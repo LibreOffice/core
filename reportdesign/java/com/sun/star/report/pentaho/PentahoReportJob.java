@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PentahoReportJob.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -297,6 +297,11 @@ public class PentahoReportJob implements ReportJob
         }
     }
 
+    private void setMetaDataProperties(DefaultReportJob job)
+    {
+        job.getConfiguration().setConfigProperty(ReportEngineParameterNames.AUTHOR, (String) jobProperties.getProperty(ReportEngineParameterNames.AUTHOR));
+        job.getConfiguration().setConfigProperty(ReportEngineParameterNames.TITLE, (String) jobProperties.getProperty(ReportEngineParameterNames.TITLE));
+    }
     /**
      * Although we might want to run the job as soon as it has been created, sometimes it is
      * wiser to let the user add some listeners first. If we execute at once, the user
@@ -307,7 +312,7 @@ public class PentahoReportJob implements ReportJob
             throws ReportExecutionException, IOException
     {
         final DefaultReportJob job = new DefaultReportJob(report);
-
+        setMetaDataProperties(job);
         final String contentType = (String) jobProperties.getProperty(ReportEngineParameterNames.CONTENT_TYPE);
         //noinspection OverlyBroadCatchBlock
         try
