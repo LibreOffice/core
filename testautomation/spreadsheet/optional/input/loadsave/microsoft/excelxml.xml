@@ -1,0 +1,254 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>Gavin Lu</Author>
+  <LastAuthor>Gavin Lu</LastAuthor>
+  <Created>2003-07-07T08:07:10Z</Created>
+  <Company>Sun China Engineering &amp; Research Institute</Company>
+  <Version>11.5329</Version>
+ </DocumentProperties>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>9000</WindowHeight>
+  <WindowWidth>13860</WindowWidth>
+  <WindowTopX>240</WindowTopX>
+  <WindowTopY>75</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Center"/>
+   <Borders/>
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s21" ss:Name="Hyperlink">
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12" ss:Color="#0000FF"
+    ss:Underline="Single"/>
+  </Style>
+  <Style ss:ID="s22">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Center"/>
+  </Style>
+  <Style ss:ID="s23">
+   <Alignment ss:Horizontal="Right" ss:Vertical="Center"/>
+  </Style>
+  <Style ss:ID="s24">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+  </Style>
+  <Style ss:ID="s25">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Center" ss:Indent="1"/>
+  </Style>
+  <Style ss:ID="s26">
+   <Alignment ss:Vertical="Top"/>
+  </Style>
+  <Style ss:ID="s27">
+   <Alignment ss:Vertical="Center"/>
+  </Style>
+  <Style ss:ID="s28">
+   <Alignment ss:Vertical="Bottom"/>
+  </Style>
+  <Style ss:ID="s29">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:Rotate="-42"/>
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="28"/>
+  </Style>
+  <Style ss:ID="s30">
+   <Alignment ss:Vertical="Center" ss:VerticalText="1"/>
+  </Style>
+  <Style ss:ID="s31">
+   <Font ss:FontName="Broadway" x:Family="Swiss" ss:Size="22" ss:Shadow="1"/>
+  </Style>
+  <Style ss:ID="s32">
+   <Alignment ss:Vertical="Center" ss:WrapText="1"/>
+  </Style>
+  <Style ss:ID="s33">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="3"
+     ss:Color="#0000FF"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"
+     ss:Color="#FF0000"/>
+    <Border ss:Position="Right" ss:LineStyle="Double" ss:Weight="3"
+     ss:Color="#000000"/>
+    <Border ss:Position="Top" ss:LineStyle="DashDot" ss:Weight="2"
+     ss:Color="#99CC00"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="s34">
+   <Font ss:FontName="Arial Black" x:Family="Swiss" ss:Size="22" ss:Bold="1"
+    ss:Outline="1"/>
+  </Style>
+  <Style ss:ID="s35">
+   <Font ss:FontName="Arial Black" x:Family="Swiss" ss:Size="12"/>
+  </Style>
+  <Style ss:ID="s37">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Font ss:FontName="Courier New" x:Family="Modern" ss:Size="18"/>
+  </Style>
+  <Style ss:ID="s38">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12" ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="s39">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Font ss:FontName="Blackadder ITC" x:Family="Decorative" ss:Size="20"
+    ss:Italic="1"/>
+  </Style>
+  <Style ss:ID="s40">
+   <Font ss:FontName="Forte" x:Family="Script" ss:Size="16" ss:Underline="Single"/>
+  </Style>
+  <Style ss:ID="s41">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Font ss:FontName="Bodoni MT Black" x:Family="Roman" ss:Size="12"
+    ss:Color="#FFCC00" ss:Underline="Double"/>
+  </Style>
+  <Style ss:ID="s42">
+   <Font ss:FontName="MS Reference Sans Serif" x:Family="Swiss" ss:Size="12"
+    ss:StrikeThrough="1"/>
+  </Style>
+  <Style ss:ID="s43">
+   <Font ss:FontName="Perpetua Titling MT" x:Family="Roman" ss:Size="12"
+    ss:VerticalAlign="Superscript"/>
+  </Style>
+  <Style ss:ID="s44">
+   <Font ss:FontName="Rockwell Extra Bold" x:Family="Roman" ss:Size="12"
+    ss:VerticalAlign="Subscript"/>
+  </Style>
+  <Style ss:ID="s47" ss:Parent="s21">
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12" ss:Color="#0000FF"
+    ss:VerticalAlign="Subscript" ss:Underline="Single"/>
+  </Style>
+  <Style ss:ID="s49">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12" ss:Color="#FF0000"/>
+   <Interior ss:Color="#99CC00" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="s51">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+   <Font ss:FontName="Courier New" x:Family="Modern" ss:Size="12"
+    ss:VerticalAlign="Subscript"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Sheet1">
+  <Table ss:ExpandedColumnCount="8" ss:ExpandedRowCount="7" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25">
+   <Column ss:Index="2" ss:AutoFitWidth="0" ss:Width="104.25"/>
+   <Column ss:AutoFitWidth="0" ss:Width="63"/>
+   <Column ss:AutoFitWidth="0" ss:Width="75"/>
+   <Column ss:AutoFitWidth="0" ss:Width="135.75"/>
+   <Column ss:AutoFitWidth="0" ss:Width="63.75"/>
+   <Column ss:AutoFitWidth="0" ss:Width="99.75"/>
+   <Row ss:AutoFitHeight="0"/>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2" ss:StyleID="s22"><Data ss:Type="String">left</Data></Cell>
+    <Cell ss:StyleID="s23"><Data ss:Type="String">right</Data></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">center</Data></Cell>
+    <Cell ss:StyleID="s25"><Data ss:Type="String">Indent</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="122.25">
+    <Cell ss:Index="2" ss:StyleID="s26"><Data ss:Type="String">top</Data></Cell>
+    <Cell ss:StyleID="s27"><Data ss:Type="String">middle</Data></Cell>
+    <Cell ss:StyleID="s28"><Data ss:Type="String">bottom</Data></Cell>
+    <Cell ss:StyleID="s29"><Data ss:Type="String">Rotate</Data></Cell>
+    <Cell ss:StyleID="s30"><Data ss:Type="String">vertical</Data></Cell>
+    <Cell ss:StyleID="s31"><Data ss:Type="String">shadow</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="74.25">
+    <Cell><Data ss:Type="String">Notes</Data><Comment ss:Author="Guang Gavin Lu"><ss:Data
+       xmlns="http://www.w3.org/TR/REC-html40"><B><Font html:Face="Tahoma"
+         x:CharSet="134" x:Family="Swiss" html:Size="8" html:Color="#000000">Guang Gavin Lu:</Font></B><Font
+        html:Face="Tahoma" x:CharSet="134" x:Family="Swiss" html:Size="8"
+        html:Color="#000000">&#10;&#10;</Font><B><Font html:Face="Tahoma"
+         x:CharSet="134" x:Family="Swiss" html:Size="8" html:Color="#000000">Yes</Font><Font
+         html:Face="Tahoma" x:CharSet="134" x:Family="Swiss" html:Size="8"
+         html:Color="#FF6600">, T</Font></B><Font html:Face="Rockwell"
+        x:Family="Roman" html:Size="16" html:Color="#FF6600">h</Font><B><Font
+         html:Face="Rockwell" x:Family="Roman" html:Size="16" html:Color="#FF0000">is's</Font><Font
+         html:Face="Rockwell" x:Family="Roman" html:Size="16" html:Color="#0000FF"> a formated comments</Font></B><Font
+        html:Face="Rockwell" x:Family="Roman" html:Size="16" html:Color="#0000FF">. </Font><B><U><Font
+          html:Face="Tahoma" x:CharSet="134" x:Family="Swiss" html:Size="8"
+          html:Color="#0000FF">:( </Font><Font html:Face="Tahoma" x:CharSet="134"
+          x:Family="Swiss" html:Size="8" html:Color="#FF6600">Too complexive. Righ</Font></U></B><Font
+        html:Face="Tahoma" x:CharSet="134" x:Family="Swiss" html:Size="8"
+        html:Color="#FF6600">t?</Font></ss:Data></Comment></Cell>
+    <Cell ss:StyleID="s32"><Data ss:Type="String">WrapWrapWrapWrapWrapWrapWrapWrapWrapWrapWrapWrapWrap</Data></Cell>
+    <Cell ss:Index="5" ss:StyleID="s33"><Data ss:Type="String">borders</Data></Cell>
+    <Cell ss:Index="7" ss:StyleID="s34"><Data ss:Type="String">Outline</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="50.25">
+    <Cell ss:Index="2" ss:StyleID="s35"><Data ss:Type="String">Arial Black12</Data></Cell>
+    <Cell ss:MergeAcross="1" ss:StyleID="s37"><Data ss:Type="String">Courier New18</Data></Cell>
+    <Cell ss:StyleID="s38"><Data ss:Type="String">Black</Data></Cell>
+    <Cell ss:StyleID="s39"><Data ss:Type="String">Italy20</Data></Cell>
+    <Cell ss:StyleID="s40"><Data ss:Type="String">Underline16</Data></Cell>
+    <Cell ss:StyleID="s41"><Data ss:Type="String">Under2</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="37.5">
+    <Cell ss:Index="2" ss:StyleID="s42"><Data ss:Type="String">strikethrough</Data></Cell>
+    <Cell ss:StyleID="s43"><Data ss:Type="String">superscript</Data></Cell>
+    <Cell ss:StyleID="s44"><Data ss:Type="String">subscript</Data></Cell>
+    <Cell ss:StyleID="s21" ss:HRef="http://www.sun.com/"><Data ss:Type="String">Link to www.sun.com</Data></Cell>
+    <Cell ss:StyleID="s47" ss:HRef="http://www.sun.com/"><Data ss:Type="String">sub_Link</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="38.25">
+    <Cell ss:Index="2" ss:MergeAcross="1" ss:StyleID="s49"><Data ss:Type="String">Green Back Red Fore</Data></Cell>
+    <Cell ss:Index="5" ss:MergeAcross="2" ss:StyleID="s51"><ss:Data
+      ss:Type="String" xmlns="http://www.w3.org/TR/REC-html40"><Sub>Low<Font
+        html:Color="#0000FF">er</Font></Sub><B><Font html:Face="Arial"
+        x:Family="Swiss" html:Color="#0000FF">Ar</Font><Font html:Face="Arial"
+        x:Family="Swiss">ail</Font><U><Font html:Color="#FF0000">Courier New</Font></U></B><I><S><Font
+         html:Face="Times New Roman" x:Family="Roman">Times </Font><Font
+         html:Face="Times New Roman" x:Family="Roman" html:Color="#99CC00">New</Font><Font
+         html:Face="Times New Roman" x:Family="Roman"> Rom</Font><Font
+         html:Face="Times New Roman" x:Family="Roman" html:Color="#0000FF">an</Font></S></I><Sup><Font
+        html:Face="Times" x:Family="Roman" html:Color="#0000FF">U</Font><Font
+        html:Face="Times" x:Family="Roman" html:Color="#800000">p</Font><Font
+        html:Face="Times" x:Family="Roman">per</Font></Sup></ss:Data></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Unsynced/>
+   <Print>
+    <ValidPrinterInfo/>
+    <PaperSizeIndex>9</PaperSizeIndex>
+    <HorizontalResolution>600</HorizontalResolution>
+    <VerticalResolution>600</VerticalResolution>
+   </Print>
+   <Selected/>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>6</ActiveRow>
+     <ActiveCol>4</ActiveCol>
+     <RangeSelection>R7C5:R7C7</RangeSelection>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+ <Worksheet ss:Name="Sheet2">
+  <Table ss:ExpandedColumnCount="0" ss:ExpandedRowCount="0" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25"/>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Unsynced/>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+ <Worksheet ss:Name="Sheet3">
+  <Table ss:ExpandedColumnCount="0" ss:ExpandedRowCount="0" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25"/>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Unsynced/>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>
