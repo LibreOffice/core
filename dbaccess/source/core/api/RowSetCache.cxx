@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RowSetCache.cxx,v $
- * $Revision: 1.98 $
+ * $Revision: 1.99 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1485,16 +1485,14 @@ sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
 
                 if(bCheck)
                 { // here we know that we have to check on which side our table resides
-                    OSQLParseNode* pTableRef = pJoin->getByRule(::connectivity::OSQLParseNode::qualified_join);
+                    const OSQLParseNode* pTableRef = pJoin->getByRule(::connectivity::OSQLParseNode::qualified_join);
                     if(bLeftSide)
                         pTableRef = pJoin->getChild(0);
                     else
                         pTableRef = pJoin->getChild(3);
                     OSL_ENSURE(SQL_ISRULE(pTableRef,table_ref),"Must be a tableref here!");
 
-                    ::rtl::OUString sTableRange;
-                    if(pTableRef->count() == 4)
-                        sTableRange = pTableRef->getChild(2)->getTokenValue(); // Tabellenrange an Pos 2
+                    ::rtl::OUString sTableRange = OSQLParseNode::getTableRange(pTableRef);
                     if(!sTableRange.getLength())
                         pTableRef->getChild(0)->parseNodeToStr( sTableRange, _xConnection, NULL, sal_False, sal_False );
                     bOk =  sTableRange == _sUpdateTableName;
