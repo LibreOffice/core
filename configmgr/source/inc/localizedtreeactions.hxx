@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: localizedtreeactions.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,17 +41,10 @@ class SubtreeChange;
 //==========================================================================
 // Helper function to invoke the previous ones properly
 
-// convert to the given locale format, no matter what the original representation
-data::TreeSegment cloneForLocale(INode const* _pNode, OUString const& _sLocale);
 // convert to the given locale format, assuming the original representation was expanded
 data::TreeSegment cloneExpandedForLocale(data::TreeAccessor const & _aTree, OUString const& _sLocale);
 // convert to the given locale format, assuming the original representation was expanded
 std::auto_ptr<INode> reduceExpandedForLocale(std::auto_ptr<ISubtree> _pNode, OUString const& _sLocale);
-
-// convert to the expanded locale format, assuming the original representation was reduced for the given locale
-void expandForLocale(ISubtree& _rNode, OUString const& _sLocale);
-// convert to the expanded locale format, assuming the original representation was reduced for the given locale
-void expandForLocale(SubtreeChange& _rNode, OUString const& _sLocale);
 
 //..........................................................................
 }   // namespace configmgr
