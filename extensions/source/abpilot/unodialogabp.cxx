@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unodialogabp.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -163,7 +163,7 @@ namespace abp
     //--------------------------------------------------------------------------
     Dialog* OABSPilotUno::createDialog(Window* _pParent)
     {
-        return new OAddessBookSourcePilot(_pParent, m_xORB);
+        return new OAddessBookSourcePilot(_pParent, m_aContext.getLegacyServiceFactory());
     }
 
     //--------------------------------------------------------------------------
