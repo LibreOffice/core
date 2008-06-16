@@ -8,7 +8,7 @@
  *
  * $RCSfile: cpp2uno.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -143,7 +143,7 @@ void call(
     }
     bool retconv =
         rtd != NULL && bridges::cpp_uno::shared::relatesToInterfaceType(rtd);
-    OSL_ASSERT(!(directRet && retconv));
+    OSL_ASSERT(!(directReturn && retconv));
     void * retin;
     void * retout;
     char retbuf[32];

@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -36,7 +36,7 @@ ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
 
-.IF "$(COM)" == "C52" && "$(CPUNAME)" == "SPARC64"
+.IF "$(COM)" == "C52" && "$(CPU)" == "U"
 
 SHL1TARGET = $(TARGET)
 SHL1OBJS = \
