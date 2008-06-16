@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ControllerCommandDispatch.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -416,6 +416,7 @@ bool ModelState::HasAnyTitle() const
 } // namespace impl
 
 // ----------------------------------------
+DBG_NAME(ControllerCommandDispatch)
 
 ControllerCommandDispatch::ControllerCommandDispatch(
     const Reference< uno::XComponentContext > & xContext,
@@ -426,10 +427,15 @@ ControllerCommandDispatch::ControllerCommandDispatch(
         m_xDispatch( xController, uno::UNO_QUERY ),
         m_apModelState( new impl::ModelState() ),
                 m_apControllerState( new impl::ControllerState() )
-{}
+{
+    DBG_CTOR(ControllerCommandDispatch,NULL);
+}
 
 ControllerCommandDispatch::~ControllerCommandDispatch()
-{}
+{
+
+    DBG_DTOR(ControllerCommandDispatch,NULL);
+}
 
 void ControllerCommandDispatch::initialize()
 {
