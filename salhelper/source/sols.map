@@ -15,8 +15,10 @@ UDK_3.1 { # OOo 1.1.2 SDK
 
         __1cJsalhelperPConditionWaiter2t6Mrn0AJCondition__v_;
         __1cJsalhelperPConditionWaiter2t5B6Mrn0AJCondition__v_;
-        __1cJsalhelperPConditionWaiter2t6Mrn0AJCondition_L_v_;
-        __1cJsalhelperPConditionWaiter2t5B6Mrn0AJCondition_L_v_;
+        __1cJsalhelperPConditionWaiter2t6Mrn0AJCondition_L_v_; #S-ILP32
+        __1cJsalhelperPConditionWaiter2t6Mrn0AJCondition_I_v_; #S-LP64
+        __1cJsalhelperPConditionWaiter2t5B6Mrn0AJCondition_L_v_; #S-ILP32
+        __1cJsalhelperPConditionWaiter2t5B6Mrn0AJCondition_I_v_; #S-LP64
         __1cJsalhelperPConditionWaiter2T6M_v_;
         __1cJsalhelperPConditionWaiter2T5B6M_v_;
 
@@ -44,15 +46,19 @@ __1cJsalhelperSORealDynamicLoader2T6M_v_;
 __1cJsalhelperbR__RTTI__1CpknJsalhelperSORealDynamicLoader__;
 __1cJsalhelperbQ__RTTI__1CpnJsalhelperSORealDynamicLoader__;
 __1cJsalhelperbO__RTTI__1nJsalhelperSORealDynamicLoader__;
-__1cJsalhelperSORealDynamicLoaderHacquire6M_L_;
-__1cJsalhelperSORealDynamicLoaderHrelease6M_L_;
+__1cJsalhelperSORealDynamicLoaderHacquire6M_L_; #S-ILP32
+__1cJsalhelperSORealDynamicLoaderHacquire6M_I_; #S-LP64
+__1cJsalhelperSORealDynamicLoaderHrelease6M_L_; #S-ILP32
+__1cJsalhelperSORealDynamicLoaderHrelease6M_I_; #S-LP64
 __1cJsalhelperSORealDynamicLoaderGgetApi6kM_pv_;
 __1cJsalhelperVSimpleReferenceObject2T5B6M_v_;
 __1cJsalhelperVSimpleReferenceObject2T6M_v_;
 __1cJsalhelperVSimpleReferenceObject2k6Fpv_v_;
 __1cJsalhelperVSimpleReferenceObject2k6FpvrknDstdJnothrow_t__v_;
-__1cJsalhelperVSimpleReferenceObject2n6FI_pv_;
-__1cJsalhelperVSimpleReferenceObject2n6FIrknDstdJnothrow_t__pv_;
+__1cJsalhelperVSimpleReferenceObject2n6FI_pv_; #S-ILP32
+__1cJsalhelperVSimpleReferenceObject2n6FL_pv_; #S-LP64
+__1cJsalhelperVSimpleReferenceObject2n6FIrknDstdJnothrow_t__pv_; #S-ILP32
+__1cJsalhelperVSimpleReferenceObject2n6FLrknDstdJnothrow_t__pv_; #S-LP64
 __1cJsalhelperVSimpleReferenceObjectG__vtbl_;
 __1cJsalhelperbR__RTTI__1nJsalhelperVSimpleReferenceObject__;
 __1cJsalhelperbT__RTTI__1CpnJsalhelperVSimpleReferenceObject__;
