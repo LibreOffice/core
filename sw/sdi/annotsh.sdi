@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: annotsh.sdi,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -341,6 +341,22 @@ interface Annotation : _Annotation
     [
         StateMethod = StateDisableItems ;
     ]
+    FN_STAT_SELMODE
+    [
+        StateMethod = StateStatusLine ;
+    ]
+
+    FN_STAT_TEMPLATE
+    [
+        StateMethod = StateStatusLine ;
+    ]
+
+    SID_LANGUAGE_STATUS
+    [
+        ExecMethod = ExecLingu ;
+        StateMethod = GetLinguState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
 
 }
 
@@ -348,5 +364,3 @@ shell SwAnnotationShell
 {
     import Annotation[Automation];
 }
-
-
