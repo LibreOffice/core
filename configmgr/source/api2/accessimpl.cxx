@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accessimpl.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -813,18 +813,6 @@ css::beans::PropertyState implGetStateAsProperty(NodeAccess& rNode)
         e.unhandled();
     }
     return aRet;
-}
-
-void implSetToDefaultAsProperty(NodeAccess& rNode)
-    throw (css::lang::WrappedTargetException, uno::RuntimeException)
-{
-    GuardedNodeAccess lock( rNode );
-
-    OUString const sMessage( RTL_CONSTASCII_USTRINGPARAM("Cannot set Property object to default: Object or View is read-only"));
-    beans::PropertyVetoException aVeto(sMessage, rNode.getUnoInstance());
-
-    OUString const sWrapMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Operation failed: "));
-    throw lang::WrappedTargetException(sWrapMessage + sMessage, rNode.getUnoInstance(), uno::makeAny(aVeto));
 }
 
 Reference< uno::XInterface > implGetDefaultAsProperty(NodeAccess& )
