@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgedfunc.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,6 +56,13 @@ protected:
     OSectionView*   m_pView;
     Timer           aScrollTimer;
     Point           m_aMDPos;
+    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> m_xOverlappingObj;
+    SdrObject *     m_pOverlappingObj;
+    sal_Int32       m_nOverlappedControlColor;
+    sal_Int32       m_nOldColor;
+    bool            m_bSelectionMode;
+    bool            m_bUiActive;
+    bool            m_bShowPropertyBrowser;
 
     DECL_LINK( ScrollTimeout, Timer * );
     void    ForceScroll( const Point& rPos );
@@ -78,6 +85,13 @@ protected:
         custom shapes can drop every where
     */
     bool    isOnlyCustomShapeMarked();
+
+    /** activate object if it is of type OBJ_OLE2
+    */
+    void    activateOle(SdrObject* _pObj);
+
+    void checkTwoCklicks(const MouseEvent& rMEvt);
+
 public:
     DlgEdFunc( OReportSection* pParent );
     virtual ~DlgEdFunc();
@@ -100,16 +114,17 @@ public:
     bool isOverlapping(const MouseEvent& rMEvt);
     void setOverlappedControlColor(sal_Int32 _nColor);
     void stopScrollTimer();
+
+    /** deactivate all ole object
+    */
+    void    deactivateOle(bool _bSelect = false);
+
+    inline bool isUiActive() const { return m_bUiActive; }
 protected:
     void colorizeOverlappedObject(SdrObject* _pOverlappedObj);
     void unColorizeOverlappedObj();
 
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> m_xOverlappingObj;
-    SdrObject *m_pOverlappingObj;
-    sal_Int32 m_nOverlappedControlColor;
-    sal_Int32 m_nOldColor;
 
-    bool m_bSelectionMode;
 };
 
 //============================================================================
