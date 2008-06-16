@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: valuenodeaccess.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,8 +58,6 @@ namespace configmgr
 
             configuration::Name getName() const;
             node::Attributes getAttributes() const;
-
-            bool isEmpty()     const { return data().isEmpty(); }
 
             bool isNull()      const { return data().isNull(); }
             bool isDefault()   const;

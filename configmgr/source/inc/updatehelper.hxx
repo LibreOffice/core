@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updatehelper.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,12 +39,6 @@
 namespace configmgr
 {
 //..........................................................................
-
-// adjust a set of changes to the target tree, return true, if there are changes left
-    bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, data::NodeAccess const & _aRootNode);
-
-// adjust a set of changes to the target tree, return true, if there are changes left
-    bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, data::NodeAddress _aRootNode);
 
 // apply a already matching set of changes to the target tree
     void applyUpdateToTree(SubtreeChange& _anUpdateTree, data::NodeAddress _aRootNode);

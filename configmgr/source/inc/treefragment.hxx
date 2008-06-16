@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: treefragment.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,7 +117,6 @@ namespace configmgr
             Node                nodes[1];   //   nodes[header.count]
 
             // header info access
-            bool hasDefaults() const;
             bool hasDefaultsAvailable() const;
 
             bool isDefault() const;

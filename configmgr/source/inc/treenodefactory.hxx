@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: treenodefactory.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,14 +85,6 @@ namespace configmgr
                                     rtl::OUString const& _rTemplateName,
                                     rtl::OUString const& _rTemplateModule,
                                     node::Attributes _aAttrs);
-        //-----------------------------------------------
-
-    //= special case: Dummy ISubtree ============================================================
-        static std::auto_ptr<ISubtree> createDummyTree(
-                                    Name const& _aName,
-                                    Name const& _aElementTypeName);
-
-        //-----------------------------------------------
     };
 
     OTreeNodeFactory& getDefaultTreeNodeFactory();
