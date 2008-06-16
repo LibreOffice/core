@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: weak.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -340,7 +340,6 @@ namespace uno
 class OWeakRefListener : public XReference
 {
 public:
-    OWeakRefListener() SAL_THROW( () );
     OWeakRefListener(const OWeakRefListener& rRef) SAL_THROW( () );
     OWeakRefListener(const Reference< XInterface >& xInt) SAL_THROW( () );
     virtual ~OWeakRefListener() SAL_THROW( () );
@@ -361,11 +360,6 @@ public:
 private:
     OWeakRefListener& SAL_CALL operator=(const OWeakRefListener& rRef) SAL_THROW( () );
 };
-
-OWeakRefListener::OWeakRefListener() SAL_THROW( () )
-    : m_aRefCount( 0 )
-{
-}
 
 OWeakRefListener::OWeakRefListener(const OWeakRefListener& rRef) SAL_THROW( () )
     : com::sun::star::uno::XReference()
