@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nodeaccess.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,6 +78,7 @@ namespace configmgr
             SetNodeAccess aNodeAccess(_aNodeAddr);
             return aNodeAccess;
         }
+#if OSL_DEBUG_LEVEL > 0
         // -------------------------------------------------------------------------
 
         GroupNodeAddress toGroupNodeAddress(NodeAddress const & _aNodeAddr)
@@ -85,7 +86,7 @@ namespace configmgr
             GroupNodeAccess aNodeAccess( _aNodeAddr );
             return aNodeAccess;
         }
-
+#endif
         // -------------------------------------------------------------------------
         // GroupNodeAccess ...
         // -------------------------------------------------------------------------

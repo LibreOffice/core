@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nodeconverter.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -132,14 +132,6 @@ public:
     void handle(SubtreeChange& aSubtree);
 };
 
-
-//--------------------------------------------------------------------------
-std::auto_ptr<INode> OTreeNodeConverter::createCorrespondingNode(Change& _rChange)
-{
-    ONodeConverter aAction(*this);
-    aAction.applyToChange(_rChange);
-    return aAction.result();
-}
 
 //--------------------------------------------------------------------------
 std::auto_ptr<ISubtree> OTreeNodeConverter::createCorrespondingTree(SubtreeChange& _rChange)
