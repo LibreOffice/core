@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Functions.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,18 +60,6 @@ OFunctions::~OFunctions()
     DBG_DTOR( rpt_OFunctions,NULL);
 }
 //--------------------------------------------------------------------------
-void OFunctions::copyFunctions(const uno::Reference< report::XFunctions >& _xSource)
-{
-    sal_Int32 nCount = _xSource->getCount();
-    for (sal_Int32 i = 0; i != nCount; ++i)
-    {
-        uno::Reference<report::XFunction> xDestFunction = new OFunction(m_xContext);
-        m_aFunctions.push_back(xDestFunction);
-        uno::Reference<report::XFunction> xSourceFunction(_xSource->getByIndex(i),uno::UNO_QUERY);
-        ::comphelper::copyProperties(xSourceFunction.get(),xDestFunction.get());
-    }
-}
-// -----------------------------------------------------------------------------
 void SAL_CALL OFunctions::dispose() throw(uno::RuntimeException)
 {
     cppu::WeakComponentImplHelperBase::dispose();
