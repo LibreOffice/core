@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportEngineJFree.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,7 @@
 #include "corestrings.hrc"
 #endif
 #include <tools/debug.hxx>
+#include <svtools/useroptions.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <comphelper/mimeconfighelper.hxx>
@@ -160,11 +161,6 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
     set(PROPERTY_STATUSINDICATOR,_statusindicator,m_StatusIndicator);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OReportEngineJFree::transform()
-{
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml")); /// TODO has to be changed into the real name for the report transformation
-}
-// -----------------------------------------------------------------------------
 ::rtl::OUString OReportEngineJFree::getNewOutputName()
 {
     ::rtl::OUString sOutputName;
@@ -187,14 +183,16 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
             }
             m_xReport->storeToStorage(xTemp,aEmpty); // store to temp file because it may contain information which aren't in the database yet.
 
-            uno::Sequence< beans::NamedValue > aConvertedProperties(5/*6*/);
+            uno::Sequence< beans::NamedValue > aConvertedProperties(7);
             sal_Int32 nPos = 0;
             aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStorage"));
             aConvertedProperties[nPos++].Value <<= xTemp;
             aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutputStorage"));
 
             const static String s_sExt = String::CreateFromAscii(".rpt");
-            String sName = m_xReport->getName();
+            String sName = m_xReport->getCaption();
+            if ( !sName.Len() )
+                sName = m_xReport->getName();
             ::utl::TempFile aFile(sName,sal_False,&s_sExt);
             uno::Reference< embed::XStorage > xOut = OStorageHelper::GetStorageFromURL(aFile.GetURL(),embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE,uno::Reference< lang::XMultiServiceFactory >(m_xContext->getServiceManager(),uno::UNO_QUERY));
             utl::DisposableComponent aOut(xOut);
@@ -212,6 +210,19 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
 
             aConvertedProperties[nPos].Name = PROPERTY_ACTIVECONNECTION;
             aConvertedProperties[nPos++].Value <<= m_xActiveConnection;
+
+            // some meta data
+            SvtUserOptions aUserOpts;
+            ::rtl::OUStringBuffer sAuthor(aUserOpts.GetFirstName());
+            sAuthor.appendAscii(" ");
+            sAuthor.append(aUserOpts.GetLastName());
+            static const ::rtl::OUString s_sAuthor(RTL_CONSTASCII_USTRINGPARAM("Author"));
+            aConvertedProperties[nPos].Name = s_sAuthor;
+            aConvertedProperties[nPos++].Value <<= sAuthor.makeStringAndClear();
+
+            static const ::rtl::OUString s_sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"));
+            aConvertedProperties[nPos].Name = s_sTitle;
+            aConvertedProperties[nPos++].Value <<= m_xReport->getCaption();
 
             // create job factory and initialize
             const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(uno::Reference< lang::XMultiServiceFactory >(m_xContext->getServiceManager(),uno::UNO_QUERY_THROW));
