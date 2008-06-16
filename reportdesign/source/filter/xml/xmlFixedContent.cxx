@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlFixedContent.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,13 +37,11 @@
 #include "xmlReportElement.hxx"
 #include <tools/debug.hxx>
 #include <com/sun/star/report/XShape.hpp>
-#include "xmlFixedText.hxx"
 #include "xmlCell.hxx"
-#ifndef RPT_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
-#endif
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XFormattedField.hpp>
+#include <com/sun/star/report/XFixedText.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include "xmlTable.hxx"
 #include <xmloff/XMLCharContext.hxx>
