@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.38 $
+# $Revision: 1.39 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -105,12 +105,16 @@ python_LDFLAGS+=-Wl,-z,noexecstack
 # SunStudio on Solaris 10 and above needs the -xc99=all flag already 
 # during the configuration tests, otherwise the HAVE_LIMITS_H check will
 # be wrong resulting in a build breaker.
-.IF "$(SYSBASE)"==""
+.IF "$(SYSBASE)"=="" || "$(OS)$(CPU)"=="SOLARISU"
 .IF "$(COMNAME)"=="sunpro5"
-CC+=-xc99=all
+CC+:=-xc99=all
 .ENDIF          # "$(COMNAME)"=="sunpro5"
 .ENDIF
 
+.IF "$(OS)$(CPU)"=="SOLARISU"
+CC+:=$(ARCH_FLAGS)
+python_LDFLAGS+=$(ARCH_FLAGS)
+.ENDIF
 
 CONFIGURE_ACTION=./configure --prefix=$(MYCWD)/python-inst --enable-shared CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
 .IF "$(OS)$(CPU)" == "SOLARISI"
