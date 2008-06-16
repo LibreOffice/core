@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docfmt.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,8 @@
 #ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
 #endif
+#include <svx/eeitem.hxx>
+#include <svx/langitem.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/brkitem.hxx>
 #include <svtools/whiter.hxx>
@@ -84,6 +86,7 @@
 #include <fmtautofmt.hxx>
 #include <istyleaccess.hxx>
 #include <SwUndoFmt.hxx>
+#include <docsh.hxx>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
@@ -1214,8 +1217,8 @@ int lcl_SetNewDefTabStops( SwTwips nOldWidth, SwTwips nNewWidth,
     return TRUE;
 }
 
-    // Setze das Attribut als neues default Attribut in diesem Dokument.
-    // Ist Undo aktiv, wird das alte in die Undo-History aufgenommen
+// Setze das Attribut als neues default Attribut in diesem Dokument.
+// Ist Undo aktiv, wird das alte in die Undo-History aufgenommen
 void SwDoc::SetDefault( const SfxPoolItem& rAttr )
 {
     SfxItemSet aSet( GetAttrPool(), rAttr.Which(), rAttr.Which() );
