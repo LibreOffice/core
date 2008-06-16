@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salnativewidgets-gtk.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -424,7 +424,7 @@ void GtkData::initNWF( void )
 
 
     #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "GtkPlugin: using %s NWF\n",
+    std::fprintf( stderr, "GtkPlugin: using %s NWF\n",
              GtkSalGraphics::bNeedPixmapPaint ? "offscreen" : "direct" );
     #endif
 }
@@ -1943,7 +1943,7 @@ BOOL GtkSalGraphics::NWPaintGTKSpinBox( ControlType nType, ControlPart nPart,
     {
         if ( !pSpinVal )
         {
-            fprintf( stderr, "Tried to draw CTRL_SPINBUTTONS, but the SpinButtons data structure didn't exist!\n" );
+            std::fprintf( stderr, "Tried to draw CTRL_SPINBUTTONS, but the SpinButtons data structure didn't exist!\n" );
             return( false );
         }
         pixmapRect = pSpinVal->maUpperRect;
@@ -2250,7 +2250,7 @@ BOOL GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
 
     if ( !pTabitemValue && (nType==CTRL_TAB_ITEM) )
     {
-        fprintf( stderr, "NWPaintGTKTabItem() received a NULL TabitemValue.  Cannot draw native tab\n" );
+        std::fprintf( stderr, "NWPaintGTKTabItem() received a NULL TabitemValue.  Cannot draw native tab\n" );
         return( false );
     }
 
@@ -3088,7 +3088,7 @@ static inline Color getColor( const GdkColor& rCol )
 
 void printColor( const char* name, const GdkColor& rCol )
 {
-    fprintf( stderr, "   %s = 0x%2x 0x%2x 0x%2x\n",
+    std::fprintf( stderr, "   %s = 0x%2x 0x%2x 0x%2x\n",
              name,
              rCol.red >> 8, rCol.green >> 8, rCol.blue >> 8 );
 }
@@ -3099,7 +3099,7 @@ void printStyleColors( GtkStyle* pStyle )
 
     for( int i = 0; i < 5; i++ )
     {
-        fprintf( stderr, "state %s colors:\n", pStates[i] );
+        std::fprintf( stderr, "state %s colors:\n", pStates[i] );
         printColor( "bg     ", pStyle->bg[i] );
         printColor( "fg     ", pStyle->fg[i] );
         printColor( "light  ", pStyle->light[i] );
@@ -3263,14 +3263,14 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     }
 
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "font name BEFORE system match: \"%s\"\n", aFamily.getStr() );
+    std::fprintf( stderr, "font name BEFORE system match: \"%s\"\n", aFamily.getStr() );
 #endif
 
     // match font to e.g. resolve "Sans"
     psp::PrintFontManager::get().matchFont( aInfo, rSettings.GetUILocale() );
 
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "font match %s, name AFTER: \"%s\"\n",
+    std::fprintf( stderr, "font match %s, name AFTER: \"%s\"\n",
              aInfo.m_nID != 0 ? "succeeded" : "failed",
              OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
@@ -3366,7 +3366,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         g_value_init( &aValue, G_TYPE_STRING );
         g_object_get_property( G_OBJECT(pGtkSettings), "gtk-theme-name", &aValue );
         const gchar* pThemeName = g_value_get_string( &aValue );
-        fprintf( stderr, "Theme name is \"%s\"\n", pThemeName );
+        std::fprintf( stderr, "Theme name is \"%s\"\n", pThemeName );
         g_value_unset( &aValue );
     }
     #endif
@@ -3420,7 +3420,7 @@ GdkPixmap* GtkSalGraphics::NWGetPixmapFromScreen( Rectangle srcRect )
             g_object_unref( pPixmap );
         if ( pPixmapGC )
             g_object_unref( pPixmapGC );
-        fprintf( stderr, "salnativewidgets-gtk.cxx: could not get valid pixmap from screen\n" );
+        std::fprintf( stderr, "salnativewidgets-gtk.cxx: could not get valid pixmap from screen\n" );
         return( NULL );
     }
 
@@ -3449,7 +3449,7 @@ BOOL GtkSalGraphics::NWRenderPixmapToScreen( GdkPixmap* pPixmap, Rectangle dstRe
     // The GC can't be null, otherwise we'd have no clip region
     if( SelectFont() == NULL )
     {
-        fprintf(stderr, "salnativewidgets.cxx: no valid GC\n" );
+        std::fprintf(stderr, "salnativewidgets.cxx: no valid GC\n" );
         return( FALSE );
     }
 
