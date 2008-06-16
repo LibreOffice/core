@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlExport.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -449,38 +449,6 @@ void ORptExport::exportReport(const Reference<XReportDefinition>& _xReportDefini
     }
 }
 // -----------------------------------------------------------------------------
-void ORptExport::exportImagePosition(sal_Int16 _nImagePosition)
-{
-    OSL_ENSURE( ( _nImagePosition >= awt::ImagePosition::LeftTop ) && ( _nImagePosition <= awt::ImagePosition::Centered ),
-        "ORptExport::export: don't know this image position!" );
-
-    if ( ( _nImagePosition < awt::ImagePosition::LeftTop ) || ( _nImagePosition > awt::ImagePosition::Centered ) )
-        // this is important to prevent potential buffer overflows below, so don't optimize
-        _nImagePosition = awt::ImagePosition::Centered;
-
-    if ( _nImagePosition == awt::ImagePosition::Centered )
-    {
-        AddAttribute( XML_NAMESPACE_FORM, XML_IMAGE_POSITION , GetXMLToken( XML_CENTER ) );
-    }
-    else
-    {
-        XMLTokenEnum eXmlImagePositions[] =
-        {
-            XML_START, XML_END, XML_TOP, XML_BOTTOM
-        };
-        XMLTokenEnum eXmlImageAligns[] =
-        {
-            XML_START, XML_CENTER, XML_END
-        };
-
-        XMLTokenEnum eXmlImagePosition = eXmlImagePositions[ _nImagePosition / 3 ];
-        XMLTokenEnum eXmlImageAlign    = eXmlImageAligns   [ _nImagePosition % 3 ];
-
-        AddAttribute( XML_NAMESPACE_FORM, XML_IMAGE_POSITION , GetXMLToken( eXmlImagePosition ) );
-        AddAttribute( XML_NAMESPACE_FORM, XML_IMAGE_ALIGN    , GetXMLToken( eXmlImageAlign    ) );
-    }
-}
-// -----------------------------------------------------------------------------
 void ORptExport::exportComponent(const Reference<XReportComponent>& _xReportComponent)
 {
     OSL_ENSURE(_xReportComponent.is(),"No component interface!");
@@ -582,9 +550,9 @@ void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
     exportAutoStyle(_xProp);
 
     Reference<XReportDefinition> xReport = _xProp->getReportDefinition();
-    awt::Size aSize     = rptui::getStyleProperty<awt::Size>(xReport,PROPERTY_PAPERSIZE);
-    sal_Int32 nOffset   = rptui::getStyleProperty<sal_Int32>(xReport,PROPERTY_LEFTMARGIN);
-    sal_Int32 nCount    = _xProp->getCount();
+    const awt::Size aSize   = rptui::getStyleProperty<awt::Size>(xReport,PROPERTY_PAPERSIZE);
+    const sal_Int32 nOffset = rptui::getStyleProperty<sal_Int32>(xReport,PROPERTY_LEFTMARGIN);
+    const sal_Int32 nCount  = _xProp->getCount();
 
     ::std::vector<sal_Int32> aColumnPos;
     aColumnPos.reserve(2*(nCount + 1));
@@ -1547,9 +1515,6 @@ void SAL_CALL ORptExport::setSourceDocument( const Reference< XComponent >& xDoc
 {
     m_xReportDefinition.set(xDoc,UNO_QUERY_THROW);
     OSL_ENSURE(m_xReportDefinition.is(),"DataSource is NULL!");
-
-    //if ( !GetNumberFormatsSupplier().is() )
-    //    SetNumberFormatsSupplier(OXMLHelper::GetNumberFormatsSupplier(m_xReportDefinition));
 
     SvXMLExport::setSourceDocument(xDoc);
 }
