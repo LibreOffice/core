@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlStyleImport.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -123,7 +123,7 @@ void OControlStyleContext::FillPropertySet(const Reference< XPropertySet > & rPr
             if ((m_nNumberFormat == -1) && m_sDataStyleName.getLength())
             {
                 SvXMLNumFormatContext* pStyle = const_cast< SvXMLNumFormatContext*>(dynamic_cast<const SvXMLNumFormatContext*>(pStyles->FindStyleChildContext(
-                    XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, sal_True)));
+                    XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, sal_False)));
                 if ( !pStyle )
                 {
                     OReportStylesContext* pMyStyles = PTR_CAST(OReportStylesContext,GetOwnImport().GetAutoStyles());
