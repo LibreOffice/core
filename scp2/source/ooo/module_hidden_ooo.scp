@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_hidden_ooo.scp,v $
- * $Revision: 1.99 $
+ * $Revision: 1.100 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -658,6 +658,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Oo_Office_Ui_Genericcategories_Xcs,
 	gid_File_Oo_Office_Ui_Genericcategories_Xcu,
 	gid_File_Oo_Office_Common_Xcs,
+    gid_File_Oo_Office_Common_Xcu,
 	gid_File_Oo_Office_Extendedcolorscheme_Xcs,
 	gid_File_Oo_Office_Extendedcolorscheme_Xcu,
 	gid_File_Oo_Office_OptionsDialog_Xcs,
@@ -713,6 +714,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Oo_Office_Ui_Startmodulewindowstate_Xcu,
 	gid_File_Oo_Office_Substitution_Xcs,
 	gid_File_Oo_Office_Ui_Xcs,
+    gid_File_Oo_Office_Ui_Xcu,
 	gid_File_Oo_Office_Views_Xcs,
 	gid_File_Oo_Office_Writer_Xcs,
 	gid_File_Oo_Office_Writer_Xcu,
@@ -726,6 +728,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Oo_Office_TypeDetection_Xcs,
 	gid_File_Oo_Office_Embedding_Xcs,
 	gid_File_Oo_Setup_Xcs,
+    gid_File_Oo_Setup_Xcu,
 	gid_File_Oo_Setup_Start_Xcu,
     gid_File_Oo_Firststartwizard_Xcs,
     gid_File_Oo_Firststartwizard_Xcu,
@@ -836,7 +839,10 @@ Module gid_Module_Root_Files_7
 	Sortkey = "1900";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
-	Files = (gid_File_Mozilla_Runtime,gid_File_Help_Help_Zip);
+	Files = (gid_File_Help_Help_Zip,
+             gid_File_Moz_Msvcp71,
+             gid_File_Moz_Msvcr71,
+             gid_File_Mozilla_Runtime);
 End
 
 #ifdef UNX
