@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataBrowser.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -669,7 +669,7 @@ void DataBrowser::RenewTable()
 
     // fill series headers
     clearHeaders();
-    DataBrowserModel::tDataHeaderVector aHeaders( m_apDataBrowserModel->getDataHeaders());
+    const DataBrowserModel::tDataHeaderVector& aHeaders( m_apDataBrowserModel->getDataHeaders());
     Link aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
     Link aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
     bool bIsHighContrast = pWin ? (pWin->GetDisplayBackground().GetColor().IsDark()) : false;
