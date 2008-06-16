@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportWindow.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -170,10 +170,6 @@ namespace rptui
         */
         sal_Int32       getSplitterHeight() const;
 
-        /** sets the total size of the scroll window
-        */
-        void            setTotalSize();
-
         /** returns the minimum height of the section
         *
         * \param _nPos
@@ -236,6 +232,11 @@ namespace rptui
         void alignMarkedObjects(sal_Int32 _nControlModification, bool _bAlignAtSection, bool bBoundRects = false);
 
         sal_uInt32 getMarkedObjectCount() const;
+
+        /** fills the vector with all selected control models
+            /param  _rSelection The vector will be filled and will not be cleared before.
+        */
+        void fillControlModelSelection(::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& _rSelection) const;
     };
 //==================================================================
 }   //rptui
