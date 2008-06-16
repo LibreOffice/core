@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Condition.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -211,6 +211,10 @@ Condition::Condition( Window* _pParent, IConditionalFormatAction& _rAction, ::rp
     ,m_nLastKnownWindowWidth( -1 )
     ,m_bInDestruction( false )
 {
+    m_aMoveUp.SetModeImage( ModuleRes( IMG_MOVE_UP_HC ), BMP_COLOR_HIGHCONTRAST );
+    m_aMoveDown.SetModeImage( ModuleRes( IMG_MOVE_DOWN_HC ), BMP_COLOR_HIGHCONTRAST );
+
+    FreeResource();
     m_aActions.SetStyle(m_aActions.GetStyle()|WB_LINESPACING);
     m_aCondLHS.GrabFocus();
 
@@ -260,11 +264,6 @@ Condition::Condition( Window* _pParent, IConditionalFormatAction& _rAction, ::rp
     m_pBtnUpdaterFontColor = new ::svx::ToolboxButtonColorUpdater(
                                             SID_ATTR_CHAR_COLOR2, SID_ATTR_CHAR_COLOR2, &m_aActions, TBX_UPDATER_MODE_CHAR_COLOR_NEW );
 
-
-    m_aMoveUp.SetModeImage( ModuleRes( IMG_MOVE_UP_HC ), BMP_COLOR_HIGHCONTRAST );
-    m_aMoveDown.SetModeImage( ModuleRes( IMG_MOVE_DOWN_HC ), BMP_COLOR_HIGHCONTRAST );
-
-    FreeResource();
     Show();
 
     impl_layoutAll();
