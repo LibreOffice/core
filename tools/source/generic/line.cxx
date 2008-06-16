@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: line.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,8 @@
 #include <tools/debug.hxx>
 
 #include <cstdlib>
-#include <cmath>
+#include <cmath>    // std::sqrt
+#include <math.h>   // hypot, doens't seem to live in std namespace everywhere
 
 inline long FRound( double fVal )
 {
@@ -238,7 +239,7 @@ double Line::GetDistance( const double& rPtX, const double& rPtY ) const
                 fDist *= -1.0;
         }
         else if( fR <= 1.0 )
-            fDist = fS * sqrt( fL2 );
+            fDist = fS * std::sqrt( fL2 );
         else
         {
             fDist = hypot( maEnd.X() - rPtX, maEnd.Y() - rPtY );
