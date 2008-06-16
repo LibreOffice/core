@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StartMarker.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +74,6 @@ namespace rptui
         using Window::Notify;
 
         void            setTitle(const String& _sTitle);
-        sal_Int32       getWidth() const;
         sal_Int32       getMinHeight() const;
 
         /** returns the offset where the horizontal ruler must start
