@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UndoEnv.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,8 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <memory>
+#include <svtools/lstner.hxx>
+
 namespace rptui
 {
     class OXUndoEnvironmentImpl;
@@ -84,10 +86,6 @@ namespace rptui
         * \param _pPage
         */
         void RemoveSection(OReportPage* _pPage);
-
-        // readonly-ness
-        void SetReadOnly( sal_Bool bRead, const Accessor& );
-        sal_Bool IsReadOnly() const;
 
     protected:
         // XEventListener
