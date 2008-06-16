@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UndoActions.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -500,8 +500,6 @@ void OXUndoEnvironment::UnLock()
     osl_decrementInterlockedCount( &m_pImpl->m_nLocks );
 }
 sal_Bool OXUndoEnvironment::IsLocked() const { return m_pImpl->m_nLocks != 0; }
-sal_Bool OXUndoEnvironment::IsReadOnly() const {return m_pImpl->m_bReadOnly;}
-void OXUndoEnvironment::SetReadOnly( sal_Bool bRead, const Accessor& ) { m_pImpl->m_bReadOnly = bRead; }
 // -----------------------------------------------------------------------------
 void OXUndoEnvironment::RemoveSection(OReportPage* _pPage)
 {
@@ -957,7 +955,8 @@ void OXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObjec
 //------------------------------------------------------------------------------
 void OXUndoEnvironment::AddElement(const Reference< XInterface >& _rxElement )
 {
-    m_pImpl->m_aFormatNormalizer.notifyElementInserted( _rxElement );
+    if ( !IsLocked() )
+        m_pImpl->m_aFormatNormalizer.notifyElementInserted( _rxElement );
 
     // if it's a container, start listening at all elements
     Reference< XIndexAccess > xContainer( _rxElement, UNO_QUERY );
