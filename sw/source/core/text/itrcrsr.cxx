@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: itrcrsr.cxx,v $
- * $Revision: 1.79 $
+ * $Revision: 1.80 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1348,7 +1348,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         }
 
         if ( pPor->IsPostItsPortion() )
-            nWidth30 = 30 + pPor->GetViewWidth( GetInfo() ) / 2;
+            nWidth30 = 30 +  pPor->GetViewWidth( GetInfo() ) / 2;
         else
             nWidth30 = ! nWidth && pPor->GetLen() && pPor->InToxRefOrFldGrp() ?
                          30 :
