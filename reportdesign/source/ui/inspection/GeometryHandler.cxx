@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GeometryHandler.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -698,33 +698,6 @@ void GeometryHandler::implCreateListLikeControl(
     out_Descriptor.Control = xListControl.get();
     ::std::for_each( _aEntries.begin(), _aEntries.end(),::boost::bind( &inspection::XStringListControl::appendListEntry, xListControl,_1 ));
 }
-// -----------------------------------------------------------------------------
-void lcl_collectParamNames_nothrow( const uno::Reference< container::XIndexAccess >& _rxParams, ::std::vector< ::rtl::OUString >& _out_rParamNames )
-{
-    _out_rParamNames.resize( 0 );
-    if ( !_rxParams.is() )
-        return;
-
-    try
-    {
-        const sal_Int32 nCount( _rxParams->getCount() );
-        _out_rParamNames.reserve( nCount );
-
-        uno::Reference< beans::XPropertySet > xParam;
-        ::rtl::OUString sParamName;
-        for ( sal_Int32 i=0; i<nCount; ++i )
-        {
-            xParam.set( _rxParams->getByIndex(i), uno::UNO_QUERY_THROW );
-            OSL_VERIFY( xParam->getPropertyValue( PROPERTY_NAME ) >>= sParamName );
-            _out_rParamNames.push_back( sParamName );
-        }
-    }
-    catch( const uno::Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
-}
-
 // -----------------------------------------------------------------------------
 
 inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const ::rtl::OUString & PropertyName, const uno::Reference< inspection::XPropertyControlFactory > & _xControlFactory) throw (beans::UnknownPropertyException, lang::NullPointerException,uno::RuntimeException)
@@ -1635,11 +1608,6 @@ uno::Reference< report::XFunctionsSupplier> GeometryHandler::fillScope_throw(::r
     OSL_ENSURE(xReturn.is(),"Why don't we have a functionssupplier here!");
 
     return xReturn;
-}
-// -----------------------------------------------------------------------------
-::rtl::OUString GeometryHandler::getFormula() const
-{
-    return m_sDefaultFunction;
 }
 // -----------------------------------------------------------------------------
 sal_Bool GeometryHandler::isDefaultFunction( const ::rtl::OUString& _sQuotedFunction
