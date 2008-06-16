@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ViewsWindow.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,7 +116,6 @@ namespace rptui
         svtools::ColorConfig                    m_aColorConfig;
         OReportWindow*                          m_pParent;
         ::rtl::OUString                         m_sShapeType;
-        Point                                   m_aPoint;
         sal_Bool                                m_bInSplitHandler;
         sal_Bool                                m_bInUnmark;
 
@@ -322,10 +321,12 @@ namespace rptui
 
         void MovAction(const Point& rPnt,const OSectionView* _pSection,bool _bMove /*= true */, bool _bControlKeySet);
         // void MovAction2(const Point& rPnt,const OSectionView* _pSection);
-        void setPoint(const Point& _aPnt);
-        inline Point getPoint() const { return m_aPoint; }
 
         sal_uInt32 getMarkedObjectCount() const;
+        /** fills the vector with all selected control models
+            /param  _rSelection The vector will be filled and will not be cleared before.
+        */
+        void fillControlModelSelection(::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& _rSelection) const;
     };
 //==============================================================================
 } // rptui
