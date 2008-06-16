@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updatehelper.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -148,28 +148,6 @@ public:
     void apply(ValueChange& _rValueChange, data::ValueNodeAddress & _aValueNodeAddr);
 };
 //--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
-
-
-// adjust a set of changes to the target tree, return true, if there are changes left
-    bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, data::NodeAccess const & _aRootNode)
-    {
-        SubtreeChange aResultTree(_rUpdateTree, SubtreeChange::NoChildCopy());
-
-        bool bResult = AdjustUpdate::adjust(aResultTree,_rUpdateTree,_aRootNode);
-
-        _rUpdateTree.swap(aResultTree);
-
-        return bResult;
-    }
-//--------------------------------------------------------------------------
-
-// adjust a set of changes to the target tree, return true, if there are changes left
-    bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, data::NodeAddress _aRootNode)
-    {
-        data::NodeAccess aTargetNode(_aRootNode);
-        return adjustUpdateToTree(_rUpdateTree, aTargetNode);
-    }
 //--------------------------------------------------------------------------
 
 // apply a already matching set of changes to the target tree
