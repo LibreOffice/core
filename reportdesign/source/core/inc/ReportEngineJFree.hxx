@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportEngineJFree.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,12 +72,6 @@ namespace reportdesign
             }
             l.notify();
         }
-
-        /** transform the report defintion format into a jfree report format.
-         *
-         * \return The URL of the newly created file.
-         */
-        ::rtl::OUString transform();
 
         /** returns the file url for a new model
         *
