@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cachecontroller.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -747,7 +747,7 @@ void CacheController::savePendingChanges(CacheRef const & _aCache, ComponentRequ
                OUSTRING2ASCII(_aComponent.getComponentName().toString()),
                OUSTRING2ASCII(e.Message) );
 
-    this->invalidateComponent(_aComponent);
+    refreshComponent(_aComponent);
     CFG_TRACE_INFO_NI("- component data invalidated");
 
     throw;
