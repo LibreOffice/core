@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_extensioncmdqueue.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -961,7 +961,6 @@ void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdE
     try
     {
         xPackageManager->removePackage( id, xPackage->getName(), xAbortChannel, rCmdEnv.get() );
-        m_pDialog->removeEntry( xPackage );
     }
     catch ( ucb::CommandAbortedException & )
     {}
