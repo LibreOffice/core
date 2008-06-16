@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: valueref.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,8 +104,6 @@ namespace configmgr
         {
         public:
             static SubNodeID createEmpty() { return SubNodeID(); }
-            SubNodeID(Tree const& rTree, ValueRef const& rNode);
-            SubNodeID(Tree const& rTree, NodeRef const& rParentNode, Name const& aName);
             SubNodeID(TreeRef const& rTree, NodeRef const& rParentNode, Name const& aName);
             SubNodeID(NodeID const& rParentNodeID, Name const& aName);
 
@@ -115,8 +113,6 @@ namespace configmgr
             { return lhs.m_aParentID == rhs.m_aParentID && lhs.m_sNodeName == rhs.m_sNodeName; }
             // ordering
             friend bool operator < (SubNodeID const& lhs, SubNodeID const& rhs);
-            // checking
-            bool isEmpty() const;
             // checking
             bool isValidNode() const;
             // hashing

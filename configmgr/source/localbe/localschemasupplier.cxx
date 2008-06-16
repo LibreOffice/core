@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: localschemasupplier.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -264,14 +264,6 @@ instantiateLocalSchemaSupplier(const CreationContext& xContext) {
 }
 //------------------------------------------------------------------------------
 
-static const rtl::OUString kImplementationName(
-                            RTL_CONSTASCII_USTRINGPARAM(kImplementation)) ;
-
-rtl::OUString SAL_CALL LocalSchemaSupplier::getName(void) {
-    return kImplementationName ;
-}
-//------------------------------------------------------------------------------
-
 rtl::OUString SAL_CALL LocalSchemaSupplier::getImplementationName(void)
     throw (uno::RuntimeException)
 {
@@ -284,12 +276,6 @@ sal_Bool SAL_CALL LocalSchemaSupplier::supportsService(
     throw (uno::RuntimeException)
 {
     return  ServiceInfoHelper(&kServiceInfo).supportsService(aServiceName);
-}
-//------------------------------------------------------------------------------
-
-uno::Sequence<rtl::OUString> SAL_CALL LocalSchemaSupplier::getServices(void)
-{
-    return ServiceInfoHelper(&kServiceInfo).getSupportedServiceNames() ;
 }
 //------------------------------------------------------------------------------
 
