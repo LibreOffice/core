@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DatabaseDataProvider.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,20 +35,29 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/chart2/data/XDatabaseDataProvider.hpp"
+#include "com/sun/star/chart2/XInternalDataProvider.hpp"
 #include <com/sun/star/sdbc/XRowSet.hpp>
+#include <com/sun/star/sdbc/XParameters.hpp>
+#include <com/sun/star/container/XChild.hpp>
 
-#include "cppuhelper/compbase2.hxx"
+#include "cppuhelper/compbase3.hxx"
 #include "cppuhelper/basemutex.hxx"
 #include "cppuhelper/propertysetmixin.hxx"
 #include <cppuhelper/implementationentry.hxx>
+
 #include <comphelper/sequence.hxx>
+
+#include "connectivity/parameters.hxx"
+#include "connectivity/filtermanager.hxx"
+
 
 namespace dbaccess
 {
 
 class DatabaseDataSource;
-typedef ::cppu::WeakComponentImplHelper2<    ::com::sun::star::chart2::data::XDatabaseDataProvider
-                                          ,  ::com::sun::star::lang::XServiceInfo > TDatabaseDataProvider;
+typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::chart2::data::XDatabaseDataProvider
+                                          , ::com::sun::star::container::XChild
+                                          , ::com::sun::star::lang::XServiceInfo > TDatabaseDataProvider;
 
 class DatabaseDataProvider: private ::cppu::BaseMutex,
                             public TDatabaseDataProvider,
@@ -111,6 +120,14 @@ private:
     virtual void SAL_CALL setCommandType(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getFilter() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setFilter(const ::rtl::OUString & the_value) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getApplyFilter() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setApplyFilter( ::sal_Bool _applyfilter ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getHavingClause() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setHavingClause( const ::rtl::OUString& _havingclause ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getGroupBy() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setGroupBy( const ::rtl::OUString& _groupby ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getOrder() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setOrder( const ::rtl::OUString& _order ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getEscapeProcessing() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setEscapeProcessing(::sal_Bool the_value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getRowLimit() throw (::com::sun::star::uno::RuntimeException);
@@ -119,6 +136,60 @@ private:
     virtual void SAL_CALL setActiveConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > & the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException);
     virtual ::rtl::OUString SAL_CALL getDataSourceName() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDataSourceName( const ::rtl::OUString& _datasourcename ) throw (::com::sun::star::uno::RuntimeException);
+
+    // com::sun::star::sdbc::XParameters
+    virtual void SAL_CALL setNull(sal_Int32 parameterIndex, sal_Int32 sqlType) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setObjectNull(sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setBoolean(sal_Int32 parameterIndex, sal_Bool x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setByte(sal_Int32 parameterIndex, sal_Int8 x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setShort(sal_Int32 parameterIndex, sal_Int16 x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setInt(sal_Int32 parameterIndex, sal_Int32 x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setLong(sal_Int32 parameterIndex, sal_Int64 x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setFloat(sal_Int32 parameterIndex, float x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setDouble(sal_Int32 parameterIndex, double x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setString(sal_Int32 parameterIndex, const ::rtl::OUString& x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setBytes(sal_Int32 parameterIndex, const ::com::sun::star::uno::Sequence< sal_Int8 >& x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setDate(sal_Int32 parameterIndex, const ::com::sun::star::util::Date& x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setTime(sal_Int32 parameterIndex, const ::com::sun::star::util::Time& x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setTimestamp(sal_Int32 parameterIndex, const ::com::sun::star::util::DateTime& x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setBinaryStream(sal_Int32 parameterIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& x, sal_Int32 length) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setCharacterStream(sal_Int32 parameterIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& x, sal_Int32 length) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setObject(sal_Int32 parameterIndex, const ::com::sun::star::uno::Any& x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setObjectWithInfo(sal_Int32 parameterIndex, const ::com::sun::star::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setRef(sal_Int32 parameterIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRef>& x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setBlob(sal_Int32 parameterIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob>& x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setClob(sal_Int32 parameterIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob>& x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setArray(sal_Int32 parameterIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray>& x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL clearParameters() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    // com::sun::star::sdbc::XRowSet
+    virtual void SAL_CALL execute() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addRowSetListener(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSetListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeRowSetListener(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSetListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
+
+    // com::sun::star::sdbc::XResultSet
+    virtual sal_Bool SAL_CALL next() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isBeforeFirst() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isAfterLast() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isFirst() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isLast() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL beforeFirst() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL afterLast() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL first() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL last() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getRow() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL absolute(sal_Int32 row) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL relative(sal_Int32 rows) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL previous() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL refreshRow() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL rowUpdated() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL rowInserted() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL rowDeleted() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getStatement() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    // conatiner::XChild
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 private:
     DatabaseDataProvider(DatabaseDataProvider &); // not defined
     void operator =(DatabaseDataProvider &); // not defined
@@ -129,6 +200,12 @@ private:
     // if your component needs special work when it becomes
     // disposed, do it here.
     virtual void SAL_CALL disposing();
+
+    void impl_fillRowSet_throw();
+    bool impl_executeRowSet_throw(::osl::ResettableMutexGuard& _rClearForNotifies);
+    bool fillParameters( ::osl::ResettableMutexGuard& _rClearForNotifies, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler );
+    void impl_fillInternalDataProvider_throw();
+    void impl_invalidateParameter_nothrow();
 
     template <typename T> void set(  const ::rtl::OUString& _sProperty
                                         ,const T& _Value
@@ -143,20 +220,31 @@ private:
         l.notify();
     }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xActiveConnection;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >             m_xRowSet;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource > m_xDataSource;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >                              m_MasterFields;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >                              m_DetailFields;
+    ::dbtools::ParameterManager m_aParameterManager;
+    ::dbtools::FilterManager    m_aFilterManager;
 
-    DatabaseDataSource* m_pDataSource;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >            m_xContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >                 m_xActiveConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                     m_xRowSet;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XInternalDataProvider >     m_xInternal;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XRangeXMLConversion>  m_xRangeConversion;
+    // the object doin' most of the work - an SDB-rowset
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>                  m_xAggregate;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>                m_xAggregateSet;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>                    m_xParent;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >                                      m_MasterFields;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >                                      m_DetailFields;
+
     ::rtl::OUString     m_Command;
     ::rtl::OUString     m_DataSourceName;
     ::sal_Int32         m_CommandType;
     sal_Int32           m_RowLimit;
     ::rtl::OUString     m_Filter;
+    ::rtl::OUString     m_HavingClause;
+    ::rtl::OUString     m_Order;
+    ::rtl::OUString     m_GroupBy;
     ::sal_Bool          m_EscapeProcessing;
+    ::sal_Bool          m_ApplyFilter;
 };
 
 } // namespace dbaccess
