@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UITools.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,47 +29,12 @@
  ************************************************************************/
 #include "precompiled_reportdesign.hxx"
 
-//Erstmal definieren, damit die Klassendeklarionen angezogen werden.
-#define ITEMID_FONT             10
-#define ITEMID_POSTURE          11
-#define ITEMID_WEIGHT           12
-#define ITEMID_SHADOWED         13
-#define ITEMID_WORDLINEMODE     14
-#define ITEMID_CONTOUR          15
-#define ITEMID_CROSSEDOUT       16
-#define ITEMID_UNDERLINE        17
-#define ITEMID_FONTHEIGHT       18
-#define ITEMID_PROPSIZE         19
-#define ITEMID_COLOR            20
-#define ITEMID_KERNING          21
-#define ITEMID_CASEMAP          22
-#define ITEMID_LANGUAGE         23
-#define ITEMID_ESCAPEMENT       24
-#define ITEMID_FONTLIST         25
-#define ITEMID_AUTOKERN         26
-#define ITEMID_COLOR_TABLE      27
-#define ITEMID_BLINK            28
-#define ITEMID_EMPHASISMARK     29
-#define ITEMID_TWOLINES         30
-#define ITEMID_CHARROTATE       31
-#define ITEMID_CHARRELIEF       32
-#define ITEMID_CHARHIDDEN       33
-#define ITEMID_CHARSCALE_W      34
-#define ITEMID_BRUSH            35
-#define ITEMID_HORJUSTIFY       36
-#define ITEMID_VERJUSTIFY       37
-//#define ITEMID_IDENT          38
-//#define ITEMID_DEGREES        39
-//#define ITEMID_CHARROTATE     SID_ATTR_CHAR_ROTATED
-
 #include <svx/charscaleitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <toolkit/helper/convert.hxx>
 #include "SectionView.hxx"
-#ifndef RPTUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/pathoptions.hxx>
 #include <tools/diagnose_ex.h>
@@ -111,12 +76,8 @@
 #include <svx/svdpage.hxx>
 #include <svtools/itempool.hxx>
 #include <svtools/itemset.hxx>
-#ifndef _RPTUI_SLOTID_HRC_
 #include "rptui_slotid.hrc"
-#endif
-#ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
 #include "uistrings.hrc"
-#endif
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <com/sun/star/report/XGroups.hpp>
@@ -129,10 +90,52 @@
 #include <vcl/msgbox.hxx>
 #include "ModuleHelper.hxx"
 #include "RptDef.hxx"
-#ifndef _RPTUI_DLGRESID_HRC
 #include "RptResId.hrc"
-#endif
 #include <tools/string.hxx>
+#define ITEMID_FONT                     10
+#define ITEMID_FONTHEIGHT               11
+#define ITEMID_LANGUAGE                 12
+
+#define ITEMID_POSTURE                  13
+#define ITEMID_WEIGHT                   14
+#define ITEMID_SHADOWED                 15
+#define ITEMID_WORDLINEMODE             16
+#define ITEMID_CONTOUR                  17
+#define ITEMID_CROSSEDOUT               18
+#define ITEMID_UNDERLINE                19
+
+#define ITEMID_COLOR                    20
+#define ITEMID_KERNING                  21
+#define ITEMID_CASEMAP                  22
+
+#define ITEMID_ESCAPEMENT               23
+#define ITEMID_FONTLIST                 24
+#define ITEMID_AUTOKERN                 25
+#define ITEMID_COLOR_TABLE              26
+#define ITEMID_BLINK                    27
+#define ITEMID_EMPHASISMARK             28
+#define ITEMID_TWOLINES                 29
+#define ITEMID_CHARROTATE               30
+#define ITEMID_CHARSCALE_W              31
+#define ITEMID_CHARRELIEF               32
+#define ITEMID_CHARHIDDEN               33
+#define ITEMID_BRUSH                    34
+#define ITEMID_HORJUSTIFY               35
+#define ITEMID_VERJUSTIFY               36
+#define ITEMID_FONT_ASIAN               37
+#define ITEMID_FONTHEIGHT_ASIAN         38
+#define ITEMID_LANGUAGE_ASIAN           39
+#define ITEMID_POSTURE_ASIAN            40
+#define ITEMID_WEIGHT_ASIAN             41
+#define ITEMID_FONT_COMPLEX             42
+#define ITEMID_FONTHEIGHT_COMPLEX       43
+#define ITEMID_LANGUAGE_COMPLEX         44
+#define ITEMID_POSTURE_COMPLEX          45
+#define ITEMID_WEIGHT_COMPLEX           46
+
+#define WESTERN 0
+#define ASIAN   1
+#define COMPLEX 2
 
 namespace rptui
 {
@@ -233,21 +236,6 @@ sal_Int16 lcl_MapVerticalAlignment(const SvxCellVerJustify _eAlign)
     return nRet;
 }
 // -----------------------------------------------------------------------------
-sal_Int32 getGroupPosition(const uno::Reference< report::XReportDefinition >& _xReportDefinition,const uno::Reference< report::XGroup >& _xGroup)
-{
-    OSL_ENSURE(_xReportDefinition.is(),"No report definition -> GPF!");
-    uno::Reference< report::XGroups > xGroups = _xReportDefinition->getGroups();
-    const sal_Int32 nCount = xGroups->getCount();
-    sal_Int32 i = 0;
-    for (;i<nCount ; ++i)
-    {
-        uno::Reference< report::XGroup > xGroup(xGroups->getByIndex(i),uno::UNO_QUERY);
-        if ( xGroup == _xGroup )
-            break;
-    } // for (;i<nCount ; ++i)
-    return i;
-}
-// -----------------------------------------------------------------------------
 void adjustSectionName(const uno::Reference< report::XGroup >& _xGroup,sal_Int32 _nPos)
 {
     OSL_ENSURE(_xGroup.is(),"Group is NULL -> GPF");
@@ -287,23 +275,67 @@ void adjustSectionName(const uno::Reference< report::XGroup >& _xGroup,sal_Int32
 namespace
 {
     // -------------------------------------------------------------------------
-    Font lcl_getReportControlFont( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat, awt::FontDescriptor& _out_rControlFont )
+    Font lcl_getReportControlFont( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat, awt::FontDescriptor& _out_rControlFont ,USHORT _nWichFont)
     {
         if ( !_rxReportControlFormat.is() )
             throw uno::RuntimeException();
 
-        _out_rControlFont = _rxReportControlFormat->getFontDescriptor();
+        switch(_nWichFont)
+        {
+            case WESTERN:
+                _out_rControlFont = _rxReportControlFormat->getFontDescriptor();
+                break;
+            case ASIAN:
+                _out_rControlFont = _rxReportControlFormat->getFontDescriptorAsian();
+                break;
+            case COMPLEX:
+                _out_rControlFont = _rxReportControlFormat->getFontDescriptorComplex();
+                break;
+
+        }
+
         Font aDefaultFont = Application::GetDefaultDevice()->GetSettings().GetStyleSettings().GetAppFont();
         return VCLUnoHelper::CreateFont( _out_rControlFont, aDefaultFont );
     }
 
     // -------------------------------------------------------------------------
-    Font lcl_getReportControlFont( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat )
+    Font lcl_getReportControlFont( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,USHORT _nWhich )
     {
         awt::FontDescriptor aAwtFont;
-        return lcl_getReportControlFont( _rxReportControlFormat, aAwtFont );
+        return lcl_getReportControlFont( _rxReportControlFormat, aAwtFont, _nWhich );
     }
+    // -------------------------------------------------------------------------
+    const Font lcl_setFont(const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
+        SfxItemSet& _rItemSet,USHORT _nWhich,USHORT _nFont, USHORT _nFontHeight,USHORT _nLanguage,USHORT _nPosture, USHORT _nWeight)
+    {
+        // fill it
+        awt::FontDescriptor aControlFont;
+        const Font aFont( lcl_getReportControlFont( _rxReportControlFormat, aControlFont,_nWhich ) );
 
+        SvxFontItem aFontItem(_nFont);
+        aFontItem.PutValue( uno::makeAny( aControlFont ) );
+        _rItemSet.Put(aFontItem);
+
+        _rItemSet.Put(SvxFontHeightItem(OutputDevice::LogicToLogic(Size(0, (sal_Int32)aFont.GetHeight()), MAP_POINT, MAP_TWIP).Height(),100,_nFontHeight));
+        lang::Locale aLocale;
+        switch(_nWhich)
+        {
+            default:
+                aLocale = _rxReportControlFormat->getCharLocale();
+                break;
+            case ASIAN:
+                aLocale = _rxReportControlFormat->getCharLocaleAsian();
+                break;
+            case COMPLEX:
+                aLocale = _rxReportControlFormat->getCharLocaleComplex();
+                break;
+        }
+        _rItemSet.Put(SvxLanguageItem(MsLangId::convertLocaleToLanguage(aLocale),_nLanguage));
+
+        _rItemSet.Put(SvxPostureItem(aFont.GetItalic(),_nPosture));
+        _rItemSet.Put(SvxWeightItem(aFont.GetWeight(),_nWeight));
+        return aFont;
+    }
     // -------------------------------------------------------------------------
     void lcl_CharPropertiesToItems( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
         SfxItemSet& _rItemSet )
@@ -312,20 +344,15 @@ namespace
             throw lang::NullPointerException();
 
         // fill it
-        awt::FontDescriptor aControlFont;
-        const Font aFont( lcl_getReportControlFont( _rxReportControlFormat, aControlFont ) );
-        SvxFontItem aFontItem(ITEMID_FONT);
-        aFontItem.PutValue( uno::makeAny( aControlFont ) );
-        _rItemSet.Put(aFontItem);
-        _rItemSet.Put(SvxPostureItem(aFont.GetItalic(),ITEMID_POSTURE));
-        _rItemSet.Put(SvxWeightItem(aFont.GetWeight(),ITEMID_WEIGHT));
+        const Font aFont( lcl_setFont(_rxReportControlFormat, _rItemSet,WESTERN,ITEMID_FONT,ITEMID_FONTHEIGHT,ITEMID_LANGUAGE,ITEMID_POSTURE,ITEMID_WEIGHT ) );
+
         _rItemSet.Put(SvxShadowedItem(_rxReportControlFormat->getCharShadowed(),ITEMID_SHADOWED));
         _rItemSet.Put(SvxWordLineModeItem(aFont.IsWordLineMode(),ITEMID_WORDLINEMODE));
         _rItemSet.Put(SvxContourItem(_rxReportControlFormat->getCharContoured(),ITEMID_CONTOUR));
         _rItemSet.Put(SvxAutoKernItem(_rxReportControlFormat->getCharAutoKerning(),ITEMID_AUTOKERN));
         _rItemSet.Put(SvxCrossedOutItem(aFont.GetStrikeout(),ITEMID_CROSSEDOUT));
         _rItemSet.Put(SvxCaseMapItem(static_cast<SvxCaseMap>(_rxReportControlFormat->getCharCaseMap()),ITEMID_CASEMAP));
-        _rItemSet.Put(SvxLanguageItem(MsLangId::convertLocaleToLanguage(_rxReportControlFormat->getCharLocale()),ITEMID_LANGUAGE));
+
         _rItemSet.Put(SvxEscapementItem(_rxReportControlFormat->getCharEscapement(),_rxReportControlFormat->getCharEscapementHeight(),ITEMID_ESCAPEMENT));
         _rItemSet.Put(SvxBlinkItem(_rxReportControlFormat->getCharFlash(),ITEMID_BLINK));
         _rItemSet.Put(SvxCharHiddenItem(_rxReportControlFormat->getCharHidden(),ITEMID_CHARHIDDEN));
@@ -333,7 +360,6 @@ namespace
         SvxUnderlineItem aUnderLineItem(aFont.GetUnderline(),ITEMID_UNDERLINE);
         aUnderLineItem.SetColor(_rxReportControlFormat->getCharUnderlineColor());
         _rItemSet.Put(aUnderLineItem);
-        _rItemSet.Put(SvxFontHeightItem(OutputDevice::LogicToLogic(Size(0, (sal_Int32)aFont.GetHeight()), MAP_POINT, MAP_TWIP).Height(),100,ITEMID_FONTHEIGHT));
         _rItemSet.Put(SvxKerningItem(_rxReportControlFormat->getCharKerning(),ITEMID_KERNING));
         _rItemSet.Put(SvxEmphasisMarkItem(static_cast<FontEmphasisMark>(_rxReportControlFormat->getCharEmphasis()),ITEMID_EMPHASISMARK));
         //_rItemSet.Put(SvxTwoLinesItem());
@@ -350,22 +376,26 @@ namespace
         uno::Reference< report::XShape> xShape(_rxReportControlFormat,uno::UNO_QUERY);
         if ( !xShape.is() )
             _rItemSet.Put(SvxBrushItem(::Color(_rxReportControlFormat->getControlBackground()),ITEMID_BRUSH));
+
+        lcl_setFont(_rxReportControlFormat, _rItemSet,ASIAN,ITEMID_FONT_ASIAN,ITEMID_FONTHEIGHT_ASIAN,ITEMID_LANGUAGE_ASIAN,ITEMID_POSTURE_ASIAN,ITEMID_WEIGHT_ASIAN );
+        lcl_setFont(_rxReportControlFormat, _rItemSet,COMPLEX,ITEMID_FONT_COMPLEX,ITEMID_FONTHEIGHT_COMPLEX,ITEMID_LANGUAGE_COMPLEX,ITEMID_POSTURE_COMPLEX,ITEMID_WEIGHT_COMPLEX );
     }
 
     // -------------------------------------------------------------------------
-    void lcl_pushBack( uno::Sequence< beans::NamedValue >& _out_rProperties, const sal_Char* _pAsciiName, const uno::Any& _rValue )
+    void lcl_pushBack( uno::Sequence< beans::NamedValue >& _out_rProperties, const ::rtl::OUString& _sName, const uno::Any& _rValue )
     {
         sal_Int32 nLen( _out_rProperties.getLength() );
         _out_rProperties.realloc( nLen + 1 );
-        _out_rProperties[ nLen ] = beans::NamedValue( ::rtl::OUString::createFromAscii( _pAsciiName ), _rValue );
+        _out_rProperties[ nLen ] = beans::NamedValue( _sName, _rValue );
     }
 
     // -------------------------------------------------------------------------
-    void lcl_initAwtFont( const Font& _rOriginalFont, const SfxItemSet& _rItemSet, awt::FontDescriptor& _out_rAwtFont )
+    void lcl_initAwtFont( const Font& _rOriginalFont, const SfxItemSet& _rItemSet, awt::FontDescriptor& _out_rAwtFont,
+        USHORT _nFont, USHORT _nFontHeight,USHORT _nPosture, USHORT _nWeight)
     {
         Font aNewFont( _rOriginalFont );
         const SfxPoolItem* pItem( NULL );
-        if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_FONT,sal_True,&pItem) && pItem->ISA(SvxFontItem))
+        if ( SFX_ITEM_SET == _rItemSet.GetItemState( _nFont,sal_True,&pItem) && pItem->ISA(SvxFontItem))
         {
             const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(pItem);
             aNewFont.SetName( pFontItem->GetFamilyName());
@@ -373,13 +403,18 @@ namespace
             aNewFont.SetFamily(pFontItem->GetFamily());
             aNewFont.SetPitch(pFontItem->GetPitch());
             aNewFont.SetCharSet(pFontItem->GetCharSet());
+        } // if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_FONT,sal_True,&pItem) && pItem->ISA(SvxFontItem))
+        if ( SFX_ITEM_SET == _rItemSet.GetItemState( _nFontHeight,sal_True,&pItem) && pItem->ISA(SvxFontHeightItem))
+        {
+            const SvxFontHeightItem* pFontItem = static_cast<const SvxFontHeightItem*>(pItem);
+            aNewFont.SetHeight(OutputDevice::LogicToLogic(Size(0, pFontItem->GetHeight()), MAP_TWIP, MAP_POINT).Height());
         }
-        if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_POSTURE,sal_True,&pItem) && pItem->ISA(SvxPostureItem))
+        if ( SFX_ITEM_SET == _rItemSet.GetItemState( _nPosture,sal_True,&pItem) && pItem->ISA(SvxPostureItem))
         {
             const SvxPostureItem* pFontItem = static_cast<const SvxPostureItem*>(pItem);
             aNewFont.SetItalic(pFontItem->GetPosture());
         }
-        if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_WEIGHT,sal_True,&pItem) && pItem->ISA(SvxWeightItem))
+        if ( SFX_ITEM_SET == _rItemSet.GetItemState( _nWeight,sal_True,&pItem) && pItem->ISA(SvxWeightItem))
         {
             const SvxWeightItem* pFontItem = static_cast<const SvxWeightItem*>(pItem);
             aNewFont.SetWeight(pFontItem->GetWeight());
@@ -394,19 +429,7 @@ namespace
             const SvxCrossedOutItem* pFontItem = static_cast<const SvxCrossedOutItem*>(pItem);
             aNewFont.SetStrikeout(pFontItem->GetStrikeout());
         }
-        if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_FONTHEIGHT,sal_True,&pItem) && pItem->ISA(SvxFontHeightItem))
-        {
-            const SvxFontHeightItem* pFontItem = static_cast<const SvxFontHeightItem*>(pItem);
-            aNewFont.SetHeight(OutputDevice::LogicToLogic(Size(0, pFontItem->GetHeight()), MAP_TWIP, MAP_POINT).Height());
-        }
-        if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_PROPSIZE,sal_True,&pItem) && pItem->ISA(SvxPropSizeItem))
-        {
-            //const SvxPropSizeItem* pFontItem = static_cast<const SvxPropSizeItem*>(pItem);
-        }
-        if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_FONTLIST,sal_True,&pItem) && pItem->ISA(SvxFontListItem))
-        {
-            //const SvxFontListItem* pFontItem = static_cast<const SvxFontListItem*>(pItem);
-        }
+
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_CHARROTATE,sal_True,&pItem) && pItem->ISA(SvxCharRotateItem))
         {
             const SvxCharRotateItem* pRotateItem = static_cast<const SvxCharRotateItem*>(pItem);
@@ -432,105 +455,120 @@ namespace
     }
 
     // -------------------------------------------------------------------------
-    void lcl_itemsToCharProperties( const Font& _rOriginalControlFont, const SfxItemSet& _rItemSet, uno::Sequence< beans::NamedValue >& _out_rProperties )
+    void lcl_itemsToCharProperties( const Font& _rOriginalControlFont,const Font& _rOriginalControlFontAsian,const Font& _rOriginalControlFontComplex, const SfxItemSet& _rItemSet, uno::Sequence< beans::NamedValue >& _out_rProperties )
     {
         const SfxPoolItem* pItem( NULL );
 
         // create an AWT font
         awt::FontDescriptor aAwtFont;
-        lcl_initAwtFont( _rOriginalControlFont, _rItemSet, aAwtFont );
-        lcl_pushBack( _out_rProperties, "Font", uno::makeAny( aAwtFont ) );
+        lcl_initAwtFont( _rOriginalControlFont, _rItemSet, aAwtFont,ITEMID_FONT,ITEMID_FONTHEIGHT,ITEMID_POSTURE, ITEMID_WEIGHT);
+        lcl_pushBack( _out_rProperties, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Font")), uno::makeAny( aAwtFont ) );
+        lcl_initAwtFont( _rOriginalControlFontAsian, _rItemSet, aAwtFont,ITEMID_FONT_ASIAN,ITEMID_FONTHEIGHT_ASIAN,ITEMID_POSTURE_ASIAN, ITEMID_WEIGHT_ASIAN);
+        lcl_pushBack( _out_rProperties, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FontAsian")), uno::makeAny( aAwtFont ) );
+        lcl_initAwtFont( _rOriginalControlFontComplex, _rItemSet, aAwtFont,ITEMID_FONT_COMPLEX,ITEMID_FONTHEIGHT_COMPLEX,ITEMID_POSTURE_COMPLEX, ITEMID_WEIGHT_COMPLEX);
+        lcl_pushBack( _out_rProperties, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FontComplex")), uno::makeAny( aAwtFont ) );
 
         // properties which cannot be represented in an AWT font need to be preserved directly
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_SHADOWED,sal_True,&pItem) && pItem->ISA(SvxShadowedItem))
         {
             const SvxShadowedItem* pFontItem = static_cast<const SvxShadowedItem*>(pItem);
-            lcl_pushBack( _out_rProperties, "CharShadowed", uno::makeAny( pFontItem->GetValue() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARSHADOWED, uno::makeAny( pFontItem->GetValue() ) );
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_CONTOUR,sal_True,&pItem) && pItem->ISA(SvxContourItem))
         {
             const SvxContourItem* pFontItem = static_cast<const SvxContourItem*>(pItem);
-            lcl_pushBack( _out_rProperties, "CharContoured", uno::makeAny( pFontItem->GetValue() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARCONTOURED, uno::makeAny( pFontItem->GetValue() ) );
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_UNDERLINE,sal_True,&pItem) && pItem->ISA(SvxUnderlineItem))
         {
             const SvxUnderlineItem* pFontItem = static_cast<const SvxUnderlineItem*>(pItem);
-            lcl_pushBack( _out_rProperties, "CharUnderlineColor", uno::makeAny( pFontItem->GetColor().GetColor() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARUNDERLINECOLOR, uno::makeAny( pFontItem->GetColor().GetColor() ) );
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_HORJUSTIFY,sal_True,&pItem) && pItem->ISA(SvxHorJustifyItem))
         {
             const SvxHorJustifyItem* pJustifyItem = static_cast<const SvxHorJustifyItem*>(pItem);
-            lcl_pushBack( _out_rProperties, "ParaAdjust", uno::makeAny( lcl_MapHorizontalAlignment( static_cast< SvxCellHorJustify >( pJustifyItem->GetEnumValue() ) ) ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_PARAADJUST, uno::makeAny( lcl_MapHorizontalAlignment( static_cast< SvxCellHorJustify >( pJustifyItem->GetEnumValue() ) ) ) );
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_VERJUSTIFY,sal_True,&pItem) && pItem->ISA(SvxVerJustifyItem))
         {
             const SvxVerJustifyItem* pJustifyItem = static_cast<const SvxVerJustifyItem*>(pItem);
-            lcl_pushBack( _out_rProperties, "ParaVertAlignment", uno::makeAny( lcl_MapVerticalAlignment( static_cast< SvxCellVerJustify >( pJustifyItem->GetEnumValue() ) ) ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_VERTICALALIGN, uno::makeAny( lcl_MapVerticalAlignment( static_cast< SvxCellVerJustify >( pJustifyItem->GetEnumValue() ) ) ) );
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_CHARRELIEF,sal_True,&pItem) && pItem->ISA(SvxCharReliefItem))
         {
             const SvxCharReliefItem* pFontItem = static_cast<const SvxCharReliefItem*>(pItem);
-            lcl_pushBack( _out_rProperties, "CharRelief", uno::makeAny( static_cast< sal_Int16 >( pFontItem->GetEnumValue() ) ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARRELIEF, uno::makeAny( static_cast< sal_Int16 >( pFontItem->GetEnumValue() ) ) );
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_CHARHIDDEN,sal_True,&pItem) && pItem->ISA(SvxCharHiddenItem))
         {
             const SvxCharHiddenItem* pFontItem = static_cast<const SvxCharHiddenItem*>(pItem);
-            lcl_pushBack( _out_rProperties, "CharHidden", uno::makeAny( pFontItem->GetValue() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARHIDDEN, uno::makeAny( pFontItem->GetValue() ) );
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_AUTOKERN,sal_True,&pItem) && pItem->ISA(SvxAutoKernItem))
         {
             const SvxAutoKernItem* pFontItem = static_cast<const SvxAutoKernItem*>(pItem);
-            lcl_pushBack( _out_rProperties, "CharAutoKerning", uno::makeAny( pFontItem->GetValue() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARAUTOKERNING, uno::makeAny( pFontItem->GetValue() ) );
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_BRUSH,sal_True,&pItem) && pItem->ISA(SvxBrushItem))
         {
             const SvxBrushItem* pFontItem = static_cast<const SvxBrushItem*>(pItem);
-            lcl_pushBack( _out_rProperties, "ControlBackground", uno::makeAny( pFontItem->GetColor().GetColor() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CONTROLBACKGROUND, uno::makeAny( pFontItem->GetColor().GetColor() ) );
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_BLINK,sal_True,&pItem) && pItem->ISA(SvxBlinkItem))
         {
             const SvxBlinkItem* pFontItem = static_cast<const SvxBlinkItem*>(pItem);
-            lcl_pushBack( _out_rProperties, "CharFlash", uno::makeAny( pFontItem->GetValue() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARFLASH, uno::makeAny( pFontItem->GetValue() ) );
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_EMPHASISMARK,sal_True,&pItem) && pItem->ISA(SvxEmphasisMarkItem))
         {
             const SvxEmphasisMarkItem* pFontItem = static_cast<const SvxEmphasisMarkItem*>(pItem);
-            lcl_pushBack( _out_rProperties, "CharEmphasis", uno::makeAny( static_cast< sal_Int16 >( pFontItem->GetEmphasisMark() ) ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHAREMPHASIS, uno::makeAny( static_cast< sal_Int16 >( pFontItem->GetEmphasisMark() ) ) );
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_TWOLINES,sal_True,&pItem) && pItem->ISA(SvxTwoLinesItem))
         {
             const SvxTwoLinesItem* pFontItem = static_cast<const SvxTwoLinesItem*>(pItem);
-            lcl_pushBack( _out_rProperties, "CharCombineIsOn", uno::makeAny( pFontItem->GetValue() ) );
-            lcl_pushBack( _out_rProperties, "CharCombinePrefix", uno::makeAny( ::rtl::OUString( pFontItem->GetStartBracket() ) ) );
-            lcl_pushBack( _out_rProperties, "CharCombineSuffix", uno::makeAny( ::rtl::OUString( pFontItem->GetEndBracket() ) ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARCOMBINEISON, uno::makeAny( pFontItem->GetValue() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARCOMBINEPREFIX, uno::makeAny( ::rtl::OUString( pFontItem->GetStartBracket() ) ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARCOMBINESUFFIX, uno::makeAny( ::rtl::OUString( pFontItem->GetEndBracket() ) ) );
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_COLOR,sal_True,&pItem) && pItem->ISA(SvxColorItem))
         {
             const SvxColorItem* pFontItem = static_cast<const SvxColorItem*>(pItem);
-            lcl_pushBack( _out_rProperties, "CharColor", uno::makeAny( pFontItem->GetValue().GetColor() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARCOLOR, uno::makeAny( pFontItem->GetValue().GetColor() ) );
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_KERNING,sal_True,&pItem) && pItem->ISA(SvxKerningItem))
         {
             const SvxKerningItem* pFontItem = static_cast<const SvxKerningItem*>(pItem);
-            lcl_pushBack( _out_rProperties, "CharKerning", uno::makeAny( pFontItem->GetValue() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARKERNING, uno::makeAny( pFontItem->GetValue() ) );
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_CASEMAP,sal_True,&pItem) && pItem->ISA(SvxCaseMapItem))
         {
             const SvxCaseMapItem* pFontItem = static_cast<const SvxCaseMapItem*>(pItem);
-            lcl_pushBack( _out_rProperties, "CharCaseMap", uno::makeAny( pFontItem->GetValue() ) );
-        }
-        if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_LANGUAGE,sal_True,&pItem) && pItem->ISA(SvxLanguageItem))
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARCASEMAP, uno::makeAny( pFontItem->GetValue() ) );
+        } // if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_CASEMAP,sal_True,&pItem) && pItem->ISA(SvxCaseMapItem))
+        struct Items {
+                USHORT nWhich;
+                ::rtl::OUString sPropertyName;
+        };
+        const Items pItems[] = { {ITEMID_LANGUAGE,PROPERTY_CHARLOCALE}
+                                ,{ITEMID_LANGUAGE_ASIAN,PROPERTY_CHARLOCALEASIAN}
+                                ,{ITEMID_LANGUAGE_COMPLEX,PROPERTY_CHARLOCALECOMPLEX}
+        };
+        for(size_t k = 0; k < sizeof(pItems)/sizeof(pItems[0]);++k)
         {
-            const SvxLanguageItem* pFontItem = static_cast<const SvxLanguageItem*>(pItem);
-            lang::Locale aCharLocale;
-            MsLangId::convertLanguageToLocale( pFontItem->GetLanguage(), aCharLocale );
-            lcl_pushBack( _out_rProperties, "CharLocale", uno::makeAny( aCharLocale ) );
+            if ( SFX_ITEM_SET == _rItemSet.GetItemState( pItems[k].nWhich,sal_True,&pItem) && pItem->ISA(SvxLanguageItem))
+            {
+                const SvxLanguageItem* pFontItem = static_cast<const SvxLanguageItem*>(pItem);
+                lang::Locale aCharLocale;
+                MsLangId::convertLanguageToLocale( pFontItem->GetLanguage(), aCharLocale );
+                lcl_pushBack( _out_rProperties, pItems[k].sPropertyName, uno::makeAny( aCharLocale ) );
+            } // if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_LANGUAGE,sal_True,&pItem) && pItem->ISA(SvxLanguageItem))
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_ESCAPEMENT,sal_True,&pItem) && pItem->ISA(SvxEscapementItem))
         {
             const SvxEscapementItem* pFontItem = static_cast<const SvxEscapementItem*>(pItem);
-            lcl_pushBack( _out_rProperties, "CharEscapement", uno::makeAny( pFontItem->GetEsc() ) );
-            lcl_pushBack( _out_rProperties, "CharEscapementHeight", uno::makeAny( (sal_Int8)pFontItem->GetProp() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARESCAPEMENT, uno::makeAny( pFontItem->GetEsc() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARESCAPEMENTHEIGHT, uno::makeAny( (sal_Int8)pFontItem->GetProp() ) );
         }
     }
 
@@ -581,6 +619,8 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     static SfxItemInfo aItemInfos[] =
     {
         { SID_ATTR_CHAR_FONT, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_FONTHEIGHT, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_LANGUAGE, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_POSTURE, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_WEIGHT, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_SHADOWED, SFX_ITEM_POOLABLE },
@@ -588,12 +628,9 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         { SID_ATTR_CHAR_CONTOUR, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_STRIKEOUT, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_UNDERLINE, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_FONTHEIGHT, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_PROPSIZE, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_COLOR, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_KERNING, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_CASEMAP, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_LANGUAGE, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_ESCAPEMENT, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_FONTLIST, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_AUTOKERN, SFX_ITEM_POOLABLE },
@@ -602,14 +639,25 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         { SID_ATTR_CHAR_EMPHASISMARK, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_TWO_LINES, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_ROTATED, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_SCALEWIDTH, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_RELIEF, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_HIDDEN, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_SCALEWIDTH, SFX_ITEM_POOLABLE },
-        { SID_ATTR_BRUSH, SFX_ITEM_POOLABLE },
+        { SID_ATTR_BRUSH_CHAR, SFX_ITEM_POOLABLE },
         { SID_ATTR_ALIGN_HOR_JUSTIFY, SFX_ITEM_POOLABLE },
-        //{ SID_ATTR_ALIGN_INDENT, SFX_ITEM_POOLABLE },
-        { SID_ATTR_ALIGN_VER_JUSTIFY, SFX_ITEM_POOLABLE }
-        //{ SID_ATTR_ALIGN_DEGREES, SFX_ITEM_POOLABLE }
+        { SID_ATTR_ALIGN_VER_JUSTIFY, SFX_ITEM_POOLABLE },
+
+        // Asian
+        { SID_ATTR_CHAR_CJK_FONT, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_CJK_FONTHEIGHT, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_CJK_LANGUAGE, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_CJK_POSTURE, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_CJK_WEIGHT, SFX_ITEM_POOLABLE },
+        // Complex
+        { SID_ATTR_CHAR_CTL_FONT, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_CTL_FONTHEIGHT, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_CTL_LANGUAGE, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_CTL_POSTURE, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_CTL_WEIGHT, SFX_ITEM_POOLABLE }
     };
     Window* pParent = VCLUnoHelper::GetWindow( _rxParentWindow );
     ::std::auto_ptr<FontList> pFontList(new FontList( pParent ));
@@ -617,19 +665,20 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     SfxPoolItem* pDefaults[] =
     {
         new SvxFontItem(ITEMID_FONT),
+        new SvxFontHeightItem(240,100,ITEMID_FONTHEIGHT),
+        new SvxLanguageItem(LANGUAGE_GERMAN,ITEMID_LANGUAGE),
         new SvxPostureItem(ITALIC_NONE,ITEMID_POSTURE),
         new SvxWeightItem(WEIGHT_NORMAL,ITEMID_WEIGHT),
+
         new SvxShadowedItem(FALSE,ITEMID_SHADOWED),
         new SvxWordLineModeItem(FALSE,ITEMID_WORDLINEMODE),
         new SvxContourItem(FALSE,ITEMID_CONTOUR),
         new SvxCrossedOutItem(STRIKEOUT_NONE,ITEMID_CROSSEDOUT),
         new SvxUnderlineItem(UNDERLINE_NONE,ITEMID_UNDERLINE),
-        new SvxFontHeightItem(240,100,ITEMID_FONTHEIGHT),
-        new SvxPropSizeItem(100,ITEMID_PROPSIZE),
+
         new SvxColorItem(ITEMID_COLOR),
         new SvxKerningItem(0,ITEMID_KERNING),
         new SvxCaseMapItem(SVX_CASEMAP_NOT_MAPPED,ITEMID_CASEMAP),
-        new SvxLanguageItem(LANGUAGE_GERMAN,ITEMID_LANGUAGE),
         new SvxEscapementItem(ITEMID_ESCAPEMENT),
         new SvxFontListItem(pFontList.get(),ITEMID_FONTLIST),
         new SvxAutoKernItem(FALSE,ITEMID_AUTOKERN),
@@ -638,40 +687,39 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         new SvxEmphasisMarkItem(EMPHASISMARK_NONE,ITEMID_EMPHASISMARK),
         new SvxTwoLinesItem(TRUE,0,0,ITEMID_TWOLINES),
         new SvxCharRotateItem(0,sal_False,ITEMID_CHARROTATE),
+        new SvxCharScaleWidthItem(100,ITEMID_CHARSCALE_W),
         new SvxCharReliefItem(RELIEF_NONE,ITEMID_CHARRELIEF),
         new SvxCharHiddenItem(FALSE,ITEMID_CHARHIDDEN),
-        new SvxCharScaleWidthItem(100,ITEMID_CHARSCALE_W),
         new SvxBrushItem(ITEMID_BRUSH),
         new SvxHorJustifyItem(ITEMID_HORJUSTIFY),
-        //new SfxInt32Item(ITEMID_IDENT),
-        new SvxVerJustifyItem(ITEMID_VERJUSTIFY)
-        //new SfxInt32Item(ITEMID_DEGREES)
+        new SvxVerJustifyItem(ITEMID_VERJUSTIFY),
+// Asian
+        new SvxFontItem(ITEMID_FONT_ASIAN),
+        new SvxFontHeightItem(240,100,ITEMID_FONTHEIGHT_ASIAN),
+        new SvxLanguageItem(LANGUAGE_GERMAN,ITEMID_LANGUAGE_ASIAN),
+        new SvxPostureItem(ITALIC_NONE,ITEMID_POSTURE_ASIAN),
+        new SvxWeightItem(WEIGHT_NORMAL,ITEMID_WEIGHT_ASIAN),
+// Complex
+        new SvxFontItem(ITEMID_FONT_COMPLEX),
+        new SvxFontHeightItem(240,100,ITEMID_FONTHEIGHT_COMPLEX),
+        new SvxLanguageItem(LANGUAGE_GERMAN,ITEMID_LANGUAGE_COMPLEX),
+        new SvxPostureItem(ITALIC_NONE,ITEMID_POSTURE_COMPLEX),
+        new SvxWeightItem(WEIGHT_NORMAL,ITEMID_WEIGHT_COMPLEX)
+
     };
+
+    OSL_ASSERT((sizeof(pDefaults)/sizeof(pDefaults[0])) == (sizeof(aItemInfos)/sizeof(aItemInfos[0])));
 
     static USHORT pRanges[] =
     {
-        /*
-        SID_ATTR_CHAR_FONT,
-        SID_ATTR_CHAR_WEIGHT,
-        SID_ATTR_CHAR_FONTHEIGHT,
-        SID_ATTR_CHAR_FONTHEIGHT,
-        SID_ATTR_CHAR_COLOR,
-        SID_ATTR_CHAR_COLOR,
-        SID_ATTR_CHAR_LANGUAGE,
-        SID_ATTR_CHAR_LANGUAGE,
-        SID_ATTR_CHAR_CJK_FONT,
-        SID_ATTR_CHAR_CJK_WEIGHT,
-        SID_ATTR_CHAR_CTL_FONT,
-        SID_ATTR_CHAR_CTL_WEIGHT
-        */
-        ITEMID_FONT,ITEMID_VERJUSTIFY,
+        ITEMID_FONT,ITEMID_WEIGHT_COMPLEX,
         0
     };
 
     bool bSuccess = false;
     try
     {
-        ::std::auto_ptr<SfxItemPool> pPool( new SfxItemPool(String::CreateFromAscii("ReportCharProperties"), ITEMID_FONT,ITEMID_VERJUSTIFY, aItemInfos, pDefaults) );
+        ::std::auto_ptr<SfxItemPool> pPool( new SfxItemPool(String::CreateFromAscii("ReportCharProperties"), ITEMID_FONT,ITEMID_WEIGHT_COMPLEX, aItemInfos, pDefaults) );
         // not needed for font height pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );  // ripped, don't understand why
         pPool->FreezeIdRanges();                        // the same
 
@@ -686,7 +734,9 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
             bSuccess = ( RET_OK == aDlg.Execute() );
             if ( bSuccess )
             {
-                lcl_itemsToCharProperties( lcl_getReportControlFont( _rxReportControlFormat ), *aDlg.GetOutputItemSet(), _out_rNewValues );
+                lcl_itemsToCharProperties( lcl_getReportControlFont( _rxReportControlFormat,WESTERN ),
+                    lcl_getReportControlFont( _rxReportControlFormat,ASIAN ),
+                    lcl_getReportControlFont( _rxReportControlFormat,COMPLEX ), *aDlg.GetOutputItemSet(), _out_rNewValues );
             }
         }
     }
@@ -715,28 +765,44 @@ void applyCharacterSettings( const uno::Reference< report::XReportControlFormat 
             aAwtFont.Name = ::rtl::OUString(); // hack to
             _rxReportControlFormat->setFontDescriptor( aAwtFont );
             _rxReportControlFormat->setCharFontName( sTemp );
+        } // if ( aSettings.get( "Font" ) >>= aAwtFont )
+        if ( aSettings.get( "FontAsian" ) >>= aAwtFont )
+        {
+            ::rtl::OUString sTemp = aAwtFont.Name;
+            aAwtFont.Name = ::rtl::OUString(); // hack to
+            _rxReportControlFormat->setFontDescriptorAsian( aAwtFont );
+            _rxReportControlFormat->setCharFontNameAsian( sTemp );
+        } // if ( aSettings.get( "Font" ) >>= aAwtFont )
+        if ( aSettings.get( "FontComplex" ) >>= aAwtFont )
+        {
+            ::rtl::OUString sTemp = aAwtFont.Name;
+            aAwtFont.Name = ::rtl::OUString(); // hack to
+            _rxReportControlFormat->setFontDescriptorComplex( aAwtFont );
+            _rxReportControlFormat->setCharFontNameComplex( sTemp );
         }
 
-        lcl_applyFontAttribute( aSettings, "CharShadowed", _rxReportControlFormat, &report::XReportControlFormat::setCharShadowed );
-        lcl_applyFontAttribute( aSettings, "CharContoured", _rxReportControlFormat, &report::XReportControlFormat::setCharContoured );
-        lcl_applyFontAttribute( aSettings, "CharUnderlineColor", _rxReportControlFormat, &report::XReportControlFormat::setCharUnderlineColor );
-        lcl_applyFontAttribute( aSettings, "ParaAdjust", _rxReportControlFormat, &report::XReportControlFormat::setParaAdjust );
-        lcl_applyFontAttribute( aSettings, "ParaVertAlignment", _rxReportControlFormat, &report::XReportControlFormat::setParaVertAlignment );
-        lcl_applyFontAttribute( aSettings, "CharRelief", _rxReportControlFormat, &report::XReportControlFormat::setCharRelief );
-        lcl_applyFontAttribute( aSettings, "CharHidden", _rxReportControlFormat, &report::XReportControlFormat::setCharHidden );
-        lcl_applyFontAttribute( aSettings, "CharAutoKerning", _rxReportControlFormat, &report::XReportControlFormat::setCharAutoKerning );
-        lcl_applyFontAttribute( aSettings, "ControlBackground", _rxReportControlFormat, &report::XReportControlFormat::setControlBackground );
-        lcl_applyFontAttribute( aSettings, "CharFlash", _rxReportControlFormat, &report::XReportControlFormat::setCharFlash );
-        lcl_applyFontAttribute( aSettings, "CharEmphasis", _rxReportControlFormat, &report::XReportControlFormat::setCharEmphasis );
-        lcl_applyFontAttribute( aSettings, "CharCombineIsOn", _rxReportControlFormat, &report::XReportControlFormat::setCharCombineIsOn );
-        lcl_applyFontAttribute( aSettings, "CharCombinePrefix", _rxReportControlFormat, &report::XReportControlFormat::setCharCombinePrefix );
-        lcl_applyFontAttribute( aSettings, "CharCombineSuffix", _rxReportControlFormat, &report::XReportControlFormat::setCharCombineSuffix );
-        lcl_applyFontAttribute( aSettings, "CharColor", _rxReportControlFormat, &report::XReportControlFormat::setCharColor );
-        lcl_applyFontAttribute( aSettings, "CharKerning", _rxReportControlFormat, &report::XReportControlFormat::setCharKerning );
-        lcl_applyFontAttribute( aSettings, "CharCaseMap", _rxReportControlFormat, &report::XReportControlFormat::setCharCaseMap );
-        lcl_applyFontAttribute( aSettings, "CharLocale", _rxReportControlFormat, &report::XReportControlFormat::setCharLocale );
-        lcl_applyFontAttribute( aSettings, "CharEscapement", _rxReportControlFormat, &report::XReportControlFormat::setCharEscapement );
-        lcl_applyFontAttribute( aSettings, "CharEscapementHeight", _rxReportControlFormat, &report::XReportControlFormat::setCharEscapementHeight );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARSHADOWED, _rxReportControlFormat, &report::XReportControlFormat::setCharShadowed );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARCONTOURED, _rxReportControlFormat, &report::XReportControlFormat::setCharContoured );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARUNDERLINECOLOR, _rxReportControlFormat, &report::XReportControlFormat::setCharUnderlineColor );
+        lcl_applyFontAttribute( aSettings, PROPERTY_PARAADJUST, _rxReportControlFormat, &report::XReportControlFormat::setParaAdjust );
+        lcl_applyFontAttribute( aSettings, PROPERTY_VERTICALALIGN, _rxReportControlFormat, &report::XReportControlFormat::setParaVertAlignment );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARRELIEF, _rxReportControlFormat, &report::XReportControlFormat::setCharRelief );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARHIDDEN, _rxReportControlFormat, &report::XReportControlFormat::setCharHidden );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARAUTOKERNING, _rxReportControlFormat, &report::XReportControlFormat::setCharAutoKerning );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CONTROLBACKGROUND, _rxReportControlFormat, &report::XReportControlFormat::setControlBackground );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARFLASH, _rxReportControlFormat, &report::XReportControlFormat::setCharFlash );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHAREMPHASIS, _rxReportControlFormat, &report::XReportControlFormat::setCharEmphasis );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARCOMBINEISON, _rxReportControlFormat, &report::XReportControlFormat::setCharCombineIsOn );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARCOMBINEPREFIX, _rxReportControlFormat, &report::XReportControlFormat::setCharCombinePrefix );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARCOMBINESUFFIX, _rxReportControlFormat, &report::XReportControlFormat::setCharCombineSuffix );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARCOLOR, _rxReportControlFormat, &report::XReportControlFormat::setCharColor );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARKERNING, _rxReportControlFormat, &report::XReportControlFormat::setCharKerning );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARCASEMAP, _rxReportControlFormat, &report::XReportControlFormat::setCharCaseMap );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARLOCALE, _rxReportControlFormat, &report::XReportControlFormat::setCharLocale );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARESCAPEMENT, _rxReportControlFormat, &report::XReportControlFormat::setCharEscapement );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARESCAPEMENTHEIGHT, _rxReportControlFormat, &report::XReportControlFormat::setCharEscapementHeight );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARLOCALEASIAN, _rxReportControlFormat, &report::XReportControlFormat::setCharLocaleAsian );
+        lcl_applyFontAttribute( aSettings, PROPERTY_CHARLOCALECOMPLEX, _rxReportControlFormat, &report::XReportControlFormat::setCharLocaleComplex );
     }
     catch( const uno::Exception& )
     {
