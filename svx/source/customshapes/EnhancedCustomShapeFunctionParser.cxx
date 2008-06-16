@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EnhancedCustomShapeFunctionParser.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +52,8 @@
 #include <functional>
 #include <algorithm>
 #include <stack>
+
+#include <math.h> // fabs, sqrt, sin, cos, tan, atan, atan2
 using namespace EnhancedCustomShape;
 using namespace com::sun::star;
 using namespace com::sun::star::drawing;
