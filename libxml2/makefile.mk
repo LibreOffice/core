@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.22 $
+# $Revision: 1.23 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -78,7 +78,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .IF "$(SYSBASE)"!=""
 xml2_CFLAGS+=-I$(SYSBASE)$/usr$/include 
 .IF "$(COMNAME)"=="sunpro5"
-xml2_CFLAGS+=$(C_RESTRICTIONFLAGS)
+xml2_CFLAGS+=$(ARCH_FLAGS) $(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
 xml2_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
