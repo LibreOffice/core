@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SpreadsheetRawReportProcessor.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,9 @@ import org.jfree.resourceloader.ResourceManager;
 import com.sun.star.report.OutputRepository;
 import com.sun.star.report.InputRepository;
 import com.sun.star.report.ImageService;
+import com.sun.star.report.pentaho.PentahoFormulaContext;
+import org.jfree.report.data.ReportContextImpl;
+import org.jfree.report.flow.ReportContext;
 
 /**
  * @author Michael D'Amour
@@ -103,5 +106,17 @@ public class SpreadsheetRawReportProcessor extends AbstractReportProcessor
         processReportRun(job, reportTarget);
         // second run: uses table cell data to output a single uniform table
         processReportRun(job, reportTarget);
+    }
+
+    protected ReportContext createReportContext(final ReportJob job,
+            final ReportTarget target)
+    {
+        final ReportContext context = super.createReportContext(job, target);
+        if (context instanceof ReportContextImpl)
+        {
+            ReportContextImpl impl = (ReportContextImpl) context;
+            impl.setFormulaContext(new PentahoFormulaContext(impl.getFormulaContext(),job.getConfiguration()));
+        }
+        return context;
     }
 }
