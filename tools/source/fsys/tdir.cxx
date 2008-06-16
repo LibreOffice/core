@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tdir.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -428,7 +428,7 @@ Dir::Dir( const DirEntry& rDirEntry, DirEntryKind nKindFlags, FSysSort nSort, ..
 
     Construct( nKindFlags );
 
-    va_list pArgs;
+    std::va_list pArgs;
     va_start( pArgs, nSort );
     ImpSetSort( pArgs, nSort );
 
@@ -549,7 +549,7 @@ Dir::~Dir()
 |*
 *************************************************************************/
 
-FSysError Dir::ImpSetSort( va_list pArgs, int nFirstSort )
+FSysError Dir::ImpSetSort( std::va_list pArgs, int nFirstSort )
 {
     BOOL             bLast;
     FSysSort        *pSort;
@@ -680,7 +680,7 @@ FSysError Dir::ImpSetSort( va_list pArgs, int nFirstSort )
 
 FSysError Dir::SetSort( FSysSort nSort, ... )
 {
-    va_list pArgs;
+    std::va_list pArgs;
     va_start( pArgs, nSort );
     return ImpSetSort( pArgs, nSort );
 }
