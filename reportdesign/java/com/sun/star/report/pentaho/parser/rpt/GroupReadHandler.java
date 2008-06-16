@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GroupReadHandler.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,6 +29,7 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.parser.rpt;
 
+import com.sun.star.report.OfficeToken;
 import java.util.ArrayList;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
@@ -53,9 +54,11 @@ public class GroupReadHandler extends ElementReadHandler
     private final OfficeGroup group;
     private final OfficeGroupInstanceSection groupInstanceSection;
     private final List functionHandlers;
+    private final ReportReadHandler rh;
 
-    public GroupReadHandler()
+    public GroupReadHandler(final ReportReadHandler _rh)
     {
+        rh = _rh;
         group = new OfficeGroup();
         groupInstanceSection = new OfficeGroupInstanceSection();
         groupInstanceSection.setNamespace(OfficeNamespaces.INTERNAL_NS);
@@ -113,16 +116,18 @@ public class GroupReadHandler extends ElementReadHandler
         }
         if ("group".equals(tagName))
         {
-            childGroup = new GroupReadHandler();
+            childGroup = new GroupReadHandler(rh);
             return childGroup;
         }
         if ("detail".equals(tagName))
         {
             detailSection = new DetailRootTableReadHandler();
+            rh.setDetail(detailSection);
             return detailSection;
         }
         if ("group-footer".equals(tagName))
         {
+            ((Element)((Section)rh.getDetail().getElement()).getNode(0)).setAttribute(OfficeNamespaces.INTERNAL_NS,"has-group-footer", OfficeToken.TRUE);
             groupFooter = new GroupSectionReadHandler();
             return groupFooter;
         }
