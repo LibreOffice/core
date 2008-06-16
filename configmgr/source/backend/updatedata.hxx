@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updatedata.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,7 +129,6 @@ namespace configmgr
             bool addPropertyUpdate  (ElementUpdateRef const & _aProp);
             void removeNodeByName      (OUString const & _aName);
             void removePropertyByName  (OUString const & _aName);
-            void clear(bool _bKeep);
 
             Op getOperation() const { return m_op; }
 
@@ -206,8 +205,6 @@ namespace configmgr
             void removeValue()                                  { removeValueFor(primarySlot()); }
 
             void finishValue();
-
-            void clear();
 
             uno::Type const & getValueType()    const { return m_aType; }
 
