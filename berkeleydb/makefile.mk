@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.47 $
+# $Revision: 1.48 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -92,7 +92,7 @@ LDFLAGSVERSION:= -Wl,--version-script=../db_4_2_gcc3.map
 #CC:=$(COMPATH)$/bin$/cc
 #CXX:=$(COMPATH)$/bin$/CC
 #.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
-LDFLAGS:=-R\''$$$$ORIGIN'\'
+LDFLAGS:=$(ARCH_FLAGS) -R\''$$$$ORIGIN'\'
 .EXPORT: LDFLAGS
 .ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
 CONFIGURE_DIR=out
