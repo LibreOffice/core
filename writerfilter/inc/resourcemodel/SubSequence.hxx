@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SubSequence.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <iostream>
+#include <stdio.h>
 #include <ctype.h>
 #include "exceptions.hxx"
 #include <WriterFilterDllApi.hxx>
