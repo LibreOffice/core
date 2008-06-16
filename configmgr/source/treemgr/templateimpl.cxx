@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: templateimpl.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,31 +56,26 @@ namespace configmgr
     {
 //-----------------------------------------------------------------------------
 
-Name TemplateName::makeSimpleTypeName(UnoType const& aType)
-{
-    OUString sTypeName = toTemplateName(aType);
-    return makeName(sTypeName, Name::NoValidate());
-}
-//-----------------------------------------------------------------------------
-
 UnoType TemplateName::resolveSimpleTypeName(Name const& aName)
 {
     OUString sTypeName = aName.toString();
     return parseTemplateName(sTypeName);
 }
 //-----------------------------------------------------------------------------
-
+#if OSL_DEBUG_LEVEL > 0
 Name TemplateName::makeNativeTypeModuleName()
 {
     OUString aModuleName( TEMPLATE_MODULE_NATIVE_VALUE );
     return makeName(aModuleName, Name::NoValidate());
 }
+
 //-----------------------------------------------------------------------------
 Name TemplateName::makeLocalizedTypeModuleName()
 {
     OUString aModuleName( TEMPLATE_MODULE_LOCALIZED_VALUE );
     return makeName(aModuleName, Name::NoValidate());
 }
+#endif
 //-----------------------------------------------------------------------------
 bool TemplateName::isSimpleTypeName() const
 {
@@ -117,18 +112,6 @@ TemplateHolder TemplateImplHelper::createNew (TemplateName const& aNames,UnoType
 }
 //-----------------------------------------------------------------------------
 
-TemplateHolder TemplateImplHelper::makeSpecialTemplate (TemplateName const& aNames, SpecialTemplateProvider const& aProvider, UnoType const& aType)
-{
-    OSL_ENSURE(aProvider.m_aImpl.is(), "Cannot find a template without a provider");
-
-    if (aProvider.m_aImpl.is())
-        return aProvider.m_aImpl->makeTemplate(aNames,aType);
-
-    else
-        return TemplateHolder(0);
-}
-//-----------------------------------------------------------------------------
-
 TemplateHolder TemplateImplHelper::makeElementTemplateWithType(TemplateName const& _aNames, TemplateProvider const& _aProvider, data::SetNodeAccess const& _aSet)
 {
     OSL_ENSURE(_aProvider.m_aImpl.is(), "ERROR: Cannot find a template without a provider");
@@ -152,33 +135,6 @@ void TemplateImplHelper::assignActualType (Template& aTemplate,UnoType const& aT
     OSL_ENSURE(aTemplate.getInstanceType() == aType, "ERROR: Trying to change instance type of a template");
 }
 //-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// class SpecialTemplateProvider_Impl
-//-----------------------------------------------------------------------------
-
-SpecialTemplateProvider_Impl::SpecialTemplateProvider_Impl()
-: m_aRepository()
-{
-}
-//-----------------------------------------------------------------------------
-
-TemplateHolder SpecialTemplateProvider_Impl::makeTemplate (TemplateName const& aNames, UnoType const& aType)
-{
-    typedef TemplateRepository::value_type Entry;
-
-    TemplateRepository::iterator it = m_aRepository.find(aNames);
-    if (it == m_aRepository.end())
-        it = m_aRepository.insert( Entry( aNames, TemplateImplHelper::createNew(aNames,aType) ) ).first;
-
-    else if (!it->second->isInstanceTypeKnown())
-        TemplateImplHelper::assignActualType(*it->second, aType);
-
-    OSL_ENSURE(it->second->isInstanceTypeKnown(), "No type assigned to Template");
-    OSL_ENSURE(it->second->getInstanceType() == aType, "Inconsistent type found for Template");
-    return it->second;
-
-}
 
 //-----------------------------------------------------------------------------
 // class TemplateProvider_Impl
