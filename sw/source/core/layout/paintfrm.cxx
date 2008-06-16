@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: paintfrm.cxx,v $
- * $Revision: 1.119 $
+ * $Revision: 1.120 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,8 +114,8 @@
 
 #include <PostItMgr.hxx>
 #include <tools/color.hxx>
-#define COL_NOTES_SIDEPANE                  RGB_COLORDATA(240,240,240)
-#define COL_NOTES_SIDEPANE_BORDER           RGB_COLORDATA(192,192,192)
+#define COL_NOTES_SIDEPANE                  RGB_COLORDATA(230,230,230)
+#define COL_NOTES_SIDEPANE_BORDER           RGB_COLORDATA(200,200,200)
 #define COL_NOTES_SIDEPANE_SCROLLAREA       RGB_COLORDATA(230,230,220)
 #include <vcl/svapp.hxx>
 
