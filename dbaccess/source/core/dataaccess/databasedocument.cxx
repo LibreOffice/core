@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: databasedocument.cxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1448,8 +1448,15 @@ uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHel
     if ( !m_xModuleManager.is() )
         m_xModuleManager.set( m_pImpl->m_aContext.createComponent( "com.sun.star.frame.ModuleManager" ), UNO_QUERY_THROW );
 
-    ::rtl::OUString sModuleId = m_xModuleManager->identify( _xComponent );
-
+    ::rtl::OUString sModuleId;
+    try
+    {
+        sModuleId = m_xModuleManager->identify( _xComponent );
+    }
+    catch(uno::Exception)
+    {
+        // ni
+    }
     uno::Reference< frame::XUntitledNumbers > xNumberedControllers;
 
     TNumberedController::iterator aFind = m_aNumberedControllers.find(sModuleId);
