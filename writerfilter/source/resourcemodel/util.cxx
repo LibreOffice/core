@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: util.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,6 +27,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#include <stdio.h>
 #include <stdlib.h>
 #include <fstream>
 #include <string>
