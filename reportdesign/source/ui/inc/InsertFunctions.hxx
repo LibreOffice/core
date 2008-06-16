@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: InsertFunctions.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,8 +42,6 @@ class SdrObject;
 namespace rptui
 {
 /************************************************************************/
-    void InitializeChart( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel,
-                          const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj);
 // ---------
 } // namespace rptui
 // ---------
