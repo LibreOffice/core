@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: binaryreader.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,8 +65,6 @@ namespace configmgr
 
         public:
             bool open()     SAL_THROW( (io::IOException, uno::RuntimeException) );
-            void reopen()   SAL_THROW( (io::IOException, uno::RuntimeException) );
-            void close()    SAL_THROW( (io::IOException, uno::RuntimeException) );
 
             typedef uno::Sequence< sal_Int8 >       Binary;
             typedef uno::Sequence< rtl::OUString >  StringList;
