@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartController.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,7 +104,7 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-
+DBG_NAME(ChartController)
 //-----------------------------------------------------------------
 // ChartController Constructor and Destructor
 //-----------------------------------------------------------------
@@ -129,12 +129,14 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
     , m_xUndoManager( 0 )
     , m_aDispatchContainer( m_xCC )
 {
+    DBG_CTOR(ChartController,NULL);
 //     m_aDispatchContainer.setUndoManager( m_xUndoManager );
     m_aDoubleClickTimer.SetTimeoutHdl( LINK( this, ChartController, DoubleClickWaitingHdl ) );
 }
 
 ChartController::~ChartController()
 {
+    DBG_DTOR(ChartController,NULL);
     stopDoubleClickWaiting();
 }
 
