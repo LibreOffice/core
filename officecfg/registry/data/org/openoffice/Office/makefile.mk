@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.22 $
+# $Revision: 1.23 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -67,6 +67,7 @@ XCUFILES= \
     ExtendedColorScheme.xcu
 
 MODULEFILES= \
+    Common-brand.xcu \
     Common-writer.xcu   \
     Common-calc.xcu   \
     Common-draw.xcu   \
@@ -94,7 +95,8 @@ MODULEFILES= \
     Embedding-math.xcu   \
     Embedding-base.xcu   \
     Embedding-writer.xcu \
-    Embedding-report.xcu
+    Embedding-report.xcu \
+    UI-brand.xcu
 
 
 LOCALIZEDFILES= \
