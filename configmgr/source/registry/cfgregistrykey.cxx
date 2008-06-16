@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cfgregistrykey.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -155,21 +155,6 @@ OConfigurationRegistryKey::OConfigurationRegistryKey
     ,m_sLocalName( getNodeName(_rxNode) ) // this will not be treated as root
 {
     OSL_ENSURE(m_xNode.is(), "OConfigurationRegistryKey::OConfigurationRegistryKey : invalid config node param !");
-}
-
-//--------------------------------------------------------------------------
-OConfigurationRegistryKey::OConfigurationRegistryKey(
-            const Reference< XNameAccess >& _rxParentNode,
-            const ::rtl::OUString& _rLocalName,
-            sal_Bool _bWriteable)
-    :m_bReadOnly(!_bWriteable)
-    ,m_xNode()
-    ,m_xParentNode(_rxParentNode)
-    ,m_sLocalName(_rLocalName)
-{
-    OSL_ENSURE(m_xParentNode.is(), "OConfigurationRegistryKey::OConfigurationRegistryKey : invalid parent node param !");
-    OSL_ENSURE(m_sLocalName.getLength(), "OConfigurationRegistryKey::OConfigurationRegistryKey : invalid relative name !");
-    OSL_ENSURE(m_xParentNode->hasByName( m_sLocalName ), "OConfigurationRegistryKey::OConfigurationRegistryKey : key not found in parent node !" ); //
 }
 
 //--------------------------------------------------------------------------
