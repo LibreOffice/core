@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: calc.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,8 @@
 #include <svx/unolingu.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <svtools/useroptions.hxx>
+#include <tools/datetime.hxx>
+#include <svtools/zforlist.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include <viewsh.hxx>
@@ -99,6 +101,7 @@ const sal_Char __FAR_DATA sCalc_Asin[]  =   "asin";
 const sal_Char __FAR_DATA sCalc_Acos[]  =   "acos";
 const sal_Char __FAR_DATA sCalc_Atan[]  =   "atan";
 const sal_Char __FAR_DATA sCalc_Round[] =   "round";
+const sal_Char __FAR_DATA sCalc_Date[]  =   "date";
 
 
 
@@ -119,6 +122,7 @@ _CalcOp __READONLY_DATA aOpTable[] = {
 /* ASIN */    {{sCalc_Asin},       CALC_ASIN},  // Arcussinus
 /* ATAN */    {{sCalc_Atan},       CALC_ATAN},  // Arcustangens
 /* COS */     {{sCalc_Cos},        CALC_COS},   // Cosinus
+/* DATE */    {{sCalc_Date},       CALC_DATE},  // Date
 /* DIV */     {{sCalc_Div},        CALC_DIV},   // Dividieren
 /* EQ */      {{sCalc_Eq},         CALC_EQ},    // gleich
 /* G */       {{sCalc_G},          CALC_GRE},   // groesser
@@ -239,6 +243,19 @@ inline LanguageType GetDocAppScriptLang( SwDoc& rDoc )
                             GetWhichOfScript( RES_CHRATR_LANGUAGE,
                                 GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() ))
             )).GetLanguage();
+}
+
+double lcl_ConvertToDateValue( SwDoc& rDoc, sal_Int32 nDate )
+{
+    double nRet = 0;
+    SvNumberFormatter* pFormatter = rDoc.GetNumberFormatter();
+    if( pFormatter )
+    {
+        Date* pNull = pFormatter->GetNullDate();
+        Date aDate( nDate >> 24, (nDate & 0x00FF0000) >> 16, nDate & 0x0000FFFF );
+        nRet = aDate - *pNull;
+    }
+    return nRet;
 }
 
 //-----------------------------------------------------------------------------
@@ -798,6 +815,9 @@ if( !nUseOld )
                     case CALC_MAX:
                         eCurrListOper = CALC_MAX_IN;
                         break;
+                    case CALC_DATE:
+                        eCurrListOper = CALC_MONTH;
+                        break;
                     default:
                         break;
                 }
@@ -823,7 +843,12 @@ if( !nUseOld )
                 sal_Unicode ch = aName.GetChar( 0 );
                 switch( ch )
                 {
-                case ';':
+                case ';': if( CALC_MONTH == eCurrListOper ||
+                              CALC_DAY == eCurrListOper )
+                          {
+                              eCurrOper = eCurrListOper;
+                              break;
+                          }
                 case '\n':
                             eCurrOper = CALC_PRINT;
                             break;
@@ -960,7 +985,11 @@ else
 
     switch( ch )
     {
-        case ';':
+        case ';': if( CALC_MONTH == eCurrListOper || CALC_DAY == eCurrListOper )
+                  {
+                      eCurrOper = eCurrListOper;
+                      break;
+                  } // else .. no break
         case '\n':
                     {
                         sal_Unicode c;
@@ -1110,6 +1139,8 @@ else
                                                     break;
                                 case CALC_MAX  : eCurrListOper = CALC_MAX_IN;
                                                     break;
+                                case CALC_DATE  : eCurrListOper = CALC_MONTH;
+                                                    break;
                                 default :
                                     break;
                             }
@@ -1198,6 +1229,29 @@ SwSbxValue SwCalc::Term()
                                 SwSbxValue e = Prim();
                                 left = left.GetDouble() > e.GetDouble()
                                             ? left : e;
+                            }
+                            break;
+            case CALC_MONTH:
+                            {
+                                GetToken();
+                                SwSbxValue e = Prim();
+                                sal_Int32 nYear = (sal_Int32) floor( left.GetDouble() );
+                                nYear = nYear & 0x0000FFFF;
+                                sal_Int32 nMonth = (INT32) floor( e.GetDouble() );
+                                nMonth = ( nMonth & 0x000000FF ) << 16;
+                                left = sal_Int32(nMonth + nYear);
+                                eCurrOper = CALC_DAY;
+                            }
+                            break;
+            case CALC_DAY:
+                            {
+                                GetToken();
+                                SwSbxValue e = Prim();
+                                sal_Int32 nYearMonth = (sal_Int32) floor( left.GetDouble() );
+                                nYearMonth = nYearMonth & 0x00FFFFFF;
+                                sal_Int32 nDay = (sal_Int32) floor( e.GetDouble() );
+                                nDay = ( nDay & 0x000000FF ) << 24;
+                                left = lcl_ConvertToDateValue( rDoc, nDay + nYearMonth );
                             }
                             break;
             case CALC_ROUND:
@@ -1427,6 +1481,7 @@ SwSbxValue SwCalc::Prim()
                             break;
 
         case CALC_SUM:
+        case CALC_DATE:
         case CALC_MIN:
         case CALC_MAX:      GetToken();
                             nErg = Expr();
