@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cachecontroller.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -305,8 +305,6 @@ namespace configmgr
         // writes an update  to the backend directly
         void saveDirectly(UpdateRequest const & _anUpdate) CFG_UNO_THROW_ALL(  );
 
-        // marks a component as invalid and initiates a (background ?) refresh on it
-        void invalidateComponent(ComponentRequest const & _aComponent) CFG_UNO_THROW_ALL(  );
         // writes updates for a component to the backend directly
         void savePendingChanges(CacheRef const & _aCache, ComponentRequest const & _aComponent)
             CFG_UNO_THROW_ALL(  );
