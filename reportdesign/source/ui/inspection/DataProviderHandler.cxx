@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataProviderHandler.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,10 +31,9 @@
 #include "DataProviderHandler.hxx"
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/sequence.hxx>
-#ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
-#include "uistrings.hrc"
-#endif
+#include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
+#include "uistrings.hrc"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/syslocale.hxx>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
@@ -44,6 +43,9 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
+#include <com/sun/star/chart2/XFormattedString.hpp>
+#include <com/sun/star/chart2/XTitled.hpp>
+#include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
@@ -53,6 +55,8 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <vcl/fldunit.hxx>
 #include "metadata.hxx"
+#include <vcl/svapp.hxx>
+#include <vos/mutex.hxx>
 #include "helpids.hrc"
 #include "uistrings.hrc"
 #include "RptResId.hrc"
@@ -62,7 +66,6 @@ namespace rptui
 {
 //........................................................................
 using namespace ::com::sun::star;
-// using namespace comphelper;
 
 DataProviderHandler::DataProviderHandler(uno::Reference< uno::XComponentContext > const & context)
     :DataProviderHandler_Base(m_aMutex)
@@ -164,7 +167,7 @@ void SAL_CALL DataProviderHandler::inspect(const uno::Reference< uno::XInterface
             aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_MASTERFIELDS, PROPERTY_MASTERFIELDS ) );
             aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_DETAILFIELDS, PROPERTY_DETAILFIELDS ) );
 
-            m_xMasterDetails = new OPropertyMediator( m_xDataProvider.get(), m_xReportComponent.get(), aPropertyMediation );
+            m_xMasterDetails = new OPropertyMediator( m_xDataProvider.get(), m_xReportComponent.get(), aPropertyMediation,sal_True );
         }
 
         //const ::rtl::OUString sRowSet(RTL_CONSTASCII_USTRINGPARAM("RowSet"));
@@ -243,28 +246,32 @@ void SAL_CALL DataProviderHandler::setPropertyValue(const ::rtl::OUString & Prop
             break;
         default:
             m_xFormComponentHandler->setPropertyValue(PropertyName, Value);
-            if ( PropertyName == PROPERTY_COMMAND )
-            {
-
-                uno::Sequence< beans::PropertyValue > aArgs( 4 );
-                aArgs[0] = beans::PropertyValue(
-                    ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
-                    uno::makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("all")) ), beans::PropertyState_DIRECT_VALUE );
-                aArgs[1] = beans::PropertyValue(
-                    ::rtl::OUString::createFromAscii("HasCategories"), -1,
-                    uno::makeAny( sal_True ), beans::PropertyState_DIRECT_VALUE );
-                aArgs[2] = beans::PropertyValue(
-                    ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
-                    uno::makeAny( sal_False ), beans::PropertyState_DIRECT_VALUE );
-                aArgs[3] = beans::PropertyValue(
-                    ::rtl::OUString::createFromAscii("DataRowSource"), -1,
-                    uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
-                uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xChartModel,uno::UNO_QUERY);
-                if ( xReceiver.is() )
-                    xReceiver->setArguments( aArgs );
-            }
             break;
     }
+}
+// -----------------------------------------------------------------------------
+void DataProviderHandler::impl_updateChartTitle_throw(const uno::Any& _aValue)
+{
+    uno::Reference<chart2::XTitled> xTitled(m_xChartModel,uno::UNO_QUERY);
+    if ( xTitled.is() )
+    {
+        uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
+        if ( !xTitle.is() )
+        {
+            xTitle.set(m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.Title")),m_xContext),uno::UNO_QUERY);
+            xTitled->setTitleObject(xTitle);
+        }
+        if ( xTitle.is() )
+        {
+            uno::Reference< chart2::XFormattedString> xFormatted(m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.FormattedString")),m_xContext),uno::UNO_QUERY);
+            ::rtl::OUString sStr;
+            _aValue>>= sStr;
+            xFormatted->setString(sStr);
+            uno::Sequence< uno::Reference< chart2::XFormattedString> > aArgs(1);
+            aArgs[0] = xFormatted;
+            xTitle->setText(aArgs);
+        }
+    } // if ( xTitled.is() )
 }
 
 beans::PropertyState SAL_CALL DataProviderHandler::getPropertyState(const ::rtl::OUString & PropertyName) throw (uno::RuntimeException, beans::UnknownPropertyException)
@@ -389,8 +396,9 @@ uno::Sequence< beans::Property > SAL_CALL DataProviderHandler::getSupportedPrope
             ,PROPERTY_MASTERFIELDS
             ,PROPERTY_DETAILFIELDS
             ,PROPERTY_PREVIEW_COUNT
+            //,PROPERTY_TITLE
         };
-        ;
+
         for (size_t nPos = 0; nPos < sizeof(s_pProperties)/sizeof(s_pProperties[0]) ;++nPos )
         {
             aValue.Name = s_pProperties[nPos];
@@ -402,13 +410,18 @@ uno::Sequence< beans::Property > SAL_CALL DataProviderHandler::getSupportedPrope
 
 uno::Sequence< ::rtl::OUString > SAL_CALL DataProviderHandler::getSupersededProperties() throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aRet;
+    uno::Sequence< ::rtl::OUString > aRet(1);
+    aRet[0] = PROPERTY_TITLE; // have a look at OPropertyInfoService::getExcludeProperties
     return aRet;
 }
 
 uno::Sequence< ::rtl::OUString > SAL_CALL DataProviderHandler::getActuatingProperties() throw (uno::RuntimeException)
 {
-    return m_xFormComponentHandler->getActuatingProperties();
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    uno::Sequence< ::rtl::OUString > aSeq(1);
+    aSeq[0] = PROPERTY_TITLE;
+    return ::comphelper::concatSequences(m_xFormComponentHandler->getActuatingProperties(),aSeq);
 }
 
 ::sal_Bool SAL_CALL DataProviderHandler::isComposable( const ::rtl::OUString& _rPropertyName ) throw (uno::RuntimeException, beans::UnknownPropertyException)
@@ -449,10 +462,38 @@ void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const ::rtl::OUStrin
 
     if ( ActuatingPropertyName == PROPERTY_COMMAND )
     {
-        uno::Reference< report::XReportDefinition> xReport = m_xReportComponent->getSection()->getReportDefinition();
-        bool bDoEnableMasterDetailFields = xReport.is() && xReport->getCommand().getLength() && m_xDataProvider->getCommand().getLength();
-        InspectorUI->enablePropertyUIElements( PROPERTY_DETAILFIELDS, inspection::PropertyLineElement::PrimaryButton, bDoEnableMasterDetailFields );
-        InspectorUI->enablePropertyUIElements( PROPERTY_MASTERFIELDS, inspection::PropertyLineElement::PrimaryButton, bDoEnableMasterDetailFields );
+        if ( NewValue != OldValue )
+        {
+            uno::Reference< report::XReportDefinition> xReport = m_xReportComponent->getSection()->getReportDefinition();
+            bool bDoEnableMasterDetailFields = xReport.is() && xReport->getCommand().getLength() && m_xDataProvider->getCommand().getLength();
+            InspectorUI->enablePropertyUIElements( PROPERTY_DETAILFIELDS, inspection::PropertyLineElement::PrimaryButton, bDoEnableMasterDetailFields );
+            InspectorUI->enablePropertyUIElements( PROPERTY_MASTERFIELDS, inspection::PropertyLineElement::PrimaryButton, bDoEnableMasterDetailFields );
+
+            sal_Bool bModified = xReport->isModified();
+            // this fills the chart again
+            uno::Sequence< beans::PropertyValue > aArgs( 4 );
+            aArgs[0] = beans::PropertyValue(
+                ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
+                uno::makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("all")) ), beans::PropertyState_DIRECT_VALUE );
+            aArgs[1] = beans::PropertyValue(
+                ::rtl::OUString::createFromAscii("HasCategories"), -1,
+                uno::makeAny( sal_True ), beans::PropertyState_DIRECT_VALUE );
+            aArgs[2] = beans::PropertyValue(
+                ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
+                uno::makeAny( sal_True ), beans::PropertyState_DIRECT_VALUE );
+            aArgs[3] = beans::PropertyValue(
+                ::rtl::OUString::createFromAscii("DataRowSource"), -1,
+                uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
+            uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xChartModel,uno::UNO_QUERY_THROW);
+            xReceiver->setArguments( aArgs );
+            if ( !bModified )
+                xReport->setModified(sal_False);
+        }
+    } // if ( ActuatingPropertyName == PROPERTY_COMMAND )
+    else if ( ActuatingPropertyName == PROPERTY_TITLE )
+    {
+        if ( NewValue != OldValue )
+            impl_updateChartTitle_throw(NewValue);
     }
     else
     {
