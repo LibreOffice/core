@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewaccess.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,12 +41,6 @@ namespace configmgr
 //-----------------------------------------------------------------------------
     namespace view
     {
-//-----------------------------------------------------------------------------
-bool ViewTreeAccess::isValid(configuration::NodeRef const& _aNodeArg) const
-{
-    return _aNodeArg.isValid();
-}
-
 //-----------------------------------------------------------------------------
 configuration::NodeData* ViewTreeAccess::nodeData(configuration::NodeRef const& _aNodeArg) const
 {
