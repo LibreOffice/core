@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: metadata.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -193,13 +193,6 @@ namespace rptui
     }
 
     //------------------------------------------------------------------------
-    String OPropertyInfoService::getPropertyName( sal_Int32 _nPropId )
-    {
-        const OPropertyInfoImpl* pInfo = getPropertyInfo(_nPropId);
-        return pInfo ? pInfo->sName : String();
-    }
-
-    //------------------------------------------------------------------------
     String OPropertyInfoService::getPropertyTranslation(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
@@ -214,55 +207,10 @@ namespace rptui
     }
 
     //------------------------------------------------------------------------
-    sal_Int16 OPropertyInfoService::getPropertyPos(sal_Int32 _nId) const
-    {
-        const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
-        return (pInfo) ? pInfo->nPos : 0xFFFF;
-    }
-
-    //------------------------------------------------------------------------
     sal_uInt32 OPropertyInfoService::getPropertyUIFlags(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->nUIFlags : 0;
-    }
-
-    //------------------------------------------------------------------------
-    void OPropertyInfoService::getPropertyEnumRepresentations(sal_Int32 _nId,::std::vector< ::rtl::OUString >& _rOut) const
-    {
-        OSL_ENSURE( ( ( getPropertyUIFlags( _nId ) & PROP_FLAG_ENUM ) != 0 ) ,
-            "OPropertyInfoService::getPropertyEnumRepresentations: this is no enum property!" );
-
-        sal_Int16 nCommaSeparatedListResId = 0;
-        sal_Int16 nStringItemsResId = 0;
-        switch ( _nId )
-        {
-            case PROPERTY_ID_FORCENEWPAGE:
-                nCommaSeparatedListResId = RID_STR_FORCENEWPAGE_CONST;
-                break;
-        }
-
-        if ( nCommaSeparatedListResId )
-        {
-            String sSeparatedList = String( ModuleRes( nCommaSeparatedListResId ) );
-            xub_StrLen nTokens = sSeparatedList.GetTokenCount();
-            _rOut.reserve( nTokens );
-            for ( xub_StrLen i = 0; i < nTokens; ++i )
-                _rOut.push_back( sSeparatedList.GetToken( i ) );
-        }
-        else if ( nStringItemsResId )
-        {
-            ModuleRes aModuleRes( nStringItemsResId );
-            ::svt::OLocalResourceAccess aEnumStrings( aModuleRes, RSC_RESOURCE );
-
-            sal_Int16 i = 1;
-            ModuleRes aLocalId( i );
-            while ( aEnumStrings.IsAvailableRes( aLocalId.SetRT( RSC_STRING ) ) )
-            {
-                _rOut.push_back( String( aLocalId ) );
-                aLocalId = ModuleRes( ++i );
-            }
-        }
     }
 
     //------------------------------------------------------------------------
@@ -315,7 +263,7 @@ namespace rptui
     void OPropertyInfoService::getExcludeProperties(::std::vector< beans::Property >& _rExcludeProperties,const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _xFormComponentHandler)
     {
         uno::Sequence< beans::Property > aProps = _xFormComponentHandler->getSupportedProperties();
-        ::rtl::OUString pExcludeProperties[] =
+        static const ::rtl::OUString pExcludeProperties[] =
         {
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Enabled")),
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Printable")),
@@ -340,6 +288,7 @@ namespace rptui
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RepeatDelay")),
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlLabel")), /// TODO: has to be checked
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LabelControl")),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")), // comment this out if you want to have title feature for charts
                 PROPERTY_MAXTEXTLEN,
                 PROPERTY_EFFECTIVEDEFAULT,
                 PROPERTY_EFFECTIVEMAX,
