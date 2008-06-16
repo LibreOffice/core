@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Functions.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,8 +70,6 @@ namespace reportdesign
     public:
         explicit OFunctions( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctionsSupplier >& _xParent
                 ,const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& context);
-
-        void copyFunctions(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctions >& _xSource);
 
     // XFunctions
         // Methods
