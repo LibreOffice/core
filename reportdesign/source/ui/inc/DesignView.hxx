@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DesignView.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -251,13 +251,6 @@ namespace rptui
         ::rtl::OUString  getCurrentPage() const;
         void             setCurrentPage(const ::rtl::OUString& _sLastActivePage);
 
-        /** calculate the max width of the markers
-        *
-        * @param _bWithEnd  if <TRUE/> the end marker will be used for calculation as well otherwise not.
-        * \return the max width
-        */
-        sal_Int32        getMaxMarkerWidth(sal_Bool _bWithEnd) const;
-
         /** checks if the keycode is known by the child windows
             @param  _rCode  the keycode
             @return <TRUE/> if the keycode is handled otherwise <FALSE/>
@@ -281,6 +274,11 @@ namespace rptui
         sal_Bool        isHandleEvent(sal_uInt16 _nId) const;
 
         sal_uInt32      getMarkedObjectCount() const;
+
+        /** fills the vector with all selected control models
+            /param  _rSelection The vector will be filled and will not be cleared before.
+        */
+        void fillControlModelSelection(::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& _rSelection) const;
     };
 //==================================================================
 }   //rptui
