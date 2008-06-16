@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: typeconverter.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -188,29 +188,6 @@ namespace configmgr
         return aRet;
     }
 
-    uno::TypeClass toTypeClass(const ::rtl::OUString& _rType)
-    {
-        uno::TypeClass aRet = uno::TypeClass_VOID;
-
-        if     (_rType.equalsIgnoreAsciiCase(TYPE_BOOLEAN))  aRet = uno::TypeClass_BOOLEAN;
-        else if(_rType.equalsIgnoreAsciiCase(TYPE_SHORT))      aRet = uno::TypeClass_SHORT;
-        else if(_rType.equalsIgnoreAsciiCase(TYPE_INT))    aRet = uno::TypeClass_LONG;
-        else if(_rType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("integer")))  aRet = uno::TypeClass_LONG;
-        else if(_rType.equalsIgnoreAsciiCase(TYPE_LONG))       aRet = uno::TypeClass_HYPER;
-        else if(_rType.equalsIgnoreAsciiCase(TYPE_DOUBLE))   aRet = uno::TypeClass_DOUBLE;
-        else if(_rType.equalsIgnoreAsciiCase(TYPE_STRING))   aRet = uno::TypeClass_STRING;
-        else if(_rType.equalsIgnoreAsciiCase(TYPE_BINARY))   aRet = uno::TypeClass_SEQUENCE;
-        else if(_rType.equalsIgnoreAsciiCase(TYPE_ANY))   aRet = uno::TypeClass_ANY;
-        else
-        {
-            ::rtl::OString aStr("Wrong typeclass! ");
-            aStr += rtl::OUStringToOString(_rType,RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSURE(0,aStr.getStr());
-        }
-
-        return aRet;
-    }
-
 // *************************************************************************
     uno::Type toType(const ::rtl::OUString& _rType)
     {
@@ -337,19 +314,6 @@ namespace configmgr
         // else leave as void
 
         return aRet;
-    }
-
-    bool parseTemplateName(::rtl::OUString const& sTypeName, uno::TypeClass& _rType, bool& bList)
-    {
-        ::rtl::OUString sBasicTypeName;
-
-        if (parseTemplateName(sTypeName, sBasicTypeName,bList))
-            _rType = toTypeClass(sBasicTypeName);
-
-        else
-            _rType = uno::TypeClass_VOID;
-
-        return _rType != uno::TypeClass_VOID;
     }
 
 // *************************************************************************
