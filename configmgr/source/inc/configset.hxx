@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: configset.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,7 +87,6 @@ namespace configmgr
             bool isValid() const;
 
             Path::Component getFullName() const;
-            Name            getName() const;
 
             TemplateHolder getTemplate() const;
 
@@ -116,18 +115,12 @@ namespace configmgr
             ElementTreeHolder get() const;
             ElementTreeImpl* getImpl() const;
 
-            TemplateHolder getTemplate() const;
-
             ElementTreeImpl* operator->() const;
             ElementTreeImpl& operator*() const;
 
             Tree getTree() const;
 
             static ElementTree extract(Tree const& aTree);
-
-            /** if the element tree owns it's node tree, access to the segment is given to the caller.
-            */
-            static data::TreeSegment getOwnedElement(ElementTree const& aElementTree);
         private:
             ElementTree();
         };
@@ -143,8 +136,6 @@ namespace configmgr
             TemplateHolder getTemplate() const;
 
             UnoType  getType() const;
-            Name     getTemplateName() const;
-            Name     getTemplatePackage() const;
             OUString getTemplatePathString() const;
         };
 //-----------------------------------------------------------------------------
