@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DesignView.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -708,11 +708,6 @@ sal_Bool ODesignView::isAlignPossible() const
     return pMarkedSection.get() && pMarkedSection->getView()->IsAlignPossible();
 }
 // -------------------------------------------------------------------------
-sal_Int32 ODesignView::getMaxMarkerWidth(sal_Bool _bWithEnd) const
-{
-    return m_pScrollWindow->getMaxMarkerWidth(_bWithEnd);
-}
-//------------------------------------------------------------------------------
 sal_Bool ODesignView::handleKeyEvent(const KeyEvent& _rEvent)
 {
     if ( (m_pPropWin && m_pPropWin->HasChildPathFocus()) )
@@ -766,13 +761,26 @@ uno::Any ODesignView::getCurrentlyShownProperty() const
     ::boost::shared_ptr<OReportSection> pSection = getMarkedSection();
     if ( pSection )
     {
-        ::std::vector< uno::Reference< report::XReportComponent > > aSelection;
+        ::std::vector< uno::Reference< uno::XInterface > > aSelection;
         pSection->fillControlModelSelection(aSelection);
         if ( !aSelection.empty() )
-            aRet <<= uno::Sequence< uno::Reference< report::XReportComponent > >(&(*aSelection.begin()),aSelection.size());
-
+        {
+            ::std::vector< uno::Reference< uno::XInterface > >::iterator aIter = aSelection.begin();
+            uno::Sequence< uno::Reference< report::XReportComponent > > aSeq(aSelection.size());
+            for(sal_Int32 i = 0; i < aSeq.getLength(); ++i,++aIter)
+            {
+                aSeq[i].set(*aIter,uno::UNO_QUERY);
+            }
+            aRet <<= aSeq;
+        }
     }
     return aRet;
+}
+// -----------------------------------------------------------------------------
+void ODesignView::fillControlModelSelection(::std::vector< uno::Reference< uno::XInterface > >& _rSelection) const
+{
+    if ( m_pScrollWindow )
+        m_pScrollWindow->fillControlModelSelection(_rSelection);
 }
 // -----------------------------------------------------------------------------
 void ODesignView::setGridSnap(BOOL bOn)
