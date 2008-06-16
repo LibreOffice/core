@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: genericcontroller.cxx,v $
- * $Revision: 1.89 $
+ * $Revision: 1.90 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -130,6 +130,7 @@
 #endif
 #include <algorithm>
 #include <hash_map>
+#include <cppuhelper/implbase1.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -154,6 +155,7 @@ using namespace ::comphelper;
 // -------------------------------------------------------------------------
 typedef ::std::hash_map< sal_Int16, sal_Int16 > CommandHashMap;
 typedef ::std::list< DispatchInformation > DispatchInfoList;
+
 
 // -------------------------------------------------------------------------
 const ::rtl::OUString& getConfirmDeletionURL()
@@ -669,7 +671,7 @@ Reference< XDispatch >  OGenericUnoController::queryDispatch(const URL& aURL, co
         ||  ( m_aSupportedFeatures.find( aURL.Complete ) != m_aSupportedFeatures.end() )
         )
     {
-        xReturn = static_cast< XDispatch* >( this );
+        xReturn = this;
     }
     // no? -> ask the slave dispatcher
     else if ( m_xSlaveDispatcher.is() )
