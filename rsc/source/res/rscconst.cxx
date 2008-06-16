@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rscconst.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -349,7 +349,7 @@ RSCINST RscEnum::Create( RSCINST * pInst, const RSCINST & rDflt, BOOL bOwnClass 
         bOwnClass = rDflt.pClass->InHierarchy( this );
 
     if( bOwnClass )
-        memmove( aInst.pData, rDflt.pData, Size() );
+        std::memmove( aInst.pData, rDflt.pData, Size() );
     else{
         ((RscEnumInst *)aInst.pData)->nValue = 0;
         ((RscEnumInst *)aInst.pData)->bDflt = TRUE;
