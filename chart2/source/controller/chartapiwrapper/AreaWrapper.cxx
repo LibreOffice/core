@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AreaWrapper.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -174,6 +174,7 @@ Reference< beans::XPropertySet > AreaWrapper::getInnerPropertySet()
     Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
     if( xChartDoc.is() )
         return xChartDoc->getPageBackground();
+    OSL_ENSURE(false,"AreaWrapper::getInnerPropertySet() is NULL");
     return 0;
 }
 
