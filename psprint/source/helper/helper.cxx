@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: helper.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -293,8 +293,8 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
             // this migt be a pfa font already
             sal_uInt64 nWrite = 0;
             if( ! rInFile.read( buffer+6, 9, nRead ) && nRead == 9 &&
-                ( ! strncmp( (char*)buffer, "%!FontType1-", 12 ) ||
-                  ! strncmp( (char*)buffer, "%!PS-AdobeFont-", 15 ) ) )
+                ( ! std::strncmp( (char*)buffer, "%!FontType1-", 12 ) ||
+                  ! std::strncmp( (char*)buffer, "%!PS-AdobeFont-", 15 ) ) )
             {
                 if( rOutFile.write( buffer, 15, nWrite ) || nWrite != 15 )
                     bSuccess = false;
