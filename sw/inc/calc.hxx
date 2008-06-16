@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: calc.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +65,8 @@ enum SwCalcOper
     CALC_MAX=271,           CALC_MAX_IN=272,        CALC_SIN=273,
     CALC_COS=274,           CALC_TAN=275,           CALC_ASIN=276,
     CALC_ACOS=278,          CALC_ATAN=279,          CALC_TDIF=280,
-    CALC_ROUND=281
+    CALC_ROUND=281,         CALC_DATE=282,          CALC_MONTH=283,
+    CALC_DAY=284
 };
 
 //-- Calculate Operations Strings -----------------------------------------
@@ -99,6 +100,7 @@ extern const sal_Char __FAR_DATA sCalc_Acos[];
 extern const sal_Char __FAR_DATA sCalc_Atan[];
 extern const sal_Char __FAR_DATA sCalc_Tdif[];
 extern const sal_Char __FAR_DATA sCalc_Round[];
+extern const sal_Char __FAR_DATA sCalc_Date[];
 
 /******************************************************************************
  *                          Calculate ErrorCodes
