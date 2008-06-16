@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tracer.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,9 +64,6 @@
 #define CFG_TRACE_WARNING_NI    OConfigTracer::traceWarning
 #define CFG_TRACE_ERROR_NI      OConfigTracer::traceError
 
-
-#define CFG_TRACE_TO_DEVICE     OConfigTracer::traceToVirtualDevice
-
 namespace configmgr
 {
 
@@ -89,14 +86,11 @@ private:
 
 public:
     static void traceInfo(const sal_Char* _pFormat, ...);
+#if OSL_DEBUG_LEVEL > 0
     static void traceWarning(const sal_Char* _pFormat, ...);
     static void traceError(const sal_Char* _pFormat, ...);
-    static void traceToVirtualDevice(const sal_Char* _pDeviceName, const sal_Char* _pFormat, ...);
-
-    static ::rtl::OString getTimeStamp();
-
+#endif
 protected:
-    static void trace(const sal_Char* _pFormat, ...);
     static void implTrace(const sal_Char* _pType, const sal_Char* _pFormat, va_list args);
     static void startGlobalTimer();
     static sal_uInt32 getGlobalTimer();
