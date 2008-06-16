@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: layerupdatebuilder.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -277,12 +277,13 @@ bool LayerUpdateBuilder::isActive() const
     return m_pCurrentNode != 0;
 }
 // -----------------------------------------------------------------------------
-
+#if OSL_DEBUG_LEVEL > 0
 bool LayerUpdateBuilder::isComplete() const
 {
     OSL_ENSURE( !m_pCurrentNode || !m_aUpdate.isEmpty(), "LayerUpdateBuilder: Invariant violation: got a current node without a layer");
     return !m_aUpdate.isEmpty() && m_pCurrentNode == NULL;
 }
+#endif
 // -----------------------------------------------------------------------------
 
 bool LayerUpdateBuilder::isPropertyActive() const
