@@ -8,7 +8,7 @@
 #
 # $RCSfile: unxsoli4.mk,v $
 #
-# $Revision: 1.45 $
+# $Revision: 1.46 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -210,6 +210,7 @@ IMPLIBFLAGS=
 
 MAPSYM=
 MAPSYMFLAGS=
+IGNORE_SYMBOLS=S-LP64
 
 RC=irc
 RCFLAGS=-fo$@ $(RCFILES)
