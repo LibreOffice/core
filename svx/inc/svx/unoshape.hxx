@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoshape.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -481,7 +481,7 @@ public:
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-class SvxShapeControl : public ::com::sun::star::drawing::XControlShape, public SvxShapeText
+class SVX_DLLPUBLIC SvxShapeControl : public ::com::sun::star::drawing::XControlShape, public SvxShapeText
 {
 private:
     void convertPropertyName( const rtl::OUString& rApiName, rtl::OUString& rInternalName );
@@ -557,6 +557,35 @@ public:
     // XServiceInfo
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 };
+
+/***********************************************************************
+*                                                                      *
+***********************************************************************/
+
+class SVX_DLLPUBLIC SvxOle2Shape : public SvxShape
+{
+protected:
+// overide these for special property handling in subcasses. Return true if property is handled
+    virtual bool setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual bool getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    void resetModifiedState();
+
+    const SvGlobalName GetClassName_Impl(rtl::OUString& rHexCLSID);
+public:
+    SvxOle2Shape( SdrObject* pObj ) throw();
+    SvxOle2Shape( SdrObject* pObject, const SfxItemPropertyMap* pPropertySet ) throw ();
+    virtual ~SvxOle2Shape() throw();
+
+    sal_Bool createObject( const SvGlobalName &aClassName );
+
+    sal_Bool createLink( const ::rtl::OUString& aLinkURL );
+
+    // XInterface
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+};
+
+
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 /***********************************************************************
@@ -781,7 +810,7 @@ typedef ::cppu::WeakAggImplHelper1<
     ::com::sun::star::drawing::XEnhancedCustomShapeDefaulter
     > SvxShape_UnoImplHelper1;
 
-class SvxCustomShape : public SvxShapeText, public SvxShape_UnoImplHelper1
+class SVX_DLLPUBLIC SvxCustomShape : public SvxShapeText, public SvxShape_UnoImplHelper1
 {
 private:
     rtl::Reference< SvxDrawPage > mxPage;
