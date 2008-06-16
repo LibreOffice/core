@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: configexcept.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,10 +40,6 @@ namespace configmgr
     {
 //-----------------------------------------------------------------------------
 
-        Exception::Exception()
-        : m_sAsciiMessage()
-        {
-        }
         //---------------------------------------------------------------------
         Exception::Exception(char const* sAsciiMessage)
         : m_sAsciiMessage(sAsciiMessage)
@@ -72,11 +68,6 @@ namespace configmgr
         static const char c_sInvalidName[] = "CONFIGURATION: <Invalid Path or Name>";
 //-----------------------------------------------------------------------------
 
-        InvalidName::InvalidName(OUString const& sName)
-        : Exception( rtl::OString(RTL_CONSTASCII_STRINGPARAM(c_sInvalidName)) )
-        , m_sName(sName)
-        {
-        }
         //---------------------------------------------------------------------
 
         InvalidName::InvalidName(OUString const& sName, char const* sAsciiDescription)
@@ -93,11 +84,6 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 
         static const char c_sViolation[] = "CONFIGURATION: Update Violates Constraint: ";
-    //---------------------------------------------------------------------
-        ConstraintViolation::ConstraintViolation()
-        : Exception( rtl::OString(RTL_CONSTASCII_STRINGPARAM(c_sViolation)) )
-        {
-        }
         //---------------------------------------------------------------------
 
         ConstraintViolation::ConstraintViolation(char const* sConstraint)
@@ -127,22 +113,11 @@ namespace configmgr
         }
     //---------------------------------------------------------------------
 
-        TypeMismatch::TypeMismatch()
-        : Exception( rtl::OString(RTL_CONSTASCII_STRINGPARAM(c_sTypeMismatch)) )
-        {
-        }
     //---------------------------------------------------------------------
 
         TypeMismatch::TypeMismatch(OUString const& sType1, OUString const& sType2)
         : Exception( rtl::OString(RTL_CONSTASCII_STRINGPARAM(c_sTypeMismatch)) )
         , m_sTypes( describe(sType1,sType2) )
-        {
-        }
-    //---------------------------------------------------------------------
-
-        TypeMismatch::TypeMismatch(OUString const& sType1)
-        : Exception( rtl::OString(RTL_CONSTASCII_STRINGPARAM(c_sTypeMismatch)) )
-        , m_sTypes( describe(sType1,OUString()) )
         {
         }
     //---------------------------------------------------------------------
