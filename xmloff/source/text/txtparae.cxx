@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtparae.cxx,v $
- * $Revision: 1.147 $
+ * $Revision: 1.148 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -656,16 +656,9 @@ void XMLTextParagraphExport::exportListChange(
             const SvtSaveOptions::ODFDefaultVersion eODFDefaultVersion =
                                             GetExport().getDefaultVersion();
             const ::rtl::OUString sListStyleName( rNextInfo.GetNumRulesName() );
-            ::rtl::OUString sListId( rNextInfo.GetListId() );
             // Currently only the text documents support <ListId>.
-            if ( sListId.getLength() == 0 )
-            {
-                sListId = mpTextListsHelper->GetLastProcessedListId();
-                if ( sListId.getLength() == 0 )
-                {
-                    sListId = mpTextListsHelper->GenerateNewListId();
-                }
-            }
+            // Thus, for other document types <sListId> is empty.
+            const ::rtl::OUString sListId( rNextInfo.GetListId() );
             bool bExportListStyle( true );
             bool bRestartNumberingAtContinuedRootList( false );
             sal_Int16 nRestartValueForContinuedRootList( -1 );
@@ -677,7 +670,8 @@ void XMLTextParagraphExport::exportListChange(
                     if ( !mpTextListsHelper->IsListProcessed( sListId ) )
                     {
                         if ( bExportODF &&
-                             eODFDefaultVersion >= SvtSaveOptions::ODFVER_012 )
+                             eODFDefaultVersion >= SvtSaveOptions::ODFVER_012 &&
+                             sListId.getLength() > 0 )
                         {
                             GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                                       XML_ID,
@@ -692,7 +686,8 @@ void XMLTextParagraphExport::exportListChange(
                         const ::rtl::OUString sNewListId(
                                         mpTextListsHelper->GenerateNewListId() );
                         if ( bExportODF &&
-                             eODFDefaultVersion >= SvtSaveOptions::ODFVER_012 )
+                             eODFDefaultVersion >= SvtSaveOptions::ODFVER_012 &&
+                             sListId.getLength() > 0 )
                         {
                             GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                                       XML_ID,
@@ -716,7 +711,8 @@ void XMLTextParagraphExport::exportListChange(
                         else
                         {
                             if ( bExportODF &&
-                                 eODFDefaultVersion >= SvtSaveOptions::ODFVER_012 )
+                                 eODFDefaultVersion >= SvtSaveOptions::ODFVER_012 &&
+                                 sListId.getLength() > 0 )
                             {
                                 GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                                           XML_CONTINUE_LIST,
