@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TextRawReportTarget.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +52,7 @@ import com.sun.star.report.pentaho.model.PageSection;
 import com.sun.star.report.pentaho.output.OfficeDocumentReportTarget;
 import com.sun.star.report.pentaho.output.StyleUtilities;
 import com.sun.star.report.pentaho.styles.LengthCalculator;
+import java.util.ArrayList;
 import org.jfree.layouting.input.style.values.CSSNumericValue;
 import org.jfree.layouting.util.AttributeMap;
 import org.jfree.report.DataSourceException;
@@ -60,6 +61,7 @@ import org.jfree.report.flow.ReportJob;
 import org.jfree.report.flow.ReportStructureRoot;
 import org.jfree.report.flow.ReportTargetUtil;
 import org.jfree.report.structure.Element;
+import org.jfree.report.structure.Node;
 import org.jfree.report.structure.Section;
 import org.jfree.report.util.AttributeNameGenerator;
 import org.jfree.report.util.IntegerCache;
@@ -83,11 +85,13 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     private static final String ALWAYS = "always";
     private static final String KEEP_TOGETHER = "keep-together";
     private static final String KEEP_WITH_NEXT = "keep-with-next";
+    private static final String MAY_BREAK_BETWEEN_ROWS = "may-break-between-rows";
     private static final String NAME = "name";
     private static final String NONE = "none";
     private static final String NORMAL = "normal";
     private static final String PARAGRAPH_PROPERTIES = "paragraph-properties";
     private static final String STANDARD = "Standard";
+    private static final String TABLE_PROPERTIES = "table-properties";
     private static final String VARIABLES_HIDDEN_STYLE_WITH_KEEPWNEXT = "variables_paragraph_with_next";
     private static final String VARIABLES_HIDDEN_STYLE_WITHOUT_KEEPWNEXT = "variables_paragraph_without_next";
     private static final int TABLE_LAYOUT_VARIABLES_PARAGRAPH = 0;
@@ -356,7 +360,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             }
             catch (NumberFormatException nfe)
             {
-            //return null; // ignore
+                //return null; // ignore
             }
         }
         return null;
@@ -564,7 +568,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             {
                 startImageProcessing(attrs);
             }
-            else if (ObjectUtilities.equal(OfficeToken.OBJECT_OLE, elementType) && getCurrentRole() != ROLE_TEMPLATE )
+            else if (ObjectUtilities.equal(OfficeToken.OBJECT_OLE, elementType) && getCurrentRole() != ROLE_TEMPLATE)
             {
                 startChartProcessing(attrs);
             }
@@ -652,67 +656,65 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             {
                 if (ReportTargetUtil.isElementOfType(OfficeNamespaces.TEXT_NS, OfficeToken.P, attrs))
                 {
+                    final int keepTogetherState = getCurrentContext().getKeepTogether();
                     cellEmpty = false;
-                    if (!firstCellSeen && sectionKeepTogether)
+                    if (!firstCellSeen && (sectionKeepTogether || keepTogetherState == PageContext.KEEP_TOGETHER_GROUP))
                     {
+                        OfficeStyle style = null;
                         final String styleName = (String) attrs.getAttribute(OfficeNamespaces.TEXT_NS, OfficeToken.STYLE_NAME);
-                        final OfficeStyle style = deriveStyle(OfficeToken.PARAGRAPH, styleName);
-                        // Lets set the 'keep-together' flag..
+                        if (styleName == null)
+                        {
+                            final boolean keep = (keepTogetherState == PageContext.KEEP_TOGETHER_GROUP || expectedTableRowCount > 0) && isParentKeepTogether();
+                            final ArrayList propertyNameSpaces = new ArrayList();
+                            final ArrayList propertyNames = new ArrayList();
+                            final ArrayList propertyValues = new ArrayList();
 
-                        Element paragraphProps = style.getParagraphProperties();
-                        if (paragraphProps == null)
-                        {
-                            paragraphProps = new Section();
-                            paragraphProps.setNamespace(OfficeNamespaces.STYLE_NS);
-                            paragraphProps.setType(PARAGRAPH_PROPERTIES);
-                            style.addNode(paragraphProps);
+                            propertyNameSpaces.add(OfficeNamespaces.FO_NS);
+                            propertyNameSpaces.add(OfficeNamespaces.FO_NS);
+                            propertyNames.add(KEEP_TOGETHER);
+                            propertyValues.add(ALWAYS);
+                            if (keep)
+                            {
+                                propertyNames.add(KEEP_WITH_NEXT);
+                                propertyValues.add(ALWAYS);
+                            }
+                            else
+                            {
+                                propertyNames.add(KEEP_WITH_NEXT);
+                                propertyValues.add(null);
+                            }
+                            style = StyleUtilities.queryStyleByProperties(getStylesCollection(), OfficeToken.PARAGRAPH, PARAGRAPH_PROPERTIES, propertyNameSpaces, propertyNames, propertyValues);
                         }
-                        paragraphProps.setAttribute(OfficeNamespaces.FO_NS, KEEP_TOGETHER, ALWAYS);
-                        final int keepTogetherState = getCurrentContext().getKeepTogether();
-                        // We prevent pagebreaks within the two adjacent rows (this one and the next one) if
-                        // either a group-wide keep-together is defined or if we haven't reached the end of the
-                        // current section yet.
-                        if (keepTogetherState == PageContext.KEEP_TOGETHER_GROUP || expectedTableRowCount > 0)
+                        if (style == null)
                         {
-                            paragraphProps.setAttribute(OfficeNamespaces.FO_NS, KEEP_WITH_NEXT, ALWAYS);
+                            style = deriveStyle(OfficeToken.PARAGRAPH, styleName);
+                            // Lets set the 'keep-together' flag..
+
+                            Element paragraphProps = style.getParagraphProperties();
+                            if (paragraphProps == null)
+                            {
+                                paragraphProps = new Section();
+                                paragraphProps.setNamespace(OfficeNamespaces.STYLE_NS);
+                                paragraphProps.setType(PARAGRAPH_PROPERTIES);
+                                style.addNode(paragraphProps);
+                            }
+                            paragraphProps.setAttribute(OfficeNamespaces.FO_NS, KEEP_TOGETHER, ALWAYS);
+
+                            // We prevent pagebreaks within the two adjacent rows (this one and the next one) if
+                            // either a group-wide keep-together is defined or if we haven't reached the end of the
+                            // current section yet.
+                            if ((keepTogetherState == PageContext.KEEP_TOGETHER_GROUP || expectedTableRowCount > 0) && isParentKeepTogether())
+                            {
+                                paragraphProps.setAttribute(OfficeNamespaces.FO_NS, KEEP_WITH_NEXT, ALWAYS);
+                            }
                         }
 
                         attrs.setAttribute(OfficeNamespaces.TEXT_NS, OfficeToken.STYLE_NAME, style.getStyleName());
                     }
                 }
             }
-            else if (isTableNS && ObjectUtilities.equal(OfficeToken.TABLE_CELL, elementType))
-            {
-                cellEmpty = false;
-                if (!firstCellSeen && sectionKeepTogether)
-                {
-                    final String styleName = (String) attrs.getAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME);
-                    final OfficeStyle style = deriveStyle(OfficeToken.TABLE_CELL, styleName);
-                    // Lets set the 'keep-together' flag..
 
-                    Element paragraphProps = style.getParagraphProperties();
-                    if (paragraphProps == null)
-                    {
-                        paragraphProps = new Section();
-                        paragraphProps.setNamespace(OfficeNamespaces.STYLE_NS);
-                        paragraphProps.setType(PARAGRAPH_PROPERTIES);
-                        style.addNode(paragraphProps);
-                    }
-                    paragraphProps.setAttribute(OfficeNamespaces.FO_NS, KEEP_TOGETHER, ALWAYS);
-                    final int keepTogetherState = getCurrentContext().getKeepTogether();
-                    // We prevent pagebreaks within the two adjacent rows (this one and the next one) if
-                    // either a group-wide keep-together is defined or if we haven't reached the end of the
-                    // current section yet.
-                    if (keepTogetherState == PageContext.KEEP_TOGETHER_GROUP || expectedTableRowCount > 0)
-                    {
-                        paragraphProps.setAttribute(OfficeNamespaces.FO_NS, KEEP_WITH_NEXT, ALWAYS);
-                    }
-
-                    attrs.setAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME, style.getStyleName());
-                }
-            }
-
-            if ( ObjectUtilities.equal(OfficeNamespaces.DRAWING_NS, namespace) && ObjectUtilities.equal(OfficeToken.FRAME, elementType) )
+            if (ObjectUtilities.equal(OfficeNamespaces.DRAWING_NS, namespace) && ObjectUtilities.equal(OfficeToken.FRAME, elementType))
             {
                 final String styleName = (String) attrs.getAttribute(OfficeNamespaces.DRAWING_NS, OfficeToken.STYLE_NAME);
                 final OfficeStyle predefAutoStyle = getPredefinedStylesCollection().getAutomaticStyles().getStyle(OfficeToken.GRAPHIC, styleName);
@@ -727,7 +729,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                     graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "flow-with-text", "false");
                     graphicProperties.setAttribute(OfficeNamespaces.DRAWING_NS, "ole-draw-aspect", "1");
 
-                    // attrs.setAttribute(OfficeNamespaces.DRAWING_NS, OfficeToken.STYLE_NAME, predefAutoStyle.getStyleName());
+                // attrs.setAttribute(OfficeNamespaces.DRAWING_NS, OfficeToken.STYLE_NAME, predefAutoStyle.getStyleName());
                 }
             }
 
@@ -906,7 +908,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                 xmlWriter.writeTag(OfficeNamespaces.TEXT_NS, OfficeToken.P, OfficeToken.STYLE_NAME, style.getStyleName(), XmlWriterSupport.OPEN);
 
                 masterPageName = null;
-                //breakDefinition = null;
+            //breakDefinition = null;
             }
             else if (isColumnBreakPending())
             {
@@ -980,8 +982,8 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             {
                 if (localKeepTogether)
                 {
-                    final Element tableProps = produceFirstChild(style, OfficeNamespaces.STYLE_NS, "table-properties");
-                    tableProps.setAttribute(OfficeNamespaces.STYLE_NS, "may-break-between-rows", OfficeToken.FALSE);
+                    final Element tableProps = produceFirstChild(style, OfficeNamespaces.STYLE_NS, TABLE_PROPERTIES);
+                    tableProps.setAttribute(OfficeNamespaces.STYLE_NS, MAY_BREAK_BETWEEN_ROWS, OfficeToken.FALSE);
                 }
             }
             else
@@ -997,10 +999,19 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             }
             if (keepWithNext)
             {
-                final Element tableProps = produceFirstChild(style, OfficeNamespaces.STYLE_NS, "table-properties");
-                tableProps.setAttribute(OfficeNamespaces.FO_NS, KEEP_WITH_NEXT, ALWAYS);
-                // A keep-with-next does not work, if the may-break-betweek rows is not set to false ..
-                tableProps.setAttribute(OfficeNamespaces.STYLE_NS, "may-break-between-rows", OfficeToken.FALSE);
+                boolean addKeepWithNext = true;
+                if (currentRole == ROLE_GROUP_FOOTER)
+                {
+                    addKeepWithNext = isParentKeepTogether();
+                }
+
+                final Element tableProps = produceFirstChild(style, OfficeNamespaces.STYLE_NS, TABLE_PROPERTIES);
+                tableProps.setAttribute(OfficeNamespaces.STYLE_NS, MAY_BREAK_BETWEEN_ROWS, OfficeToken.FALSE);
+                if (addKeepWithNext)
+                {
+                    tableProps.setAttribute(OfficeNamespaces.FO_NS, KEEP_WITH_NEXT, ALWAYS);
+                    // A keep-with-next does not work, if the may-break-betweek rows is not set to false ..
+                }
             }
             attrs.setAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME, style.getStyleName());
         // no need to copy the styles, this was done while deriving the
@@ -1018,6 +1029,22 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                 }
                 else if (detailBandProcessingState == DETAIL_SECTION_WAIT)
                 {
+                    if (keepWithNext)
+                    {
+                        final String styleName = (String) attrs.getAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME);
+
+                        final OfficeStyle style = deriveStyle(OfficeToken.TABLE, styleName);
+                        final Element tableProps = produceFirstChild(style, OfficeNamespaces.STYLE_NS, TABLE_PROPERTIES);
+                        // A keep-with-next does not work, if the may-break-betweek rows is not set to false ..
+                        tableProps.setAttribute(OfficeNamespaces.STYLE_NS, MAY_BREAK_BETWEEN_ROWS, OfficeToken.FALSE);
+                        final String hasGroupFooter = (String) attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "has-group-footer");
+                        if (hasGroupFooter != null && hasGroupFooter.equals(OfficeToken.TRUE))
+                        {
+                            tableProps.setAttribute(OfficeNamespaces.FO_NS, KEEP_WITH_NEXT, ALWAYS);
+                        }
+
+                        attrs.setAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME, style.getStyleName());
+                    }
                     detailBandProcessingState = DETAIL_SECTION_FIRST_STARTED;
                 }
                 else if (detailBandProcessingState == DETAIL_SECTION_FIRST_PRINTED)
@@ -1034,6 +1061,20 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         final String elementType = ReportTargetUtil.getElemenTypeFromAttribute(attrs);
         final AttributeList attrList = buildAttributeList(attrs);
         xmlWriter.writeTag(namespace, elementType, attrList, XmlWriterSupport.OPEN);
+    }
+
+    private boolean isParentKeepTogether()
+    {
+        PageContext context = getCurrentContext();
+        if (context != null)
+        {
+            context = context.getParent();
+            if (context != null)
+            {
+                return context.getKeepTogether() == PageContext.KEEP_TOGETHER_GROUP;
+            }
+        }
+        return false;
     }
 
     private boolean isTableMergeActive()
@@ -1351,17 +1392,19 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                 xmlWriter.writeCloseTag();
                 variables = null;
             }
-            // Only generate the empty paragraph, if we have to add the keep-together ..
-            else if (cellEmpty && expectedTableRowCount > 0 &&
-                    sectionKeepTogether && !firstCellSeen)
-            {
-                // we have no variables ..
-                StyleUtilities.copyStyle(OfficeToken.PARAGRAPH,
-                        TextRawReportTarget.VARIABLES_HIDDEN_STYLE_WITH_KEEPWNEXT, getStylesCollection(),
-                        getGlobalStylesCollection(), getPredefinedStylesCollection());
-                xmlWriter.writeTag(OfficeNamespaces.TEXT_NS, OfficeToken.P, OfficeToken.STYLE_NAME,
-                        TextRawReportTarget.VARIABLES_HIDDEN_STYLE_WITH_KEEPWNEXT, XmlWriterSupport.CLOSE);
-            }
+        /**
+        // Only generate the empty paragraph, if we have to add the keep-together ..
+        else if (cellEmpty && expectedTableRowCount > 0 &&
+        sectionKeepTogether && !firstCellSeen)
+        {
+        // we have no variables ..
+        StyleUtilities.copyStyle(OfficeToken.PARAGRAPH,
+        TextRawReportTarget.VARIABLES_HIDDEN_STYLE_WITH_KEEPWNEXT, getStylesCollection(),
+        getGlobalStylesCollection(), getPredefinedStylesCollection());
+        xmlWriter.writeTag(OfficeNamespaces.TEXT_NS, OfficeToken.P, OfficeToken.STYLE_NAME,
+        TextRawReportTarget.VARIABLES_HIDDEN_STYLE_WITH_KEEPWNEXT, XmlWriterSupport.CLOSE);
+        }
+         */
         }
 
         if (isTableNs && (ObjectUtilities.equal(OfficeToken.TABLE_CELL, elementType) || ObjectUtilities.equal(OfficeToken.COVERED_TABLE_CELL, elementType)))
