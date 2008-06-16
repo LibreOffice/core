@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlExportDocumentHandler.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,11 +70,26 @@ void lcl_exportPrettyPrinting(const uno::Reference< xml::sax::XDocumentHandler >
     return sQName.makeStringAndClear();
 }
 
+void lcl_correctCellAddress(const ::rtl::OUString & _sName, const uno::Reference< xml::sax::XAttributeList > & xAttribs)
+{
+    SvXMLAttributeList* pList = SvXMLAttributeList::getImplementation(xAttribs);
+    ::rtl::OUString sCellAddress = pList->getValueByName(_sName);
+    const sal_Int32 nPos = sCellAddress.lastIndexOf('$');
+    if ( nPos != -1 )
+    {
+        sCellAddress = sCellAddress.copy(0,nPos);
+        sCellAddress += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$65535"));
+        pList->RemoveAttribute(_sName);
+        pList->AddAttribute(_sName,sCellAddress);
+    }
+}
+
 ExportDocumentHandler::ExportDocumentHandler(uno::Reference< uno::XComponentContext > const & context) :
     m_xContext(context)
     ,m_nCurrentCellIndex(0)
     ,m_bTableRowsStarted(false)
     ,m_bFirstRowExported(false)
+    ,m_bExportChar(false)
 {
 }
 // -----------------------------------------------------------------------------
@@ -141,7 +156,6 @@ void SAL_CALL ExportDocumentHandler::endDocument() throw (uno::RuntimeException,
 
 void SAL_CALL ExportDocumentHandler::startElement(const ::rtl::OUString & _sName, const uno::Reference< xml::sax::XAttributeList > & xAttribs) throw (uno::RuntimeException, xml::sax::SAXException)
 {
-
     bool bExport = true;
     if ( _sName.equalsAscii("office:chart") )
     {
@@ -175,7 +189,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const ::rtl::OUString & _sName
 
         m_xDelegatee->startElement(lcl_createAttribute(XML_NP_OFFICE,XML_REPORT),xNewAttribs);
 
-        const uno::Sequence< ::rtl::OUString > aDetailFields = m_xDatabaseDataProvider->getDetailFields();
+        /*const uno::Sequence< ::rtl::OUString > aDetailFields = m_xDatabaseDataProvider->getDetailFields();
         if ( aDetailFields.getLength() )
         {
             lcl_exportPrettyPrinting(m_xDelegatee);
@@ -202,7 +216,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const ::rtl::OUString & _sName
             }
             lcl_exportPrettyPrinting(m_xDelegatee);
             m_xDelegatee->endElement(lcl_createAttribute(XML_NP_RPT,XML_MASTER_DETAIL_FIELDS));
-        }
+        }*/
         bExport = false;
     }
     else if ( _sName.equalsAscii("table:table") )
@@ -214,22 +228,50 @@ void SAL_CALL ExportDocumentHandler::startElement(const ::rtl::OUString & _sName
         m_bTableRowsStarted = true;
     else if ( m_bTableRowsStarted && m_bFirstRowExported && (_sName.equalsAscii("table:table-row") || _sName.equalsAscii("table:table-cell")) )
         bExport = false;
+    else if ( _sName.equalsAscii("chart:plot-area"))
+    {
+        SvXMLAttributeList* pList = SvXMLAttributeList::getImplementation(xAttribs);
+        pList->RemoveAttribute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("table:cell-range-address")));
+    }
+    else if ( _sName.equalsAscii("chart:categories"))
+    {
+        static ::rtl::OUString s_sCellAddress(lcl_createAttribute(XML_NP_TABLE,XML_CELL_RANGE_ADDRESS));
+        lcl_correctCellAddress(s_sCellAddress,xAttribs);
+    }
+    else if ( _sName.equalsAscii("chart:series"))
+    {
+        static ::rtl::OUString s_sCellAddress(lcl_createAttribute(XML_NP_CHART,XML_VALUES_CELL_RANGE_ADDRESS));
+        lcl_correctCellAddress(s_sCellAddress,xAttribs);
+    }
+    else if ( m_bTableRowsStarted && !m_bFirstRowExported && _sName.equalsAscii("table:table-cell") )
+    {
+        SvXMLAttributeList* pList = SvXMLAttributeList::getImplementation(xAttribs);
+        static ::rtl::OUString s_sValue(lcl_createAttribute(XML_NP_OFFICE,XML_VALUE));
+        pList->RemoveAttribute(s_sValue);
+    }
     else if ( m_bTableRowsStarted && _sName.equalsAscii("text:p") )
     {
         if ( !m_bFirstRowExported )
         {
+            SvXMLAttributeList* pList = SvXMLAttributeList::getImplementation(xAttribs);
+            pList->RemoveAttribute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("text:id")));
             m_xDelegatee->startElement(_sName,xAttribs);
-            SvXMLAttributeList* pList = new SvXMLAttributeList();
+            pList = new SvXMLAttributeList();
             uno::Reference< xml::sax::XAttributeList > xNewAttribs = pList;
 
             ::rtl::OUString sFormula;
             if( m_nCurrentCellIndex < m_aColumns.getLength() )
-                sFormula = m_aColumns[m_nCurrentCellIndex];
+            {
+                sFormula += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("field:["));
+                sFormula += m_aColumns[m_nCurrentCellIndex];
+                sFormula += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]"));
+            }
             pList->AddAttribute(lcl_createAttribute(XML_NP_RPT,XML_FORMULA),sFormula);
 
             m_xDelegatee->startElement(lcl_createAttribute(XML_NP_RPT,XML_FORMATTED_TEXT),xNewAttribs);
             m_xDelegatee->startElement(lcl_createAttribute(XML_NP_RPT,XML_REPORT_ELEMENT),NULL);
             m_xDelegatee->startElement(lcl_createAttribute(XML_NP_RPT,XML_REPORT_COMPONENT),NULL);
+            m_bExportChar = true;
 
             ++m_nCurrentCellIndex;
         }
@@ -264,6 +306,7 @@ void SAL_CALL ExportDocumentHandler::endElement(const ::rtl::OUString & _sName) 
         bExport = !m_bFirstRowExported;
         if ( bExport )
         {
+            m_bExportChar = false;
             m_xDelegatee->endElement(lcl_createAttribute(XML_NP_RPT,XML_REPORT_COMPONENT));
             m_xDelegatee->endElement(lcl_createAttribute(XML_NP_RPT,XML_REPORT_ELEMENT));
             m_xDelegatee->endElement(lcl_createAttribute(XML_NP_RPT,XML_FORMATTED_TEXT));
@@ -276,8 +319,13 @@ void SAL_CALL ExportDocumentHandler::endElement(const ::rtl::OUString & _sName) 
 
 void SAL_CALL ExportDocumentHandler::characters(const ::rtl::OUString & aChars) throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    if ( !(m_bTableRowsStarted && m_bFirstRowExported) )
+    if ( !(m_bTableRowsStarted || m_bFirstRowExported) )
         m_xDelegatee->characters(aChars);
+    else if ( m_bExportChar )
+    {
+        static const ::rtl::OUString s_sZero(RTL_CONSTASCII_USTRINGPARAM("0"));
+        m_xDelegatee->characters(s_sZero);
+    }
 }
 
 void SAL_CALL ExportDocumentHandler::ignorableWhitespace(const ::rtl::OUString & aWhitespaces) throw (uno::RuntimeException, xml::sax::SAXException)
