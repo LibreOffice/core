@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -59,6 +59,12 @@ CXXFLAGS:=$(EXTRA_CFLAGS)
 .ENDIF # "$(SYSBASE)"!=""
 
 .IF "$(GUI)"=="UNX"
+.IF "$(OS)"=="SOLARIS"
+CFLAGS:=-O $(ARCH_FLAGS)
+CXXFLAGS:=-O $(ARCH_FLAGS)
+LDFLAGS:=$(ARCH_FLAGS)
+.EXPORT : CFLAGS CXXFLAGS LDFLAGS
+.ENDIF
 #CONFIGURE_ACTION=./configure
 #CONFIGURE_ACTION=./configure --without-x --enable-multithreaded --enable-exceptions CFLAGS="-g -O0" CXXFLAGS="-g -O0"
 CONFIGURE_ACTION=./configure --without-x --enable-multithreaded --enable-exceptions
