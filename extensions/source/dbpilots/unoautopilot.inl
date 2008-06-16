@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoautopilot.inl,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,7 +116,7 @@ template <class TYPE, class SERVICEINFO>
 template <class TYPE, class SERVICEINFO>
 Dialog* OUnoAutoPilot<TYPE, SERVICEINFO>::createDialog(Window* _pParent)
 {
-    return new TYPE(_pParent, m_xObjectModel, m_xORB);
+    return new TYPE(_pParent, m_xObjectModel, m_aContext.getLegacyServiceFactory());
 }
 
 //--------------------------------------------------------------------------
