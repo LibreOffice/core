@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportWindow.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -277,10 +277,6 @@ sal_Int32 OReportWindow::getSplitterHeight() const
     return nRet;
 }
 //------------------------------------------------------------------------------
-void OReportWindow::setTotalSize()
-{
-}
-//------------------------------------------------------------------------------
 sal_Int32 OReportWindow::GetTotalHeight() const
 {
     sal_Int32 nHeight = m_aHRuler.GetSizePixel().Height();
@@ -496,6 +492,12 @@ BOOL OReportWindow::isDragStripes() const
 sal_uInt32 OReportWindow::getMarkedObjectCount() const
 {
     return m_pViews ? m_pViews->getMarkedObjectCount() : 0;
+}
+// -----------------------------------------------------------------------------
+void OReportWindow::fillControlModelSelection(::std::vector< uno::Reference< uno::XInterface > >& _rSelection) const
+{
+    if ( m_pViews )
+        m_pViews->fillControlModelSelection(_rSelection);
 }
 
 //==================================================================
