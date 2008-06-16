@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: confeventhelpers.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,11 +48,6 @@ namespace configmgr
 {
     namespace internal
     {
-
-        void throwDispatchIllegalSequenceException()
-        {
-            OSL_ENSURE( 0, "Illegal Call to brodcaster while dispatching" );
-        }
 
 ////////////////////////////////////////////////////////////////////////
     using namespace configuration;
