@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: olmenu.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,27 +59,17 @@
 #include <svtools/lingucfg.hxx>
 #include <svx/acorrcfg.hxx>
 #include <swmodule.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>        //CheckSpellChanges
-#endif
 #include <olmenu.hxx>
 #include <swundo.hxx>
 #include <crsskip.hxx>
 
-#ifndef _OLMENU_HRC
 #include <olmenu.hrc>
-#endif
 #include <doc.hxx>
 
 // -> #111827#
@@ -102,32 +92,17 @@
 #include <viewopt.hxx>
 #include <uitool.hxx>
 
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <sfx2/request.hxx>
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
+
+#include <langhelper.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-// from textsh1.cxx:
-extern void lcl_CharDialog( SwWrtShell &rWrtSh, BOOL bUseDialog, USHORT nSlot,
-        const SfxItemSet *pArgs, SfxRequest *pReq );
-extern void lcl_SetLanguage_None( SwWrtShell& rWrtSh,
-        bool bIsForSelection, SfxItemSet &rCoreSet );
-extern void lcl_SetLanguage( SwWrtShell& rWrtSh, const String &rLangText,
-        bool bIsForSelection, SfxItemSet &rCoreSet);
-extern void lcl_SelectCurrentPara( SwWrtShell &rWrtSh );
-extern LanguageType lcl_GetCurrentLanguage( SwWrtShell &rSh );
-extern LanguageType lcl_GetLanguage( SwWrtShell &rSh, USHORT nLangWhichId );
-
-/*--------------------------------------------------------------------------
-
----------------------------------------------------------------------------*/
+extern void lcl_CharDialog( SwWrtShell &rWrtSh, BOOL bUseDialog, USHORT nSlot,const SfxItemSet *pArgs, SfxRequest *pReq );
 
 // tries to determine the language of 'rText'
 //
@@ -476,7 +451,7 @@ SwSpellPopup::SwSpellPopup(
     // get the language that is in use
     const String aMultipleLanguages = String::CreateFromAscii("*");
     String aCurrentLang = aMultipleLanguages;
-    nLang = lcl_GetCurrentLanguage( *pWrtSh );
+    nLang = SwLangHelper::GetCurrentLanguage( *pWrtSh );
     if (nLang != LANGUAGE_DONTKNOW)
         aCurrentLang = aLangTable.GetString( nLang );
 
@@ -702,12 +677,12 @@ void SwSpellPopup::Execute( USHORT nId )
                 {
                     //Set language for current selection
                     aNewLangTxt=aLangTable_Text[nId];
-                    lcl_SetLanguage( *pSh, aNewLangTxt, true, aCoreSet );
+                    SwLangHelper::SetLanguage( *pSh, aNewLangTxt, true, aCoreSet );
                 }
                 else if (nId == MN_LANGUAGE_SELECTION_START + nNumLanguageTextEntries - 1)
                 {
                     //Set Language_None for current selection
-                    lcl_SetLanguage_None( *pSh, true, aCoreSet );
+                    SwLangHelper::SetLanguage_None( *pSh, true, aCoreSet );
                 }
                 else if (nId == MN_LANGUAGE_SELECTION_START + nNumLanguageTextEntries)
                 {
@@ -719,22 +694,22 @@ void SwSpellPopup::Execute( USHORT nId )
                     //Set language for current paragraph
                     aNewLangTxt=aLangTable_Paragraph[nId];
                     pSh->Push();        // save cursor
-                    lcl_SelectCurrentPara( *pSh );
-                    lcl_SetLanguage( *pSh, aNewLangTxt, true, aCoreSet );
+                    SwLangHelper::SelectCurrentPara( *pSh );
+                    SwLangHelper::SetLanguage( *pSh, aNewLangTxt, true, aCoreSet );
                     pSh->Pop( FALSE );  // restore cursor
                 }
                 else if (nId == MN_LANGUAGE_PARAGRAPH_START + nNumLanguageParaEntries - 1)
                 {
                     //Set Language_None for current paragraph
                     pSh->Push();        // save cursor
-                    lcl_SelectCurrentPara( *pSh );
-                    lcl_SetLanguage_None( *pSh, true, aCoreSet );
+                    SwLangHelper::SelectCurrentPara( *pSh );
+                    SwLangHelper::SetLanguage_None( *pSh, true, aCoreSet );
                     pSh->Pop( FALSE );  // restore cursor
                 }
                 else if (nId == MN_LANGUAGE_PARAGRAPH_START + nNumLanguageParaEntries)
                 {
                     pSh->Push();        // save cursor
-                    lcl_SelectCurrentPara( *pSh );
+                    SwLangHelper::SelectCurrentPara( *pSh );
                     //Open Format/Character Dialog
                     lcl_CharDialog( *pSh, true, nId, 0, 0 );
                     pSh->Pop( FALSE );  // restore cursor
@@ -743,12 +718,12 @@ void SwSpellPopup::Execute( USHORT nId )
                 {
                     //Set selected language as the default language
                     aNewLangTxt=aLangTable_Document[nId];
-                    lcl_SetLanguage( *pSh, aNewLangTxt, false, aCoreSet );
+                    SwLangHelper::SetLanguage( *pSh, aNewLangTxt, false, aCoreSet );
                 }
                 else if (nId == MN_LANGUAGE_ALL_TEXT_START + nNumLanguageDocEntries - 1)
                 {
                     //Set Language_None as the default language
-                    lcl_SetLanguage_None( *pSh, false, aCoreSet );
+                    SwLangHelper::SetLanguage_None( *pSh, false, aCoreSet );
                 }
                 else if (nId == MN_LANGUAGE_ALL_TEXT_START + nNumLanguageDocEntries)
                 {
