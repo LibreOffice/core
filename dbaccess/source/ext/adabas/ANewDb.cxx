@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ANewDb.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -144,7 +144,7 @@ Dialog* OAdabasCreateDialog::createDialog(Window* _pParent)
 {
     if(!m_xCreateCatalog.is())
         throw SQLException();
-    m_pDialog = new OAdabasNewDbDlg(_pParent,m_xCreateCatalog,m_xORB);
+    m_pDialog = new OAdabasNewDbDlg(_pParent,m_xCreateCatalog,m_aContext.getLegacyServiceFactory());
     return m_pDialog;
 }
 // -----------------------------------------------------------------------------
