@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ImageControl.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,8 @@ uno::Sequence< ::rtl::OUString > lcl_getImageOptionals()
             ,PROPERTY_CHARPOSTURE
             ,PROPERTY_CHARRELIEF
             ,PROPERTY_FONTDESCRIPTOR
+            ,PROPERTY_FONTDESCRIPTORASIAN
+            ,PROPERTY_FONTDESCRIPTORCOMPLEX
             ,PROPERTY_CONTROLTEXTEMPHASISMARK
             ,PROPERTY_CHARROTATION
             ,PROPERTY_CHARSCALEWIDTH
@@ -89,6 +91,36 @@ uno::Sequence< ::rtl::OUString > lcl_getImageOptionals()
             ,PROPERTY_CHARKERNING
             ,PROPERTY_MASTERFIELDS
             ,PROPERTY_DETAILFIELDS
+            ,PROPERTY_PARAADJUST
+            , PROPERTY_CHAREMPHASISASIAN
+            , PROPERTY_CHARFONTNAMEASIAN
+            , PROPERTY_CHARFONTSTYLENAMEASIAN
+            , PROPERTY_CHARFONTFAMILYASIAN
+            , PROPERTY_CHARFONTCHARSETASIAN
+            , PROPERTY_CHARFONTPITCHASIAN
+            , PROPERTY_CHARHEIGHTASIAN
+            , PROPERTY_CHARUNDERLINEASIAN
+            , PROPERTY_CHARWEIGHTASIAN
+            , PROPERTY_CHARPOSTUREASIAN
+            , PROPERTY_CHARWORDMODEASIAN
+            , PROPERTY_CHARROTATIONASIAN
+            , PROPERTY_CHARSCALEWIDTHASIAN
+            , PROPERTY_CHARLOCALEASIAN
+            , PROPERTY_CHAREMPHASISCOMPLEX
+            , PROPERTY_CHARFONTNAMECOMPLEX
+            , PROPERTY_CHARFONTSTYLENAMECOMPLEX
+            , PROPERTY_CHARFONTFAMILYCOMPLEX
+            , PROPERTY_CHARFONTCHARSETCOMPLEX
+            , PROPERTY_CHARFONTPITCHCOMPLEX
+            , PROPERTY_CHARHEIGHTCOMPLEX
+            , PROPERTY_CHARUNDERLINECOMPLEX
+            , PROPERTY_CHARWEIGHTCOMPLEX
+            , PROPERTY_CHARPOSTURECOMPLEX
+            , PROPERTY_CHARWORDMODECOMPLEX
+            , PROPERTY_CHARROTATIONCOMPLEX
+            , PROPERTY_CHARSCALEWIDTHCOMPLEX
+            , PROPERTY_CHARLOCALECOMPLEX
+
     };
     return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
@@ -100,6 +132,7 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
 ,ImageControlPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getImageOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_bScaleImage(sal_False)
+,m_bPreserveIRI(sal_True)
 {
     DBG_CTOR( rpt_OImageControl,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_IMAGECONTROL,m_aProps.aComponent.m_xContext->getServiceManager());
@@ -112,6 +145,7 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
 ,ImageControlPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getImageOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_bScaleImage(sal_False)
+,m_bPreserveIRI(sal_True)
 {
     DBG_CTOR( rpt_OImageControl,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_IMAGECONTROL,m_aProps.aComponent.m_xContext->getServiceManager());
@@ -224,16 +258,6 @@ void SAL_CALL OImageControl::setHyperLinkName(const ::rtl::OUString & the_value)
 }
 
 // -----------------------------------------------------------------------------
-::sal_Int16 SAL_CALL OImageControl::getParaAdjust() throw (uno::RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    return m_aProps.aFormatProperties.nAlign;
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OImageControl::setParaAdjust( ::sal_Int16 _align ) throw (uno::RuntimeException)
-{
-    set(PROPERTY_PARAADJUST,_align,m_aProps.aFormatProperties.nAlign);
-}
 ::sal_Int32 SAL_CALL OImageControl::getControlBackground() throw (::com::sun::star::beans::UnknownPropertyException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
