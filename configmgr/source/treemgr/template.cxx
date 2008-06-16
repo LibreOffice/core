@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: template.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,34 +75,6 @@ TemplateProvider::~TemplateProvider()
 }
 
 //-----------------------------------------------------------------------------
-// class SpecialTemplateProvider
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-SpecialTemplateProvider::SpecialTemplateProvider()
-: m_aImpl( new SpecialTemplateProvider_Impl() )
-{
-}
-
-//-----------------------------------------------------------------------------
-SpecialTemplateProvider::SpecialTemplateProvider(SpecialTemplateProvider const& aOther)
-: m_aImpl(aOther.m_aImpl)
-{
-}
-
-//-----------------------------------------------------------------------------
-SpecialTemplateProvider& SpecialTemplateProvider::operator =(SpecialTemplateProvider const& aOther)
-{
-    m_aImpl = aOther.m_aImpl;
-    return *this;
-}
-
-//-----------------------------------------------------------------------------
-SpecialTemplateProvider::~SpecialTemplateProvider()
-{
-}
-
-//-----------------------------------------------------------------------------
 // class Template
 //-----------------------------------------------------------------------------
 
@@ -141,20 +113,6 @@ OUString Template::getPathString() const
 {
     TemplateName aNames(m_aName,m_aModule);
     return aNames.makePathString( );
-}
-//-----------------------------------------------------------------------------
-
-TemplateHolder makeSimpleTemplate(UnoType const& aType, SpecialTemplateProvider const& aProvider)
-{
-    TemplateName aNames(aType,false);
-    return TemplateImplHelper::makeSpecialTemplate( aNames, aProvider, aType);
-}
-//-----------------------------------------------------------------------------
-
-TemplateHolder makeTreeTemplate(OUString const& sName, OUString const& sModule, SpecialTemplateProvider const& aProvider)
-{
-    TemplateName aNames( sName,sModule );
-    return TemplateImplHelper::makeSpecialTemplate( aNames,aProvider, configapi::getUnoInterfaceType());
 }
 //-----------------------------------------------------------------------------
 
