@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AdvancedSettingsDlg.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -148,7 +148,7 @@ namespace dbaui
     //------------------------------------------------------------------------------
     Dialog* OAdvancedSettingsDialog::createDialog(Window* _pParent)
     {
-        AdvancedSettingsDialog* pDlg = new AdvancedSettingsDialog(_pParent, m_pDatasourceItems, m_xORB,m_aInitialSelection);
+        AdvancedSettingsDialog* pDlg = new AdvancedSettingsDialog(_pParent, m_pDatasourceItems, m_aContext.getLegacyServiceFactory(),m_aInitialSelection);
         return pDlg;
     }
 

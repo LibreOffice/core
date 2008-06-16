@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UserSettingsDlg.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,7 +126,7 @@ Reference<XPropertySetInfo>  SAL_CALL OUserSettingsDialog::getPropertySetInfo() 
 //------------------------------------------------------------------------------
 Dialog* OUserSettingsDialog::createDialog(Window* _pParent)
 {
-    OUserAdminDlg* pDlg = new OUserAdminDlg(_pParent, m_pDatasourceItems, m_xORB,m_aInitialSelection,m_xActiveConnection);
+    OUserAdminDlg* pDlg = new OUserAdminDlg(_pParent, m_pDatasourceItems, m_aContext.getLegacyServiceFactory(),m_aInitialSelection,m_xActiveConnection);
     return pDlg;
 }
 
