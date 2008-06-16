@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nodechangeinfo.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,9 +117,6 @@ namespace configmgr
             Tree    getNewElementTree() const;
             Tree    getOldElementTree() const;
 
-            NodeRef getNewElementNodeRef() const;
-            NodeRef getOldElementNodeRef() const;
-
             NodeID  getNewElementNodeID() const;
             NodeID  getOldElementNodeID() const;
         //-------------------------------------------------
@@ -147,10 +144,10 @@ namespace configmgr
         //-------------------------------------------------
             // checks whether the base has been properly set up.
             // Does not check for existence of the affected node
-
+#if OSL_DEBUG_LEVEL > 0
             /// check whether the location has been initialized properly
             bool isValidData() const;
-
+#endif
             /// check whether the location is for a valid object
             bool isValidLocation() const;
 
@@ -164,11 +161,7 @@ namespace configmgr
             NodeRef getBaseNode() const;
 
             /// retrieve the tree where the change is actually taking place (may be Empty, if the tree has never been accessed)
-            Tree getAffectedTree() const;
-            /// retrieve the tree where the change is actually taking place (may be Empty, if the tree has never been accessed)
             TreeRef getAffectedTreeRef() const;
-            /// retrieve the node where the change is actually taking place (if the affected Tree is not empty)
-            NodeRef getAffectedNode() const;
             /// identify the node where the change is actually taking place
             NodeID getAffectedNodeID() const;
 
