@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fsys.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,8 @@
 #include <tools/errcode.hxx>
 #endif
 #include "tools/toolsdllapi.h"
+
+#include <cstdarg>
 
 #define FEAT_FSYS_DOUBLESPEED
 
@@ -470,7 +472,7 @@ private:
     TOOLS_DLLPRIVATE Dir&           operator=( const Dir& );    // not allowed
 
 #ifdef _DIR_CXX
-    TOOLS_DLLPRIVATE FSysError      ImpSetSort( va_list pArgs, FSysSort nSort );
+    TOOLS_DLLPRIVATE FSysError      ImpSetSort( std::va_list pArgs, FSysSort nSort );
     TOOLS_DLLPRIVATE void           Construct( DirEntryKind nKind = FSYS_KIND_DIR|FSYS_KIND_FILE );
 #endif
 
