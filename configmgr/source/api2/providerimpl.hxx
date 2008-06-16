@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: providerimpl.hxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,16 +117,7 @@ namespace configmgr
             };
             static sal_Char const * const asciiArgumentNames[];
 
-            static OUString getArgumentName(Argument _which)                CFG_NOTHROW();
             static Argument lookupArgument(OUString const& sArgumentName)   CFG_NOTHROW();
-
-            static OUString getUserArgumentNameD()              CFG_NOTHROW() { return getArgumentName(ARG_USER_DEPRECATED);     }
-            static OUString getEntityArgumentName()             CFG_NOTHROW() { return getArgumentName(ARG_ENTITY);     }
-            static OUString getNodePathArgumentName()           CFG_NOTHROW() { return getArgumentName(ARG_NODEPATH); }
-            static OUString getDepthArgumentNameArgumentName()  CFG_NOTHROW() { return getArgumentName(ARG_DEPTH);    }
-            static OUString getLocaleArgumentName()             CFG_NOTHROW() { return getArgumentName(ARG_LOCALE);   }
-            static OUString getNoCacheArgumentNameD()           CFG_NOTHROW() { return getArgumentName(ARG_NOCACHE_OBSOLETE);  }
-            static OUString getAsyncArgumentName()              CFG_NOTHROW() { return getArgumentName(ARG_ASYNC);    }
         public:
             /** extracts arguments from the argument sequence into to the parameter variables
 
@@ -210,7 +201,6 @@ namespace configmgr
 
         RequestOptions const& getDefaultOptions() const {return m_aDefaultOptions;}
         TypeConverterRef getTypeConverter() const {return m_xTypeConverter;}
-        configapi::Factory& getWriterFactory();
         IConfigBroadcaster* getNotifier() CFG_NOTHROW();
         uno::XInterface*    getProviderInstance();
 
