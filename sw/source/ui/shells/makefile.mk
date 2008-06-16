@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.13 $
+# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,6 +47,7 @@ SRC1FILES =  \
         shells.src
 
 SLOFILES =  \
+        $(SLO)$/langhelper.obj \
         $(SLO)$/annotsh.obj \
         $(SLO)$/basesh.obj \
         $(SLO)$/beziersh.obj \
