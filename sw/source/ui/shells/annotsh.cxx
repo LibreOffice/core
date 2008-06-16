@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: annotsh.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,23 +89,15 @@
 #include <initui.hxx>
 #include <edtwin.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
 #include <breakit.hxx>
 #include "annotsh.hxx"
 #include "view.hxx"
 #include "PostItMgr.hxx"
 #include "postit.hxx"
 
-
-#include "cmdid.h"
 #include "swtypes.hxx"
 
 #include <svx/svxdlg.hxx>
@@ -115,6 +107,12 @@
 #include <svtools/itempool.hxx>
 #include <svx/outliner.hxx>
 #include <svx/editeng.hxx>
+#include <svx/editview.hxx>
+
+#include <svtools/languageoptions.hxx>
+#include <svx/langitem.hxx>
+#include <svtools/langtab.hxx>
+#include <svtools/slstitm.hxx>
 
 #include <docsh.hxx>
 #include <svtools/undo.hxx>
@@ -123,18 +121,17 @@
 
 #include <cppuhelper/bootstrap.hxx>
 
+#include <langhelper.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::i18n;
 
 #define SwAnnotationShell
-#ifndef _ITEMDEF_HXX
+
 #include <itemdef.hxx>
-#endif
-#ifndef _SWSLOTS_HXX
 #include <swslots.hxx>
-#endif
 
 
 SFX_IMPL_INTERFACE(SwAnnotationShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
@@ -314,14 +311,17 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                     aSel.nEndPos++;
                     pOLV->SetSelection(aSel);
                 }
-                pOLV->InsertField(SvxFieldItem(aFld, EE_FEATURE_FIELD));
+                if (pPostItMgr->GetActivePostIt()->GetStatus()!=SwPostItHelper::DELETED)
+                    pOLV->InsertField(SvxFieldItem(aFld, EE_FEATURE_FIELD));
             }
             break;
         }
         case FN_INSERT_SYMBOL:
-            InsertSymbol(rReq);
+        {
+            if (pPostItMgr->GetActivePostIt()->GetStatus()!=SwPostItHelper::DELETED)
+                InsertSymbol(rReq);
             break;
-
+        }
         case SID_CHAR_DLG:
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
@@ -414,6 +414,41 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         case SID_AUTOSPELL_CHECK:
         {
             rView.ExecuteSlot(rReq);
+            break;
+        }
+        case SID_ATTR_PARA_LEFT_TO_RIGHT:
+        case SID_ATTR_PARA_RIGHT_TO_LEFT:
+        {
+            sal_Bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
+
+            const SfxPoolItem* pPoolItem;
+            if( pNewAttrs && SFX_ITEM_SET == pNewAttrs->GetItemState( nSlot, TRUE, &pPoolItem ) )
+            {
+                if( !( (SfxBoolItem*)pPoolItem)->GetValue() )
+                    bLeftToRight = !bLeftToRight;
+            }
+            SfxItemSet aAttr( *aNewAttr.GetPool(),
+                        EE_PARA_JUST, EE_PARA_JUST,
+                        EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
+                        0 );
+
+            USHORT nAdjust = SVX_ADJUST_LEFT;
+            if( SFX_ITEM_ON == aEditAttr.GetItemState(EE_PARA_JUST, TRUE, &pPoolItem ) )
+                nAdjust = ( (SvxAdjustItem*)pPoolItem)->GetEnumValue();
+
+            if( bLeftToRight )
+            {
+                aAttr.Put( SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
+                if( nAdjust == SVX_ADJUST_RIGHT )
+                    aAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
+            }
+            else
+            {
+                aAttr.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
+                if( nAdjust == SVX_ADJUST_LEFT )
+                    aAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+            }
+            pOLV->SetAttribs(aAttr);
             break;
         }
     }
@@ -576,7 +611,37 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     rSet.DisableItem( nWhich );
                 break;
             }
-
+            case SID_ATTR_PARA_LEFT_TO_RIGHT:
+            case SID_ATTR_PARA_RIGHT_TO_LEFT:
+            {
+                if ( !SvtLanguageOptions().IsCTLFontEnabled() )
+                    rSet.DisableItem( nWhich );
+                else
+                {
+                    if(pOLV->GetOutliner() && pOLV->GetOutliner()->IsVertical())
+                        rSet.DisableItem( nWhich );
+                    else
+                    {
+                        BOOL bFlag = FALSE;
+                        switch( ( ( (SvxFrameDirectionItem&) aEditAttr.Get( EE_PARA_WRITINGDIR ) ) ).GetValue() )
+                        {
+                            case FRMDIR_HORI_LEFT_TOP:
+                            {
+                                bFlag = nWhich == SID_ATTR_PARA_LEFT_TO_RIGHT;
+                                rSet.Put( SfxBoolItem( nWhich, bFlag ));
+                                break;
+                            }
+                            case FRMDIR_HORI_RIGHT_TOP:
+                            {
+                                bFlag = nWhich != SID_ATTR_PARA_LEFT_TO_RIGHT;
+                                rSet.Put( SfxBoolItem( nWhich, bFlag ));
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            break;
             default:
                 rSet.InvalidateItem( nWhich );
                 break;
@@ -584,6 +649,9 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
 
         if(nEEWhich)
             rSet.Put(aEditAttr.Get(nEEWhich, sal_True), nWhich);
+
+        if (pPostItMgr->GetActivePostIt()->GetStatus()==SwPostItHelper::DELETED)
+            rSet.DisableItem( nWhich );
 
         nWhich = aIter.NextWhich();
     }
@@ -610,11 +678,31 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
             pOLV->Copy();
             break;
         case SID_PASTE:
-            pOLV->Paste();
+            if (pPostItMgr->GetActivePostIt()->GetStatus()!=SwPostItHelper::DELETED)
+                pOLV->Paste();
             break;
         case FN_PASTESPECIAL:
-            pOLV->PasteSpecial();
+        {
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( &rView.GetEditWin() );
+
+            pDlg->Insert( SOT_FORMAT_STRING, aEmptyStr );
+            pDlg->Insert( SOT_FORMAT_RTF,    aEmptyStr );
+
+            TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( &rView.GetEditWin() ) );
+
+            ULONG nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
+
+            if (nFormat > 0)
+            {
+                if (nFormat == SOT_FORMAT_STRING)
+                    pOLV->Paste();
+                else
+                    pOLV->PasteSpecial();
+            }
+            delete pDlg;
             break;
+        }
         case SID_CLIPBOARD_FORMAT_ITEMS:
         {
             ULONG nFormat = 0;
@@ -647,6 +735,7 @@ void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( &rView.GetEditWin() ) );
     bool bPastePossible = ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) || aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
+    bPastePossible = bPastePossible &&  (pPostItMgr->GetActivePostIt()->GetStatus()!=SwPostItHelper::DELETED);
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -656,6 +745,10 @@ void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
         switch(nWhich)
         {
             case SID_CUT:
+            {
+                if ( (pPostItMgr->GetActivePostIt()->GetStatus()==SwPostItHelper::DELETED) || !pOLV->HasSelection() )
+                    rSet.DisableItem( nWhich );
+            }
             case SID_COPY:
             {
                 if( !pOLV->HasSelection() )
@@ -676,7 +769,7 @@ void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
                         SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
                         if ( aDataHelper.HasFormat( SOT_FORMAT_RTF ) )
                             aFormats.AddClipbrdFormat( SOT_FORMAT_RTF );
-                        if ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) )
+                        //if ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) )
                             aFormats.AddClipbrdFormat( SOT_FORMAT_STRING );
                         rSet.Put( aFormats );
                     }
@@ -684,6 +777,31 @@ void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
                         rSet.DisableItem( nWhich );
                     break;
                 }
+        }
+        nWhich = aIter.NextWhich();
+    }
+}
+
+void SwAnnotationShell::StateStatusLine(SfxItemSet &rSet)
+{
+    SfxWhichIter aIter( rSet );
+    USHORT nWhich = aIter.FirstWhich();
+
+    while( nWhich )
+    {
+        switch( nWhich )
+        {
+            case FN_STAT_SELMODE:
+            {
+                rSet.Put(SfxUInt16Item(FN_STAT_SELMODE, 0));
+                rSet.DisableItem( nWhich );
+                break;
+            }
+            case FN_STAT_TEMPLATE:
+            {
+                rSet.DisableItem( nWhich );
+                break;
+            }
         }
         nWhich = aIter.NextWhich();
     }
@@ -737,6 +855,10 @@ void SwAnnotationShell::StateInsert(SfxItemSet &rSet)
                 }
                 break;
         }
+
+        if (pPostItMgr->GetActivePostIt()->GetStatus()==SwPostItHelper::DELETED)
+            rSet.DisableItem( nWhich );
+
         nWhich = aIter.NextWhich();
     }
 }
@@ -807,6 +929,9 @@ void SwAnnotationShell::GetNoteState(SfxItemSet &rSet)
                 break;
         }
 
+        if ( (pPostItMgr->GetActivePostIt()->GetStatus()==SwPostItHelper::DELETED) && (nSlotId==FN_DELETE_NOTE) )
+            rSet.DisableItem( nWhich );
+
         nWhich = aIter.NextWhich();
     }
 }
@@ -818,9 +943,122 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
         return;
 
     OutlinerView* pOLV = pPostItMgr->GetActivePostIt()->View();
+    SfxItemSet aEditAttr(pOLV->GetAttribs());
     sal_uInt16 nSlot = rReq.GetSlot();
+    SwWrtShell &rSh = rView.GetWrtShell();
+    bool bRestoreSelection = false;
+    ESelection aOldSelection;
+
     switch (nSlot)
     {
+        case SID_LANGUAGE_STATUS:
+        {
+            aOldSelection = pOLV->GetSelection();
+            if (!pOLV->GetEditView().HasSelection())
+            {
+                bRestoreSelection   = true;
+                pOLV->GetEditView().SelectCurrentWord();
+            }
+
+            ESelection   aSelection  = pOLV->GetSelection();
+            EditView   & rEditView   = pOLV->GetEditView();
+            EditEngine * pEditEngine = rEditView.GetEditEngine();
+
+            // get the language
+            String aNewLangTxt;
+
+            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, SID_LANGUAGE_STATUS , sal_False );
+            if (pItem)
+                aNewLangTxt = pItem->GetValue();
+
+            //!! Remember the view frame right now...
+            //!! (call to GetView().GetViewFrame() will break if the
+            //!! SwTextShell got destroyed meanwhile.)
+            SfxViewFrame *pViewFrame = rView.GetViewFrame();
+
+            if (aNewLangTxt.EqualsAscii( "*" ))
+            {
+                // open the dialog "Tools/Options/Language Settings - Language"
+                SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+                if (pFact)
+                {
+                    VclAbstractDialog* pDlg = pFact->CreateVclDialog( rView.GetWindow(), SID_LANGUAGE_OPTIONS );
+                    pDlg->Execute();
+                    delete pDlg;
+                }
+            }
+            else
+            {
+
+                // setting the new language...
+                if (aNewLangTxt.Len() > 0)
+                {
+                    const String aSelectionLangPrefix( String::CreateFromAscii("Current_") );
+                    const String aParagraphLangPrefix( String::CreateFromAscii("Paragraph_") );
+                    const String aDocumentLangPrefix( String::CreateFromAscii("Default_") );
+                    const String aStrNone( String::CreateFromAscii("LANGUAGE_NONE") );
+
+                    xub_StrLen nPos = 0;
+                    bool bForSelection = true;
+                    bool bForParagraph = false;
+                    if (STRING_NOTFOUND != (nPos = aNewLangTxt.Search( aSelectionLangPrefix, 0 )))
+                    {
+                        // ... for the current selection
+                        aNewLangTxt = aNewLangTxt.Erase( nPos, aSelectionLangPrefix.Len() );
+                        bForSelection = true;
+                    }
+                    else if (STRING_NOTFOUND != (nPos = aNewLangTxt.Search( aParagraphLangPrefix , 0 )))
+                    {
+                        // ... for the current paragraph language
+                        aNewLangTxt = aNewLangTxt.Erase( nPos, aParagraphLangPrefix.Len() );
+                        bForSelection = true;
+                        bForParagraph = true;
+                    }
+                    else if (STRING_NOTFOUND != (nPos = aNewLangTxt.Search( aDocumentLangPrefix , 0 )))
+                    {
+                        // ... as default document language
+                        aNewLangTxt = aNewLangTxt.Erase( nPos, aDocumentLangPrefix.Len() );
+                        bForSelection = false;
+                    }
+
+                    if (bForParagraph)
+                    {
+                        bRestoreSelection = true;
+                        SwLangHelper::SelectPara( rEditView, aSelection );
+                        aSelection = pOLV->GetSelection();
+                    }
+                    if (!bForSelection) // document language to be changed...
+                    {
+                        rSh.StartAction();
+                        rSh.LockView( TRUE );
+                        rSh.Push();
+
+                        // prepare to apply new language to all text in document
+                        rSh.SelAll();
+                        rSh.ExtendedSelectAll();
+                    }
+
+                    if (aNewLangTxt != aStrNone)
+                        SwLangHelper::SetLanguage( rSh, pEditEngine, aSelection, aNewLangTxt, bForSelection, aEditAttr );
+                    else
+                        SwLangHelper::SetLanguage_None( rSh, pEditEngine, aSelection, bForSelection, aEditAttr );
+
+                    if (!bForSelection)
+                    {
+                        // need to release view and restore selection...
+                        rSh.Pop( FALSE );
+                        rSh.LockView( FALSE );
+                        rSh.EndAction();
+                    }
+                }
+            }
+
+            // invalidate slot to get the new language displayed
+            pViewFrame->GetBindings().Invalidate( nSlot );
+
+            rReq.Done();
+            break;
+        }
         case FN_THESAURUS_DLG:
         {
             pOLV->StartThesaurus();
@@ -832,7 +1070,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
             break;
 
         case SID_CHINESE_CONVERSION:
-            {
+        {
                 //open ChineseTranslationDialog
                 Reference< XComponentContext > xContext(
                     ::cppu::defaultBootstrap_InitialComponentContext() ); //@todo get context from calc if that has one
@@ -901,6 +1139,12 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
             }
             break;
     }
+
+    if (bRestoreSelection)
+    {
+        // restore selection
+        pOLV->GetEditView().SetSelection( aOldSelection );
+    }
 }
 
 void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
@@ -916,9 +1160,52 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
     sal_uInt16 nWhich = aIter.FirstWhich();
     while(nWhich)
     {
-
         switch (nWhich)
         {
+            case SID_LANGUAGE_STATUS:
+            {
+                ESelection aSelection = pOLV->GetSelection();
+                EditView& rEditView=pOLV->GetEditView();
+                EditEngine* pEditEngine=rEditView.GetEditEngine();
+
+                // the value of used script types
+                const USHORT nScriptType =pOLV->GetSelectedScriptType();
+                String aScriptTypesInUse( String::CreateFromInt32( nScriptType ) );//pEditEngine->GetScriptType(aSelection)
+
+                SvtLanguageTable aLangTable;
+
+                // get keyboard language
+                String aKeyboardLang;
+                LanguageType nLang = LANGUAGE_DONTKNOW;
+
+                Window* pWin = rEditView.GetWindow();
+                if(pWin)
+                    nLang = pWin->GetInputLanguage();
+                if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
+                    aKeyboardLang = aLangTable.GetString( nLang );
+
+
+                // get the language that is in use
+                const String aMultipleLanguages = String::CreateFromAscii("*");
+                String aCurrentLang = aMultipleLanguages;
+                SfxItemSet aSet(pOLV->GetAttribs());
+                nLang = SwLangHelper::GetCurrentLanguage( aSet,nScriptType );
+                if (nLang != LANGUAGE_DONTKNOW)
+                    aCurrentLang = aLangTable.GetString( nLang );
+
+                // build sequence for status value
+                uno::Sequence< ::rtl::OUString > aSeq( 4 );
+                aSeq[0] = aCurrentLang;
+                aSeq[1] = aScriptTypesInUse;
+                aSeq[2] = aKeyboardLang;
+                aSeq[3] = SwLangHelper::GetTextForLanguageGuessing( pEditEngine, aSelection );
+
+                // set sequence as status value
+                SfxStringListItem aItem( SID_LANGUAGE_STATUS );
+                aItem.SetStringList( aSeq );
+                rSet.Put( aItem, SID_LANGUAGE_STATUS );
+            }
+            break;
             // disable "Thesaurus" if the language is not supported
             case FN_THESAURUS_DLG:
             {
@@ -946,6 +1233,10 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
             }
             break;
         }
+
+        if (pPostItMgr->GetActivePostIt()->GetStatus()==SwPostItHelper::DELETED)
+            rSet.DisableItem( nWhich );
+
         nWhich = aIter.NextWhich();
     }
 }
@@ -1064,6 +1355,10 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
 
 void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
 {
+    SwPostItMgr* pPostItMgr = rView.GetPostItMgr();
+    if ( !pPostItMgr || !pPostItMgr->GetActivePostIt() )
+        return;
+
     SfxWhichIter aIter(rSet);
     USHORT nWhich = aIter.FirstWhich();
     SfxUndoManager* pUndoManager = GetUndoManager();
@@ -1149,6 +1444,10 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
             }
 
         }
+
+        if (pPostItMgr->GetActivePostIt()->GetStatus()==SwPostItHelper::DELETED)
+            rSet.DisableItem( nWhich );
+
         nWhich = aIter.NextWhich();
     }
 }
