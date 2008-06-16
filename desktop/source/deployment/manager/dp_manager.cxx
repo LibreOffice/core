@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_manager.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -859,6 +859,7 @@ void PackageManagerImpl::removePackage(
 
     try {
         removePackage_( id, fileName, xAbortChannel, xCmdEnv );
+        fireModified();
     }
     catch (RuntimeException &) {
         throw;
