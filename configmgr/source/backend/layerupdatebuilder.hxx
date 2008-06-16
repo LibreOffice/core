@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: layerupdatebuilder.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,8 +87,9 @@ namespace configmgr
 
             bool isEmpty()      const;
             bool isActive()     const;
+#if OSL_DEBUG_LEVEL > 0
             bool isComplete()   const;
-
+#endif
             bool isPropertyActive()     const;
 
             LayerUpdate const & result() const;

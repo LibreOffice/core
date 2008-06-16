@@ -74,8 +74,6 @@ namespace configmgr
            SELECT_BOTH    = cfgmgr_SELECT_BOTH
         };
     public:
-        // ctors
-        AnyPair();
         explicit AnyPair(uno::Type const& _aType); // one Type, any's are null
         explicit AnyPair(uno::Any const& _aAny, SelectMember _select); // one selected any
 
@@ -91,7 +89,6 @@ namespace configmgr
         // elementwise setters
         sal_Bool setFirst(uno::Any const& _aAny);
         sal_Bool setSecond(uno::Any const& _aAny);
-        sal_Bool setValue(uno::Any const& _aAny, SelectMember _select);
 
         // clear data (but not type)
         void clear(SelectMember _select = SELECT_BOTH);
