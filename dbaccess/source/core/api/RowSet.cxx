@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RowSet.cxx,v $
- * $Revision: 1.157 $
+ * $Revision: 1.158 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2457,9 +2457,16 @@ ORowSetValue& ORowSet::getParameterStorage(sal_Int32 parameterIndex)
 
     if ( m_pParameters.is() )
     {
-        if ( (size_t)parameterIndex > m_pParameters->size() )
-            throwInvalidIndexException( *this );
-        return (*m_pParameters)[ parameterIndex - 1 ];
+        if ( m_bCommandFacetsDirty )
+        // need to rebuild the parameters, since some property which contributes to the
+        // complete command, and thus the parameters, changed
+            impl_disposeParametersContainer_nothrow();
+        if ( m_pParameters.is() )
+        {
+            if ( (size_t)parameterIndex > m_pParameters->size() )
+                throwInvalidIndexException( *this );
+            return (*m_pParameters)[ parameterIndex - 1 ];
+        }
     }
 
     if ( m_aPrematureParamValues.size() < (size_t)parameterIndex )
