@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportSection.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -256,38 +256,41 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
             {
                 try
                 {
-                    uno::Sequence< uno::Reference<util::XCloneable> > aCopies;
+                    uno::Sequence< uno::Reference<report::XReportComponent> > aCopies;
                     pIter->Value >>= aCopies;
-                    const uno::Reference<util::XCloneable>* pCopiesIter = aCopies.getConstArray();
-                    const uno::Reference<util::XCloneable>* pCopiesEnd = pCopiesIter + aCopies.getLength();
+                    const uno::Reference<report::XReportComponent>* pCopiesIter = aCopies.getConstArray();
+                    const uno::Reference<report::XReportComponent>* pCopiesEnd = pCopiesIter + aCopies.getLength();
                     for (;pCopiesIter != pCopiesEnd ; ++pCopiesIter)
                     {
-                        uno::Reference< report::XReportComponent> xComponent(*pCopiesIter,uno::UNO_QUERY_THROW);
-                        uno::Reference< report::XReportComponent> xClone(xComponent->createClone(),uno::UNO_QUERY_THROW);
-                        Rectangle aRet(VCLPoint(xClone->getPosition()),VCLSize(xClone->getSize()));
-                        aRet.setHeight(aRet.getHeight() + 1);
-                        aRet.setWidth(aRet.getWidth() + 1);
-                        bool bOverlapping = true;
-                        while ( bOverlapping )
+                        SvxShape* pShape = SvxShape::getImplementation( *pCopiesIter );
+                        SdrObject* pObject = pShape ? pShape->GetSdrObject() : NULL;
+                        if ( pObject )
                         {
-                            bOverlapping = isOver(aRet,*m_pPage,*m_pView,true);
-                            if ( bOverlapping )
+                            SdrObject* pNeuObj = pObject->Clone();
+
+                            pNeuObj->SetPage( m_pPage );
+                            pNeuObj->SetModel( m_pModel.get() );
+                            SdrInsertReason aReason(SDRREASON_VIEWCALL);
+                            m_pPage->InsertObject(pNeuObj,CONTAINER_APPEND,&aReason);
+
+                            Rectangle aRet(VCLPoint((*pCopiesIter)->getPosition()),VCLSize((*pCopiesIter)->getSize()));
+                            aRet.setHeight(aRet.getHeight() + 1);
+                            aRet.setWidth(aRet.getWidth() + 1);
+                            bool bOverlapping = true;
+                            while ( bOverlapping )
                             {
-                                aRet.Move(0,aRet.getHeight()+1);
-                                xClone->setPositionY(aRet.Top());
+                                bOverlapping = isOver(aRet,*m_pPage,*m_pView,true,pNeuObj) != NULL;
+                                if ( bOverlapping )
+                                {
+                                    aRet.Move(0,aRet.getHeight()+1);
+                                    pNeuObj->SetLogicRect(aRet);
+                                    //(*pCopiesIter)->setPositionY(aRet.Top());
+                                }
                             }
-                        }
-                        if ( !bOverlapping )
-                        {
-                            m_xSection->add(xClone.get());
-                            SvxShape* pShape = SvxShape::getImplementation( xClone );
-                            SdrObject* pObject = pShape ? pShape->GetSdrObject() : NULL;
-                            OSL_ENSURE( pObject, "OReportSection::Paste: no SdrObject for the shape!" );
-                            if ( pObject )
-                            {
-                                m_pView->AddUndo( m_pView->GetModel()->GetSdrUndoFactory().CreateUndoNewObject( *pObject ) );
-                                m_pView->MarkObj( pObject, m_pView->GetSdrPageView() );
-                            }
+                            m_pView->AddUndo( m_pView->GetModel()->GetSdrUndoFactory().CreateUndoNewObject( *pNeuObj ) );
+                            m_pView->MarkObj( pNeuObj, m_pView->GetSdrPageView() );
+                            if ( m_xSection.is() && (static_cast<sal_uInt32>(aRet.getHeight() + aRet.Top()) > m_xSection->getHeight()) )
+                                m_xSection->setHeight(aRet.getHeight() + aRet.Top());
                         }
                     }
                 }
@@ -309,33 +312,6 @@ void OReportSection::Delete()
 
     m_pView->BrkAction();
     m_pView->DeleteMarked();
-}
-//----------------------------------------------------------------------------
-BOOL OReportSection::UnmarkDialog()
-{
-    SdrObject*      pDlgObj = m_pPage->GetObj(0);
-    SdrPageView*    pPgView = m_pView->GetSdrPageView();
-
-    BOOL bWasMarked = m_pView->IsObjMarked( pDlgObj );
-
-    if( bWasMarked )
-        m_pView->MarkObj( pDlgObj, pPgView, TRUE );
-
-    return bWasMarked;
-}
-
-//----------------------------------------------------------------------------
-BOOL OReportSection::RemarkDialog()
-{
-    SdrObject*      pDlgObj = m_pPage->GetObj(0);
-    SdrPageView*    pPgView = m_pView->GetSdrPageView();
-
-    BOOL bWasMarked = m_pView->IsObjMarked( pDlgObj );
-
-    if( !bWasMarked )
-        m_pView->MarkObj( pDlgObj, pPgView, FALSE );
-
-    return bWasMarked;
 }
 //----------------------------------------------------------------------------
 void OReportSection::SetMode( DlgEdMode eNewMode )
@@ -374,7 +350,7 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
     const SdrMarkList& rMarkedList = m_pView->GetMarkedObjectList();
     const ULONG nMark = rMarkedList.GetMarkCount();
 
-    ::std::vector< uno::Reference<util::XCloneable> > aCopies;
+    ::std::vector< uno::Reference<report::XReportComponent> > aCopies;
     aCopies.reserve(nMark);
 
     SdrUndoFactory& rUndo = m_pView->GetModel()->GetSdrUndoFactory();
@@ -388,8 +364,8 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
         {
             try
             {
-                uno::Reference<report::XReportComponent> xComponent = pObj->getReportComponent();
-                aCopies.push_back(xComponent->createClone());
+                SdrObject* pNeuObj = pSdrObject->Clone();
+                aCopies.push_back(uno::Reference<report::XReportComponent>(pNeuObj->getUnoShape(),uno::UNO_QUERY));
                 if ( _bEraseAnddNoClone )
                 {
                     m_pView->AddUndo( rUndo.CreateUndoDeleteObject( *pSdrObject ) );
@@ -411,7 +387,7 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
         _rAllreadyCopiedObjects.realloc( nLength + 1);
         beans::NamedValue* pNewValue = _rAllreadyCopiedObjects.getArray() + nLength;
         pNewValue->Name = m_xSection->getName();
-        pNewValue->Value <<= uno::Sequence< uno::Reference<util::XCloneable> >(&(*aCopies.begin()),aCopies.size());
+        pNewValue->Value <<= uno::Sequence< uno::Reference<report::XReportComponent> >(&(*aCopies.begin()),aCopies.size());
     }
 }
 //----------------------------------------------------------------------------
@@ -448,12 +424,6 @@ void OReportSection::MouseMove( const MouseEvent& rMEvt )
     m_pFunc->MouseMove( rMEvt );
 }
 //----------------------------------------------------------------------------
-bool OReportSection::adjustPageSize()
-{
-    bool bAdjustedPageSize = false;
-    return bAdjustedPageSize;
-}
-//----------------------------------------------------------------------------
 void OReportSection::SetGridVisible(BOOL _bVisible)
 {
     m_pView->SetGridVisible( _bVisible );
@@ -463,21 +433,6 @@ void OReportSection::SelectAll()
 {
     if ( m_pView )
         m_pView->MarkAllObj();
-}
-// -----------------------------------------------------------------------------
-void OReportSection::setSectionHeightPixel(sal_uInt32 _nHeight)
-{
-    OSL_ENSURE(m_xSection.is(),"Why is the UNO section NULL!");
-    if ( m_xSection.is() )
-        m_xSection->setHeight(PixelToLogic(Size(0,_nHeight),MAP_100TH_MM).Width());
-}
-//----------------------------------------------------------------------------
-void OReportSection::insertObject(const uno::Reference< report::XReportComponent >& _xObject)
-{
-    OSL_ENSURE(_xObject.is(),"Object is not valid to create a SdrObject!");
-    if ( !_xObject.is() || !m_pView || !m_pPage )
-        return;
-    m_pPage->insertObject(_xObject);
 }
 //----------------------------------------------------------------------------
 void OReportSection::Command( const CommandEvent& _rCEvt )
@@ -616,6 +571,12 @@ sal_Bool OReportSection::handleKeyEvent(const KeyEvent& _rEvent)
     return m_pFunc.get() ? m_pFunc->handleKeyEvent(_rEvent) : sal_False;
 }
 // -----------------------------------------------------------------------------
+void OReportSection::deactivateOle()
+{
+    if ( m_pFunc.get() )
+        m_pFunc->deactivateOle(true);
+}
+// -----------------------------------------------------------------------------
 void OReportSection::createDefault(const ::rtl::OUString& _sType)
 {
     SdrObject* pObj = m_pView->GetCreateObj();//rMarkList.GetMark(0)->GetObj();
@@ -707,7 +668,7 @@ uno::Reference< report::XReportComponent > OReportSection::getCurrentControlMode
     return xModel;
 }
 // -----------------------------------------------------------------------------
-void OReportSection::fillControlModelSelection(::std::vector< uno::Reference< report::XReportComponent > >& _rSelection) const
+void OReportSection::fillControlModelSelection(::std::vector< uno::Reference< uno::XInterface > >& _rSelection) const
 {
     if ( m_pView )
     {
@@ -830,6 +791,11 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 void OReportSection::stopScrollTimer()
 {
     m_pFunc->stopScrollTimer();
+}
+// -----------------------------------------------------------------------------
+bool OReportSection::isUiActive() const
+{
+    return m_pFunc->isUiActive();
 }
 // -----------------------------------------------------------------------------
 // =============================================================================
