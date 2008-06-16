@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentdefinition.cxx,v $
- * $Revision: 1.61 $
+ * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1569,6 +1569,8 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
         aComponentData.put( "ApplyFormDesignMode", !_bReadOnly );
         aMediaDesc.put( "ComponentData", aComponentData.getPropertyValues() );
     }
+
+    aMediaDesc.put( "DocumentTitle", m_pImpl->m_aProps.aTitle );
 
     // .........................................................................
     // put the common load arguments into the document's media descriptor
