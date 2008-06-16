@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: simpletypehelper.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +41,6 @@ namespace configmgr
     {
         uno::Type getBooleanType();
 
-        uno::Type getByteType();
         uno::Type getShortType();
         uno::Type getIntType();
         uno::Type getLongType();
