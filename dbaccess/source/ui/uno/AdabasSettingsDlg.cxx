@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AdabasSettingsDlg.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,7 +126,7 @@ Reference<XPropertySetInfo>  SAL_CALL OAdabasSettingsDialog::getPropertySetInfo(
 //------------------------------------------------------------------------------
 Dialog* OAdabasSettingsDialog::createDialog(Window* _pParent)
 {
-    OAdabasStatPageDlg* pDlg = new OAdabasStatPageDlg(_pParent, m_pDatasourceItems, m_xORB,m_aInitialSelection);
+    OAdabasStatPageDlg* pDlg = new OAdabasStatPageDlg(_pParent, m_pDatasourceItems, m_aContext.getLegacyServiceFactory(),m_aInitialSelection);
     return pDlg;
 }
 
