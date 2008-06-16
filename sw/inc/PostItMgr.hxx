@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PostItMgr.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +51,7 @@ class SwPostIt;
 class SwEditWin;
 class Color;
 class SvxSearchItem;
+class SvxLanguageItem;
 
 #define SORT_POS    1
 #define SORT_AUTHOR 2
@@ -59,24 +60,7 @@ class SvxSearchItem;
 #define COL_NOTES_SIDEPANE_ARROW_ENABLED    RGB_COLORDATA(0,0,0)
 #define COL_NOTES_SIDEPANE_ARROW_DISABLED   RGB_COLORDATA(172,168,153)
 
-
-struct SwPostItItem
-{
-    bool bShow;
-    bool bFocus;
-    SwFmtFld* pFmtFld;
-    SwPostIt* pPostIt;
-    SwRect mPos;
-    SwRect mFramePos;
-    SwRect mPagePos;
-    SwPostItItem( SwFmtFld* p, bool aShow, bool aFocus)
-        : bShow(aShow),
-        bFocus(aFocus),
-        pFmtFld(p),
-        pPostIt(0)
-    {
-    }
-};
+struct SwPostItItem;
 
 typedef std::list<SwPostItItem*> SwPostItItem_list;
 
@@ -104,6 +88,9 @@ struct FieldShadowState
     const SwPostItField* mpShadowFld;
     bool bCursor;
     bool bMouse;
+    FieldShadowState(): mpShadowFld(0),bCursor(false),bMouse(false)
+    {
+    }
 };
 
 class SwPostItMgr: public SfxListener
@@ -138,6 +125,13 @@ class SwPostItMgr: public SfxListener
         bool            ArrowEnabled(USHORT aDirection,unsigned long aPage) const;
         bool            BorderOverPageBorder(unsigned long aPage) const;
         bool            HasScrollbars() const;
+
+        void            SetColors(SwPostIt* pPostIt, SwPostItField* pFld);
+
+        Color           GetColorDark(sal_uInt16 aAuthorIndex);
+        Color           GetColorLight(sal_uInt16 aAuthorIndex);
+        Color           GetColorAnkor(sal_uInt16 aAuthorIndex);
+
         sal_Int32       GetInitialAnchorDistance() const;
         sal_Int32       GetScrollSize() const;
         sal_Int32       GetSpaceBetween() const;
@@ -173,7 +167,6 @@ class SwPostItMgr: public SfxListener
             void PrepareView(bool bIgnoreCount = false);
 
             void CorrectPositions();
-            void SetColors(SwPostIt* pPostIt, SwPostItField* pFld);
 
             void Sort(const short aType);
 
@@ -209,7 +202,7 @@ class SwPostItMgr: public SfxListener
 
             void SetShadowState(const SwPostItField* pFld,bool bCursor = true);
 
-            void SetSpellChecking(bool bEnable);
+            void SetSpellChecking();
 
             bool ShowPreview(const SwField* pFld,SwFmtFld*& pFmtFld) const;
 };
