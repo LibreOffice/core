@@ -8,7 +8,7 @@
 #
 # $RCSfile: tg_shl.mk,v $
 #
-# $Revision: 1.125 $
+# $Revision: 1.126 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -178,6 +178,8 @@ $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL$(TNR)VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELIF "$(COMNAME)"=="sunpro5"
+    tr -d "\015" < $(SHL$(TNR)VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL$(TNR)VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
