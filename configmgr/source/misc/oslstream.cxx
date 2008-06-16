@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: oslstream.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -207,102 +207,6 @@ void SAL_CALL OSLOutputStreamWrapper::flush() throw( stario::NotConnectedExcepti
 void SAL_CALL OSLOutputStreamWrapper::closeOutput() throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
 {
     rFile.close();
-}
-
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-// ----------------------------- Buffered OSLStream -----------------------------
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-//------------------------------------------------------------------
-/*
-BufferedFileInputStream::BufferedFileInputStream( File& _rFile )
-                 :m_pFile(&_rFile)
-                 ,m_bFileOwner(sal_False)
-{
-}
-*/
-//------------------------------------------------------------------
-BufferedFileInputStream::BufferedFileInputStream( rtl::OUString const & aFileURL)
-: m_aFile( aFileURL )
-{
-    osl::File::RC rc = m_aFile.open(osl_File_OpenFlag_Read);
-    if (rc != File::E_None)
-        raiseIOException(rc,NULL);
-}
-
-//------------------------------------------------------------------
-BufferedFileInputStream::~BufferedFileInputStream()
-{
-}
-
-//------------------------------------------------------------------------------
-sal_Int32 SAL_CALL BufferedFileInputStream::readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
-    throw( stario::NotConnectedException, stario::BufferSizeExceededException,
-            stario::IOException, staruno::RuntimeException )
-{
-    if (nBytesToRead < 0)
-        raiseIOException(osl::File::E_INVAL, *this);
-
-    aData.realloc(nBytesToRead);
-
-    sal_uInt64 nSize = sal_uInt64(nBytesToRead);
-    sal_uInt64 nRead = 0;
-
-    File::RC rc = m_aFile.read(aData.getArray(), nSize, nRead);
-    if (rc != File::E_None)
-        raiseIOException(rc,*this);
-
-    OSL_ASSERT(nRead <= nSize);
-    return sal_Int32(nRead);
-}
-
-//------------------------------------------------------------------------------
-sal_Int32 SAL_CALL BufferedFileInputStream::readSomeBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
-    throw( stario::NotConnectedException, stario::BufferSizeExceededException,
-            stario::IOException, staruno::RuntimeException )
-{
-    return readBytes(aData, nMaxBytesToRead);
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL BufferedFileInputStream::skipBytes(sal_Int32 nBytesToSkip)
-    throw( stario::NotConnectedException, stario::BufferSizeExceededException,
-            stario::IOException, staruno::RuntimeException )
-{
-    if (nBytesToSkip < 0)
-        raiseIOException(osl::File::E_INVAL, *this);
-
-    sal_uInt64 nOffset = sal_uInt64(nBytesToSkip);
-
-    File::RC rc = m_aFile.setPos(osl_Pos_Current, nOffset);
-    if (rc != File::E_None)
-        raiseIOException(rc,*this);
-}
-
-//------------------------------------------------------------------------------
-sal_Int32 SAL_CALL BufferedFileInputStream::available()
-    throw( stario::NotConnectedException, stario::IOException, staruno::RuntimeException )
-{
-    sal_uInt64 avail = 0;
-    File::RC rc = m_aFile.available(avail);
-    if (rc != File::E_None)
-        raiseIOException(rc,*this);
-
-    sal_Int32 result = sal_Int32(avail);
-    if (result < 0 || sal_uInt64(result) < avail)
-        result = SAL_MAX_INT32;
-
-    return result;
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL BufferedFileInputStream::closeInput()
-    throw( stario::NotConnectedException, stario::IOException, staruno::RuntimeException )
-{
-    File::RC rc = m_aFile.close();
-    if (rc != File::E_None)
-        raiseIOException(rc,*this);
 }
 
 //------------------------------------------------------------------

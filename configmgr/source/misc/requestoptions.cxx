@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: requestoptions.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,33 +38,6 @@
 
 namespace configmgr
 {
-// ---------------------------------------------------------------------------
-
-#if 0 // not used any more
-    static sal_Int32 getNextCacheID()
-    {
-        static oslInterlockedCount nNextID = 0;
-
-        oslInterlockedCount nNewID = osl_incrementInterlockedCount(&nNextID);
-
-        if (nNewID == 0)
-        {
-            CFG_TRACE_WARNING("Cache ID overflow - restarting sequence !");
-            OSL_ENSURE(false, "Cache ID overflow - restarting sequence !");
-        }
-
-        return static_cast<sal_Int32>(nNewID);
-    }
-#endif
-// ---------------------------------------------------------------------------
-
-    RequestOptions RequestOptions::forAllLocales()
-    {
-        RequestOptions aResult;
-        aResult.setAllLocales();
-        return aResult;
-    }
-
 // ---------------------------------------------------------------------------
 
     RequestOptions::LocaleString RequestOptions::getIsoLocale() const
@@ -102,12 +75,6 @@ namespace configmgr
     sal_Int32 hashRequestLocale(RequestOptions::Locale const & aLocale)
     {
         return aLocale.Language.hashCode() ^ aLocale.Country.hashCode();
-    }
-// ---------------------------------------------------------------------------
-
-    sal_Int32 RequestOptions::hashCode() const
-    {
-        return hashRequestLocale(m_sLocale) ^ m_sEntity.hashCode();
     }
 // ---------------------------------------------------------------------------
 
