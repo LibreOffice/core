@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartReadHandler.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,11 +29,13 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.parser.chart;
 
+import com.sun.star.report.pentaho.OfficeNamespaces;
 import java.util.ArrayList;
 
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
 import com.sun.star.report.pentaho.parser.rpt.DetailRootTableReadHandler;
 import com.sun.star.report.pentaho.parser.rpt.ReportReadHandler;
+import com.sun.star.report.pentaho.parser.text.TextContentReadHandler;
 import java.util.List;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
@@ -78,6 +80,12 @@ public class ChartReadHandler extends ElementReadHandler
             reportHandler.setDetail(detail);
             return detail;
         }
+        else if ("p".equals(tagName) && OfficeNamespaces.TEXT_NS.equals(uri))
+        {
+            final TextContentReadHandler readHandler = new TextContentReadHandler();
+            children.add(readHandler);
+            return readHandler;
+        }
         final ChartReadHandler erh = new ChartReadHandler(reportHandler);
         children.add(erh);
         return erh;
@@ -92,7 +100,7 @@ public class ChartReadHandler extends ElementReadHandler
     {
         for (int i = 0; i < children.size(); i++)
         {
-            final ChartReadHandler handler = (ChartReadHandler) children.get(i);
+            final ElementReadHandler handler = (ElementReadHandler) children.get(i);
             element.addNode(handler.getElement());
         }
     }
