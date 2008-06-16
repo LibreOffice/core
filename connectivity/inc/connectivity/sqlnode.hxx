@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sqlnode.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -192,7 +192,6 @@ namespace connectivity
             all_or_any_predicate,
             named_columns_join,
             join_condition,
-            joined_table,
             boolean_factor,
             sql_not,
             boolean_test,
@@ -217,6 +216,7 @@ namespace connectivity
             table_node,
             as,
             op_column_commalist,
+            table_primary_as_range_column,
             rule_count,             // letzter_wert
             UNKNOWN_RULE            // ID indicating that a node is no rule with a matching Rule-enum value (see getKnownRuleID)
         };
@@ -400,6 +400,10 @@ namespace connectivity
         // susbtitute all occurences of :var or [name] into the dynamic parameter ?
         // _pNode will be modified if parameters exists
         static void substituteParameterNames(OSQLParseNode* _pNode);
+
+        /** return a table range when it exists.
+        */
+        static ::rtl::OUString getTableRange(const OSQLParseNode* _pTableRef);
 
     protected:
         // ParseNodeToStr konkateniert alle Token (Blaetter) des ParseNodes
