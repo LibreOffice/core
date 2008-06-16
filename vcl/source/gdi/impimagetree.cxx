@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impimagetree.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,9 +70,12 @@ ImplZipAccessor::ImplZipAccessor()
 {
     uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
 
-    mxFileAccess.set( xFactory->createInstance(
-        ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
-        uno::UNO_QUERY );
+    if( xFactory.is() )
+    {
+        mxFileAccess.set( xFactory->createInstance(
+            ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+            uno::UNO_QUERY );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -87,7 +90,7 @@ ImplZipAccessor::~ImplZipAccessor()
 void ImplZipAccessor::Update( const ::rtl::OUString& rSymbolsStyle )
 {
 #ifdef DEBUG
-    fprintf( stderr, "\nUpdating symbols for style: %s\n", ByteString( String( rSymbolsStyle ), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+    std::fprintf( stderr, "\nUpdating symbols for style: %s\n", ByteString( String( rSymbolsStyle ), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
 #endif
 
     Clear();
@@ -188,7 +191,7 @@ void ImplZipAccessor::Update( const ::rtl::OUString& rSymbolsStyle )
                                 maZipAccVector.push_back( xZipAcc );
                                 maNameAccVector.push_back( xNameAcc );
 #ifdef DEBUG
-                                fprintf( stderr, "Current set has symbols from archive: %s\n", ByteString( String( rZipURL ), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+                                std::fprintf( stderr, "Current set has symbols from archive: %s\n", ByteString( String( rZipURL ), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
 #endif
                             }
                         }
@@ -225,7 +228,7 @@ uno::Reference< io::XInputStream > ImplZipAccessor::GetByName( const ::rtl::OUSt
     uno::Reference< io::XInputStream > xRet;
 
 #ifdef DEBUG
-    fprintf( stderr, "Looking for file: %s\n", ByteString( String( rName ), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+    std::fprintf( stderr, "Looking for file: %s\n", ByteString( String( rName ), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
 #endif
 
     for( unsigned int i = 0; ( i < maNameAccVector.size() ) && !xRet.is(); ++i )
@@ -237,7 +240,7 @@ uno::Reference< io::XInputStream > ImplZipAccessor::GetByName( const ::rtl::OUSt
                 if( maNameAccVector[ i ]->getByName( rName ) >>= xRet )
                 {
 #ifdef DEBUG
-                    fprintf( stderr, "Found in archive: %s\n\n", ByteString( String( maURLVector[ i ] ), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+                    std::fprintf( stderr, "Found in archive: %s\n\n", ByteString( String( maURLVector[ i ] ), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
 #endif
 
 
