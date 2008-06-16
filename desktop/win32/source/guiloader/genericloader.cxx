@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: genericloader.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,7 @@
 #include <stdlib.h>
 #include <systools/win32/uwinapi.h>
 
+#include "tools/pathutils.hxx"
 #include "../extendloaderenvironment.hxx"
 
 //---------------------------------------------------------------------------
@@ -71,25 +72,38 @@ static int GenericMain()
 
     PROCESS_INFORMATION aProcessInfo;
 
+    size_t iniDirLen = wcslen(szIniDirectory);
     WCHAR cwd[MAX_PATH];
     DWORD cwdLen = GetCurrentDirectoryW(MAX_PATH, cwd);
     if (cwdLen >= MAX_PATH) {
         cwdLen = 0;
     }
+    WCHAR redirect[MAX_PATH];
+    DWORD dummy;
+    bool hasRedirect =
+        tools::buildPath(
+            redirect, szIniDirectory, szIniDirectory + iniDirLen,
+            MY_STRING(L"redirect.ini")) != NULL &&
+        (GetBinaryType(redirect, &dummy) || // cheaper check for file existence?
+         GetLastError() != ERROR_FILE_NOT_FOUND);
     LPTSTR cl1 = GetCommandLine();
     WCHAR * cl2 = new WCHAR[
-        wcslen(cl1) + MY_LENGTH(L" \"-env:INIFILENAME=vnd.sun.star.pathname:") +
-        wcslen(szIniDirectory) +
-        MY_LENGTH(L"redirect.ini\" \"-env:OOO_CWD=2") + 4 * cwdLen +
-        MY_LENGTH(L"\"") + 1];
+        wcslen(cl1) +
+        (hasRedirect
+         ? (MY_LENGTH(L" \"-env:INIFILENAME=vnd.sun.star.pathname:") +
+            iniDirLen + MY_LENGTH(L"redirect.ini\""))
+         : 0) +
+        MY_LENGTH(L" \"-env:OOO_CWD=2") + 4 * cwdLen + MY_LENGTH(L"\"") + 1];
         // 4 * cwdLen: each char preceded by backslash, each trailing backslash
         // doubled
     WCHAR * p = desktop_win32::commandLineAppend(cl2, cl1);
-    p = desktop_win32::commandLineAppend(
-        p, MY_STRING(L" \"-env:INIFILENAME=vnd.sun.star.pathname:"));
-    p = desktop_win32::commandLineAppend(p, szIniDirectory);
-    p = desktop_win32::commandLineAppend(
-        p, MY_STRING(L"redirect.ini\" \"-env:OOO_CWD="));
+    if (hasRedirect) {
+        p = desktop_win32::commandLineAppend(
+            p, MY_STRING(L" \"-env:INIFILENAME=vnd.sun.star.pathname:"));
+        p = desktop_win32::commandLineAppend(p, szIniDirectory);
+        p = desktop_win32::commandLineAppend(p, MY_STRING(L"redirect.ini\""));
+    }
+    p = desktop_win32::commandLineAppend(p, MY_STRING(L" \"-env:OOO_CWD="));
     if (cwdLen == 0) {
         p = desktop_win32::commandLineAppend(p, MY_STRING(L"0"));
     } else {
