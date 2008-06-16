@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SDBCReportDataFactory.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +58,7 @@ import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.task.XInteractionHandler;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -79,6 +80,13 @@ public class SDBCReportDataFactory implements DataSourceFactory
     private static final String UNO_COMMAND_TYPE = "CommandType";
     private final XConnection connection;
     private final XComponentContext m_cmpCtx;
+    private static final int FAILED = 0;
+    private static final int DONE = 1;
+    private static final int RETRIEVE_COLUMNS = 2;
+    private static final int RETRIEVE_OBJECT = 3;
+    private static final int HANDLE_QUERY = 4;
+    private static final int HANDLE_TABLE = 5;
+    private static final int HANDLE_SQL = 6;
 
     private static final int FAILED = 0;
     private static final int DONE = 1;
@@ -97,6 +105,10 @@ public class SDBCReportDataFactory implements DataSourceFactory
     {
         try
         {
+            if (command == null)
+            {
+                return new SDBCReportData(null);
+            }
             int commandType = CommandType.COMMAND;
             final String commandTypeValue = (String) parameters.get(COMMAND_TYPE);
             if (commandTypeValue != null)
@@ -391,13 +403,9 @@ public class SDBCReportDataFactory implements DataSourceFactory
             WrappedTargetException
     {
         int oldParameterCount = 0;
-        final ArrayList masterValues = (ArrayList) parameters.get(MASTER_VALUES);
-        if (masterValues != null && !masterValues.isEmpty())
+        final XSingleSelectQueryComposer composer = tools.getComposer(commandType, command);
+        if (composer != null)
         {
-            // Vector masterColumns = (Vector) parameters.get("master-columns");
-            final ArrayList detailColumns = (ArrayList) parameters.get(DETAIL_COLUMNS);
-            final XSingleSelectQueryComposer composer = tools.getComposer(commandType, command);
-
             // get old parameter count
             final XParametersSupplier paraSup = (XParametersSupplier) UnoRuntime.queryInterface(XParametersSupplier.class, composer);
             if (paraSup != null)
@@ -408,56 +416,67 @@ public class SDBCReportDataFactory implements DataSourceFactory
                     oldParameterCount = params.getCount();
                 }
             }
-            // create the new filter
-            final String quote = connection.getMetaData().getIdentifierQuoteString();
-            final StringBuffer oldFilter = new StringBuffer();
-            oldFilter.append(composer.getFilter());
-            if (oldFilter.length() != 0)
+            final ArrayList masterValues = (ArrayList) parameters.get(MASTER_VALUES);
+            if (masterValues != null && !masterValues.isEmpty())
             {
-                oldFilter.append(" AND ");
-            }
-            int newParamterCounter = 1;
-            for (final Iterator it = detailColumns.iterator(); it.hasNext();
-                    ++newParamterCounter)
-            {
-                final String detail = (String) it.next();
-                //String master = (String) masterIt.next();
-                oldFilter.append(quote);
-                oldFilter.append(detail);
-                oldFilter.append(quote);
-                oldFilter.append(" = :link_");
-                oldFilter.append(newParamterCounter);
-                if (it.hasNext())
+                // Vector masterColumns = (Vector) parameters.get("master-columns");
+                final ArrayList detailColumns = (ArrayList) parameters.get(DETAIL_COLUMNS);
+
+                // create the new filter
+                final String quote = connection.getMetaData().getIdentifierQuoteString();
+                final StringBuffer oldFilter = new StringBuffer();
+                oldFilter.append(composer.getFilter());
+                if (oldFilter.length() != 0)
                 {
                     oldFilter.append(" AND ");
                 }
-            }
+                int newParamterCounter = 1;
+                for (final Iterator it = detailColumns.iterator(); it.hasNext();
+                        ++newParamterCounter)
+                {
+                    final String detail = (String) it.next();
+                    //String master = (String) masterIt.next();
+                    oldFilter.append(quote);
+                    oldFilter.append(detail);
+                    oldFilter.append(quote);
+                    oldFilter.append(" = :link_");
+                    oldFilter.append(newParamterCounter);
+                    if (it.hasNext())
+                    {
+                        oldFilter.append(" AND ");
+                    }
+                }
 
-            composer.setFilter(oldFilter.toString());
+                composer.setFilter(oldFilter.toString());
 
+                final String sQuery = composer.getQuery();
+                final XPropertySet rowSetProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, rowSet);
+                rowSetProp.setPropertyValue(UNO_COMMAND, sQuery);
+                rowSetProp.setPropertyValue(UNO_COMMAND_TYPE,
+                        new Integer(CommandType.COMMAND));
 
+                final XParameters para = (XParameters) UnoRuntime.queryInterface(XParameters.class, rowSet);
 
-            final String sQuery = composer.getQuery();
-            final XPropertySet rowSetProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, rowSet);
-            rowSetProp.setPropertyValue(UNO_COMMAND, sQuery);
-            rowSetProp.setPropertyValue(UNO_COMMAND_TYPE,
-                    new Integer(CommandType.COMMAND));
-
-            final XParameters para = (XParameters) UnoRuntime.queryInterface(XParameters.class, rowSet);
-
-            for (int i = 0;
-                    i < masterValues.size();
-                    i++)
-            {
-                final Object object = masterValues.get(i);
-                para.setObject(oldParameterCount + i + 1, object);
+                for (int i = 0;
+                        i < masterValues.size();
+                        i++)
+                {
+                    Object object = masterValues.get(i);
+                    if (object instanceof BigDecimal)
+                    {
+                        object = ((BigDecimal) object).toString();
+                    }
+                    para.setObject(oldParameterCount + i + 1, object);
+                }
             }
         }
+
         return oldParameterCount;
     }
 
-    final XRowSet createRowSet(final String command, final int commandType, final Map parameters) throws Exception
-
+    final XRowSet createRowSet(final String command,
+            final int commandType, final Map parameters)
+            throws Exception
     {
         final XRowSet rowSet = (XRowSet) UnoRuntime.queryInterface(XRowSet.class, m_cmpCtx.getServiceManager().createInstanceWithContext("com.sun.star.sdb.RowSet", m_cmpCtx));
         final XPropertySet rowSetProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, rowSet);
@@ -489,27 +508,49 @@ public class SDBCReportDataFactory implements DataSourceFactory
             UnknownPropertyException,
             PropertyVetoException,
             IllegalArgumentException,
-            WrappedTargetException
+            WrappedTargetException,
+            NoSuchElementException
     {
         final StringBuffer order = new StringBuffer(getOrderStatement(commandType, command, (ArrayList) parameters.get(GROUP_EXPRESSIONS)));
         if (order.length() > 0 && commandType != CommandType.TABLE)
         {
+            String statement = command;
             final XSingleSelectQueryComposer composer = tools.getComposer(commandType, command);
-            final String sCurrentSQL = composer.getQuery();
-            // Magic here, read the nice documentation out of the IDL.
-            composer.setQuery(sCurrentSQL);
-            final String sOldOrder = composer.getOrder();
-            if (sOldOrder.length() > 0)
+            if (composer != null)
             {
-                order.append(',');
-                order.append(sOldOrder);
-                composer.setOrder("");
-                final String sQuery = composer.getQuery();
-                rowSetProp.setPropertyValue(UNO_COMMAND, sQuery);
-                rowSetProp.setPropertyValue(UNO_COMMAND_TYPE, new Integer(CommandType.COMMAND));
+                statement = composer.getQuery();
+                composer.setQuery(statement);
+                final String sOldOrder = composer.getOrder();
+                if (sOldOrder.length() > 0)
+                {
+                    order.append(',');
+                    order.append(sOldOrder);
+                    composer.setOrder("");
+                    statement = composer.getQuery();
+                }
             }
-
+            else
+            {
+                if (commandType == CommandType.QUERY)
+                {
+                    final XQueriesSupplier xSupplyQueries = (XQueriesSupplier) UnoRuntime.queryInterface(XQueriesSupplier.class, connection);
+                    final XNameAccess queries = xSupplyQueries.getQueries();
+                    if (queries.hasByName(command))
+                    {
+                        final XPropertySet prop = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, queries.getByName(command));
+                        final String queryCommand = (String) prop.getPropertyValue(UNO_COMMAND);
+                        statement = "SELECT * FROM (" + queryCommand + ")";
+                    }
+                }
+                else
+                {
+                    statement = "SELECT * FROM (" + command + ")";
+                }
+            }
+            rowSetProp.setPropertyValue(UNO_COMMAND, statement);
+            rowSetProp.setPropertyValue(UNO_COMMAND_TYPE, new Integer(CommandType.COMMAND));
         }
         rowSetProp.setPropertyValue("Order", order.toString());
     }
 }
+
