@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: grid.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_extensions.hxx"
 #include <grid.hrc>
 #include <cstdio>
+#include <math.h> // for M_LN10 and M_E
 
 #define _USE_MATH_DEFINES
 #include <cmath>
@@ -228,8 +229,8 @@ void GridWindow::computeChunk( double fMin, double fMax, double& fChunkOut, doub
 {
     // get a nice chunk size like 10, 100, 25 or such
     fChunkOut = ( fMax - fMin ) / 6.0;
-    int logchunk = (int)log10( fChunkOut );
-    int nChunk = (int)( fChunkOut / exp( (double)(logchunk-1) * M_LN10 ) );
+    int logchunk = (int)std::log10( fChunkOut );
+    int nChunk = (int)( fChunkOut / std::exp( (double)(logchunk-1) * M_LN10 ) );
     if( nChunk >= 75 )
         nChunk = 100;
     else if( nChunk >= 35 )
@@ -350,7 +351,7 @@ void GridWindow::drawGrid()
         drawLine( fX, m_fMinY, fX, m_fMaxY );
         // draw tickmarks
         Point aPt = transform( fX, m_fMinY );
-        sprintf( pBuf, "%g", fX );
+        std::sprintf( pBuf, "%g", fX );
         String aMark( pBuf, gsl_getSystemTextEncoding() );
         Size aTextSize( GetTextWidth( aMark ), GetTextHeight() );
         aPt.X() -= aTextSize.Width()/2;
@@ -363,7 +364,7 @@ void GridWindow::drawGrid()
         drawLine( m_fMinX, fY, m_fMaxX, fY );
         // draw tickmarks
         Point aPt = transform( m_fMinX, fY );
-        sprintf( pBuf, "%g", fY );
+        std::sprintf( pBuf, "%g", fY );
         String aMark( pBuf, gsl_getSystemTextEncoding() );
         Size aTextSize( GetTextWidth( aMark ), GetTextHeight() );
         aPt.X() -= aTextSize.Width() + 2;
@@ -571,7 +572,7 @@ IMPL_LINK( GridWindow, ClickButtonHdl, Button*, pButton )
             {
                 for( int i = 0; i < m_nValues; i++ )
                 {
-                    m_pNewYValues[ i ] = m_fMinY + (m_fMaxY-m_fMinY)*(exp((m_pXValues[i]-m_fMinX)/(m_fMaxX-m_fMinX))-1.0)/(M_E-1.0);
+                    m_pNewYValues[ i ] = m_fMinY + (m_fMaxY-m_fMinY)*(std::exp((m_pXValues[i]-m_fMinX)/(m_fMaxX-m_fMinX))-1.0)/(M_E-1.0);
                 }
             }
             break;
@@ -586,12 +587,12 @@ IMPL_LINK( GridWindow, ClickButtonHdl, Button*, pButton )
             double x, y;
             transform( m_aHandles[i].maPos, x, y );
             int nIndex = 0;
-            double delta = fabs( x-m_pXValues[0] );
+            double delta = std::fabs( x-m_pXValues[0] );
             for( int n = 1; n < m_nValues; n++ )
             {
-                if( delta > fabs( x - m_pXValues[ n ] ) )
+                if( delta > std::fabs( x - m_pXValues[ n ] ) )
                 {
-                    delta = fabs( x - m_pXValues[ n ] );
+                    delta = std::fabs( x - m_pXValues[ n ] );
                     nIndex = n;
                 }
             }
