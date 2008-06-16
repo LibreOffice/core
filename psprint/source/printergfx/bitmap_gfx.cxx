@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bitmap_gfx.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -183,7 +183,7 @@ void
 Ascii85Encoder::ConvertToAscii85 ()
 {
     if (mnByte < 4)
-        memset (mpByteBuffer + mnByte, 0, (4 - mnByte) * sizeof(sal_uInt8));
+        std::memset (mpByteBuffer + mnByte, 0, (4 - mnByte) * sizeof(sal_uInt8));
 
     sal_uInt32 nByteValue =   mpByteBuffer[0] * 256 * 256 * 256
         + mpByteBuffer[1] * 256 * 256
@@ -220,7 +220,7 @@ Ascii85Encoder::ConvertToAscii85 ()
             sal_uInt32 nEolOff = mnColumn - nLineLength;
             sal_uInt32 nBufOff = mnOffset - nEolOff;
 
-            memmove (mpFileBuffer + nBufOff + 1, mpFileBuffer + nBufOff, nEolOff);
+            std::memmove (mpFileBuffer + nBufOff + 1, mpFileBuffer + nBufOff, nEolOff);
             mpFileBuffer[ nBufOff ] = '\n';
 
             mnOffset++;
