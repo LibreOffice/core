@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view0.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -405,6 +405,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
                 if ( STATE_TOGGLE == eState )
                     bFlag = !pOpt->IsPostIts();
 
+                GetPostItMgr()->SetLayout();
                 pOpt->SetPostIts( bFlag );
                 break;
 
@@ -479,7 +480,6 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             if( STATE_TOGGLE == eState )
                 bFlag = bSet = !pOpt->IsOnlineSpell();
 
-            GetPostItMgr()->SetSpellChecking(bSet);
             pOpt->SetOnlineSpell(bSet);
             {
                 uno::Any aVal( &bSet, ::getCppuBooleanType() );
@@ -491,7 +491,6 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
                 if (xLngProp.is())
                     xLngProp->setPropertyValue( aPropName, aVal );
             }
-
             if (!(STATE_TOGGLE == eState && bSet && ( pOpt->IsHideSpell() )))
                 break;
         case SID_AUTOSPELL_MARKOFF:
@@ -509,8 +508,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
                 if (xLngProp.is())
                     xLngProp->setPropertyValue( aPropName, aVal );
             }
-        break;
-
+            break;
         case FN_SHADOWCURSOR:
             if( STATE_TOGGLE == eState )
                 bFlag = bSet = !pOpt->IsShadowCursor();
@@ -543,6 +541,10 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         rSh.ResetModified();
 
     pModule->ApplyUsrPref( *pOpt, this, bWebView ? VIEWOPT_DEST_WEB : VIEWOPT_DEST_TEXT );
+
+    //mod #i6193# let postits know about new spellcheck setting
+    if ( (nSlot==SID_AUTOSPELL_CHECK) || nSlot==SID_AUTOSPELL_MARKOFF)
+        GetPostItMgr()->SetSpellChecking();
 
     const BOOL bLockedView = rSh.IsViewLocked();
     rSh.LockView( TRUE );    //lock visible section
