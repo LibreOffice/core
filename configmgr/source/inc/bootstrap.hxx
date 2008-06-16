@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bootstrap.hxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -174,12 +174,6 @@ namespace configmgr
         Context const & getBestContext()        const { return m_fullcontext.is() ? m_fullcontext : m_basecontext; }
 
         uno::Reference< lang::XMultiComponentFactory > getServiceManager() const;
-
-        /** Checks, if the given context is a BootstrapContext.
-            @param _xContext
-                The context that is checked.
-        */
-        static bool isBootstrapContext(Context const & context);
 
         /** Checks, if the given context has the given 'admin' flag setting..
             @param _xContext
