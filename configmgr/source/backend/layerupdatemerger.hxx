@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: layerupdatemerger.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -120,7 +120,6 @@ namespace configmgr
             virtual void flushUpdate();
         private:
             void malformedUpdate(sal_Char const * pMsg);
-            void illegalUpdate(sal_Char const * pMsg);
         private:
             LayerUpdate                 m_aLayerUpdate;
             NodeUpdateRef               m_xCurrentNode;

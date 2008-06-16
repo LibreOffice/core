@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: binarywritehandler.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,9 +107,6 @@ namespace configmgr
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
             void writeStop()
-                SAL_THROW( (io::IOException, uno::RuntimeException) );
-
-            void writeType(uno::Type const& _aType)
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
             void writeValue( uno::Any const& _aValue)

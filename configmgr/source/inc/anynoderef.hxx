@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: anynoderef.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,24 +101,15 @@ namespace configmgr
             friend class TreeImplHelper;
             AnyNodeRef(NodeOffset nParentPos, TreeDepth m_nDepth);
             AnyNodeRef(Name const& aName, NodeOffset nParentPos);
-
+#if OSL_DEBUG_LEVEL > 0
             bool checkValidState() const;
+#endif
         private:
             Name        m_sNodeName;
             NodeOffset  m_nUsedPos;
             TreeDepth   m_nDepth;
         };
     //-------------------------------------------------------------------------
-
-        /** checks whether there are any immediate children of <var>aNode</var> (which is in <var>aTree</var>)
-
-            @return
-                <TRUE/> if a child node exists
-                <FALSE/> otherwise
-        */
-        inline
-        bool hasChildOrElement(Tree const& aTree, AnyNodeRef const& aNode)
-        { return aNode.isNode() && hasChildOrElement(aTree,aNode.toNode()); }
 
         /** checks whether there is an immediate child of <var>aNode</var> (which is in <var>aTree</var>)
             specified by <var>aName</var>
