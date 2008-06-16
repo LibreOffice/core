@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: classids.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -568,5 +568,10 @@
 #define SO3_RPT_CLASSID_90 \
     0xd7896d52, 0xb7af, 0x4820, \
     0x9d, 0xfe, 0xd4, 0x04, 0xd0, 0x15, 0x96, 0x0f
+
+#define SO3_RPT_SCH_CLASSID_90 \
+    0x80243d39, 0x6741, 0x46c5, \
+    0x92, 0x6e, 0x06, 0x91, 0x64, 0xff, 0x87, 0xbb
+
 
 #endif
