@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: InternalDataProvider.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,6 +55,7 @@
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/charclass.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -399,8 +400,8 @@ void InternalData::swapAllDataAtIndexWithNext( sal_Int32 nAtIndex, bool bDataInC
 
 bool InternalData::enlargeData( sal_Int32 nColumnCount, sal_Int32 nRowCount )
 {
-    sal_Int32 nNewColumnCount( ::std::max( m_nColumnCount, nColumnCount ));
-    sal_Int32 nNewRowCount( ::std::max( m_nRowCount, nRowCount ));
+    sal_Int32 nNewColumnCount( ::std::max<sal_Int32>(1, ::std::max<sal_Int32>( m_nColumnCount, nColumnCount )));
+    sal_Int32 nNewRowCount( ::std::max<sal_Int32>(1, ::std::max<sal_Int32>( m_nRowCount, nRowCount )));
     sal_Int32 nNewSize( nNewColumnCount*nNewRowCount );
 
     bool bGrow = (nNewSize > m_nColumnCount*m_nRowCount);
@@ -779,7 +780,7 @@ Sequence< Reference< chart2::data::XLabeledDataSequence > >
             rInternalData.enlargeData( nNewIndex + 1, aValues.size());
             rInternalData.setDataAt( nNewIndex, true, aValues );
             xNewValues.set( rProvider.createDataSequenceByRangeRepresentation( aIdentifier ));
-            PropertyHelper::copyProperties(
+            comphelper::copyProperties(
                 Reference< beans::XPropertySet >( xValues, uno::UNO_QUERY ),
                 Reference< beans::XPropertySet >( xNewValues, uno::UNO_QUERY ));
         }
@@ -792,7 +793,7 @@ Sequence< Reference< chart2::data::XLabeledDataSequence > >
             rInternalData.setColumnLabels( aLabels );
             Reference< chart2::data::XDataSequence > xNewLabel(
                 rProvider.createDataSequenceByRangeRepresentation( lcl_aLabelRangePrefix + aIdentifier ));
-            PropertyHelper::copyProperties(
+            comphelper::copyProperties(
                 Reference< beans::XPropertySet >( xLabel, uno::UNO_QUERY ),
                 Reference< beans::XPropertySet >( xNewLabel, uno::UNO_QUERY ));
             aResult[i] =
@@ -830,6 +831,9 @@ private:
 };
 
 } // anonymous namespace
+InternalDataProvider::InternalDataProvider(const Reference< uno::XComponentContext > & /*_xContext*/) :
+        m_bDataInColumns( true )
+{}
 
 // ================================================================================
 
@@ -1245,7 +1249,7 @@ void SAL_CALL InternalDataProvider::setDataByRangeRepresentation(
     }
     else if( aRange.match( lcl_aLabelRangePrefix ))
     {
-        sal_Int32 nIndex = aRange.copy( lcl_aLabelRangePrefix.getLength()).toInt32();
+        sal_uInt32 nIndex = aRange.copy( lcl_aLabelRangePrefix.getLength()).toInt32();
         OUString aNewLabel;
         if( aNewData.getLength() &&
             (aNewData[0] >>= aNewLabel))
@@ -1253,13 +1257,19 @@ void SAL_CALL InternalDataProvider::setDataByRangeRepresentation(
             if( m_bDataInColumns )
             {
                 vector< OUString > aLabels( rData.getColumnLabels());
-                aLabels[ nIndex ] = aNewLabel;
+                if ( aLabels.size() <= nIndex )
+                    aLabels.push_back(aNewLabel);
+                else
+                    aLabels[ nIndex ] = aNewLabel;
                 rData.setColumnLabels( aLabels );
             }
             else
             {
                 vector< OUString > aLabels( rData.getRowLabels());
-                aLabels[ nIndex ] = aNewLabel;
+                if ( aLabels.size() <= nIndex )
+                    aLabels.push_back(aNewLabel);
+                else
+                    aLabels[ nIndex ] = aNewLabel;
                 rData.setRowLabels( aLabels );
             }
         }
@@ -1585,7 +1595,13 @@ double SAL_CALL InternalDataProvider::getNotANumber()
     return ::rtl::math::isNan( nNumber )
         || ::rtl::math::isInf( nNumber );
 }
-
+// lang::XInitialization:
+void SAL_CALL InternalDataProvider::initialize(const uno::Sequence< uno::Any > & _aArguments) throw (uno::RuntimeException, uno::Exception)
+{
+    comphelper::SequenceAsHashMap aArgs(_aArguments);
+    if ( aArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDefaultData")),sal_False) )
+        createDefaultData();
+}
 // ____ XCloneable ____
 Reference< util::XCloneable > SAL_CALL InternalDataProvider::createClone()
     throw (uno::RuntimeException)
