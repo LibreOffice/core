@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: request.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,12 +104,8 @@ namespace configmgr
             Name getTemplateName()      const { return m_aTemplateName; }
             Name getComponentName()     const { return m_aComponentName; }
 
-            static RequestOptions getOptions()
-            { return RequestOptions::forAllLocales(); }
         };
 
-        inline ComponentRequest getComponentRequest(TemplateRequest const & _aTR)
-        { return ComponentRequest(_aTR.getComponentName(), _aTR.getOptions()); }
 // ---------------------------------------------------------------------------
 
         class UpdateRequest

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: oslstream.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,39 +82,6 @@ namespace configmgr
 
         virtual sal_Int32   SAL_CALL    available() throw(stario::NotConnectedException, staruno::RuntimeException);
         virtual void        SAL_CALL    closeInput() throw(stario::NotConnectedException, staruno::RuntimeException);
-    };
-
-// -----------------------------------------------------------------------------
-    /// BufferedFileInputStream - buffered implementation of XInputStream on an osl::File
-    class BufferedFileInputStream: public InputStreamWrapper_Base
-    {
-        BufferedInputFile   m_aFile;
-
-    public:
-        BufferedFileInputStream(rtl::OUString const & aFileURL);
-        virtual ~BufferedFileInputStream();
-
-    // stario::XInputStream
-        virtual sal_Int32   SAL_CALL
-            readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
-                throw(stario::NotConnectedException, stario::BufferSizeExceededException,
-                        stario::IOException,  staruno::RuntimeException);
-
-        virtual sal_Int32   SAL_CALL
-            readSomeBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
-                throw(stario::NotConnectedException, stario::BufferSizeExceededException,
-                        stario::IOException,staruno::RuntimeException);
-
-        virtual void        SAL_CALL
-            skipBytes(sal_Int32 nBytesToSkip)
-                throw(stario::NotConnectedException, stario::BufferSizeExceededException,
-                        stario::IOException,staruno::RuntimeException);
-
-        virtual sal_Int32   SAL_CALL    available()
-            throw(stario::NotConnectedException, stario::IOException, staruno::RuntimeException);
-
-        virtual void        SAL_CALL    closeInput()
-            throw(stario::NotConnectedException, stario::IOException, staruno::RuntimeException);
     };
 
 // -----------------------------------------------------------------------------

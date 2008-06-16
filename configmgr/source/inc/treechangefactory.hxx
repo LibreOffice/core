@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: treechangefactory.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,39 +54,6 @@ namespace configmgr
     public:
         typedef rtl::OUString Name;
     public:
-    //= ValueChanges ============================================================
-        std::auto_ptr<ValueChange> createValueChange(
-                                        Name const& _aName,
-                                        node::Attributes _aAttrs,
-                                        ValueChange::Mode _eMode,
-                                        uno::Any const& _aNewValue,
-                                        uno::Any const& _aOldValue = uno::Any()
-                                        );
-
-        //-----------------------------------------------
-        std::auto_ptr<ValueChange> createValueChange(
-                                        ValueNode const& _aNewValue,
-                                        bool _bWasDefault
-                                        );
-
-        //-----------------------------------------------
-        std::auto_ptr<ValueChange> createValueChange(
-                                        uno::Any const& _aNewValue,
-                                        ValueNode const& _aOldValue
-                                        );
-
-        //-----------------------------------------------
-        std::auto_ptr<ValueChange> createValueChange(
-                                        ValueChange::SetToDefault,
-                                        ValueNode const& _aOldValue
-                                        );
-
-    //= SubtreeChanges ============================================================
-        std::auto_ptr<SubtreeChange> createGroupNodeChange(
-                                        Name const& _aName,
-                                        node::Attributes _aAttrs,
-                                        bool _bToDefault = false);
-
         //-----------------------------------------------
         std::auto_ptr<SubtreeChange> createSetNodeChange(
                                         Name const& _aName,
