@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: InsertFunctions.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,7 @@
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-
+#include <com/sun/star/embed/XEmbedPersist.hpp>
 //------------------------------------------------------------------------
 
 #include <toolkit/helper/vclunohelper.hxx>
@@ -82,86 +82,6 @@ using namespace ::com::sun::star;
 namespace rptui
 {
 //------------------------------------------------------------------------
-void InitializeChart( const uno::Reference< frame::XModel>& _xModel,
-                      const uno::Reference < embed::XEmbeddedObject >& xObj)
-{
-    //ScDocShell* pDocShell = pViewData->GetDocShell();
-    //ScDocument* pScDoc = pDocShell->GetDocument();
-
-    //rtl::OUString aRangeString( rRangeParam );
-    //if ( !aRangeString.getLength() )
-    //{
-    //    SCCOL nCol1 = 0;
-    //    SCROW nRow1 = 0;
-    //    SCTAB nTab1 = 0;
-    //    SCCOL nCol2 = 0;
-    //    SCROW nRow2 = 0;
-    //    SCTAB nTab2 = 0;
-
-    //    ScMarkData& rMark = pViewData->GetMarkData();
-    //    if ( !rMark.IsMarked() )
-    //        pViewData->GetView()->MarkDataArea( TRUE );
-
-    //    if ( pViewData->GetSimpleArea( nCol1,nRow1,nTab1, nCol2,nRow2,nTab2 ) )
-    //    {
-    //        PutInOrder( nCol1, nCol2 );
-    //        PutInOrder( nRow1, nRow2 );
-    //        if ( nCol2>nCol1 || nRow2>nRow1 )
-    //        {
-    //            ScDocument* pDoc = pViewData->GetDocument();
-    //            pDoc->LimitChartArea( nTab1, nCol1,nRow1, nCol2,nRow2 );
-
-    //            String aStr;
-    //            ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-    //            aRange.Format( aStr, SCR_ABS_3D, pScDoc );
-    //            aRangeString = aStr;
-    //        }
-    //    }
-    //}
-
-    //if ( rRangeParam.getLength() )
-    {
-        // connect to Calc data (if no range string, leave chart alone, with its own data)
-
-        uno::Reference< chart2::data::XDataReceiver > xReceiver;
-        uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
-        if( xCompSupp.is())
-            xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
-        OSL_ASSERT( xReceiver.is());
-        if( xReceiver.is() )
-        {
-            // lock the model to suppress any internal updates
-            uno::Reference< frame::XModel > xChartModel( xReceiver, uno::UNO_QUERY );
-            if( xChartModel.is() )
-                xChartModel->lockControllers();
-
-            uno::Reference< lang::XMultiServiceFactory> xFac(_xModel,uno::UNO_QUERY_THROW);
-            uno::Reference< chart2::data::XDatabaseDataProvider > xDataProvider( xFac->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.DataProvider"))),uno::UNO_QUERY);
-            xReceiver->attachDataProvider( xDataProvider.get() );
-
-            uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( _xModel, uno::UNO_QUERY );
-            xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
-
-            uno::Sequence< beans::PropertyValue > aArgs( 4 );
-            aArgs[0] = beans::PropertyValue(
-                ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
-                uno::makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("all")) ), beans::PropertyState_DIRECT_VALUE );
-            aArgs[1] = beans::PropertyValue(
-                ::rtl::OUString::createFromAscii("HasCategories"), -1,
-                uno::makeAny( sal_True ), beans::PropertyState_DIRECT_VALUE );
-            aArgs[2] = beans::PropertyValue(
-                ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
-                uno::makeAny( sal_False ), beans::PropertyState_DIRECT_VALUE );
-            aArgs[3] = beans::PropertyValue(
-                ::rtl::OUString::createFromAscii("DataRowSource"), -1,
-                uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
-            xReceiver->setArguments( aArgs );
-
-            if( xChartModel.is() )
-                xChartModel->unlockControllers();
-        }
-    }
-}
 // -----------------------------------------------------------------------------
 } // namespace rptui
 // -----------------------------------------------------------------------------
