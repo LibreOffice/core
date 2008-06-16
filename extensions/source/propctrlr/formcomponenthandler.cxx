@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formcomponenthandler.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -228,26 +228,27 @@ namespace pcr
             ( Reference< XPropertySet > _xComponent, const ::rtl::OUString& _rPropertyName,
               const Any& _rPropertyValue )
         {
-            static ::rtl::OUString aResourceResolverPropName
-                = ::rtl::OUString::createFromAscii( "ResourceResolver" );
-
-            Reference< resource::XStringResourceResolver > xStringResourceResolver;
-            try
-            {
-                Any aResourceAny( _xComponent->getPropertyValue( aResourceResolverPropName ) );
-                aResourceAny >>= xStringResourceResolver;
-            }
-            catch(UnknownPropertyException&)
-            {}
-
             Reference< resource::XStringResourceResolver > xRet;
-            TypeClass eType = _rPropertyValue.getValueType().getTypeClass();
-            if( xStringResourceResolver.is() &&
-                xStringResourceResolver->getLocales().getLength() > 0 &&
-                (eType == TypeClass_STRING || eType == TypeClass_SEQUENCE) &&
-                lcl_isLanguageDependentProperty( _rPropertyName ) )
+            const TypeClass eType = _rPropertyValue.getValueType().getTypeClass();
+            if ( (eType == TypeClass_STRING || eType == TypeClass_SEQUENCE) &&
+                    lcl_isLanguageDependentProperty( _rPropertyName ) )
             {
-                xRet = xStringResourceResolver;
+                static const ::rtl::OUString s_sResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("ResourceResolver"));
+
+                Reference< resource::XStringResourceResolver > xStringResourceResolver;
+                try
+                {
+                    xStringResourceResolver.set( _xComponent->getPropertyValue( s_sResourceResolverPropName ),UNO_QUERY);
+                    if( xStringResourceResolver.is() &&
+                        xStringResourceResolver->getLocales().getLength() > 0 )
+                    {
+                        xRet = xStringResourceResolver;
+                    }
+                }
+                catch(UnknownPropertyException&)
+                {
+                    // nii
+                }
             }
 
             return xRet;
@@ -257,7 +258,7 @@ namespace pcr
     //--------------------------------------------------------------------
     Any FormComponentPropertyHandler::impl_getPropertyValue_throw( const ::rtl::OUString& _rPropertyName ) const
     {
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        const PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
 
         Any aPropertyValue( m_xComponent->getPropertyValue( _rPropertyName ) );
 
