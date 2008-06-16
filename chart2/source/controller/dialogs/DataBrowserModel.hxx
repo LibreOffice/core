@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataBrowserModel.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -152,7 +152,7 @@ public:
 
     typedef ::std::vector< tDataHeader > tDataHeaderVector;
 
-    tDataHeaderVector getDataHeaders() const;
+    const tDataHeaderVector& getDataHeaders() const;
 
     tDataHeader getHeaderForSeries(
         const ::com::sun::star::uno::Reference<
