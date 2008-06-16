@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Section.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -174,6 +174,7 @@ void SAL_CALL OSection::dispose() throw(uno::RuntimeException)
 {
     SectionPropertySet::dispose();
     cppu::WeakComponentImplHelperBase::dispose();
+
 }
 // -----------------------------------------------------------------------------
 // TODO: VirtualFunctionFinder: This is virtual function!
@@ -183,8 +184,9 @@ void SAL_CALL OSection::disposing()
     lang::EventObject aDisposeEvent( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aContainerListeners.disposeAndClear( aDisposeEvent );
     m_xContext.clear();
+    //m_xDrawPage.clear();
 
-    uno::Reference< report::XReportDefinition> xReport = getReportDefinition();
+    /*uno::Reference< report::XReportDefinition> xReport = getReportDefinition();
     ::boost::shared_ptr<rptui::OReportModel> pModel = OReportDefinition::getSdrModel(xReport);
     osl_incrementInterlockedCount( &m_refCount );
     while( m_xDrawPage.is() && m_xDrawPage->hasElements() )
@@ -203,7 +205,7 @@ void SAL_CALL OSection::disposing()
         uno::Reference< report::XSection> xSection = this;
         pModel->DeletePage(pModel->getPage(xSection)->GetPageNum());
     }
-    osl_decrementInterlockedCount( &m_refCount );
+    osl_decrementInterlockedCount( &m_refCount );*/
 }
 //--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OSection::getImplementationName(  ) throw(uno::RuntimeException)
@@ -235,14 +237,29 @@ void OSection::init()
     OSL_ENSURE(pModel,"No odel set at the report definition!");
     if ( pModel )
     {
+// DO NOT TOUCH THIS BLOCKS, WE HAVE A COMPILER PROBLEM UNDER SOLARIS X86
         osl_incrementInterlockedCount( &m_refCount );
         {
-            m_xProxy.set(pModel->createNewPage(this)->getUnoPage(),uno::UNO_QUERY);
-            ::comphelper::query_aggregation(m_xProxy,m_xDrawPage);
-            // set ourself as delegator
-            if ( m_xProxy.is() )
-                m_xProxy->setDelegator( static_cast<cppu::OWeakObject*>(this) );
+            uno::Reference<report::XSection> xTemp = this;
+            {
+                {
+                    m_xProxy.set(pModel->createNewPage(xTemp)->getUnoPage(),uno::UNO_QUERY);
+                }
+                {
+                    ::comphelper::query_aggregation(m_xProxy,m_xDrawPage);
+                }
+
+                // set ourself as delegator
+                {
+                    if ( m_xProxy.is() )
+                    {
+                        m_xProxy->setDelegator( xTemp );
+                    }
+                }
+            }
+            xTemp.clear();
         }
+// DO NOT TOUCH THIS BLOCKS, WE HAVE A COMPILER PROBLEM UNDER SOLARIS X86
         osl_decrementInterlockedCount( &m_refCount );
     }
 }
@@ -349,7 +366,6 @@ void SAL_CALL OSection::setForceNewPage( ::sal_Int16 _forcenewpage ) throw (lang
                         ,1
                         ,m_xContext);
     checkNotPageHeaderFooter();
-
     set(PROPERTY_FORCENEWPAGE,_forcenewpage,m_nForceNewPage);
 }
 // -----------------------------------------------------------------------------
@@ -385,6 +401,7 @@ void SAL_CALL OSection::setKeepTogether( ::sal_Bool _keeptogether ) throw (lang:
         ::osl::MutexGuard aGuard(m_aMutex);
         checkNotPageHeaderFooter();
     }
+
     set(PROPERTY_KEEPTOGETHER,_keeptogether,m_bKeepTogether);
 }
 // -----------------------------------------------------------------------------
