@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: addrtempuno.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -237,9 +237,9 @@ namespace svt
     Dialog* OAddressBookSourceDialogUno::createDialog(Window* _pParent)
     {
         if ( m_xDataSource.is() && m_sTable.getLength() )
-            return new AddressBookSourceDialog(_pParent, m_xORB, m_xDataSource, m_sDataSourceName, m_sTable, m_aAliases );
+            return new AddressBookSourceDialog(_pParent, m_aContext.getLegacyServiceFactory(), m_xDataSource, m_sDataSourceName, m_sTable, m_aAliases );
         else
-            return new AddressBookSourceDialog( _pParent, m_xORB );
+            return new AddressBookSourceDialog( _pParent, m_aContext.getLegacyServiceFactory() );
     }
 
 // .......................................................................
