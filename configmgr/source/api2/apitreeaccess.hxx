@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: apitreeaccess.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,7 +114,6 @@ namespace configmgr
 
         // api object handling
             Factory&                    getFactory();
-            Notifier                    getNotifier();
 
         protected:
             virtual ApiTreeImpl& getApiTree() const = 0;

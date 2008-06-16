@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: apinodeaccess.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -139,9 +139,6 @@ namespace configmgr
         */
         configuration::ElementRef  extractElementRef (Factory& rFactory, UnoAny const& aElement, configuration::TemplateInfo   const& aElementInfo );
         configuration::ElementTree extractElementTree(Factory& rFactory, UnoAny const& aElement, configuration::SetElementInfo const& aElementInfo );
-
-        /// finds a existing <type>SetElement</type> for a given <type scope='configmgr::configuration'>ElementTree</type>
-        SetElement* findSetElement(Factory& rFactory, configuration::ElementRef const& aElementTree);
 
         // Guarding and locking implementations
         /// guards a NodeAccess; provides an object (read) lock,
