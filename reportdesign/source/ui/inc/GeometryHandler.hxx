@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GeometryHandler.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -174,7 +174,6 @@ namespace rptui
         * \return the function supplier
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctionsSupplier> fillScope_throw(::rtl::OUString& _rsNamePostFix);
-        ::rtl::OUString getFormula() const;
 
         /** checks if the given function is a default function we know.
         *
