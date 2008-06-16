@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportSection.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,34 +124,15 @@ namespace rptui
         */
         void SetGridVisible(BOOL _bVisible);
 
-        /** adjusat the size of the current page
-        *
-        * \return <TRUE/> when the page was adjusted
-        */
-        bool adjustPageSize();
-
         inline OViewsWindow*        getViewsWindow() const { return m_pParent; }
         inline OSectionView*        getView() const { return m_pView; }
         inline OReportPage*         getPage() const { return m_pPage; }
         inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getSection() const { return m_xSection; }
 
-        BOOL            UnmarkDialog();
-        BOOL            RemarkDialog();
-
         void            SetDialogModelChanged( BOOL bChanged = TRUE ) { m_bDialogModelChanged = bChanged; }
         BOOL            IsDialogModelChanged() const { return m_bDialogModelChanged; }
         DlgEdMode       GetMode() const { return m_eMode; }
         void            SetMode( DlgEdMode m_eMode );
-
-        /** sets the height of the section
-            @param  _nHeight    Height is in pixel
-        */
-        void            setSectionHeightPixel(sal_uInt32 _nHeight);
-
-        /** insert a new SdrObject which belongs to the report component.
-            @param  _xObject    the report component
-        */
-        void            insertObject(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xObject);
 
         /** checks if the keycode is known by the child windows
             @param  _rCode  the keycode
@@ -166,7 +147,7 @@ namespace rptui
         /** fills the vector with all selected control models
             /param  _rSelection The vector will be filled and will not be cleared before.
         */
-        void fillControlModelSelection(::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent > >& _rSelection) const;
+        void fillControlModelSelection(::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& _rSelection) const;
 
         /** creates a default object (custom shape)
         *
@@ -181,6 +162,14 @@ namespace rptui
         */
         void createDefault(const ::rtl::OUString& _sType,SdrObject* _pObj);
         void stopScrollTimer();
+
+        /** deactivate the currect active ole object if any
+        */
+        void    deactivateOle();
+
+        /** returns true when an ole object is currently active
+        */
+        bool isUiActive() const;
     };
 //==================================================================
 }   //rptui
