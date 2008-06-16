@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filehelper.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,32 +49,6 @@ namespace configmgr
     //==========================================================================
     //= FileHelper
     //==========================================================================
-
-    // -----------------------------------------------------------------------------
-    const rtl::OUString& FileHelper::delimiterAsString()
-    {
-        static const rtl::OUString aStringDelimiter( &FileHelper::delimiter,1);
-        return aStringDelimiter;
-    }
-
-    // -----------------------------------------------------------------------------
-    void FileHelper::removeFile(const rtl::OUString& _aURL) CFG_THROW1 (io::IOException)
-    {
-        File::RC eError = File::remove(_aURL);
-        if (eError != File::E_None &&
-            eError != File::E_NOENT)
-        {
-            rtl::OUStringBuffer sErrorBuf;
-            sErrorBuf.appendAscii("Configmgr: removeFile failed ");
-            sErrorBuf.appendAscii("for file \"").append(_aURL).appendAscii("\". ");
-            sErrorBuf.appendAscii("Error = \"").append(FileHelper::createOSLErrorString(eError)).appendAscii("\" ");
-            sErrorBuf.appendAscii("[").append(sal_Int32(eError)).appendAscii("] ");
-
-            rtl::OUString const sError = sErrorBuf.makeStringAndClear();
-            OSL_ENSURE(0, rtl::OUStringToOString(sError,RTL_TEXTENCODING_ASCII_US).getStr());
-            throw io::IOException(sError, NULL);
-        }
-    }
 
     // -----------------------------------------------------------------------------
     bool FileHelper::tryToRemoveFile(const rtl::OUString& _aURL, bool tryBackupFirst)
@@ -145,20 +119,6 @@ namespace configmgr
             }
         }
         return aSize;
-    }
-
-    // -----------------------------------------------------------------------------
-    TimeValue FileHelper::getModifyTime(rtl::OUString const& _sURL)
-    {
-        TimeValue aTime = {0,0};
-        DirectoryItem aItem;
-        if (osl::FileBase::E_None == DirectoryItem::get(_sURL, aItem))
-        {
-            FileStatus aStatus(osl_FileStatus_Mask_ModifyTime|osl_FileStatus_Mask_Type);
-            if (osl::FileBase::E_None == aItem.getFileStatus(aStatus) && aStatus.isValid(osl_FileStatus_Mask_ModifyTime))
-                aTime = aStatus.getModifyTime();
-        }
-        return aTime;
     }
 
     // -----------------------------------------------------------------------------
