@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CommandDispatchContainer.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,8 +66,9 @@ void CommandDispatchContainer::setModel(
     const Reference< frame::XModel > & xModel )
 {
     // remove all existing dispatcher that base on the old model
-    DisposeHelper::DisposeAllMapElements( m_aCachedDispatches );
     m_aCachedDispatches.clear();
+    DisposeHelper::DisposeAllElements( m_aToBeDisposedDispatches );
+    m_aToBeDisposedDispatches.clear();
     m_xModel.set( xModel );
 }
 
@@ -81,8 +82,10 @@ void CommandDispatchContainer::setFallbackDispatch(
     const Reference< frame::XDispatch > xFallbackDispatch,
     const ::std::set< OUString > & rFallbackCommands )
 {
+    OSL_ENSURE(xFallbackDispatch.is(),"Invalid fall back dispatcher!");
     m_xFallbackDispatcher.set( xFallbackDispatch );
     m_aFallbackCommands = rFallbackCommands;
+    m_aToBeDisposedDispatches.push_back( m_xFallbackDispatcher );
 }
 
 Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
@@ -105,6 +108,7 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
             pDispatch->initialize();
             m_aCachedDispatches[ C2U(".uno:Undo") ].set( xResult );
             m_aCachedDispatches[ C2U(".uno:Redo") ].set( xResult );
+            m_aToBeDisposedDispatches.push_back( xResult );
         }
         else if( rURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Context" ))
                  || rURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ModifiedStatus" )))
@@ -117,6 +121,7 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
             pDispatch->initialize();
             m_aCachedDispatches[ C2U(".uno:Context") ].set( xResult );
             m_aCachedDispatches[ C2U(".uno:ModifiedStatus") ].set( xResult );
+            m_aToBeDisposedDispatches.push_back( xResult );
         }
         else if( m_xModel.is() &&
                  (m_aContainerDocumentCommands.find( rURL.Path ) != m_aContainerDocumentCommands.end()) )
@@ -152,8 +157,9 @@ Sequence< Reference< frame::XDispatch > > CommandDispatchContainer::getDispatche
 
 void CommandDispatchContainer::DisposeAndClear()
 {
-    DisposeHelper::DisposeAllMapElements( m_aCachedDispatches );
     m_aCachedDispatches.clear();
+    DisposeHelper::DisposeAllElements( m_aToBeDisposedDispatches );
+    m_aToBeDisposedDispatches.clear();
     m_xFallbackDispatcher.clear();
     m_aFallbackCommands.clear();
 }
