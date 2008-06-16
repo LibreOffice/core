@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interactionrequest.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,12 +58,6 @@ struct InteractionRequest::Impl
 };
 
 //=========================================================================
-InteractionRequest::InteractionRequest()
-: m_pImpl( new Impl )
-{
-}
-
-//=========================================================================
 InteractionRequest::InteractionRequest( const uno::Any & rRequest )
 : m_pImpl( new Impl( rRequest ) )
 {
@@ -74,12 +68,6 @@ InteractionRequest::InteractionRequest( const uno::Any & rRequest )
 InteractionRequest::~InteractionRequest()
 {
     delete m_pImpl;
-}
-
-//=========================================================================
-void InteractionRequest::setRequest( const uno::Any & rRequest )
-{
-    m_pImpl->m_aRequest = rRequest;
 }
 
 //=========================================================================
