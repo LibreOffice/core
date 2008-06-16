@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: matchlocale.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,9 +77,7 @@ namespace configmgr
         OUString makeIsoLocale(Locale const& aUnoLocale_);
 
         LocaleSequence makeLocaleSequence(uno::Sequence<OUString> const& sLocaleNames_);
-        LocaleSequence makeLocaleSequence(uno::Sequence<Locale> const& aUnoLocales_);
         uno::Sequence<OUString> makeIsoSequence(LocaleSequence const& aLocales_);
-        uno::Sequence<Locale>   makeUnoSequence(LocaleSequence const& aLocales_);
 
         inline
         bool equalLocale(Locale const & lhs, Locale const & rhs)
@@ -178,10 +176,6 @@ namespace configmgr
         inline bool operator >=(MatchResult const& lhs, MatchResult const& rhs)
         { return !(lhs < rhs); }
 
-        // ---------------------------------------------------------------------
-        /// match a locale against a sequence of locales
-        MatchResult match(Locale const& aLocale_, LocaleSequence const& aTarget_);
-
         /// improve an existing match of a locale against a sequence of locales
         bool improveMatch(MatchResult& rMatch_, Locale const& aLocale_, LocaleSequence const& aTarget_);
 
@@ -196,12 +190,8 @@ namespace configmgr
         class FindBestLocale
         {
         public:
-            /// construct a MatchLocale with no target locale
-            FindBestLocale();
             /// construct a MatchLocale with a single target locale
             FindBestLocale(Locale const& aTarget_);
-            /// construct a MatchLocale with a sequence of locales
-            FindBestLocale(LocaleSequence const& aTarget_);
 
             /// is there any match ?
             bool isMatch() const { return m_aResult.isMatch(); }
@@ -209,20 +199,11 @@ namespace configmgr
             /// is there an optimum match (so we are done) ?
             bool isBestMatch() const { return m_aResult.isBest(); }
 
-            /// get the best match found
-            Locale getBestMatch() const;
-
             /// get the quality of the best match found
             MatchQuality getMatchQuality() const { return m_aResult.quality(); }
 
             /// check, if the given locale improves the quality. if it does, accept it
             bool accept(Locale const& aLocale_);
-
-            /// change the target locale (and reset matching)
-            void reset(Locale const& aTarget_);
-
-            /// change the target locales (and reset matching)
-            void reset(LocaleSequence const& aTarget_);
 
             /// reset the match result, indicating whether a match is needed at all
             void reset(bool bNeedLocale_ = true);
