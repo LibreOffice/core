@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_backend.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -369,6 +369,13 @@ css::beans::StringPair Package::getPublisherInfo() throw (RuntimeException)
 {
     css::beans::StringPair aEmptyPair;
     return aEmptyPair;
+}
+
+//______________________________________________________________________________
+uno::Reference< css::graphic::XGraphic > Package::getIcon( sal_Bool /*bHighContrast*/ ) throw ( RuntimeException )
+{
+    uno::Reference< css::graphic::XGraphic > aEmpty;
+    return aEmpty;
 }
 
 //______________________________________________________________________________
