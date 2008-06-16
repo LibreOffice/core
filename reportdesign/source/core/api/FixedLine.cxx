@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FixedLine.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,6 +72,8 @@ uno::Sequence< ::rtl::OUString > lcl_getLineOptionals()
             ,PROPERTY_CHARPOSTURE
             ,PROPERTY_CHARRELIEF
             ,PROPERTY_FONTDESCRIPTOR
+            ,PROPERTY_FONTDESCRIPTORASIAN
+            ,PROPERTY_FONTDESCRIPTORCOMPLEX
             ,PROPERTY_CONTROLTEXTEMPHASISMARK
             ,PROPERTY_CHARROTATION
             ,PROPERTY_CHARSCALEWIDTH
@@ -105,6 +107,38 @@ uno::Sequence< ::rtl::OUString > lcl_getLineOptionals()
             ,PROPERTY_PRINTWHENGROUPCHANGE
             ,PROPERTY_MASTERFIELDS
             ,PROPERTY_DETAILFIELDS
+            ,PROPERTY_PARAADJUST
+
+            , PROPERTY_CHAREMPHASISASIAN
+            , PROPERTY_CHARFONTNAMEASIAN
+            , PROPERTY_CHARFONTSTYLENAMEASIAN
+            , PROPERTY_CHARFONTFAMILYASIAN
+            , PROPERTY_CHARFONTCHARSETASIAN
+            , PROPERTY_CHARFONTPITCHASIAN
+            , PROPERTY_CHARHEIGHTASIAN
+            , PROPERTY_CHARUNDERLINEASIAN
+            , PROPERTY_CHARWEIGHTASIAN
+            , PROPERTY_CHARPOSTUREASIAN
+            , PROPERTY_CHARWORDMODEASIAN
+            , PROPERTY_CHARROTATIONASIAN
+            , PROPERTY_CHARSCALEWIDTHASIAN
+            , PROPERTY_CHARLOCALEASIAN
+            , PROPERTY_CHAREMPHASISCOMPLEX
+            , PROPERTY_CHARFONTNAMECOMPLEX
+            , PROPERTY_CHARFONTSTYLENAMECOMPLEX
+            , PROPERTY_CHARFONTFAMILYCOMPLEX
+            , PROPERTY_CHARFONTCHARSETCOMPLEX
+            , PROPERTY_CHARFONTPITCHCOMPLEX
+            , PROPERTY_CHARHEIGHTCOMPLEX
+            , PROPERTY_CHARUNDERLINECOMPLEX
+            , PROPERTY_CHARWEIGHTCOMPLEX
+            , PROPERTY_CHARPOSTURECOMPLEX
+            , PROPERTY_CHARWORDMODECOMPLEX
+            , PROPERTY_CHARROTATIONCOMPLEX
+            , PROPERTY_CHARSCALEWIDTHCOMPLEX
+            , PROPERTY_CHARLOCALECOMPLEX
+
+
     };
     return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
@@ -293,17 +327,6 @@ void SAL_CALL OFixedLine::removeVetoableChangeListener( const ::rtl::OUString& P
 void SAL_CALL OFixedLine::setDataField( const ::rtl::OUString& /*_datafield*/ ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
     throw beans::UnknownPropertyException();
-}
-// -----------------------------------------------------------------------------
-::sal_Int16 SAL_CALL OFixedLine::getParaAdjust() throw (uno::RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    return m_aProps.aFormatProperties.nAlign;
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OFixedLine::setParaAdjust( ::sal_Int16 _align ) throw (uno::RuntimeException)
-{
-    set(PROPERTY_PARAADJUST,_align,m_aProps.aFormatProperties.nAlign);
 }
 // -----------------------------------------------------------------------------
 ::sal_Int32 SAL_CALL OFixedLine::getControlBackground() throw (beans::UnknownPropertyException, uno::RuntimeException)
