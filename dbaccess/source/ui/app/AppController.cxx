@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppController.cxx,v $
- * $Revision: 1.61 $
+ * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1449,8 +1449,6 @@ void OApplicationController::describeSupportedFeatures()
                                                                                         CommandGroup::APPLICATION );
 
     implDescribeSupportedFeature( ".uno:DBNewReport",        SID_APP_NEW_REPORT,        CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:DBNewReportWithPreSelection",
-                                                             SID_APP_NEW_REPORT_PRE_SEL,CommandGroup::APPLICATION );
     implDescribeSupportedFeature( ".uno:DBNewReportAutoPilot",
                                                              ID_DOCUMENT_CREATE_REPWIZ, CommandGroup::INSERT );
     implDescribeSupportedFeature( ".uno:DBNewReportAutoPilotWithPreSelection",
@@ -1526,6 +1524,8 @@ void OApplicationController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:OpenUrl",            SID_OPENURL,               CommandGroup::APPLICATION );
 
     // this one should not appear under Tools->Customize->Keyboard
+    implDescribeSupportedFeature( ".uno:DBNewReportWithPreSelection",
+                                                             SID_APP_NEW_REPORT_PRE_SEL,CommandGroup::INTERNAL );
     implDescribeSupportedFeature( ".uno:DBDSImport",        SID_DB_APP_DSIMPORT, CommandGroup::INTERNAL);
     implDescribeSupportedFeature( ".uno:DBDSExport",        SID_DB_APP_DSEXPORT, CommandGroup::INTERNAL);
     implDescribeSupportedFeature( ".uno:DBDBAdmin",         SID_DB_APP_DBADMIN, CommandGroup::INTERNAL);
