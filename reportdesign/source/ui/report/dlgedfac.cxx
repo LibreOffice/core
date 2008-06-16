@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgedfac.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,10 +99,10 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                 pObjFactory->pNewObj = new OCustomShape(SERVICE_SHAPE);
                 break;
             case OBJ_DLG_SUBREPORT:
-                pObjFactory->pNewObj = new OOle2Obj(SERVICE_REPORTDEFINITION);
+                pObjFactory->pNewObj = new OOle2Obj(SERVICE_REPORTDEFINITION,OBJ_DLG_SUBREPORT);
                 break;
             case OBJ_OLE2:
-                pObjFactory->pNewObj = new OOle2Obj(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.ChartDocument")));
+                pObjFactory->pNewObj = new OOle2Obj(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.ChartDocument")),OBJ_OLE2);
                 break;
             default:
                 OSL_ENSURE(0,"Unknown object id");
