@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: apifactory.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,7 +103,6 @@ namespace configmgr
             sal_Bool        hasElement(configuration::NodeID const& _rNode) { return NULL != implFind(_rNode); }
 
             void    revokeElement(configuration::NodeID const& aNode);
-            void    revokeElement(configuration::NodeID const& aNode, NodeElement& rElement);
 
             SetElement* extractSetElement(UnoAny const& aElement);
             bool tunnelSetElement(sal_Int64& nSomething, SetElement& rElement, uno::Sequence< sal_Int8 > const& aTunnelID);
