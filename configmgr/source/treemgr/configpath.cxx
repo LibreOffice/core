@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: configpath.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -262,41 +262,6 @@ Name Component::getTypeName()      const SAL_THROW(())
     implSplitCompositeName(m_aName,sType,sName);
 
     return Name(sType,PackageOnly());
-}
-//-----------------------------------------------------------------------------
-
-bool Component::splitCompositeName(Name& _rName, Name& _rType) const SAL_THROW(())
-{
-    if (isSimpleName())
-    {
-        _rName = m_aName;
-        _rType = Name();
-        return false;
-    }
-    else
-    {
-        OUString sName, sType;
-        implSplitCompositeName(m_aName,sType,sName);
-        _rName = Name(sName, PackageOnly());
-        _rType = Name(sType, PackageOnly());
-        return true;
-    }
-}
-//-----------------------------------------------------------------------------
-
-bool Component::splitCompositeName(OUString& _rName, OUString& _rType) const SAL_THROW(())
-{
-    if (isSimpleName())
-    {
-        _rName = m_aName.toString();
-        _rType = OUString();
-        return false;
-    }
-    else
-    {
-        implSplitCompositeName(m_aName,_rType,_rName);
-        return true;
-    }
 }
 //-----------------------------------------------------------------------------
 
@@ -1083,12 +1048,14 @@ AbsolutePath AbsolutePath::getParentPath() const
 
     return AbsolutePath( Path::Rep(begin(),end()-1) );
 }
+#if OSL_DEBUG_LEVEL > 0
 //-----------------------------------------------------------------------------
 
 bool AbsolutePath::isDetached() const SAL_THROW(())
 {
     return !m_aRep.isEmpty() && begin()->isEmpty();
 }
+#endif
 //-----------------------------------------------------------------------------
 
 OUString AbsolutePath::toString() const SAL_THROW(())
