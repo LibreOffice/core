@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: genericunodialog.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,7 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <tools/link.hxx>
 
 class Dialog;
@@ -96,10 +97,7 @@ namespace svt
         com::sun::star::uno::Reference<com::sun::star::awt::XWindow>    m_xParent;  /// parent window
         // </properties>
 
-        com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-                                    m_xORB;
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-                                                                      m_xContext; // only filled when correct ctor was called
+        ::comphelper::ComponentContext m_aContext;
 
     public:
         inline bool needInitialization() const { return m_bNeedInitialization && !m_bInitialized; }
@@ -107,7 +105,7 @@ namespace svt
     protected:
         OGenericUnoDialog(const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& _rxORB);
         OGenericUnoDialog(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& _rxContext);
-        ~OGenericUnoDialog();
+        virtual ~OGenericUnoDialog();
 
     public:
         // UNO
