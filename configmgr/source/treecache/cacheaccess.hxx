@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cacheaccess.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,9 +71,6 @@ namespace configmgr
         /// removes an existing broadcast helper
         ConfigChangeBroadcastHelper * releaseBroadcaster();
 
-        /// return TRUE if there is no data (left) in this object's cache data
-        bool isEmpty();
-
         // attach a module with a given name
         void attachModule(data::TreeAddress _aLocation, CacheLine::Name const & _aModule);
         /// check if the given module exists already (and is not empty)
@@ -133,12 +130,6 @@ namespace configmgr
 
         /// clientRelease() the tree at aComponentName, and return the resulting reference count
         oslInterlockedCount releaseModule( CacheLine::Name const & _aModule );
-
-        /// retrieve the given subtree without changing its ref count
-        data::NodeAddress   findNode(CacheLine::Path const& _aPath );
-
-        /// merge the given change list into this tree - reflects old data to _aUpdate
-        void applyUpdate(backend::UpdateInstance & _aUpdate) CFG_UNO_THROW_RTE( );
 
         /// collect the modules that can be disposed now (i.e. released after _rLimitReleaseTime)
         TimeStamp collectDisposeList(CacheLoadingAccess::DisposeList & _rList,

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: treenodefactory.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,26 +84,6 @@ std::auto_ptr<ValueNode>  OTreeNodeFactory::createNullValueNode(
     return std::auto_ptr<ValueNode>( new ValueNode(aName, aType, _aAttrs) );
 }
 
-
-//= ISubtree ============================================================
-
-std::auto_ptr<ISubtree> OTreeNodeFactory::createDummyTree(Name const& _aName, Name const& _aElementTypeName)
-{
-    std::auto_ptr<ISubtree> pResult;
-
-    if (_aElementTypeName.isEmpty())
-    {
-        pResult.reset( new Subtree(_aName.toString(),node::Attributes()) );
-    }
-    else
-    {
-        pResult.reset( new Subtree(_aName.toString(),
-                                   _aElementTypeName.toString(),
-                                   getDummySetElementModule().toString(),
-                                   node::Attributes()) );
-    }
-    return pResult;
-}
 
 //-----------------------------------------------
 
