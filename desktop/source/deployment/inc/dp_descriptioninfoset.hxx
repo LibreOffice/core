@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_descriptioninfoset.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -193,6 +193,10 @@ public:
     ::com::sun::star::uno::Sequence< ::rtl::OUString >
     getUpdateDownloadUrls() const;
 
+    /**
+        Returns the URL for the icon image.
+    */
+    ::rtl::OUString getIconURL( sal_Bool bHighContrast ) const;
 
     /**
        Allow direct access to the XPath functionality.
