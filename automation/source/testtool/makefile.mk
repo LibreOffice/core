@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.12 $
+# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -102,14 +102,14 @@ $(MISC)$/xfilter.pl : filter.pl
 
 
 .IF "$(GUI)"=="UNX"
-INIFILE=$(BIN)$/testtoolrc
+INIFILESUFFIX=rc
 .ELIF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
-INIFILE=$(BIN)$/testtool.ini
+INIFILESUFFIX=.ini
 .END
 
-$(INIFILE): testtool.ini
-        -$(COPY) $< $@
+$(BIN)$/testtool$(INIFILESUFFIX): testtool.ini
+        $(SED) -e s/$(EMQ)!INIFILESUFFIX$(EMQ)!/$(INIFILESUFFIX)/ < $< > $@
 
 ALLTAR: \
-        $(INIFILE)
+        $(BIN)$/testtool$(INIFILESUFFIX)
 
