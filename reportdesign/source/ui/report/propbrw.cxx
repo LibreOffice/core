@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: propbrw.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -354,19 +354,19 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
 {
     if ( m_xBrowserController.is() )
     {
-        m_xBrowserController->inspect(uno::Sequence< Reference<uno::XInterface> >());
-        m_xBrowserController->inspect(_aObjects);
-
-        if ( m_sLastActivePage.getLength() )
+        try
         {
-            try
+            m_xBrowserController->inspect(uno::Sequence< Reference<uno::XInterface> >());
+            m_xBrowserController->inspect(_aObjects);
+
+            if ( m_sLastActivePage.getLength() )
             {
                 m_xBrowserController->restoreViewData( makeAny( m_sLastActivePage ) );
-            }
-            catch( const Exception& )
-            {
-                OSL_ENSURE( sal_False, "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
-            }
+            } // if ( m_sLastActivePage.getLength() )
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
         }
 
         //Resize();
