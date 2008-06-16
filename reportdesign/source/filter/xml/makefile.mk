@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -49,7 +49,6 @@ SLOFILES=	$(SLO)$/xmlfilter.obj				\
             $(SLO)$/xmlComponent.obj			\
             $(SLO)$/xmlControlProperty.obj		\
             $(SLO)$/xmlFormattedField.obj		\
-            $(SLO)$/xmlFixedText.obj			\
             $(SLO)$/xmlReportElement.obj		\
             $(SLO)$/xmlReportElementBase.obj	\
             $(SLO)$/xmlCondPrtExpr.obj			\
