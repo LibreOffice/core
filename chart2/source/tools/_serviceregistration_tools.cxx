@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: _serviceregistration_tools.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include "ErrorBar.hxx"
 #include "RegressionCurveModel.hxx"
 #include "RegressionEquation.hxx"
+#include "InternalDataProvider.hxx"
 
 static struct ::cppu::ImplementationEntry g_entries_chart2_tools[] =
 {
@@ -159,6 +160,14 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_tools[] =
           ::chart::RegressionEquation::create
         , ::chart::RegressionEquation::getImplementationName_Static
         , ::chart::RegressionEquation::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+   ,{
+          ::chart::InternalDataProvider::create
+        , ::chart::InternalDataProvider::getImplementationName_Static
+        , ::chart::InternalDataProvider::getSupportedServiceNames_Static
         , ::cppu::createSingleComponentFactory
         , 0
         , 0
