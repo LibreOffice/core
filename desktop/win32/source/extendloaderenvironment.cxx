@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: extendloaderenvironment.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,11 +93,11 @@ void extendLoaderEnvironment(WCHAR * binPath, WCHAR * iniDirectory) {
     if (!GetModuleFileNameW(NULL, iniDirectory, MAX_PATH)) {
         fail();
     }
-    WCHAR * pathEnd = tools::filename(iniDirectory);
+    WCHAR * iniDirEnd = tools::filename(iniDirectory);
     WCHAR name[MAX_PATH + MY_LENGTH(L".bin")];
         // hopefully std::size_t is large enough to not overflow
     WCHAR * nameEnd = name;
-    for (WCHAR * p = pathEnd; *p != L'\0'; ++p) {
+    for (WCHAR * p = iniDirEnd; *p != L'\0'; ++p) {
         *nameEnd++ = *p;
     }
     if (!(nameEnd - name >= 4 && nameEnd[-4] == L'.' &&
@@ -111,33 +111,43 @@ void extendLoaderEnvironment(WCHAR * binPath, WCHAR * iniDirectory) {
     nameEnd[-3] = 'b';
     nameEnd[-2] = 'i';
     nameEnd[-1] = 'n';
-    tools::buildPath(binPath, iniDirectory, pathEnd, name, nameEnd - name);
-    *pathEnd = L'\0';
+    tools::buildPath(binPath, iniDirectory, iniDirEnd, name, nameEnd - name);
+    *iniDirEnd = L'\0';
     WCHAR path[MAX_PATH];
-    pathEnd = tools::buildPath(
-        path, iniDirectory, pathEnd, MY_STRING(L"..\\basis-link"));
-    if (pathEnd == NULL) {
-        fail();
-    }
-    pathEnd = tools::resolveLink(path);
+    WCHAR * pathEnd = tools::buildPath(
+        path, iniDirectory, iniDirEnd, MY_STRING(L"..\\basis-link"));
     if (pathEnd == NULL) {
         fail();
     }
     std::size_t const maxEnv = 32767;
     WCHAR pad[2 * MAX_PATH + maxEnv];
         // hopefully std::size_t is large enough to not overflow
-    WCHAR * padEnd = tools::buildPath(
-        pad, path, pathEnd, MY_STRING(L"\\program"));
-    if (padEnd == NULL) {
-        fail();
-    }
+    WCHAR * padEnd = NULL;
     WCHAR env[maxEnv];
     DWORD n = GetEnvironmentVariableW(L"PATH", env, maxEnv);
     if (n >= maxEnv || n == 0 && GetLastError() != ERROR_ENVVAR_NOT_FOUND) {
         fail();
     }
     env[n] = L'\0';
-    bool exclude1 = contains(env, pad, padEnd);
+    bool exclude1;
+    pathEnd = tools::resolveLink(path);
+    if (pathEnd == NULL) {
+        if (GetLastError() != ERROR_FILE_NOT_FOUND) {
+            fail();
+        }
+        pathEnd = tools::buildPath(
+            path, iniDirectory, iniDirEnd, MY_STRING(L".."));
+        if (pathEnd == NULL) {
+            fail();
+        }
+        exclude1 = true;
+    } else {
+        padEnd = tools::buildPath(pad, path, pathEnd, MY_STRING(L"\\program"));
+        if (padEnd == NULL) {
+            fail();
+        }
+        exclude1 = contains(env, pad, padEnd);
+    }
     WCHAR * pad2 = exclude1 ? pad : padEnd + 1;
     pathEnd = tools::buildPath(path, path, pathEnd, MY_STRING(L"\\ure-link"));
     if (pathEnd == NULL) {
