@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.11 $
+# $Revision: 1.12 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -65,11 +65,16 @@ CFLAGS+=-D_KERNEL
 .ENDIF
 
 # this object must not be a Ultra SPARC binary, this does not
-# work with /usr/bin/sort and such.
+# work with /usr/bin/sort and such. Needs to be 32 bit even in
+# 64 bit builds
 .IF "$(OS)" == "SOLARIS"
-.IF "$(CPU)" == "S"
 .IF "$(COM)" != "GCC"
+.IF "$(CPU)" == "S"
 ENVCFLAGS=-xarch=v8
+.ENDIF
+.IF "$(CPU)"=="U"
+CFLAGSAPPEND+=-m32
+LINKFLAGSSHL+=-m32
 .ENDIF
 .ENDIF
 .ENDIF
