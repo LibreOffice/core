@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -57,7 +57,7 @@ ADDITIONAL_FILES= \
 #CONFIGURE_DIR=$(BUILD_DIR)
 
 #relative to CONFIGURE_DIR
-CONFIGURE_ACTION=configure CFLAGS="$(EXTRA_CFLAGS)"
+CONFIGURE_ACTION=configure CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)"
 CONFIGURE_FLAGS=
 
 BUILD_ACTION=make
