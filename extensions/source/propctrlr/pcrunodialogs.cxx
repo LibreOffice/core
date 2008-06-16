@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pcrunodialogs.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,7 +140,7 @@ namespace pcr
     //--------------------------------------------------------------------------
     Dialog* OTabOrderDialog::createDialog( Window* _pParent )
     {
-        return new TabOrderDialog( _pParent, m_xTabbingModel, m_xControlContext, m_xORB );
+        return new TabOrderDialog( _pParent, m_xTabbingModel, m_xControlContext, m_aContext.getLegacyServiceFactory() );
     }
 
 //........................................................................
