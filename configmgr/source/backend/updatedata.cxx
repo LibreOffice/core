@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updatedata.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -139,21 +139,6 @@ void NodeUpdate::removePropertyByName  (OUString const & _aName)
         m_aRemovedElements.insert(*it);
         m_aProperties.erase(it);
     }
-}
-// -----------------------------------------------------------------------------
-
-void NodeUpdate::clear(bool _bKeep)
-{
-    if (_bKeep)
-    {
-        std::copy(m_aNodes.begin(),m_aNodes.end(),std::inserter(m_aRemovedElements,m_aRemovedElements.end()));
-        std::copy(m_aProperties.begin(),m_aProperties.end(),std::inserter(m_aRemovedElements,m_aRemovedElements.end()));
-    }
-    else
-        m_aRemovedElements.clear();
-
-    m_aNodes.clear();
-    m_aProperties.clear();
 }
 // -----------------------------------------------------------------------------
 
@@ -344,12 +329,6 @@ void PropertyUpdate::finishValue()
 {
     if (m_aType.getTypeClass() == uno::TypeClass_ANY)
         m_aType = uno::Type();
-}
-// -----------------------------------------------------------------------------
-
-void PropertyUpdate::clear()
-{
-    m_aValues.clear();
 }
 // -----------------------------------------------------------------------------
 

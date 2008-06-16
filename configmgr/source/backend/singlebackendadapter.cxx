@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: singlebackendadapter.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -311,16 +311,6 @@ uno::Reference<uno::XInterface> SAL_CALL
 }
 //------------------------------------------------------------------------------
 
-static const rtl::OUString kImplementationName(
-                                RTL_CONSTASCII_USTRINGPARAM(kImplementation)) ;
-
-rtl::OUString SAL_CALL
-    SingleBackendAdapter::getName(void)
-{
-    return kImplementationName ;
-}
-//------------------------------------------------------------------------------
-
 rtl::OUString SAL_CALL
     SingleBackendAdapter::getImplementationName(void)
         throw (uno::RuntimeException)
@@ -334,13 +324,6 @@ sal_Bool SAL_CALL
         throw (uno::RuntimeException)
 {
     return  ServiceInfoHelper(&kServiceInfo).supportsService(aServiceName) ;
-}
-//------------------------------------------------------------------------------
-
-uno::Sequence<rtl::OUString> SAL_CALL
-    SingleBackendAdapter::getServices()
-{
-    return ServiceInfoHelper(&kServiceInfo).getSupportedServiceNames() ;
 }
 //------------------------------------------------------------------------------
 

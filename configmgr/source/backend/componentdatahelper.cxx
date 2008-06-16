@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: componentdatahelper.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -125,18 +125,6 @@ void DataBuilderContext::raiseMalformedDataException(sal_Char const * _pText) co
 }
 // -----------------------------------------------------------------------------
 
-void DataBuilderContext::raiseIllegalAccessException(sal_Char const * _pText) const
-        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
-{
-    OUString const sMessage = makeMessageWithPath(_pText);
-    lang::IllegalAccessException e(sMessage, m_pContext);
-
-    OUString const sFullMessage = OUSTR("Illegal Access: ").concat(sMessage);
-    m_aLogger.error(sFullMessage,"parse","configmgr::backend::DataBuilder");
-    throw MalformedDataException(sFullMessage , m_pContext, uno::makeAny(e));
-}
-// -----------------------------------------------------------------------------
-
 void DataBuilderContext::raiseIllegalTypeException(sal_Char const * _pText) const
         CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
@@ -144,18 +132,6 @@ void DataBuilderContext::raiseIllegalTypeException(sal_Char const * _pText) cons
     beans::IllegalTypeException e(sMessage, m_pContext);
 
     OUString const sFullMessage = OUSTR("Illegal Type: ").concat(sMessage);
-    m_aLogger.error(sFullMessage,"parse","configmgr::backend::DataBuilder");
-    throw MalformedDataException(sFullMessage, m_pContext, uno::makeAny(e));
-}
-// -----------------------------------------------------------------------------
-
-void DataBuilderContext::raiseNoSupportException(sal_Char const * _pText) const
-        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
-{
-    OUString const sMessage = makeMessageWithPath(_pText);
-    lang::NoSupportException e(sMessage, m_pContext);
-
-    OUString const sFullMessage = OUSTR("Not Supported: ").concat(sMessage);
     m_aLogger.error(sFullMessage,"parse","configmgr::backend::DataBuilder");
     throw MalformedDataException(sFullMessage, m_pContext, uno::makeAny(e));
 }
@@ -192,18 +168,6 @@ void DataBuilderContext::raiseElementExistException(sal_Char const * _pText, OUS
     container::ElementExistException e(sMessage, m_pContext);
 
     OUString const sFullMessage = OUSTR("Node Already Exists: ").concat(sMessage);
-    m_aLogger.error(sFullMessage,"parse","configmgr::backend::DataBuilder");
-    throw MalformedDataException(sFullMessage, m_pContext, uno::makeAny(e));
-}
-// -----------------------------------------------------------------------------
-
-void DataBuilderContext::raiseUnknownPropertyException(sal_Char const * _pText, OUString const & _sElement) const
-        CFG_UNO_THROW1( configuration::backend::MalformedDataException )
-{
-    OUString const sMessage = makeMessageWithName(_pText,_sElement);
-    beans::UnknownPropertyException e(sMessage, m_pContext);
-
-    OUString const sFullMessage = OUSTR("No Such Property: ").concat(sMessage);
     m_aLogger.error(sFullMessage,"parse","configmgr::backend::DataBuilder");
     throw MalformedDataException(sFullMessage, m_pContext, uno::makeAny(e));
 }
@@ -321,16 +285,6 @@ OUString DataBuilderContext::getTemplateComponent( const TemplateIdentifier& aIt
 
     else
         return getActiveComponent();
-}
-// -----------------------------------------------------------------------------
-
-TemplateIdentifier DataBuilderContext::stripComponent( const TemplateIdentifier& aItemType ) const
-{
-    TemplateIdentifier aStripped(aItemType);
-    if (aStripped.Component == getActiveComponent() )
-        aStripped.Component = OUString();
-
-    return aStripped;
 }
 // -----------------------------------------------------------------------------
 
