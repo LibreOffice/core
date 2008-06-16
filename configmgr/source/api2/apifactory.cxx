@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: apifactory.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -214,13 +214,6 @@ void Factory::revokeElement(NodeID const& aNodeID)
 }
 //-----------------------------------------------------------------------------
 
-void Factory::revokeElement(NodeID const& aNodeID, NodeElement& rElement)
-{
-    if (implFind(aNodeID) == &rElement)
-        doRevokeElement(aNodeID, &rElement);
-}
-
-//-----------------------------------------------------------------------------
 TreeElement* Factory::makeAccessRoot(Tree const& aTree, RequestOptions const& _aOptions)
 {
     OSL_PRECOND( !aTree.isEmpty() , "ERROR: Configuration: Making element from tree requires valid tree");
