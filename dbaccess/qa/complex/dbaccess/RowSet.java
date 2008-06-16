@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RowSet.java,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -812,6 +812,24 @@ public class RowSet extends ComplexTestCase {
             assure( "testing the parameters of a table failed" + e.getMessage(), false );
         }
     }
+    // --------------------------------------------------------------------------------------------------------
+    private void testParametersAfterNormalExecute()
+    {
+        try
+        {
+            createRowSet( "SELECT * FROM \"customers\"", CommandType.COMMAND, true );
+            m_rowSetProperties.setPropertyValue( "Command", "SELECT * FROM \"customers\" WHERE \"City\" = :city");
+            XParameters rowsetParams = (XParameters)UnoRuntime.queryInterface( XParameters.class,
+                m_rowSet );
+            rowsetParams.setString( 1, "London" );
+            m_rowSet.execute();
+        }
+        catch( AssureException e ) { throw e; }
+        catch( Exception e )
+        {
+            assure( "testing the parameters of a table failed" + e.getMessage(), false );
+        }
+    }
 
     // --------------------------------------------------------------------------------------------------------
     private void verifyParameters( String[] _paramNames, String _context ) throws com.sun.star.uno.Exception
@@ -928,6 +946,8 @@ public class RowSet extends ComplexTestCase {
         testTableParameters();
         testParametrizedQuery();
         testParametersInFilter();
+
+        testParametersAfterNormalExecute();
 
         testParametersInteraction();
    }
