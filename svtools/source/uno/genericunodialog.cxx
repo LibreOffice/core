@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: genericunodialog.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,7 +67,7 @@ OGenericUnoDialog::OGenericUnoDialog(const Reference< XMultiServiceFactory >& _r
         ,m_bTitleAmbiguous(sal_True)
         ,m_bInitialized( false )
         ,m_bNeedInitialization( false )
-        ,m_xORB( _rxORB )
+        ,m_aContext( _rxORB )
 {
     registerProperty(::rtl::OUString::createFromAscii(UNODIALOG_PROPERTY_TITLE), UNODIALOG_PROPERTY_ID_TITLE, PropertyAttribute::TRANSIENT,
         &m_sTitle, getCppuType(&m_sTitle));
@@ -84,8 +84,7 @@ OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxCo
         ,m_bTitleAmbiguous(sal_True)
         ,m_bInitialized( false )
         ,m_bNeedInitialization( false )
-        ,m_xORB( _rxContext->getServiceManager(), UNO_QUERY_THROW )
-        ,m_xContext(_rxContext)
+        ,m_aContext(_rxContext)
 {
     registerProperty(::rtl::OUString::createFromAscii(UNODIALOG_PROPERTY_TITLE), UNODIALOG_PROPERTY_ID_TITLE, PropertyAttribute::TRANSIENT,
         &m_sTitle, getCppuType(&m_sTitle));
