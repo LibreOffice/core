@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyHelper.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -190,37 +190,6 @@ namespace chart
 {
 namespace PropertyHelper
 {
-
-void copyProperties(
-    const Reference< XPropertySet > & xSource,
-    const Reference< XPropertySet > & xDestination )
-{
-    if( ! (xSource.is() && xDestination.is()))
-        return;
-
-    try
-    {
-        Reference< XPropertySetInfo > xSrcInfo( xSource->getPropertySetInfo(), uno::UNO_QUERY_THROW );
-        Reference< XPropertySetInfo > xDestInfo( xDestination->getPropertySetInfo(), uno::UNO_QUERY_THROW );
-        Sequence< Property > aProperties( xSrcInfo->getProperties());
-        const sal_Int32 nLength = aProperties.getLength();
-        for( sal_Int32 i = 0; i < nLength; ++i )
-        {
-            OUString aName( aProperties[i].Name);
-            if( xDestInfo->hasPropertyByName( aName ))
-            {
-                Property aProp( xDestInfo->getPropertyByName( aName ));
-                if( (aProp.Attributes & PropertyAttribute::READONLY) == 0 )
-                    xDestination->setPropertyValue(
-                        aName, xSource->getPropertyValue( aName ));
-            }
-        }
-    }
-    catch( const uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
-}
 
 OUString addLineDashUniqueNameToTable(
     const Any & rValue,
