@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ure.scp,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -474,7 +474,7 @@ End
 File gid_File_Dl_Jpipe
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_NORMAL("jpipe");
+    Name = SCP2_URE_JDL_NORMAL("jpipe");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "B1A60DD4-51D7-4898-B899-9BD05DE2DA8F";
 End
@@ -756,7 +756,7 @@ End
 #endif
 
 #ifdef WNT
-#if defined(M1310) || ( (defined(M1400) || defined(M1500) ) && ( !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) ))
+#if defined(M1310)
 File gid_File_Dl_Msvcr71
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -772,7 +772,7 @@ End
 #endif
 
 #if defined(WNT)
-#if defined(M1310) || ( (defined(M1400) || defined(M1500) ) && ( !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) ))
+#if defined(M1310)
 File gid_File_Dl_Msvcp71
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
