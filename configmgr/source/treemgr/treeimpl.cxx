@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: treeimpl.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -567,12 +567,6 @@ NodeOffset TreeImpl::firstChild_ (NodeOffset nParent) const
 }
 //-----------------------------------------------------------------------------
 
-NodeOffset TreeImpl::nextSibling_(NodeOffset nNode) const
-{
-    return findNextChild_(parent_(nNode),nNode);
-}
-//-----------------------------------------------------------------------------
-
 NodeOffset TreeImpl::findNextChild_(NodeOffset nParent, NodeOffset nStartAfter) const
 {
     OSL_ASSERT(isValidNode(nParent));
@@ -617,26 +611,9 @@ ElementTreeImpl * TreeImpl::asElementTree()
 }
 //-----------------------------------------------------------------------------
 
-RootTreeImpl * TreeImpl::asRootTree()
-{
-    RootTreeImpl    const* const pResult = doCastToRootTree();
-    TreeImpl        const* const pTest = pResult;
-    if (pTest== this)
-        return const_cast<RootTreeImpl *>(pResult);
-    else
-        return 0;
-}
-//-----------------------------------------------------------------------------
-
 ElementTreeImpl const* TreeImpl::asElementTree() const
 {
     return doCastToElementTree();
-}
-//-----------------------------------------------------------------------------
-
-RootTreeImpl const* TreeImpl::asRootTree() const
-{
-    return doCastToRootTree();
 }
 //-----------------------------------------------------------------------------
 
@@ -891,14 +868,6 @@ void ElementTreeImpl::takeTreeAndRebuild(data::TreeSegment const & _aDataSegment
         m_aOwnData = _aDataSegment;
         OSL_ENSURE(m_aOwnData.is(),"ERROR: Could not take over data segment");
     }
-}
-//-----------------------------------------------------------------------------
-
-/// transfer ownership to the given owner
-data::TreeSegment ElementTreeImpl::getOwnedTree() const
-{
-    OSL_ENSURE(m_aOwnData.is(),"ERROR: Cannot provide segment for a non-owned node");
-    return m_aOwnData;
 }
 //-----------------------------------------------------------------------------
 

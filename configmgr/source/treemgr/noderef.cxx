@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: noderef.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,18 +101,6 @@ NodeRef TreeImplHelper::makeNode(NodeID const& aNodeID)
 ValueRef TreeImplHelper::makeValue(Name const& aName, NodeOffset nParentOffset)
 {
     return ValueRef(aName,nParentOffset);
-}
-//-----------------------------------------------------------------------------
-
-AnyNodeRef TreeImplHelper::makeAnyNode(NodeOffset nOffset, TreeDepth nDepth)
-{
-    return AnyNodeRef(nOffset, nDepth);
-}
-//-----------------------------------------------------------------------------
-
-AnyNodeRef TreeImplHelper::makeAnyNode(Name const& aName, NodeOffset nParentOffset)
-{
-    return AnyNodeRef(aName,nParentOffset);
 }
 //-----------------------------------------------------------------------------
 
@@ -574,7 +562,7 @@ UnoType Tree::getUnoType(ValueRef const& aValue) const
 //-----------------------------------------------------------------------------
 // class AnyNodeRef
 //-----------------------------------------------------------------------------
-
+#if OSL_DEBUG_LEVEL > 0
 bool AnyNodeRef::checkValidState() const
 {
     if (m_nUsedPos  == 0)    return false;
@@ -587,6 +575,7 @@ bool AnyNodeRef::checkValidState() const
 
     return true;
 }
+#endif
 //-----------------------------------------------------------------------------
 
 AnyNodeRef::AnyNodeRef()
@@ -696,30 +685,6 @@ node::Attributes Tree::getAttributes(AnyNodeRef const& aNode)   const
         return TreeImplHelper::member_node(*this,aNode.toValue()).getAttributes();
 }
 //-----------------------------------------------------------------------------
-
-Name Tree::getName(AnyNodeRef const& aNode) const
-{
-    OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires valid tree" );
-    OSL_PRECOND( !aNode.isValid() || isValidNode(aNode), "ERROR: Configuration: NodeRef does not match tree" );
-
-    if (isEmpty() || !aNode.isValid()) return Name();
-
-    if (aNode.isNode())
-        return m_ref->getSimpleNodeName(aNode.m_nUsedPos);
-
-    else
-        return aNode.m_sNodeName;
-}
-//-----------------------------------------------------------------------------
-
-NodeVisitor::Result Tree::visit(AnyNodeRef const& aNode, NodeVisitor& aVisitor) const
-{
-    OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires valid tree" );
-    OSL_PRECOND( !aNode.isValid() || isValidNode(aNode), "ERROR: Configuration: NodeRef does not match tree" );
-
-    return aNode.isNode() ? visit(aNode.toNode(),aVisitor) : visit(aNode.toValue(),aVisitor);
-}
-
 
 //-----------------------------------------------------------------------------
 // class TreeRef
@@ -838,7 +803,7 @@ bool Tree::isValidNode(NodeRef const& aNode) const
     return m_ref.isValidNode(aNode);
 }
 //-----------------------------------------------------------------------------
-
+#if OSL_DEBUG_LEVEL > 0
 bool Tree::isValidNode(AnyNodeRef const& aNode) const
 {
     OSL_PRECOND(!isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
@@ -855,6 +820,7 @@ bool Tree::isValidNode(AnyNodeRef const& aNode) const
 
     return true;
 }
+#endif
 //-----------------------------------------------------------------------------
 
 bool Tree::hasChildren(NodeRef const& aNode) const
@@ -1039,21 +1005,6 @@ NodeRef Tree::getParent(NodeRef const& aNode) const
     OSL_ENSURE(  m_ref->isValidNode(aParent.get_offset()), "ERROR: Configuration: NodeRef has invalid parent");
 
     return NodeRef(aParent.get_offset(), parentDepth(aNode.m_nDepth));
-}
-//-----------------------------------------------------------------------------
-
-NodeRef Tree::getParent(AnyNodeRef const& aNode) const
-{
-    OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
-    OSL_PRECOND(  isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
-    OSL_ASSERT( getView().makeNode(getRootNode()).getParent().is() == false );
-
-    view::Node aParent = getView().makeNode(aNode.m_nUsedPos);
-
-    if (aNode.m_sNodeName.isEmpty() && aNode.isValid())
-        aParent = aParent.getParent();
-
-    return TreeImplHelper::makeNode(*m_ref, aParent.get_offset());
 }
 //-----------------------------------------------------------------------------
 
@@ -1491,20 +1442,6 @@ SubNodeID::SubNodeID()
 }
 //-----------------------------------------------------------------------------
 
-SubNodeID::SubNodeID(Tree const& rTree, ValueRef const& rNode)
-: m_sNodeName(rTree.getName(rNode))
-, m_aParentID(rTree,rTree.getParent(rNode))
-{
-}
-//-----------------------------------------------------------------------------
-
-SubNodeID::SubNodeID(Tree const& rTree, NodeRef const& rParentNode, Name const& aName)
-: m_sNodeName(aName)
-, m_aParentID(rTree,rParentNode)
-{
-}
-//-----------------------------------------------------------------------------
-
 SubNodeID::SubNodeID(TreeRef const& rTree, NodeRef const& rParentNode, Name const& aName)
 : m_sNodeName(aName)
 , m_aParentID(rTree,rParentNode)
@@ -1516,14 +1453,6 @@ SubNodeID::SubNodeID(NodeID const& rParentNodeID, Name const& aName)
 : m_sNodeName(aName)
 , m_aParentID(rParentNodeID)
 {
-}
-//-----------------------------------------------------------------------------
-
-bool SubNodeID::isEmpty() const
-{
-    OSL_ENSURE( m_aParentID.isEmpty() ||
-                (m_aParentID.isValidNode() && !m_sNodeName.isEmpty()),"Invalid subnode ID");
-    return m_aParentID.isEmpty();
 }
 //-----------------------------------------------------------------------------
 
@@ -1668,12 +1597,6 @@ RelativePath validateAndReducePath(OUString const& _sPath, Tree const& aTree, No
     implValidateLocalPath(aStrippedPath,aTree,aNode);
 
     return aStrippedPath;
-}
-//-----------------------------------------------------------------------------
-
-bool hasChildOrElement(Tree const& aTree, NodeRef const& aNode)
-{
-    return aTree.getView().isSetNode(aNode) ? aTree.hasElements(aNode) : aTree.hasChildren(aNode);
 }
 //-----------------------------------------------------------------------------
 
@@ -1954,20 +1877,13 @@ NodeID findNodeFromIndex(TreeRef const& aTree, NodeOffset nIndex)
 }
 
 //-----------------------------------------------------------------------------
-bool isSimpleValue(Tree const& aTree, AnyNodeRef const& aNode)
-{
-    OSL_PRECOND( !aNode.isValid() || !aTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
-    OSL_PRECOND( !aNode.isValid() || aTree.isValidNode(aNode), "WARNING: Configuration: NodeRef does not match Tree");
-    return aNode.isValid() && (!aNode.isNode() || aTree.getView().isValueNode(aNode.toNode()));
-}
-//-----------------------------------------------------------------------------
 
 static inline bool isRootNode(Tree const& aTree, NodeRef const& aNode)
 {
     return TreeImplHelper::offset(aNode) == TreeImplHelper::impl(aTree)->root_();
 }
 //-----------------------------------------------------------------------------
-
+#if OSL_DEBUG_LEVEL > 1
 bool isSimpleValueElement(Tree const& aTree, NodeRef const& aNode)
 {
     OSL_PRECOND( !aNode.isValid() || !aTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
@@ -1982,6 +1898,7 @@ bool isSimpleValueElement(Tree const& aTree, NodeRef const& aNode)
 
     return aNode.isValid() && isRootNode(aTree,aNode) && aView.isValueNode(aNode);
 }
+#endif
 //-----------------------------------------------------------------------------
 
 bool isStructuralNode(Tree const& aTree, NodeRef const& aNode)
