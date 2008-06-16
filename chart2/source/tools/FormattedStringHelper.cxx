@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormattedStringHelper.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +65,7 @@ Sequence< Reference< chart2::XFormattedString > >
             xFormStr->setString( rString );
 
             // set character properties
-            PropertyHelper::copyProperties(
+            comphelper::copyProperties(
                 xTextProperties, Reference< beans::XPropertySet >( xFormStr, uno::UNO_QUERY ) );
         }
     }
