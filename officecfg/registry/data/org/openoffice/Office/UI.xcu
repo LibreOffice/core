@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UI.xcu,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -285,11 +285,12 @@
         </node>
     </node>
     <node oor:name="ColorScheme">
-        <prop oor:name="CurrentColorScheme">
+        <prop oor:name="CurrentColorScheme" install:module="brand">
             <value>${PRODUCTNAME}</value>
         </prop>
         <node oor:name="ColorSchemes">
-            <node oor:name="${PRODUCTNAME}" oor:op="replace">
+            <node oor:name="${PRODUCTNAME}" oor:op="replace"
+                    install:module="brand">
                 <node oor:name="DocColor">
                     <prop oor:name="Color">
                         <value xsi:nil="true"/>
