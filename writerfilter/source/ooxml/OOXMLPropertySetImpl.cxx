@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLPropertySetImpl.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,6 +29,7 @@
  ************************************************************************/
 
 #include "OOXMLPropertySetImpl.hxx"
+#include <stdio.h>
 #include <iostream>
 #include <resourcemodel/QNameToString.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
