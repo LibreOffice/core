@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Common.xcu,v $
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,10 +111,11 @@
   </node>
   <node oor:name="Help">
     <node oor:name="StartCenter">
-        <prop oor:name="AddFeatureURL" oor:type="xs:string">
+        <prop oor:name="AddFeatureURL" oor:type="xs:string"
+                install:module="brand">
             <value>${STARTCENTER_ADDFEATURE_URL}</value>
         </prop>
-        <prop oor:name="InfoURL" oor:type="xs:string">
+        <prop oor:name="InfoURL" oor:type="xs:string" install:module="brand">
             <value>${STARTCENTER_INFO_URL}</value>
         </prop>
         <prop oor:name="TemplateRepositoryURL" oor:type="xs:string">
@@ -122,13 +123,13 @@
         </prop>
     </node>
     <node oor:name="Registration">
-      <prop oor:name="TemplateURL">
+      <prop oor:name="TemplateURL" install:module="brand">
         <value>${REGISTRATIONURL}</value>
       </prop>
       <prop oor:name="URL">
         <value/>
       </prop>
-      <prop oor:name="ProductVersionID">
+      <prop oor:name="ProductVersionID" install:module="brand">
         <value>${SERVICETAG_URN}</value>
       </prop>
       <prop oor:name="ReminderDate">
