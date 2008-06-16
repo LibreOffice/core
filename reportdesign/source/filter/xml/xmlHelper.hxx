@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlHelper.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,16 +75,12 @@ namespace rptxml
         static const SvXMLEnumMapEntry* GetReportPrintOptions();
         static const SvXMLEnumMapEntry* GetForceNewPageOptions();
         static const SvXMLEnumMapEntry* GetKeepTogetherOptions();
-        static const SvXMLEnumMapEntry* GetImagePositionOptions();
-        static const SvXMLEnumMapEntry* GetImageAlignOptions();
         static const SvXMLEnumMapEntry* GetCommandTypeOptions();
 
         static const XMLPropertyMapEntry* GetTableStyleProps();
         static const XMLPropertyMapEntry* GetColumnStyleProps();
 
         static const XMLPropertyMapEntry* GetRowStyleProps();
-
-        static com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier > GetNumberFormatsSupplier(const com::sun::star::uno::Reference< com::sun::star::report::XReportDefinition>& _xReportDefinition);
 
         static void copyStyleElements(const ::rtl::OUString& _sStyleName,const SvXMLStylesContext* _pAutoStyles,const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet>& _xProp);
         static com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet> createBorderPropertySet();
