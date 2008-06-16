@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docredln.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1556,8 +1556,9 @@ const SwRedline* SwDoc::GetRedline( const SwPosition& rPos,
                     ? *pStt == rPos
                     : ( *pStt <= rPos && rPos < *pEnd ) )
             {
-                /* #107318# returned wrong redline */
-                while( nM && rPos <= *(*pRedlineTbl)[ nM - 1 ]->End() )
+                /* #107318# returned wrong redline ???*/
+                while( nM && rPos == *(*pRedlineTbl)[ nM - 1 ]->End() &&
+                    rPos == *(*pRedlineTbl)[ nM - 1 ]->Start() )
                 {
                     --nM;
                     pRedl = (*pRedlineTbl)[ nM ];
