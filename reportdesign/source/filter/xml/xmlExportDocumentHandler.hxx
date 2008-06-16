@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlExportDocumentHandler.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,6 +97,7 @@ private:
     sal_Int32                                                                           m_nCurrentCellIndex;
     bool m_bTableRowsStarted;
     bool m_bFirstRowExported;
+    bool m_bExportChar;
 };
 // -----------------------------------------------------------------------------
 } // namespace rptxml
