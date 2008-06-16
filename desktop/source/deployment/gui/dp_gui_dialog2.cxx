@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_dialog2.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,6 +134,7 @@ struct Entry_Impl
     String          m_sPublisherURL;
     String          m_sErrorText;
     Image           m_aIcon;
+    Image           m_aIconHC;
     svt::FixedHyperlink *m_pPublisher;
 
     uno::Reference< deployment::XPackage> m_xPackage;
@@ -182,6 +183,17 @@ Entry_Impl::Entry_Impl( Window * pParent,
         Size aSize = FixedText::CalcMinimumTextSize( m_pPublisher );
         m_pPublisher->SetSizePixel( aSize );
     }
+
+    // get the icons for the package if there are any
+    uno::Reference< graphic::XGraphic > xGraphic = xPackage->getIcon( false );
+    if ( xGraphic.is() )
+        m_aIcon = Image( xGraphic );
+
+    xGraphic = xPackage->getIcon( true );
+    if ( xGraphic.is() )
+        m_aIconHC = Image( xGraphic );
+    else
+        m_aIconHC = m_aIcon;
 
     m_bLocked = m_xPackageManager->isReadOnly();
 
@@ -322,6 +334,8 @@ public:
 
     void            prepareChecking( const uno::Reference< deployment::XPackageManager > &xPackageMgr );
     void            checkEntries();
+
+    TheExtensionManager*    getExtensionManager() const { return m_pManager; }
 
     //===================================================================================
     //These functions are used for automatic testing
@@ -754,7 +768,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     if ( ! pEntry->m_aIcon )
         DrawImage( aPos, Size( ICON_HEIGHT, ICON_HEIGHT ), isHCMode() ? m_aDefaultImageHC : m_aDefaultImage );
     else
-        DrawImage( aPos, Size( ICON_HEIGHT, ICON_HEIGHT ), pEntry->m_aIcon );
+        DrawImage( aPos, Size( ICON_HEIGHT, ICON_HEIGHT ), isHCMode() ? pEntry->m_aIconHC : pEntry->m_aIcon );
 
     // Setup fonts
     Font aStdFont( GetFont() );
@@ -904,7 +918,7 @@ bool ExtensionBox_Impl::HandleTabKey( bool bReverse )
 }
 
 // -----------------------------------------------------------------------
-bool ExtensionBox_Impl::HandleCursorKey( const USHORT nKeyCode )
+bool ExtensionBox_Impl::HandleCursorKey( USHORT nKeyCode )
 {
     if ( m_vEntries.empty() )
         return true;
@@ -1019,13 +1033,16 @@ void ExtensionBox_Impl::SetupScrollBar()
 
     if ( bNeedsScrollBar )
     {
+        if ( m_nTopIndex + aSize.Height() > nTotalHeight )
+            m_nTopIndex = nTotalHeight - aSize.Height();
+
         m_pScrollBar->SetPosSizePixel( Point( aSize.Width() - nScrBarSize, 0 ),
                                        Size( nScrBarSize, aSize.Height() ) );
         m_pScrollBar->SetRangeMax( nTotalHeight );
         m_pScrollBar->SetVisibleSize( aSize.Height() );
         m_pScrollBar->SetPageSize( ( aSize.Height() * 4 ) / 5 );
         m_pScrollBar->SetLineSize( m_nStdHeight );
-        m_pScrollBar->SetThumbPos( 0 );
+        m_pScrollBar->SetThumbPos( m_nTopIndex );
 
         if ( !m_bHasScrollBar )
             m_pScrollBar->Show();
@@ -1104,6 +1121,24 @@ long ExtensionBox_Impl::Notify( NotifyEvent& rNEvt )
             bHandled = HandleTabKey( aKeyCode.IsShift() );
         else if ( aKeyCode.GetGroup() == KEYGROUP_CURSOR )
             bHandled = HandleCursorKey( nKeyCode );
+    }
+
+    if ( rNEvt.GetType() == EVENT_COMMAND )
+    {
+        if ( m_bHasScrollBar &&
+             ( rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL ) )
+        {
+            const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
+            if ( pData->GetMode() == COMMAND_WHEEL_SCROLL )
+            {
+                long nThumbPos = m_pScrollBar->GetThumbPos();
+                if ( pData->GetDelta() < 0 )
+                    m_pScrollBar->DoScroll( nThumbPos + m_nStdHeight );
+                else
+                    m_pScrollBar->DoScroll( nThumbPos - m_nStdHeight );
+                bHandled = true;
+            }
+        }
     }
 
     if ( !bHandled )
@@ -1410,6 +1445,7 @@ void ExtensionBox_Impl::enableButtons( bool bEnable )
 IMPL_LINK( ExtensionBox_Impl, ScrollHdl, ScrollBar*, pScrBar )
 {
     long nDelta = pScrBar->GetDelta();
+
     m_nTopIndex += nDelta;
     Point aNewOptPt( m_pOptionsBtn->GetPosPixel() - Point( 0, nDelta ) );
     Point aNewRemPt( m_pRemoveBtn->GetPosPixel() - Point( 0, nDelta ) );
@@ -1542,6 +1578,7 @@ ExtMgrDialog::ExtMgrDialog( Window *pParent, TheExtensionManager *pManager ) :
               (3 * RSC_SP_DLG_INNERBORDER_LEFT) ) );
 
     m_aDivider.Show();
+    m_aProgressBar.Hide();
 
     m_aTimeoutTimer.SetTimeout( 500 ); // mSec
     m_aTimeoutTimer.SetTimeoutHdl( LINK( this, ExtMgrDialog, TimeOutHdl ) );
@@ -2038,7 +2075,6 @@ void ExtMgrDialog::Resize()
     aPos.X() -= ( RSC_SP_CTRL_GROUP_Y + PROGRESS_WIDTH );
     m_aProgressBar.SetPosSizePixel( Point( aPos.X(), aPos.Y() - ((nProgressHeight-aFTSize.Height())/2) ),
                                     Size( PROGRESS_WIDTH, nProgressHeight ) );
-    m_aProgressBar.SetValue( 0 );
 
     Rectangle aRect1( m_aGetExtensions.GetPosPixel(), m_aGetExtensions.GetSizePixel() );
     Rectangle aRect2( m_aProgressBar.GetPosPixel(), m_aProgressBar.GetSizePixel() );
