@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLChartStyleContext.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,7 @@ void XMLChartStyleContext::SetAttribute(
     {
         msDataStyleName =rValue;
     }
-    if( IsXMLToken( rLocalName, XML_PERCENTAGE_DATA_STYLE_NAME ) )
+    else if( IsXMLToken( rLocalName, XML_PERCENTAGE_DATA_STYLE_NAME ) )
     {
         msPercentageDataStyleName =rValue;
     }
