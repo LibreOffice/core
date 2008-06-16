@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -93,7 +93,7 @@ LDFLAGS+=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -L$(SOLARLIBDIR) -lpthread -ld
 .EXPORT: LDFLAGS
 
 .IF "$(COMNAME)"=="sunpro5"
-xslt_CFLAGS+=-xc99=none
+xslt_CFLAGS+=$(ARCH_FLAGS) -xc99=none
 .ENDIF                  # "$(COMNAME)"=="sunpro5"
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
