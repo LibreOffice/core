@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: treechangefactory.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,57 +75,6 @@ OTreeChangeFactory& getDefaultTreeChangeFactory()
     return aDefaultFactory;
 }
 
-//= ValueNodes ============================================================
-std::auto_ptr<ValueChange> OTreeChangeFactory::createValueChange(
-                                    Name const& _aName,
-                                    node::Attributes _aAttrs,
-                                    ValueChange::Mode _eMode,
-                                    uno::Any const& _aNewValue,
-                                    uno::Any const& _aOldValue
-                                )
-{
-    return std::auto_ptr<ValueChange>(new ValueChange(_aName,_aAttrs,_eMode,_aNewValue,_aOldValue));
-}
-
-//-----------------------------------------------
-std::auto_ptr<ValueChange> OTreeChangeFactory::createValueChange(ValueNode const& _aNewValue, bool _bWasDefault)
-{
-    Name aName              = _aNewValue.getName();
-    uno::Any aValue         = _aNewValue.getValue();
-    node::Attributes aAttrs = _aNewValue.getAttributes();
-
-    ValueChange::Mode eMode = aAttrs.isDefault() ?
-                                    _bWasDefault ? ValueChange::changeDefault   : ValueChange:: setToDefault:
-                                    _bWasDefault ? ValueChange::wasDefault      : ValueChange::changeValue;
-
-    if (aValue.hasValue())
-    {
-        return std::auto_ptr<ValueChange>(new ValueChange(aName,aAttrs,eMode,aValue));
-    }
-    else
-    {
-        return std::auto_ptr<ValueChange>(new ValueChange(aName,aAttrs,eMode,_aNewValue.getValueType()));
-    }
-}
-
-//-----------------------------------------------
-std::auto_ptr<ValueChange> OTreeChangeFactory::createValueChange(
-                                uno::Any const& _aNewValue,
-                                ValueNode const& _aOldValue
-                                )
-{
-    return std::auto_ptr<ValueChange>(new ValueChange(_aNewValue,_aOldValue));
-}
-
-//-----------------------------------------------
-std::auto_ptr<ValueChange> OTreeChangeFactory::createValueChange(
-                                ValueChange::SetToDefault _aSetToDefault,
-                                ValueNode const& _aOldValue
-                                )
-{
-    return std::auto_ptr<ValueChange>(new ValueChange(_aSetToDefault,_aOldValue));
-}
-
 //= SubtreeChanges ============================================================
 std::auto_ptr<SubtreeChange> OTreeChangeFactory::createDummyChange(
                                     configuration::Name const& _aName,
@@ -145,15 +94,6 @@ std::auto_ptr<SubtreeChange> OTreeChangeFactory::createDummyChange(
                                          node::Attributes()) );
     }
     return pResult;
-}
-
-//-----------------------------------------------
-std::auto_ptr<SubtreeChange> OTreeChangeFactory::createGroupNodeChange(
-                                Name const& _aName,
-                                node::Attributes _aAttrs,
-                                bool _bToDefault)
-{
-    return std::auto_ptr<SubtreeChange>(new SubtreeChange(_aName,_aAttrs,_bToDefault));
 }
 
 //-----------------------------------------------
