@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RptObject.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +32,6 @@
 #include <vector>
 #include <algorithm>
 
-#ifndef REPORTDESIGN_SHARED_CORESTRINGS_HRC
-#include "corestrings.hrc"
-#endif
 #include <RptDef.hxx>
 #include <svx/unoshape.hxx>
 #include "RptModel.hxx"
@@ -42,15 +39,11 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include "RptPage.hxx"
-#ifndef REPORTDESIGN_SHARED_CORESTRINGS_HRC
 #include "corestrings.hrc"
-#endif
 #include <dbaccess/singledoccontroller.hxx>
 #include "ModuleHelper.hxx"
 
-#ifndef _REPORT_DLGRESID_HRC
 #include <RptResId.hrc>
-#endif
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlndsit.hxx>
@@ -65,13 +58,18 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <comphelper/genericpropertyset.hxx>
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
+#include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <comphelper/genericpropertyset.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/property.hxx>
 #include "PropertyForward.hxx"
 #include <connectivity/dbtools.hxx>
 #include "UndoActions.hxx"
@@ -149,7 +147,7 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
             break;
         case OBJ_DLG_SUBREPORT:
         case OBJ_OLE2:
-            pNewObj = OOle2Obj::Create( _xComponent );
+            pNewObj = OOle2Obj::Create( _xComponent,nType );
             break;
         default:
             OSL_ENSURE(0,"Unknown object id");
@@ -299,10 +297,9 @@ void OObjectBase::EndListening(sal_Bool /*bRemoveListener*/)
     DBG_CHKTHIS( rpt_OObjectBase,NULL);
     OSL_ENSURE(!m_xReportComponent.is() || isListening(), "OUnoObject::EndListening: not listening currently!");
 
+    m_bIsListening = sal_False;
     if ( isListening() && m_xReportComponent.is() )
     {
-        m_bIsListening = sal_False;
-
         // XPropertyChangeListener
         if ( m_xPropertyChangeListener.is() )
         {
@@ -336,70 +333,6 @@ void OObjectBase::SetPropsFromRect(const Rectangle& _rRect)
     }
 }
 //----------------------------------------------------------------------------
-void OObjectBase::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
-{
-    DBG_CHKTHIS( rpt_OObjectBase,NULL);
-    OReportPage* pPage = dynamic_cast<OReportPage*>(GetImplPage());
-    OSL_ENSURE( pPage, "OUnoObject::PositionAndSizeChange: no page!" );
-    if ( pPage )
-    {
-        sal_Int32 nPageX = 0;
-        sal_Int32 nPageY = 0;
-        Size aPageSize = pPage->GetSize();
-        sal_Int32 nPageWidth = aPageSize.Width();
-        sal_Int32 nPageHeight = aPageSize.Height();
-        if ( m_xReportComponent.is() )
-        {
-            sal_Int32 nX = m_xReportComponent->getPositionX();
-            sal_Int32 nY = m_xReportComponent->getPositionY();
-            sal_Int32 nWidth = m_xReportComponent->getWidth();
-            sal_Int32 nHeight = m_xReportComponent->getHeight();
-
-            sal_Int32 nValue = 0;
-            evt.NewValue >>= nValue;
-            sal_Int32 nNewValue = nValue;
-
-            if ( evt.PropertyName == PROPERTY_POSITIONX )
-            {
-                if ( nNewValue + nWidth > nPageX + nPageWidth )
-                    nNewValue = nPageX + nPageWidth - nWidth;
-                if ( nNewValue < nPageX )
-                    nNewValue = nPageX;
-            }
-            else if ( evt.PropertyName == PROPERTY_POSITIONY )
-            {
-                if ( nNewValue + nHeight > nPageY + nPageHeight )
-                    nNewValue = nPageY + nPageHeight - nHeight;
-                if ( nNewValue < nPageY )
-                    nNewValue = nPageY;
-            }
-            else if ( evt.PropertyName == PROPERTY_WIDTH )
-            {
-                if ( nX + nNewValue > nPageX + nPageWidth )
-                    nNewValue = nPageX + nPageWidth - nX;
-                if ( nNewValue < 1 )
-                    nNewValue = 1;
-            }
-            else if ( evt.PropertyName == PROPERTY_HEIGHT )
-            {
-                if ( nY + nNewValue > nPageY + nPageHeight )
-                    nNewValue = nPageY + nPageHeight - nY;
-                if ( nNewValue < 1 )
-                    nNewValue = 1;
-            }
-
-            if ( nNewValue != nValue )
-            {
-                Any aNewValue;
-                aNewValue <<= nNewValue;
-                EndListening( sal_False );
-                m_xReportComponent->setPropertyValue( evt.PropertyName, aNewValue );
-                StartListening();
-            }
-        }
-    }
-}
-//----------------------------------------------------------------------------
 void OObjectBase::_propertyChange( const  beans::PropertyChangeEvent& /*evt*/ ) throw( uno::RuntimeException)
 {
     DBG_CHKTHIS( rpt_OObjectBase,NULL);
@@ -408,24 +341,6 @@ void OObjectBase::_propertyChange( const  beans::PropertyChangeEvent& /*evt*/ ) 
 void OObjectBase::SetObjectItemHelper(const SfxPoolItem& /*rItem*/)
 {
     // do nothing
-}
-
-//----------------------------------------------------------------------------
-void OObjectBase::_elementInserted(const container::ContainerEvent& /*Event*/) throw(uno::RuntimeException)
-{
-    DBG_CHKTHIS( rpt_OObjectBase,NULL);
-}
-
-//----------------------------------------------------------------------------
-void OObjectBase::_elementReplaced(const container::ContainerEvent& /*Event*/) throw(uno::RuntimeException)
-{
-    DBG_CHKTHIS( rpt_OObjectBase,NULL);
-}
-
-//----------------------------------------------------------------------------
-void OObjectBase::_elementRemoved(const container::ContainerEvent& /*Event*/) throw(uno::RuntimeException)
-{
-    DBG_CHKTHIS( rpt_OObjectBase,NULL);
 }
 
 //----------------------------------------------------------------------------
@@ -507,6 +422,16 @@ OCustomShape::~OCustomShape()
 {
     DBG_DTOR( rpt_OCustomShape, NULL);
     //mxUnoShape = uno::WeakReference< uno::XInterface >();
+}
+// -----------------------------------------------------------------------------
+UINT16 OCustomShape::GetObjIdentifier() const
+{
+    return UINT16(OBJ_CUSTOMSHAPE);
+}
+//----------------------------------------------------------------------------
+UINT32 OCustomShape::GetObjInventor() const
+{
+    return ReportInventor;
 }
 //----------------------------------------------------------------------------
 SdrPage* OCustomShape::GetImplPage() const
@@ -616,18 +541,6 @@ uno::Reference< uno::XInterface > OCustomShape::getUnoShape()
 //----------------------------------------------------------------------------
 TYPEINIT1(OUnoObject, SdrUnoObj);
 DBG_NAME( rpt_OUnoObject );
-OUnoObject::OUnoObject(const uno::Reference< report::XReportComponent>& _xComponent
-                       ,const uno::Reference< awt::XControlModel >& _xControlModel
-                       ,sal_uInt16   _nObjectType)
-          :SdrUnoObj(String(), sal_False)
-          ,OObjectBase(_xComponent)
-          ,m_nObjectType(_nObjectType)
-{
-    DBG_CTOR( rpt_OUnoObject, NULL);
-    SetUnoControlModel( _xControlModel );
-    mxUnoShape = uno::Reference< uno::XInterface >(_xComponent,uno::UNO_QUERY);
-    //CreateMediator();
-}
 //----------------------------------------------------------------------------
 OUnoObject::OUnoObject(const ::rtl::OUString& _sComponentName
                        ,const ::rtl::OUString& rModelName
@@ -654,6 +567,16 @@ OUnoObject::~OUnoObject()
 {
     DBG_DTOR( rpt_OUnoObject, NULL);
     //mxUnoShape = uno::WeakReference< uno::XInterface >();
+}
+// -----------------------------------------------------------------------------
+UINT16 OUnoObject::GetObjIdentifier() const
+{
+    return UINT16(m_nObjectType);
+}
+//----------------------------------------------------------------------------
+UINT32 OUnoObject::GetObjInventor() const
+{
+    return ReportInventor;
 }
 //----------------------------------------------------------------------------
 SdrPage* OUnoObject::GetImplPage() const
@@ -871,7 +794,7 @@ void OUnoObject::CreateMediator(sal_Bool _bReverse)
 
         Reference<XPropertySet> xControlModel(GetUnoControlModel(),uno::UNO_QUERY);
         if ( !m_xMediator.is() && m_xReportComponent.is() && xControlModel.is() )
-            m_xMediator = TMediator::createFromQuery(new OPropertyMediator(m_xReportComponent.get(),xControlModel,getPropertyNameMap(getObjectId()),_bReverse));
+            m_xMediator = TMediator::createFromQuery(new OPropertyMediator(m_xReportComponent.get(),xControlModel,getPropertyNameMap(GetObjIdentifier()),_bReverse));
         OObjectBase::StartListening();
     }
 }
@@ -886,14 +809,28 @@ uno::Reference< uno::XInterface > OUnoObject::getUnoShape()
 {
     return OObjectBase::getUnoShapeOf( *this );
 }
+// -----------------------------------------------------------------------------
+SdrObject* OUnoObject::Clone() const
+{
+    SdrObject* pClone = SdrUnoObj::Clone();
+    if ( pClone )
+    {
+        Reference<XPropertySet> xSource(const_cast<OUnoObject*>(this)->getUnoShape(),uno::UNO_QUERY);
+        Reference<XPropertySet> xDest(pClone->getUnoShape(),uno::UNO_QUERY);
+        if ( xSource.is() && xDest.is() )
+            comphelper::copyProperties(xSource.get(),xDest.get());
+    } // if ( pClone )
+    return pClone;
+}
 //----------------------------------------------------------------------------
 // OOle2Obj
 //----------------------------------------------------------------------------
 TYPEINIT1(OOle2Obj, SdrOle2Obj);
 DBG_NAME( rpt_OOle2Obj );
-OOle2Obj::OOle2Obj(const uno::Reference< report::XReportComponent>& _xComponent)
+OOle2Obj::OOle2Obj(const uno::Reference< report::XReportComponent>& _xComponent,UINT16 _nType)
           :SdrOle2Obj()
           ,OObjectBase(_xComponent)
+          ,m_nType(_nType)
 {
     DBG_CTOR( rpt_OOle2Obj, NULL);
 
@@ -906,22 +843,36 @@ OOle2Obj::OOle2Obj(const uno::Reference< report::XReportComponent>& _xComponent)
     //SetObjRef(xEmbed);
 }
 //----------------------------------------------------------------------------
-OOle2Obj::OOle2Obj(const ::rtl::OUString& _sComponentName)
+OOle2Obj::OOle2Obj(const ::rtl::OUString& _sComponentName,UINT16 _nType)
           :SdrOle2Obj()
           ,OObjectBase(_sComponentName)
+          ,m_nType(_nType)
 {
     DBG_CTOR( rpt_OOle2Obj, NULL);
+    m_bIsListening = sal_True;
 }
 // -----------------------------------------------------------------------------
-OOle2Obj::OOle2Obj(const ::rtl::OUString& _sComponentName,const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, const Rectangle& rNewRect, FASTBOOL bFrame_)
+OOle2Obj::OOle2Obj(const ::rtl::OUString& _sComponentName,const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, const Rectangle& rNewRect,UINT16 _nType, FASTBOOL bFrame_)
           :SdrOle2Obj(rNewObjRef,rNewObjName,rNewRect,bFrame_)
           ,OObjectBase(_sComponentName)
+          ,m_nType(_nType)
 {
+    m_bIsListening = sal_True;
 }
 //----------------------------------------------------------------------------
 OOle2Obj::~OOle2Obj()
 {
     DBG_DTOR( rpt_OOle2Obj, NULL);
+}
+// -----------------------------------------------------------------------------
+UINT16 OOle2Obj::GetObjIdentifier() const
+{
+    return m_nType;
+}
+//----------------------------------------------------------------------------
+UINT32 OOle2Obj::GetObjInventor() const
+{
+    return ReportInventor;
 }
 //----------------------------------------------------------------------------
 SdrPage* OOle2Obj::GetImplPage() const
@@ -1049,6 +1000,95 @@ uno::Reference< uno::XInterface > OOle2Obj::getUnoShape()
         m_xReportComponent.set(xShape,uno::UNO_QUERY);
     }
     return xShape;
+}
+// -----------------------------------------------------------------------------
+uno::Reference< chart2::data::XDatabaseDataProvider > lcl_getDataProvider(const uno::Reference < embed::XEmbeddedObject >& _xObj)
+{
+    uno::Reference< chart2::data::XDatabaseDataProvider > xSource;
+    uno::Reference< embed::XComponentSupplier > xCompSupp(_xObj,uno::UNO_QUERY);
+    if( xCompSupp.is())
+    {
+        uno::Reference< chart2::XChartDocument> xChartDoc( xCompSupp->getComponent(), uno::UNO_QUERY );
+        if ( xChartDoc.is() )
+        {
+            xSource.set(xChartDoc->getDataProvider(),uno::UNO_QUERY);
+        }
+    } // if( xCompSupp.is())
+    return xSource;
+}
+// -----------------------------------------------------------------------------
+// Clone() soll eine komplette Kopie des Objektes erzeugen.
+SdrObject* OOle2Obj::Clone() const
+{
+    OOle2Obj* pObj = static_cast<OOle2Obj*>(SdrOle2Obj::Clone());
+    OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
+    svt::EmbeddedObjectRef::TryRunningState( pObj->GetObjRef() );
+    pObj->impl_createDataProvider_nothrow(pRptModel->getReportDefinition().get());
+
+    uno::Reference< chart2::data::XDatabaseDataProvider > xSource( lcl_getDataProvider(GetObjRef()) );
+    uno::Reference< chart2::data::XDatabaseDataProvider > xDest( lcl_getDataProvider(pObj->GetObjRef()) );
+    if ( xSource.is() && xDest.is() )
+        comphelper::copyProperties(xSource.get(),xDest.get());
+
+    pObj->initializeChart(pRptModel->getReportDefinition().get());
+    return pObj;
+}
+// -----------------------------------------------------------------------------
+void OOle2Obj::impl_createDataProvider_nothrow(const uno::Reference< frame::XModel>& _xModel)
+{
+    uno::Reference < embed::XEmbeddedObject > xObj = GetObjRef();
+    uno::Reference< chart2::data::XDataReceiver > xReceiver;
+    uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
+    if( xCompSupp.is())
+        xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
+    OSL_ASSERT( xReceiver.is());
+    if( xReceiver.is() )
+    {
+        uno::Reference< lang::XMultiServiceFactory> xFac(_xModel,uno::UNO_QUERY);
+        uno::Reference< chart2::data::XDatabaseDataProvider > xDataProvider( xFac->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.DataProvider"))),uno::UNO_QUERY);
+        xReceiver->attachDataProvider( xDataProvider.get() );
+    }
+}
+// -----------------------------------------------------------------------------
+void OOle2Obj::initializeChart( const uno::Reference< frame::XModel>& _xModel)
+{
+    uno::Reference < embed::XEmbeddedObject > xObj = GetObjRef();
+    uno::Reference< chart2::data::XDataReceiver > xReceiver;
+    uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
+    if( xCompSupp.is())
+        xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
+    OSL_ASSERT( xReceiver.is());
+    if( xReceiver.is() )
+    {
+        // lock the model to suppress any internal updates
+        uno::Reference< frame::XModel > xChartModel( xReceiver, uno::UNO_QUERY );
+        if( xChartModel.is() )
+            xChartModel->lockControllers();
+
+        if ( !lcl_getDataProvider(xObj).is() )
+            impl_createDataProvider_nothrow(_xModel);
+
+        uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( _xModel, uno::UNO_QUERY );
+        xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
+
+        uno::Sequence< beans::PropertyValue > aArgs( 4 );
+        aArgs[0] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
+            uno::makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("all")) ), beans::PropertyState_DIRECT_VALUE );
+        aArgs[1] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("HasCategories"), -1,
+            uno::makeAny( sal_True ), beans::PropertyState_DIRECT_VALUE );
+        aArgs[2] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
+            uno::makeAny( sal_False ), beans::PropertyState_DIRECT_VALUE );
+        aArgs[3] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("DataRowSource"), -1,
+            uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
+        xReceiver->setArguments( aArgs );
+
+        if( xChartModel.is() )
+            xChartModel->unlockControllers();
+    }
 }
 // -----------------------------------------------------------------------------
 uno::Reference< style::XStyle> getUsedStyle(const uno::Reference< report::XReportDefinition>& _xReport)
