@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: changes.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,45 +80,6 @@ ValueChange::ValueChange(OUString const& _rName,
 {
     m_aAttributes.markAsDefault(Change::isToDefault());
 }
-// -----------------------------------------------------------------------------
-ValueChange::ValueChange(OUString const& _rName,
-                         const node::Attributes& _rAttributes,
-                         Mode _eMode,
-                         uno::Type const & aValueType)
-    : Change(_rName, isDefaultMode(_eMode))
-     ,m_aValueType( aValueType )
-     ,m_aValue()
-     ,m_aOldValue()
-     ,m_aAttributes(_rAttributes)
-     ,m_eMode(_eMode)
-{
-    m_aAttributes.markAsDefault(Change::isToDefault());
-}
-// -------------------------------------------------------------------------
-ValueChange::ValueChange(uno::Any const & aNewValue, ValueNode const& aOldValue)
-    : Change(aOldValue.getName(),false)
-     ,m_aValueType( aOldValue.getValueType() )
-     ,m_aValue(aNewValue)
-     ,m_aOldValue(aOldValue.getValue())
-     ,m_aAttributes(aOldValue.getAttributes())
-{
-    OSL_ENSURE(aNewValue.getValueType() == m_aValueType || !aNewValue.hasValue(),
-                "ValueChange: Type mismatch in new value" );
-
-    m_eMode = aOldValue.isDefault() ? wasDefault : changeValue;
-    m_aAttributes.markAsDefault(false);
-}
-// -------------------------------------------------------------------------
-ValueChange::ValueChange(SetToDefault, ValueNode const& aOldValue)
-    : Change(aOldValue.getName(),true)
-     ,m_aValueType( aOldValue.getValueType() )
-     ,m_aValue(aOldValue.getDefault())
-     ,m_aOldValue(aOldValue.getValue())
-     ,m_aAttributes(aOldValue.getAttributes())
-     ,m_eMode(setToDefault)
-{
-    m_aAttributes.markAsDefault(true);
-}
 
 // -----------------------------------------------------------------------------
 void ValueChange::setNewValue(const uno::Any& _rNewVal)
@@ -152,35 +113,6 @@ namespace tree_changes_internal {
 using namespace tree_changes_internal;
 
 // -------------------------------------------------------------------------
-void ValueChange::applyTo(ValueNode& aValue)
-{
-    switch (getMode())
-    {
-    case wasDefault:
-        OSL_ASSERT(aValue.isDefault());
-    case changeValue:
-        doAdjust( m_aOldValue, aValue.getValue());
-        aValue.setValue(getNewValue());
-        break;
-
-    case setToDefault:
-        doAdjust( m_aOldValue,  aValue.getValue());
-        doAdjust( m_aValue,     aValue.getDefault());
-        aValue.setDefault();
-        break;
-
-    case changeDefault:
-        doAdjust( m_aOldValue,  aValue.getDefault());
-        aValue.changeDefault(getNewValue());
-        break;
-
-    default:
-        OSL_ENSURE(0, "Unknown mode found for ValueChange");
-        break;
-    }
-}
-
-// -------------------------------------------------------------------------
 void ValueChange::applyChangeNoRecover(ValueNode& aValue) const
 {
     switch (getMode())
@@ -202,43 +134,6 @@ void ValueChange::applyChangeNoRecover(ValueNode& aValue) const
     default:
         OSL_ENSURE(0, "Unknown mode found for ValueChange");
         break;
-    }
-}
-
-// -------------------------------------------------------------------------
-::rtl::OUString ValueChange::getModeAsString() const
-{
-    ::rtl::OUString aRet;
-    switch(m_eMode)
-    {
-    case wasDefault:
-        aRet = ::rtl::OUString::createFromAscii("wasDefault");
-        break;
-    case changeValue:
-        aRet = ::rtl::OUString::createFromAscii("changeValue");
-        break;
-    case setToDefault:
-        aRet = ::rtl::OUString::createFromAscii("setToDefault");
-        break;
-    case changeDefault:
-        aRet = ::rtl::OUString::createFromAscii("changeDefault");
-        break;
-    default:
-        OSL_ENSURE(0,"getModeAsString: Wrong mode!");
-    }
-
-    return aRet;
-}
-// -------------------------------------------------------------------------
-void ValueChange::setModeAsString(const ::rtl::OUString& _rMode)
-{
-    if(_rMode == ::rtl::OUString::createFromAscii("wasDefault"))        m_eMode = wasDefault;
-    else if(_rMode == ::rtl::OUString::createFromAscii("changeValue"))  m_eMode = changeValue;
-    else if(_rMode == ::rtl::OUString::createFromAscii("setToDefault")) m_eMode = setToDefault;
-    else if(_rMode == ::rtl::OUString::createFromAscii("changeDefault"))m_eMode = changeDefault;
-    else
-    {
-        OSL_ENSURE(0,"setModeAsString: Wrong mode!");
     }
 }
 
