@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sqliterator.cxx,v $
- * $Revision: 1.57 $
+ * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -477,7 +477,7 @@ void OSQLParseTreeIterator::traverseOneTableName( OSQLTables& _rTables,const OSQ
 //-----------------------------------------------------------------------------
 void OSQLParseTreeIterator::getQualified_join( OSQLTables& _rTables, const OSQLParseNode *pTableRef, ::rtl::OUString& aTableRange )
 {
-    OSL_PRECOND( SQL_ISRULE( pTableRef, joined_table ) || SQL_ISRULE( pTableRef, cross_union ) || SQL_ISRULE( pTableRef, qualified_join ) ,
+    OSL_PRECOND( SQL_ISRULE( pTableRef, cross_union ) || SQL_ISRULE( pTableRef, qualified_join ) ,
         "OSQLParseTreeIterator::getQualified_join: illegal node!" );
 
     aTableRange = ::rtl::OUString();
@@ -497,34 +497,23 @@ void OSQLParseTreeIterator::getQualified_join( OSQLTables& _rTables, const OSQLP
 //-----------------------------------------------------------------------------
 const OSQLParseNode* OSQLParseTreeIterator::getTableNode( OSQLTables& _rTables, const OSQLParseNode *pTableRef,::rtl::OUString& rTableRange )
 {
-    OSL_PRECOND( SQL_ISRULE( pTableRef, table_ref ) || SQL_ISRULE( pTableRef, joined_table )
+    OSL_PRECOND( SQL_ISRULE( pTableRef, table_ref )
               || SQL_ISRULE( pTableRef, qualified_join ) || SQL_ISRULE( pTableRef, cross_union )
               || SQL_ISRULE( pTableRef, subquery ),
         "OSQLParseTreeIterator::getTableNode: only to be called for table_ref nodes!" );
 
     const OSQLParseNode* pTableNameNode = NULL;
 
-    if ( SQL_ISRULE( pTableRef, joined_table ) )
-    {
-        getQualified_join( _rTables, pTableRef->getChild(1), rTableRange );
-    }
-    else if ( SQL_ISRULE( pTableRef, qualified_join ) || SQL_ISRULE( pTableRef, cross_union ) )
+    if ( SQL_ISRULE( pTableRef, qualified_join ) || SQL_ISRULE( pTableRef, cross_union ) )
     {
         getQualified_join( _rTables, pTableRef, rTableRange );
     }
     else
     {
-        if ( pTableRef->count() == 4 )
+        rTableRange = OSQLParseNode::getTableRange(pTableRef);
+        if ( pTableRef->count() == 4 || pTableRef->count() == 5 ) // '{' SQL_TOKEN_OJ joined_table '}' || '(' joined_table ')' range_variable op_column_commalist
         {
-            if ( SQL_ISPUNCTUATION( pTableRef->getChild(0), "{" ) )
-            {   // { OJ joined_table }
-                getQualified_join( _rTables, pTableRef->getChild(2), rTableRange );
-            }
-            else
-            {   // table_node as range_variable op_column_commalist
-                pTableNameNode = pTableRef->getChild(0);
-                rTableRange = pTableRef->getChild(2)->getTokenValue();
-            }
+            getQualified_join( _rTables, pTableRef->getChild(6 - pTableRef->count()), rTableRange );
         }
         else if ( pTableRef->count() == 3 )
         {   // subquery as range_variable
@@ -534,20 +523,13 @@ const OSQLParseNode* OSQLParseTreeIterator::getTableNode( OSQLTables& _rTables, 
             if ( SQL_ISRULE( pQueryExpression, select_statement ) )
             {
                 getSelect_statement( *m_pImpl->m_pSubTables, pQueryExpression );
-                rTableRange = pTableRef->getChild(2)->getTokenValue();
             }
             else
             {
                 OSL_ENSURE( false, "OSQLParseTreeIterator::getTableNode: subquery which is no select_statement: not yet implemented!" );
             }
         }
-        else if ( pTableRef->count() == 6 )
-        {
-            // '(' joined_table ')' as range_variable op_column_commalist
-            getQualified_join( _rTables, pTableRef->getChild(1), rTableRange );
-            rTableRange = pTableRef->getChild(4)->getTokenValue();
-        }
-        else if ( pTableRef->count() == 1 )
+        else if ( pTableRef->count() == 2 )
         {
             // table_node
             pTableNameNode = pTableRef->getChild(0);
@@ -589,12 +571,7 @@ void OSQLParseTreeIterator::getSelect_statement(OSQLTables& _rTables,const OSQLP
             pTableName = pTableListElement->getChild(0);
             if( isTableNode( pTableName ) )
             {   // Tabellennamen gefunden
-                if ( pTableListElement->count() == 4 )
-                {   // table_node as range_variable op_column_commalist
-                    OSL_ENSURE( pTableListElement->getChild(1)->getKnownRuleID() == OSQLParseNode::as,
-                        "OSQLParseTreeIterator::getSelect_statement: table_ref rules changed?" );
-                    aTableRange = pTableListElement->getChild(2)->getTokenValue();
-                }
+                aTableRange = OSQLParseNode::getTableRange(pTableListElement);
                 traverseOneTableName( _rTables, pTableName, aTableRange );
             }
             else if(SQL_ISPUNCTUATION(pTableName,"{"))
@@ -602,17 +579,13 @@ void OSQLParseTreeIterator::getSelect_statement(OSQLTables& _rTables,const OSQLP
                 getQualified_join( _rTables, pTableListElement->getChild(2), aTableRange );
             }
             else
-            {   // '(' joined_table ')' as range_variable op_column_commalist
+            {   // '(' joined_table ')' range_variable op_column_commalist
                 getTableNode( _rTables, pTableListElement, aTableRange );
             }
         }
         else if (SQL_ISRULE( pTableListElement, qualified_join ) || SQL_ISRULE( pTableListElement, cross_union ) )
         {
             getQualified_join( _rTables, pTableListElement, aTableRange );
-        }
-        else if ( SQL_ISRULE( pTableListElement, joined_table ) )
-        {
-            getQualified_join( _rTables, pTableListElement->getChild(1), aTableRange );
         }
 
         //  if (! aIteratorStatus.IsSuccessful()) break;
@@ -1991,3 +1964,4 @@ void OSQLParseTreeIterator::impl_appendError( const SQLException& _rError )
     else
         m_aErrors = _rError;
 }
+// -----------------------------------------------------------------------------
