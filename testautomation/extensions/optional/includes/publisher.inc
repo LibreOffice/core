@@ -1,0 +1,260 @@
+'encoding UTF-8  Do not remove or change this line!
+'**************************************************************************
+'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'* 
+'* Copyright 2008 by Sun Microsystems, Inc.
+'*
+'* OpenOffice.org - a multi-platform office productivity suite
+'*
+'* $RCSfile: publisher.inc,v $
+'*
+'* $Revision: 1.1 $
+'*
+'* last change: $Author: jsi $ $Date: 2008-06-16 10:03:21 $
+'*
+'* This file is part of OpenOffice.org.
+'*
+'* OpenOffice.org is free software: you can redistribute it and/or modify
+'* it under the terms of the GNU Lesser General Public License version 3
+'* only, as published by the Free Software Foundation.
+'*
+'* OpenOffice.org is distributed in the hope that it will be useful,
+'* but WITHOUT ANY WARRANTY; without even the implied warranty of
+'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'* GNU Lesser General Public License version 3 for more details
+'* (a copy is included in the LICENSE file that accompanied this code).
+'*
+'* You should have received a copy of the GNU Lesser General Public License
+'* version 3 along with OpenOffice.org.  If not, see
+'* <http://www.openoffice.org/license.html>
+'* for a copy of the LGPLv3 License.
+'*
+'/******************************************************************************
+'*
+'*  owner : joerg.skottke@sun.com
+'*
+'*  short description : Extension publisher and release notes
+'*
+'*******************************************************************************
+'**
+' #1 tExtensionPublisher ' Extension publisher and release notes
+'**
+'\******************************************************************************
+
+testcase tExtensionPublisher
+
+    '///<h1>Extension publisher and release notes</h1>
+
+    '///<u><pre>Synopsis</pre></u>With CWS jl76 extensions can bring a link to the extension 
+    '///+ publisher and the release notes which are displayed in the online update dialog
+    '///+ for extensions - if provided. Otherwise these fields are not visible.<br>
+    '///<u><pre>Specification document</pre></u>
+    '///+ <a href=http://specs.openoffice.org/appwide/packagemanager/online_update_for_extensions.odt>
+    '///+ http://specs.openoffice.org/appwide/packagemanager/online_update_for_extensions.odt</a><br>
+    '///<u><pre>Files used</pre></u>(gTesttoolPath)/extensions/input/publisher/*.oxt,*.info<br>
+    '///<u><pre>Test case specification</pre></u>
+    
+    ' This is the path where the test-extensions and the info file are located
+    dim cBasePath as string
+        cBasePath = gTesttoolPath & "extensions/optional/input/publisher/"
+        cBasePath = convertpath( cBasePath )
+    
+    ' Modify this file to add test cases or attributes
+    dim cInfoFile as string
+        cinfoFile = cBasePath & "extension.info"
+        
+    ' The number of files to test. Information about this is stored in the file
+    ' specified by cInfoFile
+    dim iFileCount as integer
+    dim iCurrentFile as integer
+    dim iExitCounter as integer
+    
+    ' This is the data we get from the configuration file
+    dim cCurrentFileName as string
+    dim cHasReleaseNotes as string
+    dim cReleaseNotes as string
+    dim cHasPublisher as string
+    dim cPublisher as string
+                        
+    ' This is where we store the configuration data. This array must have more
+    ' lines than cInfoFile contains.
+    dim cConfigArray( 60 ) as string
+    
+    dim cTestString as string
+    
+    
+    '///<ul>
+    '///+<li>Read info-file about the testdocuments.</li>
+    hGetDataFileSection( cInfoFile, cConfigArray(), "info", "", "" )
+    iFileCount = int( hGetValueForKeyAsString( cConfigArray() , "filecount" ) )
+    printlog( cInfoFile & " specifies " & iFileCount & " documents to load" )
+
+    '///+<li>Install all extensions specified in the info-file.<br>
+    '///+You may use &quot;unopkg&quot; or the Extension Manager GUI.<br>
+    '///+The test uses &quot;unopkg&quot;.</li>
+    printlog( "Installing extensions" )
+    for iCurrentFile = 1 to iFileCount
+        
+        hGetDataFileSection( cInfoFile, cConfigArray(), iCurrentFile, "", "" )
+        cCurrentFileName = hGetValueForKeyAsString( cConfigArray() , "file" )
+        cCurrentFileName = cBasePath & cCurrentFileName
+        sExtensionCLI( "add" , cCurrentFileName )
+        
+    next iCurrentFile
+    printlog( "Finished installing extensions" )
+       
+    '///+<li>Open the extension manager GUI (if not open yet).</li>
+    try
+        ToolsPackageManager
+    catch
+        warnlog( "#i84786# UNopkg processes block UI" )
+    endcatch
+    
+    '///+<li>Wait about 5 seconds - the &quot;Live-Deployment&quot; needs time to strike.</li>
+    printlog( "Waiting 5 seconds for Live-Deployment to strike" )
+    wait( 5000 )
+ 
+    '///+<li>Click on  &quot;update...&quot;<br>
+    '///+The &quot;Update Extensions&quot; dialog should open.</li>
+    kontext "PackageManager"
+    Updates.click()
+    
+    '///+<li>Wait max 20 seconds for the &quot;Update&quot; dialog listbox to get populated.</li>
+    kontext "ExtensionUpdate"
+    if ( ExtensionUpdate.exists( 2 ) ) then
+    
+        
+        '///+<li>Verify that all extensions (currently 7) are present - and only those</li>
+        do while ( AvailableUpdatesList.getItemCount() < 7 ) 
+            wait( 1000 )
+            iExitCounter = iExitCounter + 1
+            if ( iExitCounter = 20 ) then exit do
+        loop
+        
+        '///+<li>&quot;Show all updates&quot; checkbox must be disabled.<br> 
+        '///+There are no additional extensions installed at this time</li>
+        if ( ShowAllUpdates.exists() ) then
+            if ( ShowAllUpdates.isEnabled() ) then
+                warnlog( """Show all updates"" should be disabled" )
+            else
+                printlog( """Show all updates"" is disabled, good" )
+            endif
+        else
+            qaerrorlog( """Show all updates"" checkbox could not be accessed" )
+        endif
+        
+        if ( AvailableUpdatesList.isEnabled() ) then
+        
+            printlog( "Available updates list populated in " & iExitCounter & " seconds" )
+            
+            if ( iExitCounter < 20 ) then
+                '///+<li>Select each listed extension and verify its attributes.</li>
+                '///<ul>
+                for iCurrentFile = 1 to iFileCount
+                
+                    '///+<li>Retrieve the name of the extension from the config file.</li>
+                    hGetDataFileSection( cInfoFile, cConfigArray(), iCurrentFile, "", "" )
+                    cCurrentFileName = hGetValueForKeyAsString( cConfigArray() , "display_name" )
+                    
+                    '///+<li>Retrieve configuration of the extension from config file: Release Notes.</li>
+                    cHasReleaseNotes = hGetValueForKeyAsString( cConfigArray() , "has_release_notes" )
+                    cReleaseNotes    = hGetValueForKeyAsString( cConfigArray() , "release_notes" )
+                    
+                    '///+<li>Retrieve configuration of the extension from config file: Publisher.</li>
+                    cHasPublisher = hGetValueForKeyAsString( cConfigArray() , "has_publisher" )
+                    cPublisher    = hGetValueForKeyAsString( cConfigArray() , "publisher" )
+                    
+                    '///+<li>Select the current extension by index.</li>
+                    AvailableUpdatesList.select( iCurrentFile )
+                    
+                    '///+<li>Verify that the extension is the one we expect.</li>
+                    if ( AvailableUpdatesList.getText() = cCurrentFileName ) then
+                        printlog( "Testing extension: " & cCurrentFileName )
+                        
+                        '///+<li>Verify the configuration for the Release Notes.</li>
+                        if ( lcase( cHasReleaseNotes ) = "yes" ) then
+                            if ( ReleaseNotesText.isVisible() ) then
+                                printlog( " - Release notes text is visible. Good." )
+                                qaerrorlog( "#i84700# cannot read static text" )
+                                'cTestString = ReleaseNotesText.getSelText()
+                                'if ( cTestString = cReleaseNotes ) then
+                                '    printlog( " - Release notes text is ok." )
+                                'else
+                                '    warnlog( "Incorrect release notes text" )
+                                '    printlog( "Expected: " & cReleaseNotes )
+                                '    printlog( "Found...: " & ctestString   )
+                                'endif
+                            else
+                                warnlog( "Release notes text is not visible" )
+                            endif
+                        else
+                            if ( ReleaseNotesText.isVisible() ) then
+                                warnlog( "Release notes should not be visible" )
+                            else
+                                printlog( " - No release notes for this extension." )
+                            endif
+                        endif
+                        
+                        '///+<li>Verify the configuration for the Publisher.</li>
+                        if ( lcase( cHasPublisher ) = "yes" ) then
+                            if ( UpdatePublisherText.isVisible() ) then
+                                printlog( " - Publisher text is visible. Good." )
+                                qaerrorlog( "#i84700# cannot read static text" )
+                                'cTestString = UpdatePublisherText.getText()
+                                'if ( cTestString = cPublisher ) then
+                                '    printlog( " - Release notes text is ok." )
+                                'else
+                                '    warnlog( "Incorrect release notes text" )
+                                '    printlog( "Expected: " & cPublisher )
+                                '    printlog( "Found...: " & ctestString   )
+                                'endif
+                            else
+                                warnlog( "Publisher text is not visible." )
+                            endif
+                        else
+                            if ( UpdatePublisherText.isVisible() ) then
+                                warnlog( "Publisher should not be visible." )
+                            else
+                                printlog( " - No Publisher for this extension." )
+                            endif
+                        endif
+                        
+                    else
+                        warnlog( "The extension is not at the expected position" )
+                        printlog( "Expected: " & cCurrentFileName )
+                        printlog( "Found...: " & AvailableUpdatesList.getText() )
+                        exit for
+                    endif
+                    
+                next iCurrentFile
+            else
+                warnlog( "Updates list not fully populated in 15 seconds -> fail" )
+            endif
+        else
+            warnlog( "No extensions available for update. Installation failed?" )
+        endif
+        '///</ul>
+        
+        '///+<li>Close the extension update dialog.</li>
+        kontext "ExtensionUpdate"
+        ExtensionUpdate.cancel()
+    else
+        warnlog( "Extension Update dialog is not open" )
+    endif
+    
+    '///+<li>Close extension manager GUI</li>
+    kontext "PackageManager"
+    PackageManager.close()
+    
+    '///+<li>Cleanup - remove all test-extensions.</li>
+    printlog( "Removing extensions" )
+    for iCurrentFile = 1 to iFileCount
+        hGetDataFileSection( cInfoFile, cConfigArray(), iCurrentFile, "", "" )
+        cCurrentFileName = hGetValueForKeyAsString( cConfigArray() , "file" )
+        sExtensionCLI( "remove" , cCurrentFileName )
+    next iCurrentFile
+    printlog( "Finished removing extensions" )
+    '///</ul>
+
+endcase
+

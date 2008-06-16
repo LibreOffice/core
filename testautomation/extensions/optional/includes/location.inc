@@ -1,0 +1,164 @@
+'encoding UTF-8  Do not remove or change this line!
+'**************************************************************************
+'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'* 
+'* Copyright 2008 by Sun Microsystems, Inc.
+'*
+'* OpenOffice.org - a multi-platform office productivity suite
+'*
+'* $RCSfile: location.inc,v $
+'*
+'* $Revision: 1.1 $
+'*
+'* last change: $Author: jsi $ $Date: 2008-06-16 10:03:21 $
+'*
+'* This file is part of OpenOffice.org.
+'*
+'* OpenOffice.org is free software: you can redistribute it and/or modify
+'* it under the terms of the GNU Lesser General Public License version 3
+'* only, as published by the Free Software Foundation.
+'*
+'* OpenOffice.org is distributed in the hope that it will be useful,
+'* but WITHOUT ANY WARRANTY; without even the implied warranty of
+'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'* GNU Lesser General Public License version 3 for more details
+'* (a copy is included in the LICENSE file that accompanied this code).
+'*
+'* You should have received a copy of the GNU Lesser General Public License
+'* version 3 along with OpenOffice.org.  If not, see
+'* <http://www.openoffice.org/license.html>
+'* for a copy of the LGPLv3 License.
+'*
+'/******************************************************************************
+'*
+'*  owner : joerg.skottke@sun.com
+'*
+'*  short description : Test the extension locator service
+'*
+'\******************************************************************************
+
+testcase tExtensionLocation
+
+    '///<h3>Test the extension locator service</h3>
+    '///<p>This test installs a dummy extension and loads a document afterwards
+    '///+ which comes with a macro to trigger the locator service. By running the
+    '///+ macro a messagebox should pop open to display the installation path of 
+    '///+ the extension.</b><br><br>
+
+     ' The location of the sample extension and helper document
+    dim cWorkPath as string
+        cWorkPath = gTesttoolPath & "extensions\optional\input\path_to_extension\"
+        cWorkPath = convertpath( cWorkPath )
+
+    const EXTENSION_NAME = "locationtest.oxt"
+    const DOCUMENT_NAME  = "LocationTest.odt"
+    const MACRO_NAME     = "tExtensionLocation"
+
+    dim brc as boolean
+    dim irc as integer
+    dim cMsg as string
+
+    printlog( "Using extension: " & cWorkPath & EXTENSION_NAME )
+    printlog( "Using document.: " & cWorkPath & DOCUMENT_NAME )
+
+    '///<ul>
+    '///+<li>Load the testdocument</li>
+    brc = hFileOpen( cWorkPath & DOCUMENT_NAME )
+    if ( not brc ) then
+        warnlog( "Error while loading document" )
+    endif
+
+    '///+<li>Allow macro execution</li>
+    brc = hAllowMacroExecution()
+    if ( not brc ) then
+        warnlog( "Macro execution warning is missing" )
+    endif
+
+    '///+<li>Run the macro</li>
+    irc = hMacroOrganizerRunMacro( MACRO_NAME )
+    if ( irc = 0 ) then
+        warnlog( "No macro with the given name could be found, aborting" )
+        kontext "Makro"
+        if ( Makro.exists() ) then
+            Makro.close()
+        endif
+        goto endsub
+    endif
+
+    '///+<li>Test that the messagebox is open and verify that it contains an empty string</li>
+    kontext "active"
+    if ( active.exists( 2 ) ) then
+        cMsg = active.getText()
+        if ( cMsg <> "" ) then
+            warnlog( "The messagebox is not empty: " & cMsg )
+        else
+            printlog( "Messagebox is empty, good." )
+        endif
+        active.ok()
+    else
+        warnlog( "No messagebox displayed, please check that the macro is executed" )
+    endif
+
+    '///+<li>Add the extension</li>
+    irc = hExtensionAddGUI( cWorkPath & EXTENSION_NAME , "verbose,InstallForUser" )
+
+    '///+<li>Run the macro</li>
+    irc = hMacroOrganizerRunMacro( MACRO_NAME )
+    if ( irc = 0 ) then
+        warnlog( "No macro with the given name could be found" )
+    endif
+
+    '///+<li>Test that the messagebox is open and verify that it contains an empty string</li>
+    '///<ul>
+    kontext "active"
+    if ( active.exists( 2 ) ) then
+        cMsg = active.getText()
+
+        '///+<li>Verify that the messagebox is not empty</li>
+        if ( cMsg = "" ) then
+            warnlog( "The messagebox is empty, please check." )
+        else
+
+
+            printlog( "Content of messagebox: " & cMsg )
+
+            '///+<li>Verify that it is a file-URL</li>
+            if ( instr( cMsg , "file:///" ) > 0 ) then
+                printlog( "Found File-URL" )
+            else
+                warnlog( "This does not appear to be a File-URL, please check!" )
+            endif
+
+            '///+<li>Verify that the string contains the extension name</li>
+            if ( instr( cMsg , EXTENSION_NAME ) > 0 ) then
+                printlog( "Extension string is present" )
+            else
+                warnlog( "Extension name seems to be missing" )
+            endif
+
+            '///+<li>Test file presence on filesystem level</li>
+            if ( dir( cMsg ) = "" ) then
+                warnlog( "The extension could not be found at the expected location" )
+            else
+                printlog( "Extension found. Good." )
+            endif
+
+        endif
+        active.ok()
+    else
+        warnlog( "No messagebox displayed, please check that the macro is executed" )
+    endif
+    '///</ul>
+    '///+<li>Cleanup: Remove the extension</li>
+    irc = hExtensionRemoveGUI( EXTENSION_NAME )
+    if ( irc <> 0 ) then
+        warnlog( "the extension was NOT cleanly removed" )
+    endif
+
+    '///+<li>Cleanup: Close document</li>
+    hDestroyDocument()
+
+    '///</ul>
+
+endcase
+
