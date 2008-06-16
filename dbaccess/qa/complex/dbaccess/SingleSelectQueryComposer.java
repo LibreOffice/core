@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SingleSelectQueryComposer.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -196,15 +196,16 @@ public class SingleSelectQueryComposer extends ComplexTestCase
     public void testSubQueries() throws Exception
     {
         m_composer.setQuery( "SELECT * from \"" + innerProductsQuery + "\"" );
-        XTablesSupplier suppTables = (XTablesSupplier)UnoRuntime.queryInterface(
+        final XTablesSupplier suppTables = (XTablesSupplier)UnoRuntime.queryInterface(
             XTablesSupplier.class, m_composer );
-        XNameAccess tables = suppTables.getTables();
+        final XNameAccess tables = suppTables.getTables();
         assure( "a simple SELECT * FROM <query> could not be parsed",
             tables != null && tables.hasByName( innerProductsQuery ) );
 
-        String sInnerCommand = m_database.getDatabase().getDataSource().getQueryDefinition( innerProductsQuery ).getCommand();
-        String sExecutableQuery = m_composer.getQueryWithSubstitution();
-        assure( "simple query containing a sub query improperly parsed to SDBC level statement",
+        final String sInnerCommand = m_database.getDatabase().getDataSource().getQueryDefinition( innerProductsQuery ).getCommand();
+        final String sExecutableQuery = m_composer.getQueryWithSubstitution();
+        assure( "simple query containing a sub query improperly parsed to SDBC level statement: \n1. " + sExecutableQuery
+        + "\n2. " + "SELECT * FROM ( " + sInnerCommand  + " ) AS \"" + innerProductsQuery + "\"",
             sExecutableQuery.equals( "SELECT * FROM ( " + sInnerCommand  + " ) AS \"" + innerProductsQuery + "\"") );
     }
 
