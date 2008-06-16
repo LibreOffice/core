@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoDirectSql.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,7 +119,7 @@ DBG_NAME(ODirectSQLDialog)
             try
             {
                 // the connection the row set is working with
-                ODatasourceConnector aDSConnector(m_xORB,_pParent);
+                ODatasourceConnector aDSConnector(m_aContext.getLegacyServiceFactory(),_pParent);
                 xConnection = aDSConnector.connect(m_sInitialSelection);
             }
             catch( const Exception& )
