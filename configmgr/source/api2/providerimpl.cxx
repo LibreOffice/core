@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: providerimpl.cxx,v $
- * $Revision: 1.68 $
+ * $Revision: 1.69 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,7 +67,6 @@ namespace configmgr
 
     using configapi::NodeElement;
     using configuration::RootTree;
-    using configuration::SpecialTemplateProvider;
 
     namespace configapi
     {
@@ -338,10 +337,6 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
-    // access to the factory for writable elements
-    configapi::Factory& OProviderImpl::getWriterFactory() {return m_pNewProviders->getWriterFactory();}
-
-    //-----------------------------------------------------------------------------
     // access to the raw notifications
     IConfigBroadcaster* OProviderImpl::getNotifier() CFG_NOTHROW()
     {
@@ -603,14 +598,6 @@ namespace configmgr
        "reload",    //ARG_REFRESH            // refresh component
 
     };
-
-    OUString OProviderImpl::FactoryArguments::getArgumentName(Argument _which) CFG_NOTHROW()
-    {
-        OSL_ASSERT(sizeof asciiArgumentNames/sizeof 0[asciiArgumentNames] == _arg_count);
-        OSL_PRECOND(_which < _arg_count, "Illegal argument selector in OProviderImpl::FactoryArguments::getArgumentName");
-
-        return OUString::createFromAscii(asciiArgumentNames[_which]);
-    }
 
     OProviderImpl::FactoryArguments::Argument
         OProviderImpl::FactoryArguments::lookupArgument(const rtl::OUString& rName)
