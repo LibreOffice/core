@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PentahoReportEngineMetaData.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,6 +71,8 @@ public class PentahoReportEngineMetaData
         mandatoryParameters.add(ReportEngineParameterNames.INPUT_MASTER_COLUMNS);
         mandatoryParameters.add(ReportEngineParameterNames.INPUT_MASTER_VALUES);
         mandatoryParameters.add(ReportEngineParameterNames.INPUT_DETAIL_COLUMNS);
+        mandatoryParameters.add(ReportEngineParameterNames.AUTHOR);
+        mandatoryParameters.add(ReportEngineParameterNames.TITLE);
 
 
         parameterTypes = new HashMap();
@@ -85,6 +87,8 @@ public class PentahoReportEngineMetaData
         parameterTypes.put(ReportEngineParameterNames.INPUT_MASTER_COLUMNS, List.class);
         parameterTypes.put(ReportEngineParameterNames.INPUT_MASTER_VALUES, List.class);
         parameterTypes.put(ReportEngineParameterNames.INPUT_DETAIL_COLUMNS, List.class);
+        parameterTypes.put(ReportEngineParameterNames.AUTHOR, String.class);
+        parameterTypes.put(ReportEngineParameterNames.TITLE, String.class);
 
         enumerationValues = new HashNMap();
         enumerationValues.add(CONTENT_TYPE,
