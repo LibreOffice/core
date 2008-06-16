@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewstrategy.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,10 +112,10 @@ namespace configmgr
             /// Does this node assume its default value
             /// retrieve the current value of this node
             UnoAny  getValue(ValueNode const& _aNode) const;
-
+#if OSL_DEBUG_LEVEL > 0
             /// get the type of this value
             UnoType getValueType(ValueNode const& _aNode)   const;
-
+#endif
 
         // group node specific operations
         public:
@@ -178,14 +178,8 @@ namespace configmgr
 
         // access to node innards
         protected:
-            /// provide access to the data of the underlying node
-            data::NodeAccess getNodeAccess(Node const& _aNode) const;
-
             /// provide access to the address of the underlying node
             data::NodeAddress getNodeAddress(Node const& _aNode) const;
-
-            /// retrieve the name of the underlying node
-            Name getNodeName(Node const& _aNode) const;
 
             /// retrieve the attributes of the underlying node
             node::Attributes getNodeAttributes(Node const& _aNode) const;
@@ -238,10 +232,6 @@ namespace configmgr
             virtual void doInsertElement(SetNode const& _aNode, Name const& aName, SetNodeEntry const& aNewEntry) = 0;
             virtual void doRemoveElement(SetNode const& _aNode, Name const& aName) = 0;
         };
-
-//-----------------------------------------------------------------------------
-        inline Name ViewStrategy::getName(Node const& _aNode)   const
-        { return getNodeName(_aNode); }
 
         inline node::Attributes ViewStrategy::getAttributes(Node const& _aNode) const
         { return doAdjustAttributes(getNodeAttributes(_aNode)); }
