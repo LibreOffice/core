@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgedfunc.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,18 +29,25 @@
  ************************************************************************/
 #include "precompiled_reportdesign.hxx"
 #include <vcl/scrbar.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/seleng.hxx>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/outlobj.hxx>
-#include <vcl/svapp.hxx>
 #include <svx/unolingu.hxx>
-#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <svx/svdetc.hxx>
 #include <svx/editstat.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svddrgmt.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/svxids.hrc>
+#include <svx/svditer.hxx>
 
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include "dlgedfunc.hxx"
 #include "ReportSection.hxx"
@@ -51,19 +58,14 @@
 #include "ReportWindow.hxx"
 #include "RptObject.hxx"
 #include "ScrollHelper.hxx"
-#include <vcl/seleng.hxx>
+
 #include "ReportRuler.hxx"
 #include "UITools.hxx"
-#ifndef _SBASLTID_HRC
-#include <svx/svxids.hrc>
-#endif
-#include <svx/svditer.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
+
 #include <uistrings.hrc>
 #include "UndoEnv.hxx"
 #include <RptModel.hxx>
-#include "InsertFunctions.hxx"
+#include <tools/diagnose_ex.h>
 
 #define DEFAUL_MOVE_SIZE    100
 namespace rptui
@@ -127,7 +129,9 @@ DlgEdFunc::DlgEdFunc( OReportSection* _pParent )
  m_pView(_pParent->getView()),
  m_xOverlappingObj(NULL),
  m_pOverlappingObj(NULL),
- m_bSelectionMode(false)
+ m_bSelectionMode(false),
+ m_bUiActive(false),
+ m_bShowPropertyBrowser(false)
 {
     // m_pParent = _pParent;
     aScrollTimer.SetTimeoutHdl( LINK( this, DlgEdFunc, ScrollTimeout ) );
@@ -136,11 +140,10 @@ DlgEdFunc::DlgEdFunc( OReportSection* _pParent )
 }
 
 //----------------------------------------------------------------------------
-    void DlgEdFunc::setOverlappedControlColor(sal_Int32 _nColor)
-    {
-        m_nOverlappedControlColor = _nColor;
-    }
-
+void DlgEdFunc::setOverlappedControlColor(sal_Int32 _nColor)
+{
+    m_nOverlappedControlColor = _nColor;
+}
 // -----------------------------------------------------------------------------
 sal_Int32 lcl_setColorOfObject(uno::Reference< uno::XInterface > _xObj, long _nColorTRGB)
 {
@@ -250,6 +253,26 @@ BOOL DlgEdFunc::MouseButtonUp( const MouseEvent& /*rMEvt*/ )
     return bHandled;
 }
 // -----------------------------------------------------------------------------
+void DlgEdFunc::checkTwoCklicks(const MouseEvent& rMEvt)
+{
+    deactivateOle();
+
+    const USHORT nClicks = rMEvt.GetClicks();
+    if ( nClicks == 2 && rMEvt.IsLeft() )
+    {
+        if ( m_pView->AreObjectsMarked() )
+        {
+            const SdrMarkList& rMarkList = m_pView->GetMarkedObjectList();
+            if (rMarkList.GetMarkCount() == 1)
+            {
+                const SdrMark* pMark = rMarkList.GetMark(0);
+                SdrObject* pObj = pMark->GetMarkedSdrObj();
+                activateOle(pObj);
+            } // if (rMarkList.GetMarkCount() == 1)
+        } // if ( pView->AreObjectsMarked() )
+    }
+}
+// -----------------------------------------------------------------------------
 void DlgEdFunc::stopScrollTimer()
 {
     unColorizeOverlappedObj();
@@ -268,88 +291,184 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
 {
     BOOL bReturn = FALSE;
 
-    const KeyCode& rCode = _rEvent.GetKeyCode();
-    USHORT nCode = rCode.GetCode();
-
-    switch ( nCode )
+    if ( !m_bUiActive )
     {
-        case KEY_ESCAPE:
+        const KeyCode& rCode = _rEvent.GetKeyCode();
+        USHORT nCode = rCode.GetCode();
+
+        switch ( nCode )
         {
-            if ( m_pParent->getViewsWindow()->IsAction() )
+            case KEY_ESCAPE:
             {
-                m_pParent->getViewsWindow()->BrkAction();
-                bReturn = TRUE;
-            }
-            else if ( m_pView->AreObjectsMarked() )
-            {
-                const SdrHdlList& rHdlList = m_pView->GetHdlList();
-                SdrHdl* pHdl = rHdlList.GetFocusHdl();
-                if ( pHdl )
-                    ((SdrHdlList&)rHdlList).ResetFocusHdl();
+                if ( m_pParent->getViewsWindow()->IsAction() )
+                {
+                    m_pParent->getViewsWindow()->BrkAction();
+                    bReturn = TRUE;
+                } // if ( m_pParent->getViewsWindow()->IsAction() )
+                else if ( m_pView->IsTextEdit() )
+                {
+                    m_pView->SdrEndTextEdit();
+                    bReturn = TRUE;
+                }
+                else if ( m_pView->AreObjectsMarked() )
+                {
+                    const SdrHdlList& rHdlList = m_pView->GetHdlList();
+                    SdrHdl* pHdl = rHdlList.GetFocusHdl();
+                    if ( pHdl )
+                        ((SdrHdlList&)rHdlList).ResetFocusHdl();
+                    else
+                        m_pParent->getViewsWindow()->unmarkAllObjects(NULL);
+                        //m_pView->UnmarkAll();
+
+                    deactivateOle(true);
+                    bReturn = FALSE;
+                }
                 else
-                    m_pParent->getViewsWindow()->unmarkAllObjects(NULL);
-                    //m_pView->UnmarkAll();
-
-                bReturn = FALSE;
-            }
-        }
-        break;
-        case KEY_TAB:
-        {
-            if ( !rCode.IsMod1() && !rCode.IsMod2() )
-            {
-                // mark next object
-                if ( !m_pView->MarkNextObj( !rCode.IsShift() ) )
                 {
-                    // if no next object, mark first/last
-                    m_pView->UnmarkAllObj();
-                    m_pView->MarkNextObj( !rCode.IsShift() );
+                    deactivateOle(true);
                 }
+            }
+            break;
+            case KEY_TAB:
+            {
+                if ( !rCode.IsMod1() && !rCode.IsMod2() )
+                {
+                    // mark next object
+                    if ( !m_pView->MarkNextObj( !rCode.IsShift() ) )
+                    {
+                        // if no next object, mark first/last
+                        m_pView->UnmarkAllObj();
+                        m_pView->MarkNextObj( !rCode.IsShift() );
+                    }
 
-                if ( m_pView->AreObjectsMarked() )
-                    m_pView->MakeVisible( m_pView->GetAllMarkedRect(), *m_pParent);
+                    if ( m_pView->AreObjectsMarked() )
+                        m_pView->MakeVisible( m_pView->GetAllMarkedRect(), *m_pParent);
 
+                    bReturn = TRUE;
+                }
+                else if ( rCode.IsMod1() && rCode.IsMod2())
+                {
+                    // selected handle
+                    const SdrHdlList& rHdlList = m_pView->GetHdlList();
+                    ((SdrHdlList&)rHdlList).TravelFocusHdl( !rCode.IsShift() );
+
+                    // guarantee visibility of focused handle
+                    SdrHdl* pHdl = rHdlList.GetFocusHdl();
+                    if ( pHdl )
+                    {
+                        Point aHdlPosition( pHdl->GetPos() );
+                        Rectangle aVisRect( aHdlPosition - Point( DEFAUL_MOVE_SIZE, DEFAUL_MOVE_SIZE ), Size( 200, 200 ) );
+                        m_pView->MakeVisible( aVisRect, *m_pParent);
+                    }
+
+                    bReturn = TRUE;
+                }
+            }
+            break;
+            case KEY_UP:
+            case KEY_DOWN:
+            case KEY_LEFT:
+            case KEY_RIGHT:
+            {
+                m_pParent->getViewsWindow()->handleKey(rCode);
                 bReturn = TRUE;
             }
-            else if ( rCode.IsMod1() && rCode.IsMod2())
-            {
-                // selected handle
-                const SdrHdlList& rHdlList = m_pView->GetHdlList();
-                ((SdrHdlList&)rHdlList).TravelFocusHdl( !rCode.IsShift() );
-
-                // guarantee visibility of focused handle
-                SdrHdl* pHdl = rHdlList.GetFocusHdl();
-                if ( pHdl )
+            break;
+            case KEY_RETURN:
+                if ( !rCode.IsMod1() )
                 {
-                    Point aHdlPosition( pHdl->GetPos() );
-                    Rectangle aVisRect( aHdlPosition - Point( DEFAUL_MOVE_SIZE, DEFAUL_MOVE_SIZE ), Size( 200, 200 ) );
-                    m_pView->MakeVisible( aVisRect, *m_pParent);
+                    const SdrMarkList& rMarkList = m_pView->GetMarkedObjectList();
+                    if ( rMarkList.GetMarkCount() == 1 )
+                    {
+                        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+                        activateOle(pObj);
+                    }
                 }
-
-                bReturn = TRUE;
+                break;
+            default:
+            {
+                bReturn = m_pView->KeyInput(_rEvent, m_pParent);
             }
-        }
-        break;
-        case KEY_UP:
-        case KEY_DOWN:
-        case KEY_LEFT:
-        case KEY_RIGHT:
-        {
-            m_pParent->getViewsWindow()->handleKey(rCode);
-            bReturn = TRUE;
-        }
-        break;
-        default:
-        {
-            bReturn = m_pView->KeyInput(_rEvent, m_pParent);
-        }
-        break;
+            break;
+        } // switch ( nCode )
     }
 
     if ( bReturn && m_pParent->IsMouseCaptured() )
         m_pParent->ReleaseMouse();
 
     return bReturn;
+}
+// -----------------------------------------------------------------------------
+void DlgEdFunc::activateOle(SdrObject* _pObj)
+{
+    if ( _pObj )
+    {
+        const UINT16 nSdrObjKind = _pObj->GetObjIdentifier();
+        //
+        //  OLE: activate
+        //
+        if (nSdrObjKind == OBJ_OLE2)
+        {
+            bool bIsInplaceOle = false;
+            if (!bIsInplaceOle)
+            {
+                SdrOle2Obj* pOleObj = dynamic_cast<SdrOle2Obj*>(_pObj);
+                if ( pOleObj->GetObjRef().is() )
+                {
+                    if (m_pView->IsTextEdit())
+                    {
+                        m_pView->SdrEndTextEdit();
+                    }
+
+                    pOleObj->AddOwnLightClient();
+                    pOleObj->SetWindow(VCLUnoHelper::GetInterface(m_pParent));
+                    try
+                    {
+                        pOleObj->GetObjRef()->changeState( embed::EmbedStates::UI_ACTIVE );
+                        m_bUiActive = true;
+                        OReportController* pController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
+                        m_bShowPropertyBrowser = pController->isCommandChecked(SID_SHOW_PROPERTYBROWSER);
+                        if ( m_bShowPropertyBrowser )
+                            pController->executeChecked(SID_SHOW_PROPERTYBROWSER,uno::Sequence< beans::PropertyValue >());
+                    }
+                    catch( uno::Exception& )
+                    {
+                        DBG_UNHANDLED_EXCEPTION();
+                    }
+                }
+            }
+        } // if (nSdrObjKind == OBJ_OLE2)
+    } // if ( _pObj )
+}
+// -----------------------------------------------------------------------------
+void DlgEdFunc::deactivateOle(bool _bSelect)
+{
+    OLEObjCache& rObjCache = GetSdrGlobalData().GetOLEObjCache();
+    const ULONG nCount = rObjCache.Count();
+    for(ULONG i = 0 ; i< nCount;++i)
+    {
+        SdrOle2Obj* pObj = reinterpret_cast<SdrOle2Obj*>(rObjCache.GetObject(i));
+        if ( m_pParent->getPage() == pObj->GetPage() )
+        {
+            uno::Reference< embed::XEmbeddedObject > xObj = pObj->GetObjRef();
+            if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::UI_ACTIVE )
+            {
+                xObj->changeState( embed::EmbedStates::RUNNING );
+                m_bUiActive = false;
+                if ( m_bShowPropertyBrowser )
+                {
+                    OReportController* pController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
+                    pController->executeChecked(SID_SHOW_PROPERTYBROWSER,uno::Sequence< beans::PropertyValue >());
+                }
+
+                if ( _bSelect )
+                {
+                    SdrPageView* pPV = m_pView->GetSdrPageView();
+                    m_pView->MarkObj(pObj, pPV);
+                }
+            } // if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::UI_ACTIVE )
+        }
+    } // for(ULONG i = 0 ; i< nCount;++i)
 }
 // -----------------------------------------------------------------------------
 void DlgEdFunc::colorizeOverlappedObject(SdrObject* _pOverlappedObj)
@@ -562,6 +681,7 @@ BOOL DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
         // if no action, create object
         if ( !m_pParent->getViewsWindow()->IsAction() )
         {
+            deactivateOle(true);
             if ( m_pParent->getViewsWindow()->HasSelection() )
                 m_pParent->getViewsWindow()->unmarkAllObjects(m_pView);
             m_pView->BegCreateObj(m_aMDPos);
@@ -619,7 +739,7 @@ BOOL DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
                 OOle2Obj* pObj = dynamic_cast<OOle2Obj*>(pMark->GetMarkedSdrObj());
                 if ( pObj && !pObj->IsEmpty() )
                 {
-                    InitializeChart(pController->getModel(),pObj->GetObjRef());
+                    pObj->initializeChart(pController->getModel());
                 }
             }
         }
@@ -636,7 +756,10 @@ BOOL DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
         SdrViewEvent aVEvt;
         m_pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
         m_pView->MarkObj(aVEvt.pRootObj, pPV);
-    }
+    } // ift() && !rMEvt.IsMod2() )
+
+    checkTwoCklicks(rMEvt);
+
     m_pParent->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_pView);
     return bReturn;
 }
@@ -724,7 +847,9 @@ BOOL DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
             m_pParent->getViewsWindow()->BegMarkObj( m_aMDPos ,m_pView);
         }
         else
+        {
             m_pView->SdrBeginTextEdit( aVEvt.pRootObj,m_pView->GetSdrPageView(),m_pParent,sal_False );
+        }
     }
 
     return TRUE;
@@ -744,9 +869,12 @@ BOOL DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
         checkMovementAllowed(rMEvt);
 
     m_pParent->getViewsWindow()->EndAction();
-    m_pParent->SetPointer( m_pView->GetPreferedPointer( aPnt, m_pParent) );
 
-    m_pParent->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_pView);
+    checkTwoCklicks(rMEvt);
+
+    m_pParent->SetPointer( m_pView->GetPreferedPointer( aPnt, m_pParent) );
+    if ( !m_bUiActive )
+        m_pParent->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_pView);
     m_bSelectionMode = false;
     return TRUE;
 }
