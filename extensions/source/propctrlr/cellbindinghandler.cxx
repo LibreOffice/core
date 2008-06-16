@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cellbindinghandler.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -432,7 +432,7 @@ namespace pcr
                 sal_Bool bSuccess =
 #endif
                 _rPropertyValue >>= xBinding;
-                DBG_ASSERT( bSuccess, "CellBindingPropertyHandler::convertToControlValue: invalid value (1)!" );
+                OSL_ENSURE( bSuccess, "CellBindingPropertyHandler::convertToControlValue: invalid value (1)!" );
 
                 // the only value binding we support so far is linking to spreadsheet cells
                 aControlValue <<= m_pHelper->getStringAddressFromCellBinding( xBinding );
@@ -446,7 +446,7 @@ namespace pcr
                 sal_Bool bSuccess =
 #endif
                 _rPropertyValue >>= xSource;
-                DBG_ASSERT( bSuccess, "CellBindingPropertyHandler::convertToControlValue: invalid value (2)!" );
+                OSL_ENSURE( bSuccess, "CellBindingPropertyHandler::convertToControlValue: invalid value (2)!" );
 
                 // the only value binding we support so far is linking to spreadsheet cells
                 aControlValue <<= m_pHelper->getStringAddressFromCellListSource( xSource );
