@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: builddata.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,7 +98,6 @@ namespace configmgr
         Node &      lastNode()     { checkOffset(0); return m_nodes.back(); }
         NodeInfo &  lastNodeInfo() { checkOffset(0); return m_nodes.back().node.info; }
 
-        void resetTreeFragment();
         void resetTreeFragment(sharable::String _treeName, State::Field _state);
 
         TreeAddress createTreeFragment();
@@ -526,13 +525,6 @@ Offset TreeNodeBuilder::addNode(Name _aName, Flags::Field _aFlags, Type::Field _
     rInfo.parent = nNewOffset - m_parent;
 
     return nNewOffset;
-}
-//-----------------------------------------------------------------------------
-
-void TreeNodeBuilder::resetTreeFragment()
-{
-    State::Field nNullState = State::merged | State::flag_mandatory | State::flag_readonly;
-    this->resetTreeFragment(0,nNullState);
 }
 //-----------------------------------------------------------------------------
 
