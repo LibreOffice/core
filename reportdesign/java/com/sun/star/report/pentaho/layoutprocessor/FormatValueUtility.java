@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormatValueUtility.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,12 +62,14 @@ public class FormatValueUtility
     {
     }
 
-    public static void applyValueForVariable(final Object value, final AttributeMap variableSection)
+    public static String applyValueForVariable(final Object value, final AttributeMap variableSection)
     {
+        String ret = null;
         if (value instanceof Date)
         {
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "date");
-            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "date-value", formatDate((Date) value));
+            ret = formatDate((Date) value);
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "date-value", ret);
         }
         else if (value instanceof Number)
         {
@@ -96,6 +98,7 @@ public class FormatValueUtility
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "string");
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS,STRING_VALUE, "");
         }
+        return ret;
     }
 
     public static void applyValueForCell(final Object value, final AttributeMap variableSection)
@@ -149,7 +152,7 @@ public class FormatValueUtility
         if (result == null)
         {
             // ignore it. Ignoring it is much better than printing 'null'.
-            Log.debug("Formula '" + formulaExpression.getFormula() + "' evaluated to null.");
+            // Log.debug("Formula '" + formulaExpression.getFormula() + "' evaluated to null.");
             return null;
         }
         else if (result instanceof DataFlags)
