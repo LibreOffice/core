@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: uistrings.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,5 +58,6 @@ namespace rptui
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_SCOPE                 , "Scope");
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CHARTTYPE             , "ChartType");
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_PREVIEW_COUNT         , "RowLimit");
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TITLE                 , "Title");
 }
 
