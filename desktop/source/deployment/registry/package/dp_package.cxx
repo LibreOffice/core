@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_package.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +51,8 @@
 #include "com/sun/star/lang/WrappedTargetException.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/beans/UnknownPropertyException.hpp"
+#include "com/sun/star/graphic/XGraphic.hpp"
+#include "com/sun/star/graphic/XGraphicProvider.hpp"
 #include "com/sun/star/io/XOutputStream.hpp"
 #include "com/sun/star/io/XInputStream.hpp"
 #include "com/sun/star/task/InteractionClassification.hpp"
@@ -134,7 +136,7 @@ class BackendImpl : public ImplBaseT
         ::sal_Bool checkLicense(
             css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv,
             ExtensionDescription const& description, bool bInstalled,
-            ::rtl::OUString const & aContextName )
+            OUString const & aContextName )
                 throw (css::deployment::DeploymentException,
                     css::ucb::CommandFailedException,
                     css::ucb::CommandAbortedException,
@@ -193,7 +195,7 @@ class BackendImpl : public ImplBaseT
         virtual ::sal_Bool SAL_CALL checkPrerequisites(
             const css::uno::Reference< css::task::XAbortChannel >& xAbortChannel,
             const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
-            ::sal_Bool bInstalled, ::rtl::OUString const & aContextName)
+            ::sal_Bool bInstalled, OUString const & aContextName)
             throw (css::deployment::DeploymentException,
                 css::ucb::CommandFailedException,
                 css::ucb::CommandAbortedException,
@@ -210,6 +212,7 @@ class BackendImpl : public ImplBaseT
         virtual css::beans::StringPair SAL_CALL getPublisherInfo() throw (css::uno::RuntimeException);
 
         virtual OUString SAL_CALL getDisplayName() throw (RuntimeException);
+        virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL getIcon( ::sal_Bool bHighContrast ) throw (css::uno::RuntimeException);
     };
     friend class PackageImpl;
 
@@ -684,7 +687,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
 ::sal_Bool BackendImpl::PackageImpl::checkPrerequisites(
         const css::uno::Reference< css::task::XAbortChannel >&,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
-        sal_Bool bInstalled, ::rtl::OUString const & aContextName)
+        sal_Bool bInstalled, OUString const & aContextName)
         throw (css::deployment::DeploymentException,
             css::ucb::CommandFailedException,
             css::ucb::CommandAbortedException,
@@ -728,9 +731,38 @@ Sequence<OUString> BackendImpl::PackageImpl::getUpdateInformationURLs()
 beans::StringPair BackendImpl::PackageImpl::getPublisherInfo()
     throw (RuntimeException)
 {
-    ::std::pair< ::rtl::OUString, ::rtl::OUString > aInfo = getDescriptionInfoset().getLocalizedPublisherNameAndURL();
+    ::std::pair< OUString, OUString > aInfo = getDescriptionInfoset().getLocalizedPublisherNameAndURL();
     beans::StringPair aStrPair( aInfo.first, aInfo.second );
     return aStrPair;
+}
+
+//______________________________________________________________________________
+uno::Reference< graphic::XGraphic > BackendImpl::PackageImpl::getIcon( sal_Bool bHighContrast )
+    throw ( RuntimeException )
+{
+    uno::Reference< graphic::XGraphic > xGraphic;
+
+    OUString aIconURL = getDescriptionInfoset().getIconURL( bHighContrast );
+    if ( aIconURL.getLength() )
+    {
+        OUString aFullIconURL = m_url_expanded + OUSTR("/") + aIconURL;
+
+        uno::Reference< XComponentContext > xContext( getMyBackend()->getComponentContext() );
+        uno::Reference< graphic::XGraphicProvider > xGraphProvider(
+                        xContext->getServiceManager()->createInstanceWithContext( OUSTR( "com.sun.star.graphic.GraphicProvider" ), xContext ),
+                        uno::UNO_QUERY );
+
+        if ( xGraphProvider.is() )
+        {
+            uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
+            aMediaProps[0].Name = OUSTR( "URL" );
+            aMediaProps[0].Value <<= aFullIconURL;
+
+            xGraphic = xGraphProvider->queryGraphic( aMediaProps );
+        }
+    }
+
+    return xGraphic;
 }
 
 //______________________________________________________________________________
