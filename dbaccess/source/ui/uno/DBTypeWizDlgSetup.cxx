@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DBTypeWizDlgSetup.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -150,7 +150,7 @@ Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialogSetup::getPropertySetInfo(
 //------------------------------------------------------------------------------
 Dialog* ODBTypeWizDialogSetup::createDialog(Window* _pParent)
 {
-    return new ODbTypeWizDialogSetup(_pParent, m_pDatasourceItems, m_xORB, m_aInitialSelection);
+    return new ODbTypeWizDialogSetup(_pParent, m_pDatasourceItems, m_aContext.getLegacyServiceFactory(), m_aInitialSelection);
 }
 // -----------------------------------------------------------------------------
 void ODBTypeWizDialogSetup::executedDialog(sal_Int16 _nExecutionResult)
