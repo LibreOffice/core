@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CommandDispatchContainer.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,7 +126,11 @@ private:
                 ::com::sun::star::frame::XDispatch > >
         tDispatchMap;
 
+    typedef
+        ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > tDisposeVector;
+
     mutable tDispatchMap m_aCachedDispatches;
+    mutable tDisposeVector m_aToBeDisposedDispatches;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xModel;
