@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: poly2.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,6 +62,8 @@ extern "C"
 #ifndef _BGFX_POLYGON_B2DPOLYPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #endif
+
+#include <cmath>
 
 // ---------------
 // - PolyPolygon -
@@ -684,7 +686,7 @@ void PolyPolygon::Rotate( const Point& rCenter, USHORT nAngle10 )
     if( nAngle10 )
     {
         const double fAngle = F_PI1800 * nAngle10;
-        Rotate( rCenter, sin( fAngle ), cos( fAngle ) );
+        Rotate( rCenter, std::sin( fAngle ), std::cos( fAngle ) );
     }
 }
 
