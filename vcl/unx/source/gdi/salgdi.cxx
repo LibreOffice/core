@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -491,7 +491,7 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
         //if( (13*rDPIX >= 10*rDPIY) && (13*rDPIY >= 10*rDPIX) )  //+-30%
         {
 #ifdef DEBUG
-            printf("Forcing Resolution from %ldx%ld to %ldx%ld\n",
+            printf("Forcing Resolution from %dx%d to %dx%d\n",
                 rDPIX,rDPIY,rDPIY,rDPIY);
 #endif
             rDPIX = rDPIY; // y-resolution is more trustworthy
