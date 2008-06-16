@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportComponent.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,13 +42,36 @@
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include <svx/unoshape.hxx>
+#include <svx/unolingu.hxx>
 #include <svtools/syslocale.hxx>
+#include <svtools/lingucfg.hxx>
 // =============================================================================
 namespace reportdesign
 {
 // =============================================================================
     using namespace com::sun::star;
     using namespace comphelper;
+
+void lcl_getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rCTLFont,LanguageType  _eLatin,LanguageType _eCJK,LanguageType _eCTL )
+{
+        LanguageType eLatin = _eLatin;
+
+        //      #108374# / #107782#: If the UI language is Korean, the default Latin font has to
+        //      be queried for Korean, too (the Latin language from the document can't be Korean).
+        //      This is the same logic as in SwDocShell::InitNew.
+        LanguageType eUiLanguage = Application::GetSettings().GetUILanguage();
+        switch( eUiLanguage )
+        {
+                case LANGUAGE_KOREAN:
+                case LANGUAGE_KOREAN_JOHAB:
+                        eLatin = eUiLanguage;
+                break;
+        }
+
+        rLatinFont = OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_PRESENTATION, eLatin, DEFAULTFONT_FLAGS_ONLYONE );
+        rCJKFont = OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_PRESENTATION, _eCJK, DEFAULTFONT_FLAGS_ONLYONE );
+        rCTLFont = OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_PRESENTATION, _eCTL, DEFAULTFONT_FLAGS_ONLYONE ) ;
+}
 OFormatProperties::OFormatProperties()
     :nAlign(0)
     ,nFontEmphasisMark(0)
@@ -70,13 +93,29 @@ OFormatProperties::OFormatProperties()
     ,bCharShadowed(sal_False)
     ,bCharContoured(sal_False)
 {
-    Font aInitFont = Application::GetDefaultDevice()->GetSettings().GetStyleSettings().GetAppFont();
-    aFontDescriptor = VCLUnoHelper::CreateFontDescriptor(aInitFont);
+    try
+    {
+        SvtLinguConfig aLinguConfig;
+        aLinguConfig.GetProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultLocale"))) >>= aCharLocale;
+        LanguageType eCurLang = SvxLocaleToLanguage( aCharLocale );
+        aLinguConfig.GetProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultLocale_CJK")))  >>= aCharLocaleAsian;
+        LanguageType eCurLangCJK = SvxLocaleToLanguage( aCharLocaleAsian );
+        aLinguConfig.GetProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultLocale_CTL")))  >>= aCharLocaleComplex;
+        LanguageType eCurLangCTL = SvxLocaleToLanguage( aCharLocaleComplex );
+
+        Font aLatin,aCJK,aCTL;
+        lcl_getDefaultFonts(aLatin,aCJK,aCTL,eCurLang,eCurLangCJK,eCurLangCTL);
+        aFontDescriptor = VCLUnoHelper::CreateFontDescriptor(aLatin);
+        aAsianFontDescriptor = VCLUnoHelper::CreateFontDescriptor(aCJK);
+        aComplexFontDescriptor = VCLUnoHelper::CreateFontDescriptor(aCTL);
+    }
+    catch(const uno::Exception&)
+    {
+    }
     aFontDescriptor.Weight = awt::FontWeight::NORMAL;
     aFontDescriptor.CharacterWidth = awt::FontWidth::NORMAL;
-    aCharLocale = SvtSysLocale().GetLocaleData().getLocale();
-    //if ( !aFontDescriptor.StyleName.getLength() )
-    //    aFontDescriptor.StyleName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test"));
+
+    // aCharLocale = SvtSysLocale().GetLocaleData().getLocale();
 }
 // -----------------------------------------------------------------------------
 void OReportComponentProperties::setShape(uno::Reference< drawing::XShape >& _xShape,const uno::Reference< report::XReportComponent>& _xTunnel,oslInterlockedCount& _rRefCount)
