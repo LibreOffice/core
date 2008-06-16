@@ -8,7 +8,7 @@
 #
 # $RCSfile: unx.mk,v $
 #
-# $Revision: 1.38 $
+# $Revision: 1.39 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -61,6 +61,14 @@
 
 .IF "$(OS)$(CPU)$(COMEX)" == "SOLARISI4"
 .INCLUDE : unxsoli4.mk
+.ENDIF
+
+.IF "$(OS)$(CPU)$(COMEX)" == "SOLARISU4"
+.INCLUDE : unxsolu4.mk
+.ENDIF
+
+.IF "$(OS)$(CPU)$(COMEX)" == "SOLARISX4"
+.INCLUDE : unxsolx4.mk
 .ENDIF
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCSOLARISS"
