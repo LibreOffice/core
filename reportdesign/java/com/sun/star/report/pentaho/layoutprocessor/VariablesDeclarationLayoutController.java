@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VariablesDeclarationLayoutController.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,8 @@ import org.jfree.report.flow.layoutprocessor.AbstractLayoutController;
 import org.jfree.report.flow.layoutprocessor.LayoutController;
 import org.jfree.report.flow.layoutprocessor.LayoutControllerUtil;
 import org.jfree.report.structure.Element;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 /**
  * Writes a full variables-declaration section.
@@ -145,8 +147,16 @@ public class VariablesDeclarationLayoutController
 
     final FormulaExpression valueExpression = variable.getValueExpression();
     final Object value = LayoutControllerUtil.evaluateExpression(getFlowController(), variable, valueExpression);
-    FormatValueUtility.applyValueForVariable(value, variableSection);
-    variableSection.setAttribute(OfficeNamespaces.TEXT_NS, "formula", "ooow:" + value);
+    String formula = FormatValueUtility.applyValueForVariable(value, variableSection);
+    if ( formula == null )
+        formula = "" + value;
+    if (value instanceof Date)
+    {
+        Date date = (Date)value;
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy;MM;dd");
+        formula = "Date(" + dateFormat.format(date) + ")";
+    }
+    variableSection.setAttribute(OfficeNamespaces.TEXT_NS, "formula", "ooow:" + formula);
     return variableSection;
   }
 
