@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: metadata.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,10 +64,7 @@ namespace rptui
         sal_Int32                           getPropertyId(const String& _rName) const;
         String                              getPropertyTranslation(sal_Int32 _nId) const;
         sal_Int32                           getPropertyHelpId(sal_Int32 _nId) const;
-        sal_Int16                           getPropertyPos(sal_Int32 _nId) const;
         sal_uInt32                          getPropertyUIFlags(sal_Int32 _nId) const;
-        void                                getPropertyEnumRepresentations(sal_Int32 _nId,::std::vector< ::rtl::OUString >& _rOut) const;
-        String                              getPropertyName( sal_Int32 _nPropId );
         static void                         getExcludeProperties(::std::vector< com::sun::star::beans::Property >& _rExcludeProperties,const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _xFormComponentHandler);
 
         bool                                isComposable(
@@ -89,7 +86,6 @@ namespace rptui
     class HelpIdUrl
     {
     public:
-        static sal_uInt32 getHelpId( const ::rtl::OUString& _rHelpURL );
         static ::rtl::OUString getHelpURL( sal_uInt32 _nHelpId );
     };
 
