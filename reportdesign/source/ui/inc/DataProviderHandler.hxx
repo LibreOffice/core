@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataProviderHandler.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,6 +106,7 @@ namespace rptui
 
         bool impl_dialogLinkedFields_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
         bool impl_dialogChartType_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        void impl_updateChartTitle_throw(const ::com::sun::star::uno::Any& _aValue);
 
         // overload WeakComponentImplHelperBase::disposing()
         // This function is called upon disposing the component,
