@@ -34,6 +34,7 @@
 #include <cstring>
 #include <cstdio>
 #include <cctype>
+using namespace std;
 #else
 #include <stdlib.h>
 #include <string.h>
