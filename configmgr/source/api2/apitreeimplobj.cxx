@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: apitreeimplobj.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +76,6 @@ public:
     void setProvider(uno::Reference< lang::XComponent > const& xProvider);
     void setParent(uno::Reference< lang::XComponent > const& xParent);
     uno::Reference< lang::XComponent > getProvider() const;
-    uno::Reference< lang::XComponent > getParent() const;
 
 // XEventListener
     virtual void SAL_CALL acquire() throw();
@@ -121,10 +120,6 @@ void ApiTreeImpl::ComponentAdapter::setComponent(
 uno::Reference< lang::XComponent > ApiTreeImpl::ComponentAdapter::getProvider() const
 {
     return this->getComponent( this->xProvider );
-}
-uno::Reference< lang::XComponent > ApiTreeImpl::ComponentAdapter::getParent() const
-{
-    return this->getComponent( this->xParent );
 }
 void ApiTreeImpl::ComponentAdapter::setProvider(uno::Reference< lang::XComponent > const& rProvider)
 {
