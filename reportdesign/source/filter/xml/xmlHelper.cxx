@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlHelper.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -258,32 +258,6 @@ const SvXMLEnumMapEntry* OXMLHelper::GetKeepTogetherOptions()
     return s_aXML_EnumMap;
 }
 // -----------------------------------------------------------------------------
-const SvXMLEnumMapEntry* OXMLHelper::GetImagePositionOptions()
-{
-    static SvXMLEnumMapEntry s_aXML_EnumMap[] =
-    {
-        { XML_START,  0 },
-        { XML_END,    1 },
-        { XML_TOP,    2 },
-        { XML_BOTTOM, 3 },
-        { XML_CENTER, (sal_uInt16)-1 },
-        { XML_TOKEN_INVALID, 0 }
-    };
-    return s_aXML_EnumMap;
-}
-// -----------------------------------------------------------------------------
-const SvXMLEnumMapEntry* OXMLHelper::GetImageAlignOptions()
-{
-    static SvXMLEnumMapEntry s_aXML_EnumMap[] =
-    {
-        { XML_START,  0 },
-        { XML_CENTER, 1 },
-        { XML_END, 2 },
-        { XML_TOKEN_INVALID, 0 }
-    };
-    return s_aXML_EnumMap;
-}
-// -----------------------------------------------------------------------------
 const SvXMLEnumMapEntry* OXMLHelper::GetCommandTypeOptions()
 {
     static SvXMLEnumMapEntry s_aXML_EnumMap[] =
@@ -294,46 +268,6 @@ const SvXMLEnumMapEntry* OXMLHelper::GetCommandTypeOptions()
         { XML_TOKEN_INVALID, 0 }
     };
     return s_aXML_EnumMap;
-}
-// -----------------------------------------------------------------------------
-uno::Reference< util::XNumberFormatsSupplier > OXMLHelper::GetNumberFormatsSupplier(const uno::Reference<report::XReportDefinition>& _xReportDefinition)
-{
-    uno::Reference< util::XNumberFormatsSupplier > xSupplier;
-    uno::Reference< uno::XInterface> xParent = _xReportDefinition->getParent();
-    if ( xParent.is() )
-    {
-        uno::Reference< sdb::XOfficeDatabaseDocument > xDatabaseDocument(xParent,uno::UNO_QUERY);
-        if ( !xDatabaseDocument.is() )
-        {
-            uno::Reference< container::XChild> xChild(xParent,uno::UNO_QUERY);
-            while( !xDatabaseDocument.is() && xChild.is() )
-            {
-                xParent = xChild->getParent();
-                xDatabaseDocument.set(xParent,uno::UNO_QUERY);
-                xChild.set(xParent,uno::UNO_QUERY);
-            }
-        }
-        if ( xDatabaseDocument.is() )
-        {
-            uno::Reference<beans::XPropertySet> xProp(xDatabaseDocument->getDataSource(),uno::UNO_QUERY);
-            if ( xProp.is() )
-                xSupplier.set(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormatsSupplier"))),uno::UNO_QUERY);
-        }
-    }
-    else
-    {
-        ::comphelper::MediaDescriptor aDescriptor( _xReportDefinition->getArgs() );
-        uno::Sequence<beans::PropertyValue> aComponentData;
-        aComponentData = aDescriptor.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ComponentData")),aComponentData);
-        if ( aComponentData.getLength() )
-        {
-            ::comphelper::SequenceAsHashMap aComponentDataMap( aComponentData );
-            uno::Reference<sdbc::XConnection> xConnection;
-            xConnection = aComponentDataMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection")),xConnection);
-            xSupplier = dbtools::getNumberFormats(xConnection);
-        }
-    }
-    return xSupplier;
 }
 // -----------------------------------------------------------------------------
 #define PROPERTY_ID_FONTNAME         1
@@ -419,23 +353,27 @@ void OXMLHelper::copyStyleElements(const ::rtl::OUString& _sStyleName,const SvXM
 
             if ( xReportControlModel.is() )
             {
-                sal_Int16 nTextAlign = xReportControlModel->getParaAdjust();
-                switch(nTextAlign)
+                try
                 {
-                    case style::ParagraphAdjust_LEFT:
-                        nTextAlign = awt::TextAlign::LEFT;
-                        break;
-                    case style::ParagraphAdjust_CENTER:
-                        nTextAlign = awt::TextAlign::CENTER;
-                        break;
-                    case style::ParagraphAdjust_RIGHT:
-                        nTextAlign = awt::TextAlign::RIGHT;
-                        break;
-                    default:
-                        OSL_ENSURE(0,"Illegal text alignment value!");
-                        break;
+                    sal_Int16 nTextAlign = xReportControlModel->getParaAdjust();
+                    switch(nTextAlign)
+                    {
+                        case style::ParagraphAdjust_LEFT:
+                            nTextAlign = awt::TextAlign::LEFT;
+                            break;
+                        case style::ParagraphAdjust_CENTER:
+                            nTextAlign = awt::TextAlign::CENTER;
+                            break;
+                        case style::ParagraphAdjust_RIGHT:
+                            nTextAlign = awt::TextAlign::RIGHT;
+                            break;
+                        default:
+                            OSL_ENSURE(0,"Illegal text alignment value!");
+                            break;
+                    }
+                    xReportControlModel->setParaAdjust(nTextAlign);
                 }
-                xReportControlModel->setParaAdjust(nTextAlign);
+                catch(beans::UnknownPropertyException){}
             }
            }
         catch(uno::Exception&)
