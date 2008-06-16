@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: node.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -291,14 +291,6 @@ TreeFragment const  * SetNode::getNextElement(TreeFragment const * _pElement) co
 }
 //-----------------------------------------------------------------------------
 
-bool ValueNode::isEmpty() const
-{
-    Type::Field const empty_value_type = Type::value_any | Type::nodetype_value;
-
-    return info.type == empty_value_type;
-}
-//-----------------------------------------------------------------------------
-
 bool ValueNode::isNull() const
 {
     Flags::Type availmask = (info.flags & Flags::defaulted) ?
@@ -402,19 +394,12 @@ bool Node::isDefault() const
 }
 //-----------------------------------------------------------------------------
 
-bool Node::isLocalized() const
-{
-    return node.info.isLocalized();
-}
-
-//-----------------------------------------------------------------------------
-
 bool Node::isFragmentRoot() const
 {
     return ! node.info.parent;
 }
+#if OSL_DEBUG_LEVEL > 0
 //-----------------------------------------------------------------------------
-
 Node * Node::getParentNode()
 {
     return node.info.parent ? this - node.info.parent : NULL;
@@ -425,8 +410,8 @@ Node const * Node::getParentNode() const
 {
     return node.info.parent ? this - node.info.parent : NULL;
 }
+#endif
 //-----------------------------------------------------------------------------
-
 static Offset getFragmentIndex(Node const * pNode)
 {
     Offset result = 0;
