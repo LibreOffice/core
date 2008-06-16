@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: elementparser.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -578,16 +578,7 @@ bool ElementParser::maybeGetAttribute(SaxAttributeList const& xAttribs, OUString
 {
     return xAttribs.is() && impl_maybeGetAttribute(xAttribs, aAttributeName, rAttributeValue);
 }
-// -----------------------------------------------------------------------------
 
-/// assigns an attribute value or an empty string if it doesn't exist
-void ElementParser::alwaysGetAttribute(SaxAttributeList const& xAttribs, OUString const& aAttributeName, OUString& rAttributeValue) const
-{
-    if (xAttribs.is())
-        rAttributeValue = xAttribs->getValueByName(aAttributeName);
-    else
-        rAttributeValue = OUString();
-}
 // -----------------------------------------------------------------------------
 } // namespace
 } // namespace
