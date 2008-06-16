@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: profileitem_ooo.scp,v $
- * $Revision: 1.64 $
+ * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -272,7 +272,7 @@ ProfileItem gid_Profileitem_Configmgr_Strata
     Section   = "Bootstrap";
     Order = 25;
     Key  = "CFG_Strata";
-    Value  = "${CFG_LocalDataSvc}:$CFG_DefaultLayerUrl;${CFG_LocalModuleDataSvc}:$CFG_ModuleLayerUrl;${CFG_LocalResDataSvc}:$CFG_DefaultLayerUrl;${CFG_LocalDataSvc}:$CFG_UnoSharedPackages;?com.sun.star.comp.configuration.backend.SystemIntegration:;?com.sun.star.comp.configuration.backend.PolicyLayerBackend:;?${CFG_LocalDataSvc}:$CFG_CustomLayerUrl;?${CFG_LocalModuleDataSvc}:$CFG_CustomLayerModulesUrl;${CFG_LocalDataSvc}:$CFG_UnoUserPackages;${CFG_LocalDataSvc}:$CFG_UserLayerUrl;";
+    Value  = "${CFG_LocalDataSvc}:$CFG_DefaultLayerUrl;${CFG_LocalModuleDataSvc}:$CFG_ModuleLayerUrl;${CFG_LocalResDataSvc}:$CFG_DefaultLayerUrl;?${CFG_LocalDataSvc}:$CFG_CustomLayerUrl;?${CFG_LocalModuleDataSvc}:$CFG_CustomLayerModulesUrl;${CFG_LocalDataSvc}:$CFG_UnoSharedPackages;?com.sun.star.comp.configuration.backend.SystemIntegration:;?com.sun.star.comp.configuration.backend.PolicyLayerBackend:;${CFG_LocalDataSvc}:$CFG_UnoUserPackages;${CFG_LocalDataSvc}:$CFG_UserLayerUrl;";
 End
 
 ProfileItem gid_Profileitem_Configmgr_Ldapmappingurl
@@ -520,7 +520,11 @@ ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Types
     ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_TYPES";
+#if defined ENABLE_VBA && !defined VBA_EXTENSION
+    Value = "$ORIGIN/offapi.rdb $ORIGIN/oovbaapi.rdb ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_TYPES}";
+#else
     Value = "$ORIGIN/offapi.rdb ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_TYPES}";
+#endif
 End
 
 ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Services
