@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: common_brand.scp,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,8 +59,11 @@ Module gid_Module_Root_Brand
             gid_Brand_Dir_Share_Registry_Modules_Oo,
             gid_Brand_Dir_Share_Registry_Modules_Oo_Inet,
             gid_Brand_Dir_Share_Registry_Modules_Oo_Office,
+            gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Common,
             gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Jobs,
+            gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Ui,
             gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Writer,
+            gid_Brand_Dir_Share_Registry_Modules_Oo_Setup,
             gid_Brand_Dir_Share_Xdg);
     Files = (gid_Brand_File_BasisLink,
              gid_Brand_File_Bin_Crashreport,
@@ -98,11 +101,11 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Msvcm90crt_Manifest,
              gid_Brand_File_Lib_Npsoplugin,
              gid_Brand_File_Lib_Subscrib_C05,
-             gid_Brand_File_Oo_Office_Common_Xcu,
              gid_Brand_File_Oo_Office_Compatibility_Xcu,
-             gid_Brand_File_Oo_Office_Ui_Xcu,
-             gid_Brand_File_Oo_Setup_Xcu,
              gid_Brand_File_Registry_Spool_Oo_Inet_defaultsearchengine_Xcu_C01,
+             gid_Brand_File_Registry_Spool_Oo_Setup_Brand_Xcu,
+             gid_Brand_File_Registry_Spool_Oo_Office_Common_Brand_Xcu,
+             gid_Brand_File_Registry_Spool_Oo_Office_Ui_Brand_Xcu,
              gid_Brand_File_Registry_Spool_Oo_Office_Writer_directcursor_Xcu_C01,
              gid_Brand_File_Registry_Spool_Oo_Office_Writer_defaultfontarial_Xcu_C01,
              gid_Brand_File_Script_Setofficelang_C01,
@@ -119,6 +122,7 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Share_Xdg_Writer);
     Unixlinks = (gid_Brand_Unixlink_BasisLink,
                  gid_Brand_Unixlink_Program,
+                 gid_Brand_Unixlink_Soffice,
                  gid_Brand_Unixlink_Unopkg,
                  gid_Brand_Unixlink_Urelibs);
 End
@@ -295,9 +299,24 @@ Directory gid_Brand_Dir_Share_Registry_Modules_Oo_Office
     HostName = "Office";
 End
 
+Directory gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Common
+    ParentID = gid_Brand_Dir_Share_Registry_Modules_Oo_Office;
+    HostName = "Common";
+End
+
+Directory gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Ui
+    ParentID = gid_Brand_Dir_Share_Registry_Modules_Oo_Office;
+    HostName = "UI";
+End
+
 Directory gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Writer
     ParentID = gid_Brand_Dir_Share_Registry_Modules_Oo_Office;
     HostName = "Writer";
+End
+
+Directory gid_Brand_Dir_Share_Registry_Modules_Oo_Setup
+    ParentID = gid_Brand_Dir_Share_Registry_Modules_Oo;
+    HostName = "Setup";
 End
 
 #if defined UNX && ! defined MACOSX
@@ -365,7 +384,15 @@ File gid_Brand_File_Html_Thirdpartylicensereadme
     TXT_FILE_BODY;
 End
 
-#if !defined MACOSX
+#if defined MACOSX
+Unixlink gid_Brand_Unixlink_Soffice
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = EXENAME(soffice);
+    Target = "soffice.bin";
+    Styles = ();
+End
+#else
 File gid_Brand_File_Bin_Soffice
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -492,13 +519,6 @@ File gid_Brand_File_Images_Brand_Zip
     Styles = (PACKED);
 End
 
-File gid_Brand_File_Oo_Office_Common_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED, SCPZIP_REPLACE);
-    Dir = gid_Brand_Dir_Share_Registry_Data_Org_Openoffice_Office;
-    Name = "/registry/data/org/openoffice/Office/Common.xcu";
-End
-
 File gid_Brand_File_Oo_Office_Compatibility_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED, SCPZIP_REPLACE);
@@ -506,18 +526,25 @@ File gid_Brand_File_Oo_Office_Compatibility_Xcu
     Name = "/registry/data/org/openoffice/Office/Compatibility.xcu";
 End
 
-File gid_Brand_File_Oo_Office_Ui_Xcu
+File gid_Brand_File_Registry_Spool_Oo_Office_Common_Brand_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED, SCPZIP_REPLACE);
-    Dir = gid_Brand_Dir_Share_Registry_Data_Org_Openoffice_Office;
-    Name = "/registry/data/org/openoffice/Office/UI.xcu";
+    Dir = gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Common;
+    Name = "/registry/spool/org/openoffice/Office/Common-brand.xcu";
 End
 
-File gid_Brand_File_Oo_Setup_Xcu
+File gid_Brand_File_Registry_Spool_Oo_Office_Ui_Brand_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED, SCPZIP_REPLACE);
-    Dir = gid_Brand_Dir_Share_Registry_Data_Org_Openoffice;
-    Name = "/registry/data/org/openoffice/Setup.xcu";
+    Dir = gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Ui;
+    Name = "/registry/spool/org/openoffice/Office/UI-brand.xcu";
+End
+
+File gid_Brand_File_Registry_Spool_Oo_Setup_Brand_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED, SCPZIP_REPLACE);
+    Dir = gid_Brand_Dir_Share_Registry_Modules_Oo_Setup;
+    Name = "/registry/spool/org/openoffice/Setup-brand.xcu";
 End
 
 #if defined UNX && ! defined MACOSX
