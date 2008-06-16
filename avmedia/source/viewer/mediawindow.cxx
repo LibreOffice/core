@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mediawindow.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -473,7 +473,7 @@ bool MediaWindow::isMediaURL( const ::rtl::OUString& rURL, bool bDeep, Size* pPr
             {
                 try
                 {
-                    fprintf(stderr, "-->%s uno reference \n\n",AVMEDIA_MANAGER_SERVICE_NAME);
+                    std::fprintf(stderr, "-->%s uno reference \n\n",AVMEDIA_MANAGER_SERVICE_NAME);
 
                     uno::Reference< ::com::sun::star::media::XManager > xManager(
                         xFactory->createInstance( ::rtl::OUString::createFromAscii( AVMEDIA_MANAGER_SERVICE_NAME ) ),
