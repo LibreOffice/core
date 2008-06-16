@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cacheaccess.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -135,16 +135,6 @@ bool CacheClientAccess::insertDefaults( backend::NodeInstance const & _aDefaultD
 }
 // -------------------------------------------------------------------------
 
-bool CacheClientAccess::isEmpty()
-{
-    CacheData::ModuleList& rModules = this->m_aData.accessModuleList();
-
-    bool bRet = rModules.empty();
-
-    return bRet;
-}
-// -------------------------------------------------------------------------
-
 // -------------------------------------------------------------------------
 // -------------------------------------------------------------------------
 
@@ -209,23 +199,6 @@ oslInterlockedCount CacheLoadingAccess::releaseModule( CacheLine::Name const & _
     return nRet;
 }
 // -----------------------------------------------------------------------------
-
-void CacheLoadingAccess::applyUpdate(backend::UpdateInstance & _aUpdate) CFG_UNO_THROW_RTE( )
-{
-    CFG_TRACE_INFO("CacheLoadingAccess: Merging changes into subtree '%s'", OUSTRING2ASCII(_aUpdate.root().toString()) );
-
-    this->m_aData.applyUpdate(_aUpdate);
-}
-
-// -----------------------------------------------------------------------------
-data::NodeAddress CacheLoadingAccess::findNode( CacheLine::Path const& aComponentName )
-{
-    data::NodeAddress aNode = this->m_aData.getNode(aComponentName);
-
-    return aNode;
-}
-
-// -------------------------------------------------------------------------
 
 bool CacheLoadingAccess::isEmpty()
 {
