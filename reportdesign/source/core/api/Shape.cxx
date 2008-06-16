@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Shape.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,23 +28,25 @@
  *
  ************************************************************************/
 #include "Shape.hxx"
+
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#ifndef REPORTDESIGN_SHARED_CORESTRINGS_HRC
-#include "corestrings.hrc"
-#endif
 #include <com/sun/star/beans/XPropertyState.hpp>
-#ifndef REPORTDESIGN_CORE_RESOURCE_HRC_
-#include "core_resource.hrc"
-#endif
-#include "core_resource.hxx"
+#include <com/sun/star/text/ParagraphVertAlign.hpp>
+#include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/debug.hxx>
-#include <comphelper/property.hxx>
-#include "Tools.hxx"
-#include "FormatCondition.hxx"
-#include <com/sun/star/text/ParagraphVertAlign.hpp>
-#include "ReportHelperImpl.hxx"
+#include <tools/diagnose_ex.h>
 #include <boost/bind.hpp>
+#include <svx/unoshape.hxx>
+
+#include "corestrings.hrc"
+#include "core_resource.hrc"
+#include "core_resource.hxx"
+#include "Tools.hxx"
+#include "RptObject.hxx"
+#include "FormatCondition.hxx"
+#include "ReportHelperImpl.hxx"
 // =============================================================================
 namespace reportdesign
 {
@@ -311,7 +313,29 @@ void SAL_CALL OShape::setConditionalPrintExpression( const ::rtl::OUString& _con
 uno::Reference< util::XCloneable > SAL_CALL OShape::createClone(  ) throw (uno::RuntimeException)
 {
     uno::Reference< report::XReportComponent> xSource = this;
-    uno::Reference< report::XShape> xSet(cloneObject(xSource,m_aProps.aComponent.m_xFactory,SERVICE_SHAPE),uno::UNO_QUERY_THROW);
+    uno::Reference< report::XReportComponent> xSet;
+    try
+    {
+        SvxShape* pShape = SvxShape::getImplementation( xSource );
+        if ( pShape )
+        {
+            SdrObject* pObject = pShape->GetSdrObject();
+            if ( pObject )
+            {
+                SdrObject* pClone = pObject->Clone();
+                if ( pClone )
+                {
+                    xSet.set(pClone->getUnoShape(),uno::UNO_QUERY_THROW );
+
+                    // ::comphelper::copyProperties(xSource.get(),xSet.get());
+                }
+            }
+        } // if ( pShape )
+    }
+    catch(const uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
     return xSet.get();
 }
 // -----------------------------------------------------------------------------
