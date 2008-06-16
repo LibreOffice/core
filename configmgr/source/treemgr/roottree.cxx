@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: roottree.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,12 +116,6 @@ CommitHelper::~CommitHelper()
 }
 
 //-----------------------------------------------------------------------------
-void CommitHelper::reset()
-{
-    m_pData.reset();
-}
-
-//-----------------------------------------------------------------------------
 bool CommitHelper::prepareCommit(TreeChangeList& rChangeList)
 {
     OSL_ENSURE(m_pTree,"ERROR: CommitHelper: Cannot commit without a tree");
@@ -159,20 +153,6 @@ void CommitHelper::finishCommit(TreeChangeList& rChangeList)
         throw configuration::Exception("INTERNAL ERROR: FinishCommit cannot handle rebased changes trees");
 
     view::ViewTreeAccess(*m_pTree).finishCommit(rChangeList.root);
-}
-//-----------------------------------------------------------------------------
-
-void CommitHelper::revertCommit(TreeChangeList& rChangeList)
-{
-    OSL_ENSURE(m_pTree,"INTERNAL ERROR: Nothing to finish without a tree");
-
-    AbsolutePath aPath = m_pTree->getRootPath();
-
-    OSL_ENSURE( rChangeList.getRootNodePath().toString() == aPath.toString(), "ERROR: FinishCommit cannot handle rebased changes trees");
-    if ( !matches(rChangeList.getRootNodePath(), aPath) )
-        throw configuration::Exception("INTERNAL ERROR: FinishCommit cannot handle rebased changes trees");
-
-    view::ViewTreeAccess(*m_pTree).revertCommit(rChangeList.root);
 }
 //-----------------------------------------------------------------------------
 
