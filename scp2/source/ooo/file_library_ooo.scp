@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_library_ooo.scp,v $
- * $Revision: 1.291 $
+ * $Revision: 1.292 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2042,3 +2042,19 @@ File gid_File_Lib_Unopkg
     Name = SCP2_URE_DL_NORMAL("unopkg");
     Styles = (PACKED);
 End
+
+#if defined WNT && (defined M1400 || defined M1500) && \
+    !(defined SYSTEM_MOZILLA || defined WITHOUT_MOZILLA)
+File gid_File_Moz_Msvcp71
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = SCP2_URE_DL_NORMAL("msvcp71" SCP2_STDLP_DEBUG);
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+End
+File gid_File_Moz_Msvcr71
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = SCP2_URE_DL_NORMAL("msvcr71" SCP2_STDLP_DEBUG);
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+End
+#endif
