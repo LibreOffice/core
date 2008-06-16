@@ -8,7 +8,7 @@
 #
 # $RCSfile: parameter.pm,v $
 #
-# $Revision: 1.51 $
+# $Revision: 1.52 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -283,7 +283,7 @@ sub setglobalvariables
         if ( $installer::globals::installertypedir eq "" ) { $installer::globals::installertypedir = "msi"; }
     }
 
-    if ( $installer::globals::compiler =~ /unxso[lg][si]/ )
+    if ( $installer::globals::compiler =~ /unxso[lg][siux]/ )
     {
         $installer::globals::issolarisbuild = 1;
         if ( $installer::globals::packageformat eq "pkg" )
