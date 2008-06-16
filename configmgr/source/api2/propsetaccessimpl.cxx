@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: propsetaccessimpl.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,14 +106,6 @@ public:
     : m_bReadonly(_bReadonly)
     { m_aProperties.reserve(_nCount); }
 
-    Property forNode(Tree const& _aPropertyTree, AnyNodeRef const& _rNode)
-    {
-        OSL_ENSURE( _aPropertyTree.isValidNode(_rNode), "Node to retrieve properties from does not match tree");
-        reset();
-        _aPropertyTree.visit(_rNode, *this);
-        OSL_ENSURE(m_aProperties.size() == 1, "CollectProperties::forNode: not exactly one result property!");
-        return m_aProperties[0];
-    }
     Sequence<Property> forChildren(Tree const& _aPropertyTree, NodeRef const& _rNode)
     {
         OSL_ENSURE( _aPropertyTree.isValidNode(_rNode), "Node to retrieve properties from does not match tree");
