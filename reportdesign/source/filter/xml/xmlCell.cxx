@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlCell.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +50,6 @@
 #include "xmlstrings.hrc"
 #endif
 #include "xmlTable.hxx"
-#include "xmlFixedText.hxx"
 #include "xmlFormattedField.hxx"
 #include "xmlImage.hxx"
 #include "xmlFixedContent.hxx"
