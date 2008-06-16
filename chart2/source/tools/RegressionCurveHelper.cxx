@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RegressionCurveHelper.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -410,7 +410,7 @@ void RegressionCurveHelper::addRegressionCurve(
         if( xProp.is())
         {
             if( xPropertySource.is())
-                ::chart::PropertyHelper::copyProperties( xPropertySource, xProp );
+                comphelper::copyProperties( xPropertySource, xProp );
             else
             {
                 uno::Reference< XPropertySet > xSeriesProp( xRegCnt, uno::UNO_QUERY );
