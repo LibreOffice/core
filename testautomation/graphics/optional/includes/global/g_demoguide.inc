@@ -1,0 +1,473 @@
+'encoding UTF-8  Do not remove or change this line!
+'**************************************************************************
+'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'* 
+'* Copyright 2008 by Sun Microsystems, Inc.
+'*
+'* OpenOffice.org - a multi-platform office productivity suite
+'*
+'* $RCSfile: g_demoguide.inc,v $
+'*
+'* $Revision: 1.1 $
+'*
+'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:39 $
+'*
+'* This file is part of OpenOffice.org.
+'*
+'* OpenOffice.org is free software: you can redistribute it and/or modify
+'* it under the terms of the GNU Lesser General Public License version 3
+'* only, as published by the Free Software Foundation.
+'*
+'* OpenOffice.org is distributed in the hope that it will be useful,
+'* but WITHOUT ANY WARRANTY; without even the implied warranty of
+'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'* GNU Lesser General Public License version 3 for more details
+'* (a copy is included in the LICENSE file that accompanied this code).
+'*
+'* You should have received a copy of the GNU Lesser General Public License
+'* version 3 along with OpenOffice.org.  If not, see
+'* <http://www.openoffice.org/license.html>
+'* for a copy of the LGPLv3 License.
+'*
+'/***********************************************************************
+'*
+'* owner : wolfram.garten@sun.com
+'*
+'* short description : testcase to check the demo guide
+'*
+'************************************************************************
+'*
+' #1 t_Introduction         ' Description
+' #1 t_Interoperability     ' Description
+' #1 t_DrawingEngine        ' Description
+' 
+'*
+'\***********************************************************************
+testcase t_Introduction
+
+    gApplication   = "IMPRESS"
+    
+    '///Open new presentation
+    printlog "Open new presentation"
+    Call hNewDocument
+    
+    '///Open the Gallery
+    printlog "Open the Gallery"
+    ToolsGallery
+    Sleep (1)
+    Kontext "Gallery"
+    if Gallery.NotExists(2) then
+        ToolsGallery
+    end if
+    
+    '///Choose computer theme and insert the third image
+    printlog "Choose an item from the gallery"
+    Gallerys.Select(2)
+    View.TypeKeys "<HOME><RIGHT><RIGHT>"
+    View.TypeKeys "<SHIFT F10>"    'OpenContextMenu(true)
+    sleep 2
+    MenuSelect(MenuGetItemID(1))   'Insert
+    sleep 2
+    MenuSelect(MenuGetItemID(1))   'Copy
+    sleep 2
+    '///+ - Check that we really got a copy of the object ///'
+    kontext "DocumentImpress"
+    DocumentImpress.OpenContextMenu(true)
+    sleep 2
+    MenuSelect 27353
+    sleep 2
+    Kontext "ExportierenDlg"
+    if ExportierenDlg.IsVisible(5) then
+            printlog "   Gallery-object correctly copied into Slide."
+            ExportierenDlg.Close
+        else
+            warnlog "   Doesn't seem like we copied anything from the Gallery... ?"
+    endif
+    printlog "Delete the item"
+    kontext "DocumentImpress"
+    DocumentImpress.TypeKeys "<DELETE>"
+    printlog "Close the Gallery"
+    ToolsGallery
+    printlog "Insert computergraphic from file"
+    InsertGraphicsFromFile
+    try
+        Kontext "GrafikEinfuegenDlg"
+        sleep 2
+        Dateiname.settext Convertpath (gTesttoolPath + "graphics/required/input/screen_white.wmf")
+        Oeffnen.click
+    catch
+        Warnlog "Insert graphic doesn't work"
+    endcatch
+    
+    '///Resize object 
+    printlog "Resize object"
+    Kontext "DocumentImpress"
+    gMouseClick (10, 10)
+    sleep 1
+    EditSelectAll
+    sleep 1
+    ContextPositionAndSize                '/// Format-position and size
+    Kontext
+    Active.SetPage TabPositionAndSize
+    Kontext "TabPositionAndSize"
+    KeepRatio.Check
+    SizePosition.TypeKeys "<UP> <UP> <LEFT> <LEFT>"
+    SizePosition.TypeKeys "<DOWN> <RIGHT>"
+    Width.SetText CStr((CInt(Width.GetText)) * 2)
+    TabPositionAndSize.OK
+    
+    '///Break object
+    printlog "Break object"
+    Kontext "DocumentImpress"
+    gMouseClick (10, 10)
+    sleep 1
+    EditSelectAll
+    sleep 1
+    hOpenContextMenu  '(when the object is marked)
+    hMenuSelectNr(13) 
+    '///    Select part of object and make it black
+    printlog "Select part of object and make it black"
+    DocumentImpress.TypeKeys "<SHIFT TAB>"
+    FormatArea
+    Kontext
+    Active.SetPage TabArea
+    Kontext "TabArea"
+    FillOptions.Select 2
+    ColourList.Select 1
+    TabArea.OK
+    
+    '///Group the objects
+    printlog "Group the object"
+    kontext "DocumentImpress"
+    DocumentImpress.TypeKeys "<MOD1 A>"
+    hOpenContextMenu  '(when the object is marked)
+    hMenuSelectNr(12)
+    
+    '///Add Layout "Title Only"
+    Printlog "Add Layout"
+    kontext "Tasks"
+    if (NOT Tasks.exists) then
+        warnlog "Tasks Panel not visible. Opening now."
+        ViewTaskPane
+    endif
+    Kontext "LayoutsPreview"
+    LayoutsPreview.TypeKeys "<HOME> <DOWN> <DOWN> <RETURN>"
+    sleep (5)
+    '///Add a background
+    Printlog "Add background"
+    
+    warnlog "#i89113, Testtool: View.OpenMenu does not work on TaskPane Menu anymore."
+    goto endsub
+    
+    Kontext "Tasks"
+    printlog "Deselect all tabs from view menu in task pane except the needed."
+    View.OpenMenu
+    MenuSelect(MenuGetItemID(5))        
+    View.OpenMenu
+    MenuSelect(MenuGetItemID(4))        
+    View.OpenMenu
+    MenuSelect(MenuGetItemID(3))
+    View.OpenMenu
+    MenuSelect(MenuGetItemID(2))
+    Kontext "AvailableForUsePreview"
+    AvailableForUsePreview.TypeKeys "<HOME> <RIGHT> <RETURN>"
+    sleep (5)    
+    '///Add a transition effect
+    Printlog "Add a transition effect"
+    Kontext "Tasks"
+    View.OpenMenu
+    MenuSelect(MenuGetItemID(5))
+    View.OpenMenu
+    MenuSelect(MenuGetItemID(1))
+    TransitionSound.GetItemCount   'needed for select
+    Sleep 1
+    TransitionSound.Select 4
+    
+    '///Close the document
+    Printlog "Close the document"
+    Call hCloseDocument
+    
+endcase
+'--------------------------------------------------------------------
+
+testcase t_Interoperability
+
+    Dim sTemplatename as string
+
+    gApplication   = "IMPRESS"
+    
+    '///Open PowerPoint presentation
+    printlog "Open PowerPoint presentation"
+    hFileOpen (Convertpath (gTesttoolPath + "graphics/required/input/dotNetOverview.ppt"))
+
+    Call sMakeReadOnlyDocumentEditable
+    
+    'Save the name of the origin background (taken from last slide)
+        Kontext "DocumentImpress"
+        DocumentImpress.TypeKeys "<END>"
+        sleep (1)
+        sTemplatename = DocumentImpress.StatusGetText (7)
+        printlog "    Background = " & sTemplatename     'Debugcode
+    
+    printlog "Choose a masterpage from right pane"
+    
+    warnlog "#i89113, Testtool: View.OpenMenu does not work on TaskPane Menu anymore."
+    goto endsub
+    
+    Kontext "Tasks"
+    printlog "Deselect all tabs accept the Master Pages"
+    View.OpenMenu
+    MenuSelect(MenuGetItemID(5)) 
+    View.OpenMenu
+    MenuSelect(MenuGetItemID(4))        
+    View.OpenMenu
+    MenuSelect(MenuGetItemID(3))
+    View.OpenMenu
+    MenuSelect(MenuGetItemID(2))
+    sleep 2    
+    Kontext "AvailableForUsePreview"
+    AvailableForUsePreview.TypeKeys "<HOME> <RIGHT> <RETURN>"
+    sleep (5)
+    printlog "    Verify that the background has changed"
+    Kontext "DocumentImpress"
+    printlog "    Background is " & DocumentImpress.StatusGetText (7)     'Debugcode
+    if DocumentImpress.StatusGetText (7) = sTemplatename then
+            warnlog "The background is not changed"
+        else printlog "    Background has been changed"
+    endif
+    
+    '///Switch back to original background
+    printlog "Switch back to original background"
+    Kontext "Tasks"
+    Kontext "AvailableForUsePreview"
+    AvailableForUsePreview.TypeKeys "<HOME> <RETURN>"
+    sleep (5)
+    Kontext "DocumentImpress"
+    if DocumentImpress.StatusGetText (7) = sTemplatename then
+            printlog "    The background has been set back to default"
+        else warnlog "The background is " & DocumentImpress.StatusGetText (7) & " but should be: " & sTemplatename
+    endif
+    
+    '///Resort slides
+    printlog "Resort slides"
+    Kontext "DocumentImpress"
+    Kontext "Slides"
+    Kontext "SlidesControl"
+    SlidesControl.TypeKeys "<Mod1 X>"
+    Kontext "DocumentImpress"
+    DocumentImpress.TypeKeys "<HOME>"
+    Kontext "Slides"
+    Kontext "SlidesControl"
+    SlidesControl.TypeKeys "<Mod1 V>"
+    kontext "InsertPaste"
+     if InsertPaste.Exists(1) then
+        Before.Check
+        InsertPaste.OK
+     endif
+     Printlog "    Verify that the slide was moved correctly"
+     Kontext "Slides"
+     SlidesControl.TypeKeys "<PAGEUP>"
+     SlidesControl.TypeKeys "<SHIFT F10>"
+     if hMenuFindSelect(27268, true, 3) = false then
+        Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
+        Call hCloseDocument
+        Goto Endsub
+     endif
+     kontext "NameDlgPage"
+     if NameField.GetText <> ".NET Enterprise Federation" then
+        Warnlog "Wrong slide found! Expected no 3, but found " + NameField.GetText + "."
+     else
+        Printlog "    The slide was correctly moved"
+     endif
+     NameDlgPage.OK
+     sleep 1
+    
+    '///Switch views
+    printlog "Switch views"
+    ViewWorkspaceOutlineView
+    sleep (2)
+    setclipboard("")
+    try
+        Kontext "DocumentImpressOutlineView"
+        DocumentImpressOutlineView.TypeKeys "<MOD1 HOME><SHIFT END>"
+        DocumentImpressOutlineView.TypeKeys "<Mod1 C>"
+        sleep (5)
+        if getclipboard() <> ".NET Enterprise" then
+                warnlog "    Wrong selection in outlineview. Should be '.NET Enterprise', but is '" & getclipboard() +"'."
+            else printlog "    Switching to Outlineview was successfull"
+        endif
+    catch
+        warnlog "Switching to Outlineview was not successfull"
+    endcatch
+    ViewWorkspaceNotesView
+    sleep 1
+    try
+        Kontext "DocumentImpressNotesView"
+        DocumentImpressNotesView.TypeKeys "<TAB><TAB>"
+        DocumentImpressNotesView.OpenContextMenu(true)
+        sleep 2
+        MenuSelect(MenuGetItemID(3))   'Open Contextmenu Line
+        Kontext "TabLinie"
+        TabLinie.Cancel
+        printlog "    Switching to Notesview was successfull"
+    catch
+        warnlog "Switching to Notesview was not successfull"
+    endcatch
+    ViewWorkspaceHandoutView
+    sleep 1
+    try
+        Kontext "DocumentImpressHandoutView"
+        DocumentImpressHandoutView.TypeKeys "<TAB>"
+        printlog "    Switching to Handoutview was successfull"
+    catch
+        warnlog "Switching to Handoutview was not successfull"
+    endcatch
+    sleep 2
+    ViewWorkspaceSlidesView
+    sleep 2
+    try
+        Kontext "Slides"
+        SlidesControl.TypeKeys "<TAB>"
+        printlog "    Switching to Slideview was successfull"
+    catch
+        warnlog "Switching to Slideview was not successfull"
+    endcatch
+    sleep 1
+    ViewWorkspaceDrawingView
+    sleep 1
+    try
+        Kontext "DocumentImpress"
+        DocumentImpress.TypeKeys "<TAB>"
+        printlog "    Switching back to Drawingview was successfull"
+    catch
+        warnlog "Switching to Drawingview was not successfull"
+    endcatch
+    
+    '///Travel through the presentation by left pane
+    printlog "Travel through the presentation by left pane to slide 7"
+    Kontext "DocumentImpress"
+    DocumentImpress.TypeKeys "<HOME><PAGEDOWN><PAGEDOWN><PAGEDOWN><PAGEDOWN><PAGEDOWN><PAGEDOWN><PAGEDOWN>"
+    Printlog "    Verify that the correct slide (7) is reached"
+    Kontext "Slides"
+    Kontext "SlidesControl"
+    SlidesControl.OpenContextMenu
+    if hMenuFindSelect(27268, true, 3) = false then
+    Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
+    Call hCloseDocument
+    Goto Endsub
+    endif
+    kontext "NameDlgPage"
+    if NameField.GetText <> "Visual Studio.NET The complete development environment  for building distributed applications  for Windows and the Web" then
+            Warnlog "Wrong slide found! Expected no 7, but found " + NameField.GetText + "."
+        else Printlog "    Slide 7 is reached"        
+    endif
+    NameDlgPage.OK
+    sleep 1
+    
+    '///Autoshape support
+    printlog "Autoshape support"
+    Kontext "DocumentImpress"
+    DocumentImpress.TypeKeys "<TAB>"
+    try
+        Kontext "ExtrusionObjectBar"
+        ExtrusionTiltRight.Click
+        printlog "    An autoshape was found and turned right"
+    catch
+        warnlog "Turning autoshape was not successfully"
+    endcatch
+    
+    '///Close document
+    printlog "Close document"
+    Call hCloseDocument
+        
+endcase
+'--------------------------------------------------------------------
+
+testcase t_DrawingEngine
+
+Dim sGroupPosition as string
+Dim sObjectPosition as string
+
+gApplication   = "DRAW"
+    
+    '///Open a drawing
+    printlog "Open a drawing"
+    hFileOpen (Convertpath (gTesttoolPath + "graphics/required/input/Blueprint.odg"))
+
+    Call sMakeReadOnlyDocumentEditable
+
+    '///Select grouped object and enter group
+    printlog "Select group"
+    Kontext "DocumentDraw"
+    DocumentDraw.TypeKeys "<TAB><TAB>"
+    sleep (5)
+    printlog "    Save position of group"
+    ContextPositionAndSize                'Format-position and size
+    Kontext
+    Active.SetPage TabPositionAndSize
+    Kontext "TabPositionAndSize"
+    sGroupPosition = PositionY.GetText
+    printlog "    - GroupPosition is " & sGroupPosition
+    TabPositionAndSize.OK
+    printlog "Enter group"
+    Kontext "DocumentDraw"
+    FormatEditGroupDraw
+    sleep 1
+    
+    '///Select and move single object
+    printlog "Select and move single object"
+    printlog "    Select object"
+    Kontext "DocumentDraw"
+    DocumentDraw.TypeKeys "<TAB><TAB>"
+    sleep (5)
+    printlog "    Verify that the wanted object is selected"
+    DocumentDraw.TypeKeys "<SHIFT F10>"         'Open contextmenu
+    MenuSelect(MenuGetItemID(15))               'Select NAME from context
+    kontext "NameDlgObject"
+    if NameField.GetText <> "Chair" then
+            Warnlog "Wrong object selected!"
+        else Printlog "    The correct object is selected"
+    endif
+    NameDlgObject.OK
+    sleep 1
+    printlog "    Save position of group"
+    ContextPositionAndSize                'Format-position and size
+    Kontext
+    Active.SetPage TabPositionAndSize
+    Kontext "TabPositionAndSize"
+    sObjectPosition = PositionY.GetText
+    printlog "    - ObjectPosition is " & sObjectPosition
+    TabPositionAndSize.OK
+    printlog "    Move object"
+    Kontext "DocumentDraw"
+    DocumentDraw.TypeKeys "<UP><UP><UP>"
+    sleep (5)
+    printlog "    Verify that the object was moved"
+    ContextPositionAndSize                '/// Format-position and size
+    Kontext
+    Active.SetPage TabPositionAndSize
+    Kontext "TabPositionAndSize"
+    if PositionY.GetText <> sObjectPosition then
+            printlog "    Single object was moved" 
+        else warnlog "The object has not been moved"
+    endif
+    TabPositionAndSize.OK
+    printlog "    Exit group"
+    FormatExitGroupDraw
+    Printlog "Verify that the group is still on position"
+    printlog "    Verify position"
+    ContextPositionAndSize                'Format-position and size
+    Kontext
+    Active.SetPage TabPositionAndSize
+    Kontext "TabPositionAndSize"
+    if PositionY.GetText = sGroupPosition then
+            printlog "    Group is still on position"
+        else warnlog "Group has moved from " & sGroupPosition & " to " & PositionY.GetText
+    endif
+    TabPositionAndSize.OK
+    
+    '///Close document
+    printlog "Close document"
+    Call hCloseDocument
+
+endcase

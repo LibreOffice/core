@@ -1,0 +1,153 @@
+'encoding UTF-8  Do not remove or change this line!
+'**************************************************************************
+'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'* 
+'* Copyright 2008 by Sun Microsystems, Inc.
+'*
+'* OpenOffice.org - a multi-platform office productivity suite
+'*
+'* $RCSfile: id_opt_2.inc,v $
+'*
+'* $Revision: 1.1 $
+'*
+'* last change: $Author: jsi $ $Date: 2008-06-16 10:43:01 $
+'*
+'* This file is part of OpenOffice.org.
+'*
+'* OpenOffice.org is free software: you can redistribute it and/or modify
+'* it under the terms of the GNU Lesser General Public License version 3
+'* only, as published by the Free Software Foundation.
+'*
+'* OpenOffice.org is distributed in the hope that it will be useful,
+'* but WITHOUT ANY WARRANTY; without even the implied warranty of
+'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'* GNU Lesser General Public License version 3 for more details
+'* (a copy is included in the LICENSE file that accompanied this code).
+'*
+'* You should have received a copy of the GNU Lesser General Public License
+'* version 3 along with OpenOffice.org.  If not, see
+'* <http://www.openoffice.org/license.html>
+'* for a copy of the LGPLv3 License.
+'*
+'/************************************************************************
+'*
+'* Owner : wolfram.garten@sun.com
+'*
+'* short description :
+'*
+'************************************************************************************
+' #1 tToolsOptionsMeasurementUnit
+'\***********************************************************************************
+
+testcase tToolsOptionsMeasurementUnit (sApplication as string)
+    dim i as integer
+    dim iCount as integer
+    dim iCount2 as integer
+    dim sUnitOptions as string
+    dim sUnitDialog as string
+    dim gApplicationTemp as string
+
+    gApplicationTemp = gApplication
+    gApplication = "writer"
+    printlog "Take Measurement Units from Writer "
+    hNewDocument
+    ToolsOptions
+    ' Take General Measurement units from writer, there are only 5!
+    hToolsOptions ("textdocument","General")
+
+    iCount2 = Masseinheit.GetItemCount
+    for i=1 to iCount2
+        Masseinheit.select i
+        printlog "(" + i + "/" + iCount2 + "): '" + Masseinheit.getSelText + "' - " + GetMeasUnit(Tabulatorenabstand.getText)
+    next i
+    Kontext "ExtrasOptionenDlg"
+    ExtrasOptionenDlg.OK
+    hCloseDocument()
+    gApplication = gApplicationTemp
+
+	sleep 1
+    hNewDocument
+	sleep 1
+    ToolsOptions
+    hToolsOptions (sApplication,"General")
+    iCount = Masseinheit.GetItemCount
+    if (iCount <> iCount2) then
+        'warnlog "Inconsistence between Writer: '" + iCount2 + "' and " + sApplication + ": '" + iCount + "'"
+    endif
+    Kontext "ExtrasOptionenDlg"
+    ExtrasOptionenDlg.OK
+    printlog "----------------------"
+
+    printlog "Take Measurement Units from Graphics "
+    printlog "(1) reference from options; (2) BMP export dialog; (3) Format->3D Effects->Geometry"
+    ' In graphics are some more; beside the general one from writer we see large ones: m, km, Miles, foot
+    for i=1 to iCount
+        ToolsOptions
+        hToolsOptions (sApplication,"General")
+
+        Masseinheit.select i
+        sUnitOptions = GetMeasUnit(Tabulatorabstand.getText)  ' (1)
+        printlog "(" + i + "/" + iCount + "): '" + Masseinheit.getSelText + "' - " + sUnitOptions + "      (1)"
+
+        Kontext "ExtrasOptionenDlg"
+        ExtrasOptionenDlg.OK
+
+        FileExport
+        Kontext "ExportierenDlg"
+        Dateiname.SetText "adagio"
+        Dateityp.Select "BMP - Windows Bitmap (.bmp)"
+        if AutomatischeDateinamenserweiterung.Exists then
+            QAErrorLog "OBSOLETE: Automatic file extension check-box in file dialog will be removed soon!"                         
+            AutomatischeDateinamenserweiterung.Check
+        endif
+        Speichern.Click
+        kontext "AlienWarning"
+        if AlienWarning.exists(5) then
+            warnlog "#i41983# Alien Warning on export not allowed"
+            AlienWarning.OK
+        endif
+        Kontext "Messagebox"
+        if Messagebox.Exists(2) then
+           Messagebox.Yes
+        endif
+        Sleep 3
+        Kontext "BMPOptionen"
+            Groesse.Check
+                sUnitDialog = getMeasUnit(Breite.getText)   ' (2)
+                if (getMeasUnit(Hoehe.getText) <> sUnitDialog) then
+                    warnlog " Measurement Unit is different for Width:'" + sUnitDialog + "' and Hight:'" + getMeasUnit(Hoehe.getText) + "'"
+                else
+                    printlog "Measurement Unit is same for Width:'" + sUnitDialog + "' and Hight:'" + getMeasUnit(Hoehe.getText) + "'"
+                endif
+                if (sUnitOptions <> sUnitDialog) then
+                    printlog "#109705# Measurement Unit is different for Options:'" + sUnitOptions + "' and BMP Dialog:'" + sUnitDialog + "' (1) <> (2)"
+                endif
+        BMPOptionen.Cancel
+
+        Format3D_Effects
+        Kontext "Drei_D_Effekte"
+        Geometrie.Click
+        sleep 1
+        if (getMeasUnit(Tiefe.getText) <> sUnitOptions) then
+             printlog "#109705# Measurement Unit is different for Options:'" + sUnitOptions + "' and Depth:'" + getMeasUnit(Tiefe.getText) + "' (1) <> (3)"
+        else
+             printlog "Measurement Unit is same for Options:'" + sUnitOptions + "' and Depth:'" + getMeasUnit(Tiefe.getText) + "'      (3)"
+        endif
+        Drei_D_Effekte.close
+
+        FormatParagraph
+        Kontext
+        Messagebox.SetPage TabEinzuegeUndAbstaende
+        kontext "TabEinzuegeUndAbstaende"
+        sleep 1
+        if (getMeasUnit(Vonlinks.getText) <> sUnitOptions) then
+             warnlog "#109705# Measurement Unit is different for Options:'" + sUnitOptions + "' and Vonlinks:'" + getMeasUnit(Vonlinks.getText) + "'  Paragraph"
+        else
+             printlog "Measurement Unit is same for Options:'" + sUnitOptions + "' and Vonlinks:'" + getMeasUnit(Vonlinks.getText) + "' Paragraph"
+        endif
+        TabEinzuegeUndAbstaende.cancel
+
+    next i
+
+    hCloseDocument
+endcase 'tToolsOptionsMeasurementUnit 
