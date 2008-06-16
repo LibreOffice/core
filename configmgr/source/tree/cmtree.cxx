@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cmtree.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -146,7 +146,6 @@ namespace configmgr
 
 // ---------------------------- Node implementation ----------------------------
 
-    INode::INode(node::Attributes _aAttr):m_aAttributes(_aAttr){}
     INode::INode(OUString const& aName, node::Attributes _aAttr)
           :m_aName(aName)
           ,m_aAttributes(_aAttr){}
@@ -190,16 +189,7 @@ namespace configmgr
             m_aAttributes.setRemovability(false,false);
     }
 
-    void INode::forceReadonlyToFinalized()
-      {
-        if (m_aAttributes.isReadonly())
-        {
-            m_aAttributes.setAccess(node::accessFinal);
-        }
-    }
-
 // ------------------------- SearchNode implementation -------------------------
-    SearchNode::SearchNode():INode(node::Attributes()){}
     SearchNode::SearchNode(OUString const& aName)
         :INode(aName, node::Attributes()){}
 
