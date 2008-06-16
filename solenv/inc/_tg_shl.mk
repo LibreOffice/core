@@ -145,6 +145,8 @@ $(USE_SHL1VERSIONMAP): $(SHL1VERSIONMAP)
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL1VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELIF "$(COMNAME)"=="sunpro5"
+    tr -d "\015" < $(SHL1VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL1VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
@@ -603,6 +605,8 @@ $(USE_SHL2VERSIONMAP): $(SHL2VERSIONMAP)
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL2VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELIF "$(COMNAME)"=="sunpro5"
+    tr -d "\015" < $(SHL2VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL2VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
@@ -1061,6 +1065,8 @@ $(USE_SHL3VERSIONMAP): $(SHL3VERSIONMAP)
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL3VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELIF "$(COMNAME)"=="sunpro5"
+    tr -d "\015" < $(SHL3VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL3VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
@@ -1519,6 +1525,8 @@ $(USE_SHL4VERSIONMAP): $(SHL4VERSIONMAP)
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL4VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELIF "$(COMNAME)"=="sunpro5"
+    tr -d "\015" < $(SHL4VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL4VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
@@ -1977,6 +1985,8 @@ $(USE_SHL5VERSIONMAP): $(SHL5VERSIONMAP)
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL5VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELIF "$(COMNAME)"=="sunpro5"
+    tr -d "\015" < $(SHL5VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL5VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
@@ -2435,6 +2445,8 @@ $(USE_SHL6VERSIONMAP): $(SHL6VERSIONMAP)
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL6VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELIF "$(COMNAME)"=="sunpro5"
+    tr -d "\015" < $(SHL6VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL6VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
@@ -2893,6 +2905,8 @@ $(USE_SHL7VERSIONMAP): $(SHL7VERSIONMAP)
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL7VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELIF "$(COMNAME)"=="sunpro5"
+    tr -d "\015" < $(SHL7VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL7VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
@@ -3351,6 +3365,8 @@ $(USE_SHL8VERSIONMAP): $(SHL8VERSIONMAP)
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL8VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELIF "$(COMNAME)"=="sunpro5"
+    tr -d "\015" < $(SHL8VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL8VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
@@ -3809,6 +3825,8 @@ $(USE_SHL9VERSIONMAP): $(SHL9VERSIONMAP)
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL9VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELIF "$(COMNAME)"=="sunpro5"
+    tr -d "\015" < $(SHL9VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL9VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
@@ -4267,6 +4285,8 @@ $(USE_SHL10VERSIONMAP): $(SHL10VERSIONMAP)
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL10VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.ELIF "$(COMNAME)"=="sunpro5"
+    tr -d "\015" < $(SHL10VERSIONMAP) | $(GREP) -v $(IGNORE_SYMBOLS) > $@
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL10VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
