@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: layermerge.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -128,27 +128,6 @@ bool LayerMergeHandler::prepareSublayer(OUString const & aLocale)
 
     return m_bSublayer;
 }
-// -----------------------------------------------------------------------------
-
-MergedComponentData & LayerMergeHandler::result()
-{
-    OSL_ENSURE(isDone(), "LayerMergeHandler: Warning: Layer not terminated properly");
-    if (!isDone())
-        m_aContext.getLogger().error("Layer not terminated properly", "result()", "configmgr::LayerMergeHandler");
-
-    return m_rData;
-}
-// -----------------------------------------------------------------------------
-
-MergedComponentData const & LayerMergeHandler::result() const
-{
-    OSL_ENSURE(isDone(), "LayerMergeHandler: Warning: Layer not terminated properly");
-    if (!isDone())
-        m_aContext.getLogger().error("Layer not terminated properly", "result()", "configmgr::LayerMergeHandler");
-
-    return m_rData;
-}
-// -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
 namespace
