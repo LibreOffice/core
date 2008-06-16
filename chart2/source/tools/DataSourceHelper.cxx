@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataSourceHelper.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -132,7 +132,7 @@ struct lcl_migrateData : public ::std::unary_function<
         Reference< chart2::data::XDataSequence > xNewData(
             m_xDataProvider->createDataSequenceByRangeRepresentation(
                 xOldData->getSourceRangeRepresentation()));
-        PropertyHelper::copyProperties(
+        comphelper::copyProperties(
             Reference< beans::XPropertySet >( xOldData, uno::UNO_QUERY ),
             Reference< beans::XPropertySet >( xNewData, uno::UNO_QUERY ));
         return xNewData;
