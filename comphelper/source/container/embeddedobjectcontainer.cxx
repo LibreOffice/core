@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: embeddedobjectcontainer.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -168,8 +168,21 @@ sal_Bool EmbeddedObjectContainer::CommitImageSubStorage()
     {
         try
         {
-            uno::Reference< embed::XTransactedObject > xTransact( pImpl->mxImageStorage, uno::UNO_QUERY_THROW );
-            xTransact->commit();
+            sal_Bool bReadOnlyMode = sal_True;
+            uno::Reference < beans::XPropertySet > xSet(pImpl->mxImageStorage,uno::UNO_QUERY);
+            if ( xSet.is() )
+            {
+                // get the open mode from the parent storage
+                sal_Int32 nMode = 0;
+                uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("OpenMode") );
+                if ( aAny >>= nMode )
+                    bReadOnlyMode = !(nMode & embed::ElementModes::WRITE );
+            } // if ( xSet.is() )
+            if ( !bReadOnlyMode )
+            {
+                uno::Reference< embed::XTransactedObject > xTransact( pImpl->mxImageStorage, uno::UNO_QUERY_THROW );
+                xTransact->commit();
+            }
         }
         catch( uno::Exception& )
         {
@@ -371,9 +384,12 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::Get_Impl( con
             aObjDescr[1].Value <<= xCopy;
         }
 
+        uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
+        aMediaDescr[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+        aMediaDescr[0].Value <<= bReadOnlyMode;
         xObj = uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitFromEntry(
                 pImpl->mxStorage, rName,
-                bReadOnlyMode, aObjDescr ), uno::UNO_QUERY );
+                aMediaDescr, aObjDescr ), uno::UNO_QUERY );
 
         // insert object into my list
         AddEmbeddedObject( xObj, rName );
@@ -1068,16 +1084,15 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
                         //             the media type will be provided with object insertion
                         ::rtl::OUString aOrigStorMediaType;
                         uno::Reference< beans::XPropertySet > xStorProps( pImpl->mxStorage, uno::UNO_QUERY_THROW );
-                        xStorProps->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) )
-                                        >>= aOrigStorMediaType;
+                        static const ::rtl::OUString s_sMediaType(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
+                        xStorProps->getPropertyValue( s_sMediaType ) >>= aOrigStorMediaType;
 
                         OSL_ENSURE( aOrigStorMediaType.getLength(), "No valuable media type in the storage!\n" );
 
                         uno::Reference< beans::XPropertySet > xTargetStorProps(
                                                                     pImpl->mpTempObjectContainer->pImpl->mxStorage,
                                                                     uno::UNO_QUERY_THROW );
-                        xTargetStorProps->setPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ),
-                                                            uno::makeAny( aOrigStorMediaType ) );
+                        xTargetStorProps->setPropertyValue( s_sMediaType,uno::makeAny( aOrigStorMediaType ) );
                     }
                     catch( uno::Exception& )
                     {
