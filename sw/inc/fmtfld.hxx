@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmtfld.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,6 +100,7 @@ class SW_DLLPUBLIC SwFmtFldHint : public SfxHint
 #define SWFMTFLD_REMOVED    2
 #define SWFMTFLD_FOCUS      3
 #define SWFMTFLD_CHANGED    4
+#define SWFMTFLD_LANGUAGE   5
 
     const SwFmtFld* pFld;
     sal_Int16 nWhich;
