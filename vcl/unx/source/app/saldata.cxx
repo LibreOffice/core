@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saldata.cxx,v $
- * $Revision: 1.57 $
+ * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
+#include <stdio.h> // snprintf, seems not to be in namespace std on every platform
 #include <limits.h>
 #include <errno.h>
 #include <pthread.h>
@@ -252,9 +253,9 @@ int X11SalData::XIOErrorHdl( Display * )
     if( ! SessionManagerClient::checkDocumentsSaved() )
         /* oslSignalAction eToDo = */ osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
 
-    fprintf( stderr, "X IO Error\n" );
-    fflush( stdout );
-    fflush( stderr );
+    std::fprintf( stderr, "X IO Error\n" );
+    std::fflush( stdout );
+    std::fflush( stderr );
 
     /*  #106197# the same reasons to use _exit instead of exit in salmain
      *  do apply here. Since there is nothing to be done after an XIO
@@ -464,12 +465,12 @@ void SalXLib::Init()
         rtl::OString  aProgramName = rtl::OUStringToOString(
                                             aProgramSystemPath,
                                             osl_getThreadTextEncoding() );
-        fprintf( stderr, "%s X11 error: Can't open display: %s\n",
+        std::fprintf( stderr, "%s X11 error: Can't open display: %s\n",
                 aProgramName.getStr(), aDisplay.getStr());
-        fprintf( stderr, "   Set DISPLAY environment variable, use -display option\n");
-        fprintf( stderr, "   or check permissions of your X-Server\n");
-        fprintf( stderr, "   (See \"man X\" resp. \"man xhost\" for details)\n");
-        fflush( stderr );
+        std::fprintf( stderr, "   Set DISPLAY environment variable, use -display option\n");
+        std::fprintf( stderr, "   or check permissions of your X-Server\n");
+        std::fprintf( stderr, "   (See \"man X\" resp. \"man xhost\" for details)\n");
+        std::fflush( stderr );
         exit(0);
     }
 
@@ -498,7 +499,7 @@ void EmitFontpathWarning( void )
     if ( !bOnce )
     {
         bOnce = True;
-        fprintf( stderr, "Please verify your fontpath settings\n"
+        std::fprintf( stderr, "Please verify your fontpath settings\n"
                 "\t(See \"man xset\" for details"
                 " or ask your system administrator)\n" );
     }
@@ -512,34 +513,34 @@ static void PrintXError( Display *pDisplay, XErrorEvent *pEvent )
 #if ! ( defined LINUX && defined PPC )
     XGetErrorText( pDisplay, pEvent->error_code, msg, sizeof( msg ) );
 #endif
-    fprintf( stderr, "X-Error: %s\n", msg );
+    std::fprintf( stderr, "X-Error: %s\n", msg );
     if( pEvent->request_code < capacityof( XRequest ) )
     {
         const char* pName = XRequest[pEvent->request_code];
         if( !pName )
             pName = "BadRequest?";
-        fprintf( stderr, "\tMajor opcode: %d (%s)\n", pEvent->request_code, pName );
+        std::fprintf( stderr, "\tMajor opcode: %d (%s)\n", pEvent->request_code, pName );
     }
     else
     {
-        fprintf( stderr, "\tMajor opcode: %d\n", pEvent->request_code );
+        std::fprintf( stderr, "\tMajor opcode: %d\n", pEvent->request_code );
         // TODO: also display extension name?
-        fprintf( stderr, "\tMinor opcode: %d\n", pEvent->minor_code );
+        std::fprintf( stderr, "\tMinor opcode: %d\n", pEvent->minor_code );
     }
 
-    fprintf( stderr, "\tResource ID:  0x%lx\n",
+    std::fprintf( stderr, "\tResource ID:  0x%lx\n",
              pEvent->resourceid );
-    fprintf( stderr, "\tSerial No:    %ld (%ld)\n",
+    std::fprintf( stderr, "\tSerial No:    %ld (%ld)\n",
              pEvent->serial, LastKnownRequestProcessed(pDisplay) );
 
     if( !getenv( "SAL_SYNCHRONIZE" ) )
     {
-        fprintf( stderr, "These errors are reported asynchronously,\n");
-        fprintf( stderr, "set environment variable SAL_SYNCHRONIZE to 1 to help debugging\n");
+        std::fprintf( stderr, "These errors are reported asynchronously,\n");
+        std::fprintf( stderr, "set environment variable SAL_SYNCHRONIZE to 1 to help debugging\n");
     }
 
-    fflush( stdout );
-    fflush( stderr );
+    std::fflush( stdout );
+    std::fflush( stderr );
 }
 
 void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
@@ -555,7 +556,7 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
             static Bool bOnce = False;
             if ( !bOnce )
             {
-                fprintf(stderr, "X-Error occured in a request for X_OpenFont\n");
+                std::fprintf(stderr, "X-Error occured in a request for X_OpenFont\n");
                 EmitFontpathWarning();
 
                 bOnce = True ;
@@ -749,7 +750,7 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     if( nFound < 0 ) // error
     {
 #ifdef DBG_UTIL
-        fprintf( stderr, "SalXLib::Yield e=%d f=%d\n", errno, nFound );
+        std::fprintf( stderr, "SalXLib::Yield e=%d f=%d\n", errno, nFound );
 #endif
         if( EINTR == errno )
         {
@@ -791,7 +792,7 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
             {
                 if ( FD_ISSET( nFD, &ExceptionFDS ) ) {
 #if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "SalXLib::Yield exception\n" );
+                    std::fprintf( stderr, "SalXLib::Yield exception\n" );
 #endif
                     nFound--;
                 }
