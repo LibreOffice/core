@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlExport.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -135,6 +135,7 @@ class ODBExport : public SvXMLExport
     ::std::auto_ptr< TStringPair >                  m_aAutoIncrement;
     ::std::auto_ptr< TDelimiter >                   m_aDelimiter;
     ::std::vector< Any>                             m_aDataSourceSettings;
+    ::std::vector< XMLPropertyState >               m_aCurrentPropertyStates;
     TPropertyStyleMap                               m_aAutoStyleNames;
     TPropertyStyleMap                               m_aCellAutoStyleNames;
     TPropertyStyleMap                               m_aRowAutoStyleNames;
@@ -176,7 +177,8 @@ class ODBExport : public SvXMLExport
                                             ,enum ::xmloff::token::XMLTokenEnum _eComponents
                                             ,enum ::xmloff::token::XMLTokenEnum _eSubComponents
                                             ,sal_Bool _bExportContext
-                                            ,const ::comphelper::mem_fun1_t<ODBExport,XPropertySet* >& _aMemFunc);
+                                            ,const ::comphelper::mem_fun1_t<ODBExport,XPropertySet* >& _aMemFunc
+                                            );
     void                    exportComponent(XPropertySet* _xProp);
     void                    exportQuery(XPropertySet* _xProp);
     void                    exportTable(XPropertySet* _xProp);
