@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bootstrap.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -454,18 +454,6 @@ uno::Any SAL_CALL
         return getSetting( NAME(CONTEXT_ITEM_BOOTSTRAP_ERROR) );
     }
 // ---------------------------------------------------------------------------------------
-
-    bool ContextReader::isBootstrapContext(Context const & _xContext)
-    {
-        OSL_ASSERT(_xContext.is());
-        if (!_xContext.is()) return false;
-
-        uno::Any aSetting = _xContext->getValueByName( NAME(CONTEXT_ITEM_IS_BOOTSTRAP_CONTEXT) );
-
-        sal_Bool bValue = false;
-        return (aSetting >>= bValue) && bValue;
-    }
-// ---------------------------------------------------------------------------
 
     bool ContextReader::testAdminService(Context const & context, bool bAdmin)
     {
