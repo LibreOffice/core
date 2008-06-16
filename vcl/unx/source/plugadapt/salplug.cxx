@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salplug.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,7 +90,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
         {
             pInst = aProc( aMod );
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "sal plugin %s produced instance %p\n",
+            std::fprintf( stderr, "sal plugin %s produced instance %p\n",
                      OUStringToOString( aModule, RTL_TEXTENCODING_ASCII_US ).getStr(),
                      pInst );
 #endif
@@ -105,7 +105,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
         else
         {
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "could not load symbol %s from shared object %s\n",
+            std::fprintf( stderr, "could not load symbol %s from shared object %s\n",
                      OUStringToOString( aSym, RTL_TEXTENCODING_ASCII_US ).getStr(),
                      OUStringToOString( aModule, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
@@ -114,7 +114,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
     }
 #if OSL_DEBUG_LEVEL > 1
     else
-        fprintf( stderr, "could not load shared object %s\n",
+        std::fprintf( stderr, "could not load shared object %s\n",
                  OUStringToOString( aModule, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
 
@@ -426,7 +426,7 @@ static const char* autodetect_plugin()
         pRet = "gen";
 
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "plugin autodetection: %s\n", pRet );
+    std::fprintf( stderr, "plugin autodetection: %s\n", pRet );
 #endif
 
     return pRet;
@@ -466,7 +466,7 @@ SalInstance *CreateSalInstance()
 
     if( ! pInst )
     {
-        fprintf( stderr, "no suitable windowing system found, exiting.\n" );
+        std::fprintf( stderr, "no suitable windowing system found, exiting.\n" );
         _exit( 1 );
     }
 
@@ -505,9 +505,9 @@ void DeInitSalMain()
 void SalAbort( const XubString& rErrorText )
 {
     if( !rErrorText.Len() )
-        fprintf( stderr, "Application Error" );
+        std::fprintf( stderr, "Application Error" );
     else
-        fprintf( stderr, ByteString( rErrorText, gsl_getSystemTextEncoding() ).GetBuffer() );
+        std::fprintf( stderr, ByteString( rErrorText, gsl_getSystemTextEncoding() ).GetBuffer() );
     abort();
 }
 
