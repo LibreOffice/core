@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.43 $
+# $Revision: 1.44 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,6 +40,13 @@ TARGET=so_stlport
 
 .IF "$(USE_SYSTEM_STL)"=="YES"
 
+.IF "$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
+# System STL when building with SunStudio is just a version of STLport
+# which comes with the compiler
+all:
+    @echo "Nothing to do"
+.ELSE #"$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
+#
 # If you choose to build without stlport, some headers will be used to bring the
 # sgi extensions into the std namespace:
 $(INCCOM)$/stlport$/functional \
@@ -51,6 +58,7 @@ $(INCCOM)$/stlport$/rope \
 $(INCCOM)$/stlport$/vector: systemstl$/$$(@:f)
     $(MKDIRHIER) $(@:d)
     $(COPY) $< $@
+.ENDIF #"$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
 
 .ELSE # "$(USE_SYSTEM_STL)"
 
