@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlfilter.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -509,11 +509,11 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 #if OSL_DEBUG_LEVEL > 1
         uno::Reference < container::XNameAccess > xAccess( xStorage, uno::UNO_QUERY );
         uno::Sequence< ::rtl::OUString> aSeq = xAccess->getElementNames();
-        const ::rtl::OUString* pIter = aSeq.getConstArray();
-        const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
-        for(;pIter != pEnd;++pIter)
+        const ::rtl::OUString* pDebugIter = aSeq.getConstArray();
+        const ::rtl::OUString* pDebugEnd      = pDebugIter + aSeq.getLength();
+        for(;pDebugIter != pDebugEnd;++pDebugIter)
         {
-            (void)*pIter;
+            (void)*pDebugIter;
         }
 #endif
 
@@ -569,9 +569,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
         if ( bRet )
         {
-            uno::Reference< XModifiable > xModi(GetModel(),UNO_QUERY);
-            if ( xModi.is() )
-                xModi->setModified(sal_False);
+            m_xReportDefinition->setModified(sal_False);
         }
         else
         {
@@ -784,8 +782,6 @@ const SvXMLTokenMap& ORptFilter::GetControlElemTokenMap() const
             { XML_NAMESPACE_FORM,   XML_SIZE                ,XML_TOK_SIZE               },
             { XML_NAMESPACE_FORM,   XML_IMAGE_DATA          ,XML_TOK_IMAGE_DATA         },
             { XML_NAMESPACE_REPORT, XML_SCALE               ,XML_TOK_SCALE              },
-            { XML_NAMESPACE_FORM,   XML_IMAGE_POSITION      ,XML_TOK_IMAGE_POSITION     },
-            { XML_NAMESPACE_FORM,   XML_IMAGE_ALIGN         ,XML_TOK_IMAGE_ALIGN        },
             { XML_NAMESPACE_REPORT, XML_REPORT_ELEMENT      ,XML_TOK_REPORT_ELEMENT     },
             { XML_NAMESPACE_REPORT, XML_FORMULA             ,XML_TOK_DATA_FORMULA       },
             { XML_NAMESPACE_REPORT, XML_PRESERVE_IRI        ,XML_TOK_PRESERVE_IRI       },
@@ -989,9 +985,6 @@ void SAL_CALL ORptFilter::startDocument( void )
         m_pReportModel = reportdesign::OReportDefinition::getSdrModel(m_xReportDefinition);
         OSL_ENSURE(m_pReportModel,"Report model is NULL!");
 
-        //uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier = OXMLHelper::GetNumberFormatsSupplier(m_xReportDefinition);
-        //if ( xNumberFormatsSupplier.is() )
-        //    SetNumberFormatsSupplier(xNumberFormatsSupplier);
         SvXMLImport::startDocument();
     }
 }
