@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ScrollHelper.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,8 +94,6 @@ namespace rptui
         /** late ctor
         */
         void                    initialize();
-
-        void                    EndScroll( long nDeltaX, long nDeltaY );
 
         inline Point            getScrollOffset() const { return Point(m_aHScroll.GetThumbPos(),m_aVScroll.GetThumbPos())/*m_aScrollOffset*/; }
         inline OReportWindow*   getReportWindow() const { return m_pChild; }
@@ -217,6 +215,11 @@ namespace rptui
         void alignMarkedObjects(sal_Int32 _nControlModification, bool _bAlignAtSection, bool bBoundRects = false);
 
         sal_uInt32 getMarkedObjectCount() const;
+
+        /** fills the vector with all selected control models
+            /param  _rSelection The vector will be filled and will not be cleared before.
+        */
+        void fillControlModelSelection(::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& _rSelection) const;
     };
 }
 #endif // RPTUI_SCROLLHELPER_HXX
