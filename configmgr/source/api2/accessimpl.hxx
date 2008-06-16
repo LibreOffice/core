@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accessimpl.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,9 +122,6 @@ namespace configmgr
         // XPropertyWithState
         css::beans::PropertyState implGetStateAsProperty(NodeAccess& rNode)
             throw (uno::RuntimeException);
-
-        void implSetToDefaultAsProperty(NodeAccess& rNode)
-            throw (css::lang::WrappedTargetException, uno::RuntimeException);
 
         uno::Reference< uno::XInterface > implGetDefaultAsProperty(NodeAccess& rNode)
             throw (css::lang::WrappedTargetException, uno::RuntimeException);
