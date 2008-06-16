@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ScrollHelper.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -207,14 +207,6 @@ Size OScrollWindowHelper::ResizeScrollBars()
         impl_scrollContent( -nX, -nY );
     }
     return aOutPixSz;
-}
-//------------------------------------------------------------------------------
-void OScrollWindowHelper::EndScroll( long nDeltaX, long nDeltaY )
-{
-    m_aHScroll.SetThumbPos(m_aHScroll.GetThumbPos()+nDeltaX);
-    impl_scrollContent( nDeltaX, nDeltaY );
-    Resize();
-
 }
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::impl_scrollContent( long nDeltaX, long nDeltaY )
@@ -469,6 +461,12 @@ sal_uInt32 OScrollWindowHelper::getMarkedObjectCount() const
     return m_pChild ? m_pChild->getMarkedObjectCount() : 0;
 }
 // -----------------------------------------------------------------------------
+void OScrollWindowHelper::fillControlModelSelection(::std::vector< uno::Reference< uno::XInterface > >& _rSelection) const
+{
+    if ( m_pChild )
+        m_pChild->fillControlModelSelection(_rSelection);
+}
+
 //==============================================================================
 } // rptui
 //==============================================================================
