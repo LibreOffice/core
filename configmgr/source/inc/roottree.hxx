@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: roottree.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,13 +93,8 @@ namespace configmgr
 
             // finish and clean up the changes in rChangeList after they are integrated
             void finishCommit(TreeChangeList& rChangeList);
-            // restore the changes in rChangeList as pending
-            void revertCommit(TreeChangeList& rChangeList);
             // throw away and clean up the changes in rChangeList after a commit failed
             void failedCommit(TreeChangeList& rChangeList);
-
-            // dispose of auxiliary data for a commit operation
-            void reset();
         };
 
 //-----------------------------------------------------------------------------

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: template.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,23 +79,6 @@ namespace configmgr
         };
 //-----------------------------------------------------------------------------
 
-        struct SpecialTemplateProvider_Impl;
-        class SpecialTemplateProvider
-        {
-            friend class TemplateImplHelper;
-
-            rtl::Reference<SpecialTemplateProvider_Impl>  m_aImpl;
-        public:
-            explicit
-            SpecialTemplateProvider();
-            SpecialTemplateProvider(SpecialTemplateProvider const& aOther);
-            SpecialTemplateProvider& operator=(SpecialTemplateProvider const& aOther);
-            ~SpecialTemplateProvider();
-
-            bool isValid() const { return !!m_aImpl.is(); }
-        };
-//-----------------------------------------------------------------------------
-
         class Template;
         typedef rtl::Reference<Template> TemplateHolder;
 
@@ -130,10 +113,6 @@ namespace configmgr
             friend class TemplateImplHelper;
         };
 
-        /// make a template instance that matches the given (simple) type
-        TemplateHolder makeSimpleTemplate(UnoType const& aType, SpecialTemplateProvider const& aProvider);
-        /// make a template instance that matches the given path. Assume that it represents a (complex) tree structure.
-        TemplateHolder makeTreeTemplate(OUString const& sName, OUString const& sModule, SpecialTemplateProvider const& aProvider);
         /// make a template instance that matches the elements of the given set. Ensures that the element type is known
         TemplateHolder makeSetElementTemplate(data::SetNodeAccess const& _aSet, TemplateProvider const& _aProvider);
 //-----------------------------------------------------------------------------
