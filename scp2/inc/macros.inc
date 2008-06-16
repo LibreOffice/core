@@ -400,6 +400,11 @@
 #define SCP2_URE_DL_UNO_VER(n, v) n v ".dll"
 #define SCP2_URE_DL_UNO_COMID_VER(n, v) n v STRING(COMID) ".dll"
 #define SCP2_URE_SHARE_DIR gid_Dir_Common_Ure
+#if defined _STLP_DEBUG
+#define SCP2_STDLP_DEBUG "d"
+#else
+#define SCP2_STDLP_DEBUG ""
+#endif
 #else
 #define SCP2_URE_DL_DIR gid_Dir_Ure_Lib
 #define SCP2_URE_DL_NORMAL(n) "lib" n STRING(UNXSUFFIX)
@@ -411,6 +416,11 @@
 #define SCP2_URE_DL_UNO_COMID_VER(n, v)	\
     "libuno_" n STRING(COMID) STRING(UNXSUFFIX) "." v
 #define SCP2_URE_SHARE_DIR gid_Dir_Ure_Share
+#endif
+#if defined MACOSX
+#define SCP2_URE_JDL_NORMAL(n) "lib" n ".jnilib"
+#else
+#define SCP2_URE_JDL_NORMAL(n) SCP2_URE_DL_NORMAL(n)
 #endif
 
 #include <langmacros.inc>
