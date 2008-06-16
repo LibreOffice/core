@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filecoll.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,8 @@
 
 // NOT FULLY DEFINED SERVICES
 #include <cosv/ploc_dir.hxx>
+
+#include <stdio.h>
 
 
 FileCollector::FileCollector( uintt i_nRoughNrOfFiles )
