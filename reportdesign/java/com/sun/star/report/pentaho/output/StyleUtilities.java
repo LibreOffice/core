@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StyleUtilities.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@ import com.sun.star.report.pentaho.model.FontFaceElement;
 import com.sun.star.report.pentaho.model.OfficeStyle;
 import com.sun.star.report.pentaho.model.OfficeStyles;
 import com.sun.star.report.pentaho.model.OfficeStylesCollection;
+import java.util.ArrayList;
 import java.util.Set;
 import org.jfree.report.ReportProcessingException;
 import org.jfree.report.structure.Element;
@@ -448,7 +449,7 @@ public class StyleUtilities
 
         // now copy the common style ..
         final OfficeStyles commonStyles = commonCollection.getCommonStyles();
-        if (!commonStyles.containsStyle(styleFamily, styleName) )
+        if (!commonStyles.containsStyle(styleFamily, styleName))
         {
             copyStyleInternal(commonStyle, commonStyles,
                     commonCollection, commonCollection, predefCollection,
@@ -500,6 +501,46 @@ public class StyleUtilities
                 styleName, sectionName, propertyNamespace, propertyName, new HashSet());
     }
 
+    public static OfficeStyle queryStyleByProperties(final OfficeStylesCollection predefCollection,
+            final String styleFamily,
+            final String sectionName,
+            final ArrayList propertyNamespace,
+            final ArrayList propertyName,
+            final ArrayList propertyValues)
+    {
+        if ( propertyNamespace.size() != propertyName.size())
+            return null;
+        final OfficeStyle[] styles = predefCollection.getAutomaticStyles().getAllStyles();
+        for (int i = 0; i < styles.length; i++)
+        {
+            final OfficeStyle officeStyle = styles[i];
+            if ( officeStyle.getStyleFamily().equals(styleFamily) )
+            {
+                final Element section = officeStyle.findFirstChild(OfficeNamespaces.STYLE_NS, sectionName);
+                if (section != null)
+                {
+                    int j = 0;
+                    for (; j < propertyNamespace.size(); j++)
+                    {
+                        final String ns = (String)propertyNamespace.get(j);
+                        final String prop = (String)propertyName.get(j);
+                        final Object obj = section.getAttribute(ns, prop);
+                        final Object value = propertyValues.get(j);
+                        if ( obj == null && value == null)
+                            continue;
+                        if (!propertyValues.get(j).equals(obj))
+                            break;
+                    }
+                    if ( j == propertyName.size() )
+                    {
+                        return officeStyle;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     private static String queryStyle(final OfficeStylesCollection predefCollection,
             final String styleFamily,
             final String styleName,
@@ -518,6 +559,7 @@ public class StyleUtilities
         if (style == null)
         {
             return null; // no such style
+
         }
         final Element section = style.findFirstChild(OfficeNamespaces.STYLE_NS, sectionName);
         if (section != null)
