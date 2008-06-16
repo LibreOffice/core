@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: layerupdatemerger.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -502,13 +502,6 @@ void SAL_CALL LayerUpdateMerger::addPropertyWithValue( const OUString& aName, sa
 // -----------------------------------------------------------------------------
 
 void LayerUpdateMerger::malformedUpdate(sal_Char const * pMsg)
-{
-    { (void)pMsg; }
-    OSL_ENSURE(false,pMsg);
-}
-// -----------------------------------------------------------------------------
-
-void LayerUpdateMerger::illegalUpdate(sal_Char const * pMsg)
 {
     { (void)pMsg; }
     OSL_ENSURE(false,pMsg);
