@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: schemabuilder.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,26 +79,6 @@ SchemaBuilder::SchemaBuilder(Context const & xContext, const OUString& aExpected
 SchemaBuilder::~SchemaBuilder(  )
 {
 
-}
-// -----------------------------------------------------------------------------
-
-MergedComponentData & SchemaBuilder::result()
-{
-    OSL_ENSURE(isDone(), "SchemaBuilder: Warning: Schema not terminated properly");
-    if (!isDone())
-        m_aContext.getLogger().warning("Schema not terminated properly", "result()", "configmgr::SchemaBuilder");
-
-    return m_aData;
-}
-// -----------------------------------------------------------------------------
-
-MergedComponentData const & SchemaBuilder::result() const
-{
-    OSL_ENSURE(isDone(), "SchemaBuilder: Warning: Schema not terminated properly");
-    if (!isDone())
-        m_aContext.getLogger().warning("Schema not terminated properly", "result()", "configmgr::SchemaBuilder");
-
-    return m_aData;
 }
 // -----------------------------------------------------------------------------
 
