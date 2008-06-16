@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportControlModel.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +56,11 @@ namespace reportdesign
     {
         ::sal_Int16                                         nAlign;
         ::com::sun::star::awt::FontDescriptor               aFontDescriptor;
+        ::com::sun::star::awt::FontDescriptor               aAsianFontDescriptor;
+        ::com::sun::star::awt::FontDescriptor               aComplexFontDescriptor;
         ::com::sun::star::lang::Locale                      aCharLocale;
+        ::com::sun::star::lang::Locale                      aCharLocaleAsian;
+        ::com::sun::star::lang::Locale                      aCharLocaleComplex;
         ::sal_Int16                                         nFontEmphasisMark;
         ::sal_Int16                                         nFontRelief;
         ::sal_Int32                                         nTextColor;
