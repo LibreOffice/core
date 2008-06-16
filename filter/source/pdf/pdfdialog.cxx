@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pdfdialog.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -175,7 +175,7 @@ Dialog* PDFDialog::createDialog( Window* pParent )
 
     if( mpResMgr && mxSrcDoc.is() )
     {
-        ImpPDFTabDialog* pDlg = new ImpPDFTabDialog( pParent, *mpResMgr, maFilterData, mxSrcDoc, m_xORB );
+        ImpPDFTabDialog* pDlg = new ImpPDFTabDialog( pParent, *mpResMgr, maFilterData, mxSrcDoc, m_aContext.getLegacyServiceFactory() );
         pRet = pDlg;
     }
 
