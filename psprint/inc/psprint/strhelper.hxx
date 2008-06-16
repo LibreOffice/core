@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: strhelper.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +74,7 @@ inline int getValueOfDouble( char* pBuffer, double f, int nPrecision = 0)
 {
     rtl::OString aStr( rtl::math::doubleToString( f, rtl_math_StringFormat_G, nPrecision, '.', true ) );
     int nLen = aStr.getLength();
-    strncpy( pBuffer, aStr.getStr(), nLen+1 ); // copy string including terminating zero
+    std::strncpy( pBuffer, aStr.getStr(), nLen+1 ); // copy string including terminating zero
     return nLen;
 }
 
