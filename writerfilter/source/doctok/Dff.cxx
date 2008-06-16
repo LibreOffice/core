@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Dff.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,6 +28,7 @@
  *
  ************************************************************************/
 
+#include <stdio.h>
 #include "Dff.hxx"
 #include <doctok/resourceids.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
