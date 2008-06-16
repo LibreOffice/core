@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XDatabaseDataProvider.idl,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +34,12 @@
 #include <com/sun/star/container/NoSuchElementException.idl>
 #endif
 #include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/beans/UnknownPropertyException.idl>
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/sdbc/XConnection.idl>
+#include <com/sun/star/sdbc/XParameters.idl>
+#include <com/sun/star/sdbc/XRowSet.idl>
 #include <com/sun/star/chart2/data/XDataProvider.idl>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.idl>
 
@@ -74,6 +77,9 @@ interface XDatabaseDataProvider
     /** allows access to the properties of the instance.
     */
     interface com::sun::star::beans::XPropertySet;
+
+    interface com::sun::star::sdbc::XParameters;
+    interface com::sun::star::sdbc::XRowSet;
 
     /** is used for subreports and contains the names of columns of the parent report.
     <p> These columns are typically the foreign key fields of the parent report.
@@ -154,6 +160,29 @@ interface XDatabaseDataProvider
         @see ResultSet
     */
     [attribute,bound] string Filter;
+
+    /** indicates whether the filter should be applied or not,
+        default is <FALSE/>.
+     */
+    [attribute,bound] boolean ApplyFilter;
+
+    /** additional having clause for the row set
+     */
+    [attribute,bound] string HavingClause
+    {
+        set raises (com::sun::star::beans::UnknownPropertyException);
+    };
+
+    /** additional group by for the row set
+     */
+    [attribute,bound] string GroupBy
+    {
+        set raises (com::sun::star::beans::UnknownPropertyException);
+    };
+
+    /** is a additional sort order definition for a rowset.
+     */
+    [attribute,bound] string Order;
 
     /** specifies if the <member>Command</member> should be analyzed on the client side before sending it
         to the database server.
