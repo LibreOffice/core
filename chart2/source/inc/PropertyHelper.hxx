@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyHelper.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +35,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
+#include <comphelper/property.hxx>
 #include <map>
 
 namespace chart
@@ -48,13 +48,6 @@ typedef ::std::map< tPropertyValueMapKey, ::com::sun::star::uno::Any >
 
 namespace PropertyHelper
 {
-
-void copyProperties(
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet > & xSource,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet > & xDestination
-    );
 
 /** adds a line dash with a unique name to the gradient obtained by the given
     factory.
