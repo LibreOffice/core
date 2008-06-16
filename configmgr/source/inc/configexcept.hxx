@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: configexcept.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +51,6 @@ namespace configmgr
         {
             rtl::OString m_sAsciiMessage;
         public:
-            Exception();
             Exception(char const* sAsciiMessage);
             Exception(rtl::OString const& sAsciiMessage);
             virtual ~Exception() {}
@@ -65,7 +64,6 @@ namespace configmgr
         {
             rtl::OUString m_sName;
         public:
-            InvalidName(OUString const& sName);
             InvalidName(OUString const& sName, char const* sAsciiDescription);
 
             virtual OUString message() const;
@@ -76,7 +74,6 @@ namespace configmgr
         : public Exception
         {
         public:
-            ConstraintViolation();
             ConstraintViolation(char const* sConstraint);
         };
     //-------------------------------------------------------------------------
@@ -86,8 +83,6 @@ namespace configmgr
             OUString m_sTypes;
             static OUString describe(OUString const& sFoundType, OUString const& sExpectedType);
         public:
-            TypeMismatch();
-            TypeMismatch(OUString const& sFoundType);
             TypeMismatch(OUString const& sFoundType, OUString const& sExpectedType);
             TypeMismatch(OUString const& sFoundType, OUString const& sExpectedType, char const* sAsciiDescription);
 
