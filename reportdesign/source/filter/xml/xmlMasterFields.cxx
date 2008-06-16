@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlMasterFields.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +63,7 @@ OXMLMasterFields::OXMLMasterFields( ORptFilter& rImport,
     const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-     ::rtl::OUString sLocalName;
+        ::rtl::OUString sLocalName;
         const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
         const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
         const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
@@ -82,7 +82,8 @@ OXMLMasterFields::OXMLMasterFields( ORptFilter& rImport,
     }
     if ( !sDetailField.getLength() )
         sDetailField = sMasterField;
-    m_pReport->addMasterDetailPair(::std::pair< ::rtl::OUString,::rtl::OUString >(sMasterField,sDetailField));
+    if ( sMasterField.getLength() )
+        m_pReport->addMasterDetailPair(::std::pair< ::rtl::OUString,::rtl::OUString >(sMasterField,sDetailField));
 }
 // -----------------------------------------------------------------------------
 
