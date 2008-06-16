@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartTypeTemplate.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -943,7 +943,7 @@ void ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem(
         }
     }
     if( xSource.is() )
-        PropertyHelper::copyProperties( xSource, xDestination );
+        comphelper::copyProperties( xSource, xDestination );
 }
 
 // ________
