@@ -9,7 +9,7 @@
 //
 // $RCSfile: sqlbison.y,v $
 //
-// $Revision: 1.64 $
+// $Revision: 1.65 $
 //
 // This file is part of OpenOffice.org.
 //
@@ -268,11 +268,11 @@ using namespace connectivity;
 %type <pParseNode> /*bit_concatenation*/ bit_value_exp bit_factor bit_primary collate_clause char_value_fct unique_spec value_exp_commalist in_predicate_value unique_test update_source 
 %type <pParseNode> function_arg_commalist3 string_function_3Argument function_arg_commalist4 string_function_4Argument function_arg_commalist2 string_function_1Argument string_function_2Argument
 %type <pParseNode> date_function_0Argument date_function_1Argument function_name12 function_name23 function_name1 function_name2 function_name3 function_name0 numeric_function_0Argument numeric_function_1Argument numeric_function_2Argument date_function_3Argument
-%type <pParseNode> all query_primary as sql_not for_length upper_lower comparison column_val  cross_union /*opt_schema_element_list*/
+%type <pParseNode> all query_primary sql_not for_length upper_lower comparison column_val  cross_union /*opt_schema_element_list*/
 %type <pParseNode> /*op_authorization op_schema*/ nil_fkt schema_element base_table_def base_table_element base_table_element_commalist
 %type <pParseNode> column_def odbc_fct_spec	odbc_call_spec odbc_fct_type op_parameter union_statement
 %type <pParseNode> op_odbc_call_parameter odbc_parameter_commalist odbc_parameter function_args_commalist function_arg
-%type <pParseNode> catalog_name schema_name table_node numeric_function string_function function_name date_function
+%type <pParseNode> catalog_name schema_name table_node numeric_function string_function function_name date_function table_primary_as_range_column opt_as
 %%
 
 /* Parse Tree an OSQLParser zurueckliefern
@@ -904,12 +904,7 @@ query_term:
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
 		}
-/*      | joined_table
-		{
-			$$ = SQL_NEW_RULE;
-			$$->append($1);
-		}
-*/	;
+    ;
 /* SELECT STATEMENT */
 select_statement:
 		SQL_TOKEN_SELECT opt_all_distinct selection table_exp
@@ -953,6 +948,7 @@ from_clause:
 	;
 
 table_ref_commalist:
+
 		table_ref
 			{$$ = SQL_NEW_COMMALISTRULE;
 			$$->append($1);}
@@ -960,38 +956,34 @@ table_ref_commalist:
 			{$1->append($3);
 			$$ = $1;}
 	;
-as:
-		{$$ = SQL_NEW_RULE;}
+
+opt_as:
+		/* empty */ {$$ = SQL_NEW_RULE;}
 	|	SQL_TOKEN_AS
-		{
-			$$ = SQL_NEW_RULE;
-		}
 	;
-table_ref:
-		table_node
-		{
-			$$ = SQL_NEW_RULE;
-			$$->append($1);
-		}
-	|	table_node as range_variable op_column_commalist
-		{
-			$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2);
+table_primary_as_range_column:
+        {$$ = SQL_NEW_RULE;}
+	|   opt_as SQL_TOKEN_NAME op_column_commalist
+		{$$ = SQL_NEW_RULE;
+		    $$->append($1);
+		    $$->append($2);
 			$$->append($3);
-			$$->append($4);
 		}
-	|	'(' joined_table ')' as range_variable op_column_commalist
+    ;
+table_ref:
+        table_node table_primary_as_range_column
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append($1);
 			$$->append($2);
-			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
-			$$->append($4);
-			$$->append($5);
-			$$->append($6);
 		}
-	|	joined_table
+	|   subquery range_variable op_column_commalist
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		    $$->append($3);
+		}
 	|	'{' SQL_TOKEN_OJ joined_table '}'
 		{
 			$$ = SQL_NEW_RULE;
@@ -1000,13 +992,15 @@ table_ref:
 			$$->append($3);
 			$$->append($4 = newNode("}", SQL_NODE_PUNCTUATION));
 		}
-	|   subquery as range_variable
+    |	'(' joined_table ')' range_variable op_column_commalist
 		{
 			$$ = SQL_NEW_RULE;
-			$$->append($1);
+			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($2);
-			$$->append($3);
-		}
+			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append($4);
+			$$->append($5);
+		}	
 	;
 where_clause:
 		SQL_TOKEN_WHERE search_condition
@@ -2116,15 +2110,6 @@ qualified_join:
 	;
 joined_table:
 		qualified_join
-/*	|	query_exp*/
-	|	'(' joined_table ')'
-		{
-			$$ = SQL_NEW_RULE;
-			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
-			$$->append($2);
-			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
-		}
-
 	;
 named_columns_join:
 		SQL_TOKEN_USING '(' column_commalist ')'
@@ -2164,7 +2149,6 @@ non_join_query_term:
 	;
 query_primary:
 		non_join_query_primary
-	 /*|	joined_table*/
 	;
 non_join_query_exp:
 		non_join_query_term
@@ -3090,7 +3074,13 @@ procedure:      SQL_TOKEN_NAME
 	;
 ***/
 
-range_variable: SQL_TOKEN_NAME
+range_variable: 
+        {$$ = SQL_NEW_RULE;}
+    |   opt_as SQL_TOKEN_NAME
+        {$$ = SQL_NEW_RULE;
+        $$->append($1);
+        $$->append($2);
+        }
 	;
 
 user:	SQL_TOKEN_NAME
