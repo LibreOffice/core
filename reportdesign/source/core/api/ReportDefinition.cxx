@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportDefinition.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,12 @@
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
+#include <com/sun/star/awt/Gradient.hpp>
+
+#include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/LineDash.hpp>
+#include <com/sun/star/drawing/Hatch.hpp>
+
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/sequence.hxx>
@@ -96,6 +102,7 @@
 #include <boost/utility.hpp>
 #include <svtools/saveopt.hxx>
 #include "RptModel.hxx"
+#include "UndoEnv.hxx"
 #include "FormattedField.hxx"
 #include "FixedText.hxx"
 #include "ImageControl.hxx"
@@ -107,6 +114,7 @@
 #include <svx/svdlayer.hxx>
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
+#include <svx/unofill.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include "ReportComponent.hxx"
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
@@ -506,6 +514,13 @@ struct OReportDefinitionImpl
     uno::Reference< frame::XController >                    m_xCurrentController;
     uno::Reference< container::XIndexAccess >               m_xViewData;
     uno::Reference< container::XNameAccess >                m_xStyles;
+    uno::Reference< container::XNameAccess>                 m_xXMLNamespaceMap;
+    uno::Reference< container::XNameAccess>                 m_xGradientTable;
+    uno::Reference< container::XNameAccess>                 m_xHatchTable;
+    uno::Reference< container::XNameAccess>                 m_xBitmapTable;
+    uno::Reference< container::XNameAccess>                 m_xTransparencyGradientTable;
+    uno::Reference< container::XNameAccess>                 m_xDashTable;
+    uno::Reference< container::XNameAccess>                 m_xMarkerTable;
     uno::Reference< report::XFunctions >                    m_xFunctions;
     uno::Reference< ui::XUIConfigurationManager>            m_xUIConfigurationManager;
     uno::Reference< util::XNumberFormatsSupplier>           m_xNumberFormatsSupplier;
@@ -660,6 +675,15 @@ void OReportDefinition::init()
         m_pImpl->m_xFunctions = new OFunctions(this,m_aProps->m_xContext);
         if ( !m_pImpl->m_xStorage.is() )
             m_pImpl->m_xStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
+
+        uno::Reference<beans::XPropertySet> xStorProps(m_pImpl->m_xStorage,uno::UNO_QUERY);
+        if ( xStorProps.is())
+        {
+            ::rtl::OUString sMediaType;
+            xStorProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType"))) >>= sMediaType;
+            if ( !sMediaType.getLength() )
+                xStorProps->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")),uno::makeAny(MIMETYPE_OASIS_OPENDOCUMENT_REPORT));
+        }
         m_pImpl->m_pObjectContainer.reset( new comphelper::EmbeddedObjectContainer(m_pImpl->m_xStorage , static_cast<cppu::OWeakObject*>(this) ) );
     }
     catch(uno::Exception)
@@ -695,6 +719,7 @@ void SAL_CALL OReportDefinition::disposing()
         ::comphelper::disposeComponent(m_pImpl->m_xPageFooter);
         ::comphelper::disposeComponent(m_pImpl->m_xDetail);
         ::comphelper::disposeComponent(m_pImpl->m_xFunctions);
+
         //::comphelper::disposeComponent(m_pImpl->m_xStorage);
             // don't dispose, this currently is the task of either the ref count going to
             // 0, or of the embedded object (if we're embedded, which is the only possible
@@ -705,6 +730,13 @@ void SAL_CALL OReportDefinition::disposing()
         m_pImpl->m_xCurrentController.clear();
         m_pImpl->m_xNumberFormatsSupplier.clear();
         m_pImpl->m_xStyles.clear();
+        m_pImpl->m_xXMLNamespaceMap.clear();
+        m_pImpl->m_xGradientTable.clear();
+        m_pImpl->m_xHatchTable.clear();
+        m_pImpl->m_xBitmapTable.clear();
+        m_pImpl->m_xTransparencyGradientTable.clear();
+        m_pImpl->m_xDashTable.clear();
+        m_pImpl->m_xMarkerTable.clear();
         m_pImpl->m_xUIConfigurationManager.clear();
         m_pImpl->m_pReportModel.reset();
         m_pImpl->m_pObjectContainer.reset();
@@ -1283,27 +1315,24 @@ void SAL_CALL OReportDefinition::loadFromStorage( const uno::Reference< embed::X
     aPropVal.Value <<= _xStorageToLoadFrom;
     aDelegatorArguments[nPos] <<= aPropVal;
 
-    uno::Reference< document::XFilter > xFilter(
-        m_aProps->m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.OReportFilter")),aDelegatorArguments,m_aProps->m_xContext),
-        uno::UNO_QUERY_THROW );
+    rptui::OXUndoEnvironment& rEnv = m_pImpl->m_pReportModel->GetUndoEnv();
+    rptui::OXUndoEnvironment::OUndoEnvLock aLock(rEnv);
+    {
+        uno::Reference< document::XFilter > xFilter(
+            m_aProps->m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.OReportFilter")),aDelegatorArguments,m_aProps->m_xContext),
+            uno::UNO_QUERY_THROW );
 
-    uno::Reference< document::XImporter> xImporter(xFilter,uno::UNO_QUERY_THROW);
-    uno::Reference<XComponent> xComponent(static_cast<OWeakObject*>(this),uno::UNO_QUERY);
-    xImporter->setTargetDocument(xComponent);
+        uno::Reference< document::XImporter> xImporter(xFilter,uno::UNO_QUERY_THROW);
+        uno::Reference<XComponent> xComponent(static_cast<OWeakObject*>(this),uno::UNO_QUERY);
+        xImporter->setTargetDocument(xComponent);
 
-    ::comphelper::MediaDescriptor aTemp;
-    aTemp << aDelegatorArguments;
-    xFilter->filter(aTemp.getAsConstPropertyValueList());
+        ::comphelper::MediaDescriptor aTemp;
+        aTemp << aDelegatorArguments;
+        xFilter->filter(aTemp.getAsConstPropertyValueList());
 
-    lcl_setModelReadOnly(m_pImpl->m_xStorage,m_pImpl->m_pReportModel);
-    m_pImpl->m_pObjectContainer->SwitchPersistence(m_pImpl->m_xStorage);
-    //LLA: if read only, try to load writer
-    // sal_Bool bIsReadOnly = aTemp.getUnpackedValueOrDefault(MediaDescriptor::PROP_READONLY(), sal_False);
-    // if (bIsReadOnly)
-    // {
-    //     // try to open the writer
-    //     bIsReadOnly = sal_True;
-    // }
+        lcl_setModelReadOnly(m_pImpl->m_xStorage,m_pImpl->m_pReportModel);
+        m_pImpl->m_pObjectContainer->SwitchPersistence(m_pImpl->m_xStorage);
+    }
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XStorage >& _xStorageToSaveTo, const uno::Sequence< beans::PropertyValue >& _aMediaDescriptor ) throw (lang::IllegalArgumentException, io::IOException, uno::Exception, uno::RuntimeException)
@@ -1333,7 +1362,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         static const ::rtl::OUString sPropName(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
         ::rtl::OUString sOldMediaType;
         xProp->getPropertyValue(sPropName) >>= sOldMediaType;
-        if ( !xProp->getPropertyValue(sPropName).hasValue() || !sOldMediaType.getLength() )
+        if ( !xProp->getPropertyValue(sPropName).hasValue() || !sOldMediaType.getLength() || MIMETYPE_OASIS_OPENDOCUMENT_REPORT != sOldMediaType )
             xProp->setPropertyValue( sPropName, uno::makeAny(MIMETYPE_OASIS_OPENDOCUMENT_REPORT) );
     }
 
@@ -1966,9 +1995,9 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
     {
         xShape.set(m_aProps->m_xContext->getServiceManager()->createInstanceWithContext(aServiceSpecifier,m_aProps->m_xContext),uno::UNO_QUERY);
     }
-    else if ( aServiceSpecifier.indexOf( ::rtl::OUString::createFromAscii("com.sun.star.style.PageStyle") ) == 0 ||
-              aServiceSpecifier.indexOf( ::rtl::OUString::createFromAscii("com.sun.star.style.FrameStyle") ) == 0 ||
-              aServiceSpecifier.indexOf( ::rtl::OUString::createFromAscii("com.sun.star.style.GraphicStyle") ) == 0
+    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.style.PageStyle") ) == 0 ||
+              aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.style.FrameStyle") ) == 0 ||
+              aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.style.GraphicStyle") ) == 0
               )
     {
         uno::Reference< style::XStyle> xStyle = new OStyle();
@@ -1979,30 +2008,77 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
 
         return xStyle.get();
     }
-    else if ( aServiceSpecifier.indexOf( ::rtl::OUString::createFromAscii("com.sun.star.document.Settings") ) == 0 )
+    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.Settings") ) == 0 )
     {
         uno::Reference<beans::XPropertySet> xProp = new OStyle();
 
         return xProp.get();
     }
-    else if ( aServiceSpecifier.indexOf( ::rtl::OUString::createFromAscii("com.sun.star.drawing.Defaults") ) == 0 )
+    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Defaults") ) == 0 )
     {
         uno::Reference<beans::XPropertySet> xProp = new OStyle();
         return xProp.get();
     }
-    else if ( aServiceSpecifier.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver"))) == 0 )
+    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GradientTable") ) == 0 )
+    {
+        if ( !m_pImpl->m_xGradientTable.is() )
+            m_pImpl->m_xGradientTable.set(SvxUnoGradientTable_createInstance(m_pImpl->m_pReportModel.get()),uno::UNO_QUERY);
+            //comphelper::NameContainer_createInstance( ::getCppuType( (const awt::Gradient*) 0 ) ).get();
+        return m_pImpl->m_xGradientTable;
+    }
+    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.HatchTable") ) == 0 )
+    {
+        if ( !m_pImpl->m_xHatchTable.is() )
+            m_pImpl->m_xHatchTable.set(SvxUnoHatchTable_createInstance(m_pImpl->m_pReportModel.get()),uno::UNO_QUERY);
+            //comphelper::NameContainer_createInstance( ::getCppuType( (const drawing::Hatch*) 0 ) ).get();
+        return m_pImpl->m_xHatchTable;
+    }
+    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.BitmapTable") ) == 0 )
+    {
+        if ( !m_pImpl->m_xBitmapTable.is() )
+            m_pImpl->m_xBitmapTable.set(SvxUnoBitmapTable_createInstance(m_pImpl->m_pReportModel.get()),uno::UNO_QUERY);
+            //comphelper::NameContainer_createInstance( ::getCppuType( (const ::rtl::OUString*) 0 ) ).get();
+        return m_pImpl->m_xBitmapTable;
+    }
+    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TransparencyGradientTable") ) == 0 )
+    {
+        if ( !m_pImpl->m_xTransparencyGradientTable.is() )
+            m_pImpl->m_xTransparencyGradientTable.set(SvxUnoTransGradientTable_createInstance(m_pImpl->m_pReportModel.get()),uno::UNO_QUERY);
+            //comphelper::NameContainer_createInstance( ::getCppuType( (const awt::Gradient*) 0 ) ).get();
+        return m_pImpl->m_xTransparencyGradientTable;
+    }
+    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DashTable") ) == 0 )
+    {
+        if ( !m_pImpl->m_xDashTable.is() )
+            m_pImpl->m_xDashTable.set(SvxUnoDashTable_createInstance(m_pImpl->m_pReportModel.get()),uno::UNO_QUERY);
+            //comphelper::NameContainer_createInstance( ::getCppuType( (const drawing::LineDash*) 0 ) ).get();
+        return m_pImpl->m_xDashTable;
+    }
+    else if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MarkerTable") ) )
+    {
+        if( !m_pImpl->m_xMarkerTable.is() )
+            m_pImpl->m_xMarkerTable.set(SvxUnoMarkerTable_createInstance( m_pImpl->m_pReportModel.get() ),uno::UNO_QUERY);
+        return m_pImpl->m_xMarkerTable;
+    }
+    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver")) == 0 )
         return static_cast< ::cppu::OWeakObject* >(SvXMLEmbeddedObjectHelper::Create( m_pImpl->m_xStorage,*this, EMBEDDEDOBJECTHELPER_MODE_READ ));
-    else if ( aServiceSpecifier.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportEmbeddedObjectResolver"))) == 0 )
+    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ExportEmbeddedObjectResolver")) == 0 )
         return static_cast< ::cppu::OWeakObject* >(SvXMLEmbeddedObjectHelper::Create( m_pImpl->m_xStorage,*this, EMBEDDEDOBJECTHELPER_MODE_WRITE ));
-    else if ( aServiceSpecifier.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ImportGraphicObjectResolver"))) == 0 )
+    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ImportGraphicObjectResolver")) == 0 )
         return static_cast< ::cppu::OWeakObject* >(new SvXMLGraphicHelper( GRAPHICHELPER_MODE_READ ));
-    else if ( aServiceSpecifier.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportGraphicObjectResolver"))) == 0 )
+    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ExportGraphicObjectResolver")) == 0 )
         return static_cast< ::cppu::OWeakObject* >(new SvXMLGraphicHelper( GRAPHICHELPER_MODE_WRITE ));
-    else if ( aServiceSpecifier.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.DataProvider"))) == 0 )
+    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.data.DataProvider")) == 0 )
     {
         uno::Reference<chart2::data::XDatabaseDataProvider> xDataProvider(chart2::data::DatabaseDataProvider::createWithConnection( m_aProps->m_xContext, m_pImpl->m_xActiveConnection ));
         xDataProvider->setRowLimit(10);
         return uno::Reference< uno::XInterface >(xDataProvider,uno::UNO_QUERY);
+    }
+    else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.xml.NamespaceMap")) == 0 )
+    {
+        if ( !m_pImpl->m_xXMLNamespaceMap.is() )
+            m_pImpl->m_xXMLNamespaceMap = comphelper::NameContainer_createInstance( ::getCppuType( (const ::rtl::OUString*) 0 ) ).get();
+        return m_pImpl->m_xXMLNamespaceMap;
     }
     else
         xShape.set(SvxUnoDrawMSFactory::createInstance( aServiceSpecifier ),uno::UNO_QUERY_THROW);
@@ -2036,7 +2112,15 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OReportDefinition::getAvailableService
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportEmbeddedObjectResolver")),
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ImportGraphicObjectResolver")),
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportGraphicObjectResolver")),
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.DataProvider"))
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.DataProvider")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.NamespaceMap")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.Settings")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GradientTable")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.HatchTable")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.BitmapTable")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.TransparencyGradientTable")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DashTable")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.MarkerTable"))
     };
 
     static const sal_uInt16 nSvxComponentServiceNameListCount = sizeof(aSvxComponentServiceNameList) / sizeof ( aSvxComponentServiceNameList[0] );
