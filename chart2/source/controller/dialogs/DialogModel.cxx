@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DialogModel.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -736,7 +736,7 @@ void DialogModel::restoreModel(
             xDestinationTitled->setTitleObject( xSourceTitled->getTitleObject());
 
             // page background
-            PropertyHelper::copyProperties(
+            comphelper::copyProperties(
                 xSource->getPageBackground(),
                 xDestination->getPageBackground() );
         }
