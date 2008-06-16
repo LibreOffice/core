@@ -70,9 +70,18 @@
      			wlst[nh].word = mystrdup(st);
      			wlst[nh].allow = (1 == 0);
      			wlst[nh].orig = mystrdup(newword);
---- misc/hunspell-1.1.12/src/hunspell/atypes.hxx	2007-09-01 08:57:35.000000000 +0200
-+++ misc/build/hunspell-1.1.12/src/hunspell/atypes.hxx	2008-04-23 22:59:31.000000000 +0200
-@@ -9,7 +9,7 @@
+--- misc/hunspell-1.1.12/src/hunspell/atypes.hxx	Sat Sep  1 08:57:35 2007
++++ misc/build/hunspell-1.1.12/src/hunspell/atypes.hxx	Mon Jun 16 15:50:27 2008
+@@ -1,6 +1,8 @@
+ #ifndef _ATYPES_HXX_
+ #define _ATYPES_HXX_
+ 
++#include <stdio.h>
++
+ #ifndef HUNSPELL_WARNING
+ #ifdef HUNSPELL_WARNING_ON
+ #define HUNSPELL_WARNING fprintf
+@@ -9,7 +11,7 @@
  static inline void HUNSPELL_WARNING(FILE *, const char *, ...) {}
  #endif
  #endif
@@ -81,7 +90,7 @@
  // HUNSTEM def.
  #define HUNSTEM
  
-@@ -91,8 +91,3 @@
+@@ -91,8 +93,3 @@
  };
  
  #endif
@@ -166,6 +175,16 @@
      unsigned char l;
      unsigned char h;
  } w_char;
+--- misc/hunspell-1.1.12/src/hunspell/hashmgr.hxx	Sun Aug 26 03:45:12 2007
++++ misc/build/hunspell-1.1.12/src/hunspell/hashmgr.hxx	Mon Jun 16 15:50:40 2008
+@@ -3,6 +3,7 @@
+ 
+ #ifndef MOZILLA_CLIENT
+ #include <cstdio>
++using namespace std;
+ #else
+ #include <stdio.h>
+ #endif
 --- misc/hunspell-1.1.12/src/hunspell/hunspell.cxx	2007-08-28 15:17:30.000000000 +0200
 +++ misc/build/hunspell-1.1.12/src/hunspell/hunspell.cxx	2008-04-23 22:59:31.000000000 +0200
 @@ -1,3 +1,7 @@
@@ -275,6 +294,23 @@
  
  # DIC2BIN= \
  #	en_US.aff \
+--- misc/hunspell-1.1.12/src/hunspell/phonet.cxx	Mon Aug 27 21:45:49 2007
++++ misc/build/hunspell-1.1.12/src/hunspell/phonet.cxx	Mon Jun 16 15:50:48 2008
+@@ -27,11 +27,14 @@
+                 Porting from Aspell to Hunspell using C-like structs
+ */
+ 
++// MARKER(update_precomp.py): autogen include statement, do not remove
++#include "precompiled_lingucomponent.hxx"
+ #ifndef MOZILLA_CLIENT
+ #include <cstdlib>
+ #include <cstring>
+ #include <cstdio>
+ #include <cctype>
++using namespace std;
+ #else
+ #include <stdlib.h> 
+ #include <string.h>
 --- misc/hunspell-1.1.12/src/hunspell/suggestmgr.cxx	2007-09-04 13:21:26.000000000 +0200
 +++ misc/build/hunspell-1.1.12/src/hunspell/suggestmgr.cxx	2008-04-23 22:59:31.000000000 +0200
 @@ -118,7 +118,7 @@
