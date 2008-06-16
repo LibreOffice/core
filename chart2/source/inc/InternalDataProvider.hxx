@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: InternalDataProvider.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,8 +37,9 @@
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase6.hxx>
 #include "ServiceMacros.hxx"
 
 #include "CachedDataSequence.hxx"
@@ -53,11 +54,12 @@ namespace impl
 {
 class InternalData;
 
-typedef ::cppu::WeakImplHelper5<
+typedef ::cppu::WeakImplHelper6<
         ::com::sun::star::chart2::XInternalDataProvider,
         ::com::sun::star::chart2::data::XRangeXMLConversion,
         ::com::sun::star::chart::XChartDataArray,
         ::com::sun::star::util::XCloneable,
+        ::com::sun::star::lang::XInitialization,
         ::com::sun::star::lang::XServiceInfo >
     InternalDataProvider_Base;
 }
@@ -77,6 +79,7 @@ class InternalDataProvider :
 {
 public:
     explicit InternalDataProvider();
+    explicit InternalDataProvider(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & _xContext);
     /// sets the internal data to the given data
     explicit InternalDataProvider(
         const ::com::sun::star::uno::Reference<
@@ -92,6 +95,7 @@ public:
 
     /// declare XServiceInfo methods
     APPHELPER_XSERVICEINFO_DECL()
+    APPHELPER_SERVICE_FACTORY_HELPER(InternalDataProvider)
 
     // ____ XInternalDataProvider ____
     virtual ::sal_Bool SAL_CALL hasDataByRangeRepresentation( const ::rtl::OUString& aRange )
@@ -183,6 +187,9 @@ public:
     // ____ XCloneable ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
         throw (::com::sun::star::uno::RuntimeException);
+    // ::com::sun::star::lang::XInitialization:
+    virtual void SAL_CALL initialize(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > & aArguments)
+        throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::uno::Exception);
 
 private:
     impl::InternalData &  getInternalData();
