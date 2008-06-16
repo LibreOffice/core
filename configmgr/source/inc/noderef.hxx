@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: noderef.hxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -228,8 +228,10 @@ namespace configmgr
             /// checks whether the node <var>aNode</var> is a valid inner node in this tree.
             bool isValidNode(NodeRef const& aNode) const;
 
+#if OSL_DEBUG_LEVEL > 0
             /// checks whether the node <var>aNode</var> is a valid inner node in this tree.
             bool isValidNode(AnyNodeRef const& aNode) const;
+#endif
 
             /// checks whether the node <var>aNode</var> is a valid value node in this tree.
             bool isValidNode(ValueRef const& aNode) const;
@@ -313,9 +315,6 @@ namespace configmgr
             /// return the local <type>Name</type> of node <var>aNode</var> in this tree
             Name            getName(NodeRef const& aNode) const;
 
-            /// return the local <type>Name</type> of node <var>aNode</var> in this tree
-            Name            getName(AnyNodeRef const& aNode) const;
-
             /// return the local <type>Name</type> of value <var>aValue</var> in this tree
             Name            getName(ValueRef const& aValue) const;
 
@@ -333,9 +332,6 @@ namespace configmgr
 
         // Parent/NodeRef context handling
         public:
-            /// return the parent <type>NodeRef</type> of <var>aNode</var> (or an empty node, if it is the tree root)
-            NodeRef getParent(AnyNodeRef const& aNode) const;
-
             /// return the parent <type>NodeRef</type> of <var>aNode</var> (or an empty node, if it is the tree root)
             NodeRef getParent(NodeRef const& aNode) const;
 
@@ -427,9 +423,6 @@ namespace configmgr
             /// dispatch node <var>aNode</var> to a Visitor
             NodeVisitor::Result visit(ValueRef const& aNode, NodeVisitor& aVisitor) const
             { return aVisitor.handle(*this,aNode); }
-
-            /// dispatch node <var>aNode</var> to a Visitor
-            NodeVisitor::Result visit(AnyNodeRef const& aNode, NodeVisitor& aVisitor) const;
 
             /** lets <var>aVisitor</var> visit the child nodes of <var>aNode</var>
                 <p>The order in which nodes are visited is repeatable (but currently unspecified)</p>
@@ -543,15 +536,6 @@ namespace configmgr
                 if it is an absolute path that is not to a descendant of <var>aNode<var/>
         */
         RelativePath validateAndReducePath(OUString const& aPath, Tree const& aTree, NodeRef const& aNode);
-
-        /** checks whether there are any immediate children of <var>aNode</var> (which is in <var>aTree</var>)
-
-            @return
-                <TRUE/> if a child node exists
-                <FALSE/> otherwise
-        */
-        bool hasChildOrElement(Tree const& aTree, NodeRef const& aNode);
-
         /** checks whether there is an immediate child of <var>aNode</var> (which is in <var>aTree</var>)
             specified by <var>aName</var>
 
