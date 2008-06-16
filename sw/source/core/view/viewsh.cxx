@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewsh.cxx,v $
- * $Revision: 1.85 $
+ * $Revision: 1.86 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2131,18 +2131,6 @@ Size ViewShell::GetDocSize() const
     const SwRootFrm* pRoot = GetLayout();
     if( pRoot )
         aSz = pRoot->Frm().SSize();
-
-    //mod #i6193# added sidebar width
-    // fme: Sidebar is already part of the root frame
-    /*SwView* pView = pDoc->GetDocShell()->GetView() ;
-    if (pView)
-    {
-        SwPostItMgr* pPostItMgr = pView->GetPostItMgr();
-        if (pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes())
-        {
-            aSz.Width() += pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth();
-        }
-    }*/
 
     return aSz;
 }
