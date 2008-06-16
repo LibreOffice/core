@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SDBCReportData.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,58 +65,68 @@ public class SDBCReportData implements DataSource
         row = (XRow) UnoRuntime.queryInterface(XRow.class, rowSet);
         this.rowSet = rowSet;
 
-        final XParametersSupplier xSuppParams = (XParametersSupplier) UnoRuntime.queryInterface(
-                XParametersSupplier.class, rowSet);
-        if (xSuppParams != null)
+        if (rowSet == null)
         {
-            parameters = xSuppParams.getParameters();
-        }
-
-        final XResultSetMetaDataSupplier sup = (XResultSetMetaDataSupplier) UnoRuntime.queryInterface(XResultSetMetaDataSupplier.class, rowSet);
-        final XResultSetMetaData resultSetMetaData = sup.getMetaData();
-
-        columnCount = resultSetMetaData.getColumnCount();
-        if (parameters != null)
-        {
-            firstParameterIndex = columnCount + 1;
-            columnCount += parameters.getCount();
-        }
-
-        columnTypes = new int[columnCount];
-        columnNames = new String[columnCount];
-
-        for (int i = 1; i <= columnCount; ++i)
-        {
-            if (i < firstParameterIndex)
-            {
-                columnNames[i - 1] = resultSetMetaData.getColumnName(i);
-                columnTypes[i - 1] = resultSetMetaData.getColumnType(i);
-            }
-            else
-            {
-                try
-                {
-                    final XPropertySet paramColumn = (XPropertySet) UnoRuntime.queryInterface(
-                            XPropertySet.class, parameters.getByIndex(i - firstParameterIndex));
-                    columnNames[i - 1] = (String) paramColumn.getPropertyValue("Name");
-                    columnTypes[i - 1] = ((Integer) paramColumn.getPropertyValue("Type")).intValue();
-                }
-                catch (Exception e)
-                {
-                    columnNames[i - 1] = "Error";
-                    columnTypes[i - 1] = DataType.CHAR;
-                }
-            }
-        }
-
-        if (rowSet.last())
-        {
-            rowCount = rowSet.getRow();
-            rowSet.beforeFirst();
+            rowCount = 0;
+            columnCount = 0;
+            columnTypes = new int[1];
+            columnNames = new String[1];
         }
         else
         {
-            rowCount = 0;
+            final XParametersSupplier xSuppParams = (XParametersSupplier) UnoRuntime.queryInterface(
+                    XParametersSupplier.class, rowSet);
+            if (xSuppParams != null)
+            {
+                parameters = xSuppParams.getParameters();
+            }
+
+            final XResultSetMetaDataSupplier sup = (XResultSetMetaDataSupplier) UnoRuntime.queryInterface(XResultSetMetaDataSupplier.class, rowSet);
+            final XResultSetMetaData resultSetMetaData = sup.getMetaData();
+
+            columnCount = resultSetMetaData.getColumnCount();
+            if (parameters != null)
+            {
+                firstParameterIndex = columnCount + 1;
+                columnCount += parameters.getCount();
+            }
+
+            columnTypes = new int[columnCount];
+            columnNames = new String[columnCount];
+
+            for (int i = 1; i <= columnCount; ++i)
+            {
+                if (i < firstParameterIndex)
+                {
+                    columnNames[i - 1] = resultSetMetaData.getColumnName(i);
+                    columnTypes[i - 1] = resultSetMetaData.getColumnType(i);
+                }
+                else
+                {
+                    try
+                    {
+                        final XPropertySet paramColumn = (XPropertySet) UnoRuntime.queryInterface(
+                                XPropertySet.class, parameters.getByIndex(i - firstParameterIndex));
+                        columnNames[i - 1] = (String) paramColumn.getPropertyValue("Name");
+                        columnTypes[i - 1] = ((Integer) paramColumn.getPropertyValue("Type")).intValue();
+                    }
+                    catch (Exception e)
+                    {
+                        columnNames[i - 1] = "Error";
+                        columnTypes[i - 1] = DataType.CHAR;
+                    }
+                }
+            }
+
+            if (rowSet.last())
+            {
+                rowCount = rowSet.getRow();
+                rowSet.beforeFirst();
+            }
+            else
+            {
+                rowCount = 0;
+            }
         }
     }
 
@@ -137,6 +147,8 @@ public class SDBCReportData implements DataSource
 
     public boolean absolute(final int row) throws DataSourceException
     {
+        if (rowSet == null)
+            return false;
         try
         {
             if (row == 0)
@@ -154,6 +166,8 @@ public class SDBCReportData implements DataSource
 
     public boolean next() throws DataSourceException
     {
+        if (rowSet == null)
+            return false;
         try
         {
             return rowSet.next();
@@ -276,6 +290,8 @@ public class SDBCReportData implements DataSource
 
     public Object getObject(final int column) throws DataSourceException
     {
+        if (rowSet == null)
+            return null;
         try
         {
             final boolean isParameterValue = (parameters != null) && (column >= firstParameterIndex);
@@ -322,7 +338,7 @@ public class SDBCReportData implements DataSource
         }
     }
 
-    Object convertObject(final int type, final Object obj)
+    private Object convertObject(final int type, final Object obj)
     {
         final Object ret;
         switch (type)
