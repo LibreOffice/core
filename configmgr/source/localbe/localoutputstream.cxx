@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: localoutputstream.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,7 +119,6 @@ LocalOutputStream::~LocalOutputStream()
     try
     {
         this->closeOutput();
-    //  if (mWriteFile)  FileHelper::removeFile(mTemporaryFileUrl) ;
     }
     catch (uno::Exception&)
     {
