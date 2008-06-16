@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewstrategy.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -389,13 +389,13 @@ namespace configmgr
             checkInstance(_aNode.tree());
             return _aNode.get_impl()->getValue();
         }
-
+#if OSL_DEBUG_LEVEL > 0
         UnoType ViewStrategy::getValueType(ValueNode const& _aNode) const
         {
             checkInstance(_aNode.tree());
             return _aNode.get_impl()->getValueType();
         }
-
+#endif
 //-----------------------------------------------------------------------------
 // group member access
 
@@ -428,9 +428,9 @@ namespace configmgr
 
             virtual Result handle(data::ValueNodeAccess const& _aValue);
             virtual Result handle(data::NodeAccess const& _aNonValue);
-
+#if (OSL_DEBUG_LEVEL > 0)
             bool test_value(data::NodeAccess const & _aNode) const;
-
+#endif
             ViewStrategy&       m_rStrategy;
             GroupNode           m_aGroup;
             GroupMemberVisitor& m_rVisitor;
@@ -441,12 +441,14 @@ namespace configmgr
                 using NodeVisitor::handle;
         };
 
+#if (OSL_DEBUG_LEVEL > 0)
         bool GroupMemberDispatch::test_value(data::NodeAccess const& _aNode) const
         {
             Name aName = _aNode.getName();
 
             return m_rStrategy.hasValue( m_aGroup, aName );
         }
+#endif
 
         GroupMemberDispatch::Result GroupMemberDispatch::handle(data::ValueNodeAccess const& _aValue)
         {
@@ -601,19 +603,6 @@ namespace configmgr
         {
             checkInstance(_aNode.tree());
             return _aNode.get_impl()->getTemplateProvider();
-        }
-
-//-----------------------------------------------------------------------------
-        data::NodeAccess ViewStrategy::getNodeAccess(Node const& _aNode) const
-        {
-            checkInstance(_aNode.tree());
-            return _aNode.getAccessRef();
-        }
-
-        Name ViewStrategy::getNodeName(Node const& _aNode) const
-        {
-            checkInstance(_aNode.tree());
-            return _aNode.data().getName();
         }
 
         node::Attributes ViewStrategy::getNodeAttributes(Node const& _aNode) const
