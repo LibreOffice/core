@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tokstack.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,8 @@
 #include "compiler.hxx"
 #include "tokstack.hxx"
 #include "global.hxx"
+
+#include <stdio.h> // printf
 
 const UINT16    TokenPool::nScTokenOff = 8192;
 
