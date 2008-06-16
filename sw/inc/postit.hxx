@@ -8,7 +8,7 @@
  *
  * $RCSfile: postit.hxx,v $
  *
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,8 @@
 #ifndef _POSTIT_HXX
 #define _POSTIT_HXX
 
+#include <postithelper.hxx>
+
 #include <vcl/window.hxx>
 #include <swrect.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
@@ -52,6 +54,7 @@ class SwPostIt;
 class Edit;
 class MultiLineEdit;
 class PopupMenu;
+class SvxLanguageItem;
 
 class SwPostItAnkor: public sdr::overlay::OverlayObjectWithBasePosition
 {
@@ -113,11 +116,6 @@ class SwPostItAnkor: public sdr::overlay::OverlayObjectWithBasePosition
             const basegfx::B2DPoint& rPoint4, const basegfx::B2DPoint& rPoint5, const basegfx::B2DPoint& rPoint6, const basegfx::B2DPoint& rPoint7);
         void SetTriPosition(const basegfx::B2DPoint& rPoint1,const basegfx::B2DPoint& rPoint2,const basegfx::B2DPoint& rPoint3,
                                     const basegfx::B2DPoint& rPoint4,const basegfx::B2DPoint& rPoint5);
-        void SetColorLineInfo(Color aBaseColor,const LineInfo& aLineInfo);
-        void SetSecondPosition(const basegfx::B2DPoint& rNew);
-        void SetThirdPosition(const basegfx::B2DPoint& rNew);
-        void SetFourthPosition(const basegfx::B2DPoint& rNew);
-        void SetFifthPosition(const basegfx::B2DPoint& rNew);
         void SetSixthPosition(const basegfx::B2DPoint& rNew);
         void SetSeventhPosition(const basegfx::B2DPoint& rNew);
 
@@ -126,7 +124,6 @@ class SwPostItAnkor: public sdr::overlay::OverlayObjectWithBasePosition
         void SetHeight(const unsigned long aHeight) {mHeight = aHeight;};
 
         bool getShadowedEffect() const { return mbShadowedEffect; }
-        void setShadowedEffect(bool bNew);
 
         virtual void Trigger(sal_uInt32 nTime);
 
@@ -160,10 +157,6 @@ class SwPostItShadow: public sdr::overlay::OverlayObjectWithBasePosition
         void SetPosition(const basegfx::B2DPoint& rPoint1,const basegfx::B2DPoint& rPoint2);
 
         virtual void Trigger(sal_uInt32 nTime);
-
-        //sal_Bool isHit(const basegfx::B2DPoint& rPos, double fTol) const;
-        // transform object coordinates. Transforms maBasePosition
-        // and invalidates on change
         virtual void transform(const basegfx::B2DHomMatrix& rMatrix);
 };
 
@@ -173,8 +166,6 @@ class PostItTxt : public Window
         OutlinerView*   mpOutlinerView;
         SwPostIt*       mpPostIt;
 
-        Color           mColorDark;
-        Color           mColorLight;
         bool            mMouseOver;
         BOOL            mbShowPopup;
 
@@ -187,13 +178,13 @@ class PostItTxt : public Window
         virtual void    Command( const CommandEvent& rCEvt );
         virtual void    DataChanged( const DataChangedEvent& aData);
         virtual void    LoseFocus();
+        virtual void    RequestHelp(const HelpEvent &rEvt);
 
     public:
             PostItTxt(Window* pParent, WinBits nBits);
             ~PostItTxt();
 
             virtual void    GetFocus();
-            void            SetColor(Color &aColorDark,Color &aColorLight);
             void            SetTextView( OutlinerView* aEditView ) {    mpOutlinerView = aEditView; }
 
             DECL_LINK( WindowEventListener, VclSimpleEvent* );
@@ -233,7 +224,8 @@ class SwPostIt : public Window
         SwRect          mAnkorRect;
         long            mPageBorder;
         SwPostItBits    nFlags;
-
+        Color           mChangeColor;
+        SwPostItHelper::SwLayoutStatus mStatus;
 
     protected:
 
@@ -259,7 +251,6 @@ class SwPostIt : public Window
         void    SetPosSizePixelRect( long nX, long nY,long nWidth, long nHeight,const SwRect &aRect,const long PageBorder);
         void    TranslateTopPosition(const long aAmount);
 
-        void    MetaInfo(const bool bMeta);
         void    SetPostItText();
 
         PostItTxt*      PostItText()    { return mpPostItTxt;}
@@ -270,15 +261,16 @@ class SwPostIt : public Window
         SwView*         DocView()       { return mpView;}
         Outliner*       Engine()        { return mpOutliner;}
         SwPostItMgr*    Mgr()           { return mpMgr; }
-        SwEditWin*      EditWin();
         SwFmtFld*       Field()         { return mpFmtFld; }
-        String          GetAuthor() const;
+        SwRect          GetAnkorRect()  { return mAnkorRect; }
+        String          GetAuthor()     const;
+        SwEditWin*      EditWin();
 
         long            GetPostItTextHeight();
         void            UpdateData();
 
         void            SwitchToPostIt(USHORT aDirection);
-        void            SwitchToPostIt(bool aDirection);
+        //void          SwitchToPostIt(bool aDirection);
         void            SwitchToFieldPos(bool bAfter = true);
 
         void            ExecuteCommand(USHORT aSlot);
@@ -297,16 +289,15 @@ class SwPostIt : public Window
 
         void            ResetAttributes();
 
+        void            SetLanguage(const SvxLanguageItem aNewItem);
         void            SetMarginSide(bool aMarginSide);
         void            SetReadonly(BOOL bSet);
         BOOL            IsReadOnly()        { return mbReadonly;}
         bool            IsPreview()         { return nFlags & PB_Preview;}
 
-        void            SetColor(Color &aColorDark,Color &aColorLight, Color &aColorAnkor);
-        Color           ColorDark();
-        Color           ColorLight();
-        Color           ColorAnkor();
-
+        void            SetColor(Color aColorDark,Color aColorLight, Color aColorAnkor);
+        Color           ColorDark() { return mColorDark; }
+        Color           ColorLight() { return mColorLight; }
         void            Rescale();
 
         void            SetShadowState(ShadowState bState);
@@ -317,24 +308,16 @@ class SwPostIt : public Window
         sal_Int32       GetMetaButtonAreaWidth();
         sal_Int32       GetScrollbarWidth();
 
-        void            SetSpellChecking(bool bEnable);
+        void            SetSpellChecking();
+
+        void            SetChangeTracking(SwPostItHelper::SwLayoutStatus& aStatus,Color aColor);
+        SwPostItHelper::SwLayoutStatus GetStatus() { return mStatus; }
+        Color           GetChangeColor() { return mChangeColor; }
 
 
 
         void            ActivatePostIt();
         void            DeactivatePostIt();
-
-        /*
-        //void          ClearModifyFlag()   { mpOutliner->SetModified(); }
-        //BOOL          IsModified() const  { return mpOutliner->IsModified();}
-
-        void            SetStartLine(USHORT nLine){nStartLine = nLine;}
-
-        virtual void    Command( const CommandEvent& rCEvt );
-        void            HandleWheelCommand( const CommandEvent& rCEvt );
-
-        void            SetTextEncoding(rtl_TextEncoding eEncoding);
-        */
 };
 
 
