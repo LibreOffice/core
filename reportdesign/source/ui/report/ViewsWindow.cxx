@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ViewsWindow.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -648,7 +648,10 @@ void OViewsWindow::unmarkAllObjects(OSectionView* _pSectionView)
         for (; aIter != aEnd ; ++aIter)
         {
             if ( (*aIter).first.first->getView() != _pSectionView )
+            {
+                (*aIter).first.first->deactivateOle();
                 (*aIter).first.first->getView()->UnmarkAllObj();
+            }
         } // for (; aIter != aEnd ; ++aIter)
         m_bInUnmark = sal_False;
     }
@@ -1297,8 +1300,8 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
                     BegDragObj_createInvisibleObjectAtPosition(aRect, pView);
 
                     // calculate the clickpoint
-                    sal_Int32 nDeltaX = abs(aRect.Left() - aAbsolutePnt.X());
-                    sal_Int32 nDeltaY = abs(aRect.Top() - aAbsolutePnt.Y());
+                    const sal_Int32 nDeltaX = abs(aRect.Left() - aAbsolutePnt.X());
+                    const sal_Int32 nDeltaY = abs(aRect.Top() - aAbsolutePnt.Y());
                     if (m_aDragDelta.X() > nDeltaX)
                         m_aDragDelta.X() = nDeltaX;
                     if (m_aDragDelta.Y() > nDeltaY)
@@ -1424,7 +1427,8 @@ OSectionView* OViewsWindow::getSectionRelativeToPosition(const OSectionView* _pS
     OSL_ENSURE(aIter != aEnd,"This can never happen!");
     if ( _rPnt.Y() < 0 )
     {
-        --aIter;
+        if ( nCount )
+            --aIter;
         for (; nCount && (_rPnt.Y() < 0); --nCount)
         {
             ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
@@ -1498,7 +1502,8 @@ void OViewsWindow::EndDragObj(BOOL _bControlKeyPressed, const OSectionView* _pSe
             }
             else
                 pInSection->EndDragObj(FALSE);
-        }
+        } // for (; aIter != aEnd; ++aIter)
+
         if ( aAllreadyCopiedObjects.getLength() )
         {
             beans::NamedValue* pIter = aAllreadyCopiedObjects.getArray();
@@ -1550,7 +1555,6 @@ void OViewsWindow::EndDragObj(BOOL _bControlKeyPressed, const OSectionView* _pSe
             }
             pInSection->getSectionWindow()->Paste(aAllreadyCopiedObjects,true);
         }
-        getView()->getReportView()->getController()->getUndoMgr()->LeaveListAction();
     }
     else
     {
@@ -1662,11 +1666,6 @@ BOOL OViewsWindow::IsDragObj() const
     return bAction;
 }
 // -----------------------------------------------------------------------------
-void OViewsWindow::setPoint(const Point& _aPnt)
-{
-    m_aPoint = _aPnt;
-}
-// -----------------------------------------------------------------------------
 sal_uInt32 OViewsWindow::getMarkedObjectCount() const
 {
     sal_uInt32 nCount = 0;
@@ -1732,10 +1731,12 @@ void OViewsWindow::handleKey(const KeyCode& _rCode)
                 if ( pView->IsMoveAllowed() )
                 {
                     // restrict movement to work area
-                    const Rectangle& rWorkArea = pView->GetWorkArea();
+                    Rectangle rWorkArea = pView->GetWorkArea();
 
                     if ( !rWorkArea.IsEmpty() )
                     {
+                        if ( rWorkArea.Top() < 0 )
+                            rWorkArea.Top() = 0;
                         Rectangle aMarkRect( pView->GetMarkedObjRect() );
                         aMarkRect.Move( nX, nY );
 
@@ -1851,7 +1852,16 @@ void OViewsWindow::stopScrollTimer()
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
         ::std::compose1(::boost::mem_fn(&OReportSection::stopScrollTimer),TReportPairHelper()));
 }
+// -----------------------------------------------------------------------------
+void OViewsWindow::fillControlModelSelection(::std::vector< uno::Reference< uno::XInterface > >& _rSelection) const
+{
+    TSectionsMap::const_iterator aIter = m_aSections.begin();
+    TSectionsMap::const_iterator aEnd = m_aSections.end();
+    for(;aIter != aEnd; ++aIter)
+    {
+        aIter->first.first->fillControlModelSelection(_rSelection);
+    }
+}
 //==============================================================================
 } // rptui
 //==============================================================================
-
