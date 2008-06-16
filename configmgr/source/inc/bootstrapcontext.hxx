@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bootstrapcontext.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,15 +90,10 @@ namespace configmgr
         /// Destroys this BootstrapContext
         ~ComponentContext();
 
-        /// changes the INI file to use for bootstrap data
-        void changeBootstrapURL( const OUString& _aURL );
-
         // gets the INI in use for getting bootstrap data
         OUString getBootstrapURL() const;
 
         static sal_Bool isPassthrough(Context const & _xContext);
-
-        static Context getBaseContext(Context const & _xContext);
 
         static beans::NamedValue makePassthroughMarker(sal_Bool bPassthrough = true);
     // interface implementations

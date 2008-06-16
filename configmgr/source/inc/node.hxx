@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: node.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,7 +119,6 @@ namespace configmgr
             AnyData  value;
             AnyData  defaultValue;
 
-            bool isEmpty()      const;
             bool isNull()       const;
             bool hasUsableDefault()   const;
 
@@ -144,7 +143,6 @@ namespace configmgr
             rtl::OUString       getName() const;
             node::Attributes    getAttributes() const;
             bool isDefault() const;
-            bool isLocalized() const;
 
             // type checks
             bool isGroup()  const  { return typeIs (Type::nodetype_group); }
@@ -161,10 +159,10 @@ namespace configmgr
 
             // navigation
             bool isFragmentRoot() const;
-
+#if OSL_DEBUG_LEVEL > 0
             Node        * getParentNode();
             Node const  * getParentNode() const;
-
+#endif
             TreeFragment        * getTreeFragment();
             TreeFragment const  * getTreeFragment() const;
             private:
