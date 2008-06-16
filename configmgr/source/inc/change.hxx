@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: change.hxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -152,15 +152,6 @@ namespace configmgr
             uno::Any const & aNewValue,
             uno::Any const & aOldValue = uno::Any());
 
-        ValueChange(
-            rtl::OUString const& _rName,
-            const node::Attributes& _rAttributes,
-            Mode aMode,
-            uno::Type const & aValueType);
-
-        ValueChange(uno::Any const & aNewValue, ValueNode const& aOldValue);
-        ValueChange(SetToDefault, ValueNode const& aOldValue);
-
         virtual std::auto_ptr<Change> clone() const;
 
         bool isChange() const;
@@ -181,10 +172,6 @@ namespace configmgr
 
         const node::Attributes& getAttributes() const {return m_aAttributes;}
 
-        rtl::OUString getModeAsString() const;
-        void setModeAsString(const rtl::OUString& _rMode);
-
-        void applyTo(ValueNode& aNode);
         void applyChangeNoRecover(ValueNode& aNode) const;
 
         virtual void dispatch(ChangeTreeAction& anAction) const { anAction.handle(*this); }
