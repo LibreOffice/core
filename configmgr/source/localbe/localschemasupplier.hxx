@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: localschemasupplier.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,19 +101,6 @@ class LocalSchemaSupplier : public SingleBackendBase {
         virtual uno::Sequence<rtl::OUString> SAL_CALL
             getSupportedServiceNames(  )
                 throw (uno::RuntimeException) ;
-
-        /**
-          Provides the implementation name.
-
-          @return   implementation name
-          */
-        static rtl::OUString SAL_CALL getName(void) ;
-        /**
-          Provides the supported services names
-
-          @return   service names
-          */
-        static uno::Sequence<rtl::OUString> SAL_CALL getServices(void) ;
 
     private :
         /** Service factory */
