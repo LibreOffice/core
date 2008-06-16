@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfioutdev_gpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2007-12-17 03:44:23 $
+ *  last change: $Author: rt $ $Date: 2008-06-16 13:46:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU General Public License Version 2.
@@ -36,6 +36,7 @@
 
 #include "pdfioutdev_gpl.hxx"
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
 #include <math.h>
