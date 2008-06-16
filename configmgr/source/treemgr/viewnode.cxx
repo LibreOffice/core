@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewnode.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,13 +68,6 @@ namespace configmgr
         }
 
 //-----------------------------------------------------------------------------
-        Node Node::getNextSibling() const
-        {
-            Tree::TreeData * pTreeData = this->tree().get_impl();
-            return makeNode_(tree(), pTreeData->nextSibling_(this->get_offset()));
-        }
-
-//-----------------------------------------------------------------------------
         Node GroupNode::findChild(configuration::Name const& _aName) const
         {
             Tree::TreeData * pTreeData = this->tree().get_impl();
@@ -100,12 +93,6 @@ namespace configmgr
         data::NodeAccess Node::getAccessRef() const
         {
             return get_impl()->getOriginalNodeAccess();
-        }
-
-//-----------------------------------------------------------------------------
-        data::ValueNodeAccess ValueNode::getAccess() const
-        {
-            return get_impl()->getDataAccess();
         }
 
 //-----------------------------------------------------------------------------

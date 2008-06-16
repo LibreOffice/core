@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewaccess.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +60,6 @@ namespace configmgr
             typedef configuration::NodeOffset NodeOffset;
             configuration::NodeData* nodeData(NodeArg    _aNodeArg) const;
             configuration::NodeData* nodeData(NodeOffset _aNodePos) const;
-            bool isValid(NodeArg _aNodeArg) const;
 
             Node makeNode(NodeArg    _aNodeArg) const { return Node(m_aTree,nodeData(_aNodeArg)); }
             Node makeNode(NodeOffset _aNodePos) const { return Node(m_aTree,nodeData(_aNodePos)); }
@@ -157,11 +156,11 @@ namespace configmgr
         /// retrieve the current value of this node
         UnoAny getValue(ValueNode const& _aNode) const
             { return m_xStrategy->getValue(_aNode); }
-
+#if OSL_DEBUG_LEVEL > 0
         /// get the type of this value
         UnoType getValueType(ValueNode const& _aNode)   const
             { return m_xStrategy->getValueType(_aNode); }
-
+#endif
 
         // group node specific operations
         public:
