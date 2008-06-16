@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: appopen.cxx,v $
- * $Revision: 1.120 $
+ * $Revision: 1.121 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -239,7 +239,7 @@ void SetTemplate_Impl( const String &rFileName,
 
 //--------------------------------------------------------------------
 
-ULONG CheckPasswd_Impl
+sal_uInt32 CheckPasswd_Impl
 (
     //Window *pWin,             // Parent des Dialogs
     SfxObjectShell*  pDoc,
