@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sm.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +76,7 @@ inline void SMprintf( const char*, ... )
     FILE* fp = fopen( "/tmp/sessionlog.txt", bFirstAssert ? "w" : "a" );
     if(!fp) return;
     bFirstAssert = false;
-    va_list ap;
+    std::va_list ap;
     va_start( ap, pFormat );
     vfprintf( fp, pFormat, ap );
     fclose( fp );
