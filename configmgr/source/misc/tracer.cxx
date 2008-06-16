@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tracer.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -250,7 +250,7 @@ void OConfigTracer::traceInfo(const sal_Char* _pFormat, ...)
         va_end(args);
     }
 }
-
+#if OSL_DEBUG_LEVEL > 0
 //--------------------------------------------------------------------------
 void OConfigTracer::traceWarning(const sal_Char* _pFormat, ...)
 {
@@ -280,16 +280,7 @@ void OConfigTracer::traceError(const sal_Char* _pFormat, ...)
         va_end(args);
     }
 }
-
-//--------------------------------------------------------------------------
-void OConfigTracer::trace(const sal_Char* _pFormat, ...)
-{
-    va_list args;
-    va_start(args, _pFormat);
-    implTrace("", _pFormat, args);
-    va_end(args);
-}
-
+#endif
 //--------------------------------------------------------------------------
 void OConfigTracer::indent()
 {
@@ -440,39 +431,6 @@ void OConfigTracer::ensureInitalized()
 }
 
 //--------------------------------------------------------------------------
-void OConfigTracer::traceToVirtualDevice(const sal_Char* _pDeviceName, const sal_Char* _pFormat, ...)
-{
-    ::osl::MutexGuard aGuard(getMutex());
-    ensureData();
-    ensureInitalized();
-
-    VirtualDevices::const_iterator aDeviceMediumPos = s_pImpl->m_aDevices.find(::rtl::OString(_pDeviceName));
-    if (aDeviceMediumPos != s_pImpl->m_aDevices.end())
-    {
-        FILE* pDeviceMedium = (FILE*)aDeviceMediumPos->second;
-
-        va_list args;
-        va_start(args, _pFormat);
-        vfprintf(pDeviceMedium, _pFormat, args);
-        fflush(pDeviceMedium);
-        va_end(args);
-    }
-}
-
-//--------------------------------------------------------------------------
-::rtl::OString OConfigTracer::getTimeStamp()
-{
-    time_t aTime = time(NULL);
-    tm* pStructuredTime = gmtime(&aTime);
-    ::rtl::OString sTimeStamp(asctime(pStructuredTime));
-    // cut the trainling linefeed (asctime is defined to contain such a line feed)
-    sal_Int32 nStampLen = sTimeStamp.getLength();
-    if ((0 != nStampLen) && ('\n' == sTimeStamp.getStr()[nStampLen - 1]))
-        sTimeStamp = sTimeStamp.copy(0, nStampLen - 1);
-
-    return sTimeStamp;
-}
-
 //-----------------------------------------------------------
 // need raw unsigned int to safely printf a value
 static inline
