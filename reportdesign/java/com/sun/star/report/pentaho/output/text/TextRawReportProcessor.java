@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TextRawReportProcessor.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,11 @@ import com.sun.star.report.DataSourceFactory;
 import com.sun.star.report.OutputRepository;
 import com.sun.star.report.InputRepository;
 import com.sun.star.report.ImageService;
+import com.sun.star.report.pentaho.PentahoFormulaContext;
+import com.sun.star.report.pentaho.PentahoReportJob;
 import org.jfree.report.ReportProcessingException;
+import org.jfree.report.data.ReportContextImpl;
+import org.jfree.report.flow.ReportContext;
 import org.jfree.report.flow.ReportJob;
 import org.jfree.report.flow.ReportStructureRoot;
 import org.jfree.report.flow.ReportTarget;
@@ -97,4 +101,17 @@ public class TextRawReportProcessor extends SinglePassReportProcessor
         return new TextRawReportTarget(job, resourceManager, report.getBaseResource(),
                 inputRepository, outputRepository, targetName, imageService, dataSourceFactory);
     }
+
+    protected ReportContext createReportContext(final ReportJob job,
+            final ReportTarget target)
+    {
+        final ReportContext context = super.createReportContext(job, target);
+        if (context instanceof ReportContextImpl)
+        {
+            ReportContextImpl impl = (ReportContextImpl) context;
+            impl.setFormulaContext(new PentahoFormulaContext(impl.getFormulaContext(),job.getConfiguration()));
+        }
+        return context;
+    }
 }
+
