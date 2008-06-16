@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: configpath.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -162,10 +162,6 @@ namespace configmgr
                 Name getName()         const SAL_THROW(());
                 /// get the embedded type name for this component (if any)
                 Name getTypeName()     const SAL_THROW(());
-                /// get inner name and the embedded type name (if any) for this component
-                bool splitCompositeName(Name& _rName, Name& _rType) const SAL_THROW(());
-                /// get inner name and the embedded type name (if any) for this component as strings
-                bool splitCompositeName(OUString& _rName, OUString& _rType) const SAL_THROW(());
 
                 /// get the contents of this as string (unparsed).
                 OUString toPathString() const SAL_THROW(()) { return m_aName.toString(); }
@@ -454,10 +450,10 @@ namespace configmgr
 
             /// check if this is the path to the (imaginary) root node
             bool isRoot() const SAL_THROW(()) { return m_aRep.isEmpty(); }
-
+#if OSL_DEBUG_LEVEL > 0
             /// check if this is a path to a detached node
             bool isDetached() const SAL_THROW(());
-
+#endif
             /// get the local name (the last component of this path)
             Path::Component const& getLocalName() const { return m_aRep.getLocalName(); }
 
