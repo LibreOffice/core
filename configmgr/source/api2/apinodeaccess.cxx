@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: apinodeaccess.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -177,18 +177,6 @@ configuration::ElementTree extractElementTree(configapi::Factory& rFactory, UnoA
     using namespace configuration;
     ElementRef aExtractedRef = extractElementRef(rFactory,aElement,aElementInfo.getTemplateInfo());
     return aExtractedRef.getElementTree();
-}
-//-----------------------------------------------------------------------------
-
-SetElement* findSetElement(Factory& rFactory, configuration::ElementRef const& aElementTree)
-{
-    SetElement* pSetElement = rFactory.findSetElement(aElementTree);
-    if (pSetElement)
-    {
-        // the factory always does an extra acquire
-        pSetElement->getUnoInstance()->release();
-    }
-    return pSetElement;
 }
 //-----------------------------------------------------------------------------
 
