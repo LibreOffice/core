@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoshap4.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -471,7 +471,7 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
     DBG_TESTSOLARMUTEX();
 
     SdrOle2Obj* pOle2Obj = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
-    if ( !pOle2Obj && !pOle2Obj->IsEmpty() )
+    if ( !pOle2Obj || !pOle2Obj->IsEmpty() )
         return sal_False;
 
     // create storage and inplace object
