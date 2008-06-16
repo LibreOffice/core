@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pdfwriter_impl.cxx,v $
- * $Revision: 1.128 $
+ * $Revision: 1.129 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2419,7 +2419,7 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
             {
                 DBG_ERROR( "unresolved link id for Link structure" );
 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "unresolved link id %ld for Link structure\n", nLink );
+                fprintf( stderr, "unresolved link id %d for Link structure\n", nLink );
                 {
                     OStringBuffer aLine( "unresolved link id " );
                     aLine.append( nLink );
@@ -2520,7 +2520,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
                 {
                     DBG_ERROR( "PDFWriterImpl::emitStructure: invalid child structure element" );
 #if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "PDFWriterImpl::emitStructure: invalid child structure elemnt with id %ld\n", *it );
+                    fprintf( stderr, "PDFWriterImpl::emitStructure: invalid child structure elemnt with id %d\n", *it );
 #endif
                 }
             }
@@ -2529,7 +2529,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
         {
             DBG_ERROR( "PDFWriterImpl::emitStructure: invalid child structure id" );
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "PDFWriterImpl::emitStructure: invalid child structure id %ld\n", *it );
+            fprintf( stderr, "PDFWriterImpl::emitStructure: invalid child structure id %d\n", *it );
 #endif
         }
     }
@@ -10295,7 +10295,7 @@ void PDFWriterImpl::beginStructureElementMCSeq()
 
         // update the element's content list
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "beginning marked content id %ld on page object %ld, structure first page = %ld\n",
+        fprintf( stderr, "beginning marked content id %d on page object %d, structure first page = %d\n",
                  nMCID,
                  m_aPages[ m_nCurrentPage ].m_nPageObject,
                  rEle.m_nFirstPageObject );
