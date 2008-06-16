@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: main.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,6 +28,7 @@
  *
  ************************************************************************/
 #include <cstdio>
+#include <stdlib.h>
 #include <sys/utsname.h>
 #include <_version.h>
 #include <errno.h>
