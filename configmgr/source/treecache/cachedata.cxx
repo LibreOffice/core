@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cachedata.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,12 +106,6 @@ namespace configmgr
     CacheData::~CacheData()
     {
         CFG_TRACE_INFO("Discarding CacheData (Still holding %d module trees)", int (m_aModules.size()) );
-    }
-// -----------------------------------------------------------------------------
-
-    CacheLine::Name CacheData::extractModuleName(CacheLine::Path const& _aPath)
-    {
-        return implExtractModuleName(_aPath);
     }
 // -----------------------------------------------------------------------------
     inline

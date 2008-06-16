@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cachedata.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,9 +65,6 @@ namespace configmgr
     public:
         CacheData();
         virtual ~CacheData();
-
-        /// retrieve the module tree name for the given path
-        static CacheLine::Name extractModuleName(CacheLine::Path const& _aPath);
 
         // attach a module with a given name
         void attachModule(data::TreeAddress _aLocation, CacheLine::Name const & _aModule);
