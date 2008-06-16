@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: subtree.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,9 +103,6 @@ namespace configmgr
     // to search in ChildListSet a value
     class SearchNode : public INode
     {
-        // why you want to search with no names.
-        SearchNode();
-
     public:
         SearchNode(OUString const& aName);
         virtual ~SearchNode();
