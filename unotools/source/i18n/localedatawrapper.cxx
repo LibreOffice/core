@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: localedatawrapper.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1375,7 +1375,7 @@ inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, const String& rStr )
         ;
     else
     {
-        memcpy( pBuf, rStr.GetBuffer(), rStr.Len() * sizeof(sal_Unicode) );
+        std::memcpy( pBuf, rStr.GetBuffer(), rStr.Len() * sizeof(sal_Unicode) );
         pBuf += rStr.Len();
     }
     return pBuf;
@@ -1392,7 +1392,7 @@ inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, sal_Unicode c )
 
 inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, const sal_Unicode* pCopyBuf, xub_StrLen nLen )
 {
-    memcpy( pBuf, pCopyBuf, nLen * sizeof(sal_Unicode) );
+    std::memcpy( pBuf, pCopyBuf, nLen * sizeof(sal_Unicode) );
     return pBuf + nLen;
 }
 
@@ -1971,8 +1971,8 @@ void LocaleDataWrapper::outputCheckMessage( const String& rMsg )
 // static
 void LocaleDataWrapper::outputCheckMessage( const char* pStr )
 {
-    fprintf( stderr, "\n%s\n", pStr);
-    fflush( stderr);
+    std::fprintf( stderr, "\n%s\n", pStr);
+    std::fflush( stderr);
     DBG_ERROR( pStr);
 }
 
