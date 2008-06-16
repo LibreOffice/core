@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: requestoptions.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,9 +48,6 @@ namespace configmgr
         typedef rtl::OUString LocaleString;
         typedef rtl::OUString Entity;
     public:
-        // create Request options for all locales
-        static RequestOptions forAllLocales();
-
         /// Default constructor. Sets options to use defaults.
         RequestOptions()
         : m_sLocale()
@@ -104,8 +101,6 @@ namespace configmgr
         /// enforce a refresh to cache
         void forceRefresh(bool _bEnable = true)  { m_bReload = _bEnable; }
     // comparison/container helpers
-        /// return a hash code for this object
-        sal_Int32 hashCode() const;
         /// function that defines a weak strict ordering on RequestOptions
         friend sal_Int32 compareRequestOptions(RequestOptions const& lhs, RequestOptions const& rhs);
     private:
@@ -126,12 +121,6 @@ namespace configmgr
     {
         bool operator()(RequestOptions const & lhs, RequestOptions const & rhs) const
         { return compareRequestOptions(lhs,rhs) == 0; }
-    };
-// ---------------------------------------------------------------------------
-    struct hashRequestOptions
-    {
-        sal_Int32 operator()(RequestOptions const & _opt) const
-        { return _opt.hashCode(); }
     };
 // ---------------------------------------------------------------------------
 } // namespace
