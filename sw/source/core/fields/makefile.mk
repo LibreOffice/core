@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.10 $
+# $Revision: 1.11 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -59,6 +59,7 @@ CXXFILES = \
         scrptfld.cxx \
         macrofld.cxx \
         fldlst.cxx \
+        postithelper.cxx \
         reffld.cxx \
         tblcalc.cxx \
         usrfld.cxx
@@ -81,6 +82,7 @@ SLOFILES =	\
         $(SLO)$/fldlst.obj \
         $(SLO)$/scrptfld.obj \
         $(SLO)$/macrofld.obj \
+        $(SLO)$/postithelper.obj \
         $(SLO)$/reffld.obj \
         $(SLO)$/tblcalc.obj \
         $(SLO)$/usrfld.obj
