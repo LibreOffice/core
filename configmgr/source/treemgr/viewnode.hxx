@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewnode.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,7 +85,6 @@ namespace configmgr
             bool is() const { return m_addr != 0; }
 
             Node getParent() const;
-            Node getNextSibling() const;
 
             bool isSetNode()    const { return is() && data().isSetNode(); }
             bool isGroupNode()  const { return is() && data().isGroupNode(); }
@@ -135,8 +134,6 @@ namespace configmgr
 
             Tree tree() const   // has a Tree
             { return m_node.tree(); }
-
-            data::ValueNodeAccess getAccess() const;   // has a NodeAccess
         };
     //-------------------------------------------------------------------------
         struct GroupNode        // has/is a Node
