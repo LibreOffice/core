@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eventcfg.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,13 +137,15 @@ void GlobalEventConfig_Impl::Commit()
     ClearNodeSet( SETNODE_BINDINGS );
     Sequence< beans::PropertyValue > seqValues( 1 );
     OUString sNode;
+    static const OUString sPrefix(SETNODE_BINDINGS + PATHDELIMITER + OUString::createFromAscii("BindingType['"));
+    static const OUString sPostfix(OUString::createFromAscii("']") + PATHDELIMITER + PROPERTYNAME_BINDINGURL);
     //step through the list of events
     for(int i=0;it!=it_end;++it,++i)
     {
         //no point in writing out empty bindings!
         if(it->second.getLength() == 0 )
             continue;
-        sNode = SETNODE_BINDINGS + PATHDELIMITER + OUString::createFromAscii("BindingType['") + it->first + OUString::createFromAscii("']") + PATHDELIMITER + PROPERTYNAME_BINDINGURL;
+        sNode = sPrefix + it->first + sPostfix;
         OSL_TRACE("writing binding for: %s",::rtl::OUStringToOString(sNode , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
         seqValues[ 0 ].Name = sNode;
         seqValues[ 0 ].Value <<= it->second;
@@ -220,7 +222,7 @@ void SAL_CALL GlobalEventConfig_Impl::replaceByName( const OUString& aName, cons
     //DF should we prepopulate the hash with a list of valid event Names?
     if( sal_False == ( aElement >>= props ) )
     {
-        throw lang::IllegalArgumentException( OUString::createFromAscii(""),
+        throw lang::IllegalArgumentException( OUString(),
                 Reference< XInterface > (), 2);
     }
     OUString macroURL;
@@ -254,7 +256,7 @@ Any SAL_CALL GlobalEventConfig_Impl::getByName( const OUString& aName ) throw (c
         {
             if(vit->equals(aName))
             {
-                props[1].Value <<= OUString::createFromAscii("");
+                props[1].Value <<= OUString();
                 break;
             }
         }
@@ -268,14 +270,8 @@ Any SAL_CALL GlobalEventConfig_Impl::getByName( const OUString& aName ) throw (c
 
 Sequence< OUString > SAL_CALL GlobalEventConfig_Impl::getElementNames(  ) throw (RuntimeException)
 {
-    Sequence< OUString > ret(m_supportedEvents.size());
-    SupportedEventsVector::const_iterator it = m_supportedEvents.begin();
-    SupportedEventsVector::const_iterator it_end = m_supportedEvents.end();
-    for(int i=0;it!=it_end;++it,++i)
-    {
-        ret[ i ] = *it;
-    }
-    return ret;
+    const ::rtl::OUString* pRet = m_supportedEvents.empty() ? NULL : &m_supportedEvents[0];
+    return uno::Sequence< ::rtl::OUString >(pRet, m_supportedEvents.size());
 }
 
 sal_Bool SAL_CALL GlobalEventConfig_Impl::hasByName( const OUString& aName ) throw (RuntimeException)
