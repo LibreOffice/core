@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: confignotifier.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -156,13 +156,6 @@ void Notifier::addForOne(NodeRef const& aNode, uno::Reference< css::beans::XVeto
 }
 // ---------------------------------------------------------------------------------------------------
 
-void Notifier::add(NodeRef const& aNode, uno::Reference< css::beans::XPropertiesChangeListener > const& xListener) const
-{
-    if (xListener.is())
-        m_aImpl->add( NodeID(m_pTree->getTree(),aNode), xListener );
-}
-// ---------------------------------------------------------------------------------------------------
-
 void Notifier::add(NodeRef const& aNode, uno::Reference< css::beans::XPropertiesChangeListener > const& xListener, uno::Sequence<OUString> const& aNames) const
 {
     if (xListener.is())
@@ -233,22 +226,11 @@ void Notifier::remove(NodeRef const& aNode, uno::Reference< css::beans::XPropert
 // ---------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------
 
-DisposeGuardImpl::DisposeGuardImpl(NotifierImpl&) throw()
-{
-}
-// ---------------------------------------------------------------------------------------------------
-
 DisposeGuardImpl::DisposeGuardImpl(Notifier const&) throw()
 {
 }
 // ---------------------------------------------------------------------------------------------------
 DisposeGuardImpl::~DisposeGuardImpl() throw ()
-{
-}
-// ---------------------------------------------------------------------------------------------------
-GuardedNotifier::GuardedNotifier(Notifier const& rNotifier) throw()
-: m_aNotifier(rNotifier)
-, m_aImpl(rNotifier)
 {
 }
 // ---------------------------------------------------------------------------------------------------
@@ -258,24 +240,11 @@ GuardedNotifier::GuardedNotifier(NodeAccess& rNode) throw()
 {
 }
 // ---------------------------------------------------------------------------------------------------
-GuardedNotifier::GuardedNotifier(TreeElement& rTree) throw()
-: m_aNotifier(rTree.getNotifier())
-, m_aImpl(m_aNotifier)
-{
-}
-// ---------------------------------------------------------------------------------------------------
 
 DisposeGuard::DisposeGuard(NodeAccess& rNode) throw(css::lang::DisposedException)
 : m_aImpl(rNode.getNotifier())
 {
     rNode.checkAlive();
-}
-// ---------------------------------------------------------------------------------------------------
-
-DisposeGuard::DisposeGuard(TreeElement& rTree) throw(css::lang::DisposedException)
-: m_aImpl(rTree.getNotifier())
-{
-    rTree.checkAlive();
 }
 // ---------------------------------------------------------------------------------------------------
     }

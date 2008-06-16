@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: binarywritehandler.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -351,15 +351,6 @@ namespace configmgr
 
             m_BinaryWriter.write(nValue);
 
-        }
-        // -----------------------------------------------------------------------------
-
-        void BinaryWriteHandler::writeType(uno::Type const& _aType)
-            SAL_THROW( (io::IOException, uno::RuntimeException) )
-        {
-            ValueFlags::Type eType = convertTypeToValueType(_aType);
-            sal_Int8 nValueType = sal_Int8(eType);
-            m_BinaryWriter.write(nValueType);
         }
         // -----------------------------------------------------------------------------
 

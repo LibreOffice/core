@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: binaryreadhandler.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -261,12 +261,6 @@ namespace configmgr
         }
 
         // -----------------------------------------------------------------------------
-
-        void BinaryReadHandler::readString(rtl::OUString &_aString)
-            SAL_THROW( (io::IOException, uno::RuntimeException) )
-        {
-            m_BinaryReader.read (_aString);
-        }
 
         void BinaryReadHandler::readName(rtl::OUString &_aString)
             SAL_THROW( (io::IOException, uno::RuntimeException) )
