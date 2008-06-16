@@ -1,0 +1,189 @@
+'encoding UTF-8  Do not remove or change this line!
+'**************************************************************************
+'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'* 
+'* Copyright 2008 by Sun Microsystems, Inc.
+'*
+'* OpenOffice.org - a multi-platform office productivity suite
+'*
+'* $RCSfile: security_macrosecurity.inc,v $
+'*
+'* $Revision: 1.1 $
+'*
+'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:15 $
+'*
+'* This file is part of OpenOffice.org.
+'*
+'* OpenOffice.org is free software: you can redistribute it and/or modify
+'* it under the terms of the GNU Lesser General Public License version 3
+'* only, as published by the Free Software Foundation.
+'*
+'* OpenOffice.org is distributed in the hope that it will be useful,
+'* but WITHOUT ANY WARRANTY; without even the implied warranty of
+'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'* GNU Lesser General Public License version 3 for more details
+'* (a copy is included in the LICENSE file that accompanied this code).
+'*
+'* You should have received a copy of the GNU Lesser General Public License
+'* version 3 along with OpenOffice.org.  If not, see
+'* <http://www.openoffice.org/license.html>
+'* for a copy of the LGPLv3 License.
+'*
+'/************************************************************************
+'*
+'*  owner : joerg.skottke@sun.com
+'*
+'*  short description : Macros with all security-levels
+'*
+'\******************************************************************************
+
+sub tMacroSecurityLevelsControlModule
+
+    dim iApplication as integer
+
+    for iApplication = 1 to 6
+
+        printlog( "" )
+        printlog( hNumericDocType( iApplication ) )
+        call tMacroSecurityLevels( "current" )
+        call tMacroSecurityLevels( "645" )
+
+    next iApplication
+
+end sub
+
+'*******************************************************************************
+
+testcase tMacroSecurityLevels( cFileFormat )
+
+    '///<H1>Macro execution in all security levels</H1>
+    '///<ul>
+
+    dim cWorkFile as string
+        cWorkFile = gTesttoolPath & "framework\optional\input\BasicDocs\"
+        cWorkFile = cWorkFile & "basic" & hGetSuffix( cFileFormat )
+        cWorkFile = convertpath( cWorkFile )
+        cWorkFile = convertToURL( cWorkFile )
+
+    dim iSecLevel as integer
+    dim brc as boolean
+    
+    ' We have quite a bunch of possible combinations here. Some trigger a security warning
+    ' others do not. Depending on the security level we either get no warning at all, the
+    ' "classic" Security Warning or a message that the macros will not be executed (Blocked)
+        
+    '         |---------------------------------------------------------|
+    '         | Trusted |     Security Level / Warning displayed        |
+    '         |  Path   |   Low     |  Medium   |   High    | Very High |
+    '         |---------------------------------------------------------|
+    '         |  Yes*)  |     No    |    No     |     No    |    No     |
+    '         |---------------------------------------------------------|
+    '         |   No    |     No    |    Yes    |  Blocked  |  Blocked  |
+    '         |---------------------------------------------------------|
+    ' *) Covered by test "f_sec_trusted_path.bas"
+    
+    '///+<li>Cycle through all four security levels and load a document with macro</li>
+    '///<ul>
+    for iSecLevel = 0 to 3
+
+        '///+<li>Set the macro security level</li>
+        printlog( "" )
+        hSetMacroSecurityAPI( iSecLevel )
+
+        '///+<li>Load a file from ..\framework\optional\input\BasicDocs\</li>
+        '///<ul>
+        select case iSecLevel
+        '///+<li>For security level &eq; 0: Macro should be executed</li>
+        case 0 : FileOpen( "URL", cWorkFile, "FrameName", "_default" )
+                 brc = hIdentifyExecutedMacro()
+                 if ( not brc ) then
+                     if ( gApplication = "MATH" ) then
+                         qaerrorlog( "#i68291# Math document forgets eventbinding" )
+                     else
+                         qaerrorlog( "#i53711# Macro was not found/executed" )
+                     endif
+                 endif   
+                 
+        '///+<li>For security level &eq; 1: Macro should be executed after security warning</li>                               
+        case 1 : FileOpen( "URL", cWorkFile, "FrameName", "_default" )
+                 brc = hAllowMacroExecution()
+                 if ( not brc ) then
+                     warnlog( "Macro execution warning missing, chek the file/security settings" )
+                 endif
+                 brc = hIdentifyExecutedMacro()
+                 if ( not brc ) then
+                     if ( gApplication = "MATH" ) then
+                         qaerrorlog( "#i68291# Math document forgets eventbinding" )
+                     else
+                         qaerrorlog( "#i53711# Macro was not found/executed" )
+                         'warnlog( "#i65885# - CWS Warnings01/Macro not executed on load" )
+                     endif
+                 endif
+                 
+        '///+<li>For security level &eq; 2: Macro should *not* be executed (it is not in trusted path)</li>                 
+        case 2 : FileOpen( "URL", cWorkFile, "FrameName", "_default" )
+                 brc = hHandleActivesOnLoad( 1 , 1 )
+                 if ( not brc ) then
+                     qaerrorlog( "#i53710# unexpected second messagebox" )
+                 endif
+                 brc = hIdentifyExecutedMacro()
+                 if ( brc ) then
+                     warnlog( "Macro was executed" )
+                 endif                 
+                 
+        '///+<li>For security level &eq; 3: Macro should *never* be executed</li>                 
+        case 3 : FileOpen( "URL", cWorkFile, "FrameName", "_default" )
+                 brc = hHandleActivesOnLoad( 1 , 0 )
+                 brc = hIdentifyExecutedMacro()
+                 if ( brc ) then
+                     warnlog( "Macro was executed" )
+                 endif
+        end select
+        '///</ul>
+
+        brc = hDestroyDocument()
+
+    next iSecLevel
+    '///</ul>
+
+    '///+<li>Reset macro security level to default (High)</li>
+    hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_DEFAULT )
+    '///</ul>
+
+endcase
+
+'*******************************************************************************
+
+function hIdentifyExecutedMacro() as boolean
+
+    '///<h3>Function to identify the macro just being executed</h3>
+    '///This is a tiny helper function that compares the string from the message-
+    '///+box with a reference - TTMacro3 - and returns TRUE if the macro is the 
+    '///+ correct one. FALSE in any other case.
+
+    dim cMessage as string
+    const CFN = "hIdentifyExecutedMacro::"
+
+    kontext "active"
+    if ( active.exists( 3 ) ) then
+
+        cMessage = active.getText()
+        
+        if ( cMessage = "TTMacro3" ) then
+            printlog( CFN & "The Macro has been executed" )
+            hIdentifyExecutedMacro() = true
+            active.ok()
+        else
+            warnlog( CFN & "The WRONG macro/dialog is open" )
+            hIdentifyExecutedMacro() = false
+            hHandleActivesOnLoad( 0 , 2 )
+        endif
+        
+    else
+    
+        printlog( CFN & "No macro/dialog is open" )
+        hIdentifyExecutedMacro() = false
+        
+    endif
+    
+end function

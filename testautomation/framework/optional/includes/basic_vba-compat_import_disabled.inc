@@ -1,0 +1,144 @@
+'encoding UTF-8  Do not remove or change this line!
+'*******************************************************************************
+'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'*
+'* Copyright 2008 by Sun Microsystems, Inc.
+'*
+'* OpenOffice.org - a multi-platform office productivity suite
+'*
+'* $RCSfile: basic_vba-compat_import_disabled.inc,v $
+'*
+'* $Revision: 1.1 $
+'*
+'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:13 $
+'*
+'* This file is part of OpenOffice.org.
+'*
+'* OpenOffice.org is free software: you can redistribute it and/or modify
+'* it under the terms of the GNU Lesser General Public License version 3
+'* only, as published by the Free Software Foundation.
+'*
+'* OpenOffice.org is distributed in the hope that it will be useful,
+'* but WITHOUT ANY WARRANTY; without even the implied warranty of
+'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'* GNU Lesser General Public License version 3 for more details
+'* (a copy is included in the LICENSE file that accompanied this code).
+'*
+'* You should have received a copy of the GNU Lesser General Public License
+'* version 3 along with OpenOffice.org.  If not, see
+'* <http://www.openoffice.org/license.html>
+'* for a copy of the LGPLv3 License.
+'*
+'/******************************************************************************
+'*
+'*  owner : joerg.skottke@sun.com
+'*  
+'*  short description : Test VBA compatibility switches
+'*
+'\******************************************************************************
+
+testcase tBasicVBACompatImportDisabled()
+
+    printlog( "Test VBA compatibility switch / executable Microsoft(R) Excel(R) Macros" )
+    printlog( "Test case 2: Import macros but do not set the executable mode" )
+    
+    
+    ' This test case is based on the use cases provided in issue #i88690
+    ' Spec: http://specs.openoffice.org/appwide/options_settings/Option_Dialog.odt
+    
+    dim cTestFile as string
+        cTestFile = gTesttoolPath & "framework/optional/input/vba-compat/vba-test.xls"
+        
+    dim cNodeCount as integer
+    
+    dim caNodeData( 7 ) as string
+        caNodeData( 1 ) = "Standard"
+        caNodeData( 2 ) = "DieseArbeitsmappe"
+        caNodeData( 3 ) = "Modul1"
+        caNodeData( 4 ) = "Modul2"
+        caNodeData( 5 ) = "Tabelle1"
+        caNodeData( 6 ) = "Tabelle2"
+        caNodeData( 7 ) = "Tabelle3"    
+        
+    dim iCurrentModule as integer  
+    dim cCurrentModule as string
+    dim bFound as boolean  
+    
+    ' Depending on the mode of macro import we have differtent basic libraries listed
+    const NODE_COUNT = 80 
+ 
+    const DOCUMENT_POSITION_OFFSET = -7
+    
+    const IMPORT_EXCEL_MACROS = TRUE
+    const EXEC_EXCEL_MACROS   = FALSE
+ 
+    printlog( "Set macro security to low" )
+    hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_LOW )
+    
+    printlog( "Open Tools/Options" )
+
+    hSetExcelBasicImportMode( IMPORT_EXCEL_MACROS, EXEC_EXCEL_MACROS )
+    
+    printlog( "Load the test file" )
+    hFileOpen( cTestFile )
+    
+    printlog( "Open the Basic organizer" )
+    hOpenBasicOrganizerFromDoc()
+    
+    printlog( "Expand all nodes" )
+    cNodeCount = hExpandAllNodes( MakroAus )
+    
+    printlog( "Verify that we have the correct node count for the current mode" )
+    if ( cNodeCount <> NODE_COUNT ) then
+        warnlog( "The number of nodes is incorrect: " & cNodeCount )
+    endif
+    
+    printlog( "Verify position of the document node" )
+    MakroAus.select( cNodeCount + DOCUMENT_POSITION_OFFSET )
+    if ( MakroAus.getSelText() <> "vba-test" ) then
+        warnlog( "The document node is not at the expected position" )
+    endif
+    
+    for iCurrentModule = 2 to 7
+    
+        printlog( "Look for: " & caNodeData( iCurrentModule ) )
+        
+        bFound = false
+    
+        MakroAus.select( cNodeCount + DOCUMENT_POSITION_OFFSET + iCurrentModule )
+        cCurrentModule = MakroAus.getSelText()
+        
+        for iCurrentModule = 2 to 7
+        
+            if ( cCurrentModule = caNodeData( iCurrentModule ) ) then 
+                bFound = TRUE
+                if ( MakroListe.getSelText() <> caNodeData( iCurrentModule ) ) then
+                    warnlog( "Module has incorrect script: " & cCurrentModule )
+                    bFound = false
+                endif
+                exit for
+            endif
+            
+        next iCurrentModule
+        
+        if ( not bFound ) then
+            warnlog( "The node was not found: " & cCurrentModule )
+        else
+            printlog( "Module found, script found, good" )
+        endif
+        
+    next iCurrentModule
+    
+    printlog( "Close Macro Organizer" )
+    Kontext "Makro"
+    Makro.close()
+    WaitSlot()
+    
+    hCloseDocument()
+    hSetExcelImportModeDefault()    
+    hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_DEFAULT )
+
+
+endcase
+
+

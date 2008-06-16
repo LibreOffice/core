@@ -1,0 +1,109 @@
+'encoding UTF-8  Do not remove or change this line!
+'**************************************************************************
+'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'* 
+'* Copyright 2008 by Sun Microsystems, Inc.
+'*
+'* OpenOffice.org - a multi-platform office productivity suite
+'*
+'* $RCSfile: help_compare_content.inc,v $
+'*
+'* $Revision: 1.1 $
+'*
+'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:14 $
+'*
+'* This file is part of OpenOffice.org.
+'*
+'* OpenOffice.org is free software: you can redistribute it and/or modify
+'* it under the terms of the GNU Lesser General Public License version 3
+'* only, as published by the Free Software Foundation.
+'*
+'* OpenOffice.org is distributed in the hope that it will be useful,
+'* but WITHOUT ANY WARRANTY; without even the implied warranty of
+'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'* GNU Lesser General Public License version 3 for more details
+'* (a copy is included in the LICENSE file that accompanied this code).
+'*
+'* You should have received a copy of the GNU Lesser General Public License
+'* version 3 along with OpenOffice.org.  If not, see
+'* <http://www.openoffice.org/license.html>
+'* for a copy of the LGPLv3 License.
+'*
+'/************************************************************************
+'*
+'* owner : joerg.skottke@sun.com
+'*
+'* short description : 
+'*
+'\******************************************************************************
+
+testcase tCompareHelpContent()
+
+    if ( gIsoLang <> "en-US" ) then
+        printlog( "No testing for languages other than en_US" )
+        goto endsub
+    endif
+
+    '///<h1>Compare the help content in the Help-Viewer against a reference</h1>
+    '///<h2>help_compare_content::tCompareHelpContent</h2>
+    '///<ul>
+    '///+<li>Open the Help-Viewer</li>
+    '///+<li>Go to the Content-Page</li>
+    '///+<li>Read all entries in the Content-Treelist</li>
+    '///+<li>Close the Help</li>
+    '///+<li>Compare the list to a reference</li>
+    '///</ul>
+    
+    ' file related variables
+    dim sFileOut as string
+    dim sFilein as string
+    dim sFileName as string
+    
+    ' the array that holds the names of the applications
+    dim aTopicsFromUI( 1200 ) as string 
+    
+    ' some incremant variables and temporary stuff
+    dim iTopicsFromUI as integer
+    dim iCurrentItem as integer
+    dim sCurrentItem as string
+    dim irc as integer
+    dim brc as boolean
+    
+    ' define input and output paths, presetting variables
+    sFileName = gProductName & "_help_content_" & gIsoLang & ".txt"
+    sFileOut = hGetWorkFile( sFilename )
+    sFileIn  = gTesttoolPath & "framework\optional\input\help_browser\"  
+    sFileIn  = convertpath( sFileIn & sFileName )
+    
+    aTopicsFromUI( 0 ) = "0"
+    
+    ' get the names from the listbox
+    brc = hOpenHelp()
+    if ( not brc ) then
+        warnlog( "Help not open, aborting test" )
+        goto endsub
+    endif
+    
+    hSelectHelpTab( "content" )
+    
+    ' find out, how many items we have in the list
+    iTopicsFromUI = hExpandAllNodes( SearchContent ) 
+    printlog( "Reading " & iTopicsFromUI & " items from Content Treelist" )
+    
+    ' get all topics from the contents-treelist
+    hGetVisibleNodeNames( SearchContent , aTopicsFromUI() )
+ 
+    call hCloseHelp()
+    
+    ' Compare the list against a reference or create a new list, if the 
+    ' reference does not exist
+    printlog( "" )
+    printlog( "Beginning comparision" )
+    irc = hManageComparisionList( sFileIn, sFileOut, aTopicsFromUI() )
+    if ( irc <> 0 ) then
+	warnlog( "Something went wrong, please review the log." )
+    endif
+    
+endcase
+
+

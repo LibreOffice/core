@@ -1,0 +1,71 @@
+'*************************************************************************
+'*
+'*  OpenOffice.org - a multi-platform office productivity suite
+'*
+'*  $RCSfile: resetregistration.txt,v $
+'*
+'*  $Revision: 1.1 $
+'*
+'*  last change: $Author: jsi $ $Date: 2008-06-16 12:18:40 $
+'*
+'*  The Contents of this file are made available subject to
+'*  the terms of GNU Lesser General Public License Version 2.1.
+'*
+'*
+'*    GNU Lesser General Public License Version 2.1
+'*    =============================================
+'*    Copyright 2005 by Sun Microsystems, Inc.
+'*    901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*    This library is free software; you can redistribute it and/or
+'*    modify it under the terms of the GNU Lesser General Public
+'*    License version 2.1, as published by the Free Software Foundation.
+'*
+'*    This library is distributed in the hope that it will be useful,
+'*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*    Lesser General Public License for more details.
+'*
+'*    You should have received a copy of the GNU Lesser General Public
+'*    License along with this library; if not, write to the Free Software
+'*    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*    MA  02111-1307  USA
+'*
+'*************************************************************************
+
+REM  *****  BASIC  *****
+
+Option Explicit
+
+Sub ResetRegistration
+	' access the global configuration provider
+	Dim aConfigProvider As Object
+	aConfigProvider = createUnoService( "com.sun.star.configuration.ConfigurationProvider" )
+	
+	' params for creating config access objects
+	Dim aParams(0) As new com.sun.star.beans.PropertyValue
+	aParams(0).Name = "nodepath"
+
+	' create an access object for the jobs key
+	Dim aRegReq As Object
+	aParams(0).Value = "/org.openoffice.Office.Jobs/Jobs/RegistrationRequest"
+	aRegReq = aConfigProvider.createInstanceWithArguments( _
+		"com.sun.star.configuration.ConfigurationUpdateAccess", _
+		aParams() )
+
+	' reset the user time (which means the job will be executed next time)
+	aRegReq.setPropertyToDefault( "UserTime" ) ' = "01.01.2001/00:00:00"
+	aRegReq.commitChanges
+
+	' create an access object for the Registration key
+	Dim aRegistrationSettings As Object
+	aParams(0).Value = "/org.openoffice.Office.Common/Help/Registration"
+	aRegistrationSettings = aConfigProvider.createInstanceWithArguments( _
+		"com.sun.star.configuration.ConfigurationUpdateAccess", _
+		aParams() )
+
+	aRegistrationSettings.RequestDialog = 1
+	aRegistrationSettings.setPropertyToDefault( "ReminderDate" )
+	aRegistrationSettings.commitChanges
+End Sub
+
