@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLFastContextHandler.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,6 +28,7 @@
  *
  ************************************************************************/
 
+#include <stdio.h>
 #include <iostream>
 #include <set>
 #include <rtl/uuid.h>
