@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mn.src,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -440,7 +440,7 @@
     {\
         Identifier = FN_DELETE_NOTE_AUTHOR ;\
         HelpID = FN_DELETE_NOTE_AUTHOR ;\
-        Text [ en-US ] = "Delete ~All Notes by " ;\
+        Text [ en-US ] = "Delete ~All Notes by $1" ;\
     };\
     MenuItem\
     {\
