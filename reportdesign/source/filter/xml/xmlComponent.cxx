@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlComponent.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,12 +113,6 @@ OXMLComponent::OXMLComponent( ORptFilter& _rImport
 OXMLComponent::~OXMLComponent()
 {
     DBG_DTOR( rpt_OXMLComponent,NULL);
-}
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-ORptFilter& OXMLComponent::GetOwnImport()
-{
-    return static_cast<ORptFilter&>(GetImport());
 }
 // -----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
