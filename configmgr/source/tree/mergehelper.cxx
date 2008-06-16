@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mergehelper.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,6 @@
 
 #include <stdio.h>
 
-#include "mergehelper.hxx"
 #include "nodeconverter.hxx"
 #include "treeprovider.hxx"
 #include "treenodefactory.hxx"
@@ -138,17 +137,6 @@ private:
 } // anon namepsace
 // -----------------------------------------------------------------------------
 // this is our 'exported' function
-void mergeLayerToTree(SubtreeChange & _aLayerTree,ISubtree& _aTree)
-{
-    // coarse: _aTree += _aLayerTree;
-
-    AttributeSetter(node::isDefault, true).applyToNode(_aTree);
-
-    SubtreeChange aMergeChange(_aLayerTree, SubtreeChange::NoChildCopy());
-
-    if (OCleanupLayerAction::adjust(aMergeChange,_aLayerTree,_aTree))
-        MergeLayerToTree(_aTree).merge(aMergeChange);
-}
 
 // -----------------------------------------------------------------------------
 namespace

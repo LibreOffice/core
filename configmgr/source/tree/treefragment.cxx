@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: treefragment.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,21 +54,6 @@ bool TreeFragment::isNamed(rtl::OUString const & _aName) const
 {
     // TODO: optimize comparison
     return !!(this->getName() == _aName);
-}
-//-----------------------------------------------------------------------------
-
-bool TreeFragment::hasDefaults() const
-{
-    switch (this->header.state & State::mask_state)
-    {
-    default: OSL_ASSERT(false); // not reachable
-
-    case State::merged:
-    case State::defaulted:  return true;
-
-    case State::replaced:
-    case State::added:      return false;
-    }
 }
 //-----------------------------------------------------------------------------
 

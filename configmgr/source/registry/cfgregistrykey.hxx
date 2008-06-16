@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cfgregistrykey.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,17 +91,6 @@ public:
     */
     OConfigurationRegistryKey(
              const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxNode
-            ,sal_Bool _bWriteable
-        );
-
-    /** builds an registry key for a configuration child node.
-        @param      _rxParentNode   the parent of the node. Used for update access and for obtaining the initial value.
-        @param      _rRelativeName  te relative name within the parent
-        @param      _bWriteable     should the key be writeable ?
-    */
-    OConfigurationRegistryKey(
-             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxParentNode
-            ,const ::rtl::OUString& _rRelativeName
             ,sal_Bool _bWriteable
         );
 
