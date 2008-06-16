@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -55,6 +55,12 @@ CDEFS+= -DVIGRA_HAS_LONG_DOUBLE
 
 .IF "$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
 CDEFS+= -DBASEBMP_NO_NESTED_TEMPLATE_PARAMETER -DVIGRA_WITHOUT_NESTED_TEMPLATE_PARAMS
+.ENDIF
+
+# SunStudio 12, LP64 mode (-m64): three test cases of the unit tests fail 
+# if compiled with default -xalias_level (and optimization level -xO3)
+.IF "$(OS)$(CPU)"=="SOLARISU"
+CDEFS+=-xalias_level=compatible
 .ENDIF
 
 # --- Common ----------------------------------------------------------
