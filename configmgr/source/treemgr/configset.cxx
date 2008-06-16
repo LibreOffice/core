@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: configset.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,14 +103,6 @@ Path::Component ElementRef::getFullName() const
 }
 //-----------------------------------------------------------------------------
 
-Name ElementRef::getName() const
-{
-    if (!isValid()) return Name();
-
-    return m_aTreeHolder->getSimpleRootName();
-}
-//-----------------------------------------------------------------------------
-
 TemplateHolder ElementRef::getTemplate() const
 {
     if (!isValid()) return TemplateHolder();
@@ -190,17 +182,6 @@ ElementTreeImpl* ElementTree::getImpl() const
 }
 //-----------------------------------------------------------------------------
 
-TemplateHolder ElementTree::getTemplate() const
-{
-    OSL_PRECOND(isValid(),"ERROR: Trying to get the template of a NULL element tree");
-
-    if (isValid())
-        return m_aTreeHolder->getTemplate();
-    else
-        return TemplateHolder();
-}
-//-----------------------------------------------------------------------------
-
 ElementTreeImpl* ElementTree::operator->() const
 {
     return m_aTreeHolder.operator->();
@@ -222,15 +203,6 @@ Tree ElementTree::getTree() const
 ElementTree ElementTree::extract(Tree const& aTree)
 {
     return ElementRef::extract(aTree.getRef()).getElementTree();
-}
-//-----------------------------------------------------------------------------
-
-data::TreeSegment ElementTree::getOwnedElement(ElementTree const& aElementTree)
-{
-    OSL_PRECOND(aElementTree.isValid(),"ERROR: Trying to take over the content of a NULL element tree");
-    OSL_PRECOND(aElementTree->isFree(),"Trying to take over the content of a owned element tree - returning NULL");
-
-    return aElementTree->getOwnedTree();
 }
 
 //-----------------------------------------------------------------------------
@@ -257,18 +229,6 @@ UnoType TemplateInfo::getType() const
     return m_aTemplate->getInstanceType();
 }
 
-//-----------------------------------------------------------------------------
-
-Name TemplateInfo::getTemplateName() const
-{
-    return m_aTemplate->getName();
-}
-//-----------------------------------------------------------------------------
-
-Name TemplateInfo::getTemplatePackage() const
-{
-    return m_aTemplate->getModule();
-}
 //-----------------------------------------------------------------------------
 
 OUString TemplateInfo::getTemplatePathString() const
@@ -843,6 +803,7 @@ ValueSetUpdater::ElementNodeRef ValueSetUpdater::extractElementNode (ElementRef 
 }
 //-----------------------------------------------------------------------------
 
+#if OSL_DEBUG_LEVEL > 0
 UnoType ElementHelper::getUnoType(ElementTree const& aElement)
 {
     OSL_PRECOND( aElement.isValid(), "ERROR: Configuration: ElementRef operation requires valid node" );
@@ -865,6 +826,7 @@ UnoType ElementHelper::getUnoType(ElementTree const& aElement)
         return ::getCppuType(selectInterface);
     }
 }
+#endif
 //-----------------------------------------------------------------------------
     }
 }
