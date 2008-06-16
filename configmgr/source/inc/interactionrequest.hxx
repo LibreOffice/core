@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interactionrequest.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,10 +69,7 @@ class InteractionRequest : public cppu::WeakImplHelper1<com::sun::star::task::XI
     Impl * m_pImpl;
 
 protected:
-    InteractionRequest();
     virtual ~InteractionRequest();
-
-    void setRequest( const com::sun::star::uno::Any & rRequest );
 public:
     /**
       * Constructor.

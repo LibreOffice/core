@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bufferedfile.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,28 +44,6 @@ namespace configmgr
 {
 
     namespace io = com::sun::star::io;
-
-    class BufferedInputFile : public osl::FileBase, Noncopyable
-    {
-        rtl::OUString m_aFileURL;
-        sal_Int8  *m_pBuffer;
-        sal_uInt64 m_nPointer;
-        sal_uInt64 m_nSize;
-
-    public:
-        BufferedInputFile( rtl::OUString const& aFileURL );
-        ~BufferedInputFile ();
-
-        RC open( sal_uInt32 uFlags );
-        RC close();
-        RC setPos( sal_uInt32 uHow, sal_uInt64 uPos );
-
-        RC getPos( sal_uInt64& uPos );
-        RC read( void *pBuffer, sal_uInt64 uBytesRequested, sal_uInt64& rBytesRead );
-
-        // extra api for buffered file
-        RC available( sal_uInt64& nAvail) const;
-    };
 
     class BufferedOutputFile : public osl::FileBase, Noncopyable
     {

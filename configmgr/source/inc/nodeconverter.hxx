@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nodeconverter.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +52,6 @@ namespace configmgr
         std::auto_ptr<ISubtree>  createCorrespondingNode(SubtreeChange   const& _rChange);
         std::auto_ptr<ValueNode> createCorrespondingNode(ValueChange     const& _rChange);
 
-        std::auto_ptr<INode>     createCorrespondingNode(Change& _rChange);
         std::auto_ptr<ISubtree>  createCorrespondingTree(SubtreeChange& _rChange);
     };
 
