@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: treeimpl.hxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -286,15 +286,6 @@ namespace configmgr
             */
             NodeOffset      firstChild_ (NodeOffset nParent) const;
 
-            /** gets the <type>NodeOffset</type> of the next node
-                after <var>nNode</var> in this tree (in list order)
-                that has the same parent node,
-                or 0 (zero) if there is no such node
-                <p>PRE: <code>isValidNode(nNode)</code>
-                </p>
-            */
-            NodeOffset      nextSibling_(NodeOffset nNode) const;
-
             /** gets the <type>NodeOffset</type> of the first child node
                 of node <var>nParent</var> that is after
                 node <var>nNode</var> in this tree (in list order)
@@ -331,9 +322,6 @@ namespace configmgr
             NodeImpl const& nodeImpl(NodeOffset nNode) const { return nodeData(nNode)->nodeImpl(); }
 
             NodeOffset nodeOffset(NodeData const & rNodeData) const;
-        // dynamic_cast replacement
-            RootTreeImpl        * asRootTree();
-            RootTreeImpl const  * asRootTree() const;
 
             ElementTreeImpl     * asElementTree();
             ElementTreeImpl const* asElementTree() const;
@@ -445,8 +433,6 @@ namespace configmgr
             void takeTreeBack(data::TreeSegment const& _aElementData);
 
             /// release ownership
-            data::TreeSegment getOwnedTree() const;
-            /// release ownership
             data::TreeSegment releaseOwnedTree();
 
         // context operation
@@ -546,12 +532,6 @@ namespace configmgr
         ValueRef makeValue(Name const& aName, NodeOffset nParentOffset);
 
         static
-        AnyNodeRef makeAnyNode(NodeOffset nOffset, TreeDepth nDepth);
-
-        static
-        AnyNodeRef makeAnyNode(Name const& aName, NodeOffset nParentOffset);
-
-        static
         TreeImpl* impl(Tree const& aTree);
 
         static
@@ -582,12 +562,13 @@ namespace configmgr
 //-----------------------------------------------------------------------------
     class ElementTree;
 //-----------------------------------------------------------------------------
-
+#if OSL_DEBUG_LEVEL > 0
     struct ElementHelper
     {
         static
         UnoType getUnoType(ElementTree const& aElement);
     };
+#endif
 //-----------------------------------------------------------------------------
     }
 //-----------------------------------------------------------------------------
