@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: matchlocale.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -162,12 +162,6 @@ Locale makeLocale(OUString const& sLocaleName_)
     splitLocaleString(sLocaleName_, aResult.Language, aResult.Country);
     return aResult;
 }
-Locale makeLocale(Locale const& aLocale_) // normalizes the locale
-{
-    return Locale(  aLocale_.Language.toAsciiLowerCase(),
-                    aLocale_.Country .toAsciiUpperCase(),
-                    OUString() );
-}
 OUString makeIsoLocale(Locale const& aUnoLocale_)
 {
     rtl::OUStringBuffer aResult(aUnoLocale_.Language.toAsciiLowerCase());
@@ -224,10 +218,6 @@ LocaleSequence makeLocaleSequence(uno::Sequence<OUString> const& sLocaleNames_)
 {
     return makeLocaleSeq_impl(sLocaleNames_);
 }
-LocaleSequence makeLocaleSequence(uno::Sequence<lang::Locale> const& aUnoLocales_)
-{
-    return makeLocaleSeq_impl(aUnoLocales_);
-}
 // -----------------------------------------------------------------------------
 
 uno::Sequence<OUString> makeIsoSequence(LocaleSequence const& aLocales_)
@@ -239,15 +229,6 @@ uno::Sequence<OUString> makeIsoSequence(LocaleSequence const& aLocales_)
     uno::Sequence<OUString> aResult(nSeqSize);
     std::transform(aLocales_.begin(), aLocales_.end(), aResult.getArray(), &makeIsoLocale);
 
-    return aResult;
-}
-uno::Sequence<Locale>   makeUnoSequence(LocaleSequence const& aLocales_)
-{
-    LocaleSequence::size_type const nLocaleCount = aLocales_.size();
-    sal_Int32 const nSeqSize = sal_Int32(nLocaleCount);
-    OSL_ASSERT( nSeqSize >= 0 && sal_uInt32(nSeqSize) == nLocaleCount );
-
-    uno::Sequence<Locale> aResult( &aLocales_.front(), nSeqSize );
     return aResult;
 }
 // -----------------------------------------------------------------------------
@@ -311,21 +292,6 @@ bool MatchResult::improve(SequencePos nPos_, MatchQuality eQuality_)
     return true;
 }
 
-// -----------------------------------------------------------------------------
-
-MatchResult match(Locale const& aLocale_, LocaleSequence const& aTarget_)
-{
-    SequencePos const nEnd = aTarget_.size();
-
-    for (SequencePos nPos = 0; nPos < nEnd; ++nPos)
-    {
-        if (MatchQuality eQuality = match(aLocale_, aTarget_[nPos]))
-        {
-            return MatchResult(nPos,eQuality);
-        }
-    }
-    return MatchResult();
-}
 // -----------------------------------------------------------------------------
 
 bool isMatch(Locale const& aLocale_, LocaleSequence const& aTarget_, MatchQuality eRequiredQuality_)
@@ -393,13 +359,6 @@ void FindBestLocale::implSetTarget(LocaleSequence const& aTarget_)
 }
 // -----------------------------------------------------------------------------
 
-FindBestLocale::FindBestLocale() // use only fallbacks !
-{
-    LocaleSequence aSeq;
-    implSetTarget( aSeq );
-}
-// -----------------------------------------------------------------------------
-
 FindBestLocale::FindBestLocale(Locale const& aTarget_)
 {
     LocaleSequence aSeq(1,aTarget_);
@@ -407,47 +366,9 @@ FindBestLocale::FindBestLocale(Locale const& aTarget_)
 }
 // -----------------------------------------------------------------------------
 
-
-FindBestLocale::FindBestLocale(LocaleSequence const& aTarget_)
-{
-    implSetTarget( aTarget_ );
-}
-// -----------------------------------------------------------------------------
-
-Locale FindBestLocale::getBestMatch() const
-{
-    OSL_ENSURE(this->isMatch(), "FindBestLocale::getBestMatch(): ERROR - no match found");
-
-    if (this->isMatch())
-    {
-        OSL_ENSURE(m_aResult.position() < m_aTarget.size(), "FindBestLocale::getBestMatch(): ERROR - invalid match position");
-        return m_aTarget[m_aResult.position()];
-    }
-    else
-    {
-        return Locale();
-    }
-}
-// -----------------------------------------------------------------------------
-
 bool FindBestLocale::accept(Locale const& aLocale_)
 {
     return improveMatch(m_aResult, aLocale_, m_aTarget);
-}
-// -----------------------------------------------------------------------------
-
-void FindBestLocale::reset(Locale const& aTarget_)
-{
-    LocaleSequence aSeq(1,aTarget_);
-
-    this->reset(aSeq);
-}
-// -----------------------------------------------------------------------------
-
-void FindBestLocale::reset(LocaleSequence const& aTarget_)
-{
-    implSetTarget(aTarget_);
-    m_aResult.reset();
 }
 // -----------------------------------------------------------------------------
 
