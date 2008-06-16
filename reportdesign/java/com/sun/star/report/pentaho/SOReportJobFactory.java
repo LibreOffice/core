@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SOReportJobFactory.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -176,8 +176,7 @@ public class SOReportJobFactory
             catch (java.lang.IncompatibleClassChangeError e2)
             {
                 Log.error("Detected an IncompatibleClassChangeError");
-                e2.printStackTrace(System.err);
-                System.err.println(e2);
+                throw new com.sun.star.lang.WrappedTargetException("caught a " + e2.getClass().getName(), this, new com.sun.star.uno.Exception(e2.getLocalizedMessage()));
             }
             Thread.currentThread().setContextClassLoader(cl);
 
@@ -190,6 +189,8 @@ public class SOReportJobFactory
             XStorage output = null;
             XRowSet rowSet = null;
             String mimetype = null;
+            String author = null;
+            String title = null;
 
             for (int i = 0; i < namedValue.length; ++i)
             {
@@ -217,6 +218,14 @@ public class SOReportJobFactory
                 else if ("mimetype".equalsIgnoreCase(aProps.Name))
                 {
                     mimetype = (String) aProps.Value;
+                }
+                else if (ReportEngineParameterNames.AUTHOR.equalsIgnoreCase(aProps.Name))
+                {
+                    author = (String) aProps.Value;
+                }
+                else if (ReportEngineParameterNames.TITLE.equalsIgnoreCase(aProps.Name))
+                {
+                    title = (String) aProps.Value;
                 }
             }
 
@@ -257,7 +266,6 @@ public class SOReportJobFactory
             final ReportJobDefinition definition = engine.createJobDefinition();
             final JobProperties procParms = definition.getProcessingParameters();
             procParms.setProperty(ReportEngineParameterNames.INPUT_REPOSITORY, storageRepository);
-
             procParms.setProperty(ReportEngineParameterNames.OUTPUT_REPOSITORY, storageRepository);
             procParms.setProperty(ReportEngineParameterNames.INPUT_NAME, inputName);
             procParms.setProperty(ReportEngineParameterNames.OUTPUT_NAME, outputName);
@@ -265,6 +273,10 @@ public class SOReportJobFactory
             procParms.setProperty(ReportEngineParameterNames.INPUT_DATASOURCE_FACTORY, dataFactory);
             procParms.setProperty(ReportEngineParameterNames.IMAGE_SERVICE, new SOImageService(m_cmpCtx));
             procParms.setProperty(ReportEngineParameterNames.INPUT_REPORTJOB_FACTORY, this);
+            if ( author != null)
+                procParms.setProperty(ReportEngineParameterNames.AUTHOR, author);
+            if ( title != null)
+                procParms.setProperty(ReportEngineParameterNames.TITLE, title);
 
             return engine.createJob(definition);
         }
@@ -335,8 +347,6 @@ public class SOReportJobFactory
         }
         catch (java.lang.IncompatibleClassChangeError e2)
         {
-            e2.printStackTrace(System.err);
-            System.err.println(e2);
         }
 
         return xFactory;
