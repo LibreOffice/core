@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: treeactions.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,10 +42,6 @@
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
-
-// helper to implement force-writable support
-void forceWritable(INode& _rNode);
-void forceWritable(data::TreeAccessor const & _aTree);
 
 //==========================================================================
 //= OChangeActionCounter
