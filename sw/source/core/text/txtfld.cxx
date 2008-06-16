@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtfld.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,9 +97,15 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
     sal_Bool bNewFlyPor = sal_False,
          bINet = sal_False;
 
-    // Sprache setzen
+    // set language
     ((SwTxtFormatter*)this)->SeekAndChg( rInf );
-    pFld->SetLanguage( GetFnt()->GetLanguage() );
+    if (pFld->GetLanguage() != GetFnt()->GetLanguage())
+    {
+        pFld->SetLanguage( GetFnt()->GetLanguage() );
+        // let the visual note know about its new language
+        if (pFld->GetTyp()->Which()==RES_POSTITFLD)
+            const_cast<SwFmtFld*> (&pHint->GetFld())->Broadcast( SwFmtFldHint( &pHint->GetFld(), SWFMTFLD_LANGUAGE ) );
+    }
 
     ViewShell *pSh = rInf.GetVsh();
     sal_Bool bPlaceHolder = sal_False;
