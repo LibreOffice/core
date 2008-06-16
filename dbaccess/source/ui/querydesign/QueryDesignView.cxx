@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: QueryDesignView.cxx,v $
- * $Revision: 1.93 $
+ * $Revision: 1.94 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -210,33 +210,9 @@ namespace
         ::rtl::OUString sTableRange;
         if ( _pTableRef )
         {
-            if ( SQL_ISRULE( _pTableRef, joined_table ) )
-            {
-                OSL_ENSURE(0,"joined_table NYI");
-            }
-            else
-            {
-                switch( _pTableRef->count() )
-                {
-                    case 1:
-                        _pTableRef->parseNodeToStr(sTableRange,xConnection,NULL,sal_False,sal_False);
-                        break;
-                    case 3:
-                        sTableRange = _pTableRef->getChild(2)->getTokenValue();
-                        break;
-                    case 4:
-                        if ( !SQL_ISRULE( _pTableRef->getChild(2), joined_table ))
-                            sTableRange = _pTableRef->getChild(2)->getTokenValue();
-                        else
-                            OSL_ENSURE(0,"Outer join is not implemented here!");
-                        break;
-                    case 6:
-                        sTableRange = _pTableRef->getChild(4)->getTokenValue();
-                        break;
-                    default:
-                        OSL_ENSURE(0,"Unhandled child count");
-                }
-            }
+            sTableRange = ::connectivity::OSQLParseNode::getTableRange(_pTableRef);
+            if ( !sTableRange.getLength() )
+                _pTableRef->parseNodeToStr(sTableRange,xConnection,NULL,sal_False,sal_False);
         }
         return sTableRange;
     }
@@ -336,11 +312,10 @@ namespace
             const ::connectivity::OSQLParseNode* pParseNode = pTableRefList->getChild(i);
             const ::connectivity::OSQLParseNode* pJoinNode = NULL;
 
-            if ( SQL_ISRULEOR2(pParseNode , qualified_join,joined_table) || SQL_ISRULE(pParseNode ,cross_union) )
+            if ( SQL_ISRULEOR2(pParseNode , qualified_join,cross_union) )
                 pJoinNode = pParseNode;
-            else if(    pParseNode->count() == 4
-                    &&  SQL_ISPUNCTUATION(pParseNode->getChild(0),"{")
-                    &&  SQL_ISRULE(pParseNode,table_ref))
+            else if(    SQL_ISRULE(pParseNode,table_ref)
+                    &&  pParseNode->count() == 4 ) // '{' SQL_TOKEN_OJ joined_table '}'
                 pJoinNode = pParseNode->getChild(2);
 
             if ( pJoinNode )
@@ -1930,11 +1905,7 @@ namespace
         sal_Bool bRet = sal_True;
         if (SQL_ISRULE(_pNode,qualified_join))
             pJoinNode = _pNode;
-        else if (SQL_ISRULE(_pNode, joined_table))
-            pJoinNode = _pNode->getChild(1);
-        else if (! ( SQL_ISRULE(_pNode, table_ref) &&
-                     (SQL_ISRULEOR2(_pNode->getChild(0), catalog_name, schema_name)  ||
-                      SQL_ISRULE(_pNode->getChild(0), table_name))))
+        else if (! ( SQL_ISRULE(_pNode, table_ref) && _pNode->count() == 2) ) // table_node table_primary_as_range_column
             bRet = sal_False;
 
         if (pJoinNode && !InsertJoin(_pView,pJoinNode))
@@ -1945,14 +1916,11 @@ namespace
     sal_Bool InsertJoin(const OQueryDesignView* _pView,
                         const ::connectivity::OSQLParseNode *pNode)
     {
-        DBG_ASSERT(SQL_ISRULE(pNode, qualified_join) || SQL_ISRULE(pNode, joined_table) || SQL_ISRULE(pNode, cross_union),
+        DBG_ASSERT(SQL_ISRULE(pNode, qualified_join) || SQL_ISRULE(pNode, cross_union),
             "OQueryDesignView::InsertJoin: Fehler im Parse Tree");
 
-        if (SQL_ISRULE(pNode,joined_table))
-            return InsertJoin(_pView,pNode->getChild(1));
-
         // first check the left and right side
-        ::connectivity::OSQLParseNode* pRightTableRef = pNode->getChild(3); // table_ref
+        const ::connectivity::OSQLParseNode* pRightTableRef = pNode->getChild(3); // table_ref
         if ( SQL_ISRULE(pNode, qualified_join) && SQL_ISTOKEN(pNode->getChild(1),NATURAL) )
             pRightTableRef = pNode->getChild(4); // table_ref
 
