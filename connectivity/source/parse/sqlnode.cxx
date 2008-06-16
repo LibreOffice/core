@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sqlnode.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.55 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +72,9 @@
 #include "connectivity/sqlerror.hxx"
 #include <tools/diagnose_ex.h>
 #include <string.h>
-
+#include <boost/bind.hpp>
+#include <algorithm>
+#include <functional>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::util;
@@ -349,47 +351,7 @@ namespace
 {
     bool lcl_isAliasNamePresent( const OSQLParseNode& _rTableNameNode )
     {
-        OSL_ENSURE( _rTableNameNode.getKnownRuleID() == OSQLParseNode::table_name, "lcl_isAliasNamePresent: Must be a 'table_name' rule!" );
-        OSL_ENSURE( _rTableNameNode.getParent()->getKnownRuleID() == OSQLParseNode::table_ref, "lcl_isAliasNamePresent: parent must be a 'table_ref'!" );
-
-        const OSQLParseNode* pTableRef = _rTableNameNode.getParent();
-        if ( pTableRef->count() == 4 )
-        {
-            // table_ref := table_node as range_variable op_column_commalist
-            // table_node := table_name | ...
-            if ( pTableRef->getChild(1)->getKnownRuleID() == OSQLParseNode::as )
-                return true;
-
-            // table_ref := '{' SQL_TOKEN_OJ joined_table '}'
-            OSL_ENSURE( SQL_ISPUNCTUATION( pTableRef->getChild(0), "(" ), "lcl_isAliasNamePresent: grammar changed(1)!" );
-            return false;
-        }
-
-        if ( pTableRef->count() == 6 )
-        {   // '(' joined_table ')' as range_variable op_column_commalist
-            OSL_ENSURE( SQL_ISPUNCTUATION( pTableRef->getChild(2), "(" )
-                    &&  SQL_ISRULE( pTableRef->getChild(3), as ),
-                    "lcl_isAliasNamePresent: grammar changed(3)!" );
-            return true;
-        }
-
-        if ( pTableRef->count() == 3 )
-            // subquery as range_variable
-            return true;
-
-        if ( pTableRef->count() == 1 )
-            return false;
-
-#if OSL_DEBUG_LEVEL > 0
-        for ( size_t i=0; i<pTableRef->count(); ++i )
-        {
-            const OSQLParseNode* pChildNode = pTableRef->getChild( i );
-            OSQLParseNode::Rule eRuleID = pChildNode->getKnownRuleID();
-            OSL_UNUSED( eRuleID );
-        }
-#endif
-        OSL_ENSURE( false, "lcl_isAliasNamePresent: unreachable code - except you extended the production rules for table_ref!" );
-        return false;
+        return OSQLParseNode::getTableRange(_rTableNameNode.getParent()).getLength() != 0;
     }
 }
 
@@ -432,9 +394,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const
 
     // table refs
     case table_ref:
-        if  (   ( nCount == 4 )
-            ||  ( ( nCount == 6 ) &&  SQL_ISPUNCTUATION( m_aChilds[0], "(" ) )
-            )
+        if (  ( nCount == 2 ) || ( nCount == 3 ) || ( nCount == 5 ) )
         {
             impl_parseTableRangeNodeToString_throw( rString, rParam );
             bHandled = true;
@@ -693,25 +653,11 @@ bool OSQLParseNode::impl_parseTableNameNodeToString_throw( ::rtl::OUString& rStr
 //-----------------------------------------------------------------------------
 void OSQLParseNode::impl_parseTableRangeNodeToString_throw(::rtl::OUString& rString, const SQLParseNodeParameter& rParam) const
 {
-    sal_uInt32 nCount(count());
-    rString += ::rtl::OUString::createFromAscii(" ");
+    OSL_PRECOND(  ( count() == 2 ) || ( count() == 3 ) || ( count() == 5 ) ,"Illegal count");
 
-    if (nCount == 4)
-    {
-        m_aChilds[0]->impl_parseNodeToString_throw( rString, rParam );
-        m_aChilds[1]->impl_parseNodeToString_throw( rString, rParam );
-        m_aChilds[2]->impl_parseNodeToString_throw( rString, rParam );
-        m_aChilds[3]->impl_parseNodeToString_throw( rString, rParam );
-    }
-    else if(nCount == 6 && SQL_ISPUNCTUATION(m_aChilds[0],"("))
-    {
-        m_aChilds[0]->impl_parseNodeToString_throw( rString, rParam );
-        m_aChilds[1]->impl_parseNodeToString_throw( rString, rParam );
-        m_aChilds[2]->impl_parseNodeToString_throw( rString, rParam );
-        m_aChilds[3]->impl_parseNodeToString_throw( rString, rParam );
-        m_aChilds[4]->impl_parseNodeToString_throw( rString, rParam );
-        m_aChilds[5]->impl_parseNodeToString_throw( rString, rParam );
-    }
+    // rString += ::rtl::OUString::createFromAscii(" ");
+    ::std::for_each(m_aChilds.begin(),m_aChilds.end(),
+        boost::bind( &OSQLParseNode::impl_parseNodeToString_throw, _1, boost::ref( rString ), boost::cref( rParam ) ));
 }
 
 //-----------------------------------------------------------------------------
@@ -1426,7 +1372,6 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
             { OSQLParseNode::all_or_any_predicate, "all_or_any_predicate" },
             { OSQLParseNode::named_columns_join, "named_columns_join" },
             { OSQLParseNode::join_condition, "join_condition" },
-            { OSQLParseNode::joined_table, "joined_table" },
             { OSQLParseNode::boolean_factor, "boolean_factor" },
             { OSQLParseNode::sql_not, "sql_not" },
             { OSQLParseNode::boolean_test, "boolean_test" },
@@ -1450,7 +1395,8 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
             { OSQLParseNode::column_def, "column_def" },
             { OSQLParseNode::table_node, "table_node" },
             { OSQLParseNode::as, "as" },
-            { OSQLParseNode::op_column_commalist, "op_column_commalist" }
+            { OSQLParseNode::op_column_commalist, "op_column_commalist" },
+            { OSQLParseNode::table_primary_as_range_column, "table_primary_as_range_column" }
         };
         size_t nRuleMapCount = sizeof( aRuleDescriptions ) / sizeof( aRuleDescriptions[0] );
         OSL_ENSURE( nRuleMapCount == size_t( OSQLParseNode::rule_count ), "OSQLParser::OSQLParser: added a new rule? Adjust this map!" );
@@ -2605,6 +2551,24 @@ OSQLParseNode::Rule OSQLParseNode::getKnownRuleID() const
     if ( !isRule() )
         return UNKNOWN_RULE;
     return OSQLParser::RuleIDToRule( getRuleID() );
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OSQLParseNode::getTableRange(const OSQLParseNode* _pTableRef)
+{
+    OSL_ENSURE(_pTableRef && _pTableRef->count() > 1 && _pTableRef->getKnownRuleID() == OSQLParseNode::table_ref,"Invalid node give, only table ref is allowed!");
+    const sal_uInt32 nCount = _pTableRef->count();
+    ::rtl::OUString sTableRange;
+    if ( nCount == 2 || nCount == 3 || nCount == 5)
+    {
+        const OSQLParseNode* pNode = _pTableRef->getChild(nCount - (nCount == 2 ? 1 : 2));
+        OSL_ENSURE(pNode && (pNode->getKnownRuleID() == OSQLParseNode::table_primary_as_range_column
+                          || pNode->getKnownRuleID() == OSQLParseNode::range_variable)
+                         ,"SQL grammar changed!");
+        if ( !pNode->isLeaf() )
+            sTableRange = pNode->getChild(1)->getTokenValue();
+    } // if ( nCount == 2 || nCount == 3 || nCount == 5)
+
+    return sTableRange;
 }
 
 }   // namespace connectivity
