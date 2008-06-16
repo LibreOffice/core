@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: templateimpl.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,11 +74,6 @@ namespace configmgr
             , aModule()
             {}
 
-            TemplateName(UnoType const& aType, bool bLocalized)
-            : aName(makeSimpleTypeName(aType))
-            , aModule(makeSimpleTypeModuleName(bLocalized))
-            {}
-
             TemplateName(Name const& aName_)
             : aName(aName_)
             , aModule()
@@ -126,16 +121,11 @@ namespace configmgr
             //-----------------------------------------------------------------
             static UnoType resolveSimpleTypeName(Name const& aName);
             //-----------------------------------------------------------------
-            static Name makeSimpleTypeName(UnoType const& aType);
-            //-----------------------------------------------------------------
+#if OSL_DEBUG_LEVEL > 0
             static Name makeNativeTypeModuleName();
             //-----------------------------------------------------------------
             static Name makeLocalizedTypeModuleName();
-            //-----------------------------------------------------------------
-            static Name makeSimpleTypeModuleName(bool bLocalized)
-            {
-                return bLocalized ? makeLocalizedTypeModuleName() : makeNativeTypeModuleName();
-            }
+#endif
             //-----------------------------------------------------------------
         };
     //-------------------------------------------------------------------------
@@ -158,8 +148,6 @@ namespace configmgr
             static void assignActualType (Template& aTemplate,UnoType const& aType);
             //-----------------------------------------------------------------
 
-            static TemplateHolder makeSpecialTemplate (TemplateName const& _aNames, SpecialTemplateProvider const& aProvider, UnoType const& aType);
-
             static TemplateHolder makeElementTemplateWithType(TemplateName const& aNames, TemplateProvider const& _aProvider, data::SetNodeAccess const& _aSet);
             //-----------------------------------------------------------------
 
@@ -170,20 +158,6 @@ namespace configmgr
 
         typedef std::map<TemplateName, TemplateHolder> TemplateRepository;
     //-------------------------------------------------------------------------
-
-        //---------------------------------------------------------------------
-        // class SpecialTemplateProvider_Impl
-        //---------------------------------------------------------------------
-
-        struct SpecialTemplateProvider_Impl : configmgr::SimpleReferenceObject
-        {
-            SpecialTemplateProvider_Impl();
-
-            TemplateHolder makeTemplate (TemplateName const& aNames, UnoType const& aType);
-
-        private:
-            TemplateRepository m_aRepository;
-        };
 
         //---------------------------------------------------------------------
         // class TemplateProvider_Impl
