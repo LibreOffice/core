@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportReadHandler.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@ package com.sun.star.report.pentaho.parser.rpt;
 import java.util.ArrayList;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.pentaho.model.OfficeGroup;
 import com.sun.star.report.pentaho.model.OfficeReport;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
 import com.sun.star.report.pentaho.parser.chart.ChartReadHandler;
@@ -54,6 +55,10 @@ public class ReportReadHandler extends ElementReadHandler
     public void setDetail(final RootTableReadHandler detail)
     {
         this.detail = detail;
+    }
+    public final RootTableReadHandler getDetail()
+    {
+        return detail;
     }
     private GroupReadHandler groups;
     private final OfficeReport rootSection;
@@ -132,7 +137,7 @@ public class ReportReadHandler extends ElementReadHandler
             }
             else if ("group".equals(tagName))
             {
-                groups = new GroupReadHandler();
+                groups = new GroupReadHandler(this);
                 erh = groups;
             }
             else
