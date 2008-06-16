@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: valuenode.hxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,7 +96,6 @@ namespace configmgr
         }
     public:
         explicit
-        INode(node::Attributes);
         INode(OUString const& aName, node::Attributes);
 
         virtual ~INode();
@@ -115,7 +114,6 @@ namespace configmgr
         void markMandatory();
         void markRemovable();
         void promoteAccessToDefault();
-          void forceReadonlyToFinalized();
 
             // to be used with caution. If the node is referenced from somewhere else under it's old name,
             // you may have problems with this inconsistence
