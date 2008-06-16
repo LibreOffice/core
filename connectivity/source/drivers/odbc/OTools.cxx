@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OTools.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,7 +96,7 @@ void OTools::bindParameter( OConnection* _pConnection,
         nColumnSize = 1;
 
     if(fSqlType == SQL_LONGVARCHAR || fSqlType == SQL_LONGVARBINARY)
-        memcpy(pDataBuffer,&nPos,sizeof(nPos));
+        std::memcpy(pDataBuffer,&nPos,sizeof(nPos));
 
     // 20.09.2001 OJ: Problems with mysql. mysql returns only CHAR as parameter type
     //  nRetcode = (*(T3SQLDescribeParam)_pConnection->getOdbcFunction(ODBC3SQLDescribeParam))(_hStmt,(SQLUSMALLINT)nPos,&fSqlType,&nColumnSize,&nDecimalDigits,&nNullable);
@@ -144,7 +144,7 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
                 ::rtl::OString aString(::rtl::OUStringToOString(*(::rtl::OUString*)_pValue,_nTextEncoding));
                 *pLen = SQL_NTS;
                 _nColumnSize = aString.getLength();
-                memcpy(_pData,aString.getStr(),aString.getLength());
+                std::memcpy(_pData,aString.getStr(),aString.getLength());
                 ((sal_Int8*)_pData)[aString.getLength()] = '\0';
             }
             break;
@@ -170,7 +170,7 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
                 ::rtl::OString aString = ::rtl::OString::valueOf(*(double*)_pValue);
                 _nColumnSize = aString.getLength();
                 *pLen = _nColumnSize;
-                memcpy(_pData,aString.getStr(),aString.getLength());
+                std::memcpy(_pData,aString.getStr(),aString.getLength());
                 ((sal_Int8*)_pData)[_nColumnSize] = '\0';
             }   break;
         case SQL_BIT:
@@ -523,7 +523,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
                             _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
         sal_Int32 nLen = aData.getLength();
         aData.realloc(nLen + nBytes);
-        memcpy(aData.getArray() + nLen, aCharArray, nBytes);
+        std::memcpy(aData.getArray() + nLen, aCharArray, nBytes);
     }
     return aData;
 }
