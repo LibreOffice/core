@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: translatechanges.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,10 +73,6 @@ namespace configmgr
 // ---------------------------------------------------------------------------------------------------
     //interpreting NodeChanges
 // resolve the relative path from a given base to the changed node
-bool resolveChangeLocation(RelativePath& aPath, NodeChangeLocation const& aChange, Tree const& aBaseTree)
-{
-    return resolveChangeLocation(aPath,aChange,aBaseTree,aBaseTree.getRootNode());
-}
 bool resolveChangeLocation(RelativePath& aPath, NodeChangeLocation const& aChange, Tree const& aBaseTree, NodeRef const& aBaseNode)
 {
     OSL_ENSURE(aChange.isValidLocation(), "Trying to resolve against change location that wasn't set up properly");
@@ -239,14 +235,6 @@ bool resolveToUno(NodeChangeData& aChange, Factory& rFactory)
 }
 // ---------------------------------------------------------------------------------------------------
 
-// building events
-/// find the sending api object
-void fillEventSource(lang::EventObject& rEvent, Tree const& aTree, NodeRef const& aNode, Factory& rFactory)
-{
-    rEvent.Source = rFactory.findUnoElement( NodeID(aTree,aNode) );
-}
-// ---------------------------------------------------------------------------------------------------
-
 /// fill a change info from a NodeChangeInfo
 void fillChange(util::ElementChange& rChange, NodeChangeInformation const& aInfo, Tree const& aBaseTree, Factory& rFactory)
 {
@@ -277,51 +265,12 @@ void fillChangeFromResolved(util::ElementChange& rChange, NodeChangeInformation 
     rChange.ReplacedElement = aInfo.change.unoData.oldValue;
 }
 // ---------------------------------------------------------------------------------------------------
-
-/// fill a event from a NodeChangeInfo
-bool fillEventData(container::ContainerEvent& rEvent, NodeChangeInformation const& aInfo, Factory& rFactory)
-{
-    UnoChange aUnoChange;
-    if (!resolveUnoObjects(aUnoChange, aInfo.change, rFactory))
-    {
-        OSL_ENSURE(false, "WARNING: Cannot find out old/new UNO objects involved in change");
-        return false;
-    }
-
-    rEvent.Accessor     <<= aInfo.location.getAccessor().getLocalName().getName().toString();
-    rEvent.Element          = aUnoChange.newValue;
-    rEvent.ReplacedElement  = aUnoChange.oldValue;
-
-    return !aInfo.isEmptyChange();
-}
-// ---------------------------------------------------------------------------------------------------
 /// fill a event from a NodeChangeInfo (uno objects are assumed to be resolved already)
 bool fillEventDataFromResolved(container::ContainerEvent& rEvent, NodeChangeInformation const& aInfo)
 {
     rEvent.Accessor         <<= aInfo.location.getAccessor().getLocalName().getName().toString();
     rEvent.Element          = aInfo.change.unoData.newValue;
     rEvent.ReplacedElement  = aInfo.change.unoData.oldValue;
-
-    return !aInfo.isEmptyChange();
-}
-// ---------------------------------------------------------------------------------------------------
-/// fill a event from a NodeChangeInfo(uno objects are assumed to be resolved already)
-bool fillEventData(beans::PropertyChangeEvent& rEvent, NodeChangeInformation const& aInfo, Factory& rFactory, bool bMore)
-{
-    if (!aInfo.isValueChange())
-        return false;
-
-     UnoChange aUnoChange;
-    if (!resolveUnoObjects(aUnoChange, aInfo.change, rFactory))
-        OSL_ENSURE(false, "WARNING: Cannot find out old/new UNO objects involved in change");
-
-    rEvent.PropertyName     = aInfo.location.getAccessor().getLocalName().getName().toString();
-
-    rEvent.NewValue         = aUnoChange.newValue;
-    rEvent.OldValue         = aUnoChange.oldValue;
-
-    rEvent.PropertyHandle   = -1;
-     rEvent.Further         = bMore;
 
     return !aInfo.isEmptyChange();
 }
