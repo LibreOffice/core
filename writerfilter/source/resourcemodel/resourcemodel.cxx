@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: resourcemodel.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,6 +28,7 @@
  *
  ************************************************************************/
 
+#include <stdio.h>
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <resourcemodel/TableManager.hxx>
 #include <resourcemodel/QNameToString.hxx>
