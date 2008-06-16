@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportController.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,21 +34,23 @@
 #include <dbaccess/singledoccontroller.hxx>
 #endif
 #include <cppuhelper/implbase2.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/report/XSection.hpp>
+#include <com/sun/star/sdbc/XRowSet.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/report/XReportControlModel.hpp>
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/report/XReportEngine.hpp>
-#include <com/sun/star/sdbc/XRowSet.hpp>
+#include <com/sun/star/report/XSection.hpp>
+
 #include <comphelper/uno3.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/lstner.hxx>
@@ -58,7 +60,7 @@
 #include "RptDef.hxx"
 #include <functional>
 #include <boost/shared_ptr.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
+
 
 
 class TransferableHelper;
@@ -256,6 +258,21 @@ namespace rptui
         * \param _aArgs must contain a properyvalue with name "KeyModifier" and value KEY_MOD1 when control should be created.
         */
         void createDefaultControl(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _aArgs);
+
+        /** fills the state for the feture request.
+            @param  _sProperty  the property which should be filled in the value
+            @param  _rState     the state to fill
+        */
+        void impl_fillState_nothrow(const ::rtl::OUString& _sProperty,dbaui::FeatureState& _rState) const;
+        void impl_fillCustomShapeState_nothrow(const char* _pCustomShapeType,dbaui::FeatureState& _rState) const;
+
+        /** set the property at all selected controls.
+            @return <TRUE/> when the selection is not empty
+        */
+        bool impl_setPropertyAtControls_throw(const sal_uInt16 _nUndoResId
+            ,const ::rtl::OUString& _sProperty
+            ,const ::com::sun::star::uno::Any& _aValue
+            ,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aArgs);
 
         DECL_LINK( OnInvalidateClipboard, void* );
         DECL_LINK( OnClipboardChanged, void* );
