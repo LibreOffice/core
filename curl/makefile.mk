@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.24 $
+# $Revision: 1.25 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -61,6 +61,11 @@ curl_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 
 .IF "$(OS)$(COM)$(CPU)"=="LINUXGCCI"
 curl_LDFLAGS+=-Wl,-z,noexecstack
+.ENDIF
+
+.IF "$(OS)$(CPU)"=="SOLARISU"
+curl_CFLAGS+:=$(ARCH_FLAGS)
+curl_LDFLAGS+:=$(ARCH_FLAGS)
 .ENDIF
 
 CONFIGURE_DIR=.$/
