@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: namecreator.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,9 +58,6 @@ namespace configmgr
 
         void clear() { m_aNameList.clear(); }
 
-        RelativePath buildPath() const;
-        RelativePath buildPath(const FullName &_aPlusName) const;
-
         static FullName createName(Change const& _rChange, SubtreeChange const* _pParent);
     private:
         NameList     m_aNameList;
@@ -78,11 +75,6 @@ namespace configmgr
         void init(PathClass const & _aBasePath)
         { clear(); m_aBasePath = _aBasePath; }
 
-        PathClass createPath() const
-        { return m_aBasePath.compose( ONameCreator::buildPath() ); }
-
-        PathClass createPath(const FullName & _aPlusName) const
-        { return m_aBasePath.compose( ONameCreator::buildPath(_aPlusName) ); }
     private:
         PathClass m_aBasePath;
     };
