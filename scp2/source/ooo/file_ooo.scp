@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_ooo.scp,v $
- * $Revision: 1.247 $
+ * $Revision: 1.248 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1383,6 +1383,13 @@ File gid_File_Oo_Office_Common_Xcs
     Name = "/registry/schema/org/openoffice/Office/Common.xcs";
 End
 
+File gid_File_Oo_Office_Common_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Common.xcu";
+End
+
 File gid_File_Oo_Office_Extendedcolorscheme_Xcs
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -1833,6 +1840,13 @@ File gid_File_Oo_Office_Ui_Xcs
     Name = "/registry/schema/org/openoffice/Office/UI.xcs";
 End
 
+File gid_File_Oo_Office_Ui_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/UI.xcu";
+End
+
 File gid_File_Oo_Office_Views_Xcs
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -1924,6 +1938,13 @@ File gid_File_Oo_Setup_Xcs
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice;
     Name = "/registry/schema/org/openoffice/Setup.xcs";
+End
+
+File gid_File_Oo_Setup_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice;
+    Name = "/registry/data/org/openoffice/Setup.xcu";
 End
 
 File gid_File_Oo_Setup_Start_Xcu
