@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nodechangeinfo.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,32 +93,6 @@ Tree NodeChangeData::getOldElementTree() const
 }
 //-----------------------------------------------------------------------------
 
-NodeRef NodeChangeData::getNewElementNodeRef() const
-{
-    ElementTreeHolder newElement = this->element.newValue;
-    if ( newElement.is() &&  newElement->nodeCount() > 0)
-    {
-        NodeOffset n = newElement->root_();
-        return TreeImplHelper::makeNode( *newElement, n);
-    }
-    else
-        return NodeRef();
-}
-//-----------------------------------------------------------------------------
-
-NodeRef NodeChangeData::getOldElementNodeRef() const
-{
-    ElementTreeHolder oldElement = this->element.oldValue;
-    if ( oldElement.is() &&  oldElement->nodeCount() > 0)
-    {
-        NodeOffset n = oldElement->root_();
-        return TreeImplHelper::makeNode( *oldElement, n);
-    }
-    else
-        return NodeRef();
-}
-//-----------------------------------------------------------------------------
-
 NodeID NodeChangeData::getNewElementNodeID() const
 {
     ElementTreeHolder newElement = this->element.newValue;
@@ -162,6 +136,7 @@ bool NodeChangeLocation::isValidLocation() const
                             SubNodeID(m_affected,m_path.getLocalName().getName()).isValidNode()
                     ) )  ) );
 }
+#if OSL_DEBUG_LEVEL > 0
 //-----------------------------------------------------------------------------
 bool NodeChangeLocation::isValidData() const
 {
@@ -172,6 +147,7 @@ bool NodeChangeLocation::isValidData() const
                       (! m_bSubNodeChanging || !m_path.isEmpty() )
             )       );
 }
+#endif
 //-----------------------------------------------------------------------------
 
 void NodeChangeLocation::setAccessor(RelativePath const& aAccessor)
@@ -221,19 +197,6 @@ TreeRef NodeChangeLocation::getAffectedTreeRef() const
 {
     NodeID aAffected = this->getAffectedNodeID();
     return TreeRef( TreeImplHelper::tree(aAffected) );
-}
-//-----------------------------------------------------------------------------
-
-Tree NodeChangeLocation::getAffectedTree() const
-{
-    return Tree( getAffectedTreeRef() );
-}
-//-----------------------------------------------------------------------------
-
-NodeRef NodeChangeLocation::getAffectedNode() const
-{
-    NodeID aAffected = this->getAffectedNodeID();
-    return TreeImplHelper::makeNode(aAffected);
 }
 //-----------------------------------------------------------------------------
 
