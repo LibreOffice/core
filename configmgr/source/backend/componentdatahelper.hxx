@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: componentdatahelper.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,7 +105,6 @@ namespace configmgr
 
             OUString getTemplateComponent(TemplateIdentifier const & aItemType ) const;
 
-            TemplateIdentifier stripComponent   (TemplateIdentifier const & aItemType ) const;
             TemplateIdentifier completeComponent(TemplateIdentifier const & aItemType ) const;
 
             TemplateIdentifier getCurrentItemType() const
@@ -157,17 +156,11 @@ namespace configmgr
             // Exception support
             void raiseMalformedDataException    (sal_Char const * _pText) const
                 CFG_UNO_THROW1( configuration::backend::MalformedDataException );
-            void raiseNoSupportException        (sal_Char const * _pText) const
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
-            void raiseIllegalAccessException    (sal_Char const * _pText) const
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
             void raiseIllegalArgumentException  (sal_Char const * _pText, sal_Int16 _nPos = 0) const
                 CFG_UNO_THROW1( configuration::backend::MalformedDataException );
             void raiseElementExistException     (sal_Char const * _pText, OUString const & _sElement) const
                 CFG_UNO_THROW1( configuration::backend::MalformedDataException );
             void raiseNoSuchElementException    (sal_Char const * _pText, OUString const & _sElement) const
-                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
-            void raiseUnknownPropertyException  (sal_Char const * _pText, OUString const & _sElement) const
                 CFG_UNO_THROW1( configuration::backend::MalformedDataException );
             void raisePropertyExistException    (sal_Char const * _pText, OUString const & _sElement) const
                 CFG_UNO_THROW1( configuration::backend::MalformedDataException );

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: layermerge.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,9 +71,6 @@ namespace configmgr
         // checking the result
             bool isDone() const { return m_aContext.isDone(); }
             bool isInSublayer() const { return m_bSublayer; }
-
-            MergedComponentData &       result();
-            MergedComponentData const & result() const;
 
         // XLayerHandler
         public:
