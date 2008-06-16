@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: timestamp.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,13 +48,6 @@ namespace configmgr
         const ::TimeValue maxTimeValue = { maxTimeValueSeconds, maxTimeValueNanos };
 
         return TimeStamp( maxTimeValue );
-    }
-// -------------------------------------------------------------------------
-    TimeStamp TimeStamp::always()
-    {
-        const ::TimeValue minTimeValue = { minTimeValueSeconds, minTimeValueNanos };
-
-        return TimeStamp( minTimeValue );
     }
 // -------------------------------------------------------------------------
     TimeStamp TimeStamp::getCurrentTime()
