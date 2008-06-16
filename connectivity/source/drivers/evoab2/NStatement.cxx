@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NStatement.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -403,9 +403,8 @@ rtl::OUString OStatement_Base::getTableName()
             OSQLParseNode *pNodeForTableName = pAllTableNames->getChild( 0 )->getChild( 0 );
             if( m_aSQLIterator.isTableNode( pNodeForTableName ) )
             {
-                if( pAllTableNames->getChild( 0 )->count() == 4 )
-                    aTableName = pAllTableNames->getChild( 0 )->getChild( 2 )->getTokenValue();
-                else
+                aTableName = getTableRange(pAllTableNames->getChild( 0 ));
+                if( !aTableName.getLength() )
                     OSQLParseNode::getTableComponents( pNodeForTableName, aCatalog, aSchema, aTableName);
             }
             else
