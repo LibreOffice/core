@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filehelper.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,9 +49,6 @@ namespace configmgr
     {
         /// delimiter used in URLs and ConfPath
         static const ::sal_Unicode  delimiter = sal_Unicode('/');
-
-        /// string representation of the delimiter
-        const rtl::OUString& delimiterAsString();
 
         /// Tests if the file exists.
         bool fileExists(rtl::OUString const& _sFileURL);
@@ -103,20 +100,11 @@ namespace configmgr
 
         /** removes a file specified by _aURL. Ignores the case of a non-existing file.
         */
-        void removeFile(const rtl::OUString& _aURL) CFG_THROW1(io::IOException);
-
-        /** removes a file specified by _aURL. Ignores the case of a non-existing file.
-        */
         bool tryToRemoveFile(const rtl::OUString& _aURL, bool tryBackupFirst);
 
         /** creates an error msg string for a given file error return code.
         */
         rtl::OUString createOSLErrorString(osl::FileBase::RC eError);
-
-        /** determines the modification time of a directory entry specified by a URL.
-            @return the TimeValue of the last modification, if the file exists, otherwise a TimeValue(0,0).
-        */
-        TimeValue getModifyTime(rtl::OUString const& _aNormalizedFilename);
 
         /** determines the status of a directory entry specified by a URL.
             @return the Size of the file in bytes and the TimeValue of the last modification, if the file exists,
