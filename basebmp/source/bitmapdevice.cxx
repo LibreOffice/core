@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bitmapdevice.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,6 +28,10 @@
  *
  ************************************************************************/
 
+// FIXME: in vigra
+#if defined(__SUNPRO_CC) && (__SUNPRO_CC > 0x580)
+#include <math.h> // needed for fabs, hypot
+#endif
 #include "basebmp/bitmapdevice.hxx"
 
 #include "basebmp/compositeiterator.hxx"
@@ -75,8 +79,10 @@
 #include <vigra/copyimage.hxx>
 #include <vigra/tuple.hxx>
 
+
 namespace vigra
 {
+
 /// componentwise xor of an RGBValue (missing from rgbvalue.hxx)
 template< class Value, unsigned int RedIndex, unsigned int BlueIndex, unsigned int GreenIndex >
 inline RGBValue<Value, RedIndex, GreenIndex, BlueIndex>
