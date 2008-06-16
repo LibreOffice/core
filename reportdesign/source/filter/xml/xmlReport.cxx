@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlReport.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,16 +49,6 @@ namespace rptxml
     using namespace uno;
     using namespace xml::sax;
 
-    Sequence< ::rtl::OUString> lcl_getColumnNames(const ::rtl::OUString& _sValue)
-    {
-        String sColumns = _sValue;
-        Sequence< ::rtl::OUString> aSeq(sColumns.GetTokenCount(','));
-        ::rtl::OUString* pIter = aSeq.getArray();
-        ::rtl::OUString* pEnd  = pIter + aSeq.getLength();
-        for(;pIter != pEnd;++pIter)
-            *pIter = sColumns.GetToken(',');
-        return aSeq;
-    }
 DBG_NAME( rpt_OXMLReport )
 
 OXMLReport::OXMLReport( ORptFilter& rImport,
