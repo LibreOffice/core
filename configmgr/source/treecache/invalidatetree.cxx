@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: invalidatetree.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +41,6 @@
 #include "tracer.hxx"
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/container/NoSuchElementException.hpp>
-#include <vos/thread.hxx>
 
 #ifndef INCLUDED_ALGORITHM
 #include <algorithm>
@@ -111,55 +110,6 @@ std::auto_ptr<ISubtree> TreeManager::loadNodeFromSession( AbsolutePath const& _a
 #endif
 // -----------------------------------------------------------------------------
 
-class OInvalidateTreeThread: public vos::OThread
-{
-    typedef backend::ICachedDataProvider CacheManager;
-    typedef rtl::Reference< CacheManager > CacheManagerRef;
-    CacheManagerRef     m_rTreeManager;
-    Name                m_aComponentName;
-    RequestOptions      m_aOptions;
-
-public:
-    OInvalidateTreeThread(CacheManager* _rTreeManager,
-                          Name const & _aComponentName,
-                          const RequestOptions& _aOptions)
-    : m_rTreeManager(_rTreeManager)
-    , m_aComponentName(_aComponentName)
-    , m_aOptions(_aOptions)
-    {}
-
-    ~OInvalidateTreeThread()
-    {}
-
-private:
-    virtual void SAL_CALL onTerminated()
-    {
-        delete this;
-    }
-
-    virtual void SAL_CALL run();
-};
-
-// -----------------------------------------------------------------------------
-
-void CacheController::invalidateComponent(ComponentRequest const & _aComponent) CFG_UNO_THROW_ALL(  )
-{
-    if (!this->m_bDisposing)
-    {
-        // start the InvalidateTreeThread only, if we are not at disposemode
-        if (OInvalidateTreeThread *pThread =
-            new OInvalidateTreeThread(this, _aComponent.getComponentName(), _aComponent.getOptions()))
-        {
-            pThread->create();
-        }
-        else
-            OSL_ENSURE(false, "Could not create refresher thread");
-    }
-
-}
-
-// -----------------------------------------------------------------------------
-
 CacheLocation CacheController::refreshComponent(ComponentRequest const & _aRequest) CFG_UNO_THROW_ALL()
 {
     if (m_bDisposing) return NULL;
@@ -222,21 +172,6 @@ CacheLocation CacheController::refreshComponent(ComponentRequest const & _aReque
     return aResult;
 }
 
-// -----------------------------------------------------------------------------
-void OInvalidateTreeThread::run()
-{
-    try
-    {
-        UnoApiLock aLock;
-        ComponentRequest aRequest(m_aComponentName, m_aOptions);
-        m_rTreeManager->refreshComponent(aRequest);
-    }
-    catch(uno::Exception&)
-    {
-        // do nothing, only thread safe exception absorb
-        CFG_TRACE_ERROR_NI("OInvalidateTreeThread::run: refreshing failed - ignoring the exception");
-    }
-}
 // -----------------------------------------------------------------------------
     } // namespace backend
 
