@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeDocumentReportTarget.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,8 +100,8 @@ import org.w3c.css.sac.LexicalUnit;
  */
 public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
 {
-    public static final String HORIZONTAL_POS = "horizontal-pos";
 
+    public static final String HORIZONTAL_POS = "horizontal-pos";
     public static final String TAG_DEF_PREFIX = "com.sun.star.report.pentaho.output.";
     public static final int ROLE_NONE = 0;
     public static final int ROLE_REPORT_HEADER = 1;
@@ -117,7 +117,6 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     public static final int ROLE_TEMPLATE = 11;
     public static final int ROLE_SPREADSHEET_PAGE_HEADER = 12;
     public static final int ROLE_SPREADSHEET_PAGE_FOOTER = 13;
-
     public static final int STATE_IN_DOCUMENT = 0;
     public static final int STATE_IN_BODY = 1;
     public static final int STATE_IN_CONTENT = 2;
@@ -129,7 +128,6 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     public static final String FAILED = "Failed";
     public static final String VERTICAL_POS = "vertical-pos";
     private static final String ZERO_CM = "0cm";
-
 
     protected static class BufferState
     {
@@ -379,22 +377,24 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             predefinedStylesCollection = reportDoc.getStylesCollection();
 
             final OfficeStyles commonStyles = predefinedStylesCollection.getCommonStyles();
-            if (!commonStyles.containsStyle(OfficeToken.GRAPHIC,OfficeToken.GRAPHICS))
+            if (!commonStyles.containsStyle(OfficeToken.GRAPHIC, OfficeToken.GRAPHICS))
             {
                 final OfficeStyle graphicsDefaultStyle = new OfficeStyle();
                 graphicsDefaultStyle.setStyleFamily(OfficeToken.GRAPHIC);
                 graphicsDefaultStyle.setStyleName(OfficeToken.GRAPHICS);
-                final Element graphicProperties = produceFirstChild(graphicsDefaultStyle, OfficeNamespaces.STYLE_NS,OfficeToken.GRAPHIC_PROPERTIES);
-                graphicProperties.setAttribute(OfficeNamespaces.TEXT_NS, "anchor-type",OfficeToken.PARAGRAPH);
-                graphicProperties.setAttribute(OfficeNamespaces.SVG_NS, "x",ZERO_CM);
-                graphicProperties.setAttribute(OfficeNamespaces.SVG_NS, "y",ZERO_CM);
+                final Element graphicProperties = produceFirstChild(graphicsDefaultStyle, OfficeNamespaces.STYLE_NS, OfficeToken.GRAPHIC_PROPERTIES);
+                graphicProperties.setAttribute(OfficeNamespaces.TEXT_NS, "anchor-type", OfficeToken.PARAGRAPH);
+                graphicProperties.setAttribute(OfficeNamespaces.SVG_NS, "x", ZERO_CM);
+                graphicProperties.setAttribute(OfficeNamespaces.SVG_NS, "y", ZERO_CM);
                 graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "wrap", "dynamic");
                 graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "number-wrapped-paragraphs", "no-limit");
                 graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "wrap-contour", OfficeToken.FALSE);
                 graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, VERTICAL_POS, "from-top"); // changed for chart
-                graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "vertical-rel",OfficeToken.PARAGRAPH);
-                graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS,HORIZONTAL_POS, "from-left"); // changed for chart
-                graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "horizontal-rel",OfficeToken.PARAGRAPH);
+
+                graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "vertical-rel", OfficeToken.PARAGRAPH);
+                graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, HORIZONTAL_POS, "from-left"); // changed for chart
+
+                graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "horizontal-rel", OfficeToken.PARAGRAPH);
                 commonStyles.addStyle(graphicsDefaultStyle);
             }
 
@@ -408,7 +408,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         }
         catch (IOException e)
         {
-            throw new ReportProcessingException( FAILED,e);
+            throw new ReportProcessingException(FAILED, e);
         }
     }
 
@@ -813,7 +813,6 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     protected void startGroupInstance(final AttributeMap attrs)
             throws IOException, DataSourceException, ReportProcessingException
     {
-
     }
 
     protected void startGroupBody(final AttributeMap attrs)
@@ -844,7 +843,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         }
         catch (IOException e)
         {
-            throw new ReportProcessingException( FAILED,e);
+            throw new ReportProcessingException(FAILED, e);
         }
     }
 
@@ -907,7 +906,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         }
         catch (IOException e)
         {
-            throw new ReportProcessingException( FAILED,e);
+            throw new ReportProcessingException(FAILED, e);
         }
     }
 
@@ -988,13 +987,11 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     protected void endGroupBody(final AttributeMap attrs)
             throws IOException, DataSourceException, ReportProcessingException
     {
-
     }
 
     protected void endGroupInstance(final AttributeMap attrs)
             throws IOException, DataSourceException, ReportProcessingException
     {
-
     }
 
     public int getCurrentRole()
@@ -1058,7 +1055,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         }
         catch (IOException e)
         {
-            throw new ReportProcessingException( FAILED,e);
+            throw new ReportProcessingException(FAILED, e);
         }
     }
 
@@ -1133,9 +1130,9 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     public void commit()
             throws ReportProcessingException
     {
-    // do not call flush before the report is fully finished. Every flush
-    // causes the Office-Backend to fully ZIP all contents (it acts like a
-    // 'Save' call from the UI) and that's expensive like hell
+        // do not call flush before the report is fully finished. Every flush
+        // causes the Office-Backend to fully ZIP all contents (it acts like a
+        // 'Save' call from the UI) and that's expensive like hell
     }
 
     public NamespaceDefinition getNamespaceByUri(final String uri)
@@ -1264,6 +1261,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
 
             // When scaling, we have to create an image-style.
             final CSSNumericValue width = image.getWidth(); // always in 100th of a mm
+
             final CSSNumericValue height = image.getHeight(); // always in 100th of a mm
 
             Log.debug("Image " + imageData + " Width: " + width + ", Height: " + height);
@@ -1294,14 +1292,14 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                             CSSValueResolverUtility.convertLength(height, imageAreaHeightVal.getType());
 
                     final boolean scale = OfficeToken.TRUE.equals(attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, OfficeToken.SCALE));
-                    if (!scale  && normalizedImageWidth.getValue() > 0 && normalizedImageHeight.getValue() > 0)
+                    if (!scale && normalizedImageWidth.getValue() > 0 && normalizedImageHeight.getValue() > 0)
                     {
                         final double clipWidth = normalizedImageWidth.getValue() - imageAreaWidthVal.getValue();
                         final double clipHeight = normalizedImageHeight.getValue() - imageAreaHeightVal.getValue();
                         if (clipWidth > 0 && clipHeight > 0)
                         {
-                            final OfficeStyle imageStyle = deriveStyle(OfficeToken.GRAPHIC,OfficeToken.GRAPHICS);
-                            final Element graphProperties = produceFirstChild(imageStyle, OfficeNamespaces.STYLE_NS,OfficeToken.GRAPHIC_PROPERTIES);
+                            final OfficeStyle imageStyle = deriveStyle(OfficeToken.GRAPHIC, OfficeToken.GRAPHICS);
+                            final Element graphProperties = produceFirstChild(imageStyle, OfficeNamespaces.STYLE_NS, OfficeToken.GRAPHIC_PROPERTIES);
                             final StringBuffer buffer = new StringBuffer();
                             buffer.append("rect(");
                             buffer.append(clipHeight / 2);
@@ -1323,8 +1321,8 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                         }
                         else if (clipWidth > 0)
                         {
-                            final OfficeStyle imageStyle = deriveStyle(OfficeToken.GRAPHIC,OfficeToken.GRAPHICS);
-                            final Element graphProperties = produceFirstChild(imageStyle, OfficeNamespaces.STYLE_NS,OfficeToken.GRAPHIC_PROPERTIES);
+                            final OfficeStyle imageStyle = deriveStyle(OfficeToken.GRAPHIC, OfficeToken.GRAPHICS);
+                            final Element graphProperties = produceFirstChild(imageStyle, OfficeNamespaces.STYLE_NS, OfficeToken.GRAPHIC_PROPERTIES);
                             final StringBuffer buffer = new StringBuffer();
                             buffer.append("rect(0cm ");
                             buffer.append(clipWidth / 2);
@@ -1341,8 +1339,8 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                         }
                         else if (clipHeight > 0)
                         {
-                            final OfficeStyle imageStyle = deriveStyle(OfficeToken.GRAPHIC,OfficeToken.GRAPHICS);
-                            final Element graphProperties = produceFirstChild(imageStyle, OfficeNamespaces.STYLE_NS,OfficeToken.GRAPHIC_PROPERTIES);
+                            final OfficeStyle imageStyle = deriveStyle(OfficeToken.GRAPHIC, OfficeToken.GRAPHICS);
+                            final Element graphProperties = produceFirstChild(imageStyle, OfficeNamespaces.STYLE_NS, OfficeToken.GRAPHIC_PROPERTIES);
                             final StringBuffer buffer = new StringBuffer();
                             buffer.append("rect(");
                             buffer.append(clipHeight / 2);
@@ -1381,10 +1379,10 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             {
                 frameList.setAttribute(OfficeNamespaces.DRAWING_NS, OfficeToken.STYLE_NAME, styleName);
             }
-            frameList.setAttribute(OfficeNamespaces.TEXT_NS, "anchor-type",OfficeToken.PARAGRAPH);
+            frameList.setAttribute(OfficeNamespaces.TEXT_NS, "anchor-type", OfficeToken.PARAGRAPH);
             frameList.setAttribute(OfficeNamespaces.SVG_NS, "z-index", "0");
-            frameList.setAttribute(OfficeNamespaces.SVG_NS, "x",ZERO_CM);
-            frameList.setAttribute(OfficeNamespaces.SVG_NS, "y",ZERO_CM);
+            frameList.setAttribute(OfficeNamespaces.SVG_NS, "x", ZERO_CM);
+            frameList.setAttribute(OfficeNamespaces.SVG_NS, "y", ZERO_CM);
 
             Log.debug("Image " + imageData + " A-Width: " + imageAreaWidthVal + ", A-Height: " + imageAreaHeightVal);
 
@@ -1416,7 +1414,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             }
             catch (IOException ioe)
             {
-                throw new ReportProcessingException( FAILED,ioe);
+                throw new ReportProcessingException(FAILED, ioe);
             }
         }
     }
@@ -1623,7 +1621,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         }
         catch (IOException ioe)
         {
-            throw new ReportProcessingException( FAILED,ioe);
+            throw new ReportProcessingException(FAILED, ioe);
         }
 
 
