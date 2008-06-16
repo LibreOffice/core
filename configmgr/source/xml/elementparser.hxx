@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: elementparser.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,9 +117,6 @@ namespace configmgr
 
             /// checks for presence of an attribute and assigns its value if it exists
             bool maybeGetAttribute(SaxAttributeList const& _xAttribs, OUString const& _aAttributeName, OUString& _rsAttributeValue) const;
-
-            /// assigns an attribute value or an empty string if it doesn't exist
-            void alwaysGetAttribute(SaxAttributeList const& _xAttribs, OUString const& _aAttributeName, OUString& _rsAttributeValue) const;
         };
 // -----------------------------------------------------------------------------
 
