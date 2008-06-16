@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bootstrapcontext.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,22 +129,6 @@ OUString ComponentContext::getBootstrapURL() const
 }
 // ---------------------------------------------------------------------------
 
-void ComponentContext::changeBootstrapURL( const OUString& _aURL )
-{
-    UnoApiLock aLock;
-
-    if (rtlBootstrapHandle hNew = rtl_bootstrap_args_open(_aURL.pData))
-    {
-        rtl_bootstrap_args_close(m_hBootstrapData);
-        m_hBootstrapData = hNew;
-    }
-    else
-    {
-        OSL_TRACE( "configmgr: Cannot open bootstrap data URL: %s", OU2ASCII(_aURL) );
-    }
-}
-// ---------------------------------------------------------------------------
-
 uno::Reference< lang::XMultiComponentFactory > SAL_CALL
     ComponentContext::getServiceManager(  )
         throw (uno::RuntimeException)
@@ -199,19 +183,6 @@ sal_Bool ComponentContext::isPassthrough(Context const & _xContext)
 beans::NamedValue ComponentContext::makePassthroughMarker(sal_Bool bPassthrough)
 {
     return beans::NamedValue(OUSTR(IMPL_ITEM_PASSTHRU),uno::makeAny(bPassthrough));
-}
-// ---------------------------------------------------------------------------
-
-ComponentContext::Context ComponentContext::getBaseContext(Context const & _xContext)
-{
-    OSL_ENSURE(_xContext.is(),"Unexpected NULL context");
-
-    Context xResult = _xContext;
-    if (_xContext.is())
-    {
-        _xContext->getValueByName(OUSTR(IMPL_ITEM_BASECONTEXT)) >>= xResult;
-    }
-    return xResult;
 }
 // ---------------------------------------------------------------------------
 
