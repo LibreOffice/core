@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cmtreemodel.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,14 +66,6 @@ bool isLocalizedValueSet(SubtreeChange const& _aSubtree)
     return true;
 }
 
-// -----------------------------------------------------------------------------
-
-bool isValueSet(ISubtree const& _aSubtree)
-{
-    if ( !_aSubtree.isSetNode())    return false;
-    if ( !_aSubtree.getElementTemplateModule().equals(TEMPLATE_MODULE_NATIVE_VALUE) )   return false;
-    return true;
-}
 // -----------------------------------------------------------------------------
 
 bool isValueSet(SubtreeChange const& _aSubtree)

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: treeactions.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,25 +40,6 @@
 //..........................................................................
 namespace configmgr
 {
-// -------------------------------------------------------------------------
-namespace
-{
-    struct ForceWritable : NodeModification
-    {
-        void handle(ValueNode& _rValue)     { implForceWritable(_rValue); }
-        void handle(ISubtree& _rSubtree)    { implForceWritable(_rSubtree); applyToChildren(_rSubtree); }
-
-        void implForceWritable(INode& _rNode) { _rNode.forceReadonlyToFinalized(); }
-    };
-}
-
-// -------------------------------------------------------------------------
-void forceWritable(INode& _rNode)
-{
-    ForceWritable aVisitor;
-
-    aVisitor.applyToNode(_rNode);
-}
 
 //==========================================================================
 //= OChangeActionCounter
