@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: localizedtreeactions.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -297,18 +297,6 @@ static data::TreeSegment old_cloneExpandedForLocale(OUString const& _sName, INod
 }
 //--------------------------------------------------------------------------
 
-// convert to the given locale format, no matter what the original representation
-data::TreeSegment cloneForLocale(INode const* _pNode, OUString const& _sLocale)
-{
-    using namespace localehelper;
-    OSL_ENSURE( !designatesAllLocales(makeLocale(_sLocale)),
-                "WARNING: This function doesn't work from single values to  expanded sets so far");
-
-    OUString sName = _pNode ? _pNode->getName() : OUString();
-    return old_cloneExpandedForLocale(sName, _pNode,_sLocale);
-}
-//--------------------------------------------------------------------------
-
 // -----------------------------------------------------------------------------
 //--------------------------------------------------------------------------
 data::TreeSegment cloneExpandedForLocale(data::TreeAccessor const & _aTree, OUString const& _sLocale)
@@ -568,23 +556,6 @@ std::auto_ptr<SubtreeChange> ExpandChangesForLocale::expanded(ValueChange const&
 //--------------------------------------------------------------------------
 } // anonymous namespace
 //--------------------------------------------------------------------------
-
-void expandForLocale(ISubtree& _rNode, OUString const& _sLocale)
-{
-    using namespace localehelper;
-
-    if ( ! designatesAllLocales(makeLocale(_sLocale)) ) // nothing to reduce
-        ExpandTreeForLocale::expand(_rNode,_sLocale);
-}
-//--------------------------------------------------------------------------
-
-void expandForLocale(SubtreeChange& _rNode, OUString const& _sLocale)
-{
-    using namespace localehelper;
-
-    if ( ! designatesAllLocales(makeLocale(_sLocale)) ) // nothing to reduce
-        ExpandChangesForLocale::expand(_rNode,_sLocale);
-}
 
 //--------------------------------------------------------------------------
 //..........................................................................
