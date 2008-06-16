@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_descriptioninfoset.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -235,6 +235,22 @@ DescriptionInfoset::getUpdateDownloadUrls() const
         ::rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM(
                 "desc:update-download/desc:src/@xlink:href")));
+}
+
+::rtl::OUString DescriptionInfoset::getIconURL( sal_Bool bHighContrast ) const
+{
+    css::uno::Sequence< ::rtl::OUString > aStrList = getUrls( ::rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM( "desc:icon/desc:default/@xlink:href")));
+    css::uno::Sequence< ::rtl::OUString > aStrListHC = getUrls( ::rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM( "desc:icon/desc:high-contrast/@xlink:href")));
+
+    if ( bHighContrast && aStrListHC.hasElements() && aStrListHC[0].getLength() )
+        return aStrListHC[0];
+
+    if ( aStrList.hasElements() && aStrList[0].getLength() )
+        return aStrList[0];
+
+    return ::rtl::OUString();
 }
 
 ::boost::optional< ::rtl::OUString > DescriptionInfoset::getLocalizedUpdateWebsiteURL()
