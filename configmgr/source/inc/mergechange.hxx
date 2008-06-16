@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mergechange.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,11 +38,7 @@
 namespace configmgr
 {
     // method that applies changes on a existing subtree
-    void applyUpdateWithAdjustment(TreeChangeList & _anUpdate, data::NodeAddress const & _aBaseAddress);
-    bool adjustUpdate(TreeChangeList & _anUpdate, data::NodeAddress const & _aBaseAddress);
-    void mergeLayer         (TreeChangeList & _aLayer,      ISubtree& _aTree);
     void combineUpdates     (SubtreeChange  const& _anUpdate, SubtreeChange& _aCombinedUpdate);
-    void applyLayerUpdate   (TreeChangeList const& _anUpdate, TreeChangeList& _aLayer);
 
     // -----------------------------------------------------------------------------
     class OStripDefaults : private ChangeTreeModification
