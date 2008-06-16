@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: binaryreader.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -535,32 +535,9 @@ namespace configmgr
 
         // --------------------------------------------------------------------------
 
-        void BinaryReader::reopen()
-            SAL_THROW( (io::IOException, uno::RuntimeException) )
-        {
-            OSL_PRECOND(m_xDataInputStream.is(),"Binary Reader - cannot reopen: not open");
-            if (m_xDataInputStream.is())
-            {
-                m_xDataInputStream->closeInput();
-                m_xDataInputStream.set(new BinaryReader_Impl (m_sFileURL));
-            }
-        }
-        // --------------------------------------------------------------------------
-
-        void BinaryReader::close()
-            SAL_THROW( (io::IOException, uno::RuntimeException) )
-        {
-            if (m_xDataInputStream.is())
-                m_xDataInputStream->closeInput();
-        }
-        // --------------------------------------------------------------------------
-
         inline uno::Reference<io::XDataInputStream> BinaryReader::getDataInputStream()
         {
             OSL_ENSURE(m_xDataInputStream.is(),"Binary Cache: Reader was not opened - no input stream");
-#if 0
-            if (!m_xDataInputStream.is()) throw io::NotConnectedException();
-#endif
             return m_xDataInputStream;
         }
 
