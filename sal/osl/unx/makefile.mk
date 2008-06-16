@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.34 $
+# $Revision: 1.35 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -148,7 +148,7 @@ CFLAGS+=-DSAL_ENABLE_CRASH_REPORT
 
 .INCLUDE :  target.mk
 
-.IF "$(OS)$(CPU)"=="SOLARISS" || "$(OS)$(CPU)"=="NETBSDS" || "$(OS)$(CPU)"=="LINUXS"
+.IF "$(OS)$(CPU)"=="SOLARISU" || "$(OS)$(CPU)"=="SOLARISS" || "$(OS)$(CPU)"=="NETBSDS" || "$(OS)$(CPU)"=="LINUXS"
 
 $(SLO)$/interlck.obj: $(SLO)$/interlck.o
      touch $(SLO)$/interlck.obj
