@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlImportDocumentHandler.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,7 +124,7 @@ void SAL_CALL ImportDocumentHandler::endDocument() throw (uno::RuntimeException,
 
 void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName, const uno::Reference< xml::sax::XAttributeList > & _xAttrList) throw (uno::RuntimeException, xml::sax::SAXException)
 {
-
+    uno::Reference< xml::sax::XAttributeList > xNewAttribs = _xAttrList;
     bool bExport = true;
     if ( _sName.equalsAscii("office:report") )
     {
@@ -166,10 +166,11 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
                         break;
                 }
             }
+            m_xDatabaseDataProvider->execute();
         }
         catch(uno::Exception&)
         {
-            OSL_ENSURE(0,"Exception catched while filling the report definition props");
+            // OSL_ENSURE(0,"Exception catched while filling the report definition props");
         }
         m_xDelegatee->startElement(lcl_createAttribute(XML_NP_OFFICE,XML_CHART),NULL);
         bExport = false;
@@ -220,9 +221,16 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
         ||    _sName.equalsAscii("rpt:report-component")
         ||    _sName.equalsAscii("rpt:report-element"))
         bExport = false;
+    else if ( _sName.equalsAscii("chart:plot-area"))
+    {
+        SvXMLAttributeList* pList = new SvXMLAttributeList();
+        xNewAttribs = pList;
+        pList->AppendAttributeList(_xAttrList);
+        pList->AddAttribute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("table:cell-range-address")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("local-table.$A$1:.$Z$65536")));
+    }
 
     if ( bExport )
-        m_xDelegatee->startElement(_sName,_xAttrList);
+        m_xDelegatee->startElement(_sName,xNewAttribs);
 }
 
 void SAL_CALL ImportDocumentHandler::endElement(const ::rtl::OUString & _sName) throw (uno::RuntimeException, xml::sax::SAXException)
