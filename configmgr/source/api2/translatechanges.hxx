@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: translatechanges.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,10 +72,6 @@ namespace configmgr
         struct UnoChange { uno::Any newValue, oldValue; };
 
     //interpreting NodeChanges
-        // resolve the relative path from a given base tree (root) to the changed node
-        bool resolveChangeLocation( configuration::RelativePath& aPath,
-                                    configuration::NodeChangeLocation const& aChange,
-                                    configuration::Tree const& aBaseTree);
         // resolve the relative path from a given base node to the changed node
         bool resolveChangeLocation( configuration::RelativePath& aPath,
                                     configuration::NodeChangeLocation const& aChange,
@@ -98,8 +94,6 @@ namespace configmgr
                           Factory& rFactory);
 
     // building events
-        /// find the sending api object
-        void fillEventSource(lang::EventObject& rEvent, configuration::Tree const& aTree, configuration::NodeRef const& aNode, Factory& rFactory);
 
         /// fill a change info from a NodeChangeInfo
         void fillChange(util::ElementChange& rChange,
@@ -115,12 +109,8 @@ namespace configmgr
         /// fill a change info from a NodeChangeInfo (base,path and uno objects are assumed to be resolved already)
         void fillChangeFromResolved(util::ElementChange& rChange, configuration::NodeChangeInformation const& aInfo);
 
-        /// fill a event from a NodeChangeInfo
-        bool fillEventData(container::ContainerEvent& rEvent, configuration::NodeChangeInformation const& aInfo, Factory& rFactory);
         /// fill a event from a NodeChangeInfo (uno objects are assumed to be resolved already)
         bool fillEventDataFromResolved(container::ContainerEvent& rEvent, configuration::NodeChangeInformation const& aInfo);
-        /// fill a event from a NodeChangeInfo(uno objects are assumed to be resolved already) - returns false if this isn't a property change
-        bool fillEventData(beans::PropertyChangeEvent& rEvent, configuration::NodeChangeInformation const& aInfo, Factory& rFactory, bool bMore);
         /// fill a event from a NodeChangeInfo(uno objects are assumed to be resolved already) - returns false if this isn't a property change
         bool fillEventDataFromResolved(beans::PropertyChangeEvent& rEvent, configuration::NodeChangeInformation const& aInfo, bool bMore);
     }

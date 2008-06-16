@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: confignotifier.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -131,10 +131,6 @@ namespace configmgr
             void addForOne(NodeRef const& aNode, uno::Reference< css::beans::XVetoableChangeListener > const& xListener, Name const& aName) const;
 
             /** Add a <type scope='com::sun::star::beans'>XPropertiesChangeListener</type>
-                observing all properties of <var>aNode</var>.
-            */
-            void add(NodeRef const& aNode, uno::Reference< css::beans::XPropertiesChangeListener > const& xListener) const;
-            /** Add a <type scope='com::sun::star::beans'>XPropertiesChangeListener</type>
                 observing the properties of <var>aNode</var> (optimally only those given by <var>aNames</var>.
             */
             void add(NodeRef const& aNode, uno::Reference< css::beans::XPropertiesChangeListener > const& xListener, uno::Sequence<OUString> const& aNames) const;
@@ -179,7 +175,6 @@ namespace configmgr
         class DisposeGuardImpl : Noncopyable
         {
         public:
-            DisposeGuardImpl(NotifierImpl& rNotifierImpl) throw();
             DisposeGuardImpl(Notifier const& rNotifier) throw();
             ~DisposeGuardImpl() throw ();
         };
@@ -191,9 +186,7 @@ namespace configmgr
             Notifier            m_aNotifier;
             DisposeGuardImpl    m_aImpl;
         public:
-            GuardedNotifier(Notifier const& rNotifier) throw();
             GuardedNotifier(NodeAccess& rNode) throw();
-            GuardedNotifier(TreeElement& rTree) throw();
         public:
             Notifier const& get()        const  { return m_aNotifier; }
 
@@ -208,7 +201,6 @@ namespace configmgr
             UnoApiLock          m_aLock;
         public:
             DisposeGuard(NodeAccess& rNode) throw(css::lang::DisposedException);
-            DisposeGuard(TreeElement& rTree) throw(css::lang::DisposedException);
         };
 
 // ---------------------------------------------------------------------------------------------------

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: binaryreadhandler.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,9 +110,6 @@ namespace configmgr
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
             binary::ValueFlags::Type readValueFlags(bool& bSeq, bool& hasValue, bool& hasDefault )
-                SAL_THROW( (io::IOException, uno::RuntimeException) );
-
-            void readString(rtl::OUString &_aString)
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
             void readAttributes(node::Attributes  &_aAttributes)
