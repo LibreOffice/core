@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: simpletypehelper.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +43,6 @@ namespace configmgr
 
         uno::Type getBooleanType() { return ::getBooleanCppuType(); }
 
-        uno::Type getByteType()     { return ::getCppuType(static_cast<sal_Int8 const*>(0)); }
         uno::Type getShortType()        { return ::getCppuType(static_cast<sal_Int16 const*>(0)); }
         uno::Type getIntType()      { return ::getCppuType(static_cast<sal_Int32 const*>(0)); }
         uno::Type getLongType()     { return ::getCppuType(static_cast<sal_Int64 const*>(0)); }
