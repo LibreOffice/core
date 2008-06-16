@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: composerdialogs.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,7 +134,7 @@ namespace dbaui
 
             // fallback: if there is a connection and thus a row set, but no composer, create one
             if ( xConnection.is() && !m_xComposer.is() )
-                m_xComposer = ::dbtools::getCurrentSettingsComposer( Reference< XPropertySet >( m_xRowSet, UNO_QUERY ), m_xORB );
+                m_xComposer = ::dbtools::getCurrentSettingsComposer( Reference< XPropertySet >( m_xRowSet, UNO_QUERY ), m_aContext.getLegacyServiceFactory() );
 
             // the columns of the row set
             Reference< XColumnsSupplier > xSuppColumns( m_xRowSet, UNO_QUERY );
@@ -179,7 +179,7 @@ namespace dbaui
     //---------------------------------------------------------------------
     Dialog* RowsetFilterDialog::createComposerDialog( Window* _pParent, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxColumns )
     {
-        return new DlgFilterCrit( _pParent, m_xORB, _rxConnection, m_xComposer, _rxColumns );
+        return new DlgFilterCrit( _pParent, m_aContext.getLegacyServiceFactory(), _rxConnection, m_xComposer, _rxColumns );
     }
 
     //---------------------------------------------------------------------
