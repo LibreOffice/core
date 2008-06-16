@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DefaultInspection.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,15 +49,6 @@
 namespace rptui
 {
 //........................................................................
-    //------------------------------------------------------------------------
-    sal_uInt32 HelpIdUrl::getHelpId( const ::rtl::OUString& _rHelpURL )
-    {
-        sal_uInt32 nHelpId = 0;
-        if ( 0 == _rHelpURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "HID:" ) ) )
-            nHelpId = _rHelpURL.copy( sizeof( "HID:" ) - 1 ).toInt32();
-        return nHelpId;
-    }
-
     //------------------------------------------------------------------------
     ::rtl::OUString HelpIdUrl::getHelpURL( sal_uInt32 _nHelpId )
     {
@@ -147,11 +138,12 @@ namespace rptui
         } aFactories[] = {
 
             { "com.sun.star.report.inspection.ReportComponentHandler"},
+            { "com.sun.star.form.inspection.EditPropertyHandler"},
             { "com.sun.star.report.inspection.DataProviderHandler"},
-            { "com.sun.star.report.inspection.GeometryHandler"},
+            { "com.sun.star.report.inspection.GeometryHandler"}
 
             // generic virtual edit properties
-            { "com.sun.star.form.inspection.EditPropertyHandler"},
+
         };
 
         const size_t nFactories = sizeof( aFactories ) / sizeof( aFactories[ 0 ] );
