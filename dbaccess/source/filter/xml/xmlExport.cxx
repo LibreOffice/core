@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlExport.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -831,7 +831,8 @@ void ODBExport::exportCollection(const Reference< XNameAccess >& _xCollection
                                 ,enum ::xmloff::token::XMLTokenEnum _eComponents
                                 ,enum ::xmloff::token::XMLTokenEnum _eSubComponents
                                 ,sal_Bool _bExportContext
-                                ,const ::comphelper::mem_fun1_t<ODBExport,XPropertySet* >& _aMemFunc)
+                                ,const ::comphelper::mem_fun1_t<ODBExport,XPropertySet* >& _aMemFunc
+                                )
 {
     if ( _xCollection.is() )
     {
@@ -1109,7 +1110,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
     {
         const TExportPropMapperPair pExportHelper[] = {
              TExportPropMapperPair(m_xExportHelper,TEnumMapperPair(&m_aAutoStyleNames,XML_STYLE_FAMILY_TABLE_TABLE ))
-            ,TExportPropMapperPair(m_xCellExportHelper,TEnumMapperPair(&m_aCellAutoStyleNames,XML_STYLE_FAMILY_TABLE_CELL))
+            // ,TExportPropMapperPair(m_xCellExportHelper,TEnumMapperPair(&m_aCellAutoStyleNames,XML_STYLE_FAMILY_TABLE_CELL))
             ,TExportPropMapperPair(m_xRowExportHelper,TEnumMapperPair(&m_aRowAutoStyleNames,XML_STYLE_FAMILY_TABLE_ROW))
         };
 
@@ -1132,8 +1133,10 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
         {
             // not interested in
         }
+        m_aCurrentPropertyStates = m_xCellExportHelper->Filter(_xProp);
         ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > aMemFunc(&ODBExport::exportAutoStyle);
         exportCollection(xCollection,XML_TOKEN_INVALID,XML_TOKEN_INVALID,sal_False,aMemFunc);
+        m_aCurrentPropertyStates.clear();
     }
     else
     { // here I know I have a column
@@ -1169,9 +1172,13 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
                         }
                     }
                     ++aItr;
-                }
+                } // while ( aItr != aEnd )
+
+            } // if ( !aPropStates.empty() )
+            if ( XML_STYLE_FAMILY_TABLE_CELL == pExportHelper[i].second.second )
+                ::std::copy( m_aCurrentPropertyStates.begin(), m_aCurrentPropertyStates.end(), ::std::back_inserter( aPropStates ));
+            if ( !aPropStates.empty() )
                 pExportHelper[i].second.first->insert( TPropertyStyleMap::value_type(_xProp,GetAutoStylePool()->Add( pExportHelper[i].second.second, aPropStates )));
-            }
         }
     }
 }
