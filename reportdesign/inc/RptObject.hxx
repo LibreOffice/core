@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RptObject.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,7 +70,6 @@ typedef ::std::multimap< sal_Int16, ::rtl::OUString, ::std::less< sal_Int16 > > 
     public:
         TYPEINFO();
         DlgEdHint( DlgEdHintKind eHint );
-        DlgEdHint( DlgEdHintKind eHint, OUnoObject* pObj );
         virtual ~DlgEdHint();
 
         inline DlgEdHintKind    GetKind() const { return eHintKind; }
@@ -105,7 +104,6 @@ protected:
     inline sal_Bool isListening() const { return m_bIsListening; }
 
     void SetPropsFromRect(const Rectangle& _rRect);
-    void PositionAndSizeChange( const ::com::sun::star::beans::PropertyChangeEvent& evt );
 
     virtual void SetSnapRectImpl(const Rectangle& _rRect) = 0;
     virtual SdrPage* GetImplPage() const = 0;
@@ -126,11 +124,6 @@ public:
     void EndListening(sal_Bool bRemoveListener = sal_True);
     // PropertyChangeListener
     virtual void _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ContainerListener
-    void _elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
-    void _elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
-    void _elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
 
     sal_Bool        supportsService( const ::rtl::OUString& _sServiceName ) const;
 
@@ -186,6 +179,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
+    virtual UINT16 GetObjIdentifier() const;
+    virtual UINT32 GetObjInventor() const;
 };
 
 //============================================================================
@@ -196,16 +191,18 @@ class REPORTDESIGN_DLLPUBLIC OOle2Obj: public SdrOle2Obj , public OObjectBase
     friend class OReportPage;
     friend class DlgEdFactory;
 
+    UINT16 m_nType;
+    void impl_createDataProvider_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel);
 public:
-    static OOle2Obj* Create( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent )
+    static OOle2Obj* Create( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent,UINT16 _nType )
     {
-        return new OOle2Obj( _xComponent );
+        return new OOle2Obj( _xComponent,_nType );
     }
-    OOle2Obj(const ::rtl::OUString& _sComponentName,const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, const Rectangle& rNewRect, FASTBOOL bFrame_=FALSE);
+    OOle2Obj(const ::rtl::OUString& _sComponentName,const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, const Rectangle& rNewRect,UINT16 _nType, FASTBOOL bFrame_=FALSE);
 
 protected:
-    OOle2Obj(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
-    OOle2Obj(const ::rtl::OUString& _sComponentName);
+    OOle2Obj(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent,UINT16 _nType);
+    OOle2Obj(const ::rtl::OUString& _sComponentName,UINT16 _nType);
 
 
     virtual void NbcMove( const Size& rSize );
@@ -227,6 +224,12 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
+    virtual UINT16 GetObjIdentifier() const;
+    virtual UINT32 GetObjInventor() const;
+    // Clone() soll eine komplette Kopie des Objektes erzeugen.
+    virtual SdrObject* Clone() const;
+
+    void initializeChart( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel);
 };
 
 //============================================================================
@@ -240,9 +243,6 @@ class REPORTDESIGN_DLLPUBLIC OUnoObject: public SdrUnoObj , public OObjectBase
 
     sal_uInt16   m_nObjectType;
 protected:
-    OUnoObject(  const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent
-                ,const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _xControlModel
-                ,sal_uInt16   _nObjectType);
     OUnoObject(const ::rtl::OUString& _sComponentName
                 ,const ::rtl::OUString& rModelName
                 ,sal_uInt16   _nObjectType);
@@ -275,11 +275,12 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
 
-    inline sal_uInt16 getObjectId() const { return m_nObjectType; }
-
     static ::rtl::OUString GetDefaultName(const OUnoObject* _pObj);
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
+    virtual UINT16 GetObjIdentifier() const;
+    virtual UINT32 GetObjInventor() const;
+    virtual SdrObject* Clone() const;
 };
 
 //============================================================================
