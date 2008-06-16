@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: localsinglebackend.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -771,14 +771,7 @@ uno::Reference<uno::XInterface> SAL_CALL
 instantiateLocalBackend(const CreationContext& xContext) {
     return *new LocalSingleBackend(xContext) ;
 }
-//------------------------------------------------------------------------------
 
-static const rtl::OUString kImplementationName(
-                            RTL_CONSTASCII_USTRINGPARAM(kImplementation)) ;
-
-rtl::OUString SAL_CALL LocalSingleBackend::getName(void) {
-    return kImplementationName ;
-}
 //------------------------------------------------------------------------------
 
 rtl::OUString SAL_CALL LocalSingleBackend::getImplementationName(void)
@@ -793,12 +786,6 @@ sal_Bool SAL_CALL LocalSingleBackend::supportsService(
     throw (uno::RuntimeException)
 {
     return  ServiceInfoHelper(&kServiceInfo).supportsService(aServiceName);
-}
-//------------------------------------------------------------------------------
-
-uno::Sequence<rtl::OUString> SAL_CALL LocalSingleBackend::getServices(void)
-{
-    return ServiceInfoHelper(&kServiceInfo).getSupportedServiceNames() ;
 }
 //------------------------------------------------------------------------------
 
