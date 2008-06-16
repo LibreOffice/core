@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bufferedfile.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,131 +41,6 @@
 
 namespace configmgr
 {
-
-BufferedInputFile::BufferedInputFile( rtl::OUString const& aFileURL)
-: m_aFileURL(aFileURL)
-, m_pBuffer(0)
-, m_nPointer(0)
-, m_nSize(0)
-{
-}
-
-/** D'tor
- */
-
-BufferedInputFile::~BufferedInputFile()
-{
-    delete [] m_pBuffer;
-}
-
-BufferedInputFile::RC BufferedInputFile::open( sal_uInt32 uFlags )
-{
-    OSL_ENSURE(!m_pBuffer,"File already open");
-
-    osl::File theFile(m_aFileURL);
-    RC rc = theFile.open(uFlags);
-    if (rc != E_None)
-        return rc;
-
-    sal_uInt64 theSize;
-    rc = theFile.getSize(theSize);
-    if (rc != E_None)
-        return rc;
-
-    // still prevent leaks in case of misuse
-    delete [] m_pBuffer, m_pBuffer = 0;
-
-    m_pBuffer = new sal_Int8[sal::static_int_cast<sal_Int32>(theSize)];
-
-    sal_uInt64 nReallyRead = 0;
-    rc = theFile.read(m_pBuffer, theSize, nReallyRead);
-    if (rc != E_None)
-    {
-        delete [] m_pBuffer, m_pBuffer = 0;
-        return rc;
-    }
-
-    OSL_ENSURE(nReallyRead == m_nSize, "Error, read file can't get it's complete file data");
-    m_nSize = nReallyRead;
-    m_nPointer = 0;
-
-    return E_None;
-}
-
-BufferedInputFile::RC BufferedInputFile::close()
-{
-    if (m_pBuffer == 0)
-        return E_BADF;
-
-    delete [] m_pBuffer, m_pBuffer = 0;
-    m_nSize = 0;
-    return E_None;
-}
-
-BufferedInputFile::RC BufferedInputFile::setPos( sal_uInt32 uHow, sal_uInt64 uPos )
-{
-    if (m_pBuffer == 0)
-        return E_BADF;
-
-    switch (uHow)
-    {
-    case osl_Pos_Absolut:
-        m_nPointer = uPos;
-        break;
-    case osl_Pos_Current:
-        m_nPointer += uPos;
-        break;
-    case osl_Pos_End:
-        m_nPointer = m_nSize + uPos;
-        break;
-    default:
-        return E_INVAL;
-    }
-    return E_None;
-}
-
-BufferedInputFile::RC BufferedInputFile::getPos( sal_uInt64& uPos )
-{
-    if (m_pBuffer == 0)
-        return E_BADF;
-
-    uPos = m_nPointer;
-    return E_None;
-}
-
-BufferedInputFile::RC BufferedInputFile::available( sal_uInt64& nAvail) const
-{
-    if (m_pBuffer == 0)
-        return E_BADF;
-
-    if (m_nPointer < m_nSize)
-        nAvail = m_nSize-m_nPointer;
-    else
-        nAvail = 0;
-
-    return E_None;
-}
-
-BufferedInputFile::RC BufferedInputFile::read( void *pBuffer, sal_uInt64 uBytesRequested, sal_uInt64& rBytesRead )
-{
-    if (m_pBuffer == 0)
-        return E_BADF;
-
-    if (m_nPointer < m_nSize)
-    {
-        // requested size may be greater than the real file size
-        rBytesRead = std::min(m_nSize - m_nPointer, uBytesRequested);
-
-        memcpy(pBuffer, m_pBuffer + m_nPointer, sal::static_int_cast<sal_Int32>(rBytesRead));
-        m_nPointer += rBytesRead;
-    }
-    else
-    {
-        // EOF
-        rBytesRead = 0;
-    }
-    return E_None;
-}
 
 BufferedOutputFile::BufferedOutputFile( rtl::OUString const& aFileURL, sal_uInt32 nBufferSizeHint )
 : m_pFile(new osl::File(aFileURL))
