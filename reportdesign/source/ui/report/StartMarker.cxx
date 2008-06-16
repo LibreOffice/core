@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StartMarker.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,11 +105,6 @@ OStartMarker::~OStartMarker()
         DELETEZ(s_pDefCollapsedHC);
         DELETEZ(s_pDefExpandedHC);
     } // if ( osl_decrementInterlockedCount(&s_nImageRefCount) == 0 )
-}
-// -----------------------------------------------------------------------------
-sal_Int32 OStartMarker::getWidth() const
-{
-    return (GetDisplayBackground().GetColor().IsDark() ? s_pDefExpandedHC : s_pDefCollapsed)->GetSizePixel().Width() + GetTextWidth(m_aText.GetText(),0,::std::min<USHORT>(TEXT_WIDTH,m_aText.GetText().Len())) + 2*REPORT_EXTRA_SPACE;
 }
 // -----------------------------------------------------------------------------
 sal_Int32 OStartMarker::getMinHeight() const
