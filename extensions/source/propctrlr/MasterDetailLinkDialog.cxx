@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MasterDetailLinkDialog.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,7 +117,7 @@ namespace pcr
     //--------------------------------------------------------------------------
     Dialog* MasterDetailLinkDialog::createDialog(Window* _pParent)
     {
-        return new FormLinkDialog(_pParent,m_xDetail,m_xMaster,Reference< XMultiServiceFactory >( m_xContext->getServiceManager(),UNO_QUERY)
+        return new FormLinkDialog(_pParent,m_xDetail,m_xMaster,m_aContext.getLegacyServiceFactory()
             ,m_sExplanation,m_sDetailLabel,m_sMasterLabel);
     }
     //---------------------------------------------------------------------
