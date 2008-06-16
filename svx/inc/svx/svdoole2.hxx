@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoole2.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,13 +35,10 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
+#include "com/sun/star/awt/XWindow.hpp"
 #include <svx/svdorect.hxx>
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
-#ifndef _GDIMTF_HXX //autogen
 #include <vcl/gdimtf.hxx>
-#endif
 #include <sot/storage.hxx>
 #include "svx/svxdllapi.h"
 
@@ -66,7 +63,7 @@ private:
     SVX_DLLPRIVATE void PaintGraphic_Impl(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec, sal_Bool bActive = sal_False ) const;
     SVX_DLLPRIVATE void SetGraphic_Impl(const Graphic* pGrf);
 
-protected:
+//protected:
     svt::EmbeddedObjectRef      xObjRef;
     Graphic*                    pGraphic;
     String                      aProgName;
@@ -74,6 +71,8 @@ protected:
     // wg. Kompatibilitaet erstmal am SdrTextObj
     BOOL                        bFrame : 1;
     BOOL                        bInDestruction : 1;
+    mutable bool                m_bTypeAsked;
+    mutable bool                m_bChart;
 
     SdrOle2ObjImpl*             mpImpl;
 
@@ -171,9 +170,10 @@ public:
     void SetGraphicToObj( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xGrStream,
                           const ::rtl::OUString& aMediaType );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetParentXModel();
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetParentXModel()  const;
     sal_Bool CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHeight, Size& aObjAreaSize );
     sal_Bool AddOwnLightClient();
+    void SetWindow(const com::sun::star::uno::Reference < com::sun::star::awt::XWindow >& _xWindow);
 };
 
 #endif //_SVDOOLE2_HXX
