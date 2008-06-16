@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -48,6 +48,7 @@ XCUFILES= \
 
 MODULEFILES= \
     Inet-defaultsearchengine.xcu \
+    Setup-brand.xcu \
     Setup-writer.xcu   \
     Setup-calc.xcu   \
     Setup-draw.xcu   \
