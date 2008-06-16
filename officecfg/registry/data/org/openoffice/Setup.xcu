@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Setup.xcu,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,25 +31,25 @@
 <!DOCTYPE oor:component-data SYSTEM "../../../component-update.dtd">
 <oor:component-data oor:name="Setup" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:install="http://openoffice.org/2004/installation" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <node oor:name="Product">
-        <prop oor:name="ooName">
+        <prop oor:name="ooName" install:module="brand">
             <value >${PRODUCTNAME}</value>
         </prop>
-        <prop oor:name="ooSetupVersion">
+        <prop oor:name="ooSetupVersion" install:module="brand">
             <value >${PRODUCTVERSION}</value>
         </prop>
-        <prop oor:name="ooSetupVersionAboutBox">
+        <prop oor:name="ooSetupVersionAboutBox" install:module="brand">
             <value>${ABOUTBOXPRODUCTVERSION}</value>
         </prop>
-        <prop oor:name="ooSetupExtension">
+        <prop oor:name="ooSetupExtension" install:module="brand">
             <value >${PRODUCTEXTENSION}</value>
         </prop>
-        <prop oor:name="ooXMLFileFormatVersion">
+        <prop oor:name="ooXMLFileFormatVersion" install:module="brand">
             <value >${FILEFORMATVERSION}</value>
         </prop>
-        <prop oor:name="ooXMLFileFormatName">
+        <prop oor:name="ooXMLFileFormatName" install:module="brand">
             <value >${FILEFORMATNAME}</value>
         </prop>
-        <prop oor:name="ooOpenSourceContext">
+        <prop oor:name="ooOpenSourceContext" install:module="brand">
             <value >${OPENSOURCE}</value>
         </prop>
     </node>
