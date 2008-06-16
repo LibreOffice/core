@@ -1,0 +1,80 @@
+diff -cr misc/rasqal-0.9.15/LICENSE.txt misc/build/rasqal-0.9.15/LICENSE.txt
+*** misc/rasqal-0.9.15/LICENSE.txt	Sun Apr 22 23:09:08 2007
+--- misc/build/rasqal-0.9.15/LICENSE.txt	Fri Jun  6 18:39:51 2008
+***************
+*** 61,63 ****
+--- 61,75 ----
+  
+     Copyright (C) 2003-2007 Dave Beckett
+     Copyright (C) 2003-2005 University of Bristol
++ 
++ 
++ LGPL Disclaimer
++ 
++ For the avoidance of doubt, except that if any license choice other 
++ than GPL or LGPL is available it will apply instead, Sun elects to 
++ use only the Lesser General Public License version 2.1 (LGPLv2) at 
++ this time for any software where a choice of LGPL license versions 
++ is made available with the language indicating that LGPLv2.1 or any 
++ later version may be used, or where a choice of which version of the 
++ LGPL is applied is otherwise unspecified.
++ 
+diff -cr misc/rasqal-0.9.15/src/rasqal-config.in misc/build/rasqal-0.9.15/src/rasqal-config.in
+*** misc/rasqal-0.9.15/src/rasqal-config.in	2007-04-22 22:58:51.000000000 +0200
+--- misc/build/rasqal-0.9.15/src/rasqal-config.in	2008-04-07 17:18:52.033946868 +0200
+***************
+*** 22,34 ****
+  # 
+  #
+  
+! prefix=@prefix@
+  
+! if test "@includedir@" != /usr/include ; then
+!   includes="-I@includedir@"
+! else
+!   includes=
+! fi
+  
+  
+  usage()
+--- 22,43 ----
+  # 
+  #
+  
+! prefix=${SOLARVERSION}/${INPATH}
+! exec_prefix=${SOLARVERSION}/${INPATH}
+! #includedir=${SOLARVERSION}/${INPATH}/inc${UPDMINOREXT}/external
+! #libdir=${SOLARVERSION}/${INPATH}/lib${UPDMINOREXT}
+! # HACK: map to build directory
+! includedir=../../../../inc
+! libdir=../../../../lib
+! includes=-I${includedir}
+  
+! #prefix=@prefix@
+! #
+! #if test "@includedir@" != /usr/include ; then
+! #  includes="-I@includedir@"
+! #else
+! #  includes=
+! #fi
+  
+  
+  usage()
+***************
+*** 109,115 ****
+    echo $includes
+  fi
+  if test "$echo_libs" = "yes"; then
+!   echo -L@libdir@ -lrasqal
+  fi
+  if test "$echo_libtool_libs" = "yes"; then
+    echo @libdir@/@RASQAL_LIBTOOLLIBS@
+--- 118,125 ----
+    echo $includes
+  fi
+  if test "$echo_libs" = "yes"; then
+! #  echo -L@libdir@ -lrasqal
+!   echo -L${libdir} -lrasqal
+  fi
+  if test "$echo_libtool_libs" = "yes"; then
+    echo @libdir@/@RASQAL_LIBTOOLLIBS@

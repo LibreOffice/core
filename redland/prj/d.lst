@@ -1,0 +1,6 @@
+..\%__SRC%\inc\*.h %_DEST%\inc%_EXT%\external\*.h
+..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
+..\%__SRC%\lib\lib*.so.* %_DEST%\lib%_EXT%
+..\%__SRC%\lib\lib*.dylib %_DEST%\lib%_EXT%
+..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%

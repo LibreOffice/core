@@ -1,0 +1,21 @@
+Redland RDF library (librdf)
+
+Module: external/redland
+
+Upstream URL: http://librdf.org/
+
+License: Triple-licensed: LGPL v2+/GPL v2+/Apache v2
+         Note that Sun distributes this software only under LGPL v2
+         (see LICENSE.txt)
+
+Description:
+This module contains the third-party Redland RDF / librdf library, which
+is needed to support data in RDF (Resource Description Framework) format.
+It consists of 3 parts:
+- raptor:  parsers and serializers for numerous RDF file formats
+- rasqal:  query engine which supports SPARQL queries
+- redland: librdf integrates raptor and rasqal, and provides numerous storage
+           engines for storing RDF graphs (in memory, SQL, ...)
+
+Libraries: libraptor, librasqal, librdf
+

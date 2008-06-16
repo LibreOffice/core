@@ -1,0 +1,82 @@
+diff -cr misc/raptor-1.4.17/LICENSE.txt misc/build/raptor-1.4.17/LICENSE.txt
+*** misc/raptor-1.4.17/LICENSE.txt	Sun Mar 30 06:52:22 2008
+--- misc/build/raptor-1.4.17/LICENSE.txt	Fri Jun  6 18:38:51 2008
+***************
+*** 60,62 ****
+--- 60,74 ----
+  
+     Copyright (C) 2000-2008 David Beckett
+     Copyright (C) 2000-2005 University of Bristol
++ 
++ 
++ LGPL Disclaimer
++ 
++ For the avoidance of doubt, except that if any license choice other 
++ than GPL or LGPL is available it will apply instead, Sun elects to 
++ use only the Lesser General Public License version 2.1 (LGPLv2) at 
++ this time for any software where a choice of LGPL license versions 
++ is made available with the language indicating that LGPLv2.1 or any 
++ later version may be used, or where a choice of which version of the 
++ LGPL is applied is otherwise unspecified.
++ 
+diff -cr misc/raptor-1.4.17/src/raptor-config.in misc/build/raptor-1.4.17/src/raptor-config.in
+*** misc/raptor-1.4.17/src/raptor-config.in	2007-01-06 05:02:00.000000000 +0100
+--- misc/build/raptor-1.4.17/src/raptor-config.in	2008-04-07 16:55:00.542937115 +0200
+***************
+*** 21,34 ****
+  # 
+  #
+  
+! prefix=@prefix@
+! exec_prefix=@exec_prefix@
+  
+! if test "@includedir@" != /usr/include ; then
+!   includes="-I@includedir@"
+! else
+!   includes=
+! fi
+  
+  
+  usage()
+--- 21,43 ----
+  # 
+  #
+  
+! prefix=${SOLARVERSION}/${INPATH}
+! exec_prefix=${SOLARVERSION}/${INPATH}
+! #includedir=${SOLARVERSION}/${INPATH}/inc${UPDMINOREXT}/external
+! #libdir=${SOLARVERSION}/${INPATH}/lib${UPDMINOREXT}
+! # HACK: map to build directory
+! includedir=../../../../inc
+! libdir=../../../../lib
+! includes=-I${includedir}
+  
+! #prefix=@prefix@
+! #exec_prefix=@exec_prefix@
+! #
+! #if test "@includedir@" != /usr/include ; then
+! #  includes="-I@includedir@"
+! #else
+! #  includes=
+! #fi
+  
+  
+  usage()
+***************
+*** 130,136 ****
+    done
+  fi
+  if test "$echo_libs" = "yes"; then
+!   echo -L@libdir@ -lraptor
+  fi
+  if test "$echo_libtool_libs" = "yes"; then
+    echo @libdir@/@RAPTOR_LIBTOOLLIBS@
+--- 139,146 ----
+    done
+  fi
+  if test "$echo_libs" = "yes"; then
+! #  echo -L@libdir@ -lraptor
+!   echo -L${libdir} -lraptor
+  fi
+  if test "$echo_libtool_libs" = "yes"; then
+    echo @libdir@/@RAPTOR_LIBTOOLLIBS@

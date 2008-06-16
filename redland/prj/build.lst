@@ -1,0 +1,5 @@
+rl	redland	: soltools ZLIB:zlib LIBXML2:libxml2 LIBXSLT:libxslt OPENSSL:openssl NULL
+rl	redland				usr1	-	all	rl_mkout	NULL
+rl	redland\raptor		nmake	-	all	rl_raptor	NULL
+rl	redland\rasqal		nmake	-	all	rl_rasqal	rl_raptor NULL
+rl	redland\redland		nmake	-	all	rl_redland	rl_raptor rl_rasqal NULL
