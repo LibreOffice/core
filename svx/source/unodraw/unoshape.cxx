@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoshape.cxx,v $
- * $Revision: 1.173 $
+ * $Revision: 1.174 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1043,7 +1043,10 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 
     if( bClearMe )
     {
-        mpObj.reset( NULL );
+        if( !HasSdrObjectOwnership() )
+            mpObj.reset( NULL );
+        /*mpImpl->mbHasSdrObjectOwnerhship = false;
+        mpObj.reset( NULL );*/
         if(!mbDisposing)
             dispose();
     }
@@ -1202,7 +1205,10 @@ void SAL_CALL SvxShape::setSize( const awt::Size& rSize )
         }
         else
         {
-            aRect.SetSize(aLocalSize);
+            //aRect.SetSize(aLocalSize); // this call substract 1 // http://www.openoffice.org/issues/show_bug.cgi?id=83193
+            aRect.setWidth(aLocalSize.Width());
+            aRect.setHeight(aLocalSize.Height());
+
             svx_setLogicRectHack( mpObj.get(), aRect );
         }
 
