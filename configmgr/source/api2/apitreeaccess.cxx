@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: apitreeaccess.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,12 +73,6 @@ bool SetElement::disposeTree(bool bForce)
 Factory& TreeElement::getFactory()
 {
     return getApiTree().getFactory();
-}
-//-----------------------------------------------------------------------------
-
-Notifier TreeElement::getNotifier()
-{
-    return getApiTree().getNotifier();
 }
 //-----------------------------------------------------------------------------
 
