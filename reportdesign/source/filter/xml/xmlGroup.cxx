@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlGroup.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,7 +77,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
 
     const SvXMLNamespaceMap& rMap = _rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = _rImport.GetGroupElemTokenMap();
-
+    m_xGroup->setSortAscending(sal_False);// the default value has to be set
     const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     for(sal_Int16 i = 0; i < nLength; ++i)
