@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SpreadsheetRawReportTarget.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -200,7 +200,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         }
 
         final String elementType = ReportTargetUtil.getElemenTypeFromAttribute(attrs);
-        if (OfficeNamespaces.TEXT_NS.equals(namespace) && OfficeToken.P.equals(elementType))
+        if (OfficeNamespaces.TEXT_NS.equals(namespace) && OfficeToken.P.equals(elementType) && !paragraphHandled)
         {
             paragraphFound = true;
             return;
@@ -211,7 +211,6 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             if (isElementBoundaryCollectionPass() && getCurrentRole() != ROLE_TEMPLATE)
             {
                 final LengthCalculator len = new LengthCalculator();
-                double val = 0.0;
                 for (int i = 0; i < rowHeights.size(); i++)
                 {
                     len.add((CSSNumericValue) rowHeights.get(i));
@@ -308,6 +307,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
                 final XmlWriter xmlWriter = getXmlWriter();
                 xmlWriter.writeTag(OfficeNamespaces.TEXT_NS, OfficeToken.P, null, XmlWriterSupport.OPEN);
                 paragraphHandled = true;
+                paragraphFound = false;
             }
             catch (IOException ex)
             {
@@ -409,6 +409,24 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.TABLE_NS, OfficeToken.TABLE_CELL, attrs))
         {
             columnCounter++;
+            final String styleName = (String) attrs.getAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME);
+            if (styleName != null)
+            {
+                OfficeStyle cellStyle = getPredefinedStylesCollection().getStyle(OfficeToken.TABLE_CELL, styleName);
+                if (cellStyle != null)
+                {
+                    final Element props = cellStyle.getTableCellProperties();
+                    if (props != null)
+                    {
+                        final Object raw = props.getAttribute(OfficeNamespaces.FO_NS, OfficeToken.BACKGROUND_COLOR);
+                        if (raw == null || "transparent".equals(raw))
+                        {
+                            cellStyle.removeNode(props);
+                        }
+                    }
+                }
+            }
+
             final String numColSpanStr = (String) attrs.getAttribute(namespace, "number-columns-spanned");
             int initialColumnSpan = columnSpanCounter = 1;
             if (numColSpanStr != null)
@@ -523,32 +541,35 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
 
     private void createTableShapes() throws ReportProcessingException
     {
-        try
+        if (!shapes.isEmpty())
         {
-            final XmlWriter xmlWriter = getXmlWriter();
-            // at this point we need to generate the table-columns section based on our boundary table
-            // <table:shapes>
-            // <draw:frame />
-            // ..
-            // </table:shapes>
-            xmlWriter.writeTag(OfficeNamespaces.TABLE_NS, OfficeToken.SHAPES, null, XmlWriterSupport.OPEN);
-
-
-            for (int i = 0; i < shapes.size(); i++)
+            try
             {
-                final AttributeMap attrs = (AttributeMap) shapes.get(i);
-                final AttributeList attrList = buildAttributeList(attrs);
-                attrList.removeAttribute(OfficeNamespaces.DRAWING_NS, OfficeToken.STYLE_NAME);
-                xmlWriter.writeTag(OfficeNamespaces.DRAWING_NS, OfficeToken.FRAME, attrList, XmlWriterSupport.OPEN);
-                startChartProcessing((AttributeMap) ole.get(i));
+                final XmlWriter xmlWriter = getXmlWriter();
+                // at this point we need to generate the table-columns section based on our boundary table
+                // <table:shapes>
+                // <draw:frame />
+                // ..
+                // </table:shapes>
+                xmlWriter.writeTag(OfficeNamespaces.TABLE_NS, OfficeToken.SHAPES, null, XmlWriterSupport.OPEN);
 
+
+                for (int i = 0; i < shapes.size(); i++)
+                {
+                    final AttributeMap attrs = (AttributeMap) shapes.get(i);
+                    final AttributeList attrList = buildAttributeList(attrs);
+                    attrList.removeAttribute(OfficeNamespaces.DRAWING_NS, OfficeToken.STYLE_NAME);
+                    xmlWriter.writeTag(OfficeNamespaces.DRAWING_NS, OfficeToken.FRAME, attrList, XmlWriterSupport.OPEN);
+                    startChartProcessing((AttributeMap) ole.get(i));
+
+                    xmlWriter.writeCloseTag();
+                }
                 xmlWriter.writeCloseTag();
             }
-            xmlWriter.writeCloseTag();
-        }
-        catch (IOException e)
-        {
-            throw new ReportProcessingException("Failed", e);
+            catch (IOException e)
+            {
+                throw new ReportProcessingException("Failed", e);
+            }
         }
     }
 
@@ -603,8 +624,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             return;
         }
 
-        if (ReportTargetUtil.isElementOfType(OfficeNamespaces.TABLE_NS, OfficeToken.TABLE_ROW, attrs)
-                && isElementBoundaryCollectionPass() && getCurrentRole() != ROLE_TEMPLATE )
+        if (ReportTargetUtil.isElementOfType(OfficeNamespaces.TABLE_NS, OfficeToken.TABLE_ROW, attrs) && isElementBoundaryCollectionPass() && getCurrentRole() != ROLE_TEMPLATE)
         {
             final String styleName = (String) attrs.getAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME);
             rowHeights.add(computeRowHeight(styleName));
@@ -635,12 +655,15 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             return;
         }
 
-        if (!paragraphHandled && OfficeNamespaces.TEXT_NS.equals(namespace) && OfficeToken.P.equals(elementType))
+        if ( !paragraphHandled && OfficeNamespaces.TEXT_NS.equals(namespace) && OfficeToken.P.equals(elementType))
         {
-            return;
-        }
+            if (!paragraphHandled)
+            {
+                return;
+            }
 
-        paragraphHandled = false;
+            paragraphHandled = false;
+        }
         try
         {
             final XmlWriter xmlWriter = getXmlWriter();
