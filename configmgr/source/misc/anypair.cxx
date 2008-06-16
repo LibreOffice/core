@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: anypair.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -519,21 +519,6 @@ namespace configmgr
     }
 
 // -----------------------------------------------------------------------------
-    sal_Bool anypair_assign_both(cfgmgr_AnyPair* _pAnyPair, uno_Any const * _pUnoAny)
-    {
-        CFG_PRECOND( _pAnyPair     != NULL );
-        CFG_PRECOND( _pUnoAny != NULL );
-
-        sal_Bool bOK = anypair_assign_first(_pAnyPair,_pUnoAny);
-        if (bOK)
-        {
-            // same type - second assignment must succeed as well
-            OSL_VERIFY( anypair_assign_second(_pAnyPair,_pUnoAny) );
-        }
-        return bOK;
-    }
-
-// -----------------------------------------------------------------------------
     void anypair_assign(cfgmgr_AnyPair* _pAnyPair, cfgmgr_AnyPair const * _pAnyPairFrom)
     {
         if (_pAnyPair != _pAnyPairFrom)
@@ -589,14 +574,6 @@ namespace configmgr
         anypair_Data_fill_Any(&aTmpAny,_pAnyPairDesc,_pAnyPairData,_nSelect);
 
         return uno::Any( aTmpAny.pData, aTmpAny.pType );
-    }
-
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-    // ctors
-    AnyPair::AnyPair()
-    {
-        anypair_construct_default(&m_aAnyPair);
     }
 
 // -----------------------------------------------------------------------------
@@ -661,20 +638,6 @@ namespace configmgr
     sal_Bool AnyPair::setSecond(uno::Any const& _aAny)
     {
         return anypair_assign_second(&m_aAnyPair,&_aAny);
-    }
-
-// -----------------------------------------------------------------------------
-    sal_Bool AnyPair::setValue(uno::Any const& _aAny, SelectMember _select)
-    {
-        switch (_select)
-        {
-        case SELECT_FIRST:  return anypair_assign_first (&m_aAnyPair,&_aAny);
-        case SELECT_SECOND: return anypair_assign_second(&m_aAnyPair,&_aAny);
-        case SELECT_BOTH:   return anypair_assign_both  (&m_aAnyPair,&_aAny);
-
-        default:            OSL_ENSURE(false, "AnyPair: Unknown member selector");
-                            return false;
-        }
     }
 
 // -----------------------------------------------------------------------------
