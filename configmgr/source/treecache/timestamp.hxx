@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: timestamp.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,7 +78,6 @@ namespace configmgr
 
         static TimeStamp getCurrentTime();
         static TimeStamp never(); // is later than (>) any other TimeStamp
-        static TimeStamp always(); // is before (<) any other TimeStamp
     };
 
     inline
