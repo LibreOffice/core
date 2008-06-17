@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: g_customize.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-13 10:27:03 $
+'* last change: $Author: fredrikh $ $Date: 2008-06-17 13:02:42 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -42,6 +42,8 @@
 '\***********************************************************************
 
 testcase tToolsCustomize
+WarnLog "#i90134# - tToolsCustomize outcommented due to bug."
+
     Dim iCountMsgBox as integer
     '/// open application ///'
     Call hNewDocument
