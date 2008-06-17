@@ -10,18 +10,6 @@
  
  
  am__api_version="1.9"
---- misc/hunspell-1.1.12/configure.ac	2007-09-04 01:43:08.000000000 +0200
-+++ misc/build/hunspell-1.1.12/configure.ac	2008-04-24 12:16:53.000000000 +0200
-@@ -8,9 +8,6 @@
- AC_INIT([hunspell],[1.1.12],[nemeth@openoffice.org])
- 
- AC_CANONICAL_SYSTEM
--case "$host" in
--arm*) XFAILED="flagutf8.test maputf.test";;
--esac
- AC_SUBST(XFAILED)
- 
- AM_INIT_AUTOMAKE(hunspell, 1.1.12)
 --- misc/hunspell-1.1.12/src/hunspell/affixmgr.cxx	2007-09-04 09:49:30.000000000 +0200
 +++ misc/build/hunspell-1.1.12/src/hunspell/affixmgr.cxx	2008-04-23 22:59:31.000000000 +0200
 @@ -25,6 +25,10 @@
