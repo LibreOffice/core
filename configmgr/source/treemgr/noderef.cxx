@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: noderef.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1883,7 +1883,7 @@ static inline bool isRootNode(Tree const& aTree, NodeRef const& aNode)
     return TreeImplHelper::offset(aNode) == TreeImplHelper::impl(aTree)->root_();
 }
 //-----------------------------------------------------------------------------
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 bool isSimpleValueElement(Tree const& aTree, NodeRef const& aNode)
 {
     OSL_PRECOND( !aNode.isValid() || !aTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
