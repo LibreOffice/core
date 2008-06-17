@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fltshell.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1634,10 +1634,12 @@ BOOL SwFltOutDoc::BeginFly( RndStdIds eAnchor /*= FLY_AT_CNTNT*/,
 
 /*virtual*/ void SwFltOutDoc::SetFlyFrmAttr(const SfxPoolItem& rAttr)
 {
-    if (pFly)
+    if (pFly){
         pFly->SetFmtAttr( rAttr );
-    else
+    }else{
         ASSERT(pFly, "SetFlyAttr ohne Doc-Fly");
+        return;
+    }
 }
 
 /*virtual*/ const SfxPoolItem& SwFltOutDoc::GetFlyFrmAttr(USHORT nWhich)
