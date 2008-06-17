@@ -99,9 +99,9 @@
 -
 -
 -
---- misc/hunspell-1.1.12/src/hunspell/csutil.cxx	2007-08-23 09:27:39.000000000 +0200
-+++ misc/build/hunspell-1.1.12/src/hunspell/csutil.cxx	2008-04-23 22:59:31.000000000 +0200
-@@ -18,12 +18,12 @@
+--- misc/hunspell-1.1.12/src/hunspell/csutil.cxx	Thu Aug 23 09:27:39 2007
++++ misc/build/hunspell-1.1.12/src/hunspell/csutil.cxx	Tue Jun 17 12:51:33 2008
+@@ -18,13 +18,13 @@
  #include "langnum.hxx"
  
  #ifdef OPENOFFICEORG
@@ -115,10 +115,11 @@
 +#ifndef MOZILLA_CLIENT
 +#include "utf_info.cxx"
 +#define UTF_LST_LEN (sizeof(utf_lst) / (sizeof(unicode_info)))
-+#endif
  #endif
++#endif
  
  #ifdef MOZILLA_CLIENT
+ #include "nsCOMPtr.h"
 @@ -125,7 +125,7 @@
          case 0x90:
          case 0xa0:
@@ -161,16 +162,16 @@
  {"ISO8859-1",iso1_tbl},
  {"ISO8859-2",iso2_tbl},
  {"ISO8859-3",iso3_tbl},
---- misc/hunspell-1.1.12/src/hunspell/csutil.hxx	2007-09-02 02:04:00.000000000 +0200
-+++ misc/build/hunspell-1.1.12/src/hunspell/csutil.hxx	2008-06-11 19:00:13.817528000 +0200
+--- misc/hunspell-1.1.12/src/hunspell/csutil.hxx	Sun Sep  2 02:04:00 2007
++++ misc/build/hunspell-1.1.12/src/hunspell/csutil.hxx	Tue Jun 17 12:51:49 2008
 @@ -21,7 +21,11 @@
  // default flags
  #define ONLYUPCASEFLAG 65535
  
-+#ifdef WIN32
- typedef struct {
-+#else
++#ifdef GCC
 +typedef struct __attribute__ ((packed)) {
++#else
+ typedef struct {
 +#endif
      unsigned char l;
      unsigned char h;
@@ -295,8 +296,8 @@
  # DIC2BIN= \
  #	en_US.aff \
 --- misc/hunspell-1.1.12/src/hunspell/phonet.cxx	Mon Aug 27 21:45:49 2007
-+++ misc/build/hunspell-1.1.12/src/hunspell/phonet.cxx	Mon Jun 16 15:50:48 2008
-@@ -27,6 +27,7 @@
++++ misc/build/hunspell-1.1.12/src/hunspell/phonet.cxx	Tue Jun 17 12:51:33 2008
+@@ -32,6 +32,7 @@
  #include <cstring>
  #include <cstdio>
  #include <cctype>
