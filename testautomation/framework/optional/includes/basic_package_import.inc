@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: basic_package_import.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:13 $
+'* last change: $Author: jsk $ $Date: 2008-06-17 11:42:14 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -42,7 +42,7 @@ testcase tBasicPackageImport
     '///<h1>Import BASIC library as UNO package via Package Manager UI</h1>
 
     ' Assumption: All actions take place in the user/work directory
-    ' macro taken from framework/tools/input/macros.txt::tBasicLibraryExport
+    ' macro taken from global/input/macros.txt::tBasicLibraryExport
 
     dim package_name as string
 
@@ -73,10 +73,10 @@ testcase tBasicPackageImport
     '///+<li>Add a package</li>
     '///+<li>Select &quot;tBasicLibraryExportAsPackage.oxt&quot;, import it</li>
     '///+<li>Close the package manager ui</li>
-    iStatus = hExtensionAddGUI( cFile, false )
+    iStatus = hExtensionAddGUI( cFile, "InstallForUser,NoLicense,NoUpdate" )
     
     ' Evaluate the returncode. Anything different from 0 causes the test to end.
-    if ( iStatus <> 0 ) then
+    if ( iStatus <= 0 ) then
         warnlog( "Error adding extension. Aborting." )
         goto endsub
     endif
