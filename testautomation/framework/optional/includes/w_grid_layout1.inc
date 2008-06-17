@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_grid_layout1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:16 $
+'* last change: $Author: jsk $ $Date: 2008-06-17 07:50:24 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -36,6 +36,8 @@
 '* short description : Grid Layout for CJK test in Writer
 '*
 '\***********************************************************************
+
+private const SOURCE_PATH = "framework\optional\input\CJK\"
 
 testcase tTextGridDialog_1
 
@@ -95,7 +97,7 @@ testcase tTextGridDialog_2
    Call hNewDocument
 
   '/// open a test file , and check No Grid checkbox
-   Call hFileOpen ( gTesttoolPath + "framework\level2\CJK\input\" + testFile )
+   Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
 
     FormatPageWriter
     Kontext
@@ -143,7 +145,7 @@ testcase tTextGridDialog_3
 
   '/// open a test file and check Grid(lines onle) checkbox ,
   '/// + set 10 line/page
-   Call hFileOpen ( gTesttoolPath + "framework\level2\CJK\input\" + testFile )
+   Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
 
     FormatPageWriter
     Kontext
@@ -193,7 +195,7 @@ testcase tTextGridDialog_4
 
   '/// open a test file and check Grid(lines and characters) checkbox
   '/// + set 10 line/page and 9 characters/line
-   Call hFileOpen ( gTesttoolPath + "framework\level2\CJK\input\" + testFile )
+   Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
 
     FormatPageWriter
     Kontext
@@ -370,7 +372,7 @@ testcase tFontSizeChanges_1
     sCharsPerLine  = "9"
 
     '/// open a test file
-    Call hFileOpen ( gTesttoolPath + "framework\level2\CJK\input\" + testFile )
+    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
 
     Kontext "DocumentWriter"
     Call DocumentWriter.TypeKeys  "<Shift Right>"
@@ -440,7 +442,7 @@ testcase tRubyText_1
    Call hNewDocument
 
   '/// open a test file , and insert  long ruby test text
-   Call hFileOpen ( gTesttoolPath + "framework\level2\CJK\input\" + testFile )
+   Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
 
    Kontext "DocumentWriter"
    Call DocumentWriter.TypeKeys  "<Shift Right>"
@@ -484,7 +486,7 @@ testcase tIndentsTest_1
    Call hNewDocument
 
   '/// open a test file , and press TAB in second line
-   Call hFileOpen ( gTesttoolPath + "framework\level2\CJK\input\" + testFile )
+   Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
 
    Kontext "DocumentWriter"
    Call DocumentWriter.TypeKeys  "<Down>"
@@ -534,7 +536,7 @@ testcase tObjectsTest_1
    Call hNewDocument
 
   '/// open a test file , and press TAB in second line
-   Call hFileOpen ( gTesttoolPath + "framework\level2\CJK\input\" + testFile )
+   Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
 
   '/// If object is anchored as Character , check if it will snap to the appropriate grid cell
     fStartupNavigator( "OLEObject" , 1 )
