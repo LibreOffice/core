@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -53,6 +53,9 @@ PATCH_FILE_NAME=hunspell-1.1.12.patch
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=configure
 CONFIGURE_FLAGS= --disable-shared --with-pic
+.IF "$(COMNAME)"=="sunpro5"
+CONFIGURE_FLAGS+= CFLAGS=-xc99=none
+.ENDIF                  # "$(COMNAME)"=="sunpro5"
 
 BUILD_ACTION=make && make check
 
