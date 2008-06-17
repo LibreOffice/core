@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtw8num.cxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -488,7 +488,7 @@ void SwWW8Writer::Out_SwNumLvl( BYTE nSwLevel )
 {
     // --> OD 2008-04-02 #refactorlists#
 //    ASSERT(IsNum(nSwLevel), "numbered?");
-    ASSERT( nSwLevel >= 0 && nSwLevel < MAXLEVEL, "numbered?");
+    ASSERT( nSwLevel < MAXLEVEL, "numbered?");
     // <--
     Out_WwNumLvl( nSwLevel + 1 );
 }

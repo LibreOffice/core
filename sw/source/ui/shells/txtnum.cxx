@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtnum.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,7 +134,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 
             aSet.Put(SvxNumBulletItem(aRule));
             // --> OD 2008-02-29 #refactorlists# - removed <bHasChild>
-            ASSERT( GetShell().GetNumLevel() >= 0 && GetShell().GetNumLevel() < MAXLEVEL,
+            ASSERT( GetShell().GetNumLevel() < MAXLEVEL,
                     "<SwTextShell::ExecEnterNum()> - numbered node without valid list level. Serious defect -> please inform OD." );
             USHORT nLevel = GetShell().GetNumLevel();
             // <--

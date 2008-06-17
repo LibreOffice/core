@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docnum.cxx,v $
- * $Revision: 1.74 $
+ * $Revision: 1.75 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1660,7 +1660,7 @@ BOOL lcl_IsNumOk( BYTE nSrchNum, BYTE& rLower, BYTE& rUpper,
                     BOOL bOverUpper, BYTE nNumber )
 {
     // --> OD 2008-04-02 #refactorlists#
-    ASSERT( nNumber >= 0 && nNumber < MAXLEVEL,
+    ASSERT( nNumber < MAXLEVEL,
             "<lcl_IsNumOk(..)> - misusage of method" );
     // <--
 
