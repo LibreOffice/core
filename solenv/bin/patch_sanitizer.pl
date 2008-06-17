@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: patch_sanitizer.pl,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,7 +51,7 @@ open SORTEDPATCH, "> $sortedfile";
 foreach my $file (sort (keys %newpatchfile)) {
     print SORTEDPATCH $file."\t";
     if (defined($oldpatchfile{$file})) {
-        if ( @{$oldpatchfile{$file}{'data'}} ==  @{$newpatchfile{$file}{'data'}} ) {
+        if ( (join '', @{$oldpatchfile{$file}{'data'}}) eq (join '', @{$newpatchfile{$file}{'data'}}) ) {
             # patch data for the file hasn't been modified, use the header from
             # the old patch, to reduce noise (keep the old timestamps)
             print SORTEDPATCH $oldpatchfile{$file}{'origtimestamp'}."\n";
