@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.50 $
+# $Revision: 1.51 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -131,7 +131,10 @@ SCP1FILES +=                           \
              folderitem_math.par       \
              module_quickstart.par     \
              file_quickstart.par       \
-             registryitem_quickstart.par
+             registryitem_quickstart.par \
+             module_winexplorerext.par \
+             file_winexplorerext.par   \
+             registryitem_winexplorerext.par
 
 .IF "$(ENABLE_DIRECTX)"!=""
 SCP1FILES += directxcanvas.par
@@ -140,10 +143,7 @@ SCP1FILES += directxcanvas.par
 .IF "$(DISABLE_ACTIVEX)"==""
 SCP1FILES +=                           \
              module_activex.par        \
-             file_activex.par          \
-             module_winexplorerext.par \
-             file_winexplorerext.par   \
-             registryitem_winexplorerext.par
+             file_activex.par 
 .ENDIF
 .ENDIF
 
@@ -284,7 +284,10 @@ SCP2FILES +=                           \
              folderitem_math.par       \
              module_quickstart.par     \
              file_quickstart.par       \
-             registryitem_quickstart.par
+             registryitem_quickstart.par \
+             module_winexplorerext.par \
+             file_winexplorerext.par   \
+             registryitem_winexplorerext.par
 
 .IF "$(ENABLE_DIRECTX)"!=""
 SCP2FILES += directxcanvas.par
@@ -293,10 +296,7 @@ SCP2FILES += directxcanvas.par
 .IF "$(DISABLE_ACTIVEX)"==""
 SCP2FILES +=                           \
              module_activex.par        \
-             file_activex.par          \
-             module_winexplorerext.par \
-             file_winexplorerext.par   \
-             registryitem_winexplorerext.par
+             file_activex.par
 .ENDIF
 .ENDIF
 
