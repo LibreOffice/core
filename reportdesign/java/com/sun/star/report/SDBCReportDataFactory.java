@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SDBCReportDataFactory.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,13 +88,6 @@ public class SDBCReportDataFactory implements DataSourceFactory
     private static final int HANDLE_TABLE = 5;
     private static final int HANDLE_SQL = 6;
 
-    private static final int FAILED = 0;
-    private static final int DONE = 1;
-    private static final int RETRIEVE_COLUMNS = 2;
-    private static final int RETRIEVE_OBJECT = 3;
-    private static final int HANDLE_QUERY = 4;
-    private static final int HANDLE_TABLE = 5;
-    private static final int HANDLE_SQL = 6;
     public SDBCReportDataFactory(final XComponentContext cmpCtx, final XConnection connection)
     {
         this.connection = connection;
