@@ -296,14 +296,7 @@
  #	en_US.aff \
 --- misc/hunspell-1.1.12/src/hunspell/phonet.cxx	Mon Aug 27 21:45:49 2007
 +++ misc/build/hunspell-1.1.12/src/hunspell/phonet.cxx	Mon Jun 16 15:50:48 2008
-@@ -27,11 +27,14 @@
-                 Porting from Aspell to Hunspell using C-like structs
- */
- 
-+// MARKER(update_precomp.py): autogen include statement, do not remove
-+#include "precompiled_lingucomponent.hxx"
- #ifndef MOZILLA_CLIENT
- #include <cstdlib>
+@@ -27,6 +27,7 @@
  #include <cstring>
  #include <cstdio>
  #include <cctype>
