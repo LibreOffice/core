@@ -1,3 +1,6 @@
 mkdir: %_DEST%\inc%_EXT%\external
-mkdir: %_DEST%\inc%_EXT%\external\lucene
-..\%__SRC%\bin\lucene-core-2.3.jar %_DEST%\bin%_EXT%\lucene-core-2.3.jar
+mkdir: %_DEST%\inc%_EXT%\external\neon
+..\version.mk %_DEST%\inc%_EXT%\external\neon\version.mk
+..\%__SRC%\inc\ne_*.h %_DEST%\inc%_EXT%\external\neon\ne_*.h
+..\%__SRC%\slb\neon.lib %_DEST%\lib%_EXT%\neon.lib
+..\%__SRC%\lib\libneon.a %_DEST%\lib%_EXT%\libneon.a
