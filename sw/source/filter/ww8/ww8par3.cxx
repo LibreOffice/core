@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par3.cxx,v $
- * $Revision: 1.88 $
+ * $Revision: 1.89 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -637,7 +637,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
                 aOfsNumsXCH[nLevelB] = 0;
         }
     }
-#if defined(_MSC_VER) && (_MSC_VER > 1310) && (_MSC_VER < 1800)
+#if defined(_MSC_VER) && (_MSC_VER > 1310) && (_MSC_VER < 1500)
     myIter aIter = remove(aOfsNumsXCH.begin(), aOfsNumsXCH.end(), 0);
 #else
     myIter aIter = std::remove(aOfsNumsXCH.begin(), aOfsNumsXCH.end(), 0);
