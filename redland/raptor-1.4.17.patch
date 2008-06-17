@@ -1,82 +1,247 @@
-diff -cr misc/raptor-1.4.17/LICENSE.txt misc/build/raptor-1.4.17/LICENSE.txt
-*** misc/raptor-1.4.17/LICENSE.txt	Sun Mar 30 06:52:22 2008
---- misc/build/raptor-1.4.17/LICENSE.txt	Fri Jun  6 18:38:51 2008
-***************
-*** 60,62 ****
---- 60,74 ----
-  
-     Copyright (C) 2000-2008 David Beckett
-     Copyright (C) 2000-2005 University of Bristol
-+ 
-+ 
-+ LGPL Disclaimer
-+ 
-+ For the avoidance of doubt, except that if any license choice other 
-+ than GPL or LGPL is available it will apply instead, Sun elects to 
-+ use only the Lesser General Public License version 2.1 (LGPLv2) at 
-+ this time for any software where a choice of LGPL license versions 
-+ is made available with the language indicating that LGPLv2.1 or any 
-+ later version may be used, or where a choice of which version of the 
-+ LGPL is applied is otherwise unspecified.
-+ 
-diff -cr misc/raptor-1.4.17/src/raptor-config.in misc/build/raptor-1.4.17/src/raptor-config.in
-*** misc/raptor-1.4.17/src/raptor-config.in	2007-01-06 05:02:00.000000000 +0100
---- misc/build/raptor-1.4.17/src/raptor-config.in	2008-04-07 16:55:00.542937115 +0200
-***************
-*** 21,34 ****
-  # 
-  #
-  
-! prefix=@prefix@
-! exec_prefix=@exec_prefix@
-  
-! if test "@includedir@" != /usr/include ; then
-!   includes="-I@includedir@"
-! else
-!   includes=
-! fi
-  
-  
-  usage()
---- 21,43 ----
-  # 
-  #
-  
-! prefix=${SOLARVERSION}/${INPATH}
-! exec_prefix=${SOLARVERSION}/${INPATH}
-! #includedir=${SOLARVERSION}/${INPATH}/inc${UPDMINOREXT}/external
-! #libdir=${SOLARVERSION}/${INPATH}/lib${UPDMINOREXT}
-! # HACK: map to build directory
-! includedir=../../../../inc
-! libdir=../../../../lib
-! includes=-I${includedir}
-  
-! #prefix=@prefix@
-! #exec_prefix=@exec_prefix@
-! #
-! #if test "@includedir@" != /usr/include ; then
-! #  includes="-I@includedir@"
-! #else
-! #  includes=
-! #fi
-  
-  
-  usage()
-***************
-*** 130,136 ****
-    done
-  fi
-  if test "$echo_libs" = "yes"; then
-!   echo -L@libdir@ -lraptor
-  fi
-  if test "$echo_libtool_libs" = "yes"; then
-    echo @libdir@/@RAPTOR_LIBTOOLLIBS@
---- 139,146 ----
-    done
-  fi
-  if test "$echo_libs" = "yes"; then
-! #  echo -L@libdir@ -lraptor
-!   echo -L${libdir} -lraptor
-  fi
-  if test "$echo_libtool_libs" = "yes"; then
-    echo @libdir@/@RAPTOR_LIBTOOLLIBS@
+--- misc/raptor-1.4.17/LICENSE.txt	Sun Mar 30 06:52:22 2008
++++ misc/build/raptor-1.4.17/LICENSE.txt	Mon Jun 16 15:55:38 2008
+@@ -60,3 +60,15 @@
+ 
+    Copyright (C) 2000-2008 David Beckett
+    Copyright (C) 2000-2005 University of Bristol
++
++
++LGPL Disclaimer
++
++For the avoidance of doubt, except that if any license choice other 
++than GPL or LGPL is available it will apply instead, Sun elects to 
++use only the Lesser General Public License version 2.1 (LGPLv2) at 
++this time for any software where a choice of LGPL license versions 
++is made available with the language indicating that LGPLv2.1 or any 
++later version may be used, or where a choice of which version of the 
++LGPL is applied is otherwise unspecified.
++
+--- misc/raptor-1.4.17/src/makefile.mk	Mon Jun 16 17:24:23 2008
++++ misc/build/raptor-1.4.17/src/makefile.mk	Mon Jun 16 19:25:14 2008
+@@ -1,1 +1,121 @@
+-dummy
++#*************************************************************************
++#
++# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
++#
++# Copyright 2008 by Sun Microsystems, Inc.
++#
++# OpenOffice.org - a multi-platform office productivity suite
++#
++# $RCSfile: raptor-1.4.17.patch,v $
++#
++# $Revision: 1.2 $
++#
++# This file is part of OpenOffice.org.
++#
++# OpenOffice.org is free software: you can redistribute it and/or modify
++# it under the terms of the GNU Lesser General Public License version 3
++# only, as published by the Free Software Foundation.
++#
++# OpenOffice.org is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU Lesser General Public License version 3 for more details
++# (a copy is included in the LICENSE file that accompanied this code).
++#
++# You should have received a copy of the GNU Lesser General Public License
++# version 3 along with OpenOffice.org.  If not, see
++# <http://www.openoffice.org/license.html>
++# for a copy of the LGPLv3 License.
++#
++#*************************************************************************
++
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=redland
++TARGET=raptor
++LIBTARGET=NO
++
++EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
++
++
++# --- Settings -----------------------------------------------------
++
++.INCLUDE :  settings.mk
++
++CDEFS+=-DRAPTOR_INTERNAL -DWIN32 -DNDEBUG -D_WINDOWS -D_USRDLL -DWIN32_EXPORTS
++
++# --- Files --------------------------------------------------------
++
++SLOFILES =	\
++   $(SLO)$/n3_lexer.obj \
++   $(SLO)$/n3_parser.obj \
++   $(SLO)$/ntriples_parse.obj \
++   $(SLO)$/parsedate.obj \
++   $(SLO)$/raptor_feature.obj \
++   $(SLO)$/raptor_general.obj \
++   $(SLO)$/raptor_guess.obj \
++   $(SLO)$/raptor_identifier.obj \
++   $(SLO)$/raptor_iostream.obj \
++   $(SLO)$/raptor_libxml.obj \
++   $(SLO)$/raptor_locator.obj \
++   $(SLO)$/raptor_namespace.obj \
++   $(SLO)$/raptor_nfc.obj \
++   $(SLO)$/raptor_nfc_data.obj \
++   $(SLO)$/raptor_parse.obj \
++   $(SLO)$/raptor_qname.obj \
++   $(SLO)$/raptor_rdfxml.obj \
++   $(SLO)$/raptor_rfc2396.obj \
++   $(SLO)$/raptor_rss.obj \
++   $(SLO)$/raptor_rss_common.obj \
++   $(SLO)$/raptor_sax2.obj \
++   $(SLO)$/raptor_sequence.obj \
++   $(SLO)$/raptor_serialize.obj \
++   $(SLO)$/raptor_serialize_ntriples.obj \
++   $(SLO)$/raptor_serialize_rdfxml.obj \
++   $(SLO)$/raptor_serialize_rdfxmla.obj \
++   $(SLO)$/raptor_serialize_rss.obj \
++   $(SLO)$/raptor_serialize_simple.obj \
++   $(SLO)$/raptor_set.obj \
++   $(SLO)$/raptor_stringbuffer.obj \
++   $(SLO)$/raptor_uri.obj \
++   $(SLO)$/raptor_utf8.obj \
++   $(SLO)$/raptor_win32.obj \
++   $(SLO)$/raptor_www.obj \
++   $(SLO)$/raptor_www_libxml.obj \
++   $(SLO)$/raptor_xml.obj \
++   $(SLO)$/raptor_xml_writer.obj \
++   $(SLO)$/raptor_xsd.obj \
++   $(SLO)$/raptor_strcasecmp.obj \
++   $(SLO)$/turtle_common.obj \
++   $(SLO)$/turtle_lexer.obj \
++   $(SLO)$/turtle_parser.obj \
++   $(SLO)$/raptor_grddl.obj \
++   $(SLO)$/raptor_abbrev.obj \
++   $(SLO)$/raptor_avltree.obj \
++   $(SLO)$/raptor_statement.obj \
++   $(SLO)$/raptor_turtle_writer.obj \
++
++
++SHL1DEPN=   makefile.mk
++SHL1OBJS=   $(SLOFILES)
++SHL1USE_EXPORTS=name
++
++#SHL1TARGET=	$(TARGET)$(DLLPOSTFIX)
++SHL1TARGET=	$(TARGET)
++SHL1IMPLIB= lib$(TARGET)
++
++#SHL1VERSIONMAP=../service/exports.map
++SHL1DEF=$(MISC)$/$(SHL1TARGET).def
++DEF1NAME=$(SHL1TARGET)
++
++SHL1STDLIBS= \
++    $(LIBXML2LIB) \
++    $(XSLTLIB) \
++
++# --- Targets ------------------------------------------------------
++
++.INCLUDE :  target.mk
++
++$(MISC)$/raptor_strcasecmp.c : strcasecmp.c
++	$(COPY) $< $@
++
+--- misc/raptor-1.4.17/src/raptor-config.in	Sat Jan  6 05:02:00 2007
++++ misc/build/raptor-1.4.17/src/raptor-config.in	Mon Jun 16 15:55:38 2008
+@@ -21,14 +21,23 @@
+ # 
+ #
+ 
+-prefix=@prefix@
+-exec_prefix=@exec_prefix@
++prefix=${SOLARVERSION}/${INPATH}
++exec_prefix=${SOLARVERSION}/${INPATH}
++#includedir=${SOLARVERSION}/${INPATH}/inc${UPDMINOREXT}/external
++#libdir=${SOLARVERSION}/${INPATH}/lib${UPDMINOREXT}
++# HACK: map to build directory
++includedir=../../../../inc
++libdir=../../../../lib
++includes=-I${includedir}
+ 
+-if test "@includedir@" != /usr/include ; then
+-  includes="-I@includedir@"
+-else
+-  includes=
+-fi
++#prefix=@prefix@
++#exec_prefix=@exec_prefix@
++#
++#if test "@includedir@" != /usr/include ; then
++#  includes="-I@includedir@"
++#else
++#  includes=
++#fi
+ 
+ 
+ usage()
+@@ -130,7 +139,8 @@
+   done
+ fi
+ if test "$echo_libs" = "yes"; then
+-  echo -L@libdir@ -lraptor
++#  echo -L@libdir@ -lraptor
++  echo -L${libdir} -lraptor
+ fi
+ if test "$echo_libtool_libs" = "yes"; then
+   echo @libdir@/@RAPTOR_LIBTOOLLIBS@
+--- misc/raptor-1.4.17/src/win32_raptor_config.h	Tue Oct  2 06:12:55 2007
++++ misc/build/raptor-1.4.17/src/win32_raptor_config.h	Mon Jun 16 15:55:38 2008
+@@ -38,6 +38,8 @@
+ 
+ #define HAVE_STDLIB_H 1
+ 
++#define HAVE_ERRNO_H 1
++
+ #if 0
+ /* For using expat on win32 */
+ #define RAPTOR_XML_EXPAT 1
+@@ -47,8 +49,17 @@
+ /* For using libxml2 on win32 */
+ #define RAPTOR_XML_LIBXML
+ #define HAVE_LIBXML_XMLREADER_H
++#define HAVE_LIBXML_HASH_H 1
++#define HAVE_LIBXML_HTMLPARSER_H 1
++#define HAVE_LIBXML_NANOHTTP_H 1
++#define HAVE_LIBXML_PARSER_H 1
++#define HAVE_LIBXSLT_XSLT_H 1
++
++#define RAPTOR_LIBXML_HTML_PARSE_NONET 1
++#define RAPTOR_LIBXML_XML_PARSE_NONET 1
++
+ /* does libxml struct xmlEntity have a field etype */
+-/*#define RAPTOR_LIBXML_ENTITY_ETYPE*/
++#define RAPTOR_LIBXML_ENTITY_ETYPE
+ 
+ /* does libxml struct xmlEntity have a field name_length */
+ /*#define RAPTOR_LIBXML_ENTITY_NAME_LENGTH*/
+@@ -60,16 +71,17 @@
+ #define HAVE_XMLSAX2INTERNALSUBSET 1
+ 
+ /* does libxml xmlSAXHandler have externalSubset field */
+-/*#define RAPTOR_LIBXML_XMLSAXHANDLER_EXTERNALSUBSET*/
++#define RAPTOR_LIBXML_XMLSAXHANDLER_EXTERNALSUBSET 1
+ 
+ /* does libxml xmlSAXHandler have initialized field */
+-/*#define RAPTOR_LIBXML_XMLSAXHANDLER_INITIALIZED*/
++#define RAPTOR_LIBXML_XMLSAXHANDLER_INITIALIZED 1
+ #endif
+ 
+ #define HAVE_STRICMP 1
+ 
+ /* MS names for these functions */
+-#define vsnprintf _vsnprintf
++// next line breaks build on wntmsci12
++//#define vsnprintf _vsnprintf
+ #define snprintf _snprintf
+ #define access _access
+ #define stricmp _stricmp
+@@ -125,7 +137,8 @@
+ #define RAPTOR_SERIALIZER_RDFXML_ABBREV 1
+ #define RAPTOR_SERIALIZER_NTRIPLES 1
+ 
+-#define RAPTOR_WWW_LIBCURL 1
++//#define RAPTOR_WWW_LIBCURL 1
++#define RAPTOR_WWW_LIBXML 1
+ 
+ 
+ #include <windows.h>

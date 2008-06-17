@@ -1,574 +1,686 @@
-diff -cr misc/redland-1.0.7/LICENSE.txt misc/build/redland-1.0.7/LICENSE.txt
-*** misc/redland-1.0.7/LICENSE.txt	Wed May  2 07:45:42 2007
---- misc/build/redland-1.0.7/LICENSE.txt	Fri Jun  6 18:40:18 2008
-***************
-*** 77,79 ****
---- 77,91 ----
-    10. NOTICE
-    11. http://purl.org/net/dajobe/
-    12. http://www.bristol.ac.uk/
-+ 
-+ 
-+ LGPL Disclaimer
-+ 
-+ For the avoidance of doubt, except that if any license choice other 
-+ than GPL or LGPL is available it will apply instead, Sun elects to 
-+ use only the Lesser General Public License version 2.1 (LGPLv2) at 
-+ this time for any software where a choice of LGPL license versions 
-+ is made available with the language indicating that LGPLv2.1 or any 
-+ later version may be used, or where a choice of which version of the 
-+ LGPL is applied is otherwise unspecified.
-+ 
-diff -cr misc/redland-1.0.7/raptor/LICENSE.txt misc/build/redland-1.0.7/raptor/LICENSE.txt
-*** misc/redland-1.0.7/raptor/LICENSE.txt	Fri Mar 23 06:28:24 2007
---- misc/build/redland-1.0.7/raptor/LICENSE.txt	Fri Jun  6 18:40:37 2008
-***************
-*** 61,63 ****
---- 61,75 ----
-  
-     Copyright (C) 2000-2007 David Beckett
-     Copyright (C) 2000-2005 University of Bristol
-+ 
-+ 
-+ LGPL Disclaimer
-+ 
-+ For the avoidance of doubt, except that if any license choice other 
-+ than GPL or LGPL is available it will apply instead, Sun elects to 
-+ use only the Lesser General Public License version 2.1 (LGPLv2) at 
-+ this time for any software where a choice of LGPL license versions 
-+ is made available with the language indicating that LGPLv2.1 or any 
-+ later version may be used, or where a choice of which version of the 
-+ LGPL is applied is otherwise unspecified.
-+ 
-diff -cr misc/redland-1.0.7/rasqal/LICENSE.txt misc/build/redland-1.0.7/rasqal/LICENSE.txt
-*** misc/redland-1.0.7/rasqal/LICENSE.txt	Sun Apr 22 23:09:08 2007
---- misc/build/redland-1.0.7/rasqal/LICENSE.txt	Fri Jun  6 18:40:54 2008
-***************
-*** 61,63 ****
---- 61,75 ----
-  
-     Copyright (C) 2003-2007 Dave Beckett
-     Copyright (C) 2003-2005 University of Bristol
-+ 
-+ 
-+ LGPL Disclaimer
-+ 
-+ For the avoidance of doubt, except that if any license choice other 
-+ than GPL or LGPL is available it will apply instead, Sun elects to 
-+ use only the Lesser General Public License version 2.1 (LGPLv2) at 
-+ this time for any software where a choice of LGPL license versions 
-+ is made available with the language indicating that LGPLv2.1 or any 
-+ later version may be used, or where a choice of which version of the 
-+ LGPL is applied is otherwise unspecified.
-+ 
-diff -cr misc/redland-1.0.7/librdf/rdf_digest.c misc/build/redland-1.0.7/librdf/rdf_digest.c
-*** misc/redland-1.0.7/librdf/rdf_digest.c	Wed Dec  5 18:25:18 2007
---- misc/build/redland-1.0.7/librdf/rdf_digest.c	Mon Apr 28 13:27:03 2008
-***************
-*** 250,255 ****
---- 250,257 ----
-  void
-  librdf_free_digest(librdf_digest *digest) 
-  {
-+   if(!digest)
-+     return;
-    if(digest->context)
-      LIBRDF_FREE(digest_context, digest->context);
-    if(digest->digest)
-diff -cr misc/redland-1.0.7/librdf/rdf_hash.c misc/build/redland-1.0.7/librdf/rdf_hash.c
-*** misc/redland-1.0.7/librdf/rdf_hash.c	Thu Dec 20 22:39:42 2007
---- misc/build/redland-1.0.7/librdf/rdf_hash.c	Mon Apr 28 13:27:03 2008
-***************
-*** 490,495 ****
---- 490,497 ----
-  void
-  librdf_free_hash(librdf_hash* hash) 
-  {
-+   if(!hash)
-+     return;
-    if(hash->context) {
-      if(hash->is_open)
-        librdf_hash_close(hash);
-diff -cr misc/redland-1.0.7/librdf/rdf_init.c misc/build/redland-1.0.7/librdf/rdf_init.c
-*** misc/redland-1.0.7/librdf/rdf_init.c	Tue Nov  6 16:26:18 2007
---- misc/build/redland-1.0.7/librdf/rdf_init.c	Mon Apr 28 13:27:03 2008
-***************
-*** 178,183 ****
---- 178,186 ----
-  void
-  librdf_free_world(librdf_world *world)
-  {
-+   if(!world)
-+     return;
-+ 
-    /* NOTE: raptor is always initialised as a parser and may
-     * be also used as a serializer, but it is NOT finished
-     * in the serializer_raptor registration.  Therefore, always
-diff -cr misc/redland-1.0.7/librdf/rdf_list.c misc/build/redland-1.0.7/librdf/rdf_list.c
-*** misc/redland-1.0.7/librdf/rdf_list.c	Thu Dec 20 22:39:42 2007
---- misc/build/redland-1.0.7/librdf/rdf_list.c	Mon Apr 28 13:27:03 2008
-***************
-*** 108,113 ****
---- 108,115 ----
-  void
-  librdf_free_list(librdf_list* list) 
-  {
-+   if(!list)
-+     return;
-    LIBRDF_ASSERT_RETURN(list->iterator_count,
-                         "Iterators were active on freeing list", );
-  
-diff -cr misc/redland-1.0.7/librdf/rdf_model.c misc/build/redland-1.0.7/librdf/rdf_model.c
-*** misc/redland-1.0.7/librdf/rdf_model.c	Tue Oct 23 16:55:06 2007
---- misc/build/redland-1.0.7/librdf/rdf_model.c	Mon Apr 28 13:27:03 2008
-***************
-*** 393,399 ****
-    librdf_iterator* iterator;
-    librdf_model* m;
-  
-!   LIBRDF_ASSERT_OBJECT_POINTER_RETURN(model, librdf_model);
-  
-    if(--model->usage)
-      return;
---- 393,400 ----
-    librdf_iterator* iterator;
-    librdf_model* m;
-  
-!   if(!model)
-!     return;
-  
-    if(--model->usage)
-      return;
-diff -cr misc/redland-1.0.7/librdf/rdf_node.c misc/build/redland-1.0.7/librdf/rdf_node.c
-*** misc/redland-1.0.7/librdf/rdf_node.c	Thu Dec 20 22:39:42 2007
---- misc/build/redland-1.0.7/librdf/rdf_node.c	Mon Apr 28 13:27:03 2008
-***************
-*** 726,732 ****
-    librdf_world *world;
-  #endif
-  
-!   LIBRDF_ASSERT_OBJECT_POINTER_RETURN(node, librdf_node);
-  
-  #ifdef WITH_THREADS
-    world = node->world;
---- 726,733 ----
-    librdf_world *world;
-  #endif
-  
-!   if(!node)
-!     return;
-  
-  #ifdef WITH_THREADS
-    world = node->world;
-diff -cr misc/redland-1.0.7/librdf/rdf_parser.c misc/build/redland-1.0.7/librdf/rdf_parser.c
-*** misc/redland-1.0.7/librdf/rdf_parser.c	Mon Dec 17 08:19:11 2007
---- misc/build/redland-1.0.7/librdf/rdf_parser.c	Mon Apr 28 13:27:03 2008
-***************
-*** 371,377 ****
-  void
-  librdf_free_parser(librdf_parser *parser) 
-  {
-!   LIBRDF_ASSERT_OBJECT_POINTER_RETURN(parser, librdf_parser);
-  
-    if(parser->context) {
-      if(parser->factory->terminate)
---- 371,378 ----
-  void
-  librdf_free_parser(librdf_parser *parser) 
-  {
-!   if(!parser)
-!     return;
-  
-    if(parser->context) {
-      if(parser->factory->terminate)
-diff -cr misc/redland-1.0.7/librdf/rdf_query.c misc/build/redland-1.0.7/librdf/rdf_query.c
-*** misc/redland-1.0.7/librdf/rdf_query.c	Tue Oct 23 16:55:06 2007
---- misc/build/redland-1.0.7/librdf/rdf_query.c	Mon Apr 28 13:27:03 2008
-***************
-*** 388,394 ****
-  void
-  librdf_free_query(librdf_query* query) 
-  {
-!   LIBRDF_ASSERT_OBJECT_POINTER_RETURN(query, librdf_query);
-  
-    if(--query->usage)
-      return;
---- 388,395 ----
-  void
-  librdf_free_query(librdf_query* query) 
-  {
-!   if(!query)
-!     return;
-  
-    if(--query->usage)
-      return;
-diff -cr misc/redland-1.0.7/librdf/rdf_query_results.c misc/build/redland-1.0.7/librdf/rdf_query_results.c
-*** misc/redland-1.0.7/librdf/rdf_query_results.c	Fri Oct 26 04:23:36 2007
---- misc/build/redland-1.0.7/librdf/rdf_query_results.c	Mon Apr 28 13:27:03 2008
-***************
-*** 244,250 ****
-  void
-  librdf_free_query_results(librdf_query_results* query_results)
-  {
-!   LIBRDF_ASSERT_OBJECT_POINTER_RETURN(query_results, librdf_query_results);
-  
-    if(query_results->query->factory->free_results)
-      query_results->query->factory->free_results(query_results);
---- 244,251 ----
-  void
-  librdf_free_query_results(librdf_query_results* query_results)
-  {
-!   if(!query_results)
-!     return;
-  
-    if(query_results->query->factory->free_results)
-      query_results->query->factory->free_results(query_results);
-***************
-*** 636,641 ****
---- 637,644 ----
-  void
-  librdf_free_query_results_formatter(librdf_query_results_formatter* formatter) 
-  {
-+   if(!formatter)
-+     return;
-    if(formatter->query_results->query->factory->free_results_formatter)
-      formatter->query_results->query->factory->free_results_formatter(formatter);
-  }
-diff -cr misc/redland-1.0.7/librdf/rdf_serializer.c misc/build/redland-1.0.7/librdf/rdf_serializer.c
-*** misc/redland-1.0.7/librdf/rdf_serializer.c	Tue Oct 23 16:55:06 2007
---- misc/build/redland-1.0.7/librdf/rdf_serializer.c	Mon Apr 28 13:27:03 2008
-***************
-*** 373,379 ****
-  void
-  librdf_free_serializer(librdf_serializer *serializer) 
-  {
-!   LIBRDF_ASSERT_OBJECT_POINTER_RETURN(serializer, librdf_serializer);
-  
-    if(serializer->context) {
-      if(serializer->factory->terminate)
---- 373,380 ----
-  void
-  librdf_free_serializer(librdf_serializer *serializer) 
-  {
-!   if(!serializer)
-!     return;
-  
-    if(serializer->context) {
-      if(serializer->factory->terminate)
-diff -cr misc/redland-1.0.7/librdf/rdf_statement.c misc/build/redland-1.0.7/librdf/rdf_statement.c
-*** misc/redland-1.0.7/librdf/rdf_statement.c	Tue Nov  6 16:26:18 2007
---- misc/build/redland-1.0.7/librdf/rdf_statement.c	Mon Apr 28 13:27:03 2008
-***************
-*** 255,261 ****
-    librdf_world *world;
-  #endif
-  
-!   LIBRDF_ASSERT_OBJECT_POINTER_RETURN(statement, librdf_statement);
-  
-  #ifdef WITH_THREADS
-    world = statement->world;
---- 255,262 ----
-    librdf_world *world;
-  #endif
-  
-!   if(!statement)
-!     return;
-  
-  #ifdef WITH_THREADS
-    world = statement->world;
-diff -cr misc/redland-1.0.7/librdf/rdf_storage.c misc/build/redland-1.0.7/librdf/rdf_storage.c
-*** misc/redland-1.0.7/librdf/rdf_storage.c	Thu Dec 20 22:39:42 2007
---- misc/build/redland-1.0.7/librdf/rdf_storage.c	Mon Apr 28 13:27:03 2008
-***************
-*** 608,614 ****
-  void
-  librdf_free_storage (librdf_storage* storage) 
-  {
-!   LIBRDF_ASSERT_OBJECT_POINTER_RETURN(storage, librdf_storage);
-  
-    if(--storage->usage)
-      return;
---- 608,615 ----
-  void
-  librdf_free_storage (librdf_storage* storage) 
-  {
-!   if(!storage)
-!     return;
-  
-    if(--storage->usage)
-      return;
-diff -cr misc/redland-1.0.7/librdf/rdf_storage_hashes.c misc/build/redland-1.0.7/librdf/rdf_storage_hashes.c
-*** misc/redland-1.0.7/librdf/rdf_storage_hashes.c	Thu Dec 20 22:39:42 2007
---- misc/build/redland-1.0.7/librdf/rdf_storage_hashes.c	Tue May  6 14:06:56 2008
-***************
-*** 1389,1394 ****
---- 1389,1454 ----
-                                                      LIBRDF_STATEMENT_OBJECT);
-  }
-  
-+ 
-+ /* return -1 on failure, 1 if context contains stmt, 0 if not */
-+ static int
-+ librdf_storage_hashes_context_contains_statement(librdf_storage* storage,
-+     librdf_node* context_node,
-+     librdf_statement* statement)
-+ {
-+   librdf_storage_hashes_context* context=(librdf_storage_hashes_context*)storage->context;
-+   librdf_hash_datum key, value; /* on stack - not allocated */
-+   size_t size;
-+   int status;
-+ 
-+   if(context->contexts_index < 0) {
-+     librdf_log(storage->world, 0, LIBRDF_LOG_WARN, LIBRDF_FROM_STORAGE, NULL,
-+                "Storage was created without context support");
-+     return -1;
-+   }
-+ 
-+   /* ENCODE KEY */
-+   size=librdf_node_encode(context_node, NULL, 0);
-+   if (!size)
-+     return -1;
-+   key.data=(char*)LIBRDF_MALLOC(cstring, size);
-+   if (!key.data)
-+     return -1;
-+   key.size=librdf_node_encode(context_node,
-+                                (unsigned char*)key.data, size);
-+   if (!key.size) {
-+     LIBRDF_FREE(data, key.data);
-+     return -1;
-+   }
-+ 
-+   /* ENCODE VALUE */
-+   size=librdf_statement_encode(statement, NULL, 0);
-+   if (!size) {
-+     LIBRDF_FREE(data, key.data);
-+     return -1;
-+   }
-+   value.data=(char*)LIBRDF_MALLOC(cstring, size);
-+   if (!value.data) {
-+     LIBRDF_FREE(data, key.data);
-+     return -1;
-+   }
-+   value.size=librdf_statement_encode(statement, (unsigned char*)value.data, size);
-+   if (!value.size) {
-+     LIBRDF_FREE(data, value.data);
-+     LIBRDF_FREE(data, key.data);
-+     return -1;
-+   }
-+ 
-+   status=librdf_hash_exists(context->hashes[context->contexts_index], &key, &value);
-+   LIBRDF_FREE(data, value.data);
-+   LIBRDF_FREE(data, key.data);
-+ 
-+   /* DO NOT free statement, ownership was not passed in */
-+   return status;
-+ }
-+ 
-+ 
-+ 
-  /**
-   * librdf_storage_hashes_context_add_statement:
-   * @storage: #librdf_storage object
-***************
-*** 1414,1420 ****
-                 "Storage was created without context support");
-      return 1;
-    }
-!   
-    if(librdf_storage_hashes_add_remove_statement(storage, 
-                                                  statement, context_node, 1))
-      return 1;
---- 1474,1488 ----
-                 "Storage was created without context support");
-      return 1;
-    }
-! 
-!   /* Do not add duplicate statements */
-!   status=librdf_storage_hashes_context_contains_statement(storage, context_node, statement);
-!   if(status)
-!     if(status < 0)
-!       return 1;
-!     else
-!       return 0;
-! 
-    if(librdf_storage_hashes_add_remove_statement(storage, 
-                                                  statement, context_node, 1))
-      return 1;
-***************
-*** 1595,1601 ****
-  {
-    librdf_storage_hashes_context_serialise_stream_context* scontext=(librdf_storage_hashes_context_serialise_stream_context*)context;
-    librdf_hash_datum* v;
--   librdf_node** cnp=NULL;
-  
-    switch(flags) {
-      case LIBRDF_ITERATOR_GET_METHOD_GET_OBJECT:
---- 1595,1600 ----
-***************
-*** 1608,1627 ****
-            return scontext->context_node;
-        }
-  
-!       /* current stuff is out of date - get new cached answers */
-!       if(scontext->index_contexts) {
-!         if(scontext->context_node)
-!           librdf_free_node(scontext->context_node);
-!         scontext->context_node=NULL;
-!         cnp=&scontext->context_node;
-!       }
-!       
-        librdf_statement_clear(&scontext->current);
-  
-        v=(librdf_hash_datum*)librdf_iterator_get_value(scontext->iterator);
-!       
-        /* decode value content and optional context */
-!       if(!librdf_statement_decode_parts(&scontext->current, cnp,
-                                          (unsigned char*)v->data, v->size)) {
-          return NULL;
-        }
---- 1607,1620 ----
-            return scontext->context_node;
-        }
-  
-!       /* note: scontext->context_node is still valid */
-! 
-        librdf_statement_clear(&scontext->current);
-  
-        v=(librdf_hash_datum*)librdf_iterator_get_value(scontext->iterator);
-! 
-        /* decode value content and optional context */
-!       if(!librdf_statement_decode_parts(&scontext->current, NULL,
-                                          (unsigned char*)v->data, v->size)) {
-          return NULL;
-        }
-diff -cr misc/redland-1.0.7/librdf/rdf_storage_list.c misc/build/redland-1.0.7/librdf/rdf_storage_list.c
-*** misc/redland-1.0.7/librdf/rdf_storage_list.c	Thu Dec 20 22:39:42 2007
---- misc/build/redland-1.0.7/librdf/rdf_storage_list.c	Mon Apr 28 13:27:21 2008
-***************
-*** 459,464 ****
---- 459,522 ----
-  }
-  
-  
-+ /* return -1 on failure, 1 if context contains stmt, 0 if not */
-+ static int
-+ librdf_storage_list_context_contains_statement(librdf_storage* storage,
-+     librdf_node* context_node,
-+     librdf_statement* statement)
-+ {
-+   librdf_storage_list_context* context=(librdf_storage_list_context*)storage->context;
-+   librdf_hash_datum key, value; /* on stack - not allocated */
-+   size_t size;
-+   int status;
-+ 
-+   if(!context->index_contexts) {
-+     librdf_log(storage->world, 0, LIBRDF_LOG_WARN, LIBRDF_FROM_STORAGE, NULL,
-+                "Storage was created without context support");
-+     return -1;
-+   }
-+ 
-+   /* ENCODE KEY */
-+   size=librdf_node_encode(context_node, NULL, 0);
-+   if (!size)
-+     return -1;
-+   key.data=(char*)LIBRDF_MALLOC(cstring, size);
-+   if (!key.data)
-+     return -1;
-+   key.size=librdf_node_encode(context_node,
-+                                (unsigned char*)key.data, size);
-+   if (!key.size) {
-+     LIBRDF_FREE(data, key.data);
-+     return -1;
-+   }
-+ 
-+   /* ENCODE VALUE */
-+   size=librdf_statement_encode(statement, NULL, 0);
-+   if (!size) {
-+     LIBRDF_FREE(data, key.data);
-+     return -1;
-+   }
-+   value.data=(char*)LIBRDF_MALLOC(cstring, size);
-+   if (!value.data) {
-+     LIBRDF_FREE(data, key.data);
-+     return -1;
-+   }
-+   value.size=librdf_statement_encode(statement, (unsigned char*)value.data, size);
-+   if (!value.size) {
-+     LIBRDF_FREE(data, value.data);
-+     LIBRDF_FREE(data, key.data);
-+     return -1;
-+   }
-+ 
-+   status=librdf_hash_exists(context->contexts, &key, &value);
-+   LIBRDF_FREE(data, value.data);
-+   LIBRDF_FREE(data, key.data);
-+ 
-+   /* DO NOT free statement, ownership was not passed in */
-+   return status;
-+ }
-+ 
-+ 
-  /**
-   * librdf_storage_list_context_add_statement:
-   * @storage: #librdf_storage object
-***************
-*** 485,491 ****
-                 "Storage was created without context support");
-      return 1;
-    }
-!   
-    /* Store statement + node in the storage_list */
-    sln=(librdf_storage_list_node*)LIBRDF_MALLOC(librdf_storage_list_node, sizeof(librdf_storage_list_node));
-    if(!sln)
---- 543,557 ----
-                 "Storage was created without context support");
-      return 1;
-    }
-! 
-!   /* Do not add duplicate statements */
-!   status=librdf_storage_list_context_contains_statement(storage, context_node, statement);
-!   if(status)
-!     if(status < 0)
-!       return 1;
-!     else
-!       return 0;
-! 
-    /* Store statement + node in the storage_list */
-    sln=(librdf_storage_list_node*)LIBRDF_MALLOC(librdf_storage_list_node, sizeof(librdf_storage_list_node));
-    if(!sln)
-diff -cr misc/redland-1.0.7/librdf/rdf_stream.c misc/build/redland-1.0.7/librdf/rdf_stream.c
-*** misc/redland-1.0.7/librdf/rdf_stream.c	Mon Dec 24 00:23:10 2007
---- misc/build/redland-1.0.7/librdf/rdf_stream.c	Mon Apr 28 13:27:03 2008
-***************
-*** 126,131 ****
---- 126,134 ----
-  void
-  librdf_free_stream(librdf_stream* stream) 
-  {
-+   if(!stream)
-+     return;
-+ 
-    if(stream->finished_method)
-      stream->finished_method(stream->context);
-  
-diff -cr misc/redland-1.0.7/librdf/rdf_uri.c misc/build/redland-1.0.7/librdf/rdf_uri.c
-*** misc/redland-1.0.7/librdf/rdf_uri.c	Tue Oct 23 16:55:06 2007
---- misc/build/redland-1.0.7/librdf/rdf_uri.c	Mon Apr 28 13:27:03 2008
-***************
-*** 409,415 ****
-    librdf_world *world;
-  #endif
-  
-!   LIBRDF_ASSERT_OBJECT_POINTER_RETURN(uri, librdf_uri);
-  
-  #ifdef WITH_THREADS
-    world = uri->world;
---- 409,416 ----
-    librdf_world *world;
-  #endif
-  
-!   if(!uri)
-!     return;
-  
-  #ifdef WITH_THREADS
-    world = uri->world;
+--- misc/redland-1.0.7/LICENSE.txt	Wed May  2 07:45:42 2007
++++ misc/build/redland-1.0.7/LICENSE.txt	Mon Jun 16 15:55:51 2008
+@@ -77,3 +77,15 @@
+   10. NOTICE
+   11. http://purl.org/net/dajobe/
+   12. http://www.bristol.ac.uk/
++
++
++LGPL Disclaimer
++
++For the avoidance of doubt, except that if any license choice other 
++than GPL or LGPL is available it will apply instead, Sun elects to 
++use only the Lesser General Public License version 2.1 (LGPLv2) at 
++this time for any software where a choice of LGPL license versions 
++is made available with the language indicating that LGPLv2.1 or any 
++later version may be used, or where a choice of which version of the 
++LGPL is applied is otherwise unspecified.
++
+--- misc/redland-1.0.7/librdf/makefile.mk	Mon Jun 16 19:32:46 2008
++++ misc/build/redland-1.0.7/librdf/makefile.mk	Mon Jun 16 19:26:20 2008
+@@ -1,1 +1,114 @@
+-dummy
++#*************************************************************************
++#
++# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
++#
++# Copyright 2008 by Sun Microsystems, Inc.
++#
++# OpenOffice.org - a multi-platform office productivity suite
++#
++# $RCSfile: redland-1.0.7.patch,v $
++#
++# $Revision: 1.2 $
++#
++# This file is part of OpenOffice.org.
++#
++# OpenOffice.org is free software: you can redistribute it and/or modify
++# it under the terms of the GNU Lesser General Public License version 3
++# only, as published by the Free Software Foundation.
++#
++# OpenOffice.org is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU Lesser General Public License version 3 for more details
++# (a copy is included in the LICENSE file that accompanied this code).
++#
++# You should have received a copy of the GNU Lesser General Public License
++# version 3 along with OpenOffice.org.  If not, see
++# <http://www.openoffice.org/license.html>
++# for a copy of the LGPLv3 License.
++#
++#*************************************************************************
++
++PRJ=..$/..$/..$/..$/..
++
++PRJNAME=redland
++TARGET=librdf
++LIBTARGET=NO
++
++EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
++
++
++# --- Settings -----------------------------------------------------
++
++.INCLUDE :  settings.mk
++
++CDEFS+=-DLIBRDF_INTERNAL -DWIN32 -DNDEBUG -D_WINDOWS -D_USRDLL -DWIN32_EXPORTS
++
++# --- Files --------------------------------------------------------
++
++SLOFILES =	\
++   $(SLO)$/rdf_concepts.obj \
++   $(SLO)$/rdf_digest.obj \
++   $(SLO)$/rdf_digest_md5.obj \
++   $(SLO)$/rdf_digest_openssl.obj \
++   $(SLO)$/rdf_digest_sha1.obj \
++   $(SLO)$/rdf_files.obj \
++   $(SLO)$/rdf_hash.obj \
++   $(SLO)$/rdf_hash_cursor.obj \
++   $(SLO)$/rdf_hash_memory.obj \
++   $(SLO)$/rdf_heuristics.obj \
++   $(SLO)$/rdf_init.obj \
++   $(SLO)$/rdf_iterator.obj \
++   $(SLO)$/rdf_list.obj \
++   $(SLO)$/rdf_log.obj \
++   $(SLO)$/rdf_model.obj \
++   $(SLO)$/rdf_model_storage.obj \
++   $(SLO)$/rdf_node.obj \
++   $(SLO)$/rdf_parser.obj \
++   $(SLO)$/rdf_parser_raptor.obj \
++   $(SLO)$/rdf_query.obj \
++   $(SLO)$/rdf_query_rasqal.obj \
++   $(SLO)$/rdf_query_results.obj \
++   $(SLO)$/rdf_query_triples.obj \
++   $(SLO)$/rdf_serializer.obj \
++   $(SLO)$/rdf_serializer_raptor.obj \
++   $(SLO)$/rdf_statement.obj \
++   $(SLO)$/rdf_storage.obj \
++   $(SLO)$/rdf_storage_file.obj \
++   $(SLO)$/rdf_storage_list.obj \
++   $(SLO)$/rdf_storage_hashes.obj \
++   $(SLO)$/rdf_stream.obj \
++   $(SLO)$/rdf_uri.obj \
++   $(SLO)$/rdf_utf8.obj \
++
++
++#   $(SLO)$/rdf_hash_bdb.obj \
++#   $(SLO)$/rdf_storage_mysql.obj \
++#   $(SLO)$/rdf_storage_sqlite.obj \
++
++
++SHL1DEPN=   makefile.mk
++SHL1OBJS=   $(SLOFILES)
++
++#SHL1TARGET=	$(TARGET)$(DLLPOSTFIX)
++SHL1TARGET=	$(TARGET)
++SHL1IMPLIB= $(TARGET)
++SHL1USE_EXPORTS=name
++
++#SHL1VERSIONMAP=../service/exports.map
++SHL1DEF=$(MISC)$/$(SHL1TARGET).def
++DEF1NAME=$(SHL1TARGET)
++
++SHL1STDLIBS= \
++    $(OPENSSLLIB) \
++    $(PRJ)$/$(INPATH)$/lib$/libraptor.lib \
++    $(PRJ)$/$(INPATH)$/lib$/librasqal.lib \
++
++
++#$(LIBXML2LIB) \
++#    $(XSLTLIB) \
++
++# --- Targets ------------------------------------------------------
++
++.INCLUDE :  target.mk
++
+--- misc/redland-1.0.7/librdf/rdf_digest.c	Wed Dec  5 18:25:18 2007
++++ misc/build/redland-1.0.7/librdf/rdf_digest.c	Mon Jun 16 15:55:51 2008
+@@ -250,6 +250,8 @@
+ void
+ librdf_free_digest(librdf_digest *digest) 
+ {
++  if(!digest)
++    return;
+   if(digest->context)
+     LIBRDF_FREE(digest_context, digest->context);
+   if(digest->digest)
+--- misc/redland-1.0.7/librdf/rdf_hash.c	Thu Dec 20 22:39:42 2007
++++ misc/build/redland-1.0.7/librdf/rdf_hash.c	Mon Jun 16 15:55:51 2008
+@@ -490,6 +490,8 @@
+ void
+ librdf_free_hash(librdf_hash* hash) 
+ {
++  if(!hash)
++    return;
+   if(hash->context) {
+     if(hash->is_open)
+       librdf_hash_close(hash);
+--- misc/redland-1.0.7/librdf/rdf_init.c	Tue Nov  6 16:26:18 2007
++++ misc/build/redland-1.0.7/librdf/rdf_init.c	Mon Jun 16 15:55:51 2008
+@@ -178,6 +178,9 @@
+ void
+ librdf_free_world(librdf_world *world)
+ {
++  if(!world)
++    return;
++
+   /* NOTE: raptor is always initialised as a parser and may
+    * be also used as a serializer, but it is NOT finished
+    * in the serializer_raptor registration.  Therefore, always
+--- misc/redland-1.0.7/librdf/rdf_list.c	Thu Dec 20 22:39:42 2007
++++ misc/build/redland-1.0.7/librdf/rdf_list.c	Mon Jun 16 15:55:51 2008
+@@ -108,6 +108,8 @@
+ void
+ librdf_free_list(librdf_list* list) 
+ {
++  if(!list)
++    return;
+   LIBRDF_ASSERT_RETURN(list->iterator_count,
+                        "Iterators were active on freeing list", );
+ 
+--- misc/redland-1.0.7/librdf/rdf_model.c	Tue Oct 23 16:55:06 2007
++++ misc/build/redland-1.0.7/librdf/rdf_model.c	Mon Jun 16 15:55:51 2008
+@@ -393,7 +393,8 @@
+   librdf_iterator* iterator;
+   librdf_model* m;
+ 
+-  LIBRDF_ASSERT_OBJECT_POINTER_RETURN(model, librdf_model);
++  if(!model)
++    return;
+ 
+   if(--model->usage)
+     return;
+--- misc/redland-1.0.7/librdf/rdf_node.c	Thu Dec 20 22:39:42 2007
++++ misc/build/redland-1.0.7/librdf/rdf_node.c	Mon Jun 16 15:55:51 2008
+@@ -726,7 +726,8 @@
+   librdf_world *world;
+ #endif
+ 
+-  LIBRDF_ASSERT_OBJECT_POINTER_RETURN(node, librdf_node);
++  if(!node)
++    return;
+ 
+ #ifdef WITH_THREADS
+   world = node->world;
+--- misc/redland-1.0.7/librdf/rdf_parser.c	Mon Dec 17 08:19:11 2007
++++ misc/build/redland-1.0.7/librdf/rdf_parser.c	Mon Jun 16 15:55:51 2008
+@@ -371,7 +371,8 @@
+ void
+ librdf_free_parser(librdf_parser *parser) 
+ {
+-  LIBRDF_ASSERT_OBJECT_POINTER_RETURN(parser, librdf_parser);
++  if(!parser)
++    return;
+ 
+   if(parser->context) {
+     if(parser->factory->terminate)
+--- misc/redland-1.0.7/librdf/rdf_query.c	Tue Oct 23 16:55:06 2007
++++ misc/build/redland-1.0.7/librdf/rdf_query.c	Mon Jun 16 15:55:51 2008
+@@ -388,7 +388,8 @@
+ void
+ librdf_free_query(librdf_query* query) 
+ {
+-  LIBRDF_ASSERT_OBJECT_POINTER_RETURN(query, librdf_query);
++  if(!query)
++    return;
+ 
+   if(--query->usage)
+     return;
+--- misc/redland-1.0.7/librdf/rdf_query_results.c	Fri Oct 26 04:23:36 2007
++++ misc/build/redland-1.0.7/librdf/rdf_query_results.c	Mon Jun 16 15:55:51 2008
+@@ -244,7 +244,8 @@
+ void
+ librdf_free_query_results(librdf_query_results* query_results)
+ {
+-  LIBRDF_ASSERT_OBJECT_POINTER_RETURN(query_results, librdf_query_results);
++  if(!query_results)
++    return;
+ 
+   if(query_results->query->factory->free_results)
+     query_results->query->factory->free_results(query_results);
+@@ -636,6 +637,8 @@
+ void
+ librdf_free_query_results_formatter(librdf_query_results_formatter* formatter) 
+ {
++  if(!formatter)
++    return;
+   if(formatter->query_results->query->factory->free_results_formatter)
+     formatter->query_results->query->factory->free_results_formatter(formatter);
+ }
+--- misc/redland-1.0.7/librdf/rdf_serializer.c	Tue Oct 23 16:55:06 2007
++++ misc/build/redland-1.0.7/librdf/rdf_serializer.c	Mon Jun 16 15:55:51 2008
+@@ -373,7 +373,8 @@
+ void
+ librdf_free_serializer(librdf_serializer *serializer) 
+ {
+-  LIBRDF_ASSERT_OBJECT_POINTER_RETURN(serializer, librdf_serializer);
++  if(!serializer)
++    return;
+ 
+   if(serializer->context) {
+     if(serializer->factory->terminate)
+--- misc/redland-1.0.7/librdf/rdf_statement.c	Tue Nov  6 16:26:18 2007
++++ misc/build/redland-1.0.7/librdf/rdf_statement.c	Mon Jun 16 15:55:51 2008
+@@ -255,7 +255,8 @@
+   librdf_world *world;
+ #endif
+ 
+-  LIBRDF_ASSERT_OBJECT_POINTER_RETURN(statement, librdf_statement);
++  if(!statement)
++    return;
+ 
+ #ifdef WITH_THREADS
+   world = statement->world;
+--- misc/redland-1.0.7/librdf/rdf_storage.c	Thu Dec 20 22:39:42 2007
++++ misc/build/redland-1.0.7/librdf/rdf_storage.c	Mon Jun 16 15:55:51 2008
+@@ -608,7 +608,8 @@
+ void
+ librdf_free_storage (librdf_storage* storage) 
+ {
+-  LIBRDF_ASSERT_OBJECT_POINTER_RETURN(storage, librdf_storage);
++  if(!storage)
++    return;
+ 
+   if(--storage->usage)
+     return;
+--- misc/redland-1.0.7/librdf/rdf_storage_hashes.c	Thu Dec 20 22:39:42 2007
++++ misc/build/redland-1.0.7/librdf/rdf_storage_hashes.c	Mon Jun 16 15:55:51 2008
+@@ -1389,6 +1389,66 @@
+                                                     LIBRDF_STATEMENT_OBJECT);
+ }
+ 
++
++/* return -1 on failure, 1 if context contains stmt, 0 if not */
++static int
++librdf_storage_hashes_context_contains_statement(librdf_storage* storage,
++    librdf_node* context_node,
++    librdf_statement* statement)
++{
++  librdf_storage_hashes_context* context=(librdf_storage_hashes_context*)storage->context;
++  librdf_hash_datum key, value; /* on stack - not allocated */
++  size_t size;
++  int status;
++
++  if(context->contexts_index < 0) {
++    librdf_log(storage->world, 0, LIBRDF_LOG_WARN, LIBRDF_FROM_STORAGE, NULL,
++               "Storage was created without context support");
++    return -1;
++  }
++
++  /* ENCODE KEY */
++  size=librdf_node_encode(context_node, NULL, 0);
++  if (!size)
++    return -1;
++  key.data=(char*)LIBRDF_MALLOC(cstring, size);
++  if (!key.data)
++    return -1;
++  key.size=librdf_node_encode(context_node,
++                               (unsigned char*)key.data, size);
++  if (!key.size) {
++    LIBRDF_FREE(data, key.data);
++    return -1;
++  }
++
++  /* ENCODE VALUE */
++  size=librdf_statement_encode(statement, NULL, 0);
++  if (!size) {
++    LIBRDF_FREE(data, key.data);
++    return -1;
++  }
++  value.data=(char*)LIBRDF_MALLOC(cstring, size);
++  if (!value.data) {
++    LIBRDF_FREE(data, key.data);
++    return -1;
++  }
++  value.size=librdf_statement_encode(statement, (unsigned char*)value.data, size);
++  if (!value.size) {
++    LIBRDF_FREE(data, value.data);
++    LIBRDF_FREE(data, key.data);
++    return -1;
++  }
++
++  status=librdf_hash_exists(context->hashes[context->contexts_index], &key, &value);
++  LIBRDF_FREE(data, value.data);
++  LIBRDF_FREE(data, key.data);
++
++  /* DO NOT free statement, ownership was not passed in */
++  return status;
++}
++
++
++
+ /**
+  * librdf_storage_hashes_context_add_statement:
+  * @storage: #librdf_storage object
+@@ -1414,7 +1474,15 @@
+                "Storage was created without context support");
+     return 1;
+   }
+-  
++
++  /* Do not add duplicate statements */
++  status=librdf_storage_hashes_context_contains_statement(storage, context_node, statement);
++  if(status)
++    if(status < 0)
++      return 1;
++    else
++      return 0;
++
+   if(librdf_storage_hashes_add_remove_statement(storage, 
+                                                 statement, context_node, 1))
+     return 1;
+@@ -1595,7 +1663,6 @@
+ {
+   librdf_storage_hashes_context_serialise_stream_context* scontext=(librdf_storage_hashes_context_serialise_stream_context*)context;
+   librdf_hash_datum* v;
+-  librdf_node** cnp=NULL;
+ 
+   switch(flags) {
+     case LIBRDF_ITERATOR_GET_METHOD_GET_OBJECT:
+@@ -1608,20 +1675,14 @@
+           return scontext->context_node;
+       }
+ 
+-      /* current stuff is out of date - get new cached answers */
+-      if(scontext->index_contexts) {
+-        if(scontext->context_node)
+-          librdf_free_node(scontext->context_node);
+-        scontext->context_node=NULL;
+-        cnp=&scontext->context_node;
+-      }
+-      
++      /* note: scontext->context_node is still valid */
++
+       librdf_statement_clear(&scontext->current);
+ 
+       v=(librdf_hash_datum*)librdf_iterator_get_value(scontext->iterator);
+-      
++
+       /* decode value content and optional context */
+-      if(!librdf_statement_decode_parts(&scontext->current, cnp,
++      if(!librdf_statement_decode_parts(&scontext->current, NULL,
+                                         (unsigned char*)v->data, v->size)) {
+         return NULL;
+       }
+--- misc/redland-1.0.7/librdf/rdf_storage_list.c	Thu Dec 20 22:39:42 2007
++++ misc/build/redland-1.0.7/librdf/rdf_storage_list.c	Mon Jun 16 15:55:51 2008
+@@ -459,6 +459,64 @@
+ }
+ 
+ 
++/* return -1 on failure, 1 if context contains stmt, 0 if not */
++static int
++librdf_storage_list_context_contains_statement(librdf_storage* storage,
++    librdf_node* context_node,
++    librdf_statement* statement)
++{
++  librdf_storage_list_context* context=(librdf_storage_list_context*)storage->context;
++  librdf_hash_datum key, value; /* on stack - not allocated */
++  size_t size;
++  int status;
++
++  if(!context->index_contexts) {
++    librdf_log(storage->world, 0, LIBRDF_LOG_WARN, LIBRDF_FROM_STORAGE, NULL,
++               "Storage was created without context support");
++    return -1;
++  }
++
++  /* ENCODE KEY */
++  size=librdf_node_encode(context_node, NULL, 0);
++  if (!size)
++    return -1;
++  key.data=(char*)LIBRDF_MALLOC(cstring, size);
++  if (!key.data)
++    return -1;
++  key.size=librdf_node_encode(context_node,
++                               (unsigned char*)key.data, size);
++  if (!key.size) {
++    LIBRDF_FREE(data, key.data);
++    return -1;
++  }
++
++  /* ENCODE VALUE */
++  size=librdf_statement_encode(statement, NULL, 0);
++  if (!size) {
++    LIBRDF_FREE(data, key.data);
++    return -1;
++  }
++  value.data=(char*)LIBRDF_MALLOC(cstring, size);
++  if (!value.data) {
++    LIBRDF_FREE(data, key.data);
++    return -1;
++  }
++  value.size=librdf_statement_encode(statement, (unsigned char*)value.data, size);
++  if (!value.size) {
++    LIBRDF_FREE(data, value.data);
++    LIBRDF_FREE(data, key.data);
++    return -1;
++  }
++
++  status=librdf_hash_exists(context->contexts, &key, &value);
++  LIBRDF_FREE(data, value.data);
++  LIBRDF_FREE(data, key.data);
++
++  /* DO NOT free statement, ownership was not passed in */
++  return status;
++}
++
++
+ /**
+  * librdf_storage_list_context_add_statement:
+  * @storage: #librdf_storage object
+@@ -485,7 +543,15 @@
+                "Storage was created without context support");
+     return 1;
+   }
+-  
++
++  /* Do not add duplicate statements */
++  status=librdf_storage_list_context_contains_statement(storage, context_node, statement);
++  if(status)
++    if(status < 0)
++      return 1;
++    else
++      return 0;
++
+   /* Store statement + node in the storage_list */
+   sln=(librdf_storage_list_node*)LIBRDF_MALLOC(librdf_storage_list_node, sizeof(librdf_storage_list_node));
+   if(!sln)
+--- misc/redland-1.0.7/librdf/rdf_stream.c	Mon Dec 24 00:23:10 2007
++++ misc/build/redland-1.0.7/librdf/rdf_stream.c	Mon Jun 16 15:55:52 2008
+@@ -126,6 +126,9 @@
+ void
+ librdf_free_stream(librdf_stream* stream) 
+ {
++  if(!stream)
++    return;
++
+   if(stream->finished_method)
+     stream->finished_method(stream->context);
+ 
+--- misc/redland-1.0.7/librdf/rdf_uri.c	Tue Oct 23 16:55:06 2007
++++ misc/build/redland-1.0.7/librdf/rdf_uri.c	Mon Jun 16 15:55:52 2008
+@@ -409,7 +409,8 @@
+   librdf_world *world;
+ #endif
+ 
+-  LIBRDF_ASSERT_OBJECT_POINTER_RETURN(uri, librdf_uri);
++  if(!uri)
++    return;
+ 
+ #ifdef WITH_THREADS
+   world = uri->world;
+--- misc/redland-1.0.7/librdf/win32_rdf_config.h	Sun May  6 19:14:36 2007
++++ misc/build/redland-1.0.7/librdf/win32_rdf_config.h	Mon Jun 16 15:55:52 2008
+@@ -45,7 +45,8 @@
+ #define HAVE_STRICMP 1
+ 
+ /* MS names for these functions */
+-#define vsnprintf _vsnprintf
++// next line breaks build on wntmsci12
++//#define vsnprintf _vsnprintf
+ #define snprintf _snprintf
+ #define access _access
+ #define stricmp _stricmp
+@@ -74,40 +75,40 @@
+  */
+ 
+ /* BDB has close method with 2 args */
+-#define HAVE_BDB_CLOSE_2_ARGS 1
++// #define HAVE_BDB_CLOSE_2_ARGS 1
+ 
+ /* BDB defines DBC */
+-#define HAVE_BDB_CURSOR 1
++// #define HAVE_BDB_CURSOR 1
+ 
+ /* BDB cursor method has 4 arguments */
+-#define HAVE_BDB_CURSOR_4_ARGS 1
++// #define HAVE_BDB_CURSOR_4_ARGS 1
+ 
+ /* BDB defines DB_TXN */
+-#define HAVE_BDB_DB_TXN 1
++// #define HAVE_BDB_DB_TXN 1
+ 
+ /* BDB has fd method with 2 args */
+-#define HAVE_BDB_FD_2_ARGS 1
++// #define HAVE_BDB_FD_2_ARGS 1
+ 
+ /* Have BDB hash support */
+-#define HAVE_BDB_HASH 1
++// #define HAVE_BDB_HASH 1
+ 
+ /* BDB has open method with 6 args */
+ /* #undef HAVE_BDB_OPEN_6_ARGS */
+ 
+ /* BDB has open method with 7 args */
+-#define HAVE_BDB_OPEN_7_ARGS 1
++// #define HAVE_BDB_OPEN_7_ARGS 1
+ 
+ /* BDB has set_flags method */
+-#define HAVE_BDB_SET_FLAGS 1
++// #define HAVE_BDB_SET_FLAGS 1
+ 
+ /* BDB has dbopen method */
+ /* #undef HAVE_DBOPEN */
+ 
+ /* BDB has db_create method */
+-#define HAVE_DB_CREATE 1
++// #define HAVE_DB_CREATE 1
+ 
+ /* Define to 1 if you have the <db.h> header file. */
+-#define HAVE_DB_H 1
++// #define HAVE_DB_H 1
+ 
+ /* Define to 1 if you have the <dlfcn.h> header file. */
+ /* undef HAVE_DLFCN_H */
+@@ -143,13 +144,13 @@
+ /* #undef HAVE_LIBWWW */
+ 
+ /* Have local MD5 digest */
+-#define HAVE_LOCAL_MD5_DIGEST 1
++// #define HAVE_LOCAL_MD5_DIGEST 1
+ 
+ /* Have local RIPEMD160 digest */
+ /* #undef HAVE_LOCAL_RIPEMD160_DIGEST */
+ 
+ /* Have local SHA1 digest */
+-#define HAVE_LOCAL_SHA1_DIGEST 1
++// #define HAVE_LOCAL_SHA1_DIGEST 1
+ 
+ /* Define to 1 if you have the <memory.h> header file. */
+ #define HAVE_MEMORY_H 1
+@@ -161,22 +162,27 @@
+ #define HAVE_MKTEMP 1
+ 
+ /* MySQL libraries are present */
+-#define HAVE_MYSQL 1
++// #define HAVE_MYSQL 1
+ 
+ /* Define to 1 if you have the <openssl/crypto.h> header file. */
+ /* #undef HAVE_OPENSSL_CRYPTO_H */
++#define HAVE_OPENSSL_CRYPTO_H 1
+ 
+ /* Have openssl MD5 digest */
+ /* #undef HAVE_OPENSSL_CRYPTO_MD5_DIGEST */
++#define HAVE_OPENSSL_CRYPTO_MD5_DIGEST 1
+ 
+ /* Have openssl RIPEMD160 digest */
+ /* #undef HAVE_OPENSSL_CRYPTO_RIPEMD160_DIGEST */
++#define HAVE_OPENSSL_CRYPTO_RIPEMD160_DIGEST 1
+ 
+ /* Have openssl SHA1 digest */
+ /* #undef HAVE_OPENSSL_CRYPTO_SHA1_DIGEST */
++#define HAVE_OPENSSL_CRYPTO_SHA1_DIGEST 1
+ 
+ /* Have openssl digests */
+ /* #undef HAVE_OPENSSL_DIGESTS */
++#define HAVE_OPENSSL_DIGESTS 1
+ 
+ /* Define to 1 if you have the <pthread.h> header file. */
+ /* #undef HAVE_PTHREAD_H */
+@@ -248,7 +254,7 @@
+ #define SIZEOF_UNSIGNED_LONG_LONG 8
+ 
+ /* SQLite API version */
+-#define SQLITE_API 3
++// #define SQLITE_API 3
+ 
+ /* Define to 1 if you have the ANSI C header files. */
+ #define STDC_HEADERS 1
+@@ -256,14 +262,17 @@
+ /* Building file storage */
+ #define STORAGE_FILE 1
+ 
++#define STORAGE_HASHES 1
++#define STORAGE_MEMORY 1
++
+ /* Building MySQL storage */
+-#define STORAGE_MYSQL 1
++// #define STORAGE_MYSQL 1
+ 
+ /* Building PostgreSQL storage */
+ /*#undef STORAGE_POSTGRESQL*/
+ 
+ /* Building SQLite storage */
+-#define STORAGE_SQLITE 1
++// #define STORAGE_SQLITE 1
+ 
+ /* Building 3store storage */
+ /*#undef STORAGE_TSTORE*/
+--- misc/redland-1.0.7/raptor/LICENSE.txt	Fri Mar 23 06:28:24 2007
++++ misc/build/redland-1.0.7/raptor/LICENSE.txt	Mon Jun 16 15:55:52 2008
+@@ -61,3 +61,15 @@
+ 
+    Copyright (C) 2000-2007 David Beckett
+    Copyright (C) 2000-2005 University of Bristol
++
++
++LGPL Disclaimer
++
++For the avoidance of doubt, except that if any license choice other 
++than GPL or LGPL is available it will apply instead, Sun elects to 
++use only the Lesser General Public License version 2.1 (LGPLv2) at 
++this time for any software where a choice of LGPL license versions 
++is made available with the language indicating that LGPLv2.1 or any 
++later version may be used, or where a choice of which version of the 
++LGPL is applied is otherwise unspecified.
++
+--- misc/redland-1.0.7/rasqal/LICENSE.txt	Sun Apr 22 23:09:08 2007
++++ misc/build/redland-1.0.7/rasqal/LICENSE.txt	Mon Jun 16 15:55:52 2008
+@@ -61,3 +61,15 @@
+ 
+    Copyright (C) 2003-2007 Dave Beckett
+    Copyright (C) 2003-2005 University of Bristol
++
++
++LGPL Disclaimer
++
++For the avoidance of doubt, except that if any license choice other 
++than GPL or LGPL is available it will apply instead, Sun elects to 
++use only the Lesser General Public License version 2.1 (LGPLv2) at 
++this time for any software where a choice of LGPL license versions 
++is made available with the language indicating that LGPLv2.1 or any 
++later version may be used, or where a choice of which version of the 
++LGPL is applied is otherwise unspecified.
++

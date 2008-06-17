@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mst $ $Date: 2008-06-16 11:38:21 $
+#   last change: $Author: mst $ $Date: 2008-06-17 16:12:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,10 @@ all:
 
 REDLANDVERSION=1.0.7
 
-TARFILE_NAME=$(PRJNAME)-$(REDLANDVERSION)
+TARFILE_NAME=redland-$(REDLANDVERSION)
 PATCH_FILE_NAME=$(TARFILE_NAME).patch
+
+ADDITIONAL_FILES=librdf/makefile.mk
 
 
 .IF "$(OS)"=="WNT"
@@ -87,6 +89,10 @@ CPPFLAGS+=-I$(SOLARINCDIR)$/external -I$(SYSBASE)$/usr$/include
 LDFLAGS+:=-L$(SOLARLIBDIR) -L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -lpthread -ldl
 .ENDIF
 .ENDIF			# "$(SYSBASE)"!=""
+
+.IF "$(OS)"=="MACOSX"
+LDFLAGS+:=-Wl,-dylib_file,@loader_path/libraptor.1.dylib:$(PWD)/$(LB)/libraptor.1.dylib
+.ENDIF
 
 CPPFLAGS+:=$(EXTRA_CFLAGS)
 LDFLAGS+:=$(EXTRA_LINKFLAGS)

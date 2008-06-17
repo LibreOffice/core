@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mst $ $Date: 2008-06-16 11:38:21 $
+#   last change: $Author: mst $ $Date: 2008-06-17 16:12:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ=..
 
-PRJNAME=rasqal
+PRJNAME=redland
 TARGET=so_rasqal
 
 # --- Settings -----------------------------------------------------
@@ -52,8 +52,10 @@ all:
 
 RASQALVERSION=0.9.15
 
-TARFILE_NAME=$(PRJNAME)-$(RASQALVERSION)
+TARFILE_NAME=rasqal-$(RASQALVERSION)
 PATCH_FILE_NAME=$(TARFILE_NAME).patch
+
+ADDITIONAL_FILES=src/makefile.mk
 
 
 .IF "$(OS)"=="WNT"
