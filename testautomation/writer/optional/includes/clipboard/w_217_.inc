@@ -1,0 +1,371 @@
+'**************************************************************************
+'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'* 
+'* Copyright 2008 by Sun Microsystems, Inc.
+'*
+'* OpenOffice.org - a multi-platform office productivity suite
+'*
+'* $RCSfile: w_217_.inc,v $
+'*
+'* $Revision: 1.1 $
+'*
+'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:47 $
+'*
+'* This file is part of OpenOffice.org.
+'*
+'* OpenOffice.org is free software: you can redistribute it and/or modify
+'* it under the terms of the GNU Lesser General Public License version 3
+'* only, as published by the Free Software Foundation.
+'*
+'* OpenOffice.org is distributed in the hope that it will be useful,
+'* but WITHOUT ANY WARRANTY; without even the implied warranty of
+'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'* GNU Lesser General Public License version 3 for more details
+'* (a copy is included in the LICENSE file that accompanied this code).
+'*
+'* You should have received a copy of the GNU Lesser General Public License
+'* version 3 along with OpenOffice.org.  If not, see
+'* <http://www.openoffice.org/license.html>
+'* for a copy of the LGPLv3 License.
+'*
+'/************************************************************************
+'*
+'* owner : fredrik.haegg@sun.com
+'*
+'* short description : CROSS-APPLICATIONS CLIPBOARD TEST (Writer)
+'*
+'\***********************************************************************
+
+sub w_217_
+
+    Call HTMLToCALCText
+    Call HTMLToCALCField
+    Call HTMLToCALCTable
+    Call HTMLToCALCGraphicLinked
+    Call HTMLToCALCControl
+    Call HTMLToCALCFloatingFrame
+
+end sub
+
+' ---------------------------------------------------------------------------------
+
+testcase HTMLToCALCText
+  gApplication = "HTMLDOKUMENT"
+  printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' " 
+  printlog "  Jump to beginning of document " 
+  printlog "  Select first paragraph " 
+  printlog "  Copy selected text " 
+  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+  printlog "  Jump to beginning of document " 
+  Call wDokSchreiben "<Mod1 Home>"
+  Call wDokSchreiben "<Shift Down><Shift End>"
+  EditCopy
+
+  gApplication = "CALC"
+  printlog "  Open new document " 
+  Call hNewDocument
+  printlog "  Edit / Paste Special " 
+    Sleep 2
+    try
+        EditPasteSpecialCalc
+    catch
+        Warnlog "Unable to execute 'Edit / Paste Special'! Test failed!"
+        Call hCloseDocument
+        Call hCloseDocument
+        goto endsub
+    endcatch
+  Wait 500
+  printlog "  Paste 'Text' in all available clipboard formats " 
+  Kontext "InhaltEinfuegen"
+  if InhaltEinfuegen.Exists then
+   Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"text")
+   printlog "  Write Clipboard format under pasted content " 
+   Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_calc_text.ods", "calc8")
+   printlog "  Save document as ..\user\work\html_to_calc_text.ods" 
+   Wait 500
+   Call hCloseDocument
+   printlog "  Close saved document " 
+   wait 500
+   Call hFileOpen (gOfficepath + "user\work\html_to_calc_text.ods",true)
+   printlog "  Reopen saved document " 
+   Wait 500
+   Call hCloseDocument
+   printlog "  Close saved document " 
+  else
+   Warnlog "Dialog 'Paste Special' is not up!"
+   Call hCloseDocument
+   goto endsub
+  end if
+  Call hCloseDocument
+  printlog "  Close active document " 
+
+endcase
+
+' ----------------------------------------------------------------------------------------------
+
+testcase HTMLToCALCField
+  gApplication = "HTMLDOKUMENT"
+  printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' " 
+  printlog "  Jump to beginning of document " 
+  printlog "  Select paragraph with 'Date Field' " 
+  printlog "  Copy selected text " 
+  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+  printlog "  Jump to beginning of document " 
+  Call wDokSchreiben "<Mod1 Home>"
+  Call wDokSchreiben "<Down>",2
+  Call wDokSchreiben "<Home><Shift End>"
+  EditCopy
+
+    gApplication = "CALC"
+    printlog "  Open new document " 
+    Call hNewDocument
+    printlog "  Edit / Paste Special " 
+    Sleep 2
+    try
+        EditPasteSpecialCalc
+    catch
+        Warnlog "Unable to execute 'Edit / Paste Special'! Test failed!"
+        Call hCloseDocument
+        Call hCloseDocument
+        goto endsub
+    endcatch
+    Wait 500
+    printlog "  Paste 'Field' in all available clipboard formats " 
+    Kontext "InhaltEinfuegen"
+    if InhaltEinfuegen.Exists then
+        Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"field")
+        printlog "  Write Clipboard format under pasted content " 
+        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_calc_field.ods", "calc8")
+        printlog "  Save document as ..\user\work\html_to_calc_field.ods" 
+        Wait 500
+        Call hCloseDocument
+        printlog "  Close saved document "
+        wait 500
+        Call hFileOpen (gOfficepath + "user\work\html_to_calc_field.ods",true)
+        printlog "  Reopen saved document "
+        Wait 500
+        Call hCloseDocument
+        printlog "  Close saved document "
+    else
+        Warnlog "Dialog 'Paste Special' is not up!"
+        Call hCloseDocument
+        goto endsub
+    end if
+    printlog "  Close active document "
+    Call hCloseDocument
+endcase
+
+' ----------------------------------------------------------------------------------------------
+
+testcase HTMLToCALCTable
+    gApplication = "HTMLDOKUMENT"
+    printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' " 
+    printlog "  Jump to beginning of document " 
+    printlog "  Select 'Table' " 
+    printlog "  Copy selected table " 
+    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+    printlog "  Jump to beginning of document " 
+    Call wDokSchreiben "<Mod1 Home>"
+    Call wDokSchreiben "<Down>",5
+    Call wDokSchreiben "<Mod1 A>",2
+    sleep (1)
+    EditCopy
+
+    gApplication = "CALC"
+    printlog "  Open new document " 
+    Call hNewDocument
+    printlog "  Edit / Paste Special " 
+    Sleep 2
+    try
+        EditPasteSpecialCalc
+    catch
+        Warnlog "Unable to execute 'Edit / Paste Special'! Test failed!"
+        Call hCloseDocument
+        Call hCloseDocument
+        goto endsub
+    endcatch
+    printlog "  Paste 'Table' in all available clipboard formats " 
+    Kontext "InhaltEinfuegen"
+    if InhaltEinfuegen.Exists(2) then
+        Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"table")
+        printlog "  Write Clipboard format under pasted content " 
+        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_calc_table.ods", "calc8")
+        printlog "  Save document as ..\user\work\html_to_calc_table.ods" 
+        Call hCloseDocument
+        printlog "  Close saved document " 
+        Call hFileOpen (gOfficepath + "user\work\html_to_calc_table.ods",true)
+        printlog "  Reopen saved document " 
+        Call hCloseDocument
+        printlog "  Close saved document " 
+    else
+        Warnlog "Dialog 'Paste Special' is not up!"
+        Call hCloseDocument
+        goto endsub
+    end if
+    printlog "  Close active document " 
+    Call hCloseDocument
+endcase
+
+' ----------------------------------------------------------------------------------------------
+
+testcase HTMLToCALCGraphicLinked
+    gApplication = "HTMLDOKUMENT"
+    printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' " 
+    printlog "  Jump to beginning of document " 
+    printlog "  Select 'Linked Graphic' " 
+    printlog "  Copy selected Linked Graphic " 
+    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+    printlog "  Jump to beginning of document " 
+    Call wDokSchreiben "<Mod1 Home>"
+    Call wDokSchreiben ( "<Shift F4>" )
+    EditCopy
+
+    gApplication = "CALC"
+    printlog "  Open new document " 
+    Call hNewDocument
+    printlog "  Edit / Paste Special " 
+    Sleep 2
+    try
+        EditPasteSpecialCalc
+    catch
+        QAErrorlog "Unable to execute 'Edit / Paste Special'! Test failed! Manually not reproducable"
+        Call hCloseDocument
+        Call hCloseDocument
+        goto endsub
+    endcatch
+    Wait 500
+    printlog "  Paste 'Linked Graphic' in all available clipboard formats " 
+    Kontext "InhaltEinfuegen"
+    if InhaltEinfuegen.Exists then
+        Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"graphicL")
+        printlog "  Write Clipboard format under pasted content " 
+        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_calc_graphic1.ods", "calc8")
+        printlog "  Save document as ..\user\work\html_to_calc_graphic1.ods" 
+        Wait 500
+        Call hCloseDocument
+        printlog "  Close saved document " 
+        wait 500
+        Call hFileOpen (gOfficepath + "user\work\html_to_calc_graphic1.ods",false)
+        printlog "  Reopen saved document " 
+        Wait 500
+        Call hCloseDocument
+        printlog "  Close saved document " 
+    else
+        Warnlog "Dialog 'Paste Special' is not up!"
+        Call hCloseDocument
+        goto endsub
+    end if
+    printlog "  Close active document " 
+    Call hCloseDocument
+endcase
+
+' ----------------------------------------------------------------------------------------------
+
+testcase HTMLToCALCControl
+    gApplication = "HTMLDOKUMENT"
+    printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' " 
+    printlog "  Jump to beginning of document " 
+    printlog "  Select 'Control' " 
+    printlog "  Copy selected Control " 
+    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+    printlog "  Jump to beginning of document " 
+    Call wDokSchreiben "<Mod1 Home>"
+    Call wDokSchreiben ( "<Shift F4>" )
+    Call wDokSchreiben "<Tab>"
+    EditCopy
+
+    gApplication = "CALC"
+    printlog "  Open new document " 
+    Call hNewDocument
+    printlog "  Edit / Paste Special " 
+    Sleep 2
+    try
+        EditPasteSpecialCalc
+    catch
+        Warnlog "Unable to execute 'Edit / Paste Special'! Test failed!"
+        Call hCloseDocument
+        Call hCloseDocument
+        goto endsub
+    endcatch
+    Wait 500
+    printlog "  Paste 'Control' in all available clipboard formats " 
+    Kontext "InhaltEinfuegen"
+    if InhaltEinfuegen.Exists then
+        Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"control")
+        printlog "  Write Clipboard format under pasted content " 
+        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_calc_control.ods", "calc8")
+        printlog "  Save document as ..\user\work\html_to_calc_control.sxc" 
+        Wait 500
+        Call hCloseDocument
+        printlog "  Close saved document " 
+        wait 500
+        Call hFileOpen (gOfficepath + "user\work\html_to_calc_control.ods",false)
+        printlog "  Reopen saved document " 
+        Wait 500
+        Call hCloseDocument
+        printlog "  Close saved document " 
+    else
+        Warnlog "Dialog 'Paste Special' is not up!"
+        Call hCloseDocument
+        goto endsub
+    end if
+    printlog "  Close active document " 
+    Call hCloseDocument
+endcase
+
+' ----------------------------------------------------------------------------------------------
+
+testcase HTMLToCALCFloatingFrame
+    gApplication = "HTMLDOKUMENT"
+    printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' " 
+    printlog "  Jump to beginning of document " 
+    printlog "  Select 'Floating Frame' " 
+    printlog "  Copy selected Floating Frame " 
+    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
+    printlog "  Jump to beginning of document " 
+    Call wDokSchreiben "<Mod1 Home>"
+    Call wDokSchreiben ( "<Shift F4>" )
+    Call wDokSchreiben "<Tab>",2
+    wait 500
+    try
+        EditCopy
+        EditCopy
+    catch
+        Warnlog "Edit / Copy is disabled ! Maybe object not selected!"
+        Call hCloseDocument
+        goto endsub
+    endcatch
+    gApplication = "CALC"
+    printlog "  Open new document " 
+    Call hNewDocument
+    printlog "  Edit / Paste Special " 
+    Sleep 2
+    try
+        EditPasteSpecialCalc
+    catch
+        Warnlog "Unable to execute 'Edit / Paste Special'! Test failed!"
+        Call hCloseDocument
+        Call hCloseDocument
+        goto endsub
+    endcatch
+    printlog "  Paste 'Floating Frame' in all available clipboard formats " 
+    Kontext "InhaltEinfuegen"
+    if InhaltEinfuegen.Exists(3) then
+        Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"control")
+        printlog "  Write Clipboard format under pasted content " 
+        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_calc_float.ods", "calc8")
+        printlog "  Save document as ..\user\work\html_to_calc_float.ods" 
+        Call hCloseDocument
+        printlog "  Close saved document " 
+        Call hFileOpen (gOfficepath + "user\work\html_to_calc_float.ods",false)
+        printlog "  Reopen saved document " 
+        Call hCloseDocument
+        printlog "  Close saved document " 
+    else
+        Warnlog "Dialog 'Paste Special' is not up!"
+        Call hCloseDocument
+        goto endsub
+    end if
+    printlog "  Close active document " 
+    Call hCloseDocument
+endcase

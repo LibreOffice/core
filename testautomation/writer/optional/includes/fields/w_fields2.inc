@@ -1,0 +1,1024 @@
+'encoding UTF-8  Do not remove or change this line!
+'**************************************************************************
+'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'* 
+'* Copyright 2008 by Sun Microsystems, Inc.
+'*
+'* OpenOffice.org - a multi-platform office productivity suite
+'*
+'* $RCSfile: w_fields2.inc,v $
+'*
+'* $Revision: 1.1 $
+'*
+'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:51 $
+'*
+'* This file is part of OpenOffice.org.
+'*
+'* OpenOffice.org is free software: you can redistribute it and/or modify
+'* it under the terms of the GNU Lesser General Public License version 3
+'* only, as published by the Free Software Foundation.
+'*
+'* OpenOffice.org is distributed in the hope that it will be useful,
+'* but WITHOUT ANY WARRANTY; without even the implied warranty of
+'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'* GNU Lesser General Public License version 3 for more details
+'* (a copy is included in the LICENSE file that accompanied this code).
+'*
+'* You should have received a copy of the GNU Lesser General Public License
+'* version 3 along with OpenOffice.org.  If not, see
+'* <http://www.openoffice.org/license.html>
+'* for a copy of the LGPLv3 License.
+'*
+'/************************************************************************
+'*
+'* owner : fredrik.haegg@sun.com
+'*
+'* short description : Fields general test
+'*
+'\***********************************************************************
+
+
+sub w_fields2
+
+    Call tFieldsOther_0      'NON modal
+    Call tFieldsOther_1_1    'Insert/Fields/Other/Document / Author
+    Call tFieldsOther_1_2    'Insert/Fields/Other/Document / Author - Fixed
+    Call tFieldsOther_2      'Insert/Fields/Other/Document / Chapter
+    Call tFieldsOther_3      'Insert/Fields/Other/Document / Date
+    Call tFieldsOther_4      'Insert/Fields/Other/Document / File name
+    Call tFieldsOther_5      'Insert/Fields/Other/Document / Page
+    Call tFieldsOther_6_1    'Insert/Fields/Other/Document / Sender
+    Call tFieldsOther_6_2    'Insert/Fields/Other/Document / Sender - Fixed
+    Call tFieldsOther_7      'Insert/Fields/Other/Document / Statistics
+    Call tFieldsOther_8      'Insert/Fields/Other/Document / Template
+    Call tFieldsOther_9      'Insert/Fields/Other/Document / Time
+
+end sub
+
+
+testcase tFieldsOther_0
+
+  Dim sTest as String
+
+  sTest = "This is a Test"
+
+  printlog "NON modal"
+ '/// <b> NON modal </b>
+
+  Call hNewDocument
+
+  '/// Insert / Fields / Other / Document , test if
+  '/// + the dialog is NON modal
+   Call fInsertFieldsOther("TabDokumentFeldbefehle")
+       try
+           Call wDokSchreiben sTest
+       catch
+           Warnlog "Something is wrong in dialog document!"
+       endcatch
+   Kontext "TabDokumentFeldbefehle"
+   TabDokumentFeldbefehle.Close
+
+   Call wDokSchreiben "<Shift Home>"
+   EditCopy
+   if GetClipboardText <> sTest then
+       Warnlog "The text in document isn't corrrect!"
+   end if
+
+ Call hCloseDocument
+
+endcase
+
+'-----------------------------------------------------------------
+
+testcase tFieldsOther_1_1
+
+  Dim sFirstName  , sLastName   as String
+  Dim sFirstName1 , sLastName1  as String
+  Dim sFirstName2 , sLastName2  as String
+  Dim sInitial1   , sInitial2   as String
+
+  sFirstName1 = "ABC" : sLastName1 = "DEF"
+  sFirstName2 = "XYZ" : sLastName2 = "OPQ"
+  sInitial1   = "AD"  : sInitial2  = "XO"
+
+  printlog "Insert/Fields/Other/Document / Author "
+ '/// <b> Insert/Fields/Other/Document / Author </b>
+
+  Call hNewDocument
+
+  '/// Change author to author1 :ABC DEF
+   ToolsOptions
+   Call hToolsOptions("STAROFFICE","USERDATA")
+     sFirstName = VorName.GetText
+     sLastName  = ZuName.GetText
+     Kuerzel.SetText ""
+     VorName.SetText sFirstName1
+     ZuName.SetText  sLastName1
+     Kontext "ExtrasOptionenDlg"
+   ExtrasOptionenDlg.OK
+
+  '/// Insert/Fields/Other/Document / Author (Name, Initial)
+   Call fInsertFieldsOther("TabDokumentFeldbefehle")
+     Feldtyp.Select fGetType("Author")
+     Sleep 1
+     Auswahl.Select 1
+     Sleep 1
+     Einfuegen.Click
+     sleep 1
+     Call wDokSchreiben "<Return>"
+     Kontext "TabDokumentFeldbefehle"
+     Auswahl.Select 2
+     Sleep 1
+     Einfuegen.Click
+   TabDokumentFeldbefehle.Close
+
+  '/// Check if the name is inserted correctly
+   Call wDokSchreiben "<MOD1 Home><Shift End>"
+   EditCopy
+   if GetClipboardText <> (sFirstName1 + " " + sLastName1) then
+       Warnlog "Should get " & sFirstName1 & " " & sLastName1 & " but get " & GetClipboardText
+   end if
+
+  '/// Check if the Initial is inserted correctly
+   Call wDokSchreiben "<Down>"
+   Call wDokSchreiben "<End><Shift Home>"
+   EditCopy
+   if GetClipboardText <> sInitial1 then
+       Warnlog "Should get " & sInitial1 & " but get " & GetClipboardText
+   end if
+
+  '/// Change author to author1 :XYZ OPQ
+   ToolsOptions
+   Call hToolsOptions("STAROFFICE","USERDATA")
+     VorName.SetText sFirstName2
+     ZuName.SetText  sLastName2
+     Kontext "ExtrasOptionenDlg"
+   ExtrasOptionenDlg.OK
+   Sleep 2
+
+  '/// Press F9
+   Call wDokSchreiben "<F9>"
+   Sleep 3
+
+  '/// Check if the name is changed
+   Call wDokSchreiben "<MOD1 Home><Shift End>"
+   EditCopy
+   if GetClipboardText <> (sFirstName2 + " " + sLastName2) then
+       Warnlog "Should get " & sFirstName2 & " " & sLastName2 & " but get " & GetClipboardText
+   end if
+
+  '/// Check if the Initial is changed
+   Call wDokSchreiben "<Down><End><Shift Home>"
+   EditCopy
+   if GetClipboardText <> sInitial2 then
+       Warnlog "Should get " & sInitial2 & " but get " & GetClipboardText
+   end if
+
+  'Change author to default
+   ToolsOptions
+   Call hToolsOptions("STAROFFICE","USERDATA")
+     VorName.SetText sFirstName
+     ZuName.SetText  sLastName
+     Kontext "ExtrasOptionenDlg"
+   ExtrasOptionenDlg.OK
+
+ Call hCloseDocument
+
+endcase
+
+'-----------------------------------------------------------------
+
+testcase tFieldsOther_1_2
+
+  Dim sFirstName  , sLastName   as String
+  Dim sFirstName1 , sLastName1  as String
+  Dim sFirstName2 , sLastName2  as String
+  Dim sInitial1                 as String
+
+  sFirstName1 = "ABC" : sLastName1 = "DEF"
+  sFirstName2 = "XYZ" : sLastName2 = "OPQ"
+  sInitial1   = "AD"
+
+  printlog "Insert/Fields/Other/Document / Author - Fixed"
+ '/// <b> Insert/Fields/Other/Document / Author - Fixed</b>
+
+  Call hNewDocument
+
+  '/// Change author to author1 :ABC DEF
+   ToolsOptions
+   Call hToolsOptions("STAROFFICE","USERDATA")
+     sFirstName = VorName.GetText
+     sLastName  = ZuName.GetText
+     Kuerzel.SetText ""
+     VorName.SetText sFirstName1
+     ZuName.SetText  sLastName1
+     Kontext "ExtrasOptionenDlg"
+   ExtrasOptionenDlg.OK
+
+  '/// Insert/Fields/Other/Document / Author (Name, Initial)
+  '/// + check 'Fixed content'
+   Call fInsertFieldsOther("TabDokumentFeldbefehle")
+     Feldtyp.Select fGetType("Author")
+     Sleep 1
+     Auswahl.Select 1
+     Sleep 1
+     InhaltFix.Check
+     Einfuegen.Click
+     sleep 1
+     Call wDokSchreiben "<Return>"
+     Kontext "TabDokumentFeldbefehle"
+     Auswahl.Select 2
+     Sleep 1
+     InhaltFix.Check
+     Einfuegen.Click
+   TabDokumentFeldbefehle.Close
+
+  '/// Check if the name is inserted correctly
+   Call wDokSchreiben "<MOD1 Home><Shift End>"
+   EditCopy
+   if GetClipboardText <> (sFirstName1 + " " + sLastName1) then
+       Warnlog "Should get " & sFirstName1 & " " & sLastName1 & " but get " & GetClipboardText
+   end if
+
+  '/// Check if the Initial is inserted correctly
+   Call wDokSchreiben "<Down>"
+   Call wDokSchreiben "<End><Shift Home>"
+   EditCopy
+   if GetClipboardText <> sInitial1 then
+       Warnlog "Should get " & sInitial1 & " but get " & GetClipboardText
+   end if
+
+  '/// Change author to author1 :XYZ OPQ
+   ToolsOptions
+   Call hToolsOptions("STAROFFICE","USERDATA")
+     VorName.SetText sFirstName2
+     ZuName.SetText  sLastName2
+     Kontext "ExtrasOptionenDlg"
+   ExtrasOptionenDlg.OK
+   Sleep 2
+
+  '/// Press F9
+   Call wDokSchreiben "<F9>"
+   Sleep 3
+
+  '/// Check if the name is changed
+   Call wDokSchreiben "<MOD1 Home><Shift End>"
+   EditCopy
+   if GetClipboardText <> (sFirstName1 + " " + sLastName1) then
+       Warnlog "Still should get " & sFirstName1 & " " & sLastName1 & " but get " & GetClipboardText
+   end if
+
+  '/// Check if the Initial is changed
+   Call wDokSchreiben "<Down><End><Shift Home>"
+   EditCopy
+   if GetClipboardText <> sInitial1 then
+       Warnlog "Still should get " & sInitial1 & " but get " & GetClipboardText
+   end if
+
+  'Change author to default
+   ToolsOptions
+   Call hToolsOptions("STAROFFICE","USERDATA")
+     VorName.SetText sFirstName
+     ZuName.SetText  sLastName
+     Kontext "ExtrasOptionenDlg"
+   ExtrasOptionenDlg.OK
+
+ Call hCloseDocument
+
+endcase
+
+'-----------------------------------------------------------------
+
+testcase tFieldsOther_2
+
+  Dim  sTestFile     as String
+  Dim  sChapter()    as String
+  Dim  i             as Integer
+
+  sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\fields\chapterTest.sxw")
+
+  sChapter  = Array( _
+                    "My House"             , _
+                    "Before2After"         , _
+                    "Before2AfterMy House" , _
+                    "2"                    , _
+                   )
+
+  printlog "Insert/Fields/Other/Document / Chapter"
+ '/// <b> Insert/Fields/Other/Document / Chapter </b>
+
+  Call hNewDocument
+
+  '/// Open test file chapterTest.sxw
+   Call hFileOpen(sTestFile)
+
+   Call wDokSchreiben "<MOD1 End><Return>"
+
+  '/// Insert/Fields/Other/Document / Chapter
+  '/// Insert Chapter name, Chapter number,
+  '/// Chapter number and name , Chapter number without separator
+  '/// Check if the insertion is correct
+   Call fInsertFieldsOther("TabDokumentFeldbefehle")
+     Feldtyp.Select fGetType("Chapter")
+     for i = 0 to UBound(sChapter)
+         Kontext "TabDokumentFeldbefehle"
+         Formatliste.Select i+1
+         Sleep 1
+         Einfuegen.Click
+         sleep 1
+         Call wDokSchreiben "<F9>"
+         Sleep 2
+         Call wDokSchreiben "<Shift Home>"
+         Sleep 1
+         if fGetFieldContent() <> sChapter(i) then
+             Warnlog i &"#i40625# Should get " & sChapter(i) & " but get " & fGetFieldContent()
+         end if
+         Call wDokSchreiben "<Delete>"
+     next i
+     Kontext "TabDokumentFeldbefehle"
+   TabDokumentFeldbefehle.Close
+
+ Call hCloseDocument
+
+endcase
+
+'-----------------------------------------------------------------
+
+testcase tFieldsOther_3
+
+    Dim sDate as String
+    
+    printlog "Insert/Fields/Other/Document / Date"
+    '/// <b> Insert/Fields/Other/Document / Date </b>
+    
+    Call hNewDocument
+    
+    '/// Insert/Fields/Other/Document / Date
+    '/// Check if the insertion is correct
+    Call fInsertFieldsOther("TabDokumentFeldbefehle")
+    Feldtyp.Select fGetType("Date")
+    Auswahl.Select 1
+    Einfuegen.Click
+    Kontext "TabDokumentFeldbefehle"
+    TabDokumentFeldbefehle.Close
+    
+    Call wDokSchreiben "<Shift Left>"
+    EditCopy
+    Sleep 1
+    if GetClipboardText = "" then
+        Warnlog "Field returns an empty string"
+    end if
+    
+    Call hCloseDocument
+
+endcase
+
+'-----------------------------------------------------------------
+
+testcase tFieldsOther_4
+
+  Dim  sTestFile     as String
+  Dim  sFilename(4)  as String
+  Dim  i             as Integer
+
+  sTestFile    = Convertpath (gTesttoolpath + "writer\optional\input\fields\pageTest.sxw")
+
+  sFilename(0) = "pageTest.sxw"
+  sFilename(1) = "pageTest"
+  sFilename(2) = Convertpath (gTesttoolpath + "writer\optional\input\fields\")
+  sFilename(3) = sTestFile
+
+  printlog "Insert/Fields/Other/Document / File name"
+ '/// <b> Insert/Fields/Other/Document / File name </b>
+
+  Call hNewDocument
+
+  '/// Open test file pageTest.sxw
+   Call hFileOpen(sTestFile)
+
+   Call wDokSchreiben "<MOD1 Home>"
+   Call wDokSchreiben "<End><Return>"
+
+  '/// Insert/Fields/Other/Document / File name
+  '/// Insert File name, File name without extension ,
+  '/// Path , Path/File name
+  '/// Check if the insertion is correct
+   Call fInsertFieldsOther("TabDokumentFeldbefehle")
+     Feldtyp.Select fGetType("File name")
+     for i = 0 to 3
+         Kontext "TabDokumentFeldbefehle"
+         Formatliste.Select i+1
+         Sleep 1
+         Einfuegen.Click
+         sleep 1
+         Call wDokSchreiben "<F9>"
+         Sleep 2
+         Call wDokSchreiben "<Shift Home>"
+         Sleep 1
+         if fGetFieldContent() <> sFilename(i) then
+             Warnlog i &" - Should get " & sFilename(i) & " but get " & fGetFieldContent()
+         end if
+         Call wDokSchreiben "<Delete>"
+     next i
+     Kontext "TabDokumentFeldbefehle"
+   TabDokumentFeldbefehle.Close
+
+ Call hCloseDocument
+
+endcase
+
+'-----------------------------------------------------------------
+
+testcase tFieldsOther_5
+
+  Dim  sTestFile     as String
+  Dim  sPage()       as String
+  Dim  i             as Integer
+
+  sPage = Array( _
+                 "2"         , _
+                 "1"         , _
+                 "3"         , _
+                )
+
+  sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\fields\pageTest.sxw")
+
+  printlog "Insert/Fields/Other/Document / Page"
+ '/// <b> Insert/Fields/Other/Document / Page </b>
+
+  Call hNewDocument
+
+  '/// Open test file pageTest.sxw which includes 3 pages
+   Call hFileOpen(sTestFile)
+
+  '/// Go to the 2nd page
+   Call wDokSchreiben "<MOD1 Home>"
+   Call fFindWord ("Sec")
+   Call wDokSchreiben "<End><Return>"
+
+  '/// Insert/Fields/Other/Document / Page
+  '/// Insert Page numbers, Privious page , Next page
+   Call fInsertFieldsOther("TabDokumentFeldbefehle")
+     Feldtyp.Select fGetType("Page")
+     for i = 0 to UBound(sPage)
+         Kontext "TabDokumentFeldbefehle"
+         Auswahl.Select i+1
+         Sleep 1
+         Einfuegen.Click
+         sleep 1
+         Call wDokSchreiben "<F9>"
+         Sleep 2
+         Call wDokSchreiben "<Shift Home>"
+         Sleep 1
+         ToolsCalculate
+         if GetClipboardText <> sPage(i) then
+             Warnlog i &" - Should get " & sPage(i) & " but get " & GetClipboardText
+         end if
+         Call wDokSchreiben "<Delete>"
+     next i
+     Kontext "TabDokumentFeldbefehle"
+   TabDokumentFeldbefehle.Close
+
+ Call hCloseDocument
+
+endcase
+
+'-----------------------------------------------------------------
+
+testcase tFieldsOther_6_1
+
+  Dim aUserData(14) , aUserData1() , aUserData2() as String
+
+  Dim i as Integer
+
+  aUserData1 = Array( _
+                      "Com1"       , _
+                      "ABC"        , _
+                      "DEF"        , _
+                      "AD"         , _
+                      "Str1"       , _
+                      "Country1"   , _
+                      "123"        , _
+                      "City1"      , _
+                      "Title1"     , _
+                      "Posi1"      , _
+                      "123"        , _
+                      "465"        , _
+                      "789"        , _
+                      "AD@a.a"     , _
+                      "State1"     , _
+                     )
+  aUserData2 = Array( _
+                      "Com2"       , _
+                      "XYZ"        , _
+                      "OPQ"        , _
+                      "XO"         , _
+                      "Str2"       , _
+                      "Country2"   , _
+                      "321"        , _
+                      "City2"      , _
+                      "Title2"     , _
+                      "Posi2"      , _
+                      "222"        , _
+                      "654"        , _
+                      "987"        , _
+                      "XO@b.b"     , _
+                      "State2"     , _
+                     )
+
+
+  printlog "Insert/Fields/Other/Document / Sender"
+ '/// <b> Insert/Fields/Other/Document / Sender </b>
+
+  Call hNewDocument
+
+  '/// Change user data
+   ToolsOptions
+   Call hToolsOptions("STAROFFICE","USERDATA")
+     aUserData(0) = Firma.GetText
+     aUserData(1) = VorName.GetText
+     aUserData(2) = ZuName.GetText
+     aUserData(3) = Strasse.GetText
+     aUserData(4) = City.GetText
+     aUserData(5) = State.GetText
+     aUserData(6) = Zip.GetText
+     aUserData(7) = Land.GetText
+     aUserData(8) = Titel.GetText
+     aUserData(9) = Position.GetText
+     aUserData(10) = TelPriv.GetText
+     aUserData(11) = TelGe.GetText
+     aUserData(12) = Fax.GetText
+     aUserData(13) = EMail.GetText
+
+     Kuerzel.SetText   ""
+     Firma.SetText     aUserData1(0)
+     VorName.SetText   aUserData1(1)
+     ZuName.SetText    aUserData1(2)
+     Strasse.SetText   aUserData1(4)
+     City.SetText      aUserData1(7)
+     State.SetText     aUserData1(14)
+     Zip.SetText       aUserData1(6)
+     Land.SetText      aUserData1(5)
+     Titel.SetText     aUserData1(8)
+     Position.SetText  aUserData1(9)
+     TelPriv.SetText   aUserData1(10)
+     TelGe.SetText     aUserData1(11)
+     Fax.SetText       aUserData1(12)
+     EMail.SetText     aUserData1(13)
+
+     Kontext "ExtrasOptionenDlg"
+   ExtrasOptionenDlg.OK
+
+  '/// Insert/Fields/Other/Document / Sender
+   Call fInsertFieldsOther("TabDokumentFeldbefehle")
+     Feldtyp.Select fGetType("Sender")
+     for i= 0 to UBound(aUserData1)
+         Kontext "TabDokumentFeldbefehle"
+         Auswahl.Select i+1
+         Sleep 1
+         Einfuegen.Click
+         sleep 1
+         Call wDokSchreiben "<Return>"
+     next i
+     Kontext "TabDokumentFeldbefehle"
+   TabDokumentFeldbefehle.Close
+
+  '/// Check if the configuration is inserted correctly
+   Call wDokSchreiben "<MOD1 Home>"
+   for i= 0 to UBound(aUserData1)
+       Call wDokSchreiben "<Shift End>"
+       if fGetFieldContent() <> aUserData1(i) then
+           Warnlog "i32872 1.Should get " & aUserData1(i)& " but get " & fGetFieldContent()
+       end if
+       Call wDokSchreiben "<Down><Home>"
+   next i
+
+  '/// Change author to author1 :XYZ OPQ
+   ToolsOptions
+   Call hToolsOptions("STAROFFICE","USERDATA")
+     Kuerzel.SetText   ""
+     Firma.SetText     aUserData2(0)
+     VorName.SetText   aUserData2(1)
+     ZuName.SetText    aUserData2(2)
+     Strasse.SetText   aUserData2(4)
+     City.SetText      aUserData2(7)
+     State.SetText     aUserData2(14)
+     Zip.SetText       aUserData2(6)
+     Land.SetText      aUserData2(5)
+     Titel.SetText     aUserData2(8)
+     Position.SetText  aUserData2(9)
+     TelPriv.SetText   aUserData2(10)
+     TelGe.SetText     aUserData2(11)
+     Fax.SetText       aUserData2(12)
+     EMail.SetText     aUserData2(13)
+
+     Kontext "ExtrasOptionenDlg"
+   ExtrasOptionenDlg.OK
+   Sleep 2
+
+  '/// Press F9
+   Call wDokSchreiben "<F9>"
+   Sleep 3
+
+  '/// Check if the configuration is changed
+   Call wDokSchreiben "<MOD1 Home>"
+   for i= 0 to UBound(aUserData1)
+       Call wDokSchreiben "<Shift End>"
+       if fGetFieldContent() <> aUserData2(i) then
+           Warnlog "i32872  2.Should get " & aUserData2(i)& " but get " & fGetFieldContent()
+       end if
+       Call wDokSchreiben "<Down><Home>"
+   next i
+
+  'Change author to default
+   ToolsOptions
+   Call hToolsOptions("STAROFFICE","USERDATA")
+     Firma.SetText     aUserData(0)
+     VorName.SetText   aUserData(1)
+     ZuName.SetText    aUserData(2)
+     Strasse.SetText   aUserData(3)
+     City.SetText      aUserData(4)
+     State.SetText     aUserData(5)
+     Zip.SetText       aUserData(6)
+     Land.SetText      aUserData(7)
+     Titel.SetText     aUserData(8)
+     Position.SetText  aUserData(9)
+     TelPriv.SetText   aUserData(10)
+     TelGe.SetText     aUserData(11)
+     Fax.SetText       aUserData(12)
+     EMail.SetText     aUserData(13)
+
+     Kontext "ExtrasOptionenDlg"
+   ExtrasOptionenDlg.OK
+
+ Call hCloseDocument
+
+endcase
+
+'-----------------------------------------------------------------
+
+testcase tFieldsOther_6_2
+
+  Dim aUserData(16) , aUserData1() , aUserData2() as String
+
+  Dim i as Integer
+
+  aUserData1 = Array( _
+                      "Com1"       , _
+                      "ABC"        , _
+                      "DEF"        , _
+                      "AD"         , _
+                      "Str1"       , _
+                      "Country1"   , _
+                      "123"        , _
+                      "City1"      , _
+                      "Title1"     , _
+                      "Posi1"      , _
+                      "123"        , _
+                      "465"        , _
+                      "789"        , _
+                      "AD@a.a"     , _
+                      "State1"     , _
+                     )
+
+  aUserData2 = Array( _
+                      "Com2"       , _
+                      "XYZ"        , _
+                      "OPQ"        , _
+                      "XO"         , _
+                      "Str2"       , _
+                      "Country2"   , _
+                      "321"        , _
+                      "City2"      , _
+                      "Title2"     , _
+                      "Posi2"      , _
+                      "222"        , _
+                      "654"        , _
+                      "987"        , _
+                      "XO@b.b"     , _
+                      "State2"     , _
+                     )
+
+
+  printlog "Insert/Fields/Other/Document / Sender - Fixed"
+ '/// <b> Insert/Fields/Other/Document / Sender - Fixed</b>
+
+  Call hNewDocument
+
+  '/// Change user data
+   ToolsOptions
+   Call hToolsOptions("STAROFFICE","USERDATA")
+     aUserData(0) = Firma.GetText
+     aUserData(1) = VorName.GetText
+     aUserData(2) = ZuName.GetText
+     aUserData(3) = Strasse.GetText
+     aUserData(4) = City.GetText
+     aUserData(5) = State.GetText
+     aUserData(6) = Zip.GetText
+     aUserData(7) = Land.GetText
+     aUserData(8) = Titel.GetText
+     aUserData(9) = Position.GetText
+     aUserData(10) = TelPriv.GetText
+     aUserData(11) = TelGe.GetText
+     aUserData(12) = Fax.GetText
+     aUserData(13) = EMail.GetText
+
+     Kuerzel.SetText   ""
+     Firma.SetText     aUserData1(0)
+     VorName.SetText   aUserData1(1)
+     ZuName.SetText    aUserData1(2)
+     Strasse.SetText   aUserData1(4)
+     City.SetText      aUserData1(7)
+     State.SetText     aUserData1(14)
+     Zip.SetText       aUserData1(6)
+     Land.SetText      aUserData1(5)
+     Titel.SetText     aUserData1(8)
+     Position.SetText  aUserData1(9)
+     TelPriv.SetText   aUserData1(10)
+     TelGe.SetText     aUserData1(11)
+     Fax.SetText       aUserData1(12)
+     EMail.SetText     aUserData1(13)
+
+     Kontext "ExtrasOptionenDlg"
+   ExtrasOptionenDlg.OK
+
+  '/// Insert/Fields/Other/Document / Sender , check 'Fixed content'
+   Call fInsertFieldsOther("TabDokumentFeldbefehle")
+     Feldtyp.Select fGetType("Sender")
+     for i= 0 to UBound(aUserData1)
+         Kontext "TabDokumentFeldbefehle"
+         Auswahl.Select i+1
+         Sleep 1
+         InhaltFix.Check
+         Einfuegen.Click
+         sleep 1
+         Call wDokSchreiben "<Return>"
+     next i
+     Kontext "TabDokumentFeldbefehle"
+   TabDokumentFeldbefehle.Close
+
+  '/// Check if the configuration is inserted correctly
+   Call wDokSchreiben "<MOD1 Home>"
+   for i= 0 to UBound(aUserData1)
+       Call wDokSchreiben "<Shift End>"
+       if fGetFieldContent() <> aUserData1(i) then
+           Warnlog "i32872  1.Should get " & aUserData1(i)& " but get " & fGetFieldContent()
+       end if
+       Call wDokSchreiben "<Down><Home>"
+   next i
+
+  '/// Change author to author1 :XYZ OPQ
+   ToolsOptions
+   Call hToolsOptions("STAROFFICE","USERDATA")
+     Kuerzel.SetText   ""
+     Firma.SetText     aUserData2(0)
+     VorName.SetText   aUserData2(1)
+     ZuName.SetText    aUserData2(2)
+     Strasse.SetText   aUserData2(4)
+     City.SetText      aUserData2(7)
+     State.SetText     aUserData2(14)
+     Zip.SetText       aUserData2(6)
+     Land.SetText      aUserData2(5)
+     Titel.SetText     aUserData2(8)
+     Position.SetText  aUserData2(9)
+     TelPriv.SetText   aUserData2(10)
+     TelGe.SetText     aUserData2(11)
+     Fax.SetText       aUserData2(12)
+     EMail.SetText     aUserData2(13)
+
+     Kontext "ExtrasOptionenDlg"
+   ExtrasOptionenDlg.OK
+   Sleep 2
+
+  '/// Press F9
+   Call wDokSchreiben "<F9>"
+   Sleep 3
+
+  '/// Check if the configuration is changed
+   Call wDokSchreiben "<MOD1 Home>"
+   for i= 0 to UBound(aUserData1)
+       Call wDokSchreiben "<Shift End>"
+       if fGetFieldContent() <> aUserData1(i) then
+           Warnlog "i32872  2.Should get " & aUserData1(i)& " but get " & fGetFieldContent()
+       end if
+       Call wDokSchreiben "<Down><Home>"
+   next i
+
+  'Change author to default
+   ToolsOptions
+   Call hToolsOptions("STAROFFICE","USERDATA")
+     Firma.SetText     aUserData(0)
+     VorName.SetText   aUserData(1)
+     ZuName.SetText    aUserData(2)
+     Strasse.SetText   aUserData(3)
+     City.SetText      aUserData(4)
+     State.SetText     aUserData(5)
+     Zip.SetText       aUserData(6)
+     Land.SetText      aUserData(7)
+     Titel.SetText     aUserData(8)
+     Position.SetText  aUserData(9)
+     TelPriv.SetText   aUserData(10)
+     TelGe.SetText     aUserData(11)
+     Fax.SetText       aUserData(12)
+     EMail.SetText     aUserData(13)
+
+     Kontext "ExtrasOptionenDlg"
+   ExtrasOptionenDlg.OK
+
+ Call hCloseDocument
+
+endcase
+
+'-----------------------------------------------------------------
+
+testcase tFieldsOther_7
+
+  Dim  sTestFile     as String
+  Dim  sStatistics() as String
+  Dim  i             as Integer
+
+  sStatistics = Array( _
+                      "2"         , _
+                      "2"         , _
+                      "2"         , _
+                      "12"        , _
+                      "2"         , _
+                      "2"         , _
+                      "1"         , _
+                      )
+
+  sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\statisticsTest.sxw")
+
+  printlog "Insert/Fields/Other/Document / Statistics"
+ '/// <b> Insert/Fields/Other/Document / Statistics </b>
+
+  Call hNewDocument
+
+  '/// Open test file statisticsTest.sxw which includes
+  '/// 2 tables , 2 pictures , 22 paragraph , 1 object ,
+  '/// 2 words , 12 characters and 2 pages
+   Call hFileOpen(sTestFile)
+
+   Call wDokSchreiben "<MOD1 Home><Down>"
+
+  '/// Insert/Fields/Other/Document / Statistics
+  '/// Insert Pages, Paragraphs , Words , Characters , Tables, Graphics , Objects.
+  '/// Check if the insertion is correct
+   Call fInsertFieldsOther("TabDokumentFeldbefehle")
+     Feldtyp.Select fGetType("Statistics")
+     for i = 0 to UBound(sStatistics)
+         Kontext "TabDokumentFeldbefehle"
+         Auswahl.Select i+1
+         Sleep 1
+         Einfuegen.Click
+         sleep 1
+         Call wDokSchreiben "<F9>"
+         Sleep 2
+         Call wDokSchreiben "<Shift Home>"
+         Sleep 1
+         ToolsCalculate
+         if GetClipboardText <> sStatistics(i) then
+             Warnlog i &" - Should get " & sStatistics(i) & " but get " & GetClipboardText
+         end if
+         Call wDokSchreiben "<Delete>"
+     next i
+     Kontext "TabDokumentFeldbefehle"
+   TabDokumentFeldbefehle.Close
+
+ Call hCloseDocument
+
+endcase
+
+'-----------------------------------------------------------------
+
+testcase tFieldsOther_8
+
+    Dim  sTestFile     as String
+    Dim  sDirectory    as String
+    Dim  sLanguage     as String
+    Dim  sFormat()     as String
+    Dim  sResult(6)    as String
+    Dim  i             as Integer
+    
+    sLanguage    = fGetDirLanguage()
+    sDirectory   = "share\template\" & sLanguage & "\educate"
+    sTestFile    = Convertpath ( gNetzOfficePath + sDirectory + "\diploma.ott")
+    
+    sResult(0)   = fGetCateGory()
+    sResult(1)   = "diploma.ott"
+    sResult(2)   = "diploma"
+    sResult(3)   = Convertpath ( gNetzOfficePath + sDirectory )
+    sResult(4)   = sTestFile
+    sResult(5)   = fGetStyle()
+    
+    printlog "Insert/Fields/Other/Document / Template"
+    '/// <b> Insert/Fields/Other/Document / Template </b>
+    
+    Call hNewDocument
+    
+    '/// Open test file diploma.ott
+    Call hFileOpen(sTestFile)
+    
+    Call wDokSchreiben "<MOD1 Home>"
+    
+    '/// Insert/Fields/Other/Document / Template
+    '/// Insert Category , File name , File name without extension ,
+    '/// + Path , Path/File name , Style
+    '/// Check if the insertion is correct
+    Call fInsertFieldsOther("TabDokumentFeldbefehle")
+    Feldtyp.Select fGetType("Templates")
+    for i = 1 to Formatliste.GetItemCount
+        Kontext "TabDokumentFeldbefehle"
+        Formatliste.Select i
+        Sleep 1
+        Einfuegen.Click
+        sleep 1
+        Call wDokSchreiben "<F9>"
+        Sleep 2
+        Call wDokSchreiben "<Shift Left>"
+        Sleep 1
+    
+        if fGetFieldContent() <> sResult(i-1) then
+            select case i-1
+                case 0
+                    QAErrorlog "#i70342#Field 'Templates->Category' is empty"
+                case else
+                    Warnlog " - Should get " & sResult(i-1) & " but get " & fGetFieldContent()                    
+            end select
+        end if
+        Call wDokSchreiben "<Delete>"
+    next i
+    Kontext "TabDokumentFeldbefehle"
+    TabDokumentFeldbefehle.Close
+    
+    Call hCloseDocument
+    Call hCloseDocument
+
+endcase
+
+'-----------------------------------------------------------------
+
+testcase tFieldsOther_9
+
+  Dim sTime1 , sTime2  as  String
+
+  printlog "Insert/Fields/Other/Document / Time"
+ '/// <b> Insert/Fields/Other/Document / Time </b>
+
+  Call hNewDocument
+
+  '/// Insert/Fields/Other/Document / Time
+  '/// Insert a fixed time and a time .
+  '/// Check if the insertion is correct
+   Call fInsertFieldsOther("TabDokumentFeldbefehle")
+     Feldtyp.Select fGetType("Time")
+     Auswahl.Select 1  'Time (Fixed)
+     Sleep 1
+     Einfuegen.Click
+     sleep 1
+     Call wDokSchreiben "<Return>"
+
+     Kontext "TabDokumentFeldbefehle"
+     Auswahl.Select 1  'Time
+     Sleep 1
+     Einfuegen.Click
+     sleep 1
+     Kontext "TabDokumentFeldbefehle"
+   TabDokumentFeldbefehle.Close
+
+   Call wDokSchreiben "<MOD1 Home>"
+   Call wDokSchreiben "<Shift End>"
+   EditCopy
+   sTime1 = GetClipboardText
+
+   Call wDokSchreiben "<Down><Home>"
+   Call wDokSchreiben "<Shift End>"
+   EditCopy
+   sTime2 = GetClipboardText
+
+   Sleep 5
+   Call wDokSchreiben "<F9>"
+
+   'Check fixed time
+   Call wDokSchreiben "<MOD1 Home>"
+   Call wDokSchreiben "<Shift End>"
+   EditCopy
+   if sTime1 <> GetClipboardText then
+       Warnlog "Time should NOT change !"
+   end if
+
+   'Check time
+   Call wDokSchreiben "<Down><Home>"
+   Call wDokSchreiben "<Shift End>"
+   EditCopy
+   if sTime2 <> GetClipboardText then
+       Warnlog "Time should change !"
+   end if
+
+ Call hCloseDocument
+
+endcase
+
+'-----------------------------------------------------------------
+
+

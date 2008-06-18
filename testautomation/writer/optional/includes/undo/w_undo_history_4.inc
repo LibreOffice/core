@@ -1,0 +1,510 @@
+'encoding UTF-8  Do not remove or change this line!
+'**************************************************************************
+'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'* 
+'* Copyright 2008 by Sun Microsystems, Inc.
+'*
+'* OpenOffice.org - a multi-platform office productivity suite
+'*
+'* $RCSfile: w_undo_history_4.inc,v $
+'*
+'* $Revision: 1.1 $
+'*
+'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:04:01 $
+'*
+'* This file is part of OpenOffice.org.
+'*
+'* OpenOffice.org is free software: you can redistribute it and/or modify
+'* it under the terms of the GNU Lesser General Public License version 3
+'* only, as published by the Free Software Foundation.
+'*
+'* OpenOffice.org is distributed in the hope that it will be useful,
+'* but WITHOUT ANY WARRANTY; without even the implied warranty of
+'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'* GNU Lesser General Public License version 3 for more details
+'* (a copy is included in the LICENSE file that accompanied this code).
+'*
+'* You should have received a copy of the GNU Lesser General Public License
+'* version 3 along with OpenOffice.org.  If not, see
+'* <http://www.openoffice.org/license.html>
+'* for a copy of the LGPLv3 License.
+'*
+'/************************************************************************
+'*
+'* owner : fredrik.haegg@sun.com
+'*
+'* short description : Writer Undo-History - Test
+'*
+'\***********************************************************************
+
+
+sub w_undo_history_4
+
+	Call tUndoHistory34			' Objects (Insert/Delete)
+	Call tUndoHistory35			' Floating Frame (Insert/Delete)
+	Call tUndoHistory36			' Insert file
+	Call tUndoHistory37			' Asian Phonetic Guides
+	Call tUndoHistory38			' Autocorrect / Autoformat
+	Call tUndoHistory39			' Draw Object (Insert)
+	Call tUndoHistory40			' Draw Object (Group/ungroup/Name/Delete)
+	Call tUndoHistory41			' Spellcheck (Autocheck/Spellcheck)	
+	Call tUndoHistory42			' Form Control (Insert/resize/move/replace/change property/delete)
+	Call tUndoHistory43			' Header/Footer insert and delete
+	
+end sub
+
+
+
+testcase tUndoHistory34
+	
+	'/// <B>OLE-Objects (Insert/Delete)</B>
+	printlog "- Insert OLE-Object"
+	'/// new Document
+	Call hNewDocument
+    '/// Insert / Object / OLE-Object ///
+	InsertObjectOLEObject
+    Kontext "OLEObjektEinfuegen"
+	Objekttyp.Select 1
+	OLEObjektEinfuegen.Ok
+    wait 500
+	Call wDokSchreiben "<Esc>"
+    wait 500
+    Call gMouseClick(15,5)
+    wait 500
+	'///  string in Undo-list has to be: "Insert object") 
+	Call CheckUndoStringInUndoList ( 10, "InsertObject" )
+
+	printlog "- delete object"	
+	'/// Select object with <Shift F4>
+    Call wDokSchreiben "<Shift F4>"
+    wait 500
+    '/// <B>Delete object</B>
+	Call wDokSchreiben "<Delete>"
+    wait 500
+	'/// press 'delete' to remove object
+	'///  string in Undo-list has to be: "Delete object") 
+	Call CheckUndoStringInUndoList ( 10, "DeleteObject" )
+	
+	'/// close Document
+	Call hCloseDocument
+
+endcase
+
+
+testcase tUndoHistory35
+
+	'/// <B>Floating frames</B>
+	printlog "- Insert floating frame"
+	'/// new document
+	Call hNewDocument
+	'/// Insert / Floating frame
+	InsertFloatingFrame
+	Kontext "TabEigenschaften"	
+	'/// Choose a file as floating frame
+	Inhalt.Settext Convertpath (gTesttoolPath & "writer\optional\input\graphics\jolink.jpg" )
+	TabEigenschaften.Ok
+	Sleep 2
+	'///  string in Undo-list has to be: "Insert floating frame") 
+	Call CheckUndoStringInUndoList ( 10, "InsertFloatingFrame" )
+
+	'/// Delete floating frame
+	printlog "- delete floating frame"
+	Call wDokSchreiben "<Delete>"	
+	'///  string in Undo-list has to be: "Delete floating frame") 
+	Call CheckUndoStringInUndoList ( 10, "DeleteFloatingFrame" )
+	
+	'/// close document
+	Call hCloseDocument
+
+endcase
+
+
+testcase tUndoHistory36
+
+	'/// <B>Insert File</B>
+	printlog "- Insert file"
+	'/// new document
+	Call hNewDocument
+	'/// Insert / File
+	InsertFileWriter
+    Sleep 3
+    Kontext "OeffnenDlg"
+    Sleep 2
+    '/// Choose "..\\writer\\input\\htmltest.sxw"
+	if OeffnenDlg.Exists then
+		Dateiname.Settext Convertpath (gTesttoolPath & "writer\optional\input\htmltest.sxw" )
+		Oeffnen.Click
+	else
+		Warnlog "File open dialog missing"
+		Call hCloseDocument
+		goto endsub
+	endif
+
+	'///  string in Undo-list has to be: "Insert document") 
+	Call CheckUndoStringInUndoList ( 10, "InsertDocument" )
+	
+	'/// close document
+	Call hCloseDocument
+
+endcase
+
+
+testcase tUndoHistory37
+
+	'/// <B>Asian Phonetic Guides</B>
+	printlog "- Asian Phonetic Guides"
+	'/// new document
+	Call hNewDocument
+	'/// type some text and select it
+	Call wDokSchreiben ( "JuppHeidiUndJuppHeida" )
+	Call wDokSchreiben ( "<Home>" )
+	'/// Check if Asian support is enabled, if not enable it
+	if gAsianSup = true then
+		FormatRuby
+		Kontext "RubyDialog"
+		RubyText1.Settext "SeppHeidiUndSeppHeida"
+		RubyDialog.Ok
+		RubyDialog.Close
+	else
+		Call ActiveDeactivateAsianSupport(True)
+		FormatRuby
+		Kontext "RubyDialog"
+		RubyText1.Settext "SeppHeidiUndSeppHeida"
+		RubyDialog.Ok
+		RubyDialog.Close
+		Call ActiveDeactivateAsianSupport(False)	
+	endif
+	
+	'///  string in Undo-list has to be: "Asian Phonectic Guides Setting") 
+	Call CheckUndoStringInUndoList ( 10, "APGS" )
+
+	'/// close document
+	Call hCloseDocument	
+
+endcase
+
+
+testcase tUndoHistory38
+
+	'/// <B>Autocorrect / Autoformat</B>
+	printlog "- Autocorrect / Autoformat"
+	'/// new document
+	Call hNewDocument
+	'/// <B>Autocorrect</B>
+	printlog "- Autocorrect"
+	'/// type with quote and blank at the end 'www.sun.com ' 
+	Call wDokSchreiben ( "www.sun.com " )
+	'///  string in Undo-list has to be: "AutoCorrect") 
+	Call CheckUndoStringInUndoList ( 10, "AutoCorrect" )	
+	'/// insert a line break
+	Call wDokSchreiben ( "<Return>" )
+	'/// <B>Autoformat</B>
+	printlog "- Autoformat"
+	'/// type - AutoFormat test<Return>
+	Call wDokSchreiben ( "- AutoFormat test<Return>" )
+	'///  string in Undo-list has to be: "AutoCorrect") 
+	Call CheckUndoStringInUndoList ( 10, "AutoFormat" )	
+	
+	'/// close document
+	Call hCloseDocument	
+
+endcase
+
+
+testcase tUndoHistory39
+
+	'/// <B>Draw object</B>
+	printlog "- Draw object"
+	'/// new document
+	Call hNewDocument
+	'/// Insert a freeform line object
+	
+    ViewZoom
+    Kontext "Massstab"
+    Optimal.Check
+    Massstab.OK
+
+    Call hToolbarSelect ("Drawing", true)
+    Kontext "Drawbar"
+    printlog "  - Draw Freeform"
+    Freihand.Click
+    Call gMouseMove ( 23, 20, 35, 31 )
+    Call gMouseMove ( 35, 31, 40, 90 )
+    Call gMouseMove ( 41, 91, 55 , 70 )
+    Call gMouseClick( 55, 70 )
+    Call wDokSchreiben ("<Escape>")
+
+	'///  string in Undo-list has to be: "Insert draw object: freeform line") 
+	Call CheckUndoStringInUndoList ( 10, "FreeForm" )
+
+	'/// close document
+	Call hCloseDocument	
+
+endcase
+
+
+testcase tUndoHistory40
+
+	'/// <B>Group of Drawing objects</B>
+	printlog "- Group of Drawing objects"
+    '/// new document ///
+    Call hNewDocument
+    ViewZoom
+    Kontext "Massstab"
+    Optimal.Check
+    Massstab.OK
+    Sleep 1
+    '/// Insert 2 drawing objects (rectangle) ///
+    Call wZeichenobjektEinfuegen ( "Rechteck", 20, 20, 30, 30 )
+    Call wZeichenobjektEinfuegen ( "Rechteck", 20, 35, 30, 45 )
+    '/// Select both objects ///
+    Call wObjektSelektieren ( 15, 15, 50, 50 )
+    '/// Select Format / Group / Group ///
+    try
+        printlog "- group objects"
+		FormatGroupGroup
+        Sleep 1
+		'///  string in Undo-list has to be: "Group draw objects") 
+		Call CheckUndoStringInUndoList ( 10, "DrawGroup" )		
+		'/// Format / Name object
+		printlog "- name objects"
+		FormatNameObject
+		Kontext "NameDlgObject"
+		NameField.Settext "MyGroup"
+		NameDlgObject.OK
+		'///  string in Undo-list has to be: "Rename 2 Rectangles")
+		Call CheckUndoStringInUndoList ( 10, "RenameGroup" )		
+		'/// Select Format / Group / Ungroup ///
+		printlog "- ungroup objects"
+		FormatUngroupDraw
+		'///  string in Undo-list has to be: "Ungroup group object 'MyGroup'") 
+		Call CheckUndoStringInUndoList ( 10, "DrawUnGroup" )		
+		'/// Select 1 object and delete it
+		Call gMouseClick ( 25, 25 )
+		printlog "- delete object"
+		Call wDokSchreiben "<Delete>"
+		'///  string in Undo-list has to be: "Delete 2 Rectangles") 
+		Call CheckUndoStringInUndoList ( 10, "DeleteGroup" )				
+	catch
+        Warnlog "Unable to execute 'Format / Group / Group' -> disabled!"
+    endcatch
+
+	'/// close document
+	Call hCloseDocument	
+
+endcase
+
+
+testcase tUndoHistory41
+	Dim sReplace as string
+
+	'/// <B>Spellcheck(Autocheck/Spellcheck)</B>
+	printlog "- Spellcheck: Autocheck"
+    '/// new document ///
+    Call hNewDocument
+	'/// Type "This is a testp<End>"
+	Call wDokSchreiben ( "This is a testp<End>" )
+	'/// Select word' testp'
+	Call wDokSchreiben ( "<Mod1 Shift Left>" )
+	'/// Tools / Spellcheck
+	ToolsSpellcheck
+	Kontext "Spellcheck"
+	Suggestions.Select 1
+	sReplace = Suggestions.GetSelText
+	'///Replace with 1st word in suggestion list
+	printlog "-> Replace with word: " & sReplace
+	Change.Click
+	Kontext "Active"
+	if Active.Exists then
+		if Active.GetRT = 304 then
+			Active.Ok
+		endif
+	endif
+	Kontext "Spellcheck"
+	if Spellcheck.Exists then Spellcheck.Close
+	'///  string in Undo-list has to be: "Replace: 'Testp' -> 'Test'") 
+	Call CheckUndoStringInUndoList ( 10, "Autocheck/Spellcheck" )		
+    Sleep 1
+    '/// Uncheck 'Autospellcheck' in Toolbar ///
+    'ToolsSpellcheckAutoSpellcheck
+	
+	printlog "- Spellcheck"
+	Call wDokSchreiben ( "<End><Return>", 2 )
+	'/// retype 'testp'
+	Call wDokSchreiben ( "testp<Shift Home>" )
+	ToolsSpellcheck
+	Kontext "Spellcheck"
+	' Workaround: For some reasons sometimes dialog is disabled here
+	' Only reproducable by testtool
+	try
+		Suggestions.Select 1
+	catch
+		Spellcheck.Close
+		ToolsSpellcheck
+		Kontext "Spellcheck"
+		Suggestions.Select 1
+	endcatch		
+	Change.Click
+	Kontext "Active"
+	if Active.Exists then
+		if Active.GetRT = 304 then
+			try
+				Active.No
+			catch
+				Active.Ok
+			endcatch
+		endif
+	endif
+	Kontext "Spellcheck"
+	if Spellcheck.Exists then Spellcheck.Close
+	
+	'///  string in Undo-list has to be: "Replace: 'Testp' -> 'Test'") 
+	Call CheckUndoStringInUndoList ( 10, "Autocheck/Spellcheck" )		
+
+	'/// close document
+    Call hCloseDocument
+
+endcase
+
+
+testcase tUndoHistory42
+
+	'/// <B>Form Control (Insert/resize/move/replace/change property/delete)</B>
+	printlog "- Form control (insert)"
+	'/// new document
+	Call hNewDocument
+	'/// Open 'Form' Toolbox ///
+	Call hToolbarSelect ("FormControls", true)
+	'Formsbar.Move 20, 30
+	'/// Insert a pushbutton from toolbox ///
+	Pushbutton.Click
+    Kontext "DocumentWriter"
+    DocumentWriter.MouseDown ( 10, 20 )
+    DocumentWriter.MouseMove ( 20, 25 )
+    DocumentWriter.MouseUp   ( 20, 25 )
+    Sleep 1
+
+	
+	'///  string in Undo-list has to be: "Insert control") 
+	Call CheckUndoStringInUndoList ( 10, "ControlInsert" )
+
+	printlog "- Form control (move)"
+	'/// Press '<Up>' to move control
+	Call wDokSchreiben ( "<Up>" )
+	'///  string in Undo-list has to be: "Move control")
+	Call CheckUndoStringInUndoList ( 10, "ControlMove" )
+
+	printlog "- Form control (resize)"
+	'/// Press '<Ctrl+Tab>' to enter handle selection mode
+	Call wDokSchreiben ( "<Mod1 Tab>" )
+	'/// Press '<Up>' to resize control
+	Call wDokSchreiben ( "<Up>" )
+	'///  string in Undo-list has to be: "Resize control")
+	Call CheckUndoStringInUndoList ( 10, "ControlResize" )
+		
+	printlog "- Form control (replace)"
+	'/// Select 'Format->Replace with-> Text box'			
+	FormatReplaceWithTextBox
+	wait 500
+	'///  string in Undo-list has to be: "Replace control")
+	Call CheckUndoStringInUndoList ( 10, "ControlReplace" )
+		
+	printlog "- Form control (change property)"	
+	'/// Select 'Format->Control' and change name of control
+	FormatControl	
+	Kontext "ControlPropertiesDialog"   
+    ControlPropertiesTabControl.setPage TabGeneralControl
+	Kontext "TabGeneralControl"
+	NameText.Settext "MyControl"
+	Kontext "ControlPropertiesDialog"
+    ControlPropertiesDialog.Close 
+	'///  string in Undo-list has to be: "Set property 'Name'")
+	Call CheckUndoStringInUndoList ( 10, "ControlChange" )
+	
+	printlog "- Form control (delete)"
+	'/// Press '<Delete>' to delete control
+	Call wDokSchreiben ( "<Delete>" )
+	'///  string in Undo-list has to be: "Delete control")
+	Call CheckUndoStringInUndoList ( 10, "ControlDelete" )
+	
+	'/// close document
+	Call hCloseDocument 	
+	
+endcase
+
+
+testcase tUndoHistory43
+
+    QAErrorlog "#i56552#footer deletion cannot be undone"
+    goto endsub
+	'/// Insert header
+	printlog "- Insert header"
+	'/// new Document
+	Call hNewDocument
+	'/// Insert / Header / Default
+     DocumentWriter.UseMenu
+     MenuSelect(Menugetitemid(4))
+     Sleep 2
+     MenuSelect(Menugetitemid(9))
+     Sleep 2
+     MenuSelect(Menugetitemid(1))
+     Sleep 2
+	'///  string in Undo-list has to be: "Header/footer changed")
+	Call CheckUndoStringInUndoList ( 10, "Header/Footer" )
+	
+	'///  Delete header
+	printlog "- Delete header"
+    Kontext "DocumentWriter"
+	DocumentWriter.UseMenu
+    MenuSelect(Menugetitemid(4))
+    Sleep 2
+    MenuSelect(Menugetitemid(9))
+    Sleep 2
+    MenuSelect(Menugetitemid(1))
+    Sleep 2
+	Kontext "Active"
+	if Active.Exists then
+		if Active.GetRT = 304 then
+			Active.Yes
+		endif
+	endif
+	'///  string in Undo-list has to be: "Header/footer changed")
+	Call CheckUndoStringInUndoList ( 10, "Header/Footer" )
+
+	'/// Insert footer
+	printlog "- Insert footer"
+	'/// Insert / Header / Default
+     Kontext "DocumentWriter"
+	 DocumentWriter.UseMenu
+     MenuSelect(Menugetitemid(4))
+     Sleep 2
+     MenuSelect(Menugetitemid(10))
+     Sleep 2
+     MenuSelect(Menugetitemid(1))
+     Sleep 2
+	'///  string in Undo-list has to be: "Header/footer changed")
+	Call CheckUndoStringInUndoList ( 10, "Header/Footer" )
+	
+	'///  Delete footer
+	printlog "- Delete footer"
+    Kontext "DocumentWriter"
+	DocumentWriter.UseMenu
+    MenuSelect(Menugetitemid(4))
+    Sleep 2
+    MenuSelect(Menugetitemid(10))
+    Sleep 2
+    MenuSelect(Menugetitemid(1))
+    Sleep 2
+	Kontext "Active"
+	if Active.Exists then
+		if Active.GetRT = 304 then
+			Active.Yes
+		endif
+	endif
+	'///  string in Undo-list has to be: "Header/footer changed")
+	Call CheckUndoStringInUndoList ( 10, "Header/Footer" )
+
+	 '/// close document
+	 Call hCloseDocument
+	 
+endcase
