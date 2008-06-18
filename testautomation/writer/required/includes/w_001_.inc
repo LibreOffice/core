@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_001_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:26:27 $
+'* last change: $Author: fredrikh $ $Date: 2008-06-18 14:32:03 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -657,7 +657,6 @@ testcase tFileSaveAsExport
     Select Case gApplication
         Case "WRITER"
             xExport = Convertpath( gTesttoolpath + "writer\required\input\st1_1.sxw" )
-            xExportFilter = "Microsoft Word 97/2000/XP (.doc)"
         Case else
             goto endsub
     end select
@@ -669,7 +668,7 @@ testcase tFileSaveAsExport
     Sleep 1
 
     PrintLog "Select Save as .. and choose 'Microsoft Word 97/2000/XP' as export-filter"
-    Call hSpeichernUnterMitFilterKill(Convertpath(gOfficepath + "user\work\ecksport.doc"), xExportFilter)
+    Call hFileSaveAsWithFilterKill (Convertpath(gOfficepath + "user\work\ecksport.doc"), "MS Word 2003 XML")
 
     CountDocu = 0
     Do Until GetDocumentCount = 1
@@ -679,7 +678,7 @@ testcase tFileSaveAsExport
     if CountDocu > 1 then
         QAErrorlog "#i42080#More than 1 document had to be closed!"
     end if
-    
+
     PrintLog "Close document"
     Call hCloseDocument
 endcase
@@ -888,7 +887,7 @@ testcase tFileReload
 
     PrintLog "Enter some text, save and close document"
     Call wDokSchreiben("File -> Reload!")
-    Call hSpeichernUnterKill ( gOfficePath + "user\work\" + sFile$ )
+    Call hFileSaveAsKill ( gOfficePath + "user\work\" + sFile$ )
     FileClose
     Kontext
     if MessageBox.Exists (1) then
@@ -946,7 +945,7 @@ testcase tFileVersions
     Call hNewDocument
     Call wDokSchreiben ("File version")
     PrintLog "enter some text in documet and save it"
-    Call hSpeichernUnterKill(gOfficePath + "user\work\" + sFile$)
+    Call hFileSaveAsKill(gOfficePath + "user\work\" + sFile$)
     Sleep 1
 
     try
