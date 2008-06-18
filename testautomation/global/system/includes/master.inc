@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: master.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-13 10:27:05 $
+'* last change: $Author: tbo $ $Date: 2008-06-18 10:02:29 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -117,6 +117,7 @@ sub GetUseFiles
 '/// At the resulting path of BaseDirectory + gPrivateEnvironmentLocation + 'inc/' there has to exist the file: privateenvironment.inc
 '/// with at least the sub: getUseFilesPrivateEnvironment which will get executed
 
+    if (gPrivateEnvironmentLocation = "") then
     sPrivateEnvironmentLocation = ConvertPath (gTestToolPath + "errorlog\privateenvironment.txt")
     if fileExists(sPrivateEnvironmentLocation) then
         gPrivateEnvironmentLocation = getIniValue(sPrivateEnvironmentLocation, "PrivateEnvironment", "Current")
@@ -130,6 +131,7 @@ sub GetUseFiles
         call getUseFilesPrivateEnvironment
     else
         qaErrorLog "Private Environment Control File Location specified in '" + sPrivateEnvironmentLocation + "', but the file doesn't exist: '" +sTemp+ "'"
+    end if
     end if
     
     ' Check if environment works with this OOo version
@@ -905,12 +907,15 @@ sub hDetectStatusDatabase as Boolean
     dim sOOoLocalStatusDatabase as string
     dim sPrivateEnvironmentLocation as string
   
+    gStatusFeatureLevel = GetIniValue ( gTesttoolIni, "StatusFeatureLevel" , "Current" )
+    if gStatusFeatureLevel = "" then
     sPrivateEnvironmentLocation = ConvertPath (gTestToolPath + "errorlog\privateenvironment.txt")
     if fileExists(sPrivateEnvironmentLocation) then
         gStatusFeatureLevel = getIniValue(sPrivateEnvironmentLocation, "StatusFeatureLevel", "Current")
     else
 	' manual submitting status from errorlog directory
         gStatusFeatureLevel = 2
+    end if
     end if
     if gStatusFeatureLevel = 0 then
 	' automatical submitting status; filespace location defined in privateenvironment.inc

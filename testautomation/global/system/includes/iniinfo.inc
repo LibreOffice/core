@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: iniinfo.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-13 10:27:05 $
+'* last change: $Author: tbo $ $Date: 2008-06-18 10:02:29 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -75,6 +75,7 @@ sub GetIniInformation
     dim sSoffice(3) as string ' array, because they might all get evaluated sometime
     dim bOOo(3) as string
     dim iSoffice(3) as integer
+    dim sTemp as string
     
     gPathSigne = hGetPathSigne(gPLatform)
 
@@ -148,6 +149,14 @@ sub GetIniInformation
    gOOoStartupTimeOut = fgetOOoStartupTimeOut()
    gOOoShutdownTimeOut = fgetOOoShutdownTimeOut()
    call sCheckValgrindStatus()
+   gPrivateEnvironmentLocation = getIniValue(gTesttoolIni, "PrivateEnvironment", "Current")
+   sTemp = ConvertPath (gTestToolPath + gPrivateEnvironmentLocation + "inc/privateenvironment.inc")
+   if fileExists(sTemp) then
+       use sTemp
+       call getUseFilesPrivateEnvironment
+   else
+       gPrivateEnvironmentLocation = ""
+   end if
 end sub
 
 '-------------------------------------------------------------------------
