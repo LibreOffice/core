@@ -304,3 +304,149 @@
  //    pass in address of array of char * pointers
  // onlycompoundsug: probably bad suggestions (need for ngram sugs, too)
  
+--- misc/hunspell-1.1.12/tests/Makefile.am	Tue Sep  4 01:25:35 2007
++++ misc/build/hunspell-1.1.12/tests/Makefile.am	Wed Jun 18 11:53:11 2008
+@@ -6,29 +6,18 @@
+ 
+ TESTS =	\
+ affixes.test \
+-base.test \
+ base_utf.test \
+-allcaps.test \
+ allcaps_utf.test \
+-allcaps2.test \
+-allcaps3.test \
+-keepcase.test \
+-i58202.test \
+ map.test \
+-rep.test \
+-sug.test \
+ sugutf.test \
+-phone.test \
+ flag.test \
+ flaglong.test \
+ flagnum.test \
+ flagutf8.test \
+-slash.test \
+ forbiddenword.test \
+ nosuggest.test \
+ alias.test \
+ alias2.test \
+-alias3.test \
+ break.test \
+ needaffix.test \
+ needaffix2.test \
+@@ -39,7 +28,6 @@
+ fogemorpheme.test \
+ onlyincompound.test \
+ complexprefixes.test \
+-complexprefixes2.test \
+ complexprefixesutf.test \
+ conditionalprefix.test \
+ zeroaffix.test \
+@@ -51,7 +39,6 @@
+ compoundrule.test \
+ compoundrule2.test \
+ compoundrule3.test \
+-compoundrule4.test \
+ compoundrule5.test \
+ compoundrule6.test \
+ compoundaffix.test \
+@@ -64,12 +51,7 @@
+ checkcompoundcaseutf.test \
+ checkcompoundpattern.test \
+ utfcompound.test \
+-checksharps.test \
+ checksharpsutf.test \
+-germancompounding.test \
+-germancompoundingold.test \
+-i35725.test \
+-i53643.test \
+ i54633.test \
+ i54980.test \
+ maputf.test \
+@@ -77,11 +59,8 @@
+ ignore.test \
+ ignoreutf.test \
+ 1592880.test \
+-1695964.test \
+ 1463589.test \
+ 1463589_utf.test \
+-IJ.test \
+-i68568.test \
+ i68568utf.test \
+ 1706659.test \
+ digits_in_words.test \
+--- misc/hunspell-1.1.12/tests/Makefile.in	Tue Sep  4 02:20:35 2007
++++ misc/build/hunspell-1.1.12/tests/Makefile.in	Wed Jun 18 11:53:11 2008
+@@ -196,29 +196,18 @@
+ XFAIL_TESTS = @XFAILED@
+ TESTS = \
+ affixes.test \
+-base.test \
+ base_utf.test \
+-allcaps.test \
+ allcaps_utf.test \
+-allcaps2.test \
+-allcaps3.test \
+-keepcase.test \
+-i58202.test \
+ map.test \
+-rep.test \
+-sug.test \
+ sugutf.test \
+-phone.test \
+ flag.test \
+ flaglong.test \
+ flagnum.test \
+ flagutf8.test \
+-slash.test \
+ forbiddenword.test \
+ nosuggest.test \
+ alias.test \
+ alias2.test \
+-alias3.test \
+ break.test \
+ needaffix.test \
+ needaffix2.test \
+@@ -229,7 +218,6 @@
+ fogemorpheme.test \
+ onlyincompound.test \
+ complexprefixes.test \
+-complexprefixes2.test \
+ complexprefixesutf.test \
+ conditionalprefix.test \
+ zeroaffix.test \
+@@ -241,7 +229,6 @@
+ compoundrule.test \
+ compoundrule2.test \
+ compoundrule3.test \
+-compoundrule4.test \
+ compoundrule5.test \
+ compoundrule6.test \
+ compoundaffix.test \
+@@ -254,12 +241,7 @@
+ checkcompoundcaseutf.test \
+ checkcompoundpattern.test \
+ utfcompound.test \
+-checksharps.test \
+ checksharpsutf.test \
+-germancompounding.test \
+-germancompoundingold.test \
+-i35725.test \
+-i53643.test \
+ i54633.test \
+ i54980.test \
+ maputf.test \
+@@ -267,11 +249,8 @@
+ ignore.test \
+ ignoreutf.test \
+ 1592880.test \
+-1695964.test \
+ 1463589.test \
+ 1463589_utf.test \
+-IJ.test \
+-i68568.test \
+ i68568utf.test \
+ 1706659.test \
+ digits_in_words.test \
