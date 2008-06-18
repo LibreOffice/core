@@ -1,0 +1,673 @@
+'**************************************************************************
+'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'* 
+'* Copyright 2008 by Sun Microsystems, Inc.
+'*
+'* OpenOffice.org - a multi-platform office productivity suite
+'*
+'* $RCSfile: w_tool3.inc,v $
+'*
+'* $Revision: 1.1 $
+'*
+'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:36:08 $
+'*
+'* This file is part of OpenOffice.org.
+'*
+'* OpenOffice.org is free software: you can redistribute it and/or modify
+'* it under the terms of the GNU Lesser General Public License version 3
+'* only, as published by the Free Software Foundation.
+'*
+'* OpenOffice.org is distributed in the hope that it will be useful,
+'* but WITHOUT ANY WARRANTY; without even the implied warranty of
+'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'* GNU Lesser General Public License version 3 for more details
+'* (a copy is included in the LICENSE file that accompanied this code).
+'*
+'* You should have received a copy of the GNU Lesser General Public License
+'* version 3 along with OpenOffice.org.  If not, see
+'* <http://www.openoffice.org/license.html>
+'* for a copy of the LGPLv3 License.
+'*
+'/************************************************************************
+'*                                                                **
+'* owner : helge.delfs@sun.com                                    **
+'*                                                                **
+'* short description : Description of file                        **
+'*                                                                **
+'*******************************************************************
+'*                                                                **
+' #1 InTabelleKontrollieren
+' #1 InTabelleKontrollierenExtra
+' #1 InTextKontrollieren
+' #1 AufsteigendKontrollieren ( Zahl as Boolean )
+' #1 AbsteigendKontrollieren ( Zahl as Boolean )
+' #1 AufSortierungPruefen
+' #1 AbSortierungPruefen
+' #1 UndoRichtigBeiSortierung
+' #1 TrennzeichenSetzen ( Trennstring as String )
+' #1 ZelleRuntertesten ( Wert$ ) as Boolean
+' #1 wEinfuegenEintragAlle ( NaWieSollErheissen$ )
+' #1 ReihenfolgePruefen
+' #1 ReihenfolgePruefen2
+' #1 SchriftFormatTesten ( sName$ ) as String
+' #1 ErmittleErgebnis ( Ergebnis as String ) as Boolean
+' #1 VerzeichnisUeberNavigator(Welches as integer)
+' #1 sZahlenformatfuerZelle
+' #1 sNavigatorInBrauchbarenZustand
+' #1 sZellinhaltInZwischenablage(VergleichDas as string
+' #1 sSeiteMitBrauchbarerTabelleEinrichten
+' #1 wOpenContextMenu
+'*                                                                **
+'\******************************************************************
+
+
+sub InTabelleKontrollieren
+   Call wDokSchreiben ("<Home>")
+   Call wDokSchreiben ("<Tab><Shift End>")
+   EditCopy
+   if GetClipBoardText <> "Text" then
+      Warnlog "Text has not been inserted in a table"
+   else
+      Call wDokSchreiben "<Home>"
+      Call wDokSchreiben "<Shift End>"
+   end if
+end sub
+
+' ****
+sub InTabelleKontrollierenExtra
+   Call wDokSchreiben ("<Home><Shift Tab><Shift End>")
+   EditCopy
+   if GetClipBoardText <> "Der" then
+      Warnlog "Text has not been inserted in a table"
+   else
+      Call wDokSchreiben "<Home>"
+      Call wDokSchreiben "<Shift End>"
+   end if
+end sub
+
+'***
+sub InTextKontrollieren
+   Call wDokSchreiben ("<Home><Shift Mod1 Right>")
+   EditCopy
+   if Left$(GetClipBoardText,3) <> "Der" AND Left$(GetClipboardText,4) <> "Der " then
+      Warnlog "Table has not been changed to text"
+   else
+      Call wDokSchreiben "<Home>"
+      Call wDokSchreiben "<Shift End>"
+   end if
+end sub
+
+'***
+sub AufsteigendKontrollieren ( Zahl as Boolean )
+   Call wDokSchreiben "<Home><Up>",6
+   wait 500
+   Call wDokSchreiben ("<Home><Shift End>" )
+   wait 100
+   EditCopy
+   if Zahl = TRUE then
+      if GetClipboardText <> "23" then Warnlog "1. Number not correctly sorted"
+   else
+      if GetClipboardText <> "Ahallo" then Warnlog "1. Word is not correctly sorted"
+   end if
+   Call wDokSchreiben ( "<Down><Down><Home><Shift End>" )
+   wait 100
+   EditCopy
+   if Zahl = TRUE then
+      if GetClipboardText <> "54" then Warnlog "3. Number not correctly sorted"
+   else
+      if GetClipboardText <> "Ohallo" then Warnlog "3. Word not correctly sorted"
+   end if
+   Call wDokSchreiben ( "<Down><Down><Home><Shift End>" )
+   wait 100
+   EditCopy
+   if Zahl = TRUE then
+      if GetClipboardText <> "65" then Warnlog "Last number is not correctly sorted"
+   else
+      if GetClipboardText <> "Zhallo" then Warnlog "Last word is not correctly sorted"
+   end if
+end sub
+
+'***
+sub AbsteigendKontrollieren ( Zahl as Boolean )
+   Call wDokSchreiben "<Home><Up>",6
+   wait 500
+   Call wDokSchreiben ( "<Home><Shift End>" )
+   wait 100
+   EditCopy
+   if Zahl = TRUE then
+      if GetClipboardText <> "65" then Warnlog "1. Number not correctly sorted"
+   else
+      if GetClipboardText <> "Zhallo" then Warnlog "1. word not correctly sorted"
+   end if
+   Call wDokSchreiben ( "<Down><Down><Down><Home><Shift End>" )
+   wait 100
+   EditCopy
+   if Zahl = TRUE then
+      if GetClipboardText <> "43" then Warnlog "4th number not correctly sorted"
+   else
+      if GetClipboardText <> "Ghallo" then Warnlog "4th word not correctly sorted"
+   end if
+   Call wDokSchreiben ( "<Down><Home><Shift End>" )
+   wait 100
+   EditCopy
+   if Zahl = TRUE then
+      if GetClipboardText <> "23" then Warnlog "Wrong sort: last number. Should => "+"Ohallo"+"   Is =>"+GetClipboardText
+   else
+      if GetClipboardText <> "Ahallo" then Warnlog "Wrong sort: last word. Should => "+"Ohallo"+"   Is =>"+GetClipboardText
+   end if
+end sub
+
+'***
+sub AufSortierungPruefen(i as integer)
+   Call wDokSchreiben "<Home>"
+   Call wDokSchreiben "<up>",6
+   Call wDokSchreiben "<Shift Mod1 Right>"
+   Wait 100
+   EditCopy
+   if Left$(GetClipboardText,3) <> "AAA" then Warnlog "Entry in 1.Column/1.Row incorrect"
+   if i <> 1 then
+    Call wDokSchreiben "<Mod1 Right>", 3
+   else
+    Call wDokSchreiben "<Mod1 Right>"
+   endif
+   Call wDokSchreiben "<Shift Mod1 Right>"
+   Wait 100
+   EditCopy
+   if Left$(GetClipboardText,3) <> "CCC" then Warnlog "Entry in 2.Column/1.Row incorrect"
+   Call wDokSchreiben "<Down><Home>"
+   Call wDokSchreiben "<Shift Mod1 Right>"
+   Wait 100
+   EditCopy
+   if Left$(GetClipboardText,3) <> "AAA" then Warnlog "Entry in 1.Column/2.Row incorrect"
+   if i <> 1 then
+    Call wDokSchreiben "<Mod1 Right>", 3
+   else
+    Call wDokSchreiben "<Mod1 Right>"
+   endif
+   Call wDokSchreiben "<Shift Mod1 Right>"
+   Wait 100
+   EditCopy
+   if Left$(GetClipboardText,3) <> "DDD" then Warnlog "Entry in 2.Column/2.Row incorrect"
+   Call wDokSchreiben "<Down><Home>"
+   if i <> 1 then
+    Call wDokSchreiben "<Mod1 Right>", 10
+   else
+    Call wDokSchreiben "<Mod1 Right>", 5
+   endif
+   Call wDokSchreiben "<Shift Mod1 Right>"
+   Wait 100
+   EditCopy
+   if Left$(GetClipboardText,3) <> "AAA" then Warnlog "Entry in 4.Column/3.Row incorrect"
+end sub
+
+'***
+sub AbSortierungPruefen(i as integer)
+   Call wDokSchreiben "<Home>"
+   Call wDokSchreiben "<up>", 6
+   Call wDokSchreiben "<Shift Mod1 Right>"
+   Wait 100
+   EditCopy
+   if Left$(GetClipboardText,3) <> "CCC" then Warnlog "Entry in 1.Column/1.Row incorrect"
+   Call wDokSchreiben "<Down><Shift Mod1 Left>"
+   Wait 100
+   EditCopy
+   if Left$(GetClipboardText,3) <> "CCC" then Warnlog "Entry in 1.Column/2.Row incorrect"
+   if i <> 1 then
+    Call wDokSchreiben "<Mod1 Right>" , 4
+   else
+    Call wDokSchreiben "<Mod1 Right>" , 2
+   endif
+   Call wDokSchreiben "<Shift Mod1 Right>"
+   Wait 100
+   EditCopy
+   if Left$(GetClipboardText,3) <> "BBB" then Warnlog "Entry in 2.Column/2.Row incorrect"
+   Call wDokSchreiben "<Left><Up>"
+   Call wDokSchreiben "<Right>"
+   Call wDokSchreiben "<Shift Mod1 Left>"
+   Wait 100
+   EditCopy
+   if Left$(GetClipboardText,3) <> "EEE" then Warnlog "Entry in 2.Column/1.Row incorrect"
+   if i <> 1 then
+    Call wDokSchreiben "<Mod1 Right>", 6
+    Call wDokSchreiben "<Down>", 3
+    Call wDokSchreiben "<End><Shift Mod1 Left>"
+   else
+    Call wDokSchreiben "<Mod1 Right>", 3
+    Call wDokSchreiben "<Down>", 3
+    Call wDokSchreiben "<Shift Mod1 Right>"
+   endif
+   Wait 100
+   EditCopy
+   if Left$(GetClipboardText,3) <> "AAA" then Warnlog "Entry in 2.Column/1.Row incorrect"
+end sub
+
+'***
+sub UndoRichtigBeiSortierung
+  Dim Fehler as Boolean
+   Call wDokSchreiben "<Left Right>"
+   wait 100
+   EditUndo
+   Sleep 1
+   Call wDokSchreiben "<Home>"
+   Call wDokSchreiben "<up>", 6
+   Call wDokSchreiben "<Shift Mod1 Right>"
+   EditCopy
+   if Left$(GetClipboardText,3) <> "AAA" then Fehler = TRUE
+   Call wDokSchreiben "<Down><Home><Shift Mod1 Right>"
+   Wait 100
+   EditCopy
+   if Left$(GetClipboardText,3) <> "BBB" then Fehler = TRUE
+   Call wDokSchreiben "<Down><Home><Shift Mod1 Right>"
+   Wait 100
+   EditCopy
+   if Left$(GetClipboardText,3) <> "CCC" then Fehler = TRUE
+   Call wDokSchreiben "<Down><Home><Shift Mod1 Right>"
+   Wait 100
+   EditCopy
+   if Left$(GetClipboardText,3) <> "AAA" then Fehler = TRUE
+   Call wDokSchreiben "<Down><Home><Shift Mod1 Right>"
+   Wait 100
+   EditCopy
+   if Left$(GetClipboardText,3) <> "BBB" then Fehler = TRUE
+   Call wDokSchreiben "<Down><Home><Shift Mod1 Right>"
+   Wait 100
+   EditCopy
+   if Left$(GetClipboardText,3) <> "CCC" then Fehler = TRUE
+   if Fehler = TRUE then
+      Warnlog "Undo after sorting has not been functioned correctly"
+      Call hCloseDocument
+      Call hFileOpen ( gTesttoolPath + "writer\level1\input\st1_5.sdw" )
+   end if
+   Call wDokSchreiben "<End>"
+   Call wDokSchreiben "<Down>",6
+   Call wDokSchreiben "<Mod1 a>"
+   wait 100
+end sub
+
+'***
+sub TrennzeichenSetzen ( Trennstring as String )
+    EditSearchAndReplace
+    Kontext "FindAndReplace"
+    if FindAndReplace.NotExists then EditSearchAndReplace
+    Kontext "FindAndReplace"
+    if Not RegularExpressions.IsVisible then More.Click
+    Select Case Trennstring
+        Case ";"
+            RegularExpressions.Check
+            SearchFor.SetText "\t"
+    
+        Case "|"
+            RegularExpressions.Check
+            SearchFor.SetText "\t"
+
+    end select
+
+    ReplaceWith.SetText TrennString
+    ReplaceAll.Click
+
+    Kontext
+    if MessageBox.Exists then
+        if InStr( MessageBox.GetText, "30" ) = 0 then
+            MessageBox.OK
+            Kontext "FindAndReplace"
+            RegularExpressions.Check
+            SearchFor.SetText "\t"
+            ReplaceWith.SetText TrennString
+            ReplaceAll.Click
+            Sleep 1
+            Kontext
+            if MessageBox.Exists then
+                if InStr( MessageBox.GetText, "30" ) = 0 then
+                    MessageBox.OK
+                else
+                    Warnlog "Unable to insert Character. Following test doesn't work!"
+                    MessageBox.OK
+                end if
+            end if
+        else
+            MessageBox.OK
+        end if
+    end if
+    Kontext "FindAndReplace"
+    More.Click
+    if FindAndReplace.Exists then FindAndReplace.Close
+end sub
+
+'***
+function ZelleRuntertesten ( Wert$ ) as Boolean
+   Call wDokSchreiben "<Down>"
+   Call wDokSchreiben "<Mod1 a>"
+   wait 100
+   EditCopy
+   if GetClipboardText = Wert$ then
+      ZelleRuntertesten = TRUE
+   else
+      ZelleRuntertesten = FALSE
+   end if
+end function
+
+'***
+
+sub wEinfuegenEintragAlle ( NaWieSollErheissen$ )
+   Call wDokSchreiben NaWieSollErheissen$
+   Call wDokSchreiben "<Mod1 Left><Shift Mod1 Right>"
+   InsertIndexesEntry
+   Kontext "VerzeichniseintragEinfuegen"
+   Verzeichnis.Select 1
+   VerzeichniseintragEinfuegen.OK
+
+   Call wDokSchreiben "<End> "
+   Call wDokSchreiben "<Left><Shift Mod1 Left>"
+   InsertIndexesEntry
+   Kontext "VerzeichniseintragEinfuegen"
+   Verzeichnis.Select 2
+   VerzeichniseintragEinfuegen.OK
+
+   Call wDokSchreiben "<End> "
+   Call wDokSchreiben "<Left><Left><Shift Mod1 Left>"
+   InsertIndexesEntry
+   Kontext "VerzeichniseintragEinfuegen"
+   Verzeichnis.Select 3
+   VerzeichniseintragEinfuegen.OK
+   Call wDokSchreiben "<End> "
+end sub
+
+'***
+
+sub ReihenfolgePruefen
+  Dim sDummy$
+
+  printlog "     - Checking entry's on first page"
+   Call wDokSchreiben "<Down><Shift Mod1 Right>"
+   wait 100
+   EditCopy
+   sDummy$ = GetClipboardText
+   if sDummy$ <> "Zhallo" then
+      if sDummy$ <> "Ahallo" then
+         Warnlog "Wrong Sort: Should -> Zhallo   Is -> "+ sDummy$
+      else
+         Warnlog "Sort infinitely is not in alphabetical order"
+         Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+         wait 100
+         EditCopy
+         if GetClipboardText <> "Zhallo" then Warnlog "2. entry not Zhallo but "+GetClipboardText
+      end if
+   else
+      Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+      wait 100
+      EditCopy
+      if GetClipboardText <> "Ahallo" then Warnlog "2. entry not Ahallo but "+GetClipboardText
+   end if
+   Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+   wait 100
+   EditCopy
+   if GetClipboardText <> "Xhallo" then Warnlog "3. entry not Xhallo but "+GetClipboardText
+   Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+   wait 100
+   EditCopy
+   if GetClipboardText <> "Ghallo" then Warnlog "4. entry not Ghallo but "+GetClipboardText
+
+  printlog "     - checking entrys on 3rd page"
+   Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+   wait 100
+   EditCopy
+   sDummy$ = GetClipboardText
+   if sDummy$ <> "Zhallo" then
+      if sDummy$ <> "Ahallo" then
+         Warnlog "Wrong Sort: Should -> Zhallo   Is -> "+ sDummy$
+      else
+         Warnlog "Sort infinitely is not in alphabetical order"
+         Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+         wait 100
+         EditCopy
+         if GetClipboardText <> "Zhallo" then Warnlog "6. entry not Zhallo but "+GetClipboardText
+      end if
+   else
+      Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+      wait 100
+      EditCopy
+      if GetClipboardText <> "Ahallo" then Warnlog "6. entry not Ahallo but "+GetClipboardText
+   end if
+   Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+   wait 100
+   EditCopy
+   if GetClipboardText <> "Xhallo" then Warnlog "7. entry not Xhallo but "+GetClipboardText
+   Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+   wait 100
+   EditCopy
+   if GetClipboardText <> "Ghallo" then Warnlog "8. entry not Ghallo but "+GetClipboardText
+
+  printlog "     - checking page entrys"
+   Call wDokSchreiben "<End><Shift Mod1 Left>"
+   wait 100
+   EditCopy
+   if GetClipboardText <> "3" then Warnlog "8. Entry: Not page 3 but "+ GetClipboardText
+   Call wDokSchreiben "<End><Up><Shift Mod1 Left>"
+   wait 100
+   EditCopy
+   if GetClipboardText <> "3" then Warnlog "7. Entry: Not page 3 but "+ GetClipboardText
+   Call wDokSchreiben "<End><Up><Shift Mod1 Left>"
+   wait 100
+   EditCopy
+   if GetClipboardText <> "3" then Warnlog "6. entry: Not page 3 but "+ GetClipboardText
+   Call wDokSchreiben "<End><Up><Shift Mod1 Left>"
+   wait 100
+   EditCopy
+   if GetClipboardText <> "3" then Warnlog "5. entry: Not page 3 but "+ GetClipboardText
+   Call wDokSchreiben "<End><Up><Shift Mod1 Left>"
+   wait 100
+   EditCopy
+   if GetClipboardText <> "1" then Warnlog "4. entry: Not page 1 but "+ GetClipboardText
+   Call wDokSchreiben "<End><Up><Shift Mod1 Left>"
+   wait 100
+   EditCopy
+   if GetClipboardText <> "1" then Warnlog "3. entry: Not page 1 but "+ GetClipboardText
+   Call wDokSchreiben "<End><Up><Shift Mod1 Left>"
+   wait 100
+   EditCopy
+   if GetClipboardText <> "1" then Warnlog "2. entry: Not page 1 but "+ GetClipboardText
+   Call wDokSchreiben "<End><Up><Shift Mod1 Left>"
+   wait 100
+   EditCopy
+   if GetClipboardText <> "1" then Warnlog "1. entry: Not page 1 but "+ GetClipboardText
+   Call wDokSchreiben "<End><Up><Shift Mod1 Left>"
+end sub
+
+'***
+sub ReihenfolgePruefen2
+  printlog "     - checking entrys"
+   Call wDokSchreiben "<Down><Shift Mod1 Right>"
+   wait 100
+   EditCopy
+   if GetClipboardText <> "Ahallo" then Warnlog "1. entry not Ahallo but "+GetClipboardText
+   Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+   wait 100
+   EditCopy
+   if GetClipboardText <> "Ghallo" then Warnlog "2. entry not Ghallo but "+GetClipboardText
+   Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+   wait 100
+   EditCopy
+   if GetClipboardText <> "Xhallo" then Warnlog "3. entry not Xhallo but "+GetClipboardText
+   Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+   wait 100
+   EditCopy
+   if GetClipboardText <> "Zhallo" then Warnlog "4. entry not Zhallo but "+GetClipboardText
+   Call wDokSchreiben "<Down><Mod1 Left><Shift Mod1 Right>"
+   wait 100
+   EditCopy
+   if GetClipboardText <> "Bhallo " then Warnlog "Number of entrys more then 4."
+
+  printlog "     - checking page entrys"
+   Call wDokSchreiben "<Up>"
+   Call wDokSchreiben "<Shift Mod1 Right>", 3
+   wait 100
+   EditCopy
+   if GetClipboardText <> "1, 3" then Warnlog "4. entry: Not '1, 3' but "+ GetClipboardText
+   Call wDokSchreiben "<Up>"
+   Call wDokSchreiben "<Shift Mod1 Left>", 3
+   wait 100
+   EditCopy
+   if GetClipboardText <> "1, 3" then Warnlog "3. entry: Not '1, 3' but "+ GetClipboardText
+   Call wDokSchreiben "<Up>"
+   Call wDokSchreiben "<Shift Mod1 Right>", 3
+   wait 100
+   EditCopy
+   if GetClipboardText <> "1, 3" then Warnlog "2. entry: Not '1, 3' but "+ GetClipboardText
+   Call wDokSchreiben "<Up>"
+   Call wDokSchreiben "<Shift Mod1 Left>", 3
+   wait 100
+   EditCopy
+   if GetClipboardText <> "1, 3" then Warnlog "1. entry: Not '1, 3' but "+ GetClipboardText
+end sub
+' ***
+function SchriftFormatTesten ( sName$ ) as String
+   SchriftFormatTesten = sName$
+   FormatCharacter
+   Kontext
+   Active.SetPage TabFont
+   Kontext "TabFont"
+   if FontWest.GetSelText <> sName then SchriftFormatTesten = FontWest.GetSelText
+   TabFont.OK
+end function
+
+' *******************************************************************
+
+function ErmittleErgebnis ( Ergebnis as String ) as Boolean
+   ErmittleErgebnis = TRUE
+   Kontext "DocumentWriter"
+   Call wDokSchreiben "<End><Shift Home>"
+   EditCopy
+   Wait 500
+   if GetClipboardText <> Ergebnis then ErmittleErgebnis = FALSE
+end function
+
+' *******************************************************************
+
+sub VerzeichnisUeberNavigator(Welches as integer)
+   dim j as integer
+     Kontext "Navigator"
+    if Navigator.NotExists then EditNavigator
+    Kontext "NavigatorWriter"
+    if Auswahlliste.GetItemCount<11 then Inhaltsansicht.Click
+
+    if Auswahlliste.GetItemCount >11 then
+       For j= 1 to 11
+        Auswahlliste.Select j
+        Auswahlliste.TypeKeys "-"
+       next j
+   endif
+
+   wait 500
+
+    Auswahlliste.Select 10
+    Auswahlliste.TypeKeys "+"
+    Auswahlliste.Select 10 + Welches
+    Auswahlliste.TypeKeys "<Return>"
+   Kontext "DocumentWriter"
+end sub
+
+'**********************************************************
+
+sub sZahlenformatfuerZelle
+   Kontext "DocumentWriter"
+   FormatNumberFormat
+   Kontext "Zahlenformat"
+   Kategorie.Select 3
+   KategorieFormat.Select 1
+   Zahlenformat.OK
+   Kontext "DocumentWriter"
+end sub
+
+'**********************************************************
+
+sub sNavigatorInBrauchbarenZustand
+   dim j as integer
+    Kontext "NavigatorWriter"
+    if NavigatorWriter.NotExists then EditNavigator
+    if Auswahlliste.GetItemCount<11 then Inhaltsansicht.Click
+    Wait 500
+    if Auswahlliste.GetItemCount >11 then
+       For j= 1 to 11
+        Auswahlliste.Select j
+        Auswahlliste.TypeKeys "-"
+       next j
+   endif
+
+Wait 500
+    Auswahlliste.Select 2
+    Auswahlliste.TypeKeys "+"
+    Inhaltsansicht.Click
+   Kontext "DocumentWriter"
+end sub
+
+'**********************************************************
+
+sub sZellinhaltInZwischenablage(VergleichDas as string,Aktion as string)
+  Call wDokSchreiben "<Home><Shift End>"
+  EditCopy
+  if VergleichDas <> GetClipboardText then Warnlog "- Table has not been splitted correctly!(" + Aktion + ")"
+end sub
+
+'**********************************************************
+
+sub sSeiteMitBrauchbarerTabelleEinrichten
+  Call hTabelleEinfuegen
+  FormatTable
+  Kontext
+  Active.SetPage TabTabelle
+  Kontext "TabTabelle"
+  Tabellenname.Settext "MeineTabelle"
+  TabTabelle.OK
+
+  Call wDokSchreiben "�berschrift 1"
+  Call wDokSchreiben "<Down>"
+  Call wDokSchreiben "Text 1"
+  Call wDokSchreiben "<Down>"
+  wait 500
+  Call hTabelleEinfuegen
+  wait 500
+  Call wDokSchreiben "�berschrift 2"
+  Call wDokSchreiben "<Down>"
+  Call wDokSchreiben "Text 2"
+  Call wDokSchreiben "<Up>",1
+end sub
+
+'**********************************************************
+
+sub wOpenContextMenu ( optional FocusParam as boolean)
+	if IsMissing(FocusParam) = True then
+ 		Select Case gApplication
+			Case "WRITER"
+				Kontext "DocumentWriter"
+				Call DocumentWriter.OpenContextMenu
+
+			Case "MASTERDOC"
+				Kontext "DocumentMasterDoc"
+				Call DocumentMasterDoc.OpenContextMenu
+
+			end select
+	else
+ 		if FocusParam = True then
+			Select Case gApplication
+				Case "WRITER"
+					Kontext "DocumentWriter"
+					Call DocumentWriter.OpenContextMenu true
+	
+				Case "MASTERDOC"
+					Kontext "DocumentMasterDoc"
+					Call DocumentMasterDoc.OpenContextMenu true
+	
+			end select
+		else
+			Select Case gApplication
+				Case "WRITER"
+					Kontext "DocumentWriter"
+					Call DocumentWriter.OpenContextMenu true
+
+				Case "MASTERDOC"
+					Kontext "DocumentMasterDoc"
+					Call DocumentMasterDoc.OpenContextMenu true
+			end select
+		endif
+	endif		
+end sub
