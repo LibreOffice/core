@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_import.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 14:42:37 $
+'* last change: $Author: fredrikh $ $Date: 2008-06-18 14:53:51 $
 '*
 '* This file is part of OpenOffice.org.
 '*
