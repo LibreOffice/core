@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mediacontrol.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -448,9 +448,9 @@ void MediaControl::implUpdateTimeField( double fCurTime )
         SvtSysLocale aSysLocale;
         const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
 
-        aTimeString += rLocaleData.getDuration( Time( 0, 0, static_cast< sal_uInt32 >( std::floor( fCurTime ) ) ) );
+        aTimeString += rLocaleData.getDuration( Time( 0, 0, static_cast< sal_uInt32 >( floor( fCurTime ) ) ) );
         aTimeString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " / " ));
-        aTimeString += rLocaleData.getDuration( Time( 0, 0, static_cast< sal_uInt32 >( std::floor( maItem.getDuration() ) )) );
+        aTimeString += rLocaleData.getDuration( Time( 0, 0, static_cast< sal_uInt32 >( floor( maItem.getDuration() ) )) );
 
         if( maTimeEdit.GetText() != aTimeString )
             maTimeEdit.SetText( aTimeString );
