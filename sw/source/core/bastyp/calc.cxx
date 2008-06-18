@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: calc.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1239,7 +1239,7 @@ SwSbxValue SwCalc::Term()
                                 nYear = nYear & 0x0000FFFF;
                                 sal_Int32 nMonth = (INT32) floor( e.GetDouble() );
                                 nMonth = ( nMonth & 0x000000FF ) << 16;
-                                left = sal_Int32(nMonth + nYear);
+                                left.PutLong( nMonth + nYear );
                                 eCurrOper = CALC_DAY;
                             }
                             break;
