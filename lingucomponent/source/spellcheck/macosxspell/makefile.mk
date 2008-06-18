@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,6 +41,14 @@ USE_DEFFILE=TRUE
 #----- Settings ---------------------------------------------------------
 
 .INCLUDE : settings.mk
+
+.IF "$(SYSTEM_HUNSPELL)" != "YES"
+HUNSPELL_CFLAGS += -I$(SOLARVER)$/$(INPATH)$/inc$/hunspell
+.ENDIF
+
+CXXFLAGS += $(HUNSPELL_CFLAGS)
+CFLAGSCXX += $(HUNSPELL_CFLAGS)
+CFLAGSCC += $(HUNSPELL_CFLAGS)
 
 # --- Files --------------------------------------------------------
 
