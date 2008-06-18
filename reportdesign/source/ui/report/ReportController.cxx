@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportController.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -805,7 +805,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             impl_fillState_nothrow(PROPERTY_PARAADJUST,aReturn);
             if ( aReturn.bEnabled )
             {
-                ::sal_Int16 nParaAdjust;
+                ::sal_Int16 nParaAdjust = 0;
                 if ( aReturn.aValue >>= nParaAdjust )
                 {
                     switch(nParaAdjust)
