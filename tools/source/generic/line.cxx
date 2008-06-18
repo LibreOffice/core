@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: line.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,11 @@
 #include <tools/debug.hxx>
 
 #include <cstdlib>
+#if defined(_MSC_VER) && (_MSC_VER <= 1310)
+// Windows .Net2003 compiler: do not include cmath
+#else
 #include <cmath>    // std::sqrt
+#endif
 #include <math.h>   // hypot, doens't seem to live in std namespace everywhere
 
 inline long FRound( double fVal )
