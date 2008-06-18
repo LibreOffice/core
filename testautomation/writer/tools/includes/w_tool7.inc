@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_tool7.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:36:09 $
+'* last change: $Author: fredrikh $ $Date: 2008-06-18 09:03:05 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -226,7 +226,7 @@ function fGetType(sType as String)  as String
       case "Statistics"
           select case iSprache
               case 1:      fGetType = "Statistics"
-              case 7:		fGetType = "Статистика"              
+              case 7:		fGetType = "Статистика"
               case 31:     fGetType = "Statistiek"
               case 33:     fGetType = "Statistiques"
               case 34:     fGetType = "Estadística"
@@ -447,7 +447,7 @@ end function
 
 function fConvertBacklashToSlash (sTest) as String
 	'/// convert all \ to / , return the string with /
-	'///+ eg, \tmp\test\levle1\inc\ ==> /tmp/test/level1/inc/
+	'///+ eg, \tmp\test\optional\includes\ ==> /tmp/test/optional/includes/
 
 	Dim i    as Integer
 	Dim s1$ : Dim s2$ : Dim s3$
