@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cfrstd.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -334,9 +334,9 @@ MakeCopyRight()
     StreamStr cr(700);
     std::time_t
         gt;
-    std::time(&gt);
+    time(&gt);
     std::tm *
-        plt = std::localtime(&gt);
+        plt = localtime(&gt);
     int year = 1900 + plt->tm_year;
 
     cr  << "Copyright &copy; "
