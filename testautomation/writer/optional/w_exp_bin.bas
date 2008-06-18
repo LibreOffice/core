@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_exp_bin.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 09:11:25 $
+'* last change: $Author: fredrikh $ $Date: 2008-06-18 20:00:33 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -42,7 +42,7 @@ sub main
 
     use "writer\tools\includes\w_tools.inc"
     use "writer\tools\includes\w_tool6.inc"
-    use "writer\loadsave\includes\w_export.inc"
+    use "writer\optional\includes\w_export.inc"
 
     Start = Now()
 

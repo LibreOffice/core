@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_layout_regression.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 09:11:26 $
+'* last change: $Author: fredrikh $ $Date: 2008-06-18 20:00:34 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -42,7 +42,7 @@ global SourceDocument(200 ) as String
 sub main
 
     use "writer\tools\includes\w_tools.inc"
-    use "writer\loadsave\includes\w_layout_regression.inc"
+    use "writer\optional\includes\w_layout_regression.inc"
 
     Dim StartZeit, SourcePath as string
     StartZeit = Now()
@@ -72,8 +72,8 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    use "global\tools\includes\t_dir.inc"
-    use "global\tools\includes\t_lists.inc"
+    use "global\tools\includes\required\t_dir.inc"
+    use "global\tools\includes\required\t_lists.inc"
     Call GetUseFiles
     gApplication = "Writer"
 end sub

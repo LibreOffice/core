@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_imp_xml2.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 09:11:25 $
+'* last change: $Author: fredrikh $ $Date: 2008-06-18 20:00:34 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -48,7 +48,7 @@ sub main
     use "writer\tools\includes\w_tools.inc"
     use "writer\tools\includes\w_tool4.inc"
 	use "writer\tools\includes\w_tool6.inc"
-    use "writer\loadsave\includes\w_import.inc"
+    use "writer\optional\includes\w_import.inc"
 
     Start = Now()
 
