@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: deliver.pl,v $
 #
-# $Revision: 1.128 $
+# $Revision: 1.129 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,7 +47,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.128 $ ';
+$id_str = ' $Revision: 1.129 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1486,6 +1486,7 @@ sub usage
     }
     print STDERR "  -minor       deliver into minor (milestone)\n";
     print STDERR "  -quiet       be quiet, only report errors\n";
+    print STDERR "  -verbose     be verbose\n";
     print STDERR "  -zip         additionally create zip files of delivered content\n";
     print STDERR "Option '-zip' and a destination-path are mutually exclusive.\n";
     print STDERR "Options '-check' and '-quiet' are mutually exclusive.\n";
