@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: help.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:03:20 $
+'* last change: $Author: jsk $ $Date: 2008-06-19 09:02:10 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -35,10 +35,6 @@
 '*
 '*  short description : Extensible help
 '*
-'*******************************************************************************
-'**
-' #1 tExtensibleHelp ' Extensible help
-'**
 '\******************************************************************************
 
 testcase tExtensibleHelp

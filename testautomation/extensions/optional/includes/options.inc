@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: options.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:03:21 $
+'* last change: $Author: jsk $ $Date: 2008-06-19 09:02:10 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -35,10 +35,6 @@
 '*
 '*  short description : Options for extensions
 '*
-'*******************************************************************************
-'**
-' #1 tExtensionOptions1 ' Options for extensions
-'**
 '\******************************************************************************
 
 testcase tExtensionOptions1

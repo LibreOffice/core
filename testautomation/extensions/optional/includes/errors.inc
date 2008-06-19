@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: errors.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:03:20 $
+'* last change: $Author: jsk $ $Date: 2008-06-19 09:02:09 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -35,10 +35,6 @@
 '*
 '*  short description : Reproduction of misc errors when working with extensions
 '*
-'*******************************************************************************
-'**
-' #1 tExtensionError77436 ' Registration error when installing extension
-'**
 '\******************************************************************************
 
 testcase tExtensionError77436
