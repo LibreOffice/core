@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saxhelper.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,9 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/csax/XMLAttribute.hpp>
 
-
+/** This class represents a SAX handler which simply forwards to
+    the corresponding libxml API and translates parameter if necessary.
+*/
 class SAXHelper
 {
     private :
