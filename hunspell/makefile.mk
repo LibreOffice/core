@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -56,6 +56,13 @@ CONFIGURE_FLAGS= --disable-shared --with-pic
 .IF "$(COMNAME)"=="sunpro5"
 CONFIGURE_FLAGS+= CFLAGS=-xc99=none
 .ENDIF                  # "$(COMNAME)"=="sunpro5"
+
+.IF "$(SYSBASE)"!=""
+.IF "$(EXTRA_CFLAGS)"!=""
+CONFIGURE_FLAGS+= CFLAGS="$(EXTRA_CFLAGS)" CXXFLAGS="$(EXTRA_CFLAGS)"
+.ENDIF # "$(EXTRA_CFLAGS)"!=""
+.ENDIF # "$(SYSBASE)"!=""
+
 
 BUILD_ACTION=make && make check
 
