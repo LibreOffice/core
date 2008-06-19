@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlsignaturehelper2.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@
 #include <com/sun/star/embed/XStorageRawAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include "rtl/uri.hxx"
 
 using namespace com::sun::star;
 
@@ -195,6 +196,7 @@ uno::Reference< io::XInputStream > SAL_CALL UriBindingHelper::getUriBinding( con
 
 uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno::Reference < embed::XStorage >& rxStore, const rtl::OUString& rURI )
 {
+    OSL_ASSERT(rURI.getLength());
     uno::Reference < io::XInputStream > xInStream;
 
     sal_Int32 nSepPos = rURI.indexOf( '/' );
@@ -204,10 +206,15 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
         // MBA with think about a better API...
         sal_Bool bEncrypted = sal_False;
 
+        const ::rtl::OUString sName = ::rtl::Uri::decode(
+            rURI, rtl_UriDecodeStrict, rtl_UriCharClassRelSegment);
+        if (sName.getLength() == 0 && rURI.getLength() != 0)
+            throw uno::Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "Could not decode URI for stream element.")), 0);
         try
         {
             uno::Reference< io::XStream > xStream;
-            xStream = rxStore->cloneStreamElement( rURI );
+            xStream = rxStore->cloneStreamElement( sName );
             if ( !xStream.is() )
                 throw uno::RuntimeException();
 
@@ -231,12 +238,18 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
             uno::Reference< embed::XStorageRawAccess > xRawStore( rxStore, uno::UNO_QUERY );
             OSL_ENSURE( xRawStore.is(), "Strange storage implementation is used for signing!\n" );
             if ( xRawStore.is() )
-                xInStream = xRawStore->getPlainRawStreamElement( rURI );
+                xInStream = xRawStore->getPlainRawStreamElement( sName );
         }
     }
     else
     {
-        rtl::OUString aStoreName = rURI.copy( 0, nSepPos );
+        const rtl::OUString aStoreName = ::rtl::Uri::decode(
+            rURI.copy( 0, nSepPos ), rtl_UriDecodeStrict, rtl_UriCharClassRelSegment);
+        if (aStoreName.getLength() == 0 && rURI.getLength() != 0)
+            throw uno::Exception(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "Could not decode URI for stream element.")), 0);
+
         rtl::OUString aElement = rURI.copy( nSepPos+1 );
         uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aStoreName, embed::ElementModes::READ );
         xInStream = OpenInputStream( xSubStore, aElement );
