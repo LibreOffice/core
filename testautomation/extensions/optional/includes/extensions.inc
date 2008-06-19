@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: extensions.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:03:20 $
+'* last change: $Author: jsk $ $Date: 2008-06-19 08:56:57 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -34,10 +34,6 @@
 '* owner : thorsten.bosbach@sun.com
 '*
 '* short description : Function test of extension manager
-'*
-'*************************************************************************
-'*
-' #1 tExtensionsFunction        '
 '*
 '\************************************************************************
 
@@ -326,11 +322,6 @@ testcase tExtensionsFunction
     a = listCount(aFiles())
     for i = 1 to a
         printlog "********** Test file ("+i+"/"+a+"): "+aFiles(i)
-        if i=8 then
-            warnlog "#i84453# crash on installing - disabled"
-            i=9
-            printlog "********** Test file ("+i+"/"+a+"): "+aFiles(i)
-        endif
         aTemp = split (aFeatures(i),",")
         '/// call Tools - Package/Extension manager ///'
         ToolsPackageManager
@@ -353,7 +344,15 @@ testcase tExtensionsFunction
             'endif
             'printlog BrowsePackages.getSelText
             '/// click button 'Add' ///'
+            try
             Add.click
+            catch
+            warnlog "#i90870# extension manager deadlock/C++ runtimes"
+            exitrestarttheoffice
+        ToolsPackageManager
+        kontext "PackageManager"
+            Add.click
+            endcatch
             '/// Add Package(s)... dialg comes up ///'
             Kontext "OeffnenDlg"
             if OeffnenDlg.exists(5) then
@@ -442,11 +441,7 @@ testcase tExtensionsFunction
                     if i = 3 then
                         qaErrorLog "#i73367# "
                     else
-                        if i=5 OR i=10 OR i=11 then
-                            warnLog "#i84453# errormessage expected, but none came up."
-                        else
                             warnlog "errormessage expected, but none came up."
-                        endif
                     endif
                 endif
             endif
@@ -481,11 +476,7 @@ testcase tExtensionsFunction
                 if cBool(aTemp(1)) then
                     printlog " - ExtensionSoftwareLicenseAgreement dialog exists"
                 else
-                    if i=5 OR i=10 OR i=11 then
-                        warnLog "#i84453# ExtensionSoftwareLicenseAgreement are not expected but shown"
-                    else
                         warnlog "ExtensionSoftwareLicenseAgreement are not expected but shown"
-                    endif
                 endif
                 if NOT Accept.isEnabled then
                     if cInt(aTemp(1)) = 2 then
@@ -605,11 +596,7 @@ testcase tExtensionsFunction
                         if i = 3 then
                             qaerrorLog "#i73367# "
                         else
-                            if i=5 OR i=10 OR i=11 then
-                                warnLog "#i84453# -------------------------------- Extension got installed, but shouldn't do that"
-                            else
                                 warnLog "-------------------------------- Extension got installed, but shouldn't do that"
-                            endif
                         endif
                     endif
                 endif
@@ -634,7 +621,7 @@ testcase tExtensionsFunction
     If PackageManager.exists(10) then
         BrowsePackages.typeKeys("<home>")
         ii = 1
-        while (ii <> BrowsePackages.getItemCount +1)
+        while (ii < BrowsePackages.getItemCount +1)
             kontext "PackageManager"
             'BrowsePackages.typeKeys("+")
             'BrowsePackages.typeKeys("<down>")
