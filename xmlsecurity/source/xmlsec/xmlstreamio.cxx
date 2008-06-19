@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlstreamio.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
  */
 #include "xmlstreamio.hxx"
 #include <rtl/ustring.hxx>
+#include "rtl/uri.hxx"
 
 #include <libxml/uri.h>
 #include <xmlsec/io.h>
@@ -60,13 +61,27 @@ int xmlStreamMatch( const char* uri )
         ( enableXmlStreamIO & XMLSTREAMIO_REGISTERED ) ) {
         if( uri == NULL || !m_xUriBinding.is() )
             return 0 ;
-
-        xInputStream = m_xUriBinding->getUriBinding( ::rtl::OUString::createFromAscii( uri ) ) ;
-        if( xInputStream.is() )
-            return 1 ;
+        //XMLSec first unescapes the uri and  calls this function. For example, we pass the Uri
+        //ObjectReplacements/Object%201 then XMLSec passes ObjectReplacements/Object 1
+        //first. If this failed it would try this
+        //again with the original escaped string. However, it does not get this far, because there
+        //is another callback registered by libxml which claims to be able to handle this uri.
+        ::rtl::OUString sUri =
+            ::rtl::Uri::encode( ::rtl::OUString::createFromAscii( uri ),
+            rtl_UriCharClassUric, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
+        xInputStream = m_xUriBinding->getUriBinding( sUri ) ;
+        if (!xInputStream.is())
+        {
+            //Try the the passed in uri directly.
+            //For old documents prior OOo 3.0. We did not use URIs then.
+            xInputStream = m_xUriBinding->getUriBinding(
+                ::rtl::OUString::createFromAscii(uri));
+        }
     }
-
-    return 0 ;
+    if (xInputStream.is())
+        return 1;
+    else
+        return 0 ;
 }
 
 extern "C"
@@ -80,7 +95,19 @@ void* xmlStreamOpen( const char* uri )
         if( uri == NULL || !m_xUriBinding.is() )
             return NULL ;
 
-        xInputStream = m_xUriBinding->getUriBinding( ::rtl::OUString::createFromAscii( uri ) ) ;
+        //see xmlStreamMatch
+        ::rtl::OUString sUri =
+            ::rtl::Uri::encode( ::rtl::OUString::createFromAscii( uri ),
+            rtl_UriCharClassUric, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
+        xInputStream = m_xUriBinding->getUriBinding( sUri ) ;
+        if (!xInputStream.is())
+        {
+            //For old documents.
+            //try the the passed in uri directly.
+            xInputStream = m_xUriBinding->getUriBinding(
+                ::rtl::OUString::createFromAscii(uri));
+        }
+
         if( xInputStream.is() ) {
             pInputStream = xInputStream.get() ;
             pInputStream->acquire() ;
