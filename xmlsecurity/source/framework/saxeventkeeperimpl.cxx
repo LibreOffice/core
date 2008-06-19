@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saxeventkeeperimpl.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1318,12 +1318,12 @@ void SAL_CALL SAXEventKeeperImpl::endElement( const rtl::OUString& aName )
         #endif
         }
 
-            /*
-             * If the current buffer node has not notified yet, and
-             * the current buffer node is waiting for the current element,
-             * then let it notify.
-             */
-               if (bIsCurrent && (m_pCurrentBufferNode != m_pRootBufferNode))
+        /*
+        * If the current buffer node has not notified yet, and
+        * the current buffer node is waiting for the current element,
+        * then let it notify.
+        */
+           if (bIsCurrent && (m_pCurrentBufferNode != m_pRootBufferNode))
         {
             BufferNode* pOldCurrentBufferNode = m_pCurrentBufferNode;
             m_pCurrentBufferNode = (BufferNode*)m_pCurrentBufferNode->getParent();
@@ -1336,14 +1336,14 @@ void SAL_CALL SAXEventKeeperImpl::endElement( const rtl::OUString& aName )
                 m_xSAXEventKeeperStatusChangeListener->collectionStatusChanged(sal_False);
             }
         }
-           }
-           else
-           {
-            if (!m_bIsForwarding)
-            {
-                   m_xXMLDocument->removeCurrentElement();
-               }
-           }
+    }
+    else
+    {
+        if (!m_bIsForwarding)
+        {
+            m_xXMLDocument->removeCurrentElement();
+        }
+    }
 }
 
 void SAL_CALL SAXEventKeeperImpl::characters( const rtl::OUString& aChars )
