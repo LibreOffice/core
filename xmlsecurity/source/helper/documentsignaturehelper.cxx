@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentsignaturehelper.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,7 @@
 
 #include "comphelper/documentconstants.hxx"
 #include <tools/debug.hxx>
+#include "rtl/uri.hxx"
 
 using namespace ::com::sun::star;
 namespace css = ::com::sun::star;
@@ -93,15 +94,22 @@ void ImplFillElementList( std::vector< rtl::OUString >& rList, const uno::Refere
     {
         if ( pNames[n] != aMetaInfName )
         {
+            ::rtl::OUString sEncName = ::rtl::Uri::encode(
+                    pNames[n], rtl_UriCharClassRelSegment,
+                    rtl_UriEncodeStrict, RTL_TEXTENCODING_UTF8);
+            if (sEncName.getLength() == 0 && pNames[n].getLength() != 0)
+                throw css::uno::Exception(::rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("Failed to encode element name of XStorage")), 0);
+
             if ( rxStore->isStreamElement( pNames[n] ) )
             {
-                ::rtl::OUString aFullName( rRootStorageName + pNames[n] );
-                rList.push_back( aFullName );
+                ::rtl::OUString aFullName( rRootStorageName + sEncName );
+                rList.push_back(aFullName);
             }
             else if ( bRecursive && rxStore->isStorageElement( pNames[n] ) )
             {
                 uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( pNames[n], embed::ElementModes::READ );
-                rtl::OUString aFullRootName( rRootStorageName + pNames[n] + aSep );
+                rtl::OUString aFullRootName( rRootStorageName + sEncName + aSep );
                 ImplFillElementList( rList, xSubStore, aFullRootName, bRecursive );
             }
         }
