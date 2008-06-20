@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lineproperties.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,35 +58,35 @@ LineProperties::~LineProperties()
 {
 }
 
-void LineProperties::apply( const LinePropertiesPtr& rSourceLineProperties )
+void LineProperties::apply( const LineProperties& rSourceLineProperties )
 {
-    PropertyMapBase::const_iterator aIter( rSourceLineProperties->maLineProperties.begin() );
-    PropertyMapBase::const_iterator aEnd( rSourceLineProperties->maLineProperties.end() );
+    PropertyMapBase::const_iterator aIter( rSourceLineProperties.maLineProperties.begin() );
+    PropertyMapBase::const_iterator aEnd( rSourceLineProperties.maLineProperties.end() );
     while( aIter != aEnd )
     {
         maLineProperties[ (*aIter).first ] = (*aIter).second;
         aIter++;
     }
-    if ( rSourceLineProperties->maLineColor->isUsed() )
-        maLineColor = rSourceLineProperties->maLineColor;
-    if ( rSourceLineProperties->moLineWidth )
-        moLineWidth = rSourceLineProperties->moLineWidth;
-    if ( rSourceLineProperties->moStartArrow )
-        moStartArrow = rSourceLineProperties->moStartArrow;
-    if ( rSourceLineProperties->moStartArrowWidth )
-        moStartArrowWidth = rSourceLineProperties->moStartArrowWidth;
-    if ( rSourceLineProperties->moStartArrowLength )
-        moStartArrowLength = rSourceLineProperties->moStartArrowLength;
-    if ( rSourceLineProperties->moEndArrow )
-        moEndArrow = rSourceLineProperties->moEndArrow;
-    if ( rSourceLineProperties->moEndArrowWidth )
-        moEndArrowWidth = rSourceLineProperties->moEndArrowWidth;
-    if ( rSourceLineProperties->moEndArrowLength )
-        moEndArrowLength = rSourceLineProperties->moEndArrowLength;
-    if ( rSourceLineProperties->moPresetDash )
-        moPresetDash = rSourceLineProperties->moPresetDash;
-    if ( rSourceLineProperties->moLineCap )
-        moLineCap = rSourceLineProperties->moLineCap;
+    if ( rSourceLineProperties.maLineColor->isUsed() )
+        maLineColor = rSourceLineProperties.maLineColor;
+    if ( rSourceLineProperties.moLineWidth )
+        moLineWidth = rSourceLineProperties.moLineWidth;
+    if ( rSourceLineProperties.moStartArrow )
+        moStartArrow = rSourceLineProperties.moStartArrow;
+    if ( rSourceLineProperties.moStartArrowWidth )
+        moStartArrowWidth = rSourceLineProperties.moStartArrowWidth;
+    if ( rSourceLineProperties.moStartArrowLength )
+        moStartArrowLength = rSourceLineProperties.moStartArrowLength;
+    if ( rSourceLineProperties.moEndArrow )
+        moEndArrow = rSourceLineProperties.moEndArrow;
+    if ( rSourceLineProperties.moEndArrowWidth )
+        moEndArrowWidth = rSourceLineProperties.moEndArrowWidth;
+    if ( rSourceLineProperties.moEndArrowLength )
+        moEndArrowLength = rSourceLineProperties.moEndArrowLength;
+    if ( rSourceLineProperties.moPresetDash )
+        moPresetDash = rSourceLineProperties.moPresetDash;
+    if ( rSourceLineProperties.moLineCap )
+        moLineCap = rSourceLineProperties.moLineCap;
 }
 
 static com::sun::star::drawing::PolyPolygonBezierCoords GetLineArrow( const sal_Int32 nLineWidth, const sal_Int32 nLineEndToken,
