@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fillproperties.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,8 @@
 
 #include <comphelper/processfactory.hxx>
 #include "oox/drawingml/fillproperties.hxx"
+#include "oox/core/xmlfilterbase.hxx"
+#include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
@@ -117,46 +119,46 @@ FillProperties::~FillProperties()
 {
 }
 
-void FillProperties::apply( const FillPropertiesPtr& rSourceFillProperties )
+void FillProperties::apply( const FillProperties& rSourceFillProperties )
 {
-    if ( rSourceFillProperties->moFillStyle )
-        moFillStyle = rSourceFillProperties->moFillStyle;
-    if ( rSourceFillProperties->maFillColor->isUsed() )
-        maFillColor = rSourceFillProperties->maFillColor;
-    if ( rSourceFillProperties->moBitmapMode )
-        moBitmapMode = rSourceFillProperties->moBitmapMode;
-    if ( rSourceFillProperties->moRotateWithShape )
-        moRotateWithShape = rSourceFillProperties->moRotateWithShape;
-    if ( rSourceFillProperties->moShadeScaled )
-        moShadeScaled = rSourceFillProperties->moShadeScaled;
-    if ( rSourceFillProperties->moShadeAngle )
-        moShadeAngle = rSourceFillProperties->moShadeAngle;
-    if ( rSourceFillProperties->moShadeTypeToken )
-        moShadeTypeToken = rSourceFillProperties->moShadeTypeToken;
-    if ( rSourceFillProperties->moFlipModeToken )
-        moFlipModeToken = rSourceFillProperties->moFlipModeToken;
-    if ( rSourceFillProperties->moFillToRect )
-        moFillToRect = rSourceFillProperties->moFillToRect;
-    if ( rSourceFillProperties->moTileRect )
-        moTileRect = rSourceFillProperties->moTileRect;
-    if ( rSourceFillProperties->moTileAlign )
-        moTileAlign = rSourceFillProperties->moTileAlign;
-    if ( rSourceFillProperties->moTileX )
-        moTileX = rSourceFillProperties->moTileX;
-    if ( rSourceFillProperties->moTileY )
-        moTileY = rSourceFillProperties->moTileY;
-    if ( rSourceFillProperties->moTileSX )
-        moTileSX = rSourceFillProperties->moTileSX;
-    if ( rSourceFillProperties->moTileSY )
-        moTileSY = rSourceFillProperties->moTileSY;
-    if ( rSourceFillProperties->mvGradientStops.size() )
-        mvGradientStops = rSourceFillProperties->mvGradientStops;
-    if ( rSourceFillProperties->mxGraphic.is() )
-        mxGraphic = rSourceFillProperties->mxGraphic;
-    if ( rSourceFillProperties->maColorChangeFrom->isUsed() )
-        maColorChangeFrom = rSourceFillProperties->maColorChangeFrom;
-    if ( rSourceFillProperties->maColorChangeTo->isUsed() )
-        maColorChangeTo = rSourceFillProperties->maColorChangeTo;
+    if ( rSourceFillProperties.moFillStyle )
+        moFillStyle = rSourceFillProperties.moFillStyle;
+    if ( rSourceFillProperties.maFillColor->isUsed() )
+        maFillColor = rSourceFillProperties.maFillColor;
+    if ( rSourceFillProperties.moBitmapMode )
+        moBitmapMode = rSourceFillProperties.moBitmapMode;
+    if ( rSourceFillProperties.moRotateWithShape )
+        moRotateWithShape = rSourceFillProperties.moRotateWithShape;
+    if ( rSourceFillProperties.moShadeScaled )
+        moShadeScaled = rSourceFillProperties.moShadeScaled;
+    if ( rSourceFillProperties.moShadeAngle )
+        moShadeAngle = rSourceFillProperties.moShadeAngle;
+    if ( rSourceFillProperties.moShadeTypeToken )
+        moShadeTypeToken = rSourceFillProperties.moShadeTypeToken;
+    if ( rSourceFillProperties.moFlipModeToken )
+        moFlipModeToken = rSourceFillProperties.moFlipModeToken;
+    if ( rSourceFillProperties.moFillToRect )
+        moFillToRect = rSourceFillProperties.moFillToRect;
+    if ( rSourceFillProperties.moTileRect )
+        moTileRect = rSourceFillProperties.moTileRect;
+    if ( rSourceFillProperties.moTileAlign )
+        moTileAlign = rSourceFillProperties.moTileAlign;
+    if ( rSourceFillProperties.moTileX )
+        moTileX = rSourceFillProperties.moTileX;
+    if ( rSourceFillProperties.moTileY )
+        moTileY = rSourceFillProperties.moTileY;
+    if ( rSourceFillProperties.moTileSX )
+        moTileSX = rSourceFillProperties.moTileSX;
+    if ( rSourceFillProperties.moTileSY )
+        moTileSY = rSourceFillProperties.moTileSY;
+    if ( rSourceFillProperties.mvGradientStops.size() )
+        mvGradientStops = rSourceFillProperties.mvGradientStops;
+    if ( rSourceFillProperties.mxGraphic.is() )
+        mxGraphic = rSourceFillProperties.mxGraphic;
+    if ( rSourceFillProperties.maColorChangeFrom->isUsed() )
+        maColorChangeFrom = rSourceFillProperties.maColorChangeFrom;
+    if ( rSourceFillProperties.maColorChangeTo->isUsed() )
+        maColorChangeTo = rSourceFillProperties.maColorChangeTo;
 }
 
 void FillProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
