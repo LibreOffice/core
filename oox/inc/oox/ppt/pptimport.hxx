@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pptimport.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,7 +59,7 @@ public:
     virtual sal_Int32 getSchemeClr( sal_Int32 nColorSchemeToken ) const;
 
     virtual const oox::vml::DrawingPtr getDrawings();
-
+    virtual const oox::drawingml::table::TableStyleListPtr getTableStyles();
     virtual ::oox::drawingml::chart::ChartConverter& getChartConverter();
 
     void                                                    setActualSlidePersist( SlidePersistPtr pActualSlidePersist ){ mpActualSlidePersist = pActualSlidePersist; };
@@ -72,6 +72,9 @@ private:
     virtual ::rtl::OUString implGetImplementationName() const;
 
 private:
+    rtl::OUString                                       maTableStyleListPath;
+    oox::drawingml::table::TableStyleListPtr            mpTableStyleList;
+
     SlidePersistPtr                                     mpActualSlidePersist;
     std::map< rtl::OUString, oox::drawingml::ThemePtr > maThemes;
 
