@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: oleembobj.hxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,11 +75,11 @@ public:
     , m_bWasEverActive( sal_False )
     , m_nNotificationLock( 0 )
     {}
-
+#ifdef WNT
     void StartControlExecution();
     sal_Bool EndControlExecution_WasModified();
     void ModificationNotificationIsDone();
-
+#endif
     void LockNotification();
     void UnlockNotification();
 
@@ -200,18 +200,20 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetNewFilledTempStream_Impl(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream )
         throw( ::com::sun::star::io::IOException );
-
+#ifdef WNT
     void SwitchComponentToRunningState_Impl();
-
+#endif
     void MakeEventListenerNotification_Impl( const ::rtl::OUString& aEventName );
+#ifdef WNT
     void StateChangeNotification_Impl( sal_Bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState );
-
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > GetStreamForSaving();
+
 
     ::com::sun::star::uno::Sequence< sal_Int32 > GetIntermediateVerbsSequence_Impl( sal_Int32 nNewState );
 
     ::com::sun::star::uno::Sequence< sal_Int32 > GetReachableStatesList_Impl(
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::embed::VerbDescriptor >& aVerbList );
+#endif
 
     void CloseComponent();
     void Dispose();
@@ -234,10 +236,10 @@ protected:
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs,
                             sal_Bool bSaveAs )
         throw ( ::com::sun::star::uno::Exception );
-
+#ifdef WNT
     void StoreObjectToStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutStream )
         throw ( ::com::sun::star::uno::Exception );
-
+#endif
     void InsertVisualCache_Impl(
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xCachedVisualRepresentation )
@@ -257,19 +259,19 @@ protected:
                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream,
                     sal_Bool bAllowRepair50 = sal_False )
         throw ();
-
+#ifdef WNT
     sal_Bool SaveObject_Impl();
     sal_Bool OnShowWindow_Impl( sal_Bool bShow );
-
     void CreateOleComponent_Impl( OleComponent* pOleComponent = NULL );
     void CreateOleComponentAndLoad_Impl( OleComponent* pOleComponent = NULL );
     void CreateOleComponentFromClipboard_Impl( OleComponent* pOleComponent = NULL );
-
+#endif
     void SetObjectIsLink_Impl( sal_Bool bIsLink ) { m_bIsLink = bIsLink; }
 
+#ifdef WNT
     ::rtl::OUString CreateTempURLEmpty_Impl();
     ::rtl::OUString GetTempURL_Impl();
-
+#endif
     ::rtl::OUString GetContainerName_Impl() { return m_aContainerName; }
 
 public:
@@ -282,15 +284,18 @@ public:
     // factory can do it for OOo objects, but for OLE objects OS dependent code is required
     OleEmbeddedObject( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
                         sal_Bool bLink );
-
+#ifdef WNT
     // this constructor let object be initialized from clipboard
     OleEmbeddedObject( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+#endif
 
     virtual ~OleEmbeddedObject();
 
+#ifdef WNT
     void OnIconChanged_Impl();
     void OnViewChanged_Impl();
     void OnClosed_Impl();
+#endif
 
 // XEmbeddedObject
 
