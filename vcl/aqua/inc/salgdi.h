@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.h,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -360,22 +360,26 @@ private:
 class XorEmulation
 {
 public:
-                    XorEmulation( int nWidth, int nHeight, int nBitmapDepth );
-                    ~XorEmulation();
+                    XorEmulation();
+    /*final*/       ~XorEmulation();
 
-    CGContextRef    Enable( CGContextRef, CGLayerRef );
-    CGContextRef    Disable();
+    void            SetTarget( int nWidth, int nHeight, int nBitmapDepth, CGContextRef, CGLayerRef );
     bool            UpdateTarget();
-    bool            IsEnabled() const { return (mxTargetLayer != NULL); }
+    void            Enable()            { mbIsEnabled = true; }
+    void            Disable()           { mbIsEnabled = false; }
+    bool            IsEnabled() const   { return mbIsEnabled; }
+    CGContextRef    GetTargetContext() const { return mxTargetContext; }
+    CGContextRef    GetMaskContext() const { return (mbIsEnabled ? mxMaskContext : NULL); }
 
 private:
     CGLayerRef      mxTargetLayer;
     CGContextRef    mxTargetContext;
     CGContextRef    mxMaskContext;
     CGContextRef    mxTempContext;
-    long*           mpMaskBuffer;
-    long*           mpTempBuffer;
-    int             mnBufferSize;
+    ULONG*          mpMaskBuffer;
+    ULONG*          mpTempBuffer;
+    int             mnBufferLongs;
+    bool            mbIsEnabled;
 };
 
 
