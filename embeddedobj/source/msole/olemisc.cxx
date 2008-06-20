@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: olemisc.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,7 +110,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bFromClipboard( sal_False )
 {
 }
-
+#ifdef WNT
 //------------------------------------------------------
 // this constructor let object be initialized from clipboard
 OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
@@ -140,7 +140,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bFromClipboard( sal_True )
 {
 }
-
+#endif
 //------------------------------------------------------
 OleEmbeddedObject::~OleEmbeddedObject()
 {
@@ -185,7 +185,7 @@ void OleEmbeddedObject::MakeEventListenerNotification_Impl( const ::rtl::OUStrin
         }
     }
 }
-
+#ifdef WNT
 //----------------------------------------------
 void OleEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState )
 {
@@ -226,7 +226,7 @@ void OleEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange, sa
         }
     }
 }
-
+#endif
 //------------------------------------------------------
 void OleEmbeddedObject::GetRidOfComponent()
 {
