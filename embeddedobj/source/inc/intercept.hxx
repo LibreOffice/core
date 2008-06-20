@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: intercept.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,8 +51,6 @@ public:
     Interceptor( DocumentHolder* pDocHolder );
     ~Interceptor();
 
-    void GenerateFeatureStateEvent();
-
     void DisconnectDocHolder();
     // overwritten to release the statuslistner.
 
@@ -65,10 +63,6 @@ public:
     virtual void SAL_CALL
     removeEventListener( const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& aListener )
         throw( com::sun::star::uno::RuntimeException );
-
-    void SAL_CALL
-    dispose() throw(::com::sun::star::uno::RuntimeException);
-
 
     //XDispatch
     virtual void SAL_CALL
