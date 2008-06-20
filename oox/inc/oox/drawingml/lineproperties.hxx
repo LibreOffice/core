@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lineproperties.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +52,7 @@ public:
     LineProperties();
     virtual ~LineProperties();
 
-    void apply( const LinePropertiesPtr& );
+    void apply( const LineProperties& );
     void pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
             const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet ) const;
 
