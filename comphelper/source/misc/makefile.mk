@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.46 $
+# $Revision: 1.47 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -85,8 +85,10 @@ SLOFILES=	\
             $(SLO)$/documentinfo.obj \
             $(SLO)$/string.obj \
             $(SLO)$/legacysingletonfactory.obj \
-            $(SLO)$/synchronousdispatch.obj
+            $(SLO)$/synchronousdispatch.obj \
+            $(SLO)$/ihwrapnofilter.obj
 
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
+
