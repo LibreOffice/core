@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ZipFile.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -177,11 +177,6 @@ public:
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::packages::zip::ZipException,
                 ::com::sun::star::uno::RuntimeException );
-
-    ::rtl::OUString SAL_CALL getName(  )
-        throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getSize(  )
-        throw(::com::sun::star::uno::RuntimeException);
 
     ZipEnumeration * SAL_CALL entries(  );
 protected:
