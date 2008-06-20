@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fillproperties.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,7 +67,7 @@ public:
     FillProperties( sal_Int32 nContext = XML_spPr );
     virtual ~FillProperties();
 
-    void apply( const FillPropertiesPtr& );
+    void apply( const FillProperties& );
     void pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
             const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet, sal_Int32 nShapeRotation ) const;
 
