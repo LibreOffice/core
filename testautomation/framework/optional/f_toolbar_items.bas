@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: f_toolbar_items.bas,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:52 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:07:02 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -54,7 +54,7 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
     
-    use "global\tools\includes\optional\f_docfuncs.inc"
+    use "global\tools\includes\optional\t_docfuncs.inc"
     use "global\tools\includes\optional\t_filetools.inc"
     
     use "framework\tools\includes\toolbar_tools.inc"

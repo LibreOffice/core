@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: e_errors.bas,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:51 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:07:01 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -56,8 +56,8 @@ sub LoadIncludeFiles
     
     use "global\tools\includes\optional\t_extension_manager_tools.inc"
     use "global\tools\includes\optional\t_stringtools.inc"
-    use "global\tools\includes\optional\accels.inc"
-    use "global\tools\includes\optional\f_docfuncs.inc"
+    use "global\tools\includes\optional\t_accels.inc"
+    use "global\tools\includes\optional\t_docfuncs.inc"
     use "global\tools\includes\optional\t_listfuncs.inc"
     use "global\tools\includes\optional\t_macro_tools.inc"
     use "global\tools\includes\optional\t_basic_ide_tools.inc"

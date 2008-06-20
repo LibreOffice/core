@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: f_filedlg_dialogtest.bas,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:52 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:07:02 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -62,8 +62,8 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_stringtools.inc"
     use "global\tools\includes\optional\t_listfuncs.inc"    
     use "global\tools\includes\optional\t_filetools.inc"
-    use "global\tools\includes\optional\f_docfuncs.inc"
-    use "global\tools\includes\optional\accels.inc"
+    use "global\tools\includes\optional\t_docfuncs.inc"
+    use "global\tools\includes\optional\t_accels.inc"
 
     use "framework\tools\includes\tabpages.inc"
    
