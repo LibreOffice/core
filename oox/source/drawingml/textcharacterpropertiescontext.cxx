@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textcharacterpropertiescontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,9 +40,9 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/colorchoicecontext.hxx"
 #include "oox/drawingml/lineproperties.hxx"
+#include "oox/drawingml/textfontcontext.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/core/relations.hxx"
-#include "textfontcontext.hxx"
 #include "hyperlinkcontext.hxx"
 #include "tokens.hxx"
 
@@ -250,6 +250,7 @@ Reference< XFastContextHandler > TextCharacterPropertiesContext::createFastChild
             xRet.set( new colorChoiceContext( *this, *mrTextCharacterProperties.getUnderlineColor() ) );
             break;
 
+        // CT_FontCollection
         case NMSP_DRAWINGML|XML_ea:             // CT_TextFont
             xRet.set( new TextFontContext( *this, aElementToken,  xAttributes, maAsianFont ) );
             break;
@@ -262,6 +263,7 @@ Reference< XFastContextHandler > TextCharacterPropertiesContext::createFastChild
         case NMSP_DRAWINGML|XML_latin:          // CT_TextFont
             xRet.set( new TextFontContext( *this, aElementToken,  xAttributes, maLatinFont ) );
             break;
+
         case NMSP_DRAWINGML|XML_hlinkClick:     // CT_Hyperlink
         case NMSP_DRAWINGML|XML_hlinkMouseOver: // CT_Hyperlink
             xRet.set( new HyperLinkContext( *this, xAttributes,  mrTextCharacterProperties.getHyperlinkPropertyMap() ) );
