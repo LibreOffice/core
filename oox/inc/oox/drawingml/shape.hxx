@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shape.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/customshapeproperties.hxx"
+#include "oox/drawingml/table/tableproperties.hxx"
 #include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/textliststyle.hxx"
 
@@ -92,27 +93,30 @@ public:
     Shape( const sal_Char* pServiceType = NULL );
     virtual ~Shape();
 
-    rtl::OUString&                  getServiceName(){ return msServiceName; }
+    rtl::OUString&                  getServiceName(){ return msServiceName; };
     void                            setServiceName( const sal_Char* pServiceName );
-    PropertyMap&                    getShapeProperties(){ return maShapeProperties; }
-    LinePropertiesPtr               getLineProperties(){ return mpLinePropertiesPtr; }
-    FillPropertiesPtr               getFillProperties(){ return mpFillPropertiesPtr; }
-    FillPropertiesPtr               getGraphicProperties() { return mpGraphicPropertiesPtr; }
-    CustomShapePropertiesPtr        getCustomShapeProperties(){ return mpCustomShapePropertiesPtr; }
+    PropertyMap&                    getShapeProperties(){ return maShapeProperties; };
+    LinePropertiesPtr               getLineProperties(){ return mpLinePropertiesPtr; };
+    FillPropertiesPtr               getFillProperties(){ return mpFillPropertiesPtr; };
+    FillPropertiesPtr               getGraphicProperties() { return mpGraphicPropertiesPtr; };
+    CustomShapePropertiesPtr        getCustomShapeProperties(){ return mpCustomShapePropertiesPtr; };
+    table::TablePropertiesPtr       getTableProperties(){ if ( !mpTablePropertiesPtr.get() )
+                                                            mpTablePropertiesPtr.reset( new table::TableProperties() );
+                                                        return mpTablePropertiesPtr; };
 
-    void                            setPosition( com::sun::star::awt::Point nPosition ){ maPosition = nPosition; }
-    void                            setSize( com::sun::star::awt::Size aSize ){ maSize = aSize; }
-    void                            setRotation( sal_Int32 nRotation ) { mnRotation = nRotation; }
-    void                            setFlip( sal_Bool bFlipH, sal_Bool bFlipV ) { mbFlipH = bFlipH; mbFlipV = bFlipV; }
-    void                            addChild( const ShapePtr pChildPtr ) { maChilds.push_back( pChildPtr ); }
-    std::vector< ShapePtr >&        getChilds() { return maChilds; }
+    void                            setPosition( com::sun::star::awt::Point nPosition ){ maPosition = nPosition; };
+    void                            setSize( com::sun::star::awt::Size aSize ){ maSize = aSize; };
+    void                            setRotation( sal_Int32 nRotation ) { mnRotation = nRotation; };
+    void                            setFlip( sal_Bool bFlipH, sal_Bool bFlipV ) { mbFlipH = bFlipH; mbFlipV = bFlipV; };
+    void                            addChild( const ShapePtr pChildPtr ) { maChilds.push_back( pChildPtr ); };
+    std::vector< ShapePtr >&        getChilds() { return maChilds; };
 
-    void                            setName( const rtl::OUString& rName ) { msName = rName; }
+    void                            setName( const rtl::OUString& rName ) { msName = rName; };
     ::rtl::OUString                 getName( ) { return msName; }
-    void                            setId( const rtl::OUString& rId ) { msId = rId; }
-    void                            setSubType( sal_uInt32 nSubType ) { mnSubType = nSubType; }
-    sal_Int32                       getSubType() const { return mnSubType; }
-    void                            setIndex( sal_uInt32 nIndex ) { mnIndex = nIndex; }
+    void                            setId( const rtl::OUString& rId ) { msId = rId; };
+    void                            setSubType( sal_uInt32 nSubType ) { mnSubType = nSubType; };
+    sal_Int32                       getSubType() const { return mnSubType; };
+    void                            setIndex( sal_uInt32 nIndex ) { mnIndex = nIndex; };
 
     // setDefaults has to be called if styles are imported (OfficeXML is not storing properties having the default value)
     void                            setDefaults();
@@ -120,8 +124,7 @@ public:
     void                setTextBody(const TextBodyPtr & pTextBody);
     TextBodyPtr         getTextBody();
     void                setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle );
-    TextListStylePtr    getMasterTextListStyle() const { return mpMasterTextListStyle; }
-
+    TextListStylePtr    getMasterTextListStyle() const { return mpMasterTextListStyle; };
 
     ShapeStylesColorMap&    getShapeStylesColor(){ return maShapeStylesColorMap; }
     ShapeStylesIndexMap&    getShapeStylesIndex(){ return maShapeStylesIndexMap; }
@@ -136,6 +139,8 @@ public:
                             const ::com::sun::star::awt::Rectangle* pShapeRect = 0,
                             ShapeIdMap* pShapeMap = 0 );
 
+    void                setXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rXShape )
+                            { mxShape = rXShape; };
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &
                         getXShape() const { return mxShape; }
 
@@ -165,13 +170,14 @@ protected:
     FillPropertiesPtr           mpFillPropertiesPtr;
     FillPropertiesPtr           mpGraphicPropertiesPtr;
     CustomShapePropertiesPtr    mpCustomShapePropertiesPtr;
+    table::TablePropertiesPtr   mpTablePropertiesPtr;
     PropertyMap                 maShapeProperties;
     TextListStylePtr            mpMasterTextListStyle;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
 
     rtl::OUString   msServiceName;
-    rtl::OUString    msName;
-    rtl::OUString    msId;
+    rtl::OUString   msName;
+    rtl::OUString   msId;
     sal_uInt32      mnSubType;      // if this type is not zero, then the shape is a placeholder
     sal_uInt32      mnIndex;
 
