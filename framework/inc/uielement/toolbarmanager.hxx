@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolbarmanager.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -154,6 +154,10 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         typedef std::vector< ControllerParams > ControllerParamsVector;
 
     protected:
+        //added for 33668 by shizhoubo : 2008:04
+        DECL_LINK( Command, CommandEvent * );
+        PopupMenu * GetToolBarCustomMeun(ToolBox* pToolBar);
+        //end
         DECL_LINK( Click, ToolBox * );
         DECL_LINK( DropdownClick, ToolBox * );
         DECL_LINK( DoubleClick, ToolBox * );
