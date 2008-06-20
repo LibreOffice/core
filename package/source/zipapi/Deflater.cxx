@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Deflater.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,30 +72,6 @@ void Deflater::init (sal_Int32 nLevelArg, sal_Int32 nStrategyArg, sal_Bool bNowr
         default:
              break;
     }
-}
-
-Deflater::Deflater()
-: bFinish(sal_False)
-, bFinished(sal_False)
-, bSetParams(sal_False)
-, nLevel(DEFAULT_COMPRESSION)
-, nStrategy(DEFAULT_STRATEGY)
-, nOffset(0)
-, nLength(0)
-{
-    init(DEFAULT_COMPRESSION, DEFAULT_STRATEGY, sal_False);
-}
-
-Deflater::Deflater(sal_Int32 nSetLevel)
-: bFinish(sal_False)
-, bFinished(sal_False)
-, bSetParams(sal_False)
-, nLevel(nSetLevel)
-, nStrategy(DEFAULT_STRATEGY)
-, nOffset(0)
-, nLength(0)
-{
-    init(nSetLevel, DEFAULT_STRATEGY, sal_False);
 }
 
 Deflater::Deflater(sal_Int32 nSetLevel, sal_Bool bNowrap)
@@ -176,54 +152,6 @@ void SAL_CALL Deflater::setInputSegment( const uno::Sequence< sal_Int8 >& rBuffe
     nOffset = nNewOffset;
     nLength = nNewLength;
 }
-void SAL_CALL Deflater::setInput( const uno::Sequence< sal_Int8 >& rBuffer )
-{
-    sInBuffer = rBuffer;
-    nOffset = 0;
-    nLength = rBuffer.getLength();
-}
-void SAL_CALL Deflater::setDictionarySegment( const uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-{
-    if (pStream == NULL)
-    {
-        // do error handling
-    }
-    if (nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength())
-    {
-        // do error handling
-    }
-#ifdef SYSTEM_ZLIB
-    deflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray()+nOffset, nLength);
-#else
-    z_deflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray()+nOffset, nLength);
-#endif
-}
-void SAL_CALL Deflater::setDictionary( const uno::Sequence< sal_Int8 >& rBuffer )
-{
-    if (pStream == NULL)
-    {
-        // do error handling
-    }
-#ifdef SYSTEM_ZLIB
-    deflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray(), rBuffer.getLength());
-#else
-    z_deflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray(), rBuffer.getLength());
-#endif
-}
-void SAL_CALL Deflater::setStrategy( sal_Int32 nNewStrategy )
-{
-    if (nNewStrategy != DEFAULT_STRATEGY &&
-        nNewStrategy != FILTERED &&
-        nNewStrategy != HUFFMAN_ONLY)
-    {
-        // do error handling
-    }
-    if (nStrategy != nNewStrategy)
-    {
-        nStrategy = nNewStrategy;
-        bSetParams = sal_True;
-    }
-}
 void SAL_CALL Deflater::setLevel( sal_Int32 nNewLevel )
 {
     if ((nNewLevel < 0 || nNewLevel > 9) && nNewLevel != DEFAULT_COMPRESSION)
@@ -252,15 +180,6 @@ sal_Int32 SAL_CALL Deflater::doDeflateSegment( uno::Sequence< sal_Int8 >& rBuffe
 {
     OSL_ASSERT( !(nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength()));
     return doDeflateBytes(rBuffer, nNewOffset, nNewLength);
-}
-sal_Int32 SAL_CALL Deflater::doDeflate( uno::Sequence< sal_Int8 >& rBuffer )
-{
-    return doDeflateBytes(rBuffer, 0, rBuffer.getLength());
-}
-
-sal_Int32 SAL_CALL Deflater::getAdler(  )
-{
-    return pStream->adler;
 }
 sal_Int32 SAL_CALL Deflater::getTotalIn(  )
 {
