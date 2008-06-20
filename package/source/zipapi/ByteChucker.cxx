@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ByteChucker.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,38 +61,12 @@ void SAL_CALL ByteChucker::writeBytes( const Sequence< sal_Int8 >& aData, sal_In
 {
     xStream->writeBytes(aData);
 }
-void SAL_CALL ByteChucker::flush(  )
-    throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
-{
-    xStream->flush();
-}
-void SAL_CALL ByteChucker::closeOutput(  )
-    throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
-{
-    xStream->closeOutput();
-}
 
 // XSeekable chained...
-sal_Int64 SAL_CALL ByteChucker::seek( sal_Int64 location )
-    throw(IllegalArgumentException, IOException, RuntimeException)
-{
-    sal_Int64 nLen = xSeek->getLength();
-    if ( location < 0 || location > nLen )
-        throw IllegalArgumentException();
-    if (location > nLen )
-        location = nLen;
-    xSeek->seek( location );
-    return location;
-}
 sal_Int64 SAL_CALL ByteChucker::getPosition(  )
         throw(IOException, RuntimeException)
 {
     return xSeek->getPosition();
-}
-sal_Int64 SAL_CALL ByteChucker::getLength(  )
-        throw(IOException, RuntimeException)
-{
-    return xSeek->getLength();
 }
 
 ByteChucker& ByteChucker::operator << (sal_Int8 nInt8)
