@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: graphicshapecontext.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/graphicshapecontext.hxx"
 #include "oox/drawingml/diagram/diagramfragmenthandler.hxx"
+#include "oox/drawingml/table/tablecontext.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
@@ -134,9 +135,8 @@ Reference< XFastContextHandler > GraphicalObjectFrameContext::createFastChildCon
                 xRet.set( new DiagramGraphicDataContext( *this, mpShapePtr ) );
             else if ( sUri.equalsAscii( "http://schemas.openxmlformats.org/drawingml/2006/chart" ) )
                 xRet.set( new ChartGraphicDataContext( *this, mpShapePtr ) );
-            else if ( sUri.equalsAscii( "http://schemas.openxmlformats.org/drawingml/2006/table" ) )
-                // TODO deal with tables too.
-                xRet.set( this );
+            else if ( sUri.compareToAscii( "http://schemas.openxmlformats.org/drawingml/2006/table" ) == 0 )
+                xRet.set( new table::TableContext( *this, mpShapePtr ) );
             else
             {
                 OSL_TRACE( "OOX: Ignore graphicsData of %s", OUSTRING_TO_CSTR( sUri ) );
