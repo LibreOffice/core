@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: f_basic_library_export_import.bas,v $
 '*
-'* $Revision: 1.3 $
+'* $Revision: 1.4 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 08:07:01 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:15:19 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -73,9 +73,9 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_accels.inc"
     use "global\tools\includes\optional\t_listfuncs.inc"    
     use "global\tools\includes\optional\t_stringtools.inc" 
+    use "global\tools\includes\optional\t_macro_tools.inc"
 
     use "framework\tools\includes\init_tools.inc"
-    use "framework\tools\includes\t_macro_tools.inc"
     
     gApplication = "WRITER"
     call GetUseFiles()

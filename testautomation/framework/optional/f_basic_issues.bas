@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: f_basic_issues.bas,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:52 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:15:19 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -55,8 +55,7 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     
     use "global\tools\includes\optional\t_basic_ide_tools.inc"
-
-    use "framework\tools\includes\t_macro_tools.inc"
+    use "global\tools\includes\optional\t_macro_tools.inc"
 
     gApplication = "WRITER"
     call GetUseFiles()
