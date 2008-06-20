@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ZipOutputStream.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,11 +73,6 @@ ZipOutputStream::~ZipOutputStream( void )
         delete aZipList[i];
 }
 
-void SAL_CALL ZipOutputStream::setComment( const ::rtl::OUString& rComment )
-    throw(RuntimeException)
-{
-    sComment = rComment;
-}
 void SAL_CALL ZipOutputStream::setMethod( sal_Int32 nNewMethod )
     throw(RuntimeException)
 {
@@ -129,11 +124,6 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
     rEntry.nOffset = static_cast < sal_Int32 > (aChucker.getPosition()) - nLOCLength;
     aZipList.push_back( &rEntry );
     pCurrentEntry = &rEntry;
-}
-void SAL_CALL ZipOutputStream::close(  )
-    throw(IOException, RuntimeException)
-{
-    finish();
 }
 
 void SAL_CALL ZipOutputStream::closeEntry(  )
