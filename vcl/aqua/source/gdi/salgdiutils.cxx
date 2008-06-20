@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdiutils.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,12 +89,15 @@ void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContex
     mrContext = xContext;
     mnBitmapDepth = nBitmapDepth;
 
+    // return early if the virdev is being destroyed
+    if( !xContext )
+        return;
+
+    // get new graphics properties
     if( !mxLayer )
     {
-        if( !xContext )
-            return;
-        mnWidth = CGBitmapContextGetWidth( xContext );
-        mnHeight = CGBitmapContextGetHeight( xContext );
+        mnWidth = CGBitmapContextGetWidth( mrContext );
+        mnHeight = CGBitmapContextGetHeight( mrContext );
     }
     else
     {
@@ -104,12 +107,19 @@ void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContex
     }
 
     // prepare graphics for drawing
-    DBG_ASSERT( mrContext, "AquaSalVirtualDevice has no drawing context?" );
-    if( !mrContext )
-        return;
     const CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
     CGContextSetFillColorSpace( mrContext, aCGColorSpace );
     CGContextSetStrokeColorSpace( mrContext, aCGColorSpace );
+
+    // re-enable XorEmulation for the new context
+    if( mpXorEmulation )
+    {
+        mpXorEmulation->SetTarget( mnWidth, mnHeight, mnBitmapDepth, mrContext, mxLayer );
+        if( mpXorEmulation->IsEnabled() )
+            mrContext = mpXorEmulation->GetMaskContext();
+    }
+
+    // initialize stack of CGContext states
     CGContextSaveGState( mrContext );
     SetState();
 }
@@ -154,7 +164,6 @@ bool AquaSalGraphics::CheckContext()
 
         CGContextRef rReleaseContext = 0;
         CGLayerRef   rReleaseLayer = NULL;
-        const bool bXorEnabled = (mpXorEmulation && mpXorEmulation->IsEnabled());
 
         // check if a new drawing context is needed (e.g. after a resize)
         if( (unsigned(mnWidth) != nWidth) || (unsigned(mnHeight) != nHeight) )
@@ -166,8 +175,6 @@ bool AquaSalGraphics::CheckContext()
             rReleaseLayer   = mxLayer;
             mrContext = NULL;
             mxLayer = NULL;
-            delete mpXorEmulation;
-            mpXorEmulation = NULL;
         }
 
         if( !mrContext )
@@ -193,11 +200,8 @@ bool AquaSalGraphics::CheckContext()
                 SetState();
 
                 // re-enable XOR emulation for the new context
-                if( bXorEnabled )
-                {
-                    mpXorEmulation = new XorEmulation( nWidth, nHeight, 0 );
-                    mrContext = mpXorEmulation->Enable( mrContext, mxLayer );
-                }
+                if( mpXorEmulation )
+                    mpXorEmulation->SetTarget( mnWidth, mnHeight, mnBitmapDepth, mrContext, mxLayer );
             }
         }
 
@@ -247,7 +251,6 @@ void AquaSalGraphics::UpdateWindow( NSRect& rRect )
     if( !mpFrame )
         return;
     NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
-    // NSGraphicsContext* pContext = [NSGraphicsContext graphicsContextWithWindow: mpFrame->getWindow()];
     if( (mxLayer != NULL) && (pContext != NULL) )
     {
         CGContextRef rCGContext = reinterpret_cast<CGContextRef>([pContext graphicsPort]);
@@ -261,14 +264,13 @@ void AquaSalGraphics::UpdateWindow( NSRect& rRect )
             CGContextClip( rCGContext );
         }
 
-        if( mxLayer )
-            CGContextDrawLayerAtPoint( rCGContext, CGPointZero, mxLayer );
-        CGContextFlush( rCGContext );
+        ApplyXorContext();
+        CGContextDrawLayerAtPoint( rCGContext, CGPointZero, mxLayer );
         if( rClip ) // cleanup clipping
             CGContextRestoreGState( rCGContext );
     }
     else
-        DBG_ERROR( "UpdateWindow called on uneligible graphics" );
+        DBG_ASSERT( mpFrame->mbInitShow, "UpdateWindow called on uneligible graphics" );
 }
 
 // -----------------------------------------------------------------------
