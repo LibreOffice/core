@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ZipPackageBuffer.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +52,6 @@ protected:
     sal_Bool m_bMustInitBuffer;
 public:
     ZipPackageBuffer(sal_Int64 nNewBufferSize);
-    ZipPackageBuffer( com::sun::star::uno::Sequence < sal_Int8 > &nNewBuffer );
     virtual ~ZipPackageBuffer(void);
 
     inline void realloc ( sal_Int32 nSize ) { m_aBuffer.realloc ( nSize ); }
