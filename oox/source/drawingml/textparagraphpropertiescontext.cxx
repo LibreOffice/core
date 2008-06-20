@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textparagraphpropertiescontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,10 +36,10 @@
 #include "oox/drawingml/colorchoicecontext.hxx"
 #include "oox/drawingml/textcharacterpropertiescontext.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
+#include "oox/drawingml/textfontcontext.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/core/namespaces.hxx"
 #include "textspacingcontext.hxx"
-#include "textfontcontext.hxx"
 #include "texttabstoplistcontext.hxx"
 #include "tokens.hxx"
 
