@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CRC32.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,8 +45,6 @@ public:
     ~CRC32();
 
     sal_Int32 SAL_CALL updateStream (::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > & xStream)
-        throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL updateByte (sal_Int8 nByte)
         throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL updateSegment(const ::com::sun::star::uno::Sequence< sal_Int8 > &b, sal_Int32 off, sal_Int32 len)
         throw(::com::sun::star::uno::RuntimeException);

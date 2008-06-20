@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Inflater.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,21 +48,10 @@ protected:
 public:
     Inflater(sal_Bool bNoWrap = sal_False);
     ~Inflater();
-    void SAL_CALL setInputSegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
     void SAL_CALL setInput( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer );
-    void SAL_CALL setDictionarySegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
-    void SAL_CALL setDictionary( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer );
-    sal_Int32 SAL_CALL getRemaining(  );
-    sal_Bool SAL_CALL needsInput(  );
     sal_Bool SAL_CALL needsDictionary(  );
-    void SAL_CALL finish(  );
     sal_Bool SAL_CALL finished(  );
     sal_Int32 SAL_CALL doInflateSegment( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
-    sal_Int32 SAL_CALL doInflate( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer );
-    sal_Int32 SAL_CALL getAdler(  );
-    sal_Int32 SAL_CALL getTotalIn(  );
-    sal_Int32 SAL_CALL getTotalOut(  );
-    void SAL_CALL reset(  );
     void SAL_CALL end(  );
 };
 
