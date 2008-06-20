@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wizard.src,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,7 +110,7 @@ String STR_FINISH
 
 String STR_REGISTRATION_OOO
 {
-    Text [ en-US ] = "You now have the opportunity to support and contribute to the fastest growing open source community in the world.\n\nHelp us prove that %PRODUCTNAME has already significant market share by registering %PRODUCTNAME.\n\nRegistering is voluntary and is without obligation.";
+    Text [ en-US ] = "You now have the opportunity to support and contribute to the fastest growing open source community in the world.\n\nHelp us prove that %PRODUCTNAME has already gained significant market share by registering.\n\nRegistering is voluntary and without obligation.";
 };
 
 ErrorBox ERRBOX_REG_NOSYSBROWSER
