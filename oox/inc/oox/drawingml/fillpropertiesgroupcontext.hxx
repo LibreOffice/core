@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fillpropertiesgroupcontext.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,6 @@ namespace oox { namespace core {
 
 namespace oox { namespace drawingml {
 
-
 // ---------------------------------------------------------------------
 
 class FillPropertiesGroupContext : public ::oox::core::ContextHandler
@@ -51,6 +50,20 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > StaticCreateContext( oox::core::ContextHandler& rParent,
         ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs, FillProperties& rFillProperties )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+
+protected:
+    FillProperties& mrFillProperties;
+};
+
+// ---------------------------------------------------------------------
+
+class FillPropertiesContext : public ::oox::core::ContextHandler
+{
+public:
+    FillPropertiesContext( oox::core::ContextHandler& rParent, FillProperties& rFillProperties ) throw();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs )
+            throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 protected:
     FillProperties& mrFillProperties;
