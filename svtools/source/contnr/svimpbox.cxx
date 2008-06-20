@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svimpbox.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -968,26 +968,15 @@ void SvImpLBox::Paint( const Rectangle& rRect )
         pEntry = (SvLBoxEntry*)(pView->NextVisible( pEntry ));
     }
 
-    if( !pCursor && ( ( nExtendedWinBits & EWB_NO_AUTO_CURENTRY ) == 0 ) )
+    if ( !pCursor && ( ( nExtendedWinBits & EWB_NO_AUTO_CURENTRY ) == 0 ) )
     {
-        if( aSelEng.GetSelectionMode()==SINGLE_SELECTION )
-        {
-            if( nWinBits & WB_NOINITIALSELECTION )
-            {
-                // nicht selektieren
-                SetCursor( pStartEntry, TRUE );
-            }
-            else
-                SetCursor( pStartEntry );
-        }
-        else
-            // nicht selektieren
-            SetCursor( pStartEntry, TRUE );
-        //OV, 16.7.97, warum HideFocus?? (siehe Bugid 41404)
-        //pView->HideFocus();
+        // do not select if multiselection or explicit set
+        BOOL bNotSelect = ( aSelEng.GetSelectionMode() == MULTIPLE_SELECTION )
+                || ( ( nWinBits & WB_NOINITIALSELECTION ) == WB_NOINITIALSELECTION );
+        SetCursor( pStartEntry, bNotSelect );
     }
-    nFlags &= (~F_DESEL_ALL);
 
+    nFlags &= (~F_DESEL_ALL);
     pView->SetClipRegion();
     Rectangle aRect;
     if( !(nFlags & F_PAINTED) )
