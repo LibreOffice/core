@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: olepersist.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -176,7 +176,7 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
 
     return aResult;
 }
-
+#ifdef WNT
 ::rtl::OUString GetNewFilledTempFile_Impl( const uno::Reference< embed::XOptimizedStorage >& xParentStorage, const ::rtl::OUString& aEntryName, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
     throw( io::IOException, uno::RuntimeException )
 {
@@ -218,7 +218,7 @@ void SetStreamMediaType_Impl( const uno::Reference< io::XStream >& xStream, cons
 
     xPropSet->setPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ), uno::makeAny( aMediaType ) );
 }
-
+#endif
 //------------------------------------------------------
 void LetCommonStoragePassBeUsed_Impl( const uno::Reference< io::XStream >& xStream )
 {
@@ -229,7 +229,7 @@ void LetCommonStoragePassBeUsed_Impl( const uno::Reference< io::XStream >& xStre
     xPropSet->setPropertyValue( ::rtl::OUString::createFromAscii( "UseCommonStoragePasswordEncryption" ),
                                 uno::makeAny( (sal_Bool)sal_True ) );
 }
-
+#ifdef WNT
 //------------------------------------------------------
 void VerbExecutionController::StartControlExecution()
 {
@@ -267,7 +267,7 @@ void VerbExecutionController::ModificationNotificationIsDone()
     if ( m_bVerbExecutionInProgress && osl_getThreadIdentifier( NULL ) == m_nVerbExecutionThreadIdentifier )
         m_bChangedOnVerbExecution = sal_True;
 }
-
+#endif
 //-----------------------------------------------
 void VerbExecutionController::LockNotification()
 {
@@ -889,7 +889,7 @@ void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStor
     SwitchOwnPersistence( xNewParentStorage, xNewOwnStream, aNewName );
 }
 
-
+#ifdef WNT
 //----------------------------------------------
 sal_Bool OleEmbeddedObject::SaveObject_Impl()
 {
@@ -1044,13 +1044,8 @@ void OleEmbeddedObject::OnClosed_Impl()
 }
 
 //------------------------------------------------------
-void OleEmbeddedObject::CreateOleComponent_Impl( OleComponent*
-#ifdef WNT
-pOleComponent
-#endif
-)
+void OleEmbeddedObject::CreateOleComponent_Impl( OleComponent* pOleComponent )
 {
-#ifdef WNT
     if ( !m_pOleComponent )
     {
         m_pOleComponent = pOleComponent ? pOleComponent : new OleComponent( m_xFactory, this );
@@ -1063,17 +1058,11 @@ pOleComponent
 
         m_pOleComponent->addCloseListener( m_xClosePreventer );
     }
-#endif
 }
 
 //------------------------------------------------------
-void OleEmbeddedObject::CreateOleComponentAndLoad_Impl( OleComponent*
-#ifdef WNT
-pOleComponent
-#endif
-)
+void OleEmbeddedObject::CreateOleComponentAndLoad_Impl( OleComponent* pOleComponent )
 {
-#ifdef WNT
     if ( !m_pOleComponent )
     {
         if ( !m_xObjectStream.is() )
@@ -1090,18 +1079,11 @@ pOleComponent
 
         m_pOleComponent->LoadEmbeddedObject( m_aTempURL );
     }
-
-#endif
 }
 
 //------------------------------------------------------
-void OleEmbeddedObject::CreateOleComponentFromClipboard_Impl( OleComponent*
-#ifdef WNT
-pOleComponent
-#endif
-)
+void OleEmbeddedObject::CreateOleComponentFromClipboard_Impl( OleComponent* pOleComponent )
 {
-#ifdef WNT
     if ( !m_pOleComponent )
     {
         if ( !m_xObjectStream.is() )
@@ -1113,7 +1095,6 @@ pOleComponent
         // will be detected later by olecomponent
         m_pOleComponent->CreateObjectFromClipboard();
     }
-#endif
 }
 
 //------------------------------------------------------
@@ -1136,15 +1117,10 @@ uno::Reference< io::XOutputStream > OleEmbeddedObject::GetStreamForSaving()
 }
 
 //----------------------------------------------
-void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream >
-#ifdef WNT
-xOutStream
-#endif
-)
+void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream > xOutStream )
     throw ( uno::Exception )
 {
     // this method should be used only on windows
-#ifdef WNT
     if ( m_pOleComponent )
         m_pOleComponent->StoreOwnTmpIfNecessary();
 
@@ -1182,11 +1158,8 @@ xOutStream
 
     // TODO: should the view replacement be in the stream ???
     //       probably it must be specified on storing
-#else
-    throw io::IOException();
-#endif
 }
-
+#endif
 //------------------------------------------------------
 void OleEmbeddedObject::StoreToLocation_Impl(
                             const uno::Reference< embed::XStorage >& xStorage,
