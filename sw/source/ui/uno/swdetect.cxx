@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swdetect.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,6 +74,7 @@
 #include <svtools/FilterConfigItem.hxx>
 #include <svtools/moduleoptions.hxx>
 #include <com/sun/star/util/XArchiver.hpp>
+#include <comphelper/ihwrapnofilter.hxx>
 
 #include <swdll.hxx>
 
@@ -125,6 +126,7 @@ SwFilterDetect::~SwFilterDetect()
     sal_Int32 nIndexOfReadOnlyFlag = -1;
     sal_Int32 nIndexOfTemplateFlag = -1;
     sal_Int32 nIndexOfDocumentTitle = -1;
+    sal_Int32 nIndexOfInteractionHandler = -1;
 
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
@@ -165,7 +167,10 @@ SwFilterDetect::~SwFilterDetect()
             nIndexOfTemplateFlag = nProperty;
         }
         else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler")) )
+        {
             lDescriptor[nProperty].Value >>= xInteraction;
+            nIndexOfInteractionHandler = nProperty;
+        }
         else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("RapairPackage")) )
             lDescriptor[nProperty].Value >>= bRepairPackage;
         else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle")) )
@@ -288,7 +293,12 @@ SwFilterDetect::~SwFilterDetect()
                                     // repair either not allowed or not successful
                                     NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocumentTitle );
                                     uno::Reference< task::XInteractionRequest > xRequest ( pNotifyRequest );
-                                       xInteraction->handle( xRequest );
+                                    xInteraction->handle( xRequest );
+
+                                    rtl::Reference< ::comphelper::OIHWrapNoFilterDialog > xHandler = new ::comphelper::OIHWrapNoFilterDialog( xInteraction );
+                                    if ( nIndexOfInteractionHandler != -1 )
+                                        lDescriptor[nIndexOfInteractionHandler].Value <<= uno::Reference< XInteractionHandler >( static_cast< task::XInteractionHandler* >( xHandler.get() ) );
+
                                     aMedium.SetError( ERRCODE_ABORT );
                                 }
                             }
