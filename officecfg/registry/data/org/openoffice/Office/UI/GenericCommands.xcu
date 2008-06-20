@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GenericCommands.xcu,v $
- * $Revision: 1.68 $
+ * $Revision: 1.69 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -5110,7 +5110,22 @@
                     <value xml:lang="en-US">Find</value>
                 </prop>
             </node> -->
-        </node>
+      <node oor:name=".uno:DeleteAllNotes" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Delete All Notes</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:DeleteAuthor" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Delete All Notes by This Author</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:DeleteNote" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Delete Note</value>
+        </prop>
+      </node>
+    </node>
         <node oor:name="Popups">
             <node oor:name=".uno:HelpMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
