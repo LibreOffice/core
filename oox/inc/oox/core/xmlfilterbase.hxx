@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlfilterbase.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 #include <rtl/ref.hxx>
 #include "oox/vml/drawing.hxx"
+#include "oox/drawingml/table/tablestylelist.hxx"
 #include "oox/core/filterbase.hxx"
 #include "oox/core/relations.hxx"
 
@@ -74,6 +75,9 @@ public:
         converter object, that should be global per imported document. */
     virtual ::oox::drawingml::chart::ChartConverter&
                         getChartConverter() = 0;
+
+    /** Has to be implemented by each filter to return the table style list. */
+    virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles() = 0;
 
     // ------------------------------------------------------------------------
 
