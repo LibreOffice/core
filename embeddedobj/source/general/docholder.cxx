@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docholder.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1018,19 +1018,6 @@ sal_Bool DocumentHolder::LoadDocToFrame( sal_Bool bInPlace )
                                                         0,
                                                         aArgs );
 
-//             ::rtl::OUString aDocumentName;
-//             uno::Reference < frame::XModel > xDocument( m_xComponent, uno::UNO_QUERY );
-
-//REMOVE                uno::Sequence< beans::PropertyValue > aDocArgs = xDocument->getArgs();
-//REMOVE                for ( sal_Int32 nInd = 0; nInd < aDocArgs.getLength(); nInd++ )
-//REMOVE                    if ( aDocArgs[nInd].Name.equalsAscii( "Title" ) )
-//REMOVE                    {
-//REMOVE                        aDocArgs[nInd].Value >>= aDocumentName;
-//REMOVE                        break;
-//REMOVE                    }
-//REMOVE
-//REMOVE                SetTitle( aDocumentName );
-
             return sal_True;
         }
         else
@@ -1059,155 +1046,6 @@ void DocumentHolder::Show()
     else
         GetDocFrame();
 }
-
-//---------------------------------------------------------------------------
-void DocumentHolder::SetTitle( const rtl::OUString& aDocumentName )
-{
-    // TODO: to have a different title for links
-    if( m_xFrame.is() )
-    {
-        rtl::OUString aFilterName;
-        uno::Sequence<beans::PropertyValue> aSeq;
-        uno::Reference < frame::XModel > xDocument( m_xComponent, uno::UNO_QUERY );
-        if( xDocument.is() )
-        {
-            aSeq = xDocument->getArgs();
-            for( sal_Int32 j = 0; j < aSeq.getLength(); ++j )
-            {
-                if( aSeq[j].Name == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) ) )
-                {
-                    aSeq[j].Value >>= aFilterName;
-                    break;
-                }
-            }
-        }
-
-        if( aFilterName.getLength() )
-        {
-            uno::Reference<container::XNameAccess> xNameAccess(
-                m_xFactory->createInstance(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" ) ) ),
-                uno::UNO_QUERY );
-            try {
-                if( xNameAccess.is() && ( xNameAccess->getByName( aFilterName ) >>= aSeq ) )
-                {
-                    for( sal_Int32 j = 0; j < aSeq.getLength(); ++j )
-                        if( aSeq[j].Name == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ) ) )
-                        {
-                            aSeq[j].Value >>= aFilterName;
-                            break;
-                        }
-                }
-            }
-            catch( const uno::Exception& )
-            {
-            }
-        }
-
-        // set the title
-        uno::Reference<beans::XPropertySet> xPropSet( m_xFrame,uno::UNO_QUERY );
-        if( xPropSet.is() )
-        {
-            uno::Any aAny;
-            static const sal_Unicode u[] = { ' ', '(', ' ', 0 };
-            static const sal_Unicode c[] = { ' ', ')', 0 };
-            rtl::OUString aTotalName( aFilterName );
-            aTotalName += rtl::OUString( u );
-            aTotalName += aDocumentName;
-            aTotalName += rtl::OUString( c );
-            aAny <<= aTotalName;
-
-            try
-            {
-                xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
-                                            aAny );
-            }
-            catch( const uno::Exception& )
-            {
-            }
-        }
-    }
-
-    m_aDocumentNamePart = aDocumentName;
-
-    if( m_pInterceptor )
-        m_pInterceptor->GenerateFeatureStateEvent();
-}
-
-//---------------------------------------------------------------------------
-void DocumentHolder::SetContainerName( const rtl::OUString& aContainerName )
-{
-    m_aContainerName = aContainerName;
-}
-
-//---------------------------------------------------------------------------
-void DocumentHolder::Hide()
-{
-    if( m_xFrame.is() )
-        m_xFrame->deactivate();
-}
-
-#if 0
-//---------------------------------------------------------------------------
-sal_Bool DocumentHolder::SetVisArea( const awt::Rectangle& aRect )
-{
-    uno::Reference < frame::XModel > xDocument( m_xComponent, uno::UNO_QUERY );
-    if( xDocument.is() )
-    if ( xDocument.is() )
-    {
-        uno::Sequence< beans::PropertyValue > aArgs = xDocument->getArgs();
-        for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
-            if ( aArgs[nInd].Name.equalsAscii( "WinExtent" ) )
-            {
-                // should allways be there
-                uno::Sequence< sal_Int32 > aSeqRect( 4 );
-
-                aSeqRect[0] = aRect.X;
-                aSeqRect[1] = aRect.Y;
-                aSeqRect[2] = aRect.X + aRect.Width;
-                aSeqRect[3] = aRect.Y + aRect.Height;
-
-                aArgs[nInd].Value <<= aSeqRect;
-
-                xDocument->attachResource( m_xComponent->getURL(), aArgs );
-                return sal_True;
-            }
-
-        OSL_ENSURE( sal_False, "WinExtent seems not to be implemented!\n" );
-    }
-
-    return sal_False;
-}
-
-//---------------------------------------------------------------------------
-sal_Bool DocumentHolder::GetVisArea( awt::Rectangle *pRect )
-{
-    uno::Reference < frame::XModel > xDocument( m_xComponent, uno::UNO_QUERY );
-    if( xDocument.is() )
-    if ( pRect && xDocument.is() )
-    {
-        uno::Sequence< beans::PropertyValue > aArgs = xDocument->getArgs();
-        for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
-            if ( aArgs[nInd].Name.equalsAscii( "WinExtent" ) )
-            {
-                uno::Sequence< sal_Int32 > aRect;
-                if ( ( aArgs[nInd].Value >>= aRect ) && aRect.getLength() == 4 )
-                {
-                    pRect->X   = aRect[0];
-                    pRect->Y    = aRect[1];
-                    pRect->Width  = aRect[2] - pRect->X;
-                    pRect->Height = aRect[3] - pRect->Y;
-
-                    return sal_True;
-                }
-
-                break;
-            }
-    }
-
-    return sal_False;
-}
-#endif
 
 //---------------------------------------------------------------------------
 sal_Bool DocumentHolder::SetExtent( sal_Int64 nAspect, const awt::Size& aSize )
