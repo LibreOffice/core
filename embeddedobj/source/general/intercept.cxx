@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: intercept.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,26 +112,6 @@ Interceptor::removeEventListener(
 }
 
 
-void SAL_CALL Interceptor::dispose()
-    throw( uno::RuntimeException )
-{
-    lang::EventObject aEvt;
-    aEvt.Source = static_cast< frame::XDispatch* >( this );
-
-    osl::MutexGuard aGuard(m_aMutex);
-
-    if ( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength() )
-        m_pDisposeEventListeners->disposeAndClear( aEvt );
-
-    if(m_pStatCL)
-        m_pStatCL->disposeAndClear( aEvt );
-
-    m_xSlaveDispatchProvider = 0;
-    m_xMasterDispatchProvider = 0;
-}
-
-
-
 Interceptor::Interceptor( DocumentHolder* pDocHolder )
     : m_pDocHolder( pDocHolder ),
       m_pDisposeEventListeners(0),
@@ -215,66 +195,6 @@ Interceptor::dispatch(
                 xDispatch->dispatch( URL, aNewArgs );
         }
 }
-
-void Interceptor::GenerateFeatureStateEvent()
-{
-    if(m_pStatCL)
-    {
-        for(int i = 0; i < IUL; ++i)
-        {
-            if( i == 1 )
-                continue;
-
-            cppu::OInterfaceContainerHelper* pICH =
-                m_pStatCL->getContainer(m_aInterceptedURL[i]);
-            uno::Sequence<uno::Reference<uno::XInterface> > aSeq;
-            if(pICH)
-                aSeq = pICH->getElements();
-            if(!aSeq.getLength())
-                continue;
-
-            frame::FeatureStateEvent aStateEvent;
-            aStateEvent.IsEnabled = sal_True;
-            aStateEvent.Requery = sal_False;
-            if(i == 0)
-            {
-                aStateEvent.FeatureURL.Complete = m_aInterceptedURL[0];
-                aStateEvent.FeatureDescriptor = rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("Update"));
-                aStateEvent.State <<= (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("($1) ")) + m_pDocHolder->GetTitle() );
-
-            }
-            else if ( i == 5 )
-            {
-                aStateEvent.FeatureURL.Complete = m_aInterceptedURL[5];
-                aStateEvent.FeatureDescriptor = rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("SaveCopyTo"));
-                aStateEvent.State <<= (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("($3)")));
-            }
-            else
-            {
-                aStateEvent.FeatureURL.Complete = m_aInterceptedURL[i];
-                aStateEvent.FeatureDescriptor = rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("Close and Return"));
-                aStateEvent.State <<= (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("($2) ")) + m_pDocHolder->GetTitle() );
-
-            }
-
-            for(sal_Int32 k = 0; k < aSeq.getLength(); ++k)
-            {
-                uno::Reference<frame::XStatusListener>
-                    Control(aSeq[k],uno::UNO_QUERY);
-                if(Control.is())
-                    Control->statusChanged(aStateEvent);
-
-            }
-        }
-    }
-}
-
 
 void SAL_CALL
 Interceptor::addStatusListener(
