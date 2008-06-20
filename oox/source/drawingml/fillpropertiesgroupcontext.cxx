@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fillpropertiesgroupcontext.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -118,6 +118,23 @@ public:
     ~clrChangeContext();
     virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException);
 };
+
+// ---------------------------------------------------------------------
+
+FillPropertiesContext::FillPropertiesContext( ContextHandler& rParent, FillProperties& rFillProperties ) throw()
+: ContextHandler( rParent )
+, mrFillProperties( rFillProperties )
+{
+}
+
+// ---------------------------------------------------------------------
+
+Reference< XFastContextHandler > FillPropertiesContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
+    throw ( SAXException, RuntimeException )
+{
+    return FillPropertiesGroupContext::StaticCreateContext( *this, aElementToken, xAttribs, mrFillProperties );
+
+}
 
 // ---------------------------------------------------------------------
 
