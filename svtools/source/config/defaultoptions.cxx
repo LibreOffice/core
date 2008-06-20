@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: defaultoptions.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,8 +77,8 @@ using namespace com::sun::star::uno;
 #define DEFAULTPATH__TEMP           17
 #define DEFAULTPATH__TEMPLATE       18
 #define DEFAULTPATH__USERCONFIG     19
-#define DEFAULTPATH__USERDICTIONARY 20
-#define DEFAULTPATH__WORK           21
+#define DEFAULTPATH__WORK           20
+#define DEFAULTPATH__USERDICTIONARY 21
 
 // class SvtDefaultOptions_Impl ------------------------------------------
 
@@ -105,8 +105,8 @@ public:
     String          m_aTempPath;
     String          m_aTemplatePath;
     String          m_aUserConfigPath;
-    String          m_aUserDictionaryPath;
     String          m_aWorkPath;
+    String          m_aUserDictionaryPath;
 
                     SvtDefaultOptions_Impl();
 
@@ -129,25 +129,25 @@ struct PathToDefaultMapping_Impl
 static PathToDefaultMapping_Impl __READONLY_DATA PathMap_Impl[] =
 {
     { SvtPathOptions::PATH_ADDIN,           &SvtDefaultOptions_Impl::m_aAddinPath },
-    { SvtPathOptions::PATH_AUTOCORRECT, &SvtDefaultOptions_Impl::m_aAutoCorrectPath },
+    { SvtPathOptions::PATH_AUTOCORRECT,     &SvtDefaultOptions_Impl::m_aAutoCorrectPath },
     { SvtPathOptions::PATH_AUTOTEXT,        &SvtDefaultOptions_Impl::m_aAutoTextPath },
-    { SvtPathOptions::PATH_BACKUP,      &SvtDefaultOptions_Impl::m_aBackupPath },
+    { SvtPathOptions::PATH_BACKUP,          &SvtDefaultOptions_Impl::m_aBackupPath },
     { SvtPathOptions::PATH_BASIC,           &SvtDefaultOptions_Impl::m_aBasicPath },
-    { SvtPathOptions::PATH_BITMAP,      &SvtDefaultOptions_Impl::m_aBitmapPath },
-    { SvtPathOptions::PATH_CONFIG,      &SvtDefaultOptions_Impl::m_aConfigPath },
-    { SvtPathOptions::PATH_DICTIONARY,  &SvtDefaultOptions_Impl::m_aDictionaryPath },
+    { SvtPathOptions::PATH_BITMAP,          &SvtDefaultOptions_Impl::m_aBitmapPath },
+    { SvtPathOptions::PATH_CONFIG,          &SvtDefaultOptions_Impl::m_aConfigPath },
+    { SvtPathOptions::PATH_DICTIONARY,      &SvtDefaultOptions_Impl::m_aDictionaryPath },
     { SvtPathOptions::PATH_FAVORITES,       &SvtDefaultOptions_Impl::m_aFavoritesPath },
-    { SvtPathOptions::PATH_FILTER,      &SvtDefaultOptions_Impl::m_aFilterPath },
-    { SvtPathOptions::PATH_GALLERY,     &SvtDefaultOptions_Impl::m_aGalleryPath },
-    { SvtPathOptions::PATH_GRAPHIC,     &SvtDefaultOptions_Impl::m_aGraphicPath },
+    { SvtPathOptions::PATH_FILTER,          &SvtDefaultOptions_Impl::m_aFilterPath },
+    { SvtPathOptions::PATH_GALLERY,         &SvtDefaultOptions_Impl::m_aGalleryPath },
+    { SvtPathOptions::PATH_GRAPHIC,         &SvtDefaultOptions_Impl::m_aGraphicPath },
     { SvtPathOptions::PATH_HELP,            &SvtDefaultOptions_Impl::m_aHelpPath },
-    { SvtPathOptions::PATH_LINGUISTIC,  &SvtDefaultOptions_Impl::m_aLinguisticPath },
-    { SvtPathOptions::PATH_MODULE,      &SvtDefaultOptions_Impl::m_aModulePath },
-    { SvtPathOptions::PATH_PALETTE,     &SvtDefaultOptions_Impl::m_aPalettePath },
-    { SvtPathOptions::PATH_PLUGIN,      &SvtDefaultOptions_Impl::m_aPluginPath },
-    { SvtPathOptions::PATH_TEMP,          &SvtDefaultOptions_Impl::m_aTempPath },
+    { SvtPathOptions::PATH_LINGUISTIC,      &SvtDefaultOptions_Impl::m_aLinguisticPath },
+    { SvtPathOptions::PATH_MODULE,          &SvtDefaultOptions_Impl::m_aModulePath },
+    { SvtPathOptions::PATH_PALETTE,         &SvtDefaultOptions_Impl::m_aPalettePath },
+    { SvtPathOptions::PATH_PLUGIN,          &SvtDefaultOptions_Impl::m_aPluginPath },
+    { SvtPathOptions::PATH_TEMP,            &SvtDefaultOptions_Impl::m_aTempPath },
     { SvtPathOptions::PATH_TEMPLATE,        &SvtDefaultOptions_Impl::m_aTemplatePath },
-    { SvtPathOptions::PATH_USERCONFIG,  &SvtDefaultOptions_Impl::m_aUserConfigPath },
+    { SvtPathOptions::PATH_USERCONFIG,      &SvtDefaultOptions_Impl::m_aUserConfigPath },
     { SvtPathOptions::PATH_WORK,            &SvtDefaultOptions_Impl::m_aWorkPath }
 };
 
@@ -304,8 +304,8 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( ASCII_STR("Office
                     case DEFAULTPATH__TEMP:             m_aTempPath = String( aFullPath );          break;
                     case DEFAULTPATH__TEMPLATE:         m_aTemplatePath = String( aFullPath );      break;
                     case DEFAULTPATH__USERCONFIG:       m_aUserConfigPath = String( aFullPath );    break;
-                    case DEFAULTPATH__USERDICTIONARY:   m_aUserDictionaryPath = String( aFullPath );break;
                     case DEFAULTPATH__WORK:             m_aWorkPath = String( aFullPath );          break;
+                    case DEFAULTPATH__USERDICTIONARY:   m_aUserDictionaryPath = String( aFullPath );break;
 
                     default:
                         DBG_ERRORFILE( "invalid index to load a default path" );
