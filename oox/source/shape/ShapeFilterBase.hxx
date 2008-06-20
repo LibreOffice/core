@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ShapeFilterBase.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include <boost/shared_ptr.hpp>
 #include <rtl/ref.hxx>
 #include "oox/vml/drawing.hxx"
+#include "oox/drawingml/table/tablestylelist.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 
 namespace oox {
@@ -56,6 +57,9 @@ public:
 
     /** Has to be implemented by each filter to return drawings collection. */
     virtual const ::oox::vml::DrawingPtr getDrawings();
+
+    /** Has to be implemented by each filter to return TableStyles. */
+    virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles();
 
     virtual ::oox::drawingml::chart::ChartConverter& getChartConverter();
 
