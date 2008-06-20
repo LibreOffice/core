@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -57,6 +57,7 @@ SLOFILES =	\
         $(SLO)$/fillproperties.obj\
         $(SLO)$/fillpropertiesgroupcontext.obj\
         $(SLO)$/graphicshapecontext.obj\
+        $(SLO)$/guidcontext.obj\
         $(SLO)$/hyperlinkcontext.obj\
         $(SLO)$/lineproperties.obj\
         $(SLO)$/linepropertiescontext.obj\
@@ -67,6 +68,7 @@ SLOFILES =	\
         $(SLO)$/shapepropertiescontext.obj\
         $(SLO)$/shapestylecontext.obj\
         $(SLO)$/spdefcontext.obj\
+        $(SLO)$/stylematrixreferencecontext.obj\
         $(SLO)$/textbody.obj\
         $(SLO)$/textbodycontext.obj\
         $(SLO)$/textbodypropertiescontext.obj\
