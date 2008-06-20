@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dinfdlg.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -659,8 +659,8 @@ BOOL SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
     }
 
     // Erzeugung der Ausgabedaten
-    const SfxPoolItem *pItem = NULL;
-    SfxDocumentInfoItem *pInfo;
+    const SfxPoolItem* pItem = NULL;
+    SfxDocumentInfoItem* pInfo = NULL;
     SfxTabDialog* pDlg = GetTabDialog();
     const SfxItemSet* pExSet = NULL;
 
@@ -668,13 +668,16 @@ BOOL SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
         pExSet = pDlg->GetExampleSet();
 
     if ( pExSet && SFX_ITEM_SET != pExSet->GetItemState( SID_DOCINFO, TRUE, &pItem ) )
-    {
         pInfo = pInfoItem;
-    }
-    else
+    else if ( pItem )
+        pInfo = new SfxDocumentInfoItem( *(const SfxDocumentInfoItem *)pItem );
+
+    if ( !pInfo )
     {
-        pInfo = new SfxDocumentInfoItem( *( const SfxDocumentInfoItem *) pItem );
+        DBG_ERRORFILE( "SfxDocumentDescPage::FillItemSet(): no item found" );
+        return FALSE;
     }
+
     if( bTitleMod )
     {
         pInfo->setTitle( aTitleEd.GetText() );
@@ -1336,8 +1339,14 @@ BOOL SfxInternetPage::FillItemSet( SfxItemSet& rSet )
 
     if( pExSet && SFX_ITEM_SET != pExSet->GetItemState( SID_DOCINFO, TRUE, &pItem ) )
         pInfo = pInfoItem;
-    else
-        pInfo = new SfxDocumentInfoItem( *( const SfxDocumentInfoItem* ) pItem );
+    else if ( pItem )
+        pInfo = new SfxDocumentInfoItem( *(const SfxDocumentInfoItem*)pItem );
+
+    if ( !pInfo )
+    {
+        DBG_ERRORFILE( "SfxInternetPage::FillItemSet(): no item found" );
+        return FALSE;
+    }
 
     DBG_ASSERT( eState != S_Init, "*SfxInternetPage::FillItemSet(): state init is not acceptable at this point!" );
 
@@ -1570,19 +1579,24 @@ BOOL SfxDocumentUserPage::FillItemSet( SfxItemSet& rSet )
     if ( !bMod )
         return FALSE;
 
-    const SfxPoolItem* pItem = 0;
-    SfxDocumentInfoItem* pInfo = 0;
+    const SfxPoolItem* pItem = NULL;
+    SfxDocumentInfoItem* pInfo = NULL;
     SfxTabDialog* pDlg = GetTabDialog();
     const SfxItemSet* pExSet = NULL;
 
     if ( pDlg )
         pExSet = pDlg->GetExampleSet();
 
-    if ( pExSet &&
-         SFX_ITEM_SET != pExSet->GetItemState(SID_DOCINFO, TRUE, &pItem) )
+    if ( pExSet && SFX_ITEM_SET != pExSet->GetItemState( SID_DOCINFO, TRUE, &pItem ) )
         pInfo = pInfoItem;
-    else
+    else if ( pItem )
         pInfo = new SfxDocumentInfoItem( *(const SfxDocumentInfoItem*)pItem );
+
+    if ( !pInfo )
+    {
+        DBG_ERRORFILE( "SfxDocumentUserPage::FillItemSet(): no item found" );
+        return FALSE;
+    }
 
     if ( bLabelModified || aInfo1Ed.IsModified() )
     {
