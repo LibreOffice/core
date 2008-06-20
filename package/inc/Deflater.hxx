@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Deflater.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,22 +52,14 @@ protected:
     sal_Int32 doDeflateBytes (com::sun::star::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
 
 public:
-    Deflater();
     ~Deflater();
-    Deflater(sal_Int32 nSetLevel);
     Deflater(sal_Int32 nSetLevel, sal_Bool bNowrap);
     void SAL_CALL setInputSegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
-    void SAL_CALL setInput( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer );
-    void SAL_CALL setDictionarySegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
-    void SAL_CALL setDictionary( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer );
-    void SAL_CALL setStrategy( sal_Int32 nNewStrategy );
     void SAL_CALL setLevel( sal_Int32 nNewLevel );
     sal_Bool SAL_CALL needsInput(  );
     void SAL_CALL finish(  );
     sal_Bool SAL_CALL finished(  );
     sal_Int32 SAL_CALL doDeflateSegment( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
-    sal_Int32 SAL_CALL doDeflate( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer );
-    sal_Int32 SAL_CALL getAdler(  );
     sal_Int32 SAL_CALL getTotalIn(  );
     sal_Int32 SAL_CALL getTotalOut(  );
     void SAL_CALL reset(  );

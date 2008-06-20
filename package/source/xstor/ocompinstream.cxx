@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ocompinstream.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,29 +39,6 @@
 #include "xstorage.hxx"
 
 using namespace ::com::sun::star;
-
-//-----------------------------------------------
-OInputCompStream::OInputCompStream( sal_Int16 nStorageType )
-: m_pImpl( NULL )
-, m_rMutexRef( new SotMutexHolder )
-, m_pInterfaceContainer( NULL )
-, m_bDisposed( sal_False )
-, m_nStorageType( nStorageType )
-{
-}
-
-//-----------------------------------------------
-OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl, sal_Int16 nStorageType )
-: m_pImpl( &aImpl )
-, m_rMutexRef( m_pImpl->m_rMutexRef )
-, m_pInterfaceContainer( NULL )
-, m_bDisposed( sal_False )
-, m_nStorageType( nStorageType )
-{
-    OSL_ENSURE( m_pImpl->m_rMutexRef.Is(), "No mutex is provided!\n" );
-    if ( !m_pImpl->m_rMutexRef.Is() )
-        throw uno::RuntimeException(); // just a disaster
-}
 
 //-----------------------------------------------
 OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
