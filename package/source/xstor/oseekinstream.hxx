@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: oseekinstream.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,16 +47,7 @@ public:
                       const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
                       sal_Int16 nStorageType );
 
-    OInputSeekStream( OWriteStream_Impl& pImpl,
-                      ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > xStream,
-                      const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
-                      sal_Int16 nStorageType );
-
     OInputSeekStream( ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xStream,
-                      const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
-                      sal_Int16 nStorageType );
-
-    OInputSeekStream( ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > xStream,
                       const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
                       sal_Int16 nStorageType );
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ocompinstream.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,9 +64,6 @@ protected:
     sal_Bool m_bDisposed;
 
     sal_Int16 m_nStorageType;
-
-    OInputCompStream( sal_Int16 nStorageType );
-    OInputCompStream( OWriteStream_Impl& pImpl, sal_Int16 nStorageType );
 
 public:
     OInputCompStream( OWriteStream_Impl& pImpl,
