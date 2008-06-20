@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excelfilter.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +52,9 @@ public:
     virtual bool        exportDocument() throw();
 
     virtual sal_Int32   getSchemeClr( sal_Int32 nColorSchemeToken ) const;
+
     virtual const ::oox::vml::DrawingPtr getDrawings();
+    virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles();
     virtual ::oox::drawingml::chart::ChartConverter& getChartConverter();
 
 private:
