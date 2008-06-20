@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: about.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -158,18 +158,21 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     aFont.SetTransparent( TRUE );
     SetFont( aFont );
 
-    // ggf. Spezial Version
-    String aStr = aVersionText.GetText();
-    aStr.SearchAndReplaceAscii( "$(VER)", Application::GetDisplayName() );
+    // if necessary more info
+    String sVersion = aVersionText.GetText();
+    sVersion.SearchAndReplaceAscii( "$(VER)", Application::GetDisplayName() );
     ::rtl::OUString aDefault;
     String sPatchLevel( utl::Bootstrap::getProductPatchLevel( aDefault ) );
     if ( sPatchLevel.Len() > 0 )
     {
-        aStr.EraseTrailingChars();
-        aStr += ' ';
-        aStr += sPatchLevel;
+        sVersion.EraseTrailingChars();
+        sVersion += ' ';
+        sVersion += sPatchLevel;
     }
-    aVersionText.SetText( aStr );
+
+    sVersion += '\n';
+    sVersion += rVerStr;
+    aVersionText.SetText( sVersion );
 
     // Initialisierung fuer Aufruf Entwickler
     if ( aAccelStr.Len() && ByteString(U2S(aAccelStr)).IsAlphaAscii() )
@@ -384,84 +387,9 @@ void AboutDialog::Paint( const Rectangle& rRect )
 
     Point aPnt;
     Size aSize;
-    long nPos = 0, nPos1, nPos2, nTop = 0;
+    long nPos = 0, nPos1, nPos2, nTop = rRect.Top();
     long nFullWidth = GetOutputSizePixel().Width();
     long nW = nFullWidth / 2 - 5;
-    long nTxtWidth = GetTextWidth( aDevVersionStr );
-
-    // perhaps the devversion text is too wide, so we have to split it in some lines
-    // the buildids end with ')'
-    String sVersion = aDevVersionStr;
-    xub_StrLen nEndPos = sVersion.Search( ')' );
-    xub_StrLen nLastPos = STRING_NOTFOUND;
-    while ( true )
-    {
-        bool bDraw = false, bDraw2 = false;
-        String sTemp = sVersion.Copy( 0, nEndPos + 1 );
-        nTxtWidth = GetTextWidth( sTemp );
-        if ( nTxtWidth < nFullWidth )
-        {
-            nLastPos = nEndPos;
-            nEndPos = sVersion.Search( ')', nEndPos + 1 );
-        }
-        else if ( nLastPos != STRING_NOTFOUND )
-        {
-            sTemp = sVersion.Copy( 0, nLastPos + 1 );
-            sVersion = sVersion.Copy( nLastPos + 2 );
-            bDraw = true;
-        }
-
-        if ( !bDraw && nEndPos == STRING_NOTFOUND )
-        {
-            sTemp = sVersion;
-            nTxtWidth = GetTextWidth( sTemp );
-            if ( nTxtWidth > nFullWidth )
-            {
-                if ( nLastPos != STRING_NOTFOUND )
-                {
-                    sTemp = sVersion.Copy( 0, nLastPos + 1 );
-                    sVersion = sVersion.Copy( nLastPos + 2 );
-                    bDraw2 = true;
-                }
-                else
-                {
-                    DBG_ERRORFILE( "error while scanning buildids" );
-                }
-            }
-
-            bDraw = true;
-        }
-
-        if ( bDraw )
-        {
-            aSize = Size( GetTextWidth( sTemp ), GetTextHeight() );
-            aPnt = Point( nW - ( aSize.Width() / 2 ), nPos );
-            nPos1 = aPnt.Y();
-            nPos2 = nPos1 + aSize.Height();
-            nTop = rRect.Top();
-
-            if ( nTop < nPos2 )
-                DrawText( aPnt, sTemp );
-            nPos += aSize.Height() + 3;
-
-            if ( bDraw2 )
-            {
-                aSize = Size( GetTextWidth( sVersion ), GetTextHeight() );
-                aPnt = Point( nW - ( aSize.Width() / 2 ), nPos );
-                nPos1 = aPnt.Y();
-                nPos2 = nPos1 + aSize.Height();
-                nTop = rRect.Top();
-
-                if ( nTop < nPos2 )
-                    DrawText( aPnt, sVersion );
-                nPos += aSize.Height() + 3;
-            }
-        }
-
-        if ( nEndPos == STRING_NOTFOUND )
-            break;
-    }
-
     USHORT nDevCnt = static_cast< USHORT >( aDeveloperAry.Count() );
     USHORT nCount = nDevCnt;
 
