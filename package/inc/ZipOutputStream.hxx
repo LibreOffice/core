@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ZipOutputStream.hxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,8 +76,6 @@ public:
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
     // XZipOutputStream interfaces
-    void SAL_CALL setComment( const ::rtl::OUString& rComment )
-        throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setMethod( sal_Int32 nNewMethod )
         throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setLevel( sal_Int32 nNewLevel )
@@ -91,8 +89,6 @@ public:
     void SAL_CALL write( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     void SAL_CALL finish(  )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    void SAL_CALL close(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     static sal_uInt32 getCurrentDosTime ( );
 protected:
