@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ZipPackageBuffer.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,13 +43,6 @@ ZipPackageBuffer::ZipPackageBuffer(sal_Int64 nNewBufferSize )
 , m_nEnd(0)
 , m_nCurrent(0)
 , m_bMustInitBuffer ( sal_True )
-{
-}
-ZipPackageBuffer::ZipPackageBuffer(Sequence < sal_Int8 > &nNewBuffer )
-: m_aBuffer ( nNewBuffer )
-, m_nEnd ( nNewBuffer.getLength() )
-, m_nCurrent( 0 )
-, m_bMustInitBuffer ( sal_False )
 {
 }
 ZipPackageBuffer::~ZipPackageBuffer(void)
