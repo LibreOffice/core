@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.18 $
+# $Revision: 1.19 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,7 +45,6 @@ ENABLE_EXCEPTIONS=TRUE
 CFLAGS+=-DSYSTEM_ZLIB
 .ENDIF
 SLOFILES= \
-        $(SLO)$/Adler32.obj			\
         $(SLO)$/CRC32.obj			\
         $(SLO)$/ByteChucker.obj		\
         $(SLO)$/ByteGrabber.obj		\
