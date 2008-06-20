@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pptimport.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 #include "oox/ppt/pptimport.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/dump/pptxdumper.hxx"
+#include "oox/drawingml/table/tablestylelistfragmenthandler.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -75,7 +76,11 @@ bool PowerPointImport::importDocument() throw()
     OOX_DUMP_FILE( ::oox::dump::pptx::Dumper );
 
     OUString aFragmentPath = getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "officeDocument" ) );
-    return importFragment( new PresentationFragmentHandler( *this, aFragmentPath ) );
+    FragmentHandlerRef xPresentationFragmentHandler( new PresentationFragmentHandler( *this, aFragmentPath ) );
+    maTableStyleListPath = xPresentationFragmentHandler->getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "tableStyles" ) );
+    return importFragment( xPresentationFragmentHandler );
+
+
 }
 
 bool PowerPointImport::exportDocument() throw()
@@ -128,6 +133,17 @@ const oox::vml::DrawingPtr PowerPointImport::getDrawings()
     if ( mpActualSlidePersist )
         xRet = mpActualSlidePersist->getDrawing();
     return xRet;
+}
+
+const oox::drawingml::table::TableStyleListPtr PowerPointImport::getTableStyles()
+{
+    if ( !mpTableStyleList && maTableStyleListPath.getLength() )
+    {
+        mpTableStyleList = oox::drawingml::table::TableStyleListPtr( new oox::drawingml::table::TableStyleList() );
+        importFragment( new oox::drawingml::table::TableStyleListFragmentHandler(
+            *this, maTableStyleListPath, *mpTableStyleList ) );
+    }
+    return mpTableStyleList;;
 }
 
 ::oox::drawingml::chart::ChartConverter& PowerPointImport::getChartConverter()
