@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textbodypropertiescontext.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -131,11 +131,11 @@ Reference< XFastContextHandler > TextBodyPropertiesContext::createFastChildConte
 
             // EG_TextAutofit
             case NMSP_DRAWINGML|XML_noAutofit:
-                mrTextBodyProp[ sTextAutoGrowHeight ] <<= false;   // CT_TextNoAutofit
+                mrTextBodyProp[ sTextAutoGrowHeight ] <<= sal_False;    // CT_TextNoAutofit
                 break;
             case NMSP_DRAWINGML|XML_normAutofit:    // CT_TextNormalAutofit
             case NMSP_DRAWINGML|XML_spAutoFit:
-                mrTextBodyProp[ sTextAutoGrowHeight ] <<= true;
+                mrTextBodyProp[ sTextAutoGrowHeight ] <<= sal_True;
                 break;
 
             case NMSP_DRAWINGML|XML_scene3d:        // CT_Scene3D
