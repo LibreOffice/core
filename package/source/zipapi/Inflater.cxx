@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Inflater.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,12 +77,6 @@ Inflater::~Inflater()
 {
     end();
 }
-void SAL_CALL Inflater::setInputSegment( const Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-{
-    sInBuffer = rBuffer;
-    nOffset = nNewOffset;
-    nLength = nNewLength;
-}
 
 void SAL_CALL Inflater::setInput( const Sequence< sal_Int8 >& rBuffer )
 {
@@ -91,59 +85,11 @@ void SAL_CALL Inflater::setInput( const Sequence< sal_Int8 >& rBuffer )
     nLength = rBuffer.getLength();
 }
 
-void SAL_CALL Inflater::setDictionarySegment( const Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-{
-    if (pStream == NULL)
-    {
-        // do error handling
-    }
-    if (nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength())
-    {
-        // do error handling
-    }
-#ifdef SYSTEM_ZLIB
-    inflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray() + nNewOffset,
-                  nNewLength);
-#else
-    z_inflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray() + nNewOffset,
-                  nNewLength);
-#endif
-}
-
-void SAL_CALL Inflater::setDictionary( const Sequence< sal_Int8 >& rBuffer )
-{
-    if (pStream == NULL)
-    {
-        // do error handling
-    }
-#ifdef SYSTEM_ZLIB
-    inflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray(),
-                   rBuffer.getLength());
-#else
-    z_inflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray(),
-                   rBuffer.getLength());
-#endif
-}
-
-sal_Int32 SAL_CALL Inflater::getRemaining(  )
-{
-    return nLength;
-}
-
-sal_Bool SAL_CALL Inflater::needsInput(  )
-{
-    return nLength <=0;
-}
-
 sal_Bool SAL_CALL Inflater::needsDictionary(  )
 {
     return bNeedDict;
 }
 
-void SAL_CALL Inflater::finish(  )
-{
-    bFinish = sal_True;
-}
 sal_Bool SAL_CALL Inflater::finished(  )
 {
     return bFinished;
@@ -156,37 +102,6 @@ sal_Int32 SAL_CALL Inflater::doInflateSegment( Sequence< sal_Int8 >& rBuffer, sa
         // do error handling
     }
     return doInflateBytes(rBuffer, nNewOffset, nNewLength);
-}
-
-sal_Int32 SAL_CALL Inflater::doInflate( Sequence< sal_Int8 >& rBuffer )
-{
-    return doInflateBytes(rBuffer, 0, rBuffer.getLength());
-}
-
-sal_Int32 SAL_CALL Inflater::getAdler(  )
-{
-    return pStream->adler;
-}
-
-sal_Int32 SAL_CALL Inflater::getTotalIn(  )
-{
-    return pStream->total_in;
-}
-
-sal_Int32 SAL_CALL Inflater::getTotalOut(  )
-{
-    return pStream->total_out;
-}
-
-void SAL_CALL Inflater::reset(  )
-{
-#ifdef SYSTEM_ZLIB
-    inflateReset(pStream);
-#else
-    z_inflateReset(pStream);
-#endif
-    bFinish = bNeedDict = bFinished = sal_False;
-    nOffset = nLength = 0;
 }
 
 void SAL_CALL Inflater::end(  )

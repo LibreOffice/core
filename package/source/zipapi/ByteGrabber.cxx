@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ByteGrabber.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,27 +63,6 @@ sal_Int32 SAL_CALL ByteGrabber::readBytes( uno::Sequence< sal_Int8 >& aData,
     throw(io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
     return xStream->readBytes(aData, nBytesToRead );
-}
-sal_Int32 SAL_CALL ByteGrabber::readSomeBytes( uno::Sequence< sal_Int8 >& aData,
-                                                sal_Int32 nMaxBytesToRead )
-    throw(io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
-{
-    return xStream->readSomeBytes( aData, nMaxBytesToRead );
-}
-void SAL_CALL ByteGrabber::skipBytes( sal_Int32 nBytesToSkip )
-    throw(io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
-{
-    xStream->skipBytes( nBytesToSkip );
-}
-sal_Int32 SAL_CALL ByteGrabber::available(  )
-    throw(io::NotConnectedException, io::IOException, uno::RuntimeException)
-{
-    return xStream->available();
-}
-void SAL_CALL ByteGrabber::closeInput(  )
-    throw(io::NotConnectedException, io::IOException, uno::RuntimeException)
-{
-    xStream->closeInput();
 }
 
 // XSeekable chained...
