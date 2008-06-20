@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: oleembed.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,10 +60,10 @@
 
 using namespace ::com::sun::star;
 
+#ifdef WNT
 //----------------------------------------------
 void OleEmbeddedObject::SwitchComponentToRunningState_Impl()
 {
-#ifdef WNT
     if ( m_pOleComponent )
     {
         try
@@ -82,7 +82,6 @@ void OleEmbeddedObject::SwitchComponentToRunningState_Impl()
         }
     }
     else
-#endif
     {
         throw embed::UnreachableStateException();
     }
@@ -119,7 +118,7 @@ uno::Sequence< sal_Int32 > OleEmbeddedObject::GetIntermediateVerbsSequence_Impl(
 
     return uno::Sequence< sal_Int32 >();
 }
-
+#endif
 //----------------------------------------------
 void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
         throw ( embed::UnreachableStateException,
@@ -202,7 +201,6 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                     StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
                     aGuard.reset();
 
-#ifdef WNT
                     if ( m_pOleComponent && m_bHasSizeToSet )
                     {
                         aGuard.clear();
@@ -213,7 +211,6 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                         catch( uno::Exception& ) {}
                         aGuard.reset();
                     }
-#endif
 
                     if ( m_nObjectState == nNewState )
                         return;
@@ -228,7 +225,6 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                     m_pOleComponent->ExecuteVerb( embed::EmbedVerbs::MS_OLEVERB_OPEN );
                     aGuard.reset();
 
-#ifdef WNT
                     // some objects do not allow to set the size even in running state
                     if ( m_pOleComponent && m_bHasSizeToSet )
                     {
@@ -240,7 +236,6 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                         catch( uno::Exception& ) {}
                         aGuard.reset();
                     }
-#endif
 
                     m_nObjectState = nNewState;
                 }
