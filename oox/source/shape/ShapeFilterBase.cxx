@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ShapeFilterBase.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,6 +56,11 @@ sal_Int32 ShapeFilterBase::getSchemeClr(sal_Int32 /*nColorSchemeToken*/ ) const
 const vml::DrawingPtr ShapeFilterBase::getDrawings()
 {
     return vml::DrawingPtr();
+}
+
+const ::oox::drawingml::table::TableStyleListPtr ShapeFilterBase::getTableStyles()
+{
+    return ::oox::drawingml::table::TableStyleListPtr();
 }
 
 ::oox::drawingml::chart::ChartConverter& ShapeFilterBase::getChartConverter()
