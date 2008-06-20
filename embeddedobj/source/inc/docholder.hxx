@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docholder.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -141,14 +141,11 @@ public:
     void CloseDocument( sal_Bool bDeliverOwnership, sal_Bool bWaitForClose );
     void CloseFrame();
 
-    void SetTitle(const rtl::OUString& aDocumentName);
-
     rtl::OUString GetTitle() const
     {
         return m_aContainerName + ::rtl::OUString::createFromAscii( " - " ) + m_aDocumentNamePart;
     }
 
-    void SetContainerName(const rtl::OUString& aContainerName);
     rtl::OUString GetContainerName() const { return m_aContainerName; }
 
     void SetOutplaceFrameProperties( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aProps )
@@ -171,8 +168,6 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM );
 
     void Show();
-
-    void Hide();
 
     // sal_Bool SetVisArea( sal_Int64 nAspect, const ::com::sun::star::awt::Rectangle& aRect );
     // sal_Bool GetVisArea( sal_Int64 nAspect, ::com::sun::star::awt::Rectangle *pRect );
