@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: page.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -992,7 +992,7 @@ IMPL_LINK( SvxPageDescPage, LayoutHdl_Impl, ListBox *, EMPTYARG )
         if ( aRightMarginLbl.GetText() != aRightText )
             aRightMarginLbl.SetText( aRightText );
     }
-    UpdateExample_Impl();
+    UpdateExample_Impl( true );
     return 0;
 }
 
