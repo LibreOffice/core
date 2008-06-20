@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CRC32.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,15 +64,6 @@ sal_Int32 SAL_CALL CRC32::getValue()
     throw(RuntimeException)
 {
     return nCRC & 0xFFFFFFFFL;
-}
-/** Update CRC32 with specified byte
- */
-void SAL_CALL CRC32::updateByte (sal_Int8 nByte)
-        throw(RuntimeException)
-{
-    sal_uInt8 pBuf[1];
-    pBuf[0] = (sal_uInt8)nByte;
-    nCRC  = crc32(nCRC, pBuf, 1);
 }
 /** Update CRC32 with specified sequence of bytes
  */

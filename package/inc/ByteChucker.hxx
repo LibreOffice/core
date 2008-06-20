@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ByteChucker.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,16 +56,8 @@ public:
     // XOutputStream
     void SAL_CALL writeBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nLength = -1, const sal_Int8 * const pData = NULL)
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    void SAL_CALL flush(  )
-        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    void SAL_CALL closeOutput(  )
-        throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     // XSeekable
-    sal_Int64 SAL_CALL seek( sal_Int64 location )
-        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     sal_Int64 SAL_CALL getPosition(  )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    sal_Int64 SAL_CALL getLength(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
     ByteChucker& operator << (sal_Int8 nInt8);
