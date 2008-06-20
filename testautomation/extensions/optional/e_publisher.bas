@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: e_publisher.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 06:00:09 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:51 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -53,7 +53,7 @@ sub LoadIncludeFiles
 
     use "global\system\includes\gvariabl.inc"
     use "global\system\includes\master.inc"
-    use "global\tools\includes\optional\extension_manager_tools.inc"
+    use "global\tools\includes\optional\t_extension_manager_tools.inc"
     gApplication = "WRITER"
     call GetUseFiles()
 

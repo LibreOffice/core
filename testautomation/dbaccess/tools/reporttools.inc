@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: reporttools.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 07:43:46 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:51 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -369,7 +369,7 @@ function tools_reporttools_InstallExtension
     '/// </ol>
     
     dim i as integer
-    use "global/tools/includes/optional/extension_manager_tools.inc"
+    use "global/tools/includes/optional/t_extension_manager_tools.inc"
     if (not hIsExtensionAlreadyInstalled("sun-report-builder.oxt")) then
         i = hExtensionAddGUI( gTesttoolPath + "dbaccess/optional/input/sun-report-builder.oxt", "AcceptLicense,InstallForUser" )
         if (i > 0) then    

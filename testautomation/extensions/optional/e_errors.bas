@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: e_errors.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 05:58:47 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:51 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -54,14 +54,14 @@ sub LoadIncludeFiles
     use "global\system\includes\gvariabl.inc"
     use "global\system\includes\master.inc"
     
-    use "global\tools\includes\optional\extension_manager_tools.inc"
-    use "global\tools\includes\optional\stringtools.inc"
+    use "global\tools\includes\optional\t_extension_manager_tools.inc"
+    use "global\tools\includes\optional\t_stringtools.inc"
     use "global\tools\includes\optional\accels.inc"
-    use "global\tools\includes\optional\docfuncs.inc"
-    use "global\tools\includes\optional\listfuncs.inc"
-    use "global\tools\includes\optional\macro_tools.inc"
-    use "global\tools\includes\optional\basicide_tools.inc"
-    use "global\tools\includes\optional\basicorganizer_tools.inc"
+    use "global\tools\includes\optional\f_docfuncs.inc"
+    use "global\tools\includes\optional\t_listfuncs.inc"
+    use "global\tools\includes\optional\t_macro_tools.inc"
+    use "global\tools\includes\optional\t_basic_ide_tools.inc"
+    use "global\tools\includes\optional\t_basic_organizer_tools.inc"
    
     gApplication = "WRITER"
     call GetUseFiles()

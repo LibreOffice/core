@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: e_meta-inf.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 05:59:35 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:51 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -53,10 +53,10 @@ sub LoadIncludeFiles
 
     use "global\system\includes\gvariabl.inc"
     use "global\system\includes\master.inc"
-    use "global\tools\includes\optional\extension_manager_tools.inc"
+    use "global\tools\includes\optional\t_extension_manager_tools.inc"
     
-    use "global\tools\includes\optional\docfuncs.inc"
-    use "global\tools\includes\optional\filetools.inc"
+    use "global\tools\includes\optional\f_docfuncs.inc"
+    use "global\tools\includes\optional\t_filetools.inc"
 
     gApplication = "WRITER"
     call GetUseFiles()

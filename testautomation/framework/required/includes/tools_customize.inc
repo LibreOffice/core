@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: tools_customize.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:04 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:53 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -731,7 +731,7 @@ function hUpdtToolsCustomizeScriptSelector( iBtn as integer ) as boolean
 
     '///<h3>A brief look at the ScriptSelector via Tools/Customize</h3>
     '///<i>Starting point: Tools/Customize dialog (AddMacro/BtnNew)</i><br>
-    '///<i>Uses: treelist_tools.inc</i><br>
+    '///<i>Uses: t_treelist_tools.inc</i><br>
     
     '///<u>Input</u>:
     '///<ol>

@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: dba_Main.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 07:43:45 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:50 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -75,7 +75,7 @@ end sub
 
 
 sub LoadIncludeFiles
-    use "global/tools/includes/optional/extension_manager_tools.inc"
+    use "global/tools/includes/optional/t_extension_manager_tools.inc"
     use "dbaccess/tools/dbinit.inc"
     Call sDBInit
     Call GetUseFiles

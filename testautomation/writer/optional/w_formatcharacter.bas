@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_formatcharacter.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 09:11:25 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:54 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -67,7 +67,7 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    use "global\tools\includes\extension_manager_tools.inc"
+    use "global\tools\includes\t_extension_manager_tools.inc"
     Call GetUseFiles
     gApplication = "Writer"
 end sub

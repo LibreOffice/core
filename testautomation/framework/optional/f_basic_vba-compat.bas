@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: f_basic_vba-compat.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 07:01:33 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:52 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -58,8 +58,8 @@ sub LoadIncludeFiles
     use "global\system\includes\gvariabl.inc"
     use "global\system\includes\master.inc"
 
-    use "global\tools\includes\optional\basicorganizer_tools.inc"
-    use "global\tools\includes\optional\treelist_tools.inc"
+    use "global\tools\includes\optional\t_basic_organizer_tools.inc"
+    use "global\tools\includes\optional\t_treelist_tools.inc"
 
     use "framework\optional\includes\basic_vba_compat_tools.inc"
     

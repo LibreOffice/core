@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: scriptorganizer_tools.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:06 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:54 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -135,7 +135,7 @@ function hRenameScriptingObject( cName as string ) as boolean
     '///<u>Description</u>:
     '///<ul>
 
-    use "global\tools\includes\optional\stringtools.inc"    
+    use "global\tools\includes\optional\t_stringtools.inc"    
 
     const CFN = "hRenameScriptingObject::"
     dim cMessage as string
@@ -226,7 +226,7 @@ function hDeleteScript( cName as string , bSuccess as boolean ) as boolean
     '///<u>Description</u>:
     '///<ul>
 
-    use "global\tools\includes\optional\stringtools.inc"
+    use "global\tools\includes\optional\t_stringtools.inc"
     
     const CFN = "hDeleteScript::"
     dim iPos as integer

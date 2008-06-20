@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: private_environment.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:06 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:54 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -68,7 +68,7 @@ function hGetPrivateHttpServer( _proxy as string, _port as string ) as boolean
     '///</ul>
     '///</ol>
     
-    use "global\tools\includes\optional\key_tools.inc"
+    use "global\tools\includes\optional\t_key_tools.inc"
 
     const CFN = "hGetPrivateHttpServer::"
     dim cFile as string
@@ -138,7 +138,7 @@ function hGetPrivateFtpServer( _proxy as string, _port as string ) as boolean
     '///</ul>
     '///</ol>
     
-    use "global\tools\includes\optional\key_tools.inc"
+    use "global\tools\includes\optional\t_key_tools.inc"
 
     const CFN = "hGetPrivateFtpServer::"
     dim cFile as string
@@ -205,7 +205,7 @@ function hGetPrivateSocksServer( _proxy as string, _port as string ) as boolean
     '///</ul>
     '///</ol>
     
-    use "global\tools\includes\optional\key_tools.inc"
+    use "global\tools\includes\optional\t_key_tools.inc"
 
     const CFN = "hGetPrivateSocksServer::"
     dim brc as boolean 'a multi purpose boolean returnvalue

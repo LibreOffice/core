@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: f_security_recommend_password.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 07:09:12 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:52 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -71,9 +71,9 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
     
-    use "global\tools\includes\optional\security_tools.inc"
-    use "global\tools\includes\optional\filetools.inc"
-    use "global\tools\includes\optional\docfuncs.inc"
+    use "global\tools\includes\optional\t_security_tools.inc"
+    use "global\tools\includes\optional\t_filetools.inc"
+    use "global\tools\includes\optional\f_docfuncs.inc"
     
     gApplication = "WRITER"
     call GetUseFiles()

@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: init_tools.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:06 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:54 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -97,7 +97,7 @@ end function
 
 function hInitBackingMode() as boolean
 
-    use "global\tools\includes\optional\docfuncs.inc"
+    use "global\tools\includes\optional\f_docfuncs.inc"
 
     '///<h3>Make that we are on the backing window (no open documents)</h3>
     '///<i>Close all open documents</i><br><br>

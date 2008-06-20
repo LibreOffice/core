@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: e_options.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 05:59:52 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:51 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -54,9 +54,9 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
 
-    use "global\tools\includes\optional\extension_manager_tools.inc"
-    use "global\tools\includes\optional\treelist_tools.inc"
-    use "global\tools\includes\optional\control_objects.inc"
+    use "global\tools\includes\optional\t_extension_manager_tools.inc"
+    use "global\tools\includes\optional\t_treelist_tools.inc"
+    use "global\tools\includes\optional\t_control_objects.inc"
     
     gApplication = "WRITER"
     call GetUseFiles()

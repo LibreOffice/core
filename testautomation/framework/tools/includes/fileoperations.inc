@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: fileoperations.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:05 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:54 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -40,7 +40,7 @@
 function hSaveLoadDelSuccess( cFile as string ) as integer
 
     '///<h3>Successfully save, close, load, close and delete a file</h3>
-    '///<i>Uses</i>: framework\tools\stringtools.inc<br><br>
+    '///<i>Uses</i>: framework\tools\t_stringtools.inc<br><br>
     '///<u>Input</u>:
     '///<ol>
     '///+<li>Filename incl. extension (string)</li>
@@ -141,7 +141,7 @@ end function
 function hLoadFileExpectSuccess( fpath as string ) as boolean
 
     '///<h3>Load a file where failure is expected</h3>
-    '///<i>Uses</i>: framework\tools\stringtools.inc<br><br>
+    '///<i>Uses</i>: framework\tools\t_stringtools.inc<br><br>
     '///<i>This function is quite similar to hLoadFile but does much less
     '///+ errorhandling so the information of the type of failure is a little
     '///+ more exact</i><br><br>
@@ -214,7 +214,7 @@ end function
 function hLoadFileExpectFailure( fpath as string ) as boolean
 
     '///<h3>Load a file where failure is expected</h3>
-    '///<i>Uses</i>: framework\tools\stringtools.inc<br><br>
+    '///<i>Uses</i>: framework\tools\t_stringtools.inc<br><br>
     '///<u>Input</u>:
     '///<ol>
     '///+<li>Filename incl. extension (string)</li>
@@ -299,7 +299,7 @@ end function
 function hSaveFileExpectSuccess( fpath as string , bReplace as boolean ) as boolean
 
     '///<h3>Save a file with optional replace where success is expected</h3>
-    '///<i>Uses</i>: framework\tools\stringtools.inc<br><br>
+    '///<i>Uses</i>: framework\tools\t_stringtools.inc<br><br>
     '///<u>Input</u>:
     '///<ol>
     '///+<li>Filename incl. extension (string)</li>
@@ -400,7 +400,7 @@ end function
 function hSaveFileExpectFailure( fpath as string , errortype as integer ) as boolean
 
     '///<h3>Save a file where failure is expected</h3>
-    '///<i>Uses</i>: framework\tools\stringtools.inc<br><br>
+    '///<i>Uses</i>: framework\tools\t_stringtools.inc<br><br>
     '///<u>Input</u>:
     '///<ol>
     '///+<li>Filename incl. extension (string)</li>
@@ -530,7 +530,7 @@ end function
 function hCreateDirectoryExpectSuccess( dirname as string ) as boolean
 
     '///<h3>Create a directory where success is expected</h3>
-    '///<i>Uses</i>: framework\tools\stringtools.inc<br><br>
+    '///<i>Uses</i>: framework\tools\t_stringtools.inc<br><br>
     '///<u>Input</u>:
     '///<ol>
     '///+<li>Name of the directory (string)</li>
@@ -605,7 +605,7 @@ end function
 function hDeleteFileViaFileOpen( cFile as String ) as boolean
 
     '///<h3>Delete a file using the File Open dialog</h3>
-    '///<i>Uses</i>: framework\tools\stringtools.inc<br><br>
+    '///<i>Uses</i>: framework\tools\t_stringtools.inc<br><br>
     '///<u>Input</u>:
     '///<ol>
     '///+<li>Filename incl. extension (string)</li>

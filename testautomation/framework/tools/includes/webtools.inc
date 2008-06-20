@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: webtools.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:06 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:54 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -41,7 +41,7 @@ function hSetProxies( HTTP_Server as string, HTTP_Port as string, _
                       FTP_Server as string, FTP_Port as string, _
                       NoProxyFor as string ) as integer
                       
-    use "global\tools\includes\optional\control_objects.inc"
+    use "global\tools\includes\optional\t_control_objects.inc"
 
     '///<h3>Configure proxy settings via Tools/Options Internet page</h3>
     '///<i>Starting point is a plain document of any type</i><br>

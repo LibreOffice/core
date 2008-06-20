@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: f_filedlg_multiselection.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 07:04:52 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:52 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -54,9 +54,9 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
     
-    use "global\tools\includes\optional\filetools.inc"
-    use "global\tools\includes\optional\docfuncs.inc"
-    use "global\tools\includes\optional\stringtools.inc"
+    use "global\tools\includes\optional\t_filetools.inc"
+    use "global\tools\includes\optional\f_docfuncs.inc"
+    use "global\tools\includes\optional\t_stringtools.inc"
     
     gApplication = "WRITER"
     call GetUseFiles()

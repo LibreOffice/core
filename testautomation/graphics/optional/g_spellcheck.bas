@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: g_spellcheck.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:37 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:54 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -68,7 +68,7 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    use "global\tools\includes\optional\extension_manager_tools.inc"
+    use "global\tools\includes\optional\t_extension_manager_tools.inc"
     gApplication = "Impress"
     Call GetUseFiles
 end sub

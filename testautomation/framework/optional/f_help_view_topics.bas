@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: f_help_view_topics.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 07:06:34 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:52 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -63,8 +63,8 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
     
-    use "global\tools\includes\optional\listfuncs.inc"
-    use "global\tools\includes\optional\filetools.inc"
+    use "global\tools\includes\optional\t_listfuncs.inc"
+    use "global\tools\includes\optional\t_filetools.inc"
     
     use "framework\tools\includes\help_tools.inc"
 

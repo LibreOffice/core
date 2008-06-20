@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: f_first.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 07:23:33 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:53 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -68,9 +68,9 @@ sub LoadIncludeFiles
     
     use "global\required\includes\g_option.inc"
     
-    use "global\tools\includes\optional\filetools.inc"
-    use "global\tools\includes\optional\docfuncs.inc"
-    use "global\tools\includes\optional\listfuncs.inc"
+    use "global\tools\includes\optional\t_filetools.inc"
+    use "global\tools\includes\optional\f_docfuncs.inc"
+    use "global\tools\includes\optional\t_listfuncs.inc"
 
     gApplication = "WRITER"
     call GetUseFiles()

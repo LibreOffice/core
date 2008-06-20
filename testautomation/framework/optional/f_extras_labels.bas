@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: f_extras_labels.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 07:02:34 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:52 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -41,8 +41,8 @@ sub main
 
    use "framework\optional\includes\extras_labels.inc" 
 
-   use "global\tools\includes\optional\filetools.inc"
-   use "global\tools\includes\optional\listfuncs.inc"
+   use "global\tools\includes\optional\t_filetools.inc"
+   use "global\tools\includes\optional\t_listfuncs.inc"
 
    call hStatusIn ( "framework", "f_extras_labels.bas"  )
    Call tLabelTypes()

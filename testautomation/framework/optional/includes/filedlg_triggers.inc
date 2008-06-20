@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: filedlg_triggers.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:14 $
+'* last change: $Author: jsk $ $Date: 2008-06-20 08:03:53 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -44,7 +44,7 @@ testcase tDialogTriggers
     '///<u><pre>Synopsis</pre></u>Test that some slots for the file-save, file-save-as 
     '///+ and file-open dialogs are not available in special situations, using accelerators.<br>
     '///<u><pre>Specification document</pre></u>No specification provided<br>
-    '///<u><pre>Files used</pre></u>framework/tools/input/accelerators.txt<br>framework/tools/inc/accels.inc<br>
+    '///<u><pre>Files used</pre></u>framework/tools/input/accelerators.txt<br>framework/tools/inc/t_accels.inc<br>
     '///<u><pre>Test case specification</pre></u>
     '///<ul>
     
