@@ -8,7 +8,7 @@
  *
  * $RCSfile: dpcachetable.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -650,7 +650,7 @@ void ScDPCacheTable::filterTable(const vector<Criterion>& rCriteria, Sequence< S
                 // use this criterion.
                 continue;
 
-            const Cell* pCell = getCell(itr->mnFieldIndex, nRow, bRepeatIfEmpty);
+            const Cell* pCell = getCell(static_cast<SCCOL>(itr->mnFieldIndex), nRow, bRepeatIfEmpty);
             if (!pCell)
             {
                 // This should never happen, but just in case...
@@ -671,7 +671,7 @@ void ScDPCacheTable::filterTable(const vector<Criterion>& rCriteria, Sequence< S
         // Insert this row into table.
 
         Sequence<Any> row(nColSize);
-        for (sal_Int32 nCol = 0; nCol < nColSize; ++nCol)
+        for (SCCOL nCol = 0; nCol < nColSize; ++nCol)
         {
             Any any;
             const Cell* pCell = getCell(nCol, nRow, bRepeatIfEmpty);
