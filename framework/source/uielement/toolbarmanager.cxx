@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolbarmanager.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -289,6 +289,9 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     USHORT nMenuType = TOOLBOX_MENUTYPE_CLIPPEDITEMS;
     if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, OUString::createFromAscii( "CreateDialog" )))
          nMenuType |= TOOLBOX_MENUTYPE_CUSTOMIZE;
+    //added for issue33668 by shizhoubo
+    m_pToolBar->SetCommandHdl( LINK( this, ToolBarManager, Command ) );
+    //end
     m_pToolBar->SetMenuType( nMenuType );
     m_pToolBar->SetMenuButtonHdl( LINK( this, ToolBarManager, MenuButton ) );
     m_pToolBar->GetMenu()->SetSelectHdl( LINK( this, ToolBarManager, MenuSelect ) );
@@ -823,6 +826,18 @@ void ToolBarManager::RemoveControllers()
         return;
 
     m_aSubToolBarControllerMap.clear();
+
+    // i90033
+    // Remove item windows pointers from the toolbar. They are going to be
+    // destroyed by the dispose() call later at XComponent. This is needed
+    // as VCL code later tries to access the item window data in certain
+    // dtors where the item window is already invalid!
+    for ( sal_uInt16 i = 0; i < m_pToolBar->GetItemCount(); i++ )
+    {
+        sal_uInt16 nItemId = m_pToolBar->GetItemId( i );
+        if ( nItemId > 0 )
+            m_pToolBar->SetItemWindow(nItemId, 0);
+    }
 
     ToolBarControllerMap::iterator pIter = m_aControllerMap.begin();
     while ( pIter != m_aControllerMap.end() )
@@ -1629,18 +1644,12 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
     return true;
 }
 
-IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
+//added for i33668 by shizhoubo : 200804
+PopupMenu * ToolBarManager::GetToolBarCustomMeun(ToolBox* pToolBar)
 {
-    ResetableGuard aGuard( m_aLock );
-
-    if ( m_bDisposed )
-        return 1;
-
     PopupMenu *pMenu = pToolBar->GetMenu();
-
     // remove all entries before inserting new ones
     ImplClearPopupMenu( pToolBar );
-
     // No config menu entries if command ".uno:ConfigureDialog" is not enabled
     Reference< XDispatch > xDisp;
     com::sun::star::util::URL aURL;
@@ -1648,15 +1657,15 @@ IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
     {
         Reference< XDispatchProvider > xProv( m_xFrame, UNO_QUERY );
         Reference< XURLTransformer > xTrans( m_xServiceManager->createInstance(
-                                                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
+            OUString( RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
         aURL.Complete = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ConfigureDialog" ));
         xTrans->parseStrict( aURL );
         if ( xProv.is() )
             xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
 
         if ( !xDisp.is() || IsPluginMode() )
-            return 1;
+            return 0;
     }
 
     // popup menu for quick customization
@@ -1691,6 +1700,12 @@ IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
             aPopupMenu.EnableItem( MENUITEM_TOOLBAR_VISIBLEBUTTON, sal_False );
             aPopupMenu.EnableItem( MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, sal_False );
         }
+
+        // Disable menu item CLOSE if the toolbar has no closer
+        //added for issue64028  by shizhoubo
+        if( !(pToolBar->GetFloatStyle() & WB_CLOSEABLE) )
+            aPopupMenu.EnableItem(MENUITEM_TOOLBAR_CLOSE, sal_False);
+        //end
 
         pItemMenu->SetMenuFlags (pItemMenu->GetMenuFlags () |
                                  MENU_FLAG_SHOWCHECKIMAGES);
@@ -1753,8 +1768,43 @@ IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
     if ( bHideDisabledEntries )
         pMenu->RemoveDisabledEntries();
 
+    return pMenu;
+}
+
+// addd for 33668  by shizhoubo
+IMPL_LINK( ToolBarManager, Command, CommandEvent*, pCmdEvt )
+{
+    ResetableGuard aGuard( m_aLock );
+
+    if ( m_bDisposed )
+        return 1;
+    if ( pCmdEvt->GetCommand() != COMMAND_CONTEXTMENU )
+        return 0;
+
+    PopupMenu * pMenu = GetToolBarCustomMeun(m_pToolBar);
+    if (pMenu)
+    {
+        // make sure all disabled entries will be shown
+        pMenu->SetMenuFlags( pMenu->GetMenuFlags() | MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
+        ::Point aPoint( pCmdEvt->GetMousePosPixel() );
+        pMenu->Execute( m_pToolBar, aPoint );
+    }
+
     return 0;
 }
+//end
+
+IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar )
+{
+   ResetableGuard aGuard( m_aLock );
+
+    if ( m_bDisposed )
+        return 1;
+    //modify for i33668 by shizhoubo:2008:04
+    GetToolBarCustomMeun(pToolBar);
+    //end
+     return 0;
+ }
 
 IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
 {
