@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ZipFile.cxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -498,18 +498,6 @@ Reference < XInputStream > ZipFile::createUnbufferedStream(
 ZipEnumeration * SAL_CALL ZipFile::entries(  )
 {
     return new ZipEnumeration ( aEntries );
-}
-
-::rtl::OUString SAL_CALL ZipFile::getName(  )
-    throw(RuntimeException)
-{
-    return sName;
-}
-
-sal_Int32 SAL_CALL ZipFile::getSize(  )
-    throw(RuntimeException)
-{
-    return aEntries.size();
 }
 
 Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntry,
