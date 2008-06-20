@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: oseekinstream.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,26 +40,6 @@
 using namespace ::com::sun::star;
 
 OInputSeekStream::OInputSeekStream( OWriteStream_Impl& pImpl,
-                                    uno::Reference < io::XStream > xStream,
-                                    const uno::Sequence< beans::PropertyValue >& aProps,
-                                    sal_Int16 nStorageType )
-: OInputCompStream( pImpl, nStorageType )
-{
-    OSL_ENSURE( xStream.is(), "No stream is provided!\n" );
-
-    if ( xStream.is() )
-    {
-        m_xStream = xStream->getInputStream();
-        m_xSeekable = uno::Reference< io::XSeekable >( xStream, uno::UNO_QUERY );
-
-        OSL_ENSURE( m_xStream.is(), "No input stream is provided!\n" );
-        OSL_ENSURE( m_xSeekable.is(), "No seeking support!\n" );
-    }
-
-    m_aProperties = aProps;
-}
-
-OInputSeekStream::OInputSeekStream( OWriteStream_Impl& pImpl,
                                     uno::Reference < io::XInputStream > xStream,
                                     const uno::Sequence< beans::PropertyValue >& aProps,
                                     sal_Int16 nStorageType )
@@ -70,25 +50,6 @@ OInputSeekStream::OInputSeekStream( OWriteStream_Impl& pImpl,
         m_xSeekable = uno::Reference< io::XSeekable >( m_xStream, uno::UNO_QUERY );
         OSL_ENSURE( m_xSeekable.is(), "No seeking support!\n" );
     }
-}
-
-OInputSeekStream::OInputSeekStream( uno::Reference < io::XStream > xStream,
-                                    const uno::Sequence< beans::PropertyValue >& aProps,
-                                    sal_Int16 nStorageType )
-: OInputCompStream( nStorageType )
-{
-    OSL_ENSURE( xStream.is(), "No stream is provided!\n" );
-
-    if ( xStream.is() )
-    {
-        m_xStream = xStream->getInputStream();
-        m_xSeekable = uno::Reference< io::XSeekable >( xStream, uno::UNO_QUERY );
-
-        OSL_ENSURE( m_xStream.is(), "No input stream is provided!\n" );
-        OSL_ENSURE( m_xSeekable.is(), "No seeking support!\n" );
-    }
-
-    m_aProperties = aProps;
 }
 
 OInputSeekStream::OInputSeekStream( uno::Reference < io::XInputStream > xStream,
