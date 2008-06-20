@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excelfilter.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +51,7 @@ using ::oox::core::Relation;
 using ::oox::core::Relations;
 using ::oox::core::XmlFilterBase;
 using ::oox::vml::DrawingPtr;
+using ::oox::drawingml::table::TableStyleListPtr;
 
 namespace oox {
 namespace xls {
@@ -123,6 +124,11 @@ sal_Int32 ExcelFilter::getSchemeClr( sal_Int32 nColorSchemeToken ) const
 const DrawingPtr ExcelFilter::getDrawings()
 {
     return DrawingPtr();
+}
+
+const TableStyleListPtr ExcelFilter::getTableStyles()
+{
+    return TableStyleListPtr();
 }
 
 ::oox::drawingml::chart::ChartConverter& ExcelFilter::getChartConverter()
