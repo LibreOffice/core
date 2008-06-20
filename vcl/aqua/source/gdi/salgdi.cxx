@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.74 $
+ * $Revision: 1.75 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -315,6 +315,9 @@ AquaSalGraphics::~AquaSalGraphics()
     CGPathRelease( mxClipPolysPath );
     ATSUDisposeStyle( maATSUStyle );
 
+    if( mpXorEmulation )
+        delete mpXorEmulation;
+
     if( mxLayer )
         CGLayerRelease( mxLayer );
     else if( mrContext && mbWindow )
@@ -324,9 +327,6 @@ AquaSalGraphics::~AquaSalGraphics()
         mrContext = NULL;
         // memory is freed automatically by maOwnContextMemory
     }
-
-    if( mpXorEmulation )
-        delete mpXorEmulation;
 }
 
 bool AquaSalGraphics::supportsOperation( OutDevSupportType eType ) const
@@ -1000,6 +1000,7 @@ void AquaSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGrap
         return;
     }
 
+    ApplyXorContext();
     pSrc->ApplyXorContext();
 
 #if 0 // TODO: make AquaSalBitmap as fast as the alternative implementation below
@@ -1016,19 +1017,26 @@ void AquaSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGrap
 #else
     DBG_ASSERT( pSrc->mxLayer!=NULL, "AquaSalGraphics::copyBits() from non-layered graphics" )
 
-    CGContextSaveGState( mrContext );
+    // in XOR mode the drawing context is redirected to the XOR mask
+    // if source and target are identical then copyBits() paints onto the target context though
+    CGContextRef xCopyContext = mrContext;
+    if( mpXorEmulation && mpXorEmulation->IsEnabled() )
+        if( pSrcGraphics == this )
+            xCopyContext = mpXorEmulation->GetTargetContext();
+
+    CGContextSaveGState( xCopyContext );
     const CGRect aDstRect = { {pPosAry->mnDestX, pPosAry->mnDestY}, {pPosAry->mnDestWidth, pPosAry->mnDestHeight} };
-    CGContextClipToRect( mrContext, aDstRect );
+    CGContextClipToRect( xCopyContext, aDstRect );
 
     // draw at new destination
     // NOTE: flipped drawing gets disabled for this, else the subimage would be drawn upside down
     if( pSrc->IsFlipped() )
-        { CGContextTranslateCTM( mrContext, 0, +mnHeight ); CGContextScaleCTM( mrContext, +1, -1 ); }
+        { CGContextTranslateCTM( xCopyContext, 0, +mnHeight ); CGContextScaleCTM( xCopyContext, +1, -1 ); }
     // TODO: pSrc->size() != this->size()
     const CGPoint aDstPoint = { +pPosAry->mnDestX - pPosAry->mnSrcX, pPosAry->mnDestY - pPosAry->mnSrcY };
     if( !mnBitmapDepth || (aDstPoint.x + pSrc->mnWidth) <= mnWidth ) // workaround a Quartz crasher
-        ::CGContextDrawLayerAtPoint( mrContext, aDstPoint, pSrc->mxLayer );
-    CGContextRestoreGState( mrContext );
+        ::CGContextDrawLayerAtPoint( xCopyContext, aDstPoint, pSrc->mxLayer );
+    CGContextRestoreGState( xCopyContext );
     // mark the destination rectangle as updated
        RefreshRect( aDstRect );
 #endif
@@ -1038,6 +1046,8 @@ void AquaSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGrap
 
 void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY, long nSrcWidth, long nSrcHeight, USHORT nFlags )
 {
+    ApplyXorContext();
+
 #if 0 // TODO: make AquaSalBitmap as fast as the alternative implementation below
     SalBitmap* pBitmap = getBitmap( nSrcX, nSrcY, nSrcWidth, nSrcHeight );
     if( pBitmap )
@@ -1057,7 +1067,13 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY, l
 #else
     DBG_ASSERT( mxLayer!=NULL, "AquaSalGraphics::copyArea() for non-layered graphics" )
 
-    // drawing a layer onto its own context means trouble => copy it first
+    // in XOR mode the drawing context is redirected to the XOR mask
+    // copyArea() always works on the target context though
+    CGContextRef xCopyContext = mrContext;
+    if( mpXorEmulation && mpXorEmulation->IsEnabled() )
+        xCopyContext = mpXorEmulation->GetTargetContext();
+
+    // drawing a layer onto its own context causes trouble on OSX => copy it first
     // TODO: is it possible to get rid of this unneeded copy more often?
     //       e.g. on OSX>=10.5 only this situation causes problems:
     //          mnBitmapDepth && (aDstPoint.x + pSrc->mnWidth) > mnWidth
@@ -1065,24 +1081,25 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY, l
     // TODO: if( mnBitmapDepth > 0 )
     {
         const CGSize aSrcSize = { nSrcWidth, nSrcHeight };
-        xSrcLayer = CGLayerCreateWithContext( mrContext, aSrcSize, NULL );
+        xSrcLayer = ::CGLayerCreateWithContext( xCopyContext, aSrcSize, NULL );
         const CGContextRef xSrcContext = CGLayerGetContext( xSrcLayer );
-        const CGPoint aSrcPoint = { -nSrcX, (nSrcY+nSrcHeight)-mnHeight };
+        CGPoint aSrcPoint = { -nSrcX, -nSrcY };
+        if( IsFlipped() )
+        {
+            ::CGContextTranslateCTM( xSrcContext, 0, +nSrcHeight );
+            ::CGContextScaleCTM( xSrcContext, +1, -1 );
+            aSrcPoint.y = (nSrcY + nSrcHeight) - mnHeight;
+        }
         ::CGContextDrawLayerAtPoint( xSrcContext, aSrcPoint, mxLayer );
     }
 
     // draw at new destination
-    // NOTE: flipped drawing gets disabled for this, else the subimage would be drawn upside down
-    CGContextSaveGState( mrContext );
-    if( IsFlipped() )
-        { CGContextTranslateCTM( mrContext, 0, +mnHeight ); CGContextScaleCTM( mrContext, +1, -1 ); }
-    const CGPoint aDstPoint = { +nDstX, mnHeight-(nDstY+nSrcHeight) };
-    ::CGContextDrawLayerAtPoint( mrContext, aDstPoint, xSrcLayer );
+    const CGPoint aDstPoint = { +nDstX, +nDstY };
+    ::CGContextDrawLayerAtPoint( xCopyContext, aDstPoint, xSrcLayer );
 
     // cleanup
     if( xSrcLayer != mxLayer )
         CGLayerRelease( xSrcLayer );
-    CGContextRestoreGState( mrContext );
 
     // mark the destination rectangle as updated
     RefreshRect( nDstX, nDstY, nSrcWidth, nSrcHeight );
@@ -2125,7 +2142,7 @@ void AquaSalGraphics::FreeEmbedFontData( const void* pData, long nDataLen )
 
 void AquaSalGraphics::SetXORMode( BOOL bSet )
 {
-    // return early if XOR mode doesn't/can't change
+    // return early if XOR mode remains unchanged
     if( mbPrinter )
         return;
     if( (mpXorEmulation == NULL) && !bSet )
@@ -2137,15 +2154,22 @@ void AquaSalGraphics::SetXORMode( BOOL bSet )
 
     // prepare XOR emulation
     if( !mpXorEmulation )
-        mpXorEmulation = new XorEmulation( mnWidth, mnHeight, mnBitmapDepth );
+    {
+        mpXorEmulation = new XorEmulation();
+        mpXorEmulation->SetTarget( mnWidth, mnHeight, mnBitmapDepth, mrContext, mxLayer );
+    }
 
     // change the XOR mode
     if( bSet )
-        mrContext = mpXorEmulation->Enable( mrContext, mxLayer );
+    {
+        mpXorEmulation->Enable();
+        mrContext = mpXorEmulation->GetMaskContext();
+    }
     else
     {
         mpXorEmulation->UpdateTarget();
-        mrContext = mpXorEmulation->Disable();
+        mpXorEmulation->Disable();
+        mrContext = mpXorEmulation->GetTargetContext();
     }
 }
 
@@ -2157,24 +2181,65 @@ void AquaSalGraphics::ApplyXorContext()
     if( !mpXorEmulation )
         return;
     if( mpXorEmulation->UpdateTarget() )
-        ; // TODO: RefreshRect
+        RefreshRect( 0, 0, mnWidth, mnHeight ); // TODO: refresh minimal changerect
 }
 
 // ======================================================================
 
-XorEmulation::XorEmulation( int nWidth, int nHeight, int nTargetDepth )
+XorEmulation::XorEmulation()
 :   mxTargetLayer( NULL )
 ,   mxTargetContext( NULL )
 ,   mxMaskContext( NULL )
 ,   mxTempContext( NULL )
 ,   mpMaskBuffer( NULL )
 ,   mpTempBuffer( NULL )
-,   mnBufferSize( 0 )
+,   mnBufferLongs( 0 )
+,   mbIsEnabled( false )
+{}
+
+// ----------------------------------------------------------------------
+
+XorEmulation::~XorEmulation()
 {
+    Disable();
+    SetTarget( 0, 0, 0, NULL, NULL );
+}
+
+// -----------------------------------------------------------------------
+
+void XorEmulation::SetTarget( int nWidth, int nHeight, int nTargetDepth,
+    CGContextRef xTargetContext, CGLayerRef xTargetLayer )
+{
+    // prepare to replace old mask+temp context
+    if( mxMaskContext )
+    {
+        // cleanup the mask context
+        CGContextRelease( mxMaskContext );
+        delete[] mpMaskBuffer;
+        mxMaskContext = NULL;
+        mpMaskBuffer = NULL;
+
+        // cleanup the temp context if needed
+        if( mxTempContext )
+        {
+            CGContextRelease( mxTempContext );
+            delete[] mpTempBuffer;
+            mxTempContext = NULL;
+            mpTempBuffer = NULL;
+        }
+    }
+
+    // return early if there is nothing more to do
+    if( !xTargetContext )
+        return;
+
+    // retarget drawing operations to the XOR mask
+    mxTargetLayer = xTargetLayer;
+    mxTargetContext = xTargetContext;
+
     // prepare creation of matching CGBitmaps
     CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
     CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst;
-    // TODO: use a 16-bit XorMask on 16-bit target graphics
     int nBitDepth = nTargetDepth;
     if( !nBitDepth )
         nBitDepth = 32;
@@ -2187,20 +2252,24 @@ XorEmulation::XorEmulation( int nWidth, int nHeight, int nTargetDepth )
         nBytesPerRow = 1;
     }
     nBytesPerRow *= nWidth;
-    mnBufferSize = (nHeight * nBytesPerRow + sizeof(long)-1) / sizeof(long);
+    mnBufferLongs = (nHeight * nBytesPerRow + sizeof(ULONG)-1) / sizeof(ULONG);
 
     // create a XorMask context
-    mpMaskBuffer = new long[ mnBufferSize ];
+    mpMaskBuffer = new ULONG[ mnBufferLongs ];
     mxMaskContext = ::CGBitmapContextCreate( mpMaskBuffer,
         nWidth, nHeight, nBitsPerComponent, nBytesPerRow,
         aCGColorSpace, aCGBmpInfo );
+    // reset the XOR mask to black
+    memset( mpMaskBuffer, 0, mnBufferLongs * sizeof(ULONG) );
 
     // a bitmap context will be needed for manual XORing
     // create one unless the target context is a bitmap context
-    if( !nTargetDepth )
+    if( nTargetDepth )
+        mpTempBuffer = (ULONG*)CGBitmapContextGetData( mxTargetContext );
+    if( !mpTempBuffer )
     {
         // create a bitmap context matching to the target context
-        mpTempBuffer = new long[ mnBufferSize ];
+        mpTempBuffer = new ULONG[ mnBufferLongs ];
         mxTempContext = ::CGBitmapContextCreate( mpTempBuffer,
             nWidth, nHeight, nBitsPerComponent, nBytesPerRow,
             aCGColorSpace, aCGBmpInfo );
@@ -2216,58 +2285,14 @@ XorEmulation::XorEmulation( int nWidth, int nHeight, int nTargetDepth )
     if( aCGColorSpace == GetSalData()->mxGraySpace )
         CGContextSetBlendMode( mxMaskContext, kCGBlendModeDifference );
 
-    // initialize the default XorMask graphics state
-    CGContextSaveGState( mxMaskContext );
-}
-
-// ----------------------------------------------------------------------
-
-XorEmulation::~XorEmulation()
-{
-    Disable();
-
-    CGContextRelease( mxMaskContext );
-    if( mxTempContext != mxTargetContext )
-        CGContextRelease( mxTempContext );
-    delete[] mpMaskBuffer;
-    delete[] mpTempBuffer;
-}
-
-// ----------------------------------------------------------------------
-
-CGContextRef XorEmulation::Enable( CGContextRef xTargetContext, CGLayerRef xTargetLayer )
-{
-#if 0
     // intialize the transformation matrix to the drawing target
     const CGAffineTransform aCTM = CGContextGetCTM( xTargetContext );
     CGContextConcatCTM( mxMaskContext, aCTM );
-#endif
+    if( mxTempContext )
+        CGContextConcatCTM( mxTempContext, aCTM );
 
-    // retarget drawing operations to the XOR mask
-    mxTargetLayer = xTargetLayer;
-    mxTargetContext = xTargetContext;
-
-    // get the data pointer for bitmap targets
-    if( !mxTempContext )
-        mpTempBuffer = (long*)CGBitmapContextGetData( mxTargetContext );
-
-    // reset the XOR mask to black
-    memset( mpMaskBuffer, sizeof(long)* mnBufferSize, 0 );
-    return mxMaskContext;
-}
-
-// ----------------------------------------------------------------------
-
-CGContextRef XorEmulation::Disable()
-{
-    if( !mxTempContext )
-        mpTempBuffer = NULL;
-
-    // retarget drawing operations to the XOR mask
-    CGContextRef xOrigContext = mxTargetContext;
-    mxTargetContext = NULL;
-    mxTargetLayer = NULL;
-    return xOrigContext;
+    // initialize the default XorMask graphics state
+    CGContextSaveGState( mxMaskContext );
 }
 
 // ----------------------------------------------------------------------
@@ -2284,10 +2309,10 @@ bool XorEmulation::UpdateTarget()
     // do a manual XOR with the XorMask
     // this approach suffices for simple color manipulations
     // and also the complex-clipping-XOR-trick used in metafiles
-    const long* pSrc = mpMaskBuffer;
-    long* pDst = mpTempBuffer;
-    for( int i = mnBufferSize; --i >= 0; ++pSrc, ++pDst )
-        *pDst ^= *pSrc;
+    const ULONG* pSrc = mpMaskBuffer;
+    ULONG* pDst = mpTempBuffer;
+    for( int i = mnBufferLongs; --i >= 0;)
+        *(pDst++) ^= *(pSrc++);
 
     // write back the XOR results to the target context
     if( mxTempContext )
@@ -2295,6 +2320,7 @@ bool XorEmulation::UpdateTarget()
         CGImageRef xXorImage = CGBitmapContextCreateImage( mxTempContext );
         const int nWidth  = (int)CGImageGetWidth( xXorImage );
         const int nHeight = (int)CGImageGetHeight( xXorImage );
+        // TODO: update minimal changerect
         const CGRect aFullRect = {{0,0},{nWidth,nHeight}};
         CGContextDrawImage( mxTargetContext, aFullRect, xXorImage );
         CGImageRelease( xXorImage );
@@ -2302,7 +2328,7 @@ bool XorEmulation::UpdateTarget()
 
     // reset the XorMask to black again
     // TODO: not needed for last update
-    memset( mpMaskBuffer, mnBufferSize * sizeof(long), 0 );
+    memset( mpMaskBuffer, 0, mnBufferLongs * sizeof(ULONG) );
 
     // TODO: return FALSE if target was not changed
     return true;
