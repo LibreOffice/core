@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shape.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,12 +92,14 @@ void Shape::setDefaults()
     const OUString sTextUpperDistance( RTL_CONSTASCII_USTRINGPARAM( "TextUpperDistance" ) );
     const OUString sTextRightDistance( RTL_CONSTASCII_USTRINGPARAM( "TextRightDistance" ) );
     const OUString sTextLowerDistance( RTL_CONSTASCII_USTRINGPARAM( "TextLowerDistance" ) );
-    maShapeProperties[ sTextAutoGrowHeight ] <<= false;
-    maShapeProperties[ sTextWordWrap ] <<= true;
+    const OUString sCharHeight( RTL_CONSTASCII_USTRINGPARAM( "CharHeight" ) );
+    maShapeProperties[ sTextAutoGrowHeight ] <<= sal_False;
+    maShapeProperties[ sTextWordWrap ] <<= sal_True;
     maShapeProperties[ sTextLeftDistance ]  <<= static_cast< sal_Int32 >( 250 );
     maShapeProperties[ sTextUpperDistance ] <<= static_cast< sal_Int32 >( 125 );
     maShapeProperties[ sTextRightDistance ] <<= static_cast< sal_Int32 >( 250 );
     maShapeProperties[ sTextLowerDistance ] <<= static_cast< sal_Int32 >( 125 );
+    maShapeProperties[ sCharHeight ] <<= static_cast< float >( 18.0 );
 }
 
 void Shape::setServiceName( const sal_Char* pServiceName )
@@ -137,13 +139,14 @@ void Shape::addShape(
     }
 }
 
-void Shape::applyShapeReference( const Shape& rReferencedShape )
+void Shape::applyShapeReference( const oox::drawingml::Shape& rReferencedShape )
 {
     mpTextBody = TextBodyPtr( new TextBody( *rReferencedShape.mpTextBody.get() ) );
     maShapeProperties = rReferencedShape.maShapeProperties;
     mpLinePropertiesPtr = LinePropertiesPtr( new LineProperties( *rReferencedShape.mpLinePropertiesPtr.get() ) );
     mpFillPropertiesPtr = FillPropertiesPtr( new FillProperties( *rReferencedShape.mpFillPropertiesPtr.get() ) );
     mpCustomShapePropertiesPtr = CustomShapePropertiesPtr( new CustomShapeProperties( *rReferencedShape.mpCustomShapePropertiesPtr.get() ) );
+    mpTablePropertiesPtr = table::TablePropertiesPtr( rReferencedShape.mpTablePropertiesPtr.get() ? new table::TableProperties( *rReferencedShape.mpTablePropertiesPtr.get() ) : NULL );
     mpMasterTextListStyle = TextListStylePtr( new TextListStyle( *rReferencedShape.mpMasterTextListStyle.get() ) );
     maShapeStylesColorMap = rReferencedShape.maShapeStylesColorMap;
     maShapeStylesIndexMap = rReferencedShape.maShapeStylesIndexMap;
@@ -210,6 +213,38 @@ void Shape::addChilds(
             }
         }
         (*aIter++)->addShape( rFilterBase, rxTheme, rxShapes, pShapeRect, pShapeMap );
+    }
+}
+
+void applyPropertyMap( uno::Reference< drawing::XShape >& rxShape, PropertyMap& rPropertyMap )
+{
+    if( !rPropertyMap.empty() )
+    {
+        Reference< XMultiPropertySet > xMSet( rxShape, UNO_QUERY );
+        if( xMSet.is() )
+        {
+            try
+            {
+                Sequence< OUString > aNames;
+                Sequence< Any > aValues;
+                rPropertyMap.makeSequence( aNames, aValues );
+                xMSet->setPropertyValues( aNames,  aValues);
+            }
+            catch( Exception& )
+            {
+            }
+        }
+        else
+        {
+            uno::Reference< beans::XPropertySet > xSet( rxShape, uno::UNO_QUERY_THROW );
+            uno::Reference< beans::XPropertySetInfo > xInfo( xSet->getPropertySetInfo() );
+
+            for( PropertyMap::const_iterator aIter( rPropertyMap.begin() ); aIter != rPropertyMap.end(); aIter++ )
+            {
+                if ( xInfo->hasPropertyByName( (*aIter).first ) )
+                    xSet->setPropertyValue( (*aIter).first, (*aIter).second );
+            }
+        }
     }
 }
 
@@ -324,19 +359,19 @@ Reference< XShape > Shape::createAndInsert(
         maShapeProperties[ sTransformation ] <<= aMatrix;
     }
     Reference< lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), UNO_QUERY_THROW );
-    Reference< drawing::XShape > xShape( xServiceFact->createInstance( rServiceName ), UNO_QUERY_THROW );
+    if ( !mxShape.is() )
+        mxShape = Reference< drawing::XShape >( xServiceFact->createInstance( rServiceName ), UNO_QUERY_THROW );
 
-    Reference< XPropertySet > xSet( xShape, UNO_QUERY_THROW );
-    if( xShape.is() && xSet.is() )
+    Reference< XPropertySet > xSet( mxShape, UNO_QUERY_THROW );
+    if( mxShape.is() && xSet.is() )
     {
         if( msName.getLength() )
         {
-            Reference< container::XNamed > xNamed( xShape, UNO_QUERY );
+            Reference< container::XNamed > xNamed( mxShape, UNO_QUERY );
             if( xNamed.is() )
                 xNamed->setName( msName );
         }
-        rxShapes->add( xShape );
-        mxShape = xShape;
+        rxShapes->add( mxShape );
 
         LineProperties aLineProperties;
         FillProperties aFillProperties;
@@ -345,17 +380,15 @@ Reference< XShape > Shape::createAndInsert(
         setShapeStyles( rxTheme, aLineProperties, aFillProperties );
         setShapeStyleColors( rFilterBase, aLineProperties, aFillProperties, aShapeProperties );
 
-        aLineProperties.apply( getLineProperties() );
-        aFillProperties.apply( getFillProperties() );
+        aLineProperties.apply( *getLineProperties() );
+        aFillProperties.apply( *getFillProperties() );
         aShapeProperties.insert( getShapeProperties().begin(), getShapeProperties().end() );
-
-        // add properties from textbody to shape properties
-        if( mpTextBody.get() )
-            aShapeProperties.insert( mpTextBody->getTextProperties().begin(), mpTextBody->getTextProperties().end() );
 
         // applying properties
         if ( rServiceName == OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) )
             mpGraphicPropertiesPtr->pushToPropSet( rFilterBase, xSet, 0 );
+        if ( mpTablePropertiesPtr.get() && ( rServiceName == OUString::createFromAscii( "com.sun.star.drawing.TableShape" ) ) )
+            mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
         aFillProperties.pushToPropSet( rFilterBase, xSet, mnRotation );
         aLineProperties.pushToPropSet( rFilterBase, xSet );
 
@@ -368,19 +401,18 @@ Reference< XShape > Shape::createAndInsert(
         {
             const Any* pAutoGrowHeight = aShapeProperties.getPropertyValue( sTextAutoGrowHeight );
             if ( pAutoGrowHeight )
-                xSet->setPropertyValue( sTextAutoGrowHeight, Any( false ) );
+                xSet->setPropertyValue( sTextAutoGrowHeight, Any( sal_False ) );
         }
 
-        PropertySet aPropSet( xShape );
-        aPropSet.setProperties( aShapeProperties );
+        applyPropertyMap( mxShape, aShapeProperties );
 
         if( rServiceName == OUString::createFromAscii( "com.sun.star.drawing.CustomShape" ) )
-            mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, xShape );
+            mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape );
 
         // in some cases, we don't have any text body.
         if( getTextBody() )
         {
-            Reference < XText > xText( xShape, UNO_QUERY );
+            Reference < XText > xText( mxShape, UNO_QUERY );
             if ( xText.is() )   // not every shape is supporting an XText interface (e.g. GroupShape)
             {
                 Reference < XTextCursor > xAt = xText->createTextCursor();
@@ -388,12 +420,11 @@ Reference< XShape > Shape::createAndInsert(
             }
         }
     }
-
     // use a callback for further processing on the XShape (e.g. charts)
-    if( xShape.is() && mxCreateCallback.get() )
-        mxCreateCallback->onCreateXShape( xShape );
+    if( mxShape.is() && mxCreateCallback.get() )
+        mxCreateCallback->onCreateXShape( mxShape );
 
-    return xShape;
+    return mxShape;
 }
 
 // the properties of rSource which are not part of rDest are being put into rDest
