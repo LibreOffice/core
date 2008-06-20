@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CalcWindowState.xcu,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,11 +106,11 @@
                     <value xml:lang="en-US">Page Preview</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="NoClose" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
+        <prop oor:name="NoClose" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
                 <prop oor:name="ContextSensitive" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
