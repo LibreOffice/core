@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_section_2.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:57 $
+'* last change: $Author: fredrikh $ $Date: 2008-06-23 15:15:44 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -525,7 +525,7 @@ testcase tDisplaySection_2
 
    Call hNewDocument
    fInsertSection("testlink1")
-   Call wFileSaveAsKill (gOfficePath + "user\work\testlink1.odt")
+   Call hFileSaveAsKill (gOfficePath + "user\work\testlink1.odt")
    Call hCloseDocument
 
    Call hNewDocument
