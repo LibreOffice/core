@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportDrawPage.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,7 +137,8 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
         else if ( pObj->ISA(OCustomShape) )
         {
             SvxCustomShape* pShape = new SvxCustomShape( pObj );
-            xShape.set(*pShape,uno::UNO_QUERY);
+            uno::Reference < drawing::XEnhancedCustomShapeDefaulter > xShape2 = pShape;
+            xShape.set(xShape2,uno::UNO_QUERY);
             pShape->setShapeKind(pObj->GetObjIdentifier());
         }
         else if ( pObj->ISA(SdrOle2Obj) )
