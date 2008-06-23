@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: master.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: tbo $ $Date: 2008-06-18 10:02:29 $
+'* last change: $Author: tbo $ $Date: 2008-06-23 14:14:02 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -906,16 +906,19 @@ sub hDetectStatusDatabase as Boolean
 '/// Detecting the status database server.
     dim sOOoLocalStatusDatabase as string
     dim sPrivateEnvironmentLocation as string
+    dim sTemp as string
   
-    gStatusFeatureLevel = GetIniValue ( gTesttoolIni, "StatusFeatureLevel" , "Current" )
-    if gStatusFeatureLevel = "" then
-    sPrivateEnvironmentLocation = ConvertPath (gTestToolPath + "errorlog\privateenvironment.txt")
-    if fileExists(sPrivateEnvironmentLocation) then
-        gStatusFeatureLevel = getIniValue(sPrivateEnvironmentLocation, "StatusFeatureLevel", "Current")
+    sTemp = GetIniValue ( gTesttoolIni, "StatusFeatureLevel" , "Current" )
+    if sTemp = "" then
+        sPrivateEnvironmentLocation = ConvertPath (gTestToolPath + "errorlog\privateenvironment.txt")
+        if fileExists(sPrivateEnvironmentLocation) then
+            gStatusFeatureLevel = getIniValue(sPrivateEnvironmentLocation, "StatusFeatureLevel", "Current")
+        else
+	    ' manual submitting status from errorlog directory
+            gStatusFeatureLevel = 2
+        end if
     else
-	' manual submitting status from errorlog directory
-        gStatusFeatureLevel = 2
-    end if
+        gStatusFeatureLevel = sTemp
     end if
     if gStatusFeatureLevel = 0 then
 	' automatical submitting status; filespace location defined in privateenvironment.inc
