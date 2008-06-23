@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -56,7 +56,7 @@ MYTHESLIB=libmythes.lib
 # --- Files --------------------------------------------------------
 
 .IF "$(SYSTEM_HUNSPELL)" != "YES"
-HUNSPELL_CFLAGS += -I$(SOLARVER)$/$(INPATH)$/inc$/hunspell
+HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell
 .ENDIF
 
 .IF "$(SYSTEM_MYTHES)" != "YES"
