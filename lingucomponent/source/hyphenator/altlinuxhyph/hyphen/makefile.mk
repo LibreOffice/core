@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.23 $
+# $Revision: 1.24 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,7 +51,7 @@ HNJLIB=hyphen.lib
 # --- Files --------------------------------------------------------
 
 .IF "$(SYSTEM_HUNSPELL)" != "YES"
-HUNSPELL_CFLAGS += -I$(SOLARVER)$/$(INPATH)$/inc$/hunspell
+HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell
 .ENDIF
 
 CFLAGS += -I..$/..$/..$/lingutil $(HUNSPELL_CFLAGS)
