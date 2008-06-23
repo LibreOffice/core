@@ -7,7 +7,7 @@
  *
  * $RCSfile: stlunosequence.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,8 +82,15 @@ namespace comphelper { namespace stlunosequence {
             typedef const V& reference;
             StlSequenceConstIterator();
             StlSequenceConstIterator(S * uno_sequence, typename StlSequenceIterator<S,V>::difference_type by);
-            typename StlSequenceIterator<S,V>::const_reference operator*() const;
-            typename StlSequenceIterator<S,V>::const_reference operator[](const typename StlSequenceIterator<S,V>::difference_type by) const;
+            typename StlSequenceIterator<S,V>::const_reference operator*() const
+            {
+                return (*(this->m_UnoSequence))[this->m_Index];
+            }
+
+            typename StlSequenceIterator<S,V>::const_reference operator[](const typename StlSequenceIterator<S,V>::difference_type by) const
+            {
+                return (*(this->m_UnoSequence))[this->m_Index+by];
+            }
     };
 
     template<typename S, typename V>
@@ -148,12 +155,6 @@ namespace comphelper { namespace stlunosequence {
     inline typename StlSequenceIterator<S,V>::reference StlSequenceIterator<S, V>::operator*() const
     {
         return (*m_UnoSequence)[m_Index];
-    }
-
-    template<typename S, typename V>
-    inline typename StlSequenceIterator<S,V>::const_reference StlSequenceConstIterator<S, V>::operator*() const
-    {
-        return (*(this->m_UnoSequence))[this->m_Index];
     }
 
     template<typename S, typename V>
@@ -274,12 +275,6 @@ namespace comphelper { namespace stlunosequence {
 
     template<typename S, typename V>
     inline typename StlSequenceIterator<S,V>::reference StlSequenceIterator<S, V>::operator[](const typename StlSequenceIterator<S,V>::difference_type by) const
-    {
-        return (*(this->m_UnoSequence))[this->m_Index+by];
-    }
-
-    template<typename S, typename V>
-    inline typename StlSequenceIterator<S,V>::const_reference StlSequenceConstIterator<S, V>::operator[](const typename StlSequenceIterator<S,V>::difference_type by) const
     {
         return (*(this->m_UnoSequence))[this->m_Index+by];
     }
