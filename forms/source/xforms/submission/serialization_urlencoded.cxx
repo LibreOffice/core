@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: serialization_urlencoded.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +45,6 @@
 
 #include "serialization_urlencoded.hxx"
 
-using namespace rtl;
 using namespace utl;
 using namespace CSS::uno;
 using namespace CSS::io;
@@ -55,7 +54,7 @@ using namespace CSS::xml::dom;
 CSerializationURLEncoded::CSerializationURLEncoded()
     : m_aFactory(getProcessServiceFactory())
     , m_aPipe(Reference< XOutputStream > (m_aFactory->createInstance(
-        OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY))
+        ::rtl::OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY))
 {
 }
 
@@ -87,9 +86,9 @@ sal_Bool CSerializationURLEncoded::is_unreserved(sal_Char c)
     }
     return sal_False;
 }
-void  CSerializationURLEncoded::encode_and_append(const OUString& aString, OStringBuffer& aBuffer)
+void  CSerializationURLEncoded::encode_and_append(const ::rtl::OUString& aString, ::rtl::OStringBuffer& aBuffer)
 {
-    OString utf8String = OUStringToOString(aString, RTL_TEXTENCODING_UTF8);
+    ::rtl::OString utf8String = OUStringToOString(aString, RTL_TEXTENCODING_UTF8);
     const sal_uInt8 *pString = reinterpret_cast< const sal_uInt8 * >( utf8String.getStr() );
     sal_Char tmpChar[4]; tmpChar[3] = 0;
 
@@ -136,9 +135,9 @@ void CSerializationURLEncoded::serialize_node(const Reference< XNode >& aNode)
     // is this an element node?
     if (aNode->getNodeType() == NodeType_ELEMENT_NODE)
     {
-        OUString  aName = aNode->getNodeName();
+        ::rtl::OUString  aName = aNode->getNodeName();
         // find any text children
-        OUStringBuffer aValue;
+        ::rtl::OUStringBuffer aValue;
         Reference< XText > aText;
         for(sal_Int32 i=0; i < aChildList->getLength(); i++)
         {
@@ -153,8 +152,8 @@ void CSerializationURLEncoded::serialize_node(const Reference< XNode >& aNode)
         // found anything?
         if (aValue.getLength() > 0)
         {
-            OUString aUnencValue = aValue.makeStringAndClear();
-            OStringBuffer aEncodedBuffer;
+            ::rtl::OUString aUnencValue = aValue.makeStringAndClear();
+            ::rtl::OStringBuffer aEncodedBuffer;
             encode_and_append(aName, aEncodedBuffer);
             aEncodedBuffer.append("=");
             encode_and_append(aUnencValue, aEncodedBuffer);
@@ -210,6 +209,5 @@ Reference< XInputStream > CSerializationURLEncoded::getInputStream()
 {
     return Reference< XInputStream >(m_aPipe, UNO_QUERY);
 }
-
 
 
