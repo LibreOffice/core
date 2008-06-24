@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_vcltools.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,16 +42,15 @@ namespace com { namespace sun { namespace star { namespace lang
     class XUnoTunnel;
 } } } }
 
+namespace Gdiplus { class Graphics; }
 
 namespace dxcanvas
 {
-    class SurfaceGraphics;
-
     namespace tools
     {
         /** Raw RGBA bitmap data,
             contiguous in memory
-         */
+        */
         struct RawRGBABitmap
         {
             sal_Int32                           mnWidth;
@@ -59,12 +58,9 @@ namespace dxcanvas
             ::boost::shared_ptr< sal_uInt8 >    mpBitmapData;
         };
 
-        bool drawVCLBitmapFromUnoTunnel( const ::boost::shared_ptr< SurfaceGraphics >&  rGraphics,
-                                         const ::com::sun::star::uno::Reference<
-                                             ::com::sun::star::lang::XUnoTunnel >&      xTunnel );
-
-        ::com::sun::star::util::TriState isAlphaVCLBitmapFromUnoTunnel( const ::com::sun::star::uno::Reference<
-                                                                            ::com::sun::star::lang::XUnoTunnel >& xTunnel );
+        bool drawVCLBitmapFromXBitmap( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
+                                       const ::com::sun::star::uno::Reference<
+                                             ::com::sun::star::rendering::XBitmap >&   xBitmap );
     }
 }
 
