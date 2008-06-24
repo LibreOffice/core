@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XTextLayout.idl,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -182,7 +182,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
 
         @see <member>XTextLayout::queryLogicalAdvancements()</member>
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if the size of aAdvancements does not match the number of
         characters in the text.
      */
@@ -222,7 +222,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         justification algorithm could compress the text, this value
         might even be significantly larger than nSize.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if nSize is 0 or negative.
      */
     double justify( [in] double nSize )
@@ -259,7 +259,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         justification algorithm could compress the text, this value
         might even be significantly larger than nSize.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the parameters are not in the valid range.
      */
     double combinedJustify( [in] sequence< XTextLayout > aNextLayouts, [in] double nSize )
@@ -298,7 +298,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
 
         @returns the generated Caret structure.
 
-        @throws com::sun::star::lang::IndexOutOfBoundsException
+        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
         if nInsertionIndex is outside the permissible range.
      */
     Caret getCaret( [in] long nInsertionIndex,
@@ -323,7 +323,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
 
         @returns the new insertion index.
 
-        @throws com::sun::star::lang::IndexOutOfBoundsException
+        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
         if nStartIndex or nCaretAdvancement is outside the permissible
         range.
      */
@@ -348,7 +348,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
 
         @return the highlight polygon in the font coordinate space.
 
-        @throws com::sun::star::lang::IndexOutOfBoundsException
+        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
         if nStartIndex or nEndIndex are outside the permissible
         range.
      */
@@ -374,7 +374,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
 
         @return the highlight polygon in the font coordinate space.
 
-        @throws com::sun::star::lang::IndexOutOfBoundsException
+        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
         if nStartIndex or nEndIndex are outside the permissible
         range.
      */
