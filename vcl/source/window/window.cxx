@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: window.cxx,v $
- * $Revision: 1.279 $
+ * $Revision: 1.280 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,6 +74,7 @@
 #include <vcl/taskpanelist.hxx>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
@@ -9520,7 +9521,9 @@ BOOL Window::IsNativeWidgetEnabled() const
 #include <salframe.h>
 #endif
 
-Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSize, bool bFullscreen ) const
+Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSize,
+                                                       bool        bFullscreen,
+                                                       bool        bSpriteCanvas ) const
 {
     // try to retrieve hard reference from weak member
     Reference< rendering::XCanvas > xCanvas( mpWindowImpl->mxCanvas );
@@ -9529,17 +9532,13 @@ Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSi
     if( xCanvas.is() )
         return xCanvas;
 
-
-    Sequence< Any > aArg( 5 );
+    Sequence< Any > aArg(6);
 
     // Feed any with operating system's window handle
     // ==============================================
 
     // common: first any is VCL pointer to window (for VCL canvas)
     aArg[ 0 ] = makeAny( reinterpret_cast<sal_Int64>(this) );
-
-    // Fetch system data structure
-    const SystemEnvData* pSysData;
 
     // TODO(Q1): Make GetSystemData method virtual
 
@@ -9548,35 +9547,15 @@ Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSi
     // method is unfortunately not virtual
     const SystemChildWindow* pSysChild = dynamic_cast< const SystemChildWindow* >( this );
     if( pSysChild )
-        pSysData = pSysChild->GetSystemData();
+    {
+        aArg[ 1 ] = pSysChild->GetSystemDataAny();
+        aArg[ 5 ] = pSysChild->GetSystemGfxDataAny();
+    }
     else
-        pSysData = GetSystemData();
-
-#if defined( WIN ) || defined( WNT )
-    // take HWND for Windows
-    if( pSysData )
-        aArg[ 1 ] = makeAny( reinterpret_cast<sal_Int32>(pSysData->hWnd) );
-#elif defined( OS2 )
-    // take HWND for OS/2
-    if( pSysData )
-        aArg[ 1 ] = makeAny( static_cast<sal_Int32>(pSysData->hWnd) );
-#elif defined( QUARTZ )
-    // take NSView* for Mac OS X / Quartz
-    if( pSysData )
-        aArg[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pSysData->pView) ) );
-#elif defined( UNX )
-    // take XLIB window for X11, and fake a motif widget ID from
-    // that.
-
-    // feed the motif widget ID to canvas
-    //aArg[ 0 ] = makeAny( vcl::createMotifHandle( mpWindowImpl->mpFrame->maFrameData.GetWindow() ) );
-
-    // feed the X11 window handle to canvas
-    if( pSysData )
-        aArg[ 1 ] = makeAny( static_cast<sal_Int32>(pSysData->aWindow) );
-#else
-# error Please forward window handle to canvas for your OS
-#endif
+    {
+        aArg[ 1 ] = GetSystemDataAny();
+        aArg[ 5 ] = GetSystemGfxDataAny();
+    }
 
     if( bFullscreen )
         aArg[ 2 ] = makeAny( ::com::sun::star::awt::Rectangle( 0, 0,
@@ -9596,36 +9575,45 @@ Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSi
     // =========================================
     if ( xFactory.is() )
     {
-        Reference<lang::XMultiServiceFactory> xCanvasFactory(
+        static Reference<lang::XMultiServiceFactory> xCanvasFactory(
             xFactory->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM(
                               "com.sun.star."
                               "rendering.CanvasFactory") ) ), UNO_QUERY );
         if(xCanvasFactory.is())
         {
-            xCanvas.set( xCanvasFactory->createInstanceWithArguments(
-                             OUString() /* no preference */,
-                             aArg ),
-                         UNO_QUERY );
-
 #ifdef WNT
             // see #140456# - if we're running on a multiscreen setup,
-            // avoid DX5 canvas (as it cannot cope with surfaces
-            // spanning multiple displays)
+            // request special, multi-screen safe sprite canvas
+            // implementation (not DX5 canvas, as it cannot cope with
+            // surfaces spanning multiple displays). Note: canvas
+            // (without sprite) stays the same)
             const sal_uInt32 nDisplay = static_cast< WinSalFrame* >( mpWindowImpl->mpFrame )->mnDisplay;
             if( (nDisplay >= Application::GetScreenCount()) )
             {
-                Reference<lang::XServiceName> xServiceName(xCanvas, UNO_QUERY);
-                if( xServiceName.is() &&
-                    xServiceName->getServiceName().endsWithIgnoreAsciiCaseAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("DXCanvas")) )
-                {
-                    // oops - got DX5 canvas. fallback to VCL canvas instead.
-                    xCanvas.set( xCanvasFactory->createInstanceWithArguments(
-                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.rendering.VCLCanvas" )),
-                                     aArg ),
-                                 UNO_QUERY );
-                }
+                xCanvas.set( xCanvasFactory->createInstanceWithArguments(
+                                 bSpriteCanvas ?
+                                 OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                               "com.sun.star.rendering.SpriteCanvas.MultiScreen" )) :
+                                 OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                               "com.sun.star.rendering.Canvas" )),
+                                 aArg ),
+                             UNO_QUERY );
+
+            }
+            else
+            {
+#endif
+                xCanvas.set( xCanvasFactory->createInstanceWithArguments(
+                                 bSpriteCanvas ?
+                                 OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                               "com.sun.star.rendering.SpriteCanvas" )) :
+                                 OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                               "com.sun.star.rendering.Canvas" )),
+                                 aArg ),
+                             UNO_QUERY );
+
+#ifdef WNT
             }
 #endif
 
@@ -9637,14 +9625,23 @@ Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSi
     return xCanvas;
 }
 
-Reference< ::com::sun::star::rendering::XCanvas > Window::GetCanvas() const
+Reference< rendering::XCanvas > Window::GetCanvas() const
 {
-    return ImplGetCanvas( Size(), false );
+    return ImplGetCanvas( Size(), false, false );
 }
 
-Reference< ::com::sun::star::rendering::XCanvas > Window::GetFullscreenCanvas( const Size& rFullscreenSize ) const
+Reference< rendering::XSpriteCanvas > Window::GetSpriteCanvas() const
 {
-    return ImplGetCanvas( rFullscreenSize, true );
+    Reference< rendering::XSpriteCanvas > xSpriteCanvas(
+        ImplGetCanvas( Size(), false, true ), uno::UNO_QUERY );
+    return xSpriteCanvas;
+}
+
+Reference< ::com::sun::star::rendering::XSpriteCanvas > Window::GetFullscreenSpriteCanvas( const Size& rFullscreenSize ) const
+{
+    Reference< rendering::XSpriteCanvas > xSpriteCanvas(
+        ImplGetCanvas( rFullscreenSize, true, true ), uno::UNO_QUERY );
+    return xSpriteCanvas;
 }
 
 void Window::ImplPaintToMetaFile( GDIMetaFile* pMtf, OutputDevice* pTargetOutDev, const Region* pOuterClip )
