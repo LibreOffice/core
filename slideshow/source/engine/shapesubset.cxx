@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shapesubset.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_slideshow.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -53,7 +54,7 @@ namespace slideshow
             maTreeNode( rTreeNode ),
             mpShapeManager( rShapeManager )
         {
-            ENSURE_AND_THROW( mpShapeManager,
+            ENSURE_OR_THROW( mpShapeManager,
                               "ShapeSubset::ShapeSubset(): Invalid shape manager" );
         }
 
@@ -66,9 +67,9 @@ namespace slideshow
             maTreeNode( rTreeNode ),
             mpShapeManager( rOriginalSubset->mpShapeManager )
         {
-            ENSURE_AND_THROW( mpShapeManager,
+            ENSURE_OR_THROW( mpShapeManager,
                               "ShapeSubset::ShapeSubset(): Invalid shape manager" );
-            ENSURE_AND_THROW( rOriginalSubset->maTreeNode.isEmpty() ||
+            ENSURE_OR_THROW( rOriginalSubset->maTreeNode.isEmpty() ||
                               (rTreeNode.getStartIndex() >= rOriginalSubset->maTreeNode.getStartIndex() &&
                                rTreeNode.getEndIndex() <= rOriginalSubset->maTreeNode.getEndIndex()),
                               "ShapeSubset::ShapeSubset(): Subset is bigger than parent" );
@@ -81,7 +82,7 @@ namespace slideshow
             maTreeNode(),
             mpShapeManager( rShapeManager )
         {
-            ENSURE_AND_THROW( mpShapeManager,
+            ENSURE_OR_THROW( mpShapeManager,
                               "ShapeSubset::ShapeSubset(): Invalid shape manager" );
         }
 
