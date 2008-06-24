@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_spritehelper.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,12 +78,12 @@ namespace cairocanvas
             @param bShowSpriteBounds
             When true, little debug bound rects for sprites are shown
          */
-        void init( const ::com::sun::star::geometry::RealSize2D&    rSpriteSize,
-                   const SpriteCanvasRef&                           rSpriteCanvas );
+        void init( const ::com::sun::star::geometry::RealSize2D& rSpriteSize,
+                   const SpriteCanvasRef&                        rSpriteCanvas );
 
         void disposing();
 
-        void setSurface( ::cairo::Surface* pBufferSurface );
+        void setSurface( const ::cairo::SurfaceSharedPtr& pBufferSurface );
 
         /** Repaint sprite content to associated sprite canvas
 
@@ -99,20 +99,19 @@ namespace cairocanvas
             the front buffer, but within a VDev. Used to speed up
             drawing.
          */
-        void redraw( ::cairo::Cairo*            pCairo,
-                     const ::basegfx::B2DPoint& rPos,
-                     bool&                      bSurfacesDirty,
-                     bool                       bBufferedUpdate ) const;
+        void redraw( const ::cairo::CairoSharedPtr& pCairo,
+                     const ::basegfx::B2DPoint&     rPos,
+                     bool&                          bSurfacesDirty,
+                     bool                           bBufferedUpdate ) const;
 
     private:
         virtual ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D(
             ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPoly ) const;
 
 
-        SpriteCanvasRef             mpSpriteCanvas;
-        mutable bool                mbTextureDirty;  // when true, texture needs update
-
-    ::cairo::Surface* mpBufferSurface;
+        SpriteCanvasRef           mpSpriteCanvas;
+        ::cairo::SurfaceSharedPtr mpBufferSurface;
+        mutable bool              mbTextureDirty;  // when true, texture needs update
     };
 }
 
