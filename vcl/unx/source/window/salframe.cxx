@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframe.cxx,v $
- * $Revision: 1.224 $
+ * $Revision: 1.225 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -873,6 +873,7 @@ const SystemChildData* X11SalFrame::GetSystemData() const
     pFrame->maSystemChildData.pSalFrame     = pFrame;
     pFrame->maSystemChildData.pWidget       = NULL;
     pFrame->maSystemChildData.pVisual       = GetDisplay()->GetVisual( m_nScreen ).GetVisual();
+    pFrame->maSystemChildData.nScreen       = m_nScreen;
     pFrame->maSystemChildData.nDepth        = GetDisplay()->GetVisual( m_nScreen ).GetDepth();
     pFrame->maSystemChildData.aColormap     = GetDisplay()->GetColormap( m_nScreen ).GetXColormap();
     pFrame->maSystemChildData.pAppContext   = NULL;
