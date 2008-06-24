@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salobj.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,8 +80,9 @@ AquaSalObject::~AquaSalObject()
 {
     if( maSysData.pView )
     {
-        [maSysData.pView removeFromSuperview];
-        [maSysData.pView release];
+        NSView *pView = maSysData.pView;
+        [pView removeFromSuperview];
+        [pView release];
     }
     if( mpClipView )
     {
@@ -181,7 +182,10 @@ void AquaSalObject::setClippedPosSize()
 {
     NSRect aViewRect = { { 0, 0 }, { mnWidth, mnHeight } };
     if( maSysData.pView )
-        [maSysData.pView setFrame: aViewRect];
+    {
+        NSView *pView = maSysData.pView;
+        [pView setFrame: aViewRect];
+    }
 
     NSRect aClipViewRect = { { mnX, mnY }, { mnWidth, mnHeight } };
     NSPoint aClipPt = { 0, 0 };
