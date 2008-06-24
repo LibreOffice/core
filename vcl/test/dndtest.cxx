@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dndtest.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -323,7 +323,7 @@ void SAL_CALL MyDragAndDropListener::dragEnter( const DropTargetDragEnterEvent& 
 
 // -----------------------------------------------------------------------
 
-void SAL_CALL MyDragAndDropListener::dragExit( const DropTargetEvent& dte ) throw(RuntimeException)
+void SAL_CALL MyDragAndDropListener::dragExit( const DropTargetEvent& ) throw(RuntimeException)
 {
     printf( "XDropTargetListener::dragExit called ( Window: %X ).\n", m_pWindow );
 }
@@ -353,35 +353,35 @@ void SAL_CALL MyDragAndDropListener::dragDropEnd( const DragSourceDropEvent& dsd
 
 // -----------------------------------------------------------------------
 
-void SAL_CALL MyDragAndDropListener::dragEnter( const DragSourceDragEvent& dsde ) throw(RuntimeException)
+void SAL_CALL MyDragAndDropListener::dragEnter( const DragSourceDragEvent& ) throw(RuntimeException)
 {
     printf( "XDragSourceListener::dragEnter called ( Window: %X ).\n", m_pWindow );
 }
 
 // -----------------------------------------------------------------------
 
-void SAL_CALL MyDragAndDropListener::dragExit( const DragSourceEvent& dse ) throw(RuntimeException)
+void SAL_CALL MyDragAndDropListener::dragExit( const DragSourceEvent& ) throw(RuntimeException)
 {
     printf( "XDragSourceListener::dragExit called ( Window: %X ).\n", m_pWindow );
 }
 
 // -----------------------------------------------------------------------
 
-void SAL_CALL MyDragAndDropListener::dragOver( const DragSourceDragEvent& dsde ) throw(RuntimeException)
+void SAL_CALL MyDragAndDropListener::dragOver( const DragSourceDragEvent& ) throw(RuntimeException)
 {
     printf( "XDragSourceListener::dragOver called ( Window: %X ).\n", m_pWindow );
 }
 
 // -----------------------------------------------------------------------
 
-void SAL_CALL MyDragAndDropListener::dropActionChanged( const DragSourceDragEvent& dsde ) throw(RuntimeException)
+void SAL_CALL MyDragAndDropListener::dropActionChanged( const DragSourceDragEvent& ) throw(RuntimeException)
 {
     printf( "XDragSourceListener::dropActionChanged called ( Window: %X ).\n", m_pWindow );
 }
 
 // -----------------------------------------------------------------------
 
-void SAL_CALL MyDragAndDropListener::disposing( const EventObject& eo ) throw(RuntimeException)
+void SAL_CALL MyDragAndDropListener::disposing( const EventObject& ) throw(RuntimeException)
 {
     printf( "XEventListener::disposing called ( Window: %X ).\n", m_pWindow );
 }
@@ -425,7 +425,7 @@ MyListBox::MyListBox( Window* pParent ) : ListBox( pParent )
 
 // -----------------------------------------------------------------------
 
-Any SAL_CALL StringTransferable::getTransferData( const DataFlavor& aFlavor )
+Any SAL_CALL StringTransferable::getTransferData( const DataFlavor& )
     throw(UnsupportedFlavorException, IOException, RuntimeException)
 {
     return makeAny( m_aData );
@@ -441,7 +441,7 @@ Sequence< DataFlavor > SAL_CALL StringTransferable::getTransferDataFlavors(  )
 
 // -----------------------------------------------------------------------
 
-sal_Bool SAL_CALL StringTransferable::isDataFlavorSupported( const DataFlavor& aFlavor )
+sal_Bool SAL_CALL StringTransferable::isDataFlavorSupported( const DataFlavor& )
     throw(RuntimeException)
 {
     return sal_True;
