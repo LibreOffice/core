@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ContextTables.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,10 +86,6 @@ namespace xmlsearch {
 
             void setMicroindex( sal_Int32 docNo ) throw( xmlsearch::excep::XmlSearchException );
 
-            sal_Int32 parentContext( sal_Int32 context );
-
-            rtl::OUString linkName( sal_Int32 context );
-
             sal_Int32 linkCode( const rtl::OUString& linkName_ );
 
             bool* getIgnoredElementsSet( sal_Int32& len, /*out*/
@@ -100,18 +96,6 @@ namespace xmlsearch {
                              sal_Int32 ignoredElementsL,bool* ignoredElements );
 
             sal_Int32 firstParentWithCode( const sal_Int32 pos,const sal_Int32 linkCode_ );
-
-            sal_Int32 firstParentWithCode2( sal_Int32 pos,const sal_Int32 linkCode_,const sal_Int32 parentCode );
-
-            sal_Int32 firstParentWithCode3( sal_Int32 pos,sal_Int32 linkCode_,sal_Int32 ancestorCode );
-
-            sal_Int32 firstParentWithCode4(sal_Int32 pos, sal_Int32 linkCodesL,sal_Int32* linkCodes );
-
-            sal_Int32 firstParentWithCode5(sal_Int32 pos,sal_Int32 pathCodesL,sal_Int32* pathCodes);
-
-            sal_Int32 firstParentWithCode7( const sal_Int32 pos,const sal_Int32 linkCode_,const sal_Int32 seq );
-
-            bool isGoverning( sal_Int32 context );
 
             void resetContextSearch();
 
