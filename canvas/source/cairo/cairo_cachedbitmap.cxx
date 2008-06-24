@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_cachedbitmap.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include "cairo_cachedbitmap.hxx"
 #include "cairo_repainttarget.hxx"
@@ -48,26 +49,20 @@ using namespace ::com::sun::star;
 
 namespace cairocanvas
 {
-    CachedBitmap::CachedBitmap( Surface* pSurface,
+    CachedBitmap::CachedBitmap( const SurfaceSharedPtr&                     pSurface,
                                 const rendering::ViewState&                 rUsedViewState,
-                                const rendering::RenderState&                   rUsedRenderState,
+                                const rendering::RenderState&               rUsedRenderState,
                                 const uno::Reference< rendering::XCanvas >& rTarget ) :
         CachedPrimitiveBase( rUsedViewState, rTarget, true ),
-    mpSurface( pSurface ),
-    maRenderState( rUsedRenderState )
-    {
-        mpSurface->Ref();
-    }
+        mpSurface( pSurface ),
+        maRenderState( rUsedRenderState )
+    {}
 
     void SAL_CALL CachedBitmap::disposing()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        if( mpSurface ) {
-            mpSurface->Unref();
-            mpSurface = NULL;
-        }
-
+        mpSurface.reset();
         CachedPrimitiveBase::disposing();
     }
 
@@ -76,13 +71,13 @@ namespace cairocanvas
                                        const uno::Reference< rendering::XCanvas >&  rTargetCanvas,
                                        bool                                         bSameViewTransform )
     {
-        ENSURE_AND_THROW( bSameViewTransform,
+        ENSURE_OR_THROW( bSameViewTransform,
                           "CachedBitmap::doRedraw(): base called with changed view transform "
                           "(told otherwise during construction)" );
 
         RepaintTarget* pTarget = dynamic_cast< RepaintTarget* >(rTargetCanvas.get());
 
-        ENSURE_AND_THROW( pTarget,
+        ENSURE_OR_THROW( pTarget,
                           "CachedBitmap::redraw(): cannot cast target to RepaintTarget" );
 
         if( !pTarget->repaint( mpSurface,
