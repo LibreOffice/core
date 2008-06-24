@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: precompiled_canvas.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,5 @@
 // MARKER(update_precomp.py): Generated on 2006-09-01 17:49:32.389803
 
 #ifdef PRECOMPILED_HEADERS
-#include <sal/macros.h>
 #endif
 
