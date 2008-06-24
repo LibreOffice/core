@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svppspgraphics.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include <vcl/outfont.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/salprn.hxx>
+#include <vcl/sysdata.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 #include <basebmp/color.hxx>
@@ -1402,5 +1403,14 @@ bool PspGraphics::filterText( const String& rOrig, String& rNewText, xub_StrLen 
     }
 
     return bRet && m_bSwallowFaxNo;
+}
+
+SystemGraphicsData PspGraphics::GetGraphicsData() const
+{
+    SystemGraphicsData aRes;
+    aRes.nSize = sizeof(aRes);
+        aRes.hDrawable = 0;
+        aRes.pRenderFormat = 0;
+    return aRes;
 }
 
