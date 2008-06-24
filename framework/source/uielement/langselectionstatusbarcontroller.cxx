@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: langselectionstatusbarcontroller.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +74,6 @@
 #include <svtools/languageoptions.hxx>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -205,7 +204,7 @@ void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::R
     USHORT nItemId=1;
 
     //1--add current language
-    if( m_aCurLang != OUString::createFromAscii( "" ) &&
+    if( m_aCurLang != ::rtl::OUString::createFromAscii( "" ) &&
         LANGUAGE_DONTKNOW != aLanguageTable.GetType( m_aCurLang ))
         LangItems.insert( m_aCurLang );
 
@@ -216,7 +215,7 @@ void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::R
     if( rSystemLanguage != LANGUAGE_DONTKNOW )
     {
         if ( checkScriptType( m_nScriptType, rSystemLanguage ))
-            LangItems.insert( OUString( aLangTable.GetString( rSystemLanguage )) );
+            LangItems.insert( ::rtl::OUString( aLangTable.GetString( rSystemLanguage )) );
     }
 
     //3--UI
@@ -224,7 +223,7 @@ void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::R
     if( rUILanguage != LANGUAGE_DONTKNOW )
     {
         if ( checkScriptType( m_nScriptType, rUILanguage ))
-            LangItems.insert( OUString( aLangTable.GetString( rUILanguage )) );
+            LangItems.insert( ::rtl::OUString( aLangTable.GetString( rUILanguage )) );
     }
 
     //4--guessed language
@@ -238,7 +237,7 @@ void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::R
     }
 
     //5--keyboard language
-    if( m_aKeyboardLang != OUString::createFromAscii( "" ))
+    if( m_aKeyboardLang != ::rtl::OUString::createFromAscii( "" ))
     {
         if ( checkScriptType( m_nScriptType, aLanguageTable.GetType( m_aKeyboardLang )))
             LangItems.insert( m_aKeyboardLang );
@@ -275,17 +274,17 @@ void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::R
                     break;
                 const Locale& rLocale=rLocales[i];
                 if( checkScriptType( m_nScriptType, aLangTable.GetType( rLocale.Language )))
-                    LangItems.insert( OUString( rLocale.Language ) );
+                    LangItems.insert( ::rtl::OUString( rLocale.Language ) );
             }
         }
     }
     std::map< sal_Int16, ::rtl::OUString > LangTable;
 
-    for( std::set< OUString >::const_iterator it = LangItems.begin(); it != LangItems.end(); ++it )
+    for( std::set< ::rtl::OUString >::const_iterator it = LangItems.begin(); it != LangItems.end(); ++it )
     {
-        if ( *it != OUString( aLangTable.GetString( LANGUAGE_NONE ) )&&
-             *it != OUString::createFromAscii( "*" ) &&
-             *it != OUString::createFromAscii( ""  ))
+        if ( *it != ::rtl::OUString( aLangTable.GetString( LANGUAGE_NONE ) )&&
+             *it != ::rtl::OUString::createFromAscii( "*" ) &&
+             *it != ::rtl::OUString::createFromAscii( ""  ))
         {
             //nItemId = xPopupMenu->getItemCount()+1;
             nItemId++;
@@ -306,11 +305,11 @@ void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::R
     nItemId++;
     xPopupMenu->insertItem( nItemId, String( FwkResId( STR_LANGSTATUS_MORE )), css::awt::MenuItemStyle::RADIOCHECK, nItemId );
 
-    for( ::std::set< OUString >::const_iterator it = LangItems.begin(); it != LangItems.end(); ++it )
+    for( ::std::set< ::rtl::OUString >::const_iterator it = LangItems.begin(); it != LangItems.end(); ++it )
     {
-        if( *it != OUString( aLangTable.GetString( LANGUAGE_NONE ) )&&
-            *it != OUString::createFromAscii( "*" ) &&
-            *it != OUString::createFromAscii( ""  ))
+        if( *it != ::rtl::OUString( aLangTable.GetString( LANGUAGE_NONE ) )&&
+            *it != ::rtl::OUString::createFromAscii( "*" ) &&
+            *it != ::rtl::OUString::createFromAscii( ""  ))
         {
             nItemId++;
             subPopupMenu->insertItem( nItemId, *it, css::awt::MenuItemStyle::RADIOCHECK, nItemId );
@@ -485,3 +484,4 @@ throw ( RuntimeException )
 }
 
 }
+

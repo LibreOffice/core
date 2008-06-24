@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: langselectionmenucontroller.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,7 +82,6 @@
 //  Defines
 //_________________________________________________________________________________________________________________
 //
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -345,7 +344,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     USHORT nItemId = 1;
 
     //1--add current language
-    if(m_aCurLang!=OUString::createFromAscii(""))
+    if(m_aCurLang!=::rtl::OUString::createFromAscii(""))
     {
         LangItems[m_aCurLang]=m_aCurLang;
     }
@@ -357,7 +356,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     if(rSystemLanguage!=LANGUAGE_DONTKNOW)
     {
         if (lcl_checkScriptType(m_nScriptType,rSystemLanguage ))
-            LangItems[OUString(aLangTable.GetString(rSystemLanguage))]=OUString(aLangTable.GetString(rSystemLanguage));
+            LangItems[::rtl::OUString(aLangTable.GetString(rSystemLanguage))]=::rtl::OUString(aLangTable.GetString(rSystemLanguage));
     }
 
     //3--UI
@@ -365,7 +364,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     if(rUILanguage!=LANGUAGE_DONTKNOW)
     {
         if (lcl_checkScriptType(m_nScriptType, rUILanguage ))
-            LangItems[OUString(aLangTable.GetString(rUILanguage))]=OUString(aLangTable.GetString(rUILanguage));
+            LangItems[::rtl::OUString(aLangTable.GetString(rUILanguage))]=::rtl::OUString(aLangTable.GetString(rUILanguage));
     }
 
     //4--guessed language
@@ -379,7 +378,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     }
 
     //5--keyboard language
-    if(m_aKeyboardLang!=OUString::createFromAscii(""))
+    if(m_aKeyboardLang!=::rtl::OUString::createFromAscii(""))
     {
         if (lcl_checkScriptType(m_nScriptType, aLanguageTable.GetType(m_aKeyboardLang)))
             LangItems[m_aKeyboardLang] = m_aKeyboardLang;
@@ -416,17 +415,17 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
                     break;
                 const Locale& rLocale=rLocales[i];
                 if(lcl_checkScriptType(m_nScriptType, aLanguageTable.GetType(rLocale.Language)))
-                    LangItems[OUString(rLocale.Language)]=OUString(rLocale.Language);
+                    LangItems[::rtl::OUString(rLocale.Language)]=::rtl::OUString(rLocale.Language);
             }
         }
     }
     std::map< sal_Int16, ::rtl::OUString > LangTable;
 
-    for(std::map<OUString, OUString>::const_iterator it = LangItems.begin(); it != LangItems.end(); ++it)
+    for(std::map< ::rtl::OUString, ::rtl::OUString >::const_iterator it = LangItems.begin(); it != LangItems.end(); ++it)
     {
-        if(it->first != OUString( aLangTable.GetString( LANGUAGE_NONE ) )&&
-           it->first != OUString::createFromAscii("*") &&
-           it->first != OUString::createFromAscii(""))
+        if(it->first != ::rtl::OUString( aLangTable.GetString( LANGUAGE_NONE ) )&&
+           it->first != ::rtl::OUString::createFromAscii("*") &&
+           it->first != ::rtl::OUString::createFromAscii(""))
         {
             ++nItemId;
             pPopupMenu->InsertItem( nItemId,it->first);
@@ -534,3 +533,4 @@ void SAL_CALL LanguageSelectionMenuController::initialize( const Sequence< Any >
 }
 
 }
+
