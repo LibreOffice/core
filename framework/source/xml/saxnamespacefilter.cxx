@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saxnamespacefilter.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,12 +44,11 @@
 
 #include <vcl/svapp.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 
-const OUString aXMLAttributeNamespace( RTL_CONSTASCII_USTRINGPARAM( "xmlns" ));
-const OUString aXMLAttributeType( RTL_CONSTASCII_USTRINGPARAM( "CDATA" ));
+const ::rtl::OUString aXMLAttributeNamespace( RTL_CONSTASCII_USTRINGPARAM( "xmlns" ));
+const ::rtl::OUString aXMLAttributeType( RTL_CONSTASCII_USTRINGPARAM( "CDATA" ));
 
 namespace framework{
 
@@ -103,7 +102,7 @@ void SAL_CALL SaxNamespaceFilter::startElement(
     {
         for ( sal_Int16 i=0; i< xAttribs->getLength(); i++ )
         {
-            OUString aName = xAttribs->getNameByIndex( i );
+            ::rtl::OUString aName = xAttribs->getNameByIndex( i );
             if ( aName.compareTo( aXMLAttributeNamespace, aXMLAttributeNamespace.getLength() ) == 0 )
                 aXMLNamespaces.addNamespace( aName, xAttribs->getValueByIndex( i ));
             else
@@ -121,19 +120,19 @@ void SAL_CALL SaxNamespaceFilter::startElement(
                   aAttributeIndexes.begin());
               i != aAttributeIndexes.end(); ++i )
         {
-            OUString aAttributeName          = xAttribs->getNameByIndex( *i );
-            OUString aValue                  = xAttribs->getValueByIndex( *i );
-            OUString aNamespaceAttributeName = aXMLNamespaces.applyNSToAttributeName( aAttributeName );
+            ::rtl::OUString aAttributeName           = xAttribs->getNameByIndex( *i );
+            ::rtl::OUString aValue                   = xAttribs->getValueByIndex( *i );
+            ::rtl::OUString aNamespaceAttributeName = aXMLNamespaces.applyNSToAttributeName( aAttributeName );
             pNewList->AddAttribute( aNamespaceAttributeName, aXMLAttributeType, aValue );
         }
     }
     catch ( SAXException& e )
     {
-        e.Message = OUString( getErrorLineString() + e.Message );
+        e.Message = ::rtl::OUString( getErrorLineString() + e.Message );
         throw e;
     }
 
-    OUString aNamespaceElementName;
+    ::rtl::OUString aNamespaceElementName;
 
     try
     {
@@ -141,7 +140,7 @@ void SAL_CALL SaxNamespaceFilter::startElement(
     }
     catch ( SAXException& e )
     {
-        e.Message = OUString( getErrorLineString() + e.Message );
+        e.Message = ::rtl::OUString( getErrorLineString() + e.Message );
         throw e;
     }
 
@@ -152,7 +151,7 @@ void SAL_CALL SaxNamespaceFilter::endElement(const rtl::OUString& aName)
     throw(  SAXException, RuntimeException )
 {
     XMLNamespaces& aXMLNamespaces = m_aNamespaceStack.top();
-    OUString aNamespaceElementName;
+    ::rtl::OUString aNamespaceElementName;
 
     try
     {
@@ -160,7 +159,7 @@ void SAL_CALL SaxNamespaceFilter::endElement(const rtl::OUString& aName)
     }
     catch ( SAXException& e )
     {
-        e.Message = OUString( getErrorLineString() + e.Message );
+        e.Message = ::rtl::OUString( getErrorLineString() + e.Message );
         throw e;
     }
 
@@ -195,17 +194,18 @@ void SAL_CALL SaxNamespaceFilter::setDocumentLocator(
     xDocumentHandler->setDocumentLocator( xLocator );
 }
 
-OUString SaxNamespaceFilter::getErrorLineString()
+::rtl::OUString SaxNamespaceFilter::getErrorLineString()
 {
     char buffer[32];
 
     if ( m_xLocator.is() )
     {
         snprintf( buffer, sizeof(buffer), "Line: %ld - ", static_cast<long>( m_xLocator->getLineNumber() ));
-        return OUString::createFromAscii( buffer );
+        return ::rtl::OUString::createFromAscii( buffer );
     }
     else
-        return OUString();
+        return ::rtl::OUString();
 }
 
 } // namespace
+
