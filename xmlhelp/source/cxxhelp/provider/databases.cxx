@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: databases.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -408,20 +408,6 @@ rtl::OUString Databases::getInstallPathAsURL()
     osl::MutexGuard aGuard( m_aMutex );
 
       return m_aInstallDirectory;
-}
-
-
-rtl::OUString Databases::getInstallPathAsURLWithOutEncoding()
-{
-    osl::MutexGuard aGuard( m_aMutex );
-
-    return m_aInstallDirectoryWithoutEncoding;
-}
-
-
-rtl::OUString Databases::getURLMode()
-{
-    return rtl::OUString::createFromAscii( "with-jars" );
 }
 
 
@@ -1163,57 +1149,6 @@ void Databases::popupDocument( URLParameter* urlPar,char **buffer,int *byteCount
 }
 
 
-void Databases::errorDocument( const rtl::OUString& Language,
-                               char** buffer,
-                               int* byteCount )
-{
-    if( ! m_pErrorDoc )
-    {
-        rtl::OUString fileURL =
-            getInstallPathAsURL()
-            + lang( Language )
-            + rtl::OUString::createFromAscii( "/err.html" );
-
-        osl::DirectoryItem aDirItem;
-        osl::File aFile( fileURL );
-        osl::FileStatus aStatus( FileStatusMask_FileSize );
-
-        if( osl::FileBase::E_None == osl::DirectoryItem::get( fileURL,aDirItem ) &&
-            osl::FileBase::E_None == aFile.open( OpenFlag_Read )       &&
-            osl::FileBase::E_None == aDirItem.getFileStatus( aStatus ) )
-        {
-            m_nErrorDocLength = int( aStatus.getFileSize() );
-            m_pErrorDoc = new char[ 1 + m_nErrorDocLength ];
-            m_pErrorDoc[ m_nErrorDocLength ] = 0;
-            sal_uInt64 a = m_nErrorDocLength,b = m_nErrorDocLength;
-            aFile.read( m_pErrorDoc,a,b );
-            aFile.close();
-        }
-        else
-        {
-            // the error file does not exist
-          const char* errorText =
-            "<html><body>"
-            "The requested document does not exist in the database !!"
-            "</body></html>";
-
-          m_nErrorDocLength = strlen( errorText );
-          m_pErrorDoc = new char[ 1 + m_nErrorDocLength ];
-          m_pErrorDoc[ m_nErrorDocLength ] = 0;
-          rtl_copyMemory( m_pErrorDoc,errorText,m_nErrorDocLength );
-        }
-
-    }
-
-    *byteCount = m_nErrorDocLength;
-    *buffer = new char[ 1 + *byteCount ];
-    (*buffer)[*byteCount] = 0;
-    rtl_copyMemory( *buffer,m_pErrorDoc,m_nErrorDocLength );
-}
-
-
-
-
 void Databases::changeCSS(const rtl::OUString& newStyleSheet)
 {
     m_aCSS = newStyleSheet.toAsciiLowerCase();
@@ -1387,14 +1322,6 @@ ExtensionIteratorBase::ExtensionIteratorBase( Databases& rDatabases,
         , m_aInitialModule( aInitialModule )
         , m_aLanguage( aLanguage )
         , m_aCorrectedLanguage( rDatabases.lang( aLanguage ) )
-{
-    init();
-}
-
-ExtensionIteratorBase::ExtensionIteratorBase( Reference< XComponentContext > xContext, Databases& rDatabases )
-    : m_xContext( xContext )
-    , m_rDatabases( rDatabases )
-    , m_eState( USER_EXTENSIONS )
 {
     init();
 }
