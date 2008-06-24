@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ContextTables.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -204,18 +204,6 @@ void ContextTables::setMicroindex( sal_Int32 docNo ) throw( excep::XmlSearchExce
 
 
 
-sal_Int32 ContextTables::parentContext( sal_Int32 context)
-{
-    return dests_[ context ];
-}
-
-
-rtl::OUString ContextTables::linkName( sal_Int32 context )
-{
-    return linkNames_[ linkTypes_[context ] ];
-}
-
-
 sal_Int32 ContextTables::linkCode( const rtl::OUString& linkName_ )
 {
     for( sal_Int32 i = 0; i < linkNamesL_; ++i )
@@ -278,124 +266,6 @@ sal_Int32 ContextTables::firstParentWithCode( const sal_Int32 pos,const sal_Int3
         if( ( ctx = dests_[ ctx ] ) == limit )
             return -1;
     return ctx;
-}
-
-
-
-/*
- * starting with ctx and going up the ancestry tree look for the first
- * context with the given linkCode and given parent code
- */
-
-sal_Int32 ContextTables::firstParentWithCode2( sal_Int32 pos,const sal_Int32 linkCode_,const sal_Int32 parentCode)
-{
-    sal_Int32 ctx = dests_[ wordContextLin( pos ) ]; // first parent of text node
-    const sal_Int32 shift = nTextNodes_;
-    const sal_Int32 limit = destsL_ - 1;
-    for( sal_Int32 parent = dests_[ctx]; parent < limit; parent = dests_[ parent ] )
-        if( linkTypes_[ parent - shift ] == parentCode && linkTypes_[ ctx - shift ] == linkCode_ )
-            return ctx;
-        else
-            ctx = parent;
-    return -1;
-}
-
-
-/*
- * starting with ctx and going up the ancestry tree look for the first
- * context with the given linkCode and given ancestor code
- */
-
-sal_Int32 ContextTables::firstParentWithCode3( sal_Int32 pos,sal_Int32 linkCode_,sal_Int32 ancestorCode )
-{
-    sal_Int32 ctx = dests_[ wordContextLin( pos ) ];
-    const sal_Int32 shift = nTextNodes_;
-    const sal_Int32 limit = destsL_ - 1;
-    // find first instance of linkCode
-    while( ctx < limit && linkTypes_[ ctx - shift ] != linkCode_ )
-        ctx = dests_[ ctx ];
-    if( ctx < limit )       // found linkCode, check ancestry
-        for( sal_Int32 ancestor = dests_[ctx];
-             ancestor < limit;
-             ancestor = dests_[ancestor])
-            if (linkTypes_[ancestor - shift] == ancestorCode) // ancestor confirmed
-                return ctx;     // match found, return successful ctx
-    return -1;          // match NOT found
-}
-
-
-/*
- * starting with ctx and going up the ancestry tree look for the first
- * context with any of the given linkCode
- */
-
-sal_Int32 ContextTables::firstParentWithCode4(sal_Int32 pos, sal_Int32 linkCodesL,sal_Int32* linkCodes)
-{
-    const sal_Int32 shift = nTextNodes_;
-    const sal_Int32 limit = destsL_ - 1;
-    for (sal_Int32 ctx = dests_[wordContextLin(pos)]; ctx < limit; ctx = dests_[ctx])
-    {
-        const sal_Int32 code = linkTypes_[ctx - shift];
-        for (sal_Int32 i = 0; i < linkCodesL; i++)
-            if (code == linkCodes[i])
-                return ctx;
-    }
-    return -1;
-}
-
-
-/*
- * starting with ctx and going up the ancestry tree look for the first
- * context with the given path
- */
-
-sal_Int32 ContextTables::firstParentWithCode5(sal_Int32 pos,sal_Int32 pathCodesL,sal_Int32* pathCodes)
-{
-    const sal_Int32 lastCode = pathCodes[ pathCodesL - 1 ];
-    const sal_Int32 shift = nTextNodes_;
-    const sal_Int32 limit = destsL_ - 1;
-    sal_Int32 ctx = dests_[wordContextLin(pos)];
-
- SEARCH:
-    for(sal_Int32 parent = dests_[ctx];
-        parent < limit;
-        parent = dests_[parent])
-        if( linkTypes_[ctx - shift] == lastCode )
-        { // initial match
-            // try to match the entire path
-            for(sal_Int32 i = pathCodesL - 2, parent2 = parent; i >= 0; i--)
-                if (linkTypes_[parent2 - shift] != pathCodes[i]) // match failure
-                    goto SEARCH;    // try to match higher
-                else if ((parent2 = dests_[parent2]) == limit)
-                    return -1;
-            return ctx;
-        }
-        else
-            ctx = parent;
-    return -1;
-}
-
-
-/*
- * starting with ctx and going up the ancestry tree look for the first
- * context with the given linkCode
- */
-
-sal_Int32 ContextTables::firstParentWithCode7( const sal_Int32 pos,const sal_Int32 linkCode_,const sal_Int32 seq)
-{
-    sal_Int32 ctx = dests_[ wordContextLin(pos) ]; // first parent of text node
-    const sal_Int32 shift = nTextNodes_;
-    const sal_Int32 limit = destsL_ - 1;
-    while (linkTypes_[ctx - shift] != linkCode_ || seqNumbers_[ctx] != seq)
-        if ((ctx = dests_[ctx]) == limit)
-            return -1;
-    return ctx;
-}
-
-
-bool ContextTables::isGoverning(sal_Int32 context)
-{
-    return linkName(context).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("TITLE") ) != 0;
 }
 
 
