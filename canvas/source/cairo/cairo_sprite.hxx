@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_sprite.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,8 +51,8 @@ namespace cairocanvas
             the front buffer, but within a VDev. Used to speed up
             drawing.
          */
-        virtual void redraw( ::cairo::Cairo* pCairo,
-                             bool            bBufferedUpdate ) const = 0;
+        virtual void redraw( const ::cairo::CairoSharedPtr& pCairo,
+                             bool                           bBufferedUpdate ) const = 0;
 
         /** Redraw sprite at the given position.
 
@@ -65,9 +65,9 @@ namespace cairocanvas
             the front buffer, but within a VDev. Used to speed up
             drawing.
         */
-        virtual void redraw( ::cairo::Cairo*            pCairo,
-                             const ::basegfx::B2DPoint& rOrigOutputPos,
-                             bool                       bBufferedUpdate ) const = 0;
+        virtual void redraw( const ::cairo::CairoSharedPtr& pCairo,
+                             const ::basegfx::B2DPoint&     rOrigOutputPos,
+                             bool                           bBufferedUpdate ) const = 0;
     };
 }
 
