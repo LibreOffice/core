@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessiblePageShape.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +46,6 @@
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
@@ -132,17 +131,17 @@ awt::Rectangle SAL_CALL AccessiblePageShape::getBounds (void)
             awt::Size aSize;
 
             aValue = xSet->getPropertyValue (
-                OUString (RTL_CONSTASCII_USTRINGPARAM("BorderLeft")));
+                ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("BorderLeft")));
             aValue >>= aBoundingBox.X;
             aValue = xSet->getPropertyValue (
-                OUString (RTL_CONSTASCII_USTRINGPARAM("BorderTop")));
+                ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("BorderTop")));
             aValue >>= aBoundingBox.Y;
 
             aValue = xSet->getPropertyValue (
-                OUString (RTL_CONSTASCII_USTRINGPARAM("Width")));
+                ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("Width")));
             aValue >>= aBoundingBox.Width;
             aValue = xSet->getPropertyValue (
-                OUString (RTL_CONSTASCII_USTRINGPARAM("Height")));
+                ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("Height")));
             aValue >>= aBoundingBox.Height;
         }
 
@@ -199,7 +198,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getForeground (void)
         if (aSet.is())
         {
             uno::Any aColor;
-            aColor = aSet->getPropertyValue (OUString::createFromAscii ("LineColor"));
+            aColor = aSet->getPropertyValue (::rtl::OUString::createFromAscii ("LineColor"));
             aColor >>= nColor;
         }
     }
@@ -229,7 +228,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
         {
             uno::Any aBGSet;
             aBGSet = xSet->getPropertyValue (
-                OUString (RTL_CONSTASCII_USTRINGPARAM("Background")));
+                ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("Background")));
             Reference<beans::XPropertySet> xBGSet (aBGSet, uno::UNO_QUERY);
             if ( ! xBGSet.is())
             {
@@ -241,7 +240,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
                     xSet = Reference<beans::XPropertySet> (xTarget->getMasterPage(),
                         uno::UNO_QUERY);
                     aBGSet = xSet->getPropertyValue (
-                        OUString (RTL_CONSTASCII_USTRINGPARAM("Background")));
+                        ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("Background")));
                     xBGSet = Reference<beans::XPropertySet> (aBGSet, uno::UNO_QUERY);
                 }
             }
@@ -250,7 +249,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
             if (xBGSet.is())
             {
                 uno::Any aColor;
-                aColor = xBGSet->getPropertyValue (OUString::createFromAscii ("FillColor"));
+                aColor = xBGSet->getPropertyValue (::rtl::OUString::createFromAscii ("FillColor"));
                 aColor >>= nColor;
             }
             else
@@ -356,3 +355,5 @@ void AccessiblePageShape::dispose (void)
 
 
 } // end of namespace accessibility
+
+
