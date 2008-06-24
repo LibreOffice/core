@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: JavaCanvas.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -507,15 +507,6 @@ public class JavaCanvas
     {
         // TODO: finish that one
         IntegerBitmapLayout layout = new IntegerBitmapLayout();
-
-        layout.ScanLines = boundRect.Width;
-        layout.ScanLineBytes = boundRect.Width*4;
-        layout.ScanLineStride = layout.ScanLineBytes;
-        layout.Format = 0;
-        layout.NumComponents = 4;
-        layout.ComponentMasks = null;
-        layout.Endianness = 0;
-        layout.IsMsbFirst = false;
 
         return layout;
     }
