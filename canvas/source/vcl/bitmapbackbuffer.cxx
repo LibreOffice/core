@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bitmapbackbuffer.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,18 +77,10 @@ namespace vclcanvas
         return *mpVDev;
     }
 
-    VirtualDevice& BitmapBackBuffer::getVirDev()
+    void BitmapBackBuffer::clear()
     {
-        createVDev();
-        updateVDev();
-        return *mpVDev;
-    }
-
-    const VirtualDevice& BitmapBackBuffer::getVirDev() const
-    {
-        createVDev();
-        updateVDev();
-        return *mpVDev;
+        // force current content to bitmap, make all transparent white
+        getBitmapReference().Erase(COL_TRANSPARENT);
     }
 
     BitmapEx& BitmapBackBuffer::getBitmapReference()
