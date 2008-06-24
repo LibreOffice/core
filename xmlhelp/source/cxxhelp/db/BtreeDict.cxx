@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BtreeDict.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -425,12 +425,6 @@ void BtreeDict::unlock( sal_Int32 blNum ) const throw( excep::IllegalIndexExcept
 {
   blockManager_.unlock( blNum );
 }
-
-bool BtreeDict::isLocked( sal_Int32 blNum ) const throw( excep::IllegalIndexException )
-{
-  return blockManager_.isLocked( blNum );
-}
-
 
 sal_Int32 BtreeDict::fetch( const rtl::OUString& key ) const throw( excep::XmlSearchException )
 {
