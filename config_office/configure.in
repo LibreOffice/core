@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-06-13 14:10:42 $
+dnl * Date: $Date: 2008-06-24 11:59:33 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.271 $ )
+AC_REVISION( $Revision: 1.272 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -5268,33 +5268,21 @@ AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
 dnl ===================================================================
-dnl Check whether the Cairo libraries are available.
+dnl dnl Check whether to enable the cairo canvas backend.
 dnl ===================================================================
 
-dnl === Linux has no "internal cairo" (prebuilt or in OOo source). Default to system cairo on Linux. ===
-if test -z "$with_system_cairo" -a "$_os" = "Linux"; then
-   with_system_cairo="yes"
-fi
-
 ENABLE_CAIRO=""
-SYSTEM_CAIRO=""
 
 if test  "$build_cairo" = "yes"; then
 
     AC_MSG_CHECKING([whether to enable the cairo canvas backend])
     if test "x$enable_cairo" != "xno" ; then
-        ENABLE_CAIRO="TRUE"
-	AC_MSG_RESULT([yes])
-        AC_MSG_CHECKING([which cairo to use])
-        if test -n "$with_system_cairo" -o -n "$with_system_libs" && \
-           test "$with_system_cairo" != "no"; then
-           AC_MSG_RESULT([external])
-           SYSTEM_CAIRO=YES
-	   
-           PKG_CHECK_MODULES( CAIRO, cairo >= 1.0.2 )
-           if test "$with_system_xrender_headers" = "yes"; then
-              AC_MSG_CHECKING([whether Xrender.h defines PictStandardA8])
-              AC_TRY_RUN([
+       AC_MSG_RESULT([yes])
+       ENABLE_CAIRO="TRUE"
+       if test "$_os" != "WINNT"; then
+	if test "$with_system_xrender_headers" = "yes"; then
+             AC_MSG_CHECKING([whether Xrender.h defines PictStandardA8])
+             AC_TRY_RUN([
 #include <X11/extensions/Xrender.h>
 
 int main(int argc, char **argv) {
@@ -5305,13 +5293,32 @@ int main(int argc, char **argv) {
 #endif
 }
                ], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([no, X headers too old.])])
-           fi
-        else
-           BUILD_TYPE="$BUILD_TYPE CAIRO"
-           AC_MSG_RESULT([internal])
-        fi
+          fi
+	fi
+     else
+ 	     AC_MSG_RESULT([no])
+     fi
+fi
+
+dnl ===================================================================
+dnl Check for system cairo
+dnl ===================================================================
+
+dnl === Linux has no "internal cairo" (prebuilt or in OOo source). Default to system cairo on Linux. ===
+if test -z "$with_system_cairo" -a "$_os" = "Linux"; then
+   with_system_cairo="yes"
+fi
+
+if test "$ENABLE_CAIRO" = "TRUE"; then
+    AC_MSG_CHECKING([which cairo to use])
+    if test "$with_system_cairo" != "yes" && test "$_os" = "Linux"; then
+        BUILD_TYPE="$BUILD_TYPE CAIRO"
+        AC_MSG_RESULT([internal])
+        SYSTEM_CAIRO=NO
     else
-	   AC_MSG_RESULT([no])
+        AC_MSG_RESULT([external])
+        SYSTEM_CAIRO=YES
+        PKG_CHECK_MODULES( CAIRO, cairo >= 1.0.2 )
     fi
 fi
 
