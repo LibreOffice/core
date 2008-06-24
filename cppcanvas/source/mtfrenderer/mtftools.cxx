@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mtftools.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_cppcanvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
 #include <com/sun/star/rendering/RenderState.hpp>
@@ -86,7 +87,7 @@ namespace cppcanvas
                                    aMetric.GetIntLeading() + aMetric.GetAscent() );
 
                 default:
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "tools::getBaselineOffset(): Unexpected TextAlign value" );
                     // FALLTHROUGH intended (to calm compiler warning - case won't happen)
                 case ALIGN_BASELINE:
@@ -497,7 +498,7 @@ namespace cppcanvas
                     break;
 
                 default:
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "::cppcanvas::internal::createTextLinesPolyPolygon(): Unexpected underline case" );
             }
 
@@ -552,7 +553,7 @@ namespace cppcanvas
                     break;
 
                 default:
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "::cppcanvas::internal::createTextLinesPolyPolygon(): Unexpected strikeout case" );
             }
 
