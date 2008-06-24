@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_impltools.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,8 +70,6 @@ namespace com { namespace sun { namespace star { namespace rendering
 
 namespace dxcanvas
 {
-    class SurfaceGraphics;
-
     namespace tools
     {
         struct RawRGBABitmap;
@@ -79,6 +77,9 @@ namespace dxcanvas
         ::basegfx::B2DPolyPolygon
         polyPolygonFromXPolyPolygon2D( const ::com::sun::star::uno::Reference<
                                        ::com::sun::star::rendering::XPolyPolygon2D >& );
+
+        Gdiplus::Graphics* createGraphicsFromHDC(HDC);
+        Gdiplus::Graphics* createGraphicsFromBitmap(const BitmapSharedPtr&);
 
         void setupGraphics( Gdiplus::Graphics& rGraphics );
 
@@ -111,16 +112,14 @@ namespace dxcanvas
 
         GraphicsPathSharedPtr graphicsPathFromXPolyPolygon2D( const ::com::sun::star::uno::Reference<
                                                               ::com::sun::star::rendering::XPolyPolygon2D >& );
-        bool drawDIBits( const ::boost::shared_ptr< SurfaceGraphics >&  rGraphics,
-                         const BITMAPINFO&                      rBI,
-                         const void*                                    pBits );
+        bool drawGdiPlusBitmap( const GraphicsSharedPtr& rGraphics,
+                                const BitmapSharedPtr&   rBitmap );
+        bool drawDIBits( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
+                         const BITMAPINFO&                               rBI,
+                         const void*                                     pBits );
 
-        bool drawRGBABits( const ::boost::shared_ptr< SurfaceGraphics >&    rGraphics,
-                           const RawRGBABitmap&                             rRawRGBAData );
-
-        bool drawXBitmap( const ::boost::shared_ptr< SurfaceGraphics >& rGraphics,
-                          const ::com::sun::star::uno::Reference<
-                              ::com::sun::star::rendering::XBitmap >&   xBitmap );
+        bool drawRGBABits( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
+                           const RawRGBABitmap&                            rRawRGBAData );
 
         BitmapSharedPtr bitmapFromXBitmap( const ::com::sun::star::uno::Reference<
                                                    ::com::sun::star::rendering::XBitmap >&  xBitmap );
