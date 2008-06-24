@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cf_service.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,20 +30,26 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_canvas.hxx"
-#include "osl/mutex.hxx"
-#include "osl/process.h"
-#include "cppuhelper/implementationentry.hxx"
-#include "cppuhelper/factory.hxx"
-#include "cppuhelper/implbase3.hxx"
-#include "vcl/configsettings.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/lang/XSingleComponentFactory.hpp"
-#include "com/sun/star/container/XContentEnumerationAccess.hpp"
-#include "com/sun/star/container/XNameAccess.hpp"
-#include "com/sun/star/beans/PropertyValue.hpp"
 
+#include <osl/mutex.hxx>
+#include <osl/process.h>
+#include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <vcl/configsettings.hxx>
+
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+
+#include <boost/bind.hpp>
 #include <vector>
+#include <utility>
+#include <functional>
 #include <algorithm>
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
@@ -54,7 +60,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
-namespace {
+namespace
+{
 
 OUString SAL_CALL getImplName()
 {
@@ -73,19 +80,26 @@ class CanvasFactory
                                       lang::XMultiComponentFactory,
                                       lang::XMultiServiceFactory >
 {
-    ::osl::Mutex m_mutex;
-    Reference<XComponentContext> m_xContext;
-    Sequence<OUString> m_services;
-    OUString m_serviceName;
-    Reference<lang::XSingleComponentFactory> m_xFactory;
+    typedef std::pair<OUString,Sequence<OUString> > AvailPair;
+    typedef std::pair<OUString,OUString>            CachePair;
+    typedef std::vector< AvailPair >                AvailVector;
+    typedef std::vector< CachePair >                CacheVector;
+
+
+    mutable ::osl::Mutex              m_mutex;
+    Reference<XComponentContext>      m_xContext;
+    Reference<container::XNameAccess> m_xForceFlagNameAccess;
+    AvailVector                       m_aAvailableImplementations;
+    mutable CacheVector               m_aCachedImplementations;
+    mutable bool                      m_bCacheHasForcedLastImpl;
 
     Reference<XInterface> use(
-        Reference<lang::XSingleComponentFactory> const & xFactory,
+        OUString const & serviceName,
         Sequence<Any> const & args,
-        Reference<XComponentContext> const & xContext );
+        Reference<XComponentContext> const & xContext ) const;
     Reference<XInterface> lookupAndUse(
         OUString const & serviceName, Sequence<Any> const & args,
-        Reference<XComponentContext> const & xContext );
+        Reference<XComponentContext> const & xContext ) const;
 
 public:
     virtual ~CanvasFactory();
@@ -117,16 +131,16 @@ public:
     virtual Reference<XInterface> SAL_CALL createInstanceWithArguments(
         OUString const & name, Sequence<Any> const & args )
         throw (Exception);
-//     virtual Sequence<OUString> SAL_CALL getAvailableServiceNames()
-//         throw (RuntimeException);
 };
 
-CanvasFactory::CanvasFactory(
-    Reference<XComponentContext> const & xContext )
-    : m_xContext(xContext)
+CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
+    m_mutex(),
+    m_xContext(xContext),
+    m_xForceFlagNameAccess(),
+    m_aAvailableImplementations(),
+    m_aCachedImplementations(),
+    m_bCacheHasForcedLastImpl()
 {
-    ::rtl::OUString preferredServices;
-
     try
     {
         // read out configuration for preferred services:
@@ -138,50 +152,68 @@ CanvasFactory::CanvasFactory(
         Any propValue(
             makeAny( beans::PropertyValue(
                          OUSTR("nodepath"), -1,
-                         makeAny( OUSTR("/org.openoffice.VCL/Settings/Canvas") ),
+                         makeAny( OUSTR("/org.openoffice.Office.Canvas") ),
                          beans::PropertyState_DIRECT_VALUE ) ) );
+
+        m_xForceFlagNameAccess.set(
+            xConfigProvider->createInstanceWithArguments(
+                OUSTR("com.sun.star.configuration.ConfigurationAccess"),
+                Sequence<Any>( &propValue, 1 ) ),
+            UNO_QUERY_THROW );
+
+        propValue = makeAny(
+            beans::PropertyValue(
+                OUSTR("nodepath"), -1,
+                makeAny( OUSTR("/org.openoffice.Office.Canvas/CanvasServiceList") ),
+                beans::PropertyState_DIRECT_VALUE ) );
 
         Reference<container::XNameAccess> xNameAccess(
             xConfigProvider->createInstanceWithArguments(
                 OUSTR("com.sun.star.configuration.ConfigurationAccess"),
-                Sequence<Any>( &propValue, 1 ) ), UNO_QUERY );
+                Sequence<Any>( &propValue, 1 ) ), UNO_QUERY_THROW );
+        Reference<container::XHierarchicalNameAccess> xHierarchicalNameAccess(
+            xNameAccess, UNO_QUERY_THROW);
 
-        if (xNameAccess.is())
-            xNameAccess->getByName( OUSTR("PreferredServices") ) >>= preferredServices;
+        Sequence<OUString> serviceNames = xNameAccess->getElementNames();
+        const OUString* pCurr = serviceNames.getConstArray();
+        const OUString* const pEnd = pCurr + serviceNames.getLength();
+        while( pCurr != pEnd )
+        {
+            Reference<container::XNameAccess> xEntryNameAccess(
+                xHierarchicalNameAccess->getByHierarchicalName(*pCurr),
+                UNO_QUERY );
+
+            if( xEntryNameAccess.is() )
+            {
+                Sequence<OUString> preferredImplementations;
+                if( (xEntryNameAccess->getByName( OUSTR("PreferredImplementations") ) >>= preferredImplementations) )
+                    m_aAvailableImplementations.push_back( std::make_pair(*pCurr,preferredImplementations) );
+            }
+
+            ++pCurr;
+        }
     }
-    catch (RuntimeException &) {
+    catch (RuntimeException &)
+    {
         throw;
     }
-    catch (Exception & exc) {
-        (void) exc;
-    }
-
-    ::std::vector< ::rtl::OUString > services;
-    sal_Int32 tokenPos = 0;
-    do
+    catch (Exception&)
     {
-        ::rtl::OUString oneService = preferredServices.getToken( 0, ';', tokenPos );
-        if ( oneService.getLength() )
-            services.push_back( oneService );
     }
-    while ( tokenPos > 0 );
-    m_services.realloc( services.size() );
-    ::std::copy( services.begin(), services.end(), m_services.getArray() );
 
-    // append the usual preferred ones:
-    sal_Int32 pos = m_services.getLength();
-#if defined WNT
-    m_services.realloc( pos + 6 );
-    m_services[ pos++ ] = OUSTR("com.sun.star.rendering.DX9Canvas");
-    m_services[ pos++ ] = OUSTR("com.sun.star.rendering.DXCanvas");
-    m_services[ pos++ ] = OUSTR("com.sun.star.rendering.GLCanvas");
-#else
-    m_services.realloc( pos + 4 );
-    m_services[ pos++ ] = OUSTR("com.sun.star.rendering.GLCanvas");
-#endif
-    m_services[ pos++ ] = OUSTR("com.sun.star.rendering.CairoCanvas");
-    m_services[ pos++ ] = OUSTR("com.sun.star.rendering.JavaCanvas");
-    m_services[ pos   ] = OUSTR("com.sun.star.rendering.VCLCanvas");
+    if( m_aAvailableImplementations.empty() )
+    {
+        // Ugh. Looks like configuration is borked. Fake minimal
+        // setup.
+        Sequence<OUString> aServices(1);
+        aServices[0] = OUSTR("com.sun.star.comp.rendering.Canvas.VCL");
+        m_aAvailableImplementations.push_back( std::make_pair(OUSTR("com.sun.star.rendering.Canvas"),
+                                                              aServices) );
+
+        aServices[0] = OUSTR("com.sun.star.comp.rendering.SpriteCanvas.VCL");
+        m_aAvailableImplementations.push_back( std::make_pair(OUSTR("com.sun.star.rendering.SpriteCanvas"),
+                                                              aServices) );
+    }
 }
 
 CanvasFactory::~CanvasFactory()
@@ -221,7 +253,12 @@ Sequence<OUString> CanvasFactory::getSupportedServiceNames()
 Sequence<OUString> CanvasFactory::getAvailableServiceNames()
     throw (RuntimeException)
 {
-    return m_services;
+    Sequence<OUString> aServiceNames(m_aAvailableImplementations.size());
+    std::transform(m_aAvailableImplementations.begin(),
+                   m_aAvailableImplementations.end(),
+                   aServiceNames.getArray(),
+                   std::select1st<AvailPair>());
+    return aServiceNames;
 }
 
 //______________________________________________________________________________
@@ -235,16 +272,20 @@ Reference<XInterface> CanvasFactory::createInstanceWithContext(
 
 //______________________________________________________________________________
 Reference<XInterface> CanvasFactory::use(
-    Reference<lang::XSingleComponentFactory> const & xFactory,
-    Sequence<Any> const & args, Reference<XComponentContext> const & xContext )
+    OUString const & serviceName,
+    Sequence<Any> const & args,
+    Reference<XComponentContext> const & xContext ) const
 {
     try {
-        return xFactory->createInstanceWithArgumentsAndContext(args, xContext);
+        return m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            serviceName, args, xContext);
     }
-    catch (RuntimeException &) {
+    catch (RuntimeException &)
+    {
         throw;
     }
-    catch (Exception &) {
+    catch (Exception &)
+    {
         return Reference<XInterface>();
     }
 }
@@ -252,41 +293,83 @@ Reference<XInterface> CanvasFactory::use(
 //______________________________________________________________________________
 Reference<XInterface> CanvasFactory::lookupAndUse(
     OUString const & serviceName, Sequence<Any> const & args,
-    Reference<XComponentContext> const & xContext )
+    Reference<XComponentContext> const & xContext ) const
 {
+    ::osl::MutexGuard guard(m_mutex);
+
+    // forcing last entry from impl list, if config flag set
+    bool bForceLastEntry(false);
+    if( m_xForceFlagNameAccess.is() )
     {
-        // try to reuse:
-        ::osl::ClearableMutexGuard guard(m_mutex);
-        if (m_serviceName.equals(serviceName)) {
-            Reference<lang::XSingleComponentFactory> xFac(m_xFactory);
-            guard.clear();
-            Reference<XInterface> xCanvas( use( xFac, args, xContext ) );
-            if (xCanvas.is())
-                return xCanvas;
+        m_xForceFlagNameAccess->getByName( OUSTR("ForceSafeServiceImpl") ) >>= bForceLastEntry;
+
+        if( m_bCacheHasForcedLastImpl != bForceLastEntry )
+        {
+            // cache is invalid, because of different order of
+            // elements
+            m_bCacheHasForcedLastImpl = bForceLastEntry;
+            m_aCachedImplementations.clear();
         }
     }
 
-    Reference<container::XContentEnumerationAccess> xEnumAccess(
-        // use service manager of factory:
-        m_xContext->getServiceManager(), UNO_QUERY_THROW );
-    Reference<container::XEnumeration> xEnum(
-        xEnumAccess->createContentEnumeration( serviceName ) );
-    if (xEnum.is()) {
-        while (xEnum->hasMoreElements()) {
-            Reference<lang::XSingleComponentFactory> xFactory(
-                xEnum->nextElement(), UNO_QUERY );
-            OSL_ASSERT( xFactory.is() );
-            if (xFactory.is()) {
-                Reference<XInterface> xCanvas(
-                    use( xFactory, args, xContext ) );
-                if (xCanvas.is()) {
-                    ::osl::MutexGuard guard(m_mutex);
-                    // init for reuse:
-                    m_xFactory.set(xFactory);
-                    m_serviceName = serviceName;
-                    return xCanvas;
+    // try to reuse last working implementation for given service name
+    const CacheVector::iterator aEnd(m_aCachedImplementations.end());
+    CacheVector::iterator aMatch;
+    if( (aMatch=std::find_if(m_aCachedImplementations.begin(),
+                             aEnd,
+                             boost::bind(&OUString::equals,
+                                         boost::cref(serviceName),
+                                         boost::bind(
+                                             std::select1st<CachePair>(),
+                                             _1)))) != aEnd )
+    {
+        Reference<XInterface> xCanvas( use( aMatch->second, args, xContext ) );
+        if(xCanvas.is())
+            return xCanvas;
+    }
+
+    // lookup in available service list
+    const AvailVector::const_iterator aAvailEnd(m_aAvailableImplementations.end());
+    AvailVector::const_iterator aAvailMatch;
+    if( (aAvailMatch=std::find_if(m_aAvailableImplementations.begin(),
+                                  aAvailEnd,
+                                  boost::bind(&OUString::equals,
+                                              boost::cref(serviceName),
+                                              boost::bind(
+                                                  std::select1st<AvailPair>(),
+                                                  _1)))) != aAvailEnd )
+    {
+        const Sequence<OUString> aPreferredImpls( aAvailMatch->second );
+        const OUString* pCurrImpl = aPreferredImpls.getConstArray();
+        const OUString* const pEndImpl = pCurrImpl + aPreferredImpls.getLength();
+
+        // force last entry from impl list, if config flag set
+        if( bForceLastEntry )
+            pCurrImpl = pEndImpl-1;
+
+        while( pCurrImpl != pEndImpl )
+        {
+            Reference<XInterface> xCanvas(
+                use( pCurrImpl->trim(), args, xContext ) );
+            if(xCanvas.is())
+            {
+                if( aMatch != aEnd )
+                {
+                    // cache entry exists, replace dysfunctional
+                    // implementation name
+                    aMatch->second = pCurrImpl->trim();
                 }
+                else
+                {
+                    // new service name, add new cache entry
+                    m_aCachedImplementations.push_back(std::make_pair(serviceName,
+                                                                      pCurrImpl->trim()));
+                }
+
+                return xCanvas;
             }
+
+            ++pCurrImpl;
         }
     }
 
@@ -298,38 +381,13 @@ Reference<XInterface> CanvasFactory::createInstanceWithArgumentsAndContext(
     OUString const & preferredOne, Sequence<Any> const & args,
     Reference<XComponentContext> const & xContext ) throw (Exception)
 {
-    // preferred one overrides previously used one:
-    if (preferredOne.getLength() > 0) {
-        Reference<XInterface> xCanvas(
-            lookupAndUse( preferredOne, args, xContext ) );
-        if (xCanvas.is())
-            return xCanvas;
-    }
+    Reference<XInterface> xCanvas(
+        lookupAndUse( preferredOne, args, xContext ) );
+    if(xCanvas.is())
+        return xCanvas;
 
-    {
-        // try to reuse previously installed factory:
-        ::osl::ClearableMutexGuard guard(m_mutex);
-        if (m_xFactory.is()) {
-            Reference<lang::XSingleComponentFactory> xFac(m_xFactory);
-            guard.clear();
-            Reference<XInterface> xCanvas( use( xFac, args, xContext ) );
-            if (xCanvas.is())
-                return xCanvas;
-        }
-    }
-
-    // try configured ones:
-    OUString const * pservices = m_services.getConstArray();
-    sal_Int32 pos = 0, len = m_services.getLength();
-    for ( ; pos < len; ++pos ) {
-        Reference<XInterface> xCanvas(
-            lookupAndUse( pservices[pos], args, xContext ) );
-        if (xCanvas.is())
-            return xCanvas;
-    }
-
-    OSL_ENSURE( 0, "### no canvas available!?" );
-    return Reference<XInterface>();
+    // last resort: try service name directly
+    return use( preferredOne, args, xContext );
 }
 
 // XMultiServiceFactory
