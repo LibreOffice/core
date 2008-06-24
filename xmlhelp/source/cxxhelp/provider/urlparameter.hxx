@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: urlparameter.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -127,12 +127,6 @@ namespace chelp {
         URLParameter( const rtl::OUString& aURL,
                       Databases* pDatabases )
             throw( com::sun::star::ucb::IllegalIdentifierException );
-
-        URLParameter( const rtl::OUString&  aURL,
-                      const rtl::OUString& aDefaultLanguage,
-                      Databases* pDatabases )
-            throw( com::sun::star::ucb::IllegalIdentifierException );
-
 
         bool isPicture()        { return m_aModule.compareToAscii("picture") == 0; }
         bool isActive()         { return m_aActive.getLength() > 0 && m_aActive.compareToAscii( "true" ) == 0; }
