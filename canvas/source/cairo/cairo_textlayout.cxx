@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_textlayout.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
@@ -87,7 +88,7 @@ namespace cairocanvas
                             sal_Int8                            nDirection,
                             sal_Int64                           /*nRandomSeed*/,
                             const CanvasFont::Reference&        rFont,
-                            const DeviceRef&                    rRefDevice ) :
+                            const SurfaceProviderRef&           rRefDevice ) :
         TextLayout_Base( m_aMutex ),
         maText( aText ),
         maLogicalAdvancements(),
@@ -158,7 +159,7 @@ namespace cairocanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        OutputDevice* pOutDev = mpRefDevice->getOutputWindow();
+        OutputDevice* pOutDev = mpRefDevice->getOutputDevice();
         if( !pOutDev )
             return geometry::RealRectangle2D();
 
@@ -346,7 +347,7 @@ namespace cairocanvas
                                        const rendering::ViewState&      viewState,
                                        const rendering::RenderState&    renderState     ) const
     {
-        ENSURE_AND_THROW( outputOffsets!=NULL,
+        ENSURE_OR_THROW( outputOffsets!=NULL,
                           "TextLayout::setupTextOffsets offsets NULL" );
 
         ::basegfx::B2DHomMatrix aMatrix;
