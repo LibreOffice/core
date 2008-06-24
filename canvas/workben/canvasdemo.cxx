@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: canvasdemo.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,14 +33,6 @@
 #include "precompiled_canvas.hxx"
 // This code strongly inspired by Miguel / Federico's Gnome Canvas demo code.
 
-#include <stdio.h>
-#include <unistd.h>
-
-#ifndef  _USE_MATH_DEFINES
-#define  _USE_MATH_DEFINES  // needed by Visual C++ for math constants
-#endif
-#include <math.h>
-
 #include <comphelper/processfactory.hxx>
 #include <comphelper/regpathhelper.hxx>
 #include <cppuhelper/servicefactory.hxx>
@@ -57,6 +49,7 @@
 #include <basegfx/tools/canvastools.hxx>
 
 #include <vcl/window.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/unowrap.hxx>
@@ -74,6 +67,10 @@
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
+
+#include <stdio.h>
+#include <unistd.h>
+
 
 // never import whole leaf namespaces, since this will result in
 // absolutely weird effects during (Koenig) name lookup
@@ -128,12 +125,17 @@ class DemoRenderer
         DemoRenderer( uno::Reference< rendering::XGraphicDevice > xDevice,
                       uno::Reference< rendering::XCanvas > xCanvas,
                       Size aSize ) :
-                mxDevice( xDevice ), mxCanvas( xCanvas ), maSize( aSize )
+            maSize(aSize),
+            maBox(),
+            maViewState(),
+            maRenderState(),
+            maColorBlack( vcl::unotools::colorToStdColorSpaceSequence( Color(COL_BLACK)) ),
+            maColorWhite( vcl::unotools::colorToStdColorSpaceSequence( Color(COL_WHITE)) ),
+            maColorRed( vcl::unotools::colorToStdColorSpaceSequence( Color(COL_RED)) ),
+            mxCanvas(xCanvas),
+            mxDefaultFont(),
+            mxDevice( xDevice )
         {
-            // Color init
-            maColorBlack = ::vcl::unotools::colorToDoubleSequence( xDevice, Color( COL_BLACK ) );
-            maColorWhite = ::vcl::unotools::colorToDoubleSequence( xDevice, Color( COL_WHITE ) );
-            maColorRed = ::vcl::unotools::colorToDoubleSequence( xDevice, Color( COL_RED ) );
             // Geometry init
             geometry::AffineMatrix2D aUnit( 1,0, 0,
                                             0,1, 0 );
@@ -378,7 +380,9 @@ class DemoRenderer
             drawTitle( ::rtl::OString( "Images" ) );
 
             uno::Reference< rendering::XBitmap > xBitmap(mxCanvas, uno::UNO_QUERY);
-            xBitmap->queryBitmapCanvas();
+
+            if( !xBitmap.is() )
+                return;
 
             translate( maBox.Width()*0.1, maBox.Height()*0.2 );
             maRenderState.AffineTransform.m00 *= 4.0/15;
@@ -492,17 +496,18 @@ class DemoRenderer
                 by= gimmerand();
                 double c1x= gimmerand();
                 double c1y= gimmerand();
-                double c2x= c1x;  //gimmerand();
-                double c2y= c1y;  //gimmerand();
+                double c2x= gimmerand();
+                double c2y= gimmerand();
                 maRenderState.DeviceColor = maColorRed;
                 mxCanvas->drawLine(geometry::RealPoint2D(ax, ay), geometry::RealPoint2D(c1x, c1y), maViewState, maRenderState);
+                mxCanvas->drawLine(geometry::RealPoint2D(c1x, c1y), geometry::RealPoint2D(c2x, c2y), maViewState, maRenderState);
                 mxCanvas->drawLine(geometry::RealPoint2D(bx, by), geometry::RealPoint2D(c2x, c2y), maViewState, maRenderState);
                  //draw from a to b
                 geometry::RealBezierSegment2D aBezierSegment(
                     ax, //Px
                     ay, //Py
                     c1x,
-                    c2x,
+                    c1x,
                     c2x,
                     c2y
                     );
@@ -574,12 +579,31 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
 {
     try
     {
-        uno::Reference< rendering::XCanvas > xCanvas( GetCanvas(),
-                                                      uno::UNO_QUERY_THROW );
+        const Size aVDevSize(300,300);
+        VirtualDevice aVDev(*this);
+        aVDev.SetOutputSizePixel(aVDevSize);
+        uno::Reference< rendering::XCanvas > xVDevCanvas( aVDev.GetCanvas(),
+                                                          uno::UNO_QUERY_THROW );
+        uno::Reference< rendering::XGraphicDevice > xVDevDevice( xVDevCanvas->getDevice(),
+                                                                 uno::UNO_QUERY_THROW );
+        DemoRenderer aVDevRenderer( xVDevDevice, xVDevCanvas, aVDevSize);
+        xVDevCanvas->clear();
+        aVDevRenderer.drawGrid();
+        aVDevRenderer.drawRectangles();
+        aVDevRenderer.drawEllipses();
+        aVDevRenderer.drawText();
+        aVDevRenderer.drawLines();
+        aVDevRenderer.drawCurves();
+        aVDevRenderer.drawArcs();
+        aVDevRenderer.drawPolygons();
+
+        uno::Reference< rendering::XCanvas > xCanvas( GetSpriteCanvas(),
+                                                          uno::UNO_QUERY_THROW );
         uno::Reference< rendering::XGraphicDevice > xDevice( xCanvas->getDevice(),
                                                              uno::UNO_QUERY_THROW );
 
         DemoRenderer aRenderer( xDevice, xCanvas, GetSizePixel() );
+        xCanvas->clear();
         aRenderer.drawGrid();
         aRenderer.drawRectangles();
         aRenderer.drawEllipses();
@@ -591,9 +615,22 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
         aRenderer.drawWidgets();
         aRenderer.drawImages();
 
+        // check whether virdev actually contained something
+        uno::Reference< rendering::XBitmap > xBitmap(xVDevCanvas, uno::UNO_QUERY);
+        if( !xBitmap.is() )
+            return;
+
+        aRenderer.maRenderState.AffineTransform.m02 += 100;
+        aRenderer.maRenderState.AffineTransform.m12 += 100;
+        xCanvas->drawBitmap(xBitmap, aRenderer.maViewState, aRenderer.maRenderState);
+
         uno::Reference< rendering::XSpriteCanvas > xSpriteCanvas( xCanvas,
-                                                                  uno::UNO_QUERY_THROW );
-        xSpriteCanvas->updateScreen( sal_True );
+                                                                  uno::UNO_QUERY );
+        if( xSpriteCanvas.is() )
+            xSpriteCanvas->updateScreen( sal_True ); // without
+                                                     // updateScreen(),
+                                                     // nothing is
+                                                     // visible
     }
     catch (const uno::Exception &e)
     {
@@ -658,13 +695,15 @@ void DemoApp::Main()
     uno::Sequence< uno::Any > aArgs( 2 );
     aArgs[ 0 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
     aArgs[ 1 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
-    ::ucb::ContentBroker::initialize( xFactory, aArgs );
+    ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
 
+    InitVCL( xFactory );
     TestWindow pWindow;
     pWindow.Execute();
+    DeInitVCL();
 
     // clean up UCB
-    ::ucb::ContentBroker::deinitialize();
+    ::ucbhelper::ContentBroker::deinitialize();
 }
 
 DemoApp aDemoApp;
