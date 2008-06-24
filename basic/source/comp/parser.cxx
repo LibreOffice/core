@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: parser.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -391,7 +391,7 @@ BOOL SbiParser::Parse()
             Next();
             Push( eCurTok );
             aGen.Statement();
-            Symbol();
+                Symbol();
         }
     }
     else
@@ -476,9 +476,13 @@ SbiExprNode* SbiParser::GetWithVar()
 
 void SbiParser::Symbol()
 {
-    SbiExpression aVar( this, SbSYMBOL );
+    SbiExprMode eMode = bVBASupportOn ? EXPRMODE_STANDALONE : EXPRMODE_STANDARD;
+    SbiExpression aVar( this, SbSYMBOL, eMode );
 
     bool bEQ = ( Peek() == EQ );
+    if( !bEQ && bVBASupportOn && aVar.IsBracket() )
+        Error( SbERR_EXPECTED, "=" );
+
     RecursiveMode eRecMode = ( bEQ ? PREVENT_CALL : FORCE_CALL );
     bool bSpecialMidHandling = false;
     SbiSymDef* pDef = aVar.GetRealVar();
