@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_vcltools.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,11 +28,15 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_canvas.hxx"
+
 #include <vcl/canvastools.hxx>
 
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
+#include <tools/diagnose_ex.h>
 
 #include "dx_impltools.hxx"
 #include <basegfx/numeric/ftools.hxx>
@@ -41,8 +45,7 @@
 #include <canvas/verbosetrace.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-
+#include <com/sun/star/rendering/XIntegerBitmap.hpp>
 
 #include <boost/scoped_array.hpp>
 
@@ -81,8 +84,8 @@ namespace dxcanvas
             }
 
             /// Draw DI bits to given Graphics
-            bool drawDIBits( const ::boost::shared_ptr< SurfaceGraphics >&  rGraphics,
-                             const void*                                    hDIB )
+            bool drawDIBits( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
+                             const void*                                     hDIB )
             {
                 bool            bRet( false );
                 BitmapSharedPtr pBitmap;
@@ -111,7 +114,7 @@ namespace dxcanvas
                 Reference to bitmap. Might get modified, in such a way
                 that it will hold a DIB after a successful function call.
              */
-            bool drawVCLBitmap( const ::boost::shared_ptr< SurfaceGraphics >&   rGraphics,
+            bool drawVCLBitmap( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
                                 ::Bitmap&                                       rBmp )
             {
                 BitmapSystemData aBmpSysData;
@@ -161,7 +164,7 @@ namespace dxcanvas
                 // make the local bitmap copy unique, effectively
                 // duplicating the memory used)
 
-                ENSURE_AND_THROW( rBmpEx.IsTransparent(),
+                ENSURE_OR_THROW( rBmpEx.IsTransparent(),
                                   "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
                                   "BmpEx not transparent" );
 
@@ -183,7 +186,7 @@ namespace dxcanvas
                 const sal_Int32 nWidth( aBmpSize.Width() );
                 const sal_Int32 nHeight( aBmpSize.Height() );
 
-                ENSURE_AND_THROW( pReadAccess.get() != NULL,
+                ENSURE_OR_THROW( pReadAccess.get() != NULL,
                                   "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
                                   "Unable to acquire read acces to bitmap" );
 
@@ -210,11 +213,11 @@ namespace dxcanvas
                     // WinSalBitmap::AcquireBuffer() sets up the
                     // buffer
 
-                    ENSURE_AND_THROW( pAlphaReadAccess.get() != NULL,
+                    ENSURE_OR_THROW( pAlphaReadAccess.get() != NULL,
                                       "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
                                       "Unable to acquire read acces to alpha" );
 
-                    ENSURE_AND_THROW( pAlphaReadAccess->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL ||
+                    ENSURE_OR_THROW( pAlphaReadAccess->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL ||
                                       pAlphaReadAccess->GetScanlineFormat() == BMP_FORMAT_8BIT_TC_MASK,
                                       "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
                                       "Unsupported alpha scanline format" );
@@ -323,7 +326,7 @@ namespace dxcanvas
                             case BMP_FORMAT_32BIT_TC_RGBA:
                                 // FALLTHROUGH intended
                             default:
-                                ENSURE_AND_THROW( false,
+                                ENSURE_OR_THROW( false,
                                                   "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
                                                   "Unexpected scanline format - has "
                                                   "WinSalBitmap::AcquireBuffer() changed?" );
@@ -353,11 +356,11 @@ namespace dxcanvas
                     // WinSalBitmap::AcquireBuffer() sets up the
                     // buffer
 
-                    ENSURE_AND_THROW( pMaskReadAccess.get() != NULL,
+                    ENSURE_OR_THROW( pMaskReadAccess.get() != NULL,
                                       "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
                                       "Unable to acquire read acces to mask" );
 
-                    ENSURE_AND_THROW( pMaskReadAccess->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL,
+                    ENSURE_OR_THROW( pMaskReadAccess->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL,
                                       "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
                                       "Unsupported mask scanline format" );
 
@@ -476,7 +479,7 @@ namespace dxcanvas
                             case BMP_FORMAT_32BIT_TC_RGBA:
                                 // FALLTHROUGH intended
                             default:
-                                ENSURE_AND_THROW( false,
+                                ENSURE_OR_THROW( false,
                                                   "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
                                                   "Unexpected scanline format - has "
                                                   "WinSalBitmap::AcquireBuffer() changed?" );
@@ -487,8 +490,8 @@ namespace dxcanvas
                 return aBmpData;
             }
 
-            bool drawVCLBitmapEx( const ::boost::shared_ptr< SurfaceGraphics >& rGraphics,
-                                  const ::BitmapEx&                             rBmpEx )
+            bool drawVCLBitmapEx( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
+                                  const ::BitmapEx&                               rBmpEx )
             {
                 if( !rBmpEx.IsTransparent() )
                 {
@@ -501,48 +504,23 @@ namespace dxcanvas
                                          bitmapFromVCLBitmapEx( rBmpEx ) );
                 }
             }
-
-            bool bitmapExFromUnoTunnel( BitmapEx&                                   o_rBmpEx,
-                                        const uno::Reference< lang::XUnoTunnel >&   xTunnel )
-            {
-                if( !xTunnel.is() )
-                    return false;
-
-                sal_Int64 nPtr = xTunnel->getSomething( vcl::unotools::getTunnelIdentifier( vcl::unotools::Id_BitmapEx ) );
-                if( !nPtr )
-                    return false;
-
-                o_rBmpEx = *(BitmapEx*)nPtr;
-
-                return true;
-            }
         }
 
-        bool drawVCLBitmapFromUnoTunnel( const ::boost::shared_ptr< SurfaceGraphics >&  rGraphics,
-                                         const uno::Reference< lang::XUnoTunnel >&      xTunnel )
+        bool drawVCLBitmapFromXBitmap( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
+                                       const uno::Reference< rendering::XBitmap >&     xBitmap )
         {
-            BitmapEx aBmpEx;
+            // TODO(F2): add support for floating point bitmap formats
+            uno::Reference< rendering::XIntegerReadOnlyBitmap > xIntBmp(
+                xBitmap, uno::UNO_QUERY );
 
-            if( !bitmapExFromUnoTunnel( aBmpEx,
-                                        xTunnel ) )
+            if( !xIntBmp.is() )
+                return false;
+
+            ::BitmapEx aBmpEx = ::vcl::unotools::bitmapExFromXBitmap( xIntBmp );
+            if( !aBmpEx )
                 return false;
 
             return drawVCLBitmapEx( rGraphics, aBmpEx );
-        }
-
-        util::TriState isAlphaVCLBitmapFromUnoTunnel( const uno::Reference< lang::XUnoTunnel >& xTunnel )
-        {
-            if( !xTunnel.is() )
-                return util::TriState_INDETERMINATE;
-
-            sal_Int64 nPtr = xTunnel->getSomething( vcl::unotools::getTunnelIdentifier( vcl::unotools::Id_BitmapEx ) );
-            if( !nPtr )
-                return util::TriState_INDETERMINATE;
-
-            BitmapEx& rBmpEx( *(BitmapEx*)nPtr );
-
-            return rBmpEx.IsTransparent() ?
-                util::TriState_YES : util::TriState_NO;
         }
     }
 }
