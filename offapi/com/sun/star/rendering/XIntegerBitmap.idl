@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XIntegerBitmap.idl,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,58 +45,23 @@
 #ifndef __com_sun_star_rendering_IntegerBitmapLayout_idl__
 #include <com/sun/star/rendering/IntegerBitmapLayout.idl>
 #endif
-#ifndef __com_sun_star_rendering_XBitmap_idl__
-#include <com/sun/star/rendering/XBitmap.idl>
-#endif
-#ifndef __com_sun_star_rendering_VolatileContentDestroyedException_idl__
-#include <com/sun/star/rendering/VolatileContentDestroyedException.idl>
+#ifndef __com_sun_star_rendering_XIntegerReadOnlyBitmap_idl__
+#include <com/sun/star/rendering/XIntegerReadOnlyBitmap.idl>
 #endif
 
 
 module com { module sun { module star { module rendering {
 
-interface XBitmapPalette;
-
 /** This is a specialized interface for bitmaps having integer color
-    channels.
+    channels.<p>
+
+    @since OOo 2.0.0
  */
-interface XIntegerBitmap : XBitmap
+interface XIntegerBitmap : XIntegerReadOnlyBitmap
 {
-    /** Query the raw data of this bitmap.<p>
-
-        Query the raw data of this bitmap, in the format as defined by
-        getMemoryLayout(). With the given rectangle, a subset of the
-        whole bitmap can be queried. If the internal data format's
-        pixel are not integer multiples of bytes (i.e. if one pixel
-        occupies less than a byte), the leftover content of the bytes
-        at the right of each scanline is filled with zero. When
-        querying subsets of the bitmap, the same scanline padding
-        takes place as when the whole bitmap is requested.<p>
-
-        Note that the bitmap memory layout might change for volatile
-        bitmaps.<p>
-
-        @param bitmapLayout
-        The memory layout the returned data is in.
-
-        @param rect
-        A rectangle, within the bounds of the bitmap, to retrieve the
-        contens from.
-
-        @throws VolatileContentDestroyedException
-        if the bitmap is volatile, and the content has been destroyed by the system.
-
-        @throws com::sun::star::lang::IndexOutOfBoundsException
-        if parts of the given rectangle are outside the permissible
-        bitmap area.
-     */
-    sequence<byte>      getData( [out] IntegerBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerRectangle2D rect )
-        raises (com::sun::star::lang::IndexOutOfBoundsException,
-                VolatileContentDestroyedException);
-
     //-------------------------------------------------------------------------
 
-    /** Set raw data of a bitmap.
+    /** Set raw data of a bitmap.<p>
 
         Set raw data of a bitmap, in the format as defined by
         getMemoryLayout(). With the given rectangle, a subset of the
@@ -126,13 +91,13 @@ interface XIntegerBitmap : XBitmap
         Destination rectangle, within the bounds of the bitmap, to set
         the data in.
 
-        @throws com::sun::star::lang::IndexOutOfBoundsException
+        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
         if parts of the given rectangle are outside the permissible
         bitmap area.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if the given memory layout does not match this bitmap's
-        layout, or if the given data sequence has too few or too much
+        layout, or if the given data sequence has too few or too many
         elements.
      */
     void                setData( [in] sequence<byte> data, [in] IntegerBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerRectangle2D rect )
@@ -142,7 +107,7 @@ interface XIntegerBitmap : XBitmap
     //-------------------------------------------------------------------------
 
     /** Set a single pixel of the bitmap with the given color
-        value.
+        value.<p>
 
         If the internal data format's pixel are not integer multiples
         of bytes (i.e. if one pixel occupies less than a byte), the
@@ -167,65 +132,17 @@ interface XIntegerBitmap : XBitmap
         @param pos
         Pixel position with the bounds of the bitmap to set.
 
-        @throws com::sun::star::lang::IndexOutOfBoundsException
+        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
         if the given point is outside the permissible bitmap area.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if the given memory layout does not match this bitmap's
-        layout, or if the given data sequence has too few or too much
+        layout, or if the given data sequence has too few or too many
         elements.
      */
     void                setPixel( [in] sequence<byte> color, [in] IntegerBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerPoint2D pos )
         raises (com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::lang::IndexOutOfBoundsException);
-
-    //-------------------------------------------------------------------------
-
-    /** Get a single pixel of the bitmap, returning its color
-        value.
-
-        If the internal data format's pixel are not integer multiples
-        of bytes (i.e. if one pixel occupies less than a byte), the
-        color value is returned in the least significant bits of the
-        single byte returned as the color.
-
-        Note that the bitmap memory layout might change for volatile
-        bitmaps.<p>
-
-        @param bitmapLayout
-        The memory layout the returned data is in.
-
-        @param pos
-        A position, within the bounds of the bitmap, to retrieve the
-        color from.
-
-        @throws VolatileContentDestroyedException
-        if the bitmap is volatile, and the content has been destroyed by the system.
-
-        @throws com::sun::star::lang::IndexOutOfBoundsException
-        if the given position is outside the permissible bitmap area.
-     */
-    sequence<byte>      getPixel( [out] IntegerBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerPoint2D pos )
-        raises (com::sun::star::lang::IndexOutOfBoundsException,
-                VolatileContentDestroyedException);
-
-    //-------------------------------------------------------------------------
-
-    /** Query the associated palette for this bitmap.
-
-        Returns empty interface or interface with empty palette for
-        non-paletted bitmaps.
-     */
-    XBitmapPalette      getPalette();
-
-    //-------------------------------------------------------------------------
-
-    /** Query the memory layout for this bitmap.<p>
-
-        Please note that for volatile bitmaps, the memory layout might
-        change between subsequent calls.
-     */
-    IntegerBitmapLayout getMemoryLayout();
 };
 
 }; }; }; };
