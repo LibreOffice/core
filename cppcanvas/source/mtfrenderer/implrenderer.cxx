@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: implrenderer.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_cppcanvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
 #include <osl/mutex.hxx>
@@ -126,8 +127,9 @@ namespace
             aColor.SetTransparency(0);
             //aColor.SetTransparency(128);
 
-            rColorSequence = ::vcl::unotools::colorToDoubleSequence( rCanvas->getUNOCanvas()->getDevice(),
-                                                                     aColor );
+            rColorSequence = ::vcl::unotools::colorToDoubleSequence(
+                aColor,
+                rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
         }
     }
 
@@ -501,7 +503,7 @@ namespace cppcanvas
                                         const char*  pCommentString,
                                         sal_Int32&   io_rCurrActionIndex ) const
         {
-            ENSURE_AND_THROW( pCommentString,
+            ENSURE_OR_THROW( pCommentString,
                               "ImplRenderer::skipContent(): NULL string given" );
 
             MetaAction* pCurrAct;
@@ -527,7 +529,7 @@ namespace cppcanvas
                                               const char*  pCommentString,
                                               USHORT       nType ) const
         {
-            ENSURE_AND_THROW( pCommentString,
+            ENSURE_OR_THROW( pCommentString,
                               "ImplRenderer::isActionContained(): NULL string given" );
 
             bool bRet( false );
@@ -623,12 +625,24 @@ namespace cppcanvas
                     aVCLEndColor.SetGreen( (UINT8)(aVCLEndColor.GetGreen() * nEndIntensity / 100) );
                     aVCLEndColor.SetBlue( (UINT8)(aVCLEndColor.GetBlue() * nEndIntensity / 100) );
 
+                    uno::Reference<rendering::XColorSpace> xColorSpace(
+                        rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
                     const uno::Sequence< double > aStartColor(
-                        ::vcl::unotools::colorToDoubleSequence( rParms.mrCanvas->getUNOCanvas()->getDevice(),
-                                                                aVCLStartColor ) );
+                        ::vcl::unotools::colorToDoubleSequence( aVCLStartColor,
+                                                                xColorSpace ));
                     const uno::Sequence< double > aEndColor(
-                        ::vcl::unotools::colorToDoubleSequence( rParms.mrCanvas->getUNOCanvas()->getDevice(),
-                                                                aVCLEndColor ) );
+                        ::vcl::unotools::colorToDoubleSequence( aVCLEndColor,
+                                                                xColorSpace ));
+
+                    uno::Sequence< uno::Sequence < double > > aColors(2);
+                    uno::Sequence< double > aStops(2);
+
+                    aStops[0] = 0.0;
+                    aStops[1] = 1.0;
+
+                    aColors[0] = aStartColor;
+                    aColors[1] = aEndColor;
+
 
                     // Setup texture transformation
                     // ----------------------------
@@ -679,13 +693,13 @@ namespace cppcanvas
                             {
                                 case GRADIENT_LINEAR:
                                     nOffsetX = rGradient.GetBorder() / 100.0;
-                                    aTexture.Gradient = xFactory->createLinearHorizontalGradient( aStartColor,
-                                                                                                  aEndColor );
+                                    aTexture.Gradient = xFactory->createLinearHorizontalGradient( aColors,
+                                                                                                  aStops );
                                     break;
 
                                 case GRADIENT_AXIAL:
-                                    aTexture.Gradient = xFactory->createAxialHorizontalGradient( aStartColor,
-                                                                                                 aEndColor );
+                                    aTexture.Gradient = xFactory->createAxialHorizontalGradient( aColors,
+                                                                                                 aStops );
                                     break;
 
                                 default: // other cases can't happen
@@ -786,8 +800,8 @@ namespace cppcanvas
                                     aTextureTransformation.scale( nScale, nScale );
                                     aTextureTransformation.translate( 0.5, 0.5 );
 
-                                    aTexture.Gradient = xFactory->createEllipticalGradient( aEndColor,
-                                                                                            aStartColor,
+                                    aTexture.Gradient = xFactory->createEllipticalGradient( aColors,
+                                                                                            aStops,
                                                                                             geometry::RealRectangle2D(0.0,0.0,
                                                                                                                     1.0,1.0) );
                                 }
@@ -802,8 +816,8 @@ namespace cppcanvas
                                     aTextureTransformation.translate( 0.5, 0.5 );
 
                                     aTexture.Gradient = xFactory->createEllipticalGradient(
-                                        aEndColor,
-                                        aStartColor,
+                                        aColors,
+                                        aStops,
                                         ::basegfx::unotools::rectangle2DFromB2DRectangle(
                                             aBounds ));
                                 }
@@ -822,16 +836,16 @@ namespace cppcanvas
                                         nScaleX = nScaleY;
                                     }
 
-                                    aTexture.Gradient = xFactory->createRectangularGradient( aEndColor,
-                                                                                             aStartColor,
+                                    aTexture.Gradient = xFactory->createRectangularGradient( aColors,
+                                                                                             aStops,
                                                                                              geometry::RealRectangle2D(0.0,0.0,
                                                                                                                        1.0,1.0) );
                                     break;
 
                                 case GRADIENT_RECT:
                                     aTexture.Gradient = xFactory->createRectangularGradient(
-                                        aEndColor,
-                                        aStartColor,
+                                        aColors,
+                                        aStops,
                                         ::basegfx::unotools::rectangle2DFromB2DRectangle(
                                             aBounds ) );
                                     break;
@@ -855,7 +869,7 @@ namespace cppcanvas
                         break;
 
                         default:
-                            ENSURE_AND_THROW( false,
+                            ENSURE_OR_THROW( false,
                                               "ImplRenderer::createGradientAction(): Unexpected gradient type" );
                             break;
                     }
@@ -1016,7 +1030,7 @@ namespace cppcanvas
                                              const ActionFactoryParameters& rParms,
                                              bool                           bSubsettableActions )
         {
-            ENSURE_AND_THROW( nIndex >= 0 && nLength <= rString.Len() + nIndex,
+            ENSURE_OR_THROW( nIndex >= 0 && nLength <= rString.Len() + nIndex,
                               "ImplRenderer::createTextWithEffectsAction(): Invalid text index" );
 
             if( !nLength )
@@ -1032,6 +1046,9 @@ namespace cppcanvas
             ::Size  aShadowOffset;
             ::Size  aReliefOffset;
 
+            uno::Reference<rendering::XColorSpace> xColorSpace(
+                rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
+
             if( rState.isTextEffectShadowSet )
             {
                 // calculate shadow offset (similar to outdev3.cxx)
@@ -1044,8 +1061,8 @@ namespace cppcanvas
                 aShadowOffset.setHeight( nShadowOffset );
 
                 // determine shadow color (from outdev3.cxx)
-                ::Color aTextColor = ::vcl::unotools::sequenceToColor(
-                    rParms.mrCanvas->getUNOCanvas()->getDevice(), rState.textColor );
+                ::Color aTextColor = ::vcl::unotools::doubleSequenceToColor(
+                    rState.textColor, xColorSpace );
                 bool bIsDark = (aTextColor.GetColor() == COL_BLACK)
                     || (aTextColor.GetLuminance() < 8);
 
@@ -1068,9 +1085,8 @@ namespace cppcanvas
                 aReliefOffset.setHeight( nReliefOffset );
 
                 // determine relief color (from outdev3.cxx)
-                ::Color aTextColor = ::vcl::unotools::sequenceToColor(
-                    rParms.mrCanvas->getUNOCanvas()->getDevice(),
-                    rState.textColor );
+                ::Color aTextColor = ::vcl::unotools::doubleSequenceToColor(
+                    rState.textColor, xColorSpace );
 
                 aReliefColor = ::Color( COL_LIGHTGRAY );
 
@@ -1081,8 +1097,8 @@ namespace cppcanvas
                 {
                     aTextColor = ::Color( COL_WHITE );
                     getState( rParms.mrStates ).textColor =
-                        ::vcl::unotools::colorToDoubleSequence( rParms.mrCanvas->getUNOCanvas()->getDevice(),
-                                                                aTextColor );
+                        ::vcl::unotools::colorToDoubleSequence(
+                            aTextColor, xColorSpace );
                 }
 
                 if( aTextColor.GetColor() == COL_WHITE )
@@ -1108,12 +1124,94 @@ namespace cppcanvas
                     rParms.mrParms,
                     bSubsettableActions ) );
 
+            ActionSharedPtr pStrikeoutTextAction;
+
+            if ( rState.textStrikeoutStyle == STRIKEOUT_X || rState.textStrikeoutStyle == STRIKEOUT_SLASH )
+            {
+                long nWidth = rParms.mrVDev.GetTextWidth( rString,nIndex,nLength );
+
+                xub_Unicode pChars[5];
+                if ( rState.textStrikeoutStyle == STRIKEOUT_X )
+                    pChars[0] = 'X';
+                else
+                    pChars[0] = '/';
+                pChars[3]=pChars[2]=pChars[1]=pChars[0];
+
+                long nStrikeoutWidth = nWidth;
+                String aStrikeoutTest( pChars, 4 );
+
+                if( aStrikeoutTest.Len() )
+                {
+                    nStrikeoutWidth = ( rParms.mrVDev.GetTextWidth( aStrikeoutTest ) + 2 ) / 4;
+                    aStrikeoutTest.Erase();
+
+                    if( nStrikeoutWidth <= 0 )
+                        nStrikeoutWidth = 1;
+                }
+
+                long nMaxWidth = nStrikeoutWidth/2;
+                if ( nMaxWidth < 2 )
+                    nMaxWidth = 2;
+                nMaxWidth += nWidth + 1;
+
+                long nFullStrikeoutWidth = 0;
+                String aStrikeoutText( pChars, 0 );
+                while( (nFullStrikeoutWidth+=nStrikeoutWidth ) < nMaxWidth+1 )
+                    aStrikeoutText += pChars[0];
+
+
+                sal_Int32 nStartPos = 0;
+                xub_StrLen nLen = aStrikeoutText.Len();
+
+                if( nLen )
+                {
+                    long nInterval = ( nWidth - nStrikeoutWidth * nLen ) / nLen;
+                    nStrikeoutWidth += nInterval;
+                    sal_Int32* pStrikeoutCharWidths = new sal_Int32[nLen];
+
+                    for ( int i = 0;i<nLen; i++)
+                    {
+                        pStrikeoutCharWidths[i] = nStrikeoutWidth;
+                    }
+
+                    for ( int i = 1;i< nLen; i++ )
+                    {
+                        pStrikeoutCharWidths[ i ] += pStrikeoutCharWidths[ i-1 ];
+                    }
+
+                    pStrikeoutTextAction =
+                        TextActionFactory::createTextAction(
+                            rStartPoint,
+                            aReliefOffset,
+                            aReliefColor,
+                            aShadowOffset,
+                            aShadowColor,
+                            aStrikeoutText,
+                            nStartPos,
+                            aStrikeoutText.Len(),
+                            pStrikeoutCharWidths,
+                            rParms.mrVDev,
+                            rParms.mrCanvas,
+                            rState,
+                            rParms.mrParms,
+                            bSubsettableActions ) ;
+                }
+            }
+
             if( pTextAction )
             {
                 maActions.push_back(
                     MtfAction(
                         pTextAction,
                         rParms.mrCurrActionIndex ) );
+
+                if ( pStrikeoutTextAction )
+                {
+                    maActions.push_back(
+                        MtfAction(
+                        pStrikeoutTextAction,
+                        rParms.mrCurrActionIndex ) );
+                }
 
                 rParms.mrCurrActionIndex += pTextAction->getActionCount()-1;
             }
@@ -1129,7 +1227,7 @@ namespace cppcanvas
             const bool bEmptyClipRect( rState.clipRect.IsEmpty() );
             const bool bEmptyClipPoly( rState.clip.count() == 0 );
 
-            ENSURE_AND_THROW( bEmptyClipPoly || bEmptyClipRect,
+            ENSURE_OR_THROW( bEmptyClipPoly || bEmptyClipRect,
                               "ImplRenderer::updateClipping(): Clip rect and polygon are both set!" );
 
             if( !bIntersect ||
@@ -1212,7 +1310,7 @@ namespace cppcanvas
             const bool bEmptyClipRect( rState.clipRect.IsEmpty() );
             const bool bEmptyClipPoly( rState.clip.count() == 0 );
 
-            ENSURE_AND_THROW( bEmptyClipPoly || bEmptyClipRect,
+            ENSURE_OR_THROW( bEmptyClipPoly || bEmptyClipRect,
                               "ImplRenderer::updateClipping(): Clip rect and polygon are both set!" );
 
             if( !bIntersect ||
@@ -1502,8 +1600,9 @@ namespace cppcanvas
                             aColor.SetTransparency(0);
 
                             getState( rStates ).textColor =
-                                ::vcl::unotools::colorToDoubleSequence( rCanvas->getUNOCanvas()->getDevice(),
-                                                                        aColor );
+                                ::vcl::unotools::colorToDoubleSequence(
+                                    aColor,
+                                    rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
                         }
                     }
                     break;
@@ -2783,8 +2882,8 @@ namespace cppcanvas
                     aSubset.mnSubsetEnd   = ::std::min( aRangeBegin->mpAction->getActionCount(),
                                                         nEndIndex - aRangeBegin->mnOrigIndex );
 
-                    ENSURE_AND_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
-                                       "ImplRenderer::forSubsetRange(): Invalid indices" );
+                    ENSURE_OR_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
+                                      "ImplRenderer::forSubsetRange(): Invalid indices" );
 
                     rFunctor( *aRangeBegin, aSubset );
                 }
@@ -2799,8 +2898,8 @@ namespace cppcanvas
                                                         nStartIndex - aRangeBegin->mnOrigIndex );
                     aSubset.mnSubsetEnd   = aRangeBegin->mpAction->getActionCount();
 
-                    ENSURE_AND_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
-                                       "ImplRenderer::forSubsetRange(): Invalid indices" );
+                    ENSURE_OR_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
+                                      "ImplRenderer::forSubsetRange(): Invalid indices" );
 
                     rFunctor( *aRangeBegin, aSubset );
 
@@ -2828,8 +2927,8 @@ namespace cppcanvas
                     aSubset.mnSubsetBegin = 0;
                     aSubset.mnSubsetEnd   = nEndIndex - aRangeEnd->mnOrigIndex;
 
-                    ENSURE_AND_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
-                                       "ImplRenderer::forSubsetRange(): Invalid indices" );
+                    ENSURE_OR_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
+                                      "ImplRenderer::forSubsetRange(): Invalid indices" );
 
                     rFunctor( *aRangeEnd, aSubset );
                 }
@@ -2843,11 +2942,11 @@ namespace cppcanvas
                                              ActionVector::const_iterator&  o_rRangeBegin,
                                              ActionVector::const_iterator&  o_rRangeEnd ) const
         {
-            ENSURE_AND_RETURN( io_rStartIndex<=io_rEndIndex,
-                               "ImplRenderer::getSubsetIndices(): invalid action range" );
+            ENSURE_OR_RETURN( io_rStartIndex<=io_rEndIndex,
+                              "ImplRenderer::getSubsetIndices(): invalid action range" );
 
-            ENSURE_AND_RETURN( !maActions.empty(),
-                               "ImplRenderer::getSubsetIndices(): no actions to render" );
+            ENSURE_OR_RETURN( !maActions.empty(),
+                              "ImplRenderer::getSubsetIndices(): no actions to render" );
 
             const sal_Int32 nMinActionIndex( maActions.front().mnOrigIndex );
             const sal_Int32 nMaxActionIndex( maActions.back().mnOrigIndex +
