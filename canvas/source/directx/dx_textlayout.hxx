@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_textlayout.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +43,7 @@
 #include <boost/utility.hpp>
 
 #include "dx_canvasfont.hxx"
-#include "dx_surfacegraphics.hxx"
+#include "dx_ibitmap.hxx"
 #include "dx_winstuff.hxx"
 #include "dx_gdiplususer.hxx"
 
@@ -93,12 +93,13 @@ namespace dxcanvas
         virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()  throw( ::com::sun::star::uno::RuntimeException );
 
-        bool draw( const DXBitmapSharedPtr&                              rBitmap,
+        bool draw( const GraphicsSharedPtr&                              rGraphics,
                    const ::com::sun::star::rendering::ViewState&         rViewState,
                    const ::com::sun::star::rendering::RenderState&       rRenderState,
                    const ::basegfx::B2ISize&                             rOutputOffset,
                    const ::com::sun::star::uno::Reference<
-                         ::com::sun::star::rendering::XGraphicDevice >&  xGraphicDevice ) const;
+                   ::com::sun::star::rendering::XGraphicDevice >&        xGraphicDevice,
+                   bool                                                  bAlphaSurface ) const;
 
     protected:
         ~TextLayout(); // we're a ref-counted UNO class. _We_ destroy ourselves.
