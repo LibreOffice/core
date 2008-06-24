@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: precompiled_reportdesign.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,5 +31,18 @@
 // MARKER(update_precomp.py): Generated on 2006-09-01 17:49:38.561560
 
 #ifdef PRECOMPILED_HEADERS
+#include "com/sun/star/sdb/CommandType.hpp"
+//#include "com/sun/star/chart2/data/DatabaseDataProvider.hpp"
+#include "com/sun/star/chart2/data/XDataReceiver.hpp"
+#include "com/sun/star/reflection/XProxyFactory.hpp"
+#include "com/sun/star/sdb/CommandType.hpp"
+#include "comphelper/sequence.hxx"
+#include "comphelper/sequenceashashmap.hxx"
+#include "comphelper/documentconstants.hxx"
+#include "xmloff/attrlist.hxx"
+#include "xmloff/xmltoken.hxx"
+#include "xmloff/xmlement.hxx"
+#include "xmloff/xmluconv.hxx"
+#include "xmloff/xmltkmap.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #endif
-
