@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: animationpathmotionnode.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +50,7 @@ void AnimationPathMotionNode::dispose()
 AnimationActivitySharedPtr AnimationPathMotionNode::createActivity() const
 {
     rtl::OUString aString;
-    ENSURE_AND_THROW( (mxPathMotionNode->getPath() >>= aString),
+    ENSURE_OR_THROW( (mxPathMotionNode->getPath() >>= aString),
                       "no string-based SVG:d path found" );
 
     ActivitiesFactory::CommonParameters const aParms( fillCommonParameters() );
