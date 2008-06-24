@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: property.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +53,7 @@
 #include <com/sun/star/uno/genfunc.h>
 
 #include <algorithm>
+#include <boost/bind.hpp>
 
 //.........................................................................
 namespace comphelper
@@ -138,6 +139,25 @@ sal_Bool hasProperty(const rtl::OUString& _rName, const Reference<XPropertySet>&
         return _rxSet->getPropertySetInfo()->hasPropertyByName(_rName);
     }
     return sal_False;
+}
+
+//------------------------------------------------------------------
+bool findProperty(Property&              o_rProp,
+                  Sequence<Property>&    i_seqProps,
+                  const ::rtl::OUString& i_rPropName)
+{
+    const Property* pAry(i_seqProps.getConstArray());
+    const sal_Int32 nLen(i_seqProps.getLength());
+    const Property* pRes(
+        std::find_if(pAry,pAry+nLen,
+                     boost::bind(PropertyStringEqualFunctor(),
+                                 _1,
+                                 boost::cref(i_rPropName))));
+    if( pRes == pAry+nLen )
+        return false;
+
+    o_rProp = *pRes;
+    return true;
 }
 
 //------------------------------------------------------------------
