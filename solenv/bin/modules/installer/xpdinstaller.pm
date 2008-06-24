@@ -8,7 +8,7 @@
 #
 # $RCSfile: xpdinstaller.pm,v $
 #
-# $Revision: 1.16 $
+# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -371,6 +371,24 @@ sub get_isjavamodule_value
     my $styles = "";
     if ( $module->{'Styles'} ) { $styles = $module->{'Styles'}; }
     if ( $styles =~ /\bJAVAMODULE\b/ ) { $value = "true"; }
+
+    return $value;
+}
+
+###################################################
+# Asking module, if installation can fail
+# scp style: INSTALLCANFAIL
+###################################################
+
+sub get_installcanfail_value
+{
+    my ( $module ) = @_;
+
+    my $value = "false";
+
+    my $styles = "";
+    if ( $module->{'Styles'} ) { $styles = $module->{'Styles'}; }
+    if ( $styles =~ /\bINSTALLCANFAIL\b/ ) { $value = "true"; }
 
     return $value;
 }
@@ -1073,6 +1091,10 @@ sub get_file_content
 
     $value = get_isjavamodule_value($module);
     $line = get_tag_line($doubleindent, "isjavapackage", $value);
+    push(@xpdfile, $line);
+
+    $value = get_installcanfail_value($module);
+    $line = get_tag_line($doubleindent, "installcanfail", $value);
     push(@xpdfile, $line);
 
     # iterating over all languages to get names and descriptions
