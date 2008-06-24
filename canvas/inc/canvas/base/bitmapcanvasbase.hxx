@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bitmapcanvasbase.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,7 @@
 #define INCLUDED_CANVAS_BITMAPCANVASBASE_HXX
 
 #include <canvas/base/canvasbase.hxx>
-
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 
 namespace canvas
 {
@@ -121,11 +121,6 @@ namespace canvas
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             return BaseType::maCanvasHelper.hasAlpha();
-        }
-
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > SAL_CALL queryBitmapCanvas(  ) throw (::com::sun::star::uno::RuntimeException)
-        {
-            return this;
         }
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > SAL_CALL getScaledBitmap( const ::com::sun::star::geometry::RealSize2D& newSize,
