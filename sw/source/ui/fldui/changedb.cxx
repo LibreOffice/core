@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: changedb.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +76,6 @@
 
 #include <unomid.h>
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -159,8 +158,8 @@ void SwChangeDBDlg::FillDBPopup()
 
     SvStringsDtor aAllDBNames(5, 5);
 
-    Sequence<OUString> aDBNames = xDBContext->getElementNames();
-    const OUString* pDBNames = aDBNames.getConstArray();
+    Sequence< ::rtl::OUString > aDBNames = xDBContext->getElementNames();
+    const ::rtl::OUString* pDBNames = aDBNames.getConstArray();
     sal_Int32 nDBCount = aDBNames.getLength();
     for(sal_Int32 i = 0; i < nDBCount; i++)
     {
@@ -364,5 +363,4 @@ IMPL_LINK( SwChangeDBDlg, AddDBHdl, PushButton *, EMPTYARG )
         aAvailDBTLB.AddDataSource(sNewDB);
     return 0;
 }
-
 
