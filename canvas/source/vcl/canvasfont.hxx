@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: canvasfont.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@
 #include <com/sun/star/geometry/Matrix2D.hpp>
 #include <com/sun/star/rendering/FontRequest.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
+#include <com/sun/star/rendering/XGraphicDevice.hpp>
 
 #include <vcl/font.hxx>
 
@@ -70,7 +71,8 @@ namespace vclcanvas
         CanvasFont( const ::com::sun::star::rendering::FontRequest&                                     fontRequest,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&    extraFontProperties,
                     const ::com::sun::star::geometry::Matrix2D&                                         rFontMatrix,
-                    const DeviceRef&                                                                    rDevice );
+                    ::com::sun::star::rendering::XGraphicDevice&                                        rDevice,
+                    const OutDevProviderSharedPtr&                                                      rOutDevProvider );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing();
@@ -90,9 +92,10 @@ namespace vclcanvas
         ::Font getVCLFont() const;
 
     private:
-        ::canvas::vcltools::VCLObject<Font>         maFont;
-        ::com::sun::star::rendering::FontRequest    maFontRequest;
-        DeviceRef                                   mpRefDevice;
+        ::canvas::vcltools::VCLObject<Font>                                            maFont;
+        ::com::sun::star::rendering::FontRequest                                       maFontRequest;
+        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice> mpRefDevice;
+        OutDevProviderSharedPtr                                                        mpOutDevProvider;
     };
 
 }
