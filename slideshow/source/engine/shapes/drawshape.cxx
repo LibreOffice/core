@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawshape.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
 #include <rtl/logfile.hxx>
@@ -242,7 +243,7 @@ namespace slideshow
                 // will typically have dimension different from the
                 // actual shape
                 ::basegfx::B2DRectangle aScrollRect, aPaintRect;
-                ENSURE_AND_THROW( getRectanglesFromScrollMtf( aScrollRect,
+                ENSURE_OR_THROW( getRectanglesFromScrollMtf( aScrollRect,
                                                               aPaintRect,
                                                               mpCurrMtf ),
                                   "DrawShape::forceScrollTextMetaFile(): Could "
@@ -282,10 +283,10 @@ namespace slideshow
             if( (mnCurrMtfLoadFlags & MTF_LOAD_VERBOSE_COMMENTS) == 0 &&
                 maAnimationFrames.empty() )
             {
-                ENSURE_AND_THROW( !maSubsetting.hasSubsetShapes(),
+                ENSURE_OR_THROW( !maSubsetting.hasSubsetShapes(),
                                   "DrawShape::ensureVerboseMtfComments(): reloading the metafile "
                                   "with active child subsets will wreak havoc on the view!" );
-                ENSURE_AND_THROW( maSubsetting.getSubsetNode().isEmpty(),
+                ENSURE_OR_THROW( maSubsetting.getSubsetNode().isEmpty(),
                                   "DrawShape::ensureVerboseMtfComments(): reloading the metafile "
                                   "for an ALREADY SUBSETTED shape is not possible!" );
 
@@ -327,7 +328,7 @@ namespace slideshow
             mbForceUpdate = false;
             mbAttributeLayerRevoked = false;
 
-            ENSURE_AND_RETURN( !maViewShapes.empty(),
+            ENSURE_OR_RETURN( !maViewShapes.empty(),
                                "DrawShape::implRender(): render called on DrawShape without views" );
 
             if( maBounds.isEmpty() )
@@ -411,7 +412,7 @@ namespace slideshow
 
         ::basegfx::B2DRectangle DrawShape::getActualUnitShapeBounds() const
         {
-            ENSURE_AND_THROW( !maViewShapes.empty(),
+            ENSURE_OR_THROW( !maViewShapes.empty(),
                               "DrawShape::getActualUnitShapeBounds(): called on DrawShape without views" );
 
             const VectorOfDocTreeNodes& rSubsets(
@@ -555,8 +556,8 @@ namespace slideshow
             mbAttributeLayerRevoked( false ),
             mbDrawingLayerAnim( false )
         {
-            ENSURE_AND_THROW( mxShape.is(), "DrawShape::DrawShape(): Invalid XShape" );
-            ENSURE_AND_THROW( mxPage.is(), "DrawShape::DrawShape(): Invalid containing page" );
+            ENSURE_OR_THROW( mxShape.is(), "DrawShape::DrawShape(): Invalid XShape" );
+            ENSURE_OR_THROW( mxPage.is(), "DrawShape::DrawShape(): Invalid containing page" );
 
             // check for drawing layer animations:
             drawing::TextAnimationKind eKind = drawing::TextAnimationKind_NONE;
@@ -574,7 +575,7 @@ namespace slideshow
                 uno::Reference<lang::XComponent>(xShape, uno::UNO_QUERY),
                 xContainingPage, *mpCurrMtf, mnCurrMtfLoadFlags,
                 mxComponentContext );
-            ENSURE_AND_THROW( mpCurrMtf,
+            ENSURE_OR_THROW( mpCurrMtf,
                               "DrawShape::DrawShape(): Invalid metafile" );
             maSubsetting.reset( mpCurrMtf );
 
@@ -615,7 +616,7 @@ namespace slideshow
             mbAttributeLayerRevoked( false ),
             mbDrawingLayerAnim( false )
         {
-            ENSURE_AND_THROW( rGraphic.IsAnimated(),
+            ENSURE_OR_THROW( rGraphic.IsAnimated(),
                               "DrawShape::DrawShape(): Graphic is no animation" );
 
             getAnimationFromGraphic( maAnimationFrames,
@@ -623,14 +624,14 @@ namespace slideshow
                                      meCycleMode,
                                      rGraphic );
 
-            ENSURE_AND_THROW( !maAnimationFrames.empty() &&
+            ENSURE_OR_THROW( !maAnimationFrames.empty() &&
                               maAnimationFrames.front().mpMtf,
                               "DrawShape::DrawShape(): " );
             mpCurrMtf = maAnimationFrames.front().mpMtf;
 
-            ENSURE_AND_THROW( mxShape.is(), "DrawShape::DrawShape(): Invalid XShape" );
-            ENSURE_AND_THROW( mxPage.is(), "DrawShape::DrawShape(): Invalid containing page" );
-            ENSURE_AND_THROW( mpCurrMtf, "DrawShape::DrawShape(): Invalid metafile" );
+            ENSURE_OR_THROW( mxShape.is(), "DrawShape::DrawShape(): Invalid XShape" );
+            ENSURE_OR_THROW( mxPage.is(), "DrawShape::DrawShape(): Invalid containing page" );
+            ENSURE_OR_THROW( mpCurrMtf, "DrawShape::DrawShape(): Invalid metafile" );
         }
 
         DrawShape::DrawShape( const DrawShape&      rSrc,
@@ -666,8 +667,8 @@ namespace slideshow
             mbAttributeLayerRevoked( false ),
             mbDrawingLayerAnim( false )
         {
-            ENSURE_AND_THROW( mxShape.is(), "DrawShape::DrawShape(): Invalid XShape" );
-            ENSURE_AND_THROW( mpCurrMtf, "DrawShape::DrawShape(): Invalid metafile" );
+            ENSURE_OR_THROW( mxShape.is(), "DrawShape::DrawShape(): Invalid XShape" );
+            ENSURE_OR_THROW( mpCurrMtf, "DrawShape::DrawShape(): Invalid metafile" );
 
             // xxx todo: currently not implemented for subsetted shapes;
             //           would mean modifying set of hyperlink regions when
@@ -1041,7 +1042,7 @@ namespace slideshow
 
         bool DrawShape::setIntrinsicAnimationFrame( ::std::size_t nCurrFrame )
         {
-            ENSURE_AND_RETURN( nCurrFrame < maAnimationFrames.size(),
+            ENSURE_OR_RETURN( nCurrFrame < maAnimationFrames.size(),
                                "DrawShape::setIntrinsicAnimationFrame(): frame index out of bounds" );
 
             if( mnCurrFrame != nCurrFrame )
@@ -1311,7 +1312,7 @@ namespace slideshow
 
         AttributableShapeSharedPtr DrawShape::getSubset( const DocTreeNode& rTreeNode ) const
         {
-            ENSURE_AND_THROW( (mnCurrMtfLoadFlags & MTF_LOAD_VERBOSE_COMMENTS) != 0,
+            ENSURE_OR_THROW( (mnCurrMtfLoadFlags & MTF_LOAD_VERBOSE_COMMENTS) != 0,
                               "DrawShape::getSubset(): subset query on shape with apparently no subsets" );
 
             // forward to delegate
@@ -1321,7 +1322,7 @@ namespace slideshow
         bool DrawShape::createSubset( AttributableShapeSharedPtr&   o_rSubset,
                                       const DocTreeNode&            rTreeNode )
         {
-            ENSURE_AND_THROW( (mnCurrMtfLoadFlags & MTF_LOAD_VERBOSE_COMMENTS) != 0,
+            ENSURE_OR_THROW( (mnCurrMtfLoadFlags & MTF_LOAD_VERBOSE_COMMENTS) != 0,
                               "DrawShape::createSubset(): subset query on shape with apparently no subsets" );
 
             // subset shape already created for this DocTreeNode?
@@ -1365,7 +1366,7 @@ namespace slideshow
 
         bool DrawShape::revokeSubset( const AttributableShapeSharedPtr& rShape )
         {
-            ENSURE_AND_THROW( (mnCurrMtfLoadFlags & MTF_LOAD_VERBOSE_COMMENTS) != 0,
+            ENSURE_OR_THROW( (mnCurrMtfLoadFlags & MTF_LOAD_VERBOSE_COMMENTS) != 0,
                               "DrawShape::createSubset(): subset query on shape with apparently no subsets" );
 
             // flush bounds cache
