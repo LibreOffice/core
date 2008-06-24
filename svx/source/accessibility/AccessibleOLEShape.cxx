@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleOLEShape.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,6 @@
 #include <svx/SvxShapeTypes.hxx>
 
 using namespace accessibility;
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
@@ -154,13 +153,13 @@ void SAL_CALL
 {
     ThrowIfDisposed();
     // Get list of supported service names from base class...
-    uno::Sequence<OUString> aServiceNames =
+    uno::Sequence< ::rtl::OUString > aServiceNames =
         AccessibleShape::getSupportedServiceNames();
     sal_Int32 nCount (aServiceNames.getLength());
 
     // ...and add additional names.
     aServiceNames.realloc (nCount + 1);
-    static const OUString sAdditionalServiceName (RTL_CONSTASCII_USTRINGPARAM(
+    static const ::rtl::OUString sAdditionalServiceName (RTL_CONSTASCII_USTRINGPARAM(
         "com.sun.star.drawing.AccessibleOLEShape"));
     aServiceNames[nCount] = sAdditionalServiceName;
 
@@ -233,5 +232,4 @@ uno::Sequence<uno::Type> SAL_CALL
 {
     return CreateAccessibleName ();
 }
-
 
