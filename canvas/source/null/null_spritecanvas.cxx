@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: null_spritecanvas.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
 
@@ -61,31 +62,33 @@ namespace nullcanvas
 {
     SpriteCanvas::SpriteCanvas( const uno::Sequence< uno::Any >&                aArguments,
                                 const uno::Reference< uno::XComponentContext >& rxContext ) :
+        maArguments(aArguments),
         mxComponentContext( rxContext )
     {
-        // #i64742# Only call initialize when not in probe mode
-        if( aArguments.getLength() != 0 )
-            initialize( aArguments );
     }
 
-    void SpriteCanvas::initialize( const uno::Sequence< uno::Any >& aArguments )
+    void SpriteCanvas::initialize()
     {
+        // #i64742# Only call initialize when not in probe mode
+        if( maArguments.getLength() == 0 )
+            return;
+
         VERBOSE_TRACE( "SpriteCanvas::initialize called" );
 
         // At index 1, we expect a system window handle here,
         // containing a pointer to a valid window, on which to output
         // At index 2, we expect the current window bound rect
-        CHECK_AND_THROW( aArguments.getLength() >= 4 &&
-                         aArguments[1].getValueTypeClass() == uno::TypeClass_LONG,
-                         "SpriteCanvas::initialize: wrong number of arguments, or wrong types" );
+        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 4 &&
+                             maArguments[1].getValueTypeClass() == uno::TypeClass_LONG,
+                             "SpriteCanvas::initialize: wrong number of arguments, or wrong types" );
 
         awt::Rectangle aRect;
-        aArguments[2] >>= aRect;
+        maArguments[2] >>= aRect;
         const ::basegfx::B2ISize aSize(aRect.Width,
                                        aRect.Height);
 
         sal_Bool bIsFullscreen( sal_False );
-        aArguments[3] >>= bIsFullscreen;
+        maArguments[3] >>= bIsFullscreen;
 
         // setup helper
         maDeviceHelper.init( *this,
@@ -95,6 +98,8 @@ namespace nullcanvas
                              *this,
                              aSize,
                              false );
+
+        maArguments.realloc(0);
     }
 
     void SAL_CALL SpriteCanvas::disposing()
@@ -145,15 +150,17 @@ namespace nullcanvas
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
     }
 
+    static uno::Reference<uno::XInterface> initCanvas( SpriteCanvas* pCanvas )
+    {
+        uno::Reference<uno::XInterface> xRet(static_cast<cppu::OWeakObject*>(pCanvas));
+        pCanvas->initialize();
+        return xRet;
+    }
+
     namespace sdecl = comphelper::service_decl;
-#if defined (__GNUC__) && (__GNUC__ == 3 && __GNUC_MINOR__ <= 3)
-    sdecl::class_<SpriteCanvas, sdecl::with_args<true> > serviceImpl;
+    sdecl::class_<SpriteCanvas, sdecl::with_args<true> > serviceImpl(&initCanvas);
     const sdecl::ServiceDecl nullCanvasDecl(
         serviceImpl,
-#else
-    const sdecl::ServiceDecl nullCanvasDecl(
-        sdecl::class_<SpriteCanvas, sdecl::with_args<true> >(),
-#endif
         "com.sun.star.comp.rendering.NullCanvas",
         SERVICE_NAME );
 }
