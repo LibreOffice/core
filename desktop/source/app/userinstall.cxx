@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: userinstall.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -148,18 +148,18 @@ namespace desktop {
     UserInstall::UserInstallError UserInstall::finalize()
     {
         OUString aUserInstallPath;
-        Bootstrap::PathStatus aLocateResult =
-            Bootstrap::locateUserInstallation(aUserInstallPath);
+        utl::Bootstrap::PathStatus aLocateResult =
+            utl::Bootstrap::locateUserInstallation(aUserInstallPath);
 
         switch (aLocateResult) {
 
-            case Bootstrap::DATA_INVALID:
-            case Bootstrap::DATA_MISSING:
-            case Bootstrap::DATA_UNKNOWN:
+            case utl::Bootstrap::DATA_INVALID:
+            case utl::Bootstrap::DATA_MISSING:
+            case utl::Bootstrap::DATA_UNKNOWN:
                 // cannot find a valid path or path is missing
                 return E_Unknown;
 
-            case Bootstrap::PATH_EXISTS:
+            case utl::Bootstrap::PATH_EXISTS:
             {
                 // path exists, check if an installation lives there
                 if ( is_user_install() )
@@ -168,7 +168,7 @@ namespace desktop {
                 }
                 // Note: fall-thru intended.
             }
-            case Bootstrap::PATH_VALID:
+            case utl::Bootstrap::PATH_VALID:
                 // found a path but need to create user install
                 return create_user_install(aUserInstallPath);
             default:
@@ -242,7 +242,7 @@ namespace desktop {
     static UserInstall::UserInstallError create_user_install(OUString& aUserPath)
     {
         OUString aBasePath;
-        if (Bootstrap::locateBaseInstallation(aBasePath) != Bootstrap::PATH_EXISTS)
+        if (utl::Bootstrap::locateBaseInstallation(aBasePath) != utl::Bootstrap::PATH_EXISTS)
             return UserInstall::E_InvalidBaseinstall;
 
         // create the user directory
@@ -300,3 +300,5 @@ namespace desktop {
 
     }
 }
+
+
