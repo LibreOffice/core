@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XCanvas.idl,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,13 +124,32 @@ interface XTextLayout;
     extra clipping).<p>
 
     Furtheron, this stateless nature provides easy ways for
-    caching. Every non-trivial operation on <type>XCanvas</type>
-    returns a cache object, which, when called to redraw, renders the
+    caching. Every non-trivial operation on <type>XCanvas</type> can
+    return a cache object, which, when called to redraw, renders the
     primitive usually much more quickly than the original method. Note
     that such caching is a lot more complicated, should the actual
     rendering a method yields depend on internal state (which is the
     case e.g. for the
-    <type scope="::com::sun::star::drawing">XGraphics</type> interface).<p>
+    <type
+    scope="::com::sun::star::drawing">::com::sun::star::drawing::XGraphics</type>
+    interface).  Please note, though, that deciding whether to return
+    an <type>XCachedPrimitive</type> is completely up to the
+    implementation - don't rely on the methods returning something
+    (this is because there might be cases when returning such a cache
+    object will actually be a pessimization, since it involves memory
+    allocation and comparisons).<p>
+
+    Things that need more than a small, fixed amount of data are
+    encapsulated in own interfaces, e.g. polygons and bitmaps. You
+    can, in principle, roll your own implementations of these
+    interfaces, wrap it around your internal representation of
+    polygons and bitmaps, and render them. It might just not be overly
+    fast, because the <type>XCanvas</type> would need to convert for
+    each render call. It is therefore recommended to create such
+    objects via the <type>XGraphicDevice</type> factory (to be
+    retrieved from every canvas object via the
+    <member>getDevice()</member> call) - they will then internally
+    optimize to the underlying graphics subsystem.<p>
 
     @since OOo 2.0.0
  */
@@ -155,7 +174,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @param aRenderState
         The renderstate to be used when drawing this point.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the view and renderstate parameters are outside the
         specified range.
      */
@@ -179,7 +198,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @param aRenderState
         The renderstate to be used when drawing this line.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the view and renderstate parameters are outside the
         specified range.
      */
@@ -203,7 +222,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @param aRenderState
         The renderstate to be used when drawing this curve.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the view and renderstate parameters are outside the
         specified range.
      */
@@ -226,7 +245,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the view and renderstate parameters are outside the
         specified range.
      */
@@ -259,7 +278,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the view and renderstate parameters are outside the
         specified range.
      */
@@ -297,11 +316,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the view and renderstate parameters are outside the
         specified range.
 
-        @throws VolatileContentDestroyedException
+        @throws <type>VolatileContentDestroyedException</type>
         if a texture bitmap was volatile, and the content was
         destroyed before the rendering could take place.
      */
@@ -345,11 +364,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the view and renderstate parameters are outside the
         specified range.
 
-        @throws VolatileContentDestroyedException
+        @throws <type>VolatileContentDestroyedException</type>
         if a texture bitmap was volatile, and the content was
         destroyed before the rendering could take place.
      */
@@ -382,7 +401,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @return a poly-polygon describing the outline of the stroked
         area.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the view and renderstate parameters are outside the
         specified range.
      */
@@ -408,7 +427,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the view and renderstate parameters are outside the
         specified range.
      */
@@ -438,11 +457,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the view and renderstate parameters are outside the
         specified range.
 
-        @throws VolatileContentDestroyedException
+        @throws <type>VolatileContentDestroyedException</type>
         if a texture bitmap was volatile, and the content was
         destroyed before the rendering could take place.
     */
@@ -478,11 +497,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the view and renderstate parameters are outside the
         specified range.
 
-        @throws VolatileContentDestroyedException
+        @throws <type>VolatileContentDestroyedException</type>
         if a texture bitmap was volatile, and the content was
         destroyed before the rendering could take place.
      */
@@ -530,7 +549,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
         @returns the requested font, or an invalid reference, if the
         request failed.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the parameters is not within the allowed range.
      */
     XCanvasFont             createFont( [in] FontRequest aFontRequest, [in] sequence< ::com::sun::star::beans::PropertyValue > aExtraFontProperties, [in] ::com::sun::star::geometry::Matrix2D aFontMatrix )
@@ -552,7 +571,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @returns the list of fonts matching the filter set.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the font properties are invalid or not recognized,
         or if one of the <type>FontInfo</type> members is not within
         the permitted range.
@@ -592,7 +611,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the view and renderstate parameters are outside the
         specified range.
      */
@@ -624,7 +643,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the view and renderstate parameters are outside the
         specified range.
      */
@@ -653,11 +672,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the view and renderstate parameters are outside the
         specified range.
 
-        @throws VolatileContentDestroyedException
+        @throws <type>VolatileContentDestroyedException</type>
         if a texture bitmap was volatile, and the content was
         destroyed before the rendering could take place.
      */
@@ -692,11 +711,11 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
         @return a handle to the cached rendering output.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the view and renderstate parameters are outside the
         specified range.
 
-        @throws VolatileContentDestroyedException
+        @throws <type>VolatileContentDestroyedException</type>
         if a texture bitmap was volatile, and the content was
         destroyed before the rendering could take place.
      */
@@ -720,6 +739,7 @@ interface XCanvas : ::com::sun::star::uno::XInterface
 
 //=============================================================================
 
+/// Service providing an <type>XCanvas</type> interface
 service Canvas: XCanvas;
 
 }; }; }; };
