@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XVolatileBitmap.idl,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +46,8 @@ interface XVolatileBitmap : XBitmap
         As the video RAM allocated to this bitmap can be reclaimed at
         any time, a return value of true here does not imply that the
         next draw operation with this bitmap will succeed. Instead,
-        the exception VolatileContentDestroyed will be thrown then.
+        the exception VolatileContentDestroyed might then be thrown,
+        if lost bitmap data is accessed.
      */
     boolean isValid();
 };
