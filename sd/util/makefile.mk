@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.56 $
+# $Revision: 1.57 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -175,7 +175,8 @@ SHL2STDLIBS= \
 
 SHL2OBJS=   $(SLO)$/sddetect.obj \
         $(SLO)$/detreg.obj
-SHL2DEPN+=	makefile.mk
+
+SHL2DEPN+=  makefile.mk
 
 # sdui
 SHL4TARGET= sdui$(DLLPOSTFIX)
@@ -214,6 +215,21 @@ SHL4STDLIBS= \
     $(VOSLIB) \
     $(CANVASLIB) \
     $(SALLIB)
+
+.IF "$(GUI)$(COM)" == "WNTMSC"
+.IF "$(ENABLE_PCH)" != ""
+#target sd
+SHL1OBJS += $(SLO)$/pchname.obj \
+            $(SLO)$/pchname_ex.obj
+#target sdd
+SHL2OBJS += $(SLO)$/pchname.obj \
+            $(SLO)$/pchname_ex.obj
+#target sdui
+SHL4OBJS += $(SLO)$/pchname.obj \
+            $(SLO)$/pchname_ex.obj
+.ENDIF # "$(ENABLE_PCH)" != ""
+.ENDIF # "$(GUI)$(COM)" == "WNTMSC"
+
 # $(ISDLIB) is build in SHL1TARGET
 .IF "$(GUI)" == "UNX"
 SHL4DEPN=$(SHL1TARGETN)
@@ -229,5 +245,4 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
     @$(TYPE) sd.flt > $@
-
 
