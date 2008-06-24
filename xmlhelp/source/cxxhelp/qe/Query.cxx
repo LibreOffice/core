@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Query.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -391,13 +391,3 @@ QueryHitData* QueryHitIterator::getHit( const PrefixTranslator* ) const
     else
         return 0;
 }
-
-
-double QueryHitIterator::getPenalty()
-{
-    if( accessible_ )
-        return result_->queryHits_[index_]->getPenalty();
-    else
-        return 1.0E30;
-}
-
