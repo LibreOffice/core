@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChildrenManagerImpl.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +49,6 @@
 #include <vector>
 
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 namespace accessibility {
@@ -570,3 +569,4 @@ public:
 } // end of namespace accessibility
 
 #endif
+

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svxrectctaccessiblecontext.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,7 +57,6 @@
 
 using namespace ::cppu;
 using namespace ::osl;
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
@@ -153,8 +152,8 @@ static long PointToIndex( RECT_POINT ePoint, sal_Bool bAngleControl )
 SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
     const Reference< XAccessible >&     rxParent,
     SvxRectCtl&                         rRepr,
-    const OUString*                     pName,
-    const OUString*                     pDesc ) :
+    const ::rtl::OUString*                      pName,
+    const ::rtl::OUString*                      pDesc ) :
 
     SvxRectCtlAccessibleContext_Base( m_aMutex ),
     mxParent( rxParent ),
@@ -307,9 +306,9 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
         {
             const ChildIndexToPointData*    p = IndexToPoint( nIndex, mbAngleMode );
             UniString       tmp = SVX_RESSTR( p->nResIdName );
-            OUString        aName( tmp );
+            ::rtl::OUString     aName( tmp );
                         tmp = SVX_RESSTR( p->nResIdDescr );
-            OUString        aDescr( tmp );
+            ::rtl::OUString     aDescr( tmp );
 
             Rectangle       aFocusRect( mpRepr->CalculateFocusRectangle( p->ePoint ) );
 
@@ -365,13 +364,13 @@ sal_Int16 SAL_CALL SvxRectCtlAccessibleContext::getAccessibleRole( void ) throw(
     return AccessibleRole::PANEL;
 }
 
-OUString SAL_CALL SvxRectCtlAccessibleContext::getAccessibleDescription( void ) throw( RuntimeException )
+::rtl::OUString SAL_CALL SvxRectCtlAccessibleContext::getAccessibleDescription( void ) throw( RuntimeException )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     return msDescription;
 }
 
-OUString SAL_CALL SvxRectCtlAccessibleContext::getAccessibleName( void ) throw( RuntimeException )
+::rtl::OUString SAL_CALL SvxRectCtlAccessibleContext::getAccessibleName( void ) throw( RuntimeException )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     return msName;
@@ -524,19 +523,19 @@ sal_Int32 SvxRectCtlAccessibleContext::getBackground(  )
 
 //=====  XServiceInfo  ========================================================
 
-OUString SAL_CALL SvxRectCtlAccessibleContext::getImplementationName( void ) throw( RuntimeException )
+::rtl::OUString SAL_CALL SvxRectCtlAccessibleContext::getImplementationName( void ) throw( RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.ui.SvxRectCtlAccessibleContext" ) );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.ui.SvxRectCtlAccessibleContext" ) );
 }
 
-sal_Bool SAL_CALL SvxRectCtlAccessibleContext::supportsService( const OUString& sServiceName ) throw( RuntimeException )
+sal_Bool SAL_CALL SvxRectCtlAccessibleContext::supportsService( const ::rtl::OUString& sServiceName ) throw( RuntimeException )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     //  Iterate over all supported service names and return true if on of them
     //  matches the given name.
-    Sequence< OUString >    aSupportedServices( getSupportedServiceNames() );
+    Sequence< ::rtl::OUString > aSupportedServices( getSupportedServiceNames() );
     int                     nLength = aSupportedServices.getLength();
-    const OUString*         pStr = aSupportedServices.getConstArray();
+    const ::rtl::OUString*          pStr = aSupportedServices.getConstArray();
 
     for( int i = nLength ; i ; --i, ++pStr )
     {
@@ -547,10 +546,10 @@ sal_Bool SAL_CALL SvxRectCtlAccessibleContext::supportsService( const OUString& 
     return sal_False;
 }
 
-Sequence< OUString > SAL_CALL SvxRectCtlAccessibleContext::getSupportedServiceNames( void ) throw( RuntimeException )
+Sequence< ::rtl::OUString > SAL_CALL SvxRectCtlAccessibleContext::getSupportedServiceNames( void ) throw( RuntimeException )
 {
-    const OUString sServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleContext" ) );
-    return Sequence< OUString >( &sServiceName, 1 );
+    const ::rtl::OUString sServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleContext" ) );
+    return Sequence< ::rtl::OUString >( &sServiceName, 1 );
 }
 
 //=====  XTypeProvider  =======================================================
@@ -621,7 +620,7 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getSelectedAccess
 
 void SAL_CALL SvxRectCtlAccessibleContext::deselectAccessibleChild( sal_Int32 /*nIndex*/ ) throw( lang::IndexOutOfBoundsException, RuntimeException )
 {
-    OUString    aMessage( RTL_CONSTASCII_USTRINGPARAM( "deselectAccessibleChild is not possible in this context" ) );
+    ::rtl::OUString aMessage( RTL_CONSTASCII_USTRINGPARAM( "deselectAccessibleChild is not possible in this context" ) );
 
     DBG_ASSERT( sal_False, "SvxRectCtlAccessibleContext::deselectAccessibleChild() is not possible!" );
 
@@ -680,7 +679,7 @@ void SvxRectCtlAccessibleContext::selectChild( RECT_POINT eButton )
     selectChild( PointToIndex( eButton, mbAngleMode ) );
 }
 
-void SvxRectCtlAccessibleContext::setName( const OUString& rName )
+void SvxRectCtlAccessibleContext::setName( const ::rtl::OUString& rName )
 {
     Any                     aPreVal, aPostVal;
     {
@@ -696,7 +695,7 @@ void SvxRectCtlAccessibleContext::setName( const OUString& rName )
     CommitChange( AccessibleEventObject( xSource, AccessibleEventId::NAME_CHANGED, aPreVal, aPostVal ) );
 }
 
-void SvxRectCtlAccessibleContext::setDescription( const OUString& rDescr )
+void SvxRectCtlAccessibleContext::setDescription( const ::rtl::OUString& rDescr )
 {
     Any                     aPreVal, aPostVal;
     {
@@ -967,13 +966,13 @@ sal_Int16 SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleRole( void ) t
     return AccessibleRole::RADIO_BUTTON;
 }
 
-OUString SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleDescription( void ) throw( RuntimeException )
+::rtl::OUString SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleDescription( void ) throw( RuntimeException )
 {
     ::osl::MutexGuard   aGuard( maMutex );
     return msDescription;
 }
 
-OUString SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleName( void ) throw( RuntimeException )
+::rtl::OUString SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleName( void ) throw( RuntimeException )
 {
     ::osl::MutexGuard   aGuard( maMutex );
     return msName;
@@ -1095,17 +1094,17 @@ Any SAL_CALL SvxRectCtlChildAccessibleContext::getMinimumValue() throw( RuntimeE
 
 //=====  XServiceInfo  ========================================================
 
-OUString SAL_CALL SvxRectCtlChildAccessibleContext::getImplementationName( void ) throw( RuntimeException )
+::rtl::OUString SAL_CALL SvxRectCtlChildAccessibleContext::getImplementationName( void ) throw( RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.ui.SvxRectCtlChildAccessibleContext" ) );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.ui.SvxRectCtlChildAccessibleContext" ) );
 }
 
-sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::supportsService( const OUString& sServiceName ) throw( RuntimeException )
+sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::supportsService( const ::rtl::OUString& sServiceName ) throw( RuntimeException )
 {
     //  Iterate over all supported service names and return true if on of them
     //  matches the given name.
     ::osl::MutexGuard   aGuard( maMutex );
-    Sequence< OUString >    aSupportedServices ( getSupportedServiceNames() );
+    Sequence< ::rtl::OUString > aSupportedServices ( getSupportedServiceNames() );
     int                     nLength = aSupportedServices.getLength();
     for( int i = 0 ; i < nLength; ++i )
     {
@@ -1116,10 +1115,10 @@ sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::supportsService( const OUStr
     return sal_False;
 }
 
-Sequence< OUString > SAL_CALL SvxRectCtlChildAccessibleContext::getSupportedServiceNames( void ) throw( RuntimeException )
+Sequence< ::rtl::OUString > SAL_CALL SvxRectCtlChildAccessibleContext::getSupportedServiceNames( void ) throw( RuntimeException )
 {
-    const OUString sServiceName (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.accessibility.AccessibleContext"));
-    return Sequence< OUString >( &sServiceName, 1 );
+    const ::rtl::OUString sServiceName (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.accessibility.AccessibleContext"));
+    return Sequence< ::rtl::OUString >( &sServiceName, 1 );
 }
 
 //=====  XTypeProvider  =======================================================
