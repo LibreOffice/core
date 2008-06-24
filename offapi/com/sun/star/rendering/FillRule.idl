@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FillRule.idl,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,12 +39,16 @@ module com { module sun { module star { module rendering {
  */
 enum FillRule
 {
-    /** Fill every area, which is within one or more of the
-        poly-polygons polygons.<p>
+    /** Fill every area, where, when travelling along a line, the
+        summed winding number (that is, -1 for a
+        counter-clockwise-oriented polygon, and +1 for a
+        clockwise-oriented) is non-zero.<p>
 
         For example, a poly-polygon consisting of two concentric
-        circles is filled the same way as if only the outer circle
-        would exist.<p>
+        circles with similar orientation is filled the same way as if
+        only the outer circle would exist. If both have opposite
+        orientation, then the filled representation looks the same as
+        if filled with the EVEN_ODD fill rule.<p>
      */
     NON_ZERO,
 
