@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewshape.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,12 +33,14 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <math.h>
 
 #include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 
+#include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/PanoseLetterForm.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -78,7 +80,7 @@ namespace slideshow
                                   const ShapeAttributeLayerSharedPtr&   rAttr ) const
         {
             RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewShape::prefetch()" );
-            ENSURE_AND_RETURN( rMtf,
+            ENSURE_OR_RETURN( rMtf,
                                "ViewShape::prefetch(): no valid metafile!" );
 
             if( rMtf != io_rCacheEntry.mpMtf ||
@@ -204,7 +206,7 @@ namespace slideshow
             ::cppcanvas::RendererSharedPtr pRenderer(
                 getRenderer( rDestinationCanvas, rMtf, rAttr ) );
 
-            ENSURE_AND_RETURN( pRenderer, "ViewShape::draw(): Invalid renderer" );
+            ENSURE_OR_RETURN( pRenderer, "ViewShape::draw(): Invalid renderer" );
 
             pRenderer->setTransformation( rTransform );
 #if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
@@ -231,11 +233,7 @@ namespace slideshow
             }
             catch( uno::Exception& )
             {
-                // ignore - this is non-fatal
-                OSL_ENSURE( false,
-                            rtl::OUStringToOString(
-                                comphelper::anyToString( cppu::getCaughtException() ),
-                                RTL_TEXTENCODING_UTF8 ).getStr() );
+                DBG_UNHANDLED_EXCEPTION();
             }
 #endif
             if( pClip )
@@ -400,7 +398,7 @@ namespace slideshow
                 mpSprite->resize( rSpriteSizePixel );
             }
 
-            ENSURE_AND_RETURN( mpSprite, "ViewShape::renderSprite(): No sprite" );
+            ENSURE_OR_RETURN( mpSprite, "ViewShape::renderSprite(): No sprite" );
 
             VERBOSE_TRACE( "ViewShape::renderSprite(): Rendering sprite 0x%X",
                            mpSprite.get() );
@@ -646,7 +644,7 @@ namespace slideshow
                                     rDestinationCanvas,
                                     aBmpSize ) );
 
-                            ENSURE_AND_THROW(pBitmap,
+                            ENSURE_OR_THROW(pBitmap,
                                              "ViewShape::render(): Could not create compositing surface");
 
                             aCompositingSurface->mpDestinationCanvas = rDestinationCanvas;
@@ -754,7 +752,7 @@ namespace slideshow
             mbAnimationMode( false ),
             mbForceUpdate( true )
         {
-            ENSURE_AND_THROW( mpViewLayer, "ViewShape::ViewShape(): Invalid View" );
+            ENSURE_OR_THROW( mpViewLayer, "ViewShape::ViewShape(): Invalid View" );
         }
 
         ViewLayerSharedPtr ViewShape::getViewLayer() const
@@ -837,7 +835,7 @@ namespace slideshow
 
         ::basegfx::B2DSize ViewShape::getAntialiasingBorder() const
         {
-            ENSURE_AND_THROW( mpViewLayer->getCanvas(),
+            ENSURE_OR_THROW( mpViewLayer->getCanvas(),
                               "ViewShape::getAntialiasingBorder(): Invalid ViewLayer canvas" );
 
             const ::basegfx::B2DHomMatrix& rViewTransform(
@@ -875,7 +873,7 @@ namespace slideshow
                                 bool                        bIsVisible ) const
         {
             RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewShape::update()" );
-            ENSURE_AND_RETURN( mpViewLayer->getCanvas(), "ViewShape::update(): Invalid layer canvas" );
+            ENSURE_OR_RETURN( mpViewLayer->getCanvas(), "ViewShape::update(): Invalid layer canvas" );
 
             // Shall we render to a sprite, or to a plain canvas?
             if( isBackgroundDetached() )
