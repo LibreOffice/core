@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: animationfactory.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
 #include <animationfactory.hxx>
@@ -91,9 +92,9 @@ namespace slideshow
                     maDefaultValue( rDefaultValue ),
                     mbAnimationStarted( false )
                 {
-                    ENSURE_AND_THROW( rShapeManager,
+                    ENSURE_OR_THROW( rShapeManager,
                                       "TupleAnimation::TupleAnimation(): Invalid ShapeManager" );
-                    ENSURE_AND_THROW( pIs1stValid && pIs2ndValid && pGet1stValue && pGet2ndValue && pSetValue,
+                    ENSURE_OR_THROW( pIs1stValid && pIs2ndValid && pGet1stValue && pGet2ndValue && pSetValue,
                                       "TupleAnimation::TupleAnimation(): One of the method pointers is NULL" );
                 }
 
@@ -119,9 +120,9 @@ namespace slideshow
                     mpShape = rShape;
                     mpAttrLayer = rAttrLayer;
 
-                    ENSURE_AND_THROW( rShape,
+                    ENSURE_OR_THROW( rShape,
                                       "TupleAnimation::start(): Invalid shape" );
-                    ENSURE_AND_THROW( rAttrLayer,
+                    ENSURE_OR_THROW( rAttrLayer,
                                       "TupleAnimation::start(): Invalid attribute layer" );
 
                     if( !mbAnimationStarted )
@@ -153,7 +154,7 @@ namespace slideshow
 
                 virtual bool operator()( const ::basegfx::B2DTuple& rValue )
                 {
-                    ENSURE_AND_RETURN( mpAttrLayer && mpShape,
+                    ENSURE_OR_RETURN( mpAttrLayer && mpShape,
                                        "TupleAnimation::operator(): Invalid ShapeAttributeLayer" );
 
                     ValueT aValue( rValue.getX(),
@@ -174,7 +175,7 @@ namespace slideshow
 
                 virtual ::basegfx::B2DTuple getUnderlyingValue() const
                 {
-                    ENSURE_AND_THROW( mpAttrLayer,
+                    ENSURE_OR_THROW( mpAttrLayer,
                                       "TupleAnimation::getUnderlyingValue(): Invalid ShapeAttributeLayer" );
 
                     ::basegfx::B2DTuple aRetVal;
@@ -235,14 +236,14 @@ namespace slideshow
                     mbAnimationStarted( false ),
                     mnAdditive( nAdditive )
                 {
-                    ENSURE_AND_THROW( rShapeManager,
+                    ENSURE_OR_THROW( rShapeManager,
                                       "PathAnimation::PathAnimation(): Invalid ShapeManager" );
 
                     ::basegfx::B2DPolyPolygon aPolyPoly;
 
-                    ENSURE_AND_THROW( ::basegfx::tools::importFromSvgD( aPolyPoly, rSVGDPath ),
+                    ENSURE_OR_THROW( ::basegfx::tools::importFromSvgD( aPolyPoly, rSVGDPath ),
                                       "PathAnimation::PathAnimation(): failed to parse SVG:d path" );
-                    ENSURE_AND_THROW( aPolyPoly.count() == 1,
+                    ENSURE_OR_THROW( aPolyPoly.count() == 1,
                                       "PathAnimation::PathAnimation(): motion path consists of multiple/zero polygon(s)" );
 
                     // TODO(F2): Since getPositionRelative() currently
@@ -273,9 +274,9 @@ namespace slideshow
                     mpShape = rShape;
                     mpAttrLayer = rAttrLayer;
 
-                    ENSURE_AND_THROW( rShape,
+                    ENSURE_OR_THROW( rShape,
                                       "PathAnimation::start(): Invalid shape" );
-                    ENSURE_AND_THROW( rAttrLayer,
+                    ENSURE_OR_THROW( rAttrLayer,
                                       "PathAnimation::start(): Invalid attribute layer" );
 
                     // TODO(F1): Check whether _shape_ bounds are correct here.
@@ -316,7 +317,7 @@ namespace slideshow
 
                 virtual bool operator()( double nValue )
                 {
-                    ENSURE_AND_RETURN( mpAttrLayer && mpShape,
+                    ENSURE_OR_RETURN( mpAttrLayer && mpShape,
                                        "PathAnimation::operator(): Invalid ShapeAttributeLayer" );
 
                     ::basegfx::B2DPoint rOutPos = ::basegfx::tools::getPositionRelative( maPathPoly,
@@ -345,7 +346,7 @@ namespace slideshow
 
                 virtual double getUnderlyingValue() const
                 {
-                    ENSURE_AND_THROW( mpAttrLayer,
+                    ENSURE_OR_THROW( mpAttrLayer,
                                       "PathAnimation::getUnderlyingValue(): Invalid ShapeAttributeLayer" );
 
                     return 0.0; // though this should be used in concert with
@@ -443,9 +444,9 @@ namespace slideshow
                     maDefaultValue(rDefaultValue),
                     mbAnimationStarted( false )
                 {
-                    ENSURE_AND_THROW( rShapeManager,
+                    ENSURE_OR_THROW( rShapeManager,
                                       "GenericAnimation::GenericAnimation(): Invalid ShapeManager" );
-                    ENSURE_AND_THROW( pIsValid && pGetValue && pSetValue,
+                    ENSURE_OR_THROW( pIsValid && pGetValue && pSetValue,
                                       "GenericAnimation::GenericAnimation(): One of the method pointers is NULL" );
                 }
 
@@ -471,9 +472,9 @@ namespace slideshow
                     mpShape = rShape;
                     mpAttrLayer = rAttrLayer;
 
-                    ENSURE_AND_THROW( rShape,
+                    ENSURE_OR_THROW( rShape,
                                       "GenericAnimation::start(): Invalid shape" );
-                    ENSURE_AND_THROW( rAttrLayer,
+                    ENSURE_OR_THROW( rAttrLayer,
                                       "GenericAnimation::start(): Invalid attribute layer" );
 
                     // only start animation once per repeated start() call,
@@ -536,7 +537,7 @@ namespace slideshow
                  */
                 bool operator()( const ValueT& x )
                 {
-                    ENSURE_AND_RETURN( mpAttrLayer && mpShape,
+                    ENSURE_OR_RETURN( mpAttrLayer && mpShape,
                                        "GenericAnimation::operator(): Invalid ShapeAttributeLayer" );
 
                     ((*mpAttrLayer).*mpSetValueFunc)( maSetterModifier( x ) );
@@ -551,7 +552,7 @@ namespace slideshow
                  */
                 bool operator()( ValueT x )
                 {
-                    ENSURE_AND_RETURN( mpAttrLayer && mpShape,
+                    ENSURE_OR_RETURN( mpAttrLayer && mpShape,
                                        "GenericAnimation::operator(): Invalid ShapeAttributeLayer" );
 
                     ((*mpAttrLayer).*mpSetValueFunc)( maSetterModifier( x ) );
@@ -564,7 +565,7 @@ namespace slideshow
 
                 ValueT getUnderlyingValue() const
                 {
-                    ENSURE_AND_THROW( mpAttrLayer,
+                    ENSURE_OR_THROW( mpAttrLayer,
                                       "GenericAnimation::getUnderlyingValue(): Invalid ShapeAttributeLayer" );
 
                     // deviated from the (*shared_ptr).*mpFuncPtr
@@ -673,7 +674,7 @@ namespace slideshow
                 uno::Reference< beans::XPropertySet > xPropSet( xShape,
                                                                 uno::UNO_QUERY );
 
-                ENSURE_AND_THROW( xPropSet.is(),
+                ENSURE_OR_THROW( xPropSet.is(),
                                   "getShapeDefault(): Cannot query property set from shape" );
 
                 return xPropSet->getPropertyValue( rPropertyName );
@@ -822,7 +823,7 @@ namespace slideshow
                 default:
                     // FALLTHROUGH intended
                 case ATTRIBUTE_INVALID:
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "AnimationFactory::createNumberPropertyAnimation(): Unknown attribute" );
                     break;
 
@@ -847,7 +848,7 @@ namespace slideshow
                 case ATTRIBUTE_LINE_STYLE:
                     // FALLTHROUGH intended
                 case ATTRIBUTE_VISIBILITY:
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "AnimationFactory::createNumberPropertyAnimation(): Attribute type mismatch" );
                     break;
 
@@ -986,7 +987,7 @@ namespace slideshow
                 default:
                     // FALLTHROUGH intended
                 case ATTRIBUTE_INVALID:
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "AnimationFactory::createEnumPropertyAnimation(): Unknown attribute" );
                     break;
 
@@ -1025,7 +1026,7 @@ namespace slideshow
                 case ATTRIBUTE_POS_X:
                     // FALLTHROUGH intended
                 case ATTRIBUTE_POS_Y:
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "AnimationFactory::createEnumPropertyAnimation(): Attribute type mismatch" );
                     break;
 
@@ -1082,7 +1083,7 @@ namespace slideshow
                 default:
                     // FALLTHROUGH intended
                 case ATTRIBUTE_INVALID:
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "AnimationFactory::createColorPropertyAnimation(): Unknown attribute" );
                     break;
 
@@ -1119,7 +1120,7 @@ namespace slideshow
                 case ATTRIBUTE_POS_X:
                     // FALLTHROUGH intended
                 case ATTRIBUTE_POS_Y:
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "AnimationFactory::createColorPropertyAnimation(): Attribute type mismatch" );
                     break;
 
@@ -1213,7 +1214,7 @@ namespace slideshow
                             &ShapeAttributeLayer::setPosition ) );
 
                 default:
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "AnimationFactory::createPairPropertyAnimation(): Attribute type mismatch" );
                     break;
             }
@@ -1234,7 +1235,7 @@ namespace slideshow
                 default:
                     // FALLTHROUGH intended
                 case ATTRIBUTE_INVALID:
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "AnimationFactory::createStringPropertyAnimation(): Unknown attribute" );
                     break;
 
@@ -1279,7 +1280,7 @@ namespace slideshow
                 case ATTRIBUTE_FILL_STYLE:
                     // FALLTHROUGH intended
                 case ATTRIBUTE_LINE_STYLE:
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "AnimationFactory::createStringPropertyAnimation(): Attribute type mismatch" );
                     break;
 
@@ -1308,7 +1309,7 @@ namespace slideshow
                 default:
                     // FALLTHROUGH intended
                 case ATTRIBUTE_INVALID:
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "AnimationFactory::createBoolPropertyAnimation(): Unknown attribute" );
                     break;
 
@@ -1353,7 +1354,7 @@ namespace slideshow
                 case ATTRIBUTE_POS_Y:
                     // FALLTHROUGH intended
                 case ATTRIBUTE_CHAR_UNDERLINE:
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "AnimationFactory::createBoolPropertyAnimation(): Attribute type mismatch" );
                     break;
 
