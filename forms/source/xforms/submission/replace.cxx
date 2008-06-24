@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: replace.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,14 +45,13 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::xml::dom;
 
-CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, const Reference<XDocument>& aDocument, const Reference<XFrame>& aFrame)
+CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aReplace, const Reference<XDocument>& aDocument, const Reference<XFrame>& aFrame)
 {
     if (!m_aResultStream.is())
         return CSubmission::UNKNOWN_ERROR;
@@ -66,19 +65,19 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
 
             if (!xLoader.is())
                 xLoader = Reference< XComponentLoader >(xFactory->createInstance(
-                    OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY_THROW);
+                    ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY_THROW);
 
             // open the stream from the result...
             // build media descriptor
             Sequence< PropertyValue > descriptor(2);
-            descriptor[0] = PropertyValue(OUString::createFromAscii(
+            descriptor[0] = PropertyValue(::rtl::OUString::createFromAscii(
                 "InputStream"), -1, makeAny(m_aResultStream), PropertyState_DIRECT_VALUE);
-            descriptor[1] = PropertyValue(OUString::createFromAscii(
+            descriptor[1] = PropertyValue(::rtl::OUString::createFromAscii(
                 "ReadOnly"), -1, makeAny(sal_True), PropertyState_DIRECT_VALUE);
 
-            //OUString aURL = OUString::createFromAscii("private:stream");
-            OUString aURL = m_aURLObj.GetMainURL(INetURLObject::NO_DECODE);
-            OUString aTarget = OUString::createFromAscii("_default");
+            //::rtl::OUString aURL = ::rtl::OUString::createFromAscii("private:stream");
+            ::rtl::OUString aURL = m_aURLObj.GetMainURL(INetURLObject::NO_DECODE);
+            ::rtl::OUString aTarget = ::rtl::OUString::createFromAscii("_default");
             xLoader->loadComponentFromURL(aURL, aTarget, FrameSearchFlag::ALL, descriptor);
 
             return CSubmission::SUCCESS;
@@ -87,7 +86,7 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
             if (aDocument.is()) {
                 // parse the result stream into a new document
                 Reference< XDocumentBuilder > xBuilder(xFactory->createInstance(
-                    OUString::createFromAscii("com.sun.star.xml.dom.DocumentBuilder")), UNO_QUERY_THROW);
+                    ::rtl::OUString::createFromAscii("com.sun.star.xml.dom.DocumentBuilder")), UNO_QUERY_THROW);
                 Reference< XDocument > aNewDocument = xBuilder->parse(m_aResultStream);
 
                 if (aNewDocument.is()) {
@@ -111,9 +110,11 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
             return CSubmission::SUCCESS;
         }
     } catch (Exception& e) {
-        OString aMsg("Exception during replace:\n");
+        ::rtl::OString aMsg("Exception during replace:\n");
         aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
         OSL_ENSURE(sal_False, aMsg.getStr());
     }
     return CSubmission::UNKNOWN_ERROR;
 }
+
+
