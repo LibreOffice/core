@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: comboboxtoolbarcontroller.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,7 +69,6 @@
 #include <vcl/combobox.hxx>
 #include <tools/urlobj.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -177,7 +176,7 @@ ComboboxToolbarController::ComboboxToolbarController(
     ToolBox*                                 pToolbar,
     USHORT                                   nID,
     sal_Int32                                nWidth,
-    const OUString&                          aCommand ) :
+    const ::rtl::OUString&                          aCommand ) :
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
     ,   m_pComboBox( 0 )
 {
@@ -221,8 +220,8 @@ throw ( RuntimeException )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XURLTransformer > xURLTransformer;
-    OUString                     aCommandURL;
-    OUString                     aSelectedText;
+    ::rtl::OUString                     aCommandURL;
+    ::rtl::OUString                     aSelectedText;
     ::com::sun::star::util::URL  aTargetURL;
 
     {
@@ -343,7 +342,7 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
         {
             if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "List", 4 ))
             {
-                Sequence< OUString > aList;
+                Sequence< ::rtl::OUString > aList;
                 m_pComboBox->Clear();
 
                 rControlCommand.Arguments[i].Value >>= aList;
@@ -475,3 +474,4 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
 }
 
 } // namespace
+
