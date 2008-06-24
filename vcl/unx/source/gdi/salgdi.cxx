@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -984,3 +984,22 @@ BOOL X11SalGraphics::drawEPS( long,long,long,long,void*,ULONG )
 {
     return FALSE;
 }
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+SystemGraphicsData X11SalGraphics::GetGraphicsData() const
+{
+    SystemGraphicsData aRes;
+
+    aRes.nSize = sizeof(aRes);
+    aRes.pDisplay  = GetXDisplay();
+    aRes.hDrawable = hDrawable_;
+    aRes.pVisual   = GetDisplay()->GetVisual( m_nScreen ).GetVisual();
+    aRes.nScreen   = m_nScreen;
+    aRes.nDepth    = GetDisplay()->GetVisual( m_nScreen ).GetDepth();
+    aRes.aColormap = GetDisplay()->GetColormap( m_nScreen ).GetXColormap();
+    aRes.pRenderFormat = pRenderFormat_;
+    return aRes;
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
