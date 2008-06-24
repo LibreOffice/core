@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,6 +45,12 @@ DLLPRE =
 .IF "$(ENABLE_CAIRO)" != "TRUE"
 @all:
     @echo "Building without cairo support..."
+.ELSE
+# --- X11 Mac build currently doesn't work with cairo -----------
+.IF "$(OS)" == "MACOSX" && "$(GUIBASE)" == "unx"
+@all:   
+        @echo "Cannot build cairocanvas with X11..."
+.ENDIF
 .ENDIF
 
 # --- Common ----------------------------------------------------------
@@ -62,14 +68,17 @@ CDEFS+= -DVERBOSE
 
 SLOFILES =	$(SLO)$/cairo_cachedbitmap.obj \
             $(SLO)$/cairo_cairo.obj \
+            $(SLO)$/cairo_canvas.obj \
             $(SLO)$/cairo_canvasbitmap.obj \
             $(SLO)$/cairo_canvascustomsprite.obj \
             $(SLO)$/cairo_canvasfont.obj \
             $(SLO)$/cairo_canvashelper.obj \
             $(SLO)$/cairo_canvashelper_text.obj \
             $(SLO)$/cairo_devicehelper.obj \
+            $(SLO)$/cairo_services.obj \
             $(SLO)$/cairo_spritecanvas.obj \
             $(SLO)$/cairo_spritecanvashelper.obj \
+            $(SLO)$/cairo_spritedevicehelper.obj \
             $(SLO)$/cairo_spritehelper.obj \
             $(SLO)$/cairo_textlayout.obj
 
@@ -82,7 +91,7 @@ SHL1STDLIBS= $(CPPULIB) $(TKLIB) $(SALLIB) $(VCLLIB) $(COMPHELPERLIB) $(CPPUHELP
 .IF "$(SYSTEM_CAIRO)" == "YES"
 SHL1STDLIBS+= $(CAIRO_LIBS)
 .ELSE
-SHL1STDLIBS+= -lcairo -lpixman-1
+SHL1STDLIBS+= -lcairo
 .ENDIF
 
 .IF "$(GUIBASE)"=="aqua"
@@ -90,11 +99,11 @@ SHL1STDLIBS+= -lcairo -lpixman-1
 SLOFILES+= $(SLO)$/cairo_quartz_cairo.obj
 OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
 CFLAGSCXX+=$(OBJCXXFLAGS)
+SHL1STDLIBS+= -lpixman-1
 .ELSE
 # Xlib
-SLOFILES+= $(SLO)$/cairo_xlib_cairo.obj \
-           $(SLO)$/cairo_xlib_helper.obj
-SHL1STDLIBS+= -lX11 -lXrender
+SLOFILES+= $(SLO)$/cairo_xlib_cairo.obj
+SHL1STDLIBS+= -lfontconfig $(FREETYPELIB) -lX11 -lXrender
 .ENDIF
 
 .ELSE    # "$(GUI)"=="UNX" 
@@ -102,13 +111,11 @@ SHL1STDLIBS+= -lX11 -lXrender
 .IF "$(GUI)"=="WNT"
 SLOFILES+= $(SLO)$/cairo_win32_cairo.obj
 .IF "$(COM)"=="GCC"
-SHL1STDLIBS+= -lcairo -lgdi32 -lmsimg32
+SHL1STDLIBS+= -lcairo
 .ELSE
-#We build cairo and pixman as separate (static) libs as I couldn't be
-#bothered to dig into the obscure makefile.mk stuff enough to combine
-#them into one as is normally done.
-SHL1STDLIBS+= cairo.lib pixman.lib gdi32.lib 
+SHL1STDLIBS+= cairo.lib
 .ENDIF
+SHL1STDLIBS+= $(GDI32LIB) $(MSIMG32LIB)
 .ENDIF
 
 .ENDIF   # "$(GUI)"=="UNX" 
