@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: togglebuttontoolbarcontroller.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +72,6 @@
 #include <svtools/filter.hxx>
 #include <svtools/miscopt.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
@@ -92,7 +91,7 @@ ToggleButtonToolbarController::ToggleButtonToolbarController(
     ToolBox*                                 pToolbar,
     USHORT                                   nID,
     Style                                    eStyle,
-    const OUString&                          aCommand ) :
+    const ::rtl::OUString&                          aCommand ) :
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand ),
     m_eStyle( eStyle )
 {
@@ -124,8 +123,8 @@ throw ( RuntimeException )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XURLTransformer > xURLTransformer;
-    OUString                     aCommandURL;
-    OUString                     aSelectedText;
+    ::rtl::OUString                     aCommandURL;
+    ::rtl::OUString                     aSelectedText;
     ::com::sun::star::util::URL  aTargetURL;
 
     {
@@ -214,7 +213,7 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
             {
                 if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "List", 4 ))
                 {
-                    Sequence< OUString > aList;
+                    Sequence< ::rtl::OUString > aList;
                     m_aDropdownMenuList.clear();
 
                     rControlCommand.Arguments[i].Value >>= aList;
@@ -362,3 +361,4 @@ IMPL_LINK( ToggleButtonToolbarController, MenuSelectHdl, Menu *, pMenu )
 }
 
 } // namespace
+
