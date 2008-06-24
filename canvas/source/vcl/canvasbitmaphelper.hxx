@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: canvasbitmaphelper.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,15 +75,21 @@ namespace vclcanvas
 
             @param rDevice
             Reference device for this canvas bitmap
+
+            @param rOutDevProvider
+            Reference output device. Used to create matching bitmap.
          */
-        void init( const BitmapEx&  rBitmap,
-                   SpriteCanvas&    rDevice );
+        void init( const BitmapEx&                              rBitmap,
+                   ::com::sun::star::rendering::XGraphicDevice& rDevice,
+                   const OutDevProviderSharedPtr&               rOutDevProvider );
 
 
         // Overridden CanvasHelper functionality
         // =====================================
 
         void disposing();
+
+        void clear();
 
         ::com::sun::star::geometry::IntegerSize2D getSize();
 
@@ -109,8 +115,6 @@ namespace vclcanvas
             getPixel( ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
                       const ::com::sun::star::geometry::IntegerPoint2D& pos );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapPalette > getPalette();
-
         ::com::sun::star::rendering::IntegerBitmapLayout getMemoryLayout();
 
         /// @internal
@@ -121,6 +125,7 @@ namespace vclcanvas
         void setBitmap( const BitmapEx& rBitmap );
 
         BitmapBackBufferSharedPtr   mpBackBuffer;
+        OutDevProviderSharedPtr     mpOutDevReference;
     };
 }
 
