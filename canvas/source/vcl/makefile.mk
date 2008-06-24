@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,6 +54,7 @@ NOOPTFILES = $(SLO)$/canvashelper_texturefill.obj
 SLOFILES =	$(SLO)$/backbuffer.obj \
             $(SLO)$/bitmapbackbuffer.obj \
             $(SLO)$/cachedbitmap.obj \
+            $(SLO)$/canvas.obj \
             $(SLO)$/canvasbitmap.obj \
             $(SLO)$/canvasbitmaphelper.obj \
             $(SLO)$/canvascustomsprite.obj \
@@ -62,10 +63,13 @@ SLOFILES =	$(SLO)$/backbuffer.obj \
             $(SLO)$/canvashelper_texturefill.obj \
             $(SLO)$/devicehelper.obj \
             $(SLO)$/impltools.obj \
+            $(SLO)$/services.obj \
             $(SLO)$/spritecanvas.obj \
             $(SLO)$/spritecanvashelper.obj \
+            $(SLO)$/spritedevicehelper.obj \
             $(SLO)$/spritehelper.obj \
-            $(SLO)$/textlayout.obj
+            $(SLO)$/textlayout.obj \
+            $(SLO)$/windowoutdevholder.obj
 
 SHL1TARGET=$(TARGET).uno
 
