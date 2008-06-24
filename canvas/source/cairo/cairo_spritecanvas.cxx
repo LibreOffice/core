@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_spritecanvas.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,16 +34,16 @@
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <osl/mutex.hxx>
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
-#include <comphelper/servicedecl.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -51,76 +51,80 @@
 #include <basegfx/numeric/ftools.hxx>
 
 #include "cairo_spritecanvas.hxx"
-#include "cairo_devicehelper.hxx"
 
 using namespace ::cairo;
 using namespace ::com::sun::star;
-
-#define SERVICE_NAME "com.sun.star.rendering.CairoCanvas"
 
 namespace cairocanvas
 {
     SpriteCanvas::SpriteCanvas( const uno::Sequence< uno::Any >&                aArguments,
                                 const uno::Reference< uno::XComponentContext >& rxContext ) :
-        mxComponentContext( rxContext ),
-        mpBackgroundSurface( NULL ),
-        mpBackgroundCairo( NULL )
+        maArguments(aArguments),
+        mxComponentContext( rxContext )
     {
-        // #i64742# Only call initialize when not in probe mode
-        if( aArguments.getLength() != 0 )
-            initialize( aArguments );
     }
 
-    void SpriteCanvas::initialize( const uno::Sequence< uno::Any >& aArguments )
+    void SpriteCanvas::initialize()
     {
-        VERBOSE_TRACE("SpriteCanvas created %p\n", this);
+        VERBOSE_TRACE("CairoSpriteCanvas created %p\n", this);
 
-        // At index 1, we expect a system window handle here,
-        // containing a pointer to a valid window, on which to output
-        // At index 2, we expect the current window bound rect
-        // NOTE: type is derived from vcl/source/window/window.cxx (XCanvas setup)
-#ifdef QUARTZ
-        CHECK_AND_THROW( aArguments.getLength() >= 4 &&
-                         aArguments[1].getValueTypeClass() == uno::TypeClass_UNSIGNED_HYPER,
-                         "SpriteCanvas::initialize: wrong number of arguments, or wrong types" );
-#else
-        CHECK_AND_THROW( aArguments.getLength() >= 4 &&
-                         aArguments[1].getValueTypeClass() == uno::TypeClass_LONG,
-                         "SpriteCanvas::initialize: wrong number of arguments, or wrong types" );
-#endif
+        // #i64742# Only call initialize when not in probe mode
+        if( maArguments.getLength() == 0 )
+            return;
+
+        /* maArguments:
+           0: ptr to creating instance (Window or VirtualDevice)
+           1: SystemEnvData as a streamed Any (or empty for VirtualDevice)
+           2: current bounds of creating instance
+           3: bool, denoting always on top state for Window (always false for VirtualDevice)
+           4: XWindow for creating Window (or empty for VirtualDevice)
+           5: SystemGraphicsData as a streamed Any
+         */
+        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 4 &&
+                             maArguments[0].getValueTypeClass() == uno::TypeClass_HYPER &&
+                             maArguments[4].getValueTypeClass() == uno::TypeClass_INTERFACE,
+                             "CairoSpriteCanvas::initialize: wrong number of arguments, or wrong types" );
 
         awt::Rectangle aRect;
-        aArguments[2] >>= aRect;
+        maArguments[2] >>= aRect;
 
         sal_Bool bIsFullscreen( sal_False );
-        aArguments[3] >>= bIsFullscreen;
+        maArguments[3] >>= bIsFullscreen;
 
-        sal_Int64 nWindowPtr = 0;
-    aArguments[0] >>= nWindowPtr;
-    Window* pOutputWindow = reinterpret_cast<Window*>(nWindowPtr);
+        uno::Reference< awt::XWindow > xParentWindow;
+        maArguments[4] >>= xParentWindow;
 
-        CHECK_AND_THROW( pOutputWindow != NULL,
-                         "SpriteCanvas::SpriteCanvas: invalid Window pointer" );
+        Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
+        if( !pParentWindow )
+            throw lang::NoSupportException(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                     "Parent window not VCL window, or canvas out-of-process!")),
+                NULL);
 
-#if defined(CAIRO_HAS_XLIB_SURFACE) && !defined (QUARTZ)
-        bool bHasXRender = HasXRender( cairocanvas::GetSysData(pOutputWindow) );
-        CHECK_AND_THROW( bHasXRender == true,
-                         "SpriteCanvas::SpriteCanvas: No RENDER extension" );
-#endif
+        bool bHasXRender = IsCairoWorking(pParentWindow);
+        ENSURE_ARG_OR_THROW( bHasXRender == true,
+                             "CairoSpriteCanvas::SpriteCanvas: No RENDER extension" );
 
-        Size aPixelSize( pOutputWindow->GetOutputSizePixel() );
+        Size aPixelSize( pParentWindow->GetOutputSizePixel() );
         const ::basegfx::B2ISize aSize( aPixelSize.Width(),
                                         aPixelSize.Height() );
 
+        ENSURE_ARG_OR_THROW( pParentWindow != NULL,
+                             "CairoSpriteCanvas::initialize: invalid Window pointer" );
+
         // setup helper
-        maDeviceHelper.init( *pOutputWindow,
+        maDeviceHelper.init( *pParentWindow,
                              *this,
                              aSize,
                              bIsFullscreen );
 
+        setWindow(uno::Reference<awt::XWindow2>(xParentWindow, uno::UNO_QUERY_THROW));
+
         maCanvasHelper.init( maRedrawManager,
                              *this,
                              aSize );
+
+        maArguments.realloc(0);
     }
 
     void SAL_CALL SpriteCanvas::disposing()
@@ -129,38 +133,18 @@ namespace cairocanvas
 
         mxComponentContext.clear();
 
-        if( mpBackgroundCairo ) {
-            cairo_destroy( mpBackgroundCairo );
-            mpBackgroundCairo = NULL;
-        }
-
-        if( mpBackgroundSurface ) {
-            mpBackgroundSurface->Unref();
-            mpBackgroundSurface = NULL;
-        }
-
         // forward to parent
         SpriteCanvasBaseT::disposing();
     }
 
     ::sal_Bool SAL_CALL SpriteCanvas::showBuffer( ::sal_Bool bUpdateAll ) throw (uno::RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        // avoid repaints on hidden window (hidden: not mapped to
-        // screen). Return failure, since the screen really has _not_
-        // been updated (caller should try again later)
-        return !mbIsVisible ? false : SpriteCanvasBaseT::showBuffer( bUpdateAll );
+        return updateScreen( bUpdateAll );
     }
 
     ::sal_Bool SAL_CALL SpriteCanvas::switchBuffer( ::sal_Bool bUpdateAll ) throw (uno::RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        // avoid repaints on hidden window (hidden: not mapped to
-        // screen). Return failure, since the screen really has _not_
-        // been updated (caller should try again later)
-        return !mbIsVisible ? false : SpriteCanvasBaseT::switchBuffer( bUpdateAll );
+        return updateScreen( bUpdateAll );
     }
 
     sal_Bool SAL_CALL SpriteCanvas::updateScreen( sal_Bool bUpdateAll ) throw (uno::RuntimeException)
@@ -173,51 +157,55 @@ namespace cairocanvas
         return !mbIsVisible ? false : maCanvasHelper.updateScreen(
             ::basegfx::unotools::b2IRectangleFromAwtRectangle(maBounds),
             bUpdateAll,
-            mbSurfaceDirty );
+            mbSurfaceDirty);
     }
 
     ::rtl::OUString SAL_CALL SpriteCanvas::getServiceName(  ) throw (uno::RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SPRITECANVAS_SERVICE_NAME ) );
     }
 
-    Surface* SpriteCanvas::getSurface( const ::basegfx::B2ISize& rSize, Content aContent )
-    {
-        return maDeviceHelper.getSurface( rSize, aContent );
-    }
-
-    Surface* SpriteCanvas::getSurface( Content aContent )
-    {
-        return maDeviceHelper.getSurface( aContent );
-    }
-
-    Surface* SpriteCanvas::getSurface( Bitmap& rBitmap )
-    {
-        Surface *pSurface = NULL;
-
-        BitmapSystemData aData;
-        if( rBitmap.GetSystemData( aData ) ) {
-            const Size& rSize = rBitmap.GetSizePixel();
-
-            pSurface = maDeviceHelper.getSurface( aData, rSize );
-        }
-
-        return pSurface;
-    }
-
-    Surface* SpriteCanvas::getBufferSurface()
+    SurfaceSharedPtr SpriteCanvas::getSurface()
     {
         return maDeviceHelper.getBufferSurface();
     }
 
-    Surface* SpriteCanvas::getWindowSurface()
+    SurfaceSharedPtr SpriteCanvas::createSurface( const ::basegfx::B2ISize& rSize, Content aContent )
     {
-        return maDeviceHelper.getWindowSurface();
+        return maDeviceHelper.createSurface( rSize, aContent );
     }
 
-    Surface* SpriteCanvas::getBackgroundSurface()
+    SurfaceSharedPtr SpriteCanvas::createSurface( ::Bitmap& rBitmap )
     {
-        return mpBackgroundSurface;
+        BitmapSystemData aData;
+        if( rBitmap.GetSystemData( aData ) ) {
+            const Size& rSize = rBitmap.GetSizePixel();
+
+            return maDeviceHelper.createSurface( aData, rSize );
+        }
+
+        return SurfaceSharedPtr();
+    }
+
+    SurfaceSharedPtr SpriteCanvas::changeSurface( bool, bool )
+    {
+        // non-modifiable surface here
+        return SurfaceSharedPtr();
+    }
+
+    OutputDevice* SpriteCanvas::getOutputDevice()
+    {
+        return maDeviceHelper.getOutputDevice();
+    }
+
+    SurfaceSharedPtr SpriteCanvas::getBufferSurface()
+    {
+        return maDeviceHelper.getBufferSurface();
+    }
+
+    SurfaceSharedPtr SpriteCanvas::getWindowSurface()
+    {
+        return maDeviceHelper.getWindowSurface();
     }
 
     const ::basegfx::B2ISize& SpriteCanvas::getSizePixel()
@@ -227,20 +215,10 @@ namespace cairocanvas
 
     void SpriteCanvas::setSizePixel( const ::basegfx::B2ISize& rSize )
     {
-        if( mpBackgroundSurface )
-        {
-            mpBackgroundSurface->Unref();
-        }
-        mpBackgroundSurface = maDeviceHelper.getSurface( CAIRO_CONTENT_COLOR );
-
-        if( mpBackgroundCairo )
-        {
-            cairo_destroy( mpBackgroundCairo );
-        }
-        mpBackgroundCairo = mpBackgroundSurface->getCairo();
-
         maCanvasHelper.setSize( rSize );
-        maCanvasHelper.setSurface( mpBackgroundSurface, false );
+        // re-set background surface, in case it needed recreation
+        maCanvasHelper.setSurface( maDeviceHelper.getBufferSurface(),
+                                   false );
     }
 
     void SpriteCanvas::flush()
@@ -248,25 +226,10 @@ namespace cairocanvas
         maDeviceHelper.flush();
     }
 
-    bool SpriteCanvas::repaint( Surface*                        pSurface,
-                                const rendering::ViewState&     viewState,
-                                const rendering::RenderState&   renderState )
+    bool SpriteCanvas::repaint( const SurfaceSharedPtr&       pSurface,
+                                const rendering::ViewState&   viewState,
+                                const rendering::RenderState& renderState )
     {
         return maCanvasHelper.repaint( pSurface, viewState, renderState );
     }
-
-    namespace sdecl = comphelper::service_decl;
-#if defined (__GNUC__) && (__GNUC__ == 3 && __GNUC_MINOR__ <= 3)
-    sdecl::class_<SpriteCanvas, sdecl::with_args<true> > serviceImpl;
-    const sdecl::ServiceDecl cairoCanvasDecl(
-        serviceImpl,
-#else
-    const sdecl::ServiceDecl cairoCanvasDecl(
-        sdecl::class_<SpriteCanvas, sdecl::with_args<true> >(),
-#endif
-        "com.sun.star.comp.rendering.CairoCanvas",
-        SERVICE_NAME );
 }
-
-// The C shared lib entry points
-COMPHELPER_SERVICEDECL_EXPORTS1(cairocanvas::cairoCanvasDecl)
