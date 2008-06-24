@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eventmultiplexer.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <rtl/ref.hxx>
 #include <cppuhelper/compbase2.hxx>
@@ -479,7 +480,7 @@ void EventMultiplexerImpl::addMouseHandler(
     double                            nPriority,
     RegisterFunction                  pRegisterListener )
 {
-    ENSURE_AND_THROW(
+    ENSURE_OR_THROW(
         rHandler,
         "EventMultiplexer::addMouseHandler(): Invalid handler" );
 
@@ -602,7 +603,7 @@ bool EventMultiplexerImpl::notifyMouseHandlers(
     uno::Reference<presentation::XSlideShowView> xView(
         e.Source, uno::UNO_QUERY );
 
-    ENSURE_AND_RETURN( xView.is(), "EventMultiplexer::notifyHandlers(): "
+    ENSURE_OR_RETURN( xView.is(), "EventMultiplexer::notifyHandlers(): "
                        "event source is not an XSlideShowView" );
 
     // find corresponding view (to map mouse position into user
@@ -617,7 +618,7 @@ bool EventMultiplexerImpl::notifyMouseHandlers(
                           boost::cref( xView ),
                           boost::bind( &UnoView::getUnoView, _1 ) ) ) ) == aEnd)
     {
-        ENSURE_AND_RETURN(
+        ENSURE_OR_RETURN(
             false, "EventMultiplexer::notifyHandlers(): "
             "event source not found under registered views" );
     }
@@ -626,7 +627,7 @@ bool EventMultiplexerImpl::notifyMouseHandlers(
     ::basegfx::B2DPoint     aPosition( e.X, e.Y );
     ::basegfx::B2DHomMatrix aMatrix( (*aIter)->getTransformation() );
     if( !aMatrix.invert() )
-        ENSURE_AND_THROW( false, "EventMultiplexer::notifyHandlers():"
+        ENSURE_OR_THROW( false, "EventMultiplexer::notifyHandlers():"
                           " view matrix singular" );
     aPosition *= aMatrix;
 
@@ -1132,7 +1133,7 @@ bool EventMultiplexer::notifyPauseMode( bool bPauseShow )
 
 bool EventMultiplexer::notifyViewAdded( const UnoViewSharedPtr& rView )
 {
-    ENSURE_AND_THROW( rView, "EventMultiplexer::notifyViewAdded(): Invalid view");
+    ENSURE_OR_THROW( rView, "EventMultiplexer::notifyViewAdded(): Invalid view");
 
     // register event listener
     uno::Reference<presentation::XSlideShowView> const rUnoView(
@@ -1154,7 +1155,7 @@ bool EventMultiplexer::notifyViewAdded( const UnoViewSharedPtr& rView )
 
 bool EventMultiplexer::notifyViewRemoved( const UnoViewSharedPtr& rView )
 {
-    ENSURE_AND_THROW( rView,
+    ENSURE_OR_THROW( rView,
                       "EventMultiplexer::removeView(): Invalid view" );
 
     // revoke event listeners
