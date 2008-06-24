@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: propertyanimationnode.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +54,7 @@ AnimationActivitySharedPtr PropertyAnimationNode::createActivity() const
     switch (AnimationFactory::classifyAttributeName( attrName )) {
     default:
     case AnimationFactory::CLASS_UNKNOWN_PROPERTY:
-        ENSURE_AND_THROW(
+        ENSURE_OR_THROW(
             false,
             "Unexpected attribute class (unknown or empty attribute name)" );
         break;
