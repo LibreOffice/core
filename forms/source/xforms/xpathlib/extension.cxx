@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: extension.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,6 @@
 #include "xpathlib.hxx"
 #include "frm_module.hxx"
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xforms;
@@ -54,17 +53,17 @@ Reference< XInterface > SAL_CALL CLibxml2XFormsExtension::Create(
     return aInstance;
 }
 
-OUString SAL_CALL CLibxml2XFormsExtension::getImplementationName_Static()
+::rtl::OUString SAL_CALL CLibxml2XFormsExtension::getImplementationName_Static()
 {
     // printf("_implname_\n");
-    return OUString::createFromAscii("com.sun.star.comp.xml.xpath.XFormsExtension");
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.xml.xpath.XFormsExtension");
 }
 
-Sequence< OUString > SAL_CALL CLibxml2XFormsExtension::getSupportedServiceNames_Static()
+Sequence< ::rtl::OUString > SAL_CALL CLibxml2XFormsExtension::getSupportedServiceNames_Static()
 {
     // printf("_services_\n");
-    Sequence< OUString > aSequence(1);
-    aSequence[0] = OUString::createFromAscii("com.sun.star.xml.xpath.XPathExtension");
+    Sequence< ::rtl::OUString > aSequence(1);
+    aSequence[0] = ::rtl::OUString::createFromAscii("com.sun.star.xml.xpath.XPathExtension");
     return aSequence;
 }
 
