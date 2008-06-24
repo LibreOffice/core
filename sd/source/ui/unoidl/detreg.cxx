@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: detreg.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,6 @@
 #include <rtl/ustring.hxx>
 #include "sal/types.h"
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -59,8 +58,8 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
     Reference< ::registry::XRegistryKey >
             xKey( reinterpret_cast< ::registry::XRegistryKey* >( pRegistryKey ) ) ;
 
-    OUString aDelimiter( RTL_CONSTASCII_USTRINGPARAM("/") );
-    OUString aUnoServices( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") );
+    ::rtl::OUString aDelimiter( RTL_CONSTASCII_USTRINGPARAM("/") );
+    ::rtl::OUString aUnoServices( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") );
 
     // Eigentliche Implementierung und ihre Services registrieren
     sal_Int32 i;
@@ -69,7 +68,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
     xNewKey = xKey->createKey( aDelimiter + SdFilterDetect::impl_getStaticImplementationName() +
                                aUnoServices );
 
-    Sequence< OUString > aServices = SdFilterDetect::impl_getStaticSupportedServiceNames();
+    Sequence< ::rtl::OUString > aServices = SdFilterDetect::impl_getStaticSupportedServiceNames();
     for(i = 0; i < aServices.getLength(); i++ )
         xNewKey->createKey( aServices.getConstArray()[i] );
 
@@ -113,6 +112,5 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
     return pReturn ;
 }
 } // extern "C"
-
 
 
