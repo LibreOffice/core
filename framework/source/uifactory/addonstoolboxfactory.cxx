@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: addonstoolboxfactory.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +63,6 @@
 //_________________________________________________________________________________________________________________
 //
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
@@ -103,7 +102,7 @@ AddonsToolBoxFactory::AddonsToolBoxFactory(
     ThreadHelpBase( &Application::GetSolarMutex() )
     , m_xServiceManager( xServiceManager )
     , m_xModuleManager( xServiceManager->createInstance(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ))),
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ))),
                         UNO_QUERY )
 {
 }
@@ -156,14 +155,14 @@ sal_Bool AddonsToolBoxFactory::hasButtonsInContext(
         {
             if ( rPropSeq[j].Name.equalsAsciiL( "Context", 7 ))
             {
-                OUString aContextList;
+                ::rtl::OUString aContextList;
                 if ( rPropSeq[j].Value >>= aContextList )
                     bIsCorrectContext = IsCorrectContext( aModuleIdentifier, aContextList );
                 nPropChecked++;
             }
             else if ( rPropSeq[j].Name.equalsAsciiL( "URL", 3 ))
             {
-                OUString aURL;
+                ::rtl::OUString aURL;
                 rPropSeq[j].Value >>= aURL;
                 bIsButton = !aURL.equalsAsciiL( "private:separator", 17 );
                 nPropChecked++;
@@ -237,3 +236,4 @@ throw ( ::com::sun::star::container::NoSuchElementException,
 }
 
 }
+
