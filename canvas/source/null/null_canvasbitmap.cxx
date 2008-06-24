@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: null_canvasbitmap.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/canvastools.hxx>
 
 #include "null_canvasbitmap.hxx"
@@ -46,7 +47,7 @@ namespace nullcanvas
                                 bool                      bHasAlpha ) :
         mpDevice( rDevice )
     {
-        ENSURE_AND_THROW( mpDevice.is(),
+        ENSURE_OR_THROW( mpDevice.is(),
                           "CanvasBitmap::CanvasBitmap(): Invalid surface or device" );
 
         maCanvasHelper.init( rSize,
