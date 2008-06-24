@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: canvasbitmap.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include "canvasbitmap.hxx"
 
 #include <vcl/bmpacc.hxx>
@@ -44,17 +45,11 @@ namespace vclcanvas
     // Currently, the only way to generate an XBitmap is from
     // XGraphicDevice.getCompatibleBitmap(). Therefore, we don't even
     // take a bitmap here, but a VDev directly.
-    CanvasBitmap::CanvasBitmap( const ::Size&       rSize,
-                                bool                bAlphaBitmap,
-                                const DeviceRef&    rDevice ) :
-        mpDevice( rDevice )
+    CanvasBitmap::CanvasBitmap( const ::Size&                  rSize,
+                                bool                           bAlphaBitmap,
+                                rendering::XGraphicDevice&     rDevice,
+                                const OutDevProviderSharedPtr& rOutDevProvider )
     {
-        ENSURE_AND_THROW( rDevice->getOutDev(),
-                          "CanvasBitmap::CanvasBitmap(): Invalid reference outdev" );
-
-        OutputDevice&            rOutDev( *rDevice->getOutDev() );
-        tools::OutDevStateKeeper aStateKeeper( rOutDev );
-
         // create bitmap for given reference device
         // ========================================
         const USHORT nBitCount( (USHORT)24U );
@@ -71,30 +66,26 @@ namespace vclcanvas
             AlphaMask   aAlpha ( rSize );
 
             maCanvasHelper.init( BitmapEx( aBitmap, aAlpha ),
-                                 *rDevice.get() );
+                                 rDevice,
+                                 rOutDevProvider );
         }
         else
         {
             maCanvasHelper.init( BitmapEx( aBitmap ),
-                                 *rDevice.get() );
+                                 rDevice,
+                                 rOutDevProvider );
         }
     }
 
-    CanvasBitmap::CanvasBitmap( const BitmapEx&     rBitmap,
-                                const DeviceRef&    rDevice ) :
-        mpDevice( rDevice )
+    CanvasBitmap::CanvasBitmap( const BitmapEx&                rBitmap,
+                                rendering::XGraphicDevice&     rDevice,
+                                const OutDevProviderSharedPtr& rOutDevProvider )
     {
-        ENSURE_AND_THROW( rDevice->getOutDev(),
-                          "CanvasBitmap::CanvasBitmap(): Invalid reference outdev" );
-
-        maCanvasHelper.init( rBitmap,
-                             *rDevice.get() );
+        maCanvasHelper.init( rBitmap, rDevice, rOutDevProvider );
     }
 
     void SAL_CALL CanvasBitmap::disposing()
     {
-        mpDevice.clear();
-
         // forward to base
         CanvasBitmap_Base::disposing();
     }
@@ -141,5 +132,16 @@ namespace vclcanvas
         mbSurfaceDirty = true;
 
         return maCanvasHelper.repaint( rGrf, viewState, renderState, rPt, rSz, rAttr );
+    }
+
+    uno::Any SAL_CALL CanvasBitmap::getFastPropertyValue( sal_Int32 nHandle ) throw (uno::RuntimeException)
+    {
+        if( nHandle == 0 ) {
+            BitmapEx* pBitmapEx = new BitmapEx( getBitmap() );
+
+            return uno::Any( reinterpret_cast<sal_Int64>( pBitmapEx ) );
+        }
+
+        return uno::Any( sal_Int64(0) );
     }
 }
