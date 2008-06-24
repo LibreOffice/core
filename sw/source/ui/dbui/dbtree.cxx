@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbtree.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +72,6 @@
 
 #include <unomid.h>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
@@ -88,7 +87,7 @@ using namespace ::com::sun::star::beans;
  ---------------------------------------------------------------------------*/
 struct SwConnectionData
 {
-    OUString                sSourceName;
+    ::rtl::OUString                sSourceName;
     Reference<XConnection>  xConnection;
 };
 
@@ -150,7 +149,7 @@ void SwDBTreeList_Impl::elementInserted( const ContainerEvent&  ) throw (Runtime
 void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent ) throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    OUString sSource;
+    ::rtl::OUString sSource;
     rEvent.Accessor >>= sSource;
     for(USHORT i = 0; i < aConnections.Count(); i++)
     {
@@ -276,8 +275,8 @@ void SwDBTreeList::InitTreeList()
 
     GetModel()->SetCompareHdl(LINK(this, SwDBTreeList, DBCompare));
 
-    Sequence<OUString> aDBNames = pImpl->GetContext()->getElementNames();
-    const OUString* pDBNames = aDBNames.getConstArray();
+    Sequence< ::rtl::OUString > aDBNames = pImpl->GetContext()->getElementNames();
+    const ::rtl::OUString* pDBNames = aDBNames.getConstArray();
     long nCount = aDBNames.getLength();
 
     Image aImg = aImageList.GetImage(IMG_DB);
@@ -406,8 +405,8 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                 if(xColsSupplier.is())
                 {
                     Reference <XNameAccess> xCols = xColsSupplier->getColumns();
-                    Sequence<OUString> aColNames = xCols->getElementNames();
-                    const OUString* pColNames = aColNames.getConstArray();
+                    Sequence< ::rtl::OUString> aColNames = xCols->getElementNames();
+                    const ::rtl::OUString* pColNames = aColNames.getConstArray();
                     long nCount = aColNames.getLength();
                     for (long i = 0; i < nCount; i++)
                     {
@@ -437,10 +436,10 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                     if(xTSupplier.is())
                     {
                         Reference<XNameAccess> xTbls = xTSupplier->getTables();
-                        Sequence<OUString> aTblNames = xTbls->getElementNames();
+                        Sequence< ::rtl::OUString> aTblNames = xTbls->getElementNames();
                         String sTableName;
                         long nCount = aTblNames.getLength();
-                        const OUString* pTblNames = aTblNames.getConstArray();
+                        const ::rtl::OUString* pTblNames = aTblNames.getConstArray();
                         Image aImg = aImageList.GetImage(IMG_DBTABLE);
                         Image aHCImg = aImageListHC.GetImage(IMG_DBTABLE);
                         for (long i = 0; i < nCount; i++)
@@ -458,10 +457,10 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                     if(xQSupplier.is())
                     {
                         Reference<XNameAccess> xQueries = xQSupplier->getQueries();
-                        Sequence<OUString> aQueryNames = xQueries->getElementNames();
+                        Sequence< ::rtl::OUString> aQueryNames = xQueries->getElementNames();
                         String sQueryName;
                         long nCount = aQueryNames.getLength();
-                        const OUString* pQueryNames = aQueryNames.getConstArray();
+                        const ::rtl::OUString* pQueryNames = aQueryNames.getConstArray();
                         Image aImg = aImageList.GetImage(IMG_DBQUERY);
                         Image aHCImg = aImageListHC.GetImage(IMG_DBQUERY);
                         for (long i = 0; i < nCount; i++)
@@ -624,4 +623,3 @@ void    SwDBTreeList::SetWrtShell(SwWrtShell& rSh)
     if (IsVisible() && !bInitialized)
         InitTreeList();
 }
-
