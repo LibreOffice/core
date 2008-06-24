@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawshapesubsetting.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
 #include <rtl/math.hxx>
@@ -67,7 +68,7 @@ namespace slideshow
 
         void DrawShapeSubsetting::ensureInitializedNodeTree() const
         {
-            ENSURE_AND_THROW( mpMtf,
+            ENSURE_OR_THROW( mpMtf,
                               "DrawShapeSubsetting::ensureInitializedNodeTree(): Invalid mtf" );
 
             if( mbNodeTreeInitialized )
@@ -108,7 +109,7 @@ namespace slideshow
                                 // action).
                                 const sal_Int32 nIndex( nLastTextActionIndex + pAct->GetValue() );
 
-                                ENSURE_AND_THROW( static_cast< ::std::size_t >(nIndex) < maActionClassVector.size(),
+                                ENSURE_OR_THROW( static_cast< ::std::size_t >(nIndex) < maActionClassVector.size(),
                                                   "DrawShapeSubsetting::ensureInitializedNodeTree(): sentence index out of range" );
 
                                 maActionClassVector[ nIndex ] = CLASS_CHARACTER_CELL_END;
@@ -122,7 +123,7 @@ namespace slideshow
                                 // action).
                                 const sal_Int32 nIndex( nLastTextActionIndex + pAct->GetValue() );
 
-                                ENSURE_AND_THROW( static_cast< ::std::size_t >(nIndex) < maActionClassVector.size(),
+                                ENSURE_OR_THROW( static_cast< ::std::size_t >(nIndex) < maActionClassVector.size(),
                                                   "DrawShapeSubsetting::ensureInitializedNodeTree(): sentence index out of range" );
 
                                 maActionClassVector[ nIndex ] = CLASS_WORD_END;
@@ -136,7 +137,7 @@ namespace slideshow
                                 // action).
                                 const sal_Int32 nIndex( nLastTextActionIndex + pAct->GetValue() );
 
-                                ENSURE_AND_THROW( static_cast< ::std::size_t >(nIndex) < maActionClassVector.size(),
+                                ENSURE_OR_THROW( static_cast< ::std::size_t >(nIndex) < maActionClassVector.size(),
                                                   "DrawShapeSubsetting::ensureInitializedNodeTree(): sentence index out of range" );
 
                                 maActionClassVector[ nIndex ] = CLASS_SENTENCE_END;
@@ -256,7 +257,7 @@ namespace slideshow
             maCurrentSubsets(),
             mbNodeTreeInitialized( false )
         {
-            ENSURE_AND_THROW( mpMtf,
+            ENSURE_OR_THROW( mpMtf,
                               "DrawShapeSubsetting::DrawShapeSubsetting(): Invalid metafile" );
 
             initCurrentSubsets();
@@ -273,7 +274,7 @@ namespace slideshow
             maCurrentSubsets(),
             mbNodeTreeInitialized( false )
         {
-            ENSURE_AND_THROW( mpMtf,
+            ENSURE_OR_THROW( mpMtf,
                               "DrawShapeSubsetting::DrawShapeSubsetting(): Invalid metafile" );
 
             initCurrentSubsets();
@@ -520,7 +521,7 @@ namespace slideshow
                     switch( *aCurr )
                     {
                         default:
-                            ENSURE_AND_THROW( false,
+                            ENSURE_OR_THROW( false,
                                               "Unexpected type in iterateDocShapes()" );
                         case DrawShapeSubsetting::CLASS_NOOP:
                             // ignore NOOP actions
