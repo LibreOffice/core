@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optgdlg.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,8 @@
 #include <svx/langbox.hxx>
 #include <readonlyimage.hxx>
 #define FOLDERWEBVIEW_DEFAULTFILE   "folder.so"
+
+class CanvasSettings;
 
 // class OfaMiscTabPage --------------------------------------------------
 
@@ -134,6 +136,7 @@ private:
     BOOL            bSfxSymbolsAuto;
 
     SvtTabAppearanceCfg* pAppearanceCfg;
+    CanvasSettings*      pCanvasSettings;
 
     DECL_LINK( OpenGLHdl, CheckBox* );
 #if defined( UNX )
