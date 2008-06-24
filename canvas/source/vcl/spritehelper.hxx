@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: spritehelper.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 #include <vcl/virdev.hxx>
 
 #include <canvas/base/canvascustomspritehelper.hxx>
+#include <canvas/base/spritesurface.hxx>
 #include <canvas/vclwrapper.hxx>
 
 #include "backbuffer.hxx"
@@ -76,11 +77,11 @@ namespace vclcanvas
             @param rBackBufferMask
             Buffer of the sprite content (alpha part)
          */
-        void init( const ::com::sun::star::geometry::RealSize2D&    rSpriteSize,
-                   const SpriteCanvasRef&                           rSpriteCanvas,
-                   const BackBufferSharedPtr&                       rBackBuffer,
-                   const BackBufferSharedPtr&                       rBackBufferMask,
-                   bool                                             bShowSpriteBounds );
+        void init( const ::com::sun::star::geometry::RealSize2D& rSpriteSize,
+                   const ::canvas::SpriteSurface::Reference&     rOwningSpriteCanvas,
+                   const BackBufferSharedPtr&                    rBackBuffer,
+                   const BackBufferSharedPtr&                    rBackBufferMask,
+                   bool                                          bShowSpriteBounds );
 
         void disposing();
 
@@ -110,11 +111,6 @@ namespace vclcanvas
         // for the redraw
         BackBufferSharedPtr                                 mpBackBuffer;
         BackBufferSharedPtr                                 mpBackBufferMask;
-
-        // necessary to avoid downcasts later on (Sprite interface
-        // only gets passed ptr to SpriteSurface interface, not
-        // concrete implementations)
-        SpriteCanvasRef                                     mpSpriteCanvas;
 
         /// Cached bitmap for the current sprite content
         mutable ::canvas::vcltools::VCLObject<BitmapEx>     maContent;
