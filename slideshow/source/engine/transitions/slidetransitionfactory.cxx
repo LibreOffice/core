@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slidetransitionfactory.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_slideshow.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tools/canvastools.hxx>
@@ -147,8 +148,8 @@ public:
                     getEnteringBitmap(ViewEntry(*aCurrView))->getXBitmap(),
                     basegfx::unotools::point2DFromB2DPoint(aOffsetPixel) ) );
 
-            ENSURE_AND_THROW(maTransitions.back().is(),
-                             "Failed to create plugin transition");
+            ENSURE_OR_THROW(maTransitions.back().is(),
+                            "Failed to create plugin transition");
             ++aCurrView;
         }
     }
@@ -288,7 +289,7 @@ void FadingSlideChange::performIn(
     const ::cppcanvas::CanvasSharedPtr&         /*rDestinationCanvas*/,
     double                                      t )
 {
-    ENSURE_AND_THROW(
+    ENSURE_OR_THROW(
         rSprite,
         "FadingSlideChange::performIn(): Invalid sprite" );
 
@@ -306,10 +307,10 @@ void FadingSlideChange::performOut(
     const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
     double                                     t )
 {
-    ENSURE_AND_THROW(
+    ENSURE_OR_THROW(
         rSprite,
         "FadingSlideChange::performOut(): Invalid sprite" );
-    ENSURE_AND_THROW(
+    ENSURE_OR_THROW(
         rDestinationCanvas,
         "FadingSlideChange::performOut(): Invalid dest canvas" );
 
@@ -410,10 +411,10 @@ void MovingSlideChange::performIn(
 {
     // intro sprite moves:
 
-    ENSURE_AND_THROW(
+    ENSURE_OR_THROW(
         rSprite,
         "MovingSlideChange::performIn(): Invalid sprite" );
-    ENSURE_AND_THROW(
+    ENSURE_OR_THROW(
         rDestinationCanvas,
         "MovingSlideChange::performIn(): Invalid dest canvas" );
 
@@ -448,10 +449,10 @@ void MovingSlideChange::performOut(
 {
     // outro sprite moves:
 
-    ENSURE_AND_THROW(
+    ENSURE_OR_THROW(
         rSprite,
         "MovingSlideChange::performOut(): Invalid sprite" );
-    ENSURE_AND_THROW(
+    ENSURE_OR_THROW(
         rDestinationCanvas,
         "MovingSlideChange::performOut(): Invalid dest canvas" );
 
@@ -727,7 +728,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
         return NumberAnimationSharedPtr();
     }
 
-    ENSURE_AND_THROW(
+    ENSURE_OR_THROW(
         pEnteringSlide,
         "TransitionFactory::createSlideTransition(): Invalid entering slide" );
 
@@ -804,12 +805,12 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                         const TransitionInfo* pRandomTransitionInfo(
                             getRandomTransitionInfo() );
 
-                        ENSURE_AND_THROW(
+                        ENSURE_OR_THROW(
                             pRandomTransitionInfo != NULL,
                             "TransitionFactory::createSlideTransition(): "
                             "Got invalid random transition info" );
 
-                        ENSURE_AND_THROW(
+                        ENSURE_OR_THROW(
                             pRandomTransitionInfo->mnTransitionType !=
                             animations::TransitionType::RANDOM,
                             "TransitionFactory::createSlideTransition(): "
@@ -885,7 +886,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                                 break;
 
                             default:
-                                ENSURE_AND_THROW( false,
+                                ENSURE_OR_THROW( false,
                                                   "SlideTransitionFactory::createSlideTransition(): Unknown FADE subtype" );
                         }
 
