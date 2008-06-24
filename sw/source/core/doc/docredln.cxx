@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docredln.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3595,7 +3595,7 @@ void SwRedline::MoveFromSection()
             else
                 aPam.GetPoint()->nNode++;
 
-            SwFmtColl* pColl = pCNd && aPam.GetPoint()->nNode !=
+            SwFmtColl* pColl = pCNd && pCNd->Len() && aPam.GetPoint()->nNode !=
                                         aPam.GetMark()->nNode
                                 ? pCNd->GetFmtColl() : 0;
 
