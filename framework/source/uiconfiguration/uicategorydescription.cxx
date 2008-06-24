@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: uicategorydescription.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,7 +71,6 @@
 //_________________________________________________________________________________________________________________
 //
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -285,7 +284,7 @@ sal_Bool ConfigurationAccess_UICategory::fillCache()
     sal_Int32            i( 0 );
     Any                  a;
     rtl::OUString        aUIName;
-    Sequence< OUString > aNameSeq = m_xConfigAccess->getElementNames();
+    Sequence< ::rtl::OUString > aNameSeq = m_xConfigAccess->getElementNames();
 
     for ( i = 0; i < aNameSeq.getLength(); i++ )
     {
@@ -379,18 +378,18 @@ Sequence< rtl::OUString > ConfigurationAccess_UICategory::getAllIds()
 
         try
         {
-            Sequence< OUString > aNameSeq = m_xConfigAccess->getElementNames();
+            Sequence< ::rtl::OUString > aNameSeq = m_xConfigAccess->getElementNames();
 
             if ( m_xGenericUICategories.is() )
             {
                 // Create concat list of supported user interface commands of the module
-                Sequence< OUString > aGenericNameSeq = m_xGenericUICategories->getElementNames();
+                Sequence< ::rtl::OUString > aGenericNameSeq = m_xGenericUICategories->getElementNames();
                 sal_uInt32 nCount1 = aNameSeq.getLength();
                 sal_uInt32 nCount2 = aGenericNameSeq.getLength();
 
                 aNameSeq.realloc( nCount1 + nCount2 );
-                OUString* pNameSeq = aNameSeq.getArray();
-                const OUString* pGenericSeq = aGenericNameSeq.getConstArray();
+                ::rtl::OUString* pNameSeq = aNameSeq.getArray();
+                const ::rtl::OUString* pGenericSeq = aGenericNameSeq.getConstArray();
                 for ( sal_uInt32 i = 0; i < nCount2; i++ )
                     pNameSeq[nCount1+i] = pGenericSeq[i];
             }
@@ -501,7 +500,7 @@ UICategoryDescription::UICategoryDescription( const Reference< XMultiServiceFact
     m_xServiceManager( xServiceManager )
 {
     Reference< XNameAccess > xEmpty;
-    rtl::OUString aGenericCategories( OUString::createFromAscii( "GenericCategories" ));
+    rtl::OUString aGenericCategories( ::rtl::OUString::createFromAscii( "GenericCategories" ));
     m_xGenericCategories = new ConfigurationAccess_UICategory( aGenericCategories, xEmpty, xServiceManager );
 
     m_xModuleManager = Reference< XModuleManager >( m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ),
@@ -509,7 +508,7 @@ UICategoryDescription::UICategoryDescription( const Reference< XMultiServiceFact
     Reference< XNameAccess > xNameAccess( m_xModuleManager, UNO_QUERY_THROW );
     Sequence< rtl::OUString > aElementNames = xNameAccess->getElementNames();
     Sequence< PropertyValue > aSeq;
-    OUString                  aModuleIdentifier;
+    ::rtl::OUString                  aModuleIdentifier;
 
     // insert generic categories mappings
     m_aModuleToCategoryFileMap.insert( ModuleToCategoryFileMap::value_type(
@@ -525,7 +524,7 @@ UICategoryDescription::UICategoryDescription( const Reference< XMultiServiceFact
         Any a = xNameAccess->getByName( aModuleIdentifier );
         if ( a >>= aSeq )
         {
-            OUString aCmdCategoryStr;
+            ::rtl::OUString aCmdCategoryStr;
             for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )
             {
                 if ( aSeq[y].Name.equalsAscii("ooSetupFactoryCmdCategoryConfigRef") )
@@ -565,7 +564,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
     ModuleToCategoryFileMap::const_iterator pM2CIter = m_aModuleToCategoryFileMap.find( aName );
     if ( pM2CIter != m_aModuleToCategoryFileMap.end() )
     {
-        OUString aCommandFile( pM2CIter->second );
+        ::rtl::OUString aCommandFile( pM2CIter->second );
         CategoryHashMap::iterator pIter = m_aCategoryHashMap.find( aCommandFile );
         if ( pIter != m_aCategoryHashMap.end() )
         {
@@ -633,3 +632,4 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 } // namespace framework
+
