@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolbarmanager.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,7 +106,6 @@
 //  namespaces
 //_________________________________________________________________________________________________________________
 
-using namespace ::rtl;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -201,7 +200,7 @@ static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager
     {
         try
         {
-            Any a( xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) );
+            Any a( xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) );
             a >>= xLayoutManager;
         }
         catch ( RuntimeException& )
@@ -287,7 +286,7 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     // enables a menu for clipped items and customization
     SvtCommandOptions aCmdOptions;
     USHORT nMenuType = TOOLBOX_MENUTYPE_CLIPPEDITEMS;
-    if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, OUString::createFromAscii( "CreateDialog" )))
+    if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, ::rtl::OUString::createFromAscii( "CreateDialog" )))
          nMenuType |= TOOLBOX_MENUTYPE_CUSTOMIZE;
     //added for issue33668 by shizhoubo
     m_pToolBar->SetCommandHdl( LINK( this, ToolBarManager, Command ) );
@@ -300,8 +299,8 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     // set name for testtool, the useful part is after the last '/'
     sal_Int32 idx = rResourceName.lastIndexOf('/');
     idx++; // will become 0 if '/' not found: use full string
-    OUString  aHelpIdAsString( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX_TESTTOOL ));
-    OUString  aToolbarName = rResourceName.copy( idx );
+    ::rtl::OUString  aHelpIdAsString( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX_TESTTOOL ));
+    ::rtl::OUString  aToolbarName = rResourceName.copy( idx );
     aHelpIdAsString += aToolbarName;
     m_pToolBar->SetSmartHelpId( SmartId( aHelpIdAsString ) );
 
@@ -398,7 +397,7 @@ void ToolBarManager::RefreshImages()
 
         if ( nId > 0 )
         {
-            OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
+            ::rtl::OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
             Image aImage = GetImageFromURL( m_xFrame, aCommandURL, bBigImages, m_bIsHiContrast );
             // Try also to query for add-on images before giving up and use an
             // empty image.
@@ -856,9 +855,9 @@ void ToolBarManager::RemoveControllers()
     m_aControllerMap.clear();
 }
 
-OUString ToolBarManager::RetrieveLabelFromCommand( const OUString& aCmdURL )
+::rtl::OUString ToolBarManager::RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL )
 {
-    OUString aLabel;
+    ::rtl::OUString aLabel;
 
     // Retrieve popup menu labels
     if ( !m_bModuleIdentified )
@@ -1069,13 +1068,13 @@ void ToolBarManager::CreateControllers()
                 PropertyValue aPropValue;
                 std::vector< Any > aPropertyVector;
 
-                aPropValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+                aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
                 aPropValue.Value = makeAny( m_xFrame );
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
+                aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
                 aPropValue.Value = makeAny( aCommandURL );
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
+                aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
                 aPropValue.Value = makeAny( m_xServiceManager );
                 aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
@@ -1164,7 +1163,7 @@ sal_uInt16 ToolBarManager::ConvertStyleToToolboxItemBits( sal_Int32 nStyle )
 
 void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContainer )
 {
-    OString aTbxName = rtl::OUStringToOString( m_aResourceName, RTL_TEXTENCODING_ASCII_US );
+    ::rtl::OString aTbxName = rtl::OUStringToOString( m_aResourceName, RTL_TEXTENCODING_ASCII_US );
 
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::FillToolbar" );
     RTL_LOGFILE_CONTEXT_TRACE1( aLog, "framework (cd100003) ::ToolBarManager::FillToolbar %s", aTbxName.getStr() );
@@ -1175,7 +1174,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         return;
 
     USHORT    nId( 1 );
-    OUString  aHelpIdPrefix( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX ));
+    ::rtl::OUString  aHelpIdPrefix( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX ));
 
     Reference< XModuleManager > xModuleManager( Reference< XModuleManager >(
                                                     m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY ));
@@ -1259,7 +1258,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
                 if (( nType == ::com::sun::star::ui::ItemType::DEFAULT ) && ( aCommandURL.getLength() > 0 ))
                 {
-                    OUString aString( RetrieveLabelFromCommand( aCommandURL ));
+                    ::rtl::OUString aString( RetrieveLabelFromCommand( aCommandURL ));
 
                     sal_uInt16 nItemBits = ConvertStyleToToolboxItemBits( nStyle );
                     m_pToolBar->InsertItem( nId, aString, nItemBits );
@@ -1657,9 +1656,9 @@ PopupMenu * ToolBarManager::GetToolBarCustomMeun(ToolBox* pToolBar)
     {
         Reference< XDispatchProvider > xProv( m_xFrame, UNO_QUERY );
         Reference< XURLTransformer > xTrans( m_xServiceManager->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
             "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
-        aURL.Complete = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ConfigureDialog" ));
+        aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ConfigureDialog" ));
         xTrans->parseStrict( aURL );
         if ( xProv.is() )
             xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
@@ -1715,7 +1714,7 @@ PopupMenu * ToolBarManager::GetToolBarCustomMeun(ToolBox* pToolBar)
             if ( m_pToolBar->GetItemType(nPos) == TOOLBOXITEM_BUTTON )
             {
                 USHORT nId = m_pToolBar->GetItemId(nPos);
-                OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
+                ::rtl::OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
                 pItemMenu->InsertItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->GetItemText( nId ), MIB_CHECKABLE );
                 pItemMenu->CheckItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->IsItemVisible( nId ) );
                 pItemMenu->SetItemCommand( STARTID_CUSTOMIZE_POPUPMENU+nPos, aCommandURL );
@@ -1830,9 +1829,9 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                 {
                     Reference< XDispatchProvider > xProv( m_xFrame, UNO_QUERY );
                     Reference< XURLTransformer > xTrans( m_xServiceManager->createInstance(
-                                                            OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                             "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
-                    aURL.Complete = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ConfigureDialog" ));
+                    aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ConfigureDialog" ));
                     xTrans->parseStrict( aURL );
                     if ( xProv.is() )
                         xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
@@ -2137,3 +2136,6 @@ Image ToolBarManager::QueryAddonsImage( const ::rtl::OUString& aCommandURL, bool
 }
 
 }
+
+
+
