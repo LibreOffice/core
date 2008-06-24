@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slideshowimpl.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_slideshow.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase1.hxx>
@@ -608,9 +609,9 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     const SlideSharedPtr&                       rEnteringSlide,
     const EventSharedPtr&                       rTransitionEndEvent )
 {
-    ENSURE_AND_THROW( !maViewContainer.empty(),
+    ENSURE_OR_THROW( !maViewContainer.empty(),
                       "createSlideTransition(): No views" );
-    ENSURE_AND_THROW( rEnteringSlide,
+    ENSURE_OR_THROW( rEnteringSlide,
                       "createSlideTransition(): No entering slide" );
 
     // return empty transition, if slide transitions
@@ -1065,8 +1066,8 @@ sal_Bool SlideShowImpl::addView(
     DBG_TESTSOLARMUTEX();
 
     // first of all, check if view has a valid canvas
-    ENSURE_AND_RETURN( xView.is(), "addView(): Invalid view" );
-    ENSURE_AND_RETURN( xView->getCanvas().is(),
+    ENSURE_OR_RETURN( xView.is(), "addView(): Invalid view" );
+    ENSURE_OR_RETURN( xView->getCanvas().is(),
                        "addView(): View does not provide a valid canvas" );
 
     UnoViewSharedPtr const pView( createSlideView(
@@ -1109,7 +1110,7 @@ sal_Bool SlideShowImpl::removeView(
     // precondition: must only be called from the main thread!
     DBG_TESTSOLARMUTEX();
 
-    ENSURE_AND_RETURN( xView.is(), "removeView(): Invalid view" );
+    ENSURE_OR_RETURN( xView.is(), "removeView(): Invalid view" );
 
     UnoViewSharedPtr const pView( maViewContainer.removeView( xView ) );
     if( !pView )
@@ -1355,7 +1356,7 @@ void SlideShowImpl::removeShapeEventListener(
     {
         // entry for this shape found -> remove listener from
         // helper object
-        ENSURE_AND_THROW(
+        ENSURE_OR_THROW(
             aIter->second.get(),
             "SlideShowImpl::removeShapeEventListener(): "
             "listener map contains NULL broadcast helper" );
