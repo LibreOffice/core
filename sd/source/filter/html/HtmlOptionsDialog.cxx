@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: HtmlOptionsDialog.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +48,6 @@
 #include <cppuhelper/implbase5.hxx>
 #include <vcl/svapp.hxx>
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::document;
@@ -72,7 +71,7 @@ class SdHtmlOptionsDialog : public cppu::WeakImplHelper5
     const Reference< XMultiServiceFactory > &mrxMgr;
     Sequence< PropertyValue > maMediaDescriptor;
     Sequence< PropertyValue > maFilterDataSequence;
-    OUString aDialogTitle;
+    ::rtl::OUString aDialogTitle;
     DocumentType meDocType;
 
 public:
@@ -88,9 +87,9 @@ public:
     virtual void SAL_CALL initialize( const Sequence< Any > & aArguments ) throw ( Exception, RuntimeException );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw ( RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw ( RuntimeException );
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( RuntimeException );
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw ( RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw ( RuntimeException );
+    virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw ( RuntimeException );
 
     // XPropertyAccess
     virtual Sequence< PropertyValue > SAL_CALL getPropertyValues() throw ( RuntimeException );
@@ -122,24 +121,24 @@ Reference< XInterface >
     return static_cast< ::cppu::OWeakObject* > ( new SdHtmlOptionsDialog( _rxFactory ) );
 }
 
-OUString SdHtmlOptionsDialog_getImplementationName()
+::rtl::OUString SdHtmlOptionsDialog_getImplementationName()
     throw( RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.draw.SdHtmlOptionsDialog" ) );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.draw.SdHtmlOptionsDialog" ) );
 }
 #define SERVICE_NAME "com.sun.star.ui.dialog.FilterOptionsDialog"
-sal_Bool SAL_CALL SdHtmlOptionsDialog_supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL SdHtmlOptionsDialog_supportsService( const ::rtl::OUString& ServiceName )
     throw( RuntimeException )
 {
     return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SERVICE_NAME ) );
 }
 
-Sequence< OUString > SAL_CALL SdHtmlOptionsDialog_getSupportedServiceNames()
+Sequence< ::rtl::OUString > SAL_CALL SdHtmlOptionsDialog_getSupportedServiceNames()
     throw( RuntimeException )
 {
-    Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
+    Sequence< ::rtl::OUString > aRet(1);
+    ::rtl::OUString* pArray = aRet.getArray();
+    pArray[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
     return aRet;
 }
 #undef SERVICE_NAME
@@ -179,17 +178,17 @@ void SAL_CALL SdHtmlOptionsDialog::initialize( const Sequence< Any > & )
 }
 
 // XServiceInfo
-OUString SAL_CALL SdHtmlOptionsDialog::getImplementationName()
+::rtl::OUString SAL_CALL SdHtmlOptionsDialog::getImplementationName()
     throw( RuntimeException )
 {
     return SdHtmlOptionsDialog_getImplementationName();
 }
-sal_Bool SAL_CALL SdHtmlOptionsDialog::supportsService( const OUString& rServiceName )
+sal_Bool SAL_CALL SdHtmlOptionsDialog::supportsService( const ::rtl::OUString& rServiceName )
     throw( RuntimeException )
 {
     return SdHtmlOptionsDialog_supportsService( rServiceName );
 }
-Sequence< OUString > SAL_CALL SdHtmlOptionsDialog::getSupportedServiceNames()
+Sequence< ::rtl::OUString > SAL_CALL SdHtmlOptionsDialog::getSupportedServiceNames()
     throw ( RuntimeException )
 {
     return SdHtmlOptionsDialog_getSupportedServiceNames();
@@ -210,7 +209,7 @@ Sequence< PropertyValue > SdHtmlOptionsDialog::getPropertyValues()
         maMediaDescriptor.realloc( ++nCount );
 
     // the "FilterData" Property is an Any that will contain our PropertySequence of Values
-    maMediaDescriptor[ i ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterData" ) );
+    maMediaDescriptor[ i ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterData" ) );
     maMediaDescriptor[ i ].Value <<= maFilterDataSequence;
     return maMediaDescriptor;
 }
@@ -234,7 +233,7 @@ void SdHtmlOptionsDialog::setPropertyValues( const Sequence< PropertyValue > & a
 }
 
 // XExecutableDialog
-void SdHtmlOptionsDialog::setTitle( const OUString& aTitle )
+void SdHtmlOptionsDialog::setTitle( const ::rtl::OUString& aTitle )
     throw ( RuntimeException )
 {
     aDialogTitle = aTitle;
@@ -276,12 +275,12 @@ void SdHtmlOptionsDialog::setSourceDocument( const Reference< XComponent >& xDoc
             ( xDoc, UNO_QUERY );
     if ( xServiceInfo.is() )
     {
-        if ( xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) ) )
+        if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) ) )
         {
             meDocType = DOCUMENT_TYPE_IMPRESS;
             return;
         }
-        else if ( xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ) )
+        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ) )
         {
             meDocType = DOCUMENT_TYPE_DRAW;
             return;
@@ -289,4 +288,3 @@ void SdHtmlOptionsDialog::setSourceDocument( const Reference< XComponent >& xDoc
     }
     throw IllegalArgumentException();
 }
-
