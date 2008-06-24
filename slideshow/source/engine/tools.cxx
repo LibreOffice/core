@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tools.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_slideshow.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/canvastools.hxx>
 
 #include <math.h>
@@ -288,7 +289,7 @@ namespace slideshow
                 uno::Sequence< double > aTmp;
                 if( (rSourceAny >>= aTmp) )
                 {
-                    ENSURE_AND_THROW( aTmp.getLength() == 3,
+                    ENSURE_OR_THROW( aTmp.getLength() == 3,
                                       "extractValue(): inappropriate length for RGB color value" );
 
                     o_rValue = RGBColor( aTmp[0], aTmp[1], aTmp[2] );
@@ -303,7 +304,7 @@ namespace slideshow
                 uno::Sequence< sal_Int32 > aTmp;
                 if( (rSourceAny >>= aTmp) )
                 {
-                    ENSURE_AND_THROW( aTmp.getLength() == 3,
+                    ENSURE_OR_THROW( aTmp.getLength() == 3,
                                       "extractValue(): inappropriate length for RGB color value" );
 
                     // truncate to byte
@@ -323,7 +324,7 @@ namespace slideshow
                 uno::Sequence< sal_Int8 > aTmp;
                 if( (rSourceAny >>= aTmp) )
                 {
-                    ENSURE_AND_THROW( aTmp.getLength() == 3,
+                    ENSURE_OR_THROW( aTmp.getLength() == 3,
                                       "extractValue(): inappropriate length for RGB color value" );
 
                     o_rValue = RGBColor( ::cppcanvas::makeColor( aTmp[0], aTmp[1], aTmp[2], 255 ) );
@@ -355,7 +356,7 @@ namespace slideshow
                 uno::Sequence< double > aTmp;
                 if( (rSourceAny >>= aTmp) )
                 {
-                    ENSURE_AND_THROW( aTmp.getLength() == 3,
+                    ENSURE_OR_THROW( aTmp.getLength() == 3,
                                       "extractValue(): inappropriate length for HSL color value" );
 
                     o_rValue = HSLColor( aTmp[0], aTmp[1], aTmp[2] );
@@ -370,7 +371,7 @@ namespace slideshow
                 uno::Sequence< sal_Int8 > aTmp;
                 if( (rSourceAny >>= aTmp) )
                 {
-                    ENSURE_AND_THROW( aTmp.getLength() == 3,
+                    ENSURE_OR_THROW( aTmp.getLength() == 3,
                                       "extractValue(): inappropriate length for HSL color value" );
 
                     o_rValue = HSLColor( aTmp[0]*360.0/255.0, aTmp[1]/255.0, aTmp[2]/255.0 );
@@ -770,7 +771,7 @@ namespace slideshow
             if( !(xPropSet->getPropertyValue(
                       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BoundRect") ) ) >>= aTmpRect) )
             {
-                ENSURE_AND_THROW( false,
+                ENSURE_OR_THROW( false,
                                   "getAPIShapeBounds(): Could not get \"BoundRect\" property from shape" );
             }
 
@@ -789,7 +790,7 @@ namespace slideshow
             if( !(xPropSet->getPropertyValue(
                       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ZOrder") ) ) >>= nPrio) )
             {
-                ENSURE_AND_THROW( false,
+                ENSURE_OR_THROW( false,
                                   "getAPIShapePrio(): Could not get \"ZOrder\" property from shape" );
             }
 
@@ -801,7 +802,7 @@ namespace slideshow
         basegfx::B2IVector getSlideSizePixel( const basegfx::B2DVector& rSlideSize,
                                               const UnoViewSharedPtr&   pView )
         {
-            ENSURE_AND_THROW(pView, "getSlideSizePixel(): invalid view");
+            ENSURE_OR_THROW(pView, "getSlideSizePixel(): invalid view");
 
             // determine transformed page bounds
             const basegfx::B2DRange aRect( 0,0,
