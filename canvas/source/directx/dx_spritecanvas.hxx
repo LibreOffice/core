@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_spritecanvas.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,37 +42,37 @@
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XBufferController.hpp>
-#include <com/sun/star/rendering/XColorSpace.hpp>
 #include <com/sun/star/rendering/XParametricPolyPolygon2DFactory.hpp>
 
-#include <cppuhelper/compbase10.hxx>
+#include <cppuhelper/compbase9.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <canvas/base/spritecanvasbase.hxx>
 #include <canvas/base/basemutexhelper.hxx>
-#include <canvas/base/windowgraphicdevicebase.hxx>
+#include <canvas/base/bufferedgraphicdevicebase.hxx>
 
+#include "dx_bitmapprovider.hxx"
 #include "dx_spritecanvashelper.hxx"
+#include "dx_surfacebitmap.hxx"
 #include "dx_impltools.hxx"
-#include "dx_devicehelper.hxx"
+#include "dx_spritedevicehelper.hxx"
 
 
 namespace dxcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper10< ::com::sun::star::rendering::XSpriteCanvas,
+    typedef ::cppu::WeakComponentImplHelper9< ::com::sun::star::rendering::XSpriteCanvas,
                                                 ::com::sun::star::rendering::XIntegerBitmap,
                                                 ::com::sun::star::rendering::XGraphicDevice,
-                                               ::com::sun::star::rendering::XParametricPolyPolygon2DFactory,
-                                               ::com::sun::star::rendering::XBufferController,
-                                               ::com::sun::star::rendering::XColorSpace,
-                                               ::com::sun::star::awt::XWindowListener,
-                                               ::com::sun::star::util::XUpdatable,
-                                               ::com::sun::star::beans::XPropertySet,
-                                               ::com::sun::star::lang::XServiceName >   WindowGraphicDeviceBase_Base;
-    typedef ::canvas::WindowGraphicDeviceBase< ::canvas::BaseMutexHelper< WindowGraphicDeviceBase_Base >,
-                                               DeviceHelper,
-                                               ::osl::MutexGuard,
-                                               ::cppu::OWeakObject >    SpriteCanvasBase_Base;
+                                                ::com::sun::star::rendering::XParametricPolyPolygon2DFactory,
+                                                ::com::sun::star::rendering::XBufferController,
+                                                ::com::sun::star::awt::XWindowListener,
+                                                ::com::sun::star::util::XUpdatable,
+                                                ::com::sun::star::beans::XPropertySet,
+                                                ::com::sun::star::lang::XServiceName >  WindowGraphicDeviceBase_Base;
+    typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::BaseMutexHelper< WindowGraphicDeviceBase_Base >,
+                                                   SpriteDeviceHelper,
+                                                   ::osl::MutexGuard,
+                                                   ::cppu::OWeakObject >    SpriteCanvasBase_Base;
     /** Mixin SpriteSurface
 
         Have to mixin the SpriteSurface before deriving from
@@ -109,7 +109,7 @@ namespace dxcanvas
         XGraphicDevice. And to avoid messing around with circular
         references, this is implemented as one single object.
      */
-    class SpriteCanvas : public SpriteCanvasBaseT
+    class SpriteCanvas : public SpriteCanvasBaseT, public BitmapProvider
     {
     public:
         SpriteCanvas( const ::com::sun::star::uno::Sequence<
@@ -117,7 +117,7 @@ namespace dxcanvas
                       const ::com::sun::star::uno::Reference<
                             ::com::sun::star::uno::XComponentContext >& rxContext );
 
-        void initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
+        void initialize();
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing();
@@ -143,14 +143,17 @@ namespace dxcanvas
         const IDXRenderModuleSharedPtr& getRenderModule() const;
 
         /// Get backbuffer for this canvas
-        const DXBitmapSharedPtr&  getBackBuffer() const;
+        const DXSurfaceBitmapSharedPtr& getBackBuffer() const;
+
+        // BitmapProvider
+        virtual IBitmapSharedPtr getBitmap() const;
 
      private:
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > maArguments;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxComponentContext;
     };
 
     typedef ::rtl::Reference< SpriteCanvas > SpriteCanvasRef;
-    typedef ::rtl::Reference< SpriteCanvas > DeviceRef;
 }
 
 #endif
