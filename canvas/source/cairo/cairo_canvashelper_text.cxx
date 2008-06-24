@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_canvashelper_text.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,14 +33,15 @@
 
 #include <canvas/debug.hxx>
 #include <canvas/canvastools.hxx>
+#include <tools/diagnose_ex.h>
 
+#include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/canvastools.hxx>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/tools/canvastools.hxx>
 
-#include "cairo_spritecanvas.hxx"
 #include "cairo_canvasfont.hxx"
 #include "cairo_textlayout.hxx"
 #include "cairo_canvashelper.hxx"
@@ -55,15 +56,15 @@ namespace cairocanvas
         LINE_COLOR, FILL_COLOR, TEXT_COLOR, IGNORE_COLOR
     };
 
-    uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const rendering::XCanvas*                    /*pCanvas*/,
+    uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const rendering::XCanvas*                    ,
                                                                        const rendering::FontRequest&                fontRequest,
                                                                        const uno::Sequence< beans::PropertyValue >& extraFontProperties,
                                                                        const geometry::Matrix2D&                    fontMatrix )
     {
-        return uno::Reference< rendering::XCanvasFont >( new CanvasFont( fontRequest, extraFontProperties, fontMatrix, mpDevice ) );
+        return uno::Reference< rendering::XCanvasFont >( new CanvasFont( fontRequest, extraFontProperties, fontMatrix, mpSurfaceProvider ));
     }
 
-    uno::Sequence< rendering::FontInfo > CanvasHelper::queryAvailableFonts( const rendering::XCanvas*                       /*pCanvas*/,
+    uno::Sequence< rendering::FontInfo > CanvasHelper::queryAvailableFonts( const rendering::XCanvas*                       ,
                                                                             const rendering::FontInfo&                      /*aFilter*/,
                                                                             const uno::Sequence< beans::PropertyValue >&    /*aFontProperties*/ )
     {
@@ -114,7 +115,7 @@ namespace cairocanvas
             io_rVCLFont.SetHeight( ::basegfx::fround(nFontHeight * aScale.getY()) );
         }
 
-        io_rVCLFont.SetOrientation( static_cast< short >( ::basegfx::fround(-fmod(nRotate, 2*F_PI)*(1800.0/F_PI)) ) );
+        io_rVCLFont.SetOrientation( static_cast< short >( ::basegfx::fround(-fmod(nRotate, 2*M_PI)*(1800.0/M_PI)) ) );
 
         // TODO(F2): Missing functionality in VCL: shearing
         o_rPoint.X() = ::basegfx::fround(aTranslate.getX());
@@ -125,14 +126,14 @@ namespace cairocanvas
 
     static int
     setupOutDevState( OutputDevice&                 rOutDev,
-                          SpriteCanvas*                 pDevice,
-                          const rendering::ViewState&   viewState,
-                          const rendering::RenderState& renderState,
-                          ColorType                     eColorType )
+                      const rendering::XCanvas*     pOwner,
+                      const rendering::ViewState&   viewState,
+                      const rendering::RenderState& renderState,
+                      ColorType                     eColorType )
     {
         ::canvas::tools::verifyInput( renderState,
                                       BOOST_CURRENT_FUNCTION,
-                                      static_cast< ::cppu::OWeakObject* >(pDevice),
+                                      const_cast<rendering::XCanvas*>(pOwner), // only for refcount
                                       2,
                                       eColorType == IGNORE_COLOR ? 0 : 3 );
 
@@ -149,7 +150,7 @@ namespace cairocanvas
         if( viewState.Clip.is() )
         {
             ::basegfx::B2DPolyPolygon aClipPoly(
-                ::canvas::tools::polyPolygonFromXPolyPolygon2D(
+                ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(
                     viewState.Clip) );
 
             if( aClipPoly.count() )
@@ -167,7 +168,7 @@ namespace cairocanvas
         if( renderState.Clip.is() )
         {
             ::basegfx::B2DPolyPolygon aClipPoly(
-                ::canvas::tools::polyPolygonFromXPolyPolygon2D(
+                ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(
                     renderState.Clip) );
 
             ::basegfx::B2DHomMatrix aMatrix;
@@ -214,8 +215,7 @@ namespace cairocanvas
 
             if( renderState.DeviceColor.getLength() > 2 )
             {
-                aColor = ::vcl::unotools::sequenceToColor( pDevice,
-                                                           renderState.DeviceColor );
+                aColor = ::vcl::unotools::stdColorSpaceSequenceToColor( renderState.DeviceColor );
             }
 
             // extract alpha, and make color opaque
@@ -243,7 +243,7 @@ namespace cairocanvas
                     break;
 
                 default:
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "CanvasHelper::setupOutDevState(): Unexpected color type");
                     break;
             }
@@ -253,19 +253,19 @@ namespace cairocanvas
     }
 
     bool setupTextOutput( OutputDevice&                                     rOutDev,
-                          SpriteCanvas*                                     pDevice,
+                          const rendering::XCanvas*                         pOwner,
                           ::Point&                                          o_rOutPos,
                           const rendering::ViewState&                       viewState,
                           const rendering::RenderState&                     renderState,
                           const uno::Reference< rendering::XCanvasFont >&   xFont   )
     {
-        setupOutDevState( rOutDev, pDevice, viewState, renderState, TEXT_COLOR );
+        setupOutDevState( rOutDev, pOwner, viewState, renderState, TEXT_COLOR );
 
         ::Font aVCLFont;
 
         CanvasFont* pFont = dynamic_cast< CanvasFont* >( xFont.get() );
 
-        CHECK_AND_THROW( pFont,
+        ENSURE_ARG_OR_THROW( pFont,
                          "CanvasHelper::setupTextOutput(): Font not compatible with this canvas" );
 
         aVCLFont = pFont->getVCLFont();
@@ -274,8 +274,7 @@ namespace cairocanvas
 
         if( renderState.DeviceColor.getLength() > 2 )
         {
-            aColor = ::vcl::unotools::sequenceToColor( pDevice,
-                                                       renderState.DeviceColor );
+            aColor = ::vcl::unotools::stdColorSpaceSequenceToColor(renderState.DeviceColor );
         }
 
         // setup font color
@@ -292,7 +291,7 @@ namespace cairocanvas
         return true;
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawText( const rendering::XCanvas*                         /*pCanvas*/,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawText( const rendering::XCanvas*                         pOwner,
                                                                           const rendering::StringContext&                   text,
                                                                           const uno::Reference< rendering::XCanvasFont >&   xFont,
                                                                           const rendering::ViewState&                       viewState,
@@ -304,7 +303,7 @@ namespace cairocanvas
         mxDevice->startPerfTrace( &aTimer );
 #endif
 
-        CHECK_AND_THROW( xFont.is(),
+        ENSURE_ARG_OR_THROW( xFont.is(),
                          "CanvasHelper::drawText(): font is NULL");
 
         if( !mpVirtualDevice )
@@ -314,13 +313,11 @@ namespace cairocanvas
         {
 #if defined CAIRO_HAS_WIN32_SURFACE
             // FIXME: Some kind of work-araound...
-            cairo_t *cr = cairo_create (mpSurface->mpSurface);
-            cairo_rectangle (cr, 0, 0, 0, 0);
-            cairo_fill (cr);
-            cairo_destroy (cr);
+            cairo_rectangle (mpSurface->getCairo().get(), 0, 0, 0, 0);
+            cairo_fill(mpSurface->getCairo().get());
 #endif
             ::Point aOutpos;
-            if( !setupTextOutput( *mpVirtualDevice, mpDevice, aOutpos, viewState, renderState, xFont ) )
+            if( !setupTextOutput( *mpVirtualDevice, pOwner, aOutpos, viewState, renderState, xFont ) )
                 return uno::Reference< rendering::XCachedPrimitive >(NULL); // no output necessary
 
                 // change text direction and layout mode
@@ -355,12 +352,12 @@ namespace cairocanvas
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawTextLayout( const rendering::XCanvas*                       /*pCanvas*/,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawTextLayout( const rendering::XCanvas*                       pOwner,
                                                                                 const uno::Reference< rendering::XTextLayout >& xLayoutedText,
                                                                                 const rendering::ViewState&                     viewState,
                                                                                 const rendering::RenderState&                   renderState )
     {
-        CHECK_AND_THROW( xLayoutedText.is(),
+        ENSURE_ARG_OR_THROW( xLayoutedText.is(),
                          "CanvasHelper::drawTextLayout(): layout is NULL");
 
         TextLayout* pTextLayout = dynamic_cast< TextLayout* >( xLayoutedText.get() );
@@ -374,10 +371,8 @@ namespace cairocanvas
             {
 #if defined CAIRO_HAS_WIN32_SURFACE
                 // FIXME: Some kind of work-araound...
-                cairo_t *cr = cairo_create (mpSurface->mpSurface);
-                cairo_rectangle (cr, 0, 0, 0, 0);
-                cairo_fill (cr);
-                cairo_destroy (cr);
+                cairo_rectangle( mpSurface->getCairo().get(), 0, 0, 0, 0);
+                cairo_fill(mpSurface->getCairo().get());
 #endif
                 // TODO(T3): Race condition. We're taking the font
                 // from xLayoutedText, and then calling draw() at it,
@@ -385,7 +380,7 @@ namespace cairocanvas
                 // e.g. to impltools?
 
                 ::Point aOutpos;
-                if( !setupTextOutput( *mpVirtualDevice, mpDevice, aOutpos, viewState, renderState, xLayoutedText->getFont() ) )
+                if( !setupTextOutput( *mpVirtualDevice, pOwner, aOutpos, viewState, renderState, xLayoutedText->getFont() ) )
                     return uno::Reference< rendering::XCachedPrimitive >(NULL); // no output necessary
 
                 // TODO(F2): What about the offset scalings?
@@ -394,7 +389,7 @@ namespace cairocanvas
         }
         else
         {
-            CHECK_AND_THROW( false,
+            ENSURE_ARG_OR_THROW( false,
                              "CanvasHelper::drawTextLayout(): TextLayout not compatible with this canvas" );
         }
 
