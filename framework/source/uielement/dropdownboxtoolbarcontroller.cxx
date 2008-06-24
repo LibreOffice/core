@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dropdownboxtoolbarcontroller.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,7 +66,6 @@
 #endif
 #include <tools/urlobj.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
@@ -159,7 +158,7 @@ DropdownToolbarController::DropdownToolbarController(
     ToolBox*                                 pToolbar,
     USHORT                                   nID,
     sal_Int32                                nWidth,
-    const OUString&                          aCommand ) :
+    const ::rtl::OUString&                          aCommand ) :
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
     ,   m_pListBoxControl( 0 )
 {
@@ -204,8 +203,8 @@ throw ( RuntimeException )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XURLTransformer > xURLTransformer;
-    OUString                     aCommandURL;
-    OUString                     aSelectedText;
+    ::rtl::OUString                     aCommandURL;
+    ::rtl::OUString                     aSelectedText;
     ::com::sun::star::util::URL  aTargetURL;
 
     {
@@ -288,7 +287,7 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
         {
             if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "List", 4 ))
             {
-                Sequence< OUString > aList;
+                Sequence< ::rtl::OUString > aList;
                 m_pListBoxControl->Clear();
 
                 rControlCommand.Arguments[i].Value >>= aList;
@@ -390,3 +389,4 @@ void DropdownToolbarController::executeControlCommand( const ::com::sun::star::f
 }
 
 } // namespace
+

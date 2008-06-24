@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: buttontoolbarcontroller.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,7 +71,6 @@
 #include <svtools/filter.hxx>
 #include <svtools/miscopt.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
@@ -335,3 +334,4 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 } // namespace
+
