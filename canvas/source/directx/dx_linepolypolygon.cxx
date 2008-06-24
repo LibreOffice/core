@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_linepolypolygon.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,6 +28,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_canvas.hxx"
+
 #include <basegfx/tools/canvastools.hxx>
 #include "dx_linepolypolygon.hxx"
 
@@ -37,7 +40,7 @@ using namespace ::com::sun::star;
 namespace dxcanvas
 {
     LinePolyPolygon::LinePolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly ) :
-        ::canvas::LinePolyPolygonBase( rPolyPoly ),
+        ::basegfx::unotools::UnoPolyPolygon( rPolyPoly ),
         mpGdiPlusUser( GDIPlusUser::createInstance() ),
         mpPath()
     {
@@ -50,7 +53,7 @@ namespace dxcanvas
         // B2DPolyPolygon).
         if( !mpPath )
         {
-            mpPath = tools::graphicsPathFromB2DPolyPolygon( getPolyPolygon() );
+            mpPath = tools::graphicsPathFromB2DPolyPolygon( getPolyPolygonUnsafe() );
             mpPath->SetFillMode( const_cast<LinePolyPolygon*>(this)->getFillRule() == rendering::FillRule_EVEN_ODD ?
                                  Gdiplus::FillModeAlternate : Gdiplus::FillModeWinding );
         }
