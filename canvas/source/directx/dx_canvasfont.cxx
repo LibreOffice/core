@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_canvasfont.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,6 +27,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_canvas.hxx"
 
 #include <ctype.h> // don't ask. msdev breaks otherwise...
 #include "dx_winstuff.hxx"
