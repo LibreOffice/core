@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: precompiled_desktop.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,13 @@
 // MARKER(update_precomp.py): Generated on 2006-09-01 17:49:39.170923
 
 #ifdef PRECOMPILED_HEADERS
-#include <tools/debug.hxx>
+#include "com/sun/star/beans/XPropertySet.hpp"
+#include "com/sun/star/beans/NamedValue.hpp"
+#include "comphelper/processfactory.hxx"
+#include "osl/file.hxx"
+#include "rtl/bootstrap.hxx"
+#include "rtl/ustring.hxx"
+#include "tools/datetime.hxx"
+#include "tools/debug.hxx"
+#include "unotools/configmgr.hxx"
 #endif
-
