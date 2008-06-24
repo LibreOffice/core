@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: db.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,14 +96,8 @@ namespace berkeleydbproxy {
 
 
         int get(DB_TXN* txnid, Dbt *key, Dbt *data, u_int32_t flags);
-        int put(DB_TXN* txnid, Dbt *key, Dbt *data, u_int32_t flags);
 
         int cursor(DB_TXN *txnid, Dbc **cursorp, u_int32_t flags);
-
-        int set_alloc(
-                  db_malloc_fcn_type app_malloc,
-                  db_realloc_fcn_type app_realloc,
-                  db_free_fcn_type app_free);
     };
 
     class Dbc : db_internal::Noncopyable
