@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: smilfunctionparser.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,9 @@
 
 // must be first
 #include <canvas/debug.hxx>
-#include <math.h>
+#include <tools/diagnose_ex.h>
+
+#include <rtl/math.hxx>
 
 #include <smilfunctionparser.hxx>
 #include <expressionnodefactory.hxx>
@@ -104,7 +106,7 @@ namespace slideshow
                     maGenerator( aGenerator ),
                     mpContext( rContext )
                 {
-                    ENSURE_AND_THROW( mpContext,
+                    ENSURE_OR_THROW( mpContext,
                                       "ShapeBoundsFunctor::ShapeBoundsFunctor(): Invalid context" );
                 }
 
@@ -137,7 +139,7 @@ namespace slideshow
                     mnValue( rValue ),
                     mpContext( rContext )
                 {
-                    ENSURE_AND_THROW( mpContext,
+                    ENSURE_OR_THROW( mpContext,
                                       "ConstantFunctor::ConstantFunctor(): Invalid context" );
                 }
 
@@ -160,7 +162,7 @@ namespace slideshow
                 DoubleConstantFunctor( const ParserContextSharedPtr& rContext ) :
                     mpContext( rContext )
                 {
-                    ENSURE_AND_THROW( mpContext,
+                    ENSURE_OR_THROW( mpContext,
                                       "DoubleConstantFunctor::DoubleConstantFunctor(): Invalid context" );
                 }
 
@@ -183,7 +185,7 @@ namespace slideshow
                 ValueTFunctor( const ParserContextSharedPtr& rContext ) :
                     mpContext( rContext )
                 {
-                    ENSURE_AND_THROW( mpContext,
+                    ENSURE_OR_THROW( mpContext,
                                       "ValueTFunctor::ValueTFunctor(): Invalid context" );
                 }
 
@@ -242,7 +244,7 @@ namespace slideshow
                     maFunctor( rFunctor ),
                     mpContext( rContext )
                 {
-                    ENSURE_AND_THROW( mpContext,
+                    ENSURE_OR_THROW( mpContext,
                                       "UnaryFunctionFunctor::UnaryFunctionFunctor(): Invalid context" );
                 }
 
@@ -317,7 +319,7 @@ namespace slideshow
                     maGenerator( rGenerator ),
                     mpContext( rContext )
                 {
-                    ENSURE_AND_THROW( mpContext,
+                    ENSURE_OR_THROW( mpContext,
                                       "BinaryFunctionFunctor::BinaryFunctionFunctor(): Invalid context" );
                 }
 
