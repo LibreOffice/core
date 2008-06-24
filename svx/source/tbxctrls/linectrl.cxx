@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: linectrl.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +52,6 @@
 #include <svx/itemwin.hxx>
 #include <svx/dialmgr.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
@@ -100,8 +99,8 @@ SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( USHORT nSlotId,
     pDashItem       ( NULL ),
     bUpdate         ( FALSE )
 {
-    addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineDash" )));
-    addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DashListState" )));
+    addStatusListener( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineDash" )));
+    addStatusListener( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DashListState" )));
 }
 
 //========================================================================
@@ -500,13 +499,13 @@ IMPL_LINK( SvxLineEndWindow, SelectHdl, void *, EMPTYARG )
 
     if ( pLineStartItem )
     {
-        aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "LineStart" ));
+        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LineStart" ));
         pLineStartItem->QueryValue( a );
         aArgs[0].Value = a;
     }
     else
     {
-        aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "LineEnd" ));
+        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LineEnd" ));
         pLineEndItem->QueryValue( a );
         aArgs[0].Value = a;
     }
@@ -517,7 +516,7 @@ IMPL_LINK( SvxLineEndWindow, SelectHdl, void *, EMPTYARG )
     aLineEndSet.SetNoSelection();
 
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineEndStyle" )),
+                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineEndStyle" )),
                                  aArgs );
 
     delete pLineEndItem;
@@ -786,4 +785,3 @@ void SvxLineEndToolBoxControl::StateChanged( USHORT, SfxItemState eState, const 
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
     rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
 }
-
