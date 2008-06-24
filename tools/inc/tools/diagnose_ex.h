@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: diagnose_ex.h,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,15 @@
 
 #ifndef TOOLS_DIAGNOSE_EX_H
 #define TOOLS_DIAGNOSE_EX_H
+
+#include <osl/diagnose.h>
+#include <rtl/ustring.hxx>
+
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
+#include <boost/current_function.hpp>
+
 
 #define OSL_UNUSED( expression ) \
     (void)(expression)
@@ -75,5 +84,49 @@
     #define DBG_UNHANDLED_EXCEPTION()
 
 #endif  // OSL_DEBUG_LEVEL
+
+
+/** This macro asserts the given condition (in debug mode), and throws
+    an IllegalArgumentException afterwards.
+ */
+#define ENSURE_ARG_OR_THROW(c, m) if( !(c) ) { \
+                                     OSL_ENSURE(c, m); \
+                                     throw ::com::sun::star::lang::IllegalArgumentException( \
+                                     ::rtl::OUString::createFromAscii(BOOST_CURRENT_FUNCTION) + \
+                                     ::rtl::OUString::createFromAscii(",\n"m), \
+                                     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(), \
+                                     0 ); }
+#define ENSURE_ARG_OR_THROW2(c, m, ifc, arg) if( !(c) ) { \
+                                               OSL_ENSURE(c, m); \
+                                               throw ::com::sun::star::lang::IllegalArgumentException( \
+                                               ::rtl::OUString::createFromAscii(BOOST_CURRENT_FUNCTION) + \
+                                               ::rtl::OUString::createFromAscii(",\n"m), \
+                                               ifc, \
+                                               arg ); }
+
+/** This macro asserts the given condition (in debug mode), and throws
+    an RuntimeException afterwards.
+ */
+#define ENSURE_OR_THROW(c, m) if( !(c) ) { \
+                                     OSL_ENSURE(c, m); \
+                                     throw ::com::sun::star::uno::RuntimeException( \
+                                     ::rtl::OUString::createFromAscii(BOOST_CURRENT_FUNCTION) + \
+                                     ::rtl::OUString::createFromAscii(",\n"m), \
+                                     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() ); }
+#define ENSURE_OR_THROW2(c, m, ifc) if( !(c) ) { \
+                                          OSL_ENSURE(c, m); \
+                                          throw ::com::sun::star::uno::RuntimeException( \
+                                          ::rtl::OUString::createFromAscii(BOOST_CURRENT_FUNCTION) + \
+                                          ::rtl::OUString::createFromAscii(",\n"m), \
+                                          ifc ); }
+
+/** This macro asserts the given condition (in debug mode), and
+    returns false afterwards.
+ */
+#define ENSURE_OR_RETURN(c, m) if( !(c) ) { \
+                                     OSL_ENSURE(c, m); \
+                                     return false; }
+
+
 
 #endif // TOOLS_DIAGNOSE_EX_H
