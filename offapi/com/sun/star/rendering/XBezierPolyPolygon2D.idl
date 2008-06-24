@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XBezierPolyPolygon2D.idl,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,7 +88,7 @@ interface XBezierPolyPolygon2D : XPolyPolygon2D
 
         @returns the sequence of extracted points.
 
-        @throws com::sun::star::lang::IndexOutOfBoundsException
+        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
         if one of the given values exceed the permissible range.
      */
     sequence< sequence < ::com::sun::star::geometry::RealBezierSegment2D > > getBezierSegments( [in] long nPolygonIndex, [in] long nNumberOfPolygons, [in] long nPointIndex, [in] long nNumberOfPoints )
@@ -114,7 +114,7 @@ interface XBezierPolyPolygon2D : XPolyPolygon2D
         such that after this method completes, it contains exactly the
         specified bezier segment data.
 
-        @throws com::sun::star::lang::IndexOutOfBoundsException
+        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
         if one of the given values exceed the permissible range.
      */
     void setBezierSegments( [in] sequence< sequence< ::com::sun::star::geometry::RealBezierSegment2D > > points, [in] long nPolygonIndex )
@@ -136,7 +136,7 @@ interface XBezierPolyPolygon2D : XPolyPolygon2D
 
         @returns the requested point.
 
-        @throws com::sun::star::lang::IndexOutOfBoundsException
+        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
         if one of the given values exceed the permissible range.
 
      */
@@ -166,7 +166,7 @@ interface XBezierPolyPolygon2D : XPolyPolygon2D
         nPolygonIndex, which is to be set.  This value must not
         exceed the number of points in this polygon.
 
-        @throws com::sun::star::lang::IndexOutOfBoundsException
+        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
         if one of the given values exceed the permissible range.
      */
     void setBezierSegment( [in] ::com::sun::star::geometry::RealBezierSegment2D point, [in] long nPolygonIndex, [in] long nPointIndex )
