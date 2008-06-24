@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_spritecanvas.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,9 +28,14 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_canvas.hxx"
+
 #include <ctype.h> // don't ask. msdev breaks otherwise...
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
+#include <tools/diagnose_ex.h>
+
 #include <canvas/canvastools.hxx>
 
 #include <osl/mutex.hxx>
@@ -40,10 +45,10 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 
+#include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <comphelper/servicedecl.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -53,42 +58,49 @@
 #include "dx_winstuff.hxx"
 #include "dx_spritecanvas.hxx"
 
-using namespace ::com::sun::star;
-
 #if DIRECTX_VERSION < 0x0900
-# define CANVAS_NAME "DXCanvas"
+# define CANVAS_TECH "DX5"
 #else
-# define CANVAS_NAME "DX9Canvas"
+# define CANVAS_TECH "DX9"
 #endif
 
-#define SERVICE_NAME        "com.sun.star.rendering." CANVAS_NAME
-#define IMPLEMENTATION_NAME "com.sun.star.comp.rendering." CANVAS_NAME
+#define SPRITECANVAS_SERVICE_NAME        "com.sun.star.rendering.SpriteCanvas."      CANVAS_TECH
+#define SPRITECANVAS_IMPLEMENTATION_NAME "com.sun.star.comp.rendering.SpriteCanvas." CANVAS_TECH
 
+
+using namespace ::com::sun::star;
 
 namespace dxcanvas
 {
     SpriteCanvas::SpriteCanvas( const uno::Sequence< uno::Any >&                aArguments,
                                 const uno::Reference< uno::XComponentContext >& rxContext ) :
+        maArguments(aArguments),
         mxComponentContext( rxContext )
     {
-        // #i64742# Only call initialize when not in probe mode
-        if( aArguments.getLength() != 0 )
-            initialize( aArguments );
     }
 
-    void SpriteCanvas::initialize( const uno::Sequence< uno::Any >& aArguments )
+    void SpriteCanvas::initialize()
     {
+        // #i64742# Only call initialize when not in probe mode
+        if( maArguments.getLength() == 0 )
+            return;
+
         VERBOSE_TRACE( "SpriteCanvas::initialize called" );
 
-        // At index 1, we expect a HWND handle here, containing a
-        // pointer to a valid window, on which to output
-        // At index 2, we expect the current window bound rect
-        CHECK_AND_THROW( aArguments.getLength() >= 4 &&
-                         aArguments[1].getValueTypeClass() == uno::TypeClass_LONG,
-                         "SpriteCanvas::initialize: wrong number of arguments, or wrong types" );
+        /* aArguments:
+           0: ptr to creating instance (Window or VirtualDevice)
+           1: SystemEnvData as a streamed Any (or empty for VirtualDevice)
+           2: current bounds of creating instance
+           3: bool, denoting always on top state for Window (always false for VirtualDevice)
+           4: XWindow for creating Window (or empty for VirtualDevice)
+           5: SystemGraphicsData as a streamed Any
+         */
+        ENSURE_ARG_OR_THROW( maArguments.getLength() >= 5 &&
+                             maArguments[4].getValueTypeClass() == uno::TypeClass_INTERFACE,
+                             "VCLSpriteCanvas::initialize: wrong number of arguments, or wrong types" );
 
         uno::Reference< awt::XWindow > xParentWindow;
-        aArguments[4] >>= xParentWindow;
+        maArguments[4] >>= xParentWindow;
         Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
         if( !pParentWindow )
             throw lang::NoSupportException(
@@ -97,22 +109,23 @@ namespace dxcanvas
                 NULL);
 
         awt::Rectangle aRect;
-        aArguments[2] >>= aRect;
+        maArguments[2] >>= aRect;
 
         sal_Bool bIsFullscreen( sal_False );
-        aArguments[3] >>= bIsFullscreen;
+        maArguments[3] >>= bIsFullscreen;
 
         // setup helper
         maDeviceHelper.init( *pParentWindow,
                              *this,
                              aRect,
                              bIsFullscreen );
-        maCanvasHelper.setDevice( *this );
-        maCanvasHelper.init( maRedrawManager,
+        maCanvasHelper.init( *this,
+                             maRedrawManager,
                              maDeviceHelper.getRenderModule(),
                              maDeviceHelper.getSurfaceProxy(),
                              maDeviceHelper.getBackBuffer(),
                              ::basegfx::B2ISize() );
+        maArguments.realloc(0);
     }
 
     void SAL_CALL SpriteCanvas::disposing()
@@ -160,7 +173,7 @@ namespace dxcanvas
 
     ::rtl::OUString SAL_CALL SpriteCanvas::getServiceName(  ) throw (uno::RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ) );
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SPRITECANVAS_SERVICE_NAME ) );
     }
 
     const IDXRenderModuleSharedPtr& SpriteCanvas::getRenderModule() const
@@ -170,19 +183,32 @@ namespace dxcanvas
         return maDeviceHelper.getRenderModule();
     }
 
-    const DXBitmapSharedPtr& SpriteCanvas::getBackBuffer() const
+    const DXSurfaceBitmapSharedPtr& SpriteCanvas::getBackBuffer() const
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         return maDeviceHelper.getBackBuffer();
     }
 
+    IBitmapSharedPtr SpriteCanvas::getBitmap() const
+    {
+        return maDeviceHelper.getBackBuffer();
+    }
+
+    static uno::Reference<uno::XInterface> initCanvas( SpriteCanvas* pCanvas )
+    {
+        uno::Reference<uno::XInterface> xRet(static_cast<cppu::OWeakObject*>(pCanvas));
+        pCanvas->initialize();
+        return xRet;
+    }
+
     namespace sdecl = comphelper::service_decl;
-    const sdecl::ServiceDecl dxCanvasDecl(
-        sdecl::class_<SpriteCanvas, sdecl::with_args<true> >(),
-        IMPLEMENTATION_NAME,
-        SERVICE_NAME );
+    sdecl::class_<SpriteCanvas, sdecl::with_args<true> > serviceImpl(&initCanvas);
+    const sdecl::ServiceDecl dxSpriteCanvasDecl(
+        serviceImpl,
+        SPRITECANVAS_IMPLEMENTATION_NAME,
+        SPRITECANVAS_SERVICE_NAME );
 }
 
 // The C shared lib entry points
-COMPHELPER_SERVICEDECL_EXPORTS1(dxcanvas::dxCanvasDecl);
+COMPHELPER_SERVICEDECL_EXPORTS1(dxcanvas::dxSpriteCanvasDecl);
