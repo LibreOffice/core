@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shapeattributelayer.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <shapeattributelayer.hxx>
 
 #include <canvas/verbosetrace.hxx>
@@ -209,7 +210,7 @@ namespace slideshow
 
         bool ShapeAttributeLayer::revokeChildLayer( const ShapeAttributeLayerSharedPtr& rChildLayer )
         {
-            ENSURE_AND_RETURN( rChildLayer,
+            ENSURE_OR_RETURN( rChildLayer,
                                "ShapeAttributeLayer::revokeChildLayer(): Will not remove NULL child" );
 
             if( !haveChild() )
@@ -287,7 +288,7 @@ namespace slideshow
 
         void ShapeAttributeLayer::setWidth( const double& rNewWidth )
         {
-            ENSURE_AND_THROW( ::rtl::math::isFinite(rNewWidth),
+            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewWidth),
                               "ShapeAttributeLayer::setWidth(): Invalid width" );
 
             maSize.setX( rNewWidth );
@@ -311,7 +312,7 @@ namespace slideshow
 
         void ShapeAttributeLayer::setHeight( const double& rNewHeight )
         {
-            ENSURE_AND_THROW( ::rtl::math::isFinite(rNewHeight),
+            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewHeight),
                               "ShapeAttributeLayer::setHeight(): Invalid height" );
 
             maSize.setY( rNewHeight );
@@ -321,7 +322,7 @@ namespace slideshow
 
         void ShapeAttributeLayer::setSize( const ::basegfx::B2DSize& rNewSize )
         {
-            ENSURE_AND_THROW( ::rtl::math::isFinite(rNewSize.getX()) &&
+            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewSize.getX()) &&
                               ::rtl::math::isFinite(rNewSize.getY()),
                               "ShapeAttributeLayer::setSize(): Invalid size" );
 
@@ -346,7 +347,7 @@ namespace slideshow
 
         void ShapeAttributeLayer::setPosX( const double& rNewX )
         {
-            ENSURE_AND_THROW( ::rtl::math::isFinite(rNewX),
+            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewX),
                               "ShapeAttributeLayer::setPosX(): Invalid position" );
 
             maPosition.setX( rNewX );
@@ -370,7 +371,7 @@ namespace slideshow
 
         void ShapeAttributeLayer::setPosY( const double& rNewY )
         {
-            ENSURE_AND_THROW( ::rtl::math::isFinite(rNewY),
+            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewY),
                               "ShapeAttributeLayer::setPosY(): Invalid position" );
 
             maPosition.setY( rNewY );
@@ -401,7 +402,7 @@ namespace slideshow
 
         void ShapeAttributeLayer::setRotationAngle( const double& rNewAngle )
         {
-            ENSURE_AND_THROW( ::rtl::math::isFinite(rNewAngle),
+            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewAngle),
                               "ShapeAttributeLayer::setRotationAngle(): Invalid angle" );
 
             mnRotationAngle = rNewAngle;
@@ -424,7 +425,7 @@ namespace slideshow
 
         void ShapeAttributeLayer::setShearXAngle( const double& rNewAngle )
         {
-            ENSURE_AND_THROW( ::rtl::math::isFinite(rNewAngle),
+            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewAngle),
                               "ShapeAttributeLayer::setShearXAngle(): Invalid angle" );
 
             mnShearXAngle = rNewAngle;
@@ -447,7 +448,7 @@ namespace slideshow
 
         void ShapeAttributeLayer::setShearYAngle( const double& rNewAngle )
         {
-            ENSURE_AND_THROW( ::rtl::math::isFinite(rNewAngle),
+            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewAngle),
                               "ShapeAttributeLayer::setShearYAngle(): Invalid angle" );
 
             mnShearYAngle = rNewAngle;
@@ -470,7 +471,7 @@ namespace slideshow
 
         void ShapeAttributeLayer::setAlpha( const double& rNewValue )
         {
-            ENSURE_AND_THROW( ::rtl::math::isFinite(rNewValue),
+            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewValue),
                               "ShapeAttributeLayer::setAlpha(): Invalid alpha" );
 
             mnAlpha = rNewValue;
@@ -670,7 +671,7 @@ namespace slideshow
 
         void ShapeAttributeLayer::setCharRotationAngle( const double& rNewAngle )
         {
-            ENSURE_AND_THROW( ::rtl::math::isFinite(rNewAngle),
+            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewAngle),
                               "ShapeAttributeLayer::setCharRotationAngle(): Invalid angle" );
 
             mnCharRotationAngle = rNewAngle;
@@ -792,7 +793,7 @@ namespace slideshow
 
         void ShapeAttributeLayer::setCharScale( const double& rNewHeight )
         {
-            ENSURE_AND_THROW( ::rtl::math::isFinite(rNewHeight),
+            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewHeight),
                               "ShapeAttributeLayer::setCharScale(): Invalid height" );
 
             mnCharScale = rNewHeight;
