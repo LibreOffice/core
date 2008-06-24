@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: implsprite.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,16 +30,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppcanvas.hxx"
+
 #include <com/sun/star/rendering/XSprite.hpp>
 #include <com/sun/star/rendering/XAnimatedSprite.hpp>
+
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#ifndef _CANVAS_CANVASTOOLS_HXX
 #include <canvas/canvastools.hxx>
-#endif
 
-
-#include <implsprite.hxx>
+#include "implsprite.hxx"
 
 
 using namespace ::com::sun::star;
