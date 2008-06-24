@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: HelpCompiler.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,7 +95,7 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
             doc = xmlParseFile(filePath.native_file_string().c_str());
         }
 
-        res = xmlParseFile(filePath.native_file_string().c_str());
+        //???res = xmlParseFile(filePath.native_file_string().c_str());
 
         res = xsltApplyStylesheet(cur, doc, params);
         xmlFreeDoc(doc);
@@ -507,6 +507,18 @@ bool HelpCompiler::compile( void ) throw( HelpProcessingException )
 
 namespace fs
 {
+    rtl_TextEncoding getThreadTextEncoding( void )
+    {
+        static bool bNeedsInit = true;
+        static rtl_TextEncoding nThreadTextEncoding;
+        if( bNeedsInit )
+        {
+            bNeedsInit = false;
+            nThreadTextEncoding = osl_getThreadTextEncoding();
+        }
+        return nThreadTextEncoding;
+    }
+
     void create_directory(const fs::path indexDirName)
     {
         HCDBG(
@@ -520,6 +532,11 @@ namespace fs
     void rename(const fs::path &src, const fs::path &dest)
     {
         osl::File::move(src.data, dest.data);
+    }
+
+    void copy(const fs::path &src, const fs::path &dest)
+    {
+        osl::File::copy(src.data, dest.data);
     }
 
     bool exists(const fs::path &in)
