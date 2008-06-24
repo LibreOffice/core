@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_canvasbitmap.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,36 +31,43 @@
 #ifndef _DXCANVAS_CANVASBITMAP_HXX
 #define _DXCANVAS_CANVASBITMAP_HXX
 
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase4.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
+#include <com/sun/star/beans/XFastPropertySet.hpp>
 
 #include <basegfx/vector/b2isize.hxx>
 
 #include <boost/shared_ptr.hpp>
 
+#include <cppuhelper/compbase3.hxx>
+#include <comphelper/uno3.hxx>
+#include <canvas/base/basemutexhelper.hxx>
 #include <canvas/base/integerbitmapbase.hxx>
 
-#include "dx_canvashelper.hxx"
-#include "dx_spritecanvas.hxx"
+#include "dx_bitmapprovider.hxx"
+#include "dx_bitmapcanvashelper.hxx"
+#include "dx_devicehelper.hxx"
 #include "dx_impltools.hxx"
+#include "dx_ibitmap.hxx"
 
 
 /* Definition of CanvasBitmap class */
 
 namespace dxcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper3< ::com::sun::star::rendering::XBitmapCanvas,
+    typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::rendering::XBitmapCanvas,
                                               ::com::sun::star::rendering::XIntegerBitmap,
-                                               ::com::sun::star::lang::XServiceInfo >   CanvasBitmapBase_Base;
+                                               ::com::sun::star::lang::XServiceInfo,
+                                               ::com::sun::star::beans::XFastPropertySet >      CanvasBitmapBase_Base;
     typedef ::canvas::IntegerBitmapBase< ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
-                                         CanvasHelper,
+                                         BitmapCanvasHelper,
                                          ::osl::MutexGuard,
                                          ::cppu::OWeakObject >                          CanvasBitmap_Base;
 
-    class CanvasBitmap : public CanvasBitmap_Base
+    class CanvasBitmap : public CanvasBitmap_Base, public BitmapProvider
     {
     public:
         /** Create a canvas bitmap for the given surface
@@ -71,8 +78,8 @@ namespace dxcanvas
             @param rDevice
             Reference device, with which bitmap should be compatible
          */
-        CanvasBitmap( const DXBitmapSharedPtr&  rSurface,
-                      const DeviceRef&          rDevice );
+        CanvasBitmap( const IBitmapSharedPtr& rSurface,
+                      const DeviceRef&        rDevice );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing();
@@ -82,16 +89,18 @@ namespace dxcanvas
         virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
-        // attention: Only intended client of this method is
-        // bitmapFromXBitmap()!
-        DXBitmapSharedPtr getSurface() { return mpSurface; };
+        // BitmapProvider
+        virtual IBitmapSharedPtr getBitmap() const { return mpBitmap; }
+
+        virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle)  throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const ::com::sun::star::uno::Any&)  throw (::com::sun::star::uno::RuntimeException) {}
 
     private:
         /** MUST hold here, too, since CanvasHelper only contains a
             raw pointer (without refcounting)
         */
-        DeviceRef           mpDevice;
-        DXBitmapSharedPtr   mpSurface;
+        DeviceRef        mpDevice;
+        IBitmapSharedPtr mpBitmap;
     };
 }
 
