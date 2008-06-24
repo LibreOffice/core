@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: animationaudionode.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,7 @@ AnimationAudioNode::AnimationAudioNode(
     OSL_ENSURE( maSoundURL.getLength(),
                 "could not extract sound source URL/empty URL string" );
 
-    ENSURE_AND_THROW( getContext().mxComponentContext.is(),
+    ENSURE_OR_THROW( getContext().mxComponentContext.is(),
                       "Invalid component context" );
 }
 
