@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nodetools.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,12 +75,12 @@ namespace slideshow
         AttributableShapeSharedPtr lookupAttributableShape( const ShapeManagerSharedPtr&                rShapeManager,
                                                             const uno::Reference< drawing::XShape >&    xShape          )
         {
-            ENSURE_AND_THROW( rShapeManager,
+            ENSURE_OR_THROW( rShapeManager,
                               "lookupAttributableShape(): invalid ShapeManager" );
 
             ShapeSharedPtr pShape( rShapeManager->lookupShape( xShape ) );
 
-            ENSURE_AND_THROW( pShape,
+            ENSURE_OR_THROW( pShape,
                               "lookupAttributableShape(): no shape found for given XShape" );
 
             AttributableShapeSharedPtr pRes(
@@ -89,7 +89,7 @@ namespace slideshow
             // TODO(E3): Cannot throw here, people might set animation info
             // for non-animatable shapes from the API. AnimationNodes must catch
             // the exception and handle that differently
-            ENSURE_AND_THROW( pRes,
+            ENSURE_OR_THROW( pRes,
                               "lookupAttributableShape(): shape found does not implement AttributableShape interface" );
 
             return pRes;
