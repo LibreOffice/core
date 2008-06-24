@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: continuouskeytimeactivitybase.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
 #include <continuouskeytimeactivitybase.hxx>
@@ -50,7 +51,7 @@ namespace slideshow
             maKeyTimes( rParms.maDiscreteTimes ),
             mnLastIndex( 0 )
         {
-            ENSURE_AND_THROW( maKeyTimes.size() > 1,
+            ENSURE_OR_THROW( maKeyTimes.size() > 1,
                               "ContinuousKeyTimeActivityBase::ContinuousKeyTimeActivityBase(): key times vector must have two entries or more" );
 
 #ifdef DBG_UTIL
@@ -64,12 +65,12 @@ namespace slideshow
                     maKeyTimes[i-1] < 0.0 ||
                     maKeyTimes[i-1] > 1.0 )
                 {
-                    ENSURE_AND_THROW( false, "ContinuousKeyTimeActivityBase::ContinuousKeyTimeActivityBase(): time values not within [0,1] range!" );
+                    ENSURE_OR_THROW( false, "ContinuousKeyTimeActivityBase::ContinuousKeyTimeActivityBase(): time values not within [0,1] range!" );
                 }
 
                 if( maKeyTimes[i-1] > maKeyTimes[i] )
                 {
-                    ENSURE_AND_THROW( false, "ContinuousKeyTimeActivityBase::ContinuousKeyTimeActivityBase(): time vector is not sorted in ascending order!" );
+                    ENSURE_OR_THROW( false, "ContinuousKeyTimeActivityBase::ContinuousKeyTimeActivityBase(): time vector is not sorted in ascending order!" );
                 }
             }
 
