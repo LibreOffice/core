@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XParametricPolyPolygon2DFactory.idl,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,11 +55,11 @@ interface XParametricPolyPolygon2DFactory : ::com::sun::star::uno::XInterface
 {
     /** Create a linear gradient.
 
-        The gradient varies linearly between leftColor and rightColor
+        The gradient varies linearly between colors. the color positions on <0, 1> interval are given by stops values
         in the x direction, and has constant color for fixed x
         coordinate value in y direction
      */
-    XParametricPolyPolygon2D    createLinearHorizontalGradient( [in] sequence<ColorComponent> leftColor, [in] sequence<ColorComponent> rightColor )
+    XParametricPolyPolygon2D    createLinearHorizontalGradient( [in] sequence<Color> colors, [in] sequence<double> stops )
         raises (com::sun::star::lang::IllegalArgumentException);
 
     /** Create an axial gradient.
@@ -69,7 +69,7 @@ interface XParametricPolyPolygon2DFactory : ::com::sun::star::uno::XInterface
         x direction. For fixed x coordinate, the gradient has constant
         color value in y direction.
      */
-    XParametricPolyPolygon2D    createAxialHorizontalGradient( [in] sequence<ColorComponent> middleColor, [in] sequence<ColorComponent> endColor )
+    XParametricPolyPolygon2D    createAxialHorizontalGradient( [in] sequence<Color> colors, [in] sequence<double> stops )
         raises (com::sun::star::lang::IllegalArgumentException);
 
     /** Create an elliptical gradient.
@@ -84,7 +84,7 @@ interface XParametricPolyPolygon2DFactory : ::com::sun::star::uno::XInterface
         center color: the gradient will not collapse into a single
         point, but become a line of center color.
      */
-    XParametricPolyPolygon2D    createEllipticalGradient( [in] sequence<ColorComponent> centerColor, [in] sequence<ColorComponent> endColor, [in] ::com::sun::star::geometry::RealRectangle2D boundRect )
+    XParametricPolyPolygon2D    createEllipticalGradient( [in] sequence<Color> colors, [in] sequence<double> stops, [in] ::com::sun::star::geometry::RealRectangle2D boundRect )
         raises (com::sun::star::lang::IllegalArgumentException);
 
     /** Create a rectangular gradient.
@@ -99,7 +99,7 @@ interface XParametricPolyPolygon2DFactory : ::com::sun::star::uno::XInterface
         the center color: the gradient will not collapse into a single
         point, but become a line of center color.
      */
-    XParametricPolyPolygon2D    createRectangularGradient( [in] sequence<ColorComponent> centerColor, [in] sequence<ColorComponent> endColor, [in] ::com::sun::star::geometry::RealRectangle2D boundRect )
+    XParametricPolyPolygon2D    createRectangularGradient( [in] sequence<Color> colors, [in] sequence<double> stops, [in] ::com::sun::star::geometry::RealRectangle2D boundRect )
         raises (com::sun::star::lang::IllegalArgumentException);
 
     /** Create a line hash of vertical lines.
@@ -147,6 +147,7 @@ interface XParametricPolyPolygon2DFactory : ::com::sun::star::uno::XInterface
 
 //=============================================================================
 
+/// Service providing a <type>XParametricPolyPolygon2DFactory</type> service
 service ParametricPolyPolygon2DFactory: XParametricPolyPolygon2DFactory;
 
 }; }; }; };
