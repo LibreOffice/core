@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basegfxfactory.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,19 +30,22 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppcanvas.hxx"
+
 #include <rtl/instance.hxx>
 #include <osl/getglobalmutex.hxx>
 #include <osl/diagnose.h>
+
 #include <com/sun/star/rendering/InterpolationMode.hpp>
+
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/tools/canvastools.hxx>
 
 #include <cppcanvas/basegfxfactory.hxx>
 
-#include <implpolypolygon.hxx>
-#include <implbitmap.hxx>
-#include <impltext.hxx>
+#include "implpolypolygon.hxx"
+#include "implbitmap.hxx"
+#include "impltext.hxx"
 
 
 using namespace ::com::sun::star;
