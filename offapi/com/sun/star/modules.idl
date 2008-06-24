@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: modules.idl,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,6 +102,9 @@ module formula {};
 /// Desktop environment framework interfaces.
 module frame {};
 
+/// Interfaces and data types to deal with basic geometric entities
+module geometry {};
+
 /// Interfaces for graphic handling
 module graphic {};
 
@@ -134,6 +137,9 @@ module plugin {};
 
 /// Presentation specific interfaces.
 module presentation {};
+
+/// Interfaces and data structures for rendering
+module rendering {};
 
 /// Interfaces to access (UI) resource files.
 module resource {};
