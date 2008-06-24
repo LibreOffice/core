@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Block.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,7 +55,6 @@ namespace xmlsearch {
             Block( const DBEnv* );
             virtual ~Block();
 
-            void setInteger( sal_Int32 i,sal_Int32 value ) throw( xmlsearch::excep::IllegalIndexException );
             sal_Int32 getInteger( sal_Int32 i ) const throw( xmlsearch::excep::IllegalIndexException );
 
             void trueLeaf() { isLeaf_ = true; }
@@ -69,7 +68,6 @@ namespace xmlsearch {
             sal_Int32 getNum() const { return num_; }
 
             void read( util::RandomAccessStream* in );
-            void write( util::RandomAccessStream* out ) const;
 
             const sal_Int8* getData() const { return data_; }
 

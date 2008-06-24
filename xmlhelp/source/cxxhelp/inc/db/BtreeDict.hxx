@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BtreeDict.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,7 +68,6 @@ namespace xmlsearch {
 
             void lock( sal_Int32   blNum ) const throw( xmlsearch::excep::IllegalIndexException );
             void unlock( sal_Int32 blNum ) const throw( xmlsearch::excep::IllegalIndexException );
-            bool isLocked( sal_Int32 blNum ) const throw( xmlsearch::excep::IllegalIndexException );
 
             const DictBlock* accessBlock( sal_Int32 id ) const;
 
