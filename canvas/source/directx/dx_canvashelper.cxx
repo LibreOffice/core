@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_canvashelper.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,13 +28,15 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_canvas.hxx"
+
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 
-#include <com/sun/star/rendering/IntegerBitmapFormat.hpp>
-#include <com/sun/star/rendering/Endianness.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/RepaintResult.hpp>
@@ -50,6 +52,7 @@
 
 #include "dx_spritecanvas.hxx"
 #include "dx_impltools.hxx"
+#include "dx_vcltools.hxx"
 #include "dx_canvasfont.hxx"
 #include "dx_textlayout.hxx"
 #include "dx_canvashelper.hxx"
@@ -77,7 +80,7 @@ namespace dxcanvas
                     return Gdiplus::LineCapSquare;
 
                 default:
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "gdiCapFromCap(): Unexpected cap type" );
             }
 
@@ -102,7 +105,7 @@ namespace dxcanvas
                     return Gdiplus::LineJoinBevel;
 
                 default:
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "gdiJoinFromJoin(): Unexpected join type" );
             }
 
@@ -111,44 +114,44 @@ namespace dxcanvas
     }
 
     CanvasHelper::CanvasHelper() :
-        mpDevice( NULL ),
-        mpTarget(),
         mpGdiPlusUser( GDIPlusUser::createInstance() ),
+        mpDevice( NULL ),
+        mpGraphicsProvider(),
         maOutputOffset()
     {
     }
 
     void CanvasHelper::disposing()
     {
-        mpGdiPlusUser.reset();
+        mpGraphicsProvider.reset();
         mpDevice = NULL;
-        mpTarget.reset();
+        mpGdiPlusUser.reset();
     }
 
-    void CanvasHelper::setDevice( SpriteCanvas& rDevice )
+    void CanvasHelper::setDevice( rendering::XGraphicDevice& rDevice )
     {
         mpDevice = &rDevice;
     }
 
-    void CanvasHelper::setTarget( const DXBitmapSharedPtr& rTarget )
+    void CanvasHelper::setTarget( const GraphicsProviderSharedPtr& rTarget )
     {
-        ENSURE_AND_THROW( rTarget,
+        ENSURE_OR_THROW( rTarget,
                           "CanvasHelper::setTarget(): Invalid target" );
-        ENSURE_AND_THROW( !mpTarget.get(),
+        ENSURE_OR_THROW( !mpGraphicsProvider.get(),
                           "CanvasHelper::setTarget(): target set, old target would be overwritten" );
 
-        mpTarget = rTarget;
+        mpGraphicsProvider = rTarget;
     }
 
-    void CanvasHelper::setTarget( const DXBitmapSharedPtr&      rTarget,
-                                   const ::basegfx::B2ISize&    rOutputOffset )
+    void CanvasHelper::setTarget( const GraphicsProviderSharedPtr& rTarget,
+                                  const ::basegfx::B2ISize&        rOutputOffset )
     {
-        ENSURE_AND_THROW( rTarget,
-                          "CanvasHelper::setTarget(): invalid target" );
-        ENSURE_AND_THROW( !mpTarget.get(),
-                          "CanvasHelper::setTarget(): target set, old target would be overwritten" );
+        ENSURE_OR_THROW( rTarget,
+                         "CanvasHelper::setTarget(): invalid target" );
+        ENSURE_OR_THROW( !mpGraphicsProvider.get(),
+                         "CanvasHelper::setTarget(): target set, old target would be overwritten" );
 
-        mpTarget = rTarget;
+        mpGraphicsProvider = rTarget;
         maOutputOffset = rOutputOffset;
     }
 
@@ -156,17 +159,15 @@ namespace dxcanvas
     {
         if( needOutput() )
         {
-            SurfaceGraphicsSharedPtr aGraphics( mpTarget->getGraphics() );
+            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
+            Gdiplus::Color aClearColor = Gdiplus::Color((Gdiplus::ARGB)Gdiplus::Color::White);
 
-            Gdiplus::Color aClearColor = hasAlpha() ?
-                Gdiplus::Color( 0,255,255,255 ) : Gdiplus::Color((Gdiplus::ARGB)Gdiplus::Color::White);
-
-            ENSURE_AND_THROW(
-                Gdiplus::Ok == (*aGraphics.get())->SetCompositingMode(
+            ENSURE_OR_THROW(
+                Gdiplus::Ok == pGraphics->SetCompositingMode(
                     Gdiplus::CompositingModeSourceCopy ), // force set, don't blend
                 "CanvasHelper::clear(): GDI+ SetCompositingMode call failed" );
-            ENSURE_AND_THROW(
-                Gdiplus::Ok == (*aGraphics)->Clear( aClearColor ),
+            ENSURE_OR_THROW(
+                Gdiplus::Ok == pGraphics->Clear( aClearColor ),
                 "CanvasHelper::clear(): GDI+ Clear call failed" );
         }
     }
@@ -178,9 +179,9 @@ namespace dxcanvas
     {
         if( needOutput() )
         {
-            SurfaceGraphicsSharedPtr aGraphics( mpTarget->getGraphics() );
+            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
 
-            setupGraphicsState( aGraphics, viewState, renderState );
+            setupGraphicsState( pGraphics, viewState, renderState );
 
             Gdiplus::SolidBrush aBrush(
                 Gdiplus::Color(
@@ -188,20 +189,20 @@ namespace dxcanvas
 
             // determine size of one-by-one device pixel ellipse
             Gdiplus::Matrix aMatrix;
-            (*aGraphics)->GetTransform(&aMatrix);
+            pGraphics->GetTransform(&aMatrix);
             aMatrix.Invert();
             Gdiplus::PointF vector(1, 1);
             aMatrix.TransformVectors(&vector);
 
             // paint a one-by-one circle, with the given point
             // in the middle (rounded to float)
-            ENSURE_AND_THROW(
-                Gdiplus::Ok == (*aGraphics)->FillEllipse( &aBrush,
-                                                          // disambiguate call
-                                                          Gdiplus::REAL(aPoint.X),
-                                                          Gdiplus::REAL(aPoint.Y),
-                                                          Gdiplus::REAL(vector.X),
-                                                          Gdiplus::REAL(vector.Y) ),
+            ENSURE_OR_THROW(
+                Gdiplus::Ok == pGraphics->FillEllipse( &aBrush,
+                                                       // disambiguate call
+                                                       Gdiplus::REAL(aPoint.X),
+                                                       Gdiplus::REAL(aPoint.Y),
+                                                       Gdiplus::REAL(vector.X),
+                                                       Gdiplus::REAL(vector.Y) ),
                 "CanvasHelper::drawPoint(): GDI+ call failed" );
         }
     }
@@ -214,9 +215,9 @@ namespace dxcanvas
     {
         if( needOutput() )
         {
-            SurfaceGraphicsSharedPtr aGraphics( mpTarget->getGraphics() );
+            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
 
-            setupGraphicsState( aGraphics, viewState, renderState );
+            setupGraphicsState( pGraphics, viewState, renderState );
 
             Gdiplus::Pen aPen(
                 Gdiplus::Color(
@@ -229,17 +230,17 @@ namespace dxcanvas
             // results, whereas all other operations (e.g. polygon
             // fills, bitmaps) look better with PixelOffsetModeHalf.
             const Gdiplus::PixelOffsetMode aOldMode(
-                (*aGraphics)->GetPixelOffsetMode() );
-            (*aGraphics)->SetPixelOffsetMode( Gdiplus::PixelOffsetModeNone );
+                pGraphics->GetPixelOffsetMode() );
+            pGraphics->SetPixelOffsetMode( Gdiplus::PixelOffsetModeNone );
 
-            Gdiplus::Status hr = (*aGraphics)->DrawLine( &aPen,
-                                                         Gdiplus::REAL(aStartPoint.X), // disambiguate call
-                                                         Gdiplus::REAL(aStartPoint.Y),
-                                                         Gdiplus::REAL(aEndPoint.X),
-                                                         Gdiplus::REAL(aEndPoint.Y) );
-            (*aGraphics)->SetPixelOffsetMode( aOldMode );
+            Gdiplus::Status hr = pGraphics->DrawLine( &aPen,
+                                                      Gdiplus::REAL(aStartPoint.X), // disambiguate call
+                                                      Gdiplus::REAL(aStartPoint.Y),
+                                                      Gdiplus::REAL(aEndPoint.X),
+                                                      Gdiplus::REAL(aEndPoint.Y) );
+            pGraphics->SetPixelOffsetMode( aOldMode );
 
-            ENSURE_AND_THROW(
+            ENSURE_OR_THROW(
                 Gdiplus::Ok == hr,
                 "CanvasHelper::drawLine(): GDI+ call failed" );
         }
@@ -253,9 +254,9 @@ namespace dxcanvas
     {
         if( needOutput() )
         {
-            SurfaceGraphicsSharedPtr aGraphics( mpTarget->getGraphics() );
+            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
 
-            setupGraphicsState( aGraphics, viewState, renderState );
+            setupGraphicsState( pGraphics, viewState, renderState );
 
             Gdiplus::Pen aPen(
                 Gdiplus::Color(
@@ -268,22 +269,22 @@ namespace dxcanvas
             // results, whereas all other operations (e.g. polygon
             // fills, bitmaps) look better with PixelOffsetModeHalf.
             const Gdiplus::PixelOffsetMode aOldMode(
-                (*aGraphics)->GetPixelOffsetMode() );
-            (*aGraphics)->SetPixelOffsetMode( Gdiplus::PixelOffsetModeNone );
+                pGraphics->GetPixelOffsetMode() );
+            pGraphics->SetPixelOffsetMode( Gdiplus::PixelOffsetModeNone );
 
-            Gdiplus::Status hr = (*aGraphics)->DrawBezier( &aPen,
-                                                           Gdiplus::REAL(aBezierSegment.Px), // disambiguate call
-                                                           Gdiplus::REAL(aBezierSegment.Py),
-                                                           Gdiplus::REAL(aBezierSegment.C1x),
-                                                           Gdiplus::REAL(aBezierSegment.C1y),
-                                                           Gdiplus::REAL(aEndPoint.X),
-                                                           Gdiplus::REAL(aEndPoint.Y),
-                                                           Gdiplus::REAL(aBezierSegment.C2x),
-                                                           Gdiplus::REAL(aBezierSegment.C2y) );
+            Gdiplus::Status hr = pGraphics->DrawBezier( &aPen,
+                                                        Gdiplus::REAL(aBezierSegment.Px), // disambiguate call
+                                                        Gdiplus::REAL(aBezierSegment.Py),
+                                                        Gdiplus::REAL(aBezierSegment.C1x),
+                                                        Gdiplus::REAL(aBezierSegment.C1y),
+                                                        Gdiplus::REAL(aEndPoint.X),
+                                                        Gdiplus::REAL(aEndPoint.Y),
+                                                        Gdiplus::REAL(aBezierSegment.C2x),
+                                                        Gdiplus::REAL(aBezierSegment.C2y) );
 
-            (*aGraphics)->SetPixelOffsetMode( aOldMode );
+            pGraphics->SetPixelOffsetMode( aOldMode );
 
-            ENSURE_AND_THROW(
+            ENSURE_OR_THROW(
                 Gdiplus::Ok == hr,
                 "CanvasHelper::drawBezier(): GDI+ call failed" );
         }
@@ -294,14 +295,14 @@ namespace dxcanvas
                                                                                  const rendering::ViewState&                        viewState,
                                                                                  const rendering::RenderState&                      renderState )
     {
-        ENSURE_AND_THROW( xPolyPolygon.is(),
+        ENSURE_OR_THROW( xPolyPolygon.is(),
                           "CanvasHelper::drawPolyPolygon: polygon is NULL");
 
         if( needOutput() )
         {
-            SurfaceGraphicsSharedPtr aGraphics( mpTarget->getGraphics() );
+            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
 
-            setupGraphicsState( aGraphics, viewState, renderState );
+            setupGraphicsState( pGraphics, viewState, renderState );
 
             Gdiplus::Pen aPen(
                 Gdiplus::Color(
@@ -314,17 +315,17 @@ namespace dxcanvas
             // results, whereas all other operations (e.g. polygon
             // fills, bitmaps) look better with PixelOffsetModeHalf.
             const Gdiplus::PixelOffsetMode aOldMode(
-                (*aGraphics)->GetPixelOffsetMode() );
-            (*aGraphics)->SetPixelOffsetMode( Gdiplus::PixelOffsetModeNone );
+                pGraphics->GetPixelOffsetMode() );
+            pGraphics->SetPixelOffsetMode( Gdiplus::PixelOffsetModeNone );
 
             GraphicsPathSharedPtr pPath( tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ) );
 
             // TODO(E1): Return value
-            Gdiplus::Status hr = (*aGraphics)->DrawPath( &aPen, pPath.get() );
+            Gdiplus::Status hr = pGraphics->DrawPath( &aPen, pPath.get() );
 
-            (*aGraphics)->SetPixelOffsetMode( aOldMode );
+            pGraphics->SetPixelOffsetMode( aOldMode );
 
-            ENSURE_AND_THROW(
+            ENSURE_OR_THROW(
                 Gdiplus::Ok == hr,
                 "CanvasHelper::drawPolyPolygon(): GDI+ call failed" );
         }
@@ -339,14 +340,14 @@ namespace dxcanvas
                                                                                    const rendering::RenderState&                        renderState,
                                                                                    const rendering::StrokeAttributes&                   strokeAttributes )
     {
-        ENSURE_AND_THROW( xPolyPolygon.is(),
+        ENSURE_OR_THROW( xPolyPolygon.is(),
                           "CanvasHelper::drawPolyPolygon: polygon is NULL");
 
         if( needOutput() )
         {
-            SurfaceGraphicsSharedPtr aGraphics( mpTarget->getGraphics() );
+            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
 
-            setupGraphicsState( aGraphics, viewState, renderState );
+            setupGraphicsState( pGraphics, viewState, renderState );
 
 
             // Setup stroke pen
@@ -363,8 +364,8 @@ namespace dxcanvas
             // results, whereas all other operations (e.g. polygon
             // fills, bitmaps) look better with PixelOffsetModeHalf.
             const Gdiplus::PixelOffsetMode aOldMode(
-                (*aGraphics)->GetPixelOffsetMode() );
-            (*aGraphics)->SetPixelOffsetMode( Gdiplus::PixelOffsetModeNone );
+                pGraphics->GetPixelOffsetMode() );
+            pGraphics->SetPixelOffsetMode( Gdiplus::PixelOffsetModeNone );
 
             aPen.SetMiterLimit( static_cast< Gdiplus::REAL >(strokeAttributes.MiterLimit) );
 
@@ -384,11 +385,11 @@ namespace dxcanvas
             GraphicsPathSharedPtr pPath( tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ) );
 
             // TODO(E1): Return value
-            Gdiplus::Status hr = (*aGraphics)->DrawPath( &aPen, pPath.get() );
+            Gdiplus::Status hr = pGraphics->DrawPath( &aPen, pPath.get() );
 
-            (*aGraphics)->SetPixelOffsetMode( aOldMode );
+            pGraphics->SetPixelOffsetMode( aOldMode );
 
-            ENSURE_AND_THROW(
+            ENSURE_OR_THROW(
                 Gdiplus::Ok == hr,
                 "CanvasHelper::strokePolyPolygon(): GDI+ call failed" );
         }
@@ -435,14 +436,14 @@ namespace dxcanvas
                                                                                  const rendering::ViewState&                        viewState,
                                                                                  const rendering::RenderState&                      renderState )
     {
-        ENSURE_AND_THROW( xPolyPolygon.is(),
+        ENSURE_OR_THROW( xPolyPolygon.is(),
                           "CanvasHelper::fillPolyPolygon: polygon is NULL");
 
         if( needOutput() )
         {
-            SurfaceGraphicsSharedPtr aGraphics( mpTarget->getGraphics() );
+            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
 
-            setupGraphicsState( aGraphics, viewState, renderState );
+            setupGraphicsState( pGraphics, viewState, renderState );
 
             Gdiplus::SolidBrush aBrush(
                 tools::sequenceToArgb(renderState.DeviceColor));
@@ -450,8 +451,8 @@ namespace dxcanvas
             GraphicsPathSharedPtr pPath( tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ) );
 
             // TODO(F1): FillRule
-            ENSURE_AND_THROW( Gdiplus::Ok == (*aGraphics)->FillPath( &aBrush, pPath.get() ),
-                              "CanvasHelper::fillPolyPolygon(): GDI+ call failed  " );
+            ENSURE_OR_THROW( Gdiplus::Ok == pGraphics->FillPath( &aBrush, pPath.get() ),
+                             "CanvasHelper::fillPolyPolygon(): GDI+ call failed  " );
         }
 
         // TODO(P1): Provide caching here.
@@ -498,14 +499,14 @@ namespace dxcanvas
                                                                           const rendering::RenderState&                     renderState,
                                                                           sal_Int8                                          /*textDirection*/ )
     {
-        ENSURE_AND_THROW( xFont.is(),
+        ENSURE_OR_THROW( xFont.is(),
                           "CanvasHelper::drawText: font is NULL");
 
         if( needOutput() )
         {
-            SurfaceGraphicsSharedPtr aGraphics( mpTarget->getGraphics() );
+            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
 
-            setupGraphicsState( aGraphics, viewState, renderState );
+            setupGraphicsState( pGraphics, viewState, renderState );
 
             Gdiplus::SolidBrush aBrush(
                 Gdiplus::Color(
@@ -529,13 +530,14 @@ namespace dxcanvas
 
             // TODO(F2): Proper layout (BiDi, CTL)! IMHO must use
             // DrawDriverString here, and perform layouting myself...
-            ENSURE_AND_THROW(
-                Gdiplus::Ok == (*aGraphics)->DrawString( reinterpret_cast<LPCWSTR>(text.Text.copy( text.StartPosition,
-                                                                         text.Length ).getStr()),
-                                                         text.Length,
-                                                         pFont->getFont().get(),
-                                                         aPoint,
-                                                         &aBrush ),
+            ENSURE_OR_THROW(
+                Gdiplus::Ok == pGraphics->DrawString( reinterpret_cast<LPCWSTR>(
+                                                          text.Text.copy( text.StartPosition,
+                                                                          text.Length ).getStr()),
+                                                      text.Length,
+                                                      pFont->getFont().get(),
+                                                      aPoint,
+                                                      &aBrush ),
                 "CanvasHelper::drawText(): GDI+ call failed" );
         }
 
@@ -547,7 +549,7 @@ namespace dxcanvas
                                                                                 const rendering::ViewState&                     viewState,
                                                                                 const rendering::RenderState&                   renderState )
     {
-        ENSURE_AND_THROW( xLayoutetText.is(),
+        ENSURE_OR_THROW( xLayoutetText.is(),
                           "CanvasHelper::drawTextLayout: layout is NULL");
 
         if( needOutput() )
@@ -555,14 +557,15 @@ namespace dxcanvas
             TextLayout* pTextLayout =
                 dynamic_cast< TextLayout* >( xLayoutetText.get() );
 
-            ENSURE_AND_THROW( pTextLayout,
+            ENSURE_OR_THROW( pTextLayout,
                                 "CanvasHelper::drawTextLayout(): TextLayout not compatible with this canvas" );
 
-            pTextLayout->draw( mpTarget,
+            pTextLayout->draw( mpGraphicsProvider->getGraphics(),
                                viewState,
                                renderState,
                                maOutputOffset,
-                               mpDevice );
+                               mpDevice,
+                               false );
         }
 
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
@@ -573,15 +576,32 @@ namespace dxcanvas
                                                                             const rendering::ViewState&                 viewState,
                                                                             const rendering::RenderState&               renderState )
     {
-        ENSURE_AND_THROW( xBitmap.is(),
+        ENSURE_OR_THROW( xBitmap.is(),
                           "CanvasHelper::drawBitmap: bitmap is NULL");
 
         if( needOutput() )
         {
-            SurfaceGraphicsSharedPtr aGraphics( mpTarget->getGraphics() );
-            setupGraphicsState( aGraphics, viewState, renderState );
-            Gdiplus::PointF aPoint;
-            tools::drawXBitmap( aGraphics, xBitmap );
+            // check whether one of our own objects - need to retrieve
+            // bitmap _before_ calling
+            // GraphicsProvider::getGraphics(), to avoid locking our
+            // own surface.
+            BitmapSharedPtr pGdiBitmap;
+            BitmapProvider* pBitmap = dynamic_cast< BitmapProvider* >(xBitmap.get());
+            if( pBitmap )
+            {
+                IBitmapSharedPtr pDXBitmap( pBitmap->getBitmap() );
+                if( pDXBitmap )
+                    pGdiBitmap = pDXBitmap->getBitmap();
+            }
+
+            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
+            setupGraphicsState( pGraphics, viewState, renderState );
+
+            if( pGdiBitmap )
+                tools::drawGdiPlusBitmap(pGraphics,pGdiBitmap);
+            else
+                tools::drawVCLBitmapFromXBitmap(pGraphics,
+                                                xBitmap);
         }
 
         // TODO(P1): Provide caching here.
@@ -593,7 +613,7 @@ namespace dxcanvas
                                                                                      const rendering::ViewState&                    viewState,
                                                                                      const rendering::RenderState&                  renderState )
     {
-        ENSURE_AND_THROW( xBitmap.is(),
+        ENSURE_OR_THROW( xBitmap.is(),
                           "CanvasHelper::drawBitmap: bitmap is NULL");
 
         // no color set -> this is equivalent to a plain drawBitmap(), then
@@ -602,9 +622,9 @@ namespace dxcanvas
 
         if( needOutput() )
         {
-            SurfaceGraphicsSharedPtr aGraphics( mpTarget->getGraphics() );
+            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
 
-            setupGraphicsState( aGraphics, viewState, renderState );
+            setupGraphicsState( pGraphics, viewState, renderState );
 
             BitmapSharedPtr pBitmap( tools::bitmapFromXBitmap( xBitmap ) );
             Gdiplus::Rect aRect( 0, 0,
@@ -613,27 +633,26 @@ namespace dxcanvas
 
             // Setup an ImageAttributes with an alpha-modulating
             // color matrix.
-            double nRed;
-            double nGreen;
-            double nBlue;
-            double nAlpha;
-            ::canvas::tools::getDeviceColor( nRed, nGreen, nBlue, nAlpha,
-                                             renderState );
+            const rendering::ARGBColor& rARGBColor(
+                mpDevice->getDeviceColorSpace()->convertToARGB(renderState.DeviceColor)[0]);
 
             Gdiplus::ImageAttributes aImgAttr;
             tools::setModulateImageAttributes( aImgAttr,
-                                               nRed, nGreen, nBlue, nAlpha );
+                                               rARGBColor.Red,
+                                               rARGBColor.Green,
+                                               rARGBColor.Blue,
+                                               rARGBColor.Alpha );
 
-            ENSURE_AND_THROW(
-                Gdiplus::Ok == (*aGraphics)->DrawImage( pBitmap.get(),
-                                                        aRect,
-                                                        0, 0,
-                                                        pBitmap->GetWidth(),
-                                                        pBitmap->GetHeight(),
-                                                        Gdiplus::UnitPixel,
-                                                        &aImgAttr,
-                                                        NULL,
-                                                        NULL ),
+            ENSURE_OR_THROW(
+                Gdiplus::Ok == pGraphics->DrawImage( pBitmap.get(),
+                                                     aRect,
+                                                     0, 0,
+                                                     pBitmap->GetWidth(),
+                                                     pBitmap->GetHeight(),
+                                                     Gdiplus::UnitPixel,
+                                                     &aImgAttr,
+                                                     NULL,
+                                                     NULL ),
                 "CanvasHelper::drawBitmapModulated(): GDI+ call failed" );
         }
 
@@ -645,124 +664,6 @@ namespace dxcanvas
     {
         return uno::Reference< rendering::XGraphicDevice >(mpDevice);
     }
-
-    void CanvasHelper::copyRect( const rendering::XCanvas*                          /*pCanvas*/,
-                                 const uno::Reference< rendering::XBitmapCanvas >&  /*sourceCanvas*/,
-                                 const geometry::RealRectangle2D&                   /*sourceRect*/,
-                                 const rendering::ViewState&                        /*sourceViewState*/,
-                                 const rendering::RenderState&                      /*sourceRenderState*/,
-                                 const geometry::RealRectangle2D&                   /*destRect*/,
-                                 const rendering::ViewState&                        /*destViewState*/,
-                                 const rendering::RenderState&                      /*destRenderState*/ )
-    {
-        // TODO(F2): copyRect NYI
-    }
-
-    geometry::IntegerSize2D CanvasHelper::getSize()
-    {
-        if( !mpTarget )
-            geometry::IntegerSize2D(1, 1); // we're disposed
-
-        return ::basegfx::unotools::integerSize2DFromB2ISize(mpTarget->getSize());
-    }
-
-    uno::Reference< rendering::XBitmap > CanvasHelper::getScaledBitmap( const geometry::RealSize2D& /*newSize*/,
-                                                                        sal_Bool                    /*beFast*/ )
-    {
-        // TODO(F1):
-        return uno::Reference< rendering::XBitmap >();
-    }
-
-    uno::Sequence< sal_Int8 > CanvasHelper::getData( rendering::IntegerBitmapLayout&     bitmapLayout,
-                                                     const geometry::IntegerRectangle2D& rect )
-    {
-        RTL_LOGFILE_CONTEXT( aLog, "::dxcanvas::CanvasHelper::getData()" );
-
-        ENSURE_AND_THROW( mpTarget,
-                          "::dxcanvas::CanvasHelper::getData(): disposed" );
-
-        if( !mpTarget )
-            return uno::Sequence< sal_Int8 >();
-
-        return mpTarget->getData(bitmapLayout,rect);
-    }
-
-    void CanvasHelper::setData( const uno::Sequence< sal_Int8 >&        data,
-                                const rendering::IntegerBitmapLayout&   bitmapLayout,
-                                const geometry::IntegerRectangle2D&     rect )
-    {
-        RTL_LOGFILE_CONTEXT( aLog, "::dxcanvas::CanvasHelper::setData()" );
-
-        ENSURE_AND_THROW( mpTarget,
-                          "::dxcanvas::CanvasHelper::setData(): disposed" );
-
-        if( !mpTarget )
-            return;
-
-        mpTarget->setData(data,bitmapLayout,rect);
-    }
-
-    void CanvasHelper::setPixel( const uno::Sequence< sal_Int8 >&       color,
-                                 const rendering::IntegerBitmapLayout&  bitmapLayout,
-                                 const geometry::IntegerPoint2D&        pos )
-    {
-        RTL_LOGFILE_CONTEXT( aLog, "::dxcanvas::CanvasHelper::setPixel()" );
-
-        ENSURE_AND_THROW( mpTarget,
-                          "::dxcanvas::CanvasHelper::setPixel(): disposed" );
-
-        if( !mpTarget )
-            return;
-
-        mpTarget->setPixel(color,bitmapLayout,pos);
-    }
-
-    uno::Sequence< sal_Int8 > CanvasHelper::getPixel( rendering::IntegerBitmapLayout&   bitmapLayout,
-                                                      const geometry::IntegerPoint2D&   pos )
-    {
-        RTL_LOGFILE_CONTEXT( aLog, "::dxcanvas::CanvasHelper::getPixel()" );
-
-        ENSURE_AND_THROW( mpTarget,
-                          "::dxcanvas::CanvasHelper::getPixel(): disposed" );
-
-        if( !mpTarget )
-            return uno::Sequence< sal_Int8 >();
-
-        return mpTarget->getPixel(bitmapLayout,pos);
-    }
-
-    uno::Reference< rendering::XBitmapPalette > CanvasHelper::getPalette()
-    {
-        // TODO(F1): Palette bitmaps NYI
-        return uno::Reference< rendering::XBitmapPalette >();
-    }
-
-    rendering::IntegerBitmapLayout CanvasHelper::getMemoryLayout()
-    {
-        // TODO(F1): finish memory layout initialization
-        rendering::IntegerBitmapLayout aLayout;
-
-        const geometry::IntegerSize2D& rBmpSize( getSize() );
-
-        aLayout.ScanLines = rBmpSize.Width;
-        aLayout.ScanLineBytes = rBmpSize.Height * 4;
-        aLayout.ScanLineStride = aLayout.ScanLineBytes;
-        aLayout.PlaneStride = 0;
-        aLayout.ColorSpace.set( mpDevice );
-        aLayout.NumComponents = 4;
-        aLayout.ComponentMasks.realloc(4);
-        aLayout.ComponentMasks[0] = 0x00FF0000;
-        aLayout.ComponentMasks[1] = 0x0000FF00;
-        aLayout.ComponentMasks[2] = 0x000000FF;
-        aLayout.ComponentMasks[3] = 0xFF000000;
-        aLayout.Palette.clear();
-        aLayout.Endianness = rendering::Endianness::LITTLE;
-        aLayout.Format = rendering::IntegerBitmapFormat::CHUNKY_32BIT;
-        aLayout.IsMsbFirst = sal_False;
-
-        return aLayout;
-    }
-
 
     // private helper
     // --------------------------------------------------
@@ -809,20 +710,20 @@ namespace dxcanvas
                 break;
 
             default:
-                ENSURE_AND_THROW( false, "CanvasHelper::calcCompositingMode: unexpected mode" );
+                ENSURE_OR_THROW( false, "CanvasHelper::calcCompositingMode: unexpected mode" );
                 break;
         }
 
         return aRet;
     }
 
-    void CanvasHelper::setupGraphicsState( SurfaceGraphicsSharedPtr&        rGraphics,
-                                           const rendering::ViewState&      viewState,
-                                           const rendering::RenderState&    renderState )
+    void CanvasHelper::setupGraphicsState( GraphicsSharedPtr&            rGraphics,
+                                           const rendering::ViewState&   viewState,
+                                           const rendering::RenderState& renderState )
     {
-        ENSURE_AND_THROW( needOutput(),
+        ENSURE_OR_THROW( needOutput(),
                           "CanvasHelper::setupGraphicsState: primary graphics invalid" );
-        ENSURE_AND_THROW( mpDevice,
+        ENSURE_OR_THROW( mpDevice,
                           "CanvasHelper::setupGraphicsState: reference device invalid" );
 
         // setup view transform first. Clipping e.g. depends on it
@@ -842,13 +743,13 @@ namespace dxcanvas
         Gdiplus::Matrix aMatrix;
         tools::gdiPlusMatrixFromB2DHomMatrix( aMatrix, aTransform );
 
-        ENSURE_AND_THROW(
-            Gdiplus::Ok == (*rGraphics)->SetTransform( &aMatrix ),
+        ENSURE_OR_THROW(
+            Gdiplus::Ok == rGraphics->SetTransform( &aMatrix ),
             "CanvasHelper::setupGraphicsState(): Failed to set GDI+ transformation" );
 
         // setup view and render state clipping
-        ENSURE_AND_THROW(
-            Gdiplus::Ok == (*rGraphics)->ResetClip(),
+        ENSURE_OR_THROW(
+            Gdiplus::Ok == rGraphics->ResetClip(),
             "CanvasHelper::setupGraphicsState(): Failed to reset GDI+ clip" );
 
         if( viewState.Clip.is() )
@@ -858,9 +759,9 @@ namespace dxcanvas
             // TODO(P3): Cache clip. SetClip( GraphicsPath ) performs abyssmally on GDI+.
             // Try SetClip( Rect ) or similar for simple clip paths (need some support in
             // LinePolyPolygon, then)
-            ENSURE_AND_THROW(
-                Gdiplus::Ok == (*rGraphics)->SetClip( aClipPath.get(),
-                                                      Gdiplus::CombineModeIntersect ),
+            ENSURE_OR_THROW(
+                Gdiplus::Ok == rGraphics->SetClip( aClipPath.get(),
+                                                   Gdiplus::CombineModeIntersect ),
                 "CanvasHelper::setupGraphicsState(): Cannot set GDI+ clip" );
         }
 
@@ -882,8 +783,8 @@ namespace dxcanvas
 
         tools::gdiPlusMatrixFromB2DHomMatrix( aMatrix, aTransform );
 
-        ENSURE_AND_THROW(
-            Gdiplus::Ok == (*rGraphics)->SetTransform( &aMatrix ),
+        ENSURE_OR_THROW(
+            Gdiplus::Ok == rGraphics->SetTransform( &aMatrix ),
             "CanvasHelper::setupGraphicsState(): Cannot set GDI+ transformation" );
 
         if( renderState.Clip.is() )
@@ -893,29 +794,22 @@ namespace dxcanvas
             // TODO(P3): Cache clip. SetClip( GraphicsPath ) performs abyssmally on GDI+.
             // Try SetClip( Rect ) or similar for simple clip paths (need some support in
             // LinePolyPolygon, then)
-            ENSURE_AND_THROW(
-                Gdiplus::Ok == (*rGraphics)->SetClip( aClipPath.get(),
-                                                      Gdiplus::CombineModeIntersect ),
+            ENSURE_OR_THROW(
+                Gdiplus::Ok == rGraphics->SetClip( aClipPath.get(),
+                                                   Gdiplus::CombineModeIntersect ),
                 "CanvasHelper::setupGraphicsState(): Cannot set GDI+ clip" );
         }
 
         // setup compositing
         const Gdiplus::CompositingMode eCompositing( calcCompositingMode( renderState.CompositeOperation ) );
-        ENSURE_AND_THROW(
-            Gdiplus::Ok == (*rGraphics)->SetCompositingMode( eCompositing ),
+        ENSURE_OR_THROW(
+            Gdiplus::Ok == rGraphics->SetCompositingMode( eCompositing ),
             "CanvasHelper::setupGraphicsState(): Cannot set GDI* compositing mode)" );
     }
 
     void CanvasHelper::flush() const
     {
         if( needOutput() )
-        {
-            (*mpTarget->getGraphics())->Flush( Gdiplus::FlushIntentionSync );
-        }
-    }
-
-    bool CanvasHelper::hasAlpha() const
-    {
-        return mpTarget ? mpTarget->hasAlpha() : false;
+            mpGraphicsProvider->getGraphics()->Flush( Gdiplus::FlushIntentionSync );
     }
 }
