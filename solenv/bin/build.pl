@@ -11,7 +11,7 @@
 #
 # $RCSfile: build.pl,v $
 #
-# $Revision: 1.169 $
+# $Revision: 1.170 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -76,7 +76,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.169 $ ';
+    $id_str = ' $Revision: 1.170 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -897,7 +897,7 @@ sub get_stand_dir {
     do {
         foreach (@possible_build_lists) {# ('build.lst', 'build.xlist');
             if (-e $StandDir . '/prj/'.$_) {
-                $StandDir =~ /([\.\w]+$)/;
+                $StandDir =~ /([\-\.\w]+$)/;
                 $StandDir = $`;
                 $CurrentPrj = $1;
                 return $StandDir;
