@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.h,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -326,6 +326,8 @@ public:
 
     // Query the platform layer for control support
     virtual BOOL IsNativeControlSupported( ControlType nType, ControlPart nPart );
+
+    virtual SystemGraphicsData GetGraphicsData() const;
 };
 
 // Init/Deinit Graphics
