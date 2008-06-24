@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sbxmod.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1273,7 +1273,7 @@ BOOL SbModule::StoreBinaryData( SvStream& rStrm, USHORT nVer )
          bRet = SbxObject::StoreData( rStrm );
         if( bRet )
         {
-            pImage->aOUSource = OUString();
+            pImage->aOUSource = ::rtl::OUString();
             pImage->aComment = aComment;
             pImage->aName = GetName();
 
@@ -1296,7 +1296,7 @@ BOOL SbModule::StoreBinaryData( SvStream& rStrm, USHORT nVer )
 
 BOOL SbModule::LoadBinaryData( SvStream& rStrm )
 {
-    OUString aKeepSource = aOUSource;
+    ::rtl::OUString aKeepSource = aOUSource;
     bool bRet = LoadData( rStrm, 2 );
     LoadCompleted();
     aOUSource = aKeepSource;
@@ -2107,5 +2107,4 @@ SbProperty::~SbProperty()
 
 SbProcedureProperty::~SbProcedureProperty()
 {}
-
 
