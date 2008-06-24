@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shapemanagerimpl.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_slideshow.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/presentation/XShapeEventListener.hpp>
@@ -341,7 +342,7 @@ bool ShapeManagerImpl::listenerAdded(
     if( (aIter = mrGlobalListenersMap.find( xShape )) ==
         mrGlobalListenersMap.end() )
     {
-        ENSURE_AND_RETURN(false,
+        ENSURE_OR_RETURN(false,
                           "ShapeManagerImpl::listenerAdded(): global "
                           "shape listener map inconsistency!");
     }
