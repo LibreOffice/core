@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.35 $
+# $Revision: 1.36 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -33,6 +33,7 @@ PRJ		= ..$/..$/..$/..$/..
 PRJNAME = xmlhelp
 TARGET  = HelpLinker
 LIBBASENAME = helplinker
+PACKAGE = com$/sun$/star$/help
 TARGETTYPE=CUI
 
 # --- Settings -----------------------------------------------------
@@ -94,6 +95,18 @@ SHL1USE_EXPORTS	=ordinal
 DEF1NAME	=$(SHL1TARGET) 
 DEFLIB1NAME	=$(TARGET)
 
+JAVACLASSFILES = \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpSearch.class			        \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpIndexer.class			        \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpFileDocument.class
+
+JARFILES  = lucene-core-2.3.jar ridl.jar jurt.jar unoil.jar juh.jar
+JAVAFILES = $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
+  
+JARTARGET	   = LuceneHelpWrapper.jar
+JARCOMPRESS        = TRUE 
+CUSTOMMANIFESTFILE = MANIFEST.MF 
+ 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
