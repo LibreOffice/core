@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: property.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,6 +76,44 @@ namespace comphelper
         }
     };
 
+    //--------------------------------------------------------------------------
+    /** compare two properties by name
+     */
+    struct PropertyStringEqualFunctor : ::std::binary_function< ::com::sun::star::beans::Property, ::rtl::OUString, bool >
+    {
+        // ................................................................
+        inline bool operator()( const ::com::sun::star::beans::Property& lhs, const ::rtl::OUString& rhs ) const
+        {
+            return lhs.Name.compareTo(rhs) == 0;
+        }
+        // ................................................................
+        inline bool operator()( const ::rtl::OUString& lhs, const ::com::sun::star::beans::Property& rhs ) const
+        {
+            return lhs.compareTo(rhs.Name) == 0;
+        }
+    };
+    //--------------------------------------------------------------------------
+    // comparing two property instances
+    struct PropertyEqualByName : public ::std::binary_function< ::com::sun::star::beans::Property, ::com::sun::star::beans::Property, bool >
+    {
+        bool operator() (const ::com::sun::star::beans::Property& x, const ::com::sun::star::beans::Property& y) const
+        {
+            return x.Name.compareTo(y.Name) == 0;
+        }
+    };
+
+//------------------------------------------------------------------
+/** find property with given name
+
+    @param o_rProp
+    Output parameter receiving the property, if found
+
+    @param i_rPropName
+    Name of the property to find
+
+    @return false, if property was not found
+ */
+COMPHELPER_DLLPUBLIC bool findProperty(starbeans::Property& o_rProp, staruno::Sequence<starbeans::Property>& i_seqProps, const ::rtl::OUString& i_rPropName);
 
 //------------------------------------------------------------------
 /// remove the property with the given name from the given sequence
