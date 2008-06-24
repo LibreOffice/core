@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: intrinsicanimationactivity.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_slideshow.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
 #include "drawshapesubsetting.hxx"
@@ -145,13 +146,13 @@ namespace slideshow
             mnLoopCount(0),
             mbIsActive(false)
         {
-            ENSURE_AND_THROW( rContext.mpSubsettableShapeManager,
+            ENSURE_OR_THROW( rContext.mpSubsettableShapeManager,
                               "IntrinsicAnimationActivity::IntrinsicAnimationActivity(): Invalid shape manager" );
-            ENSURE_AND_THROW( rDrawShape,
+            ENSURE_OR_THROW( rDrawShape,
                               "IntrinsicAnimationActivity::IntrinsicAnimationActivity(): Invalid draw shape" );
-            ENSURE_AND_THROW( rWakeupEvent,
+            ENSURE_OR_THROW( rWakeupEvent,
                               "IntrinsicAnimationActivity::IntrinsicAnimationActivity(): Invalid wakeup event" );
-            ENSURE_AND_THROW( !rTimeouts.empty(),
+            ENSURE_OR_THROW( !rTimeouts.empty(),
                               "IntrinsicAnimationActivity::IntrinsicAnimationActivity(): Empty timeout vector" );
 
             maContext.mpSubsettableShapeManager->addIntrinsicAnimationHandler(
