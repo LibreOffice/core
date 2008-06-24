@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: imagewrapper.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,6 @@
 #include <tools/stream.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-using namespace rtl;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 
@@ -207,3 +206,4 @@ Sequence< sal_Int8 > SAL_CALL ImageWrapper::getImplementationId() throw ( Runtim
 }
 
 }
+
