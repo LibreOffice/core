@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: window.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,6 +100,7 @@ namespace sun {
 namespace star {
 namespace rendering {
     class XCanvas;
+    class XSpriteCanvas;
 }}}}
 
 namespace com {
@@ -561,7 +562,7 @@ public:
     SAL_DLLPRIVATE BOOL        ImplIsInTaskPaneList();
     SAL_DLLPRIVATE void        ImplIsInTaskPaneList( BOOL mbIsInTaskList );
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >
-                               ImplGetCanvas( const Size& rFullscreenSize, bool bFullscreen ) const;
+                               ImplGetCanvas( const Size& rFullscreenSize, bool bFullscreen, bool bSpriteCanvas ) const;
     SAL_DLLPRIVATE void        ImplMoveControlValue( ControlType, const ImplControlValue&, const Point& ) const;
 
 private:
@@ -1032,12 +1033,15 @@ public:
     // by default checks complete parent path
     BOOL    IsAccessibilityEventsSuppressed( BOOL bTraverseParentPath = TRUE );
 
-    // new Canvas
+    /// request XCanvas render interface for this window
     ::com::sun::star::uno::Reference<
         ::com::sun::star::rendering::XCanvas > GetCanvas() const;
-    // new Canvas
+    /// request XSpriteCanvas render interface for this window
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::rendering::XCanvas > GetFullscreenCanvas( const Size& rFullscreenSize ) const;
+        ::com::sun::star::rendering::XSpriteCanvas > GetSpriteCanvas() const;
+    /// request fullscreen XSpriteCanvas render interface for this window
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::rendering::XSpriteCanvas > GetFullscreenSpriteCanvas( const Size& rFullscreenSize ) const;
 
     /*  records all DrawText operations within the passed rectangle;
      *  a synchronous paint is sent to achieve this
