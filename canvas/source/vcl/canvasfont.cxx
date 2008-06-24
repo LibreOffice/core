@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: canvasfont.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,13 +49,15 @@ namespace vclcanvas
     CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
                             const uno::Sequence< beans::PropertyValue >&    ,
                             const geometry::Matrix2D&                       rFontMatrix,
-                            const DeviceRef&                                rDevice ) :
+                            rendering::XGraphicDevice&                      rDevice,
+                            const OutDevProviderSharedPtr&                  rOutDevProvider ) :
         CanvasFont_Base( m_aMutex ),
         maFont( Font( rFontRequest.FontDescription.FamilyName,
                       rFontRequest.FontDescription.StyleName,
                       Size( 0, ::basegfx::fround(rFontRequest.CellSize) ) ) ),
         maFontRequest( rFontRequest ),
-        mpRefDevice( rDevice )
+        mpRefDevice( &rDevice ),
+        mpOutDevProvider( rOutDevProvider )
     {
         maFont->SetAlign( ALIGN_BASELINE );
         maFont->SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==com::sun::star::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
@@ -68,27 +70,24 @@ namespace vclcanvas
         // adjust to stretched/shrinked font
         if( !::rtl::math::approxEqual( rFontMatrix.m00, rFontMatrix.m11) )
         {
-            OutputDevice* pOutDev( mpRefDevice->getOutDev() );
+            OutputDevice& rOutDev( rOutDevProvider->getOutDev() );
 
-            if( pOutDev )
-            {
-                const bool bOldMapState( pOutDev->IsMapModeEnabled() );
-                pOutDev->EnableMapMode(FALSE);
+            const bool bOldMapState( rOutDev.IsMapModeEnabled() );
+            rOutDev.EnableMapMode(FALSE);
 
-                const Size aSize = pOutDev->GetFontMetric( *maFont ).GetSize();
+            const Size aSize = rOutDev.GetFontMetric( *maFont ).GetSize();
 
-                const double fDividend( rFontMatrix.m10 + rFontMatrix.m11 );
-                double fStretch = (rFontMatrix.m00 + rFontMatrix.m01);
+            const double fDividend( rFontMatrix.m10 + rFontMatrix.m11 );
+            double fStretch = (rFontMatrix.m00 + rFontMatrix.m01);
 
-                if( !::basegfx::fTools::equalZero( fDividend) )
-                    fStretch /= fDividend;
+            if( !::basegfx::fTools::equalZero( fDividend) )
+                fStretch /= fDividend;
 
-                const long nNewWidth = ::basegfx::fround( aSize.Width() * fStretch );
+            const long nNewWidth = ::basegfx::fround( aSize.Width() * fStretch );
 
-                maFont->SetWidth( nNewWidth );
+            maFont->SetWidth( nNewWidth );
 
-                pOutDev->EnableMapMode(bOldMapState);
-            }
+            rOutDev.EnableMapMode(bOldMapState);
         }
     }
 
@@ -96,6 +95,7 @@ namespace vclcanvas
     {
         tools::LocalGuard aGuard;
 
+        mpOutDevProvider.reset();
         mpRefDevice.clear();
     }
 
@@ -110,7 +110,8 @@ namespace vclcanvas
                                nDirection,
                                nRandomSeed,
                                Reference( this ),
-                               mpRefDevice );
+                               mpRefDevice,
+                               mpOutDevProvider);
     }
 
     rendering::FontRequest SAL_CALL  CanvasFont::getFontRequest(  ) throw (uno::RuntimeException)
