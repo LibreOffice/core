@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eventsdocumenthandler.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +63,6 @@
 //  namespace
 //_________________________________________________________________________________________________________________
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
@@ -132,25 +131,25 @@ OReadEventsDocumentHandler::OReadEventsDocumentHandler( EventsConfig& aItems ) :
     ::cppu::OWeakObject(),
     m_aEventItems( aItems )
 {
-    OUString aNamespaceEvent( RTL_CONSTASCII_USTRINGPARAM( XMLNS_EVENT ));
-    OUString aNamespaceXLink( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK ));
-    OUString aSeparator( RTL_CONSTASCII_USTRINGPARAM( XMLNS_FILTER_SEPARATOR ));
+    ::rtl::OUString aNamespaceEvent( RTL_CONSTASCII_USTRINGPARAM( XMLNS_EVENT ));
+    ::rtl::OUString aNamespaceXLink( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK ));
+    ::rtl::OUString aSeparator( RTL_CONSTASCII_USTRINGPARAM( XMLNS_FILTER_SEPARATOR ));
 
     // create hash map
     for ( int i = 0; i < (int)EV_XML_ENTRY_COUNT; i++ )
     {
         if ( EventEntries[i].nNamespace == EV_NS_EVENT )
         {
-            OUString temp( aNamespaceEvent );
+            ::rtl::OUString temp( aNamespaceEvent );
             temp += aSeparator;
-            temp += OUString::createFromAscii( EventEntries[i].aEntryName );
+            temp += ::rtl::OUString::createFromAscii( EventEntries[i].aEntryName );
             m_aEventsMap.insert( EventsHashMap::value_type( temp, (Events_XML_Entry)i ) );
         }
         else
         {
-            OUString temp( aNamespaceXLink );
+            ::rtl::OUString temp( aNamespaceXLink );
             temp += aSeparator;
-            temp += OUString::createFromAscii( EventEntries[i].aEntryName );
+            temp += ::rtl::OUString::createFromAscii( EventEntries[i].aEntryName );
             m_aEventsMap.insert( EventsHashMap::value_type( temp, (Events_XML_Entry)i ) );
         }
     }
@@ -190,14 +189,14 @@ throw(  SAXException, RuntimeException )
     if (( m_bEventsStartFound && !m_bEventsEndFound ) ||
         ( !m_bEventsStartFound && m_bEventsEndFound )       )
     {
-        OUString aErrorMessage = getErrorLineString();
-        aErrorMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( "No matching start or end element 'event:events' found!" ));
+        ::rtl::OUString aErrorMessage = getErrorLineString();
+        aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No matching start or end element 'event:events' found!" ));
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
 }
 
 void SAL_CALL OReadEventsDocumentHandler::startElement(
-    const OUString& aName, const Reference< XAttributeList > &xAttribs )
+    const ::rtl::OUString& aName, const Reference< XAttributeList > &xAttribs )
 throw(  SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
@@ -211,8 +210,8 @@ throw(  SAXException, RuntimeException )
             {
                 if ( m_bEventsStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'event:events' cannot be embeded into 'event:events'!" ));
+                    ::rtl::OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'event:events' cannot be embeded into 'event:events'!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -224,23 +223,23 @@ throw(  SAXException, RuntimeException )
             {
                 if ( !m_bEventsStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'event:event' must be embeded into element 'event:events'!" ));
+                    ::rtl::OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element 'event:event' must be embeded into element 'event:events'!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
                 if ( m_bEventStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( "Element event:event is not a container!" ));
+                    ::rtl::OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Element event:event is not a container!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
-                OUString aLanguage;
-                OUString aURL;
-                OUString aMacroName;
-                OUString aLibrary;
-                OUString aEventName;
+                ::rtl::OUString aLanguage;
+                ::rtl::OUString aURL;
+                ::rtl::OUString aMacroName;
+                ::rtl::OUString aLibrary;
+                ::rtl::OUString aEventName;
 
                 m_bEventStartFound = sal_True;
 
@@ -293,19 +292,19 @@ throw(  SAXException, RuntimeException )
                     }
                 } // for
 
-                OUString aRequiredAttributeName;
+                ::rtl::OUString aRequiredAttributeName;
                 if ( aLanguage.getLength() == 0 )
-                    aRequiredAttributeName = OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE ));
+                    aRequiredAttributeName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE ));
                 else if ( aEventName.getLength() == 0 )
-                    aRequiredAttributeName = OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NAME ));
+                    aRequiredAttributeName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NAME ));
 
                 // check for missing attribute values
                 if ( aRequiredAttributeName.getLength() > 0 )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( "Required attribute "));
+                    ::rtl::OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Required attribute "));
                     aErrorMessage += aRequiredAttributeName;
-                    aErrorMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( " must have a value!" ));
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " must have a value!" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -314,11 +313,11 @@ throw(  SAXException, RuntimeException )
                 // set properties
                 a <<= aLanguage;
                 aEventProperties[0].Value <<= a;
-                aEventProperties[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( PROP_EVENT_TYPE ));
+                aEventProperties[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PROP_EVENT_TYPE ));
 
                 a <<= aMacroName;
                 aEventProperties[1].Value <<= a;
-                aEventProperties[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( PROP_MACRO_NAME ));
+                aEventProperties[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PROP_MACRO_NAME ));
 
                 if ( aLibrary.getLength() > 0 )
                 {
@@ -326,7 +325,7 @@ throw(  SAXException, RuntimeException )
                     aEventProperties.realloc( nPropCount );
                     a <<= aLibrary;
                     aEventProperties[nPropCount-1].Value <<= a;
-                    aEventProperties[nPropCount-1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( PROP_LIBRARY ));
+                    aEventProperties[nPropCount-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PROP_LIBRARY ));
                 }
 
                 if ( aURL.getLength() > 0 )
@@ -335,7 +334,7 @@ throw(  SAXException, RuntimeException )
                     aEventProperties.realloc( nPropCount );
                     a <<= aURL;
                     aEventProperties[nPropCount-1].Value <<= a;
-                    aEventProperties[nPropCount-1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( PROP_SCRIPT ));
+                    aEventProperties[nPropCount-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PROP_SCRIPT ));
                 }
 
                 // set event name
@@ -353,7 +352,7 @@ throw(  SAXException, RuntimeException )
     }
 }
 
-void SAL_CALL OReadEventsDocumentHandler::endElement(const OUString& aName)
+void SAL_CALL OReadEventsDocumentHandler::endElement(const ::rtl::OUString& aName)
 throw(  SAXException, RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
@@ -367,8 +366,8 @@ throw(  SAXException, RuntimeException )
             {
                 if ( !m_bEventsStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( "End element 'event:events' found, but no start element" ));
+                    ::rtl::OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "End element 'event:events' found, but no start element" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -380,8 +379,8 @@ throw(  SAXException, RuntimeException )
             {
                 if ( !m_bEventStartFound )
                 {
-                    OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( "End element 'event:event' found, but no start element" ));
+                    ::rtl::OUString aErrorMessage = getErrorLineString();
+                    aErrorMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "End element 'event:event' found, but no start element" ));
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -395,18 +394,18 @@ throw(  SAXException, RuntimeException )
     }
 }
 
-void SAL_CALL OReadEventsDocumentHandler::characters(const OUString&)
+void SAL_CALL OReadEventsDocumentHandler::characters(const ::rtl::OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
 
-void SAL_CALL OReadEventsDocumentHandler::ignorableWhitespace(const OUString&)
+void SAL_CALL OReadEventsDocumentHandler::ignorableWhitespace(const ::rtl::OUString&)
 throw(  SAXException, RuntimeException )
 {
 }
 
 void SAL_CALL OReadEventsDocumentHandler::processingInstruction(
-    const OUString& /*aTarget*/, const OUString& /*aData*/ )
+    const ::rtl::OUString& /*aTarget*/, const ::rtl::OUString& /*aData*/ )
 throw(  SAXException, RuntimeException )
 {
 }
@@ -429,10 +428,10 @@ throw(  SAXException, RuntimeException )
     if ( m_xLocator.is() )
     {
         snprintf( buffer, sizeof(buffer), "Line: %ld - ", static_cast<long>(m_xLocator->getLineNumber() ));
-        return OUString::createFromAscii( buffer );
+        return ::rtl::OUString::createFromAscii( buffer );
     }
     else
-        return OUString();
+        return ::rtl::OUString();
 }
 
 
@@ -449,9 +448,9 @@ OWriteEventsDocumentHandler::OWriteEventsDocumentHandler(
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     m_xEmptyList        = Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
-    m_aAttributeType    = OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
-    m_aXMLXlinkNS       = OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK_PREFIX ));
-    m_aXMLEventNS       = OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_EVENT_PREFIX ));
+    m_aAttributeType    = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
+    m_aXMLXlinkNS       = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK_PREFIX ));
+    m_aXMLEventNS       = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_EVENT_PREFIX ));
 }
 
 OWriteEventsDocumentHandler::~OWriteEventsDocumentHandler()
@@ -469,22 +468,22 @@ void OWriteEventsDocumentHandler::WriteEventsDocument() throw
     Reference< XExtendedDocumentHandler > xExtendedDocHandler( m_xWriteDocumentHandler, UNO_QUERY );
     if ( xExtendedDocHandler.is() )
     {
-        xExtendedDocHandler->unknown( OUString( RTL_CONSTASCII_USTRINGPARAM( EVENTS_DOCTYPE )) );
-        m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+        xExtendedDocHandler->unknown( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( EVENTS_DOCTYPE )) );
+        m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
     }
 
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
-    pList->AddAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_EVENT )),
+    pList->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_EVENT )),
                          m_aAttributeType,
-                         OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_EVENT )) );
-    pList->AddAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_XLINK )),
+                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_EVENT )) );
+    pList->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_XLINK )),
                          m_aAttributeType,
-                         OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK )) );
+                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK )) );
 
-    m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_EVENTS )), pList );
-    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+    m_xWriteDocumentHandler->startElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_EVENTS )), pList );
+    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
 
     Sequence< PropertyValue > aEventProperties;
 
@@ -494,10 +493,10 @@ void OWriteEventsDocumentHandler::WriteEventsDocument() throw
             WriteEvent( m_aItems.aEventNames[i], aEventProperties );
     }
 
-    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_EVENTS )) );
+    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
+    m_xWriteDocumentHandler->endElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_EVENTS )) );
 
-    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+    m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
     m_xWriteDocumentHandler->endDocument();
 }
 
@@ -505,7 +504,7 @@ void OWriteEventsDocumentHandler::WriteEventsDocument() throw
 //  protected member functions
 //_________________________________________________________________________________________________________________
 
-void OWriteEventsDocumentHandler::WriteEvent( const OUString& aEventName, const Sequence< PropertyValue >& aPropertyValues ) throw
+void OWriteEventsDocumentHandler::WriteEvent( const ::rtl::OUString& aEventName, const Sequence< PropertyValue >& aPropertyValues ) throw
 ( SAXException, RuntimeException )
 {
     if ( aPropertyValues.getLength() > 0 )
@@ -516,24 +515,24 @@ void OWriteEventsDocumentHandler::WriteEvent( const OUString& aEventName, const 
         if ( m_aAttributeURL.getLength() == 0 )
         {
             m_aAttributeURL = m_aXMLXlinkNS;
-            m_aAttributeURL += OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HREF ));
+            m_aAttributeURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HREF ));
             m_aAttributeLinkType = m_aXMLXlinkNS;
-            m_aAttributeLinkType += OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE ));
+            m_aAttributeLinkType += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE ));
             m_aAttributeLanguage = m_aXMLEventNS;
-            m_aAttributeLanguage += OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_LANGUAGE ));
+            m_aAttributeLanguage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_LANGUAGE ));
             m_aAttributeMacroName = m_aXMLEventNS;
-            m_aAttributeMacroName += OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MACRONAME ));
+            m_aAttributeMacroName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MACRONAME ));
             m_aAttributeLibrary = m_aXMLEventNS;
-            m_aAttributeLibrary += OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_LIBRARY ));
+            m_aAttributeLibrary += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_LIBRARY ));
             m_aAttributeName = m_aXMLEventNS;
-            m_aAttributeName += OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NAME ));
+            m_aAttributeName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NAME ));
         }
 
         pList->AddAttribute( m_aAttributeName, m_aAttributeType, aEventName );
 
         sal_Bool    bURLSet = sal_False;
-        OUString    aValue;
-        OUString    aName;
+        ::rtl::OUString aValue;
+        ::rtl::OUString aName;
 
         // save attributes
         for ( int i = 0; i < aPropertyValues.getLength(); i++ )
@@ -555,14 +554,15 @@ void OWriteEventsDocumentHandler::WriteEvent( const OUString& aEventName, const 
         }
 
         if ( bURLSet )
-            pList->AddAttribute( m_aAttributeLinkType, m_aAttributeType, OUString( RTL_CONSTASCII_USTRINGPARAM( "simple" )) );
+            pList->AddAttribute( m_aAttributeLinkType, m_aAttributeType, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "simple" )) );
 
-        m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_EVENT )), xList );
-        m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+        m_xWriteDocumentHandler->startElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_EVENT )), xList );
+        m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
 
-        m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_EVENT )) );
-        m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+        m_xWriteDocumentHandler->endElement( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_EVENT )) );
+        m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );
     }
 }
 
 } // namespace framework
+
