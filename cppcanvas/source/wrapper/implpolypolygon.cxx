@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: implpolypolygon.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,14 +30,18 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppcanvas.hxx"
+
 #include <rtl/math.hxx>
+
+#include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
+
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tools/canvastools.hxx>
 
-#include <implpolypolygon.hxx>
-#include <tools.hxx>
+#include "implpolypolygon.hxx"
+#include "tools.hxx"
 
 
 using namespace ::com::sun::star;
