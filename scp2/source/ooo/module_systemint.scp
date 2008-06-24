@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_systemint.scp,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +41,7 @@ Module gid_Module_Optional_Systemintegration
   #ifdef WNT
     Styles = (HIDDEN_ROOT);
   #else
-    Styles = (SYSTEMMODULE,NOTRELOCATABLE,DONTSHOWINUSERINSTALL);
+    Styles = (SYSTEMMODULE,NOTRELOCATABLE,DONTSHOWINUSERINSTALL,INSTALLCANFAIL);
   #endif
   #if (defined(LINUX)) || (defined(SOLARIS))
     // PackageName = "%UNIXPRODUCTNAME-desktop-integration.tar.gz"; EMPTY IN BETA!
