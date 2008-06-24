@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bitmap.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/rendering/bitmap.hxx>
 #include <canvas/rendering/isurfaceproxy.hxx>
 #include <basegfx/vector/b2isize.hxx>
@@ -54,8 +55,8 @@ namespace canvas
             mpSurfaceProxy(),
             mbIsSurfaceDirty( true )
         {
-            ENSURE_AND_THROW( rMgr,
-                              "Bitmap::Bitmap(): Invalid surface proxy manager" );
+            ENSURE_OR_THROW( rMgr,
+                             "Bitmap::Bitmap(): Invalid surface proxy manager" );
 
             Image::Description desc;
 
