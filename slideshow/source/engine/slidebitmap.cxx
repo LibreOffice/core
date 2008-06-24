@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slidebitmap.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <slidebitmap.hxx>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
@@ -61,12 +62,12 @@ namespace slideshow
             if( rBitmap )
                 mxBitmap = rBitmap->getUNOBitmap();
 
-            ENSURE_AND_THROW( mxBitmap.is(), "SlideBitmap::SlideBitmap(): Invalid bitmap" );
+            ENSURE_OR_THROW( mxBitmap.is(), "SlideBitmap::SlideBitmap(): Invalid bitmap" );
         }
 
         bool SlideBitmap::draw( const ::cppcanvas::CanvasSharedPtr& rCanvas ) const
         {
-            ENSURE_AND_RETURN( rCanvas && rCanvas->getUNOCanvas().is(),
+            ENSURE_OR_RETURN( rCanvas && rCanvas->getUNOCanvas().is(),
                                "SlideBitmap::draw(): Invalid canvas" );
 
             // selectively only copy the transformation from current viewstate,
