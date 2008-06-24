@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: animationnodefactory.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -177,7 +177,7 @@ bool implCreateIteratedNodes(
     BaseContainerNodeSharedPtr&                               rParent,
     const NodeContext&                                        rContext )
 {
-    ENSURE_AND_THROW( xIterNode.is(),
+    ENSURE_OR_THROW( xIterNode.is(),
                       "implCreateIteratedNodes(): Invalid node" );
 
     const double nIntervalTimeout( xIterNode->getIterateInterval() );
@@ -201,7 +201,7 @@ bool implCreateIteratedNodes(
     // ==================================
 
     // TODO(E1): I'm not too sure what to expect here...
-    ENSURE_AND_RETURN(
+    ENSURE_OR_RETURN(
         xIterNode->getTarget().hasValue(),
         "implCreateIteratedNodes(): no target on ITERATE node" );
 
@@ -216,14 +216,14 @@ bool implCreateIteratedNodes(
     {
         // no shape provided. Maybe a ParagraphTarget?
         if( !(xIterNode->getTarget() >>= aTarget) )
-            ENSURE_AND_RETURN(
+            ENSURE_OR_RETURN(
                 false,
                 "implCreateIteratedNodes(): could not extract any "
                 "target information" );
 
         xTargetShape = aTarget.Shape;
 
-        ENSURE_AND_RETURN(
+        ENSURE_OR_RETURN(
             xTargetShape.is(),
             "implCreateIteratedNodes(): invalid shape in ParagraphTarget" );
 
@@ -254,7 +254,7 @@ bool implCreateIteratedNodes(
     // paragraph)
     if( bParagraphTarget )
     {
-        ENSURE_AND_RETURN(
+        ENSURE_OR_RETURN(
             aTarget.Paragraph >= 0 &&
             rTreeNodeSupplier.getNumberOfTreeNodes(
                 DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH ) > aTarget.Paragraph,
@@ -325,7 +325,7 @@ bool implCreateIteratedNodes(
         if( !::anim::for_each_childNode( xNode,
                                          aCreator ) )
         {
-            ENSURE_AND_RETURN(
+            ENSURE_OR_RETURN(
                 false,
                 "implCreateIteratedNodes(): iterated child node creation failed" );
         }
@@ -361,7 +361,7 @@ bool implCreateIteratedNodes(
             break;
 
         default:
-            ENSURE_AND_THROW(
+            ENSURE_OR_THROW(
                 false, "implCreateIteratedNodes(): "
                 "Unexpected IterateType on XIterateContainer");
             break;
@@ -448,7 +448,7 @@ bool implCreateIteratedNodes(
                 if( !::anim::for_each_childNode( xNode,
                                                  aCreator ) )
                 {
-                    ENSURE_AND_RETURN(
+                    ENSURE_OR_RETURN(
                         false, "implCreateIteratedNodes(): "
                         "iterated child node creation failed" );
                 }
@@ -467,7 +467,7 @@ BaseNodeSharedPtr implCreateAnimationNode(
     const BaseContainerNodeSharedPtr&                    rParent,
     const NodeContext&                                   rContext )
 {
-    ENSURE_AND_THROW( xNode.is(),
+    ENSURE_OR_THROW( xNode.is(),
                       "implCreateAnimationNode(): invalid XAnimationNode" );
 
     BaseNodeSharedPtr           pCreatedNode;
@@ -598,7 +598,7 @@ AnimationNodeSharedPtr AnimationNodeFactory::createAnimationNode(
     const ::basegfx::B2DVector&                           rSlideSize,
     const SlideShowContext&                               rContext )
 {
-    ENSURE_AND_THROW(
+    ENSURE_OR_THROW(
         xNode.is(),
         "AnimationNodeFactory::createAnimationNode(): invalid XAnimationNode" );
 
