@@ -168,11 +168,11 @@ End
 
 Start
 module = "gid_Module_Langpack_Binfilter"
-solarispackagename = "ooobasis%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-binfilter"
-solarisrequires = "ooobasis%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
-packagename = "ooobasis%OOOBASEVERSION-%LANGUAGESTRING-binfilter"
-provides = "ooobasis%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-binfilter"
-requires = "ooobasis%OOOBASEVERSION-%LANGUAGESTRING"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-binfilter"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
+packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING-binfilter"
+provides = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-binfilter"
+requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING"
 copyright = "1999-2007 by OpenOffice.org"
 solariscopyright = "solariscopyrightfile"
 vendor = "OpenOffice.org"
