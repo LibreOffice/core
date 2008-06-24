@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slideimpl.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 #include <osl/diagnose.hxx>
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/canvastools.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 
@@ -601,7 +602,7 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
     {
         // corresponding view not found - maybe view was not
         // added to Slide?
-        ENSURE_AND_THROW( false,
+        ENSURE_OR_THROW( false,
                           "SlideImpl::getInitialSlideBitmap(): view does not "
                           "match any of the added ones" );
     }
@@ -620,7 +621,7 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
         // set initial shape attributes (e.g. hide 'appear' effect
         // shapes)
         if( !const_cast<SlideImpl*>(this)->applyInitialShapeAttributes( mxRootNode ) )
-            ENSURE_AND_THROW(false,
+            ENSURE_OR_THROW(false,
                              "SlideImpl::getCurrentSlideBitmap(): Cannot "
                              "apply initial attributes");
     }
@@ -720,11 +721,11 @@ bool SlideImpl::isAnimated()
 SlideBitmapSharedPtr SlideImpl::createCurrentSlideBitmap( const UnoViewSharedPtr&   rView,
                                                           const ::basegfx::B2ISize& rBmpSize ) const
 {
-    ENSURE_AND_THROW( rView && rView->getCanvas(),
+    ENSURE_OR_THROW( rView && rView->getCanvas(),
                       "SlideImpl::createCurrentSlideBitmap(): Invalid view" );
-    ENSURE_AND_THROW( mpLayerManager,
+    ENSURE_OR_THROW( mpLayerManager,
                       "SlideImpl::createCurrentSlideBitmap(): Invalid layer manager" );
-    ENSURE_AND_THROW( mbShowLoaded,
+    ENSURE_OR_THROW( mbShowLoaded,
                       "SlideImpl::createCurrentSlideBitmap(): No show loaded" );
 
     ::cppcanvas::CanvasSharedPtr pCanvas( rView->getCanvas() );
@@ -735,12 +736,12 @@ SlideBitmapSharedPtr SlideImpl::createCurrentSlideBitmap( const UnoViewSharedPtr
             pCanvas,
             rBmpSize ) );
 
-    ENSURE_AND_THROW( pBitmap,
+    ENSURE_OR_THROW( pBitmap,
                       "SlideImpl::createCurrentSlideBitmap(): Cannot create page bitmap" );
 
     ::cppcanvas::BitmapCanvasSharedPtr pBitmapCanvas( pBitmap->getBitmapCanvas() );
 
-    ENSURE_AND_THROW( pBitmapCanvas,
+    ENSURE_OR_THROW( pBitmapCanvas,
                       "SlideImpl::createCurrentSlideBitmap(): Cannot create page bitmap canvas" );
 
     // apply linear part of destination canvas transformation (linear means in this context:
@@ -794,9 +795,9 @@ bool SlideImpl::implPrefetchShow()
     if( mbShowLoaded )
         return true;
 
-    ENSURE_AND_RETURN( mxDrawPage.is(),
+    ENSURE_OR_RETURN( mxDrawPage.is(),
                        "SlideImpl::implPrefetchShow(): Invalid draw page" );
-    ENSURE_AND_RETURN( mpLayerManager,
+    ENSURE_OR_RETURN( mpLayerManager,
                        "SlideImpl::implPrefetchShow(): Invalid layer manager" );
 
     // fetch desired page content
@@ -907,7 +908,7 @@ bool SlideImpl::applyInitialShapeAttributes(
 
     try
     {
-        ENSURE_AND_RETURN( maContext.mxComponentContext.is(),
+        ENSURE_OR_RETURN( maContext.mxComponentContext.is(),
                            "SlideImpl::applyInitialShapeAttributes(): Invalid component context" );
 
         uno::Reference<lang::XMultiComponentFactory> xFac(
@@ -935,7 +936,7 @@ bool SlideImpl::applyInitialShapeAttributes(
         // could not determine initial shape attributes - this
         // is an error, as some effects might then be plainly
         // invisible
-        ENSURE_AND_RETURN( false,
+        ENSURE_OR_RETURN( false,
                            "SlideImpl::applyInitialShapeAttributes(): "
                            "couldn't create TargetPropertiesCreator." );
     }
@@ -1040,9 +1041,9 @@ bool SlideImpl::loadShapes()
     if( mbShapesLoaded )
         return true;
 
-    ENSURE_AND_RETURN( mxDrawPage.is(),
+    ENSURE_OR_RETURN( mxDrawPage.is(),
                        "SlideImpl::loadShapes(): Invalid draw page" );
-    ENSURE_AND_RETURN( mpLayerManager,
+    ENSURE_OR_RETURN( mpLayerManager,
                        "SlideImpl::loadShapes(): Invalid layer manager" );
 
     // fetch desired page content
