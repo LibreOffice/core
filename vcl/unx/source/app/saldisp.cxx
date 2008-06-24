@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saldisp.cxx,v $
- * $Revision: 1.97 $
+ * $Revision: 1.98 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +65,7 @@
 
 #ifdef USE_XINERAMA
 #ifdef USE_XINERAMA_XORG
-#if defined(X86) || defined(MACOSX)
+#if defined(X86) || defined(X86_64) || defined(MACOSX)
 #include <X11/extensions/Xinerama.h>
 #endif
 #elif defined USE_XINERAMA_XSUN
@@ -2664,7 +2664,7 @@ void SalDisplay::InitXinerama()
         }
     }
 #elif defined(USE_XINERAMA_XORG)
-#if defined( X86 ) || defined( MACOSX )
+#if defined( X86 ) || defined( X86_64 ) || defined( MACOSX )
 if( XineramaIsActive( pDisp_ ) )
 {
     int nFramebuffers = 1;
