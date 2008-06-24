@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: servicedecl.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -392,16 +392,16 @@ extern "C" \
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME; \
     } \
  \
-    sal_Bool SAL_CALL component_writeInfo( lang::XMultiServiceFactory*  pServiceManager, \
-                                           registry::XRegistryKey*      pRegistryKey ) \
+    sal_Bool SAL_CALL component_writeInfo( ::com::sun::star::lang::XMultiServiceFactory*    pServiceManager, \
+                                           ::com::sun::star::registry::XRegistryKey*        pRegistryKey ) \
     { \
         return component_writeInfoHelper( pServiceManager, pRegistryKey, \
                                           BOOST_PP_SEQ_ENUM(varargs_) ); \
     } \
  \
-    void* SAL_CALL component_getFactory( sal_Char const*                pImplName, \
-                                         lang::XMultiServiceFactory*    pServiceManager, \
-                                         registry::XRegistryKey*        pRegistryKey ) \
+    void* SAL_CALL component_getFactory( sal_Char const*                                pImplName, \
+                                         ::com::sun::star::lang::XMultiServiceFactory*  pServiceManager, \
+                                         ::com::sun::star::registry::XRegistryKey*      pRegistryKey ) \
     { \
         return component_getFactoryHelper( pImplName, pServiceManager, \
                                            pRegistryKey, \
