@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterCanvas.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -888,7 +888,7 @@ css::rendering::ViewState PresenterCanvas::MergeViewState (
 
         // Clip the view state clipping polygon against the local clip rectangle.
         const ::basegfx::B2DPolyPolygon aClipPolygon (
-            ::canvas::tools::polyPolygonFromXPolyPolygon2D(
+            ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(
                 aViewState.Clip));
         const ::basegfx::B2DPolyPolygon aClippedClipPolygon (
             ::basegfx::tools::clipPolyPolygonOnRange(
