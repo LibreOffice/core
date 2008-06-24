@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: statusbarwrapper.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,7 +66,6 @@
 #include <vcl/svapp.hxx>
 #include <rtl/logfile.hxx>
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::frame;
@@ -215,7 +214,7 @@ void SAL_CALL StatusBarWrapper::setSettings( const Reference< XIndexAccess >& xS
 
         if ( m_xConfigSource.is() && m_bPersistent )
         {
-            OUString aResourceURL( m_aResourceURL );
+            ::rtl::OUString aResourceURL( m_aResourceURL );
             Reference< XUIConfigurationManager > xUICfgMgr( m_xConfigSource );
 
             aLock.unlock();
@@ -263,3 +262,4 @@ Reference< XInterface > SAL_CALL StatusBarWrapper::getRealInterface() throw ( Ru
 }
 
 } // namespace framework
+
