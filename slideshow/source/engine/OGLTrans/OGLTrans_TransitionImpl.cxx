@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OGLTrans_TransitionImpl.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,9 @@
  *
  ************************************************************************/
 #include "OGLTrans_TransitionImpl.hxx"
+
 #include <GL/gl.h>
+
 
 void OGLTransitionImpl::clear()
 {
@@ -113,6 +115,7 @@ Primitive::~Primitive()
     for(unsigned int i( 0 ); i < Operations.size(); ++i)
         delete Operations[i];
 }
+
 
 void SceneObject::display(double nTime, double /* SlideWidth */, double /* SlideHeight */, double DispWidth, double DispHeight )
 {
@@ -344,16 +347,16 @@ void OGLTransitionImpl::makeRochade()
 // TODO(Q3): extract to basegfx
 inline basegfx::B2DVector clamp(const basegfx::B2DVector& v)
 {
-    return basegfx::B2DVector(std::min(std::max(v.getX(),-1.0),1.0),
-                              std::min(std::max(v.getY(),-1.0),1.0));
+    return basegfx::B2DVector(min(max(v.getX(),-1.0),1.0),
+                              min(max(v.getY(),-1.0),1.0));
 }
 
 // TODO(Q3): extract to basegfx
 inline basegfx::B3DVector clamp(const basegfx::B3DVector& v)
 {
-    return basegfx::B3DVector(std::min(std::max(v.getX(),-1.0),1.0),
-                              std::min(std::max(v.getY(),-1.0),1.0),
-                              std::min(std::max(v.getZ(),-1.0),1.0));
+    return basegfx::B3DVector(min(max(v.getX(),-1.0),1.0),
+                              min(max(v.getY(),-1.0),1.0),
+                              min(max(v.getZ(),-1.0),1.0));
 }
 
 inline double randFromNeg1to1()
@@ -387,7 +390,7 @@ void OGLTransitionImpl::makeRevolvingCircles( ::sal_uInt16 nCircles , ::sal_uInt
     /// the last will always be the outer shell of the slide with a circle hole
 
     //add the full circle
-    std::vector<basegfx::B2DVector> unScaledTexCoords;
+    vector<basegfx::B2DVector> unScaledTexCoords;
     double TempAngle(0.0);
     for(unsigned int Point(0); Point < nPointsOnCircles; ++Point)
     {
@@ -496,8 +499,8 @@ void OGLTransitionImpl::makeHelix( ::sal_uInt16 nRows )
         Tile.pushTriangle(basegfx::B2DVector( 1.0 , iPDn ) , basegfx::B2DVector( 1.0 , iDn ) , basegfx::B2DVector( 0.0 , iPDn ));
 
         Tile.Operations.push_back( new SRotate( basegfx::B3DVector( 0 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0 , 180 ,
-                                                true,std::min(std::max(static_cast<double>(i - nRows/2.0)*invN/2.0,0.0),1.0),
-                                                std::min(std::max(static_cast<double>(i + nRows/2.0)*invN/2.0,0.0),1.0) ) );
+                                                true,min(max(static_cast<double>(i - nRows/2.0)*invN/2.0,0.0),1.0),
+                                                min(max(static_cast<double>(i + nRows/2.0)*invN/2.0,0.0),1.0) ) );
 
         maLeavingSlidePrimitives.push_back(Tile);
 
@@ -679,11 +682,11 @@ const Primitive& Primitive::operator=(const Primitive& rvalue)
 {
     for(unsigned int i( 0 ); i < rvalue.Operations.size(); ++i)
         Operations.push_back(rvalue.Operations[i]->clone());
-    for(unsigned int i( 0 ); i < rvalue.Vertices.size(); ++i)//SPEED! use std::copy or something. this is slow.
+    for(unsigned int i( 0 ); i < rvalue.Vertices.size(); ++i)//SPEED! use copy or something. this is slow.
         Vertices.push_back(rvalue.Vertices[i]);
-    for(unsigned int i( 0 ); i < rvalue.TexCoords.size(); ++i)//SPEED! use std::copy or something. this is slow.
+    for(unsigned int i( 0 ); i < rvalue.TexCoords.size(); ++i)//SPEED! use copy or something. this is slow.
         TexCoords.push_back(rvalue.TexCoords[i]);
-    for(unsigned int i( 0 ); i < rvalue.Normals.size(); ++i)//SPEED! use std::copy or something. this is slow.
+    for(unsigned int i( 0 ); i < rvalue.Normals.size(); ++i)//SPEED! use copy or something. this is slow.
         Normals.push_back(rvalue.Normals[i]);
     return *this;
 }
@@ -692,18 +695,18 @@ Primitive::Primitive(const Primitive& rvalue)
 {
     for(unsigned int i( 0 ); i < rvalue.Operations.size(); ++i)
         Operations.push_back(rvalue.Operations[i]->clone());
-    for(unsigned int i( 0 ); i < rvalue.Vertices.size(); ++i)//SPEED! use std::copy or something. this is slow.
+    for(unsigned int i( 0 ); i < rvalue.Vertices.size(); ++i)//SPEED! use copy or something. this is slow.
         Vertices.push_back(rvalue.Vertices[i]);
-    for(unsigned int i( 0 ); i < rvalue.TexCoords.size(); ++i)//SPEED! use std::copy or something. this is slow.
+    for(unsigned int i( 0 ); i < rvalue.TexCoords.size(); ++i)//SPEED! use copy or something. this is slow.
         TexCoords.push_back(rvalue.TexCoords[i]);
-    for(unsigned int i( 0 ); i < rvalue.Normals.size(); ++i)//SPEED! use std::copy or something. this is slow.
+    for(unsigned int i( 0 ); i < rvalue.Normals.size(); ++i)//SPEED! use copy or something. this is slow.
         Normals.push_back(rvalue.Normals[i]);
 }
 
 void Primitive::pushTriangle(const basegfx::B2DVector& SlideLocation0,const basegfx::B2DVector& SlideLocation1,const basegfx::B2DVector& SlideLocation2)
 {
-    std::vector<basegfx::B3DVector> Verts;
-    std::vector<basegfx::B2DVector> Texs;
+    vector<basegfx::B3DVector> Verts;
+    vector<basegfx::B2DVector> Texs;
     Verts.reserve(3);
     Texs.reserve(3);
 
