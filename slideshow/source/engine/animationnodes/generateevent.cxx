@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: generateevent.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
 #include <com/sun/star/drawing/XShape.hpp>
@@ -76,7 +77,7 @@ EventSharedPtr generateEvent(
             OSL_ENSURE( false, "MEDIA timing not yet implemented!" );
             break;
         default:
-            ENSURE_AND_THROW( false, "unexpected case!" );
+            ENSURE_OR_THROW( false, "unexpected case!" );
         }
     }
     else if (rEventDescription >>= aEvent) {
@@ -97,7 +98,7 @@ EventSharedPtr generateEvent(
 
         switch (aEvent.Trigger) {
         default:
-            ENSURE_AND_THROW( false, "unexpected event trigger!" );
+            ENSURE_OR_THROW( false, "unexpected event trigger!" );
         case animations::EventTrigger::NONE:
             // no event at all
             break;
