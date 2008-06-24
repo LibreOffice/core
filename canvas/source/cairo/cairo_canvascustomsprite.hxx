@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_canvascustomsprite.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,7 +79,8 @@ namespace cairocanvas
         enforce any specific interface on its derivees.
      */
     class CanvasCustomSpriteSpriteBase_Base : public ::canvas::BaseMutexHelper< CanvasCustomSpriteBase_Base >,
-                                                 public Sprite
+                                                 public Sprite,
+                                              public SurfaceProvider
     {
     };
 
@@ -92,8 +93,7 @@ namespace cairocanvas
     /* Definition of CanvasCustomSprite class */
 
     class CanvasCustomSprite : public CanvasCustomSpriteBaseT,
-                               public RepaintTarget,
-                               public SurfaceProvider
+                               public RepaintTarget
     {
     public:
         /** Create a custom sprite
@@ -128,27 +128,31 @@ namespace cairocanvas
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()  throw( ::com::sun::star::uno::RuntimeException );
 
         // Sprite
-        virtual void redraw( ::cairo::Cairo* pCairo,
-                 bool bBufferedUpdate ) const;
-        virtual void redraw( ::cairo::Cairo* pCairo,
-                             const ::basegfx::B2DPoint& rOrigOutputPos,
-                             bool bBufferedUpdate ) const;
+        virtual void redraw( const ::cairo::CairoSharedPtr& pCairo,
+                             bool                           bBufferedUpdate ) const;
+        virtual void redraw( const ::cairo::CairoSharedPtr& pCairo,
+                             const ::basegfx::B2DPoint&     rOrigOutputPos,
+                             bool                           bBufferedUpdate ) const;
 
         // RepaintTarget
-        virtual bool repaint( ::cairo::Surface* pSurface,
-                  const ::com::sun::star::rendering::ViewState& viewState,
-                  const ::com::sun::star::rendering::RenderState&   renderState );
+        virtual bool repaint( const ::cairo::SurfaceSharedPtr&                pSurface,
+                              const ::com::sun::star::rendering::ViewState&   viewState,
+                              const ::com::sun::star::rendering::RenderState& renderState );
 
         // SurfaceProvider
-        virtual ::cairo::Surface* changeSurface( bool bHasAlpha, bool bCopyContent );
+        virtual SurfaceSharedPtr getSurface();
+        virtual SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, Content aContent = CAIRO_CONTENT_COLOR_ALPHA );
+        virtual SurfaceSharedPtr createSurface( ::Bitmap& rBitmap );
+        virtual SurfaceSharedPtr changeSurface( bool bHasAlpha, bool bCopyContent );
+        virtual OutputDevice* getOutputDevice();
 
     private:
         /** MUST hold here, too, since CanvasHelper only contains a
             raw pointer (without refcounting)
         */
-        SpriteCanvasRef mpSpriteCanvas;
-        ::cairo::Surface*       mpBufferSurface;
-        ::basegfx::B2ISize      maSize;
+        SpriteCanvasRef           mpSpriteCanvas;
+        ::cairo::SurfaceSharedPtr mpBufferSurface;
+        ::basegfx::B2ISize        maSize;
     };
 }
 
