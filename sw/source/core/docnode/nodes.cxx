@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nodes.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1804,6 +1804,8 @@ void SwNodes::Move( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes,
 //!NOSPLIT      if( !bOneNd && ( bSplitNd || bSplitDestNd ))
         if( !bOneNd && bSplitDestNd )
         {
+            if( !rPos.nContent.GetIndex() )
+                bCopyCollFmt = TRUE;
             if( rNodes.IsDocNodes() )
             {
                 SwDoc* pInsDoc = pDestNd->GetDoc();
@@ -1834,6 +1836,7 @@ void SwNodes::Move( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes,
             pInsDoc->DoUndo( FALSE );
             pSrcNd->CopyCollFmt( *pDestNd );
             pInsDoc->DoUndo( bIsUndo );
+            bCopyCollFmt = FALSE;
         }
 
         if( bOneNd )        // das wars schon
