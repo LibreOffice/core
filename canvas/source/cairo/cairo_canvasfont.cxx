@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_canvasfont.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,7 +70,7 @@ namespace cairocanvas
     CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
                             const uno::Sequence< beans::PropertyValue >&    /*rExtraFontProperties*/,
                             const geometry::Matrix2D&                       rFontMatrix,
-                            const DeviceRef&                                rDevice ) :
+                            const SurfaceProviderRef&                       rDevice ) :
         CanvasFont_Base( m_aMutex ),
         maFont( Font( rFontRequest.FontDescription.FamilyName,
                       rFontRequest.FontDescription.StyleName,
@@ -89,7 +89,7 @@ namespace cairocanvas
         // adjust to stretched/shrinked font
         if( !::rtl::math::approxEqual( rFontMatrix.m00, rFontMatrix.m11) )
         {
-            OutputDevice* pOutDev( mpRefDevice->getOutputWindow() );
+            OutputDevice* pOutDev( mpRefDevice->getOutputDevice() );
 
             if( pOutDev )
             {
