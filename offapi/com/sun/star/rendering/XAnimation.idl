@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XAnimation.idl,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,7 +100,7 @@ interface XAnimation : ::com::sun::star::uno::XInterface
         range must always be [0,1], where 0 denotes the very beginning, and
         1 the end of the animation sequence.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the passed parameters does not lie in the specified,
         permissible range.
      */
