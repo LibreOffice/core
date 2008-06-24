@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_canvashelper_texturefill.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,11 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_canvas.hxx"
+
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <rtl/math.hxx>
 
 #include <com/sun/star/rendering/TexturingMode.hpp>
@@ -45,7 +49,6 @@
 #include "dx_spritecanvas.hxx"
 #include "dx_canvashelper.hxx"
 #include "dx_impltools.hxx"
-#include "dx_surfacegraphics.hxx"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -58,11 +61,11 @@ namespace dxcanvas
     {
         typedef ::boost::shared_ptr< Gdiplus::PathGradientBrush >   PathGradientBrushSharedPtr;
 
-        bool fillLinearGradient( SurfaceGraphicsSharedPtr&                      rGraphics,
-                                 const Gdiplus::Color&                          rColor1,
-                                 const Gdiplus::Color&                          rColor2,
-                                 const GraphicsPathSharedPtr&                   rFillPath,
-                                 const rendering::Texture&                      texture )
+        bool fillLinearGradient( GraphicsSharedPtr&           rGraphics,
+                                 const Gdiplus::Color&        rColor1,
+                                 const Gdiplus::Color&        rColor2,
+                                 const GraphicsPathSharedPtr& rFillPath,
+                                 const rendering::Texture&    texture )
         {
             // setup a linear gradient with two colors
             // ---------------------------------------
@@ -78,7 +81,7 @@ namespace dxcanvas
             // render background color, as LinearGradientBrush does not
             // properly support the WrapModeClamp repeat mode
             Gdiplus::SolidBrush aBackgroundBrush( rColor1 );
-            (*rGraphics)->FillPath( &aBackgroundBrush, rFillPath.get() );
+            rGraphics->FillPath( &aBackgroundBrush, rFillPath.get() );
 
             // TODO(F2): This does not yet support other repeat modes
             // except clamp, and probably also no multi-texturing
@@ -145,14 +148,14 @@ namespace dxcanvas
 
             // limit output to fill path, we've just generated a path that
             // might be substantially larger
-            if( Gdiplus::Ok != (*rGraphics)->SetClip( rFillPath.get(),
-                                                      Gdiplus::CombineModeIntersect ) )
+            if( Gdiplus::Ok != rGraphics->SetClip( rFillPath.get(),
+                                                   Gdiplus::CombineModeIntersect ) )
             {
                 return false;
             }
 
             Gdiplus::SolidBrush aBackgroundBrush2( rColor2 );
-            (*rGraphics)->FillPath( &aBackgroundBrush2, &aSolidFillPath );
+            rGraphics->FillPath( &aBackgroundBrush2, &aSolidFillPath );
 
             // generate clip polygon from the extended parallelogram
             // (exploit the feature that distinct lines in a figure are
@@ -170,8 +173,8 @@ namespace dxcanvas
 
             // limit output to a _single_ strip of the gradient (have to
             // clip here, since GDI+ wrapmode clamp does not work here)
-            if( Gdiplus::Ok != (*rGraphics)->SetClip( &aClipPath,
-                                                      Gdiplus::CombineModeIntersect ) )
+            if( Gdiplus::Ok != rGraphics->SetClip( &aClipPath,
+                                                   Gdiplus::CombineModeIntersect ) )
             {
                 return false;
             }
@@ -182,16 +185,16 @@ namespace dxcanvas
                                                     texture.AffineTransform );
             aBrush.SetTransform( &aMatrix );
 
-            (*rGraphics)->FillRectangle( &aBrush, aBounds );
+            rGraphics->FillRectangle( &aBrush, aBounds );
 
             return true;
         }
 
-        bool fillAxialGradient( SurfaceGraphicsSharedPtr&                      rGraphics,
-                                const Gdiplus::Color&                          rColor1,
-                                const Gdiplus::Color&                          rColor2,
-                                const GraphicsPathSharedPtr&                   rFillPath,
-                                const rendering::Texture&                      texture )
+        bool fillAxialGradient( GraphicsSharedPtr&           rGraphics,
+                                const Gdiplus::Color&        rColor1,
+                                const Gdiplus::Color&        rColor2,
+                                const GraphicsPathSharedPtr& rFillPath,
+                                const rendering::Texture&    texture )
         {
             // setup a linear gradient with three colors
             // -----------------------------------------
@@ -228,7 +231,7 @@ namespace dxcanvas
             // render background color, as LinearGradientBrush does not
             // properly support the WrapModeClamp repeat mode
             Gdiplus::SolidBrush aBackgroundBrush( rColor1 );
-            (*rGraphics)->FillPath( &aBackgroundBrush, rFillPath.get() );
+            rGraphics->FillPath( &aBackgroundBrush, rFillPath.get() );
 
             // TODO(F2): This does not yet support other repeat modes
             // except clamp, and probably also no multi-texturing
@@ -278,13 +281,13 @@ namespace dxcanvas
 
             // limit output to a _single_ strip of the gradient (have to
             // clip here, since GDI+ wrapmode clamp does not work here)
-            if( Gdiplus::Ok != (*rGraphics)->SetClip( rFillPath.get(),
-                                                      Gdiplus::CombineModeIntersect ) )
+            if( Gdiplus::Ok != rGraphics->SetClip( rFillPath.get(),
+                                                   Gdiplus::CombineModeIntersect ) )
             {
                 return false;
             }
-            if( Gdiplus::Ok != (*rGraphics)->SetClip( &aClipPath,
-                                                      Gdiplus::CombineModeIntersect ) )
+            if( Gdiplus::Ok != rGraphics->SetClip( &aClipPath,
+                                                   Gdiplus::CombineModeIntersect ) )
             {
                 return false;
             }
@@ -295,7 +298,7 @@ namespace dxcanvas
                                                     texture.AffineTransform );
             aBrush.SetTransform( &aMatrix );
 
-            (*rGraphics)->FillRectangle( &aBrush, aBounds );
+            rGraphics->FillRectangle( &aBrush, aBounds );
 
             return true;
         }
@@ -322,7 +325,7 @@ namespace dxcanvas
         }
 
         bool fillPolygonalGradient( const ::canvas::ParametricPolyPolygon::Values& rValues,
-                                    SurfaceGraphicsSharedPtr&                      rGraphics,
+                                    GraphicsSharedPtr&                             rGraphics,
                                     const Gdiplus::Color&                          rColor1,
                                     const Gdiplus::Color&                          rColor2,
                                     const GraphicsPathSharedPtr&                   rPath,
@@ -341,14 +344,14 @@ namespace dxcanvas
             GraphicsPathSharedPtr pGradientPath(
                 tools::graphicsPathFromB2DPolygon( rValues.maGradientPoly ) );
 
-            ENSURE_AND_RETURN( pGradientPath.get(),
+            ENSURE_OR_RETURN( pGradientPath.get(),
                                "ParametricPolyPolygon::fillPolygonalGradient(): Could not clone path" );
 
             PathGradientBrushSharedPtr pGradientBrush;
 
             // fill background uniformly with end color
             Gdiplus::SolidBrush aBackgroundBrush( rColor1 );
-            (*rGraphics)->FillPath( &aBackgroundBrush, pFillPath.get() );
+            rGraphics->FillPath( &aBackgroundBrush, pFillPath.get() );
 
             // scale focus according to aspect ratio: for wider-than-tall
             // bounds (nAspectRatio > 1.0), the focus must have non-zero
@@ -370,17 +373,17 @@ namespace dxcanvas
                 // except clamp, and probably also no multi-texturing
 
                 // limit output to to-be-filled polygon
-                if( Gdiplus::Ok != (*rGraphics)->SetClip( pFillPath.get(),
-                                                          Gdiplus::CombineModeIntersect ) )
+                if( Gdiplus::Ok != rGraphics->SetClip( pFillPath.get(),
+                                                       Gdiplus::CombineModeIntersect ) )
                 {
                     return false;
                 }
 
-                (*rGraphics)->MultiplyTransform( &aMatrix );
+                rGraphics->MultiplyTransform( &aMatrix );
 
                 // disable anti-aliasing, if any
-                const Gdiplus::SmoothingMode eOldAAMode( (*rGraphics)->GetSmoothingMode() );
-                (*rGraphics)->SetSmoothingMode( Gdiplus::SmoothingModeHighSpeed );
+                const Gdiplus::SmoothingMode eOldAAMode( rGraphics->GetSmoothingMode() );
+                rGraphics->SetSmoothingMode( Gdiplus::SmoothingModeHighSpeed );
 
 
                 // determine number of steps to use
@@ -395,7 +398,7 @@ namespace dxcanvas
                             labs( rColor1.GetBlue() - rColor2.GetBlue() ) ) ) );
 
                 Gdiplus::Matrix aWorldTransformMatrix;
-                (*rGraphics)->GetTransform( &aWorldTransformMatrix );
+                rGraphics->GetTransform( &aWorldTransformMatrix );
 
                 Gdiplus::RectF  aBounds;
                 pGradientPath->GetBounds( &aBounds, &aWorldTransformMatrix, NULL );
@@ -486,11 +489,11 @@ namespace dxcanvas
                         tools::graphicsPathFromB2DPolygon( rValues.maGradientPoly ) );
                     pScaledGradientPath->Transform( &aGDIScaleMatrix );
 
-                    (*rGraphics)->FillPath( &aFillBrush, pScaledGradientPath.get() );
+                    rGraphics->FillPath( &aFillBrush, pScaledGradientPath.get() );
                 }
 
                 // reset to old anti-alias mode
-                (*rGraphics)->SetSmoothingMode( eOldAAMode );
+                rGraphics->SetSmoothingMode( eOldAAMode );
             }
             else
             {
@@ -536,18 +539,18 @@ namespace dxcanvas
                 }
 
                 // render actual gradient
-                (*rGraphics)->FillPath( pGradientBrush.get(), pFillPath.get() );
+                rGraphics->FillPath( pGradientBrush.get(), pFillPath.get() );
             }
 
 #if defined(VERBOSE) && defined(DBG_UTIL)
-            (*rGraphics)->MultiplyTransform( &aMatrix );
+            rGraphics->MultiplyTransform( &aMatrix );
 
             Gdiplus::Pen aPen( Gdiplus::Color( 255, 255, 0, 0 ),
                                0.0001f );
 
-            (*rGraphics)->DrawRectangle( &aPen,
-                                         Gdiplus::RectF( 0.0f, 0.0f,
-                                                         1.0f, 1.0f ) );
+            rGraphics->DrawRectangle( &aPen,
+                                      Gdiplus::RectF( 0.0f, 0.0f,
+                                                      1.0f, 1.0f ) );
 #endif
 
             return true;
@@ -556,7 +559,7 @@ namespace dxcanvas
         bool fillGradient( const ::canvas::ParametricPolyPolygon::Values& rValues,
                            const Gdiplus::Color&                          rColor1,
                            const Gdiplus::Color&                          rColor2,
-                           SurfaceGraphicsSharedPtr&                      rGraphics,
+                           GraphicsSharedPtr&                             rGraphics,
                            const GraphicsPathSharedPtr&                   rPath,
                            const rendering::Texture&                      texture )
         {
@@ -590,7 +593,7 @@ namespace dxcanvas
                     break;
 
                 default:
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "CanvasHelper::fillGradient(): Unexpected case" );
             }
 
@@ -598,7 +601,7 @@ namespace dxcanvas
         }
 
         void fillBitmap( const uno::Reference< rendering::XBitmap >& xBitmap,
-                         SurfaceGraphicsSharedPtr&                   rGraphics,
+                         GraphicsSharedPtr&                          rGraphics,
                          const GraphicsPathSharedPtr&                rPath,
                          const rendering::Texture&                   rTexture )
         {
@@ -610,7 +613,7 @@ namespace dxcanvas
                                rTexture.RepeatModeY == rendering::TexturingMode::CLAMP );
 
             const geometry::IntegerSize2D aBmpSize( xBitmap->getSize() );
-            CHECK_AND_THROW( aBmpSize.Width != 0 &&
+            ENSURE_ARG_OR_THROW( aBmpSize.Width != 0 &&
                              aBmpSize.Height != 0,
                              "CanvasHelper::fillBitmap(): zero-sized texture bitmap" );
 
@@ -667,9 +670,9 @@ namespace dxcanvas
             pBrush->MultiplyTransform( &aTextureTransform );
 
             // TODO(F1): FillRule
-            ENSURE_AND_THROW(
-                Gdiplus::Ok == (*rGraphics)->FillPath( pBrush.get(),
-                                                       rPath.get() ),
+            ENSURE_OR_THROW(
+                Gdiplus::Ok == rGraphics->FillPath( pBrush.get(),
+                                                    rPath.get() ),
                 "CanvasHelper::fillTexturedPolyPolygon(): GDI+ call failed" );
         }
     }
@@ -682,16 +685,16 @@ namespace dxcanvas
                                                                                          const rendering::RenderState&                      renderState,
                                                                                          const uno::Sequence< rendering::Texture >&         textures )
     {
-        ENSURE_AND_THROW( xPolyPolygon.is(),
+        ENSURE_OR_THROW( xPolyPolygon.is(),
                           "CanvasHelper::fillTexturedPolyPolygon: polygon is NULL");
-        ENSURE_AND_THROW( textures.getLength(),
+        ENSURE_OR_THROW( textures.getLength(),
                           "CanvasHelper::fillTexturedPolyPolygon: empty texture sequence");
 
         if( needOutput() )
         {
-            SurfaceGraphicsSharedPtr aGraphics( mpTarget->getGraphics() );
+            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
 
-            setupGraphicsState( aGraphics, viewState, renderState );
+            setupGraphicsState( pGraphics, viewState, renderState );
 
             // TODO(F1): Multi-texturing
             if( textures[0].Gradient.is() )
@@ -706,15 +709,16 @@ namespace dxcanvas
                     const ::canvas::ParametricPolyPolygon::Values& rValues(
                         pGradient->getValues() );
 
-                    const Gdiplus::Color aColor1(tools::sequenceToArgb(rValues.maColor1));
-                    const Gdiplus::Color aColor2(tools::sequenceToArgb(rValues.maColor2));
+                    // TODO: use all the colors and place them on given positions/stops
+                    const Gdiplus::Color aColor1(tools::sequenceToArgb(rValues.maColors[0]));
+                    const Gdiplus::Color aColor2(tools::sequenceToArgb(rValues.maColors[rValues.maColors.getLength () - 1] ));
 
                     // TODO(E1): Return value
                     // TODO(F1): FillRule
                     fillGradient( rValues,
                                   aColor1,
                                   aColor2,
-                                  aGraphics,
+                                  pGraphics,
                                   tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ),
                                   textures[0] );
                 }
@@ -724,7 +728,7 @@ namespace dxcanvas
                 // TODO(E1): Return value
                 // TODO(F1): FillRule
                 fillBitmap( textures[0].Bitmap,
-                            aGraphics,
+                            pGraphics,
                             tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ),
                             textures[0] );
             }
