@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev.cxx,v $
- * $Revision: 1.57 $
+ * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,13 +57,12 @@
 #include <vcl/print.hxx>
 #include <vcl/salotype.hxx>
 #include <vcl/opengl.hxx>
-#ifndef _VCL_IMPLNCVT_HXX
 #include <implncvt.hxx>
-#endif
 #include <vcl/outdev3d.hxx>
 #include <vcl/outdev.h>
 #include <vcl/outdev.hxx>
 #include <vcl/unowrap.hxx>
+#include <vcl/sysdata.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
@@ -72,6 +71,12 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <com/sun/star/awt/XGraphics.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <vcl/unohelp.hxx>
+
+using namespace ::com::sun::star;
 
 DBG_NAME( OutputDevice );
 DBG_NAME( Polygon );
@@ -2934,3 +2939,69 @@ OpenGL* OutputDevice::GetOpenGL()
     UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
     return pWrapper ? pWrapper->CreateGraphics( this ) : ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >();
 }
+
+// -----------------------------------------------------------------------
+
+SystemGraphicsData OutputDevice::GetSystemGfxData() const
+{
+    if ( !mpGraphics )
+    {
+        if ( !ImplGetGraphics() )
+            return SystemGraphicsData();
+    }
+
+    return mpGraphics->GetGraphicsData();
+}
+
+// -----------------------------------------------------------------------
+
+::com::sun::star::uno::Any OutputDevice::GetSystemGfxDataAny() const
+{
+    ::com::sun::star::uno::Any aRet;
+    const SystemGraphicsData aSysData = GetSystemGfxData();
+    ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( (sal_Int8*)&aSysData,
+                                                      aSysData.nSize );
+
+    return uno::makeAny(aSeq);
+}
+
+// -----------------------------------------------------------------------
+
+::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas > OutputDevice::GetCanvas() const
+{
+    uno::Sequence< uno::Any > aArg(6);
+
+    aArg[ 0 ] = uno::makeAny( reinterpret_cast<sal_Int64>(this) );
+    aArg[ 2 ] = uno::makeAny( ::com::sun::star::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight ) );
+    aArg[ 3 ] = uno::makeAny( sal_False );
+    aArg[ 5 ] = GetSystemGfxDataAny();
+
+    uno::Reference<lang::XMultiServiceFactory> xFactory = vcl::unohelper::GetMultiServiceFactory();
+
+    uno::Reference<rendering::XCanvas> xCanvas;
+
+    // Create canvas instance with window handle
+    // =========================================
+    if ( xFactory.is() )
+    {
+        static uno::Reference<lang::XMultiServiceFactory> xCanvasFactory(
+            xFactory->createInstance(
+                OUString( RTL_CONSTASCII_USTRINGPARAM(
+                              "com.sun.star."
+                              "rendering.CanvasFactory") ) ),
+            uno::UNO_QUERY );
+        if(xCanvasFactory.is())
+        {
+            xCanvas.set(
+                xCanvasFactory->createInstanceWithArguments(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                  "com.sun.star.rendering.Canvas" )),
+                    aArg ),
+                uno::UNO_QUERY );
+        }
+    }
+
+    return xCanvas;
+}
+
+// -----------------------------------------------------------------------
