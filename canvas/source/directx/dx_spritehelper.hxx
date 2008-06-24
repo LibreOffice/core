@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_spritehelper.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include "dx_spritecanvas.hxx"
-#include "dx_bitmap.hxx"
+#include "dx_surfacebitmap.hxx"
 
 namespace dxcanvas
 {
@@ -81,7 +81,7 @@ namespace dxcanvas
         void init( const ::com::sun::star::geometry::RealSize2D&    rSpriteSize,
                    const SpriteCanvasRef&                           rSpriteCanvas,
                    const IDXRenderModuleSharedPtr&                  rRenderModule,
-                   const DXBitmapSharedPtr                          rBitmap,
+                   const DXSurfaceBitmapSharedPtr                   rBitmap,
                    bool                                             bShowSpriteBounds );
 
         void disposing();
@@ -105,7 +105,7 @@ namespace dxcanvas
 
         SpriteCanvasRef             mpSpriteCanvas;
 
-        DXBitmapSharedPtr           mpBitmap;
+        DXSurfaceBitmapSharedPtr    mpBitmap;
         mutable bool                mbTextureDirty;  // when true, texture needs update
         bool                        mbShowSpriteBounds; // when true, debug bound rect for sprites is shown
     };
