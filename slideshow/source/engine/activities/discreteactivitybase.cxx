@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: discreteactivitybase.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
 #include <discreteactivitybase.hxx>
@@ -49,10 +50,10 @@ namespace slideshow
             mnSimpleDuration( rParms.mnMinDuration ),
             mnCurrPerformCalls( 0 )
         {
-            ENSURE_AND_THROW( mpWakeupEvent,
+            ENSURE_OR_THROW( mpWakeupEvent,
                               "DiscreteActivityBase::DiscreteActivityBase(): Invalid wakeup event" );
 
-            ENSURE_AND_THROW( !maDiscreteTimes.empty(),
+            ENSURE_OR_THROW( !maDiscreteTimes.empty(),
                               "DiscreteActivityBase::DiscreteActivityBase(): time vector is empty, why do you create me?" );
 
 #ifdef DBG_UTIL
@@ -66,11 +67,11 @@ namespace slideshow
                     maDiscreteTimes[i-1] < 0.0 ||
                     maDiscreteTimes[i-1] > 1.0 )
                 {
-                    ENSURE_AND_THROW( false, "DiscreteActivityBase::DiscreteActivityBase(): time values not within [0,1] range!" );
+                    ENSURE_OR_THROW( false, "DiscreteActivityBase::DiscreteActivityBase(): time values not within [0,1] range!" );
                 }
 
                 if( maDiscreteTimes[i-1] > maDiscreteTimes[i] )
-                    ENSURE_AND_THROW( false, "DiscreteActivityBase::DiscreteActivityBase(): time vector is not sorted in ascending order!" );
+                    ENSURE_OR_THROW( false, "DiscreteActivityBase::DiscreteActivityBase(): time vector is not sorted in ascending order!" );
             }
 
             // TODO(E2): check this also in production code?
