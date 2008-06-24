@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bitmap.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -244,7 +244,7 @@ struct BitmapSystemData
     void* pDIB; // device independent byte buffer
     void* pDDB; // if not NULL then this is actually an HBITMAP
     #elif defined( QUARTZ )
-    void* rImageContext;
+    void* rImageContext;     //Image context (CGContextRef)
     #else
     void* aPixmap;
     #endif
