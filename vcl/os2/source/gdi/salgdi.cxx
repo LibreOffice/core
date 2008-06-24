@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1011,3 +1011,15 @@ BOOL Os2SalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
 {
     return( FALSE );
 }
+
+// -----------------------------------------------------------------------
+
+SystemGraphicsData Os2SalGraphics::GetGraphicsData() const
+{
+    SystemGraphicsData aRes;
+    aRes.nSize = sizeof(aRes);
+    aRes.hDC = mhDC;
+    return aRes;
+}
+
+// -----------------------------------------------------------------------
