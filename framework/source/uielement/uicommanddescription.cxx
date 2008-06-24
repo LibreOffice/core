@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: uicommanddescription.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,7 +68,6 @@
 //_________________________________________________________________________________________________________________
 //
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -364,13 +363,13 @@ void ConfigurationAccess_UICommand::fillInfoFromResult( CmdToInfoMap& rCmdInfo, 
     String rStr( aLabel );
     if ( rStr.SearchAscii( "%PRODUCT" ) != STRING_NOTFOUND )
         rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", m_aBrandName );
-    rCmdInfo.aLabel       = OUString( rStr );
+    rCmdInfo.aLabel       = ::rtl::OUString( rStr );
     rStr.EraseTrailingChars( '.' ); // Remove "..." from string
-    rCmdInfo.aCommandName = OUString( MnemonicGenerator::EraseAllMnemonicChars( rStr ));
+    rCmdInfo.aCommandName = ::rtl::OUString( MnemonicGenerator::EraseAllMnemonicChars( rStr ));
     rCmdInfo.bCommandNameCreated = sal_True;
 }
 
-Any ConfigurationAccess_UICommand::getSequenceFromCache( const OUString& aCommandURL )
+Any ConfigurationAccess_UICommand::getSequenceFromCache( const ::rtl::OUString& aCommandURL )
 {
     CommandToInfoCache::iterator pIter = m_aCmdInfoCache.find( aCommandURL );
     if ( pIter != m_aCmdInfoCache.end() )
@@ -408,10 +407,10 @@ sal_Bool ConfigurationAccess_UICommand::fillCache()
 
     sal_Int32               i( 0 );
     Any                     a;
-    std::vector< OUString > aImageCommandVector;
-    std::vector< OUString > aImageRotateVector;
-    std::vector< OUString > aImageMirrorVector;
-    Sequence< OUString >    aNameSeq;
+    std::vector< ::rtl::OUString > aImageCommandVector;
+    std::vector< ::rtl::OUString > aImageRotateVector;
+    std::vector< ::rtl::OUString > aImageMirrorVector;
+    Sequence< ::rtl::OUString >    aNameSeq;
 
     if ( m_xConfigAccess.is() )
     {
@@ -596,18 +595,18 @@ Sequence< rtl::OUString > ConfigurationAccess_UICommand::getAllCommands()
 
         try
         {
-            Sequence< OUString > aNameSeq = m_xConfigAccess->getElementNames();
+            Sequence< ::rtl::OUString > aNameSeq = m_xConfigAccess->getElementNames();
 
             if ( m_xGenericUICommands.is() )
             {
                 // Create concat list of supported user interface commands of the module
-                Sequence< OUString > aGenericNameSeq = m_xGenericUICommands->getElementNames();
+                Sequence< ::rtl::OUString > aGenericNameSeq = m_xGenericUICommands->getElementNames();
                 sal_uInt32 nCount1 = aNameSeq.getLength();
                 sal_uInt32 nCount2 = aGenericNameSeq.getLength();
 
                 aNameSeq.realloc( nCount1 + nCount2 );
-                OUString* pNameSeq = aNameSeq.getArray();
-                const OUString* pGenericSeq = aGenericNameSeq.getConstArray();
+                ::rtl::OUString* pNameSeq = aNameSeq.getArray();
+                const ::rtl::OUString* pGenericSeq = aGenericNameSeq.getConstArray();
                 for ( sal_uInt32 i = 0; i < nCount2; i++ )
                     pNameSeq[nCount1+i] = pGenericSeq[i];
             }
@@ -749,7 +748,7 @@ UICommandDescription::UICommandDescription( const Reference< XMultiServiceFactor
     m_xServiceManager( xServiceManager )
 {
     Reference< XNameAccess > xEmpty;
-    rtl::OUString aGenericUICommand( OUString::createFromAscii( "GenericCommands" ));
+    rtl::OUString aGenericUICommand( ::rtl::OUString::createFromAscii( "GenericCommands" ));
     m_xGenericUICommands = new ConfigurationAccess_UICommand( aGenericUICommand, xEmpty, xServiceManager );
 
     m_xModuleManager = Reference< XModuleManager >( m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ),
@@ -757,7 +756,7 @@ UICommandDescription::UICommandDescription( const Reference< XMultiServiceFactor
     Reference< XNameAccess > xNameAccess( m_xModuleManager, UNO_QUERY_THROW );
     Sequence< rtl::OUString > aElementNames = xNameAccess->getElementNames();
     Sequence< PropertyValue > aSeq;
-    OUString                  aModuleIdentifier;
+    ::rtl::OUString                  aModuleIdentifier;
 
     for ( sal_Int32 i = 0; i < aElementNames.getLength(); i++ )
     {
@@ -765,7 +764,7 @@ UICommandDescription::UICommandDescription( const Reference< XMultiServiceFactor
         Any a = xNameAccess->getByName( aModuleIdentifier );
         if ( a >>= aSeq )
         {
-            OUString aCommandStr;
+            ::rtl::OUString aCommandStr;
             for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )
             {
                 if ( aSeq[y].Name.equalsAscii("ooSetupFactoryCommandConfigRef") )
@@ -809,7 +808,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
     ModuleToCommandFileMap::const_iterator pM2CIter = m_aModuleToCommandFileMap.find( aName );
     if ( pM2CIter != m_aModuleToCommandFileMap.end() )
     {
-        OUString aCommandFile( pM2CIter->second );
+        ::rtl::OUString aCommandFile( pM2CIter->second );
         UICommandsHashMap::iterator pIter = m_aUICommandsHashMap.find( aCommandFile );
         if ( pIter != m_aUICommandsHashMap.end() )
         {
@@ -882,3 +881,4 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 } // namespace framework
+
