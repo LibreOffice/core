@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inettbc.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +74,6 @@
 #include "sfxtypes.hxx"
 #include "helper.hxx"
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
@@ -137,18 +136,18 @@ void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, BOOL /*bNew*/ ) co
         if ( xDispatch.is() )
         {
             Sequence< PropertyValue > aArgs( 2 );
-            aArgs[0].Name = OUString::createFromAscii( "Referer" );
+            aArgs[0].Name = ::rtl::OUString::createFromAscii( "Referer" );
             aArgs[0].Value = makeAny( ::rtl::OUString::createFromAscii( SFX_REFERER_USER ));
-            aArgs[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ));
-            aArgs[1].Value = makeAny( OUString( aName ));
+            aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ));
+            aArgs[1].Value = makeAny( ::rtl::OUString( aName ));
 
             if ( aFilter.Len() )
             {
                 aArgs.realloc( 4 );
-                aArgs[2].Name = OUString::createFromAscii( "FilterOptions" );
-                aArgs[2].Value = makeAny( OUString( aOptions ));
-                aArgs[3].Name = OUString::createFromAscii( "FilterName" );
-                aArgs[3].Value = makeAny( OUString( aFilter ));
+                aArgs[2].Name = ::rtl::OUString::createFromAscii( "FilterOptions" );
+                aArgs[2].Value = makeAny( ::rtl::OUString( aOptions ));
+                aArgs[3].Name = ::rtl::OUString::createFromAscii( "FilterName" );
+                aArgs[3].Value = makeAny( ::rtl::OUString( aFilter ));
             }
 
             SfxURLToolBoxControl_Impl::ExecuteInfo* pExecuteInfo = new SfxURLToolBoxControl_Impl::ExecuteInfo;
@@ -208,7 +207,7 @@ IMPL_LINK( SfxURLToolBoxControl_Impl, OpenHdl, void*, EMPTYARG )
     if ( m_xServiceManager.is() )
     {
         Reference< XFramesSupplier > xDesktop( m_xServiceManager->createInstance(
-                                                OUString::createFromAscii( "com.sun.star.frame.Desktop" )),
+                                                ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" )),
                                              UNO_QUERY );
         Reference< XFrame > xFrame( xDesktop->getActiveFrame(), UNO_QUERY );
         if ( xFrame.is() )
@@ -404,3 +403,4 @@ void SfxCancelToolBoxControl_Impl::StateChanged
     //SfxToolBoxControl::StateChanged( nSID, eState, pState ? &aVoidItem : 0 );
     SfxToolBoxControl::StateChanged( nSID, eState, pState );
 }
+
