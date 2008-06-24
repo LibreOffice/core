@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterPreviewCache.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 #include "sdpage.hxx"
 #include <cppcanvas/vclfactory.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
