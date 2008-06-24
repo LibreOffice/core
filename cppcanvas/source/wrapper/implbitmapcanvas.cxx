@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: implbitmapcanvas.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,17 +31,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppcanvas.hxx"
 
-#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP__
 #include <com/sun/star/rendering/XCanvas.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XBITMAPCANVAS_HPP__
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
-#endif
+
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/tools/canvastools.hxx>
 
-#include <implbitmapcanvas.hxx>
+#include "implbitmapcanvas.hxx"
 
 
 using namespace ::com::sun::star;
