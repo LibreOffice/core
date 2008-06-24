@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: spriteredrawmanager.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/spriteredrawmanager.hxx>
 
 #include <basegfx/range/b2drectangle.hxx>
@@ -102,7 +103,7 @@ namespace canvas
                             break;
 
                         default:
-                            ENSURE_AND_THROW( false,
+                            ENSURE_OR_THROW( false,
                                               "Unexpected case in SpriteUpdater::operator()" );
                             break;
                     }
