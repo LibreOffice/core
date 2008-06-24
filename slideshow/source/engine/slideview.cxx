@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slideview.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,7 @@
 #include "precompiled_slideshow.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/canvastools.hxx>
 
 #include "eventqueue.hxx"
@@ -627,12 +628,12 @@ private:
                 mpSprite->show();
             }
 
-            ENSURE_AND_THROW( mpSprite,
+            ENSURE_OR_THROW( mpSprite,
                               "SlideViewLayer::getCanvas(): no layer sprite" );
 
             mpOutputCanvas = mpSprite->getContentCanvas();
 
-            ENSURE_AND_THROW( mpOutputCanvas,
+            ENSURE_OR_THROW( mpOutputCanvas,
                               "SlideViewLayer::getCanvas(): sprite doesn't yield a canvas" );
 
             // new canvas retrieved - setup transformation and clip
@@ -778,12 +779,12 @@ SlideView::SlideView( const uno::Reference<presentation::XSlideShowView>& xView,
 {
     // take care not constructing any UNO references to this _inside_
     // ctor, shift that code to createSlideView()!
-    ENSURE_AND_THROW( mxView.is(),
+    ENSURE_OR_THROW( mxView.is(),
                       "SlideView::SlideView(): Invalid view" );
 
     mpCanvas = cppcanvas::VCLFactory::getInstance().createSpriteCanvas(
         xView->getCanvas() );
-    ENSURE_AND_THROW( mpCanvas,
+    ENSURE_OR_THROW( mpCanvas,
                       "Could not create cppcanvas" );
 
     geometry::AffineMatrix2D aViewTransform(
@@ -831,7 +832,7 @@ ViewLayerSharedPtr SlideView::createViewLayer( const basegfx::B2DRange& rLayerBo
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    ENSURE_AND_THROW( mpCanvas,
+    ENSURE_OR_THROW( mpCanvas,
                       "SlideView::createViewLayer(): Disposed" );
 
     const std::size_t nNumLayers( maViewLayers.size() );
@@ -855,7 +856,7 @@ bool SlideView::updateScreen() const
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    ENSURE_AND_RETURN( mpCanvas.get(),
+    ENSURE_OR_RETURN( mpCanvas.get(),
                        "SlideView::updateScreen(): Disposed" );
 
     return mpCanvas->updateScreen( false );
@@ -865,7 +866,7 @@ bool SlideView::paintScreen() const
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    ENSURE_AND_RETURN( mpCanvas.get(),
+    ENSURE_OR_RETURN( mpCanvas.get(),
                        "SlideView::paintScreen(): Disposed" );
 
     return mpCanvas->updateScreen( true );
@@ -927,7 +928,7 @@ cppcanvas::CanvasSharedPtr SlideView::getCanvas() const
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    ENSURE_AND_THROW( mpCanvas,
+    ENSURE_OR_THROW( mpCanvas,
                       "SlideView::getCanvas(): Disposed" );
 
     return mpCanvas;
@@ -939,7 +940,7 @@ cppcanvas::CustomSpriteSharedPtr SlideView::createSprite(
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    ENSURE_AND_THROW( mpCanvas, "SlideView::createSprite(): Disposed" );
+    ENSURE_OR_THROW( mpCanvas, "SlideView::createSprite(): Disposed" );
 
     cppcanvas::CustomSpriteSharedPtr pSprite(
         mpCanvas->createCustomSprite( rSpriteSizePixel ) );
