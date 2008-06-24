@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewappletshape.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 // must be first
 #include <canvas/verbosetrace.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/debug.hxx>
 
 #include <comphelper/anytostring.hxx>
@@ -83,10 +84,10 @@ namespace slideshow
             mxFrame(),
             mxComponentContext( rxContext )
         {
-            ENSURE_AND_THROW( rxShape.is(), "ViewAppletShape::ViewAppletShape(): Invalid Shape" );
-            ENSURE_AND_THROW( mpViewLayer, "ViewAppletShape::ViewAppletShape(): Invalid View" );
-            ENSURE_AND_THROW( mpViewLayer->getCanvas(), "ViewAppletShape::ViewAppletShape(): Invalid ViewLayer canvas" );
-            ENSURE_AND_THROW( mxComponentContext.is(), "ViewAppletShape::ViewAppletShape(): Invalid component context" );
+            ENSURE_OR_THROW( rxShape.is(), "ViewAppletShape::ViewAppletShape(): Invalid Shape" );
+            ENSURE_OR_THROW( mpViewLayer, "ViewAppletShape::ViewAppletShape(): Invalid View" );
+            ENSURE_OR_THROW( mpViewLayer->getCanvas(), "ViewAppletShape::ViewAppletShape(): Invalid ViewLayer canvas" );
+            ENSURE_OR_THROW( mxComponentContext.is(), "ViewAppletShape::ViewAppletShape(): Invalid component context" );
 
             uno::Reference<lang::XMultiComponentFactory> xFactory(
                 mxComponentContext->getServiceManager(),
@@ -140,7 +141,7 @@ namespace slideshow
 
         bool ViewAppletShape::startApplet( const ::basegfx::B2DRectangle& rBounds )
         {
-            ENSURE_AND_RETURN( mpViewLayer && mpViewLayer->getCanvas() && mpViewLayer->getCanvas()->getUNOCanvas().is(),
+            ENSURE_OR_RETURN( mpViewLayer && mpViewLayer->getCanvas() && mpViewLayer->getCanvas()->getUNOCanvas().is(),
                                "ViewAppletShape::startApplet(): Invalid or disposed view" );
             try
             {
