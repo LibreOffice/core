@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: opcodes.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,6 +95,7 @@ enum SbiOpcode {
     _INITFOREACH,
     _VBASET,            // VBA-like Set
     _ERASE_CLEAR,       // Erase array and clear variable
+    _ARRAYACCESS,       // Assign parameters to TOS and get value, used for array of arrays
     SbOP0_END,
 
     // Alle Opcodes mit einem Operanden
