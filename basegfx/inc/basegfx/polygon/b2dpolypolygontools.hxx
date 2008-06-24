@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolypolygontools.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,19 +111,37 @@ namespace basegfx
         /** Read poly-polygon from SVG.
 
             This function imports a poly-polygon from an SVG-D
-            statement. Currently, elliptical arc elements are not yet
+            attribute. Currently, elliptical arc elements are not yet
             supported (and ignored during parsing).
 
             @param o_rPolyPoly
             The output poly-polygon
 
-            @param rSvgDStatement
-            A valid SVG-D statement
+            @param rSvgDAttribute
+            A valid SVG-D attribute string
 
             @return true, if the string was successfully parsed
          */
-        bool importFromSvgD( B2DPolyPolygon& o_rPolyPoly,
-                             const ::rtl::OUString&     rSvgDStatement );
+        bool importFromSvgD( B2DPolyPolygon&        o_rPolyPoly,
+                             const ::rtl::OUString& rSvgDAttribute );
+
+        /** Read poly-polygon from SVG.
+
+            This function imports a poly-polygon from an SVG points
+            attribute (a plain list of coordinate pairs).
+
+            @param o_rPoly
+            The output polygon. Note that svg:points can only define a
+            single polygon
+
+            @param rSvgPointsAttribute
+            A valid SVG points attribute string
+
+            @return true, if the string was successfully parsed
+         */
+        bool importFromSvgPoints( B2DPolygon&            o_rPoly,
+                                  const ::rtl::OUString& rSvgPointsAttribute );
+
 
         // create 3d PolyPolygon from given 2d PolyPolygon. The given fZCoordinate is used to expand the
         // third coordinate.
