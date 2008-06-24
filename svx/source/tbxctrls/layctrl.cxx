@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: layctrl.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +49,6 @@
 #include <svtools/colorcfg.hxx>
 
 // namespaces
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
@@ -451,9 +450,9 @@ void TableWindow::PopupModeEnd()
             if ( xDispatch.is() )
             {
                 Sequence< PropertyValue > aArgs( 2 );
-                aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Columns" ));
+                aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Columns" ));
                 aArgs[0].Value = makeAny( sal_Int16( nCol ));
-                aArgs[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Rows" ));
+                aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Rows" ));
                 aArgs[1].Value = makeAny( sal_Int16( nLine ));
 
                 xDispatch->dispatch( aTargetURL, aArgs );
@@ -482,11 +481,11 @@ private:
     BOOL                m_bMod1;
     ToolBox&            rTbx;
     Reference< XFrame > mxFrame;
-    OUString            maCommand;
+    ::rtl::OUString            maCommand;
 
     void UpdateSize_Impl( long nNewCol );
 public:
-                            ColumnsWindow( USHORT nId, const OUString& rCmd, ToolBox& rParentTbx, const Reference< XFrame >& rFrame );
+                            ColumnsWindow( USHORT nId, const ::rtl::OUString& rCmd, ToolBox& rParentTbx, const Reference< XFrame >& rFrame );
 
     void                    KeyInput( const KeyEvent& rKEvt );
     virtual void            MouseMove( const MouseEvent& rMEvt );
@@ -501,7 +500,7 @@ public:
 
 // -----------------------------------------------------------------------
 
-ColumnsWindow::ColumnsWindow( USHORT nId, const OUString& rCmd, ToolBox& rParentTbx, const Reference< XFrame >& rFrame ) :
+ColumnsWindow::ColumnsWindow( USHORT nId, const ::rtl::OUString& rCmd, ToolBox& rParentTbx, const Reference< XFrame >& rFrame ) :
     SfxPopupWindow( nId, rFrame, WB_SYSTEMWINDOW ),
     bInitialKeyInput(TRUE),
     m_bMod1(FALSE),
@@ -763,9 +762,9 @@ void ColumnsWindow::PopupModeEnd()
         pParent->UserEvent(SVX_EVENT_COLUM_WINDOW_EXECUTE, reinterpret_cast<void*>(nId));
 
         Sequence< PropertyValue > aArgs( 2 );
-        aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Columns" ));
+        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Columns" ));
         aArgs[0].Value = makeAny( sal_Int16( nCol ));
-        aArgs[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Modifier" ));
+        aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Modifier" ));
         aArgs[1].Value = makeAny( sal_Int16( m_bMod1 ? KEY_MOD1 : 0 ));
 
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
@@ -902,4 +901,3 @@ void SvxColumnsToolBoxControl::StateChanged( USHORT nSID,
     bEnabled = SFX_ITEM_DISABLED != eState;
     SfxToolBoxControl::StateChanged(nSID,   eState, pState );
 }
-
