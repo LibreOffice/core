@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: null_canvascustomsprite.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
 #include <rtl/logfile.hxx>
@@ -54,7 +55,7 @@ namespace nullcanvas
                                             const SpriteCanvasRef&                          rRefDevice ) :
         mpSpriteCanvas( rRefDevice )
     {
-        ENSURE_AND_THROW( rRefDevice.get(),
+        ENSURE_OR_THROW( rRefDevice.get(),
                           "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
 
         maCanvasHelper.init( ::basegfx::B2ISize(
