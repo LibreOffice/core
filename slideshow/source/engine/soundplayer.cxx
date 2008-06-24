@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: soundplayer.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_slideshow.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
 #include <comphelper/anytostring.hxx>
@@ -104,7 +105,7 @@ namespace slideshow
               mThis(),
               mxPlayer()
         {
-            ENSURE_AND_THROW( rComponentContext.is(),
+            ENSURE_OR_THROW( rComponentContext.is(),
                               "SoundPlayer::SoundPlayer(): Invalid component context" );
 
             try
