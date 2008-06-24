@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_spritecanvashelper.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +54,7 @@ namespace cairocanvas
         SpriteCanvasHelper();
 
         void init( ::canvas::SpriteRedrawManager& rManager,
-                   SpriteCanvas&                  rDevice,
+                   SpriteCanvas&                  rOwningSpriteCanvas,
                    const ::basegfx::B2ISize&      rSize );
 
         /// Dispose all internal references
@@ -132,8 +132,17 @@ namespace cairocanvas
                             const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
 
     private:
+        ::cairo::SurfaceSharedPtr getCompositingSurface( const ::basegfx::B2ISize& rNeededSize );
+
         /// Set from the SpriteCanvas: instance coordinating sprite redraw
         ::canvas::SpriteRedrawManager*  mpRedrawManager;
+
+        /// Set from the init method. used to generate sprites
+        SpriteCanvas*                   mpOwningSpriteCanvas;
+
+        /// a temporary surface used to composite the frontbuffer image
+        ::cairo::SurfaceSharedPtr           mpCompositingSurface;
+        ::basegfx::B2ISize               maCompositingSurfaceSize;
     };
 }
 
