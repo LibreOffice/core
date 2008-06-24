@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: setactivity.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
 #include "animationactivity.hxx"
@@ -69,7 +70,7 @@ public:
           maToValue( rToValue ),
           mbIsActive(true)
     {
-        ENSURE_AND_THROW( mpAnimation, "Invalid animation" );
+        ENSURE_OR_THROW( mpAnimation, "Invalid animation" );
     }
 
     virtual void dispose()
@@ -125,8 +126,8 @@ public:
     virtual void setTargets( const AnimatableShapeSharedPtr&        rShape,
                              const ShapeAttributeLayerSharedPtr&    rAttrLayer )
     {
-        ENSURE_AND_THROW( rShape, "Invalid shape" );
-        ENSURE_AND_THROW( rAttrLayer, "Invalid attribute layer" );
+        ENSURE_OR_THROW( rShape, "Invalid shape" );
+        ENSURE_OR_THROW( rAttrLayer, "Invalid attribute layer" );
 
         mpShape = rShape;
         mpAttributeLayer = rAttrLayer;
