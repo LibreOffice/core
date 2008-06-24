@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewbackgroundshape.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +33,10 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 
-#include <viewbackgroundshape.hxx>
-#include <tools.hxx>
+#include "viewbackgroundshape.hxx"
+#include "tools.hxx"
 
 #include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
@@ -47,6 +48,8 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+
+#include <com/sun/star/rendering/XCanvas.hpp>
 
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
@@ -67,7 +70,7 @@ namespace slideshow
                                             const GDIMetaFileSharedPtr&         rMtf ) const
         {
             RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewBackgroundShape::prefetch()" );
-            ENSURE_AND_RETURN( rMtf,
+            ENSURE_OR_RETURN( rMtf,
                                "ViewBackgroundShape::prefetch(): no valid metafile!" );
 
             const ::basegfx::B2DHomMatrix& rCanvasTransform(
@@ -98,12 +101,12 @@ namespace slideshow
                         rDestinationCanvas,
                         aBmpSizePixel ) );
 
-                ENSURE_AND_THROW( pBitmap,
+                ENSURE_OR_THROW( pBitmap,
                                   "ViewBackgroundShape::prefetch(): Cannot create background bitmap" );
 
                 ::cppcanvas::BitmapCanvasSharedPtr pBitmapCanvas( pBitmap->getBitmapCanvas() );
 
-                ENSURE_AND_THROW( pBitmapCanvas,
+                ENSURE_OR_THROW( pBitmapCanvas,
                                   "ViewBackgroundShape::prefetch(): Cannot create background bitmap canvas" );
 
                 // clear bitmap
@@ -128,7 +131,7 @@ namespace slideshow
                         *rMtf.get(),
                         ::cppcanvas::Renderer::Parameters() ) );
 
-                ENSURE_AND_RETURN( pRenderer,
+                ENSURE_OR_RETURN( pRenderer,
                                    "ViewBackgroundShape::prefetch(): Could not create Renderer" );
 
                 pRenderer->setTransformation( aShapeTransform );
@@ -151,8 +154,8 @@ namespace slideshow
             maLastTransformation(),
             maBounds( rShapeBounds )
         {
-            ENSURE_AND_THROW( mpViewLayer, "ViewBackgroundShape::ViewBackgroundShape(): Invalid View" );
-            ENSURE_AND_THROW( mpViewLayer->getCanvas(), "ViewBackgroundShape::ViewBackgroundShape(): Invalid ViewLayer canvas" );
+            ENSURE_OR_THROW( mpViewLayer, "ViewBackgroundShape::ViewBackgroundShape(): Invalid View" );
+            ENSURE_OR_THROW( mpViewLayer->getCanvas(), "ViewBackgroundShape::ViewBackgroundShape(): Invalid ViewLayer canvas" );
         }
 
         ViewLayerSharedPtr ViewBackgroundShape::getViewLayer() const
@@ -169,7 +172,7 @@ namespace slideshow
             if( !prefetch( rDestinationCanvas, rMtf ) )
                 return false;
 
-            ENSURE_AND_RETURN( mxBitmap.is(),
+            ENSURE_OR_RETURN( mxBitmap.is(),
                                "ViewBackgroundShape::draw(): Invalid background bitmap" );
 
             ::basegfx::B2DHomMatrix aTransform( mpViewLayer->getTransformation() );
