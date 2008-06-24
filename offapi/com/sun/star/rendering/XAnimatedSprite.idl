@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XAnimatedSprite.idl,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -141,7 +141,7 @@ interface XAnimatedSprite : XSprite
         <member>XAnimation::render()</member> method, or when drawing
         the sprite's bitmaps, respectively.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if the view transformation matrix is singular.
     */
     void setViewState( [in] ViewState aViewState )
@@ -182,7 +182,7 @@ interface XAnimatedSprite : XSprite
         Whether this method should implicitely call
         <member>XSpriteCanvas::updateAnimation</member> or not.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the passed parameters does not lie in the specified,
         permissible range.
      */
