@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_5rm.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,6 +27,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_canvas.hxx"
 
 #if DIRECTX_VERSION < 0x0900
 
@@ -53,6 +56,7 @@
 #include <canvas/rendering/icolorbuffer.hxx>
 #include <canvas/rendering/isurface.hxx>
 #include <canvas/rendering/irendermodule.hxx>
+#include <tools/diagnose_ex.h>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2isize.hxx>
@@ -73,10 +77,12 @@
 #include "dx_impltools.hxx"
 #include <malloc.h>
 
-#if defined(DX_DEBUG_IMAGES) && defined(DBG_UTIL)
-# include <imdebug.h>
-# undef min
-# undef max
+#if defined(DX_DEBUG_IMAGES)
+# if OSL_DEBUG_LEVEL > 0
+#  include <imdebug.h>
+#  undef min
+#  undef max
+# endif
 #endif
 
 #undef COMPILE_MULTIMON_STUBS
@@ -743,7 +749,7 @@ namespace dxcanvas
                 return;
 #endif
 
-            CHECK_AND_THROW(rSize.getX() > 0 && rSize.getY() > 0,
+            ENSURE_ARG_OR_THROW(rSize.getX() > 0 && rSize.getY() > 0,
                             "DXSurface::DXSurface(): request for zero-sized surface");
 
             const D3DDEVICEDESC &deviceDesc = rRenderModule.getDeviceDesc();
@@ -835,7 +841,8 @@ namespace dxcanvas
                 return false;
             }
 
-#if defined(DX_DEBUG_IMAGES) && defined(DBG_UTIL)
+#if defined(DX_DEBUG_IMAGES)
+# if OSL_DEBUG_LEVEL > 0
             if( mpSurface.is() )
             {
                 DDSURFACEDESC aSurfaceDesc;
@@ -855,6 +862,7 @@ namespace dxcanvas
                     mpSurface->Unlock(NULL);
                 }
             }
+# endif
 #endif
 
             return true;
@@ -1000,7 +1008,7 @@ namespace dxcanvas
                     break;
 
                     default:
-                        ENSURE_AND_RETURN(false,
+                        ENSURE_OR_RETURN(false,
                                           "DXSurface::update(): Unknown/unimplemented buffer format" );
                         break;
                 }
@@ -1122,7 +1130,7 @@ namespace dxcanvas
             const HWND hwnd(reinterpret_cast<HWND>(pData->hWnd));
             mhWnd = const_cast<HWND>(hwnd);
 
-            ENSURE_AND_THROW( IsWindow( reinterpret_cast<HWND>(mhWnd) ),
+            ENSURE_OR_THROW( IsWindow( reinterpret_cast<HWND>(mhWnd) ),
                               "DXRenderModuleDXRenderModuleWin32() No valid HWND given." );
 
             // retrieve position and size of the parent window
@@ -1715,7 +1723,7 @@ namespace dxcanvas
 
             flushVertexCache();
 
-            ENSURE_AND_THROW( !mnBeginSceneCount,
+            ENSURE_OR_THROW( !mnBeginSceneCount,
                               "Device::flip(): within 3D scene" );
 
             // TODO(E3): handle DX errors more thoroughly. For fullscreen
@@ -1936,18 +1944,18 @@ namespace dxcanvas
         void DXRenderModule::renderInfoText( const ::rtl::OUString& rStr,
                                              const Gdiplus::PointF& rPos ) const
         {
-            ENSURE_AND_THROW( !mnBeginSceneCount,
+            ENSURE_OR_THROW( !mnBeginSceneCount,
                               "Device::renderInfoText(): within 3D scene" );
 
             // render text directly to primary surface
-            SurfaceGraphicsSharedPtr pGraphics;
+            GraphicsSharedPtr pGraphics;
 
             if( mbPageFlipping )
             {
                 // render on top of backbuffer. We have
                 // page flipping, anyway, thus this will
                 // cost us nothing.
-                pGraphics = SurfaceGraphicsSharedPtr( new SurfaceGraphics( mpBackBufferSurface ) );
+                pGraphics = createSurfaceGraphics( mpBackBufferSurface );
             }
             else
             {
@@ -1955,7 +1963,7 @@ namespace dxcanvas
                 // That saves us another explicit blit,
                 // and for me, the FPS counter can blink,
                 // if it likes to...
-                pGraphics = SurfaceGraphicsSharedPtr( new SurfaceGraphics( mpPrimarySurface ) );
+                pGraphics = createSurfaceGraphics( mpPrimarySurface );
             }
 
             if( !mbPageFlipping )
@@ -1966,8 +1974,8 @@ namespace dxcanvas
                 Gdiplus::SolidBrush aBrush(
                     Gdiplus::Color( 255, 255, 255 ) );
 
-                pGraphics->get()->FillRectangle( &aBrush,
-                                                 rPos.X, rPos.Y, 80.0, 20.0 );
+                pGraphics->FillRectangle( &aBrush,
+                                          rPos.X, rPos.Y, 80.0, 20.0 );
             }
 
             Gdiplus::SolidBrush aBrush(
@@ -1977,11 +1985,11 @@ namespace dxcanvas
                                  Gdiplus::FontStyleRegular,
                                  Gdiplus::UnitWorld,
                                  NULL );
-            pGraphics->get()->DrawString( reinterpret_cast<LPCWSTR>(rStr.getStr()),
-                                          rStr.getLength(),
-                                          &aFont,
-                                          rPos,
-                                          &aBrush );
+            pGraphics->DrawString( reinterpret_cast<LPCWSTR>(rStr.getStr()),
+                                   rStr.getLength(),
+                                   &aFont,
+                                   rPos,
+                                   &aBrush );
         }
 
         //////////////////////////////////////////////////////////////////////////////////
@@ -1990,7 +1998,7 @@ namespace dxcanvas
 
         void DXRenderModule::renderMemAvailable() const
         {
-            ENSURE_AND_THROW( !mnBeginSceneCount,
+            ENSURE_OR_THROW( !mnBeginSceneCount,
                               "DXRenderModule::renderMemAvailable(): within 3D scene" );
 
             const double nSurfaceMem( getAvailableSurfaceMem()/1024 );
@@ -2033,7 +2041,7 @@ namespace dxcanvas
 
         void DXRenderModule::renderFPSCounter() const
         {
-            ENSURE_AND_THROW( !mnBeginSceneCount,
+            ENSURE_OR_THROW( !mnBeginSceneCount,
                               "DXRenderModule::ren    derFPSCounter(): within 3D scene" );
 
             const double denominator( maLastUpdate.getElapsedTime() );
@@ -2116,7 +2124,7 @@ namespace dxcanvas
             // TODO(P2): get rid of those fine-grained locking
             ::osl::MutexGuard aGuard( maMutex );
 
-            ENSURE_AND_THROW( !mnBeginSceneCount,
+            ENSURE_OR_THROW( !mnBeginSceneCount,
                               "DXRenderModule::beginPrimitive(): nested call" );
 
             ++mnBeginSceneCount;
