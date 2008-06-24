@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bmkmenu.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,7 +69,6 @@
 //  namespace
 //_________________________________________________________________________________________________________________
 
-using namespace ::rtl;
 using namespace ::comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -131,7 +130,7 @@ USHORT BmkMenu_Impl::GetMID()
 
 // ------------------------------------------------------------------------
 
-BmkMenu::BmkMenu( Reference< XFrame >& xFrame, BmkMenu::BmkMenuType nType, BmkMenu* pRoot ) :
+BmkMenu::BmkMenu( com::sun::star::uno::Reference< XFrame >& xFrame, BmkMenu::BmkMenuType nType, BmkMenu* pRoot ) :
     m_nType( nType ), m_xFrame( xFrame )
 {
     _pImp = new BmkMenu_Impl( pRoot );
@@ -263,3 +262,4 @@ void GetMenuEntry
 }
 
 }
+
