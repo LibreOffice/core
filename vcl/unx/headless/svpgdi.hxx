@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svpgdi.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -167,6 +167,8 @@ public:
     virtual void            invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nFlags );
 
     virtual BOOL            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize );
+
+    virtual SystemGraphicsData GetGraphicsData() const;
 };
 
 #endif
