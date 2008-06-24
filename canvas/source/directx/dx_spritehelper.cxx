@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_spritehelper.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,9 +28,13 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_canvas.hxx"
+
 #include <ctype.h> // don't ask. msdev breaks otherwise...
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
@@ -50,7 +54,6 @@
 #include "dx_canvascustomsprite.hxx"
 #include "dx_spritehelper.hxx"
 #include "dx_impltools.hxx"
-#include "dx_surfacegraphics.hxx"
 
 #include <memory>
 
@@ -66,13 +69,13 @@ namespace dxcanvas
     {
     }
 
-    void SpriteHelper::init( const geometry::RealSize2D&        rSpriteSize,
-                             const SpriteCanvasRef&             rSpriteCanvas,
-                             const IDXRenderModuleSharedPtr&    rRenderModule,
-                             const DXBitmapSharedPtr            rBitmap,
-                             bool                               bShowSpriteBounds )
+    void SpriteHelper::init( const geometry::RealSize2D&     rSpriteSize,
+                             const SpriteCanvasRef&          rSpriteCanvas,
+                             const IDXRenderModuleSharedPtr& rRenderModule,
+                             const DXSurfaceBitmapSharedPtr  rBitmap,
+                             bool                            bShowSpriteBounds )
     {
-        ENSURE_AND_THROW( rSpriteCanvas.get() &&
+        ENSURE_OR_THROW( rSpriteCanvas.get() &&
                           rRenderModule &&
                           rBitmap,
                           "SpriteHelper::init(): Invalid device, sprite canvas or surface" );
