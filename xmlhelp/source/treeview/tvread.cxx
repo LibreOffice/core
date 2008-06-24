@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tvread.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -303,12 +303,6 @@ XTYPEPROVIDER_IMPL_5( TVBase,
 
 
 // TVRead
-
-
-TVRead::TVRead()
-{
-}
-
 
 
 TVRead::TVRead( const ConfigData& configData,TVDom* tvDom )
