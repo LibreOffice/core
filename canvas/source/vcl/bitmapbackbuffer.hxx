@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bitmapbackbuffer.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,8 +61,8 @@ namespace vclcanvas
         virtual OutputDevice&       getOutDev();
         virtual const OutputDevice& getOutDev() const;
 
-        VirtualDevice&              getVirDev();
-        const VirtualDevice&        getVirDev() const;
+        /// Clear the underlying bitmap to white, all transparent
+        void clear();
 
         /** Exposing our internal bitmap. Only to be used from
             CanvasBitmapHelper
