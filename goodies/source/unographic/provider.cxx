@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: provider.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -233,6 +233,39 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( co
 
 // ------------------------------------------------------------------------------
 
+uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadBitmap( const uno::Reference< awt::XBitmap >& xBtm ) const
+{
+    uno::Reference< ::graphic::XGraphic > xRet;
+    uno::Sequence< sal_Int8 > aBmpSeq( xBtm->getDIB() );
+    uno::Sequence< sal_Int8 > aMaskSeq( xBtm->getMaskDIB() );
+    SvMemoryStream aBmpStream( aBmpSeq.getArray(), aBmpSeq.getLength(), STREAM_READ );
+    Bitmap aBmp;
+    aBmpStream >> aBmp;
+
+    BitmapEx aBmpEx;
+
+    if( aMaskSeq.getLength() )
+    {
+        SvMemoryStream aMaskStream( aMaskSeq.getArray(), aMaskSeq.getLength(), STREAM_READ );
+        Bitmap aMask;
+        aMaskStream >> aMask;
+        aBmpEx = BitmapEx( aBmp, aMask );
+    }
+    else
+        aBmpEx = BitmapEx( aBmp );
+
+    if( !aBmpEx.IsEmpty() )
+    {
+        ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic;
+
+        pUnoGraphic->init( aBmpEx );
+        xRet = pUnoGraphic;
+    }
+    return xRet;
+}
+
+// ------------------------------------------------------------------------------
+
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const ::rtl::OUString& rResourceURL ) const
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
@@ -319,6 +352,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
 
     ::rtl::OUString aURL;
     uno::Reference< io::XInputStream > xIStm;
+    uno::Reference< awt::XBitmap >xBtm;
 
     for( sal_Int32 i = 0; ( i < rMediaProperties.getLength() ) && !xRet.is(); ++i )
     {
@@ -332,6 +366,10 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
         else if( COMPARE_EQUAL == aName.compareToAscii( "InputStream" ) )
         {
             aValue >>= xIStm;
+        }
+        else if( COMPARE_EQUAL == aName.compareToAscii( "Bitmap" ) )
+        {
+            aValue >>= xBtm;
         }
     }
 
@@ -365,6 +403,12 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
             xRet = pDescriptor;
         }
     }
+    else if( xBtm.is() )
+    {
+        uno::Reference< ::graphic::XGraphic > xGraphic( implLoadBitmap( xBtm ) );
+        if( xGraphic.is() )
+            xRet = uno::Reference< beans::XPropertySet >( xGraphic, uno::UNO_QUERY );
+    }
 
     return xRet;
 }
@@ -379,6 +423,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     SvStream*                               pIStm = NULL;
 
     uno::Reference< io::XInputStream > xIStm;
+    uno::Reference< awt::XBitmap >xBtm;
 
     for( sal_Int32 i = 0; ( i < rMediaProperties.getLength() ) && !pIStm && !xRet.is(); ++i )
     {
@@ -394,6 +439,10 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
         else if( COMPARE_EQUAL == aName.compareToAscii( "InputStream" ) )
         {
             aValue >>= xIStm;
+        }
+        else if( COMPARE_EQUAL == aName.compareToAscii( "Bitmap" ) )
+        {
+            aValue >>= xBtm;
         }
     }
 
@@ -416,6 +465,10 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
 
         if( !xRet.is() )
             pIStm = ::utl::UcbStreamHelper::CreateStream( aPath, STREAM_READ );
+    }
+    else if( xBtm.is() )
+    {
+        xRet = implLoadBitmap( xBtm );
     }
 
     if( pIStm )
