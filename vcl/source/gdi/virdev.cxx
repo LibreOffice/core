@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: virdev.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -162,7 +162,8 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, USHORT nBitCount )
 // -----------------------------------------------------------------------
 
 VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, USHORT nBitCount, USHORT nAlphaBitCount )
-    : mpVirDev( NULL )
+    : mpVirDev( NULL ),
+    meRefDevMode( REFDEV_NONE )
 {
     DBG_TRACE1( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
 
