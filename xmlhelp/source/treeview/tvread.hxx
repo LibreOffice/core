@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tvread.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -216,9 +216,6 @@ namespace treeview {
         friend class TVChildTarget;
 
     public:
-
-        TVRead();
-
         TVRead( const ConfigData& configData,TVDom* tvDom = 0 );
 
         ~TVRead();
