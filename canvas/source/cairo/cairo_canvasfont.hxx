@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_canvasfont.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,10 +66,10 @@ namespace cairocanvas
             CanvasFont,
             ::com::sun::star::rendering::XCanvasFont > Reference;
 
-        CanvasFont( const ::com::sun::star::rendering::FontRequest&                                     fontRequest,
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&    extraFontProperties,
-                    const ::com::sun::star::geometry::Matrix2D&                                         rFontMatrix,
-                    const DeviceRef&                                                                    rDevice );
+        CanvasFont( const ::com::sun::star::rendering::FontRequest&                                  fontRequest,
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& extraFontProperties,
+                    const ::com::sun::star::geometry::Matrix2D&                                      rFontMatrix,
+                    const SurfaceProviderRef&                                                        rDevice );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing();
@@ -89,9 +89,9 @@ namespace cairocanvas
         ::Font getVCLFont() const;
 
     private:
-        ::canvas::vcltools::VCLObject<Font>         maFont;
-        ::com::sun::star::rendering::FontRequest    maFontRequest;
-        DeviceRef                                   mpRefDevice;
+        ::canvas::vcltools::VCLObject<Font>      maFont;
+        ::com::sun::star::rendering::FontRequest maFontRequest;
+        SurfaceProviderRef                       mpRefDevice;
     };
 
 }
