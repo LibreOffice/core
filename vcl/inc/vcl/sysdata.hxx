@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sysdata.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,17 @@
 #ifndef _SV_SYSDATA_HXX
 #define _SV_SYSDATA_HXX
 
+#ifdef QUARTZ
+// predeclare the native classes to avoid header/include problems
+typedef struct CGContext *CGContextRef;
+typedef struct CGLayer *CGLayerRef;
+#ifdef __OBJC__
+@class NSView;
+#else
+class NSView;
+#endif
+#endif
+
 // -----------------
 // - SystemEnvData -
 // -----------------
@@ -41,13 +52,14 @@ struct SystemEnvData
 #if defined( WNT ) || defined( OS2 )
     HWND                hWnd;           // the window hwnd
 #elif defined( QUARTZ )
-    NSView*             pView;          // the cocoa view ptr implementing this object
+    NSView*               pView;          // the cocoa (NSView *) implementing this object
 #elif defined( UNX )
     void*               pDisplay;       // the relevant display connection
     long                aWindow;        // the window of the object
     void*               pSalFrame;      // contains a salframe, if object has one
     void*               pWidget;        // the corresponding widget
     void*               pVisual;        // the visual in use
+    int             nScreen;        // the current screen of the window
     int                 nDepth;         // depth of said visual
     long                aColormap;      // the colormap being used
     void*               pAppContext;    // the application context in use
@@ -68,7 +80,7 @@ struct SystemParentData
 #if defined( WNT ) || defined( OS2 )
     HWND            hWnd;             // the window hwnd
 #elif defined( QUARTZ )
-    NSView*         pView;            // the cocoa view ptr implementing this object
+    NSView*         pView;            // the cocoa (NSView *) implementing this object
 #elif defined( UNX )
     long            aWindow;          // the window of the object
     bool            bXEmbedSupport:1; // decides whether the object in question
@@ -85,6 +97,8 @@ struct SystemMenuData
     unsigned long   nSize;          // size in bytes of this structure
 #if defined( WNT )
     HMENU           hMenu;          // the menu handle of the menu bar
+#elif defined( QUARTZ )
+    //not defined
 #elif defined( UNX )
     long            aMenu;          // ???
 #endif
@@ -102,7 +116,12 @@ struct SystemGraphicsData
 #elif defined( QUARTZ )
     CGContextRef    rCGContext;     // QUARTZ graphic context
 #elif defined( UNX )
+    void*           pDisplay;       // the relevant display connection
     long            hDrawable;      // a drawable
+    void*           pVisual;        // the visual in use
+    int         nScreen;        // the current screen of the drawable
+    int             nDepth;         // depth of said visual
+    long            aColormap;      // the colormap being used
     void*           pRenderFormat;  // render format for drawable
 #endif
 };
