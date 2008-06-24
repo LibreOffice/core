@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: canvascustomsprite.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,7 @@
 
 #include <canvas/vclwrapper.hxx>
 #include <canvas/base/basemutexhelper.hxx>
+#include <canvas/base/spritesurface.hxx>
 #include <canvas/base/canvascustomspritebase.hxx>
 
 #include "sprite.hxx"
@@ -95,9 +96,11 @@ namespace vclcanvas
                                public RepaintTarget
     {
     public:
-        CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D&   rSpriteSize,
-                            const SpriteCanvasRef&                          rSpriteCanvas,
-                            bool                                            bShowSpriteBounds );
+        CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D& rSpriteSize,
+                            ::com::sun::star::rendering::XGraphicDevice&  rDevice,
+                            const ::canvas::SpriteSurface::Reference&     rOwningSpriteCanvas,
+                            const OutDevProviderSharedPtr&                rOutDevProvider,
+                            bool                                          bShowSpriteBounds );
 
         virtual void SAL_CALL disposing();
 
@@ -127,12 +130,6 @@ namespace vclcanvas
                               const ::Point&                                  rPt,
                               const ::Size&                                   rSz,
                               const GraphicAttr&                              rAttr ) const;
-
-    private:
-        /** MUST hold here, too, since CanvasHelper only contains a
-            raw pointer (without refcounting)
-        */
-        SpriteCanvasRef mpSpriteCanvas;
     };
 }
 
