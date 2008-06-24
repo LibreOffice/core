@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: methods.cxx,v $
- * $Revision: 1.79 $
+ * $Revision: 1.80 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +74,6 @@
 #include <com/sun/star/io/XSeekable.hpp>
 
 using namespace comphelper;
-using namespace rtl;
 using namespace osl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -167,7 +166,7 @@ static inline BOOL isFolder( FileStatus::Type aType )
 // according to the setting done by ChDir/ChDrive
 String getFullPath( const String& aRelPath )
 {
-    OUString aFileURL;
+    ::rtl::OUString aFileURL;
 
     // #80204 Try first if it already is a valid URL
     INetURLObject aURLObj( aRelPath );
@@ -213,7 +212,7 @@ static Reference< XSimpleFileAccess3 > getFileAccess( void )
         if( xSMgr.is() )
         {
             xSFI = Reference< XSimpleFileAccess3 >( xSMgr->createInstance
-                ( OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
+                ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
         }
     }
     return xSFI;
@@ -744,7 +743,7 @@ void implRemoveDirRecursive( const String& aDirPath )
         // Handle flags
         FileStatus aFileStatus2( FileStatusMask_Type | FileStatusMask_FileURL );
         nRet = aItem2.getFileStatus( aFileStatus2 );
-        OUString aPath = aFileStatus2.getFileURL();
+        ::rtl::OUString aPath = aFileStatus2.getFileURL();
 
         // Directory?
         FileStatus::Type aType2 = aFileStatus2.getFileType();
@@ -791,7 +790,7 @@ RTLFUNC(RmDir) // JSM
                     bool bCompatibility = ( pInst && pInst->IsCompatibility() );
                     if( bCompatibility )
                     {
-                        Sequence< OUString > aContent = xSFI->getFolderContents( aPath, true );
+                        Sequence< ::rtl::OUString > aContent = xSFI->getFolderContents( aPath, true );
                         sal_Int32 nCount = aContent.getLength();
                         if( nCount > 0 )
                         {
@@ -1054,8 +1053,8 @@ RTLFUNC(InStrRev)
             {
                 if( !bTextMode )
                 {
-                    OUString aOUStr1 ( aStr1 );
-                    OUString aOUToken( aToken );
+                    ::rtl::OUString aOUStr1 ( aStr1 );
+                    ::rtl::OUString aOUToken( aToken );
                     sal_Int32 nRet = aOUStr1.lastIndexOf( aOUToken, nStartPos );
                     if( nRet == -1 )
                         nPos = 0;
@@ -1067,8 +1066,8 @@ RTLFUNC(InStrRev)
                     aStr1.ToUpperAscii();
                     aToken.ToUpperAscii();
 
-                    OUString aOUStr1 ( aStr1 );
-                    OUString aOUToken( aToken );
+                    ::rtl::OUString aOUStr1 ( aStr1 );
+                    ::rtl::OUString aOUToken( aToken );
                     sal_Int32 nRet = aOUStr1.lastIndexOf( aOUToken, nStartPos );
 
                     if( nRet == -1 )
@@ -2433,7 +2432,7 @@ bool isRootDir( String aDirURLStr )
     // or Windows  "file:///c:/"  -> root
     else if( nCount == 1 )
     {
-        OUString aSeg1 = aDirURLObj.getName( 0, TRUE,
+        ::rtl::OUString aSeg1 = aDirURLObj.getName( 0, TRUE,
             INetURLObject::DECODE_WITH_CHARSET );
         if( aSeg1.getStr()[1] == (sal_Unicode)':' )
         {
@@ -2553,11 +2552,11 @@ RTLFUNC(Dir)
                         {
                             if( pRTLData->nCurDirPos == -2 )
                             {
-                                aPath = OUString::createFromAscii( "." );
+                                aPath = ::rtl::OUString::createFromAscii( "." );
                             }
                             else if( pRTLData->nCurDirPos == -1 )
                             {
-                                aPath = OUString::createFromAscii( ".." );
+                                aPath = ::rtl::OUString::createFromAscii( ".." );
                             }
                             pRTLData->nCurDirPos++;
                         }
@@ -2569,7 +2568,7 @@ RTLFUNC(Dir)
                         }
                         else
                         {
-                            OUString aFile = pRTLData->aDirSeq.getConstArray()[pRTLData->nCurDirPos++];
+                            ::rtl::OUString aFile = pRTLData->aDirSeq.getConstArray()[pRTLData->nCurDirPos++];
 
                             if( bCompatibility )
                             {
@@ -2743,11 +2742,11 @@ RTLFUNC(Dir)
                     {
                         if( pRTLData->nCurDirPos == -2 )
                         {
-                            aPath = OUString::createFromAscii( "." );
+                            aPath = ::rtl::OUString::createFromAscii( "." );
                         }
                         else if( pRTLData->nCurDirPos == -1 )
                         {
-                            aPath = OUString::createFromAscii( ".." );
+                            aPath = ::rtl::OUString::createFromAscii( ".." );
                         }
                         pRTLData->nCurDirPos++;
                     }
