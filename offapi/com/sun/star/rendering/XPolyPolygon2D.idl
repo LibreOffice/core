@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XPolyPolygon2D.idl,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,10 +77,12 @@ interface XPolyPolygon2D : ::com::sun::star::uno::XInterface
         poly-polygon is copied, later changes to polyPolygon will have
         no effect on the poly-polygon it was added to.
 
-        @throws an IllegalArgumentException, if the XPolyPolygon2D
-        parameter does not support one of the data-providing
-        derivative interfaces (XBezierPolyPolygon2D,
-        XLinePolyPolygon2D).
+        @throws a
+        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        if the XPolyPolygon2D parameter does not support one of the
+        data-providing derivative interfaces
+        (<type>XBezierPolyPolygon2D</type>,
+        <type>XLinePolyPolygon2D</type>).
      */
     void        addPolyPolygon( [in] ::com::sun::star::geometry::RealPoint2D position, [in] XPolyPolygon2D polyPolygon )
         raises (com::sun::star::lang::IllegalArgumentException);
