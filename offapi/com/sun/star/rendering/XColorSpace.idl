@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XColorSpace.idl,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +33,11 @@
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
 #endif
-
-#ifndef __com_sun_star_rendering_ColorSpaceType_idl__
-#include <com/sun/star/rendering/ColorSpaceType.idl>
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
 #endif
 #ifndef __com_sun_star_rendering_ColorProfile_idl__
 #include <com/sun/star/rendering/ColorProfile.idl>
@@ -43,21 +45,24 @@
 
 module com { module sun { module star { module rendering {
 
-/* TODO: There's still a lot open here! */
-
-interface XColorSpace
-{
-    // TODO
-    byte            getRenderingIntent();
-    ColorProfile    getICCProfile();
-    string          getName();
-    ColorSpaceType  getType(); // whatever
-};
+/// Shorthand for the device-dependent color components, and easier to read
+typedef double ColorComponent;
+typedef sequence<ColorComponent> Color;
 
 //=============================================================================
 
-/// Shorthand for the device-dependent color components, and easier to read
-typedef double ColorComponent;
+/// RGB color triplet
+struct RGBColor
+{
+    /// Red component. Valid range is [0,1.0]
+    ColorComponent Red;
+    /// Green component. Valid range is [0,1.0]
+    ColorComponent Green;
+    /// Blue component. Valid range is [0,1.0]
+    ColorComponent Blue;
+};
+
+//=============================================================================
 
 /// ARGB color quad
 struct ARGBColor
@@ -74,6 +79,170 @@ struct ARGBColor
     ColorComponent Green;
     /// Blue component. Valid range is [0,1.0]
     ColorComponent Blue;
+};
+
+//=============================================================================
+
+/** Information how to interpret certain color data.<p>
+
+    This interface encapsulates all information that is necessary to
+    interpret color data, by defining a describing color space, like
+    for example CMYK or sRGB. You can either convert between this and
+    an arbitrary other colorspace, or into the standard RGB or ARGB
+    formats (because those are so overwhelmingly common in computer
+    graphics).<p>
+
+    All canvas interfaces standardize to sequences of IEEE doubles for
+    color representation. As this is overly verbose when used for
+    bitmap data, derived interfaces exist,
+    e.g. <type>XIntegerBitmapColorSpace</type>, which use sequences of
+    integers for color representation.<p>
+ */
+interface XColorSpace
+{
+    /** Query type of this color space.<p>
+
+        @return a value from the <type>ColorSpaceType</type> constant
+        group.
+     */
+    byte                     getType();
+
+    /** Query the kind for each color component.<p>
+
+        Color space components tend to correspond to physical
+        attributes like the amount of one specific colorant contained
+        in the final output color. This method returns a sequence of
+        tags, specifying for each component of a color value, to what
+        color attribute (if any) it corresponds. The values must be
+        one of the <type>ColorComponentTag</type> constants.<p>
+
+        At the same time, the number of elements in this sequence
+        corresponds to the number of color channels for this color
+        space.<p>
+
+        @example For the standard RGB color space, ComponentTags
+        consists of three elements, containing RGB_RED, RGB_GREEN and
+        RGB_BLUE tags, respectively
+     */
+    sequence<byte>           getComponentTags();
+
+    /** Query rendering intent of this color space.<p>
+
+        @return a value from the <type>RenderingIntent</type> constant
+        group.
+     */
+    byte                     getRenderingIntent();
+
+    /** Query various optional properties from the color space.<p>
+
+        If this color space has an ICC color profile, the sequence
+        contains an element named ICCProfile. Some color spaces also
+        have properties Gamma, Whitepoint and Blackpoint. Background
+        information for these is available <a
+        href="http://en.wikipedia.org/wiki/Color_temperature">here</a>.
+     */
+    sequence< ::com::sun::star::beans::PropertyValue > getProperties();
+
+
+    //=============================================================================
+
+    /** Convert to color of another color space.<p>
+
+        @param deviceColor Sequence of device color components. Is
+        permitted to contain more than one device color element,
+        therefore, batch conversion of multiple color values is
+        possible.
+
+        @return the corresponding sequence of device colors in the
+        target color space (e.g. <type>sequence<double></type> or
+        <type>sequence<byte></type>).
+
+        @throws a
+        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        if the input sequence does not match the device color format
+        (e.g. if the number of components is wrong)
+     */
+    sequence<ColorComponent> convertColorSpace( [in] sequence<ColorComponent> deviceColor, [in] XColorSpace targetColorSpace )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    /** Convert color value in this color space to sRGB color values.<p>
+
+        Any information not representable in the <type>RGBColor</type>
+        struct is discarded during the conversion. This includes alpha
+        information.
+
+        @param deviceColor Sequence of device color components. Is
+        permitted to contain more than one device color element,
+        therefore, batch conversion of multiple color values is
+        possible.
+
+        @return the corresponding sequence of colors in the sRGB color
+        space.
+
+        @throws a
+        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        if the input sequence does not match the device color format.
+
+        @see <member>convertToARGB</member>
+     */
+    sequence<RGBColor>       convertToRGB( [in] sequence<ColorComponent> deviceColor )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    /** Convert color value in this color space to sRGB color values, with linear alpha.<p>
+
+        If the given input color does not carry alpha information, an
+        alpha value of 1.0 (fully opaque) is assumed.
+
+        @param deviceColor Sequence of device color components. Is
+        permitted to contain more than one device color element,
+        therefore, batch conversion of multiple color values is
+        possible.
+
+        @return the corresponding sequence of colors in the sRGB color
+        space.
+
+        @throws a
+        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        if the input sequence does not match the device color format.
+     */
+    sequence<ARGBColor>      convertToARGB( [in] sequence<ColorComponent> deviceColor )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    /** Convert sRGB color to a representation in this color space.<p>
+
+        If this color space conveys alpha information, it is assumed
+        be fully opaque for the given rgb color value.
+
+        @param deviceColor Sequence of sRGB color components. Is
+        permitted to contain more than one color element, therefore,
+        batch conversion of multiple color values is possible.
+
+        @return the corresponding sequence of device colors.
+
+        @throws a
+        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        if the input sequence does not match the device color format.
+     */
+    sequence<ColorComponent> convertFromRGB( [in] sequence<RGBColor> rgbColor )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    /** Convert sRGB color with linear alpha into this color space.<p>
+
+        If this color space does not convey alpha information, the
+        specified alpha value is silently ignored.
+
+        @param deviceColor Sequence of sRGB color components. Is
+        permitted to contain more than one color element, therefore,
+        batch conversion of multiple color values is possible.
+
+        @return the corresponding sequence of device colors.
+
+        @throws a
+        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        if the input sequence does not match the device color format.
+     */
+    sequence<ColorComponent> convertFromARGB( [in] sequence<ARGBColor> rgbColor )
+        raises (com::sun::star::lang::IllegalArgumentException);
 };
 
 }; }; }; };
