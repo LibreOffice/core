@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChildrenManagerImpl.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +45,6 @@
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
@@ -669,9 +668,9 @@ void SAL_CALL
         const document::EventObject& rEventObject)
     throw (uno::RuntimeException)
 {
-    static const OUString sShapeInserted (
+    static const ::rtl::OUString sShapeInserted (
         RTL_CONSTASCII_USTRINGPARAM("ShapeInserted"));
-    static const OUString sShapeRemoved (
+    static const ::rtl::OUString sShapeRemoved (
         RTL_CONSTASCII_USTRINGPARAM("ShapeRemoved"));
 
 
