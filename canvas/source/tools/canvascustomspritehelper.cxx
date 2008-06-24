@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: canvascustomspritehelper.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
 
@@ -185,7 +186,7 @@ namespace canvas
     void CanvasCustomSpriteHelper::init( const geometry::RealSize2D&        rSpriteSize,
                                          const SpriteSurface::Reference&    rOwningSpriteCanvas )
     {
-        ENSURE_AND_THROW( rOwningSpriteCanvas.get(),
+        ENSURE_OR_THROW( rOwningSpriteCanvas.get(),
                           "CanvasCustomSpriteHelper::init(): Invalid owning sprite canvas" );
 
         mpSpriteCanvas = rOwningSpriteCanvas;
