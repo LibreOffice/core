@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_textlayout.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,6 +27,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_canvas.hxx"
 
 #include <ctype.h> // don't ask. msdev breaks otherwise...
 #include <canvas/debug.hxx>
@@ -230,25 +233,28 @@ namespace dxcanvas
         }
     }
 
-    bool TextLayout::draw( const DXBitmapSharedPtr &rBitmap,
-                           const rendering::ViewState&                          rViewState,
-                           const rendering::RenderState&                        rRenderState,
-                           const ::basegfx::B2ISize&                            rOutputOffset,
-                           const uno::Reference< rendering::XGraphicDevice >&   xGraphicDevice ) const
+    bool TextLayout::draw( const GraphicsSharedPtr&                           rGraphics,
+                           const rendering::ViewState&                        rViewState,
+                           const rendering::RenderState&                      rRenderState,
+                           const ::basegfx::B2ISize&                          rOutputOffset,
+                           const uno::Reference< rendering::XGraphicDevice >& xGraphicDevice,
+                           bool                                               bAlphaSurface ) const
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         ::dxcanvas::TextLayoutDrawHelper aDrawHelper(xGraphicDevice);
 
         // render text
-        aDrawHelper.drawText(rBitmap,
+        aDrawHelper.drawText(
+            rGraphics,
             rViewState,
             rRenderState,
             rOutputOffset,
             maText,
             maLogicalAdvancements,
             mpFont.getRef(),
-            mpFont->getFontMatrix());
+            mpFont->getFontMatrix(),
+            bAlphaSurface);
 
         return true;
     }
