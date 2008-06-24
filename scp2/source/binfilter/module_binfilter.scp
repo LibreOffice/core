@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_binfilter.scp,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@ Module gid_Module_Optional_Binfilter
     PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC ( MODULE_OPTIONAL_BINFILTER );
     Sortkey = "700";
+    InstallOrder = "1100";
     ParentID = gid_Module_Optional;
     Default = YES;
     Files = (gid_File_Registry_Spool_Oo_TypeDetection_Chart_Bf_Types_Xcu,
