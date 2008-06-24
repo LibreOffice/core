@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: step0.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -896,6 +896,16 @@ void SbiRuntime::StepERASE_CLEAR()
     lcl_eraseImpl( refVar, bVBAEnabled );
     SbxDataType eType = refVar->GetType();
     lcl_clearImpl( refVar, eType );
+}
+
+void SbiRuntime::StepARRAYACCESS()
+{
+    if( !refArgv )
+        StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+    SbxVariableRef refVar = PopVar();
+    refVar->SetParameters( refArgv );
+    PopArgv();
+    PushVar( CheckArray( refVar ) );
 }
 
 // Einrichten eines Argvs
