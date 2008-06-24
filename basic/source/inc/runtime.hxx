@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: runtime.hxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +52,6 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <unotools/localedatawrapper.hxx>
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
@@ -167,7 +166,7 @@ public:
     WildCard* pWildCard;
 
 #ifdef _USE_UNO
-    Sequence< OUString > aDirSeq;
+    Sequence< ::rtl::OUString > aDirSeq;
 #endif /* _USE_UNO */
 
     SbiRTLData();
@@ -544,3 +543,4 @@ inline String getFullPathUNC( const String& aRelPath )
 void implStepRenameOSL( const String& aSource, const String& aDest );
 
 #endif
+
