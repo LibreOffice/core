@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: canvashelper.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,10 +86,10 @@ namespace vclcanvas
             @param bHaveAlpha
             When true, hasAlpha() will always return true, otherwise, false.
          */
-        void init( SpriteCanvas&                    rDevice,
-                   const OutDevProviderSharedPtr&   rOutDev,
-                   bool                             bProtect,
-                   bool                             bHaveAlpha );
+        void init( ::com::sun::star::rendering::XGraphicDevice& rDevice,
+                   const OutDevProviderSharedPtr&               rOutDev,
+                   bool                                         bProtect,
+                   bool                                         bHaveAlpha );
 
         /** Set primary output device
 
@@ -272,8 +272,6 @@ namespace vclcanvas
             getPixel( ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
                       const ::com::sun::star::geometry::IntegerPoint2D& pos );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapPalette > getPalette();
-
         ::com::sun::star::rendering::IntegerBitmapLayout getMemoryLayout();
 
         /// Repaint a cached bitmap
@@ -315,19 +313,19 @@ namespace vclcanvas
             Deliberately not a refcounted reference, because of
             potential circular references for spritecanvas.
          */
-        SpriteCanvas*               mpDevice;
+        ::com::sun::star::rendering::XGraphicDevice* mpDevice;
 
         /// Rendering to this outdev preserves its state
-        OutDevProviderSharedPtr     mpProtectedOutDev;
+        OutDevProviderSharedPtr                      mpProtectedOutDev;
 
         /// Rendering to this outdev does not preserve its state
-        OutDevProviderSharedPtr     mpOutDev;
+        OutDevProviderSharedPtr                      mpOutDev;
 
         /// Rendering to this outdev does not preserve its state
-        OutDevProviderSharedPtr     mp2ndOutDev;
+        OutDevProviderSharedPtr                      mp2ndOutDev;
 
         /// When true, content is able to represent alpha
-        bool                        mbHaveAlpha;
+        bool                                         mbHaveAlpha;
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
