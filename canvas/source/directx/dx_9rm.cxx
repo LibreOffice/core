@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_9rm.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,6 +27,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_canvas.hxx"
 
 #if DIRECTX_VERSION == 0x0900
 
@@ -49,6 +52,8 @@
 
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
+#include <tools/diagnose_ex.h>
+
 #include <canvas/elapsedtime.hxx>
 #include <canvas/canvastools.hxx>
 #include <canvas/rendering/icolorbuffer.hxx>
@@ -64,7 +69,6 @@
 
 #include "dx_rendermodule.hxx"
 #include "dx_config.hxx"
-#include "dx_surfacegraphics.hxx"
 
 #undef WB_LEFT
 #undef WB_RIGHT
@@ -73,9 +77,11 @@
 #include <vcl/sysdata.hxx>
 
 #if defined(DX_DEBUG_IMAGES)
-# include <imdebug.h>
-# undef min
-# undef max
+# if OSL_DEBUG_LEVEL > 0
+#  include <imdebug.h>
+#  undef min
+#  undef max
+# endif
 #endif
 
 using namespace ::com::sun::star;
@@ -328,7 +334,7 @@ namespace dxcanvas
                 return;
 #endif
 
-            CHECK_AND_THROW(rSize.getX() > 0 && rSize.getY() > 0,
+            ENSURE_ARG_OR_THROW(rSize.getX() > 0 && rSize.getY() > 0,
                             "DXSurface::DXSurface(): request for zero-sized surface");
 
             COMReference<IDirect3DDevice9> pDevice(rRenderModule.getDevice());
@@ -538,7 +544,7 @@ namespace dxcanvas
                         break;
 
                         default:
-                            ENSURE_AND_RETURN(false,
+                            ENSURE_OR_RETURN(false,
                                             "DXSurface::update(): Unknown/unimplemented buffer format" );
                             break;
                     }
@@ -626,7 +632,7 @@ namespace dxcanvas
             IDirect3DVertexBuffer9 *pVB(NULL);
             DWORD aFVF(D3DFVF_XYZRHW|D3DFVF_DIFFUSE|D3DFVF_TEX1);
             if( FAILED(mpDevice->CreateVertexBuffer(sizeof(dxvertex)*maNumVertices,
-                                                    D3DUSAGE_DYNAMIC,
+                                                    D3DUSAGE_DYNAMIC|D3DUSAGE_WRITEONLY,
                                                     aFVF,
                                                     D3DPOOL_DEFAULT,
                                                     &pVB,
@@ -703,7 +709,7 @@ namespace dxcanvas
             const HWND hwnd(reinterpret_cast<HWND>(pData->hWnd));
             mhWnd = const_cast<HWND>(hwnd);
 
-            ENSURE_AND_THROW( IsWindow( reinterpret_cast<HWND>(mhWnd) ),
+            ENSURE_OR_THROW( IsWindow( reinterpret_cast<HWND>(mhWnd) ),
                             "DXRenderModule::create() No valid HWND given." );
 
             // retrieve position and size of the parent window
@@ -740,7 +746,7 @@ namespace dxcanvas
 
         bool DXRenderModule::verifyDevice( const UINT nAdapter )
         {
-            ENSURE_AND_THROW( mpDirect3D9.is(),
+            ENSURE_OR_THROW( mpDirect3D9.is(),
                               "DXRenderModule::verifyDevice() No valid device." );
 
             // ask direct3d9 about the capabilities of hardware devices on a specific adapter.
@@ -797,11 +803,11 @@ namespace dxcanvas
         bool DXRenderModule::createDevice()
         {
             // we expect that the caller provides us with a valid HWND
-            ENSURE_AND_THROW( IsWindow(mhWnd),
+            ENSURE_OR_THROW( IsWindow(mhWnd),
                               "DXRenderModule::createDevice() No valid HWND given." );
 
             // we expect that the caller already created the direct3d9 object.
-            ENSURE_AND_THROW( mpDirect3D9.is(),
+            ENSURE_OR_THROW( mpDirect3D9.is(),
                               "DXRenderModule::createDevice() no direct3d?." );
 
             // find the adapter identifier from the window.
@@ -841,6 +847,7 @@ namespace dxcanvas
                                                sal_Int32(d3ddm.Width));
             mad3dpp.BackBufferHeight = std::max(sal_Int32(maSize.getY()),
                                                 sal_Int32(d3ddm.Height));
+            mad3dpp.BackBufferCount = 1;
             mad3dpp.Windowed = TRUE;
             mad3dpp.SwapEffect = D3DSWAPEFFECT_COPY;
             mad3dpp.BackBufferFormat = d3ddm.Format;
@@ -1078,7 +1085,7 @@ namespace dxcanvas
             if(isDisposed())
                 return;
 
-            ENSURE_AND_THROW( !mnBeginSceneCount,
+            ENSURE_OR_THROW( !mnBeginSceneCount,
                               "DXRenderModule::beginPrimitive(): nested call" );
 
             ++mnBeginSceneCount;
