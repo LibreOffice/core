@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impltools.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,11 +32,7 @@
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
-
-#ifndef  _USE_MATH_DEFINES
-#define  _USE_MATH_DEFINES  // needed by Visual C++ for math constants
-#endif
-#include <math.h>           // M_PI definition
+#include <tools/diagnose_ex.h>
 
 #include <rtl/math.hxx>
 #include <rtl/logfile.hxx>
@@ -50,7 +46,6 @@
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/geometry/RealBezierSegment2D.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <vcl/salbtype.hxx>
 #include <vcl/bmpacc.hxx>
@@ -66,7 +61,6 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
-#include <canvas/base/linepolypolygonbase.hxx>
 #include <canvas/canvastools.hxx>
 
 #include "impltools.hxx"
@@ -93,28 +87,26 @@ namespace vclcanvas
             }
             else
             {
-                uno::Reference< lang::XUnoTunnel > xTunnel( xBitmap, uno::UNO_QUERY );
-                if( xTunnel.is() )
-                {
-                    sal_Int64 nPtr = xTunnel->getSomething(
-                        vcl::unotools::getTunnelIdentifier(
-                            vcl::unotools::Id_BitmapEx ) );
-
-                    if( nPtr )
-                        return BitmapEx( *reinterpret_cast<BitmapEx*>(sal::static_int_cast<sal_uIntPtr>(nPtr)) );
-                }
-
                 SpriteCanvas* pCanvasImpl = dynamic_cast< SpriteCanvas* >( xBitmap.get() );
                 if( pCanvasImpl && pCanvasImpl->getBackBuffer() )
                 {
-                    const ::VirtualDevice& rVDev( pCanvasImpl->getBackBuffer()->getVirDev() );
+                    // TODO(F3): mind the plain Canvas impl. Consolidate with CWS canvas05
+                    const ::OutputDevice& rDev( pCanvasImpl->getBackBuffer()->getOutDev() );
                     const ::Point aEmptyPoint;
-                    return rVDev.GetBitmapEx( aEmptyPoint,
-                                              rVDev.GetOutputSizePixel() );
+                    return rDev.GetBitmapEx( aEmptyPoint,
+                                             rDev.GetOutputSizePixel() );
                 }
 
+                // TODO(F2): add support for floating point bitmap formats
+                uno::Reference< rendering::XIntegerReadOnlyBitmap > xIntBmp(
+                    xBitmap, uno::UNO_QUERY_THROW );
+
+                ::BitmapEx aBmpEx = ::vcl::unotools::bitmapExFromXBitmap( xIntBmp );
+                if( !!aBmpEx )
+                    return aBmpEx;
+
                 // TODO(F1): extract pixel from XBitmap interface
-                ENSURE_AND_THROW( false,
+                ENSURE_OR_THROW( false,
                                   "bitmapExFromXBitmap(): could not extract bitmap" );
             }
 
@@ -297,7 +289,7 @@ namespace vclcanvas
                 (pAlphaReadAccess.get() == NULL && rBitmap.IsTransparent()) )
             {
                 // TODO(E2): Error handling!
-                ENSURE_AND_THROW( false,
+                ENSURE_OR_THROW( false,
                                   "transformBitmap(): could not access source bitmap" );
             }
 
@@ -541,7 +533,7 @@ namespace vclcanvas
                 else
                 {
                     // TODO(E2): Error handling!
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "transformBitmap(): could not access bitmap" );
                 }
             }
