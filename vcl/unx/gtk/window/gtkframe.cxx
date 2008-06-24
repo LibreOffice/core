@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gtkframe.cxx,v $
- * $Revision: 1.81 $
+ * $Revision: 1.82 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -587,6 +587,7 @@ void GtkSalFrame::InitCommon()
     m_aSystemData.pSalFrame     = this;
     m_aSystemData.pWidget       = m_pWindow;
     m_aSystemData.pVisual       = pDisp->GetVisual( m_nScreen ).GetVisual();
+    m_aSystemData.nScreen       = m_nScreen;
     m_aSystemData.nDepth        = pDisp->GetVisual( m_nScreen ).GetDepth();
     m_aSystemData.aColormap     = pDisp->GetColormap( m_nScreen ).GetXColormap();
     m_aSystemData.pAppContext   = NULL;
