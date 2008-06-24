@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eventqueue.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
 #include <comphelper/anytostring.hxx>
@@ -102,7 +103,7 @@ namespace slideshow
         {
             ::osl::MutexGuard aGuard( maMutex );
 
-            ENSURE_AND_RETURN( rEvent,
+            ENSURE_OR_RETURN( rEvent,
                                "EventQueue::addEvent: event ptr NULL" );
 
             // prepare entry
@@ -123,7 +124,7 @@ namespace slideshow
         {
             ::osl::MutexGuard aGuard( maMutex );
 
-            ENSURE_AND_RETURN( rEvent.get() != NULL,
+            ENSURE_OR_RETURN( rEvent.get() != NULL,
                                "EventQueue::addEvent: event ptr NULL" );
             maNextEvents.push_back(
                 EventEntry( rEvent, rEvent->getActivationTime(
