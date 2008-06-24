@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_canvasbitmap.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +31,13 @@
 #ifndef _CAIROCANVAS_CANVASBITMAP_HXX
 #define _CAIROCANVAS_CANVASBITMAP_HXX
 
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase4.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
+#include <com/sun/star/beans/XFastPropertySet.hpp>
+#include <comphelper/uno3.hxx>
 
 #include <basegfx/vector/b2isize.hxx>
 
@@ -53,13 +55,21 @@
 
 namespace cairocanvas
 {
-    typedef ::cppu::WeakComponentImplHelper3< ::com::sun::star::rendering::XBitmapCanvas,
-                                                                           ::com::sun::star::rendering::XIntegerBitmap,
-                                                                                                        ::com::sun::star::lang::XServiceInfo >      CanvasBitmapBase_Base;
-    typedef ::canvas::IntegerBitmapBase< ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
-        CanvasHelper,
-        ::osl::MutexGuard,
-               ::cppu::OWeakObject >                            CanvasBitmap_Base;
+    typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::rendering::XBitmapCanvas,
+                                              ::com::sun::star::rendering::XIntegerBitmap,
+                                              ::com::sun::star::lang::XServiceInfo,
+                                              ::com::sun::star::beans::XFastPropertySet >   CanvasBitmapBase_Base;
+    class CanvasBitmapSpriteSurface_Base :
+        public ::canvas::BaseMutexHelper<CanvasBitmapBase_Base>,
+        public SurfaceProvider
+    {
+    };
+
+    typedef ::canvas::IntegerBitmapBase<
+          CanvasBitmapSpriteSurface_Base,
+          CanvasHelper,
+          ::osl::MutexGuard,
+          ::cppu::OWeakObject >                         CanvasBitmap_Base;
 
     class CanvasBitmap : public CanvasBitmap_Base,
                          public RepaintTarget
@@ -74,33 +84,57 @@ namespace cairocanvas
             Reference device, with which bitmap should be compatible
         */
         CanvasBitmap( const ::basegfx::B2ISize& rSize,
-                      const DeviceRef&          rDevice,
+                      const SurfaceProviderRef& rDevice,
+                      ::com::sun::star::rendering::XGraphicDevice* pDevice,
                       bool                      bHasAlpha );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing();
+
+        // Forwarding the XComponent implementation to the
+        // cppu::ImplHelper templated base
+        //                                    Classname     Base doing refcounting        Base implementing the XComponent interface
+        //                                       |                 |                            |
+        //                                       V                 V                            V
+        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( CanvasBitmap, CanvasBitmapBase_Base, ::cppu::WeakComponentImplHelperBase );
 
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
-        ::cairo::Surface* getSurface();
+        // SurfaceProvider
+        virtual SurfaceSharedPtr getSurface();
+        virtual SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, Content aContent = CAIRO_CONTENT_COLOR_ALPHA );
+        virtual SurfaceSharedPtr createSurface( ::Bitmap& rBitmap );
+        virtual SurfaceSharedPtr changeSurface( bool bHasAlpha, bool bCopyContent );
+        virtual OutputDevice* getOutputDevice();
 
         // RepaintTarget
-        virtual bool repaint( ::cairo::Surface* pSurface,
-                              const ::com::sun::star::rendering::ViewState& viewState,
-                              const ::com::sun::star::rendering::RenderState&   renderState );
+        virtual bool repaint( const SurfaceSharedPtr&                         pSurface,
+                              const ::com::sun::star::rendering::ViewState&   viewState,
+                              const ::com::sun::star::rendering::RenderState& renderState );
+
+        // XFastPropertySet
+        // used to retrieve BitmapEx pointer or X Pixmap handles for this bitmap
+        // handle values have these meanings:
+        // 0 ... get pointer to BitmapEx
+        // 1 ... get X pixmap handle to rgb content
+        // 2 ... get X pitmap handle to alpha mask
+        // returned any contains either BitmapEx pointer or array of three Any value
+        //     1st a bool value: true - free the pixmap after used by XFreePixmap, false do nothing, the pixmap is used internally in the canvas
+        //     2nd the pixmap handle
+        //     3rd the pixmap depth
+        virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle)  throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const ::com::sun::star::uno::Any&)  throw (::com::sun::star::uno::RuntimeException) {}
 
     private:
-        /** MUST hold here, too, since CanvasHelper only contains a
-            raw pointer (without refcounting)
-        */
-        DeviceRef               mpDevice;
-        ::cairo::Surface*       mpBufferSurface;
-        ::cairo::Cairo*         mpBufferCairo;
+        SurfaceProviderRef        mpSurfaceProvider;
+        ::cairo::SurfaceSharedPtr mpBufferSurface;
+        ::cairo::CairoSharedPtr   mpBufferCairo;
 
-        bool mbHasAlpha;
+        const ::basegfx::B2ISize  maSize;
+        const bool                mbHasAlpha;
     };
 }
 
