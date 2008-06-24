@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: directxcanvas.scp,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,9 +31,9 @@
 #include "macros.inc"
 
 #ifdef WNT
-SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Lib_DirectXCanvas, directxcanvas.uno)
-#endif
-
-#ifdef WNT
+# ifdef USE_DIRECTX5
+SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Lib_DirectX5Canvas,directx5canvas.uno)
+# endif
 SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Lib_DirectX9Canvas, directx9canvas.uno)
+SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Lib_GdiPlusCanvas,  gdipluscanvas.uno)
 #endif
