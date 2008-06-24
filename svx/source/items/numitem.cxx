@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: numitem.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +62,6 @@
 #define DEF_WRITER_LSPACE   500     //Standardeinrueckung
 #define DEF_DRAW_LSPACE     800     //Standardeinrueckung
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
