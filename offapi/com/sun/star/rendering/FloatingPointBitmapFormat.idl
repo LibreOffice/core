@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FloatingPointBitmapFormat.idl,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,72 +34,35 @@ module com { module sun { module star { module rendering {
 
 /** This structure describes format of a floating point bitmap.<p>
 
-    The difference between chunky and planar layout lies in the way
-    how color channels are interleaved. For a chunky format, all
-    channel data for a single pixel lies consecutively in memory. For a
-    planar layout, the first channel of all pixel is stored
-    consecutive, followed by the second channel, and so forth.<p>
-
     @since OOo 2.0.0
  */
 constants FloatingPointBitmapFormat
 {
-    /** Half-float format, with chunky layout.<p>
+    /** Half-float format.<p>
 
         The color components are stored in the half-float format,
         i.e. in a 16 bit value, with 5 bit exponent, 10 bit mantissa
-        and a sign bit. The bits of each value are stored consecutive
-        in memory.<p>
+        and a sign bit. See also <a
+        href="http://www.openexr.com/">OpenEXR</a> for a format
+        employing half-floats.<p>
      */
-    const byte  CHUNKY_HALFFLOAT=0;
+    const byte HALFFLOAT=0;
 
-    /** Half-float format, with plane layout.<p>
-
-        The color components are stored in the half-float format,
-        i.e. in a 16 bit value, with 5 bit exponent, 10 bit mantissa
-        and a sign bit. For multi-channel Bitmaps, the pixel of the
-        first color channel are stored consecutively, follow by the
-        second channel and so forth.<p>
-     */
-    const byte  PLANES_HALFFLOAT=1;
-
-    /** IEEE float format, with chunky layout.<p>
+    /** IEEE float format.<p>
 
         The color components are stored in the IEEE single-precision
         floating point format, i.e. in a 32 bit value, with 8 bit
-        exponent, 23 bit mantissa and a sign bit. The bits of each
-        value are stored consecutive in memory.<p>
+        exponent, 23 bit mantissa and a sign bit.<p>
      */
-    const byte  CHUNKY_FLOAT=2;
+    const byte FLOAT=1;
 
-    /** IEEE float format, with plane layout.<p>
-
-        The color components are stored in the IEEE single-precision
-        floating point format, i.e. in a 32 bit value, with 8 bit
-        exponent, 23 bit mantissa and a sign bit. For multi-channel
-        Bitmaps, the pixel of the first color channel are stored
-        consecutively, follow by the second channel and so forth.<p>
-     */
-    const byte  PLANES_FLOAT=3;
-
-    /** IEEE double format, with chunky layout.<p>
+    /** IEEE double format.<p>
 
         The color components are stored in the IEEE double-precision
         floating point format, i.e. in a 64 bit value, with 16 bit
-        exponent, 47 bit mantissa and a sign bit. The bits of each
-        value are stored consecutive in memory.<p>
+        exponent, 47 bit mantissa and a sign bit.<p>
      */
-    const byte  CHUNKY_DOUBLE=4;
-
-    /** IEEE double format, with chunky layout.<p>
-
-        The color components are stored in the IEEE double-precision
-        floating point format, i.e. in a 64 bit value, with 16 bit
-        exponent, 47 bit mantissa and a sign bit. For multi-channel
-        Bitmaps, the pixel of the first color channel are stored
-        consecutively, follow by the second channel and so forth.<p>
-     */
-    const byte  PLANES_DOUBLE=5;
+    const byte DOUBLE=2;
 };
 
 }; }; }; };
