@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: db.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,16 +51,6 @@ namespace berkeleydbproxy {
             return dberr;
         }
     }
-
-//----------------------------------------------------------------------------
-
-int Db::set_alloc(   db_malloc_fcn_type app_malloc,
-                     db_realloc_fcn_type app_realloc,
-                     db_free_fcn_type app_free)
-{
-    int err = m_pDBP->set_alloc(m_pDBP,app_malloc,app_realloc,app_free);
-    return db_internal::check_error(err,"Db::set_alloc");
-}
 
 Db::Db()
 {
@@ -106,15 +96,6 @@ int Db::get(DB_TXN *txnid, Dbt *key, Dbt *data, u_int32_t flags)
     if (err != DB_NOTFOUND && err != DB_KEYEMPTY)
         db_internal::check_error( err,"Db::get" );
 
-    return err;
-}
-
-int Db::put(DB_TXN* txnid, Dbt *key, Dbt *data, u_int32_t flags)
-{
-    int err = m_pDBP->put(m_pDBP,txnid,key,data,flags);
-
-    if (err != DB_KEYEXIST) // this is a non-exceptional outcome
-        db_internal::check_error( err,"Db::put" );
     return err;
 }
 
