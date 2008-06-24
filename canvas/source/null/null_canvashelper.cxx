@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: null_canvashelper.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,12 +32,12 @@
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 
-#include <com/sun/star/rendering/IntegerBitmapFormat.hpp>
-#include <com/sun/star/rendering/Endianness.hpp>
+#include <com/sun/star/util/Endianness.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/RepaintResult.hpp>
@@ -225,13 +225,13 @@ namespace nullcanvas
                                                                                 const rendering::ViewState&                     viewState,
                                                                                 const rendering::RenderState&                   renderState )
     {
-        ENSURE_AND_THROW( xLayoutetText.is(),
+        ENSURE_OR_THROW( xLayoutetText.is(),
                           "CanvasHelper::drawTextLayout: layout is NULL");
 
         TextLayout* pTextLayout =
             dynamic_cast< TextLayout* >( xLayoutetText.get() );
 
-        ENSURE_AND_THROW( pTextLayout,
+        ENSURE_OR_THROW( pTextLayout,
                           "CanvasHelper::drawTextLayout(): TextLayout not compatible with this canvas" );
 
         pTextLayout->draw( viewState,
@@ -324,28 +324,7 @@ namespace nullcanvas
 
     rendering::IntegerBitmapLayout CanvasHelper::getMemoryLayout()
     {
-        // TODO(F1): finish memory layout initialization
-        rendering::IntegerBitmapLayout aLayout;
-
-        const geometry::IntegerSize2D& rBmpSize( getSize() );
-
-        aLayout.ScanLines = rBmpSize.Width;
-        aLayout.ScanLineBytes = rBmpSize.Height * 4;
-        aLayout.ScanLineStride = aLayout.ScanLineBytes;
-        aLayout.PlaneStride = 0;
-        aLayout.ColorSpace.set( mpDevice );
-        aLayout.NumComponents = 4;
-        aLayout.ComponentMasks.realloc(4);
-        aLayout.ComponentMasks[0] = 0x00FF0000;
-        aLayout.ComponentMasks[1] = 0x0000FF00;
-        aLayout.ComponentMasks[2] = 0x000000FF;
-        aLayout.ComponentMasks[3] = 0xFF000000;
-        aLayout.Palette.clear();
-        aLayout.Endianness = rendering::Endianness::LITTLE;
-        aLayout.Format = rendering::IntegerBitmapFormat::CHUNKY_32BIT;
-        aLayout.IsMsbFirst = sal_False;
-
-        return aLayout;
+        return ::canvas::tools::getStdMemoryLayout(getSize());
     }
 
     void CanvasHelper::flush() const
