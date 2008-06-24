@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textsh2.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,7 +83,6 @@
 
 #include <unomid.h>
 
-using namespace ::rtl;
 using namespace ::svx;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -113,7 +112,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     const SfxItemSet *pArgs = rReq.GetArgs();
     SwNewDBMgr* pNewDBMgr = GetShell().GetNewDBMgr();
     USHORT nSlot = rReq.GetSlot();
-    OUString sSourceArg, sCommandArg;
+    ::rtl::OUString sSourceArg, sCommandArg;
     sal_Int32 nCommandTypeArg = 0;
 
     const SfxPoolItem* pSourceItem = 0;
@@ -220,7 +219,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 pArgs->GetItemState(FN_DB_COLUMN_ANY, FALSE, &pColumnItem);
                 pArgs->GetItemState(FN_DB_DATA_COLUMN_NAME_ANY, FALSE, &pColumnNameItem);
 
-                OUString sColumnName;
+                ::rtl::OUString sColumnName;
                 if(pColumnNameItem)
                     ((SfxUsrAnyItem*)pColumnNameItem)->GetValue() >>= sColumnName;
                 String sDBName = sSourceArg;
@@ -311,7 +310,6 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
     delete pDBStruct;
     return 0;
 }
-
 
 
 
