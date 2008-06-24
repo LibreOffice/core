@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.75 $
+ * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,8 @@
 #include "osl/process.h"
 #include "rtl/bootstrap.h"
 #include "rtl/strbuf.hxx"
+
+#include "vcl/sysdata.hxx"
 
 #include "vcl/sallayout.hxx"
 #include "salatsuifontutils.hxx"
@@ -2136,6 +2138,16 @@ void AquaSalGraphics::FreeEmbedFontData( const void* pData, long nDataLen )
     // TODO: implementing this only makes sense when the implementation of
     //      AquaSalGraphics::GetEmbedFontData() returns non-NULL
     DBG_ASSERT( (pData!=NULL), "AquaSalGraphics::FreeEmbedFontData() is not implemented\n");
+}
+
+// -----------------------------------------------------------------------
+
+SystemGraphicsData AquaSalGraphics::GetGraphicsData() const
+{
+    SystemGraphicsData aRes;
+    aRes.nSize = sizeof(aRes);
+    aRes.rCGContext = mrContext;
+    return aRes;
 }
 
 // -----------------------------------------------------------------------
