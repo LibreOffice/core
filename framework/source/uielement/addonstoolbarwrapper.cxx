@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: addonstoolbarwrapper.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,7 +73,6 @@
 #include <vcl/toolbox.hxx>
 #include <rtl/logfile.hxx>
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::frame;
@@ -196,3 +195,4 @@ Reference< XInterface > SAL_CALL AddonsToolBarWrapper::getRealInterface() throw 
 }
 
 } // namespace framework
+
