@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: verifyinput.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,10 +44,9 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
-#include <com/sun/star/rendering/Endianness.hpp>
+#include <com/sun/star/util/Endianness.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
-#include <com/sun/star/rendering/IntegerBitmapFormat.hpp>
 #include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <com/sun/star/rendering/FloatingPointBitmapFormat.hpp>
 #include <com/sun/star/rendering/FloatingPointBitmapLayout.hpp>
@@ -639,67 +638,36 @@ namespace canvas
                 throw lang::IllegalArgumentException();
 #endif
             }
-
-            if( bitmapLayout.NumComponents < 0 )
+            else
             {
+                if( bitmapLayout.ColorSpace->getBitsPerPixel() < 0 )
+                {
 #if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's NumComponents is negative"),
-                    xIf,
-                    nArgPos );
+                    throw lang::IllegalArgumentException(
+                        ::rtl::OUString::createFromAscii(pStr) +
+                        ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's ColorSpace getBitsPerPixel() is negative"),
+                        xIf,
+                        nArgPos );
 #else
-                throw lang::IllegalArgumentException();
+                    throw lang::IllegalArgumentException();
 #endif
-            }
+                }
 
-            if( bitmapLayout.ComponentMasks.getLength() != bitmapLayout.NumComponents )
-            {
+                if( bitmapLayout.ColorSpace->getEndianness() < util::Endianness::LITTLE ||
+                    bitmapLayout.ColorSpace->getEndianness() > util::Endianness::BIG )
+                {
 #if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's number of ComponentMasks elements mismatch NumComponents (is: ") +
-                    ::rtl::OUString::valueOf(bitmapLayout.ComponentMasks.getLength()) +
-                    ::rtl::OUString::createFromAscii(" expected: ") +
-                    ::rtl::OUString::valueOf(bitmapLayout.NumComponents) +
-                    ::rtl::OUString::createFromAscii(")"),
-                    xIf,
-                    nArgPos );
+                    throw lang::IllegalArgumentException(
+                        ::rtl::OUString::createFromAscii(pStr) +
+                        ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's ColorSpace getEndianness() value is out of range (") +
+                        ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(bitmapLayout.ColorSpace->getEndianness())) +
+                        ::rtl::OUString::createFromAscii(" not known)"),
+                        xIf,
+                        nArgPos );
 #else
-                throw lang::IllegalArgumentException();
+                    throw lang::IllegalArgumentException();
 #endif
-            }
-
-            if( bitmapLayout.Endianness < rendering::Endianness::LITTLE ||
-                bitmapLayout.Endianness > rendering::Endianness::BIG )
-            {
-#if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's Endianness value is out of range (") +
-                    ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(bitmapLayout.Endianness)) +
-                    ::rtl::OUString::createFromAscii(" not known)"),
-                    xIf,
-                    nArgPos );
-#else
-                throw lang::IllegalArgumentException();
-#endif
-            }
-
-            if( bitmapLayout.Format < rendering::IntegerBitmapFormat::CHUNKY_1BIT ||
-                bitmapLayout.Format > rendering::IntegerBitmapFormat::PLANES_64BIT )
-            {
-#if OSL_DEBUG_LEVEL > 0
-                throw lang::IllegalArgumentException(
-                    ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's Format value is out of range (") +
-                    ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(bitmapLayout.Format)) +
-                    ::rtl::OUString::createFromAscii(" not known)"),
-                    xIf,
-                    nArgPos );
-#else
-                throw lang::IllegalArgumentException();
-#endif
+                }
             }
         }
 
@@ -762,8 +730,8 @@ namespace canvas
 #endif
             }
 
-            if( bitmapLayout.Endianness < rendering::Endianness::LITTLE ||
-                bitmapLayout.Endianness > rendering::Endianness::BIG )
+            if( bitmapLayout.Endianness < util::Endianness::LITTLE ||
+                bitmapLayout.Endianness > util::Endianness::BIG )
             {
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
@@ -778,8 +746,8 @@ namespace canvas
 #endif
             }
 
-            if( bitmapLayout.Format < rendering::IntegerBitmapFormat::CHUNKY_1BIT ||
-                bitmapLayout.Format > rendering::IntegerBitmapFormat::PLANES_64BIT )
+            if( bitmapLayout.Format < rendering::FloatingPointBitmapFormat::HALFFLOAT ||
+                bitmapLayout.Format > rendering::FloatingPointBitmapFormat::DOUBLE )
             {
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
