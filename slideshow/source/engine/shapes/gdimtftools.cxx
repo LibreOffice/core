@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gdimtftools.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <gdimtftools.hxx>
 
 #include <com/sun/star/document/XExporter.hpp>
@@ -188,7 +189,7 @@ bool getMetaFile( const uno::Reference< lang::XComponent >&       xSource,
                   int                                             mtfLoadFlags,
                   const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    ENSURE_AND_RETURN( rxContext.is(),
+    ENSURE_OR_RETURN( rxContext.is(),
                        "getMetaFile(): Invalid context" );
 
     // create dummy XGraphicRenderer, which receives the
@@ -388,7 +389,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
             break;
 
         default:
-            ENSURE_AND_RETURN(false,
+            ENSURE_OR_RETURN(false,
                               "getAnimationFromGraphic(): Unexpected case" );
             break;
     }
