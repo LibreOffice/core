@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: animationcolornode.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +60,7 @@ public:
     HSLWrapper( const ColorAnimationSharedPtr& rAnimation )
         : mpAnimation( rAnimation )
     {
-        ENSURE_AND_THROW(
+        ENSURE_OR_THROW(
             mpAnimation,
             "HSLWrapper::HSLWrapper(): Invalid color animation delegate" );
     }
@@ -128,7 +128,7 @@ AnimationActivitySharedPtr AnimationColorNode::createActivity() const
             mxColorNode );
 
     default:
-        ENSURE_AND_THROW( false, "AnimationColorNode::createColorActivity(): "
+        ENSURE_OR_THROW( false, "AnimationColorNode::createColorActivity(): "
                           "Unexpected color space" );
     }
 
