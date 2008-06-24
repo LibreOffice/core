@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: spinfieldtoolbarcontroller.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +72,6 @@
 #include <systools/win32/snprintf.h>
 #endif
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -212,7 +211,7 @@ SpinfieldToolbarController::SpinfieldToolbarController(
     ToolBox*                                 pToolbar,
     USHORT                                   nID,
     sal_Int32                                nWidth,
-    const OUString&                          aCommand ) :
+    const ::rtl::OUString&                          aCommand ) :
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
     ,   m_bFloat( false )
     ,   m_bMaxSet( false )
@@ -262,8 +261,8 @@ throw ( RuntimeException )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XURLTransformer > xURLTransformer;
-    OUString                     aCommandURL;
-    OUString                     aSpinfieldText;
+    ::rtl::OUString                     aCommandURL;
+    ::rtl::OUString                     aSpinfieldText;
     ::com::sun::star::util::URL  aTargetURL;
     bool                         bFloat( false );
 
@@ -604,7 +603,7 @@ rtl::OUString SpinfieldToolbarController::impl_formatOutputString( double fValue
         // is 32 bit on Unix platform!
         char aBuffer[128];
 
-        OString aFormat = OUStringToOString( m_aOutFormat, osl_getThreadTextEncoding() );
+        ::rtl::OString aFormat = OUStringToOString( m_aOutFormat, osl_getThreadTextEncoding() );
         if ( m_bFloat )
             snprintf( aBuffer, 128, aFormat.getStr(), fValue );
         else
@@ -618,3 +617,4 @@ rtl::OUString SpinfieldToolbarController::impl_formatOutputString( double fValue
 }
 
 } // namespace
+
