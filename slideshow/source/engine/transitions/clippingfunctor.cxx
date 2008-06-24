@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: clippingfunctor.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_slideshow.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include "clippingfunctor.hxx"
 #include "transitiontools.hxx"
 
@@ -51,7 +52,7 @@ namespace slideshow
             mbScaleIsotrophically( rTransitionInfo.mbScaleIsotrophically ),
             mbFlip(false)
         {
-            ENSURE_AND_THROW( rPolygon,
+            ENSURE_OR_THROW( rPolygon,
                               "ClippingFunctor::ClippingFunctor(): Invalid parametric polygon" );
 
             // maBackgroundRect serves as the minuent when
@@ -104,7 +105,7 @@ namespace slideshow
                 switch( rTransitionInfo.meReverseMethod )
                 {
                     default:
-                        ENSURE_AND_THROW(
+                        ENSURE_OR_THROW(
                             false,
                             "TransitionFactory::TransitionFactory(): Unexpected reverse method" );
                         break;
