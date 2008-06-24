@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: transparencygroupaction.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@
 #include <rtl/logfile.hxx>
 
 #include <com/sun/star/rendering/XBitmap.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
 
 #include <rtl/math.hxx>
 
@@ -466,8 +467,9 @@ namespace cppcanvas
 #ifdef SPECIAL_DEBUG
                 aLocalState.Clip.clear();
                 aLocalState.DeviceColor =
-                    ::vcl::unotools::colorToDoubleSequence( mpCanvas->getUNOCanvas()->getDevice(),
-                                                            ::Color( 0x80FF0000 ) );
+                    ::vcl::unotools::colorToDoubleSequence(
+                        ::Color( 0x80FF0000 ),
+                        mpCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
 
                 if( maState.Clip.is() )
                     mpCanvas->getUNOCanvas()->fillPolyPolygon( maState.Clip,
@@ -487,8 +489,11 @@ namespace cppcanvas
                 else
                 {
                     // add alpha modulation value to DeviceColor
-                    ::canvas::tools::setDeviceColor( aLocalState,
-                                                     1.0, 1.0, 1.0, mnAlpha );
+                    uno::Sequence<rendering::ARGBColor> aCols(1);
+                    aCols[0] = rendering::ARGBColor( mnAlpha, 1.0, 1.0, 1.0);
+                    aLocalState.DeviceColor =
+                        mpCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace()->convertFromARGB(
+                            aCols);
 
                     mpCanvas->getUNOCanvas()->drawBitmapModulated( mxBufferBitmap,
                                                                    mpCanvas->getViewState(),
