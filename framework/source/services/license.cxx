@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: license.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,7 +82,6 @@
 namespace framework{
 using namespace utl;
 using namespace ::osl                           ;
-using namespace ::rtl                           ;
 using namespace ::cppu                          ;
 using namespace ::com::sun::star::uno           ;
 using namespace ::com::sun::star::beans         ;
@@ -174,7 +173,7 @@ IMPL_STATIC_LINK_NOINSTANCE( License, Terminate, void*, EMPTYARG )
     /*
     Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
     Reference< XDesktop > xDesktop(xFactory->createInstance(
-        OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY);
+        ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY);
     if (xDesktop.is())
         xDesktop->terminate();
     */
@@ -191,9 +190,9 @@ static DateTime _oslDateTimeToDateTime(const oslDateTime& aDateTime)
         Time(aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds));
 }
 
-static OUString _makeDateTimeString (const DateTime& aDateTime, sal_Bool bUTC = sal_False)
+static ::rtl::OUString _makeDateTimeString (const DateTime& aDateTime, sal_Bool bUTC = sal_False)
 {
-    OStringBuffer aDateTimeString;
+    ::rtl::OStringBuffer aDateTimeString;
     aDateTimeString.append((sal_Int32)aDateTime.GetYear());
     aDateTimeString.append("-");
     if (aDateTime.GetMonth()<10) aDateTimeString.append("0");
@@ -215,12 +214,12 @@ static OUString _makeDateTimeString (const DateTime& aDateTime, sal_Bool bUTC = 
     return OStringToOUString(aDateTimeString.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
 }
 
-static sal_Bool _parseDateTime(const OUString& aString, DateTime& aDateTime)
+static sal_Bool _parseDateTime(const ::rtl::OUString& aString, DateTime& aDateTime)
 {
     // take apart a canonical literal xsd:dateTime string
     //CCYY-MM-DDThh:mm:ss(Z)
 
-    OUString aDateTimeString = aString.trim();
+    ::rtl::OUString aDateTimeString = aString.trim();
 
     // check length
     if (aDateTimeString.getLength() < 19 || aDateTimeString.getLength() > 20)
@@ -229,13 +228,13 @@ static sal_Bool _parseDateTime(const OUString& aString, DateTime& aDateTime)
     sal_Int32 nDateLength = 10;
     sal_Int32 nTimeLength = 8;
 
-    OUString aDateTimeSep = OUString::createFromAscii("T");
-    OUString aDateSep = OUString::createFromAscii("-");
-    OUString aTimeSep = OUString::createFromAscii(":");
-    OUString aUTCString = OUString::createFromAscii("Z");
+    ::rtl::OUString aDateTimeSep = ::rtl::OUString::createFromAscii("T");
+    ::rtl::OUString aDateSep = ::rtl::OUString::createFromAscii("-");
+    ::rtl::OUString aTimeSep = ::rtl::OUString::createFromAscii(":");
+    ::rtl::OUString aUTCString = ::rtl::OUString::createFromAscii("Z");
 
-    OUString aDateString = aDateTimeString.copy(0, nDateLength);
-    OUString aTimeString = aDateTimeString.copy(nDateLength+1, nTimeLength);
+    ::rtl::OUString aDateString = aDateTimeString.copy(0, nDateLength);
+    ::rtl::OUString aTimeString = aDateTimeString.copy(nDateLength+1, nTimeLength);
 
     sal_Int32 nIndex = 0;
     sal_Int32 nYear = aDateString.getToken(0, '-', nIndex).toInt32();
@@ -256,9 +255,9 @@ static sal_Bool _parseDateTime(const OUString& aString, DateTime& aDateTime)
     return sal_True;
 }
 
-static OUString _getCurrentDateString()
+static ::rtl::OUString _getCurrentDateString()
 {
-    OUString aString;
+    ::rtl::OUString aString;
     return _makeDateTimeString(DateTime());
 }
 
@@ -271,7 +270,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
 
     try
     {
-        OUString aBaseInstallPath;
+        ::rtl::OUString aBaseInstallPath;
         Bootstrap::PathStatus aBaseLocateResult =
             Bootstrap::locateBaseInstallation(aBaseInstallPath);
         if (aBaseLocateResult != Bootstrap::PATH_EXISTS)
@@ -284,9 +283,9 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
             return aRet;
         }
         // determine the filename of the license to show
-        OUString  aLangString;
+        ::rtl::OUString  aLangString;
         ::com::sun::star::lang::Locale aLocale;
-        OString aMgrName = OString("fwe");
+        ::rtl::OString aMgrName = ::rtl::OString("fwe");
         AllSettings aSettings(Application::GetSettings());
         aLocale = aSettings.GetUILocale();
         ResMgr* pResMgr = ResMgr::SearchCreateResMgr(aMgrName, aLocale);
@@ -294,53 +293,53 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         aLangString = aLocale.Language;
         if ( aLocale.Country.getLength() != 0 )
         {
-            aLangString += OUString::createFromAscii("-");
+            aLangString += ::rtl::OUString::createFromAscii("-");
             aLangString += aLocale.Country;
             if ( aLocale.Variant.getLength() != 0 )
             {
-                aLangString += OUString::createFromAscii("-");
+                aLangString += ::rtl::OUString::createFromAscii("-");
                 aLangString += aLocale.Variant;
             }
         }
 #if defined(WNT) || defined(OS2)
-        OUString aLicensePath =
-            aBaseInstallPath + OUString::createFromAscii(szLicensePath)
-            + OUString::createFromAscii(szWNTLicenseName)
-            + OUString::createFromAscii("_")
+        ::rtl::OUString aLicensePath =
+            aBaseInstallPath + ::rtl::OUString::createFromAscii(szLicensePath)
+            + ::rtl::OUString::createFromAscii(szWNTLicenseName)
+            + ::rtl::OUString::createFromAscii("_")
             + aLangString
-            + OUString::createFromAscii(szWNTLicenseExt);
+            + ::rtl::OUString::createFromAscii(szWNTLicenseExt);
 #else
-        OUString aLicensePath =
-            aBaseInstallPath + OUString::createFromAscii(szLicensePath)
-            + OUString::createFromAscii(szUNXLicenseName)
-            + OUString::createFromAscii("_")
+        ::rtl::OUString aLicensePath =
+            aBaseInstallPath + ::rtl::OUString::createFromAscii(szLicensePath)
+            + ::rtl::OUString::createFromAscii(szUNXLicenseName)
+            + ::rtl::OUString::createFromAscii("_")
             + aLangString
-            + OUString::createFromAscii(szUNXLicenseExt);
+            + ::rtl::OUString::createFromAscii(szUNXLicenseExt);
 #endif
         // check if we need to show the license at all
         // open org.openoffice.Setup/Office/ooLicenseAcceptDate
-        OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
-        OUString sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess");
-        OUString sReadSrvc   = OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
+        ::rtl::OUString sConfigSrvc = ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
+        ::rtl::OUString sAccessSrvc = ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess");
+        ::rtl::OUString sReadSrvc   = ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
 
         // get configuration provider
         Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
         m_xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
         Sequence< Any > theArgs(1);
         NamedValue v;
-        v.Name = OUString::createFromAscii("NodePath");
-        v.Value <<= OUString::createFromAscii("org.openoffice.Setup/Office");
+        v.Name = ::rtl::OUString::createFromAscii("NodePath");
+        v.Value <<= ::rtl::OUString::createFromAscii("org.openoffice.Setup/Office");
         theArgs[0] <<= v;
         Reference< XPropertySet > pset = Reference< XPropertySet >(
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
-        Any result = pset->getPropertyValue(OUString::createFromAscii("ooLicenseAcceptDate"));
+        Any result = pset->getPropertyValue(::rtl::OUString::createFromAscii("ooLicenseAcceptDate"));
 
         // if we find a date there, compare it to baseinstall license date
-        OUString aAcceptDate;
+        ::rtl::OUString aAcceptDate;
         if (result >>= aAcceptDate)
         {
             // get LicenseFileDate from base install
-            OUString aLicenseURL = aLicensePath;
+            ::rtl::OUString aLicenseURL = aLicensePath;
             /*
             if (FileBase::getFileURLFromSystemPath(aLicensePath, aLicenseURL) != FileBase::E_None)
                 return makeAny(sal_False);
@@ -375,7 +374,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
 
             // write org.openoffice.Setup/ooLicenseAcceptDate
             aAcceptDate = _getCurrentDateString();
-            pset->setPropertyValue(OUString::createFromAscii("ooLicenseAcceptDate"), makeAny(aAcceptDate));
+            pset->setPropertyValue(::rtl::OUString::createFromAscii("ooLicenseAcceptDate"), makeAny(aAcceptDate));
             Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
 
             // enable quickstarter
@@ -386,7 +385,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
             aSeq[1] <<= bAutostart;
 
             Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
-                OUString::createFromAscii( "com.sun.star.office.Quickstart" )),UNO_QUERY );
+                ::rtl::OUString::createFromAscii( "com.sun.star.office.Quickstart" )),UNO_QUERY );
             if ( xQuickstart.is() )
                 xQuickstart->initialize( aSeq );
 
@@ -428,7 +427,7 @@ void SAL_CALL License::removeCloseListener(const css::uno::Reference< css::util:
 //   License Dialog
 //************************************************************************
 
-LicenseDialog::LicenseDialog(const OUString & aLicensePath, ResMgr *pResMgr) :
+LicenseDialog::LicenseDialog(const ::rtl::OUString & aLicensePath, ResMgr *pResMgr) :
     ModalDialog(NULL, ResId(DLG_LICENSE, *pResMgr)),
     aLicenseML(this, ResId(ML_LICENSE, *pResMgr)),
     aInfo1FT(this, ResId(FT_INFO1, *pResMgr)),
@@ -486,7 +485,7 @@ LicenseDialog::LicenseDialog(const OUString & aLicensePath, ResMgr *pResMgr) :
         {
             nPosition += nBytesRead;
         }
-        OUString aLicenseString(pBuffer, nBytes, RTL_TEXTENCODING_UTF8,
+        ::rtl::OUString aLicenseString(pBuffer, nBytes, RTL_TEXTENCODING_UTF8,
                 OSTRING_TO_OUSTRING_CVTFLAGS | RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE);
         delete[] pBuffer;
         aLicenseML.SetText(aLicenseString);
@@ -632,3 +631,4 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
 }
 
 }       //  namespace framework
+
