@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SpellDialog.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,13 +80,12 @@
 #include "svxerr.hxx"
 #include "treeopt.hxx"
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
-#define C2U(cChar)                  OUString::createFromAscii(cChar)
+#define C2U(cChar)                  ::rtl::OUString::createFromAscii(cChar)
 // struct SpellDialog_Impl ---------------------------------------------
 
 struct SpellDialog_Impl
@@ -118,7 +117,7 @@ class SpellUndoAction_Impl : public SfxUndoAction
     bool            m_bIsErrorLanguageSelected;
     //undo of AddToDictionary
     Reference<XDictionary>  m_xDictionary;
-    OUString                m_sAddedWord;
+    ::rtl::OUString                m_sAddedWord;
     //move end of error - ::ChangeMarkedWord()
     long            m_nOffset;
 
@@ -165,8 +164,8 @@ public:
 
     void                    SetDictionary(Reference<XDictionary> xDict) { m_xDictionary = xDict; }
     Reference<XDictionary>  GetDictionary() const {return m_xDictionary;}
-    void                    SetAddedWord(const OUString& rWord) {m_sAddedWord = rWord;}
-    const OUString&         GetAddedWord() const { return m_sAddedWord;}
+    void                    SetAddedWord(const ::rtl::OUString& rWord) {m_sAddedWord = rWord;}
+    const ::rtl::OUString&         GetAddedWord() const { return m_sAddedWord;}
 
     void                    SetOffset(long nSet) {m_nOffset = nSet;}
     long                    GetOffset() const {return m_nOffset;}
@@ -320,7 +319,7 @@ void SpellDialog::UpdateBoxes_Impl()
 
     LanguageType nAltLanguage = LANGUAGE_NONE;
     String       aAltWord;
-    Sequence< OUString >    aNewWords;
+    Sequence< ::rtl::OUString > aNewWords;
     if (xAlt.is())
     {
         nAltLanguage    = SvxLocaleToLanguage( xAlt->getLocale() );
@@ -340,7 +339,7 @@ void SpellDialog::UpdateBoxes_Impl()
 
 
     // Alternativen eintragen
-    const OUString *pNewWords = aNewWords.getConstArray();
+    const ::rtl::OUString *pNewWords = aNewWords.getConstArray();
     const sal_Int32 nSize = aNewWords.getLength();
     for ( i = 0; i < nSize; ++i )
     {
@@ -813,7 +812,7 @@ IMPL_LINK(SpellDialog, AddToDictionaryHdl, MenuButton*, pButton )
         String sTmpTxt( sNewWord );
         sal_Bool bNegEntry = xDic->getDictionaryType() == DictionaryType_NEGATIVE;
         nAddRes = linguistic::AddEntryToDic( xDic, sTmpTxt, bNegEntry,
-                OUString(), LANGUAGE_NONE );
+                ::rtl::OUString(), LANGUAGE_NONE );
 
         if(nAddRes == DIC_ERR_NONE)
         {
@@ -1874,5 +1873,4 @@ void  SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
     AddUndoAction(pAction);
     pSpellDialog->aChangePB.Enable();
 }
-
 
