@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RowSetCache.cxx,v $
- * $Revision: 1.99 $
+ * $Revision: 1.100 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,32 +31,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
-#include "RowSetCache.hxx"
-#endif
-#ifndef _DBA_CORE_RESOURCE_HXX_
-#include "core_resource.hxx"
-#endif
-#ifndef _DBA_CORE_RESOURCE_HRC_
-#include "core_resource.hrc"
-#endif
 #ifndef _COMPHELPER_SEQSTREAM_HXX
 #include <comphelper/seqstream.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef DBACCESS_CORE_API_BOOKMARKSET_HXX
-#include "BookmarkSet.hxx"
-#endif
-#ifndef DBACCESS_CORE_API_STATICSET_HXX
-#include "StaticSet.hxx"
-#endif
-#ifndef DBACCESS_CORE_API_KEYSET_HXX
-#include "KeySet.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
-#include "dbastrings.hrc"
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -114,6 +93,27 @@
 #endif
 
 #include <algorithm>
+#ifndef DBACCESS_CORE_API_ROWSETCACHE_HXX
+#include "RowSetCache.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HXX_
+#include "core_resource.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HRC_
+#include "core_resource.hrc"
+#endif
+#ifndef DBACCESS_CORE_API_BOOKMARKSET_HXX
+#include "BookmarkSet.hxx"
+#endif
+#ifndef DBACCESS_CORE_API_STATICSET_HXX
+#include "StaticSet.hxx"
+#endif
+#ifndef DBACCESS_CORE_API_KEYSET_HXX
+#include "KeySet.hxx"
+#endif
+#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
+#include "dbastrings.hrc"
+#endif
 
 using namespace dbaccess;
 using namespace dbtools;
@@ -1588,3 +1588,8 @@ sal_Bool ORowSetCache::fill(ORowSetMatrix::iterator& _aIter,const ORowSetMatrix:
     return _bCheck;
 }
 // -----------------------------------------------------------------------------
+
+
+
+
+
