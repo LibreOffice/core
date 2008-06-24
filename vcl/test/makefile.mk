@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.10 $
+# $Revision: 1.11 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,14 +29,12 @@
 #
 #*************************************************************************
 
-# any volunteer to remove warnings?
-EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
-
 PRJ=..
 
 PRJNAME=vcl
 TARGET=dndtest
 LIBTARGET=NO
+ENABLE_EXCEPTIONS=TRUE
 
 .IF "$(GUI)" == "OS2"
 TARGETTYPE=GUI
@@ -54,7 +52,7 @@ OBJFILES= \
 
 APP1NOSAL=		TRUE
 APP1TARGET= 	$(TARGET)
-APP1OBJS=	$(OBJFILES)	$(OBJ)$/salmain.obj
+APP1OBJS=	    $(OBJFILES)	$(OBJ)$/salmain.obj
 APP1STDLIBS=	$(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
                 $(TOOLSLIB) 		\
@@ -63,6 +61,27 @@ APP1STDLIBS=	$(CPPULIB)			\
                 $(SOTLIB)			\
                 $(COMPHELPERLIB)	\
                 $(VCLLIB)
+
+# --- Targets ------------------------------------------------------
+
+APP2TARGET= canvasbitmaptest
+APP2OBJS=	\
+    $(OBJ)$/canvasbitmaptest.obj
+
+.IF "$(GUI)"!="UNX"
+    APP2OBJS += $(OBJ)$/salmain.obj
+.ELSE
+    APP2OBJS += $(SLO)$/salmain.obj
+.ENDIF
+
+APP2NOSAL=		TRUE
+APP2STDLIBS=$(TOOLSLIB) 		\
+            $(COMPHELPERLIB)	\
+            $(CPPULIB)			\
+            $(CPPUHELPERLIB)	\
+            $(UCBHELPERLIB)		\
+            $(SALLIB)			\
+            $(VCLLIB)
 
 # --- Targets ------------------------------------------------------
 
