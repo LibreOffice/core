@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XSprite.idl,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +72,7 @@ interface XSprite : ::com::sun::star::uno::XInterface
         New global alpha value to composite this sprite with the
         background. Valid range is [0,1].
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if nAlpha is not within the permissible range.
      */
     void setAlpha( [in] double nAlpha )
@@ -101,7 +101,7 @@ interface XSprite : ::com::sun::star::uno::XInterface
         @param aRenderState
         The renderstate to be used when interpreting aNewPos.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the view and renderstate parameters are outside the
         specified range.
      */
@@ -134,7 +134,7 @@ interface XSprite : ::com::sun::star::uno::XInterface
         @param aTransformation
         The transformation to apply to the sprite shape.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if the given transformation matrix is singular.
      */
     void transform( [in] com::sun::star::geometry::AffineMatrix2D aTransformation )
