@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textlayout.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/canvastools.hxx>
 
 #include <com/sun/star/rendering/TextDirection.hpp>
@@ -84,16 +85,18 @@ namespace vclcanvas
         }
     }
 
-    TextLayout::TextLayout( const rendering::StringContext& aText,
-                            sal_Int8                        nDirection,
-                            sal_Int64                       nRandomSeed,
-                            const CanvasFont::Reference&    rFont,
-                            const DeviceRef&                rRefDevice ) :
+    TextLayout::TextLayout( const rendering::StringContext&                  aText,
+                            sal_Int8                                         nDirection,
+                            sal_Int64                                        nRandomSeed,
+                            const CanvasFont::Reference&                     rFont,
+                            const uno::Reference<rendering::XGraphicDevice>& xDevice,
+                            const OutDevProviderSharedPtr&                   rOutDev ) :
         TextLayout_Base( m_aMutex ),
         maText( aText ),
         maLogicalAdvancements(),
         mpFont( rFont ),
-        mpRefDevice( rRefDevice ),
+        mxDevice( xDevice ),
+        mpOutDevProvider( rOutDev ),
         mnTextDirection( nDirection )
     {
         (void)nRandomSeed;
@@ -103,8 +106,9 @@ namespace vclcanvas
     {
         tools::LocalGuard aGuard;
 
+        mpOutDevProvider.reset();
+        mxDevice.clear();
         mpFont.reset();
-        mpRefDevice.clear();
     }
 
     // XTextLayout
@@ -143,7 +147,7 @@ namespace vclcanvas
     {
         tools::LocalGuard aGuard;
 
-        CHECK_AND_THROW( aAdvancements.getLength() == maText.Length,
+        ENSURE_ARG_OR_THROW( aAdvancements.getLength() == maText.Length,
                          "TextLayout::applyLogicalAdvancements(): mismatching number of advancements" );
 
         maLogicalAdvancements = aAdvancements;
@@ -153,11 +157,12 @@ namespace vclcanvas
     {
         tools::LocalGuard aGuard;
 
-        OutputDevice* pOutDev = mpRefDevice->getOutDev();
-        if( !pOutDev )
+        if( !mpOutDevProvider )
             return geometry::RealRectangle2D();
 
-        VirtualDevice aVDev( *pOutDev );
+        OutputDevice& rOutDev = mpOutDevProvider->getOutDev();
+
+        VirtualDevice aVDev( rOutDev );
         aVDev.SetFont( mpFont->getVCLFont() );
 
         // need metrics for Y offset, the XCanvas always renders
@@ -364,7 +369,7 @@ namespace vclcanvas
                                        const rendering::ViewState&      viewState,
                                        const rendering::RenderState&    renderState     ) const
     {
-        ENSURE_AND_THROW( outputOffsets!=NULL,
+        ENSURE_OR_THROW( outputOffsets!=NULL,
                           "TextLayout::setupTextOffsets offsets NULL" );
 
         ::basegfx::B2DHomMatrix aMatrix;
