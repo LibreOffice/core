@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_surfacegraphics.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,45 +31,18 @@
 #ifndef _DXCANVAS_SURFACEGRAPHICS_HXX
 #define _DXCANVAS_SURFACEGRAPHICS_HXX
 
-#include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
+#include "dx_graphicsprovider.hxx"
 
 namespace dxcanvas
 {
     /** Container providing a Gdiplus::Graphics for a Surface
 
         This wrapper class transparently handles allocation and
-        release of surface resources the RAII way. Please don't create
-        yourself, the only legal way to obtain such an object is via
-        Surface::getGraphics()
-
-        @see Surface::getGraphics()
+        release of surface resources the RAII way (the
+        GraphicsSharedPtr returned has a deleter that does all the
+        necessary DX cleanup work).
      */
-    class SurfaceGraphics : private ::boost::noncopyable
-    {
-    public:
-        SurfaceGraphics();
-        explicit SurfaceGraphics( HDC aHDC );
-        explicit SurfaceGraphics( const BitmapSharedPtr& rBitmap );
-        explicit SurfaceGraphics( const COMReference<surface_type>& rSurface );
-        ~SurfaceGraphics();
-
-        bool is() const { return mpGraphics != NULL; }
-        Gdiplus::Graphics* get() { return mpGraphics; }
-        const Gdiplus::Graphics* get() const { return mpGraphics; }
-        Gdiplus::Graphics* operator->() { return mpGraphics; }
-        const Gdiplus::Graphics* operator->() const { return mpGraphics; }
-        Gdiplus::Graphics& operator*() { return *mpGraphics; }
-        const Gdiplus::Graphics& operator*() const { return *mpGraphics; }
-
-    private:
-        COMReference<surface_type> mpSurface;
-        Gdiplus::Graphics*               mpGraphics;
-        BitmapSharedPtr                         mpBitmap;
-        HDC                              maHDC;
-    };
-
-    typedef ::boost::shared_ptr< SurfaceGraphics >  SurfaceGraphicsSharedPtr;
+    GraphicsSharedPtr createSurfaceGraphics(const COMReference<surface_type>& rSurface );
 }
 
 #endif /* _DXCANVAS_SURFACEGRAPHICS_HXX */
