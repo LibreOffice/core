@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: implcanvas.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,19 +30,20 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppcanvas.hxx"
+
 #include <rtl/ustring.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/tools/canvastools.hxx>
+
 #include <com/sun/star/rendering/XCanvas.hpp>
 
 #include <canvas/canvastools.hxx>
-
 #include <cppcanvas/polypolygon.hxx>
-#include <implfont.hxx>
-#include <implcolor.hxx>
 
-#include <implcanvas.hxx>
+#include "implfont.hxx"
+#include "implcolor.hxx"
+#include "implcanvas.hxx"
 
 
 using namespace ::com::sun::star;
