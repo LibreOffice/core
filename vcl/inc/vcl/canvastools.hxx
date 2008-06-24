@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: canvastools.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/rendering/XColorSpace.hpp>
 #include <basegfx/numeric/ftools.hxx>
 
 #include <vcl/dllapi.h>
@@ -74,6 +75,7 @@ namespace com { namespace sun { namespace star { namespace rendering
     class  XGraphicDevice;
     class  XBitmap;
     class  XIntegerBitmap;
+    class  XIntegerReadOnlyBitmap;
     class  XPolyPolygon2D;
 } } } }
 
@@ -142,51 +144,56 @@ namespace vcl
         /** Create a BitmapEx from an XBitmap
          */
         ::BitmapEx VCL_DLLPUBLIC bitmapExFromXBitmap( const ::com::sun::star::uno::Reference<
-                                                            ::com::sun::star::rendering::XGraphicDevice >&  xGraphicDevice,
-                                                      const ::com::sun::star::uno::Reference<
-                                                            ::com::sun::star::rendering::XIntegerBitmap >&  xInputBitmap );
+                                                            ::com::sun::star::rendering::XIntegerReadOnlyBitmap >& xInputBitmap );
 
         /** get a unique identifier for identification in XUnoTunnel interface
          */
          enum TunnelIdentifierType { Id_BitmapEx = 0 };
          const com::sun::star::uno::Sequence< sal_Int8 > VCL_DLLPUBLIC getTunnelIdentifier( TunnelIdentifierType eType );
 
-        // Color conversions (vcl/tools Color <-> x)
+        // Color conversions (vcl/tools Color <-> canvas standard color space)
         // ===================================================================
 
         /** Create a device-specific color sequence from VCL/Tools color
+
+            Note that this method assumes a color space equivalent to
+            the one returned from createStandardColorSpace()
          */
         ::com::sun::star::uno::Sequence< double >
-            VCL_DLLPUBLIC colorToDoubleSequence( const ::com::sun::star::uno::Reference<
-                                   ::com::sun::star::rendering::XGraphicDevice >&   xGraphicDevice,
-                                   const Color&                                     rColor       );
+            VCL_DLLPUBLIC colorToStdColorSpaceSequence( const Color& rColor );
 
-        /** Create a device-specific color sequence from VCL/Tools color
+        /** Convert color to device color sequence
+
+            @param rColor
+            Color to convert
+
+            @param xColorSpace
+            Color space to convert into
          */
-        ::com::sun::star::uno::Sequence< sal_Int8 >
-            VCL_DLLPUBLIC colorToIntSequence( const ::com::sun::star::uno::Reference<
-                                 ::com::sun::star::rendering::XGraphicDevice >&     xGraphicDevice,
-                                const Color&                                    rColor       );
+        ::com::sun::star::uno::Sequence< double >
+        VCL_DLLPUBLIC colorToDoubleSequence( const Color&                                      rColor,
+                                             const ::com::sun::star::uno::Reference<
+                                                   ::com::sun::star::rendering::XColorSpace >& xColorSpace );
 
-        /** Convert from XGraphicDevice color space to VCL/Tools Color.
+        /** Convert from standard device color space to VCL/Tools color
 
-            If the XGraphicDevice interface reference is invalid, no
-            color space transformation is performed, but the values
-            are taken as BGRA (for four elements) or BGR tuples (for
-            three elements)
+            Note that this method assumes a color space equivalent to
+            the one returned from createStandardColorSpace()
          */
-        Color VCL_DLLPUBLIC sequenceToColor( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&,
-                                             const ::com::sun::star::uno::Sequence< double >&                                );
+        Color VCL_DLLPUBLIC stdColorSpaceSequenceToColor(
+            const ::com::sun::star::uno::Sequence< double >& rColor );
 
-        /** Convert from XGraphicDevice color space to VCL/Tools Color.
+        /** Convert color to device color sequence
 
-            If the XGraphicDevice interface reference is invalid, no
-            color space transformation is performed, but the values
-            are taken as BGRA (for four elements) or BGR tuples (for
-            three elements)
+            @param rColor
+            Color sequence to convert from
+
+            @param xColorSpace
+            Color space to convert from
          */
-        Color VCL_DLLPUBLIC sequenceToColor( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&,
-                                             const ::com::sun::star::uno::Sequence< sal_Int8 >&                                     );
+        Color VCL_DLLPUBLIC doubleSequenceToColor( const ::com::sun::star::uno::Sequence< double >   rColor,
+                                                   const ::com::sun::star::uno::Reference<
+                                                         ::com::sun::star::rendering::XColorSpace >& xColorSpace );
 
         /// Convert [0,1] double value to [0,255] int
         inline sal_Int8 toByteColor( double val )
@@ -200,6 +207,10 @@ namespace vcl
         {
             return val / 255.0;
         }
+
+        /// Create a standard color space suitable for VCL RGB color
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::rendering::XColorSpace> VCL_DLLPUBLIC createStandardColorSpace();
 
         // Geometry conversions (vcl/tools <-> x)
         // ===================================================================
@@ -239,7 +250,6 @@ namespace vcl
         basegfx::B2IVector          VCL_DLLPUBLIC b2ISizeFromSize( const Size& );
         basegfx::B2IPoint           VCL_DLLPUBLIC b2IPointFromPoint( const Point& );
         basegfx::B2IRange           VCL_DLLPUBLIC b2IRectangleFromRectangle( const Rectangle& );
-
     }
 }
 
