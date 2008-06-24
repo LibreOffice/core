@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: image.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,12 +31,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_canvas.hxx"
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/rendering/RepaintResult.hpp>
+#include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <canvas/canvastools.hxx>
 #include <canvas/parametricpolypolygon.hxx>
-#include <canvas/debug.hxx>
+
+#include <com/sun/star/rendering/RepaintResult.hpp>
+#include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 
 #include <vcl/canvastools.hxx>
 #include <vcl/bitmapex.hxx>
@@ -221,7 +223,7 @@ namespace canvas { namespace
         if( viewState.Clip.is() )
         {
             ::basegfx::B2DPolyPolygon aViewClip(
-                tools::polyPolygonFromXPolyPolygon2D( viewState.Clip ) );
+                ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D( viewState.Clip ));
 
             if(aViewClip.areControlPointsUsed())
                 aViewClip = ::basegfx::tools::adaptiveSubdivideByAngle(aViewClip);
@@ -232,7 +234,7 @@ namespace canvas { namespace
         if( renderState.Clip.is() )
         {
             ::basegfx::B2DPolyPolygon aRenderClip(
-                tools::polyPolygonFromXPolyPolygon2D( viewState.Clip ) );
+                ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D( viewState.Clip ) );
 
             if(aRenderClip.areControlPointsUsed())
                 aRenderClip = ::basegfx::tools::adaptiveSubdivideByAngle(aRenderClip);
@@ -401,7 +403,7 @@ namespace canvas { namespace
         const sal_Int32 nWidth( rBmpData.mnWidth );
         const sal_Int32 nHeight( rBmpData.mnHeight );
 
-        ENSURE_AND_THROW( pReadAccess.get() != NULL,
+        ENSURE_OR_THROW( pReadAccess.get() != NULL,
                           "vclBitmapEx2Raw(): "
                           "Unable to acquire read acces to bitmap" );
 
@@ -431,11 +433,11 @@ namespace canvas { namespace
                 // WinSalBitmap::AcquireBuffer() sets up the
                 // buffer
 
-                ENSURE_AND_THROW( pAlphaReadAccess.get() != NULL,
+                ENSURE_OR_THROW( pAlphaReadAccess.get() != NULL,
                                   "vclBitmapEx2Raw(): "
                                   "Unable to acquire read acces to alpha" );
 
-                ENSURE_AND_THROW( pAlphaReadAccess->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL ||
+                ENSURE_OR_THROW( pAlphaReadAccess->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL ||
                                   pAlphaReadAccess->GetScanlineFormat() == BMP_FORMAT_8BIT_TC_MASK,
                                   "vclBitmapEx2Raw(): "
                                   "Unsupported alpha scanline format" );
@@ -542,7 +544,7 @@ namespace canvas { namespace
                         case BMP_FORMAT_32BIT_TC_RGBA:
                             // FALLTHROUGH intended
                         default:
-                            ENSURE_AND_THROW( false,
+                            ENSURE_OR_THROW( false,
                                               "vclBitmapEx2Raw(): "
                                               "Unexpected scanline format - has "
                                               "WinSalBitmap::AcquireBuffer() changed?" );
@@ -573,11 +575,11 @@ namespace canvas { namespace
                 // WinSalBitmap::AcquireBuffer() sets up the
                 // buffer
 
-                ENSURE_AND_THROW( pMaskReadAccess.get() != NULL,
+                ENSURE_OR_THROW( pMaskReadAccess.get() != NULL,
                                   "vclBitmapEx2Raw(): "
                                   "Unable to acquire read acces to mask" );
 
-                ENSURE_AND_THROW( pMaskReadAccess->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL,
+                ENSURE_OR_THROW( pMaskReadAccess->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL,
                                   "vclBitmapEx2Raw(): "
                                   "Unsupported mask scanline format" );
 
@@ -697,7 +699,7 @@ namespace canvas { namespace
                         case BMP_FORMAT_32BIT_TC_RGBA:
                             // FALLTHROUGH intended
                         default:
-                            ENSURE_AND_THROW( false,
+                            ENSURE_OR_THROW( false,
                                               "vclBitmapEx2Raw(): "
                                               "Unexpected scanline format - has "
                                               "WinSalBitmap::AcquireBuffer() changed?" );
@@ -1808,24 +1810,16 @@ Image::Image( const uno::Reference< rendering::XBitmap >& xBitmap ) :
         maElapsedTime[i]=0.0;
 #endif
 
-    uno::Reference< lang::XUnoTunnel > xTunnel( xBitmap,
-                                                uno::UNO_QUERY );
-    if( xTunnel.is() )
-    {
-        sal_Int64 nPtr = xTunnel->getSomething(
-            vcl::unotools::getTunnelIdentifier(
-                vcl::unotools::Id_BitmapEx ) );
-        if(nPtr)
-        {
-            BitmapEx& rBmpEx = *reinterpret_cast<BitmapEx*>(nPtr);
-            fromVCLBitmap(rBmpEx);
-            return;
-        }
-    }
+    // TODO(F1): Add support for floating point bitmap formats
+    uno::Reference<rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap,
+                                                              uno::UNO_QUERY_THROW);
+    ::BitmapEx aBmpEx = ::vcl::unotools::bitmapExFromXBitmap(xIntBmp);
+    if( !!aBmpEx )
+        fromVCLBitmap(aBmpEx);
 
     // TODO(F2): Fallback to XIntegerBitmap interface for import
     OSL_ENSURE(false,
-               "Image::Image(): fallback to XBitmap interface import NYI!" );
+               "Image::Image(): Cannot retrieve bitmap data!" );
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -2042,7 +2036,7 @@ ImageCachedPrimitiveSharedPtr Image::drawPolyPolygon(
     if( !xPolyPolygon.is() )
         return ImageCachedPrimitiveSharedPtr();
 
-    drawLinePolyPolygon( tools::polyPolygonFromXPolyPolygon2D( xPolyPolygon ),
+    drawLinePolyPolygon( ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D( xPolyPolygon ),
                          1.0,
                          viewState,
                          renderState );
@@ -2064,7 +2058,7 @@ ImageCachedPrimitiveSharedPtr Image::strokePolyPolygon(
     if( !xPolyPolygon.is() )
         return ImageCachedPrimitiveSharedPtr();
 
-    drawLinePolyPolygon( tools::polyPolygonFromXPolyPolygon2D( xPolyPolygon ),
+    drawLinePolyPolygon( ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D( xPolyPolygon ),
                          strokeAttributes.StrokeWidth,
                          viewState,
                          renderState );
@@ -2224,7 +2218,7 @@ ImageCachedPrimitiveSharedPtr Image::fillPolyPolygon(
         return ImageCachedPrimitiveSharedPtr();
 
     ::basegfx::B2DPolyPolygon aPoly(
-        tools::polyPolygonFromXPolyPolygon2D( xPolyPolygon ) );
+        ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D( xPolyPolygon ) );
 
     switch(maDesc.eFormat)
     {
@@ -2259,7 +2253,7 @@ ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygon(
         return ImageCachedPrimitiveSharedPtr();
 
     ::basegfx::B2DPolyPolygon aPoly(
-        tools::polyPolygonFromXPolyPolygon2D( xPolyPolygon ) );
+        ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D( xPolyPolygon ) );
     ARGB aFillColor;
 
     setupPolyPolygon( aPoly, true, aFillColor, viewState, renderState );
@@ -2294,11 +2288,12 @@ ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygon(
             const ParametricPolyPolygon::Values& rValues(
                 pGradient->getValues() );
 
+            // TODO: use all the colors and place them on given positions/stops
             // TODO(E1): Return value
             // TODO(F1): FillRule
             fillGradient( rValues,
-                          rValues.maColor1,
-                          rValues.maColor2,
+                          rValues.maColors [0],
+                          rValues.maColors [rValues.maColors.getLength () - 1],
                           aPoly,
                           aTextureTransform,
                           textures[0] );
