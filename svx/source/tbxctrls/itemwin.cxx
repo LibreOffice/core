@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: itemwin.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,6 @@
 
 #include "linectrl.hrc"
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
@@ -149,11 +148,11 @@ void SvxLineBox::Select()
 
                     Any a;
                     Sequence< PropertyValue > aArgs( 1 );
-                    aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "LineDash" ));
+                    aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LineDash" ));
                     aLineDashItem.QueryValue ( a );
                     aArgs[0].Value = a;
                     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                                 OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineDash" )),
+                                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineDash" )),
                                                  aArgs );
 //                    pDisp->Execute( SID_ATTR_LINE_DASH, SFX_CALLMODE_RECORD, &aLineDashItem, 0L );
                 }
@@ -164,11 +163,11 @@ void SvxLineBox::Select()
         XLineStyleItem aLineStyleItem( eXLS );
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "XLineStyle" ));
+        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XLineStyle" ));
         aLineStyleItem.QueryValue ( a );
         aArgs[0].Value = a;
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                     OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:XLineStyle" )),
+                                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:XLineStyle" )),
                                      aArgs );
 //      pDisp->Execute( SID_ATTR_LINE_STYLE, SFX_CALLMODE_RECORD, &aLineStyleItem, 0L );
 
@@ -318,7 +317,7 @@ void SvxLineBox::FillControl()
 
 SvxColorBox::SvxColorBox(
     Window* pParent,
-    const OUString& rCommand,
+    const ::rtl::OUString& rCommand,
     const Reference< XFrame >& rFrame,
     WinBits nBits ) :
     ColorLB( pParent, nBits ),
@@ -547,11 +546,11 @@ void SvxMetricField::Modify()
 
     Any a;
     Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "LineWidth" ));
+    aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LineWidth" ));
     aLineWidthItem.QueryValue( a );
     aArgs[0].Value = a;
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineWidth" )),
+                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineWidth" )),
                                  aArgs );
 //  rBindings.GetDispatcher()->Execute( SID_ATTR_LINE_WIDTH, SFX_CALLMODE_RECORD, &aLineWidthItem, 0L );
 }
@@ -846,4 +845,3 @@ void SvxFillAttrBox::ReleaseFocus_Impl()
             pShellWnd->GrabFocus();
     }
 }
-
