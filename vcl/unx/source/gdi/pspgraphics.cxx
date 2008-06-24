@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pspgraphics.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,7 @@
 #include <vcl/outfont.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/salprn.hxx>
+#include <vcl/sysdata.hxx>
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -1498,6 +1499,15 @@ bool PspGraphics::drawAlphaBitmap( const SalTwoRect&,
 bool PspGraphics::drawAlphaRect( long, long, long, long, sal_uInt8 )
 {
     return false;
+}
+
+SystemGraphicsData PspGraphics::GetGraphicsData() const
+{
+    SystemGraphicsData aRes;
+    aRes.nSize = sizeof(aRes);
+        aRes.hDrawable = 0;
+        aRes.pRenderFormat = 0;
+    return aRes;
 }
 
 bool PspGraphics::supportsOperation( OutDevSupportType ) const
