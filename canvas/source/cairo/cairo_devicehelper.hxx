@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_devicehelper.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,25 +41,34 @@
 #include <vcl/bitmap.hxx>
 
 #include "cairo_cairo.hxx"
+#include "cairo_surfaceprovider.hxx"
 
 /* Definition of DeviceHelper class */
 
+struct SystemEnvData;
+class Window;
+
 namespace cairocanvas
 {
-    class SpriteCanvas;
-    class SpriteCanvasHelper;
-
-    const SystemEnvData* GetSysData(Window *pOutputWindow);
+    class Canvas;
+    class CanvasHelper;
 
     class DeviceHelper : private ::boost::noncopyable
     {
     public:
         DeviceHelper();
 
-        void init( Window&              rOutputWindow,
-           SpriteCanvas&                rSpriteCanvas,
-                   const ::basegfx::B2ISize&    rSize,
-                   bool                         bFullscreen );
+        /** init helper
+
+            @param rCanvas
+            Owning canvas.
+
+            @param rRefDevice
+            Reference output device. Needed for resolution
+            calculations etc.
+         */
+        void init( SurfaceProvider& rSurfaceProvider,
+                   OutputDevice&    rRefDevice );
 
         /// Dispose all internal references
         void disposing();
@@ -88,53 +97,50 @@ namespace cairocanvas
         sal_Bool hasFullScreenMode(  );
         sal_Bool enterFullScreenMode( sal_Bool bEnter );
 
-        ::sal_Int32 createBuffers( ::sal_Int32 nBuffers );
-        void        destroyBuffers(  );
-        ::sal_Bool  showBuffer( ::sal_Bool bUpdateAll );
-        ::sal_Bool  switchBuffer( ::sal_Bool bUpdateAll );
-
+        ::com::sun::star::uno::Any isAccelerated() const;
         ::com::sun::star::uno::Any getDeviceHandle() const;
         ::com::sun::star::uno::Any getSurfaceHandle() const;
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::rendering::XColorSpace > getColorSpace() const;
 
-    /** called when DumpScreenContent property is enabled on
+        /** called when DumpScreenContent property is enabled on
             XGraphicDevice, and writes out bitmaps of current screen.
          */
         void dumpScreenContent() const;
 
-        void notifySizeUpdate( const ::com::sun::star::awt::Rectangle& rBounds );
-    void setSize( const ::basegfx::B2ISize& rSize );
+        OutputDevice* getOutputDevice() const { return mpRefDevice; }
+        const void* getSysData() { return mpSysData; }
+        ::cairo::SurfaceSharedPtr getSurface();
+        ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, ::cairo::Content aContent = CAIRO_CONTENT_COLOR_ALPHA );
+        ::cairo::SurfaceSharedPtr createSurface( BitmapSystemData& rData, const Size& rSize );
 
-    ::cairo::Surface* getBufferSurface();
-    ::cairo::Surface* getWindowSurface();
-    ::cairo::Surface* getSurface( const ::basegfx::B2ISize& rSize, ::cairo::Content aContent = CAIRO_CONTENT_COLOR_ALPHA );
-    ::cairo::Surface* getSurface( ::cairo::Content aContent = CAIRO_CONTENT_COLOR_ALPHA );
-    ::cairo::Surface* getSurface( BitmapSystemData& rData, const Size& rSize );
-    const ::basegfx::B2ISize& getSizePixel();
-    void flush();
+    protected:
+        /** init helper
 
-        Window* getOuputWindow()
-        {
-            return mpOutputWindow;
-        }
+            @param rCanvas
+            Owning canvas.
+
+            @param rRefDevice
+            Reference output device. Needed for resolution
+            calculations etc.
+         */
+        void implInit( SurfaceProvider& rSurfaceProvider,
+                       OutputDevice&    rRefDevice );
+        void setSize( const ::basegfx::B2ISize& rSize );
 
     private:
-        /// Pointer to sprite canvas (owner of this helper), needed to create bitmaps
-        SpriteCanvas*           mpSpriteCanvas;
-        ::basegfx::B2ISize      maSize;
-        bool                    mbFullScreen;
+        /** Surface provider
 
-        // TODO(Q3): Lifetime issue. Cannot control pointer validity
-        // over object lifetime, since we're a UNO component. Now that
-        // we've changed the ::Window canvas reference to a weak ref,
-        // might be okay to hold a uno::Reference to the VCL window
-        // here.
-        Window* mpOutputWindow;
+            Deliberately not a refcounted reference, because of
+            potential circular references for canvas. Provides us with
+            our output surface and associated functionality.
+         */
+        SurfaceProvider*          mpSurfaceProvider;
 
-        const SystemEnvData* mpSysData;
-        ::cairo::Surface* mpWindowSurface;
-        ::cairo::Surface* mpBufferSurface;
-    ::cairo::Cairo*   mpBufferCairo;
+        OutputDevice*             mpRefDevice;
+        const void*               mpSysData;
+        ::cairo::SurfaceSharedPtr mpSurface;
     };
 }
 
-#endif /* _CAIROCANVAS_WINDOWGRAPHICDEVICE_HXX */
+#endif
