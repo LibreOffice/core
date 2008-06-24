@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: canvascustomsprite.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
 #include <rtl/math.hxx>
@@ -61,14 +62,15 @@ using namespace ::com::sun::star;
 namespace vclcanvas
 {
 
-    CanvasCustomSprite::CanvasCustomSprite( const geometry::RealSize2D& rSpriteSize,
-                                            const SpriteCanvasRef&      rSpriteCanvas,
-                                            bool                        bShowSpriteBounds ) :
-        mpSpriteCanvas( rSpriteCanvas )
+    CanvasCustomSprite::CanvasCustomSprite( const geometry::RealSize2D&               rSpriteSize,
+                                            rendering::XGraphicDevice&                rDevice,
+                                            const ::canvas::SpriteSurface::Reference& rOwningSpriteCanvas,
+                                            const OutDevProviderSharedPtr&            rOutDevProvider,
+                                            bool                                      bShowSpriteBounds )
     {
-        ENSURE_AND_THROW( rSpriteCanvas.get() &&
-                          rSpriteCanvas->getOutDev(),
-                          "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
+        ENSURE_OR_THROW( rOwningSpriteCanvas.get() &&
+                         rOutDevProvider,
+                         "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
 
         // setup back buffer
         // -----------------
@@ -82,11 +84,11 @@ namespace vclcanvas
                                                 ceil( rSpriteSize.Height ))) );
 
         // create content backbuffer in screen depth
-        BackBufferSharedPtr pBackBuffer( new BackBuffer( *rSpriteCanvas->getOutDev() ) );
+        BackBufferSharedPtr pBackBuffer( new BackBuffer( rOutDevProvider->getOutDev() ) );
         pBackBuffer->setSize( aSize );
 
         // create mask backbuffer, with one bit color depth
-        BackBufferSharedPtr pBackBufferMask( new BackBuffer( *rSpriteCanvas->getOutDev(),
+        BackBufferSharedPtr pBackBufferMask( new BackBuffer( rOutDevProvider->getOutDev(),
                                                              true ) );
         pBackBufferMask->setSize( aSize );
 
@@ -94,13 +96,13 @@ namespace vclcanvas
         // antialiasing again, then)
 
         // disable font antialiasing (causes ugly shadows otherwise)
-        pBackBuffer->getVirDev().SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
-        pBackBufferMask->getVirDev().SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
+        pBackBuffer->getOutDev().SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
+        pBackBufferMask->getOutDev().SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
 
         // set mask vdev drawmode, such that everything is painted
         // black. That leaves us with a binary image, white for
         // background, black for painted content
-        pBackBufferMask->getVirDev().SetDrawMode( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_BLACKTEXT |
+        pBackBufferMask->getOutDev().SetDrawMode( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_BLACKTEXT |
                                                   DRAWMODE_BLACKGRADIENT | DRAWMODE_BLACKBITMAP );
 
 
@@ -109,7 +111,7 @@ namespace vclcanvas
 
         // always render into back buffer, don't preserve state (it's
         // our private VDev, after all), have notion of alpha
-        maCanvasHelper.init( *rSpriteCanvas.get(),
+        maCanvasHelper.init( rDevice,
                              pBackBuffer,
                              false,
                              true );
@@ -120,7 +122,7 @@ namespace vclcanvas
         // -------------------
 
         maSpriteHelper.init( rSpriteSize,
-                             rSpriteCanvas,
+                             rOwningSpriteCanvas,
                              pBackBuffer,
                              pBackBufferMask,
                              bShowSpriteBounds );
@@ -132,8 +134,6 @@ namespace vclcanvas
     void SAL_CALL CanvasCustomSprite::disposing()
     {
         tools::LocalGuard aGuard;
-
-        mpSpriteCanvas.clear();
 
         // forward to parent
         CanvasCustomSpriteBaseT::disposing();
