@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hangulhanja.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +62,6 @@ namespace svx
 {
 //.............................................................................
 
-    using namespace ::rtl;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::i18n;
     using namespace ::com::sun::star::i18n::TextConversionOption;
@@ -102,8 +101,8 @@ namespace svx
     class HangulHanjaConversion_Impl
     {
     private:
-        typedef ::std::set< OUString, ::std::less< OUString > >                 StringBag;
-        typedef ::std::map< OUString, OUString, ::std::less< OUString > >   StringMap;
+        typedef ::std::set< ::rtl::OUString, ::std::less< ::rtl::OUString > >                   StringBag;
+        typedef ::std::map< ::rtl::OUString, ::rtl::OUString, ::std::less< ::rtl::OUString > >  StringMap;
 
     private:
         StringBag               m_sIgnoreList;
@@ -148,14 +147,14 @@ namespace svx
         bool                    m_bAutoReplaceUnique;
 
         // state
-        OUString                m_sCurrentPortion;      // the text which we are currently working on
+        ::rtl::OUString                m_sCurrentPortion;      // the text which we are currently working on
         LanguageType            m_nCurrentPortionLang;  // language of m_sCurrentPortion found
         sal_Int32               m_nCurrentStartIndex;   // the start index within m_sCurrentPortion of the current convertible portion
         sal_Int32               m_nCurrentEndIndex;     // the end index (excluding) within m_sCurrentPortion of the current convertible portion
         sal_Int32               m_nReplacementBaseIndex;// index which ReplaceUnit-calls need to be relative to
         sal_Int32               m_nCurrentConversionOption;
         sal_Int16               m_nCurrentConversionType;
-        Sequence< OUString >
+        Sequence< ::rtl::OUString >
                                 m_aCurrentSuggestions;  // the suggestions for the current unit
                                                         // (means for the text [m_nCurrentStartIndex, m_nCurrentEndIndex) in m_sCurrentPortion)
         sal_Bool                m_bTryBothDirections;   // specifies if other conversion directions should be tried when looking for convertible characters
@@ -219,7 +218,7 @@ namespace svx
         void    implProceed( bool _bRepeatCurrentUnit );
 
         // change the current convertible, and do _not_ proceed
-        void    implChange( const OUString& _rChangeInto );
+        void    implChange( const ::rtl::OUString& _rChangeInto );
 
         /** find the next convertible piece of text, with possibly advancing to the next portion
 
@@ -329,7 +328,7 @@ namespace svx
 
         if ( m_xORB.is() )
         {
-            OUString sTextConversionService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.TextConversion" ) );
+            ::rtl::OUString sTextConversionService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.TextConversion" ) );
             m_xConverter = m_xConverter.query( m_xORB->createInstance( sTextConversionService ) );
             if ( !m_xConverter.is() )
                 ShowServiceNotAvailableError( m_pUIParent, sTextConversionService, sal_True );
@@ -535,7 +534,7 @@ namespace svx
     {
         sal_Bool bAllowImplicitChanges = m_eConvType == HHC::eConvSimplifiedTraditional;
 
-        m_sCurrentPortion = OUString();
+        m_sCurrentPortion = ::rtl::OUString();
         m_nCurrentPortionLang = LANGUAGE_NONE;
         m_pAntiImpl->GetNextPortion( m_sCurrentPortion, m_nCurrentPortionLang, bAllowImplicitChanges );
         m_nReplacementBaseIndex = 0;
@@ -672,8 +671,8 @@ namespace svx
             try
             {
                 // get the break iterator service
-                OUString sBreakIteratorService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.BreakIterator" ) );
-                Reference< XInterface > xBI( m_xORB->createInstance( OUString( sBreakIteratorService ) ) );
+                ::rtl::OUString sBreakIteratorService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.BreakIterator" ) );
+                Reference< XInterface > xBI( m_xORB->createInstance( ::rtl::OUString( sBreakIteratorService ) ) );
                 Reference< XBreakIterator > xBreakIter( xBI, UNO_QUERY );
                 if ( !xBreakIter.is() )
                 {
@@ -789,7 +788,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    void HangulHanjaConversion_Impl::implChange( const OUString& _rChangeInto )
+    void HangulHanjaConversion_Impl::implChange( const ::rtl::OUString& _rChangeInto )
     {
         if( !_rChangeInto.getLength() )
             return;
@@ -855,7 +854,7 @@ namespace svx
         {
             try
             {
-                OUString aConvText = xExtConverter->getConversionWithOffset(
+                ::rtl::OUString aConvText = xExtConverter->getConversionWithOffset(
                     m_sCurrentPortion,
                     m_nCurrentStartIndex,
                     m_nCurrentEndIndex - m_nCurrentStartIndex,
@@ -965,8 +964,8 @@ namespace svx
         DBG_ASSERT( m_pConversionDialog, "HangulHanjaConversion_Impl::OnChangeAll: no dialog! How this?" );
         if ( m_pConversionDialog )
         {
-            OUString sCurrentUnit( m_pConversionDialog->GetCurrentString() );
-            OUString sChangeInto( m_pConversionDialog->GetCurrentSuggestion( ) );
+            ::rtl::OUString sCurrentUnit( m_pConversionDialog->GetCurrentString() );
+            ::rtl::OUString sChangeInto( m_pConversionDialog->GetCurrentSuggestion( ) );
 
             if( sChangeInto.getLength() )
             {
@@ -1011,8 +1010,8 @@ namespace svx
         {
             try
             {
-                OUString sNewOriginal( m_pConversionDialog->GetCurrentSuggestion( ) );
-                Sequence< OUString > aSuggestions;
+                ::rtl::OUString sNewOriginal( m_pConversionDialog->GetCurrentSuggestion( ) );
+                Sequence< ::rtl::OUString > aSuggestions;
 
                 DBG_ASSERT( m_xConverter.is(), "HangulHanjaConversion_Impl::OnFind: no converter!" );
                 TextConversionResult aToHanja = m_xConverter->getConversions(
@@ -1137,7 +1136,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    void HangulHanjaConversion::GetNextPortion( OUString&, LanguageType&, sal_Bool )
+    void HangulHanjaConversion::GetNextPortion( ::rtl::OUString&, LanguageType&, sal_Bool )
     {
         DBG_ERROR( "HangulHanjaConversion::GetNextPortion: to be overridden!" );
     }
@@ -1146,7 +1145,7 @@ namespace svx
     void HangulHanjaConversion::ReplaceUnit(
             const sal_Int32, const sal_Int32,
             const ::rtl::OUString&,
-            const OUString&,
+            const ::rtl::OUString&,
             const ::com::sun::star::uno::Sequence< sal_Int32 > &,
             ReplacementAction,
             LanguageType * )
@@ -1171,3 +1170,4 @@ namespace svx
 //.............................................................................
 }   // namespace svx
 //.............................................................................
+
