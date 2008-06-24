@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OGLTrans_TransitionerImpl.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,8 @@
 #include "OGLTrans_TransitionImpl.hxx"
 
 #include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
-#include <com/sun/star/rendering/IntegerBitmapFormat.hpp>
+#include <com/sun/star/rendering/ColorComponentTag.hpp>
+#include <com/sun/star/rendering/ColorSpaceType.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/presentation/XTransitionFactory.hpp>
@@ -58,11 +59,20 @@
 
 #include <GL/gl.h>
 #include <GL/glu.h>
+
+
+#if defined( WNT )
+    #define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
+    #define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
+#elif defined( OS2 )
+#elif defined( QUARTZ )
+#elif defined( UNX )
 namespace unx
 {
 #include <X11/keysym.h>
 #include <GL/glx.h>
 }
+#endif
 
 using namespace ::com::sun::star;
 
@@ -83,7 +93,7 @@ public:
     void setSlides( const uno::Reference< rendering::XBitmap >& xLeavingSlide , const uno::Reference< rendering::XBitmap >& xEnteringSlide );
 
     // XTransition
-    virtual SAL_CALL void update( double nTime ) throw (uno::RuntimeException);
+    virtual void SAL_CALL update( double nTime ) throw (uno::RuntimeException);
 
 protected:
     // WeakComponentImplHelperBase
@@ -99,13 +109,22 @@ private:
     */
     void GLInitSlides();
 
+
     /// Holds the information of our new child window
     struct GLWindow
     {
-        unx::Display*           dpy;
-        int                     screen;
-        unx::Window             win;
-        unx::GLXContext         ctx;
+#if defined( WNT )
+            HWND                    hWnd;
+            HDC                     hDC;
+            HGLRC                   hRC;
+#elif defined( OS2 )
+#elif defined( QUARTZ )
+#elif defined( UNX )
+            unx::Display*           dpy;
+            int                     screen;
+            unx::Window             win;
+            unx::GLXContext         ctx;
+#endif
         unsigned int            bpp;
         unsigned int            Width;
         unsigned int            Height;
@@ -124,11 +143,11 @@ private:
 
     /** raw bytes of the entering bitmap
     */
-    uno::Sequence<signed char> EnteringBytes;
+    uno::Sequence<sal_Int8> EnteringBytes;
 
     /** raw bytes of the leaving bitmap
     */
-    uno::Sequence<signed char> LeavingBytes;
+    uno::Sequence<sal_Int8> LeavingBytes;
 
     /** the form the raw bytes are in for the bitmaps
     */
@@ -163,6 +182,9 @@ void OGLTransitionerImpl::initWindowFromSlideShowView( const uno::Reference< pre
     GLWin.Height = pPWindow->GetSizePixel().Height();
 
     const SystemEnvData* sysData(pPWindow->GetSystemData());
+#if defined( WNT )
+    GLWin.hWnd = sysData->hWnd;
+#elif defined( UNX )
     GLWin.dpy = reinterpret_cast<unx::Display*>(sysData->pDisplay);
     GLWin.win = sysData->aWindow;
     GLWin.screen = unx::XDefaultScreen(GLWin.dpy);
@@ -244,12 +266,18 @@ void OGLTransitionerImpl::initWindowFromSlideShowView( const uno::Reference< pre
         }
         ++pAttributeTable;
     }
+#endif
+
+#if defined( WNT )
+            const SystemEnvData* pChildSysData = NULL;
+            SystemWindowData winData;
+            winData.nSize = sizeof(winData);
+            pWindow=new SystemChildWindow(pPWindow, 0, &winData, FALSE);
+            pChildSysData = pWindow->GetSystemData();
+#endif
 
     if( pWindow )
     {
-        OSL_TRACE("OGLTrans: using VisualID %08X\n",
-                  vi->visualid);
-
         pWindow->SetMouseTransparent( TRUE );
         pWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
         pWindow->EnableEraseBackground( FALSE );
@@ -258,21 +286,61 @@ void OGLTransitionerImpl::initWindowFromSlideShowView( const uno::Reference< pre
         pWindow->EnablePaint(FALSE);
         pWindow->SetPosSizePixel(pPWindow->GetPosPixel(),pPWindow->GetSizePixel());
 
+#if defined( WNT )
+        GLWin.hWnd = sysData->hWnd;
+#elif defined( UNX )
         GLWin.dpy = reinterpret_cast<unx::Display*>(pChildSysData->pDisplay);
         GLWin.win = pChildSysData->aWindow;
+#endif
     }
 
+#if defined( WNT )
+        GLWin.hDC = GetDC(GLWin.hWnd);
+#elif defined( UNX )
     GLWin.ctx = glXCreateContext(GLWin.dpy,
                                  vi,
                                  0,
                                  GL_TRUE);
+#endif
 
+#if defined( WNT )
+    PIXELFORMATDESCRIPTOR PixelFormatFront =                    // PixelFormat Tells Windows How We Want Things To Be
+    {
+        sizeof(PIXELFORMATDESCRIPTOR),
+        1,                              // Version Number
+        PFD_DRAW_TO_WINDOW |
+        PFD_SUPPORT_OPENGL |
+        PFD_DOUBLEBUFFER,
+        PFD_TYPE_RGBA,                  // Request An RGBA Format
+        (BYTE)32,                       // Select Our Color Depth
+        0, 0, 0, 0, 0, 0,               // Color Bits Ignored
+        0,                              // No Alpha Buffer
+        0,                              // Shift Bit Ignored
+        0,                              // No Accumulation Buffer
+        0, 0, 0, 0,                     // Accumulation Bits Ignored
+        64,                             // 32 bit Z-BUFFER
+        0,                              // 0 bit stencil buffer
+        0,                              // No Auxiliary Buffer
+        0,                              // now ignored
+        0,                              // Reserved
+        0, 0, 0                         // Layer Masks Ignored
+    };
+    int WindowPix = ChoosePixelFormat(GLWin.hDC,&PixelFormatFront);
+    SetPixelFormat(GLWin.hDC,WindowPix,&PixelFormatFront);
+    GLWin.hRC  = wglCreateContext(GLWin.hDC);
+    wglMakeCurrent(GLWin.hDC,GLWin.hRC);
+#elif defined( UNX )
     glXMakeCurrent( GLWin.dpy, GLWin.win, GLWin.ctx );
+#endif
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glClearColor (0, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT);
+#if defined( WNT )
+    SwapBuffers(GLWin.hDC);
+#elif defined( UNX )
     unx::glXSwapBuffers(GLWin.dpy, GLWin.win);
+#endif
 
     glEnable(GL_LIGHTING);
     GLfloat light_direction[] = { 0.0 , 0.0 , 1.0 };
@@ -310,13 +378,54 @@ void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >&
     LeavingBytes = LeavingSlideIntBitmap->getData(SlideBitmapLayout,SlideRect);
     EnteringBytes = EnteringSlideIntBitmap->getData(SlideBitmapLayout,SlideRect);
 
-
-    if(GLWin.ctx)//if we have a rendering context, let's init the slides
+// TODO    if(GLWin.ctx)//if we have a rendering context, let's init the slides
         GLInitSlides();
 
-    OSL_ENSURE(SlideBitmapLayout.Endianness == 0,"only handle little endian now");
     OSL_ENSURE(SlideBitmapLayout.PlaneStride == 0,"only handle no plane stride now");
 }
+
+namespace
+{
+    struct OGLFormat
+    {
+        GLint  nInternalFormat;
+        GLenum eFormat;
+        GLenum eType;
+    };
+
+    /* channel ordering: (0:rgba, 1:bgra, 2:argb, 3:abgr)
+    */
+    int calcComponentOrderIndex(const uno::Sequence<sal_Int8>& rTags)
+    {
+        using namespace rendering::ColorComponentTag;
+
+        static const sal_Int8 aOrderTable[] =
+        {
+            RGB_RED, RGB_GREEN, RGB_BLUE, ALPHA,
+            RGB_BLUE, RGB_GREEN, RGB_RED, ALPHA,
+            ALPHA, RGB_RED, RGB_GREEN, RGB_BLUE,
+            ALPHA, RGB_BLUE, RGB_GREEN, RGB_RED,
+        };
+
+        const sal_Int32 nNumComps(rTags.getLength());
+        const sal_Int8* pLine=aOrderTable;
+        for(int i=0; i<4; ++i)
+        {
+            int j=0;
+            while( j<4 && j<nNumComps && pLine[j] == rTags[j] )
+                ++j;
+
+            // all of the line passed, this is a match!
+            if( j==nNumComps )
+                return i;
+
+            pLine+=4;
+        }
+
+        return -1;
+    }
+}
+
 
 void OGLTransitionerImpl::GLInitSlides()
 {
@@ -349,70 +458,149 @@ void OGLTransitionerImpl::GLInitSlides()
     glLoadIdentity();
     glTranslated(0,0,-EyePos);
 
-    GLint internalFormat;
-    GLint Format;
-    switch( SlideBitmapLayout.NumComponents )
-    {
-    case 3:
-        Format = GL_RGB;
-        break;
-    case 4:
-        Format = GL_RGBA;
-        break;
-    default:
-        OSL_ENSURE(false, "unsupported number of color components");
-        Format = GL_RGB;
-    }
+    const OGLFormat* pDetectedFormat=NULL;
+    uno::Reference<rendering::XIntegerBitmapColorSpace> xIntColorSpace(
+        SlideBitmapLayout.ColorSpace);
 
-    switch( SlideBitmapLayout.Format )
+    if( (xIntColorSpace->getType() == rendering::ColorSpaceType::RGB ||
+         xIntColorSpace->getType() == rendering::ColorSpaceType::SRGB) )
     {
-    case rendering::IntegerBitmapFormat::CHUNKY_16BIT:
-        switch( Format)
+        /* table for canvas->OGL format mapping. outer index is number
+           of color components (0:3, 1:4), then comes bits per pixel
+           (0:16, 1:24, 2:32), then channel ordering: (0:rgba, 1:bgra,
+           2:argb, 3:abgr)
+         */
+        static const OGLFormat lcl_RGB24[] =
         {
-        case GL_RGBA:
-            internalFormat = GL_RGBA4;
-            break;
-        default:
-        OSL_ENSURE(false, "unsupported bitmap integer format");
-        internalFormat = GL_RGBA;
-        }
-        break;
-    case rendering::IntegerBitmapFormat::CHUNKY_24BIT:
-        switch( Format)
+            // 24 bit RGB
+            {3, GL_RGB, GL_UNSIGNED_BYTE},
+//            {3, GL_BGR, GL_UNSIGNED_BYTE},
+            {3, GL_RGB, GL_UNSIGNED_BYTE},
+ //           {3, GL_BGR, GL_UNSIGNED_BYTE}
+        };
+
+#if defined(GL_VERSION_1_2) && defined(GLU_VERSION_1_3)
+        // more format constants available
+        static const OGLFormat lcl_RGB16[] =
         {
-        case GL_RGB:
-            internalFormat = GL_RGB8;
-            Format = GL_BGR;//24 bit bitmaps are BGR, not RGB
-            break;
-        default:
-            OSL_ENSURE(false, "unsupported bitmap integer format");
-            internalFormat = GL_RGB;
-            Format = GL_BGR;//24 bit bitmaps are BGR, not RGB
-        }
-        break;
-    case rendering::IntegerBitmapFormat::CHUNKY_32BIT:
-        switch( Format)
+            // 16 bit RGB
+            {3, GL_RGB, GL_UNSIGNED_SHORT_5_6_5},
+            {3, GL_RGB, GL_UNSIGNED_SHORT_5_6_5_REV},
+            {3, GL_RGB, GL_UNSIGNED_SHORT_5_6_5},
+            {3, GL_RGB, GL_UNSIGNED_SHORT_5_6_5_REV}
+        };
+
+        static const OGLFormat lcl_ARGB16_4[] =
         {
-        case GL_RGBA:
-            Format = GL_BGRA;//32 bit bitmaps are BGRA, not RGBA
-            internalFormat = GL_RGBA8;
-            break;
-        default:
-        OSL_ENSURE(false, "unsupported bitmap integer format");
-        internalFormat = GL_RGBA;
-        Format = GL_BGRA;//32 bit bitmaps are BGRA, not RGBA
+            // 16 bit ARGB
+            {4, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4},
+//            {4, GL_BGRA, GL_UNSIGNED_SHORT_4_4_4_4},
+ //           {4, GL_BGRA, GL_UNSIGNED_SHORT_4_4_4_4_REV},
+            {4, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4_REV}
+        };
+
+        static const OGLFormat lcl_ARGB16_5[] =
+        {
+            // 16 bit ARGB
+            {4, GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1},
+ //           {4, GL_BGRA, GL_UNSIGNED_SHORT_5_5_5_1},
+  //          {4, GL_BGRA, GL_UNSIGNED_SHORT_1_5_5_5_REV},
+            {4, GL_RGBA, GL_UNSIGNED_SHORT_1_5_5_5_REV}
+        };
+
+        static const OGLFormat lcl_ARGB32[] =
+        {
+            // 32 bit ARGB
+            {4, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8},
+//            {4, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8},
+  //          {4, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV},
+            {4, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV}
+        };
+
+        const uno::Sequence<sal_Int8> aComponentTags(
+            xIntColorSpace->getComponentTags());
+        const uno::Sequence<sal_Int32> aComponentBitcounts(
+            xIntColorSpace->getComponentBitCounts());
+        const sal_Int32 nNumComponents( aComponentBitcounts.getLength() );
+        const sal_Int32 nBitsPerPixel( xIntColorSpace->getBitsPerPixel() );
+
+        // supported component ordering?
+        const int nComponentOrderIndex(
+            calcComponentOrderIndex(aComponentTags));
+        if( nComponentOrderIndex != -1 )
+        {
+            switch( nBitsPerPixel )
+            {
+                case 16:
+                    if( nNumComponents == 3 )
+                    {
+                        pDetectedFormat = &lcl_RGB16[nComponentOrderIndex];
+                    }
+                    else if( nNumComponents == 4 )
+                    {
+                        if( aComponentBitcounts[1] == 4 )
+                        {
+                            pDetectedFormat = &lcl_ARGB16_4[nComponentOrderIndex];
+                        }
+                        else if( aComponentBitcounts[1] == 5 )
+                        {
+                            pDetectedFormat = &lcl_ARGB16_5[nComponentOrderIndex];
+                        }
+                    }
+                    break;
+                case 24:
+                    if( nNumComponents == 3 )
+                    {
+                        pDetectedFormat = &lcl_RGB24[nComponentOrderIndex];
+                    }
+                    break;
+                case 32:
+                    pDetectedFormat = &lcl_ARGB32[nComponentOrderIndex];
+                    break;
+            }
         }
-        break;
-    default:
-        OSL_ENSURE(false, "unsupported bitmap integer format");
-        internalFormat = GL_RGB;
+#else
+        const uno::Sequence<sal_Int8> aComponentTags(
+            xIntColorSpace->getComponentTags());
+        const int nComponentOrderIndex(calcComponentOrderIndex(aComponentTags));
+        if( aComponentTags.getLength() == 3 &&
+            nComponentOrderIndex != -1 &&
+            xIntColorSpace->getBitsPerPixel() == 24 )
+        {
+            pDetectedFormat = &lcl_RGB24[nComponentOrderIndex];
+        }
+#endif
     }
 
     glDeleteTextures(1,&GLleavingSlide);
 
     glGenTextures(1, &GLleavingSlide);
     glBindTexture(GL_TEXTURE_2D, GLleavingSlide);
-    gluBuild2DMipmaps(GL_TEXTURE_2D, internalFormat , SlideSize.Width, SlideSize.Height, Format, GL_UNSIGNED_BYTE, &LeavingBytes[0]);
+    if( !pDetectedFormat )
+    {
+        // force-convert color to ARGB8888 int color space
+        uno::Sequence<sal_Int8> tempBytes(
+            SlideBitmapLayout.ColorSpace->convertToIntegerColorSpace(
+                LeavingBytes,
+                canvas::tools::getStdColorSpace()));
+        gluBuild2DMipmaps(GL_TEXTURE_2D,
+                          4,
+                          SlideSize.Width,
+                          SlideSize.Height,
+                          GL_RGBA,
+                          GL_UNSIGNED_BYTE,
+                          &tempBytes[0]);
+    }
+    else
+    {
+        gluBuild2DMipmaps(GL_TEXTURE_2D,
+                          pDetectedFormat->nInternalFormat,
+                          SlideSize.Width,
+                          SlideSize.Height,
+                          pDetectedFormat->eFormat,
+                          pDetectedFormat->eType,
+                          &LeavingBytes[0]);
+    }
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
@@ -427,7 +615,31 @@ void OGLTransitionerImpl::GLInitSlides()
 
     glGenTextures(1, &GLenteringSlide);
     glBindTexture(GL_TEXTURE_2D, GLenteringSlide);
-    gluBuild2DMipmaps(GL_TEXTURE_2D, internalFormat , SlideSize.Width, SlideSize.Height, Format, GL_UNSIGNED_BYTE, &EnteringBytes[0]);
+    if( !pDetectedFormat )
+    {
+        // force-convert color to ARGB8888 int color space
+        uno::Sequence<sal_Int8> tempBytes(
+            SlideBitmapLayout.ColorSpace->convertToIntegerColorSpace(
+                EnteringBytes,
+                canvas::tools::getStdColorSpace()));
+        gluBuild2DMipmaps(GL_TEXTURE_2D,
+                          4,
+                          SlideSize.Width,
+                          SlideSize.Height,
+                          GL_RGBA,
+                          GL_UNSIGNED_BYTE,
+                          &tempBytes[0]);
+    }
+    else
+    {
+        gluBuild2DMipmaps(GL_TEXTURE_2D,
+                          pDetectedFormat->nInternalFormat,
+                          SlideSize.Width,
+                          SlideSize.Height,
+                          pDetectedFormat->eFormat,
+                          pDetectedFormat->eType,
+                          &EnteringBytes[0]);
+    }
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
@@ -452,7 +664,12 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
                               SlideSize.Width, SlideSize.Height,
                               static_cast<double>(GLWin.Width),
                               static_cast<double>(GLWin.Height) );
+
+#if defined( WNT )
+    SwapBuffers(GLWin.hDC);
+#elif defined( UNX )
     unx::glXSwapBuffers(GLWin.dpy, GLWin.win);
+#endif
     if( pWindow )
         pWindow->Show();
 }
@@ -467,13 +684,25 @@ void OGLTransitionerImpl::disposing()
     if (pTransition)
         pTransition->finish();
 
+
+#if defined( WNT )
+    if (GLWin.hRC)
+    {
+        wglMakeCurrent( GLWin.hDC, 0 );     // kill Device Context
+        wglDeleteContext( GLWin.hRC );      // Kill Render Context
+        ReleaseDC( GLWin.hWnd, GLWin.hDC );// Release Window
+    }
+#elif defined( UNX )
     if(GLWin.ctx)
     {
         OSL_ENSURE( glXMakeCurrent(GLWin.dpy, None, NULL) , "Error releasing glX context" );
         glXDestroyContext(GLWin.dpy, GLWin.ctx);
         GLWin.ctx = NULL;
     }
-    delete pWindow;
+#endif
+    if (pWindow)
+        delete pWindow;
+    if (pTransition)
     delete pTransition;
 }
 
@@ -489,7 +718,11 @@ OGLTransitionerImpl::OGLTransitionerImpl(OGLTransitionImpl* pOGLTransition) :
     SlideSize(),
     pTransition(pOGLTransition)
 {
+#if defined( WNT )
+    GLWin.hWnd = 0;
+#elif defined( UNX )
     GLWin.ctx = 0;
+#endif
 }
 
 typedef cppu::WeakComponentImplHelper1<presentation::XTransitionFactory> OGLTransitionFactoryImplBase;
