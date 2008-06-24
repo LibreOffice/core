@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: parametricpolypolygon.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,14 +75,14 @@ namespace canvas
         struct Values
         {
             Values( const ::basegfx::B2DPolygon&                        rGradientPoly,
-                    const ::com::sun::star::uno::Sequence< double >&    rColor1,
-                    const ::com::sun::star::uno::Sequence< double >&    rColor2,
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& rColors,
+                    const ::com::sun::star::uno::Sequence< double >&    rStops,
                     double                                              nAspectRatio,
                     GradientType                                        eType ) :
                 maGradientPoly( rGradientPoly ),
                 mnAspectRatio( nAspectRatio ),
-                maColor1( rColor1 ),
-                maColor2( rColor2 ),
+                maColors( rColors ),
+                maStops( rStops ),
                 meType( eType )
             {
             }
@@ -93,11 +93,11 @@ namespace canvas
             /// Aspect ratio of gradient, affects scaling of innermost gradient polygon
             const double                                        mnAspectRatio;
 
-            /// First gradient color
-            const ::com::sun::star::uno::Sequence< double >     maColor1;
+            /// Gradient colors
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >      maColors;
 
-            /// Second gradient color
-            const ::com::sun::star::uno::Sequence< double >     maColor2;
+            /// Gradient color stops
+            const ::com::sun::star::uno::Sequence< double >     maStops;
 
             /// Type of gradient to render (as e.g. linear grads are not represented by maGradientPoly)
             const GradientType                                  meType;
@@ -105,21 +105,21 @@ namespace canvas
 
         static ParametricPolyPolygon* createLinearHorizontalGradient( const ::com::sun::star::uno::Reference<
                                                                           ::com::sun::star::rendering::XGraphicDevice >&    rDevice,
-                                                                      const ::com::sun::star::uno::Sequence< double >&  leftColor,
-                                                                      const ::com::sun::star::uno::Sequence< double >&  rightColor );
+                                                                      const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >&   colors,
+                                                                      const ::com::sun::star::uno::Sequence< double >&  stops );
         static ParametricPolyPolygon* createAxialHorizontalGradient( const ::com::sun::star::uno::Reference<
                                                                           ::com::sun::star::rendering::XGraphicDevice >&    rDevice,
-                                                                     const ::com::sun::star::uno::Sequence< double >&   middleColor,
-                                                                     const ::com::sun::star::uno::Sequence< double >&   endColor );
+                                                                      const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >&   colors,
+                                                                      const ::com::sun::star::uno::Sequence< double >&  stops );
         static ParametricPolyPolygon* createEllipticalGradient( const ::com::sun::star::uno::Reference<
-                                                                          ::com::sun::star::rendering::XGraphicDevice >&    rDevice,
-                                                                const ::com::sun::star::uno::Sequence< double >&        centerColor,
-                                                                const ::com::sun::star::uno::Sequence< double >&        endColor,
+                                                                ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
+                                                                const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >&     colors,
+                                                                const ::com::sun::star::uno::Sequence< double >&    stops,
                                                                 const ::com::sun::star::geometry::RealRectangle2D&      boundRect );
         static ParametricPolyPolygon* createRectangularGradient( const ::com::sun::star::uno::Reference<
-                                                                          ::com::sun::star::rendering::XGraphicDevice >&    rDevice,
-                                                                 const ::com::sun::star::uno::Sequence< double >&       centerColor,
-                                                                 const ::com::sun::star::uno::Sequence< double >&       endColor,
+                                                                 ::com::sun::star::rendering::XGraphicDevice >&     rDevice,
+                                                                 const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >&    colors,
+                                                                 const ::com::sun::star::uno::Sequence< double >&   stops,
                                                                  const ::com::sun::star::geometry::RealRectangle2D&     boundRect );
 
         /// Dispose all internal references
@@ -149,20 +149,20 @@ namespace canvas
                                    ::com::sun::star::rendering::XGraphicDevice >&   rDevice,
                                const ::basegfx::B2DPolygon&                     rGradientPoly,
                                GradientType                                     eType,
-                               const ::com::sun::star::uno::Sequence< double >& rColor1,
-                               const ::com::sun::star::uno::Sequence< double >& rColor2 );
+                               const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >&  colors,
+                               const ::com::sun::star::uno::Sequence< double >&     stops );
         ParametricPolyPolygon( const ::com::sun::star::uno::Reference<
                                    ::com::sun::star::rendering::XGraphicDevice >&   rDevice,
                                const ::basegfx::B2DPolygon&                     rGradientPoly,
                                GradientType                                     eType,
-                               const ::com::sun::star::uno::Sequence< double >& rColor1,
-                               const ::com::sun::star::uno::Sequence< double >& rColor2,
+                               const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >&  colors,
+                               const ::com::sun::star::uno::Sequence< double >&     stops,
                                double                                           nAspectRatio );
         ParametricPolyPolygon( const ::com::sun::star::uno::Reference<
                                    ::com::sun::star::rendering::XGraphicDevice >&   rDevice,
                                GradientType                                     eType,
-                               const ::com::sun::star::uno::Sequence< double >& rColor1,
-                               const ::com::sun::star::uno::Sequence< double >& rColor2 );
+                               const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >&  colors,
+                               const ::com::sun::star::uno::Sequence< double >&     stops );
 
         ::com::sun::star::uno::Reference<
             ::com::sun::star::rendering::XGraphicDevice >    mxDevice;
