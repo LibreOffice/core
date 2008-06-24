@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_cachedbitmap.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,11 +45,11 @@ namespace cairocanvas
 
         /** Create an XCachedPrimitive for given GraphicObject
          */
-        CachedBitmap( ::cairo::Surface* pSurface,
-                      const ::com::sun::star::rendering::ViewState& rUsedViewState,
-                      const ::com::sun::star::rendering::RenderState&   rUsedRenderState,
+        CachedBitmap( const ::cairo::SurfaceSharedPtr&                pSurface,
+                      const ::com::sun::star::rendering::ViewState&   rUsedViewState,
+                      const ::com::sun::star::rendering::RenderState& rUsedRenderState,
                       const ::com::sun::star::uno::Reference<
-              ::com::sun::star::rendering::XCanvas >& rTarget   );
+                         ::com::sun::star::rendering::XCanvas >&      rTarget   );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing();
@@ -62,7 +62,7 @@ namespace cairocanvas
                                      bool                                           bSameViewTransform );
 
 
-    ::cairo::Surface* mpSurface;
+    ::cairo::SurfaceSharedPtr mpSurface;
     const ::com::sun::star::rendering::RenderState  maRenderState;
     };
 }
