@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: moduleuicfgsupplier.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +53,6 @@
 
 #include <vcl/svapp.hxx>
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
@@ -146,12 +145,12 @@ void ModuleUIConfigurationManagerSupplier::impl_initStorages()
         rtl::OUString aConfigFileName( RTL_CONSTASCII_USTRINGPARAM( "soffice.cfg/uiconfig.zip" ));
 
         Reference< XPropertySet > xPathSettings( m_xServiceManager->createInstance(
-                                                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.PathSettings" ))),
+                                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.PathSettings" ))),
                                                   UNO_QUERY_THROW );
 
-        Any a = xPathSettings->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "UIConfig" )));
+        Any a = xPathSettings->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UIConfig" )));
         a >>= m_aDefaultConfigURL;
-        a = xPathSettings->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "UserConfig" )));
+        a = xPathSettings->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserConfig" )));
         a >>= m_aUserConfigURL;
 
         // Use only the first entry from "UIConfig"
@@ -176,7 +175,7 @@ void ModuleUIConfigurationManagerSupplier::impl_initStorages()
 
         // Create root storages for user interface configuration data (default and customizable)
         Reference< XSingleServiceFactory > xStorageFactory( m_xServiceManager->createInstance(
-                                                                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.StorageFactory" ))),
+                                                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.StorageFactory" ))),
                                                             UNO_QUERY_THROW );
 
         Sequence< Any > aArgs( 2 );
@@ -191,7 +190,7 @@ void ModuleUIConfigurationManagerSupplier::impl_initStorages()
                                               UNO_QUERY );
 
         Reference< XPackageStructureCreator > xPackageStructCreator( m_xServiceManager->createInstance(
-                                                                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.PackageStructureCreator" ))),
+                                                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.PackageStructureCreator" ))),
                                                                      UNO_QUERY_THROW );
 
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ convertToPackage" );
@@ -235,8 +234,8 @@ ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( cons
 {
     // Retrieve known modules and insert them into our hash_map to speed-up access time.
     Reference< XNameAccess > xNameAccess( m_xModuleMgr, UNO_QUERY );
-    const Sequence< OUString >     aNameSeq   = xNameAccess->getElementNames();
-    const OUString*                pNameSeq   = aNameSeq.getConstArray();
+    const Sequence< ::rtl::OUString >     aNameSeq   = xNameAccess->getElementNames();
+    const ::rtl::OUString*                pNameSeq   = aNameSeq.getConstArray();
     for ( sal_Int32 n = 0; n < aNameSeq.getLength(); n++ )
         m_aModuleToModuleUICfgMgrMap.insert( ModuleToModuleCfgMgr::value_type(  pNameSeq[n], Reference< XUIConfigurationManager >() ));
 }
@@ -320,7 +319,7 @@ throw ( NoSuchElementException, RuntimeException)
     if ( pIter == m_aModuleToModuleUICfgMgrMap.end() )
         throw NoSuchElementException();
 
-    OUString sShort;
+    ::rtl::OUString sShort;
     try
     {
         Sequence< PropertyValue > lProps;
@@ -337,7 +336,7 @@ throw ( NoSuchElementException, RuntimeException)
     }
     catch( Exception& )
     {
-        sShort = OUString();
+        sShort = ::rtl::OUString();
     }
 
     if (!sShort.getLength())
@@ -382,25 +381,25 @@ throw ( NoSuchElementException, RuntimeException)
         }
         PropertyValue   aArg;
         Sequence< Any > aArgs( 5 );
-        aArg.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleIdentifier" ));
+        aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleIdentifier" ));
         aArg.Value <<= ModuleIdentifier;
         aArgs[0] <<= aArg;
-        aArg.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultConfigStorage" ));
+        aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultConfigStorage" ));
         aArg.Value <<= xDefaultConfigModuleStorage;
         aArgs[1] <<= aArg;
-        aArg.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "UserConfigStorage" ));
+        aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserConfigStorage" ));
         aArg.Value <<= xUserConfigModuleStorage;
         aArgs[2] <<= aArg;
-        aArg.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "UserRootCommit" ));
+        aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserRootCommit" ));
         aArg.Value <<= m_xUserRootCommit;
         aArgs[3] <<= aArg;
         */
         PropertyValue   aArg;
         Sequence< Any > aArgs( 2 );
-        aArg.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleShortName" ));
+        aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleShortName" ));
         aArg.Value <<= sShort;
         aArgs[0] <<= aArg;
-        aArg.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleIdentifier" ));
+        aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleIdentifier" ));
         aArg.Value <<= ModuleIdentifier;
         aArgs[1] <<= aArg;
 
@@ -413,3 +412,4 @@ throw ( NoSuchElementException, RuntimeException)
 }
 
 } // namespace framework
+
