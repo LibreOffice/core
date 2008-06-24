@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AStatement.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,8 @@
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include "connectivity/dbexception.hxx"
 #include <comphelper/types.hxx>
+
+#undef max
 
 #include <algorithm>
 
@@ -229,11 +231,7 @@ sal_Int32 OStatement_Base::getPrecision ( sal_Int32 sqlType)
         ::std::vector<OTypeInfo>::const_iterator aIter = ::std::find(m_aTypeInfo.begin(),m_aTypeInfo.end(),aInfo);
         for(;aIter != m_aTypeInfo.end();++aIter)
         {
-#if (_MSC_VER < 1300)
-            prec = std::max(prec,(*aIter).nPrecision);
-#else
-            prec = max(prec,(*aIter).nPrecision);
-#endif
+            prec = ::std::max(prec,(*aIter).nPrecision);
         }
     }
 
@@ -844,4 +842,3 @@ void SAL_CALL OStatement::release() throw()
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 // -----------------------------------------------------------------------------
-
