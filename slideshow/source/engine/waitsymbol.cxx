@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: waitsymbol.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,8 @@
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
+
+#include <com/sun/star/rendering/XCanvas.hpp>
 
 #include "waitsymbol.hxx"
 #include "eventmultiplexer.hxx"
