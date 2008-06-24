@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_surfacegraphics.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,72 +28,58 @@
  *
  ************************************************************************/
 
-#include "dx_impltools.hxx"
-#include "dx_surfacegraphics.hxx"
-//#include <imdebug.h>
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_canvas.hxx"
 
+#include "dx_surfacegraphics.hxx"
+#include "dx_impltools.hxx"
 
 namespace dxcanvas
 {
-    SurfaceGraphics::SurfaceGraphics() :
-        mpSurface(NULL),
-        mpGraphics(NULL),
-        mpBitmap(),
-        maHDC(0)
+    namespace
     {
-    }
-
-    SurfaceGraphics::SurfaceGraphics( HDC aHDC ) :
-        mpSurface(NULL),
-        mpGraphics(NULL),
-        mpBitmap(),
-        maHDC(0)
-    {
-        mpGraphics = new Gdiplus::Graphics(aHDC);
-        if(mpGraphics)
-            tools::setupGraphics( *mpGraphics );
-    }
-
-    SurfaceGraphics::SurfaceGraphics( const BitmapSharedPtr& rBitmap ) :
-        mpSurface(NULL),
-        mpGraphics(NULL),
-        mpBitmap(rBitmap),
-        maHDC(0)
-    {
-        mpGraphics = Gdiplus::Graphics::FromImage(mpBitmap.get());
-
-        if(mpGraphics)
-            tools::setupGraphics( *mpGraphics );
-    }
-
-    SurfaceGraphics::SurfaceGraphics( const COMReference<surface_type>& rSurface ) :
-        mpSurface(rSurface),
-        mpGraphics(NULL),
-        mpBitmap(),
-        maHDC(0)
-    {
-        if( SUCCEEDED(mpSurface->GetDC( &maHDC )) )
+        struct GraphicsDeleter
         {
-            mpGraphics = Gdiplus::Graphics::FromHDC( maHDC );
-            if(mpGraphics)
-            {
-                tools::setupGraphics( *mpGraphics );
-                return;
-            }
+            COMReference<surface_type> mpSurface;
+            HDC                        maHDC;
 
-            mpSurface->ReleaseDC( maHDC );
-        }
+            GraphicsDeleter(const COMReference<surface_type>& rSurface, HDC hdc) :
+                mpSurface(rSurface),
+                maHDC(hdc)
+            {}
+
+            void operator()( Gdiplus::Graphics* pGraphics )
+            {
+                if(!pGraphics)
+                    return;
+
+                pGraphics->Flush(Gdiplus::FlushIntentionSync);
+                delete pGraphics;
+
+                if(mpSurface.is())
+                    mpSurface->ReleaseDC( maHDC );
+            }
+        };
     }
 
-    SurfaceGraphics::~SurfaceGraphics()
+    GraphicsSharedPtr createSurfaceGraphics(const COMReference<surface_type>& rSurface )
     {
-        if(!(mpGraphics))
-            return;
+        Gdiplus::Graphics* pGraphics;
+        GraphicsSharedPtr  pRet;
+        HDC aHDC;
+        if( SUCCEEDED(rSurface->GetDC( &aHDC )) )
+        {
+            pGraphics = Gdiplus::Graphics::FromHDC( aHDC );
+            if(pGraphics)
+            {
+                tools::setupGraphics( *pGraphics );
+                pRet.reset(pGraphics,
+                           GraphicsDeleter(rSurface, aHDC));
+            }
+            else
+                rSurface->ReleaseDC( aHDC );
+        }
 
-        mpGraphics->Flush(Gdiplus::FlushIntentionSync);
-        delete mpGraphics;
-
-        if(mpSurface.is())
-            mpSurface->ReleaseDC( maHDC );
+        return pRet;
     }
 }
