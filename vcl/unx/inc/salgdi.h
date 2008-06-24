@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.h,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -331,6 +331,8 @@ public:
 
     virtual bool            drawAlphaRect( long nX, long nY, long nWidth,
                                            long nHeight, sal_uInt8 nTransparency );
+
+    virtual SystemGraphicsData GetGraphicsData() const;
 
     /*  use to handle GraphicsExpose/NoExpose after XCopyArea & friends
      *  if pFrame is not NULL, corresponding Paint events are generated
