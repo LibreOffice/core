@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_section_2.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-23 15:15:44 $
+'* last change: $Author: fredrikh $ $Date: 2008-06-24 10:24:28 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -364,10 +364,10 @@ testcase tProtectSection_1
       Active.ok
      else
       warnlog "-  No warning when trying to write in protected area!"
-     endif
+     end if
    else
      warnlog "Testtool couldn't find the protected area!"
-   endif
+   end if
 
    Call wDokSchreiben "<Up>"
    Call wDokSchreiben "<Home><Shift End>"
@@ -386,7 +386,7 @@ testcase tProtectSection_1
 
    else
       warnlog "Testtool couldn't find the edited area!"
-   endif
+   end if
 
    Call hCloseDocument
 endcase
@@ -837,7 +837,7 @@ testcase tDisplaySection_5
        Ausblenden.check
    else
        warnlog "The second section should be " +sectionName(1) +" bug get" +BereichsName.GetText
-   endif
+   end if
 
    '/// insert a section with protect option
    Bereich.TypeKeys "<Down>"
@@ -845,7 +845,7 @@ testcase tDisplaySection_5
        Geschuetzt.Check
    else
        warnlog "The second section should be " +sectionName(2) +" bug get" +BereichsName.GetText
-   endif
+   end if
 
    '/// insert a section with Link option
    Bereich.TypeKeys "<Down>"
@@ -854,7 +854,7 @@ testcase tDisplaySection_5
        Dateiname.Settext ConvertPath(gOfficePath + "user\work\NavigatorSection_1.odt")
    else
        warnlog "The second section should be " +sectionName(3) +" bug get" +BereichsName.GetText
-   endif
+   end if
 
    BereicheBearbeiten.OK
    Sleep 1
@@ -982,7 +982,7 @@ testcase tDisplaySection_8
       warnlog "- Dialog to eidt section isn't up!"
    else
       BereicheBearbeiten.Cancel
-   endif
+   end if
    sleep(1)
    'Close Navigator before close the document
    fCloseNavigator
@@ -995,6 +995,7 @@ endcase
 testcase tDisplaySection_9
 
    Dim i as Integer
+   Dim shouldbe as string
 
    '/// Check to insert a paragraph before and after a section"
    printlog "   -  Check to insert a paragraph before and after a section"
@@ -1023,19 +1024,25 @@ testcase tDisplaySection_9
             EditCopy
             if GetClipBoardtext <> "Paragraph before a section" then
                warnlog "Problem with paragraph before section"
-            endif
+            end if
          Case 2
             Call wDokSchreiben "<Shift Down>"
             EditCopy
-            if GetClipBoardtext <> "Add a paragraph before and after a section!" then
+            if gPlatGroup = "unx" then
+                shouldbe = "Add a paragraph before and after a section!" + chr(10)
+            else
+                shouldbe = "Add a paragraph before and after a section!" + chr(13) + chr(10)
+            end if
+
+            if GetClipBoardtext <> shouldbe then
                warnlog "Problem with section"
-            endif
+            end if
          Case 3
             Call wDokSchreiben "<Shift End>"
             EditCopy
             if GetClipBoardtext <> "Paragraph after a section" then
                warnlog "Problem with paragraph after section"
-            endif
+            end if
       end select
       Call wDokSchreiben "<Home><Down>"
    next i
