@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -57,7 +57,6 @@ SLOFILES =	\
     $(SLO)$/canvascustomspritehelper.obj \
     $(SLO)$/canvastools.obj \
     $(SLO)$/elapsedtime.obj \
-    $(SLO)$/linepolypolygonbase.obj \
     $(SLO)$/parametricpolypolygon.obj \
     $(SLO)$/prioritybooster.obj \
     $(SLO)$/propertysethelper.obj \
