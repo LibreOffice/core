@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: querycomposer.cxx,v $
- * $Revision: 1.67 $
+ * $Revision: 1.68 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,9 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
-#include "querycomposer.hxx"
-#endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
@@ -93,6 +90,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
+#endif
+#ifndef DBACCESS_CORE_API_QUERYCOMPOSER_HXX
+#include "querycomposer.hxx"
 #endif
 #ifndef DBA_HELPERCOLLECTIONS_HXX
 #include "HelperCollections.hxx"
@@ -362,3 +362,8 @@ void SAL_CALL OQueryComposer::release() throw()
     OSubComponent::release();
 }
 // -----------------------------------------------------------------------------
+
+
+
+
+
