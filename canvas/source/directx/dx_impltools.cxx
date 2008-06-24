@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_impltools.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,11 +28,15 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_canvas.hxx"
+
 #include <ctype.h> // don't ask. msdev breaks otherwise...
 #include <basegfx/numeric/ftools.hxx>
 
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -54,7 +58,8 @@
 #include "dx_linepolypolygon.hxx"
 #include "dx_canvasbitmap.hxx"
 #include "dx_canvasfont.hxx"
-#include "dx_surfacegraphics.hxx"
+#include "dx_canvas.hxx"
+#include "dx_spritecanvas.hxx"
 
 #include <boost/scoped_array.hpp>
 
@@ -103,7 +108,7 @@ namespace dxcanvas
 
                     // no implementation class and no data provider
                     // found - contract violation.
-                    CHECK_AND_THROW( xLinePoly.is(),
+                    ENSURE_ARG_OR_THROW( xLinePoly.is(),
                                      "VCLCanvas::polyPolygonFromXPolyPolygon2D(): Invalid input "
                                      "poly-polygon, cannot retrieve vertex data" );
 
@@ -138,6 +143,22 @@ namespace dxcanvas
             //rGraphics.SetTextRenderingHint( Gdiplus::TextRenderingHintAntiAlias );
             rGraphics.SetTextRenderingHint( Gdiplus::TextRenderingHintSystemDefault );
             rGraphics.SetPageUnit(Gdiplus::UnitPixel);
+        }
+
+        Gdiplus::Graphics* createGraphicsFromHDC(HDC aHDC)
+        {
+            Gdiplus::Graphics* pRet = new Gdiplus::Graphics(aHDC);
+            if( pRet )
+                setupGraphics( *pRet );
+            return pRet;
+        }
+
+        Gdiplus::Graphics* createGraphicsFromBitmap(const BitmapSharedPtr& rBitmap)
+        {
+            Gdiplus::Graphics* pRet = Gdiplus::Graphics::FromImage(rBitmap.get());
+            if( pRet )
+                setupGraphics( *pRet );
+            return pRet;
         }
 
         void gdiPlusMatrixFromB2DHomMatrix( Gdiplus::Matrix& rGdiplusMatrix, const ::basegfx::B2DHomMatrix& rMatrix )
@@ -337,7 +358,7 @@ namespace dxcanvas
 
         Gdiplus::ARGB sequenceToArgb( const uno::Sequence< sal_Int8 >& rColor )
         {
-            ENSURE_AND_THROW( rColor.getLength() > 2,
+            ENSURE_OR_THROW( rColor.getLength() > 2,
                               "sequenceToArgb: need at least three channels" );
 
             // TODO(F1): handle color space conversions, when defined on canvas/graphicDevice
@@ -353,7 +374,7 @@ namespace dxcanvas
 
         Gdiplus::ARGB sequenceToArgb( const uno::Sequence< double >& rColor )
         {
-            ENSURE_AND_THROW( rColor.getLength() > 2,
+            ENSURE_OR_THROW( rColor.getLength() > 2,
                               "sequenceToColor: need at least three channels" );
 
             // TODO(F1): handle color space conversions, when defined on canvas/graphicDevice
@@ -446,20 +467,17 @@ namespace dxcanvas
             }
         }
 
-        namespace
+        bool drawGdiPlusBitmap( const GraphicsSharedPtr& rGraphics,
+                                const BitmapSharedPtr&   rBitmap )
         {
-            bool drawGdiPlusBitmap( const SurfaceGraphicsSharedPtr& rGraphics,
-                                    const BitmapSharedPtr&          rBitmap )
-            {
-                Gdiplus::PointF aPoint;
-                return (Gdiplus::Ok == (*rGraphics)->DrawImage( rBitmap.get(),
-                                                                aPoint ) );
-            }
+            Gdiplus::PointF aPoint;
+            return (Gdiplus::Ok == rGraphics->DrawImage( rBitmap.get(),
+                                                         aPoint ) );
         }
 
-        bool drawDIBits( const SurfaceGraphicsSharedPtr& rGraphics,
-                         const BITMAPINFO&               rBI,
-                         const void*                     pBits )
+        bool drawDIBits( const GraphicsSharedPtr& rGraphics,
+                         const BITMAPINFO&        rBI,
+                         const void*              pBits )
         {
             BitmapSharedPtr pBitmap(
                 Gdiplus::Bitmap::FromBITMAPINFO( &rBI,
@@ -469,8 +487,8 @@ namespace dxcanvas
                                       pBitmap );
         }
 
-        bool drawRGBABits( const SurfaceGraphicsSharedPtr&  rGraphics,
-                           const RawRGBABitmap&             rRawRGBAData )
+        bool drawRGBABits( const GraphicsSharedPtr& rGraphics,
+                           const RawRGBABitmap&     rRawRGBAData )
         {
             BitmapSharedPtr pBitmap( new Gdiplus::Bitmap( rRawRGBAData.mnWidth,
                                                           rRawRGBAData.mnHeight,
@@ -499,59 +517,14 @@ namespace dxcanvas
                                       pBitmap );
         }
 
-        bool drawXBitmap( const SurfaceGraphicsSharedPtr&               rGraphics,
-                          const uno::Reference< rendering::XBitmap >&   xBitmap )
-        {
-            CanvasBitmap* pBitmap = dynamic_cast< CanvasBitmap* >(xBitmap.get());
-
-            if( pBitmap )
-            {
-                // we're instructed to draw the xBitmap to the
-                // graphics object. moreover we know that the passed
-                // xBitmap is a disguised CanvasBitmap object from
-                // which we're able to directly access the pixel from
-                // the contained directx surface.
-                DXBitmapSharedPtr pDXBitmap( pBitmap->getSurface() );
-                return drawGdiPlusBitmap(rGraphics,pDXBitmap->getBitmap());
-            }
-            else if( drawVCLBitmapFromUnoTunnel(
-                         rGraphics,
-                         uno::Reference< lang::XUnoTunnel >( xBitmap,
-                                                             uno::UNO_QUERY ) ) )
-            {
-                return true;
-            }
-            else
-            {
-                SpriteCanvas* pCanvas = dynamic_cast< SpriteCanvas* >(xBitmap.get());
-
-                if( pCanvas )
-                {
-                    // we're instructed to draw the xBitmap to the
-                    // graphics object. moreover we know that the passed
-                    // xBitmap is a disguised SpriteCanvas object from
-                    // which we're able to directly access the pixel from
-                    // the contained directx surface.
-                    DXBitmapSharedPtr pDXBitmap( pCanvas->getBackBuffer() );
-                    return drawGdiPlusBitmap(rGraphics,pDXBitmap->getBitmap());
-                }
-            }
-
-            // TODO(F1): extract pixel from XBitmap interface
-            OSL_ENSURE( false,
-                        "drawXBitmap(): could not extract bitmap" );
-
-            return false;
-        }
-
         BitmapSharedPtr bitmapFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
         {
-            CanvasBitmap* pCanvasBitmap = dynamic_cast< CanvasBitmap* >(xBitmap.get());
+            BitmapProvider* pBitmapProvider = dynamic_cast< BitmapProvider* >(xBitmap.get());
 
-            if( pCanvasBitmap )
+            if( pBitmapProvider )
             {
-                DXBitmapSharedPtr pDXBitmap( pCanvasBitmap->getSurface() );
-                return pDXBitmap->getBitmap();
+                IBitmapSharedPtr pBitmap( pBitmapProvider->getBitmap() );
+                return pBitmap->getBitmap();
             }
             else
             {
@@ -582,12 +555,11 @@ namespace dxcanvas
                                                         PixelFormat24bppRGB ) );
                 }
 
-                SurfaceGraphicsSharedPtr pSurface(new SurfaceGraphics(pBitmap));
-                tools::setupGraphics(*(pSurface->get()));
-                if( !drawVCLBitmapFromUnoTunnel(
-                        pSurface,
-                        uno::Reference< lang::XUnoTunnel >( xBitmap,
-                                                            uno::UNO_QUERY ) ) )
+                GraphicsSharedPtr pGraphics(createGraphicsFromBitmap(pBitmap));
+                tools::setupGraphics(*pGraphics);
+                if( !drawVCLBitmapFromXBitmap(
+                        pGraphics,
+                        xBitmap) )
                 {
                     pBitmap.reset();
                 }
@@ -600,7 +572,7 @@ namespace dxcanvas
         {
             CanvasFont* pCanvasFont = dynamic_cast< CanvasFont* >(xFont.get());
 
-            CHECK_AND_THROW( pCanvasFont,
+            ENSURE_ARG_OR_THROW( pCanvasFont,
                              "canvasFontFromXFont(): Invalid XFont (or incompatible font for this XCanvas)" );
 
             return CanvasFont::ImplRef( pCanvasFont );
