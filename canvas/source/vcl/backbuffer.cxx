@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: backbuffer.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,16 +51,6 @@ namespace vclcanvas
     }
 
     const OutputDevice& BackBuffer::getOutDev() const
-    {
-        return maVDev.get();
-    }
-
-    VirtualDevice& BackBuffer::getVirDev()
-    {
-        return maVDev.get();
-    }
-
-    const VirtualDevice& BackBuffer::getVirDev() const
     {
         return maVDev.get();
     }
