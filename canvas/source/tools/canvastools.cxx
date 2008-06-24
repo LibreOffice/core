@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: canvastools.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,13 +32,21 @@
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/geometry/Matrix2D.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/util/Endianness.hpp>
+#include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
+#include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
+#include <com/sun/star/rendering/ColorSpaceType.hpp>
+#include <com/sun/star/rendering/ColorComponentTag.hpp>
+#include <com/sun/star/rendering/RenderingIntent.hpp>
 #include <com/sun/star/rendering/RenderState.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/XColorSpace.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -56,16 +64,57 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
+#include <cppuhelper/compbase1.hxx>
+#include <rtl/instance.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
+#include <vcl/canvastools.hxx>
 
 #include <canvas/canvastools.hxx>
-#include <canvas/base/linepolypolygonbase.hxx>
 
 #include <limits>
 
 
 using namespace ::com::sun::star;
+
+namespace com { namespace sun { namespace star { namespace rendering
+{
+    bool operator==( const RenderState& renderState1,
+                     const RenderState& renderState2 )
+    {
+        if( renderState1.Clip != renderState2.Clip )
+            return false;
+
+        if( renderState1.DeviceColor != renderState2.DeviceColor )
+            return false;
+
+        if( renderState1.CompositeOperation != renderState2.CompositeOperation )
+            return false;
+
+        ::basegfx::B2DHomMatrix mat1, mat2;
+        ::canvas::tools::getRenderStateTransform( mat1, renderState1 );
+        ::canvas::tools::getRenderStateTransform( mat2, renderState2 );
+        if( mat1 != mat2 )
+            return false;
+
+        return true;
+    }
+
+    bool operator==( const ViewState& viewState1,
+                     const ViewState& viewState2 )
+    {
+        if( viewState1.Clip != viewState2.Clip )
+            return false;
+
+        ::basegfx::B2DHomMatrix mat1, mat2;
+        ::canvas::tools::getViewStateTransform( mat1, viewState1 );
+        ::canvas::tools::getViewStateTransform( mat2, viewState2 );
+        if( mat1 != mat2 )
+            return false;
+
+        return true;
+    }
+}}}}
 
 namespace canvas
 {
@@ -216,68 +265,323 @@ namespace canvas
             return matrix;
         }
 
-        void setDeviceColor( ::com::sun::star::rendering::RenderState&  o_renderState,
-                             const double&                              rColor0,
-                             const double&                              rColor1,
-                             const double&                              rColor2,
-                             const double&                              rColor3 )
+        namespace
         {
-            o_renderState.DeviceColor.realloc( 4 );
-            double* pColors = o_renderState.DeviceColor.getArray();
+            class StandardColorSpace : public cppu::WeakImplHelper1< com::sun::star::rendering::XIntegerBitmapColorSpace >
+            {
+            private:
+                uno::Sequence< sal_Int8 >  maComponentTags;
+                uno::Sequence< sal_Int32 > maBitCounts;
 
-            pColors[0] = rColor0;
-            pColors[1] = rColor1;
-            pColors[2] = rColor2;
-            pColors[3] = rColor3;
+                virtual ::sal_Int8 SAL_CALL getType(  ) throw (uno::RuntimeException)
+                {
+                    return rendering::ColorSpaceType::RGB;
+                }
+                virtual uno::Sequence< ::sal_Int8 > SAL_CALL getComponentTags(  ) throw (uno::RuntimeException)
+                {
+                    return maComponentTags;
+                }
+                virtual ::sal_Int8 SAL_CALL getRenderingIntent(  ) throw (uno::RuntimeException)
+                {
+                    return rendering::RenderingIntent::PERCEPTUAL;
+                }
+                virtual uno::Sequence< beans::PropertyValue > SAL_CALL getProperties(  ) throw (uno::RuntimeException)
+                {
+                    return uno::Sequence< beans::PropertyValue >();
+                }
+                virtual uno::Sequence< double > SAL_CALL convertColorSpace( const uno::Sequence< double >& deviceColor,
+                                                                            const uno::Reference< rendering::XColorSpace >& targetColorSpace ) throw (lang::IllegalArgumentException,
+                                                                                                                                                      uno::RuntimeException)
+                {
+                    // TODO(P3): if we know anything about target
+                    // colorspace, this can be greatly sped up
+                    uno::Sequence<rendering::ARGBColor> aIntermediate(
+                        convertToARGB(deviceColor));
+                    return targetColorSpace->convertFromARGB(aIntermediate);
+                }
+                virtual uno::Sequence< rendering::RGBColor > SAL_CALL convertToRGB( const uno::Sequence< double >& deviceColor ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+                {
+                    const double*  pIn( deviceColor.getConstArray() );
+                    const sal_Size nLen( deviceColor.getLength() );
+                    ENSURE_ARG_OR_THROW2(nLen%4==0,
+                                         "number of channels no multiple of 4",
+                                         static_cast<rendering::XColorSpace*>(this), 0);
+
+                    uno::Sequence< rendering::RGBColor > aRes(nLen/4);
+                    rendering::RGBColor* pOut( aRes.getArray() );
+                    for( sal_Size i=0; i<nLen; i+=4 )
+                    {
+                        *pOut++ = rendering::RGBColor(pIn[0],pIn[1],pIn[2]);
+                        pIn += 4;
+                    }
+                    return aRes;
+                }
+                virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToARGB( const uno::Sequence< double >& deviceColor ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+                {
+                    const double*  pIn( deviceColor.getConstArray() );
+                    const sal_Size nLen( deviceColor.getLength() );
+                    ENSURE_ARG_OR_THROW2(nLen%4==0,
+                                         "number of channels no multiple of 4",
+                                         static_cast<rendering::XColorSpace*>(this), 0);
+
+                    uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
+                    rendering::ARGBColor* pOut( aRes.getArray() );
+                    for( sal_Size i=0; i<nLen; i+=4 )
+                    {
+                        *pOut++ = rendering::ARGBColor(pIn[3],pIn[0],pIn[1],pIn[2]);
+                        pIn += 4;
+                    }
+                    return aRes;
+                }
+                virtual uno::Sequence< double > SAL_CALL convertFromRGB( const uno::Sequence< rendering::RGBColor >& rgbColor ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+                {
+                    const rendering::RGBColor* pIn( rgbColor.getConstArray() );
+                    const sal_Size             nLen( rgbColor.getLength() );
+
+                    uno::Sequence< double > aRes(nLen*4);
+                    double* pColors=aRes.getArray();
+                    for( sal_Size i=0; i<nLen; ++i )
+                    {
+                        *pColors++ = pIn->Red;
+                        *pColors++ = pIn->Green;
+                        *pColors++ = pIn->Blue;
+                        *pColors++ = 1.0;
+                        ++pIn;
+                    }
+                    return aRes;
+                }
+                virtual uno::Sequence< double > SAL_CALL convertFromARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+                {
+                    const rendering::ARGBColor* pIn( rgbColor.getConstArray() );
+                    const sal_Size              nLen( rgbColor.getLength() );
+
+                    uno::Sequence< double > aRes(nLen*4);
+                    double* pColors=aRes.getArray();
+                    for( sal_Size i=0; i<nLen; ++i )
+                    {
+                        *pColors++ = pIn->Red;
+                        *pColors++ = pIn->Green;
+                        *pColors++ = pIn->Blue;
+                        *pColors++ = pIn->Alpha;
+                        ++pIn;
+                    }
+                    return aRes;
+                }
+
+                // XIntegerBitmapColorSpace
+                virtual ::sal_Int32 SAL_CALL getBitsPerPixel(  ) throw (uno::RuntimeException)
+                {
+                    return 32;
+                }
+                virtual uno::Sequence< ::sal_Int32 > SAL_CALL getComponentBitCounts(  ) throw (uno::RuntimeException)
+                {
+                    return maBitCounts;
+                }
+                virtual ::sal_Int8 SAL_CALL getEndianness(  ) throw (uno::RuntimeException)
+                {
+                    return util::Endianness::LITTLE;
+                }
+                virtual uno::Sequence<double> SAL_CALL convertFromIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& deviceColor,
+                                                                                     const uno::Reference< rendering::XColorSpace >& targetColorSpace ) throw (lang::IllegalArgumentException,
+                                                                                                                                                               uno::RuntimeException)
+                {
+                    if( dynamic_cast<StandardColorSpace*>(targetColorSpace.get()) )
+                    {
+                        const sal_Int8* pIn( deviceColor.getConstArray() );
+                        const sal_Size  nLen( deviceColor.getLength() );
+                        ENSURE_ARG_OR_THROW2(nLen%4==0,
+                                             "number of channels no multiple of 4",
+                                             static_cast<rendering::XColorSpace*>(this), 0);
+
+                        uno::Sequence<double> aRes(nLen);
+                        double* pOut( aRes.getArray() );
+                        for( sal_Size i=0; i<nLen; i+=4 )
+                        {
+                            *pOut++ = vcl::unotools::toDoubleColor(*pIn++);
+                            *pOut++ = vcl::unotools::toDoubleColor(*pIn++);
+                            *pOut++ = vcl::unotools::toDoubleColor(*pIn++);
+                            *pOut++ = vcl::unotools::toDoubleColor(255-*pIn++);
+                        }
+                        return aRes;
+                    }
+                    else
+                    {
+                        // TODO(P3): if we know anything about target
+                        // colorspace, this can be greatly sped up
+                        uno::Sequence<rendering::ARGBColor> aIntermediate(
+                            convertIntegerToARGB(deviceColor));
+                        return targetColorSpace->convertFromARGB(aIntermediate);
+                    }
+                }
+                virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertToIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& deviceColor,
+                                                                                         const uno::Reference< rendering::XIntegerBitmapColorSpace >& targetColorSpace ) throw (lang::IllegalArgumentException,
+                                                                                                                                                                              uno::RuntimeException)
+                {
+                    if( dynamic_cast<StandardColorSpace*>(targetColorSpace.get()) )
+                    {
+                        // it's us, so simply pass-through the data
+                        return deviceColor;
+                    }
+                    else
+                    {
+                        // TODO(P3): if we know anything about target
+                        // colorspace, this can be greatly sped up
+                        uno::Sequence<rendering::ARGBColor> aIntermediate(
+                            convertIntegerToARGB(deviceColor));
+                        return targetColorSpace->convertIntegerFromARGB(aIntermediate);
+                    }
+                }
+                virtual uno::Sequence< rendering::RGBColor > SAL_CALL convertIntegerToRGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+                {
+                    const sal_Int8* pIn( deviceColor.getConstArray() );
+                    const sal_Size  nLen( deviceColor.getLength() );
+                    ENSURE_ARG_OR_THROW2(nLen%4==0,
+                                         "number of channels no multiple of 4",
+                                         static_cast<rendering::XColorSpace*>(this), 0);
+
+                    uno::Sequence< rendering::RGBColor > aRes(nLen/4);
+                    rendering::RGBColor* pOut( aRes.getArray() );
+                    for( sal_Size i=0; i<nLen; i+=4 )
+                    {
+                        *pOut++ = rendering::RGBColor(
+                            vcl::unotools::toDoubleColor(pIn[0]),
+                            vcl::unotools::toDoubleColor(pIn[1]),
+                            vcl::unotools::toDoubleColor(pIn[2]));
+                        pIn += 4;
+                    }
+                    return aRes;
+                }
+
+                virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToARGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+                {
+                    const sal_Int8* pIn( deviceColor.getConstArray() );
+                    const sal_Size  nLen( deviceColor.getLength() );
+                    ENSURE_ARG_OR_THROW2(nLen%4==0,
+                                         "number of channels no multiple of 4",
+                                         static_cast<rendering::XColorSpace*>(this), 0);
+
+                    uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
+                    rendering::ARGBColor* pOut( aRes.getArray() );
+                    for( sal_Size i=0; i<nLen; i+=4 )
+                    {
+                        *pOut++ = rendering::ARGBColor(
+                            vcl::unotools::toDoubleColor(255-pIn[3]),
+                            vcl::unotools::toDoubleColor(pIn[0]),
+                            vcl::unotools::toDoubleColor(pIn[1]),
+                            vcl::unotools::toDoubleColor(pIn[2]));
+                        pIn += 4;
+                    }
+                    return aRes;
+                }
+
+                virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromRGB( const uno::Sequence< rendering::RGBColor >& rgbColor ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+                {
+                    const rendering::RGBColor* pIn( rgbColor.getConstArray() );
+                    const sal_Size             nLen( rgbColor.getLength() );
+
+                    uno::Sequence< sal_Int8 > aRes(nLen*4);
+                    sal_Int8* pColors=aRes.getArray();
+                    for( sal_Size i=0; i<nLen; ++i )
+                    {
+                        *pColors++ = vcl::unotools::toByteColor(pIn->Red);
+                        *pColors++ = vcl::unotools::toByteColor(pIn->Green);
+                        *pColors++ = vcl::unotools::toByteColor(pIn->Blue);
+                        *pColors++ = 0;
+                        ++pIn;
+                    }
+                    return aRes;
+                }
+
+                virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+                {
+                    const rendering::ARGBColor* pIn( rgbColor.getConstArray() );
+                    const sal_Size              nLen( rgbColor.getLength() );
+
+                    uno::Sequence< sal_Int8 > aRes(nLen*4);
+                    sal_Int8* pColors=aRes.getArray();
+                    for( sal_Size i=0; i<nLen; ++i )
+                    {
+                        *pColors++ = vcl::unotools::toByteColor(pIn->Red);
+                        *pColors++ = vcl::unotools::toByteColor(pIn->Green);
+                        *pColors++ = vcl::unotools::toByteColor(pIn->Blue);
+                        *pColors++ = 255-vcl::unotools::toByteColor(pIn->Alpha);
+                        ++pIn;
+                    }
+                    return aRes;
+                }
+
+            public:
+                StandardColorSpace() :
+                    maComponentTags(4),
+                    maBitCounts(4)
+                {
+                    sal_Int8*  pTags = maComponentTags.getArray();
+                    sal_Int32* pBitCounts = maBitCounts.getArray();
+                    pTags[0] = rendering::ColorComponentTag::RGB_RED;
+                    pTags[1] = rendering::ColorComponentTag::RGB_GREEN;
+                    pTags[2] = rendering::ColorComponentTag::RGB_BLUE;
+                    pTags[3] = rendering::ColorComponentTag::ALPHA;
+
+                    pBitCounts[0] =
+                    pBitCounts[1] =
+                    pBitCounts[2] =
+                    pBitCounts[3] = 8;
+                }
+            };
+
+            struct StandardColorSpaceHolder : public rtl::StaticWithInit<uno::Reference<rendering::XIntegerBitmapColorSpace>,
+                                                                         StandardColorSpaceHolder>
+            {
+                uno::Reference<rendering::XIntegerBitmapColorSpace> operator()()
+                {
+                    return new StandardColorSpace();
+                }
+            };
         }
 
-        void getDeviceColor( double&                                            o_rColor0,
-                             double&                                            o_rColor1,
-                             double&                                            o_rColor2,
-                             double&                                            o_rColor3,
-                             const ::com::sun::star::rendering::RenderState&    rRenderState )
+        uno::Reference<rendering::XIntegerBitmapColorSpace> getStdColorSpace()
         {
-            o_rColor0 = rRenderState.DeviceColor[0];
-            o_rColor1 = rRenderState.DeviceColor[1];
-            o_rColor2 = rRenderState.DeviceColor[2];
-            o_rColor3 = rRenderState.DeviceColor.getLength() > 3 ?
-                rRenderState.DeviceColor[3] : 1.0;
+            return StandardColorSpaceHolder::get();
         }
 
-        bool operator==( const rendering::RenderState& renderState1,
-                         const rendering::RenderState& renderState2 )
+        rendering::IntegerBitmapLayout getStdMemoryLayout( const geometry::IntegerSize2D& rBmpSize )
         {
-            if( renderState1.Clip != renderState2.Clip )
-                return false;
+            rendering::IntegerBitmapLayout aLayout;
 
-            if( renderState1.DeviceColor != renderState2.DeviceColor )
-                return false;
+            aLayout.ScanLines = rBmpSize.Height;
+            aLayout.ScanLineBytes = rBmpSize.Width*4;
+            aLayout.ScanLineStride = aLayout.ScanLineBytes;
+            aLayout.PlaneStride = 0;
+            aLayout.ColorSpace = getStdColorSpace();
+            aLayout.Palette.clear();
+            aLayout.IsMsbFirst = sal_False;
 
-            if( renderState1.CompositeOperation != renderState2.CompositeOperation )
-                return false;
-
-            ::basegfx::B2DHomMatrix mat1, mat2;
-            getRenderStateTransform( mat1, renderState1 );
-            getRenderStateTransform( mat2, renderState2 );
-            if( mat1 != mat2 )
-                return false;
-
-            return true;
+            return aLayout;
         }
 
-        bool operator==( const rendering::ViewState& viewState1,
-                         const rendering::ViewState& viewState2 )
+        ::Color stdIntSequenceToColor( const uno::Sequence<sal_Int8>& rColor )
         {
-            if( viewState1.Clip != viewState2.Clip )
-                return false;
+#ifdef OSL_BIGENDIAN
+            const sal_Int8* pCols( rColor.getConstArray() );
+            return ::Color( pCols[3], pCols[0], pCols[1], pCols[2] );
+#else
+            return ::Color( *reinterpret_cast< const ::ColorData* >(rColor.getConstArray()) );
+#endif
+        }
 
-            ::basegfx::B2DHomMatrix mat1, mat2;
-            getViewStateTransform( mat1, viewState1 );
-            getViewStateTransform( mat2, viewState2 );
-            if( mat1 != mat2 )
-                return false;
-
-            return true;
+        uno::Sequence<sal_Int8> colorToStdIntSequence( const ::Color& rColor )
+        {
+            uno::Sequence<sal_Int8> aRet(4);
+            sal_Int8* pCols( aRet.getArray() );
+#ifdef OSL_BIGENDIAN
+            pCols[0] = rColor.GetRed();
+            pCols[1] = rColor.GetGreen();
+            pCols[2] = rColor.GetBlue();
+            pCols[3] = 255-rColor.GetTransparency();
+#else
+            *reinterpret_cast<sal_Int32*>(pCols) = rColor.GetColor();
+#endif
+            return aRet;
         }
 
         // Create a corrected view transformation out of the give one,
@@ -517,54 +821,6 @@ namespace canvas
                                         aTopLeft + ::basegfx::B2IPoint(
                                             ::basegfx::fround( rRange.getWidth() ),
                                             ::basegfx::fround( rRange.getHeight() ) ) );
-        }
-
-        ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D( const uno::Reference< rendering::XPolyPolygon2D >& xPoly )
-        {
-            ::canvas::LinePolyPolygonBase* pPolyImpl =
-                dynamic_cast< ::canvas::LinePolyPolygonBase* >( xPoly.get() );
-
-            if( pPolyImpl )
-            {
-                return pPolyImpl->getPolyPolygon();
-            }
-            else
-            {
-                const sal_Int32 nPolys( xPoly->getNumberOfPolygons() );
-
-                // not a known implementation object - try data source
-                // interfaces
-                uno::Reference< rendering::XBezierPolyPolygon2D > xBezierPoly(
-                    xPoly,
-                    uno::UNO_QUERY );
-
-                if( xBezierPoly.is() )
-                {
-                    return ::basegfx::unotools::polyPolygonFromBezier2DSequenceSequence(
-                        xBezierPoly->getBezierSegments( 0,
-                                                        nPolys,
-                                                        0,
-                                                        -1 ) );
-                }
-                else
-                {
-                    uno::Reference< rendering::XLinePolyPolygon2D > xLinePoly(
-                        xPoly,
-                        uno::UNO_QUERY );
-
-                    // no implementation class and no data provider
-                    // found - contract violation.
-                    CHECK_AND_THROW( xLinePoly.is(),
-                                     "canvas::tools::polyPolygonFromXPolyPolygon2D(): Invalid input "
-                                     "poly-polygon, cannot retrieve vertex data" );
-
-                    return ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence(
-                        xLinePoly->getPoints( 0,
-                                              nPolys,
-                                              0,
-                                              -1 ) );
-                }
-            }
         }
 
         uno::Sequence< uno::Any >& getDeviceInfo( const uno::Reference< rendering::XCanvas >& i_rxCanvas,
