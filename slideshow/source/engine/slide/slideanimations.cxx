@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slideanimations.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,8 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
+#include <tools/diagnose_ex.h>
 
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -52,7 +54,7 @@ namespace slideshow
             maSlideSize( rSlideSize ),
             mpRootNode()
         {
-            ENSURE_AND_THROW( maContext.mpSubsettableShapeManager,
+            ENSURE_OR_THROW( maContext.mpSubsettableShapeManager,
                               "SlideAnimations::SlideAnimations(): Invalid SlideShowContext" );
         }
 
