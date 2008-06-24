@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: constitemcontainer.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +48,6 @@
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/implbase1.hxx>
 
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -71,7 +70,7 @@ extern "C"
 {
 static int SAL_CALL compare_OUString_Property_Impl( const void *arg1, const void *arg2 ) SAL_THROW( () )
 {
-   return ((OUString *)arg1)->compareTo( ((Property *)arg2)->Name );
+   return ((::rtl::OUString *)arg1)->compareTo( ((Property *)arg2)->Name );
 }
 }
 
@@ -85,8 +84,8 @@ public:
 
     // XPropertySetInfo-Methoden
     virtual Sequence< Property > SAL_CALL getProperties(void) throw(::com::sun::star::uno::RuntimeException);
-    virtual Property SAL_CALL getPropertyByName(const OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& PropertyName) throw(::com::sun::star::uno::RuntimeException);
+    virtual Property SAL_CALL getPropertyByName(const ::rtl::OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasPropertyByName(const ::rtl::OUString& PropertyName) throw(::com::sun::star::uno::RuntimeException);
 };
 
 
@@ -111,7 +110,7 @@ Sequence< Property > OPropertySetHelperInfo_Impl::getProperties(void) throw(::co
 /**
  * Return the sequence of properties, which are provided throug the constructor.
  */
-Property OPropertySetHelperInfo_Impl::getPropertyByName( const OUString & PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+Property OPropertySetHelperInfo_Impl::getPropertyByName( const ::rtl::OUString & PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
     Property * pR;
     pR = (Property *)bsearch( &PropertyName, aInfos.getConstArray(), aInfos.getLength(),
@@ -127,7 +126,7 @@ Property OPropertySetHelperInfo_Impl::getPropertyByName( const OUString & Proper
 /**
  * Return the sequence of properties, which are provided throug the constructor.
  */
-sal_Bool OPropertySetHelperInfo_Impl::hasPropertyByName( const OUString & PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool OPropertySetHelperInfo_Impl::hasPropertyByName( const ::rtl::OUString & PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     Property * pR;
     pR = (Property *)bsearch( &PropertyName, aInfos.getConstArray(), aInfos.getLength(),
@@ -345,7 +344,7 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
     if ( sal_Int32( m_aItemVector.size()) > Index )
         return makeAny( m_aItemVector[Index] );
     else
-        throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
+        throw IndexOutOfBoundsException( ::rtl::OUString(), (OWeakObject *)this );
 }
 
 // XPropertySet
@@ -374,7 +373,7 @@ throw (::com::sun::star::uno::RuntimeException)
     return (*pInfo);
 }
 
-void SAL_CALL ConstItemContainer::setPropertyValue( const OUString&, const Any& )
+void SAL_CALL ConstItemContainer::setPropertyValue( const ::rtl::OUString&, const Any& )
 throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
 }
@@ -480,3 +479,4 @@ Reference < XPropertySetInfo > ConstItemContainer::createPropertySetInfo(
 }
 
 } // namespace framework
+

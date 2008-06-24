@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: complextoolbarcontroller.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,7 +66,6 @@
 #endif
 #include <tools/urlobj.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
@@ -86,7 +85,7 @@ ComplexToolbarController::ComplexToolbarController(
     const Reference< XFrame >&               rFrame,
     ToolBox*                                 pToolbar,
     USHORT                                   nID,
-    const OUString&                          aCommand ) :
+    const ::rtl::OUString&                          aCommand ) :
     svt::ToolboxController( rServiceManager, rFrame, aCommand )
     ,   m_pToolbar( pToolbar )
     ,   m_nID( nID )
@@ -125,7 +124,7 @@ throw ( RuntimeException )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XURLTransformer > xURLTransformer;
-    OUString                     aCommandURL;
+    ::rtl::OUString                     aCommandURL;
     ::com::sun::star::util::URL  aTargetURL;
 
     {
@@ -384,3 +383,4 @@ void ComplexToolbarController::notifyTextChanged( const ::rtl::OUString& aText )
 }
 
 } // namespace
+
