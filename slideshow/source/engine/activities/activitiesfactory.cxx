@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: activitiesfactory.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,9 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
+
 #include <com/sun/star/animations/AnimationCalcMode.hpp>
 #include <comphelper/sequence.hxx>
 
@@ -174,9 +176,9 @@ public:
           mbDynamicStartValue( false ),
           mbCumulative( bCumulative )
     {
-        ENSURE_AND_THROW( mpAnim, "Invalid animation object" );
+        ENSURE_OR_THROW( mpAnim, "Invalid animation object" );
 
-        ENSURE_AND_THROW(
+        ENSURE_OR_THROW(
             rTo || rBy,
             "From and one of To or By, or To or By alone must be valid" );
     }
@@ -349,21 +351,21 @@ AnimationActivitySharedPtr createFromToByActivity(
 
     if( rFromAny.hasValue() )
     {
-        ENSURE_AND_THROW(
+        ENSURE_OR_THROW(
             extractValue( aTmpValue, rFromAny, rShape, rSlideBounds ),
             "createFromToByActivity(): Could not extract from value" );
         aFrom.reset(aTmpValue);
     }
     if( rToAny.hasValue() )
     {
-        ENSURE_AND_THROW(
+        ENSURE_OR_THROW(
             extractValue( aTmpValue, rToAny, rShape, rSlideBounds ),
             "createFromToByActivity(): Could not extract to value" );
         aTo.reset(aTmpValue);
     }
     if( rByAny.hasValue() )
     {
-        ENSURE_AND_THROW(
+        ENSURE_OR_THROW(
             extractValue( aTmpValue, rByAny, rShape, rSlideBounds ),
             "createFromToByActivity(): Could not extract by value" );
         aBy.reset(aTmpValue);
@@ -469,8 +471,8 @@ public:
           maInterpolator( rInterpolator ),
           mbCumulative( bCumulative )
     {
-        ENSURE_AND_THROW( mpAnim, "Invalid animation object" );
-        ENSURE_AND_THROW( !rValues.empty(), "Empty value vector" );
+        ENSURE_OR_THROW( mpAnim, "Invalid animation object" );
+        ENSURE_OR_THROW( !rValues.empty(), "Empty value vector" );
     }
 
     virtual void startAnimation()
@@ -498,7 +500,7 @@ public:
     {
         if (this->isDisposed() || !mpAnim)
             return;
-        ENSURE_AND_THROW( nIndex+1 < maValues.size(),
+        ENSURE_OR_THROW( nIndex+1 < maValues.size(),
                           "ValuesActivity::perform(): index out of range" );
 
         // interpolate between nIndex and nIndex+1 values
@@ -518,7 +520,7 @@ public:
     {
         if (this->isDisposed() || !mpAnim)
             return;
-        ENSURE_AND_THROW( nFrame < maValues.size(),
+        ENSURE_OR_THROW( nFrame < maValues.size(),
                           "ValuesActivity::perform(): index out of range" );
 
         // this is discrete, thus no lerp here.
@@ -580,7 +582,7 @@ AnimationActivitySharedPtr createValueListActivity(
     for( ::std::size_t i=0, nLen=rValues.getLength(); i<nLen; ++i )
     {
         ValueType aValue;
-        ENSURE_AND_THROW(
+        ENSURE_OR_THROW(
             extractValue( aValue, rValues[i], rShape, rSlideBounds ),
             "createValueListActivity(): Could not extract values" );
         aValueVector.push_back( aValue );
@@ -832,7 +834,7 @@ public:
         ContinuousActivityBase( rParms ),
         mpAnim( rAnim )
     {
-        ENSURE_AND_THROW( mpAnim, "Invalid animation object" );
+        ENSURE_OR_THROW( mpAnim, "Invalid animation object" );
     }
 
     virtual void startAnimation()
