@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: animationsetnode.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +76,7 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
     if (! isIndefiniteTiming( xAnimateNode->getDuration() )) {
         boost::shared_ptr<AnimationSetNode> const pSelf(
             boost::dynamic_pointer_cast<AnimationSetNode>(getSelf()) );
-        ENSURE_AND_THROW(
+        ENSURE_OR_THROW(
             pSelf, "cannot cast getSelf() to my type!" );
         aParms.mpEndEvent = makeEvent(
             boost::bind( &AnimationSetNode::implScheduleDeactivationEvent,
@@ -86,7 +86,7 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
     switch (AnimationFactory::classifyAttributeName( attrName )) {
     default:
     case AnimationFactory::CLASS_UNKNOWN_PROPERTY:
-        ENSURE_AND_THROW(
+        ENSURE_OR_THROW(
             false, "AnimationSetNode::createSetActivity(): "
             "Unexpected attribute class" );
         break;
@@ -95,7 +95,7 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
     {
         NumberAnimation::ValueType aValue;
 
-        ENSURE_AND_THROW(
+        ENSURE_OR_THROW(
             extractValue( aValue,
                           xAnimateNode->getTo(),
                           pShape,
@@ -118,7 +118,7 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
     {
         EnumAnimation::ValueType aValue;
 
-        ENSURE_AND_THROW(
+        ENSURE_OR_THROW(
             extractValue( aValue,
                           xAnimateNode->getTo(),
                           pShape,
@@ -141,7 +141,7 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
     {
         ColorAnimation::ValueType aValue;
 
-        ENSURE_AND_THROW(
+        ENSURE_OR_THROW(
             extractValue( aValue,
                           xAnimateNode->getTo(),
                           pShape,
@@ -164,7 +164,7 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
     {
         StringAnimation::ValueType aValue;
 
-        ENSURE_AND_THROW(
+        ENSURE_OR_THROW(
             extractValue( aValue,
                           xAnimateNode->getTo(),
                           pShape,
@@ -187,7 +187,7 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
     {
         BoolAnimation::ValueType aValue;
 
-        ENSURE_AND_THROW(
+        ENSURE_OR_THROW(
             extractValue( aValue,
                           xAnimateNode->getTo(),
                           pShape,
