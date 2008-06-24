@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_canvashelper.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,14 +32,13 @@
 #define _DXCANVAS_CANVASHELPER_HXX_
 
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/XIntegerBitmap.hpp>
 
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 
+#include "dx_graphicsprovider.hxx"
 #include "dx_gdiplususer.hxx"
 #include "dx_impltools.hxx"
-#include "dx_bitmap.hxx"
 
 #include <boost/utility.hpp>
 
@@ -72,14 +71,14 @@ namespace dxcanvas
             Reference device this canvas is associated with
 
          */
-        void setDevice( SpriteCanvas&   rDevice );
+        void setDevice( com::sun::star::rendering::XGraphicDevice& rDevice );
 
         /** Set the target for rendering operations
 
             @param rTarget
             Render target
          */
-        void setTarget( const DXBitmapSharedPtr& rTarget );
+        void setTarget( const GraphicsProviderSharedPtr& rTarget );
 
         /** Set the target for rendering operations
 
@@ -89,8 +88,8 @@ namespace dxcanvas
             @param rOutputOffset
             Output offset in pixel
          */
-        void setTarget( const DXBitmapSharedPtr&    rTarget,
-                         const ::basegfx::B2ISize&  rOutputOffset );
+        void setTarget( const GraphicsProviderSharedPtr& rTarget,
+                        const ::basegfx::B2ISize&        rOutputOffset );
 
 
         // CanvasHelper functionality
@@ -222,45 +221,6 @@ namespace dxcanvas
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >
             getDevice();
 
-        // BitmapCanvasHelper functionality
-        // ================================
-
-        void copyRect( const ::com::sun::star::rendering::XCanvas*          pCanvas,
-                       const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::rendering::XBitmapCanvas >&    sourceCanvas,
-                       const ::com::sun::star::geometry::RealRectangle2D&   sourceRect,
-                       const ::com::sun::star::rendering::ViewState&        sourceViewState,
-                       const ::com::sun::star::rendering::RenderState&      sourceRenderState,
-                       const ::com::sun::star::geometry::RealRectangle2D&   destRect,
-                       const ::com::sun::star::rendering::ViewState&        destViewState,
-                       const ::com::sun::star::rendering::RenderState&      destRenderState );
-
-        ::com::sun::star::geometry::IntegerSize2D getSize();
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >
-            getScaledBitmap( const ::com::sun::star::geometry::RealSize2D&  newSize,
-                             sal_Bool                                       beFast );
-
-        ::com::sun::star::uno::Sequence< sal_Int8 >
-            getData( ::com::sun::star::rendering::IntegerBitmapLayout&      bitmapLayout,
-                     const ::com::sun::star::geometry::IntegerRectangle2D&  rect );
-
-        void setData( const ::com::sun::star::uno::Sequence< sal_Int8 >&         data,
-                      const ::com::sun::star::rendering::IntegerBitmapLayout&    bitmapLayout,
-                      const ::com::sun::star::geometry::IntegerRectangle2D&      rect );
-
-        void setPixel( const ::com::sun::star::uno::Sequence< sal_Int8 >&        color,
-                       const ::com::sun::star::rendering::IntegerBitmapLayout&   bitmapLayout,
-                       const ::com::sun::star::geometry::IntegerPoint2D&         pos );
-
-        ::com::sun::star::uno::Sequence< sal_Int8 >
-            getPixel( ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
-                      const ::com::sun::star::geometry::IntegerPoint2D& pos );
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapPalette > getPalette();
-
-        ::com::sun::star::rendering::IntegerBitmapLayout getMemoryLayout();
-
         // Flush drawing queue to screen
         void                    flush() const;
 
@@ -269,38 +229,28 @@ namespace dxcanvas
         */
         void modifying() {}
 
-        bool hasAlpha() const;
-
-        /** Access target externally.
-
-            @attention if you change content, make sure mbSurfaceDirty
-            is correctly updated.
-         */
-        DXBitmapSharedPtr getTarget() const { return mpTarget; }
-
     protected:
+        /// Refcounted global GDI+ state container
+        GDIPlusUserSharedPtr            mpGdiPlusUser;
+
         /** Phyical output device
 
             Deliberately not a refcounted reference, because of
             potential circular references for spritecanvas.
          */
-        SpriteCanvas*            mpDevice;
+        com::sun::star::rendering::XGraphicDevice* mpDevice;
 
-        /// Render target
-        DXBitmapSharedPtr        mpTarget;
+        /// Provides the Gdiplus::Graphics to render into
+        GraphicsProviderSharedPtr                  mpGraphicsProvider;
 
-    private:
+        bool needOutput() const { return mpGraphicsProvider.get() != NULL; };
+
         // returns transparency of color
-        void setupGraphicsState( SurfaceGraphicsSharedPtr&                          rGraphics,
-                                 const ::com::sun::star::rendering::ViewState&      viewState,
-                                 const ::com::sun::star::rendering::RenderState&    renderState );
+        void setupGraphicsState( GraphicsSharedPtr&                              rGraphics,
+                                 const ::com::sun::star::rendering::ViewState&   viewState,
+                                 const ::com::sun::star::rendering::RenderState& renderState );
 
         Gdiplus::CompositingMode    calcCompositingMode( sal_Int8 nMode );
-
-        bool needOutput() const { return mpTarget.get() != NULL; };
-
-        /// Refcounted global GDI+ state container
-        GDIPlusUserSharedPtr            mpGdiPlusUser;
 
         /// Current (transformation-independent) output buffer offset
         ::basegfx::B2ISize              maOutputOffset;
