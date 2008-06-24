@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_spritecanvashelper.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,26 +35,30 @@
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 
 #include <canvas/spriteredrawmanager.hxx>
+#include <canvas/rendering/isurfaceproxy.hxx>
+#include <canvas/rendering/isurfaceproxymanager.hxx>
 
-#include "dx_canvashelper.hxx"
+#include "dx_bitmapcanvashelper.hxx"
 #include "dx_impltools.hxx"
 #include "dx_rendermodule.hxx"
-#include "dx_bitmap.hxx"
+#include "dx_surfacebitmap.hxx"
+
 #include <basegfx/range/b2irectangle.hxx>
 
 namespace dxcanvas
 {
     class SpriteCanvas;
 
-    class SpriteCanvasHelper : public CanvasHelper
+    class SpriteCanvasHelper : public BitmapCanvasHelper
     {
     public:
         SpriteCanvasHelper();
 
-        void init( ::canvas::SpriteRedrawManager&                   rManager,
+        void init( SpriteCanvas&                                    rParent,
+                   ::canvas::SpriteRedrawManager&                   rManager,
                    const IDXRenderModuleSharedPtr&                  rRenderModule,
                    const ::canvas::ISurfaceProxyManagerSharedPtr&   rSurfaceProxy,
-                   const DXBitmapSharedPtr&                         rBackBuffer,
+                   const DXSurfaceBitmapSharedPtr&                  rBackBuffer,
                    const ::basegfx::B2ISize&                        rOutputOffset );
 
         /// Dispose all internal references
@@ -132,6 +136,9 @@ namespace dxcanvas
                             const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
 
     private:
+        /// For generating sprites
+        SpriteCanvas*                                   mpSpriteSurface;
+
         /// Set from the SpriteCanvas: instance coordinating sprite redraw
         ::canvas::SpriteRedrawManager*                  mpRedrawManager;
 
@@ -141,7 +148,7 @@ namespace dxcanvas
         ::canvas::ISurfaceProxyManagerSharedPtr         mpSurfaceProxy;
 
         /// Backbuffer, contains the static canvas render output
-        DXBitmapSharedPtr                               mpBackBuffer;
+        DXSurfaceBitmapSharedPtr                        mpBackBuffer;
 
         /// Completely temporary rect storage (used by sprite repaint)
         mutable ::basegfx::B2IRange                     maUpdateRect;
