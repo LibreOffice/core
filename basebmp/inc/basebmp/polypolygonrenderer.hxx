@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: polypolygonrenderer.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygonfillrule.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
 #include <vigra/diff2d.hxx>
@@ -149,7 +150,8 @@ namespace basebmp
                                    DestAccessor                   ad,
                                    T                              fillColor,
                                    const basegfx::B2IRange&       rClipRect,
-                                   basegfx::B2DPolyPolygon const& rPoly )
+                                   basegfx::B2DPolyPolygon const& rPoly,
+                                   basegfx::FillRule              eFillRule )
     {
         const sal_Int32 nClipX1( std::max((sal_Int32)0,rClipRect.getMinX()) );
         const sal_Int32 nClipX2( rClipRect.getMaxX() );
@@ -236,6 +238,7 @@ namespace basebmp
                 detail::VectorOfVertexPtr::iterator       currVertex( pAET->begin() );
                 detail::VectorOfVertexPtr::iterator const lastVertex( pAET->end()-1 );
                 sal_uInt32                                nCrossedEdges(0);
+                sal_Int32                                 nWindingNumber(0);
                 while( currVertex != lastVertex )
                 {
                     // TODO(P1): might be worth a try to extend the
@@ -244,8 +247,17 @@ namespace basebmp
                     detail::Vertex&       rV1( **currVertex );
                     detail::Vertex const& rV2( **++currVertex );
 
-                    // even/odd fillrule
-                    if( !(nCrossedEdges & 0x01) &&
+                    nWindingNumber += -1 + 2*rV1.mbDownwards;
+
+                    // calc fill status for both rules. might save a
+                    // few percent runtime to specialize here...
+                    const bool bEvenOddFill(
+                        eFillRule == basegfx::FillRule_EVEN_ODD && !(nCrossedEdges & 0x01) );
+                    const bool bNonZeroWindingFill(
+                        eFillRule == basegfx::FillRule_NONZERO_WINDING_NUMBER && nWindingNumber != 0 );
+
+                    // is span visible?
+                    if( (bEvenOddFill || bNonZeroWindingFill) &&
                         y >= nClipY1 &&
                         rV1.mnX < nClipX2_frac &&
                         rV2.mnX > nClipX1_frac )
