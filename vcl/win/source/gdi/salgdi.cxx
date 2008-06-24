@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1809,3 +1809,15 @@ BOOL WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void*
 
     return bRetValue;
 }
+
+// -----------------------------------------------------------------------
+
+SystemGraphicsData WinSalGraphics::GetGraphicsData() const
+{
+    SystemGraphicsData aRes;
+    aRes.nSize = sizeof(aRes);
+    aRes.hDC = mhDC;
+    return aRes;
+}
+
+// -----------------------------------------------------------------------
