@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChildrenManager.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,6 @@
 #endif
 #include <svx/AccessibleShape.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
@@ -47,8 +46,8 @@ namespace accessibility {
 //=====  AccessibleChildrenManager  ===========================================
 
 ChildrenManager::ChildrenManager (
-    const Reference<XAccessible>& rxParent,
-    const Reference<drawing::XShapes>& rxShapeList,
+    const ::com::sun::star::uno::Reference<XAccessible>& rxParent,
+    const ::com::sun::star::uno::Reference<drawing::XShapes>& rxShapeList,
     const AccessibleShapeTreeInfo& rShapeTreeInfo,
     AccessibleContextBase& rContext)
     : mpImpl (NULL)
@@ -86,7 +85,7 @@ long ChildrenManager::GetChildCount (void) const throw ()
 
 
 
-Reference<XAccessible> ChildrenManager::GetChild (long nIndex)
+::com::sun::star::uno::Reference<XAccessible> ChildrenManager::GetChild (long nIndex)
     throw (::com::sun::star::uno::RuntimeException,
            ::com::sun::star::lang::IndexOutOfBoundsException)
 {
@@ -181,3 +180,4 @@ void ChildrenManager::ViewForwarderChanged (ChangeType aChangeType,
 
 
 } // end of namespace accessibility
+
