@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlcnitm.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,6 @@
 #endif
 #include "xmlcnitm.hxx"
 
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -132,8 +131,8 @@ BOOL SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
             if( !xContainer.is() )
                 return FALSE;
 
-            const Sequence< OUString > aNameSequence( xContainer->getElementNames() );
-            const OUString* pNames = aNameSequence.getConstArray();
+            const Sequence< ::rtl::OUString > aNameSequence( xContainer->getElementNames() );
+            const ::rtl::OUString* pNames = aNameSequence.getConstArray();
             const INT32 nCount = aNameSequence.getLength();
             Any aAny;
             AttributeData* pData;
@@ -141,7 +140,7 @@ BOOL SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
 
             for( nAttr = 0; nAttr < nCount; nAttr++ )
             {
-                const OUString aName( *pNames++ );
+                const ::rtl::OUString aName( *pNames++ );
 
                 aAny = xContainer->getByName( aName );
                 if( aAny.getValue() == NULL || aAny.getValueType() != ::getCppuType((AttributeData*)0) )
@@ -151,8 +150,8 @@ BOOL SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
                 sal_Int32 pos = aName.indexOf( sal_Unicode(':') );
                 if( pos != -1 )
                 {
-                    const OUString aPrefix( aName.copy( 0, pos ));
-                    const OUString aLName( aName.copy( pos+1 ));
+                    const ::rtl::OUString aPrefix( aName.copy( 0, pos ));
+                    const ::rtl::OUString aLName( aName.copy( pos+1 ));
 
                     if( pData->Namespace.getLength() == 0 )
                     {
@@ -193,15 +192,15 @@ BOOL SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
 }
 
 
-BOOL SvXMLAttrContainerItem::AddAttr( const OUString& rLName,
-                                        const OUString& rValue )
+BOOL SvXMLAttrContainerItem::AddAttr( const ::rtl::OUString& rLName,
+                                        const ::rtl::OUString& rValue )
 {
     return pImpl->AddAttr( rLName, rValue );
 }
 
-BOOL SvXMLAttrContainerItem::AddAttr( const OUString& rPrefix,
-          const OUString& rNamespace, const OUString& rLName,
-          const OUString& rValue )
+BOOL SvXMLAttrContainerItem::AddAttr( const ::rtl::OUString& rPrefix,
+          const ::rtl::OUString& rNamespace, const ::rtl::OUString& rLName,
+          const ::rtl::OUString& rValue )
 {
     return pImpl->AddAttr( rPrefix, rNamespace, rLName, rValue );
 }
@@ -211,22 +210,22 @@ USHORT SvXMLAttrContainerItem::GetAttrCount() const
     return (USHORT)pImpl->GetAttrCount();
 }
 
-OUString SvXMLAttrContainerItem::GetAttrNamespace( USHORT i ) const
+::rtl::OUString SvXMLAttrContainerItem::GetAttrNamespace( USHORT i ) const
 {
     return pImpl->GetAttrNamespace( i );
 }
 
-OUString SvXMLAttrContainerItem::GetAttrPrefix( USHORT i ) const
+::rtl::OUString SvXMLAttrContainerItem::GetAttrPrefix( USHORT i ) const
 {
     return pImpl->GetAttrPrefix( i );
 }
 
-const OUString& SvXMLAttrContainerItem::GetAttrLName( USHORT i ) const
+const ::rtl::OUString& SvXMLAttrContainerItem::GetAttrLName( USHORT i ) const
 {
     return pImpl->GetAttrLName( i );
 }
 
-const OUString& SvXMLAttrContainerItem::GetAttrValue( USHORT i ) const
+const ::rtl::OUString& SvXMLAttrContainerItem::GetAttrValue( USHORT i ) const
 {
     return pImpl->GetAttrValue( i );
 }
@@ -242,14 +241,13 @@ USHORT SvXMLAttrContainerItem::GetNextNamespaceIndex( USHORT nIdx ) const
     return pImpl->GetNextNamespaceIndex( nIdx );
 }
 
-const OUString& SvXMLAttrContainerItem::GetNamespace( USHORT i ) const
+const ::rtl::OUString& SvXMLAttrContainerItem::GetNamespace( USHORT i ) const
 {
     return pImpl->GetNamespace( i );
 }
 
-const OUString& SvXMLAttrContainerItem::GetPrefix( USHORT i ) const
+const ::rtl::OUString& SvXMLAttrContainerItem::GetPrefix( USHORT i ) const
 {
     return pImpl->GetPrefix( i );
 }
-
 
