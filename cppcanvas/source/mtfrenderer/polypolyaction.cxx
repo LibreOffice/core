@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: polypolyaction.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,7 @@
 #include <tools/gen.hxx>
 #include <vcl/canvastools.hxx>
 
-#include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -107,7 +107,7 @@ namespace cppcanvas
                                             bool                                bFill,
                                             bool                                bStroke ) :
                 CachedPrimitiveBase( rCanvas, false ),
-                mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), /*#i76339#*/ ::PolyPolygon(rPolyPoly) ) ),
+                mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
                 maBounds( ::basegfx::tools::getRange(rPolyPoly) ),
                 mpCanvas( rCanvas ),
                 maState(),
@@ -129,7 +129,7 @@ namespace cppcanvas
                                             bool                                bStroke,
                                             int                                 nTransparency ) :
                 CachedPrimitiveBase( rCanvas, false ),
-                mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), /*#i76339#*/ ::PolyPolygon(rPolyPoly) ) ),
+                mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
                 maBounds( ::basegfx::tools::getRange(rPolyPoly) ),
                 mpCanvas( rCanvas ),
                 maState(),
@@ -263,10 +263,10 @@ namespace cppcanvas
             class TexturedPolyPolyAction : public CachedPrimitiveBase
             {
             public:
-                TexturedPolyPolyAction( const ::PolyPolygon&        rPoly,
-                                        const CanvasSharedPtr&      rCanvas,
-                                        const OutDevState&          rState,
-                                        const rendering::Texture&   rTexture );
+                TexturedPolyPolyAction( const ::basegfx::B2DPolyPolygon& rPoly,
+                                        const CanvasSharedPtr&           rCanvas,
+                                        const OutDevState&               rState,
+                                        const rendering::Texture&        rTexture );
 
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
                                      const Subset&                  rSubset ) const;
@@ -283,7 +283,7 @@ namespace cppcanvas
                                      const ::basegfx::B2DHomMatrix&                 rTransformation ) const;
 
                 const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
-                const ::Rectangle                                   maBounds;
+                const ::basegfx::B2DRectangle                       maBounds;
                 const CanvasSharedPtr                               mpCanvas;
 
                 // stroke color is now implicit: the maState.DeviceColor member
@@ -291,14 +291,13 @@ namespace cppcanvas
                 const rendering::Texture                            maTexture;
             };
 
-            TexturedPolyPolyAction::TexturedPolyPolyAction( const ::PolyPolygon&        rPolyPoly,
-                                                            const CanvasSharedPtr&      rCanvas,
-                                                            const OutDevState&          rState,
-                                                            const rendering::Texture&   rTexture ) :
+            TexturedPolyPolyAction::TexturedPolyPolyAction( const ::basegfx::B2DPolyPolygon& rPolyPoly,
+                                                            const CanvasSharedPtr&           rCanvas,
+                                                            const OutDevState&               rState,
+                                                            const rendering::Texture&        rTexture ) :
                 CachedPrimitiveBase( rCanvas, true ),
-                mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(),
-                                                                          rPolyPoly ) ),
-                maBounds( rPolyPoly.GetBoundRect() ),
+                mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
+                maBounds( ::basegfx::tools::getRange(rPolyPoly) ),
                 mpCanvas( rCanvas ),
                 maState(),
                 maTexture( rTexture )
@@ -346,7 +345,7 @@ namespace cppcanvas
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
 
                 return tools::calcDevicePixelBounds(
-                    ::vcl::unotools::b2DRectangleFromRectangle( maBounds ),
+                    maBounds,
                     mpCanvas->getViewState(),
                     aLocalState );
             }
@@ -378,7 +377,7 @@ namespace cppcanvas
             class StrokedPolyPolyAction : public CachedPrimitiveBase
             {
             public:
-                StrokedPolyPolyAction( const ::PolyPolygon&                 rPoly,
+                StrokedPolyPolyAction( const ::basegfx::B2DPolyPolygon&     rPoly,
                                        const CanvasSharedPtr&               rCanvas,
                                        const OutDevState&                   rState,
                                        const rendering::StrokeAttributes&   rStrokeAttributes );
@@ -398,20 +397,19 @@ namespace cppcanvas
                                      const ::basegfx::B2DHomMatrix&                 rTransformation ) const;
 
                 const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
-                const ::Rectangle                                   maBounds;
+                const ::basegfx::B2DRectangle                       maBounds;
                 const CanvasSharedPtr                               mpCanvas;
                 rendering::RenderState                              maState;
                 const rendering::StrokeAttributes                   maStrokeAttributes;
             };
 
-            StrokedPolyPolyAction::StrokedPolyPolyAction( const ::PolyPolygon&                  rPolyPoly,
+            StrokedPolyPolyAction::StrokedPolyPolyAction( const ::basegfx::B2DPolyPolygon&      rPolyPoly,
                                                           const CanvasSharedPtr&                rCanvas,
                                                           const OutDevState&                    rState,
                                                           const rendering::StrokeAttributes&    rStrokeAttributes ) :
                 CachedPrimitiveBase( rCanvas, false ),
-                mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(),
-                                                                          rPolyPoly ) ),
-                maBounds( rPolyPoly.GetBoundRect() ),
+                mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
+                maBounds( ::basegfx::tools::getRange(rPolyPoly) ),
                 mpCanvas( rCanvas ),
                 maState(),
                 maStrokeAttributes( rStrokeAttributes )
@@ -457,7 +455,7 @@ namespace cppcanvas
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
 
                 return tools::calcDevicePixelBounds(
-                    ::vcl::unotools::b2DRectangleFromRectangle( maBounds ),
+                    maBounds,
                     mpCanvas->getViewState(),
                     aLocalState );
             }
@@ -496,12 +494,12 @@ namespace cppcanvas
                                                         rState.isLineColorSet ) );
         }
 
-        ActionSharedPtr PolyPolyActionFactory::createPolyPolyAction( const ::basegfx::B2DPolyPolygon& rPoly,
+        ActionSharedPtr PolyPolyActionFactory::createPolyPolyAction( const ::basegfx::B2DPolyPolygon&   rPoly,
                                                                      const CanvasSharedPtr&             rCanvas,
                                                                      const OutDevState&                 rState,
                                                                      const rendering::Texture&          rTexture )
         {
-            return ActionSharedPtr( new TexturedPolyPolyAction( /*#i76339#*/ ::PolyPolygon(rPoly), rCanvas, rState, rTexture ) );
+            return ActionSharedPtr( new TexturedPolyPolyAction( rPoly, rCanvas, rState, rTexture ) );
         }
 
         ActionSharedPtr PolyPolyActionFactory::createLinePolyPolyAction( const ::basegfx::B2DPolyPolygon& rPoly,
@@ -523,7 +521,7 @@ namespace cppcanvas
         {
             OSL_ENSURE( rState.isLineColorSet,
                         "PolyPolyActionFactory::createPolyPolyAction() for strokes called with empty line color" );
-            return ActionSharedPtr( new StrokedPolyPolyAction( /*#i76339#*/ ::PolyPolygon(rPoly), rCanvas, rState, rStrokeAttributes ) );
+            return ActionSharedPtr( new StrokedPolyPolyAction( rPoly, rCanvas, rState, rStrokeAttributes ) );
         }
 
         ActionSharedPtr PolyPolyActionFactory::createPolyPolyAction( const ::basegfx::B2DPolyPolygon& rPoly,
