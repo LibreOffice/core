@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: IntegerBitmapLayout.idl,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,14 +30,8 @@
 #ifndef __com_sun_star_rendering_IntegerBitmapLayout_idl__
 #define __com_sun_star_rendering_IntegerBitmapLayout_idl__
 
-#ifndef __com_sun_star_rendering_Endianness_idl__
-#include <com/sun/star/rendering/Endianness.idl>
-#endif
-#ifndef __com_sun_star_rendering_IntegerBitmapFormat_idl__
-#include <com/sun/star/rendering/IntegerBitmapFormat.idl>
-#endif
-#ifndef __com_sun_star_rendering_XColorSpace_idl__
-#include <com/sun/star/rendering/XColorSpace.idl>
+#ifndef __com_sun_star_rendering_XIntegerBitmapColorSpace_idl__
+#include <com/sun/star/rendering/XIntegerBitmapColorSpace.idl>
 #endif
 #ifndef __com_sun_star_rendering_XBitmapPalette_idl__
 #include <com/sun/star/rendering/XBitmapPalette.idl>
@@ -59,68 +53,59 @@ struct IntegerBitmapLayout
 
         This value must not be negative
      */
-    long                ScanLines;
+    long                     ScanLines;
 
     /** Number of data bytes per scanline.
 
         This value must not be negative
      */
-    long                ScanLineBytes;
+    long                     ScanLineBytes;
 
     /** Byte offset between the start of two consecutive scanlines.
 
         This value is permitted to be negative, denoting a bitmap
         whose content is flipped at the x axis.
      */
-    long                ScanLineStride;
+    long                     ScanLineStride;
 
     /** Byte offset between the start of two consecutive planes.
 
-        This value is permitted to be negative.
+        This value is permitted to be negative. If this value is zero,
+        the bitmap is assumed to be in chunky format, otherwise it is
+        assumed to be planar.  The difference between chunky and
+        planar layout lies in the way how color channels are
+        interleaved. For a chunky format, all channel data for a
+        single pixel lies consecutively in memory. For a planar
+        layout, the first channel of all pixel is stored consecutive,
+        followed by the second channel, and so forth.<p>
      */
-    long                PlaneStride;
+    long                     PlaneStride;
 
-    /// Color space the bitmap colors shall be interpreted within.
-    XColorSpace         ColorSpace;
+    /** Color space the bitmap colors shall be interpreted within.<p>
 
-    /** Number of color components per pixel.
+        Note that the actual pixel layout is specified at the color
+        space. If this layout describes a palette bitmap format, this
+        color space describes the index format (plus maybe an extra
+        alpha channel). The palette itself references another color
+        space, which describes the layout of the palette entries.
 
-        This value must not be negative
+        @see XBitmapPalette
      */
-    long                NumComponents;
-
-    /** Mask values for packed bitmaps
-
-        This member contains NumComponents 64 bit masks, which can be
-        used to mask out the corresponding color component from the
-        bitmap data. For the typical 32 bit RGBA color data, the four
-        mask values would look like 0xFF000000, 0x00FF0000,
-        0x0000FF00, and 0x000000FF.
-     */
-    sequence<hyper>     ComponentMasks;
+    XIntegerBitmapColorSpace ColorSpace;
 
     /** This member determines whether the bitmap data are actually
         indices into a color map.<p>
 
         When set to the nil reference, the bitmap data is assumed to
         contain direct color values (to be interpreted according to
-        the associated color space).<p>
+        the associated color space). If this member references a valid
+        palette, one of the pixel components as returned by the color
+        space referenced from the <member>ColorSpace</member> is
+        required to be of type
+        <member>ColorComponentTag::INDEX</member>. That component is
+        then used to index the palette.<p>
      */
-    XBitmapPalette      Palette;
-
-    /** Endianness of the pixel values.
-
-        This value must be one of the <type>Endianness</type> constants
-     */
-    byte                Endianness;
-
-    /** Format type of this bitmap.<p>
-
-        This value must be one of the <type>IntegerBitmapFormat</type>
-        constants. The precise layout of the color channels within a
-        bitmap pixel is further specified via the ComponentMasks member.<p>
-    */
-    byte                Format;
+    XBitmapPalette           Palette;
 
     /** This member determines the bit order (only relevant if a pixel
         uses less than 8 bits, of course).<p>
@@ -136,7 +121,8 @@ struct IntegerBitmapLayout
         the first byte. If this member is <FALSE/>, it's just the
         opposite.
      */
-    boolean             IsMsbFirst;
+    boolean                  IsMsbFirst;
+
 };
 
 }; }; }; };
