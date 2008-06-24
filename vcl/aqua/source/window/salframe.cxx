@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframe.cxx,v $
- * $Revision: 1.63 $
+ * $Revision: 1.64 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,8 +98,6 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, ULONG salFrameStyle ) :
     mpParent = dynamic_cast<AquaSalFrame*>(pParent);
 
     initWindowAndView();
-
-//  maSysData.rWindow = mrWindow;
 
     SalData* pSalData = GetSalData();
     pSalData->maFrames.push_front( this );
