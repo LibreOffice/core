@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: implbitmap.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,10 +31,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppcanvas.hxx"
 
-#include <implbitmap.hxx>
-#include <implbitmapcanvas.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
+#include "implbitmap.hxx"
+#include "implbitmapcanvas.hxx"
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <canvas/canvastools.hxx>
 
 
@@ -103,8 +103,10 @@ namespace cppcanvas
             }
 
             rendering::RenderState aLocalState( getRenderState() );
-            ::canvas::tools::setDeviceColor( aLocalState,
-                                             1.0, 1.0, 1.0, nAlphaModulation );
+            uno::Sequence<rendering::ARGBColor> aCol(1);
+            aCol[0] = rendering::ARGBColor( nAlphaModulation, 1.0, 1.0, 1.0 );
+            aLocalState.DeviceColor =
+                pCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace()->convertFromARGB(aCol);
 
             // TODO(P1): implement caching
             pCanvas->getUNOCanvas()->drawBitmapModulated( mxBitmap,
