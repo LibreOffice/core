@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_canvashelper_texturefill.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -128,9 +128,9 @@ namespace cairocanvas
                                                                                          const rendering::RenderState&                      renderState,
                                                                                          const uno::Sequence< rendering::Texture >&         textures )
     {
-        CHECK_AND_THROW( xPolyPolygon.is(),
+        ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
                          "CanvasHelper::fillPolyPolygon(): polygon is NULL");
-        CHECK_AND_THROW( textures.getLength(),
+        ENSURE_ARG_OR_THROW( textures.getLength(),
                          "CanvasHelper::fillTexturedPolyPolygon: empty texture sequence");
 
     cairo_save( mpCairo );
