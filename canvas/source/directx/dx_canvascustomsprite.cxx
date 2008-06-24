@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_canvascustomsprite.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,9 +28,13 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_canvas.hxx"
+
 #include <ctype.h> // don't ask. msdev breaks otherwise...
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
@@ -53,13 +57,14 @@ namespace dxcanvas
                                             const IDXRenderModuleSharedPtr&                 rRenderModule,
                                             const ::canvas::ISurfaceProxyManagerSharedPtr&  rSurfaceProxy,
                                             bool                                            bShowSpriteBounds ) :
-        mpSpriteCanvas( rRefDevice )
+        mpSpriteCanvas( rRefDevice ),
+        mpSurface()
     {
-        ENSURE_AND_THROW( rRefDevice.get(),
-                          "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
+        ENSURE_OR_THROW( rRefDevice.get(),
+                         "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
 
-        DXBitmapSharedPtr pBitmap(
-            new DXBitmap(
+        mpSurface.reset(
+            new DXSurfaceBitmap(
                 ::basegfx::B2IVector(
                     ::canvas::tools::roundUp( rSpriteSize.Width ),
                     ::canvas::tools::roundUp( rSpriteSize.Height )),
@@ -68,12 +73,12 @@ namespace dxcanvas
                 true));
 
         maCanvasHelper.setDevice( *rRefDevice.get() );
-        maCanvasHelper.setTarget( pBitmap );
+        maCanvasHelper.setTarget( mpSurface );
 
         maSpriteHelper.init( rSpriteSize,
                              rRefDevice,
                              rRenderModule,
-                             maCanvasHelper.getTarget(),
+                             mpSurface,
                              bShowSpriteBounds );
 
         // clear sprite to 100% transparent
@@ -84,6 +89,7 @@ namespace dxcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
+        mpSurface.reset();
         mpSpriteCanvas.clear();
 
         // forward to parent
