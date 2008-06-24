@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_repainttarget.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,10 @@
 #ifndef _CAIROCANVAS_REPAINTTARGET_HXX
 #define _CAIROCANVAS_REPAINTTARGET_HXX
 
+#ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
+#endif
+
 #include "cairo_cairo.hxx"
 
 using namespace ::cairo;
@@ -51,9 +54,9 @@ namespace cairocanvas
         virtual ~RepaintTarget() {}
 
         // call this when a bitmap is repainted
-        virtual bool repaint( ::cairo::Surface* pSurface,
-                  const ::com::sun::star::rendering::ViewState& viewState,
-                  const ::com::sun::star::rendering::RenderState& renderState ) = 0;
+        virtual bool repaint( const ::cairo::SurfaceSharedPtr&                pSurface,
+                              const ::com::sun::star::rendering::ViewState&   viewState,
+                              const ::com::sun::star::rendering::RenderState& renderState ) = 0;
     };
 }
 
