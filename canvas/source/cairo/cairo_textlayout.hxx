@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_textlayout.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,10 +60,10 @@ namespace cairocanvas
     {
     public:
         TextLayout( const ::com::sun::star::rendering::StringContext& aText,
-                    sal_Int8                                                  nDirection,
-                    sal_Int64                                                 nRandomSeed,
-                    const CanvasFont::Reference&                              rFont,
-                    const DeviceRef&                                          rRefDevice );
+                    sal_Int8                                          nDirection,
+                    sal_Int64                                         nRandomSeed,
+                    const CanvasFont::Reference&                      rFont,
+                    const SurfaceProviderRef&                         rRefDevice );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing();
@@ -109,7 +109,7 @@ namespace cairocanvas
         ::com::sun::star::rendering::StringContext maText;
         ::com::sun::star::uno::Sequence< double >  maLogicalAdvancements;
         CanvasFont::Reference                      mpFont;
-        DeviceRef                                  mpRefDevice;
+        SurfaceProviderRef                         mpRefDevice;
         sal_Int8                                   mnTextDirection;
 
     void useFont( ::cairo::Cairo* pCairo );
