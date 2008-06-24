@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: actiontriggerpropertyset.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,6 @@
 
 
 using namespace cppu;
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -113,7 +112,7 @@ void SAL_CALL ActionTriggerPropertySet::release() throw ()
 ::rtl::OUString SAL_CALL ActionTriggerPropertySet::getImplementationName()
 throw ( RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATIONNAME_ACTIONTRIGGER ));
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATIONNAME_ACTIONTRIGGER ));
 }
 
 sal_Bool SAL_CALL ActionTriggerPropertySet::supportsService( const ::rtl::OUString& ServiceName )
@@ -129,7 +128,7 @@ Sequence< ::rtl::OUString > SAL_CALL ActionTriggerPropertySet::getSupportedServi
 throw ( RuntimeException )
 {
     Sequence< ::rtl::OUString > seqServiceNames( 1 );
-    seqServiceNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_ACTIONTRIGGER ));
+    seqServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_ACTIONTRIGGER ));
     return seqServiceNames;
 }
 
@@ -354,11 +353,11 @@ const Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescr
 {
     static const Property pActionTriggerPropertys[] =
     {
-        Property( OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL"   )), HANDLE_COMMANDURL   , ::getCppuType((OUString*)0)               , PropertyAttribute::TRANSIENT  ),
-        Property( OUString( RTL_CONSTASCII_USTRINGPARAM( "HelpURL"      )), HANDLE_HELPURL      , ::getCppuType((OUString*)0)               , PropertyAttribute::TRANSIENT  ),
-        Property( OUString( RTL_CONSTASCII_USTRINGPARAM( "Image"        )), HANDLE_IMAGE        , ::getCppuType((Reference<XBitmap>*)0)     , PropertyAttribute::TRANSIENT  ),
-        Property( OUString( RTL_CONSTASCII_USTRINGPARAM( "SubContainer" )), HANDLE_SUBCONTAINER , ::getCppuType((OUString*)0)               , PropertyAttribute::TRANSIENT  ),
-        Property( OUString( RTL_CONSTASCII_USTRINGPARAM( "Text"         )), HANDLE_TEXT         , ::getCppuType((Reference<XInterface>*)0)  , PropertyAttribute::TRANSIENT  )
+        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL"    )), HANDLE_COMMANDURL   , ::getCppuType((::rtl::OUString*)0)                , PropertyAttribute::TRANSIENT  ),
+        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HelpURL"       )), HANDLE_HELPURL      , ::getCppuType((::rtl::OUString*)0)                , PropertyAttribute::TRANSIENT  ),
+        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Image"        )), HANDLE_IMAGE     , ::getCppuType((Reference<XBitmap>*)0)     , PropertyAttribute::TRANSIENT  ),
+        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SubContainer"  )), HANDLE_SUBCONTAINER , ::getCppuType((::rtl::OUString*)0)                , PropertyAttribute::TRANSIENT  ),
+        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text"          )), HANDLE_TEXT         , ::getCppuType((Reference<XInterface>*)0)  , PropertyAttribute::TRANSIENT  )
     };
 
     // Use it to initialize sequence!
@@ -373,7 +372,7 @@ const Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescr
 //  private method
 //******************************************************************************************************************************
 sal_Bool ActionTriggerPropertySet::impl_tryToChangeProperty(
-    const   OUString&   sCurrentValue   ,
+    const   ::rtl::OUString&    sCurrentValue   ,
     const   Any&        aNewValue       ,
     Any&        aOldValue       ,
     Any&        aConvertedValue )
@@ -383,7 +382,7 @@ throw( IllegalArgumentException )
     sal_Bool bReturn = sal_False;
     // Get new value from any.
     // IllegalArgumentException() can be thrown!
-    OUString sValue ;
+    ::rtl::OUString sValue ;
     convertPropertyValue( sValue, aNewValue );
 
     // If value change ...
@@ -479,3 +478,4 @@ throw( IllegalArgumentException )
 }
 
 }
+

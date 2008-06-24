@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: actiontriggerseparatorpropertyset.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,6 @@
 
 
 using namespace cppu;
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -107,7 +106,7 @@ void ActionTriggerSeparatorPropertySet::release() throw()
 ::rtl::OUString SAL_CALL ActionTriggerSeparatorPropertySet::getImplementationName()
 throw ( RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATIONNAME_ACTIONTRIGGERSEPARATOR ));
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATIONNAME_ACTIONTRIGGERSEPARATOR ));
 }
 
 sal_Bool SAL_CALL ActionTriggerSeparatorPropertySet::supportsService( const ::rtl::OUString& ServiceName )
@@ -123,7 +122,7 @@ Sequence< ::rtl::OUString > SAL_CALL ActionTriggerSeparatorPropertySet::getSuppo
 throw ( RuntimeException )
 {
     Sequence< ::rtl::OUString > seqServiceNames( 1 );
-    seqServiceNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_ACTIONTRIGGERSEPARATOR ));
+    seqServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_ACTIONTRIGGERSEPARATOR ));
     return seqServiceNames;
 }
 
@@ -300,7 +299,7 @@ const Sequence< Property > ActionTriggerSeparatorPropertySet::impl_getStaticProp
 {
     static const Property pActionTriggerPropertys[] =
     {
-        Property( OUString( RTL_CONSTASCII_USTRINGPARAM( "SeparatorType" )), HANDLE_TYPE, ::getCppuType((sal_Int16*)0), PropertyAttribute::TRANSIENT )
+        Property( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SeparatorType" )), HANDLE_TYPE, ::getCppuType((sal_Int16*)0), PropertyAttribute::TRANSIENT )
     };
 
     // Use it to initialize sequence!
@@ -350,3 +349,4 @@ throw( IllegalArgumentException )
 }
 
 }
+
