@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: imagebuttontoolbarcontroller.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +72,6 @@
 #include <svtools/filter.hxx>
 #include <svtools/miscopt.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
@@ -108,7 +107,7 @@ uno::Reference< util::XMacroExpander > GetMacroExpander()
             if ( xContext.is() )
             {
                 m_xMacroExpander =  Reference< com::sun::star::util::XMacroExpander >( xContext->getValueByName(
-                                        OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander"))),
+                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander"))),
                                         UNO_QUERY );
                 xMacroExpander = m_xMacroExpander;
             }
@@ -127,7 +126,7 @@ static void SubstituteVariables( ::rtl::OUString& aURL )
         // cut protocol
         rtl::OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
         // decode uric class chars
-        aMacro = Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+        aMacro = ::rtl::Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
         // expand macro string
         aURL = xMacroExpander->expandMacros( aMacro );
     }
@@ -140,7 +139,7 @@ ImageButtonToolbarController::ImageButtonToolbarController(
     const Reference< XFrame >&               rFrame,
     ToolBox*                                 pToolbar,
     USHORT                                   nID,
-    const OUString&                          aCommand ) :
+    const ::rtl::OUString&                          aCommand ) :
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
 {
     sal_Bool bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
@@ -214,7 +213,7 @@ void ImageButtonToolbarController::executeControlCommand( const ::com::sun::star
     }
 }
 
-sal_Bool ImageButtonToolbarController::ReadImageFromURL( sal_Bool bBigImage, const OUString& aImageURL, Image& aImage )
+sal_Bool ImageButtonToolbarController::ReadImageFromURL( sal_Bool bBigImage, const ::rtl::OUString& aImageURL, Image& aImage )
 {
     SvStream* pStream = utl::UcbStreamHelper::CreateStream( aImageURL, STREAM_STD_READ );
     if ( pStream && ( pStream->GetErrorCode() == 0 ))
@@ -245,3 +244,4 @@ sal_Bool ImageButtonToolbarController::ReadImageFromURL( sal_Bool bBigImage, con
 }
 
 } // namespace
+
