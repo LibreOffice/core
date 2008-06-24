@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XSystemDependentWindowPeer.idl,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +65,8 @@ published interface XSystemDependentWindowPeer: com::sun::star::uno::XInterface
         object provided from the JNI-API.<BR>
 
         OS2: Returns an HWND if possible, otherwise 0.<BR>
-        MAC: Not supported.<BR>
+
+        MAC: Returns a ptr to the NSView implementing the window.<BR>
 
         XWINDOW: Returns a structure SystemDependentXWindow
         or void if it is not reachable.<BR></p>
