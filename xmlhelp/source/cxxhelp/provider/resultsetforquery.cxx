@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: resultsetforquery.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,8 @@
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/script/XInvocation.hpp>
+
 #include <qe/QueryProcessor.hxx>
 #ifndef INCLUDED_STL_ALGORITHM
 #include <algorithm>
@@ -79,9 +81,13 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
         xTrans->loadModule(TransliterationModules_UPPERCASE_LOWERCASE,
                            aLocale );
 
+    // Access Lucene via XInvocation
+    Reference< script::XInvocation > xInvocation(
+        xMSF->createInstance( rtl::OUString::createFromAscii( "com.sun.star.help.HelpSearch" ) ),
+        UNO_QUERY );
+
     unsigned int i;
     vector< vector< rtl::OUString > > queryList;
-
     {
         sal_Int32 idx;
         rtl::OUString query = m_aURLParameter.get_query();
@@ -99,78 +105,94 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
                 toliterate = xTrans->transliterate(
                     tmp,0,tmp.getLength(),aSeq);
             }
+
             currentQuery.push_back( toliterate );
             queryList.push_back( currentQuery );
-            query = query.copy( 1 + idx );
-        }
-    }
 
-    rtl::OUString scope = m_aURLParameter.get_scope();
-    StaticModuleInformation* inf =
-        m_pDatabases->getStaticInformationForModule( m_aURLParameter.get_module(),
-                                                     m_aURLParameter.get_language() );
-
-    if( inf )
-    {
-        if( scope.compareToAscii( "Heading" ) == 0 )
-            scope = rtl::OUString::createFromAscii("title"); // inf->get_heading();
-        else
-            scope = inf->get_fulltext();
-    }
-
-    sal_Int32 hitCount = m_aURLParameter.get_hitCount();
-
-    QueryResults* queryResults = 0;
-    QueryHitIterator* it = 0;
-    set< rtl::OUString > aSet,aCurrent,aResultSet;
-
-    try
-    {
-        rtl::OUString idxDir =
-            m_pDatabases->getInstallPathAsURL()                    +
-            m_pDatabases->lang( m_aURLParameter.get_language() )   +
-            rtl::OUString::createFromAscii( "/" )                  +
-            m_aURLParameter.get_module()                           +
-            rtl::OUString::createFromAscii( ".idx/" );
-
-        if(queryList.size() > 1)
-            hitCount = 2000;
-
-        for( i = 0; i < queryList.size(); ++i )
-        {
-            QueryProcessor queryProcessor(idxDir);
-            QueryStatement queryStatement(hitCount,queryList[i],scope);
-            queryResults = queryProcessor.processQuery( queryStatement );
-
-            it = 0;
-            if( queryResults )
-                it = queryResults->makeQueryHitIterator();
-
-            aSet.clear();
-            while( it && it->next() )
-            {
-                QueryHitData* qhd = it->getHit( 0 /*PrefixTranslator*/ );
-                if(qhd)
-                    aSet.insert(qhd->getDocument());
-            }
-
-            delete it;  // deletes also queryResults[i]
-
-            // intersect
-            if( i == 0 )
-                aResultSet = aSet;
+            int nCpy = 1 + idx;
+            if( nCpy >= query.getLength() )
+                query = rtl::OUString();
             else
-            {
-                aCurrent = aResultSet;
-                aResultSet.clear();
-                set_intersection( aSet.begin(),aSet.end(),
-                                  aCurrent.begin(),aCurrent.end(),
-                                  inserter(aResultSet,aResultSet.begin()));
-            }
+                query = query.copy( 1 + idx );
         }
     }
-    catch( IOException )
+
+    set< rtl::OUString > aSet,aCurrent,aResultSet;
+    if( xInvocation.is() )
     {
+        rtl::OUString scope = m_aURLParameter.get_scope();
+        bool bCaptionsOnly = ( scope.compareToAscii( "Heading" ) == 0 );
+        sal_Int32 hitCount = m_aURLParameter.get_hitCount();
+
+        try
+        {
+            rtl::OUString idxDir;
+            idxDir =
+                m_pDatabases->getInstallPathAsURL()                    +
+                m_pDatabases->lang( m_aURLParameter.get_language() )   +
+                rtl::OUString::createFromAscii( "/" )                  +
+                m_aURLParameter.get_module()                           +
+                rtl::OUString::createFromAscii( ".idxl/" );
+
+            if(queryList.size() > 1)
+                hitCount = 2000;
+
+            for( i = 0; i < queryList.size(); ++i )
+            {
+                if( xInvocation.is() )
+                {
+                    int nParamCount = bCaptionsOnly ? 5 : 4;
+                    Sequence<uno::Any> aParamsSeq( nParamCount );
+
+                    aParamsSeq[0] = uno::makeAny( rtl::OUString::createFromAscii( "-index" ) );
+                    rtl::OUString aSystemPath;
+                    osl::FileBase::getSystemPathFromFileURL( idxDir, aSystemPath );
+                    aParamsSeq[1] = uno::makeAny( aSystemPath );
+
+                    aParamsSeq[2] = uno::makeAny( rtl::OUString::createFromAscii( "-query" ) );
+
+                    const std::vector< rtl::OUString >& aListItem = queryList[i];
+                    ::rtl::OUString aNewQueryStr = aListItem[0];
+                    aParamsSeq[3] = uno::makeAny( aNewQueryStr );
+
+                    if( bCaptionsOnly )
+                        aParamsSeq[4] = uno::makeAny( rtl::OUString::createFromAscii( "-caption" ) );
+
+                    Sequence< sal_Int16 > aOutParamIndex;
+                    Sequence< uno::Any > aOutParam;
+                    uno::Any aRet = xInvocation->invoke( rtl::OUString::createFromAscii( "search" ),
+                        aParamsSeq, aOutParamIndex, aOutParam );
+
+                    Sequence<rtl::OUString> aRetSeq;
+                    if( aRet >>= aRetSeq )
+                    {
+                        aSet.clear();
+
+                        const rtl::OUString* pRetSeq = aRetSeq.getConstArray();
+                        int nCount = aRetSeq.getLength();
+                        if( nCount > hitCount )
+                            nCount = hitCount;
+                        for( int j = 0 ; j < nCount ; ++j )
+                            aSet.insert( pRetSeq[j] );
+                    }
+                }
+
+                // intersect
+                if( i == 0 )
+                    aResultSet = aSet;
+                else
+                {
+                    aCurrent = aResultSet;
+                    aResultSet.clear();
+                    set_intersection( aSet.begin(),aSet.end(),
+                                      aCurrent.begin(),aCurrent.end(),
+                                      inserter(aResultSet,aResultSet.begin()));
+                }
+            }
+        }
+        catch( const Exception& )
+        {
+        }
     }
 
     sal_Int32 replIdx = rtl::OUString::createFromAscii( "#HLP#" ).getLength();
@@ -179,7 +201,8 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
     set< rtl::OUString >::const_iterator set_it = aResultSet.begin();
     while( set_it != aResultSet.end() )
     {
-          m_aPath.push_back(replWith + set_it->copy(replIdx));
+        rtl::OUString aResultStr = replWith + set_it->copy(replIdx);
+          m_aPath.push_back( aResultStr );
         ++set_it;
     }
 
