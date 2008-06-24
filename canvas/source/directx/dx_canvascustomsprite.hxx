@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_canvascustomsprite.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +48,8 @@
 #include <canvas/base/canvascustomspritebase.hxx>
 
 #include "dx_sprite.hxx"
-#include "dx_canvashelper.hxx"
+#include "dx_surfacebitmap.hxx"
+#include "dx_bitmapcanvashelper.hxx"
 #include "dx_spritehelper.hxx"
 #include "dx_spritecanvas.hxx"
 
@@ -83,7 +84,7 @@ namespace dxcanvas
 
     typedef ::canvas::CanvasCustomSpriteBase< CanvasCustomSpriteSpriteBase_Base,
                                               SpriteHelper,
-                                              CanvasHelper,
+                                              BitmapCanvasHelper,
                                               ::osl::MutexGuard,
                                               ::cppu::OWeakObject >                     CanvasCustomSpriteBaseT;
 
@@ -130,10 +131,11 @@ namespace dxcanvas
         virtual void redraw() const;
 
     private:
-        /** MUST hold here, too, since CanvasHelper only contains a
+        /** MUST hold here, too, since BitmapCanvasHelper only contains a
             raw pointer (without refcounting)
         */
-        SpriteCanvasRef mpSpriteCanvas;
+        SpriteCanvasRef          mpSpriteCanvas;
+        DXSurfaceBitmapSharedPtr mpSurface;
     };
 }
 
