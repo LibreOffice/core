@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basenode.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 #define INCLUDED_SLIDESHOW_BASENODE_HXX
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <osl/diagnose.hxx>
 
 #include "event.hxx"
@@ -146,7 +147,7 @@ protected:
     bool isMainSequenceRootNode() const { return mbIsMainSequenceRootNode; }
 
     bool checkValidNode() const {
-        ENSURE_AND_THROW( mpSelf, "no self ptr set!" );
+        ENSURE_OR_THROW( mpSelf, "no self ptr set!" );
         bool const bRet = (meCurrState != INVALID);
         OSL_ENSURE( bRet, "### INVALID node!" );
         return bRet;
