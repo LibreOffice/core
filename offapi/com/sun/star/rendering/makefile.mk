@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,18 +47,17 @@ IDLFILES=\
     BlendMode.idl \
     CanvasFactory.idl \
     Caret.idl \
+    ColorComponentTag.idl \
     ColorProfile.idl \
     ColorSpaceType.idl \
     CompositeOperation.idl \
     EmphasisMark.idl \
-    Endianness.idl \
     FillRule.idl \
     FloatingPointBitmapFormat.idl \
     FloatingPointBitmapLayout.idl \
     FontInfo.idl \
     FontMetrics.idl \
     FontRequest.idl \
-    IntegerBitmapFormat.idl \
     IntegerBitmapLayout.idl \
     InterpolationMode.idl \
     Panose.idl \
@@ -99,9 +98,14 @@ IDLFILES=\
     XCustomSprite.idl \
     XGraphicDevice.idl \
     XHalfFloatBitmap.idl \
+    XHalfFloatReadOnlyBitmap.idl \
     XIeeeDoubleBitmap.idl \
+    XIeeeDoubleReadOnlyBitmap.idl \
     XIeeeFloatBitmap.idl \
+    XIeeeFloatReadOnlyBitmap.idl \
     XIntegerBitmap.idl \
+    XIntegerBitmapColorSpace.idl \
+    XIntegerReadOnlyBitmap.idl \
     XLinePolyPolygon2D.idl \
     XParametricPolyPolygon2D.idl \
     XParametricPolyPolygon2DFactory.idl \
