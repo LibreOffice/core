@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: spritehelper.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
 #include <rtl/math.hxx>
@@ -65,34 +66,31 @@ namespace vclcanvas
     SpriteHelper::SpriteHelper() :
         mpBackBuffer(),
         mpBackBufferMask(),
-        mpSpriteCanvas(),
         maContent(),
         mbShowSpriteBounds(false)
     {
     }
 
-    void SpriteHelper::init( const geometry::RealSize2D&    rSpriteSize,
-                             const SpriteCanvasRef&         rSpriteCanvas,
-                             const BackBufferSharedPtr&     rBackBuffer,
-                             const BackBufferSharedPtr&     rBackBufferMask,
-                             bool                           bShowSpriteBounds )
+    void SpriteHelper::init( const geometry::RealSize2D&               rSpriteSize,
+                             const ::canvas::SpriteSurface::Reference& rOwningSpriteCanvas,
+                             const BackBufferSharedPtr&                rBackBuffer,
+                             const BackBufferSharedPtr&                rBackBufferMask,
+                             bool                                      bShowSpriteBounds )
     {
-        ENSURE_AND_THROW( rSpriteCanvas.get() && rBackBuffer && rBackBufferMask,
-                          "SpriteHelper::init(): Invalid sprite canvas or back buffer" );
+        ENSURE_OR_THROW( rOwningSpriteCanvas.get() && rBackBuffer && rBackBufferMask,
+                         "SpriteHelper::init(): Invalid sprite canvas or back buffer" );
 
         mpBackBuffer        = rBackBuffer;
         mpBackBufferMask    = rBackBufferMask;
-        mpSpriteCanvas      = rSpriteCanvas;
         mbShowSpriteBounds  = bShowSpriteBounds;
 
-        init( rSpriteSize, rSpriteCanvas.get() );
+        init( rSpriteSize, rOwningSpriteCanvas );
     }
 
     void SpriteHelper::disposing()
     {
         mpBackBuffer.reset();
         mpBackBufferMask.reset();
-        mpSpriteCanvas.clear();
 
         // forward to parent
         CanvasCustomSpriteHelper::disposing();
@@ -105,8 +103,7 @@ namespace vclcanvas
     {
         (void)bBufferedUpdate; // not used on every platform
 
-        if( !mpSpriteCanvas.get() ||
-            !mpBackBuffer ||
+        if( !mpBackBuffer ||
             !mpBackBufferMask )
         {
             return; // we're disposed
@@ -260,7 +257,7 @@ namespace vclcanvas
                 if( getClip().is() )
                 {
                     ::basegfx::B2DPolyPolygon aClipPoly(
-                        ::canvas::tools::polyPolygonFromXPolyPolygon2D(
+                        ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(
                             getClip() ));
 
                     if( aClipPoly.count() )
@@ -443,7 +440,7 @@ namespace vclcanvas
 
     ::basegfx::B2DPolyPolygon SpriteHelper::polyPolygonFromXPolyPolygon2D( uno::Reference< rendering::XPolyPolygon2D >& xPoly ) const
     {
-        return ::canvas::tools::polyPolygonFromXPolyPolygon2D( xPoly );
+        return ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D( xPoly );
     }
 
 }
