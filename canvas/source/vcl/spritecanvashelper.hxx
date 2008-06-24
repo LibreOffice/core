@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: spritecanvashelper.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +53,11 @@ namespace vclcanvas
     public:
         SpriteCanvasHelper();
 
-        void setRedrawManager( ::canvas::SpriteRedrawManager& rManager );
+        void init( const OutDevProviderSharedPtr& rOutDev,
+                   SpriteCanvas&                  rOwningSpriteCanvas,
+                   ::canvas::SpriteRedrawManager& rManager,
+                   bool                           bProtect,
+                   bool                           bHaveAlpha );
 
         /// Dispose all internal references
         void disposing();
@@ -149,6 +153,9 @@ namespace vclcanvas
 
         /// Set from the SpriteCanvas: instance coordinating sprite redraw
         ::canvas::SpriteRedrawManager*                  mpRedrawManager;
+
+        /// Set from the init method. used to generate sprites
+        SpriteCanvas*                                   mpOwningSpriteCanvas;
 
         /** Background compositing surface.
 
