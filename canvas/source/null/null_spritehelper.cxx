@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: null_spritehelper.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
 #include <rtl/logfile.hxx>
@@ -68,7 +69,7 @@ namespace nullcanvas
     void SpriteHelper::init( const geometry::RealSize2D&    rSpriteSize,
                              const SpriteCanvasRef&         rSpriteCanvas )
     {
-        ENSURE_AND_THROW( rSpriteCanvas.get(),
+        ENSURE_OR_THROW( rSpriteCanvas.get(),
                           "SpriteHelper::init(): Invalid device, sprite canvas or surface" );
 
         mpSpriteCanvas     = rSpriteCanvas;
@@ -94,6 +95,6 @@ namespace nullcanvas
 
     ::basegfx::B2DPolyPolygon SpriteHelper::polyPolygonFromXPolyPolygon2D( uno::Reference< rendering::XPolyPolygon2D >& xPoly ) const
     {
-        return ::canvas::tools::polyPolygonFromXPolyPolygon2D( xPoly );
+        return ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D( xPoly );
     }
 }
