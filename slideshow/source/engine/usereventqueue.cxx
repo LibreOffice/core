@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: usereventqueue.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -180,7 +181,7 @@ public:
 
     virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode )
     {
-        ENSURE_AND_RETURN(
+        ENSURE_OR_RETURN(
             rNode,
             "AllAnimationEventHandler::handleAnimationEvent(): Invalid node" );
 
@@ -601,7 +602,7 @@ void UserEventQueue::registerEvent(
     const EventSharedPtr&         rEvent,
     const Functor&                rRegistrationFunctor )
 {
-    ENSURE_AND_THROW( rEvent,
+    ENSURE_OR_THROW( rEvent,
                       "UserEventQueue::registerEvent(): Invalid event" );
 
     if( !rHandler ) {
@@ -621,7 +622,7 @@ void UserEventQueue::registerEvent(
     const Arg&                    rArg,
     const Functor&                rRegistrationFunctor )
 {
-    ENSURE_AND_THROW( rEvent,
+    ENSURE_OR_THROW( rEvent,
                       "UserEventQueue::registerEvent(): Invalid event" );
 
     if( !rHandler ) {
@@ -823,7 +824,7 @@ void UserEventQueue::registerAudioStoppedEvent(
 void UserEventQueue::registerShapeClickEvent( const EventSharedPtr& rEvent,
                                               const ShapeSharedPtr& rShape )
 {
-    ENSURE_AND_THROW(
+    ENSURE_OR_THROW(
         rEvent,
         "UserEventQueue::registerShapeClickEvent(): Invalid event" );
 
@@ -920,7 +921,7 @@ void UserEventQueue::registerShapeDoubleClickEvent(
     const EventSharedPtr& rEvent,
     const ShapeSharedPtr& rShape )
 {
-    ENSURE_AND_THROW(
+    ENSURE_OR_THROW(
         rEvent,
         "UserEventQueue::registerShapeDoubleClickEvent(): Invalid event" );
 
