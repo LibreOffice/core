@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: null_textlayout.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -115,7 +116,7 @@ namespace nullcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        ENSURE_AND_THROW( mpFont.get(),
+        ENSURE_OR_THROW( mpFont.get(),
                           "TextLayout::queryTextBounds(): invalid font" );
 
         // fake text bounds by either taking the advancement values,
