@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slidechangebase.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_slideshow.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/canvastools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -70,7 +71,7 @@ SlideChangeBase::SlideChangeBase( boost::optional<SlideSharedPtr> const & leavin
       mbFinished(false),
       mbPrefetched(false)
 {
-    ENSURE_AND_THROW(
+    ENSURE_OR_THROW(
         pEnteringSlide,
         "SlideChangeBase::SlideChangeBase(): Invalid entering slide!" );
 }
@@ -120,14 +121,14 @@ SlideBitmapSharedPtr SlideChangeBase::createBitmap( const UnoViewSharedPtr&     
                 pCanvas,
                 slideSizePixel ) );
 
-        ENSURE_AND_THROW(
+        ENSURE_OR_THROW(
             pBitmap,
             "SlideChangeBase::createBitmap(): Cannot create page bitmap" );
 
         cppcanvas::BitmapCanvasSharedPtr pBitmapCanvas(
             pBitmap->getBitmapCanvas() );
 
-        ENSURE_AND_THROW( pBitmapCanvas,
+        ENSURE_OR_THROW( pBitmapCanvas,
                           "SlideChangeBase::createBitmap(): "
                           "Cannot create page bitmap canvas" );
 
