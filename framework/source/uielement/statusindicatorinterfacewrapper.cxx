@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: statusindicatorinterfacewrapper.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +45,6 @@
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -145,3 +144,4 @@ throw( ::com::sun::star::uno::RuntimeException )
 }
 
 } // namespace framework
+
