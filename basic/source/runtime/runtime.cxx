@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: runtime.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,6 +136,7 @@ SbiRuntime::pStep0 SbiRuntime::aStep0[] = { // Alle Opcodes ohne Operanden
     &SbiRuntime::StepINITFOREACH,// Init for each loop
     &SbiRuntime::StepVBASET,// vba-like set statement
     &SbiRuntime::StepERASE_CLEAR,// vba-like set statement
+    &SbiRuntime::StepARRAYACCESS,// access TOS as array
 };
 
 SbiRuntime::pStep1 SbiRuntime::aStep1[] = { // Alle Opcodes mit einem Operanden
