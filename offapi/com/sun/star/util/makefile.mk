@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.31 $
+# $Revision: 1.32 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,6 +54,7 @@ IDLFILES=\
     DateTimeRange.idl\
     DiskFullException.idl\
     ElementChange.idl \
+    Endianness.idl \
     FileIOException.idl\
     Language.idl\
     NumberFormat.idl\
