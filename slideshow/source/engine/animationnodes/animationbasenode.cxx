@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: animationbasenode.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,12 +121,12 @@ AnimationBaseNode::AnimationBaseNode(
             presentation::ParagraphTarget aTarget;
 
             if( !(mxAnimateNode->getTarget() >>= aTarget) )
-                ENSURE_AND_THROW(
+                ENSURE_OR_THROW(
                     false, "could not extract any target information" );
 
             xShape = aTarget.Shape;
 
-            ENSURE_AND_THROW( xShape.is(), "invalid shape in ParagraphTarget" );
+            ENSURE_OR_THROW( xShape.is(), "invalid shape in ParagraphTarget" );
 
             mpShape = lookupAttributableShape( getContext().mpSubsettableShapeManager,
                                                xShape );
@@ -249,7 +249,7 @@ void AnimationBaseNode::activate_st()
     // create new attribute layer
     maAttributeLayerHolder.createAttributeLayer( getShape() );
 
-    ENSURE_AND_THROW( maAttributeLayerHolder.get(),
+    ENSURE_OR_THROW( maAttributeLayerHolder.get(),
                       "Could not generate shape attribute layer" );
 
     // TODO(Q2): This affects the way mpActivity
