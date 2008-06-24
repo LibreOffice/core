@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RenderingIntent.idl,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,8 +32,15 @@
 
 module com { module sun { module star { module rendering {
 
-/* TODO: There's still a lot open here! */
+/** The rendering intent for a color space.<p>
 
+    The rendering intent for a color space mostly determines how
+    out-of-gamut color is treated. See <a
+    href="http://en.wikipedia.org/wiki/Rendering_intent">Wikipedia</a>
+    for a thorough explanation.
+
+    @since OOo 2.0.0
+ */
 constants RenderingIntent
 {
     /** Also known as the image intent, this rendering intent
