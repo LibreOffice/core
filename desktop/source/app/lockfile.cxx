@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lockfile.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,7 +80,7 @@ namespace desktop {
     {
         // build the file-url to use for the lock
         OUString aUserPath;
-        Bootstrap::locateUserInstallation( aUserPath );
+        utl::Bootstrap::locateUserInstallation( aUserPath );
         m_aLockname = aUserPath + Suffix();
 
         // generate ID
