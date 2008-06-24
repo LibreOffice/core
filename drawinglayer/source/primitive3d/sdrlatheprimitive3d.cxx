@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrlatheprimitive3d.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include <drawinglayer/primitive3d/sdrdecompositiontools3d.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
+#include <drawinglayer/geometry/viewinformation3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -54,7 +55,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence SdrLathePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        Primitive3DSequence SdrLathePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& rViewInformation) const
         {
             Primitive3DSequence aRetval;
 
@@ -183,12 +184,56 @@ namespace drawinglayer
                 // add line
                 if(getSdrLFSAttribute().getLine())
                 {
-                    basegfx::B3DPolyPolygon aLine;
-                    extractLinesFromSlice(aLine, rSliceVector, bClosedRotation,
-                        true,
-                        !getSdr3DObjectAttribute().getReducedLineGeometry());
-                    const Primitive3DSequence aLines(create3DPolyPolygonLinePrimitives(aLine, getTransform(), *getSdrLFSAttribute().getLine()));
-                    appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aLines);
+                    if(getSdr3DObjectAttribute().getReducedLineGeometry())
+                    {
+                        // create geometric outlines with reduced line geometry for chart
+                        const basegfx::B3DPolyPolygon aHorLine(extractHorizontalLinesFromSlice(rSliceVector, bClosedRotation));
+                        const sal_uInt32 nCount(aHorLine.count());
+                        basegfx::B3DPolyPolygon aNewLineGeometry;
+
+                        for(sal_uInt32 a(1); a < nCount; a++)
+                        {
+                            // for each loop pair create the connection edges
+                            createReducedOutlines(
+                                rViewInformation,
+                                getTransform(),
+                                aHorLine.getB3DPolygon(a - 1),
+                                aHorLine.getB3DPolygon(a),
+                                aNewLineGeometry);
+                        }
+
+                        for(sal_uInt32 b(0); b < nCount; b++)
+                        {
+                            // filter hor lines for empty loops (those who have their defining point on the Y-Axis)
+                            basegfx::B3DPolygon aCandidate(aHorLine.getB3DPolygon(b));
+                            aCandidate.removeDoublePoints();
+
+                            if(aCandidate.count())
+                            {
+                                aNewLineGeometry.append(aCandidate);
+                            }
+                        }
+
+                        if(aNewLineGeometry.count())
+                        {
+                            const Primitive3DSequence aLines(create3DPolyPolygonLinePrimitives(aNewLineGeometry, getTransform(), *getSdrLFSAttribute().getLine()));
+                            appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aLines);
+                        }
+                    }
+                    else
+                    {
+                        // extract line geometry from slices
+                        const basegfx::B3DPolyPolygon aHorLine(extractHorizontalLinesFromSlice(rSliceVector, bClosedRotation));
+                        const basegfx::B3DPolyPolygon aVerLine(extractVerticalLinesFromSlice(rSliceVector));
+
+                        // add horizontal lines
+                        const Primitive3DSequence aHorLines(create3DPolyPolygonLinePrimitives(aHorLine, getTransform(), *getSdrLFSAttribute().getLine()));
+                        appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aHorLines);
+
+                        // add vertical lines
+                        const Primitive3DSequence aVerLines(create3DPolyPolygonLinePrimitives(aVerLine, getTransform(), *getSdrLFSAttribute().getLine()));
+                        appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aVerLines);
+                    }
                 }
 
                 // add shadow
@@ -206,24 +251,24 @@ namespace drawinglayer
         {
             // prepare the polygon. No double points, correct orientations and a correct
             // outmost polygon are needed
-            basegfx::B2DPolyPolygon aCandidate(basegfx::tools::adaptiveSubdivideByAngle(getPolyPolygon()));
-            aCandidate.removeDoublePoints();
-            aCandidate = basegfx::tools::correctOrientations(aCandidate);
-            aCandidate = basegfx::tools::correctOutmostPolygon(aCandidate);
+            maCorrectedPolyPolygon = basegfx::tools::adaptiveSubdivideByAngle(getPolyPolygon());
+            maCorrectedPolyPolygon.removeDoublePoints();
+            maCorrectedPolyPolygon = basegfx::tools::correctOrientations(maCorrectedPolyPolygon);
+            maCorrectedPolyPolygon = basegfx::tools::correctOutmostPolygon(maCorrectedPolyPolygon);
 
             // check edge count of first sub-polygon. If different, reSegment polyPolygon. This ensures
             // that for polyPolygons, the subPolys 1..n only get reSegmented when polygon 0L is different
             // at all (and not always)
-            const basegfx::B2DPolygon aSubCandidate(aCandidate.getB2DPolygon(0));
+            const basegfx::B2DPolygon aSubCandidate(maCorrectedPolyPolygon.getB2DPolygon(0));
             const sal_uInt32 nSubEdgeCount(aSubCandidate.isClosed() ? aSubCandidate.count() : (aSubCandidate.count() ? aSubCandidate.count() - 1L : 0L));
 
             if(nSubEdgeCount != getVerticalSegments())
             {
-                aCandidate = basegfx::tools::reSegmentPolyPolygon(aCandidate, getVerticalSegments());
+                maCorrectedPolyPolygon = basegfx::tools::reSegmentPolyPolygon(maCorrectedPolyPolygon, getVerticalSegments());
             }
 
             // prepare slices as geometry
-            createLatheSlices(maSlices, aCandidate, getBackScale(), getDiagonal(), getRotation(), getHorizontalSegments(), getCharacterMode(), getCloseFront(), getCloseBack());
+            createLatheSlices(maSlices, maCorrectedPolyPolygon, getBackScale(), getDiagonal(), getRotation(), getHorizontalSegments(), getCharacterMode(), getCloseFront(), getCloseBack());
         }
 
         const Slice3DVector& SdrLathePrimitive3D::getSlices() const
@@ -257,12 +302,15 @@ namespace drawinglayer
             bool bCloseFront,
             bool bCloseBack)
         :   SdrPrimitive3D(rTransform, rTextureSize, rSdrLFSAttribute, rSdr3DObjectAttribute),
+            maCorrectedPolyPolygon(),
+            maSlices(),
             maPolyPolygon(rPolyPolygon),
             mnHorizontalSegments(nHorizontalSegments),
             mnVerticalSegments(nVerticalSegments),
             mfDiagonal(fDiagonal),
             mfBackScale(fBackScale),
             mfRotation(fRotation),
+            mpLastRLGViewInformation(0),
             mbSmoothNormals(bSmoothNormals),
             mbSmoothHorizontalNormals(bSmoothHorizontalNormals),
             mbSmoothLids(bSmoothLids),
@@ -299,6 +347,14 @@ namespace drawinglayer
             }
         }
 
+        SdrLathePrimitive3D::~SdrLathePrimitive3D()
+        {
+            if(mpLastRLGViewInformation)
+            {
+                delete mpLastRLGViewInformation;
+            }
+        }
+
         bool SdrLathePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
             if(SdrPrimitive3D::operator==(rPrimitive))
@@ -331,6 +387,28 @@ namespace drawinglayer
             // ranges where the new method is more correct, but the need to keep the old behaviour
             // has priority here.
             return get3DRangeFromSlices(getSlices());
+        }
+
+        Primitive3DSequence SdrLathePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
+        {
+            if(getSdr3DObjectAttribute().getReducedLineGeometry())
+            {
+                if(!mpLastRLGViewInformation ||
+                    (getLocalDecomposition().hasElements()
+                        && *mpLastRLGViewInformation != rViewInformation))
+                {
+                    // conditions of last local decomposition with reduced lines have changed. Remember
+                    // new one and clear current decompositiopn
+                    ::osl::Mutex m_mutex;
+                    SdrLathePrimitive3D* pThat = const_cast< SdrLathePrimitive3D* >(this);
+                    pThat->setLocalDecomposition(Primitive3DSequence());
+                    delete pThat->mpLastRLGViewInformation;
+                    pThat->mpLastRLGViewInformation = new geometry::ViewInformation3D(rViewInformation);
+                }
+            }
+
+            // no test for buffering needed, call parent
+            return SdrPrimitive3D::get3DDecomposition(rViewInformation);
         }
 
         // provide unique ID

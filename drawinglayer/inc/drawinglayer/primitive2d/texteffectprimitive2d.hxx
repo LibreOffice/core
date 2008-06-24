@@ -4,9 +4,9 @@
  *
  *  $RCSfile: texteffectprimitive2d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:17 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,8 +62,9 @@ namespace drawinglayer
             double                                          mfDirection;
             TextEffectStyle2D                               meTextEffectStyle2D;
 
-            // the last used viewTransformation, used from getDecomposition for buffering
-            basegfx::B2DHomMatrix                           maLastViewTransformation;
+            // the last used object to view transformtion used from getDecomposition
+            // for decide buffering
+            basegfx::B2DHomMatrix                           maLastObjectToViewTransformation;
 
         protected:
             // create local decomposition

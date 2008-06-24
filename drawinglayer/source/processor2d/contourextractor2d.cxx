@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contourextractor2d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,10 +74,10 @@ namespace drawinglayer
             {
                 case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D :
                 {
-                    // extract hairline
+                    // extract hairline in world coordinates
                     const primitive2d::PolygonHairlinePrimitive2D& rPolygonCandidate(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate));
                     basegfx::B2DPolygon aLocalPolygon(rPolygonCandidate.getB2DPolygon());
-                    aLocalPolygon.transform(maCurrentTransformation);
+                    aLocalPolygon.transform(getViewInformation2D().getObjectTransformation());
 
                     if(aLocalPolygon.isClosed())
                     {
@@ -91,18 +91,18 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :
                 {
-                    // extract fill
+                    // extract fill in world coordinates
                     const primitive2d::PolyPolygonColorPrimitive2D& rPolygonCandidate(static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(rCandidate));
                     basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolygonCandidate.getB2DPolyPolygon());
-                    aLocalPolyPolygon.transform(maCurrentTransformation);
+                    aLocalPolyPolygon.transform(getViewInformation2D().getObjectTransformation());
                     maExtractedContour.push_back(aLocalPolyPolygon);
                     break;
                 }
                 case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
                 {
-                    // extract BoundRect from bitmaps
+                    // extract BoundRect from bitmaps in world coordinates
                     const primitive2d::BitmapPrimitive2D& rBitmapCandidate(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
-                    basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation * rBitmapCandidate.getTransform());
+                    basegfx::B2DHomMatrix aLocalTransform(getViewInformation2D().getObjectTransformation() * rBitmapCandidate.getTransform());
                     basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
                     aPolygon.transform(aLocalTransform);
                     maExtractedContour.push_back(basegfx::B2DPolyPolygon(aPolygon));
@@ -110,9 +110,9 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
                 {
-                    // extract BoundRect from MetaFiles
+                    // extract BoundRect from MetaFiles in world coordinates
                     const primitive2d::MetafilePrimitive2D& rMetaCandidate(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
-                    basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation * rMetaCandidate.getTransform());
+                    basegfx::B2DHomMatrix aLocalTransform(getViewInformation2D().getObjectTransformation() * rMetaCandidate.getTransform());
                     basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
                     aPolygon.transform(aLocalTransform);
                     maExtractedContour.push_back(basegfx::B2DPolyPolygon(aPolygon));
@@ -127,24 +127,23 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
                 {
-                    // extract mask, ignore content
+                    // extract mask in world coordinates, ignore content
                     const primitive2d::MaskPrimitive2D& rMaskCandidate(static_cast< const primitive2d::MaskPrimitive2D& >(rCandidate));
                     basegfx::B2DPolyPolygon aMask(rMaskCandidate.getMask());
-                    aMask.transform(maCurrentTransformation);
+                    aMask.transform(getViewInformation2D().getObjectTransformation());
                     maExtractedContour.push_back(basegfx::B2DPolyPolygon(aMask));
                     break;
                 }
                 case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D :
                 {
-                    // remember current transformation and ViewInformation
+                    // remember current ViewInformation2D
                     const primitive2d::TransformPrimitive2D& rTransformCandidate(static_cast< const primitive2d::TransformPrimitive2D& >(rCandidate));
-                    const basegfx::B2DHomMatrix aLastCurrentTransformation(maCurrentTransformation);
                     const geometry::ViewInformation2D aLastViewInformation2D(getViewInformation2D());
 
-                    // create new transformations for CurrentTransformation and for local ViewInformation2D
-                    maCurrentTransformation = maCurrentTransformation * rTransformCandidate.getTransformation();
+                    // create new local ViewInformation2D
                     const geometry::ViewInformation2D aViewInformation2D(
-                        getViewInformation2D().getViewTransformation() * rTransformCandidate.getTransformation(),
+                        getViewInformation2D().getObjectTransformation() * rTransformCandidate.getTransformation(),
+                        getViewInformation2D().getViewTransformation(),
                         getViewInformation2D().getViewport(),
                         getViewInformation2D().getVisualizedPage(),
                         getViewInformation2D().getViewTime(),
@@ -155,14 +154,13 @@ namespace drawinglayer
                     process(rTransformCandidate.getChildren());
 
                     // restore transformations
-                    maCurrentTransformation = aLastCurrentTransformation;
                     updateViewInformation(aLastViewInformation2D);
 
                     break;
                 }
                 case PRIMITIVE2D_ID_SCENEPRIMITIVE2D :
                 {
-                    // 2D Scene primitive containing 3D stuff; extract 2D contour
+                    // 2D Scene primitive containing 3D stuff; extract 2D contour in world coordinates
                     const primitive2d::ScenePrimitive2D& rScenePrimitive2DCandidate(static_cast< const primitive2d::ScenePrimitive2D& >(rCandidate));
                     const primitive2d::Primitive2DSequence xExtracted2DSceneGeometry(rScenePrimitive2DCandidate.getGeometry2D(getViewInformation2D()));
 
@@ -184,9 +182,9 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D :
                 case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
                 {
-                    // primitives who's BoundRect will be added
+                    // primitives who's BoundRect will be added in world coordinates
                     basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
-                    aRange.transform(maCurrentTransformation);
+                    aRange.transform(getViewInformation2D().getObjectTransformation());
                     maExtractedContour.push_back(basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(aRange)));
                     break;
                 }
@@ -199,37 +197,6 @@ namespace drawinglayer
             }
         }
 
-        void ContourExtractor2D::process(const primitive2d::Primitive2DSequence& rSource)
-        {
-            if(rSource.hasElements())
-            {
-                const sal_Int32 nCount(rSource.getLength());
-
-                for(sal_Int32 a(0L); a < nCount; a++)
-                {
-                    // get reference
-                    const primitive2d::Primitive2DReference xReference(rSource[a]);
-
-                    if(xReference.is())
-                    {
-                        // try to cast to BasePrimitive2D implementation
-                        const primitive2d::BasePrimitive2D* pBasePrimitive = dynamic_cast< const primitive2d::BasePrimitive2D* >(xReference.get());
-
-                        if(pBasePrimitive)
-                        {
-                            // it is a BasePrimitive2D implementation, use local processor
-                            processBasePrimitive2D(*pBasePrimitive);
-                        }
-                        else
-                        {
-                            // unknown implementation, use UNO API call instead and process recursively
-                            const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation2D().getViewInformationSequence());
-                            process(xReference->getDecomposition(rViewParameters));
-                        }
-                    }
-                }
-            }
-        }
     } // end of namespace processor2d
 } // end of namespace drawinglayer
 

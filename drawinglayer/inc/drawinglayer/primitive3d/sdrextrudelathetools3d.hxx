@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudelathetools3d.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,10 @@
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
+
+namespace drawinglayer { namespace geometry {
+    class ViewInformation3D;
+}}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -114,12 +118,8 @@ namespace drawinglayer
             bool bCloseBack);
 
         // helpers for geometry extraction
-        void extractLinesFromSlice(
-            basegfx::B3DPolyPolygon& rLine,
-            const Slice3DVector& rSliceVector,
-            bool bClosed,
-            bool bAddHorizontal,
-            bool bAddVertical);
+        basegfx::B3DPolyPolygon extractHorizontalLinesFromSlice(const Slice3DVector& rSliceVector, bool bCloseHorLines);
+        basegfx::B3DPolyPolygon extractVerticalLinesFromSlice(const Slice3DVector& rSliceVector);
 
         void extractPlanesFromSlice(
             ::std::vector< basegfx::B3DPolyPolygon >& rFill,
@@ -133,6 +133,13 @@ namespace drawinglayer
             double fSmoothLidsMix,
             bool bCreateTextureCoordinates,
             const basegfx::B2DHomMatrix& rTexTransform);
+
+        void createReducedOutlines(
+            const geometry::ViewInformation3D& rViewInformation,
+            const basegfx::B3DHomMatrix& rObjectTransform,
+            const basegfx::B3DPolygon& rLoopA,
+            const basegfx::B3DPolygon& rLoopB,
+            basegfx::B3DPolyPolygon& rTarget);
 
     } // end of namespace overlay
 } // end of namespace drawinglayer

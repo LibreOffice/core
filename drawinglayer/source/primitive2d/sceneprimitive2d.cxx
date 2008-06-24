@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sceneprimitive2d.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/processor3d/zbufferprocessor3d.hxx>
 #include <drawinglayer/processor3d/shadow3dextractor.hxx>
-#include <drawinglayer/processor3d/label3dextractor.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
@@ -63,6 +62,44 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        bool ScenePrimitive2D::impGetShadow3D(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+
+            // create on demand
+            if(!mbShadow3DChecked && getChildren3D().hasElements())
+            {
+                basegfx::B3DVector aLightNormal;
+                const double fShadowSlant(getSdrSceneAttribute().getShadowSlant());
+                const basegfx::B3DRange aScene3DRange(primitive3d::getB3DRangeFromPrimitive3DSequence(getChildren3D(), getViewInformation3D()));
+
+                if(maSdrLightingAttribute.getLightVector().size())
+                {
+                    // get light normal from first light and normalize
+                    aLightNormal = maSdrLightingAttribute.getLightVector()[0].getDirection();
+                    aLightNormal.normalize();
+                }
+
+                // create shadow extraction processor
+                processor3d::Shadow3DExtractingProcessor aShadowProcessor(
+                    getViewInformation3D(),
+                    getObjectTransformation(),
+                    aLightNormal,
+                    fShadowSlant,
+                    aScene3DRange);
+
+                // process local primitives
+                aShadowProcessor.process(getChildren3D());
+
+                // fetch result and set checked flag
+                const_cast< ScenePrimitive2D* >(this)->maShadowPrimitives = aShadowProcessor.getPrimitive2DSequence();
+                const_cast< ScenePrimitive2D* >(this)->mbShadow3DChecked = true;
+            }
+
+            // return if there are shadow primitives
+            return maShadowPrimitives.hasElements();
+        }
+
         void ScenePrimitive2D::calculateDsicreteSizes(
             const geometry::ViewInformation2D& rViewInformation,
             basegfx::B2DRange& rDiscreteRange,
@@ -71,7 +108,7 @@ namespace drawinglayer
         {
             // use unit range and transform to discrete coordinates
             rDiscreteRange = basegfx::B2DRange(0.0, 0.0, 1.0, 1.0);
-            rDiscreteRange.transform(rViewInformation.getViewTransformation() * getObjectTransformation());
+            rDiscreteRange.transform(rViewInformation.getObjectToViewTransformation() * getObjectTransformation());
 
             // force to discrete expanded bounds (it grows, so expanding works perfectly well)
             rDiscreteRange.expand(basegfx::B2DTuple(floor(rDiscreteRange.getMinX()), floor(rDiscreteRange.getMinY())));
@@ -167,7 +204,7 @@ namespace drawinglayer
                 basegfx::B2DVector aLogicRenderSize(
                     aDiscreteRange.getWidth() * fReduceFactor,
                     aDiscreteRange.getHeight() * fReduceFactor);
-                aLogicRenderSize *= rViewInformation.getInverseViewTransformation();
+                aLogicRenderSize *= rViewInformation.getInverseObjectToViewTransformation();
 
                 // determine the oversample value
                 static bool bDoOversample(false);
@@ -201,7 +238,7 @@ namespace drawinglayer
                     aNew2DTransform.set(1, 2, aVisibleDiscreteRange.getMinY());
 
                     // transform back to world coordinates for usage in primitive creation
-                    aNew2DTransform *= rViewInformation.getInverseViewTransformation();
+                    aNew2DTransform *= rViewInformation.getInverseObjectToViewTransformation();
 
                     // create bitmap primitive and add
                     const Primitive2DReference xRef(new BitmapPrimitive2D(aNewBitmap, aNew2DTransform));
@@ -217,21 +254,6 @@ namespace drawinglayer
                         const Primitive2DReference xRef2(new PolygonHairlinePrimitive2D(aOutline, basegfx::BColor(1.0, 0.0, 0.0)));
                         appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, xRef2);
                     }
-                }
-            }
-
-            // create 2D labels from contained 3D label primitives. This creates the label primitives on demand and tells if
-            // there are some or not. Do this at end, the labels might still be visible even when the scene is not
-            if(impGetLabel3D(rViewInformation))
-            {
-                // test visibility
-                const basegfx::B2DRange aLabel2DRange(getB2DRangeFromPrimitive2DSequence(maLabelPrimitives, rViewInformation));
-                const basegfx::B2DRange aViewRange(rViewInformation.getViewport());
-
-                if(aViewRange.isEmpty() || aLabel2DRange.overlaps(aViewRange))
-                {
-                    // add extracted 2d labels (after 3d scene creations)
-                    appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, maLabelPrimitives);
                 }
             }
 
@@ -265,13 +287,6 @@ namespace drawinglayer
                 appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, a2DExtractedPrimitives);
             }
 
-            // create 2D labels from contained 3D label primitives
-            if(impGetLabel3D(rViewInformation))
-            {
-                // add extracted 2d labels (after 3d scene creations)
-                appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, maLabelPrimitives);
-            }
-
             return aRetval;
         }
 
@@ -287,8 +302,8 @@ namespace drawinglayer
             maSdrLightingAttribute(rSdrLightingAttribute),
             maObjectTransformation(rObjectTransformation),
             maViewInformation3D(rViewInformation3D),
+            maShadowPrimitives(),
             mbShadow3DChecked(false),
-            mbLabel3DChecked(false),
             mfOldDiscreteSizeX(0.0),
             mfOldDiscreteSizeY(0.0),
             maOldUnitVisiblePart()
@@ -315,14 +330,14 @@ namespace drawinglayer
         {
             // transform unit range to discrete coordinate range
             basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
-            aRetval.transform(rViewInformation.getViewTransformation() * getObjectTransformation());
+            aRetval.transform(rViewInformation.getObjectToViewTransformation() * getObjectTransformation());
 
             // force to discrete expanded bounds (it grows, so expanding works perfectly well)
             aRetval.expand(basegfx::B2DTuple(floor(aRetval.getMinX()), floor(aRetval.getMinY())));
             aRetval.expand(basegfx::B2DTuple(ceil(aRetval.getMaxX()), ceil(aRetval.getMaxY())));
 
             // transform back from discrete (view) to world coordinates
-            aRetval.transform(rViewInformation.getInverseViewTransformation());
+            aRetval.transform(rViewInformation.getInverseObjectToViewTransformation());
 
             // expand by evtl. existing shadow primitives
             if(impGetShadow3D(rViewInformation))
@@ -332,17 +347,6 @@ namespace drawinglayer
                 if(!aShadow2DRange.isEmpty())
                 {
                     aRetval.expand(aShadow2DRange);
-                }
-            }
-
-            // expand by evtl. existing label primitives
-            if(impGetLabel3D(rViewInformation))
-            {
-                const basegfx::B2DRange aLabel2DRange(getB2DRangeFromPrimitive2DSequence(maLabelPrimitives, rViewInformation));
-
-                if(!aLabel2DRange.isEmpty())
-                {
-                    aRetval.expand(aLabel2DRange);
                 }
             }
 
@@ -398,57 +402,6 @@ namespace drawinglayer
 
             // use parent implementation
             return BasePrimitive2D::get2DDecomposition(rViewInformation);
-        }
-
-        bool ScenePrimitive2D::impGetShadow3D(const geometry::ViewInformation2D& /*rViewInformation*/) const
-        {
-            osl::MutexGuard aGuard( m_aMutex );
-
-            // create on demand
-            if(!mbShadow3DChecked && getChildren3D().hasElements())
-            {
-                // create shadow extraction processor
-                processor3d::Shadow3DExtractingProcessor aShadowProcessor(
-                    getViewInformation3D(),
-                    getObjectTransformation(),
-                    getSdrLightingAttribute(),
-                    getChildren3D(),
-                    getSdrSceneAttribute().getShadowSlant());
-
-                // process local primitives
-                aShadowProcessor.process(getChildren3D());
-
-                // fetch result and set checked flag
-                const_cast< ScenePrimitive2D* >(this)->maShadowPrimitives = aShadowProcessor.getPrimitive2DSequence();
-                const_cast< ScenePrimitive2D* >(this)->mbShadow3DChecked = true;
-            }
-
-            // return if there are shadow primitives
-            return maShadowPrimitives.hasElements();
-        }
-
-        bool ScenePrimitive2D::impGetLabel3D(const geometry::ViewInformation2D& /*rViewInformation*/) const
-        {
-            osl::MutexGuard aGuard( m_aMutex );
-
-            // create on demand
-            if(!mbLabel3DChecked && getChildren3D().hasElements())
-            {
-                // create label extraction processor
-                processor3d::Label3DExtractingProcessor aLabelProcessor(
-                    getViewInformation3D(),
-                    getObjectTransformation());
-
-                // process local primitives
-                aLabelProcessor.process(getChildren3D());
-
-                // fetch result and set checked flag
-                const_cast< ScenePrimitive2D* >(this)->maLabelPrimitives = aLabelProcessor.getPrimitive2DSequence();
-                const_cast< ScenePrimitive2D* >(this)->mbLabel3DChecked = true;
-            }
-
-            // return if there are label primitives
-            return maLabelPrimitives.hasElements();
         }
 
         // provide unique ID

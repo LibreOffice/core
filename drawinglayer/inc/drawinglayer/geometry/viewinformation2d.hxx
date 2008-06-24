@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewinformation2d.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:20 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:30:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,62 +62,110 @@ namespace drawinglayer
 {
     namespace geometry
     {
+        /** ViewInformation2D class
+
+            This class holds all view-relevant information for a 2d geometry. It works
+            together with UNO API definitions and supports holding a sequence of PropertyValues.
+            The most used data is for convenience offered directly using basegfx tooling classes.
+            It is an implementation to support the sequence of PropertyValues used in a
+            ::com::sun::star::graphic::XPrimitive2D for C++ implementations working with those
+        */
         class ViewInformation2D
         {
         private:
-            // impl pointer
+            /// pointer to private implementation class
             ImpViewInformation2D*                   mpViewInformation2D;
 
         public:
-            // constructor to easily build a ViewInformation2D when all view
-            // information is available as basegfx implementation classes. The
-            // ExtendedParameters allows adding extra parameters besides ViewTransformation,
-            // Viewport, ViewTime and DrawPage and should not itself include one of these.
+            /** Constructor: Create a ViewInformation2D
+
+                @param rObjectTransformation
+                The Transformation from Object to World coordinates (normally logic coordinates).
+
+                @param rViewTransformation
+                The Transformation from World to View coordinates (normally logic coordinates
+                to discrete units, e.g. pixels).
+
+                @param rViewport
+                The visible part of the view in World coordinates. If empty (getViewport().isEmpty())
+                everything is visible. The data is in World coordinates.
+
+                @param rxDrawPage
+                The currently displaqyed page. This information is needed e.g. due to existing PageNumber
+                fields which need to be interpreted.
+
+                @param fViewTime
+                The time the view is defined for. Default is 0.0. This parameter is used e.g. for
+                animated objects
+
+                @param rExtendedParameters
+                A sequence of property values which allows holding various other parameters besides
+                the obvious and needed ones above. For this constructor none of the other parameters
+                should be added as data. The constructor will parse the given parameters and if
+                data for the other parameters is given, the value in rExtendedParameters will
+                be preferred and overwrite the given parameter
+            */
             ViewInformation2D(
+                const basegfx::B2DHomMatrix& rObjectTransformation,
                 const basegfx::B2DHomMatrix& rViewTransformation,
                 const basegfx::B2DRange& rViewport,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& rxDrawPage,
                 double fViewTime,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rExtendedParameters);
 
-            // constructor to create a ViewInformation2D based on API information only. The
-            // ViewParameters can contain ViewTransformation, Viewport and ViewTime but also
-            // other parameters which will be preserved in the ExtendedInformation. The three
-            // named information will be extracted locally for faster access.
+            /** Constructor: Create a ViewInformation2D
+
+                @param rViewParameters
+                A sequence of property values which allows holding any combination of local and various
+                other parameters. This constructor is feeded completely with a sequence of PropertyValues
+                which will be parsed to be able to offer the most used ones in a convenient way.
+            */
             ViewInformation2D(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters);
 
-            // copy constructor
+            /// copy constructor
             ViewInformation2D(const ViewInformation2D& rCandidate);
 
-            // destructor
+            /// destructor
             ~ViewInformation2D();
 
-            // assignment operator
+            /// assignment operator
             ViewInformation2D& operator=(const ViewInformation2D& rCandidate);
 
-            // compare operator
+            /// compare operators
             bool operator==(const ViewInformation2D& rCandidate) const;
+            bool operator!=(const ViewInformation2D& rCandidate) const { return !operator==(rCandidate); }
 
-            // data access
+            /// data access
+            const basegfx::B2DHomMatrix& getObjectTransformation() const;
             const basegfx::B2DHomMatrix& getViewTransformation() const;
             const basegfx::B2DRange& getViewport() const;
             double getViewTime() const;
-
-            // get the DrawPage which is visualized. Tjhis is needed e.g. for the
-            // view-dependent decomposition of PageNumber Fields in Texts
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& getVisualizedPage() const;
 
-            // data access with on-demand preparations
-            const basegfx::B2DHomMatrix& getInverseViewTransformation() const;
+            /// On-demand prepared Object to View transformation and it's inerse for convenience
+            const basegfx::B2DHomMatrix& getObjectToViewTransformation() const;
+            const basegfx::B2DHomMatrix& getInverseObjectToViewTransformation() const;
+
+            /// On-demand prepared Viewport in discrete units for convenience
             const basegfx::B2DRange& getDiscreteViewport() const;
 
-            // get the uno::Sequence< beans::PropertyValue > which contains all information. When
-            // constructed using the API constructor, You will get back Your input. If not, the
-            // needed sequence will be constructed including the extended informations.
+            /** Get the uno::Sequence< beans::PropertyValue > which contains all ViewInformation
+
+                Use this call if You need to extract all contained ViewInformation. The ones
+                directly supported for convenience will be added to the ones only available
+                as PropertyValues. This set completely describes this ViewInformation2D and
+                can be used for complete information transport over UNO API.
+            */
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& getViewInformationSequence() const;
 
-            // get the uno::Sequence< beans::PropertyValue > which contains only extra information. This means
-            // information different from ViewTransformation, Viewport, ViewTime and DrawPage.
+            /** Get the uno::Sequence< beans::PropertyValue > which contains only ViewInformation
+                not offered directly
+
+                Use this call if You only need ViewInformation which is not offered conveniently,
+                but only exists as PropertyValue. This is e.g. used to create partially updated
+                incarnations of ViewInformation2D without losing the only with PropertyValues
+                defined data. It does not contain a complete description.
+            */
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& getExtendedInformationSequence() const;
         };
     } // end of namespace geometry

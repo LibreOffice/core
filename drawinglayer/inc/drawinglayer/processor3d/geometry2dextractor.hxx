@@ -4,9 +4,9 @@
  *
  *  $RCSfile: geometry2dextractor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:22 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:30:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,13 +60,14 @@ namespace drawinglayer
             // the modifiedColorPrimitive stack
             basegfx::BColorModifierStack                    maBColorModifierStack;
 
+            // as tooling, the process() implementation takes over API handling and calls this
+            // virtual render method when the primitive implementation is BasePrimitive3D-based.
+            virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate);
+
         public:
             Geometry2DExtractingProcessor(
                 const geometry::ViewInformation3D& rViewInformation,
                 const basegfx::B2DHomMatrix& rObjectTransformation);
-
-            // the central processing method
-            virtual void process(const primitive3d::Primitive3DSequence& rSource);
 
             // data access
             const primitive2d::Primitive2DSequence& getPrimitive2DSequence() const { return maPrimitive2DSequence; }

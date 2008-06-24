@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zbufferprocessor3d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:22 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:30:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,9 +117,6 @@ namespace drawinglayer
 
             // get the result as bitmapEx
             BitmapEx getBitmapEx() const;
-
-            // data access
-            const basegfx::B3DHomMatrix& getViewToEye() const { return maInvEyeToView; }
         };
     } // end of namespace processor3d
 } // end of namespace drawinglayer

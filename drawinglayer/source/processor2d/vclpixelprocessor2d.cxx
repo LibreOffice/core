@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclpixelprocessor2d.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:22 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:31:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ namespace drawinglayer
             maOriginalMapMode(rOutDev.GetMapMode())
         {
             // prepare maCurrentTransformation matrix with viewTransformation to target directly to pixels
-            maCurrentTransformation = rViewInformation.getViewTransformation();
+            maCurrentTransformation = rViewInformation.getObjectToViewTransformation();
 
             // prepare output directly to pixels
                mpOutputDevice->Push(PUSH_MAPMODE);

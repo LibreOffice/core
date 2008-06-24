@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shadow3dextractor.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:22 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:30:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
-#include <drawinglayer/attribute/sdrattribute3d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -89,16 +88,17 @@ namespace drawinglayer
             basegfx::B2DPolygon impDoShadowProjection(const basegfx::B3DPolygon& rSource);
             basegfx::B2DPolyPolygon impDoShadowProjection(const basegfx::B3DPolyPolygon& rSource);
 
+            // as tooling, the process() implementation takes over API handling and calls this
+            // virtual render method when the primitive implementation is BasePrimitive3D-based.
+            virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate);
+
         public:
             Shadow3DExtractingProcessor(
                 const geometry::ViewInformation3D& rViewInformation,
                 const basegfx::B2DHomMatrix& rObjectTransformation,
-                const attribute::SdrLightingAttribute& rSdrLightingAttribute,
-                const primitive3d::Primitive3DSequence& rPrimitiveVector,
-                double fShadowSlant);
-
-            // the central processing method
-            virtual void process(const primitive3d::Primitive3DSequence& rSource);
+                const basegfx::B3DVector& rLightNormal,
+                double fShadowSlant,
+                const basegfx::B3DRange& rContained3DRange);
 
             // data access
             const primitive2d::Primitive2DSequence& getPrimitive2DSequence() const { return maPrimitive2DSequence; }

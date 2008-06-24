@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helplineprimitive2d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:17 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,8 +63,9 @@ namespace drawinglayer
             basegfx::BColor                                 maRGBColB;
             double                                          mfViewDashLength;
 
-            // the last used viewInformation, used from getDecomposition for buffering
-            basegfx::B2DHomMatrix                           maLastViewTransformation;
+            // the last used object to view transformtion and the last Viewport,
+            // used from getDecomposition for decide buffering
+            basegfx::B2DHomMatrix                           maLastObjectToViewTransformation;
             basegfx::B2DRange                               maLastViewport;
 
         protected:

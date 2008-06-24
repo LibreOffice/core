@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasprocessor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,9 +75,6 @@ namespace drawinglayer
             // the modifiedColorPrimitive stack
             basegfx::BColorModifierStack                            maBColorModifierStack;
 
-            // the current transformation
-            basegfx::B2DHomMatrix                                   maCurrentTransformation;
-
             // SvtOptionsDrawinglayer incarnation to react on diverse settings
             const SvtOptionsDrawinglayer                            maDrawinglayerOpt;
 
@@ -97,9 +94,6 @@ namespace drawinglayer
                 const geometry::ViewInformation2D& rViewInformation,
                 const com::sun::star::uno::Reference< com::sun::star::rendering::XCanvas >& rCanvas);
             virtual ~canvasProcessor2D();
-
-            // the central processing method
-            virtual void process(const primitive2d::Primitive2DSequence& rSource);
 
             // access to Drawinglayer configuration options
             const SvtOptionsDrawinglayer& getOptionsDrawinglayer() const { return maDrawinglayerOpt; }

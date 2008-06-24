@@ -4,9 +4,9 @@
  *
  *  $RCSfile: texteffectprimitive2d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:20 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,8 @@ namespace drawinglayer
 
             // get the distance of one discrete units from target display. Use between 1.0 and sqrt(2) to
             // have good results on rotated objects, too
-            const basegfx::B2DVector aDistance(rViewInformation.getInverseViewTransformation() * basegfx::B2DVector(fDiscreteSize, fDiscreteSize));
+            const basegfx::B2DVector aDistance(rViewInformation.getInverseObjectToViewTransformation() *
+                basegfx::B2DVector(fDiscreteSize, fDiscreteSize));
             const basegfx::B2DVector aDiagonalDistance(aDistance * (1.0 / 1.44));
 
             switch(getTextEffectStyle2D())
@@ -217,7 +218,7 @@ namespace drawinglayer
 
             if(getLocalDecomposition().hasElements())
             {
-                if(maLastViewTransformation != rViewInformation.getViewTransformation())
+                if(maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
                 {
                     // conditions of last local decomposition have changed, delete
                     const_cast< TextEffectPrimitive2D* >(this)->setLocalDecomposition(Primitive2DSequence());
@@ -227,7 +228,7 @@ namespace drawinglayer
             if(!getLocalDecomposition().hasElements())
             {
                 // remember ViewRange and ViewTransformation
-                const_cast< TextEffectPrimitive2D* >(this)->maLastViewTransformation = rViewInformation.getViewTransformation();
+                const_cast< TextEffectPrimitive2D* >(this)->maLastObjectToViewTransformation = rViewInformation.getObjectToViewTransformation();
             }
 
             // use parent implementation

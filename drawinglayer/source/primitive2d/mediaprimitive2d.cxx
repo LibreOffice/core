@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediaprimitive2d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:20 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,8 @@ namespace drawinglayer
 
             if(getDiscreteBorder())
             {
-                const basegfx::B2DVector aDiscreteInLogic(rViewInformation.getInverseViewTransformation() * basegfx::B2DVector((double)getDiscreteBorder(), (double)getDiscreteBorder()));
+                const basegfx::B2DVector aDiscreteInLogic(rViewInformation.getInverseObjectToViewTransformation() *
+                    basegfx::B2DVector((double)getDiscreteBorder(), (double)getDiscreteBorder()));
                 const double fDiscreteSize(aDiscreteInLogic.getX() + aDiscreteInLogic.getY());
 
                 basegfx::B2DRange aSourceRange(0.0, 0.0, 1.0, 1.0);
@@ -143,7 +144,8 @@ namespace drawinglayer
 
             if(getDiscreteBorder())
             {
-                const basegfx::B2DVector aDiscreteInLogic(rViewInformation.getInverseViewTransformation() * basegfx::B2DVector((double)getDiscreteBorder(), (double)getDiscreteBorder()));
+                const basegfx::B2DVector aDiscreteInLogic(rViewInformation.getInverseObjectToViewTransformation() *
+                    basegfx::B2DVector((double)getDiscreteBorder(), (double)getDiscreteBorder()));
                 const double fDiscreteSize(aDiscreteInLogic.getX() + aDiscreteInLogic.getY());
 
                 aRetval.grow(-0.5 * fDiscreteSize);

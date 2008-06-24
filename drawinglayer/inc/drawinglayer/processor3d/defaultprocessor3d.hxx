@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultprocessor3d.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:21 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:30:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,14 +82,8 @@ namespace drawinglayer
             const attribute::SdrSceneAttribute&                 mrSdrSceneAttribute;    // read-only scene infos (normal handling, etc...)
             const attribute::SdrLightingAttribute&              mrSdrLightingAttribute; // read-only light infos (lights, etc...)
 
-            // renderer transformations and range. Need to be correctly set by the
-            // derived implementations
-            basegfx::B3DHomMatrix                               maWorldToEye;           // world to eye coordinates
-            basegfx::B3DHomMatrix                               maWorldToView;          // mul maWorldToEye with maProjection and maDeviceToView
+            // renderer range. Need to be correctly set by the derived implementations
             basegfx::B2DRange                                   maRasterRange;          // the (0, 0, W, H) range from mpBZPixelRaster
-
-            // inverse from maWorldToView, filled on demand
-            basegfx::B3DHomMatrix                               maInvWorldToView;       // back from view to world coordinates
 
             // the modifiedColorPrimitive stack
             basegfx::BColorModifierStack                        maBColorModifierStack;
@@ -130,10 +124,6 @@ namespace drawinglayer
                 const attribute::SdrSceneAttribute& rSdrSceneAttribute,
                 const attribute::SdrLightingAttribute& rSdrLightingAttribute);
             virtual ~DefaultProcessor3D();
-
-            // the central processing method. It checks for known primitive implementation
-            // and uses processBasePrimitive3D or forwards to API implementations
-            virtual void process(const primitive3d::Primitive3DSequence& rSource);
 
             // data read access
             const attribute::SdrSceneAttribute& getSdrSceneAttribute() const { return mrSdrSceneAttribute; }

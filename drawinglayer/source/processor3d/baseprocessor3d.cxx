@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprocessor3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:31:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,10 @@ namespace drawinglayer
 {
     namespace processor3d
     {
+        void BaseProcessor3D::processBasePrimitive3D(const primitive3d::BasePrimitive3D& /*rCandidate*/)
+        {
+        }
+
         BaseProcessor3D::BaseProcessor3D(const geometry::ViewInformation3D& rViewInformation)
         :   maViewInformation3D(rViewInformation)
         {
@@ -55,6 +59,37 @@ namespace drawinglayer
 
         BaseProcessor3D::~BaseProcessor3D()
         {
+        }
+
+        void BaseProcessor3D::process(const primitive3d::Primitive3DSequence& rSource)
+        {
+            if(rSource.hasElements())
+            {
+                const sal_Int32 nCount(rSource.getLength());
+
+                for(sal_Int32 a(0L); a < nCount; a++)
+                {
+                    // get reference
+                    const primitive3d::Primitive3DReference xReference(rSource[a]);
+
+                    if(xReference.is())
+                    {
+                        // try to cast to BasePrimitive3D implementation
+                        const primitive3d::BasePrimitive3D* pBasePrimitive = dynamic_cast< const primitive3d::BasePrimitive3D* >(xReference.get());
+
+                        if(pBasePrimitive)
+                        {
+                            processBasePrimitive3D(*pBasePrimitive);
+                        }
+                        else
+                        {
+                            // unknown implementation, use UNO API call instead and process recursively
+                            const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation3D().getViewInformationSequence());
+                            process(xReference->getDecomposition(rViewParameters));
+                        }
+                    }
+                }
+            }
         }
     } // end of namespace processor3d
 } // end of namespace drawinglayer
@@ -68,6 +103,10 @@ namespace drawinglayer
         CollectingProcessor3D::CollectingProcessor3D(const geometry::ViewInformation3D& rViewInformation)
         :   BaseProcessor3D(rViewInformation),
             maPrimitive3DSequence()
+        {
+        }
+
+        CollectingProcessor3D::~CollectingProcessor3D()
         {
         }
 

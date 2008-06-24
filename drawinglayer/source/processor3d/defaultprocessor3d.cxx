@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultprocessor3d.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:31:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,15 +188,15 @@ namespace drawinglayer
                 const bool bOldFilter(getFilter()); mbFilter = rPrimitive.getFilter();
                 texture::GeoTexSvx* pOldTex = mpGeoTexSvx;
 
-                // calculate logic pixel size in world coordinates. Create transformation view
-                // to world by inverting WorldToView
-                basegfx::B3DHomMatrix aInvWorldToView(maWorldToView);
-                aInvWorldToView.invert();
+                // calculate logic pixel size in object coordinates. Create transformation view
+                // to object by inverting ObjectToView
+                basegfx::B3DHomMatrix aInvObjectToView(getViewInformation3D().getObjectToView());
+                aInvObjectToView.invert();
 
-                // back-project discrete coordinates to world coordinates and extract
+                // back-project discrete coordinates to object coordinates and extract
                 // maximum distance
-                const basegfx::B3DPoint aZero(aInvWorldToView * basegfx::B3DPoint(0.0, 0.0, 0.0));
-                const basegfx::B3DPoint aOne(aInvWorldToView * basegfx::B3DPoint(1.0, 1.0, 1.0));
+                const basegfx::B3DPoint aZero(aInvObjectToView * basegfx::B3DPoint(0.0, 0.0, 0.0));
+                const basegfx::B3DPoint aOne(aInvObjectToView * basegfx::B3DPoint(1.0, 1.0, 1.0));
                 const basegfx::B3DVector aLogicPixel(aOne - aZero);
                 double fLogicPixelSizeWorld(::std::max(::std::max(fabs(aLogicPixel.getX()), fabs(aLogicPixel.getY())), fabs(aLogicPixel.getZ())));
 
@@ -293,7 +293,7 @@ namespace drawinglayer
                 aHairline.clearBColors();
 
                 // transform to device coordinates (-1.0 .. 1.0) and check for visibility
-                aHairline.transform(maWorldToView);
+                aHairline.transform(getViewInformation3D().getObjectToView());
                 const basegfx::B3DRange a3DRange(basegfx::tools::getRange(aHairline));
                 const basegfx::B2DRange a2DRange(a3DRange.getMinX(), a3DRange.getMinY(), a3DRange.getMaxX(), a3DRange.getMaxY());
 
@@ -321,7 +321,7 @@ namespace drawinglayer
                 }
 
                 // transform to device coordinates (-1.0 .. 1.0) and check for visibility
-                aFill.transform(maWorldToView);
+                aFill.transform(getViewInformation3D().getObjectToView());
                 const basegfx::B3DRange a3DRange(basegfx::tools::getRange(aFill));
                 const basegfx::B2DRange a2DRange(a3DRange.getMinX(), a3DRange.getMinY(), a3DRange.getMaxX(), a3DRange.getMaxY());
 
@@ -343,8 +343,9 @@ namespace drawinglayer
 
             if(bPaintIt)
             {
+                // prepare ObjectToEye in NormalTransform
                 ::com::sun::star::drawing::ShadeMode aShadeMode(getSdrSceneAttribute().getShadeMode());
-                basegfx::B3DHomMatrix aNormalTransform(maWorldToEye);
+                basegfx::B3DHomMatrix aNormalTransform(getViewInformation3D().getOrientation() * getViewInformation3D().getObjectTransformation());
 
                 if(getSdrSceneAttribute().getTwoSidedLighting())
                 {
@@ -452,20 +453,24 @@ namespace drawinglayer
 
         void DefaultProcessor3D::impRenderTransformPrimitive3D(const primitive3d::TransformPrimitive3D& rTransformCandidate)
         {
-            // remember current transformations
-            const basegfx::B3DHomMatrix aLastWorldToView(maWorldToView);
-            const basegfx::B3DHomMatrix aLastWorldToEye(maWorldToEye);
+            // transform group. Remember current transformations
+            const geometry::ViewInformation3D aLastViewInformation3D(getViewInformation3D());
 
-            // create new transformations
-            maWorldToView = maWorldToView * rTransformCandidate.getTransformation();
-            maWorldToEye = maWorldToEye * rTransformCandidate.getTransformation();
+            // create new transformation; add new object transform from right side
+            const geometry::ViewInformation3D aNewViewInformation3D(
+                aLastViewInformation3D.getObjectTransformation() * rTransformCandidate.getTransformation(),
+                aLastViewInformation3D.getOrientation(),
+                aLastViewInformation3D.getProjection(),
+                aLastViewInformation3D.getDeviceToView(),
+                aLastViewInformation3D.getViewTime(),
+                aLastViewInformation3D.getExtendedInformationSequence());
+            updateViewInformation(aNewViewInformation3D);
 
-            // let break down
+            // let break down recursively
             process(rTransformCandidate.getChildren());
 
             // restore transformations
-            maWorldToView = aLastWorldToView;
-            maWorldToEye = aLastWorldToEye;
+            updateViewInformation(aLastViewInformation3D);
         }
 
         void DefaultProcessor3D::processBasePrimitive3D(const primitive3d::BasePrimitive3D& rBasePrimitive)
@@ -540,48 +545,11 @@ namespace drawinglayer
                     impRenderTransformPrimitive3D(static_cast< const primitive3d::TransformPrimitive3D& >(rBasePrimitive));
                     break;
                 }
-                case PRIMITIVE3D_ID_SDRLABELPRIMITIVE3D :
-                {
-                    // SdrLabelPrimitive3D. Accept, but ignore. Is handled by the scenePrimitive decompose
-                    // method which creates 2d text objects at the 3d-projection-dependent positions.
-                    break;
-                }
                 default:
                 {
                     // process recursively
                     process(rBasePrimitive.get3DDecomposition(getViewInformation3D()));
                     break;
-                }
-            }
-        }
-
-        void DefaultProcessor3D::process(const primitive3d::Primitive3DSequence& rSource)
-        {
-            if(rSource.hasElements())
-            {
-                const sal_Int32 nCount(rSource.getLength());
-
-                for(sal_Int32 a(0L); a < nCount; a++)
-                {
-                    // get reference
-                    const primitive3d::Primitive3DReference xReference(rSource[a]);
-
-                    if(xReference.is())
-                    {
-                        // try to cast to BasePrimitive3D implementation
-                        const primitive3d::BasePrimitive3D* pBasePrimitive = dynamic_cast< const primitive3d::BasePrimitive3D* >(xReference.get());
-
-                        if(pBasePrimitive)
-                        {
-                            processBasePrimitive3D(*pBasePrimitive);
-                        }
-                        else
-                        {
-                            // unknown implementation, use UNO API call instead and process recursively
-                            const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation3D().getViewInformationSequence());
-                            process(xReference->getDecomposition(rViewParameters));
-                        }
-                    }
                 }
             }
         }
@@ -593,8 +561,6 @@ namespace drawinglayer
         :   BaseProcessor3D(rViewInformation),
             mrSdrSceneAttribute(rSdrSceneAttribute),
             mrSdrLightingAttribute(rSdrLightingAttribute),
-            maWorldToEye(),
-            maWorldToView(),
             maRasterRange(),
             maBColorModifierStack(),
             mpGeoTexSvx(0),
@@ -603,8 +569,10 @@ namespace drawinglayer
             mbFilter(false),
             mbSimpleTextureActive(false)
         {
-            // a derivation has to set maWorldToEye, maWorldToView and maRasterRange. Those values are
-            // used in the basic render methods
+            // a derivation has to set maRasterRange which is used in the basic render methods.
+            // Setting to default here ([0.0 .. 1.0] in X,Y) to avoid problems
+            maRasterRange.expand(basegfx::B2DTuple(0.0, 0.0));
+            maRasterRange.expand(basegfx::B2DTuple(1.0, 1.0));
         }
 
         DefaultProcessor3D::~DefaultProcessor3D()

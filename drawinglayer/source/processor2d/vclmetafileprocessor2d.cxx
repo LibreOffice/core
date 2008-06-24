@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:22 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:31:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -397,8 +397,9 @@ namespace drawinglayer
             mpPDFExtOutDevData(dynamic_cast< vcl::PDFExtOutDevData* >(rOutDev.GetExtOutDevData()))
         {
             OSL_ENSURE(rOutDev.GetConnectMetaFile(), "VclMetafileProcessor2D: Used on OutDev which has no MetaFile Target (!)");
-            // draw to logic coordinates, do not initialize maCurrentTransformation to viewTransformation,
-            // do not change MapMode of destination
+            // draw to logic coordinates, do not initialize maCurrentTransformation to viewTransformation
+            // but only to ObjectTransformation. Do not change MapMode of destination.
+            maCurrentTransformation = rViewInformation.getObjectTransformation();
         }
 
         VclMetafileProcessor2D::~VclMetafileProcessor2D()
@@ -1533,6 +1534,7 @@ namespace drawinglayer
                                 // create view information and pixel renderer. Reuse known ViewInformation
                                 // except new transformation and range
                                 const geometry::ViewInformation2D aViewInfo(
+                                    getViewInformation2D().getObjectTransformation(),
                                     aViewTransform,
                                     aViewRange,
                                     getViewInformation2D().getVisualizedPage(),

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contourextractor2d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ namespace drawinglayer
         class ContourExtractor2D : public BaseProcessor2D
         {
         private:
-            basegfx::B2DHomMatrix                   maCurrentTransformation;
+            // the extracted contour
             std::vector< basegfx::B2DPolyPolygon >  maExtractedContour;
 
             // tooling methods
@@ -59,7 +59,6 @@ namespace drawinglayer
             ContourExtractor2D(const geometry::ViewInformation2D& rViewInformation);
             virtual ~ContourExtractor2D();
 
-            virtual void process(const primitive2d::Primitive2DSequence& rSource);
             const std::vector< basegfx::B2DPolyPolygon >& getExtractedContour() const { return maExtractedContour; }
         };
     } // end of namespace processor2d

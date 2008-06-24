@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlprimitive2d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:20 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ namespace drawinglayer
 
                     // get absolute discrete size (no mirror or rotate here)
                     aScale = basegfx::absolute(aScale);
-                    basegfx::B2DVector aDiscreteSize(rViewInformation.getViewTransformation() * aScale);
+                    basegfx::B2DVector aDiscreteSize(rViewInformation.getObjectToViewTransformation() * aScale);
 
                     // calc screen zoom for text display
                     basegfx::B2DVector aScreenZoom(
@@ -177,7 +177,7 @@ namespace drawinglayer
                                 // to avoid scaling, use the Bitmap pixel size as primitive size
                                 const Size aBitmapSize(aContent.GetSizePixel());
                                 basegfx::B2DVector aBitmapSizeLogic(
-                                    rViewInformation.getInverseViewTransformation() *
+                                    rViewInformation.getInverseObjectToViewTransformation() *
                                     basegfx::B2DVector(aBitmapSize.getWidth() - 1, aBitmapSize.getHeight() - 1));
 
                                 if(bScaleUsed)
@@ -318,9 +318,9 @@ namespace drawinglayer
         Primitive2DSequence ControlPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // this primitive is view-dependent related to the scaling. If scaling has changed,
-            // destroy existing decomposition
+            // destroy existing decomposition. To detect change, use size of unit size in view coordinates
             ::osl::MutexGuard aGuard( m_aMutex );
-            const basegfx::B2DVector aNewScaling(rViewInformation.getViewTransformation() * basegfx::B2DVector(1.0, 1.0));
+            const basegfx::B2DVector aNewScaling(rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
 
             if(getLocalDecomposition().hasElements())
             {

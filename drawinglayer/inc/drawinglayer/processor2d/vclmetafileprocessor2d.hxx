@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ namespace drawinglayer
             // same for SvtGraphicStroke
             sal_uInt32                          mnSvtGraphicStrokeCount;
 
-            // hold the last unified transparence value to have ot handy
+            // hold the last unified transparence value to have it handy
             // on SvtGraphicStroke creation
             double                              mfCurrentUnifiedTransparence;
 

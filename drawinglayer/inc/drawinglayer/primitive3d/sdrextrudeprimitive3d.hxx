@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudeprimitive3d.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:21 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,9 @@ namespace drawinglayer
             double                                      mfDiagonal;
             double                                      mfBackScale;
 
+            // decomposition data when ReducedLineGeometry is used, see get3DDecomposition
+            geometry::ViewInformation3D*                mpLastRLGViewInformation;
+
             // bitfield
             unsigned                                    mbSmoothNormals : 1; // Plane self
             unsigned                                    mbSmoothHorizontalNormals : 1; // always
@@ -92,6 +95,7 @@ namespace drawinglayer
                 bool bCharacterMode,
                 bool bCloseFront,
                 bool bCloseBack);
+            virtual ~SdrExtrudePrimitive3D();
 
             // data access
             const basegfx::B2DPolyPolygon& getPolyPolygon() const { return maPolyPolygon; }
@@ -110,6 +114,9 @@ namespace drawinglayer
 
             // get range
             virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;
+
+            // Overloaded to allow for reduced line mode to decide if to buffer decomposition or not
+            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
             // provide unique ID
             DeclPrimitrive3DIDBlock()

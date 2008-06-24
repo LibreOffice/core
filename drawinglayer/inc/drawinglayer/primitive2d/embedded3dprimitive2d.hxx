@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedded3dprimitive2d.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:21 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,34 @@ namespace drawinglayer
         class Embedded3DPrimitive2D : public BasePrimitive2D
         {
         private:
-            primitive3d::Primitive3DSequence                mxChildren3D;
-            basegfx::B2DHomMatrix                           maObjectTransformation;
-            geometry::ViewInformation3D                     maViewInformation3D;
+            // the sequence of 3d primitives
+            primitive3d::Primitive3DSequence                    mxChildren3D;
+
+            // the 2D scene object transformation
+            basegfx::B2DHomMatrix                               maObjectTransformation;
+
+            // the 3D transformations
+            geometry::ViewInformation3D                         maViewInformation3D;
+
+            // if the embedded 3D primitives contain shadow, these parameters are needed
+            // to extract the shadow wich is a sequence od 2D primitives and may expand
+            // the 2D range. Since every single 3D object in a scene may individually
+            // have shadow or not, these values need to be provided and prepared. The shadow
+            // distance itself (a 2D transformation) is part of the 3D shadow definition
+            basegfx::B3DVector                                  maLightNormal;
+            double                                              mfShadowSlant;
+            basegfx::B3DRange                                   maScene3DRange;
+
+            // the primitiveSequence for on-demand created shadow primitives (see mbShadow3DChecked)
+            Primitive2DSequence                                 maShadowPrimitives;
+
+            // bitfield
+            // flag if given 3D geometry is already cheched for shadow definitions and 2d shadows
+            // are created in maShadowPrimitives
+            unsigned                                            mbShadow3DChecked : 1;
+
+            // private helpers
+            bool impGetShadow3D(const geometry::ViewInformation2D& rViewInformation) const;
 
         protected:
             // local decomposition.
@@ -63,12 +88,18 @@ namespace drawinglayer
             Embedded3DPrimitive2D(
                 const primitive3d::Primitive3DSequence& rxChildren3D,
                 const basegfx::B2DHomMatrix& rObjectTransformation,
-                const geometry::ViewInformation3D& rViewInformation3D);
+                const geometry::ViewInformation3D& rViewInformation3D,
+                const basegfx::B3DVector& rLightNormal,
+                double fShadowSlant,
+                const basegfx::B3DRange& rScene3DRange);
 
             // get data
             const primitive3d::Primitive3DSequence& getChildren3D() const { return mxChildren3D; }
             const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
             const geometry::ViewInformation3D& getViewInformation3D() const { return maViewInformation3D; }
+            const basegfx::B3DVector& getLightNormal() const { return maLightNormal; }
+            double getShadowSlant() const { return mfShadowSlant; }
+            const basegfx::B3DRange& getScene3DRange() const { return maScene3DRange; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

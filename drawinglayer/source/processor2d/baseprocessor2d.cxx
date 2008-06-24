@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprocessor2d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:21 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,10 @@ namespace drawinglayer
 {
     namespace processor2d
     {
+        void BaseProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& /*rCandidate*/)
+        {
+        }
+
         BaseProcessor2D::BaseProcessor2D(const geometry::ViewInformation2D& rViewInformation)
         :   maViewInformation2D(rViewInformation)
         {
@@ -56,25 +60,37 @@ namespace drawinglayer
         BaseProcessor2D::~BaseProcessor2D()
         {
         }
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
-
-namespace drawinglayer
-{
-    namespace processor2d
-    {
-        CollectingProcessor2D::CollectingProcessor2D(const geometry::ViewInformation2D& rViewInformation)
-        :   BaseProcessor2D(rViewInformation),
-            maPrimitive2DSequence()
+        void BaseProcessor2D::process(const primitive2d::Primitive2DSequence& rSource)
         {
-        }
+            if(rSource.hasElements())
+            {
+                const sal_Int32 nCount(rSource.getLength());
 
-        void CollectingProcessor2D::process(const primitive2d::Primitive2DSequence& rSource)
-        {
-            // accept everything
-            primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(maPrimitive2DSequence, rSource);
+                for(sal_Int32 a(0L); a < nCount; a++)
+                {
+                    // get reference
+                    const primitive2d::Primitive2DReference xReference(rSource[a]);
+
+                    if(xReference.is())
+                    {
+                        // try to cast to BasePrimitive2D implementation
+                        const primitive2d::BasePrimitive2D* pBasePrimitive = dynamic_cast< const primitive2d::BasePrimitive2D* >(xReference.get());
+
+                        if(pBasePrimitive)
+                        {
+                            // it is a BasePrimitive2D implementation, use local processor
+                            processBasePrimitive2D(*pBasePrimitive);
+                        }
+                        else
+                        {
+                            // unknown implementation, use UNO API call instead and process recursively
+                            const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation2D().getViewInformationSequence());
+                            process(xReference->getDecomposition(rViewParameters));
+                        }
+                    }
+                }
+            }
         }
     } // end of namespace processor2d
 } // end of namespace drawinglayer

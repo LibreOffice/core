@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,9 @@ namespace drawinglayer
             // the modifiedColorPrimitive stack
             basegfx::BColorModifierStack                            maBColorModifierStack;
 
-            // the current transformation
+            // the current transformation. Since VCL pixel renderer transforms to pixels
+            // and VCL MetaFile renderer to World (logic) coordinates, the local
+            // ViewInformation2D cannot directly be used, but needs to be kept up to date
             basegfx::B2DHomMatrix                                   maCurrentTransformation;
 
             // SvtOptionsDrawinglayer incarnation to react on diverse settings
@@ -121,22 +123,12 @@ namespace drawinglayer
             // FormControl support
             basegfx::B2DPoint PositionAndSizeControl(const primitive2d::ControlPrimitive2D& rControlPrimitive2D);
 
-            // as tooling, the process() implementation takes over API handling and calls this
-            // virtual render method when the primitive implementation is BasePrimitive2D-based.
-            virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) = 0;
-
         public:
             // constructor/destructor
             VclProcessor2D(
                 const geometry::ViewInformation2D& rViewInformation,
                 OutputDevice& rOutDev);
             virtual ~VclProcessor2D();
-
-            // the central processing method
-            // This VCL base implementation takes over the API handling and calls processBasePrimitive2D
-            // directly when it's a BasePrinitive2D implementation. This is used as tooling from derived
-            // implementations
-            virtual void process(const primitive2d::Primitive2DSequence& rSource);
 
             // access to Drawinglayer configuration options
             const SvtOptionsDrawinglayer& getOptionsDrawinglayer() const { return maDrawinglayerOpt; }

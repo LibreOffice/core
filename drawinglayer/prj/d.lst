@@ -58,7 +58,6 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive3d
 ..\inc\drawinglayer\primitive3d\sdrdecompositiontools3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\sdrdecompositiontools3d.hxx
 ..\inc\drawinglayer\primitive3d\sdrextrudelathetools3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\sdrextrudelathetools3d.hxx
 ..\inc\drawinglayer\primitive3d\sdrextrudeprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\sdrextrudeprimitive3d.hxx
-..\inc\drawinglayer\primitive3d\sdrlabelprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\sdrlabelprimitive3d.hxx
 ..\inc\drawinglayer\primitive3d\sdrlatheprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\sdrlatheprimitive3d.hxx
 ..\inc\drawinglayer\primitive3d\sdrpolypolygonprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\sdrpolypolygonprimitive3d.hxx
 ..\inc\drawinglayer\primitive3d\sdrprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\sdrprimitive3d.hxx
@@ -81,6 +80,7 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\processor2d
 ..\inc\drawinglayer\processor2d\vclmetafileprocessor2d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor2d\vclmetafileprocessor2d.hxx
 ..\inc\drawinglayer\processor2d\canvasprocessor.hxx %_DEST%\inc%_EXT%\drawinglayer\processor2d\canvasprocessor.hxx
 ..\inc\drawinglayer\processor2d\contourextractor2d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor2d\contourextractor2d.hxx
+..\inc\drawinglayer\processor2d\linegeometryextractor2d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor2d\linegeometryextractor2d.hxx
 
 mkdir: %_DEST%\inc%_EXT%\drawinglayer\processor3d
 ..\inc\drawinglayer\processor3d\baseprocessor3d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor3d\baseprocessor3d.hxx

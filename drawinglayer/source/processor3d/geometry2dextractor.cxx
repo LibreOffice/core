@@ -4,9 +4,9 @@
  *
  *  $RCSfile: geometry2dextractor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:31:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,110 @@ namespace drawinglayer
 {
     namespace processor3d
     {
+        // as tooling, the process() implementation takes over API handling and calls this
+        // virtual render method when the primitive implementation is BasePrimitive3D-based.
+        void Geometry2DExtractingProcessor::processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate)
+        {
+            // it is a BasePrimitive3D implementation, use getPrimitiveID() call for switch
+            switch(rCandidate.getPrimitiveID())
+            {
+                case PRIMITIVE3D_ID_TRANSFORMPRIMITIVE3D :
+                {
+                    // transform group. Remember current transformations
+                    const primitive3d::TransformPrimitive3D& rPrimitive = static_cast< const primitive3d::TransformPrimitive3D& >(rCandidate);
+                    const geometry::ViewInformation3D aLastViewInformation3D(getViewInformation3D());
+
+                    // create new transformation; add new object transform from right side
+                    const geometry::ViewInformation3D aNewViewInformation3D(
+                        aLastViewInformation3D.getObjectTransformation() * rPrimitive.getTransformation(),
+                        aLastViewInformation3D.getOrientation(),
+                        aLastViewInformation3D.getProjection(),
+                        aLastViewInformation3D.getDeviceToView(),
+                        aLastViewInformation3D.getViewTime(),
+                        aLastViewInformation3D.getExtendedInformationSequence());
+                    updateViewInformation(aNewViewInformation3D);
+
+                    // let break down recursively
+                    process(rPrimitive.getChildren());
+
+                    // restore transformations
+                    updateViewInformation(aLastViewInformation3D);
+                    break;
+                }
+                case PRIMITIVE3D_ID_MODIFIEDCOLORPRIMITIVE3D :
+                {
+                    // ModifiedColorPrimitive3D; push, process and pop
+                    const primitive3d::ModifiedColorPrimitive3D& rModifiedCandidate = static_cast< const primitive3d::ModifiedColorPrimitive3D& >(rCandidate);
+                    const primitive3d::Primitive3DSequence& rSubSequence = rModifiedCandidate.getChildren();
+
+                    if(rSubSequence.hasElements())
+                    {
+                        maBColorModifierStack.push(rModifiedCandidate.getColorModifier());
+                        process(rModifiedCandidate.getChildren());
+                        maBColorModifierStack.pop();
+                    }
+                    break;
+                }
+                case PRIMITIVE3D_ID_POLYGONHAIRLINEPRIMITIVE3D :
+                {
+                    // PolygonHairlinePrimitive3D
+                    const primitive3d::PolygonHairlinePrimitive3D& rPrimitive = static_cast< const primitive3d::PolygonHairlinePrimitive3D& >(rCandidate);
+                    basegfx::B2DPolygon a2DHairline(basegfx::tools::createB2DPolygonFromB3DPolygon(rPrimitive.getB3DPolygon(), getViewInformation3D().getObjectToView()));
+
+                    if(a2DHairline.count())
+                    {
+                        a2DHairline.transform(getObjectTransformation());
+                        const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(rPrimitive.getBColor()));
+                        const primitive2d::Primitive2DReference xRef(new primitive2d::PolygonHairlinePrimitive2D(a2DHairline, aModifiedColor));
+                        primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(maPrimitive2DSequence, xRef);
+                    }
+                    break;
+                }
+                case PRIMITIVE3D_ID_POLYPOLYGONMATERIALPRIMITIVE3D :
+                {
+                    // PolyPolygonMaterialPrimitive3D
+                    const primitive3d::PolyPolygonMaterialPrimitive3D& rPrimitive = static_cast< const primitive3d::PolyPolygonMaterialPrimitive3D& >(rCandidate);
+                    basegfx::B2DPolyPolygon a2DFill(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(rPrimitive.getB3DPolyPolygon(), getViewInformation3D().getObjectToView()));
+
+                    if(a2DFill.count())
+                    {
+                        a2DFill.transform(getObjectTransformation());
+                        const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(rPrimitive.getMaterial().getColor()));
+                        const primitive2d::Primitive2DReference xRef(new primitive2d::PolyPolygonColorPrimitive2D(a2DFill, aModifiedColor));
+                        primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(maPrimitive2DSequence, xRef);
+                    }
+                    break;
+                }
+                case PRIMITIVE3D_ID_GRADIENTTEXTUREPRIMITIVE3D :
+                case PRIMITIVE3D_ID_HATCHTEXTUREPRIMITIVE3D :
+                case PRIMITIVE3D_ID_BITMAPTEXTUREPRIMITIVE3D :
+                case PRIMITIVE3D_ID_ALPHATEXTUREPRIMITIVE3D :
+                case PRIMITIVE3D_ID_UNIFIEDALPHATEXTUREPRIMITIVE3D :
+                {
+                    // TexturePrimitive3D: Process children, do not try to decompose
+                    const primitive3d::TexturePrimitive3D& rTexturePrimitive = static_cast< const primitive3d::TexturePrimitive3D& >(rCandidate);
+                    const primitive3d::Primitive3DSequence aChildren(rTexturePrimitive.getChildren());
+
+                    if(aChildren.hasElements())
+                    {
+                        process(aChildren);
+                    }
+                    break;
+                }
+                case PRIMITIVE3D_ID_SHADOWPRIMITIVE3D :
+                {
+                    // accept but ignore labels and shadow; these should be extracted seperately
+                    break;
+                }
+                default :
+                {
+                    // process recursively
+                    process(rCandidate.get3DDecomposition(getViewInformation3D()));
+                    break;
+                }
+            }
+        }
+
         Geometry2DExtractingProcessor::Geometry2DExtractingProcessor(
             const geometry::ViewInformation3D& rViewInformation,
             const basegfx::B2DHomMatrix& rObjectTransformation)
@@ -66,135 +170,6 @@ namespace drawinglayer
             maObjectTransformation(rObjectTransformation),
             maBColorModifierStack()
         {
-        }
-
-        void Geometry2DExtractingProcessor::process(const primitive3d::Primitive3DSequence& rSource)
-        {
-            if(rSource.hasElements())
-            {
-                const sal_Int32 nCount(rSource.getLength());
-
-                for(sal_Int32 a(0L); a < nCount; a++)
-                {
-                    // get reference
-                    const primitive3d::Primitive3DReference xReference(rSource[a]);
-
-                    if(xReference.is())
-                    {
-                        // try to cast to BasePrimitive3D implementation
-                        const primitive3d::BasePrimitive3D* pBasePrimitive = dynamic_cast< const primitive3d::BasePrimitive3D* >(xReference.get());
-
-                        if(pBasePrimitive)
-                        {
-                            // it is a BasePrimitive3D implementation, use getPrimitiveID() call for switch
-                            switch(pBasePrimitive->getPrimitiveID())
-                            {
-                                case PRIMITIVE3D_ID_TRANSFORMPRIMITIVE3D :
-                                {
-                                    // transform group. Remember current transformations
-                                    const primitive3d::TransformPrimitive3D& rPrimitive = static_cast< const primitive3d::TransformPrimitive3D& >(*(xReference.get()));
-                                    const geometry::ViewInformation3D aLastViewInformation3D(getViewInformation3D());
-
-                                    // create new transformation; add new object transform from right side
-                                    const geometry::ViewInformation3D aNewViewInformation3D(
-                                        aLastViewInformation3D.getTransformation() * rPrimitive.getTransformation(),
-                                        aLastViewInformation3D.getOrientation(),
-                                        aLastViewInformation3D.getProjection(),
-                                        aLastViewInformation3D.getDeviceToView(),
-                                        aLastViewInformation3D.getViewTime(),
-                                        aLastViewInformation3D.getExtendedInformationSequence());
-                                    updateViewInformation(aNewViewInformation3D);
-
-                                    // let break down recursively
-                                    process(rPrimitive.getChildren());
-
-                                    // restore transformations
-                                    updateViewInformation(aLastViewInformation3D);
-                                    break;
-                                }
-                                case PRIMITIVE3D_ID_MODIFIEDCOLORPRIMITIVE3D :
-                                {
-                                    // ModifiedColorPrimitive3D; push, process and pop
-                                    const primitive3d::ModifiedColorPrimitive3D& rModifiedCandidate = static_cast< const primitive3d::ModifiedColorPrimitive3D& >(*pBasePrimitive);
-                                    const primitive3d::Primitive3DSequence& rSubSequence = rModifiedCandidate.getChildren();
-
-                                    if(rSubSequence.hasElements())
-                                    {
-                                        maBColorModifierStack.push(rModifiedCandidate.getColorModifier());
-                                        process(rModifiedCandidate.getChildren());
-                                        maBColorModifierStack.pop();
-                                    }
-                                    break;
-                                }
-                                case PRIMITIVE3D_ID_POLYGONHAIRLINEPRIMITIVE3D :
-                                {
-                                    // PolygonHairlinePrimitive3D
-                                    const primitive3d::PolygonHairlinePrimitive3D& rPrimitive = static_cast< const primitive3d::PolygonHairlinePrimitive3D& >(*pBasePrimitive);
-                                    basegfx::B2DPolygon a2DHairline(basegfx::tools::createB2DPolygonFromB3DPolygon(rPrimitive.getB3DPolygon(), getViewInformation3D().getObjectToView()));
-
-                                    if(a2DHairline.count())
-                                    {
-                                        a2DHairline.transform(getObjectTransformation());
-                                        const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(rPrimitive.getBColor()));
-                                        const primitive2d::Primitive2DReference xRef(new primitive2d::PolygonHairlinePrimitive2D(a2DHairline, aModifiedColor));
-                                        primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(maPrimitive2DSequence, xRef);
-                                    }
-                                    break;
-                                }
-                                case PRIMITIVE3D_ID_POLYPOLYGONMATERIALPRIMITIVE3D :
-                                {
-                                    // PolyPolygonMaterialPrimitive3D
-                                    const primitive3d::PolyPolygonMaterialPrimitive3D& rPrimitive = static_cast< const primitive3d::PolyPolygonMaterialPrimitive3D& >(*pBasePrimitive);
-                                    basegfx::B2DPolyPolygon a2DFill(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(rPrimitive.getB3DPolyPolygon(), getViewInformation3D().getObjectToView()));
-
-                                    if(a2DFill.count())
-                                    {
-                                        a2DFill.transform(getObjectTransformation());
-                                        const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(rPrimitive.getMaterial().getColor()));
-                                        const primitive2d::Primitive2DReference xRef(new primitive2d::PolyPolygonColorPrimitive2D(a2DFill, aModifiedColor));
-                                        primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(maPrimitive2DSequence, xRef);
-                                    }
-                                    break;
-                                }
-                                case PRIMITIVE3D_ID_GRADIENTTEXTUREPRIMITIVE3D :
-                                case PRIMITIVE3D_ID_HATCHTEXTUREPRIMITIVE3D :
-                                case PRIMITIVE3D_ID_BITMAPTEXTUREPRIMITIVE3D :
-                                case PRIMITIVE3D_ID_ALPHATEXTUREPRIMITIVE3D :
-                                case PRIMITIVE3D_ID_UNIFIEDALPHATEXTUREPRIMITIVE3D :
-                                {
-                                    // TexturePrimitive3D: Process children, do not try to decompose
-                                    const primitive3d::TexturePrimitive3D& rTexturePrimitive = static_cast< const primitive3d::TexturePrimitive3D& >(*pBasePrimitive);
-                                    const primitive3d::Primitive3DSequence aChildren(rTexturePrimitive.getChildren());
-
-                                    if(aChildren.hasElements())
-                                    {
-                                        process(aChildren);
-                                    }
-                                    break;
-                                }
-                                case PRIMITIVE3D_ID_SDRLABELPRIMITIVE3D :
-                                case PRIMITIVE3D_ID_SHADOWPRIMITIVE3D :
-                                {
-                                    // accept but ignore labels and shadow; these should be extracted seperately
-                                    break;
-                                }
-                                default :
-                                {
-                                    // process recursively
-                                    process(pBasePrimitive->get3DDecomposition(getViewInformation3D()));
-                                    break;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // unknown implementation, use UNO API call instead and process recursively
-                            const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation3D().getViewInformationSequence());
-                            process(xReference->getDecomposition(rViewParameters));
-                        }
-                    }
-                }
-            }
         }
     } // end of namespace processor3d
 } // end of namespace drawinglayer

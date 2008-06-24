@@ -4,9 +4,9 @@
  *
  *  $RCSfile: markerarrayprimitive2d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:20 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ namespace drawinglayer
                     if(nMarkerCount)
                     {
                         // get the size of one dicscrete display unit in logic size
-                        const basegfx::B2DVector aDist(rViewInformation.getInverseViewTransformation() * basegfx::B2DVector(1.0, 1.0));
+                        const basegfx::B2DVector aDist(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
                         Primitive2DSequence aTemplate;
 
                         switch(getStyle())
@@ -220,7 +220,7 @@ namespace drawinglayer
                 case MARKERSTYLE2D_CROSS :
                 {
                     // size is 3x3 centered, expand
-                    const basegfx::B2DVector aDiscreteVector(rViewInformation.getInverseViewTransformation() * basegfx::B2DVector(1.5, 1.5));
+                    const basegfx::B2DVector aDiscreteVector(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.5, 1.5));
                     aRetval.expand(aRetval.getMinimum() - aDiscreteVector);
                     aRetval.expand(aRetval.getMinimum() + aDiscreteVector);
                     break;
@@ -228,7 +228,7 @@ namespace drawinglayer
                 case MARKERSTYLE2D_GLUEPOINT :
                 {
                     // size is 7x7 centered, expand
-                    const basegfx::B2DVector aDiscreteVector(rViewInformation.getInverseViewTransformation() * basegfx::B2DVector(3.5, 3.5));
+                    const basegfx::B2DVector aDiscreteVector(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(3.5, 3.5));
                     aRetval.expand(aRetval.getMinimum() - aDiscreteVector);
                     aRetval.expand(aRetval.getMinimum() + aDiscreteVector);
                     break;

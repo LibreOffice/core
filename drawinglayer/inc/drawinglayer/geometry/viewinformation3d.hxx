@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewinformation3d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:20 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:30:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,63 +60,113 @@ namespace drawinglayer
 {
     namespace geometry
     {
+        /** ViewInformation3D class
+
+            This class holds all view-relevant information for a 3d geometry. It works
+            together with UNO API definitions and supports holding a sequence of PropertyValues.
+            The most used data is for convenience offered directly using basegfx tooling classes.
+            It is an implementation to support the sequence of PropertyValues used in a
+            ::com::sun::star::graphic::XPrimitive3D for C++ implementations working with those
+        */
         class ViewInformation3D
         {
         private:
-            // impl pointer
+            /// pointer to private implementation class
             ImpViewInformation3D*                   mpViewInformation3D;
 
         public:
-            // constructor to easily build a ViewInformation3D when all view
-            // information is available as basegfx implementation classes. The
-            // ExtendedParameters allows adding extra parameters besides the simple ones
-            // and should not itself include one of these.
+            /** Constructor: Create a ViewInformation3D
+
+                @param rObjectTransformation
+                The Transformation from Object to World coordinates (normally logic coordinates).
+
+                @param rOrientation
+                A part of the 3D ViewTransformation, the World to Camera coordinates transformation
+                which holds the camera coordinate system.
+
+                @param rProjection
+                A part of the 3D ViewTransformation, the Camera to Device transformation which
+                transforms coordinates to a [0.0 .. 1.0] device range in X,Y and Z. Z may be used
+                as source for for Z-Buffers. This transformation may be e.g. a parallell projection,
+                but also a perspective one and thus may use the last line of the matrix.
+
+                @param rDeviceToView
+                A part of the 3D ViewTransformation, the Device to View transformation which normally
+                translates and scales from [0.0 .. 1.0] range in X,Y and Z to discrete position and
+                size.
+
+                rOrientation, rProjection and rDeviceToView define the 3D transformation pipeline
+                and are normally used multiplied together to have a direct transformation from
+                World to View coordinates
+
+                @param fViewTime
+                The time the view is defined for. Default is 0.0. This parameter is used e.g. for
+                animated objects
+
+                @param rExtendedParameters
+                A sequence of property values which allows holding various other parameters besides
+                the obvious and needed ones above. For this constructor none of the other parameters
+                should be added as data. The constructor will parse the given parameters and if
+                data for the other parameters is given, the value in rExtendedParameters will
+                be preferred and overwrite the given parameter
+            */
             ViewInformation3D(
-                const basegfx::B3DHomMatrix& rTransformation,
+                const basegfx::B3DHomMatrix& rObjectTransformation,
                 const basegfx::B3DHomMatrix& rOrientation,
                 const basegfx::B3DHomMatrix& rProjection,
                 const basegfx::B3DHomMatrix& rDeviceToView,
                 double fViewTime,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rExtendedParameters);
 
-            // constructor to create a ViewInformation3D based on API information only. The
-            // ViewParameters can contain ViewTransformation, Viewport and ViewTime but also
-            // other parameters which will be preserved in the ExtendedInformation. The three
-            // named information will be extracted locally for faster access.
+            /** Constructor: Create a ViewInformation3D
+
+                @param rViewParameters
+                A sequence of property values which allows holding any combination of local and various
+                other parameters. This constructor is feeded completely with a sequence of PropertyValues
+                which will be parsed to be able to offer the most used ones in a convenient way.
+            */
             ViewInformation3D(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters);
 
-            // copy constructor
+            /// copy constructor
             ViewInformation3D(const ViewInformation3D& rCandidate);
 
-            // destructor
+            /// destructor
             ~ViewInformation3D();
 
-            // assignment operator
+            /// assignment operator
             ViewInformation3D& operator=(const ViewInformation3D& rCandidate);
 
-            // compare operator
+            /// compare operators
             bool operator==(const ViewInformation3D& rCandidate) const;
+            bool operator!=(const ViewInformation3D& rCandidate) const { return !operator==(rCandidate); }
 
-            // data access
-            // the four transformations defining the 3D view pipeline complately
-            const basegfx::B3DHomMatrix& getTransformation() const;
+            /// data access
+            const basegfx::B3DHomMatrix& getObjectTransformation() const;
             const basegfx::B3DHomMatrix& getOrientation() const;
             const basegfx::B3DHomMatrix& getProjection() const;
             const basegfx::B3DHomMatrix& getDeviceToView() const;
-
-            // for convenience, the linear combination of the above four transformations
-            const basegfx::B3DHomMatrix& getObjectToView() const;
-
-            // time at which the transformation is to be used. This may be used from animated objects
             double getViewTime() const;
 
-            // get the uno::Sequence< beans::PropertyValue > which contains all information. When
-            // constructed using the API constructor, You will get back Your input. If not, the
-            // needed sequence will be constructed including the extended informations.
+            /// for convenience, the linear combination of the above four transformations is offered
+            const basegfx::B3DHomMatrix& getObjectToView() const;
+
+            /** Get the uno::Sequence< beans::PropertyValue > which contains all ViewInformation
+
+                Use this call if You need to extract all contained ViewInformation. The ones
+                directly supported for convenience will be added to the ones only available
+                as PropertyValues. This set completely describes this ViewInformation3D and
+                can be used for complete information transport over UNO API.
+            */
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& getViewInformationSequence() const;
 
-            // get the uno::Sequence< beans::PropertyValue > which contains only extra information. This means
-            // information different from the four transformations.
+            /** Get the uno::Sequence< beans::PropertyValue > which contains only ViewInformation
+                not offered directly
+
+                Use this call if You only need ViewInformation which is not offered conveniently,
+                but only exists as PropertyValue. This is e.g. used to create partially updated
+                incarnations of ViewInformation3D without losing the only with PropertyValues
+                defined data. It does not contain a complete description.
+            */
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& getExtendedInformationSequence() const;
         };
     } // end of namespace geometry

@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: aw $ $Date: 2006-10-19 10:38:32 $
+#   last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@ SLOFILES= \
         $(SLO)$/sdrdecompositiontools3d.obj		\
         $(SLO)$/sdrextrudelathetools3d.obj		\
         $(SLO)$/sdrextrudeprimitive3d.obj		\
-        $(SLO)$/sdrlabelprimitive3d.obj			\
         $(SLO)$/sdrlatheprimitive3d.obj			\
         $(SLO)$/sdrpolypolygonprimitive3d.obj	\
         $(SLO)$/sdrprimitive3d.obj				\

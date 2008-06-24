@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprocessor3d.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:21 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:30:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,12 +56,17 @@ namespace drawinglayer
                 maViewInformation3D = rViewInformation3D;
             }
 
+            // as tooling, the process() implementation takes over API handling and calls this
+            // virtual render method when the primitive implementation is BasePrimitive3D-based.
+            // Default implementation does nothing
+            virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate);
+
         public:
             BaseProcessor3D(const geometry::ViewInformation3D& rViewInformation);
             virtual ~BaseProcessor3D();
 
             // the central processing method
-            virtual void process(const primitive3d::Primitive3DSequence& rSource) = 0;
+            virtual void process(const primitive3d::Primitive3DSequence& rSource);
 
             // data access
             const geometry::ViewInformation3D& getViewInformation3D() const { return maViewInformation3D; }
@@ -82,16 +87,12 @@ namespace drawinglayer
 
         public:
             CollectingProcessor3D(const geometry::ViewInformation3D& rViewInformation);
+            virtual ~CollectingProcessor3D();
 
             // the central processing method
             virtual void process(const primitive3d::Primitive3DSequence& rSource);
 
             // helpers for adding to local sequence
-            void appendPrimitive3DSequence(const primitive3d::Primitive3DSequence& rSource)
-            {
-                primitive3d::appendPrimitive3DSequenceToPrimitive3DSequence(maPrimitive3DSequence, rSource);
-            }
-
             void appendPrimitive3DReference(const primitive3d::Primitive3DReference& rSource)
             {
                 primitive3d::appendPrimitive3DReferenceToPrimitive3DSequence(maPrimitive3DSequence, rSource);

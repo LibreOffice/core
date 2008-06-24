@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridprimitive2d.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:20 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ namespace drawinglayer
                 aRST.shearX(fShearX);
                 aRST.rotate(fRotate);
                 aRST.translate(aTranslate.getX(), aTranslate.getY());
-                aRST *= rViewInformation.getViewTransformation();
+                aRST *= rViewInformation.getObjectToViewTransformation();
 
                 // get step widths
                 double fStepX(getWidth());
@@ -87,9 +87,9 @@ namespace drawinglayer
                     fStepY = fMinimalStep;
                 }
 
-                // get relative distances in view
-                double fViewStepX((rViewInformation.getViewTransformation() * basegfx::B2DVector(fStepX, 0.0)).getLength());
-                double fViewStepY((rViewInformation.getViewTransformation() * basegfx::B2DVector(0.0, fStepY)).getLength());
+                // get relative distances in view coordinates
+                double fViewStepX((rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(fStepX, 0.0)).getLength());
+                double fViewStepY((rViewInformation.getObjectToViewTransformation() * basegfx::B2DVector(0.0, fStepY)).getLength());
                 double fSmallStepX(1.0), fViewSmallStepX(1.0), fSmallStepY(1.0), fViewSmallStepY(1.0);
                 sal_uInt32 nSmallStepsX(0L), nSmallStepsY(0L);
 
@@ -166,7 +166,7 @@ namespace drawinglayer
 
                             if(rViewInformation.getDiscreteViewport().overlaps(aDiscreteRangeCross))
                             {
-                                const basegfx::B2DPoint aLogicPos(rViewInformation.getInverseViewTransformation() * aViewPos);
+                                const basegfx::B2DPoint aLogicPos(rViewInformation.getInverseObjectToViewTransformation() * aViewPos);
                                 aPositionsCross.push_back(aLogicPos);
                             }
                         }
@@ -181,7 +181,7 @@ namespace drawinglayer
 
                                 if(rViewInformation.getDiscreteViewport().isInside(aViewPos))
                                 {
-                                    const basegfx::B2DPoint aLogicPos(rViewInformation.getInverseViewTransformation() * aViewPos);
+                                    const basegfx::B2DPoint aLogicPos(rViewInformation.getInverseObjectToViewTransformation() * aViewPos);
                                     aPositionsPoint.push_back(aLogicPos);
                                 }
                             }
@@ -197,7 +197,7 @@ namespace drawinglayer
 
                                 if(rViewInformation.getDiscreteViewport().isInside(aViewPos))
                                 {
-                                    const basegfx::B2DPoint aLogicPos(rViewInformation.getInverseViewTransformation() * aViewPos);
+                                    const basegfx::B2DPoint aLogicPos(rViewInformation.getInverseObjectToViewTransformation() * aViewPos);
                                     aPositionsPoint.push_back(aLogicPos);
                                 }
                             }
@@ -247,7 +247,7 @@ namespace drawinglayer
             mnSubdivisionsX(nSubdivisionsX),
             mnSubdivisionsY(nSubdivisionsY),
             maBColor(rBColor),
-            maLastViewTransformation(),
+            maLastObjectToViewTransformation(),
             maLastViewport()
         {
         }
@@ -289,7 +289,7 @@ namespace drawinglayer
 
             if(getLocalDecomposition().hasElements())
             {
-                if(maLastViewport != rViewInformation.getViewport() || maLastViewTransformation != rViewInformation.getViewTransformation())
+                if(maLastViewport != rViewInformation.getViewport() || maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
                 {
                     // conditions of last local decomposition have changed, delete
                     const_cast< GridPrimitive2D* >(this)->setLocalDecomposition(Primitive2DSequence());
@@ -299,7 +299,7 @@ namespace drawinglayer
             if(!getLocalDecomposition().hasElements())
             {
                 // remember ViewRange and ViewTransformation
-                const_cast< GridPrimitive2D* >(this)->maLastViewTransformation = rViewInformation.getViewTransformation();
+                const_cast< GridPrimitive2D* >(this)->maLastObjectToViewTransformation = rViewInformation.getObjectToViewTransformation();
                 const_cast< GridPrimitive2D* >(this)->maLastViewport = rViewInformation.getViewport();
             }
 

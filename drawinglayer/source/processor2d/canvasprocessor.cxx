@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasprocessor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1302,16 +1302,14 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D :
                 {
-                    // transform group.
+                    // transform group. Remember current ViewInformation2D
                     const primitive2d::TransformPrimitive2D& rTransformCandidate = static_cast< const primitive2d::TransformPrimitive2D& >(rCandidate);
-                    const basegfx::B2DHomMatrix aLastCurrentTransformation(maCurrentTransformation);
                     const geometry::ViewInformation2D aLastViewInformation2D(getViewInformation2D());
 
-                    // create new transformations for CurrentTransformation
-                    // and for local ViewInformation2D
-                    maCurrentTransformation = maCurrentTransformation * rTransformCandidate.getTransformation();
+                    // create new local ViewInformation2D with new transformation
                     const geometry::ViewInformation2D aViewInformation2D(
-                        getViewInformation2D().getViewTransformation() * rTransformCandidate.getTransformation(),
+                        getViewInformation2D().getObjectTransformation()  * rTransformCandidate.getTransformation(),
+                        getViewInformation2D().getViewTransformation(),
                         getViewInformation2D().getViewport(),
                         getViewInformation2D().getVisualizedPage(),
                         getViewInformation2D().getViewTime(),
@@ -1319,17 +1317,16 @@ namespace drawinglayer
                     updateViewInformation(aViewInformation2D);
 
                     // set at canvas
-                    canvas::tools::setViewStateTransform(maViewState, maCurrentTransformation);
+                    canvas::tools::setViewStateTransform(maViewState, getViewInformation2D().getObjectToViewTransformation());
 
                     // proccess content
                     process(rTransformCandidate.getChildren());
 
                     // restore transformations
-                    maCurrentTransformation = aLastCurrentTransformation;
                     updateViewInformation(aLastViewInformation2D);
 
                     // restore at canvas
-                    canvas::tools::setViewStateTransform(maViewState, maCurrentTransformation);
+                    canvas::tools::setViewStateTransform(maViewState, getViewInformation2D().getObjectToViewTransformation());
 
                     break;
                 }
@@ -1346,38 +1343,6 @@ namespace drawinglayer
         //////////////////////////////////////////////////////////////////////////////
         // process support
 
-        void canvasProcessor2D::process(const primitive2d::Primitive2DSequence& rSource)
-        {
-            if(rSource.hasElements())
-            {
-                const sal_Int32 nCount(rSource.getLength());
-
-                for(sal_Int32 a(0L); a < nCount; a++)
-                {
-                    // get reference
-                    const primitive2d::Primitive2DReference xReference(rSource[a]);
-
-                    if(xReference.is())
-                    {
-                        // try to cast to BasePrimitive2D implementation
-                        const primitive2d::BasePrimitive2D* pBasePrimitive = dynamic_cast< const primitive2d::BasePrimitive2D* >(xReference.get());
-
-                        if(pBasePrimitive)
-                        {
-                            // it is a BasePrimitive2D implementation, use local processor
-                            processBasePrimitive2D(*pBasePrimitive);
-                        }
-                        else
-                        {
-                            // unknown implementation, use UNO API call instead and process recursively
-                            const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation2D().getViewInformationSequence());
-                            process(xReference->getDecomposition(rViewParameters));
-                        }
-                    }
-                }
-            }
-        }
-
         canvasProcessor2D::canvasProcessor2D(
             const geometry::ViewInformation2D& rViewInformation,
             const uno::Reference< rendering::XCanvas >& rCanvas)
@@ -1386,7 +1351,6 @@ namespace drawinglayer
             maViewState(),
             maRenderState(),
             maBColorModifierStack(),
-            maCurrentTransformation(),
             maDrawinglayerOpt(),
             mnPolygonStrokePrimitive2D(0),
             meLang(LANGUAGE_SYSTEM)
@@ -1395,8 +1359,7 @@ namespace drawinglayer
 
             canvas::tools::initViewState(maViewState);
             canvas::tools::initRenderState(maRenderState);
-            maCurrentTransformation = getViewInformation2D().getViewTransformation();
-            canvas::tools::setViewStateTransform(maViewState, maCurrentTransformation);
+            canvas::tools::setViewStateTransform(maViewState, getViewInformation2D().getObjectToViewTransformation());
 
             if(SvtCTLOptions::NUMERALS_HINDI == aSvtCTLOptions.GetCTLTextNumerals())
             {

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sceneprimitive2d.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:21 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,27 +60,18 @@ namespace drawinglayer
             // the primitiveSequence for on-demand created shadow primitives (see mbShadow3DChecked)
             Primitive2DSequence                                 maShadowPrimitives;
 
-            // the primitiveSequence for on-demand created label primitives (see mbLabelChecked)
-            Primitive2DSequence                                 maLabelPrimitives;
-
             // bitfield
-
             // flag if given 3D geometry is already cheched for shadow definitions and 2d shadows
             // are created in maShadowPrimitives
             unsigned                                            mbShadow3DChecked : 1;
-
-            // flag if given 3D geometry is already cheched for label definitions and 2d labels
-            // are created in maLabelPrimitives
-            unsigned                                            mbLabel3DChecked : 1;
 
             // the last used NewDiscreteSize and NewUnitVisiblePart definitions for decomposition
             double                                              mfOldDiscreteSizeX;
             double                                              mfOldDiscreteSizeY;
             basegfx::B2DRange                                   maOldUnitVisiblePart;
 
-            // protected helpers
+            // private helpers
             bool impGetShadow3D(const geometry::ViewInformation2D& rViewInformation) const;
-            bool impGetLabel3D(const geometry::ViewInformation2D& rViewInformation) const;
             void calculateDsicreteSizes(
                 const geometry::ViewInformation2D& rViewInformation,
                 basegfx::B2DRange& rDiscreteRange,
@@ -93,7 +84,7 @@ namespace drawinglayer
 
         public:
             // public helpers
-            // Geometry extractor. Shadow and labels will be added as in createLocalDecomposition, but
+            // Geometry extractor. Shadow will be added as in createLocalDecomposition, but
             // the 3D content is not converted to a bitmap visualisation but to projected 2D gemetry. This
             // helper is useful for Contour extraction.
             Primitive2DSequence getGeometry2D(const geometry::ViewInformation2D& rViewInformation) const;

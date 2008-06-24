@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprocessor2d.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:21 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,50 +56,20 @@ namespace drawinglayer
                 maViewInformation2D = rViewInformation2D;
             }
 
+            // as tooling, the process() implementation takes over API handling and calls this
+            // virtual render method when the primitive implementation is BasePrimitive2D-based.
+            // Default implementation does nothing
+            virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
+
         public:
             BaseProcessor2D(const geometry::ViewInformation2D& rViewInformation);
             virtual ~BaseProcessor2D();
 
             // the central processing method
-            virtual void process(const primitive2d::Primitive2DSequence& rSource) = 0;
+            virtual void process(const primitive2d::Primitive2DSequence& rSource);
 
             // data access
             const geometry::ViewInformation2D& getViewInformation2D() const { return maViewInformation2D; }
-        };
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace drawinglayer
-{
-    namespace processor2d
-    {
-        class CollectingProcessor2D : public BaseProcessor2D
-        {
-        private:
-            primitive2d::Primitive2DSequence                maPrimitive2DSequence;
-
-        public:
-            CollectingProcessor2D(const geometry::ViewInformation2D& rViewInformation);
-
-            // the central processing method
-            virtual void process(const primitive2d::Primitive2DSequence& rSource);
-
-            // helpers for adding to local sequence
-            void appendPrimitive2DSequence(const primitive2d::Primitive2DSequence& rSource)
-            {
-                primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(maPrimitive2DSequence, rSource);
-            }
-
-            void appendPrimitive2DReference(const primitive2d::Primitive2DReference& rSource)
-            {
-                primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(maPrimitive2DSequence, rSource);
-            }
-
-            // data access and reset
-            const primitive2d::Primitive2DSequence& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
-            void reset() { maPrimitive2DSequence = primitive2d::Primitive2DSequence(); }
         };
     } // end of namespace processor2d
 } // end of namespace drawinglayer

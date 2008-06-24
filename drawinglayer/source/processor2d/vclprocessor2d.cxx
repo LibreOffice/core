@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:31:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -763,7 +763,8 @@ namespace drawinglayer
             // and for local ViewInformation2D
             maCurrentTransformation = maCurrentTransformation * rTransformCandidate.getTransformation();
             const geometry::ViewInformation2D aViewInformation2D(
-                getViewInformation2D().getViewTransformation() * rTransformCandidate.getTransformation(),
+                getViewInformation2D().getObjectTransformation() * rTransformCandidate.getTransformation(),
+                getViewInformation2D().getViewTransformation(),
                 getViewInformation2D().getViewport(),
                 getViewInformation2D().getVisualizedPage(),
                 getViewInformation2D().getViewTime(),
@@ -786,6 +787,7 @@ namespace drawinglayer
 
             // create new local ViewInformation2D
             const geometry::ViewInformation2D aViewInformation2D(
+                getViewInformation2D().getObjectTransformation(),
                 getViewInformation2D().getViewTransformation(),
                 getViewInformation2D().getViewport(),
                 rPagePreviewCandidate.getXDrawPage(),
@@ -1161,38 +1163,6 @@ namespace drawinglayer
 
         //////////////////////////////////////////////////////////////////////////////
         // process support
-
-        void VclProcessor2D::process(const primitive2d::Primitive2DSequence& rSource)
-        {
-            if(rSource.hasElements())
-            {
-                const sal_Int32 nCount(rSource.getLength());
-
-                for(sal_Int32 a(0L); a < nCount; a++)
-                {
-                    // get reference
-                    const primitive2d::Primitive2DReference xReference(rSource[a]);
-
-                    if(xReference.is())
-                    {
-                        // try to cast to BasePrimitive2D implementation
-                        const primitive2d::BasePrimitive2D* pBasePrimitive = dynamic_cast< const primitive2d::BasePrimitive2D* >(xReference.get());
-
-                        if(pBasePrimitive)
-                        {
-                            // it is a BasePrimitive2D implementation, use local processor
-                            processBasePrimitive2D(*pBasePrimitive);
-                        }
-                        else
-                        {
-                            // unknown implementation, use UNO API call instead and process recursively
-                            const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation2D().getViewInformationSequence());
-                            process(xReference->getDecomposition(rViewParameters));
-                        }
-                    }
-                }
-            }
-        }
 
         VclProcessor2D::VclProcessor2D(
             const geometry::ViewInformation2D& rViewInformation,

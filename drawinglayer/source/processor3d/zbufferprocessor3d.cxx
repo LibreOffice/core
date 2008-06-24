@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zbufferprocessor3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:34 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:31:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -587,8 +587,8 @@ namespace drawinglayer
             mbContainsTransparent(false)
         {
             // generate ViewSizes
-            const double fFullViewSizeX((rViewInformation2D.getViewTransformation() * basegfx::B2DVector(fSizeX, 0.0)).getLength());
-            const double fFullViewSizeY((rViewInformation2D.getViewTransformation() * basegfx::B2DVector(0.0, fSizeY)).getLength());
+            const double fFullViewSizeX((rViewInformation2D.getObjectToViewTransformation() * basegfx::B2DVector(fSizeX, 0.0)).getLength());
+            const double fFullViewSizeY((rViewInformation2D.getObjectToViewTransformation() * basegfx::B2DVector(0.0, fSizeY)).getLength());
             const double fViewSizeX(fFullViewSizeX * rVisiblePart.getWidth());
             const double fViewSizeY(fFullViewSizeY * rVisiblePart.getHeight());
 
@@ -603,10 +603,13 @@ namespace drawinglayer
                     mnAntiAlialize ? nRasterWidth * mnAntiAlialize : nRasterWidth,
                     mnAntiAlialize ? nRasterHeight * mnAntiAlialize : nRasterHeight);
                 OSL_ENSURE(mpBZPixelRaster, "ZBufferProcessor3D: Could not allocate basegfx::BZPixelRaster (!)");
-                basegfx::B3DHomMatrix aDeviceToView;
 
-                // create DeviceToView
-                // outcome is [-1.0 .. 1.0] in X,Y and Z.
+                // create DeviceToView for Z-Buffer renderer since Z is handled
+                // different from standard 3D transformations (Z is mirrored). Also
+                // the transformation includes the step from unit device coordinates
+                // to discrete units ([-1.0 .. 1.0] -> [minDiscrete .. maxDiscrete]
+
+                basegfx::B3DHomMatrix aDeviceToView;
 
                 {
                     // step one:
@@ -634,17 +637,24 @@ namespace drawinglayer
                         aDeviceToView.scale(fFullViewSizeX, fFullViewSizeY, fMaxZDepth);
                 }
 
-                // create world to eye transformation
-                maWorldToEye = getViewInformation3D().getOrientation() * getViewInformation3D().getTransformation();
+                // update local ViewInformation3D with own DeviceToView
+                const geometry::ViewInformation3D aNewViewInformation3D(
+                    getViewInformation3D().getObjectTransformation(),
+                    getViewInformation3D().getOrientation(),
+                    getViewInformation3D().getProjection(),
+                    aDeviceToView,
+                    getViewInformation3D().getViewTime(),
+                    getViewInformation3D().getExtendedInformationSequence());
+                updateViewInformation(aNewViewInformation3D);
 
-                // create EyeToView transformation
-                maWorldToView = aDeviceToView * getViewInformation3D().getProjection() * maWorldToEye;
-
-                // create inverse EyeToView transformation
-                maInvEyeToView = aDeviceToView * getViewInformation3D().getProjection();
+                // prepare inverse EyeToView transformation. This can be done in constructor
+                // since changes in object transformations when processing TransformPrimitive3Ds
+                // do not influence this prepared partial transformation
+                maInvEyeToView = getViewInformation3D().getDeviceToView() * getViewInformation3D().getProjection();
                 maInvEyeToView.invert();
 
                 // prepare maRasterRange
+                maRasterRange.reset();
                 maRasterRange.expand(basegfx::B2DPoint(0.0, 0.0));
                 maRasterRange.expand(basegfx::B2DPoint(mpBZPixelRaster->getWidth(), mpBZPixelRaster->getHeight()));
 

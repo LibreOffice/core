@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudeprimitive3d.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include <drawinglayer/primitive3d/sdrdecompositiontools3d.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
+#include <drawinglayer/geometry/viewinformation3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -54,7 +55,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence SdrExtrudePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        Primitive3DSequence SdrExtrudePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& rViewInformation) const
         {
             Primitive3DSequence aRetval;
 
@@ -189,12 +190,209 @@ namespace drawinglayer
                 // add line
                 if(getSdrLFSAttribute().getLine())
                 {
-                    basegfx::B3DPolyPolygon aLine;
-                    extractLinesFromSlice(aLine, rSliceVector, false,
-                        !getSdr3DObjectAttribute().getReducedLineGeometry(),
-                        true);
-                    const Primitive3DSequence aLines(create3DPolyPolygonLinePrimitives(aLine, getTransform(), *getSdrLFSAttribute().getLine()));
-                    appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aLines);
+                    if(getSdr3DObjectAttribute().getReducedLineGeometry())
+                    {
+                        // create geometric outlines with reduced line geometry for chart.
+                        const basegfx::B3DPolyPolygon aVerLine(extractVerticalLinesFromSlice(rSliceVector));
+                        const sal_uInt32 nCount(aVerLine.count());
+                        basegfx::B3DPolyPolygon aReducedLoops;
+                        basegfx::B3DPolyPolygon aNewLineGeometry;
+
+                        // sort out doubles (front and back planes when no edge rounding is done). Since
+                        // this is a line geometry merged from PolyPolygons, loop over all Polygons
+                        for(sal_uInt32 a(0); a < nCount; a++)
+                        {
+                            const sal_uInt32 nReducedCount(aReducedLoops.count());
+                            const basegfx::B3DPolygon aCandidate(aVerLine.getB3DPolygon(a));
+                            bool bAdd(true);
+
+                            if(nReducedCount)
+                            {
+                                bool bAdd(true);
+
+                                for(sal_uInt32 b(0); bAdd && b < nReducedCount; b++)
+                                {
+                                    if(aCandidate == aReducedLoops.getB3DPolygon(b))
+                                    {
+                                        bAdd = false;
+                                    }
+                                }
+                            }
+
+                            if(bAdd)
+                            {
+                                aReducedLoops.append(aCandidate);
+                            }
+                        }
+
+                        // from here work with reduced loops and reduced count without changing them
+                        const sal_uInt32 nReducedCount(aReducedLoops.count());
+
+                        if(nReducedCount > 1)
+                        {
+                            for(sal_uInt32 b(1); b < nReducedCount; b++)
+                            {
+                                // get loop pair
+                                const basegfx::B3DPolygon aCandA(aReducedLoops.getB3DPolygon(b - 1));
+                                const basegfx::B3DPolygon aCandB(aReducedLoops.getB3DPolygon(b));
+
+                                // for each loop pair create the connection edges
+                                createReducedOutlines(
+                                    rViewInformation,
+                                    getTransform(),
+                                    aCandA,
+                                    aCandB,
+                                    aNewLineGeometry);
+                            }
+                        }
+
+                        // add reduced loops themselves
+                        aNewLineGeometry.append(aReducedLoops);
+
+                        // to create vertical edges at non-C1/C2 steady loops, use maCorrectedPolyPolygon
+                        // directly since the 3D Polygons do not suport this.
+                        //
+                        // Unfortunately there is no bezier polygon provided by the chart module; one reason is
+                        // that the API for extrude wants a 3D polygon geometry (for historical reasons, i guess)
+                        // and those have no beziers. Another reason is that he chart module uses self-created
+                        // stuff to create the 2D geometry (in ShapeFactory::createPieSegment), but this geometry
+                        // does not contain bezier infos, either. The only way which is possible for now is to 'detect'
+                        // candidates for vertical edges of pie segments by looking for the angles in the polygon.
+                        //
+                        // This is all not very well designed ATM. Ideally, the ReducedLineGeometry is responsible
+                        // for creating the outer geometry edges (createReducedOutlines), but for special edges
+                        // like the vertical ones for pie center and both start/end, the incarnation with the
+                        // knowledge about that it needs to create those and IS a pie segment -> in this case,
+                        // the chart itself.
+                        const sal_uInt32 nPolyCount(maCorrectedPolyPolygon.count());
+
+                        for(sal_uInt32 c(0); c < nPolyCount; c++)
+                        {
+                            const basegfx::B2DPolygon aCandidate(maCorrectedPolyPolygon.getB2DPolygon(c));
+                            const sal_uInt32 nPointCount(aCandidate.count());
+
+                            if(nPointCount > 2)
+                            {
+                                sal_uInt32 nIndexA(nPointCount);
+                                sal_uInt32 nIndexB(nPointCount);
+                                sal_uInt32 nIndexC(nPointCount);
+
+                                for(sal_uInt32 d(0); d < nPointCount; d++)
+                                {
+                                    const sal_uInt32 nPrevInd((d + nPointCount - 1) % nPointCount);
+                                    const sal_uInt32 nNextInd((d + 1) % nPointCount);
+                                    const basegfx::B2DPoint aPoint(aCandidate.getB2DPoint(d));
+                                    const basegfx::B2DVector aPrev(aCandidate.getB2DPoint(nPrevInd) - aPoint);
+                                    const basegfx::B2DVector aNext(aCandidate.getB2DPoint(nNextInd) - aPoint);
+                                    const double fAngle(aPrev.angle(aNext));
+
+                                    // take each angle which deviates more than 10% from going straight as
+                                    // special edge. This will detect the two outer edges of pie segments,
+                                    // but not always the center one (think about a near 180 degree pie)
+                                    if(F_PI - fabs(fAngle) > F_PI * 0.1)
+                                    {
+                                        if(nPointCount == nIndexA)
+                                        {
+                                            nIndexA = d;
+                                        }
+                                        else if(nPointCount == nIndexB)
+                                        {
+                                            nIndexB = d;
+                                        }
+                                        else if(nPointCount == nIndexC)
+                                        {
+                                            nIndexC = d;
+                                            d = nPointCount;
+                                        }
+                                    }
+                                }
+
+                                const bool bIndexAUsed(nIndexA != nPointCount);
+                                const bool bIndexBUsed(nIndexB != nPointCount);
+                                bool bIndexCUsed(nIndexC != nPointCount);
+
+                                if(bIndexCUsed)
+                                {
+                                    // already three special edges found, so the center one was already detected
+                                    // and does not need to be searched
+                                }
+                                else if(bIndexAUsed && bIndexBUsed)
+                                {
+                                    // outer edges detected (they are approx. 90 degrees), but center one not.
+                                    // Look with the knowledge that it's in-between the two found ones
+                                    if(((nIndexA + 2) % nPointCount) == nIndexB)
+                                    {
+                                        nIndexC = (nIndexA + 1) % nPointCount;
+                                    }
+                                    else if(((nIndexA + nPointCount - 2) % nPointCount) == nIndexB)
+                                    {
+                                        nIndexC = (nIndexA + nPointCount - 1) % nPointCount;
+                                    }
+
+                                    bIndexCUsed = (nIndexC != nPointCount);
+                                }
+
+                                if(bIndexAUsed)
+                                {
+                                    const basegfx::B2DPoint aPoint(aCandidate.getB2DPoint(nIndexA));
+                                    const basegfx::B3DPoint aStart(aPoint.getX(), aPoint.getY(), 0.0);
+                                    const basegfx::B3DPoint aEnd(aPoint.getX(), aPoint.getY(), getDepth());
+                                    basegfx::B3DPolygon aToBeAdded;
+
+                                    aToBeAdded.append(aStart);
+                                    aToBeAdded.append(aEnd);
+                                    aNewLineGeometry.append(aToBeAdded);
+                                }
+
+                                if(bIndexBUsed)
+                                {
+                                    const basegfx::B2DPoint aPoint(aCandidate.getB2DPoint(nIndexB));
+                                    const basegfx::B3DPoint aStart(aPoint.getX(), aPoint.getY(), 0.0);
+                                    const basegfx::B3DPoint aEnd(aPoint.getX(), aPoint.getY(), getDepth());
+                                    basegfx::B3DPolygon aToBeAdded;
+
+                                    aToBeAdded.append(aStart);
+                                    aToBeAdded.append(aEnd);
+                                    aNewLineGeometry.append(aToBeAdded);
+                                }
+
+                                if(bIndexCUsed)
+                                {
+                                    const basegfx::B2DPoint aPoint(aCandidate.getB2DPoint(nIndexC));
+                                    const basegfx::B3DPoint aStart(aPoint.getX(), aPoint.getY(), 0.0);
+                                    const basegfx::B3DPoint aEnd(aPoint.getX(), aPoint.getY(), getDepth());
+                                    basegfx::B3DPolygon aToBeAdded;
+
+                                    aToBeAdded.append(aStart);
+                                    aToBeAdded.append(aEnd);
+                                    aNewLineGeometry.append(aToBeAdded);
+                                }
+                            }
+                        }
+
+                        // append loops themselves
+                        aNewLineGeometry.append(aReducedLoops);
+
+                        if(aNewLineGeometry.count())
+                        {
+                            const Primitive3DSequence aLines(create3DPolyPolygonLinePrimitives(aNewLineGeometry, getTransform(), *getSdrLFSAttribute().getLine()));
+                            appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aLines);
+                        }
+                    }
+                    else
+                    {
+                        // extract line geometry from slices
+                        const basegfx::B3DPolyPolygon aHorLine(extractHorizontalLinesFromSlice(rSliceVector, false));
+                        const basegfx::B3DPolyPolygon aVerLine(extractVerticalLinesFromSlice(rSliceVector));
+
+                        // add horizontal lines
+                        const Primitive3DSequence aHorLines(create3DPolyPolygonLinePrimitives(aHorLine, getTransform(), *getSdrLFSAttribute().getLine()));
+                        appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aHorLines);
+
+                        // add vertical lines
+                        const Primitive3DSequence aVerLines(create3DPolyPolygonLinePrimitives(aVerLine, getTransform(), *getSdrLFSAttribute().getLine()));
+                        appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aVerLines);
+                    }
                 }
 
                 // add shadow
@@ -250,10 +448,13 @@ namespace drawinglayer
             bool bCloseFront,
             bool bCloseBack)
         :   SdrPrimitive3D(rTransform, rTextureSize, rSdrLFSAttribute, rSdr3DObjectAttribute),
+            maCorrectedPolyPolygon(),
+            maSlices(),
             maPolyPolygon(rPolyPolygon),
             mfDepth(fDepth),
             mfDiagonal(fDiagonal),
             mfBackScale(fBackScale),
+            mpLastRLGViewInformation(0),
             mbSmoothNormals(bSmoothNormals),
             mbSmoothHorizontalNormals(bSmoothHorizontalNormals),
             mbSmoothLids(bSmoothLids),
@@ -290,6 +491,14 @@ namespace drawinglayer
             }
         }
 
+        SdrExtrudePrimitive3D::~SdrExtrudePrimitive3D()
+        {
+            if(mpLastRLGViewInformation)
+            {
+                delete mpLastRLGViewInformation;
+            }
+        }
+
         bool SdrExtrudePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
             if(SdrPrimitive3D::operator==(rPrimitive))
@@ -320,6 +529,28 @@ namespace drawinglayer
             // ranges where the new method is more correct, but the need to keep the old behaviour
             // has priority here.
             return get3DRangeFromSlices(getSlices());
+        }
+
+        Primitive3DSequence SdrExtrudePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
+        {
+            if(getSdr3DObjectAttribute().getReducedLineGeometry())
+            {
+                if(!mpLastRLGViewInformation ||
+                    (getLocalDecomposition().hasElements()
+                        && *mpLastRLGViewInformation != rViewInformation))
+                {
+                    // conditions of last local decomposition with reduced lines have changed. Remember
+                    // new one and clear current decompositiopn
+                    ::osl::Mutex m_mutex;
+                    SdrExtrudePrimitive3D* pThat = const_cast< SdrExtrudePrimitive3D* >(this);
+                    pThat->setLocalDecomposition(Primitive3DSequence());
+                    delete pThat->mpLastRLGViewInformation;
+                    pThat->mpLastRLGViewInformation = new geometry::ViewInformation3D(rViewInformation);
+                }
+            }
+
+            // no test for buffering needed, call parent
+            return SdrPrimitive3D::get3DDecomposition(rViewInformation);
         }
 
         // provide unique ID

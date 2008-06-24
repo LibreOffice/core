@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helplineprimitive2d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:20 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,8 +61,9 @@ namespace drawinglayer
             if(!rViewInformation.getViewport().isEmpty() && !getDirection().equalZero())
             {
                 // position to view coordinates, DashLen and DashLen in logic
-                const basegfx::B2DPoint aViewPosition(rViewInformation.getViewTransformation() * getPosition());
-                const double fLogicDashLen((rViewInformation.getInverseViewTransformation() * basegfx::B2DVector(getViewDashLength(), 0.0)).getLength());
+                const basegfx::B2DPoint aViewPosition(rViewInformation.getObjectToViewTransformation() * getPosition());
+                const double fLogicDashLen((rViewInformation.getInverseObjectToViewTransformation() *
+                    basegfx::B2DVector(getViewDashLength(), 0.0)).getLength());
 
                 switch(getStyle())
                 {
@@ -77,7 +78,7 @@ namespace drawinglayer
                         basegfx::B2DPolygon aLineA;
                         aLineA.append(aStartA);
                         aLineA.append(aEndA);
-                        aLineA.transform(rViewInformation.getInverseViewTransformation());
+                        aLineA.transform(rViewInformation.getInverseObjectToViewTransformation());
                         PolygonMarkerPrimitive2D* pNewA = new PolygonMarkerPrimitive2D(aLineA, getRGBColA(), getRGBColB(), fLogicDashLen);
                         aTempPrimitiveTarget.push_back(pNewA);
 
@@ -87,7 +88,7 @@ namespace drawinglayer
                         basegfx::B2DPolygon aLineB;
                         aLineB.append(aStartB);
                         aLineB.append(aEndB);
-                        aLineB.transform(rViewInformation.getInverseViewTransformation());
+                        aLineB.transform(rViewInformation.getInverseObjectToViewTransformation());
                         PolygonMarkerPrimitive2D* pNewB = new PolygonMarkerPrimitive2D(aLineB, getRGBColA(), getRGBColB(), fLogicDashLen);
                         aTempPrimitiveTarget.push_back(pNewB);
 
@@ -138,7 +139,7 @@ namespace drawinglayer
                             for(sal_uInt32 a(0L); a < aResult.count(); a++)
                             {
                                 basegfx::B2DPolygon aPart(aResult.getB2DPolygon(a));
-                                aPart.transform(rViewInformation.getInverseViewTransformation());
+                                aPart.transform(rViewInformation.getInverseObjectToViewTransformation());
                                 PolygonMarkerPrimitive2D* pNew = new PolygonMarkerPrimitive2D(aPart, getRGBColA(), getRGBColB(), fLogicDashLen);
                                 aTempPrimitiveTarget.push_back(pNew);
                             }
@@ -175,7 +176,7 @@ namespace drawinglayer
             maRGBColA(rRGBColA),
             maRGBColB(rRGBColB),
             mfViewDashLength(fViewDashLength),
-            maLastViewTransformation(),
+            maLastObjectToViewTransformation(),
             maLastViewport()
         {
         }
@@ -203,7 +204,7 @@ namespace drawinglayer
 
             if(getLocalDecomposition().hasElements())
             {
-                if(maLastViewport != rViewInformation.getViewport() || maLastViewTransformation != rViewInformation.getViewTransformation())
+                if(maLastViewport != rViewInformation.getViewport() || maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
                 {
                     // conditions of last local decomposition have changed, delete
                     const_cast< HelplinePrimitive2D* >(this)->setLocalDecomposition(Primitive2DSequence());
@@ -213,7 +214,7 @@ namespace drawinglayer
             if(!getLocalDecomposition().hasElements())
             {
                 // remember ViewRange and ViewTransformation
-                const_cast< HelplinePrimitive2D* >(this)->maLastViewTransformation = rViewInformation.getViewTransformation();
+                const_cast< HelplinePrimitive2D* >(this)->maLastObjectToViewTransformation = rViewInformation.getObjectToViewTransformation();
                 const_cast< HelplinePrimitive2D* >(this)->maLastViewport = rViewInformation.getViewport();
             }
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrlatheprimitive3d.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:21 $
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@ namespace drawinglayer
         {
         private:
             // geometry helper for slices
+            basegfx::B2DPolyPolygon                     maCorrectedPolyPolygon;
             Slice3DVector                               maSlices;
 
             // primitive data
@@ -58,6 +59,9 @@ namespace drawinglayer
             double                                      mfDiagonal;
             double                                      mfBackScale;
             double                                      mfRotation;
+
+            // decomposition data when ReducedLineGeometry is used, see get3DDecomposition
+            geometry::ViewInformation3D*                mpLastRLGViewInformation;
 
             // bitfield
             unsigned                                    mbSmoothNormals : 1; // Plane self
@@ -74,6 +78,18 @@ namespace drawinglayer
             const Slice3DVector& getSlices() const;
 
         protected:
+            // local helpers
+            void impCreateOutlines(
+                const geometry::ViewInformation3D& rViewInformation,
+                const basegfx::B3DPolygon& rLoopA,
+                const basegfx::B3DPolygon& rLoopB,
+                basegfx::B3DPolyPolygon& rTarget) const;
+
+            bool impHasCutWith(
+                const basegfx::B2DPolygon& rPoly,
+                const basegfx::B2DPoint& rStart,
+                const basegfx::B2DPoint& rEnd) const;
+
             // local decomposition.
             virtual Primitive3DSequence createLocalDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
@@ -95,6 +111,7 @@ namespace drawinglayer
                 bool bCharacterMode,
                 bool bCloseFront,
                 bool bCloseBack);
+            virtual ~SdrLathePrimitive3D();
 
             // data access
             const basegfx::B2DPolyPolygon& getPolyPolygon() const { return maPolyPolygon; }
@@ -115,6 +132,9 @@ namespace drawinglayer
 
             // get range
             virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;
+
+            // Overloaded to allow for reduced line mode to decide if to buffer decomposition or not
+            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
             // provide unique ID
             DeclPrimitrive3DIDBlock()
