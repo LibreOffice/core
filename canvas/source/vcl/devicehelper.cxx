@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: devicehelper.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,12 +32,14 @@
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/canvastools.hxx>
-#include <canvas/base/linepolypolygonbase.hxx>
 
+#include <rtl/instance.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/canvastools.hxx>
 #include <basegfx/tools/canvastools.hxx>
+#include <basegfx/tools/unopolypolygon.hxx>
 
 #include "devicehelper.hxx"
 #include "spritecanvas.hxx"
@@ -50,52 +52,40 @@ using namespace ::com::sun::star;
 namespace vclcanvas
 {
     DeviceHelper::DeviceHelper() :
-        mpSpriteCanvas(NULL),
-        mpBackBuffer()
+        mpOutDev()
+    {}
+
+    void DeviceHelper::init( const OutDevProviderSharedPtr& rOutDev )
     {
-    }
-
-    void DeviceHelper::init( Window&        rOutputWindow,
-                             SpriteCanvas&  rSpriteCanvas )
-    {
-        rSpriteCanvas.setWindow(
-            uno::Reference<awt::XWindow2>(
-                VCLUnoHelper::GetInterface(&rOutputWindow),
-                uno::UNO_QUERY_THROW) );
-
-        mpOutputWindow = &rOutputWindow;
-        mpSpriteCanvas = &rSpriteCanvas;
-        rOutputWindow.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | rOutputWindow.GetAntialiasing() );
-
-        // setup back buffer
-        mpBackBuffer.reset( new BackBuffer( rOutputWindow ) );
-        mpBackBuffer->setSize( rOutputWindow.GetOutputSizePixel() );
+        mpOutDev = rOutDev;
     }
 
     geometry::RealSize2D DeviceHelper::getPhysicalResolution()
     {
-        if( !mpOutputWindow )
+        if( !mpOutDev )
             return ::canvas::tools::createInfiniteSize2D(); // we're disposed
 
         // Map a one-by-one millimeter box to pixel
-        const MapMode aOldMapMode( mpOutputWindow->GetMapMode() );
-        mpOutputWindow->SetMapMode( MapMode(MAP_MM) );
-        const Size aPixelSize( mpOutputWindow->LogicToPixel(Size(1,1)) );
-        mpOutputWindow->SetMapMode( aOldMapMode );
+        OutputDevice& rOutDev = mpOutDev->getOutDev();
+        const MapMode aOldMapMode( rOutDev.GetMapMode() );
+        rOutDev.SetMapMode( MapMode(MAP_MM) );
+        const Size aPixelSize( rOutDev.LogicToPixel(Size(1,1)) );
+        rOutDev.SetMapMode( aOldMapMode );
 
         return ::vcl::unotools::size2DFromSize( aPixelSize );
     }
 
     geometry::RealSize2D DeviceHelper::getPhysicalSize()
     {
-        if( !mpOutputWindow )
+        if( !mpOutDev )
             return ::canvas::tools::createInfiniteSize2D(); // we're disposed
 
         // Map the pixel dimensions of the output window to millimeter
-        const MapMode aOldMapMode( mpOutputWindow->GetMapMode() );
-        mpOutputWindow->SetMapMode( MapMode(MAP_MM) );
-        const Size aLogSize( mpOutputWindow->PixelToLogic(mpOutputWindow->GetOutputSizePixel()) );
-        mpOutputWindow->SetMapMode( aOldMapMode );
+        OutputDevice& rOutDev = mpOutDev->getOutDev();
+        const MapMode aOldMapMode( rOutDev.GetMapMode() );
+        rOutDev.SetMapMode( MapMode(MAP_MM) );
+        const Size aLogSize( rOutDev.PixelToLogic(rOutDev.GetOutputSizePixel()) );
+        rOutDev.SetMapMode( aOldMapMode );
 
         return ::vcl::unotools::size2DFromSize( aLogSize );
     }
@@ -104,37 +94,46 @@ namespace vclcanvas
         const uno::Reference< rendering::XGraphicDevice >&              ,
         const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >&  points )
     {
-        if( !mpOutputWindow )
-            return uno::Reference< rendering::XLinePolyPolygon2D >(); // we're disposed
+        uno::Reference< rendering::XLinePolyPolygon2D > xPoly;
+        if( !mpOutDev )
+            return xPoly; // we're disposed
 
-        return uno::Reference< rendering::XLinePolyPolygon2D >(
-            new ::canvas::LinePolyPolygonBase(
-                ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence( points ) ) );
+        xPoly.set( new ::basegfx::unotools::UnoPolyPolygon(
+                       ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence( points ) ) );
+        // vcl only handles even_odd polygons
+        xPoly->setFillRule(rendering::FillRule_EVEN_ODD);
+
+        return xPoly;
     }
 
     uno::Reference< rendering::XBezierPolyPolygon2D > DeviceHelper::createCompatibleBezierPolyPolygon(
         const uno::Reference< rendering::XGraphicDevice >&                      ,
         const uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > >&  points )
     {
-        if( !mpOutputWindow )
-            return uno::Reference< rendering::XBezierPolyPolygon2D >(); // we're disposed
+        uno::Reference< rendering::XBezierPolyPolygon2D > xPoly;
+        if( !mpOutDev )
+            return xPoly; // we're disposed
 
-        return uno::Reference< rendering::XBezierPolyPolygon2D >(
-            new ::canvas::LinePolyPolygonBase(
-                ::basegfx::unotools::polyPolygonFromBezier2DSequenceSequence( points ) ) );
+        xPoly.set( new ::basegfx::unotools::UnoPolyPolygon(
+                       ::basegfx::unotools::polyPolygonFromBezier2DSequenceSequence( points ) ) );
+        // vcl only handles even_odd polygons
+        xPoly->setFillRule(rendering::FillRule_EVEN_ODD);
+
+        return xPoly;
     }
 
     uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  ,
-        const geometry::IntegerSize2D&                      size )
+        const uno::Reference< rendering::XGraphicDevice >& rDevice,
+        const geometry::IntegerSize2D&                     size )
     {
-        if( !mpSpriteCanvas )
+        if( !mpOutDev )
             return uno::Reference< rendering::XBitmap >(); // we're disposed
 
         return uno::Reference< rendering::XBitmap >(
             new CanvasBitmap( ::vcl::unotools::sizeFromIntegerSize2D(size),
                               false,
-                              mpSpriteCanvas ) );
+                              *rDevice.get(),
+                              mpOutDev ) );
     }
 
     uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileBitmap(
@@ -145,15 +144,17 @@ namespace vclcanvas
     }
 
     uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleAlphaBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  ,
-        const geometry::IntegerSize2D&                      size )
+        const uno::Reference< rendering::XGraphicDevice >& rDevice,
+        const geometry::IntegerSize2D&                     size )
     {
-        if( !mpSpriteCanvas )
+        if( !mpOutDev )
             return uno::Reference< rendering::XBitmap >(); // we're disposed
 
-        return uno::Reference< rendering::XBitmap >( new CanvasBitmap( ::vcl::unotools::sizeFromIntegerSize2D(size),
-                                                                       true,
-                                                                       mpSpriteCanvas ) );
+        return uno::Reference< rendering::XBitmap >(
+            new CanvasBitmap( ::vcl::unotools::sizeFromIntegerSize2D(size),
+                              true,
+                              *rDevice.get(),
+                              mpOutDev ) );
     }
 
     uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileAlphaBitmap(
@@ -165,85 +166,63 @@ namespace vclcanvas
 
     sal_Bool DeviceHelper::hasFullScreenMode()
     {
-        // TODO(F3): offer fullscreen mode the XCanvas way
         return false;
     }
 
     sal_Bool DeviceHelper::enterFullScreenMode( sal_Bool bEnter )
     {
         (void)bEnter;
-
-        // TODO(F3): offer fullscreen mode the XCanvas way
         return false;
-    }
-
-    ::sal_Int32 DeviceHelper::createBuffers( ::sal_Int32 nBuffers )
-    {
-        (void)nBuffers;
-
-        // TODO(F3): implement XBufferStrategy interface. For now, we
-        // _always_ will have exactly one backbuffer
-        return 1;
-    }
-
-    void DeviceHelper::destroyBuffers()
-    {
-        // TODO(F3): implement XBufferStrategy interface. For now, we
-        // _always_ will have exactly one backbuffer
-    }
-
-    ::sal_Bool DeviceHelper::showBuffer( ::sal_Bool bUpdateAll )
-    {
-        // forward to sprite canvas helper
-        if( !mpSpriteCanvas )
-            return false;
-
-        return mpSpriteCanvas->updateScreen( bUpdateAll );
-    }
-
-    ::sal_Bool DeviceHelper::switchBuffer( ::sal_Bool bUpdateAll )
-    {
-        // no difference for VCL canvas
-        return showBuffer( bUpdateAll );
     }
 
     void DeviceHelper::disposing()
     {
         // release all references
-        mpSpriteCanvas = NULL;
-        mpBackBuffer.reset();
+        mpOutDev.reset();
+    }
+
+    uno::Any DeviceHelper::isAccelerated() const
+    {
+        return ::com::sun::star::uno::makeAny(false);
     }
 
     uno::Any DeviceHelper::getDeviceHandle() const
     {
-        if( !mpOutputWindow )
+        if( !mpOutDev )
             return uno::Any();
 
         return uno::makeAny(
-            reinterpret_cast< sal_Int64 >(mpOutputWindow) );
+            reinterpret_cast< sal_Int64 >(&mpOutDev->getOutDev()) );
     }
 
     uno::Any DeviceHelper::getSurfaceHandle() const
     {
-        if( !mpBackBuffer )
-            return uno::Any();
-
-        return uno::makeAny(
-            reinterpret_cast< sal_Int64 >(&mpBackBuffer->getOutDev()) );
+        return getDeviceHandle();
     }
 
-    void DeviceHelper::notifySizeUpdate( const awt::Rectangle& rBounds )
+    namespace
     {
-        if( mpBackBuffer )
-            mpBackBuffer->setSize( ::Size(rBounds.Width,
-                                          rBounds.Height) );
+        struct DeviceColorSpace: public rtl::StaticWithInit<uno::Reference<rendering::XColorSpace>,
+                                                            DeviceColorSpace>
+        {
+            uno::Reference<rendering::XColorSpace> operator()()
+            {
+                return vcl::unotools::createStandardColorSpace();
+            }
+        };
+    }
+
+    uno::Reference<rendering::XColorSpace> DeviceHelper::getColorSpace() const
+    {
+        // always the same
+        return DeviceColorSpace::get();
     }
 
     void DeviceHelper::dumpScreenContent() const
     {
         static sal_uInt32 nFilePostfixCount(0);
 
-        if( mpOutputWindow )
+        if( mpOutDev )
         {
             String aFilename( String::CreateFromAscii("dbg_frontbuffer") );
             aFilename += String::CreateFromInt32(nFilePostfixCount);
@@ -252,24 +231,12 @@ namespace vclcanvas
             SvFileStream aStream( aFilename, STREAM_STD_READWRITE );
 
             const ::Point aEmptyPoint;
-            bool bOldMap( mpOutputWindow->IsMapModeEnabled() );
-            mpOutputWindow->EnableMapMode( FALSE );
-            aStream << mpOutputWindow->GetBitmap(aEmptyPoint,
-                                                mpOutputWindow->GetOutputSizePixel());
-            mpOutputWindow->EnableMapMode( bOldMap );
-
-            if( mpBackBuffer )
-            {
-                String aFilename2( String::CreateFromAscii("dbg_backbuffer") );
-                aFilename2 += String::CreateFromInt32(nFilePostfixCount);
-                aFilename2 += String::CreateFromAscii(".bmp");
-
-                SvFileStream aStream2( aFilename2, STREAM_STD_READWRITE );
-
-                mpBackBuffer->getOutDev().EnableMapMode( FALSE );
-                aStream2 << mpBackBuffer->getOutDev().GetBitmap(aEmptyPoint,
-                                                                mpBackBuffer->getOutDev().GetOutputSizePixel());
-            }
+            OutputDevice& rOutDev = mpOutDev->getOutDev();
+            bool bOldMap( rOutDev.IsMapModeEnabled() );
+            rOutDev.EnableMapMode( FALSE );
+            aStream << rOutDev.GetBitmap(aEmptyPoint,
+                                         rOutDev.GetOutputSizePixel());
+            rOutDev.EnableMapMode( bOldMap );
 
             ++nFilePostfixCount;
         }
