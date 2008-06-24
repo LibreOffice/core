@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: precompiled_accessibility.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,5 +31,10 @@
 // MARKER(update_precomp.py): Generated on 2006-09-01 17:49:28.952369
 
 #ifdef PRECOMPILED_HEADERS
-#endif
 
+//---MARKER---
+
+#include "com/sun/star/accessibility/AccessibleRelationType.hpp"
+#include "unotools/accessiblerelationsethelper.hxx"
+#include "vcl/window.hxx"
+#endif
