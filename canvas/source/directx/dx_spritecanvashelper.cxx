@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_spritecanvashelper.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,9 +28,13 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_canvas.hxx"
+
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <comphelper/scopeguard.hxx>
 
@@ -42,6 +46,14 @@
 #include "dx_spritecanvashelper.hxx"
 #include "dx_canvascustomsprite.hxx"
 
+#if defined(DX_DEBUG_IMAGES)
+# if OSL_DEBUG_LEVEL > 0
+#  include <imdebug.h>
+#  undef min
+#  undef max
+# endif
+#endif
+
 using namespace ::com::sun::star;
 
 namespace dxcanvas
@@ -50,7 +62,7 @@ namespace dxcanvas
     {
         void repaintBackground( const ::basegfx::B2DRange&      rUpdateArea,
                                 const ::basegfx::B2IRange&      rOutputArea,
-                                const DXBitmapSharedPtr&        rBackBuffer )
+                                const DXSurfaceBitmapSharedPtr& rBackBuffer )
         {
             // TODO(E1): Use numeric_cast to catch overflow here
             ::basegfx::B2IRange aActualArea( 0, 0,
@@ -94,6 +106,7 @@ namespace dxcanvas
     }
 
     SpriteCanvasHelper::SpriteCanvasHelper() :
+        mpSpriteSurface( NULL ),
         mpRedrawManager( NULL ),
         mpRenderModule(),
         mpSurfaceProxy(),
@@ -108,19 +121,22 @@ namespace dxcanvas
 #endif
     }
 
-    void SpriteCanvasHelper::init( ::canvas::SpriteRedrawManager&                   rManager,
+    void SpriteCanvasHelper::init( SpriteCanvas&                                    rParent,
+                                   ::canvas::SpriteRedrawManager&                   rManager,
                                    const IDXRenderModuleSharedPtr&                  rRenderModule,
                                    const ::canvas::ISurfaceProxyManagerSharedPtr&   rSurfaceProxy,
-                                   const DXBitmapSharedPtr&                         rBackBuffer,
+                                   const DXSurfaceBitmapSharedPtr&                  rBackBuffer,
                                    const ::basegfx::B2ISize&                        rOutputOffset )
     {
         // init base
+        setDevice( rParent );
         setTarget( rBackBuffer, rOutputOffset );
 
+        mpSpriteSurface = &rParent;
         mpRedrawManager = &rManager;
-        mpRenderModule = rRenderModule;
-        mpSurfaceProxy = rSurfaceProxy;
-        mpBackBuffer = rBackBuffer;
+        mpRenderModule  = rRenderModule;
+        mpSurfaceProxy  = rSurfaceProxy;
+        mpBackBuffer    = rBackBuffer;
     }
 
     void SpriteCanvasHelper::disposing()
@@ -131,6 +147,7 @@ namespace dxcanvas
         mpBackBuffer.reset();
         mpRenderModule.reset();
         mpRedrawManager = NULL;
+        mpSpriteSurface = NULL;
 
         // forward to base
         CanvasHelper::disposing();
@@ -156,7 +173,7 @@ namespace dxcanvas
 
         return uno::Reference< rendering::XCustomSprite >(
             new CanvasCustomSprite( spriteSize,
-                                    mpDevice,
+                                    mpSpriteSurface,
                                     mpRenderModule,
                                     mpSurfaceProxy,
                                     mbShowSpriteBounds ) );
@@ -177,6 +194,12 @@ namespace dxcanvas
         {
             return sal_False; // disposed, or otherwise dysfunctional
         }
+
+#if defined(DX_DEBUG_IMAGES)
+# if OSL_DEBUG_LEVEL > 0
+        mpBackBuffer->imageDebugger();
+# endif
+#endif
 
         // store current output area (need to tunnel that to the
         // background, scroll, opaque and general sprite repaint
@@ -246,7 +269,7 @@ namespace dxcanvas
 
     void SpriteCanvasHelper::backgroundPaint( const ::basegfx::B2DRange& rUpdateRect )
     {
-        ENSURE_AND_THROW( mpRenderModule &&
+        ENSURE_OR_THROW( mpRenderModule &&
                           mpBackBuffer,
                           "SpriteCanvasHelper::backgroundPaint(): NULL device pointer " );
 
@@ -259,7 +282,7 @@ namespace dxcanvas
                                            const ::basegfx::B2DRange&                       rMoveEnd,
                                            const ::canvas::SpriteRedrawManager::UpdateArea& rUpdateArea )
     {
-        ENSURE_AND_THROW( mpRenderModule &&
+        ENSURE_OR_THROW( mpRenderModule &&
                           mpBackBuffer,
                           "SpriteCanvasHelper::scrollUpdate(): NULL device pointer " );
 
@@ -309,7 +332,7 @@ namespace dxcanvas
     void SpriteCanvasHelper::opaqueUpdate( const ::basegfx::B2DRange&                          rTotalArea,
                                            const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites )
     {
-        ENSURE_AND_THROW( mpRenderModule &&
+        ENSURE_OR_THROW( mpRenderModule &&
                           mpBackBuffer,
                           "SpriteCanvasHelper::opaqueUpdate(): NULL device pointer " );
 
@@ -333,7 +356,7 @@ namespace dxcanvas
     void SpriteCanvasHelper::genericUpdate( const ::basegfx::B2DRange&                          rTotalArea,
                                             const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites )
     {
-        ENSURE_AND_THROW( mpRenderModule &&
+        ENSURE_OR_THROW( mpRenderModule &&
                           mpBackBuffer,
                           "SpriteCanvasHelper::genericUpdate(): NULL device pointer " );
 
