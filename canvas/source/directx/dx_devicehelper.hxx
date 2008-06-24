@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_devicehelper.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,18 +47,22 @@
 
 namespace dxcanvas
 {
-    class SpriteCanvas;
-    class SpriteCanvasHelper;
-
     class DeviceHelper : private ::boost::noncopyable
     {
     public:
         DeviceHelper();
 
-        void init( Window&                                  rWindow,
-                   SpriteCanvas&                            rSpriteCanvas,
-                   const ::com::sun::star::awt::Rectangle&  rRect,
-                   bool                                     bFullscreen );
+        /** Init the device helper
+
+            @param hdc
+            private or class dc of the output device. is only stored,
+            not release
+
+            @param rDevice
+            Ref back to owning UNO device
+         */
+        void init( HDC                                        hdc,
+                   com::sun::star::rendering::XGraphicDevice& rDevice );
 
         /// Dispose all internal references
         void disposing();
@@ -84,44 +88,37 @@ namespace dxcanvas
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > createVolatileAlphaBitmap(
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
             const ::com::sun::star::geometry::IntegerSize2D&                                        size );
-        sal_Bool hasFullScreenMode(  );
+
+        sal_Bool hasFullScreenMode();
         sal_Bool enterFullScreenMode( sal_Bool bEnter );
 
-        ::sal_Int32 createBuffers( ::sal_Int32 nBuffers );
-        void        destroyBuffers(  );
-        ::sal_Bool  showBuffer( ::sal_Bool bUpdateAll );
-        ::sal_Bool  switchBuffer( ::sal_Bool bUpdateAll );
-
+        ::com::sun::star::uno::Any isAccelerated() const;
         ::com::sun::star::uno::Any getDeviceHandle() const;
         ::com::sun::star::uno::Any getSurfaceHandle() const;
-
-        const IDXRenderModuleSharedPtr& getRenderModule() const { return mpRenderModule; }
-        const DXBitmapSharedPtr&        getBackBuffer() const { return mpBackBuffer; }
-        const ::canvas::ISurfaceProxyManagerSharedPtr &getSurfaceProxy() const { return mpSurfaceProxyManager; }
-
-        void notifySizeUpdate( const ::com::sun::star::awt::Rectangle& rBounds );
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::rendering::XColorSpace > getColorSpace() const;
 
         /** called when DumpScreenContent property is enabled on
             XGraphicDevice, and writes out bitmaps of current screen.
          */
-        void dumpScreenContent() const;
+        void dumpScreenContent() const {}
+
+    protected:
+        HDC getHDC() const { return mnHDC; }
+        com::sun::star::rendering::XGraphicDevice* getDevice() const { return mpDevice; }
 
     private:
-        void        resizeBackBuffer( const ::basegfx::B2ISize& rNewSize );
-        HWND getHwnd() const;
+        /** Phyical output device
 
-
-        /// Pointer to sprite canvas (owner of this helper), needed to create bitmaps
-        SpriteCanvas*                           mpSpriteCanvas;
-
-        DXBitmapSharedPtr                       mpBackBuffer;
-
-        /// Instance passing out HW textures
-        ::canvas::ISurfaceProxyManagerSharedPtr mpSurfaceProxyManager;
-
-        /// Our encapsulation interface to DirectX
-        IDXRenderModuleSharedPtr                mpRenderModule;
+            Deliberately not a refcounted reference, because of
+            potential circular references for canvas. Needed to
+            create bitmaps
+         */
+        com::sun::star::rendering::XGraphicDevice* mpDevice;
+        HDC                                        mnHDC;
     };
+
+    typedef ::rtl::Reference< com::sun::star::rendering::XGraphicDevice > DeviceRef;
 }
 
-#endif /* _DXCANVAS_WINDOWGRAPHICDEVICE_HXX */
+#endif /* _DXCANVAS_DEVICEHELPER_HXX */
