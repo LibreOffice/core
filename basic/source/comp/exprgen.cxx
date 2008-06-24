@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: exprgen.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -177,6 +177,7 @@ void SbiExprNode::GenElement( SbiOpcode eOp )
         nId |= 0x8000;
         aVar.pPar->Gen();
     }
+
     SbiProcDef* pProc = aVar.pDef->GetProcDef();
     // per DECLARE definiert?
     if( pProc )
@@ -189,6 +190,18 @@ void SbiExprNode::GenElement( SbiOpcode eOp )
             nId = ( nId & 0x8000 ) | pGen->GetParser()->aGblStrings.Add( pProc->GetAlias() );
     }
     pGen->Gen( eOp, nId, sal::static_int_cast< UINT16 >( GetType() ) );
+
+    if( aVar.pvMorePar )
+    {
+        SbiExprListVector* pvMorePar = aVar.pvMorePar;
+        SbiExprListVector::iterator it;
+        for( it = pvMorePar->begin() ; it != pvMorePar->end() ; ++it )
+        {
+            SbiExprList* pExprList = *it;
+            pExprList->Gen();
+            pGen->Gen( _ARRAYACCESS );
+        }
+    }
 }
 
 // Erzeugen einer Argv-Tabelle
