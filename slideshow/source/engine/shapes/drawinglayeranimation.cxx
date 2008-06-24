@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawinglayeranimation.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_slideshow.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/elapsedtime.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
@@ -702,7 +703,7 @@ bool ActivityImpl::perform()
     if( !isActive() )
         return false;
 
-    ENSURE_AND_RETURN(
+    ENSURE_OR_RETURN(
         mpDrawShape,
         "ActivityImpl::perform(): still active, but NULL draw shape" );
 
@@ -796,7 +797,7 @@ ActivityImpl::ActivityImpl(
     mpDrawShape->setVisibility(false);
 
     basegfx::B2DRectangle aScrollRect, aPaintRect;
-    ENSURE_AND_THROW( getRectanglesFromScrollMtf( aScrollRect,
+    ENSURE_OR_THROW( getRectanglesFromScrollMtf( aScrollRect,
                                                   aPaintRect,
                                                   mpMetaFile ),
                       "ActivityImpl::ActivityImpl(): Could not extract "
