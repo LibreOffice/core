@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -57,6 +57,9 @@ PARFILES= canvascommons.par		\
 PARFILES+= cairocanvas.par
 .ENDIF
 .IF "$(ENABLE_DIRECTX)" != ""
+.IF "$(USE_DIRECTX5)" != ""
+SCPDEFS+=-DUSE_DIRECTX5
+.ENDIF
 PARFILES+= directxcanvas.par
 .ENDIF
 
