@@ -5,9 +5,24 @@
 		<desc>Contains configuration items related to the Impress application.</desc>
 	</info>
 	<import oor:component="org.openoffice.Office.Common"/>
+	<templates>
+        <group oor:name="CanvasService">
+			<info>
+				<author>THB</author>
+				<label>Implementation names for canvas service.</label>
+				<desc>Contains a list of implementation names for each canvas service. Tried in order of appearance</desc>
+			</info>
+			<prop oor:name="PreferredImplementations" oor:type="oor:string-list">
+                <info>
+	    			<desc>List of implementation names.</desc>
+                </info>
+            </prop>
+		</group>
+	</templates>
 	<component>
 		<group oor:name="DXCanvas">
 			<info>
+				<author>THB</author>
 				<desc>Contains config entries for the DirectX-based implementation of the XCanvas interface.</desc>
 			</info>
 			<prop oor:name="DeviceBlacklist" oor:type="oor:int-list">
@@ -56,6 +71,24 @@
 				<value>2048</value>
 			</prop>
 		</group>
+        <set oor:name="CanvasServiceList" oor:node-type="CanvasService">
+            <info>
+                <desc>List of preferred implementation names, for each given canvas service.</desc>
+            </info>
+		</set>
+		<prop oor:name="ForceSafeServiceImpl" oor:type="xs:boolean">
+			<info>
+				<author>THB</author>
+				<desc>When true, force canvas factory to use the last
+				      entry of the respective preferred services
+					  lists. This entry should represent a safe,
+					  works-always implementation, ready to serve as a
+					  fallback.
+				</desc>
+				<label>Force fallback canvas impl</label>
+			</info>
+			<value>false</value>
+		</prop>
 	</component>
 </oor:component-schema>
 
