@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_hidden_ooo.scp,v $
- * $Revision: 1.101 $
+ * $Revision: 1.102 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -128,6 +128,8 @@ Module gid_Module_Root_Files_3
 	gid_File_Jar_Xflatxml,
 	gid_File_Jar_Xmerge,
 	gid_File_Jar_Xmergebridge,
+	gid_File_Jar_Lucene,
+	gid_File_Jar_Lucenehelpwrapper
     gid_File_Rdb_Offapi,
 	gid_Starregistry_Services_Rdb);
 End
