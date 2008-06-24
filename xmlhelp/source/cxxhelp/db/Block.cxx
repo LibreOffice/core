@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Block.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,30 +84,11 @@ void Block::read( util::RandomAccessStream* in )
 }
 
 
-void Block::write( util::RandomAccessStream* out ) const
-{
-  out->writeBytes( (sal_Int8*)(&num_),4 );
-  sal_Int32 twoFields = ( free_ | ( isLeaf_ ? 0x80000000 : 0 ) );
-  out->writeBytes( (sal_Int8*)(&twoFields),4 );
-  out->writeBytes( data_,dbenv_->getDataLen() );
-}
-
-
-void Block::setInteger( sal_Int32 i,sal_Int32 value ) throw( excep::IllegalIndexException )
-{
-  if( i < 0 || dbenv_->getDataLen() <= i  )
-    throw excep::IllegalIndexException(
-                       rtl::OUString::createFromAscii( "Block::setInteger -> index out of range" ) );
-
-  ::setInteger_( &data_[i],value );
-}
-
-
 sal_Int32 Block::getInteger( sal_Int32 i ) const throw( excep::IllegalIndexException )
 {
   if( i < 0 || dbenv_->getDataLen() <= i  )
     throw excep::IllegalIndexException(
-                       rtl::OUString::createFromAscii( "Block::setInteger -> index out of range" ) );
+                       rtl::OUString::createFromAscii( "Block::getInteger -> index out of range" ) );
 
     sal_Int32 ret = ::getInteger_( &data_[i] );
   return ret;
