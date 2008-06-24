@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: layermanager.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_slideshow.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <basegfx/range/b1drange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
@@ -271,7 +272,7 @@ namespace slideshow
         void LayerManager::addShape( const ShapeSharedPtr& rShape )
         {
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
-            ENSURE_AND_THROW( rShape, "LayerManager::addShape(): invalid Shape" );
+            ENSURE_OR_THROW( rShape, "LayerManager::addShape(): invalid Shape" );
 
             // add shape to XShape hash map
             if( !maXShapeHash.insert(
@@ -298,7 +299,7 @@ namespace slideshow
         void LayerManager::implAddShape( const ShapeSharedPtr& rShape )
         {
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
-            ENSURE_AND_THROW( rShape, "LayerManager::implAddShape(): invalid Shape" );
+            ENSURE_OR_THROW( rShape, "LayerManager::implAddShape(): invalid Shape" );
 
             ShapeEntry aShapeEntry(rShape);
 
@@ -333,7 +334,7 @@ namespace slideshow
         void LayerManager::implRemoveShape( const ShapeSharedPtr& rShape )
         {
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
-            ENSURE_AND_THROW( rShape, "LayerManager::implRemoveShape(): invalid Shape" );
+            ENSURE_OR_THROW( rShape, "LayerManager::implRemoveShape(): invalid Shape" );
 
             const LayerShapeSet::iterator aShapeEntry(
                 maAllShapes.find(
@@ -370,7 +371,7 @@ namespace slideshow
 
         ShapeSharedPtr LayerManager::lookupShape( const uno::Reference< drawing::XShape >& xShape ) const
         {
-            ENSURE_AND_THROW( xShape.is(), "LayerManager::lookupShape(): invalid Shape" );
+            ENSURE_OR_THROW( xShape.is(), "LayerManager::lookupShape(): invalid Shape" );
 
             const XShapeHash::const_iterator aIter( maXShapeHash.find( xShape ));
             if( aIter == maXShapeHash.end() )
@@ -433,7 +434,7 @@ namespace slideshow
         void LayerManager::enterAnimationMode( const AnimatableShapeSharedPtr& rShape )
         {
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
-            ENSURE_AND_THROW( rShape, "LayerManager::enterAnimationMode(): invalid Shape" );
+            ENSURE_OR_THROW( rShape, "LayerManager::enterAnimationMode(): invalid Shape" );
 
             const bool bPrevAnimState( rShape->isBackgroundDetached() );
 
@@ -462,8 +463,8 @@ namespace slideshow
 
         void LayerManager::leaveAnimationMode( const AnimatableShapeSharedPtr& rShape )
         {
-            ENSURE_AND_THROW( !maLayers.empty(), "LayerManager::leaveAnimationMode(): no layers" );
-            ENSURE_AND_THROW( rShape, "LayerManager::leaveAnimationMode(): invalid Shape" );
+            ENSURE_OR_THROW( !maLayers.empty(), "LayerManager::leaveAnimationMode(): no layers" );
+            ENSURE_OR_THROW( rShape, "LayerManager::leaveAnimationMode(): invalid Shape" );
 
             const bool bPrevAnimState( rShape->isBackgroundDetached() );
 
@@ -646,7 +647,7 @@ namespace slideshow
                 virtual ::cppcanvas::CustomSpriteSharedPtr createSprite( const ::basegfx::B2DSize& /*rSpriteSizePixel*/,
                                                                          double                    /*nSpritePrio*/ ) const
                 {
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "DummyLayer::createSprite(): This method is not supposed to be called!" );
                     return ::cppcanvas::CustomSpriteSharedPtr();
                 }
@@ -731,7 +732,7 @@ namespace slideshow
         void LayerManager::addUpdateArea( ShapeSharedPtr const& rShape )
         {
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
-            ENSURE_AND_THROW( rShape, "LayerManager::addUpdateArea(): invalid Shape" );
+            ENSURE_OR_THROW( rShape, "LayerManager::addUpdateArea(): invalid Shape" );
 
             const LayerShapeSet::const_iterator aShapeEntry(
                 maAllShapes.find(
