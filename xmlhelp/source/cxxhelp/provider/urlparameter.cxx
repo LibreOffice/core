@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: urlparameter.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,18 +107,6 @@ URLParameter::URLParameter( const rtl::OUString& aURL,
     parse();
 }
 
-
-URLParameter::URLParameter( const rtl::OUString&  aURL,
-                            const rtl::OUString& aDefaultLanguage,
-                            Databases* pDatabases )
-    throw( com::sun::star::ucb::IllegalIdentifierException )
-    : m_pDatabases( pDatabases ),
-      m_aURL( aURL ),
-      m_aDefaultLanguage( aDefaultLanguage )
-{
-    init( true );
-    parse();
-}
 
 bool URLParameter::isErrorDocument()
 {
