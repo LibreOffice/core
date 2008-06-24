@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XBitmapCanvas.idl,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,7 +121,7 @@ interface XBitmapCanvas : XCanvas
         the compositing mode must be one of the
         <type>CompositingOperation</type> values.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if one of the parameters are not within the specified range.
      */
     void copyRect( [in] XBitmapCanvas sourceCanvas,
@@ -136,7 +136,7 @@ interface XBitmapCanvas : XCanvas
 
 // TODO: Multiple-inheritance interfaces
 
-/** This service provides the interfaces for a BitmapCanvas
+/** This service provides the interfaces for a <type>XBitmapCanvas</type>
  */
 service BitmapCanvas
 {
