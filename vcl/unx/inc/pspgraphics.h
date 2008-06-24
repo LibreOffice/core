@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pspgraphics.h,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -201,6 +201,7 @@ public:
                                              const SalBitmap& rAlphaBitmap );
     virtual bool            drawAlphaRect( long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency );
 
+    virtual SystemGraphicsData GetGraphicsData() const;
 };
 
 #endif // _VCL_PSPGRAPHICS_H
