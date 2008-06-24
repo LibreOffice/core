@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: null_spritecanvas.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,15 +41,14 @@
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XBufferController.hpp>
-#include <com/sun/star/rendering/XColorSpace.hpp>
 #include <com/sun/star/rendering/XParametricPolyPolygon2DFactory.hpp>
 
-#include <cppuhelper/compbase9.hxx>
+#include <cppuhelper/compbase8.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <canvas/base/spritecanvasbase.hxx>
 #include <canvas/base/basemutexhelper.hxx>
-#include <canvas/base/windowgraphicdevicebase.hxx>
+#include <canvas/base/bufferedgraphicdevicebase.hxx>
 
 #include "null_spritecanvashelper.hxx"
 #include "null_devicehelper.hxx"
@@ -58,19 +57,18 @@
 
 namespace nullcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper9<  ::com::sun::star::rendering::XSpriteCanvas,
+    typedef ::cppu::WeakComponentImplHelper8<  ::com::sun::star::rendering::XSpriteCanvas,
                                                 ::com::sun::star::rendering::XIntegerBitmap,
                                                 ::com::sun::star::rendering::XGraphicDevice,
                                                ::com::sun::star::rendering::XParametricPolyPolygon2DFactory,
                                                ::com::sun::star::rendering::XBufferController,
-                                               ::com::sun::star::rendering::XColorSpace,
                                                ::com::sun::star::awt::XWindowListener,
                                                ::com::sun::star::beans::XPropertySet,
                                                ::com::sun::star::lang::XServiceName >   WindowGraphicDeviceBase_Base;
-    typedef ::canvas::WindowGraphicDeviceBase< ::canvas::BaseMutexHelper< WindowGraphicDeviceBase_Base >,
-                                               DeviceHelper,
-                                               ::osl::MutexGuard,
-                                               ::cppu::OWeakObject >    SpriteCanvasBase_Base;
+    typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::BaseMutexHelper< WindowGraphicDeviceBase_Base >,
+                                                   DeviceHelper,
+                                                   ::osl::MutexGuard,
+                                                   ::cppu::OWeakObject >    SpriteCanvasBase_Base;
     /** Mixin SpriteSurface
 
         Have to mixin the SpriteSurface before deriving from
@@ -116,7 +114,7 @@ namespace nullcanvas
                       const ::com::sun::star::uno::Reference<
                             ::com::sun::star::uno::XComponentContext >& rxContext );
 
-        void initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
+        void initialize();
 
 #if defined __SUNPRO_CC
         using SpriteCanvasBaseT::disposing;
@@ -143,6 +141,7 @@ namespace nullcanvas
         virtual ::rtl::OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException);
 
      private:
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > maArguments;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxComponentContext;
     };
 
