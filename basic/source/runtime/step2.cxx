@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: step2.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -433,7 +433,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, UINT32 nOp1 )
                             USHORT nCurPar = 1;
                             AutomationNamedArgsSbxArray* pArg =
                                 new AutomationNamedArgsSbxArray( nArgCount );
-                            OUString* pNames = pArg->getNames().getArray();
+                            ::rtl::OUString* pNames = pArg->getNames().getArray();
                             for( i = 1 ; i < nArgCount ; i++ )
                             {
                                 SbxVariable* pVar = refArgv->Get( i );
@@ -1227,5 +1227,4 @@ void SbiRuntime::StepSTATIC( UINT32 nOp1, UINT32 nOp2 )
     pInst -> GetStatics()->Put( p, pInst->GetStatics()->Count() );
     */
 }
-
 
