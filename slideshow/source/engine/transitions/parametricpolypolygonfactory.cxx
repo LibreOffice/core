@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: parametricpolypolygonfactory.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_slideshow.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
@@ -304,7 +305,7 @@ namespace slideshow
             case PUSHWIPE:
             case SLIDEWIPE:
             case FADE:
-                ENSURE_AND_THROW( false,
+                ENSURE_OR_THROW( false,
                                   "createShapeClipPolyPolygonAnimation(): Transition type mismatch" );
             }
 
