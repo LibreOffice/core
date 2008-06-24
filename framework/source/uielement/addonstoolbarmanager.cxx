@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: addonstoolbarmanager.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,7 +103,6 @@
 //  namespaces
 //_________________________________________________________________________________________________________________
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
@@ -230,8 +229,8 @@ void AddonsToolBarManager::RefreshImages()
 
         if ( nId > 0 )
         {
-            OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
-            OUString aImageId;
+            ::rtl::OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
+            ::rtl::OUString aImageId;
             AddonsParams* pRuntimeItemData = (AddonsParams*)m_pToolBar->GetItemData( nId );
             if ( pRuntimeItemData )
                 aImageId  = pRuntimeItemData->aImageId;
@@ -387,13 +386,13 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 {
                     PropertyValue aPropValue;
                     Sequence< Any > aArgs( 3 );
-                    aPropValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+                    aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
                     aPropValue.Value = makeAny( m_xFrame );
                     aArgs[0] = makeAny( aPropValue );
-                    aPropValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
+                    aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
                     aPropValue.Value = makeAny( aURL );
                     aArgs[1] = makeAny( aPropValue );
-                    aPropValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
+                    aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
                     aPropValue.Value = makeAny( m_xServiceManager );
                     aArgs[2] = makeAny( aPropValue );
                     try
@@ -560,3 +559,4 @@ IMPL_LINK( AddonsToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEve
 }
 
 }
+
