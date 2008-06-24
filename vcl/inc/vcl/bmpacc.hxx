@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bmpacc.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -172,6 +172,8 @@ public:
     inline BOOL                 HasColorMask() const;
     inline ColorMask&           GetColorMask() const;
 
+    inline BitmapColor          GetPixelFromData( const BYTE* pData, long nX ) const;
+    inline void                 SetPixelOnData( BYTE* pData, long nX, const BitmapColor& rBitmapColor );
     inline BitmapColor          GetPixel( long nY, long nX ) const;
     inline BitmapColor          GetColor( long nY, long nX ) const;
     inline BYTE                 GetLuminance( long nY, long nX ) const;
@@ -470,6 +472,22 @@ inline BitmapColor BitmapReadAccess::GetPixel( long nY, long nX ) const
     DBG_ASSERT( nX < mpBuffer->mnWidth, "x-coordinate out of range!" );
     DBG_ASSERT( nY < mpBuffer->mnHeight, "y-coordinate out of range!" );
     return mFncGetPixel( mpScanBuf[ nY ], nX, maColorMask );
+}
+
+// ------------------------------------------------------------------
+
+inline BitmapColor BitmapReadAccess::GetPixelFromData( const BYTE* pData, long nX ) const
+{
+    DBG_ASSERT( pData, "Access is not valid!" );
+    return mFncGetPixel( pData, nX, maColorMask );
+}
+
+// ------------------------------------------------------------------
+
+inline void BitmapReadAccess::SetPixelOnData( BYTE* pData, long nX, const BitmapColor& rBitmapColor )
+{
+    DBG_ASSERT( pData, "Access is not valid!" );
+    mFncSetPixel( pData, nX, rBitmapColor, maColorMask );
 }
 
 // ------------------------------------------------------------------
