@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_textlayout_drawhelper.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,9 +44,11 @@
 
 class ::com::sun::star::rendering::XCanvasFont;
 
+namespace Gdiplus { class Graphics; }
+
 namespace dxcanvas
 {
-    class DXBitmap;
+    struct Bitmap;
     class TextLayoutDrawHelper
     {
     public:
@@ -55,15 +57,16 @@ namespace dxcanvas
         ~TextLayoutDrawHelper();
 
         // draw text
-        void drawText( const ::boost::shared_ptr< DXBitmap > &rBitmap,
-                        const ::com::sun::star::rendering::ViewState&       rViewState,
+        void drawText( const boost::shared_ptr<Gdiplus::Graphics>&          rGraphics,
+                       const ::com::sun::star::rendering::ViewState&        rViewState,
                        const ::com::sun::star::rendering::RenderState&      rRenderState,
                        const ::basegfx::B2ISize&                            rOutputOffset,
                        const ::com::sun::star::rendering::StringContext&    rText,
                        const ::com::sun::star::uno::Sequence< double >&     rLogicalAdvancements,
                        const ::com::sun::star::uno::Reference<
                                ::com::sun::star::rendering::XCanvasFont >&  rCanvasFont,
-                       const ::com::sun::star::geometry::Matrix2D&          rFontMatrix );
+                       const ::com::sun::star::geometry::Matrix2D&          rFontMatrix,
+                       bool                                                 bAlphaSurface );
 
         ::com::sun::star::geometry::RealRectangle2D queryTextBounds(
             const ::com::sun::star::rendering::StringContext&   rText,
