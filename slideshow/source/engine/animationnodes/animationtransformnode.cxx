@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: animationtransformnode.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +62,7 @@ AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
     switch( nTransformType )
     {
     default:
-        ENSURE_AND_THROW(
+        ENSURE_OR_THROW(
             false, "AnimationTransformNode::createTransformActivity(): "
             "Unknown transform type" );
 
