@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_spritecanvas.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +31,6 @@
 #ifndef _CAIROCANVAS_SPRITECANVAS_HXX_
 #define _CAIROCANVAS_SPRITECANVAS_HXX_
 
-#include <rtl/ref.hxx>
-
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -44,39 +42,40 @@
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XBufferController.hpp>
-#include <com/sun/star/rendering/XColorSpace.hpp>
 #include <com/sun/star/rendering/XParametricPolyPolygon2DFactory.hpp>
 
-#include <cppuhelper/compbase10.hxx>
+#include <cppuhelper/compbase9.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <canvas/base/spritecanvasbase.hxx>
 #include <canvas/base/basemutexhelper.hxx>
-#include <canvas/base/windowgraphicdevicebase.hxx>
+#include <canvas/base/bufferedgraphicdevicebase.hxx>
 
 #include <basegfx/vector/b2isize.hxx>
 
-#include "cairo_devicehelper.hxx"
+#include "cairo_spritedevicehelper.hxx"
 #include "cairo_repainttarget.hxx"
+#include "cairo_surfaceprovider.hxx"
 #include "cairo_spritecanvashelper.hxx"
 
+#define SPRITECANVAS_SERVICE_NAME        "com.sun.star.rendering.SpriteCanvas.Cairo"
+#define SPRITECANVAS_IMPLEMENTATION_NAME "com.sun.star.comp.rendering.SpriteCanvas.Cairo"
 
 namespace cairocanvas
 {
-    typedef ::cppu::WeakComponentImplHelper10< ::com::sun::star::rendering::XSpriteCanvas,
+    typedef ::cppu::WeakComponentImplHelper9< ::com::sun::star::rendering::XSpriteCanvas,
                                                 ::com::sun::star::rendering::XIntegerBitmap,
                                                 ::com::sun::star::rendering::XGraphicDevice,
-                                               ::com::sun::star::rendering::XParametricPolyPolygon2DFactory,
-                                               ::com::sun::star::rendering::XBufferController,
-                                               ::com::sun::star::rendering::XColorSpace,
-                                               ::com::sun::star::awt::XWindowListener,
-                                               ::com::sun::star::util::XUpdatable,
-                                               ::com::sun::star::beans::XPropertySet,
-                                               ::com::sun::star::lang::XServiceName >   WindowGraphicDeviceBase_Base;
-    typedef ::canvas::WindowGraphicDeviceBase< ::canvas::BaseMutexHelper< WindowGraphicDeviceBase_Base >,
-                                               DeviceHelper,
-                                               ::osl::MutexGuard,
-                                               ::cppu::OWeakObject >    SpriteCanvasBase_Base;
+                                                ::com::sun::star::rendering::XParametricPolyPolygon2DFactory,
+                                                ::com::sun::star::rendering::XBufferController,
+                                                ::com::sun::star::awt::XWindowListener,
+                                                ::com::sun::star::util::XUpdatable,
+                                                ::com::sun::star::beans::XPropertySet,
+                                                ::com::sun::star::lang::XServiceName >  WindowGraphicDeviceBase_Base;
+    typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::BaseMutexHelper< WindowGraphicDeviceBase_Base >,
+                                                 SpriteDeviceHelper,
+                                                 ::osl::MutexGuard,
+                                                 ::cppu::OWeakObject > SpriteCanvasBase_Base;
     /** Mixin SpriteSurface
 
         Have to mixin the SpriteSurface before deriving from
@@ -95,7 +94,8 @@ namespace cairocanvas
         enforce any specific interface on its derivees.
      */
     class SpriteCanvasBaseSpriteSurface_Base : public SpriteCanvasBase_Base,
-                                               public ::canvas::SpriteSurface
+                                               public ::canvas::SpriteSurface,
+                                               public SurfaceProvider
     {
     };
 
@@ -122,7 +122,7 @@ namespace cairocanvas
                       const ::com::sun::star::uno::Reference<
                             ::com::sun::star::uno::XComponentContext >& rxContext );
 
-        void initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
+        void initialize();
 
 #if defined __SUNPRO_CC
         using SpriteCanvasBaseT::disposing;
@@ -148,35 +148,31 @@ namespace cairocanvas
         // XServiceName
         virtual ::rtl::OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException);
 
-        ::cairo::Surface* getSurface( const ::basegfx::B2ISize& rSize, ::cairo::Content aContent = CAIRO_CONTENT_COLOR_ALPHA );
-        ::cairo::Surface* getSurface( ::cairo::Content aContent = CAIRO_CONTENT_COLOR_ALPHA );
-        ::cairo::Surface* getSurface( Bitmap& rBitmap );
-        ::cairo::Surface* getBufferSurface();
-        ::cairo::Surface* getWindowSurface();
-        ::cairo::Surface* getBackgroundSurface();
+        // SurfaceProvider
+        virtual SurfaceSharedPtr getSurface();
+        virtual SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, Content aContent = CAIRO_CONTENT_COLOR_ALPHA );
+        virtual SurfaceSharedPtr createSurface( ::Bitmap& rBitmap );
+        virtual SurfaceSharedPtr changeSurface( bool bHasAlpha, bool bCopyContent );
+        virtual OutputDevice* getOutputDevice();
+
+        // RepaintTarget
+        virtual bool repaint( const ::cairo::SurfaceSharedPtr&                pSurface,
+                              const ::com::sun::star::rendering::ViewState&   viewState,
+                              const ::com::sun::star::rendering::RenderState& renderState );
+
+        SurfaceSharedPtr getWindowSurface();
+        SurfaceSharedPtr getBufferSurface();
+
         const ::basegfx::B2ISize& getSizePixel();
         void setSizePixel( const ::basegfx::B2ISize& rSize );
         void flush();
 
-        Window* getOutputWindow()
-        {
-            return maDeviceHelper.getOuputWindow();
-        }
-
-        // RepaintTarget
-        virtual bool repaint( ::cairo::Surface* pSurface,
-                  const ::com::sun::star::rendering::ViewState& viewState,
-                  const ::com::sun::star::rendering::RenderState&   renderState );
-
      private:
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > maArguments;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxComponentContext;
-
-        ::cairo::Surface* mpBackgroundSurface;
-        ::cairo::Cairo*   mpBackgroundCairo;
     };
 
     typedef ::rtl::Reference< SpriteCanvas > SpriteCanvasRef;
-    typedef ::rtl::Reference< SpriteCanvas > DeviceRef;
 }
 
 #endif
