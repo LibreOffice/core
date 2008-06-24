@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: externalshapebase.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
 #include <comphelper/anytostring.hxx>
@@ -107,7 +108,7 @@ namespace slideshow
             mnPriority( nPrio ), // TODO(F1): When ZOrder someday becomes usable: make this ( getAPIShapePrio( xShape ) ),
             maBounds( getAPIShapeBounds( xShape ) )
         {
-            ENSURE_AND_THROW( mxShape.is(), "ExternalShapeBase::ExternalShapeBase(): Invalid XShape" );
+            ENSURE_OR_THROW( mxShape.is(), "ExternalShapeBase::ExternalShapeBase(): Invalid XShape" );
 
             mpShapeManager->addIntrinsicAnimationHandler( mpListener );
             mrEventMultiplexer.addViewHandler( mpListener );
