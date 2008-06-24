@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: layoutmanager.cxx,v $
- * $Revision: 1.71 $
+ * $Revision: 1.72 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,7 +111,6 @@
 // ______________________________________________
 //  using namespace
 
-using namespace rtl;
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
@@ -354,7 +353,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         ,   ::cppu::OWeakObject         (                                                   )
         ,   m_xSMGR( xServiceManager )
         ,   m_xURLTransformer( Reference< XURLTransformer >( xServiceManager->createInstance(
-                                                                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
+                                                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
                                                              UNO_QUERY ))
         ,   m_nLockCount( 0 )
         ,   m_bActive( sal_False )
@@ -453,7 +452,7 @@ void LayoutManager::impl_clearUpMenuBar()
                 {
                     try
                     {
-                        Any a = xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "XMenuBar" )));
+                        Any a = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMenuBar" )));
                         a >>= xMenuBar;
                     }
                     catch ( com::sun::star::beans::UnknownPropertyException )
@@ -498,7 +497,7 @@ sal_Bool LayoutManager::impl_parseResourceURL( const rtl::OUString aResourceURL,
     aURL.Complete = aResourceURL;
     m_xURLTransformer->parseStrict( aURL );
 
-    OUString aUIResource = aURL.Path.getToken( 0, (sal_Unicode)'/', nIndex );
+    ::rtl::OUString aUIResource = aURL.Path.getToken( 0, (sal_Unicode)'/', nIndex );
 
     if (( aURL.Protocol.equalsIgnoreAsciiCaseAscii( UIRESOURCE_PROTOCO_ASCII )) &&
         ( aUIResource.equalsIgnoreAsciiCaseAscii( UIRESOURCE_RESOURCE_ASCII )))
@@ -546,7 +545,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
     Reference< XNameAccess > xPersistentWindowState( m_xPersistentWindowState );
     Reference< XMultiServiceFactory > xServiceManager( m_xSMGR );
     Reference< XNameAccess > xPersistentWindowStateSupplier( m_xPersistentWindowStateSupplier );
-    OUString aModuleIdentifier( m_aModuleIdentifier );
+    ::rtl::OUString aModuleIdentifier( m_aModuleIdentifier );
     sal_Bool bAutomaticToolbars( m_bAutomaticToolbars );
     aReadLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -558,7 +557,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
     {
         if ( bAttached )
         {
-            OUString aOldModuleIdentifier( aModuleIdentifier );
+            ::rtl::OUString aOldModuleIdentifier( aModuleIdentifier );
             try
             {
                 aModuleIdentifier = m_xModuleManager->identify( Reference< XInterface >( xFrame, UNO_QUERY ) );
@@ -673,7 +672,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
             xModuleCfgMgr.clear();
             xDocCfgMgr.clear();
             xPersistentWindowState.clear();
-            aModuleIdentifier = OUString();
+            aModuleIdentifier = ::rtl::OUString();
         }
 
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -824,8 +823,8 @@ void LayoutManager::implts_createCustomToolBars(
     for ( sal_Int32 i = 0; i < aTbxSeqSeq.getLength(); i++ )
     {
         const Sequence< PropertyValue >& rTbxSeq = pTbxSeq[i];
-        OUString aTbxResName;
-        OUString aTbxTitle;
+        ::rtl::OUString aTbxResName;
+        ::rtl::OUString aTbxTitle;
         for ( sal_Int32 j = 0; j < rTbxSeq.getLength(); j++ )
         {
             if ( rTbxSeq[j].Name.equalsAscii( "ResourceURL" ))
@@ -912,16 +911,16 @@ void LayoutManager::implts_createAddonsToolBars()
     Reference< XUIElement >               xUIElement;
 
     sal_uInt32 nCount = m_pAddonOptions->GetAddonsToolBarCount();
-    OUString aAddonsToolBarStaticName( m_aFullAddonTbxPrefix );
-    OUString aElementType( RTL_CONSTASCII_USTRINGPARAM( "toolbar" ));
+    ::rtl::OUString aAddonsToolBarStaticName( m_aFullAddonTbxPrefix );
+    ::rtl::OUString aElementType( RTL_CONSTASCII_USTRINGPARAM( "toolbar" ));
 
     Sequence< PropertyValue > aPropSeq( 2 );
-    aPropSeq[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+    aPropSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
     aPropSeq[0].Value = makeAny( xFrame );
-    aPropSeq[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ConfigurationData" ));
+    aPropSeq[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ConfigurationData" ));
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
-        OUString aAddonToolBarName( aAddonsToolBarStaticName + m_pAddonOptions->GetAddonsToolbarResourceName(i) );
+        ::rtl::OUString aAddonToolBarName( aAddonsToolBarStaticName + m_pAddonOptions->GetAddonsToolbarResourceName(i) );
         aAddonToolBarData = m_pAddonOptions->GetAddonsToolBarPart( i );
         aPropSeq[1].Value = makeAny( aAddonToolBarData );
 
@@ -956,7 +955,7 @@ void LayoutManager::implts_createAddonsToolBars()
                     }
                 }
 
-                OUString aGenericAddonTitle = implts_generateGenericAddonToolbarTitle( i+1 );
+                ::rtl::OUString aGenericAddonTitle = implts_generateGenericAddonToolbarTitle( i+1 );
 
                 if ( aElement.m_aName.getLength() > 0 )
                 {
@@ -1509,7 +1508,7 @@ void LayoutManager::implts_writeWindowStateData( const rtl::OUString& aName, con
         try
         {
             // Check persistent flag of the user interface element
-            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" ))) >>= bPersistent;
+            xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" ))) >>= bPersistent;
         }
         catch ( com::sun::star::beans::UnknownPropertyException )
         {
@@ -3049,9 +3048,9 @@ Reference< XUIElement > LayoutManager::implts_createElement( const rtl::OUString
 
     ReadGuard   aReadLock( m_aLock );
     Sequence< PropertyValue > aPropSeq( 2 );
-    aPropSeq[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+    aPropSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
     aPropSeq[0].Value <<= m_xFrame;
-    aPropSeq[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" ));
+    aPropSeq[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" ));
     aPropSeq[1].Value <<= sal_True;
 
     try
@@ -4099,8 +4098,8 @@ throw (RuntimeException)
 
     sal_Bool                                      bFound( sal_False );
     sal_Bool                                      bNotify( sal_False );
-    OUString                                      aElementType;
-    OUString                                      aElementName;
+    ::rtl::OUString                                      aElementType;
+    ::rtl::OUString                                      aElementName;
     Reference< ::com::sun::star::ui::XUIElement > xUIElement;
 
     implts_findElement( aName, aElementType, aElementName, xUIElement );
@@ -4202,7 +4201,7 @@ throw (RuntimeException)
                         {
                             try
                             {
-                                Any a = xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "XMenuBar" )));
+                                Any a = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMenuBar" )));
                                 a >>= xMenuBar;
                             }
                             catch ( com::sun::star::beans::UnknownPropertyException )
@@ -4273,8 +4272,8 @@ throw (RuntimeException)
     sal_Bool    bMustBeDestroyed( sal_False );
     sal_Bool    bMustBeSorted( sal_False );
     sal_Bool    bNotify( sal_False );
-    OUString    aElementType;
-    OUString    aElementName;
+    ::rtl::OUString    aElementType;
+    ::rtl::OUString    aElementName;
 
     Reference< XComponent > xComponent;
     if ( impl_parseResourceURL( aName, aElementType, aElementName ))
@@ -4396,8 +4395,8 @@ throw (::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::requestElement" );
 
-    OUString                  aElementType;
-    OUString                  aElementName;
+    ::rtl::OUString                  aElementType;
+    ::rtl::OUString                  aElementName;
     UIElementVector::iterator pIter;
     sal_Bool                  bResult( sal_False );
     sal_Bool                  bNotify( sal_False );
@@ -4405,7 +4404,7 @@ throw (::com::sun::star::uno::RuntimeException)
     WriteGuard aWriteLock( m_aLock );
     if ( impl_parseResourceURL( ResourceURL, aElementType, aElementName ))
     {
-        OString aResName = rtl::OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
+        ::rtl::OString aResName = rtl::OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
         RTL_LOGFILE_CONTEXT_TRACE1( aLog, "framework (cd100003) Element %s", aResName.getStr() );
 
         if (( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) &&
@@ -4542,8 +4541,8 @@ throw (::com::sun::star::uno::RuntimeException)
 Reference< XUIElement > SAL_CALL LayoutManager::getElement( const ::rtl::OUString& aName )
 throw (RuntimeException)
 {
-    OUString                aElementType;
-    OUString                aElementName;
+    ::rtl::OUString                aElementType;
+    ::rtl::OUString                aElementName;
     Reference< XUIElement > xElement;
 
     implts_findElement( aName, aElementType, aElementName, xElement );
@@ -4597,12 +4596,12 @@ throw (RuntimeException)
 
     sal_Bool    bResult( sal_False );
     sal_Bool    bNotify( sal_False );
-    OUString    aElementType;
-    OUString    aElementName;
+    ::rtl::OUString    aElementType;
+    ::rtl::OUString    aElementName;
 
     if ( impl_parseResourceURL( aName, aElementType, aElementName ))
     {
-        OString aResName = rtl::OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
+        ::rtl::OString aResName = rtl::OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
         RTL_LOGFILE_CONTEXT_TRACE1( aLog, "framework (cd100003) Element %s", aResName.getStr() );
 
         if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ) &&
@@ -4698,12 +4697,12 @@ throw (RuntimeException)
 
     sal_Bool            bResult( sal_False );
     sal_Bool            bNotify( sal_False );
-    OUString            aElementType;
-    OUString            aElementName;
+    ::rtl::OUString            aElementType;
+    ::rtl::OUString            aElementName;
 
     if ( impl_parseResourceURL( aName, aElementType, aElementName ))
     {
-        OString aResName = rtl::OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
+        ::rtl::OString aResName = rtl::OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
         RTL_LOGFILE_CONTEXT_TRACE1( aLog, "framework (cd100003) Element %s", aResName.getStr() );
 
         if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ) &&
@@ -4901,8 +4900,8 @@ throw (RuntimeException)
     {
         std::vector< rtl::OUString > aToolBarNameVector;
 
-        OUString                  aElementType;
-        OUString                  aElementName;
+        ::rtl::OUString                  aElementType;
+        ::rtl::OUString                  aElementName;
 
         {
             ReadGuard aReadLock( m_aLock );
@@ -5171,8 +5170,8 @@ throw (RuntimeException)
 sal_Bool SAL_CALL LayoutManager::isElementVisible( const ::rtl::OUString& aName )
 throw (RuntimeException)
 {
-    OUString aElementType;
-    OUString aElementName;
+    ::rtl::OUString aElementType;
+    ::rtl::OUString aElementName;
 
     if ( impl_parseResourceURL( aName, aElementType, aElementName ))
     {
@@ -7179,8 +7178,8 @@ void SAL_CALL LayoutManager::elementInserted( const ::com::sun::star::ui::Config
 {
     ReadGuard aReadLock( m_aLock );
 
-    OUString                aElementType;
-    OUString                aElementName;
+    ::rtl::OUString                aElementType;
+    ::rtl::OUString                aElementName;
     Reference< XUIElement > xElement;
     Reference< XFrame >     xFrame( m_xFrame );
 
@@ -7191,7 +7190,7 @@ void SAL_CALL LayoutManager::elementInserted( const ::com::sun::star::ui::Config
         Reference< XUIElementSettings > xElementSettings( xElement, UNO_QUERY );
         if ( xElementSettings.is() )
         {
-            OUString aConfigSourcePropName( RTL_CONSTASCII_USTRINGPARAM( "ConfigurationSource" ));
+            ::rtl::OUString aConfigSourcePropName( RTL_CONSTASCII_USTRINGPARAM( "ConfigurationSource" ));
             Reference< XPropertySet > xPropSet( xElementSettings, UNO_QUERY );
             if ( xPropSet.is() )
             {
@@ -7212,7 +7211,7 @@ void SAL_CALL LayoutManager::elementInserted( const ::com::sun::star::ui::Config
                 {
                     Reference< XUIConfigurationManager > xCfgMgr;
                     Reference< XPropertySet >            xPropSet;
-                    OUString                             aUIName;
+                    ::rtl::OUString                             aUIName;
 
                     try
                     {
@@ -7220,7 +7219,7 @@ void SAL_CALL LayoutManager::elementInserted( const ::com::sun::star::ui::Config
                         xPropSet = Reference< XPropertySet >( xCfgMgr->getSettings( Event.ResourceURL, sal_False ), UNO_QUERY );
 
                         if ( xPropSet.is() )
-                            xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ))) >>= aUIName;
+                            xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ))) >>= aUIName;
                     }
                     catch ( com::sun::star::container::NoSuchElementException& )
                     {
@@ -7252,8 +7251,8 @@ void SAL_CALL LayoutManager::elementRemoved( const ::com::sun::star::ui::Configu
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
-    OUString                aElementType;
-    OUString                aElementName;
+    ::rtl::OUString                aElementType;
+    ::rtl::OUString                aElementName;
     Reference< XUIElement > xUIElement;
     Reference< XFrame >     xFrame( m_xFrame );
 
@@ -7265,7 +7264,7 @@ void SAL_CALL LayoutManager::elementRemoved( const ::com::sun::star::ui::Configu
         if ( xElementSettings.is() )
         {
             bool                        bNoSettings( false );
-            OUString                    aConfigSourcePropName( RTL_CONSTASCII_USTRINGPARAM( "ConfigurationSource" ));
+            ::rtl::OUString                    aConfigSourcePropName( RTL_CONSTASCII_USTRINGPARAM( "ConfigurationSource" ));
             Reference< XInterface >     xElementCfgMgr;
             Reference< XPropertySet >   xPropSet( xElementSettings, UNO_QUERY );
 
@@ -7324,8 +7323,8 @@ void SAL_CALL LayoutManager::elementReplaced( const ::com::sun::star::ui::Config
 {
     ReadGuard aReadLock( m_aLock );
 
-    OUString                aElementType;
-    OUString                aElementName;
+    ::rtl::OUString                aElementType;
+    ::rtl::OUString                aElementName;
     Reference< XUIElement > xUIElement;
     Reference< XFrame >     xFrame( m_xFrame );
 
@@ -7336,7 +7335,7 @@ void SAL_CALL LayoutManager::elementReplaced( const ::com::sun::star::ui::Config
         Reference< XUIElementSettings > xElementSettings( xUIElement, UNO_QUERY );
         if ( xElementSettings.is() )
         {
-            OUString                    aConfigSourcePropName( RTL_CONSTASCII_USTRINGPARAM( "ConfigurationSource" ));
+            ::rtl::OUString                    aConfigSourcePropName( RTL_CONSTASCII_USTRINGPARAM( "ConfigurationSource" ));
             Reference< XInterface >     xElementCfgMgr;
             Reference< XPropertySet >   xPropSet( xElementSettings, UNO_QUERY );
 
@@ -7542,3 +7541,4 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > LayoutMan
 }
 
 } // namespace framework
+
