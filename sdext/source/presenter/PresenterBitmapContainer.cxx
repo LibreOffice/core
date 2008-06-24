@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterBitmapContainer.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -505,7 +505,7 @@ void PresenterBitmapContainer::BitmapDescriptor::Update (
         Reference<rendering::XBitmap> xHighlight(rxDevice->createCompatibleBitmap(aSize));
         if (xHighlight.is())
         {
-            Reference<rendering::XBitmapCanvas> xHighlightCanvas (xHighlight->queryBitmapCanvas());
+            Reference<rendering::XBitmapCanvas> xHighlightCanvas (xHighlight, UNO_QUERY);
             if (xHighlightCanvas.is())
             {
                 double aColor[] = {0,0,0,128};
