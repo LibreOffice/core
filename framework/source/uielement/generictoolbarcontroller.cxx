@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: generictoolbarcontroller.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +65,6 @@
 #endif
 #include <tools/urlobj.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -128,7 +127,7 @@ GenericToolbarController::GenericToolbarController( const Reference< XMultiServi
                                                     const Reference< XFrame >&               rFrame,
                                                     ToolBox*                                 pToolbar,
                                                     USHORT                                   nID,
-                                                    const OUString&                          aCommand ) :
+                                                    const ::rtl::OUString&                          aCommand ) :
     svt::ToolboxController( rServiceManager, rFrame, aCommand )
     ,   m_pToolbar( pToolbar )
     ,   m_nID( nID )
@@ -160,7 +159,7 @@ throw ( RuntimeException )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XURLTransformer > xURLTransformer;
-    OUString                     aCommandURL;
+    ::rtl::OUString                     aCommandURL;
 
     {
         vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
@@ -300,3 +299,4 @@ IMPL_STATIC_LINK_NOINSTANCE( GenericToolbarController, ExecuteHdl_Impl, ExecuteI
 }
 
 } // namespace
+
