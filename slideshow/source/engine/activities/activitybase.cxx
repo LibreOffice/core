@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: activitybase.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
 
@@ -106,9 +107,9 @@ namespace slideshow
         void ActivityBase::setTargets( const AnimatableShapeSharedPtr&      rShape,
                                        const ShapeAttributeLayerSharedPtr&  rAttrLayer )
         {
-            ENSURE_AND_THROW( rShape,
+            ENSURE_OR_THROW( rShape,
                               "ActivityBase::setTargets(): Invalid shape" );
-            ENSURE_AND_THROW( rAttrLayer,
+            ENSURE_OR_THROW( rAttrLayer,
                               "ActivityBase::setTargets(): Invalid attribute layer" );
 
             mpShape = rShape;
