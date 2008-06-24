@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_canvashelper.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,7 @@
 #include <boost/utility.hpp>
 
 #include "cairo_cairo.hxx"
+#include "cairo_surfaceprovider.hxx"
 
 class VirtualDevice;
 
@@ -56,15 +57,6 @@ namespace cairocanvas
         Stroke,
         Fill,
         Clip
-    };
-
-    /** Helper class for basic canvas functionality. Also offers
-        optional backbuffer painting, when providing it with a second
-        HDC to render into.
-     */
-    class SurfaceProvider {
-    public:
-        virtual ::cairo::Surface* changeSurface( bool bHasAlpha, bool bCopyContent ) = 0;
     };
 
     class CanvasHelper : private ::boost::noncopyable
@@ -93,10 +85,11 @@ namespace cairocanvas
 
          */
         void init( const ::basegfx::B2ISize& rSizePixel,
-                   SpriteCanvas&             rDevice );
+                   SurfaceProvider&          rSurfaceProvider,
+                   ::com::sun::star::rendering::XGraphicDevice* pDevice );
 
         void setSize( const ::basegfx::B2ISize& rSize );
-    void setSurface( ::cairo::Surface* pSurface, bool bHasAlpha, SurfaceProvider* pSurfaceProvider = NULL );
+        void setSurface( const ::cairo::SurfaceSharedPtr& pSurface, bool bHasAlpha );
 
         // CanvasHelper functionality
         // ==========================
@@ -287,53 +280,58 @@ namespace cairocanvas
                   ::cairo::Cairo* pCairo=NULL ) const;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
-    implDrawBitmapSurface( ::cairo::Surface* pSurface,
+    implDrawBitmapSurface(
+                   const ::com::sun::star::rendering::XCanvas*      pCanvas,
+                   const ::cairo::SurfaceSharedPtr&                 pSurface,
                    const ::com::sun::star::rendering::ViewState&    viewState,
-                   const ::com::sun::star::rendering::RenderState& renderState,
+                   const ::com::sun::star::rendering::RenderState&  renderState,
                    const ::com::sun::star::geometry::IntegerSize2D& rSize,
                    bool bModulateColors,
                    bool bHasAlpha );
 
-        bool repaint( ::cairo::Surface* pSurface,
+        bool repaint( const ::cairo::SurfaceSharedPtr& pSurface,
               const ::com::sun::star::rendering::ViewState& viewState,
               const ::com::sun::star::rendering::RenderState&   renderState );
 
     protected:
+        /** Surface provider
+
+            Deliberately not a refcounted reference, because of
+            potential circular references for canvas. Provides us with
+            our output surface and associated functionality.
+         */
+        SurfaceProvider* mpSurfaceProvider;
+
         /** Phyical output device
 
             Deliberately not a refcounted reference, because of
             potential circular references for spritecanvas.
          */
-        SpriteCanvas*                   mpDevice;
+        ::com::sun::star::rendering::XGraphicDevice* mpDevice;
 
     private:
 
-        VirtualDevice* mpVirtualDevice;
+        boost::shared_ptr<VirtualDevice> mpVirtualDevice;
 
     void useStates( const ::com::sun::star::rendering::ViewState& viewState,
             const ::com::sun::star::rendering::RenderState& renderState,
             bool setColor );
 
         /// When true, content is able to represent alpha
-        bool                            mbHaveAlpha;
+        bool mbHaveAlpha;
 
-        ::cairo::Cairo* mpCairo;
-        ::cairo::Surface* mpSurface;
-        SurfaceProvider* mpSurfaceProvider;
+        CairoSharedPtr     mpCairo;
+        SurfaceSharedPtr   mpSurface;
         ::basegfx::B2ISize maSize;
     };
 
+    /// also needed from SpriteHelper
     void doPolyPolygonImplementation( ::basegfx::B2DPolyPolygon aPolyPolygon,
-                    Operation aOperation,
-                    ::cairo::Cairo* pCairo,
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::Texture >* pTextures=NULL,
-                    SpriteCanvas* pDevice=NULL,
-                    ::com::sun::star::rendering::FillRule eFillrule=::com::sun::star::rendering::FillRule_EVEN_ODD );
-    void doOperation( Operation aOperation,
-              ::cairo::Cairo* pCairo,
-              sal_uInt32 nPolygonIndex=0,
-              const ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::Texture >* pTextures=NULL,
-              SpriteCanvas* pDevice=NULL);
+                                      Operation aOperation,
+                                      ::cairo::Cairo* pCairo,
+                                      const ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::Texture >* pTextures,
+                                      const SurfaceProviderRef& pDevice,
+                                      ::com::sun::star::rendering::FillRule eFillrule );
 }
 
 #endif /* _CAIROCANVAS_CANVASHELPER_HXX_ */
