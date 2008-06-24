@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_section_2.inc,v $
 '*
-'* $Revision: 1.3 $
+'* $Revision: 1.4 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-24 10:24:28 $
+'* last change: $Author: fredrikh $ $Date: 2008-06-24 11:12:12 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -155,7 +155,8 @@ endcase
 '----------------------------------------------------------
 
 testcase tHideSection_2
-    Dim rightCondition , wrongCondition as String
+    Dim rightCondition as String
+    Dim wrongCondition as String
     '/// <b> Hide Section with condition </b>
     printlog "Hide Section with condition "
     '/// Open a new document. 
@@ -398,9 +399,11 @@ testcase tDisplaySection_1
    '/// Check display of dialogues -- Insert Section
    printlog "   - Check display of dialogues -- Insert Section"
 
-   Dim SectionName(),correctSequence() as String
-   Dim selectName                      as String
-   Dim i , j                           as Integer
+   Dim SectionName() as String
+   Dim correctSequence() as String
+   Dim selectName as String
+   Dim i as Integer
+   Dim j as Integer
 
    SectionName = Array( _
                        "a1","b2","c3","d4","e5","f6","g7", _
@@ -629,7 +632,8 @@ endcase
 '----------------------------------------------------------
 
 testcase tDisplaySection_4
-    Dim mMessage , allMessage as String
+    Dim mMessage as String
+    Dim allMessage as String
     '///<u>Goal</u>: Hiding a section hierarchy hides all subsections.
     '///+(Except if the section which should be hided is the whole document - than this feature is disabled!)
     '///+<u>Note</u>: The display in the dialog should not affected by changes in the document view.
@@ -775,8 +779,10 @@ endcase
 
 testcase tDisplaySection_5
 
-   Dim sectionName(),correctSequence() as String
-   Dim i , j                           as Integer
+   Dim sectionName() as String
+   Dim correctSequence() as String
+   Dim i as Integer
+   Dim j as Integer
 
    if Dir (gOfficePath + "user\work\NavigatorSection_1.odt") <> "" then kill (gOfficePath + "user\work\NavigatorSection_1.odt")
 
