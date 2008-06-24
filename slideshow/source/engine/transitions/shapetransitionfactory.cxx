@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shapetransitionfactory.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_slideshow.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -114,7 +115,7 @@ ClippingAnimation::ClippingAnimation(
                            bModeIn ),
         mbSpriteActive(false)
 {
-    ENSURE_AND_THROW(
+    ENSURE_OR_THROW(
         rShapeManager,
         "ClippingAnimation::ClippingAnimation(): Invalid ShapeManager" );
 }
@@ -150,9 +151,9 @@ void ClippingAnimation::start( const AnimatableShapeSharedPtr&      rShape,
     mpShape = rShape;
     mpAttrLayer = rAttrLayer;
 
-    ENSURE_AND_THROW( rShape,
+    ENSURE_OR_THROW( rShape,
                       "ClippingAnimation::start(): Invalid shape" );
-    ENSURE_AND_THROW( rAttrLayer,
+    ENSURE_OR_THROW( rAttrLayer,
                       "ClippingAnimation::start(): Invalid attribute layer" );
 
     mpShape = rShape;
@@ -184,7 +185,7 @@ void ClippingAnimation::end_()
 
 bool ClippingAnimation::operator()( double nValue )
 {
-    ENSURE_AND_RETURN(
+    ENSURE_OR_RETURN(
         mpAttrLayer && mpShape,
         "ClippingAnimation::operator(): Invalid ShapeAttributeLayer" );
 
@@ -200,7 +201,7 @@ bool ClippingAnimation::operator()( double nValue )
 
 double ClippingAnimation::getUnderlyingValue() const
 {
-    ENSURE_AND_THROW(
+    ENSURE_OR_THROW(
         mpAttrLayer,
         "ClippingAnimation::getUnderlyingValue(): Invalid ShapeAttributeLayer" );
 
@@ -239,7 +240,7 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
     sal_Int16                                               nType,
     sal_Int16                                               nSubType )
 {
-    ENSURE_AND_THROW(
+    ENSURE_OR_THROW(
         xTransition.is(),
         "TransitionFactory::createShapeTransition(): Invalid XTransition" );
 
@@ -291,10 +292,10 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
 
                         const TransitionInfo* pRandomTransitionInfo( getRandomTransitionInfo() );
 
-                        ENSURE_AND_THROW( pRandomTransitionInfo != NULL,
+                        ENSURE_OR_THROW( pRandomTransitionInfo != NULL,
                                           "TransitionFactory::createShapeTransition(): Got invalid random transition info" );
 
-                        ENSURE_AND_THROW( pRandomTransitionInfo->mnTransitionType != animations::TransitionType::RANDOM,
+                        ENSURE_OR_THROW( pRandomTransitionInfo->mnTransitionType != animations::TransitionType::RANDOM,
                                           "TransitionFactory::createShapeTransition(): Got random again for random input!" );
 
                         // and recurse
@@ -338,7 +339,7 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
                                 break;
 
                             default:
-                                ENSURE_AND_THROW( false,
+                                ENSURE_OR_THROW( false,
                                                   "TransitionFactory::createShapeTransition(): Unexpected subtype for SLIDEWIPE" );
                                 break;
                         }
