@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TextDirection.idl,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,10 +42,12 @@ constants TextDirection
 {
     /// Reference point is left, main direction is from left to right
     const byte WEAK_LEFT_TO_RIGHT=0;
+    /// Reference point is left, main direction is from left to right
     const byte STRONG_LEFT_TO_RIGHT=2;
 
     /// Reference point is right, main direction is from right to left
     const byte WEAK_RIGHT_TO_LEFT=1;
+    /// Reference point is right, main direction is from right to left
     const byte STRONG_RIGHT_TO_LEFT=3;
 };
 
