@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: expr.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,10 +44,15 @@ class SbiCodeGen;
 class SbiSymDef;
 class SbiProcDef;
 
+
+#include <vector>
+typedef ::std::vector<SbiExprList*> SbiExprListVector;
+
 struct SbVar {                      // Variablen-Element:
-    SbiExprNode*   pNext;           // Weiteres Element (bei Strukturen)
-    SbiSymDef*     pDef;            // Symboldefinition
-    SbiExprList*   pPar;            // optionale Parameter (wird geloescht)
+    SbiExprNode*        pNext;      // Weiteres Element (bei Strukturen)
+    SbiSymDef*          pDef;       // Symboldefinition
+    SbiExprList*        pPar;       // optionale Parameter (wird geloescht)
+    SbiExprListVector*  pvMorePar;  // Array of arrays foo(pPar)(avMorePar[0])(avMorePar[1])...
 };
 
 enum SbiExprType {                  // Expression-Typen:
@@ -55,6 +60,16 @@ enum SbiExprType {                  // Expression-Typen:
     SbLVALUE,                       // beliebiger lValue
     SbSYMBOL,                       // beliebiges zusammengesetztes Symbol
     SbOPERAND                       // Variable/Funktion
+};
+
+enum SbiExprMode {                  // Expression context:
+    EXPRMODE_STANDARD,              // default
+    EXPRMODE_STANDALONE,            // a param1, param2 OR a( param1, param2 ) = 42
+    EXPRMODE_LPAREN_PENDING,        // start of parameter list with bracket, special handling
+    EXPRMODE_LPAREN_NOT_NEEDED,     // pending LPAREN has not been used
+    EXPRMODE_ARRAY_OR_OBJECT,       // '=' or '(' or '.' found after ')' on ParenLevel 0, stopping
+                                    // expression, assuming array syntax a(...)[(...)] = ?
+                                    // or a(...).b(...)
 };
 
 enum SbiNodeType {
@@ -127,6 +142,7 @@ public:
     short GetDepth();               // Tiefe eines Baumes berechnen
     const String& GetString()       { return aStrVal; }
     SbiExprList* GetParameters()    { return aVar.pPar; }
+    SbiExprListVector* GetMoreParameters()  { return aVar.pvMorePar; }
 
     void Optimize();                // Baumabgleich
 
@@ -143,9 +159,12 @@ protected:
     SbiExpression* pNext;            // Link bei Parameterlisten
     SbiExprNode*   pExpr;            // Der Expression-Baum
     SbiExprType   eCurExpr;         // Art des Ausdrucks
+    SbiExprMode   m_eMode;          // Expression context
     BOOL          bBased;           // TRUE: einfacher DIM-Teil (+BASE)
     BOOL          bError;           // TRUE: Fehler
     BOOL          bByVal;           // TRUE: ByVal-Parameter
+    BOOL          bBracket;         // TRUE: Parameter list with brackets
+    USHORT        nParenLevel;
     SbiExprNode* Term();
     SbiExprNode* ObjTerm( SbiSymDef& );
     SbiExprNode* Operand();
@@ -160,7 +179,7 @@ protected:
     SbiExprNode* Comp();
     SbiExprNode* Boolean();
 public:
-    SbiExpression( SbiParser*, SbiExprType = SbSTDEXPR ); // Parsender Ctor
+    SbiExpression( SbiParser*, SbiExprType = SbSTDEXPR, SbiExprMode eMode = EXPRMODE_STANDARD ); // Parsender Ctor
     SbiExpression( SbiParser*, const String& );
     SbiExpression( SbiParser*, double, SbxDataType = SbxDOUBLE );
     SbiExpression( SbiParser*, const SbiSymDef&, SbiExprList* = NULL );
@@ -171,6 +190,7 @@ public:
     BOOL IsBased()                  { return bBased;              }
     void SetByVal()                 { bByVal = TRUE;              }
     BOOL IsByVal()                  { return bByVal;              }
+    BOOL IsBracket()                { return bBracket;            }
     BOOL IsValid()                  { return pExpr->IsValid();    }
     BOOL IsConstant()               { return pExpr->IsConstant(); }
     BOOL IsVariable()               { return pExpr->IsVariable(); }
