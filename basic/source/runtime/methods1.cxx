@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: methods1.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,7 +95,7 @@ static Reference< XCalendar > getLocaleCalendar( void )
         if( xSMgr.is() )
         {
             xCalendar = Reference< XCalendar >( xSMgr->createInstance
-                ( OUString::createFromAscii( "com.sun.star.i18n.LocaleCalendar" ) ), UNO_QUERY );
+                ( ::rtl::OUString::createFromAscii( "com.sun.star.i18n.LocaleCalendar" ) ), UNO_QUERY );
         }
     }
 
@@ -1484,7 +1484,7 @@ RTLFUNC(ConvertToUrl)
     {
         String aStr = rPar.Get(1)->GetString();
         INetURLObject aURLObj( aStr, INET_PROT_FILE );
-        OUString aFileURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
+        ::rtl::OUString aFileURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
         if( !aFileURL.getLength() )
             ::osl::File::getFileURLFromSystemPath( aFileURL, aFileURL );
         if( !aFileURL.getLength() )
@@ -1503,7 +1503,7 @@ RTLFUNC(ConvertFromUrl)
     if ( rPar.Count() == 2 )
     {
         String aStr = rPar.Get(1)->GetString();
-        OUString aSysPath;
+        ::rtl::OUString aSysPath;
         ::osl::File::getSystemPathFromFileURL( aStr, aSysPath );
         if( !aSysPath.getLength() )
             aSysPath = aStr;
@@ -1687,7 +1687,7 @@ RTLFUNC(MonthName)
     const CalendarItem* pCalendarItems = aMonthSeq.getConstArray();
     const CalendarItem& rItem = pCalendarItems[nVal - 1];
 
-    OUString aRetStr = ( bAbbreviate ? rItem.AbbrevName : rItem.FullName );
+    ::rtl::OUString aRetStr = ( bAbbreviate ? rItem.AbbrevName : rItem.FullName );
     rPar.Get(0)->PutString( String(aRetStr) );
 }
 
@@ -1745,7 +1745,7 @@ RTLFUNC(WeekdayName)
     const CalendarItem* pCalendarItems = aDaySeq.getConstArray();
     const CalendarItem& rItem = pCalendarItems[nDay - 1];
 
-    OUString aRetStr = ( bAbbreviate ? rItem.AbbrevName : rItem.FullName );
+    ::rtl::OUString aRetStr = ( bAbbreviate ? rItem.AbbrevName : rItem.FullName );
     rPar.Get(0)->PutString( String(aRetStr) );
 }
 
@@ -2595,3 +2595,4 @@ RTLFUNC(Me)
         refVar->PutObject( pClassModuleObject );
     }
 }
+
