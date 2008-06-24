@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: urltransformer.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,7 +57,6 @@
 namespace framework{
 
 using namespace ::osl                           ;
-using namespace ::rtl                           ;
 using namespace ::cppu                          ;
 using namespace ::com::sun::star::uno           ;
 using namespace ::com::sun::star::lang          ;
@@ -147,7 +146,7 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeExcepti
 
     // Try to extract the protocol
     sal_Int32 nURLIndex = aURL.Complete.indexOf( sal_Unicode( ':' ));
-    OUString aProtocol;
+    ::rtl::OUString aProtocol;
     if ( nURLIndex > 1 )
     {
         aProtocol = aURL.Complete.copy( 0, nURLIndex+1 );
@@ -205,8 +204,8 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeExcepti
                 aURL.Complete   = aParser.GetMainURL( INetURLObject::NO_DECODE           );
                 aURL.Complete   = aURL.Complete.intern();
 
-                aParser.SetMark ( OUString() );
-                aParser.SetParam( OUString() );
+                aParser.SetMark ( ::rtl::OUString() );
+                aParser.SetParam( ::rtl::OUString() );
 
                 aURL.Main       = aParser.GetMainURL( INetURLObject::NO_DECODE           );
 
@@ -234,7 +233,7 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeExcepti
 //  XURLTransformer
 //*****************************************************************************************************************
 sal_Bool SAL_CALL URLTransformer::parseSmart(           URL&        aURL            ,
-                                                const   OUString&   sSmartProtocol  ) throw( RuntimeException )
+                                                const   ::rtl::OUString&    sSmartProtocol  ) throw( RuntimeException )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -289,8 +288,8 @@ sal_Bool SAL_CALL URLTransformer::parseSmart(           URL&        aURL        
 
         aURL.Complete   = aParser.GetMainURL( INetURLObject::NO_DECODE           );
 
-        aParser.SetMark ( OUString() );
-        aParser.SetParam( OUString() );
+        aParser.SetMark ( ::rtl::OUString() );
+        aParser.SetParam( ::rtl::OUString() );
 
         aURL.Main       = aParser.GetMainURL( INetURLObject::NO_DECODE           );
 
@@ -305,7 +304,7 @@ sal_Bool SAL_CALL URLTransformer::parseSmart(           URL&        aURL        
         {
             // Try to extract the protocol
             sal_Int32 nIndex = aURL.Complete.indexOf( sal_Unicode( ':' ));
-            OUString aProtocol;
+            ::rtl::OUString aProtocol;
             if ( nIndex > 1 )
             {
                 aProtocol = aURL.Complete.copy( 0, nIndex+1 );
@@ -346,7 +345,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
 
     if ( INetURLObject::CompareProtocolScheme( aURL.Protocol ) != INET_PROT_NOT_VALID )
     {
-        OUStringBuffer aCompletePath( aURL.Path );
+        ::rtl::OUStringBuffer aCompletePath( aURL.Path );
 
         // Concat the name if it is provided, just support a final slash
         if ( aURL.Name.getLength() > 0 )
@@ -385,7 +384,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
     else if ( aURL.Protocol.getLength() > 0 )
     {
         // Minimal support for unknown protocols
-        OUStringBuffer aBuffer( aURL.Protocol );
+        ::rtl::OUStringBuffer aBuffer( aURL.Protocol );
         aBuffer.append( aURL.Path );
         aURL.Complete   = aBuffer.makeStringAndClear();
         aURL.Main       = aURL.Complete;
@@ -398,7 +397,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
 //*****************************************************************************************************************
 //  XURLTransformer
 //*****************************************************************************************************************
-OUString SAL_CALL URLTransformer::getPresentation(  const   URL&        aURL            ,
+::rtl::OUString SAL_CALL URLTransformer::getPresentation(   const   URL&        aURL            ,
                                                             sal_Bool    bWithPassword   ) throw( RuntimeException )
 {
     // Ready for multithreading
@@ -410,7 +409,7 @@ OUString SAL_CALL URLTransformer::getPresentation(  const   URL&        aURL    
             (( bWithPassword            !=  sal_True    )   &&
              ( bWithPassword            !=  sal_False   )       ) )
     {
-        return OUString();
+        return ::rtl::OUString();
     }
 
     // Check given URL
@@ -421,7 +420,7 @@ OUString SAL_CALL URLTransformer::getPresentation(  const   URL&        aURL    
         if ( !bWithPassword && aTestURL.Password.getLength() > 0 )
         {
             // Exchange password text with other placeholder string
-            aTestURL.Password = OUString::createFromAscii( "<******>" );
+            aTestURL.Password = ::rtl::OUString::createFromAscii( "<******>" );
             assemble( aTestURL );
         }
 
@@ -432,7 +431,7 @@ OUString SAL_CALL URLTransformer::getPresentation(  const   URL&        aURL    
         return sPraesentationURL;
     }
     else
-        return OUString();
+        return ::rtl::OUString();
 }
 
 //_________________________________________________________________________________________________________________
@@ -441,3 +440,4 @@ OUString SAL_CALL URLTransformer::getPresentation(  const   URL&        aURL    
 
 
 }       //  namespace framework
+
