@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cachedbitmap.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include "cachedbitmap.hxx"
 #include "repainttarget.hxx"
@@ -77,9 +78,9 @@ namespace vclcanvas
                                        const uno::Reference< rendering::XCanvas >&  rTargetCanvas,
                                        bool                                         bSameViewTransform )
     {
-        ENSURE_AND_THROW( bSameViewTransform,
-                          "CachedBitmap::doRedraw(): base called with changed view transform "
-                          "(told otherwise during construction)" );
+        ENSURE_OR_THROW( bSameViewTransform,
+                         "CachedBitmap::doRedraw(): base called with changed view transform "
+                         "(told otherwise during construction)" );
 
         // TODO(P1): Could adapt to modified clips as well
         if( rNewState.Clip != rOldState.Clip )
@@ -87,7 +88,7 @@ namespace vclcanvas
 
         RepaintTarget* pTarget = dynamic_cast< RepaintTarget* >(rTargetCanvas.get());
 
-        ENSURE_AND_THROW( pTarget,
+        ENSURE_OR_THROW( pTarget,
                           "CachedBitmap::redraw(): cannot cast target to RepaintTarget" );
 
         if( !pTarget->repaint( mpGraphicObject,
