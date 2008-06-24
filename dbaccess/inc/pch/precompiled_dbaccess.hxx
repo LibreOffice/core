@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: precompiled_dbaccess.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,6 +82,7 @@
 #include "com/sun/star/beans/XPropertyState.hpp"
 #include "com/sun/star/beans/XPropertyStateChangeListener.hpp"
 #include "com/sun/star/beans/XVetoableChangeListener.hpp"
+#include "com/sun/star/chart/ChartDataRowSource.hpp"
 #include "com/sun/star/configuration/backend/XLayer.hpp"
 #include "com/sun/star/configuration/backend/XLayerHandler.hpp"
 #include "com/sun/star/connection/XConnection.hpp"
@@ -409,6 +410,7 @@
 #include "comphelper/streamsection.hxx"
 #include "comphelper/types.hxx"
 
+#include "connectivity/FValue.hxx"
 #include "connectivity/dbcharset.hxx"
 #include "connectivity/dbconversion.hxx"
 #include "connectivity/dbexception.hxx"
@@ -418,6 +420,7 @@
 
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/factory.hxx"
+#include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/interfacecontainer.h"
 #include "cppuhelper/interfacecontainer.hxx"
 #include "cppuhelper/propshlp.hxx"
@@ -511,6 +514,9 @@
 #include "xmloff/xmlnmspe.hxx"
 #include "xmloff/xmltoken.hxx"
 #include "xmloff/xmltypes.hxx"
+
 //---MARKER---
 
 #endif
+
+
