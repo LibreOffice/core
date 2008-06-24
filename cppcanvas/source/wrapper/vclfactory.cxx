@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclfactory.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,7 +98,7 @@ namespace cppcanvas
         return SpriteCanvasSharedPtr(
             new internal::ImplSpriteCanvas(
                 uno::Reference< rendering::XSpriteCanvas >(
-                    rVCLWindow.GetCanvas(),
+                    rVCLWindow.GetSpriteCanvas(),
                     uno::UNO_QUERY) ) );
     }
 
@@ -114,7 +114,7 @@ namespace cppcanvas
         return SpriteCanvasSharedPtr(
             new internal::ImplSpriteCanvas(
                 uno::Reference< rendering::XSpriteCanvas >(
-                    rVCLWindow.GetFullscreenCanvas( rFullscreenSize ),
+                    rVCLWindow.GetFullscreenSpriteCanvas( rFullscreenSize ),
                     uno::UNO_QUERY) ) );
     }
 
