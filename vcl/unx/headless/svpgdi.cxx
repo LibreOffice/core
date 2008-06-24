@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svpgdi.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 #include "svpgdi.hxx"
 #include "svpbmp.hxx"
 
+#include <vcl/sysdata.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -560,6 +561,15 @@ void SvpSalGraphics::invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert /*
 BOOL SvpSalGraphics::drawEPS( long, long, long, long, void*, ULONG )
 {
     return FALSE;
+}
+
+SystemGraphicsData SvpSalGraphics::GetGraphicsData() const
+{
+    SystemGraphicsData aRes;
+    aRes.nSize = sizeof(aRes);
+    aRes.hDrawable = 0;
+    aRes.pRenderFormat = 0;
+    return aRes;
 }
 
 bool SvpSalGraphics::supportsOperation( OutDevSupportType ) const
