@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filterenv.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,6 +27,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_filter.hxx"
 
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
@@ -125,3 +127,5 @@ void * SAL_CALL component_getFactory(
     return pRet;
 }
 }
+
+
