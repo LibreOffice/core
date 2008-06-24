@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basegfx2d.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -484,6 +484,14 @@ public:
 
         CPPUNIT_ASSERT_MESSAGE("exporting to circle does not produce the expected number of coordinates",
                                nCount==18);
+
+        const B2DPolygon aRect(
+            tools::createPolygonFromRect( B2DRange(0.0,0.0,4000.0,4000.0) ));
+        aExport = tools::exportToSvgD( B2DPolyPolygon(aRect), false, false);
+
+        const char* sExportStringRect = "M0 0H4000V4000H0Z";
+        CPPUNIT_ASSERT_MESSAGE("exporting to rectangle svg-d string",
+                               !aExport.compareToAscii(sExportStringRect));
     }
 
     // Change the following lines only, if you add, remove or rename
