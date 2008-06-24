@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_linepolypolygon.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,7 @@
 #define _DXCANVAS_LINEPOLYPOLYGON_HXX_
 
 #include <canvas/canvastools.hxx>
-#include <canvas/base/linepolypolygonbase.hxx>
+#include <basegfx/tools/unopolypolygon.hxx>
 
 #include "dx_gdiplususer.hxx"
 #include "dx_impltools.hxx"
@@ -40,7 +40,7 @@
 
 namespace dxcanvas
 {
-    class LinePolyPolygon : public ::canvas::LinePolyPolygonBase
+    class LinePolyPolygon : public ::basegfx::unotools::UnoPolyPolygon
     {
     public:
         explicit LinePolyPolygon( const ::basegfx::B2DPolyPolygon& );
