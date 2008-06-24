@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: propacc.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +44,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace cppu;
-using namespace rtl;
 
 
 //========================================================================
@@ -68,7 +67,7 @@ int CDECL SbCompare_PropertyValues_Impl( const void *arg1, const void *arg2 )
 
 extern "C" int CDECL SbCompare_UString_PropertyValue_Impl( const void *arg1, const void *arg2 )
 {
-    const OUString *pArg1 = (OUString*) arg1;
+    const ::rtl::OUString *pArg1 = (::rtl::OUString*) arg1;
     const PropertyValue **pArg2 = (const PropertyValue**) arg2;
     return pArg1->compareTo( (*pArg2)->Name );
 }
@@ -80,7 +79,7 @@ int CDECL SbCompare_Properties_Impl( const void *arg1, const void *arg2 )
 
 extern "C" int CDECL SbCompare_UString_Property_Impl( const void *arg1, const void *arg2 )
 {
-    const OUString *pArg1 = (OUString*) arg1;
+    const ::rtl::OUString *pArg1 = (::rtl::OUString*) arg1;
     const Property *pArg2 = (Property*) arg2;
     return pArg1->compareTo( pArg2->Name );
 }
@@ -116,7 +115,7 @@ Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo(void) throw( 
 
 //-------------------------------------------------------------------------
 
-INT32 SbPropertyValues::GetIndex_Impl( const OUString &rPropName ) const
+INT32 SbPropertyValues::GetIndex_Impl( const ::rtl::OUString &rPropName ) const
 {
     PropertyValue **ppPV;
     ppPV = (PropertyValue **)
@@ -129,7 +128,7 @@ INT32 SbPropertyValues::GetIndex_Impl( const OUString &rPropName ) const
 //----------------------------------------------------------------------------
 
 void SbPropertyValues::setPropertyValue(
-                    const OUString& aPropertyName,
+                    const ::rtl::OUString& aPropertyName,
                     const Any& aValue)
                     throw (::com::sun::star::beans::UnknownPropertyException,
                     ::com::sun::star::beans::PropertyVetoException,
@@ -146,7 +145,7 @@ void SbPropertyValues::setPropertyValue(
 //----------------------------------------------------------------------------
 
 Any SbPropertyValues::getPropertyValue(
-                    const OUString& aPropertyName)
+                    const ::rtl::OUString& aPropertyName)
                     throw(::com::sun::star::beans::UnknownPropertyException,
                     ::com::sun::star::lang::WrappedTargetException,
                     ::com::sun::star::uno::RuntimeException)
@@ -161,7 +160,7 @@ Any SbPropertyValues::getPropertyValue(
 //----------------------------------------------------------------------------
 
 void SbPropertyValues::addPropertyChangeListener(
-                    const OUString& aPropertyName,
+                    const ::rtl::OUString& aPropertyName,
                     const Reference< XPropertyChangeListener >& )
                     throw ()
 {
@@ -171,7 +170,7 @@ void SbPropertyValues::addPropertyChangeListener(
 //----------------------------------------------------------------------------
 
 void SbPropertyValues::removePropertyChangeListener(
-                    const OUString& aPropertyName,
+                    const ::rtl::OUString& aPropertyName,
                     const Reference< XPropertyChangeListener >& )
                     throw ()
 {
@@ -181,7 +180,7 @@ void SbPropertyValues::removePropertyChangeListener(
 //----------------------------------------------------------------------------
 
 void SbPropertyValues::addVetoableChangeListener(
-                    const OUString& aPropertyName,
+                    const ::rtl::OUString& aPropertyName,
                     const Reference< XVetoableChangeListener >& )
                     throw()
 {
@@ -191,7 +190,7 @@ void SbPropertyValues::addVetoableChangeListener(
 //----------------------------------------------------------------------------
 
 void SbPropertyValues::removeVetoableChangeListener(
-                    const OUString& aPropertyName,
+                    const ::rtl::OUString& aPropertyName,
                     const Reference< XVetoableChangeListener >& )
                     throw()
 {
@@ -235,7 +234,7 @@ PropertySetInfoImpl::PropertySetInfoImpl()
 {
 }
 
-INT32 PropertySetInfoImpl::GetIndex_Impl( const OUString &rPropName ) const
+INT32 PropertySetInfoImpl::GetIndex_Impl( const ::rtl::OUString &rPropName ) const
 {
     Property *pP;
     pP = (Property*)
@@ -250,7 +249,7 @@ Sequence< Property > PropertySetInfoImpl::getProperties(void) throw()
     return _aProps;
 }
 
-Property PropertySetInfoImpl::getPropertyByName(const OUString& Name) throw( RuntimeException )
+Property PropertySetInfoImpl::getPropertyByName(const ::rtl::OUString& Name) throw( RuntimeException )
 {
     sal_Int32 nIndex = GetIndex_Impl( Name );
     if( USHRT_MAX != nIndex )
@@ -258,7 +257,7 @@ Property PropertySetInfoImpl::getPropertyByName(const OUString& Name) throw( Run
     return Property();
 }
 
-sal_Bool PropertySetInfoImpl::hasPropertyByName(const OUString& Name) throw( RuntimeException )
+sal_Bool PropertySetInfoImpl::hasPropertyByName(const ::rtl::OUString& Name) throw( RuntimeException )
 {
     sal_Int32 nIndex = GetIndex_Impl( Name );
     return USHRT_MAX != nIndex;
@@ -300,13 +299,13 @@ Sequence< Property > SbPropertySetInfo::getProperties(void) throw( RuntimeExcept
     return aImpl.getProperties();
 }
 
-Property SbPropertySetInfo::getPropertyByName(const OUString& Name)
+Property SbPropertySetInfo::getPropertyByName(const ::rtl::OUString& Name)
     throw( RuntimeException )
 {
     return aImpl.getPropertyByName( Name );
 }
 
-BOOL SbPropertySetInfo::hasPropertyByName(const OUString& Name)
+BOOL SbPropertySetInfo::hasPropertyByName(const ::rtl::OUString& Name)
     throw( RuntimeException )
 {
     return aImpl.hasPropertyByName( Name );
@@ -326,7 +325,7 @@ SbPropertyContainer::~SbPropertyContainer()
 }
 
 //----------------------------------------------------------------------------
-void SbPropertyContainer::addProperty(const OUString& Name,
+void SbPropertyContainer::addProperty(const ::rtl::OUString& Name,
                                       INT16 Attributes,
                                       const Any& DefaultValue)
     throw(  PropertyExistException, IllegalTypeException,
@@ -338,7 +337,7 @@ void SbPropertyContainer::addProperty(const OUString& Name,
 }
 
 //----------------------------------------------------------------------------
-void SbPropertyContainer::removeProperty(const OUString& Name)
+void SbPropertyContainer::removeProperty(const ::rtl::OUString& Name)
     throw( UnknownPropertyException, RuntimeException )
 {
     (void)Name;
@@ -351,13 +350,13 @@ Sequence< Property > SbPropertyContainer::getProperties(void) throw ()
     return aImpl.getProperties();
 }
 
-Property SbPropertyContainer::getPropertyByName(const OUString& Name)
+Property SbPropertyContainer::getPropertyByName(const ::rtl::OUString& Name)
     throw( RuntimeException )
 {
     return aImpl.getPropertyByName( Name );
 }
 
-BOOL SbPropertyContainer::hasPropertyByName(const OUString& Name)
+BOOL SbPropertyContainer::hasPropertyByName(const ::rtl::OUString& Name)
     throw( RuntimeException )
 {
     return aImpl.hasPropertyByName( Name );
@@ -430,5 +429,4 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite 
     // Objekt konnte nicht erzeugt werden
     refVar->PutObject( NULL );
 }
-
 
