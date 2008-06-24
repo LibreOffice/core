@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolboxconfiguration.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,7 +58,6 @@
 //  namespace
 //_________________________________________________________________________________________________________________
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::lang;
@@ -157,3 +156,4 @@ sal_Bool ToolBoxConfiguration::StoreToolBox(
 }
 
 }
+
