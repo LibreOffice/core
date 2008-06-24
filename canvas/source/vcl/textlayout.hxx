@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textlayout.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +62,9 @@ namespace vclcanvas
                     sal_Int8                                            nDirection,
                     sal_Int64                                           nRandomSeed,
                     const CanvasFont::Reference&                        rFont,
-                    const DeviceRef&                                    rRefDevice );
+                    const ::com::sun::star::uno::Reference<
+                          ::com::sun::star::rendering::XGraphicDevice>& xDevice,
+                    const OutDevProviderSharedPtr&                      rOutDev );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing();
@@ -102,11 +104,13 @@ namespace vclcanvas
                                const ::com::sun::star::rendering::ViewState&    viewState,
                                const ::com::sun::star::rendering::RenderState&  renderState     ) const;
 
-        ::com::sun::star::rendering::StringContext  maText;
-        ::com::sun::star::uno::Sequence< double >   maLogicalAdvancements;
-        CanvasFont::Reference                       mpFont;
-        DeviceRef                                   mpRefDevice;
-        sal_Int8                                    mnTextDirection;
+        ::com::sun::star::rendering::StringContext       maText;
+        ::com::sun::star::uno::Sequence< double >        maLogicalAdvancements;
+        CanvasFont::Reference                            mpFont;
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::rendering::XGraphicDevice> mxDevice;
+        OutDevProviderSharedPtr                          mpOutDevProvider;
+        sal_Int8                                         mnTextDirection;
     };
 
 }
