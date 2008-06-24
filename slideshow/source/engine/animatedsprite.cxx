@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: animatedsprite.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <animatedsprite.hxx>
 
@@ -65,7 +66,7 @@ namespace slideshow
             maTransform(),
             mbSpriteVisible( false )
         {
-            ENSURE_AND_THROW( mpViewLayer, "AnimatedSprite::AnimatedSprite(): Invalid view layer" );
+            ENSURE_OR_THROW( mpViewLayer, "AnimatedSprite::AnimatedSprite(): Invalid view layer" );
 
             // Add half a pixel tolerance to sprite size, since we later on compare
             // against it in resize(). And view transformations will almost never yield
@@ -75,12 +76,12 @@ namespace slideshow
             mpSprite = mpViewLayer->createSprite( maEffectiveSpriteSizePixel,
                                                   mnSpritePrio );
 
-            ENSURE_AND_THROW( mpSprite, "AnimatedSprite::AnimatedSprite(): Could not create sprite" );
+            ENSURE_OR_THROW( mpSprite, "AnimatedSprite::AnimatedSprite(): Could not create sprite" );
         }
 
         ::cppcanvas::CanvasSharedPtr AnimatedSprite::getContentCanvas() const
         {
-            ENSURE_AND_THROW( mpViewLayer->getCanvas(), "AnimatedSprite::getContentCanvas(): No view layer canvas" );
+            ENSURE_OR_THROW( mpViewLayer->getCanvas(), "AnimatedSprite::getContentCanvas(): No view layer canvas" );
 
             const ::cppcanvas::CanvasSharedPtr pContentCanvas( mpSprite->getContentCanvas() );
             pContentCanvas->clear();
@@ -146,7 +147,7 @@ namespace slideshow
                 mpSprite = mpViewLayer->createSprite( maEffectiveSpriteSizePixel,
                                                       mnSpritePrio );
 
-                ENSURE_AND_THROW( mpSprite,
+                ENSURE_OR_THROW( mpSprite,
                                   "AnimatedSprite::resize(): Could not create new sprite" );
 
                 // set attributes similar to previous sprite
