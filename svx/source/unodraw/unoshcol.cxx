@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoshcol.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +35,6 @@
 #include "unoshcol.hxx"
 #include <svx/unoprov.hxx>
 
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -225,33 +224,33 @@ sal_Bool SAL_CALL SvxShapeCollection::hasElements() throw( uno::RuntimeException
 //----------------------------------------------------------------------
 // XServiceInfo
 //----------------------------------------------------------------------
-OUString SAL_CALL SvxShapeCollection::getImplementationName()
+::rtl::OUString SAL_CALL SvxShapeCollection::getImplementationName()
     throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
 }
 
-OUString SvxShapeCollection::getImplementationName_Static()
+::rtl::OUString SvxShapeCollection::getImplementationName_Static()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.SvxShapeCollection") );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.SvxShapeCollection") );
 }
 
-sal_Bool SAL_CALL SvxShapeCollection::supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL SvxShapeCollection::supportsService( const ::rtl::OUString& ServiceName )
     throw( uno::RuntimeException )
 {
     return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
-uno::Sequence< OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames() throw( uno::RuntimeException )
+uno::Sequence< ::rtl::OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames() throw( uno::RuntimeException )
 {
     return getSupportedServiceNames_Static();
 }
 
-uno::Sequence< OUString > SvxShapeCollection::getSupportedServiceNames_Static()
+uno::Sequence< ::rtl::OUString > SvxShapeCollection::getSupportedServiceNames_Static()
 {
-    uno::Sequence< OUString > aSeq(2);
-    aSeq.getArray()[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shapes") );
-    aSeq.getArray()[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ShapeCollection") );
+    uno::Sequence< ::rtl::OUString > aSeq(2);
+    aSeq.getArray()[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shapes") );
+    aSeq.getArray()[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ShapeCollection") );
     return aSeq;
 }
 
@@ -259,4 +258,3 @@ Reference< XInterface > SAL_CALL SvxShapeCollection_createInstance( const Refere
 {
     return *( new SvxShapeCollection() );
 }
-
