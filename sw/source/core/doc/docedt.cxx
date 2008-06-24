@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docedt.cxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1205,7 +1205,20 @@ bool SwDoc::Move( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         {
             if( pTNd->CanJoinNext())
             {
-                pTNd->JoinNext();
+                SwTxtNode *pNextTNd = 0;
+                if( !pTNd->Len() )
+                {
+                    SwNodeIndex aTmpIdx( *pTNd, 1 );
+                    pNextTNd = aTmpIdx.GetNode().GetTxtNode();
+                }
+                if( pNextTNd )
+                {
+                    if( !bNullCntnt )
+                        pSavePam->Move( fnMoveForward, fnGoCntnt );
+                    pNextTNd->JoinPrev();
+                }
+                else
+                    pTNd->JoinNext();
                 bRemove = false;
             }
         }
@@ -1421,40 +1434,28 @@ bool lcl_StrLenOverFlow( const SwPaM& rPam )
 
 void lcl_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev )
 {
+    rJoinTxt = sal_False;
+    rJoinPrev = sal_False;
     if( rPam.GetPoint()->nNode != rPam.GetMark()->nNode )
     {
         const SwPosition* pStt = rPam.Start(), *pEnd = rPam.End();
-        SwTxtNode* pSttNd = pStt->nNode.GetNode().GetTxtNode();
-        rJoinTxt = (0 != pSttNd) && pEnd->nNode.GetNode().IsTxtNode();
-
-        bool bDone = false;
-
-        if( rJoinTxt && pStt == rPam.GetPoint())
+        SwTxtNode *pSttNd = pStt->nNode.GetNode().GetTxtNode();
+        if( pSttNd )
         {
-            SwTxtNode * pEndNd = pEnd->nNode.GetNode().GetTxtNode();
-            if (0 != pEndNd )
+            SwTxtNode *pEndNd = pEnd->nNode.GetNode().GetTxtNode();
+            rJoinTxt = 0 != pEndNd;
+            if( rJoinTxt )
             {
-                bool bExchange = pEndNd->GetTxt().Len() == pEnd->nContent.GetIndex();
-                if( !bExchange && 0 != pSttNd->GetNumRule() && pSttNd->GetTxtColl() )
-                {
-                    const String aDefault( String::CreateFromAscii("Default") );
-                    if( aDefault != pSttNd->GetTxtColl()->GetName() )
-                        bExchange = true;
-                }
+                bool bExchange = pStt == rPam.GetPoint();
+                if( !pStt->nContent.GetIndex() &&
+                    pEndNd->GetTxt().Len() != pEnd->nContent.GetIndex() )
+                    bExchange = !bExchange;
                 if( bExchange )
-                {
                     rPam.Exchange();
-                    rJoinPrev = sal_False;
-                    bDone = true;
-                }
+                rJoinPrev = rJoinTxt && rPam.GetPoint() == pStt;
             }
         }
-
-        if (! bDone)
-            rJoinPrev = rJoinTxt && rPam.GetPoint() == pStt;
     }
-    else
-        rJoinTxt = sal_False, rJoinPrev = sal_False;
 }
 
 void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
