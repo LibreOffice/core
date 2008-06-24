@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: canvashelper_texturefill.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <rtl/math.hxx>
 
@@ -338,7 +339,7 @@ namespace vclcanvas
         {
             const ::basegfx::B2DPolygon& rGradientPoly( rValues.maGradientPoly );
 
-            ENSURE_AND_THROW( rGradientPoly.count() > 2,
+            ENSURE_OR_THROW( rGradientPoly.count() > 2,
                               "fillPolygonalGradient(): polygon without area given" );
 
             // For performance reasons, we create a temporary VCL polygon
@@ -591,7 +592,7 @@ namespace vclcanvas
                     break;
 
                 default:
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "CanvasHelper::doGradientFill(): Unexpected case" );
             }
         }
@@ -798,9 +799,9 @@ namespace vclcanvas
                                                                                          const rendering::RenderState&                      renderState,
                                                                                          const uno::Sequence< rendering::Texture >&         textures )
     {
-        CHECK_AND_THROW( xPolyPolygon.is(),
+        ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
                          "CanvasHelper::fillPolyPolygon(): polygon is NULL");
-        CHECK_AND_THROW( textures.getLength(),
+        ENSURE_ARG_OR_THROW( textures.getLength(),
                          "CanvasHelper::fillTexturedPolyPolygon: empty texture sequence");
 
         if( mpOutDev )
@@ -809,7 +810,7 @@ namespace vclcanvas
 
             const int nTransparency( setupOutDevState( viewState, renderState, IGNORE_COLOR ) );
             PolyPolygon aPolyPoly( tools::mapPolyPolygon(
-                                       ::canvas::tools::polyPolygonFromXPolyPolygon2D(xPolyPolygon),
+                                       ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon),
                                        viewState, renderState ) );
 
             // TODO(F1): Multi-texturing
@@ -827,12 +828,13 @@ namespace vclcanvas
                     const ::canvas::ParametricPolyPolygon::Values& rValues(
                         pGradient->getValues() );
 
+                    // TODO: use all the colors and place them on given positions/stops
                     const ::Color aColor1(
-                        ::vcl::unotools::sequenceToColor( mpDevice,
-                                                          rValues.maColor1 ) );
+                        ::vcl::unotools::stdColorSpaceSequenceToColor(
+                            rValues.maColors [0] ) );
                     const ::Color aColor2(
-                        ::vcl::unotools::sequenceToColor( mpDevice,
-                                                          rValues.maColor2 ) );
+                        ::vcl::unotools::stdColorSpaceSequenceToColor(
+                            rValues.maColors [rValues.maColors.getLength () - 1] ) );
 
                     // TODO(E1): Return value
                     // TODO(F1): FillRule
@@ -850,7 +852,7 @@ namespace vclcanvas
                 else
                 {
                     // TODO(F1): The generic case is missing here
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "CanvasHelper::fillTexturedPolyPolygon(): unknown parametric polygon encountered" );
                 }
             }
@@ -862,7 +864,7 @@ namespace vclcanvas
 
                 const geometry::IntegerSize2D aBmpSize( textures[0].Bitmap->getSize() );
 
-                CHECK_AND_THROW( aBmpSize.Width != 0 &&
+                ENSURE_ARG_OR_THROW( aBmpSize.Width != 0 &&
                                  aBmpSize.Height != 0,
                                  "CanvasHelper::fillTexturedPolyPolygon(): zero-sized texture bitmap" );
 
@@ -914,8 +916,12 @@ namespace vclcanvas
                                                    1.0 ) )
                     {
                         // setup alpha modulation values
-                        ::canvas::tools::setDeviceColor( aLocalState,
-                                                         0.0, 0.0, 0.0, textures[0].Alpha );
+                        aLocalState.DeviceColor.realloc(4);
+                        double* pColor = aLocalState.DeviceColor.getArray();
+                        pColor[0] =
+                        pColor[1] =
+                        pColor[2] = 0.0;
+                        pColor[3] = textures[0].Alpha;
 
                         return drawBitmapModulated( pCanvas,
                                                     textures[0].Bitmap,
@@ -1018,7 +1024,7 @@ namespace vclcanvas
 
                     ::basegfx::B2DHomMatrix aInverseTextureTransform( aPureTotalTransform );
 
-                    CHECK_AND_THROW( aInverseTextureTransform.isInvertible(),
+                    ENSURE_ARG_OR_THROW( aInverseTextureTransform.isInvertible(),
                                      "CanvasHelper::fillTexturedPolyPolygon(): singular texture matrix" );
 
                     aInverseTextureTransform.invert();
