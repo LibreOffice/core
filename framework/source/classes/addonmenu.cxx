@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: addonmenu.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +60,6 @@
 //  namespace
 //_________________________________________________________________________________________________________________
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
@@ -99,7 +98,7 @@ AddonMenu::~AddonMenu()
 
 // ------------------------------------------------------------------------
 // Check if command URL string has the unique prefix to identify addon popup menus
-sal_Bool AddonPopupMenu::IsCommandURLPrefix( const OUString& aCmdURL )
+sal_Bool AddonPopupMenu::IsCommandURLPrefix( const ::rtl::OUString& aCmdURL )
 {
     const char aPrefixCharBuf[] = ADDONSPOPUPMENU_URL_PREFIX_STR;
 
@@ -296,11 +295,11 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
         AddonsOptions   aAddonsOptions;
         USHORT          nInsertPos = nMergeAtPos;
 
-        OUString                              aTitle;
-        OUString                              aURL;
-        OUString                              aTarget;
-        OUString                              aImageId;
-        OUString                              aContext;
+        ::rtl::OUString                              aTitle;
+        ::rtl::OUString                              aURL;
+        ::rtl::OUString                              aTarget;
+        ::rtl::OUString                              aImageId;
+        ::rtl::OUString                              aContext;
         Sequence< Sequence< PropertyValue > > aAddonSubMenu;
         USHORT                                nUniqueMenuId = ADDONMENU_ITEMID_START;
 
@@ -417,11 +416,11 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
 
 // Retrieve the menu entry property values from a sequence
 void AddonMenuManager::GetMenuEntry( const Sequence< PropertyValue >& rAddonMenuEntry,
-                                     OUString& rTitle,
-                                     OUString& rURL,
-                                     OUString& rTarget,
-                                     OUString& rImageId,
-                                     OUString& rContext,
+                                     ::rtl::OUString& rTitle,
+                                     ::rtl::OUString& rURL,
+                                     ::rtl::OUString& rTarget,
+                                     ::rtl::OUString& rImageId,
+                                     ::rtl::OUString& rContext,
                                      Sequence< Sequence< PropertyValue > >& rAddonSubMenu )
 {
     // Reset submenu parameter
@@ -429,7 +428,7 @@ void AddonMenuManager::GetMenuEntry( const Sequence< PropertyValue >& rAddonMenu
 
     for ( int i = 0; i < rAddonMenuEntry.getLength(); i++ )
     {
-        OUString aMenuEntryPropName = rAddonMenuEntry[i].Name;
+        ::rtl::OUString aMenuEntryPropName = rAddonMenuEntry[i].Name;
         if ( aMenuEntryPropName == ADDONSMENUITEM_PROPERTYNAME_URL )
             rAddonMenuEntry[i].Value >>= rURL;
         else if ( aMenuEntryPropName == ADDONSMENUITEM_PROPERTYNAME_TITLE )
@@ -446,7 +445,7 @@ void AddonMenuManager::GetMenuEntry( const Sequence< PropertyValue >& rAddonMenu
 }
 
 // Check if the context string matches the provided xModel context
-sal_Bool AddonMenuManager::IsCorrectContext( const Reference< XModel >& rModel, const OUString& aContext )
+sal_Bool AddonMenuManager::IsCorrectContext( const Reference< XModel >& rModel, const ::rtl::OUString& aContext )
 {
     if ( rModel.is() )
     {
@@ -456,7 +455,7 @@ sal_Bool AddonMenuManager::IsCorrectContext( const Reference< XModel >& rModel, 
             sal_Int32 nIndex = 0;
             do
             {
-                OUString aToken = aContext.getToken( 0, ',', nIndex );
+                ::rtl::OUString aToken = aContext.getToken( 0, ',', nIndex );
 
                 if ( xServiceInfo->supportsService( aToken ))
                     return sal_True;
@@ -469,3 +468,4 @@ sal_Bool AddonMenuManager::IsCorrectContext( const Reference< XModel >& rModel, 
 }
 
 }
+
