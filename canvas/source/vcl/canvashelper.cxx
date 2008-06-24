@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: canvashelper.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,12 +32,12 @@
 #include "precompiled_canvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <rtl/math.hxx>
 
-#include <com/sun/star/rendering/IntegerBitmapFormat.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
-#include <com/sun/star/rendering/Endianness.hpp>
+#include <com/sun/star/util/Endianness.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
@@ -95,7 +95,7 @@ namespace vclcanvas
                     return ::basegfx::tools::B2DLINEJOIN_BEVEL;
 
                 default:
-                    ENSURE_AND_THROW( false,
+                    ENSURE_OR_THROW( false,
                                       "b2DJoineFromJoin(): Unexpected join type" );
             }
 
@@ -120,7 +120,7 @@ namespace vclcanvas
         mp2ndOutDev.reset();
     }
 
-    void CanvasHelper::init( SpriteCanvas&                  rDevice,
+    void CanvasHelper::init( rendering::XGraphicDevice&     rDevice,
                              const OutDevProviderSharedPtr& rOutDev,
                              bool                           bProtect,
                              bool                           bHaveAlpha )
@@ -273,8 +273,8 @@ namespace vclcanvas
                                                                                  const rendering::ViewState&                        viewState,
                                                                                  const rendering::RenderState&                      renderState )
     {
-        CHECK_AND_THROW( xPolyPolygon.is(),
-                         "CanvasHelper::drawPolyPolygon(): polygon is NULL");
+        ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
+                         "polygon is NULL");
 
         if( mpOutDev )
         {
@@ -282,7 +282,8 @@ namespace vclcanvas
 
             setupOutDevState( viewState, renderState, LINE_COLOR );
 
-            const ::basegfx::B2DPolyPolygon& rPolyPoly( ::canvas::tools::polyPolygonFromXPolyPolygon2D(xPolyPolygon) );
+            const ::basegfx::B2DPolyPolygon& rPolyPoly(
+                ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon) );
             const PolyPolygon aPolyPoly( tools::mapPolyPolygon( rPolyPoly, viewState, renderState ) );
 
             if( rPolyPoly.isClosed() )
@@ -323,8 +324,8 @@ namespace vclcanvas
                                                                                    const rendering::RenderState&                        renderState,
                                                                                    const rendering::StrokeAttributes&                   strokeAttributes )
     {
-        CHECK_AND_THROW( xPolyPolygon.is(),
-                         "CanvasHelper::drawPolyPolygon(): polygon is NULL");
+        ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
+                         "polygon is NULL");
 
         if( mpOutDev )
         {
@@ -338,7 +339,7 @@ namespace vclcanvas
             aLinePixelSize *= aMatrix;
 
             ::basegfx::B2DPolyPolygon aPolyPoly(
-                ::canvas::tools::polyPolygonFromXPolyPolygon2D(xPolyPolygon) );
+                ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon) );
 
             if( aPolyPoly.areControlPointsUsed() )
             {
@@ -410,10 +411,25 @@ namespace vclcanvas
 
             for( USHORT i=0; i<nSize; ++i )
             {
-                mpOutDev->getOutDev().DrawPolygon( aVCLPolyPoly[i] );
+                if( aStrokedPolyPoly.getB2DPolygon( i ).isClosed() ) {
+                    mpOutDev->getOutDev().DrawPolygon( aVCLPolyPoly[i] );
+                    if( mp2ndOutDev )
+                        mp2ndOutDev->getOutDev().DrawPolygon( aVCLPolyPoly[i] );
+                } else {
+                    const USHORT nPolySize = aVCLPolyPoly[i].GetSize();
+                    if( nPolySize ) {
+                        Point rPrevPoint = aVCLPolyPoly[i].GetPoint( 0 );
+                        Point rPoint;
 
-                if( mp2ndOutDev )
-                    mp2ndOutDev->getOutDev().DrawPolygon( aVCLPolyPoly[i] );
+                        for( USHORT j=1; j<nPolySize; j++ ) {
+                            rPoint = aVCLPolyPoly[i].GetPoint( j );
+                            mpOutDev->getOutDev().DrawLine( rPrevPoint, rPoint );
+                            if( mp2ndOutDev )
+                                mp2ndOutDev->getOutDev().DrawLine( rPrevPoint, rPoint );
+                            rPrevPoint = rPoint;
+                        }
+                    }
+                }
             }
         }
 
@@ -456,8 +472,8 @@ namespace vclcanvas
                                                                                  const rendering::ViewState&                        viewState,
                                                                                  const rendering::RenderState&                      renderState )
     {
-        CHECK_AND_THROW( xPolyPolygon.is(),
-                         "CanvasHelper::fillPolyPolygon(): polygon is NULL");
+        ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
+                         "polygon is NULL");
 
         if( mpOutDev )
         {
@@ -465,8 +481,12 @@ namespace vclcanvas
 
             const int nTransparency( setupOutDevState( viewState, renderState, FILL_COLOR ) );
             const int nTransPercent( (nTransparency * 100 + 128) / 255 );  // normal rounding, no truncation here
-            const PolyPolygon aPolyPoly( tools::mapPolyPolygon( ::canvas::tools::polyPolygonFromXPolyPolygon2D(xPolyPolygon),
-                                                                viewState, renderState ) );
+            ::basegfx::B2DPolyPolygon aB2DPolyPoly(
+                ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon));
+            aB2DPolyPoly.setClosed(true); // ensure closed poly, otherwise VCL does not fill
+            const PolyPolygon aPolyPoly( tools::mapPolyPolygon(
+                                             aB2DPolyPoly,
+                                             viewState, renderState ) );
             const bool bSourceAlpha( renderState.CompositeOperation == rendering::CompositeOperation::SOURCE );
             if( !nTransparency || bSourceAlpha )
             {
@@ -523,12 +543,12 @@ namespace vclcanvas
                                                                        const uno::Sequence< beans::PropertyValue >&     extraFontProperties,
                                                                        const geometry::Matrix2D&                        fontMatrix )
     {
-        if( mpOutDev )
+        if( mpOutDev && mpDevice )
         {
             // TODO(F2): font properties and font matrix
             return uno::Reference< rendering::XCanvasFont >(
                     new CanvasFont(fontRequest, extraFontProperties, fontMatrix,
-                                   mpDevice) );
+                                   *mpDevice, mpOutDev) );
         }
 
         return uno::Reference< rendering::XCanvasFont >();
@@ -549,8 +569,8 @@ namespace vclcanvas
                                                                           const rendering::RenderState&                     renderState,
                                                                           sal_Int8                                          textDirection )
     {
-        CHECK_AND_THROW( xFont.is(),
-                         "CanvasHelper::drawText(): font is NULL");
+        ENSURE_ARG_OR_THROW( xFont.is(),
+                         "font is NULL");
 
         if( mpOutDev )
         {
@@ -606,8 +626,8 @@ namespace vclcanvas
                                                                                 const rendering::ViewState&                     viewState,
                                                                                 const rendering::RenderState&                   renderState )
     {
-        CHECK_AND_THROW( xLayoutedText.is(),
-                         "CanvasHelper::drawTextLayout(): layout is NULL");
+        ENSURE_ARG_OR_THROW( xLayoutedText.is(),
+                         "layout is NULL");
 
         TextLayout* pTextLayout = dynamic_cast< TextLayout* >( xLayoutedText.get() );
 
@@ -636,8 +656,8 @@ namespace vclcanvas
         }
         else
         {
-            CHECK_AND_THROW( false,
-                             "CanvasHelper::drawTextLayout(): TextLayout not compatible with this canvas" );
+            ENSURE_ARG_OR_THROW( false,
+                                 "TextLayout not compatible with this canvas" );
         }
 
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
@@ -649,12 +669,12 @@ namespace vclcanvas
                                                                                 const rendering::RenderState&               renderState,
                                                                                 bool                                        bModulateColors )
     {
-        CHECK_AND_THROW( xBitmap.is(),
-                         "CanvasHelper::implDrawBitmap(): bitmap is NULL");
+        ENSURE_ARG_OR_THROW( xBitmap.is(),
+                             "bitmap is NULL");
 
         ::canvas::tools::verifyInput( renderState,
                                       BOOST_CURRENT_FUNCTION,
-                                      static_cast< ::cppu::OWeakObject* >(mpDevice),
+                                      mpDevice,
                                       4,
                                       bModulateColors ? 3 : 0 );
 
@@ -886,7 +906,7 @@ namespace vclcanvas
     uno::Reference< rendering::XBitmap > CanvasHelper::getScaledBitmap( const geometry::RealSize2D& newSize,
                                                                         sal_Bool                    beFast )
     {
-        if( !mpOutDev.get() )
+        if( !mpOutDev.get() || !mpDevice )
             return uno::Reference< rendering::XBitmap >(); // we're disposed
 
         // TODO(F2): Support alpha vdev canvas here
@@ -899,14 +919,16 @@ namespace vclcanvas
                        beFast ? BMP_SCALE_FAST : BMP_SCALE_INTERPOLATE );
 
         return uno::Reference< rendering::XBitmap >(
-            new CanvasBitmap( aBitmap, mpDevice ) );
+            new CanvasBitmap( aBitmap, *mpDevice, mpOutDev ) );
     }
 
-    uno::Sequence< sal_Int8 > CanvasHelper::getData( rendering::IntegerBitmapLayout&        aLayout,
-                                                     const geometry::IntegerRectangle2D&    rect )
+    uno::Sequence< sal_Int8 > CanvasHelper::getData( rendering::IntegerBitmapLayout&     rLayout,
+                                                     const geometry::IntegerRectangle2D& rect )
     {
         if( !mpOutDev.get() )
             return uno::Sequence< sal_Int8 >(); // we're disposed
+
+        rLayout = getMemoryLayout();
 
         // TODO(F2): Support alpha canvas here
         const Rectangle aRect( ::vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
@@ -914,66 +936,57 @@ namespace vclcanvas
         Bitmap aBitmap( mpOutDev->getOutDev().GetBitmap(aRect.TopLeft(),
                                                         aRect.GetSize()) );
 
-        const sal_Int32 nWidth( rect.X2 - rect.X1 );
-        const sal_Int32 nHeight( rect.Y2 - rect.Y1 );
-        aLayout.ScanLines = nHeight;
-        aLayout.ScanLineBytes = nWidth*4;
-        aLayout.ScanLineStride = aLayout.ScanLineBytes;
-        aLayout.PlaneStride = 0;
-        aLayout.ColorSpace.set( mpDevice );
-        aLayout.NumComponents = 4;
-        aLayout.ComponentMasks.realloc(4);
-        aLayout.ComponentMasks[0] = 0x00FF0000;
-        aLayout.ComponentMasks[1] = 0x0000FF00;
-        aLayout.ComponentMasks[2] = 0x000000FF;
-        aLayout.ComponentMasks[3] = 0xFF000000;
-        aLayout.Palette.clear();
-        aLayout.Endianness = rendering::Endianness::LITTLE;
-        aLayout.Format = rendering::IntegerBitmapFormat::CHUNKY_32BIT;
-        aLayout.IsMsbFirst = sal_False;
-
         ScopedBitmapReadAccess pReadAccess( aBitmap.AcquireReadAccess(),
                                             aBitmap );
 
-        if( pReadAccess.get() != NULL )
+        ENSURE_OR_THROW( pReadAccess.get() != NULL,
+                         "Could not acquire read access to OutDev bitmap" );
+
+        const sal_Int32 nWidth( rect.X2 - rect.X1 );
+        const sal_Int32 nHeight( rect.Y2 - rect.Y1 );
+
+        rLayout.ScanLines = nHeight;
+        rLayout.ScanLineBytes = nWidth*4;
+        rLayout.ScanLineStride = rLayout.ScanLineBytes;
+
+        uno::Sequence< sal_Int8 > aRes( 4*nWidth*nHeight );
+        sal_Int8* pRes = aRes.getArray();
+
+        int nCurrPos(0);
+        for( int y=0; y<nHeight; ++y )
         {
-            // TODO(F1): Support more formats.
-
-            // for the time being, always return as BGRA
-            uno::Sequence< sal_Int8 > aRes( 4*nWidth*nHeight );
-            sal_Int8* pRes = aRes.getArray();
-
-            int nCurrPos(0);
-            for( int y=0; y<nHeight; ++y )
+            for( int x=0; x<nWidth; ++x )
             {
-                for( int x=0; x<nWidth; ++x )
-                {
-                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetBlue();
-                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetGreen();
-                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetRed();
-                    pRes[ nCurrPos++ ] = sal_uInt8(255);
-                }
+                pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetRed();
+                pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetGreen();
+                pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetBlue();
+                pRes[ nCurrPos++ ] = -1;
             }
-
-            return aRes;
         }
 
-        return uno::Sequence< sal_Int8 >();
+        return aRes;
     }
 
     void CanvasHelper::setData( const uno::Sequence< sal_Int8 >&        data,
-                                const rendering::IntegerBitmapLayout&   ,
+                                const rendering::IntegerBitmapLayout&   aLayout,
                                 const geometry::IntegerRectangle2D&     rect )
     {
         if( !mpOutDev.get() )
             return; // we're disposed
 
+        const rendering::IntegerBitmapLayout aRefLayout( getMemoryLayout() );
+        ENSURE_ARG_OR_THROW( aRefLayout.PlaneStride != aLayout.PlaneStride ||
+                             aRefLayout.ColorSpace  != aLayout.ColorSpace ||
+                             aRefLayout.Palette     != aLayout.Palette ||
+                             aRefLayout.IsMsbFirst  != aLayout.IsMsbFirst,
+                             "Mismatching memory layout" );
+
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
 
-        const Rectangle         aRect( ::vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
-        const USHORT            nBitCount( ::std::min( (USHORT)24U,
-                                                       (USHORT)rOutDev.GetBitCount() ) );
-        const BitmapPalette*    pPalette = NULL;
+        const Rectangle aRect( ::vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
+        const USHORT    nBitCount( ::std::min( (USHORT)24U,
+                                               (USHORT)rOutDev.GetBitCount() ) );
+        const BitmapPalette* pPalette = NULL;
 
         if( nBitCount <= 8 )
         {
@@ -997,83 +1010,82 @@ namespace vclcanvas
 
         bool bCopyBack( false ); // only copy something back, if we
                                  // actually changed some pixel
-
         {
             ScopedBitmapWriteAccess pWriteAccess( aBitmap.AcquireWriteAccess(),
                                                   aBitmap );
 
-            if( pWriteAccess.get() != NULL )
+            ENSURE_OR_THROW( pWriteAccess.get() != NULL,
+                             "Could not acquire write access to OutDev bitmap" );
+
+            // for the time being, always read as RGB
+            const sal_Int32 nWidth( rect.X2 - rect.X1 );
+            const sal_Int32 nHeight( rect.Y2 - rect.Y1 );
+            int x, y, nCurrPos(0);
+            for( y=0; y<nHeight; ++y )
             {
-                // for the time being, always read as BGRA
-                const sal_Int32 nWidth( rect.X2 - rect.X1 );
-                const sal_Int32 nHeight( rect.Y2 - rect.Y1 );
-                int x, y, nCurrPos(0);
-                for( y=0; y<nHeight; ++y )
+                switch( pWriteAccess->GetScanlineFormat() )
                 {
-                    switch( pWriteAccess->GetScanlineFormat() )
+                    case BMP_FORMAT_8BIT_PAL:
                     {
-                        case BMP_FORMAT_8BIT_PAL:
+                        Scanline pScan = pWriteAccess->GetScanline( y );
+
+                        for( x=0; x<nWidth; ++x )
                         {
-                            Scanline pScan = pWriteAccess->GetScanline( y );
+                            *pScan++ = (BYTE)pWriteAccess->GetBestPaletteIndex(
+                                BitmapColor( data[ nCurrPos ],
+                                             data[ nCurrPos+1 ],
+                                             data[ nCurrPos+2 ] ) );
 
-                            for( x=0; x<nWidth; ++x )
-                            {
-                                *pScan++ = (BYTE)pWriteAccess->GetBestPaletteIndex(
-                                    BitmapColor( data[ nCurrPos+2 ],
-                                                 data[ nCurrPos+1 ],
-                                                 data[ nCurrPos ] ) );
-
-                                nCurrPos += 4; // skip three colors, _plus_ alpha
-                            }
+                            nCurrPos += 4;
                         }
-                        break;
-
-                        case BMP_FORMAT_24BIT_TC_BGR:
-                        {
-                            Scanline pScan = pWriteAccess->GetScanline( y );
-
-                            for( x=0; x<nWidth; ++x )
-                            {
-                                *pScan++ = data[ nCurrPos   ];
-                                *pScan++ = data[ nCurrPos+1 ];
-                                *pScan++ = data[ nCurrPos+2 ];
-
-                                nCurrPos += 4; // skip three colors, _plus_ alpha
-                            }
-                        }
-                        break;
-
-                        case BMP_FORMAT_24BIT_TC_RGB:
-                        {
-                            Scanline pScan = pWriteAccess->GetScanline( y );
-
-                            for( x=0; x<nWidth; ++x )
-                            {
-                                *pScan++ = data[ nCurrPos+2 ];
-                                *pScan++ = data[ nCurrPos+1 ];
-                                *pScan++ = data[ nCurrPos   ];
-
-                                nCurrPos += 4; // skip three colors, _plus_ alpha
-                            }
-                        }
-                        break;
-
-                        default:
-                        {
-                            for( x=0; x<nWidth; ++x )
-                            {
-                                pWriteAccess->SetPixel( y, x, BitmapColor( data[ nCurrPos+2 ],
-                                                                           data[ nCurrPos+1 ],
-                                                                           data[ nCurrPos ] ) );
-                                nCurrPos += 4; // skip three colors, _plus_ alpha
-                            }
-                        }
-                        break;
                     }
-                }
+                    break;
 
-                bCopyBack = true;
+                    case BMP_FORMAT_24BIT_TC_BGR:
+                    {
+                        Scanline pScan = pWriteAccess->GetScanline( y );
+
+                        for( x=0; x<nWidth; ++x )
+                        {
+                            *pScan++ = data[ nCurrPos+2 ];
+                            *pScan++ = data[ nCurrPos+1 ];
+                            *pScan++ = data[ nCurrPos   ];
+
+                            nCurrPos += 4;
+                        }
+                    }
+                    break;
+
+                    case BMP_FORMAT_24BIT_TC_RGB:
+                    {
+                        Scanline pScan = pWriteAccess->GetScanline( y );
+
+                        for( x=0; x<nWidth; ++x )
+                        {
+                            *pScan++ = data[ nCurrPos   ];
+                            *pScan++ = data[ nCurrPos+1 ];
+                            *pScan++ = data[ nCurrPos+2 ];
+
+                            nCurrPos += 4;
+                        }
+                    }
+                    break;
+
+                    default:
+                    {
+                        for( x=0; x<nWidth; ++x )
+                        {
+                            pWriteAccess->SetPixel( y, x, BitmapColor( data[ nCurrPos   ],
+                                                                       data[ nCurrPos+1 ],
+                                                                       data[ nCurrPos+2 ] ) );
+                            nCurrPos += 4;
+                        }
+                    }
+                    break;
+                }
             }
+
+            bCopyBack = true;
         }
 
         // copy back only here, since the BitmapAccessors must be
@@ -1089,22 +1101,28 @@ namespace vclcanvas
     }
 
     void CanvasHelper::setPixel( const uno::Sequence< sal_Int8 >&       color,
-                                 const rendering::IntegerBitmapLayout&  ,
+                                 const rendering::IntegerBitmapLayout&  rLayout,
                                  const geometry::IntegerPoint2D&        pos )
     {
         if( !mpOutDev.get() )
             return; // we're disposed
 
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
-
         const Size aBmpSize( rOutDev.GetOutputSizePixel() );
 
-        CHECK_AND_THROW( pos.X >= 0 && pos.X < aBmpSize.Width(),
-                         "CanvasHelper::setPixel: X coordinate out of bounds" );
-        CHECK_AND_THROW( pos.Y >= 0 && pos.Y < aBmpSize.Height(),
-                         "CanvasHelper::setPixel: Y coordinate out of bounds" );
-        CHECK_AND_THROW( color.getLength() > 3,
-                         "CanvasHelper::setPixel: not enough color components" );
+        ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < aBmpSize.Width(),
+                             "X coordinate out of bounds" );
+        ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < aBmpSize.Height(),
+                             "Y coordinate out of bounds" );
+        ENSURE_ARG_OR_THROW( color.getLength() > 3,
+                             "not enough color components" );
+
+        const rendering::IntegerBitmapLayout aRefLayout( getMemoryLayout() );
+        ENSURE_ARG_OR_THROW( aRefLayout.PlaneStride != rLayout.PlaneStride ||
+                             aRefLayout.ColorSpace  != rLayout.ColorSpace ||
+                             aRefLayout.Palette     != rLayout.Palette ||
+                             aRefLayout.IsMsbFirst  != rLayout.IsMsbFirst,
+                             "Mismatching memory layout" );
 
         tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
 
@@ -1112,81 +1130,57 @@ namespace vclcanvas
 
         // TODO(F2): Support alpha canvas here
         rOutDev.DrawPixel( ::vcl::unotools::pointFromIntegerPoint2D( pos ),
-                           ::vcl::unotools::sequenceToColor(
-                               mpDevice,
-                               color ) );
+                           ::canvas::tools::stdIntSequenceToColor( color ));
     }
 
-    uno::Sequence< sal_Int8 > CanvasHelper::getPixel( rendering::IntegerBitmapLayout&   ,
-                                                      const geometry::IntegerPoint2D&   pos )
+    uno::Sequence< sal_Int8 > CanvasHelper::getPixel( rendering::IntegerBitmapLayout& rLayout,
+                                                      const geometry::IntegerPoint2D& pos )
     {
         if( !mpOutDev.get() )
             return uno::Sequence< sal_Int8 >(); // we're disposed
+
+        rLayout = getMemoryLayout();
+        rLayout.ScanLines = 1;
+        rLayout.ScanLineBytes = 4;
+        rLayout.ScanLineStride = rLayout.ScanLineBytes;
 
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
 
         const Size aBmpSize( rOutDev.GetOutputSizePixel() );
 
-        CHECK_AND_THROW( pos.X >= 0 && pos.X < aBmpSize.Width(),
-                         "CanvasHelper::getPixel: X coordinate out of bounds" );
-        CHECK_AND_THROW( pos.Y >= 0 && pos.Y < aBmpSize.Height(),
-                         "CanvasHelper::getPixel: Y coordinate out of bounds" );
+        ENSURE_ARG_OR_THROW( pos.X >= 0 && pos.X < aBmpSize.Width(),
+                             "X coordinate out of bounds" );
+        ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < aBmpSize.Height(),
+                             "Y coordinate out of bounds" );
 
         tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
 
         rOutDev.EnableMapMode( FALSE );
 
         // TODO(F2): Support alpha canvas here
-        return ::vcl::unotools::colorToIntSequence( mpDevice,
-                                                    rOutDev.GetPixel(
-                                                        ::vcl::unotools::pointFromIntegerPoint2D( pos ) ) );
-    }
-
-    uno::Reference< rendering::XBitmapPalette > CanvasHelper::getPalette()
-    {
-        // TODO(F1): Provide palette support
-        return uno::Reference< rendering::XBitmapPalette >();
+        return ::canvas::tools::colorToStdIntSequence(
+            rOutDev.GetPixel(
+                ::vcl::unotools::pointFromIntegerPoint2D( pos )));
     }
 
     rendering::IntegerBitmapLayout CanvasHelper::getMemoryLayout()
     {
-        // TODO(F1): finish that one
-        rendering::IntegerBitmapLayout aLayout;
-
         if( !mpOutDev.get() )
-            return aLayout; // we're disposed
+            return rendering::IntegerBitmapLayout(); // we're disposed
 
-        const geometry::IntegerSize2D& rBmpSize( getSize() );
-
-        aLayout.ScanLines = rBmpSize.Height;
-        aLayout.ScanLineBytes = rBmpSize.Width*4;
-        aLayout.ScanLineStride = aLayout.ScanLineBytes;
-        aLayout.PlaneStride = 0;
-        aLayout.ColorSpace.set( mpDevice );
-        aLayout.NumComponents = 4;
-        aLayout.ComponentMasks.realloc(4);
-        aLayout.ComponentMasks[0] = 0x00FF0000;
-        aLayout.ComponentMasks[1] = 0x0000FF00;
-        aLayout.ComponentMasks[2] = 0x000000FF;
-        aLayout.ComponentMasks[3] = 0xFF000000;
-        aLayout.Palette.clear();
-        aLayout.Endianness = rendering::Endianness::LITTLE;
-        aLayout.Format = rendering::IntegerBitmapFormat::CHUNKY_32BIT;
-        aLayout.IsMsbFirst = sal_False;
-
-        return aLayout;
+        return ::canvas::tools::getStdMemoryLayout(getSize());
     }
 
     int CanvasHelper::setupOutDevState( const rendering::ViewState&     viewState,
                                         const rendering::RenderState&   renderState,
                                         ColorType                       eColorType ) const
     {
-        ENSURE_AND_THROW( mpOutDev.get(),
-                          "CanvasHelper::setupOutDevState(): outdev null. Are we disposed?" );
+        ENSURE_OR_THROW( mpOutDev.get(),
+                         "outdev null. Are we disposed?" );
 
         ::canvas::tools::verifyInput( renderState,
                                       BOOST_CURRENT_FUNCTION,
-                                      static_cast< ::cppu::OWeakObject* >(mpDevice),
+                                      mpDevice,
                                       2,
                                       eColorType == IGNORE_COLOR ? 0 : 3 );
 
@@ -1209,8 +1203,7 @@ namespace vclcanvas
         if( viewState.Clip.is() )
         {
             ::basegfx::B2DPolyPolygon aClipPoly(
-                ::canvas::tools::polyPolygonFromXPolyPolygon2D(
-                    viewState.Clip) );
+                ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(viewState.Clip) );
 
             if( aClipPoly.count() )
             {
@@ -1232,8 +1225,7 @@ namespace vclcanvas
         if( renderState.Clip.is() )
         {
             ::basegfx::B2DPolyPolygon aClipPoly(
-                ::canvas::tools::polyPolygonFromXPolyPolygon2D(
-                    renderState.Clip) );
+                ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(renderState.Clip) );
 
             ::basegfx::B2DHomMatrix aMatrix;
             aClipPoly.transform(
@@ -1281,8 +1273,8 @@ namespace vclcanvas
 
             if( renderState.DeviceColor.getLength() > 2 )
             {
-                aColor = ::vcl::unotools::sequenceToColor( mpDevice,
-                                                           renderState.DeviceColor );
+                aColor = ::vcl::unotools::stdColorSpaceSequenceToColor(
+                    renderState.DeviceColor );
             }
 
             // extract alpha, and make color opaque
@@ -1322,8 +1314,8 @@ namespace vclcanvas
                     break;
 
                 default:
-                    ENSURE_AND_THROW( false,
-                                      "CanvasHelper::setupOutDevState(): Unexpected color type");
+                    ENSURE_OR_THROW( false,
+                                     "Unexpected color type");
                     break;
             }
         }
@@ -1336,8 +1328,8 @@ namespace vclcanvas
                                         const rendering::RenderState&                   renderState,
                                         const uno::Reference< rendering::XCanvasFont >& xFont   ) const
     {
-        ENSURE_AND_THROW( mpOutDev.get(),
-                          "CanvasHelper::setupTextOutput(): outdev null. Are we disposed?" );
+        ENSURE_OR_THROW( mpOutDev.get(),
+                         "outdev null. Are we disposed?" );
 
         setupOutDevState( viewState, renderState, TEXT_COLOR );
 
@@ -1347,8 +1339,8 @@ namespace vclcanvas
 
         CanvasFont* pFont = dynamic_cast< CanvasFont* >( xFont.get() );
 
-        CHECK_AND_THROW( pFont,
-                         "CanvasHelper::setupTextOutput(): Font not compatible with this canvas" );
+        ENSURE_ARG_OR_THROW( pFont,
+                             "Font not compatible with this canvas" );
 
         aVCLFont = pFont->getVCLFont();
 
@@ -1356,8 +1348,8 @@ namespace vclcanvas
 
         if( renderState.DeviceColor.getLength() > 2 )
         {
-            aColor = ::vcl::unotools::sequenceToColor( mpDevice,
-                                                       renderState.DeviceColor );
+            aColor = ::vcl::unotools::stdColorSpaceSequenceToColor(
+                renderState.DeviceColor );
         }
 
         // setup font color
@@ -1383,8 +1375,8 @@ namespace vclcanvas
                                 const ::Size&                   rSz,
                                 const GraphicAttr&              rAttr ) const
     {
-        ENSURE_AND_RETURN( rGrf,
-                           "CanvasHelper::repaint(): Invalid Graphic" );
+        ENSURE_OR_RETURN( rGrf,
+                          "Invalid Graphic" );
 
         if( !mpOutDev )
             return false; // disposed
