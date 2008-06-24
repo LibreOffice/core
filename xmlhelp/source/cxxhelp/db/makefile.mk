@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -53,8 +53,7 @@ CFLAGSCXX+=-frtti
 SLOFILES=\
         $(SLO)$/Block.obj           \
         $(SLO)$/BlockManager.obj    \
-        $(SLO)$/BtreeDict.obj       \
-        $(SLO)$/Schema.obj
+        $(SLO)$/BtreeDict.obj
 
 # --- Targets ------------------------------------------------------
 
