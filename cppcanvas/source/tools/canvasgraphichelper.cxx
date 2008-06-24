@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: canvasgraphichelper.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include <canvasgraphichelper.hxx>
 
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 
 #include <canvas/canvastools.hxx>
