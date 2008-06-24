@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: null_devicehelper.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,11 +83,14 @@ namespace nullcanvas
 
         ::sal_Int32 createBuffers( ::sal_Int32 nBuffers );
         void        destroyBuffers(  );
-        ::sal_Bool  showBuffer( ::sal_Bool bUpdateAll );
-        ::sal_Bool  switchBuffer( ::sal_Bool bUpdateAll );
+        ::sal_Bool  showBuffer( bool bIsVisible, ::sal_Bool bUpdateAll );
+        ::sal_Bool  switchBuffer( bool bIsVisible, ::sal_Bool bUpdateAll );
 
+        ::com::sun::star::uno::Any isAccelerated() const;
         ::com::sun::star::uno::Any getDeviceHandle() const;
         ::com::sun::star::uno::Any getSurfaceHandle() const;
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::rendering::XColorSpace> getColorSpace() const;
 
         void notifySizeUpdate( const ::com::sun::star::awt::Rectangle& rBounds );
 
