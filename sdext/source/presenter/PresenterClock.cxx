@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterClock.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -785,7 +785,7 @@ void AnalogDefaultPainter::Paint (
                 maSize.Width*nSuperSampleFactor,
                 maSize.Height*nSuperSampleFactor)));
     }
-    Reference<rendering::XCanvas> xBitmapCanvas (mxBitmap->queryBitmapCanvas(), UNO_QUERY);
+    Reference<rendering::XCanvas> xBitmapCanvas (mxBitmap, UNO_QUERY);
     rendering::RenderState aRenderState(rRenderState);
     aRenderState.AffineTransform.m00 = nSuperSampleFactor;
     aRenderState.AffineTransform.m11 = nSuperSampleFactor;
