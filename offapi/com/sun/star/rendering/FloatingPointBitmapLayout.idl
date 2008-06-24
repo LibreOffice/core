@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FloatingPointBitmapLayout.idl,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,9 +30,6 @@
 #ifndef __com_sun_star_rendering_FloatingPointBitmapLayout_idl__
 #define __com_sun_star_rendering_FloatingPointBitmapLayout_idl__
 
-#ifndef __com_sun_star_rendering_Endianness_idl__
-#include <com/sun/star/rendering/Endianness.idl>
-#endif
 #ifndef __com_sun_star_rendering_FloatingPointBitmapFormat_idl__
 #include <com/sun/star/rendering/FloatingPointBitmapFormat.idl>
 #endif
@@ -73,9 +70,23 @@ struct FloatingPointBitmapLayout
 
     /** Byte offset between the start of two consecutive planes.
 
-        This value is permitted to be negative.
+        This value is permitted to be negative. If this value is zero,
+        the bitmap is assumed to be in chunky format, otherwise it is
+        assumed to be planar.  The difference between chunky and
+        planar layout lies in the way how color channels are
+        interleaved. For a chunky format, all channel data for a
+        single pixel lies consecutively in memory. For a planar
+        layout, the first channel of all pixel is stored consecutive,
+        followed by the second channel, and so forth.<p>
      */
     long                PlaneStride;
+
+    // TODO(F3): Need some specializations of XColorSpace for float
+    // and half float formats. This maybe translates to the bitmap
+    // layout as well, leading to separate structs for double, float
+    // and half float formats, because of the ColorSpace member. Or
+    // leave it as it is, forcing the client to query for derived
+    // interfaces...
 
     /// Color space the bitmap colors shall be interpreted within.
     XColorSpace         ColorSpace;
