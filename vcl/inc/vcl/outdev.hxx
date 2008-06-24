@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,7 @@ struct ImplOutDevData;
 class ImplFontEntry;
 struct ImplObjStack;
 struct ImplKernPairData;
+struct SystemGraphicsData;
 class ImplFontCache;
 class ImplDevFontList;
 class ImplGetDevFontList;
@@ -78,6 +79,12 @@ class SalLayout;
 class ImplLayoutArgs;
 class VirtualDevice;
 
+namespace com {
+namespace sun {
+namespace star {
+namespace rendering {
+    class XCanvas;
+}}}}
 namespace basegfx {
     class B2DHomMatrix;
     class B2DPolygon;
@@ -884,6 +891,9 @@ public:
     virtual void        SetSettings( const AllSettings& rSettings );
     const AllSettings&  GetSettings() const { return maSettings; }
 
+    SystemGraphicsData  GetSystemGfxData() const;
+    ::com::sun::star::uno::Any GetSystemGfxDataAny() const;
+
     virtual void        SetMapMode();
     virtual void        SetMapMode( const MapMode& rNewMapMode );
     virtual void        SetRelativeMapMode( const MapMode& rNewMapMode );
@@ -1045,6 +1055,10 @@ public:
 
     void                DrawEPS( const Point& rPt, const Size& rSz,
                                  const GfxLink& rGfxLink, GDIMetaFile* pSubst = NULL );
+
+    /// request XCanvas render interface for this OutputDevice
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::rendering::XCanvas > GetCanvas() const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >    CreateUnoGraphics();
     List*               GetUnoGraphicsList() const      { return mpUnoGraphicsList; }
