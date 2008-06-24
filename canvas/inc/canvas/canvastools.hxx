@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: canvastools.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +58,7 @@ namespace basegfx
 namespace com { namespace sun { namespace star { namespace geometry
 {
     struct RealSize2D;
+    struct IntegerSize2D;
     struct AffineMatrix2D;
     struct Matrix2D;
 } } } }
@@ -66,8 +67,16 @@ namespace com { namespace sun { namespace star { namespace rendering
 {
     struct RenderState;
     struct ViewState;
+    struct IntegerBitmapLayout;
     class  XCanvas;
+    class  XIntegerBitmapColorSpace;
     class  XPolyPolygon2D;
+
+    bool operator==( const RenderState& rLHS,
+                     const RenderState& rRHS );
+
+    bool operator==( const ViewState& rLHS,
+                     const ViewState& rRHS );
 } } } }
 
 namespace com { namespace sun { namespace star { namespace awt
@@ -75,6 +84,8 @@ namespace com { namespace sun { namespace star { namespace awt
     struct Rectangle;
     class  XWindow2;
 } } } }
+
+class Color;
 
 namespace canvas
 {
@@ -200,24 +211,6 @@ namespace canvas
                                      const ::com::sun::star::uno::Reference<
                                          ::com::sun::star::rendering::XCanvas >&            xCanvas );
 
-        void setDeviceColor( ::com::sun::star::rendering::RenderState&  o_renderState,
-                             const double&                              rColor0,
-                             const double&                              rColor1,
-                             const double&                              rColor2,
-                             const double&                              rColor3 );
-
-        void getDeviceColor( double&                                            o_rColor0,
-                             double&                                            o_rColor1,
-                             double&                                            o_rColor2,
-                             double&                                            o_rColor3,
-                             const ::com::sun::star::rendering::RenderState&    rRenderState );
-
-        bool operator==( const ::com::sun::star::rendering::RenderState&    rLHS,
-                         const ::com::sun::star::rendering::RenderState&    rRHS );
-
-        bool operator==( const ::com::sun::star::rendering::ViewState&      rLHS,
-                         const ::com::sun::star::rendering::ViewState&      rRHS );
-
 
         // Matrix utilities
         // ===================================================================
@@ -228,13 +221,6 @@ namespace canvas
         ::com::sun::star::geometry::Matrix2D&
             setIdentityMatrix2D( ::com::sun::star::geometry::Matrix2D&              matrix );
 
-
-        // PolyPolygon utilities
-        // ===================================================================
-
-        ::basegfx::B2DPolyPolygon
-               polyPolygonFromXPolyPolygon2D( const ::com::sun::star::uno::Reference<
-                                                    ::com::sun::star::rendering::XPolyPolygon2D >& );
 
         // Special utilities
         // ===================================================================
@@ -475,6 +461,26 @@ namespace canvas
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >& i_rxCanvas,
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& o_rxParams );
 
+        /** Return a color space for a default RGBA integer format
+
+            Use this method for dead-simple bitmap implementations,
+            that map all their formats to 8888 RGBA color.
+         */
+        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XIntegerBitmapColorSpace> getStdColorSpace();
+
+        /** Return a memory layout for a default RGBA integer format
+
+            Use this method for dead-simple bitmap implementations,
+            that map all their formats to 8888 RGBA color.
+         */
+        ::com::sun::star::rendering::IntegerBitmapLayout getStdMemoryLayout(
+            const ::com::sun::star::geometry::IntegerSize2D& rBitmapSize );
+
+        /// Convert standard 8888 RGBA color to vcl color
+        ::Color stdIntSequenceToColor( const ::com::sun::star::uno::Sequence<sal_Int8>& rColor );
+
+        /// Convert standard 8888 RGBA color to vcl color
+        ::com::sun::star::uno::Sequence<sal_Int8> colorToStdIntSequence( const ::Color& rColor );
 
         // Modeled closely after boost::numeric_cast, only that we
         // issue some trace output here and throw a RuntimeException
