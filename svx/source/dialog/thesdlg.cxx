@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: thesdlg.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +56,6 @@
 #include <svx/langbox.hxx>
 
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -103,7 +102,7 @@ static void GetReplaceEditString( String &rText )
 struct ThesDlg_Impl
 {
     Reference< XThesaurus > xThesaurus;
-    OUString                aLookUpText;
+    ::rtl::OUString             aLookUpText;
     sal_Int16               nLookUpLanguage;
 
     ThesDlg_Impl( Reference< XThesaurus > & xThes );
@@ -229,7 +228,7 @@ SvxThesaurusDialog::SvxThesaurusDialog( Window* pParent, Reference< XThesaurus >
 
     FreeResource();
 
-    OUString aTmp( rWord );
+    ::rtl::OUString aTmp( rWord );
     linguistic::RemoveHyphens( aTmp );
     linguistic::ReplaceControlChars( aTmp );
     aReplaceEdit.SetText( aTmp );
@@ -256,7 +255,7 @@ SvxThesaurusDialog::~SvxThesaurusDialog()
 
 uno::Sequence< Reference< XMeaning > > SAL_CALL
     SvxThesaurusDialog::queryMeanings_Impl(
-            OUString& rTerm,
+            ::rtl::OUString& rTerm,
             const Locale& rLocale,
             const beans::PropertyValues& rProperties )
         throw(lang::IllegalArgumentException, uno::RuntimeException)
@@ -340,12 +339,12 @@ void SvxThesaurusDialog::UpdateSynonymBox_Impl()
                     pImpl->aLookUpText, aLocale, Sequence< PropertyValue >() )
                  .getConstArray()[ nPos ];
 
-        uno::Sequence< OUString >   aSynonyms;
+        uno::Sequence< ::rtl::OUString >    aSynonyms;
         if (xMeaning.is())
             aSynonyms = xMeaning->querySynonyms();
 
         sal_Int32 nSynonymCount = aSynonyms.getLength();
-        const OUString *pSynonym = aSynonyms.getConstArray();
+        const ::rtl::OUString *pSynonym = aSynonyms.getConstArray();
         for ( sal_Int32 i=0;  i < nSynonymCount;  ++i )
             aSynonymLB.InsertEntry( pSynonym[i] );
     }
@@ -383,7 +382,7 @@ IMPL_LINK( SvxThesaurusDialog, LookUpHdl_Impl, Button *, pBtn )
 
     String aText( aReplaceEdit.GetText() );
 
-    OUString aOldLookUpText = pImpl->aLookUpText;
+    ::rtl::OUString aOldLookUpText = pImpl->aLookUpText;
     pImpl->aLookUpText = ::rtl::OUString( aText );
 
     uno::Sequence< Reference< XMeaning >  > aMeanings;
@@ -498,5 +497,4 @@ IMPL_LINK( SvxThesaurusDialog, SpellErrorHdl_Impl, void *, pError )
         *new StringErrorInfo( ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aErr ) );
     return 0;
 }
-
 
