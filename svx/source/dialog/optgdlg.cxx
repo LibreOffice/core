@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optgdlg.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,7 +98,10 @@
 #include <svtools/helpopt.hxx>
 #include <svtools/saveopt.hxx>
 
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNameReplace.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -498,160 +501,167 @@ IMPL_LINK( OfaMiscTabPage, HelpAgentResetHdl_Impl, PushButton*, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------
-namespace
+
+// -------------------------------------------------------------------
+class CanvasSettings
 {
-    // ...................................................................
-    static const sal_Char* getCairoRendererAsciiName()
-    {
-        return "com.sun.star.rendering.CairoCanvas";
-    }
-    // ...................................................................
-    static const sal_Char* getDirectXRendererAsciiName()
-    {
-        return "com.sun.star.rendering.DXCanvas";
-    }
-    // ...................................................................
-    static const sal_Char* getDirectX9RendererAsciiName()
-    {
-        return "com.sun.star.rendering.DX9Canvas";
-    }
-    // ...................................................................
-    static const sal_Char* getVCLRendererAsciiName()
-    {
-        return "com.sun.star.rendering.VCLCanvas";
-    }
+public:
+    CanvasSettings();
 
-    // ...................................................................
-    static  bool    isHardwareAccelerationAvailable()
+    BOOL    IsHardwareAccelerationEnabled() const;
+    BOOL    IsHardwareAccelerationAvailable() const;
+    void    EnabledHardwareAcceleration( BOOL _bEnabled ) const;
+
+private:
+    typedef std::vector< std::pair<OUString,Sequence<OUString> > > ServiceVector;
+
+    Reference<XNameAccess> mxForceFlagNameAccess;
+    ServiceVector          maAvailableImplementations;
+    mutable BOOL           mbHWAccelAvailable;
+    mutable BOOL           mbHWAccelChecked;
+};
+
+// -------------------------------------------------------------------
+CanvasSettings::CanvasSettings() :
+    mxForceFlagNameAccess(),
+    mbHWAccelAvailable(FALSE),
+    mbHWAccelChecked(FALSE)
+{
+    try
     {
-        static bool bWasHere = false;
-        static bool bIsAvailable = false;
-        if ( !bWasHere )
+        Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+        Reference<XMultiServiceFactory> xConfigProvider(
+            xFactory->createInstance(
+                OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
+                UNO_QUERY_THROW );
+
+        Any propValue(
+            makeAny( PropertyValue(
+                         OUString::createFromAscii("nodepath"), -1,
+                         makeAny( OUString::createFromAscii("/org.openoffice.Office.Canvas") ),
+                         PropertyState_DIRECT_VALUE ) ) );
+
+        mxForceFlagNameAccess.set(
+            xConfigProvider->createInstanceWithArguments(
+                OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess"),
+                Sequence<Any>( &propValue, 1 ) ),
+            UNO_QUERY_THROW );
+
+        propValue = makeAny(
+            PropertyValue(
+                OUString::createFromAscii("nodepath"), -1,
+                makeAny( OUString::createFromAscii("/org.openoffice.Office.Canvas/CanvasServiceList") ),
+                PropertyState_DIRECT_VALUE ) );
+
+        Reference<XNameAccess> xNameAccess(
+            xConfigProvider->createInstanceWithArguments(
+                OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"),
+                Sequence<Any>( &propValue, 1 ) ), UNO_QUERY_THROW );
+        Reference<XHierarchicalNameAccess> xHierarchicalNameAccess(
+            xNameAccess, UNO_QUERY_THROW);
+
+        Sequence<OUString> serviceNames = xNameAccess->getElementNames();
+        const OUString* pCurr = serviceNames.getConstArray();
+        const OUString* const pEnd = pCurr + serviceNames.getLength();
+        while( pCurr != pEnd )
         {
-            Reference< XInterface > xAcceleratedRenderer;
-            try
+            Reference<XNameAccess> xEntryNameAccess(
+                xHierarchicalNameAccess->getByHierarchicalName(*pCurr),
+                UNO_QUERY );
+
+            if( xEntryNameAccess.is() )
             {
-                Reference< XMultiServiceFactory > xORB( ::comphelper::getProcessServiceFactory() );
-                if ( xORB.is() )
+                Sequence<OUString> preferredImplementations;
+                if( (xEntryNameAccess->getByName( OUString::createFromAscii("PreferredImplementations") ) >>= preferredImplementations) )
+                    maAvailableImplementations.push_back( std::make_pair(*pCurr,preferredImplementations) );
+            }
+
+            ++pCurr;
+        }
+    }
+    catch( Exception& )
+    {
+    }
+}
+
+// -------------------------------------------------------------------
+BOOL CanvasSettings::IsHardwareAccelerationAvailable() const
+{
+    if( !mbHWAccelChecked )
+    {
+        mbHWAccelChecked = true;
+
+        Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+
+        // check whether any of the service lists has an
+        // implementation that presents the "HardwareAcceleration" property
+        ServiceVector::const_iterator       aCurr=maAvailableImplementations.begin();
+        const ServiceVector::const_iterator aEnd=maAvailableImplementations.end();
+        while( aCurr != aEnd )
+        {
+            const OUString* pCurrImpl = aCurr->second.getConstArray();
+            const OUString* const pEndImpl = pCurrImpl + aCurr->second.getLength();
+
+            while( pCurrImpl != pEndImpl )
+            {
+                try
                 {
-                    xAcceleratedRenderer = xORB->createInstance(
-                        ::rtl::OUString::createFromAscii( getDirectX9RendererAsciiName() ));
-
-                    if( !xAcceleratedRenderer.is() )
-                        xAcceleratedRenderer = xORB->createInstance(
-                            ::rtl::OUString::createFromAscii( getDirectXRendererAsciiName() ));
-
-                    if( !xAcceleratedRenderer.is() )
-                        xAcceleratedRenderer = xORB->createInstance(
-                            ::rtl::OUString::createFromAscii( getCairoRendererAsciiName() ));
+                    Reference<XPropertySet> xPropSet( xFactory->createInstance(
+                                                          pCurrImpl->trim() ),
+                                                      UNO_QUERY_THROW );
+                    bool bHasAccel(false);
+                    if( (xPropSet->getPropertyValue(OUString::createFromAscii("HardwareAcceleration")) >>= bHasAccel) )
+                        if( bHasAccel )
+                        {
+                            mbHWAccelAvailable = true;
+                            return mbHWAccelAvailable;
+                        }
                 }
+                catch (Exception &)
+                {}
+
+                ++pCurrImpl;
             }
-            catch( const Exception& )
-            {
-            }
-            bIsAvailable = xAcceleratedRenderer.is();
-            bWasHere = true;
+
+            ++aCurr;
         }
-        return bIsAvailable;
     }
 
-    // -------------------------------------------------------------------
-    class VCLSettings
-    {
-    public:
-        VCLSettings();
+    return mbHWAccelAvailable;
+}
 
-    public:
-        BOOL    IsHardwareAccelerationEnabled() const;
-        void    EnabledHardwareAcceleration( BOOL _bEnabled ) const;
+// -------------------------------------------------------------------
+BOOL CanvasSettings::IsHardwareAccelerationEnabled() const
+{
+    bool bForceLastEntry(false);
+    if( !mxForceFlagNameAccess.is() )
+        return true;
 
-    private:
-        void            implSetRendererPreference( const ::rtl::OUString& _rPreferredServices ) const;
-        ::rtl::OUString implGetRendererPreference() const;
-    };
+    if( !(mxForceFlagNameAccess->getByName( OUString::createFromAscii("ForceSafeServiceImpl") ) >>= bForceLastEntry) )
+        return true;
 
-    // -------------------------------------------------------------------
-    VCLSettings::VCLSettings()
-    {
-    }
+    return !bForceLastEntry;
+}
 
-    // -------------------------------------------------------------------
-    void VCLSettings::implSetRendererPreference( const ::rtl::OUString& _rPreferredServices ) const
-    {
-        return ::vcl::SettingsConfigItem::get()->setValue(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Canvas" ) ),
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PreferredServices" ) ),
-            _rPreferredServices
-        );
-    }
+// -------------------------------------------------------------------
+void CanvasSettings::EnabledHardwareAcceleration( BOOL _bEnabled ) const
+{
+    Reference< XNameReplace > xNameReplace(
+        mxForceFlagNameAccess, UNO_QUERY );
 
-    // -------------------------------------------------------------------
-    ::rtl::OUString VCLSettings::implGetRendererPreference() const
-    {
-        return ::vcl::SettingsConfigItem::get()->getValue(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Canvas" ) ),
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PreferredServices" ) )
-        );
-    }
+    if( !xNameReplace.is() )
+        return;
 
-    // -------------------------------------------------------------------
-    BOOL VCLSettings::IsHardwareAccelerationEnabled() const
-    {
-        ::rtl::OUString sPreferredServices( implGetRendererPreference() );
-        sal_Int32 nTokenPos = 0;
-        do
-        {
-            ::rtl::OUString sServiceName = sPreferredServices.getToken( 0, ';', nTokenPos );
-            if ( sServiceName.equalsAscii( getDirectX9RendererAsciiName() ) ||
-                 sServiceName.equalsAscii( getDirectXRendererAsciiName() ) ||
-                 sServiceName.equalsAscii( getCairoRendererAsciiName() ) )
-                // the accelerated renderers are to be preferred (over the VCL renderer)
-                return TRUE;
+    xNameReplace->replaceByName( OUString::createFromAscii("ForceSafeServiceImpl"),
+                                 makeAny(!_bEnabled) );
 
-            if ( sServiceName.equalsAscii( getVCLRendererAsciiName() ) )
-                // the VCL renderer is to be preferred (over the accelerated renderers)
-                return FALSE;
-        }
-        while ( nTokenPos > 0 );
-        return TRUE;
-    }
+    Reference< XChangesBatch > xChangesBatch(
+        mxForceFlagNameAccess, UNO_QUERY );
 
-    // -------------------------------------------------------------------
-    void VCLSettings::EnabledHardwareAcceleration( BOOL _bEnabled ) const
-    {
-        ::rtl::OUStringBuffer aPreferredServices;
-        if( _bEnabled )
-        {
-            aPreferredServices.appendAscii( getDirectX9RendererAsciiName() );
-            aPreferredServices.append( (sal_Unicode)';' );
-            aPreferredServices.appendAscii( getDirectXRendererAsciiName() );
-            aPreferredServices.append( (sal_Unicode)';' );
-            aPreferredServices.appendAscii( getCairoRendererAsciiName() );
-        }
-        else
-        {
-            aPreferredServices.appendAscii( getVCLRendererAsciiName() );
-        }
+    if( !xChangesBatch.is() )
+        return;
 
-        // append all other services
-        ::rtl::OUString sPreviouslyPreferred( implGetRendererPreference() );
-        sal_Int32 nTokenPos = 0;
-        do
-        {
-            ::rtl::OUString sServiceName = sPreviouslyPreferred.getToken( 0, ';', nTokenPos );
-            if ( !_bEnabled && sServiceName.equalsAscii( getVCLRendererAsciiName() ) ||
-                 _bEnabled && (sServiceName.equalsAscii( getDirectXRendererAsciiName() ) ||
-                               sServiceName.equalsAscii( getCairoRendererAsciiName() )) )
-                // no duplicate ...
-                continue;
-
-            aPreferredServices.append( (sal_Unicode)';' );
-            aPreferredServices.append( sServiceName );
-        }
-        while ( nTokenPos > 0 );
-
-        implSetRendererPreference( aPreferredServices.makeStringAndClear() );
-    }
+    xChangesBatch->commitChanges();
 }
 
 // class OfaViewTabPage --------------------------------------------------
@@ -699,12 +709,13 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aMouseMiddleLB      ( this, SVX_RES( LB_MOUSEMIDDLE ) ),
     nSizeLB_InitialSelection(0),
     nStyleLB_InitialSelection(0),
-    pAppearanceCfg(new SvtTabAppearanceCfg)
+    pAppearanceCfg(new SvtTabAppearanceCfg),
+    pCanvasSettings(new CanvasSettings)
 {
 
     a3DOpenGLCB.SetClickHdl( LINK( this, OfaViewTabPage, OpenGLHdl ) );
 
-    if ( !isHardwareAccelerationAvailable() )
+    if ( !pCanvasSettings->IsHardwareAccelerationAvailable() )
     {
         aRenderingFL.Hide();
         aUseHardwareAccell.Hide();
@@ -777,6 +788,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
 OfaViewTabPage::~OfaViewTabPage()
 {
+    delete pCanvasSettings;
     delete pAppearanceCfg;
 }
 
@@ -929,10 +941,10 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& )
         bModified = TRUE;
     }
 
-    if ( isHardwareAccelerationAvailable() )
-        if ( aUseHardwareAccell.IsChecked() != aUseHardwareAccell.GetSavedValue() )
+    if ( pCanvasSettings->IsHardwareAccelerationAvailable() )
+        if ( pCanvasSettings && aUseHardwareAccell.IsChecked() != aUseHardwareAccell.GetSavedValue() )
         {
-            VCLSettings().EnabledHardwareAcceleration( aUseHardwareAccell.IsChecked() );
+            pCanvasSettings->EnabledHardwareAcceleration( aUseHardwareAccell.IsChecked() );
             bModified = TRUE;
         }
 
@@ -1053,8 +1065,8 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
     aMenuIconsCB.SaveValue();
 
     aFontHistoryCB.Check( aFontOpt.IsFontHistoryEnabled() );
-    if ( isHardwareAccelerationAvailable() )
-        aUseHardwareAccell.Check( VCLSettings().IsHardwareAccelerationEnabled() );
+    if ( pCanvasSettings && pCanvasSettings->IsHardwareAccelerationAvailable() )
+        aUseHardwareAccell.Check( pCanvasSettings->IsHardwareAccelerationEnabled() );
 
 #if defined( UNX )
     aFontAntiAliasing.SaveValue();
@@ -1062,7 +1074,7 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
 #endif
     aFontShowCB.SaveValue();
     aFontHistoryCB.SaveValue();
-    if ( isHardwareAccelerationAvailable() )
+    if ( pCanvasSettings->IsHardwareAccelerationAvailable() )
         aUseHardwareAccell.SaveValue();
 
 #if defined( UNX )
