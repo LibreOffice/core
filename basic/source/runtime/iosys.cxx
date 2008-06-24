@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: iosys.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +72,6 @@
 
 using namespace comphelper;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
@@ -187,9 +186,9 @@ void SbiStream::MapError()
 
 // TODO: Code is copied from daemons2/source/uno/asciiEncoder.cxx
 
-OUString findUserInDescription( const OUString& aDescription )
+::rtl::OUString findUserInDescription( const ::rtl::OUString& aDescription )
 {
-    OUString user;
+    ::rtl::OUString user;
 
     sal_Int32 index;
     sal_Int32 lastIndex = 0;
@@ -197,16 +196,16 @@ OUString findUserInDescription( const OUString& aDescription )
     do
     {
         index = aDescription.indexOf((sal_Unicode) ',', lastIndex);
-        OUString token = (index == -1) ? aDescription.copy(lastIndex) : aDescription.copy(lastIndex, index - lastIndex);
+        ::rtl::OUString token = (index == -1) ? aDescription.copy(lastIndex) : aDescription.copy(lastIndex, index - lastIndex);
 
         lastIndex = index + 1;
 
         sal_Int32 eindex = token.indexOf((sal_Unicode)'=');
-        OUString left = token.copy(0, eindex).toAsciiLowerCase().trim();
-        OUString right = INetURLObject::decode( token.copy(eindex + 1).trim(), '%',
+        ::rtl::OUString left = token.copy(0, eindex).toAsciiLowerCase().trim();
+        ::rtl::OUString right = INetURLObject::decode( token.copy(eindex + 1).trim(), '%',
                             INetURLObject::DECODE_WITH_CHARSET );
 
-        if(left.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("user"))))
+        if(left.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user"))))
         {
             user = right;
             break;
@@ -244,7 +243,7 @@ BOOL needSecurityRestrictions( void )
 
         // Get system user to compare to portal user
         oslSecurity aSecurity = osl_getCurrentSecurity();
-        OUString aSystemUser;
+        ::rtl::OUString aSystemUser;
         sal_Bool bRet = osl_getUserName( aSecurity, &aSystemUser.pData );
         if( !bRet )
         {
@@ -256,7 +255,7 @@ BOOL needSecurityRestrictions( void )
         if( !xSMgr.is() )
             return TRUE;
         Reference< XBridgeFactory > xBridgeFac( xSMgr->createInstance
-            ( OUString::createFromAscii( "com.sun.star.bridge.BridgeFactory" ) ), UNO_QUERY );
+            ( ::rtl::OUString::createFromAscii( "com.sun.star.bridge.BridgeFactory" ) ), UNO_QUERY );
 
         Sequence< Reference< XBridge > > aBridgeSeq;
         sal_Int32 nBridgeCount = 0;
@@ -280,8 +279,8 @@ BOOL needSecurityRestrictions( void )
         for( i = 0 ; i < nBridgeCount ; i++ )
         {
             const Reference< XBridge >& rxBridge = pBridges[ i ];
-            OUString aDescription = rxBridge->getDescription();
-            OUString aPortalUser = findUserInDescription( aDescription );
+            ::rtl::OUString aDescription = rxBridge->getDescription();
+            ::rtl::OUString aPortalUser = findUserInDescription( aDescription );
             if( aPortalUser.getLength() > 0 )
             {
                 // User Found, compare to system user
@@ -666,7 +665,7 @@ SbError SbiStream::Open
         if( xSMgr.is() )
         {
             Reference< XSimpleFileAccess >
-                xSFI( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
+                xSFI( xSMgr->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
             if( xSFI.is() )
             {
                 try
