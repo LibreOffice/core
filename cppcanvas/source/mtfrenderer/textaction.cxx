@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textaction.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_cppcanvas.hxx"
 
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
 #include <rtl/logfile.hxx>
@@ -260,7 +261,7 @@ namespace cppcanvas
                                   const OutDevState&                        rState,
                                   const ::basegfx::B2DHomMatrix*            pTextTransform )
             {
-                ENSURE_AND_THROW( rOffsets.getLength(),
+                ENSURE_OR_THROW( rOffsets.getLength(),
                                   "::cppcanvas::internal::initArrayAction(): zero-length DX array" );
 
                 const ::basegfx::B2DPoint aLocalStartPoint(
@@ -278,7 +279,7 @@ namespace cppcanvas
                     rState.textDirection,
                     0 );
 
-                ENSURE_AND_THROW( o_rTextLayout.is(),
+                ENSURE_OR_THROW( o_rTextLayout.is(),
                                   "::cppcanvas::internal::initArrayAction(): Invalid font" );
 
                 o_rTextLayout->applyLogicalAdvancements( rOffsets );
@@ -304,13 +305,13 @@ namespace cppcanvas
                                    const uno::Reference< rendering::XTextLayout >&  rOrigTextLayout,
                                    const ::cppcanvas::internal::Action::Subset&     rSubset )
             {
-                ENSURE_AND_THROW( rSubset.mnSubsetEnd > rSubset.mnSubsetBegin,
+                ENSURE_OR_THROW( rSubset.mnSubsetEnd > rSubset.mnSubsetBegin,
                                   "::cppcanvas::internal::calcSubsetOffsets(): invalid subset range range" );
 
                 uno::Sequence< double > aOrigOffsets( rOrigTextLayout->queryLogicalAdvancements() );
                 const double*           pOffsets( aOrigOffsets.getConstArray() );
 
-                ENSURE_AND_THROW( aOrigOffsets.getLength() >= rSubset.mnSubsetEnd,
+                ENSURE_OR_THROW( aOrigOffsets.getLength() >= rSubset.mnSubsetEnd,
                                   "::cppcanvas::internal::calcSubsetOffsets(): invalid subset range range" );
 
                 // TODO(F3): It currently seems that for RTL text, the
@@ -455,7 +456,7 @@ namespace cppcanvas
                     return;
                 }
 
-                ENSURE_AND_THROW( io_rTextLayout.is(),
+                ENSURE_OR_THROW( io_rTextLayout.is(),
                                   "createSubsetLayout(): Invalid input layout" );
 
                 const rendering::StringContext& rOrigContext( io_rTextLayout->getText() );
@@ -515,6 +516,8 @@ namespace cppcanvas
                                    const ::basegfx::B2DSize&                    rReliefOffset )
             {
                 ::Color aEmptyColor( COL_AUTO );
+                uno::Reference<rendering::XColorSpace> xColorSpace(
+                    xCanvas->getDevice()->getDeviceColorSpace() );
 
                 // draw shadow text, if enabled
                 if( rShadowColor != aEmptyColor )
@@ -528,8 +531,8 @@ namespace cppcanvas
                     ::canvas::tools::appendToRenderState(aShadowState, aTranslate);
 
                     aShadowState.DeviceColor =
-                        ::vcl::unotools::colorToDoubleSequence( xCanvas->getDevice(),
-                                                                rShadowColor );
+                        ::vcl::unotools::colorToDoubleSequence( rShadowColor,
+                                                                xColorSpace );
 
                     rRenderer( aShadowState );
                 }
@@ -546,8 +549,8 @@ namespace cppcanvas
                     ::canvas::tools::appendToRenderState(aReliefState, aTranslate);
 
                     aReliefState.DeviceColor =
-                        ::vcl::unotools::colorToDoubleSequence( xCanvas->getDevice(),
-                                                                rReliefColor );
+                        ::vcl::unotools::colorToDoubleSequence( rReliefColor,
+                                                                xColorSpace );
 
                     rRenderer( aReliefState );
                 }
@@ -686,7 +689,7 @@ namespace cppcanvas
                       rStartPoint,
                       rState, rCanvas );
 
-                ENSURE_AND_THROW( mxFont.is(),
+                ENSURE_OR_THROW( mxFont.is(),
                                   "::cppcanvas::internal::TextAction(): Invalid font" );
             }
 
@@ -707,7 +710,7 @@ namespace cppcanvas
                       rStartPoint,
                       rState, rCanvas, rTextTransform );
 
-                ENSURE_AND_THROW( mxFont.is(),
+                ENSURE_OR_THROW( mxFont.is(),
                                   "::cppcanvas::internal::TextAction(): Invalid font" );
             }
 
@@ -884,7 +887,7 @@ namespace cppcanvas
                       rStartPoint,
                       rState, rCanvas );
 
-                ENSURE_AND_THROW( mxFont.is() && mxTextLines.is(),
+                ENSURE_OR_THROW( mxFont.is() && mxTextLines.is(),
                                   "::cppcanvas::internal::EffectTextAction(): Invalid font or lines" );
             }
 
@@ -924,7 +927,7 @@ namespace cppcanvas
                       rStartPoint,
                       rState, rCanvas, rTextTransform );
 
-                ENSURE_AND_THROW( mxFont.is() && mxTextLines.is(),
+                ENSURE_OR_THROW( mxFont.is() && mxTextLines.is(),
                                   "::cppcanvas::internal::EffectTextAction(): Invalid font or lines" );
             }
 
@@ -1665,8 +1668,9 @@ namespace cppcanvas
                 maState(),
                 mnOutlineWidth( calcOutlineWidth(rState,rVDev) ),
                 maFillColor(
-                    ::vcl::unotools::colorToDoubleSequence( rCanvas->getUNOCanvas()->getDevice(),
-                                                            ::Color( COL_WHITE ) ) ),
+                    ::vcl::unotools::colorToDoubleSequence(
+                        ::Color( COL_WHITE ),
+                        rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() )),
                 maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
                 maLinesOverallSize(),
                 maOutlineBounds( rOutlineBounds ),
@@ -1708,8 +1712,9 @@ namespace cppcanvas
                 maState(),
                 mnOutlineWidth( calcOutlineWidth(rState,rVDev) ),
                 maFillColor(
-                    ::vcl::unotools::colorToDoubleSequence( rCanvas->getUNOCanvas()->getDevice(),
-                                                            ::Color( COL_WHITE ) ) ),
+                    ::vcl::unotools::colorToDoubleSequence(
+                        ::Color( COL_WHITE ),
+                        rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() )),
                 maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
                 maLinesOverallSize(),
                 maOutlineBounds( rOutlineBounds ),
@@ -1797,8 +1802,8 @@ namespace cppcanvas
                                               double                                             nOutlineWidth ) :
                     maFillColor(
                         ::vcl::unotools::colorToDoubleSequence(
-                            rCanvas->getDevice(),
-                            ::Color( COL_WHITE ) ) ),
+                            ::Color( COL_WHITE ),
+                            rCanvas->getDevice()->getDeviceColorSpace() )),
                     mnOutlineWidth( nOutlineWidth ),
                     mrCanvas( rCanvas ),
                     mrTextPolygon( rTextPolygon ),
