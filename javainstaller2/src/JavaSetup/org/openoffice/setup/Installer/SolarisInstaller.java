@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SolarisInstaller.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -220,14 +220,19 @@ public class SolarisInstaller extends Installer {
                     log = pkgCommand + "<br><b>Returns: " + returnValue + " Successful installation</b><br>";
                     LogManager.addCommandsLogfileComment(log);
                 } else {    // an error occured during installation
-                    log = pkgCommand + "<br><b>Returns: " + returnValue + " Error during installation</b><br>";
-                    LogManager.addCommandsLogfileComment(log);
-                    System.err.println("Error during installation:");
-                    for (int i = 0; i < returnErrorVector.size(); i++) {
-                        LogManager.addCommandsLogfileComment((String)returnErrorVector.get(i));
-                        System.err.println(returnErrorVector.get(i));
+                    if ( packageData.installCanFail() ) {
+                        log = pkgCommand + "<br><b>Returns: " + returnValue + " Problem during installation. Can be ignored.</b><br>";
+                        LogManager.addCommandsLogfileComment(log);
+                    } else {
+                        log = pkgCommand + "<br><b>Returns: " + returnValue + " Error during installation</b><br>";
+                        LogManager.addCommandsLogfileComment(log);
+                        System.err.println("Error during installation:");
+                        for (int i = 0; i < returnErrorVector.size(); i++) {
+                            LogManager.addCommandsLogfileComment((String)returnErrorVector.get(i));
+                            System.err.println(returnErrorVector.get(i));
+                        }
+                        data.setIsErrorInstallation(true);
                     }
-                    data.setIsErrorInstallation(true);
                 }
             }
             else {

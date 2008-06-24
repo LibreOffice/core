@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LinuxInstaller.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -206,56 +206,52 @@ public class LinuxInstaller extends Installer {
                 if (useLocalDatabase) {
                     if ( relocations != null )
                     {
-                        rpmCommand = "rpm --upgrade --nodeps --ignoresize -vh " +
+                        rpmCommand = "rpm --upgrade --ignoresize -vh " +
                                 "--relocate " + relocations + " " + databaseString +
                                 " " + databasePath + " " + packageName;
-                        rpmCommandArray = new String[10];
+                        rpmCommandArray = new String[9];
                         rpmCommandArray[0] = "rpm";
                         rpmCommandArray[1] = "--upgrade";
-                        rpmCommandArray[2] = "--nodeps";
-                        rpmCommandArray[3] = "--ignoresize";
-                        rpmCommandArray[4] = "-vh";
-                        rpmCommandArray[5] = "--relocate";
-                        rpmCommandArray[6] = relocations;
-                        rpmCommandArray[7] = databaseString;
-                        rpmCommandArray[8] = databasePath;
-                        rpmCommandArray[9] = packageName;
+                        rpmCommandArray[2] = "--ignoresize";
+                        rpmCommandArray[3] = "-vh";
+                        rpmCommandArray[4] = "--relocate";
+                        rpmCommandArray[5] = relocations;
+                        rpmCommandArray[6] = databaseString;
+                        rpmCommandArray[7] = databasePath;
+                        rpmCommandArray[8] = packageName;
                     } else {
-                        rpmCommand = "rpm --upgrade --nodeps --ignoresize -vh " +
+                        rpmCommand = "rpm --upgrade --ignoresize -vh " +
                                 databaseString + " " + databasePath + " " + packageName;
-                        rpmCommandArray = new String[8];
+                        rpmCommandArray = new String[7];
                         rpmCommandArray[0] = "rpm";
                         rpmCommandArray[1] = "--upgrade";
-                        rpmCommandArray[2] = "--nodeps";
-                        rpmCommandArray[3] = "--ignoresize";
-                        rpmCommandArray[4] = "-vh";
-                        rpmCommandArray[5] = databaseString;
-                        rpmCommandArray[6] = databasePath;
-                        rpmCommandArray[7] = packageName;
+                        rpmCommandArray[2] = "--ignoresize";
+                        rpmCommandArray[3] = "-vh";
+                        rpmCommandArray[4] = databaseString;
+                        rpmCommandArray[5] = databasePath;
+                        rpmCommandArray[6] = packageName;
                     }
                 } else {
                     if ( relocations != null )
                     {
-                        rpmCommand = "rpm --upgrade --nodeps --ignoresize -vh " +
+                        rpmCommand = "rpm --upgrade --ignoresize -vh " +
                                 "--relocate " + relocations + " " + packageName;
-                        rpmCommandArray = new String[8];
+                        rpmCommandArray = new String[7];
                         rpmCommandArray[0] = "rpm";
                         rpmCommandArray[1] = "--upgrade";
-                        rpmCommandArray[2] = "--nodeps";
-                        rpmCommandArray[3] = "--ignoresize";
-                        rpmCommandArray[4] = "-vh";
-                        rpmCommandArray[5] = "--relocate";
-                        rpmCommandArray[6] = relocations;
-                        rpmCommandArray[7] = packageName;
+                        rpmCommandArray[2] = "--ignoresize";
+                        rpmCommandArray[3] = "-vh";
+                        rpmCommandArray[4] = "--relocate";
+                        rpmCommandArray[5] = relocations;
+                        rpmCommandArray[6] = packageName;
                     } else {
-                        rpmCommand = "rpm --upgrade --nodeps --ignoresize -vh " + packageName;
-                        rpmCommandArray = new String[6];
+                        rpmCommand = "rpm --upgrade --ignoresize -vh " + packageName;
+                        rpmCommandArray = new String[5];
                         rpmCommandArray[0] = "rpm";
                         rpmCommandArray[1] = "--upgrade";
-                        rpmCommandArray[2] = "--nodeps";
-                        rpmCommandArray[3] = "--ignoresize";
-                        rpmCommandArray[4] = "-vh";
-                        rpmCommandArray[5] = packageName;
+                        rpmCommandArray[2] = "--ignoresize";
+                        rpmCommandArray[3] = "-vh";
+                        rpmCommandArray[4] = packageName;
                     }
                 }
 
@@ -268,12 +264,17 @@ public class LinuxInstaller extends Installer {
                     log = rpmCommand + "<br><b>Returns: " + returnValue + " Successful installation</b><br>";
                     LogManager.addCommandsLogfileComment(log);
                 } else {    // an error occured during installation
-                    log = rpmCommand + "<br><b>Returns: " + returnValue + " Error during installation</b><br>";
-                    LogManager.addCommandsLogfileComment(log);
-                    for (int i = 0; i < returnErrorVector.size(); i++) {
-                        LogManager.addCommandsLogfileComment((String)returnErrorVector.get(i));
+                    if ( packageData.installCanFail() ) {
+                        log = rpmCommand + "<br><b>Returns: " + returnValue + " Problem during installation. Can be ignored.</b><br>";
+                        LogManager.addCommandsLogfileComment(log);
+                    } else {
+                        log = rpmCommand + "<br><b>Returns: " + returnValue + " Error during installation</b><br>";
+                        LogManager.addCommandsLogfileComment(log);
+                        for (int i = 0; i < returnErrorVector.size(); i++) {
+                            LogManager.addCommandsLogfileComment((String)returnErrorVector.get(i));
+                        }
+                        data.setIsErrorInstallation(true);
                     }
-                    data.setIsErrorInstallation(true);
                 }
 
                 // saving installation state at package
@@ -321,21 +322,19 @@ public class LinuxInstaller extends Installer {
             }
 
             if (useLocalDatabase) {
-                rpmCommand = "rpm -ev --nodeps" + " " + databaseString + " " + databasePath + " " + packageName;
-                rpmCommandArray = new String[6];
+                rpmCommand = "rpm -ev" + " " + databaseString + " " + databasePath + " " + packageName;
+                rpmCommandArray = new String[5];
                 rpmCommandArray[0] = "rpm";
                 rpmCommandArray[1] = "-ev";
-                rpmCommandArray[2] = "--nodeps";
-                rpmCommandArray[3] = databaseString;
-                rpmCommandArray[4] = databasePath;
-                rpmCommandArray[5] = packageName;
+                rpmCommandArray[2] = databaseString;
+                rpmCommandArray[3] = databasePath;
+                rpmCommandArray[4] = packageName;
             } else {
-                rpmCommand = "rpm -ev --nodeps" + " " + packageName;
-                rpmCommandArray = new String[4];
+                rpmCommand = "rpm -ev" + " " + packageName;
+                rpmCommandArray = new String[3];
                 rpmCommandArray[0] = "rpm";
                 rpmCommandArray[1] = "-ev";
-                rpmCommandArray[2] = "--nodeps";
-                rpmCommandArray[3] = packageName;
+                rpmCommandArray[2] = packageName;
             }
 
             Vector returnVector = new Vector();
