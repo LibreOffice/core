@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: backbuffer.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,9 +57,6 @@ namespace vclcanvas
 
         virtual OutputDevice&       getOutDev();
         virtual const OutputDevice& getOutDev() const;
-
-        VirtualDevice&              getVirDev();
-        const VirtualDevice&        getVirDev() const;
 
         void setSize( const ::Size& rNewSize );
 
