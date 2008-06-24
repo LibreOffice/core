@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: exprnode.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,6 +78,7 @@ SbiExprNode::SbiExprNode( SbiParser* p, const SbiSymDef& r, SbxDataType t, SbiEx
     eNodeType = SbxVARVAL;
     aVar.pDef = (SbiSymDef*) &r;
     aVar.pPar = l;
+    aVar.pvMorePar = NULL;
     aVar.pNext= NULL;
 
     // Funktionsergebnisse sind nie starr
@@ -116,6 +117,14 @@ SbiExprNode::~SbiExprNode()
     {
         delete aVar.pPar;
         delete aVar.pNext;
+        SbiExprListVector* pvMorePar = aVar.pvMorePar;
+        if( pvMorePar )
+        {
+            SbiExprListVector::iterator it;
+            for( it = pvMorePar->begin() ; it != pvMorePar->end() ; ++it )
+                delete *it;
+            delete pvMorePar;
+        }
     }
 }
 
