@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eventatt.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,7 +85,6 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::cppu;
 using namespace ::osl;
-using namespace ::rtl;
 
 
 
@@ -283,7 +282,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         if( aMacro.GetTokenCount( '.' ) == 3 )
         {
             sal_uInt16 nLast = 0;
-            OUString aFullLibName = aMacro.GetToken( 0, '.', nLast );
+            ::rtl::OUString aFullLibName = aMacro.GetToken( 0, '.', nLast );
 
             sal_Int32 nIndex = aFullLibName.indexOf( (sal_Unicode)':' );
             if (nIndex >= 0)
@@ -422,8 +421,8 @@ Any implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
         OSL_ENSURE( xDlgLibContNameAccess.is(), "implFindDialogLibForDialog: no lib container for the given dialog!" );
         if( xDlgLibContNameAccess.is() )
         {
-            Sequence< OUString > aLibNames = xDlgLibContNameAccess->getElementNames();
-            const OUString* pLibNames = aLibNames.getConstArray();
+            Sequence< ::rtl::OUString > aLibNames = xDlgLibContNameAccess->getElementNames();
+            const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
             sal_Int32 nLibNameCount = aLibNames.getLength();
 
             for( sal_Int32 iLib = 0 ; iLib < nLibNameCount ; iLib++ )
@@ -438,8 +437,8 @@ Any implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
                 OSL_ENSURE( xDlgLibNameAccess.is(), "implFindDialogLibForDialog: invalid dialog lib!" );
                 if( xDlgLibNameAccess.is() )
                 {
-                    Sequence< OUString > aDlgNames = xDlgLibNameAccess->getElementNames();
-                    const OUString* pDlgNames = aDlgNames.getConstArray();
+                    Sequence< ::rtl::OUString > aDlgNames = xDlgLibNameAccess->getElementNames();
+                    const ::rtl::OUString* pDlgNames = aDlgNames.getConstArray();
                     sal_Int32 nDlgNameCount = aDlgNames.getLength();
 
                     for( sal_Int32 iDlg = 0 ; iDlg < nDlgNameCount ; iDlg++ )
@@ -466,7 +465,7 @@ static ::rtl::OUString aTitlePropName =
 
 void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 {
-    static OUString aResourceResolverPropName = OUString::createFromAscii( "ResourceResolver" );
+    static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAscii( "ResourceResolver" );
 
     (void)pBasic;
     (void)bWrite;
@@ -501,7 +500,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 
     // Create new uno dialog
     Reference< XNameContainer > xDialogModel( xMSF->createInstance
-        ( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ),
+        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ),
             UNO_QUERY );
     if( !xDialogModel.is() )
         return;
@@ -578,7 +577,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
         Reference< XControl > xCntrl;
         try
         {
-        Reference< XDialogProvider >  xDlgProv( xMSF->createInstanceWithArguments( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.scripting.DialogProvider" ) ), aArgs ), UNO_QUERY );
+        Reference< XDialogProvider >  xDlgProv( xMSF->createInstanceWithArguments( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.scripting.DialogProvider" ) ), aArgs ), UNO_QUERY );
             xCntrl.set( xDlgProv->createDialog( rtl::OUString() ), UNO_QUERY_THROW );
            // Add dialog model to dispose vector
            Reference< XComponent > xDlgComponent( xCntrl->getModel(), UNO_QUERY );
@@ -602,3 +601,4 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 
 
 //===================================================================
+
