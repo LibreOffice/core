@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: precompiled_framework.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -474,7 +474,6 @@
 #include "vcl/pngread.hxx"
 #include "vcl/pngwrite.hxx"
 #include "vcl/print.hxx"
-#include "vcl/salstype.hxx"
 #include "vcl/scrbar.hxx"
 #include "vcl/sound.hxx"
 #include "vcl/spinfld.hxx"
@@ -496,3 +495,4 @@
 
 //---MARKER---
 #endif
+
