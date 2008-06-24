@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xpathlib.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +56,6 @@
 
 // C interface
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xforms;
@@ -106,7 +105,7 @@ void xforms_booleanFromStringFunction(xmlXPathParserContextPtr ctxt, int nargs)
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlChar *pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
-    OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
+    ::rtl::OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
     if (aString.equalsIgnoreAsciiCaseAscii("true") || aString.equalsIgnoreAsciiCaseAscii("1"))
         xmlXPathReturnTrue(ctxt);
     else if (aString.equalsIgnoreAsciiCaseAscii("false") || aString.equalsIgnoreAsciiCaseAscii("0"))
@@ -236,7 +235,7 @@ void xforms_propertyFunction(xmlXPathParserContextPtr ctxt, int nargs)
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlChar* pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
-    OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
+    ::rtl::OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
     if (aString.equalsIgnoreAsciiCaseAscii("version"))
         xmlXPathReturnString(ctxt, (xmlChar*)_version);
     else if (aString.equalsIgnoreAsciiCaseAscii("conformance-level"))
@@ -247,9 +246,9 @@ void xforms_propertyFunction(xmlXPathParserContextPtr ctxt, int nargs)
 
 // Date and Time Functions
 
-static OString makeDateTimeString (const DateTime& aDateTime, sal_Bool bUTC = sal_True)
+static ::rtl::OString makeDateTimeString (const DateTime& aDateTime, sal_Bool bUTC = sal_True)
 {
-    OStringBuffer aDateTimeString;
+    ::rtl::OStringBuffer aDateTimeString;
     aDateTimeString.append((sal_Int32)aDateTime.GetYear());
     aDateTimeString.append("-");
     if (aDateTime.GetMonth()<10) aDateTimeString.append("0");
@@ -293,19 +292,19 @@ void xforms_nowFunction(xmlXPathParserContextPtr ctxt, int /*nargs*/)
     indicated by a "Z".
     */
     DateTime aDateTime;
-    OString aDateTimeString = makeDateTimeString(aDateTime);
+    ::rtl::OString aDateTimeString = makeDateTimeString(aDateTime);
     xmlChar *pString = (xmlChar*)rtl_allocateMemory(aDateTimeString.getLength()+1);
     strncpy((char*)pString, (char*)aDateTimeString.getStr(), aDateTimeString.getLength());
     pString[aDateTimeString.getLength()] = 0;
     xmlXPathReturnString(ctxt, pString);
 }
 
-static sal_Bool parseDateTime(const OUString& aString, DateTime& aDateTime)
+static sal_Bool parseDateTime(const ::rtl::OUString& aString, DateTime& aDateTime)
 {
     // take apart a canonical literal xsd:dateTime string
     //CCYY-MM-DDThh:mm:ss(Z)
 
-    OUString aDateTimeString = aString.trim();
+    ::rtl::OUString aDateTimeString = aString.trim();
 
     // check length
     if (aDateTimeString.getLength() < 19 || aDateTimeString.getLength() > 20)
@@ -314,13 +313,13 @@ static sal_Bool parseDateTime(const OUString& aString, DateTime& aDateTime)
     sal_Int32 nDateLength = 10;
     sal_Int32 nTimeLength = 8;
 
-    OUString aDateTimeSep = OUString::createFromAscii("T");
-    OUString aDateSep = OUString::createFromAscii("-");
-    OUString aTimeSep = OUString::createFromAscii(":");
-    OUString aUTCString = OUString::createFromAscii("Z");
+    ::rtl::OUString aDateTimeSep = ::rtl::OUString::createFromAscii("T");
+    ::rtl::OUString aDateSep = ::rtl::OUString::createFromAscii("-");
+    ::rtl::OUString aTimeSep = ::rtl::OUString::createFromAscii(":");
+    ::rtl::OUString aUTCString = ::rtl::OUString::createFromAscii("Z");
 
-    OUString aDateString = aDateTimeString.copy(0, nDateLength);
-    OUString aTimeString = aDateTimeString.copy(nDateLength+1, nTimeLength);
+    ::rtl::OUString aDateString = aDateTimeString.copy(0, nDateLength);
+    ::rtl::OUString aTimeString = aDateTimeString.copy(nDateLength+1, nTimeLength);
 
     sal_Int32 nIndex = 0;
     sal_Int32 nYear = aDateString.getToken(0, '-', nIndex).toInt32();
@@ -350,7 +349,7 @@ void xforms_daysFromDateFunction(xmlXPathParserContextPtr ctxt, int nargs)
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlChar* pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
-    OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
+    ::rtl::OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
 
     DateTime aDateTime;
     if (parseDateTime(aString, aDateTime))
@@ -373,7 +372,7 @@ void xforms_secondsFromDateTimeFunction(xmlXPathParserContextPtr ctxt, int nargs
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlChar* pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
-    OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
+    ::rtl::OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
 
     DateTime aDateTime;
 
@@ -519,7 +518,7 @@ void xforms_instanceFuction(xmlXPathParserContextPtr ctxt, int nargs)
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlChar *pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
-    OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
+    ::rtl::OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
 
     Reference< XModel > aModel = ((CLibxml2XFormsExtension*)ctxt->context->funcLookupData)->getModel();
     if (aModel.is())
@@ -569,4 +568,3 @@ void xforms_currentFunction(xmlXPathParserContextPtr ctxt, int nargs)
     else
         xmlXPathReturnEmptyNodeSet(ctxt);
 }
-
