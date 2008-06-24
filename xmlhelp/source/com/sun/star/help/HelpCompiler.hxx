@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: HelpCompiler.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,6 +72,8 @@
 
 namespace fs
 {
+    rtl_TextEncoding getThreadTextEncoding( void );
+
     enum convert { native };
     class path
     {
@@ -86,20 +88,20 @@ namespace fs
             osl_getProcessWorkingDir(&sWorkingDir.pData);
 
             rtl::OString tmp(in.c_str());
-            rtl::OUString ustrSystemPath(rtl::OStringToOUString(tmp, osl_getThreadTextEncoding()));
+            rtl::OUString ustrSystemPath(rtl::OStringToOUString(tmp, getThreadTextEncoding()));
             osl::File::getFileURLFromSystemPath(ustrSystemPath, data);
             osl::File::getAbsoluteFileURL(sWorkingDir, data, data);
         }
         path(const std::string &FileURL)
         {
             rtl::OString tmp(FileURL.c_str());
-            data = rtl::OStringToOUString(tmp, osl_getThreadTextEncoding());
+            data = rtl::OStringToOUString(tmp, getThreadTextEncoding());
         }
         std::string native_file_string() const
         {
             ::rtl::OUString ustrSystemPath;
             osl::File::getSystemPathFromFileURL(data, ustrSystemPath);
-            rtl::OString tmp(rtl::OUStringToOString(ustrSystemPath, osl_getThreadTextEncoding()));
+            rtl::OString tmp(rtl::OUStringToOString(ustrSystemPath, getThreadTextEncoding()));
             HCDBG(std::cerr << "native_file_string is " << tmp.getStr() << std::endl);
             return std::string(tmp.getStr());
         }
@@ -116,7 +118,7 @@ namespace fs
             HCDBG(std::cerr << "orig was " <<
                 rtl::OUStringToOString(ret.data, RTL_TEXTENCODING_UTF8).getStr() << std::endl);
             rtl::OString tmp(in.c_str());
-            rtl::OUString ustrSystemPath(rtl::OStringToOUString(tmp, osl_getThreadTextEncoding()));
+            rtl::OUString ustrSystemPath(rtl::OStringToOUString(tmp, getThreadTextEncoding()));
             ret.data += rtl::OUString(sal_Unicode('/'));
             ret.data += ustrSystemPath;
             HCDBG(std::cerr << "final is " <<
@@ -126,7 +128,7 @@ namespace fs
         void append(const char *in)
         {
             rtl::OString tmp(in);
-            rtl::OUString ustrSystemPath(rtl::OStringToOUString(tmp, osl_getThreadTextEncoding()));
+            rtl::OUString ustrSystemPath(rtl::OStringToOUString(tmp, getThreadTextEncoding()));
             data = data + ustrSystemPath;
         }
         void append(const std::string &in) { append(in.c_str()); }
@@ -134,6 +136,7 @@ namespace fs
 
     void create_directory(const fs::path indexDirName);
     void rename(const fs::path &src, const fs::path &dest);
+    void copy(const fs::path &src, const fs::path &dest);
     bool exists(const fs::path &in);
     void remove_all(const fs::path &in);
     void remove(const fs::path &in);
