@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: null_devicehelper.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,14 +34,16 @@
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
-#include <canvas/base/linepolypolygonbase.hxx>
 
 #include <osl/mutex.hxx>
+#include <rtl/instance.hxx>
 #include <cppuhelper/compbase1.hxx>
 
 #include <com/sun/star/lang/NoSupportException.hpp>
 
 #include <basegfx/tools/canvastools.hxx>
+#include <basegfx/tools/unopolypolygon.hxx>
+#include <vcl/canvastools.hxx>
 
 #include "null_spritecanvas.hxx"
 #include "null_canvasbitmap.hxx"
@@ -93,8 +95,8 @@ namespace nullcanvas
             return uno::Reference< rendering::XLinePolyPolygon2D >(); // we're disposed
 
         return uno::Reference< rendering::XLinePolyPolygon2D >(
-            new ::canvas::LinePolyPolygonBase(
-                ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence( points ) ) );
+            new ::basegfx::unotools::UnoPolyPolygon(
+                ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence( points )));
     }
 
     uno::Reference< rendering::XBezierPolyPolygon2D > DeviceHelper::createCompatibleBezierPolyPolygon(
@@ -106,7 +108,7 @@ namespace nullcanvas
             return uno::Reference< rendering::XBezierPolyPolygon2D >(); // we're disposed
 
         return uno::Reference< rendering::XBezierPolyPolygon2D >(
-            new ::canvas::LinePolyPolygonBase(
+            new ::basegfx::unotools::UnoPolyPolygon(
                 ::basegfx::unotools::polyPolygonFromBezier2DSequenceSequence( points ) ) );
     }
 
@@ -179,19 +181,24 @@ namespace nullcanvas
         // _always_ will have exactly one backbuffer
     }
 
-    ::sal_Bool DeviceHelper::showBuffer( ::sal_Bool bUpdateAll )
+    ::sal_Bool DeviceHelper::showBuffer( bool bIsVisible, ::sal_Bool bUpdateAll )
     {
         // forward to sprite canvas helper
-        if( !mpSpriteCanvas )
+        if( !bIsVisible || !mpSpriteCanvas )
             return false;
 
         return mpSpriteCanvas->updateScreen( bUpdateAll );
     }
 
-    ::sal_Bool DeviceHelper::switchBuffer( ::sal_Bool bUpdateAll )
+    ::sal_Bool DeviceHelper::switchBuffer( bool bIsVisible, ::sal_Bool bUpdateAll )
     {
         // no difference for VCL canvas
-        return showBuffer( bUpdateAll );
+        return showBuffer( bIsVisible, bUpdateAll );
+    }
+
+    uno::Any DeviceHelper::isAccelerated() const
+    {
+        return ::com::sun::star::uno::makeAny(false);
     }
 
     uno::Any DeviceHelper::getDeviceHandle() const
@@ -202,6 +209,24 @@ namespace nullcanvas
     uno::Any DeviceHelper::getSurfaceHandle() const
     {
         return uno::Any();
+    }
+
+    namespace
+    {
+        struct DeviceColorSpace: public rtl::StaticWithInit<uno::Reference<rendering::XColorSpace>,
+                                                            DeviceColorSpace>
+        {
+            uno::Reference<rendering::XColorSpace> operator()()
+            {
+                return vcl::unotools::createStandardColorSpace();
+            }
+        };
+    }
+
+    uno::Reference<rendering::XColorSpace> DeviceHelper::getColorSpace() const
+    {
+        // always the same
+        return DeviceColorSpace::get();
     }
 
     void DeviceHelper::notifySizeUpdate( const awt::Rectangle& /*rBounds*/ )
