@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_canvascustomsprite.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
@@ -57,18 +58,19 @@ namespace cairocanvas
         maSize( ::canvas::tools::roundUp( rSpriteSize.Width ),
                 ::canvas::tools::roundUp( rSpriteSize.Height ) )
     {
-        ENSURE_AND_THROW( rRefDevice.get(),
+        ENSURE_OR_THROW( rRefDevice.get(),
                           "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
 
         OSL_TRACE("sprite size: %d, %d",
                   ::canvas::tools::roundUp( rSpriteSize.Width ),
                   ::canvas::tools::roundUp( rSpriteSize.Height ));
 
-        //mpBufferSurface = mpSpriteCanvas->getSurface( aSize, CAIRO_CONTENT_COLOR );
-        mpBufferSurface = mpSpriteCanvas->getSurface( maSize );
+        mpBufferSurface = mpSpriteCanvas->createSurface( maSize );
 
-        maCanvasHelper.init( maSize, *rRefDevice.get() );
-        maCanvasHelper.setSurface( mpBufferSurface, true, this );
+        maCanvasHelper.init( maSize,
+                             *rRefDevice,
+                             rRefDevice.get() );
+        maCanvasHelper.setSurface( mpBufferSurface, true );
 
         maSpriteHelper.init( rSpriteSize,
                              rRefDevice );
@@ -78,51 +80,28 @@ namespace cairocanvas
         maCanvasHelper.clear();
     }
 
-    ::cairo::Surface* CanvasCustomSprite::changeSurface( bool bHasAlpha, bool bCopyContent )
-    {
-        if( !bHasAlpha && !bCopyContent )
-        {
-            OSL_TRACE("replacing sprite background surface");
-
-            if( mpBufferSurface )
-                mpBufferSurface->Unref();
-            mpBufferSurface = mpSpriteCanvas->getSurface( maSize, CAIRO_CONTENT_COLOR );
-
-            maSpriteHelper.setSurface( mpBufferSurface );
-
-            return mpBufferSurface;
-        }
-
-        return NULL;
-    }
-
     void SAL_CALL CanvasCustomSprite::disposing()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         mpSpriteCanvas.clear();
-
-        if( mpBufferSurface )
-        {
-            mpBufferSurface->Unref();
-            mpBufferSurface = NULL;
-        }
+        mpBufferSurface.reset();
 
         // forward to parent
         CanvasCustomSpriteBaseT::disposing();
     }
 
-    void CanvasCustomSprite::redraw( Cairo* pCairo,
-                                     bool bBufferedUpdate ) const
+    void CanvasCustomSprite::redraw( const CairoSharedPtr& pCairo,
+                                     bool                  bBufferedUpdate ) const
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         redraw( pCairo, maSpriteHelper.getPosPixel(), bBufferedUpdate );
     }
 
-    void CanvasCustomSprite::redraw( Cairo* pCairo,
+    void CanvasCustomSprite::redraw( const CairoSharedPtr&      pCairo,
                                      const ::basegfx::B2DPoint& rOrigOutputPos,
-                                     bool bBufferedUpdate ) const
+                                     bool                       bBufferedUpdate ) const
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -134,11 +113,46 @@ namespace cairocanvas
         mbSurfaceDirty = false;
     }
 
-    bool CanvasCustomSprite::repaint( Surface* pSurface,
-                      const rendering::ViewState&   viewState,
-                      const rendering::RenderState& renderState )
+    bool CanvasCustomSprite::repaint( const SurfaceSharedPtr&       pSurface,
+                                      const rendering::ViewState&   viewState,
+                                      const rendering::RenderState& renderState )
     {
-    return maCanvasHelper.repaint( pSurface, viewState, renderState );
+        return maCanvasHelper.repaint( pSurface, viewState, renderState );
+    }
+
+    SurfaceSharedPtr CanvasCustomSprite::getSurface()
+    {
+        return mpBufferSurface;
+    }
+
+    SurfaceSharedPtr CanvasCustomSprite::createSurface( const ::basegfx::B2ISize& rSize, Content aContent )
+    {
+        return mpSpriteCanvas->createSurface(rSize,aContent);
+    }
+
+    SurfaceSharedPtr CanvasCustomSprite::createSurface( ::Bitmap& rBitmap )
+    {
+        return mpSpriteCanvas->createSurface(rBitmap);
+    }
+
+    SurfaceSharedPtr CanvasCustomSprite::changeSurface( bool bHasAlpha, bool bCopyContent )
+    {
+        if( !bHasAlpha && !bCopyContent )
+        {
+            OSL_TRACE("replacing sprite background surface");
+
+            mpBufferSurface = mpSpriteCanvas->createSurface( maSize, CAIRO_CONTENT_COLOR );
+            maSpriteHelper.setSurface( mpBufferSurface );
+
+            return mpBufferSurface;
+        }
+
+        return SurfaceSharedPtr();
+    }
+
+    OutputDevice* CanvasCustomSprite::getOutputDevice()
+    {
+        return mpSpriteCanvas->getOutputDevice();
     }
 
 #define IMPLEMENTATION_NAME "CairoCanvas.CanvasCustomSprite"
