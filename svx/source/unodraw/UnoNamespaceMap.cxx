@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UnoNamespaceMap.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +50,6 @@
 
 using namespace ::comphelper;
 using namespace ::osl;
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -75,18 +74,18 @@ namespace svx
         virtual ~NamespaceMap();
 
         // XNameAccess
-        virtual Any SAL_CALL getByName( const OUString& aName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException);
-        virtual Sequence< OUString > SAL_CALL getElementNames(  ) throw (RuntimeException);
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (RuntimeException);
+        virtual Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException);
+        virtual Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (RuntimeException);
+        virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (RuntimeException);
 
         // XElementAccess
         virtual Type SAL_CALL getElementType(  ) throw (RuntimeException);
         virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException);
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
+        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(RuntimeException);
+        virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
     };
 
     Reference< XInterface > SAL_CALL NamespaceMap_createInstance( sal_uInt16* pWhichIds, SfxItemPool* pPool1, SfxItemPool* )
@@ -99,18 +98,18 @@ namespace svx
         return (XWeak*)new NamespaceMap( pWhichIds, pPool );
     }
 
-    Sequence< OUString > SAL_CALL NamespaceMap_getSupportedServiceNames()
+    Sequence< ::rtl::OUString > SAL_CALL NamespaceMap_getSupportedServiceNames()
         throw()
     {
-        Sequence< OUString > aSupportedServiceNames( 1 );
-        aSupportedServiceNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.NamespaceMap" ) );
+        Sequence< ::rtl::OUString > aSupportedServiceNames( 1 );
+        aSupportedServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.NamespaceMap" ) );
         return aSupportedServiceNames;
     }
 
-    OUString SAL_CALL NamespaceMap_getImplementationName()
+    ::rtl::OUString SAL_CALL NamespaceMap_getImplementationName()
         throw()
     {
-        return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Svx.NamespaceMap" ) );
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Svx.NamespaceMap" ) );
     }
 
 
@@ -132,7 +131,7 @@ namespace svx
 
         NamespaceIteratorImpl( sal_uInt16* pWhichIds, SfxItemPool* pPool );
 
-        sal_Bool next( OUString& rPrefix, OUString& rURL );
+        sal_Bool next( ::rtl::OUString& rPrefix, ::rtl::OUString& rURL );
     };
 }
 
@@ -152,7 +151,7 @@ NamespaceIteratorImpl::NamespaceIteratorImpl( sal_uInt16* pWhichIds, SfxItemPool
     mnItemCount = (mpWhichId && (0 != *mpWhichId) && mpPool) ? mpPool->GetItemCount( *mpWhichId ) : 0;
 }
 
-sal_Bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
+sal_Bool NamespaceIteratorImpl::next( ::rtl::OUString& rPrefix, ::rtl::OUString& rURL )
 {
     // we still need to process the current attribute
     if( mpCurrentAttr && (mnCurrentAttr != USHRT_MAX) )
@@ -217,12 +216,12 @@ NamespaceMap::~NamespaceMap()
 }
 
 // XNameAccess
-Any SAL_CALL NamespaceMap::getByName( const OUString& aName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
+Any SAL_CALL NamespaceMap::getByName( const ::rtl::OUString& aName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     NamespaceIteratorImpl aIter( mpWhichIds, mpPool );
 
-    OUString aPrefix;
-    OUString aURL;
+    ::rtl::OUString aPrefix;
+    ::rtl::OUString aURL;
 
     sal_Bool bFound;
 
@@ -238,23 +237,23 @@ Any SAL_CALL NamespaceMap::getByName( const OUString& aName ) throw (NoSuchEleme
     return makeAny( aURL );
 }
 
-Sequence< OUString > SAL_CALL NamespaceMap::getElementNames() throw (RuntimeException)
+Sequence< ::rtl::OUString > SAL_CALL NamespaceMap::getElementNames() throw (RuntimeException)
 {
     NamespaceIteratorImpl aIter( mpWhichIds, mpPool );
 
-    OUString aPrefix;
-    OUString aURL;
+    ::rtl::OUString aPrefix;
+    ::rtl::OUString aURL;
 
-    std::set< OUString, comphelper::UStringLess > aPrefixSet;
+    std::set< ::rtl::OUString, comphelper::UStringLess > aPrefixSet;
 
     while( aIter.next( aPrefix, aURL ) )
         aPrefixSet.insert( aPrefix );
 
-    Sequence< OUString > aSeq( aPrefixSet.size() );
-    OUString* pPrefixes = aSeq.getArray();
+    Sequence< ::rtl::OUString > aSeq( aPrefixSet.size() );
+    ::rtl::OUString* pPrefixes = aSeq.getArray();
 
-    std::set< OUString, comphelper::UStringLess >::iterator aPrefixIter( aPrefixSet.begin() );
-    const std::set< OUString, comphelper::UStringLess >::iterator aEnd( aPrefixSet.end() );
+    std::set< ::rtl::OUString, comphelper::UStringLess >::iterator aPrefixIter( aPrefixSet.begin() );
+    const std::set< ::rtl::OUString, comphelper::UStringLess >::iterator aEnd( aPrefixSet.end() );
 
     while( aPrefixIter != aEnd )
     {
@@ -264,12 +263,12 @@ Sequence< OUString > SAL_CALL NamespaceMap::getElementNames() throw (RuntimeExce
     return aSeq;
 }
 
-sal_Bool SAL_CALL NamespaceMap::hasByName( const OUString& aName ) throw (RuntimeException)
+sal_Bool SAL_CALL NamespaceMap::hasByName( const ::rtl::OUString& aName ) throw (RuntimeException)
 {
     NamespaceIteratorImpl aIter( mpWhichIds, mpPool );
 
-    OUString aPrefix;
-    OUString aURL;
+    ::rtl::OUString aPrefix;
+    ::rtl::OUString aURL;
 
     sal_Bool bFound;
 
@@ -285,35 +284,34 @@ sal_Bool SAL_CALL NamespaceMap::hasByName( const OUString& aName ) throw (Runtim
 // XElementAccess
 Type SAL_CALL NamespaceMap::getElementType() throw (RuntimeException)
 {
-    return ::getCppuType( (const OUString*) 0 );
+    return ::getCppuType( (const ::rtl::OUString*) 0 );
 }
 
 sal_Bool SAL_CALL NamespaceMap::hasElements() throw (RuntimeException)
 {
     NamespaceIteratorImpl aIter( mpWhichIds, mpPool );
 
-    OUString aPrefix;
-    OUString aURL;
+    ::rtl::OUString aPrefix;
+    ::rtl::OUString aURL;
 
     return aIter.next( aPrefix, aURL );
 }
 
 // XServiceInfo
-OUString SAL_CALL NamespaceMap::getImplementationName(  )
+::rtl::OUString SAL_CALL NamespaceMap::getImplementationName(  )
     throw(RuntimeException)
 {
     return NamespaceMap_getImplementationName();
 }
 
-sal_Bool SAL_CALL NamespaceMap::supportsService( const OUString& )
+sal_Bool SAL_CALL NamespaceMap::supportsService( const ::rtl::OUString& )
     throw(RuntimeException)
 {
     return sal_True;
 }
 
-Sequence< OUString > SAL_CALL NamespaceMap::getSupportedServiceNames(  )
+Sequence< ::rtl::OUString > SAL_CALL NamespaceMap::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
     return NamespaceMap_getSupportedServiceNames();
 }
-
