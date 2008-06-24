@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: graphicdevicebase.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +50,7 @@ namespace canvas
     /** Helper template base class for XGraphicDevice implementations.
 
         This base class provides partial implementations of the
-        XGraphicDevice-related interface, such as XBufferController,
+        XGraphicDevice-related interface, such as
         XParametricPolyPolygon2DFactory and XColorSpace.
 
         This template basically interposes itself between the full
@@ -69,7 +69,6 @@ namespace canvas
         <pre>
         Example:
         typedef ::cppu::WeakComponentImplHelper5< ::com::sun::star::rendering::XGraphicDevice,
-                                                  ::com::sun::star::rendering::XBufferController,
                                                   ::com::sun::star::rendering::XColorSpace,
                                                   ::com::sun::star::rendering::XPropertySet,
                                                   ::com::sun::star::lang::XServiceInfo,
@@ -118,7 +117,7 @@ namespace canvas
     {
     public:
         typedef Base              BaseType;
-        typedef DeviceHelper      HelperType;
+        typedef DeviceHelper      DeviceHelperType;
         typedef Mutex             MutexType;
         typedef UnambiguousBase   UnambiguousBaseType;
         typedef GraphicDeviceBase ThisType;
@@ -131,6 +130,9 @@ namespace canvas
             mbDumpScreenContent(false)
         {
             maPropHelper.initProperties( PropertySetHelper::MakeMap
+                                         ("HardwareAcceleration",
+                                          boost::bind(&DeviceHelper::isAccelerated,
+                                                      boost::ref(maDeviceHelper)))
                                          ("DeviceHandle",
                                           boost::bind(&DeviceHelper::getDeviceHandle,
                                                       boost::ref(maDeviceHelper)))
@@ -161,12 +163,14 @@ namespace canvas
         // XGraphicDevice
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBufferController > SAL_CALL getBufferController(  ) throw (::com::sun::star::uno::RuntimeException)
         {
-            return this;
+            return ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBufferController >();
         }
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XColorSpace > SAL_CALL getDeviceColorSpace(  ) throw (::com::sun::star::uno::RuntimeException)
         {
-            return this;
+            MutexType aGuard( BaseType::m_aMutex );
+
+            return maDeviceHelper.getColorSpace();
         }
 
         virtual ::com::sun::star::geometry::RealSize2D SAL_CALL getPhysicalResolution(  ) throw (::com::sun::star::uno::RuntimeException)
@@ -264,110 +268,42 @@ namespace canvas
             return maDeviceHelper.enterFullScreenMode( bEnter );
         }
 
-
-        // XBufferController
-        virtual ::sal_Int32 SAL_CALL createBuffers( ::sal_Int32 nBuffers ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                  ::com::sun::star::uno::RuntimeException)
-        {
-            tools::verifyRange( nBuffers, (sal_Int32)1 );
-
-            MutexType aGuard( BaseType::m_aMutex );
-
-            return maDeviceHelper.createBuffers( nBuffers );
-        }
-
-        virtual void SAL_CALL destroyBuffers(  ) throw (::com::sun::star::uno::RuntimeException)
-        {
-            MutexType aGuard( BaseType::m_aMutex );
-
-            maDeviceHelper.destroyBuffers();
-        }
-
-        virtual ::sal_Bool SAL_CALL showBuffer( ::sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException)
-        {
-            MutexType aGuard( BaseType::m_aMutex );
-
-            return maDeviceHelper.showBuffer( bUpdateAll );
-        }
-
-        virtual ::sal_Bool SAL_CALL switchBuffer( ::sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException)
-        {
-            MutexType aGuard( BaseType::m_aMutex );
-
-            return maDeviceHelper.switchBuffer( bUpdateAll );
-        }
-
-
-        // XColorSpace
-        virtual ::sal_Int8 SAL_CALL getRenderingIntent(  ) throw (::com::sun::star::uno::RuntimeException)
-        {
-            MutexType aGuard( BaseType::m_aMutex );
-
-            // Dummy for now
-            return 0;
-        }
-
-        virtual ::com::sun::star::rendering::ColorProfile SAL_CALL getICCProfile(  ) throw (::com::sun::star::uno::RuntimeException)
-        {
-            MutexType aGuard( BaseType::m_aMutex );
-
-            // Dummy for now
-            return ::com::sun::star::rendering::ColorProfile();
-        }
-
-        virtual ::rtl::OUString SAL_CALL getName(  ) throw (::com::sun::star::uno::RuntimeException)
-        {
-            MutexType aGuard( BaseType::m_aMutex );
-
-            // Dummy for now
-            return ::rtl::OUString();
-        }
-
-        virtual ::com::sun::star::rendering::ColorSpaceType SAL_CALL getType(  ) throw (::com::sun::star::uno::RuntimeException)
-        {
-            MutexType aGuard( BaseType::m_aMutex );
-
-            // Dummy for now
-            return 0;
-        }
-
-
         // XParametricPolyPolygon2DFactory
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createLinearHorizontalGradient( const ::com::sun::star::uno::Sequence< double >& leftColor, const ::com::sun::star::uno::Sequence< double >& rightColor ) throw (::com::sun::star::lang::IllegalArgumentException,
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createLinearHorizontalGradient( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& colors, const ::com::sun::star::uno::Sequence< double >& stops ) throw (::com::sun::star::lang::IllegalArgumentException,
                                                                                                                                                                                                                                                                                     ::com::sun::star::uno::RuntimeException)
         {
             return ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D >(
                 ParametricPolyPolygon::createLinearHorizontalGradient( this,
-                                                                       leftColor,
-                                                                       rightColor ) );
+                                                                       colors,
+                                                                       stops ) );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createAxialHorizontalGradient( const ::com::sun::star::uno::Sequence< double >& middleColor, const ::com::sun::star::uno::Sequence< double >& endColor ) throw (::com::sun::star::lang::IllegalArgumentException,
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createAxialHorizontalGradient( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& colors, const ::com::sun::star::uno::Sequence< double >& stops ) throw (::com::sun::star::lang::IllegalArgumentException,
                                                                                                                                                                                                                                                                                    ::com::sun::star::uno::RuntimeException)
         {
             return ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D >(
                 ParametricPolyPolygon::createAxialHorizontalGradient( this,
-                                                                      middleColor,
-                                                                      endColor ) );
+                                                                      colors,
+                                                                      stops ) );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createEllipticalGradient( const ::com::sun::star::uno::Sequence< double >& centerColor, const ::com::sun::star::uno::Sequence< double >& endColor, const ::com::sun::star::geometry::RealRectangle2D& boundRect ) throw (::com::sun::star::lang::IllegalArgumentException,
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createEllipticalGradient( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& colors, const ::com::sun::star::uno::Sequence< double >& stops, const ::com::sun::star::geometry::RealRectangle2D& boundRect ) throw (::com::sun::star::lang::IllegalArgumentException,
                                                                                                                                                                                                                                                                                                                                             ::com::sun::star::uno::RuntimeException)
         {
             return ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D >(
                 ParametricPolyPolygon::createEllipticalGradient( this,
-                                                                 centerColor,
-                                                                 endColor,
+                                                                 colors,
+                                                                 stops,
                                                                  boundRect ) );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createRectangularGradient( const ::com::sun::star::uno::Sequence< double >& centerColor, const ::com::sun::star::uno::Sequence< double >& endColor, const ::com::sun::star::geometry::RealRectangle2D& boundRect ) throw (::com::sun::star::lang::IllegalArgumentException,
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createRectangularGradient( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& colors, const ::com::sun::star::uno::Sequence< double >& stops, const ::com::sun::star::geometry::RealRectangle2D& boundRect ) throw (::com::sun::star::lang::IllegalArgumentException,
                                                                                                                                                                                                                                                                                                                                              ::com::sun::star::uno::RuntimeException)
         {
             return ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D >(
                 ParametricPolyPolygon::createRectangularGradient( this,
-                                                                  centerColor,
-                                                                  endColor,
+                                                                  colors,
+                                                                  stops,
                                                                   boundRect ) );
         }
 
@@ -499,9 +435,9 @@ namespace canvas
             rAny >>= mbDumpScreenContent;
         }
 
-        HelperType         maDeviceHelper;
-        PropertySetHelper  maPropHelper;
-        bool               mbDumpScreenContent;
+        DeviceHelperType  maDeviceHelper;
+        PropertySetHelper maPropHelper;
+        bool              mbDumpScreenContent;
 
     private:
         GraphicDeviceBase( const GraphicDeviceBase& );
