@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: addonsoptions.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +62,6 @@
 
 using namespace ::std                   ;
 using namespace ::utl                   ;
-using namespace ::rtl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 using namespace ::com::sun::star::beans ;
@@ -72,12 +71,12 @@ using namespace ::com::sun::star::lang  ;
 //  const
 //_________________________________________________________________________________________________________________
 
-#define ROOTNODE_ADDONMENU                              OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Addons"    ))
-#define PATHDELIMITER                                   OUString(RTL_CONSTASCII_USTRINGPARAM("/"                ))
-#define TOOLBARITEMS                                    OUString(RTL_CONSTASCII_USTRINGPARAM("ToolBarItems"     ))
+#define ROOTNODE_ADDONMENU                              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Addons" ))
+#define PATHDELIMITER                                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"             ))
+#define TOOLBARITEMS                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ToolBarItems"      ))
 #define SEPARATOR_URL_STR                               "private:separator"
 #define SEPARATOR_URL_LEN                               17
-#define SEPARATOR_URL                                   OUString(RTL_CONSTASCII_USTRINGPARAM( SEPARATOR_URL_STR ))
+#define SEPARATOR_URL                                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SEPARATOR_URL_STR ))
 
 #define PROPERTYNAME_URL                                ADDONSMENUITEM_PROPERTYNAME_URL
 #define PROPERTYNAME_TITLE                              ADDONSMENUITEM_PROPERTYNAME_TITLE
@@ -88,33 +87,33 @@ using namespace ::com::sun::star::lang  ;
 #define PROPERTYNAME_CONTROLTYPE                        ADDONSMENUITEM_PROPERTYNAME_CONTROLTYPE
 #define PROPERTYNAME_WIDTH                              ADDONSMENUITEM_PROPERTYNAME_WIDTH
 
-#define PROPERTYNAME_IMAGESMALL                         OUString(RTL_CONSTASCII_USTRINGPARAM("ImageSmall" ))
-#define PROPERTYNAME_IMAGEBIG                           OUString(RTL_CONSTASCII_USTRINGPARAM("ImageBig" ))
-#define PROPERTYNAME_IMAGESMALLHC                       OUString(RTL_CONSTASCII_USTRINGPARAM("ImageSmallHC" ))
-#define PROPERTYNAME_IMAGEBIGHC                         OUString(RTL_CONSTASCII_USTRINGPARAM("ImageBigHC" ))
-#define PROPERTYNAME_IMAGESMALL_URL                     OUString(RTL_CONSTASCII_USTRINGPARAM("ImageSmallURL" ))
-#define PROPERTYNAME_IMAGEBIG_URL                       OUString(RTL_CONSTASCII_USTRINGPARAM("ImageBigURL" ))
-#define PROPERTYNAME_IMAGESMALLHC_URL                   OUString(RTL_CONSTASCII_USTRINGPARAM("ImageSmallHCURL" ))
-#define PROPERTYNAME_IMAGEBIGHC_URL                     OUString(RTL_CONSTASCII_USTRINGPARAM("ImageBigHCURL" ))
+#define PROPERTYNAME_IMAGESMALL                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageSmall" ))
+#define PROPERTYNAME_IMAGEBIG                           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageBig" ))
+#define PROPERTYNAME_IMAGESMALLHC                       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageSmallHC" ))
+#define PROPERTYNAME_IMAGEBIGHC                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageBigHC" ))
+#define PROPERTYNAME_IMAGESMALL_URL                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageSmallURL" ))
+#define PROPERTYNAME_IMAGEBIG_URL                       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageBigURL" ))
+#define PROPERTYNAME_IMAGESMALLHC_URL                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageSmallHCURL" ))
+#define PROPERTYNAME_IMAGEBIGHC_URL                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageBigHCURL" ))
 
-#define IMAGES_NODENAME                                 OUString(RTL_CONSTASCII_USTRINGPARAM("UserDefinedImages" ))
-#define PRIVATE_IMAGE_URL                               OUString(RTL_CONSTASCII_USTRINGPARAM("private:image/" ))
+#define IMAGES_NODENAME                                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UserDefinedImages" ))
+#define PRIVATE_IMAGE_URL                               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:image/" ))
 
-#define PROPERTYNAME_MERGEMENU_MERGEPOINT               OUString(RTL_CONSTASCII_USTRINGPARAM("MergePoint" ))
-#define PROPERTYNAME_MERGEMENU_MERGECOMMAND             OUString(RTL_CONSTASCII_USTRINGPARAM("MergeCommand" ))
-#define PROPERTYNAME_MERGEMENU_MERGECOMMANDPARAMETER    OUString(RTL_CONSTASCII_USTRINGPARAM("MergeCommandParameter" ))
-#define PROPERTYNAME_MERGEMENU_MERGEFALLBACK            OUString(RTL_CONSTASCII_USTRINGPARAM("MergeFallback" ))
-#define PROPERTYNAME_MERGEMENU_MERGECONTEXT             OUString(RTL_CONSTASCII_USTRINGPARAM("MergeContext" ))
-#define PROPERTYNAME_MERGEMENU_MENUITEMS                OUString(RTL_CONSTASCII_USTRINGPARAM("MenuItems" ))
+#define PROPERTYNAME_MERGEMENU_MERGEPOINT               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergePoint" ))
+#define PROPERTYNAME_MERGEMENU_MERGECOMMAND             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergeCommand" ))
+#define PROPERTYNAME_MERGEMENU_MERGECOMMANDPARAMETER    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergeCommandParameter" ))
+#define PROPERTYNAME_MERGEMENU_MERGEFALLBACK            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergeFallback" ))
+#define PROPERTYNAME_MERGEMENU_MERGECONTEXT             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergeContext" ))
+#define PROPERTYNAME_MERGEMENU_MENUITEMS                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MenuItems" ))
 #define MERGEMENU_MERGEPOINT_SEPARATOR                  '\\'
 
-#define PROPERTYNAME_MERGETOOLBAR_TOOLBAR               OUString(RTL_CONSTASCII_USTRINGPARAM("MergeToolBar" ))
-#define PROPERTYNAME_MERGETOOLBAR_MERGEPOINT            OUString(RTL_CONSTASCII_USTRINGPARAM("MergePoint" ))
-#define PROPERTYNAME_MERGETOOLBAR_MERGECOMMAND          OUString(RTL_CONSTASCII_USTRINGPARAM("MergeCommand" ))
-#define PROPERTYNAME_MERGETOOLBAR_MERGECOMMANDPARAMETER OUString(RTL_CONSTASCII_USTRINGPARAM("MergeCommandParameter" ))
-#define PROPERTYNAME_MERGETOOLBAR_MERGEFALLBACK         OUString(RTL_CONSTASCII_USTRINGPARAM("MergeFallback" ))
-#define PROPERTYNAME_MERGETOOLBAR_MERGECONTEXT          OUString(RTL_CONSTASCII_USTRINGPARAM("MergeContext" ))
-#define PROPERTYNAME_MERGETOOLBAR_TOOLBARITEMS          OUString(RTL_CONSTASCII_USTRINGPARAM("ToolBarItems" ))
+#define PROPERTYNAME_MERGETOOLBAR_TOOLBAR               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergeToolBar" ))
+#define PROPERTYNAME_MERGETOOLBAR_MERGEPOINT            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergePoint" ))
+#define PROPERTYNAME_MERGETOOLBAR_MERGECOMMAND          ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergeCommand" ))
+#define PROPERTYNAME_MERGETOOLBAR_MERGECOMMANDPARAMETER ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergeCommandParameter" ))
+#define PROPERTYNAME_MERGETOOLBAR_MERGEFALLBACK         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergeFallback" ))
+#define PROPERTYNAME_MERGETOOLBAR_MERGECONTEXT          ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MergeContext" ))
+#define PROPERTYNAME_MERGETOOLBAR_TOOLBARITEMS          ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ToolBarItems" ))
 
 // The following order is mandatory. Please add properties at the end!
 #define INDEX_URL             0
@@ -230,7 +229,7 @@ class AddonsOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void Notify( const Sequence< OUString >& lPropertyNames );
+        virtual void Notify( const Sequence< ::rtl::OUString >& lPropertyNames );
 
         /*-****************************************************************************************************//**
             @short      write changes to configuration
@@ -304,10 +303,10 @@ class AddonsOptions_Impl : public ConfigItem
             Image   aImageBigHCNoScale;
         };
 
-        typedef std::hash_map< OUString, ImageEntry, OUStringHashCode, ::std::equal_to< OUString > > ImageManager;
-        typedef std::hash_map< OUString, sal_uInt32, OUStringHashCode, ::std::equal_to< OUString > > StringToIndexMap;
+        typedef std::hash_map< ::rtl::OUString, ImageEntry, OUStringHashCode, ::std::equal_to< ::rtl::OUString > > ImageManager;
+        typedef std::hash_map< ::rtl::OUString, sal_uInt32, OUStringHashCode, ::std::equal_to< ::rtl::OUString > > StringToIndexMap;
         typedef std::vector< Sequence< Sequence< PropertyValue > > > AddonToolBars;
-        typedef ::std::hash_map< ::rtl::OUString, MergeToolbarInstructionContainer, OUStringHashCode, ::std::equal_to< OUString > > ToolbarMergingInstructions;
+        typedef ::std::hash_map< ::rtl::OUString, MergeToolbarInstructionContainer, OUStringHashCode, ::std::equal_to< ::rtl::OUString > > ToolbarMergingInstructions;
 
         enum ImageSize
         {
@@ -337,28 +336,28 @@ class AddonsOptions_Impl : public ConfigItem
         sal_Bool             ReadMenuMergeInstructions( MergeMenuInstructionContainer& rContainer );
         sal_Bool             ReadToolbarMergeInstructions( ToolbarMergingInstructions& rToolbarMergeMap );
 
-        sal_Bool             ReadMergeMenuData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu );
-        sal_Bool             ReadMergeToolbarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems );
-        sal_Bool             ReadMenuItem( const OUString& aMenuItemNodeName, Sequence< PropertyValue >& aMenuItem, sal_Bool bIgnoreSubMenu = sal_False );
-        sal_Bool             ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequence< PropertyValue >& aPopupMenu );
+        sal_Bool             ReadMergeMenuData( const ::rtl::OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu );
+        sal_Bool             ReadMergeToolbarData( const ::rtl::OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems );
+        sal_Bool             ReadMenuItem( const ::rtl::OUString& aMenuItemNodeName, Sequence< PropertyValue >& aMenuItem, sal_Bool bIgnoreSubMenu = sal_False );
+        sal_Bool             ReadPopupMenu( const ::rtl::OUString& aPopupMenuNodeName, Sequence< PropertyValue >& aPopupMenu );
         sal_Bool             AppendPopupMenu( Sequence< PropertyValue >& aTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu );
-        sal_Bool             ReadToolBarItem( const OUString& aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem );
-        sal_Bool             ReadImagesItem( const OUString& aImagesItemNodeName, Sequence< PropertyValue >& aImagesItem );
-        ImageEntry*          ReadImageData( const OUString& aImagesNodeName );
-        void                 ReadAndAssociateImages( const OUString& aURL, const OUString& aImageId );
-        void                 ReadImageFromURL( ImageSize nImageSize, const OUString& aURL, Image& aImage, Image& aNoScaleImage );
-        sal_Bool             HasAssociatedImages( const OUString& aURL );
-        void                 SubstituteVariables( OUString& aURL );
+        sal_Bool             ReadToolBarItem( const ::rtl::OUString& aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem );
+        sal_Bool             ReadImagesItem( const ::rtl::OUString& aImagesItemNodeName, Sequence< PropertyValue >& aImagesItem );
+        ImageEntry*          ReadImageData( const ::rtl::OUString& aImagesNodeName );
+        void                 ReadAndAssociateImages( const ::rtl::OUString& aURL, const ::rtl::OUString& aImageId );
+        void                 ReadImageFromURL( ImageSize nImageSize, const ::rtl::OUString& aURL, Image& aImage, Image& aNoScaleImage );
+        sal_Bool             HasAssociatedImages( const ::rtl::OUString& aURL );
+        void                 SubstituteVariables( ::rtl::OUString& aURL );
 
-        sal_Bool             ReadSubMenuEntries( const Sequence< OUString >& aSubMenuNodeNames, Sequence< Sequence< PropertyValue > >& rSubMenu );
+        sal_Bool             ReadSubMenuEntries( const Sequence< ::rtl::OUString >& aSubMenuNodeNames, Sequence< Sequence< PropertyValue > >& rSubMenu );
         void                 InsertToolBarSeparator( Sequence< Sequence< PropertyValue > >& rAddonOfficeToolBarSeq );
-        OUString             GeneratePrefixURL();
+        ::rtl::OUString          GeneratePrefixURL();
 
-        Sequence< OUString > GetPropertyNamesMergeMenuInstruction( const OUString& aPropertyRootName ) const;
-        Sequence< OUString > GetPropertyNamesMenuItem( const OUString& aPropertyRootNode ) const;
-        Sequence< OUString > GetPropertyNamesPopupMenu( const OUString& aPropertyRootNode ) const;
-        Sequence< OUString > GetPropertyNamesToolBarItem( const OUString& aPropertyRootNode ) const;
-        Sequence< OUString > GetPropertyNamesImages( const OUString& aPropertyRootNode ) const;
+        Sequence< ::rtl::OUString > GetPropertyNamesMergeMenuInstruction( const ::rtl::OUString& aPropertyRootName ) const;
+        Sequence< ::rtl::OUString > GetPropertyNamesMenuItem( const ::rtl::OUString& aPropertyRootNode ) const;
+        Sequence< ::rtl::OUString > GetPropertyNamesPopupMenu( const ::rtl::OUString& aPropertyRootNode ) const;
+        Sequence< ::rtl::OUString > GetPropertyNamesToolBarItem( const ::rtl::OUString& aPropertyRootNode ) const;
+        Sequence< ::rtl::OUString > GetPropertyNamesImages( const ::rtl::OUString& aPropertyRootNode ) const;
         sal_Bool             CreateImageFromSequence( Image& rImage, sal_Bool bBig, Sequence< sal_Int8 >& rBitmapDataSeq ) const;
 
     //-------------------------------------------------------------------------------------------------------------
@@ -366,18 +365,18 @@ class AddonsOptions_Impl : public ConfigItem
     //-------------------------------------------------------------------------------------------------------------
 
     private:
-        ImageEntry* ReadOptionalImageData( const OUString& aMenuNodeName );
+        ImageEntry* ReadOptionalImageData( const ::rtl::OUString& aMenuNodeName );
 
         sal_Int32                                         m_nRootAddonPopupMenuId;
-        OUString                                          m_aPropNames[PROPERTYCOUNT_INDEX];
-        OUString                                          m_aPropImagesNames[PROPERTYCOUNT_IMAGES];
-        OUString                                          m_aPropMergeMenuNames[PROPERTYCOUNT_MERGE_MENUBAR];
-        OUString                                          m_aPropMergeToolbarNames[PROPERTYCOUNT_MERGE_TOOLBAR];
-        OUString                                          m_aEmpty;
-        OUString                                          m_aPathDelimiter;
-        OUString                                          m_aSeparator;
-        OUString                                          m_aRootAddonPopupMenuURLPrexfix;
-        OUString                                          m_aPrivateImageURL;
+        ::rtl::OUString                                          m_aPropNames[PROPERTYCOUNT_INDEX];
+        ::rtl::OUString                                          m_aPropImagesNames[PROPERTYCOUNT_IMAGES];
+        ::rtl::OUString                                          m_aPropMergeMenuNames[PROPERTYCOUNT_MERGE_MENUBAR];
+        ::rtl::OUString                                          m_aPropMergeToolbarNames[PROPERTYCOUNT_MERGE_TOOLBAR];
+        ::rtl::OUString                                          m_aEmpty;
+        ::rtl::OUString                                          m_aPathDelimiter;
+        ::rtl::OUString                                          m_aSeparator;
+        ::rtl::OUString                                          m_aRootAddonPopupMenuURLPrexfix;
+        ::rtl::OUString                                          m_aPrivateImageURL;
         Sequence< Sequence< PropertyValue > >             m_aCachedMenuProperties;
         Sequence< Sequence< PropertyValue > >             m_aCachedMenuBarPartProperties;
         AddonToolBars                                     m_aCachedToolBarPartProperties;
@@ -444,11 +443,11 @@ AddonsOptions_Impl::AddonsOptions_Impl()
 
     Reference< XComponentContext > xContext;
     Reference< com::sun::star::beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
-    xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
+    xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
     if ( xContext.is() )
     {
         m_xMacroExpander =  Reference< com::sun::star::util::XMacroExpander >( xContext->getValueByName(
-                                OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander"))),
+                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander"))),
                                 UNO_QUERY );
     }
 
@@ -499,7 +498,7 @@ void AddonsOptions_Impl::ReadConfigurationData()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void AddonsOptions_Impl::Notify( const Sequence< OUString >& /*lPropertyNames*/ )
+void AddonsOptions_Impl::Notify( const Sequence< ::rtl::OUString >& /*lPropertyNames*/ )
 {
     Application::PostUserEvent( STATIC_LINK( 0, AddonsOptions, Notify ) );
 }
@@ -642,9 +641,9 @@ Image AddonsOptions_Impl::GetImageFromURL( const rtl::OUString& aURL, sal_Bool b
 sal_Bool AddonsOptions_Impl::ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >& rAddonMenuSeq )
 {
     // Read the AddonMenu set and fill property sequences
-    OUString                aAddonMenuNodeName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/AddonMenu" ));
-    Sequence< OUString >    aAddonMenuNodeSeq = GetNodeNames( aAddonMenuNodeName );
-    OUString                aAddonMenuItemNode( aAddonMenuNodeName + m_aPathDelimiter );
+    ::rtl::OUString             aAddonMenuNodeName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/AddonMenu" ));
+    Sequence< ::rtl::OUString > aAddonMenuNodeSeq = GetNodeNames( aAddonMenuNodeName );
+    ::rtl::OUString             aAddonMenuItemNode( aAddonMenuNodeName + m_aPathDelimiter );
 
     sal_uInt32              nCount = aAddonMenuNodeSeq.getLength();
     sal_uInt32              nIndex = 0;
@@ -660,7 +659,7 @@ sal_Bool AddonsOptions_Impl::ReadAddonMenuSet( Sequence< Sequence< PropertyValue
 
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
-        OUString aRootMenuItemNode( aAddonMenuItemNode + aAddonMenuNodeSeq[n] );
+        ::rtl::OUString aRootMenuItemNode( aAddonMenuItemNode + aAddonMenuNodeSeq[n] );
 
         // Read the MenuItem
         if ( ReadMenuItem( aRootMenuItemNode, aMenuItem ) )
@@ -681,9 +680,9 @@ sal_Bool AddonsOptions_Impl::ReadAddonMenuSet( Sequence< Sequence< PropertyValue
 sal_Bool AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > >& rAddonOfficeHelpMenuSeq )
 {
     // Read the AddonMenu set and fill property sequences
-    OUString                aAddonHelpMenuNodeName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeHelp" ));
-    Sequence< OUString >    aAddonHelpMenuNodeSeq = GetNodeNames( aAddonHelpMenuNodeName );
-    OUString                aAddonHelpMenuItemNode( aAddonHelpMenuNodeName + m_aPathDelimiter );
+    ::rtl::OUString             aAddonHelpMenuNodeName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeHelp" ));
+    Sequence< ::rtl::OUString > aAddonHelpMenuNodeSeq = GetNodeNames( aAddonHelpMenuNodeName );
+    ::rtl::OUString             aAddonHelpMenuItemNode( aAddonHelpMenuNodeName + m_aPathDelimiter );
 
     sal_uInt32              nCount = aAddonHelpMenuNodeSeq.getLength();
     sal_uInt32              nIndex = 0;
@@ -699,7 +698,7 @@ sal_Bool AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValu
 
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
-        OUString aRootMenuItemNode( aAddonHelpMenuItemNode + aAddonHelpMenuNodeSeq[n] );
+        ::rtl::OUString aRootMenuItemNode( aAddonHelpMenuItemNode + aAddonHelpMenuNodeSeq[n] );
 
         // Read the MenuItem
         if ( ReadMenuItem( aRootMenuItemNode, aMenuItem, sal_True ) )
@@ -720,9 +719,9 @@ sal_Bool AddonsOptions_Impl::ReadOfficeHelpSet( Sequence< Sequence< PropertyValu
 sal_Bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue > >& rAddonOfficeMenuBarSeq )
 {
     // Read the OfficeMenuBar set and fill property sequences
-    OUString                aAddonMenuBarNodeName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeMenuBar" ));
-    Sequence< OUString >    aAddonMenuBarNodeSeq = GetNodeNames( aAddonMenuBarNodeName );
-    OUString                aAddonMenuBarNode( aAddonMenuBarNodeName + m_aPathDelimiter );
+    ::rtl::OUString             aAddonMenuBarNodeName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeMenuBar" ));
+    Sequence< ::rtl::OUString > aAddonMenuBarNodeSeq = GetNodeNames( aAddonMenuBarNodeName );
+    ::rtl::OUString             aAddonMenuBarNode( aAddonMenuBarNodeName + m_aPathDelimiter );
 
     sal_uInt32              nCount = aAddonMenuBarNodeSeq.getLength();
     sal_uInt32              nIndex = 0;
@@ -738,13 +737,13 @@ sal_Bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyV
 
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
-        OUString aPopupMenuNode( aAddonMenuBarNode + aAddonMenuBarNodeSeq[n] );
+        ::rtl::OUString aPopupMenuNode( aAddonMenuBarNode + aAddonMenuBarNodeSeq[n] );
 
         // Read the MenuItem
         if ( ReadPopupMenu( aPopupMenuNode, aPopupMenu ) )
         {
             // Successfully read a popup menu, append to our list
-            OUString aPopupTitle;
+            ::rtl::OUString aPopupTitle;
             if ( aPopupMenu[OFFSET_POPUPMENU_TITLE].Value >>= aPopupTitle )
             {
                 StringToIndexMap::const_iterator pIter = aTitleToIndexMap.find( aPopupTitle );
@@ -776,15 +775,15 @@ sal_Bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyV
 sal_Bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars, std::vector< rtl::OUString >& rAddonOfficeToolBarResNames )
 {
     // Read the OfficeToolBar set and fill property sequences
-    OUString             aAddonToolBarNodeName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeToolBar" ));
-    Sequence< OUString > aAddonToolBarNodeSeq = GetNodeNames( aAddonToolBarNodeName );
-    OUString             aAddonToolBarNode( aAddonToolBarNodeName + m_aPathDelimiter );
+    ::rtl::OUString             aAddonToolBarNodeName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeToolBar" ));
+    Sequence< ::rtl::OUString > aAddonToolBarNodeSeq = GetNodeNames( aAddonToolBarNodeName );
+    ::rtl::OUString             aAddonToolBarNode( aAddonToolBarNodeName + m_aPathDelimiter );
 
     sal_uInt32           nCount = aAddonToolBarNodeSeq.getLength();
 
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
-        OUString aToolBarItemNode( aAddonToolBarNode + aAddonToolBarNodeSeq[n] );
+        ::rtl::OUString aToolBarItemNode( aAddonToolBarNode + aAddonToolBarNodeSeq[n] );
         rAddonOfficeToolBarResNames.push_back( aAddonToolBarNodeSeq[n] );
         rAddonOfficeToolBars.push_back( m_aEmptyAddonToolBar );
         ReadToolBarItemSet( aToolBarItemNode, rAddonOfficeToolBars[n] );
@@ -801,8 +800,8 @@ sal_Bool AddonsOptions_Impl::ReadToolBarItemSet( const rtl::OUString rToolBarIte
 {
     sal_Bool                    bInsertSeparator        = sal_False;
     sal_uInt32                  nToolBarItemCount       = rAddonOfficeToolBarSeq.getLength();
-    OUString                    aAddonToolBarItemSetNode( rToolBarItemSetNodeName + m_aPathDelimiter );
-    Sequence< OUString >        aAddonToolBarItemSetNodeSeq = GetNodeNames( rToolBarItemSetNodeName );
+    ::rtl::OUString                 aAddonToolBarItemSetNode( rToolBarItemSetNodeName + m_aPathDelimiter );
+    Sequence< ::rtl::OUString >     aAddonToolBarItemSetNodeSeq = GetNodeNames( rToolBarItemSetNodeName );
     Sequence< PropertyValue >   aToolBarItem( PROPERTYCOUNT_TOOLBARITEM );
 
     // Init the property value sequence
@@ -817,7 +816,7 @@ sal_Bool AddonsOptions_Impl::ReadToolBarItemSet( const rtl::OUString rToolBarIte
     sal_uInt32 nCount = aAddonToolBarItemSetNodeSeq.getLength();
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
-        OUString aToolBarItemNode( aAddonToolBarItemSetNode + aAddonToolBarItemSetNodeSeq[n] );
+        ::rtl::OUString aToolBarItemNode( aAddonToolBarItemSetNode + aAddonToolBarItemSetNodeSeq[n] );
 
         // Read the ToolBarItem
         if ( ReadToolBarItem( aToolBarItemNode, aToolBarItem ) )
@@ -868,22 +867,22 @@ void AddonsOptions_Impl::InsertToolBarSeparator( Sequence< Sequence< PropertyVal
 sal_Bool AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
 {
     // Read the user-defined Images set and fill image manager
-    OUString                aAddonImagesNodeName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/Images" ));
-    Sequence< OUString >    aAddonImagesNodeSeq = GetNodeNames( aAddonImagesNodeName );
-    OUString                aAddonImagesNode( aAddonImagesNodeName + m_aPathDelimiter );
+    ::rtl::OUString                aAddonImagesNodeName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/Images" ));
+    Sequence< ::rtl::OUString > aAddonImagesNodeSeq = GetNodeNames( aAddonImagesNodeName );
+    ::rtl::OUString                aAddonImagesNode( aAddonImagesNodeName + m_aPathDelimiter );
 
     sal_uInt32              nCount = aAddonImagesNodeSeq.getLength();
 
     // Init the property value sequence
-    Sequence< OUString >    aAddonImageItemNodePropNames( 1 );
-    OUString                aURL;
+    Sequence< ::rtl::OUString > aAddonImageItemNodePropNames( 1 );
+    ::rtl::OUString                aURL;
 
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
-        OUString aImagesItemNode( aAddonImagesNode + aAddonImagesNodeSeq[n] );
+        ::rtl::OUString aImagesItemNode( aAddonImagesNode + aAddonImagesNodeSeq[n] );
 
         // Create sequence for data access
-        OUStringBuffer aBuffer( aImagesItemNode );
+        ::rtl::OUStringBuffer aBuffer( aImagesItemNode );
         aBuffer.append( m_aPathDelimiter );
         aBuffer.append( m_aPropNames[ OFFSET_MENUITEM_URL ] );
         aAddonImageItemNodePropNames[0] = aBuffer.makeStringAndClear();
@@ -896,11 +895,11 @@ sal_Bool AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
             aURL.getLength() > 0 &&
             !HasAssociatedImages( aURL ))
         {
-            OUStringBuffer aBuf( aImagesItemNode );
+            ::rtl::OUStringBuffer aBuf( aImagesItemNode );
             aBuf.append( m_aPathDelimiter );
             aBuf.append( IMAGES_NODENAME );
             aBuf.append( m_aPathDelimiter );
-            OUString aImagesUserDefinedItemNode = aBuf.makeStringAndClear();
+            ::rtl::OUString aImagesUserDefinedItemNode = aBuf.makeStringAndClear();
 
             // Read a user-defined images data
             ImageEntry* pImageEntry = ReadImageData( aImagesUserDefinedItemNode );
@@ -920,14 +919,14 @@ sal_Bool AddonsOptions_Impl::ReadImages( ImageManager& aImageManager )
 //  private method
 //*****************************************************************************************************************
 
-OUString AddonsOptions_Impl::GeneratePrefixURL()
+::rtl::OUString AddonsOptions_Impl::GeneratePrefixURL()
 {
     // Create an unique prefixed Add-On popup menu URL so it can be identified later as a runtime popup menu.
     // They use a different image manager, so they must be identified by the sfx2/framework code.
-    OUString aPopupMenuURL;
-    OUStringBuffer aBuf( m_aRootAddonPopupMenuURLPrexfix.getLength() + 3 );
+    ::rtl::OUString aPopupMenuURL;
+    ::rtl::OUStringBuffer aBuf( m_aRootAddonPopupMenuURLPrexfix.getLength() + 3 );
     aBuf.append( m_aRootAddonPopupMenuURLPrexfix );
-    aBuf.append( OUString::valueOf( ++m_nRootAddonPopupMenuId ));
+    aBuf.append( ::rtl::OUString::valueOf( ++m_nRootAddonPopupMenuId ));
     aPopupMenuURL = aBuf.makeStringAndClear();
     return aPopupMenuURL;
 }
@@ -938,33 +937,33 @@ OUString AddonsOptions_Impl::GeneratePrefixURL()
 
 sal_Bool AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContainer& aContainer )
 {
-    const OUString aMenuMergeRootName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeMenuBarMerging/" ));
+    const ::rtl::OUString aMenuMergeRootName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeMenuBarMerging/" ));
 
-    Sequence< OUString >    aAddonMergeNodesSeq = GetNodeNames( aMenuMergeRootName );
-    OUString                aAddonMergeNode( aMenuMergeRootName );
+    Sequence< ::rtl::OUString > aAddonMergeNodesSeq = GetNodeNames( aMenuMergeRootName );
+    ::rtl::OUString                aAddonMergeNode( aMenuMergeRootName );
 
     sal_uInt32              nCount = aAddonMergeNodesSeq.getLength();
 
     // Init the property value sequence
-    Sequence< OUString >    aNodePropNames( 5 );
-    OUString                aURL;
+    Sequence< ::rtl::OUString > aNodePropNames( 5 );
+    ::rtl::OUString                aURL;
 
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
-        OUString aMergeAddonInstructions( aAddonMergeNode + aAddonMergeNodesSeq[i] );
+        ::rtl::OUString aMergeAddonInstructions( aAddonMergeNode + aAddonMergeNodesSeq[i] );
 
-        Sequence< OUString > aAddonInstMergeNodesSeq = GetNodeNames( aMergeAddonInstructions );
+        Sequence< ::rtl::OUString > aAddonInstMergeNodesSeq = GetNodeNames( aMergeAddonInstructions );
         sal_uInt32           nCountAddons = aAddonInstMergeNodesSeq.getLength();
 
         for ( sal_uInt32 j = 0; j < nCountAddons; j++ )
         {
-            OUStringBuffer aMergeAddonInstructionBase( aMergeAddonInstructions );
+            ::rtl::OUStringBuffer aMergeAddonInstructionBase( aMergeAddonInstructions );
             aMergeAddonInstructionBase.append( m_aPathDelimiter );
             aMergeAddonInstructionBase.append( aAddonInstMergeNodesSeq[j] );
             aMergeAddonInstructionBase.append( m_aPathDelimiter );
 
             // Create sequence for data access
-            OUStringBuffer aBuffer( aMergeAddonInstructionBase );
+            ::rtl::OUStringBuffer aBuffer( aMergeAddonInstructionBase );
             aBuffer.append( m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEPOINT ] );
             aNodePropNames[0] = aBuffer.makeStringAndClear();
 
@@ -993,7 +992,7 @@ sal_Bool AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionCont
             aNodePropValues[3] >>= aMergeMenuInstruction.aMergeFallback;
             aNodePropValues[4] >>= aMergeMenuInstruction.aMergeContext;
 
-            OUString aMergeMenuBase = aMergeAddonInstructionBase.makeStringAndClear();
+            ::rtl::OUString aMergeMenuBase = aMergeAddonInstructionBase.makeStringAndClear();
             ReadMergeMenuData( aMergeMenuBase, aMergeMenuInstruction.aMergeMenu );
 
             aContainer.push_back( aMergeMenuInstruction );
@@ -1006,16 +1005,16 @@ sal_Bool AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionCont
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-sal_Bool AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu )
+sal_Bool AddonsOptions_Impl::ReadMergeMenuData( const ::rtl::OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu )
 {
-    OUString aMergeMenuBaseNode( aMergeAddonInstructionBase+m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MENUITEMS ] );
+    ::rtl::OUString aMergeMenuBaseNode( aMergeAddonInstructionBase+m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MENUITEMS ] );
 
-    Sequence< OUString > aSubMenuNodeNames = GetNodeNames( aMergeMenuBaseNode );
+    Sequence< ::rtl::OUString > aSubMenuNodeNames = GetNodeNames( aMergeMenuBaseNode );
     aMergeMenuBaseNode += m_aPathDelimiter;
 
     // extend the node names to have full path strings
     for ( sal_uInt32 i = 0; i < (sal_uInt32)aSubMenuNodeNames.getLength(); i++ )
-        aSubMenuNodeNames[i] = OUString( aMergeMenuBaseNode + aSubMenuNodeNames[i] );
+        aSubMenuNodeNames[i] = ::rtl::OUString( aMergeMenuBaseNode + aSubMenuNodeNames[i] );
 
     return ReadSubMenuEntries( aSubMenuNodeNames, rMergeMenu );
 }
@@ -1025,33 +1024,33 @@ sal_Bool AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstr
 //*****************************************************************************************************************
 sal_Bool AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstructions& rCachedToolbarMergingInstructions )
 {
-    const OUString aToolbarMergeRootName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeToolbarMerging/" ));
+    const ::rtl::OUString aToolbarMergeRootName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeToolbarMerging/" ));
 
-    Sequence< OUString >    aAddonMergeNodesSeq = GetNodeNames( aToolbarMergeRootName );
-    OUString                aAddonMergeNode( aToolbarMergeRootName );
+    Sequence< ::rtl::OUString > aAddonMergeNodesSeq = GetNodeNames( aToolbarMergeRootName );
+    ::rtl::OUString                aAddonMergeNode( aToolbarMergeRootName );
 
     sal_uInt32              nCount = aAddonMergeNodesSeq.getLength();
 
     // Init the property value sequence
-    Sequence< OUString >    aNodePropNames( 6 );
-    OUString                aURL;
+    Sequence< ::rtl::OUString > aNodePropNames( 6 );
+    ::rtl::OUString                aURL;
 
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
-        OUString aMergeAddonInstructions( aAddonMergeNode + aAddonMergeNodesSeq[i] );
+        ::rtl::OUString aMergeAddonInstructions( aAddonMergeNode + aAddonMergeNodesSeq[i] );
 
-        Sequence< OUString > aAddonInstMergeNodesSeq = GetNodeNames( aMergeAddonInstructions );
+        Sequence< ::rtl::OUString > aAddonInstMergeNodesSeq = GetNodeNames( aMergeAddonInstructions );
         sal_uInt32           nCountAddons = aAddonInstMergeNodesSeq.getLength();
 
         for ( sal_uInt32 j = 0; j < nCountAddons; j++ )
         {
-            OUStringBuffer aMergeAddonInstructionBase( aMergeAddonInstructions );
+            ::rtl::OUStringBuffer aMergeAddonInstructionBase( aMergeAddonInstructions );
             aMergeAddonInstructionBase.append( m_aPathDelimiter );
             aMergeAddonInstructionBase.append( aAddonInstMergeNodesSeq[j] );
             aMergeAddonInstructionBase.append( m_aPathDelimiter );
 
             // Create sequence for data access
-            OUStringBuffer aBuffer( aMergeAddonInstructionBase );
+            ::rtl::OUStringBuffer aBuffer( aMergeAddonInstructionBase );
             aBuffer.append( m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBAR ] );
             aNodePropNames[0] = aBuffer.makeStringAndClear();
 
@@ -1099,12 +1098,12 @@ sal_Bool AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstruc
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-sal_Bool AddonsOptions_Impl::ReadMergeToolbarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems )
+sal_Bool AddonsOptions_Impl::ReadMergeToolbarData( const ::rtl::OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems )
 {
-    OUStringBuffer aBuffer( aMergeAddonInstructionBase );
+    ::rtl::OUStringBuffer aBuffer( aMergeAddonInstructionBase );
     aBuffer.append( m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBARITEMS ] );
 
-    OUString aMergeToolbarBaseNode = aBuffer.makeStringAndClear();
+    ::rtl::OUString aMergeToolbarBaseNode = aBuffer.makeStringAndClear();
 
     return ReadToolBarItemSet( aMergeToolbarBaseNode, rMergeToolbarItems );
 }
@@ -1112,11 +1111,11 @@ sal_Bool AddonsOptions_Impl::ReadMergeToolbarData( const OUString& aMergeAddonIn
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-sal_Bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< PropertyValue >& aMenuItem, sal_Bool bIgnoreSubMenu )
+sal_Bool AddonsOptions_Impl::ReadMenuItem( const ::rtl::OUString& aMenuNodeName, Sequence< PropertyValue >& aMenuItem, sal_Bool bIgnoreSubMenu )
 {
     sal_Bool            bResult = sal_False;
-    OUString            aStrValue;
-    OUString            aAddonMenuItemTreeNode( aMenuNodeName + m_aPathDelimiter );
+    ::rtl::OUString         aStrValue;
+    ::rtl::OUString         aAddonMenuItemTreeNode( aMenuNodeName + m_aPathDelimiter );
     Sequence< Any >     aMenuItemNodePropValues;
 
     aMenuItemNodePropValues = GetProperties( GetPropertyNamesMenuItem( aAddonMenuItemTreeNode ) );
@@ -1124,13 +1123,13 @@ sal_Bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequen
     {
         aMenuItem[ OFFSET_MENUITEM_TITLE ].Value <<= aStrValue;
 
-        OUString aRootSubMenuName( aAddonMenuItemTreeNode + m_aPropNames[ INDEX_SUBMENU ] );
-        Sequence< OUString > aRootSubMenuNodeNames = GetNodeNames( aRootSubMenuName );
+        ::rtl::OUString aRootSubMenuName( aAddonMenuItemTreeNode + m_aPropNames[ INDEX_SUBMENU ] );
+        Sequence< ::rtl::OUString > aRootSubMenuNodeNames = GetNodeNames( aRootSubMenuName );
         if ( aRootSubMenuNodeNames.getLength() > 0 && !bIgnoreSubMenu )
         {
             // Set a unique prefixed Add-On popup menu URL so it can be identified later
-            OUString aPopupMenuURL     = GeneratePrefixURL();
-            OUString aPopupMenuImageId;
+            ::rtl::OUString aPopupMenuURL     = GeneratePrefixURL();
+            ::rtl::OUString aPopupMenuImageId;
 
             aMenuItemNodePropValues[ OFFSET_MENUITEM_IMAGEIDENTIFIER ] >>= aPopupMenuImageId;
             ReadAndAssociateImages( aPopupMenuURL, aPopupMenuImageId );
@@ -1144,9 +1143,9 @@ sal_Bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequen
 
             // Continue to read the sub menu nodes
             Sequence< Sequence< PropertyValue > > aSubMenuSeq;
-            OUString aSubMenuRootNodeName( aRootSubMenuName + m_aPathDelimiter );
+            ::rtl::OUString aSubMenuRootNodeName( aRootSubMenuName + m_aPathDelimiter );
             for ( sal_uInt32 n = 0; n < (sal_uInt32)aRootSubMenuNodeNames.getLength(); n++ )
-                aRootSubMenuNodeNames[n] = OUString( aSubMenuRootNodeName + aRootSubMenuNodeNames[n] );
+                aRootSubMenuNodeNames[n] = ::rtl::OUString( aSubMenuRootNodeName + aRootSubMenuNodeNames[n] );
             ReadSubMenuEntries( aRootSubMenuNodeNames, aSubMenuSeq );
             aMenuItem[ OFFSET_MENUITEM_SUBMENU ].Value <<= aSubMenuSeq;
             bResult = sal_True;
@@ -1154,7 +1153,7 @@ sal_Bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequen
         else if (( aMenuItemNodePropValues[ OFFSET_MENUITEM_URL ] >>= aStrValue ) && aStrValue.getLength() > 0 )
         {
             // A simple menu item => read the other properties;
-            OUString aMenuImageId;
+            ::rtl::OUString aMenuImageId;
 
             aMenuItemNodePropValues[ OFFSET_MENUITEM_IMAGEIDENTIFIER ] >>= aMenuImageId;
              ReadAndAssociateImages( aStrValue, aMenuImageId );
@@ -1186,11 +1185,11 @@ sal_Bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequen
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-sal_Bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequence< PropertyValue >& aPopupMenu )
+sal_Bool AddonsOptions_Impl::ReadPopupMenu( const ::rtl::OUString& aPopupMenuNodeName, Sequence< PropertyValue >& aPopupMenu )
 {
     sal_Bool            bResult = sal_False;
-    OUString            aStrValue;
-    OUString            aAddonPopupMenuTreeNode( aPopupMenuNodeName + m_aPathDelimiter );
+    ::rtl::OUString         aStrValue;
+    ::rtl::OUString         aAddonPopupMenuTreeNode( aPopupMenuNodeName + m_aPathDelimiter );
     Sequence< Any >     aPopupMenuNodePropValues;
 
     aPopupMenuNodePropValues = GetProperties( GetPropertyNamesPopupMenu( aAddonPopupMenuTreeNode ) );
@@ -1199,22 +1198,22 @@ sal_Bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, 
     {
         aPopupMenu[ OFFSET_POPUPMENU_TITLE ].Value <<= aStrValue;
 
-        OUString aRootSubMenuName( aAddonPopupMenuTreeNode + m_aPropNames[ INDEX_SUBMENU ] );
-        Sequence< OUString > aRootSubMenuNodeNames = GetNodeNames( aRootSubMenuName );
+        ::rtl::OUString aRootSubMenuName( aAddonPopupMenuTreeNode + m_aPropNames[ INDEX_SUBMENU ] );
+        Sequence< ::rtl::OUString > aRootSubMenuNodeNames = GetNodeNames( aRootSubMenuName );
         if ( aRootSubMenuNodeNames.getLength() > 0 )
         {
             // A top-level popup menu needs a title
             // Set a unique prefixed Add-On popup menu URL so it can be identified later
-            OUString aPopupMenuURL = GeneratePrefixURL();
+            ::rtl::OUString aPopupMenuURL = GeneratePrefixURL();
 
             aPopupMenu[ OFFSET_POPUPMENU_URL        ].Value <<= aPopupMenuURL;
             aPopupMenu[ OFFSET_POPUPMENU_CONTEXT    ].Value <<= aPopupMenuNodePropValues[ OFFSET_POPUPMENU_CONTEXT ];
 
             // Continue to read the sub menu nodes
             Sequence< Sequence< PropertyValue > > aSubMenuSeq;
-            OUString aSubMenuRootNodeName( aRootSubMenuName + m_aPathDelimiter );
+            ::rtl::OUString aSubMenuRootNodeName( aRootSubMenuName + m_aPathDelimiter );
             for ( sal_uInt32 n = 0; n < (sal_uInt32)aRootSubMenuNodeNames.getLength(); n++ )
-                aRootSubMenuNodeNames[n] = OUString( aSubMenuRootNodeName + aRootSubMenuNodeNames[n] );
+                aRootSubMenuNodeNames[n] = ::rtl::OUString( aSubMenuRootNodeName + aRootSubMenuNodeNames[n] );
             ReadSubMenuEntries( aRootSubMenuNodeNames, aSubMenuSeq );
             aPopupMenu[ OFFSET_POPUPMENU_SUBMENU ].Value <<= aSubMenuSeq;
             bResult = sal_True;
@@ -1248,12 +1247,12 @@ sal_Bool AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTarget
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-sal_Bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem )
+sal_Bool AddonsOptions_Impl::ReadToolBarItem( const ::rtl::OUString& aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem )
 {
     sal_Bool            bResult = sal_False;
-    OUString            aTitle;
-    OUString            aURL;
-    OUString            aAddonToolBarItemTreeNode( aToolBarItemNodeName + m_aPathDelimiter );
+    ::rtl::OUString         aTitle;
+    ::rtl::OUString         aURL;
+    ::rtl::OUString         aAddonToolBarItemTreeNode( aToolBarItemNodeName + m_aPathDelimiter );
     Sequence< Any >     aToolBarItemNodePropValues;
 
     aToolBarItemNodePropValues = GetProperties( GetPropertyNamesToolBarItem( aAddonToolBarItemTreeNode ) );
@@ -1277,7 +1276,7 @@ sal_Bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeNa
         else if (( aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_TITLE ] >>= aTitle ) && aTitle.getLength() > 0 )
         {
             // A normal toolbar item must also have title => read the other properties;
-            OUString aImageId;
+            ::rtl::OUString aImageId;
 
             // Try to map a user-defined image URL to our internal private image URL
             aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_IMAGEIDENTIFIER ] >>= aImageId;
@@ -1305,7 +1304,7 @@ sal_Bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeNa
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-sal_Bool AddonsOptions_Impl::ReadSubMenuEntries( const Sequence< OUString >& aSubMenuNodeNames, Sequence< Sequence< PropertyValue > >& rSubMenuSeq )
+sal_Bool AddonsOptions_Impl::ReadSubMenuEntries( const Sequence< ::rtl::OUString >& aSubMenuNodeNames, Sequence< Sequence< PropertyValue > >& rSubMenuSeq )
 {
     Sequence< PropertyValue > aMenuItem( PROPERTYCOUNT_MENUITEM );
 
@@ -1335,7 +1334,7 @@ sal_Bool AddonsOptions_Impl::ReadSubMenuEntries( const Sequence< OUString >& aSu
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-sal_Bool AddonsOptions_Impl::HasAssociatedImages( const OUString& aURL )
+sal_Bool AddonsOptions_Impl::HasAssociatedImages( const ::rtl::OUString& aURL )
 {
     ImageManager::const_iterator pIter = m_aImageManager.find( aURL );
     return ( pIter != m_aImageManager.end() );
@@ -1344,15 +1343,15 @@ sal_Bool AddonsOptions_Impl::HasAssociatedImages( const OUString& aURL )
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-void AddonsOptions_Impl::SubstituteVariables( OUString& aURL )
+void AddonsOptions_Impl::SubstituteVariables( ::rtl::OUString& aURL )
 {
     if (( aURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( EXPAND_PROTOCOL )) == 0 ) &&
         m_xMacroExpander.is() )
     {
         // cut protocol
-        OUString macro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
+        ::rtl::OUString macro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
         // decode uric class chars
-        macro = Uri::decode(
+        macro = ::rtl::Uri::decode(
             macro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
         // expand macro string
         aURL = m_xMacroExpander->expandMacros( macro );
@@ -1362,7 +1361,7 @@ void AddonsOptions_Impl::SubstituteVariables( OUString& aURL )
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-void AddonsOptions_Impl::ReadImageFromURL( ImageSize nImageSize, const OUString& aImageURL, Image& aImage, Image& aImageNoScale )
+void AddonsOptions_Impl::ReadImageFromURL( ImageSize nImageSize, const ::rtl::OUString& aImageURL, Image& aImage, Image& aImageNoScale )
 {
     SvStream* pStream = UcbStreamHelper::CreateStream( aImageURL, STREAM_STD_READ );
     if ( pStream && ( pStream->GetErrorCode() == 0 ))
@@ -1407,7 +1406,7 @@ void AddonsOptions_Impl::ReadImageFromURL( ImageSize nImageSize, const OUString&
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUString& aImageId )
+void AddonsOptions_Impl::ReadAndAssociateImages( const ::rtl::OUString& aURL, const ::rtl::OUString& aImageId )
 {
     const int   MAX_NUM_IMAGES = 4;
     const char* aExtArray[MAX_NUM_IMAGES] = { "_16", "_26", "_16h", "_26h" };
@@ -1418,14 +1417,14 @@ void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUS
 
     bool        bImageFound = true;
     ImageEntry  aImageEntry;
-    OUString    aImageURL( aImageId );
+    ::rtl::OUString    aImageURL( aImageId );
 
     SubstituteVariables( aImageURL );
 
     // Loop to create the four possible image names and try to read the bitmap files
     for ( int i = 0; i < MAX_NUM_IMAGES; i++ )
     {
-        OUStringBuffer aFileURL( aImageURL );
+        ::rtl::OUStringBuffer aFileURL( aImageURL );
         aFileURL.appendAscii( aExtArray[i] );
         aFileURL.appendAscii( pBmpExt );
 
@@ -1464,12 +1463,12 @@ void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUS
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const OUString& aImagesNodeName )
+AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const ::rtl::OUString& aImagesNodeName )
 {
-    Sequence< OUString > aImageDataNodeNames = GetPropertyNamesImages( aImagesNodeName );
+    Sequence< ::rtl::OUString > aImageDataNodeNames = GetPropertyNamesImages( aImagesNodeName );
     Sequence< Any >      aPropertyData;
     Sequence< sal_Int8 > aImageDataSeq;
-    OUString             aImageURL;
+    ::rtl::OUString             aImageURL;
 
     ImageEntry* pEntry = NULL;
 
@@ -1584,32 +1583,32 @@ sal_Bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, sal_Bool bB
 //*****************************************************************************************************************
 //  private methods
 //*****************************************************************************************************************
-Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesMergeMenuInstruction( const OUString& aPropertyRootNode ) const
+Sequence< ::rtl::OUString > AddonsOptions_Impl::GetPropertyNamesMergeMenuInstruction( const ::rtl::OUString& aPropertyRootNode ) const
 {
-    Sequence< OUString > lResult( PROPERTYCOUNT_MERGE_MENUBAR );
+    Sequence< ::rtl::OUString > lResult( PROPERTYCOUNT_MERGE_MENUBAR );
 
     // Create property names dependent from the root node name
-    lResult[ OFFSET_MERGEMENU_MERGEPOINT            ] = OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEPOINT    ] );
-    lResult[ OFFSET_MERGEMENU_MERGECOMMAND          ] = OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMAND  ] );
-    lResult[ OFFSET_MERGEMENU_MERGECOMMANDPARAMETER ] = OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMANDPARAMETER ] );
-    lResult[ OFFSET_MERGEMENU_MERGEFALLBACK         ] = OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEFALLBACK ] );
-    lResult[ OFFSET_MERGEMENU_MERGECONTEXT          ] = OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECONTEXT  ] );
-    lResult[ OFFSET_MERGEMENU_MENUITEMS             ] = OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MENUITEMS     ] );
+    lResult[ OFFSET_MERGEMENU_MERGEPOINT            ] = ::rtl::OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEPOINT    ] );
+    lResult[ OFFSET_MERGEMENU_MERGECOMMAND          ] = ::rtl::OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMAND  ] );
+    lResult[ OFFSET_MERGEMENU_MERGECOMMANDPARAMETER ] = ::rtl::OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMANDPARAMETER ] );
+    lResult[ OFFSET_MERGEMENU_MERGEFALLBACK         ] = ::rtl::OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEFALLBACK ] );
+    lResult[ OFFSET_MERGEMENU_MERGECONTEXT          ] = ::rtl::OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECONTEXT  ] );
+    lResult[ OFFSET_MERGEMENU_MENUITEMS             ] = ::rtl::OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MENUITEMS     ] );
 
     return lResult;
 }
 
-Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesMenuItem( const OUString& aPropertyRootNode ) const
+Sequence< ::rtl::OUString > AddonsOptions_Impl::GetPropertyNamesMenuItem( const ::rtl::OUString& aPropertyRootNode ) const
 {
-    Sequence< OUString > lResult( PROPERTYCOUNT_MENUITEM );
+    Sequence< ::rtl::OUString > lResult( PROPERTYCOUNT_MENUITEM );
 
     // Create property names dependent from the root node name
-    lResult[OFFSET_MENUITEM_URL]             = OUString( aPropertyRootNode + m_aPropNames[ INDEX_URL             ] );
-    lResult[OFFSET_MENUITEM_TITLE]           = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TITLE           ] );
-    lResult[OFFSET_MENUITEM_IMAGEIDENTIFIER] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_IMAGEIDENTIFIER ] );
-    lResult[OFFSET_MENUITEM_TARGET]          = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TARGET          ] );
-    lResult[OFFSET_MENUITEM_CONTEXT]         = OUString( aPropertyRootNode + m_aPropNames[ INDEX_CONTEXT         ] );
-    lResult[OFFSET_MENUITEM_SUBMENU]         = OUString( aPropertyRootNode + m_aPropNames[ INDEX_SUBMENU         ] );
+    lResult[OFFSET_MENUITEM_URL]             = ::rtl::OUString( aPropertyRootNode + m_aPropNames[ INDEX_URL          ] );
+    lResult[OFFSET_MENUITEM_TITLE]           = ::rtl::OUString( aPropertyRootNode + m_aPropNames[ INDEX_TITLE            ] );
+    lResult[OFFSET_MENUITEM_IMAGEIDENTIFIER] = ::rtl::OUString( aPropertyRootNode + m_aPropNames[ INDEX_IMAGEIDENTIFIER ] );
+    lResult[OFFSET_MENUITEM_TARGET]          = ::rtl::OUString( aPropertyRootNode + m_aPropNames[ INDEX_TARGET           ] );
+    lResult[OFFSET_MENUITEM_CONTEXT]         = ::rtl::OUString( aPropertyRootNode + m_aPropNames[ INDEX_CONTEXT      ] );
+    lResult[OFFSET_MENUITEM_SUBMENU]         = ::rtl::OUString( aPropertyRootNode + m_aPropNames[ INDEX_SUBMENU      ] );
 
     return lResult;
 }
@@ -1617,15 +1616,15 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesMenuItem( const OUStrin
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesPopupMenu( const OUString& aPropertyRootNode ) const
+Sequence< ::rtl::OUString > AddonsOptions_Impl::GetPropertyNamesPopupMenu( const ::rtl::OUString& aPropertyRootNode ) const
 {
     // The URL is automatically set and not read from the configuration.
-    Sequence< OUString > lResult( PROPERTYCOUNT_POPUPMENU-1 );
+    Sequence< ::rtl::OUString > lResult( PROPERTYCOUNT_POPUPMENU-1 );
 
     // Create property names dependent from the root node name
-    lResult[OFFSET_POPUPMENU_TITLE]   = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TITLE ] );
-    lResult[OFFSET_POPUPMENU_CONTEXT] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_CONTEXT   ] );
-    lResult[OFFSET_POPUPMENU_SUBMENU] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_SUBMENU   ] );
+    lResult[OFFSET_POPUPMENU_TITLE]   = ::rtl::OUString( aPropertyRootNode + m_aPropNames[ INDEX_TITLE  ] );
+    lResult[OFFSET_POPUPMENU_CONTEXT] = ::rtl::OUString( aPropertyRootNode + m_aPropNames[ INDEX_CONTEXT    ] );
+    lResult[OFFSET_POPUPMENU_SUBMENU] = ::rtl::OUString( aPropertyRootNode + m_aPropNames[ INDEX_SUBMENU    ] );
 
     return lResult;
 }
@@ -1633,18 +1632,18 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesPopupMenu( const OUStri
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesToolBarItem( const OUString& aPropertyRootNode ) const
+Sequence< ::rtl::OUString > AddonsOptions_Impl::GetPropertyNamesToolBarItem( const ::rtl::OUString& aPropertyRootNode ) const
 {
-    Sequence< OUString > lResult( PROPERTYCOUNT_TOOLBARITEM );
+    Sequence< ::rtl::OUString > lResult( PROPERTYCOUNT_TOOLBARITEM );
 
     // Create property names dependent from the root node name
-    lResult[0] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_URL            ] );
-    lResult[1] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TITLE          ] );
-    lResult[2] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_IMAGEIDENTIFIER] );
-    lResult[3] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_TARGET         ] );
-    lResult[4] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_CONTEXT        ] );
-    lResult[5] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_CONTROLTYPE    ] );
-    lResult[6] = OUString( aPropertyRootNode + m_aPropNames[ INDEX_WIDTH          ] );
+    lResult[0] = ::rtl::OUString( aPropertyRootNode + m_aPropNames[ INDEX_URL             ] );
+    lResult[1] = ::rtl::OUString( aPropertyRootNode + m_aPropNames[ INDEX_TITLE       ] );
+    lResult[2] = ::rtl::OUString( aPropertyRootNode + m_aPropNames[ INDEX_IMAGEIDENTIFIER] );
+    lResult[3] = ::rtl::OUString( aPropertyRootNode + m_aPropNames[ INDEX_TARGET          ] );
+    lResult[4] = ::rtl::OUString( aPropertyRootNode + m_aPropNames[ INDEX_CONTEXT         ] );
+    lResult[5] = ::rtl::OUString( aPropertyRootNode + m_aPropNames[ INDEX_CONTROLTYPE     ] );
+    lResult[6] = ::rtl::OUString( aPropertyRootNode + m_aPropNames[ INDEX_WIDTH       ] );
 
     return lResult;
 }
@@ -1652,19 +1651,19 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesToolBarItem( const OUSt
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesImages( const OUString& aPropertyRootNode ) const
+Sequence< ::rtl::OUString > AddonsOptions_Impl::GetPropertyNamesImages( const ::rtl::OUString& aPropertyRootNode ) const
 {
-    Sequence< OUString > lResult( PROPERTYCOUNT_IMAGES );
+    Sequence< ::rtl::OUString > lResult( PROPERTYCOUNT_IMAGES );
 
     // Create property names dependent from the root node name
-    lResult[0] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_SMALL      ] );
-    lResult[1] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_BIG        ] );
-    lResult[2] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC    ] );
-    lResult[3] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_BIGHC      ] );
-    lResult[4] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_SMALL_URL  ] );
-    lResult[5] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_BIG_URL    ] );
-    lResult[6] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC_URL] );
-    lResult[7] = OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_BIGHC_URL  ] );
+    lResult[0] = ::rtl::OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_SMALL       ] );
+    lResult[1] = ::rtl::OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_BIG     ] );
+    lResult[2] = ::rtl::OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC ] );
+    lResult[3] = ::rtl::OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_BIGHC       ] );
+    lResult[4] = ::rtl::OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_SMALL_URL  ] );
+    lResult[5] = ::rtl::OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_BIG_URL ] );
+    lResult[6] = ::rtl::OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC_URL] );
+    lResult[7] = ::rtl::OUString( aPropertyRootNode + m_aPropImagesNames[ OFFSET_IMAGES_BIGHC_URL   ] );
 
     return lResult;
 }
@@ -1859,3 +1858,4 @@ IMPL_STATIC_LINK_NOINSTANCE( AddonsOptions, Notify, void*, EMPTYARG )
 }
 
 }
+
