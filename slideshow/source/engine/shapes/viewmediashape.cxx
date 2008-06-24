@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewmediashape.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 // must be first
 #include <canvas/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
 #include <math.h>
@@ -89,10 +90,10 @@ namespace slideshow
             mxPlayerWindow(),
             mxComponentContext( rxContext )
         {
-            ENSURE_AND_THROW( mxShape.is(), "ViewMediaShape::ViewMediaShape(): Invalid Shape" );
-            ENSURE_AND_THROW( mpViewLayer, "ViewMediaShape::ViewMediaShape(): Invalid View" );
-            ENSURE_AND_THROW( mpViewLayer->getCanvas(), "ViewMediaShape::ViewMediaShape(): Invalid ViewLayer canvas" );
-            ENSURE_AND_THROW( mxComponentContext.is(), "ViewMediaShape::ViewMediaShape(): Invalid component context" );
+            ENSURE_OR_THROW( mxShape.is(), "ViewMediaShape::ViewMediaShape(): Invalid Shape" );
+            ENSURE_OR_THROW( mpViewLayer, "ViewMediaShape::ViewMediaShape(): Invalid View" );
+            ENSURE_OR_THROW( mpViewLayer->getCanvas(), "ViewMediaShape::ViewMediaShape(): Invalid ViewLayer canvas" );
+            ENSURE_OR_THROW( mxComponentContext.is(), "ViewMediaShape::ViewMediaShape(): Invalid component context" );
         }
 
         // ---------------------------------------------------------------------
@@ -250,7 +251,7 @@ namespace slideshow
         {
             if( !mxPlayer.is() && mxShape.is() )
             {
-                ENSURE_AND_RETURN( mpViewLayer->getCanvas(),
+                ENSURE_OR_RETURN( mpViewLayer->getCanvas(),
                                    "ViewMediaShape::update(): Invalid layer canvas" );
 
                 uno::Reference< rendering::XCanvas > xCanvas( mpViewLayer->getCanvas()->getUNOCanvas() );
