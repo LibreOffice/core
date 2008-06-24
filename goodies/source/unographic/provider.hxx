@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: provider.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
 
 using namespace com::sun::star;
 
@@ -74,6 +75,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > implLoadMemory( const ::rtl::OUString& rResourceURL ) const;
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > implLoadResource( const ::rtl::OUString& rResourceURL ) const;
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > implLoadRepositoryImage( const ::rtl::OUString& rResourceURL ) const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > implLoadBitmap( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >& rBitmap ) const;
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > implLoadStandardImage( const ::rtl::OUString& rResourceURL ) const;
 };
 
