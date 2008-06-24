@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,6 +46,7 @@ TARFILE_NAME=jakarta-tomcat-5.0.30-src
 
 TARFILE_ROOTDIR=jakarta-tomcat-5.0.30-src
 
+ADDITIONAL_FILES = jakarta-servletapi-5/build.xml
 #CONVERTFILES=build$/build.xml
 
 PATCH_FILE_NAME=tomcat.patch
