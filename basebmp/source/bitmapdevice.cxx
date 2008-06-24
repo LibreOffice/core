@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bitmapdevice.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -593,7 +593,8 @@ namespace
                                       maColorLookup( maAccessor,
                                                      col),
                                       rBounds,
-                                      aPoly );
+                                      aPoly,
+                                      basegfx::FillRule_EVEN_ODD );
         }
 
         virtual void fillPolyPolygon_i(const basegfx::B2DPolyPolygon& rPoly,
