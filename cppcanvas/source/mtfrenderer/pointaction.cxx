@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pointaction.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,8 +109,9 @@ namespace cppcanvas
                 maState()
             {
                 tools::initRenderState(maState,rState);
-                maState.DeviceColor = ::vcl::unotools::colorToDoubleSequence( rCanvas->getUNOCanvas()->getDevice(),
-                                                                              rAltColor );
+                maState.DeviceColor = ::vcl::unotools::colorToDoubleSequence(
+                    rAltColor,
+                    rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
             }
 
             bool PointAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
