@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: disas.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,9 +43,9 @@ class SbiDisas {
     UINT32   nOff;                  // aktuelle Position
     UINT32   nPC;                   // Position des Opcodes
     SbiOpcode eOp;                  // Opcode
-    USHORT   nOp1, nOp2;            // Operanden
-    short    nParts;                // 1, 2 oder 3
-    short    nLine;                 // aktuelle Zeile
+    UINT32   nOp1, nOp2;            // Operanden
+    UINT32   nParts;                // 1, 2 oder 3
+    UINT32   nLine;                 // aktuelle Zeile
     BOOL     DisasLine( String& );
     BOOL     Fetch();               // naechster Opcode
 public:
