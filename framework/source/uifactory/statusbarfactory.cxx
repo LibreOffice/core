@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: statusbarfactory.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +63,6 @@
 //_________________________________________________________________________________________________________________
 //
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
@@ -102,7 +101,7 @@ StatusBarFactory::StatusBarFactory( const ::com::sun::star::uno::Reference< ::co
     ThreadHelpBase( &Application::GetSolarMutex() )
     , m_xServiceManager( xServiceManager )
     , m_xModuleManager( xServiceManager->createInstance(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ))),
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ))),
                         UNO_QUERY )
 {
 }
@@ -168,7 +167,7 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
                 if ( aModuleIdentifier.getLength() )
                 {
                     Reference< ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier(
-                        m_xServiceManager->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        m_xServiceManager->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                             "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ))),
                         UNO_QUERY );
                     xCfgMgr = xModuleCfgSupplier->getUIConfigurationManager( aModuleIdentifier );
@@ -202,3 +201,4 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
 }
 
 }
+
