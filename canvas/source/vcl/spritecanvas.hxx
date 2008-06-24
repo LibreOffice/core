@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: spritecanvas.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,38 +42,40 @@
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XBufferController.hpp>
-#include <com/sun/star/rendering/XColorSpace.hpp>
 #include <com/sun/star/rendering/XParametricPolyPolygon2DFactory.hpp>
 
-#include <cppuhelper/compbase10.hxx>
+#include <cppuhelper/compbase9.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <canvas/base/spritecanvasbase.hxx>
 #include <canvas/base/basemutexhelper.hxx>
-#include <canvas/base/windowgraphicdevicebase.hxx>
+#include <canvas/base/bufferedgraphicdevicebase.hxx>
 
 #include "spritecanvashelper.hxx"
 #include "impltools.hxx"
-#include "devicehelper.hxx"
+#include "spritedevicehelper.hxx"
 #include "repainttarget.hxx"
 
 
+#define SPRITECANVAS_SERVICE_NAME        "com.sun.star.rendering.SpriteCanvas.VCL"
+#define SPRITECANVAS_IMPLEMENTATION_NAME "com.sun.star.comp.rendering.SpriteCanvas.VCL"
+
 namespace vclcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper10< ::com::sun::star::rendering::XSpriteCanvas,
-                                                ::com::sun::star::rendering::XIntegerBitmap,
-                                                ::com::sun::star::rendering::XGraphicDevice,
-                                               ::com::sun::star::rendering::XParametricPolyPolygon2DFactory,
-                                               ::com::sun::star::rendering::XBufferController,
-                                               ::com::sun::star::rendering::XColorSpace,
-                                               ::com::sun::star::awt::XWindowListener,
-                                               ::com::sun::star::util::XUpdatable,
-                                               ::com::sun::star::beans::XPropertySet,
-                                               ::com::sun::star::lang::XServiceName >   WindowGraphicDeviceBase_Base;
-    typedef ::canvas::WindowGraphicDeviceBase< ::canvas::BaseMutexHelper< WindowGraphicDeviceBase_Base >,
-                                               DeviceHelper,
-                                               tools::LocalGuard,
-                                               ::cppu::OWeakObject >    SpriteCanvasBase_Base;
+    typedef ::cppu::WeakComponentImplHelper9< ::com::sun::star::rendering::XSpriteCanvas,
+                                              ::com::sun::star::rendering::XIntegerBitmap,
+                                              ::com::sun::star::rendering::XGraphicDevice,
+                                              ::com::sun::star::rendering::XParametricPolyPolygon2DFactory,
+                                              ::com::sun::star::rendering::XBufferController,
+                                              ::com::sun::star::awt::XWindowListener,
+                                              ::com::sun::star::util::XUpdatable,
+                                              ::com::sun::star::beans::XPropertySet,
+                                              ::com::sun::star::lang::XServiceName >    WindowGraphicDeviceBase_Base;
+    typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::BaseMutexHelper< WindowGraphicDeviceBase_Base >,
+                                                 SpriteDeviceHelper,
+                                                 tools::LocalGuard,
+                                                 ::cppu::OWeakObject >  SpriteCanvasBase_Base;
+
     /** Mixin SpriteSurface
 
         Have to mixin the SpriteSurface before deriving from
@@ -119,7 +121,7 @@ namespace vclcanvas
                       const ::com::sun::star::uno::Reference<
                             ::com::sun::star::uno::XComponentContext >& rxContext );
 
-        void initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
+        void initialize();
 
         /// For resource tracking
         ~SpriteCanvas();
@@ -156,41 +158,13 @@ namespace vclcanvas
                               const ::Size&                                   rSz,
                               const GraphicAttr&                              rAttr ) const;
 
-        /// Retrieve real output device for this Canvas
-        OutputDevice* getOutDev() const;
-
         /// Get backbuffer for this canvas
-        BackBufferSharedPtr getBackBuffer() const;
-
-        // XPropertySet
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setPropertyValue( const ::rtl::OUString&            aPropertyName,
-                                                const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::beans::UnknownPropertyException,
-                                                                                                  ::com::sun::star::beans::PropertyVetoException,
-                                                                                                  ::com::sun::star::lang::IllegalArgumentException,
-                                                                                                  ::com::sun::star::lang::WrappedTargetException,
-                                                                                                  ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& aPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException,
-                                                                                                                    ::com::sun::star::lang::WrappedTargetException,
-                                                                                                                    ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
-                                                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::beans::UnknownPropertyException,
-                                                                                                                                                                        ::com::sun::star::lang::WrappedTargetException,
-                                                                                                                                                                        ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
-                                                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::beans::UnknownPropertyException,
-                                                                                                                                                                           ::com::sun::star::lang::WrappedTargetException,
-                                                                                                                                                                           ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& aPropertyName,
-                                                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& xListener ) throw (::com::sun::star::beans::UnknownPropertyException,
-                                                                                                                                                                        ::com::sun::star::lang::WrappedTargetException,
-                                                                                                                                                                        ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& aPropertyName,
-                                                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& xListener ) throw (::com::sun::star::beans::UnknownPropertyException,
-                                                                                                                                                                           ::com::sun::star::lang::WrappedTargetException,
-                                                                                                                                                                           ::com::sun::star::uno::RuntimeException);
+        OutDevProviderSharedPtr getFrontBuffer() const { return maDeviceHelper.getOutDev(); }
+        /// Get window for this canvas
+        BackBufferSharedPtr getBackBuffer() const { return maDeviceHelper.getBackBuffer(); }
 
     private:
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > maArguments;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxComponentContext;
     };
 
