@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: databases.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -206,12 +206,6 @@ namespace chelp {
 
         rtl::OUString getInstallPathAsURL();
 
-        rtl::OUString getInstallPathAsURLWithOutEncoding();
-
-        // access method to help files
-
-        rtl::OUString getURLMode();
-
         const std::vector< rtl::OUString >& getModuleList( const rtl::OUString& Language );
 
         StaticModuleInformation* getStaticInformationForModule( const rtl::OUString& Module,
@@ -239,15 +233,6 @@ namespace chelp {
          */
 
         void popupDocument( URLParameter* urlPar,char **buffer,int *byteCount );
-
-
-        /**
-         *  Returns a copy of the errordocument for the given language-locale combination
-         */
-
-        void errorDocument( const rtl::OUString& Language,
-                            char** buffer,
-                            int* byteCount );
 
 
         /**
@@ -451,8 +436,6 @@ namespace chelp {
             Databases& rDatabases, const rtl::OUString& aInitialModule, const rtl::OUString& aLanguage );
         ExtensionIteratorBase( Databases& rDatabases, const rtl::OUString& aInitialModule,
             const rtl::OUString& aLanguage );
-        ExtensionIteratorBase( com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext,
-            Databases& rDatabases );
         void init( void );
 
     private:
