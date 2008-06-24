@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: devicehelper.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 
-#include "backbuffer.hxx"
+#include "outdevprovider.hxx"
 
 #include <boost/utility.hpp>
 
@@ -48,16 +48,14 @@
 
 namespace vclcanvas
 {
-    class SpriteCanvas;
-    class SpriteCanvasHelper;
+    class Canvas;
 
     class DeviceHelper : private ::boost::noncopyable
     {
     public:
         DeviceHelper();
 
-        void init( Window&              rOutputWindow,
-                   SpriteCanvas&        rSpriteCanvas );
+        void init( const OutDevProviderSharedPtr& rOutDev );
 
         /// Dispose all internal references
         void disposing();
@@ -86,39 +84,23 @@ namespace vclcanvas
         sal_Bool hasFullScreenMode(  );
         sal_Bool enterFullScreenMode( sal_Bool bEnter );
 
-        ::sal_Int32 createBuffers( ::sal_Int32 nBuffers );
-        void        destroyBuffers(  );
-        ::sal_Bool  showBuffer( ::sal_Bool bUpdateAll );
-        ::sal_Bool  switchBuffer( ::sal_Bool bUpdateAll );
-
-        OutputDevice*              getOutDev() const { return mpOutputWindow; }
+        ::com::sun::star::uno::Any isAccelerated() const;
         ::com::sun::star::uno::Any getDeviceHandle() const;
         ::com::sun::star::uno::Any getSurfaceHandle() const;
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::rendering::XColorSpace > getColorSpace() const;
+
+        OutDevProviderSharedPtr getOutDev() const { return mpOutDev; }
 
         /** called when DumpScreenContent property is enabled on
             XGraphicDevice, and writes out bitmaps of current screen.
          */
         void dumpScreenContent() const;
 
-        BackBufferSharedPtr getBackBuffer() const { return mpBackBuffer; }
-
-        void notifySizeUpdate( const ::com::sun::star::awt::Rectangle& rBounds );
-
     private:
-        // TODO(Q2): Lifetime issue. Though WindowGraphicDeviceBase
-        // now listenes to the window component, I still consider
-        // holding a naked ptr unsafe here (especially as we pass it
-        // around via getOutDev). This _only_ works reliably, if
-        // disposing the SpriteCanvas correctly disposes all entities
-        // which hold this pointer.
-        Window*                 mpOutputWindow;
-
-        /// Pointer to sprite canvas (owner of this helper), needed to create bitmaps
-        SpriteCanvas*           mpSpriteCanvas;
-
-        /// This buffer holds the background content for all associated canvases
-        BackBufferSharedPtr     mpBackBuffer;
+        /// For retrieving device info
+        OutDevProviderSharedPtr mpOutDev;
     };
 }
 
-#endif /* _VCLCANVAS_WINDOWGRAPHICDEVICE_HXX */
+#endif /* _VCLCANVAS_DEVICEHELPER_HXX */
