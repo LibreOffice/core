@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basenode.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -342,7 +342,7 @@ BaseNode::BaseNode( const uno::Reference< animations::XAnimationNode >& xNode,
     mpCurrentEvent(),
     mbIsMainSequenceRootNode( isMainSequenceRootNode_( xNode ) )
 {
-    ENSURE_AND_THROW( mxAnimationNode.is(),
+    ENSURE_OR_THROW( mxAnimationNode.is(),
                       "BaseNode::BaseNode(): Invalid XAnimationNode" );
 
     // setup state transition table
@@ -667,7 +667,7 @@ bool BaseNode::registerDeactivatingListener(
     if (! checkValidNode())
         return false;
 
-    ENSURE_AND_RETURN(
+    ENSURE_OR_RETURN(
         rNotifee,
         "BaseNode::registerDeactivatingListener(): invalid notifee" );
     maDeactivatingListeners.push_back( rNotifee );
@@ -677,9 +677,9 @@ bool BaseNode::registerDeactivatingListener(
 
 void BaseNode::setSelf( const BaseNodeSharedPtr& rSelf )
 {
-    ENSURE_AND_THROW( rSelf.get() == this,
+    ENSURE_OR_THROW( rSelf.get() == this,
                       "BaseNode::setSelf(): got ptr to different object" );
-    ENSURE_AND_THROW( !mpSelf,
+    ENSURE_OR_THROW( !mpSelf,
                       "BaseNode::setSelf(): called multiple times" );
 
     mpSelf = rSelf;
