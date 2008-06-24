@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XSpriteCanvas.idl,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +50,7 @@ interface XAnimatedSprite;
 interface XCustomSprite;
 
 /** Specialization of a XBitmapCanvas, where moving, animated objects
-    (called sprites) are supported.
+    (called sprites) are supported.<p>
 
     @attention The screen output of canvas drawing operations is
     undefined, unless XSpriteCanvas::updateScreen() is called. This is
@@ -90,7 +90,7 @@ interface XSpriteCanvas : XBitmapCanvas
         and how to interpolate between the provided bitmaps, if
         animation runs fast enough.
 
-        @throws VolatileContentDestroyedException
+        @throws <type>VolatileContentDestroyedException</type>
         if at least one of the bitmap is volatile, and its content has been destroyed by the system.
      */
     XAnimatedSprite createSpriteFromBitmaps( [in] sequence<XBitmap> animationBitmaps, [in] byte interpolationMode )
