@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OGLTrans_TransitionImpl.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,12 +33,26 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 
+#include <tools/prewin.h>
+#include <tools/postwin.h>
+
+#if defined( WNT )
+#include <tools/prewin.h>
+#include <tools/postwin.h>
+#elif defined( OS2 )
+#elif defined( QUARTZ )
+#elif defined( UNX )
+#endif
+
 #include <vector>
 #include <GL/gl.h>
+
+using namespace std;
 
 class Primitive;
 class Operation;
 class SceneObject;
+
 
 /** OpenGL 3D Transition class. It implicitly is constructed from XOGLTransition
 
@@ -77,19 +91,19 @@ private:
 
     /** All the primitives that use the leaving slide texture
     */
-    std::vector<Primitive> maLeavingSlidePrimitives;
+    vector<Primitive> maLeavingSlidePrimitives;
 
     /** All the primitives that use the leaving slide texture
     */
-    std::vector<Primitive> maEnteringSlidePrimitives;
+    vector<Primitive> maEnteringSlidePrimitives;
 
     /** All the surrounding scene objects
     */
-    std::vector<SceneObject*> maSceneObjects;
+    vector<SceneObject*> maSceneObjects;
 
     /** All the operations that should be applied to both leaving and entering slide primitives. These operations will be called in the order they were pushed back in. In OpenGL this effectively uses the operations in the opposite order they were pushed back.
     */
-    std::vector<Operation*> OverallOperations;
+    vector<Operation*> OverallOperations;
 };
 
 class SceneObject
@@ -106,7 +120,7 @@ public:
 protected:
     /** All the surrounding scene primitives
     */
-    std::vector<Primitive> maPrimitives;
+    vector<Primitive> maPrimitives;
 };
 
 class Iris : public SceneObject
@@ -159,11 +173,11 @@ public:
         @return
         the list of vertices
     */
-    const std::vector<basegfx::B3DVector>& getVertices() const {return Vertices;}
+    const vector<basegfx::B3DVector>& getVertices() const {return Vertices;}
 
     /** guards against directly changing the vertices
     */
-    const std::vector<basegfx::B3DVector>& getNormals() const {return Normals;}
+    const vector<basegfx::B3DVector>& getNormals() const {return Normals;}
 
     /** guards against directly changing the vertices
 
@@ -171,7 +185,7 @@ public:
         the list of Texture Coordinates
 
     */
-    const std::vector<basegfx::B2DVector>& getTexCoords() const {return TexCoords;}
+    const vector<basegfx::B2DVector>& getTexCoords() const {return TexCoords;}
 
     /** list of Operations to be performed on this primitive.These operations will be called in the order they were pushed back in. In OpenGL this effectively uses the operations in the opposite order they were pushed back.
 
@@ -179,20 +193,20 @@ public:
         the list of Operations
 
     */
-    std::vector<Operation*> Operations;
+    vector<Operation*> Operations;
 
 private:
     /** list of vertices
     */
-    std::vector<basegfx::B3DVector> Vertices;
+    vector<basegfx::B3DVector> Vertices;
 
     /** list of Normals
     */
-    std::vector<basegfx::B3DVector> Normals;
+    vector<basegfx::B3DVector> Normals;
 
     /** list of Texture Coordinates
     */
-    std::vector<basegfx::B2DVector> TexCoords;
+    vector<basegfx::B2DVector> TexCoords;
 };
 
 /** This class is to be derived to make any operation (tranform) you may need in order to construct your transitions
