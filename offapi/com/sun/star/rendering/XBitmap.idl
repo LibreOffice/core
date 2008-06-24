@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XBitmap.idl,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,8 +74,12 @@ interface XBitmap : ::com::sun::star::uno::XInterface
 
     /** Query transparency status of the bitmap.<p>
 
-        This method checks, whether the bitmap contains any alpha
-        information.<p>
+        The method checks, whether the bitmap contains any alpha
+        information. The same information is also available at the
+        <type>XColorSpace</type> associated with this bitmap, though
+        much easier to access here (the color space then has a
+        component flagged
+        <member>ColorComponentTag::ALPHA</member>).<p>
 
         @return <TRUE/>, if the bitmap has alpha data, or <FALSE/> if
         not.
@@ -84,27 +88,7 @@ interface XBitmap : ::com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    /** Query a canvas interface for this bitmap.<p>
-
-        This method queries a canvas interface for this bitmap, to
-        which draw operations can then be issued. Please note that
-        concurrent draw operations on that <type>XBitmapCanvas</type>
-        interface and modifying operations on this bitmap interface
-        might cause undesired effects. Although the implementations
-        are required to not crash in this case, the result of such
-        concurrent operations are <em>undefined</em> (i.e. anything
-        else, including corruption of the bitmap data, or deadlocking,
-        might actually happen). Thus, it is highly recommended to
-        externally serialize the access here.<p>
-
-        @returns an <type>XBitmapCanvas</type> interface, whose
-        rendering operations are directed into the bitmap.
-     */
-    XBitmapCanvas                   queryBitmapCanvas();
-
-    //-------------------------------------------------------------------------
-
-    /** Query a scaled version of the original bitmap.
+    /** Query a scaled copy of the original bitmap.
 
         @param newSize
         Requested size of the new bitmap. Both of the two size
@@ -117,10 +101,10 @@ interface XBitmap : ::com::sun::star::uno::XInterface
 
         @returns the new scaled bitmap.
 
-        @throws com::sun::star::lang::IllegalArgumentException
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
         if the size components are outside the specified range.
 
-        @throws VolatileContentDestroyedException
+        @throws <type>VolatileContentDestroyedException</type>
         if the contents of a volatile bitmap have been destroyed, and
         thus cannot be read to generate the scaled bitmap.
      */
