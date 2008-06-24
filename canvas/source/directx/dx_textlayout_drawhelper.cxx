@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_textlayout_drawhelper.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,12 +28,16 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_canvas.hxx"
+
 #include <tools/poly.hxx>
 
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/canvastools.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <boost/scoped_array.hpp>
 #include <boost/bind.hpp>
@@ -48,7 +52,6 @@
 #include <canvas/debug.hxx>
 #include "dx_impltools.hxx"
 #include <vcl/sysdata.hxx>
-#include "dx_surfacegraphics.hxx"
 #include "dx_textlayout_drawhelper.hxx"
 #include "dx_bitmap.hxx"
 #include "dx_canvasfont.hxx"
@@ -73,23 +76,24 @@ namespace dxcanvas
     {
     }
 
-    void TextLayoutDrawHelper::drawText( const ::boost::shared_ptr< dxcanvas::DXBitmap > &rBitmap,
-                      const ::com::sun::star::rendering::ViewState&         rViewState,
-                    const ::com::sun::star::rendering::RenderState&         rRenderState,
-                    const ::basegfx::B2ISize&                           rOutputOffset,
-                    const ::com::sun::star::rendering::StringContext&   rText,
-                    const ::com::sun::star::uno::Sequence< double >&    rLogicalAdvancements,
-                    const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::rendering::XCanvasFont >&  rCanvasFont,
-                    const ::com::sun::star::geometry::Matrix2D&             rFontMatrix )
+    void TextLayoutDrawHelper::drawText(
+        const GraphicsSharedPtr&                            rGraphics,
+        const ::com::sun::star::rendering::ViewState&       rViewState,
+        const ::com::sun::star::rendering::RenderState&     rRenderState,
+        const ::basegfx::B2ISize&                           rOutputOffset,
+        const ::com::sun::star::rendering::StringContext&   rText,
+        const ::com::sun::star::uno::Sequence< double >&    rLogicalAdvancements,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::rendering::XCanvasFont >&     rCanvasFont,
+        const ::com::sun::star::geometry::Matrix2D&         rFontMatrix,
+        bool                                                bAlphaSurface )
     {
-        SurfaceGraphicsSharedPtr graphics(rBitmap->getGraphics());
-        HDC hdc = (*graphics)->GetHDC();
+        HDC hdc = rGraphics->GetHDC();
 
         // issue an ReleaseHDC() when leaving the scope
         const ::comphelper::ScopeGuard aGuard(
             boost::bind( &Gdiplus::Graphics::ReleaseHDC,
-                         graphics->get(),
+                         rGraphics.get(),
                          hdc ));
 
         SystemGraphicsData aSystemGraphicsData;
@@ -99,21 +103,22 @@ namespace dxcanvas
 
         // disable font antialiasing - GDI does not handle alpha
         // surfaces properly.
-        if( rBitmap->hasAlpha() )
+        if( bAlphaSurface )
             aVirtualDevice.SetAntialiasing(ANTIALIASING_DISABLE_TEXT);
 
         if(rText.Length)
         {
             sal_Bool test = mxGraphicDevice.is();
-            ENSURE_AND_THROW( test,
+            ENSURE_OR_THROW( test,
                               "TextLayoutDrawHelper::drawText(): Invalid GraphicDevice" );
 
             // set text color. Make sure to remove transparence part first.
             Color aColor( COL_WHITE );
 
             if( rRenderState.DeviceColor.getLength() > 2 )
-                aColor = ::vcl::unotools::sequenceToColor(mxGraphicDevice,
-                                                          rRenderState.DeviceColor);
+                aColor = ::vcl::unotools::doubleSequenceToColor(
+                    rRenderState.DeviceColor,
+                    mxGraphicDevice->getDeviceColorSpace());
             aColor.SetTransparency(0);
             aVirtualDevice.SetTextColor(aColor);
 
@@ -196,7 +201,6 @@ namespace dxcanvas
             aXForm.eDy = (FLOAT)aWorldTransform.get(1, 2);
 
             // TODO(F3): This is NOT supported on 95/98/ME!
-            //win32::HDC aHDC(rBitmap->getHDC());
             SetGraphicsMode(hdc, GM_ADVANCED);
             SetTextAlign(hdc, TA_BASELINE);
             SetWorldTransform(hdc, &aXForm);
