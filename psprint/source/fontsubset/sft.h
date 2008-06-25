@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sft.h,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.h,v 1.20 2008-04-11 10:16:30 rt Exp $ */
+/* $Id: sft.h,v 1.21 2008-06-25 14:20:49 kz Exp $ */
 
 /**
 
@@ -554,6 +554,7 @@ extern "C" {
  */
     void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info);
 
+#ifdef TEST5
 /**
  * Returns kerning information for an array of glyphs.
  * Kerning is not cumulative.
@@ -569,6 +570,7 @@ extern "C" {
  *
  */
     void KernGlyphs(TrueTypeFont *ttf, sal_uInt16 *glyphs, int nglyphs, int wmode, KernData *kern);
+#endif
 
 /**
  * Returns nonzero if font is a symbol encoded font
