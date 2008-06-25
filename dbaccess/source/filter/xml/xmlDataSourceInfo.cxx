@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlDataSourceInfo.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,7 +71,8 @@ DBG_NAME(OXMLDataSourceInfo)
 OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
                 ,const ::rtl::OUString& _sLocalName
-                ,const Reference< XAttributeList > & _xAttrList) :
+                ,const Reference< XAttributeList > & _xAttrList
+                ,const sal_uInt16 _nToken) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
 {
     DBG_CTOR(OXMLDataSourceInfo,NULL);
@@ -139,19 +140,22 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
     }
     if ( rImport.isNewFormat() )
     {
-        if ( !bFoundField )
+        if ( XML_TOK_DELIMITER == _nToken )
         {
-            aProperty.Name = INFO_FIELDDELIMITER;
-            aProperty.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
-            rImport.addInfo(aProperty);
+            if ( !bFoundField )
+            {
+                aProperty.Name = INFO_FIELDDELIMITER;
+                aProperty.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+                rImport.addInfo(aProperty);
+            }
+            if ( !bFoundThousand )
+            {
+                aProperty.Name = INFO_THOUSANDSDELIMITER;
+                aProperty.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+                rImport.addInfo(aProperty);
+            } // if ( !bFoundThousand )
         }
-        if ( !bFoundThousand )
-        {
-            aProperty.Name = INFO_THOUSANDSDELIMITER;
-            aProperty.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-            rImport.addInfo(aProperty);
-        }
-        if ( !bFoundCharset )
+        if ( XML_TOK_FONT_CHARSET == _nToken && !bFoundCharset )
         {
             aProperty.Name = INFO_CHARSET;
             aProperty.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("utf8"));
