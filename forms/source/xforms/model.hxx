@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: model.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -138,6 +138,7 @@ private:
     MIPs_t maMIPs;                          /// map nodes to their MIPs
 
     bool mbInitialized;                     /// has model been initialized ?
+    bool mbExternalData;                    /// is the data of this model to be considered an ingegral part of the document?
 
     void initializePropertySet();
 
@@ -170,6 +171,10 @@ public:
     // get/set namespaces for entire model
     XNameContainer_t getNamespaces() const;
     void setNamespaces( const XNameContainer_t& );
+
+    // get/set the ExternalData property
+    bool getExternalData() const;
+    void setExternalData( bool _bData );
 
 
 #if OSL_DEBUG_LEVEL > 1

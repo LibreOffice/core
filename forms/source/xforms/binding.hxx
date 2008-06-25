@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: binding.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -239,8 +239,9 @@ public:
 
 
     // read-only properties that map MIPs to control data source properties
-    bool getReadOnly() const;   // MIP readonly
-    bool getRelevant() const;   // MIP relevant
+    bool getReadOnly() const;       // MIP readonly
+    bool getRelevant() const;       // MIP relevant
+    bool getExternalData() const;   // mapped from model's ExternalData property
 
 
     // missing binding properties:
