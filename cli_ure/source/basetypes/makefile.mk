@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.10 $
+# $Revision: 1.11 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -97,7 +97,7 @@ $(BIN)$/cli_basetypes.dll : $(CSFILES) $(BIN)$/cliureversion.mk
         $(CSFILES)
     @echo "If code has changed then provide a policy assembly and change the version!"
 
-#do not forget to deliver cli_types.config. It is NOT embedded in the policy file.
+#do not forget to deliver cli_uretypes.config. It is NOT embedded in the policy file.
 $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_basetypes.config
     $(WRAPCMD) AL.exe -out:$@ \
             -version:$(CLI_BASETYPES_POLICY_VERSION) \
@@ -107,7 +107,7 @@ $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_basetypes.config
 
 #Create the config file that is used with the policy assembly
 $(BIN)$/cli_basetypes.config: cli_basetypes_config $(BIN)$/cliureversion.mk 
-    $(PERL) $(PRJ)$/source$/scripts$/subst_template.pl \
+    $(PERL) $(SOLARENV)$/bin$/clipatchconfig.pl \
     $< $@
 
 
