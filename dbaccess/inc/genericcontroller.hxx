@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: genericcontroller.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -483,7 +483,7 @@ namespace dbaui
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  > SAL_CALL queryDispatches(const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts) throw( ::com::sun::star::uno::RuntimeException );
 
         // ::com::sun::star::lang::XComponent
-        virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException); //LLA: need solar mutex {OGenericUnoController_COMPBASE::dispose(); }
         virtual void SAL_CALL disposing();
         virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException);
