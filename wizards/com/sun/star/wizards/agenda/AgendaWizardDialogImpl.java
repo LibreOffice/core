@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AgendaWizardDialogImpl.java,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,6 +116,8 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
         super(xmsf);
     }
 
+    protected void enterStep(int OldStep, int NewStep) {}
+    protected void leaveStep(int OldStep, int NewStep) {}
 
     /**
      * read the configuration data, open the specified template,
