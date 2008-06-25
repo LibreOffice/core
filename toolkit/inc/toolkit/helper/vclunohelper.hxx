@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclunohelper.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,9 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
+
 namespace com { namespace sun { namespace star { namespace uno {
     class XInterface;
 }}}}
@@ -51,6 +54,8 @@ namespace com { namespace sun { namespace star { namespace awt {
     class XToolkit;
     class XFont;
     class XControlContainer;
+    struct Size;
+    struct Point;
     struct SimpleFontMetric;
     struct FontDescriptor;
     struct Rectangle;
@@ -127,6 +132,13 @@ public:
     */
     static sal_Int16                                ConvertToMeasurementUnit( FieldUnit _nFieldUnit, sal_Int16 _rFieldToUNOValueFactor );
     static FieldUnit                                ConvertToFieldUnit( sal_Int16 _nMeasurementUnit, sal_Int16& _rFieldToUNOValueFactor );
+
+    static MapUnit /* MapModeUnit */ ConvertToMapModeUnit(sal_Int16 /* com.sun.star.util.MeasureUnit.* */ _nMeasureUnit) throw (::com::sun::star::lang::IllegalArgumentException);
+    static sal_Int16 /* com.sun.star.util.MeasureUnit.* */ ConvertToMeasurementUnit(MapUnit /* MapModeUnit */ _nMapModeUnit) throw (::com::sun::star::lang::IllegalArgumentException);
+    static ::Size /* VCLSize */ ConvertToVCLSize(::com::sun::star::awt::Size const& _aSize);
+    static ::com::sun::star::awt::Size ConvertToAWTSize(::Size /* VCLSize */ const& _aSize);
+    static ::Point /* VCLPoint */ ConvertToVCLPoint(::com::sun::star::awt::Point const& _aPoint);
+    static ::com::sun::star::awt::Point ConvertToAWTPoint(::Point /* VCLPoint */ const& _aPoint);
 
 };
 
