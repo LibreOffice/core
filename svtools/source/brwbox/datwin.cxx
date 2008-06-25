@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: datwin.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -270,10 +270,10 @@ void InitSettings_Impl( Window *pWin,
 
     if ( bFont )
     {
-        Font aFont = rStyleSettings.GetAppFont();
+        Font aFont = rStyleSettings.GetFieldFont();
         if ( pWin->IsControlFont() )
             aFont.Merge( pWin->GetControlFont() );
-        pWin->SetPointFont( aFont );
+        pWin->SetZoomedPointFont( aFont );
     }
 
     if ( bFont || bForeground )
