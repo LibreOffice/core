@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ppdparser.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,21 +35,20 @@
 
 #include <hash_map>
 
-#include <psprint/ppdparser.hxx>
-#include <tools/debug.hxx>
-#include <psprint/strhelper.hxx>
-#include <psprint/helper.hxx>
-#include <cupsmgr.hxx>
-#include <tools/urlobj.hxx>
-#include <tools/stream.hxx>
-#include <osl/mutex.hxx>
-#include <osl/file.hxx>
-#include <osl/process.h>
-#include <osl/thread.h>
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
-
-#define PRINTER_PPDDIR "driver"
+#include "psprint/ppdparser.hxx"
+#include "tools/debug.hxx"
+#include "psprint/strhelper.hxx"
+#include "psprint/helper.hxx"
+#include "cupsmgr.hxx"
+#include "tools/urlobj.hxx"
+#include "tools/stream.hxx"
+#include "tools/zcodec.hxx"
+#include "osl/mutex.hxx"
+#include "osl/file.hxx"
+#include "osl/process.h"
+#include "osl/thread.h"
+#include "rtl/strbuf.hxx"
+#include "rtl/ustrbuf.hxx"
 
 using namespace psp;
 using namespace rtl;
@@ -66,9 +65,149 @@ std::list< PPDParser* > PPDParser::aAllParsers;
 std::hash_map< OUString, OUString, OUStringHash >* PPDParser::pAllPPDFiles = NULL;
 static String aEmptyString;
 
+class PPDDecompressStream
+{
+    SvFileStream*       mpFileStream;
+    SvMemoryStream*     mpMemStream;
+    rtl::OUString       maFileName;
+
+    // forbid copying
+    PPDDecompressStream( const PPDDecompressStream& );
+    PPDDecompressStream& operator=(const PPDDecompressStream& );
+
+    public:
+    PPDDecompressStream( const rtl::OUString& rFile );
+    ~PPDDecompressStream();
+
+    bool IsOpen() const;
+    bool IsEof() const;
+    void ReadLine( ByteString& o_rLine);
+    void Open( const rtl::OUString& i_rFile );
+    void Close();
+    const rtl::OUString& GetFileName() const { return maFileName; }
+};
+
+PPDDecompressStream::PPDDecompressStream( const rtl::OUString& i_rFile ) :
+    mpFileStream( NULL ),
+    mpMemStream( NULL )
+{
+    Open( i_rFile );
+}
+
+PPDDecompressStream::~PPDDecompressStream()
+{
+    Close();
+}
+
+void PPDDecompressStream::Open( const rtl::OUString& i_rFile )
+{
+    Close();
+
+    mpFileStream = new SvFileStream( i_rFile, STREAM_READ );
+    maFileName = mpFileStream->GetFileName();
+
+    if( ! mpFileStream->IsOpen() )
+    {
+        Close();
+        return;
+    }
+
+    ByteString aLine;
+    mpFileStream->ReadLine( aLine );
+    mpFileStream->Seek( 0 );
+
+    // check for compress'ed or gzip'ed file
+    ULONG nCompressMethod = 0;
+    if( aLine.Len() > 1 && static_cast<unsigned char>(aLine.GetChar( 0 )) == 0x1f )
+    {
+        if( static_cast<unsigned char>(aLine.GetChar( 1 )) == 0x8b ) // check for gzip
+            nCompressMethod = ZCODEC_DEFAULT | ZCODEC_GZ_LIB;
+    }
+
+    if( nCompressMethod != 0 )
+    {
+        // so let's try to decompress the stream
+        mpMemStream = new SvMemoryStream( 4096, 4096 );
+        ZCodec aCodec;
+        aCodec.BeginCompression( nCompressMethod );
+        long nComp = aCodec.Decompress( *mpFileStream, *mpMemStream );
+        aCodec.EndCompression();
+        if( nComp < 0 )
+        {
+            // decompression failed, must be an uncompressed stream after all
+            delete mpMemStream, mpMemStream = NULL;
+            mpFileStream->Seek( 0 );
+        }
+        else
+        {
+            // compression successfull, can get rid of file stream
+            delete mpFileStream, mpFileStream = NULL;
+            mpMemStream->Seek( 0 );
+        }
+    }
+}
+
+void PPDDecompressStream::Close()
+{
+    delete mpMemStream, mpMemStream = NULL;
+    delete mpFileStream, mpFileStream = NULL;
+}
+
+bool PPDDecompressStream::IsOpen() const
+{
+    return (mpMemStream || (mpFileStream && mpFileStream->IsOpen()));
+}
+
+bool PPDDecompressStream::IsEof() const
+{
+    return ( mpMemStream ? mpMemStream->IsEof() : ( mpFileStream ? mpFileStream->IsEof() : true ) );
+}
+
+void PPDDecompressStream::ReadLine( ByteString& o_rLine )
+{
+    if( mpMemStream )
+        mpMemStream->ReadLine( o_rLine );
+    else if( mpFileStream )
+        mpFileStream->ReadLine( o_rLine );
+}
+
+static osl::FileBase::RC resolveLink( const rtl::OUString& i_rURL, rtl::OUString& o_rResolvedURL, rtl::OUString& o_rBaseName, osl::FileStatus::Type& o_rType, int nLinkLevel = 10 )
+{
+    osl::DirectoryItem aLinkItem;
+    osl::FileBase::RC aRet = osl::FileBase::E_None;
+
+    if( ( aRet = osl::DirectoryItem::get( i_rURL, aLinkItem ) ) == osl::FileBase::E_None )
+    {
+        osl::FileStatus aStatus( FileStatusMask_FileName | FileStatusMask_Type | FileStatusMask_LinkTargetURL );
+        if( ( aRet = aLinkItem.getFileStatus( aStatus ) ) == osl::FileBase::E_None )
+        {
+            if( aStatus.getFileType() == osl::FileStatus::Link )
+            {
+                if( nLinkLevel > 0 )
+                    aRet = resolveLink( aStatus.getLinkTargetURL(), o_rResolvedURL, o_rBaseName, o_rType, nLinkLevel-1 );
+                else
+                    aRet = osl::FileBase::E_MULTIHOP;
+            }
+            else
+            {
+                o_rResolvedURL = i_rURL;
+                o_rBaseName = aStatus.getFileName();
+                o_rType = aStatus.getFileType();
+            }
+        }
+    }
+    return aRet;
+}
+
 void PPDParser::scanPPDDir( const String& rDir )
 {
-    static const sal_Char* pSuffixes[] = { "PS", "PPD" };
+    static struct suffix_t
+    {
+        const sal_Char* pSuffix;
+        const sal_Int32 nSuffixLen;
+    } const pSuffixes[] =
+    { { ".PS", 3 },  { ".PPD", 4 }, { ".PS.GZ", 6 }, { ".PPD.GZ", 7 } };
+
     const int nSuffixes = sizeof(pSuffixes)/sizeof(pSuffixes[0]);
 
     osl::Directory aDir( rDir );
@@ -81,16 +220,37 @@ void PPDParser::scanPPDDir( const String& rDir )
         osl::FileStatus aStatus( FileStatusMask_FileName );
         if( aItem.getFileStatus( aStatus ) == osl::FileBase::E_None )
         {
-            INetURLObject aPPDFile = aPPDDir;
-            aPPDFile.Append( aStatus.getFileName() );
-            String aExt = aPPDFile.getExtension();
-            // match extension
-            for( int nSuffix = 0; nSuffix < nSuffixes; nSuffix++ )
+            rtl::OUStringBuffer aURLBuf( rDir.Len() + 64 );
+            aURLBuf.append( rDir );
+            aURLBuf.append( sal_Unicode( '/' ) );
+            aURLBuf.append( aStatus.getFileName() );
+
+            rtl::OUString aFileURL, aFileName;
+            osl::FileStatus::Type eType = osl::FileStatus::Unknown;
+
+            if( resolveLink( aURLBuf.makeStringAndClear(), aFileURL, aFileName, eType ) == osl::FileBase::E_None )
             {
-                if( aExt.EqualsIgnoreCaseAscii( pSuffixes[nSuffix] ) )
+                if( eType == osl::FileStatus::Regular )
                 {
-                    (*pAllPPDFiles)[ aPPDFile.getBase() ] = aPPDFile.PathToFileName();
-                    break;
+                    INetURLObject aPPDFile = aPPDDir;
+                    aPPDFile.Append( aFileName );
+
+                    // match extension
+                    for( int nSuffix = 0; nSuffix < nSuffixes; nSuffix++ )
+                    {
+                        if( aFileName.getLength() > pSuffixes[nSuffix].nSuffixLen )
+                        {
+                            if( aFileName.endsWithIgnoreAsciiCaseAsciiL( pSuffixes[nSuffix].pSuffix, pSuffixes[nSuffix].nSuffixLen ) )
+                            {
+                                (*pAllPPDFiles)[ aFileName.copy( 0, aFileName.getLength() - pSuffixes[nSuffix].nSuffixLen ) ] = aPPDFile.PathToFileName();
+                                break;
+                            }
+                        }
+                    }
+                }
+                else if( eType == osl::FileStatus::Directory )
+                {
+                    scanPPDDir( aFileURL );
                 }
             }
         }
@@ -132,34 +292,55 @@ void PPDParser::initPPDFiles()
     }
 }
 
+void PPDParser::getKnownPPDDrivers( std::list< rtl::OUString >& o_rDrivers )
+{
+    initPPDFiles();
+    o_rDrivers.clear();
+
+    std::hash_map< OUString, OUString, OUStringHash >::const_iterator it;
+    for( it = pAllPPDFiles->begin(); it != pAllPPDFiles->end(); ++it )
+        o_rDrivers.push_back( it->first );
+}
+
 String PPDParser::getPPDFile( const String& rFile )
 {
     INetURLObject aPPD( rFile, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
     // someone might enter a full qualified name here
-    SvFileStream aStream( aPPD.PathToFileName(), STREAM_READ );
+    PPDDecompressStream aStream( aPPD.PathToFileName() );
     if( ! aStream.IsOpen() )
     {
-        initPPDFiles();
-        // some PPD files contain dots beside the extension, so try name first,
-        // base after that
-        std::hash_map< OUString, OUString, OUStringHash >::const_iterator it =
-            pAllPPDFiles->find( aPPD.getName() );
-        if( it == pAllPPDFiles->end() )
-            it = pAllPPDFiles->find( aPPD.getBase() );
-        if( it == pAllPPDFiles->end() )
+        std::hash_map< OUString, OUString, OUStringHash >::const_iterator it;
+
+        bool bRetry = true;
+        do
         {
-            // a new file ? rehash
-            delete pAllPPDFiles; pAllPPDFiles = NULL;
             initPPDFiles();
-            // aPPD is already the file name minus the extension
-            it = pAllPPDFiles->find( aPPD.getName() );
-            if( it == pAllPPDFiles->end() )
-                it = pAllPPDFiles->find( aPPD.getBase() );
-            // note this is optimized for office start where
-            // no new files occur and initPPDFiles is called only once
-        }
+            // some PPD files contain dots beside the extension, so try name first
+            // and cut of points after that
+            rtl::OUString aBase( rFile );
+            sal_Int32 nLastIndex = aBase.lastIndexOf( sal_Unicode( '/' ) );
+            if( nLastIndex >= 0 )
+                aBase = aBase.copy( nLastIndex+1 );
+            do
+            {
+                it = pAllPPDFiles->find( aBase );
+                nLastIndex = aBase.lastIndexOf( sal_Unicode( '.' ) );
+                if( nLastIndex > 0 )
+                    aBase = aBase.copy( 0, nLastIndex );
+            } while( it == pAllPPDFiles->end() && nLastIndex > 0 );
+
+            if( it == pAllPPDFiles->end() && bRetry )
+            {
+                // a new file ? rehash
+                delete pAllPPDFiles; pAllPPDFiles = NULL;
+                bRetry = false;
+                // note this is optimized for office start where
+                // no new files occur and initPPDFiles is called only once
+            }
+        } while( ! pAllPPDFiles );
+
         if( it != pAllPPDFiles->end() )
-            aStream.Open( it->second, STREAM_READ );
+            aStream.Open( it->second );
     }
 
     String aRet;
@@ -190,7 +371,7 @@ String PPDParser::getPPDPrinterName( const String& rFile )
     String aName;
 
     // read in the file
-    SvFileStream aStream( aPath, STREAM_READ );
+    PPDDecompressStream aStream( aPath );
     if( aStream.IsOpen() )
     {
         String aCurLine;
@@ -211,7 +392,7 @@ String PPDParser::getPPDPrinterName( const String& rFile )
                 aCurLine.EraseLeadingChars( '"' );
                 aCurLine.EraseTrailingChars( '"' );
                 aStream.Close();
-                aStream.Open( getPPDFile( aCurLine ), STREAM_READ );
+                aStream.Open( getPPDFile( aCurLine ) );
                 continue;
             }
             if( aCurLine.CompareToAscii( "*ModelName:", 11 ) == COMPARE_EQUAL )
@@ -297,7 +478,7 @@ PPDParser::PPDParser( const String& rFile ) :
 {
     // read in the file
     std::list< ByteString > aLines;
-    SvFileStream aStream( m_aFile, STREAM_READ );
+    PPDDecompressStream aStream( m_aFile );
     bool bLanguageEncoding = false;
     if( aStream.IsOpen() )
     {
@@ -319,7 +500,7 @@ PPDParser::PPDParser( const String& rFile ) :
                     aCurLine.EraseLeadingChars( '"' );
                     aCurLine.EraseTrailingChars( '"' );
                     aStream.Close();
-                    aStream.Open( getPPDFile( String( aCurLine, m_aFileEncoding ) ), STREAM_READ );
+                    aStream.Open( getPPDFile( String( aCurLine, m_aFileEncoding ) ) );
                     continue;
                 }
                 else if( ! bLanguageEncoding &&
