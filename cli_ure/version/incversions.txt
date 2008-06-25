@@ -8,7 +8,7 @@
 #
 # $RCSfile: incversions.txt,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,9 +29,9 @@
 #
 #*************************************************************************
 
-CLI_TYPES_NEW_VERSION
-CLI_TYPES_OLD_VERSION
-CLI_TYPES_POLICY_VERSION
+CLI_URETYPES_NEW_VERSION
+CLI_URETYPES_OLD_VERSION
+CLI_URETYPES_POLICY_VERSION
 
 CLI_URE_NEW_VERSION
 CLI_URE_OLD_VERSION    
