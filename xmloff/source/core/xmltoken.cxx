@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmltoken.cxx,v $
- * $Revision: 1.128 $
+ * $Revision: 1.129 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3020,6 +3020,9 @@ namespace xmloff { namespace token {
         TOKEN( "continue-list",         XML_CONTINUE_LIST ),
         TOKEN( "style-override",        XML_STYLE_OVERRIDE ),
         // <--
+        // fs: #i90243#
+        TOKEN( "xforms-settings",       XML_XFORM_MODEL_SETTINGS ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
 #else
