@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppIconControl.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,21 +69,26 @@ OApplicationIconControl::OApplicationIconControl(Window* _pParent)
 {
     DBG_CTOR(OApplicationIconControl,NULL);
 
-    typedef ::std::pair< USHORT,USHORT> TUSHORTPair;
-    typedef ::std::pair< ElementType,TUSHORTPair> TUSHORT2Pair;
-    typedef ::std::pair< String,TUSHORT2Pair> TPair;
-    static const TPair pTypes[] = {
-            TPair(String(ModuleRes(RID_STR_TABLES_CONTAINER)),TUSHORT2Pair(E_TABLE,TUSHORTPair(IMG_TABLEFOLDER_TREE_L,IMG_TABLEFOLDER_TREE_LHC) ))
-        ,   TPair(String(ModuleRes(RID_STR_QUERIES_CONTAINER)),TUSHORT2Pair(E_QUERY,TUSHORTPair(IMG_QUERYFOLDER_TREE_L,IMG_QUERYFOLDER_TREE_LHC)) )
-        ,   TPair(String(ModuleRes(RID_STR_FORMS_CONTAINER)),TUSHORT2Pair(E_FORM,TUSHORTPair(IMG_FORMFOLDER_TREE_L,IMG_FORMFOLDER_TREE_LHC)) )
-        ,   TPair(String(ModuleRes(RID_STR_REPORTS_CONTAINER)),TUSHORT2Pair(E_REPORT,TUSHORTPair(IMG_REPORTFOLDER_TREE_L,IMG_REPORTFOLDER_TREE_LHC)) )
-        };
-
-    for (size_t i=0; i < sizeof(pTypes)/sizeof(pTypes[0]); ++i)
+    struct CategoryDescriptor
     {
-        SvxIconChoiceCtrlEntry* pEntry = InsertEntry(pTypes[i].first,Image(ModuleRes(pTypes[i].second.second.first)),Image(ModuleRes(pTypes[i].second.second.second)));
+        USHORT      nLabelResId;
+        ElementType eType;
+        USHORT      nImageResId;
+        USHORT      nImageResIdHC;
+    }   aCategories[] = {
+        { RID_STR_TABLES_CONTAINER,     E_TABLE,    IMG_TABLEFOLDER_TREE_L, IMG_TABLEFOLDER_TREE_LHC    },
+        { RID_STR_QUERIES_CONTAINER,    E_QUERY,    IMG_QUERYFOLDER_TREE_L, IMG_QUERYFOLDER_TREE_LHC    },
+        { RID_STR_FORMS_CONTAINER,      E_FORM,     IMG_FORMFOLDER_TREE_L,  IMG_FORMFOLDER_TREE_LHC     },
+        { RID_STR_REPORTS_CONTAINER,    E_REPORT,   IMG_REPORTFOLDER_TREE_L,IMG_REPORTFOLDER_TREE_LHC   }
+    };
+    for ( size_t i=0; i < sizeof(aCategories)/sizeof(aCategories[0]); ++i)
+    {
+        SvxIconChoiceCtrlEntry* pEntry = InsertEntry(
+            String( ModuleRes( aCategories[i].nLabelResId ) ),
+            Image( ModuleRes( aCategories[i].nImageResId ) ),
+            Image( ModuleRes( aCategories[i].nImageResIdHC ) ) );
         if ( pEntry )
-            pEntry->SetUserData(new ElementType(pTypes[i].second.first));
+            pEntry->SetUserData( new ElementType( aCategories[i].eType ) );
     }
 
     SetChoiceWithCursor( TRUE );
