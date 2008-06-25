@@ -7,7 +7,11 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: futext.cxx,v $
- * $Revision: 1.64 $
+<<<<<<< futext.cxx
+ * $Revision: 1.65 $
+=======
+ * $Revision: 1.65 $
+>>>>>>> 1.63.50.1
  *
  * This file is part of OpenOffice.org.
  *
@@ -435,7 +439,8 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
                             }
 
                             // we need to pick again since SdrEndTextEdit can rebuild the handles list
-                            if( mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt) == SDRHIT_HANDLE )
+                            eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+                            if( (eHit == SDRHIT_HANDLE) || (eHit == SDRHIT_MARKEDOBJECT) )
                             {
                                 USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
                                 mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
