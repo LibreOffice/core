@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UIControlArranger.java,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,15 +73,15 @@ public class UIControlArranger {
         this.curFormDocument = _curFormDocument;
         curtabindex = (short) (FormWizard.SOCONTROLPAGE * 100);
         IControlStep = new Integer(FormWizard.SOCONTROLPAGE);
-        String sLabelPlacment = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 32);
-        String sAlignLeft = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 33);
-        String sAlignRight = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 34);
-        sArrangementHeader[0] = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 41);
-        sArrangementHeader[1] = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 42);
-        HelpTexts[0] = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 36);
-        HelpTexts[1] = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 37);
-        HelpTexts[2] = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 40);
-        HelpTexts[3] = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 39);
+        String sLabelPlacment = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 32);
+        String sAlignLeft = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 33);
+        String sAlignRight = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 34);
+        sArrangementHeader[0] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 41);
+        sArrangementHeader[1] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 42);
+        HelpTexts[0] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 36);
+        HelpTexts[1] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 37);
+        HelpTexts[2] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
+        HelpTexts[3] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 39);
 
         flnLabelPlacement = CurUnoDialog.insertFixedLine("lnLabelPlacement",
           new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
