@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportSection.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,7 +114,7 @@ OReportSection::OReportSection(OViewsWindow* _pParent,const uno::Reference< repo
     }
 
     m_pFunc.reset(new DlgEdFuncSelect( this ));
-    m_pFunc->setOverlappedControlColor(lcl_getOverlappedControlColor( /* m_pParent->getView()->getReportView()->getController()->getORB() */ ) );
+    m_pFunc->setOverlappedControlColor(lcl_getOverlappedControlColor( /* m_pParent->getView()->getReportView()->getController().getORB() */ ) );
 
     Show();
 }
@@ -199,7 +199,7 @@ void OReportSection::fill()
 
     m_pReportListener = addStyleListener(m_xSection->getReportDefinition(),this);
 
-    m_pModel = m_pParent->getView()->getReportView()->getController()->getSdrModel();
+    m_pModel = m_pParent->getView()->getReportView()->getController().getSdrModel();
     m_pPage = m_pModel->getPage(m_xSection);
 
     m_pView = new OSectionView( m_pModel.get(), this, m_pParent->getView() );
@@ -326,7 +326,7 @@ void OReportSection::SetMode( DlgEdMode eNewMode )
         {
             m_pFunc.reset(new DlgEdFuncSelect( this ));
         }
-        m_pFunc->setOverlappedControlColor(lcl_getOverlappedControlColor( /* m_pParent->getView()->getReportView()->getController()->getORB()  */ ) );
+        m_pFunc->setOverlappedControlColor(lcl_getOverlappedControlColor( /* m_pParent->getView()->getReportView()->getController().getORB()  */ ) );
         m_pModel->SetReadOnly(eNewMode == RPTUI_READONLY);
         m_eMode = eNewMode;
     }
@@ -414,7 +414,7 @@ void OReportSection::LoseFocus()
 void OReportSection::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( !m_pFunc->MouseButtonUp( rMEvt ) )
-        getViewsWindow()->getView()->getReportView()->getController()->executeUnChecked(SID_OBJECT_SELECT,uno::Sequence< beans::PropertyValue>());
+        getViewsWindow()->getView()->getReportView()->getController().executeUnChecked(SID_OBJECT_SELECT,uno::Sequence< beans::PropertyValue>());
 }
 
 //----------------------------------------------------------------------------
@@ -442,7 +442,7 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
     {
         case COMMAND_CONTEXTMENU:
         {
-            OReportController* pController = getViewsWindow()->getView()->getReportView()->getController();
+            OReportController& rController = getViewsWindow()->getView()->getReportView()->getController();
             PopupMenu aContextMenu( ModuleRes( RID_MENU_REPORT ) );
             uno::Reference< report::XReportDefinition> xReportDefinition = getSection()->getReportDefinition();
             const USHORT nCount = aContextMenu.GetItemCount();
@@ -461,8 +461,8 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
                         String sText = String(ModuleRes((xReportDefinition.is() && xReportDefinition->getReportHeaderOn()) ? RID_STR_REPORTHEADERFOOTER_DELETE : RID_STR_REPORTHEADERFOOTER_INSERT));
                         aContextMenu.SetItemText(nId,sText);
                     }
-                    aContextMenu.CheckItem(nId,pController->isCommandChecked(nId));
-                    aContextMenu.EnableItem(nId,pController->isCommandEnabled(nId));
+                    aContextMenu.CheckItem(nId,rController.isCommandChecked(nId));
+                    aContextMenu.EnableItem(nId,rController.isCommandEnabled(nId));
                 }
             } // for (USHORT i = 0; i < nCount; ++i)
             Point aPos = _rCEvt.GetMousePosPixel();
@@ -477,7 +477,7 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
                     aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Selection"));
                     aArgs[0].Value <<= m_xSection;
                 }
-                pController->executeChecked(nId,aArgs);
+                rController.executeChecked(nId,aArgs);
             }
         }
         break;
@@ -769,7 +769,7 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 
         ::svx::ODataAccessDescriptor aDescriptor = ::svx::OColumnTransferable::extractColumnDescriptor(aDropped);
         // we use this way to create undo actions
-        OReportController* pController = getViewsWindow()->getView()->getReportView()->getController();
+        OReportController& rController = getViewsWindow()->getView()->getReportView()->getController();
         uno::Sequence<beans::PropertyValue> aValues( aDescriptor.createPropertyValueSequence() );
         sal_Int32 nLength = aValues.getLength();
         aValues.realloc(nLength + 3);
@@ -782,7 +782,7 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         aValues[nLength].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Section"));
         aValues[nLength++].Value <<= getSection();
 
-        pController->executeChecked(SID_ADD_CONTROL_PAIR,aValues);
+        rController.executeChecked(SID_ADD_CONTROL_PAIR,aValues);
         nDropOption = DND_ACTION_COPY;
     }
     return nDropOption;
