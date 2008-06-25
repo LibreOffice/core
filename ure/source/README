@@ -8,7 +8,7 @@
 #
 # $RCSfile: README,v $
 #
-# $Revision: 1.16 $
+# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -144,6 +144,7 @@ Program Files\URE\bin\JREProperties.class  [private]
 Program Files\URE\bin\jvmfwk3.ini  [private]
 Program Files\URE\bin\msci_uno.dll  [private]
 Program Files\URE\bin\java_uno.dll  [private]
+Program Files\URE\bin\cli_uno.dll [private]
 Program Files\URE\bin\urp_uno.dll  [private]
 Program Files\URE\bin\unsafe_uno_uno.dll  [private]
 Program Files\URE\bin\affine_uno_uno.dll  [private]
@@ -176,6 +177,15 @@ Program Files\URE\misc\javavendors.xml  [private]
 Program Files\URE\bin\unsafe_uno_uno.dll  [private]
 Program Files\URE\bin\affine_uno_uno.dll  [private]
 
+%windir%\assembly\cli_basetypes.dll [GAC]
+%windir%\assembly\cli_ure.dll [GAC]
+%windir%\assembly\cli_uretypes.dll [GAC]
+%windir%\assembly\cli_cppuhelper.dll [GAC]
+%windir%\assembly\policy.1.0.cli_basetypes.dll [GAC]
+%windir%\assembly\policy.1.0.cli_ure.dll [GAC]
+%windir%\assembly\policy.1.0.cli_uretypes.dll [GAC]
+%windir%\assembly\policy.1.0.cli_cppuhelper.dll [GAC]
+
 Files marked as [external] are included in the URE installation because the URE
 needs them and it cannot be guaranteed that they are available on a given
 system.  Applications using the URE may need those files too, so they are made
@@ -185,6 +195,10 @@ world, those files would not need to be included in the URE installation.
 Files marked as [private] are private to the URE installation.  To avoid
 stability issues, applications that use the URE should not access the
 functionality of these files.
+
+Files marked as [GAC] are installed in the Global Assembly Cache on Windows. The 
+file path reflects the path as seen in the Explorer with the Assembly 
+Cache Viewer Tool (Shfusion.dll) installed. The actual paths are different.
 
 
 Public Files in a URE Installation
