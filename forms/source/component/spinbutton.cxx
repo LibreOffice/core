@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: spinbutton.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,7 +59,7 @@ namespace frm
     //====================================================================
     // implemented elsewhere
     Any translateExternalDoubleToControlIntValue(
-        const Reference< XValueBinding >& _rxBinding, const Reference< XPropertySet >& _rxProperties,
+        const Any& _rExternalValue, const Reference< XPropertySet >& _rxProperties,
         const ::rtl::OUString& _rMinValueName, const ::rtl::OUString& _rMaxValueName );
     Any translateControlIntToExternalDoubleValue( const Any& _rControlIntValue );
 
@@ -253,9 +253,9 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    Any OSpinButtonModel::translateExternalValueToControlValue( ) const
+    Any OSpinButtonModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
     {
-        return translateExternalDoubleToControlIntValue( getExternalValueBinding(), m_xAggregateSet,
+        return translateExternalDoubleToControlIntValue( _rExternalValue, m_xAggregateSet,
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SpinValueMin" ) ),
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SpinValueMax" ) ) );
     }
@@ -268,13 +268,9 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    sal_Bool OSpinButtonModel::approveValueBinding( const Reference< XValueBinding >& _rxBinding )
+    Sequence< Type > OSpinButtonModel::getSupportedBindingTypes()
     {
-        OSL_PRECOND( _rxBinding.is(), "OSpinButtonModel::approveValueBinding: invalid binding!" );
-
-        // only strings are accepted for simplicity
-        return  _rxBinding.is()
-            &&  _rxBinding->supportsType( ::getCppuType( static_cast< double* >( NULL ) ) );
+        return Sequence< Type >( &::getCppuType( static_cast< double* >( NULL ) ), 1 );
     }
 
 //........................................................................

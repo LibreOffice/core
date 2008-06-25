@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scrollbar.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,37 +60,32 @@ namespace frm
     //====================================================================
     //--------------------------------------------------------------------
     Any translateExternalDoubleToControlIntValue(
-        const Reference< XValueBinding >& _rxBinding, const Reference< XPropertySet >& _rxProperties,
+        const Any& _rExternalValue, const Reference< XPropertySet >& _rxProperties,
         const ::rtl::OUString& _rMinValueName, const ::rtl::OUString& _rMaxValueName )
     {
-        OSL_PRECOND( _rxBinding.is(), "translateExternalDoubleToControlIntValue: no external binding!" );
         OSL_ENSURE( _rxProperties.is(), "translateExternalDoubleToControlIntValue: no aggregate!?" );
 
         sal_Int32 nControlValue( 0 );
-        if ( _rxBinding.is() )
+        double nExternalValue = 0;
+        if ( _rExternalValue >>= nExternalValue )
         {
-            Any aExternalValue = _rxBinding->getValue( ::getCppuType( static_cast< double* >( NULL ) ) );
-            double nExternalValue = 0;
-            if ( aExternalValue >>= nExternalValue )
+            if ( ::rtl::math::isInf( nExternalValue ) )
             {
-                if ( ::rtl::math::isInf( nExternalValue ) )
-                {
-                    // set the minimum or maximum of the scroll values
-                    ::rtl::OUString sLimitPropertyName = ::rtl::math::isSignBitSet( nExternalValue )
-                        ? _rMinValueName : _rMaxValueName;
-                    if ( _rxProperties.is() )
-                        _rxProperties->getPropertyValue( sLimitPropertyName ) >>= nControlValue;
-                }
-                else
-                {
-                    nControlValue = (sal_Int32)::rtl::math::round( nExternalValue );
-                }
+                // set the minimum or maximum of the scroll values
+                ::rtl::OUString sLimitPropertyName = ::rtl::math::isSignBitSet( nExternalValue )
+                    ? _rMinValueName : _rMaxValueName;
+                if ( _rxProperties.is() )
+                    _rxProperties->getPropertyValue( sLimitPropertyName ) >>= nControlValue;
             }
             else
             {
-                if ( _rxProperties.is() )
-                    _rxProperties->getPropertyValue( _rMinValueName ) >>= nControlValue;
+                nControlValue = (sal_Int32)::rtl::math::round( nExternalValue );
             }
+        }
+        else
+        {
+            if ( _rxProperties.is() )
+                _rxProperties->getPropertyValue( _rMinValueName ) >>= nControlValue;
         }
 
         return makeAny( nControlValue );
@@ -302,9 +297,9 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    Any OScrollBarModel::translateExternalValueToControlValue( ) const
+    Any OScrollBarModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
     {
-        return translateExternalDoubleToControlIntValue( getExternalValueBinding(), m_xAggregateSet,
+        return translateExternalDoubleToControlIntValue( _rExternalValue, m_xAggregateSet,
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScrollValueMin" ) ),
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScrollValueMax" ) ) );
     }
@@ -317,13 +312,9 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    sal_Bool OScrollBarModel::approveValueBinding( const Reference< XValueBinding >& _rxBinding )
+    Sequence< Type > OScrollBarModel::getSupportedBindingTypes()
     {
-        OSL_PRECOND( _rxBinding.is(), "OScrollBarModel::approveValueBinding: invalid binding!" );
-
-        // only strings are accepted for simplicity
-        return  _rxBinding.is()
-            &&  _rxBinding->supportsType( ::getCppuType( static_cast< double* >( NULL ) ) );
+        return Sequence< Type >( &::getCppuType( static_cast< double* >( NULL ) ), 1 );
     }
 
 //........................................................................
