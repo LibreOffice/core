@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_section_4.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:58 $
+'* last change: $Author: fredrikh $ $Date: 2008-06-25 14:42:18 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -104,8 +104,10 @@ end sub
 
 testcase tSectionInTables_1
 
-  Dim tableName, columnNumber, rowNumber as String
-  Dim sectionName                        as String
+  Dim tableName as String
+  Dim columnNumber as String
+  Dim rowNumber as String
+  Dim sectionName as String
 
   tableName     = "testTable"
   columnNumber  = "4"
@@ -143,8 +145,11 @@ endcase
 
 testcase tSectionInTables_2
 
-  Dim tableName, columnNumber, rowNumber , testText as String
-  Dim sectionName                                   as String
+  Dim tableName as String
+  Dim columnNumber as String
+  Dim rowNumber as String
+  Dim testText as String
+  Dim sectionName as String
 
   tableName     = "testTable"
   columnNumber  = "4"
@@ -196,8 +201,11 @@ endcase
 
 testcase tSectionInTables_3
 
-  Dim tableName   , columnNumber   , rowNumber as String
-  Dim sectionName , columnInSection            as String
+  Dim tableName as String
+  Dim columnNumber as String
+  Dim rowNumber as String
+  Dim sectionName as String
+  Dim columnInSection as String
 
   tableName       = "testTable"
   columnNumber    = "4"
@@ -259,8 +267,12 @@ endcase
 
 testcase tSectionInTables_4
 
-  Dim tableName   , columnNumber , rowNumber as String
-  Dim sectionName , footNote     , endNote   as String
+  Dim tableName as String
+  Dim columnNumber as String
+  Dim rowNumber as String
+  Dim sectionName as String
+  Dim footNote as String
+  Dim endNote as String
 
   tableName     = "testTable"
   columnNumber  = "4"
@@ -316,7 +328,10 @@ endcase
 '-----------------------------------------------------------------------------
 
 testcase tSectionInTables_5
-    Dim tableName, columnNumber, rowNumber , testText as String
+    Dim tableName as String
+    Dim columnNumber as String
+    Dim rowNumber as String
+    Dim testText as String
     Dim sectionName as String
 
     tableName     = "testTable"
@@ -381,8 +396,12 @@ endcase
 
 testcase tSectionInTables_6
 
-  Dim tableName, columnNumber, rowNumber , testText , selectedString as String
-  Dim sectionName                                                    as String
+  Dim tableName as String
+  Dim columnNumber as String
+  Dim rowNumber as String
+  Dim testText as String
+  Dim selectedString as String
+  Dim sectionName as String
 
   tableName       =  "testTable"
   columnNumber    =  "4"
@@ -419,8 +438,10 @@ endcase
 
 testcase tSectionInTables_7
 
-  Dim tableName, columnNumber, rowNumber  as String
-  Dim sectionName                         as String
+  Dim tableName as String
+  columnNumber as String
+  rowNumber as String
+  Dim sectionName as String
 
   tableName       =  "testTable"
   columnNumber    =  "4"
@@ -537,7 +558,7 @@ testcase tSectionInFootnotes_2
         endcatch
      else
          QAErrorLog "Not enough dummy text in the footnote area!"
-     endif
+     end if
     Call fCloseNavigator
    Call hCloseDocument
 endcase
@@ -546,8 +567,10 @@ endcase
 
 testcase tEditSection_1
 
-  Dim columnNumber ,  sectionName  as  String
-  Dim width1       ,  width2       as  String
+  Dim columnNumber as String
+  Dim sectionName as String
+  Dim width1 as String
+  Dim width2 as String
 
   sectionName   =  "MultiColumnSection"
   columnNumber  =  "3"
@@ -632,7 +655,8 @@ endcase
 
 testcase tEditSection_2
 
-    Dim sectionName  , testText  as String
+    Dim sectionName as String
+    Dim testText as String
 
     sectionName   =  "HideSection"
     testText      =  "Hide Section"
@@ -670,7 +694,8 @@ endcase
 
 testcase tEditSection_3
 
-  Dim sectionName  , testText  as String
+  Dim sectionName as String
+  Dim testText as String
 
   sectionName   =  "ProtectSection"
   testText      =  "Protect Section"
@@ -704,7 +729,7 @@ testcase tEditSection_3
       Active.ok
     else
       Warnlog "-  No warning when trying to write in protected area!"
-    endif
+    end if
 
     Call hCloseDocument
 
@@ -714,7 +739,8 @@ endcase
 
 testcase tEditSection_4
 
-  Dim sectionName  , testText  as String
+  Dim sectionName as String
+  Dim testText as String
 
   sectionName   =  "LinkSection"
   testText      =  "Link Section"
@@ -727,7 +753,7 @@ testcase tEditSection_4
   '/// edit a test file and save it
    Call hNewDocument
    Call wDokSchreiben testText
-   Call hFileSaveAsKill (gOfficePath + "user\work\tEditSection_4")
+   Call hFileSaveAsKill (gOfficePath + "user\work\tEditSection_4.odt")
    Call hCloseDocument
 
    Call hNewDocument
@@ -774,7 +800,8 @@ endcase
 
 testcase tEditSection_5
 
-  Dim sectionName  , testText  as String
+  Dim sectionName as String
+  Dim testText as String
 
   sectionName   =  "RemoveSection"
   testText      =  "Remove Section Test"
@@ -823,7 +850,9 @@ endcase
 
 testcase tParagraphSection_1
 
-  Dim documentName , sectionName , hopeResult as String
+  Dim documentName as String
+  Dim sectionName as String
+  Dim hopeResult as String
 
    documentName  =  ConvertPath(gTesttoolpath + "writer\optional\input\section\tParagraphSection_1.sxw")
    sectionName   =  "ParagraphSection"
@@ -873,9 +902,17 @@ endcase
 
 testcase tParagraphSection_2
 
-    Dim  sectionName                                                                          as String
-    Dim  beforeTextIntent1,afterTextIntent1,firstTextIntent1,beforeTextSpace1,afterTextSpace1 as String
-    Dim  beforeTextIntent2,afterTextIntent2,firstTextIntent2,beforeTextSpace2,afterTextSpace2 as String
+    Dim sectionName as String
+    Dim beforeTextIntent1 as String
+    Dim afterTextIntent1 as String
+    Dim firstTextIntent1 as String
+    Dim beforeTextSpace1 as String
+    Dim afterTextSpace1 as String
+    Dim beforeTextIntent2 as String
+    Dim afterTextIntent2 as String
+    Dim firstTextIntent2 as String
+    Dim beforeTextSpace2 as String
+    Dim afterTextSpace2 as String
     
     sectionName   =  "ParagraphSection"
     
@@ -888,11 +925,11 @@ testcase tParagraphSection_2
     if wBlindtextEinfuegen() = false then
         Call hCloseDocument
         goto endsub
-    endif
+    end if
        
     if iSprache = 82 then
         Call wDokSchreiben "<Return>"
-    endif
+    end if
     Call WDokSchreiben "<Up>"
     
     FormatParagraph
@@ -900,11 +937,11 @@ testcase tParagraphSection_2
     active.SetPage TabEinzuegeUndAbstaende
     kontext "TabEinzuegeUndAbstaende"
     
-    beforeTextIntent1 = "0" + gSeperator + "01" + gMeasurementUnit
-    afterTextIntent1  = "0" + gSeperator + "02" + gMeasurementUnit
-    firstTextIntent1  = "0" + gSeperator + "03" + gMeasurementUnit
-    beforeTextSpace1  = "0" + gSeperator + "04" + gMeasurementUnit
-    afterTextSpace1   = "0" + gSeperator + "05" + gMeasurementUnit
+    beforeTextIntent1 = "0" + gSeperator + "10" + gMeasurementUnit
+    afterTextIntent1  = "0" + gSeperator + "20" + gMeasurementUnit
+    firstTextIntent1  = "0" + gSeperator + "30" + gMeasurementUnit
+    beforeTextSpace1  = "0" + gSeperator + "40" + gMeasurementUnit
+    afterTextSpace1   = "0" + gSeperator + "50" + gMeasurementUnit
     
     Vonlinks.SetText   beforeTextIntent1
     VonRechts.SetText  afterTextIntent1
@@ -926,10 +963,10 @@ testcase tParagraphSection_2
     active.SetPage TabEinzuegeUndAbstaende
     kontext "TabEinzuegeUndAbstaende"
     
-    beforeTextIntent2 = "0" + gSeperator + "06" + gMeasurementUnit
-    afterTextIntent2  = "0" + gSeperator + "07" + gMeasurementUnit
-    firstTextIntent2  = "0" + gSeperator + "08" + gMeasurementUnit
-    beforeTextSpace2  = "0" + gSeperator + "09" + gMeasurementUnit
+    beforeTextIntent2 = "0" + gSeperator + "60" + gMeasurementUnit
+    afterTextIntent2  = "0" + gSeperator + "70" + gMeasurementUnit
+    firstTextIntent2  = "0" + gSeperator + "80" + gMeasurementUnit
+    beforeTextSpace2  = "0" + gSeperator + "90" + gMeasurementUnit
     afterTextSpace2   = "0" + gSeperator + "10" + gMeasurementUnit
     
     Vonlinks.SetText   beforeTextIntent2
@@ -950,21 +987,18 @@ testcase tParagraphSection_2
     Kontext
     active.SetPage TabEinzuegeUndAbstaende
     kontext "TabEinzuegeUndAbstaende"
-    
-    if Automatisch.IsChecked <> TRUE OR Registerhaltigkeit.IsChecked = TRUE then
-        Warnlog "Something wrong in checkbox configuration in first paragraph!"
-    endif
-    
-    if Vonlinks.GetText   <>  beforeTextIntent1 OR _
-        VonRechts.GetText  <>  afterTextIntent1  OR _
-        ErsteZeile.GetText <>  firstTextIntent1  OR _
-        Oben.GetText       <>  beforeTextSpace1  OR _
-        Unten.GetText      <>  afterTextSpace1         then
-        Warnlog "Something wrong in intent and sparcing area in first paragraph"
-    endif
-    
+
+    if Automatisch.IsChecked <> TRUE then Warnlog "Something wrong with the checkbox 'Automatic' in first paragraph!"
+    if Registerhaltigkeit.IsChecked = TRUE then Warnlog "Something wrong with the checkbox 'Register' in first paragraph!"
+
+    if Vonlinks.GetText   <>  beforeTextIntent1 then Warnlog "Something wrong with the before-text-intent-area in the first paragraph"
+    if VonRechts.GetText  <>  afterTextIntent1 then Warnlog "Something wrong with the after-text-intent-area in the first paragraph"
+    if ErsteZeile.GetText <>  firstTextIntent1 then Warnlog "Something wrong with the first-text-intent-area in the first paragraph"
+    if Oben.GetText       <>  beforeTextSpace1 then Warnlog "Something wrong with the before-sparcing area in the first paragraph"
+    if Unten.GetText      <>  afterTextSpace1 then Warnlog "Something wrong with the after-sparcing area in the first paragraph"
+
     TabEinzuegeUndAbstaende.Cancel
-    
+
     Call WDokSchreiben "<MOD1 End>"
     Call WDokSchreiben "<Up>",3
     
@@ -974,20 +1008,17 @@ testcase tParagraphSection_2
     active.SetPage TabEinzuegeUndAbstaende
     kontext "TabEinzuegeUndAbstaende"
     
-    if Automatisch.IsChecked = TRUE OR Registerhaltigkeit.IsChecked <> TRUE then
-        Warnlog "Something wrong in checkbox configuration in second paragraph!"
-    endif
-    
-    if Vonlinks.GetText   <>  beforeTextIntent2 OR _
-        VonRechts.GetText  <>  afterTextIntent2  OR _
-        ErsteZeile.GetText <>  firstTextIntent2  OR _
-        Oben.GetText       <>  beforeTextSpace2  OR _
-        Unten.GetText      <>  afterTextSpace2         then
-        Warnlog "Something wrong in intent and sparcing area in second paragraph!"
-    endif
-    
+    if Automatisch.IsChecked = TRUE then Warnlog "Something wrong with the checkbox 'Automatic' in the second paragraph!"
+    if Registerhaltigkeit.IsChecked <> TRUE then Warnlog "Something wrong with the checkbox 'Register' in the second paragraph!"
+
+    if Vonlinks.GetText     <>  beforeTextIntent2  then Warnlog "Something was wrong with the before-text-intent in the second paragraph!"
+    if VonRechts.GetText <>  afterTextIntent2     then Warnlog "Something wrong with the after-text-intent in the second paragraph!"
+    if ErsteZeile.GetText  <>  firstTextIntent2      then Warnlog "Something wrong with the first-text-intent in the second paragraph!"
+    if Oben.GetText          <>  beforeTextSpace2 then Warnlog "Something wrong with the before-text-sparcing area in the second paragraph!"
+    if Unten.GetText         <>  afterTextSpace2 then Warnlog "Something wrong with the after-text-sparcing area in the second paragraph!"
+
     TabEinzuegeUndAbstaende.Cancel
-    
+
     Call hCloseDocument
 
 endcase
@@ -996,9 +1027,18 @@ endcase
 
 testcase tParagraphSection_3
 
-    Dim  sectionName                                as String
-    Dim  left1, right1 , top1 , bottom1 , distance1 as String
-    Dim  left2,                           distance2 as String
+    Dim sectionName as String
+    Dim left1 as String
+    Dim right1 as String
+    Dim top1 as String
+    Dim bottom1 as String
+    Dim distance1 as String
+    Dim left2 as String
+    Dim distance2 as String
+    Dim COMPAREvar1 as String
+    Dim COMPAREvar2 as String
+    Dim COMPAREvar3 as String
+    Dim COMPAREvar4 as String
     
     sectionName   =  "ParagraphSection"
     
@@ -1011,10 +1051,10 @@ testcase tParagraphSection_3
     if wBlindtextEinfuegen() = false then
         Call hCloseDocument
         goto endsub
-    endif
+    end if
     if iSprache = 82 then
         Call wDokSchreiben "<Return>"
-    endif   
+    end if   
     Call WDokSchreiben "<Up>"
     
     FormatParagraph
@@ -1025,11 +1065,11 @@ testcase tParagraphSection_3
     Vorgaben.Typekeys "<home><right>"        ' 2nd from the left
     synchronisieren.UnCheck
     
-    left1     =  "0" + gSeperator + "01" + gMeasurementUnit
-    right1    =  "0" + gSeperator + "02" + gMeasurementUnit
-    top1      =  "0" + gSeperator + "03" + gMeasurementUnit
-    bottom1   =  "0" + gSeperator + "04" + gMeasurementUnit
-    distance1 =  "0" + gSeperator + "10" + gMeasurementUnit
+    left1     =  "0" + gSeperator + "1" 
+    right1    =  "0" + gSeperator + "2" 
+    top1      =  "0" + gSeperator + "3" 
+    bottom1   =  "0" + gSeperator + "4" 
+    distance1 =  "5" + gSeperator + "2" 
     
     Links.SetText  left1
     Rechts.SetText right1
@@ -1056,8 +1096,8 @@ testcase tParagraphSection_3
     Vorgaben.Typekeys "<home><right><right>"       ' 3nd from the left
     synchronisieren.Check
     
-    left2     =  "0" + gSeperator + "06" + gMeasurementUnit
-    distance2 =  "0" + gSeperator + "15" + gMeasurementUnit
+    left2     =  "0" + gSeperator + "6" 
+    distance2 =  "5" + gSeperator + "7" 
     
     Links.SetText  left2
     
@@ -1078,21 +1118,23 @@ testcase tParagraphSection_3
     kontext "TabUmrandung"
     
     '   if synchronisieren.IsChecked = TRUE then Warnlog "The Synchronize option should NOT be checked in first paragraph!"
+    COMPAREvar1 = Links.GetText
+    COMPAREvar2 = Rechts.GetText
+    COMPAREvar3 = Oben.GetText
+    COMPAREvar4 = Unten.GetText
     
-    if Links.GetText   <>  left1  OR _
-        Rechts.GetText  <>  right1 OR _
-        Oben.GetText    <>  top1   OR _
-        Unten.GetText   <>  bottom1     then
-        Warnlog "Something wrong in space to contents area in first paragraph"
-    endif
-    
-    if Groesse.GetText           <> distance1 OR _
-        SchattenFarbe.GetSelIndex <> 2         then
-        Warnlog "Something wrong in shadow style area in the first paragraph"
-    endif
-    
+    printlog (InStr( COMPAREvar1, left1   ) = false)
+    if InStr( COMPAREvar1, left1 ) = false then Warnlog "Something wrong with the Left -space to contents area in first paragraph"
+    if InStr( COMPAREvar2, right1 ) = false then Warnlog "Something wrong with the Right -space to contents area in first paragraph"
+    if InStr( COMPAREvar3, top1 ) = false then Warnlog "Something wrong with the Top -space to contents area in first paragraph"
+    if InStr( COMPAREvar4, bottom1 ) = false then Warnlog "Something wrong with the Bottom -space to contents area in first paragraph"
+
+    if InStr( Groesse.GetText, distance1 ) = false then Warnlog "Something wrong with the size in first paragraph"
+'    Groesse.GetText <> distance1 then Warnlog "Something wrong with the size in first paragraph"
+    if SchattenFarbe.GetSelIndex <> 2 then Warnlog "Something wrong in shadow color in the first paragraph"
+
     TabUmrandung.Cancel
-    
+
     Call WDokSchreiben "<MOD1 End>"
     Call WDokSchreiben "<Up>",3
     
@@ -1104,17 +1146,12 @@ testcase tParagraphSection_3
     
     '   if synchronisieren.IsChecked <> TRUE then Warnlog "The Synchronize option should be checked in second paragraph!"
     
-    if Links.GetText   <>  left2 OR _
-        Rechts.GetText  <>  left2 OR _
-        Oben.GetText    <>  left2 OR _
-        Unten.GetText   <>  left2      then        
+    if  InStr( Links.GetText, left2 ) = false OR InStr( Rechts.GetText, left2 ) = false OR InStr( Oben.GetText, left2 ) = false OR InStr( Unten.GetText, left2 ) = false then 
         Warnlog "Something wrong in space to contents area in second paragraph"
-    endif
+    end if
     
-    if Groesse.GetText           <> distance2   OR _
-        SchattenFarbe.GetSelIndex <> 5           then
-        Warnlog "Something wrong in shadow style area in the first paragraph"
-    endif
+    if InStr( Groesse.GetText, distance2 ) = false then Warnlog "Something wrong with the size in first paragraph"
+    if SchattenFarbe.GetSelIndex <> 5 then Warnlog "Something wrong in shadow style area in the first paragraph"
     
     TabUmrandung.Cancel
     
@@ -1126,11 +1163,16 @@ endcase
 
 testcase tScenarioSection_1
 
-   Dim SectionName() , tempFile          as String
-   DIM sectionInMasterDoc , MasterDoc    as String
-   DIM ContentInMasterDoc()              as String
-   Dim i , j                            as Integer
-   Dim temp1,temp2,LinkFile            as String
+   Dim SectionName() as String
+   Dim tempFile as String
+   DIM sectionInMasterDoc
+   Dim MasterDoc    as String
+   DIM ContentInMasterDoc() as String
+   Dim i as integer
+   Dim j as Integer
+   Dim temp1 as String
+   Dim temp2 as String
+   Dim LinkFile as String
 
   '/// create Masterdocument from another document that also contains sections  ///
    PrintLog "   - create Masterdocument from another document that also contains sections"
@@ -1183,7 +1225,7 @@ testcase tScenarioSection_1
       Active.yes
    else
       Warnlog "- No messagebox asking for the actualizationing of the master document !"
-   endif
+   end if
    Sleep 1
 
    Kontext "Navigator"
@@ -1242,10 +1284,14 @@ endcase
 
 testcase tScenarioSection_2
 
-   Dim SectionName() , tempFile          as String
-   DIM sectionInMasterDoc , MasterDoc    as String
-   DIM ContentInMasterDoc()              as String
-   Dim i , j  , k                        as Integer
+   Dim SectionName() as String
+   Dim tempFile as String
+   DIM sectionInMasterDoc as String
+   Dim MasterDoc as String
+   DIM ContentInMasterDoc() as String
+   Dim i as Integer
+   Dim j as Integer
+   Dim k as Integer
    Dim sValue as String
 
   '/// create Masterdocument from another document that also contains sections and footnotes
@@ -1298,7 +1344,7 @@ testcase tScenarioSection_2
       Active.yes
    else
       Warnlog "- No messagebox asking for the actualizationing of the master document !"
-   endif
+   end if
    Sleep 1
 
    Kontext "Navigator"
@@ -1338,7 +1384,7 @@ testcase tScenarioSection_2
 			sValue = ConvertPath ( gOfficePath & "user/work/" + SectionName(i) )
 			if Instr( ConvertPath(Dateiname.Gettext), sValue) = false then
 			 	Warnlog "The linked file is NOT correct!"
-			endif				
+			end if				
 		else
         	Warnlog "The section should be linked"
         end if
@@ -1380,16 +1426,16 @@ testcase tCTLSection_1
       '/// 4)Check the default name
        if TextDirection.GetSelIndex <> 3 then
           Warnlog "The default name we hope is :" + TextDirection.GetItemText(3) +" but get: "+TextDirection.GetSelText
-       endif
+       end if
 
       '/// 5)Check the available values ( Should 3 items )
           if TextDirection.GetItemCount <> 3 then
               Warnlog "The values in TextDirection should be 3, but get " +TextDirection.GetItemCount
-          endif
+          end if
 
    else
        Warnlog "the textdirection listbox doesn't exist!"
-   endif
+   end if
 
    TabSpalten.Cancel
 
@@ -1435,16 +1481,16 @@ testcase tCTLSection_2
       '/// 5)Check the default name
        if TextDirection.GetSelIndex <> 3 then
           Warnlog "The default name we hope is :" + TextDirection.GetItemText(3) +" but get: "+TextDirection.GetSelText
-       endif
+       end if
 
       '/// 6)Check the available values ( Should 3 items )
        if TextDirection.GetItemCount <> 3 then
            Warnlog "The values in TextDirection should be 3, but get " +TextDirection.GetItemCount
-       endif
+       end if
 
    else
        Warnlog "the textdirection listbox doesn't exist!"
-   endif
+   end if
 
    TabSpalten.Cancel
 
