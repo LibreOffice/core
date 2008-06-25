@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RelationDlg.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,7 +124,7 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
 {
     DBG_CTOR(ORelationDialog,NULL);
 
-    m_xConnection = pParent->getDesignView()->getController()->getConnection();
+    m_xConnection = pParent->getDesignView()->getController().getConnection();
 
     //////////////////////////////////////////////////////////////////////
     // Connection kopieren
@@ -257,7 +257,7 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
     {
         ::dbaui::showError( SQLExceptionInfo( ::cppu::getCaughtException() ),
                             this,
-                            static_cast<OJoinTableView*>(GetParent())->getDesignView()->getController()->getORB());
+                            static_cast<OJoinTableView*>(GetParent())->getDesignView()->getController().getORB());
     }
     catch( const Exception& )
     {
