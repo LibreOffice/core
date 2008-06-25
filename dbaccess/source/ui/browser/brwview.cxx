@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: brwview.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,9 +108,9 @@ namespace
 DBG_NAME(UnoDataBrowserView)
 // -------------------------------------------------------------------------
 UnoDataBrowserView::UnoDataBrowserView( Window* pParent,
-                                        IController* _pController,
+                                        IController& _rController,
                                         const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rFactory)
-    :ODataView(pParent,_pController,_rFactory)
+    :ODataView(pParent,_rController,_rFactory)
     ,m_pTreeView(NULL)
     ,m_pSplitter(NULL)
     ,m_pVclControl(NULL)
