@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimp.cxx,v $
- * $Revision: 1.110 $
+ * $Revision: 1.111 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1354,6 +1354,12 @@ void SvXMLImport::SetViewSettings(const com::sun::star::uno::Sequence<com::sun::
 
 void SvXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&)
 {
+}
+
+void SvXMLImport::SetDocumentSpecificSettings(const ::rtl::OUString& _rSettingsGroupName, const uno::Sequence<beans::PropertyValue>& _rSettings)
+{
+    (void)_rSettingsGroupName;
+    (void)_rSettings;
 }
 
 ProgressBarHelper*  SvXMLImport::GetProgressBarHelper()
