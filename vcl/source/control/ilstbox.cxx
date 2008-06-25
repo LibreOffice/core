@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ilstbox.cxx,v $
- * $Revision: 1.66 $
+ * $Revision: 1.67 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1305,29 +1305,6 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
 
     switch( aKeyCode.GetCode() )
     {
-
-        case KEY_A:
-        {
-            if( bCtrl && mbMulti )
-            {
-                // paint only once
-                BOOL bUpdates = IsUpdateMode();
-                SetUpdateMode( FALSE );
-
-                USHORT nEntryCount = mpEntryList->GetEntryCount();
-                for( USHORT i = 0; i < nEntryCount; i++ )
-                    SelectEntry( i, TRUE );
-
-                // restore update mode
-                SetUpdateMode( bUpdates );
-                Invalidate();
-
-                bDone = TRUE;
-            }
-            maSearchStr.Erase();
-        }
-        break;
-
         case KEY_UP:
         {
             if ( IsReadOnly() )
@@ -1538,6 +1515,29 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
         }
         break;
 
+        case KEY_A:
+        {
+            if( bCtrl && mbMulti )
+            {
+                // paint only once
+                BOOL bUpdates = IsUpdateMode();
+                SetUpdateMode( FALSE );
+
+                USHORT nEntryCount = mpEntryList->GetEntryCount();
+                for( USHORT i = 0; i < nEntryCount; i++ )
+                    SelectEntry( i, TRUE );
+
+                // restore update mode
+                SetUpdateMode( bUpdates );
+                Invalidate();
+
+                maSearchStr.Erase();
+
+                bDone = TRUE;
+                break;
+            }
+        }
+        // fall through intentional
         default:
         {
             xub_Unicode c = rKEvt.GetCharCode();
