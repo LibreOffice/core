@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: singledoccontroller.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -517,7 +517,7 @@ namespace dbaui
         return aReturn;
     }
     // -----------------------------------------------------------------------------
-    void OSingleDocumentController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& /*aArgs*/)
+    void OSingleDocumentController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& _rArgs)
     {
         switch(_nId)
         {
@@ -531,6 +531,9 @@ namespace dbaui
             case ID_BROWSER_REDO:
                 m_aUndoManager.Redo();
                 InvalidateFeature(ID_BROWSER_UNDO);
+                break;
+            default:
+                OSingleDocumentController_Base::Execute( _nId, _rArgs );
                 break;
         }
         InvalidateFeature(_nId);
