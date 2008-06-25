@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppController.cxx,v $
- * $Revision: 1.62 $
+ * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,6 +74,8 @@
 #include "com/sun/star/beans/NamedValue.hpp"
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/sdb/application/DatabaseObject.hpp>
+#include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
 /** === end UNO includes === **/
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -233,6 +235,8 @@
 #include <algorithm>
 #include <functional>
 
+#include <boost/noncopyable.hpp>
+
 extern "C" void SAL_CALL createRegistryInfo_ODBApplication()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OApplicationController > aAutoRegistration;
@@ -259,6 +263,10 @@ using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::task;
 using ::com::sun::star::document::XEmbeddedScripts;
+using ::com::sun::star::sdb::application::NamedDatabaseObject;
+
+namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
+namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer;
 
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OApplicationController::getImplementationName() throw( RuntimeException )
@@ -275,7 +283,7 @@ using ::com::sun::star::document::XEmbeddedScripts;
 Sequence< ::rtl::OUString> OApplicationController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ApplicationController");
+    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.application.DefaultViewController");
     return aSupported;
 }
 //-------------------------------------------------------------------------
@@ -307,18 +315,106 @@ struct XContainerFunctor : public ::std::unary_function< OApplicationController:
 //====================================================================
 //= OApplicationController
 //====================================================================
+class SelectionNotifier : public ::boost::noncopyable
+{
+private:
+    ::cppu::OInterfaceContainerHelper   m_aSelectionListeners;
+    ::cppu::OWeakObject&                m_rContext;
+    sal_Int32                           m_nSelectionNestingLevel;
+
+public:
+    SelectionNotifier( ::osl::Mutex& _rMutex, ::cppu::OWeakObject& _rContext )
+        :m_aSelectionListeners( _rMutex )
+        ,m_rContext( _rContext )
+        ,m_nSelectionNestingLevel( 0 )
+    {
+    }
+
+    void addListener( const Reference< XSelectionChangeListener >& _Listener )
+    {
+        m_aSelectionListeners.addInterface( _Listener );
+    }
+
+    void removeListener( const Reference< XSelectionChangeListener >& _Listener )
+    {
+        m_aSelectionListeners.removeInterface( _Listener );
+    }
+
+    void disposing()
+    {
+        EventObject aEvent( m_rContext );
+        m_aSelectionListeners.disposeAndClear( aEvent );
+    }
+
+    ~SelectionNotifier()
+    {
+    }
+
+    struct SelectionGuardAccess { friend class SelectionGuard; private: SelectionGuardAccess() { }  };
+
+    /** enters a block which modifies the selection of our owner.
+
+        Can be called multiple times, the only important thing is to call leaveSelection
+        equally often.
+    */
+    void    enterSelection( SelectionGuardAccess )
+    {
+        ++m_nSelectionNestingLevel;
+    }
+
+    /** leaves a block which modifies the selection of our owner
+
+        Must be paired with enterSelection calls.
+
+        When the last block is left, i.e. the last leaveSelection call is made on the current stack,
+        then our SelectionChangeListeners are notified
+    */
+    void    leaveSelection( SelectionGuardAccess )
+    {
+        if ( --m_nSelectionNestingLevel == 0 )
+        {
+            EventObject aEvent( m_rContext );
+            m_aSelectionListeners.notifyEach( &XSelectionChangeListener::selectionChanged, aEvent );
+        }
+    }
+};
+
+class SelectionGuard : public ::boost::noncopyable
+{
+public:
+    SelectionGuard( SelectionNotifier& _rNotifier )
+        :m_rNotifier( _rNotifier )
+    {
+        m_rNotifier.enterSelection( SelectionNotifier::SelectionGuardAccess() );
+    }
+
+    ~SelectionGuard()
+    {
+        m_rNotifier.leaveSelection( SelectionNotifier::SelectionGuardAccess() );
+    }
+
+private:
+    SelectionNotifier&  m_rNotifier;
+};
+
+//====================================================================
+//= OApplicationController
+//====================================================================
 DBG_NAME(OApplicationController)
 //--------------------------------------------------------------------
 OApplicationController::OApplicationController(const Reference< XMultiServiceFactory >& _rxORB)
     :OApplicationController_CBASE( _rxORB )
+    ,m_aContextMenuInterceptors( m_aMutex )
     ,m_aTableCopyHelper(this)
     ,m_pClipbordNotifier(NULL)
     ,m_nAsyncDrop(0)
     ,m_aControllerConnectedEvent( LINK( this, OApplicationController, OnFirstControllerConnected ) )
+    ,m_aSelectContainerEvent( LINK( this, OApplicationController, OnSelectContainer ) )
     ,m_ePreviewMode(E_PREVIEWNONE)
     ,m_eCurrentType(E_NONE)
     ,m_bNeedToReconnect(sal_False)
     ,m_bSuspended( sal_False )
+    ,m_pSelectionNotifier( new SelectionNotifier( m_aMutex, *this ) )
 {
     DBG_CTOR(OApplicationController,NULL);
 
@@ -375,6 +471,7 @@ void SAL_CALL OApplicationController::disposing()
     m_aCurrentContainers.clear();
     m_aSpecialSubFrames.clear();
     m_aDocuments.clear();
+    m_pSelectionNotifier->disposing();
 
     if ( getView() )
     {
@@ -445,7 +542,7 @@ void SAL_CALL OApplicationController::disposing()
 //--------------------------------------------------------------------
 sal_Bool OApplicationController::Construct(Window* _pParent)
 {
-    m_pView = new OApplicationView(_pParent,getORB(),this,this,this,this,this,this,m_ePreviewMode);
+    m_pView = new OApplicationView( _pParent, getORB(), *this, m_ePreviewMode );
     m_pView->SetUniqueId(UID_APP_VIEW);
 
     // late construction
@@ -1029,6 +1126,13 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard(m_aMutex);
+
+    if ( isUserDefinedFeature( _nId ) )
+    {
+        OApplicationController_CBASE::Execute( _nId, aArgs );
+        return;
+    }
+
     if ( !getContainer() || m_bReadOnly )
         return; // return without execution
 
@@ -1388,16 +1492,16 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 impl_migrateScripts_nothrow();
                 break;
             case SID_DB_APP_VIEW_TABLES:
-                getContainer()->selectContainer(E_TABLE);
+                m_aSelectContainerEvent.Call( reinterpret_cast< void* >( E_TABLE ) );
                 break;
             case SID_DB_APP_VIEW_QUERIES:
-                getContainer()->selectContainer(E_QUERY);
+                m_aSelectContainerEvent.Call( reinterpret_cast< void* >( E_QUERY ) );
                 break;
             case SID_DB_APP_VIEW_FORMS:
-                getContainer()->selectContainer(E_FORM);
+                m_aSelectContainerEvent.Call( reinterpret_cast< void* >( E_FORM ) );
                 break;
             case SID_DB_APP_VIEW_REPORTS:
-                getContainer()->selectContainer(E_REPORT);
+                m_aSelectContainerEvent.Call( reinterpret_cast< void* >( E_REPORT ) );
                 break;
             case SID_DB_APP_DISABLE_PREVIEW:
                 m_ePreviewMode = E_PREVIEWNONE;
@@ -1541,13 +1645,7 @@ OApplicationView*   OApplicationController::getContainer() const
 {
     return static_cast< OApplicationView* >( getView() );
 }
-// -----------------------------------------------------------------------------
-void OApplicationController::onCreationClick(const ::rtl::OUString& _sCommand)
-{
-    URL aCommand;
-    aCommand.Complete = _sCommand;
-    executeChecked(aCommand,Sequence<PropertyValue>());
-}
+
 // -----------------------------------------------------------------------------
 // ::com::sun::star::container::XContainerListener
 void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException)
@@ -1703,6 +1801,8 @@ sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
 
     if ( m_eCurrentType != _eType && _eType != E_NONE )
     {
+        SelectionGuard aSelGuard( *m_pSelectionNotifier );
+
         if ( _eType == E_TABLE )
         {
             try
@@ -1749,24 +1849,31 @@ sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
             getContainer()->getDetailView()->createPage(_eType,xContainer);
         }
 
+        SelectionByElementType::iterator pendingSelection = m_aPendingSelection.find( _eType );
+        if ( pendingSelection != m_aPendingSelection.end() )
+        {
+            Sequence< ::rtl::OUString > aSelected( pendingSelection->second.size() );
+            ::std::copy( pendingSelection->second.begin(), pendingSelection->second.end(), aSelected.getArray() );
+            getContainer()->selectElements( aSelected );
+
+            m_aPendingSelection.erase( pendingSelection );
+        }
+
         InvalidateAll();
-        EventObject aEvent(*this);
-        m_aSelectionListeners.notifyEach( &XSelectionChangeListener::selectionChanged, aEvent );
     }
     m_eCurrentType = _eType;
 
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-bool OApplicationController::onEntryDoubleClick(SvTreeListBox* _pTree)
+bool OApplicationController::onEntryDoubleClick( SvTreeListBox& _rTree )
 {
-    OSL_ENSURE(_pTree != NULL,"Who called me without a svtreelsiboc! ->GPF ");
-    if ( getContainer() && getContainer()->isLeaf(_pTree->GetHdlEntry()) )
+    if ( getContainer() && getContainer()->isLeaf( _rTree.GetHdlEntry() ) )
     {
         try
         {
             openElement(
-                getContainer()->getQualifiedName( _pTree->GetHdlEntry() ),
+                getContainer()->getQualifiedName( _rTree.GetHdlEntry() ),
                 getContainer()->getElementType(),
                 E_OPEN_NORMAL
             );
@@ -1839,10 +1946,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
         Reference< XComponent > xDefinition;
         xRet = aHelper->open( _sName, xDefinition, _eOpenMode, _rAdditionalArguments );
 
-        if (_eOpenMode == E_OPEN_DESIGN || _eType == E_FORM )
-        {
-            addDocumentListener(xRet,xDefinition);
-        }
+        addDocumentListener(xRet,xDefinition);
     }
     break;
 
@@ -1900,6 +2004,13 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
         break;
     }
     return xRet;
+}
+// -----------------------------------------------------------------------------
+IMPL_LINK( OApplicationController, OnSelectContainer, void*, _pType )
+{
+    ElementType eType = (ElementType)reinterpret_cast< sal_IntPtr >( _pType );
+    getContainer()->selectContainer(eType);
+    return 0L;
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( OApplicationController, OnCreateWithPilot, void*, _pType )
@@ -2173,11 +2284,11 @@ void OApplicationController::renameEntry()
     }
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::onEntryDeSelect(SvTreeListBox* /*_pTree*/)
+void OApplicationController::onEntryDeSelect(SvTreeListBox& /*_rTree*/)
 {
+    SelectionGuard aSelGuard( *m_pSelectionNotifier );
+
     InvalidateAll();
-    EventObject aEvent(*this);
-    m_aSelectionListeners.notifyEach( &XSelectionChangeListener::selectionChanged, aEvent );
 }
 // -----------------------------------------------------------------------------
 void OApplicationController::onEntrySelect(SvLBoxEntry* _pEntry)
@@ -2187,15 +2298,14 @@ void OApplicationController::onEntrySelect(SvLBoxEntry* _pEntry)
     OApplicationView* pView = getContainer();
     if ( pView )
     {
+        SelectionGuard aSelGuard( *m_pSelectionNotifier );
+
         const ElementType eType = pView->getElementType();
           if ( _pEntry && pView->isALeafSelected() )
         {
             const ::rtl::OUString sName = pView->getQualifiedName( _pEntry );
             selectEntry(eType,sName);
         }
-
-        EventObject aEvent(*this);
-        m_aSelectionListeners.notifyEach( &XSelectionChangeListener::selectionChanged, aEvent );
     }
 }
 // -----------------------------------------------------------------------------
@@ -2303,10 +2413,91 @@ void OApplicationController::onDeleteEntry(SvLBoxEntry* /*_pEntry*/)
     }
     executeChecked(nId,Sequence<PropertyValue>());
 }
+
 // -----------------------------------------------------------------------------
-sal_Bool OApplicationController::requestContextMenu( const CommandEvent& /*_rEvent*/ )
+void OApplicationController::executeUnChecked(const URL& _rCommand, const Sequence< PropertyValue>& aArgs)
 {
-    return sal_False;
+    OApplicationController_CBASE::executeUnChecked( _rCommand, aArgs );
+}
+
+// -----------------------------------------------------------------------------
+void OApplicationController::executeChecked(const URL& _rCommand, const Sequence< PropertyValue>& aArgs)
+{
+    OApplicationController_CBASE::executeChecked( _rCommand, aArgs );
+}
+
+// -----------------------------------------------------------------------------
+void OApplicationController::executeUnChecked(sal_uInt16 _nCommandId, const Sequence< PropertyValue>& aArgs)
+{
+    OApplicationController_CBASE::executeUnChecked( _nCommandId, aArgs );
+}
+
+// -----------------------------------------------------------------------------
+void OApplicationController::executeChecked(sal_uInt16 _nCommandId, const Sequence< PropertyValue>& aArgs)
+{
+    OApplicationController_CBASE::executeChecked( _nCommandId, aArgs );
+}
+
+// -----------------------------------------------------------------------------
+sal_Bool OApplicationController::isCommandEnabled(sal_uInt16 _nCommandId) const
+{
+    return OApplicationController_CBASE::isCommandEnabled( _nCommandId );
+}
+
+// -----------------------------------------------------------------------------
+sal_Bool OApplicationController::isCommandEnabled( const ::rtl::OUString& _rCompleteCommandURL ) const
+{
+    return OApplicationController_CBASE::isCommandEnabled( _rCompleteCommandURL );
+}
+
+// -----------------------------------------------------------------------------
+sal_uInt16 OApplicationController::registerCommandURL( const ::rtl::OUString& _rCompleteCommandURL )
+{
+    return OApplicationController_CBASE::registerCommandURL( _rCompleteCommandURL );
+}
+
+// -----------------------------------------------------------------------------
+void OApplicationController::notifyHiContrastChanged()
+{
+    OApplicationController_CBASE::notifyHiContrastChanged();
+}
+
+// -----------------------------------------------------------------------------
+Reference< XController > OApplicationController::getXController() throw( RuntimeException )
+{
+    return OApplicationController_CBASE::getXController();
+}
+
+// -----------------------------------------------------------------------------
+bool OApplicationController::interceptUserInput( const NotifyEvent& _rEvent )
+{
+    return OApplicationController_CBASE::interceptUserInput( _rEvent );
+}
+
+// -----------------------------------------------------------------------------
+PopupMenu* OApplicationController::getContextMenu( Control& /*_rControl*/ ) const
+{
+    return new PopupMenu( ModuleRes( RID_MENU_APP_EDIT ) );
+}
+
+// -----------------------------------------------------------------------------
+IController& OApplicationController::getCommandController()
+{
+    return *static_cast< IApplicationController* >( this );
+}
+
+// -----------------------------------------------------------------------------
+::cppu::OInterfaceContainerHelper* OApplicationController::getContextMenuInterceptors()
+{
+    return &m_aContextMenuInterceptors;
+}
+
+// -----------------------------------------------------------------------------
+Any OApplicationController::getCurrentSelection( Control& _rControl ) const
+{
+    Sequence< NamedDatabaseObject > aSelection;
+    getContainer()->describeCurrentSelectionForControl( _rControl, aSelection );
+    return makeAny( aSelection );
 }
 
 // -----------------------------------------------------------------------------
@@ -2690,6 +2881,19 @@ void OApplicationController::containerFound( const Reference< XContainer >& _xCo
     }
     return sName;
 }
+
+// -----------------------------------------------------------------------------
+void SAL_CALL OApplicationController::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& _Listener ) throw (RuntimeException)
+{
+    m_pSelectionNotifier->addListener( _Listener );
+}
+
+// -----------------------------------------------------------------------------
+void SAL_CALL OApplicationController::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& _Listener ) throw (RuntimeException)
+{
+    m_pSelectionNotifier->removeListener( _Listener );
+}
+
 // -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection ) throw (IllegalArgumentException, RuntimeException)
 {
@@ -2701,6 +2905,9 @@ void OApplicationController::containerFound( const Reference< XContainer >& _xCo
         getContainer()->selectElements(aSelection);
         return sal_True;
     }
+
+    // --------------------------------------------------------------
+    // BEGIN compatibility
     Sequence< NamedValue > aCurrentSelection;
     if ( (_aSelection >>= aCurrentSelection) && aCurrentSelection.getLength() )
     {
@@ -2713,44 +2920,117 @@ void OApplicationController::containerFound( const Reference< XContainer >& _xCo
             {
                 sal_Int32 nType = 0;
                 pIter->Value >>= nType;
-                if ( nType < 0 || nType > 4)
+                if ( nType < DatabaseObject::TABLE || nType > DatabaseObject::REPORT )
                     throw IllegalArgumentException();
-                eType = static_cast<ElementType>(nType);
+                eType = static_cast< ElementType >( nType );
             }
             else if ( pIter->Name.equalsAscii("Selection") )
                 pIter->Value >>= aSelection;
         }
 
+        m_aSelectContainerEvent.CancelCall();   // just in case the async select request was running
         getContainer()->selectContainer(eType);
         getContainer()->selectElements(aSelection);
         return sal_True;
     }
-    throw IllegalArgumentException();
+    // END compatibility
+    // --------------------------------------------------------------
+
+    Sequence< NamedDatabaseObject > aSelectedObjects;
+    if ( !( _aSelection >>= aSelectedObjects ) )
+    {
+        aSelectedObjects.realloc( 1 );
+        if ( !( _aSelection >>= aSelectedObjects[0] ) )
+            throw IllegalArgumentException();
+    }
+
+    SelectionByElementType aSelectedElements;
+    ElementType eSelectedCategory = E_NONE;
+    for (   const NamedDatabaseObject* pObject = aSelectedObjects.getConstArray();
+            pObject != aSelectedObjects.getConstArray() + aSelectedObjects.getLength();
+            ++pObject
+        )
+    {
+        switch ( pObject->Type )
+        {
+            case DatabaseObject::TABLE:
+            case DatabaseObjectContainer::SCHEMA:
+            case DatabaseObjectContainer::CATALOG:
+                aSelectedElements[ E_TABLE ].push_back( pObject->Name );
+                break;
+            case DatabaseObject::QUERY:
+                aSelectedElements[ E_QUERY ].push_back( pObject->Name );
+                break;
+            case DatabaseObject::FORM:
+            case DatabaseObjectContainer::FORMS_FOLDER:
+                aSelectedElements[ E_FORM ].push_back( pObject->Name );
+                break;
+            case DatabaseObject::REPORT:
+            case DatabaseObjectContainer::REPORTS_FOLDER:
+                aSelectedElements[ E_REPORT ].push_back( pObject->Name );
+                break;
+            case DatabaseObjectContainer::TABLES:
+            case DatabaseObjectContainer::QUERIES:
+            case DatabaseObjectContainer::FORMS:
+            case DatabaseObjectContainer::REPORTS:
+                if ( eSelectedCategory != E_NONE )
+                    throw IllegalArgumentException(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "You cannot select different categories." ) ),
+                            // TODO: resource
+                        *this, sal_Int16( pObject - aSelectedObjects.getConstArray() ) );
+                eSelectedCategory =
+                        ( pObject->Type == DatabaseObjectContainer::TABLES )  ? E_TABLE
+                    :   ( pObject->Type == DatabaseObjectContainer::QUERIES ) ? E_QUERY
+                    :   ( pObject->Type == DatabaseObjectContainer::FORMS )   ? E_FORM
+                    :   ( pObject->Type == DatabaseObjectContainer::REPORTS ) ? E_REPORT
+                    :   E_NONE;
+                break;
+
+            default:
+            case DatabaseObjectContainer::DATA_SOURCE:
+            {
+                ::rtl::OUStringBuffer aMessage;
+                aMessage.appendAscii( "Unsupported object type found (" );
+                aMessage.append     ( sal_Int32( pObject->Type ) );
+                aMessage.appendAscii( ")." );
+                    // TODO: resource
+                throw IllegalArgumentException(
+                    aMessage.makeStringAndClear(), *this, sal_Int16( pObject - aSelectedObjects.getConstArray() ) );
+            }
+        }
+    }
+
+    for (   SelectionByElementType::const_iterator sel = aSelectedElements.begin();
+            sel != aSelectedElements.end();
+            ++sel
+        )
+    {
+        if ( sel->first == m_eCurrentType )
+        {
+            Sequence< ::rtl::OUString > aSelected( sel->second.size() );
+            ::std::copy( sel->second.begin(), sel->second.end(), aSelected.getArray() );
+            getContainer()->selectElements( aSelected );
+        }
+        else
+        {
+            m_aPendingSelection[ sel->first ] = sel->second;
+        }
+    }
+
+    m_aSelectContainerEvent.CancelCall();   // just in case the async select request was running
+    getContainer()->selectContainer( eSelectedCategory );
+
+    return sal_True;
 }
 // -----------------------------------------------------------------------------
 Any SAL_CALL OApplicationController::getSelection(  ) throw (RuntimeException)
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard(m_aMutex);
-    Sequence< NamedValue > aCurrentSelection;
-    if ( getContainer() )
-    {
-        ::std::vector< ::rtl::OUString> aList;
-        getSelectionElementNames(aList);
-        NamedValue aType;
-        aType.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type"));
-        aType.Value <<= static_cast<sal_Int32>(getContainer()->getElementType());
-        NamedValue aNames;
-        aNames.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Selection"));
-        if ( !aList.empty() )
-            aNames.Value <<= Sequence< ::rtl::OUString>(&aList[0],aList.size());
 
-        aCurrentSelection.realloc(2);
-        aCurrentSelection[0] = aType;
-        aCurrentSelection[1] = aNames;
-    }
-
-    return makeAny(aCurrentSelection);
+    Sequence< NamedDatabaseObject > aCurrentSelection;
+    getContainer()->describeCurrentSelectionForType( getContainer()->getElementType(), aCurrentSelection );
+    return makeAny( aCurrentSelection );
 }
 // -----------------------------------------------------------------------------
 void OApplicationController::impl_migrateScripts_nothrow()
@@ -2801,6 +3081,7 @@ bool OApplicationController::impl_activateSubFrame_throw(const ::rtl::OUString& 
     } // while ( aFind != m_aSpecialSubFrames.end() )
     return bFound;
 }
+
 //........................................................................
 }   // namespace dbaui
 //........................................................................
