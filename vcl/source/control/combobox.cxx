@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: combobox.cxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -342,10 +342,9 @@ IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
     Selection           aSel = pEdit->GetSelection();
     AutocompleteAction  eAction = pEdit->GetAutocompleteAction();
 
-    // Wenn keine Selection vorhanden ist, wird bei Tab/Shift+Tab auch
-    // keine AutoCompletion durchgefuehrt, da man ansonsten nicht in
-    // das naechste Feld kommt und der Text wieder mit etwas AutoExpandiert
-    // wird, was man nicht haben moechte.
+    /* If there is no current selection do not auto complete on
+       Tab/Shift-Tab since then we would not cycle to the next field.
+    */
     if ( aSel.Len() ||
          ((eAction != AUTOCOMPLETE_TABFORWARD) && (eAction != AUTOCOMPLETE_TABBACKWARD)) )
     {
@@ -364,18 +363,23 @@ IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
             bForward = FALSE;
             nStart = nStart ? nStart - 1 : mpImplLB->GetEntryList()->GetEntryCount()-1;
         }
-        BOOL bLazy = mbMatchCase ? FALSE : TRUE;
-        // 1. Try match full from current position
-        USHORT nPos = mpImplLB->GetEntryList()->FindMatchingEntry( aStartText, nStart, bForward, FALSE );
-        if ( nPos == LISTBOX_ENTRY_NOTFOUND )
-            // 2. Match full, but from start
-            nPos = mpImplLB->GetEntryList()->FindMatchingEntry( aStartText, bForward ? 0 : (mpImplLB->GetEntryList()->GetEntryCount()-1), bForward, FALSE );
-        if ( ( nPos == LISTBOX_ENTRY_NOTFOUND ) && bLazy )
-            // 3. Try match lazy from current position
+
+        USHORT nPos = LISTBOX_ENTRY_NOTFOUND;
+        if( ! mbMatchCase )
+        {
+            // Try match case insensitive from current position
             nPos = mpImplLB->GetEntryList()->FindMatchingEntry( aStartText, nStart, bForward, TRUE );
-        if ( ( nPos == LISTBOX_ENTRY_NOTFOUND ) && bLazy )
-            // 4. Try match lazy, but from start
-            nPos = mpImplLB->GetEntryList()->FindMatchingEntry( aStartText, bForward ? 0 : (mpImplLB->GetEntryList()->GetEntryCount()-1), bForward, bLazy );
+            if ( nPos == LISTBOX_ENTRY_NOTFOUND )
+                // Try match case insensitive, but from start
+                nPos = mpImplLB->GetEntryList()->FindMatchingEntry( aStartText, bForward ? 0 : (mpImplLB->GetEntryList()->GetEntryCount()-1), bForward, TRUE );
+        }
+
+        if ( nPos == LISTBOX_ENTRY_NOTFOUND )
+            // Try match full from current position
+            nPos = mpImplLB->GetEntryList()->FindMatchingEntry( aStartText, nStart, bForward, FALSE );
+        if ( nPos == LISTBOX_ENTRY_NOTFOUND )
+            //  Match full, but from start
+            nPos = mpImplLB->GetEntryList()->FindMatchingEntry( aStartText, bForward ? 0 : (mpImplLB->GetEntryList()->GetEntryCount()-1), bForward, FALSE );
 
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
