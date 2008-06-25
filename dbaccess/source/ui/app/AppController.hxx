@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppController.hxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,13 +31,13 @@
 #ifndef DBAUI_APPCONTROLLER_HXX
 #define DBAUI_APPCONTROLLER_HXX
 
+#include "IApplicationController.hxx"
 #include "AppElementType.hxx"
 #include "callbacks.hxx"
 #include "commontypes.hxx"
 #include "documentcontroller.hxx"
 #include "dsntypes.hxx"
 #include "genericcontroller.hxx"
-#include "IAppElementNotification.hxx"
 #include "linkeddocuments.hxx"
 #include "moduledbu.hxx"
 #include "TableCopyHelper.hxx"
@@ -47,12 +47,13 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/ui/XContextMenuInterception.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/stl_types.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <sot/storage.hxx>
 #include <svtools/transfer.hxx>
 #include <svx/dataaccessdescriptor.hxx>
@@ -82,18 +83,19 @@ namespace dbaui
     class OApplicationView;
     class OLinkedDocumentsAccess;
     typedef OGenericUnoController   OApplicationController_CBASE;
-    typedef ::cppu::ImplHelper3 <   ::com::sun::star::container::XContainerListener
+    typedef ::cppu::ImplHelper5 <   ::com::sun::star::container::XContainerListener
                                 ,   ::com::sun::star::beans::XPropertyChangeListener
                                 ,   ::com::sun::star::sdb::application::XDatabaseDocumentUI
+                                ,   ::com::sun::star::ui::XContextMenuInterception
+                                ,   ::com::sun::star::view::XSelectionSupplier
                                 >   OApplicationController_Base;
+
+    class SelectionNotifier;
 
     class OApplicationController
             :public OApplicationController_CBASE
             ,public OApplicationController_Base
-            ,public IApplicationElementNotification
-            ,public IControlActionListener
-            ,public IContainerFoundListener
-            ,public IViewChangeListener
+            ,public IApplicationController
     {
     public:
         typedef ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer > TContainer;
@@ -114,16 +116,20 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >
                                 m_xMetaData;
 
-        OModuleClient   m_aModuleClient;
+        OModuleClient           m_aModuleClient;
         TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xDataSource;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                                m_xDataSource;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                                 m_xModel;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable >
                                 m_xDocumentModify;
+        ::cppu::OInterfaceContainerHelper
+                                m_aContextMenuInterceptors;
+
         ModelControllerConnector
                                 m_aModelConnector;
-        TContainerVector        m_aCurrentContainers;   // the containers where we are listener on
+        TContainerVector        m_aCurrentContainers;       // the containers where we are listener on
         TDocuments              m_aDocuments;
         TFrames                 m_aSpecialSubFrames;        // contains the query, table and relation frame
         ODsnTypeCollection      m_aTypeCollection;
@@ -133,10 +139,16 @@ namespace dbaui
         mutable ::rtl::OUString m_sDatabaseName;
         sal_Int32               m_nAsyncDrop;
         OAsyncronousLink        m_aControllerConnectedEvent;
+        OAsyncronousLink        m_aSelectContainerEvent;
         PreviewMode             m_ePreviewMode;             // the mode of the preview
         ElementType             m_eCurrentType;
         sal_Bool                m_bNeedToReconnect;         // true when the settings of the data source were modified and the connection is no longer up to date
         sal_Bool                m_bSuspended;               // is true when the controller was already suspended
+
+        ::std::auto_ptr< SelectionNotifier >
+                                m_pSelectionNotifier;
+        typedef ::std::map< ElementType, ::std::vector< ::rtl::OUString > > SelectionByElementType;
+        SelectionByElementType  m_aPendingSelection;
 
     private:
 
@@ -217,21 +229,13 @@ namespace dbaui
         */
         void convertToView(const ::rtl::OUString& _sName);
 
-        /** checks if the selected data source is read only
-            @return
-                <TRUE/> if read only, otherwise <FALSE/>
-        */
-        virtual sal_Bool isDataSourceReadOnly() const;
-
         /** checks if the connection for the selected data source is read only. If the connection doesn't exist, <TRUE/> will be returned.
             @return
                 <TRUE/> if read only or doesn't exist, otherwise <FALSE/>
         */
         sal_Bool isConnectionReadOnly() const;
 
-        /** fills the list with the selected entries.
-            @param  _rNames
-        */
+        /// fills the list with the selected entries.
         void getSelectionElementNames( ::std::vector< ::rtl::OUString>& _rNames ) const;
 
         /// deletes the entries selected.
@@ -446,13 +450,6 @@ namespace dbaui
         // execute a feature
         virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
-        // IControlActionListener overridables
-        virtual sal_Bool        requestContextMenu( const CommandEvent& _rEvent );
-        virtual sal_Bool        requestQuickHelp( const SvLBoxEntry* _pEntry, String& _rText ) const;
-        virtual sal_Bool        requestDrag( sal_Int8 _nAction, const Point& _rPosPixel );
-        virtual sal_Int8        queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors );
-        virtual sal_Int8        executeDrop( const ExecuteDropEvent& _rEvt );
-
         // OGenericUnoController
         virtual void            onLoadedMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager );
 
@@ -502,9 +499,15 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL loadComponent( ::sal_Int32 ObjectType, const ::rtl::OUString& ObjectName, ::sal_Bool ForEditing ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL loadComponentWithArguments( ::sal_Int32 ObjectType, const ::rtl::OUString& ObjectName, ::sal_Bool ForEditing, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
+        // XContextMenuInterception
+        virtual void SAL_CALL registerContextMenuInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XContextMenuInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL releaseContextMenuInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XContextMenuInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException);
+
         // XSelectionSupplier
         virtual ::sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& xSelection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
         /** retrieves the current connection, creates it if necessary
         */
@@ -524,36 +527,52 @@ namespace dbaui
         */
         void refreshTables();
 
-        /// @see <method>IApplicationElementNotification::onEntryDoubleClick</method>
-        virtual bool onEntryDoubleClick(SvTreeListBox* _pTree);
-        /// @see <method>IApplicationElementNotification::onCreationClick</method>
-        virtual void onCreationClick(const ::rtl::OUString& _sCommand);
-        /// @see <method>IApplicationElementNotification::onContainerSelect</method>
+        // IApplicationController
+        virtual bool onEntryDoubleClick(SvTreeListBox& _rTree);
         virtual sal_Bool onContainerSelect(ElementType _eType);
-        /// @see <method>IApplicationElementNotification::onEntrySelect</method>
         virtual void onEntrySelect(SvLBoxEntry* _pEntry);
-        /// @see <method>IApplicationElementNotification::onEntryDeSelect</method>
-        virtual void onEntryDeSelect(SvTreeListBox* _pTree);
-        /// @see <method>IApplicationElementNotification::onCutEntry</method>
+        virtual void onEntryDeSelect(SvTreeListBox& _rTree);
         virtual void onCutEntry(SvLBoxEntry* _pEntry);
-        /// @see <method>IApplicationElementNotification::onCopyEntry</method>
         virtual void onCopyEntry(SvLBoxEntry* _pEntry);
-        /// @see <method>IApplicationElementNotification::onPasteEntry</method>
         virtual void onPasteEntry(SvLBoxEntry* _pEntry);
-        /// @see <method>IApplicationElementNotification::onDeleteEntry</method>
         virtual void onDeleteEntry(SvLBoxEntry* _pEntry);
+        virtual void previewChanged( sal_Int32 _nMode);
+        virtual void containerFound( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _xContainer);
+
+        // IController (base of IApplicationController)
+        virtual void        executeUnChecked(const ::com::sun::star::util::URL& _rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
+        virtual void        executeChecked(const ::com::sun::star::util::URL& _rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
+        virtual void        executeUnChecked(sal_uInt16 _nCommandId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
+        virtual void        executeChecked(sal_uInt16 _nCommandId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
+        virtual sal_Bool    isCommandEnabled(sal_uInt16 _nCommandId) const;
+        virtual sal_Bool    isCommandEnabled( const ::rtl::OUString& _rCompleteCommandURL ) const;
+        virtual sal_uInt16  registerCommandURL( const ::rtl::OUString& _rCompleteCommandURL );
+        virtual void        notifyHiContrastChanged();
+        virtual sal_Bool    isDataSourceReadOnly() const;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
+                            getXController(void) throw( ::com::sun::star::uno::RuntimeException );
+        virtual bool        interceptUserInput( const NotifyEvent& _rEvent );
+
+        // IControlActionListener overridables
+        virtual sal_Bool        requestQuickHelp( const SvLBoxEntry* _pEntry, String& _rText ) const;
+        virtual sal_Bool        requestDrag( sal_Int8 _nAction, const Point& _rPosPixel );
+        virtual sal_Int8        queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors );
+        virtual sal_Int8        executeDrop( const ExecuteDropEvent& _rEvt );
+
+        // IContextMenuProvider (base of IApplicationController)
+        virtual PopupMenu*      getContextMenu( Control& _rControl ) const;
+        virtual IController&    getCommandController();
+        virtual ::cppu::OInterfaceContainerHelper*
+                                getContextMenuInterceptors();
+        virtual ::com::sun::star::uno::Any
+                                getCurrentSelection( Control& _rControl ) const;
 
         DECL_LINK( OnInvalidateClipboard, void* );
         DECL_LINK( OnClipboardChanged, void* );
         DECL_LINK( OnAsyncDrop, void* );
         DECL_LINK( OnCreateWithPilot, void* );
+        DECL_LINK( OnSelectContainer, void* );
         DECL_LINK( OnFirstControllerConnected, void* );
-
-        // IContainerFoundListener
-        virtual void containerFound( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _xContainer);
-
-        // IViewChangeListener
-        virtual void previewChanged( sal_Int32 _nMode);
 
     protected:
         using OApplicationController_CBASE::connect;
