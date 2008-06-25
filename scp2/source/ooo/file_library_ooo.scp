@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_library_ooo.scp,v $
- * $Revision: 1.292 $
+ * $Revision: 1.293 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2032,14 +2032,14 @@ End
 File gid_File_Lib_Soffice
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Name = SCP2_URE_DL_NORMAL("soffice");
+    Name = SCP2_URE_DL_NORMAL("sofficeapp");
     Styles = (PACKED);
 End
 
-File gid_File_Lib_Unopkg
+File gid_File_Lib_Unopkgapp
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Name = SCP2_URE_DL_NORMAL("unopkg");
+    Name = SCP2_URE_DL_NORMAL("unopkgapp");
     Styles = (PACKED);
 End
 
