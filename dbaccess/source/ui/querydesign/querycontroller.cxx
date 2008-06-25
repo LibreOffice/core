@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: querycontroller.cxx,v $
- * $Revision: 1.118 $
+ * $Revision: 1.119 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -957,7 +957,7 @@ sal_Bool OQueryController::Construct(Window* pParent)
 {
     // TODO: we have to check if we should create the text- or the design- view
 
-    m_pView = new OQueryContainerWindow(pParent,this,getORB());
+    m_pView = new OQueryContainerWindow( pParent, *this, getORB() );
 
     return OJoinController::Construct(pParent);
 }
@@ -1596,19 +1596,25 @@ void OQueryController::resetImpl()
             setQueryComposer();
 
             bool bError( false );
-            if ( m_bEscapeProcessing )
+
+            if ( !m_pSqlIterator )
+            {
+                bError = true;
+            }
+            else if ( m_bEscapeProcessing )
             {
                 ::rtl::OUString aErrorMsg;
-                ::connectivity::OSQLParseNode* pNode = m_aSqlParser.parseTree(aErrorMsg,m_sStatement,m_bGraphicalDesign);
-                //  m_pParseNode = pNode;
-                if(pNode)
+                ::std::auto_ptr< ::connectivity::OSQLParseNode > pNode(
+                    m_aSqlParser.parseTree( aErrorMsg, m_sStatement, m_bGraphicalDesign ) );
+
+                if ( pNode.get() )
                 {
-                    if(m_pSqlIterator)
+                    delete m_pSqlIterator->getParseTree();
+                    m_pSqlIterator->setParseTree( pNode.release() );
+                    m_pSqlIterator->traverseAll();
+                    if ( m_pSqlIterator->hasErrors() )
                     {
-                        delete m_pSqlIterator->getParseTree();
-                        m_pSqlIterator->setParseTree(pNode);
-                        m_pSqlIterator->traverseAll();
-                        if ( m_pSqlIterator->hasErrors() )
+                        if ( !editingView() )
                         {
                             SQLContext aErrorContext;
                             aErrorContext.Message = lcl_getObjectResourceString( STR_ERROR_PARSING_STATEMENT, m_nCommandType );
@@ -1616,20 +1622,18 @@ void OQueryController::resetImpl()
                             aErrorContext.Details = lcl_getObjectResourceString( STR_INFO_OPENING_IN_SQL_VIEW, m_nCommandType );
                             aErrorContext.NextException <<= m_pSqlIterator->getErrors();
                             showError( aErrorContext );
-                            bError = true;
                         }
-                    }
-                    else
-                    {
-                        delete pNode;
                         bError = true;
                     }
                 }
                 else
                 {
-                    String aTitle(ModuleRes(STR_SVT_SQL_SYNTAX_ERROR));
-                    OSQLMessageBox aDlg(getView(),aTitle,aErrorMsg);
-                    aDlg.Execute();
+                    if ( !editingView() )
+                    {
+                        String aTitle(ModuleRes(STR_SVT_SQL_SYNTAX_ERROR));
+                        OSQLMessageBox aDlg(getView(),aTitle,aErrorMsg);
+                        aDlg.Execute();
+                    }
                     bError = true;
                 }
             }
