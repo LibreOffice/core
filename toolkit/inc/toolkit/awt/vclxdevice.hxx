@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxdevice.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,9 @@
 #include <cppuhelper/weak.hxx>
 #include <vos/mutex.hxx>
 
+// #include <com/sun/star/awt/XTextConstraints.hpp>
+#include <com/sun/star/awt/XUnitConversion.hpp>
+
 class OutputDevice;
 class VirtualDevice;
 
@@ -51,6 +54,8 @@ class VirtualDevice;
 class TOOLKIT_DLLPUBLIC VCLXDevice :    public ::com::sun::star::awt::XDevice,
                     public ::com::sun::star::lang::XTypeProvider,
                     public ::com::sun::star::lang::XUnoTunnel,
+/* public ::com::sun::star::awt::XTextConstraints,*/
+                    public ::com::sun::star::awt::XUnitConversion,
                     public ::cppu::OWeakObject
 {
     friend class VCLXGraphics;
@@ -99,6 +104,18 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >        SAL_CALL getFont( const ::com::sun::star::awt::FontDescriptor& aDescriptor ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >      SAL_CALL createBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayBitmap > SAL_CALL createDisplayBitmap( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >& Bitmap ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XTextConstraints
+    // ::sal_Int32 SAL_CALL getTextWidth( const ::rtl::OUString& Text ) throw (::com::sun::star::uno::RuntimeException);
+    // ::sal_Int32 SAL_CALL getTextHeight(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XUnitConversion
+    ::com::sun::star::awt::Point SAL_CALL convertPointToLogic( const ::com::sun::star::awt::Point& aPoint, ::sal_Int16 TargetUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::awt::Point SAL_CALL convertPointToPixel( const ::com::sun::star::awt::Point& aPoint, ::sal_Int16 SourceUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::awt::Size SAL_CALL convertSizeToLogic( const ::com::sun::star::awt::Size& aSize, ::sal_Int16 TargetUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::awt::Size SAL_CALL convertSizeToPixel( const ::com::sun::star::awt::Size& aSize, ::sal_Int16 SourceUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+
 };
 
 //  ----------------------------------------------------
