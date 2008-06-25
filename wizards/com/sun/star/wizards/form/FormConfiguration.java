@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormConfiguration.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,11 +70,11 @@ public class FormConfiguration {
         this.CurUnoDialog = _CurUnoDialog;
         curtabindex = (short) (FormWizard.SOSUBFORMPAGE * 100);
         Integer ISubFormStep = new Integer(FormWizard.SOSUBFORMPAGE);
-        String sOnExistingRelation = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 5);
-        String sOnManualRelation = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 7);
-        String sSelectManually = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 4);
-        String sSelectRelation = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 8);
-        String sSubFormDescription = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 3);
+        String sOnExistingRelation = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 5);
+        String sOnManualRelation = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 7);
+        String sSelectManually = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 4);
+        String sSelectRelation = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 8);
+        String sSubFormDescription = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 3);
 
         chkcreateSubForm = CurUnoDialog.insertCheckBox("chkcreateSubForm", SSUBFORMMODE, this,
                             new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
