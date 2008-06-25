@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: genericcontroller.cxx,v $
- * $Revision: 1.91 $
+ * $Revision: 1.92 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -130,11 +130,8 @@
 #endif
 #include <algorithm>
 #include <hash_map>
-<<<<<<< genericcontroller.cxx
 #include <cppuhelper/implbase1.hxx>
-=======
 #include <limits>
->>>>>>> 1.88.6.6
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
