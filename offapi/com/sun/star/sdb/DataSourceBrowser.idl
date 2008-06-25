@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataSourceBrowser.idl,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,9 @@
 #endif
 #ifndef __com_sun_star_form_FormController_idl__
 #include <com/sun/star/form/FormController.idl>
+#endif
+#ifndef __com_sun_star_ui_XContextMenuInterception_idl__
+#include <com/sun/star/ui/XContextMenuInterception.idl>
 #endif
 
 module com {  module sun {  module star {  module sdb {
@@ -148,7 +151,7 @@ module com {  module sun {  module star {  module sdb {
         <li><em>optional</em> <member>DataAccessDescriptor::ResultSet</member></li>
     </ul>
     </p>
-    <p>The default for <member>DataAccessDescriptor::Selection</member> is to contain bookmarks, if not specifies
+    <p>The default for <member>DataAccessDescriptor::Selection</member> is to contain bookmarks, if not specified
     otherwise by <member>DataAccessDescriptor::BookmarkSelection</member>.</pr>
     </p>
 
@@ -271,6 +274,19 @@ published service DataSourceBrowser
     </p>
     */
     interface com::sun::star::frame::XDispatchProvider;
+
+    /** allows to intercept user-triggered context menus in the data source browser
+
+        <p>Context menu interception is currently supported only for the brower control where the registered
+        data sources and all their tables and queries are displayed in a tree view.</p>
+
+        <p>The selection supplied by <member scope="com::sun::star::ui">ContextMenuExecuteEvent::Selection</member>,
+        in the event structure passed to the context menu interceptors, actually is a value from the
+        <type scope="com::sun::star::sdb::application">NamedDatabaseObject</type> group.</p>
+
+        @since OOo 3.0
+    */
+    [optional] interface ::com::sun::star::ui::XContextMenuInterception;
 };
 
 //=============================================================================
