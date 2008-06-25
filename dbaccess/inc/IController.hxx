@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: IController.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,8 @@ namespace com { namespace sun { namespace star {
         class XController;
     }
 } } }
+
+class NotifyEvent;
 
 namespace dbaui
 {
@@ -99,11 +101,25 @@ namespace dbaui
         */
         virtual sal_Bool isCommandEnabled( const ::rtl::OUString& _rCompleteCommandURL ) const = 0;
 
+        /** registers a command URL, giving it a unique name
+
+            If you call this with a command URL which is supported by the controller, then
+            you will simply get the controller's internal numeric shortcut to this command.
+
+            If you call this with a command URL which is not supported by the controller, then
+            you will get a new ID, which is unique during the lifetime of the controller.
+
+            If the command URL is invalid, or the controller cannot register new commands anymore,
+            then 0 is returned.
+        */
+        virtual sal_uInt16
+                        registerCommandURL( const ::rtl::OUString& _rCompleteCommandURL ) = 0;
+
         /** notifyHiContrastChanged will be called when the hicontrast mode changed.
             @param  _bHiContrast
                 <TRUE/> when in hicontrast mode.
         */
-        virtual void notifyHiContrastChanged() {}
+        virtual void notifyHiContrastChanged() = 0;
 
         /** checks if the selected data source is read only
             @return
@@ -116,8 +132,12 @@ namespace dbaui
             This must be the same model as returned by XController::getModel, and might be <NULL/> when
             the controller does not have an own model.
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > SAL_CALL
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
                 getXController(void) throw( ::com::sun::star::uno::RuntimeException ) = 0;
+
+        /** allows interception of user input, aka mouse clicks and key events
+        */
+        virtual bool interceptUserInput( const NotifyEvent& _rEvent ) = 0;
     };
 }
 #endif // DBAUI_ICONTROLLER_HXX
