@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ViewsWindow.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -392,20 +392,20 @@ sal_Int32 OViewsWindow::getSplitterHeight() const
 IMPL_LINK( OViewsWindow, StartSplitHdl, Splitter*,  )
 {
     const String sEmpty(ModuleRes(RID_STR_UNDO_CHANGE_SIZE));
-    getView()->getReportView()->getController()->getUndoMgr()->EnterListAction(sEmpty,String());
+    getView()->getReportView()->getController().getUndoMgr()->EnterListAction(sEmpty,String());
     return 0L;
 }
 //------------------------------------------------------------------------------
 IMPL_LINK( OViewsWindow, EndSplitHdl, Splitter*,  )
 {
-    getView()->getReportView()->getController()->getUndoMgr()->LeaveListAction();
+    getView()->getReportView()->getController().getUndoMgr()->LeaveListAction();
     Resize();
     return 0L;
 }
 //-----------------------------------------------------------------------------
 IMPL_LINK( OViewsWindow, SplitHdl, Splitter*, _pSplitter )
 {
-    if ( !getView()->getReportView()->getController()->isEditable() )
+    if ( !getView()->getReportView()->getController().isEditable() )
     {
         m_bInSplitHandler = sal_False;
         return 0L;
@@ -691,7 +691,7 @@ void OViewsWindow::MouseButtonDown( const MouseEvent& rMEvt )
     {
         GrabFocus();
         const uno::Sequence< beans::PropertyValue> aArgs;
-        getView()->getReportView()->getController()->executeChecked(SID_SELECT_REPORT,aArgs);
+        getView()->getReportView()->getController().executeChecked(SID_SELECT_REPORT,aArgs);
     }
     Window::MouseButtonDown(rMEvt);
 }
@@ -1475,7 +1475,7 @@ void OViewsWindow::EndDragObj_removeInvisibleObjects()
 void OViewsWindow::EndDragObj(BOOL _bControlKeyPressed, const OSectionView* _pSection,const Point& _aPnt)
 {
     const String sUndoAction = String((ModuleRes(RID_STR_UNDO_CHANGEPOSITION)));
-    UndoManagerListAction aListAction(*getView()->getReportView()->getController()->getUndoMgr(),sUndoAction);
+    UndoManagerListAction aListAction(*getView()->getReportView()->getController().getUndoMgr(),sUndoAction);
 
     Point aNewPos = _aPnt;
     OSectionView* pInSection = getSectionRelativeToPosition(_pSection, aNewPos);
@@ -1510,7 +1510,7 @@ void OViewsWindow::EndDragObj(BOOL _bControlKeyPressed, const OSectionView* _pSe
             const beans::NamedValue* pEnd = pIter + aAllreadyCopiedObjects.getLength();
             try
             {
-                uno::Reference<report::XReportDefinition> xReportDefinition = getView()->getReportView()->getController()->getReportDefinition();
+                uno::Reference<report::XReportDefinition> xReportDefinition = getView()->getReportView()->getController().getReportDefinition();
                 const sal_Int32 nLeftMargin  = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
                 const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);
                 const sal_Int32 nPaperWidth  = getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width;
