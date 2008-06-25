@@ -1,0 +1,2 @@
+Class-Path: report.jar commonwizards.jar
+
