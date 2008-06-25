@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sallayout.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -271,8 +271,9 @@ public:
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
 
     // used only by OutputDevice::ImplLayout, TODO: make friend
-                    MultiSalLayout( SalLayout& rBaseLayout );   // transfer ownership
-    virtual bool    AddFallback( SalLayout& rFallback,          // transfer ownership
+                    MultiSalLayout( SalLayout& rBaseLayout,
+                         const ImplFontData* pBaseFont = NULL );
+    virtual bool    AddFallback( SalLayout& rFallbackLayout,
                          ImplLayoutRuns&, const ImplFontData* pFallbackFont );
     virtual bool    LayoutText( ImplLayoutArgs& );
     virtual void    AdjustLayout( ImplLayoutArgs& );
