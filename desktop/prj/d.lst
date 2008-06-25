@@ -14,10 +14,10 @@ mkdir: %_DEST%\bin%_EXT%\c08
 ..\%__SRC%\bin\so\soffice.bin %_DEST%\bin%_EXT%\so\soffice.bin
 ..\%__SRC%\bin\so\officeloader.exe %_DEST%\bin%_EXT%\so\soffice.exe
 ..\%__SRC%\bin\so\soffice %_DEST%\bin%_EXT%\so\soffice.bin
-..\%__SRC%\bin\soffice.dll %_DEST%\bin%_EXT%\soffice.dll
-..\%__SRC%\lib\isoffice.lib %_DEST%\lib%_EXT%\isoffice.lib
-..\%__SRC%\lib\libsoffice.dylib %_DEST%\lib%_EXT%\libsoffice.dylib
-..\%__SRC%\lib\libsoffice.so %_DEST%\lib%_EXT%\libsoffice.so
+..\%__SRC%\bin\sofficeapp.dll %_DEST%\bin%_EXT%\sofficeapp.dll
+..\%__SRC%\lib\isofficeapp.lib %_DEST%\lib%_EXT%\isofficeapp.lib
+..\%__SRC%\lib\libsofficeapp.dylib %_DEST%\lib%_EXT%\libsofficeapp.dylib
+..\%__SRC%\lib\libsofficeapp.so %_DEST%\lib%_EXT%\libsofficeapp.so
 
 ..\%__SRC%\bin\soffice_oo.exe %_DEST%\bin%_EXT%\soffice_oo.exe
 ..\%__SRC%\bin\soffice_oo %_DEST%\bin%_EXT%\soffice_oo.bin
@@ -77,9 +77,9 @@ mkdir: %_DEST%\bin%_EXT%\c08
 ..\%__SRC%\bin\unopkg.exe %_DEST%\bin%_EXT%\unopkg.bin
 ..\%__SRC%\bin\so\unopkg.exe %_DEST%\bin%_EXT%\so\unopkg.bin
 ..\%__SRC%\misc\unopkg.sh %_DEST%\bin%_EXT%\unopkg
-..\%__SRC%\bin\unopkg.dll %_DEST%\bin%_EXT%\unopkg.dll
-..\%__SRC%\lib\libunopkg.dylib %_DEST%\lib%_EXT%\libunopkg.dylib
-..\%__SRC%\lib\libunopkg.so %_DEST%\lib%_EXT%\libunopkg.so
+..\%__SRC%\bin\unopkgapp.dll %_DEST%\bin%_EXT%\unopkgapp.dll
+..\%__SRC%\lib\libunopkgapp.dylib %_DEST%\lib%_EXT%\libunopkgapp.dylib
+..\%__SRC%\lib\libunopkgapp.so %_DEST%\lib%_EXT%\libunopkgapp.so
 
 ..\%__SRC%\bin\pagein %_DEST%\bin%_EXT%\pagein
 ..\%__SRC%\misc\pagein-* %_DEST%\bin%_EXT%\pagein-*
