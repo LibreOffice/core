@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DocumentType.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,8 +29,6 @@
  ************************************************************************/
 package integration.forms;
 
-import com.sun.star.uno.*;
-
 /** a helper "enumeration class" for classifying a document type
 */
 public class DocumentType extends com.sun.star.uno.Enum
@@ -48,6 +46,7 @@ public class DocumentType extends com.sun.star.uno.Enum
     public static final DocumentType WRITER = new DocumentType(0);
     public static final DocumentType CALC = new DocumentType(1);
     public static final DocumentType DRAWING = new DocumentType(2);
+    public static final DocumentType XMLFORM = new DocumentType(3);
     public static final DocumentType UNKNOWN = new DocumentType(-1);
 
     public static DocumentType fromInt(int value)
@@ -57,6 +56,7 @@ public class DocumentType extends com.sun.star.uno.Enum
             case 0: return WRITER;
             case 1: return CALC;
             case 2: return DRAWING;
+            case 3: return XMLFORM;
             default: return UNKNOWN;
         }
     }
