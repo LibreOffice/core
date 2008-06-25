@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev2.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -692,7 +692,7 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
                         }
                         if( aPosAry.mnDestX < 0 )
                         {
-                            aPosAry.mnDestWidth += aPosAry.mnDestX;
+                            aPosAry.mnDestWidth = Max(long(0),aPosAry.mnDestWidth+aPosAry.mnDestX);
                             aPosAry.mnSrcX -= sal::static_int_cast<long>(aPosAry.mnDestX / nScaleX);
                             aPosAry.mnDestX = 0;
                         }
@@ -710,7 +710,7 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
                         }
                         if( aPosAry.mnDestY < 0 )
                         {
-                            aPosAry.mnDestHeight += aPosAry.mnDestY;
+                            aPosAry.mnDestHeight = Max(long(0),aPosAry.mnDestHeight+aPosAry.mnDestY);
                             aPosAry.mnSrcY -= sal::static_int_cast<long>(aPosAry.mnDestY / nScaleY);
                             aPosAry.mnDestY = 0;
                         }
@@ -720,7 +720,8 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
                 }
             }
 
-            mpGraphics->DrawBitmap( &aPosAry, *aBmp.ImplGetImpBitmap()->ImplGetSalBitmap(), this );
+            if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
+                mpGraphics->DrawBitmap( &aPosAry, *aBmp.ImplGetImpBitmap()->ImplGetSalBitmap(), this );
         }
     }
 }
