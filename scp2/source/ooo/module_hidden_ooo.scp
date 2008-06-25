@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_hidden_ooo.scp,v $
- * $Revision: 1.103 $
+ * $Revision: 1.104 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -370,17 +370,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Stdc_5,
 	gid_File_Lib_Accessbridge,
 	gid_File_Lib_Ado_2,
-	gid_File_Lib_Cli_Cppuhelper,
-	gid_File_Lib_Cli_Cppuhelper_Assembly,
-	gid_File_Lib_Cli_Types,
-	gid_File_Lib_Cli_Types_Assembly,
-	gid_File_Lib_Cli_Basetypes,
-	gid_File_Lib_Cli_Basetypes_Assembly,
-	gid_File_Lib_Cli_Uno,
-	gid_File_Lib_Cli_Ure,
-	gid_File_Lib_Cli_Ure_Assembly,
-	gid_File_Lib_Policy_Cli_Types_Assembly,
-	gid_File_Lib_Policy_Cli_Types_Config,
 	gid_File_Lib_Dl,
 	gid_File_Lib_Dnd,
 	gid_File_Lib_Dtrans,
@@ -430,7 +419,10 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Svtmisc,
     gid_File_Lib_Updchkui,
     gid_File_Lib_Updatefeed,
-	gid_File_Lib_Onlinecheck);
+	gid_File_Lib_Onlinecheck,
+	gid_File_Lib_Cli_Oootypes_Assembly,
+	gid_File_Lib_Policy_Cli_Oootypes_Assembly
+	gid_File_Lib_Policy_Cli_Oootypes_Config
 End
 
 Module gid_Module_Root_Files_6
