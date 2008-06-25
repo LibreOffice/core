@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.20 $
+# $Revision: 1.21 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -85,11 +85,11 @@ $(ASSEMBLY_ATTRIBUTES) : assembly.cs makefile.mk $(BIN)$/cliuno.snk $(BIN)$/cliu
     >> $@
 .ENDIF
 
-$(BIN)$/cli_ure.dll : $(CSFILES) $(BIN)$/cli_types.dll $(BIN)$/cliureversion.mk 
+$(BIN)$/cli_ure.dll : $(CSFILES) $(BIN)$/cli_uretypes.dll $(BIN)$/cliureversion.mk 
     $(CSC) $(CSCFLAGS) \
         -target:library \
         -out:$@ \
-        -reference:$(OUT)$/bin$/cli_types.dll \
+        -reference:$(OUT)$/bin$/cli_uretypes.dll \
         -reference:System.dll \
         $(CSFILES)
     @echo "If code has changed then provide a policy assembly and change the version!"
@@ -104,7 +104,7 @@ $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_ure.config
 
 #Create the config file that is used with the policy assembly
 $(BIN)$/cli_ure.config: cli_ure_config $(BIN)$/cliureversion.mk 
-    $(PERL) $(PRJ)$/source$/scripts$/subst_template.pl \
+    $(PERL) $(SOLARENV)$/bin$/clipatchconfig.pl \
     $< $@
 
 
