@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlImage.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,12 +39,34 @@
 #include "xmlControlProperty.hxx"
 #include <tools/debug.hxx>
 
+#include <comphelper/componentcontext.hxx>
+#include <com/sun/star/util/XStringSubstitution.hpp>
+
 namespace rptxml
 {
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
 DBG_NAME( rpt_OXMLImage )
+
+
+//--------------------------------------------------------------------
+::rtl::OUString OXMLImage::lcl_doStringsubstitution_nothrow( ::rtl::OUString const& _inout_rURL )
+{
+    try
+    {
+        Reference< XInterface > xInt = m_rImport.getORB()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSubstitution" ) ) );
+        Reference< util::XStringSubstitution > xStringSubst(xInt, UNO_QUERY);
+
+        return xStringSubst->substituteVariables( _inout_rURL, true );
+    }
+    catch( const Exception& )
+    {
+        // DBG_UNHANDLED_EXCEPTION();
+    }
+    return ::rtl::OUString();
+}
+// -----------------------------------------------------------------------------
 
 OXMLImage::OXMLImage( ORptFilter& rImport,
                 sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
@@ -68,12 +90,46 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
          ::rtl::OUString sLocalName;
             const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
             const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-            const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+            /* const */ rtl::OUString sValue = _xAttrList->getValueByIndex( i );
 
             switch( rTokenMap.Get( nPrefix, sLocalName ) )
             {
                 case XML_TOK_IMAGE_DATA:
-                    _xComponent->setImageURL(rImport.GetAbsoluteReference( sValue ));
+                    {
+                        // rtl::OUString sTest = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(inst)"));
+                        // sTest = lcl_doStringsubstitution_nothrow( sTest );
+                        //
+                        // sTest = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(prog)"));
+                        // sTest = lcl_doStringsubstitution_nothrow( sTest );
+                        //
+                        // sTest = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(user)"));
+                        // sTest = lcl_doStringsubstitution_nothrow( sTest );
+                        //
+                        // sTest = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(work)"));
+                        // sTest = lcl_doStringsubstitution_nothrow( sTest );
+                        //
+                        // sTest = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(home)"));
+                        // sTest = lcl_doStringsubstitution_nothrow( sTest );
+                        //
+                        // sTest = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(temp)"));
+                        // sTest = lcl_doStringsubstitution_nothrow( sTest );
+                        //
+                        // sTest = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(path)"));
+                        // sTest = lcl_doStringsubstitution_nothrow( sTest );
+                        //
+                        // sTest = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(lang)"));
+                        // sTest = lcl_doStringsubstitution_nothrow( sTest );
+                        //
+                        // sTest = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(langid)"));
+                        // sTest = lcl_doStringsubstitution_nothrow( sTest );
+                        //
+                        // sTest = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(vlang)"));
+                        // sTest = lcl_doStringsubstitution_nothrow( sTest );
+
+                        sValue = lcl_doStringsubstitution_nothrow( sValue );
+                        _xComponent->setImageURL(rImport.GetAbsoluteReference( sValue ));
+                    }
+
                     break;
                 case XML_TOK_PRESERVE_IRI:
                     _xComponent->setPreserveIRI(s_sTRUE == sValue);
