@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.19 $
+# $Revision: 1.20 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -61,7 +61,8 @@ SLOFILES =	\
         $(SLO)$/viewfrm.obj \
         $(SLO)$/impframe.obj \
         $(SLO)$/topfrm.obj \
-        $(SLO)$/sfxbasecontroller.obj
+        $(SLO)$/sfxbasecontroller.obj \
+        $(SLO)$/userinputinterception.obj
 
 # --- Targets -------------------------------------------------------
 
