@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RowSet.java,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,6 @@ import com.sun.star.sdbc.*;
 import com.sun.star.sdb.*;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.util.XRefreshable;
-import connectivity.tools.DataSource;
 import connectivity.tools.HsqlDatabase;
 
 import complexlib.ComplexTestCase;
@@ -51,7 +50,8 @@ public class RowSet extends ComplexTestCase {
     static final int MAX_FETCH_ROWS = 10;
 
     HsqlDatabase        m_database;
-    DataSource          m_dataSource;
+    connectivity.tools.DataSource
+                        m_dataSource;
     XRowSet             m_rowSet;
     XResultSet          m_resultSet;
     XResultSetUpdate    m_resultSetUpdate;
