@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Desktop.java,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -327,7 +327,7 @@ public class Desktop {
     }
 
     /**
-     * used to retrieve the most common paths used in the office application
+     * @deprecated used to retrieve the most common paths used in the office application
      * @author bc93774
      *
      */
@@ -346,6 +346,54 @@ public class Desktop {
             } catch (NoValidPathException nopathexception) {
             }
         }
+    }
+    public static String getTemplatePath(XMultiServiceFactory _xMSF)
+    {
+        try
+        {
+            String sTemplatePath = FileAccess.getOfficePath(_xMSF, "Template", "share", "/wizard");
+            return sTemplatePath;
+        }
+        catch (NoValidPathException nopathexception)
+        {
+        }
+        return "";
+    }
+    public static String getUserTemplatePath(XMultiServiceFactory _xMSF)
+    {
+        try
+        {
+            String sUserTemplatePath = FileAccess.getOfficePath(_xMSF, "Template", "user", "");
+            return sUserTemplatePath;
+        }
+        catch (NoValidPathException nopathexception)
+        {
+        }
+        return "";
+    }
+    public static String getBitmapPath(XMultiServiceFactory _xMSF)
+    {
+        try
+        {
+            String sBitmapPath = FileAccess.combinePaths(_xMSF, getTemplatePath(_xMSF), "/wizard/bitmap");
+            return sBitmapPath;
+        }
+        catch (NoValidPathException nopathexception)
+        {
+        }
+        return "";
+    }
+    public static String getWorkPath(XMultiServiceFactory _xMSF)
+    {
+        try
+        {
+            String sWorkPath = FileAccess.getOfficePath(_xMSF, "Work", "", "");
+            return sWorkPath;
+        }
+        catch (NoValidPathException nopathexception)
+        {
+        }
+        return "";
     }
 
     public static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF) {
