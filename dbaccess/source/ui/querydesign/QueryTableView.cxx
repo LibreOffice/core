@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: QueryTableView.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -186,7 +186,7 @@ namespace
     {
         _pUndoAction->SetOwnership(_bOwner);
         _pUndoAction->SetConnection(_pConnection);
-        _pView->getDesignView()->getController()->addUndoActionAndInvalidate(_pUndoAction);
+        _pView->getDesignView()->getController().addUndoActionAndInvalidate(_pUndoAction);
     }
     // -----------------------------------------------------------------------------
     /** openJoinDialog opens the join dialog with this connection data
@@ -199,12 +199,12 @@ namespace
     {
         OQueryTableConnectionData* pData = static_cast< OQueryTableConnectionData*>(_pConnectionData.get());
 
-        DlgQryJoin aDlg(_pView,_pConnectionData,_pView->GetTabWinMap(),_pView->getDesignView()->getController()->getConnection(),_bSelectableTables);
+        DlgQryJoin aDlg(_pView,_pConnectionData,_pView->GetTabWinMap(),_pView->getDesignView()->getController().getConnection(),_bSelectableTables);
         sal_Bool bOk = aDlg.Execute() == RET_OK;
         if( bOk )
         {
             pData->SetJoinType(aDlg.GetJoinType());
-            _pView->getDesignView()->getController()->setModified(sal_True);
+            _pView->getDesignView()->getController().setModified(sal_True);
         }
 
         return bOk;
@@ -347,7 +347,7 @@ sal_Int32 OQueryTableView::CountTableAlias(const String& rName, sal_Int32& rMax)
 void OQueryTableView::ReSync()
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
-    TTableWindowData* pTabWinDataList = m_pView->getController()->getTableWindowData();
+    TTableWindowData* pTabWinDataList = m_pView->getController().getTableWindowData();
     DBG_ASSERT((getTableConnections()->size()==0) && (GetTabWinMap()->size()==0),
         "vor OQueryTableView::ReSync() bitte ClearAll aufrufen !");
 
@@ -387,7 +387,7 @@ void OQueryTableView::ReSync()
     }
 
     // Verbindungen einfuegen
-    TTableConnectionData* pTabConnDataList = m_pView->getController()->getTableConnectionData();
+    TTableConnectionData* pTabConnDataList = m_pView->getController().getTableConnectionData();
     TTableConnectionData::reverse_iterator aConIter = pTabConnDataList->rbegin();
 
     for(;aConIter != pTabConnDataList->rend();++aConIter)
@@ -418,7 +418,7 @@ void OQueryTableView::ClearAll()
     OJoinTableView::ClearAll();
 
     SetUpdateMode(sal_True);
-    m_pView->getController()->setModified(sal_True);
+    m_pView->getController().setModified(sal_True);
 }
 
 // -----------------------------------------------------------------------------
@@ -481,7 +481,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rTableName, const ::rtl:
 
     // leider ist _rTableName voll qualifiziert, das OQueryDesignView erwartet aber einen String, der
     // nur aus Schema und Tabelle besteht und keinen Katalog enthaelt.
-    Reference< XConnection> xConnection = m_pView->getController()->getConnection();
+    Reference< XConnection> xConnection = m_pView->getController().getConnection();
     if(!xConnection.is())
         return;
     try
@@ -547,7 +547,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
     // first check if this already hav it's data
     sal_Bool bAppend = bNewTable;
     TTableWindowData::value_type pNewTabWinData;
-    TTableWindowData* pWindowData = getDesignView()->getController()->getTableWindowData();
+    TTableWindowData* pWindowData = getDesignView()->getController().getTableWindowData();
     TTableWindowData::iterator aWinIter = pWindowData->begin();
     for(;aWinIter != pWindowData->end();++aWinIter)
     {
@@ -677,7 +677,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
     }
 
     // mein Parent brauche ich, da es vom Loeschen erfahren soll
-    m_pView->getController()->addUndoActionAndInvalidate( pUndoAction );
+    m_pView->getController().addUndoActionAndInvalidate( pUndoAction );
 
     if (bSuccess && m_lnkTabWinsChangeHandler.IsSet())
     {
@@ -787,19 +787,19 @@ void OQueryTableView::createNewConnection()
     }
 }
 //------------------------------------------------------------------------------
-::std::vector<OTableConnection*>::const_iterator OQueryTableView::RemoveConnection( OTableConnection* _pConnection,sal_Bool /*_bDelete*/ )
+bool OQueryTableView::RemoveConnection( OTableConnection* _pConnection,sal_Bool /*_bDelete*/ )
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
 
     // we don't want that our connection will be deleted, we put it in the undo manager
-    ::std::vector<OTableConnection*>::const_iterator aNextPos = OJoinTableView::RemoveConnection( _pConnection,sal_False);
+    bool bRet = OJoinTableView::RemoveConnection( _pConnection,sal_False);
 
     // add undo action
     addUndoAction(  this,
                     new OQueryDelTabConnUndoAction(this),
                     static_cast< OQueryTableConnection*>(_pConnection),
                     sal_True);
-    return aNextPos;
+    return bRet;
 }
 
 //------------------------------------------------------------------------------
@@ -845,7 +845,7 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
     // mein Parent brauche ich, da es vom Loeschen erfahren soll
     OQueryDesignView* pParent = static_cast<OQueryDesignView*>(getDesignView());
 
-    SfxUndoManager* pUndoMgr = m_pView->getController()->getUndoMgr();
+    SfxUndoManager* pUndoMgr = m_pView->getController().getUndoMgr();
     pUndoMgr->EnterListAction( String( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), String() );
 
     // Undo-Action anlegen
@@ -858,7 +858,7 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
     // Undo Actions und Loeschen der Felder in SelectionBrowseBox
     pParent->TableDeleted( static_cast< OQueryTableWindowData*>(pTabWin->GetData().get())->GetAliasName() );
 
-    m_pView->getController()->addUndoActionAndInvalidate( pUndoAction );
+    m_pView->getController().addUndoActionAndInvalidate( pUndoAction );
     pUndoMgr->LeaveListAction();
 
     if (m_lnkTabWinsChangeHandler.IsSet())
@@ -929,7 +929,7 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
         pTabWin->Hide();    // nicht zerstoeren, steht im Undo!!
 
         // die Daten zum TabWin muessen auch aus meiner Verantwortung entlassen werden
-        TTableWindowData* pTabWinDataList = m_pView->getController()->getTableWindowData();
+        TTableWindowData* pTabWinDataList = m_pView->getController().getTableWindowData();
         pTabWinDataList->erase( ::std::remove(pTabWinDataList->begin(),pTabWinDataList->end(),pTabWin->GetData()),pTabWinDataList->end());
             // NICHT loeschen, da ja das TabWin selber - das noch lebt - sie auch noch braucht
             // Entweder geht es irgendwann wieder in meine Verantwortung ueber, (ueber ShowTabWin), dann fuege ich
@@ -955,7 +955,8 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
 
                 // call base class because we append an undo action
                 // but this time we are in a undo action list
-                aIter2 = OJoinTableView::RemoveConnection(pTmpEntry,sal_False);
+                OJoinTableView::RemoveConnection(pTmpEntry,sal_False);
+                aIter2 = pTabConList->begin();
                 ++nCnt;
             }
             else
@@ -965,14 +966,14 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
         if (nCnt)
             InvalidateConnections();
 
-        m_pView->getController()->InvalidateFeature(ID_BROWSER_ADDTABLE);
+        m_pView->getController().InvalidateFeature(ID_BROWSER_ADDTABLE);
 
         // der UndoAction sagen, dass das Fenster (inklusive der Connections) jetzt in seinem Besitzt ist
         pUndoAction->SetOwnership(sal_True);
 
         // damit habe ich das Doc natuerlich modifiziert
-        m_pView->getController()->setModified( sal_True );
-        m_pView->getController()->InvalidateFeature(SID_BROWSER_CLEAR_QUERY);
+        m_pView->getController().setModified( sal_True );
+        m_pView->getController().InvalidateFeature(SID_BROWSER_CLEAR_QUERY);
     }
 }
 
@@ -1026,9 +1027,9 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
 
             // und die Daten des Fensters ebenfalls in Liste (des Docs)
             if(_bAppend)
-                m_pView->getController()->getTableWindowData()->push_back(pTabWin->GetData());
+                m_pView->getController().getTableWindowData()->push_back(pTabWin->GetData());
 
-            m_pView->getController()->InvalidateFeature(ID_BROWSER_ADDTABLE);
+            m_pView->getController().InvalidateFeature(ID_BROWSER_ADDTABLE);
 
             // und der UndoAction sagen, dass das Fenster jetzt meine ist ...
             pUndoAction->SetOwnership(sal_False);
@@ -1046,10 +1047,10 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
     }
 
     // damit habe ich das Doc natuerlich modifiziert
-    if(!m_pView->getController()->isReadOnly())
-        m_pView->getController()->setModified( sal_True );
+    if(!m_pView->getController().isReadOnly())
+        m_pView->getController().setModified( sal_True );
 
-    m_pView->getController()->InvalidateFeature(SID_BROWSER_CLEAR_QUERY);
+    m_pView->getController().InvalidateFeature(SID_BROWSER_CLEAR_QUERY);
 
     return bSuccess;
 }
