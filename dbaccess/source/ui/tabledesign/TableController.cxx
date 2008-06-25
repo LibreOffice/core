@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableController.cxx,v $
- * $Revision: 1.121 $
+ * $Revision: 1.122 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -645,7 +645,7 @@ void OTableController::impl_initialize()
 // -----------------------------------------------------------------------------
 sal_Bool OTableController::Construct(Window* pParent)
 {
-    m_pView = new OTableDesignView(pParent,getORB(),this);
+    m_pView = new OTableDesignView( pParent, getORB(), *this );
     OTableController_BASE::Construct(pParent);
 //  m_pView->Construct();
 //  m_pView->Show();
