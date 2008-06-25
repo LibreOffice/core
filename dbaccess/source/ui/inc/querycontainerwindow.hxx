@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: querycontainerwindow.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,7 +78,7 @@ namespace dbaui
 
         DECL_LINK( SplitHdl, void* );
     public:
-        OQueryContainerWindow(Window* pParent, OQueryController* _pController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+        OQueryContainerWindow(Window* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
         ~OQueryContainerWindow();
 
         virtual void Construct();
