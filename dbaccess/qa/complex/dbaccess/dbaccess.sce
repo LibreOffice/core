@@ -4,3 +4,4 @@
 -o complex.dbaccess.Query
 -o complex.dbaccess.QueryInQuery
 -o complex.dbaccess.Storable
+-o complex.dbaccess.DataSource
