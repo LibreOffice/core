@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pdfwriter_impl.cxx,v $
- * $Revision: 1.129 $
+ * $Revision: 1.130 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -4197,7 +4197,7 @@ we check in the following sequence:
 //substitute the fragment
                     aTargetURL.SetMark( aLineLoc.getStr() );
                 }
-                rtl::OUString aURL = aTargetURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
+                rtl::OUString aURL = aTargetURL.GetMainURL( (nSetRelative || eTargetProtocol == INET_PROT_FILE) ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE );
 // check if we have a URL available, if the string is empty, set it as the original one
 //                 if( aURL.getLength() == 0 )
 //                     appendLiteralStringEncrypt( rLink.m_aURL , rLink.m_nObject, aLine );
