@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Finalizer.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,10 +56,10 @@ public class Finalizer {
         this.CurUnoDialog = _CurUnoDialog;
         curtabindex = (short) (FormWizard.SOSTOREPAGE * 100);
 
-        String slblFormName = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 50);
-        String slblProceed = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 51);
-        String sWorkWithForm = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 52);
-        String sModifyForm = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 53);
+        String slblFormName = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 50);
+        String slblProceed = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 51);
+        String sWorkWithForm = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 52);
+        String sModifyForm = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 53);
         CurUnoDialog.insertLabel("lblFormName",
           new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
           new Object[] { UIConsts.INTEGERS[8], slblFormName, new Integer(97), new Integer(25), UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(111)}
