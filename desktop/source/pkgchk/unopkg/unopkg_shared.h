@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unopkg_shared.h,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -131,7 +131,8 @@ css::uno::Reference<css::ucb::XCommandEnvironment> createCmdEnv(
     css::uno::Reference<css::uno::XComponentContext> const & xContext,
     ::rtl::OUString const & logFile,
     bool option_force_overwrite,
-    bool option_verbose);
+    bool option_verbose,
+    bool option_bundled);
 
 //==============================================================================
 void printf_packages(
