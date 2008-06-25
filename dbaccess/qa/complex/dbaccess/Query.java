@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Query.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,12 +37,11 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XQueriesSupplier;
 import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.uno.UnoRuntime;
-import connectivity.tools.*;
 
 public class Query extends complexlib.ComplexTestCase {
 
-    HsqlDatabase    m_database;
-    DataSource      m_dataSource;
+    connectivity.tools.HsqlDatabase m_database;
+    connectivity.tools.DataSource   m_dataSource;
 
     // --------------------------------------------------------------------------------------------------------
     public String[] getTestMethodNames() {
