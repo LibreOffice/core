@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: climaker_app.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +91,7 @@ static char const s_usingText [] =
 " -h, --help                    this message\n"
 "\n"
 "example: climaker --out cli_mytypes.dll \\\n"
-"                  --reference cli_types.dll \\\n"
+"                  --reference cli_uretypes.dll \\\n"
 "                  --extra types.rdb \\\n"
 "                  mytypes.rdb\n"
 "\n";
