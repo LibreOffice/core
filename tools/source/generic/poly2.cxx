@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: poly2.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,10 @@ extern "C"
 #endif // HAVE_GPC_H
 }
 
+/*
+#include <cstring>
+#include <cmath>
+*/
 #include <poly.h>
 #ifndef _POLY_HXX
 #include <tools/poly.hxx>
@@ -57,12 +61,6 @@ extern "C"
 
 #ifndef _BGFX_POLYGON_B2DPOLYPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
-
-#if defined(_MSC_VER) && (_MSC_VER <= 1310)
-// Windows .Net2003 compiler: do not include cmath
-#else
-#include <cmath>
 #endif
 
 // ---------------
@@ -686,7 +684,7 @@ void PolyPolygon::Rotate( const Point& rCenter, USHORT nAngle10 )
     if( nAngle10 )
     {
         const double fAngle = F_PI1800 * nAngle10;
-        Rotate( rCenter, std::sin( fAngle ), std::cos( fAngle ) );
+        Rotate( rCenter, sin( fAngle ), cos( fAngle ) );
     }
 }
 
