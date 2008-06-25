@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormControlTest.java,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,17 +31,12 @@ package integration.forms;
 
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XNamingService;
-import com.sun.star.uno.Any;
 
 import com.sun.star.container.XNameAccess;
-import com.sun.star.container.XIndexContainer;
-import com.sun.star.container.XIndexAccess;
 
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XComponent;
 
 import com.sun.star.util.XCloseable;
-import com.sun.star.util.XRefreshable;
 import com.sun.star.util.XURLTransformer;
 import com.sun.star.util.URL;
 
@@ -50,15 +45,12 @@ import com.sun.star.sdbc.XDataSource;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XResultSetUpdate;
-import com.sun.star.sdbc.XStatement;
-import com.sun.star.sdbcx.XTablesSupplier;
 
 import com.sun.star.form.XImageProducerSupplier;
 
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.PropertyValue;
 
-import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDispatch;
 
 import com.sun.star.awt.XImageProducer;
@@ -66,16 +58,10 @@ import com.sun.star.awt.XImageProducer;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleEditableText;
 
-import integration.forms.dbfTools;
-import integration.forms.DocumentHelper;
-import integration.forms.FormLayer;
-
 import connectivity.tools.HsqlDatabase;
 
-import util.utils;
 import java.util.*;
 import java.io.*;
-import java.lang.*;
 
 public class FormControlTest extends complexlib.ComplexTestCase
 {
@@ -284,7 +270,7 @@ public class FormControlTest extends complexlib.ComplexTestCase
         // be reflected to the check box, since the formatted field needs an explicit commit
         XPropertySet tinyFormattedModel = getControlModel( "f_tinyint_format" );
         m_document.getCurrentView().grabControlFocus( tinyFormattedModel );
-        userTextInput( tinyFormattedModel, "0", false );
+        m_formLayer.userTextInput( tinyFormattedModel, "0" );
         if  (  !checkShortValue ( (short)1, "f_tinyint", "State" )
             )
         {
@@ -355,7 +341,7 @@ public class FormControlTest extends complexlib.ComplexTestCase
         // be reflected to the check box, since the formatted field needs an explicit commit
         XPropertySet textModel = getControlModel( "f_text_enum_text" );
         m_document.getCurrentView().grabControlFocus( textModel );
-        userTextInput( textModel, "normal", false );
+        m_formLayer.userTextInput( textModel, "normal" );
         if  (  !checkRadios( (short)1, (short)0, (short)0 )
             )
         {
@@ -528,7 +514,7 @@ public class FormControlTest extends complexlib.ComplexTestCase
                                     m_formLayer.insertControlLine( "DatabaseTextField",     "dummy",        "", 150 );
 
         xIDField.setPropertyValue( "DecimalAccuracy", new Short( (short)0 ) );
-        xImageField.setPropertyValue( "ScaleImage", new Boolean( (boolean)true) );
+        xImageField.setPropertyValue( "ScaleImage", new Boolean( true) );
         xImageField.setPropertyValue( "Tabstop", new Boolean( true) );
         xCheckBox.setPropertyValue( "TriState", new Boolean( true ) );
         xCheckBox.setPropertyValue( "DefaultState", new Short( (short)2 ) );
@@ -773,29 +759,13 @@ public class FormControlTest extends complexlib.ComplexTestCase
      */
     private void userTextInput( String modelName, String text, boolean withCommit ) throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        userTextInput( getControlModel( modelName ), text, withCommit );
-    }
-
-    /* ------------------------------------------------------------------ */
-    /** simulates a user's text input into a control given by control model
-     */
-    private void userTextInput( XPropertySet controlModel, String text, boolean withCommit ) throws com.sun.star.uno.Exception, java.lang.Exception
-    {
+        XPropertySet controlModel = getControlModel( modelName );
         // the form runtime environment (namely the form controller) rely on focus events for recognizing
         // control content changes ...
         if ( withCommit )
             m_document.getCurrentView().grabControlFocus( controlModel );
 
-        // we will *not* simply set the value property at the model. This is not the same as
-        // doing a user input, as the latter will trigger a lot of notifications, which the forms runtime environment
-        // (namely the FormController) relies on to notice that the control changed.
-        // Instead, we use the Accessibility interfaces of the control to simulate text input
-        XAccessible formattedAccessible = (XAccessible)UnoRuntime.queryInterface( XAccessible.class,
-            m_document.getCurrentView().getControl( controlModel )
-        );
-        XAccessibleEditableText textAccess = (XAccessibleEditableText)UnoRuntime.queryInterface( XAccessibleEditableText.class,
-            formattedAccessible.getAccessibleContext() );
-        textAccess.setText( text );
+        m_formLayer.userTextInput( controlModel, text );
 
         // focus back to a dummy control model so the content of the model we just changed will
         // be committed to the underlying database column
@@ -829,7 +799,7 @@ public class FormControlTest extends complexlib.ComplexTestCase
      */
     private void executeSlot( String slotURL ) throws java.lang.Exception
     {
-        XDispatch xDispatch = (XDispatch)m_document.getCurrentView().getDispatcher( slotURL );
+        XDispatch xDispatch = m_document.getCurrentView().getDispatcher( slotURL );
 
         URL[] url = new URL[] { new URL() };
         url[0].Complete = slotURL;
