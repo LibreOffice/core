@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: genericcontroller.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,8 +54,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/awt/XUserInputInterception.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/broadcasthelper.hxx>
@@ -66,6 +66,7 @@
 #include <cppuhelper/interfacecontainer.h>
 
 #include <boost/optional.hpp>
+#include <sfx2/userinputinterception.hxx>
 
 class Window;
 class VCLXWindow;
@@ -185,7 +186,6 @@ namespace dbaui
     typedef ::cppu::WeakComponentImplHelper11   <   ::com::sun::star::frame::XDispatch
                                                 ,   ::com::sun::star::frame::XDispatchProviderInterceptor
                                                 ,   ::com::sun::star::util::XModifyListener
-                                                ,   ::com::sun::star::view::XSelectionSupplier
                                                 ,   ::com::sun::star::frame::XFrameActionListener
                                                 ,   ::com::sun::star::lang::XInitialization
                                                 ,   ::com::sun::star::lang::XServiceInfo
@@ -193,8 +193,10 @@ namespace dbaui
                                                 ,   ::com::sun::star::frame::XController2
                                                 ,   ::com::sun::star::frame::XTitle
                                                 ,   ::com::sun::star::frame::XTitleChangeBroadcaster
+                                                ,   ::com::sun::star::awt::XUserInputInterception
                                                 >   OGenericUnoController_Base;
 
+    struct OGenericUnoController_Data;
     // ====================================================================
     class DBACCESS_DLLPUBLIC OGenericUnoController
                                 :public OGenericUnoController_MBASE
@@ -202,10 +204,13 @@ namespace dbaui
                                 ,public IController
     {
     private:
-        SupportedFeatures       m_aSupportedFeatures;   // look at the name
-
+        SupportedFeatures               m_aSupportedFeatures;
         ::comphelper::NamedValueCollection
-                                m_aInitParameters;
+                                        m_aInitParameters;
+
+        ::std::auto_ptr< OGenericUnoController_Data >
+                                        m_pData;
+
 #ifdef DBG_UTIL
         bool    m_bDescribingSupportedFeatures;
 #endif
@@ -227,8 +232,6 @@ namespace dbaui
 
         FeaturePairDeque m_aFeaturesToInvalidate;
 
-        ::cppu::OInterfaceContainerHelper
-                                m_aSelectionListeners;
         ::osl::Mutex            m_aFeatureMutex;        // locked when features are append to or remove from deque
         StateCache              m_aStateCache;          // save the current status of feature state
         Dispatch                m_arrStatusListener;    // all our listeners where we dispatch status changes
@@ -302,7 +305,7 @@ namespace dbaui
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId , const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) = 0;
+        virtual void            Execute(sal_uInt16 nId , const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         /** describes a feature supported by the controller
 
@@ -332,7 +335,11 @@ namespace dbaui
         // gets the URL which the given id is assigned to
         ::com::sun::star::util::URL getURLForId(sal_Int32 _nId) const;
 
-        void fillSupportedFeatures();
+        /** determines whether the given feature ID denotes a user-defined feature
+
+            @see IController::registerCommandURL
+        */
+        bool    isUserDefinedFeature( const sal_uInt16 nFeatureId );
 
         // connect to a datasource
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > connect(
@@ -377,8 +384,10 @@ namespace dbaui
         virtual void    stopFrameListening( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
 
         virtual ~OGenericUnoController();
+
     private:
-            // invalidate features - implementation
+        void fillSupportedFeatures();
+
         void InvalidateAll_Impl();
         void InvalidateFeature_Impl();
 
@@ -426,8 +435,11 @@ namespace dbaui
         virtual void executeChecked(sal_uInt16 _nCommandId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
         virtual sal_Bool isCommandEnabled(sal_uInt16 _nCommandId) const;
         virtual sal_Bool isCommandEnabled(const ::rtl::OUString& _rCompleteCommandURL) const;
+        virtual sal_uInt16 registerCommandURL( const ::rtl::OUString& _rCompleteCommandURL );
+        virtual void notifyHiContrastChanged();
         virtual sal_Bool isDataSourceReadOnly() const;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > SAL_CALL getXController() throw( ::com::sun::star::uno::RuntimeException );
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > getXController() throw( ::com::sun::star::uno::RuntimeException );
+        virtual bool interceptUserInput( const NotifyEvent& _rEvent );
 
         // misc
         virtual sal_Bool isCommandChecked(sal_uInt16 _nCommandId) const;
@@ -481,12 +493,6 @@ namespace dbaui
         // lang::XInitialization
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
-        // XSelectionSupplier
-        virtual ::sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& xSelection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException) = 0;
         virtual sal_Bool SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(::com::sun::star::uno::RuntimeException);
@@ -503,6 +509,12 @@ namespace dbaui
         // XTitleChangeBroadcaster
         virtual void SAL_CALL addTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XUserInputInterception
+        virtual void SAL_CALL addKeyHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeKeyHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addMouseClickHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseClickHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeMouseClickHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseClickHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
         OGenericUnoController();    // never implemented
