@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RelationDesignView.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,8 +99,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
 DBG_NAME(ORelationDesignView)
-ORelationDesignView::ORelationDesignView(Window* _pParent, ORelationController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
-    :OJoinDesignView(_pParent,_pController,_rFactory)
+ORelationDesignView::ORelationDesignView(Window* _pParent, ORelationController& _rController,const Reference< XMultiServiceFactory >& _rFactory)
+    :OJoinDesignView( _pParent, _rController, _rFactory )
 {
     DBG_CTOR(ORelationDesignView,NULL);
 }
