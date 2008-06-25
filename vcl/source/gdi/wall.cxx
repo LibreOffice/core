@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wall.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -468,7 +468,11 @@ Gradient Wallpaper::ImplGetApplicationGradient() const
     g.SetAngle( 900 );
     g.SetStyle( GRADIENT_LINEAR );
     g.SetStartColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
-    g.SetEndColor( Application::GetSettings().GetStyleSettings().GetFaceGradientColor() );
+    // no 'extreme' gradient when high contrast
+    if( Application::GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+        g.SetEndColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
+    else
+        g.SetEndColor( Application::GetSettings().GetStyleSettings().GetFaceGradientColor() );
     return g;
 }
 
