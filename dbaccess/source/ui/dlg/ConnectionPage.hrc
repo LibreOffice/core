@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ConnectionPage.hrc,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,9 +55,8 @@
 
 #define CB_PASSWORD_REQUIRED    1
 
-#define FL_SEPARATOR1           1
-#define FL_SEPARATOR2           2
-#define FL_SEPARATOR3           3
+#define FL_SEPARATOR2           1
+#define FL_SEPARATOR3           2
 
 #endif // DBAUI_CONNECTIONPAGE_HRC
 
