@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Storable.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,6 +97,7 @@ public class Storable extends complexlib.ComplexTestCase {
             XCloseable close = (XCloseable)UnoRuntime.queryInterface(XCloseable.class,xComponent);
             close.close(true);
         }
+        catch ( AssureException e ) { throw e; }
         catch ( Exception e )
         {
             assure( "caught an unexpected exception: " + e.getMessage(), false );
