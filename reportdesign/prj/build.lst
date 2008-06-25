@@ -1,4 +1,4 @@
-rd  reportdesign    :   BOOST:boost JFREEREPORT:jfreereport comphelper dbaccess readlicense_oo NULL
+rd  reportdesign    :   BOOST:boost JFREEREPORT:jfreereport comphelper dbaccess readlicense_oo wizards NULL
 rd  reportdesign                                                        usr1    -   all rd_mkout NULL
 rd  reportdesign\inc                                                    nmake   -   all rd_inc NULL
 rd  reportdesign\java							                        nmake   -   all rd_java NULL
@@ -17,4 +17,5 @@ rd  reportdesign\source\ui\dlg                                          nmake   
 rd  reportdesign\source\ui\report                                       nmake   -   all rd_uireport rd_inc NULL
 rd  reportdesign\source\ui\inspection                                   nmake   -   all rd_uiinspection rd_inc NULL
 rd  reportdesign\source\filter\xml                                      nmake   -   all rd_filter_xml rd_inc NULL
-rd  reportdesign\util                                                   nmake   -   all rd_util rd_jreport_pe rd_api rd_res rd_shared rd_uimisc rd_uidlg rd_uireport rd_uiinspection rd_sdr rd_misc rd_filter_xml rd_reg_data_ooo NULL
+rd  reportdesign\template\en-US\wizard\report				nmake   -   all rd_template_en_us_wiz_rep NULL
+rd  reportdesign\util                                                   nmake   -   all rd_util rd_jreport_pe rd_api rd_res rd_shared rd_uimisc rd_uidlg rd_uireport rd_uiinspection rd_sdr rd_misc rd_filter_xml rd_reg_data_ooo rd_template_en_us_wiz_rep NULL
