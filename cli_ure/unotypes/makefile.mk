@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.18 $
+# $Revision: 1.19 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,43 +45,37 @@ TARGET = unotypes
 
 .INCLUDE : $(BIN)$/cliureversion.mk
 
-POLICY_ASSEMBLY_FILE=$(BIN)/$(CLI_TYPES_POLICY_ASSEMBLY).dll
+POLICY_ASSEMBLY_FILE=$(BIN)/$(CLI_URETYPES_POLICY_ASSEMBLY).dll
 
 ALLTAR : \
-    $(OUT)$/bin$/cli_types.dll \
+    $(OUT)$/bin$/cli_uretypes.dll \
     $(POLICY_ASSEMBLY_FILE)
-
-
 
 CLIMAKERFLAGS =
 .IF "$(debug)" != ""
 CLIMAKERFLAGS += --verbose
 .ENDIF
 
-
 #When changing the assembly version then this must also be done in scp2
-$(OUT)$/bin$/cli_types.dll : $(OUT)$/bin$/climaker.exe $(SOLARBINDIR)$/types.rdb $(BIN)$/cliureversion.mk
-    $(WRAPCMD) $(OUT)$/bin$/climaker.exe $(CLIMAKERFLAGS) \
+$(OUT)$/bin$/cli_uretypes.dll : $(BIN)$/climaker.exe $(SOLARBINDIR)$/types.rdb $(BIN)$/cliureversion.mk
+    $(WRAPCMD) $(BIN)$/climaker.exe $(CLIMAKERFLAGS) \
         --out $@ \
-                --keyfile $(BIN)$/cliuno.snk \
-        --assembly-version $(CLI_TYPES_NEW_VERSION) \
+        --keyfile $(BIN)$/cliuno.snk \
+        --assembly-version $(CLI_URETYPES_NEW_VERSION) \
         --assembly-description "This assembly contains metadata for the StarOffice/OpenOffice.org API." \
         --assembly-company "OpenOffice.org" \
-        $(SOLARBINDIR)$/types_doc.rdb
+        $(SOLARBINDIR)$/udkapi.rdb
 
-#		--assembly-copyright "2003" \
-
-#do not forget to deliver cli_types.config. It is NOT embedded in the policy file.
-# iz62624: Add dependency for "$(OUT)$/bin$/cli_types.dll" because climaker locks cliuno.mk.
-$(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_types.config $(OUT)$/bin$/cli_types.dll
+#do not forget to deliver cli_uretypes.config. It is NOT embedded in the policy file.
+$(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_uretypes.config $(OUT)$/bin$/cli_uretypes.dll
     $(WRAPCMD) AL.exe -out:$@ \
-            -version:$(CLI_TYPES_POLICY_VERSION) \
+            -version:$(CLI_URETYPES_POLICY_VERSION) \
             -keyfile:$(BIN)$/cliuno.snk \
-            -link:$(BIN)$/cli_types.config
+            -link:$(BIN)$/cli_uretypes.config
 
 #Create the config file that is used with the policy assembly
-$(BIN)$/cli_types.config: cli_types_config $(BIN)$/cliureversion.mk 
-    $(PERL) $(PRJ)$/source$/scripts$/subst_template.pl \
+$(BIN)$/cli_uretypes.config: cli_uretypes_config $(BIN)$/cliureversion.mk 
+    $(PERL) $(SOLARENV)$/bin$/clipatchconfig.pl \
     $< $@
 
 
