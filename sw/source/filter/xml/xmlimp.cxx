@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimp.cxx,v $
- * $Revision: 1.106 $
+ * $Revision: 1.107 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,16 +66,17 @@
 #include <ForbiddenCharactersEnum.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <svtools/saveopt.hxx>
+#include <tools/diagnose_ex.h>
 #include <hash_set>
 #include <stringhash.hxx>
 
 // for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
-#include <xmloff/xformsimport.hxx>
 #include <unotxdoc.hxx>    // for initXForms()
 
 #include <xmloff/xmlmetai.hxx>
+#include <xmloff/xformsimport.hxx>
 
 using ::rtl::OUString;
 
@@ -87,6 +88,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::xforms;
 using namespace ::xmloff::token;
 using namespace ::std;
 
@@ -463,6 +465,7 @@ SwXMLImport::SwXMLImport(
     bBlock( sal_False ),
     bShowProgress( sal_True ),
     bOrganizerMode( sal_False ),
+    bInititedXForms( sal_False ),
     bPreserveRedlineMode( sal_True )
 {
     _InitItemImport();
@@ -974,6 +977,34 @@ void SwXMLImport::endDocument( void )
             pDrawModel->setLock( sal_False );
     }
 
+    // #i90243#
+    if ( bInititedXForms )
+    {
+        Reference< xforms::XFormsSupplier > xFormsSupp( GetModel(), UNO_QUERY );
+        Reference< XNameAccess > xXForms;
+        if ( xFormsSupp.is() )
+            xXForms = xFormsSupp->getXForms().get();
+
+        if ( xXForms.is() )
+        {
+            try
+            {
+                Sequence< beans::PropertyValue > aXFormsSettings;
+
+                ::rtl::OUString sXFormsSettingsName( GetXMLToken( XML_XFORM_MODEL_SETTINGS ) );
+                if ( xLateInitSettings.is() && xLateInitSettings->hasByName( sXFormsSettingsName ) )
+                {
+                    OSL_VERIFY( xLateInitSettings->getByName( sXFormsSettingsName ) >>= aXFormsSettings );
+                    applyXFormsSettings( xXForms, aXFormsSettings );
+                }
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+    }
+
     // delegate to parent: takes care of error handling
     SvXMLImport::endDocument();
 }
@@ -1463,6 +1494,36 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 }
 
 
+void SwXMLImport::SetDocumentSpecificSettings(
+    const ::rtl::OUString& _rSettingsGroupName,
+    const Sequence< PropertyValue>& _rSettings )
+{
+    // the only doc-specific settings group we know so far are the XForms settings
+    if ( !IsXMLToken( _rSettingsGroupName, XML_XFORM_MODEL_SETTINGS ) )
+        return;
+
+    // preserve the settings for a later iteration - we are currently reading the settings.xml,
+    // the content.xml will be read later, by another instance of SwXMLImport
+    OSL_ENSURE( xLateInitSettings.is(), "SwXMLImport::SetDocumentSpecificSettings: no storage for those settings!" );
+    if ( !xLateInitSettings.is() )
+        return;
+
+    try
+    {
+        if ( xLateInitSettings->hasByName( _rSettingsGroupName ) )
+        {
+            xLateInitSettings->replaceByName( _rSettingsGroupName, makeAny( _rSettings ) );
+            OSL_ENSURE( false, "SwXMLImport::SetDocumentSpecificSettings: already have settings for this model!" );
+        }
+        else
+            xLateInitSettings->insertByName( _rSettingsGroupName, makeAny( _rSettings ) );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
 void SwXMLImport::initialize(
     const Sequence<Any>& aArguments )
     throw( uno::Exception, uno::RuntimeException)
@@ -1474,16 +1535,24 @@ void SwXMLImport::initialize(
     sal_Int32 nLength = aArguments.getLength();
     for(sal_Int32 i = 0; i < nLength; i++)
     {
-        if (aArguments[i].getValueType() ==
-            ::getCppuType((const beans::PropertyValue*)0) )
+        beans::PropertyValue aValue;
+        if ( aArguments[i] >>= aValue )
         {
-            beans::PropertyValue aValue;
-            aArguments[i] >>= aValue;
-
             if (aValue.Name.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM("PreserveRedlineMode")))
             {
-                bPreserveRedlineMode = *(sal_Bool*)aValue.Value.getValue();
+                OSL_VERIFY( aValue.Value >>= bPreserveRedlineMode );
+            }
+            continue;
+        }
+
+        beans::NamedValue aNamedValue;
+        if ( aArguments[i] >>= aNamedValue )
+        {
+            if (aNamedValue.Name.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("LateInitSettings")))
+            {
+                OSL_VERIFY( aNamedValue.Value >>= xLateInitSettings );
             }
         }
     }
@@ -1674,4 +1743,6 @@ void SwXMLImport::initXForms()
     // (no default model, since we'll load the models)
     if( ! pDoc->isXForms() )
         pDoc->initXForms( false );
+
+    bInititedXForms = sal_True;
 }
