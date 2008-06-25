@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormWizard.java,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,8 +32,11 @@ package com.sun.star.wizards.form;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdb.CommandType;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.lang.XComponent;
 import com.sun.star.wizards.common.*;
+import com.sun.star.wizards.db.DBMetaData;
 import com.sun.star.wizards.db.RelationController;
 import com.sun.star.wizards.document.OfficeDocument;
 import com.sun.star.wizards.ui.*;
@@ -84,10 +87,10 @@ public class FormWizard extends WizardDialog{
         super.addResourceHandler("FormWizard", "dbw");
         Helper.setUnoPropertyValues(xDialogModel,
             new String[] { "Height","Moveable","Name","PositionX","PositionY","Step","TabIndex","Title","Width"},
-            new Object[] { new Integer(210),Boolean.TRUE, "DialogForm", new Integer(102),new Integer(41),new Integer(1), new Short((short)0), oResource.getResText(UIConsts.RID_FORM), new Integer(310)}  );
+            new Object[] { new Integer(210),Boolean.TRUE, "DialogForm", new Integer(102),new Integer(41),new Integer(1), new Short((short)0), m_oResource.getResText(UIConsts.RID_FORM), new Integer(310)}  );
         drawNaviBar();
         if (getFormResources() == true)
-            setRightPaneHeaders(oResource, UIConsts.RID_FORM + 90, 8);
+            setRightPaneHeaders(m_oResource, UIConsts.RID_FORM + 90, 8);
     }
 
 
@@ -259,14 +262,14 @@ public class FormWizard extends WizardDialog{
     public void insertFormRelatedSteps(){
         addRoadmap();
         int i = 0;
-        i = insertRoadmapItem(0, true, oResource.getResText(UIConsts.RID_FORM + 80), SOMAINPAGE);
-        i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_FORM + 81), SOSUBFORMPAGE);
-        i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_FORM + 82), SOSUBFORMFIELDSPAGE);
-        i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_FORM + 83),  SOFIELDLINKERPAGE);
-        i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_FORM + 84), SOCONTROLPAGE);
-        i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_FORM + 85), SODATAPAGE);
-        i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_FORM + 86), SOSTYLEPAGE);
-        i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_FORM + 87), SOSTOREPAGE);
+        i = insertRoadmapItem(0, true, m_oResource.getResText(UIConsts.RID_FORM + 80), SOMAINPAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 81), SOSUBFORMPAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 82), SOSUBFORMFIELDSPAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 83),  SOFIELDLINKERPAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 84), SOCONTROLPAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 85), SODATAPAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 86), SOSTYLEPAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 87), SOSTOREPAGE);
         setRoadmapInteractive(true);
         setRoadmapComplete(true);
         setCurrentRoadmapItemID((short) 1);
@@ -276,8 +279,8 @@ public class FormWizard extends WizardDialog{
     public XComponent[] startFormWizard(XMultiServiceFactory _xMSF, PropertyValue[] CurPropertyValue){
         XComponent[] ret = null;
         try{
-            curFormDocument =  new FormDocument(xMSF, oResource);
-            if (curFormDocument.oMainFormDBMetaData.getConnection(CurPropertyValue) ){
+            curFormDocument =  new FormDocument(xMSF, m_oResource);
+            if (curFormDocument.oMainFormDBMetaData.getConnection(CurPropertyValue)){
                 curFormDocument.oSubFormDBMetaData.getConnection(new PropertyValue[]{Properties.createProperty("ActiveConnection", curFormDocument.oMainFormDBMetaData.DBConnection)});
                 curFormDocument.xProgressBar.setValue(20);
                 buildSteps();
@@ -305,12 +308,12 @@ public class FormWizard extends WizardDialog{
 
 
     public boolean getFormResources(){
-        sMsgWizardName = super.oResource.getResText(UIConsts.RID_FORM);
-        sShowBinaryFields = oResource.getResText(UIConsts.RID_FORM + 2);
-        slblTables = oResource.getResText(UIConsts.RID_FORM + 6);
-        slblFields = oResource.getResText(UIConsts.RID_FORM + 12);
-        slblSelFields = oResource.getResText(UIConsts.RID_FORM + 1);
-        serrFormNameexists = oResource.getResText(UIConsts.RID_FORM + 98);
+        sMsgWizardName = super.m_oResource.getResText(UIConsts.RID_FORM);
+        sShowBinaryFields = m_oResource.getResText(UIConsts.RID_FORM + 2);
+        slblTables = m_oResource.getResText(UIConsts.RID_FORM + 6);
+        slblFields = m_oResource.getResText(UIConsts.RID_FORM + 12);
+        slblSelFields = m_oResource.getResText(UIConsts.RID_FORM + 1);
+        serrFormNameexists = m_oResource.getResText(UIConsts.RID_FORM + 98);
 
         return true;
     }
