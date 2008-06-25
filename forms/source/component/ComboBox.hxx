@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ComboBox.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,10 +145,8 @@ protected:
     virtual ::com::sun::star::uno::Any
                             getDefaultForReset() const;
 
-    virtual sal_Bool        approveValueBinding( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding );
-
     // OEntryListHelper overriables
-    virtual void    stringItemListChanged( );
+    virtual void    stringItemListChanged( ::osl::ResettableMutexGuard& _rInstanceLock );
     virtual void    connectedExternalListSource( );
     virtual void    disconnectedExternalListSource( );
     virtual void    refreshInternalEntryList();
