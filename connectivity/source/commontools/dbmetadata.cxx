@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbmetadata.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -272,7 +272,6 @@ namespace dbtools
             OSL_VERIFY( setting >>= mode );
         return mode;
     }
-
     //--------------------------------------------------------------------
     bool DatabaseMetaData::supportsRelations() const
     {
@@ -294,7 +293,16 @@ namespace dbtools
         }
         return bSupport;
     }
-
+    //--------------------------------------------------------------------
+    bool DatabaseMetaData::supportsColumnAliasInOrderBy() const
+    {
+        bool doGenerate( true );
+        Any setting;
+        if ( lcl_getConnectionSetting( "ColumnAliasInOrderBy", *m_pImpl, setting ) )
+            OSL_VERIFY( setting >>= doGenerate );
+        return doGenerate;
+    }
+    //--------------------------------------------------------------------
 //........................................................................
 } // namespace dbtools
 //........................................................................
