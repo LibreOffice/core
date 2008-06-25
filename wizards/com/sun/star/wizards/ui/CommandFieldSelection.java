@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CommandFieldSelection.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -26,12 +26,16 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.ui;
+ ************************************************************************/
+
+package com.sun.star.wizards.ui;
+
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.db.*;
 import com.sun.star.awt.XWindow;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.sdb.CommandType;
+// import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.awt.*;
@@ -53,6 +57,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator{
     short iOldSelPos = -1;
     boolean bpreselectCommand = true;
     boolean bgetQueries;
+    // boolean AppendMode;
     WizardDialog oWizardDialog;
     private Collator aCollator = null;
 
@@ -143,7 +148,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator{
      */
     public String getQueryPrefix() {
         if (sQueryPrefix == null)
-            sQueryPrefix = CurUnoDialog.oResource.getResText(UIConsts.RID_QUERY + 22);
+            sQueryPrefix = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 22);
         return sQueryPrefix;
     }
 
@@ -162,7 +167,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator{
      */
     public String getTablePrefix() {
         if (sTablePrefix == null)
-            sTablePrefix = CurUnoDialog.oResource.getResText(UIConsts.RID_QUERY + 21);
+            sTablePrefix = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 21);
         return sTablePrefix;
     }
 
@@ -273,6 +278,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator{
     public int compare(Object _oObject1, Object _oObject2){
         return this.getCollator().compare(_oObject1, _oObject2);
     }
+
 
     private String[] setPrefixinArray(String[] _ContentList, String _sprefix, int _startindex, int _nlen) {
         for (int i = _startindex; i < _startindex + _nlen; i++)
