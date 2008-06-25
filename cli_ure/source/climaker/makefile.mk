@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.20 $
+# $Revision: 1.21 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -120,13 +120,6 @@ APP1STDLIBS += \
 
 $(OBJFILES): $(BIN)$/cli_basetypes.dll
 
-ALLTAR : $(BIN)$/climaker.exe.config
-
-$(BIN)$/climaker.exe.config : climaker.exe.config
-    $(GNUCOPY) -f $? $@
-.IF "$(USE_SHELL)"!="4nt"
-    chmod +x $@
-.ENDIF
 
 .ENDIF
 
