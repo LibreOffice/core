@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gridcell.cxx,v $
- * $Revision: 1.65 $
+ * $Revision: 1.66 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,7 @@
 #include "precompiled_svx.hxx"
 #include "gridcell.hxx"
 #include "fmtools.hxx"
-
+#include <stdio.h>
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
 #endif
@@ -76,6 +76,7 @@
 #include <connectivity/formattedcolumnvalue.hxx>
 
 #include <math.h>
+#include <rtl/math.hxx>
 #include <svtools/svmedit.hxx>
 
 using namespace ::connectivity;
@@ -211,7 +212,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< ::com::s
         xCur = Reference< XRowSet > ((Reference< XInterface >)*m_rParent.getDataSource(), UNO_QUERY);
         // TODO : the cursor wrapper should use an XRowSet interface, too
 
-    pCellControl->Init(&m_rParent.GetDataWindow(), xCur );
+    pCellControl->Init( m_rParent.GetDataWindow(), xCur );
 
     // now create the control wrapper
     if (m_rParent.IsFilterMode())
@@ -520,10 +521,10 @@ void DbGridColumn::Paint(OutputDevice& rDev,
 }
 
 //------------------------------------------------------------------------------
-void DbGridColumn::ImplInitSettings(Window* pParent, sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground)
+void DbGridColumn::ImplInitSettings(Window& rParent, sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground)
 {
     if (m_pCell)
-        m_pCell->ImplInitSettings(pParent, bFont, bForeground, bBackground);
+        m_pCell->ImplInitSettings(rParent, bFont, bForeground, bBackground);
 }
 
 //==============================================================================
@@ -680,45 +681,47 @@ sal_Bool DbCellControl::Commit()
 }
 
 //------------------------------------------------------------------------------
-void DbCellControl::ImplInitSettings(Window* pParent, sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground)
+void DbCellControl::ImplInitSettings(Window& rParent, sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground)
 {
-    Window* pWindows[] = { m_pPainter,m_pWindow};
+    Window* pWindows[] = { m_pPainter, m_pWindow };
     if (bFont)
     {
-        bool bIsControlFont( pParent->IsControlFont() );
-        Font aFont( bIsControlFont ? pParent->GetControlFont() : pParent->GetPointFont() );
-        aFont.SetTransparent( isTransparent() );
-
         for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
         {
-            if ( pWindows[i] )
+            if ( !pWindows[i] )
+                continue;
+
+            pWindows[i]->SetZoom( rParent.GetZoom() );
+
+            const StyleSettings& rStyleSettings = pWindows[i]->GetSettings().GetStyleSettings();
+            Font aFont = rStyleSettings.GetFieldFont();
+            aFont.SetTransparent( isTransparent() );
+
+            if ( rParent.IsControlFont() )
             {
-                if ( bIsControlFont )
-                {
-                    pWindows[i]->SetControlFont( aFont );
-                }
-                else
-                {
-                    pWindows[i]->SetZoom( pParent->GetZoom() );
-                    pWindows[i]->SetZoomedPointFont( aFont );
-                }
+                pWindows[i]->SetControlFont( rParent.GetControlFont() );
+                aFont.Merge( rParent.GetControlFont() );
             }
+            else
+                pWindows[i]->SetControlFont();
+
+            pWindows[i]->SetZoomedPointFont( aFont );
         }
     }
 
     if (bFont || bForeground)
     {
-        Color aTextColor( pParent->IsControlForeground() ? pParent->GetControlForeground() : pParent->GetTextColor() );
+        Color aTextColor( rParent.IsControlForeground() ? rParent.GetControlForeground() : rParent.GetTextColor() );
 
-        sal_Bool bTextLineColor = pParent->IsTextLineColor();
-        Color aTextLineColor( pParent->GetTextLineColor() );
+        sal_Bool bTextLineColor = rParent.IsTextLineColor();
+        Color aTextLineColor( rParent.GetTextLineColor() );
 
         for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
         {
             if ( pWindows[i] )
             {
                 pWindows[i]->SetTextColor(aTextColor);
-                if (pParent->IsControlForeground())
+                if (rParent.IsControlForeground())
                     pWindows[i]->SetControlForeground(aTextColor);
 
                 if (bTextLineColor)
@@ -731,9 +734,9 @@ void DbCellControl::ImplInitSettings(Window* pParent, sal_Bool bFont, sal_Bool b
 
     if (bBackground)
     {
-        if (pParent->IsControlBackground())
+        if (rParent.IsControlBackground())
         {
-            Color aColor( pParent->GetControlBackground());
+            Color aColor( rParent.GetControlBackground());
             for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
             {
                 if ( pWindows[i] )
@@ -756,16 +759,16 @@ void DbCellControl::ImplInitSettings(Window* pParent, sal_Bool bFont, sal_Bool b
                 if ( isTransparent() )
                     m_pPainter->SetBackground();
                 else
-                    m_pPainter->SetBackground(pParent->GetBackground());
-                m_pPainter->SetFillColor(pParent->GetFillColor());
+                    m_pPainter->SetBackground(rParent.GetBackground());
+                m_pPainter->SetFillColor(rParent.GetFillColor());
             }
 
             if (m_pWindow)
             {
                 if ( isTransparent() )
-                    m_pWindow->SetBackground(pParent->GetBackground());
+                    m_pWindow->SetBackground(rParent.GetBackground());
                 else
-                    m_pWindow->SetFillColor(pParent->GetFillColor());
+                    m_pWindow->SetFillColor(rParent.GetFillColor());
             }
         }
     }
@@ -802,9 +805,9 @@ void DbCellControl::implAdjustEnabled( const Reference< XPropertySet >& _rxModel
 }
 
 //------------------------------------------------------------------------------
-void DbCellControl::Init( Window* pParent, const Reference< XRowSet >& _rxCursor )
+void DbCellControl::Init( Window& rParent, const Reference< XRowSet >& _rxCursor )
 {
-    ImplInitSettings(pParent, sal_True ,sal_True, sal_True);
+    ImplInitSettings( rParent, sal_True, sal_True, sal_True );
     if ( m_pWindow )
     {
         // align the control
@@ -1017,7 +1020,7 @@ DbTextField::~DbTextField( )
 }
 
 //------------------------------------------------------------------------------
-void DbTextField::Init(Window* pParent, const Reference< XRowSet >& xCursor)
+void DbTextField::Init( Window& rParent, const Reference< XRowSet >& xCursor)
 {
     sal_Int16 nAlignment = m_rColumn.SetAlignmentFromModel(-1);
 
@@ -1052,18 +1055,18 @@ void DbTextField::Init(Window* pParent, const Reference< XRowSet >& xCursor)
     m_bIsSimpleEdit = !bIsMultiLine;
     if ( bIsMultiLine )
     {
-        m_pWindow = new MultiLineTextCell( pParent, nStyle );
+        m_pWindow = new MultiLineTextCell( &rParent, nStyle );
         m_pEdit = new MultiLineEditImplementation( *static_cast< MultiLineTextCell* >( m_pWindow ) );
 
-        m_pPainter = new MultiLineTextCell( pParent, nStyle );
+        m_pPainter = new MultiLineTextCell( &rParent, nStyle );
         m_pPainterImplementation = new MultiLineEditImplementation( *static_cast< MultiLineTextCell* >( m_pPainter ) );
     }
     else
     {
-        m_pWindow = new Edit( pParent, nStyle );
+        m_pWindow = new Edit( &rParent, nStyle );
         m_pEdit = new EditImplementation( *static_cast< Edit* >( m_pWindow ) );
 
-        m_pPainter = new Edit( pParent, nStyle );
+        m_pPainter = new Edit( &rParent, nStyle );
         m_pPainterImplementation = new EditImplementation( *static_cast< Edit* >( m_pPainter ) );
     }
 
@@ -1083,7 +1086,7 @@ void DbTextField::Init(Window* pParent, const Reference< XRowSet >& xCursor)
     if (m_rColumn.GetParent().getNumberFormatter().is() && m_rColumn.GetKey())
         m_nKeyType  = comphelper::getNumberFormatType(m_rColumn.GetParent().getNumberFormatter()->getNumberFormatsSupplier()->getNumberFormats(), m_rColumn.GetKey());
 
-    DbLimitedLengthField::Init(pParent, xCursor);
+    DbLimitedLengthField::Init( rParent, xCursor );
 }
 
 //------------------------------------------------------------------------------
@@ -1194,7 +1197,7 @@ DbFormattedField::~DbFormattedField()
 }
 
 //------------------------------------------------------------------------------
-void DbFormattedField::Init(Window* pParent, const Reference< XRowSet >& xCursor)
+void DbFormattedField::Init( Window& rParent, const Reference< XRowSet >& xCursor)
 {
     sal_Int16 nAlignment = m_rColumn.SetAlignmentFromModel(-1);
 
@@ -1203,17 +1206,17 @@ void DbFormattedField::Init(Window* pParent, const Reference< XRowSet >& xCursor
     switch (nAlignment)
     {
         case ::com::sun::star::awt::TextAlign::RIGHT:
-            m_pWindow  = new FormattedField(pParent, WB_RIGHT);
-            m_pPainter = new FormattedField(pParent, WB_RIGHT);
+            m_pWindow  = new FormattedField( &rParent, WB_RIGHT );
+            m_pPainter = new FormattedField( &rParent, WB_RIGHT );
             break;
 
         case ::com::sun::star::awt::TextAlign::CENTER:
-            m_pWindow  = new FormattedField(pParent, WB_CENTER);
-            m_pPainter  = new FormattedField(pParent, WB_CENTER);
+            m_pWindow  = new FormattedField( &rParent, WB_CENTER );
+            m_pPainter  = new FormattedField( &rParent, WB_CENTER );
             break;
         default:
-            m_pWindow  = new FormattedField(pParent, WB_LEFT);
-            m_pPainter  = new FormattedField(pParent, WB_LEFT);
+            m_pWindow  = new FormattedField( &rParent, WB_LEFT );
+            m_pPainter  = new FormattedField( &rParent, WB_LEFT );
 
             // Alles nur damit die Selektion bei Focuserhalt von rechts nach links geht
             AllSettings aSettings = m_pWindow->GetSettings();
@@ -1399,7 +1402,7 @@ void DbFormattedField::Init(Window* pParent, const Reference< XRowSet >& xCursor
                 break;
         }
     }
-    DbLimitedLengthField::Init(pParent, xCursor);
+    DbLimitedLengthField::Init( rParent, xCursor );
 }
 
 //------------------------------------------------------------------------------
@@ -1579,12 +1582,12 @@ namespace
 }
 
 //------------------------------------------------------------------------------
-void DbCheckBox::Init(Window* pParent, const Reference< XRowSet >& xCursor)
+void DbCheckBox::Init( Window& rParent, const Reference< XRowSet >& xCursor )
 {
     setTransparent( sal_True );
 
-    m_pWindow  = new CheckBoxControl(pParent);
-    m_pPainter = new CheckBoxControl(pParent);
+    m_pWindow  = new CheckBoxControl( &rParent );
+    m_pPainter = new CheckBoxControl( &rParent );
 
     m_pWindow->SetPaintTransparent( sal_True );
     m_pPainter->SetPaintTransparent( sal_True );
@@ -1606,7 +1609,7 @@ void DbCheckBox::Init(Window* pParent, const Reference< XRowSet >& xCursor)
         OSL_ENSURE( sal_False, "DbCheckBox::Init: caught an exception!" );
     }
 
-    DbCellControl::Init(pParent, xCursor);
+    DbCellControl::Init( rParent, xCursor );
 }
 
 //------------------------------------------------------------------------------
@@ -1714,17 +1717,17 @@ void DbPatternField::implAdjustGenericFieldSetting( const Reference< XPropertySe
 }
 
 //------------------------------------------------------------------------------
-void DbPatternField::Init(Window* pParent, const Reference< XRowSet >& xCursor)
+void DbPatternField::Init( Window& rParent, const Reference< XRowSet >& xCursor)
 {
     m_rColumn.SetAlignmentFromModel(-1);
 
-    m_pWindow = new PatternField( pParent, 0 );
-    m_pPainter= new PatternField( pParent, 0 );
+    m_pWindow = new PatternField( &rParent, 0 );
+    m_pPainter= new PatternField( &rParent, 0 );
 
     Reference< XPropertySet >   xModel( m_rColumn.getModel() );
     implAdjustGenericFieldSetting( xModel );
 
-    DbCellControl::Init(pParent, xCursor);
+    DbCellControl::Init( rParent, xCursor );
 }
 
 //------------------------------------------------------------------------------
@@ -1803,7 +1806,7 @@ DbSpinField::DbSpinField( DbGridColumn& _rColumn, sal_Int16 _nStandardAlign )
 }
 
 //------------------------------------------------------------------------------
-void DbSpinField::Init( Window* _pParent, const Reference< XRowSet >& _rxCursor )
+void DbSpinField::Init( Window& _rParent, const Reference< XRowSet >& _rxCursor )
 {
     m_rColumn.SetAlignmentFromModel( m_nStandardAlign );
 
@@ -1814,14 +1817,14 @@ void DbSpinField::Init( Window* _pParent, const Reference< XRowSet >& _rxCursor 
     if ( ::comphelper::getBOOL( xModel->getPropertyValue( FM_PROP_SPIN ) ) )
         nFieldStyle = WB_REPEAT | WB_SPIN;
     // create the fields
-    m_pWindow = createField( _pParent, nFieldStyle, xModel );
-    m_pPainter = createField( _pParent, nFieldStyle, xModel );
+    m_pWindow = createField( &_rParent, nFieldStyle, xModel );
+    m_pPainter = createField( &_rParent, nFieldStyle, xModel );
 
     // adjust all other settings which depend on the property values
     implAdjustGenericFieldSetting( xModel );
 
     // call the base class
-    DbCellControl::Init( _pParent, _rxCursor );
+    DbCellControl::Init( _rParent, _rxCursor );
 }
 
 //------------------------------------------------------------------------------
@@ -2035,9 +2038,13 @@ SpinField* DbCurrencyField::createField( Window* _pParent, WinBits _nFieldStyle,
 //------------------------------------------------------------------------------
 double DbCurrencyField::GetCurrency(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter) const
 {
-    double fValue = GetValue(_rxField, xFormatter);
+    volatile double fValue = GetValue(_rxField, xFormatter);
     if (m_nScale)
-        fValue *= pow(10.0, double(m_nScale));
+    {
+        // OSL_TRACE("double = %.64f ",fValue);
+        fValue = ::rtl::math::pow10Exp(fValue, m_nScale);
+        fValue = ::rtl::math::round(fValue, 0);
+    }
     return fValue;
 }
 
@@ -2056,6 +2063,8 @@ namespace
                 if ( !_rxField->wasNull() )
                 {
                     _rField.SetValue( fValue );
+                    BigInt aValue = _rField.GetCorrectedValue();
+                    sValue = aValue.GetString();
                     sValue = _rField.GetText();
                 }
             }
@@ -2089,7 +2098,10 @@ void DbCurrencyField::updateFromModel( Reference< XPropertySet > _rxModel )
     if ( _rxModel->getPropertyValue( FM_PROP_VALUE ) >>= dValue )
     {
         if ( m_nScale )
-            dValue *= pow( 10.0, double( m_nScale ) );
+        {
+            dValue = ::rtl::math::pow10Exp( dValue, m_nScale );
+            dValue = ::rtl::math::round(dValue, 0);
+        }
 
         static_cast< LongCurrencyField* >( m_pWindow )->SetValue( dValue );
     }
@@ -2104,9 +2116,12 @@ sal_Bool DbCurrencyField::commitControl()
     Any aVal;
     if (aText.Len() != 0)   // nicht null
     {
-        double fValue = ((LongCurrencyField*)m_pWindow)->GetValue();
+        volatile double fValue = ((LongCurrencyField*)m_pWindow)->GetValue();
         if (m_nScale)
-            fValue /= pow(10.0, double(m_nScale));
+        {
+            fValue /= ::rtl::math::pow10Exp(1.0, m_nScale);
+            //fValue = ::rtl::math::round(fValue, m_nScale);
+        }
         aVal <<= (double)fValue;
     }
     m_rColumn.getModel()->setPropertyValue(FM_PROP_VALUE, aVal);
@@ -2413,11 +2428,11 @@ void DbComboBox::implAdjustGenericFieldSetting( const Reference< XPropertySet >&
 }
 
 //------------------------------------------------------------------------------
-void DbComboBox::Init(Window* pParent, const Reference< XRowSet >& xCursor)
+void DbComboBox::Init( Window& rParent, const Reference< XRowSet >& xCursor )
 {
     m_rColumn.SetAlignmentFromModel(::com::sun::star::awt::TextAlign::LEFT);
 
-    m_pWindow = new ComboBoxControl(pParent);
+    m_pWindow = new ComboBoxControl( &rParent );
 
     // selection von rechts nach links
     AllSettings     aSettings = m_pWindow->GetSettings();
@@ -2435,7 +2450,7 @@ void DbComboBox::Init(Window* pParent, const Reference< XRowSet >& xCursor)
     if (m_rColumn.GetParent().getNumberFormatter().is())
         m_nKeyType  = comphelper::getNumberFormatType(m_rColumn.GetParent().getNumberFormatter()->getNumberFormatsSupplier()->getNumberFormats(), m_rColumn.GetKey());
 
-    DbCellControl::Init(pParent, xCursor);
+    DbCellControl::Init( rParent, xCursor );
 }
 
 //------------------------------------------------------------------------------
@@ -2538,18 +2553,18 @@ void DbListBox::SetList(const Any& rItems)
 }
 
 //------------------------------------------------------------------------------
-void DbListBox::Init(Window* pParent, const Reference< XRowSet >& xCursor)
+void DbListBox::Init( Window& rParent, const Reference< XRowSet >& xCursor)
 {
     m_rColumn.SetAlignment(::com::sun::star::awt::TextAlign::LEFT);
 
-    m_pWindow = new ListBoxControl(pParent);
+    m_pWindow = new ListBoxControl( &rParent );
 
     // some initial properties
     Reference< XPropertySet > xModel( m_rColumn.getModel() );
     SetList( xModel->getPropertyValue( FM_PROP_STRINGITEMLIST ) );
     implAdjustGenericFieldSetting( xModel );
 
-    DbCellControl::Init(pParent, xCursor);
+    DbCellControl::Init( rParent, xCursor );
 }
 
 //------------------------------------------------------------------------------
@@ -2768,7 +2783,7 @@ void DbFilterField::CreateControl(Window* pParent, const Reference< ::com::sun::
 }
 
 //------------------------------------------------------------------------------
-void DbFilterField::Init(Window* pParent, const Reference< XRowSet >& xCursor)
+void DbFilterField::Init( Window& rParent, const Reference< XRowSet >& xCursor )
 {
     Reference< ::com::sun::star::beans::XPropertySet >  xModel(m_rColumn.getModel());
     m_rColumn.SetAlignment(::com::sun::star::awt::TextAlign::LEFT);
@@ -2797,8 +2812,8 @@ void DbFilterField::Init(Window* pParent, const Reference< XRowSet >& xCursor)
         }
     }
 
-    CreateControl(pParent, xModel);
-    DbCellControl::Init(pParent, xCursor);
+    CreateControl( &rParent, xModel );
+    DbCellControl::Init( rParent, xCursor );
 
     // filter cells are never readonly
     // 31.07.2002 - 101584 - fs@openoffice.org
