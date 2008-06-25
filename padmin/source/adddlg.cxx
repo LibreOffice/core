@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: adddlg.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -147,37 +147,25 @@ void APChooseDriverPage::fill( PrinterInfo& rInfo )
 
 void APChooseDriverPage::updateDrivers()
 {
-    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-
     for( int k = 0; k < m_aDriverBox.GetEntryCount(); k++ )
         delete (String*)m_aDriverBox.GetEntryData( k );
     m_aDriverBox.Clear();
 
-    std::list< rtl::OUString > aPathList;
-    psp::getPrinterPathList( aPathList, PSPRINT_PPDDIR );
-    for( std::list<rtl::OUString>::const_iterator path_it = aPathList.begin();
-         path_it != aPathList.end(); ++path_it )
+    std::list< rtl::OUString > aDrivers;
+    psp::PPDParser::getKnownPPDDrivers( aDrivers );
+
+    for( std::list< rtl::OUString >::const_iterator it = aDrivers.begin(); it != aDrivers.end(); ++it )
     {
-        if( access( OUStringToOString( *path_it, aEncoding ).getStr(), F_OK ) )
-            continue;
-
-        ::std::list< String > aFiles;
-        FindFiles( *path_it, aFiles, String( RTL_CONSTASCII_USTRINGPARAM( "PS;PPD" ) ) );
-
-        for( ::std::list< String >::const_iterator it = aFiles.begin(); it != aFiles.end(); ++it )
+        String aDriver( ::psp::PPDParser::getPPDPrinterName( *it ) );
+        if( aDriver.Len() )
         {
-            String aPPD( *it );
-            aPPD.Erase( aPPD.SearchBackward( '.' ) );
-            String aDriver( ::psp::PPDParser::getPPDPrinterName( aPPD ) );
-            if( aDriver.Len() )
-            {
-                int nPos = m_aDriverBox.InsertEntry( aDriver );
-                m_aDriverBox.SetEntryData( nPos, new String( aPPD ) );
-                if( aPPD.EqualsAscii( "SGENPRT" ) )
-                    m_aDriverBox.SelectEntryPos( nPos );
-            }
+            int nPos = m_aDriverBox.InsertEntry( aDriver );
+            m_aDriverBox.SetEntryData( nPos, new String( *it ) );
+            if( it->equalsAscii( "SGENPRT" ) )
+                m_aDriverBox.SelectEntryPos( nPos );
         }
     }
+
     m_aRemBtn.Enable( m_aDriverBox.GetEntryCount() > 0 );
 }
 
@@ -270,14 +258,18 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                 }
 
                 ::std::list< rtl::OUString > aDirs;
-                psp::getPrinterPathList( aDirs, PSPRINT_PPDDIR );
+                // get only psprint's directories, not eventual system dirs
+                psp::getPrinterPathList( aDirs, NULL );
                 ::std::list< rtl::OUString >::iterator dir;
 
                 for( dir = aDirs.begin(); dir != aDirs.end(); ++dir )
                 {
                     ::std::list< String > aFiles;
                     ::std::list< String >::iterator file;
-                    FindFiles( *dir, aFiles, String( RTL_CONSTASCII_USTRINGPARAM( "PS;PPD" ) ) );
+                    OUStringBuffer aDir( *dir );
+                    aDir.append( sal_Unicode( '/' ) );
+                    aDir.appendAscii( PRINTER_PPDDIR );
+                    FindFiles( aDir.makeStringAndClear(), aFiles, String( RTL_CONSTASCII_USTRINGPARAM( "PS;PPD;PS.GZ;PPD.GZ" ) ), true );
                     for( file = aFiles.begin(); file != aFiles.end(); ++file )
                     {
                         String aFile( *dir );
