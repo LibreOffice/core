@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableDesignView.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -224,10 +224,10 @@ DBG_NAME(OTableDesignView);
 //------------------------------------------------------------------------------
 OTableDesignView::OTableDesignView( Window* pParent,
                                     const Reference< XMultiServiceFactory >& _rxOrb,
-                                    OTableController* _pController
+                                    OTableController& _rController
                                    ) :
-    ODataView( pParent ,_pController,_rxOrb )
-    ,m_pController( _pController )
+    ODataView( pParent, _rController,_rxOrb )
+    ,m_rController( _rController )
     ,m_eChildFocus(NONE)
 {
     DBG_CTOR(OTableDesignView,NULL);
@@ -254,8 +254,6 @@ OTableDesignView::~OTableDesignView()
         ::std::auto_ptr<Window> aTemp(m_pWin);
         m_pWin = NULL;
     }
-
-    m_pController = NULL;
 }
 
 // -----------------------------------------------------------------------------
@@ -285,7 +283,7 @@ void OTableDesignView::resizeDocumentView(Rectangle& _rPlayground)
 //------------------------------------------------------------------------------
 IMPL_LINK( OTableDesignView, SwitchHdl, Accelerator*, /*pAcc*/ )
 {
-    if( getController()->isReadOnly() )
+    if( getController().isReadOnly() )
         return 0;
 
     if( GetDescWin()->HasChildPathFocus() )
