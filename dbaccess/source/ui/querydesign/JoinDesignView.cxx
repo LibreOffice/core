@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: JoinDesignView.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,10 +110,10 @@ namespace dbaui
 // = OJoinDesignView
 // =============================================================================
 // -----------------------------------------------------------------------------
-OJoinDesignView::OJoinDesignView(Window* _pParent, OJoinController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
-    :ODataView(_pParent,_pController,_rFactory)
+OJoinDesignView::OJoinDesignView(Window* _pParent, OJoinController& _rController,const Reference< XMultiServiceFactory >& _rFactory)
+    :ODataView( _pParent, _rController, _rFactory )
     ,m_pTableView(NULL)
-    ,m_pController(_pController)
+    ,m_rController( _rController )
 {
     m_pScrollWindow = new OScrollWindowHelper(this);
 }
@@ -157,7 +157,7 @@ void OJoinDesignView::setReadOnly(sal_Bool /*_bReadOnly*/)
 // -----------------------------------------------------------------------------
 void OJoinDesignView::SaveTabWinUIConfig(OTableWindow* pWin)
 {
-    getController()->SaveTabWinPosSize(pWin, m_pScrollWindow->GetHScrollBar()->GetThumbPos(), m_pScrollWindow->GetVScrollBar()->GetThumbPos());
+    getController().SaveTabWinPosSize(pWin, m_pScrollWindow->GetHScrollBar()->GetThumbPos(), m_pScrollWindow->GetVScrollBar()->GetThumbPos());
 }
 // -----------------------------------------------------------------------------
 void OJoinDesignView::KeyInput( const KeyEvent& rEvt )
