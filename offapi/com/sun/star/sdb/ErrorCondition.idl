@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ErrorCondition.idl,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,7 +126,7 @@ constants ErrorCondition
         which is already used in the database.
 
         <p>In databases which support query names to appear in <code>SELECT</code>
-        statements, this could mean that a query was attempted to be saved with the
+        statements, this could mean that a table was attempted to be saved with the
         name of an existing query, or vice versa.</p>
 
         <p>Otherwise, it means an object was attempted to be saved with the
