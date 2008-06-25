@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabletree.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +49,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XDRIVER_HPP_
 #include <com/sun/star/sdbc/XDriver.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_APPLICATION_NAMEDDATABASEOBJECT_HPP_
+#include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
 #endif
 
 #include <memory>
@@ -127,6 +130,11 @@ public:
                 const ::com::sun::star::uno::Sequence< ::rtl::OUString>& _rTables,
                 const ::com::sun::star::uno::Sequence< ::rtl::OUString>& _rViews
             );
+
+    /** returns a NamedDatabaseObject record which describes the given entry
+    */
+    ::com::sun::star::sdb::application::NamedDatabaseObject
+            describeObject( SvLBoxEntry* _pEntry );
 
     /** to be used if a foreign instance added a table
     */
