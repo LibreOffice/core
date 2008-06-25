@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlexp.cxx,v $
- * $Revision: 1.140 $
+ * $Revision: 1.141 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -961,22 +961,42 @@ void SvXMLExport::ImplExportSettings()
 {
     CheckAttrList();
 
-    uno::Sequence<beans::PropertyValue> aViewProps;
-    GetViewSettingsAndViews(aViewProps);
+    ::std::list< SettingsGroup > aSettings;
+    sal_Int32 nSettingsCount = 0;
 
-    uno::Sequence<beans::PropertyValue> aConfigProps;
-    GetConfigurationSettings(aConfigProps);
+    // view settings
+    uno::Sequence< beans::PropertyValue > aViewSettings;
+    GetViewSettingsAndViews( aViewSettings );
+    aSettings.push_back( SettingsGroup( XML_VIEW_SETTINGS, aViewSettings ) );
+    nSettingsCount += aViewSettings.getLength();
+
+    // configuration settings
+    uno::Sequence<beans::PropertyValue> aConfigSettings;
+    GetConfigurationSettings( aConfigSettings );
+    aSettings.push_back( SettingsGroup( XML_CONFIGURATION_SETTINGS, aConfigSettings ) );
+    nSettingsCount += aConfigSettings.getLength();
+
+    // any document specific settings
+    nSettingsCount += GetDocumentSpecificSettings( aSettings );
 
     {
         SvXMLElementExport aElem( *this,
-                                aViewProps.getLength() || aConfigProps.getLength(),
+                                nSettingsCount != 0,
                                 XML_NAMESPACE_OFFICE, XML_SETTINGS,
                                 sal_True, sal_True );
         XMLSettingsExportHelper aSettingsExportHelper(*this);
-        if( aViewProps.getLength() )
-            _ExportViewSettings2(aSettingsExportHelper, aViewProps );
-        if( aConfigProps.getLength() )
-            _ExportConfigurationSettings2(aSettingsExportHelper, aConfigProps );
+
+        for (   ::std::list< SettingsGroup >::const_iterator settings = aSettings.begin();
+                settings != aSettings.end();
+                ++settings
+            )
+        {
+            if ( !settings->aSettings.getLength() )
+                continue;
+
+            OUString sSettingsName( GetXMLToken( settings->eGroupName ) );
+            aSettingsExportHelper.exportSettings( settings->aSettings, sSettingsName );
+        }
     }
 }
 
@@ -1369,34 +1389,6 @@ void SvXMLExport::_ExportMeta()
     }
 }
 
-void SvXMLExport::_ExportViewSettings(const XMLSettingsExportHelper& rSettingsExportHelper )
-{
-    uno::Sequence<beans::PropertyValue> aViewProps;
-    GetViewSettingsAndViews(aViewProps);
-    if( aViewProps.getLength() )
-        _ExportViewSettings2(rSettingsExportHelper, aViewProps );
-}
-
-void SvXMLExport::_ExportViewSettings2(const XMLSettingsExportHelper& rSettingsExportHelper, uno::Sequence<beans::PropertyValue>& rProps )
-{
-    OUString sViewSettings(GetXMLToken(XML_VIEW_SETTINGS));
-    rSettingsExportHelper.exportSettings(rProps, sViewSettings);
-}
-
-void SvXMLExport::_ExportConfigurationSettings(const XMLSettingsExportHelper& rSettingsExportHelper )
-{
-    uno::Sequence<beans::PropertyValue> aConfigProps;
-    GetConfigurationSettings(aConfigProps);
-    if( aConfigProps.getLength() )
-        _ExportConfigurationSettings2(rSettingsExportHelper, aConfigProps );
-}
-
-void SvXMLExport::_ExportConfigurationSettings2(const XMLSettingsExportHelper& rSettingsExportHelper, uno::Sequence<beans::PropertyValue>& rProps )
-{
-    OUString sConfigurationSettings(GetXMLToken(XML_CONFIGURATION_SETTINGS));
-    rSettingsExportHelper.exportSettings(rProps, sConfigurationSettings);
-}
-
 void SvXMLExport::_ExportScripts()
 {
     SvXMLElementExport aElement( *this, XML_NAMESPACE_OFFICE, XML_SCRIPTS, sal_True, sal_True );
@@ -1732,6 +1724,12 @@ void SvXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>&)
 
 void SvXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>&)
 {
+}
+
+sal_Int32 SvXMLExport::GetDocumentSpecificSettings( ::std::list< SettingsGroup >& _out_rSettings )
+{
+    (void)_out_rSettings;
+    return 0;
 }
 
 void SvXMLExport::addDataStyle(const sal_Int32 nNumberFormat, sal_Bool /*bTimeFormat*/ )
