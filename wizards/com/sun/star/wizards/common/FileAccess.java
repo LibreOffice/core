@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FileAccess.java,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -26,15 +26,23 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.common;
+ ************************************************************************/
+
+package com.sun.star.wizards.common;
+
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.lang.Locale;
+import com.sun.star.uno.Exception;
+import com.sun.star.util.XMacroExpander;
+// import com.sun.star.wizards.common.NoValidPathException;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.io.XActiveDataSink;
 import com.sun.star.io.XInputStream;
-import com.sun.star.io.XStream;
+// import com.sun.star.io.XStream;
 import com.sun.star.io.XTextInputStream;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.*;
@@ -87,8 +95,13 @@ public class FileAccess {
 
     public static String deleteLastSlashfromUrl(String _sPath){
         if (_sPath.endsWith("/"))
+        {
             return _sPath.substring(0, _sPath.length()-1);
-        else return _sPath;
+        }
+        else
+        {
+            return _sPath;
+        }
     }
 
 
@@ -176,10 +189,168 @@ public class FileAccess {
             ResultPath = "";
         }
         if (bexists == false)
-            throw new NoValidPathException(xMSF);
+        {
+            throw new NoValidPathException(xMSF, "");
+        }
         return ResultPath;
     }
 
+    public static ArrayList getOfficePaths(XMultiServiceFactory xMSF, String _sPath, String sType, String sSearchDir) throws NoValidPathException {
+        //This method currently only works with sPath="Template"
+
+        // String ResultPath = "";
+        ArrayList aPathList = new ArrayList();
+        String Template_writable = "";
+        String [] Template_internal;
+        String [] Template_user;
+
+        // String [] ReadPaths = null;
+
+        // boolean bexists = false;
+        try {
+            XInterface xPathInterface = (XInterface) xMSF.createInstance("com.sun.star.util.PathSettings");
+            XPropertySet xPropertySet = (XPropertySet) com.sun.star.uno.UnoRuntime.queryInterface(XPropertySet.class, xPathInterface);
+            // String WritePath = "";
+            // XInterface xUcbInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
+            // XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, xUcbInterface);
+
+            Template_writable = (String) xPropertySet.getPropertyValue(_sPath + "_writable");
+            Template_internal = (String []) xPropertySet.getPropertyValue(_sPath + "_internal");
+            Template_user = (String []) xPropertySet.getPropertyValue(_sPath + "_user");
+
+            // int iNumEntries = Template_user.length + Template_internal.length + 1;
+            for (int i=0; i<Template_internal.length; i++)
+            {
+                String sPath = Template_internal[i];
+                if (sPath.startsWith("vnd."))
+                {
+                    String sPathToExpand = sPath.substring("vnd.sun.star.Expand:".length());
+
+                    XMacroExpander xExpander = Helper.getMacroExpander(xMSF);
+                    sPath = xExpander.expandMacros(sPathToExpand);
+                }
+
+                // if there exists a language in the directory, we try to add the right language
+                sPath = checkIfLanguagePathExists(xMSF, sPath);
+
+                aPathList.add(sPath);
+            }
+            for (int i=0; i<Template_user.length; i++)
+            {
+                aPathList.add(Template_user[i]);
+            }
+            aPathList.add(Template_writable);
+            // WritePath = Template_writable;
+
+//            if (sType.equalsIgnoreCase("user"))
+//            {
+//                ResultPath = WritePath;
+//                bexists = true;
+//            }
+
+            // There was a bug here, because we have to search through the whole list of paths
+//            else
+//            {
+//                //find right path using the search sub path
+//                for (int i = 0; i<ReadPaths.length; i++)
+//                {
+//                    String tmpPath = ReadPaths[i]+sSearchDir;
+//                    if (xSimpleFileAccess.exists(tmpPath))
+//                    {
+//                        ResultPath = ReadPaths[i];
+//                        bexists = true;
+//                        break;
+//                    }
+//                }
+//            }
+//            ResultPath = deleteLastSlashfromUrl(ResultPath);
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace(System.out);
+            // ResultPath = "";
+        }
+//        if (bexists == false)
+//        {
+//            throw new NoValidPathException(xMSF, "");
+//        }
+//        return ResultPath;
+        return aPathList;
+    }
+
+    private static String checkIfLanguagePathExists(XMultiServiceFactory _xMSF, String _sPath)
+    {
+        try
+        {
+            Object defaults = _xMSF.createInstance("com.sun.star.text.Defaults");
+            Locale  aLocale = (Locale) Helper.getUnoStructValue(defaults, "CharLocale");
+            if (aLocale == null)
+            {
+                java.util.Locale.getDefault();
+                aLocale = new com.sun.star.lang.Locale();
+                aLocale.Country = java.util.Locale.getDefault().getCountry();
+                aLocale.Language = java.util.Locale.getDefault().getLanguage();
+                aLocale.Variant = java.util.Locale.getDefault().getVariant();
+            }
+
+            String sLanguage = aLocale.Language;
+            String sCountry =  aLocale.Country;
+            String sVariant =  aLocale.Variant;
+
+            // de-DE-Bayrisch
+            StringBuffer aLocaleAll = new StringBuffer();
+            aLocaleAll.append(sLanguage).append('-').append(sCountry).append('-').append(sVariant);
+            String sPath = _sPath + "/" + aLocaleAll.toString();
+
+            XInterface xInterface = (XInterface) _xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
+            XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, xInterface);
+            if (xSimpleFileAccess.exists(sPath))
+            {
+                return sPath;
+            }
+
+            // de-DE
+            StringBuffer aLocaleLang_Country = new StringBuffer();
+            aLocaleLang_Country.append(sLanguage).append('-').append(sCountry);
+            sPath = _sPath + "/" + aLocaleLang_Country.toString();
+
+            if (xSimpleFileAccess.exists(sPath))
+            {
+                return sPath;
+            }
+
+            // de
+            StringBuffer aLocaleLang = new StringBuffer();
+            aLocaleLang.append(sLanguage);
+            sPath = _sPath + "/" + aLocaleLang.toString();
+
+            if (xSimpleFileAccess.exists(sPath))
+            {
+                return sPath;
+            }
+
+            // the absolute default is en-US or en
+            sPath = _sPath + "/en-US";
+            if (xSimpleFileAccess.exists(sPath))
+            {
+                return sPath;
+            }
+
+            sPath = _sPath + "/en";
+            if (xSimpleFileAccess.exists(sPath))
+            {
+                return sPath;
+            }
+
+            // java.util.Locale jl = new java.util.Locale(
+            //        l.Language , l.Country, l.Variant );
+        }
+        catch (com.sun.star.uno.Exception e)
+        {
+        }
+
+        return _sPath;
+    }
 
     /*
     public static String getOfficePath(XMultiServiceFactory xMSF, String sPath, String sType) throws NoValidPathException {
@@ -224,20 +395,59 @@ public class FileAccess {
     }
      **/
 
-    public static String combinePaths(XMultiServiceFactory xMSF, String FirstPath, String SecondPath) throws NoValidPathException {
-        boolean bexists = false;
-        String ReturnPath = "";
-        try {
+    public static void combinePaths(XMultiServiceFactory xMSF, ArrayList _aFirstPath, String _sSecondPath) throws NoValidPathException
+    {
+        for (int i=0;i<_aFirstPath.size();i++)
+        {
+            String sOnePath = (String)_aFirstPath.get(i);
+            sOnePath = addPath(sOnePath, _sSecondPath);
+            if (isPathValid(xMSF, sOnePath))
+            {
+                _aFirstPath.add(i, sOnePath);
+                _aFirstPath.remove(i + 1);
+            }
+            else
+            {
+                _aFirstPath.remove(i);
+            }
+        }
+    }
+
+    public static boolean isPathValid(XMultiServiceFactory xMSF, String _sPath)
+    {
+        boolean bExists = false;
+        try
+        {
             XInterface xUcbInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
             XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, xUcbInterface);
-            ReturnPath = FirstPath + SecondPath;
+            bExists = xSimpleFileAccess.exists(_sPath);
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace(System.out);
+        }
+        return bExists;
+    }
+
+    public static String combinePaths(XMultiServiceFactory xMSF, String _sFirstPath, String _sSecondPath) throws NoValidPathException {
+        boolean bexists = false;
+        String ReturnPath = "";
+        try
+        {
+            XInterface xUcbInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
+            XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, xUcbInterface);
+            ReturnPath = _sFirstPath + _sSecondPath;
             bexists = xSimpleFileAccess.exists(ReturnPath);
-        } catch (Exception exception) {
+        }
+        catch (Exception exception)
+        {
             exception.printStackTrace(System.out);
             return "";
         }
         if (bexists == false)
-            throw new NoValidPathException(xMSF);
+        {
+            throw new NoValidPathException(xMSF, "");
+        }
         return ReturnPath;
     }
 
@@ -294,7 +504,9 @@ public class FileAccess {
                     sFileexists = JavaTools.replaceSubString(sFileexists, String.valueOf((char) 13), "<CR>");
                     int iLeave = SystemDialog.showMessageBox(xMSF, "QueryBox", VclWindowPeerAttribute.YES_NO, sFileexists);
                     if (iLeave == 3)
+                    {
                         return false;
+                    }
                 }
             }
             String[] DirArray = JavaTools.ArrayoutofString(Path, "/");
@@ -308,7 +520,9 @@ public class FileAccess {
                     if (RestLen > 0) {
                         NewPath = NewPath.substring(0, NewLen - SubLen - 1);
                         if (i == MaxIndex)
+                        {
                             SubDirPath = NewPath;
+                        }
                         bexists = xSimpleFileAccess.exists(NewPath);
                         if (bexists) {
                             LowerCasePath = NewPath.toLowerCase();
@@ -320,8 +534,11 @@ public class FileAccess {
                                 return bSubDiriscreated;
                             }
                             return true;
-                        } else
+                        }
+                        else
+                        {
                             bSubDirexists = false;
+                        }
                     }
                 }
             }
@@ -342,8 +559,10 @@ public class FileAccess {
      * @param FolderName the folder (URL) to look for files...
      * @return an array with two array members. The first one, with document titles,
      * the second with the corresponding URLs.
+     * @deprecated please use the getFolderTitles() with ArrayList
      */
-    public static String[][] getFolderTitles(com.sun.star.lang.XMultiServiceFactory xMSF, String FilterName, String FolderName) {
+
+        public static String[][] getFolderTitles(com.sun.star.lang.XMultiServiceFactory xMSF, String FilterName, String FolderName) {
         String[][] LocLayoutFiles = new String[2][]; //{"",""}{""};
         try {
             java.util.Vector TitleVector = null;
@@ -389,6 +608,166 @@ public class FileAccess {
         return LocLayoutFiles;
     }
 
+        /**
+         * We search in all given path for a given file
+         * @param _sPath
+         * @param _sPath2
+         * @return
+         */
+
+    public static String addPath(String _sPath, String _sPath2)
+    {
+        String sNewPath;
+        if (!_sPath.endsWith("/"))
+        {
+            _sPath += "/";
+        }
+        if (_sPath2.startsWith("/"))
+        {
+            _sPath2 = _sPath2.substring(1);
+        }
+        sNewPath = _sPath + _sPath2;
+        return sNewPath;
+    }
+
+    public static String getPathFromList(XMultiServiceFactory xMSF, ArrayList _aList, String _sFile)
+    {
+        String sFoundFile = "";
+        try
+        {
+            XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
+            com.sun.star.ucb.XSimpleFileAccess xSimpleFileAccess = (com.sun.star.ucb.XSimpleFileAccess) UnoRuntime.queryInterface(com.sun.star.ucb.XSimpleFileAccess.class, xInterface);
+
+            for (int i=0;i<_aList.size();i++)
+            {
+                String sPath = (String)_aList.get(i);
+                sPath = addPath(sPath, _sFile);
+                if (xSimpleFileAccess.exists(sPath))
+                {
+                    sFoundFile = sPath;
+                }
+            }
+        }
+        catch(com.sun.star.uno.Exception e)
+        {
+        }
+        return sFoundFile;
+    }
+
+        /**
+         *
+         * @param xMSF
+         * @param _sStartFilterName
+         * @param FolderNames
+         * @return
+         * @throws com.sun.star.wizards.common.NoValidPathException
+         */
+    public static String[][] getFolderTitles(com.sun.star.lang.XMultiServiceFactory xMSF, String _sStartFilterName, ArrayList FolderNames)
+            throws NoValidPathException
+    {
+        return getFolderTitles(xMSF, _sStartFilterName, FolderNames, "");
+    }
+
+    private static String getTitle(XMultiServiceFactory xMSF, String _sFile)
+    {
+        String sTitle = "";
+        try
+        {
+            XInterface xDocInterface = (XInterface) xMSF.createInstance("com.sun.star.document.StandaloneDocumentInfo");
+            com.sun.star.document.XStandaloneDocumentInfo xDocInfo = (com.sun.star.document.XStandaloneDocumentInfo) UnoRuntime.queryInterface(com.sun.star.document.XStandaloneDocumentInfo.class, xDocInterface);
+
+            xDocInfo.loadFromURL(_sFile);
+            sTitle = com.sun.star.uno.AnyConverter.toString(Helper.getUnoPropertyValue(xDocInterface, "Title"));
+        }
+        catch (Exception e)
+        {
+        }
+        return sTitle;
+    }
+
+    public static String[][] getFolderTitles(com.sun.star.lang.XMultiServiceFactory xMSF, String _sStartFilterName, ArrayList FolderName, String _sEndFilterName)
+            throws NoValidPathException
+    {
+        String[][] LocLayoutFiles = new String[2][]; //{"",""}{""};
+        if (FolderName.size() == 0)
+        {
+            throw new NoValidPathException(null, "Path not given.");
+        }
+        ArrayList TitleVector = new ArrayList();
+        ArrayList URLVector = new ArrayList();
+
+        com.sun.star.ucb.XSimpleFileAccess xSimpleFileAccess = null;
+        try
+        {
+            XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
+            xSimpleFileAccess = (com.sun.star.ucb.XSimpleFileAccess) UnoRuntime.queryInterface(com.sun.star.ucb.XSimpleFileAccess.class, xInterface);
+        }
+        catch (com.sun.star.uno.Exception e)
+        {
+            e.printStackTrace();
+            throw new NoValidPathException(null, "Internal error.");
+        }
+
+        for (int j = 0; j < FolderName.size(); j++)
+        {
+            String sFolderName = (String) FolderName.get(j);
+
+            try
+            {
+                String[] nameList = xSimpleFileAccess.getFolderContents(sFolderName, false);
+                _sStartFilterName = _sStartFilterName == null || _sStartFilterName.equals("") ? null : _sStartFilterName + "-";
+
+                String fileName = "";
+                for (int i = 0; i < nameList.length; i++)
+                {
+                    fileName = getFilename(nameList[i]);
+                    String sTitle;
+
+                    if (_sStartFilterName == null || fileName.startsWith(_sStartFilterName))
+                    {
+                        if (_sEndFilterName.equals(""))
+                        {
+                            sTitle = getTitle(xMSF, nameList[i]);
+                        }
+                        else if (fileName.endsWith(_sEndFilterName))
+                        {
+                            fileName = fileName.replaceAll(_sEndFilterName + "$", "");
+                            sTitle = fileName;
+                        }
+                        else
+                        {
+                            // no or wrong (start|end) filter
+                            continue;
+                        }
+                        URLVector.add(nameList[i]);
+                        TitleVector.add(sTitle);
+                    }
+                }
+            }
+            catch (com.sun.star.ucb.CommandAbortedException exception)
+            {
+                exception.printStackTrace(System.out);
+            }
+            catch (com.sun.star.uno.Exception e)
+            {
+            }
+        }
+
+        String[] LocNameList = new String[URLVector.size()];
+        String[] LocTitleList = new String[TitleVector.size()];
+
+        // LLA: we have to check if this works
+        URLVector.toArray(LocNameList);
+        TitleVector.toArray(LocTitleList);
+
+        LocLayoutFiles[1] = LocNameList;
+        LocLayoutFiles[0] = LocTitleList;
+
+        JavaTools.bubblesortList(LocLayoutFiles);
+
+        return LocLayoutFiles;
+    }
+
     public XSimpleFileAccess2 fileAccess;
     public XFileIdentifierConverter filenameConverter;
 
@@ -428,10 +807,17 @@ public class FileAccess {
     public static String getExtension(String filename) {
         int p = filename.indexOf(".");
         if (p == -1)
+        {
             return "";
+        }
         else
-            do filename = filename.substring(p + 1);
+        {
+            do
+            {
+                filename = filename.substring(p + 1);
+            }
             while ((p = filename.indexOf(".")) > -1);
+        }
         return filename;
     }
 
@@ -540,6 +926,7 @@ public class FileAccess {
     /**
      * @author rpiterman
      * @param path
+     * @param pathSeparator
      * @return
      */
     public static String getFilename(String path, String pathSeparator) {
@@ -583,16 +970,21 @@ public class FileAccess {
 
     /**
      *
+     * @param url
      * @return the parent dir of the given url.
      * if the path points to file, gives the directory in which the file is.
      */
     public static String getParentDir(String url) {
         if (url.endsWith("/"))
+        {
             return getParentDir(url.substring(0, url.length() - 1));
+        }
         int pos = -1;
         int lastPos = 0;
         while ((pos = url.indexOf("/", pos + 1)) > -1)
+        {
             lastPos = pos;
+        }
         return url.substring(0, lastPos);
     }
 
@@ -600,9 +992,13 @@ public class FileAccess {
     public String createNewDir(String parentDir, String name) {
         String s = getNewFile(parentDir, name, "");
         if (mkdir(s))
+        {
             return s;
+        }
         else
+        {
             return null;
+        }
     }
 
     public String getNewFile(String parentDir, String name, String extension) {
@@ -649,7 +1045,8 @@ public class FileAccess {
                 XTextInputStream xTextInputStream = (XTextInputStream) UnoRuntime.queryInterface(XTextInputStream.class, oTextInputStream);
                 XActiveDataSink xActiveDataSink = (XActiveDataSink) UnoRuntime.queryInterface(XActiveDataSink.class, oTextInputStream);
                 xActiveDataSink.setInputStream(xInputStream);
-                while (!xTextInputStream.isEOF()){
+                while (!xTextInputStream.isEOF())
+                {
                     oDataVector.addElement((String) xTextInputStream.readLine());
                 }
                 xTextInputStream.closeInput();
@@ -687,6 +1084,8 @@ public class FileAccess {
             return s1 + "..." + s2;
         }
         else
+        {
             return path;
+        }
     }
 }
