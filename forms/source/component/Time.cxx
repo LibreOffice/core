@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Time.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -310,21 +310,14 @@ Any OTimeModel::translateControlValueToExternalValue( ) const
 }
 
 //------------------------------------------------------------------------------
-Any OTimeModel::translateExternalValueToControlValue( ) const
+Any OTimeModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
 {
-    OSL_PRECOND( hasExternalValueBinding(),
-        "OTimeModel::translateExternalValueToControlValue: precondition not met!" );
-
     Any aControlValue;
-    if ( hasExternalValueBinding() )
+    if ( _rExternalValue.hasValue() )
     {
-        Any aExternalValue = getExternalValueBinding()->getValue( ::getCppuType( static_cast< util::Time* >( NULL ) ) );
-        if ( aExternalValue.hasValue() )
-        {
-            util::Time aTime;
-            OSL_VERIFY( aExternalValue >>= aTime );
-            aControlValue <<= DBTypeConversion::toINT32( aTime );
-        }
+        util::Time aTime;
+        OSL_VERIFY( _rExternalValue >>= aTime );
+        aControlValue <<= DBTypeConversion::toINT32( aTime );
     }
     return aControlValue;
 }
@@ -357,12 +350,9 @@ Any OTimeModel::getDefaultForReset() const
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OTimeModel::approveValueBinding( const Reference< binding::XValueBinding >& _rxBinding )
+Sequence< Type > OTimeModel::getSupportedBindingTypes()
 {
-    OSL_PRECOND( _rxBinding.is(), "OTimeModel::approveValueBinding: invalid binding!" );
-
-    return  _rxBinding.is()
-        &&  _rxBinding->supportsType( ::getCppuType( static_cast< util::Time* >( NULL ) ) );
+    return Sequence< Type >( &::getCppuType( static_cast< util::Time* >( NULL ) ), 1 );
 }
 
 //.........................................................................
