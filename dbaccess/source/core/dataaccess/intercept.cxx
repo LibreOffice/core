@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: intercept.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -131,18 +131,18 @@ OInterceptor::~OInterceptor()
     DBG_DTOR(OInterceptor,NULL);
 }
 
-
+struct DispatchHelper
+{
+    URL aURL;
+    Sequence<PropertyValue > aArguments;
+};
 
 //XDispatch
-void SAL_CALL
-OInterceptor::dispatch(
-    const URL& _URL,
-    const Sequence<
-    PropertyValue >& Arguments )
-    throw (RuntimeException)
+void SAL_CALL OInterceptor::dispatch( const URL& _URL,const Sequence<PropertyValue >& Arguments ) throw (RuntimeException)
 {
     osl::MutexGuard aGuard(m_aMutex);
     if( m_pContentHolder )
+    {
         if( _URL.Complete == m_aInterceptedURL[DISPATCH_SAVE] )
         {
             m_pContentHolder->save(sal_False);
@@ -187,28 +187,42 @@ OInterceptor::dispatch(
         }
         else if (  _URL.Complete == m_aInterceptedURL[DISPATCH_CLOSEDOC]
                 || _URL.Complete == m_aInterceptedURL[DISPATCH_CLOSEWIN]
-                || _URL.Complete == m_aInterceptedURL[DISPATCH_CLOSEFRAME]
-                )
+                || _URL.Complete == m_aInterceptedURL[DISPATCH_CLOSEFRAME])
         {
-            if ( m_pContentHolder->prepareClose() && m_xSlaveDispatchProvider.is() )
+            DispatchHelper* pHelper = new DispatchHelper;
+            pHelper->aArguments = Arguments;
+            pHelper->aURL = _URL;
+            Application::PostUserEvent(LINK(this, OInterceptor, OnDispatch),reinterpret_cast<void*>(pHelper) );
+        }
+    }
+}
+IMPL_LINK( OInterceptor, OnDispatch, void*, _nId)
+{
+    ::std::auto_ptr<DispatchHelper> pHelper(reinterpret_cast<DispatchHelper*>(_nId));
+    try
+    {
+        if ( m_pContentHolder && m_pContentHolder->prepareClose() && m_xSlaveDispatchProvider.is() )
+        {
+            Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
+                pHelper->aURL, ::rtl::OUString::createFromAscii( "_self" ), 0 );
+            if ( xDispatch.is() )
             {
-                Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
-                    _URL, ::rtl::OUString::createFromAscii( "_self" ), 0 );
-                if ( xDispatch.is() )
-                {
-                    Reference< ::com::sun::star::document::XEventBroadcaster> xEvtB(m_pContentHolder->getComponent(),UNO_QUERY);
-                    if ( xEvtB.is() )
-                        xEvtB->removeEventListener(this);
+                Reference< ::com::sun::star::document::XEventBroadcaster> xEvtB(m_pContentHolder->getComponent(),UNO_QUERY);
+                if ( xEvtB.is() )
+                    xEvtB->removeEventListener(this);
 
-                    Reference< XInterface > xKeepContentHolderAlive( *m_pContentHolder );
-                    xDispatch->dispatch( _URL, Arguments );
-                }
+                Reference< XInterface > xKeepContentHolderAlive( *m_pContentHolder );
+                xDispatch->dispatch( pHelper->aURL,pHelper->aArguments);
             }
         }
+    }
+    catch(const Exception&)
+    {
+        OSL_ENSURE(sal_False, "caught an exception while starting the table wizard!");
+    }
+    return 0L;
 }
-
-void SAL_CALL
-OInterceptor::addStatusListener(
+void SAL_CALL OInterceptor::addStatusListener(
     const Reference<
     XStatusListener >& Control,
     const URL& _URL )
@@ -291,8 +305,7 @@ OInterceptor::addStatusListener(
 }
 
 
-void SAL_CALL
-OInterceptor::removeStatusListener(
+void SAL_CALL OInterceptor::removeStatusListener(
     const Reference<
     XStatusListener >& Control,
     const URL& _URL )
@@ -311,29 +324,17 @@ OInterceptor::removeStatusListener(
 
 
 //XInterceptorInfo
-Sequence< ::rtl::OUString >
-SAL_CALL
-OInterceptor::getInterceptedURLs(  )
-    throw (
-        RuntimeException
-    )
+Sequence< ::rtl::OUString > SAL_CALL OInterceptor::getInterceptedURLs(  )   throw ( RuntimeException    )
 {
     // now implemented as update
-
     return m_aInterceptedURL;
 }
 
 
 // XDispatchProvider
 
-Reference< XDispatch > SAL_CALL
-OInterceptor::queryDispatch(
-    const URL& _URL,
-    const ::rtl::OUString& TargetFrameName,
-    sal_Int32 SearchFlags )
-    throw (
-        RuntimeException
-    )
+Reference< XDispatch > SAL_CALL OInterceptor::queryDispatch( const URL& _URL,const ::rtl::OUString& TargetFrameName,sal_Int32 SearchFlags )
+    throw (RuntimeException)
 {
     osl::MutexGuard aGuard(m_aMutex);
     const ::rtl::OUString* pIter = m_aInterceptedURL.getConstArray();
@@ -350,12 +351,7 @@ OInterceptor::queryDispatch(
         return Reference<XDispatch>();
 }
 
-Sequence< Reference< XDispatch > > SAL_CALL
-OInterceptor::queryDispatches(
-    const Sequence<DispatchDescriptor >& Requests )
-    throw (
-        RuntimeException
-    )
+Sequence< Reference< XDispatch > > SAL_CALL OInterceptor::queryDispatches(  const Sequence<DispatchDescriptor >& Requests ) throw (     RuntimeException    )
 {
     Sequence< Reference< XDispatch > > aRet;
     osl::MutexGuard aGuard(m_aMutex);
@@ -385,30 +381,22 @@ OInterceptor::queryDispatches(
 
 //XDispatchProviderInterceptor
 
-Reference< XDispatchProvider > SAL_CALL
-OInterceptor::getSlaveDispatchProvider(  )
-    throw (
-        RuntimeException
-    )
+Reference< XDispatchProvider > SAL_CALL OInterceptor::getSlaveDispatchProvider(  )  throw ( RuntimeException    )
 {
     osl::MutexGuard aGuard(m_aMutex);
     return m_xSlaveDispatchProvider;
 }
 
 void SAL_CALL
-OInterceptor::setSlaveDispatchProvider(
-    const Reference< XDispatchProvider >& NewDispatchProvider )
-    throw (
-        RuntimeException
-    )
+OInterceptor::setSlaveDispatchProvider( const Reference< XDispatchProvider >& NewDispatchProvider )
+    throw (     RuntimeException    )
 {
     osl::MutexGuard aGuard(m_aMutex);
     m_xSlaveDispatchProvider = NewDispatchProvider;
 }
 
 
-Reference< XDispatchProvider > SAL_CALL
-OInterceptor::getMasterDispatchProvider(  )
+Reference< XDispatchProvider > SAL_CALL OInterceptor::getMasterDispatchProvider(  )
     throw (
         RuntimeException
     )
@@ -418,8 +406,7 @@ OInterceptor::getMasterDispatchProvider(  )
 }
 
 
-void SAL_CALL
-OInterceptor::setMasterDispatchProvider(
+void SAL_CALL OInterceptor::setMasterDispatchProvider(
     const Reference< XDispatchProvider >& NewSupplier )
     throw (
         RuntimeException
