@@ -33,7 +33,8 @@ $(WRITERDEMO_OUT)/%.exe: %.vb
 		-out:$@ \
 		-libpath:"$(OFFICE_PROGRAM_PATH)\assembly" \
 		-reference:cli_basetypes.dll \
-		-reference:cli_types.dll \
+		-reference:cli_uretypes.dll \
+		-reference:cli_ootypes.dll \
 		-reference:cli_ure.dll \
 		-reference:cli_cppuhelper.dll \
 		-reference:System.dll \
