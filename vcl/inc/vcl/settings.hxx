@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: settings.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,12 +31,13 @@
 #ifndef _SV_SETTINGS_HXX
 #define _SV_SETTINGS_HXX
 
-#include <vcl/sv.h>
-#include <vcl/dllapi.h>
-#include <tools/color.hxx>
-#include <vcl/font.hxx>
-#include <vcl/accel.hxx>
-#include <com/sun/star/lang/Locale.hpp>
+#include "vcl/sv.h"
+#include "vcl/dllapi.h"
+#include "tools/color.hxx"
+#include "vcl/font.hxx"
+#include "vcl/accel.hxx"
+#include "vcl/wall.hxx"
+#include "com/sun/star/lang/Locale.hpp"
 
 class CollatorWrapper;
 class LocaleDataWrapper;
@@ -430,7 +431,11 @@ private:
     ULONG                           mnSymbolsStyle;
     ULONG                           mnPreferredSymbolsStyle;
     USHORT                          mnSkipDisabledInMenus;
+    Wallpaper                       maWorkspaceGradient;
 };
+
+#define DEFAULT_WORKSPACE_GRADIENT_START_COLOR Color( 0xa3, 0xae, 0xb8 )
+#define DEFAULT_WORKSPACE_GRADIENT_END_COLOR Color( 0x73, 0x7e, 0x88 )
 
 // -----------------
 // - StyleSettings -
@@ -930,6 +935,11 @@ public:
                                         { return ImplSymbolsStyleToName( GetSymbolsStyle() ); }
     ::rtl::OUString                 GetCurrentSymbolsStyleName() const
                                         { return ImplSymbolsStyleToName( GetCurrentSymbolsStyle() ); }
+
+    const Wallpaper&                GetWorkspaceGradient() const
+                                        { return mpData->maWorkspaceGradient; }
+    void                            SetWorkspaceGradient( const Wallpaper& rWall )
+                                        { CopyData(); mpData->maWorkspaceGradient = rWall; }
 
     void                            SetStandardStyles();
     void                            SetStandardWinStyles();
