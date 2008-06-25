@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: list.c,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-/* $Id: list.c,v 1.7 2008-04-11 10:14:59 rt Exp $ */
+/* $Id: list.c,v 1.8 2008-06-25 14:19:44 kz Exp $ */
 
 /*[]---------------------------------------------------[]*/
 /*|                                                     |*/
@@ -52,6 +52,7 @@
 #include <stdio.h>
 #include </usr/local/include/malloc.h>
 #endif
+/* #define TEST */
 #include "list.h"
 
 /*- private data types */
@@ -104,7 +105,7 @@ static lnode *appendPrim(list this, void *el)
     this->aCount++;
     return ptr;
 }
-
+#ifdef TEST
 static lnode *prependPrim(list this, void *el)
 {
     lnode *ptr = newNode(el);
@@ -128,7 +129,7 @@ static lnode *prependPrim(list this, void *el)
     this->aCount++;
     return ptr;
 }
-
+#endif
 
 /*- public methods  */
 list listNewEmpty(void)                           /*- default ctor */
@@ -143,6 +144,7 @@ list listNewEmpty(void)                           /*- default ctor */
     return this;
 }
 
+#ifdef TEST
 list listNewCopy(list l)                          /*- copy ctor */
 {
     lnode *ptr, *c;
@@ -166,6 +168,7 @@ list listNewCopy(list l)                          /*- copy ctor */
 
     return this;
 }
+#endif
 
 void listDispose(list this)                       /*- dtor */
 {
@@ -179,26 +182,6 @@ void listSetElementDtor(list this, void (*f)(void *))
     assert(this != 0);
     this->eDtor = f;
 }
-
-
-list listCopy(list to, list from)                 /*- assignment */
-{
-    lnode *ptr, *c;
-    assert(to != 0);
-    assert(from != 0);
-
-    listClear(to);
-    ptr = from->head;
-
-    while (ptr) {
-        c = appendPrim(to, ptr->value);
-        if (ptr == from->cptr) to->cptr = c;
-        ptr = ptr->next;
-    }
-
-    return to;
-}
-
 
 /* calling this function on an empty list is a run-time error */
 void *listCurrent(list this)
@@ -221,6 +204,7 @@ int   listIsEmpty(list this)
 }
 
 
+#ifdef TEST
 int   listAtFirst(list this)
 {
     assert(this != 0);
@@ -248,7 +232,7 @@ int   listPosition(list this)
 
     return res;
 }
-
+#endif
 int    listFind(list this, void *el)
 {
     lnode *ptr;
@@ -272,11 +256,6 @@ int    listNext(list this)
     return listSkipForward(this, 1);
 }
 
-int    listPrev(list this)
-{
-    return listSkipBackward(this, 1);
-}
-
 int    listSkipForward(list this, int n)
 {
     int m = 0;
@@ -287,22 +266,6 @@ int    listSkipForward(list this, int n)
     while (n != 0) {
         if (this->cptr->next == 0) break;
         this->cptr = this->cptr->next;
-        n--;
-        m++;
-    }
-    return m;
-}
-
-int    listSkipBackward(list this, int n)
-{
-    int m = 0;
-    assert(this != 0);
-
-    if (this->cptr == 0) return 0;
-
-    while (n != 0) {
-        if (this->cptr->prev == 0) break;
-        this->cptr = this->cptr->prev;
         n--;
         m++;
     }
@@ -353,7 +316,7 @@ list   listAppend(list this, void *el)
     appendPrim(this, el);
     return this;
 }
-
+#ifdef TEST
 list   listPrepend(list this, void *el)
 {
     assert(this != 0);
@@ -405,7 +368,7 @@ list   listInsertBefore(list this, void *el)
     this->aCount++;
     return this;
 }
-
+#endif
 list   listRemove(list this)
 {
     lnode *ptr = 0;
@@ -450,6 +413,8 @@ list   listClear(list this)
     return this;
 }
 
+#ifdef TEST
+
 void   listForAll(list this, void (*f)(void *))
 {
     lnode *ptr = this->head;
@@ -459,26 +424,7 @@ void   listForAll(list this, void (*f)(void *))
     }
 }
 
-void **listToArray(list this)
-{
-    void **res;
-    lnode *ptr = this->head;
-    int i = 0;
 
-    assert(this->aCount != 0);
-    res = calloc(this->aCount, sizeof(void *));
-    assert(res != 0);
-
-    while (ptr) {
-        res[i++] = ptr->value;
-        ptr = ptr->next;
-    }
-    return res;
-}
-
-
-/* #define TEST */
-#ifdef TEST
 #include <stdio.h>
 
 void printlist(list l)
