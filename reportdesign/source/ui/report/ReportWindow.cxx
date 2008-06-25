@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportWindow.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -200,7 +200,7 @@ sal_Int32 OReportWindow::GetTotalWidth() const
     sal_Int32 nWidth = 0;
     if ( m_pViews && !m_pViews->empty() )
     {
-        const sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(m_pView->getController()->getReportDefinition(),PROPERTY_PAPERSIZE).Width;
+        const sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(m_pView->getController().getReportDefinition(),PROPERTY_PAPERSIZE).Width;
         const Size aPageSize = LogicToPixel(Size(nPaperWidth,0),MAP_100TH_MM);
         nWidth = aPageSize.Width()
                 + REPORT_ENDMARKER_WIDTH + REPORT_STARTMARKER_WIDTH;
@@ -211,12 +211,12 @@ sal_Int32 OReportWindow::GetTotalWidth() const
 void OReportWindow::Resize()
 {
     Window::Resize();
-    if ( m_pView->getController() && m_pViews && !m_pViews->empty() && m_pSections )
+    if ( m_pViews && !m_pViews->empty() && m_pSections )
     {
         const Size aTotalOutputSize = GetOutputSizePixel();
 
         Point aStartPoint(REPORT_STARTMARKER_WIDTH,0);
-        uno::Reference<report::XReportDefinition> xReportDefinition = getReportView()->getController()->getReportDefinition();
+        uno::Reference<report::XReportDefinition> xReportDefinition = getReportView()->getController().getReportDefinition();
         const sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width;
         sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
         sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);

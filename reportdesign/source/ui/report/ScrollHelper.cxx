@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ScrollHelper.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,7 +110,7 @@ void OScrollWindowHelper::impl_initScrollBar( ScrollBar& _rScrollBar ) const
 // -----------------------------------------------------------------------------
 void OScrollWindowHelper::initialize()
 {
-    uno::Reference<report::XReportDefinition> xReportDefinition = m_pParent->getController()->getReportDefinition();
+    uno::Reference<report::XReportDefinition> xReportDefinition = m_pParent->getController().getReportDefinition();
     m_pReportDefintionMultiPlexer = addStyleListener(xReportDefinition,this);
     if ( m_pChild )
         m_pChild->initialize();
