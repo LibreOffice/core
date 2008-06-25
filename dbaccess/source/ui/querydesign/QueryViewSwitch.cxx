@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: QueryViewSwitch.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,13 +66,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 DBG_NAME(OQueryViewSwitch)
-OQueryViewSwitch::OQueryViewSwitch(OQueryContainerWindow* _pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
+OQueryViewSwitch::OQueryViewSwitch(OQueryContainerWindow* _pParent, OQueryController& _rController,const Reference< XMultiServiceFactory >& _rFactory)
 : m_bAddTableDialogWasVisible(sal_False)
 {
     DBG_CTOR(OQueryViewSwitch,NULL);
 
     m_pTextView     = new OQueryTextView(_pParent);
-    m_pDesignView   = new OQueryDesignView(_pParent,_pController,_rFactory);
+    m_pDesignView   = new OQueryDesignView( _pParent, _rController, _rFactory );
 }
 // -----------------------------------------------------------------------------
 OQueryViewSwitch::~OQueryViewSwitch()
@@ -211,7 +211,7 @@ OQueryContainerWindow* OQueryViewSwitch::getContainer() const
 sal_Bool OQueryViewSwitch::switchView()
 {
     sal_Bool bRet = sal_True;
-    sal_Bool bGraphicalDesign = static_cast<OQueryController*>(m_pDesignView->getController())->isGraphicalDesign();
+    sal_Bool bGraphicalDesign = static_cast<OQueryController&>(m_pDesignView->getController()).isGraphicalDesign();
 
     OAddTableDlg* pAddTabDialog( getAddTableDialog() );
 
@@ -229,11 +229,11 @@ sal_Bool OQueryViewSwitch::switchView()
         m_pTextView->getSqlEdit()->startTimer();
 
         m_pTextView->clear();
-        m_pTextView->setStatement(static_cast<OQueryController*>(m_pDesignView->getController())->getStatement());
+        m_pTextView->setStatement(static_cast<OQueryController&>(m_pDesignView->getController()).getStatement());
     }
     else
     {
-        ::rtl::OUString sOldStatement = static_cast<OQueryController*>(m_pDesignView->getController())->getStatement();
+        ::rtl::OUString sOldStatement = static_cast<OQueryController&>(m_pDesignView->getController()).getStatement();
         // we have to stop the sqledit from our textview
         m_pTextView->getSqlEdit()->stopTimer();
 
@@ -258,8 +258,8 @@ sal_Bool OQueryViewSwitch::switchView()
     if ( pContainer )
         pContainer->Resize();
 
-    m_pDesignView->getController()->getUndoMgr()->Clear();
-    m_pDesignView->getController()->InvalidateAll();
+    m_pDesignView->getController().getUndoMgr()->Clear();
+    m_pDesignView->getController().InvalidateAll();
 
     return bRet;
 }
@@ -268,9 +268,7 @@ OAddTableDlg* OQueryViewSwitch::getAddTableDialog()
 {
     if ( !m_pDesignView )
         return NULL;
-    if ( !m_pDesignView->getController() )
-        return NULL;
-    return m_pDesignView->getController()->getAddTableDialog();
+    return m_pDesignView->getController().getAddTableDialog();
 }
 // -----------------------------------------------------------------------------
 sal_Bool OQueryViewSwitch::isSlotEnabled(sal_Int32 _nSlotId)
