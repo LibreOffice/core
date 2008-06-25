@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.19 $
+# $Revision: 1.20 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -86,7 +86,8 @@ SHL1STDLIBS = \
         $(SVLLIB)  \
         $(SVXLIB) \
         $(SFXLIB) \
-        $(DEPLOYMENTMISCLIB)
+        $(DEPLOYMENTMISCLIB) \
+        $(OLE32LIB)
 
 SHL1DEPN =
 SHL1IMPLIB = i$(TARGET)
