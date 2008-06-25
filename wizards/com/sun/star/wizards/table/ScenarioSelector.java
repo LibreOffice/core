@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ScenarioSelector.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,12 +94,12 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         bcolumnnameislimited = (imaxcolumnchars > 0) && (imaxcolumnchars < 16);
         addFieldSelectionListener( this);
         short pretabindex = (short) (50);
-        String sExplanation = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 14);
-        String sCategories = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 15);
-        String sBusiness  = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 16);
-        String sPrivate  = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 17);
-        String sTableNames = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 18);
-        smytable = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 44);
+        String sExplanation = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 14);
+        String sCategories = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 15);
+        String sBusiness  = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 16);
+        String sPrivate  = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 17);
+        String sTableNames = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 18);
+        smytable = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 44);
         Integer IMAINSTEP = new Integer(TableWizard.SOMAINPAGE);
         oCGCategory = new CGCategory(CurUnoDialog.xMSF);
         oCGTable = new CGTable(CurUnoDialog.xMSF);
