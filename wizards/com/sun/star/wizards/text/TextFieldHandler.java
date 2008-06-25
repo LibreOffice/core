@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TextFieldHandler.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,14 +129,13 @@ public class TextFieldHandler {
         XDependentTextField[] xDependentFields;
         Vector xDependentVector = new Vector();
         if (xTextFieldsSupplier.getTextFields().hasElements()) {
-            XPropertySet xPSet;
             XEnumeration xEnum = xTextFieldsSupplier.getTextFields().createEnumeration();
             while (xEnum.hasMoreElements()) {
                 Object oTextField = xEnum.nextElement();
                 XDependentTextField xDependent = (XDependentTextField) UnoRuntime.queryInterface(XDependentTextField.class, oTextField);
-                xPSet = xDependent.getTextFieldMaster();
-                if (xPSet.getPropertySetInfo().hasPropertyByName(_PropertyName)){
-                    Object oValue = xPSet.getPropertyValue(_PropertyName);
+                XPropertySet xPropertySet = xDependent.getTextFieldMaster();
+                if (xPropertySet.getPropertySetInfo().hasPropertyByName(_PropertyName)){
+                    Object oValue = xPropertySet.getPropertyValue(_PropertyName);
                     // TODO replace the following comparison via com.sun.star.uno.Any.Type
                     if(AnyConverter.isString(oValue)){
                         if (_TypeName.equals("String")){
@@ -246,6 +245,7 @@ public class TextFieldHandler {
     } catch (Exception e) {
         e.printStackTrace();
     }}
+
 
     public void removeUserFieldByContent(String _FieldContent) {
     try {
