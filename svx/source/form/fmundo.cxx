@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmundo.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -470,6 +470,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
         //   to a database column. Note that it doesn't matter here whether the control actually
         //   *is* bound to a column
         // - OR the control is bound to an external value via XBindableValue/XValueBinding
+        //   which does not have a "ExternalData" property being <TRUE/>
 
         if (!m_pPropertySetCache)
             m_pPropertySetCache = new PropertySetInfoCache;
@@ -559,7 +560,22 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             if ( bAddUndoAction )
             {
                 Reference< XBindableValue > xBindable( evt.Source, UNO_QUERY );
-                bAddUndoAction = !xBindable.is() || !xBindable->getValueBinding().is();
+                Reference< XPropertySet > xBindingProps;
+                Reference< XPropertySetInfo > xBindingPropsPSI;
+                if ( xBindable.is() )
+                    xBindingProps.set( xBindable->getValueBinding(), UNO_QUERY );
+                if ( xBindingProps.is() )
+                    xBindingPropsPSI = xBindingProps->getPropertySetInfo();
+                // TODO: we should cache all those things, else this might be too expensive.
+                // However, this requires we're notified of changes in the value binding
+
+                static const ::rtl::OUString s_sExternalData( RTL_CONSTASCII_USTRINGPARAM( "ExternalData" ) );
+                if ( xBindingPropsPSI.is() && xBindingPropsPSI->hasPropertyByName( s_sExternalData ) )
+                {
+                    sal_Bool bExternalData = sal_True;
+                    OSL_VERIFY( xBindingProps->getPropertyValue( s_sExternalData ) >>= bExternalData );
+                    bAddUndoAction = !bExternalData;
+                }
             }
         }
 
