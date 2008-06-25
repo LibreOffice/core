@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: entrylisthelper.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,7 +117,7 @@ namespace frm
                 not to be called when we have an external list source
             @see hasExternalListSource
         */
-        void        setNewStringItemList( const ::com::sun::star::uno::Any& _rValue );
+        void        setNewStringItemList( const ::com::sun::star::uno::Any& _rValue, ::osl::ResettableMutexGuard& _rInstanceLock );
 
         /** announces that the list of entries has changed.
 
@@ -127,7 +127,7 @@ namespace frm
             @pure
             @see getStringItemList
         */
-        virtual void    stringItemListChanged( ) = 0;
+        virtual void    stringItemListChanged( ::osl::ResettableMutexGuard& _rInstanceLock ) = 0;
 
         /** called whenever a connection to a new external list source has been established
         */
@@ -170,7 +170,8 @@ namespace frm
             @see disconnectExternalListSource
         */
         void        connectExternalListSource(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxSource
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxSource,
+                        ::osl::ResettableMutexGuard& _rInstanceLock
                     );
 
         /** refreshes our list entries
@@ -181,7 +182,7 @@ namespace frm
 
             In case we do not have an external list source, refreshInternalEntryList is called.
         */
-        void        impl_lock_refreshList();
+        void        impl_lock_refreshList( ::osl::ResettableMutexGuard& _rInstanceLock );
 
     private:
         OEntryListHelper();                                     // never implemented
