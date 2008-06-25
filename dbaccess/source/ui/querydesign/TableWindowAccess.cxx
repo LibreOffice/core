@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableWindowAccess.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -281,7 +281,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     sal_Bool OTableWindowAccess::isEditable() const
     {
-        return m_pTable && !m_pTable->getTableView()->getDesignView()->getController()->isReadOnly();
+        return m_pTable && !m_pTable->getTableView()->getDesignView()->getController().isReadOnly();
     }
     // -----------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL OTableWindowAccess::getTitledBorderText(  ) throw (RuntimeException)
