@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.41 $
+# $Revision: 1.42 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,7 +40,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-SHL1TARGET = soffice
+SHL1TARGET = sofficeapp
 SHL1OBJS = \
     $(SLO)$/app.obj \
     $(SLO)$/appfirststart.obj \
