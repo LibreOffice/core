@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlImage.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,9 @@ namespace rptxml
     {
         OXMLImage(const OXMLImage&);
         void operator =(const OXMLImage&);
+
+        ::rtl::OUString lcl_doStringsubstitution_nothrow( ::rtl::OUString const& _inout_rURL );
+
     public:
 
         OXMLImage( ORptFilter& rImport, sal_uInt16 nPrfx,
