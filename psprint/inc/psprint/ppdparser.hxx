@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ppdparser.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,8 @@
 #include <psprint/helper.hxx> // hash_map and OUString hash
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
+
+#define PRINTER_PPDDIR "driver"
 
 namespace psp {
 
@@ -198,6 +200,7 @@ public:
     static const PPDParser* getParser( const String& rFile );
     static String getPPDPrinterName( const String& rFile );
     static void freeAll();
+    static void getKnownPPDDrivers( std::list< rtl::OUString >& o_rDrivers );
 
     const String&   getFilename() const { return m_aFile; }
 
