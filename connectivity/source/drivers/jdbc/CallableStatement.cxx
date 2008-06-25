@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CallableStatement.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -500,7 +500,7 @@ Reference< starsdbc::XArray > SAL_CALL java_sql_CallableStatement::getArray( sal
     if( t.pEnv ){
         createStatement(t.pEnv);
         // temporaere Variable initialisieren
-        static const char * cSignature = "(I)Ljava/sql/Ref;";
+        static const char * cSignature = "(I)Ljava/sql/Array;";
         static const char * cMethodName = "getArray";
         // Java-Call absetzen
         static jmethodID mID = NULL;
@@ -523,7 +523,7 @@ Reference< starsdbc::XClob > SAL_CALL java_sql_CallableStatement::getClob( sal_I
     if( t.pEnv ){
         createStatement(t.pEnv);
         // temporaere Variable initialisieren
-        static const char * cSignature = "(I)Ljava/sql/Ref;";
+        static const char * cSignature = "(I)Ljava/sql/Clob;";
         static const char * cMethodName = "getClob";
         // Java-Call absetzen
         static jmethodID mID = NULL;
@@ -545,7 +545,7 @@ Reference< starsdbc::XBlob > SAL_CALL java_sql_CallableStatement::getBlob( sal_I
     if( t.pEnv ){
         createStatement(t.pEnv);
         // temporaere Variable initialisieren
-        static const char * cSignature = "(I)Ljava/sql/Ref;";
+        static const char * cSignature = "(I)Ljava/sql/Blob;";
         static const char * cMethodName = "getBlob";
         // Java-Call absetzen
         static jmethodID mID = NULL;
