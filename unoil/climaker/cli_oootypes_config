@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<configuration>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="cli_oootypes" publicKeyToken="ce2cb7e279207b9e"/>
+        <bindingRedirect oldVersion="CLI_OOOTYPES_OLD_VERSION" newVersion="CLI_OOOTYPES_NEW_VERSION" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+</configuration>
