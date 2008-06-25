@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dsbrowserDnD.cxx,v $
- * $Revision: 1.80 $
+ * $Revision: 1.81 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,7 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <svtools/treelist.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -84,7 +85,7 @@ namespace dbaui
             ::osl::MutexGuard aGuard(m_aEntryMutex);
 
             ::rtl::OUString aName = GetEntryText( _pApplyTo );
-            ::rtl::OUString aDSName = getDataSourceAcessor( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
+            ::rtl::OUString aDSName = getDataSourceAcessor( m_pTreeView->getListBox().GetRootLevelParent( _pApplyTo ) );
 
             ODataClipboard* pData = NULL;
             SharedConnection xConnection;
@@ -114,7 +115,7 @@ namespace dbaui
     sal_Int8 SbaTableQueryBrowser::queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors )
     {
         // check if we're a table or query container
-        SvLBoxEntry* pHitEntry = m_pTreeView->getListBox()->GetEntry( _rEvt.maPosPixel );
+        SvLBoxEntry* pHitEntry = m_pTreeView->getListBox().GetEntry( _rEvt.maPosPixel );
 
         if ( pHitEntry ) // no drop if no entry was hit ....
         {
@@ -136,7 +137,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     sal_Int8 SbaTableQueryBrowser::executeDrop( const ExecuteDropEvent& _rEvt )
     {
-        SvLBoxEntry* pHitEntry = m_pTreeView->getListBox()->GetEntry( _rEvt.maPosPixel );
+        SvLBoxEntry* pHitEntry = m_pTreeView->getListBox().GetEntry( _rEvt.maPosPixel );
         EntryType eEntryType = getEntryType( pHitEntry );
         if (!isContainer(eEntryType))
         {
@@ -198,7 +199,7 @@ namespace dbaui
     {
         // get the affected list entry
         // ensure that the entry which the user clicked at is selected
-        SvLBoxEntry* pHitEntry = m_pTreeView->getListBox()->GetEntry( _rPosPixel );
+        SvLBoxEntry* pHitEntry = m_pTreeView->getListBox().GetEntry( _rPosPixel );
         if (!pHitEntry)
             // no drag of no entry was hit ....
             return sal_False;
@@ -212,7 +213,7 @@ namespace dbaui
         Reference< XTransferable> xEnsureDelete = pTransfer;
 
         if (pTransfer)
-            pTransfer->StartDrag( m_pTreeView->getListBox(), DND_ACTION_COPY );
+            pTransfer->StartDrag( &m_pTreeView->getListBox(), DND_ACTION_COPY );
 
         return NULL != pTransfer;
     }
@@ -253,7 +254,7 @@ namespace dbaui
             SharedConnection xDestConnection;
             if ( ensureConnection( m_aAsyncDrop.pDroppedAt, xDestConnection ) && xDestConnection.is() )
             {
-                SvLBoxEntry* pDataSourceEntry = m_pTreeView->getListBox()->GetRootLevelParent(m_aAsyncDrop.pDroppedAt);
+                SvLBoxEntry* pDataSourceEntry = m_pTreeView->getListBox().GetRootLevelParent(m_aAsyncDrop.pDroppedAt);
                 m_aTableCopyHelper.asyncCopyTagTable( m_aAsyncDrop, getDataSourceAcessor( pDataSourceEntry ), xDestConnection );
             }
         }
@@ -271,7 +272,7 @@ namespace dbaui
             SvLBoxEntry* pEntryLoop = m_pTreeModel->First();
             while (pEntryLoop)
             {
-                DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntryLoop->GetUserData());
+                DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(pEntryLoop->GetUserData());
                 if(pData)
                 {
                     pEntryLoop->SetUserData(NULL);
