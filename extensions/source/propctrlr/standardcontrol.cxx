@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: standardcontrol.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -403,7 +403,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    bool HyperlinkInput::impl_textHitTest( const Point& _rWindowPos )
+    bool HyperlinkInput::impl_textHitTest( const ::Point& _rWindowPos )
     {
         xub_StrLen nPos = GetCharPos( _rWindowPos );
         return ( ( nPos != STRING_LEN ) && ( nPos < GetText().Len() ) );
