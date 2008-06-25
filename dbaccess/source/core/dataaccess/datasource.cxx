@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: datasource.cxx,v $
- * $Revision: 1.78 $
+ * $Revision: 1.79 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -630,6 +630,17 @@ ODatabaseSource::~ODatabaseSource()
         dispose();
     }
 }
+
+//--------------------------------------------------------------------------
+void ODatabaseSource::setName( const Reference< XDocumentDataSource >& _rxDocument, const ::rtl::OUString& _rNewName, DBContextAccess )
+{
+    ODatabaseSource& rModelImpl = dynamic_cast< ODatabaseSource& >( *_rxDocument.get() );
+
+    ::osl::MutexGuard aGuard( rModelImpl.m_xMutex->getMutex() );
+    if ( rModelImpl.m_pImpl.is() )
+        rModelImpl.m_pImpl->m_sName = _rNewName;
+}
+
 // com::sun::star::lang::XTypeProvider
 //--------------------------------------------------------------------------
 Sequence< Type > ODatabaseSource::getTypes() throw (RuntimeException)
