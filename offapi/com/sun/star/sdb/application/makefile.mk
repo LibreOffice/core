@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,11 +44,14 @@ UNOIDLDEFS += -w
 
 # ------------------------------------------------------------------------
 IDLFILES=\
+    DefaultViewController.idl \
     CopyTableContinuation.idl \
     CopyTableOperation.idl \
     CopyTableRowEvent.idl \
     CopyTableWizard.idl \
     DatabaseObject.idl \
+    DatabaseObjectContainer.idl \
+    NamedDatabaseObject.idl \
     XCopyTableWizard.idl \
     XCopyTableListener.idl \
     XDatabaseDocumentUI.idl \
