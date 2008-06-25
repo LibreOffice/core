@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AnyCompareFactory.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -162,7 +162,7 @@ OUString SAL_CALL AnyCompareFactory::getImplementationName(  ) throw( RuntimeExc
 
 sal_Bool SAL_CALL AnyCompareFactory::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.NamedPropertyValues" ) );
+    rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.AnyCompareFactory" ) );
     return aServiceName == ServiceName;
 }
 
