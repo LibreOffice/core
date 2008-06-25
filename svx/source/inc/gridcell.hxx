@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gridcell.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -183,7 +183,7 @@ public:
 
     void    SetReadOnly(sal_Bool bRead){m_bReadOnly = bRead;}
     void    SetObject(sal_Int16 nPos) {m_bObject = m_bReadOnly = sal_True; m_nFieldPos = nPos;}
-    void    ImplInitSettings(Window* pParent, sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground);
+    void    ImplInitSettings( Window& rParent, sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
 
     // Properties, die auf den ::com::sun::star::frame::Controller durchschlagen koennen
     sal_Int16   SetAlignment(sal_Int16 _nAlign);
@@ -291,7 +291,7 @@ public:
     void SetTextLineColor(const Color& _rColor);
 
     // Initialisieren bevor ein Control angezeigt wird
-    virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor);
+    virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
     virtual ::svt::CellControllerRef CreateController() const = 0;
 
     // Schreiben des Wertes in das Model
@@ -308,7 +308,7 @@ public:
     virtual void PaintFieldToCell( OutputDevice& rDev, const Rectangle& rRect, const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual void PaintCell( OutputDevice& _rDev, const Rectangle& _rRect );
 
-    void  ImplInitSettings(Window* pParent, sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground);
+    void  ImplInitSettings( Window& rParent, sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
 
     double GetValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) const;
 
@@ -410,7 +410,7 @@ public:
     ::svt::IEditImplementation* GetEditImplementation() { return m_pEdit; }
     sal_Bool                    IsSimpleEdit() const { return m_bIsSimpleEdit; }
 
-    virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
+    virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual ::svt::CellControllerRef CreateController() const;
@@ -440,7 +440,7 @@ public:
     virtual ~DbFormattedField();
 
 
-    virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
+    virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual ::svt::CellControllerRef CreateController() const;
@@ -461,7 +461,7 @@ public:
     TYPEINFO();
     DbCheckBox(DbGridColumn& _rColumn);
 
-    virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
+    virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual ::svt::CellControllerRef CreateController() const;
     virtual void PaintFieldToCell(OutputDevice& rDev, const Rectangle& rRect,
@@ -484,7 +484,7 @@ public:
     TYPEINFO();
     DbComboBox(DbGridColumn& _rColumn);
 
-    virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
+    virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual ::svt::CellControllerRef CreateController() const;
@@ -512,7 +512,7 @@ public:
     TYPEINFO();
     DbListBox(DbGridColumn& _rColumn);
 
-    virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
+    virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual ::svt::CellControllerRef CreateController() const;
@@ -536,7 +536,7 @@ class DbPatternField : public DbCellControl
 public:
     TYPEINFO();
     DbPatternField( DbGridColumn& _rColumn, const ::comphelper::ComponentContext& _rContext );
-    virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
+    virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual ::svt::CellControllerRef CreateController() const;
@@ -570,7 +570,7 @@ protected:
     DbSpinField( DbGridColumn& _rColumn, sal_Int16 _nStandardAlign = com::sun::star::awt::TextAlign::RIGHT );
 
 public:
-    virtual void                        Init( Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxCursor );
+    virtual void                        Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxCursor );
     virtual ::svt::CellControllerRef    CreateController() const;
 
 protected:
@@ -703,7 +703,7 @@ public:
     DbFilterField(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,DbGridColumn& _rColumn);
     virtual ~DbFilterField();
 
-    virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor);
+    virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
     virtual ::svt::CellControllerRef CreateController() const;
     virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect);
     virtual void Update();
@@ -781,8 +781,8 @@ public:
     virtual void SAL_CALL setLock(sal_Bool _bLock) throw(::com::sun::star::uno::RuntimeException);
 
     sal_Bool Commit() {return m_pCellControl->Commit();}
-    void ImplInitSettings(Window* pParent, sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground)
-        { m_pCellControl->ImplInitSettings(pParent, bFont, bForeground, bBackground); }
+    void ImplInitSettings( Window& rParent, sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
+        { m_pCellControl->ImplInitSettings( rParent, bFont, bForeground, bBackground ); }
 
     sal_Bool isAlignedController() const { return m_pCellControl->isAlignedController(); }
     void AlignControl(sal_Int16 nAlignment)
