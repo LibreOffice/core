@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbtreeview.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,10 +40,10 @@
 #endif
 
 class SvTreeListBox;
+class SvLBoxTreeList;
 namespace dbaui
 {
     class DBTreeListBox;
-    class DBTreeListModel;
     // ------------------
     // - DBTreeView -
     // ------------------
@@ -72,10 +72,10 @@ namespace dbaui
         void    setCopyHandler(const Link& _rHdl);
 
 
-        void                setModel(DBTreeListModel* _pTreeModel);
+        void                setModel(SvLBoxTreeList* _pTreeModel);
         void                setSelectHdl(const Link& _rHdl);
 
-        DBTreeListBox*      getListBox() const;
+        DBTreeListBox&      getListBox() const { return *m_pTreeListBox; }
 
         virtual void GetFocus();
     };
