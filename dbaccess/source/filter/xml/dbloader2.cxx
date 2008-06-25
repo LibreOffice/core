@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbloader2.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +60,8 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
+#include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
@@ -101,6 +103,7 @@ using namespace ::com::sun::star::embed;
 namespace css = ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using ::com::sun::star::awt::XWindow;
+using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
 // -------------------------------------------------------------------------
 namespace dbaxml
@@ -408,7 +411,6 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     ::rtl::OUString     sSalvagedURL = aMediaDesc.getOrDefault( "SalvagedFile", _rURL );
 
     sal_Bool bCreateNew = sal_False;        // does the URL denote the private:factory URL?
-    sal_Bool bDidLoadExisting = sal_False;  // when it does, did we (the wizard) load an existing document instead
     sal_Bool bStartTableWizard = sal_False; // start the table wizard after everything was loaded successfully?
 
     sal_Bool bSuccess = sal_True;
@@ -435,7 +437,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     ::rtl::OUString sViewName = aMediaDesc.getOrDefault( "ViewName", ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Default" ) ) );
     aMediaDesc.remove( "ViewName" );
 
-    sal_Bool bInteractive = sal_False;
+    sal_Int32 nInitialSelection = -1;
     if ( !xModel.is() )
     {
         Reference< XSingleServiceFactory > xDatabaseContext;
@@ -444,32 +446,29 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
 
         ::rtl::OUString sFactoryName = SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::E_DATABASE);
         bCreateNew = sFactoryName.match(_rURL);
-        Sequence<Any> aCreationArgs;
-        if ( !bCreateNew )
-        {
-            aCreationArgs.realloc(1);
-            aCreationArgs[0] <<= NamedValue( INFO_POOLURL, makeAny( sSalvagedURL ) );
-        }
-        else
-            bInteractive = lcl_urlAllowsInteraction( m_aContext, _rURL );
 
         Reference< XDocumentDataSource > xDocumentDataSource;
-        xDocumentDataSource.set(xDatabaseContext->createInstanceWithArguments(aCreationArgs),UNO_QUERY_THROW);
-        xModel.set(xDocumentDataSource->getDatabaseDocument(),UNO_QUERY);
-        if ( xModel.is() )
+        bool bNewAndInteractive = false;
+        if ( bCreateNew )
+        {
+            bNewAndInteractive = lcl_urlAllowsInteraction( m_aContext, _rURL );
+            xDocumentDataSource.set( xDatabaseContext->createInstance(), UNO_QUERY_THROW );
+        }
+        else
+        {
+            Sequence< Any > aCreationArgs( 1 );
+            aCreationArgs[0] <<= NamedValue( INFO_POOLURL, makeAny( sSalvagedURL ) );
+            xDocumentDataSource.set( xDatabaseContext->createInstanceWithArguments( aCreationArgs ), UNO_QUERY_THROW );
+        }
+
+        xModel.set( xDocumentDataSource->getDatabaseDocument(), UNO_QUERY );
+        if ( xModel.is() && bNewAndInteractive )
         {
             const ::rtl::OUString sURL = xModel->getURL();
-            if ( bCreateNew )
-            {
-                xModel->attachResource( sURL, aMediaDesc.getPropertyValues() );
-            }
+            bSuccess = impl_executeNewDatabaseWizard( xModel, bStartTableWizard );
 
-            if ( bInteractive )
-            {
-                bSuccess = impl_executeNewDatabaseWizard( xModel, bStartTableWizard );
-                if ( sURL != xModel->getURL() )
-                    bDidLoadExisting = sal_True;
-            }
+            // initially select the "Tables" category (will be done below)
+            nInitialSelection = ::com::sun::star::sdb::application::DatabaseObjectContainer::TABLES;
         }
     }
 
@@ -560,15 +559,14 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         if ( rListener.is() )
             rListener->loadFinished(this);
 
-        if ( bCreateNew && bInteractive )
+        if ( nInitialSelection != -1 )
         {
             Reference< css::view::XSelectionSupplier >  xDocView( xModel->getCurrentController(), UNO_QUERY );
             if ( xDocView.is() )
             {
-                Sequence< NamedValue > aSelection(1);
-                aSelection[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type"));
-                aSelection[0].Value <<= sal_Int32(0);
-                xDocView->select(makeAny(aSelection));
+                NamedDatabaseObject aSelection;
+                aSelection.Type = nInitialSelection;
+                xDocView->select( makeAny( aSelection ) );
             }
         }
 
