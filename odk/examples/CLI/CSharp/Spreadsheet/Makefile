@@ -43,7 +43,8 @@ $(SPREADSHEET_OUT)/%.exe : %.cs SpreadsheetDocHelper.cs
 		-target:exe \
 		-out:$@ \
 		-reference:"$(CLI_LIB_LOCATION)"\cli_basetypes.dll \
-		-reference:"$(CLI_LIB_LOCATION)"\cli_types.dll \
+		-reference:"$(CLI_LIB_LOCATION)"\cli_uretypes.dll \
+		-reference:"$(CLI_LIB_LOCATION)"\cli_oootypes.dll \
 		-reference:"$(CLI_LIB_LOCATION)"\cli_ure.dll \
 		-reference:"$(CLI_LIB_LOCATION)"\cli_cppuhelper.dll \
 		$^
