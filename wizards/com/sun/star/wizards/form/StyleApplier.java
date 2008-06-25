@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StyleApplier.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,11 +103,11 @@ public class StyleApplier{
             this.CurUnoDialog = _CurUnoDialog;
             curtabindex = (short) (FormWizard.SOSTYLEPAGE * 100);
             Integer IStyleStep = new Integer(FormWizard.SOSTYLEPAGE);
-            String sPageStyles = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 86);
-            String sNoBorder = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 29);
-            String s3DLook = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 30);
-            String sFlat = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 31);
-            String sFieldBorder = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 28);
+            String sPageStyles = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 86);
+            String sNoBorder = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 29);
+            String s3DLook = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 30);
+            String sFlat = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 31);
+            String sFieldBorder = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 28);
             XInterface xUcbInterface = (XInterface) _curFormDocument.xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
             setStyles();
             short[] SelLayoutPos;
