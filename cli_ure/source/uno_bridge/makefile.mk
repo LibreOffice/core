@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,7 +42,6 @@ USE_DEFFILE = TRUE
 .INCLUDE :  settings.mk
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
-.IF "$(COM)$(COMEX)" == "MSC11" || "$(COM)$(COMEX)" == "MSC10"
 
 .IF "$(COM)" == "MSC"
 # When compiling for CLR, disable "warning C4339: use of undefined type detected
@@ -56,8 +55,6 @@ CFLAGSCXX += -clr:oldSyntax -AI $(DLLDEST) -AI $(SOLARBINDIR) -wd4339
 .IF "$(debug)" != ""
 CFLAGS += -Ob0
 .ENDIF
-.ENDIF
-
 
 
 
