@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Finalizer.java,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,14 +76,14 @@ public class Finalizer{
             this.curtabledescriptor = _curtabledescriptor;
             curtabindex = (short) (TableWizard.SOFINALPAGE * 100);
             Integer IFINALSTEP = new Integer(TableWizard.SOFINALPAGE);
-            String slblTableName = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 34);
-            String slblProceed = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 36);
-            String sWorkWithTable = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 38);
-            String sStartFormWizard = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 39);
-            String sModifyTable = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 37);
-            String sCongratulations  = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 35);
-            String slblCatalog = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 49);
-            String slblSchema = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 50);
+            String slblTableName = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 34);
+            String slblProceed = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 36);
+            String sWorkWithTable = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 38);
+            String sStartFormWizard = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 39);
+            String sModifyTable = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 37);
+            String sCongratulations  = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 35);
+            String slblCatalog = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 49);
+            String slblSchema = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 50);
             String[] sCatalogNames = curtabledescriptor.getCatalogNames();
             String[] sSchemaNames = curtabledescriptor.getSchemaNames();
             int nListBoxPosX = 97;
