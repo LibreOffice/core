@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DocumentHelper.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,30 +29,36 @@
  ************************************************************************/
 package integration.forms;
 
-/**************************************************************************/
-import com.sun.star.uno.*;
-import com.sun.star.lang.*;
-import com.sun.star.util.*;
-import com.sun.star.awt.*;
-import com.sun.star.drawing.*;
-import com.sun.star.frame.*;
-import com.sun.star.form.*;
-import com.sun.star.beans.*;
-import com.sun.star.container.*;
-import com.sun.star.container.*;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XChild;
+import com.sun.star.container.XIndexContainer;
+import com.sun.star.container.XNameContainer;
+import com.sun.star.drawing.XDrawPage;
+import com.sun.star.drawing.XDrawPageSupplier;
+import com.sun.star.drawing.XDrawPages;
+import com.sun.star.drawing.XDrawPagesSupplier;
+import com.sun.star.form.XFormsSupplier;
+import com.sun.star.frame.XComponentLoader;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XFrame;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XServiceInfo;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.XModifiable;
 
-import integration.forms.dbfTools;
-import integration.forms.DocumentViewHelper;
-import integration.forms.SpreadsheetView;
-import integration.forms.SpreadsheetDocument;
+/**************************************************************************/
 
 /**************************************************************************/
 /** provides a small wrapper around a document
 */
 public class DocumentHelper
 {
-    protected XMultiServiceFactory  m_orb;
-    protected XComponent            m_documentComponent;
+    private XMultiServiceFactory    m_orb;
+    private XComponent              m_documentComponent;
 
     /* ================================================================== */
     /* ------------------------------------------------------------------ */
@@ -101,6 +107,12 @@ public class DocumentHelper
     }
 
     /* ------------------------------------------------------------------ */
+    public static DocumentHelper blankXMLForm( XMultiServiceFactory orb ) throws com.sun.star.uno.Exception
+    {
+        return blankDocument( orb, DocumentType.XMLFORM );
+    }
+
+    /* ------------------------------------------------------------------ */
     public static DocumentHelper blankDocument( XMultiServiceFactory orb, DocumentType eType ) throws com.sun.star.uno.Exception
     {
         return implLoadDocument( orb, getDocumentFactoryURL( eType ) );
@@ -111,6 +123,13 @@ public class DocumentHelper
     public XComponent getDocument( )
     {
         return m_documentComponent;
+    }
+
+    /* ------------------------------------------------------------------ */
+    public boolean isModified()
+    {
+        XModifiable modify = (XModifiable)query( XModifiable.class );
+        return modify.isModified();
     }
 
     /* ------------------------------------------------------------------ */
@@ -142,6 +161,34 @@ public class DocumentHelper
             return new SpreadsheetView( m_orb, this, xController );
 
         return new DocumentViewHelper( m_orb, this, xController );
+    }
+
+    /* ------------------------------------------------------------------ */
+    /** reloads the document
+     *
+     *  The reload is done by dispatching the respective URL at a frame of the document.
+     *  As a consequence, if you have references to a view of the document, or any interface
+     *  of the document, they will become invalid.
+     *  The Model instance itself, at which you called reload, will still be valid, it will
+     *  automatically update its internal state after the reload.
+     *
+     *  Another consequence is that if the document does not have a view at all, it cannot
+     *  be reloaded.
+     */
+    public void reload() throws Exception
+    {
+        DocumentViewHelper view = getCurrentView();
+        XFrame frame = view.getController().getFrame();
+        XModel oldModel = frame.getController().getModel();
+
+        getCurrentView().dispatch( ".uno:Reload" );
+
+        m_documentComponent = (XComponent)UnoRuntime.queryInterface( XComponent.class,
+            frame.getController().getModel() );
+
+        XModel newModel = getCurrentView().getController().getModel();
+        if ( UnoRuntime.areSame( oldModel, newModel ) )
+            throw new java.lang.IllegalStateException( "reload failed" );
     }
 
     /* ------------------------------------------------------------------ */
@@ -236,6 +283,8 @@ public class DocumentHelper
             return "private:factory/scalc";
         if ( eType == DocumentType.DRAWING )
             return "private:factory/sdraw";
+        if ( eType == DocumentType.XMLFORM )
+            return "private:factory/swriter?slot=21053";
         return "private:factory/swriter";
     }
 
@@ -256,6 +305,7 @@ public class DocumentHelper
 
         return DocumentType.UNKNOWN;
     }
+
     /* ------------------------------------------------------------------ */
     /** retrieves a com.sun.star.drawing.DrawPage of the document, denoted by index
      *  @param index
