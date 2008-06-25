@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: datanavi.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -531,6 +531,7 @@ namespace svxform
         FixedLine           m_aModelFL;
         FixedText           m_aNameFT;
         Edit                m_aNameED;
+        CheckBox            m_aModifyCB;
         FixedLine           m_aButtonsFL;
         OKButton            m_aOKBtn;
         CancelButton        m_aEscBtn;
@@ -542,6 +543,9 @@ namespace svxform
 
         inline String           GetName() const { return m_aNameED.GetText(); }
         inline void             SetName( const String& _rName ) { m_aNameED.SetText( _rName );}
+
+        inline bool             GetModifyDoc() const { return bool( m_aModifyCB.IsChecked() ); }
+        inline void             SetModifyDoc( const bool _bModify ) { m_aModifyCB.Check( _bModify ); }
     };
 
     //========================================================================
