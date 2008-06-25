@@ -8,7 +8,7 @@
 #
 # $RCSfile: libs.mk,v $
 #
-# $Revision: 1.134 $
+# $Revision: 1.135 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,7 +28,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.134 $$"
+LIBSMKREV!:="$$Revision: 1.135 $$"
 
 .IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 
@@ -342,8 +342,8 @@ HUNSPELLLIB=-lhunspell-1.1
 MYTHESLIB=-lmythes
 PYUNOLIB=-lpyuno
 LPSOLVELIB=-llpsolve55
-SOFFICELIB=-lsoffice
-UNOPKGLIB=-lunopkg
+SOFFICELIB=-lsofficeapp
+UNOPKGAPPLIB=-lunopkgapp
 
 .ELSE				# "$(GUI)"=="UNX"
 AWTLIB*=jawt.lib
@@ -506,7 +506,7 @@ HUNSPELLLIB=$(LIBPRE) libhunspell.lib
 MYTHESLIB=libmythes.lib
 PYUNOLIB=ipyuno.lib
 LPSOLVELIB=lpsolve55.lib
-SOFFICELIB=isoffice.lib
-UNOPKGLIB=iunopkg.lib
+SOFFICELIB=isofficeapp.lib
+UNOPKGAPPLIB=iunopkgapp.lib
 
 .ENDIF              # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
