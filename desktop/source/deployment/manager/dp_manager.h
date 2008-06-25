@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_manager.h,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -183,10 +183,17 @@ public:
                css::lang::IllegalArgumentException,
                css::uno::RuntimeException);
 
+    /* Unregisters the package but does not remove it from disk.
+        When the operation is canceled by the user, a CommandAbortedException
+        is thrown. Then the package is still fully functional.
+        @param out_oldData
+            can be NULL
+    */
     void removePackage_(
         ::rtl::OUString const & id, ::rtl::OUString const & fileName,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
+        ActivePackages::Data * out_oldData);
 
     virtual void SAL_CALL removePackage(
         ::rtl::OUString const & id, ::rtl::OUString const & fileName,
