@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RelationDesignView.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,7 +58,7 @@ namespace dbaui
     class ORelationDesignView : public OJoinDesignView
     {
     public:
-        ORelationDesignView(Window* pParent, ORelationController* _pController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+        ORelationDesignView(Window* pParent, ORelationController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
         virtual ~ORelationDesignView();
 
         // set the statement for representation
