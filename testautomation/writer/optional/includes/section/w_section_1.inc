@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_section_1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:57 $
+'* last change: $Author: fredrikh $ $Date: 2008-06-25 14:46:32 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -198,23 +198,23 @@ testcase tInsertSection_3
                        )
 
     j = UBound(SectionName)
-    
+
     Call hNewDocument
-    
+
     For i = 0 to j
         try
             fInsertSection(SectionName(i))
             Call wDokSchreiben "<Up>" , 1
-    
+
             FormatSections
             Kontext "BereicheBearbeiten"
             if BereichsName.GetText <> SectionName(i) then warnlog "    The Section Name is wrong, it should be :" +SectionName(i) +", but: "+BereichsName.GetText
             BereicheBearbeiten.Cancel
-    
+
             Call wDokSchreiben "<Down>" , 1
         catch
             Warnlog "   Insert Section is failed , the section name should be " +SectionName(i)
-        endcatch    
+        endcatch
     next i
     
     Call hCloseDocument
@@ -351,7 +351,9 @@ endcase
 
 testcase tInsertSection_5
 
-    Dim Message1, Message2, Message3
+    Dim Message1
+    Dim Message2
+    Dim Message3
     
     if Dir (gOfficePath + "user\work\link_of_section_test.oot") <> "" then
         kill (gOfficePath + "user\work\link_of_section_test.oot")
@@ -418,8 +420,8 @@ testcase tInsertSection_5
     
     ' Save document
     if gApplication = "WRITER" then
-        Call hFileSaveAsKill (gOfficePath + "user\work\link_of_section_test")
-    endif
+        Call hFileSaveAsKill (gOfficePath + "user\work\link_of_section_test.odt")
+    end if
     
     Call hCloseDocument
     
