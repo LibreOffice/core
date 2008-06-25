@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ure.scp,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -470,6 +470,215 @@ File gid_File_Dl_AffineUnoUno
     // CompID = "CF542EC3-7A51-4EAA-8480-65D5E8906D05";
 End
 
+#if defined WNT
+File gid_File_Dl_Cli_Uno
+    TXT_FILE_BODY;
+    Dir = SCP2_URE_DL_DIR;
+    Name = SCP2_URE_DL_NORMAL("cli_uno");
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+
+End
+#endif
+
+#if defined WNT
+
+File gid_File_Dl_Cli_Ure_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
+    Name = "cli_ure.dll";
+    Dir = SCP2_URE_DL_DIR;
+    Assemblyname = "cli_ure";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "${CLI_URE_NEW_VERSION}";
+    Culture = "neutral";
+    Attributes = "0";
+#ifndef M1310
+    ProcessorArchitecture = "MSIL";
+#endif
+End
+
+#endif
+
+#if defined WNT
+
+File gid_File_Dl_Policy_Cli_Ure_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
+    Name = "${CLI_URE_POLICY_ASSEMBLY}.dll";
+    Dir = SCP2_URE_DL_DIR;
+    Assemblyname = "${CLI_URE_POLICY_ASSEMBLY}";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "${CLI_URE_POLICY_VERSION}";
+    Culture = "neutral";
+    Attributes = "0";
+#ifndef M1310
+    ProcessorArchitecture = "MSIL";
+#endif
+End
+
+#endif
+
+#if defined WNT 
+
+File gid_File_Dl_Policy_Cli_Ure_Config
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSIGNCOMPOMENT, DONTRENAMEINPATCH);
+    Name = "cli_ure.config";
+    Dir = SCP2_URE_DL_DIR;
+    AssignComponent = gid_File_Dl_Policy_Cli_Ure_Assembly;
+End
+
+#endif
+
+#if defined WNT 
+
+File gid_File_Dl_Cli_Basetypes_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
+    Name = "cli_basetypes.dll";
+    Dir = SCP2_URE_DL_DIR;
+    Assemblyname = "cli_basetypes";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "${CLI_BASETYPES_NEW_VERSION}";
+    Culture = "neutral";
+    Attributes = "0";
+#ifndef M1310
+    ProcessorArchitecture = "MSIL";
+#endif
+End
+
+#endif
+
+#if defined WNT 
+
+File gid_File_Dl_Policy_Cli_Basetypes_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
+    Name = "${CLI_BASETYPES_POLICY_ASSEMBLY}.dll";
+    Dir = SCP2_URE_DL_DIR;
+    Assemblyname = "${CLI_BASETYPES_POLICY_ASSEMBLY}";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "${CLI_BASETYPES_POLICY_VERSION}";
+    Culture = "neutral";
+    Attributes = "0";
+#ifndef M1310
+    ProcessorArchitecture = "MSIL";
+#endif
+End
+
+#endif
+#if defined WNT 
+
+File gid_File_Dl_Policy_Cli_Basetypes_Config
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSIGNCOMPOMENT, DONTRENAMEINPATCH);
+    Name = "cli_basetypes.config";
+    Dir = SCP2_URE_DL_DIR;
+    AssignComponent = gid_File_Dl_Policy_Cli_Basetypes_Assembly;
+End
+
+#endif
+
+
+#if defined WNT 
+
+File gid_File_Dl_Cli_Uretypes_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
+    Name = "cli_uretypes.dll";
+    Dir = SCP2_URE_DL_DIR;
+    Assemblyname = "cli_uretypes";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "${CLI_URETYPES_NEW_VERSION}";
+    Culture = "neutral";
+    Attributes = "0";
+#ifndef M1310
+    ProcessorArchitecture = "MSIL";
+#endif
+End
+
+#endif
+
+#if defined WNT 
+
+File gid_File_Dl_Policy_Cli_Uretypes_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
+    Name = "${CLI_URETYPES_POLICY_ASSEMBLY}.dll";
+    Dir = SCP2_URE_DL_DIR;
+    Assemblyname = "${CLI_URETYPES_POLICY_ASSEMBLY}";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "${CLI_URETYPES_POLICY_VERSION}";
+    Culture = "neutral";
+    Attributes = "0";
+#ifndef M1310
+    ProcessorArchitecture = "MSIL";
+#endif
+End
+
+#endif
+
+#if defined WNT 
+
+File gid_File_Dl_Policy_Cli_Uretypes_Config
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSIGNCOMPOMENT, DONTRENAMEINPATCH);
+    Name = "cli_uretypes.config";
+    Dir = SCP2_URE_DL_DIR;
+    AssignComponent = gid_File_Dl_Policy_Cli_Uretypes_Assembly;
+End
+
+#endif
+
+#if defined WNT 
+
+File gid_File_Lib_Cli_Cppuhelper_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
+    Name = "cli_cppuhelper.dll";
+    Dir = SCP2_URE_DL_DIR;
+    Assemblyname = "cli_cppuhelper";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "${CLI_CPPUHELPER_NEW_VERSION}";
+    Culture = "neutral";
+    Attributes = "0";
+#ifndef M1310
+    ProcessorArchitecture = "x86";
+#endif
+End
+
+#endif
+#if defined WNT
+
+File gid_File_Lib_Policy_Cli_Cppuhelper_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
+    Name = "${CLI_CPPUHELPER_POLICY_ASSEMBLY}.dll";
+    Dir = SCP2_URE_DL_DIR;
+    Assemblyname = "${CLI_CPPUHELPER_POLICY_ASSEMBLY}";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "${CLI_CPPUHELPER_POLICY_VERSION}";
+    Culture = "neutral";
+    Attributes = "0";
+#ifndef M1310
+    ProcessorArchitecture = "x86";
+#endif
+End
+
+#endif
+
+#if defined WNT
+
+File gid_File_Lib_Policy_Cli_Cppuhelper_Config
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSIGNCOMPOMENT, DONTRENAMEINPATCH);
+    Name = "cli_cppuhelper.config";
+    Dir = SCP2_URE_DL_DIR;
+    AssignComponent = gid_File_Lib_Policy_Cli_Cppuhelper_Assembly;
+End
+
+#endif
+
 #if defined SOLAR_JAVA
 File gid_File_Dl_Jpipe
     TXT_FILE_BODY;
@@ -931,6 +1140,22 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Exe_StartupSh,
             gid_File_Exe_UnoBin,
             gid_File_Exe_RegcompBin,
+            gid_File_Dl_Cli_Uno,
+            gid_File_Dl_Cli_Ure_Assembly,
+            gid_File_Dl_Policy_Cli_Ure_Assembly,
+            gid_File_Dl_Policy_Cli_Ure_Config,
+            gid_File_Dl_Cli_Basetypes_Assembly,
+            gid_File_Dl_Policy_Cli_Basetypes_Assembly,
+            gid_File_Dl_Policy_Cli_Basetypes_Config,
+            gid_File_Dl_Cli_Uretypes_Assembly,
+            gid_File_Dl_Policy_Cli_Uretypes_Assembly,
+            gid_File_Dl_Policy_Cli_Uretypes_Config,
+            gid_File_Dl_Cli_Cppuhelper_Assembly,
+            gid_File_Dl_Policy_Cli_Cppuhelper_Assembly,
+            gid_File_Dl_Policy_Cli_Cppuhelper_Config,
+           	gid_File_Lib_Cli_Cppuhelper_Assembly,
+            gid_File_Lib_Policy_Cli_Cppuhelper_Assembly,
+	        gid_File_Lib_Policy_Cli_Cppuhelper_Config,
             gid_File_Dl_Cppu,
             gid_File_Dl_Cppuhelper,
             gid_File_Dl_PurpEnvHelper,
