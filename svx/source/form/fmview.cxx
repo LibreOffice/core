@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmview.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -170,12 +170,12 @@ void FmFormView::Init()
 //------------------------------------------------------------------------
 FmFormView::~FmFormView()
 {
-    pImpl->notifyViewDying();
-    pImpl->release();
-
-    // Bei der Shell abmelden
     if( pFormShell )
         pFormShell->SetView( NULL );
+
+    pImpl->notifyViewDying();
+    pImpl->release();
+    pImpl = NULL;
 }
 
 //------------------------------------------------------------------------
@@ -379,8 +379,7 @@ SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
         else if (pFormShell && pFormShell->IsDesignMode())
         {
             FmXFormShell* pFormShellImpl = pFormShell->GetImpl();
-            Reference< ::com::sun::star::container::XIndexAccess >  xForms(((FmFormPage*)pPage)->GetForms(), UNO_QUERY);
-            pFormShellImpl->ResetForms(xForms, sal_True);
+            pFormShellImpl->UpdateForms( sal_True );
 
             // damit der Formular-Navigator auf den Seitenwechsel reagieren kann
             pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_FMEXPLORER_CONTROL , sal_True, sal_False);
