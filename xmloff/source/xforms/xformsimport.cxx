@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xformsimport.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,15 +43,24 @@
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <com/sun/star/form/submission/XSubmission.hpp>
 #include <com/sun/star/form/submission/XSubmissionSupplier.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <rtl/ustring.hxx>
 #include <xformsapi.hxx>
+#include <comphelper/namedvaluecollection.hxx>
+#include <tools/diagnose_ex.h>
 
 using std::pair;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Exception;
 using com::sun::star::uno::UNO_QUERY;
+using com::sun::star::uno::UNO_QUERY_THROW;
+using com::sun::star::uno::UNO_SET_THROW;
+using com::sun::star::uno::Sequence;
 using com::sun::star::beans::XPropertySet;
+using com::sun::star::beans::XPropertySetInfo;
+using com::sun::star::beans::PropertyValue;
 using com::sun::star::frame::XModel;
+using com::sun::star::container::XNameAccess;
 using com::sun::star::form::binding::XValueBinding;
 using com::sun::star::form::binding::XBindableValue;
 using com::sun::star::form::binding::XListEntrySource;
@@ -138,5 +147,63 @@ void bindXFormsSubmission(
             // ignore problems during binding
             // TODO: call XML error handling
         }
+    }
+}
+
+void applyXFormsSettings( const Reference< XNameAccess >& _rXForms, const Sequence< PropertyValue >& _rSettings )
+{
+    OSL_PRECOND( _rXForms.is(), "applyXFormsSettings: invalid XForms container!" );
+    if ( !_rXForms.is() )
+        return;
+
+    ::comphelper::NamedValueCollection aSettings( _rSettings );
+    Reference< XNameAccess > xModelSettings( aSettings.get( "XFormModels" ), UNO_QUERY );
+    if ( !xModelSettings.is() )
+    {
+        OSL_ENSURE( false, "applyXFormsSettings: wrong type for the XFormModels settings!" );
+        return;
+    }
+
+    try
+    {
+        Sequence< ::rtl::OUString > aSettingsForModels( xModelSettings->getElementNames() );
+        for (   const ::rtl::OUString* pModelName = aSettingsForModels.getConstArray();
+                pModelName != aSettingsForModels.getConstArray() + aSettingsForModels.getLength();
+                ++pModelName
+            )
+        {
+            // the settings for this particular model
+            Sequence< PropertyValue > aModelSettings;
+            OSL_VERIFY( xModelSettings->getByName( *pModelName ) >>= aModelSettings );
+
+            // the model itself
+            if ( !_rXForms->hasByName( *pModelName ) )
+            {
+                OSL_ENSURE( false, "applyXFormsSettings: have settings for a non-existent XForms model!" );
+                continue;
+            }
+
+            // propagate the settings, being tolerant by omitting properties which are not supported
+            Reference< XPropertySet > xModelProps( _rXForms->getByName( *pModelName ), UNO_QUERY_THROW );
+            Reference< XPropertySetInfo > xModelPSI( xModelProps->getPropertySetInfo(), UNO_SET_THROW );
+
+            for (   const PropertyValue* pSetting = aModelSettings.getConstArray();
+                    pSetting != aModelSettings.getConstArray() + aModelSettings.getLength();
+                    ++pSetting
+                )
+            {
+                if ( !xModelPSI->hasPropertyByName( pSetting->Name ) )
+                {
+                    OSL_ENSURE( false, "applyXFormsSettings: non-existent model property!" );
+                    continue;
+                }
+
+                xModelProps->setPropertyValue( pSetting->Name, pSetting->Value );
+            }
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
