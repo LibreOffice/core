@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.48 $
+# $Revision: 1.49 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -304,6 +304,7 @@ IDLFILES=\
     XToolkit.idl\
     XTopWindow.idl\
     XTopWindowListener.idl\
+    XUnitConversion.idl\
     XUnoControlContainer.idl\
     XUserInputInterception.idl\
     XVclContainer.idl\
