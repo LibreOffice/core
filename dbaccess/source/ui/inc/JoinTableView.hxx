@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: JoinTableView.hxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -170,7 +170,7 @@ namespace dbaui
 
             @return an iterator to next valid connection, so it can be used in any loop
         */
-        virtual ::std::vector<OTableConnection*>::const_iterator RemoveConnection(OTableConnection* _pConnection,sal_Bool _bDelete);
+        virtual bool RemoveConnection(OTableConnection* _pConnection,sal_Bool _bDelete);
 
         /** allows to add new connections to join table view, it implies an invalidation of the features
             ID_BROWSER_ADDTABLE and SID_RELATION_ADD_RELATION also the modified flag will be set to true
