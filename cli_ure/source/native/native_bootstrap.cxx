@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: native_bootstrap.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,9 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cli_ure.hxx"
+// We are using the Windows UNICODE API
+#define _UNICODE
+#define UNICODE
 
 #ifdef _MSC_VER
 #pragma warning(push, 1)
@@ -40,12 +41,13 @@
 #pragma warning(pop)
 #endif
 
+#include <tchar.h>
+
 #include "native_share.h"
 
 #include "rtl/bootstrap.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "cppuhelper/bootstrap.hxx"
-
 #include <delayimp.h>
 #include <stdio.h>
 
@@ -53,132 +55,137 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#define OFFICE_LOCATION_REGISTRY_KEY "Software\\OpenOffice.org\\UNO\\InstallPath"
-
-
+#define OFFICE_LOCATION_REGISTRY_KEY L"Software\\OpenOffice.org\\Layer\\URE\\1"
+#define UREINSTALLLOCATION L"UREINSTALLLOCATION"
+#define URE_BIN L"\\bin"
 
 namespace
 {
 
-char* getLibraryPath()
+
+//Returns the path to the URE/bin folder.
+//The caller must free the returned string with delete[]
+wchar_t * getUnoPath()
 {
-    static char* sPath = NULL;
-
-    //do not use oslMutex here. That would cause to load sal and we would
-    //run in a loop with delayLoadHook
-    if (sPath == NULL)
+    wchar_t *  theUnoPath = NULL;
+    bool failed = false;
+    HKEY    hKey = 0;
+    if (RegOpenKeyEx(HKEY_CURRENT_USER,OFFICE_LOCATION_REGISTRY_KEY,
+        0, KEY_READ, &hKey) != ERROR_SUCCESS)
     {
-        //First we try the environment variable UNO_PATH. It overrides all other settings.
-        //Get the UNO_PATH environment variable, do not use CRT, use Kernel library
-        char * sEnvUnoPath = NULL;
-        DWORD  cChars = GetEnvironmentVariableA("UNO_PATH", sEnvUnoPath, 0);
-        if (cChars > 0)
+        if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, OFFICE_LOCATION_REGISTRY_KEY,
+            0, KEY_READ, &hKey) != ERROR_SUCCESS)
         {
-            sEnvUnoPath = new char[cChars];
-            cChars = GetEnvironmentVariableA("UNO_PATH", sEnvUnoPath, cChars);
-        }
-        //store the UNO_PATH in the static variable that will be returned from now on.
-        if (cChars > 0)
-        {
-            sPath = new char[cChars + 1];
-            sPath[0] = 0;
-            lstrcatA(sPath, sEnvUnoPath);
-        }
-        delete[] sEnvUnoPath;
-
-        //try registry
-        if (sPath == NULL)
-        {
-            bool failed = false;
-            HKEY    hKey = 0;
-            if (RegOpenKeyExA(HKEY_CURRENT_USER,OFFICE_LOCATION_REGISTRY_KEY,
-                              0, KEY_READ, &hKey) != ERROR_SUCCESS)
-            {
-                if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, OFFICE_LOCATION_REGISTRY_KEY,
-                                  0, KEY_READ, &hKey) != ERROR_SUCCESS)
-                {
-                    OSL_ASSERT(0);
 #if OSL_DEBUG_LEVEL >= 2
-                    fprintf(stderr, "cli_cppuhelper: Office not properly installed. "
-                            "Could not open registry keys.");
+            fprintf(stderr, "cli_cppuhelper: Office not properly installed. "
+                "Could not open registry keys.");
 #endif
-                    failed = true;
-                }
-            }
-            if (failed)
-                return NULL;
-
-            DWORD   dwType = 0;
-            DWORD   dwLen = 0;
-            char *arData = NULL;
-            //get the length for the path to office
-            if (RegQueryValueExA(hKey, NULL, NULL, &dwType, NULL,
-                                 &dwLen) == ERROR_SUCCESS)
-            {
-                arData = new  char[dwLen];
-                if (RegQueryValueExA(hKey, NULL, NULL, &dwType, (LPBYTE) arData,
-                                     & dwLen) == ERROR_SUCCESS)
-                {
-                    sPath = new char[dwLen];
-                    lstrcpyA(sPath, arData);
-#if OSL_DEBUG_LEVEL >=2
-                    fprintf(stdout,"[cli_cppuhelper]: Using path %s to load office libraries.", sPath);
-#endif
-                }
-                delete [] arData;
-            }
-            RegCloseKey(hKey);
-        }
-        if (sPath)
-        {
-            //We extend the path to contain the program directory of the office,
-            //so that components can use osl_loadModule with arguments, such as
-            //"reg3.dll". That is, the arguments are only the library names.
-
-            //Get the PATH environment variable, do not use CRT, use Kernel library
-            char * sEnvPath = NULL;
-            DWORD  cChars = GetEnvironmentVariableA("PATH", sEnvPath, 0);
-            if (cChars > 0)
-            {
-                sEnvPath = new char[cChars];
-                cChars = GetEnvironmentVariableA("PATH", sEnvPath, cChars);
-            }
-            if (cChars == 0 && GetLastError() != ERROR_ENVVAR_NOT_FOUND)
-            {
-                delete[] sEnvPath;
-                return NULL;
-            }
-
-            //prepare the new PATH, including the path to the program folder
-            char * sNewPath = NULL;
-            int lenPath = lstrlenA(sEnvPath);
-            if (lenPath > 0)
-                sNewPath = new char[lenPath + lstrlenA(sPath) + 2];
-            else
-                sNewPath = new char[lenPath + 1];
-            sNewPath[0] = 0;
-
-            lstrcatA(sNewPath, sPath);
-            if (lenPath)
-            {
-                lstrcatA(sNewPath, ";");
-                lstrcatA(sNewPath, sEnvPath);
-            }
-
-            BOOL bSet = SetEnvironmentVariableA("PATH", sNewPath);
-
-            delete[] sEnvPath;
-            delete[] sNewPath;
-
-            if (bSet == FALSE)
-                return NULL;
+            failed = true;
         }
     }
-
-    return  sPath;
+    if (! failed)
+    {
+        DWORD   dwType = 0;
+        DWORD   dwLen = 0;
+        wchar_t *arData = NULL;
+        //get the length for the path to office
+        if (RegQueryValueEx(hKey, UREINSTALLLOCATION, NULL, &dwType, NULL,
+            &dwLen) == ERROR_SUCCESS)
+        {
+            arData = new  wchar_t[dwLen];
+            arData[0] = '\0';
+            if (RegQueryValueEx(hKey, UREINSTALLLOCATION, NULL, &dwType, (LPBYTE) arData,
+                & dwLen) == ERROR_SUCCESS)
+            {
+                int test = lstrlen(URE_BIN);
+                //attach the bin directory to the URE path
+                int sizePath = lstrlen(arData) + lstrlen(URE_BIN) + 1;
+                theUnoPath = new wchar_t[sizePath];
+                 theUnoPath[0] = '\0';
+                 lstrcat(theUnoPath, arData);
+                 lstrcat(theUnoPath, URE_BIN);
+                delete[] arData;
+#if OSL_DEBUG_LEVEL >=2
+                fprintf(stdout,"[cli_cppuhelper]: Using path %S to load office libraries.", theUnoPath);
+#endif
+            }
+        }
+        RegCloseKey(hKey);
+    }
+    return theUnoPath;
 }
 
 
+//Returns the path to the Ure/bin directory and expands the PATH by inserting the
+// ure/bin path at the front.
+wchar_t const * getUreBinPathAndSetPath()
+{
+    static wchar_t * theBinPath = NULL;
+
+    if (theBinPath)
+        return theBinPath;
+
+    wchar_t * unoPath = getUnoPath();
+    if (!unoPath)
+        return NULL;
+
+    //We extend the path to contain the program directory of the office,
+    //so that components can use osl_loadModule with arguments, such as
+    //"reg3.dll". That is, the arguments are only the library names.
+
+    wchar_t * sEnvPath = NULL;
+    DWORD  cChars = GetEnvironmentVariable(L"PATH", sEnvPath, 0);
+    if (cChars > 0)
+    {
+        sEnvPath = new wchar_t[cChars];
+        cChars = GetEnvironmentVariable(L"PATH", sEnvPath, cChars);
+        //If PATH is not set then it is no error
+        if (cChars == 0 && GetLastError() != ERROR_ENVVAR_NOT_FOUND)
+        {
+            delete[] sEnvPath;
+            return NULL;
+        }
+    }
+    //prepare the new PATH. Add the Ure/bin directory at the front
+    wchar_t * sNewPath = new wchar_t[lstrlen(sEnvPath) + lstrlen(unoPath) + 2];
+    sNewPath[0] = '\0';
+    lstrcat(sNewPath, unoPath);
+    if (lstrlen(sEnvPath))
+    {
+        lstrcat(sNewPath, L";");
+        lstrcat(sNewPath, sEnvPath);
+    }
+
+    BOOL bSet = SetEnvironmentVariable(L"PATH", sNewPath);
+
+    theBinPath = unoPath;
+    delete[] sEnvPath;
+    delete[] sNewPath;
+
+    return theBinPath;
+}
+
+HMODULE loadFromPath(wchar_t const * sLibName)
+{
+    if (sLibName == NULL)
+        return NULL;
+
+    wchar_t const * binPath =  getUreBinPathAndSetPath();
+    if (!binPath)
+        return NULL;
+
+
+    wchar_t*  sFullPath = new wchar_t[lstrlen(sLibName) + lstrlen(binPath) + 2];
+    sFullPath[0] = '\0';
+    sFullPath = lstrcat(sFullPath, binPath);
+    sFullPath = lstrcat(sFullPath, L"\\");
+    sFullPath = lstrcat(sFullPath, sLibName);
+    HMODULE handle = LoadLibraryEx(sFullPath, NULL,
+        LOAD_WITH_ALTERED_SEARCH_PATH);
+    delete[] sFullPath;
+    return handle;
+
+}
 
 //Hook for delayed loading of libraries which this library is linked with.
 extern "C"  FARPROC WINAPI delayLoadHook(
@@ -188,22 +195,16 @@ extern "C"  FARPROC WINAPI delayLoadHook(
 {
     if (dliNotify == dliFailLoadLib)
     {
-        char* sPath = getLibraryPath();
-        if (sPath)
+        //Convert the ansi file name to wchar_t*
+        int size = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pdli->szDll, -1, NULL, 0);
+        if (size > 0)
         {
-            int lenPath = lstrlenA(sPath);
-            //create string to contain the full path to cppuhelper
-            int lenLib = lstrlenA(pdli->szDll);
-            char*  sFullPath = new char[lenLib + lenPath + 2];
-            sFullPath[0] = 0;
-            sFullPath = lstrcatA(sFullPath, sPath);
-            sFullPath = lstrcatA(sFullPath, "\\");
-            sFullPath = lstrcatA(sFullPath, pdli->szDll);
-
-            HMODULE handle = LoadLibraryExA(sFullPath, NULL,
-                                            LOAD_WITH_ALTERED_SEARCH_PATH);
-            delete[] sFullPath;
-            return (FARPROC) handle;
+            wchar_t * buf = new wchar_t[size];
+            if (MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pdli->szDll, -1, buf, size))
+            {
+                HMODULE handle = NULL;
+                return (FARPROC) loadFromPath(buf);
+            }
         }
     }
     return 0;
@@ -221,14 +222,11 @@ namespace util
 /** Bootstrapping native UNO.
 
     Bootstrapping requires the existence of many libraries which are contained
-    in an office installation. To find and load these libraries the Windows
-    registry keys HKEY_CURRENT_USER\Software\OpenOffice.org\UNO\InstallPath
-    and HKEY_LOCAL_MACHINE\Software\OpenOffice.org\UNO\InstallPath are examined.
-    These contain the paths to the program folder of the office which was
-    installed most recently. Please note that the office's setup either
-    writes the key in HKEY_CURRENT_USER or HKEY_LOCAL_MACHINE dependent on
-    whether the user chooses a user installation or an installation for all
-    users.
+    in an URE installation. To find and load these libraries the Windows
+    registry keys HKEY_CURRENT_USER\Software\OpenOffice.org\Layer\URE\1
+    and HKEY_LOCAL_MACHINE\Software\OpenOffice.org\Layer\URE\1 are examined.
+    These contain a named value UREINSTALLLOCATION which holds a path to the URE
+    installation folder.
 */
 public __sealed __gc class Bootstrap
 {
