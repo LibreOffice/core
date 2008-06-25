@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pngread.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +54,9 @@ namespace vcl
         PNGReader( SvStream& rStm );
         ~PNGReader();
 
-        BitmapEx                        Read();
+        /* an empty preview size hint (=default) will read the whole image
+        */
+        BitmapEx                        Read( const Size& i_rPreviewHint = Size() );
 
         // retrieve every chunk that resides inside the PNG
         struct ChunkData
@@ -63,13 +65,6 @@ namespace vcl
             std::vector< sal_uInt8 >    aData;
         };
         const std::vector< ChunkData >& GetChunks() const;
-
-        // TODO: when incompatible changes are possible again
-        // the preview size hint should be redone
-        static void SetPreviewSizeHint( const Size& r ) { aPreviewSizeHint = r; }
-        static void DisablePreviewMode() { aPreviewSizeHint = Size(0,0); }
-    private:
-        static Size aPreviewSizeHint;
     };
 }
 
