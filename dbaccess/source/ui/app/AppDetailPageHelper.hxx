@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppDetailPageHelper.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_APPLICATION_NAMEDDATABASEOBJECT_HPP_
+#include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
 #include <com/sun/star/ucb/XContent.hpp>
 #endif
@@ -65,13 +68,14 @@
 #ifndef _GRFMGR_HXX
 #include <goodies/grfmgr.hxx>
 #endif
+#include "callbacks.hxx"
 #include <memory>
 
 namespace com{ namespace sun { namespace star { namespace awt   { class XWindow; } } } }
 namespace com{ namespace sun { namespace star { namespace frame { class XFrame; } } } }
 namespace com{ namespace sun { namespace star { namespace io    { class XPersist; } } } }
 
-#define CONTROL_COUNT   4
+#define ELEMENT_COUNT   size_t(E_ELEMENT_TYPE_COUNT)
 
 namespace dbaui
 {
@@ -110,7 +114,7 @@ namespace dbaui
     //==================================================================
     class OAppDetailPageHelper : public Window
     {
-        DBTreeListBox*      m_pLists[CONTROL_COUNT];
+        DBTreeListBox*      m_pLists[ELEMENT_COUNT];
         OAppBorderWindow&   m_rBorderWin;
         FixedLine           m_aFL;
         ToolBox             m_aTBPreview;
@@ -146,8 +150,8 @@ namespace dbaui
         /** fills the names in the listbox
             @param  _xContainer
                 This can either be the queries, forms or report names.
-            @param  _rList
-                The tree list box to fill
+            @param  _eType
+                the type of elements which are being filled
             @param _nImageId
                 the resource id of the image to use for non-container entries
             @param _nHighContrastImageId
@@ -155,11 +159,12 @@ namespace dbaui
             @param  _pParent
                 The parent of the entries to be inserted.
         */
-        void fillNames(  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer
-                        ,DBTreeListBox& _rList
-                        ,USHORT _nImageId
-                        ,USHORT _nHighContrastImageId
-                        ,SvLBoxEntry* _pParent = NULL);
+        void fillNames( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer,
+                        const ElementType _eType,
+                        const USHORT _nImageId,
+                        const USHORT _nHighContrastImageId,
+                        SvLBoxEntry* _pParent );
+
         /** sets the detail page
             @param  _pWindow
                 The control which should be visible.
@@ -206,6 +211,7 @@ namespace dbaui
 
         inline OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
         void ImplInitSettings();
+
     public:
         OAppDetailPageHelper(Window* _pParent,OAppBorderWindow& _rBorderWin,PreviewMode _ePreviewMode);
         virtual ~OAppDetailPageHelper();
@@ -261,6 +267,20 @@ namespace dbaui
         */
         void getSelectionElementNames( ::std::vector< ::rtl::OUString>& _rNames ) const;
 
+        /** describes the current selection for the given control
+        */
+        void    describeCurrentSelectionForControl(
+                    const Control& _rControl,
+                    ::com::sun::star::uno::Sequence< ::com::sun::star::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
+                );
+
+        /** describes the current selection for the given ElementType
+        */
+        void    describeCurrentSelectionForType(
+                    const ElementType _eType,
+                    ::com::sun::star::uno::Sequence< ::com::sun::star::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
+                );
+
         /** select all names on the currently selected container. Non existence names where ignored.
         *
         * \param _aNames the element names
@@ -291,7 +311,7 @@ namespace dbaui
             @return
                 <TRUE/> if the entry is a leaf, otherwise <FALSE/>
         */
-        sal_Bool isLeaf(SvLBoxEntry* _pEntry) const;
+        bool    isLeaf(SvLBoxEntry* _pEntry) const;
 
         /** returns if one of the selected entries is a leaf
             @return
