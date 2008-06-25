@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FieldLinker.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,7 @@ public class FieldLinker extends DBLimitedFieldSelection{
     int SOFOURTHLINKLST = 3;
     int[] SOLINKLST = null;
     String[] sSlaveListHeader;
-    String[] sMasterListHeader; //CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 40);
+    String[] sMasterListHeader; //CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
     String sSlaveHidString;
     String sMasterHidString;
     Integer IListBoxPosX;
@@ -85,8 +85,8 @@ public class FieldLinker extends DBLimitedFieldSelection{
             SOTHIRDLINKLST = 2;
             SOFOURTHLINKLST = 3;
             IListBoxPosX = new Integer(iCompPosX + 6);
-            sSlaveListHeader = CurUnoDialog.oResource.getResArray(UIConsts.RID_FORM + 20, 4); //new String[rowcount];""; //CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 40);
-            sMasterListHeader = CurUnoDialog.oResource.getResArray(UIConsts.RID_FORM + 24, 4);// new String[rowcount];""; //CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 40);
+            sSlaveListHeader = CurUnoDialog.m_oResource.getResArray(UIConsts.RID_FORM + 20, 4); //new String[rowcount];""; //CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
+            sMasterListHeader = CurUnoDialog.m_oResource.getResArray(UIConsts.RID_FORM + 24, 4);// new String[rowcount];""; //CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
             SOLINKLST = new int[] { SOFIRSTLINKLST, SOSECLINKLST, SOTHIRDLINKLST, SOFOURTHLINKLST };
         }
         sSlaveHidString = "HID:" + Integer.toString(FirstHelpIndex + (i * 2));
@@ -187,7 +187,7 @@ public class FieldLinker extends DBLimitedFieldSelection{
      *
      */
     public String[][] getLinkFieldNames() {
-        String sLinkFieldsAreDuplicate = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 19);
+        String sLinkFieldsAreDuplicate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 19);
         setMaxSelIndex();
         String[][] LinkFieldNames = new String[2][MaxSelIndex + 1];
         for (int i = 0; i <= MaxSelIndex; i++) {
