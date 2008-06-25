@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PrimaryKeyHandler.java,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,15 +82,15 @@ public class PrimaryKeyHandler implements XFieldSelectionListener {
         bAutoPrimaryKeysupportsAutoIncrmentation = isAutoPrimeKeyAutoIncrementationsupported();
         curtabindex = (short) ((TableWizard.SOPRIMARYKEYPAGE * 100) - 20);
         Integer IPRIMEKEYSTEP = new Integer(TableWizard.SOPRIMARYKEYPAGE);
-        String sExplanations  = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 26);
-        String screatePrimaryKey = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 27);
-        String slblPrimeFieldName = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 31);
-        String sApplyAutoValue = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 33);
-        String sAddAutomatically = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 28);
-        String sUseExisting = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 29);
-        String sUseSeveral = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 30);
-        String slblAvailableFields = CurUnoDialog.oResource.getResText(UIConsts.RID_QUERY + 4);
-        String slblSelPrimaryFields = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 32);
+        String sExplanations  = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 26);
+        String screatePrimaryKey = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 27);
+        String slblPrimeFieldName = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 31);
+        String sApplyAutoValue = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 33);
+        String sAddAutomatically = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 28);
+        String sUseExisting = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 29);
+        String sUseSeveral = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 30);
+        String slblAvailableFields = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 4);
+        String slblSelPrimaryFields = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 32);
         CurUnoDialog.insertLabel("lblExplanation",
             new String[] {"Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
             new Object[] { new Integer(40), sExplanations,  Boolean.TRUE, new Integer(91), new Integer(27),IPRIMEKEYSTEP, new Short(curtabindex++), new Integer(233)}
