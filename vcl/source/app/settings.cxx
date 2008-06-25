@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: settings.cxx,v $
- * $Revision: 1.75 $
+ * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,25 +30,25 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <tools/debug.hxx>
-#include <i18npool/mslangid.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/svdata.hxx>
-#include <vcl/event.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/i18nhelp.hxx>
-#include <vcl/fontcfg.hxx>
-#include <vcl/configsettings.hxx>
-
-#include <vcl/unohelp.hxx>
-#include <unotools/localedatawrapper.hxx>
-#include <unotools/collatorwrapper.hxx>
-#include <unotools/confignode.hxx>
+#include "tools/debug.hxx"
+#include "i18npool/mslangid.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/svdata.hxx"
+#include "vcl/event.hxx"
+#include "vcl/settings.hxx"
+#include "vcl/i18nhelp.hxx"
+#include "vcl/fontcfg.hxx"
+#include "vcl/configsettings.hxx"
+#include "vcl/gradient.hxx"
+#include "vcl/unohelp.hxx"
+#include "unotools/localedatawrapper.hxx"
+#include "unotools/collatorwrapper.hxx"
+#include "unotools/confignode.hxx"
 
 #ifdef WNT
-#include <tools/prewin.h>
+#include "tools/prewin.h"
 #include <windows.h>
-#include <tools/postwin.h>
+#include "tools/postwin.h"
 #endif
 
 using namespace rtl;
@@ -496,7 +496,8 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maPushButtonFont( rData.maPushButtonFont ),
     maFieldFont( rData.maFieldFont ),
     maIconFont( rData.maIconFont ),
-    maGroupFont( rData.maGroupFont )
+    maGroupFont( rData.maGroupFont ),
+    maWorkspaceGradient( rData.maWorkspaceGradient )
 {
     mnRefCount                  = 1;
     mnBorderSize                = rData.mnBorderSize;
@@ -622,6 +623,9 @@ void ImplStyleData::SetStandardStyles()
     mnUseFlatMenues             = 0;
     mnUseImagesInMenus          = (USHORT)TRUE;
     mnSkipDisabledInMenus       = (USHORT)FALSE;
+
+    Gradient aGrad( GRADIENT_LINEAR, DEFAULT_WORKSPACE_GRADIENT_START_COLOR, DEFAULT_WORKSPACE_GRADIENT_END_COLOR );
+    maWorkspaceGradient = Wallpaper( aGrad );
 }
 
 // -----------------------------------------------------------------------
