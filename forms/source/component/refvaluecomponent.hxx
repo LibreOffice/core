@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: refvaluecomponent.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,15 +59,6 @@ namespace frm
 
         sal_Bool            m_bSupportSecondRefValue;       // do we support the SecondaryRefValue property?
 
-        /** type how we should transfer our selection to external value bindings
-        */
-        enum ValueExchangeType
-        {
-            eString,
-            eBoolean
-        };
-        ValueExchangeType   m_eValueExchangeType;
-
     protected:
         const ::rtl::OUString& getReferenceValue() const { return m_sReferenceValue; }
         void                   setReferenceValue( const ::rtl::OUString& _rRefValue );
@@ -100,11 +91,10 @@ namespace frm
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
         // OBoundControlModel overridables
-        virtual void            onConnectedExternalValue( );
-        virtual sal_Bool        approveValueBinding( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding );
-
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+                                getSupportedBindingTypes();
         virtual ::com::sun::star::uno::Any
-                                translateExternalValueToControlValue( ) const;
+                                translateExternalValueToControlValue( const ::com::sun::star::uno::Any& _rExternalValue ) const;
         virtual ::com::sun::star::uno::Any
                                 translateControlValueToExternalValue( ) const;
 
@@ -113,11 +103,6 @@ namespace frm
 
         virtual ::com::sun::star::uno::Any
                                 getDefaultForReset() const;
-
-    private:
-        /** calculates the data type we need to use to exchange values with external bindings
-        */
-        void    calcValueExchangeType();
     };
 
 //........................................................................
