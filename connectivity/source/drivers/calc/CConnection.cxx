@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CConnection.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,7 +112,8 @@ void OCalcConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
             pIter->Value >>= m_sPassword;
             break;
         }
-    }
+    } // for(;pIter != pEnd;++pIter)
+    ODocHolder aDocHodler(this); // just to test that the doc can be loaded
 }
 // -----------------------------------------------------------------------------
 Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
