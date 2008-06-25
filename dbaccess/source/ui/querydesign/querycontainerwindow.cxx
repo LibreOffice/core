@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: querycontainerwindow.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,13 +82,13 @@ namespace dbaui
     //= OQueryContainerWindow
     //=====================================================================
     DBG_NAME(OQueryContainerWindow)
-    OQueryContainerWindow::OQueryContainerWindow(Window* pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
-        :ODataView(pParent,_pController, _rFactory)
+    OQueryContainerWindow::OQueryContainerWindow(Window* pParent, OQueryController& _rController,const Reference< XMultiServiceFactory >& _rFactory)
+        :ODataView( pParent, _rController, _rFactory )
         ,m_pViewSwitch(NULL)
         ,m_pBeamer(NULL)
     {
         DBG_CTOR(OQueryContainerWindow,NULL);
-        m_pViewSwitch = new OQueryViewSwitch(this,_pController,_rFactory);
+        m_pViewSwitch = new OQueryViewSwitch( this, _rController, _rFactory );
 
         m_pSplitter = new Splitter(this,WB_VSCROLL);
         m_pSplitter->Hide();
@@ -210,10 +210,10 @@ namespace dbaui
             case  EVENT_GETFOCUS:
                 if ( m_pViewSwitch )
                 {
-                    OJoinController* pController = m_pViewSwitch->getDesignView()->getController();
-                    pController->InvalidateFeature(SID_CUT);
-                    pController->InvalidateFeature(SID_COPY);
-                    pController->InvalidateFeature(SID_PASTE);
+                    OJoinController& rController = m_pViewSwitch->getDesignView()->getController();
+                    rController.InvalidateFeature(SID_CUT);
+                    rController.InvalidateFeature(SID_COPY);
+                    rController.InvalidateFeature(SID_PASTE);
                 }
         }
         return bHandled ? 1L : ODataView::PreNotify(rNEvt);
