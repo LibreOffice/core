@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: backingwindow.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,6 @@
 #include "classes/fwkresid.hxx"
 
 #include "vcl/metric.hxx"
-#include "vcl/gradient.hxx"
 #include "vcl/mnemonic.hxx"
 #include "vcl/menu.hxx"
 #include "vcl/svapp.hxx"
@@ -169,6 +168,9 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     maButtonImageSize.Width() += 12;
     maButtonImageSize.Height() += 12;
 
+    // force tab cycling in toolbox
+    maToolbox.SetStyle( maToolbox.GetStyle() | WB_FORCETABCYCLE );
+
     // insert toolbox items
     maToolbox.InsertItem( nItemId_TplRep, Image( aTplRepImage ) );
     maToolbox.SetItemText( nItemId_TplRep, aTplRepHelpText );
@@ -233,13 +235,14 @@ void BackingWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
     if ( rDCEvt.GetFlags() & SETTINGS_STYLE )
     {
-        SetBackground();
         initBackground();
     }
 }
 
 void BackingWindow::initBackground()
 {
+    SetBackground( GetSettings().GetStyleSettings().GetWorkspaceGradient() );
+
     bool bDark = GetSettings().GetStyleSettings().GetWindowColor().IsDark();
     maWelcomeTextColor = maLabelTextColor =  bDark ? Color( COL_WHITE ) : Color( 0x26, 0x35, 0x42 );
     Color aTextBGColor( bDark ? COL_BLACK : COL_WHITE );
@@ -305,9 +308,6 @@ void BackingWindow::initControls()
     maControlRect.Right() -= nShadowRight;
     maControlRect.Top() += nShadowTop;
     maControlRect.Bottom() -= nShadowBottom;
-
-    // set background
-    SetBackground();
 
     long nYPos = 0;
     // set bigger welcome string
@@ -514,17 +514,6 @@ void BackingWindow::Paint( const Rectangle& )
     bool bDark = GetSettings().GetStyleSettings().GetWindowColor().IsDark();
 
     Color aBackColor( bDark ? COL_BLACK : COL_WHITE );
-    if( bDark )
-    {
-        SetLineColor();
-        SetFillColor( aBackColor );
-        DrawRect( Rectangle( Point( 0, 0 ), GetSizePixel() ) );
-    }
-    else
-    {
-        Gradient aGrad( GRADIENT_LINEAR, Color( 0xa3, 0xae, 0xb8 ), Color( 0x73, 0x7e, 0x88 ) );
-        DrawGradient( Rectangle( Point( 0, 0 ), GetSizePixel() ), aGrad );
-    }
 
     // fill control rect
     SetLineColor();
