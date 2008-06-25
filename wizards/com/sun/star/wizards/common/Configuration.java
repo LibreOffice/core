@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Configuration.java,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -171,20 +171,33 @@ public abstract class Configuration {
         }
     }
 
-    public static Locale getOfficeLocale(XMultiServiceFactory xMSF) {
-        try {
+    public static String getOfficeLocaleString(XMultiServiceFactory xMSF)
+    {
+        String sLocale = "";
+        try
+        {
             Locale aLocLocale = new Locale();
             Object oMasterKey = getConfigurationRoot(xMSF, "org.openoffice.Setup/L10N/", false);
-            String sLocale = (String) Helper.getUnoObjectbyName(oMasterKey, "ooLocale");
-            String[] sLocaleList = JavaTools.ArrayoutofString(sLocale, "-");
-            aLocLocale.Language = sLocaleList[0];
-            if (sLocaleList.length > 1)
-                aLocLocale.Country = sLocaleList[1];
-            return aLocLocale;
-        } catch (Exception exception) {
-            exception.printStackTrace(System.out);
-            return null;
+            sLocale = (String) Helper.getUnoObjectbyName(oMasterKey, "ooLocale");
         }
+        catch (Exception exception)
+        {
+            exception.printStackTrace(System.out);
+        }
+        return sLocale;
+    }
+
+    public static Locale getOfficeLocale(XMultiServiceFactory xMSF)
+    {
+        Locale aLocLocale = new Locale();
+        // Object oMasterKey = getConfigurationRoot(xMSF, "org.openoffice.Setup/L10N/", false);
+        // String sLocale = (String) Helper.getUnoObjectbyName(oMasterKey, "ooLocale");
+        String sLocale = getOfficeLocaleString(xMSF);
+        String[] sLocaleList = JavaTools.ArrayoutofString(sLocale, "-");
+        aLocLocale.Language = sLocaleList[0];
+        if (sLocaleList.length > 1)
+            aLocLocale.Country = sLocaleList[1];
+        return aLocLocale;
     }
 
     public static String getOfficeLinguistic(XMultiServiceFactory xMSF) {
