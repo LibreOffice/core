@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppDetailView.hxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,9 @@
 #ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
 #include <com/sun/star/ucb/XContent.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_APPLICATION_NAMEDDATABASEOBJECT_HPP_
+#include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
+#endif
 #ifndef _SV_SPLIT_HXX
 #include <vcl/split.hxx>
 #endif
@@ -73,7 +76,6 @@ class SvLBoxEntry;
 
 namespace dbaui
 {
-    class OApplicationController;
     class OAppBorderWindow;
     class OApplicationDetailView;
     class OAppDetailPageHelper;
@@ -295,6 +297,20 @@ namespace dbaui
         */
         void getSelectionElementNames(::std::vector< ::rtl::OUString>& _rNames ) const;
 
+        /** describes the current selection for the given control
+        */
+        void    describeCurrentSelectionForControl(
+                    const Control& _rControl,
+                    ::com::sun::star::uno::Sequence< ::com::sun::star::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
+                );
+
+        /** describes the current selection for the given ElementType
+        */
+        void    describeCurrentSelectionForType(
+                    const ElementType _eType,
+                    ::com::sun::star::uno::Sequence< ::com::sun::star::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
+                );
+
         /** select all names on the currently selected container. Non existence names where ignored.
         *
         * \param _aNames the element names
@@ -376,11 +392,6 @@ namespace dbaui
 
         SvLBoxEntry* getEntry( const Point& _aPoint ) const;
 
-        /** a command entry was selected
-            @param  _sCommand
-                The command to be executed.
-        */
-        void onCreationClick( const ::rtl::OUString& _sCommand);
         Window* getTreeWindow() const;
     private:
         void                impl_createPage(
