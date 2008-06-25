@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppView.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,9 +42,6 @@
 #ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
 #endif
-#ifndef DBAUI_IAPPELEMENTNOTIFICATION_HXX
-#include "IAppElementNotification.hxx"
-#endif
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
 #endif
@@ -65,9 +62,6 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
-#include <com/sun/star/frame/XController.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -114,7 +108,7 @@
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
-
+#include "IApplicationController.hxx"
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
@@ -128,6 +122,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
+using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
 //==================================================================
 // class OAppBorderWindow
@@ -274,20 +269,11 @@ DBG_NAME(OApplicationView);
 //------------------------------------------------------------------------------
 OApplicationView::OApplicationView( Window* pParent
                                     ,const Reference< XMultiServiceFactory >& _rxOrb
-                                    ,IController* _pIController
-                                    ,IApplicationElementNotification* _pController
-                                    ,IControlActionListener* _pActonListener
-                                    ,IContainerFoundListener* _pContainerListener
-                                    ,IViewChangeListener* _pViewChangeListener
-                                    ,const Reference< XController>& _xController
+                                    ,IApplicationController& _rAppController
                                     ,PreviewMode _ePreviewMode
                                    ) :
-    ODataView( pParent ,_pIController,_rxOrb,WB_DIALOGCONTROL )
-    ,m_xController(_xController)
-    ,m_pElementNotification( _pController )
-    ,m_pActonListener(_pActonListener)
-    ,m_pContainerListener(_pContainerListener)
-    ,m_pViewChangeListener(_pViewChangeListener)
+    ODataView( pParent, _rAppController, _rxOrb, WB_DIALOGCONTROL )
+    ,m_rAppController( _rAppController )
     ,m_eChildFocus(NONE)
 {
     DBG_CTOR(OApplicationView,NULL);
@@ -318,7 +304,6 @@ OApplicationView::~OApplicationView()
         ::std::auto_ptr<Window> aTemp(m_pWin);
         m_pWin = NULL;
     }
-    m_pElementNotification = NULL;
 }
 // -----------------------------------------------------------------------------
 void OApplicationView::createIconAutoMnemonics( MnemonicGenerator& _rMnemonics )
@@ -513,6 +498,18 @@ void OApplicationView::getSelectionElementNames( ::std::vector< ::rtl::OUString>
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     getDetailView()->getSelectionElementNames( _rNames );
+}
+// -----------------------------------------------------------------------------
+void OApplicationView::describeCurrentSelectionForControl( const Control& _rControl, Sequence< NamedDatabaseObject >& _out_rSelectedObjects )
+{
+    OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
+    getDetailView()->describeCurrentSelectionForControl( _rControl, _out_rSelectedObjects );
+}
+// -----------------------------------------------------------------------------
+void OApplicationView::describeCurrentSelectionForType( const ElementType _eType, Sequence< NamedDatabaseObject >& _out_rSelectedObjects )
+{
+    OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
+    getDetailView()->describeCurrentSelectionForType( _eType, _out_rSelectedObjects );
 }
 // -----------------------------------------------------------------------------
 void OApplicationView::selectElements(const Sequence< ::rtl::OUString>& _aNames)
