@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: JAccess.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,7 +121,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     sal_Bool OJoinDesignViewAccess::isEditable() const
     {
-        return m_pTableView && !m_pTableView->getDesignView()->getController()->isReadOnly();
+        return m_pTableView && !m_pTableView->getDesignView()->getController().isReadOnly();
     }
     // -----------------------------------------------------------------------------
     sal_Int16 SAL_CALL OJoinDesignViewAccess::getAccessibleRole(  ) throw (RuntimeException)

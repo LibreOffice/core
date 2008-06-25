@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ConnectionLineAccess.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -260,7 +260,8 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     sal_Bool OConnectionLineAccess::isEditable() const
     {
-        return m_pLine ? !m_pLine->GetParent()->getDesignView()->getController()->isReadOnly() : sal_False;
+
+        return m_pLine ? !m_pLine->GetParent()->getDesignView()->getController().isReadOnly() : sal_False;
     }
     // -----------------------------------------------------------------------------
     Reference< XAccessibleContext > SAL_CALL OConnectionLineAccess::getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException)
