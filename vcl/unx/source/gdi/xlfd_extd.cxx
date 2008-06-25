@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xlfd_extd.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -243,9 +243,6 @@ ExtendedXlfd::AddEncoding( const Xlfd *pXlfd )
         mePitch     = GetPitch();
 
         maName      = pFamilyAttr->GetAnnotation();
-        // special case for X11 fonts from a ghostscript installation
-        if( maName.CompareIgnoreCaseToAscii( "itc ", 4 ) == COMPARE_EQUAL )
-            maName = maName.Copy( 4 );
 
         // the helvetica narrow hack
         if (  ! pFamilyAttr->HasFeature(XLFD_FEATURE_NARROW)
