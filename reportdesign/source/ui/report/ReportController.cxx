@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportController.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -283,6 +283,7 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
 ,m_bChartEnabled(false)
 ,m_bChartEnabledAsked(false)
 {
+    m_sMode =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("normal"));
     DBG_CTOR( rpt_OReportController,NULL);
 }
 // -----------------------------------------------------------------------------
@@ -1318,10 +1319,12 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             InvalidateAll();
             break;
         case SID_RPT_SHOWREPORTEXPLORER:
-            m_pMyOwnView->toggleReportExplorer();
+            if ( isUiVisible() )
+                m_pMyOwnView->toggleReportExplorer();
             break;
         case SID_FM_ADD_FIELD:
-            m_pMyOwnView->toggleAddField();
+            if ( isUiVisible() )
+                m_pMyOwnView->toggleAddField();
             break;
         case SID_SHOW_PROPERTYBROWSER:
             if ( m_bShowProperties )
@@ -1329,11 +1332,14 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             else
                 m_pMyOwnView->setCurrentPage(m_sLastActivePage);
 
-            m_bShowProperties = !m_bShowProperties;
-            if ( aArgs.getLength() == 1 )
-                aArgs[0].Value >>= m_bShowProperties;
+            if ( isUiVisible() )
+            {
+                m_bShowProperties = !m_bShowProperties;
+                if ( aArgs.getLength() == 1 )
+                    aArgs[0].Value >>= m_bShowProperties;
 
-            m_pMyOwnView->togglePropertyBrowser(m_bShowProperties);
+                m_pMyOwnView->togglePropertyBrowser(m_bShowProperties);
+            }
             break;
         case SID_PROPERTYBROWSER_LAST_PAGE: // nothing to do
             m_sLastActivePage = m_pMyOwnView->getCurrentPage();
@@ -2094,7 +2100,7 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
                     )
             {
                 InvalidateFeature(SID_FM_ADD_FIELD);
-                if ( !m_pMyOwnView->isAddFieldVisible() )
+                if ( !m_pMyOwnView->isAddFieldVisible() && isUiVisible() )
                     m_pMyOwnView->toggleAddField();
             }
             /// TODO: check what we need to notify here TitleHelper
@@ -2363,7 +2369,7 @@ void OReportController::openSortingAndGroupingDialog()
         m_pGroupsFloater = new OGroupsSortingDialog(getView(),!isEditable(),this);
         m_pGroupsFloater->AddEventListener(LINK(this,OReportController,EventLstHdl));
     }
-    else
+    else if ( isUiVisible() )
         m_pGroupsFloater->Show(!m_pGroupsFloater->IsVisible());
 }
 // -----------------------------------------------------------------------------
@@ -2729,7 +2735,7 @@ void OReportController::insertGraphic()
 // -----------------------------------------------------------------------------
 void OReportController::displayDesignFloater(sal_Bool _bShow)
 {
-    if ( m_pGroupsFloater )
+    if ( m_pGroupsFloater && isUiVisible() )
     {
         m_pGroupsFloater->Show( m_bGroupFloaterWasVisible && _bShow);
     }
@@ -3675,6 +3681,40 @@ void OReportController::checkChartEnabled()
     uno::Reference< frame::XTitle> xTitle(m_xReportDefinition,uno::UNO_QUERY_THROW);
 
     return xTitle->getTitle ();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OReportController::setMode( const ::rtl::OUString& aMode ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    m_sMode = aMode;
+}
+::rtl::OUString SAL_CALL OReportController::getMode(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    return m_sMode;
+}
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OReportController::getSupportedModes(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    static ::rtl::OUString s_sModes[] = { ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("remote")),
+                                          ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("normal")) };
+    return uno::Sequence< ::rtl::OUString> (&s_sModes[0],sizeof(s_sModes)/sizeof(s_sModes[0]));
+}
+::sal_Bool SAL_CALL OReportController::supportsMode( const ::rtl::OUString& aMode ) throw (::com::sun::star::uno::RuntimeException)
+{
+    uno::Sequence< ::rtl::OUString> aModes = getSupportedModes();
+    const ::rtl::OUString* pIter = aModes.getConstArray();
+    const ::rtl::OUString* pEnd  = pIter + aModes.getLength();
+    for(;pIter != pEnd;++pIter)
+    {
+        if ( pIter->equals(aMode ) )
+            break;
+    }
+    return pIter != pEnd;
+}
+// -----------------------------------------------------------------------------
+bool OReportController::isUiVisible() const
+{
+    return !m_sMode.equalsAscii("remote");
 }
 // -----------------------------------------------------------------------------
 void OReportController::impl_fillState_nothrow(const ::rtl::OUString& _sProperty,dbaui::FeatureState& _rState) const
