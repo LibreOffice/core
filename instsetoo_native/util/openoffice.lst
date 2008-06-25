@@ -45,7 +45,7 @@ OpenOffice
             REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0Beta/register.html?id=${INSTANCE_URN}&amp;cid=923142
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
 			ADDSYSTEMINTEGRATION 1
 			EVAL
 			FILEFORMATNAME OpenOffice.org
@@ -105,7 +105,7 @@ OpenOffice_wJRE
             REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0Beta/register.html?id=${INSTANCE_URN}&amp;cid=923142
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,javaversion.dat
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat
 			ADDSYSTEMINTEGRATION 1
 			EVAL
 			FILEFORMATNAME OpenOffice.org
@@ -170,7 +170,7 @@ OpenOffice_Dev
 			SOLSUREPACKAGEPREFIX ooodev
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,javaversion.dat
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
@@ -241,6 +241,7 @@ URE
             STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
             STARTCENTER_INFO_URL http://www.openoffice.org
             STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/taxonomy/term/36
+            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
         }
         active 1
         compression 5
@@ -302,7 +303,7 @@ BrOffice
             REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0Beta/register.html?id=${INSTANCE_URN}&amp;cid=923142
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
 			ADDSYSTEMINTEGRATION 1
 			EVAL
 			FILEFORMATNAME OpenOffice.org
@@ -362,7 +363,7 @@ BrOffice_wJRE
             REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0Beta/register.html?id=${INSTANCE_URN}&amp;cid=923142
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,javaversion.dat
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat
 			ADDSYSTEMINTEGRATION 1
 			EVAL
 			FILEFORMATNAME OpenOffice.org
@@ -427,7 +428,7 @@ BrOffice_Dev
 			SOLSUREPACKAGEPREFIX ooodev
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,javaversion.dat
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
