@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: linkeddocuments.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -321,9 +321,10 @@ namespace dbaui
                 ::comphelper::disposeComponent(xFormWizard);
             }
         }
-        catch( const Exception& )
+        catch(const Exception& e)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            (void) e;
+            OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newWithPilot: caught an exception while loading the object!");
         }
         return xRet;
     }
