@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxdevice.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
 #include <com/sun/star/awt/DeviceCapability.hpp>
+
+#include <com/sun/star/util/MeasureUnit.hpp>
 
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/awt/vclxfont.hxx>
@@ -94,7 +96,8 @@ sal_Bool VCLXDevice::IsCreatedWithToolkit() const
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XDevice*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::lang::XUnoTunnel*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ) );
+                                        SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XUnitConversion*, this ) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
@@ -103,7 +106,8 @@ IMPL_XUNOTUNNEL( VCLXDevice )
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXDevice )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice>* ) NULL )
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice>* ) NULL ),
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XUnitConversion>* ) NULL )
 IMPL_XTYPEPROVIDER_END
 
 
@@ -255,4 +259,129 @@ VCLXVirtualDevice::~VCLXVirtualDevice()
     DestroyOutputDevice();
 }
 
+
+// -----------------------------------------------------------------------------
+// ::com::sun::star::awt::XTextConstraints
+// -----------------------------------------------------------------------------
+// ::sal_Int32 SAL_CALL VCLXDevice::getTextWidth( const ::rtl::OUString& Text ) throw (::com::sun::star::uno::RuntimeException)
+// {
+//  ::vos::OGuard aGuard( GetMutex() );
+//     if (Text.getLength() == 0)
+//     {
+//         return 0;
+//     }
+//
+//     return 1;
+// }
+//
+// ::sal_Int32 SAL_CALL VCLXDevice::getTextHeight(  ) throw (::com::sun::star::uno::RuntimeException)
+// {
+//  ::vos::OGuard aGuard( GetMutex() );
+//     return 1;
+// }
+
+
+// -----------------------------------------------------------------------------
+// ::com::sun::star::awt::XUnitConversion
+// -----------------------------------------------------------------------------
+
+::com::sun::star::awt::Point SAL_CALL VCLXDevice::convertPointToLogic( const ::com::sun::star::awt::Point& aPoint, ::sal_Int16 TargetUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+{
+    (void)aPoint;
+    ::vos::OGuard aGuard( GetMutex() );
+    if (TargetUnit == com::sun::star::util::MeasureUnit::PERCENT ||
+        TargetUnit == com::sun::star::util::MeasureUnit::PIXEL)
+    {
+        // pixel or percentage not allowed here
+        throw ::com::sun::star::lang::IllegalArgumentException();
+    }
+
+    ::com::sun::star::awt::Point aAWTPoint(0,0);
+    // X,Y
+
+    if( mpOutputDevice )
+    {
+        MapMode aMode(VCLUnoHelper::ConvertToMapModeUnit(TargetUnit));
+        ::Point aVCLPoint = VCLUnoHelper::ConvertToVCLPoint(aPoint);
+        ::Point aDevPoint = mpOutputDevice->PixelToLogic(aVCLPoint, aMode );
+        aAWTPoint = VCLUnoHelper::ConvertToAWTPoint(aDevPoint);
+    }
+
+    return aAWTPoint;
+}
+
+
+::com::sun::star::awt::Point SAL_CALL VCLXDevice::convertPointToPixel( const ::com::sun::star::awt::Point& aPoint, ::sal_Int16 SourceUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+{
+    (void)aPoint;
+    ::vos::OGuard aGuard( GetMutex() );
+    if (SourceUnit == com::sun::star::util::MeasureUnit::PERCENT ||
+        SourceUnit == com::sun::star::util::MeasureUnit::PIXEL)
+    {
+        // pixel or percentage not allowed here
+        throw ::com::sun::star::lang::IllegalArgumentException();
+    }
+
+    ::com::sun::star::awt::Point aAWTPoint(0,0);
+
+    if( mpOutputDevice )
+    {
+        MapMode aMode(VCLUnoHelper::ConvertToMapModeUnit(SourceUnit));
+        ::Point aVCLPoint = VCLUnoHelper::ConvertToVCLPoint(aPoint);
+        ::Point aDevPoint = mpOutputDevice->LogicToPixel(aVCLPoint, aMode );
+        aAWTPoint = VCLUnoHelper::ConvertToAWTPoint(aDevPoint);
+    }
+
+    return aAWTPoint;
+}
+
+::com::sun::star::awt::Size SAL_CALL VCLXDevice::convertSizeToLogic( const ::com::sun::star::awt::Size& aSize, ::sal_Int16 TargetUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+{
+    (void)aSize;
+    ::vos::OGuard aGuard( GetMutex() );
+    if (TargetUnit == com::sun::star::util::MeasureUnit::PERCENT ||
+        TargetUnit == com::sun::star::util::MeasureUnit::PIXEL)
+    {
+        // pixel or percentage not allowed here
+        throw ::com::sun::star::lang::IllegalArgumentException();
+    }
+
+    ::com::sun::star::awt::Size aAWTSize(0,0);
+    // Width, Height
+
+
+    if( mpOutputDevice )
+    {
+        MapMode aMode(VCLUnoHelper::ConvertToMapModeUnit(TargetUnit));
+        ::Size aVCLSize = VCLUnoHelper::ConvertToVCLSize(aSize);
+        ::Size aDevSz = mpOutputDevice->PixelToLogic(aVCLSize, aMode );
+        aAWTSize = VCLUnoHelper::ConvertToAWTSize(aDevSz);
+    }
+
+    return aAWTSize;
+}
+
+::com::sun::star::awt::Size SAL_CALL VCLXDevice::convertSizeToPixel( const ::com::sun::star::awt::Size& aSize, ::sal_Int16 SourceUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+{
+    (void)aSize;
+    ::vos::OGuard aGuard( GetMutex() );
+    if (SourceUnit == com::sun::star::util::MeasureUnit::PERCENT ||
+        SourceUnit == com::sun::star::util::MeasureUnit::PIXEL)
+    {
+        // pixel or percentage not allowed here
+        throw ::com::sun::star::lang::IllegalArgumentException();
+    }
+
+    ::com::sun::star::awt::Size aAWTSize(0,0);
+    // Width, Height
+    if( mpOutputDevice )
+    {
+        MapMode aMode(VCLUnoHelper::ConvertToMapModeUnit(SourceUnit));
+        ::Size aVCLSize = VCLUnoHelper::ConvertToVCLSize(aSize);
+        ::Size aDevSz = mpOutputDevice->LogicToPixel(aVCLSize, aMode );
+        aAWTSize = VCLUnoHelper::ConvertToAWTSize(aDevSz);
+    }
+
+    return aAWTSize;
+}
 
