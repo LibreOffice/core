@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pngread.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1551,11 +1551,9 @@ PNGReader::~PNGReader()
 
 // ------------------------------------------------------------------------
 
-Size PNGReader::aPreviewSizeHint;
-
-BitmapEx PNGReader::Read()
+BitmapEx PNGReader::Read( const Size& i_rPreviewSizeHint )
 {
-    return mpImpl->GetBitmapEx( aPreviewSizeHint );
+    return mpImpl->GetBitmapEx( i_rPreviewSizeHint );
 }
 
 // ------------------------------------------------------------------------
