@@ -7,7 +7,7 @@ import com.sun.star.container.*;
 
 /** provides global helpers
 */
-public class dbfTools
+class dbfTools
 {
     /* ------------------------------------------------------------------ */
     /** disposes the component given
