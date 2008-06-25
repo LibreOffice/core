@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Date.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,8 +85,10 @@ protected:
 
     virtual ::com::sun::star::uno::Any
                             translateControlValueToExternalValue( ) const;
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+                            getSupportedBindingTypes();
     virtual ::com::sun::star::uno::Any
-                            translateExternalValueToControlValue( ) const;
+                            translateExternalValueToControlValue( const ::com::sun::star::uno::Any& _rExternalValue ) const;
 
     virtual ::com::sun::star::uno::Any
                             translateControlValueToValidatableValue( ) const;
@@ -95,8 +97,6 @@ protected:
                             getDefaultForReset() const;
 
     virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
-
-    virtual sal_Bool        approveValueBinding( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding );
 
 protected:
     DECLARE_XCLONEABLE();
