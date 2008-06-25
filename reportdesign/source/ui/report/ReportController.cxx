@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportController.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -266,6 +266,7 @@ DBG_NAME( rpt_OReportController )
 // -----------------------------------------------------------------------------
 OReportController::OReportController(Reference< XComponentContext > const & xContext)
 : OReportController_BASE(Reference< XMultiServiceFactory >(xContext->getServiceManager(),UNO_QUERY))
+,m_aSelectionListeners( m_aMutex )
 ,m_pMyOwnView(NULL)
 ,m_pClipbordNotifier(NULL)
 ,m_pGroupsFloater(NULL)
@@ -295,7 +296,6 @@ IMPLEMENT_FORWARD_XINTERFACE2(OReportController,OReportController_BASE,OReportCo
 // -----------------------------------------------------------------------------
 void OReportController::disposing()
 {
-
     if ( getView() && m_pClipbordNotifier )
     {
         m_pClipbordNotifier->ClearCallbackLink();
@@ -335,7 +335,15 @@ void OReportController::disposing()
         {
         }
     }
+
+    {
+        EventObject aDisposingEvent( *this );
+        m_aSelectionListeners.disposeAndClear( aDisposingEvent );
+    }
+
     OReportController_BASE::disposing();
+
+
     // disconnect();
     try
     {
@@ -1655,7 +1663,7 @@ void OReportController::doOpenHelpAgent()
 // -----------------------------------------------------------------------------
 sal_Bool OReportController::Construct(Window* pParent)
 {
-    m_pMyOwnView = new ODesignView(pParent,getORB(),this);
+    m_pMyOwnView = new ODesignView(pParent,getORB(),*this);
     StartListening(*(m_pMyOwnView));
     m_pView = m_pMyOwnView;
 
@@ -2792,6 +2800,16 @@ Any SAL_CALL OReportController::getSelection(  ) throw (RuntimeException)
             aRet <<= m_pMyOwnView->getCurrentSection();
     }
     return aRet;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OReportController::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& _Listener ) throw (RuntimeException)
+{
+    m_aSelectionListeners.addInterface( _Listener );
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OReportController::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& _Listener ) throw (RuntimeException)
+{
+    m_aSelectionListeners.removeInterface( _Listener );
 }
 // -----------------------------------------------------------------------------
 void OReportController::createNewFunction(const uno::Any& _aValue)
