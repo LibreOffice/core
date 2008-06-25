@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PentahoReportJob.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -240,7 +240,10 @@ public class PentahoReportJob implements ReportJob
 
                 try
                 {
-                    final FormulaFunction function = (FormulaFunction) parser.parse(exp.getFormulaExpression());
+                    final String expression = exp.getFormulaExpression();
+                    if ( expression == null)
+                        continue;
+                    final FormulaFunction function = (FormulaFunction) parser.parse(expression);
                     final LValue[] parameters = function.getChildValues();
                     if (parameters.length > 0)
                     {
