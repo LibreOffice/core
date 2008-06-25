@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentdefinition.hxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,7 +145,7 @@ public:
     sal_Bool saveAs();
     void closeObject();
     sal_Bool isModified();
-    void fillReportData();
+    void fillReportData(::osl::ClearableMutexGuard & _aGuard);
     inline sal_Bool isNewReport() const { return !m_bForm && !m_pImpl->m_aProps.bAsTemplate; }
 
     /** prepares closing the document component
@@ -267,7 +267,9 @@ private:
     void onCommandInsert( const ::rtl::OUString& _sURL, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& Environment ) throw( ::com::sun::star::uno::Exception );
     void onCommandPreview( ::com::sun::star::uno::Any& _rImage );
     void onCommandOpenSomething( const ::com::sun::star::uno::Any& _rArgument, const bool _bActivate,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& _rxEnvironment, ::com::sun::star::uno::Any& _out_rComponent );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& _rxEnvironment,
+            ::com::sun::star::uno::Any& _out_rComponent,
+            ::osl::ClearableMutexGuard & _aClearableGuard);
 };
 
 //........................................................................
