@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sallayout.cxx,v $
- * $Revision: 1.92 $
+ * $Revision: 1.93 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1550,12 +1550,13 @@ void GenericSalLayout::SortGlyphItems()
 
 // =======================================================================
 
-MultiSalLayout::MultiSalLayout( SalLayout& rBaseLayout )
-:   SalLayout(),
-    mnLevel( 1 ),
-    mbInComplete( false )
+MultiSalLayout::MultiSalLayout( SalLayout& rBaseLayout, const ImplFontData* pBaseFont )
+:   SalLayout()
+,   mnLevel( 1 )
+,   mbInComplete( false )
 {
     //maFallbackRuns[0].Clear();
+    mpFallbackFonts[ 0 ] = pBaseFont;
     mpLayouts[ 0 ]  = &rBaseLayout;
     mnUnitsPerPixel = rBaseLayout.GetUnitsPerPixel();
 }
