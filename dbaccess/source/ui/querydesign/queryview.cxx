@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: queryview.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,8 +46,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 DBG_NAME(OQueryView)
 // -------------------------------------------------------------------------
-OQueryView::OQueryView(Window* _pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
-    :OJoinDesignView(_pParent,_pController,_rFactory)
+OQueryView::OQueryView(Window* _pParent, OQueryController& _rController,const Reference< XMultiServiceFactory >& _rFactory)
+    :OJoinDesignView( _pParent, _rController, _rFactory )
 {
     DBG_CTOR(OQueryView,NULL);
 
