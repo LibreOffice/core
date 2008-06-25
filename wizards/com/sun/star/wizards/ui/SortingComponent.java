@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SortingComponent.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,20 +111,20 @@ public class SortingComponent {
     }
 
     private boolean getResources() {
-        sSortHeader[0] = CurUnoDialog.oResource.getResText(UIConsts.RID_REPORT + 20);
-        sSortHeader[1] = CurUnoDialog.oResource.getResText(UIConsts.RID_REPORT + 21);
-        sSortHeader[2] = CurUnoDialog.oResource.getResText(UIConsts.RID_REPORT + 51);
-        sSortHeader[3] = CurUnoDialog.oResource.getResText(UIConsts.RID_REPORT + 52);
-        sSortAscend[0] = CurUnoDialog.oResource.getResText(UIConsts.RID_REPORT + 36);
-        sSortAscend[1] = CurUnoDialog.oResource.getResText(UIConsts.RID_REPORT + 53);
-        sSortAscend[2] = CurUnoDialog.oResource.getResText(UIConsts.RID_REPORT + 54);
-        sSortAscend[3] = CurUnoDialog.oResource.getResText(UIConsts.RID_REPORT + 55);
-        sSortDescend[0] = CurUnoDialog.oResource.getResText(UIConsts.RID_REPORT + 37);
-        sSortDescend[1] = CurUnoDialog.oResource.getResText(UIConsts.RID_REPORT + 56);
-        sSortDescend[2] = CurUnoDialog.oResource.getResText(UIConsts.RID_REPORT + 57);
-        sSortDescend[3] = CurUnoDialog.oResource.getResText(UIConsts.RID_REPORT + 58);
-        sSortCriteriaisduplicate = CurUnoDialog.oResource.getResText(UIConsts.RID_REPORT + 74);
-        sNoSorting = CurUnoDialog.oResource.getResText(UIConsts.RID_REPORT + 8);
+        sSortHeader[0] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 20);
+        sSortHeader[1] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 21);
+        sSortHeader[2] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 51);
+        sSortHeader[3] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 52);
+        sSortAscend[0] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 36);
+        sSortAscend[1] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 53);
+        sSortAscend[2] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 54);
+        sSortAscend[3] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 55);
+        sSortDescend[0] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 37);
+        sSortDescend[1] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 56);
+        sSortDescend[2] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 57);
+        sSortDescend[3] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 58);
+        sSortCriteriaisduplicate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 74);
+        sNoSorting = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 8);
         return true;
     }
 
@@ -133,13 +133,19 @@ public class SortingComponent {
         String[] ViewFieldNames = new String[FieldCount + 1];
         ViewFieldNames[0] = sNoSorting;
         for (int i = 0; i < FieldCount; i++)
+        {
             ViewFieldNames[i + 1] = _FieldNames[i];
+        }
         short[] SelList = null;
         for (int i = 0; i < 4; i++) {
             if (i < _SortFieldNames.length)
+            {
                 SelList = new short[] {(short) (JavaTools.FieldInList(_FieldNames, _SortFieldNames[i][0]) + 1)};
+            }
             else
+            {
                 SelList = new short[] {(short) 0 };
+            }
             CurUnoDialog.setControlProperty("lstSort" + new Integer(i + 1).toString(), "StringItemList", ViewFieldNames);
             CurUnoDialog.setControlProperty("lstSort" + new Integer(i + 1).toString(), "SelectedItems", SelList);
             toggleSortListBox(i, (i <= _SortFieldNames.length));
@@ -150,7 +156,9 @@ public class SortingComponent {
         MaxSortIndex = -1;
         for (int i = 0; i <= MAXSORTCRITERIAINDEX; i++) {
             if (xSortListBox[i].getSelectedItemPos() > 0)
+            {
                 MaxSortIndex += 1;
+            }
         }
     }
 
@@ -181,9 +189,13 @@ public class SortingComponent {
             setMaxSortIndex();
             boolean bDoEnable = (xSortListBox[CurIndex].getSelectedItemPos() != 0);
             if (!bDoEnable)
+            {
                 moveupSortItems(CurIndex, bDoEnable); //disableListBoxesfromIndex(CurIndex);
+            }
             else
+            {
                 toggleSortListBox(CurIndex + 1, true);
+            }
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
         }
@@ -204,9 +216,13 @@ public class SortingComponent {
                 iCurState = ((Short) CurUnoDialog.getControlProperty("optAscend" + new Integer(i + 1).toString(), "State")).shortValue();
                 SortFieldNames[i][0] = CurFieldName;
                 if (iCurState == 1)
+                {
                     SortFieldNames[i][1] = "ASC";
+                }
                 else
+                {
                     SortFieldNames[i][1] = "DESC";
+                }
             }
             // When searching for a duplicate entry we can neglect wether the entries are to be sorted ascending or descending
             // TODO for the future we should deliver a messagebox when two different sorting modes have been applied to one field
@@ -218,8 +234,11 @@ public class SortingComponent {
                 CurUnoDialog.setFocus("lstSort" + (iduplicate + 1));
                 return new String[][] {
                 };
-            } else
+            }
+            else
+            {
                 return SortFieldNames;
+            }
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
             return null;
@@ -231,7 +250,9 @@ public class SortingComponent {
             for (int i = CurIndex + 1; i <= MAXSORTCRITERIAINDEX; i++) {
                 toggleSortListBox(i, (false));
                 if (i < MaxSortIndex)
+                {
                     CurUnoDialog.setControlProperty("lstSort" + new Integer(i + 2).toString(), "SelectedItems", new short[] { 0 });
+                }
                 //          xSortListBox[i+1].selectItemPos((short)0, true);
             }
             CurUnoDialog.setFocus("lblSort" + new Integer(CurIndex + 1));
@@ -254,9 +275,14 @@ public class SortingComponent {
                 }
             }
             if (MaxSortIndex < xSortListBox.length - 2)
+            {
                 toggleSortListBox(MaxSortIndex + 2, false);
-        } else
+            }
+        }
+        else
+        {
             toggleSortListBox(CurIndex + 1, bDoEnable);
+        }
     }
 
     private void toggleSortListBox(int CurIndex, boolean bDoEnable) {
@@ -267,7 +293,9 @@ public class SortingComponent {
                 CurUnoDialog.setControlProperty("optAscend" + new Integer(CurIndex + 1).toString(), "Enabled", new Boolean(bDoEnable));
                 CurUnoDialog.setControlProperty("optDescend" + new Integer(CurIndex + 1).toString(), "Enabled", new Boolean(bDoEnable));
                 if (bDoEnable == false)
+                {
                     CurUnoDialog.setControlProperty("lstSort" + new Integer(CurIndex + 1).toString(), "SelectedItems", new short[] { 0 });
+                }
             }
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
