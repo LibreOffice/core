@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scriptdocument.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,7 +78,7 @@
 #include <tools/urlobj.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/processfactory.hxx>
+#include <comphelper/documentinfo.hxx>
 #include <comphelper/componentcontext.hxx>
 
 #include <vos/mutex.hxx>
@@ -868,30 +868,7 @@ namespace basctl
         ::rtl::OUString sTitle;
         if ( isValid() && isDocument() )
         {
-            INetURLObject aURL( getURL() );
-            sTitle = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-            if ( sTitle.getLength() == 0 )
-            {
-                // this is a hack. There is no UNO equivalent to retrieve the title of an unsaved
-                // document (which is something like "Untitled<no>"). Until AS finishes his document
-                // title framework, we need to use the below workaround
-                try
-                {
-                    Reference< XFrame > xFrame;
-                    getCurrentFrame( xFrame );
-                    Reference< XPropertySet > xFrameProps( xFrame, UNO_QUERY_THROW );
-                    OSL_VERIFY( xFrameProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ) ) >>= sTitle );
-
-                    sal_Int32 nWhiteSpacePos = sTitle.indexOf( ' ' );
-                    OSL_ENSURE( nWhiteSpacePos >= 0, "ScriptDocument_Impl::getTitle: Title hack doesn't work anymore! (FS)" );
-                    if ( nWhiteSpacePos >= 0 )
-                        sTitle = sTitle.copy( 0, nWhiteSpacePos );
-                }
-                catch( const Exception& )
-                {
-                    DBG_UNHANDLED_EXCEPTION();
-                }
-            }
+            sTitle = ::comphelper::DocumentInfo::getDocumentTitle( m_xDocument );
         }
         return sTitle;
     }
