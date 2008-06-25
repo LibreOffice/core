@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ListBox.cxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,7 +129,6 @@ namespace frm
         ,m_aListRowSet( getContext() )
         ,m_nNULLPos(-1)
         ,m_bBoundComponent(sal_False)
-        ,m_eTransferSelectionAs( tsEntry )
     {
         DBG_CTOR(OListBoxModel,NULL);
 
@@ -152,7 +151,6 @@ namespace frm
         ,m_aDefaultSelectSeq( _pOriginal->m_aDefaultSelectSeq )
         ,m_nNULLPos(-1)
         ,m_bBoundComponent(sal_False)
-        ,m_eTransferSelectionAs( tsEntry )
     {
         DBG_CTOR(OListBoxModel,NULL);
     }
@@ -298,9 +296,16 @@ namespace frm
             break;
 
         case PROPERTY_ID_STRINGITEMLIST:
-            setNewStringItemList( _rValue );
-            resetNoBroadcast();
-            break;
+        {
+            ::osl::ResettableMutexGuard aGuard( m_aMutex );
+            setNewStringItemList( _rValue, aGuard );
+                // TODO: this is bogus. setNewStringItemList expects a guard which has the *only*
+                // lock to the mutex, but setFastPropertyValue_NoBroadcast is already called with
+                // a lock - so we effectively has two locks here, of which setNewStringItemList can
+                // only control one.
+        }
+        resetNoBroadcast();
+        break;
 
         default:
             OBoundControlModel::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
@@ -454,7 +459,7 @@ namespace frm
         // Deshalb muessen sie explizit ueber setPropertyValue() gesetzt werden.
 
         OBoundControlModel::read(_rxInStream);
-        ::osl::MutexGuard aGuard(m_aMutex);
+        ::osl::ResettableMutexGuard aGuard(m_aMutex);
 
         // since we are "overwriting" the StringItemList of our aggregate (means we have
         // an own place to store the value, instead of relying on our aggregate storing it),
@@ -462,7 +467,7 @@ namespace frm
         try
         {
             if ( m_xAggregateSet.is() )
-                setNewStringItemList( m_xAggregateSet->getPropertyValue( PROPERTY_STRINGITEMLIST ) );
+                setNewStringItemList( m_xAggregateSet->getPropertyValue( PROPERTY_STRINGITEMLIST ), aGuard );
         }
         catch( const Exception& )
         {
@@ -1055,121 +1060,128 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    Any OListBoxModel::translateExternalValueToControlValue( ) const
+    namespace
     {
-        OSL_PRECOND( hasExternalValueBinding(),
-            "OListBoxModel::translateExternalValueToControlValue: precondition not met!" );
-
-        Sequence< sal_Int16 > aSelectIndexes;
-        if ( hasExternalValueBinding() )
+        /** type how we should transfer our selection to external value bindings
+        */
+        enum ExchangeType
         {
-            switch ( m_eTransferSelectionAs )
+            eIndexList,     /// as list of indexes of selected entries
+            eIndex,         /// as index of the selected entry
+            eEntryList,     /// as list of string representations of selected entries
+            eEntry          /// as string representation of the selected entry
+        };
+
+        //--------------------------------------------------------------------
+        ExchangeType lcl_getCurrentExchangeType( const Type& _rExchangeType )
+        {
+            switch ( _rExchangeType.getTypeClass() )
             {
-            case tsIndexList:
+            case TypeClass_STRING:
+                return eEntry;
+            case TypeClass_LONG:
+                return eIndex;
+            case TypeClass_SEQUENCE:
+            {
+                Type aElementType = ::comphelper::getSequenceElementType( _rExchangeType );
+                switch ( aElementType.getTypeClass() )
                 {
-                    // unfortunately, our select sequence is a sequence<short>, while the external binding
-                    // supplies sequence<int> only -> transform this
-                    Sequence< sal_Int32 > aSelectIndexesPure;
-                    getExternalValueBinding()->getValue( ::getCppuType( static_cast< Sequence< sal_Int32 >* >( NULL ) ) ) >>= aSelectIndexesPure;
-                    aSelectIndexes.realloc( aSelectIndexesPure.getLength() );
-                    ::std::copy(
-                        aSelectIndexesPure.getConstArray(),
-                        aSelectIndexesPure.getConstArray() + aSelectIndexesPure.getLength(),
-                        aSelectIndexes.getArray()
-                    );
+                case TypeClass_STRING:
+                    return eEntryList;
+                case TypeClass_LONG:
+                    return eIndexList;
+                default:
+                    break;
                 }
-                break;
-
-            case tsIndex:
-                {
-                    sal_Int32 nSelectIndex = -1;
-                    getExternalValueBinding()->getValue( ::getCppuType( static_cast< sal_Int32* >( NULL ) ) ) >>= nSelectIndex;
-                    if ( ( nSelectIndex >= 0 ) && ( nSelectIndex < getStringItemList().getLength() ) )
-                    {
-                        aSelectIndexes.realloc( 1 );
-                        aSelectIndexes[ 0 ] = static_cast< sal_Int16 >( nSelectIndex );
-                    }
-                }
-                break;
-
-            case tsEntryList:
-                {
-                    // we can retrieve a string list from the binding for multiple selection
-                    Sequence< ::rtl::OUString > aSelectEntries;
-                    getExternalValueBinding()->getValue( ::getCppuType( static_cast< Sequence< ::rtl::OUString >* >( NULL ) ) ) >>= aSelectEntries;
-
-                    ::std::set< sal_Int16 > aSelectionSet;
-
-                    // find the selection entries in our item list
-                    const ::rtl::OUString* pSelectEntries = aSelectEntries.getArray();
-                    const ::rtl::OUString* pSelectEntriesEnd = pSelectEntries + aSelectEntries.getLength();
-                    while ( pSelectEntries != pSelectEntriesEnd )
-                    {
-                        // the indexes where the current string appears in our string items
-                        Sequence< sal_Int16 > aThisEntryIndexes;
-                        aThisEntryIndexes = findValue( getStringItemList(), *pSelectEntries++, sal_False );
-
-                        // insert all the indexes of this entry into our set
-                        ::std::copy(
-                            aThisEntryIndexes.getConstArray(),
-                            aThisEntryIndexes.getConstArray() + aThisEntryIndexes.getLength(),
-                            ::std::insert_iterator< ::std::set< sal_Int16 > >( aSelectionSet, aSelectionSet.begin() )
-                            );
-                    }
-
-                    // copy the indexes to the sequence
-                    aSelectIndexes.realloc( aSelectionSet.size() );
-                    ::std::copy(
-                        aSelectionSet.begin(),
-                        aSelectionSet.end(),
-                        aSelectIndexes.getArray()
-                        );
-                }
-                break;
-
-            case tsEntry:
-                {
-                    ::rtl::OUString sStringToSelect;
-                    getExternalValueBinding()->getValue( ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) ) >>= sStringToSelect;
-
-                    aSelectIndexes = findValue( getStringItemList(), sStringToSelect, sal_False );
-                }
+            }
+            default:
                 break;
             }
+            OSL_ENSURE( false, "lcl_getCurrentExchangeType: unsupported (unexpected) exchange type!" );
+            return eEntry;
         }
-
-        return makeAny( aSelectIndexes );
     }
 
     //--------------------------------------------------------------------
-    void OListBoxModel::onConnectedExternalValue( )
+    Any OListBoxModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
     {
-        OSL_ENSURE( hasExternalValueBinding(), "OListBoxModel::onConnectedExternalValue: no external value binding!" );
+        Sequence< sal_Int16 > aSelectIndexes;
 
-        // if the binding supports string sequences, we prefer this
-        if ( getExternalValueBinding().is() )
+        switch ( lcl_getCurrentExchangeType( getExternalValueType() ) )
         {
-            if ( getExternalValueBinding()->supportsType( ::getCppuType( static_cast< Sequence< sal_Int32 >* >( NULL ) ) ) )
+        case eIndexList:
+        {
+            // unfortunately, our select sequence is a sequence<short>, while the external binding
+            // supplies sequence<int> only -> transform this
+            Sequence< sal_Int32 > aSelectIndexesPure;
+            OSL_VERIFY( _rExternalValue >>= aSelectIndexesPure );
+            aSelectIndexes.realloc( aSelectIndexesPure.getLength() );
+            ::std::copy(
+                aSelectIndexesPure.getConstArray(),
+                aSelectIndexesPure.getConstArray() + aSelectIndexesPure.getLength(),
+                aSelectIndexes.getArray()
+            );
+        }
+        break;
+
+        case eIndex:
+        {
+            sal_Int32 nSelectIndex = -1;
+            OSL_VERIFY( _rExternalValue >>= nSelectIndex );
+            if ( ( nSelectIndex >= 0 ) && ( nSelectIndex < getStringItemList().getLength() ) )
             {
-                m_eTransferSelectionAs = tsIndexList;
-            }
-            else if ( getExternalValueBinding()->supportsType( ::getCppuType( static_cast< sal_Int32* >( NULL ) ) ) )
-            {
-                m_eTransferSelectionAs = tsIndex;
-            }
-            else if ( getExternalValueBinding()->supportsType( ::getCppuType( static_cast< Sequence< ::rtl::OUString >* >( NULL ) ) ) )
-            {
-                m_eTransferSelectionAs = tsEntryList;
-            }
-            else
-            {
-                OSL_ENSURE( getExternalValueBinding()->supportsType( ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) ),
-                    "OListBoxModel::onConnectedExternalValue: this should not have survived approveValueBinding!" );
-                m_eTransferSelectionAs = tsEntry;
+                aSelectIndexes.realloc( 1 );
+                aSelectIndexes[ 0 ] = static_cast< sal_Int16 >( nSelectIndex );
             }
         }
+        break;
 
-        OBoundControlModel::onConnectedExternalValue( );
+        case eEntryList:
+        {
+            // we can retrieve a string list from the binding for multiple selection
+            Sequence< ::rtl::OUString > aSelectEntries;
+            OSL_VERIFY( _rExternalValue >>= aSelectEntries );
+
+            ::std::set< sal_Int16 > aSelectionSet;
+
+            // find the selection entries in our item list
+            const ::rtl::OUString* pSelectEntries = aSelectEntries.getArray();
+            const ::rtl::OUString* pSelectEntriesEnd = pSelectEntries + aSelectEntries.getLength();
+            while ( pSelectEntries != pSelectEntriesEnd )
+            {
+                // the indexes where the current string appears in our string items
+                Sequence< sal_Int16 > aThisEntryIndexes;
+                aThisEntryIndexes = findValue( getStringItemList(), *pSelectEntries++, sal_False );
+
+                // insert all the indexes of this entry into our set
+                ::std::copy(
+                    aThisEntryIndexes.getConstArray(),
+                    aThisEntryIndexes.getConstArray() + aThisEntryIndexes.getLength(),
+                    ::std::insert_iterator< ::std::set< sal_Int16 > >( aSelectionSet, aSelectionSet.begin() )
+                    );
+            }
+
+            // copy the indexes to the sequence
+            aSelectIndexes.realloc( aSelectionSet.size() );
+            ::std::copy(
+                aSelectionSet.begin(),
+                aSelectionSet.end(),
+                aSelectIndexes.getArray()
+            );
+        }
+        break;
+
+        case eEntry:
+        {
+            ::rtl::OUString sStringToSelect;
+            OSL_VERIFY( _rExternalValue >>= sStringToSelect );
+
+            aSelectIndexes = findValue( getStringItemList(), sStringToSelect, sal_False );
+        }
+        break;
+        }
+
+        return makeAny( aSelectIndexes );
     }
 
     //--------------------------------------------------------------------
@@ -1236,41 +1248,39 @@ namespace frm
         const_cast< OListBoxModel* >( this )->getPropertyValue( PROPERTY_SELECT_SEQ ) >>= aSelectSequence;
 
         Any aReturn;
-        switch ( m_eTransferSelectionAs )
+        switch ( lcl_getCurrentExchangeType( getExternalValueType() ) )
         {
-        case tsIndexList:
-            {
-                OSL_ENSURE( getExternalValueBinding()->supportsType( ::getCppuType( static_cast< Sequence< sal_Int32 >* >( NULL ) ) ),
-                    "OListBoxModel::translateControlValueToExternalValue: how this? It does not support string sequences!" );
-                // unfortunately, the select sequence is a sequence<short>, but our binding
-                // expects int's
-                Sequence< sal_Int32 > aTransformed( aSelectSequence.getLength() );
-                ::std::copy(
-                    aSelectSequence.getConstArray(),
-                    aSelectSequence.getConstArray() + aSelectSequence.getLength(),
-                    aTransformed.getArray()
-                );
-                aReturn <<= aTransformed;
-            }
-            break;
+        case eIndexList:
+        {
+            // unfortunately, the select sequence is a sequence<short>, but our binding
+            // expects int's
+            Sequence< sal_Int32 > aTransformed( aSelectSequence.getLength() );
+            ::std::copy(
+                aSelectSequence.getConstArray(),
+                aSelectSequence.getConstArray() + aSelectSequence.getLength(),
+                aTransformed.getArray()
+            );
+            aReturn <<= aTransformed;
+        }
+        break;
 
-        case tsIndex:
-            if ( aSelectSequence.getLength() <= 1 )
-            {
-                sal_Int32 nIndex = -1;
+        case eIndex:
+        if ( aSelectSequence.getLength() <= 1 )
+        {
+            sal_Int32 nIndex = -1;
 
-                if ( aSelectSequence.getLength() == 1 )
-                    nIndex = aSelectSequence[0];
+            if ( aSelectSequence.getLength() == 1 )
+                nIndex = aSelectSequence[0];
 
-                aReturn <<= nIndex;
-            }
-            break;
+            aReturn <<= nIndex;
+        }
+        break;
 
-        case tsEntryList:
+        case eEntryList:
             aReturn = lcl_getMultiSelectedEntries( aSelectSequence, getStringItemList() );
             break;
 
-        case tsEntry:
+        case eEntry:
             aReturn = lcl_getSingleSelectedEntry( aSelectSequence, getStringItemList() );
             break;
         }
@@ -1308,49 +1318,46 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    sal_Bool OListBoxModel::approveValueBinding( const Reference< XValueBinding >& _rxBinding )
+    Sequence< Type > OListBoxModel::getSupportedBindingTypes()
     {
-        OSL_PRECOND( _rxBinding.is(), "OListBoxModel::approveValueBinding: precondition not met!" );
-
-        // only strings are accepted for simplicity
-        return  _rxBinding.is()
-            &&  (   _rxBinding->supportsType( ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) )
-                ||  _rxBinding->supportsType( ::getCppuType( static_cast< Sequence< ::rtl::OUString >* >( NULL ) ) )
-                ||  _rxBinding->supportsType( ::getCppuType( static_cast< sal_Int32* >( NULL ) ) )
-                ||  _rxBinding->supportsType( ::getCppuType( static_cast< Sequence< sal_Int32 >* >( NULL ) ) )
-                );
+        Sequence< Type > aTypes(4);
+        aTypes[0] = ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
+        aTypes[1] = ::getCppuType( static_cast< Sequence< ::rtl::OUString >* >( NULL ) );
+        aTypes[2] = ::getCppuType( static_cast< sal_Int32* >( NULL ) );
+        aTypes[3] = ::getCppuType( static_cast< Sequence< sal_Int32 >* >( NULL ) );
+        return aTypes;
     }
 
     //--------------------------------------------------------------------
-    void OListBoxModel::stringItemListChanged( )
+    void OListBoxModel::stringItemListChanged( ::osl::ResettableMutexGuard& _rInstanceLock )
     {
-        if ( m_xAggregateSet.is() )
-        {
-            suspendValueListening();
-            try
-            {
-                m_xAggregateSet->setPropertyValue( PROPERTY_STRINGITEMLIST, makeAny( getStringItemList() ) );
-            }
-            catch( const Exception& )
-            {
-                OSL_ENSURE( sal_False, "OListBoxModel::stringItemListChanged: caught an exception!" );
-            }
-            resumeValueListening();
+        if ( !m_xAggregateSet.is() )
+            return;
 
-            // update the selection here
-            if ( hasExternalValueBinding( ) )
-                transferExternalValueToControl( );
+        suspendValueListening();
+        try
+        {
+            m_xAggregateSet->setPropertyValue( PROPERTY_STRINGITEMLIST, makeAny( getStringItemList() ) );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        resumeValueListening();
+
+        // update the selection here
+        if ( hasExternalValueBinding( ) )
+            transferExternalValueToControl( _rInstanceLock );
+        else
+        {
+            if ( hasField() )
+            {
+                // TODO: update the selection in case we're bound to a database column
+            }
             else
             {
-                if ( hasField() )
-                {
-                    // TODO: update the selection in case we're bound to a database column
-                }
-                else
-                {
-                    if ( m_aDefaultSelectSeq.getLength() )
-                        setControlValue( makeAny( m_aDefaultSelectSeq ), eOther );
-                }
+                if ( m_aDefaultSelectSeq.getLength() )
+                    setControlValue( makeAny( m_aDefaultSelectSeq ), eOther );
             }
         }
     }
