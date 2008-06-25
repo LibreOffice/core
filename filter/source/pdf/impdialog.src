@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impdialog.src,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -284,7 +284,7 @@ TabPage  RID_PDF_TAB_OPNFTR
     NumericField NUM_MAGNF_INITIAL_PAGE
     {
         Pos = MAP_APPFONT( 112, 52 );
-        Size = MAP_APPFONT( 40, 10 );
+        Size = MAP_APPFONT( 40, 12 );
         Value = 1;
         Spin = TRUE;
         Border = TRUE;
@@ -336,7 +336,7 @@ TabPage  RID_PDF_TAB_OPNFTR
     MetricField NUM_MAGNF_ZOOM
     {
         Pos = MAP_APPFONT( 112, 128 ) ;
-        Size = MAP_APPFONT( 40, 10 ) ;
+        Size = MAP_APPFONT( 40, 12 ) ;
         Unit = FUNIT_PERCENT;
         Value = 100;
         Spin = TRUE;
@@ -493,7 +493,7 @@ TabPage  RID_PDF_TAB_VPREFER
     NumericField NUM_BOOKMARKLEVELS
     {
         Pos = MAP_APPFONT ( 120 , 166 ) ;
-        Size = MAP_APPFONT ( 32 , 10 ) ;
+        Size = MAP_APPFONT ( 32 , 12 ) ;
         Border = TRUE;
         Spin = TRUE;
         Minimum = 1;
