@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.pmk,v $
 #
-# $Revision: 1.54 $
+# $Revision: 1.55 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -98,6 +98,7 @@ DESTPLATFROM=windows
 DESTDIRBIN=$(DESTDIR)$/$(DESTPLATFROM)$/bin
 DESTDIRLIB=$(DESTDIR)$/$(DESTPLATFROM)$/lib
 DESTDIRDLL=$(DESTDIRBIN)
+DESTDIRCLI=$(DESTDIR)$/cli
 
 .ELSE
 #--------------------
