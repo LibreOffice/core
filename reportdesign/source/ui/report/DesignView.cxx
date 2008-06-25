@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DesignView.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -153,10 +153,10 @@ DBG_NAME( rpt_ODesignView )
 //------------------------------------------------------------------------------
 ODesignView::ODesignView(   Window* pParent,
                             const Reference< XMultiServiceFactory >& _rxOrb,
-                            OReportController* _pController) :
-    ODataView( pParent,_pController,_rxOrb,WB_DIALOGCONTROL )
+                            OReportController& _rController) :
+    ODataView( pParent, _rController, _rxOrb, WB_DIALOGCONTROL )
     //,m_aSplitter(this,WB_HSCROLL)
-    ,m_pReportController( _pController )
+    ,m_rReportController( _rController )
     ,m_pPropWin(NULL)
     ,m_pAddField(NULL)
     ,m_pCurrentView(NULL)
@@ -268,12 +268,12 @@ long ODesignView::PreNotify( NotifyEvent& rNEvt )
                 const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
                 if ( handleKeyEvent(*pKeyEvent) )
                     nRet = 1L;
-                else if ( nRet == 1L && m_pAccel.get() && m_pController )
+                else if ( nRet == 1L && m_pAccel.get() )
                 {
                     const KeyCode& rCode = pKeyEvent->GetKeyCode();
                     util::URL aUrl;
                     aUrl.Complete = m_pAccel->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rCode));
-                    if ( !aUrl.Complete.getLength() || !m_pController->isCommandEnabled( aUrl.Complete ) )
+                    if ( !aUrl.Complete.getLength() || !m_rController.isCommandEnabled( aUrl.Complete ) )
                         nRet = 0L;
                 }
             }
@@ -292,7 +292,7 @@ void ODesignView::resizeDocumentView(Rectangle& _rPlayground)
         const Size aPlaygroundSize( _rPlayground.GetSize() );
 
         // calc the split pos, and forward it to the controller
-        sal_Int32 nSplitPos = getController()->getSplitPos();
+        sal_Int32 nSplitPos = getController().getSplitPos();
         if ( 0 != aPlaygroundSize.Width() )
         {
             if  (   ( -1 == nSplitPos )
@@ -303,7 +303,7 @@ void ODesignView::resizeDocumentView(Rectangle& _rPlayground)
                 if ( m_pPropWin && m_pPropWin->IsVisible() )
                     nMinWidth = m_pPropWin->GetMinOutputSizePixel().Width();
                 nSplitPos = static_cast<sal_Int32>(_rPlayground.Right() - nMinWidth);
-                getController()->setSplitPos(nSplitPos);
+                getController().setSplitPos(nSplitPos);
             }
         } // if ( 0 != _rPlaygroundSize.Width() )
 
@@ -322,7 +322,7 @@ void ODesignView::resizeDocumentView(Rectangle& _rPlayground)
                     aTaskPanePos.X() = aPlaygroundSize.Width() - nMinWidth;
                 }
                 nSplitPos = aTaskPanePos.X() - nSplitterWidth;
-                getController()->setSplitPos(nSplitPos);
+                getController().setSplitPos(nSplitPos);
 
                 const long nTaskPaneSize = static_cast<long>((aPlaygroundSize.Width() - aTaskPanePos.X())*100/aPlaygroundSize.Width());
                 if ( m_pSplitWin->GetItemSize( TASKPANE_ID ) != nTaskPaneSize )
@@ -518,8 +518,8 @@ IMPL_LINK( ODesignView, SplitHdl, void*,  )
 
     if ( (aOutputSize.Width() - nTest) >= nMinWidth && nTest > m_pScrollWindow->getMaxMarkerWidth(sal_False) )
     {
-        long nOldSplitPos = getController()->getSplitPos();
-        getController()->setSplitPos(nTest);
+        long nOldSplitPos = getController().getSplitPos();
+        getController().setSplitPos(nTest);
         if ( nOldSplitPos != -1 && nOldSplitPos <= nTest )
         {
             Invalidate(INVALIDATE_NOCHILDREN);
@@ -547,7 +547,7 @@ void ODesignView::togglePropertyBrowser(sal_Bool _bToogleOn)
 {
     if ( !m_pPropWin && _bToogleOn )
     {
-        m_pPropWin = new PropBrw(getController()->getORB(),m_pTaskPane,this);
+        m_pPropWin = new PropBrw(getController().getORB(),m_pTaskPane,this);
         m_pPropWin->Invalidate();
         static_cast<OTaskWindow*>(m_pTaskPane)->setPropertyBrowser(m_pPropWin);
         notifySystemWindow(this,m_pPropWin,::comphelper::mem_fun(&TaskPaneList::AddWindow));
@@ -555,7 +555,7 @@ void ODesignView::togglePropertyBrowser(sal_Bool _bToogleOn)
     if ( m_pPropWin && _bToogleOn != m_pPropWin->IsVisible() )
     {
         if ( !m_pCurrentView && !m_xReportComponent.is() )
-            m_xReportComponent = getController()->getReportDefinition();
+            m_xReportComponent = getController().getReportDefinition();
 
         const sal_Bool bWillBeVisible = _bToogleOn;
         m_pPropWin->Show(bWillBeVisible);
@@ -594,9 +594,9 @@ void ODesignView::toggleReportExplorer()
 {
     if ( !m_pReportExplorer )
     {
-        OReportController* pReportController = getController();
-        m_pReportExplorer = new ONavigator(this,pReportController);
-        m_pReportExplorer->AddEventListener(LINK(pReportController,OReportController,EventLstHdl));
+        OReportController& rReportController = getController();
+        m_pReportExplorer = new ONavigator(this,&rReportController);
+        m_pReportExplorer->AddEventListener(LINK(&rReportController,OReportController,EventLstHdl));
         notifySystemWindow(this,m_pReportExplorer,::comphelper::mem_fun(&TaskPaneList::AddWindow));
     }
     else
@@ -614,22 +614,22 @@ void ODesignView::toggleAddField()
     {
         uno::Reference< report::XReportDefinition > xReport(m_xReportComponent,uno::UNO_QUERY);
         uno::Reference< report::XReportComponent > xReportComponent(m_xReportComponent,uno::UNO_QUERY);
-        OReportController* pReportController = getController();
+        OReportController& rReportController = getController();
         if ( !m_pCurrentView && !xReport.is() )
         {
             if ( xReportComponent.is() )
                 xReport = xReportComponent->getSection()->getReportDefinition();
             else
-                xReport = pReportController->getReportDefinition().get();
+                xReport = rReportController.getReportDefinition().get();
         }
         else if ( m_pCurrentView )
         {
             uno::Reference< report::XSection > xSection = m_pCurrentView->getSectionWindow()->getSection();
             xReport = xSection->getReportDefinition();
         }
-        m_pAddField = new OAddFieldWindow(*pReportController,this);
+        m_pAddField = new OAddFieldWindow(rReportController,this);
         m_pAddField->Update();
-        m_pAddField->AddEventListener(LINK(pReportController,OReportController,EventLstHdl));
+        m_pAddField->AddEventListener(LINK(&rReportController,OReportController,EventLstHdl));
         notifySystemWindow(this,m_pAddField,::comphelper::mem_fun(&TaskPaneList::AddWindow));
     }
     else
@@ -645,9 +645,8 @@ uno::Reference< report::XSection > ODesignView::getCurrentSection() const
     // why do we need the code below?
     //else
  //   {
- //       OReportController* pReportController = getController();
- //       if ( pReportController )
-    //      xSection = pReportController->getReportDefinition()->getDetail();
+ //       OReportController& rReportController = getController();
+ //       xSection = rReportController.getReportDefinition()->getDetail();
  //   }
     return xSection;
 }
@@ -750,7 +749,7 @@ void ODesignView::MouseButtonDown( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeft() )
     {
         const uno::Sequence< beans::PropertyValue> aArgs;
-        getController()->executeChecked(SID_SELECT_REPORT,aArgs);
+        getController().executeChecked(SID_SELECT_REPORT,aArgs);
     }
     ODataView::MouseButtonDown(rMEvt);
 }

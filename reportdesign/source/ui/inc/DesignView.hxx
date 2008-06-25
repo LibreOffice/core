@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DesignView.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,7 +77,7 @@ namespace rptui
         SplitWindow*                        m_pSplitWin;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>        m_xReportComponent;
-        OReportController*                  m_pReportController;
+        OReportController&                  m_rReportController;
         OScrollWindowHelper*                m_pScrollWindow;
         Window*                             m_pTaskPane;
         PropBrw*                            m_pPropWin;
@@ -112,7 +112,7 @@ namespace rptui
     public:
         ODesignView(Window* pParent,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&,
-                    OReportController* _pController);
+                    OReportController& _rController);
         virtual ~ODesignView();
 
         // window overloads
@@ -125,7 +125,7 @@ namespace rptui
 
         virtual void initialize();
 
-        inline OReportController*   getController() const { return m_pReportController; }
+        inline OReportController&   getController() const { return m_rReportController; }
 
         void            SetMode( DlgEdMode m_eMode );
         void            SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType = ::rtl::OUString());
