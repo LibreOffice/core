@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableDesignView.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,7 +86,7 @@ namespace dbaui
     private:
         ::com::sun::star::lang::Locale      m_aLocale;
         OTableBorderWindow*                 m_pWin;
-        OTableController*                   m_pController;
+        OTableController&                   m_rController;
         ChildFocusState                     m_eChildFocus;
 
         IClipboardTest* getActiveChild() const;
@@ -99,7 +99,7 @@ namespace dbaui
     public:
         OTableDesignView(   Window* pParent,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&,
-                            OTableController* _pController);
+                            OTableController& _rController);
         virtual ~OTableDesignView();
 
         // window overloads
@@ -108,7 +108,7 @@ namespace dbaui
 
         OTableEditorCtrl*       GetEditorCtrl() const { return m_pWin ? m_pWin->GetEditorCtrl() : NULL; }
         OTableFieldDescWin*     GetDescWin()    const { return m_pWin ? m_pWin->GetDescWin() : NULL; }
-        OTableController*       getController() const { return m_pController; }
+        OTableController&       getController() const { return m_rController; }
 
         ::com::sun::star::lang::Locale      getLocale() const { return m_aLocale;}
 
