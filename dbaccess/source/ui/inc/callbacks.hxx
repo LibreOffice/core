@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: callbacks.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,25 +45,25 @@ class CommandEvent;
 class SvLBoxEntry;
 class String;
 class Point;
+class PopupMenu;
+class Control;
 struct AcceptDropEvent;
 struct ExecuteDropEvent;
+
+namespace cppu { class OInterfaceContainerHelper; }
 
 //........................................................................
 namespace dbaui
 {
 //........................................................................
 
+    class IController;
     //====================================================================
     //= IControlActionListener
     //====================================================================
-    class IControlActionListener
+    class SAL_NO_VTABLE IControlActionListener
     {
     public:
-        /** handler for context menu requests
-            @return <TRUE/> if the request was handled
-        */
-        virtual sal_Bool    requestContextMenu( const CommandEvent& _rEvent ) = 0;
-
         /** requests a quick help text to display
             @return <FALSE/> if the default quick help text should be used
         */
@@ -74,7 +74,7 @@ namespace dbaui
         */
         virtual sal_Bool    requestDrag( sal_Int8 _nAction, const Point& _rPosPixel ) = 0;
 
-        /** check whether or no a drop request should be accepted
+        /** check whether or not a drop request should be accepted
         */
         virtual sal_Int8    queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors ) = 0;
 
@@ -84,33 +84,48 @@ namespace dbaui
     };
 
     //====================================================================
+    //= IContextMenuProvider
+    //====================================================================
+    class SAL_NO_VTABLE IContextMenuProvider
+    {
+    public:
+        /** returns the context menu for the control
+
+            Note that the menu does not need to care for the controls selection, or its
+            state in general.
+            The control itself will, using the controller provided by getCommandController,
+            disable menu entries as needed.
+        */
+        virtual PopupMenu*      getContextMenu( Control& _rControl ) const = 0;
+
+        /** returns the controller which is responsible for providing states of certain features,
+            and executing them.
+        */
+        virtual IController&    getCommandController() = 0;
+
+        /** returns the container of registered context menu interceptors, or NULL if the implementation
+            does not support context menu interception
+        */
+        virtual ::cppu::OInterfaceContainerHelper*
+                                getContextMenuInterceptors() = 0;
+
+        /** returns the current selection in the given control
+
+            This selection is used for filling a ContextMenuExecuteEvent event for the given
+            control.
+        */
+        virtual ::com::sun::star::uno::Any
+                                getCurrentSelection( Control& _rControl ) const = 0;
+    };
+
+    //====================================================================
     //= IDragTransferableListener
     //====================================================================
-    class IDragTransferableListener
+    class SAL_NO_VTABLE IDragTransferableListener
     {
     public:
         /// called when a drag operation done with a Transferable has been finished
         virtual void        dragFinished( ) = 0;
-    };
-
-    //====================================================================
-    //= IContainerFoundListener
-    //====================================================================
-    class SAL_NO_VTABLE IContainerFoundListener
-    {
-    public:
-        /// called when a container was found
-        virtual void containerFound( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _xContainer) = 0;
-    };
-
-    //====================================================================
-    //= IViewChangeListener
-    //====================================================================
-    class SAL_NO_VTABLE IViewChangeListener
-    {
-    public:
-        /// called when the preview mode was changed
-        virtual void previewChanged( sal_Int32 _nMode) = 0;
     };
 
 //........................................................................
