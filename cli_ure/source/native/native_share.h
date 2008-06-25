@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: native_share.h,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,7 @@
 
 #using <mscorlib.dll>
 #using "cli_ure.dll"
-#using "cli_types.dll"
+#using "cli_uretypes.dll"
 
 #include "rtl/ustring.hxx"
 #include "uno/mapping.hxx"
