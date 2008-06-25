@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DBLimitedFieldSelection.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,7 @@ public abstract class DBLimitedFieldSelection {
         xMSF = CurUnoDialog.xMSF;
         FirstHelpIndex =  _FirstHelpIndex;
         curtabindex = (short) (iStep * 100);
-        sNoField = CurUnoDialog.oResource.getResText(UIConsts.RID_REPORT + 8);
+        sNoField = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 8);
         IStep = new Integer(iStep);
         iCompPosX = _iCompPosX;
         ICompPosX = new Integer(iCompPosX);
