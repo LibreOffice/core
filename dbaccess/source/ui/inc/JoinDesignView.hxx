@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: JoinDesignView.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,11 +60,11 @@ namespace dbaui
     protected:
         OScrollWindowHelper*    m_pScrollWindow;    // contains only the scrollbars
         OJoinTableView*         m_pTableView;       // presents the upper window
-        OJoinController*        m_pController;
+        OJoinController&        m_rController;
 
     public:
         OJoinDesignView(Window* pParent,
-                        OJoinController* _pController,
+                        OJoinController& _rController,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
         virtual ~OJoinDesignView();
 
@@ -77,7 +77,7 @@ namespace dbaui
         virtual void KeyInput( const KeyEvent& rEvt );
 
         virtual void SaveTabWinUIConfig(OTableWindow* pWin);
-        OJoinController* getController() const { return m_pController; }
+        OJoinController& getController() const { return m_rController; }
         // called when fields are deleted
 
         OJoinTableView* getTableView() const { return m_pTableView; }
