@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: QueryWizard.java,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +91,7 @@ public class QueryWizard extends WizardDialog {
     public QueryWizard(XMultiServiceFactory xMSF) {
         super(xMSF, 40970);
         addResourceHandler("QueryWizard", "dbw");
-        CurDBMetaData = new QuerySummary(xMSF, oResource);
+        CurDBMetaData = new QuerySummary(xMSF, m_oResource);
     }
 
     public static void main(String args[]) {
@@ -114,21 +114,51 @@ public class QueryWizard extends WizardDialog {
     }
 
 
+//!<<<<<<< QueryWizard.java
+//!    public void startQueryWizard(XMultiServiceFactory xMSF, PropertyValue[] CurPropertyValues) {
+//!    try {
+//!        if (CurDBMetaData.getConnection(CurPropertyValues)){
+//!            reslblFields = m_oResource.getResText(UIConsts.RID_QUERY + 4);
+//!            reslblFieldHeader = m_oResource.getResText(UIConsts.RID_QUERY + 19); //Fielnames in  AliasComponent
+//!            reslblAliasHeader = m_oResource.getResText(UIConsts.RID_QUERY + 20); //Fieldtitles header in  AliasComponent
+//!            reslblSelFields = m_oResource.getResText(UIConsts.RID_QUERY + 50);
+//!            reslblTables = m_oResource.getResText(UIConsts.RID_QUERY + 3);
+//!            reslblGroupBy =  m_oResource.getResText(UIConsts.RID_QUERY + 18);
+//!            resQueryWizard = m_oResource.getResText(UIConsts.RID_QUERY + 2);
+//!            resmsgNonNumericAsGroupBy = m_oResource.getResText(UIConsts.RID_QUERY + 88);
+//!            Helper.setUnoPropertyValues(xDialogModel, new String[] { "Height", "Moveable", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Title", "Width" },
+//!                                                    new Object[] { new Integer(210), Boolean.TRUE, "DialogQuery", new Integer(102), new Integer(41), new Integer(1), new Short((short) 0), resQueryWizard, new Integer(310)});
+//!            drawNaviBar();
+//!            setRightPaneHeaders(m_oResource, UIConsts.RID_QUERY + 70, 8);
+//!            this.setMaxStep(8);
+//!            buildSteps();
+//!            this.CurDBCommandFieldSelection.preselectCommand(CurPropertyValues, false);
+//!            CurFrame = Desktop.getActiveFrame(xMSF);
+//!//          CurFrame = OfficeDocument.createNewFrame(xMSF, this);
+//!//          desktopFrame = Desktop.findAFrame(xMSF, CurFrame, desktopFrame);
+//!
+//!            xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, CurFrame.getContainerWindow());
+//!            this.xMSF = xMSF;
+//!            createWindowPeer(xWindowPeer);
+//!            CurDBMetaData.setWindowPeer(this.xControl.getPeer());
+//!            insertQueryRelatedSteps();
+//!            short RetValue = executeDialog(CurFrame.getContainerWindow().getPosSize());
+//!=======
     public XComponent[] startQueryWizard(XMultiServiceFactory xMSF, PropertyValue[] CurPropertyValues) {
         try {
             if (CurDBMetaData.getConnection(CurPropertyValues)){
-                reslblFields = oResource.getResText(UIConsts.RID_QUERY + 4);
-                reslblFieldHeader = oResource.getResText(UIConsts.RID_QUERY + 19); //Fielnames in  AliasComponent
-                reslblAliasHeader = oResource.getResText(UIConsts.RID_QUERY + 20); //Fieldtitles header in  AliasComponent
-                reslblSelFields = oResource.getResText(UIConsts.RID_QUERY + 50);
-                reslblTables = oResource.getResText(UIConsts.RID_QUERY + 3);
-                reslblGroupBy =  oResource.getResText(UIConsts.RID_QUERY + 18);
-                resQueryWizard = oResource.getResText(UIConsts.RID_QUERY + 2);
-                resmsgNonNumericAsGroupBy = oResource.getResText(UIConsts.RID_QUERY + 88);
+                reslblFields = m_oResource.getResText(UIConsts.RID_QUERY + 4);
+                reslblFieldHeader = m_oResource.getResText(UIConsts.RID_QUERY + 19); //Fielnames in  AliasComponent
+                reslblAliasHeader = m_oResource.getResText(UIConsts.RID_QUERY + 20); //Fieldtitles header in  AliasComponent
+                reslblSelFields = m_oResource.getResText(UIConsts.RID_QUERY + 50);
+                reslblTables = m_oResource.getResText(UIConsts.RID_QUERY + 3);
+                reslblGroupBy =  m_oResource.getResText(UIConsts.RID_QUERY + 18);
+                resQueryWizard = m_oResource.getResText(UIConsts.RID_QUERY + 2);
+                resmsgNonNumericAsGroupBy = m_oResource.getResText(UIConsts.RID_QUERY + 88);
                 Helper.setUnoPropertyValues(xDialogModel, new String[] { "Height", "Moveable", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Title", "Width" },
                                                         new Object[] { new Integer(210), Boolean.TRUE, "DialogQuery", new Integer(102), new Integer(41), new Integer(1), new Short((short) 0), resQueryWizard, new Integer(310)});
                 drawNaviBar();
-                setRightPaneHeaders(oResource, UIConsts.RID_QUERY + 70, 8);
+                setRightPaneHeaders(m_oResource, UIConsts.RID_QUERY + 70, 8);
                 this.setMaxStep(8);
                 buildSteps();
                 this.CurDBCommandFieldSelection.preselectCommand(CurPropertyValues, false);
@@ -148,6 +178,7 @@ public class QueryWizard extends WizardDialog {
             }
         } catch (java.lang.Exception jexception) {
             jexception.printStackTrace(System.out);
+//!>>>>>>> 1.14
         }
         CurGroupFilterComponent = null;
         CurTitlesComponent = null;
@@ -204,7 +235,8 @@ public class QueryWizard extends WizardDialog {
 
     public void insertQueryRelatedSteps() {
         try {
-            setRMItemLabels(oResource, UIConsts.RID_QUERY + 80);
+//            String[] sRMItemLabels = getRMItemLabels();
+            setRMItemLabels(m_oResource, UIConsts.RID_QUERY + 80);
             addRoadmap();
             int i = 0;
             i = insertRoadmapItem(0, true, SOFIELDSELECTIONPAGE - 1, SOFIELDSELECTIONPAGE);
@@ -275,7 +307,7 @@ public class QueryWizard extends WizardDialog {
             case SOFIELDSELECTIONPAGE :
                 break;
             case SOSORTINGPAGE :
-                CurSortingComponent.initialize(CurDBMetaData.getDisplayFieldNames(), CurDBMetaData.SortFieldNames);
+                CurSortingComponent.initialize(CurDBMetaData.getDisplayFieldNames(), CurDBMetaData.getSortFieldNames());
                 break;
             case SOFILTERPAGE :
                 CurFilterComponent.initialize(CurDBMetaData.FilterConditions, CurDBMetaData.getDisplayFieldNames());
@@ -311,7 +343,7 @@ public class QueryWizard extends WizardDialog {
                 searchForOutdatedFields();
                 break;
             case SOSORTINGPAGE :
-                CurDBMetaData.SortFieldNames = CurSortingComponent.getSortFieldNames();
+                CurDBMetaData.setSortFieldNames(CurSortingComponent.getSortFieldNames());
                 break;
             case SOFILTERPAGE :
                 CurDBMetaData.setFilterConditions(CurFilterComponent.getFilterConditions());
@@ -349,9 +381,11 @@ public class QueryWizard extends WizardDialog {
         }
     }
 
-    private void searchForOutdatedFields() {
+    private void searchForOutdatedFields()
+    {
         String[] sFieldNames = CurDBMetaData.getFieldNames();
-        CurDBMetaData.SortFieldNames = JavaTools.removeOutdatedFields(CurDBMetaData.SortFieldNames, sFieldNames);
+        String[][] sRemovedFields = JavaTools.removeOutdatedFields(CurDBMetaData.getSortFieldNames(), sFieldNames);
+        CurDBMetaData.setSortFieldNames( sRemovedFields );
         CurDBMetaData.FilterConditions = JavaTools.removeOutdatedFields(CurDBMetaData.FilterConditions, sFieldNames);
         CurDBMetaData.AggregateFieldNames = JavaTools.removeOutdatedFields(CurDBMetaData.AggregateFieldNames, sFieldNames);
     }
@@ -398,9 +432,17 @@ public class QueryWizard extends WizardDialog {
             // TODO When the ListFieldbox is refilled only fields of the current Command may be merged into the Listbox
             if (ID == 1) {
                 enableWizardSteps(NewItems);
+//! <<<<<<< QueryWizard.java
+//!                 String[] sSelfieldNames = CurDBMetaData.getFieldNames(SelItems, CurDBCommandFieldSelection.getSelectedCommandName());
+//!                 CurDBCommandFieldSelection.addItemsToFieldsListbox(sSelfieldNames);
+//!                 CurDBMetaData.removeSeveralFieldColumnsByDisplayFieldName(SelItems);
+//! //              String[] sSelfieldNames = CurDBMetaData.getFieldNames(SelItems);
+//! //              CurDBCommandFieldSelection.fillUpFieldsListbox();
+//! =======
                 String[] sSelfieldNames = CurDBMetaData.getFieldNames(SelItems, CurDBCommandFieldSelection.getSelectedCommandName());
                 CurDBCommandFieldSelection.addItemsToFieldsListbox(sSelfieldNames);
         CurDBMetaData.removeSeveralFieldColumnsByDisplayFieldName(SelItems);
+//! >>>>>>> 1.14
                 CurDBCommandFieldSelection.toggleCommandListBox(NewItems);
 
             } else {
