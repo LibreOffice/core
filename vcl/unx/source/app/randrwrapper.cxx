@@ -8,7 +8,7 @@
  *
  * $RCSfile: randrwrapper.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -190,7 +190,8 @@ void RandRWrapper::releaseWrapper()
 void SalDisplay::InitRandR( XLIB_Window aRoot ) const
 {
     #ifdef USE_RANDR
-    RandRWrapper::get( GetDisplay() ).XRRSelectInput( GetDisplay(), aRoot, RRScreenChangeNotifyMask );
+    if( m_bUseRandRWrapper )
+        RandRWrapper::get( GetDisplay() ).XRRSelectInput( GetDisplay(), aRoot, RRScreenChangeNotifyMask );
     #else
     (void)aRoot;
     #endif
@@ -199,7 +200,8 @@ void SalDisplay::InitRandR( XLIB_Window aRoot ) const
 void SalDisplay::DeInitRandR()
 {
     #ifdef USE_RANDR
-    RandRWrapper::releaseWrapper();
+    if( m_bUseRandRWrapper )
+        RandRWrapper::releaseWrapper();
     #endif
 }
 
@@ -207,7 +209,7 @@ int SalDisplay::processRandREvent( XEvent* pEvent )
 {
     int nRet = 0;
     #ifdef USE_RANDR
-    if( pWrapper )
+    if( m_bUseRandRWrapper && pWrapper )
     {
         nRet = pWrapper->XRRUpdateConfiguration( pEvent );
         if( nRet == 1 && pEvent->type != ConfigureNotify) // this should then be a XRRScreenChangeNotifyEvent
