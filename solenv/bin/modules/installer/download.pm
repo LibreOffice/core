@@ -8,7 +8,7 @@
 #
 # $RCSfile: download.pm,v $
 #
-# $Revision: 1.42 $
+# $Revision: 1.43 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -664,6 +664,27 @@ sub replace_one_variable
 
 }
 
+########################################################################################
+# Converting a string to a unicode string
+########################################################################################
+
+sub convert_to_unicode
+{
+    my ($string) = @_;
+
+    my $unicodestring = "";
+
+    my $stringlength = length($string);
+
+    for ( my $i = 0; $i < $stringlength; $i++ )
+    {
+        $unicodestring = $unicodestring . substr($string, $i, 1);
+        $unicodestring = $unicodestring . chr(0);
+    }
+
+    return $unicodestring;
+}
+
 ##################################################################
 # Windows: Setting nsis version is necessary because of small
 # changes in nsis from version 2.0.4 to 2.3.1
@@ -681,6 +702,21 @@ sub set_nsis_version
         {
             # this is nsis 2.3.1 or similar
             $installer::globals::nsis231 = 1;
+            $installer::globals::unicodensis = 0;
+            last;
+        }
+    }
+
+    # checking unicode version
+    $searchstring = convert_to_unicode($searchstring);
+
+    for ( my $i = 0; $i <= $#{$nshfile}; $i++ )
+    {
+        if ( ${$nshfile}[$i] =~ /\Q$searchstring\E/ )
+        {
+            # this is nsis 2.3.1 or similar
+            $installer::globals::nsis231 = 1;
+            $installer::globals::unicodensis = 1;
             last;
         }
     }
@@ -975,6 +1011,7 @@ sub nsis_language_converter
     elsif ( $language eq "ja" ) { $nsislanguage = "Japanese"; }
     elsif ( $language eq "ko" ) { $nsislanguage = "Korean"; }
     elsif ( $language eq "th" ) { $nsislanguage = "Thai"; }
+    elsif ( $language eq "vi" ) { $nsislanguage = "Vietnamese"; }
     elsif ( $language eq "zh-CN" ) { $nsislanguage = "SimpChinese"; }
     elsif ( $language eq "zh-TW" ) { $nsislanguage = "TradChinese"; }
     else {
@@ -1192,12 +1229,72 @@ sub translate_nsh_nlf_file
 }
 
 ##################################################################
+# Converting utf 16 file to utf 8
+##################################################################
+
+sub convert_utf16_to_utf8
+{
+    my ( $filename ) = @_;
+
+    my @localfile = ();
+
+    my $savfilename = $filename . "_before.utf16";
+    installer::systemactions::copy_one_file($filename, $savfilename);
+
+#   open( IN, "<:utf16", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_utf16_to_utf8");
+#   open( IN, "<:para:crlf:uni", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_utf16_to_utf8");
+    open( IN, "<:encoding(UTF16-LE)", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_utf16_to_utf8");
+    while ( $line = <IN> ) {
+        push @localfile, $line;
+    }
+    close( IN );
+
+    if ( open( OUT, ">:utf8", $filename ) )
+    {
+        print OUT @localfile;
+        close(OUT);
+    }
+
+    $savfilename = $filename . "_before.utf8";
+    installer::systemactions::copy_one_file($filename, $savfilename);
+}
+
+##################################################################
+# Converting utf 8 file to utf 16
+##################################################################
+
+sub convert_utf8_to_utf16
+{
+    my ( $filename ) = @_;
+
+    my @localfile = ();
+
+    my $savfilename = $filename . "_after.utf8";
+    installer::systemactions::copy_one_file($filename, $savfilename);
+
+    open( IN, "<:utf8", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_utf8_to_utf16");
+    while ( $line = <IN> ) {
+        push @localfile, $line;
+    }
+    close( IN );
+
+    if ( open( OUT, ">:raw:encoding(UTF16-LE):crlf:utf8", $filename ) )
+    {
+        print OUT @localfile;
+        close(OUT);
+    }
+
+    $savfilename = $filename . "_after.utf16";
+    installer::systemactions::copy_one_file($filename, $savfilename);
+}
+
+##################################################################
 # Windows: Copying NSIS language files to local nsis directory
 ##################################################################
 
 sub copy_and_translate_nsis_language_files
 {
-    my ($nsispath, $localnsisdir, $languagesarrayref, $mlffile) = @_;
+    my ($nsispath, $localnsisdir, $languagesarrayref, $allvariables) = @_;
 
     my $nlffilepath = $nsispath . $installer::globals::separator . "Contrib" . $installer::globals::separator . "Language\ files" . $installer::globals::separator;
     my $nshfilepath = $nsispath . $installer::globals::separator . "Contrib" . $installer::globals::separator . "Modern\ UI" . $installer::globals::separator . "Language files" . $installer::globals::separator;
@@ -1232,8 +1329,19 @@ sub copy_and_translate_nsis_language_files
 
         # Changing the macro name in nsh file: MUI_LANGUAGEFILE_BEGIN -> MUI_LANGUAGEFILE_PACK_BEGIN
         my $nshfile = installer::files::read_file($nshfilename);
-        replace_one_variable($nshfile, "MUI_LANGUAGEFILE_BEGIN", "MUI_LANGUAGEFILE_PACK_BEGIN");
         set_nsis_version($nshfile);
+
+        if ( $installer::globals::unicodensis )
+        {
+            convert_utf16_to_utf8($nshfilename);
+            convert_utf16_to_utf8($nlffilename);
+            $nshfile = installer::files::read_file($nshfilename);   # read nsh file again
+        }
+
+        replace_one_variable($nshfile, "MUI_LANGUAGEFILE_BEGIN", "MUI_LANGUAGEFILE_PACK_BEGIN");
+
+        # find the ulf file for translation
+        my $mlffile = get_translation_file($allvariables);
 
         # Translate the files
         my $nlffile = installer::files::read_file($nlffilename);
@@ -1241,6 +1349,12 @@ sub copy_and_translate_nsis_language_files
 
         installer::files::save_file($nshfilename, $nshfile);
         installer::files::save_file($nlffilename, $nlffile);
+
+        if ( $installer::globals::unicodensis )
+        {
+            convert_utf8_to_utf16($nshfilename);
+            convert_utf8_to_utf16($nlffilename);
+        }
     }
 
 }
@@ -1427,6 +1541,8 @@ sub get_translation_file
 {
     my ($allvariableshashref) = @_;
     my $translationfilename = $installer::globals::idtlanguagepath . $installer::globals::separator . $installer::globals::nsisfilename;
+    if ( $installer::globals::unicodensis ) { $translationfilename = $translationfilename . ".ulf"; }
+    else {  { $translationfilename = $translationfilename . ".mlf"; } }
     if ( ! -f $translationfilename ) { installer::exiter::exit_program("ERROR: Could not find language file $translationfilename!", "get_translation_file"); }
     my $translationfile = installer::files::read_file($translationfilename);
     replace_variables($translationfile, $allvariableshashref);
@@ -1609,11 +1725,8 @@ sub create_download_sets
             return $downloaddir;
         }
 
-        # find the ulf file for translation
-        my $mlffile = get_translation_file($allvariableshashref);
-
         # copy language files into nsis directory and translate them
-        copy_and_translate_nsis_language_files($nsispath, $localnsisdir, $languagesarrayref, $mlffile);
+        copy_and_translate_nsis_language_files($nsispath, $localnsisdir, $languagesarrayref, $allvariableshashref);
 
         # find and read the nsi file template
         my $templatefilename = "downloadtemplate.nsi";
