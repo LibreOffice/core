@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbmetadata.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -138,11 +138,17 @@ namespace dbtools
         sal_Int32
             getBooleanComparisonMode() const;
 
-        /**
+        /** determines in relations are supported.
         *
         * \return <TRUE/> when relations are supported, otherwise <FALSE/>
         */
         bool supportsRelations() const;
+
+        /** determines if column alias names can be used in the order by clause.
+        *
+        * \return <TRUE/> when relations are supported, otherwise <FALSE/>
+        */
+        bool supportsColumnAliasInOrderBy() const;
     };
 
 //........................................................................
