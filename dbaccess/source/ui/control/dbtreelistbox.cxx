@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbtreelistbox.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,11 +53,17 @@
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGGESTURERECOGNIZER_HPP_
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UI_XCONTEXTMENUINTERCEPTOR_HPP_
+#include <com/sun/star/ui/XContextMenuInterceptor.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
+#endif
+#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
+#include <cppuhelper/interfacecontainer.hxx>
 #endif
 #ifndef _SV_HELP_HXX
 #include <vcl/help.hxx>
@@ -68,8 +74,14 @@
 #ifndef DBAUI_ICONTROLLER_HXX
 #include "IController.hxx"
 #endif
-#include <memory>
+#ifndef __FRAMEWORK_HELPER_ACTIONTRIGGERHELPER_HXX_
+#include <framework/actiontriggerhelper.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
+#endif
 
+#include <memory>
 
 // .........................................................................
 namespace dbaui
@@ -80,6 +92,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::ui;
+using namespace ::com::sun::star::view;
 
 DBG_NAME(DBTreeListBox)
 #define SPACEBETWEENENTRIES     4
@@ -92,7 +107,7 @@ DBTreeListBox::DBTreeListBox( Window* pParent, const Reference< XMultiServiceFac
     ,m_pSelectedEntry(NULL)
     ,m_pDragedEntry(NULL)
     ,m_pActionListener(NULL)
-    ,m_pContextMenuActionListener(NULL)
+    ,m_pContextMenuProvider( NULL )
     ,m_nSelectLock(0)
     ,m_bHandleEnterKey(_bHandleEnterKey)
     ,m_xORB(_rxORB)
@@ -106,7 +121,7 @@ DBTreeListBox::DBTreeListBox( Window* pParent, const Reference< XMultiServiceFac
     ,m_pSelectedEntry(NULL)
     ,m_pDragedEntry(NULL)
     ,m_pActionListener(NULL)
-    ,m_pContextMenuActionListener(NULL)
+    ,m_pContextMenuProvider( NULL )
     ,m_nSelectLock(0)
     ,m_bHandleEnterKey(_bHandleEnterKey)
     ,m_xORB(_rxORB)
@@ -387,24 +402,6 @@ void DBTreeListBox::RequestHelp( const HelpEvent& rHEvt )
     SvTreeListBox::RequestHelp( rHEvt );
 }
 
-// -------------------------------------------------------------------------
-void DBTreeListBox::Command( const CommandEvent& _rCEvt )
-{
-    SvTreeListBox::Command(_rCEvt);
-    switch (_rCEvt.GetCommand())
-    {
-        case COMMAND_CONTEXTMENU:
-        {
-            if (m_pActionListener)
-            {
-                CancelPendingEdit();
-                m_pActionListener->requestContextMenu( _rCEvt );
-            }
-        }
-        break;
-    }
-}
-
 // -----------------------------------------------------------------------------
 void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
 {
@@ -525,7 +522,7 @@ IMPL_LINK( DBTreeListBox, ScrollDownHdl, SvTreeListBox*, /*pBox*/ )
 // -----------------------------------------------------------------------------
 namespace
 {
-    void lcl_enableEntries(PopupMenu* _pPopup,IController* _pController)
+    void lcl_enableEntries( PopupMenu* _pPopup, IController& _rController )
     {
         if ( !_pPopup )
             return;
@@ -539,35 +536,191 @@ namespace
                 PopupMenu* pSubPopUp = _pPopup->GetPopupMenu(nId);
                 if ( pSubPopUp )
                 {
-                    lcl_enableEntries(pSubPopUp,_pController);
+                    lcl_enableEntries( pSubPopUp, _rController );
                     _pPopup->EnableItem(nId,pSubPopUp->HasValidEntries());
                 }
                 else
-                    _pPopup->EnableItem( nId, _pController->isCommandEnabled( _pPopup->GetItemCommand( nId ) ) );
+                {
+                    ::rtl::OUString sCommandURL( _pPopup->GetItemCommand( nId ) );
+                    bool bEnabled = ( sCommandURL.getLength() )
+                                  ? _rController.isCommandEnabled( sCommandURL )
+                                  : _rController.isCommandEnabled( nId );
+                    _pPopup->EnableItem( nId, bEnabled );
+                }
             }
         }
 
         _pPopup->RemoveDisabledEntries();
     }
 }
+
+// -----------------------------------------------------------------------------
+namespace
+{
+    void lcl_adjustMenuItemIDs( Menu& _rMenu, IController& _rCommandController )
+    {
+        USHORT nCount = _rMenu.GetItemCount();
+        for ( USHORT pos = 0; pos < nCount; ++pos )
+        {
+            USHORT nId = _rMenu.GetItemId(pos);
+            String aCommand = _rMenu.GetItemCommand( nId );
+            PopupMenu* pPopup = _rMenu.GetPopupMenu( nId );
+            if ( pPopup )
+            {
+                lcl_adjustMenuItemIDs( *pPopup, _rCommandController );
+                continue;
+            }
+
+            USHORT nCommandId = _rCommandController.registerCommandURL( aCommand );
+            _rMenu.InsertItem( nCommandId, _rMenu.GetItemText( nId ), _rMenu.GetItemBits( nId ), pos );
+            _rMenu.RemoveItem( pos+1 );
+        }
+    }
+    // =========================================================================
+    // = SelectionSupplier
+    // =========================================================================
+    typedef ::cppu::WeakImplHelper1 <   XSelectionSupplier
+                                    >   SelectionSupplier_Base;
+    class SelectionSupplier : public SelectionSupplier_Base
+    {
+    public:
+        SelectionSupplier( const Any& _rSelection )
+            :m_aSelection( _rSelection )
+        {
+        }
+
+        virtual ::sal_Bool SAL_CALL select( const Any& xSelection ) throw (IllegalArgumentException, RuntimeException);
+        virtual Any SAL_CALL getSelection(  ) throw (RuntimeException);
+        virtual void SAL_CALL addSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) throw (RuntimeException);
+        virtual void SAL_CALL removeSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) throw (RuntimeException);
+
+    protected:
+        virtual ~SelectionSupplier()
+        {
+        }
+
+    private:
+        Any m_aSelection;
+    };
+
+    //--------------------------------------------------------------------
+    ::sal_Bool SAL_CALL SelectionSupplier::select( const Any& /*_Selection*/ ) throw (IllegalArgumentException, RuntimeException)
+    {
+        throw IllegalArgumentException();
+        // API bug: this should be a NoSupportException
+    }
+
+    //--------------------------------------------------------------------
+    Any SAL_CALL SelectionSupplier::getSelection(  ) throw (RuntimeException)
+    {
+        return m_aSelection;
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL SelectionSupplier::addSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ ) throw (RuntimeException)
+    {
+        OSL_ENSURE( false, "SelectionSupplier::removeSelectionChangeListener: no support!" );
+        // API bug: this should be a NoSupportException
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL SelectionSupplier::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ ) throw (RuntimeException)
+    {
+        OSL_ENSURE( false, "SelectionSupplier::removeSelectionChangeListener: no support!" );
+        // API bug: this should be a NoSupportException
+    }
+}
+
 // -----------------------------------------------------------------------------
 PopupMenu* DBTreeListBox::CreateContextMenu( void )
 {
-    PopupMenu* pContextMenu = NULL;
-    if ( m_pContextMenuActionListener )
+    ::std::auto_ptr< PopupMenu > pContextMenu;
+
+    if ( !m_pContextMenuProvider )
+        return pContextMenu.release();
+
+    // the basic context menu
+    pContextMenu.reset( m_pContextMenuProvider->getContextMenu( *this ) );
+    // disable what is not available currently
+    lcl_enableEntries( pContextMenu.get(), m_pContextMenuProvider->getCommandController() );
+    // allow context menu interception
+    ::cppu::OInterfaceContainerHelper* pInterceptors = m_pContextMenuProvider->getContextMenuInterceptors();
+    if ( !pInterceptors || !pInterceptors->getLength() )
+        return pContextMenu.release();
+
+    ContextMenuExecuteEvent aEvent;
+    aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
+    aEvent.ExecutePosition.X = -1;
+    aEvent.ExecutePosition.Y = -1;
+    aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
+        m_xORB, pContextMenu.get() );
+    aEvent.Selection = new SelectionSupplier( m_pContextMenuProvider->getCurrentSelection( *this ) );
+
+    ::cppu::OInterfaceIteratorHelper aIter( *pInterceptors );
+    bool bModifiedMenu = false;
+    bool bAskInterceptors = true;
+    while ( aIter.hasMoreElements() && bAskInterceptors )
     {
-        PopupMenu aMain(ModuleRes(RID_MENU_APP_EDIT));
-        pContextMenu = new PopupMenu(aMain);
-        lcl_enableEntries(pContextMenu,m_pContextMenuActionListener);
+        Reference< XContextMenuInterceptor > xInterceptor( aIter.next(), UNO_QUERY );
+        if ( !xInterceptor.is() )
+            continue;
+
+        try
+        {
+            ContextMenuInterceptorAction eAction = xInterceptor->notifyContextMenuExecute( aEvent );
+            switch ( eAction )
+            {
+                case ContextMenuInterceptorAction_CANCELLED:
+                    return NULL;
+
+                case ContextMenuInterceptorAction_EXECUTE_MODIFIED:
+                    bModifiedMenu = true;
+                    bAskInterceptors = false;
+                    break;
+
+                case ContextMenuInterceptorAction_CONTINUE_MODIFIED:
+                    bModifiedMenu = true;
+                    bAskInterceptors = true;
+                    break;
+
+                default:
+                    DBG_ERROR( "DBTreeListBox::CreateContextMenu: unexpected return value of the interceptor call!" );
+
+                case ContextMenuInterceptorAction_IGNORED:
+                    break;
+            }
+        }
+        catch( const DisposedException& e )
+        {
+            if ( e.Context == xInterceptor )
+                aIter.remove();
+        }
     }
-    return pContextMenu;
+
+    if ( bModifiedMenu )
+    {
+        // the interceptor(s) modified the menu description => create a new PopupMenu
+        PopupMenu* pModifiedMenu = new PopupMenu;
+        ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(
+            pModifiedMenu, aEvent.ActionTriggerContainer );
+        aEvent.ActionTriggerContainer.clear();
+        pContextMenu.reset( pModifiedMenu );
+
+        // the interceptors only know command URLs, but our menus primarily work
+        // with IDs -> we need to translate the commands to IDs
+        lcl_adjustMenuItemIDs( *pModifiedMenu, m_pContextMenuProvider->getCommandController() );
+    }
+
+    return pContextMenu.release();
 }
+
 // -----------------------------------------------------------------------------
 void DBTreeListBox::ExcecuteContextMenuAction( USHORT _nSelectedPopupEntry )
 {
-    if ( m_pContextMenuActionListener )
-        m_pContextMenuActionListener->executeChecked(_nSelectedPopupEntry,Sequence<PropertyValue>());
+    if ( m_pContextMenuProvider )
+        m_pContextMenuProvider->getCommandController().executeChecked( _nSelectedPopupEntry, Sequence< PropertyValue >() );
 }
+
 // -----------------------------------------------------------------------------
 IMPL_LINK(DBTreeListBox, OnTimeOut, void*, /*EMPTY_ARG*/)
 {
