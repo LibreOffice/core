@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormLayer.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,9 +29,9 @@
  ************************************************************************/
 package integration.forms;
 
-import com.sun.star.container.NoSuchElementException;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleEditableText;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.uno.UnoRuntime;
 
 import com.sun.star.beans.XPropertySet;
@@ -43,19 +43,15 @@ import com.sun.star.drawing.XShapes;
 import com.sun.star.awt.Size;
 import com.sun.star.awt.Point;
 import com.sun.star.awt.XControlModel;
-import com.sun.star.awt.XControl;
-import com.sun.star.awt.XWindow;
 import com.sun.star.text.TextContentAnchorType;
 import com.sun.star.drawing.XDrawPage;
-
-import integration.forms.DocumentHelper;
 
 /**
  *
  * @author  fs@openoffice.org
  */
-    public class FormLayer
-    {
+public class FormLayer
+{
     private DocumentHelper  m_document;
     private XDrawPage       m_page;
 
@@ -98,7 +94,7 @@ import integration.forms.DocumentHelper;
         @return
             the property access to the control's model
     */
-    protected XPropertySet createControlAndShape( String sFormComponentService, int nXPos,
+    public XPropertySet createControlAndShape( String sFormComponentService, int nXPos,
         int nYPos, int nWidth, int nHeight, XIndexContainer xParentForm ) throws java.lang.Exception
     {
         // let the document create a shape
@@ -162,10 +158,47 @@ import integration.forms.DocumentHelper;
         @return
             the property access to the control's model
     */
-    protected XPropertySet createControlAndShape( String sFormComponentService, int nXPos,
+    public XPropertySet createControlAndShape( String sFormComponentService, int nXPos,
         int nYPos, int nWidth, int nHeight ) throws java.lang.Exception
     {
         return createControlAndShape( sFormComponentService, nXPos, nYPos, nWidth, nHeight, null );
+    }
+
+    /** creates a pair of controls, namely a label control, and another control labeled by it
+     *
+     * @param _formComponentServiceName
+     *      the service name for the control which is not the label control
+     * @param _label
+     *      the label to be shown in the label control
+     * @param _xPos
+     *      the horizontal position of the control pair
+     * @param _yPos
+     *      the vertical position of the control pair
+     * @param _height
+     *      the height of the control which is not the label control
+     * @return
+     *      the model of the control which is not the label control
+     * @throws java.lang.Exception
+     */
+    public XPropertySet createLabeledControl( String _formComponentServiceName, String _label, int _xPos,
+            int _yPos, int _height )
+        throws java.lang.Exception
+    {
+        // insert the label control
+        XPropertySet label = createControlAndShape( "FixedText", _xPos, _yPos, 25, 6 );
+        label.setPropertyValue( "Label", _label );
+
+        // insert the text field control
+        XPropertySet field = createControlAndShape( _formComponentServiceName,
+            _xPos + 25, _yPos, 40, _height );
+        // knit it to it's label component
+        field.setPropertyValue( "LabelControl", label );
+
+        // names
+        label.setPropertyValue( "Name", _label + "_Label" );
+        field.setPropertyValue( "Name", _label );
+
+        return field;
     }
 
     /* ------------------------------------------------------------------ */
@@ -187,7 +220,8 @@ import integration.forms.DocumentHelper;
         @return
             the control model of the created data input field
     */
-    protected XPropertySet insertControlLine( String sControlType, String sFieldName, String sControlNamePostfix, int nXPos, int nYPos, int nHeight )
+    public XPropertySet insertControlLine( String sControlType, String sFieldName, String sControlNamePostfix,
+            int nXPos, int nYPos, int nHeight )
         throws java.lang.Exception
     {
         // insert the label control
@@ -219,7 +253,7 @@ import integration.forms.DocumentHelper;
         @return
             the control model of the created data input field
     */
-    protected XPropertySet insertControlLine( String sControlType, String sFieldName, String sControlNamePostfix, int nYPos )
+    public XPropertySet insertControlLine( String sControlType, String sFieldName, String sControlNamePostfix, int nYPos )
         throws java.lang.Exception
     {
         return insertControlLine( sControlType, sFieldName, sControlNamePostfix, 2, nYPos, 6 );
@@ -292,5 +326,22 @@ import integration.forms.DocumentHelper;
             ++i;
         }
         return controlModel;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /** simulates a user's text input into a control given by control model
+     */
+    public void userTextInput( XPropertySet controlModel, String text ) throws com.sun.star.uno.Exception, java.lang.Exception
+    {
+        // we will *not* simply set the value property at the model. This is not the same as
+        // doing a user input, as the latter will trigger a lot of notifications, which the forms runtime environment
+        // (namely the FormController) relies on to notice that the control changed.
+        // Instead, we use the Accessibility interfaces of the control to simulate text input
+        XAccessible formattedAccessible = (XAccessible)UnoRuntime.queryInterface( XAccessible.class,
+            m_document.getCurrentView().getControl( controlModel )
+        );
+        XAccessibleEditableText textAccess = (XAccessibleEditableText)UnoRuntime.queryInterface( XAccessibleEditableText.class,
+            formattedAccessible.getAccessibleContext() );
+        textAccess.setText( text );
     }
 }
