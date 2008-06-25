@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataSource.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,7 @@
 
 package connectivity.tools;
 
+import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.container.ElementExistException;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XNameAccess;
@@ -41,8 +42,11 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.sdb.XQueryDefinitionsSupplier;
 import com.sun.star.sdbc.XDataSource;
 import com.sun.star.sdbcx.XTablesSupplier;
+import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XRefreshable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DataSource
 {
@@ -50,10 +54,26 @@ public class DataSource
     XMultiServiceFactory    m_orb;
     XDataSource             m_dataSource;
 
+    public DataSource( XMultiServiceFactory _orb, String _registeredName ) throws Exception
+    {
+        m_orb = _orb;
+
+        XNameAccess dbContext = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class,
+            _orb.createInstance("com.sun.star.sdb.DatabaseContext"));
+
+        m_dataSource = (XDataSource)UnoRuntime.queryInterface(XDataSource.class,
+            dbContext.getByName( _registeredName ) );
+    }
+
     public DataSource( XMultiServiceFactory _orb, XDataSource _dataSource )
     {
         m_orb = _orb;
         m_dataSource = _dataSource;
+    }
+
+    final public XDataSource getXDataSource()
+    {
+        return m_dataSource;
     }
 
     /** creates a query with a given name and SQL command
@@ -124,5 +144,28 @@ public class DataSource
         XRefreshable refreshTables = (XRefreshable)UnoRuntime.queryInterface(
             XRefreshable.class, suppTables.getTables() );
         refreshTables.refresh();
+    }
+
+    /** returns the name of the data source
+     *
+     * If a data source is registered at the database context, the name is the registration
+     * name. Otherwise, its the URL which the respective database document is based on.
+     *
+     * Note that the above definition is from the UNO API, not from this wrapper here.
+     */
+    public String getName()
+    {
+        String name = null;
+        try
+        {
+            XPropertySet dataSourceProps = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet.class, m_dataSource );
+            name = (String)dataSourceProps.getPropertyValue("Name");
+        }
+        catch (Exception ex)
+        {
+            Logger.getLogger(DataSource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return name;
     }
 };
