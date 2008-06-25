@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: refvaluecomponent.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,10 @@
 /** === begin UNO includes === **/
 /** === end UNO includes === **/
 
+#include <tools/diagnose_ex.h>
+
+#include <list>
+
 //........................................................................
 namespace frm
 {
@@ -53,7 +57,6 @@ namespace frm
         :OBoundControlModel( _rxFactory, _rUnoControlModelTypeName, _rDefault, sal_False, sal_True, sal_True )
         ,m_eDefaultChecked( STATE_NOCHECK )
         ,m_bSupportSecondRefValue( _bSupportNoCheckRefValue )
-        ,m_eValueExchangeType( eBoolean )
     {
     }
 
@@ -66,7 +69,7 @@ namespace frm
         m_eDefaultChecked           = _pOriginal->m_eDefaultChecked;
         m_bSupportSecondRefValue    = _pOriginal->m_bSupportSecondRefValue;
 
-        calcValueExchangeType();
+        calculateExternalValueType();
     }
 
     //--------------------------------------------------------------------
@@ -78,7 +81,7 @@ namespace frm
     void OReferenceValueComponent::setReferenceValue( const ::rtl::OUString& _rRefValue )
     {
         m_sReferenceValue = _rRefValue;
-        calcValueExchangeType();
+        calculateExternalValueType();
     }
 
     //--------------------------------------------------------------------
@@ -106,7 +109,7 @@ namespace frm
         {
         case PROPERTY_ID_REFVALUE :
             OSL_VERIFY( _rValue >>= m_sReferenceValue );
-            calcValueExchangeType();
+            calculateExternalValueType();
             break;
 
         case PROPERTY_ID_UNCHECKED_REFVALUE:
@@ -174,81 +177,50 @@ namespace frm
     }
 
     //-----------------------------------------------------------------------------
-    void OReferenceValueComponent::calcValueExchangeType()
+    Sequence< Type > OReferenceValueComponent::getSupportedBindingTypes()
     {
-        m_eValueExchangeType = eBoolean;
-        if  (  m_sReferenceValue.getLength()
-            && hasExternalValueBinding()
-            && getExternalValueBinding()->supportsType( ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) )
-            )
-            m_eValueExchangeType = eString;
+        ::std::list< Type > aTypes;
+        aTypes.push_back( ::getCppuType( static_cast< sal_Bool* >( NULL ) ) );
+
+        if ( m_sReferenceValue.getLength() )
+            aTypes.push_front( ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) );
+            // push_front, because this is the preferred type
+
+        Sequence< Type > aTypesRet( aTypes.size() );
+        ::std::copy( aTypes.begin(), aTypes.end(), aTypesRet.getArray() );
+        return aTypesRet;
     }
 
     //-----------------------------------------------------------------------------
-    sal_Bool OReferenceValueComponent::approveValueBinding( const Reference< XValueBinding >& _rxBinding )
+    Any OReferenceValueComponent::translateExternalValueToControlValue( const Any& _rExternalValue ) const
     {
-        OSL_PRECOND( _rxBinding.is(), "OReferenceValueComponent::approveValueBinding: invalid binding!" );
-
-        // only strings are accepted for simplicity
-        return  _rxBinding.is()
-            &&  (   _rxBinding->supportsType( ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) )
-                ||  _rxBinding->supportsType( ::getCppuType( static_cast< sal_Bool* >( NULL ) ) )
-                );
-    }
-
-    //-----------------------------------------------------------------------------
-    void OReferenceValueComponent::onConnectedExternalValue( )
-    {
-        calcValueExchangeType();
-        OBoundControlModel::onConnectedExternalValue( );
-    }
-
-    //-----------------------------------------------------------------------------
-    Any OReferenceValueComponent::translateExternalValueToControlValue( ) const
-    {
-        OSL_PRECOND( getExternalValueBinding().is(), "OReferenceValueComponent::commitControlValueToExternalBinding: no active binding!" );
-
         sal_Int16 nState = STATE_DONTKNOW;
-        if ( getExternalValueBinding().is() )
-        {
-            try
-            {
-                switch ( m_eValueExchangeType )
-                {
-                case eBoolean:
-                {
-                    Any aExternalValue = getExternalValueBinding()->getValue( ::getCppuType( static_cast< sal_Bool* >( NULL ) ) );
-                    sal_Bool bState = sal_False;
-                    if ( aExternalValue >>= bState )
-                        nState = sal::static_int_cast< sal_Int16 >(
-                            bState ? STATE_CHECK : STATE_NOCHECK );
-                }
-                break;
 
-                case eString:
-                {
-                    Any aExternalValue = getExternalValueBinding()->getValue( ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) );
-                    ::rtl::OUString sExternalValue;
-                    if ( aExternalValue >>= sExternalValue )
-                    {
-                        if ( sExternalValue == m_sReferenceValue )
-                            nState = STATE_CHECK;
-                        else
-                        {
-                            if ( !m_bSupportSecondRefValue || ( sExternalValue == m_sNoCheckReferenceValue ) )
-                                nState = STATE_NOCHECK;
-                            else
-                                nState = STATE_DONTKNOW;
-                        }
-                    }
-                }
-                break;
-                }
-            }
-            catch( const Exception& )
+        sal_Bool bExternalState = sal_False;
+        ::rtl::OUString sExternalValue;
+        if ( _rExternalValue >>= bExternalState )
+        {
+            nState = ::sal::static_int_cast< sal_Int16 >( bExternalState ? STATE_CHECK : STATE_NOCHECK );
+        }
+        else if ( _rExternalValue >>= sExternalValue )
+        {
+            if ( sExternalValue == m_sReferenceValue )
+                nState = STATE_CHECK;
+            else
             {
-                OSL_ENSURE( sal_False, "OReferenceValueComponent::translateExternalValueToControlValue: caught an exception!" );
+                if ( !m_bSupportSecondRefValue || ( sExternalValue == m_sNoCheckReferenceValue ) )
+                    nState = STATE_NOCHECK;
+                else
+                    nState = STATE_DONTKNOW;
             }
+        }
+        else if ( !_rExternalValue.hasValue() )
+        {
+            nState = STATE_DONTKNOW;
+        }
+        else
+        {
+            OSL_ENSURE( false, "OReferenceValueComponent::translateExternalValueToControlValue: unexpected value type!" );
         }
 
         return makeAny( nState );
@@ -265,25 +237,30 @@ namespace frm
             sal_Int16 nControlValue = STATE_DONTKNOW;
             aControlValue >>= nControlValue;
 
+            bool bBooleanExchange = getExternalValueType().getTypeClass() == TypeClass_BOOLEAN;
+            bool bStringExchange = getExternalValueType().getTypeClass() == TypeClass_STRING;
+            OSL_ENSURE( bBooleanExchange || bStringExchange,
+                "OReferenceValueComponent::translateControlValueToExternalValue: unexpected value exchange type!" );
+
             switch( nControlValue )
             {
             case STATE_CHECK:
-                if ( m_eValueExchangeType == eBoolean )
+                if ( bBooleanExchange )
                 {
                     aExternalValue <<= (sal_Bool)sal_True;
                 }
-                else if ( m_eValueExchangeType == eString )
+                else if ( bStringExchange )
                 {
                     aExternalValue <<= m_sReferenceValue;
                 }
                 break;
 
             case STATE_NOCHECK:
-                if ( m_eValueExchangeType == eBoolean )
+                if ( bBooleanExchange )
                 {
                     aExternalValue <<= (sal_Bool)sal_False;
                 }
-                else if ( m_eValueExchangeType == eString )
+                else if ( bStringExchange )
                 {
                     aExternalValue <<= m_bSupportSecondRefValue ? m_sNoCheckReferenceValue : ::rtl::OUString();
                 }
