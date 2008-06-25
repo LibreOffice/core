@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppDetailView.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,9 +44,6 @@
 #endif
 #ifndef DBAUI_APPVIEW_HXX
 #include "AppView.hxx"
-#endif
-#ifndef DBAUI_IAPPELEMENTNOTIFICATION_HXX
-#include "IAppElementNotification.hxx"
 #endif
 #ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
@@ -104,6 +101,7 @@
 #endif
 #include <algorithm>
 #include "dbtreelistbox.hxx"
+#include "IApplicationController.hxx"
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
@@ -114,6 +112,9 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::beans;
+using ::com::sun::star::util::URL;
+using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
 #define SPACEBETWEENENTRIES     4
 
@@ -363,7 +364,9 @@ void OCreationList::updateHelpText()
 void OCreationList::onSelected( SvLBoxEntry* _pEntry ) const
 {
     DBG_ASSERT( _pEntry, "OCreationList::onSelected: invalid entry!" );
-    m_rTaskWindow.getDetailView()->onCreationClick( reinterpret_cast< TaskEntry* >( _pEntry->GetUserData() )->sUNOCommand );
+    URL aCommand;
+    aCommand.Complete = reinterpret_cast< TaskEntry* >( _pEntry->GetUserData() )->sUNOCommand;
+    m_rTaskWindow.getDetailView()->getBorderWin().getView()->getAppController().executeChecked( aCommand, Sequence< PropertyValue >() );
 }
 // -----------------------------------------------------------------------------
 void OCreationList::KeyInput( const KeyEvent& rKEvt )
@@ -609,7 +612,7 @@ OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,Previe
 
     OTasksWindow* pTasks = new OTasksWindow(&m_aTasks,this);
     pTasks->Show();
-    pTasks->Disable(m_rBorderWin.getView()->getCommandController()->isDataSourceReadOnly());
+    pTasks->Disable(m_rBorderWin.getView()->getCommandController().isDataSourceReadOnly());
     m_aTasks.setChildWindow(pTasks);
     m_aTasks.SetUniqueId(UID_APP_TASKS_VIEW);
     m_aTasks.Show();
@@ -727,7 +730,7 @@ void OApplicationDetailView::impl_createPage( ElementType _eType, const Referenc
     OSL_ENSURE( !rData.aTasks.empty(), "OApplicationDetailView::impl_createPage: no tasks at all!?" );
     bool bEnabled = rData.aTasks.empty()
                 ?   false
-                :   getBorderWin().getView()->getCommandController()->isCommandEnabled( rData.aTasks[0].sUNOCommand );
+                :   getBorderWin().getView()->getCommandController().isCommandEnabled( rData.aTasks[0].sUNOCommand );
     getTasksWindow().Enable( bEnabled );
     m_aContainer.setTitle( rData.nTitleId );
 
@@ -745,7 +748,7 @@ void OApplicationDetailView::impl_createPage( ElementType _eType, const Referenc
 const TaskPaneData& OApplicationDetailView::impl_getTaskPaneData( ElementType _eType )
 {
     if ( m_aTaskPaneData.empty() )
-        m_aTaskPaneData.resize( E_ELEMENT_TYPE_COUNT );
+        m_aTaskPaneData.resize( ELEMENT_COUNT );
     OSL_ENSURE( ( _eType >= 0 ) && ( _eType < E_ELEMENT_TYPE_COUNT ), "OApplicationDetailView::impl_getTaskPaneData: illegal element type!" );
     TaskPaneData& rData = m_aTaskPaneData[ _eType ];
 
@@ -802,7 +805,7 @@ void OApplicationDetailView::impl_fillTaskPaneData( ElementType _eType, TaskPane
         )
     {
         if  (   pTask->bHideWhenDisabled
-            &&  !getBorderWin().getView()->getCommandController()->isCommandEnabled( pTask->sUNOCommand )
+            &&  !getBorderWin().getView()->getCommandController().isCommandEnabled( pTask->sUNOCommand )
             )
             pTask = rList.erase( pTask );
         else
@@ -891,11 +894,24 @@ sal_Int32 OApplicationDetailView::getElementCount()
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     return m_pControlHelper->getElementCount();
 }
+
 // -----------------------------------------------------------------------------
 void OApplicationDetailView::getSelectionElementNames( ::std::vector< ::rtl::OUString>& _rNames ) const
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     m_pControlHelper->getSelectionElementNames( _rNames );
+}
+// -----------------------------------------------------------------------------
+void OApplicationDetailView::describeCurrentSelectionForControl( const Control& _rControl, Sequence< NamedDatabaseObject >& _out_rSelectedObjects )
+{
+    DBG_CHKTHIS(OApplicationDetailView,NULL);
+    m_pControlHelper->describeCurrentSelectionForControl( _rControl, _out_rSelectedObjects );
+}
+// -----------------------------------------------------------------------------
+void OApplicationDetailView::describeCurrentSelectionForType( const ElementType _eType, Sequence< NamedDatabaseObject >& _out_rSelectedObjects )
+{
+    DBG_CHKTHIS(OApplicationDetailView,NULL);
+    m_pControlHelper->describeCurrentSelectionForType( _eType, _out_rSelectedObjects );
 }
 // -----------------------------------------------------------------------------
 void OApplicationDetailView::selectElements(const Sequence< ::rtl::OUString>& _aNames)
@@ -927,12 +943,6 @@ void OApplicationDetailView::paste()
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     m_pControlHelper->paste();
-}
-// -----------------------------------------------------------------------------
-void OApplicationDetailView::onCreationClick( const ::rtl::OUString& _sCommand)
-{
-    DBG_CHKTHIS(OApplicationDetailView,NULL);
-    getBorderWin().getView()->getElementNotification()->onCreationClick(_sCommand);
 }
 // -----------------------------------------------------------------------------
 SvLBoxEntry*  OApplicationDetailView::elementAdded(ElementType _eType,const ::rtl::OUString& _rName, const Any& _rObject )
