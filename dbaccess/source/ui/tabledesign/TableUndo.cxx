@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableUndo.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,8 +97,8 @@ void OTableDesignUndoAct::Undo()
     // Wenn erstes Undo zurueckgenommen wurde, ist Doc nicht modifiziert worden
     if( m_pTabDgnCtrl->m_nCurUndoActId == 0 )
     {
-        m_pTabDgnCtrl->GetView()->getController()->setModified(sal_False);
-        m_pTabDgnCtrl->GetView()->getController()->InvalidateFeature(SID_SAVEDOC);
+        m_pTabDgnCtrl->GetView()->getController().setModified(sal_False);
+        m_pTabDgnCtrl->GetView()->getController().InvalidateFeature(SID_SAVEDOC);
     }
 }
 
@@ -111,8 +111,8 @@ void OTableDesignUndoAct::Redo()
     // Wenn Redo fuer erste Undo-Action, muss Modified-Flag wieder gesetzt werden
     if( m_pTabDgnCtrl->m_nCurUndoActId > 0 )
     {
-        m_pTabDgnCtrl->GetView()->getController()->setModified(sal_True);
-        m_pTabDgnCtrl->GetView()->getController()->InvalidateFeature(SID_SAVEDOC);
+        m_pTabDgnCtrl->GetView()->getController().setModified(sal_True);
+        m_pTabDgnCtrl->GetView()->getController().InvalidateFeature(SID_SAVEDOC);
     }
 }
 //==============================================================================
@@ -151,7 +151,7 @@ void OTableDesignCellUndoAct::Undo()
         CellControllerRef xController = m_pTabDgnCtrl->Controller();
         if ( xController.Is() )
             xController->ClearModified();
-        m_pTabDgnCtrl->GetView()->getController()->setModified(sal_False);
+        m_pTabDgnCtrl->GetView()->getController().setModified(sal_False);
 
     }
 
