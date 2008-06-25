@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Helper.java,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,6 +28,8 @@
  *
  ************************************************************************/package com.sun.star.wizards.common;
 
+import com.sun.star.uno.XComponentContext;
+import com.sun.star.util.XMacroExpander;
 import java.util.Calendar;
 
 import com.sun.star.beans.Property;
@@ -90,7 +92,7 @@ public class Helper {
         int MaxCount = CurPropertyValue.length;
         for (int i = 0; i < MaxCount; i++) {
             if (CurPropertyValue[i] != null) {
-                if (CurPropertyValue[i].Name == PropertyName) {
+                if (CurPropertyValue[i].Name.equals(PropertyName)) {
                     return CurPropertyValue[i].Value;
                 }
             }
@@ -331,6 +333,26 @@ public class Helper {
         }
 
     }
+
+public static XComponentContext getComponentContext(XMultiServiceFactory _xMSF)
+{
+    // Get the path to the extension and try to add the path to the class loader
+    final XPropertySet xProps = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, _xMSF);
+    final PropertySetHelper aHelper = new PropertySetHelper(xProps);
+    final Object aDefaultContext = aHelper.getPropertyValueAsObject("DefaultContext");
+    final XComponentContext xComponentContext = (XComponentContext)UnoRuntime.queryInterface(XComponentContext.class, aDefaultContext);
+    return xComponentContext;
+}
+
+public static XMacroExpander getMacroExpander(XMultiServiceFactory _xMSF)
+{
+    final XComponentContext xComponentContext = getComponentContext(_xMSF);
+    final Object aSingleton = xComponentContext.getValueByName("/singletons/com.sun.star.util.theMacroExpander");
+    XMacroExpander xExpander = (XMacroExpander)UnoRuntime.queryInterface(XMacroExpander.class, aSingleton);
+    // String[][] aStrListList = xProvider.getExtensionList();
+//     final String sLocation = xProvider.getPackageLocation("com.sun.reportdesigner");
+    return xExpander;
+}
 
 
 }
