@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: framework.h,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -199,6 +199,15 @@ extern "C" {
     <p>
     All settings made by this API are done for the current user if not
     mentioned differently.</p>
+
+    <h2>Other bootstrap variables</h2>
+    <dl>
+    <dt>JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY</dt>
+    <dd>This is a unofficial variable which was introduced to workaround external issues.
+    It may be removed in the future. By setting it to 1, the framework will not try to
+    find out if the system is configured to use accessibility tools or if a JRE has an
+    accessibiliy bridge installed</dd>
+    </dl>
 */
 
 /** indicates that a JRE has an accessibility bridge installed.
