@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgedfunc.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -200,7 +200,7 @@ BOOL DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
                 uno::Sequence<beans::PropertyValue> aArgs(1);
                 aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowProperties"));
                 aArgs[0].Value <<= sal_True;
-                m_pParent->getViewsWindow()->getView()->getReportView()->getController()->executeUnChecked(SID_SHOW_PROPERTYBROWSER,aArgs);
+                m_pParent->getViewsWindow()->getView()->getReportView()->getController().executeUnChecked(SID_SHOW_PROPERTYBROWSER,aArgs);
                 m_pParent->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_pParent->getView());
                 // TODO character in shapes
                 //    SdrViewEvent aVEvt;
@@ -730,7 +730,7 @@ BOOL DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
         bReturn = m_pView->AreObjectsMarked();
         if ( bReturn )
         {
-            OReportController* pController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
+            OReportController& rController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
             const SdrMarkList& rMarkList = m_pView->GetMarkedObjectList();
             for (sal_uInt32 i =  0; i < rMarkList.GetMarkCount();++i )
             {
