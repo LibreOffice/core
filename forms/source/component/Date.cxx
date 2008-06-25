@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Date.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -308,21 +308,14 @@ Any ODateModel::translateControlValueToExternalValue( ) const
 }
 
 //------------------------------------------------------------------------------
-Any ODateModel::translateExternalValueToControlValue( ) const
+Any ODateModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
 {
-    OSL_PRECOND( hasExternalValueBinding(),
-        "ODateModel::translateExternalValueToControlValue: precondition not met!" );
-
     Any aControlValue;
-    if ( hasExternalValueBinding() )
+    if ( _rExternalValue.hasValue() )
     {
-        Any aExternalValue = getExternalValueBinding()->getValue( ::getCppuType( static_cast< util::Date* >( NULL ) ) );
-        if ( aExternalValue.hasValue() )
-        {
-            util::Date aDate;
-            OSL_VERIFY( aExternalValue >>= aDate );
-            aControlValue <<= DBTypeConversion::toINT32( aDate );
-        }
+        util::Date aDate;
+        OSL_VERIFY( _rExternalValue >>= aDate );
+        aControlValue <<= DBTypeConversion::toINT32( aDate );
     }
     return aControlValue;
 }
@@ -355,12 +348,9 @@ Any ODateModel::getDefaultForReset() const
 }
 
 //------------------------------------------------------------------------------
-sal_Bool ODateModel::approveValueBinding( const Reference< binding::XValueBinding >& _rxBinding )
+Sequence< Type > ODateModel::getSupportedBindingTypes()
 {
-    OSL_PRECOND( _rxBinding.is(), "ODateModel::approveValueBinding: invalid binding!" );
-
-    return  _rxBinding.is()
-        &&  _rxBinding->supportsType( ::getCppuType( static_cast< util::Date* >( NULL ) ) );
+    return Sequence< Type >( &::getCppuType( static_cast< util::Date* >( NULL ) ), 1 );
 }
 
 //.........................................................................
