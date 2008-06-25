@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: window.cxx,v $
- * $Revision: 1.280 $
+ * $Revision: 1.281 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,72 +31,72 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 #ifndef _SV_SVSYS_HXX
-#include <svsys.h>
+#include "svsys.h"
 #endif
-#include <vcl/salframe.hxx>
-#include <vcl/salobj.hxx>
-#include <vcl/salinst.hxx>
-#include <vcl/salgtype.hxx>
-#include <vcl/salgdi.hxx>
-#include <vcl/salctrlhandle.hxx>
+#include "vcl/salframe.hxx"
+#include "vcl/salobj.hxx"
+#include "vcl/salinst.hxx"
+#include "vcl/salgtype.hxx"
+#include "vcl/salgdi.hxx"
+#include "vcl/salctrlhandle.hxx"
 
-#include <vcl/unohelp.hxx>
-#include <tools/time.hxx>
-#include <tools/debug.hxx>
+#include "vcl/unohelp.hxx"
+#include "tools/time.hxx"
+#include "tools/debug.hxx"
 #ifndef _SV_RC_H
-#include <tools/rc.h>
+#include "tools/rc.h"
 #endif
-#include <vcl/svdata.hxx>
-#include <vcl/windata.hxx>
-#include <vcl/dbggui.hxx>
-#include <vcl/outfont.hxx>
-#include <vcl/outdev.h>
-#include <vcl/region.h>
-#include <vcl/event.hxx>
-#include <vcl/help.hxx>
-#include <vcl/cursor.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/window.h>
-#include <vcl/window.hxx>
-#include <vcl/syswin.hxx>
-#include <vcl/syschild.hxx>
-#include <vcl/brdwin.hxx>
-#include <vcl/helpwin.hxx>
-#include <vcl/dockwin.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/wall.hxx>
-#include <vcl/toolbox.h>
-#include <vcl/fontcfg.hxx>
-#include <vcl/sysdata.hxx>
-#include <vcl/sallayout.hxx>
-#include <vcl/button.hxx> // Button::GetStandardText
-#include <vcl/taskpanelist.hxx>
-#include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
-#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <com/sun/star/awt/XTopWindow.hpp>
-#include <com/sun/star/awt/XDisplayConnection.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include "vcl/svdata.hxx"
+#include "vcl/windata.hxx"
+#include "vcl/dbggui.hxx"
+#include "vcl/outfont.hxx"
+#include "vcl/outdev.h"
+#include "vcl/region.h"
+#include "vcl/event.hxx"
+#include "vcl/help.hxx"
+#include "vcl/cursor.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/window.h"
+#include "vcl/window.hxx"
+#include "vcl/syswin.hxx"
+#include "vcl/syschild.hxx"
+#include "vcl/brdwin.hxx"
+#include "vcl/helpwin.hxx"
+#include "vcl/dockwin.hxx"
+#include "vcl/menu.hxx"
+#include "vcl/wrkwin.hxx"
+#include "vcl/wall.hxx"
+#include "vcl/gradient.hxx"
+#include "vcl/toolbox.h"
+#include "vcl/fontcfg.hxx"
+#include "vcl/sysdata.hxx"
+#include "vcl/sallayout.hxx"
+#include "vcl/button.hxx" // Button::GetStandardText
+#include "vcl/taskpanelist.hxx"
+#include "com/sun/star/awt/XWindowPeer.hpp"
+#include "com/sun/star/rendering/XCanvas.hpp"
+#include "com/sun/star/awt/XWindow.hpp"
+#include "comphelper/processfactory.hxx"
+#include "com/sun/star/datatransfer/dnd/XDragSource.hpp"
+#include "com/sun/star/datatransfer/dnd/XDropTarget.hpp"
+#include "com/sun/star/datatransfer/clipboard/XClipboard.hpp"
+#include "com/sun/star/awt/XTopWindow.hpp"
+#include "com/sun/star/awt/XDisplayConnection.hpp"
+#include "com/sun/star/lang/XInitialization.hpp"
+#include "com/sun/star/lang/XComponent.hpp"
+#include "com/sun/star/lang/XServiceName.hpp"
+#include "com/sun/star/accessibility/XAccessible.hpp"
+#include "com/sun/star/accessibility/AccessibleRole.hpp"
 
-#include <vcl/dialog.hxx>
-#include <vcl/unowrap.hxx>
-#include <dndlcon.hxx>
-#include <dndevdis.hxx>
-#include <vcl/impbmpconv.hxx>
-#include <unotools/confignode.hxx>
-#include <vcl/gdimtf.hxx>
+#include "vcl/dialog.hxx"
+#include "vcl/unowrap.hxx"
+#include "dndlcon.hxx"
+#include "dndevdis.hxx"
+#include "vcl/impbmpconv.hxx"
+#include "unotools/confignode.hxx"
+#include "vcl/gdimtf.hxx"
 
-#include <vcl/pdfextoutdevdata.hxx>
+#include "vcl/pdfextoutdevdata.hxx"
 #include "vcl/lazydelete.hxx"
 
 using namespace rtl;
@@ -431,6 +431,15 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     aFont = aStyleSettings.GetGroupFont();
     aFont.SetHeight( defFontheight );
     aStyleSettings.SetGroupFont( aFont );
+
+    // set workspace gradient to black in dark themes
+    if( aStyleSettings.GetWindowColor().IsDark() )
+        aStyleSettings.SetWorkspaceGradient( Wallpaper( Color( COL_BLACK ) ) );
+    else
+    {
+        Gradient aGrad( GRADIENT_LINEAR, DEFAULT_WORKSPACE_GRADIENT_START_COLOR, DEFAULT_WORKSPACE_GRADIENT_END_COLOR );
+        aStyleSettings.SetWorkspaceGradient( Wallpaper( aGrad ) );
+    }
 
     rSettings.SetStyleSettings( aStyleSettings );
 
