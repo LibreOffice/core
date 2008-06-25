@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbtreeview.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,17 +106,11 @@ void DBTreeView::Resize()
     m_pTreeListBox->SetPosSizePixel(Point(0,0),GetOutputSizePixel());
 }
 // -------------------------------------------------------------------------
-void DBTreeView::setModel(DBTreeListModel* _pTreeModel)
+void DBTreeView::setModel(SvLBoxTreeList* _pTreeModel)
 {
     if (_pTreeModel)
         _pTreeModel->InsertView(m_pTreeListBox);
     m_pTreeListBox->SetModel(_pTreeModel);
-}
-
-// -------------------------------------------------------------------------
-DBTreeListBox* DBTreeView::getListBox() const
-{
-    return m_pTreeListBox;
 }
 
 // -------------------------------------------------------------------------
