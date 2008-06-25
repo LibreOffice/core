@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Edit.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -674,16 +674,6 @@ sal_Bool OEditModel::approveDbColumnType( sal_Int32 _nColumnType )
         return sal_False;
 
     return OEditBaseModel::approveDbColumnType( _nColumnType );
-}
-
-//------------------------------------------------------------------------------
-sal_Bool OEditModel::approveValueBinding( const Reference< XValueBinding >& _rxBinding )
-{
-    OSL_PRECOND( _rxBinding.is(), "OEditModel::approveValueBinding: invalid binding!" );
-
-    // only strings are accepted for simplicity
-    return  _rxBinding.is()
-        &&  _rxBinding->supportsType( ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) );
 }
 
 //------------------------------------------------------------------------------
