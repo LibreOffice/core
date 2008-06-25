@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportDefinition.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -358,6 +358,19 @@ namespace reportdesign
         virtual ::comphelper::EmbeddedObjectContainer& getEmbeddedObjectContainer() const;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > getInteractionHandler() const;
         virtual bool isEnableSetModified() const;
+
+    private:
+        /** loads the report definition from the given storage
+
+            @precond
+                our mutex is locked
+            @throws
+        */
+        void impl_loadFromStorage_nolck_throw(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments
+        );
+
       };
 // =============================================================================
 } // namespace reportdesign
