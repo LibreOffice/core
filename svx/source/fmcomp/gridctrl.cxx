@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gridctrl.cxx,v $
- * $Revision: 1.83 $
+ * $Revision: 1.84 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1009,9 +1009,6 @@ void DbGridControl::StateChanged( StateChangedType nType )
         case STATE_CHANGE_ZOOM:
         {
             ImplInitSettings( sal_True, sal_False, sal_False );
-            // forward the zoom factor to the navigation bar
-            if (m_bNavigationBar)
-                m_aBar.SetZoom(GetZoom());
 
             // and give it a chance to rearrange
             Point aPoint = GetControlArea().TopLeft();
@@ -1066,7 +1063,26 @@ void DbGridControl::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_
     {
         DbGridColumn* pCol = m_aColumns.GetObject(i);
         if (pCol)
-            pCol->ImplInitSettings(&GetDataWindow(), bFont, bForeground, bBackground);
+            pCol->ImplInitSettings( GetDataWindow(), bFont, bForeground, bBackground );
+    }
+
+    if ( bFont )
+    {
+        if ( m_bNavigationBar )
+        {
+            m_aBar.SetZoom( GetZoom() );
+
+            Font aFont = m_aBar.GetSettings().GetStyleSettings().GetFieldFont();
+            if ( IsControlFont() )
+            {
+                m_aBar.SetControlFont( GetControlFont() );
+                aFont.Merge( GetControlFont() );
+            }
+            else
+                m_aBar.SetControlFont();
+
+            m_aBar.SetZoomedPointFont( aFont );
+        }
     }
 
     if (bBackground)
