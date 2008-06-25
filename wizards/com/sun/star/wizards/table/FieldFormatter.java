@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FieldFormatter.java,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,13 +81,13 @@ public class FieldFormatter  implements XItemListener{
         this.CurUnoDialog = _CurUnoDialog;
         curtabindex = (short) (TableWizard.SOFIELDSFORMATPAGE * 100);
         IFieldFormatStep = new Integer(TableWizard.SOFIELDSFORMATPAGE);
-        String sFieldName = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 23);
-        String sFieldNames = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 25);
-        String sfieldinfo = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 20);
-        String sbtnplushelptext = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 45);
-        String sbtnminushelptext = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 46);
+        String sFieldName = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 23);
+        String sFieldNames = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 25);
+        String sfieldinfo = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 20);
+        String sbtnplushelptext = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 45);
+        String sbtnminushelptext = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 46);
 
-        suntitled = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 43);
+        suntitled = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 43);
 
         CurUnoDialog.insertLabel("lblFieldNames",
                 new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
