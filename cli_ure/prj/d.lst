@@ -8,4 +8,6 @@
 ..\%__SRC%\bin\policy*.dll %_DEST%\bin%_EXT%\policy*.dll
 ..\%__SRC%\bin\cli_uno.* %_DEST%\bin%_EXT%\cli_uno.*
 
+..\%__SRC%\bin\cliuno.snk %_DEST%\bin%_EXT%\cliuno.snk
+
 ..\%__SRC%\bin\cliureversion.mk %_DEST%\bin%_EXT%\cliureversion.mk
