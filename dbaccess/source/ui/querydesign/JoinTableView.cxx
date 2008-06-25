@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: JoinTableView.cxx,v $
- * $Revision: 1.60 $
+ * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -306,7 +306,7 @@ ULONG OJoinTableView::GetTabWinCount()
 }
 
 //------------------------------------------------------------------------------
-::std::vector<OTableConnection*>::const_iterator OJoinTableView::RemoveConnection( OTableConnection* _pConn,sal_Bool _bDelete )
+bool OJoinTableView::RemoveConnection( OTableConnection* _pConn,sal_Bool _bDelete )
 {
     DBG_CHKTHIS(OJoinTableView,NULL);
     DeselectConn(_pConn);
@@ -314,9 +314,9 @@ ULONG OJoinTableView::GetTabWinCount()
     // to force a redraw
     _pConn->InvalidateConnection();
 
-    m_pView->getController()->removeConnectionData( _pConn->GetData() );
+    m_pView->getController().removeConnectionData( _pConn->GetData() );
 
-    ::std::vector<OTableConnection*>::const_iterator aNextPos = m_vTableConnection.erase(
+    m_vTableConnection.erase(
                         ::std::find(m_vTableConnection.begin(),m_vTableConnection.end(),_pConn) );
 
     modified();
@@ -329,7 +329,7 @@ ULONG OJoinTableView::GetTabWinCount()
         delete _pConn;
     }
 
-    return aNextPos;
+    return true;
 }
 
 //------------------------------------------------------------------------
@@ -349,7 +349,7 @@ TTableWindowData::value_type OJoinTableView::createTableWindowData(const ::rtl::
     OJoinDesignView* pParent = getDesignView();
     try
     {
-        if ( !pData->init(pParent->getController()->getConnection(),allowQueries()) )
+        if ( !pData->init(pParent->getController().getConnection(),allowQueries()) )
         {
             if ( pData->isValid() )
                 onNoColumns_throw();
@@ -360,13 +360,13 @@ TTableWindowData::value_type OJoinTableView::createTableWindowData(const ::rtl::
     catch ( const SQLException& )
     {
         ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ),
-            pParent, pParent->getController()->getORB() );
+            pParent, pParent->getController().getORB() );
     }
     catch( const WrappedTargetException& e )
     {
         SQLException aSql;
         if ( e.TargetException >>= aSql )
-            ::dbaui::showError( ::dbtools::SQLExceptionInfo( aSql ), pParent, pParent->getController()->getORB() );
+            ::dbaui::showError( ::dbtools::SQLExceptionInfo( aSql ), pParent, pParent->getController().getORB() );
     }
     catch( const Exception& )
     {
@@ -394,7 +394,7 @@ void OJoinTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rt
     OTableWindow* pNewTabWin = createWindow( pNewTabWinData );
     if ( pNewTabWin->Init() )
     {
-        m_pView->getController()->getTableWindowData()->push_back( pNewTabWinData);
+        m_pView->getController().getTableWindowData()->push_back( pNewTabWinData);
         // when we already have a table with this name insert the full qualified one instead
         if(m_aTableMap.find(rWinName) != m_aTableMap.end())
             m_aTableMap[_rComposedName] = pNewTabWin;
@@ -423,19 +423,23 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
     DBG_CHKTHIS(OJoinTableView,NULL);
     //////////////////////////////////////////////////////////////////////
     // first delete all connections of this window to others
-    BOOL bRemove = TRUE;
-
+    bool bRemove = true;
     TTableWindowData::value_type pData = pTabWin->GetData();
     sal_Int32 nCount = m_vTableConnection.size();
     ::std::vector<OTableConnection*>::reverse_iterator aIter = m_vTableConnection.rbegin();
-    for(;aIter != m_vTableConnection.rend() && bRemove;++aIter)
+    while(aIter != m_vTableConnection.rend() && bRemove)
     {
         OTableConnection* pTabConn = (*aIter);
         if(
             ( pData == pTabConn->GetData()->getReferencingTable())      ||
             ( pData == pTabConn->GetData()->getReferencedTable())
-          )
-          bRemove = RemoveConnection( pTabConn ,sal_True) != m_vTableConnection.end(); // every remove must work
+        )
+        {
+          bRemove = RemoveConnection( pTabConn ,sal_True);
+          aIter = m_vTableConnection.rbegin();
+        }
+        else
+            ++aIter;
     }
 
     //////////////////////////////////////////////////////////////////////
@@ -448,11 +452,12 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
                                                     );
 
         pTabWin->Hide();
-        TTableWindowData::iterator aFind = ::std::find(m_pView->getController()->getTableWindowData()->begin(),m_pView->getController()->getTableWindowData()->end(),pData);
-        if(aFind != m_pView->getController()->getTableWindowData()->end())
+        OJoinController& rController = m_pView->getController();
+        TTableWindowData::iterator aFind = ::std::find(rController.getTableWindowData()->begin(),rController.getTableWindowData()->end(),pData);
+        if(aFind != rController.getTableWindowData()->end())
         {
-            m_pView->getController()->getTableWindowData()->erase(aFind);
-            m_pView->getController()->setModified(sal_True);
+            rController.getTableWindowData()->erase(aFind);
+            rController.setModified(sal_True);
         }
 
         String aWinName = pTabWin->GetWinName();
@@ -466,9 +471,9 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
 
         pTabWin->clearListBox();
         delete pTabWin;
-    }
 
-    if ( bRemove && (sal_Int32)m_aTableMap.size() < (nCount-1) ) // if some connections could be removed
+    }
+    if ( (sal_Int32)m_vTableConnection.size() < (nCount-1) ) // if some connections could be removed
         modified();
 }
 namespace
@@ -712,7 +717,7 @@ void OJoinTableView::BeginChildMove( OTableWindow* pTabWin, const Point& rMouseP
 {
     DBG_CHKTHIS(OJoinTableView,NULL);
 
-    if (m_pView->getController()->isReadOnly())
+    if (m_pView->getController().isReadOnly())
         return;
 
     m_pDragWin = pTabWin;
@@ -736,7 +741,7 @@ void OJoinTableView::BeginChildSizing( OTableWindow* pTabWin, const Pointer& rPo
 {
     DBG_CHKTHIS(OJoinTableView,NULL);
 
-    if (m_pView->getController()->isReadOnly())
+    if (m_pView->getController().isReadOnly())
         return;
 
     SetPointer( rPointer );
@@ -1220,7 +1225,7 @@ IMPL_LINK(OJoinTableView, OnDragScrollTimer, void*, EMPTYARG)
 void OJoinTableView::invalidateAndModify(SfxUndoAction *_pAction)
 {
     Invalidate(INVALIDATE_NOCHILDREN);
-    m_pView->getController()->addUndoActionAndInvalidate(_pAction);
+    m_pView->getController().addUndoActionAndInvalidate(_pAction);
 }
 //------------------------------------------------------------------------
 void OJoinTableView::TabWinMoved(OTableWindow* ptWhich, const Point& ptOldPosition)
@@ -1248,12 +1253,12 @@ BOOL OJoinTableView::IsAddAllowed()
     DBG_CHKTHIS(OJoinTableView,NULL);
 
     // nicht wenn Db readonly
-    if (m_pView->getController()->isReadOnly())
+    if (m_pView->getController().isReadOnly())
         return FALSE;
 
     try
     {
-        Reference< XConnection> xConnection = m_pView->getController()->getConnection();
+        Reference< XConnection> xConnection = m_pView->getController().getConnection();
         if(!xConnection.is())
             return FALSE;
         // nicht wenn schon zuviele Tabellen
@@ -1325,7 +1330,7 @@ void OJoinTableView::Command(const CommandEvent& rEvt)
                     if( (*aIter)->CheckHit(aMousePos) )
                     {
                         SelectConn(*aIter);
-                        if(!getDesignView()->getController()->isReadOnly() && getDesignView()->getController()->isConnected())
+                        if(!getDesignView()->getController().isReadOnly() && getDesignView()->getController().isConnected())
                             executePopup(rEvt.GetMousePosPixel(),*aIter);
                         break;
                     }
@@ -1642,7 +1647,7 @@ void OJoinTableView::HideTabWins()
             RemoveTabWin(aIter->second);
     }
 
-    m_pView->getController()->setModified(sal_True);
+    m_pView->getController().setModified(sal_True);
 
     SetUpdateMode(sal_True);
 
@@ -1710,25 +1715,16 @@ void OJoinTableView::GetFocus()
 // -----------------------------------------------------------------------------
 Reference< XAccessible > OJoinTableView::CreateAccessible()
 {
-    Reference< XAccessible > aRet;
-    if (getDesignView()->getController())
-    {
-        // create our VIEWPORT
-        OJoinDesignViewAccess* pAccessible = new OJoinDesignViewAccess(this);
-        m_pAccessible = pAccessible;
-        aRet = pAccessible;
-    }
-    else
-        aRet = Window::CreateAccessible();
-    return aRet;
+    m_pAccessible = new OJoinDesignViewAccess(this);
+    return m_pAccessible;
 }
 // -----------------------------------------------------------------------------
 void OJoinTableView::modified()
 {
-    OJoinController* pController = m_pView->getController();
-    pController->setModified( sal_True );
-    pController->InvalidateFeature(ID_BROWSER_ADDTABLE);
-    pController->InvalidateFeature(SID_RELATION_ADD_RELATION);
+    OJoinController& rController = m_pView->getController();
+    rController.setModified( sal_True );
+    rController.InvalidateFeature(ID_BROWSER_ADDTABLE);
+    rController.InvalidateFeature(SID_RELATION_ADD_RELATION);
 }
 // -----------------------------------------------------------------------------
 void OJoinTableView::addConnection(OTableConnection* _pConnection,sal_Bool _bAddData)
@@ -1736,10 +1732,10 @@ void OJoinTableView::addConnection(OTableConnection* _pConnection,sal_Bool _bAdd
     if ( _bAddData )
     {
 #if OSL_DEBUG_LEVEL > 0
-        TTableConnectionData* pTabConnDataList = m_pView->getController()->getTableConnectionData();
+        TTableConnectionData* pTabConnDataList = m_pView->getController().getTableConnectionData();
         OSL_ENSURE( ::std::find(pTabConnDataList->begin(),pTabConnDataList->end(),_pConnection->GetData()) == pTabConnDataList->end(),"Data already in vector!");
 #endif
-        m_pView->getController()->getTableConnectionData()->push_back(_pConnection->GetData());
+        m_pView->getController().getTableConnectionData()->push_back(_pConnection->GetData());
     }
     m_vTableConnection.push_back(_pConnection);
     _pConnection->RecalcLines();
