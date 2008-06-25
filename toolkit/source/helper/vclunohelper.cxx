@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclunohelper.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,6 +63,9 @@
 
 #include <vcl/graph.hxx>
 #include <comphelper/processfactory.hxx>
+
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/awt/Point.hpp>
 
 //  ----------------------------------------------------
 //  class VCLUnoHelper
@@ -549,3 +552,172 @@ FieldUnit VCLUnoHelper::ConvertToFieldUnit( sal_Int16 _nMeasurementUnit, sal_Int
 {
     return (FieldUnit)convertMeasurementUnit( _nMeasurementUnit, MeasurementUnitToFieldUnit, _rFieldToUNOValueFactor );
 }
+
+
+MapUnit /* MapModeUnit */ VCLUnoHelper::ConvertToMapModeUnit(sal_Int16 /* com.sun.star.util.MeasureUnit.* */ _nMeasureUnit) throw (::com::sun::star::lang::IllegalArgumentException)
+{
+    MapUnit eMode;
+    switch(_nMeasureUnit)
+    {
+    case com::sun::star::util::MeasureUnit::MM_100TH:
+        eMode = MAP_100TH_MM;
+        break;
+
+
+    case com::sun::star::util::MeasureUnit::MM_10TH:
+        eMode = MAP_10TH_MM;
+        break;
+
+    case com::sun::star::util::MeasureUnit::MM:
+        eMode = MAP_MM;
+        break;
+
+    case com::sun::star::util::MeasureUnit::CM:
+        eMode = MAP_CM;
+        break;
+
+    case com::sun::star::util::MeasureUnit::INCH_1000TH:
+        eMode = MAP_1000TH_INCH;
+        break;
+
+    case com::sun::star::util::MeasureUnit::INCH_100TH:
+        eMode = MAP_100TH_INCH;
+        break;
+
+    case com::sun::star::util::MeasureUnit::INCH_10TH:
+        eMode = MAP_10TH_INCH;
+        break;
+
+    case com::sun::star::util::MeasureUnit::INCH:
+        eMode = MAP_INCH;
+        break;
+
+    case com::sun::star::util::MeasureUnit::POINT:
+        eMode = MAP_POINT;
+        break;
+
+    case com::sun::star::util::MeasureUnit::TWIP:
+        eMode = MAP_TWIP;
+        break;
+
+    case com::sun::star::util::MeasureUnit::PIXEL:
+        eMode = MAP_PIXEL;
+        break;
+
+/*
+    case com::sun::star::util::MeasureUnit::M:
+        break;
+    case com::sun::star::util::MeasureUnit::KM:
+        break;
+    case com::sun::star::util::MeasureUnit::PICA:
+        break;
+    case com::sun::star::util::MeasureUnit::FOOT:
+        break;
+    case com::sun::star::util::MeasureUnit::MILE:
+        break;
+    case com::sun::star::util::MeasureUnit::PERCENT:
+        break;
+*/
+    default:
+        throw ::com::sun::star::lang::IllegalArgumentException(::rtl::OUString::createFromAscii("Unsupported measure unit."), NULL, 1 );
+    }
+    return eMode;
+}
+
+sal_Int16 /* com.sun.star.util.MeasureUnit.* */ VCLUnoHelper::ConvertToMeasurementUnit(MapUnit /* MapModeUnit */ _eMapModeUnit)  throw (::com::sun::star::lang::IllegalArgumentException)
+{
+    sal_Int16 nMeasureUnit = 0;
+    switch (_eMapModeUnit)
+    {
+    case MAP_100TH_MM:
+        nMeasureUnit = com::sun::star::util::MeasureUnit::MM_100TH;
+        break;
+
+    case MAP_10TH_MM:
+        nMeasureUnit = com::sun::star::util::MeasureUnit::MM_10TH;
+        break;
+
+    case MAP_MM:
+        nMeasureUnit = com::sun::star::util::MeasureUnit::MM;
+        break;
+
+    case MAP_CM:
+        nMeasureUnit = com::sun::star::util::MeasureUnit::CM;
+        break;
+
+    case MAP_1000TH_INCH:
+        nMeasureUnit = com::sun::star::util::MeasureUnit::INCH_1000TH;
+        break;
+
+    case MAP_100TH_INCH:
+        nMeasureUnit = com::sun::star::util::MeasureUnit::INCH_100TH;
+        break;
+
+    case MAP_10TH_INCH:
+        nMeasureUnit = com::sun::star::util::MeasureUnit::INCH_10TH;
+        break;
+
+    case MAP_INCH:
+        nMeasureUnit = com::sun::star::util::MeasureUnit::INCH;
+        break;
+
+    case MAP_POINT:
+        nMeasureUnit = com::sun::star::util::MeasureUnit::POINT;
+        break;
+
+    case MAP_TWIP:
+        nMeasureUnit = com::sun::star::util::MeasureUnit::TWIP;
+        break;
+
+    case MAP_PIXEL:
+        nMeasureUnit = com::sun::star::util::MeasureUnit::PIXEL;
+        break;
+
+/*
+    case MAP_SYSFONT:
+        break;
+
+    case MAP_APPFONT:
+        break;
+
+    case MAP_RELATIVE:
+        break;
+
+    case MAP_REALAPPFONT:
+        break;
+
+    case MAP_LASTENUMDUMMY:
+        break;
+*/
+    default:
+        throw ::com::sun::star::lang::IllegalArgumentException(::rtl::OUString::createFromAscii("Unsupported MapMode unit."), NULL, 1 );
+    }
+    return nMeasureUnit;
+}
+
+::Size VCLUnoHelper::ConvertToVCLSize(com::sun::star::awt::Size const& _aSize)
+{
+    ::Size aVCLSize(_aSize.Width, _aSize.Height);
+    return aVCLSize;
+}
+
+com::sun::star::awt::Size VCLUnoHelper::ConvertToAWTSize(::Size /* VCLSize */ const& _aSize)
+{
+    com::sun::star::awt::Size aAWTSize(_aSize.Width(), _aSize.Height());
+    return aAWTSize;
+}
+
+
+::Point VCLUnoHelper::ConvertToVCLPoint(com::sun::star::awt::Point const& _aPoint)
+{
+    ::Point aVCLPoint(_aPoint.X, _aPoint.Y);
+    return aVCLPoint;
+}
+
+com::sun::star::awt::Point VCLUnoHelper::ConvertToAWTPoint(::Point /* VCLPoint */ const& _aPoint)
+{
+    com::sun::star::awt::Point aAWTPoint(_aPoint.X(), _aPoint.Y());
+    return aAWTPoint;
+}
+
+
