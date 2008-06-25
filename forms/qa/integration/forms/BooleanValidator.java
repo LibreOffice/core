@@ -1,7 +1,7 @@
 /*
  * BooleanValidator.java
  *
- * Created on 10. März 2004, 16:27
+ * Created on 10. Maerz 2004, 16:27
  */
 
 package integration.forms;
