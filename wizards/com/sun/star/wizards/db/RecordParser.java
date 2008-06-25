@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RecordParser.java,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -226,7 +226,7 @@ public class RecordParser extends QueryMetaData {
                 throw new InvalidQueryException(xMSF, Command);
         }
         GroupFieldColumns = getFieldColumnList(GroupFieldNames);
-        RecordFieldColumns = getFieldColumnList(RecordFieldNames);
+        RecordFieldColumns = getFieldColumnList(getRecordFieldNames());
         return true;
     } catch (InvalidQueryException queryexception) {
         queryexception.printStackTrace(System.out);
