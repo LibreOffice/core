@@ -37,6 +37,9 @@ import com.sun.star.wizards.common.Helper;
 
 public class LetterWizardDialogImpl extends LetterWizardDialog {
 
+protected void enterStep(int OldStep, int NewStep){}
+protected void leaveStep(int OldStep, int NewStep){}
+
     static LetterDocument myLetterDoc;
     static boolean running;
 
@@ -1047,18 +1050,24 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
             //creation of the language independent path:
             String sLetterPath = NormPaths[getCurrentLetter().cp_Norm];
 
-            BusinessFiles = FileAccess.getFolderTitles(xMSF, "bus", sLetterPath);
-            OfficialFiles = FileAccess.getFolderTitles(xMSF, "off", sLetterPath);
-            PrivateFiles = FileAccess.getFolderTitles(xMSF, "pri", sLetterPath);
+            // try
+            // {
+                BusinessFiles = FileAccess.getFolderTitles(xMSF, "bus", sLetterPath);
+                OfficialFiles = FileAccess.getFolderTitles(xMSF, "off", sLetterPath);
+                PrivateFiles = FileAccess.getFolderTitles(xMSF, "pri", sLetterPath);
 
-            setControlProperty("lstBusinessStyle", "StringItemList", BusinessFiles[0]);
-            setControlProperty("lstPrivOfficialStyle", "StringItemList", OfficialFiles[0]);
-            setControlProperty("lstPrivateStyle", "StringItemList", PrivateFiles[0]);
+                setControlProperty("lstBusinessStyle", "StringItemList", BusinessFiles[0]);
+                setControlProperty("lstPrivOfficialStyle", "StringItemList", OfficialFiles[0]);
+                setControlProperty("lstPrivateStyle", "StringItemList", PrivateFiles[0]);
 
-            setControlProperty("lstBusinessStyle", "SelectedItems", new short[]{0});
-            setControlProperty("lstPrivOfficialStyle", "SelectedItems", new short[]{0});
-            setControlProperty("lstPrivateStyle", "SelectedItems", new short[]{0});
-
+                setControlProperty("lstBusinessStyle", "SelectedItems", new short[]{0});
+                setControlProperty("lstPrivOfficialStyle", "SelectedItems", new short[]{0});
+                setControlProperty("lstPrivateStyle", "SelectedItems", new short[]{0});
+//            }
+//            catch (com.sun.star.wizards.common.NoValidPathException e)
+//            {
+//                return false;
+//            }
             return true;
     }
 
