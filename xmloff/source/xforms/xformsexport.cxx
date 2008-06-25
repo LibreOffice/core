@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xformsexport.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
+#include "xformsexport.hxx"
+
 #include "XFormsModelExport.hxx"
 #include "xformsapi.hxx"
 
@@ -40,8 +42,11 @@
 #include <xmloff/nmspmap.hxx>
 #include "DomExport.hxx"
 #include <xmloff/xmluconv.hxx>
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "tools/debug.hxx"
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
@@ -781,4 +786,53 @@ OUString getXFormsSubmissionName( const Reference<XPropertySet>& xBinding )
     }
 
     return sReturn;
+}
+
+void getXFormsSettings( const Reference< XNameAccess >& _rXForms, Sequence< PropertyValue >& _out_rSettings )
+{
+    _out_rSettings = Sequence< PropertyValue >();
+
+    OSL_PRECOND( _rXForms.is(), "getXFormsSettings: invalid XForms container!" );
+    if ( !_rXForms.is() )
+        return;
+
+    try
+    {
+        // we want to export some special properties of our XForms models as config-item-map-named,
+        // which implies we need a PropertyValue whose value is an XNameAccess, whose keys
+        // are the names of the XForm models, and which in turn provides named sequences of
+        // PropertyValues - which denote the actual property values of the given named model.
+
+        Sequence< ::rtl::OUString > aModelNames( _rXForms->getElementNames() );
+
+        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+        Reference< XNameContainer > xModelSettings(
+            aContext.createComponent( "com.sun.star.document.NamedPropertyValues" ),
+            UNO_QUERY_THROW );
+
+        for (   const ::rtl::OUString* pModelName = aModelNames.getConstArray();
+                pModelName != aModelNames.getConstArray() + aModelNames.getLength();
+                ++pModelName
+            )
+        {
+            Reference< XPropertySet > xModelProps( _rXForms->getByName( *pModelName ), UNO_QUERY_THROW );
+
+            Sequence< PropertyValue > aModelSettings( 1 );
+            aModelSettings[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExternalData" ) );
+            aModelSettings[0].Value = xModelProps->getPropertyValue( aModelSettings[0].Name );
+
+            xModelSettings->insertByName( *pModelName, makeAny( aModelSettings ) );
+        }
+
+        if ( xModelSettings->hasElements() )
+        {
+            _out_rSettings.realloc( 1 );
+            _out_rSettings[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XFormModels" ) );
+            _out_rSettings[0].Value <<= xModelSettings;
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
