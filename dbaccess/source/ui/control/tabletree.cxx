@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabletree.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +61,9 @@
 #ifndef _COM_SUN_STAR_SDB_APPLICATION_DATABASEOBJECT_HPP_
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_APPLICATION_DATABASEOBJECTFOLDER_HPP_
+#include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #endif
@@ -91,6 +94,9 @@
 #ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 #include <algorithm>
 
 //.........................................................................
@@ -105,11 +111,13 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::sdb::application;
 
 using namespace ::dbtools;
 using namespace ::comphelper;
 
 namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
+namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer;
 
 //========================================================================
 //= OTableTreeListBox
@@ -148,7 +156,13 @@ void OTableTreeListBox::implSetDefaultImages()
 // -----------------------------------------------------------------------------
 bool  OTableTreeListBox::isFolderEntry( const SvLBoxEntry* _pEntry ) const
 {
-   return _pEntry->GetUserData() == reinterpret_cast< void* >(FOLDER_INDICATOR);
+    sal_Int32 nEntryType = reinterpret_cast< sal_IntPtr >( _pEntry->GetUserData() );
+    if  (   ( nEntryType == DatabaseObjectContainer::TABLES )
+        ||  ( nEntryType == DatabaseObjectContainer::CATALOG )
+        ||  ( nEntryType == DatabaseObjectContainer::SCHEMA )
+        )
+        return true;
+    return false;
 }
 
 // -----------------------------------------------------------------------------
@@ -314,7 +328,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
                 sRootEntryText  = String(ModuleRes(STR_ALL_VIEWS));
             else
                 sRootEntryText  = String(ModuleRes(STR_ALL_TABLES_AND_VIEWS));
-            pAllObjects = InsertEntry( sRootEntryText, NULL, FALSE, LIST_APPEND, reinterpret_cast< void* >( FOLDER_INDICATOR ) );
+            pAllObjects = InsertEntry( sRootEntryText, NULL, FALSE, LIST_APPEND, reinterpret_cast< void* >( DatabaseObjectContainer::TABLES ) );
         }
 
         if ( _rTables.empty() )
@@ -451,22 +465,34 @@ SvLBoxEntry* OTableTreeListBox::implAddEntry(
 
     SvLBoxEntry* pParentEntry = getAllObjectsEntry();
 
-    SvLBoxEntry* pCat = NULL;
-    SvLBoxEntry* pSchema = NULL;
-    if (sCatalog.getLength())
+    // if the DB uses catalog at the start of identifiers, then our hierarchy is
+    //   catalog
+    //   +- schema
+    //      +- table
+    // else it is
+    //   schema
+    //   +- catalog
+    //      +- table
+    sal_Bool bCatalogAtStart = _rxMeta->isCatalogAtStart();
+    ::rtl::OUString& nFirstName  = bCatalogAtStart ? sCatalog : sSchema;
+    sal_Int32 nFirstFolderType   = bCatalogAtStart ? DatabaseObjectContainer::CATALOG : DatabaseObjectContainer::SCHEMA;
+    ::rtl::OUString& nSecondName = bCatalogAtStart ? sSchema : sCatalog;
+    sal_Int32 nSecondFolderType  = bCatalogAtStart ? DatabaseObjectContainer::SCHEMA : DatabaseObjectContainer::CATALOG;
+
+    if ( nFirstName.getLength() )
     {
-        pCat = GetEntryPosByName(sCatalog, pParentEntry);
-        if (!pCat)
-            pCat = InsertEntry( sCatalog, pParentEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( FOLDER_INDICATOR ) );
-        pParentEntry = pCat;
+        SvLBoxEntry* pFolder = GetEntryPosByName( nFirstName, pParentEntry );
+        if ( !pFolder )
+            pFolder = InsertEntry( nFirstName, pParentEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( nFirstFolderType ) );
+        pParentEntry = pFolder;
     }
 
-    if (sSchema.getLength())
+    if ( nSecondName.getLength() )
     {
-        pSchema = GetEntryPosByName(sSchema, pParentEntry);
-        if (!pSchema)
-            pSchema = InsertEntry( sSchema, pParentEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( FOLDER_INDICATOR ) );
-        pParentEntry = pSchema;
+        SvLBoxEntry* pFolder = GetEntryPosByName( nSecondName, pParentEntry );
+        if ( !pFolder )
+            pFolder = InsertEntry( nSecondName, pParentEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( nSecondFolderType ) );
+        pParentEntry = pFolder;
     }
 
     SvLBoxEntry* pRet = NULL;
@@ -483,6 +509,53 @@ SvLBoxEntry* OTableTreeListBox::implAddEntry(
         SetCollapsedEntryBmp( pRet, aImageHC, BMP_COLOR_HIGHCONTRAST );
     }
     return pRet;
+}
+
+//------------------------------------------------------------------------
+NamedDatabaseObject OTableTreeListBox::describeObject( SvLBoxEntry* _pEntry )
+{
+    NamedDatabaseObject aObject;
+
+    sal_Int32 nEntryType = reinterpret_cast< sal_IntPtr >( _pEntry->GetUserData() );
+
+    if  ( nEntryType == DatabaseObjectContainer::TABLES )
+    {
+        aObject.Type = DatabaseObjectContainer::TABLES;
+    }
+    else if (   ( nEntryType == DatabaseObjectContainer::CATALOG )
+            ||  ( nEntryType == DatabaseObjectContainer::SCHEMA )
+            )
+    {
+        SvLBoxEntry* pParent = GetParent( _pEntry );
+        sal_Int32 nParentEntryType = pParent ? reinterpret_cast< sal_IntPtr >( pParent->GetUserData() ) : -1;
+
+        ::rtl::OUStringBuffer buffer;
+        if  ( nEntryType == DatabaseObjectContainer::CATALOG )
+        {
+            if ( nParentEntryType == DatabaseObjectContainer::SCHEMA )
+            {
+                buffer.append( GetEntryText( pParent ) );
+                buffer.append( sal_Unicode( '.' ) );
+            }
+            buffer.append( GetEntryText( _pEntry ) );
+        }
+        else if ( nEntryType == DatabaseObjectContainer::SCHEMA )
+        {
+            if ( nParentEntryType == DatabaseObjectContainer::CATALOG )
+            {
+                buffer.append( GetEntryText( pParent ) );
+                buffer.append( sal_Unicode( '.' ) );
+            }
+            buffer.append( GetEntryText( _pEntry ) );
+        }
+    }
+    else
+    {
+        aObject.Type = DatabaseObject::TABLE;
+        aObject.Name = getQualifiedTableName( _pEntry );
+    }
+
+    return aObject;
 }
 
 //------------------------------------------------------------------------
