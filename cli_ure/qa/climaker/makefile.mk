@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -73,13 +73,13 @@ CSFILES = climaker.cs testobjects.cs
 
 $(EXETARGET): $(CSFILES) $(OUTDIR)$/cli_test_types.dll
     $(GNUCOPY) -p $(BIN)$/cli_cppuhelper.dll $(OUTDIR)$/cli_cppuhelper.dll
-    $(GNUCOPY) -p $(BIN)$/cli_types.dll $(OUTDIR)$/cli_types.dll
+    $(GNUCOPY) -p $(BIN)$/cli_uretypes.dll $(OUTDIR)$/cli_uretypes.dll
     $(GNUCOPY) -p $(BIN)$/cli_basetypes.dll $(OUTDIR)$/cli_basetypes.dll
     $(GNUCOPY) -p $(BIN)$/cli_ure.dll $(OUTDIR)$/cli_ure.dll
     $(GNUCOPY) -p $(BIN)$/climaker.exe $(OUTDIR)
     $(CSC) $(CSCFLAGS) -target:exe -out:$(EXETARGET) \
         -reference:$(BIN)$/cli_ure.dll \
-         -reference:$(BIN)$/cli_types.dll \
+         -reference:$(BIN)$/cli_uretypes.dll \
          -reference:$(BIN)$/cli_basetypes.dll \
         -reference:$(OUTDIR)$/cli_test_types.dll \
         $(CSFILES)
@@ -103,9 +103,9 @@ $(OUTDIR)$/types.rdb: $(OUTDIR)$/types.urd
     - rm $@
     $(REGMERGE) $@ /UCR $<
 
-$(OUTDIR)$/cli_test_types.dll: $(OUTDIR)$/types.rdb $(BIN)$/climaker.exe $(BIN)$/cli_types.dll
+$(OUTDIR)$/cli_test_types.dll: $(OUTDIR)$/types.rdb $(BIN)$/climaker.exe $(BIN)$/cli_uretypes.dll
     $(CLIMAKER) $(CLIMAKERFLAGS) --out $@  \
-        -r $(BIN)$/cli_types.dll \
+        -r $(BIN)$/cli_uretypes.dll \
         -X $(SOLARBINDIR)$/types.rdb \
         $(OUTDIR)$/types.rdb
 
