@@ -1,33 +1,33 @@
 #*************************************************************************
-#
-# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
-#
-# OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.24 $
-#
-# This file is part of OpenOffice.org.
-#
-# OpenOffice.org is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License version 3
-# only, as published by the Free Software Foundation.
-#
-# OpenOffice.org is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License version 3 for more details
-# (a copy is included in the LICENSE file that accompanied this code).
-#
-# You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
-# <http://www.openoffice.org/license.html>
-# for a copy of the LGPLv3 License.
-#
-#*************************************************************************
+#  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+#  
+#  Copyright 2008 by Sun Microsystems, Inc.
+# 
+#  OpenOffice.org - a multi-platform office productivity suite
+# 
+#  $RCSfile: makefile.mk,v $
+#  $Revision: 1.25 $
+# 
+#  This file is part of OpenOffice.org.
+# 
+#  OpenOffice.org is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Lesser General Public License version 3
+#  only, as published by the Free Software Foundation.
+# 
+#  OpenOffice.org is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Lesser General Public License version 3 for more details
+#  (a copy is included in the LICENSE file that accompanied this code).
+# 
+#  You should have received a copy of the GNU Lesser General Public License
+#  version 3 along with OpenOffice.org.  If not, see
+#  <http://www.openoffice.org/license.html>
+#  for a copy of the LGPLv3 License.
+# 
+# ************************************************************************/
+
 
 PRJ = ..$/..
 PRJNAME = cli_ure
@@ -83,20 +83,21 @@ UNOTYPES = \
     com.sun.star.registry.XRegistryKey \
     com.sun.star.registry.XSimpleRegistry
 
+#loader lock was solved as of VS 2005 (CCNUMVER = 0014..)
 # When compiling for CLR, disable "warning C4339: use of undefined type detected
 # in CLR meta-data - use of this type may lead to a runtime exception":
 .IF "$(CCNUMVER)" >= "001399999999"
-CFLAGSCXX += -clr:oldSyntax -AI $(OUT)$/bin -wd4339
-LINKFLAGS += -NOENTRY -NODEFAULTLIB:nochkclr.obj -INCLUDE:__DllMainCRTStartup@12
+CFLAGSCXX += -clr:oldSyntax -AI $(BIN) -wd4339
 .ELSE
-CFLAGSCXX += -clr -AI $(OUT)$/bin -wd4339
+CFLAGSCXX += -clr -AI $(BIN) -wd4339
 #see  Microsoft Knowledge Base Article - 814472
 LINKFLAGS += -NOENTRY -NODEFAULTLIB:nochkclr.obj -INCLUDE:__DllMainCRTStartup@12
 .ENDIF
 
 SLOFILES = \
-        $(SLO)$/native_bootstrap.obj \
-    $(SLO)$/assembly_cppuhelper.obj                  # /clr
+    $(SLO)$/native_bootstrap.obj \
+    $(SLO)$/assembly_cppuhelper.obj
+    
 
 SHL1OBJS = $(SLOFILES)
 
@@ -121,13 +122,18 @@ SHL1VERSIONMAP = msvc.map
 SHL1DEF = $(MISC)$/$(SHL1TARGET).def
 DEF1NAME = $(SHL1TARGET)
 
-
 .ENDIF			# "$(BUILD_FOR_CLI)" != ""
 
 .INCLUDE : $(PRJ)$/util$/target.pmk
 .INCLUDE : target.mk
 
-.IF "$(BUILD_FOR_CLI)" != ""
+SIGN= $(MISC)$/cppuhelper_is_signed_flag
+
+ALLTAR: \
+    $(POLICY_ASSEMBLY_FILE) \
+    $(SIGN)
+
+
 
 .IF "$(CCNUMVER)" >= "001399999999"
 CFLAGSCXX += -clr:oldSyntax
@@ -148,11 +154,7 @@ $(ASSEMBLY_ATTRIBUTES) : assembly.cxx $(BIN)$/cliuno.snk $(BIN)$/cliureversion.m
 #make sure we build cli_cppuhelper after the version changed
 $(SHL1OBJS) : $(BIN)$/cli_cppuhelper.config
 
-SIGN= $(MISC)$/cppuhelper_is_signed_flag
-
-ALLTAR : $(POLICY_ASSEMBLY_FILE) $(SIGN)
-
-
+    
 
 $(SIGN): $(SHL1TARGETN)
     $(WRAPCMD) sn.exe -R $(BIN)$/$(TARGET).dll	$(BIN)$/cliuno.snk	 && $(TOUCH) $@
@@ -176,10 +178,7 @@ $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_cppuhelper.config
 .ENDIF			
 
 #Create the config file that is used with the policy assembly
-$(BIN)$/cli_cppuhelper.config: cli_cppuhelper_config $(BIN)$/cliureversion.mk
-    $(PERL) $(PRJ)$/source$/scripts$/subst_template.pl \
+$(BIN)$/cli_cppuhelper.config: cli_cppuhelper_config $(BIN)$/cliureversion.mk 
+    $(PERL) $(SOLARENV)$/bin$/clipatchconfig.pl \
     $< $@
     
-    
-
-.ENDIF			# "$(BUILD_FOR_CLI)" != ""
