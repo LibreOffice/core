@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentdefinition.cxx,v $
- * $Revision: 1.62 $
+ * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1011,7 +1011,10 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
 
         xReportEngine->setReportDefinition(xReportDefinition);
         xReportEngine->setActiveConnection(m_xLastKnownConnection);
-        _out_rComponent <<= xReportEngine->createDocumentAlive(NULL);
+        if ( bOpenHidden )
+            _out_rComponent <<= xReportEngine->createDocumentModel( );
+        else
+            _out_rComponent <<= xReportEngine->createDocumentAlive(NULL);
         return;
     }
 
@@ -1042,6 +1045,24 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
             {
                 OSL_ENSURE( false, "ODocumentDefinition::execute: 'openForMail' should not be used anymore - use the 'Hidden' parameter instead!" );
                 bActivateObject = false;
+            }
+
+            // if the object is already opened, do nothing
+            // #i89509# / 2008-05-22 / frank.schoenheit@sun.com
+            if ( m_xEmbeddedObject.is() )
+            {
+                sal_Int32 nCurrentState = m_xEmbeddedObject->getCurrentState();
+                bool bIsActive = ( nCurrentState == EmbedStates::ACTIVE );
+
+                // exception: new-style reports always create a new document when "open" is executed
+                Reference< report::XReportDefinition > xReportDefinition( getComponent(), UNO_QUERY );
+                bool bIsAliveNewStyleReport = ( xReportDefinition.is() && ( bOpen || bOpenForMail ) );
+
+                if ( bIsActive && !bIsAliveNewStyleReport )
+                {
+                    impl_onActivateEmbeddedObject();
+                    return makeAny( getComponent() );
+                }
             }
 
             m_bOpenInDesign = bOpenInDesign || bOpenForMail;
@@ -1508,7 +1529,11 @@ sal_Bool ODocumentDefinition::objectSupportsEmbeddedScripts() const
     // TODO: revert to the disabled code. The current version is just to be able
     // to integrate an intermediate version of the CWS, which should behave as
     // if no macros in DB docs are allowed
-    bool bAllowDocumentMacros = true;
+    bool bAllowDocumentMacros = !m_pImpl->m_pDataSource->hasMacroStorages();
+        // even if the current version is not able to create documents which contain macros,
+        // later versions will be. Such documents contain macro/script storages in the
+        // document root storage, in which case we need to disable the per-form/report
+        // scripting.
 
     // if *any* of the objects of the database document already has macros, we continue to allow it
     // to have them, until the user did a migration.
@@ -1544,6 +1569,12 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
     Reference< XFrame > xParentFrame;
     if ( m_pImpl->m_pDataSource )
         xParentFrame = lcl_getDatabaseDocumentFrame( *m_pImpl->m_pDataSource );
+    if ( !xParentFrame.is() )
+    { // i87957 we need a parent frame
+        if ( !m_xDesktop.is() )
+            m_xDesktop.set( m_aContext.createComponent( (::rtl::OUString)SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
+        xParentFrame.set(m_xDesktop,uno::UNO_QUERY);
+    }
     OSL_ENSURE( xParentFrame.is(), "ODocumentDefinition::fillLoadArgs: no parent frame!" );
     if  ( xParentFrame.is() )
         OutplaceFrameProperties.put( "ParentFrame", xParentFrame );
