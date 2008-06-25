@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cli_bridge.h,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,7 @@
 #include "cli_base.h"
 #include "cli_environment.h"
 #using <mscorlib.dll>
-#using <cli_types.dll>
+//#using <cli_uretypes.dll>
 #using <cli_basetypes.dll>
 #using <system.dll>
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cli_data.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,8 @@
 #include "cli_proxy.h"
 #include "cli_base.h"
 #include "cli_bridge.h"
+
+#using <cli_uretypes.dll>
 
 
 #undef VOID

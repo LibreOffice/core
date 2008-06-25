@@ -8,7 +8,7 @@
 #
 # $RCSfile: increment_version.pl,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -61,7 +61,7 @@ my $usage =
 my $sNameForm =
 "The names must end on one of these names: NEW_VERSION, OLD_VERSION, POLICY_VERSION\n".
 "For example, valid names are: \n".
-"CLI_TYPES_NEW_VERSION\nCLI_TYPES_OLD_VERSION\nCLI_TYPES_POLICY_VERSION\n";
+"CLI_URETYPES_NEW_VERSION\nCLI_URETYPES_OLD_VERSION\nCLI_URETYPES_POLICY_VERSION\n";
 
 if (scalar @ARGV < 4) {
    print $usage;
@@ -148,7 +148,7 @@ sub processLine($$)
     my $name = substr($line, 0, $i);
     $name = trim($name);
     #We do not check the names here because the file can contain
-    #other names, e.g. CLI_TYPES_POLICY_ASSEMBLY
+    #other names, e.g. CLI_URETYPES_POLICY_ASSEMBLY
     if (length($name) == 0) {
     print "Wrong line in $ARGV[0]\n", $sNameForm;
     exit -1;

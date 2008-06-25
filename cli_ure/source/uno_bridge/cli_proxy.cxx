@@ -7,7 +7,9 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cli_proxy.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
+ * $RCSfile: cli_proxy.cxx,v $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +40,10 @@
 #include "cli_base.h"
 #include "cli_bridge.h"
 
+#using <mscorlib.dll>
+#using <cli_ure.dll>
+#using <cli_uretypes.dll>
+
 namespace sr = System::Reflection;
 namespace st = System::Text;
 namespace sre = System::Reflection::Emit;
@@ -49,9 +55,6 @@ namespace sri = System::Runtime::InteropServices;
 namespace sd = System::Diagnostics;
 namespace css = com::sun::star;
 namespace ucss = unoidl::com::sun::star;
-
-#using <mscorlib.dll>
-#using <cli_ure.dll>
 
 using namespace cli_uno;
 using namespace rtl;
