@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableWindowListBox.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,7 +101,7 @@ void OTableWindowListBox::dragFinished( )
 {
     m_bDragSource = sal_False;
     // first show the error msg when existing
-    m_pTabWin->getDesignView()->getController()->showError(m_pTabWin->getDesignView()->getController()->clearOccuredError());
+    m_pTabWin->getDesignView()->getController().showError(m_pTabWin->getDesignView()->getController().clearOccuredError());
     // second look for ui activities which should happen after d&d
     if (m_nUiEvent)
         Application::RemoveUserEvent(m_nUiEvent);
@@ -129,12 +129,12 @@ SvLBoxEntry* OTableWindowListBox::GetEntryFromText( const String& rEntryText )
     SvTreeList* pTreeList = GetModel();
     SvLBoxEntry* pEntry = (SvLBoxEntry*)pTreeList->First();
     OJoinDesignView* pView = m_pTabWin->getDesignView();
-    OJoinController* pController = pView->getController();
+    OJoinController& rController = pView->getController();
 
     BOOL bCase = FALSE;
     try
     {
-        Reference<XConnection> xConnection = pController->getConnection();
+        Reference<XConnection> xConnection = rController.getConnection();
         if(xConnection.is())
         {
             Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
@@ -248,7 +248,7 @@ IMPL_LINK( OTableWindowListBox, ScrollDownHdl, SvTreeListBox*, /*pBox*/ )
 void OTableWindowListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
 {
     OJoinTableView* pCont = m_pTabWin->getTableView();
-    if (!pCont->getDesignView()->getController()->isReadOnly() && pCont->getDesignView()->getController()->isConnected())
+    if (!pCont->getDesignView()->getController().isReadOnly() && pCont->getDesignView()->getController().isConnected())
     {
         // #100271# OJ asterix was not allowed to be copied to selection browsebox
         sal_Bool bFirstNotAllowed = FirstSelected() == First() && m_pTabWin->GetData()->IsShowAll();
@@ -352,7 +352,7 @@ IMPL_LINK( OTableWindowListBox, DropHdl, void *, /*EMPTY_ARG*/)
     catch(const SQLException& e)
     {
         // remember the exception so that we can show them later when d&d is finished
-        m_pTabWin->getDesignView()->getController()->setErrorOccured(::dbtools::SQLExceptionInfo(e));
+        m_pTabWin->getDesignView()->getController().setErrorOccured(::dbtools::SQLExceptionInfo(e));
     }
     return 0L;
 }
