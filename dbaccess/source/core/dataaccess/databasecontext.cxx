@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: databasecontext.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -192,8 +192,7 @@ Sequence< ::rtl::OUString > ODatabaseContext::getSupportedServiceNames(  ) throw
 //--------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODatabaseContext::createInstance(  ) throw (Exception, RuntimeException)
 {
-    ::rtl::Reference<ODatabaseModelImpl> pImpl( new ODatabaseModelImpl( m_aContext.getLegacyServiceFactory() ) );
-    pImpl->m_pDBContext = this;
+    ::rtl::Reference<ODatabaseModelImpl> pImpl( new ODatabaseModelImpl( m_aContext.getLegacyServiceFactory(), *this ) );
     Reference< XDataSource > xDataSource( pImpl->getDataSource() );
     return xDataSource.get();
 }
@@ -332,7 +331,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
 
     if ( !pExistent.get() )
     {
-        pExistent.set( new ODatabaseModelImpl( _rName, m_aContext.getLegacyServiceFactory(), this ) );
+        pExistent.set( new ODatabaseModelImpl( _rName, m_aContext.getLegacyServiceFactory(), *this ) );
 
         ::comphelper::NamedValueCollection aArgs;
         aArgs.put( "FileName", _sURL );
@@ -389,41 +388,41 @@ void ODatabaseContext::registerObject(const rtl::OUString& _rName, const Referen
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
 
-    Reference<XDocumentDataSource> xDocumentDataSource(_rxObject,UNO_QUERY);
-    Reference< XModel > xModel(xDocumentDataSource.is() ? xDocumentDataSource->getDatabaseDocument() : Reference< XOfficeDatabaseDocument >(),UNO_QUERY);
-    Reference< XComponent > xComponent(_rxObject,UNO_QUERY);
-    if ( !_rName.getLength() || !xComponent.is() || !xModel.is() )
-        throw IllegalArgumentException(::rtl::OUString(),*this,1);
+    if ( !_rName.getLength() )
+        throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+
+    Reference< XDocumentDataSource > xDocDataSource( _rxObject, UNO_QUERY );
+    Reference< XModel > xModel( xDocDataSource.is() ? xDocDataSource->getDatabaseDocument() : Reference< XOfficeDatabaseDocument >(), UNO_QUERY );
+    if ( !xModel.is() )
+        throw IllegalArgumentException( ::rtl::OUString(), *this, 2 );
 
     ::rtl::OUString sURL = xModel->getURL();
     if ( !sURL.getLength() )
-        throw IllegalArgumentException(DBACORE_RESSTRING( RID_STR_DATASOURCE_NOT_STORED ),*this,2);
+        throw IllegalArgumentException( DBACORE_RESSTRING( RID_STR_DATASOURCE_NOT_STORED ), *this, 2 );
 
     OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
             ::comphelper::getProcessServiceFactory(), getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_UPDATABLE);
 
     if ( aDbRegisteredNamesRoot.isValid() )
     {
-        OConfigurationNode aThisDriverSettings;
-        // the sub-node for this driver
+        OConfigurationNode oDataSourceRegistration;
+        // the sub-node for the concrete registration
         if (aDbRegisteredNamesRoot.hasByName(_rName))
-            aThisDriverSettings = aDbRegisteredNamesRoot.openNode(_rName);
+            oDataSourceRegistration = aDbRegisteredNamesRoot.openNode(_rName);
         else
-            aThisDriverSettings = aDbRegisteredNamesRoot.createNode(_rName);
+            oDataSourceRegistration = aDbRegisteredNamesRoot.createNode(_rName);
 
         // set the values
-        aThisDriverSettings.setNodeValue(getDbNameNodeName(), makeAny(_rName));
-        aThisDriverSettings.setNodeValue(getDbLocationNodeName(), makeAny(sURL));
+        oDataSourceRegistration.setNodeValue(getDbNameNodeName(), makeAny(_rName));
+        oDataSourceRegistration.setNodeValue(getDbLocationNodeName(), makeAny(sURL));
         aDbRegisteredNamesRoot.commit();
     }
 
-//  registerPrivate(sURL,_rxObject);
+    ODatabaseSource::setName( xDocDataSource, _rName, ODatabaseSource::DBContextAccess() );
 
     // notify our container listeners
     ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rName), makeAny(_rxObject), Any());
-    OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
-    while (aListenerLoop.hasMoreElements())
-        static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
+    m_aContainerListeners.notifyEach( &XContainerListener::elementInserted, aEvent );
 }
 
 //------------------------------------------------------------------------------
