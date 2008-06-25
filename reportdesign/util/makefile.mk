@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.18 $
+# $Revision: 1.19 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -204,10 +204,14 @@ DEF3NAME=$(SHL3TARGET)
 
 XMLFILES = $(EXTENSIONDIR)$/description.xml \
             $(EXTENSIONDIR)$/META-INF$/manifest.xml
-            
+
 COMPONENT_MERGED_XCU= \
             $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/DataAccess.xcu \
-            $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/ReportDesign.xcu
+            $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/ReportDesign.xcu \
+            $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/Paths.xcu
+
+COMPONENT_OTR_FILES= \
+    $(EXTENSIONDIR)$/template$/en-US$/wizard$/report$/default.otr
 
 COMPONENT_HTMLFILES = $(EXTENSIONDIR)$/THIRDPARTYREADMELICENSE.html \
             $(EXTENSIONDIR)$/readme_en-US.html \
@@ -228,13 +232,14 @@ COMPONENT_EXTJARFILES = \
     $(EXTENSIONDIR)$/librepository-0.1.4.jar									\
     $(EXTENSIONDIR)$/libxml-0.9.9.jar										\
     $(EXTENSIONDIR)$/pentaho-reporting-flow-engine-0.9.2.jar					\
-    $(EXTENSIONDIR)$/sac.jar
+    $(EXTENSIONDIR)$/sac.jar                                                \
+    $(EXTENSIONDIR)$/sun-report-builder.jar
 
 COMPONENT_MANIFEST_GENERIC:=TRUE
 COMPONENT_MANIFEST_SEARCHDIR:=registry
 
 # make sure to add your custom files here
-EXTENSION_PACKDEPS=$(COMPONENT_EXTJARFILES) $(COMPONENT_HTMLFILES)
+EXTENSION_PACKDEPS=$(COMPONENT_EXTJARFILES) $(COMPONENT_HTMLFILES) $(COMPONENT_OTR_FILES)
 
 # --- Targets ----------------------------------
 
@@ -253,7 +258,7 @@ $(EXTENSIONDIR)$/%.jar : $(SOLARBINDIR)$/%.jar
 .ENDIF
 
 $(EXTENSIONDIR)$/readme_en-US.% : $(PRJ)$/license$/readme_en-US.%
-     @@-$(MKDIRHIER) $(@:d)
+    @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
 $(EXTENSIONDIR)$/THIRDPARTYREADMELICENSE.html : $(PRJ)$/license$/THIRDPARTYREADMELICENSE.html
