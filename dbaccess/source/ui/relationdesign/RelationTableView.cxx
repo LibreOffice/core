@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RelationTableView.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -166,7 +166,7 @@ void ORelationTableView::ReSync()
 
     //////////////////////////////////////////////////////////////////////
     // create and insert windows
-    TTableWindowData* pTabWinDataList = m_pView->getController()->getTableWindowData();
+    TTableWindowData* pTabWinDataList = m_pView->getController().getTableWindowData();
     TTableWindowData::reverse_iterator aIter = pTabWinDataList->rbegin();
     for(;aIter != pTabWinDataList->rend();++aIter)
     {
@@ -194,7 +194,7 @@ void ORelationTableView::ReSync()
     }
 
     // Verbindungen einfuegen
-    TTableConnectionData* pTabConnDataList = m_pView->getController()->getTableConnectionData();
+    TTableConnectionData* pTabConnDataList = m_pView->getController().getTableConnectionData();
     TTableConnectionData::reverse_iterator aConIter = pTabConnDataList->rbegin();
 
     for(;aConIter != pTabConnDataList->rend();++aConIter)
@@ -226,7 +226,7 @@ BOOL ORelationTableView::IsAddAllowed()
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
 
-    return !m_pView->getController()->isReadOnly();
+    return !m_pView->getController().isReadOnly();
 }
 //------------------------------------------------------------------------
 void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest)
@@ -337,25 +337,24 @@ void ORelationTableView::AddNewRelation()
 }
 
 //------------------------------------------------------------------------------
-::std::vector<OTableConnection*>::const_iterator ORelationTableView::RemoveConnection( OTableConnection* pConn ,sal_Bool /*_bDelete*/)
+bool ORelationTableView::RemoveConnection( OTableConnection* pConn ,sal_Bool /*_bDelete*/)
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
-    ::std::vector<OTableConnection*>::const_iterator aNextPos = getTableConnections()->end();
     ORelationTableConnectionData* pTabConnData = (ORelationTableConnectionData*)pConn->GetData().get();
     try
     {
         if (pTabConnData->DropRelation())
-            aNextPos = OJoinTableView::RemoveConnection( pConn ,sal_True);
+            return OJoinTableView::RemoveConnection( pConn ,sal_True);
     }
     catch(SQLException& e)
     {
-        getDesignView()->getController()->showError(SQLExceptionInfo(e));
+        getDesignView()->getController().showError(SQLExceptionInfo(e));
     }
     catch(Exception&)
     {
         OSL_ENSURE(0,"ORelationTableView::RemoveConnection: Something other than SQLException occured!");
     }
-    return aNextPos;
+    return false;
 }
 
 //------------------------------------------------------------------------------
@@ -384,7 +383,7 @@ void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const 
     OTableWindow* pNewTabWin = createWindow( pNewTabWinData );
     if(pNewTabWin->Init())
     {
-        m_pView->getController()->getTableWindowData()->push_back( pNewTabWinData);
+        m_pView->getController().getTableWindowData()->push_back( pNewTabWinData);
         // when we already have a table with this name insert the full qualified one instead
         (*GetTabWinMap())[_rComposedName] = pNewTabWin;
 
@@ -410,12 +409,12 @@ void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
     OSQLMessageBox aDlg(this,ModuleRes(STR_QUERY_REL_DELETE_WINDOW),String(),WB_YES_NO|WB_DEF_YES,OSQLMessageBox::Warning);
     if(aDlg.Execute() == RET_YES)
     {
-        m_pView->getController()->getUndoMgr()->Clear();
+        m_pView->getController().getUndoMgr()->Clear();
         OJoinTableView::RemoveTabWin( pTabWin );
 
-        m_pView->getController()->InvalidateFeature(SID_RELATION_ADD_RELATION);
-        m_pView->getController()->InvalidateFeature(ID_BROWSER_UNDO);
-        m_pView->getController()->InvalidateFeature(ID_BROWSER_REDO);
+        m_pView->getController().InvalidateFeature(SID_RELATION_ADD_RELATION);
+        m_pView->getController().InvalidateFeature(ID_BROWSER_UNDO);
+        m_pView->getController().InvalidateFeature(ID_BROWSER_REDO);
     }
 }
 // -----------------------------------------------------------------------------
