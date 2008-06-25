@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TEditControl.cxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -181,9 +181,9 @@ OTableEditorCtrl::ClipboardInvalidator::~ClipboardInvalidator()
 //------------------------------------------------------------------
 IMPL_LINK(OTableEditorCtrl::ClipboardInvalidator, OnInvalidate, void*, EMPTYARG)
 {
-    m_pOwner->GetView()->getController()->InvalidateFeature(SID_CUT);
-    m_pOwner->GetView()->getController()->InvalidateFeature(SID_COPY);
-    m_pOwner->GetView()->getController()->InvalidateFeature(SID_PASTE);
+    m_pOwner->GetView()->getController().InvalidateFeature(SID_CUT);
+    m_pOwner->GetView()->getController().InvalidateFeature(SID_COPY);
+    m_pOwner->GetView()->getController().InvalidateFeature(SID_PASTE);
     return 0L;
 }
 
@@ -195,7 +195,7 @@ void OTableEditorCtrl::Init()
 
     //////////////////////////////////////////////////////////////////////
     // Soll der Entwurf ReadOnly geoeffnet werden ?
-    sal_Bool bRead(GetView()->getController()->isReadOnly());
+    sal_Bool bRead(GetView()->getController().isReadOnly());
 
     SetReadOnly( bRead );
 
@@ -252,14 +252,14 @@ OTableEditorCtrl::OTableEditorCtrl(Window* pWindow)
     SetHelpId(HID_TABDESIGN_BACKGROUND);
     GetDataWindow().SetHelpId(HID_CTL_TABLEEDIT);
 
-    m_pRowList = GetView()->getController()->getRows();
+    m_pRowList = GetView()->getController().getRows();
     m_nDataPos = 0;
 }
 
 //------------------------------------------------------------------------------
 SfxUndoManager* OTableEditorCtrl::GetUndoManager() const
 {
-    return GetView()->getController()->getUndoMgr();
+    return GetView()->getController().getUndoMgr();
 }
 
 //------------------------------------------------------------------------------
@@ -315,7 +315,7 @@ void OTableEditorCtrl::InitCellController()
     Reference<XConnection> xCon;
     try
     {
-        xCon = GetView()->getController()->getConnection();
+        xCon = GetView()->getController().getConnection();
         Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
 
         nMaxTextLen = ((xub_StrLen)xMetaData.is() ? static_cast<xub_StrLen>(xMetaData->getMaxColumnNameLength()) : 0);
@@ -443,7 +443,7 @@ CellController* OTableEditorCtrl::GetController(long nRow, sal_uInt16 nColumnId)
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     //////////////////////////////////////////////////////////////////////
     // Wenn EditorCtrl ReadOnly ist, darf nicht editiert werden
-    Reference<XPropertySet> xTable = GetView()->getController()->getTable();
+    Reference<XPropertySet> xTable = GetView()->getController().getTable();
     if (IsReadOnly() || (   xTable.is() &&
                             xTable->getPropertySetInfo()->hasPropertyByName(PROPERTY_TYPE) &&
                             ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")))
@@ -500,7 +500,7 @@ void OTableEditorCtrl::InitController(CellControllerRef&, long nRow, sal_uInt16 
                 if( !pActFieldDescr )
                     break;
 
-                const OTypeInfoMap* pTypeInfo = GetView()->getController()->getTypeInfo();
+                const OTypeInfoMap* pTypeInfo = GetView()->getController().getTypeInfo();
                 OTypeInfoMap::const_iterator aIter = pTypeInfo->begin();
                 for(;aIter != pTypeInfo->end();++aIter)
                     pTypeCell->InsertEntry( aIter->second->aUIName );
@@ -604,7 +604,7 @@ sal_Int32 OTableEditorCtrl::HasFieldName( const String& rFieldName )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
 
-    Reference<XConnection> xCon = GetView()->getController()->getConnection();
+    Reference<XConnection> xCon = GetView()->getController().getConnection();
     Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
 
     ::comphelper::UStringMixEqual bCase(xMetaData.is() ? xMetaData->supportsMixedCaseQuotedIdentifiers() : sal_True);
@@ -798,7 +798,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
     GetUndoManager()->EnterListAction( sActionDescription, String() );
     if (!pActFieldDescr)
     {
-        const OTypeInfoMap* pTypeInfoMap = GetView()->getController()->getTypeInfo();
+        const OTypeInfoMap* pTypeInfoMap = GetView()->getController().getTypeInfo();
         if ( !pTypeInfoMap->empty() )
         {
             OTypeInfoMap::const_iterator aTypeIter = pTypeInfoMap->find(DataType::VARCHAR);
@@ -807,7 +807,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
             pActRow->SetFieldType( aTypeIter->second );
         }
         else
-            pActRow->SetFieldType( GetView()->getController()->getTypeInfoFallBack() );
+            pActRow->SetFieldType( GetView()->getController().getTypeInfoFallBack() );
 
         nInvalidateTypeEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, InvalidateFieldType) );
         pActFieldDescr = pActRow->GetActFieldDescr();
@@ -833,7 +833,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
 
     //////////////////////////////////////////////////////////////////////
     // Das ModifyFlag setzen
-    GetView()->getController()->setModified( sal_True );
+    GetView()->getController().setModified( sal_True );
     InvalidateFeatures();
 }
 // -----------------------------------------------------------------------------
@@ -841,7 +841,7 @@ void OTableEditorCtrl::resetType()
 {
     USHORT nPos = pTypeCell->GetSelectEntryPos();
     if(nPos != LISTBOX_ENTRY_NOTFOUND)
-        SwitchType( GetView()->getController()->getTypeInfo(nPos) );
+        SwitchType( GetView()->getController().getTypeInfo(nPos) );
     else
         SwitchType(TOTypeInfoSP());
 }
@@ -854,9 +854,9 @@ void OTableEditorCtrl::CellModified()
 // -----------------------------------------------------------------------------
 void OTableEditorCtrl::InvalidateFeatures()
 {
-    GetView()->getController()->InvalidateFeature(SID_UNDO);
-    GetView()->getController()->InvalidateFeature(SID_REDO);
-    GetView()->getController()->InvalidateFeature(SID_SAVEDOC);
+    GetView()->getController().InvalidateFeature(SID_UNDO);
+    GetView()->getController().InvalidateFeature(SID_REDO);
+    GetView()->getController().InvalidateFeature(SID_SAVEDOC);
 }
 //------------------------------------------------------------------------------
 void OTableEditorCtrl::Undo()
@@ -913,7 +913,7 @@ String OTableEditorCtrl::GenerateName( const String& rName )
     //////////////////////////////////////////////////////////////////////
     // Basisnamen zum Anhaengen einer Numerierung erstellen
     String aBaseName;
-    Reference<XConnection> xCon = GetView()->getController()->getConnection();
+    Reference<XConnection> xCon = GetView()->getController().getConnection();
     Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
 
     xub_StrLen nMaxTextLen((xub_StrLen)( xMetaData.is() ? xMetaData->getMaxColumnNameLength() : 0));
@@ -967,7 +967,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
                 pRow->SetReadOnly( sal_False );
                 sal_Int32 nType = pRow->GetActFieldDescr()->GetType();
                 if ( pRow->GetActFieldDescr() )
-                    pRow->GetActFieldDescr()->SetType(GetView()->getController()->getTypeInfoByType(nType));
+                    pRow->GetActFieldDescr()->SetType(GetView()->getController().getTypeInfoByType(nType));
                 //////////////////////////////////////////////////////////////////////
                 // Anpassen des Feldnamens
                 aFieldName = GenerateName( pRow->GetActFieldDescr()->GetName() );
@@ -989,7 +989,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
     //////////////////////////////////////////////////////////////////////
     // Undo-Action erzeugen
     GetUndoManager()->AddUndoAction( new OTableEditorInsUndoAct(this, nRow,vInsertedUndoRedoRows) );
-    GetView()->getController()->setModified( sal_True );
+    GetView()->getController().setModified( sal_True );
     InvalidateFeatures();
 }
 
@@ -997,7 +997,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
 void OTableEditorCtrl::DeleteRows()
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    OSL_ENSURE(GetView()->getController()->isDropAllowed(),"Call of DeleteRows not valid here. Please check isDropAllowed!");
+    OSL_ENSURE(GetView()->getController().isDropAllowed(),"Call of DeleteRows not valid here. Please check isDropAllowed!");
     //////////////////////////////////////////////////////////////////////
     // Undo-Action erzeugen
     GetUndoManager()->AddUndoAction( new OTableEditorDelUndoAct(this) );
@@ -1034,7 +1034,7 @@ void OTableEditorCtrl::DeleteRows()
     SetDataPtr( m_nDataPos );
     ActivateCell();
     pDescrWin->DisplayData( pActRow->GetActFieldDescr() );
-    GetView()->getController()->setModified( sal_True );
+    GetView()->getController().setModified( sal_True );
     InvalidateFeatures();
 }
 
@@ -1042,7 +1042,7 @@ void OTableEditorCtrl::DeleteRows()
 void OTableEditorCtrl::InsertNewRows( long nRow )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    OSL_ENSURE(GetView()->getController()->isAddAllowed(),"Call of InsertNewRows not valid here. Please check isAppendAllowed!");
+    OSL_ENSURE(GetView()->getController().isAddAllowed(),"Call of InsertNewRows not valid here. Please check isAppendAllowed!");
     //////////////////////////////////////////////////////////////////////
     // Undo-Action erzeugen
     long nInsertRows = GetSelectRowCount();
@@ -1055,7 +1055,7 @@ void OTableEditorCtrl::InsertNewRows( long nRow )
         m_pRowList->insert( m_pRowList->begin()+i ,::boost::shared_ptr<OTableRow>(new OTableRow()));
     RowInserted( nRow, nInsertRows, sal_True );
 
-    GetView()->getController()->setModified( sal_True );
+    GetView()->getController().setModified( sal_True );
     InvalidateFeatures();
 }
 
@@ -1322,8 +1322,8 @@ OFieldDescription* OTableEditorCtrl::GetFieldDescr( long nRow )
 sal_Bool OTableEditorCtrl::IsCutAllowed( long nRow )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    sal_Bool bIsCutAllowed = (GetView()->getController()->isAddAllowed() && GetView()->getController()->isDropAllowed()) ||
-                            GetView()->getController()->isAlterAllowed();
+    sal_Bool bIsCutAllowed = (GetView()->getController().isAddAllowed() && GetView()->getController().isDropAllowed()) ||
+                            GetView()->getController().isAlterAllowed();
 
     if(bIsCutAllowed)
     {
@@ -1339,7 +1339,7 @@ sal_Bool OTableEditorCtrl::IsCutAllowed( long nRow )
             bIsCutAllowed = sal_False;
     }
 
-//  Reference<XPropertySet> xTable = GetView()->getController()->getTable();
+//  Reference<XPropertySet> xTable = GetView()->getController().getTable();
 //  if( !IsCopyAllowed(nRow) || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")))
 //      return sal_False;
 
@@ -1358,7 +1358,7 @@ sal_Bool OTableEditorCtrl::IsCopyAllowed( long /*nRow*/ )
         bIsCopyAllowed = pNameCell->GetSelected().Len() != 0;
     else if(m_eChildFocus == ROW)
     {
-        Reference<XPropertySet> xTable = GetView()->getController()->getTable();
+        Reference<XPropertySet> xTable = GetView()->getController().getTable();
         if( !GetSelectRowCount() || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")))
             return sal_False;
 
@@ -1385,7 +1385,7 @@ sal_Bool OTableEditorCtrl::IsCopyAllowed( long /*nRow*/ )
 sal_Bool OTableEditorCtrl::IsPasteAllowed( long /*nRow*/ )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    sal_Bool bAllowed = GetView()->getController()->isAddAllowed();
+    sal_Bool bAllowed = GetView()->getController().isAddAllowed();
     if ( bAllowed )
     {
         TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
@@ -1404,7 +1404,7 @@ void OTableEditorCtrl::cut()
 {
     if(m_eChildFocus == NAME)
     {
-        if(GetView()->getController()->isAlterAllowed())
+        if(GetView()->getController().isAlterAllowed())
         {
             SaveData(-1,FIELD_NAME);
             pNameCell->Cut();
@@ -1413,7 +1413,7 @@ void OTableEditorCtrl::cut()
     }
     else if(m_eChildFocus == DESCRIPTION)
     {
-        if(GetView()->getController()->isAlterAllowed())
+        if(GetView()->getController().isAlterAllowed())
         {
             SaveData(-1,FIELD_DESCR);
             pDescrCell->Cut();
@@ -1451,7 +1451,7 @@ void OTableEditorCtrl::paste()
     }
     else if(m_eChildFocus == NAME)
     {
-        if(GetView()->getController()->isAlterAllowed())
+        if(GetView()->getController().isAlterAllowed())
         {
             pNameCell->Paste();
             CellModified();
@@ -1459,7 +1459,7 @@ void OTableEditorCtrl::paste()
     }
     else if(m_eChildFocus == DESCRIPTION)
     {
-        if(GetView()->getController()->isAlterAllowed())
+        if(GetView()->getController().isAlterAllowed())
         {
             pDescrCell->Paste();
             CellModified();
@@ -1472,13 +1472,13 @@ sal_Bool OTableEditorCtrl::IsDeleteAllowed( long /*nRow*/ )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
 
-    return GetSelectRowCount() != 0 && GetView()->getController()->isDropAllowed();
-//  Reference<XPropertySet> xTable = GetView()->getController()->getTable();
+    return GetSelectRowCount() != 0 && GetView()->getController().isDropAllowed();
+//  Reference<XPropertySet> xTable = GetView()->getController().getTable();
 //  if( !GetSelectRowCount() || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")))
 //      return sal_False;
 //
 //  // Wenn nur Felder hinzugefuegt werden duerfen, Delete nur auf neuen Feldern
-//  Reference<XConnection> xCon = GetView()->getController()->getConnection();
+//  Reference<XConnection> xCon = GetView()->getController().getConnection();
 //  Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : NULL;
 //
 //  return  !(xTable.is() && xTable->getPropertySetInfo()->getPropertyByName(PROPERTY_NAME).Attributes & PropertyAttribute::READONLY) ||
@@ -1490,10 +1490,10 @@ sal_Bool OTableEditorCtrl::IsInsertNewAllowed( long nRow )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
 
-    sal_Bool bInsertNewAllowed = GetView()->getController()->isAddAllowed();
+    sal_Bool bInsertNewAllowed = GetView()->getController().isAddAllowed();
     //////////////////////////////////////////////////////////////
     // Wenn nur Felder hinzugefuegt werden duerfen, Paste nur in neue Felder
-    if (bInsertNewAllowed && !GetView()->getController()->isDropAllowed())
+    if (bInsertNewAllowed && !GetView()->getController().isDropAllowed())
     {
         SetDataPtr(nRow);
         if( GetActRow()->IsReadOnly() )
@@ -1510,10 +1510,10 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
     if( !GetSelectRowCount() )
         return sal_False;
 
-    OTableController* pController = GetView()->getController();
+    OTableController& rController = GetView()->getController();
     try
     {
-        Reference<XConnection> xCon = pController->getConnection();
+        Reference<XConnection> xCon = rController.getConnection();
 
         Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
         if(!xMetaData.is() || !xMetaData->supportsCoreSQLGrammar())
@@ -1525,7 +1525,7 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
         OSL_ASSERT(!"supportsCoreSQLGrammar");
     }
 
-    Reference<XPropertySet> xTable = pController->getTable();
+    Reference<XPropertySet> xTable = rController.getTable();
     //////////////////////////////////////////////////////////////
     // Key darf nicht veraendert werden
     // Dies gilt jedoch nur, wenn die Tabelle nicht neu ist und keine ::com::sun::star::sdbcx::View. Ansonsten wird kein DROP ausgeführt
@@ -1698,8 +1698,8 @@ IMPL_LINK( OTableEditorCtrl, DelayedPaste, void*, /*EMPTYTAG*/ )
 {
     nPasteEvent = 0;
 
-    sal_Int32 nPastePosition = GetView()->getController()->getFirstEmptyRowPosition();
-    if ( !GetView()->getController()->getTable().is() )
+    sal_Int32 nPastePosition = GetView()->getController().getFirstEmptyRowPosition();
+    if ( !GetView()->getController().getTable().is() )
         nPastePosition = GetSelectRowCount() ? FirstSelectedRow() : GetCurRow();
 
     if (!IsInsertNewAllowed(nPastePosition))
@@ -1736,8 +1736,8 @@ IMPL_LINK( OTableEditorCtrl, DelayedInsNewRows, void*, /*EMPTYTAG*/ )
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     nInsNewRowsEvent = 0;
-    sal_Int32 nPastePosition = GetView()->getController()->getFirstEmptyRowPosition();
-    if ( !GetView()->getController()->getTable().is() )
+    sal_Int32 nPastePosition = GetView()->getController().getFirstEmptyRowPosition();
+    if ( !GetView()->getController().getTable().is() )
         nPastePosition = GetSelectRowCount() ? FirstSelectedRow() : m_nDataPos;
 
     InsertNewRows( nPastePosition );
@@ -1816,7 +1816,7 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
 
     //////////////////////////////////////////////////////////////////////
     // Das ModifyFlag der TableDocSh setzen
-    GetView()->getController()->setModified( sal_True );
+    GetView()->getController().setModified( sal_True );
     InvalidateFeatures();
 }
 
@@ -1863,12 +1863,13 @@ void OTableEditorCtrl::SwitchType( const TOTypeInfoSP& _pType )
     if ( _pType.get() )
     {
         sal_uInt16 nCurrentlySelected = pTypeCell->GetSelectEntryPos();
-        OTableController* pController = GetView()->getController();
 
-        if ((LISTBOX_ENTRY_NOTFOUND == nCurrentlySelected) || (pController->getTypeInfo(nCurrentlySelected) != _pType))
+        if  (   ( LISTBOX_ENTRY_NOTFOUND == nCurrentlySelected )
+            ||  ( GetView()->getController().getTypeInfo( nCurrentlySelected ) != _pType )
+            )
         {
             USHORT nEntryPos = 0;
-            const OTypeInfoMap* pTypeInfo = GetView()->getController()->getTypeInfo();
+            const OTypeInfoMap* pTypeInfo = GetView()->getController().getTypeInfo();
             OTypeInfoMap::const_iterator aIter = pTypeInfo->begin();
             for(;aIter != pTypeInfo->end();++aIter,++nEntryPos)
             {
@@ -1886,7 +1887,7 @@ void OTableEditorCtrl::SwitchType( const TOTypeInfoSP& _pType )
         sal_Int32 nFormatKey = ::dbtools::getDefaultNumberFormat( pActFieldDescr->GetType(),
             pActFieldDescr->GetScale(),
             pActFieldDescr->IsCurrency(),
-            Reference< XNumberFormatTypes>(GetView()->getController()->getNumberFormatter()->getNumberFormatsSupplier()->getNumberFormats(),UNO_QUERY),
+            Reference< XNumberFormatTypes>(GetView()->getController().getNumberFormatter()->getNumberFormatsSupplier()->getNumberFormats(),UNO_QUERY),
             GetView()->getLocale());
 
         pActFieldDescr->SetFormatKey(nFormatKey);
