@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlexp.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,6 +73,8 @@
 #include <xmloff/XMLPageExport.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <cppuhelper/implbase6.hxx>
+
+#include <list>
 
 class SvXMLNamespaceMap;
 class SvXMLAttributeList;
@@ -188,8 +190,6 @@ private:
     SAL_DLLPRIVATE void ImplExportContent(); // <office:body>
     virtual void SetBodyAttributes();
     void GetViewSettingsAndViews(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);
-    void _ExportViewSettings2(const XMLSettingsExportHelper& rSettingsExportHelper,com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);
-    void _ExportConfigurationSettings2(const XMLSettingsExportHelper& rSettingsExportHelper,com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);
 
 protected:
     void setExportFlags( sal_uInt16 nExportFlags ) { mnExportFlags = nExportFlags; }
@@ -200,16 +200,6 @@ protected:
     // This method can be overloaded to export the content of <office:meta>.
     // There is a default implementation.
     virtual void _ExportMeta();
-
-    // This method can be overloaded to export the content of <office:view-settings>.
-    // There is no default implementation.
-    // DEPRECATED - not called any longer
-    virtual void _ExportViewSettings(const XMLSettingsExportHelper& rSettingsExportHelper);
-
-    // This method can be overloaded to export the content of <office:configuration-settings>.
-    // There is no default implementation.
-    // DEPRECATED - not called any longer
-    virtual void _ExportConfigurationSettings(const XMLSettingsExportHelper& rSettingsExportHelper);
 
     // This method can be overloaded to export the content of <office:scripts>.
     // There is a default implementation.
@@ -250,6 +240,35 @@ protected:
     virtual xmloff::OFormLayerXMLExport* CreateFormExport();
     virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
     virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
+
+    struct SettingsGroup
+    {
+        ::xmloff::token::XMLTokenEnum                                               eGroupName;
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   aSettings;
+
+        SettingsGroup()
+            :eGroupName( ::xmloff::token::XML_TOKEN_INVALID )
+            ,aSettings()
+        {
+        }
+
+        SettingsGroup(
+                const ::xmloff::token::XMLTokenEnum _eGroupName,
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rSettings )
+            :eGroupName( _eGroupName )
+            ,aSettings( _rSettings )
+        {
+        }
+    };
+    /** returns the current document settings
+
+        The default implementation will obtain the view settings by calling GetViewSettingsAndViews, and the
+        configuration settings by calling GetConfigurationSettings, and return them together with the proper XML token.
+
+        @return
+            the accumulated count of all settings in all groups
+    */
+    virtual sal_Int32 GetDocumentSpecificSettings( ::std::list< SettingsGroup >& _out_rSettings );
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedObjectResolver >& GetEmbeddedResolver() const { return mxEmbeddedResolver; }
     inline void SetEmbeddedResolver( com::sun::star::uno::Reference< com::sun::star::document::XEmbeddedObjectResolver >& _xEmbeddedResolver );
