@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportDefinition.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,12 +38,7 @@
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
-
-#include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/drawing/LineDash.hpp>
-#include <com/sun/star/drawing/Hatch.hpp>
-
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/sequence.hxx>
@@ -53,6 +48,7 @@
 #include <vos/mutex.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/propertystatecontainer.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/document/EventObject.hpp>
@@ -60,6 +56,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <comphelper/documentconstants.hxx>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
 #include <com/sun/star/embed/EntryInitModes.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
@@ -86,6 +83,7 @@
 #include "core_resource.hxx"
 #include "Tools.hxx"
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <connectivity/CommonTools.hxx>
 #include <comphelper/numberedcollection.hxx>
 #include <framework/titlehelper.hxx>
@@ -116,6 +114,7 @@
 #include <svx/xmlgrhlp.hxx>
 #include <svx/unofill.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/exc_hlp.hxx>
 #include "ReportComponent.hxx"
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
@@ -236,6 +235,7 @@ void lcl_extractAndStartStatusIndicator( const ::comphelper::MediaDescriptor& _r
     catch( const uno::Exception& )
     {
         OSL_ENSURE( sal_False, "lcl_extractAndStartStatusIndicator: caught an exception!" );
+//         DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -1179,6 +1179,9 @@ void SAL_CALL OReportDefinition::close( ::sal_Bool _bDeliverOwnership ) throw (u
 // XModel
 ::sal_Bool SAL_CALL OReportDefinition::attachResource( const ::rtl::OUString& /*_rURL*/, const uno::Sequence< beans::PropertyValue >& _aArguments ) throw (uno::RuntimeException)
 {
+    // LLA: we had a deadlock problem in our context, so we get the SolarMutex earlier.
+    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     ::comphelper::MediaDescriptor aDescriptor( _aArguments );
@@ -1288,12 +1291,12 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::getCurrentSelectio
 }
 // -----------------------------------------------------------------------------
 
-// XStorageBasedDocument
-void SAL_CALL OReportDefinition::loadFromStorage( const uno::Reference< embed::XStorage >& _xStorageToLoadFrom
-                                                 , const uno::Sequence< beans::PropertyValue >& _aMediaDescriptor ) throw (lang::IllegalArgumentException, frame::DoubleInitializationException, io::IOException, uno::Exception, uno::RuntimeException)
+void OReportDefinition::impl_loadFromStorage_nolck_throw( const uno::Reference< embed::XStorage >& _xStorageToLoadFrom,
+        const uno::Sequence< beans::PropertyValue >& _aMediaDescriptor )
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+//  ::osl::MutexGuard aGuard(m_aMutex);
+//  ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+//
 
     m_pImpl->m_xStorage = _xStorageToLoadFrom;
 
@@ -1334,6 +1337,17 @@ void SAL_CALL OReportDefinition::loadFromStorage( const uno::Reference< embed::X
         m_pImpl->m_pObjectContainer->SwitchPersistence(m_pImpl->m_xStorage);
     }
 }
+// XStorageBasedDocument
+// -----------------------------------------------------------------------------
+void SAL_CALL OReportDefinition::loadFromStorage( const uno::Reference< embed::XStorage >& _xStorageToLoadFrom
+                                                 , const uno::Sequence< beans::PropertyValue >& _aMediaDescriptor ) throw (lang::IllegalArgumentException, frame::DoubleInitializationException, io::IOException, uno::Exception, uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+
+    impl_loadFromStorage_nolck_throw( _xStorageToLoadFrom, _aMediaDescriptor );
+}
+
 // -----------------------------------------------------------------------------
 void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XStorage >& _xStorageToSaveTo, const uno::Sequence< beans::PropertyValue >& _aMediaDescriptor ) throw (lang::IllegalArgumentException, io::IOException, uno::Exception, uno::RuntimeException)
 {
@@ -1444,6 +1458,9 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
             OSL_ENSURE(0,"Exception Caught: Could not commit report storage!");
             throw io::IOException();
         }
+// LLA: resynced?
+        setModified(sal_False);
+
     }
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();
@@ -1607,8 +1624,107 @@ void SAL_CALL OReportDefinition::initNew(  ) throw (frame::DoubleInitializationE
      setPageFooterOn( sal_True );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue >& /*lArguments*/ ) throw (frame::DoubleInitializationException, io::IOException, uno::Exception, uno::RuntimeException)
+void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue >& _rArguments ) throw (frame::DoubleInitializationException, io::IOException, uno::Exception, uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+
+    // TODO: this code is pretty similar to what happens in ODatabaseModelImpl::getOrCreateRootStorage,
+    //       perhaps we can share code here.
+
+    ::comphelper::NamedValueCollection aArguments( _rArguments );
+
+    // the source for the to-be-created storage: either an URL, or a stream
+    uno::Reference< io::XInputStream > xStream;
+    ::rtl::OUString sURL;
+
+    if ( aArguments.has( "Stream" ) )
+    {
+        aArguments.get_ensureType( "Stream", xStream );
+        aArguments.remove( "Stream" );
+    }
+    else if ( aArguments.has( "InputStream" ) )
+    {
+        aArguments.get_ensureType( "InputStream", xStream );
+        aArguments.remove( "InputStream" );
+    }
+
+    if ( aArguments.has( "FileName" ) )
+    {
+        aArguments.get_ensureType( "FileName", sURL );
+        aArguments.remove( "FileName" );
+    }
+    else if ( aArguments.has( "URL" ) )
+    {
+        aArguments.get_ensureType( "URL", sURL );
+        aArguments.remove( "URL" );
+    }
+
+    uno::Any aStorageSource;
+    if ( xStream.is() )
+        aStorageSource <<= aStorageSource;
+    else if ( sURL.getLength() )
+        aStorageSource <<= sURL;
+    else
+        // TODO: error message
+        throw lang::IllegalArgumentException(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No input source (URL or InputStream) found." ) ),
+                // TODO: resource
+            *this,
+            1
+        );
+
+    uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
+        m_aProps->m_xContext->getServiceManager()->createInstanceWithContext(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.StorageFactory" ) ),
+            m_aProps->m_xContext ),
+        uno::UNO_QUERY_THROW
+    );
+
+    // open read-write per default, unless told otherwise in the MediaDescriptor
+    uno::Reference< embed::XStorage > xDocumentStorage;
+    const sal_Int32 nOpenModes[2] = {
+        embed::ElementModes::READWRITE,
+        embed::ElementModes::READ
+    };
+    size_t nFirstOpenMode = 0;
+    if ( aArguments.has( "ReadOnly" ) )
+    {
+        sal_Bool bReadOnly = sal_False;
+        aArguments.get_ensureType( "ReadOnly", bReadOnly );
+        nFirstOpenMode = bReadOnly ? 1 : 0;
+    }
+    const size_t nLastOpenMode = sizeof( nOpenModes ) / sizeof( nOpenModes[0] ) - 1;
+    for ( size_t i=nFirstOpenMode; i <= nLastOpenMode; ++i )
+    {
+        uno::Sequence< uno::Any > aStorageCreationArgs(2);
+        aStorageCreationArgs[0] = aStorageSource;
+        aStorageCreationArgs[1] <<= nOpenModes[i];
+
+        try
+        {
+            xDocumentStorage.set( xStorageFactory->createInstanceWithArguments( aStorageCreationArgs ), uno::UNO_QUERY_THROW );
+        }
+        catch( const uno::Exception& )
+        {
+            if ( i == nLastOpenMode )
+                throw lang::WrappedTargetException(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "An error occured while creating the document storage." ) ),
+                        // TODO: resource
+                    *this,
+                    ::cppu::getCaughtException()
+                );
+        }
+    }
+
+    if ( !xDocumentStorage.is() )
+    {
+        throw uno::RuntimeException();
+    }
+
+    impl_loadFromStorage_nolck_throw( xDocumentStorage, aArguments.getPropertyValues() );
+    // TODO: do we need to take ownership of the storage? In opposite to loadFromStorage, we created the storage
+    // ourself here, and perhaps this means we're also responsible for it ...?
 }
 // -----------------------------------------------------------------------------
 // XVisualObject
