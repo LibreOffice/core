@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbtreemodel.hxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,42 +47,35 @@
 #include "commontypes.hxx"
 #endif
 
-// syntax of the tree                   userdata
-// datasource                           holds the connection
-//      queries                         holds the nameaccess for the queries
-//          query                       holds the query
-//      tables                          holds the nameaccess for the tables
-//          table                       holds the table
-//      bookmarks                       holds the nameaccess for the document links
-//          table                       holds the document links
+// syntax of the tree           userdata
+// datasource                   holds the connection
+//   queries                    holds the nameaccess for the queries
+//     query                    holds the query
+//   tables                     holds the nameaccess for the tables
+//     table                    holds the table
 
+#define CONTAINER_QUERIES       ULONG( 0 )
+#define CONTAINER_TABLES        ULONG( 1 )
 
 namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
 
 namespace dbaui
 {
-    //========================================================================
-    //= DBTreeListModel
-    //========================================================================
-    class DBTreeListModel : public SvLBoxTreeList
+    struct DBTreeListUserData
     {
-    public:
-        struct DBTreeListUserData
-        {
-            /// if the entry denotes a table or query, this is the respective UNO object
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                                            xObjectProperties;
-            /// if the entry denotes a object container, this is the UNO interface for this container
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                                            xContainer;
-            /// if the entry denotes a data source, this is the connection for this data source (if already connection)
-            SharedConnection                xConnection;
-            SbaTableQueryBrowser::EntryType eType;
-            String                          sAccessor;
+        /// if the entry denotes a table or query, this is the respective UNO object
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                                        xObjectProperties;
+        /// if the entry denotes a object container, this is the UNO interface for this container
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+                                        xContainer;
+        /// if the entry denotes a data source, this is the connection for this data source (if already connection)
+        SharedConnection                xConnection;
+        SbaTableQueryBrowser::EntryType eType;
+        String                          sAccessor;
 
-            DBTreeListUserData();
-            ~DBTreeListUserData();
-        };
+        DBTreeListUserData();
+        ~DBTreeListUserData();
     };
 }
 
