@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stdctrl.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,8 +76,6 @@ namespace svt
 
     void SelectableFixedText::Init()
     {
-        // no tabstop
-        SetStyle( ( GetStyle() & ~WB_TABSTOP ) | WB_NOTABSTOP );
         // no border
         SetBorderStyle( WINDOW_BORDER_NOBORDER );
         // read-only
