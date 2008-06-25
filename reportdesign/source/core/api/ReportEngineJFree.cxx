@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportEngineJFree.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -256,21 +256,15 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
 // Methods
 uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentModel( ) throw (lang::DisposedException, lang::IllegalArgumentException, uno::Exception, uno::RuntimeException)
 {
-    uno::Reference< frame::XModel > xModel;
-    ::rtl::OUString sOutputName = getNewOutputName();
-    if ( sOutputName.getLength() )
-    {
-        uno::Reference< lang::XMultiServiceFactory > xFac(m_xContext->getServiceManager(),uno::UNO_QUERY);
-        ::comphelper::MimeConfigurationHelper aHelper(xFac);
-        ::rtl::OUString sServiceName = aHelper.GetDocServiceNameFromMediaType(m_xReport->getMimeType());
-        xModel.set(m_xContext->getServiceManager()->createInstanceWithContext(sServiceName,m_xContext),uno::UNO_QUERY_THROW);
-        uno::Sequence< beans::PropertyValue > aArguments;
-        xModel->attachResource(sOutputName,aArguments);
-    }
-    return xModel;
+    return createDocumentAlive(NULL,true);
 }
 // -----------------------------------------------------------------------------
 uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive( const uno::Reference< frame::XFrame >& _frame ) throw (lang::DisposedException, lang::IllegalArgumentException, uno::Exception, uno::RuntimeException)
+{
+    return createDocumentAlive(_frame,false);
+}
+// -----------------------------------------------------------------------------
+uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive( const uno::Reference< frame::XFrame >& _frame,bool _bHidden ) throw (lang::DisposedException, lang::IllegalArgumentException, uno::Exception, uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel;
     ::rtl::OUString sOutputName = getNewOutputName(); // starts implicite the report generator
@@ -294,13 +288,19 @@ uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive
 
         if ( xFrameLoad.is() )
         {
-            uno::Sequence < beans::PropertyValue > aArgs( 2 );
+            uno::Sequence < beans::PropertyValue > aArgs( _bHidden ? 3 : 2 );
             sal_Int32 nLen = 0;
             aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
             aArgs[nLen++].Value <<= sal_False;
 
             aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
             aArgs[nLen++].Value <<= sal_True;
+
+            if ( _bHidden )
+            {
+                aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hidden"));
+                aArgs[nLen++].Value <<= sal_True;
+            }
 
             uno::Reference< lang::XMultiServiceFactory > xFac(m_xContext->getServiceManager(),uno::UNO_QUERY);
             ::comphelper::MimeConfigurationHelper aHelper(xFac);
