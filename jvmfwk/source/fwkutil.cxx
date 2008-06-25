@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fwkutil.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,6 +68,13 @@ namespace jfw
 
 bool isAccessibilitySupportDesired()
 {
+    OUString sValue;
+    if ((sal_True == ::rtl::Bootstrap::get(
+        OUString(RTL_CONSTASCII_USTRINGPARAM("JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY")), sValue))
+        && sValue.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("1")))
+        )
+        return false;
+
     bool retVal = false;
 #ifdef WNT
     HKEY    hKey = 0;
