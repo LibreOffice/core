@@ -1,4 +1,5 @@
-/*************************************************************************
+/*
+ ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -7,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportWizard.java,v $
- * $Revision: 1.74 $
+ * $Revision: 1.75 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -26,27 +27,50 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.report;
+ ************************************************************************/
 
-import java.util.Vector;
+package com.sun.star.wizards.report;
 
+// import java.util.Vector;
+
+// import com.sun.star.wizards.reportbuilder.ReportBuilderImplementation;
+import com.sun.star.awt.Size;
 import com.sun.star.awt.TextEvent;
+import com.sun.star.awt.XControl;
+import com.sun.star.awt.XControlModel;
+import com.sun.star.awt.XFixedText;
+import com.sun.star.awt.XLayoutConstrains;
 import com.sun.star.awt.XTextListener;
+import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyValue;
+
+// import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XContentEnumerationAccess;
+import com.sun.star.deployment.XPackageInformationProvider;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XServiceInfo;
 import com.sun.star.sdb.CommandType;
+
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 import com.sun.star.wizards.common.*;
-import com.sun.star.wizards.document.OfficeDocument;
 import com.sun.star.wizards.ui.*;
 import com.sun.star.wizards.db.*;
 import com.sun.star.lang.XComponent;
 
+import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Map;
 
-public class ReportWizard extends WizardDialog implements XTextListener, XCompletion{
-    XMultiServiceFactory xMSF;
-    QueryMetaData CurDBMetaData;
+
+public class ReportWizard extends WizardDialog implements XTextListener, XCompletion
+{
+    // XMultiServiceFactory xMSF;
+    // QueryMetaData CurDBMetaData;
     FieldSelection CurGroupFieldSelection;
     SortingComponent CurSortingComponent;
     UnoDialog CurUnoProgressDialog;
@@ -54,12 +78,11 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
     CommandFieldSelection CurDBCommandFieldSelection;
     GroupFieldHandler CurGroupFieldHandler;
     ReportLayouter CurReportLayouter;
-    Finalizer CurReportFinalizer;
-    public static String ReportPath;
+    ReportFinalizer CurReportFinalizer;
     PropertyValue[] DBGPROPERTYVALUE;
     String sCommandName = "";
     int nCommandType = -1;
-    int nReportMode = Finalizer.SOCREATEDOCUMENT;
+    int nReportMode = ReportFinalizer.SOCREATEDOCUMENT;
     String sReportName = "";
 
     public static final String SOREPORTFORMNAME = "ReportSource";
@@ -75,7 +98,9 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
     public static final int SOTEMPLATEPAGE = 5;
     public static final int SOSTOREPAGE = 6;
 
-    ReportDocument CurReportDocument;
+    // ReportTextDocument CurReportDocument;
+    // ReportTextImplementation CurReportDocument;
+    IReportDocument CurReportDocument;
 
     static String sMsgWizardName;
     static String slblFields;
@@ -98,434 +123,801 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
     static String sMsgQueryCreationImpossible;
     public static String sMsgFilePathInvalid;
     static String slblTables;
-    public static String sBlindTextNote;
+//    public static String sBlindTextNote;
     public static boolean bCloseDocument;
     public boolean bHasEscapeProcessing = true;
 
 
 
-    public ReportWizard(XMultiServiceFactory xMSF) {
-        super(xMSF, 34320);
-        super.addResourceHandler("Report Wizard", "dbw");
-        if (getReportResources( false) == true){
-            Helper.setUnoPropertyValues(xDialogModel,
-            new String[] { "Height","Moveable","Name","PositionX","PositionY","Step","TabIndex","Title","Width"},
-            new Object[] { new Integer(210),Boolean.TRUE, "DialogReport", new Integer(102),new Integer(41),new Integer(1), new Short((short)0), sMsgWizardName, new Integer(310)}  );
-            drawNaviBar();
-            setRightPaneHeaders(this.WizardHeaderText);
+    public ReportWizard(XMultiServiceFactory xMSF)
+        {
+            super(xMSF, 34320);
+            super.addResourceHandler("Report Wizard", "dbw");
+            if (getReportResources( false) == true)
+            {
+                Helper.setUnoPropertyValues(xDialogModel,
+                                            new String[] { "Height","Moveable","Name","PositionX","PositionY","Step","TabIndex","Title","Width"},
+                                            new Object[] { new Integer(210),Boolean.TRUE, "DialogReport", new Integer(102),new Integer(41),new Integer(1), new Short((short)0), sMsgWizardName, new Integer(310)}  );
+                drawNaviBar();
+                setRightPaneHeaders(this.WizardHeaderText);
+            }
         }
-    }
 
 
-    protected void enterStep(int nOldStep, int nNewStep){
-        if ((nOldStep >= SOTEMPLATEPAGE) && (nNewStep < SOTEMPLATEPAGE)){
-            CurReportDocument.oTextSectionHandler.removeTextSectionbyName("RecordSection");
-            CurReportDocument.oTextTableHandler.removeTextTablebyName("Tbl_RecordSection");
-        }
-        switch (nNewStep){
+    protected void enterStep(int nOldStep, int nNewStep)
+        {
+            if ((nOldStep >= SOTEMPLATEPAGE) && (nNewStep < SOTEMPLATEPAGE))
+            {
+                // CurReportDocument.getDoc().oTextSectionHandler.removeTextSectionbyName("RecordSection");
+                // CurReportDocument.getDoc().oTextTableHandler.removeTextTablebyName("Tbl_RecordSection");
+                CurReportDocument.removeTextTableAndTextSection();
+            }
+            switch (nNewStep)
+            {
             case SOMAINPAGE:
                 CurDBCommandFieldSelection.setModified(false);
                 break;
+
             case SOTITLEPAGE:
-        CurTitlesComponent.initialize(CurReportDocument.CurDBMetaData.getFieldNames(), CurReportDocument.CurDBMetaData.getFieldTitleSet());
+                String[] aFieldNames = CurReportDocument.getRecordParser().getFieldNames();
+                Map aFieldTitleSet = CurReportDocument.getRecordParser().getFieldTitleSet();
+                CurTitlesComponent.initialize(aFieldNames, aFieldTitleSet);
                 break;
+
             case SOGROUPPAGE:
                 CurGroupFieldHandler.initialize();
                 break;
+
             case SOSORTPAGE:
-        CurSortingComponent.initialize(CurReportDocument.CurDBMetaData.getFieldNames(), CurReportDocument.CurDBMetaData.SortFieldNames);
-                CurSortingComponent.setReadOnlyUntil(CurReportDocument.CurDBMetaData.GroupFieldNames.length, false);
+                String[] aFieldNames2 = CurReportDocument.getRecordParser().getFieldNames();
+                String[][] aSortFieldNames = CurReportDocument.getRecordParser().getSortFieldNames();
+                CurSortingComponent.initialize(aFieldNames2, aSortFieldNames);
+                int nLength = CurReportDocument.getRecordParser().GroupFieldNames.length;
+                CurSortingComponent.setReadOnlyUntil(nLength, false);
                 break;
+
             case SOTEMPLATEPAGE:
                 break;
+
             case SOSTOREPAGE:
                 //TODO initialize with suitable PathName
-                CurReportFinalizer.initialize(CurReportDocument.CurDBMetaData);
+                CurReportFinalizer.initialize(CurReportDocument.getRecordParser());
                 break;
-             default:
-             break;
+
+            default:
+                break;
+            }
         }
-    }
 
-    protected void leaveStep(int nOldStep, int nNewStep){
+    protected void leaveStep(int nOldStep, int nNewStep)
+        {
 
-         switch (nOldStep){
+            switch (nOldStep)
+            {
             case SOMAINPAGE:
-                CurReportDocument.CurDBMetaData.initializeFieldColumns(CurDBCommandFieldSelection.getSelectedFieldNames(), CurDBCommandFieldSelection.getSelectedCommandName());
-//      CurReportDocument.CurDBMetaData.setAllIncludedFieldNames(false);
-                if (CurDBCommandFieldSelection.isModified()){
-                    CurReportDocument.oTextSectionHandler.removeAllTextSections();
-                    CurReportDocument.oTextTableHandler.removeAllTextTables();
-                    CurReportDocument.DBColumnsVector = new Vector();
-                    CurReportDocument.CurDBMetaData.setGroupFieldNames(new String[]{});
+                String[] aSelectedFieldNames = CurDBCommandFieldSelection.getSelectedFieldNames();
+                String aTableName = CurDBCommandFieldSelection.getSelectedCommandName();
+                // set all selected field names, DB Table name
+                // CurReportDocument.getRecordParser().initializeFieldColumns(aSelectedFieldNames, aTableName);
+                CurReportDocument.initializeFieldColumns(com.sun.star.sdb.CommandType.TABLE, aTableName, aSelectedFieldNames);
+                // CurReportDocument.initializeFieldColumns(aSelectedFieldNames, aSelectedCommandName);
+                // CurReportDocument.getRecordParser().setAllIncludedFieldNames(false);
+                if (CurDBCommandFieldSelection.isModified())
+                {
+                    // cleanup document
+                    CurReportDocument.clearDocument();
+                    // CurReportDocument.getDoc().oTextSectionHandler.removeAllTextSections();
+                    // CurReportDocument.getDoc().oTextTableHandler.removeAllTextTables();
+                    // CurReportDocument.getDoc().DBColumnsVector = new Vector();
+                    CurReportDocument.getRecordParser().setGroupFieldNames(new String[]{});
                     CurGroupFieldHandler.removeGroupFieldNames();
                 }
                 break;
+
             case SOTITLEPAGE:
-        CurReportDocument.CurDBMetaData.setFieldTitles(CurTitlesComponent.getFieldTitles());
+                String[] sFieldTitles = CurTitlesComponent.getFieldTitles();
+                // set new field name titles
+                // CurReportDocument.getRecordParser().setFieldTitles(sFieldTitles);
+                CurReportDocument.setFieldTitles(sFieldTitles);
                 break;
+
             case SOGROUPPAGE:
-                CurGroupFieldHandler.getGroupFieldNames(CurReportDocument.CurDBMetaData);
-                CurReportDocument.CurDBMetaData.prependSortFieldNames(CurReportDocument.CurDBMetaData.GroupFieldNames);
+                // TODO: DESIGN!!! a getter should return a value!!!
+                CurGroupFieldHandler.getGroupFieldNames(CurReportDocument.getRecordParser());
+                String[] aGroupFieldNames = CurReportDocument.getRecordParser().GroupFieldNames;
+                // CurReportDocument.getRecordParser().prependSortFieldNames(aGroupFieldNames);
+                CurReportDocument.setGrouping(aGroupFieldNames);
                 break;
+
             case SOSORTPAGE:
-                CurReportDocument.CurDBMetaData.SortFieldNames = CurSortingComponent.getSortFieldNames();
+                String[][] aSortFieldNames = CurSortingComponent.getSortFieldNames();
+                // CurReportDocument.getRecordParser().SortFieldNames = aSortFieldNames;
+                CurReportDocument.setSorting(aSortFieldNames);
+                // TODO: why do we make a switch here
                 super.enablefromStep(SOTEMPLATEPAGE, true);
                 break;
+
             case SOTEMPLATEPAGE:
                 break;
+
             case SOSTOREPAGE:
                 break;
-             default:
-             break;
-          }
-        if ((nOldStep < SOTEMPLATEPAGE) && (super.getNewStep() >= SOTEMPLATEPAGE)){
-            CurReportDocument.CurDBMetaData.setRecordFieldNames();
-            CurReportLayouter.initialize(ReportPath + "/cnt-default.ott");
-        }
-    }
 
+            default:
+                break;
+            }
 
-    private boolean executeQuery(){
-        boolean bQueryCreated = false;
-        if (this.CurDBCommandFieldSelection.getSelectedCommandType() == CommandType.TABLE){
-            bQueryCreated = CurDBMetaData.oSQLQueryComposer.setQueryCommand(sMsgWizardName, this.xWindow, false, false);
-            CurDBMetaData.Command = CurDBMetaData.oSQLQueryComposer.getQuery();
-        }
-        else{
-            try {
-                String sQueryName = CurDBCommandFieldSelection.getSelectedCommandName();
-                DBMetaData.CommandObject oCommand = CurDBMetaData.getQueryByName(sQueryName);
-                bHasEscapeProcessing = CurDBMetaData.hasEscapeProcessing(oCommand.xPropertySet);
-                String sCommand = (String) oCommand.xPropertySet.getPropertyValue("Command");
-                if (bHasEscapeProcessing){
-                    bQueryCreated = (!sCommand.equals(""));
-                    CurDBMetaData.oSQLQueryComposer.xQueryAnalyzer.setQuery(sCommand);
-                    CurDBMetaData.oSQLQueryComposer.prependSortingCriteria();
-                    CurDBMetaData.Command = CurDBMetaData.oSQLQueryComposer.getQuery();
-                    bQueryCreated = true;
-                }
-                else{
-                    CurDBMetaData.Command = sCommand;
-                    bQueryCreated = true;
-                }
-            } catch (Exception e) {
-                e.printStackTrace(System.out);
+            if ((nOldStep < SOTEMPLATEPAGE) && (super.getNewStep() >= SOTEMPLATEPAGE))
+            {
+// this is called before SOTEMPLATEPAGE, after SOGROUPPAGE
+                CurReportDocument.getRecordParser().createRecordFieldNames();
+                CurReportLayouter.initialize(CurReportDocument.getContentPath());
             }
         }
-        if (!bQueryCreated){
-            super.vetoableChange(null);
-        }
-        return bQueryCreated;
-    }
 
-
-
-    public static void main(String args[]) {
-    String ConnectStr = "uno:socket,host=localhost,port=8100;urp;StarOffice.NamingService";   //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
-    try {
-        XMultiServiceFactory xLocMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
-        ReportWizard CurReportWizard = new ReportWizard(xLocMSF);
-        if(xLocMSF != null){
-            System.out.println("Connected to "+ ConnectStr);
-            PropertyValue[] curproperties = new PropertyValue[1];
-//            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///localhome/bc93774/NewDatabase2" +
-//                    "C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyHSQL.odb"); //MyDocAssign.odb; baseLocation ); "DataSourceName", "db1");
-            curproperties[0] = Properties.createProperty("DataSourceName", "MyTestDatabase");
-            CurReportWizard.startReportWizard(xLocMSF, curproperties);
-        }
-    }
-    catch(Exception exception){
-        exception.printStackTrace(System.out);
-    }}
-
-
-    public void buildSteps(){
-        CurReportDocument.xProgressBar.setValue(30);
-        CurDBCommandFieldSelection = new CommandFieldSelection(this, CurReportDocument.CurDBMetaData, 100, slblFields, slblSelFields,  slblTables, true, 34330);
-        CurDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
-        insertLabel("lblBinaryFields",
-            new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "Width"},
-            new Object[] {new Integer(16), sShowBinaryFields, new Integer(95), new Integer(162), new Integer(1), new Integer(210)});
-        CurReportDocument.xProgressBar.setValue(40);
-        CurTitlesComponent = new TitlesComponent(this, SOTITLEPAGE, 97, 37, 210, 7, slblColumnNames, slblColumnTitles, 34381);
-        CurTitlesComponent.addTextListener(this);
-        CurReportDocument.xProgressBar.setValue(50);
-        CurGroupFieldHandler = new GroupFieldHandler(CurReportDocument, this);
-        CurReportDocument.xProgressBar.setValue(60);
-        CurSortingComponent = new SortingComponent(this, SOSORTPAGE, 95, 30, 210, 34346);
-        CurReportDocument.xProgressBar.setValue(70);
-        CurReportLayouter = new ReportLayouter(CurReportDocument, this);
-        CurReportDocument.xProgressBar.setValue(80);
-        CurReportFinalizer = new Finalizer(CurReportDocument, this);
-        CurReportDocument.xProgressBar.setValue(100);
-        bCloseDocument = true;
-        CurReportDocument.xProgressBar.end();
-        enableNavigationButtons(false, false, false);
-    }
-
-
-    public void finishWizard(){
-        int ncurStep = getCurrentStep();
-        if ((switchToStep(ncurStep, SOSTOREPAGE)) || (ncurStep == SOSTOREPAGE)){
-            if (this.executeQuery()){
-                if (CurReportFinalizer.finish()){
-                    nReportMode = CurReportFinalizer.getReportOpenMode();
-                    sReportName = CurReportFinalizer.getStoreName();
-                    xDialog.endExecute();
-                }
-            }
-        }
-    }
-
-
-    public void cancelWizard(){
-        xDialog.endExecute();
-    }
-
-
-    public void insertQueryRelatedSteps(){
-        setRMItemLabels(oResource, UIConsts.RID_QUERY + 80);
-        addRoadmap();
-        int i = 0;
-        i = insertRoadmapItem(0, true, oResource.getResText(UIConsts.RID_QUERY + 80), SOMAINPAGE);
-        i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_REPORT + 68), SOTITLEPAGE);
-        i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_REPORT + 11), SOGROUPPAGE);
-        i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_REPORT + 12),  SOSORTPAGE);       // Orderby is always supported
-        i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_REPORT + 13), SOTEMPLATEPAGE);
-        i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_REPORT + 14), SOSTOREPAGE);
-        setRoadmapInteractive(true);
-        setRoadmapComplete(true);
-        setCurrentRoadmapItemID((short) 1);
-    }
-
-
-    public XComponent[] startReportWizard(XMultiServiceFactory _xMSF, PropertyValue[] CurPropertyValue){
+    private XComponent[] dialogFinish(short RetValue)
+    {
         XComponent[] ret = null;
-    try{
-        this.xMSF = _xMSF;
-        // Check general availability of office paths
-        ReportPath = FileAccess.getOfficePath(xMSF, "Template","share", "/wizard");
-        ReportPath = FileAccess.combinePaths(xMSF, ReportPath, "/wizard/report");
-        if (ReportPath.equals(""))
-            return ret;
-        DBGPROPERTYVALUE = CurPropertyValue;
-        CurReportDocument =  new ReportDocument(xMSF, ReportPath + "/stl-default.ott", oResource );
-        CurDBMetaData = CurReportDocument.CurDBMetaData;
-        if (CurDBMetaData.getConnection(CurPropertyValue)){
-            CurReportDocument.xProgressBar.setValue(20);
-            CurDBMetaData.oSQLQueryComposer = new SQLQueryComposer(CurReportDocument.CurDBMetaData);
-            buildSteps();
-            this.CurDBCommandFieldSelection.preselectCommand(CurPropertyValue, false);
-            createWindowPeer(CurReportDocument.xWindowPeer);
-            CurDBMetaData.setWindowPeer(this.xControl.getPeer());
-            insertQueryRelatedSteps();
-            short RetValue = executeDialog(CurReportDocument.xFrame.getComponentWindow().getPosSize());
-            boolean bdisposeDialog = true;
-            switch (RetValue){
-                case 0:                         // via Cancelbutton or via sourceCode with "endExecute"
-                    this.xComponent.dispose();
-                    if (bCloseDocument == true){
-                        OfficeDocument.dispose(xMSF, CurReportDocument.xComponent);
-                        return ret;
-                    }
-                    if ((nReportMode == Finalizer.SOCREATETEMPLATE) || (nReportMode == Finalizer.SOUSETEMPLATE)) {
-                        bdisposeDialog = false;
-                        CurReportDocument.CurDBMetaData.addReportDocument(CurReportDocument.xComponent, true);
-                        boolean bOpenInDesign = (nReportMode == Finalizer.SOCREATETEMPLATE);
-                        ret = CurDBMetaData.openReportDocument(sReportName, true, bOpenInDesign);
-                    }
-                    else {
-                        bdisposeDialog = false;
-                        Dataimport CurDataimport = new Dataimport(xMSF);
-                        CurDataimport.CurReportDocument = CurReportDocument;
-                        CurDataimport.showProgressDisplay(xMSF, false);
-                        importReportData(xMSF, CurDataimport);
-                        ret = CurDBMetaData.openReportDocument(sReportName, false, false);
-                    }
+        // Report Wizard Dialog is done.
+        boolean bdisposeDialog = true;
+        switch (RetValue)
+        {
+            case 0:
+                // via Cancelbutton or via sourceCode with "endExecute"
+                this.xComponent.dispose();
+                if (bCloseDocument == true) {
+                    // OfficeDocument.dispose(xMSF, CurReportDocument.getDoc().xComponent);
+                    CurReportDocument.dispose();
                     return ret;
-                case 1:
-                    if (bdisposeDialog == true)
-                        CurReportDocument.unlockallControllers();
-                    break;
-            }
+                }
+                if ((nReportMode == ReportFinalizer.SOCREATETEMPLATE) || (nReportMode == ReportFinalizer.SOUSETEMPLATE)) {
+                    bdisposeDialog = false;
+                    // Add Report to the DB View
+                    // old: CurReportDocument.getRecordParser().addReportDocument(CurReportDocument.getComponent(), true);
+                    CurReportDocument.addReportToDBView();
+                    boolean bOpenInDesign = ( nReportMode == ReportFinalizer.SOCREATETEMPLATE );
+                    // Create Report
+                    // old: ret = CurReportDocument.getRecordParser().openReportDocument(sReportName, true, bOpenInDesign);
+                    ret = CurReportDocument.createFinalReportDocument(sReportName, true, bOpenInDesign);
+                }
+                else
+                {
+                    bdisposeDialog = false;
+                    CurReportDocument.importReportData(this);
+                    // Dataimport CurDataimport = new Dataimport(xMSF);
+                    // CurDataimport.CurReportDocument = CurReportDocument;
+                    // CurDataimport.showProgressDisplay(xMSF, false);
+                    // importReportData(xMSF, CurDataimport);
+                    // old: ret = CurReportDocument.getRecordParser().openReportDocument(sReportName, false, false);
+                    ret = CurReportDocument.createFinalReportDocument(sReportName, false, false);
+                }
+                return ret;
+            case 1:
+                if (bdisposeDialog == true)
+                {
+                    // CurReportDocument.getDoc().unlockallControllers();
+                }
+                break;
         }
-        CurDBMetaData.dispose();
-    }
-    catch(java.lang.Exception jexception ){
-        jexception.printStackTrace(System.out);
-    }
-        return ret;
+        return null;
     }
 
 
-    public void importReportData(final XMultiServiceFactory xMSF, final Dataimport CurDataimport){
-        boolean bDocisStored = false;
-        try{
-            boolean bexecute = false;
-            if (!bHasEscapeProcessing){
-                bexecute = CurReportDocument.CurDBMetaData.executeCommand(com.sun.star.sdb.CommandType.QUERY);   //            sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot))
+    private boolean executeQuery()
+        {
+            boolean bQueryCreated = false;
+            if (this.CurDBCommandFieldSelection.getSelectedCommandType() == CommandType.TABLE)
+            {
+                bQueryCreated = CurReportDocument.getRecordParser().oSQLQueryComposer.setQueryCommand(sMsgWizardName, this.xWindow, false, false);
+
+                CurReportDocument.setCommandType( CommandType.COMMAND );
+                String sQuery = CurReportDocument.getRecordParser().oSQLQueryComposer.getQuery();
+                CurReportDocument.setCommand( sQuery );
             }
-            else{
-                bexecute = CurReportDocument.CurDBMetaData.executeCommand(com.sun.star.sdb.CommandType.COMMAND);   //            sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot))
-            }
-            if (bexecute){
-                bexecute = CurReportDocument.CurDBMetaData.getFields(CurReportDocument.CurDBMetaData.getFieldNames(), false);
-            }
-            if (bexecute)
-                CurDataimport.insertDatabaseDatatoReportDocument(xMSF);
-                if (CurReportFinalizer.getReportOpenMode() == Finalizer.SOCREATEDOCUMENT){
-                    bDocisStored = CurReportDocument.CurDBMetaData.storeDatabaseDocumentToTempPath(CurReportDocument.xComponent, CurReportFinalizer.getStoreName());
+            else
+            {
+                try
+                {
+                    String sQueryName = CurDBCommandFieldSelection.getSelectedCommandName();
+                    DBMetaData.CommandObject oCommand = CurReportDocument.getRecordParser().getQueryByName(sQueryName);
+                    bHasEscapeProcessing = CurReportDocument.getRecordParser().hasEscapeProcessing(oCommand.xPropertySet);
+                    String sCommand = (String) oCommand.xPropertySet.getPropertyValue("Command");
+                    if (bHasEscapeProcessing)
+                    {
+                        // String sCommand = (String) oCommand.xPropertySet.getPropertyValue("Command");
+                        bQueryCreated = (!sCommand.equals(""));
+                        CurReportDocument.getRecordParser().oSQLQueryComposer.xQueryAnalyzer.setQuery(sCommand);
+                        CurReportDocument.getRecordParser().oSQLQueryComposer.prependSortingCriteria();
+// TODO: check with query
+                        CurReportDocument.setCommandType( CommandType.COMMAND );
+                        CurReportDocument.setCommand( CurReportDocument.getRecordParser().oSQLQueryComposer.getQuery() );
+                        bQueryCreated = true;
+                    }
+                    else
+                    {
+                        CurReportDocument.setCommandType( CommandType.COMMAND );
+                        CurReportDocument.setCommand( sCommand );
+                        bQueryCreated = true;
+                    }
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace(System.out);
                 }
             }
-        catch (com.sun.star.wizards.common.InvalidQueryException queryexception){
-        }
-        CurDataimport.xComponent.dispose();
-        if (bDocisStored)
-            CurReportDocument.CurDBMetaData.addReportDocument(CurReportDocument.xComponent, false);
-        CurReportDocument.CurDBMetaData.dispose();
+            if (!bQueryCreated)
+            {
+                super.vetoableChange(null);
+            }
+            return bQueryCreated;
         }
 
 
-    public boolean getReportResources(boolean bgetProgressResourcesOnly){
-        sMsgWizardName = super.oResource.getResText(UIConsts.RID_REPORT);
-        if (bgetProgressResourcesOnly == false){
-            sShowBinaryFields = oResource.getResText(UIConsts.RID_REPORT + 60);
-            slstDatabasesDefaultText = oResource.getResText(UIConsts.RID_DB_COMMON + 37);
-            slstTablesDefaultText = oResource.getResText(UIConsts.RID_DB_COMMON + 38);
-            sMsgErrorOccured = oResource.getResText(UIConsts.RID_DB_COMMON + 6);
-            slblTables = oResource.getResText(UIConsts.RID_FORM + 6);
-            slblFields = oResource.getResText(UIConsts.RID_FORM + 12);
-            slblSelFields = oResource.getResText(UIConsts.RID_REPORT + 9);
-            WizardHeaderText[0] = oResource.getResText(UIConsts.RID_REPORT + 28);
-            WizardHeaderText[1] = oResource.getResText(UIConsts.RID_REPORT + 69);
-            WizardHeaderText[2] = oResource.getResText(UIConsts.RID_REPORT + 29);
-            WizardHeaderText[3] = oResource.getResText(UIConsts.RID_REPORT + 30);
-            WizardHeaderText[4] = oResource.getResText(UIConsts.RID_REPORT + 31);
-            WizardHeaderText[5] = oResource.getResText(UIConsts.RID_REPORT + 32);
-            sMsgSavingImpossible = oResource.getResText(UIConsts.RID_DB_COMMON + 30);
+
+    public static void main(String args[])
+        {
+            String ConnectStr = "uno:socket,host=localhost,port=8107;urp;StarOffice.NamingService";   //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
+            try
+            {
+                XMultiServiceFactory xLocMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
+
+                tests(xLocMSF);
+
+                ReportWizard CurReportWizard = new ReportWizard(xLocMSF);
+                if(xLocMSF != null)
+                {
+                    System.out.println("Connected to "+ ConnectStr);
+                    PropertyValue[] curproperties = new PropertyValue[1];
+                    // curproperties[0] = Properties.createProperty(
+                    // "DatabaseLocation",
+                    // "file:///localhome/bc93774/NewDatabase2" +
+                    // "C:/Documents and Settings/ll93751/My Documents/RptWizard01_DB.odb");
+                    // "file://C:/Documents%20and%20Settings/ll93751/My%20Documents/RptWizard01_DB.odb");
+//                    "C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyHSQL.odb"); //MyDocAssign.odb; baseLocation ); "DataSourceName", "db1");
+                    // curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");
+                    curproperties[0] = Properties.createProperty("DataSourceName", "RptWizard01_DB");
+                    CurReportWizard.startReportWizard(xLocMSF, curproperties, true);
+                }
+            }
+            catch(Exception exception)
+            {
+                exception.printStackTrace(System.out);
+            }
+            System.exit(1);
         }
-        sMsgFilePathInvalid = oResource.getResText(UIConsts.RID_DB_COMMON + 36);
-        slblColumnTitles = oResource.getResText(UIConsts.RID_REPORT + 70);
-        slblColumnNames = oResource.getResText(UIConsts.RID_REPORT + 71);
-        sBlindTextNote = oResource.getResText(UIConsts.RID_REPORT + 75);
-        sBlindTextNote = JavaTools.replaceSubString( sBlindTextNote, String.valueOf((char)13), "<BR>");
-        return true;
+
+private static void tests(XMultiServiceFactory _xMSF)
+{
+    try
+            {
+//                String[] sServices = _xMSF.getAvailableServiceNames();
+//                File aFile = new File("C:/temp/services.txt");
+//                aFile.delete();
+//                FileWriter aRAF = new FileWriter(aFile);
+//                for (int i=0;i<sServices.length;i++)
+//                {
+//                    aRAF.write(sServices[i]);
+//                    aRAF.write("\n");
+//                }
+//                aRAF.close();
+
+
+//                XServiceInfo xServiceInfo = (XServiceInfo)UnoRuntime.queryInterface(XServiceInfo.class, _xMSF);
+//                String[] sServices = xServiceInfo.getSupportedServiceNames();
+
+//                XControl xControl = (XControl)UnoRuntime.queryInterface(XControl.class, xFormattedField);
+//                Object aPeer = xControl.getPeer();
+//                XTextConstraints xTC = (XTextConstraints)UnoRuntime.queryInterface(XTextConstraints.class, aPeer);
+//                int nHeight = xTC.getTextHeight();
+//                int nWidth = xTC.getTextWidth("Blah Fasel");
+
+//                Object aTextShapeObj = _xMSF.createInstance("com.sun.star.drawing.TextShape");
+//                XText xText = (XText)UnoRuntime.queryInterface(XText.class, aTextShapeObj);
+//                xText.setString("Blah fasel");
+//
+//                XServiceInfo xServiceInfo2 = (XServiceInfo)UnoRuntime.queryInterface(XServiceInfo.class, aTextShapeObj);
+//                String[] sServices2 = xServiceInfo2.getSupportedServiceNames();
+
+//                Object aToolkitObj = _xMSF.createInstance("com.sun.star.awt.Toolkit");
+//                XToolkit xToolkit = (XToolkit)UnoRuntime.queryInterface(XToolkit.class, aToolkitObj);
+//                WindowDescriptor aDescriptor = new WindowDescriptor();
+//                aDescriptor.Bounds = new Rectangle(0,0,640,480);
+//
+//                XWindowPeer aWindowPeer = xToolkit.createWindow(aDescriptor);
+//                XWindow xWindow = (XWindow)UnoRuntime.queryInterface(XWindow.class, aWindowPeer);
+//                xWindow.setVisible(true);
+//                aWindowPeer.setBackground(0x00000000);
+
+                Object aControlContainer = _xMSF.createInstance("com.sun.star.awt.UnoControlContainer");
+                // XControlContainer xControlContainer = (XControlContainer)UnoRuntime.queryInterface(XControlContainer.class, aControlContainer);
+
+                Object aFixedTextModel = _xMSF.createInstance("com.sun.star.awt.UnoControlFixedTextModel");
+                XControlModel xFixedTextModel = (XControlModel)UnoRuntime.queryInterface(XControlModel.class, aFixedTextModel);
+// nicht das Model, sondern gleich den FixedText nehmen??
+
+//                XMultiServiceFactory xMSF = (XMultiServiceFactory)UnoRuntime.queryInterface(XMultiServiceFactory.class, xFixedTextModel);
+
+                Object aFixedText = _xMSF.createInstance("com.sun.star.awt.UnoControlFixedText");
+                XServiceInfo xServiceInfo2 = (XServiceInfo)UnoRuntime.queryInterface(XServiceInfo.class, aFixedText);
+                String[] sServices2 = xServiceInfo2.getSupportedServiceNames();
+
+                XWindow xWindow = (XWindow)UnoRuntime.queryInterface(XWindow.class, aFixedText);
+                xWindow.setVisible(true);
+
+                XFixedText xFixedText = (XFixedText)UnoRuntime.queryInterface(XFixedText.class, aFixedText);
+                xFixedText.setText("Dies ist ein String");
+
+                XControl xControl = (XControl)UnoRuntime.queryInterface(XControl.class, xFixedText);
+                xControl.setModel(xFixedTextModel);
+
+                XLayoutConstrains xLayoutConstrains = (XLayoutConstrains)UnoRuntime.queryInterface(XLayoutConstrains.class, aFixedText);
+                Size aSize = xLayoutConstrains.getPreferredSize();
+
+                // xToolkit.createScreenCompatibleDevice(_nWidth, _nWidth).
+                // XWindow x = getReportDefinition().getCurrentController().getFrame().getContainerWindow();
+                // Object aObj = _xSection.getParent();
+                int dummy = 0;
+            }
+            catch (Exception e)
+            {
+                int dummy = 0;
+            }
+
+}
+    public void buildSteps()
+        {
+            // CurReportDocument.getDoc().xProgressBar.setValue(30);
+            CurDBCommandFieldSelection = new CommandFieldSelection(this, CurReportDocument.getRecordParser(), 100, slblFields, slblSelFields,  slblTables, true, 34330);
+            CurDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
+            insertLabel("lblBinaryFields",
+                        new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "Width"},
+                        new Object[] {new Integer(16), sShowBinaryFields, new Integer(95), new Integer(162), new Integer(1), new Integer(210)});
+            // CurReportDocument.getDoc().xProgressBar.setValue(40);
+            CurTitlesComponent = new TitlesComponent(this, SOTITLEPAGE, 97, 37, 210, 7, slblColumnNames, slblColumnTitles, 34381);
+            CurTitlesComponent.addTextListener(this);
+            // CurReportDocument.getDoc().xProgressBar.setValue(50);
+            CurGroupFieldHandler = new GroupFieldHandler(CurReportDocument, this);
+            // CurReportDocument.getDoc().xProgressBar.setValue(60);
+            CurSortingComponent = new SortingComponent(this, SOSORTPAGE, 95, 30, 210, 34346);
+            // CurReportDocument.getDoc().xProgressBar.setValue(70);
+            CurReportLayouter = new ReportLayouter(xMSF, CurReportDocument, this);
+            // CurReportDocument.getDoc().xProgressBar.setValue(80);
+            CurReportFinalizer = new ReportFinalizer(xMSF, CurReportDocument, this);
+            // CurReportDocument.getDoc().xProgressBar.setValue(100);
+            bCloseDocument = true;
+            // CurReportDocument.getDoc().xProgressBar.end();
+            enableNavigationButtons(false, false, false);
+        }
+
+
+    public void finishWizard()
+        {
+            int ncurStep = getCurrentStep();
+            if ((switchToStep(ncurStep, SOSTOREPAGE)) || (ncurStep == SOSTOREPAGE))
+            {
+                if (this.executeQuery())
+                {
+                    if (CurReportFinalizer.finish())
+                    {
+                        nReportMode = CurReportFinalizer.getReportOpenMode();
+                        sReportName = CurReportFinalizer.getStoreName();
+                        xDialog.endExecute();
+                    }
+                }
+            }
+        }
+
+
+    public void cancelWizard()
+        {
+            xDialog.endExecute();
+        }
+
+
+    public void insertQueryRelatedSteps()
+        {
+            setRMItemLabels(m_oResource, UIConsts.RID_QUERY + 80);
+            addRoadmap();
+            int i = 0;
+            i = insertRoadmapItem(0, true, m_oResource.getResText(UIConsts.RID_QUERY + 80), SOMAINPAGE);
+            i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_REPORT + 68), SOTITLEPAGE);
+            i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_REPORT + 11), SOGROUPPAGE);
+            i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_REPORT + 12),  SOSORTPAGE);       // Orderby is always supported
+            i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_REPORT + 13), SOTEMPLATEPAGE);
+            i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_REPORT + 14), SOSTOREPAGE);
+            setRoadmapInteractive(true);
+            setRoadmapComplete(true);
+            setCurrentRoadmapItemID((short) 1);
+        }
+
+    private boolean isReportBuilderInstalled()
+    {
+        //! Check if the new Report Builder Extension is available
+        XContentEnumerationAccess a = (XContentEnumerationAccess)com.sun.star.uno.UnoRuntime.queryInterface(XContentEnumerationAccess.class, xMSF);
+        com.sun.star.container.XEnumeration e = a.createContentEnumeration("com.sun.star.report.pentaho.SOReportJobFactory");
+        if (e == null)
+        {
+            return false;
+        }
+        if (e.hasMoreElements())
+        {
+            return true;
+        }
+        return false;
     }
 
+/**
+ * Return the path to the "com.sun.reportdesigner" extension
+ * @param _xMSF
+ * @return
+ */
+public static String getPathToExtension(XMultiServiceFactory _xMSF)
+{
+    // Get the path to the extension and try to add the path to the class loader
+    final XComponentContext xComponentContext = Helper.getComponentContext(_xMSF);
+    final Object aSingleton = xComponentContext.getValueByName("/singletons/com.sun.star.deployment.PackageInformationProvider");
+    XPackageInformationProvider xProvider = (XPackageInformationProvider)UnoRuntime.queryInterface(XPackageInformationProvider.class, aSingleton);
+    // String[][] aStrListList = xProvider.getExtensionList();
+    final String sLocation = xProvider.getPackageLocation("com.sun.reportdesigner");
+    return sLocation;
+}
 
-    public void enableRoadmapItems(boolean _bEnabled ){
-    try{
-        Object oRoadmapItem = null;
-        int CurStep = AnyConverter.toInt(Helper.getUnoPropertyValue(xDialogModel, "Step"));
-        boolean bEnabled = false;
-        int CurItemID;
-        for (int i = 0; i < getRMItemCount(); i++){
-            oRoadmapItem = this.xIndexContRoadmap.getByIndex(i);
-            CurItemID = AnyConverter.toInt(Helper.getUnoPropertyValue(oRoadmapItem, "ID"));
-            if (CurItemID > CurStep)
-                bEnabled = _bEnabled;
+
+public XComponent[] startReportWizard(XMultiServiceFactory _xMSF, PropertyValue[] CurPropertyValue)
+{
+    return startReportWizard(_xMSF, CurPropertyValue, false);
+}
+
+public XComponent[] startReportWizard(XMultiServiceFactory _xMSF, PropertyValue[] CurPropertyValue, boolean _bDebug)
+{
+            XComponent[] ret = null;
+            this.xMSF = _xMSF;
+            DBGPROPERTYVALUE = CurPropertyValue;
+            // CurReportDocument = new ReportTextDocument(xMSF, ReportPath + "/stl-default.ott", m_oResource );
+            // if (isReportBuilderInstalled())
+            // {
+            //     CurReportDocument = ReportBuilderImplementation.create(xMSF, m_oResource);
+            // }
+            // else
+            // {
+            //     CurReportDocument = ReportTextImplementation.create(xMSF, m_oResource  );
+            // }
+            boolean bUseOld = false;
+            if (_bDebug == true && isReportBuilderInstalled() && !bUseOld)
+            {
+                try
+                {
+                    Class a = Class.forName("com.sun.star.wizards.reportbuilder.ReportBuilderImplementation");
+                    Method aMethod = a.getMethod("create", new Class[]{XMultiServiceFactory.class, Resource.class});
+                    CurReportDocument = (IReportDocument) aMethod.invoke(a, new Object[]{xMSF, m_oResource});
+                }
+                catch (Exception e)
+                {
+                    int dummy = 0;
+                }
+            }
             else
-                bEnabled = true;
-            Helper.setUnoPropertyValue(oRoadmapItem , "Enabled", new Boolean(bEnabled));
+            {
+                if (!bUseOld)
+                {
+                    // debug == false
+
+                    // Get the path to the extension and try to add the path to the class loader
+                    String sLocation = getPathToExtension(xMSF);
+                    // TODO: Umlaut in filename!
+                    if (sLocation.length() > 0)
+                    {
+                        try
+                        {
+                            URI aLocationURI = URI.create(sLocation + "/" + "reportbuilderwizard.jar");
+
+                            URL[] aURLs = new URL[1];
+                            aURLs[0] = aLocationURI.toURL();
+                            URLClassLoader aClassLoader = new URLClassLoader(aURLs, this.getClass().getClassLoader());
+                            Class a = aClassLoader.loadClass("com.sun.star.wizards.reportbuilder.ReportBuilderImplementation");
+                            Method aMethod = a.getMethod("create", new Class[]{XMultiServiceFactory.class, Resource.class});
+                            CurReportDocument = (IReportDocument) aMethod.invoke(a, new Object[]{xMSF, m_oResource});
+                        }
+                        catch (Exception e)
+                        {
+                            // TODO: Exception not handled.
+                            int dummy = 0;
+                            // Maybe problems in URI create() if a wrong char is used like '[' ']', ...
+                            System.out.println("There could be a problem with the path '" + sLocation + "'");
+                        }
+                    }
+                }
+            }
+            try
+            {
+                if (CurReportDocument == null)
+                {
+                    // Fallback, if there is no reportbuilder wizard implementation, we use the old wizard
+                    CurReportDocument = ReportTextImplementation.create(xMSF, m_oResource );
+                }
+
+                //        CurDBMetaData = CurReportDocument.getRecordParser();
+//                tests();
+                if (CurReportDocument.getRecordParser().getConnection(CurPropertyValue))
+                {
+                    // CurReportDocument.getDoc().xProgressBar.setValue(20);
+                    CurReportDocument.getRecordParser().oSQLQueryComposer = new SQLQueryComposer(CurReportDocument.getRecordParser());
+                    buildSteps();
+                    this.CurDBCommandFieldSelection.preselectCommand(CurPropertyValue, false);
+
+                    createWindowPeer(CurReportDocument.getWizardParent());
+
+                    CurReportDocument.getRecordParser().setWindowPeer(this.xControl.getPeer());
+                    insertQueryRelatedSteps();
+                    short RetValue = executeDialog(CurReportDocument.getFrame().getComponentWindow().getPosSize());
+                    ret = dialogFinish(RetValue);
+                }
+                CurReportDocument.getRecordParser().dispose();
+            }
+            catch(java.lang.Exception jexception )
+            {
+                jexception.printStackTrace(System.out);
+            }
+            return ret;
         }
+
+
+    public void importReportData(final XMultiServiceFactory xMSF, final Dataimport CurDataimport)
+        {
+            boolean bDocisStored = false;
+            try
+            {
+                boolean bexecute = false;
+                if (!bHasEscapeProcessing)
+                {
+                    bexecute = CurReportDocument.getRecordParser().executeCommand(com.sun.star.sdb.CommandType.QUERY);   //            sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot))
+                }
+                else
+                {
+                    bexecute = CurReportDocument.getRecordParser().executeCommand(com.sun.star.sdb.CommandType.COMMAND);   //            sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot))
+                }
+                if (bexecute)
+                {
+                    bexecute = CurReportDocument.getRecordParser().getFields(CurReportDocument.getRecordParser().getFieldNames(), false);
+                }
+                if (bexecute)
+                {
+                    // CurDataimport.insertDatabaseDatatoReportDocument(xMSF);
+                    CurReportDocument.insertDatabaseDatatoReportDocument(xMSF);
+                }
+
+                if (CurReportFinalizer.getReportOpenMode() == ReportFinalizer.SOCREATEDOCUMENT)
+                {
+                    bDocisStored = CurReportDocument.getRecordParser().storeDatabaseDocumentToTempPath(CurReportDocument.getComponent(), CurReportFinalizer.getStoreName());
+                }
+            }
+            catch (com.sun.star.wizards.common.InvalidQueryException queryexception)
+            {
+            }
+            CurDataimport.xComponent.dispose();
+            if (bDocisStored)
+            {
+                CurReportDocument.getRecordParser().addReportDocument(CurReportDocument.getComponent(), false);
+            }
+
+            CurReportDocument.getRecordParser().dispose();
+        }
+
+
+    public boolean getReportResources(boolean bgetProgressResourcesOnly)
+        {
+            sMsgWizardName = super.m_oResource.getResText(UIConsts.RID_REPORT);
+            if (bgetProgressResourcesOnly == false)
+            {
+                sShowBinaryFields = m_oResource.getResText(UIConsts.RID_REPORT + 60);
+                slstDatabasesDefaultText = m_oResource.getResText(UIConsts.RID_DB_COMMON + 37);
+                slstTablesDefaultText = m_oResource.getResText(UIConsts.RID_DB_COMMON + 38);
+                sMsgErrorOccured = m_oResource.getResText(UIConsts.RID_DB_COMMON + 6);
+                slblTables = m_oResource.getResText(UIConsts.RID_FORM + 6);
+                slblFields = m_oResource.getResText(UIConsts.RID_FORM + 12);
+                slblSelFields = m_oResource.getResText(UIConsts.RID_REPORT + 9);
+                WizardHeaderText[0] = m_oResource.getResText(UIConsts.RID_REPORT + 28);
+                WizardHeaderText[1] = m_oResource.getResText(UIConsts.RID_REPORT + 69);
+                WizardHeaderText[2] = m_oResource.getResText(UIConsts.RID_REPORT + 29);
+                WizardHeaderText[3] = m_oResource.getResText(UIConsts.RID_REPORT + 30);
+                WizardHeaderText[4] = m_oResource.getResText(UIConsts.RID_REPORT + 31);
+                WizardHeaderText[5] = m_oResource.getResText(UIConsts.RID_REPORT + 32);
+                sMsgSavingImpossible = m_oResource.getResText(UIConsts.RID_DB_COMMON + 30);
+            }
+            sMsgFilePathInvalid = m_oResource.getResText(UIConsts.RID_DB_COMMON + 36);
+            slblColumnTitles = m_oResource.getResText(UIConsts.RID_REPORT + 70);
+            slblColumnNames = m_oResource.getResText(UIConsts.RID_REPORT + 71);
+//            sBlindTextNote = m_oResource.getResText(UIConsts.RID_REPORT + 75);
+//            sBlindTextNote = JavaTools.replaceSubString( sBlindTextNote, String.valueOf((char)13), "<BR>");
+            return true;
+        }
+
+    public static String getBlindTextNote(Object _aDocument, Resource _oResource)
+    {
+        String sBlindTextNote = "";
+        if (_aDocument instanceof ReportTextImplementation)
+        {
+            sBlindTextNote = _oResource.getResText(UIConsts.RID_REPORT + 75);
+            sBlindTextNote = JavaTools.replaceSubString( sBlindTextNote, String.valueOf((char)13), "<BR>");
+        }
+        return sBlindTextNote;
     }
-    catch( com.sun.star.uno.Exception exception ){
-        exception.printStackTrace(System.out);
-    }}
+
+    public void enableRoadmapItems(boolean _bEnabled )
+        {
+            try
+            {
+                Object oRoadmapItem = null;
+                int CurStep = AnyConverter.toInt(Helper.getUnoPropertyValue(xDialogModel, "Step"));
+                boolean bEnabled = false;
+                int CurItemID;
+                for (int i = 0; i < getRMItemCount(); i++)
+                {
+                    oRoadmapItem = this.xIndexContRoadmap.getByIndex(i);
+                    CurItemID = AnyConverter.toInt(Helper.getUnoPropertyValue(oRoadmapItem, "ID"));
+                    if (CurItemID > CurStep)
+                    {
+                        bEnabled = _bEnabled;
+                    }
+                    else
+                    {
+                        bEnabled = true;
+                    }
+
+                    Helper.setUnoPropertyValue(oRoadmapItem , "Enabled", new Boolean(bEnabled));
+                }
+            }
+            catch( com.sun.star.uno.Exception exception )
+            {
+                exception.printStackTrace(System.out);
+            }
+        }
 
 
 
-    private void enableWizardSteps(String[] NewItems){
-        boolean bEnabled = NewItems.length > 0;
-        setControlProperty("btnWizardNext", "Enabled", new Boolean(bEnabled));
-        setControlProperty("btnWizardFinish", "Enabled", new Boolean(bEnabled));
-        enableRoadmapItems(bEnabled);   // Note: Performancewise this could be improved
-    }
+    private void enableWizardSteps(String[] NewItems)
+        {
+            boolean bEnabled = NewItems.length > 0;
+            setControlProperty("btnWizardNext", "Enabled", new Boolean(bEnabled));
+            setControlProperty("btnWizardFinish", "Enabled", new Boolean(bEnabled));
+            enableRoadmapItems(bEnabled);   // Note: Performancewise this could be improved
+        }
 
 
-    public void textChanged(TextEvent xTextEvent) {
-    try {
-        Object otitlemodel = UnoDialog.getModel(xTextEvent.Source);
-        String sfieldtitle = (String) Helper.getUnoPropertyValue(otitlemodel, "Text");
-        String fieldname = this.CurTitlesComponent.getFieldNameByTitleControl(otitlemodel);
-        CurReportDocument.oTextFieldHandler.changeUserFieldContent(fieldname, sfieldtitle);
-    } catch (Exception exception) {
-        exception.printStackTrace(System.out);
-    }}
+    public void textChanged(TextEvent xTextEvent)
+        {
+            try
+            {
+                Object oModel = UnoDialog.getModel(xTextEvent.Source);
+                String sContent = (String) Helper.getUnoPropertyValue(oModel, "Text");
+                String fieldname = this.CurTitlesComponent.getFieldNameByTitleControl(oModel);
+                // CurReportDocument.getDoc().oTextFieldHandler.changeUserFieldContent(fieldname, sfieldtitle);
+                CurReportDocument.liveupdate_changeUserFieldContent(fieldname, sContent);
+            }
+            catch (Exception exception)
+            {
+                exception.printStackTrace(System.out);
+            }
+        }
 
-    public void disposing(EventObject EventObject) {
-    }
+    public void disposing(EventObject EventObject)
+        {
+        }
 
 
-    public void setmodified(int _ndialogpage, Object ooldValue, Object onewValue) {
-        switch(_ndialogpage){
+    public void setmodified(int _ndialogpage, Object ooldValue, Object onewValue)
+        {
+            switch(_ndialogpage)
+            {
             case SOMAINPAGE:
                 break;
             default:
                 break;
+            }
         }
-    }
 
 
-    private void toggleSortingPage(){
-        int nlCommandType = this.CurDBCommandFieldSelection.getSelectedCommandType();
-        boolean bdoenable = (nlCommandType == CommandType.TABLE);
-        if (!bdoenable) {
-            String sQueryName = CurDBCommandFieldSelection.getSelectedCommandName();
-            DBMetaData.CommandObject oCommand = CurDBMetaData.getQueryByName(sQueryName);
-            bdoenable = CurDBMetaData.hasEscapeProcessing(oCommand.xPropertySet);
+    private void toggleSortingPage()
+        {
+            int nlCommandType = this.CurDBCommandFieldSelection.getSelectedCommandType();
+            boolean bdoenable = (nlCommandType == CommandType.TABLE);
+            if (!bdoenable)
+            {
+                String sQueryName = CurDBCommandFieldSelection.getSelectedCommandName();
+                DBMetaData.CommandObject oCommand = CurReportDocument.getRecordParser().getQueryByName(sQueryName);
+                bdoenable = CurReportDocument.getRecordParser().hasEscapeProcessing(oCommand.xPropertySet);
+            }
+            super.setStepEnabled(SOSORTPAGE, bdoenable);
+
+            // int nCommandType = this.CurDBCommandFieldSelection.getSelectedCommandType();
+            // super.setStepEnabled(SOSORTPAGE, (nCommandType == CommandType.TABLE));
         }
-        super.setStepEnabled(SOSORTPAGE, bdoenable);
+
+
+    public class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
+    {
+        protected int m_nID;
+
+        public int getID()
+            {
+                return m_nID;
+            }
+
+        public void setID(String sIncSuffix)
+            {
+                m_nID = 1;
+                if (sIncSuffix != null)
+                {
+                    if ((!sIncSuffix.equals("")) && (!sIncSuffix.equals("_")))
+                    {
+                        String sID = JavaTools.ArrayoutofString(sIncSuffix, "_")[1];
+                        m_nID = Integer.parseInt(sID);
+                    }
+                }
+            }
+
+        public void shiftFromLeftToRight(String[] SelItems, String[] NewItems)
+            {
+                if (m_nID == 1)
+                {
+                    CurDBCommandFieldSelection.setModified(true);
+                    enableWizardSteps(NewItems);
+                    toggleSortingPage();
+                }
+                else
+                {
+                    boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
+                    Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), "Enabled", new Boolean(bEnabled));
+                }
+            }
+
+
+        public void shiftFromRightToLeft(String[] SelItems, String[] NewItems )
+            {
+                // TODO When the ListFieldbox is refilled only fields of the current Command may be merged into the Listbox
+                if (m_nID == 1)
+                {
+                    enableWizardSteps(NewItems);
+                    CurDBCommandFieldSelection.setModified(true);
+                }
+                else
+                {
+                    boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
+                    Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), "Enabled", new Boolean(bEnabled));
+                }
+            }
+
+        public void moveItemDown(String item)
+            {
+            }
+
+        public void moveItemUp(String item)
+            {
+            }
     }
-
-
-    public class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener{
-         protected int ID;
-
-         public int getID(){
-             return ID;
-         }
-
-         public void setID(String sIncSuffix){
-             ID = 1;
-             if (sIncSuffix != null){
-                if ((!sIncSuffix.equals("")) && (!sIncSuffix.equals("_"))) {
-                    String sID = JavaTools.ArrayoutofString(sIncSuffix, "_")[1];
-                    ID = Integer.parseInt(sID);
-                 }
-             }
-         }
-
-         public void shiftFromLeftToRight(String[] SelItems, String[] NewItems) {
-             if (ID == 1){
-                CurDBCommandFieldSelection.setModified(true);
-                enableWizardSteps(NewItems);
-                toggleSortingPage();
-             }
-             else{
-                 boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
-                 Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), "Enabled", new Boolean(bEnabled));
-             }
-         }
-
-
-         public void shiftFromRightToLeft(String[] SelItems, String[] NewItems ) {
-             // TODO When the ListFieldbox is refilled only fields of the current Command may be merged into the Listbox
-             if (ID == 1){
-                enableWizardSteps(NewItems);
-                CurDBCommandFieldSelection.setModified(true);
-             }
-             else{
-                 boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
-                 Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), "Enabled", new Boolean(bEnabled));
-             }
-         }
-
-         public void moveItemDown(String item){
-         }
-
-         public void moveItemUp(String item){
-         }
-     }
+//    public void tests()
+//    {
+//
+//        Calendar aCalendar = new GregorianCalendar();
+//        aCalendar.setTimeInMillis(1202382900000L);
+//        String aCalStr = aCalendar.toString();
+//
+//        Date aDate = new Date();
+//        aDate.setSeconds(0);
+//        aDate.setMinutes(15);
+//        aDate.setHours(12);
+//        // aDate.setMonth(2);
+//        // aDate.setYear(2008);
+//        // aDate.setDay(7);
+//        long nTime = aDate.getTime();
+//        Long aLong = new Long(nTime);
+//        String aStr = aLong.toString();
+//
+//        Date aNewDate = new Date(1202382900000L);
+////         aNewDate.
+//        String aDateStr = aNewDate.toString();
+////         Datetime aNewTime = new Time(1202382900);
+////         String aTimeStr = aNewTime.toString();
+//
+//    }
 }
