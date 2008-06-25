@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_section_4.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-25 14:42:18 $
+'* last change: $Author: fredrikh $ $Date: 2008-06-25 15:24:07 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -439,8 +439,8 @@ endcase
 testcase tSectionInTables_7
 
   Dim tableName as String
-  columnNumber as String
-  rowNumber as String
+  Dim columnNumber as String
+  Dim rowNumber as String
   Dim sectionName as String
 
   tableName       =  "testTable"
@@ -953,6 +953,7 @@ testcase tParagraphSection_2
     TabEinzuegeUndAbstaende.OK
     
     Call WDokSchreiben "<Down>"
+    Call WDokSchreiben "<RETURN>"
     
     '/// insert second paragraph , and do some configurations which is different from the first one
     wBlindtextEinfuegen
