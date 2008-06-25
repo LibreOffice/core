@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sfxbasecontroller.cxx,v $
- * $Revision: 1.75 $
+ * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,6 +70,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/userinputinterception.hxx>
 
 #include <viewimp.hxx>
 #include <sfx2/unoctitm.hxx>
@@ -431,14 +432,13 @@ struct IMPL_SfxBaseController_DataContainer
     REFERENCE < XFRAME >    m_xFrame;
     REFERENCE < XFRAMEACTIONLISTENER >      m_xListener       ;
     REFERENCE < XCLOSELISTENER >      m_xCloseListener       ;
+    ::sfx2::UserInputInterception           m_aUserInputInterception;
     OMULTITYPEINTERFACECONTAINERHELPER      m_aListenerContainer    ;
     OINTERFACECONTAINERHELPER               m_aInterceptorContainer    ;
     REFERENCE < ::com::sun::star::task::XStatusIndicator > m_xIndicator;
     SfxViewShell*                           m_pViewShell            ;
     SfxBaseController*                      m_pController           ;
     sal_Bool                                m_bDisposing            ;
-    sal_Bool                                m_bHasKeyListeners;
-    sal_Bool                                m_bHasMouseClickListeners;
     sal_Bool                                m_bSuspendState;
     /** When this flag is <true/> (the default) then in dispose() the frame
         and with it the view shell are released together with the
@@ -458,13 +458,12 @@ struct IMPL_SfxBaseController_DataContainer
                                             SfxBaseController*  pController )
             :   m_xListener                     ( new IMPL_SfxBaseController_ListenerHelper( aMutex, pController ) )
             ,   m_xCloseListener                ( new IMPL_SfxBaseController_CloseListenerHelper( aMutex, pController ) )
+            ,   m_aUserInputInterception        ( *pController, aMutex                                  )
             ,   m_aListenerContainer            ( aMutex                                                )
             ,   m_aInterceptorContainer         ( aMutex                                                )
             ,   m_pViewShell            ( pViewShell                                            )
             ,   m_pController           ( pController                                           )
             ,   m_bDisposing            ( sal_False                                             )
-            ,   m_bHasKeyListeners      ( sal_False                                             )
-            ,   m_bHasMouseClickListeners       ( sal_False                                             )
             ,   m_bSuspendState                 ( sal_False                                              )
             ,   m_bIsFrameReleasedWithController( sal_True                                              )
     {
@@ -1257,45 +1256,25 @@ void SAL_CALL SfxBaseController::releaseContextMenuInterceptor( const REFERENCE<
 void SAL_CALL SfxBaseController::addKeyHandler( const ::com::sun::star::uno::Reference< XKEYHANDLER >& xHandler ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( !m_pData->m_bHasKeyListeners )
-        m_pData->m_bHasKeyListeners = sal_True;
-    m_pData->m_aListenerContainer.addInterface( ::getCppuType((const REFERENCE< XKEYHANDLER >*)0), xHandler );
+    m_pData->m_aUserInputInterception.addKeyHandler( xHandler );
 }
 
 void SAL_CALL SfxBaseController::removeKeyHandler( const ::com::sun::star::uno::Reference< XKEYHANDLER >& xHandler ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    m_pData->m_aListenerContainer.removeInterface( ::getCppuType((const REFERENCE< XKEYHANDLER >*)0), xHandler );
-    m_pData->m_bHasKeyListeners = sal_False;
-    ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aListenerContainer.getContainer( ::getCppuType( ( const REFERENCE < XKEYHANDLER >*) NULL ) );
-    if ( pContainer )
-    {
-        ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
-        if (pIterator.hasMoreElements())
-            m_pData->m_bHasKeyListeners = sal_True;
-    }
+    m_pData->m_aUserInputInterception.removeKeyHandler( xHandler );
 }
 
 void SAL_CALL SfxBaseController::addMouseClickHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseClickHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( !m_pData->m_bHasMouseClickListeners )
-        m_pData->m_bHasMouseClickListeners = sal_True;
-    m_pData->m_aListenerContainer.addInterface( ::getCppuType((const REFERENCE< XMOUSECLICKHANDLER >*)0), xHandler );
+    m_pData->m_aUserInputInterception.addMouseClickHandler( xHandler );
 }
 
 void SAL_CALL SfxBaseController::removeMouseClickHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseClickHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    m_pData->m_aListenerContainer.removeInterface( ::getCppuType((const REFERENCE< XMOUSECLICKHANDLER >*)0), xHandler );
-    m_pData->m_bHasMouseClickListeners = sal_False;
-    ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aListenerContainer.getContainer( ::getCppuType( ( const REFERENCE < XMOUSECLICKHANDLER >*) NULL ) );
-    if ( pContainer )
-    {
-        ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
-        if (pIterator.hasMoreElements())
-            m_pData->m_bHasMouseClickListeners = sal_True;
-    }
+    m_pData->m_aUserInputInterception.removeMouseClickHandler( xHandler );
 }
 
 ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL SfxBaseController::getSupportedCommandGroups()
@@ -1380,116 +1359,19 @@ throw (::com::sun::star::uno::RuntimeException)
     return aSeq;
 }
 
-void ImplInitKeyEvent( ::com::sun::star::awt::KeyEvent& rEvent, const KeyEvent& rEvt )
-{
-    rEvent.Modifiers = 0;
-    if ( rEvt.GetKeyCode().IsShift() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::SHIFT;
-    if ( rEvt.GetKeyCode().IsMod1() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
-    if ( rEvt.GetKeyCode().IsMod2() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
-
-    rEvent.KeyCode = rEvt.GetKeyCode().GetCode();
-    rEvent.KeyChar = rEvt.GetCharCode();
-    rEvent.KeyFunc = sal::static_int_cast< sal_Int16 >(
-        rEvt.GetKeyCode().GetFunction());
-}
-
-void ImplInitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent, const MouseEvent& rEvt )
-{
-    rEvent.Modifiers = 0;
-    if ( rEvt.IsShift() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::SHIFT;
-    if ( rEvt.IsMod1() )
-    rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
-    if ( rEvt.IsMod2() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
-
-    rEvent.Buttons = 0;
-    if ( rEvt.IsLeft() )
-        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::LEFT;
-    if ( rEvt.IsRight() )
-        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::RIGHT;
-    if ( rEvt.IsMiddle() )
-        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::MIDDLE;
-
-    rEvent.X = rEvt.GetPosPixel().X();
-    rEvent.Y = rEvt.GetPosPixel().Y();
-    rEvent.ClickCount = rEvt.GetClicks();
-    rEvent.PopupTrigger = sal_False;
-}
-
 BOOL SfxBaseController::HandleEvent_Impl( NotifyEvent& rEvent )
 {
-    REFERENCE < ::com::sun::star::uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
-    com::sun::star::lang::EventObject aSource(static_cast< ::cppu::OWeakObject*>(this));
-    USHORT nType = rEvent.GetType();
-    BOOL bHandled = FALSE;
-    if ( nType == EVENT_KEYINPUT || nType == EVENT_KEYUP )
-    {
-        ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aListenerContainer.getContainer( ::getCppuType( ( const REFERENCE < XKEYHANDLER >*) NULL ) );
-        if ( pContainer )
-        {
-            ::com::sun::star::awt::KeyEvent aEvent;
-            ImplInitKeyEvent( aEvent, *rEvent.GetKeyEvent() );
-            ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
-            if ( rEvent.GetWindow() )
-                aEvent.Source = rEvent.GetWindow()->GetComponentInterface();
-            while (pIterator.hasMoreElements())
-            {
-                try
-                {
-                    if ( nType == EVENT_KEYINPUT )
-                        bHandled = ((XKEYHANDLER*)pIterator.next())->keyPressed( aEvent );
-                    else
-                        bHandled = ((XKEYHANDLER*)pIterator.next())->keyReleased( aEvent );
-                }
-                catch( RUNTIMEEXCEPTION& )
-                {
-                    pIterator.remove();
-                }
-            }
-        }
-    }
-    else if ( nType == EVENT_MOUSEBUTTONUP || nType == EVENT_MOUSEBUTTONDOWN )
-    {
-        ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aListenerContainer.getContainer( ::getCppuType( ( const REFERENCE < XMOUSECLICKHANDLER >*) NULL ) );
-        if ( pContainer )
-        {
-            ::com::sun::star::awt::MouseEvent aEvent;
-            ImplInitMouseEvent( aEvent, *rEvent.GetMouseEvent() );
-            if ( rEvent.GetWindow() )
-                aEvent.Source = rEvent.GetWindow()->GetComponentInterface();
-            ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
-            while (pIterator.hasMoreElements())
-            {
-                try
-                {
-                    if ( nType == EVENT_MOUSEBUTTONDOWN )
-                        bHandled = ((XMOUSECLICKHANDLER*)pIterator.next())->mousePressed( aEvent );
-                    else
-                        bHandled = ((XMOUSECLICKHANDLER*)pIterator.next())->mouseReleased( aEvent );
-                }
-                catch( RUNTIMEEXCEPTION& )
-                {
-                    pIterator.remove();
-                }
-            }
-        }
-    }
-
-    return bHandled;
+    return m_pData->m_aUserInputInterception.handleNotifyEvent( rEvent );
 }
 
 BOOL SfxBaseController::HasKeyListeners_Impl()
 {
-    return m_pData->m_bHasKeyListeners;
+    return m_pData->m_aUserInputInterception.hasKeyHandlers();
 }
 
 BOOL SfxBaseController::HasMouseClickListeners_Impl()
 {
-    return m_pData->m_bHasMouseClickListeners;
+    return m_pData->m_aUserInputInterception.hasMouseClickListeners();
 }
 
 //=============================================================================
