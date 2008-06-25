@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UITools.cxx,v $
- * $Revision: 1.80 $
+ * $Revision: 1.81 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1425,10 +1425,8 @@ void fillAutoIncrementValue(const Reference<XConnection>& _xConnection,
     return sName;
 }
 // -----------------------------------------------------------------------------
-    void AppendConfigToken_Impl( ::rtl::OUString& _rURL, sal_Bool _bQuestionMark )
+    void AppendConfigToken( ::rtl::OUString& _rURL, sal_Bool _bQuestionMark )
     {
-        // this completes a help url with the system parameters "Language" and "System"
-        // detect installed locale
         Any aLocale =
             ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
         ::rtl::OUString sLocaleStr;
@@ -1498,9 +1496,9 @@ namespace
 
     ::rtl::OUString sAnchor;
     ::rtl::OUString sTempURL = aURL.Complete;
-    AppendConfigToken_Impl( sTempURL, sal_True );
+    AppendConfigToken( sTempURL, sal_True );
     sal_Bool bHasAnchor = GetHelpAnchor_Impl( sTempURL, sAnchor );
-    AppendConfigToken_Impl(aURL.Complete,sal_True);
+    AppendConfigToken(aURL.Complete,sal_True);
     if ( bHasAnchor )
     {
         aURL.Complete += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#"));
@@ -1761,46 +1759,6 @@ Reference<XPropertySet> createView( const ::rtl::OUString& _rName, const Referen
     return createView( _rName, _rxConnection, sCommand );
 }
 
-// -----------------------------------------------------------------------------
-void fillTreeListNames( const Reference< XNameAccess >& _xContainer, DBTreeListBox& _rList,
-        USHORT _nImageId, USHORT _nHighContrastImageId, SvLBoxEntry* _pParent, IContainerFoundListener* _pContainerFoundListener )
-{
-    OSL_ENSURE(_xContainer.is(),"Data source is NULL! -> GPF");
-
-    if ( _xContainer.is() && _xContainer->hasElements() )
-    {
-        Sequence< ::rtl::OUString> aSeq = _xContainer->getElementNames();
-        const ::rtl::OUString* pIter = aSeq.getConstArray();
-        const ::rtl::OUString* pEnd  = pIter + aSeq.getLength();
-        for(;pIter != pEnd;++pIter)
-        {
-            SvLBoxEntry* pEntry = NULL;
-            Reference<XNameAccess> xSubElements(_xContainer->getByName(*pIter),UNO_QUERY);
-            if ( xSubElements.is() )
-            {
-                pEntry = _rList.InsertEntry( *pIter, _pParent, FALSE, LIST_APPEND, reinterpret_cast< void* >( FOLDER_INDICATOR ) );
-                if ( _pContainerFoundListener )
-                {
-                    Reference<XContainer> xCont(xSubElements,UNO_QUERY);
-                    _pContainerFoundListener->containerFound(xCont);
-                }
-                fillTreeListNames( xSubElements, _rList, _nImageId, _nHighContrastImageId, pEntry, _pContainerFoundListener );
-            }
-            else
-            {
-                pEntry = _rList.InsertEntry( *pIter, _pParent );
-
-                Image aImage = Image( ModuleRes( _nImageId ) );
-                _rList.SetExpandedEntryBmp( pEntry, aImage, BMP_COLOR_NORMAL );
-                _rList.SetCollapsedEntryBmp( pEntry, aImage, BMP_COLOR_NORMAL );
-
-                Image aHCImage = Image( ModuleRes( _nHighContrastImageId ) );
-                _rList.SetExpandedEntryBmp( pEntry, aHCImage, BMP_COLOR_HIGHCONTRAST );
-                _rList.SetCollapsedEntryBmp( pEntry, aHCImage, BMP_COLOR_HIGHCONTRAST );
-            }
-        }
-    }
-}
 // -----------------------------------------------------------------------------
 sal_Bool insertHierachyElement( Window* _pParent, const Reference< XMultiServiceFactory >& _rxORB,
                            const Reference<XHierarchicalNameContainer>& _xNames,
