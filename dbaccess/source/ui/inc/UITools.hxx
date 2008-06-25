@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UITools.hxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,7 +105,6 @@ class SvLBoxEntry;
 namespace dbaui
 {
 // .........................................................................
-    class IContainerFoundListener;
     class ODsnTypeCollection;
     class DBTreeListBox;
 
@@ -446,29 +445,6 @@ namespace dbaui
     */
     const SfxFilter* getStandardDatabaseFilter();
 
-    /** fills the tree list box with the elements from the given container and sub elements.
-        @param  _xContainer
-            The container.
-        @param  _rList
-            The list to fill.
-        @param  _nImageId
-            For the leaf elements which do not support a XNameAccess, this denotes the resource id of the image to be used.
-        @param  _nHighContrastImageId
-            For the leaf elements which do not support a XNameAccess, this denotes the resource id of the high contrast image to be used.
-        @param  _pParent
-            The root entry.
-        @param  _pContainerFoundListener
-            Will be called if a sub container was found
-    */
-    void fillTreeListNames(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer,
-            DBTreeListBox& _rList,
-            USHORT _nImageId,
-            USHORT _nHighContrastImageId,
-            SvLBoxEntry* _pParent,
-            IContainerFoundListener* _pContainerFoundListener
-        );
-
     /** opens a save dialog to store a form or report folder in the current hierachy.
         @param  _pParent
             The parent of the dialog.
@@ -507,6 +483,11 @@ namespace dbaui
             The multi service factory
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > getNumberFormatter(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rMF );
+
+    // this completes a help url with the system parameters "Language" and "System"
+    // detect installed locale
+    void AppendConfigToken( ::rtl::OUString& _rURL, sal_Bool _bQuestionMark );
+
 // .........................................................................
 }
 // .........................................................................
