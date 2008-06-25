@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gtkframe.cxx,v $
- * $Revision: 1.82 $
+ * $Revision: 1.83 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2769,14 +2769,28 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
                            &aChild );
 
     if( x != pThis->maGeometry.nX || y != pThis->maGeometry.nY )
+    {
         bMoved = true;
-    if( pEvent->width != (int)pThis->maGeometry.nWidth || pEvent->height != (int)pThis->maGeometry.nHeight )
-        bSized = true;
-
-    pThis->maGeometry.nX        = x;
-    pThis->maGeometry.nY        = y;
-    pThis->maGeometry.nWidth    = pEvent->width;
-    pThis->maGeometry.nHeight   = pEvent->height;
+        pThis->maGeometry.nX        = x;
+        pThis->maGeometry.nY        = y;
+    }
+    /* #i86302#
+     * for non sizeable windows we set the min and max hint for the window manager to
+     * achieve correct sizing. However this is asynchronous and e.g. on Compiz
+     * it sometimes happens that the window gets resized to another size (some default)
+     * if we update the size here, subsequent setMinMaxSize will use this wrong size
+     * - which is not good since the window manager will now size the window back to this
+     * wrong size at some point.
+     */
+    if( (pThis->m_nStyle & (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_PLUG)) == SAL_FRAME_STYLE_SIZEABLE )
+    {
+        if( pEvent->width != (int)pThis->maGeometry.nWidth || pEvent->height != (int)pThis->maGeometry.nHeight )
+        {
+            bSized = true;
+            pThis->maGeometry.nWidth    = pEvent->width;
+            pThis->maGeometry.nHeight   = pEvent->height;
+        }
+    }
 
     // update decoration hints
     if( ! (pThis->m_nStyle & SAL_FRAME_STYLE_PLUG) )
@@ -3147,6 +3161,8 @@ void GtkSalFrame::IMHandler::sendEmptyCommit()
 
 void GtkSalFrame::IMHandler::endExtTextInput( USHORT /*nFlags*/ )
 {
+    gtk_im_context_reset ( m_pIMContext );
+
     if( m_aInputEvent.mpTextAttr )
     {
         vcl::DeletionListener aDel( m_pFrame );
