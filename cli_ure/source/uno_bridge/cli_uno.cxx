@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cli_uno.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,11 +36,8 @@
 #include "cli_base.h"
 #include "cli_bridge.h"
 
-
 namespace sr=System::Reflection;
 namespace css=com::sun::star;
-namespace ucss=unoidl::com::sun::star;
-
 using namespace rtl;
 
 namespace cli_uno
