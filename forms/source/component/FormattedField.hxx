@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormattedField.hxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -131,8 +131,10 @@ namespace frm
                             translateDbColumnToControlValue( );
         virtual sal_Bool    commitControlValueToDbColumn( bool _bPostReset );
 
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+                            getSupportedBindingTypes();
         virtual ::com::sun::star::uno::Any
-                            translateExternalValueToControlValue( ) const;
+                            translateExternalValueToControlValue( const ::com::sun::star::uno::Any& _rExternalValue ) const;
         virtual ::com::sun::star::uno::Any
                             translateControlValueToExternalValue( ) const;
         virtual void onConnectedExternalValue( );
@@ -142,22 +144,6 @@ namespace frm
 
         virtual void        onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
         virtual void        onDisconnectedDbColumn();
-
-        virtual sal_Bool    approveValueBinding( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding );
-
-    protected:
-        /** retrieves the type which should be used to communicate with the current
-            external binding
-
-            The type depends on the current number format, and the types which are supported
-            by the current external binding. As a least fallback, |double|'s type is returned.
-            (In approveValueBinding, we ensure that only bindings supporting |double|'s are
-            accepted.)
-
-            @precond hasExternalValueBinding returns <TRUE/>
-        */
-        ::com::sun::star::uno::Type
-                            getExternalValueType() const;
 
     private:
         DECLARE_XCLONEABLE();
