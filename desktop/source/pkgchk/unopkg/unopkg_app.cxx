@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unopkg_app.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +29,6 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_desktop.hxx"
 
 #include "unopkg_main.h"
 #include "unopkg_shared.h"
@@ -107,6 +106,8 @@ const OptionInfo s_option_infos [] = {
     { RTL_CONSTASCII_STRINGPARAM("log-file"), '\0', true },
     { RTL_CONSTASCII_STRINGPARAM("shared"), '\0', false },
     { RTL_CONSTASCII_STRINGPARAM("deployment-context"), '\0', true },
+    { RTL_CONSTASCII_STRINGPARAM("bundled"), '\0', false},
+
     { 0, 0, '\0', false }
 };
 
@@ -203,14 +204,14 @@ void disposeBridges(Reference<css::uno::XComponentContext> ctx)
 extern "C" int unopkg_main()
 {
     tools::extendApplicationEnvironment();
-
     DisposeGuard disposeGuard;
     rtl_TextEncoding textenc = osl_getThreadTextEncoding();
-
+    bool bNoOtherErrorMsg = false;
     OUString subCommand;
     bool option_shared = false;
     bool option_force = false;
     bool option_verbose = false;
+    bool option_bundled = false;
     bool subcmd_add = false;
     bool subcmd_gui = false;
     OUString logFile;
@@ -232,6 +233,8 @@ extern "C" int unopkg_main()
         s_option_infos, OUSTR("help") );
     OptionInfo const * info_version = getOptionInfo(
         s_option_infos, OUSTR("version") );
+    OptionInfo const * info_bundled = getOptionInfo(
+        s_option_infos, OUSTR("bundled") );
 
     Reference<XComponentContext> xComponentContext;
     Reference<XComponentContext> xLocalComponentContext;
@@ -239,7 +242,8 @@ extern "C" int unopkg_main()
     try {
         sal_uInt32 nPos = 0;
         sal_uInt32 nCount = osl_getCommandArgCount();
-        if (nCount == 0 || isOption( info_help, &nPos )) {
+        if (nCount == 0 || isOption( info_help, &nPos ))
+        {
             printf( "%s\n", s_usingText );
             return 0;
         }
@@ -247,15 +251,19 @@ extern "C" int unopkg_main()
             printf( "\n%s Version 1.0\n", APP_NAME );
             return 0;
         }
-        else {
-            osl_getCommandArg( 0, &subCommand.pData );
-            ++nPos;
-            subCommand = subCommand.trim();
-            subcmd_add = subCommand.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("add") );
-            subcmd_gui = subCommand.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("gui") );
-        }
+        //consume all bootstrap variables which may occur before the subcommannd
+        while(isBootstrapVariable(&nPos));
+
+        if(nPos >= nCount)
+            return 0;
+        //get the sub command
+        osl_getCommandArg( nPos, &subCommand.pData );
+        ++nPos;
+        subCommand = subCommand.trim();
+        subcmd_add = subCommand.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("add") );
+        subcmd_gui = subCommand.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("gui") );
 
         // sun-command options and packages:
         while (nPos < nCount)
@@ -267,6 +275,7 @@ extern "C" int unopkg_main()
             else if (!readOption( &option_verbose, info_verbose, &nPos ) &&
                      !readOption( &option_shared, info_shared, &nPos ) &&
                      !readOption( &option_force, info_force, &nPos ) &&
+                     !readOption( &option_bundled, info_bundled, &nPos ) &&
                      !readArgument( &deploymentContext, info_context, &nPos ) &&
                      !isBootstrapVariable(&nPos))
             {
@@ -300,6 +309,15 @@ extern "C" int unopkg_main()
             }
         }
 
+        //make sure the bundled option was provided together with shared
+        if (option_bundled && !option_shared)
+        {
+            fprintf( stderr,
+                "\nERROR: option --bundled can only be used together with --shared!");
+            return 1;
+        }
+
+
         xComponentContext = getUNO(
             disposeGuard, option_verbose, option_shared, subcmd_gui,
             xLocalComponentContext );
@@ -328,7 +346,7 @@ extern "C" int unopkg_main()
 
         Reference< ::com::sun::star::ucb::XCommandEnvironment > xCmdEnv(
             createCmdEnv( xComponentContext, logFile,
-                          option_force, option_verbose) );
+                          option_force, option_verbose, option_bundled) );
 
         if (subcmd_add ||
             subCommand.equalsAsciiL(
@@ -358,11 +376,17 @@ extern "C" int unopkg_main()
                         Reference<deployment::XPackage> p(
                             findPackage(
                                 xPackageManager, xCmdEnv, cmdPackage ) );
-                        if ( !p.is() )
+                        //Todo. temporary preventing exception in bundled case.
+                        //In case of a bundled extension, remove would be called as a result of
+                        //uninstalling a rpm. Then we do not want to show an error when the
+                        //extension does not exist, because the package will be uninstalled anyway
+                        //and the error would only confuse people.
+                        if ( !p.is() && !option_bundled)
                             throw;
-                        xPackageManager->removePackage(
-                            ::dp_misc::getIdentifier(p), p->getName(),
-                            Reference<task::XAbortChannel>(), xCmdEnv );
+                        else if (p.is())
+                            xPackageManager->removePackage(
+                                ::dp_misc::getIdentifier(p), p->getName(),
+                                Reference<task::XAbortChannel>(), xCmdEnv );
                     }
                 }
             }
@@ -435,8 +459,9 @@ extern "C" int unopkg_main()
         disposeBridges(xLocalComponentContext);
         return 0;
     }
-    catch (ucb::CommandFailedException &) {
-        // already handled by cmdenv
+    catch (ucb::CommandFailedException &e) {
+        fprintf(stderr, "%s\n", ::rtl::OUStringToOString(e.Message, textenc).getStr());
+        bNoOtherErrorMsg = true;
     }
     catch (ucb::CommandAbortedException &) {
         fprintf( stderr, "\n%s aborted!\n", APP_NAME );
@@ -461,7 +486,8 @@ extern "C" int unopkg_main()
             option_verbose  ? e.Message + OUSTR("\nException details: \n") +
             ::comphelper::anyToString(exc) : e.Message, textenc).getStr() );
     }
-    fprintf( stderr, "\n%s failed.\n", APP_NAME );
+    if (!bNoOtherErrorMsg)
+        fprintf( stderr, "\n%s failed.\n", APP_NAME );
     disposeBridges(xLocalComponentContext);
     return 1;
 }
