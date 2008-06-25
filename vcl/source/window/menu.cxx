@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: menu.cxx,v $
- * $Revision: 1.163 $
+ * $Revision: 1.164 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -5637,6 +5637,19 @@ void MenuBarWindow::Paint( const Rectangle& )
     pMenu->ImplPaint( this, 0 );
     if ( nHighlightedItem != ITEMPOS_INVALID )
         HighlightItem( nHighlightedItem, TRUE );
+
+    // in high contrast mode draw a separating line on the lower edge
+    if( ! IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL) &&
+        GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+    {
+        Push( PUSH_LINECOLOR | PUSH_MAPMODE );
+        SetLineColor( Color( COL_WHITE ) );
+        SetMapMode( MapMode( MAP_PIXEL ) );
+        Size aSize = GetSizePixel();
+        DrawLine( Point( 0, aSize.Height()-1 ), Point( aSize.Width()-1, aSize.Height()-1 ) );
+        Pop();
+    }
+
 }
 
 void MenuBarWindow::Resize()
