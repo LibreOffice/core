@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: brwctrlr.cxx,v $
- * $Revision: 1.107 $
+ * $Revision: 1.108 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -631,7 +631,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
 
     // ---------------
     // create the view
-    m_pView = new UnoDataBrowserView(pParent,this,getORB());
+    m_pView = new UnoDataBrowserView( pParent, *this, getORB() );
     if (!getBrowserView())
         return sal_False;
 
@@ -1792,12 +1792,16 @@ void SbaXDataBrowserController::ExecuteSearch()
 }
 
 //------------------------------------------------------------------------------
-void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< PropertyValue >& /*aArgs*/)
+void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< PropertyValue >& _rArgs)
 {
     sal_Bool bSortUp = sal_True;
 
     switch (nId)
     {
+        default:
+            SbaXDataBrowserController_Base::Execute( nId, _rArgs );
+            return;
+
         case ID_BROWSER_INSERT_ROW:
             try
             {
