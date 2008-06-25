@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RelationTableView.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,7 +57,7 @@ namespace dbaui
 
         virtual void RemoveTabWin( OTableWindow* pTabWin );
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest);
-        virtual ::std::vector<OTableConnection*>::const_iterator RemoveConnection(OTableConnection* pConn,sal_Bool _bDelete);
+        virtual bool RemoveConnection(OTableConnection* pConn,sal_Bool _bDelete);
 
         virtual void ReSync();
 
