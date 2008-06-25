@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: JavaTools.java,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -26,7 +26,9 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.common;
+ ************************************************************************/
+
+package com.sun.star.wizards.common;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
