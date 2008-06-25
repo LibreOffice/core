@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MethodInvocation.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -26,7 +26,9 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.ui.event;
+ ************************************************************************/
+
+package com.sun.star.wizards.ui.event;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -61,9 +63,12 @@ public class MethodInvocation {
         this(method, obj, null);
     }
 
-    public MethodInvocation(String methodName, Object obj, Class paramClass) throws NoSuchMethodException {
-        this(paramClass == null ? obj.getClass().getMethod(methodName, null) : obj.getClass().getMethod(methodName, new Class[] { paramClass }), obj, paramClass);
-    }
+    public MethodInvocation(String methodName, Object obj, Class paramClass) throws NoSuchMethodException
+        {
+            this(paramClass == null ?
+                 obj.getClass().getMethod(methodName, null) :
+                 obj.getClass().getMethod(methodName, new Class[] { paramClass }), obj, paramClass);
+        }
 
     public MethodInvocation(Method method, Object obj, Class paramClass) {
         mMethod = method;
