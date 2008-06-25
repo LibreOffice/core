@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: QueryTableView.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,7 +92,7 @@ namespace dbaui
         // Basisklasse ueberschrieben : Connections kreieren und loeschen
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest);
 
-        virtual ::std::vector<OTableConnection*>::const_iterator RemoveConnection( OTableConnection* _pConn ,sal_Bool _bDelete);
+        virtual bool RemoveConnection( OTableConnection* _pConn ,sal_Bool _bDelete);
 
         // Transfer von Connections von/zu einer UndoAction
         void GetConnection(OQueryTableConnection* pConn);
