@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DocumentSettingsContext.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -325,10 +325,40 @@ SvXMLImportContext *CreateSettingsContext(SvXMLImport& rImport, USHORT p_nPrefix
 }
 
 //=============================================================================
+namespace
+{
+    struct SettingsGroup
+    {
+        ::rtl::OUString sGroupName;
+        uno::Any        aSettings;
+
+        SettingsGroup()
+            :sGroupName()
+            ,aSettings()
+        {
+        }
+
+        SettingsGroup( const ::rtl::OUString& _rGroupName, const uno::Any& _rSettings )
+            :sGroupName( _rGroupName )
+            ,aSettings( _rSettings )
+        {
+        }
+    };
+}
+
+struct XMLDocumentSettingsContext_Data
+{
+    com::sun::star::uno::Any        aViewProps;
+    com::sun::star::uno::Any        aConfigProps;
+    ::std::list< SettingsGroup >    aDocSpecificSettings;
+};
+
+//=============================================================================
 
 XMLDocumentSettingsContext::XMLDocumentSettingsContext(SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
                     const uno::Reference<xml::sax::XAttributeList>& )
     : SvXMLImportContext( rImport, nPrfx, rLName )
+    , m_pData( new XMLDocumentSettingsContext_Data )
 {
     // here are no attributes
 }
@@ -375,12 +405,23 @@ SvXMLImportContext *XMLDocumentSettingsContext::CreateChildContext( USHORT p_nPr
                 if (IsXMLToken(aLocalConfigName, XML_VIEW_SETTINGS))
                     pContext = new XMLConfigItemSetContext(GetImport(),
                                         p_nPrefix, rLocalName, xAttrList,
-                                        aViewProps, NULL);
+                                        m_pData->aViewProps, NULL);
                 else if (IsXMLToken(aLocalConfigName,
                                                 XML_CONFIGURATION_SETTINGS))
                     pContext = new XMLConfigItemSetContext(GetImport(),
                                         p_nPrefix, rLocalName, xAttrList,
-                                        aConfigProps, NULL);
+                                        m_pData->aConfigProps, NULL);
+                else
+                {
+                    m_pData->aDocSpecificSettings.push_back( SettingsGroup( aLocalConfigName, uno::Any() ) );
+
+                    ::std::list< SettingsGroup >::reverse_iterator settingsPos =
+                        m_pData->aDocSpecificSettings.rbegin();
+
+                    pContext = new XMLConfigItemSetContext(GetImport(),
+                                        p_nPrefix, rLocalName, xAttrList,
+                                        settingsPos->aSettings, NULL);
+                }
             }
         }
     }
@@ -394,7 +435,7 @@ SvXMLImportContext *XMLDocumentSettingsContext::CreateChildContext( USHORT p_nPr
 void XMLDocumentSettingsContext::EndElement()
 {
     uno::Sequence<beans::PropertyValue> aSeqViewProps;
-    if (aViewProps >>= aSeqViewProps)
+    if (m_pData->aViewProps >>= aSeqViewProps)
     {
         GetImport().SetViewSettings(aSeqViewProps);
         sal_Int32 i(aSeqViewProps.getLength() - 1);
@@ -423,7 +464,7 @@ void XMLDocumentSettingsContext::EndElement()
         C2U("org.openoffice.Office.Common/"), C2U("Save/Document"), C2U("LoadPrinter"),
         ::comphelper::ConfigurationHelper::E_READONLY ) >>= bLoadDocPrinter;
     uno::Sequence<beans::PropertyValue> aSeqConfigProps;
-    if ( aConfigProps >>= aSeqConfigProps )
+    if ( m_pData->aConfigProps >>= aSeqConfigProps )
     {
         if ( !bLoadDocPrinter )
         {
@@ -452,6 +493,16 @@ void XMLDocumentSettingsContext::EndElement()
         }
 
         GetImport().SetConfigurationSettings( aSeqConfigProps );
+    }
+
+    for (   ::std::list< SettingsGroup >::const_iterator settings = m_pData->aDocSpecificSettings.begin();
+            settings != m_pData->aDocSpecificSettings.end();
+            ++settings
+        )
+    {
+        uno::Sequence< beans::PropertyValue > aDocSettings;
+        OSL_VERIFY( settings->aSettings >>= aDocSettings );
+        GetImport().SetDocumentSpecificSettings( settings->sGroupName, aDocSettings );
     }
 }
 
