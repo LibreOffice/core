@@ -8,7 +8,7 @@
 #
 # $RCSfile: globals.pm,v $
 #
-# $Revision: 1.97 $
+# $Revision: 1.98 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -325,9 +325,10 @@ BEGIN
     @languagepackfeature =();
     @featurecollector =();
     $msiassemblyfiles = "";
-    $nsisfilename = "Nsis.mlf";
+    $nsisfilename = "Nsis";
     $nsis204 = 0;
     $nsis231 = 0;
+    $unicodensis = 0;
     $linuxlinkrpms = "";
     $extensioninstalldir = "gid_Dir_Share_Extension_Install";
     @languagenames = ();
