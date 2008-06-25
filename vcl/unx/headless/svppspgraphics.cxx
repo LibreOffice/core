@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svppspgraphics.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1219,10 +1219,6 @@ ImplDevFontAttributes PspGraphics::Info2DevFontAttributes( const psp::FastPrintF
             aDFA.meAntiAlias = ANTIALIAS_FALSE;
             break;
     }
-
-    // special case for the ghostscript fonts
-    if( aDFA.maName.CompareIgnoreCaseToAscii( "itc ", 4 ) == COMPARE_EQUAL )
-        aDFA.maName = aDFA.maName.Copy( 4 );
 
     switch( rInfo.m_eType )
     {
