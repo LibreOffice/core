@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: winlayout.cxx,v $
- * $Revision: 1.113 $
+ * $Revision: 1.114 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -308,7 +308,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     {
         TEXTMETRICA aTextMetricA;
         if( ::GetTextMetricsA( mhDC, &aTextMetricA )
-        && !(aTextMetricA.tmPitchAndFamily & TMPF_FIXED_PITCH) )
+        && !(aTextMetricA.tmPitchAndFamily & TMPF_FIXED_PITCH) && !(aTextMetricA.tmCharSet == 0x86) )
             rArgs.mnFlags &= ~SAL_LAYOUT_KERNING_ASIAN;
     }
 
@@ -511,8 +511,8 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
             else if( rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN )
 #endif // GCP_KERN_HACK
 
-            if( (0x3000 == (0xFF00 & pBidiStr[i-1]))
-            &&  (0x3000 == (0xFF00 & pBidiStr[i])) )
+            if( ( (0x3000 == (0xFF00 & pBidiStr[i-1])) || (0x2010 == (0xFFF0 & pBidiStr[i-1])) || (0xFF00 == (0xFF00 & pBidiStr[i-1])))
+            &&  ( (0x3000 == (0xFF00 & pBidiStr[i])) || (0x2010 == (0xFFF0 & pBidiStr[i])) || (0xFF00 == (0xFF00 & pBidiStr[i])) ) )
             {
                 long nKernFirst = +CalcAsianKerning( pBidiStr[i-1], true, bVertical );
                 long nKernNext  = -CalcAsianKerning( pBidiStr[i], false, bVertical );
