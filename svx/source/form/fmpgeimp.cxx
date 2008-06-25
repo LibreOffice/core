@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmpgeimp.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -407,9 +407,10 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
             xDSProps->getPropertyValue(FM_PROP_NAME) >>= sLookupName;
 
         xFormProps->getPropertyValue(FM_PROP_DATASOURCE) >>= sFormDataSourceName;
+        // if there's no DataSourceName set at the form, check whether we can deduce one from its
+        // ActiveConnection
         if (0 == sFormDataSourceName.getLength())
         {
-            // check if it has an active connection
             Reference< XConnection > xFormConnection;
             xFormProps->getPropertyValue( FM_PROP_ACTIVE_CONNECTION ) >>= xFormConnection;
             if ( !xFormConnection.is() )
@@ -420,7 +421,6 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
                 if (xConnAsChild.is())
                 {
                     Reference< XDataSource > xFormDS(xConnAsChild->getParent(), UNO_QUERY);
-                        // the data source which created the connection
                     if (xFormDS.is())
                     {
                         xDSProps = xDSProps.query(xFormDS);
