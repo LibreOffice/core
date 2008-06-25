@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: genericcontroller.cxx,v $
- * $Revision: 1.90 $
+ * $Revision: 1.91 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -130,7 +130,11 @@
 #endif
 #include <algorithm>
 #include <hash_map>
+<<<<<<< genericcontroller.cxx
 #include <cppuhelper/implbase1.hxx>
+=======
+#include <limits>
+>>>>>>> 1.88.6.6
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -146,11 +150,12 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star;
 using namespace ::dbtools;
-using namespace ::dbaui;
 using namespace ::comphelper;
 
 // -------------------------------------------------------------------------
-#define ALL_FEATURES    -1
+#define ALL_FEATURES                -1
+#define FIRST_USER_DEFINED_FEATURE  ( ::std::numeric_limits< sal_uInt16 >::max() - 1000 )
+#define LAST_USER_DEFINED_FEATURE   ( ::std::numeric_limits< sal_uInt16 >::max()        )
 
 // -------------------------------------------------------------------------
 typedef ::std::hash_map< sal_Int16, sal_Int16 > CommandHashMap;
@@ -164,14 +169,33 @@ const ::rtl::OUString& getConfirmDeletionURL()
     return sConfirmDeletionURL;
 }
 
+namespace dbaui
+{
+
+//==========================================================================
+//= OGenericUnoController_Data
+//==========================================================================
+struct OGenericUnoController_Data
+{
+    ::sfx2::UserInputInterception   m_aUserInputInterception;
+
+    OGenericUnoController_Data( OGenericUnoController& _rController, ::osl::Mutex& _rMutex )
+        :m_aUserInputInterception( _rController, _rMutex )
+    {
+    }
+};
+
+//==========================================================================
+//= OGenericUnoController
+//==========================================================================
 DBG_NAME(OGenericUnoController)
 // -------------------------------------------------------------------------
 OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFactory >& _rM)
     :OGenericUnoController_Base(m_aMutex)
+    ,m_pData( new OGenericUnoController_Data( *this, m_aMutex ) )
 #ifdef DBG_UTIL
     ,m_bDescribingSupportedFeatures( false )
 #endif
-    ,m_aSelectionListeners(m_aMutex)
     ,m_aAsyncInvalidateAll(LINK(this, OGenericUnoController, OnAsyncInvalidateAll))
     ,m_aAsyncCloseTask(LINK(this, OGenericUnoController, OnAsyncCloseTask))
     ,m_xServiceFactory(_rM)
@@ -197,10 +221,10 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
 // -----------------------------------------------------------------------------
 OGenericUnoController::OGenericUnoController()
     :OGenericUnoController_Base(m_aMutex)
+    ,m_pData( new OGenericUnoController_Data( *this, m_aMutex ) )
 #ifdef DBG_UTIL
     ,m_bDescribingSupportedFeatures( false )
 #endif
-    ,m_aSelectionListeners(m_aMutex)
     ,m_aAsyncInvalidateAll(LINK(this, OGenericUnoController, OnAsyncInvalidateAll))
     ,m_aAsyncCloseTask(LINK(this, OGenericUnoController, OnAsyncCloseTask))
     ,m_aCurrentFrame( *this )
@@ -664,8 +688,10 @@ Reference< XDispatch >  OGenericUnoController::queryDispatch(const URL& aURL, co
 {
     Reference< XDispatch > xReturn;
 
+    OSL_PRECOND( !m_aSupportedFeatures.empty(), "OGenericUnoController::queryDispatch: shouldn't this be filled at construction time?" );
     if ( m_aSupportedFeatures.empty() )
         fillSupportedFeatures();
+
     // URL's we can handle ourself?
     if  (   aURL.Complete.equals( getConfirmDeletionURL() )
         ||  ( m_aSupportedFeatures.find( aURL.Complete ) != m_aSupportedFeatures.end() )
@@ -789,8 +815,10 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
             ++iterSearch;
     }
 
+    OSL_PRECOND( !m_aSupportedFeatures.empty(), "OGenericUnoController::removeStatusListener: shouldn't this be filled at construction time?" );
     if ( m_aSupportedFeatures.empty() )
         fillSupportedFeatures();
+
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(_rURL.Complete);
     if (aIter != m_aSupportedFeatures.end())
     {   // clear the cache for that feature
@@ -828,7 +856,6 @@ void OGenericUnoController::disposing()
             aIter->xListener->disposing(aDisposeEvent);
         }
         m_arrStatusListener.clear();
-        m_aSelectionListeners.disposeAndClear( aDisposeEvent );
     }
 
     m_xDatabaseContext = NULL;
@@ -888,6 +915,7 @@ void OGenericUnoController::implDescribeSupportedFeature( const sal_Char* _pAsci
 #ifdef DBG_UTIL
     DBG_ASSERT( m_bDescribingSupportedFeatures, "OGenericUnoController::implDescribeSupportedFeature: bad timing for this call!" );
 #endif
+    OSL_PRECOND( _nFeatureId < FIRST_USER_DEFINED_FEATURE, "OGenericUnoController::implDescribeSupportedFeature: invalid feature id!" );
 
     ControllerFeature aFeature;
     aFeature.Command = ::rtl::OUString::createFromAscii( _pAsciiCommandURL );
@@ -926,9 +954,6 @@ FeatureState OGenericUnoController::GetState(sal_uInt16 nId) const
             case ID_BROWSER_SAVEDOC:
                 aReturn.bEnabled = sal_True;
                 break;
-            case 99:
-                aReturn.bEnabled = sal_False;
-                break;
         }
     }
     catch( const Exception& )
@@ -938,6 +963,35 @@ FeatureState OGenericUnoController::GetState(sal_uInt16 nId) const
 
     return aReturn;
 }
+
+//------------------------------------------------------------------------------
+void OGenericUnoController::Execute( sal_uInt16 _nId, const Sequence< PropertyValue>& _rArgs )
+{
+    OSL_ENSURE( isUserDefinedFeature( _nId ),
+        "OGenericUnoController::Execute: responsible for user defined features only!" );
+    URL aFeatureURL( getURLForId( _nId ) );
+
+    // user defined features can be handled by dispatch interceptors only. So, we need to do
+    // a queryDispatch, and dispatch the URL
+    try
+    {
+        Reference< XDispatch > xDispatch( queryDispatch(
+            aFeatureURL,
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_self" ) ),
+            FrameSearchFlag::AUTO
+        ) );
+        if ( xDispatch == *this )
+            xDispatch.clear();
+
+        if ( xDispatch.is() )
+            xDispatch->dispatch( aFeatureURL, _rArgs );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
 //------------------------------------------------------------------------------
 URL OGenericUnoController::getURLForId(sal_Int32 _nId) const
 {
@@ -957,6 +1011,12 @@ URL OGenericUnoController::getURLForId(sal_Int32 _nId) const
         }
     }
     return aReturn;
+}
+
+//-------------------------------------------------------------------------
+bool OGenericUnoController::isUserDefinedFeature( const sal_uInt16 _nFeatureId )
+{
+    return ( _nFeatureId >= FIRST_USER_DEFINED_FEATURE ) && ( _nFeatureId < LAST_USER_DEFINED_FEATURE );
 }
 
 //-------------------------------------------------------------------------
@@ -1127,8 +1187,10 @@ void OGenericUnoController::executeUnChecked(sal_uInt16 _nCommandId, const Seque
 // -----------------------------------------------------------------------------
 void OGenericUnoController::executeUnChecked(const util::URL& _rCommand, const Sequence< PropertyValue >& aArgs)
 {
+    OSL_PRECOND( !m_aSupportedFeatures.empty(), "OGenericUnoController::executeUnChecked: shouldn't this be filled at construction time?" );
     if ( m_aSupportedFeatures.empty() )
         fillSupportedFeatures();
+
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( _rCommand.Complete );
     if (aIter != m_aSupportedFeatures.end())
         Execute( aIter->second.nFeatureId, aArgs );
@@ -1136,8 +1198,10 @@ void OGenericUnoController::executeUnChecked(const util::URL& _rCommand, const S
 // -----------------------------------------------------------------------------
 void OGenericUnoController::executeChecked(const util::URL& _rCommand, const Sequence< PropertyValue >& aArgs)
 {
+    OSL_PRECOND( !m_aSupportedFeatures.empty(), "OGenericUnoController::executeChecked: shouldn't this be filled at construction time?" );
     if ( m_aSupportedFeatures.empty() )
         fillSupportedFeatures();
+
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( _rCommand.Complete );
     if ( aIter != m_aSupportedFeatures.end() )
     {
@@ -1258,12 +1322,6 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------------
-// prototype out of UITools.cxx
-namespace dbaui
-{
-    void AppendConfigToken_Impl( ::rtl::OUString& _rURL, sal_Bool _bQuestionMark );
-}
 // -----------------------------------------------------------------------------
 
 void OGenericUnoController::openHelpAgent(rtl::OUString const& _suHelpStringURL )
@@ -1272,7 +1330,7 @@ void OGenericUnoController::openHelpAgent(rtl::OUString const& _suHelpStringURL 
     rtl::OUString sLanguage = rtl::OUString::createFromAscii("Language=");
     if (suURL.indexOf(sLanguage) == -1)
     {
-        dbaui::AppendConfigToken_Impl(suURL, sal_False /* sal_False := add '&' */ );
+        AppendConfigToken(suURL, sal_False /* sal_False := add '&' */ );
     }
     URL aURL;
     aURL.Complete = suURL;
@@ -1382,8 +1440,7 @@ void SAL_CALL OGenericUnoController::addTitleChangeListener(const Reference< XTi
         xBroadcaster->addTitleChangeListener (xListener);
 }
 
-//=============================================================================
-// XTitleChangeBroadcaster
+// -----------------------------------------------------------------------------
 void SAL_CALL OGenericUnoController::removeTitleChangeListener(const Reference< XTitleChangeListener >& xListener)
     throw (RuntimeException)
 {
@@ -1391,6 +1448,36 @@ void SAL_CALL OGenericUnoController::removeTitleChangeListener(const Reference< 
     if (xBroadcaster.is ())
         xBroadcaster->removeTitleChangeListener (xListener);
 }
+
+// =============================================================================
+// XUserInputInterception
+// -----------------------------------------------------------------------------
+void SAL_CALL OGenericUnoController::addKeyHandler( const Reference< XKeyHandler >& _rxHandler ) throw (RuntimeException)
+{
+    if ( _rxHandler.is() )
+        m_pData->m_aUserInputInterception.addKeyHandler( _rxHandler );
+}
+
+// -----------------------------------------------------------------------------
+void SAL_CALL OGenericUnoController::removeKeyHandler( const Reference< XKeyHandler >& _rxHandler ) throw (RuntimeException)
+{
+    m_pData->m_aUserInputInterception.removeKeyHandler( _rxHandler );
+}
+
+// -----------------------------------------------------------------------------
+void SAL_CALL OGenericUnoController::addMouseClickHandler( const Reference< XMouseClickHandler >& _rxHandler ) throw (RuntimeException)
+{
+    if ( _rxHandler.is() )
+        m_pData->m_aUserInputInterception.addMouseClickHandler( _rxHandler );
+}
+
+// -----------------------------------------------------------------------------
+void SAL_CALL OGenericUnoController::removeMouseClickHandler( const Reference< XMouseClickHandler >& _rxHandler ) throw (RuntimeException)
+{
+    m_pData->m_aUserInputInterception.removeMouseClickHandler( _rxHandler );
+}
+
+// =============================================================================
 // -----------------------------------------------------------------------------
 void OGenericUnoController::executeChecked(sal_uInt16 _nCommandId, const Sequence< PropertyValue >& aArgs)
 {
@@ -1405,15 +1492,55 @@ sal_Bool OGenericUnoController::isCommandEnabled(sal_uInt16 _nCommandId) const
 }
 
 // -----------------------------------------------------------------------------
+sal_uInt16 OGenericUnoController::registerCommandURL( const ::rtl::OUString& _rCompleteCommandURL )
+{
+    if ( !_rCompleteCommandURL.getLength() )
+        return 0;
+
+    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( _rCompleteCommandURL );
+    if ( aIter != m_aSupportedFeatures.end() )
+        return aIter->second.nFeatureId;
+
+    // this is a previously unkwnon command
+    sal_uInt16 nFeatureId = FIRST_USER_DEFINED_FEATURE;
+    while ( isFeatureSupported( nFeatureId ) && ( nFeatureId < LAST_USER_DEFINED_FEATURE ) )
+        ++nFeatureId;
+    if ( nFeatureId == LAST_USER_DEFINED_FEATURE )
+    {
+        OSL_ENSURE( false, "OGenericUnoController::registerCommandURL: no more space for user defined features!" );
+        return 0L;
+    }
+
+    ControllerFeature aFeature;
+    aFeature.Command = _rCompleteCommandURL;
+    aFeature.nFeatureId = nFeatureId;
+    aFeature.GroupId = CommandGroup::INTERNAL;
+    m_aSupportedFeatures[ aFeature.Command ] = aFeature;
+
+    return nFeatureId;
+}
+
+// -----------------------------------------------------------------------------
+void OGenericUnoController::notifyHiContrastChanged()
+{
+}
+
+// -----------------------------------------------------------------------------
 sal_Bool OGenericUnoController::isDataSourceReadOnly() const
 {
     return sal_False;
 }
 
 // -----------------------------------------------------------------------------
-Reference< XController > SAL_CALL OGenericUnoController::getXController() throw( RuntimeException )
+Reference< XController > OGenericUnoController::getXController() throw( RuntimeException )
 {
     return this;
+}
+
+// -----------------------------------------------------------------------------
+bool OGenericUnoController::interceptUserInput( const NotifyEvent& _rEvent )
+{
+    return m_pData->m_aUserInputInterception.handleNotifyEvent( _rEvent );
 }
 
 // -----------------------------------------------------------------------------
@@ -1495,24 +1622,5 @@ void OGenericUnoController::fillSupportedFeatures()
     m_bDescribingSupportedFeatures = false;
 #endif
 }
-// -----------------------------------------------------------------------------
-::sal_Bool SAL_CALL OGenericUnoController::select( const Any& /*xSelection*/ ) throw (IllegalArgumentException, RuntimeException)
-{
-    return sal_False;
-}
-// -----------------------------------------------------------------------------
-Any SAL_CALL OGenericUnoController::getSelection(  ) throw (RuntimeException)
-{
-    return Any();
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OGenericUnoController::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& xListener ) throw (RuntimeException)
-{
-    m_aSelectionListeners.addInterface(xListener);
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OGenericUnoController::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& xListener ) throw (RuntimeException)
-{
-    m_aSelectionListeners.removeInterface(xListener);
-}
+}   // namespace dbaui
 
