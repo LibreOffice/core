@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xformsexport.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +35,10 @@
 class SvXMLExport;
 namespace com { namespace sun { namespace star {
     namespace uno { template<typename T> class Reference; }
+    namespace uno { template<typename T> class Sequence; }
     namespace frame { class XModel; }
-    namespace beans { class XPropertySet; }
+    namespace beans { class XPropertySet; struct PropertyValue; }
+    namespace container { class XNameAccess; }
 } } }
 namespace rtl { class OUString; }
 
@@ -49,5 +51,13 @@ rtl::OUString SAL_DLLPRIVATE getXFormsBindName( const com::sun::star::uno::Refer
 rtl::OUString SAL_DLLPRIVATE getXFormsListBindName( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xBinding );
 
 rtl::OUString SAL_DLLPRIVATE getXFormsSubmissionName( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xBinding );
+
+
+/** returns the settings of the given XForms container, to be exported as document specific settings
+*/
+void XMLOFF_DLLPUBLIC getXFormsSettings(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rXForms,
+              ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _out_rSettings
+    );
 
 #endif
