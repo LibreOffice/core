@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: datasource.hxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -176,6 +176,23 @@ private:
 
 public:
     ODatabaseSource( const ::rtl::Reference< ODatabaseModelImpl >& _pImpl );
+
+    struct DBContextAccess { friend class ODatabaseContext; private: DBContextAccess() { } };
+
+    /** sets a new name for the data source
+
+        The name of a data source (our m_sName member) is the registration name, *if* the
+        data source actually *is* registered at the database context.
+
+        Normally, this name is passed at time of creation of the ODatabaseModelImpl instance,
+        but if a newly creaed data source is registered, then it must be possible to propagate
+        the new trgistration name.
+    */
+    static void setName(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDocumentDataSource >& _rxDocument,
+            const ::rtl::OUString& _rNewName,
+            DBContextAccess
+        );
 
     // XContainerListener
     virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
