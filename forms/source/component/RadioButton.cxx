@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RadioButton.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -376,9 +376,9 @@ Any ORadioButtonModel::translateDbColumnToControlValue()
 }
 
 //------------------------------------------------------------------------------
-Any ORadioButtonModel::translateExternalValueToControlValue( ) const
+Any ORadioButtonModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
 {
-    Any aControlValue = OReferenceValueComponent::translateExternalValueToControlValue();
+    Any aControlValue = OReferenceValueComponent::translateExternalValueToControlValue( _rExternalValue );
     sal_Int16 nState = STATE_NOCHECK;
     if ( ( aControlValue >>= nState ) && ( nState == STATE_DONTKNOW ) )
         // radio buttons do not have the DONTKNOW state
