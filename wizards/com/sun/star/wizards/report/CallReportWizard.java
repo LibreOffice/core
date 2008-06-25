@@ -1,4 +1,4 @@
- /*************************************************************************
+/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CallReportWizard.java,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +46,8 @@ import com.sun.star.lang.XComponent;
  * (<CODE>__writeRegistryServiceInfo</CODE>).
  * @author Bertram Nolte
  */
-public class CallReportWizard {
+public class CallReportWizard
+{
     static boolean bWizardstartedalready;
 
     /** Gives a factory for creating the service.
@@ -56,24 +57,26 @@ public class CallReportWizard {
      * component.
      * @see com.sun.star.comp.loader.JavaLoader#
      * @param stringImplementationName The implementation name of the component.
-     * @param xmultiservicefactory The service manager, who gives access to every
+     * @param xMSF The service manager, who gives access to every
      * known service.
      * @param xregistrykey Makes structural information (except regarding tree
      * structures) of a single
      * registry key accessible.
      */
     public static com.sun.star.lang.XSingleServiceFactory __getServiceFactory(String stringImplementationName, com.sun.star.lang.XMultiServiceFactory xMSF, com.sun.star.registry.XRegistryKey xregistrykey)
-    {
-    com.sun.star.lang.XSingleServiceFactory xsingleservicefactory = null;
-        if ( stringImplementationName.equals(
-            ReportWizardImplementation.class.getName() ) )
-            xsingleservicefactory = com.sun.star.comp.loader.FactoryHelper.getServiceFactory(
-            ReportWizardImplementation.class,
-            ReportWizardImplementation.__serviceName,
-            xMSF,
-            xregistrykey );
+        {
+            com.sun.star.lang.XSingleServiceFactory xsingleservicefactory = null;
+            if ( stringImplementationName.equals(
+                     ReportWizardImplementation.class.getName() ) )
+            {
+                xsingleservicefactory = com.sun.star.comp.loader.FactoryHelper.getServiceFactory(
+                    ReportWizardImplementation.class,
+                    ReportWizardImplementation.__serviceName,
+                    xMSF,
+                    xregistrykey );
+            }
             return xsingleservicefactory;
-    }
+        }
 
     /** Writes the service information into the given registry key.
      * This method is called by the <code>JavaLoader</code>.
@@ -84,12 +87,12 @@ public class CallReportWizard {
      * registry key accessible.
      */
     public static boolean __writeRegistryServiceInfo(com.sun.star.registry.XRegistryKey xregistrykey)
-    {
-        return com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
+        {
+            return com.sun.star.comp.loader.FactoryHelper.writeRegistryServiceInfo(
                 ReportWizardImplementation.class.getName(),
                 ReportWizardImplementation.__serviceName,
                 xregistrykey );
-    }
+        }
 
     /** This class implements the component. At least the interfaces XServiceInfo,
      * XTypeProvider, and XInitialization should be provided by the service.
@@ -105,52 +108,66 @@ public class CallReportWizard {
          * could be introduced while initializing.
          */
         public ReportWizardImplementation(com.sun.star.lang.XMultiServiceFactory xmultiservicefactoryInitialization)
-        {
-            super();
-            xmultiservicefactory = xmultiservicefactoryInitialization;
-            registerProperty("Document", (short)(PropertyAttribute.READONLY|PropertyAttribute.MAYBEVOID));
-            registerProperty("DocumentDefinition", (short)(PropertyAttribute.READONLY|PropertyAttribute.MAYBEVOID));
-        }
+            {
+                super();
+                xmultiservicefactory = xmultiservicefactoryInitialization;
+                registerProperty("Document", (short)(PropertyAttribute.READONLY|PropertyAttribute.MAYBEVOID));
+                registerProperty("DocumentDefinition", (short)(PropertyAttribute.READONLY|PropertyAttribute.MAYBEVOID));
+            }
 
-        public void trigger(String sEvent){
-        try{
-            if (sEvent.compareTo("start") == 0) {
-                if (bWizardstartedalready != true){
-                    ReportWizard CurReportWizard = new ReportWizard(xmultiservicefactory);
-                    XComponent[] obj = CurReportWizard.startReportWizard(xmultiservicefactory, databaseproperties);
-                    if ( obj != null ){
-                        DocumentDefinition = obj[0];
-                        Document = obj[1];
-                    }
-                }
-                bWizardstartedalready = false;
-            }
-            else if (sEvent.compareTo("end") == 0) {
-                DocumentDefinition = null;
-                Document = null;
-                databaseproperties = null;
-            }
-            else if (sEvent.compareTo("fill") == 0){
-                Dataimport CurDataimport = new Dataimport(xmultiservicefactory);
-                XTextDocument xTextDocument = null;
-                if ( databaseproperties != null )
+        public void trigger(String sEvent)
+            {
+                try
+            {
+                com.sun.star.frame.XComponentLoader xcomponentloader = (com.sun.star.frame.XComponentLoader) com.sun.star.uno.UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, xmultiservicefactory.createInstance("com.sun.star.frame.Desktop"));
+                if (sEvent.compareTo("start") == 0)
                 {
-                    for( int i=0;i < databaseproperties.length;++i)
+                    if (bWizardstartedalready != true)
                     {
-                        if ( databaseproperties[i].Name.equals("TextDocument") )
-                            xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, databaseproperties[i].Value);
-
+                        ReportWizard CurReportWizard = new ReportWizard(xmultiservicefactory);
+                        XComponent[] obj = CurReportWizard.startReportWizard(xmultiservicefactory, databaseproperties);
+                        if ( obj != null )
+                        {
+                            DocumentDefinition = obj[0];
+                            Document = obj[1];
+                        }
                     }
-                    if ( xTextDocument != null )
-                        CurDataimport.createReport(xmultiservicefactory,xTextDocument,databaseproperties);
+                    bWizardstartedalready = false;
+                }
+                else if (sEvent.compareTo("end") == 0)
+                {
+                    DocumentDefinition = null;
+                    Document = null;
+                    databaseproperties = null;
+                }
+                else if (sEvent.compareTo("fill") == 0)
+                {
+                    Dataimport CurDataimport = new Dataimport(xmultiservicefactory);
+                    XTextDocument xTextDocument = null;
+                    if ( databaseproperties != null )
+                    {
+                        for( int i=0;i < databaseproperties.length;++i)
+                        {
+                            if ( databaseproperties[i].Name.equals("TextDocument") )
+                            {
+                                xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, databaseproperties[i].Value);
+                            }
+
+                        }
+                        if ( xTextDocument != null )
+                        {
+                            CurDataimport.createReport(xmultiservicefactory,xTextDocument,databaseproperties);
+                        }
+                    }
                 }
             }
-        }
-        catch( Exception exception ){
+
+        catch( Exception exception )
+        {
             System.err.println( exception );
         }
         System.gc();
-        }
+    }
 
 
         /** The service name, that must be used to get an instance of this service.
@@ -165,27 +182,27 @@ public class CallReportWizard {
          * directly after its creation.
          * @param object This array of arbitrary objects will be passed to the
          * component after its creation.
-         * @throws Exception Every exception will not be handled, but will be
+         * @throws com.sun.star.uno.Exception Every exception will not be handled, but will be
          * passed to the caller.
          */
         public void initialize(Object[] object) throws com.sun.star.uno.Exception
-        {
-            this.databaseproperties = Properties.convertToPropertyValueArray(object);
+            {
+                this.databaseproperties = Properties.convertToPropertyValueArray(object);
 
-    //    xmultiservicefactory = (XMultiservicefactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, object[0]);
-        }
+                //    xmultiservicefactory = (XMultiservicefactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, object[0]);
+            }
 
         /** This method returns an array of all supported service names.
          * @return Array of supported service names.
          */
         public java.lang.String[] getSupportedServiceNames()
-        {
-            String []stringSupportedServiceNames = new String[ 1 ];
+            {
+                String []stringSupportedServiceNames = new String[ 1 ];
 
-            stringSupportedServiceNames[ 0 ] = __serviceName;
+                stringSupportedServiceNames[ 0 ] = __serviceName;
 
-            return( stringSupportedServiceNames );
-        }
+                return( stringSupportedServiceNames );
+            }
 
         /** This method returns true, if the given service will be
          * supported by the component.
@@ -193,15 +210,15 @@ public class CallReportWizard {
          * @return True, if the given service name will be supported.
          */
         public boolean supportsService(String stringService)
-        {
-            boolean booleanSupportsService = false;
-
-            if ( stringService.equals( __serviceName ) )
             {
-                booleanSupportsService = true;
+                boolean booleanSupportsService = false;
+
+                if ( stringService.equals( __serviceName ) )
+                {
+                    booleanSupportsService = true;
+                }
+                return( booleanSupportsService );
             }
-            return( booleanSupportsService );
-        }
 
         /** This method returns an array of bytes, that can be used to
          * unambiguously distinguish between two sets of types, e.g.
@@ -215,27 +232,27 @@ public class CallReportWizard {
          * @return Array of bytes, in order to distinguish between two sets.
          */
         public byte[] getImplementationId()
-        {
-            byte[] byteReturn = {};
-
-            try
             {
-                byteReturn = new String( "" + this.hashCode() ).getBytes();
-            }
-            catch( Exception exception ) {
-                System.err.println( exception );
-            }
+                byte[] byteReturn = {};
 
-            return( byteReturn );
-        }
+                try
+                {
+                    byteReturn = new String( "" + this.hashCode() ).getBytes();
+                }
+                catch( Exception exception ) {
+                    System.err.println( exception );
+                }
+
+                return( byteReturn );
+            }
 
         /** Return the class name of the component.
          * @return Class name of the component.
          */
         public java.lang.String getImplementationName()
-        {
-            return( ReportWizardImplementation.class.getName() );
-        }
+            {
+                return( ReportWizardImplementation.class.getName() );
+            }
 
         /** Provides a sequence of all types (usually interface types)
          * provided by the object.
@@ -243,23 +260,23 @@ public class CallReportWizard {
          * service.
          */
         public Type[] getTypes()
-        {
-            Type[] typeReturn = {};
+            {
+                Type[] typeReturn = {};
 
-        try
-        {
-            typeReturn = new Type[] {
-                new Type( com.sun.star.task.XJobExecutor.class ) ,
-                new Type( com.sun.star.lang.XTypeProvider.class ),
-                new Type( com.sun.star.lang.XServiceInfo.class ),
-                new Type( com.sun.star.lang.XInitialization.class )
-            };
-        } catch( Exception exception ) {
-            System.err.println( exception );
-        }
+                try
+                {
+                    typeReturn = new Type[] {
+                        new Type( com.sun.star.task.XJobExecutor.class ) ,
+                        new Type( com.sun.star.lang.XTypeProvider.class ),
+                        new Type( com.sun.star.lang.XServiceInfo.class ),
+                        new Type( com.sun.star.lang.XInitialization.class )
+                    };
+                } catch( Exception exception ) {
+                    System.err.println( exception );
+                }
 
-        return( typeReturn );
-        }
+                return( typeReturn );
+            }
     }
 }
 
