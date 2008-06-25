@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: model.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,7 +122,8 @@ Model::Model() :
     mxBindings( mpBindings ),
     mxSubmissions( mpSubmissions ),
     mxInstances( mpInstances ),
-    mbInitialized( false )
+    mbInitialized( false ),
+    mbExternalData( true )
 {
     initializePropertySet();
 
@@ -221,6 +222,15 @@ void Model::setNamespaces( const XNameContainer_t& rNamespaces )
         mxNamespaces = rNamespaces;
 }
 
+bool Model::getExternalData() const
+{
+    return mbExternalData;
+}
+
+void Model::setExternalData( bool _bData )
+{
+    mbExternalData = _bData;
+}
 
 #if OSL_DEBUG_LEVEL > 1
 void Model::dbg_assertInvariant() const
@@ -729,6 +739,7 @@ Model::XSet_t Model::getSubmissions()
 #define HANDLE_ForeignSchema 3
 #define HANDLE_SchemaRef 4
 #define HANDLE_Namespaces 5
+#define HANDLE_ExternalData 6
 
 #define REGISTER_PROPERTY( property, type )   \
     registerProperty( PROPERTY( property, type ), \
@@ -738,12 +749,17 @@ Model::XSet_t Model::getSubmissions()
     registerProperty( PROPERTY( property, type ), \
     new APIPropertyAccessor< Model, type >( this, &Model::set##property, &Model::get##property ) );
 
+#define REGISTER_BOOL_PROPERTY( property )   \
+    registerProperty( PROPERTY( property, sal_Bool ), \
+    new BooleanPropertyAccessor< Model, bool >( this, &Model::set##property, &Model::get##property ) );
+
 void Model::initializePropertySet()
 {
-    REGISTER_PROPERTY_API( ID,            OUString );
-    REGISTER_PROPERTY    ( ForeignSchema, XDocument_t );
-    REGISTER_PROPERTY    ( SchemaRef,     OUString );
-    REGISTER_PROPERTY    ( Namespaces,    XNameContainer_t );
+    REGISTER_PROPERTY_API ( ID,            OUString );
+    REGISTER_PROPERTY     ( ForeignSchema, XDocument_t );
+    REGISTER_PROPERTY     ( SchemaRef,     OUString );
+    REGISTER_PROPERTY     ( Namespaces,    XNameContainer_t );
+    REGISTER_BOOL_PROPERTY( ExternalData );
 }
 
 void Model::update()
