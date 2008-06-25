@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SpreadsheetDocument.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,7 +66,7 @@ public class SpreadsheetDocument extends DocumentHelper
     public XSpreadsheets getSheets() throws com.sun.star.uno.Exception
     {
         XSpreadsheetDocument spreadsheetDoc = (XSpreadsheetDocument)UnoRuntime.queryInterface( XSpreadsheetDocument.class,
-            m_documentComponent
+            getDocument()
         );
         return spreadsheetDoc.getSheets();
     }
