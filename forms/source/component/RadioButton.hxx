@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RadioButton.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +74,7 @@ protected:
                             translateDbColumnToControlValue( );
     virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
     virtual ::com::sun::star::uno::Any
-                            translateExternalValueToControlValue( ) const;
+                            translateExternalValueToControlValue( const ::com::sun::star::uno::Any& _rExternalValue ) const;
 
 protected:
     void SetSiblingPropsTo(const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rValue);
