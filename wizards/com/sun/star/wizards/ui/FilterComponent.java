@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FilterComponent.java,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -361,14 +361,14 @@ public class FilterComponent{
             iStartPosX = iPosX;
             iStartPosY = iPosY;
 
-            soptMatchAll = CurUnoDialog.oResource.getResText(BaseID + 9);
-            soptMatchAny = CurUnoDialog.oResource.getResText(BaseID + 10);
-            slblFieldNames = CurUnoDialog.oResource.getResText(BaseID + 17);
-            slblOperators = CurUnoDialog.oResource.getResText(BaseID + 24);
-            slblValue = CurUnoDialog.oResource.getResText(BaseID + 25);
-            sLogicOperators = CurUnoDialog.oResource.getResArray(BaseID + 26, 7);
+            soptMatchAll = CurUnoDialog.m_oResource.getResText(BaseID + 9);
+            soptMatchAny = CurUnoDialog.m_oResource.getResText(BaseID + 10);
+            slblFieldNames = CurUnoDialog.m_oResource.getResText(BaseID + 17);
+            slblOperators = CurUnoDialog.m_oResource.getResText(BaseID + 24);
+            slblValue = CurUnoDialog.m_oResource.getResText(BaseID + 25);
+            sLogicOperators = CurUnoDialog.m_oResource.getResArray(BaseID + 26, 7);
 
-            sDuplicateCondition = CurUnoDialog.oResource.getResText(BaseID + 89);
+            sDuplicateCondition = CurUnoDialog.m_oResource.getResText(BaseID + 89);
 
             optMatchAll = CurUnoDialog.insertRadioButton("optMatchAll" + sIncSuffix, SOOPTANDMODE, new ItemListenerImpl(),
                                             new String[] { "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width" },
