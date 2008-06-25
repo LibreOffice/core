@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dataview.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,17 +98,16 @@ namespace dbaui
     DBG_NAME(ODataView)
     // -------------------------------------------------------------------------
     ODataView::ODataView(   Window* pParent,
-                            IController* _pController,
+                            IController& _rController,
                             const Reference< XMultiServiceFactory >& _rFactory,
                             WinBits nStyle)
         :Window(pParent,nStyle)
         ,m_xServiceFactory(_rFactory)
-        ,m_pController( _pController )
+        ,m_rController( _rController )
         ,m_pSeparator( NULL )
     {
         DBG_CTOR(ODataView,NULL);
-        OSL_ENSURE(m_pController,"Controller must be not NULL!");
-        m_pController->acquire();
+        m_rController.acquire();
         m_pAccel.reset(::svt::AcceleratorExecute::createAcceleratorHelper());
     }
 
@@ -123,7 +122,7 @@ namespace dbaui
         DBG_DTOR(ODataView,NULL);
 
         enableSeparator( sal_False );
-        m_pController->release();
+        m_rController.release();
     }
 
     // -------------------------------------------------------------------------
@@ -190,23 +189,27 @@ namespace dbaui
         resizeAll( Rectangle( Point( 0, 0), GetSizePixel() ) );
     }
     // -----------------------------------------------------------------------------
-    long ODataView::PreNotify( NotifyEvent& rNEvt )
+    long ODataView::PreNotify( NotifyEvent& _rNEvt )
     {
-        BOOL bHandled = FALSE;
-        switch (rNEvt.GetType())
+        bool bHandled = false;
+        switch ( _rNEvt.GetType() )
         {
             case EVENT_KEYINPUT:
             {
-                const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+                const KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
                 const KeyCode& aKeyCode = pKeyEvent->GetKeyCode();
-                if ( m_pAccel.get() )
-                {
-                    bHandled = m_pAccel->execute(aKeyCode);
-                }
+                if ( m_pAccel.get() && m_pAccel->execute( aKeyCode ) )
+                    // the accelerator consumed the event
+                    return 1L;
             }
-            break;
+            // NO break
+            case EVENT_KEYUP:
+            case EVENT_MOUSEBUTTONDOWN:
+            case EVENT_MOUSEBUTTONUP:
+                bHandled = m_rController.interceptUserInput( _rNEvt );
+                break;
         }
-        return bHandled ? 1L : Window::PreNotify(rNEvt);
+        return bHandled ? 1L : Window::PreNotify( _rNEvt );
     }
     // -----------------------------------------------------------------------------
     void ODataView::StateChanged( StateChangedType nType )
@@ -216,7 +219,7 @@ namespace dbaui
         if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
         {
             // Check if we need to get new images for normal/high contrast mode
-            m_pController->notifyHiContrastChanged();
+            m_rController.notifyHiContrastChanged();
         }
     }
     // -----------------------------------------------------------------------------
@@ -231,7 +234,7 @@ namespace dbaui
             (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
         {
             // Check if we need to get new images for normal/high contrast mode
-            m_pController->notifyHiContrastChanged();
+            m_rController.notifyHiContrastChanged();
         }
     }
     // -----------------------------------------------------------------------------
