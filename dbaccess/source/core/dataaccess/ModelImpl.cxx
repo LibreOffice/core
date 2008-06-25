@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ModelImpl.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -298,9 +298,8 @@ void SAL_CALL DocumentStorageAccess::disposing( const css::lang::EventObject& So
 //============================================================
 DBG_NAME(ODatabaseModelImpl)
 //--------------------------------------------------------------------------
-ODatabaseModelImpl::ODatabaseModelImpl(const Reference< XMultiServiceFactory >& _rxFactory
-                                       , const Reference< XModel>& _xModel)
-            :m_xModel(_xModel)
+ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XMultiServiceFactory >& _rxFactory, ODatabaseContext& _rDBContext )
+            :m_xModel()
             ,m_xDataSource()
             ,m_pStorageAccess( NULL )
             ,m_xMutex( new SharedMutex )
@@ -308,7 +307,9 @@ ODatabaseModelImpl::ODatabaseModelImpl(const Reference< XMultiServiceFactory >& 
             ,m_aStorages()
             ,m_aMacroMode( *this )
             ,m_nImposedMacroExecMode( MacroExecMode::NEVER_EXECUTE )
+            ,m_pDBContext( &_rDBContext )
             ,m_bHasAnyObjectWithMacros( false )
+            ,m_bHasMacroStorages( false )
             ,m_bModificationLock( false )
             ,m_aContext( _rxFactory )
             ,m_nLoginTimeout(0)
@@ -318,7 +319,6 @@ ODatabaseModelImpl::ODatabaseModelImpl(const Reference< XMultiServiceFactory >& 
             ,m_bModified(sal_False)
             ,m_bDocumentReadOnly(sal_False)
             ,m_bDisposingSubStorages( sal_False )
-            ,m_pDBContext(NULL)
             ,m_pSharedConnectionManager(NULL)
             ,m_refCount(0)
             ,m_nControllerLockCount(0)
@@ -335,7 +335,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(const Reference< XMultiServiceFactory >& 
 ODatabaseModelImpl::ODatabaseModelImpl(
                     const ::rtl::OUString& _rRegistrationName,
                     const Reference< XMultiServiceFactory >& _rxFactory,
-                    ODatabaseContext* _pDBContext
+                    ODatabaseContext& _rDBContext
                     )
             :m_xModel()
             ,m_xDataSource()
@@ -345,7 +345,9 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_aStorages()
             ,m_aMacroMode( *this )
             ,m_nImposedMacroExecMode( MacroExecMode::NEVER_EXECUTE )
+            ,m_pDBContext( &_rDBContext )
             ,m_bHasAnyObjectWithMacros( false )
+            ,m_bHasMacroStorages( false )
             ,m_bModificationLock( false )
             ,m_aContext( _rxFactory )
             ,m_sName(_rRegistrationName)
@@ -356,14 +358,11 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_bModified(sal_False)
             ,m_bDocumentReadOnly(sal_False)
             ,m_bDisposingSubStorages( sal_False )
-            ,m_pDBContext(_pDBContext)
             ,m_pSharedConnectionManager(NULL)
             ,m_refCount(0)
             ,m_nControllerLockCount(0)
 {
     DBG_CTOR(ODatabaseModelImpl,NULL);
-    // adjust our readonly flag
-
     impl_construct_nothrow();
 }
 
@@ -1026,6 +1025,7 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "NoNameLengthLimit",          makeAny( (sal_Bool)sal_False ) ),
         AsciiPropertyValue( "AppendTableAliasName",       makeAny( (sal_Bool)sal_False ) ),
         AsciiPropertyValue( "GenerateASBeforeCorrelationName",  makeAny( (sal_Bool)sal_True ) ),
+        AsciiPropertyValue( "ColumnAliasInOrderBy",       makeAny( (sal_Bool)sal_True ) ),
         AsciiPropertyValue( "EnableSQL92Check",           makeAny( (sal_Bool)sal_False ) ),
         AsciiPropertyValue( "BooleanComparisonMode",      makeAny( BooleanComparisonMode::EQUAL_INTEGER ) ),
         AsciiPropertyValue( "TableTypeFilterMode",        makeAny( (sal_Int32)3 ) ),
@@ -1224,9 +1224,14 @@ void ODatabaseModelImpl::switchToURL( const ::rtl::OUString& _rDocumentLocation,
                 m_pDBContext->registerPrivate( _rDocumentURL, this );
         }
 
-        INetURLObject aURL( _rDocumentURL );
-        if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
-            m_sName = _rDocumentURL;
+        // if we do not have a name, yet (i.e. are not registered at the database context),
+        // then use the URL as name
+        if ( !m_sName.getLength() )
+        {
+            INetURLObject aURL( _rDocumentURL );
+            if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+                m_sName = _rDocumentURL;
+        }
     }
 
     // remember both
@@ -1309,7 +1314,10 @@ sal_Bool ODatabaseModelImpl::documentStorageHasMacros() const
 {
     // does our root storage contain macros?
     if ( ::sfx2::DocumentMacroMode::storageHasMacros( m_xDocumentStorage ) )
+    {
+        const_cast< ODatabaseModelImpl* >( this )->m_bHasMacroStorages = true;
         return true;
+    }
 
     // do we have forms or reports with macros?
     if  (   lcl_hasObjectsWithMacros_nothrow( const_cast< ODatabaseModelImpl& >( *this ), E_FORM )
