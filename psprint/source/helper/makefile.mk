@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,6 +47,10 @@ dummy:
     @echo "Nothing to build for GUIBASE $(GUIBASE)"
 
 .ELSE		# "$(GUIBASE)"=="aqua"
+
+.IF "$(WITH_SYSTEM_PPD_DIR)" != ""
+CDEFS += -DSYSTEM_PPD_DIR=\"$(WITH_SYSTEM_PPD_DIR)\"
+.ENDIF
 
 SLOFILES=\
     $(SLO)$/ppdparser.obj	\
