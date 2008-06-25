@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimp.hxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,6 +72,8 @@ class SwXMLImport: public SvXMLImport
     SvXMLItemMapEntriesRef  xTableRowItemMap;
     SvXMLItemMapEntriesRef  xTableCellItemMap;
     SvStorageRef            xPackage;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+                            xLateInitSettings;
 
     sal_uInt16              nStyleFamilyMask;// Mask of styles to load
     sal_Bool                bLoadDoc : 1;   // Load doc or styles only
@@ -83,6 +85,7 @@ class SwXMLImport: public SvXMLImport
     sal_Bool                bAutoStylesValid : 1;
     sal_Bool                bShowProgress : 1;
     sal_Bool                bOrganizerMode : 1;
+    sal_Bool                bInititedXForms : 1;
     sal_Bool                bPreserveRedlineMode;
 
     void                    _InitItemImport();
@@ -201,6 +204,8 @@ public:
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats);
     virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps);
+    virtual void SetDocumentSpecificSettings(const ::rtl::OUString& _rSettingsGroupName,
+                    const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& _rSettings);
 
     SvStorage *GetPackage() { return &xPackage; }
 
