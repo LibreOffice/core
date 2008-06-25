@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Finalizer.java,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,12 +57,12 @@ public class Finalizer {
         String reslblHowGoOn;
         this.CurUnoDialog = _CurUnoDialog;
         this.CurDBMetaData = _CurDBMetaData;
-        reslblQueryTitle = CurUnoDialog.oResource.getResText(UIConsts.RID_QUERY + 5);
-        resoptDisplayQuery = CurUnoDialog.oResource.getResText(UIConsts.RID_QUERY + 6);
-        resoptModifyQuery = CurUnoDialog.oResource.getResText(UIConsts.RID_QUERY + 7);
-        resflnSummary = CurUnoDialog.oResource.getResText(UIConsts.RID_QUERY + 87);
-        reslblHowGoOn = CurUnoDialog.oResource.getResText(UIConsts.RID_QUERY + 8);
-        resQuery = CurUnoDialog.oResource.getResText(UIConsts.RID_QUERY + 1);
+        reslblQueryTitle = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 5);
+        resoptDisplayQuery = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 6);
+        resoptModifyQuery = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 7);
+        resflnSummary = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 87);
+        reslblHowGoOn = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 8);
+        resQuery = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 1);
         int curHelpIndex = 40955;
 
         CurUnoDialog.insertLabel("lblQueryTitle", new String[] { "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
@@ -123,9 +123,17 @@ public class Finalizer {
                 if ( bsuccess ){
                     short igoon = AnyConverter.toShort(Helper.getUnoPropertyValue(UnoDialog.getModel(xRadioDisplayQuery), "State"));
                     if (igoon == (short) 1)
-                        ret = CurDBMetaData.switchtoDataViewmode(queryname, CommandType.QUERY,CurUnoDialog.getCurFrame());
+                    {
+                        ret = CurDBMetaData.switchtoDataViewmode(queryname,
+                                            CommandType.QUERY,
+                                            CurUnoDialog.getCurFrame());
+                    }
                     else
-                        ret = CurDBMetaData.switchtoDesignmode(queryname, CommandType.QUERY,CurUnoDialog.getCurFrame());
+                    {
+                        ret = CurDBMetaData.switchtoDesignmode(queryname,
+                                CommandType.QUERY,
+                                CurUnoDialog.getCurFrame());
+                    }
                     CurUnoDialog.xDialog.endExecute();
                 }
             }
