@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableFieldControl.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,7 +89,7 @@ sal_Bool OTableFieldControl::IsReadOnly()
     if( !bRead )
     {
         // Die Spalten einer ::com::sun::star::sdbcx::View können nicht verändert werden
-        Reference<XPropertySet> xTable = GetCtrl()->GetView()->getController()->getTable();
+        Reference<XPropertySet> xTable = GetCtrl()->GetView()->getController().getTable();
         if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW"))
             bRead = sal_True;
         else
@@ -128,17 +128,17 @@ void OTableFieldControl::DeactivateAggregate( EControlType eType )
 // -----------------------------------------------------------------------------
 void OTableFieldControl::SetModified(BOOL bModified)
 {
-    GetCtrl()->GetView()->getController()->setModified(bModified);
+    GetCtrl()->GetView()->getController().setModified(bModified);
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> OTableFieldControl::getConnection()
 {
-    return GetCtrl()->GetView()->getController()->getConnection();
+    return GetCtrl()->GetView()->getController().getConnection();
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> OTableFieldControl::getMetaData()
 {
-    Reference<XConnection> xCon = GetCtrl()->GetView()->getController()->getConnection();
+    Reference<XConnection> xCon = GetCtrl()->GetView()->getController().getConnection();
     if(!xCon.is())
         return NULL;
     return xCon->getMetaData();
@@ -146,17 +146,17 @@ void OTableFieldControl::SetModified(BOOL bModified)
 // -----------------------------------------------------------------------------
 Reference< XNumberFormatter >   OTableFieldControl::GetFormatter() const
 {
-    return GetCtrl()->GetView()->getController()->getNumberFormatter();
+    return GetCtrl()->GetView()->getController().getNumberFormatter();
 }
 // -----------------------------------------------------------------------------
 TOTypeInfoSP OTableFieldControl::getTypeInfo(sal_Int32 _nPos)
 {
-    return GetCtrl()->GetView()->getController()->getTypeInfo(_nPos);
+    return GetCtrl()->GetView()->getController().getTypeInfo(_nPos);
 }
 // -----------------------------------------------------------------------------
 const OTypeInfoMap* OTableFieldControl::getTypeInfo() const
 {
-    return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController()->getTypeInfo();
+    return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController().getTypeInfo();
 }
 // -----------------------------------------------------------------------------
 Locale OTableFieldControl::GetLocale() const
@@ -166,12 +166,12 @@ Locale OTableFieldControl::GetLocale() const
 // -----------------------------------------------------------------------------
 sal_Bool OTableFieldControl::isAutoIncrementValueEnabled() const
 {
-    return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController()->isAutoIncrementValueEnabled();
+    return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController().isAutoIncrementValueEnabled();
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OTableFieldControl::getAutoIncrementValue() const
 {
-    return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController()->getAutoIncrementValue();
+    return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController().getAutoIncrementValue();
 }
 // -----------------------------------------------------------------------------
 

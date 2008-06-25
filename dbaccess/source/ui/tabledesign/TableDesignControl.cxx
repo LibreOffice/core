@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableDesignControl.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -132,7 +132,7 @@ void OTableRowView::KeyInput( const KeyEvent& rEvt )
         {
             ::com::sun::star::util::URL aUrl;
             aUrl.Complete =::rtl::OUString::createFromAscii(".uno:DSBEditDoc");
-            GetView()->getController()->dispatch( aUrl,Sequence< PropertyValue >() );
+            GetView()->getController().dispatch( aUrl,Sequence< PropertyValue >() );
         }
     }
     EditBrowseBox::KeyInput(rEvt);
