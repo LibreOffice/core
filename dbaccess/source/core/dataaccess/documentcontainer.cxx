@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentcontainer.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,6 +73,7 @@
 #ifndef _DBA_COREDATAACCESS_DATASOURCE_HXX_
 #include "datasource.hxx"
 #endif
+#include <comphelper/classids.hxx>
 #ifndef _COMPHELPER_MIMECONFIGHELPER_HXX_
 #include <comphelper/mimeconfighelper.hxx>
 #endif
@@ -82,6 +83,9 @@
 #ifndef CONNECTIVITY_SQLERROR_HXX
 #include <connectivity/sqlerror.hxx>
 #endif
+
+#include <vcl/svapp.hxx>
+#include <vos/mutex.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -234,7 +238,18 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             }
             else if ( aValue.Name.equalsAscii("ClassID") )
             {
-                aValue.Value >>= aClassID;
+                if (! ( aValue.Value >>= aClassID ) )
+                {
+                    // Extended for usage also with a string
+                    ::rtl::OUString suValue;
+                    aValue.Value >>= suValue;
+                    aClassID = ::comphelper::MimeConfigurationHelper::GetSequenceClassIDRepresentation( suValue );
+
+                }
+                rtl::OUString suClassID = ::comphelper::MimeConfigurationHelper::GetStringClassIDRepresentation(aClassID);
+                volatile int dummy = 0;
+                (void)dummy;
+                (void)suClassID;
             }
             else if ( aValue.Name.equalsAscii(PROPERTY_AS_TEMPLATE) )
             {
@@ -521,6 +536,8 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
                                                                        , sal_Int32 /*SearchFlags*/
                                                                        , const Sequence< PropertyValue >& Arguments ) throw (IOException, IllegalArgumentException, RuntimeException)
 {
+    vos::OGuard aSolarGuard(Application::GetSolarMutex());
+
     MutexGuard aGuard(m_aMutex);
     Reference< XComponent > xComp;
     try
