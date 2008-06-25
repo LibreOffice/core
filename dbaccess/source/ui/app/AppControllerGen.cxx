@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppControllerGen.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,8 +101,11 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ucb;
-using ::com::sun::star::util::XCloseable;
 
+/** === begin UNO using === **/
+using ::com::sun::star::util::XCloseable;
+using ::com::sun::star::ui::XContextMenuInterceptor;
+/** === end UNO using === **/
 namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
 namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
 
@@ -582,6 +585,19 @@ Reference< XComponent > SAL_CALL OApplicationController::loadComponentWithArgume
 }
 
 // -----------------------------------------------------------------------------
+void SAL_CALL OApplicationController::registerContextMenuInterceptor( const Reference< XContextMenuInterceptor >& _Interceptor ) throw (RuntimeException)
+{
+    if ( _Interceptor.is() )
+        m_aContextMenuInterceptors.addInterface( _Interceptor );
+}
+
+// -----------------------------------------------------------------------------
+void SAL_CALL OApplicationController::releaseContextMenuInterceptor( const Reference< XContextMenuInterceptor >& _Interceptor ) throw (RuntimeException)
+{
+    m_aContextMenuInterceptors.removeInterface( _Interceptor );
+}
+
+// -----------------------------------------------------------------------------
 void OApplicationController::previewChanged( sal_Int32 _nMode )
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
@@ -659,6 +675,7 @@ void OApplicationController::askToReconnect()
 {
     return ::dbaui::getStrippedDatabaseName(m_xDataSource,m_sDatabaseName);
 }
+
 // -----------------------------------------------------------------------------
 void OApplicationController::addDocumentListener(const Reference< XComponent >& _xDocument,const Reference< XComponent >& _xDefintion)
 {
@@ -710,7 +727,7 @@ sal_Bool OApplicationController::isRenameDeleteAllowed(ElementType _eType,sal_Bo
             if ( bEnabled && bCompareRes && E_TABLE == eType )
             {
                 ::std::vector< ::rtl::OUString> aList;
-                const_cast<OApplicationController*>(this)->getSelectionElementNames(aList);
+                getSelectionElementNames(aList);
 
                 try
                 {
@@ -769,6 +786,13 @@ void OApplicationController::doAction(sal_uInt16 _nId ,ElementOpenMode _eOpenMod
     ::std::vector< ::rtl::OUString> aList;
     getSelectionElementNames(aList);
     ElementType eType = getContainer()->getElementType();
+    ::comphelper::NamedValueCollection aArguments;
+    ElementOpenMode eOpenMode = _eOpenMode;
+    if ( eType == E_REPORT && E_OPEN_FOR_MAIL == _eOpenMode )
+    {
+        aArguments.put("Hidden",true);
+        eOpenMode = E_OPEN_NORMAL;
+    }
 
     ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > > aCompoments;
     ::std::vector< ::rtl::OUString>::iterator aEnd = aList.end();
@@ -778,7 +802,7 @@ void OApplicationController::doAction(sal_uInt16 _nId ,ElementOpenMode _eOpenMod
             convertToView(*aIter);
         else
         {
-            Reference< XModel > xModel( openElement( *aIter, eType, _eOpenMode, _nId ), UNO_QUERY );
+            Reference< XModel > xModel( openElementWithArguments( *aIter, eType, eOpenMode, _nId,aArguments ), UNO_QUERY );
             aCompoments.push_back( ::std::pair< ::rtl::OUString, Reference< XModel > >( *aIter, xModel ) );
         }
     }
@@ -786,6 +810,7 @@ void OApplicationController::doAction(sal_uInt16 _nId ,ElementOpenMode _eOpenMod
     // special handling for mail, if more than one document is selected attach them all
     if ( _eOpenMode == E_OPEN_FOR_MAIL )
     {
+
         ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > >::iterator componentIter = aCompoments.begin();
         ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > >::iterator componentEnd = aCompoments.end();
         ::rtl::OUString aDocTypeString;
@@ -793,10 +818,18 @@ void OApplicationController::doAction(sal_uInt16 _nId ,ElementOpenMode _eOpenMod
         SfxMailModel::SendMailResult eResult = SfxMailModel::SEND_MAIL_OK;
         for (; componentIter != componentEnd && SfxMailModel::SEND_MAIL_OK == eResult; ++componentIter)
         {
-            Reference< XModel > xModel(componentIter->second,UNO_QUERY);
+            try
+            {
+                Reference< XModel > xModel(componentIter->second,UNO_QUERY);
 
-            // Send document as e-Mail using stored/default type
-            eResult = aSendMail.AttachDocument(aDocTypeString,xModel,componentIter->first);
+                // Send document as e-Mail using stored/default type
+                eResult = aSendMail.AttachDocument(aDocTypeString,xModel,componentIter->first);
+                ::comphelper::disposeComponent(xModel);
+            }
+            catch(const Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
         }
         if ( !aSendMail.IsEmpty() )
             aSendMail.Send( getFrame() );
