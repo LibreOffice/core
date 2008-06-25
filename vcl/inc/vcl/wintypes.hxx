@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wintypes.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -235,6 +235,7 @@ typedef sal_Int64 WinBits;
 // Window-Bits for ToolBox
 #define WB_LINESPACING          ((WinBits)0x01000000)
 #define WB_SCROLL               ((WinBits)0x02000000)
+#define WB_FORCETABCYCLE        ((WinBits)0x04000000)
 
 // Window-Bits for TabControl
 #define WB_SINGLELINE           ((WinBits)0x02000000)
