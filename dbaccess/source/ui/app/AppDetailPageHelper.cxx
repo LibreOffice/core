@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppDetailPageHelper.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -123,11 +123,10 @@
 #ifndef _COM_SUN_STAR_SDB_APPLICATION_XDATABASEDOCUMENTUI_HPP_
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #endif
+#include <com/sun/star/sdb/application/DatabaseObject.hpp>
+#include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
 #ifndef DBAUI_APPVIEW_HXX
 #include "AppView.hxx"
-#endif
-#ifndef DBAUI_IAPPELEMENTNOTIFICATION_HXX
-#include "IAppElementNotification.hxx"
 #endif
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
@@ -162,6 +161,10 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+#include "IApplicationController.hxx"
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
@@ -178,6 +181,12 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star;
+
+namespace dbaui
+{
+    namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
+    namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer;
+}
 
 namespace
 {
@@ -320,7 +329,7 @@ OAppDetailPageHelper::OAppDetailPageHelper(Window* _pParent,OAppBorderWindow& _r
     m_xWindow = VCLUnoHelper::GetInterface( m_pTablePreview );
 
     SetUniqueId(UID_APP_DETAILPAGE_HELPER);
-    for (int i=0; i < CONTROL_COUNT; ++i)
+    for (int i=0; i < E_ELEMENT_TYPE_COUNT; ++i)
         m_pLists[i] = NULL;
     ImplInitSettings();
 }
@@ -338,7 +347,7 @@ OAppDetailPageHelper::~OAppDetailPageHelper()
         OSL_ENSURE(0,"Exception thrown while disposing preview frame!");
     }
 
-    for (int i=0; i < CONTROL_COUNT; ++i)
+    for (int i=0; i < E_ELEMENT_TYPE_COUNT; ++i)
     {
         if ( m_pLists[i] )
         {
@@ -357,7 +366,7 @@ OAppDetailPageHelper::~OAppDetailPageHelper()
 int OAppDetailPageHelper::getVisibleControlIndex() const
 {
     int i = 0;
-    for (; i < CONTROL_COUNT ; ++i)
+    for (; i < E_ELEMENT_TYPE_COUNT ; ++i)
     {
         if ( m_pLists[i] && m_pLists[i]->IsVisible() )
             break;
@@ -368,7 +377,7 @@ int OAppDetailPageHelper::getVisibleControlIndex() const
 void OAppDetailPageHelper::selectAll()
 {
     int nPos = getVisibleControlIndex();
-    if ( nPos < CONTROL_COUNT )
+    if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
         m_pLists[nPos]->lockAutoSelect();
         m_pLists[nPos]->SelectAll(TRUE);
@@ -390,7 +399,7 @@ sal_Bool OAppDetailPageHelper::isSortUp() const
 {
     SvSortMode eSortMode = SortNone;
     int nPos = getVisibleControlIndex();
-    if ( nPos < CONTROL_COUNT )
+    if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
         SvLBoxTreeList* pModel = m_pLists[nPos]->GetModel();
         eSortMode = pModel->GetSortMode();
@@ -401,21 +410,21 @@ sal_Bool OAppDetailPageHelper::isSortUp() const
 void OAppDetailPageHelper::sortDown()
 {
     int nPos = getVisibleControlIndex();
-    if ( nPos < CONTROL_COUNT )
+    if ( nPos < E_ELEMENT_TYPE_COUNT )
         sort(nPos,SortDescending);
 }
 // -----------------------------------------------------------------------------
 void OAppDetailPageHelper::sortUp()
 {
     int nPos = getVisibleControlIndex();
-    if ( nPos < CONTROL_COUNT )
+    if ( nPos < E_ELEMENT_TYPE_COUNT )
         sort(nPos,SortAscending);
 }
 // -----------------------------------------------------------------------------
 void OAppDetailPageHelper::getSelectionElementNames( ::std::vector< ::rtl::OUString>& _rNames ) const
 {
     int nPos = getVisibleControlIndex();
-    if ( nPos < CONTROL_COUNT )
+    if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
         DBTreeListBox& rTree = *m_pLists[nPos];
         sal_Int32 nCount = rTree.GetEntryCount();
@@ -427,7 +436,7 @@ void OAppDetailPageHelper::getSelectionElementNames( ::std::vector< ::rtl::OUStr
             if ( eType == E_TABLE )
             {
                 if( rTree.GetChildCount(pEntry) == 0 )
-                    _rNames.push_back(getQualifiedName( pEntry ) );
+                    _rNames.push_back( getQualifiedName( pEntry ) );
             }
             else
             {
@@ -444,11 +453,96 @@ void OAppDetailPageHelper::getSelectionElementNames( ::std::vector< ::rtl::OUStr
         }
     }
 }
+
+// -----------------------------------------------------------------------------
+void OAppDetailPageHelper::describeCurrentSelectionForControl( const Control& _rControl, Sequence< NamedDatabaseObject >& _out_rSelectedObjects )
+{
+    enum ElementType eType = E_TABLE;
+    for ( size_t i=0; i < E_ELEMENT_TYPE_COUNT; eType = static_cast< ElementType >( ++i ) )
+    {
+        if ( m_pLists[eType] == &_rControl )
+        {
+            describeCurrentSelectionForType( eType, _out_rSelectedObjects );
+            return;
+        }
+    }
+    OSL_ENSURE( false, "OAppDetailPageHelper::describeCurrentSelectionForControl: invalid control!" );
+}
+
+// -----------------------------------------------------------------------------
+void OAppDetailPageHelper::describeCurrentSelectionForType( const ElementType _eType, Sequence< NamedDatabaseObject >& _out_rSelectedObjects )
+{
+    OSL_ENSURE( _eType < E_ELEMENT_TYPE_COUNT, "OAppDetailPageHelper::describeCurrentSelectionForType: invalid type!" );
+    DBTreeListBox* pList = m_pLists[ _eType ];
+    OSL_ENSURE( pList, "OAppDetailPageHelper::describeCurrentSelectionForType: "
+                       "You really should ensure this type has already been viewed before!" );
+    if ( !pList )
+        return;
+
+    ::std::vector< NamedDatabaseObject > aSelected;
+
+    SvLBoxEntry* pEntry = pList->FirstSelected();
+    while( pEntry )
+    {
+        NamedDatabaseObject aObject;
+        switch ( _eType )
+        {
+        case E_TABLE:
+        {
+            OTableTreeListBox& rTableTree = dynamic_cast< OTableTreeListBox& >( *pList );
+            aObject = rTableTree.describeObject( pEntry );
+        }
+        break;
+        case E_QUERY:
+            aObject.Type = DatabaseObject::QUERY;
+            aObject.Name = pList->GetEntryText( pEntry );
+            break;
+
+        case E_FORM:
+        case E_REPORT:
+        {
+            ::rtl::OUString sName = pList->GetEntryText(pEntry);
+            SvLBoxEntry* pParent = pList->GetParent(pEntry);
+            while ( pParent )
+            {
+                ::rtl::OUStringBuffer buffer;
+                buffer.append( pList->GetEntryText( pParent ) );
+                buffer.append( sal_Unicode( '/' ) );
+                buffer.append( sName );
+                sName = buffer.makeStringAndClear();
+
+                pParent = pList->GetParent( pParent );
+            }
+
+            if ( isLeaf( pEntry ) )
+                aObject.Type = ( _eType == E_FORM ) ? DatabaseObject::FORM : DatabaseObject::REPORT;
+            else
+                aObject.Type = ( _eType == E_FORM ) ? DatabaseObjectContainer::FORMS_FOLDER : DatabaseObjectContainer::REPORTS_FOLDER;
+            aObject.Name = sName;
+        }
+        break;
+        default:
+            OSL_ENSURE( false, "OAppDetailPageHelper::describeCurrentSelectionForType: unexpected type!" );
+            break;
+        }
+
+        if ( aObject.Name.getLength() )
+        {
+            aSelected.push_back( aObject );
+        }
+
+        pEntry = pList->NextSelected(pEntry);
+    }
+
+    _out_rSelectedObjects.realloc( aSelected.size() );
+    ::std::copy( aSelected.begin(), aSelected.end(), _out_rSelectedObjects.getArray() );
+}
+
 // -----------------------------------------------------------------------------
 void OAppDetailPageHelper::selectElements(const Sequence< ::rtl::OUString>& _aNames)
 {
     int nPos = getVisibleControlIndex();
-    if ( nPos < CONTROL_COUNT )
+    if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
         DBTreeListBox& rTree = *m_pLists[nPos];
         rTree.SelectAll(FALSE);
@@ -468,7 +562,7 @@ void OAppDetailPageHelper::selectElements(const Sequence< ::rtl::OUString>& _aNa
     int nPos = getVisibleControlIndex();
     ::rtl::OUString sComposedName;
 
-    if ( nPos >= CONTROL_COUNT )
+    if ( nPos >= E_ELEMENT_TYPE_COUNT )
         return sComposedName;
 
     OSL_ENSURE(m_pLists[nPos],"Tables tree view is NULL! -> GPF");
@@ -510,7 +604,7 @@ sal_Int32 OAppDetailPageHelper::getSelectionCount()
 {
     sal_Int32 nCount = 0;
     int nPos = getVisibleControlIndex();
-    if ( nPos < CONTROL_COUNT )
+    if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
         DBTreeListBox& rTree = *m_pLists[nPos];
         SvLBoxEntry* pEntry = rTree.FirstSelected();
@@ -527,7 +621,7 @@ sal_Int32 OAppDetailPageHelper::getElementCount()
 {
     sal_Int32 nCount = 0;
     int nPos = getVisibleControlIndex();
-    if ( nPos < CONTROL_COUNT )
+    if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
         nCount = m_pLists[nPos]->GetEntryCount();
     }
@@ -563,28 +657,32 @@ void OAppDetailPageHelper::paste()
 {
 }
 // -----------------------------------------------------------------------------
-sal_Bool OAppDetailPageHelper::isLeaf(SvLBoxEntry* _pEntry) const
+bool OAppDetailPageHelper::isLeaf(SvLBoxEntry* _pEntry) const
 {
-    int nPos = getVisibleControlIndex();
-    sal_Bool bLeafSelected = sal_False;
-    if ( nPos < CONTROL_COUNT && _pEntry )
-    {
-        bLeafSelected = reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData()) != FOLDER_INDICATOR;
-    }
-    return bLeafSelected;
+    sal_Int32 nEntryType = reinterpret_cast< sal_IntPtr >( _pEntry->GetUserData() );
+    if  (   ( nEntryType == DatabaseObjectContainer::TABLES )
+        ||  ( nEntryType == DatabaseObjectContainer::CATALOG )
+        ||  ( nEntryType == DatabaseObjectContainer::SCHEMA )
+        ||  ( nEntryType == DatabaseObjectContainer::FORMS_FOLDER )
+        ||  ( nEntryType == DatabaseObjectContainer::REPORTS_FOLDER )
+        )
+        return false;
+
+    return true;
 }
+
 // -----------------------------------------------------------------------------
 sal_Bool OAppDetailPageHelper::isALeafSelected() const
 {
     int nPos = getVisibleControlIndex();
     sal_Bool bLeafSelected = sal_False;
-    if ( nPos < CONTROL_COUNT )
+    if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
         DBTreeListBox& rTree = *m_pLists[nPos];
         SvLBoxEntry* pEntry = rTree.FirstSelected( );
         while( !bLeafSelected && pEntry )
         {
-            bLeafSelected = reinterpret_cast<sal_IntPtr>(pEntry->GetUserData()) != FOLDER_INDICATOR;
+            bLeafSelected = isLeaf( pEntry );
             pEntry = rTree.NextSelected(pEntry);
         }
     }
@@ -595,7 +693,7 @@ SvLBoxEntry* OAppDetailPageHelper::getEntry( const Point& _aPosPixel) const
 {
     SvLBoxEntry* pReturn = NULL;
     int nPos = getVisibleControlIndex();
-    if ( nPos < CONTROL_COUNT )
+    if ( nPos < E_ELEMENT_TYPE_COUNT )
         pReturn = m_pLists[nPos]->GetEntry( _aPosPixel,TRUE );
     return pReturn;
 }
@@ -694,7 +792,7 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
     {
         if ( !m_pLists[_eType]->GetEntryCount() && _xContainer.is() )
         {
-            fillNames( _xContainer, *m_pLists[ _eType ], nImageId, nImageIdH );
+            fillNames( _xContainer, _eType, nImageId, nImageIdH, NULL );
 
             m_pLists[_eType]->SelectAll(FALSE);
         }
@@ -724,11 +822,65 @@ void OAppDetailPageHelper::setDetailPage(Window* _pWindow)
         _pWindow->GrabFocus();
     Resize();
 }
+
 // -----------------------------------------------------------------------------
-void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContainer, DBTreeListBox& _rList,
-                                      USHORT _nImageId, USHORT _nHighContrastImageId, SvLBoxEntry* _pParent )
+namespace
 {
-    fillTreeListNames( _xContainer, _rList, _nImageId, _nHighContrastImageId, _pParent, m_rBorderWin.getView()->getContainerListener() );
+    namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
+    namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer;
+
+    static sal_Int32 lcl_getFolderIndicatorForType( const ElementType _eType )
+    {
+        const sal_Int32 nFolderIndicator =
+                ( _eType == E_FORM ) ? DatabaseObjectContainer::FORMS_FOLDER
+            :   ( _eType == E_REPORT ) ? DatabaseObjectContainer::REPORTS_FOLDER : -1;
+        return nFolderIndicator;
+    }
+}
+
+// -----------------------------------------------------------------------------
+void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContainer, const ElementType _eType,
+                                      const USHORT _nImageId, const USHORT _nHighContrastImageId, SvLBoxEntry* _pParent )
+{
+    OSL_ENSURE(_xContainer.is(),"Data source is NULL! -> GPF");
+    OSL_ENSURE( ( _eType >= E_TABLE ) && ( _eType < E_ELEMENT_TYPE_COUNT ), "OAppDetailPageHelper::fillNames: invalid type!" );
+
+    DBTreeListBox* pList = m_pLists[ _eType ];
+    OSL_ENSURE( pList, "OAppDetailPageHelper::fillNames: you really should create the list before calling this!" );
+    if ( !pList )
+        return;
+
+    if ( _xContainer.is() && _xContainer->hasElements() )
+    {
+        const sal_Int32 nFolderIndicator = lcl_getFolderIndicatorForType( _eType );
+
+        Sequence< ::rtl::OUString> aSeq = _xContainer->getElementNames();
+        const ::rtl::OUString* pIter = aSeq.getConstArray();
+        const ::rtl::OUString* pEnd  = pIter + aSeq.getLength();
+        for(;pIter != pEnd;++pIter)
+        {
+            SvLBoxEntry* pEntry = NULL;
+            Reference<XNameAccess> xSubElements(_xContainer->getByName(*pIter),UNO_QUERY);
+            if ( xSubElements.is() )
+            {
+                pEntry = pList->InsertEntry( *pIter, _pParent, FALSE, LIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
+                getBorderWin().getView()->getAppController().containerFound( Reference< XContainer >( xSubElements, UNO_QUERY ) );
+                fillNames( xSubElements, _eType, _nImageId, _nHighContrastImageId, pEntry );
+            }
+            else
+            {
+                pEntry = pList->InsertEntry( *pIter, _pParent );
+
+                Image aImage = Image( ModuleRes( _nImageId ) );
+                pList->SetExpandedEntryBmp( pEntry, aImage, BMP_COLOR_NORMAL );
+                pList->SetCollapsedEntryBmp( pEntry, aImage, BMP_COLOR_NORMAL );
+
+                Image aHCImage = Image( ModuleRes( _nHighContrastImageId ) );
+                pList->SetExpandedEntryBmp( pEntry, aHCImage, BMP_COLOR_HIGHCONTRAST );
+                pList->SetCollapsedEntryBmp( pEntry, aHCImage, BMP_COLOR_HIGHCONTRAST );
+            }
+        }
+    }
 }
 // -----------------------------------------------------------------------------
 DBTreeListBox* OAppDetailPageHelper::createSimpleTree( ULONG _nHelpId, const Image& _rImage, const Image& _rImageHC )
@@ -763,8 +915,8 @@ DBTreeListBox* OAppDetailPageHelper::createTree( DBTreeListBox* _pTreeView, cons
     _pTreeView->setPasteHandler(LINK(this, OAppDetailPageHelper, OnPasteEntry));
     _pTreeView->setDeleteHandler(LINK(this, OAppDetailPageHelper, OnDeleteEntry));
 
-    _pTreeView->setContextMenuActionListener(getBorderWin().getView()->getCommandController());
-    _pTreeView->setControlActionListener(getBorderWin().getView()->getActionListener());
+    _pTreeView->setControlActionListener( &getBorderWin().getView()->getAppController() );
+    _pTreeView->setContextMenuProvider( &getBorderWin().getView()->getAppController() );
 
     return _pTreeView;
 }
@@ -772,7 +924,7 @@ DBTreeListBox* OAppDetailPageHelper::createTree( DBTreeListBox* _pTreeView, cons
 void OAppDetailPageHelper::clearPages()
 {
     showPreview(NULL);
-    for (size_t i=0; i < CONTROL_COUNT; ++i)
+    for (size_t i=0; i < E_ELEMENT_TYPE_COUNT; ++i)
     {
         if ( m_pLists[i] )
             m_pLists[i]->Clear();
@@ -782,9 +934,9 @@ void OAppDetailPageHelper::clearPages()
 sal_Bool OAppDetailPageHelper::isFilled() const
 {
     size_t i = 0;
-    for (; i < CONTROL_COUNT && !m_pLists[i]; ++i)
+    for (; i < E_ELEMENT_TYPE_COUNT && !m_pLists[i]; ++i)
         ;
-    return i != CONTROL_COUNT;
+    return i != E_ELEMENT_TYPE_COUNT;
 }
 // -----------------------------------------------------------------------------
 void OAppDetailPageHelper::elementReplaced(ElementType _eType
@@ -849,8 +1001,9 @@ SvLBoxEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const ::rtl::
         Reference<XNameAccess> xContainer(_rObject,UNO_QUERY);
         if ( xContainer.is() )
         {
-            pRet = pTreeView->InsertEntry(_rName,pEntry,FALSE,LIST_APPEND,reinterpret_cast<void*>(FOLDER_INDICATOR));
-            fillNames( xContainer, *pTreeView, nImageId, nImageIdH, pRet );
+            const sal_Int32 nFolderIndicator = lcl_getFolderIndicatorForType( _eType );
+            pRet = pTreeView->InsertEntry( _rName, pEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
+            fillNames( xContainer, _eType, nImageId, nImageIdH, pRet );
         }
         else
         {
@@ -908,13 +1061,16 @@ void OAppDetailPageHelper::elementRemoved( ElementType _eType,const ::rtl::OUStr
 // -----------------------------------------------------------------------------
 IMPL_LINK(OAppDetailPageHelper, OnEntryDoubleClick, SvTreeListBox*, _pTree)
 {
-    bool bHandled = getBorderWin().getView()->getElementNotification()->onEntryDoubleClick(_pTree);
+    OSL_ENSURE( _pTree, "OAppDetailPageHelper, OnEntryDoubleClick: invalid callback!" );
+    bool bHandled = ( _pTree != NULL ) && getBorderWin().getView()->getAppController().onEntryDoubleClick( *_pTree );
     return bHandled ? 1L : 0L;
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK(OAppDetailPageHelper, OnDeSelectHdl, SvTreeListBox*, _pTree)
 {
-    getBorderWin().getView()->getElementNotification()->onEntryDeSelect(_pTree);
+    OSL_ENSURE( _pTree, "OAppDetailPageHelper, OnDeSelectHdl: invalid callback!" );
+    if ( _pTree != NULL )
+        getBorderWin().getView()->getAppController().onEntryDeSelect( *_pTree );
     return 1L;
 }
 // -----------------------------------------------------------------------------
@@ -922,7 +1078,7 @@ IMPL_LINK(OAppDetailPageHelper, OnEntrySelectHdl, SvLBoxEntry*, _pEntry)
 {
     if ( 1 == getSelectionCount() )
     {
-        getBorderWin().getView()->getElementNotification()->onEntrySelect(_pEntry);
+        getBorderWin().getView()->getAppController().onEntrySelect(_pEntry);
     }
     else
     {
@@ -933,25 +1089,25 @@ IMPL_LINK(OAppDetailPageHelper, OnEntrySelectHdl, SvLBoxEntry*, _pEntry)
 // -----------------------------------------------------------------------------
 IMPL_LINK( OAppDetailPageHelper, OnCutEntry, SvLBoxEntry*, _pEntry )
 {
-    getBorderWin().getView()->getElementNotification()->onCutEntry(_pEntry);
+    getBorderWin().getView()->getAppController().onCutEntry(_pEntry);
     return 1L;
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( OAppDetailPageHelper, OnCopyEntry, SvLBoxEntry*, _pEntry )
 {
-    getBorderWin().getView()->getElementNotification()->onCopyEntry(_pEntry);
+    getBorderWin().getView()->getAppController().onCopyEntry(_pEntry);
     return 1L;
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( OAppDetailPageHelper, OnPasteEntry, SvLBoxEntry*, _pEntry )
 {
-    getBorderWin().getView()->getElementNotification()->onPasteEntry(_pEntry);
+    getBorderWin().getView()->getAppController().onPasteEntry(_pEntry);
     return 1L;
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( OAppDetailPageHelper, OnDeleteEntry, SvLBoxEntry*, _pEntry )
 {
-    getBorderWin().getView()->getElementNotification()->onDeleteEntry(_pEntry);
+    getBorderWin().getView()->getAppController().onDeleteEntry(_pEntry);
     return 1L;
 }
 // -----------------------------------------------------------------------------
@@ -1003,7 +1159,7 @@ void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,BOOL _bForce)
     {
         m_ePreviewMode = _eMode;
 
-        getBorderWin().getView()->getViewChangeListener()->previewChanged(static_cast<sal_Int32>(m_ePreviewMode));
+        getBorderWin().getView()->getAppController().previewChanged(static_cast<sal_Int32>(m_ePreviewMode));
 
         sal_uInt16 nSelectedAction = SID_DB_APP_DISABLE_PREVIEW;
         switch ( m_ePreviewMode )
@@ -1015,7 +1171,7 @@ void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,BOOL _bForce)
                 nSelectedAction = SID_DB_APP_VIEW_DOC_PREVIEW;
                 break;
             case E_DOCUMENTINFO:
-                if ( getBorderWin().getView()->getCommandController()->isCommandEnabled(SID_DB_APP_VIEW_DOCINFO_PREVIEW) )
+                if ( getBorderWin().getView()->getAppController().isCommandEnabled(SID_DB_APP_VIEW_DOCINFO_PREVIEW) )
                     nSelectedAction = SID_DB_APP_VIEW_DOCINFO_PREVIEW;
                 else
                     m_ePreviewMode = E_PREVIEWNONE;
@@ -1034,7 +1190,7 @@ void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,BOOL _bForce)
                 SvLBoxEntry* pEntry = pTree->GetSelectedEntry();
                 if ( pEntry )
                 {
-                    getBorderWin().getView()->getElementNotification()->onEntrySelect(pEntry);
+                    getBorderWin().getView()->getAppController().onEntrySelect(pEntry);
                 }
             }
         }
@@ -1134,7 +1290,7 @@ void OAppDetailPageHelper::showPreview( const ::rtl::OUString& _sDataSourceName,
                 Reference< XPropertySet > xFrameProps( m_xFrame, UNO_QUERY_THROW );
                 xFrameProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ), makeAny(Reference< XLayoutManager >()) );
 
-                Reference<XFramesSupplier> xSup(getBorderWin().getView()->getController()->getFrame(),UNO_QUERY);
+                Reference<XFramesSupplier> xSup(getBorderWin().getView()->getAppController().getXController()->getFrame(),UNO_QUERY);
                 if ( xSup.is() )
                 {
                     Reference<XFrames> xFrames = xSup->getFrames();
@@ -1146,7 +1302,7 @@ void OAppDetailPageHelper::showPreview( const ::rtl::OUString& _sDataSourceName,
             }
         }
 
-        Reference< XDatabaseDocumentUI > xApplication( getBorderWin().getView()->getController(), UNO_QUERY );
+        Reference< XDatabaseDocumentUI > xApplication( getBorderWin().getView()->getAppController().getXController(), UNO_QUERY );
         ::std::auto_ptr< DatabaseObjectView > pDispatcher( new ResultSetBrowser(
             getBorderWin().getView()->getORB(), xApplication, NULL, _bTable
         ) );
@@ -1196,7 +1352,6 @@ IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, /*pToolBox*/)
     m_aTBPreview.Update();
 
     // execute the menu
-    IController* pControler = getBorderWin().getView()->getCommandController();
     ::std::auto_ptr<PopupMenu> aMenu(new PopupMenu( ModuleRes( RID_MENU_APP_PREVIEW ) ));
 
     sal_uInt16 pActions[] = { SID_DB_APP_DISABLE_PREVIEW
@@ -1208,7 +1363,7 @@ IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, /*pToolBox*/)
     {
         aMenu->CheckItem(pActions[i],m_aMenu->IsItemChecked(pActions[i]));
     }
-    aMenu->EnableItem( SID_DB_APP_VIEW_DOCINFO_PREVIEW, pControler->isCommandEnabled(SID_DB_APP_VIEW_DOCINFO_PREVIEW) );
+    aMenu->EnableItem( SID_DB_APP_VIEW_DOCINFO_PREVIEW, getBorderWin().getView()->getAppController().isCommandEnabled(SID_DB_APP_VIEW_DOCINFO_PREVIEW) );
 
     // no disabled entries
     aMenu->RemoveDisabledEntries();
@@ -1222,19 +1377,23 @@ IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, /*pToolBox*/)
     {
         m_aTBPreview.SetItemText(SID_DB_APP_DISABLE_PREVIEW, aMenu->GetItemText(nSelectedAction));
         Resize();
-        getBorderWin().getView()->getCommandController()->executeChecked(nSelectedAction,Sequence<PropertyValue>());
+        getBorderWin().getView()->getAppController().executeChecked(nSelectedAction,Sequence<PropertyValue>());
     }
     return 0L;
 }
+
 // -----------------------------------------------------------------------------
 void OAppDetailPageHelper::KeyInput( const KeyEvent& rKEvt )
 {
+    SvTreeListBox* pCurrentView = getCurrentView();
+    OSL_PRECOND( pCurrentView, "OAppDetailPageHelper::KeyInput: how this?" );
+
     KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction(); (void)eFunc;
     USHORT      nCode = rKEvt.GetKeyCode().GetCode();
 
-    if ( KEY_RETURN == nCode )
+    if ( ( KEY_RETURN == nCode ) && pCurrentView )
     {
-        getBorderWin().getView()->getElementNotification()->onEntryDoubleClick(getCurrentView());
+        getBorderWin().getView()->getAppController().onEntryDoubleClick( *pCurrentView );
     }
     else
         Window::KeyInput(rKEvt);
