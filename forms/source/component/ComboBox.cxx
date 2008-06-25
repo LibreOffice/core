@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ComboBox.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -264,8 +264,15 @@ void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const 
             break;
 
         case PROPERTY_ID_STRINGITEMLIST:
-            setNewStringItemList( _rValue );
-            break;
+        {
+            ::osl::ResettableMutexGuard aGuard( m_aMutex );
+            setNewStringItemList( _rValue, aGuard );
+                // TODO: this is bogus. setNewStringItemList expects a guard which has the *only*
+                // lock to the mutex, but setFastPropertyValue_NoBroadcast is already called with
+                // a lock - so we effectively has two locks here, of which setNewStringItemList can
+                // only control one.
+        }
+        break;
 
         default:
             OBoundControlModel::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
@@ -377,7 +384,7 @@ void SAL_CALL OComboBoxModel::write(const Reference<stario::XObjectOutputStream>
 void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, RuntimeException)
 {
     OBoundControlModel::read(_rxInStream);
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::ResettableMutexGuard aGuard(m_aMutex);
 
     // since we are "overwriting" the StringItemList of our aggregate (means we have
     // an own place to store the value, instead of relying on our aggregate storing it),
@@ -385,7 +392,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
     try
     {
         if ( m_xAggregateSet.is() )
-            setNewStringItemList( m_xAggregateSet->getPropertyValue( PROPERTY_STRINGITEMLIST ) );
+            setNewStringItemList( m_xAggregateSet->getPropertyValue( PROPERTY_STRINGITEMLIST ), aGuard );
     }
     catch( const Exception& )
     {
@@ -820,18 +827,8 @@ Any OComboBoxModel::getDefaultForReset() const
     return makeAny( m_aDefaultText );
 }
 
-//------------------------------------------------------------------------------
-sal_Bool OComboBoxModel::approveValueBinding( const Reference< XValueBinding >& _rxBinding )
-{
-    OSL_PRECOND( _rxBinding.is(), "OComboBoxModel::approveValueBinding: invalid binding!" );
-
-    // only strings are accepted for simplicity
-    return  _rxBinding.is()
-        &&  _rxBinding->supportsType( ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) );
-}
-
 //--------------------------------------------------------------------
-void OComboBoxModel::stringItemListChanged( )
+void OComboBoxModel::stringItemListChanged( ::osl::ResettableMutexGuard& /*_rInstanceLock*/ )
 {
     if ( m_xAggregateSet.is() )
         m_xAggregateSet->setPropertyValue( PROPERTY_STRINGITEMLIST, makeAny( getStringItemList() ) );
