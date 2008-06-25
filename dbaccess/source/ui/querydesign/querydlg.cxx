@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: querydlg.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -172,7 +172,7 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
     m_pJoinControl->aLB_JoinType.SetSelectHdl(LINK(this,DlgQryJoin,LBChangeHdl));
     m_pJoinControl->m_aCBNatural.SetToggleHdl(LINK(this,DlgQryJoin,NaturalToggleHdl));
 
-    if ( static_cast<OQueryTableView*>(pParent)->getDesignView()->getController()->isReadOnly() )
+    if ( static_cast<OQueryTableView*>(pParent)->getDesignView()->getController().isReadOnly() )
     {
         m_pJoinControl->aLB_JoinType.Disable();
         m_pJoinControl->m_aCBNatural.Disable();
