@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ListBox.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,17 +88,6 @@ class OListBoxModel :public OBoundControlModel
     sal_Int16                                   m_nNULLPos;             // position of the NULL value in our list
     sal_Bool                                    m_bBoundComponent : 1;
 
-    /** type how we should transfer our selection to external value bindings
-    */
-    enum TransferSelection
-    {
-        tsIndexList,        /// as list of indexes of selected entries
-        tsIndex,            /// as index of the selected entry
-        tsEntryList,        /// as list of string representations of selected entries
-        tsEntry             /// as string representation of the selected entry
-    };
-    TransferSelection                           m_eTransferSelectionAs;
-
 private:
     // Helper functions
     StringSequence GetCurValueSeq() const;
@@ -157,26 +146,25 @@ protected:
     // OBoundControlModel overridables
     virtual ::com::sun::star::uno::Any
                             translateDbColumnToControlValue( );
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+                            getSupportedBindingTypes();
     virtual ::com::sun::star::uno::Any
-                            translateExternalValueToControlValue( ) const;
+                            translateExternalValueToControlValue( const ::com::sun::star::uno::Any& _rExternalValue ) const;
     virtual ::com::sun::star::uno::Any
                             translateControlValueToExternalValue( ) const;
     virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
 
     virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
     virtual void            onDisconnectedDbColumn();
-    virtual void            onConnectedExternalValue( );
 
     virtual ::com::sun::star::uno::Any
                             getDefaultForReset() const;
-
-    virtual sal_Bool        approveValueBinding( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding );
 
     virtual ::com::sun::star::uno::Any
                             getCurrentFormComponentValue() const;
 
     // OEntryListHelper overriables
-    virtual void    stringItemListChanged( );
+    virtual void    stringItemListChanged( ::osl::ResettableMutexGuard& _rInstanceLock );
     virtual void    connectedExternalListSource( );
     virtual void    disconnectedExternalListSource( );
     virtual void    refreshInternalEntryList();
