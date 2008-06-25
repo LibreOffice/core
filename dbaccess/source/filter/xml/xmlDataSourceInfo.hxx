@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlDataSourceInfo.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +44,8 @@ namespace dbaxml
 
         OXMLDataSourceInfo( ODBFilter& rImport, sal_uInt16 nPrfx,
                     const ::rtl::OUString& rLName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList);
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
+                    ,const sal_uInt16 _nToken);
         virtual ~OXMLDataSourceInfo();
     };
 // -----------------------------------------------------------------------------
