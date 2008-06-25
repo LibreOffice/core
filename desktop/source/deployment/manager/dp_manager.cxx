@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_manager.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -598,7 +598,7 @@ bool PackageManagerImpl::checkUpdate(
         }
         if (abort || !replace)
             throw CommandFailedException(
-                getResourceString(RID_STR_ERROR_WHILE_ADDING) + id,
+                getResourceString(RID_STR_PACKAGE_ALREADY_ADDED) + id,
                 static_cast<OWeakObject *>(this), request );
 
         // remove clashing package before registering new version:
@@ -738,28 +738,56 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
                 //For example, he may be asked if he wants to replace the older version
                 //with the new version.
                 //checkUpdates must be called before checkPrerequisites
-                bool removeExisting = checkUpdate(
+                bool bAlreadyInstalled = checkUpdate(
                     xPackage, xCmdEnv_, xCmdEnv );
 
-                if (xPackage->checkPrerequisites(xAbortChannel, xCmdEnv, removeExisting, m_context))
+                if (xPackage->checkPrerequisites(xAbortChannel, xCmdEnv, bAlreadyInstalled, m_context))
                 {
                     //This guard is used to prevent that an extension is installed twice. Do not use it in other
                     //functions.
                     //Imagine addPackage is called two times by different threads for the same extension quickly
                     //after each other.
-                    //The second call would calculate "removeExisting = false" if the first thread has not yet reached
+                    //The second call would calculate "bAlreadyInstalled = false" if the first thread has not yet reached
                     //insertToActivationLayerDB.
                     ::osl::MutexGuard g(m_addMutex);
 
-                    if (removeExisting)
-                        // remove extension which is already installed
-                        //do not guard the complete function with the getMutex
-                        removePackage_(id, xPackage->getName(), xAbortChannel, xCmdEnv_ /* unwrapped cmd env */ );
+                    //Holds the database data of the old extension, in case we need to roll back.
+                    ActivePackages::Data oldDbData;
+                    if (bAlreadyInstalled)
+                    {
+                        // Remove extension which is already installed. It is not removed from disk, only
+                        // the different contents are being unregisterd. We remember the databas information
+                        // in case we need to roll back this operation.
+                        // When the user canceled the operation (CommandAbortedException) than the package is still
+                        // fully functional.
+                        // Do not guard the complete function with the getMutex
+                        removePackage_(id, xPackage->getName(), xAbortChannel,
+                            xCmdEnv, & oldDbData);
+                    }
                     install = true;
                     const ::osl::MutexGuard guard( getMutex() );
-                    //throws CommandAbortedException if the user cancelled the installation.
-                    xPackage->registerPackage(xAbortChannel, xCmdEnv);
-                    //install new version of extension
+                    try
+                    {
+                        //throws CommandAbortedException if the user cancelled the installation.
+                        xPackage->registerPackage(xAbortChannel, xCmdEnv);
+                    }
+                    catch(CommandAbortedException & )
+                    {   //ToDo: Interaction so that the gui can display an appropriate string.
+                        //See also removePackage_
+                        //User aborted installation, restore the previous situation.
+                        //Use a private AbortChannel so the user cannot interrupt.
+                        xPackage->revokePackage(new AbortChannel(), xCmdEnv);
+                        if (bAlreadyInstalled)
+                        {
+                            OUString instFolder = makeURL( m_activePackages, oldDbData.temporaryName)
+                                + OUSTR("_");
+                            Reference<deployment::XPackage> xOldPgk = m_xRegistry->bindPackage(
+                                makeURL( instFolder, oldDbData.fileName ), oldDbData.mediaType, xCmdEnv );
+                            xOldPgk->registerPackage(new AbortChannel(), xCmdEnv);
+                            insertToActivationLayerDB(dp_misc::getIdentifier( xOldPgk ), oldDbData);
+                        }
+                        throw;
+                    }
                     //access to the database must be guarded. See removePackage_
                     insertToActivationLayerDB(id, dbData);
                 }
@@ -820,18 +848,30 @@ void PackageManagerImpl::deletePackageFromCache(
 void PackageManagerImpl::removePackage_(
     OUString const & id, OUString const & fileName,
     Reference<task::XAbortChannel> const & xAbortChannel,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    Reference<XCommandEnvironment> const & xCmdEnv,
+    ActivePackages::Data * out_dbData)
 {
     Reference<deployment::XPackage> xPackage;
     {
-        const ::osl::MutexGuard guard(getMutex());
-        xPackage =  getDeployedPackage_(id, fileName, xCmdEnv );
-        beans::Optional< beans::Ambiguous<sal_Bool> > option(
-            xPackage->isRegistered( Reference<task::XAbortChannel>(),
-                                    xCmdEnv ) );
-        if (!option.IsPresent || option.Value.IsAmbiguous || option.Value.Value)
-            xPackage->revokePackage( xAbortChannel, xCmdEnv );
-        m_activePackagesDB->erase( id, fileName ); // to be removed upon next start
+        try {
+            const ::osl::MutexGuard guard(getMutex());
+            xPackage =  getDeployedPackage_(id, fileName, xCmdEnv );
+            m_activePackagesDB->get(out_dbData, id, fileName);
+            beans::Optional< beans::Ambiguous<sal_Bool> > option(
+                xPackage->isRegistered( Reference<task::XAbortChannel>(),
+                xCmdEnv ) );
+            if (!option.IsPresent || option.Value.IsAmbiguous || option.Value.Value)
+                xPackage->revokePackage( xAbortChannel, xCmdEnv );
+            m_activePackagesDB->erase( id, fileName ); // to be removed upon next start
+        }
+        catch (CommandAbortedException &)
+        {
+            //ToDo: interaction, so that gui can show an appropriate string
+            //reregister the package
+            //Create our own XAbortChannel, so the user cannot interrupt the registration.
+            xPackage->registerPackage(new AbortChannel(), xCmdEnv);
+            throw;
+        }
     }
     try_dispose( xPackage );
 }
@@ -858,7 +898,7 @@ void PackageManagerImpl::removePackage(
         xCmdEnv.set( xCmdEnv_ );
 
     try {
-        removePackage_( id, fileName, xAbortChannel, xCmdEnv );
+        removePackage_( id, fileName, xAbortChannel, xCmdEnv, NULL);
         fireModified();
     }
     catch (RuntimeException &) {
