@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AsyncronousLink.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,12 +77,12 @@ OAsyncronousLink::~OAsyncronousLink()
 
 
 //------------------------------------------------------------------
-void OAsyncronousLink::Call(void* /*_pArgument*/)
+void OAsyncronousLink::Call( void* _pArgument )
 {
     ::osl::MutexGuard aEventGuard( m_aEventSafety );
     if (m_nEventId)
         Application::RemoveUserEvent(m_nEventId);
-    m_nEventId = Application::PostUserEvent(LINK(this, OAsyncronousLink, OnAsyncCall));
+    m_nEventId = Application::PostUserEvent( LINK( this, OAsyncronousLink, OnAsyncCall ), _pArgument );
 }
 
 //------------------------------------------------------------------
