@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saldisp.cxx,v $
- * $Revision: 1.98 $
+ * $Revision: 1.99 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -521,7 +521,8 @@ SalDisplay::SalDisplay( Display *display ) :
         mpFallbackFactory ( NULL ),
         pDisp_( display ),
         m_pWMAdaptor( NULL ),
-        m_pDtIntegrator( NULL )
+        m_pDtIntegrator( NULL ),
+        m_bUseRandRWrapper( true )
 {
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "SalDisplay::SalDisplay()\n" );
