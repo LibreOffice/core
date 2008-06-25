@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlDataSource.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -254,8 +254,9 @@ SvXMLImportContext* OXMLDataSource::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
     const SvXMLTokenMap&    rTokenMap   = GetOwnImport().GetDataSourceElemTokenMap();
+    const sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
 
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
+    switch( nToken )
     {
         case XML_TOK_LOGIN:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
@@ -272,7 +273,7 @@ SvXMLImportContext* OXMLDataSource::CreateChildContext(
         case XML_TOK_FONT_CHARSET:
         case XML_TOK_CHARACTER_SET:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLDataSourceInfo( GetOwnImport(), nPrefix, rLocalName,xAttrList);
+            pContext = new OXMLDataSourceInfo( GetOwnImport(), nPrefix, rLocalName,xAttrList,nToken);
             break;
         case XML_TOK_DATA_SOURCE_SETTINGS:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
