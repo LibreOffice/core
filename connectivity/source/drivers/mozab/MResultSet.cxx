@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MResultSet.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1038,11 +1038,10 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
 
         if (SQL_ISTOKEN(parseTree->getChild(2),NOT))
         {
-            ::dbtools::throwGenericSQLException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Statement too complex")),NULL);
+            op = MQueryOp::Exists;
         }
         else
-                op = MQueryOp::Exists;
+            op = MQueryOp::DoesNotExist;
 
         ::rtl::OUString sTableRange;
         m_pSQLIterator->getColumnRange(parseTree->getChild(0),columnName,sTableRange);
