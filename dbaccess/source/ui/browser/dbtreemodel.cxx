@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbtreemodel.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,18 +43,15 @@
 
 namespace dbaui
 {
-    //========================================================================
-    //= DBTreeListModel
-    //========================================================================
     DBG_NAME(DBTreeListUserData)
     //------------------------------------------------------------------------
-    DBTreeListModel::DBTreeListUserData::DBTreeListUserData()
+    DBTreeListUserData::DBTreeListUserData()
         :eType(SbaTableQueryBrowser::etQuery)
     {
         DBG_CTOR(DBTreeListUserData,NULL);
     }
     //------------------------------------------------------------------------
-    DBTreeListModel::DBTreeListUserData::~DBTreeListUserData()
+    DBTreeListUserData::~DBTreeListUserData()
     {
         DBG_DTOR(DBTreeListUserData,NULL);
     }
