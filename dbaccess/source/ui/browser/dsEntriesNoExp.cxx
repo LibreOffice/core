@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dsEntriesNoExp.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,7 +86,7 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvLBoxEntry*
 // -----------------------------------------------------------------------------
 String SbaTableQueryBrowser::GetEntryText( SvLBoxEntry* _pEntry ) const
 {
-    return m_pTreeView->getListBox()->GetEntryText(_pEntry);
+    return m_pTreeView->getListBox().GetEntryText(_pEntry);
 }
 
 // -----------------------------------------------------------------------------
@@ -95,15 +95,15 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( SvLBoxEntry*
     if (!_pEntry)
         return etUnknown;
 
-    SvLBoxEntry* pRootEntry     = m_pTreeView->getListBox()->GetRootLevelParent(_pEntry);
-    SvLBoxEntry* pEntryParent   = m_pTreeView->getListBox()->GetParent(_pEntry);
-    SvLBoxEntry* pTables        = m_pTreeView->getListBox()->GetEntry(pRootEntry, CONTAINER_TABLES);
-    SvLBoxEntry* pQueries       = m_pTreeView->getListBox()->GetEntry(pRootEntry, CONTAINER_QUERIES);
+    SvLBoxEntry* pRootEntry     = m_pTreeView->getListBox().GetRootLevelParent(_pEntry);
+    SvLBoxEntry* pEntryParent   = m_pTreeView->getListBox().GetParent(_pEntry);
+    SvLBoxEntry* pTables        = m_pTreeView->getListBox().GetEntry(pRootEntry, CONTAINER_TABLES);
+    SvLBoxEntry* pQueries       = m_pTreeView->getListBox().GetEntry(pRootEntry, CONTAINER_QUERIES);
 
 #ifdef DBG_UTIL
     String sTest;
-    if (pTables) sTest = m_pTreeView->getListBox()->GetEntryText(pTables);
-    if (pQueries) sTest = m_pTreeView->getListBox()->GetEntryText(pQueries);
+    if (pTables) sTest = m_pTreeView->getListBox().GetEntryText(pTables);
+    if (pQueries) sTest = m_pTreeView->getListBox().GetEntryText(pQueries);
 #endif
 
     if (pRootEntry == _pEntry)
@@ -219,7 +219,7 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
         SvLBoxEntry* pEntryLoop = m_pTreeModel->First();
         while ( pEntryLoop )
         {
-            DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntryLoop->GetUserData());
+            DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(pEntryLoop->GetUserData());
             if ( !pData )
             {
                 pEntryLoop = m_pTreeModel->Next(pEntryLoop);
