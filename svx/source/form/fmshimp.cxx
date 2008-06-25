@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmshimp.cxx,v $
- * $Revision: 1.91 $
+ * $Revision: 1.92 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2393,36 +2393,32 @@ void FmXFormShell::elementRemoved(const ContainerEvent& evt) throw(::com::sun::s
     Reference< XInterface> xTemp;
     evt.Element >>= xTemp;
     RemoveElement(xTemp);
-    m_pShell->DetermineForms(sal_True);
+    if ( m_pShell )
+        m_pShell->DetermineForms(sal_True);
 }
 
 //------------------------------------------------------------------------------
 void FmXFormShell::UpdateForms( sal_Bool _bInvalidate )
 {
-    FmFormPage* pPage = m_pShell->GetCurPage();
+    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+
+    Reference< XIndexAccess > xForms;
+
+    FmFormPage* pPage = m_pShell ? m_pShell->GetCurPage() : NULL;
     if ( pPage )
     {
-        Reference< XIndexAccess > xForms;
         if ( m_pShell->m_bDesignMode )
             xForms = xForms.query( pPage->GetForms( false ) );
-
-        ResetForms( xForms, _bInvalidate );
     }
-}
 
-//------------------------------------------------------------------------------
-void FmXFormShell::ResetForms(const Reference< XIndexAccess>& _xForms, sal_Bool bInvalidate)
-{
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    if (m_xForms != _xForms)
+    if ( m_xForms != xForms )
     {
-        RemoveElement(m_xForms);
-
-        m_xForms = _xForms;
-
-        AddElement(m_xForms);
+        RemoveElement( m_xForms );
+        m_xForms = xForms;
+        AddElement( m_xForms );
     }
-    m_pShell->DetermineForms(bInvalidate);
+    if ( m_pShell )
+        m_pShell->DetermineForms( _bInvalidate );
 }
 
 //------------------------------------------------------------------------------
