@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ShowTargets.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +54,7 @@ public class ShowTargets
             if ( args[i].equals( "TestSkeleton" ) )
                 continue;
 
-            String completePotentialClassName = "integration.forms." + args[i];
+            String completePotentialClassName = args[i].replace( '/', '.' );
 
             // get the class
             Class potentialTestClass = null;
