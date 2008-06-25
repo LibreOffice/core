@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimp.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -336,6 +336,8 @@ public:
 
     virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps);
+    virtual void SetDocumentSpecificSettings(const ::rtl::OUString& _rSettingsGroupName,
+                    const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& _rSettings);
 
     XMLFontStylesContext *GetFontDecls();
     SvXMLStylesContext *GetStyles();
