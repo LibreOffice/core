@@ -33,6 +33,9 @@ import com.sun.star.document.MacroExecMode;
 
 public class FaxWizardDialogImpl extends FaxWizardDialog {
 
+protected void enterStep(int OldStep, int NewStep){}
+protected void leaveStep(int OldStep, int NewStep){}
+
     static FaxDocument myFaxDoc;
     static boolean running;
 
