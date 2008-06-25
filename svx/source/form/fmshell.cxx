@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmshell.cxx,v $
- * $Revision: 1.77 $
+ * $Revision: 1.78 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -361,21 +361,12 @@ FmFormShell::FmFormShell( SfxViewShell* _pParent, FmFormView* pView )
 //------------------------------------------------------------------------
 FmFormShell::~FmFormShell()
 {
-    if (m_pFormView)
-        GetImpl()->ResetForms();
+    if ( m_pFormView )
+        SetView( NULL );
 
     m_pImpl->dispose();
     m_pImpl->release();
-
-    if (m_pFormView)
-    {
-        m_pFormView->SetFormShell(NULL);
-        m_pFormView  = NULL;
-    }
-
-
-    // reset the model after disposing the shell !
-    m_pFormModel = NULL;
+    m_pImpl = NULL;
 }
 
 //------------------------------------------------------------------------
@@ -1332,33 +1323,31 @@ FmFormPage* FmFormShell::GetCurPage() const
 }
 
 //------------------------------------------------------------------------
-void FmFormShell::SetView(FmFormView* pView)
+void FmFormShell::SetView( FmFormView* _pView )
 {
-    if (m_pFormView)
+    if ( m_pFormView )
     {
         m_pFormView->SetFormShell( NULL );
-        GetImpl()->ResetForms();
-        m_pFormModel = NULL;
-    }
-    if (pView)
-    {
-        m_pFormView = pView;
-        m_pFormView->SetFormShell( this );
-        m_pFormModel = (FmFormModel*)m_pFormView->GetModel();
-
-        impl_setDesignMode(pView->IsDesignMode());
-
-        // We activate our view if we are activated ourself, but sometimes the Activate precedes the SetView.
-        // But here we know both the view and our activation state so we at least are able to pass the latter
-        // to the former.
-        // FS - 30.06.99 - 67308
-        if ( IsActive() )
-            GetImpl()->viewActivated( m_pFormView );
-    }
-    else
-    {
         m_pFormView = NULL;
+        m_pFormModel = NULL;
+        GetImpl()->UpdateForms( sal_False );
     }
+
+    if ( !_pView )
+        return;
+
+    m_pFormView = _pView;
+    m_pFormView->SetFormShell( this );
+    m_pFormModel = (FmFormModel*)m_pFormView->GetModel();
+
+    impl_setDesignMode( m_pFormView->IsDesignMode() );
+
+    // We activate our view if we are activated ourself, but sometimes the Activate precedes the SetView.
+    // But here we know both the view and our activation state so we at least are able to pass the latter
+    // to the former.
+    // FS - 30.06.99 - 67308
+    if ( IsActive() )
+        GetImpl()->viewActivated( m_pFormView );
 }
 
 //------------------------------------------------------------------------
