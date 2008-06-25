@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unopkg_cmdenv.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,6 +99,7 @@ class CommandEnvironmentImpl
     sal_Int32 m_logLevel;
     bool m_option_force_overwrite;
     bool m_option_verbose;
+    bool m_option_bundled;
     Reference< XComponentContext > m_xComponentContext;
     Reference< XProgressHandler > m_xLogFile;
 
@@ -111,7 +112,8 @@ public:
         Reference<XComponentContext> const & xComponentContext,
         OUString const & log_file,
         bool option_force_overwrite,
-        bool option_verbose);
+        bool option_verbose,
+        bool option_bundled);
 
     // XCommandEnvironment
     virtual Reference< task::XInteractionHandler > SAL_CALL
@@ -135,10 +137,12 @@ CommandEnvironmentImpl::CommandEnvironmentImpl(
     Reference<XComponentContext> const & xComponentContext,
     OUString const & log_file,
     bool option_force_overwrite,
-    bool option_verbose)
+    bool option_verbose,
+    bool option_bundled)
     : m_logLevel(0),
       m_option_force_overwrite( option_force_overwrite ),
       m_option_verbose( option_verbose ),
+      m_option_bundled( option_bundled),
       m_xComponentContext(xComponentContext)
 {
     if (log_file.getLength() > 0) {
@@ -268,6 +272,7 @@ void CommandEnvironmentImpl::handle(
     deployment::InstallException instExc;
     deployment::LicenseIndividualAgreementException licAgreementExc;
     deployment::PlatformException platExc;
+    deployment::VersionException verExc;
 
 
     bool bLicenseException = false;
@@ -452,10 +457,11 @@ Reference< XCommandEnvironment > createCmdEnv(
     Reference< XComponentContext > const & xContext,
     OUString const & logFile,
     bool option_force_overwrite,
-    bool option_verbose)
+    bool option_verbose,
+    bool option_bundled)
 {
     return new CommandEnvironmentImpl(
-        xContext, logFile, option_force_overwrite, option_verbose);
+        xContext, logFile, option_force_overwrite, option_verbose, option_bundled);
 }
 
 } // unopkg
