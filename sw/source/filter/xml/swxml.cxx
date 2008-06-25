@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swxml.cxx,v $
- * $Revision: 1.83 $
+ * $Revision: 1.84 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
@@ -47,6 +48,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
@@ -152,7 +154,7 @@ sal_Int32 ReadThroughComponent(
     const String& rStreamName,
     uno::Reference<lang::XMultiServiceFactory> & rFactory,
     const sal_Char* pFilterName,
-    Sequence<Any> rFilterArguments,
+    const Sequence<Any>& rFilterArguments,
     const OUString& rName,
     sal_Bool bMustBeSuccessfull,
     sal_Bool bEncrypted )
@@ -295,7 +297,7 @@ sal_Int32 ReadThroughComponent(
     const sal_Char* pCompatibilityStreamName,
     uno::Reference<lang::XMultiServiceFactory> & rFactory,
     const sal_Char* pFilterName,
-    Sequence<Any> rFilterArguments,
+    const Sequence<Any>& rFilterArguments,
     const OUString& rName,
     sal_Bool bMustBeSuccessfull)
 {
@@ -694,6 +696,14 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     OUString sProgressRange(RTL_CONSTASCII_USTRINGPARAM("ProgressRange"));
     xInfoSet->setPropertyValue(sProgressRange, aProgRange);
 
+    ::comphelper::ComponentContext aContext( xServiceFactory );
+    Reference< container::XNameAccess > xLateInitSettings(
+        aContext.createComponent( "com.sun.star.document.NamedPropertyValues" ), UNO_QUERY_THROW );
+    beans::NamedValue aLateInitSettings(
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LateInitSettings" ) ),
+        makeAny( xLateInitSettings )
+    );
+
     // prepare filter arguments, WARNING: the order is important!
     Sequence<Any> aFilterArgs( 5 );
     Any *pArgs = aFilterArgs.getArray();
@@ -701,6 +711,8 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     *pArgs++ <<= xStatusIndicator;
     *pArgs++ <<= xGraphicResolver;
     *pArgs++ <<= xObjectResolver;
+    *pArgs++ <<= aLateInitSettings;
+
     Sequence<Any> aEmptyArgs( 3 );
     pArgs = aEmptyArgs.getArray();
     *pArgs++ <<= xInfoSet;
