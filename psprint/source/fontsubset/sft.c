@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sft.c,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1538,6 +1538,7 @@ static void GetKern(TrueTypeFont *ttf)
     return;
 }
 
+#ifdef TEST5
 /* KernGlyphsPrim?() functions expect the caller to ensure the validity of their arguments and
  * that x and y elements of the kern array are initialized to zeroes
  */
@@ -1608,6 +1609,7 @@ static void KernGlyphsPrim2(TrueTypeFont *ttf, sal_uInt16 *glyphs, int nglyphs, 
         }
     }
 }
+#endif
 
 /*- Public functions */ /*FOLD00*/
 
@@ -2721,6 +2723,7 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
     }
 }
 
+#ifdef TEST5
 void KernGlyphs(TrueTypeFont *ttf, sal_uInt16 *glyphs, int nglyphs, int wmode, KernData *kern)
 {
     int i;
@@ -2735,6 +2738,7 @@ void KernGlyphs(TrueTypeFont *ttf, sal_uInt16 *glyphs, int nglyphs, int wmode, K
         default: return;
     }
 }
+#endif
 
 GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID)
 {
