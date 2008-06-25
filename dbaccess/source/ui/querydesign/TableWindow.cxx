@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableWindow.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -334,7 +334,7 @@ void OTableWindow::clearListBox()
 //------------------------------------------------------------------------------
 void OTableWindow::impl_updateImage()
 {
-    ImageProvider aImageProvider( getDesignView()->getController()->getConnection() );
+    ImageProvider aImageProvider( getDesignView()->getController().getConnection() );
 
     Image aImage, aImageHC;
     aImageProvider.getImages( GetComposedName(), m_pData->isQuery() ? DatabaseObject::QUERY : DatabaseObject::TABLE, aImage, aImageHC );
@@ -485,7 +485,7 @@ void OTableWindow::MouseMove( const MouseEvent& rEvt )
     Window::MouseMove(rEvt);
 
     OJoinTableView* pCont = getTableView();
-    if (pCont->getDesignView()->getController()->isReadOnly())
+    if (pCont->getDesignView()->getController().isReadOnly())
         return;
 
     Point   aPos = rEvt.GetPosPixel();
@@ -680,8 +680,8 @@ void OTableWindow::Command(const CommandEvent& rEvt)
     {
         case COMMAND_CONTEXTMENU:
         {
-            OJoinController* pController = getDesignView()->getController();
-            if(!pController->isReadOnly() && pController->isConnected())
+            OJoinController& rController = getDesignView()->getController();
+            if(!rController.isReadOnly() && rController.isConnected())
             {
                 Point ptWhere;
                 if ( rEvt.IsMouseEvent() )
@@ -717,7 +717,7 @@ long OTableWindow::PreNotify(NotifyEvent& rNEvt)
     {
         case EVENT_KEYINPUT:
         {
-            if ( getDesignView()->getController()->isReadOnly() )
+            if ( getDesignView()->getController().isReadOnly() )
                 break;
 
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
@@ -796,7 +796,7 @@ long OTableWindow::PreNotify(NotifyEvent& rNEvt)
                                 pView->EnsureVisible(GetData()->GetPosition(), GetData()->GetSize());
                                 pView->TabWinMoved(this,aOldDataPoint);
                                 Invalidate(INVALIDATE_NOCHILDREN);
-                                getDesignView()->getController()->setModified( sal_True );
+                                getDesignView()->getController().setModified( sal_True );
                             }
                             else
                             {
