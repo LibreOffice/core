@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableWindowTitle.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -197,7 +197,7 @@ void OTableWindowTitle::MouseButtonDown( const MouseEvent& rEvt )
                                 ::std::mem_fun(&OTableConnection::RecalcLines));
 
                 pView->InvalidateConnections();
-                pView->getDesignView()->getController()->setModified(sal_True);
+                pView->getDesignView()->getController().setModified(sal_True);
                 pView->Invalidate(INVALIDATE_NOCHILDREN);
             }
         }
