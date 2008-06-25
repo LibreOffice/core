@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xformsimport.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,8 +46,9 @@ namespace std { template<typename A, typename B> struct pair; }
 
 namespace com { namespace sun { namespace star {
     namespace uno { template<typename T> class Reference; }
-    namespace beans { class XPropertySet; }
+    namespace beans { class XPropertySet; struct PropertyValue; }
     namespace frame { class XModel; }
+    namespace container { class XNameAccess; }
 } } }
 
 /** create import context for xforms:model element. */
@@ -81,6 +82,12 @@ void bindXFormsSubmission(
     com::sun::star::uno::Reference<com::sun::star::frame::XModel>,
     std::pair<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>,rtl::OUString> );
 
+/** applies the given settings to the given XForms container
+*/
+void XMLOFF_DLLPUBLIC applyXFormsSettings(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rXForms,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rSettings
+    );
 
 #endif
 
