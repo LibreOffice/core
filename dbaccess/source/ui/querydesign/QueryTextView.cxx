@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: QueryTextView.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -135,7 +135,7 @@ void OQueryTextView::clear()
     OSqlEditUndoAct* pUndoAct = new OSqlEditUndoAct( m_pEdit );
 
     pUndoAct->SetOriginalText( m_pEdit->GetText() );
-    getContainerWindow()->getDesignView()->getController()->addUndoActionAndInvalidate( pUndoAct );
+    getContainerWindow()->getDesignView()->getController().addUndoActionAndInvalidate( pUndoAct );
 
     m_pEdit->SetText(String());
 }
@@ -170,13 +170,13 @@ void OQueryTextView::cut()
 {
     if(!m_pEdit->IsInAccelAct() )
         m_pEdit->Cut();
-    getContainerWindow()->getDesignView()->getController()->setModified(sal_True);
+    getContainerWindow()->getDesignView()->getController().setModified(sal_True);
 }
 // -----------------------------------------------------------------------------
 void OQueryTextView::paste()
 {
     if(!m_pEdit->IsInAccelAct() )
         m_pEdit->Paste();
-    getContainerWindow()->getDesignView()->getController()->setModified(sal_True);
+    getContainerWindow()->getDesignView()->getController().setModified(sal_True);
 }
 // -----------------------------------------------------------------------------

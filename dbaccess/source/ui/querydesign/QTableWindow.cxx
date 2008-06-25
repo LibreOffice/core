@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: QTableWindow.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -185,7 +185,7 @@ sal_Bool OQueryTableWindow::Init()
         m_pListBox->Show();
     }
 
-    getTableView()->getDesignView()->getController()->InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
+    getTableView()->getDesignView()->getController().InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
     return bSuccess;
 }
 // -----------------------------------------------------------------------------
@@ -209,7 +209,7 @@ void OQueryTableWindow::OnEntryDoubleClicked(SvLBoxEntry* pEntry)
     DBG_ASSERT(pEntry != NULL, "OQueryTableWindow::OnEntryDoubleClicked : pEntry darf nicht NULL sein !");
         // man koennte das auch abfragen und dann ein return hinsetzen, aber so weist es vielleicht auf Fehler bei Aufrufer hin
 
-    if (getTableView()->getDesignView()->getController()->isReadOnly())
+    if (getTableView()->getDesignView()->getController().isReadOnly())
         return;
 
     OTableFieldInfo* pInf = static_cast<OTableFieldInfo*>(pEntry->GetUserData());
@@ -231,7 +231,7 @@ sal_Bool OQueryTableWindow::ExistsField(const ::rtl::OUString& strFieldName, OTa
 {
     DBG_ASSERT(m_pListBox != NULL, "OQueryTableWindow::ExistsField : habe keine ::com::sun::star::form::ListBox !");
     OSL_ENSURE(rInfo.isValid(),"OQueryTableWindow::ExistsField: invlid argument for OTableFieldDescRef!");
-    Reference< XConnection> xConnection = getTableView()->getDesignView()->getController()->getConnection();
+    Reference< XConnection> xConnection = getTableView()->getDesignView()->getController().getConnection();
     sal_Bool bExists = sal_False;
     if(xConnection.is())
     {
