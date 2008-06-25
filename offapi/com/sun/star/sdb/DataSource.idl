@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataSource.idl,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,6 +119,13 @@ published service DataSource
     [optional] interface XBookmarksSupplier;
 
     /** is the name of the data source.
+
+        <p>If the data source is registered at the database context, then the <code>Name</code> property
+        denotes the registration name. Otherwise, the name property contains the URL of the file which the
+        database document associated with the data source is based on.</p>
+
+        <p>If the same data source is registered under different names, the value of the <code>Name</code>
+        property is not defined.</p>
      */
     [readonly, property] string Name;
 
