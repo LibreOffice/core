@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Numeric.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -210,16 +210,6 @@ Any ONumericModel::getDefaultForReset() const
         aValue = m_aDefault;
 
     return aValue;
-}
-
-//------------------------------------------------------------------------------
-sal_Bool ONumericModel::approveValueBinding( const Reference< XValueBinding >& _rxBinding )
-{
-    OSL_PRECOND( _rxBinding.is(), "ONumericModel::approveValueBinding: invalid binding!" );
-
-    // only strings are accepted for simplicity
-    return  _rxBinding.is()
-        &&  _rxBinding->supportsType( ::getCppuType( static_cast< double* >( NULL ) ) );
 }
 
 //.........................................................................
