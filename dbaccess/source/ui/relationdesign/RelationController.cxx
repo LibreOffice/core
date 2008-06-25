@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RelationController.cxx,v $
- * $Revision: 1.55 $
+ * $Revision: 1.56 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -346,7 +346,7 @@ void ORelationController::impl_initialize()
 // -----------------------------------------------------------------------------
 sal_Bool ORelationController::Construct(Window* pParent)
 {
-    m_pView = new ORelationDesignView(pParent,this,getORB());
+    m_pView = new ORelationDesignView( pParent, *this, getORB() );
     OJoinController::Construct(pParent);
 //  m_pView->Construct();
 //  m_pView->Show();
