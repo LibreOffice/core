@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TextDocument.java,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -386,14 +386,14 @@ public class TextDocument {
             String myDate = du.format(ff, currentDate);
 
             XDocumentInfoSupplier xDocInfoSuppl = (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xTextDocument);
-            XDocumentInfo xDocInfo = xDocInfoSuppl.getDocumentInfo();
-            Helper.setUnoPropertyValue(xDocInfo, "Author", fullname);
-            Helper.setUnoPropertyValue(xDocInfo, "ModifiedBy", fullname);
-            String description = (String)Helper.getUnoPropertyValue(xDocInfo, "Description");
+            XDocumentInfo xDocInfo2 = xDocInfoSuppl.getDocumentInfo();
+            Helper.setUnoPropertyValue(xDocInfo2, "Author", fullname);
+            Helper.setUnoPropertyValue(xDocInfo2, "ModifiedBy", fullname);
+            String description = (String)Helper.getUnoPropertyValue(xDocInfo2, "Description");
             description = description + " " + TemplateDescription;
             description = JavaTools.replaceSubString(description, WizardName, "<wizard_name>");
             description = JavaTools.replaceSubString(description, myDate, "<current_date>");
-            Helper.setUnoPropertyValue(xDocInfo, "Description", description);
+            Helper.setUnoPropertyValue(xDocInfo2, "Description", description);
         } catch (NoSuchElementException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
