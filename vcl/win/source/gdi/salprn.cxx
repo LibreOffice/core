@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salprn.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,6 +73,9 @@
 #define CATCH_DRIVER_EX_END(mes, p)                                         \
     }                                                                       \
     han.Reset()
+#define CATCH_DRIVER_EX_END_2(mes)                                            \
+    }                                                                       \
+    han.Reset()
 #else
 #define CATCH_DRIVER_EX_BEGIN                                               \
     __try                                                                   \
@@ -82,7 +85,13 @@
     __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))\
     {                                                                       \
         DBG_ERROR( mes );                                                   \
-        p->markInvalid();                                                      \
+        p->markInvalid();                                                   \
+    }
+#define CATCH_DRIVER_EX_END_2(mes)                                         \
+    }                                                                       \
+    __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))\
+    {                                                                       \
+        DBG_ERROR( mes );                                                   \
     }
 #endif
 
@@ -1070,6 +1079,29 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
 
 // -----------------------------------------------------------------------
 
+static HDC ImplCreateICW_WithCatch( LPWSTR pDriver,
+                                    LPCWSTR pDevice,
+                                    LPDEVMODEW pDevMode )
+{
+    HDC hDC = 0;
+    CATCH_DRIVER_EX_BEGIN;
+    hDC = CreateICW( pDriver, pDevice, 0, pDevMode );
+    CATCH_DRIVER_EX_END_2( "exception in CreateICW" );
+    return hDC;
+}
+
+static HDC ImplCreateICA_WithCatch( char* pDriver,
+                                    char* pDevice,
+                                    LPDEVMODEA pDevMode )
+{
+    HDC hDC = 0;
+    CATCH_DRIVER_EX_BEGIN;
+    hDC = CreateICA( pDriver, pDevice, 0, pDevMode );
+    CATCH_DRIVER_EX_END_2( "exception in CreateICW" );
+    return hDC;
+}
+
+
 static HDC ImplCreateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetupData )
 {
     HDC hDC = 0;
@@ -1090,10 +1122,9 @@ static HDC ImplCreateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetup
         memset( pDriverName+pPrinter->maDriverName.Len(), 0, 32 );
         rtl_copyMemory( pDeviceName, pPrinter->maDeviceName.GetBuffer(), pPrinter->maDeviceName.Len()*sizeof(sal_Unicode));
         memset( pDeviceName+pPrinter->maDeviceName.Len(), 0, 32 );
-        hDC = CreateICW( reinterpret_cast<LPWSTR>(pDriverName),
-                         reinterpret_cast<LPCWSTR>(pDeviceName),
-                         0,
-                         pDevMode );
+        hDC = ImplCreateICW_WithCatch( reinterpret_cast< LPWSTR >(pDriverName),
+                                       reinterpret_cast< LPCWSTR >(pDeviceName),
+                                       pDevMode );
     }
     else
     {
@@ -1124,10 +1155,9 @@ static HDC ImplCreateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetup
         // => add a couple of zeroes...
         memset( lpszDriverName+aDriver.Len(), 0, 16 );
         memset( lpszDeviceName+aDevice.Len(), 0, 16 );
-        hDC = CreateICA( lpszDriverName,
-                         lpszDeviceName,
-                         0,
-                         pDevMode );
+        hDC = ImplCreateICA_WithCatch( lpszDriverName,
+                                       lpszDeviceName,
+                                       pDevMode );
     }
     return hDC;
 }
