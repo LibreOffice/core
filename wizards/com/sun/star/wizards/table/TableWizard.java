@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableWizard.java,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,7 +79,7 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
     public TableWizard(XMultiServiceFactory xMSF) {
         super(xMSF, 41200);
         super.addResourceHandler("TableWizard", "dbw");
-        String sTitle = oResource.getResText(UIConsts.RID_TABLE + 1);
+        String sTitle = m_oResource.getResText(UIConsts.RID_TABLE + 1);
         Helper.setUnoPropertyValues(xDialogModel,
             new String[] { "Height","Moveable","Name","PositionX","PositionY","Step","TabIndex","Title","Width"},
             new Object[] { new Integer(218),Boolean.TRUE, "DialogTable", new Integer(102),new Integer(41),new Integer(1), new Short((short)0), sTitle, new Integer(330)}  );
@@ -87,7 +87,7 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
         fielditems = new Hashtable();
         //TODO if reportResouces cannot be gotten dispose officedocument
         if (getTableResources() == true)
-            setRightPaneHeaders(oResource, UIConsts.RID_TABLE + 8, 4);
+            setRightPaneHeaders(m_oResource, UIConsts.RID_TABLE + 8, 4);
     }
 
 
@@ -301,11 +301,11 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
     public void insertFormRelatedSteps(){
         addRoadmap();
         int i = 0;
-        i = insertRoadmapItem(0, true, oResource.getResText(UIConsts.RID_TABLE + 2), SOMAINPAGE);
-        i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_TABLE + 3), SOFIELDSFORMATPAGE);
+        i = insertRoadmapItem(0, true, m_oResource.getResText(UIConsts.RID_TABLE + 2), SOMAINPAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_TABLE + 3), SOFIELDSFORMATPAGE);
         if (this.curTableDescriptor.supportsCoreSQLGrammar())
-            i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_TABLE + 4), SOPRIMARYKEYPAGE);
-        i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_TABLE + 5),  SOFINALPAGE);        // Orderby is always supported
+            i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_TABLE + 4), SOPRIMARYKEYPAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_TABLE + 5),  SOFINALPAGE);        // Orderby is always supported
         setRoadmapInteractive(true);
         setRoadmapComplete(true);
         setCurrentRoadmapItemID((short) 1);
@@ -346,12 +346,12 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
 
 
     public boolean getTableResources(){
-        sMsgWizardName = super.oResource.getResText(UIConsts.RID_TABLE+1);
-        slblFields = oResource.getResText(UIConsts.RID_TABLE + 19);
-        slblSelFields =  oResource.getResText(UIConsts.RID_TABLE + 25);
-        serrToManyFields = oResource.getResText(UIConsts.RID_TABLE + 47);
-        serrTableNameexists = oResource.getResText(UIConsts.RID_TABLE + 48);
-        sMsgColumnAlreadyExists = oResource.getResText(UIConsts.RID_TABLE + 51);
+        sMsgWizardName = super.m_oResource.getResText(UIConsts.RID_TABLE+1);
+        slblFields = m_oResource.getResText(UIConsts.RID_TABLE + 19);
+        slblSelFields =  m_oResource.getResText(UIConsts.RID_TABLE + 25);
+        serrToManyFields = m_oResource.getResText(UIConsts.RID_TABLE + 47);
+        serrTableNameexists = m_oResource.getResText(UIConsts.RID_TABLE + 48);
+        sMsgColumnAlreadyExists = m_oResource.getResText(UIConsts.RID_TABLE + 51);
         return true;
     }
 
