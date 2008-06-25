@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.16 $
+# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -49,17 +49,21 @@ JARCLASSPATH = commonwizards.jar
 
 # --- Files --------------------------------------------------------
 
-JAVAFILES=						\
-    ReportDocument.java		\
-    ReportWizard.java		\
-    CallReportWizard.java	\
-    DBColumn.java	\
-    RecordTable.java	\
-    Finalizer.java			\
-    ReportLayouter.java			\
-    GroupFieldHandler.java	\
-    Dataimport.java
-
+JAVAFILES=                             \
+    CallReportWizard.java   		   \
+    DBColumn.java           		   \
+    Dataimport.java         		   \
+    GroupFieldHandler.java  		   \
+    IReportDocument.java    		   \
+    IReportBuilderLayouter.java    		   \
+    IReportDefinitionReadAccess.java    		   \
+    RecordTable.java        		   \
+    ReportFinalizer.java               \
+    ReportImplementationHelper.java    \
+    ReportLayouter.java     		   \
+    ReportTextDocument.java 		   \
+    ReportTextImplementation.java      \
+    ReportWizard.java
 
 JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
