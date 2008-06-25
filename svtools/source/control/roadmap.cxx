@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: roadmap.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -337,9 +337,12 @@ namespace svt
     //---------------------------------------------------------------------
     void ORoadmap::SetRoadmapLabel(ORoadmapHyperLabel* CurHyperLabel, sal_Int32 _nPrefix, String _sDescription)
     {
-        xub_StrLen n_Pos = _sDescription.Search( String::CreateFromAscii(".") );
-        String sID = ::String::CreateFromInt32( _nPrefix );
-        _sDescription.Replace(0 , n_Pos, sID );
+        const xub_StrLen n_Pos = _sDescription.Search( String::CreateFromAscii(".") );
+        if ( n_Pos != STRING_NOTFOUND )
+        {
+            const String sID = ::String::CreateFromInt32( _nPrefix );
+            _sDescription.Replace(0 , n_Pos, sID );
+        }
         CurHyperLabel->SetLabelAndSize( _nPrefix, _sDescription, m_pImpl->aHyperLabelPixelSize );
     }
 
