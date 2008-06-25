@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DocumentSettingsContext.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,10 +37,13 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+#include <memory>
+
+struct XMLDocumentSettingsContext_Data;
+
 class XMLOFF_DLLPUBLIC XMLDocumentSettingsContext : public SvXMLImportContext
 {
-    com::sun::star::uno::Any    aViewProps;
-    com::sun::star::uno::Any    aConfigProps;
+    ::std::auto_ptr< XMLDocumentSettingsContext_Data >  m_pData;
 
 public:
     XMLDocumentSettingsContext(SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
@@ -53,6 +56,11 @@ public:
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
+
+private:
+    XMLDocumentSettingsContext();                                               // never implemented
+    XMLDocumentSettingsContext( const XMLDocumentSettingsContext& );            // never implemented
+    XMLDocumentSettingsContext& operator=( const XMLDocumentSettingsContext& ); // never implemented
 };
 
 #endif
