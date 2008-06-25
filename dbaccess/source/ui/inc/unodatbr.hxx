@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unodatbr.hxx,v $
- * $Revision: 1.72 $
+ * $Revision: 1.73 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,8 +61,17 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XSCRIPTINVOCATIONCONTEXT_HPP_
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
+#ifndef _COM_SUN_STAR_UI_XCONTEXTMENUINTERCEPTION_HPP_
+#include <com/sun/star/ui/XContextMenuInterception.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_APPLICATION_DATABASEOBJECT_HPP_
+#include <com/sun/star/sdb/application/DatabaseObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_APPLICATION_DATABASEOBJECTCONTAINER_HPP_
+#include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 #ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
@@ -91,29 +100,29 @@ class SvLBoxEntry;
 class Splitter;
 struct SvSortData;
 
-#define CONTAINER_QUERIES       sal_Int32( etQuery - etQuery )
-#define CONTAINER_TABLES        sal_Int32( etTableOrView - etQuery )
-
 namespace com { namespace sun{ namespace star { namespace container { class XNameContainer; } } } }
+
+class SvLBoxTreeList;
 // .........................................................................
 namespace dbaui
 {
 // .........................................................................
 
     class DBTreeView;
-    class DBTreeListModel;
     struct DBTreeEditedEntry;
     class ImageProvider;
 
     // =====================================================================
-    typedef ::cppu::ImplHelper3 <   ::com::sun::star::frame::XStatusListener
+    typedef ::cppu::ImplHelper4 <   ::com::sun::star::frame::XStatusListener
                                 ,   ::com::sun::star::view::XSelectionSupplier
                                 ,   ::com::sun::star::document::XScriptInvocationContext
+                                ,   ::com::sun::star::ui::XContextMenuInterception
                                 >   SbaTableQueryBrowser_Base;
     class SbaTableQueryBrowser
                 :public SbaXDataBrowserController
                 ,public SbaTableQueryBrowser_Base
                 ,public IControlActionListener
+                ,public IContextMenuProvider
     {
     protected:
 
@@ -144,6 +153,7 @@ namespace dbaui
             // if we're part of a document, this is the state of the DocumentDataSource slot
 
         ::cppu::OInterfaceContainerHelper   m_aSelectionListeners;
+        ::cppu::OInterfaceContainerHelper   m_aContextMenuInterceptors;
 
         OTableCopyHelper::DropDescriptor    m_aAsyncDrop;
         OTableCopyHelper                    m_aTableCopyHelper;
@@ -152,7 +162,7 @@ namespace dbaui
 
         DBTreeView*             m_pTreeView;
         Splitter*               m_pSplitter;
-        DBTreeListModel*        m_pTreeModel;           // contains the datasources of the registry
+        SvLBoxTreeList*         m_pTreeModel;           // contains the datasources of the registry
         SvLBoxEntry*            m_pCurrentlyDisplayed;
         sal_Int32               m_nAsyncDrop;
 
@@ -174,13 +184,16 @@ namespace dbaui
 
         enum EntryType
         {
-            etDatasource,
-            etQueryContainer,
-            etTableContainer,
-            etQuery,
-            etTableOrView,
-            etUnknown
+            // don't change the above definitions! There are places (in particular SbaTableQueryBrowser::getCurrentSelection)
+            // which rely on the fact that the EntryType values really equal the DatabaseObject(Container) values!
+            etDatasource     = ::com::sun::star::sdb::application::DatabaseObjectContainer::DATA_SOURCE,
+            etQueryContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer::QUERIES,
+            etTableContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer::TABLES,
+            etQuery          = ::com::sun::star::sdb::application::DatabaseObject::QUERY,
+            etTableOrView    = ::com::sun::star::sdb::application::DatabaseObject::TABLE,
+            etUnknown        = -1
         };
+
         /** returns a DatabaseObject value corresponding to the given EntryType
             @param _eType
                 the entry type. Must not be etUnknown.
@@ -242,6 +255,10 @@ namespace dbaui
         // XScriptInvocationContext
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > SAL_CALL getScriptContainer() throw (::com::sun::star::uno::RuntimeException);
 
+        // XContextMenuInterception
+        virtual void SAL_CALL registerContextMenuInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XContextMenuInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL releaseContextMenuInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XContextMenuInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException);
+
     protected:
         // SbaXDataBrowserController overridables
         virtual sal_Bool InitializeForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > & xForm);
@@ -265,11 +282,18 @@ namespace dbaui
         virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         // IControlActionListener overridables
-        virtual sal_Bool    requestContextMenu( const CommandEvent& _rEvent );
         virtual sal_Bool    requestQuickHelp( const SvLBoxEntry* _pEntry, String& _rText ) const;
         virtual sal_Bool    requestDrag( sal_Int8 _nAction, const Point& _rPosPixel );
         virtual sal_Int8    queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors );
         virtual sal_Int8    executeDrop( const ExecuteDropEvent& _rEvt );
+
+        // IContextMenuProvider
+        virtual PopupMenu*      getContextMenu( Control& _rControl ) const;
+        virtual IController&    getCommandController();
+        virtual ::cppu::OInterfaceContainerHelper*
+                                getContextMenuInterceptors();
+        virtual ::com::sun::star::uno::Any
+                                getCurrentSelection( Control& _rControl ) const;
 
         virtual void impl_initialize();
 
@@ -456,7 +480,7 @@ namespace dbaui
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > connectWithStatus(
             const ::rtl::OUString& _rDataSourceName,
-            void* _pTreeListUserData    // in rela a DBTreeListModel::DBTreeListUserData*, but we do not know this class here ....
+            void* _pTreeListUserData    // in rela a DBTreeListUserData*, but we do not know this class here ....
         );
 
 #ifdef DBG_UTIL
