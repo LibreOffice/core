@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlexp.cxx,v $
- * $Revision: 1.90 $
+ * $Revision: 1.91 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/xforms/XFormsSupplier.hpp>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #ifndef _XMLGRHLP_HXX
@@ -54,6 +55,7 @@
 #include <svx/xmlcnitm.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <xmloff/xformsexport.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
 #include <swmodule.hxx>
@@ -92,6 +94,7 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::xforms;
 using namespace ::xmloff::token;
 
 #ifdef XML_CORE_API
@@ -553,6 +556,23 @@ void SwXMLExport::GetConfigurationSettings( Sequence < PropertyValue >& rProps)
         if( xProps.is() )
             SvXMLUnitConverter::convertPropertySet( rProps, xProps );
     }
+}
+
+sal_Int32 SwXMLExport::GetDocumentSpecificSettings( ::std::list< SettingsGroup >& _out_rSettings )
+{
+    // the only doc-specific settings group we know so far are the XForms settings
+    uno::Sequence<beans::PropertyValue> aXFormsSettings;
+    Reference< XFormsSupplier > xXFormsSupp( GetModel(), UNO_QUERY );
+    Reference< XNameAccess > xXForms;
+    if ( xXFormsSupp.is() )
+        xXForms = xXFormsSupp->getXForms().get();
+    if ( xXForms.is() )
+    {
+        getXFormsSettings( xXForms, aXFormsSettings );
+        _out_rSettings.push_back( SettingsGroup( XML_XFORM_MODEL_SETTINGS, aXFormsSettings ) );
+    }
+
+    return aXFormsSettings.getLength() + SvXMLExport::GetDocumentSpecificSettings( _out_rSettings );
 }
 
 void SwXMLExport::SetBodyAttributes()
