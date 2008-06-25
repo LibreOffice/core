@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormattedField.cxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,6 +67,9 @@
 #include <comphelper/streamsection.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <unotools/desktopterminationobserver.hxx>
+
+#include <list>
+#include <algorithm>
 
 using namespace dbtools;
 using namespace ::com::sun::star::uno;
@@ -574,14 +577,23 @@ void OFormattedModel::_propertyChanged( const com::sun::star::beans::PropertyCha
             {
                 try
                 {
-                    Reference<XNumberFormatsSupplier> xSupplier(calcFormatsSupplier());
-                    m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), getINT32(evt.NewValue));
+                    ::osl::MutexGuard aGuard( m_aMutex );
+
+                    Reference<XNumberFormatsSupplier> xSupplier( calcFormatsSupplier() );
+                    m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), getINT32( evt.NewValue ) );
+
                     // as m_aSaveValue (which is used by commitControlValueToDbColumn) is format dependent we have
                     // to recalc it, which is done by translateDbColumnToControlValue
                     if ( m_xColumn.is() && m_xAggregateFastSet.is() )
                     {
-                        ::osl::MutexGuard aGuard( m_aMutex );   // setControlValue expects that
                         setControlValue( translateDbColumnToControlValue(), eOther );
+                    }
+
+                    // if we're connected to an external value binding, then re-calculate the type
+                    // used to exchange the value - it depends on the format, too
+                    if ( hasExternalValueBinding() )
+                    {
+                        calculateExternalValueType();
                     }
                 }
                 catch(Exception&)
@@ -1027,6 +1039,7 @@ sal_Bool OFormattedModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
             ||  (   ( aControlValue.getValueType().getTypeClass() == TypeClass_STRING )
                 &&  ( getString( aControlValue ).getLength() == 0 )
                 &&  m_bEmptyIsNull
+                &&  !isRequired()
                 )
             )
             m_xColumnUpdate->updateNull();
@@ -1063,112 +1076,57 @@ void OFormattedModel::onConnectedExternalValue( )
 }
 
 //------------------------------------------------------------------------------
-Type OFormattedModel::getExternalValueType() const
+Any OFormattedModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
 {
-    OSL_PRECOND( hasExternalValueBinding(),
-        "OFormattedModel::getExternalValueType: There *is* no binding!" );
-
-    Type aExchangeType( ::getCppuType( static_cast< double* >( NULL ) ) );
-
-    Type aPreferredType;
-    if ( hasExternalValueBinding() )
-    {
-        switch ( m_nKeyType & ~NumberFormat::DEFINED )
-        {
-        case NumberFormat::DATE:
-            aPreferredType = ::getCppuType( static_cast< UNODate* >( NULL ) );
-            break;
-        case NumberFormat::TIME:
-            aPreferredType = ::getCppuType( static_cast< UNOTime* >( NULL ) );
-            break;
-        case NumberFormat::DATETIME:
-            aPreferredType = ::getCppuType( static_cast< UNODateTime* >( NULL ) );
-            break;
-
-        case NumberFormat::TEXT:
-            aPreferredType = ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
-            break;
-
-        case NumberFormat::LOGICAL:
-            aPreferredType = ::getCppuType( static_cast< sal_Bool* >( NULL ) );
-            break;
-
-        case NumberFormat::CURRENCY:
-        case NumberFormat::NUMBER:
-        case NumberFormat::SCIENTIFIC:
-        case NumberFormat::FRACTION:
-        case NumberFormat::PERCENT:
-            // no need to change the default "double"
-            break;
-        }
-
-        if ( aPreferredType.getTypeClass() != TypeClass_VOID )
-        {
-            if ( getExternalValueBinding()->supportsType( aPreferredType ) )
-                aExchangeType = aPreferredType;
-        }
-    }
-    return aExchangeType;
-}
-
-//------------------------------------------------------------------------------
-Any OFormattedModel::translateExternalValueToControlValue( ) const
-{
-    OSL_PRECOND( hasExternalValueBinding(),
-        "OFormattedModel::translateExternalValueToControlValue: precondition not met!" );
-
     Any aControlValue;
-    if ( hasExternalValueBinding() )
+    switch( _rExternalValue.getValueTypeClass() )
     {
-        Any aExternalValue = getExternalValueBinding()->getValue( getExternalValueType() );
-        switch( aExternalValue.getValueTypeClass() )
-        {
-        case TypeClass_VOID:
-            break;
-
-        case TypeClass_STRING:
-            aControlValue = aExternalValue;
-            break;
-
-        case TypeClass_BOOLEAN:
-        {
-            sal_Bool bExternalValue = sal_False;
-            aExternalValue >>= bExternalValue;
-            aControlValue <<= (double)( bExternalValue ? 1 : 0 );
-        }
+    case TypeClass_VOID:
         break;
 
-        default:
+    case TypeClass_STRING:
+        aControlValue = _rExternalValue;
+        break;
+
+    case TypeClass_BOOLEAN:
+    {
+        sal_Bool bExternalValue = sal_False;
+        _rExternalValue >>= bExternalValue;
+        aControlValue <<= (double)( bExternalValue ? 1 : 0 );
+    }
+    break;
+
+    default:
+    {
+        if ( _rExternalValue.getValueType().equals( ::getCppuType( static_cast< UNODate* >( NULL ) ) ) )
         {
-            if ( aExternalValue.getValueType().equals( ::getCppuType( static_cast< UNODate* >( NULL ) ) ) )
-            {
-                UNODate aDate;
-                aExternalValue >>= aDate;
-                aControlValue <<= DBTypeConversion::toDouble( aDate, m_aNullDate );
-            }
-            else if ( aExternalValue.getValueType().equals( ::getCppuType( static_cast< UNOTime* >( NULL ) ) ) )
-            {
-                UNOTime aTime;
-                aExternalValue >>= aTime;
-                aControlValue <<= DBTypeConversion::toDouble( aTime );
-            }
-            else if ( aExternalValue.getValueType().equals( ::getCppuType( static_cast< UNODateTime* >( NULL ) ) ) )
-            {
-                UNODateTime aDateTime;
-                aExternalValue >>= aDateTime;
-                aControlValue <<= DBTypeConversion::toDouble( aDateTime, m_aNullDate );
-            }
-            else
-            {
-                OSL_ENSURE( aExternalValue.getValueTypeClass() == TypeClass_DOUBLE,
-                    "OFormattedModel::translateExternalValueToControlValue: don't know how to translate this type!" );
-                double fValue = 0;
-                OSL_VERIFY( aExternalValue >>= fValue );
-                aControlValue <<= fValue;
-            }
+            UNODate aDate;
+            _rExternalValue >>= aDate;
+            aControlValue <<= DBTypeConversion::toDouble( aDate, m_aNullDate );
         }
+        else if ( _rExternalValue.getValueType().equals( ::getCppuType( static_cast< UNOTime* >( NULL ) ) ) )
+        {
+            UNOTime aTime;
+            _rExternalValue >>= aTime;
+            aControlValue <<= DBTypeConversion::toDouble( aTime );
+        }
+        else if ( _rExternalValue.getValueType().equals( ::getCppuType( static_cast< UNODateTime* >( NULL ) ) ) )
+        {
+            UNODateTime aDateTime;
+            _rExternalValue >>= aDateTime;
+            aControlValue <<= DBTypeConversion::toDouble( aDateTime, m_aNullDate );
+        }
+        else
+        {
+            OSL_ENSURE( _rExternalValue.getValueTypeClass() == TypeClass_DOUBLE,
+                "OFormattedModel::translateExternalValueToControlValue: don't know how to translate this type!" );
+            double fValue = 0;
+            OSL_VERIFY( _rExternalValue >>= fValue );
+            aControlValue <<= fValue;
         }
     }
+    }
+
     return aControlValue;
 }
 
@@ -1256,14 +1214,34 @@ Any OFormattedModel::translateDbColumnToControlValue()
     return m_aSaveValue;
 }
 
-//------------------------------------------------------------------------------
-sal_Bool OFormattedModel::approveValueBinding( const Reference< XValueBinding >& _rxBinding )
+// -----------------------------------------------------------------------------
+Sequence< Type > OFormattedModel::getSupportedBindingTypes()
 {
-    OSL_PRECOND( _rxBinding.is(), "OFormattedModel::approveValueBinding: invalid binding!" );
+    ::std::list< Type > aTypes;
+    aTypes.push_back( ::getCppuType( static_cast< double* >( NULL ) ) );
 
-    // only strings are accepted for simplicity
-    return  _rxBinding.is()
-        &&  _rxBinding->supportsType( ::getCppuType( static_cast< double* >( NULL ) ) );
+    switch ( m_nKeyType & ~NumberFormat::DEFINED )
+    {
+    case NumberFormat::DATE:
+        aTypes.push_front(::getCppuType( static_cast< UNODate* >( NULL ) ) );
+        break;
+    case NumberFormat::TIME:
+        aTypes.push_front(::getCppuType( static_cast< UNOTime* >( NULL ) ) );
+        break;
+    case NumberFormat::DATETIME:
+        aTypes.push_front(::getCppuType( static_cast< UNODateTime* >( NULL ) ) );
+        break;
+    case NumberFormat::TEXT:
+        aTypes.push_front(::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) );
+        break;
+    case NumberFormat::LOGICAL:
+        aTypes.push_front(::getCppuType( static_cast< sal_Bool* >( NULL ) ) );
+        break;
+    }
+
+    Sequence< Type > aTypesRet( aTypes.size() );
+    ::std::copy( aTypes.begin(), aTypes.end(), aTypesRet.getArray() );
+    return aTypesRet;
 }
 
 //------------------------------------------------------------------------------
