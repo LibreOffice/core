@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RecordTable.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,8 @@ import com.sun.star.wizards.text.TextTableHandler;
 import com.sun.star.wizards.text.ViewHandler;
 
 
-public class RecordTable{
+public class RecordTable
+{
     String CurFieldName;
     String LabelDescription;
     public XNamed xTableName;
@@ -54,37 +55,50 @@ public class RecordTable{
 
 
 
-    public RecordTable(TextTableHandler _oTextTableHandler){
-    try{
-        this.oTextTableHandler = _oTextTableHandler;
-        String[] TableNames = oTextTableHandler.xTextTablesSupplier.getTextTables().getElementNames();
-        XNameAccess xAllTextTables = oTextTableHandler.xTextTablesSupplier.getTextTables();
-        if ((xAllTextTables.hasByName(ReportDocument.TBLRECORDSECTION)) || (xAllTextTables.hasByName(ReportDocument.COPYOFTBLRECORDSECTION))){
-            Object oTable;
-            if (xAllTextTables.hasByName(ReportDocument.COPYOFTBLRECORDSECTION))
-                oTable = xAllTextTables.getByName(ReportDocument.COPYOFTBLRECORDSECTION);
-            else
-                oTable = xAllTextTables.getByName(ReportDocument.TBLRECORDSECTION);
-            xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, oTable);
-            xTableName = (XNamed) UnoRuntime.queryInterface(XNamed.class, xTextTable);
+    public RecordTable(TextTableHandler _oTextTableHandler)
+        {
+            try
+            {
+                this.oTextTableHandler = _oTextTableHandler;
+                String[] TableNames = oTextTableHandler.xTextTablesSupplier.getTextTables().getElementNames();
+                XNameAccess xAllTextTables = oTextTableHandler.xTextTablesSupplier.getTextTables();
+                if ((xAllTextTables.hasByName(ReportTextDocument.TBLRECORDSECTION)) || (xAllTextTables.hasByName(ReportTextDocument.COPYOFTBLRECORDSECTION)))
+                {
+                    Object oTable;
+                    if (xAllTextTables.hasByName(ReportTextDocument.COPYOFTBLRECORDSECTION))
+                    {
+                        oTable = xAllTextTables.getByName(ReportTextDocument.COPYOFTBLRECORDSECTION);
+                    }
+                    else
+                    {
+                        oTable = xAllTextTables.getByName(ReportTextDocument.TBLRECORDSECTION);
+                    }
+                    xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, oTable);
+                    xTableName = (XNamed) UnoRuntime.queryInterface(XNamed.class, xTextTable);
+                }
+                else
+                {
+                    XIndexAccess xTableIndex = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xAllTextTables);
+                    int n = xTableIndex.getCount()-1;
+                    Object x = xTableIndex.getByIndex(n);
+                    xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, x);
+                    xTableName = (XNamed) UnoRuntime.queryInterface(XNamed.class, xTextTable);
+                    xTableName.setName(ReportTextDocument.TBLRECORDSECTION);
+                }
+                xTableRows = xTextTable.getRows();
+                xTableColumns = xTextTable.getColumns();
+                xCellRange = (XCellRange) UnoRuntime.queryInterface(XCellRange.class, xTextTable);
+            }
+            catch(Exception exception)
+            {
+                exception.printStackTrace(System.out);
+            }
         }
-        else{
-            XIndexAccess xTableIndex = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xAllTextTables);
-            xTextTable = (XTextTable) UnoRuntime.queryInterface(XTextTable.class, xTableIndex.getByIndex(xTableIndex.getCount()-1));
-            xTableName = (XNamed) UnoRuntime.queryInterface(XNamed.class, xTextTable);
-            xTableName.setName(ReportDocument.TBLRECORDSECTION);
-        }
-        xTableRows = xTextTable.getRows();
-        xTableColumns = xTextTable.getColumns();
-        xCellRange = (XCellRange) UnoRuntime.queryInterface(XCellRange.class, xTextTable);
-    }
-    catch(Exception exception){
-        exception.printStackTrace(System.out);
-    }}
 
 
-    public void adjustOptimalTableWidths(XMultiServiceFactory _xMSF, ViewHandler oViewHandler){     // setTableColumnSeparators(){
-        oTextTableHandler.adjustOptimalTableWidths(_xMSF, xTextTable);
-    oViewHandler.collapseViewCursorToStart();
-    }
+    public void adjustOptimalTableWidths(XMultiServiceFactory _xMSF, ViewHandler oViewHandler)
+        {     // setTableColumnSeparators(){
+            oTextTableHandler.adjustOptimalTableWidths(_xMSF, xTextTable);
+            oViewHandler.collapseViewCursorToStart();
+        }
 }
