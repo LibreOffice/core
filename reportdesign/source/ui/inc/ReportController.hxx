@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportController.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,11 +30,9 @@
 #ifndef RPTUI_REPORTCONTROLLER_HXX
 #define RPTUI_REPORTCONTROLLER_HXX
 
-#ifndef rptui_SINGLEDOCCONTROLLER_HXX
 #include <dbaccess/singledoccontroller.hxx>
-#endif
-#include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
@@ -50,7 +48,8 @@
 #include <com/sun/star/report/XReportControlModel.hpp>
 #include <com/sun/star/report/XReportEngine.hpp>
 #include <com/sun/star/report/XSection.hpp>
-
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <cppuhelper/implbase3.hxx>
 #include <comphelper/uno3.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/lstner.hxx>
@@ -60,7 +59,6 @@
 #include "RptDef.hxx"
 #include <functional>
 #include <boost/shared_ptr.hpp>
-
 
 
 class TransferableHelper;
@@ -75,8 +73,9 @@ namespace rptui
     class OSectionView;
 
     typedef ::dbaui::OSingleDocumentController  OReportController_BASE;
-    typedef ::cppu::ImplHelper2 <   ::com::sun::star::container::XContainerListener,
-                                    ::com::sun::star::beans::XPropertyChangeListener
+    typedef ::cppu::ImplHelper3 <   ::com::sun::star::container::XContainerListener
+                                ,   ::com::sun::star::beans::XPropertyChangeListener
+                                ,   ::com::sun::star::view::XSelectionSupplier
                                 >   OReportController_Listener;
 
     class OReportController :    public OReportController_BASE
@@ -85,6 +84,8 @@ namespace rptui
     {
     private:
         OModuleClient           m_aModuleClient;
+        ::cppu::OInterfaceContainerHelper
+                                m_aSelectionListeners;
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>
                                 m_aCollapsedSections;
         ODesignView*            m_pMyOwnView;           // we want to avoid casts
@@ -341,6 +342,12 @@ namespace rptui
         // XPropertyChangeListener
         virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
 
+        // XSelectionSupplier
+        virtual ::sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& xSelection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+
         // ::com::sun::star::frame::XController
         virtual sal_Bool SAL_CALL attachModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel) throw( ::com::sun::star::uno::RuntimeException );
         virtual ::com::sun::star::uno::Any SAL_CALL getViewData(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -353,10 +360,6 @@ namespace rptui
 
         // ::com::sun::star::frame::XController
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  SAL_CALL getModel(void) throw( ::com::sun::star::uno::RuntimeException );
-
-        // XSelectionSupplier
-        virtual ::sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& xSelection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XTitle
         virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
