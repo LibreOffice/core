@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: helper.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -118,42 +118,42 @@ void padmin::FindFiles( const String& rDirectory, ::std::list< String >& rResult
         FileStatus aStatus( FileStatusMask_FileName         |
                             FileStatusMask_Type
                             );
-        if( aItem.getFileStatus( aStatus ) == FileBase::E_None &&
-            ( aStatus.getFileType() == FileStatus::Regular ||
-              aStatus.getFileType() == FileStatus::Link ) )
+        if( aItem.getFileStatus( aStatus ) == FileBase::E_None )
         {
-            String aFileName = aStatus.getFileName();
-            int nToken = rSuffixes.GetTokenCount( ';' );
-            while( nToken-- )
+            if( aStatus.getFileType() == FileStatus::Regular ||
+                aStatus.getFileType() == FileStatus::Link )
             {
-                String aSuffix = rSuffixes.GetToken( nToken, ';' );
-                if( aFileName.Len() > aSuffix.Len()+1 )
+                String aFileName = aStatus.getFileName();
+                int nToken = rSuffixes.GetTokenCount( ';' );
+                while( nToken-- )
                 {
-                    String aExtension = aFileName.Copy( aFileName.Len()-aSuffix.Len() );
-                    if( aFileName.GetChar( aFileName.Len()-aSuffix.Len()-1 ) == '.' &&
-                        aExtension.EqualsIgnoreCaseAscii( aSuffix ) )
+                    String aSuffix = rSuffixes.GetToken( nToken, ';' );
+                    if( aFileName.Len() > aSuffix.Len()+1 )
                     {
-                        rResult.push_back( aFileName );
-                        break;
+                        String aExtension = aFileName.Copy( aFileName.Len()-aSuffix.Len() );
+                        if( aFileName.GetChar( aFileName.Len()-aSuffix.Len()-1 ) == '.' &&
+                            aExtension.EqualsIgnoreCaseAscii( aSuffix ) )
+                        {
+                            rResult.push_back( aFileName );
+                            break;
+                        }
                     }
                 }
             }
-        }
-        else if( bRecursive &&
-                 ( aStatus.getFileType() == FileStatus::Directory ||
-                   aStatus.getFileType() == FileStatus::Link ) )
-        {
-            OUStringBuffer aSubDir( rDirectory );
-            aSubDir.appendAscii( "/", 1 );
-            aSubDir.append( aStatus.getFileName() );
-            std::list< String > subfiles;
-            FindFiles( aSubDir.makeStringAndClear(), subfiles, rSuffixes, bRecursive );
-            for( std::list< String >::const_iterator it = subfiles.begin(); it != subfiles.end(); ++it )
+            else if( bRecursive && aStatus.getFileType() == FileStatus::Directory )
             {
-                OUStringBuffer aSubFile( aStatus.getFileName() );
-                aSubFile.appendAscii( "/", 1 );
-                aSubFile.append( *it );
-                rResult.push_back( aSubFile.makeStringAndClear() );
+                OUStringBuffer aSubDir( rDirectory );
+                aSubDir.appendAscii( "/", 1 );
+                aSubDir.append( aStatus.getFileName() );
+                std::list< String > subfiles;
+                FindFiles( aSubDir.makeStringAndClear(), subfiles, rSuffixes, bRecursive );
+                for( std::list< String >::const_iterator it = subfiles.begin(); it != subfiles.end(); ++it )
+                {
+                    OUStringBuffer aSubFile( aStatus.getFileName() );
+                    aSubFile.appendAscii( "/", 1 );
+                    aSubFile.append( *it );
+                    rResult.push_back( aSubFile.makeStringAndClear() );
+                }
             }
         }
     }
