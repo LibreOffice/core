@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: newppdlg.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -132,7 +132,7 @@ void PPDImportDialog::Import()
     aProgress.startOperation( m_aLoadingPPD );
 
     ::std::list< String > aFiles;
-    FindFiles( aImportPath, aFiles, String::CreateFromAscii( "PS;PPD" ) );
+    FindFiles( aImportPath, aFiles, String( RTL_CONSTASCII_USTRINGPARAM( "PS;PPD;PS.GZ;PPD.GZ" ) ), true );
 
     int i = 0;
     aProgress.setRange( 0, aFiles.size() );
@@ -169,7 +169,7 @@ IMPL_LINK( PPDImportDialog, ClickBtnHdl, PushButton*, pButton )
     {
         // copy the files
         ::std::list< rtl::OUString > aToDirs;
-        psp::getPrinterPathList( aToDirs, PSPRINT_PPDDIR );
+        psp::getPrinterPathList( aToDirs, PRINTER_PPDDIR );
         ::std::list< rtl::OUString >::iterator writeDir = aToDirs.begin();
 
         for( int i = 0; i < m_aDriverLB.GetSelectEntryCount(); i++ )
@@ -183,7 +183,6 @@ IMPL_LINK( PPDImportDialog, ClickBtnHdl, PushButton*, pButton )
             {
                 INetURLObject aToFile( *writeDir, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
                 aToFile.Append( aFile.GetName() );
-                aToFile.setExtension( String::CreateFromAscii( "PPD" ) );
                 OUString aToUni( aToFile.GetMainURL(INetURLObject::DECODE_TO_IURI) );
                 if( ! File::copy( aFromUni, aToUni ) )
                     break;
