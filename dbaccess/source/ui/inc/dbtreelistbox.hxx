@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbtreelistbox.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,8 +49,6 @@
 
 namespace dbaui
 {
-    #define FOLDER_INDICATOR 1
-
     struct DBTreeEditedEntry
     {
         SvLBoxEntry*    pEntry;
@@ -65,17 +63,18 @@ namespace dbaui
 
     //========================================================================
     class IControlActionListener;
-    class IController;
+    class IContextMenuProvider;
     class DBTreeListBox     :public SvTreeListBox
     {
-        OModuleClient        m_aModuleClient;
+        OModuleClient               m_aModuleClient;
         OScrollHelper               m_aScrollHelper;
         Timer                       m_aTimer; // is needed for table updates
         Point                       m_aMousePos;
         SvLBoxEntry*                m_pSelectedEntry;
         SvLBoxEntry*                m_pDragedEntry;
         IControlActionListener*     m_pActionListener;
-        IController*                m_pContextMenuActionListener;
+        IContextMenuProvider*
+                                    m_pContextMenuProvider;
 
         Link                        m_aPreExpandHandler;    // handler to be called before a node is expanded
         Link                        m_aCutHandler;          // called when someone press CTRL+X
@@ -112,10 +111,7 @@ namespace dbaui
         ~DBTreeListBox();
 
         void                    setControlActionListener( IControlActionListener* _pListener ) { m_pActionListener = _pListener; }
-        IControlActionListener* getControlActionListener( ) const { return m_pActionListener; }
-
-        void            setContextMenuActionListener( IController* _pConextListener) { m_pContextMenuActionListener = _pConextListener; }
-        IController*    getContextMenuActionListener( ) const { return m_pContextMenuActionListener; }
+        void                    setContextMenuProvider( IContextMenuProvider* _pContextMenuProvider ) { m_pContextMenuProvider = _pContextMenuProvider; }
 
         inline void setORB(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB) { m_xORB = _xORB; }
 
@@ -176,7 +172,6 @@ namespace dbaui
 
     protected:
         virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-        virtual void        Command( const CommandEvent& rCEvt );
         virtual void        RequestHelp( const HelpEvent& rHEvt );
 
         // DragSourceHelper overridables
