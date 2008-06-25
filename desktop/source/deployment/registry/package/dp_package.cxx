@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_package.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -780,6 +780,7 @@ void BackendImpl::PackageImpl::processPackage_(
         const sal_Int32 len = bundle.getLength();
         for ( sal_Int32 pos = 0; pos < len; ++pos )
         {
+            checkAborted(abortChannel);
             Reference<deployment::XPackage> const & xPackage = bundle[ pos ];
             Reference<task::XAbortChannel> xSubAbortChannel(
                 xPackage->createAbortChannel() );
@@ -860,6 +861,7 @@ void BackendImpl::PackageImpl::processPackage_(
         // revoke in reverse order:
         for ( sal_Int32 pos = bundle.getLength(); pos--; )
         {
+            checkAborted(abortChannel);
             Reference<deployment::XPackage> const & xPackage = bundle[ pos ];
             Reference<task::XAbortChannel> xSubAbortChannel(
                 xPackage->createAbortChannel() );
