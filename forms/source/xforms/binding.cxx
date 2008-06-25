@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: binding.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,8 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
+
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 #include <functional>
@@ -99,6 +101,7 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::UNO_QUERY_THROW;
 using com::sun::star::uno::XInterface;
+using com::sun::star::uno::Exception;
 using com::sun::star::uno::makeAny;
 using com::sun::star::util::XModifyListener;
 using com::sun::star::xforms::XDataTypeRepository;
@@ -129,6 +132,7 @@ using com::sun::star::xsd::XDataType;
 #define HANDLE_ReadOnly 11  // from com.sun.star.form.binding.ValueBinding, for interaction with a bound form control
 #define HANDLE_Relevant 12  // from com.sun.star.form.binding.ValueBinding, for interaction with a bound form control
 #define HANDLE_ModelNamespaces 13
+#define HANDLE_ExternalData 14
 
 
 Binding::Binding() :
@@ -171,6 +175,8 @@ void Binding::_setModel( const Model_t& xModel )
     // set namespaces (and move to model, if appropriate)
     setBindingNamespaces( xNamespaces );
     _checkBindingID();
+
+    notifyAndCachePropertyValue( HANDLE_ExternalData );
 }
 
 
@@ -468,6 +474,25 @@ bool Binding::getReadOnly() const
 bool Binding::getRelevant() const
 {
     return maMIP.isRelevant();
+}
+
+bool Binding::getExternalData() const
+{
+    bool bExternalData = true;
+    if ( !mxModel.is() )
+        return bExternalData;
+
+    try
+    {
+        Reference< XPropertySet > xModelProps( mxModel, UNO_QUERY_THROW );
+        OSL_VERIFY(
+            xModelProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExternalData" ) ) ) >>= bExternalData );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return bExternalData;
 }
 
 
@@ -1317,25 +1342,31 @@ Binding::XCloneable_t SAL_CALL Binding::createClone()
     registerProperty( PROPERTY_RO( property, type ), \
     new DirectPropertyAccessor< Binding, type >( this, NULL, &Binding::get##property ) );
 
+#define REGISTER_BOOL_PROPERTY_RO( property )   \
+    registerProperty( PROPERTY_RO( property, sal_Bool ), \
+    new BooleanPropertyAccessor< Binding, bool >( this, NULL, &Binding::get##property ) );
+
 void Binding::initializePropertySet()
 {
-    REGISTER_PROPERTY   ( BindingID,            OUString );
-    REGISTER_PROPERTY   ( BindingExpression,    OUString );
-    REGISTER_PROPERTY_RO( Model,                Model_t );
-    REGISTER_PROPERTY   ( BindingNamespaces,    XNameContainer_t );
-    REGISTER_PROPERTY   ( ModelNamespaces,      XNameContainer_t );
-    REGISTER_PROPERTY_RO( ModelID,              OUString );
-    REGISTER_PROPERTY   ( ReadonlyExpression,   OUString );
-    REGISTER_PROPERTY   ( RelevantExpression,   OUString );
-    REGISTER_PROPERTY   ( RequiredExpression,   OUString );
-    REGISTER_PROPERTY   ( ConstraintExpression, OUString );
-    REGISTER_PROPERTY   ( CalculateExpression,  OUString );
-    REGISTER_PROPERTY   ( Type,                 OUString );
-    REGISTER_PROPERTY_RO( ReadOnly,             bool );
-    REGISTER_PROPERTY_RO( Relevant,             bool );
+    REGISTER_PROPERTY        ( BindingID,            OUString );
+    REGISTER_PROPERTY        ( BindingExpression,    OUString );
+    REGISTER_PROPERTY_RO     ( Model,                Model_t );
+    REGISTER_PROPERTY        ( BindingNamespaces,    XNameContainer_t );
+    REGISTER_PROPERTY        ( ModelNamespaces,      XNameContainer_t );
+    REGISTER_PROPERTY_RO     ( ModelID,              OUString );
+    REGISTER_PROPERTY        ( ReadonlyExpression,   OUString );
+    REGISTER_PROPERTY        ( RelevantExpression,   OUString );
+    REGISTER_PROPERTY        ( RequiredExpression,   OUString );
+    REGISTER_PROPERTY        ( ConstraintExpression, OUString );
+    REGISTER_PROPERTY        ( CalculateExpression,  OUString );
+    REGISTER_PROPERTY        ( Type,                 OUString );
+    REGISTER_PROPERTY_RO     ( ReadOnly,             bool );
+    REGISTER_PROPERTY_RO     ( Relevant,             bool );
+    REGISTER_BOOL_PROPERTY_RO( ExternalData               );
 
     initializePropertyValueCache( HANDLE_ReadOnly );
     initializePropertyValueCache( HANDLE_Relevant );
+    initializePropertyValueCache( HANDLE_ExternalData );
 }
 
 void Binding::addModifyListener(
