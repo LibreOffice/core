@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_extensioncmdqueue.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
+
+
+
 
 #include "sal/config.h"
 
@@ -108,6 +111,14 @@
 #include "boost/bind.hpp"
 
 #endif
+
+
+#ifdef WNT
+#include "tools/prewin.h"
+#include <objbase.h>
+#include "tools/postwin.h"
+#endif
+
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -770,6 +781,12 @@ ExtensionCmdQueue::Thread::~Thread() {}
 //------------------------------------------------------------------------------
 void ExtensionCmdQueue::Thread::execute()
 {
+#ifdef WNT
+    //Needed for use of the service "com.sun.star.system.SystemShellExecute" in
+    //ExtMgrDialog::openWebBrowser
+    CoUninitialize();
+    HRESULT r = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+#endif
     for (;;)
     {
         if ( m_wakeup.wait() != osl::Condition::result_ok )
@@ -903,6 +920,9 @@ void ExtensionCmdQueue::Thread::execute()
     //enable all buttons
 //     m_pDialog->m_bAddingExtensions = false;
 //     m_pDialog->updateButtonStates();
+#ifdef WNT
+    CoUninitialize();
+#endif
 }
 
 //------------------------------------------------------------------------------
