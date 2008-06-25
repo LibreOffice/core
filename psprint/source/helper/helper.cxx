@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: helper.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@
 #include <limits.h>
 
 #include "psprint/helper.hxx"
+#include "psprint/ppdparser.hxx"
 #include "tools/string.hxx"
 #include "tools/urlobj.hxx"
 #include "osl/file.hxx"
@@ -175,6 +176,13 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
 
         rPathList.push_back( OStringToOUString( aDir, aEncoding ) );
     } while( nIndex != -1 );
+
+    #ifdef SYSTEM_PPD_DIR
+    if( pSubDir && rtl_str_compare( pSubDir, PRINTER_PPDDIR ) == 0 )
+    {
+        rPathList.push_back( rtl::OStringToOUString( rtl::OString( SYSTEM_PPD_DIR ), RTL_TEXTENCODING_UTF8 ) );
+    }
+    #endif
 
     if( rPathList.empty() )
     {
