@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: list.h,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-/* $Id: list.h,v 1.3 2008-04-11 10:15:17 rt Exp $ */
+/* $Id: list.h,v 1.4 2008-06-25 14:20:01 kz Exp $ */
 
 /*[]---------------------------------------------------[]*/
 /*|                                                     |*/
@@ -54,47 +54,46 @@ extern "C"
 
 /*- constructors and a destructor */
     list listNewEmpty(void);
+#ifdef TEST
     list listNewCopy(list);
+#endif
     void listDispose(list);
     void listSetElementDtor(list, void (*f)(void *));                     /*- this function will be executed when the element is removed via listRemove() or listClear() */
-
-/*- assignment */
-    list listCopy(list to, list from);
 
 /*- queries */
     void * listCurrent(list);
     int    listCount(list);
     int    listIsEmpty(list);
+#ifdef TEST
     int    listAtFirst(list);
     int    listAtLast(list);
     int    listPosition(list);                        /* Expensive! */
-
+#endif
 /*- search */
     int    listFind(list, void *);                    /* Returns true/false */
 
 /*- positioning functions */
 /*- return the number of elements by which the current position in the list changes */
     int    listNext(list);
-    int    listPrev(list);
     int    listSkipForward(list, int n);
-    int    listSkipBackward(list, int n);
     int    listToFirst(list);
     int    listToLast(list);
     int    listPositionAt(list, int n);               /* Expensive! */
 
 /*- adding and removing elements */
     list   listAppend(list, void *);
+#ifdef TEST
     list   listPrepend(list, void *);
     list   listInsertAfter(list, void *);
     list   listInsertBefore(list, void *);
+#endif
     list   listRemove(list);                          /* removes the current element */
     list   listClear(list);                           /* removes all elements */
 
+#ifdef TEST
 /*- forall */
     void   listForAll(list, void (*f)(void *));
-
-/*- conversion */
-    void **listToArray(list);
+#endif
 
 #ifdef __cplusplus
 }
