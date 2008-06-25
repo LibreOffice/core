@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ModelImpl.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +65,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
+#include <com/sun/star/sdb/XDocumentDataSource.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/broadcasthelper.hxx>
@@ -166,12 +167,15 @@ private:
 
     SharedStorage                                                               m_xDocumentStorage;
     ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >                   m_pStorageModifyListener;
+    ODatabaseContext*                                                           m_pDBContext;
 
     /// the URL the document was loaded from
     ::rtl::OUString                                     m_sDocFileLocation;
 
     /// do we have any object (forms/reports) which contains macros?
     bool                                                m_bHasAnyObjectWithMacros;
+    /// does our root storage have macro/script sub storages?
+    bool                                                m_bHasMacroStorages;
 
     /// true if setting the Modified flag of the document is currently locked
     bool                                                m_bModificationLock;
@@ -216,7 +220,6 @@ public:
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableTypeFilter;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                                                         m_aArgs;
-    ODatabaseContext*                                   m_pDBContext;
     OSharedConnectionManager*                           m_pSharedConnectionManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >
                                                         m_xSharedConnectionManager;
@@ -246,15 +249,15 @@ public:
             SAL_THROW(( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException ));
 
     ODatabaseModelImpl(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory
-        , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>()
-        );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,
+        ODatabaseContext& _pDBContext
+    );
     virtual ~ODatabaseModelImpl();
 
     ODatabaseModelImpl(
-        const ::rtl::OUString& _rRegistrationName
-        ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory
-        ,ODatabaseContext* _pDBContext = NULL
+        const ::rtl::OUString& _rRegistrationName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,
+        ODatabaseContext& _rDBContext
         );
 
     // XEventListener
@@ -382,6 +385,13 @@ public:
         itself does *not* allow embedding macros.
     */
     bool    hasAnyObjectWithMacros() const { return m_bHasAnyObjectWithMacros; }
+
+    /** determines whether the document storage has sub storages used to store macros/scripts
+
+        Though the current version does not allow creating such documents, later versions will, so
+        we need to be prepared when we encounter them.
+    */
+    bool    hasMacroStorages() const { return m_bHasMacroStorages; }
 
     /** checks our document's macro execution mode, using the interaction handler as supplied with our
         load arguments
