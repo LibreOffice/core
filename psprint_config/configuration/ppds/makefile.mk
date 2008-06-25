@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,7 +40,11 @@ all:
 .ENDIF
 
 ZIP1TARGET      = fontunxppds
+.IF "$(WITH_SYSTEM_PPD_DIR)" != ""
+ZIP1LIST = SGENPRT.PS SGENT42.PS GENERIC.PS
+.ELSE
 ZIP1LIST        = * -x makefile.* -x delzip
+.ENDIF
 
 .INCLUDE : target.mk
 
