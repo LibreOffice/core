@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: brwview.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +62,6 @@ class Splitter;
 
 namespace dbaui
 {
-    class DBTreeListModel;
     class DBTreeView;
     class SbaGridControl;
 
@@ -84,7 +83,7 @@ namespace dbaui
 
     public:
         UnoDataBrowserView( Window* pParent,
-                            IController* _pController,
+                            IController& _rController,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
         virtual ~UnoDataBrowserView();
 
