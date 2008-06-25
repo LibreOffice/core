@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormComponent.hxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -565,6 +565,8 @@ private:
 
     ::rtl::OUString                     m_sValuePropertyName;
     sal_Int32                           m_nValuePropertyAggregateHandle;
+    ::com::sun::star::uno::Type         m_aValuePropertyType;
+    bool                                m_bValuePropertyMayBeVoid;
 
     ::cppu::OInterfaceContainerHelper   m_aUpdateListeners;
     ::cppu::OInterfaceContainerHelper   m_aResetListeners;
@@ -574,7 +576,7 @@ private:
                                         m_xExternalBinding;
     ::com::sun::star::uno::Reference< ::com::sun::star::form::validation::XValidator >
                                         m_xValidator;
-
+    ::com::sun::star::uno::Type         m_aExternalValueType;
 
 // <properties>
     ::rtl::OUString                     m_aControlSource;           // Datenquelle, Name des Feldes
@@ -588,9 +590,9 @@ private:
     sal_Bool                    m_bLoadListening            : 1;    // are we currently a load listener at our parent form?
     sal_Bool                    m_bLoaded                   : 1;
     sal_Bool                    m_bRequired                 : 1;
-    sal_Bool                    m_bCommitable               : 1;    // do we support XBoundComponent?
-    sal_Bool                    m_bSupportsExternalBinding  : 1;    // do we support XBindableValue?
-    sal_Bool                    m_bSupportsValidation       : 1;    // do we support XValidatable?
+    const sal_Bool              m_bCommitable               : 1;    // do we support XBoundComponent?
+    const sal_Bool              m_bSupportsExternalBinding  : 1;    // do we support XBindableValue?
+    const sal_Bool              m_bSupportsValidation       : 1;    // do we support XValidatable?
     sal_Bool                    m_bForwardValueChanges      : 1;    // do we currently handle changes in the bound database field?
     sal_Bool                    m_bTransferingValue         : 1;    // true if we're currently transfering our value to an external binding
     sal_Bool                    m_bIsCurrentValueValid      : 1;    // flag specifying whether our current value is valid, relative to our external validator
@@ -620,9 +622,6 @@ protected:
     inline const ::rtl::OUString&   getControlSource( ) const           { return m_aControlSource; }
     inline sal_Bool                 isRequired() const                  { return m_bRequired; }
     inline sal_Bool                 isLoaded() const                    { return m_bLoaded; }
-
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >&
-                                    getExternalValueBinding() const { return m_xExternalBinding; }
 
 protected:
 
@@ -736,18 +735,33 @@ protected:
     virtual ::com::sun::star::uno::Any
                             translateDbColumnToControlValue( ) = 0;
 
-    /** translates the current value of the external value binding (if any)
+    /** returns the data types which the control could use to exchange data with
+        an external value binding
+
+        The types returned here are completely independent from the concrete value binding,
+        they're just candidates which depend on the control type, and possible the concrete state
+        of the control (i.e. some property value).
+
+        If a control implementation supports multiple types, the ordering in the returned
+        sequence indicates preference: Preferred types are mentioned first.
+
+        The default implementation returns the type of our value property.
+    */
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+                            getSupportedBindingTypes();
+
+    /** translates the given value, which was obtained from the current external value binding,
         to a value which can be used in setControlValue
 
-        <p>The default implementation checks for the type of the value property
-        (see initValueProperty), and if the external binding supports this type, a value of
-        this type is requested from the binding and returned.</p>
+        <p>The default implementation returns the value itself, exception when it is VOID, and
+        our value property is not allowed to be void - in this case, the returned value is a
+        default-constructed value of the type required by our value property.
 
         @see hasExternalValueBinding
-        @see initValueProperty
+        @see getExternalValueType
     */
     virtual ::com::sun::star::uno::Any
-                            translateExternalValueToControlValue( ) const;
+                            translateExternalValueToControlValue( const ::com::sun::star::uno::Any& _rExternalValue ) const;
 
     /** commits the current control value to our external value binding
 
@@ -843,19 +857,6 @@ protected:
         FieldType_OTHER.
     */
     virtual sal_Bool        approveDbColumnType(sal_Int32 _nColumnType);
-
-    /** called from within <member scope="com::sun::star:::form::binding">XBindableValue::setValueBinding</member>
-        to approve the new binding
-
-        @param _rxBinding
-            the binding which applies for being responsible for our value, Must not be
-            <NULL/>
-        @return
-            <TRUE/> if and only if the given binding can supply values in the proper type
-    */
-    virtual sal_Bool        approveValueBinding(
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding
-                            );
 
     /** retrieves the current value of the control, in a shape which can be used with our
         external validator.
@@ -1018,11 +1019,9 @@ protected:
 
     /** transfers the current value of the active external binding to the control
         @precond
-            our own mutex is locked
-        @precond
             we do have an active external binding in place
     */
-    void        transferExternalValueToControl( );
+    void        transferExternalValueToControl( ::osl::ResettableMutexGuard& _rInstanceLock );
 
     /** transfers the control value to the external binding
         @precond
@@ -1031,6 +1030,21 @@ protected:
             we do have an active external binding in place
     */
     void        transferControlValueToExternal( );
+
+    /** calculates the type which is to be used to communicate with the current external binding,
+        and stores it in m_aExternalValueType
+
+        The method checks the possible type candidates as returned by getSupportedBindingTypes,
+        and the types supported by the current external binding, if any.
+    */
+    void        calculateExternalValueType();
+
+    /** returns the type which should be used to exchange data with our external value binding
+
+        @see initValueProperty
+    */
+    const ::com::sun::star::uno::Type&
+                getExternalValueType() const { return m_aExternalValueType; }
 
 private:
     sal_Bool    connectToField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxForm);
@@ -1108,12 +1122,13 @@ private:
         connected to a database column when this is called, this connection is suspended.</p>
 
         @precond
-                the new external binding has already been approved (see <member>approveValueBinding</member>)
+                the new external binding has already been approved (see <member>impl_approveValueBinding_nolock</member>)
         @precond
                 there currently is no external binding in place
     */
     void        connectExternalValueBinding(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding,
+                    ::osl::ResettableMutexGuard& _rInstanceLock
                 );
 
     /** disconnects from an external value binding
@@ -1142,6 +1157,24 @@ private:
             our mutex is currently locked exactly once
     */
     void        disconnectValidator( );
+
+    /** called from within <member scope="com::sun::star:::form::binding">XBindableValue::setValueBinding</member>
+        to approve the new binding
+
+        The default implementation approves the binding if and only if it is not <NULL/>, and supports
+        the type returned by getExternalValueType.
+
+        @param _rxBinding
+            the binding which applies for being responsible for our value, Must not be
+            <NULL/>
+        @return
+            <TRUE/> if and only if the given binding can supply values in the proper type
+
+        @seealso getExternalValueType
+    */
+    sal_Bool    impl_approveValueBinding_nolock(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding
+                );
 };
 
 //.........................................................................
