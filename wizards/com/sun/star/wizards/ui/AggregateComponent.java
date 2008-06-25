@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AggregateComponent.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -162,13 +162,13 @@ public class AggregateComponent extends ControlScroller{
     protected void insertControlGroup(int i, int ypos){
         if (i == 0){
             int BaseID = 2300;
-            soptDetailQuery = CurUnoDialog.oResource.getResText(BaseID + 11);
-            soptSummaryQuery = CurUnoDialog.oResource.getResText(BaseID + 12);
-            slblAggregate = CurUnoDialog.oResource.getResText(BaseID + 16);
-            slblFieldNames = CurUnoDialog.oResource.getResText(BaseID + 17);
-            sFunctions = CurUnoDialog.oResource.getResArray(BaseID + 40, 4);
+            soptDetailQuery = CurUnoDialog.m_oResource.getResText(BaseID + 11);
+            soptSummaryQuery = CurUnoDialog.m_oResource.getResText(BaseID + 12);
+            slblAggregate = CurUnoDialog.m_oResource.getResText(BaseID + 16);
+            slblFieldNames = CurUnoDialog.m_oResource.getResText(BaseID + 17);
+            sFunctions = CurUnoDialog.m_oResource.getResArray(BaseID + 40, 4);
 
-            sDuplicateAggregateFunction = CurUnoDialog.oResource.getResText(BaseID + 90);
+            sDuplicateAggregateFunction = CurUnoDialog.m_oResource.getResText(BaseID + 90);
         }
         if (ControlRowVector == null)
             ControlRowVector = new Vector();
