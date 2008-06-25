@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppView.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +33,6 @@
 #ifndef DBAUI_DATAVIEW_HXX
 #include "dataview.hxx"
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
-#include <com/sun/star/frame/XController.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
@@ -44,6 +41,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
 #include <com/sun/star/ucb/XContent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_APPLICATION_NAMEDDATABASEOBJECT_HPP_
+#include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
 #endif
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
@@ -59,7 +59,6 @@
 #endif
 
 namespace com{ namespace sun { namespace star { namespace beans    { class XPropertySet; } } } }
-namespace com{ namespace sun { namespace star { namespace frame    { class XController; } } } }
 
 class Control;
 class SvLBoxEntry;
@@ -67,10 +66,8 @@ class MnemonicGenerator;
 
 namespace dbaui
 {
-    class IApplicationElementNotification;
     class IControlActionListener;
-    class IContainerFoundListener;
-    class IViewChangeListener;
+    class IApplicationController;
     class OApplicationView;
     class OApplicationDetailView;
     class OApplicationSwapWindow;
@@ -112,16 +109,10 @@ namespace dbaui
         };
     private:
         ::com::sun::star::lang::Locale      m_aLocale;
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XController>
-                                            m_xController;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
                                             m_xObject;
         OAppBorderWindow*                   m_pWin;
-        IApplicationElementNotification*    m_pElementNotification;
-        IControlActionListener*             m_pActonListener;
-        IContainerFoundListener*            m_pContainerListener;
-        IViewChangeListener*                m_pViewChangeListener;
+        IApplicationController&             m_rAppController;
         ChildFocusState                     m_eChildFocus;
 
         IClipboardTest* getActiveChild() const;
@@ -141,12 +132,7 @@ namespace dbaui
     public:
         OApplicationView(   Window* pParent
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
-                            ,IController* _pIController
-                            ,IApplicationElementNotification*   _pController
-                            ,IControlActionListener*            _pActonListener
-                            ,IContainerFoundListener*           _pContainerListener
-                            ,IViewChangeListener*               _pViewChangeListener
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>& _xController
+                            ,IApplicationController&            _rAppController
                             ,PreviewMode _ePreviewMode
                             );
         virtual ~OApplicationView();
@@ -161,13 +147,8 @@ namespace dbaui
         virtual long PreNotify( NotifyEvent& rNEvt );
         virtual void GetFocus();
 
-        inline IApplicationElementNotification*         getElementNotification() const { return m_pElementNotification; }
-        inline IControlActionListener*                  getActionListener() const { return m_pActonListener; }
-        inline IContainerFoundListener*                 getContainerListener() const { return m_pContainerListener; }
-        inline IViewChangeListener*                     getViewChangeListener() const { return m_pViewChangeListener; }
+        inline IApplicationController&                  getAppController() const { return m_rAppController; }
         inline const ::com::sun::star::lang::Locale&    getLocale() const { return m_aLocale;}
-        inline ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XController> getController() const { return m_xController; }
 
         // IClipboardTest
         virtual sal_Bool isCutAllowed();
@@ -242,6 +223,20 @@ namespace dbaui
                 The list will be filled.
         */
         void getSelectionElementNames( ::std::vector< ::rtl::OUString>& _rNames ) const;
+
+        /** describes the current selection for the given control
+        */
+        void    describeCurrentSelectionForControl(
+                    const Control& _rControl,
+                    ::com::sun::star::uno::Sequence< ::com::sun::star::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
+                );
+
+        /** describes the current selection for the given ElementType
+        */
+        void    describeCurrentSelectionForType(
+                    const ElementType _eType,
+                    ::com::sun::star::uno::Sequence< ::com::sun::star::sdb::application::NamedDatabaseObject >& _out_rSelectedObjects
+                );
 
         /** select all names on the currently selected container. Non existence names where ignored.
         *
