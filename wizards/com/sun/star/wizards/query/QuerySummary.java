@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: QuerySummary.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +76,7 @@ public class QuerySummary extends QueryMetaData {
             String sGroupByFraction = "";
             String sHavingFraction = "";
             sFieldNamesFraction = combineFieldNameFraction() + sReturnChar;
-            sSortingFraction = combinePartString(RID_QUERY + 51, SortFieldNames, RID_QUERY + 52, RID_QUERY + 93, new String[] { "<FIELDNAME>", "<SORTMODE>" }) + sReturnChar;
+            sSortingFraction = combinePartString(RID_QUERY + 51, getSortFieldNames(), RID_QUERY + 52, RID_QUERY + 93, new String[] { "<FIELDNAME>", "<SORTMODE>" }) + sReturnChar;
             sFilterFraction = combineFilterNameFraction(this.getFilterConditions(), RID_QUERY + 53, RID_QUERY + 54) + sReturnChar;
             //      if (xDBMetaData.getNumericFunctions().length() > 0)
             //          sAggregateFraction = combinePartString(RID_QUERY + 55, AggregateFieldNames, RID_QUERY + 56, RID_QUERY + 95, new String[]{ "<CALCULATEDFUNCTION>", "<FIELDNAME>"}) + sReturnChar;
