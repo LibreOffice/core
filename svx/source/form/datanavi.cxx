@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: datanavi.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include "fmhelp.hrc"
 #include <svx/svxids.hrc>
 #include <tools/rcid.h>
+#include <tools/diagnose_ex.h>
 #include "xmlexchg.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/fmshell.hxx>
@@ -440,7 +441,7 @@ namespace svxform
         }
         catch( Exception& )
         {
-            DBG_ERRORFILE( "XFormsPage::AddChildren(): exception caught" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     //------------------------------------------------------------------------
@@ -771,7 +772,7 @@ namespace svxform
         }
         catch ( Exception& )
         {
-            DBG_ERRORFILE( "XFormsPage::AddEntry(Node): exception caught" );
+            DBG_UNHANDLED_EXCEPTION();
         }
         return m_aItemList.InsertEntry(
             sName, aImage, aImage, pParent, FALSE, LIST_APPEND, _pNewNode );
@@ -1676,6 +1677,8 @@ namespace svxform
                         if ( aDlg.Execute() == RET_OK )
                         {
                             String sNewName = aDlg.GetName();
+                            sal_Bool bDocumentData = aDlg.GetModifyDoc();
+
                             if ( m_aModelsBox.GetEntryPos( sNewName ) != LISTBOX_ENTRY_NOTFOUND )
                             {
                                 // error: model name already exists
@@ -1691,15 +1694,18 @@ namespace svxform
                                 try
                                 {
                                     // add new model to frame model
-                                    Reference< css::xforms::XModel > xNewModel =
-                                        xUIHelper->newModel( m_xFrameModel, sNewName );
-                                    if ( xNewModel.is() )
-                                    {
-                                        USHORT nNewPos = m_aModelsBox.InsertEntry( sNewName );
-                                        m_aModelsBox.SelectEntryPos( nNewPos );
-                                        ModelSelectHdl( &m_aModelsBox );
-                                        bIsDocModified = true;
-                                    }
+                                    Reference< css::xforms::XModel > xNewModel(
+                                        xUIHelper->newModel( m_xFrameModel, sNewName ), UNO_SET_THROW );
+
+                                    Reference< XPropertySet > xModelProps( xNewModel, UNO_QUERY_THROW );
+                                    xModelProps->setPropertyValue(
+                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExternalData" ) ),
+                                        makeAny( sal_Bool( !bDocumentData ) ) );
+
+                                    USHORT nNewPos = m_aModelsBox.InsertEntry( sNewName );
+                                    m_aModelsBox.SelectEntryPos( nNewPos );
+                                    ModelSelectHdl( &m_aModelsBox );
+                                    bIsDocModified = true;
                                 }
                                 catch ( Exception& )
                                 {
@@ -1714,14 +1720,52 @@ namespace svxform
                 {
                     AddModelDialog aDlg( this, true );
                     aDlg.SetName( sSelectedModel );
+
+                    bool bDocumentData( false );
+                    try
+                    {
+                        Reference< css::xforms::XFormsSupplier > xFormsSupp( m_xFrameModel, UNO_QUERY_THROW );
+                        Reference< XNameContainer > xXForms( xFormsSupp->getXForms(), UNO_SET_THROW );
+                        Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
+                        sal_Bool bExternalData = sal_False;
+                        OSL_VERIFY( xModelProps->getPropertyValue(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExternalData" ) ) ) >>= bExternalData );
+                        bDocumentData = ( bExternalData == sal_False );
+                    }
+                    catch( const Exception& )
+                    {
+                        DBG_UNHANDLED_EXCEPTION();
+                    }
+                    aDlg.SetModifyDoc( bDocumentData );
+
                     if ( aDlg.Execute() == RET_OK )
                     {
+                        if ( aDlg.GetModifyDoc() != bool( bDocumentData ) )
+                        {
+                            bDocumentData = aDlg.GetModifyDoc();
+                            try
+                            {
+                                Reference< css::xforms::XFormsSupplier > xFormsSupp( m_xFrameModel, UNO_QUERY_THROW );
+                                Reference< XNameContainer > xXForms( xFormsSupp->getXForms(), UNO_SET_THROW );
+                                Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
+                                xModelProps->setPropertyValue(
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExternalData" ) ),
+                                    makeAny( sal_Bool( !bDocumentData ) ) );
+                                bIsDocModified = true;
+                            }
+                            catch( const Exception& )
+                            {
+                                DBG_UNHANDLED_EXCEPTION();
+                            }
+                        }
+
                         String sNewName = aDlg.GetName();
                         if ( sNewName.Len() > 0 && ( sNewName != String( sSelectedModel ) ) )
                         {
                             try
                             {
                                 xUIHelper->renameModel( m_xFrameModel, sSelectedModel, sNewName );
+
                                 m_aModelsBox.RemoveEntry( nSelectedPos );
                                 nSelectedPos = m_aModelsBox.InsertEntry( sNewName );
                                 m_aModelsBox.SelectEntryPos( nSelectedPos );
@@ -3577,6 +3621,7 @@ namespace svxform
         m_aModelFL      ( this, SVX_RES( FL_MODEL ) ),
         m_aNameFT       ( this, SVX_RES( FT_MODEL_NAME ) ),
         m_aNameED       ( this, SVX_RES( ED_MODEL_NAME ) ),
+        m_aModifyCB     ( this, SVX_RES( CB_MODIFIES_DOCUMENT ) ),
         m_aButtonsFL    ( this, SVX_RES( FL_DATANAV_BTN ) ),
         m_aOKBtn        ( this, SVX_RES( BTN_DATANAV_OK ) ),
         m_aEscBtn       ( this, SVX_RES( BTN_DATANAV_ESC ) ),
