@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataEntrySetter.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,12 +52,12 @@ public class DataEntrySetter{
         this.CurUnoDialog = _CurUnoDialog;
         curtabindex = (short) (FormWizard.SODATAPAGE * 100);
         Integer IDataStep = new Integer(FormWizard.SODATAPAGE);
-        String sNewDataOnly = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 44);    //
-        String sDisplayAllData = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 46); //
-        String sNoModification = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 47); // AllowUpdates
-        String sNoDeletion = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 48);     // AllowDeletes
-        String sNoAddition = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 49);     // AlowInserts
-        String sdontdisplayExistingData = CurUnoDialog.oResource.getResText(UIConsts.RID_FORM + 45);
+        String sNewDataOnly = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 44);    //
+        String sDisplayAllData = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 46); //
+        String sNoModification = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 47); // AllowUpdates
+        String sNoDeletion = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 48);     // AllowDeletes
+        String sNoAddition = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 49);     // AlowInserts
+        String sdontdisplayExistingData = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 45);
 
       optNewDataOnly = CurUnoDialog.insertRadioButton("optNewDataOnly", "toggleCheckBoxes", this,
         new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
