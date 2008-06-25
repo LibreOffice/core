@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DocumentViewHelper.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,17 +39,16 @@ import com.sun.star.view.*;
 import com.sun.star.beans.*;
 import com.sun.star.container.*;
 import com.sun.star.form.*;
-
-import integration.forms.DocumentHelper;
+import org.openoffice.xforms.XMLDocument;
 
 /**************************************************************************/
 /** provides a small wrapper around a document view
 */
-class DocumentViewHelper
+public class DocumentViewHelper
 {
     private     XMultiServiceFactory    m_orb;
     private     XController             m_controller;
-    private     DocumentHelper      m_document;
+    private     DocumentHelper          m_document;
 
     /* ------------------------------------------------------------------ */
     final protected XController getController()
@@ -174,7 +173,10 @@ class DocumentViewHelper
     */
     protected void toggleFormDesignMode( ) throws java.lang.Exception
     {
-        dispatch( ".uno:SwitchControlDesignMode" );
+        if ( m_document instanceof XMLDocument )
+            dispatch( ".uno:SwitchXFormsDesignMode" );
+        else
+            dispatch( ".uno:SwitchControlDesignMode" );
     }
 
     /* ------------------------------------------------------------------ */
