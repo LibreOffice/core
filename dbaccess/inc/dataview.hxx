@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dataview.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,13 +52,13 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;  // the service factory to work with
 
     protected:
-        IController*        m_pController;  // the controller in where we resides in
+        IController&        m_rController;  // the controller in where we resides in
         FixedLine*          m_pSeparator;   // our separator above the toolbox (may be NULL)
         ::std::auto_ptr< ::svt::AcceleratorExecute> m_pAccel;
 
     public:
         ODataView(  Window* pParent,
-                    IController* _pController,
+                    IController& _rController,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ,
                     WinBits nStyle = 0 );
         virtual ~ODataView();
@@ -72,7 +72,7 @@ namespace dbaui
         virtual void StateChanged( StateChangedType nStateChange );
         virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
-        inline IController* getCommandController() const { return m_pController; }
+        inline IController& getCommandController() const { return m_rController; }
 
         /** will be called when the controls need to be resized.
         */
