@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ResultSet.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -478,7 +478,7 @@ Reference< XArray > SAL_CALL java_sql_ResultSet::getArray( sal_Int32 columnIndex
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static const char * cSignature = "(I)Ljava/sql/Ref;";
+        static const char * cSignature = "(I)Ljava/sql/Array;";
         static const char * cMethodName = "getArray";
         // Java-Call absetzen
         static jmethodID mID = NULL;
@@ -501,7 +501,7 @@ Reference< XClob > SAL_CALL java_sql_ResultSet::getClob( sal_Int32 columnIndex )
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static const char * cSignature = "(I)Ljava/sql/Ref;";
+        static const char * cSignature = "(I)Ljava/sql/Clob;";
         static const char * cMethodName = "getClob";
         // Java-Call absetzen
         static jmethodID mID = NULL;
@@ -523,7 +523,7 @@ Reference< XBlob > SAL_CALL java_sql_ResultSet::getBlob( sal_Int32 columnIndex )
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        static const char * cSignature = "(I)Ljava/sql/Ref;";
+        static const char * cSignature = "(I)Ljava/sql/Blob;";
         static const char * cMethodName = "getBlob";
         // Java-Call absetzen
         static jmethodID mID = NULL;
