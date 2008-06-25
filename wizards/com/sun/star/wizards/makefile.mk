@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.13 $
+# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -90,6 +90,9 @@ JAVAFILES=							\
     common$/Indexable.java					\
     common$/TerminateWizardException.java			\
     common$/UCB.java					\
+    common$/DebugHelper.java					\
+    common$/PropertySetHelper.java					\
+    common$/NumericalHelper.java					\
     db$/DBMetaData.java					\
     db$/CommandMetaData.java				\
     db$/QueryMetaData.java					\
