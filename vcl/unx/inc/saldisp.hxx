@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saldisp.hxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -396,6 +396,8 @@ protected:
     std::vector< Rectangle > m_aXineramaScreens;
     std::list<SalFrame*> m_aFrames;
     std::list<SalObject*> m_aSalObjects;
+
+    bool            m_bUseRandRWrapper; // don't use randr on gtk, use gdk signals there
 
     void            DestroyFontCache();
     virtual long    Dispatch( XEvent *pEvent ) = 0;
