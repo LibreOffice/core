@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UnoDialog.java,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -26,7 +26,9 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/package com.sun.star.wizards.ui;
+ ************************************************************************/
+
+package com.sun.star.wizards.ui;
 
 import com.sun.star.awt.*;
 import com.sun.star.awt.XReschedule;
@@ -65,7 +67,7 @@ public class UnoDialog implements EventNames {
     public XPropertySet xPSetDlg;
     public XVclWindowPeer xVclWindowPeer;
     public Hashtable ControlList;
-    public Resource oResource;
+    public Resource m_oResource;
     public XWindowPeer xWindowPeer = null;
     protected PeerConfig oPeerConfig;
 
@@ -101,8 +103,8 @@ public class UnoDialog implements EventNames {
 
     public int getControlKey(Object EventObject, Hashtable ControlList) {
         int iKey;
-        XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, EventObject);
-        XControlModel xControlModel = xControl.getModel();
+        XControl xContrl = (XControl) UnoRuntime.queryInterface(XControl.class, EventObject);
+        XControlModel xControlModel = xContrl.getModel();
         XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xControlModel);
         try {
             String sName = (String) xPSet.getPropertyValue("Name");
@@ -152,7 +154,7 @@ public class UnoDialog implements EventNames {
 
 
     public Resource getResource(){
-        return oResource;
+        return m_oResource;
     }
 
     public void setControlProperties(String ControlName, String[] PropertyNames, Object[] PropertyValues) {
@@ -823,7 +825,7 @@ public class UnoDialog implements EventNames {
     }
 
     public void addResourceHandler(String _Unit, String _Module) {
-        oResource = new Resource(xMSF, _Unit, _Module);
+        m_oResource = new Resource(xMSF, _Unit, _Module);
     }
 
     public static short setInitialTabindex(int _istep) {
