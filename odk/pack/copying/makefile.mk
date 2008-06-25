@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.87 $
+# $Revision: 1.88 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -107,6 +107,16 @@ EXELIST += \
 .ENDIF
 
 .IF "$(GUI)"=="WNT"
+CLILIST = \
+    $(DESTDIRCLI)$/cli_basetypes.dll 	\
+    $(DESTDIRCLI)$/cli_uretypes.dll 	\
+    $(DESTDIRCLI)$/cli_oootypes.dll 	\
+    $(DESTDIRCLI)$/cli_ure.dll 	\
+    $(DESTDIRCLI)$/cli_cppuhelper.dll
+.ENDIF
+
+
+.IF "$(GUI)"=="WNT"
 LIBLIST = \
     $(DESTDIRLIB)$/istore.lib 	\
     $(DESTDIRLIB)$/ireg.lib 	\
@@ -203,6 +213,7 @@ INSTALLSCRIPT= \
 
 DIR_FILE_LIST=\
     $(EXELIST) \
+    $(CLILIST) \
     $(LIBLIST) \
     $(SETTINGSLIST) \
     $(DOCUFILES) \
@@ -210,8 +221,6 @@ DIR_FILE_LIST=\
     $(DESTIDLLIST)  \
     $(DESTINCLUDELIST) \
     $(DESTCLASSESLIST)
-
-#    $(XMLLIST) \
 
 .IF "$(SOLAR_JAVA)" != ""
 DIR_FILE_LIST += $(DESTDIRJAR)$/win$/unowinreg.dll
@@ -238,7 +247,6 @@ MYZIPLIST=com$/* win$/*
 all : \
     $(DIR_FILE_LIST) \
     $(DIR_FILE_FLAG) \
-    $(MYZIPTARGET)
 
 #--------------------------------------------------
 # use global rules
