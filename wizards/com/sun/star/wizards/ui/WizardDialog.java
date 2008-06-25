@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: WizardDialog.java,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -297,11 +297,9 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         return false;
     }
 
-    protected void leaveStep(int nOldStep, int nNewStep) {
-    }
+    abstract protected void leaveStep(int nOldStep, int nNewStep);
 
-    protected void enterStep(int nOldStep, int nNewStep) {
-    }
+    abstract protected void enterStep(int nOldStep, int nNewStep);
 
     protected void changeToStep(int nNewStep) {
         Helper.setUnoPropertyValue(xDialogModel, "Step", new Integer(nNewStep));
