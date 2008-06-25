@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: propbrw.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -153,15 +153,15 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
                 xFactoryProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
                 UNO_QUERY_THROW );
 
-            /*uno::Reference< XComponent> xModel = new OContextHelper(m_xORB,uno::Reference< XComponent>(m_pDesignView->getController()->getModel(),uno::UNO_QUERY) );
+            /*uno::Reference< XComponent> xModel = new OContextHelper(m_xORB,uno::Reference< XComponent>(m_pDesignView->getController().getModel(),uno::UNO_QUERY) );
             uno::Reference< XComponent> xDialogParentWindow = new OContextHelper(m_xORB,uno::Reference< XComponent>(VCLUnoHelper::GetInterface ( this ),uno::UNO_QUERY) );
-            uno::Reference< XComponent> xConnection = new OContextHelper(m_xORB,uno::Reference< XComponent>(m_pDesignView->getController()->getConnection(),uno::UNO_QUERY) );*/
+            uno::Reference< XComponent> xConnection = new OContextHelper(m_xORB,uno::Reference< XComponent>(m_pDesignView->getController().getConnection(),uno::UNO_QUERY) );*/
             // a ComponentContext for the
             ::cppu::ContextEntry_Init aHandlerContextInfo[] =
             {
-                ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContextDocument" ) ), makeAny( m_pDesignView->getController()->getModel() )),
+                ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContextDocument" ) ), makeAny( m_pDesignView->getController().getModel() )),
                 ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) ), makeAny( VCLUnoHelper::GetInterface ( this ) )),
-                ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ActiveConnection" ) ), makeAny( m_pDesignView->getController()->getConnection() ) ),
+                ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ActiveConnection" ) ), makeAny( m_pDesignView->getController().getConnection() ) ),
             };
             m_xInspectorContext.set(
                 ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
@@ -312,7 +312,7 @@ sal_Bool PropBrw::Close()
     if( IsRollUp() )
         RollDown();
 
-    m_pDesignView->getController()->executeUnChecked(SID_PROPERTYBROWSER_LAST_PAGE,uno::Sequence< beans::PropertyValue>());
+    m_pDesignView->getController().executeUnChecked(SID_PROPERTYBROWSER_LAST_PAGE,uno::Sequence< beans::PropertyValue>());
 
     return TRUE;
 }
@@ -461,7 +461,7 @@ uno::Reference< uno::XInterface> PropBrw::CreateComponentPair(const uno::Referen
     xNameCont->insertByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormComponent")),uno::makeAny(_xFormComponent));
     xNameCont->insertByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReportComponent")),uno::makeAny(_xReportComponent));
     xNameCont->insertByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowSet"))
-            ,uno::makeAny(uno::Reference< uno::XInterface>(m_pDesignView->getController()->getRowSet())));
+            ,uno::makeAny(uno::Reference< uno::XInterface>(m_pDesignView->getController().getRowSet())));
 
     return xNameCont.get();
 }
@@ -620,7 +620,7 @@ IMPL_LINK( PropBrw, OnAsyncGetFocus, void*,  )
 void PropBrw::LoseFocus()
 {
     DockingWindow::LoseFocus();
-    m_pDesignView->getController()->InvalidateAll();
+    m_pDesignView->getController().InvalidateAll();
 }
 //----------------------------------------------------------------------------
 }
