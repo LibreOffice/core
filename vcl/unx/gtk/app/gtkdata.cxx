@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gtkdata.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,6 +77,7 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay )
               m_pGdkDisplay( pDisplay ),
               m_bStartupCompleted( false )
 {
+    m_bUseRandRWrapper = false; // use gdk signal instead
     for(int i = 0; i < POINTER_COUNT; i++)
         m_aCursors[ i ] = NULL;
     Init ();
@@ -117,6 +118,12 @@ void signalKeysChanged( GdkKeymap*, gpointer data )
 {
     GtkSalDisplay* pDisp = (GtkSalDisplay*)data;
     pDisp->GetKeyboardName(TRUE);
+}
+
+void signalScreenSizeChanged( GdkScreen* pScreen, gpointer data )
+{
+    GtkSalDisplay* pDisp = (GtkSalDisplay*)data;
+    pDisp->screenSizeChanged( pScreen );
 }
 
 }
@@ -168,10 +175,30 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
             }
         }
         X11SalObject::Dispatch( pEvent );
-        pDisplay->processRandREvent( pEvent );
     }
 
     return aFilterReturn;
+}
+
+void GtkSalDisplay::screenSizeChanged( GdkScreen* pScreen )
+{
+    if( pScreen )
+    {
+        int nScreen = gdk_screen_get_number( pScreen );
+        if( nScreen < static_cast<int>(m_aScreens.size()) )
+        {
+            ScreenData& rSD = const_cast<ScreenData&>(m_aScreens[nScreen]);
+            if( rSD.m_bInit )
+            {
+                rSD.m_aSize = Size( gdk_screen_get_width( pScreen ),
+                                    gdk_screen_get_height( pScreen ) );
+            }
+        }
+        else
+        {
+            DBG_ERROR( "unknown screen changed size" );
+        }
+    }
 }
 
 void GtkSalDisplay::initScreen( int nScreen ) const
@@ -592,6 +619,15 @@ void GtkXLib::Init()
     m_pGtkSalDisplay->SetKbdExtension( pKbdExtension );
 
     g_signal_connect( G_OBJECT(gdk_keymap_get_default()), "keys_changed", G_CALLBACK(signalKeysChanged), m_pGtkSalDisplay );
+
+    // add signal handler to notify screen size changes
+    int nScreens = gdk_display_get_n_screens( pGdkDisp );
+    for( int n = 0; n < nScreens; n++ )
+    {
+        GdkScreen *pScreen = gdk_display_get_screen( pGdkDisp, n );
+        if( pScreen )
+            g_signal_connect( G_OBJECT(pScreen), "size-changed", G_CALLBACK(signalScreenSizeChanged), m_pGtkSalDisplay );
+    }
 }
 
 extern "C"
