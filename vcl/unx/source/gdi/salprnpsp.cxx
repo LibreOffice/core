@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salprnpsp.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,56 +103,20 @@ static void getPaLib()
 {
     if( ! driverLib )
     {
-        #ifdef MACOSX
-            // Use OSL module loading for MacOS X
-            OUString        printerDriverLibName( RTL_CONSTASCII_USTRINGPARAM(_XSALSET_LIBNAME) );
-            oslModule       pPrinterDriverLib = osl_loadModule( printerDriverLibName.pData, SAL_LOADMODULE_DEFAULT );
-            if( !pPrinterDriverLib )
-            {
-                fprintf( stderr, "salprnpsp.cxx: Cannot load printer setup library %s.\n", (char *) printerDriverLibName.pData);
-                return;
-            }
+        OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( _XSALSET_LIBNAME ) );
+        driverLib   = osl_loadModuleRelative( (oslGenericFunction)getPaLib, aLibName.pData, SAL_LOADMODULE_DEFAULT );
+        if ( !driverLib )
+        {
+            return;
+        }
 
-            // Get the address of Sal_SetupPrinterDriver
-            OUString        setupPrinterDriverFuncName( RTL_CONSTASCII_USTRINGPARAM("Sal_SetupPrinterDriver") );
-            void            *pSetupPrinterDriverFunc;
-            pSetupPrinterDriverFunc = osl_getSymbol( pPrinterDriverLib, setupPrinterDriverFuncName.pData );
-            if( !pSetupPrinterDriverFunc )
-            {
-                fprintf( stderr, "salprnpsp.cxx: Cannot get address of symbol 'Sal_SetupPrinterDriver'.\n" );
-                return;
-            }
-            pSetupFunction = (int(*)(PrinterInfo&))pSetupPrinterDriverFunc;
+        pSetupFunction  = (setupFunction)osl_getAsciiFunctionSymbol( driverLib, "Sal_SetupPrinterDriver" );
+        if ( !pSetupFunction )
+            fprintf( stderr, "could not resolve Sal_SetupPrinterDriver\n" );
 
-            // Get the address of Sal_queryFaxNumber
-            OUString        queryFaxNumFuncName( RTL_CONSTASCII_USTRINGPARAM("Sal_queryFaxNumber") );
-            void            *pQueryFaxNumFunc;
-            pQueryFaxNumFunc = osl_getSymbol( pPrinterDriverLib, queryFaxNumFuncName.pData );
-            if( !pQueryFaxNumFunc )
-            {
-                fprintf( stderr, "salprnpsp.cxx: Cannot get address of symbol 'Sal_queryFaxNumber'.\n" );
-                return;
-            }
-            pFaxNrFunction = (int(*)(String&))pQueryFaxNumFunc;
-
-        #else
-            OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( _XSALSET_LIBNAME ) );
-            driverLib   = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
-            if ( !driverLib )
-            {
-                return;
-            }
-
-            OUString aSetupSym( RTL_CONSTASCII_USTRINGPARAM( "Sal_SetupPrinterDriver" ) );
-            pSetupFunction  = (setupFunction)osl_getFunctionSymbol( driverLib, aSetupSym.pData );
-            if ( !pSetupFunction )
-                fprintf( stderr, "could not resolve Sal_SetupPrinterDriver\n" );
-
-            OUString aFaxSym( RTL_CONSTASCII_USTRINGPARAM( "Sal_queryFaxNumber" ) );
-            pFaxNrFunction = (faxFunction)osl_getFunctionSymbol( driverLib, aFaxSym.pData );
-            if ( !pFaxNrFunction )
-                fprintf( stderr, "could not resolve Sal_queryFaxNumber\n" );
-        #endif
+        pFaxNrFunction = (faxFunction)osl_getAsciiFunctionSymbol( driverLib, "Sal_queryFaxNumber" );
+        if ( !pFaxNrFunction )
+            fprintf( stderr, "could not resolve Sal_queryFaxNumber\n" );
     }
 }
 
