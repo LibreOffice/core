@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: status.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -630,7 +630,7 @@ void StatusBar::ImplDrawProgress( BOOL bPaint,
     if( bNative )
     {
         aPos = maPrgsFrameRect.TopLeft();
-        nPrgsHeight += STATUSBAR_PRGS_OFFSET;
+        nPrgsHeight = maPrgsFrameRect.GetHeight();
     }
     DrawProgress( this, aPos, mnPrgsSize/2, mnPrgsSize, nPrgsHeight,
                   nPercent1*100, nPercent2*100, mnPercentCount, maPrgsFrameRect );
@@ -679,7 +679,13 @@ void StatusBar::ImplCalcProgressRect()
                                                  aNativeControlRegion, aNativeContentRegion ) ) != FALSE )
         {
             long nProgressHeight = aNativeControlRegion.GetBoundRect().GetHeight();
-            maPrgsTxtPos.Y() = mnItemY + (nProgressHeight - GetTextHeight())/2;
+            if( nProgressHeight > maPrgsFrameRect.GetHeight() )
+            {
+                long nDelta = nProgressHeight - maPrgsFrameRect.GetHeight();
+                maPrgsFrameRect.Top() -= (nDelta - nDelta/2);
+                maPrgsFrameRect.Bottom() += nDelta/2;
+            }
+            maPrgsTxtPos.Y() = maPrgsFrameRect.Top() + (nProgressHeight - GetTextHeight())/2;
         }
     }
     if( ! bNativeOK )
@@ -1664,6 +1670,8 @@ Size StatusBar::CalcWindowSizePixel() const
     }
 
     long nMinHeight = GetTextHeight();
+    const long nBarTextOffset = STATUSBAR_OFFSET_TEXTY*2;
+    long nProgressHeight = nMinHeight + nBarTextOffset;
     // FIXME: IsNativeControlSupported and GetNativeControlRegion should be const ?
     StatusBar* pThis = const_cast<StatusBar*>( this );
     if( pThis->IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
@@ -1675,13 +1683,14 @@ Size StatusBar::CalcWindowSizePixel() const
                                            CTRL_STATE_ENABLED, aValue, rtl::OUString(),
                                            aNativeControlRegion, aNativeContentRegion ) )
         {
-            long nProgressHeight = aNativeControlRegion.GetBoundRect().GetHeight();
-            if( nProgressHeight > nMinHeight )
-                nMinHeight = nProgressHeight;
+            nProgressHeight = aNativeControlRegion.GetBoundRect().GetHeight();
         }
     }
 
-    nCalcHeight = nMinHeight+(STATUSBAR_OFFSET_TEXTY*2);
+    nCalcHeight = nMinHeight+nBarTextOffset;
+    if( nCalcHeight < nProgressHeight+2 )
+        nCalcHeight = nProgressHeight+2;
+
     // add border
     if( IsTopBorder() )
         nCalcHeight += 2;
