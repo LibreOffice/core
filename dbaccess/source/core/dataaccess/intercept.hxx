@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: intercept.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,7 +55,7 @@
 #ifndef _DBA_COREDATAACCESS_DOCUMENTDEFINITION_HXX_
 #include "documentdefinition.hxx"
 #endif
-
+#include <vcl/svapp.hxx>
 
 namespace dbaccess
 {
@@ -66,6 +66,7 @@ class OInterceptor : public ::cppu::WeakImplHelper4< ::com::sun::star::frame::XD
                                                        ::com::sun::star::frame::XDispatch,
                                                     ::com::sun::star::document::XEventListener>
 {
+    DECL_LINK( OnDispatch, void* _aURL  );
 protected:
     virtual ~OInterceptor();
 public:
