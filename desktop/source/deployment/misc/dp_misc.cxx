@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_misc.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -344,7 +344,7 @@ OUString getExtensionDefaultUpdateURL()
     ::rtl::OUString sUrl(
         RTL_CONSTASCII_USTRINGPARAM(
         "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version")
-        ":Version:ExtensionUpdateURL"));
+        ":Version:ExtensionUpdateURL}"));
     ::rtl::Bootstrap::expandMacros(sUrl);
     return sUrl;
 }
