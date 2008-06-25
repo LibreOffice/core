@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: APreparedStatement.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,8 @@
 #include <comphelper/sequence.hxx>
 #include "connectivity/dbexception.hxx"
 #include "connectivity/dbtools.hxx"
+
+#include <limits>
 
 #define CHECK_RETURN(x)                                                 \
     if(!x)                                                              \
@@ -271,7 +273,7 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
 // -------------------------------------------------------------------------
 void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
 {
-    setParameter(parameterIndex,adLongVarWChar,x.getLength(),x);
+    setParameter( parameterIndex, adLongVarWChar, ::std::numeric_limits< sal_Int32 >::max(), x );
 }
 // -------------------------------------------------------------------------
 
