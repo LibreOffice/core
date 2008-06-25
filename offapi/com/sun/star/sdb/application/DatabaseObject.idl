@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DatabaseObject.idl,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,8 @@ module com { module sun { module star { module sdb { module application {
 /** denotes different objects within a database document
 
     @since OOo 2.2.0
+
+    @see DatabaseObjectContainer
  */
 constants DatabaseObject
 {
@@ -55,15 +57,15 @@ constants DatabaseObject
     */
     const long TABLE = com::sun::star::sdb::CommandType::TABLE;
 
-    /** denotes a query in a database
+    /** denotes a query in a database document
     */
     const long QUERY = com::sun::star::sdb::CommandType::QUERY;
 
-    /** denotes a form in a database
+    /** denotes a form in a database document
     */
     const long FORM = 2;
 
-    /** denotes a report in a database
+    /** denotes a report in a database document
     */
     const long REPORT = 3;
 };
