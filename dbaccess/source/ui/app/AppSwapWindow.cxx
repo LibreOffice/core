@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppSwapWindow.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,9 +45,6 @@
 #ifndef DBAUI_APPVIEW_HXX
 #include "AppView.hxx"
 #endif
-#ifndef DBAUI_IAPPELEMENTNOTIFICATION_HXX
-#include "IAppElementNotification.hxx"
-#endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
@@ -60,6 +57,7 @@
 #ifndef _SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
 #endif
+#include "IApplicationController.hxx"
 
 #include <memory>
 
@@ -85,7 +83,7 @@ OApplicationSwapWindow::OApplicationSwapWindow( Window* _pParent, OAppBorderWind
     ImplInitSettings( sal_True, sal_True, sal_True );
 
     m_aIconControl.SetClickHdl(LINK(this, OApplicationSwapWindow, OnContainerSelectHdl));
-    m_aIconControl.setControlActionListener( m_rBorderWin.getView()->getActionListener());
+    m_aIconControl.setControlActionListener( &m_rBorderWin.getView()->getAppController() );
     m_aIconControl.SetHelpId(HID_APP_SWAP_ICONCONTROL);
     m_aIconControl.Show();
     //m_aIconControl.Enable(TRUE);
@@ -186,12 +184,12 @@ bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )
     if ( m_eLastType == _eType )
         return true;
 
-    if ( m_rBorderWin.getView()->getElementNotification()->onContainerSelect( _eType ) )
+    if ( m_rBorderWin.getView()->getAppController().onContainerSelect( _eType ) )
     {
         if ( _eType != E_NONE )
             m_eLastType = _eType;
         return true;
-    }
+    } // if ( m_rBorderWin.getView()->getAppController().onContainerSelect( _eType ) )
 
     PostUserEvent( LINK( this, OApplicationSwapWindow, ChangeToLastSelected ) );
     return false;
@@ -231,7 +229,7 @@ void OApplicationSwapWindow::selectContainer(ElementType _eType)
     }
 
     if ( pEntry )
-        m_aIconControl.SetCursor(pEntry);
-
-    onContainerSelected( _eType );
+        m_aIconControl.SetCursor(pEntry); // this call also initiates a onContainerSelected call
+    else
+        onContainerSelected( _eType );
 }
