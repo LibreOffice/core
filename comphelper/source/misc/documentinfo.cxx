@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentinfo.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/frame/XTitle.hpp>
 /** === end UNO includes === **/
 
 #include <cppuhelper/exc_hlp.hxx>
@@ -65,7 +66,24 @@ namespace comphelper {
     using ::com::sun::star::document::XDocumentProperties;
     using ::com::sun::star::frame::XStorable;
     using ::com::sun::star::beans::XPropertySetInfo;
+    using ::com::sun::star::frame::XTitle;
+    using ::com::sun::star::uno::XInterface;
+    using ::com::sun::star::frame::XFrame;
     /** === end UNO using === **/
+
+    //====================================================================
+    //= helper
+    //====================================================================
+    namespace
+    {
+        ::rtl::OUString lcl_getTitle( const Reference< XInterface >& _rxComponent )
+        {
+            Reference< XTitle > xTitle( _rxComponent, UNO_QUERY );
+            if ( xTitle.is() )
+                return xTitle->getTitle();
+            return ::rtl::OUString();
+        }
+    }
 
     //====================================================================
     //= DocumentInfo
@@ -81,40 +99,34 @@ namespace comphelper {
         ::rtl::OUString sDocURL;
         try
         {
-            // note that the following was roughly ripped from the former SvxScriptSelectorDialog::GetDocTitle
-            // implementation. Additionally, heuristics from ucb/source/ucp/tdoc/tdoc_docmgr.cxx/getDocumentTitle
-            // have been merged in.
-            // I'm not really sure the steps make sense in this order ...
-            const ::rtl::OUString sTitlePropName( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
+            // 1. ask the model and the controller for their XTitle::getTitle
+            sTitle = lcl_getTitle( _rxDocument );
+            if ( sTitle.getLength() )
+                return sTitle;
 
+            Reference< XController > xController( _rxDocument->getCurrentController() );
+            sTitle = lcl_getTitle( xController );
+            if ( sTitle.getLength() )
+                return sTitle;
+
+            // work around a problem with embedded objects, which sometimes return
+            // private:object as URL
             sDocURL = _rxDocument->getURL();
             if ( sDocURL.matchAsciiL( "private:", 8 ) )
                 sDocURL = ::rtl::OUString();
 
-            // 1. if the document is not saved, yet, check the frame title
+            // 2. if the document is not saved, yet, check the frame title
             if ( sDocURL.getLength() == 0 )
             {
-                Reference< XController > xCurrentController( _rxDocument->getCurrentController() );
-                Reference< XPropertySet > xFrameProps;
-                if ( xCurrentController.is() )
-                    xFrameProps.set( xCurrentController->getFrame(), UNO_QUERY );
-                Reference< XPropertySetInfo > xFramePSI;
-                if ( xFrameProps.is() )
-                    xFramePSI = xFrameProps->getPropertySetInfo();
-
-                if ( xFramePSI.is() && xFramePSI->hasPropertyByName( sTitlePropName ) )
-                {
-                    OSL_VERIFY( xFrameProps->getPropertyValue( sTitlePropName ) >>= sTitle );
-                    // process "UntitledX - YYYYYYYY" // to get UntitledX
-                    sal_Int32 pos = 0;
-                    sTitle = sTitle.getToken( 0, ' ', pos);
-                }
+                Reference< XFrame > xFrame;
+                if ( xController.is() )
+                    xFrame.set( xController->getFrame() );
+                sTitle = lcl_getTitle( xFrame );
+                if ( sTitle.getLength() )
+                    return sTitle;
             }
 
-            if ( sTitle.getLength() != 0 )
-                return sTitle;
-
-            // 2. try the UNO DocumentInfo
+            // 3. try the UNO DocumentInfo
             Reference< XDocumentPropertiesSupplier > xDPS( _rxDocument, UNO_QUERY );
             if ( xDPS.is() )
             {
@@ -122,19 +134,17 @@ namespace comphelper {
                     xDPS->getDocumentProperties(), UNO_QUERY_THROW );
                 OSL_ENSURE(xDocProps.is(), "no DocumentProperties");
                 sTitle = xDocProps->getTitle();
+                if ( sTitle.getLength() )
+                    return sTitle;
             }
 
-            if ( sTitle.getLength() != 0 )
-                return sTitle;
-
-            // 3. try model arguments
+            // 4. try model arguments
             NamedValueCollection aModelArgs( _rxDocument->getArgs() );
             sTitle = aModelArgs.getOrDefault( "Title", sTitle );
-
-            if ( sTitle.getLength() != 0 )
+            if ( sTitle.getLength() )
                 return sTitle;
 
-            // 4. try the last segment of the document URL
+            // 5. try the last segment of the document URL
             // this formerly was an INetURLObject::getName( LAST_SEGMENT, true, DECODE_WITH_CHARSET ),
             // but since we moved this code to comphelper, we do not have access to an INetURLObject anymore
             // This heuristics here should be sufficient - finally, we will get an UNO title API in a not
