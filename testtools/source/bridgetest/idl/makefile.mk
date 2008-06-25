@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -64,7 +64,7 @@ ALLTAR: $(MISC)$/$(TARGET).cppumaker.done \
     $(BIN)$/cli_types_bridgetest.dll 
 
 $(BIN)$/cli_types_bridgetest.dll: $(BIN)$/bridgetest.rdb
-    $(CLIMAKER) $(CLIMAKERFLAGS) --out $@ -r $(SOLARBINDIR)$/cli_types.dll \
+    $(CLIMAKER) $(CLIMAKERFLAGS) --out $@ -r $(SOLARBINDIR)$/cli_uretypes.dll \
         -X $(SOLARBINDIR)$/types.rdb $< 
     $(TOUCH) $@
 
