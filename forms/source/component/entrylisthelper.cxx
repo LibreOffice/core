@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: entrylisthelper.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,14 +73,14 @@ namespace frm
     //---------------------------------------------------------------------
     void SAL_CALL OEntryListHelper::setListEntrySource( const Reference< XListEntrySource >& _rxSource ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_rMutex );
+        ::osl::ResettableMutexGuard aGuard( m_rMutex );
 
         // disconnect from the current external list source
         disconnectExternalListSource();
 
         // and connect to the new one
         if ( _rxSource.is() )
-            connectExternalListSource( _rxSource );
+            connectExternalListSource( _rxSource, aGuard );
     }
 
     //---------------------------------------------------------------------
@@ -93,7 +93,7 @@ namespace frm
     //---------------------------------------------------------------------
     void SAL_CALL OEntryListHelper::entryChanged( const ListEntryEvent& _rEvent ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_rMutex );
+        ::osl::ResettableMutexGuard aGuard( m_rMutex );
         OSL_ENSURE( _rEvent.Source == m_xListSource,
             "OEntryListHelper::entryChanged: where did this come from?" );
         OSL_ENSURE( ( _rEvent.Position >= 0 ) && ( _rEvent.Position < m_aStringItems.getLength() ),
@@ -107,14 +107,14 @@ namespace frm
             )
         {
             m_aStringItems[ _rEvent.Position ] = _rEvent.Entries[ 0 ];
-            stringItemListChanged();
+            stringItemListChanged( aGuard );
         }
     }
 
     //---------------------------------------------------------------------
     void SAL_CALL OEntryListHelper::entryRangeInserted( const ListEntryEvent& _rEvent ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_rMutex );
+        ::osl::ResettableMutexGuard aGuard( m_rMutex );
         OSL_ENSURE( _rEvent.Source == m_xListSource,
             "OEntryListHelper::entryRangeInserted: where did this come from?" );
         OSL_ENSURE( ( _rEvent.Position > 0 ) && ( _rEvent.Position < m_aStringItems.getLength() ) && ( _rEvent.Entries.getLength() > 0 ),
@@ -143,14 +143,14 @@ namespace frm
                 aMovedEntries
             );
 
-            stringItemListChanged();
+            stringItemListChanged( aGuard );
         }
     }
 
     //---------------------------------------------------------------------
     void SAL_CALL OEntryListHelper::entryRangeRemoved( const ListEntryEvent& _rEvent ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_rMutex );
+        ::osl::ResettableMutexGuard aGuard( m_rMutex );
         OSL_ENSURE( _rEvent.Source == m_xListSource,
             "OEntryListHelper::entryRangeRemoved: where did this come from?" );
         OSL_ENSURE( ( _rEvent.Position > 0 ) && ( _rEvent.Count > 0 ) && ( _rEvent.Position + _rEvent.Count <= m_aStringItems.getLength() ),
@@ -170,21 +170,21 @@ namespace frm
             // shrink the array
             m_aStringItems.realloc( m_aStringItems.getLength() - _rEvent.Count );
 
-            stringItemListChanged();
+            stringItemListChanged( aGuard );
         }
     }
 
     //---------------------------------------------------------------------
     void SAL_CALL OEntryListHelper::allEntriesChanged( const EventObject& _rEvent ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_rMutex );
+        ::osl::ResettableMutexGuard aGuard( m_rMutex );
         OSL_ENSURE( _rEvent.Source == m_xListSource,
             "OEntryListHelper::allEntriesChanged: where did this come from?" );
 
         Reference< XListEntrySource > xSource( _rEvent.Source, UNO_QUERY );
         if ( _rEvent.Source == m_xListSource )
         {
-            impl_lock_refreshList();
+            impl_lock_refreshList( aGuard );
         }
     }
 
@@ -207,8 +207,8 @@ namespace frm
     void SAL_CALL OEntryListHelper::refresh() throw(RuntimeException)
     {
         {
-            ::osl::MutexGuard aGuard( m_rMutex );
-            impl_lock_refreshList();
+            ::osl::ResettableMutexGuard aGuard( m_rMutex );
+            impl_lock_refreshList( aGuard );
         }
 
         EventObject aEvt( static_cast< XRefreshable* >( this ) );
@@ -216,12 +216,12 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    void OEntryListHelper::impl_lock_refreshList()
+    void OEntryListHelper::impl_lock_refreshList( ::osl::ResettableMutexGuard& _rInstanceLock )
     {
         if ( hasExternalListSource() )
         {
             m_aStringItems = m_xListSource->getAllListEntries( );
-            stringItemListChanged();
+            stringItemListChanged( _rInstanceLock );
         }
         else
             refreshInternalEntryList();
@@ -272,7 +272,7 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    void OEntryListHelper::connectExternalListSource( const Reference< XListEntrySource >& _rxSource )
+    void OEntryListHelper::connectExternalListSource( const Reference< XListEntrySource >& _rxSource, ::osl::ResettableMutexGuard& _rInstanceLock )
     {
         OSL_ENSURE( !hasExternalListSource(), "OEntryListHelper::connectExternalListSource: only to be called if no external source is active!" );
         OSL_ENSURE( _rxSource.is(), "OEntryListHelper::connectExternalListSource: invalid list source!" );
@@ -287,7 +287,7 @@ namespace frm
             m_xListSource->addListEntryListener( this );
 
             m_aStringItems = m_xListSource->getAllListEntries( );
-            stringItemListChanged();
+            stringItemListChanged( _rInstanceLock );
 
             // let derivees react on the new list source
             connectedExternalListSource();
@@ -306,11 +306,11 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    void OEntryListHelper::setNewStringItemList( const ::com::sun::star::uno::Any& _rValue )
+    void OEntryListHelper::setNewStringItemList( const ::com::sun::star::uno::Any& _rValue, ::osl::ResettableMutexGuard& _rInstanceLock )
     {
         OSL_PRECOND( !hasExternalListSource(), "OEntryListHelper::setNewStringItemList: this should never have survived convertNewListSourceProperty!" );
         OSL_VERIFY( _rValue >>= m_aStringItems );
-        stringItemListChanged( );
+        stringItemListChanged( _rInstanceLock );
     }
 
 //.........................................................................
