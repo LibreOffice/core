@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormComponent.cxx,v $
- * $Revision: 1.60 $
+ * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,7 +93,7 @@ namespace frm
 //=========================================================================
 DBG_NAME(frm_OControl)
 //------------------------------------------------------------------------------
-OControl::OControl( const Reference< XMultiServiceFactory>& _rxFactory, const rtl::OUString& _rAggregateService, const sal_Bool _bSetDelegator )
+OControl::OControl( const Reference< XMultiServiceFactory >& _rxFactory, const rtl::OUString& _rAggregateService, const sal_Bool _bSetDelegator )
             :OComponentHelper(m_aMutex)
             ,m_aContext( _rxFactory )
             ,m_xServiceFactory(_rxFactory)
@@ -190,7 +190,7 @@ void OControl::disposing()
 
     m_aWindowStateGuard.attach( NULL, NULL );
 
-    Reference<com::sun::star::lang::XComponent> xComp;
+    Reference< XComponent > xComp;
     if (query_aggregation(m_xAggregate, xComp))
         xComp->dispose();
 }
@@ -199,7 +199,7 @@ void OControl::disposing()
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OControl::supportsService(const rtl::OUString& _rsServiceName) throw ( RuntimeException)
 {
-        Sequence<rtl::OUString> aSupported = getSupportedServiceNames();
+    Sequence<rtl::OUString> aSupported = getSupportedServiceNames();
     const rtl::OUString* pSupported = aSupported.getConstArray();
     for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
         if (pSupported->equals(_rsServiceName))
@@ -701,7 +701,7 @@ void SAL_CALL OControlModel::setName(const ::rtl::OUString& _rName) throw(Runtim
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OControlModel::supportsService(const rtl::OUString& _rServiceName) throw ( RuntimeException)
 {
-        Sequence<rtl::OUString> aSupported = getSupportedServiceNames();
+    Sequence<rtl::OUString> aSupported = getSupportedServiceNames();
     const rtl::OUString* pSupported = aSupported.getConstArray();
     for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
         if (pSupported->equals(_rServiceName))
@@ -1151,6 +1151,7 @@ OBoundControlModel::OBoundControlModel(
     :OControlModel( _rxFactory, _rUnoControlModelTypeName, _rDefault, sal_False )
     ,OPropertyChangeListener( m_aMutex )
     ,m_nValuePropertyAggregateHandle( -1 )
+    ,m_bValuePropertyMayBeVoid( false )
     ,m_aUpdateListeners(m_aMutex)
     ,m_aResetListeners(m_aMutex)
     ,m_aFormComponentListeners( m_aMutex )
@@ -1181,6 +1182,7 @@ OBoundControlModel::OBoundControlModel(
     :OControlModel( _pOriginal, _rxFactory, sal_True, sal_False )
     ,OPropertyChangeListener( m_aMutex )
     ,m_nValuePropertyAggregateHandle( _pOriginal->m_nValuePropertyAggregateHandle )
+    ,m_bValuePropertyMayBeVoid( _pOriginal->m_bValuePropertyMayBeVoid )
     ,m_aUpdateListeners( m_aMutex )
     ,m_aResetListeners( m_aMutex )
     ,m_aFormComponentListeners( m_aMutex )
@@ -1207,6 +1209,8 @@ OBoundControlModel::OBoundControlModel(
     m_aLabelServiceName = _pOriginal->m_aLabelServiceName;
     m_sValuePropertyName = _pOriginal->m_sValuePropertyName;
     m_nValuePropertyAggregateHandle = _pOriginal->m_nValuePropertyAggregateHandle;
+    m_bValuePropertyMayBeVoid = _pOriginal->m_bValuePropertyMayBeVoid;
+    m_aValuePropertyType = _pOriginal->m_aValuePropertyType;
     m_aControlSource = _pOriginal->m_aControlSource;
     // m_xLabelControl, though being a property, is not to be cloned, not even the reference will be transfered.
     // (the former should be clear - a clone of the object we're only referencing does not make sense)
@@ -1302,6 +1306,14 @@ void OBoundControlModel::initValueProperty( const ::rtl::OUString& _rValueProper
     m_sValuePropertyName = _rValuePropertyName;
     m_nValuePropertyAggregateHandle = getOriginalHandle( _nValuePropertyExternalHandle );
     OSL_ENSURE( m_nValuePropertyAggregateHandle != -1, "OBoundControlModel::initValueProperty: unable to find the original handle!" );
+
+    if ( m_nValuePropertyAggregateHandle != -1 )
+    {
+        Reference< XPropertySetInfo > xPropInfo( m_xAggregateSet->getPropertySetInfo(), UNO_SET_THROW );
+        Property aValuePropDesc = xPropInfo->getPropertyByName( m_sValuePropertyName );
+        m_aValuePropertyType = aValuePropDesc.Type;
+        m_bValuePropertyMayBeVoid = ( aValuePropDesc.Attributes & PropertyAttribute::MAYBEVOID ) != 0;
+    }
 
     // start listening for changes at the value property
     implInitValuePropertyListening( );
@@ -1573,12 +1585,12 @@ void OBoundControlModel::readCommonProperties(const Reference<stario::XObjectInp
 {
     sal_Int32 nLen = _rxInStream->readLong();
 
-        Reference<stario::XMarkableStream> xMark(_rxInStream, UNO_QUERY);
+    Reference<stario::XMarkableStream> xMark(_rxInStream, UNO_QUERY);
     DBG_ASSERT(xMark.is(), "OBoundControlModel::readCommonProperties : can only work with markable streams !");
     sal_Int32 nMark = xMark->createMark();
 
     // read the reference to the label control
-        Reference<stario::XPersistObject> xPersist;
+    Reference<stario::XPersistObject> xPersist;
     sal_Int32 nUsedFlag;
     nUsedFlag = _rxInStream->readLong();
     if (nUsedFlag)
@@ -1599,7 +1611,7 @@ void OBoundControlModel::readCommonProperties(const Reference<stario::XObjectInp
 //------------------------------------------------------------------------------
 void OBoundControlModel::writeCommonProperties(const Reference<stario::XObjectOutputStream>& _rxOutStream)
 {
-        Reference<stario::XMarkableStream> xMark(_rxOutStream, UNO_QUERY);
+    Reference<stario::XMarkableStream> xMark(_rxOutStream, UNO_QUERY);
     DBG_ASSERT(xMark.is(), "OBoundControlModel::writeCommonProperties : can only work with markable streams !");
     sal_Int32 nMark = xMark->createMark();
 
@@ -1936,11 +1948,7 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
                 Reference<XNameAccess> xColumns(xColumnsSupplier->getColumns(), UNO_QUERY);
                 if (xColumns.is() && xColumns->hasByName(m_aControlSource))
                 {
-                    Any aElement(xColumns->getByName(m_aControlSource));
-                    DBG_ASSERT(xColumns->getElementType().equals(::getCppuType(reinterpret_cast<Reference<XPropertySet>*>(NULL))),
-                        "OBoundControlModel::connectToField : the columns container should contain XPropertySets !");
-                    // if this assertion fails we probably should do a queryInterface ....
-                    aElement >>= xFieldCandidate;
+                    OSL_VERIFY( xColumns->getByName(m_aControlSource) >>= xFieldCandidate );
                 }
             }
         }
@@ -2204,6 +2212,7 @@ void OBoundControlModel::onDisconnectedValidator( )
 //------------------------------------------------------------------------------
 void OBoundControlModel::onConnectedExternalValue( )
 {
+    calculateExternalValueType();
 }
 
 //------------------------------------------------------------------------------
@@ -2273,7 +2282,7 @@ void OBoundControlModel::reset() throw (RuntimeException)
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OBoundControlModel::reset: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -2394,18 +2403,36 @@ void OBoundControlModel::setField( const Reference< XPropertySet>& _rxField,sal_
     }
 }
 //--------------------------------------------------------------------
-sal_Bool OBoundControlModel::approveValueBinding( const Reference< XValueBinding >& /*_rxBinding*/ )
+sal_Bool OBoundControlModel::impl_approveValueBinding_nolock( const Reference< XValueBinding >& _rxBinding )
 {
-    // reject everything. Derived classes need to override this if they want to
-    // benefit from this data binding functionality
+    if ( !_rxBinding.is() )
+        return sal_False;
+
+    Sequence< Type > aTypeCandidates;
+    {
+        // >>>>>>>> ----- SAFE ----- >>>>>>>>
+        ::osl::MutexGuard aGuard( m_aMutex );
+        aTypeCandidates = getSupportedBindingTypes();
+        // <<<<<<<< ----- SAFE ----- <<<<<<<<
+    }
+
+    for (   const Type* pType = aTypeCandidates.getConstArray();
+            pType != aTypeCandidates.getConstArray() + aTypeCandidates.getLength();
+            ++pType
+        )
+    {
+        if ( _rxBinding->supportsType( *pType ) )
+            return sal_True;
+    }
+
     return sal_False;
 }
 
 //--------------------------------------------------------------------
-void OBoundControlModel::connectExternalValueBinding( const Reference< XValueBinding >& _rxBinding )
+void OBoundControlModel::connectExternalValueBinding(
+        const Reference< XValueBinding >& _rxBinding, ::osl::ResettableMutexGuard& _rInstanceLock )
 {
     OSL_PRECOND( _rxBinding.is(), "OBoundControlModel::connectExternalValueBinding: invalid binding instance!" );
-    OSL_PRECOND( approveValueBinding( _rxBinding ), "OBoundControlModel::connectExternalValueBinding: binding is not approved!" );
     OSL_PRECOND( !hasExternalValueBinding( ), "OBoundControlModel::connectExternalValueBinding: precond not met (currently have a binding)!" );
 
     // Suspend being a load listener at our parent form. This is because
@@ -2446,14 +2473,14 @@ void OBoundControlModel::connectExternalValueBinding( const Reference< XValueBin
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OBoundControlModel::connectExternalValueBinding: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     // tell the derivee
     onConnectedExternalValue();
 
     // propagate our new value
-    transferExternalValueToControl( );
+    transferExternalValueToControl( _rInstanceLock );
 
     // if the binding is also a validator, use it, too. This is a constraint of the
     // com.sun.star.form.binding.ValidatableBindableFormComponent service
@@ -2467,7 +2494,7 @@ void OBoundControlModel::connectExternalValueBinding( const Reference< XValueBin
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OBoundControlModel::connectExternalValueBinding: caught an exception while establishing the binding as validator!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }
@@ -2516,13 +2543,11 @@ void OBoundControlModel::disconnectExternalValueBinding( )
 //--------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::setValueBinding( const Reference< XValueBinding >& _rxBinding ) throw (IncompatibleTypesException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     OSL_PRECOND( m_bSupportsExternalBinding, "OBoundControlModel::setValueBinding: How did you reach this method?" );
         // the interface for this method should not have been exposed if we do not
         // support binding to external data
 
-    if ( _rxBinding.is() && !approveValueBinding( _rxBinding ) )
+    if ( !impl_approveValueBinding_nolock( _rxBinding ) )
     {
         throw IncompatibleTypesException(
             FRM_RES_STRING( RID_STR_INCOMPATIBLE_TYPES ),
@@ -2530,13 +2555,15 @@ void SAL_CALL OBoundControlModel::setValueBinding( const Reference< XValueBindin
         );
     }
 
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
+
     // disconnect from the old binding
     if ( hasExternalValueBinding() )
         disconnectExternalValueBinding( );
 
     // connect to the new binding
     if ( _rxBinding.is() )
-        connectExternalValueBinding( _rxBinding );
+        connectExternalValueBinding( _rxBinding, aGuard );
 }
 
 //--------------------------------------------------------------------
@@ -2553,12 +2580,12 @@ Reference< XValueBinding > SAL_CALL OBoundControlModel::getValueBinding(  ) thro
 //--------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::modified( const EventObject& _rEvent ) throw ( RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
 
     OSL_PRECOND( hasExternalValueBinding(), "OBoundControlModel::modified: Where did this come from?" );
-    if ( !m_bTransferingValue && hasExternalValueBinding() && ( m_xExternalBinding == _rEvent.Source ) )
+    if ( !m_bTransferingValue && ( m_xExternalBinding == _rEvent.Source ) && m_xExternalBinding.is() )
     {
-        transferExternalValueToControl( );
+        transferExternalValueToControl( aGuard );
     }
 }
 
@@ -2569,16 +2596,26 @@ void OBoundControlModel::transferDbValueToControl( )
 }
 
 //------------------------------------------------------------------------------
-void OBoundControlModel::transferExternalValueToControl( )
+void OBoundControlModel::transferExternalValueToControl( ::osl::ResettableMutexGuard& _rInstanceLock )
 {
-    try
-    {
-        setControlValue( translateExternalValueToControlValue( ), eExternalBinding );
-    }
-    catch( const Exception& )
-    {
-        OSL_ENSURE( sal_False, "OBoundControlModel::transferExternalValueToControl: caught an exception!" );
-    }
+        Reference< XValueBinding > xExternalBinding( m_xExternalBinding );
+        Type aValueExchangeType( getExternalValueType() );
+
+        _rInstanceLock.clear();
+         // >>>>>>>> ----- UNSAFE ----- >>>>>>>>
+        Any aExternalValue;
+        try
+        {
+            aExternalValue = xExternalBinding->getValue( aValueExchangeType );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        // <<<<<<<< ----- UNSAFE ----- <<<<<<<<
+        _rInstanceLock.reset();
+
+        setControlValue( translateExternalValueToControlValue( aExternalValue ), eExternalBinding );
 }
 
 //------------------------------------------------------------------------------
@@ -2622,35 +2659,47 @@ void OBoundControlModel::transferControlValueToExternal( )
 }
 
 // -----------------------------------------------------------------------------
-Any OBoundControlModel::translateExternalValueToControlValue( ) const
+Sequence< Type > OBoundControlModel::getSupportedBindingTypes()
+{
+    return Sequence< Type >( &m_aValuePropertyType, 1 );
+}
+
+//-----------------------------------------------------------------------------
+void OBoundControlModel::calculateExternalValueType()
+{
+    m_aExternalValueType = Type();
+    if ( !m_xExternalBinding.is() )
+        return;
+
+    Sequence< Type > aTypeCandidates( getSupportedBindingTypes() );
+    for (   const Type* pTypeCandidate = aTypeCandidates.getConstArray();
+            pTypeCandidate != aTypeCandidates.getConstArray() + aTypeCandidates.getLength();
+            ++pTypeCandidate
+        )
+    {
+        if ( m_xExternalBinding->supportsType( *pTypeCandidate ) )
+        {
+            m_aExternalValueType = *pTypeCandidate;
+            break;
+        }
+    }
+}
+
+//-----------------------------------------------------------------------------
+Any OBoundControlModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
 {
     OSL_PRECOND( m_bSupportsExternalBinding && hasExternalValueBinding(),
         "OBoundControlModel::translateExternalValueToControlValue: precondition not met!" );
 
-    // determine the type of our value property
-    if ( m_sValuePropertyName.getLength() && m_xAggregateSet.is() )
-    {
-        Reference< XPropertySetInfo > xPropInfo( m_xAggregateSet->getPropertySetInfo( ) );
-        if ( xPropInfo.is() )
-        {
-            Property aValuePropertyDescriptor = xPropInfo->getPropertyByName( m_sValuePropertyName );
-            // if the external binding does support this type, ask for it
-            if ( m_xExternalBinding.is() && m_xExternalBinding->supportsType( aValuePropertyDescriptor.Type ) )
-            {
-                Any aExternalValue = m_xExternalBinding->getValue( aValuePropertyDescriptor.Type );
-                // if the external value is VOID, and our value property is not allowed to be VOID,
-                // then default-construct a value
-                if ( !aExternalValue.hasValue() && ( ( aValuePropertyDescriptor.Attributes & PropertyAttribute::MAYBEVOID ) == 0 ) )
-                    aExternalValue.setValue( NULL, aValuePropertyDescriptor.Type );
+    Any aControlValue( _rExternalValue );
 
-                // outta here
-                return aExternalValue;
-            }
-        }
-    }
+    // if the external value is VOID, and our value property is not allowed to be VOID,
+    // then default-construct a value
+    if ( !aControlValue.hasValue() && !m_bValuePropertyMayBeVoid )
+        aControlValue.setValue( NULL, m_aValuePropertyType );
 
-    OSL_ENSURE( sal_False, "OBoundControlModel::translateExternalValueToControlValue: no default implementation available!" );
-    return Any();
+    // outta here
+    return aControlValue;
 }
 
 //------------------------------------------------------------------------------
