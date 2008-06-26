@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: window.cxx,v $
- * $Revision: 1.281 $
+ * $Revision: 1.282 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,6 +75,7 @@
 #include "vcl/taskpanelist.hxx"
 #include "com/sun/star/awt/XWindowPeer.hpp"
 #include "com/sun/star/rendering/XCanvas.hpp"
+#include "com/sun/star/rendering/XSpriteCanvas.hpp"
 #include "com/sun/star/awt/XWindow.hpp"
 #include "comphelper/processfactory.hxx"
 #include "com/sun/star/datatransfer/dnd/XDragSource.hpp"
