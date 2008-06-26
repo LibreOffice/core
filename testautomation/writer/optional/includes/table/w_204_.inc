@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_204_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:59 $
+'* last change: $Author: fredrikh $ $Date: 2008-06-26 12:40:56 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -35,27 +35,21 @@
 '*
 '* short description : Writer Table Test
 '*
+'*    Call tTableOption
+'*    Call tTableInsert1
+'*    Call tTableInsert2
+'*    Call tTableInsert3
+'*    Call tTableInsert4
+'*    Call tTableInsert5
+'*    Call tTableNumberFormat
+'*    Call tTableDelete
+'*    Call tTableText
+'*    Call tTableCalculate
+'*    Call tTableEdit
+'*
 '\***********************************************************************
 
-
-sub w_204_
-
-    Call tTableOption
-    Call tTableInsert1
-    Call tTableInsert2
-    Call tTableInsert3
-    Call tTableInsert4
-    Call tTableInsert5
-    Call tTableNumberFormat
-    Call tTableDelete
-	Call tTableText
-	Call tTableCalculate
-    Call tTableEdit
-
-end sub
-
 testcase tTableOption
-
    '/// Check Tables' default Option ///
     printlog "/// Check Tables' default Option ///"
 
@@ -102,7 +96,6 @@ endcase
 testcase tTableInsert1
     dim i as integer
 
-
     Call hNewDocument
     Kontext "DocumentWriter"
 
@@ -134,7 +127,7 @@ testcase tTableInsert1
         Kontext "Zahlenformat"
         if (Kategorie.GetSelText <> fLocaleString("LocaleText")) then
             warnlog "wrong format; is: "+Kategorie.GetSelText+" should: "+fLocaleString("LocaleText") ' Text
-        endif
+        end if
         Zahlenformat.Cancel
         FormatParagraph
         Kontext
@@ -164,7 +157,7 @@ testcase tTableInsert1
         Kontext "Zahlenformat"
         if (Kategorie.GetSelText <> fLocaleString("LocaleText")) then
             warnlog "wrong format; is: "+Kategorie.GetSelText+" should: "+fLocaleString("LocaleText") ' Text
-        endif
+        end if
         Zahlenformat.Cancel
         FormatParagraph
         Kontext
@@ -195,11 +188,11 @@ testcase tTableInsert1
             Case 1,2,3
                 if (Kategorie.GetSelText <> fLocaleString("LocaleNumber")) then
                     warnlog "wrong format; "+ i +"; is: "+Kategorie.GetSelText+" should: "+fLocaleString("LocaleNumber") ' Number
-                endif
+                end if
             Case 4
                 if (Kategorie.GetSelText <> fLocaleString("LocaleText")) then
                     warnlog "wrong format; "+ i +"; is: "+Kategorie.GetSelText+" should: "+fLocaleString("LocaleText") ' Text
-                endif
+                end if
         end select
         Zahlenformat.Cancel
         Call wDokSchreiben "<Tab>"
@@ -225,7 +218,7 @@ testcase tTableInsert1
                 Kontext "Zahlenformat"
                 if (Kategorie.GetSelText <> fLocaleString("LocaleNumber")) then
                     warnlog "wrong format; "+ i +"; is: "+Kategorie.GetSelText+" should: "+fLocaleString("LocaleNumber") ' number
-                endif
+                end if
                 Zahlenformat.Cancel
                 formatparagraph
                 Kontext
@@ -238,7 +231,7 @@ testcase tTableInsert1
                 Kontext "Zahlenformat"
                 if (Kategorie.GetSelText <> fLocaleString("LocaleText")) then
                     warnlog "wrong format; is: "+ i +"; "+Kategorie.GetSelText+" should: "+fLocaleString("LocaleText") ' Text
-                endif
+                end if
                 Zahlenformat.Cancel
                 formatparagraph
                 Kontext
@@ -257,7 +250,6 @@ endcase
 ' --------------------------------------------------------------------
 
 testcase tTableInsert2
-
 
     Call hNewDocument
     Printlog "'///  2. Insert Toolbox -> Insert Table -> Autoformat ///"
@@ -285,7 +277,6 @@ testcase tTableInsert3
     dim i as integer
     dim sTemp as string
     dim itemp(3) as integer
-    
 
     Call hNewDocument
     Printlog "'///  3. Menu: Insert -> Table (Shortcut): {strg} + {F12} ///"
@@ -313,7 +304,7 @@ testcase tTableInsert3
     if (sTemp <> fLocaleString("LocaleTableHeading")) then
         Warnlog "--- table heading did not work!"
         warnlog "--- is:" + sTemp + ", should :" + fLocaleString("LocaleTableHeading")
-    endif
+    end if
     '----------------------------------
     Call wDokSchreiben "<down>"
       ' -------------check if splitting; it HAS TO split
@@ -346,10 +337,9 @@ testcase tTableInsert3
         printlog "--- Table splitted" + itemp(3)
     else
         QAErrorlog "put some more rows in!!!"
-    endif
+    end if
 
     Call hCloseDocument 	
-
 endcase
 
 ' --------------------------------------------------------------------
@@ -363,7 +353,7 @@ testcase tTableInsert4
     if wBlindTextEinfuegen() = false then
         Call hCloseDocument
         goto endsub
-    endif
+    end if
     '/// Insert a table with parameters:
     InsertTableWriter
     Kontext "TabelleEinfuegenWriter"
@@ -388,7 +378,7 @@ testcase tTableInsert4
     sleep (1)
     if wStyleGet(fLocaleString("LocaleTableHeading")) = true then
         Warnlog "Seems tableheader is activated though header is off"
-    endif
+    end if
 
     '/// Cursor leaves table with <Up> and <End>
     Printlog "check if Table gets splitted"
@@ -414,7 +404,7 @@ testcase tTableInsert4
 	        printlog "Table has been moved correctly"
         else
             warnlog " It seems table has been splitted"
-    endif
+    end if
 
 	'/// <B>Table should split if table is bigger than one page</B>
     Call wDokSchreiben "<Up>"
@@ -442,10 +432,9 @@ testcase tTableInsert4
 	        printlog "Table has been splitted"
         else
             warnlog " It seems table has not been splitted"
-    endif
+    end if
 
     Call hCloseDocument
-
 endcase
 
 ' --------------------------------------------------------------------
@@ -469,13 +458,11 @@ testcase tTableInsert5
     Call wDokSchreiben "<end><Mod1 end><down><return>"
 
     Call hCloseDocument
-
 endcase
 
 ' --------------------------------------------------------------------
 
 testcase tTableNumberFormat
-
 
     Call hNewDocument
     Printlog "'/// Fill table with content: Tools->Options->TextDoc->Number formating/recognition check ALL ///"
@@ -497,13 +484,13 @@ testcase tTableNumberFormat
     printlog "  - Currency"
     Call wDokSchreiben(fLocaleString("LocaleCurrencyValue"))
     Call wDokSchreiben "<Tab><shift tab>"
-    FormatNumberFormat                      
+    FormatNumberFormat
     Kontext "Zahlenformat"
     if (Kategorie.GetSelIndex <> 5) then
             warnlog "The value is not recognized as currency, it is " & Kategorie.GetSelText
         else
             printlog "    - Value is correctly recognized as currency"
-    endif
+    end if
     Zahlenformat.Cancel
     formatparagraph
     Kontext
@@ -513,7 +500,7 @@ testcase tTableNumberFormat
             warnlog "wrong alignment of number"
         else
             printlog "    - Currencyvalue is correctly alligned"
-    endif
+    end if
     TabAusrichtungAbsatz.Cancel
     Call wDokSchreiben "<home><shift end>"
     EditCopy
@@ -521,19 +508,19 @@ testcase tTableNumberFormat
             warnlog "The number is not correctly formated. It is: " & GetClipboardText & " but should be: " & fLocaleString("LocaleCurrencyValue")
         else
             printlog "    - Currencyvalue is correctly formated"
-    endif
+    end if
     
     '///+ - Unknown currency
     printlog "  - Unknown currency"
     Call wDokSchreiben("10.78 §")
     Call wDokSchreiben "<Tab><shift tab>"
-    FormatNumberFormat                      
+    FormatNumberFormat
     Kontext "Zahlenformat"
     if (Kategorie.GetSelIndex <> 11) then
             warnlog "The value is not recognized as string, it is " & Kategorie.GetSelText
         else
             printlog "    - Value is correctly recognized as string"
-    endif
+    end if
     Zahlenformat.Cancel
     formatparagraph
     Kontext
@@ -543,7 +530,7 @@ testcase tTableNumberFormat
             warnlog "wrong alignment of number"
         else
             printlog "    - Value is correctly alligned"
-    endif
+    end if
     TabAusrichtungAbsatz.Cancel
     Call wDokSchreiben "<home><shift end>"
     EditCopy
@@ -551,19 +538,19 @@ testcase tTableNumberFormat
             warnlog "The number is not correctly formated: should be 10.78 §, but is " & GetClipboardText
         else
             printlog "    - Value is correctly formated"
-    endif
+    end if
     
     '///+ - Date
     printlog "  - Date"
     Call wDokSchreiben(fLocaleString("LocaleDateValue"))
     Call wDokSchreiben "<Tab><shift tab>"
-    FormatNumberFormat                      
+    FormatNumberFormat
     Kontext "Zahlenformat"
     if (Kategorie.GetSelIndex <> 6) then
             warnlog "The value is not recognized as date, it is " & Kategorie.GetSelText
         else
             printlog "    - Value is correctly recognized as date"
-    endif
+    end if
     Zahlenformat.Cancel
     Formatparagraph
     Kontext
@@ -573,7 +560,7 @@ testcase tTableNumberFormat
             warnlog "wrong alignment of number"
         else
             printlog "    - Datevalue is correctly alligned"
-    endif
+    end if
     TabAusrichtungAbsatz.Cancel
     Call wDokSchreiben "<home><shift end>"
     EditCopy
@@ -581,19 +568,19 @@ testcase tTableNumberFormat
             warnlog "The number is not correctly formated: should be " & fLocaleString("LocaleDateOutput") & ", but is " & GetClipboardText
         else
             printlog "    - Datevalue is correctly formated"
-    endif
+    end if
     
     '///+ - Time
     printlog "  - Time"
     Call wDokSchreiben(fLocaleString("LocaleTimeInput"))
     Call wDokSchreiben "<Tab><shift tab>"
-    FormatNumberFormat                      
+    FormatNumberFormat
     Kontext "Zahlenformat"
     if (Kategorie.GetSelIndex <> 7) then
             warnlog "The value is not recognized as time, it is " & Kategorie.GetSelText
         else
             printlog "    - Value is correctly recognized as date"
-    endif
+    end if
     Zahlenformat.Cancel
     Formatparagraph
     Kontext
@@ -603,7 +590,7 @@ testcase tTableNumberFormat
             warnlog "wrong alignment of number"
         else
             printlog "    - Timevalue is correctly alligned"
-    endif
+    end if
     TabAusrichtungAbsatz.Cancel
     Call wDokSchreiben "<home><shift end>"
     EditCopy
@@ -611,19 +598,19 @@ testcase tTableNumberFormat
             warnlog "The number is not correctly formated: should be " & fLocaleString("LocaleTimeValue") & ", but is " & GetClipboardText
         else
             printlog "    - Timevalue is correctly formated"
-    endif
+    end if
     
     '///+ - Percent
     printlog "  - Percent"
     Call wDokSchreiben(fLocaleString("LocalePercentValue"))
     Call wDokSchreiben "<Tab><shift tab>"
-    FormatNumberFormat                      
+    FormatNumberFormat
     Kontext "Zahlenformat"
     if (Kategorie.GetSelIndex <> 4) then
             warnlog "The value is not recognized as percent, it is " & Kategorie.GetSelText
         else
             printlog "    - Value is correctly recognized as percent"
-    endif
+    end if
     Zahlenformat.Cancel
     Formatparagraph
     Kontext
@@ -633,7 +620,7 @@ testcase tTableNumberFormat
             warnlog "wrong alignment of number"
         else
             printlog "    - Percentvalue is correctly alligned"
-    endif
+    end if
     TabAusrichtungAbsatz.Cancel
     Call wDokSchreiben "<home><shift end>"
     EditCopy
@@ -641,19 +628,19 @@ testcase tTableNumberFormat
             warnlog "The number is not correctly formated: should be " & fLocaleString("LocalePercentValue") & ", but is " & GetClipboardText
         else
             printlog "    - Percentvalue is correctly formated"
-    endif
+    end if
     
     '///+ - Scientific
     printlog "  - Scientific"
     Call wDokSchreiben(fLocaleString("LocaleScientificValue"))
     Call wDokSchreiben "<Tab><shift tab>"
-    FormatNumberFormat                      
+    FormatNumberFormat
     Kontext "Zahlenformat"
     if (Kategorie.GetSelIndex <> 8) then
             warnlog "The value is not recognized as scientific, it is " & Kategorie.GetSelText
         else
             printlog "    - Value is correctly recognized as scientific"
-    endif
+    end if
     Zahlenformat.Cancel
     Formatparagraph
     Kontext
@@ -663,7 +650,7 @@ testcase tTableNumberFormat
             warnlog "wrong alignment of number"
         else
             printlog "    - Scientificvalue is correctly alligned"
-    endif
+    end if
     TabAusrichtungAbsatz.Cancel
     Call wDokSchreiben "<home><shift end>"
     EditCopy
@@ -671,19 +658,19 @@ testcase tTableNumberFormat
             warnlog "The number is not correctly formated: should be " & fLocaleString("LocaleScientificValue") & ", but is " & GetClipboardText
         else
             printlog "    - Scientificvalue is correctly formated"
-    endif
+    end if
     
     '///+ - Fraction
     printlog "  - Fraction"
     Call wDokSchreiben("58 11/4")
     Call wDokSchreiben "<Tab><shift tab>"
-    FormatNumberFormat                      
+    FormatNumberFormat
     Kontext "Zahlenformat"
     if (Kategorie.GetSelIndex <> 9) then
             warnlog "The value is not recognized as fraction, it is " & Kategorie.GetSelText
         else
             printlog "    - Value is correctly recognized as fraction"
-    endif
+    end if
     Zahlenformat.Cancel
     Formatparagraph
     Kontext
@@ -693,7 +680,7 @@ testcase tTableNumberFormat
             warnlog "wrong alignment of number"
         else
             printlog "    - Fractionvalue is correctly alligned"
-    endif
+    end if
     TabAusrichtungAbsatz.Cancel
     Call wDokSchreiben "<home><shift end>"
     EditCopy
@@ -701,13 +688,13 @@ testcase tTableNumberFormat
             warnlog "The number is not correctly formated: should be 60 3/4, but is " & GetClipboardText
         else
             printlog "    - Fractionvalue is correctly formated"
-    endif
+    end if
     
     '///+ - Boolean
     printlog "  - Boolean"
     Call wDokSchreiben(fLocaleString("LocaleBooleanValue"))
     Call wDokSchreiben "<Tab><shift tab>"
-    FormatNumberFormat                      
+    FormatNumberFormat
     Kontext "Zahlenformat"
     
     if (Kategorie.GetSelIndex = 10) then
@@ -716,7 +703,7 @@ testcase tTableNumberFormat
     			qaerrorlog "#i73416#Boolean value in chinese and korean not recognized"
     		else
     		warnlog "The value " & fLocaleString("LocaleBooleanValue") & "is not recognized as boolean, it is " & Kategorie.GetSelText 
-     endif       
+     end if
     Zahlenformat.Cancel
     Formatparagraph
     Kontext
@@ -725,10 +712,10 @@ testcase tTableNumberFormat
     if (rechts.isChecked = true) then 
             printlog "    - Booleanvalue is correctly alligned"
         elseif iSprache = 86 or iSprache = 82 or iSprache = 88 then 
-    			qaerrorlog "#i73416#Boolean value in chinese and korean not recognized"   
+    			qaerrorlog "#i73416#Boolean value in chinese and korean not recognized"
             else
-            warnlog "wrong alignment of number"       
-    endif
+            warnlog "wrong alignment of number"
+    end if
     TabAusrichtungAbsatz.Cancel
     Call wDokSchreiben "<home><shift end>"
     EditCopy
@@ -736,19 +723,19 @@ testcase tTableNumberFormat
             warnlog "The number is not correctly formated: should be " & fLocaleString("LocaleBooleanValue") & ", but is " & GetClipboardText
         else
             printlog "    - Booleanvalue is correctly formated"
-    endif
+    end if
     
     '///+ - String
     printlog "  - String"
     Call wDokSchreiben("testtext")
     Call wDokSchreiben "<Tab><shift tab>"
-    FormatNumberFormat                      
+    FormatNumberFormat
     Kontext "Zahlenformat"
     if (Kategorie.GetSelIndex <> 11) then
             warnlog "The value is not recognized as string, it is " & Kategorie.GetSelText
         else
             printlog "    - Value is correctly recognized as string"
-    endif
+    end if
     Zahlenformat.Cancel
     Formatparagraph
     Kontext
@@ -758,7 +745,7 @@ testcase tTableNumberFormat
             warnlog "wrong alignment of string"
         else
             printlog "    - String is correctly alligned"
-    endif
+    end if
     TabAusrichtungAbsatz.Cancel
     Call wDokSchreiben "<home><shift end>"
     EditCopy
@@ -766,9 +753,8 @@ testcase tTableNumberFormat
             warnlog "The string is not correctly formated: should be Testtext, but is " & GetClipboardText
         else
             printlog "    - String is correctly formated"
-    endif
-    
-        
+    end if
+
     '/// finished the file, now some hardwired tests ///'
     '///+    check, if all decimals are saved, even if not displayed ///'
     Call wDokSchreiben "123" & cDecSep & "123456789"
@@ -789,8 +775,6 @@ endcase
 
 testcase tTableDelete
     dim i as integer
-   
-
 
     Call hNewDocument
     Printlog "'/// delete rows/columns in a table ///"
@@ -823,7 +807,7 @@ testcase tTableDelete
         Warnlog "Deleting rows/columns via keys has not been worked as accepted! -> Test failed!"
         Call hCloseDocument
         exit sub
-    endif
+    end if
 
     Printlog "'///   via menue Format[Zeile|Spalte]Loeschen ///"
     for i = 1 to 17             ' delete some rows/columns
@@ -838,7 +822,7 @@ testcase tTableDelete
         Warnlog "Deleting rows/columns via keys has not been worked as accepted! -> Test failed!"
         Call hCloseDocument
         exit sub
-    endif
+    end if
 
     Printlog "'///   via keys {alt insert} {cursor} -> insert row/column ///"
     Call wDokSchreiben "<ESCAPE>"
@@ -859,7 +843,7 @@ testcase tTableDelete
             EditCopy
             if GetClipboardtext <> "20" then
                 Warnlog "Maybe no columns have been inserted!"
-            endif
+            end if
         catch
             Warnlog "Maybe no columns have been inserted!"
         endcatch
@@ -877,11 +861,10 @@ testcase tTableDelete
     Call hCloseDocument
 endcase
 
-
+'--------------------------------------------------------------------------------------------------------
 
 testcase tTableText
     dim i as integer
-    
 
     Call hNewDocument
     Printlog "'/// +++ table to text ///"
@@ -914,11 +897,9 @@ testcase tTableText
     Call hCloseDocument ()
 endcase
 
-
+'-------------------------------------------------------------------------------------------
 
 testcase tTableCalculate
-    
-
     Printlog "'/// calculating in table ///"
     Call hNewDocument
 
@@ -1047,12 +1028,10 @@ testcase tTableCalculate
     Call hCloseDocument ()
 endcase
 
-
+'-------------------------------------------------------------------------------------------
 
 testcase tTableEdit
-    
     dim itemp(5) as integer
-    
 
     Call hNewDocument
     Printlog "'///  edit table ///"
@@ -1137,7 +1116,7 @@ testcase tTableEdit
         printlog "--- Pagebreak works in Table, that's good :-)"
     else
         warnlog " Pagebreak doesn't work in Table, that's not good :-("+itemp(1) +" "+ itemp(3)
-    endif
+    end if
 
     sleep (5)
     Call wDokSchreiben "<end><Mod1 end><down><return>"
