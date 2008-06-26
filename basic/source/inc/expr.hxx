@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: expr.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,7 +67,7 @@ enum SbiExprMode {                  // Expression context:
     EXPRMODE_STANDALONE,            // a param1, param2 OR a( param1, param2 ) = 42
     EXPRMODE_LPAREN_PENDING,        // start of parameter list with bracket, special handling
     EXPRMODE_LPAREN_NOT_NEEDED,     // pending LPAREN has not been used
-    EXPRMODE_ARRAY_OR_OBJECT,       // '=' or '(' or '.' found after ')' on ParenLevel 0, stopping
+    EXPRMODE_ARRAY_OR_OBJECT        // '=' or '(' or '.' found after ')' on ParenLevel 0, stopping
                                     // expression, assuming array syntax a(...)[(...)] = ?
                                     // or a(...).b(...)
 };
