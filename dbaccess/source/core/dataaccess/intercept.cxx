@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: intercept.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,7 +140,7 @@ struct DispatchHelper
 //XDispatch
 void SAL_CALL OInterceptor::dispatch( const URL& _URL,const Sequence<PropertyValue >& Arguments ) throw (RuntimeException)
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    osl::ClearableMutexGuard aClearableGuard(m_aMutex);
     if( m_pContentHolder )
     {
         if( _URL.Complete == m_aInterceptedURL[DISPATCH_SAVE] )
@@ -149,7 +149,8 @@ void SAL_CALL OInterceptor::dispatch( const URL& _URL,const Sequence<PropertyVal
         }
         else if( _URL.Complete == m_aInterceptedURL[DISPATCH_RELOAD] )
         {
-            m_pContentHolder->fillReportData();
+            m_pContentHolder->fillReportData(aClearableGuard);
+            // IMPORTANT: m_aMutex is cleared!
         }
         else if( _URL.Complete == m_aInterceptedURL[DISPATCH_SAVEAS] )
         {
@@ -222,6 +223,7 @@ IMPL_LINK( OInterceptor, OnDispatch, void*, _nId)
     }
     return 0L;
 }
+
 void SAL_CALL OInterceptor::addStatusListener(
     const Reference<
     XStatusListener >& Control,
