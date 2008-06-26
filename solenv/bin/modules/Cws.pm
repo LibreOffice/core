@@ -8,7 +8,7 @@
 #
 # $RCSfile: Cws.pm,v $
 #
-# $Revision: 1.24 $
+# $Revision: 1.25 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -847,7 +847,7 @@ sub get_eis_id
     my $child  = Eis::to_string($self->child());
 
     my $result;
-    eval { $result = $eis->getChildWorkspaceId($master, $child) };
+    eval { $result = int($eis->getChildWorkspaceId($master, $child)) };
     if ( $@ ) {
         carp("ERROR: get_eis_id(): EIS database transaction failed. Reason:\n$@\n");
     }
