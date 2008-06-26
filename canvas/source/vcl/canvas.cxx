@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: canvas.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,7 +108,7 @@ namespace vclcanvas
                              maArguments[0].getValueTypeClass() == uno::TypeClass_HYPER,
                              "Canvas::initialize: wrong number of arguments, or wrong types" );
 
-        sal_Int64 nPtr;
+        sal_Int64 nPtr = 0;
         maArguments[0] >>= nPtr;
 
         OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nPtr);
