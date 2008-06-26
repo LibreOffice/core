@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -57,7 +57,7 @@ ALLTAR: COPYFILES # COPYFILES2
 
 #-------------------------------------------------------------------------------
 
-TARGETDIR=$(MISC)$/template$/en-US$/wizard$/report
+TARGETDIR=$(MISC)$/sun-report-builder$/template$/en-US$/wizard$/report
 
 COPYFILES: $(OTR_FILES_IN_REPORT_BUILDER_EXT) $(XCU_FILES)
     @@-$(MKDIRHIER) $(TARGETDIR)
