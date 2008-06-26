@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudeprimitive3d.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
+ *  last change: $Author: aw $ $Date: 2008-06-26 16:21:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,8 +208,6 @@ namespace drawinglayer
 
                             if(nReducedCount)
                             {
-                                bool bAdd(true);
-
                                 for(sal_uInt32 b(0); bAdd && b < nReducedCount; b++)
                                 {
                                     if(aCandidate == aReducedLoops.getB3DPolygon(b))
