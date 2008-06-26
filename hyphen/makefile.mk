@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -53,6 +53,12 @@ CONFIGURE_DIR=$(BUILD_DIR)
 # still needed also in system-hyphen case as it creates the makefile
 CONFIGURE_ACTION=configure
 CONFIGURE_FLAGS= --disable-shared --with-pic
+
+.IF "$(SYSBASE)"!=""
+.IF "$(EXTRA_CFLAGS)"!=""
+CONFIGURE_FLAGS+= CFLAGS="$(EXTRA_CFLAGS)" CXXFLAGS="$(EXTRA_CFLAGS)"
+.ENDIF # "$(EXTRA_CFLAGS)"!=""
+.ENDIF # "$(SYSBASE)"!=""
 
 .IF "$(SYSTEM_HYPH)" == "YES" && "$(WITH_MYSPELL_DICTS)" == "YES"
 BUILD_ACTION=make hyph_en_US.dic
