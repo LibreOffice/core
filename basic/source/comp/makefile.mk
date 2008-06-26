@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -68,7 +68,9 @@ SLOFILES= \
     $(SLO)$/symtbl.obj		\
     $(SLO)$/buffer.obj
 
-EXCEPTIONSFILES=$(SLO)$/parser.obj
+EXCEPTIONSFILES= \
+    $(SLO)$/parser.obj \
+    $(SLO)$/exprtree.obj
 
 # --- Targets --------------------------------------------------------------
 
