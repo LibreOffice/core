@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_shortcuts.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 09:11:26 $
+'* last change: $Author: fredrikh $ $Date: 2008-06-26 08:18:21 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -44,7 +44,7 @@ sub main
     '/// This test is based on the following spec:
     '/// Localized Shortcuts
     '/// http://specs.openoffice.org/g11n/menus/LocalizedShortcuts.sxw
-        
+
     use "writer\tools\includes\w_tools.inc"
     use "writer\optional\includes\shortcut\w_shortcuts.inc"
 
@@ -52,8 +52,20 @@ sub main
     printlog Chr(13) + "******* Writer - Shortcut - Test *******"
 
     Call hStatusIn ( "writer", "w_shortcuts.bas","Writer Shortcut-Test" )
-    Call w_shortcuts
-    Call hStatusOut    
+        Call tShortcutGlobalNew
+        Call tShortcutGlobalOpen
+        Call tShortcutGlobalSave
+        Call tShortcutGlobalSaveAs
+        Call tShortcutSelectAll
+        Call tShortcutFindAndReplace
+        Call tShortcutBold
+        Call tShortcutItalic
+        Call tShortcutUnderline
+        Call tShortcutDoubleUnderline
+        Call tShortcutAlign
+        Call tShortcutSuperscript
+        Call tShortcutSubscript
+    Call hStatusOut
 
     Printlog Chr(13) + "End of Shortcut - Test :"
     Printlog "Duration: "+ WieLange ( StartTime )
