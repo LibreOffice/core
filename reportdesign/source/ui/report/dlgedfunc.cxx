@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgedfunc.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -426,10 +426,10 @@ void DlgEdFunc::activateOle(SdrObject* _pObj)
                     {
                         pOleObj->GetObjRef()->changeState( embed::EmbedStates::UI_ACTIVE );
                         m_bUiActive = true;
-                        OReportController* pController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
-                        m_bShowPropertyBrowser = pController->isCommandChecked(SID_SHOW_PROPERTYBROWSER);
+                        OReportController& rController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
+                        m_bShowPropertyBrowser = rController.isCommandChecked(SID_SHOW_PROPERTYBROWSER);
                         if ( m_bShowPropertyBrowser )
-                            pController->executeChecked(SID_SHOW_PROPERTYBROWSER,uno::Sequence< beans::PropertyValue >());
+                            rController.executeChecked(SID_SHOW_PROPERTYBROWSER,uno::Sequence< beans::PropertyValue >());
                     }
                     catch( uno::Exception& )
                     {
@@ -457,8 +457,8 @@ void DlgEdFunc::deactivateOle(bool _bSelect)
                 m_bUiActive = false;
                 if ( m_bShowPropertyBrowser )
                 {
-                    OReportController* pController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
-                    pController->executeChecked(SID_SHOW_PROPERTYBROWSER,uno::Sequence< beans::PropertyValue >());
+                    OReportController& rController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
+                    rController.executeChecked(SID_SHOW_PROPERTYBROWSER,uno::Sequence< beans::PropertyValue >());
                 }
 
                 if ( _bSelect )
@@ -739,7 +739,7 @@ BOOL DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
                 OOle2Obj* pObj = dynamic_cast<OOle2Obj*>(pMark->GetMarkedSdrObj());
                 if ( pObj && !pObj->IsEmpty() )
                 {
-                    pObj->initializeChart(pController->getModel());
+                    pObj->initializeChart(rController.getModel());
                 }
             }
         }
