@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dx_canvas.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -183,9 +183,8 @@ namespace dxcanvas
         // here. for this, check whether the HDC has a bitmap
         // selected.
         HBITMAP hBmp;
-        if( !(hBmp=(HBITMAP)GetCurrentObject(pSysData->hDC,
-                                             OBJ_BITMAP)) ||
-            GetObjectType(pSysData->hDC) != OBJ_MEMDC )
+        hBmp=(HBITMAP)GetCurrentObject(pSysData->hDC, OBJ_BITMAP);
+        if( !hBmp || GetObjectType(pSysData->hDC) != OBJ_MEMDC )
         {
             throw lang::NoSupportException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
