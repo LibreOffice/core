@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportController.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 #include <dbaccess/singledoccontroller.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
@@ -49,7 +50,7 @@
 #include <com/sun/star/report/XReportEngine.hpp>
 #include <com/sun/star/report/XSection.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <comphelper/uno3.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/lstner.hxx>
@@ -59,6 +60,7 @@
 #include "RptDef.hxx"
 #include <functional>
 #include <boost/shared_ptr.hpp>
+#include <com/sun/star/util/XModeSelector.hpp>
 
 
 class TransferableHelper;
@@ -73,9 +75,10 @@ namespace rptui
     class OSectionView;
 
     typedef ::dbaui::OSingleDocumentController  OReportController_BASE;
-    typedef ::cppu::ImplHelper3 <   ::com::sun::star::container::XContainerListener
+    typedef ::cppu::ImplHelper4 <   ::com::sun::star::container::XContainerListener
                                 ,   ::com::sun::star::beans::XPropertyChangeListener
                                 ,   ::com::sun::star::view::XSelectionSupplier
+                                ,   ::com::sun::star::util::XModeSelector
                                 >   OReportController_Listener;
 
     class OReportController :    public OReportController_BASE
@@ -105,6 +108,7 @@ namespace rptui
                                 m_aReportModel;
         ::rtl::OUString         m_sName;                /// name for the report definition
         ::rtl::OUString         m_sLastActivePage;      /// last active property browser page
+        ::rtl::OUString         m_sMode;                /// the current mode of the controller
         sal_Int32               m_nSplitPos;            /// the position of the splitter
         sal_Int32               m_nPageNum;             /// the page number from the restoreView call
         //sal_Int32               m_nExecuteReportEvent;
@@ -364,6 +368,13 @@ namespace rptui
         // XTitle
         virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
 
+        // XModeSelector
+        virtual void SAL_CALL setMode( const ::rtl::OUString& aMode ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException) ;
+        virtual ::rtl::OUString SAL_CALL getMode(  ) throw (::com::sun::star::uno::RuntimeException) ;
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedModes(  ) throw (::com::sun::star::uno::RuntimeException) ;
+        virtual ::sal_Bool SAL_CALL supportsMode( const ::rtl::OUString& aMode ) throw (::com::sun::star::uno::RuntimeException) ;
+
+
         /** returns the current position of the splitter
         *
         * \return
@@ -405,6 +416,7 @@ namespace rptui
     private:
         virtual void onLoadedMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager );
         virtual void impl_initialize( );
+        bool isUiVisible() const;
     };
 }
 #endif // RPTUI_REPORTCONTROLLER_HXX
