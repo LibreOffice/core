@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev.cxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,9 +78,9 @@
 
 using namespace ::com::sun::star;
 
-DBG_NAME( OutputDevice );
-DBG_NAME( Polygon );
-DBG_NAME( PolyPolygon );
+DBG_NAME( OutputDevice )
+DBG_NAME( Polygon )
+DBG_NAME( PolyPolygon )
 DBG_NAMEEX( Region )
 
 // -----------------------------------------------------------------------
