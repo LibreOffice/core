@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentdefinition.cxx,v $
- * $Revision: 1.63 $
+ * $Revision: 1.64 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -850,7 +850,7 @@ void ODocumentDefinition::impl_initObjectEditView( const Reference< XController 
 
 // -----------------------------------------------------------------------------
 void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, const bool _bActivate,
-    const Reference< XCommandEnvironment >& _rxEnvironment, Any& _out_rComponent )
+    const Reference< XCommandEnvironment >& _rxEnvironment, Any& _out_rComponent, ::osl::ClearableMutexGuard & _aGuard )
 {
     OExecuteImpl aExecuteGuard(m_bInExecute);
 
@@ -1024,7 +1024,9 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
         impl_onActivateEmbeddedObject();
     }
 
-    fillReportData();
+    // LLA: Alle fillReportData() calls prüfen, sollte es welche geben, die danach noch viel machen
+    // LLA: sollten wir einen _aGuard Pointer übergeben, sonst erstmal als Referenz
+    fillReportData(_aGuard);
     _out_rComponent <<= xModel;
 }
 
@@ -1032,7 +1034,7 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
 Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 CommandId, const Reference< XCommandEnvironment >& Environment ) throw (Exception, CommandAbortedException, RuntimeException)
 {
     Any aRet;
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::ClearableMutexGuard aGuard(m_aMutex);
     if ( !m_bInExecute )
     {
         sal_Bool bOpen = aCommand.Name.equalsAscii( "open" );
@@ -1065,8 +1067,11 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
                 }
             }
 
+            // m_bOpenInDesign = bOpenInDesign;
+            // onCommandOpenSomething( aCommand.Argument, !bOpenForMail, Environment, aRet, aGuard );
+
             m_bOpenInDesign = bOpenInDesign || bOpenForMail;
-            onCommandOpenSomething( aCommand.Argument, bActivateObject, Environment, aRet );
+            onCommandOpenSomething( aCommand.Argument, bActivateObject, Environment, aRet, aGuard );
         }
         else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "copyTo" ) ) )
         {
@@ -1137,6 +1142,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
                 xStorage->removeElement(m_pImpl->m_aProps.sPersistentName);
 
             dispose();
+
         }
         else if (   ( aCommand.Name.compareToAscii( "storeOwn" ) == 0 ) // compatibility
                 ||  ( aCommand.Name.compareToAscii( "store" ) == 0 )
@@ -1162,7 +1168,9 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
             aRet <<= bSuccess;
         }
         else
+        {
             aRet = OContentHelper::execute(aCommand,CommandId,Environment);
+        }
     }
     return aRet;
 }
@@ -1381,6 +1389,15 @@ sal_Bool ODocumentDefinition::saveAs()
     // default handling: instantiate an interaction handler and let it handle the parameter request
     if ( !m_bOpenInDesign )
         return sal_False;
+
+    {
+        osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+        if ( !m_pImpl->m_aProps.aTitle.getLength() )
+        {
+            aGuard.clear();
+            return save(sal_False); // (sal_False) : we don't want an approve dialog
+        }
+    }
     try
     {
         {
@@ -1390,14 +1407,6 @@ sal_Bool ODocumentDefinition::saveAs()
             Reference<XNameAccess> xName(m_xParentContainer,UNO_QUERY);
             DocumentSaveRequest aRequest;
             aRequest.Name = m_pImpl->m_aProps.aTitle;
-            if ( !aRequest.Name.getLength() )
-            {
-                if ( m_bForm )
-                    aRequest.Name = DBACORE_RESSTRING( RID_STR_FORM );
-                else
-                    aRequest.Name = DBACORE_RESSTRING( RID_STR_REPORT );
-                aRequest.Name = ::dbtools::createUniqueName(xName,aRequest.Name);
-            }
 
             aRequest.Content.set(m_xParentContainer,UNO_QUERY);
             OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
@@ -1945,7 +1954,7 @@ bool ODocumentDefinition::prepareClose()
     return true;
 }
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::fillReportData()
+void ODocumentDefinition::fillReportData(::osl::ClearableMutexGuard & _aGuard)
 {
     if ( !m_bForm && m_pImpl->m_aProps.bAsTemplate && !m_bOpenInDesign ) // open a report in alive mode, so we need to fill it
     {
@@ -1960,8 +1969,11 @@ void ODocumentDefinition::fillReportData()
 
         Reference< XJobExecutor > xExecuteable( m_aContext.createComponentWithArguments( "com.sun.star.wizards.report.CallReportWizard", aArgs ), UNO_QUERY );
         if ( xExecuteable.is() )
+        {
+            _aGuard.clear();
             xExecuteable->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fill")));
     }
+}
 }
 // -----------------------------------------------------------------------------
 void ODocumentDefinition::updateDocumentTitle()
