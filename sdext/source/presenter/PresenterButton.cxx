@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterButton.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -544,7 +544,7 @@ void PresenterButton::SetupButtonBitmaps (void)
         return;
 
     mxNormalBitmap = mxCanvas->getDevice()->createCompatibleAlphaBitmap(maButtonSize);
-    Reference<rendering::XCanvas> xCanvas (mxNormalBitmap->queryBitmapCanvas(), UNO_QUERY);
+    Reference<rendering::XCanvas> xCanvas (mxNormalBitmap, UNO_QUERY);
     if (xCanvas.is())
         RenderButton(
             xCanvas,
@@ -555,7 +555,7 @@ void PresenterButton::SetupButtonBitmaps (void)
             GetBitmap(pRightBitmap, PresenterBitmapDescriptor::Normal));
 
     mxMouseOverBitmap = mxCanvas->getDevice()->createCompatibleAlphaBitmap(maButtonSize);
-    xCanvas = Reference<rendering::XCanvas>(mxMouseOverBitmap->queryBitmapCanvas(), UNO_QUERY);
+    xCanvas = Reference<rendering::XCanvas>(mxMouseOverBitmap, UNO_QUERY);
     if (mpMouseOverFont.get()!=NULL && !mpMouseOverFont->mxFont.is() && mxCanvas.is())
         mpMouseOverFont->PrepareFont(mxCanvas);
     if (xCanvas.is())

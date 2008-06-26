@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterSlideSorter.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1890,7 +1890,7 @@ Reference<rendering::XBitmap> PresenterSlideSorter::MouseOverManager::CreateBitm
     if ( ! xBitmap.is())
         return NULL;
 
-    Reference<rendering::XBitmapCanvas> xBitmapCanvas (xBitmap->queryBitmapCanvas());
+    Reference<rendering::XBitmapCanvas> xBitmapCanvas (xBitmap, UNO_QUERY);
     if ( ! xBitmapCanvas.is())
         return NULL;
 
