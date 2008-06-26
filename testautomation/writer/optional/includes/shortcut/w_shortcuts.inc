@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_shortcuts.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:58 $
+'* last change: $Author: fredrikh $ $Date: 2008-06-26 08:16:56 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -34,32 +34,27 @@
 '*
 '* short description : Shortcut-test in writer
 '*
+'*    tShortcutGlobalNew
+'*    tShortcutGlobalOpen
+'*    tShortcutGlobalSave
+'*    tShortcutGlobalSaveAs
+'*    tShortcutSelectAll
+'*    tShortcutFindAndReplace
+'*    tShortcutBold
+'*    tShortcutItalic
+'*    tShortcutUnderline
+'*    tShortcutDoubleUnderline
+'*    tShortcutAlign
+'*    tShortcutSuperscript
+'*    tShortcutSubscript
+'*
 '\***********************************************************************
 
-
-sub w_shortcuts
-
-    Call tShortcutGlobalNew
-    Call tShortcutGlobalOpen
-    Call tShortcutGlobalSave
-    Call tShortcutGlobalSaveAs
-    Call tShortcutSelectAll
-    Call tShortcutFindAndReplace
-    Call tShortcutBold
-    Call tShortcutItalic
-    Call tShortcutUnderline
-    Call tShortcutDoubleUnderline
-    Call tShortcutAlign
-    Call tShortcutSuperscript
-    Call tShortcutSubscript    
-
-end sub
-
-
 testcase tShortcutGlobalNew
-    Dim vShortcut as string, vNoOfDocs as integer     
+    Dim vShortcut as string
+    Dim vNoOfDocs as integer
     '/// This testcases checks the global shortcut -> New
-    '/// <BR>
+
     '/// Open a new text document
     Call hNewDocument
     Select Case iSprache
@@ -68,7 +63,7 @@ testcase tShortcutGlobalNew
             '/// Shortcut for 'New' in de is <Strg+N>
             '/// Shortcut for 'New' in fr is <Strg+N>
             '/// Shortcut for 'New' in it is <Strg+N>
-            vShortcut = "<Mod1 N>"        
+            vShortcut = "<Mod1 N>"
         Case 34
             '/// Shortcut for 'New' in es is <Strg+U>
             vShortcut = "<Mod1 U>"
@@ -88,7 +83,7 @@ testcase tShortcutGlobalNew
         Call hCloseDocument
     else
         Warnlog "Shortcut " & vShortcut & " didn't open a new document!"
-    endif
+    end if
     '/// Close document opened on start
     Call hCloseDocument
 
@@ -97,9 +92,9 @@ endcase
 ' --------------------------------------------------------------------------------
 
 testcase tShortcutGlobalOpen
-    Dim vShortcut as string     
+    Dim vShortcut as string
     '/// This testcases checks the global shortcut -> Open
-    '/// <BR>
+
     '/// Open a new text document
     Call hNewDocument
     Select Case iSprache
@@ -108,27 +103,27 @@ testcase tShortcutGlobalOpen
             '/// Shortcut for 'Open' in de is <Strg+O>
             '/// Shortcut for 'Open' in fr is <Strg+O>
             '/// Shortcut for 'Open' in it is <Strg+O>
-            vShortcut = "<Mod1 O>"        
+            vShortcut = "<Mod1 O>"
         Case 34
             '/// Shortcut for 'Open' in es is <Strg+A>
             vShortcut = "<Mod1 A>"
         Case else
             Warnlog "Shortcuts for language: " & iSprache & " are not defined in this test"
             Call hCloseDocument
-            goto endsub            
+            goto endsub
     end select
     
     '/// After executing previous named shortcut FileOpen dialog should be opened
     Call wDokSchreiben ( vShortcut )
     wait 500
     Kontext "OeffnenDlg"
-    if OeffnenDlg.Exists then   
+    if OeffnenDlg.Exists then
         printlog "Shortcut " & vShortcut & " opens FileOpen dialog"
         '/// close FileOpenDialog
         OeffnenDlg.Cancel
     else
         printlog "Shortcut " & vShortcut & " didn't open FileOpen dialog"
-    endif
+    end if
     '/// Close document opened on start
     Call hCloseDocument
 
@@ -137,9 +132,8 @@ endcase
 ' --------------------------------------------------------------------------------
 
 testcase tShortcutGlobalSave
-    Dim vShortcut as string     
+    Dim vShortcut as string
     '/// This testcases checks the global shortcut -> Save
-    '/// <BR>
     '/// Open a new text document
     Call hNewDocument
     Select Case iSprache
@@ -148,26 +142,26 @@ testcase tShortcutGlobalSave
             '/// Shortcut for 'Save' in de is <Strg+S>
             '/// Shortcut for 'Save' in fr is <Strg+S>
             '/// Shortcut for 'Save' in it is <Strg+S>
-            vShortcut = "<Mod1 S>"        
+            vShortcut = "<Mod1 S>"
         Case 34
             '/// Shortcut for 'Save' in es is <Strg+G>
             vShortcut = "<Mod1 G>"
         Case else
             Warnlog "Shortcuts for language: " & iSprache & " are not defined in this test"
             Call hCloseDocument
-            goto endsub            
+            goto endsub
     end select
     
     '/// After executing previous named shortcut FileSave dialog should be opened
     Call wDokSchreiben ( vShortcut )
     Kontext "SpeichernDlg"
-    if SpeichernDlg.Exists then   
+    if SpeichernDlg.Exists then
         printlog "Shortcut " & vShortcut & " opens FileSave dialog"
         '/// close FileOpenDialog
         SpeichernDlg.Cancel
     else
         printlog "Shortcut " & vShortcut & " didn't open FileSave dialog"
-    endif
+    end if
     '/// Close document opened on start
     Call hCloseDocument
 
@@ -176,23 +170,23 @@ endcase
 ' --------------------------------------------------------------------------------
 
 testcase tShortcutGlobalSaveAs
-    Dim vShortcut as string     
+    Dim vShortcut as string
     '/// This testcases checks the global shortcut -> Save
-    '/// <BR>
+
     '/// Open a new text document
     Call hNewDocument
-    vShortcut = "<Mod1 Shift S>"        
+    vShortcut = "<Mod1 Shift S>"
     
     '/// After executing previous named shortcut FileSave dialog should be opened
     Call wDokSchreiben ( vShortcut )
     Kontext "SpeichernDlg"
-    if SpeichernDlg.Exists then   
+    if SpeichernDlg.Exists then
         printlog "Shortcut " & vShortcut & " opens FileSaveAs dialog"
         '/// close FileOpenDialog
         SpeichernDlg.Cancel
     else
         printlog "Shortcut " & vShortcut & " didn't open FileSaveAs dialog"
-    endif
+    end if
     '/// Close document opened on start
     Call hCloseDocument
 
@@ -201,9 +195,9 @@ endcase
 ' --------------------------------------------------------------------------------
 
 testcase tShortcutSelectAll
-    Dim vShortcut as string     
+    Dim vShortcut as string
     '/// This testcases checks the shortcut -> Select All
-    '/// <BR>
+
     '/// Open a new text document
     Call hNewDocument
     Select Case iSprache
@@ -212,14 +206,14 @@ testcase tShortcutSelectAll
             '/// Shortcut for 'Select All' in de is <Strg+A>
             '/// Shortcut for 'Select All' in fr is <Strg+A>
             '/// Shortcut for 'Select All' in it is <Strg+A>
-            vShortcut = "<Mod1 A>"        
+            vShortcut = "<Mod1 A>"
         Case 34
             '/// Shortcut for 'Select All' in es is <Strg+E>
             vShortcut = "<Mod1 E>"
         Case else
             Warnlog "Shortcuts for language: " & iSprache & " are not defined in this test"
             Call hCloseDocument
-            goto endsub            
+            goto endsub
     end select
  
     '/// write down 'The complete text should be selected'
@@ -239,7 +233,7 @@ testcase tShortcutSelectAll
         Warnlog "Not all of the text has been selected with shortcut " & vShortcut
     else
         printlog "All of the text has been selected!"
-    endif
+    end if
     
     '/// close document previously opened
     Call hCloseDocument
@@ -249,9 +243,8 @@ endcase
 ' --------------------------------------------------------------------------------
 
 testcase tShortcutFindAndReplace
-    Dim vShortcut as string     
+    Dim vShortcut as string
     '/// This testcases checks the shortcut -> Find & Replace and Repeat Search
-    '/// <BR>
     '/// Open a new text document
     Call hNewDocument
     '///  Check shortcut to open 'Find & Replace' dialog
@@ -261,14 +254,14 @@ testcase tShortcutFindAndReplace
             '/// Shortcut for 'Find & Replace' in de is <Strg+F>
             '/// Shortcut for 'Find & Replace' in fr is <Strg+F>
             '/// Shortcut for 'Find & Replace' in it is <Strg+F>
-            vShortcut = "<Mod1 F>"        
+            vShortcut = "<Mod1 F>"
         Case 34
             '/// Shortcut for 'Find & Replace' in es is <Strg+B>
             vShortcut = "<Mod1 B>"
         Case else
             Warnlog "Shortcuts for language: " & iSprache & " are not defined in this test"
             Call hCloseDocument
-            goto endsub            
+            goto endsub
     end select
     
     printlog "Shortcut for 'Find & Replace'"
@@ -283,7 +276,7 @@ testcase tShortcutFindAndReplace
         FindAndReplace.Cancel
     else
         printlog "Shortcut " & vShortcut & " didn't open Find & Replace dialog"
-    endif
+    end if
     
     '///  Check shortcut to Repeat search
     Select Case iSprache
@@ -292,14 +285,14 @@ testcase tShortcutFindAndReplace
             '/// Shortcut for 'Repeat Search' in de is <Strg+Shift+F>
             '/// Shortcut for 'Repeat Search' in fr is <Strg+Shift+F>
             '/// Shortcut for 'Repeat Search' in it is <Strg+Shift+F>
-            vShortcut = "<Mod1 Shift F>"        
+            vShortcut = "<Mod1 Shift F>"
         Case 34
             '/// Shortcut for 'Find & Replace' in es is <Strg+N>
             vShortcut = "<Mod1 B>"
         Case else
             Warnlog "Shortcuts for language: " & iSprache & " are not defined in this test"
             Call hCloseDocument
-            goto endsub            
+            goto endsub
     end select
  
     printlog "Shortcut for 'Repeat Search'"
@@ -316,14 +309,14 @@ testcase tShortcutFindAndReplace
                 Active.Ok
                 printlog "Shortcut " & vShortcut & " seems not to work correctly"
             endcatch
-        endif
-    endif
+        end if
+    end if
     '/// Quitting messagebox with 'Yes' should bring up another Messagebox
     if Active.Exists then
         if Active.GetRT = 304 then
             Active.Ok
-        endif
-    endif  
+        end if
+    end if  
     
     '/// close document previously opened
     Call hCloseDocument
@@ -333,9 +326,8 @@ endcase
 ' --------------------------------------------------------------------------------
 
 testcase tShortcutBold
-    Dim vShortcut as string     
+    Dim vShortcut as string
     '/// This testcases checks the shortcut -> Bold
-    '/// <BR>
     '/// Open a new text document
     Call hNewDocument
     Select Case iSprache
@@ -347,15 +339,15 @@ testcase tShortcutBold
             '/// Shortcut for 'Bold' in de is <Strg+Shift+F>
             vShortcut = "<Mod1 Shift F>"
         Case 33
-            '/// Shortcut for 'Bold' in fr is <Strg+G>            
-            vShortcut = "<Mod1 G>"        
+            '/// Shortcut for 'Bold' in fr is <Strg+G>
+            vShortcut = "<Mod1 G>"
         Case 34
             '/// Shortcut for 'Bold' in es is <Strg+N>
             vShortcut = "<Mod1 N>"
         Case else
             Warnlog "Shortcuts for language: " & iSprache & " are not defined in this test"
             Call hCloseDocument
-            goto endsub            
+            goto endsub
     end select
 
     '/// write down word 'Bold' and select it
@@ -369,7 +361,7 @@ testcase tShortcutBold
         printlog "Shortcut " & vShortcut & " to format 'Bold' works"
     else
         Warnlog "Shortcut " & vShortcut & " to format 'Bold' doesn't work"
-    endif
+    end if
     
     '/// close previous opened document
     Call hCloseDocument
@@ -379,9 +371,8 @@ endcase
 ' --------------------------------------------------------------------------------
 
 testcase tShortcutItalic
-    Dim vShortcut as string     
+    Dim vShortcut as string
     '/// This testcases checks the shortcut -> Italic
-    '/// <BR>
     '/// Open a new text document
     Call hNewDocument
     Select Case iSprache
@@ -399,7 +390,7 @@ testcase tShortcutItalic
         Case else
             Warnlog "Shortcuts for language: " & iSprache & " are not defined in this test"
             Call hCloseDocument
-            goto endsub            
+            goto endsub
     end select
 
     '/// write down word 'Italic' and select it
@@ -413,7 +404,7 @@ testcase tShortcutItalic
         printlog "Shortcut " & vShortcut & " to format 'Italic' works"
     else
         Warnlog "Shortcut " & vShortcut & " to format 'Italic' doesn't work"
-    endif
+    end if
     
     '/// close previous opened document
     Call hCloseDocument
@@ -423,9 +414,8 @@ endcase
 ' --------------------------------------------------------------------------------
 
 testcase tShortcutUnderline
-    Dim vShortcut as string     
+    Dim vShortcut as string
     '/// This testcases checks the shortcut -> Underline
-    '/// <BR>
     '/// Open a new text document
     Call hNewDocument
     Select Case iSprache
@@ -443,7 +433,7 @@ testcase tShortcutUnderline
         Case else
             Warnlog "Shortcuts for language: " & iSprache & " are not defined in this test"
             Call hCloseDocument
-            goto endsub            
+            goto endsub
     end select
 
     '/// write down word 'Underline' and select it
@@ -457,7 +447,7 @@ testcase tShortcutUnderline
         printlog "Shortcut " & vShortcut & " to format 'Underline' works"
     else
         Warnlog "Shortcut " & vShortcut & " to format 'Underline' doesn't work"
-    endif
+    end if
     
     '/// close previous opened document
     Call hCloseDocument
@@ -467,9 +457,8 @@ endcase
 ' --------------------------------------------------------------------------------
 
 testcase tShortcutDoubleUnderline
-    Dim vShortcut as string     
+    Dim vShortcut as string
     '/// This testcases checks the shortcut -> Double Underline
-    '/// <BR>
     '/// Open a new text document
     Call hNewDocument
     Select Case iSprache
@@ -483,7 +472,7 @@ testcase tShortcutDoubleUnderline
         Case else
             Warnlog "Shortcuts for language: " & iSprache & " are not defined in this test"
             Call hCloseDocument
-            goto endsub            
+            goto endsub
     end select
 
     '/// write down word 'Underline' and select it
@@ -499,8 +488,8 @@ testcase tShortcutDoubleUnderline
     if Underline.GetSelIndex <> 3 then
         Warnlog "Shortcut " & vShortcut & " to format 'Double Underline' doesn't work"
     else
-        printlog "Shortcut " & vShortcut & " to format 'Double Underline' works"        
-    endif
+        printlog "Shortcut " & vShortcut & " to format 'Double Underline' works"
+    end if
     TabFontEffects.Cancel
     
     '/// close previous opened document
@@ -511,9 +500,9 @@ endcase
 ' --------------------------------------------------------------------------------
 
 testcase tShortcutAlign
-    Dim vShortcut as string     
+    Dim vShortcut as string
     '/// This testcases checks the shortcuts -> Align Left, Right, Centered, Justified
-    '/// <BR>
+
     '/// Open a new text document
     printlog "- Shortcut 'Align Left'"
     Call hNewDocument
@@ -529,7 +518,7 @@ testcase tShortcutAlign
         Case else
             Warnlog "Shortcuts for language: " & iSprache & " are not defined in this test"
             Call hCloseDocument
-            goto endsub            
+            goto endsub
     end select
 
     '/// write down word 'Align Left'
@@ -542,7 +531,7 @@ testcase tShortcutAlign
         printlog "-  Shortcut " & vShortcut & " to 'Align Left' works"
     else
         Warnlog "-  Shortcut " & vShortcut & " to 'Align Left' doesn't work"
-    endif
+    end if
 
     '/// "- Shortcut 'Align Right'"
     printlog "- Shortcut 'Align Right'"
@@ -557,7 +546,7 @@ testcase tShortcutAlign
         Case else
             Warnlog "Shortcuts for language: " & iSprache & " are not defined in this test"
             Call hCloseDocument
-            goto endsub            
+            goto endsub
     end select
 
     '/// Insert a line break
@@ -572,14 +561,14 @@ testcase tShortcutAlign
         printlog "-  Shortcut " & vShortcut & " to 'Align Right' works"
     else
         Warnlog "-  Shortcut " & vShortcut & " to 'Align Right' doesn't work"
-    endif
+    end if
 
     '/// "- Shortcut 'Align Centered'"
     printlog "- Shortcut 'Align Centered'"
     Select Case iSprache
         Case 01, 03, 07, 31, 33, 36, 39, 49, 46, 55, 86, 82, 81
             '/// Shortcut for 'Align Centered' in en/sv/pt-BR is <Strg+E>
-            '/// Shortcut for 'Align Centered' in fr is <Strg+E>            
+            '/// Shortcut for 'Align Centered' in fr is <Strg+E>
             '/// Shortcut for 'Align Centered' in it is <Strg+E>
             '/// Shortcut for 'Align Centered' in de is <Strg+E>
             vShortcut = "<Mod1 E>"
@@ -589,7 +578,7 @@ testcase tShortcutAlign
         Case else
             Warnlog "Shortcuts for language: " & iSprache & " are not defined in this test"
             Call hCloseDocument
-            goto endsub            
+            goto endsub
     end select
 
     '/// Insert a line break
@@ -604,14 +593,14 @@ testcase tShortcutAlign
         printlog "-  Shortcut " & vShortcut & " to 'Align Centered' works"
     else
         Warnlog "-  Shortcut " & vShortcut & " to 'Align Centered' doesn't work"
-    endif
+    end if
 
     '/// "- Shortcut 'Align Justified'"
     printlog "- Shortcut 'Align Justified'"
     Select Case iSprache
         Case 01, 03, 07, 31, 33, 34, 36, 39, 46, 55, 86, 82, 81
             '/// Shortcut for 'Align Justified' in en/sv/pt-BR is <Strg+J>
-            '/// Shortcut for 'Align Justified' in fr is <Strg+J>            
+            '/// Shortcut for 'Align Justified' in fr is <Strg+J>
             '/// Shortcut for 'Align Justified' in it is <Strg+J>
             '/// Shortcut for 'Align Justified' in de is <Strg+J>
             vShortcut = "<Mod1 J>"
@@ -621,7 +610,7 @@ testcase tShortcutAlign
         Case else
             Warnlog "Shortcuts for language: " & iSprache & " are not defined in this test"
             Call hCloseDocument
-            goto endsub            
+            goto endsub
     end select
 
     '/// Insert a line break
@@ -636,8 +625,8 @@ testcase tShortcutAlign
         printlog "-  Shortcut " & vShortcut & " to 'Align Justified' works"
     else
         Warnlog "-  Shortcut " & vShortcut & " to 'Align Justified' doesn't work"
-    endif
-    
+    end if
+
     '/// close previous opened document
     Call hCloseDocument
 
@@ -646,9 +635,8 @@ endcase
 ' --------------------------------------------------------------------------------
 
 testcase tShortcutSuperscript
-    Dim vShortcut as string     
+    Dim vShortcut as string
     '/// This testcases checks the shortcut -> Superscript
-    '/// <BR>
     '/// Open a new text document
     Call hNewDocument
     Select Case iSprache
@@ -658,24 +646,24 @@ testcase tShortcutSuperscript
             '/// Shortcut for 'Superscript' in es is <Strg+D>
             '/// Shortcut for 'Superscript' in it is <Strg+D>
             vShortcut = "<Mod1 Shift P>"
-        Case 49    
+        Case 49
             '/// Shortcut for 'Superscript' in de is <Strg+H>
             vShortcut = "<Mod1 H>"
         Case else
             Warnlog "Shortcuts for language: " & iSprache & " are not defined in this test"
             Call hCloseDocument
-            goto endsub            
+            goto endsub
     end select
-    
+
     Kontext "DrawBar"
     if Not DrawBar.Exists then Call hToolbarSelect("Drawing", true)
     '/// Open 'Draw functions' toolbar ///
     Textobjekt.Click
     '/// Draw a Textobject ///
-    Call gMouseMove ( 10, 10, 20, 20 )
+    Call gMouseMove ( 30, 30, 40, 40 )
     '/// write down word 'Superscript' and select it
     Call wDokSchreiben ("Superscript")
-    Call wDokSchreiben ("<Shift Home>")     
+    Call wDokSchreiben ("<Shift Home>")
     '/// execute shortcut and check if word is now formatted as 'Superscript'
     Call wDokSchreiben ( vShortcut )
     wait 500
@@ -687,9 +675,9 @@ testcase tShortcutSuperscript
         printlog "Shortcut " & vShortcut & " to format 'Superscript' works"
     else
         Warnlog "Shortcut " & vShortcut & " to format 'Superscript' doesn't work"
-    endif
+    end if
     TabFontPosition.Cancel
-    
+
     '/// close previous opened document
     Call hCloseDocument
 
@@ -698,9 +686,8 @@ endcase
 ' --------------------------------------------------------------------------------
 
 testcase tShortcutSubscript
-    Dim vShortcut as string     
+    Dim vShortcut as string
     '/// This testcases checks the shortcut -> Subscript
-    '/// <BR>
     '/// Open a new text document
     Call hNewDocument
     Select Case iSprache
@@ -716,7 +703,7 @@ testcase tShortcutSubscript
         Case else
             Warnlog "Shortcuts for language: " & iSprache & " are not defined in this test"
             Call hCloseDocument
-            goto endsub            
+            goto endsub
     end select
     
     Kontext "DrawBar"
@@ -724,10 +711,10 @@ testcase tShortcutSubscript
     '/// Open 'Draw functions' toolbar ///
     Textobjekt.Click
     '/// Draw a Textobject ///
-    Call gMouseMove ( 10, 10, 20, 20 )
+    Call gMouseMove ( 30, 30, 40, 40 )
     '/// write down word 'Subscript' and select it
     Call wDokSchreiben ("Subscript")
-    Call wDokSchreiben ("<Shift Home>")     
+    Call wDokSchreiben ("<Shift Home>")
     '/// execute shortcut and check if word is now formatted as 'Superscript'
     Call wDokSchreiben ( vShortcut )
     wait 500
@@ -739,11 +726,10 @@ testcase tShortcutSubscript
         printlog "Shortcut " & vShortcut & " to format 'Subscript' works"
     else
         Warnlog "Shortcut " & vShortcut & " to format 'Subscript' doesn't work"
-    endif
+    end if
     TabFontPosition.Cancel
-    
+
     '/// close previous opened document
     Call hCloseDocument
 
 endcase
-
