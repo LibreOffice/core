@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mst $ $Date: 2008-06-17 16:12:51 $
+#   last change: $Author: mst $ $Date: 2008-06-26 10:52:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,10 @@ all:
 
 # --- Files --------------------------------------------------------
 
-RAPTORVERSION=1.4.17
+.INCLUDE :	../redlandversion.mk
+
+#RAPTORVERSION=$(RAPTOR_MAJOR).$(RAPTOR_MINOR).$(RAPTOR_MICRO)
+RAPTORVERSION=$(RAPTOR_MAJOR).4.17
 
 TARFILE_NAME=raptor-$(RAPTORVERSION)
 PATCH_FILE_NAME=$(TARFILE_NAME).patch
