@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: genericcontroller.cxx,v $
- * $Revision: 1.93 $
+ * $Revision: 1.94 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1613,7 +1613,6 @@ void OGenericUnoController::fillSupportedFeatures()
     m_bDescribingSupportedFeatures = false;
 #endif
 }
-}   // namespace dbaui
 
 
 void SAL_CALL OGenericUnoController::dispose() throw(::com::sun::star::uno::RuntimeException)
@@ -1621,3 +1620,5 @@ void SAL_CALL OGenericUnoController::dispose() throw(::com::sun::star::uno::Runt
     ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
     OGenericUnoController_Base::dispose();
 }
+}   // namespace dbaui
+
