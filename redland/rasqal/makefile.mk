@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mst $ $Date: 2008-06-26 10:52:14 $
+#   last change: $Author: mst $ $Date: 2008-06-27 09:30:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ XSLTLIB:=$(XSLTLIB)
 .EXPORT: XSLTLIB
 
 CONFIGURE_DIR=
-CONFIGURE_ACTION=.$/configure PATH=..$/..$/..$/bin:$$PATH
+CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
 CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl-digests --with-xml-parser=libxml --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
