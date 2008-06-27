@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: graphicdevicebase.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -139,12 +139,15 @@ namespace canvas
                                          ("SurfaceHandle",
                                           boost::bind(&DeviceHelper::getSurfaceHandle,
                                                       boost::ref(maDeviceHelper)))
+#ifndef __SUNPRO_CC
                                          ("DumpScreenContent",
                                           boost::bind(&ThisType::getDumpScreenContent,
                                                       this),
                                           boost::bind(&ThisType::setDumpScreenContent,
                                                       this,
-                                                      _1)));
+                                                      _1))
+#endif
+                );
         }
 
 #if defined __SUNPRO_CC
