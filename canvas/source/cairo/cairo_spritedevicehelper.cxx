@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_spritedevicehelper.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,6 +114,16 @@ namespace cairocanvas
     uno::Any SpriteDeviceHelper::isAccelerated() const
     {
         return ::com::sun::star::uno::makeAny(true);
+    }
+
+    uno::Any SpriteDeviceHelper::getDeviceHandle() const
+    {
+        return DeviceHelper::getDeviceHandle();
+    }
+
+    uno::Any SpriteDeviceHelper::getSurfaceHandle() const
+    {
+        return DeviceHelper::getSurfaceHandle();
     }
 
     void SpriteDeviceHelper::setSize( const ::basegfx::B2ISize& rSize )

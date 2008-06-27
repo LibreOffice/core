@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: spritedevicehelper.hxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,6 +67,8 @@ namespace vclcanvas
         ::sal_Bool  showBuffer( bool bWindowVisible, ::sal_Bool bUpdateAll );
         ::sal_Bool  switchBuffer( bool bWindowVisible, ::sal_Bool bUpdateAll );
 
+        ::com::sun::star::uno::Any isAccelerated() const;
+        ::com::sun::star::uno::Any getDeviceHandle() const;
         ::com::sun::star::uno::Any getSurfaceHandle() const;
 
         void dumpScreenContent() const;

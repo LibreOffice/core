@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_spritedevicehelper.hxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,6 +70,8 @@ namespace cairocanvas
         ::sal_Bool  switchBuffer( bool, ::sal_Bool bUpdateAll );
 
         ::com::sun::star::uno::Any isAccelerated() const;
+        ::com::sun::star::uno::Any getDeviceHandle() const;
+        ::com::sun::star::uno::Any getSurfaceHandle() const;
 
         void notifySizeUpdate( const ::com::sun::star::awt::Rectangle& rBounds );
         void setSize( const ::basegfx::B2ISize& rSize );

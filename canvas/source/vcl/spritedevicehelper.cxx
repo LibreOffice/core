@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: spritedevicehelper.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,6 +99,16 @@ namespace vclcanvas
         mpBackBuffer.reset();
 
         DeviceHelper::disposing();
+    }
+
+    uno::Any SpriteDeviceHelper::isAccelerated() const
+    {
+        return DeviceHelper::isAccelerated();
+    }
+
+    uno::Any SpriteDeviceHelper::getDeviceHandle() const
+    {
+        return DeviceHelper::getDeviceHandle();
     }
 
     uno::Any SpriteDeviceHelper::getSurfaceHandle() const
