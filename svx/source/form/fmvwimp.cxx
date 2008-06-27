@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmvwimp.cxx,v $
- * $Revision: 1.69 $
+ * $Revision: 1.70 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1576,7 +1576,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
             FmFormObj *pControl = static_cast<FmFormObj*>(SdrObjFactory::MakeNewObject( FmFormInventor, nObjID, NULL, NULL ));
             controlSize.Width() = Fraction(controlSize.Width(), 1) * eTargetMode.GetScaleX();
             controlSize.Height() = Fraction(controlSize.Height(), 1) * eTargetMode.GetScaleY();
-            ::Point controlPos(_pOutDev->LogicToLogic(Point(controlSize.Width(),0),eSourceMode,eTargetMode));
+            ::Point controlPos(_pOutDev->LogicToLogic(::Point(controlSize.Width(),0),eSourceMode,eTargetMode));
             ::Rectangle controlRect(controlPos,_pOutDev->LogicToLogic(controlSize, eSourceMode, eTargetMode));
             pControl->SetLogicRect(controlRect);
 
@@ -1658,7 +1658,7 @@ void FmXFormView::createControlLabelPair(SdrView* /*_pView*/,OutputDevice* _pOut
     aRealSize.Width() = long(Fraction(aRealSize.Width(), 1) * eTargetMode.GetScaleX());
     aRealSize.Height() = long(Fraction(aRealSize.Height(), 1) * eTargetMode.GetScaleY());
     _rpLabel->SetLogicRect(
-        ::Rectangle(    _pOutDev->LogicToLogic(Point(_nXOffsetMM, _nYOffsetMM), eSourceMode, eTargetMode),
+        ::Rectangle(    _pOutDev->LogicToLogic(::Point(_nXOffsetMM, _nYOffsetMM), eSourceMode, eTargetMode),
                     _pOutDev->LogicToLogic(aRealSize, eSourceMode, eTargetMode)
         ));
 
@@ -1679,7 +1679,7 @@ void FmXFormView::createControlLabelPair(SdrView* /*_pView*/,OutputDevice* _pOut
     szControlSize.Width() = long(Fraction(szControlSize.Width(), 1) * eTargetMode.GetScaleX());
     szControlSize.Height() = long(Fraction(szControlSize.Height(), 1) * eTargetMode.GetScaleY());
     _rpControl->SetLogicRect(
-        ::Rectangle(    _pOutDev->LogicToLogic(Point(aRealSize.Width() + _nXOffsetMM, _nYOffsetMM), eSourceMode, eTargetMode),
+        ::Rectangle(    _pOutDev->LogicToLogic(::Point(aRealSize.Width() + _nXOffsetMM, _nYOffsetMM), eSourceMode, eTargetMode),
                     _pOutDev->LogicToLogic(szControlSize, eSourceMode, eTargetMode)
         ));
 
