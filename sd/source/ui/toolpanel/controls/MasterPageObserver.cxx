@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MasterPageObserver.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -131,7 +131,8 @@ MasterPageObserver&  MasterPageObserver::Instance (void)
             Implementation::mpInstance = pInstance;
         }
     }
-    else {
+    else
+    {
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
 
