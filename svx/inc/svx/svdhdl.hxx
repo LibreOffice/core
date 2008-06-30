@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdhdl.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -439,7 +439,7 @@ class ImplHdlListData;
 class SVX_DLLPUBLIC SdrHdlList
 {
 protected:
-    sal_uInt32                  mnFocusIndex;
+    ULONG                   mnFocusIndex;
     SdrMarkView*                pView;
     Container                   aList;
     USHORT                      nHdlSize;
