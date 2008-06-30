@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmvwimp.cxx,v $
- * $Revision: 1.70 $
+ * $Revision: 1.71 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -313,9 +313,10 @@ void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,  FmXForm
     if ( _pParent )
         xHandler = _pParent->getInteractionHandler();
     else
+    {
         // TODO: should we create a default handler? Not really necessary, since the
         // FormController itself has a default fallback
-        ;
+    }
     if ( xHandler.is() )
     {
         Reference< XInitialization > xInitController( xController, UNO_QUERY );
@@ -1714,7 +1715,9 @@ void FmXFormView::createControlLabelPair(SdrView* /*_pView*/,OutputDevice* _pOut
             else if (aMinProp.Type.getTypeClass() == TypeClass_LONG)
                 aVal <<= (sal_Int32)nMinValue;
             else
+            {
                 DBG_ERROR("FmXFormView::createControlLabelPair: unexpected property type (MinValue)!");
+            }
             xControlSet->setPropertyValue(FM_PROP_VALUEMIN,aVal);
 
             Property aMaxProp = xControlPropInfo->getPropertyByName(FM_PROP_VALUEMAX);
@@ -1723,7 +1726,9 @@ void FmXFormView::createControlLabelPair(SdrView* /*_pView*/,OutputDevice* _pOut
             else if (aMaxProp.Type.getTypeClass() == TypeClass_LONG)
                 aVal <<= (sal_Int32)nMaxValue;
             else
+            {
                 DBG_ERROR("FmXFormView::createControlLabelPair: unexpected property type (MaxValue)!");
+            }
             xControlSet->setPropertyValue(FM_PROP_VALUEMAX,aVal);
         }
 
@@ -1828,7 +1833,9 @@ void FmXFormView::startMarkListWatching()
         m_pWatchStoredList->StartListening( *static_cast< SfxBroadcaster* >( pModel ) );
     }
     else
+    {
         DBG_ERROR( "FmXFormView::startMarkListWatching: already listening!" );
+    }
 }
 
 //------------------------------------------------------------------------------
