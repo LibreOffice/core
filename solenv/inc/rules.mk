@@ -8,7 +8,7 @@
 #
 # $RCSfile: rules.mk,v $
 #
-# $Revision: 1.98 $
+# $Revision: 1.99 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -98,7 +98,7 @@ $(OBJ)$/%.obj : %.cc
 .ENDIF
 .ENDIF
 
-.IF "$(ENABLE_PCH)"!=""
+.IF "$(ENABLE_PCH)"!="" && ( "$(PRJNAME)"!="sw" || "$(BUILD_SPECIAL)"!="TRUE" )
 $(SLO)$/precompiled.% .PHONY:
     -$(MKDIRHIER) $(SLO)$/pch
 .IF "$(COM)"=="MSC"
@@ -130,7 +130,7 @@ $(SLO)$/precompiled_ex.% .PHONY:
 $(SLO)$/%.obj : %.cxx
     @echo ------------------------------
     @echo Making: $@
-.IF "$(ENABLE_PCH)"!=""
+.IF "$(ENABLE_PCH)"!="" && ( "$(PRJNAME)"!="sw" || "$(BUILD_SPECIAL)"!="TRUE" )
 # just a helper var	
     @noop $(assign used_exc_switches=$(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)))
 # cleanup first
