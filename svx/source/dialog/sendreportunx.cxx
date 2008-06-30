@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sendreportunx.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -262,8 +262,10 @@ namespace svx{
                 ret = system(cmd.makeStringAndClear().getStr());
             }
 
-            if ( szBodyFile[0] );
+            if ( szBodyFile[0] )
+            {
                 unlink( szBodyFile );
+            }
 
             return -1 != ret;
         }
