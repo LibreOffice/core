@@ -8,7 +8,7 @@
 #
 # $RCSfile: mergemodule.pm,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -163,6 +163,7 @@ sub merge_mergemodules_into_msi_database
                 my $idtfilename = "File.idt"; # must exist
                 if ( ! -f $idtfilename ) { installer::exiter::exit_program("ERROR: File \"$idtfilename\" not found in directory \"$workdir\" !", "merge_mergemodules_into_msi_database"); }
                 my $filecontent = installer::files::read_file($idtfilename);
+                my @file_idt_content = ();
                 my $filecounter = 0;
                 my %mergefilesequence = ();
                 for ( my $i = 0; $i <= $#{$filecontent}; $i++ )
@@ -170,6 +171,7 @@ sub merge_mergemodules_into_msi_database
                     if ( $i <= 2 ) { next; }                        # ignoring first three lines
                     if ( ${$filecontent}[$i] =~ /^\s*$/ ) { next; } # ignoring empty lines
                     $filecounter++;
+                    push(@file_idt_content, ${$filecontent}[$i]);
                     if ( ${$filecontent}[$i] =~ /^\s*(.+?)\t(.+?)\t(.+?)\t(.+?)\t(.*?)\t(.*?)\t(.*?)\t(\d+?)\s*$/ )
                     {
                         my $filename = $1;
@@ -231,6 +233,40 @@ sub merge_mergemodules_into_msi_database
                 my $cabfilename = $mergemodule->{'Cabfilename'};
                 installer::packagelist::resolve_packagevariables(\$cabfilename, $allvariables, 0);
 
+                # Analyzing styles
+                # Flag REMOVE_FILE_TABLE is required for msvc9 Merge-Module, because otherwise msidb.exe
+                # fails during integration of msm file into msi database.
+
+                my $styles = "";
+                my $removefiletable = 0;
+                if ( $mergemodule->{'Styles'} ) { $styles = $mergemodule->{'Styles'}; }
+                if ( $styles =~ /\bREMOVE_FILE_TABLE\b/ ) { $removefiletable = 1; }
+
+                if ( $removefiletable )
+                {
+                    my $removeworkdir = $workdir . $installer::globals::separator . "remove_file_idt";
+                    if ( ! -d $removeworkdir ) { installer::systemactions::create_directory($removeworkdir); }
+                    my $completeremovedest = $removeworkdir . $installer::globals::separator . $filename;
+                    installer::systemactions::copy_one_file($completedest, $completeremovedest);
+                    if ( ! -f $completeremovedest ) { installer::exiter::exit_program("ERROR: msm file not found: $completeremovedest !", "merge_mergemodules_into_msi_database"); }
+
+                    # Unpacking msm file
+                    $systemcall = $msidb . " -d " . $completeremovedest . " -f " . $removeworkdir . " -e \*";
+                    $returnvalue = system($systemcall);
+
+                    my $idtfilename = $removeworkdir . $installer::globals::separator . "File.idt";
+                    if ( -f $idtfilename ) { unlink $idtfilename; }
+                    unlink $completeremovedest;
+
+                    # Packing msm file without "File.idt"
+                    $systemcall = $msidb . " -c -d " . $completeremovedest . " -f " . $removeworkdir . " -i \*";
+                    $returnvalue = system($systemcall);
+
+                    # Using this msm file for merging
+                    if ( -f $completeremovedest ) { $completedest = $completeremovedest; }
+                    else { installer::exiter::exit_program("ERROR: Could not find msm file without File.idt: $completeremovedest !", "merge_mergemodules_into_msi_database"); }
+                }
+
                 # Saving MergeModule info
 
                 my %onemergemodulehash = ();
@@ -246,10 +282,12 @@ sub merge_mergemodules_into_msi_database
                 $onemergemodulehash{'mergeassemblies'} = \%mergeassemblies;
                 $onemergemodulehash{'mergedirectories'} = \%mergedirectories;
                 $onemergemodulehash{'hasmsiassemblies'} = $hasmsiassemblies;
+                $onemergemodulehash{'removefiletable'} = $removefiletable;
+                $onemergemodulehash{'fileidtcontent'} = \@file_idt_content;
 
                 $installer::globals::mergemodules{$mergegid} = \%onemergemodulehash;
 
-                # Collecting all msm files, to copy them into installation set
+                # Collecting all cab files, to copy them into installation set
                 $installer::globals::copy_msm_files{$cabfilename} = $onemergemodulehash{'cabinetfile'};
 
                 chdir($from);
@@ -378,13 +416,67 @@ sub merge_mergemodules_into_msi_database
                 installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing MsiAssembly table");
                 change_msiassembly_table($mergemodulehash, $workdir);
             }
+
+            # msidb.exe does not merge InstallExecuteSequence, AdminExecuteSequence and AdvtExecuteSequence. Instead it creates
+            # new tables ModuleInstallExecuteSequence, ModuleAdminExecuteSequence and ModuleAdvtExecuteSequence that need to be
+            # merged into the three ExecuteSequences with the following process (also into InstallUISequence.idt).
+
+            # Saving original idt files
+            if ( -f "InstallE.idt" ) { installer::systemactions::rename_one_file("InstallE.idt", "InstallE.idt.$counter"); }
+            if ( -f "InstallU.idt" ) { installer::systemactions::rename_one_file("InstallU.idt", "InstallU.idt.$counter"); }
+            if ( -f "AdminExe.idt" ) { installer::systemactions::rename_one_file("AdminExe.idt", "AdminExe.idt.$counter"); }
+            if ( -f "AdvtExec.idt" ) { installer::systemactions::rename_one_file("AdvtExec.idt", "AdvtExec.idt.$counter"); }
+            if ( -f "ModuleInstallExecuteSequence.idt" ) { installer::systemactions::rename_one_file("ModuleInstallExecuteSequence.idt", "ModuleInstallExecuteSequence.idt.$counter"); }
+            if ( -f "ModuleAdminExecuteSequence.idt" ) { installer::systemactions::rename_one_file("ModuleAdminExecuteSequence.idt", "ModuleAdminExecuteSequence.idt.$counter"); }
+            if ( -f "ModuleAdvtExecuteSequence.idt" ) { installer::systemactions::rename_one_file("ModuleAdvtExecuteSequence.idt", "ModuleAdvtExecuteSequence.idt.$counter"); }
+
+            # Extracting tables
+            my $moduleexecutetables = "ModuleInstallExecuteSequence ModuleAdminExecuteSequence ModuleAdvtExecuteSequence"; # new tables
+            my $executetables = "InstallExecuteSequence InstallUISequence AdminExecuteSequence AdvtExecuteSequence"; # tables to be merged
+
+            $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -e " . "Feature " . $moduleexecutetables;
+            $returnvalue = system($systemcall);
+
+            $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -e " . "Feature " . $executetables;
+            $returnvalue = system($systemcall);
+
+            # Using 8+3 table names, that are used, when tables are integrated into database. The export of tables
+            # creates idt-files, that have long names.
+
+            if ( -f "InstallExecuteSequence.idt" ) { installer::systemactions::rename_one_file("InstallExecuteSequence.idt", "InstallE.idt"); }
+            if ( -f "InstallUISequence.idt" ) { installer::systemactions::rename_one_file("InstallUISequence.idt", "InstallU.idt"); }
+            if ( -f "AdminExecuteSequence.idt" ) { installer::systemactions::rename_one_file("AdminExecuteSequence.idt", "AdminExe.idt"); }
+            if ( -f "AdvtExecuteSequence.idt" ) { installer::systemactions::rename_one_file("AdvtExecuteSequence.idt", "AdvtExec.idt"); }
+
+            # Merging content of tables ModuleInstallExecuteSequence, ModuleAdminExecuteSequence and ModuleAdvtExecuteSequence
+            # into tables InstallExecuteSequence, AdminExecuteSequence and AdvtExecuteSequence
+            if ( -f "ModuleInstallExecuteSequence.idt" )
+            {
+                installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing InstallExecuteSequence table");
+                change_executesequence_table($mergemodulehash, $workdir, "InstallE.idt", "ModuleInstallExecuteSequence.idt");
+                installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing InstallUISequence table");
+                change_executesequence_table($mergemodulehash, $workdir, "InstallU.idt", "ModuleInstallExecuteSequence.idt");
+            }
+
+            if ( -f "ModuleAdminExecuteSequence.idt" )
+            {
+                installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing AdminExecuteSequence table");
+                change_executesequence_table($mergemodulehash, $workdir, "AdminExe.idt", "ModuleAdminExecuteSequence.idt");
+            }
+
+            if ( -f "ModuleAdvtExecuteSequence.idt" )
+            {
+                installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing AdvtExecuteSequence table");
+                change_executesequence_table($mergemodulehash, $workdir, "AdvtExec.idt", "ModuleAdvtExecuteSequence.idt");
+            }
+
             installer::logger::include_timestamp_into_logfile("\nPerformance Info: All tables edited");
 
             # Including tables into msi database
 
             installer::logger::include_timestamp_into_logfile("\nPerformance Info: Before including tables");
 
-            $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -i " . $workingtables;
+            $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -i " . $workingtables. " " . $executetables;
             $returnvalue = system($systemcall);
 
             $infoline = "Systemcall: $systemcall\n";
@@ -794,6 +886,17 @@ sub change_file_table
     if ( ! -f $idtfilename ) { installer::exiter::exit_program("ERROR: Could not find file \"$idtfilename\" in \"$workdir\" !", "change_file_table"); }
 
     my $filecontent = installer::files::read_file($idtfilename);
+
+    # If File.idt needed to be removed before the msm database was merged into the msi database,
+    # now it is time to add the content into File.idt
+    if ( $mergemodulehash->{'removefiletable'} )
+    {
+        for ( my $i = 0; $i <= $#{$mergemodulehash->{'fileidtcontent'}}; $i++ )
+        {
+            push(@{$filecontent}, ${$mergemodulehash->{'fileidtcontent'}}[$i]);
+        }
+    }
+
     # For performance reasons creating a hash with file names and rows
     # The content of File.idt is changed after every merge -> content cannot be saved in global hash
     $merge_filetablehashref = analyze_filetable_file($filecontent, $idtfilename);
@@ -1054,5 +1157,147 @@ sub change_msiassembly_table
     # saving file
     installer::files::save_file($idtfilename, $filecontent);
 }
+
+#########################################################################
+# Creating file content hash
+#########################################################################
+
+sub make_executeidtcontent_hash
+{
+    my ($filecontent, $idtfilename) = @_;
+
+    my %newhash = ();
+
+    for ( my $i = 0; $i <= $#{$filecontent}; $i++ )
+    {
+        if ( $i <= 2 ) { next; }                        # ignoring first three lines
+        if ( ${$filecontent}[$i] =~ /^\s*$/ ) { next; } # ignoring empty lines
+        # Format for all sequence tables: Action    Condition   Sequence
+        if ( ${$filecontent}[$i] =~ /^\s*(.+?)\t(.*?)\t(.*?)\s*$/ )
+        {
+            my %onehash = ();
+            $onehash{'Action'} = $1;
+            $onehash{'Condition'} = $2;
+            $onehash{'Sequence'} = $3;
+            $newhash{$onehash{'Action'}} = \%onehash;
+        }
+        else
+        {
+            my $linecount = $i + 1;
+            installer::exiter::exit_program("ERROR: Unknown line format in table \"$idtfilename\" (line $linecount) !", "make_executeidtcontent_hash");
+        }
+    }
+
+    return \%newhash;
+}
+
+#########################################################################
+# Creating file content hash
+#########################################################################
+
+sub make_moduleexecuteidtcontent_hash
+{
+    my ($filecontent, $idtfilename) = @_;
+
+    my %newhash = ();
+
+    for ( my $i = 0; $i <= $#{$filecontent}; $i++ )
+    {
+        if ( $i <= 2 ) { next; }                        # ignoring first three lines
+        if ( ${$filecontent}[$i] =~ /^\s*$/ ) { next; } # ignoring empty lines
+        # Format for all module sequence tables: Action Sequence    BaseAction  After Condition
+        if ( ${$filecontent}[$i] =~ /^\s*(.+?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\s*$/ )
+        {
+            my %onehash = ();
+            $onehash{'Action'} = $1;
+            $onehash{'Sequence'} = $2;
+            $onehash{'BaseAction'} = $3;
+            $onehash{'After'} = $4;
+            $onehash{'Condition'} = $5;
+            $newhash{$onehash{'Action'}} = \%onehash;
+        }
+        else
+        {
+            my $linecount = $i + 1;
+            installer::exiter::exit_program("ERROR: Unknown line format in table \"$idtfilename\" (line $linecount) !", "make_executeidtcontent_hash");
+        }
+    }
+
+    return \%newhash;
+}
+
+#########################################################################
+# ExecuteSequence tables need to be merged with
+# ModuleExecuteSequence tables created by msidb.exe.
+#########################################################################
+
+sub change_executesequence_table
+{
+    my ($mergemodulehash, $workdir, $idtfilename, $moduleidtfilename) = @_;
+
+    my $infoline = "Changing content of table \"$idtfilename\"\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ( ! -f $idtfilename ) { installer::exiter::exit_program("ERROR: Could not find file \"$idtfilename\" in \"$workdir\" !", "change_executesequence_table"); }
+    if ( ! -f $moduleidtfilename ) { installer::exiter::exit_program("ERROR: Could not find file \"$moduleidtfilename\" in \"$workdir\" !", "change_executesequence_table"); }
+
+    # Reading file content
+    my $idtfilecontent = installer::files::read_file($idtfilename);
+    my $moduleidtfilecontent = installer::files::read_file($moduleidtfilename);
+
+    # Converting to hash
+    my $idtcontenthash = make_executeidtcontent_hash($idtfilecontent, $idtfilename);
+    my $moduleidtcontenthash = make_moduleexecuteidtcontent_hash($moduleidtfilecontent, $moduleidtfilename);
+
+    # Merging
+    foreach my $action ( keys %{$moduleidtcontenthash} )
+    {
+        if ( exists($idtcontenthash->{$action}) ) { next; } # Action already exists, can be ignored
+
+        if (( $idtfilename eq "InstallU.idt" ) && ( ! ( $action =~ /^\s*WindowsFolder\./ ))) { next; } # Only "WindowsFolder.*" CustomActions for UI Sequence table
+
+        my $actionhashref = $moduleidtcontenthash->{$action};
+        if ( $actionhashref->{'Sequence'} ne "" )
+        {
+            # Format for all sequence tables: Action Condition Sequence
+            my $newline = $actionhashref->{'Action'} . "\t" . $actionhashref->{'Condition'} . "\t" . $actionhashref->{'Sequence'} . "\n";
+            # Adding to table
+            push(@{$idtfilecontent}, $newline);
+            # Also adding to hash
+            my %idttablehash = ();
+            $idttablehash{'Action'} = $actionhashref->{'Action'};
+            $idttablehash{'Condition'} = $actionhashref->{'Condition'};
+            $idttablehash{'Sequence'} = $actionhashref->{'Sequence'};
+            $idtcontenthash->{$action} = \%idttablehash;
+
+        }
+        else    # no sequence defined, using syntax "BaseAction" and "After"
+        {
+            my $baseactionname = $actionhashref->{'BaseAction'};
+            # If this baseactionname is not defined in execute idt file, it is not possible to merge
+            if ( ! exists($idtcontenthash->{$baseactionname}) ) { installer::exiter::exit_program("ERROR: Merge problem: Could not find action \"$baseactionname\" in file \"$idtfilename\" !", "change_executesequence_table"); }
+
+            my $baseaction = $idtcontenthash->{$baseactionname};
+            my $sequencenumber = $baseaction->{'Sequence'};
+            if ( $actionhashref->{'After'} == 1 ) { $sequencenumber = $sequencenumber + 1; }
+            else { $sequencenumber = $sequencenumber - 1; }
+
+            # Format for all sequence tables: Action Condition Sequence
+            my $newline = $actionhashref->{'Action'} . "\t" . $actionhashref->{'Condition'} . "\t" . $sequencenumber . "\n";
+            # Adding to table
+            push(@{$idtfilecontent}, $newline);
+            # Also adding to hash
+            my %idttablehash = ();
+            $idttablehash{'Action'} = $actionhashref->{'Action'};
+            $idttablehash{'Condition'} = $actionhashref->{'Condition'};
+            $idttablehash{'Sequence'} = $sequencenumber;
+            $idtcontenthash->{$action} = \%idttablehash;
+        }
+    }
+
+    # saving file
+    installer::files::save_file($idtfilename, $idtfilecontent);
+}
+
 
 1;
