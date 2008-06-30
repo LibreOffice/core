@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlvw.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1366,7 +1366,9 @@ void OutlinerView::StartTextConversion(
         )
         pEditView->StartTextConversion( nSrcLang, nDestLang, pDestFont, nOptions, bIsInteractive, bMultipleDoc );
     else
+    {
         DBG_ERROR( "unexpected language" );
+    }
 }
 
 
