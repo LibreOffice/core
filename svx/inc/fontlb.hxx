@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fontlb.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,8 +98,8 @@ public:
     /** Removes a selection. */
     void                        SetNoSelection();
 
-    /** Returns the position of the entry currently selected or LIST_ENTRY_NOTFOUND. */
-    sal_uInt32                  GetSelectEntryPos() const;
+    /** Returns the position of the entry currently selected or LIST_APPEND. */
+    ULONG                       GetSelectEntryPos() const;
     /** Returns the text of the selected entry or an empty string. */
     XubString                   GetSelectEntry() const;
 
