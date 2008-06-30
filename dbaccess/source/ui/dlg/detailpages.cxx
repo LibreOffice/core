@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: detailpages.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -534,6 +534,8 @@ namespace dbaui
         ,m_aEDHostname      (this, ModuleRes(ET_HOSTNAME))
         ,m_aPortNumber      (this, ModuleRes(FT_PORTNUMBER))
         ,m_aNFPortNumber    (this, ModuleRes(NF_PORTNUMBER))
+        ,m_aFTSocket        (this, ModuleRes(FT_SOCKET))
+        ,m_aEDSocket        (this, ModuleRes(ET_SOCKET))
         ,m_aFTDriverClass   (this, ModuleRes(FT_JDBCDRIVERCLASS))
         ,m_aEDDriverClass   (this, ModuleRes(ET_JDBCDRIVERCLASS))
         ,m_aTestJavaDriver  (this, ModuleRes(PB_TESTDRIVERCLASS))
@@ -543,6 +545,9 @@ namespace dbaui
         if ( _pDriverName != NULL )
         {
             m_aEDDriverClass.SetModifyHdl(getControlModifiedLink());
+            m_aEDDriverClass.SetModifyHdl(LINK(this, OGeneralSpecialJDBCDetailsPage, OnEditModified));
+            m_aTestJavaDriver.SetClickHdl(LINK(this,OGeneralSpecialJDBCDetailsPage,OnTestJavaClickHdl));
+            m_sDefaultJdbcDriverName = String::CreateFromAscii(_pDriverName);
         }
         else
         {
@@ -552,20 +557,18 @@ namespace dbaui
             m_aTestJavaDriver.Show(FALSE);
         }
 
+        m_aFTSocket.Show(PAGE_MYSQL_JDBC == _nResId && !m_bUseClass);
+        m_aEDSocket.Show(PAGE_MYSQL_JDBC == _nResId && !m_bUseClass);
+
         m_aEDHostname.SetModifyHdl(getControlModifiedLink());
         m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
-
-        if ( m_bUseClass )
-        {
-            m_aEDDriverClass.SetModifyHdl(LINK(this, OGeneralSpecialJDBCDetailsPage, OnEditModified));
-            m_aTestJavaDriver.SetClickHdl(LINK(this,OGeneralSpecialJDBCDetailsPage,OnTestJavaClickHdl));
-        }
+        m_aEDSocket.SetModifyHdl(getControlModifiedLink());
 
         // #98982# OJ
         m_aNFPortNumber.SetUseThousandSep(sal_False);
 
         Window* pWindows[] = {  &m_aFTHostname,&m_aEDHostname,
-                                &m_aPortNumber,&m_aNFPortNumber,
+                                &m_aPortNumber,&m_aNFPortNumber,&m_aFTSocket,&m_aEDSocket,
                                 &m_aFTDriverClass, &m_aEDDriverClass,&m_aTestJavaDriver,
                                 m_pCharsetLabel, m_pCharset};
 
@@ -574,9 +577,6 @@ namespace dbaui
             pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
 
         FreeResource();
-
-        if ( m_bUseClass )
-            m_sDefaultJdbcDriverName = String::CreateFromAscii(_pDriverName);
     }
 
     // -----------------------------------------------------------------------
@@ -587,6 +587,7 @@ namespace dbaui
             _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aEDDriverClass));
         _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aEDHostname));
         _rControlList.push_back(new OSaveValueWrapper<NumericField>(&m_aNFPortNumber));
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aEDSocket));
     }
     // -----------------------------------------------------------------------
     void OGeneralSpecialJDBCDetailsPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
@@ -594,6 +595,7 @@ namespace dbaui
         OCommonBehaviourTabPage::fillWindows(_rControlList);
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTHostname));
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aPortNumber));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTSocket));
         if ( m_bUseClass )
             _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTDriverClass));
         _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL_1));
@@ -606,6 +608,7 @@ namespace dbaui
         if ( m_bUseClass )
             fillString(_rSet,&m_aEDDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
         fillString(_rSet,&m_aEDHostname,DSID_CONN_HOSTNAME,bChangedSomething);
+        fillString(_rSet,&m_aEDSocket,DSID_CONN_SOCKET,bChangedSomething);
         fillInt32(_rSet,&m_aNFPortNumber,m_nPortId,bChangedSomething );
 
         return bChangedSomething;
@@ -620,6 +623,7 @@ namespace dbaui
         SFX_ITEMSET_GET(_rSet, pDrvItem, SfxStringItem, DSID_JDBCDRIVERCLASS, sal_True);
         SFX_ITEMSET_GET(_rSet, pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
         SFX_ITEMSET_GET(_rSet, pPortNumber, SfxInt32Item, m_nPortId, sal_True);
+        SFX_ITEMSET_GET(_rSet, pSocket, SfxStringItem, DSID_CONN_SOCKET, sal_True);
 
         if ( bValid )
         {
@@ -634,6 +638,9 @@ namespace dbaui
 
             m_aNFPortNumber.SetValue(pPortNumber->GetValue());
             m_aNFPortNumber.ClearModifyFlag();
+
+            m_aEDSocket.SetText(pSocket->GetValue());
+            m_aEDSocket.ClearModifyFlag();
         }
 
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
