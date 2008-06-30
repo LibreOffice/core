@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,7 +44,7 @@ TARGET=inc
 
 .INCLUDE :  target.mk
 
-.IF "$(ENABLE_PCH)"!=""
+.IF "$(ENABLE_PCH)"!="" && ( "$(PRJNAME)"!="sw" || "$(BUILD_SPECIAL)"!="TRUE" )
 ALLTAR : \
     $(SLO)$/precompiled.pch \
     $(SLO)$/precompiled_ex.pch

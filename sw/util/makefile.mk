@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.71 $
+# $Revision: 1.72 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -301,7 +301,7 @@ LIB3OBJFILES = \
         $(SLO)$/selectdbtabledialog.obj
 
 .IF "$(GUI)$(COM)" == "WNTMSC"
-.IF "$(ENABLE_PCH)" != ""
+.IF "$(ENABLE_PCH)" != "" && ( "$(PRJNAME)"!="sw" || "$(BUILD_SPECIAL)"!="TRUE" )
 #target sw
 SHL1OBJS += $(SLO)$/pchname.obj \
             $(SLO)$/pchname_ex.obj
