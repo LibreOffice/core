@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tkr $ $Date: 2008-06-17 08:02:38 $
+#   last change: $Author: rt $ $Date: 2008-06-30 06:51:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@ TARGET=so_lucene
 JDK_VERSION=140
 JAVA_HOME=$(JDK14PATH)
 
-PATH!:=$(JDK14PATH)$/bin$(PATH_SEPERATOR)$(PATH)
 XCLASSPATH:=$(JDK14PATH)$/jre/lib/rt.jar
 CLASSPATH:=$(XCLASSPATH)
 .ENDIF
@@ -58,7 +57,6 @@ ANT_BUILDFILE*=../../../../build.xml
 
 CLASSPATH!:=$(CLASSPATH)$(PATH_SEPERATOR)$(ANT_CLASSPATH)$(PATH_SEPERATOR)$(JAVA_HOME)$/lib$/tools.jar
 .EXPORT : CLASSPATH
-.EXPORT : PATH
 
 LUCENE_NAME=lucene-2.3.2
 
