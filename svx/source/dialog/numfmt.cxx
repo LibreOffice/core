@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: numfmt.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +62,7 @@
 #include <sfx2/request.hxx> //CHINA001
 #include <sfx2/app.hxx> //CHINA001
 #include "flagsdef.hxx" //CHINA001
-#define NUMKEY_UNDEFINED ULONG_MAX
+#define NUMKEY_UNDEFINED SAL_MAX_UINT32
 
 // static ----------------------------------------------------------------
 
