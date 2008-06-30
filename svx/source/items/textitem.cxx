@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textitem.cxx,v $
- * $Revision: 1.73 $
+ * $Revision: 1.74 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -876,7 +876,7 @@ sal_Bool SvxFontHeightItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             }
             else
             {
-                double fPoints = MM100_TO_TWIP((long)nHeight) / 20.0;
+                double fPoints = MM100_TO_TWIP_UNSIGNED(nHeight) / 20.0;
                 float fRoundPoints =
                     static_cast<float>(::rtl::math::round(fPoints, 1));
                 aFontHeight.Height = fRoundPoints;
@@ -917,7 +917,7 @@ sal_Bool SvxFontHeightItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             }
             else
             {
-                double fPoints = MM100_TO_TWIP((long)nHeight) / 20.0;
+                double fPoints = MM100_TO_TWIP_UNSIGNED(nHeight) / 20.0;
                 float fRoundPoints =
                     static_cast<float>(::rtl::math::round(fPoints, 1));
                 rVal <<= fRoundPoints;
