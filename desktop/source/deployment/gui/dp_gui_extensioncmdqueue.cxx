@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_extensioncmdqueue.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,6 +112,9 @@
 
 #endif
 
+#if (defined(_MSC_VER) && (_MSC_VER < 1400))
+#define _WIN32_WINNT 0x0400
+#endif
 
 #ifdef WNT
 #include "tools/prewin.h"
