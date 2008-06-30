@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -84,7 +84,7 @@ DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt \
             $(LIB1TARGET)
             
 DEFLIB1NAME=$(TARGET)
-
+DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ----------------------------------
 

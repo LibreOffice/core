@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FDatabaseMetaDataResultSet.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,30 +37,31 @@
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
-#include <cppuhelper/compbase7.hxx>
+#include <cppuhelper/compbase9.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "connectivity/CommonTools.hxx"
 #include <comphelper/propertycontainer.hxx>
-#ifndef _CONNECTIVITY_VALUE_HXX_
 #include "connectivity/FValue.hxx"
-#endif
 #include <comphelper/broadcasthelper.hxx>
 #include <vos/refernce.hxx>
 
 namespace connectivity
 {
     class ODatabaseMetaDataResultSetMetaData;
-    typedef ::cppu::WeakComponentImplHelper7<   ::com::sun::star::sdbc::XResultSet,
+    typedef ::cppu::WeakComponentImplHelper9<   ::com::sun::star::sdbc::XResultSet,
                                                 ::com::sun::star::sdbc::XRow,
                                                 ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                                 ::com::sun::star::util::XCancellable,
                                                 ::com::sun::star::sdbc::XWarningsSupplier,
                                                 ::com::sun::star::sdbc::XCloseable,
+                                                ::com::sun::star::lang::XInitialization,
+                                                ::com::sun::star::lang::XServiceInfo,
                                                 ::com::sun::star::sdbc::XColumnLocate> ODatabaseMetaDataResultSet_BASE;
-
 
     //  typedef ORefVector<ORowSetValue>    ORow;
     //  typedef ORefVector<ORow>            ORows;
@@ -75,6 +76,44 @@ namespace connectivity
         DECLARE_STL_VECTOR(ORowSetValueDecoratorRef,ORow);
         DECLARE_STL_VECTOR(ORow, ORows);
 
+        enum MetaDataResultSetType
+        {
+            /// describes a result set as expected by XDatabaseMetaData::getCatalogs
+            eCatalogs = 0,
+            /// describes a result set as expected by XDatabaseMetaData::getSchemas
+            eSchemas = 1,
+            /// describes a result set as expected by XDatabaseMetaData::getColumnPrivileges
+            eColumnPrivileges = 2,
+            /// describes a result set as expected by XDatabaseMetaData::getColumns
+            eColumns = 3,
+            /// describes a result set as expected by XDatabaseMetaData::getTables
+            eTables = 4,
+            /// describes a result set as expected by XDatabaseMetaData::getTableTypes
+            eTableTypes = 5,
+            /// describes a result set as expected by XDatabaseMetaData::getProcedureColumns
+            eProcedureColumns = 6,
+            /// describes a result set as expected by XDatabaseMetaData::getProcedures
+            eProcedures = 7,
+            /// describes a result set as expected by XDatabaseMetaData::getExportedKeys
+            eExportedKeys = 8,
+            /// describes a result set as expected by XDatabaseMetaData::getImportedKeys
+            eImportedKeys = 9,
+            /// describes a result set as expected by XDatabaseMetaData::getPrimaryKeys
+            ePrimaryKeys = 10,
+            /// describes a result set as expected by XDatabaseMetaData::getIndexInfo
+            eIndexInfo = 11,
+            /// describes a result set as expected by XDatabaseMetaData::getTablePrivileges
+            eTablePrivileges = 12,
+            /// describes a result set as expected by XDatabaseMetaData::getCrossReference
+            eCrossReference = 13,
+            /// describes a result set as expected by XDatabaseMetaData::getTypeInfo
+            eTypeInfo = 14,
+            /// describes a result set as expected by XDatabaseMetaData::getBestRowIdentifier
+            eBestRowIdentifier = 15,
+            /// describes a result set as expected by XDatabaseMetaData::getVersionColumns
+            eVersionColumns = 16
+        };
+
     private:
         ORowSetValue                    m_aEmptyValue;
         ::com::sun::star::uno::WeakReferenceHelper    m_aStatement;
@@ -88,6 +127,7 @@ namespace connectivity
 
         void construct();
         void checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException);
+        void setType(MetaDataResultSetType _eType);
 
     protected:
         ORows                           m_aRows;
@@ -108,43 +148,6 @@ namespace connectivity
         virtual void    SAL_CALL acquire() throw();
         virtual void    SAL_CALL release() throw();
 
-        enum MetaDataResultSetType
-        {
-            /// describes a result set as expected by XDatabaseMetaData::getCatalogs
-            eCatalogs,
-            /// describes a result set as expected by XDatabaseMetaData::getSchemas
-            eSchemas,
-            /// describes a result set as expected by XDatabaseMetaData::getColumnPrivileges
-            eColumnPrivileges,
-            /// describes a result set as expected by XDatabaseMetaData::getColumns
-            eColumns,
-            /// describes a result set as expected by XDatabaseMetaData::getTables
-            eTables,
-            /// describes a result set as expected by XDatabaseMetaData::getTableTypes
-            eTableTypes,
-            /// describes a result set as expected by XDatabaseMetaData::getProcedureColumns
-            eProcedureColumns,
-            /// describes a result set as expected by XDatabaseMetaData::getProcedures
-            eProcedures,
-            /// describes a result set as expected by XDatabaseMetaData::getExportedKeys
-            eExportedKeys,
-            /// describes a result set as expected by XDatabaseMetaData::getImportedKeys
-            eImportedKeys,
-            /// describes a result set as expected by XDatabaseMetaData::getPrimaryKeys
-            ePrimaryKeys,
-            /// describes a result set as expected by XDatabaseMetaData::getIndexInfo
-            eIndexInfo,
-            /// describes a result set as expected by XDatabaseMetaData::getTablePrivileges
-            eTablePrivileges,
-            /// describes a result set as expected by XDatabaseMetaData::getCrossReference
-            eCrossReference,
-            /// describes a result set as expected by XDatabaseMetaData::getTypeInfo
-            eTypeInfo,
-            /// describes a result set as expected by XDatabaseMetaData::getBestRowIdentifier
-            eBestRowIdentifier,
-            /// describes a result set as expected by XDatabaseMetaData::getVersionColumns
-            eVersionColumns
-        };
         /// default construction
         ODatabaseMetaDataResultSet();
         /// construction of a pre-defined result set type
@@ -152,7 +155,15 @@ namespace connectivity
 
         void setRows(const ORows& _rRows);
 
+        // XServiceInfo
+
+        static ::rtl::OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
+        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(  ) throw (::com::sun::star::uno::RuntimeException);
+
     protected:
+        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
         // ::cppu::OComponentHelper
         virtual void SAL_CALL disposing(void);
         // XInterface
@@ -212,6 +223,9 @@ namespace connectivity
         virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         // XColumnLocate
         virtual sal_Int32 SAL_CALL findColumn( const ::rtl::OUString& columnName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+        // XInitialization
+        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
         void setCatalogsMap();
         void setSchemasMap();
