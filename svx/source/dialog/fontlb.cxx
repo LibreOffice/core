@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fontlb.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -131,10 +131,10 @@ void SvxFontListBox::SetNoSelection()
     SelectAll( FALSE, TRUE );
 }
 
-sal_uInt32 SvxFontListBox::GetSelectEntryPos() const
+ULONG SvxFontListBox::GetSelectEntryPos() const
 {
     SvLBoxEntry* pSvLBoxEntry = FirstSelected();
-    return pSvLBoxEntry ? GetModel()->GetAbsPos( pSvLBoxEntry ) : LIST_ENTRY_NOTFOUND;
+    return pSvLBoxEntry ? GetModel()->GetAbsPos( pSvLBoxEntry ) : LIST_APPEND;
 }
 
 XubString SvxFontListBox::GetSelectEntry() const
