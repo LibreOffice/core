@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impedit4.cxx,v $
- * $Revision: 1.76 $
+ * $Revision: 1.77 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,7 +126,9 @@ EditPaM ImpEditEngine::Read( SvStream& rInput, const String& rBaseURL, EETextFor
     else if ( eFormat == EE_FORMAT_BIN)
         aPaM = ReadBin( rInput, aSel );
     else
+    {
         DBG_ERROR( "Read: Unbekanntes Format" );
+    }
 
     FormatFullDoc();        // reicht vielleicht auch ein einfaches Format?
     SetUpdateMode( _bUpdate );
@@ -262,7 +264,9 @@ void ImpEditEngine::Write( SvStream& rOutput, EETextFormat eFormat, EditSelectio
         else if ( eFormat == EE_FORMAT_BIN)
             WriteBin( rOutput, aSel );
         else
+        {
             DBG_ERROR( "Write: Unbekanntes Format" );
+        }
     }
 }
 #endif
