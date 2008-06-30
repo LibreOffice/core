@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vendorbase.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,7 +68,9 @@ namespace jfw_plugin
 #define JFW_PLUGIN_ARCH "arm"
 #elif defined IA64
 #define JFW_PLUGIN_ARCH "ia64"
-#else // SPARC, INTEL, POWERPC, MIPS, ARM
+#elif defined M68K
+#define JFW_PLUGIN_ARCH "m68k"
+#else // SPARC, INTEL, POWERPC, MIPS, ARM, IA64, M68K
 #error unknown plattform
 #endif // SPARC, INTEL, POWERPC, MIPS, ARM
 
