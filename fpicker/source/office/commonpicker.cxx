@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: commonpicker.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -169,7 +169,8 @@ namespace svt
             m_xWindow = NULL;
             m_xDialogParent = NULL;
         }
-        else {
+        else
+        {
             DBG_ERROR( "OCommonPicker::disposing: where did this come from?" );
         }
     }
