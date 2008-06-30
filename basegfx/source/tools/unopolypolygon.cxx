@@ -7,8 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unopolypolygon.cxx,v $
- *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,7 +57,7 @@ namespace unotools
     UnoPolyPolygon::UnoPolyPolygon( const B2DPolyPolygon& rPolyPoly ) :
         UnoPolyPolygonBase( m_aMutex ),
         maPolyPoly( rPolyPoly ),
-        meFillRule( rendering::FillRule_NON_ZERO )
+        meFillRule( rendering::FillRule_EVEN_ODD )
     {
         // or else races will haunt us.
         maPolyPoly.makeUnique();
