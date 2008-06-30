@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SingleSelectQueryComposer.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -721,13 +721,14 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
                 break;
 
         Reference< XResultSetMetaData > xResultSetMeta;
+        Reference< XResultSetMetaDataSupplier > xResMetaDataSup;
         try
         {
             xStatement.reset( Reference< XStatement >( m_xConnection->createStatement(), UNO_QUERY_THROW ) );
             Reference< XPropertySet > xStatementProps( xStatement, UNO_QUERY_THROW );
             try { xStatementProps->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, makeAny( sal_False ) ); }
             catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
-            Reference< XResultSetMetaDataSupplier > xResMetaDataSup( xStatement->executeQuery( sSql ), UNO_QUERY_THROW );
+            xResMetaDataSup.set( xStatement->executeQuery( sSql ), UNO_QUERY_THROW );
             xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );
         }
         catch( const Exception& ) { }
@@ -735,7 +736,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         if ( !xResultSetMeta.is() )
         {
             xPreparedStatement.set( m_xConnection->prepareStatement( sSql ), UNO_QUERY_THROW );
-            Reference< XResultSetMetaDataSupplier > xResMetaDataSup( xPreparedStatement, UNO_QUERY_THROW );
+            xResMetaDataSup.set( xPreparedStatement, UNO_QUERY_THROW );
             xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );
         }
 
