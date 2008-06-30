@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frmitems.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2644,7 +2644,9 @@ void SvxBoxInfoItem::SetLine( const SvxBorderLine* pNew, sal_uInt16 nLine )
         pVert = pTmp;
     }
     else
+    {
         DBG_ERROR( "wrong line" );
+    }
 }
 
 
@@ -4192,9 +4194,13 @@ const GraphicObject* SvxBrushItem::GetGraphicObject( SfxObjectShell* pSh ) const
             if( pImpl->xMedium->IsRemote() )
             {
                 if( pSh )
+                {
                     pSh->RegisterTransfer( *pImpl->xMedium );
+                }
                 else
+                {
                     DBG_WARNING( "SvxBrushItem::GetGraphic ohne DocShell" );
+                }
             }
 
             SfxMediumRef xRef( pImpl->xMedium );
@@ -4269,7 +4275,9 @@ void SvxBrushItem::SetGraphic( const Graphic& rNew )
             eGraphicPos = GPOS_MM; // None waere Brush, also Default: Mitte
     }
     else
+    {
         DBG_ERROR( "SetGraphic() on linked graphic! :-/" );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -4289,7 +4297,9 @@ void SvxBrushItem::SetGraphicObject( const GraphicObject& rNewObj )
             eGraphicPos = GPOS_MM; // None waere Brush, also Default: Mitte
     }
     else
+    {
         DBG_ERROR( "SetGraphic() on linked graphic! :-/" );
+    }
 }
 
 // -----------------------------------------------------------------------
