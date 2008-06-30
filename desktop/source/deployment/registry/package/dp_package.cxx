@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_package.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1385,11 +1385,16 @@ void BackendImpl::PackageImpl::scanBundle(
             // patch description:
             ::rtl::ByteSequence bytes( readFile( descrFileContent ) );
             ::rtl::OUStringBuffer buf;
-            buf.append( OUString( reinterpret_cast<sal_Char const *>(
-                                      bytes.getConstArray() ),
-                                  bytes.getLength(), RTL_TEXTENCODING_UTF8 ) );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\n") );
-            buf.append( Package::getDescription() );
+            if ( bytes.getLength() )
+            {
+                buf.append( OUString( reinterpret_cast<sal_Char const *>(
+                                          bytes.getConstArray() ),
+                                      bytes.getLength(), RTL_TEXTENCODING_UTF8 ) );
+            }
+            else
+            {
+                buf.append( Package::getDescription() );
+            }
             m_description = buf.makeStringAndClear();
         }
     }
