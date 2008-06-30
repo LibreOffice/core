@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeControlAccess.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -218,7 +218,8 @@ namespace svt
             else
                 _pControl->SetHelpId( nHelpId );
         }
-        else {
+        else
+        {
             DBG_ERRORFILE( "OControlAccess::setHelpURL: unsupported help URL type!" );
         }
     }
@@ -447,7 +448,8 @@ namespace svt
                         {
                             aRet <<= ::rtl::OUString( m_pFilePickerController->getCurFilter() );;
                         }
-                        else {
+                        else
+                        {
                             DBG_ERRORFILE( "Use the XFilterManager to access the filter listbox" );
                         }
                         break;
