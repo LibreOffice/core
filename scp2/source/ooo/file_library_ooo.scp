@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_library_ooo.scp,v $
- * $Revision: 1.295 $
+ * $Revision: 1.296 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1044,66 +1044,6 @@ File gid_File_Msvcm80crt_Manifest
 #endif
 End
 #endif
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1500)
-File gid_File_Lib_Msvcr90
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "msvcr90.dll";
-#else
-    Name = "msvcr90d.dll";
-#endif
-End
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1500)
-File gid_File_Lib_Msvcp90
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "msvcp90.dll";
-#else
-    Name = "msvcp90d.dll";
-#endif
-End
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1500)
-File gid_File_Lib_Msvcm90
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "msvcm90.dll";
-#else
-    Name = "msvcm90d.dll";
-#endif
-End
-#endif
-#endif
-
-#if defined(WNT)
-#if defined(M1500)
-File gid_File_Msvcm90crt_Manifest
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-#ifndef _STLP_DEBUG
-    Name = "Microsoft.VC90.CRT.manifest";
-#else
-    Name = "Microsoft.VC90.DebugCRT.manifest";
-#endif
-End
 #endif
 #endif
 
