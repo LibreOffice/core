@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svddrgmt.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1521,7 +1521,9 @@ FASTBOOL SdrDragGradient::Beg()
         bRetval = bHit;
     }
     else
+    {
         DBG_ERROR("SdrDragGradient::Beg(): IAOGradient nicht gefunden");
+    }
 
     return bRetval;
 }
