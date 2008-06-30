@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DriverSettings.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,6 +104,7 @@ void ODriversSettings::getSupportedIndirectSettings( DATASOURCE_TYPE _eType, ::s
 
         case DST_MYSQL_NATIVE:
             _out_rDetailsIds.push_back(DSID_CHARSET);
+            _out_rDetailsIds.push_back(DSID_CONN_SOCKET);
             break;
         case DST_MYSQL_JDBC:
             _out_rDetailsIds.push_back(DSID_CHARSET);
