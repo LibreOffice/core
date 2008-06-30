@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mergemodules_ooo.scp,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,28 +30,30 @@
 
 #include "macros.inc"
 
-#ifdef M1400
-MergeModule gid_Mergemodule_Microsoft_Vc80_Crt_X86
+#ifdef M1500
+MergeModule gid_Mergemodule_Microsoft_Vc90_Crt_X86
 #ifdef _STLP_DEBUG
-	Name = "Microsoft_VC80_DebugCRT_x86.msm";
+	Name = "Microsoft_VC90_DebugCRT_x86.msm";
 #else
-	Name = "Microsoft_VC80_CRT_x86.msm";
+	Name = "Microsoft_VC90_CRT_x86.msm";
 #endif
-	Cabfilename = "%UNIXPRODUCTNAME-vc80crt.cab";
+	Cabfilename = "openoffice.org-vc90crt.cab";
 	Feature = "gm_Root";
 	RootDir = "TARGETDIR";
+	Styles = (REMOVE_FILE_TABLE);
 End
 #endif
 
-#ifdef M1400
-MergeModule gid_Mergemodule_Policy_Microsoft_Vc80_Crt_X86
+#ifdef M1500
+MergeModule gid_Mergemodule_Policy_Microsoft_Vc90_Crt_X86
 #ifdef _STLP_DEBUG
-	Name = "policy_8_0_Microsoft_VC80_DebugCRT_x86.msm";
+	Name = "policy_9_0_Microsoft_VC90_DebugCRT_x86.msm";
 #else
-	Name = "policy_8_0_Microsoft_VC80_CRT_x86.msm";
+	Name = "policy_9_0_Microsoft_VC90_CRT_x86.msm";
 #endif
-	Cabfilename = "%UNIXPRODUCTNAME-policy-vc80crt.cab";
+	Cabfilename = "openoffice.org-policy-vc90crt.cab";
 	Feature = "gm_Root";
 	RootDir = "TARGETDIR";
+	Styles = (REMOVE_FILE_TABLE);
 End
 #endif
