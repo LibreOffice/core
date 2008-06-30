@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FDatabaseMetaDataResultSet.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/factory.hxx>
 #include "connectivity/dbexception.hxx"
 #include "TConnection.hxx"
 
@@ -83,26 +84,7 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet( MetaDataResultSetType _e
 {
     construct();
 
-    switch( _eType )
-    {
-    case eCatalogs:             setCatalogsMap(); break;
-    case eSchemas:              setSchemasMap(); break;
-    case eColumnPrivileges:     setColumnPrivilegesMap(); break;
-    case eColumns:              setColumnsMap(); break;
-    case eTables:               setTablesMap(); break;
-    case eTableTypes:           setTableTypes(); break;
-    case eProcedureColumns:     setProcedureColumnsMap(); break;
-    case eProcedures:           setProceduresMap(); break;
-    case eExportedKeys:         setExportedKeysMap(); break;
-    case eImportedKeys:         setImportedKeysMap(); break;
-    case ePrimaryKeys:          setPrimaryKeysMap(); break;
-    case eIndexInfo:            setIndexInfoMap(); break;
-    case eTablePrivileges:      setTablePrivilegesMap(); break;
-    case eCrossReference:       setCrossReferenceMap(); break;
-    case eTypeInfo:             setTypeInfoMap(); break;
-    case eBestRowIdentifier:    setBestRowIdentifierMap(); break;
-    case eVersionColumns:       setVersionColumnsMap(); break;
-    }
+    setType(_eType);
 }
 
 // -------------------------------------------------------------------------
@@ -116,6 +98,32 @@ void ODatabaseMetaDataResultSet::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),        PROPERTY_ID_RESULTSETTYPE,          PropertyAttribute::READONLY,&m_nResultSetType,       ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),      PROPERTY_ID_FETCHDIRECTION,     0,  &m_nFetchDirection, ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY), PROPERTY_ID_RESULTSETCONCURRENCY,   PropertyAttribute::READONLY,&m_nResultSetConcurrency,                ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+}
+// -----------------------------------------------------------------------------
+void ODatabaseMetaDataResultSet::setType(MetaDataResultSetType _eType)
+{
+    switch( _eType )
+    {
+        case eCatalogs:             setCatalogsMap(); break;
+        case eSchemas:              setSchemasMap(); break;
+        case eColumnPrivileges:     setColumnPrivilegesMap(); break;
+        case eColumns:              setColumnsMap(); break;
+        case eTables:               setTablesMap(); break;
+        case eTableTypes:           setTableTypes(); break;
+        case eProcedureColumns:     setProcedureColumnsMap(); break;
+        case eProcedures:           setProceduresMap(); break;
+        case eExportedKeys:         setExportedKeysMap(); break;
+        case eImportedKeys:         setImportedKeysMap(); break;
+        case ePrimaryKeys:          setPrimaryKeysMap(); break;
+        case eIndexInfo:            setIndexInfoMap(); break;
+        case eTablePrivileges:      setTablePrivilegesMap(); break;
+        case eCrossReference:       setCrossReferenceMap(); break;
+        case eTypeInfo:             setTypeInfoMap(); break;
+        case eBestRowIdentifier:    setBestRowIdentifierMap(); break;
+        case eVersionColumns:       setVersionColumnsMap(); break;
+        default:
+            OSL_ENSURE(0,"Wrong type!");
+    }
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::disposing(void)
@@ -722,6 +730,219 @@ ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getQuoteValue()
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
+void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aArguments ) throw (Exception, RuntimeException)
+{
+    if ( _aArguments.getLength() == 2 )
+    {
+        sal_Int32 nResultSetType;
+        if ( _aArguments[0] >>= nResultSetType)
+        {
+            setType(static_cast<MetaDataResultSetType>(nResultSetType));
+            Sequence< Sequence<Any> > aRows;
+            if ( _aArguments[1] >>= aRows )
+            {
+                ORows aRowsToSet;
+                const Sequence<Any>* pRowsIter = aRows.getConstArray();
+                const Sequence<Any>* pRowsEnd  = pRowsIter + aRows.getLength();
+                for (; pRowsIter != pRowsEnd;++pRowsIter)
+                {
+                    ORow aRowToSet;
+                    const Any* pRowIter = pRowsIter->getConstArray();
+                    const Any* pRowEnd = pRowIter + pRowsIter->getLength();
+                    for (; pRowIter != pRowEnd;++pRowIter)
+                    {
+                        ORowSetValueDecoratorRef aValue;
+                        switch( pRowIter->getValueTypeClass() )
+                        {
+                            case TypeClass_BOOLEAN:
+                                {
+                                    sal_Bool bValue;
+                                    *pRowIter >>= bValue;
+                                    aValue = new ORowSetValueDecorator(ORowSetValue(bValue));
+                                }
+                                break;
+                            case TypeClass_BYTE:
+                                {
+                                    sal_Int8 nValue;
+                                    *pRowIter >>= nValue;
+                                    aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
+                                }
+                                break;
+                            case TypeClass_SHORT:
+                            case TypeClass_UNSIGNED_SHORT:
+                                {
+                                    sal_Int16 nValue;
+                                    *pRowIter >>= nValue;
+                                    aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
+                                }
+                                break;
+                            case TypeClass_LONG:
+                            case TypeClass_UNSIGNED_LONG:
+                                {
+                                    sal_Int32 nValue;
+                                    *pRowIter >>= nValue;
+                                    aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
+                                }
+                                break;
+                            case TypeClass_HYPER:
+                            case TypeClass_UNSIGNED_HYPER:
+                                {
+                                    sal_Int64 nValue;
+                                    *pRowIter >>= nValue;
+                                    aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
+                                }
+                                break;
+                            case TypeClass_FLOAT:
+                                {
+                                    float nValue;
+                                    *pRowIter >>= nValue;
+                                    aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
+                                }
+                                break;
+                            case TypeClass_DOUBLE:
+                                {
+                                    double nValue;
+                                    *pRowIter >>= nValue;
+                                    aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
+                                }
+                                break;
+                            case TypeClass_STRING:
+                                {
+                                    ::rtl::OUString sValue;
+                                    *pRowIter >>= sValue;
+                                    aValue = new ORowSetValueDecorator(ORowSetValue(sValue));
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                        aRowToSet.push_back(aValue);
+                    }
+                    aRowsToSet.push_back(aRowToSet);
+                } // for (; pRowsIter != pRowsEnd;++pRowsIter
+                setRows(aRowsToSet);
+            }
+        }
+    }
+}
+// XServiceInfo
+    // --------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    rtl::OUString ODatabaseMetaDataResultSet::getImplementationName_Static(  ) throw(RuntimeException)
+    {
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.helper.DatabaseMetaDataResultSet"));
+    }
+    //------------------------------------------------------------------------------
+    Sequence< ::rtl::OUString > ODatabaseMetaDataResultSet::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+    {
+        Sequence< ::rtl::OUString > aSNS( 1 );
+        aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ResultSet");
+        return aSNS;
+    }
+    //------------------------------------------------------------------
+    ::rtl::OUString SAL_CALL ODatabaseMetaDataResultSet::getImplementationName(  ) throw(RuntimeException)
+    {
+        return getImplementationName_Static();
+    }
 
+    //------------------------------------------------------------------
+    sal_Bool SAL_CALL ODatabaseMetaDataResultSet::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
+    {
+        Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
+        const ::rtl::OUString* pSupported = aSupported.getConstArray();
+        const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+        for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
+            ;
 
+        return pSupported != pEnd;
+    }
+    //------------------------------------------------------------------
+    Sequence< ::rtl::OUString > SAL_CALL ODatabaseMetaDataResultSet::getSupportedServiceNames(  ) throw(RuntimeException)
+    {
+        return getSupportedServiceNames_Static();
+    }
+    // -------------------------------------------------------------------------
+    namespace connectivity
+    {
+        Reference< XInterface >  SAL_CALL ODatabaseMetaDataResultSet_CreateInstance(const Reference< XMultiServiceFactory >& ) throw( Exception )
+        {
+            return *(new ODatabaseMetaDataResultSet());
+        }
+    }
 
+// -----------------------------------------------------------------------------
+
+using ::rtl::OUString;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::registry::XRegistryKey;
+using ::com::sun::star::registry::InvalidRegistryException;
+using ::com::sun::star::registry::InvalidValueException;
+using ::com::sun::star::lang::XMultiServiceFactory;
+
+//==========================================================================
+//= registration
+//==========================================================================
+extern "C"
+{
+
+//---------------------------------------------------------------------------------------
+    void SAL_CALL component_getImplementationEnvironment(const sal_Char** _ppEnvTypeName, uno_Environment** /*_ppEnv*/)
+{
+    *_ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+
+//---------------------------------------------------------------------------------------
+sal_Bool SAL_CALL component_writeInfo(void* /*_pServiceManager*/, com::sun::star::registry::XRegistryKey* _pRegistryKey)
+{
+    ::rtl::OUString sMainKeyName = ::rtl::OUString::createFromAscii("/");
+    sMainKeyName += ODatabaseMetaDataResultSet::getImplementationName_Static();
+    sMainKeyName += ::rtl::OUString::createFromAscii("/UNO/SERVICES");
+
+    try
+    {
+        Reference< XRegistryKey > xMainKey = _pRegistryKey->createKey(sMainKeyName);
+        if (!xMainKey.is())
+            return sal_False;
+
+        Sequence< ::rtl::OUString > sServices = ODatabaseMetaDataResultSet::getSupportedServiceNames_Static();
+        const ::rtl::OUString* pServices = sServices.getConstArray();
+        for (sal_Int32 i=0; i<sServices.getLength(); ++i, ++pServices)
+            xMainKey->createKey(*pServices);
+    }
+    catch(InvalidRegistryException&)
+    {
+        return sal_False;
+    }
+    catch(InvalidValueException&)
+    {
+        return sal_False;
+    }
+    return sal_True;
+}
+//---------------------------------------------------------------------------------------
+void* SAL_CALL component_getFactory(const sal_Char* _pImplName, ::com::sun::star::lang::XMultiServiceFactory* _pServiceManager, void* /*_pRegistryKey*/)
+{
+    void* pRet = NULL;
+
+    if (ODatabaseMetaDataResultSet::getImplementationName_Static().compareToAscii(_pImplName) == 0)
+    {
+        Reference< XSingleServiceFactory > xFactory(
+            ::cppu::createSingleFactory(
+                _pServiceManager,
+                ODatabaseMetaDataResultSet::getImplementationName_Static(),
+                ODatabaseMetaDataResultSet_CreateInstance,
+                ODatabaseMetaDataResultSet::getSupportedServiceNames_Static(),0
+            )
+        );
+        if (xFactory.is())
+        {
+            xFactory->acquire();
+            pRet = xFactory.get();
+        }
+    }
+
+    return pRet;
+}
+
+}   // extern "C"
