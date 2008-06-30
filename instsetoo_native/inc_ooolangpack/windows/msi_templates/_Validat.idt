@@ -8,7 +8,7 @@ _Validation	KeyColumn	Y	1	32					Column to which foreign key connects
 _Validation	KeyTable	Y					Identifier		For foreign key, Name of table to which data must link
 _Validation	MaxValue	Y	-2147483647	2147483647					Maximum value allowed
 _Validation	MinValue	Y	-2147483647	2147483647					Minimum value allowed
-_Validation	Nullable	N						Y;N;@	Whether the column is nullable
+_Validation	Nullable	N						Y;N	Whether the column is nullable
 _Validation	Set	Y					Text		Set of values that are permitted
 _Validation	Table	N					Identifier		Name of table
 ActionText	Action	N					Identifier		Name of action to be described.
@@ -113,7 +113,7 @@ CreateFolder	Directory_	N			Directory	1	Identifier		Primary key, could be foreig
 CustomAction	Action	N					Identifier		Primary key, name of action, normally appears in sequence table unless private use.
 CustomAction	Source	Y					CustomSource		The table reference of the source of the code.
 CustomAction	Target	Y					Formatted		Excecution parameter, depends on the type of custom action
-CustomAction	Type	N	1	16383					The numeric custom action type, consisting of source location, code type, entry, option flags.
+CustomAction	Type	N	1	32767					The numeric custom action type, consisting of source location, code type, entry, option flags.
 Dialog	Attributes	Y	0	2147483647					A 32-bit word that specifies the attribute flags to be applied to this dialog.
 Dialog	Control_Cancel	Y			Control	2	Identifier		Defines the cancel control. Hitting escape or clicking on the close icon on the dialog is equivalent to pushing this button.
 Dialog	Control_Default	Y			Control	2	Identifier		Defines the default control. Hitting return is equivalent to pushing this button.
@@ -167,7 +167,7 @@ File	File	N					Identifier		Primary key, non-localized token, must match identif
 File	FileName	N					Filename		File name used for installation, may be localized.  This may contain a "short name|long name" pair.
 File	FileSize	N	0	2147483647					Size of file in bytes (long integer).
 File	Language	Y					Language		List of decimal language Ids, comma-separated if more than one.
-File	Sequence	N	1	32767					Sequence with respect to the media images; order must track cabinet order.
+File	Sequence	N	1	2147483647					Sequence with respect to the media images; order must track cabinet order.
 File	Version	Y			File	1	Version		Version string for versioned files;  Blank for unversioned files.
 FileSFPCatalog	File_	N			File	1	Identifier		File associated with the catalog
 FileSFPCatalog	SFPCatalog_	N			SFPCatalog	1	Filename		Catalog associated with the file
