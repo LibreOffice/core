@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmexch.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -166,7 +166,9 @@ namespace svxform
                 }
             }
             else
+            {
                 DBG_ERROR( "OControlTransferData::OControlTransferData: invalid data for the control path format (2)!" );
+            }
         }
         if ( OControlExchange::hasHiddenControlModelsFormat( aExchangedData.GetDataFlavorExVector() ) )
         {   // sequence of models of hidden controls
