@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: typelib.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1894,11 +1894,18 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
                     if( nMaxIntegral > rMaxIntegralTypeSize )
                         rMaxIntegralTypeSize = nMaxIntegral;
                 }
+#ifdef __m68k__
+                // Anything that is at least 16 bits wide is aligned on a 16-bit
+                // boundary on the m68k default abi
+                sal_Int32 nMaxAlign = (rMaxIntegralTypeSize > 2) ? 2 : rMaxIntegralTypeSize;
+                nStructSize = (nStructSize + nMaxAlign -1) / nMaxAlign * nMaxAlign;
+#else
                 // Example: A { double; int; } structure has a size of 16 instead of 10. The
                 // compiler must follow this rule if it is possible to access members in arrays through:
                 // (Element *)((char *)pArray + sizeof( Element ) * ElementPos)
                 nStructSize = (nStructSize + rMaxIntegralTypeSize -1)
                                 / rMaxIntegralTypeSize * rMaxIntegralTypeSize;
+#endif
                 nSize += nStructSize;
                 }
                 break;
