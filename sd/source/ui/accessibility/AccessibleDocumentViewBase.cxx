@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleDocumentViewBase.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -671,7 +671,8 @@ void SAL_CALL AccessibleDocumentViewBase::disposing (void)
         pWindow->RemoveChildEventListener (LINK(
             this, AccessibleDocumentViewBase, WindowChildEventListener));
     }
-    else {
+    else
+    {
         DBG_ASSERT (pWindow, "AccessibleDocumentViewBase::disposing");
     }
 
