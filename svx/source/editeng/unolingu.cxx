@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unolingu.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -167,7 +167,9 @@ Sequence< OUString > lcl_GetLastFoundSvcs(
             if (aValues.getConstArray()[0] >>= aSvcImplNames)
                 aRes = aSvcImplNames;
             else
+            {
                 DBG_ERROR( "type mismatch" );
+            }
         }
     }
 
