@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmpgeimp.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -625,7 +625,9 @@ void FmFormPageImpl::write(const Reference< ::com::sun::star::io::XObjectOutputS
             xOutStrm->writeObject(xObj);
         }
         else
+        {
             ;// exception
+        }
     }
 }
 
