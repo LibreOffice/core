@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdfppt.cxx,v $
- * $Revision: 1.161 $
+ * $Revision: 1.162 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1730,7 +1730,9 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const S
                             if ( SeekToRec( rStCtrl, PPT_PST_ColorSchemeAtom, aSlideHd.GetRecEndFilePos() ) )
                                 rStCtrl >> pE2->aColorScheme;
                             else
+                            {
                                 DBG_ERROR( "SdrPowerPointImport::Ctor(): could not get SlideColorScheme! (SJ)" );
+                            }
                         }
                         else
                         {
