@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_library_ooo.scp,v $
- * $Revision: 1.294 $
+ * $Revision: 1.295 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -300,7 +300,7 @@ File gid_File_Lib_Dbpool
   #endif
 End
 
-STD_LIB_FILE( gid_File_Lib_Dbt, dbtools )
+STD_UNO_LIB_FILE( gid_File_Lib_Dbt, dbtools )
 
 STD_UNO_LIB_FILE( gid_File_Lib_Dbaxml, dbaxml )
 
