@@ -8,7 +8,7 @@
 #
 # $RCSfile: unx.mk,v $
 #
-# $Revision: 1.39 $
+# $Revision: 1.40 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -197,6 +197,10 @@
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCLINUXM"
 .INCLUDE : unxlngmips.mk
+.ENDIF
+
+.IF "$(COM)$(OS)$(CPU)" == "GCCLINUX6"
+.INCLUDE : unxlngm68k.mk
 .ENDIF
 
 # --- general *ix settings ---
