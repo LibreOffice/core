@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DBSetupConnectionPages.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -181,6 +181,9 @@ namespace dbaui
         FixedText           m_aFTPortNumber;
         FixedText           m_aFTDefaultPortNumber;
         NumericField        m_aNFPortNumber;
+        FixedText           m_aFTSocket;
+        Edit                m_aETSocket;
+
 
         FixedText           m_aFTDriverClass;
         Edit                m_aETDriverClass;
