@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmtextcontrolshell.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -442,7 +442,9 @@ namespace svx
                         }
                     }
                     else
+                    {
                         DBG_ERROR( "lcl_translateUnoStateToItem: invalid state!" );
+                    }
                 }
                 }
             }
