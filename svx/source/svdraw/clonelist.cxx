@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: clonelist.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,7 +107,7 @@ void CloneList::CopyConnections() const
 
             if(pOriginalNode1)
             {
-                sal_uInt32 nPos(maOriginalList.GetPos(pOriginalNode1));
+                ULONG nPos(maOriginalList.GetPos(pOriginalNode1));
 
                 if(LIST_ENTRY_NOTFOUND != nPos)
                 {
@@ -120,7 +120,7 @@ void CloneList::CopyConnections() const
 
             if(pOriginalNode2)
             {
-                sal_uInt32 nPos(maOriginalList.GetPos(pOriginalNode2));
+                ULONG nPos(maOriginalList.GetPos(pOriginalNode2));
 
                 if(LIST_ENTRY_NOTFOUND != nPos)
                 {
