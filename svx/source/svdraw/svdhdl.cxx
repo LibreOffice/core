@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdhdl.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1793,7 +1793,7 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
     if(aList.Count())
     {
         // take care of old handle
-        const sal_uInt32 nOldHdlNum(mnFocusIndex);
+        const ULONG nOldHdlNum(mnFocusIndex);
         SdrHdl* pOld = GetHdl(nOldHdlNum);
         //SDOsal_Bool bRefresh(sal_False);
 
@@ -1820,7 +1820,7 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
         qsort(pHdlAndIndex, aList.Count(), sizeof(ImplHdlAndIndex), ImplSortHdlFunc);
 
         // #105678# look for old num in sorted array
-        sal_uInt32 nOldHdl(nOldHdlNum);
+        ULONG nOldHdl(nOldHdlNum);
 
         if(nOldHdlNum != CONTAINER_ENTRY_NOTFOUND)
         {
@@ -1835,7 +1835,7 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
         }
 
         // #105678# build new HdlNum
-        sal_uInt32 nNewHdl(nOldHdl);
+        ULONG nNewHdl(nOldHdl);
 
         // #105678# do the focus travel
         if(bForward)
@@ -1934,7 +1934,7 @@ void SdrHdlList::SetFocusHdl(SdrHdl* pNew)
 
         if(!pActual || pActual != pNew)
         {
-            sal_uInt32 nNewHdlNum = GetHdlNum(pNew);
+            ULONG nNewHdlNum = GetHdlNum(pNew);
 
             if(nNewHdlNum != CONTAINER_ENTRY_NOTFOUND)
             {
