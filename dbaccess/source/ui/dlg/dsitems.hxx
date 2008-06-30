@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dsitems.hxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,6 +89,7 @@
 #define DSID_AS_BEFORE_CORRNAME     53
 #define DSID_CHECK_REQUIRED_FIELDS  54
 #define DSID_IGNORECURRENCY         55
+#define DSID_CONN_SOCKET            56
     // don't forget to adjust DSID_LAST_ITEM_ID below!
 
 
@@ -96,7 +97,7 @@
 //= item range. Adjust this if you introduce new items above
 
 #define DSID_FIRST_ITEM_ID  DSID_NAME
-#define DSID_LAST_ITEM_ID   DSID_IGNORECURRENCY
+#define DSID_LAST_ITEM_ID   DSID_CONN_SOCKET
 
 #endif // _DBAUI_DATASOURCEITEMS_HXX_
 
