@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editdata.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -275,6 +275,16 @@ struct ImportInfo
 
 struct ParagraphInfos
 {
+    ParagraphInfos()
+        : nParaHeight( 0 )
+        , nLines( 0 )
+        , nFirstLineStartX( 0 )
+        , nFirstLineOffset( 0 )
+        , nFirstLineHeight( 0 )
+        , nFirstLineTextHeight ( 0 )
+        , nFirstLineMaxAscent( 0 )
+        , bValid( 0 )
+        {}
     USHORT  nParaHeight;
     USHORT  nLines;
 
