@@ -7,8 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_xlib_cairo.cxx,v $
- *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,292 +28,328 @@
  *
  ************************************************************************/
 
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_canvas.hxx"
-
-// NOTE: (when needed) #if defined QUARTZ has to be before UNX.
-//       since Mac OS X can have both X11 and QUARTZ versions
-//       of cairo libraries at the same time.
-#if defined (UNX) && !defined (QUARTZ)
-
-/************************************************************************
- * XLib/Xrender surface backend for OpenOffice.org Cairo Canvas         *
- ************************************************************************/
 
 #include <prex.h>
 #include <X11/extensions/Xrender.h>
 #include <X11/Xlib.h>
 #include <postx.h>
 
-#include <osl/diagnose.h>
+#include "cairo_xlib_cairo.hxx"
 
-#include "cairo_cairo.hxx"
-
-#ifdef CAIRO_HAS_XLIB_SURFACE
-
-#ifdef USE_CAIRO10_APIS
-#include "cairo_xlib_helper.hxx"
-#endif
-
-#include <cairo-xlib.h>
-#include <cairo-xlib-xrender.h>
+#include <vcl/sysdata.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/virdev.hxx>
+#include <basegfx/vector/b2isize.hxx>
 
 namespace cairo
 {
 
-bool HasXRender( const void* pSysData )
-{
-    Display *pDisplay = (Display*) ((const SystemEnvData*) pSysData)->pDisplay;
-    int nDummy;
-    return XQueryExtension( pDisplay, "RENDER", &nDummy, &nDummy, &nDummy );
-}
+#include <cairo-xlib.h>
+#include <cairo-xlib-xrender.h>
 
+    // TODO(F3): svp headless case!
 
-#ifdef USE_CAIRO10_APIS
-    Surface::Surface( const void* pSysData, void* pDisplay, long hDrawable, void* pRenderFormat, cairo_surface_t* pSurface )
-            : mnRefCount( 1 ),
-              mpSysData( pSysData ),
-              mpDisplay( pDisplay ),
-              mhDrawable( hDrawable ),
-              mpRenderFormat( pRenderFormat ),
-              mbFreePixmap( true ),
-              mpSurface( pSurface )
+    bool IsCairoWorking( OutputDevice* pOutDev )
     {
-    }
-#endif
+        if( !pOutDev )
+            return false;
 
-
-
-  /**
-   * Surface::Surface:     Create generic Canvas surface using given Cairo Surface
-   *
-   * @param pSurface Cairo Surface
-   *
-   * This constructor only stores data, it does no processing.
-   * It is used with e.g. cairo_image_surface_create_for_data()
-   * and Surface::getSimilar()
-   *
-   * Set the mpSurface to the new surface or NULL
-   **/
-    Surface::Surface( cairo_surface_t* pSurface )
-            : mnRefCount( 1 ),
-#ifdef USE_CAIRO10_APIS
-              mpSysData( NULL ),
-              mpDisplay( NULL ),
-              mhDrawable( 0 ),
-              mpRenderFormat( NULL ),
-              mbFreePixmap( false ),
-#endif
-              mpSurface( pSurface )
-    {
+        Display* pDisplay = (Display*)pOutDev->GetSystemGfxData().pDisplay;
+        int nDummy;
+        return XQueryExtension( pDisplay, "RENDER", &nDummy, &nDummy, &nDummy );
     }
 
+    X11SysData::X11SysData() :
+        pDisplay(NULL),
+        hDrawable(0),
+        pVisual(NULL),
+        nScreen(0),
+        nDepth(-1),
+        aColormap(-1),
+        pRenderFormat(NULL)
+    {}
 
+    X11SysData::X11SysData( const SystemGraphicsData* pSysDat ) :
+        pDisplay(pSysDat->pDisplay),
+        hDrawable(pSysDat->hDrawable),
+        pVisual(pSysDat->pVisual),
+        nScreen(pSysDat->nScreen),
+        nDepth(pSysDat->nDepth),
+        aColormap(pSysDat->aColormap),
+        pRenderFormat(pSysDat->pRenderFormat)
+    {}
 
-  /**
-   * Surface::Surface:   Create Canvas surface from Window reference.
-   * @param pSysData Platform native system environment data (struct SystemEnvData in vcl/inc/sysdata.hxx)
-   * @param x horizontal location of the new surface
-   * @param y vertical location of the new surface
-   * @param width width of the new surface
-   * @param height height of the new surface
-   *
-   * pSysData contains the platform native Window reference.
-   * pSysData is used to create a surface on the Window
-   *
-   * Set the mpSurface to the new surface or NULL
-   **/
-    Surface::Surface( const SystemEnvData* pSysData, int x, int y, int width, int height )
-        : mnRefCount( 1 ),
-#ifdef USE_CAIRO10_APIS
-          mpSysData( pSysData ),
-          mpDisplay( NULL ),
-          mhDrawable( 0 ),
-          mpRenderFormat( NULL ),
-          mbFreePixmap( false ),
-#endif
-          mpSurface( NULL )
+    X11SysData::X11SysData( const SystemEnvData* pSysDat ) :
+        pDisplay(pSysDat->pDisplay),
+        hDrawable(pSysDat->aWindow),
+        pVisual(pSysDat->pVisual),
+        nScreen(pSysDat->nScreen),
+        nDepth(pSysDat->nDepth),
+        aColormap(pSysDat->aColormap),
+        pRenderFormat(NULL)
+    {}
+
+    X11Pixmap::~X11Pixmap()
     {
-#ifdef USE_CAIRO10_APIS
-        mpSurface = (cairo_surface_t*) cairoHelperGetSurface( pSysData, x, y, width, height );
-        mpDisplay = (Display*) cairoHelperGetDisplay( pSysData );
-        mhDrawable = cairoHelperGetWindow( pSysData );
-#else
-        mpSurface = cairo_xlib_surface_create( (Display*) pSysData->pDisplay,
-                                               pSysData->aWindow,
-                                               (Visual*) pSysData->pVisual,
-                                               width + x, height + y );
-        cairo_surface_set_device_offset( mpSurface, x, y );
-        // XSynchronize( (Display*) pSysData->pDisplay, TRUE );
-#endif
+        if( mpDisplay && mhDrawable )
+            XFreePixmap( (Display*)mpDisplay, mhDrawable );
     }
 
+    /**
+     * Surface::Surface:   Create Canvas surface with existing data
+     * @param pSysData Platform native system environment data (struct SystemEnvData in vcl/inc/sysdata.hxx)
+     * @param pSurface Cairo surface
+     *
+     * pSysData contains the platform native Drawable reference
+     * This constructor only stores data, it does no processing.
+     * It is used by e.g. Surface::getSimilar()
+     *
+     * Set the mpSurface as pSurface
+     **/
+    X11Surface::X11Surface( const X11SysData&            rSysData,
+                            const X11PixmapSharedPtr&    rPixmap,
+                            const CairoSurfaceSharedPtr& pSurface ) :
+        maSysData(rSysData),
+        mpPixmap(rPixmap),
+        mpSurface(pSurface)
+    {}
 
-  /**
-   * Surface::Surface:   Create platfrom native Canvas surface from BitmapSystemData
-   * @param pSysData Platform native system environment data (struct SystemEnvData in vcl/inc/sysdata.hxx)
-   * @param pBmpData Platform native image data (struct BitmapSystemData in vcl/inc/bitmap.hxx)
-   * @param width width of the new surface
-   * @param height height of the new surface
-   *
-   * Create a surface based on image data on pBmpData
-   *
-   * Set the mpSurface to the new surface or NULL
-   **/
-    Surface::Surface( const SystemEnvData* pSysData, const BitmapSystemData* pBmpData, int width, int height )
-        : mnRefCount( 1 ),
-#ifdef USE_CAIRO10_APIS
-          mpSysData( pSysData ),
-          mpDisplay( NULL ),
-          mhDrawable( 0 ),
-          mpRenderFormat( NULL ),
-          mbFreePixmap( false ),
-#endif
-          mpSurface( NULL )
+    /**
+     * Surface::Surface:     Create generic Canvas surface using given Cairo Surface
+     *
+     * @param pSurface Cairo Surface
+     *
+     * This constructor only stores data, it does no processing.
+     * It is used with e.g. cairo_image_surface_create_for_data()
+     * Unlike other constructors, mpSysData is set to NULL
+     *
+     * Set the mpSurface as pSurface
+     **/
+    X11Surface::X11Surface( const CairoSurfaceSharedPtr& pSurface ) :
+        maSysData(),
+        mpPixmap(),
+        mpSurface(pSurface)
+    {}
+
+    /**
+     * Surface::Surface:   Create Canvas surface from Window reference.
+     * @param pSysData Platform native system environment data (struct SystemEnvData in vcl/inc/sysdata.hxx)
+     * @param x horizontal location of the new surface
+     * @param y vertical location of the new surface
+     * @param width width of the new surface
+     * @param height height of the new surface
+     *
+     * pSysData contains the platform native Window reference.
+     *
+     * pSysData is used to create a surface on the Window
+     *
+     * Set the mpSurface to the new surface or NULL
+     **/
+    X11Surface::X11Surface( const X11SysData& rSysData, int x, int y, int width, int height ) :
+        maSysData(rSysData),
+        mpPixmap(),
+        mpSurface(
+            cairo_xlib_surface_create( (Display*)rSysData.pDisplay,
+                                       rSysData.hDrawable,
+                                       (Visual*)rSysData.pVisual,
+                                       width + x, height + y ),
+            &cairo_surface_destroy)
     {
-#ifdef USE_CAIRO10_APIS
-        mpSurface = (cairo_surface_t*) cairoHelperGetSurface( pSysData, pBmpData, width, height );
-        mpDisplay = (Display*) cairoHelperGetDisplay( pSysData );
-        mhDrawable = cairoHelperGetWindow( pSysData );
-#else
-        OSL_ASSERT (pBmpData->mnWidth == width && pBmpData->mnHeight == height);
-
-        mpSurface =  cairo_xlib_surface_create( (Display*) pSysData->pDisplay,
-                                                (Drawable) pBmpData->aPixmap,
-                                                (Visual*) pSysData->pVisual,
-                                                width, height );
-#endif
+        cairo_surface_set_device_offset(mpSurface.get(), x, y );
     }
 
-#if defined USE_CAIRO10_APIS
-  /**
-   * Surface::~Surface:  Destroy the Canvas surface
-   *
-   * Also free any image data and other references related to the Canvas.
-   *
-   **/
-    Surface::~Surface()
+    /**
+     * Surface::Surface:   Create platfrom native Canvas surface from BitmapSystemData
+     * @param pSysData Platform native system environment data (struct SystemEnvData in vcl/inc/sysdata.hxx)
+     * @param pBmpData Platform native image data (struct BitmapSystemData in vcl/inc/bitmap.hxx)
+     * @param width width of the new surface
+     * @param height height of the new surface
+     *
+     * The pBmpData provides the imagedata that the created surface should contain.
+     *
+     * Set the mpSurface to the new surface or NULL
+     **/
+    X11Surface::X11Surface( const X11SysData&       rSysData,
+                            const BitmapSystemData& rData ) :
+        maSysData( rSysData ),
+        mpPixmap(),
+        mpSurface(
+            cairo_xlib_surface_create( (Display*)rSysData.pDisplay,
+                                       (Drawable)rData.aPixmap,
+                                       (Visual*) rSysData.pVisual,
+                                       rData.mnWidth, rData.mnHeight ),
+            &cairo_surface_destroy)
     {
-        if( mpSurface )
-        {
-            cairo_surface_destroy( mpSurface );
-            mpSurface = NULL;
-        }
-        mpSysData = NULL;
-
-// In cairo API < 1.2, explicit freeing is needed
-        if( mbFreePixmap && mhDrawable )
-            XFreePixmap( (Display*) mpDisplay, mhDrawable );
-    }
-#endif
-
-
-  /**
-   * Surface::Resize:  Resizes the Canvas surface.
-   * @param width new width of the surface
-   * @param height new height of the surface
-   *
-   * Only used on X11.
-   *
-   * @return The new surface or NULL
-   **/
-    void
-    Surface::Resize( int width, int height )
-    {
-        cairo_xlib_surface_set_size( mpSurface, width, height );
     }
 
-
-  /**
-   * Surface::getDepth:  Get the color depth of the Canvas surface.
-   *
-   * @return color depth
-   **/
-    int
-    Surface::getDepth()
+    /**
+     * Surface::getCairo:  Create Cairo (drawing object) for the Canvas surface
+     *
+     * @return new Cairo or NULL
+     **/
+    CairoSharedPtr X11Surface::getCairo() const
     {
-#ifdef USE_CAIRO10_APIS
-        if( mpRenderFormat )
-            return ( ( XRenderPictFormat * ) mpRenderFormat )->depth;
-#else
-        // TODO: verify that this works correctly
-        return cairo_xlib_surface_get_depth( mpSurface );
-#endif
-        return -1;
+        return CairoSharedPtr( cairo_create(mpSurface.get()),
+                               &cairo_destroy );
     }
 
-#ifdef USE_CAIRO10_APIS
-// This function is platform dependent on Cairo < 1.2 API only.
-    Surface* Surface::getSimilar( Content aContent, int width, int height )
+    /**
+     * Surface::getSimilar:  Create new similar Canvas surface
+     * @param aContent format of the new surface (cairo_content_t from cairo/src/cairo.h)
+     * @param width width of the new surface
+     * @param height height of the new surface
+     *
+     * Creates a new Canvas surface. This normally creates platform native surface, even though
+     * generic function is used.
+     *
+     * Cairo surface from aContent (cairo_content_t)
+     *
+     * @return new surface or NULL
+     **/
+    SurfaceSharedPtr X11Surface::getSimilar( Content aContent, int width, int height ) const
     {
         Pixmap hPixmap;
 
-        if( mpSysData && mpDisplay && mhDrawable ) {
-            XRenderPictFormat *pFormat;
+        if( maSysData.pDisplay && maSysData.hDrawable )
+        {
+            XRenderPictFormat* pFormat;
+            int nFormat;
 
-            pFormat = XRenderFindStandardFormat( (Display*) mpDisplay, getXFormat(aContent) );
-            hPixmap = XCreatePixmap( (Display*) mpDisplay, cairoHelperGetWindow( mpSysData ),
+            switch (aContent)
+            {
+                case CAIRO_CONTENT_ALPHA:
+                    nFormat = PictStandardA8;
+                    break;
+                case CAIRO_CONTENT_COLOR:
+                    nFormat = PictStandardRGB24;
+                    break;
+                case CAIRO_CONTENT_COLOR_ALPHA:
+                default:
+                    nFormat = PictStandardARGB32;
+                    break;
+            }
+
+            pFormat = XRenderFindStandardFormat( (Display*)maSysData.pDisplay, nFormat );
+            hPixmap = XCreatePixmap( (Display*)maSysData.pDisplay, maSysData.hDrawable,
                                      width > 0 ? width : 1, height > 0 ? height : 1,
                                      pFormat->depth );
 
-            return new Surface( mpSysData, mpDisplay, (long) hPixmap, pFormat,
-                                cairo_xlib_surface_create_with_xrender_format( (Display*) mpDisplay, hPixmap,
-                                                                               DefaultScreenOfDisplay( (Display *) mpDisplay ),
-                                                                               pFormat, width, height ) );
-        } else
-            return new Surface( mpSysData, mpDisplay, 0, NULL, cairo_surface_create_similar( mpSurface, aContent, width, height ) );
-    }
-#endif   // USE_CAIRO10_APIS
-
-  /**
-   * Surface::fillSystemGraphicsData:   Fill SystemGraphicsData with native surface data
-   * @param aSystemGraphicsData Platform native system graphics data (struct SystemGraphicsData in vcl/inc/sysdata.hxx)
-   *
-   */
-    void Surface::fillSystemGraphicsData( SystemGraphicsData& aSystemGraphicsData)
-    {
-    #ifdef USE_CAIRO10_APIS
-        // Backward compatibility for Cairo 1.0
-        aSystemGraphicsData.hDrawable = mhDrawable;
-        aSystemGraphicsData.pRenderFormat = mpRenderFormat;
-    #else
-        aSystemGraphicsData.hDrawable = cairo_xlib_surface_get_drawable( mpSurface );
-        aSystemGraphicsData.pRenderFormat = XRenderFindStandardFormat( cairo_xlib_surface_get_display (mpSurface),
-                                                                       getXFormat(cairo_surface_get_content(mpSurface)) );
-    #endif //USE_CAIRO10_APIS
-    }
-
-
-    int Surface::getXFormat(Content aContent)
-    {
-        switch(aContent)
-        {
-            case CAIRO_CONTENT_ALPHA: return PictStandardA8;     break;
-            case CAIRO_CONTENT_COLOR: return PictStandardRGB24;  break;
-            case CAIRO_CONTENT_COLOR_ALPHA:
-            default:                  return PictStandardARGB32; break;
+            X11SysData aSysData(maSysData);
+            aSysData.pRenderFormat = pFormat;
+            return SurfaceSharedPtr(
+                new X11Surface( aSysData,
+                                X11PixmapSharedPtr(
+                                    new X11Pixmap(hPixmap, maSysData.pDisplay)),
+                                CairoSurfaceSharedPtr(
+                                    cairo_xlib_surface_create_with_xrender_format(
+                                        (Display*)maSysData.pDisplay,
+                                        hPixmap,
+                                        ScreenOfDisplay((Display *)maSysData.pDisplay, maSysData.nScreen),
+                                        pFormat, width, height ),
+                                    &cairo_surface_destroy) ));
         }
+        else
+            return SurfaceSharedPtr(
+                new X11Surface( maSysData,
+                                X11PixmapSharedPtr(),
+                                CairoSurfaceSharedPtr(
+                                    cairo_surface_create_similar( mpSurface.get(), aContent, width, height ),
+                                    &cairo_surface_destroy )));
     }
 
-
-  /** Surface::flush  Flush the platform native window
-   *
-   * @param pSysData Platform native system environment data (struct SystemEnvData in vcl/inc/sysdata.hxx)
-   *
-   **/
-    void Surface::flush(const SystemEnvData* pSysData)
+    boost::shared_ptr<VirtualDevice> X11Surface::createVirtualDevice() const
     {
-#ifdef USE_CAIRO10_APIS
-        cairoHelperFlush( pSysData );
-#else
-        XSync( (Display*) pSysData->pDisplay, false );
-#endif
+        SystemGraphicsData aSystemGraphicsData;
+
+        aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
+        aSystemGraphicsData.hDrawable = getDrawable();
+        aSystemGraphicsData.pRenderFormat = getRenderFormat();
+
+        return boost::shared_ptr<VirtualDevice>(
+            new VirtualDevice( &aSystemGraphicsData, getDepth() ));
     }
 
+    /**
+     * Surface::Resize:  Resizes the Canvas surface.
+     * @param width new width of the surface
+     * @param height new height of the surface
+     *
+     * Only used on X11.
+     *
+     * @return The new surface or NULL
+     **/
+    void X11Surface::Resize( int width, int height )
+    {
+        cairo_xlib_surface_set_size( mpSurface.get(), width, height );
+    }
 
-}  // namespace cairo
+    void X11Surface::flush() const
+    {
+        XSync( (Display*)maSysData.pDisplay, false );
+    }
 
-#endif   // CAIRO_HAS_XLIB_SURFACE
+    /**
+     * Surface::getDepth:  Get the color depth of the Canvas surface.
+     *
+     * @return color depth
+     **/
+    int X11Surface::getDepth() const
+    {
+        if( maSysData.pRenderFormat )
+            return ((XRenderPictFormat*) maSysData.pRenderFormat)->depth;
 
-#endif   // defined (UNX) && !defined (QUARTZ)
+        return -1;
+    }
+
+    SurfaceSharedPtr createSurface( const CairoSurfaceSharedPtr& rSurface )
+    {
+        return SurfaceSharedPtr(new X11Surface(rSurface));
+    }
+
+    static X11SysData getSysData( const Window& rWindow )
+    {
+        const SystemEnvData* pSysData = GetSysData(&rWindow);
+
+        if( !pSysData )
+            return X11SysData();
+        else
+            return X11SysData(pSysData);
+    }
+
+    static X11SysData getSysData( const VirtualDevice& rVirDev )
+    {
+        return X11SysData( &rVirDev.GetSystemGfxData() );
+    }
+
+    SurfaceSharedPtr createSurface( const OutputDevice& rRefDevice,
+                                    int x, int y, int width, int height )
+    {
+        if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
+            return SurfaceSharedPtr(new X11Surface(getSysData((const Window&)rRefDevice),
+                                                   x,y,width,height));
+        else if( rRefDevice.GetOutDevType() == OUTDEV_VIRDEV )
+            return SurfaceSharedPtr(new X11Surface(getSysData((const VirtualDevice&)rRefDevice),
+                                                   x,y,width,height));
+        else
+            return SurfaceSharedPtr();
+    }
+
+    SurfaceSharedPtr createBitmapSurface( const OutputDevice&     rRefDevice,
+                                          const BitmapSystemData& rData,
+                                          const Size&             rSize )
+    {
+        OSL_TRACE( "requested size: %d x %d available size: %d x %d",
+                   rSize.Width(), rSize.Height(), rData.mnWidth, rData.mnHeight );
+        if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
+        {
+            if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
+                return SurfaceSharedPtr(new X11Surface(getSysData((const Window&)rRefDevice), rData ));
+            else if( rRefDevice.GetOutDevType() == OUTDEV_VIRDEV )
+                return SurfaceSharedPtr(new X11Surface(getSysData((const VirtualDevice&)rRefDevice), rData ));
+        }
+
+        return SurfaceSharedPtr();
+    }
+}

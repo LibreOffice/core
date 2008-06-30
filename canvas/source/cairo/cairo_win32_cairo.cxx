@@ -7,8 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_win32_cairo.cxx,v $
- *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,10 +28,8 @@
  *
  ************************************************************************/
 
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_canvas.hxx"
-
 
 #ifdef WNT
 /************************************************************************
@@ -44,134 +41,155 @@
 #include <tools/postwin.h>
 
 #include <osl/diagnose.h>
+#include <vcl/bitmap.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/sysdata.hxx>
 
-#include "cairo_cairo.hxx"
+#include "cairo_win32_cairo.hxx"
 
 #ifdef CAIRO_HAS_WIN32_SURFACE
 
-#include <cairo-win32.h>
-
 namespace cairo
 {
-  /**
-   * Surface::Surface:     Create generic Canvas surface using given Cairo Surface
-   *
-   * @param pSurface Cairo Surface
-   *
-   * This constructor only stores data, it does no processing.
-   * It is used with e.g. cairo_image_surface_create_for_data()
-   * and Surface::getSimilar()
-   *
-   * Set the mpSurface to the new surface or NULL
-   **/
-    Surface::Surface( cairo_surface_t* pSurface )
-            : mnRefCount( 1 ),
-              mpSurface( pSurface )
+
+#include <cairo-win32.h>
+
+    bool IsCairoWorking( OutputDevice* )
     {
+        // trivially true for Windows
+        return true;
     }
 
+    /**
+     * Surface::Surface:     Create generic Canvas surface using given Cairo Surface
+     *
+     * @param pSurface Cairo Surface
+     *
+     * This constructor only stores data, it does no processing.
+     * It is used with e.g. cairo_image_surface_create_for_data()
+     * and Surface::getSimilar()
+     *
+     * Set the mpSurface to the new surface or NULL
+     **/
+    Win32Surface::Win32Surface( const CairoSurfaceSharedPtr& pSurface ) :
+        mpSurface( pSurface )
+    {}
 
-  /**
-   * Surface::Surface:   Create Canvas surface from Window reference.
-   * @param pSysData Platform native system environment data (struct SystemEnvData in vcl/inc/sysdata.hxx)
-   * @param x horizontal location of the new surface
-   * @param y vertical location of the new surface
-   * @param width width of the new surface
-   * @param height height of the new surface
-   *
-   * pSysData contains the platform native Window reference.
-   * pSysData is used to create a surface on the Window
-   *
-   * Set the mpSurface to the new surface or NULL
-   **/
-    Surface::Surface( const SystemEnvData* pSysData, int x, int y, int /* width */, int /* height */ )
-        : mnRefCount( 1 ),
-          mpSurface( NULL )
+    /**
+     * Surface::Surface:   Create Canvas surface from Window reference.
+     * @param pSysData Platform native system environment data (struct SystemEnvData in vcl/inc/sysdata.hxx)
+     * @param x horizontal location of the new surface
+     * @param y vertical location of the new surface
+     *
+     * pSysData contains the platform native Window reference.
+     * pSysData is used to create a surface on the Window
+     *
+     * Set the mpSurface to the new surface or NULL
+     **/
+    Win32Surface::Win32Surface( HDC hDC, int x, int y) :
+        mpSurface(
+            cairo_win32_surface_create(hDC),
+            &cairo_surface_destroy)
     {
-        HDC hDC;
-
-        hDC = GetDC( pSysData->hWnd );
-        mpSurface = cairo_win32_surface_create( hDC );
-        cairo_surface_set_device_offset( mpSurface, x, y );
+        cairo_surface_set_device_offset( mpSurface.get(), x, y );
     }
 
-
-  /**
-   * Surface::Surface:   Create platfrom native Canvas surface from BitmapSystemData
-   * @param pSysData (not used)
-   * @param pBmpData Platform native image data (struct BitmapSystemData in vcl/inc/bitmap.hxx)
-   * @param width width of the new surface
-   * @param height height of the new surface
-   *
-   * Create a surface based on image data on pBmpData
-   *
-   * Set the mpSurface to the new surface or NULL
-   **/
-    Surface::Surface( const SystemEnvData* /* pSysData */, const BitmapSystemData* pBmpData, int width, int height )
-        : mnRefCount( 1 ),
-          mpSurface( NULL )
+    /**
+     * Surface::Surface:   Create platfrom native Canvas surface from BitmapSystemData
+     * @param pBmpData Platform native image data (struct BitmapSystemData in vcl/inc/bitmap.hxx)
+     *
+     * Create a surface based on image data on pBmpData
+     *
+     * Set the mpSurface to the new surface or NULL
+     **/
+    Win32Surface::Win32Surface( const BitmapSystemData& rBmpData ) :
+        mpSurface()
     {
-        OSL_ASSERT (pBmpData->mnWidth == width && pBmpData->mnHeight == height);
+        OSL_ASSERT(rBmpData.pDIB == NULL);
 
-        // NOTE: width and height are not used in win32
-        OSL_ASSERT (pBmpData->pDIB == NULL);
-
-        // FIXME: could we use
-        // cairo_win32_surface_create_with_ddb (HDC hdc, cairo_format_t format, int width, int height);
-        // and
-        // cairo_win32_surface_create_with_dib (cairo_format_t format, int width, int height);
-        // instead?
-        //
-
-        if (pBmpData->pDIB != NULL) {
-#if 0
-            // This code will not work anyway, as most (?) DIBs that
-            // come here will be in bottom-down order (upside-down)
-            // and in any case have a different order of colour
-            // channels compared to what cairo expects.
-            PBITMAPINFOHEADER pBIH = (PBITMAPINFOHEADER) GlobalLock ((HANDLE) p_BmpData->pDIB);
-            cairo_format_t fmt;
-            OSL_ASSERT (pBIH->biBitCount == 24 && pBIH->biCompression == BI_RGB);
-            mhDIB = p_BmpData->pDIB;
-            if (pBIH->biBitCount == 24 && pBIH->biCompression == BI_RGB)
-            {
-                mpSurface = cairo_image_surface_create_for_data (((unsigned char *) pBIH) + pBIH->biSize,
-                                                                 CAIRO_FORMAT_RGB24,
-                                                                 pBIH->biWidth, pBIH->biHeight,
-                                                                 4*((3*pBIH->biWidth-1)/4+1));
-            }
-#else
+        if(rBmpData.pDIB != NULL) {
             // So just leave mpSurface to NULL, little else we can do at
             // this stage. Hopefully the Win32 patch to
             // cairocanvas::DeviceHelper::getSurface(BitmapSystemData&,
             // const Size&) will catch the cases where this
             // constructor would be called with a DIB bitmap, and we
             // will never get here. At least it worked for Ballmer.ppt.
-#endif
-        } else {
-            HDC hDC;
-            void* hOrigBitmap;
-            hDC = CreateCompatibleDC( NULL );
-            OSL_TRACE ("::cairo::cairo::Surface::Surface(): Selecting bitmap %p into DC %p", pBmpData->pDDB, hDC);
-            hOrigBitmap = SelectObject( hDC, (HANDLE) pBmpData->pDDB );
-            if (hOrigBitmap == NULL)
-                OSL_TRACE ("SelectObject failed: %d", GetLastError ());
-            mpSurface = cairo_win32_surface_create( hDC );
         }
-
+        else
+        {
+            HDC hDC = CreateCompatibleDC(NULL);
+            void* hOrigBitmap;
+            OSL_TRACE ("Surface::Surface(): Selecting bitmap %p into DC %p", rBmpData.pDDB, hDC);
+            hOrigBitmap = SelectObject( hDC, (HANDLE)rBmpData.pDDB );
+            if(hOrigBitmap == NULL)
+                OSL_TRACE ("SelectObject failed: %d", GetLastError ());
+            mpSurface.reset(
+                cairo_win32_surface_create(hDC),
+                &cairo_surface_destroy);
+        }
     }
 
+    /**
+     * Surface::getCairo:  Create Cairo (drawing object) for the Canvas surface
+     *
+     * @return new Cairo or NULL
+     **/
+    CairoSharedPtr Win32Surface::getCairo() const
+    {
+        return CairoSharedPtr( cairo_create(mpSurface.get()),
+                               &cairo_destroy );
+    }
 
-  /**
-   * Surface::getDepth:  Get the color depth of the Canvas surface.
-   *
-   * @return color depth
-   **/
-    int
-    Surface::getDepth()
+    /**
+     * Surface::getSimilar:  Create new similar Canvas surface
+     * @param aContent format of the new surface (cairo_content_t from cairo/src/cairo.h)
+     * @param width width of the new surface
+     * @param height height of the new surface
+     *
+     * Creates a new Canvas surface. This normally creates platform native surface, even though
+     * generic function is used.
+     *
+     * Cairo surface from aContent (cairo_content_t)
+     *
+     * @return new surface or NULL
+     **/
+    SurfaceSharedPtr Win32Surface::getSimilar( Content aContent, int width, int height ) const
+    {
+        return SurfaceSharedPtr(
+            new Win32Surface(
+                CairoSurfaceSharedPtr(
+                    cairo_surface_create_similar( mpSurface.get(), aContent, width, height ),
+                    &cairo_surface_destroy )));
+    }
+
+    /**
+     * Surface::Resize:  Resizes the Canvas surface.
+     * @param width new width of the surface
+     * @param height new height of the surface
+     *
+     * Only used on X11.
+     *
+     * @return The new surface or NULL
+     **/
+    void Win32Surface::Resize( int /*width*/, int /*height*/ )
+    {
+        OSL_ENSURE(false,"not supposed to be called!");
+    }
+
+    void Win32Surface::flush() const
+    {
+        GdiFlush();
+    }
+
+    /**
+     * Surface::getDepth:  Get the color depth of the Canvas surface.
+     *
+     * @return color depth
+     **/
+    int Win32Surface::getDepth() const
     {
         if (mpSurface) {
-            switch (cairo_surface_get_content (mpSurface)) {
+            switch (cairo_surface_get_content (mpSurface.get())) {
                 case CAIRO_CONTENT_ALPHA:       return 8;  break;
                 case CAIRO_CONTENT_COLOR:       return 24; break;
                 case CAIRO_CONTENT_COLOR_ALPHA: return 32; break;
@@ -182,14 +200,88 @@ namespace cairo
     }
 
 
-  /**
-   * Surface::fillSystemGraphicsData:   Fill SystemGraphicsData with native surface data
-   * @param aSystemGraphicsData Platform native system graphics data (struct SystemGraphicsData in vcl/inc/sysdata.hxx)
-   *
-   */
-    void Surface::fillSystemGraphicsData( SystemGraphicsData& aSystemGraphicsData)
+    /**
+     * cairo::createVirtualDevice:  Create a VCL virtual device for the CGContext in the cairo Surface
+     *
+     * @return The new virtual device
+     **/
+    boost::shared_ptr<VirtualDevice> Win32Surface::createVirtualDevice() const
     {
-        aSystemGraphicsData.hDC = cairo_win32_surface_get_dc( mpSurface );
+        SystemGraphicsData aSystemGraphicsData;
+        aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
+        aSystemGraphicsData.hDC = cairo_win32_surface_get_dc( mpSurface.get() );
+
+        return boost::shared_ptr<VirtualDevice>(
+            new VirtualDevice( &aSystemGraphicsData, sal::static_int_cast<USHORT>(getDepth()) ));
+    }
+
+
+    /**
+     * cairo::createSurface:     Create generic Canvas surface using given Cairo Surface
+     *
+     * @param rSurface Cairo Surface
+     *
+     * @return new Surface
+     */
+    SurfaceSharedPtr createSurface( const CairoSurfaceSharedPtr& rSurface )
+    {
+        return SurfaceSharedPtr(new Win32Surface(rSurface));
+    }
+
+
+    /**
+     * cairo::createSurface:     Create Canvas surface using given VCL Window or Virtualdevice
+     *
+     * @param rSurface Cairo Surface
+     *
+     *  For VCL Window, use platform native system environment data (struct SystemEnvData in vcl/inc/sysdata.hxx)
+     *  For VCL Virtualdevice, use platform native system graphics data (struct SystemGraphicsData in vcl/inc/sysdata.hxx)
+     *
+     * @return new Surface
+     */
+    SurfaceSharedPtr createSurface( const OutputDevice& rRefDevice,
+                                    int x, int y, int /* width */, int /* height */)
+    {
+        SurfaceSharedPtr surf;
+
+        if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
+        {
+            const Window &rWindow = (const Window &) rRefDevice;
+            const SystemEnvData* pSysData = GetSysData(&rWindow);
+            if (pSysData && pSysData->hWnd)
+                surf = SurfaceSharedPtr(new Win32Surface(GetDC((HWND) pSysData->hWnd), x, y));
+        }
+        else if( rRefDevice.GetOutDevType() == OUTDEV_VIRDEV )
+        {
+            SystemGraphicsData aSysData = ((const VirtualDevice&) rRefDevice).GetSystemGfxData();
+            if (aSysData.hDC)
+                surf = SurfaceSharedPtr(new Win32Surface((HDC) aSysData.hDC, x, y));
+        }
+        return surf;
+    }
+
+
+    /**
+     * cairo::createBitmapSurface:   Create platfrom native Canvas surface from BitmapSystemData
+     * @param OutputDevice (not used)
+     * @param rData Platform native image data (struct BitmapSystemData in vcl/inc/bitmap.hxx)
+     * @param rSize width and height of the new surface
+     *
+     * Create a surface based on image data on rData
+     *
+     * @return new surface or empty surface
+     **/
+    SurfaceSharedPtr createBitmapSurface( const OutputDevice&     /* rRefDevice */,
+                                          const BitmapSystemData& rData,
+                                          const Size&             rSize )
+    {
+        OSL_TRACE( "requested size: %d x %d available size: %d x %d",
+                   rSize.Width(), rSize.Height(), rData.mnWidth, rData.mnHeight );
+
+        if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
+            return SurfaceSharedPtr(new Win32Surface( rData ));
+        else
+            return SurfaceSharedPtr();
     }
 
 }  // namespace cairo
