@@ -8,7 +8,7 @@
  *
  * $RCSfile: extensionlistbox.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,6 +74,16 @@ public:
         The index starts with 0.
         Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
     virtual ::rtl::OUString getItemDescription( sal_Int32 index ) const = 0;
+
+    /** @return  The publisher string of the entry with the given index
+        The index starts with 0.
+        Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
+    virtual ::rtl::OUString getItemPublisher( sal_Int32 index ) const = 0;
+
+    /** @return  The link behind the publisher text of the entry with the given index
+        The index starts with 0.
+        Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
+    virtual ::rtl::OUString getItemPublisherLink( sal_Int32 index ) const = 0;
 
     /** The entry at the given position will be selected
         Index starts with 0.
