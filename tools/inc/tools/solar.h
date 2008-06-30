@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: solar.h,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -381,6 +381,8 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
   #define __DLLEXTENSION "lm.so"
 #elif defined LINUX && defined IA64
   #define __DLLEXTENSION "la.so"
+#elif defined LINUX && defined M68K
+  #define __DLLEXTENSION "lm.so"
 #elif defined LINUX
   #error unknown plattform
 #elif defined FREEBSD && defined X86
