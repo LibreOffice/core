@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: macro.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,6 +90,8 @@ this is inserted for the case that the preprocessor ignores error
 #    endif
 #elif defined IA64
 #    define THIS_ARCH "IA64"
+#elif defined M68K
+#    define THIS_ARCH "M68K"
 #endif
 
 #if ! defined THIS_ARCH
