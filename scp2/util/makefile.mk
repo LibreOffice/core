@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.51 $
+# $Revision: 1.52 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -117,6 +117,7 @@ SCP1FILES +=                           \
              folder_ooo.par            \
              folderitem_ooo.par        \
              windowscustomaction_ooo.par \
+             mergemodules_ooo.par      \
              registryitem_writer.par   \
              folderitem_writer.par     \
              registryitem_calc.par     \
@@ -270,6 +271,7 @@ SCP2FILES +=                           \
              folder_ooo.par            \
              folderitem_ooo.par        \
              windowscustomaction_ooo.par \
+             mergemodules_ooo.par      \
              registryitem_writer.par   \
              folderitem_writer.par     \
              registryitem_calc.par     \
