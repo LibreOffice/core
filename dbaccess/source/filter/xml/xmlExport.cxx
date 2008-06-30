@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlExport.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -656,6 +656,22 @@ void ODBExport::exportConnectionData()
                         AddAttribute(XML_NAMESPACE_DB,XML_PORT,::rtl::OUString::valueOf(nPort));
                     if ( sDatabaseName.Len() )
                         AddAttribute(XML_NAMESPACE_DB,XML_DATABASE_NAME,sDatabaseName);
+
+                    Reference< XPropertySet > xDataSourceSettings;
+                    OSL_VERIFY( xProp->getPropertyValue( PROPERTY_SETTINGS ) >>= xDataSourceSettings );
+                    Reference< XPropertyState > xSettingsState( xDataSourceSettings, UNO_QUERY );
+                    Reference< XPropertySetInfo > xSettingsInfo;
+                    if ( xDataSourceSettings.is() )
+                        xSettingsInfo = xDataSourceSettings->getPropertySetInfo();
+                    static const ::rtl::OUString s_sLocalSocket(RTL_CONSTASCII_USTRINGPARAM("LocalSocket"));
+                    if ( xSettingsInfo.is() && xSettingsInfo->hasPropertyByName(s_sLocalSocket) )
+                    {
+                        ::rtl::OUString sSocket;
+                        if ( ( xDataSourceSettings->getPropertyValue(s_sLocalSocket) >>= sSocket ) && sSocket.getLength() )
+                            AddAttribute(XML_NAMESPACE_DB,XML_LOCAL_SOCKET,sSocket);
+
+                    }
+
                     SvXMLElementExport aServerDB(*this,XML_NAMESPACE_DB, XML_SERVER_DATABASE, sal_True, sal_True);
                 }
             }
