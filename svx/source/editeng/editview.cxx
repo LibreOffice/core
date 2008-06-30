@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editview.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -723,12 +723,13 @@ void EditView::MoveParagraphs( long nDiff )
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     ESelection aSel = GetSelection();
-    long nDest = aSel.nStartPara + nDiff;
+    Range aRange( aSel.nStartPara, aSel.nEndPara );
+    aRange.Justify();
+    long nDest = ( nDiff > 0  ? aRange.Max() : aRange.Min() ) + nDiff;
     if ( nDiff > 0 )
         nDest++;
     DBG_ASSERT( ( nDest >= 0 ) && ( nDest <= pImpEditView->pEditEngine->GetParagraphCount() ), "MoveParagraphs - wrong Parameters!" );
-    MoveParagraphs(
-        Range( aSel.nStartPara, aSel.nEndPara ),
+    MoveParagraphs( aRange,
         sal::static_int_cast< USHORT >( nDest ) );
 }
 
@@ -1053,9 +1054,13 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             String aParaText;
             ContentNode *pNode = aPaM.GetNode();
             if (pNode)
+            {
                 aParaText = *pNode;
+            }
             else
+            {
                 DBG_ERROR( "content node is NULL" );
+            }
 
             nGuessLangWord = lcl_CheckLanguage( xSpellAlt->getWord(), xSpeller, xLangGuesser, sal_False );
             nGuessLangPara = lcl_CheckLanguage( aParaText, xSpeller, xLangGuesser, sal_True );
