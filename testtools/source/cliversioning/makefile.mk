@@ -7,7 +7,7 @@
 #  OpenOffice.org - a multi-platform office productivity suite
 # 
 #  $RCSfile: makefile.mk,v $
-#  $Revision: 1.2 $
+#  $Revision: 1.3 $
 # 
 #  This file is part of OpenOffice.org.
 # 
@@ -130,7 +130,7 @@ RUNINSTRUCTIONS :
     @echo .
     @echo Or install an office with setup /a. Expand PATH with the bin folder of the URE.
     @echo Set UNO_PATH=system_path_to_program_folder
-    @echo This must be the brand layer's program folder. 
+    @echo This must be the program folder of the brand layer.
     @echo For example, c:\staroffice\Sun\staroffice 9\program
     @echo Run runtests.exe.
     @echo .
