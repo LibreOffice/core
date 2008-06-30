@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_dialog2.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,8 +89,8 @@ using ::rtl::OUString;
 
 namespace dp_gui {
 
-#define ICON_OFFSET         40
-#define ICON_HEIGHT         32
+#define ICON_OFFSET         50
+#define ICON_HEIGHT         42
 #define SMALL_ICON_SIZE     16
 #define RIGHT_ICON_OFFSET    5
 #define TOP_OFFSET           3
@@ -140,8 +140,7 @@ struct Entry_Impl
     uno::Reference< deployment::XPackage> m_xPackage;
     uno::Reference< deployment::XPackageManager> m_xPackageManager;
 
-    Entry_Impl( Window *pParent,
-                const uno::Reference< deployment::XPackage > &xPackage,
+    Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
                 const uno::Reference< deployment::XPackageManager > &xPackageManager,
                 PackageState eState );
    ~Entry_Impl();
@@ -150,8 +149,7 @@ struct Entry_Impl
 };
 
 //------------------------------------------------------------------------------
-Entry_Impl::Entry_Impl( Window * pParent,
-                        const uno::Reference< deployment::XPackage > &xPackage,
+Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
                         const uno::Reference< deployment::XPackageManager > &xPackageManager,
                         PackageState eState ) :
     m_bActive( false ),
@@ -172,17 +170,6 @@ Entry_Impl::Entry_Impl( Window * pParent,
     beans::StringPair aInfo( m_xPackage->getPublisherInfo() );
     m_sPublisher = aInfo.First;
     m_sPublisherURL = aInfo.Second;
-
-    if ( m_sPublisher.Len() )
-    {
-        m_pPublisher = new svt::FixedHyperlink( pParent );
-        m_pPublisher->SetBackground();
-        m_pPublisher->SetPaintTransparent( true );
-        m_pPublisher->SetURL( m_sPublisherURL );
-        m_pPublisher->SetDescription( m_sPublisher );
-        Size aSize = FixedText::CalcMinimumTextSize( m_pPublisher );
-        m_pPublisher->SetSizePixel( aSize );
-    }
 
     // get the icons for the package if there are any
     uno::Reference< graphic::XGraphic > xGraphic = xPackage->getIcon( false );
@@ -363,6 +350,16 @@ public:
         Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
     virtual OUString getItemDescription( sal_Int32 index ) const;
 
+    /** @return  The publisher string of the entry with the given index
+        The index starts with 0.
+        Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
+    virtual ::rtl::OUString getItemPublisher( sal_Int32 index ) const;
+
+    /** @return  The link behind the publisher text of the entry with the given index
+        The index starts with 0.
+        Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
+    virtual ::rtl::OUString getItemPublisherLink( sal_Int32 index ) const;
+
     /** The entry at the given position will be selected
         Index starts with 0.
         Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
@@ -523,6 +520,22 @@ OUString ExtensionBox_Impl::getItemDescription( sal_Int32 nIndex ) const
     const ::osl::MutexGuard aGuard( m_entriesMutex );
     checkIndex( nIndex );
     return m_vEntries[ nIndex ]->m_sDescription;
+}
+
+//------------------------------------------------------------------------------
+OUString ExtensionBox_Impl::getItemPublisher( sal_Int32 nIndex ) const
+{
+    const ::osl::MutexGuard aGuard( m_entriesMutex );
+    checkIndex( nIndex );
+    return m_vEntries[ nIndex ]->m_sPublisher;
+}
+
+//------------------------------------------------------------------------------
+OUString ExtensionBox_Impl::getItemPublisherLink( sal_Int32 nIndex ) const
+{
+    const ::osl::MutexGuard aGuard( m_entriesMutex );
+    checkIndex( nIndex );
+    return m_vEntries[ nIndex ]->m_sPublisherURL;
 }
 
 //------------------------------------------------------------------------------
@@ -747,6 +760,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
 
     if ( pEntry->m_bActive )
     {
+        SetLineColor();
         SetFillColor( rStyleSettings.GetHighlightColor() );
         // SetTextFillColor( rStyleSettings.GetHighlightColor() );
         DrawRect( rRect );
@@ -765,10 +779,16 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     // Draw extension icon
     Point aPos( rRect.TopLeft() );
     aPos += Point( TOP_OFFSET, TOP_OFFSET );
+    Image aImage;
     if ( ! pEntry->m_aIcon )
-        DrawImage( aPos, Size( ICON_HEIGHT, ICON_HEIGHT ), isHCMode() ? m_aDefaultImageHC : m_aDefaultImage );
+        aImage = isHCMode() ? m_aDefaultImageHC : m_aDefaultImage;
     else
-        DrawImage( aPos, Size( ICON_HEIGHT, ICON_HEIGHT ), isHCMode() ? pEntry->m_aIconHC : pEntry->m_aIcon );
+        aImage = isHCMode() ? pEntry->m_aIconHC : pEntry->m_aIcon;
+    Size aImageSize = aImage.GetSizePixel();
+    if ( ( aImageSize.Width() <= ICON_HEIGHT ) && ( aImageSize.Height() <= ICON_HEIGHT ) )
+        DrawImage( Point( aPos.X()+((ICON_HEIGHT-aImageSize.Width())/2), aPos.Y()+((ICON_HEIGHT-aImageSize.Height())/2) ), aImage );
+    else
+        DrawImage( aPos, Size( ICON_HEIGHT, ICON_HEIGHT ), aImage );
 
     // Setup fonts
     Font aStdFont( GetFont() );
@@ -777,11 +797,25 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     SetFont( aBoldFont );
     long aTextHeight = GetTextHeight();
 
+    // Init publisher link here
+    if ( !pEntry->m_pPublisher && pEntry->m_sPublisher.Len() )
+    {
+        pEntry->m_pPublisher = new svt::FixedHyperlink( this );
+        pEntry->m_pPublisher->SetBackground();
+        pEntry->m_pPublisher->SetPaintTransparent( true );
+        pEntry->m_pPublisher->SetURL( pEntry->m_sPublisherURL );
+        pEntry->m_pPublisher->SetDescription( pEntry->m_sPublisher );
+        Size aSize = FixedText::CalcMinimumTextSize( pEntry->m_pPublisher );
+        pEntry->m_pPublisher->SetSizePixel( aSize );
+    }
+
     // Get max title width
     long nMaxTitleWidth = rRect.GetWidth() - ICON_OFFSET;
-    nMaxTitleWidth -= ( 2 * SMALL_ICON_SIZE ) + ( 3 * SPACE_BETWEEN );
+    nMaxTitleWidth -= ( 2 * SMALL_ICON_SIZE ) + ( 4 * SPACE_BETWEEN );
     if ( pEntry->m_pPublisher )
+    {
         nMaxTitleWidth -= pEntry->m_pPublisher->GetSizePixel().Width() + (2*SPACE_BETWEEN);
+    }
 
     long aVersionWidth = GetTextWidth( pEntry->m_sVersion );
     long aTitleWidth = GetTextWidth( pEntry->m_sTitle ) + (aTextHeight / 3);
@@ -1001,9 +1035,9 @@ void ExtensionBox_Impl::Paint( const Rectangle &rPaintRect )
     for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
     {
         aSize.Height() = (*iIndex)->m_bActive ? m_nActiveHeight : m_nStdHeight;
-        const Rectangle aEntryRect( aStart, aSize );
+        Rectangle aEntryRect( aStart, aSize );
         if ( aEntryRect.IsOver( rPaintRect ) )
-            DrawRow( Rectangle( aStart, aSize ), *iIndex );
+            DrawRow( aEntryRect, *iIndex );
         else if ( (*iIndex)->m_pPublisher )
             (*iIndex)->m_pPublisher->Hide();
         aStart.Y() += aSize.Height();
@@ -1241,7 +1275,7 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
     long nPos = 0;
     PackageState eState = m_pManager->getPackageState( xPackage );
 
-    TEntry_Impl pEntry( new Entry_Impl( this, xPackage, xPackageManager, eState ) );
+    TEntry_Impl pEntry( new Entry_Impl( xPackage, xPackageManager, eState ) );
 
     if ( pEntry->m_pPublisher )
         pEntry->m_pPublisher->SetClickHdl( LINK( this, ExtensionBox_Impl, HandleHyperlink ) );
@@ -1580,6 +1614,8 @@ ExtMgrDialog::ExtMgrDialog( Window *pParent, TheExtensionManager *pManager ) :
     m_aDivider.Show();
     m_aProgressBar.Hide();
 
+    m_aUpdateBtn.Enable( false );
+
     m_aTimeoutTimer.SetTimeout( 500 ); // mSec
     m_aTimeoutTimer.SetTimeoutHdl( LINK( this, ExtMgrDialog, TimeOutHdl ) );
 }
@@ -1636,6 +1672,7 @@ void ExtMgrDialog::setGetExtensionsURL( const ::rtl::OUString &rURL )
 long ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
                                      const uno::Reference< deployment::XPackageManager > &xPackageManager )
 {
+    m_aUpdateBtn.Enable( true );
     return m_pExtensionBox->addEntry( xPackage, xPackageManager );
 }
 
@@ -1892,7 +1929,7 @@ IMPL_LINK( ExtMgrDialog, startProgress, ::osl::Condition *, pCond )
 
     m_aCancelBtn.Enable( bLockInterface );
     m_aAddBtn.Enable( !bLockInterface );
-    m_aUpdateBtn.Enable( !bLockInterface );
+    m_aUpdateBtn.Enable( !bLockInterface && m_pExtensionBox->getItemCount() );
     m_pExtensionBox->enableButtons( !bLockInterface );
 
     pCond->set();
