@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: numfmtsh.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -278,7 +278,9 @@ sal_Bool SvxNumberFormatShell::AddFormat( String& rFormat,  xub_StrLen& rErrPos,
             bInserted = sal_True;
         }
         else
+        {
             DBG_ERROR( "Doppeltes Format!" );
+        }
     }
     else // neues Format
     {
@@ -302,9 +304,13 @@ sal_Bool SvxNumberFormatShell::AddFormat( String& rFormat,  xub_StrLen& rErrPos,
         rFmtSelPos = FillEntryList_Impl( rFmtEntries );
     }
     else if ( rErrPos != 0 ) // Syntaxfehler
+    {
         ;
+    }
     else // Doppelt einfuegen nicht moeglich
+    {
         DBG_ERROR( "Doppeltes Format!" ); // oder doch?
+    }
 
     return bInserted;
 }
