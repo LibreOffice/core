@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DBSetupConnectionPages.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,7 +96,8 @@
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
-
+#include <com/sun/star/sdbc/XDriverAccess.hpp>
+#include "dbustrings.hrc"
 #ifndef SVTOOLS_FILENOTATION_HXX_
 #include <svtools/filenotation.hxx>
 #endif
@@ -138,7 +139,7 @@
 namespace dbaui
 {
 //.........................................................................
-//  using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
 //  using namespace ::com::sun::star::ucb;
 //  using namespace ::com::sun::star::ui::dialogs;
 //  using namespace ::com::sun::star::sdbc;
@@ -252,7 +253,6 @@ DBG_NAME(OTextConnectionPageSetup)
         ,m_aNFPortNumber        (this, ModuleRes(NF_AUTOPORTNUMBER))
         ,m_aFTDefaultPortNumber (this, ModuleRes(FT_AUTOPORTNUMBERDEFAULT))
         ,m_aCBUseSSL            (this, ModuleRes(CB_WIZ_USESSL))
-
     {
         SetControlFontWeight(&m_aFTHeaderText);
         m_aFTDefaultPortNumber.SetText(String(ModuleRes(STR_LDAP_DEFAULT)));
@@ -365,6 +365,7 @@ DBG_NAME(OMySQLIntroPageSetup)
 
         SetControlFontWeight(&m_aFT_Headertext);
            m_aRB_JDBCDatabase.SetToggleHdl(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
+        m_aRB_NATIVEDatabase.SetToggleHdl(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
         m_aRB_JDBCDatabase.SetState(sal_True);
         FreeResource();
     }
@@ -384,9 +385,22 @@ DBG_NAME(OMySQLIntroPageSetup)
 
 
     // -----------------------------------------------------------------------
-    void OMySQLIntroPageSetup::implInitControls(const SfxItemSet& /*_rSet*/, sal_Bool /*_bSaveValue*/)
+    void OMySQLIntroPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool /*_bSaveValue*/)
     {
-
+        DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet.GetItem(DSID_TYPECOLLECTION));
+        ODsnTypeCollection* pCollection = NULL;
+        if (pCollectionItem)
+        {
+            pCollection = pCollectionItem->getCollection();
+            String sUrl = pCollection->getDatasourcePrefix(DST_MYSQL_NATIVE);
+            uno::Reference< sdbc::XDriverAccess > xDriverManager( m_xORB->createInstance( SERVICE_SDBC_DRIVERMANAGER ), uno::UNO_QUERY );
+            if ( xDriverManager.is() && xDriverManager->getDriverByURL( sUrl ).is() )
+            {
+                m_aRB_NATIVEDatabase.Show();
+                m_aRB_JDBCDatabase.SetState(sal_False);
+                m_aRB_NATIVEDatabase.SetState(sal_True);
+            }
+        }
     }
 
 
@@ -478,6 +492,8 @@ DBG_NAME(OMySQLIntroPageSetup)
         ,m_aFTPortNumber        (this, ModuleRes(FT_AUTOPORTNUMBER))
         ,m_aFTDefaultPortNumber (this, ModuleRes(FT_AUTOPORTNUMBERDEFAULT))
         ,m_aNFPortNumber        (this, ModuleRes(NF_AUTOPORTNUMBER))
+        ,m_aFTSocket            (this, ModuleRes(FT_SOCKET))
+        ,m_aETSocket            (this, ModuleRes(ET_SOCKET))
         ,m_aFTDriverClass       (this, ModuleRes(FT_AUTOJDBCDRIVERCLASS))
         ,m_aETDriverClass       (this, ModuleRes(ET_AUTOJDBCDRIVERCLASS))
         ,m_aPBTestJavaDriver    (this, ModuleRes(PB_AUTOTESTDRIVERCLASS))
@@ -493,6 +509,10 @@ DBG_NAME(OMySQLIntroPageSetup)
             m_aPBTestJavaDriver.Show(FALSE);
             m_aETDriverClass.Show(FALSE);
         }
+
+        m_aFTSocket.Show(_nResId == PAGE_DBWIZARD_MYSQL_NATIVE && !m_bUseClass);
+        m_aETSocket.Show(_nResId == PAGE_DBWIZARD_MYSQL_NATIVE && !m_bUseClass);
+
         m_aFTDefaultPortNumber.SetText(String(ModuleRes(_nDefaultPortResId)));
         String sHelpText = String(ModuleRes(_nHelpTextResId));
         m_aFTHelpText.SetText(sHelpText);
@@ -502,6 +522,7 @@ DBG_NAME(OMySQLIntroPageSetup)
         m_aETDatabasename.SetModifyHdl(getControlModifiedLink());
         m_aETHostname.SetModifyHdl(getControlModifiedLink());
         m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
+        m_aETSocket.SetModifyHdl(getControlModifiedLink());
 
         if ( m_bUseClass )
         {
@@ -524,6 +545,7 @@ DBG_NAME(OMySQLIntroPageSetup)
         _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aETDriverClass));
         _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aETHostname));
         _rControlList.push_back(new OSaveValueWrapper<NumericField>(&m_aNFPortNumber));
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aETSocket));
     }
     // -----------------------------------------------------------------------
     void OGeneralSpecialJDBCConnectionPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
@@ -533,6 +555,7 @@ DBG_NAME(OMySQLIntroPageSetup)
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTHostname));
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTPortNumber));
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTDefaultPortNumber));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTSocket));
         if ( m_bUseClass )
             _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTDriverClass));
     }
@@ -546,6 +569,7 @@ DBG_NAME(OMySQLIntroPageSetup)
         fillString(_rSet,&m_aETHostname,DSID_CONN_HOSTNAME,bChangedSomething);
         fillString(_rSet,&m_aETDatabasename,DSID_DATABASENAME,bChangedSomething);
         fillInt32(_rSet,&m_aNFPortNumber,m_nPortId,bChangedSomething );
+        fillString(_rSet,&m_aETSocket,DSID_CONN_SOCKET,bChangedSomething);
         return bChangedSomething;
     }
 
@@ -562,6 +586,7 @@ DBG_NAME(OMySQLIntroPageSetup)
 
         SFX_ITEMSET_GET(_rSet, pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
         SFX_ITEMSET_GET(_rSet, pPortNumber, SfxInt32Item, m_nPortId, sal_True);
+        SFX_ITEMSET_GET(_rSet, pSocket, SfxStringItem, DSID_CONN_SOCKET, sal_True);
 
         if ( bValid )
         {
@@ -576,6 +601,9 @@ DBG_NAME(OMySQLIntroPageSetup)
 
             m_aNFPortNumber.SetValue(pPortNumber->GetValue());
             m_aNFPortNumber.ClearModifyFlag();
+
+            m_aETSocket.SetText(pSocket->GetValue());
+            m_aETSocket.ClearModifyFlag();
         }
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
 
