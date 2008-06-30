@@ -66,6 +66,7 @@ mkdir: %_DEST%\inc%_EXT%\sd
 ..\uiconfig\sdraw\accelerator\de\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\accelerator\de\*.xml
 ..\uiconfig\sdraw\accelerator\es\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\accelerator\es\*.xml
 ..\uiconfig\sdraw\accelerator\fr\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\accelerator\fr\*.xml
+..\uiconfig\simpress\accelerator\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\simpress\accelerator\*.xml
 ..\uiconfig\simpress\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\simpress\accelerator\en-US\*.xml
 ..\uiconfig\simpress\accelerator\de\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\simpress\accelerator\de\*.xml
 ..\uiconfig\simpress\accelerator\es\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\simpress\accelerator\es\*.xml
