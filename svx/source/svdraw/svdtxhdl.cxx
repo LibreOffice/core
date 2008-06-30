@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdtxhdl.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -324,7 +324,7 @@ void ImpTextPortionHandler::SortedAddFormTextRecordPortion(DrawPortionInfo* pInf
     else
     {
         // found a list for that for that Y-Coordinate, sort in
-        sal_uInt32 nInsertInd(0L);
+        ULONG nInsertInd(0L);
 
         while(nInsertInd < pList->Count()
             && pList->GetObject(nInsertInd)->maPosition.X() < pNewPortion->maPosition.X())
