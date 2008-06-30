@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xattrbmp.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -147,7 +147,9 @@ XOBitmap::XOBitmap( const USHORT* pArray, const Color& rPixelColor,
             *( pPixelArray + i ) = *( pArray + i );
     }
     else
+    {
         DBG_ASSERT( 0, "Nicht unterstuetzte Bitmapgroesse" );
+    }
 }
 
 /*************************************************************************
@@ -292,7 +294,9 @@ void XOBitmap::SetPixelArray( const USHORT* pArray )
         bGraphicDirty = TRUE;
     }
     else
+    {
         DBG_ASSERT( 0, "Nicht unterstuetzter Bitmaptyp" );
+    }
 }
 
 /*************************************************************************
