@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmgridcl.cxx,v $
- * $Revision: 1.63 $
+ * $Revision: 1.64 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -879,7 +879,9 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
                 pCurrentFrame->GetBindings().GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SFX_CALLMODE_ASYNCHRON,
                                           &aIFaceItem, &aShowItem, 0L );
             else
+            {
                 DBG_ERROR("FmGridHeader::PostExecuteColumnContextMenu : no current view frame -> no bindings !");
+            }
         }   break;
         case SID_FM_EDIT + nChangeTypeOffset:
             bReplace = sal_True;
