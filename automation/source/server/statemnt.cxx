@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: statemnt.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -6046,8 +6046,14 @@ protected:
                                                 case 3:
                                                     pRet->GenReturn ( RET_Value, aUId, pELB->getItemDescription( nNr1 -1 ) );
                                                     break;
+                                                case 4:
+                                                    pRet->GenReturn ( RET_Value, aUId, pELB->getItemPublisher( nNr1 -1 ) );
+                                                    break;
+                                                case 5:
+                                                    pRet->GenReturn ( RET_Value, aUId, pELB->getItemPublisherLink( nNr1 -1 ) );
+                                                    break;
                                                 default:
-                                                    ValueOK( aUId, MethodString( nMethodId ).AppendAscii(" String Number"), nNr2, 3 );
+                                                    ValueOK( aUId, MethodString( nMethodId ).AppendAscii(" String Number"), nNr2, 5 );
                                                 }
                                             break;
                                         case M_Select:
