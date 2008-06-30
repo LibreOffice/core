@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: framelink.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -536,7 +536,9 @@ void lclLinkLeftEnd(
         lclLinkLeftEnd_Single( rResult.maPrim, rBorder, rLFromTR, rLFromT, rLFromL, rLFromB, rLFromBR );
     }
     else
+    {
         DBG_ERRORFILE( "lclLinkLeftEnd - called for invisible frame style" );
+    }
 }
 
 /** Calculates X offsets for the right end of a horizontal frame border.
