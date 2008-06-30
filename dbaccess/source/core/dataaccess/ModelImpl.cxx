@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ModelImpl.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1038,6 +1038,7 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "EscapeDateTime",             makeAny( (sal_Bool)sal_True ) ),
         AsciiPropertyValue( "IgnoreCurrency",             makeAny( (sal_Bool)sal_False ) ),
         AsciiPropertyValue( "TypeInfoSettings",           makeAny( Sequence< Any >()) ),
+        AsciiPropertyValue( "LocalSocket",                makeAny( ::rtl::OUString() ) ),
 
         AsciiPropertyValue( NULL, Any() )
     };
