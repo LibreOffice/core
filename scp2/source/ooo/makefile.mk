@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.69 $
+# $Revision: 1.70 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -256,6 +256,7 @@ PARFILES +=                        \
         folder_ooo.par             \
         folderitem_ooo.par         \
         registryitem_ooo.par       \
+        mergemodules_ooo.par       \
         windowscustomaction_ooo.par
 .ENDIF
 
