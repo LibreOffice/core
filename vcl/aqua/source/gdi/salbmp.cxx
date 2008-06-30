@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salbmp.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -275,6 +275,7 @@ public:
 };
 
 class ImplPixelFormat32 : public ImplPixelFormat
+// currently ARGB-format for 32bit depth
 {
 public:
     virtual void SkipPixel( sal_uInt32 nPixel )
@@ -283,8 +284,9 @@ public:
     }
     virtual ColorData ReadPixel()
     {
-        pData++;
-        return RGB_COLORDATA( *pData++, *pData++, *pData++ );
+        const ColorData c = RGB_COLORDATA( pData[1], pData[2], pData[3] );
+        pData += 4;
+        return c;
     }
     virtual void WritePixel( ColorData nColor )
     {
@@ -296,6 +298,7 @@ public:
 };
 
 class ImplPixelFormat24 : public ImplPixelFormat
+// currently BGR-format for 24bit depth
 {
 public:
     virtual void SkipPixel( sal_uInt32 nPixel )
@@ -317,6 +320,7 @@ public:
 };
 
 class ImplPixelFormat16 : public ImplPixelFormat
+// currently R5G6B5-format for 16bit depth
 {
 protected:
     sal_uInt16* pData16;
@@ -471,6 +475,7 @@ void AquaSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
     {
         // simple case, same format, so just copy
         memcpy( pDestData, pSrcData, nHeight * nDestBytesPerRow );
+        return;
     }
 
     // try accelerated conversion if possible
