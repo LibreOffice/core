@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.190 $
-# Date:        $Date: 2008-06-13 14:11:11 $
+# Version:     $Revision: 1.191 $
+# Date:        $Date: 2008-06-30 15:06:07 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -509,6 +509,18 @@ elsif ( $platform =~ m/linux/ )
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds.$ARCH.$ds."native_threads";
       $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds.$ARCH.$ds."xawt";
       $CPU            = "3";
+   }
+   elsif ($platform =~ m/^m68k/)
+   {  print "Setting Linux m68k specific values... ";
+      $outfile        = "LinuxM68KEnv.Set";
+      $CPU            = "6";
+      $CPUNAME        = "M68K";
+      $CVER           = "C341";
+      $OUTPATH        = "unxlngm68k";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."m68k";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."m68k".$ds."server";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."m68k".$ds."native_threads";
+      $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."m68k".$ds."xawt";
    }
    elsif ($platform =~ m/^alpha/) 
    {  print "Setting Linux Alpha specific values... ";
