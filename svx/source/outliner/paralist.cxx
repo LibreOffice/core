@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: paralist.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,7 +114,9 @@ void ParagraphList::MoveParagraphs( ULONG nStart, ULONG nDest, ULONG _nCount )
         }
     }
     else
+    {
         DBG_ERROR( "MoveParagraphs: Invalid Parameters" );
+    }
 }
 
 Paragraph* ParagraphList::NextVisible( Paragraph* pPara ) const
