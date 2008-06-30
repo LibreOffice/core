@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: detailpages.hxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -238,6 +238,8 @@ namespace dbaui
         Edit                m_aEDHostname;
         FixedText           m_aPortNumber;
         NumericField        m_aNFPortNumber;
+        FixedText           m_aFTSocket;
+        Edit                m_aEDSocket;
 
         FixedText           m_aFTDriverClass;
         Edit                m_aEDDriverClass;
