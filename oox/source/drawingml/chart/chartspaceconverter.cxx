@@ -8,7 +8,7 @@
  *
  * $RCSfile: chartspaceconverter.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,8 +62,11 @@ ChartSpaceConverter::~ChartSpaceConverter()
 {
 }
 
-void ChartSpaceConverter::convertModelToDocument()
+void ChartSpaceConverter::convertFromModel()
 {
+    // initialize the automatic formatting information
+    initAutoFormats( mrModel.mnStyle );
+
     /*  create data provider (virtual function in the ChartConverter class,
         derived converters may create an external data provider) */
     getChartConverter().createDataProvider( getChartDocument() );
@@ -79,9 +82,13 @@ void ChartSpaceConverter::convertModelToDocument()
     {
     }
 
+    // formatting of the chart background
+    PropertySet aPropSet( getChartDocument()->getPageBackground() );
+    convertAutoFormats( aPropSet, OBJECTTYPE_CHARTSPACE );
+
     // convert plot area (container of all chart type groups)
     PlotAreaConverter aPlotAreaConv( *this, mrModel.mxPlotArea.getOrCreate() );
-    OUString aAutoTitle = aPlotAreaConv.convertModelToDocument( mrModel.mxView3D.getOrCreate() );
+    OUString aAutoTitle = aPlotAreaConv.convertFromModel( mrModel.mxView3D.getOrCreate() );
 
     // chart title
     if( !mrModel.mbAutoTitleDel ) try
@@ -94,7 +101,7 @@ void ChartSpaceConverter::convertModelToDocument()
                 aAutoTitle = CREATE_OUSTRING( "Chart Title" );
             Reference< XTitled > xTitled( getChartDocument(), UNO_QUERY_THROW );
             TitleConverter aTitleConv( *this, mrModel.mxTitle.getOrCreate() );
-            aTitleConv.convertModelToDocument( xTitled, aAutoTitle );
+            aTitleConv.convertFromModel( xTitled, aAutoTitle );
         }
     }
     catch( Exception& )
@@ -105,7 +112,7 @@ void ChartSpaceConverter::convertModelToDocument()
     if( mrModel.mxLegend.is() )
     {
         LegendConverter aLegendConv( *this, *mrModel.mxLegend );
-        aLegendConv.convertModelToDocument( getChartDocument()->getFirstDiagram() );
+        aLegendConv.convertFromModel( getChartDocument()->getFirstDiagram() );
     }
 }
 
