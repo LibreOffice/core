@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saldata.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +61,9 @@ class SystemFontList;
 
 #define SAL_CLIPRECT_COUNT 16
 
+#define VER_TIGER   0x1040
+#define VER_LEOPARD 0x1050
+
 // -----------
 // - SalData -
 // -----------
@@ -94,8 +97,9 @@ struct SalData
 
     static oslThreadKey                           s_aAutoReleaseKey;
 
-    bool              mbIsScrollbarDoubleMax;   // TODO: support DoubleMin and DoubleBoth too
-    bool              mbIsTestTool;
+    bool                                          mbIsScrollbarDoubleMax;   // TODO: support DoubleMin and DoubleBoth too
+    SInt32                                        mnSystemVersion;          // Store System Version
+    bool                                          mbIsTestTool;
 
     SalData();
     ~SalData();
