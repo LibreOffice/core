@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: epptso.cxx,v $
- * $Revision: 1.105 $
+ * $Revision: 1.106 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,7 +78,9 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/XScriptTypeDetector.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/i18n/ScriptDirection.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <vcl/cvtgrf.hxx>
 #include <tools/urlobj.hxx>
@@ -153,6 +155,7 @@ using namespace ::com::sun::star;
 // ---------------------------------------------------------------------------------------------
 
 com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > xPPTBreakIter;
+com::sun::star::uno::Reference< com::sun::star::i18n::XScriptTypeDetector > xScriptTypeDetector;
 
 PPTExBulletProvider::PPTExBulletProvider()
 {
@@ -342,6 +345,7 @@ FontCollection::~FontCollection()
         delete (FontCollectionEntry*)pStr;
     delete pVDev;
     xPPTBreakIter = NULL;
+    xScriptTypeDetector = NULL;
 }
 
 FontCollection::FontCollection() :
@@ -354,6 +358,22 @@ FontCollection::FontCollection() :
     if ( xInterface.is() )
         xPPTBreakIter = com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator >
             ( xInterface, com::sun::star::uno::UNO_QUERY );
+
+    xInterface = xMSF->createInstance( rtl::OUString::createFromAscii( "com.sun.star.i18n.ScriptTypeDetector" ) );
+    if ( xInterface.is() )
+        xScriptTypeDetector = com::sun::star::uno::Reference< com::sun::star::i18n::XScriptTypeDetector >
+            ( xInterface, com::sun::star::uno::UNO_QUERY );
+}
+
+short FontCollection::GetScriptDirection( const String& rString ) const
+{
+    short nRet = com::sun::star::i18n::ScriptDirection::NEUTRAL;
+    if ( xScriptTypeDetector.is() )
+    {
+        const rtl::OUString sT( rString );
+        nRet = xScriptTypeDetector->getScriptDirection( sT, 0, com::sun::star::i18n::ScriptDirection::NEUTRAL );
+    }
+    return nRet;
 }
 
 sal_uInt32 FontCollection::GetId( FontCollectionEntry& rEntry )
@@ -1780,7 +1800,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
             const sal_Unicode* pText = aString.GetBuffer();
             // For i39516 - a closing parenthesis that ends an RTL string is displayed backwards by PPT
             // Solution: add a Unicode Right-to-Left Mark, following the method described in i18024
-            if ( bLast && pText[ aString.Len() - 1 ] == sal_Unicode(')') && mnAsianOrComplexFont )
+            if ( bLast && pText[ aString.Len() - 1 ] == sal_Unicode(')') && rFontCollection.GetScriptDirection( aString ) == com::sun::star::i18n::ScriptDirection::RIGHT_TO_LEFT )
             {
                 mnTextSize++;
                 bRTL_endingParen = TRUE;
