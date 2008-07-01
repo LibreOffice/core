@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: aquaprintview.mm,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +50,7 @@
 -(MacOSBOOL)knowsPageRange: (NSRangePointer)range
 {
     range->location = 1;
-    range->length = mpQPrinter->GetPrintPageCount();
+    range->length = mpInfoPrinter->getCurPageRangeCount();
     return YES;
 }
 
@@ -76,6 +76,6 @@
     int nPage = (int)(aPaperSize.width * rect.origin.y + rect.origin.x);
     
     // page count is 1 based
-    mpQPrinter->PrintPage( nPage-1 );
+    mpQPrinter->PrintPage( nPage-1 + mpInfoPrinter->getCurPageRangeStart() );
 }
 @end
