@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: themeelementscontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,14 +121,14 @@ Reference< XFastContextHandler > lineStyleListContext::createFastChildContext( s
 
 class effectStyleListContext : public ContextHandler
 {
-    std::vector< PropertyMap >& mrEffectStyleList;
+    EffectStyleList& mrEffectStyleList;
 
 public:
-    effectStyleListContext( ContextHandler& rParent, std::vector< PropertyMap >& rEffectStyleList );
+    effectStyleListContext( ContextHandler& rParent, EffectStyleList& rEffectStyleList );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 };
 
-effectStyleListContext::effectStyleListContext( ContextHandler& rParent, std::vector< PropertyMap >& rEffectStyleList )
+effectStyleListContext::effectStyleListContext( ContextHandler& rParent, EffectStyleList& rEffectStyleList )
 : ContextHandler( rParent )
 , mrEffectStyleList( rEffectStyleList )
 {
@@ -141,7 +141,7 @@ Reference< XFastContextHandler > effectStyleListContext::createFastChildContext(
     {
         case NMSP_DRAWINGML|XML_effectStyle:
         {
-            mrEffectStyleList.push_back( PropertyMap() );
+            mrEffectStyleList.push_back( EffectStyleList::value_type( new PropertyMap ) );
             // todo: last effect list entry needs to be filled/
             break;
         }
@@ -214,7 +214,7 @@ Reference< XFastContextHandler > themeElementsContext::createFastChildContext( s
             break;
 
         case NMSP_DRAWINGML|XML_fmtScheme:  // CT_StyleMatrix
-            mrTheme.getStyleName() = xAttribs->getOptionalValue( XML_name );
+            mrTheme.setStyleName( xAttribs->getOptionalValue( XML_name ) );
         break;
 
             case NMSP_DRAWINGML|XML_fillStyleLst:   // CT_FillStyleList
