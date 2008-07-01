@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclnsapp.mm,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,11 +105,9 @@
             return;
         }
     }
-    else if( eType == NSScrollWheel )
+    else if( eType == NSScrollWheel && ( GetSalData()->mnSystemVersion < VER_LEOPARD /* fixed in Leopard and above */ ) )
     {
-        // FIMXE: this is necessary on MacOS 10.4 only
-        // how do I find out the OS version ?
-        
+
         NSWindow* pWin = [pEvent window];
         // on Tiger wheel events do not reach non key windows
         // which probably should be considered a bug
@@ -122,6 +120,11 @@
     [super sendEvent: pEvent];
 }
 
+-(void)sendSuperEvent:(NSEvent*)pEvent
+{
+    [super sendEvent: pEvent];
+}
+ 
 -(NSMenu*)applicationDockMenu:(NSApplication *)sender
 {
     return AquaSalInstance::GetDynamicDockMenu();
@@ -241,6 +244,26 @@
 -(void)removeFallbackMenuItem: (NSMenuItem*)pItem
 {
     AquaSalMenu::removeFallbackMenuItem( pItem );
+}
+
+- (void)getSystemVersionMajor:(unsigned *)major
+                        minor:(unsigned *)minor
+                       bugFix:(unsigned *)bugFix
+{
+    OSErr err;
+    SInt32 systemVersion = VER_TIGER; // Initialize with minimal requirement
+    if ((err = Gestalt(gestaltSystemVersion, &systemVersion)) == noErr) 
+    {
+        GetSalData()->mnSystemVersion = systemVersion;
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "System Version %x\n", (unsigned int)systemVersion);
+        fprintf( stderr, "Stored System Version %x\n", (unsigned int)GetSalData()->mnSystemVersion);
+#endif
+    }
+    else
+        NSLog(@"Unable to obtain system version: %ld", (long)err);
+
+    return;
 }
 
 -(void)addDockMenuItem: (NSMenuItem*)pNewItem
