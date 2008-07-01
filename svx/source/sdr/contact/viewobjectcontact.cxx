@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewobjectcontact.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,12 +134,17 @@ namespace sdr
                 SetParent(0L);
             }
 
-            // take care of ViewContact
-            GetViewContact().RemoveViewObjectContact(*this);
+            // #i85539# changed order of removing this from VC and OC since
+            // VC removal may trigger StopGettingViewed() and that again may
+            // destroy this VOC, too, so it needs to be removed from the OC
+            // (which may be a helper-OC for page rendering like in this case)
 
             // take care of ObjectContact, evtl. #114735# It will be removed from
             // base vector of current draw hierarchy there, too.
             GetObjectContact().RemoveViewObjectContact(*this);
+
+            // take care of ViewContact
+            GetViewContact().RemoveViewObjectContact(*this);
 
             // invalidate DrawHierarchy of ObjectContact to force rebuild
             GetObjectContact().MarkDrawHierarchyInvalid();
