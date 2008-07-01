@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleStaticTextBase.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -648,7 +648,14 @@ namespace accessibility
         // values are now legal, too.
         EPosition aPos( mpImpl->Range2Internal(nIndex) );
 
-        return mpImpl->GetParagraph( aPos.nPara ).getCharacterBounds( aPos.nIndex );
+        // #i70916# Text in spread sheet cells return the wrong extents
+        AccessibleEditableTextPara& rPara = mpImpl->GetParagraph( aPos.nPara );
+        awt::Rectangle aParaBounds( rPara.getBounds() );
+        awt::Rectangle aBounds( rPara.getCharacterBounds( aPos.nIndex ) );
+        aBounds.X += aParaBounds.X;
+        aBounds.Y += aParaBounds.Y;
+
+        return aBounds;
     }
 
     sal_Int32 SAL_CALL AccessibleStaticTextBase::getCharacterCount() throw (uno::RuntimeException)
@@ -674,8 +681,15 @@ namespace accessibility
             // TODO: maybe exploit the fact that paragraphs are
             // ordered vertically for early exit
 
+            // #i70916# Text in spread sheet cells return the wrong extents
+            AccessibleEditableTextPara& rPara = mpImpl->GetParagraph( i );
+            awt::Rectangle aParaBounds( rPara.getBounds() );
+            awt::Point aPoint( rPoint );
+            aPoint.X -= aParaBounds.X;
+            aPoint.Y -= aParaBounds.Y;
+
             // #112814# Use correct index offset
-            if( (nIndex=mpImpl->GetParagraph(i).getIndexAtPoint( rPoint )) != -1 )
+            if ( ( nIndex = rPara.getIndexAtPoint( aPoint ) ) != -1 )
                 return mpImpl->Internal2Index( EPosition(sal::static_int_cast<USHORT>(i),
                                                          sal::static_int_cast<USHORT>(nIndex)) );
         }
