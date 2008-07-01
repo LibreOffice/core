@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_dialog2.cxx,v $
  *
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1593,7 +1593,7 @@ ExtMgrDialog::ExtMgrDialog( Window *pParent, TheExtensionManager *pManager ) :
 
     // resize update button
     Size aBtnSize = m_aUpdateBtn.GetSizePixel();
-    String sTitle = m_aUpdateBtn.GetDisplayText();
+    String sTitle = m_aUpdateBtn.GetText();
     long nWidth = m_aUpdateBtn.GetCtrlTextWidth( sTitle );
     nWidth += 2 * m_aUpdateBtn.GetTextHeight();
     if ( nWidth > aBtnSize.Width() )
