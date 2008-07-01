@@ -1,0 +1,33 @@
+# This file defines the languages of the spellchecker, that are
+# included into the language specific installation sets.
+# First column: Language in the installation set.
+# Second column: Assigned spellchecker languages. Comma separated list.
+
+af = "af,en-US"
+cs = "cs,en-US"
+da = "da,de,en-US"
+de = "de,en-US,fr,it"
+en-US = "en-US,es,fr"
+es = "en-US,es,fr,pt"
+et = "en-US,et"
+fr = "en-US,es,fr"
+hu = "de,en-US,hu"
+it = "de,en-US,fr,it"
+ja = "en-US"
+ko = "en-US"
+lt = "en-US,lt"
+ne = "en-US,ne"
+nl = "en-US,fr,de,nl"
+pl = "de,en-US,pl,ru"
+pt-BR = "en-US,es,pt"
+ru = "de,en-US,ru"
+sk = "en-US,sk"
+sl = "en-US,sl"
+sv = "de,en-US,sv"
+sw = "en-US,sw"
+th = "en-US,th"
+zh-TW = "en-US"
+zh-CN = "en-US"
+zu = "en-US,zu"
+
+
