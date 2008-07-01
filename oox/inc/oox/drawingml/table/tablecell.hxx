@@ -8,7 +8,7 @@
  *
  * $RCSfile: tablecell.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +35,7 @@
 #include "oox/helper/propertymap.hxx"
 #include "oox/drawingml/color.hxx"
 #include "oox/drawingml/textbody.hxx"
-#include "oox/drawingml/lineproperties.hxx"
-#include "oox/drawingml/fillproperties.hxx"
+#include "oox/drawingml/drawingmltypes.hxx"
 #include <com/sun/star/table/XCell.hpp>
 
 #include <boost/shared_ptr.hpp>
