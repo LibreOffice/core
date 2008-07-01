@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sunjavaplugin.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -572,7 +572,11 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 #endif
     }
 
+#ifdef MACOSX
+    vm_args.version= JNI_VERSION_1_4; // issue 88987
+#else
     vm_args.version= JNI_VERSION_1_2;
+#endif
     vm_args.options= options;
     vm_args.nOptions= cOptions + 1;
     vm_args.ignoreUnrecognized= JNI_TRUE;
