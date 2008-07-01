@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pagesettings.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -171,7 +171,7 @@ void PageSettings::importPageMargins( const AttributeList& rAttribs )
 
 void PageSettings::importPageSetup( const Relations& rRelations, const AttributeList& rAttribs )
 {
-    maOoxData.maBinSettPath   = rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ) ) );
+    maOoxData.maBinSettPath   = rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
     maOoxData.mnPaperSize     = rAttribs.getInteger( XML_paperSize, 1 );
     maOoxData.mnCopies        = rAttribs.getInteger( XML_copies, 1 );
     maOoxData.mnScale         = rAttribs.getInteger( XML_scale, 100 );
@@ -192,7 +192,7 @@ void PageSettings::importPageSetup( const Relations& rRelations, const Attribute
 
 void PageSettings::importChartPageSetup( const Relations& rRelations, const AttributeList& rAttribs )
 {
-    maOoxData.maBinSettPath   = rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ) ) );
+    maOoxData.maBinSettPath   = rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
     maOoxData.mnPaperSize     = rAttribs.getInteger( XML_paperSize, 1 );
     maOoxData.mnCopies        = rAttribs.getInteger( XML_copies, 1 );
     maOoxData.mnFirstPage     = rAttribs.getInteger( XML_firstPageNumber, 1 );
@@ -226,7 +226,7 @@ void PageSettings::importHeaderFooterCharacters( const OUString& rChars, sal_Int
 
 void PageSettings::importPicture( const Relations& rRelations, const AttributeList& rAttribs )
 {
-    maOoxData.maPicturePath = rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ) ) );
+    maOoxData.maPicturePath = rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
 }
 
 void PageSettings::importPageMargins( RecordInputStream& rStrm )
