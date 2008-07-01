@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoashp.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -374,7 +374,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine( const SdrObjCustomShape* pCustomShape ) const
+Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine( const SdrObjCustomShape* pCustomShape )
 {
     Reference< XCustomShapeEngine > xCustomShapeEngine;
     String aEngine(((SdrCustomShapeEngineItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE )).GetValue());
@@ -536,7 +536,7 @@ const sal_Bool SdrObjCustomShape::GetTextBounds( Rectangle& rTextBound ) const
     }
     return bRet;
 }
-basegfx::B2DPolyPolygon SdrObjCustomShape::GetLineGeometry( const SdrObjCustomShape* pCustomShape, const sal_Bool bBezierAllowed ) const
+basegfx::B2DPolyPolygon SdrObjCustomShape::GetLineGeometry( const SdrObjCustomShape* pCustomShape, const sal_Bool bBezierAllowed )
 {
     basegfx::B2DPolyPolygon aRetval;
     sal_Bool bRet = sal_False;
@@ -2875,10 +2875,10 @@ void SdrObjCustomShape::SetVerticalWriting( sal_Bool bVertical )
                 case SDRTEXTHORZADJUST_BLOCK: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BLOCK)); break;
             }
 
-            SetObjectItemSet(aNewSet);
-
-            // set ParaObject orientation accordingly
-            pOutlinerParaObject->SetVertical(bVertical);
+            SetObjectItemSet( aNewSet );
+            pOutlinerParaObject = GetOutlinerParaObject();
+            if ( pOutlinerParaObject )
+                pOutlinerParaObject->SetVertical(bVertical);
 
             // restore object size
             SetSnapRect(aObjectRect);
