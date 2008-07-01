@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleCsvControl.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1056,7 +1056,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleColumnCount() throw( Runtim
 }
 
 OUString SAL_CALL ScAccessibleCsvGrid::getAccessibleRowDescription( sal_Int32 nRow )
-        throw( RuntimeException )
+        throw( IndexOutOfBoundsException, RuntimeException )
 {
     ScUnoGuard aGuard;
     ensureAlive();
@@ -1065,7 +1065,7 @@ OUString SAL_CALL ScAccessibleCsvGrid::getAccessibleRowDescription( sal_Int32 nR
 }
 
 OUString SAL_CALL ScAccessibleCsvGrid::getAccessibleColumnDescription( sal_Int32 nColumn )
-        throw( RuntimeException )
+        throw( IndexOutOfBoundsException, RuntimeException )
 {
     ScUnoGuard aGuard;
     ensureAlive();
@@ -1074,7 +1074,7 @@ OUString SAL_CALL ScAccessibleCsvGrid::getAccessibleColumnDescription( sal_Int32
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
-        throw( RuntimeException )
+        throw( IndexOutOfBoundsException, RuntimeException )
 {
     ensureAlive();
     ensureValidPosition( nRow, nColumn );
@@ -1082,7 +1082,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleRowExtentAt( sal_Int32 nRow
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
-        throw( RuntimeException )
+        throw( IndexOutOfBoundsException, RuntimeException )
 {
     ensureAlive();
     ensureValidPosition( nRow, nColumn );
@@ -1129,14 +1129,14 @@ Sequence< sal_Int32 > SAL_CALL ScAccessibleCsvGrid::getSelectedAccessibleColumns
 }
 
 sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleRowSelected( sal_Int32 /* nRow */ )
-        throw( RuntimeException )
+        throw( IndexOutOfBoundsException, RuntimeException )
 {
     ensureAlive();
     return sal_False;
 }
 
 sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleColumnSelected( sal_Int32 nColumn )
-        throw( RuntimeException )
+        throw( IndexOutOfBoundsException, RuntimeException )
 {
     ScUnoGuard aGuard;
     ensureAlive();
@@ -1168,7 +1168,7 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleSummary()
 }
 
 sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleSelected( sal_Int32 /* nRow */, sal_Int32 nColumn )
-        throw( RuntimeException )
+        throw( IndexOutOfBoundsException, RuntimeException )
 {
     return isAccessibleColumnSelected( nColumn );
 }
