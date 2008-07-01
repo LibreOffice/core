@@ -8,7 +8,7 @@
  *
  * $RCSfile: typegroupconverter.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,7 +101,6 @@ struct TypeGroupInfo
     VarPointMode        meVarPointMode;         /// Mode for varying point colors.
     bool                mbCombinable2d;         /// True = types can be combined in one axes set.
     bool                mbSupports3d;           /// True = 3D type allowed, false = only 2D type.
-    bool                mbWalls3d;              /// True = 3D type includes wall and floor format.
     bool                mbPolarCoordSystem;     /// True = polar, false = cartesian.
     bool                mbSeriesIsFrame2d;      /// True = 2D type series with area formatting.
     bool                mbSeriesIsFrame3d;      /// True = 3D type series with area formatting.
@@ -111,6 +110,21 @@ struct TypeGroupInfo
     bool                mbSupportsStacking;     /// True = data points can be stacked on each other.
     bool                mbReverseSeries;        /// True = insert unstacked series in reverse order.
     bool                mbTicksBetweenCateg;    /// True = X axis ticks between categories.
+};
+
+// ============================================================================
+
+struct UpDownBarsModel;
+
+class UpDownBarsConverter : public ConverterBase< UpDownBarsModel >
+{
+public:
+    explicit            UpDownBarsConverter( const ConverterRoot& rParent, UpDownBarsModel& rModel );
+    virtual             ~UpDownBarsConverter();
+
+    /** Converts the OOXML up/down bars. */
+    void                convertFromModel(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& rxChartType );
 };
 
 // ============================================================================
@@ -153,10 +167,21 @@ public:
                         createCategorySequence();
 
     /** Converts the OOXML type group model into a chart2 coordinate system. */
-    void                convertModelToDocument(
+    void                convertFromModel(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& rxDiagram,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem >& rxCoordSystem,
                             sal_Int32 nAxesSetIdx );
+
+    /** Sets the passed OOXML marker style at the passed property set. */
+    void                convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSymbol, sal_Int32 nOoxSize ) const;
+    /** Sets the passed OOXML line smoothing at the passed property set. */
+    void                convertLineSmooth( PropertySet& rPropSet, bool bOoxSmooth ) const;
+    /** Sets the passed OOXML bar 3D geometry at the passed property set. */
+    void                convertBarGeometry( PropertySet& rPropSet, sal_Int32 nOoxShape ) const;
+    /** Sets the passed OOXML pie rotation at the passed property set. */
+    void                convertPieRotation( PropertySet& rPropSet, sal_Int32 nOoxAngle ) const;
+    /** Sets the passed OOXML pie explosion at the passed property set. */
+    void                convertPieExplosion( PropertySet& rPropSet, sal_Int32 nOoxExplosion ) const;
 
 private:
     /** Inserts the passed series into the chart type. Adds additional properties to the series. */
