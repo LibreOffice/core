@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyIds.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -309,6 +309,10 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CHAR_PROP_HEIGHT        :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharPropHeight")); break;
             case PROP_CHAR_PROP_HEIGHT_ASIAN  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharPropHeightAsian")); break;
             case PROP_CHAR_PROP_HEIGHT_COMPLEX:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharPropHeightComplex")); break;
+            case PROP_FORMAT   :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Format")); break;
+            case PROP_INSERT   :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Insert")); break;
+            case PROP_DELETE   :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Delete")); break;
+            case PROP_STREAM_NAME:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamName")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
