@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fldpage.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +60,7 @@
 #ifndef _FLDPAGE_HXX
 #include <fldpage.hxx>
 #endif
-
+#include <docufld.hxx>
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -299,6 +299,15 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
                     SwSetExpField* pFld = (SwSetExpField*)pTmpFld;
                     pFld->SetPromptText(sPar2);
                     sPar2 = pFld->GetPar2();
+                }
+            }
+            break;
+        case TYP_DOCINFOFLD:
+            {
+                if( nSubType == nsSwDocInfoSubType::DI_CUSTOM )
+                {
+                    SwDocInfoField* pDocInfo = static_cast<SwDocInfoField*>( pTmpFld );
+                    pDocInfo->SetName( rPar1 );
                 }
             }
             break;
