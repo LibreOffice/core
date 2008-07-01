@@ -127,6 +127,7 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\xml\crypto\sax
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\xml\csax
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\xml\wrapper
 #i20156 - end
+mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\rdf
 
 ..\%__SRC%\inc\offuh\com\sun\star\auth\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\auth\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\auth\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\auth\*.hpp
@@ -358,3 +359,7 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\xml\wrapper
 ..\%__SRC%\inc\offuh\com\sun\star\xml\wrapper\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\xml\wrapper\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\xml\wrapper\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\xml\wrapper\*.hdl
 #i20156 - end
+
+..\%__SRC%\inc\offuh\com\sun\star\rdf\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\rdf\*.hpp
+..\%__SRC%\inc\offuh\com\sun\star\rdf\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\rdf\*.hdl
+
