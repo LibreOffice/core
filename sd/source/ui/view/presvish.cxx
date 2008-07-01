@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: presvish.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -178,6 +178,15 @@ void PresentationViewShell::Paint( const Rectangle& rRect, ::sd::Window* )
     rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
     if( xSlideShow.is() )
         xSlideShow->paint(rRect);
+}
+
+void PresentationViewShell::Resize (void)
+{
+    ViewShell::Resize(); // do not call DrawViewShell here!
+
+    rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
+    if( xSlideshow.is() )
+        xSlideshow->resize(maViewSize);
 }
 
 } // end of namespace sd
