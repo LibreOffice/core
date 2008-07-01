@@ -8,7 +8,7 @@
 #
 # $RCSfile: unxsoli4.mk,v $
 #
-# $Revision: 1.46 $
+# $Revision: 1.47 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -79,6 +79,9 @@ CFLAGSOUTOBJ=-o
 # Warnings switched off for CXX:
 # - doubunder: we have many identifiers containing double underscores, some of
 #   them in the stable UDK API we cannot change
+# - identexpected: Identifier expected instead of "}"
+#   if an enum ends with a comma before the '}'
+#   this warning does not seem to heed #pragma disable_warn, and is not helpful
 # - inllargeuse: "function is too large and will not be expanded inline" is
 #   merely a hint
 # - inllargeint: "function is too large to generate inline, consider writing
@@ -93,7 +96,7 @@ CFLAGSOUTOBJ=-o
 #   sfx2/source/toolbox/imgmgr.cxx:1.27) and thus unfortunately needs to be
 #   disabled globally
 CFLAGSWARNCC=
-CFLAGSWARNCXX=+w2 -erroff=doubunder,inllargeuse,inllargeint,notemsource,reftotemp,truncwarn
+CFLAGSWARNCXX=+w2 -erroff=doubunder,identexpected,inllargeuse,inllargeint,notemsource,reftotemp,truncwarn
 CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
 CFLAGSWERRCC=-errwarn=%all
