@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtw8sty.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1699,7 +1699,9 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt(SwWW8Writer& rWrt, BYTE nTTyp,
 
                 const SwPostItField& rPFld = *(SwPostItField*)aCntnt[ i ];
                 rWrt.WritePostItBegin();
-                rWrt.WriteStringAsPara( rPFld.GetTxt() );
+                String sTxt(rPFld.GetTxt());
+                sTxt.SearchAndReplaceAll(0x0A, 0x0B);
+                rWrt.WriteStringAsPara( sTxt );
             }
             break;
 
