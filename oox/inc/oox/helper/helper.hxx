@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: helper.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -130,6 +130,34 @@ void insertValue( Type& ornBitField, InsertType nValue, sal_uInt8 nStartBit, sal
     Type nNewValue = static_cast< Type >( nValue & nMask );
     (ornBitField &= ~(nMask << nStartBit)) |= (nNewValue << nStartBit);
 }
+
+// ============================================================================
+
+/** Optional value, similar to ::boost::optional<>, with convenience accessors.
+ */
+template< typename Type >
+class OptValue
+{
+public:
+    inline explicit     OptValue() : mbHasValue( false ) {}
+    inline explicit     OptValue( const Type& rValue ) : maValue( rValue ), mbHasValue( true ) {}
+    inline explicit     OptValue( bool bHasValue, const Type& rValue ) : maValue( rValue ), mbHasValue( bHasValue ) {}
+
+    inline bool         has() const { return mbHasValue; }
+    inline bool         operator!() const { return !mbHasValue; }
+    inline bool         differsFrom( const Type& rValue ) const { return mbHasValue && (maValue != rValue); }
+
+    inline const Type&  get() const { return maValue; }
+    inline const Type&  get( const Type& rDefValue ) const { return mbHasValue ? maValue : rDefValue; }
+
+    inline void         reset() { mbHasValue = false; }
+    inline void         set( const Type& rValue ) { maValue = rValue; mbHasValue = true; }
+    inline OptValue&    operator=( const Type& rValue ) { set( rValue ); return *this; }
+
+private:
+    Type                maValue;
+    bool                mbHasValue;
+};
 
 // ============================================================================
 
