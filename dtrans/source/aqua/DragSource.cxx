@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DragSource.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,8 +66,10 @@ extern rtl_StandardModuleCount g_moduleCount;
 
 // For OOo internal D&D we provide the Transferable without NSDragPboard
 // interference as a shortcut
-Reference<XTransferable> g_XTransferable = Reference<XTransferable>();
-NSView* g_DragSourceView = nil;
+Reference<XTransferable> DragSource::g_XTransferable = Reference<XTransferable>();
+NSView* DragSource::g_DragSourceView = nil;
+bool DragSource::g_DropSuccessSet = false;
+bool DragSource::g_DropSuccess = false;
 
 
 OUString dragSource_getImplementationName()
@@ -128,11 +130,17 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
 
 -(void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
 {
+  // an internal drop can accept the drop but fail with dropComplete( false )
+  // this is different than the Cocoa API
+  bool bDropSuccess = operation != NSDragOperationNone;
+  if( DragSource::g_DropSuccessSet )
+      bDropSuccess = DragSource::g_DropSuccess;
+
   DragSourceDropEvent dsde(static_cast<OWeakObject*>(mDragSource),
                            new DragSourceContext(mDragSource),
                            static_cast< XDragSource* >(mDragSource),
                            SystemToOfficeDragActions(operation),
-                           operation != NSDragOperationNone);
+                           bDropSuccess );
 
   mDragSource->mXDragSrcListener->dragDropEnd(dsde);
   mDragSource->mXDragSrcListener = Reference<XDragSourceListener>();
@@ -274,6 +282,10 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
   p.x = p.x - sz.width/2;
   p.y = p.y - sz.height/2;
 
+  // reset drop success flags
+  g_DropSuccessSet = false;
+  g_DropSuccess = false;
+
   [mView dragImage: dragImage
    at: p
    offset: NSMakeSize(0,0)
@@ -286,6 +298,10 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
 
   g_XTransferable = Reference<XTransferable>();
   g_DragSourceView = nil;
+
+  // reset drop success flags
+  g_DropSuccessSet = false;
+  g_DropSuccess = false;
 }
 
 

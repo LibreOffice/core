@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DropTarget.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,8 @@
 #include "DropTarget.hxx"
 #include "DragActionConversion.hxx"
 
+#include "DragSource.hxx"
+
 #include <rtl/ustring.h>
 #include <stdio.h>
 
@@ -64,9 +66,6 @@ using namespace com::sun::star::uno;
 using namespace comphelper;
 
 extern rtl_StandardModuleCount g_moduleCount;
-extern Reference<XTransferable> g_XTransferable;
-extern NSView* g_DragSourceView;
-
 
 OUString dropTarget_getImplementationName()
 {
@@ -184,7 +183,7 @@ sal_Int8 DropTarget::determineDropAction(sal_Int8 dropActions, id sender) const
     {
       // Internal DnD
       NSView* destView = [[sender draggingDestinationWindow] contentView];
-      srcAndDestEqual = (g_DragSourceView == destView);
+      srcAndDestEqual = (DragSource::g_DragSourceView == destView);
     }
 
   // If ACTION_DEFAULT is set this means NSDragOperationGeneric
@@ -256,8 +255,8 @@ NSDragOperation DropTarget::draggingEntered(id sender)
       NSPasteboard* dragPboard = [sender draggingPasteboard];
       mXCurrentDragClipboard = new AquaClipboard(mXComponentContext, dragPboard, false);
 
-      Reference<XTransferable> xTransferable = g_XTransferable.is() ?
-        g_XTransferable : mXCurrentDragClipboard->getContents();
+      Reference<XTransferable> xTransferable = DragSource::g_XTransferable.is() ?
+        DragSource::g_XTransferable : mXCurrentDragClipboard->getContents();
 
       DropTargetDragEnterEvent dtdee(static_cast<OWeakObject*>(this),
                                      0,
@@ -343,9 +342,9 @@ MacOSBOOL DropTarget::performDragOperation(id sender)
 
   if (mSelectedDropAction != DNDConstants::ACTION_NONE)
     {
-      Reference<XTransferable> xTransferable = g_XTransferable;
+      Reference<XTransferable> xTransferable = DragSource::g_XTransferable;
 
-      if (!g_XTransferable.is())
+      if (!DragSource::g_XTransferable.is())
         {
           xTransferable = mXCurrentDragClipboard->getContents();
         }
@@ -496,7 +495,9 @@ MacOSBOOL DropTarget::performDragOperation(id sender)
   {
     // Reset the internal transferable used as shortcut in case this is
     // an internal D&D operation
-    g_XTransferable = Reference<XTransferable>();
+    DragSource::g_XTransferable = Reference<XTransferable>();
+    DragSource::g_DropSuccessSet = true;
+    DragSource::g_DropSuccess = success;
   }
 
 

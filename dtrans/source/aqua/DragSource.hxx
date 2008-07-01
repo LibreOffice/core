@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DragSource.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -133,6 +133,12 @@ public:
   // The mouse button that set off the drag and drop operation
   short m_MouseButton;
   sal_Int8 mDragSourceActions;
+
+  static com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable > g_XTransferable;
+  static NSView* g_DragSourceView;
+  static bool    g_DropSuccessSet;
+  static bool    g_DropSuccess;
+
 };
 
 
