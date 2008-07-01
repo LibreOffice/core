@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoedge.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -172,6 +172,7 @@ SdrEdgeObj::SdrEdgeObj()
 :   SdrTextObj(),
     nNotifyingCount(0),
     bEdgeTrackDirty(sal_False),
+    bEdgeTrackUserDefined(sal_False),
     // #109007# Default is to allow default connects
     mbSuppressDefaultConnect(sal_False),
     // #110649#
@@ -258,7 +259,7 @@ void SdrEdgeObj::ImpSetAttrToEdgeInfo()
     }
 
     // #84649#
-    bEdgeTrackDirty = TRUE;
+    ImpDirtyEdgeTrack();
 }
 
 void SdrEdgeObj::ImpSetEdgeInfoToAttr()
@@ -591,7 +592,7 @@ void SdrEdgeObj::ConnectToNode(FASTBOOL bTail1, SdrObject* pObj)
     if (pObj!=NULL) {
         pObj->AddListener(*this);
         rCon.pObj=pObj;
-        bEdgeTrackDirty=TRUE;
+        ImpDirtyEdgeTrack();
     }
 }
 
@@ -653,15 +654,24 @@ void SdrEdgeObj::ImpSetTailPoint(FASTBOOL bTail1, const Point& rPt)
     SetRectsDirty();
 }
 
+void SdrEdgeObj::ImpDirtyEdgeTrack()
+{
+    if ( !bEdgeTrackUserDefined || !(GetModel() && GetModel()->isLocked()) )
+        bEdgeTrackDirty = sal_True;
+}
+
 void SdrEdgeObj::ImpUndirtyEdgeTrack()
 {
-    if (bEdgeTrackDirty) {
+    if (bEdgeTrackDirty && (GetModel() && GetModel()->isLocked()) ) {
         ImpRecalcEdgeTrack();
     }
 }
 
 void SdrEdgeObj::ImpRecalcEdgeTrack()
 {
+    if ( bEdgeTrackUserDefined && (GetModel() && GetModel()->isLocked()) )
+        return;
+
     // #110649#
     if(IsBoundRectCalculationRunning())
     {
@@ -678,7 +688,7 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
         ((SdrEdgeObj*)this)->mbBoundRectCalculationRunning = sal_True;
         *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
         ImpSetAttrToEdgeInfo();
-        bEdgeTrackDirty=FALSE;
+        bEdgeTrackDirty=sal_False;
         ((SdrEdgeObj*)this)->mbBoundRectCalculationRunning = sal_False;
     }
     else
@@ -692,7 +702,7 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
         // #110094#-14 if (!bEdgeTrackDirty) SendRepaintBroadcast();
         *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
         ImpSetEdgeInfoToAttr(); // Die Werte aus aEdgeInfo in den Pool kopieren
-        bEdgeTrackDirty=FALSE;
+        bEdgeTrackDirty=sal_False;
 
         // Only redraw here, no object change
         ActionChanged();
@@ -1676,6 +1686,10 @@ void __EXPORT SdrEdgeObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId&, const S
         if (bObj2) aCon2.pObj=NULL;
         return; // Und mehr braucht hier nicht getan werden.
     }
+    if ( bObj1 || bObj2 )
+    {
+        bEdgeTrackUserDefined = sal_False;
+    }
     SdrTextObj::SFX_NOTIFY(rBC,rBCType,rHint,rHintType);
     if (nNotifyingCount==0) { // Hier nun auch ein VerriegelungsFlag
         ((SdrEdgeObj*)this)->nNotifyingCount++;
@@ -1691,7 +1705,7 @@ void __EXPORT SdrEdgeObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId&, const S
             // Broadcasting nur, wenn auf der selben Page
             Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
             // #110094#-14 if (!bEdgeTrackDirty) SendRepaintBroadcast();
-            bEdgeTrackDirty=TRUE;
+            ImpDirtyEdgeTrack();
 
             // only redraw here, no objectchange
             ActionChanged();
@@ -1766,6 +1780,33 @@ basegfx::B2DPolyPolygon SdrEdgeObj::TakeXorPoly(sal_Bool /*bDetail*/) const
     {
         aPolyPolygon.append(pEdgeTrack->getB2DPolygon());
     }
+
+    return aPolyPolygon;
+}
+
+void SdrEdgeObj::SetEdgeTrackPath( const basegfx::B2DPolyPolygon& rPoly )
+{
+    if ( !rPoly.count() )
+    {
+        bEdgeTrackDirty = sal_True;
+        bEdgeTrackUserDefined = sal_False;
+    }
+    else
+    {
+        *pEdgeTrack = XPolygon( rPoly.getB2DPolygon( 0 ) );
+        bEdgeTrackDirty = sal_False;
+        bEdgeTrackUserDefined = sal_True;
+    }
+}
+
+basegfx::B2DPolyPolygon SdrEdgeObj::GetEdgeTrackPath() const
+{
+    basegfx::B2DPolyPolygon aPolyPolygon;
+
+    if (bEdgeTrackDirty)
+        ((SdrEdgeObj*)this)->ImpRecalcEdgeTrack();
+
+    aPolyPolygon.append( pEdgeTrack->getB2DPolygon() );
 
     return aPolyPolygon;
 }
@@ -1954,8 +1995,9 @@ FASTBOOL SdrEdgeObj::EndDrag(SdrDragStat& rDragStat)
     ImpSetEdgeInfoToAttr();
     delete (ImpEdgeUser*)rDragStat.GetUser();
     rDragStat.SetUser(NULL);
-    SetChanged();
+    bEdgeTrackUserDefined = sal_False;
     SetRectsDirty();
+    SetChanged();
     BroadcastObjectChange();
     if (rDragStat.GetView()!=NULL) {
         rDragStat.GetView()->HideConnectMarker();
@@ -2341,6 +2383,7 @@ void SdrEdgeObj::SaveGeoData(SdrObjGeoData& rGeo) const
     rEGeo.aCon2          =aCon2;
     *rEGeo.pEdgeTrack    =*pEdgeTrack;
     rEGeo.bEdgeTrackDirty=bEdgeTrackDirty;
+    rEGeo.bEdgeTrackUserDefined=bEdgeTrackUserDefined;
     rEGeo.aEdgeInfo      =aEdgeInfo;
 }
 
@@ -2360,6 +2403,7 @@ void SdrEdgeObj::RestGeoData(const SdrObjGeoData& rGeo)
     }
     *pEdgeTrack    =*rEGeo.pEdgeTrack;
     bEdgeTrackDirty=rEGeo.bEdgeTrackDirty;
+    bEdgeTrackUserDefined=rEGeo.bEdgeTrackUserDefined;
     aEdgeInfo      =rEGeo.aEdgeInfo;
 }
 
@@ -2457,7 +2501,7 @@ void SdrEdgeObj::NbcSetAnchorPos(const Point& rPnt)
     SdrTextObj::NbcSetAnchorPos(rPnt);
 
     // Additionally, invalidate edge track
-    bEdgeTrackDirty = TRUE;
+    ImpDirtyEdgeTrack();
 }
 
 sal_Bool SdrEdgeObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const
