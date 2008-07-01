@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: WriterFilterDetection.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,7 +89,8 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
         else if( pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM ( "InputStream" )) )
             pValues[nProperty].Value >>= xInputStream;
     }
-    bool bBinary = sTypeName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_MS_Word_97" ));
+    bool bBinary = sTypeName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_MS_Word_97" )) ||
+                   sTypeName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_MS_Word_97_Vorlage" ));
 
     try
     {
