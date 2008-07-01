@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawdoc2.cxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -434,23 +434,15 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
 
         if( pRefPage )
         {
-            pHandoutPage->SetSize( pRefPage->GetSize() );
+            pHandoutPage->SetSize(pRefPage->GetSize());
             pHandoutPage->SetBorder( pRefPage->GetLftBorder(), pRefPage->GetUppBorder(), pRefPage->GetRgtBorder(), pRefPage->GetLwrBorder() );
         }
         else
         {
-            // Stets Querformat
-            if (aDefSize.Height() <= aDefSize.Width())
-            {
-                pHandoutPage->SetSize(aDefSize);
-            }
-            else
-            {
-                pHandoutPage->SetSize( Size(aDefSize.Height(), aDefSize.Width()) );
-            }
-
+            pHandoutPage->SetSize(aDefSize);
             pHandoutPage->SetBorder(0, 0, 0, 0);
         }
+
         pHandoutPage->SetPageKind(PK_HANDOUT);
         pHandoutPage->SetName( String (SdResId(STR_HANDOUT) ) );
         InsertPage(pHandoutPage, 0);
