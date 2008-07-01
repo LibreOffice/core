@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: searchopt.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -209,8 +209,9 @@ BOOL SvtSearchOptions_Impl::Load()
                         // use index in sequence as flag index
                         SetFlag( i, bVal );
                     }
-                    else
+                    else {
                         DBG_ERROR( "unexpected index" );
+                    }
                 }
                 else
                 {
