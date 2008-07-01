@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLSectionImportContext.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,6 +73,7 @@ class XMLSectionImportContext : public SvXMLImportContext
     const ::rtl::OUString sIsCurrentlyVisible;
     const ::rtl::OUString sEmpty;
 
+    ::rtl::OUString sXmlId;
     ::rtl::OUString sStyleName;
     ::rtl::OUString sName;
     ::rtl::OUString sCond;
