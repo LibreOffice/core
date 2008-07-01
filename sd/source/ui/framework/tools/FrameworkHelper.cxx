@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FrameworkHelper.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -648,13 +648,12 @@ void FrameworkHelper::HandleModeChangeSlot (
         if ( ! mxConfigurationController.is())
             throw RuntimeException();
 
-        Reference<XView> xView (
-            mxConfigurationController->getResource(CreateResourceId(msCenterPaneURL)),
-            UNO_QUERY);
 
-        ::boost::shared_ptr<ViewShell> pCenterViewShell;
-        if (xView.is())
-            pCenterViewShell = FrameworkHelper::GetViewShell(xView);
+        Reference<XResourceId> xPaneId (
+            CreateResourceId(framework::FrameworkHelper::msCenterPaneURL));
+        Reference<XView> xView (GetView(xPaneId));
+        ::boost::shared_ptr<ViewShell> pCenterViewShell (GetViewShell(xView));
+
         ::rtl::OUString sRequestedView;
         if (bIsActive)
         {
