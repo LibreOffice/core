@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: externallinkbuffer.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,7 +104,7 @@ ExternalName::ExternalName( const ExternalLink& rParentLink, sal_Int32 nLocalShe
 
 void ExternalName::importDefinedName( const AttributeList& rAttribs )
 {
-    maOoxData.maName = rAttribs.getString( XML_name );
+    maOoxData.maName = rAttribs.getString( XML_name, OUString() );
     OSL_ENSURE( maOoxData.maName.getLength() > 0, "ExternalName::importDefinedName - empty name" );
     // zero-based index into sheet list of externalBook
     maOoxData.mnSheet = mrParentLink.getSheetIndex( rAttribs.getInteger( XML_sheetId, -1 ) );
@@ -112,7 +112,7 @@ void ExternalName::importDefinedName( const AttributeList& rAttribs )
 
 void ExternalName::importDdeItem( const AttributeList& rAttribs )
 {
-    maOoxData.maName = rAttribs.getString( XML_name );
+    maOoxData.maName = rAttribs.getString( XML_name, OUString() );
     OSL_ENSURE( maOoxData.maName.getLength() > 0, "ExternalName::importDdeItem - empty name" );
     maOoxExtNameData.mbOleObj     = false;
     maOoxExtNameData.mbStdDocName = rAttribs.getBool( XML_ole, false );
@@ -127,7 +127,7 @@ void ExternalName::importValues( const AttributeList& rAttribs )
 
 void ExternalName::importOleItem( const AttributeList& rAttribs )
 {
-    maOoxData.maName = rAttribs.getString( XML_name );
+    maOoxData.maName = rAttribs.getString( XML_name, OUString() );
     OSL_ENSURE( maOoxData.maName.getLength() > 0, "ExternalName::importOleItem - empty name" );
     maOoxExtNameData.mbOleObj    = true;
     maOoxExtNameData.mbNotify    = rAttribs.getBool( XML_advise, false );
@@ -356,18 +356,18 @@ ExternalLink::ExternalLink( const WorkbookHelper& rHelper ) :
 
 void ExternalLink::importExternalReference( const AttributeList& rAttribs )
 {
-    maRelId = rAttribs.getString( R_TOKEN( id ) );
+    maRelId = rAttribs.getString( R_TOKEN( id ), OUString() );
 }
 
 void ExternalLink::importExternalBook( const Relations& rRelations, const AttributeList& rAttribs )
 {
-    OUString aTargetUrl = rRelations.getTargetFromRelId( rAttribs.getString( R_TOKEN( id ) ) );
+    OUString aTargetUrl = rRelations.getTargetFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
     setExternalTargetUrl( aTargetUrl );
 }
 
 void ExternalLink::importSheetName( const AttributeList& rAttribs )
 {
-    OUString aSheetName = rAttribs.getString( XML_val );
+    OUString aSheetName = rAttribs.getString( XML_val, OUString() );
     OSL_ENSURE( aSheetName.getLength() > 0, "ExternalLink::importSheetName - empty sheet name" );
     if( meLinkType == LINKTYPE_EXTERNAL )
         maSheetIndexes.push_back( getWorksheets().insertExternalSheet( maTargetUrl, aSheetName ) );
@@ -380,8 +380,8 @@ void ExternalLink::importDefinedName( const AttributeList& rAttribs )
 
 void ExternalLink::importDdeLink( const AttributeList& rAttribs )
 {
-    OUString aDdeService = rAttribs.getString( XML_ddeService );
-    OUString aDdeTopic = rAttribs.getString( XML_ddeTopic );
+    OUString aDdeService = rAttribs.getString( XML_ddeService, OUString() );
+    OUString aDdeTopic = rAttribs.getString( XML_ddeTopic, OUString() );
     setDdeOleTargetUrl( aDdeService, aDdeTopic, LINKTYPE_DDE );
 }
 
@@ -394,8 +394,8 @@ ExternalNameRef ExternalLink::importDdeItem( const AttributeList& rAttribs )
 
 void ExternalLink::importOleLink( const Relations& rRelations, const AttributeList& rAttribs )
 {
-    OUString aProgId = rAttribs.getString( XML_progId );
-    OUString aTargetUrl = rRelations.getTargetFromRelId( rAttribs.getString( R_TOKEN( id ) ) );
+    OUString aProgId = rAttribs.getString( XML_progId, OUString() );
+    OUString aTargetUrl = rRelations.getTargetFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
     setDdeOleTargetUrl( aProgId, aTargetUrl, LINKTYPE_OLE );
 }
 
