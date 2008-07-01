@@ -8,7 +8,7 @@
 #
 # $RCSfile: make_installer.pl,v $
 #
-# $Revision: 1.112 $
+# $Revision: 1.113 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -381,6 +381,9 @@ installer::logger::print_message( "... analyzing directories ... \n" );
 
 my $dirsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "Directory");
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories1.log", $dirsinproductarrayref); }
+
+if ( $allvariableshashref->{'SHIFT_BASIS_INTO_BRAND_LAYER'} ) { $dirsinproductarrayref = installer::scriptitems::shift_basis_directory_parents($dirsinproductarrayref); }
+if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories1a.log", $dirsinproductarrayref); }
 
 installer::scriptitems::resolve_all_directory_names($dirsinproductarrayref);
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories2.log", $dirsinproductarrayref); }
