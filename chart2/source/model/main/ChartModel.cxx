@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartModel.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1343,6 +1343,18 @@ Reference< chart2::XUndoManager > SAL_CALL ChartModel::getUndoManager()
     throw (uno::RuntimeException)
 {
     return m_pImplChartModel->GetUndoManager();
+}
+
+// ____ XDataSource ____
+uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ChartModel::getDataSequences()
+    throw (uno::RuntimeException)
+{
+    Reference< chart2::data::XDataSource > xSource(
+        DataSourceHelper::getUsedData( uno::Reference< frame::XModel >(this) ) );
+    if( xSource.is())
+        return xSource->getDataSequences();
+
+    return uno::Sequence< Reference< chart2::data::XLabeledDataSequence > >();
 }
 
 }  // namespace chart
