@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PresentationViewShell.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,6 +59,8 @@ public:
             that shall be shared by the created view shell.
     */
     void FinishInitialization( FrameView* pFrameView );
+
+    virtual void Resize (void);
 
 protected:
     virtual SvxRuler* CreateHRuler(::sd::Window* pWin, BOOL bIsFirst);
