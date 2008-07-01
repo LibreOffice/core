@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eos2met.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -223,8 +223,6 @@ private:
     void METLineAtCurPos(Point aPt);
     void METBox(BOOL bFill, BOOL bBoundary,
                 Rectangle aRect, sal_uInt32 nHAxis, sal_uInt32 nVAxis);
-    void METArc(Point aP0, Point aP1, Point aP2);
-    void METArcAtCurPos(Point aP1, Point aP2);
     void METFullArc(Point aCenter, double fMultiplier);
     void METPartialArcAtCurPos(Point aCenter, double fMultiplier,
                                double fStartAngle, double fSweepAngle);
@@ -1330,25 +1328,6 @@ void METWriter::METBox(BOOL bFill, BOOL bBoundary,
     WritePoint(aRect.BottomLeft());
     WritePoint(aRect.TopRight());
     *pMET << nHAxis << nVAxis;
-}
-
-
-void METWriter::METArc(Point aP0, Point aP1, Point aP2)
-{
-    WillWriteOrder(26);
-    *pMET << (BYTE)0xc6 << (BYTE)24;
-    WritePoint(aP0);
-    WritePoint(aP1);
-    WritePoint(aP2);
-}
-
-
-void METWriter::METArcAtCurPos(Point aP1, Point aP2)
-{
-    WillWriteOrder(18);
-    *pMET << (BYTE)0x86 << (BYTE)16;
-    WritePoint(aP1);
-    WritePoint(aP2);
 }
 
 
