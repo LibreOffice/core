@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dxfgrprd.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -233,19 +233,6 @@ const char * DXFGroupReader::GetS(USHORT nG)
     }
 }
 
-void DXFGroupReader::SetI(USHORT nG, long nI)
-{
-    if ( ( nG >= 60 ) && ( nG <= 79 ) )
-        I60_79[ nG - 60 ] = nI;
-    else if ( ( nG >= 90 ) && ( nG <= 99 ) )
-        I90_99[ nG - 90 ] = nI;
-    else if ( ( nG >= 170 ) && ( nG <= 175 ) )
-        I170_175[ nG - 170 ] = nI;
-    else if ( ( nG >= 1060 ) && ( nG <= 1079 ) )
-        I1060_1079[ nG - 1060 ] = nI;
-}
-
-
 void DXFGroupReader::SetF(USHORT nG, double fF)
 {
     nG-=10;
@@ -282,11 +269,6 @@ void DXFGroupReader::SetS(USHORT nG, const char * sS)
     }
     if ( pPtr )
         strncpy( pPtr, sS, DXF_MAX_STRING_LEN + 1 );
-}
-
-
-void DXFGroupReader::FillIBuff()
-{
 }
 
 

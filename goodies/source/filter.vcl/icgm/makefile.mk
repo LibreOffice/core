@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.11 $
+# $Revision: 1.12 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,7 +51,6 @@ SLOFILES =	$(SLO)$/cgm.obj		\
             $(SLO)$/class7.obj	\
             $(SLO)$/classx.obj	\
             $(SLO)$/outact.obj	\
-            $(SLO)$/actmeta.obj	\
             $(SLO)$/actimpr.obj	\
             $(SLO)$/bundles.obj	\
             $(SLO)$/bitmap.obj	\
