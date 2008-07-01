@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.52 $
+# $Revision: 1.53 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -79,7 +79,6 @@ SCP1FILES  = installation_ooo.par          \
              file_graphicfilter.par        \
              module_testtool.par           \
              file_testtool.par             \
-             file_lingu.par                \
              module_xsltfilter.par         \
              file_xsltfilter.par           \
              module_python.par             \
@@ -232,7 +231,6 @@ SCP2FILES  = installation_ooo.par          \
              file_graphicfilter.par        \
              module_testtool.par           \
              file_testtool.par             \
-             file_lingu.par                \
              module_xsltfilter.par         \
              file_xsltfilter.par           \
              module_python.par             \
