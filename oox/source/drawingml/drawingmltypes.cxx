@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawingmltypes.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,28 +29,21 @@
  ************************************************************************/
 
 #include "oox/drawingml/drawingmltypes.hxx"
-
 #include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
-#include <com/sun/star/style/TabAlign.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-
 #include <sax/tools/converter.hxx>
-#include "oox/helper/attributelist.hxx"
-#include "oox/core/namespaces.hxx"
-#include "oox/drawingml/shape.hxx"
 #include "tokens.hxx"
 
 using ::rtl::OUString;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::xml::sax::XFastAttributeList;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::style;
-using namespace ::oox::core;
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::xml::sax;
+using namespace ::com::sun::star::geometry;
 
 namespace oox { namespace drawingml {
 
@@ -59,7 +52,7 @@ namespace oox { namespace drawingml {
 /** converts an emu string into 1/100th mmm but constrain as per ST_TextMargin
  * see 5.1.12.73
  */
-sal_Int32 GetTextMargin( const ::rtl::OUString& sValue )
+sal_Int32 GetTextMargin( const OUString& sValue )
 {
     sal_Int32 nRet = 0;
     if( !::sax::Converter::convertNumber( nRet, sValue ) )
@@ -74,7 +67,7 @@ sal_Int32 GetTextMargin( const ::rtl::OUString& sValue )
 }
 
 /** converts an emu string into 1/100th mmm */
-sal_Int32 GetCoordinate( const ::rtl::OUString& sValue )
+sal_Int32 GetCoordinate( const OUString& sValue )
 {
     sal_Int32 nRet = 0;
     if( !::sax::Converter::convertNumber( nRet, sValue ) )
@@ -85,7 +78,7 @@ sal_Int32 GetCoordinate( const ::rtl::OUString& sValue )
 }
 
 /** converts a ST_Percentage % string into 1/1000th of % */
-sal_Int32 GetPercent( const ::rtl::OUString& sValue )
+sal_Int32 GetPercent( const OUString& sValue )
 {
     sal_Int32 nRet = 0;
     if( !::sax::Converter::convertNumber( nRet, sValue ) )
@@ -94,7 +87,7 @@ sal_Int32 GetPercent( const ::rtl::OUString& sValue )
     return nRet;
 }
 
-double GetPositiveFixedPercentage( const ::rtl::OUString& sValue )
+double GetPositiveFixedPercentage( const OUString& sValue )
 {
     double fPercent = sValue.toFloat() / 100000.;
     return fPercent;
@@ -103,21 +96,21 @@ double GetPositiveFixedPercentage( const ::rtl::OUString& sValue )
 // --------------------------------------------------------------------
 
 /** converts the attributes from an CT_Point2D into an awt Point with 1/100thmm */
-::com::sun::star::awt::Point GetPoint2D( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs )
+Point GetPoint2D( const Reference< XFastAttributeList >& xAttribs )
 {
-    return ::com::sun::star::awt::Point( GetCoordinate( xAttribs->getOptionalValue( XML_x ) ), GetCoordinate( xAttribs->getOptionalValue( XML_y ) ) );
+    return Point( GetCoordinate( xAttribs->getOptionalValue( XML_x ) ), GetCoordinate( xAttribs->getOptionalValue( XML_y ) ) );
 }
 
 /** converts the attributes from an CT_TLPoint into an awt Point with 1/1000% */
-::com::sun::star::awt::Point GetPointPercent( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs )
+Point GetPointPercent( const Reference< XFastAttributeList >& xAttribs )
 {
-    return ::com::sun::star::awt::Point( GetPercent( xAttribs->getOptionalValue( XML_x ) ), GetCoordinate( xAttribs->getOptionalValue( XML_y ) ) );
+    return Point( GetPercent( xAttribs->getOptionalValue( XML_x ) ), GetCoordinate( xAttribs->getOptionalValue( XML_y ) ) );
 }
 
 // --------------------------------------------------------------------
 
 /** converts the ST_TextFontSize to point */
-float GetTextSize( const ::rtl::OUString& sValue )
+float GetTextSize( const OUString& sValue )
 {
     float fRet = 0;
     sal_Int32 nRet;
@@ -128,7 +121,7 @@ float GetTextSize( const ::rtl::OUString& sValue )
 
 
 /** converts the ST_TextSpacingPoint to 1/100mm */
-sal_Int32 GetTextSpacingPoint( const ::rtl::OUString& sValue )
+sal_Int32 GetTextSpacingPoint( const OUString& sValue )
 {
     sal_Int32 nRet;
     if( ::sax::Converter::convertNumber( nRet, sValue ) )
@@ -355,9 +348,9 @@ TabAlign GetTabAlign( sal_Int32 aToken )
 // --------------------------------------------------------------------
 
 /** converts the attributes from a CT_RelativeRect to an IntegerRectangle2D */
-com::sun::star::geometry::IntegerRectangle2D GetRelativeRect( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs )
+IntegerRectangle2D GetRelativeRect( const Reference< XFastAttributeList >& xAttribs )
 {
-    com::sun::star::geometry::IntegerRectangle2D r;
+    IntegerRectangle2D r;
 
     r.X1 = xAttribs->getOptionalValue( XML_l ).toInt32();
     r.Y1 = xAttribs->getOptionalValue( XML_t ).toInt32();
@@ -370,13 +363,10 @@ com::sun::star::geometry::IntegerRectangle2D GetRelativeRect( const ::com::sun::
 // --------------------------------------------------------------------
 
 /** converts the attributes from an CT_Size2D into an awt Size with 1/100thmm */
-::com::sun::star::awt::Size GetSize2D( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs )
+Size GetSize2D( const Reference< XFastAttributeList >& xAttribs )
 {
-    return ::com::sun::star::awt::Size( GetCoordinate( xAttribs->getOptionalValue( XML_cx ) ), GetCoordinate( xAttribs->getOptionalValue( XML_cy ) ) );
+    return Size( GetCoordinate( xAttribs->getOptionalValue( XML_cx ) ), GetCoordinate( xAttribs->getOptionalValue( XML_cy ) ) );
 }
-
-
-
 
 IndexRange GetIndexRange( const Reference< XFastAttributeList >& xAttributes )
 {
@@ -385,44 +375,5 @@ IndexRange GetIndexRange( const Reference< XFastAttributeList >& xAttributes )
     range.end = xAttributes->getOptionalValue( XML_end ).toInt32();
     return range;
 }
-
-
-// --------------------------------------------------------------------
-
-/** context to import a CT_Transform2D */
-Transform2DContext::Transform2DContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, Shape& rShape ) throw()
-: ContextHandler( rParent )
-, mrShape( rShape )
-{
-    AttributeList aAttributeList( xAttribs );
-    mrShape.setRotation( aAttributeList.getInteger( XML_rot, 0 ) ); // 60000ths of a degree Positive angles are clockwise; negative angles are counter-clockwise
-    mrShape.setFlip( aAttributeList.getBool( XML_flipH, sal_False ), aAttributeList.getBool( XML_flipV, sal_False ) );
-}
-
-void Transform2DContext::endFastElement( sal_Int32 ) throw (SAXException, RuntimeException)
-{
-}
-
-Reference< XFastContextHandler > Transform2DContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
-{
-    switch( aElementToken )
-    {
-    case NMSP_DRAWINGML|XML_off:        // horz/vert translation
-        mrShape.setPosition( Point( xAttribs->getOptionalValue( XML_x ).toInt32(), xAttribs->getOptionalValue( XML_y ).toInt32() ) );
-        break;
-    case NMSP_DRAWINGML|XML_ext:        // horz/vert size
-        mrShape.setSize( Size( xAttribs->getOptionalValue( XML_cx ).toInt32(), xAttribs->getOptionalValue( XML_cy ).toInt32() ) );
-        break;
-/* todo: what to do?
-    case NMSP_DRAWINGML|XML_chOff:  // horz/vert translation of children
-    case NMSP_DRAWINGML|XML_chExt:  // horz/vert size of children
-        break;
-*/
-    }
-
-    Reference< XFastContextHandler > xEmpty;
-    return xEmpty;
-}
-
 
 } }
