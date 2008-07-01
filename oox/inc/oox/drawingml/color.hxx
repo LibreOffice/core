@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: color.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,9 +77,10 @@ public:
     void                clearTransparence();
 
     /** Returns true, if the color is initialized. */
-    bool                isUsed() const { return meMode != COLOR_UNUSED; };
-    /** Returns the final RGB color value. */
-    sal_Int32           getColor( const ::oox::core::XmlFilterBase& rFilter ) const;
+    bool                isUsed() const { return meMode != COLOR_UNUSED; }
+    /** Returns the final RGB color value.
+        @param nPhClr  Actual color for the phClr placeholder color used in theme style lists. */
+    sal_Int32           getColor( const ::oox::core::XmlFilterBase& rFilter, sal_Int32 nPhClr = -1 ) const;
 
     /** Returns true, if the color has a transparence set. */
     bool                hasTransparence() const;
