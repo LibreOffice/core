@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: graphicshapecontext.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,7 @@
 #include "oox/core/namespaces.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
+#include "oox/drawingml/transform2dcontext.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/drawingml/chart/chartspacefragment.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
@@ -388,7 +388,7 @@ void CreateChartCallback::onCreateXShape( const Reference< drawing::XShape >& rx
 
         // convert imported chart model to chart document
         Reference< chart2::XChartDocument > xChartDoc( xDocModel, UNO_QUERY_THROW );
-        mrFilter.getChartConverter().convertModelToDocument( mrFilter, aModel, xChartDoc );
+        mrFilter.getChartConverter().convertFromModel( mrFilter, aModel, xChartDoc );
     }
     catch( Exception& )
     {
@@ -409,7 +409,7 @@ Reference< XFastContextHandler > ChartGraphicDataContext::createFastChildContext
     if( nElement == (NMSP_CHART | XML_chart) )
     {
         AttributeList aAttribs( rxAttribs );
-        OUString aFragmentPath = getFragmentPathFromRelId( aAttribs.getString( NMSP_RELATIONSHIPS | XML_id ) );
+        OUString aFragmentPath = getFragmentPathFromRelId( aAttribs.getString( NMSP_RELATIONSHIPS | XML_id, OUString() ) );
         CreateShapeCallbackRef xCallback( new CreateChartCallback( getFilter(), aFragmentPath ) );
         mpShapePtr->setCreateShapeCallback( xCallback );
     }
