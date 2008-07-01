@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoshape.cxx,v $
- * $Revision: 1.175 $
+ * $Revision: 1.176 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -755,7 +755,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                 // Control these pointer again ... it can be, that another instance will be faster then these!
                 if( aTypeSequence.getLength() == 0 )
                 {
-                    aTypeSequence.realloc( 16 );
+                    aTypeSequence.realloc( 17 );
                     uno::Type* pTypes = aTypeSequence.getArray();
 
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
@@ -773,7 +773,8 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XConnectorShape>*)0);
                     // from SvxUnoTextBase::getTypes()
-                    *pTypes++ = ::getCppuType(( const uno::Reference< text::XText >*)0);
+                    *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextAppend >*)0);
+                    *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextCopy >*)0);
                     *pTypes++ = ::getCppuType(( const uno::Reference< container::XEnumerationAccess >*)0);
                     *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeMover >*)0);
                 }
@@ -914,7 +915,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                 // Control these pointer again ... it can be, that another instance will be faster then these!
                 if( aTypeSequence.getLength() == 0 )
                 {
-                    aTypeSequence.realloc( 15 );
+                    aTypeSequence.realloc( 16 );
                     uno::Type* pTypes = aTypeSequence.getArray();
 
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
@@ -931,7 +932,8 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XUnoTunnel >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
                     // from SvxUnoTextBase::getTypes()
-                    *pTypes++ = ::getCppuType(( const uno::Reference< text::XText >*)0);
+                    *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextAppend >*)0);
+                    *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextCopy >*)0);
                     *pTypes++ = ::getCppuType(( const uno::Reference< container::XEnumerationAccess >*)0);
                     *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeMover >*)0);
                 }
