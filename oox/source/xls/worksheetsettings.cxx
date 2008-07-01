@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: worksheetsettings.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,13 +129,13 @@ WorksheetSettings::WorksheetSettings( const WorksheetHelper& rHelper ) :
 
 void WorksheetSettings::importSheetPr( const AttributeList& rAttribs )
 {
-    maOoxSheetData.maCodeName = rAttribs.getString( XML_codeName );
+    maOoxSheetData.maCodeName = rAttribs.getString( XML_codeName, OUString() );
     maOoxSheetData.mbFilterMode = rAttribs.getBool( XML_filterMode, false );
 }
 
 void WorksheetSettings::importChartSheetPr( const AttributeList& rAttribs )
 {
-    maOoxSheetData.maCodeName = rAttribs.getString( XML_codeName );
+    maOoxSheetData.maCodeName = rAttribs.getString( XML_codeName, OUString() );
 }
 
 void WorksheetSettings::importTabColor( const AttributeList& rAttribs )
