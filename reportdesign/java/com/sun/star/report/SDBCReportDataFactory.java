@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SDBCReportDataFactory.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,8 +75,13 @@ public class SDBCReportDataFactory implements DataSourceFactory
     public static final String GROUP_EXPRESSIONS = "group-expressions";
     public static final String MASTER_VALUES = "master-values";
     public static final String DETAIL_COLUMNS = "detail-columns";
+    public static final String UNO_FILTER = "Filter";
+
     private static final String APPLY_FILTER = "ApplyFilter";
     private static final String UNO_COMMAND = "Command";
+    private static final String UNO_ORDER = "Order";
+
+    private static final String UNO_APPLY_FILTER = "ApplyFilter";
     private static final String UNO_COMMAND_TYPE = "CommandType";
     private final XConnection connection;
     private final XComponentContext m_cmpCtx;
@@ -385,6 +390,87 @@ public class SDBCReportDataFactory implements DataSourceFactory
         return xFields;
     }
 
+    private XSingleSelectQueryComposer getComposer(final XConnectionTools tools,
+            final String command,
+            final int commandType)
+    {
+        final Class[] parameter = new Class[2];
+        parameter[0] = Integer.class;
+        parameter[1] = String.class;
+        try
+        {
+            final Object[] param = new Object[2];
+            param[0] = new Integer(commandType);
+            param[1] = command;
+            return (XSingleSelectQueryComposer) tools.getClass().getMethod("getComposer", parameter).invoke(tools, param);
+        }
+        catch (NoSuchMethodException ex)
+        {
+        }
+        catch (IllegalAccessException ex)
+        {
+            // should not happen
+            // assert False
+        }
+        catch (java.lang.reflect.InvocationTargetException ex)
+        {
+            // should not happen
+            // assert False
+        }
+        try
+        {
+            final XMultiServiceFactory factory = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, connection);
+            final XSingleSelectQueryComposer out = (XSingleSelectQueryComposer) UnoRuntime.queryInterface(XSingleSelectQueryComposer.class, factory.createInstance("com.sun.star.sdb.SingleSelectQueryAnalyzer"));
+            final String quote = connection.getMetaData().getIdentifierQuoteString();
+            String statement = command;
+            switch (commandType)
+            {
+                case CommandType.TABLE:
+                    statement = "SELECT * FROM " + quote + command + quote;
+                    break;
+                case CommandType.QUERY:
+                    {
+                        final XQueriesSupplier xSupplyQueries = (XQueriesSupplier) UnoRuntime.queryInterface(XQueriesSupplier.class, connection);
+                        final XNameAccess queries = xSupplyQueries.getQueries();
+                        if (queries.hasByName(command))
+                        {
+                            final XPropertySet prop = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, queries.getByName(command));
+                            final Boolean escape = (Boolean)prop.getPropertyValue("EscapeProcessing");
+                            if ( escape.booleanValue() )
+                            {
+                                statement = (String) prop.getPropertyValue(UNO_COMMAND);
+                                final XSingleSelectQueryComposer composer = getComposer(tools,statement,CommandType.COMMAND);
+                                if ( composer != null )
+                                {
+                                    final String order  = (String) prop.getPropertyValue(UNO_ORDER);
+                                    if ( order != null && order.length() != 0 )
+                                        composer.setOrder(order);
+                                    final Boolean applyFilter = (Boolean)prop.getPropertyValue(UNO_APPLY_FILTER);
+                                    if ( applyFilter.booleanValue() )
+                                    {
+                                        final String filter  = (String) prop.getPropertyValue(UNO_FILTER);
+                                        if ( filter != null && filter.length() != 0 )
+                                            composer.setFilter(filter);
+                                    }
+                                    statement = composer.getQuery();
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case CommandType.COMMAND:
+                    statement = command;
+                    break;
+            }
+            out.setElementaryQuery(statement);
+            return out;
+        }
+        catch (Exception e)
+        {
+        }
+        return null;
+    }
+
     int fillParameter(final Map parameters,
             final XConnectionTools tools,
             final String command,
@@ -396,7 +482,8 @@ public class SDBCReportDataFactory implements DataSourceFactory
             WrappedTargetException
     {
         int oldParameterCount = 0;
-        final XSingleSelectQueryComposer composer = tools.getComposer(commandType, command);
+
+        final XSingleSelectQueryComposer composer = getComposer(tools, command, commandType);
         if (composer != null)
         {
             // get old parameter count
@@ -480,7 +567,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                 new Integer(commandType));
         rowSetProp.setPropertyValue(UNO_COMMAND, command);
 
-        final String filter = (String) parameters.get("filter");
+        final String filter = (String) parameters.get(UNO_FILTER);
         if (filter != null)
         {
             rowSetProp.setPropertyValue("Filter", filter);
@@ -508,7 +595,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
         if (order.length() > 0 && commandType != CommandType.TABLE)
         {
             String statement = command;
-            final XSingleSelectQueryComposer composer = tools.getComposer(commandType, command);
+            final XSingleSelectQueryComposer composer = getComposer(tools, command, commandType);
             if (composer != null)
             {
                 statement = composer.getQuery();
