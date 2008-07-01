@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlexp.cxx,v $
- * $Revision: 1.141 $
+ * $Revision: 1.142 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,6 +103,9 @@
 #include <tools/inetdef.hxx>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
+#include <com/sun/star/rdf/XMetadatable.hpp>
+
 
 using ::rtl::OUString;
 
@@ -215,6 +218,9 @@ public:
     uno::Reference< embed::XStorage >                   mxTargetStorage;
 
     SvtSaveOptions                                      maSaveOptions;
+
+    /// relative path of stream in package, e.g. "someobject/content.xml"
+    ::rtl::OUString mStreamPath;
 };
 
 SvXMLExport_Impl::SvXMLExport_Impl()
@@ -224,6 +230,7 @@ SvXMLExport_Impl::SvXMLExport_Impl()
     // --> PB 2007-07-06 #i146851#
         ,mbSaveBackwardCompatibleODF( sal_True )
     // <--
+        ,mStreamPath()
 {
     mxUriReferenceFactory = uri::UriReferenceFactory::create(
             comphelper_getProcessComponentContext());
@@ -239,6 +246,7 @@ void SvXMLExport::SetDocHandler( const uno::Reference< xml::sax::XDocumentHandle
 
 void SvXMLExport::_InitCtor()
 {
+    // note: it is not necessary to add XML_NP_XML (it is declared implicitly)
     if( (getExportFlags() & ~EXPORT_OASIS) != 0 )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
@@ -298,6 +306,10 @@ void SvXMLExport::_InitCtor()
         mpNamespaceMap->Add( GetXMLToken(XML_NP_XFORMS_1_0), GetXMLToken(XML_N_XFORMS_1_0), XML_NAMESPACE_XFORMS );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_XSD), GetXMLToken(XML_N_XSD), XML_NAMESPACE_XSD );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_XSI), GetXMLToken(XML_N_XSI), XML_NAMESPACE_XSI );
+    }
+    if( (getExportFlags() & (EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
+    {
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_RDFA), GetXMLToken(XML_N_RDFA), XML_NAMESPACE_RDFA );
     }
 
     mxAttrList = (xml::sax::XAttributeList*)mpAttrList;
@@ -728,6 +740,9 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
             aBaseURL.insertName( sName );
             msOrigFileName = aBaseURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
         }
+        OSL_ENSURE(sName.getLength(), "no StreamName ???");
+        mpImpl->mStreamPath = sRelPath.getLength() ? sRelPath +
+            ::rtl::OUString::createFromAscii("/") + sName : sName;
 
         // --> OD 2006-09-26 #i69627#
         OUString sOutlineStyleAsNormalListStyle(
@@ -2284,6 +2299,63 @@ SvtSaveOptions::ODFDefaultVersion SvXMLExport::getDefaultVersion() const
     return SvtSaveOptions::ODFVER_012;
 }
 
+::rtl::OUString SvXMLExport::GetStreamPath() const
+{
+    return mpImpl->mStreamPath;
+}
+
+//FIXME: where to put this???
+static bool splitXmlId(::rtl::OUString const & i_XmlId,
+    ::rtl::OUString & o_StreamName, ::rtl::OUString& o_Idref )
+{
+    const sal_Int32 idx(i_XmlId.indexOf(static_cast<sal_Unicode>('#')));
+    if ((idx <= 0) || (idx >= i_XmlId.getLength() - 1)) {
+        return false;
+    } else {
+        o_StreamName = (i_XmlId.copy(0, idx));
+        o_Idref      = (i_XmlId.copy(idx+1));
+        return true;
+    }
+}
+
+void
+SvXMLExport::AddAttributeXmlId(uno::Reference<uno::XInterface> const & i_xIfc)
+{
+    // check version >= 1.2
+    switch (getDefaultVersion()) {
+        case SvtSaveOptions::ODFVER_011: // fall thru
+        case SvtSaveOptions::ODFVER_010: return;
+        default: break;
+    }
+    const uno::Reference<rdf::XMetadatable> xMeta(i_xIfc,
+        uno::UNO_QUERY);
+//FIXME not yet...
+//    OSL_ENSURE(xMeta.is(), "xml:id: not XMetadatable");
+    if ( xMeta.is() )
+    {
+        const ::rtl::OUString XmlId( xMeta->getXmlId() );
+        if ( !XmlId.equalsAscii("") )
+        {
+            ::rtl::OUString StreamName;
+            ::rtl::OUString Idref;
+            if( splitXmlId(XmlId, StreamName, Idref) )
+            {
+                if ( GetStreamPath().equals(StreamName) )
+                {
+                    AddAttribute( XML_NAMESPACE_XML, XML_ID, Idref );
+                }
+                else
+                {
+                    OSL_ENSURE(false, "xml:id: invalid stream name");
+                }
+            }
+            else
+            {
+                OSL_ENSURE(false, "xml:id invalid?");
+            }
+        }
+    }
+}
 
 //=============================================================================
 
