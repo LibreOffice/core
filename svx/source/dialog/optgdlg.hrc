@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optgdlg.hrc,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,7 @@
 // defines for positions and sizes ---------------------------------------
 
 #define WHOLE_WIDTH             248
-#define EDIT_WIDTH              25
+#define EDIT_WIDTH              30
 #define UNIT_WIDTH              40
 
 #define COLSPACE                RSC_SP_CTRL_DESC_X
