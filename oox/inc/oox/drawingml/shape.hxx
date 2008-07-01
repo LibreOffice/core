@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shape.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,12 +32,11 @@
 #define OOX_DRAWINGML_SHAPE_HXX
 
 #include "oox/helper/propertymap.hxx"
-#include "oox/drawingml/theme.hxx"
+#include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/customshapeproperties.hxx"
 #include "oox/drawingml/table/tableproperties.hxx"
-#include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/textliststyle.hxx"
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -48,10 +47,6 @@
 #include <map>
 
 namespace oox { namespace drawingml {
-
-class Shape;
-
-typedef boost::shared_ptr< Shape > ShapePtr;
 
 typedef ::std::map< ::rtl::OUString, ShapePtr > ShapeIdMap;
 
