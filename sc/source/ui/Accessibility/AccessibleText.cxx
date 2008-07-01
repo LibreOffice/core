@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleText.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -910,7 +910,8 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
             }
         }
 
-        pEditEngine->SetPaperSize(aSize);
+        // #i70916# Text in spread sheet cells return the wrong extents
+        pEditEngine->SetPaperSize( Size( LONG_MAX, aSize.getHeight() ) );
 
         pEditEngine->SetNotifyHdl( LINK(this, ScAccessibleCellTextData, NotifyHdl) );
     }
