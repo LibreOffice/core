@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: diagramdefinitioncontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,6 +29,7 @@
  ************************************************************************/
 
 #include "oox/core/skipcontext.hxx"
+#include "oox/core/namespaces.hxx"
 #include "layoutnodecontext.hxx"
 #include "diagramdefinitioncontext.hxx"
 #include "oox/drawingml/diagram/datamodelcontext.hxx"
