@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EnhancedCustomShapeEngine.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -411,16 +411,8 @@ com::sun::star::drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEng
                 }
 
                 if ( aPP.count() )
-                {
-                    if(aPP.areControlPointsUsed())
-                    {
-                        aPolyPolygon.append(basegfx::tools::adaptiveSubdivideByAngle(aPP));
-                    }
-                    else
-                    {
-                        aPolyPolygon.append(aPP);
-                    }
-                }
+                    aPolyPolygon.append(aPP);
+
                 SdrObject::Free( pNewObj );
             }
             SdrObject::Free( pObj );
