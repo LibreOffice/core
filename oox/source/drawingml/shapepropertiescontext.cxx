@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shapepropertiescontext.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-#include <tools/debug.hxx>
+#include "oox/drawingml/shapepropertiescontext.hxx"
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -36,11 +36,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
-#include "oox/drawingml/shapepropertiescontext.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/drawingml/linepropertiescontext.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
+#include "oox/drawingml/transform2dcontext.hxx"
 #include "oox/drawingml/customshapegeometry.hxx"
 #include "tokens.hxx"
 
