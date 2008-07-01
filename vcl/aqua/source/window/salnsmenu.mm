@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salnsmenu.mm,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,8 +79,9 @@
 -(id)initWithMenuItem: (AquaSalMenuItem*)pMenuItem
 {
     mpMenuItem = pMenuItem;
-    id ret = [super initWithTitle: [NSString string] action: nil keyEquivalent: [NSString string]];
-    [ret setAction:@selector(menuItemTriggered:)];
+    id ret = [super initWithTitle: [NSString string]
+                    action: @selector(menuItemTriggered:)
+                    keyEquivalent: [NSString string]];
     [ret setTarget: self];
     return ret;
 }
