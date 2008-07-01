@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DomainMapper_Impl.hxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
+#include <com/sun/star/text/XTextAppend.hpp>
 #include <com/sun/star/text/XTextAppendAndConvert.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -159,11 +160,11 @@ public:
 
 struct TextAppendContext
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppendAndConvert >       xTextAppendAndConvert;
-    ParagraphPropertiesPtr                                                                  pLastParagraphProperties;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppend >       xTextAppend;
+    ParagraphPropertiesPtr                                                        pLastParagraphProperties;
 
-    TextAppendContext( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppendAndConvert >& xAppend ) :
-        xTextAppendAndConvert( xAppend ){}
+    TextAppendContext( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppend >& xAppend ) :
+        xTextAppend( xAppend ){}
 };
 
 typedef boost::shared_ptr<FieldContext>  FieldContextPtr;
@@ -306,6 +307,14 @@ private:
     ::com::sun::star::uno::Reference< text::XTextRange >      m_xFrameStartRange;
     ::com::sun::star::uno::Reference< text::XTextRange >      m_xFrameEndRange;
 
+    //current redline
+    ::rtl::OUString                 m_CurrentRedlineAuthor;
+    ::rtl::OUString                 m_CurrentRedlineDate;
+    ::rtl::OUString                 m_CurrentRedlineId;
+    sal_Int32                       n_CurrentRedlineToken;
+
+    //shape import
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >      m_xTemporaryShape;
 
     void                            GetCurrentLocale(::com::sun::star::lang::Locale& rLocale);
     void                            SetNumberFormat( const ::rtl::OUString& rCommand,
@@ -331,7 +340,10 @@ public:
     {
         return m_xTextFactory;
     }
-
+    ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >     GetComponentContext() const
+    {
+        return m_xComponentContext;
+    }
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument >       GetTextDocument() const
     {
         return m_xTextDocument;
@@ -345,6 +357,7 @@ public:
     void appendTextPortion( const ::rtl::OUString& rString, PropertyMapPtr pPropertyMap );
     void appendTextContent( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >,
                                 const uno::Sequence< beans::PropertyValue >  );
+    void appendOLE( const ::rtl::OUString& rStreamName );
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > appendTextSectionAfter(
                     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xBefore );
 
@@ -364,7 +377,7 @@ public:
     }
     PropertyMapPtr GetTopContextOfType(ContextType eId);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppendAndConvert >  GetTopTextAppendAndConvert();
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppend >  GetTopTextAppend();
 
     FontTablePtr GetFontTable()
     {
@@ -411,6 +424,11 @@ public:
     bool        IsStyleSheetImport()const { return m_bInStyleSheetImport;}
     void        SetAnyTableImport( bool bSet ) { m_bInAnyTableImport = bSet;}
     bool        IsAnyTableImport()const { return m_bInAnyTableImport;}
+
+    void PushShapeContext();
+    void PopShapeContext();
+    bool IsInShapeContext() const { return m_xTemporaryShape.is(); }
+    void CopyTemporaryShapeText( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
 
     void PushPageHeader(SectionPropertyMap::PageType eType);
     void PushPageFooter(SectionPropertyMap::PageType eType);
@@ -466,6 +484,21 @@ public:
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aFrameProperties
         );
     bool ExecuteFrameConversion();
+
+    ::rtl::OUString  GetCurrentRedlineAuthor() const { return m_CurrentRedlineAuthor; }
+    void SetCurrentRedlineAuthor( const ::rtl::OUString& rSet ) { m_CurrentRedlineAuthor = rSet; }
+
+    ::rtl::OUString  GetCurrentRedlineDate() const   { return m_CurrentRedlineDate;   }
+    void SetCurrentRedlineDate( const ::rtl::OUString& rSet )    { m_CurrentRedlineDate = rSet;   }
+
+    ::rtl::OUString  GetCurrentRedlineId() const     { return m_CurrentRedlineId;     }
+    void SetCurrentRedlineId( const ::rtl::OUString& rSet ) { m_CurrentRedlineId = rSet;     }
+
+    sal_Int32        GetCurrentRedlineToken() const  { return n_CurrentRedlineToken;  }
+    void SetCurrentRedlineToken(sal_Int32 nSet) { n_CurrentRedlineToken = nSet;  }
+
+    void ResetRedlineProperties();
+
 };
 } //namespace dmapper
 } //namespace writerfilter
