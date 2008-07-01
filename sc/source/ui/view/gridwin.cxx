@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gridwin.cxx,v $
- * $Revision: 1.95 $
+ * $Revision: 1.96 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -207,6 +207,7 @@ public:
     ScFilterBoxMode GetMode() const         { return eMode; }
     BOOL            IsDataSelect() const    { return (eMode == SC_FILTERBOX_DATASELECT); }
     void            EndInit();
+    BOOL            IsInInit() const        { return bInit; }
     void            SetCancelled()          { bCancelled = TRUE; }
     BOOL            IsInSelect() const      { return bInSelect; }
 };
@@ -492,7 +493,8 @@ void ScGridWindow::ClickExtern()
 {
     // #i81298# don't delete the filter box when called from its select handler
     // (possible through row header size update)
-    if ( pFilterBox && pFilterBox->IsInSelect() )
+    // #i84277# when initializing the filter box, a Basic error can deactivate the view
+    if ( pFilterBox && ( pFilterBox->IsInSelect() || pFilterBox->IsInInit() ) )
         return;
 
     DELETEZ(pFilterBox);
@@ -3532,7 +3534,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
     return nRet;
 }
 
-ULONG lcl_GetDropFormatId( const uno::Reference<datatransfer::XTransferable>& xTransfer )
+ULONG lcl_GetDropFormatId( const uno::Reference<datatransfer::XTransferable>& xTransfer, bool bPreferText = false )
 {
     TransferableDataHelper aDataHelper( xTransfer );
 
@@ -3601,6 +3603,8 @@ ULONG lcl_GetDropFormatId( const uno::Reference<datatransfer::XTransferable>& xT
         nFormatId = SOT_FORMATSTR_ID_SYLK;
     else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK ) )
         nFormatId = SOT_FORMATSTR_ID_LINK;
+    else if ( bPreferText && aDataHelper.HasFormat( SOT_FORMAT_STRING ) ) // #i86734# the behaviour introduced in #i62773# is wrong when pasting
+        nFormatId = SOT_FORMAT_STRING;
     else if ( aDataHelper.HasFormat( SOT_FORMAT_FILE_LIST ) )
         nFormatId = SOT_FORMAT_FILE_LIST;
     else if ( aDataHelper.HasFormat( SOT_FORMAT_FILE ) )    // #i62773# FILE_LIST/FILE before STRING (Unix file managers)
@@ -4161,7 +4165,7 @@ void ScGridWindow::PasteSelection( const Point& rPosPixel )
         uno::Reference<datatransfer::XTransferable> xTransferable = aDataHelper.GetTransferable();
         if ( xTransferable.is() )
         {
-            ULONG nFormatId = lcl_GetDropFormatId( xTransferable );
+            ULONG nFormatId = lcl_GetDropFormatId( xTransferable, true );
             if ( nFormatId )
             {
                 bPasteIsDrop = TRUE;
