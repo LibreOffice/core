@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TypeDescription.java,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -525,7 +525,7 @@ public final class TypeDescription implements ITypeDescription {
         if (i < 0) {
             return null;
         }
-        List args = new List();
+        java.util.List args = new java.util.ArrayList();
         do {
             ++i; // skip '<' or ','
             int j = i;
@@ -568,7 +568,8 @@ public final class TypeDescription implements ITypeDescription {
             throw new IllegalArgumentException(
                 "UNO type name \"" + typeName + "\" is syntactically invalid");
         }
-        return args.toArray();
+        return (TypeDescription[]) args.toArray(
+                new TypeDescription[args.size()]);
     }
 
     private IFieldDescription[] calculateFieldDescriptions(
