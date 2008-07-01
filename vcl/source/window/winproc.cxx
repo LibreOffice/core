@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: winproc.cxx,v $
- * $Revision: 1.125 $
+ * $Revision: 1.126 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1596,7 +1596,13 @@ static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect, bool 
     Region aRegion( rBoundRect );
     pWindow->ImplInvalidateOverlapFrameRegion( aRegion );
     if( bImmediateUpdate )
+    {
+        // #i87663# trigger possible pending resize notifications
+        // (GetSizePixel does that for us)
+        pWindow->GetSizePixel();
+        // force drawing inmmediately
         pWindow->Update();
+    }
 }
 
 // -----------------------------------------------------------------------
