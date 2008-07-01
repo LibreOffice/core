@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: worksheetfragment.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -403,7 +403,7 @@ void OoxWorksheetFragment::importPageSetUpPr( const AttributeList& rAttribs )
 void OoxWorksheetFragment::importDimension( const AttributeList& rAttribs )
 {
     CellRangeAddress aRange;
-    getAddressConverter().convertToCellRangeUnchecked( aRange, rAttribs.getString( XML_ref ), getSheetIndex() );
+    getAddressConverter().convertToCellRangeUnchecked( aRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex() );
     setDimension( aRange );
 }
 
@@ -439,18 +439,18 @@ void OoxWorksheetFragment::importCol( const AttributeList& rAttribs )
 void OoxWorksheetFragment::importMergeCell( const AttributeList& rAttribs )
 {
     CellRangeAddress aRange;
-    if( getAddressConverter().convertToCellRange( aRange, rAttribs.getString( XML_ref ), getSheetIndex(), true ) )
+    if( getAddressConverter().convertToCellRange( aRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex(), true ) )
         setMergedRange( aRange );
 }
 
 void OoxWorksheetFragment::importDataValidation( const AttributeList& rAttribs )
 {
     mxValData.reset( new OoxValidationData );
-    getAddressConverter().convertToCellRangeList( mxValData->maRanges, rAttribs.getString( XML_sqref ), getSheetIndex(), true );
-    mxValData->maInputTitle   = rAttribs.getString( XML_promptTitle );
-    mxValData->maInputMessage = rAttribs.getString( XML_prompt );
-    mxValData->maErrorTitle   = rAttribs.getString( XML_errorTitle );
-    mxValData->maErrorMessage = rAttribs.getString( XML_error );
+    getAddressConverter().convertToCellRangeList( mxValData->maRanges, rAttribs.getString( XML_sqref, OUString() ), getSheetIndex(), true );
+    mxValData->maInputTitle   = rAttribs.getString( XML_promptTitle, OUString() );
+    mxValData->maInputMessage = rAttribs.getString( XML_prompt, OUString() );
+    mxValData->maErrorTitle   = rAttribs.getString( XML_errorTitle, OUString() );
+    mxValData->maErrorMessage = rAttribs.getString( XML_error, OUString() );
     mxValData->mnType         = rAttribs.getToken( XML_type, XML_none );
     mxValData->mnOperator     = rAttribs.getToken( XML_operator, XML_between );
     mxValData->mnErrorStyle   = rAttribs.getToken( XML_errorStyle, XML_stop );
@@ -466,12 +466,12 @@ void OoxWorksheetFragment::importDataValidation( const AttributeList& rAttribs )
 void OoxWorksheetFragment::importHyperlink( const AttributeList& rAttribs )
 {
     OoxHyperlinkData aData;
-    if( getAddressConverter().convertToCellRange( aData.maRange, rAttribs.getString( XML_ref ), getSheetIndex(), true ) )
+    if( getAddressConverter().convertToCellRange( aData.maRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex(), true ) )
     {
-        aData.maTarget   = getRelations().getTargetFromRelId( rAttribs.getString( R_TOKEN( id ) ) );
-        aData.maLocation = rAttribs.getString( XML_location );
-        aData.maDisplay  = rAttribs.getString( XML_display );
-        aData.maTooltip  = rAttribs.getString( XML_tooltip );
+        aData.maTarget   = getRelations().getTargetFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+        aData.maLocation = rAttribs.getString( XML_location, OUString() );
+        aData.maDisplay  = rAttribs.getString( XML_display, OUString() );
+        aData.maTooltip  = rAttribs.getString( XML_tooltip, OUString() );
         setHyperlink( aData );
     }
 }
@@ -492,7 +492,7 @@ void OoxWorksheetFragment::importBrk( const AttributeList& rAttribs )
 
 void OoxWorksheetFragment::importDrawing( const AttributeList& rAttribs )
 {
-    setDrawingPath( getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ) ) ) );
+    setDrawingPath( getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) ) );
 }
 
 void OoxWorksheetFragment::importDimension( RecordInputStream& rStrm )
