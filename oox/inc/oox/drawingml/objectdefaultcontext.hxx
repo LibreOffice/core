@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objectdefaultcontext.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,10 +31,11 @@
 #ifndef OOX_DRAWINGML_OBJECTDEFAULTCONTEXT_HXX
 #define OOX_DRAWINGML_OBJECTDEFAULTCONTEXT_HXX
 
-#include "oox/drawingml/theme.hxx"
 #include "oox/core/contexthandler.hxx"
 
 namespace oox { namespace drawingml {
+
+class Theme;
 
 class objectDefaultContext : public oox::core::ContextHandler
 {
