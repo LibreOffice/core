@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: condformatbuffer.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -190,7 +190,7 @@ CondFormatRule::CondFormatRule( const CondFormat& rCondFormat ) :
 
 void CondFormatRule::importCfRule( const AttributeList& rAttribs )
 {
-    maOoxData.maText         = rAttribs.getString( XML_text );
+    maOoxData.maText         = rAttribs.getString( XML_text, OUString() );
     maOoxData.mnPriority     = rAttribs.getInteger( XML_priority, -1 );
     maOoxData.mnType         = rAttribs.getToken( XML_type, XML_TOKEN_INVALID );
     maOoxData.mnOperator     = rAttribs.getToken( XML_operator, XML_TOKEN_INVALID );
@@ -651,7 +651,7 @@ CondFormat::CondFormat( const WorksheetHelper& rHelper ) :
 
 void CondFormat::importConditionalFormatting( const AttributeList& rAttribs )
 {
-    getAddressConverter().convertToCellRangeList( maOoxData.maRanges, rAttribs.getString( XML_sqref ), getSheetIndex(), true );
+    getAddressConverter().convertToCellRangeList( maOoxData.maRanges, rAttribs.getString( XML_sqref, OUString() ), getSheetIndex(), true );
     maOoxData.mbPivot = rAttribs.getBool( XML_pivot, false );
 }
 
