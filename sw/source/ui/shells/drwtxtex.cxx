@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drwtxtex.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,16 +62,10 @@
 #include <svtools/whiter.hxx>
 #include <svtools/cjkoptions.hxx>
 #include <sfx2/bindings.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
-#ifndef _SVX_FLDITEM_HXX
-#ifndef _SVX_FLDITEM_HXX //autogen
 #include <svx/flditem.hxx>
-#endif
-#endif
 #include <svx/editstat.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/htmlmode.hxx>
@@ -80,19 +74,13 @@
 #include <svx/scripttypeitem.hxx>
 #include <svx/writingmodeitem.hxx>
 #include <doc.hxx>
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <viewopt.hxx>
 #include <wrtsh.hxx>
 #include <uitool.hxx>
-#ifndef _PARDLG_HXX
 #include <pardlg.hxx>
-#endif
 #include <swdtflvr.hxx>
-#ifndef _DRWTXTSH_HXX
 #include <drwtxtsh.hxx>
-#endif
 #include <swmodule.hxx>
 #include <initui.hxx>               // fuer SpellPointer
 #include <edtwin.hxx>
@@ -161,101 +149,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 pOLV->GetEditView().SelectCurrentWord();
             }
 
-            ESelection   aSelection  = pOLV->GetSelection();
-            EditView   & rEditView   = pOLV->GetEditView();
-            EditEngine * pEditEngine = rEditView.GetEditEngine();
-
-            // get the language
-            String aNewLangTxt;
-
-            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, SID_LANGUAGE_STATUS , sal_False );
-            if (pItem)
-                aNewLangTxt = pItem->GetValue();
-
-            //!! Remember the view frame right now...
-            //!! (call to GetView().GetViewFrame() will break if the
-            //!! SwTextShell got destroyed meanwhile.)
-            SfxViewFrame *pViewFrame = GetView().GetViewFrame();
-
-            if (aNewLangTxt.EqualsAscii( "*" ))
-            {
-                // open the dialog "Tools/Options/Language Settings - Language"
-                SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                if (pFact)
-                {
-                    VclAbstractDialog* pDlg = pFact->CreateVclDialog( GetView().GetWindow(), SID_LANGUAGE_OPTIONS );
-                    pDlg->Execute();
-                    delete pDlg;
-                }
-            }
-            else
-            {
-                // setting the new language...
-                if (aNewLangTxt.Len() > 0)
-                {
-                    const String aSelectionLangPrefix( String::CreateFromAscii("Current_") );
-                    const String aParagraphLangPrefix( String::CreateFromAscii("Paragraph_") );
-                    const String aDocumentLangPrefix( String::CreateFromAscii("Default_") );
-                    const String aStrNone( String::CreateFromAscii("LANGUAGE_NONE") );
-
-                    xub_StrLen nPos = 0;
-                    bool bForSelection = true;
-                    bool bForParagraph = false;
-                    if (STRING_NOTFOUND != (nPos = aNewLangTxt.Search( aSelectionLangPrefix, 0 )))
-                    {
-                        // ... for the current selection
-                        aNewLangTxt = aNewLangTxt.Erase( nPos, aSelectionLangPrefix.Len() );
-                        bForSelection = true;
-                    }
-                    else if (STRING_NOTFOUND != (nPos = aNewLangTxt.Search( aParagraphLangPrefix , 0 )))
-                    {
-                        // ... for the current paragraph language
-                        aNewLangTxt = aNewLangTxt.Erase( nPos, aParagraphLangPrefix.Len() );
-                        bForSelection = true;
-                        bForParagraph = true;
-                    }
-                    else if (STRING_NOTFOUND != (nPos = aNewLangTxt.Search( aDocumentLangPrefix , 0 )))
-                    {
-                        // ... as default document language
-                        aNewLangTxt = aNewLangTxt.Erase( nPos, aDocumentLangPrefix.Len() );
-                        bForSelection = false;
-                    }
-
-                    if (bForParagraph)
-                    {
-                        bRestoreSelection = true;
-                        SwLangHelper::SelectPara( rEditView, aSelection );
-                        aSelection = pOLV->GetSelection();
-                    }
-                    if (!bForSelection) // document language to be changed...
-                    {
-                        rSh.StartAction();
-                        rSh.LockView( TRUE );
-                        rSh.Push();
-
-                        // prepare to apply new language to all text in document
-                        rSh.SelAll();
-                    }
-
-                    if (aNewLangTxt != aStrNone)
-                        SwLangHelper::SetLanguage( rSh, pEditEngine, aSelection, aNewLangTxt, bForSelection, aEditAttr );
-                    else
-                        SwLangHelper::SetLanguage_None( rSh, pEditEngine, aSelection, bForSelection, aEditAttr );
-
-                    if (!bForSelection)
-                    {
-                        // need to release view and restore selection...
-                        rSh.Pop( FALSE );
-                        rSh.LockView( FALSE );
-                        rSh.EndAction();
-                    }
-                }
-            }
-
-            // invalidate slot to get the new language displayed
-            pViewFrame->GetBindings().Invalidate( nSlot );
-
-            rReq.Done();
+            bRestoreSelection = SwLangHelper::SetLanguageStatus(pOLV,rReq,GetView(),rSh);
             break;
         }
         case SID_ATTR_CHAR_FONT:
@@ -621,49 +515,9 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
         {
             case SID_LANGUAGE_STATUS://20412:
             {
-                ESelection aSelection = pOLV->GetSelection();
-                EditView& rEditView=pOLV->GetEditView();
-                EditEngine* pEditEngine=rEditView.GetEditEngine();
-
-                // the value of used script types
-                const USHORT nScriptType =pOLV->GetSelectedScriptType();
-                String aScriptTypesInUse( String::CreateFromInt32( nScriptType ) );//pEditEngine->GetScriptType(aSelection)
-
-                SvtLanguageTable aLangTable;
-
-                // get keyboard language
-                String aKeyboardLang;
-                LanguageType nLang = LANGUAGE_DONTKNOW;
-
-                Window* pWin = rEditView.GetWindow();
-                if(pWin)
-                    nLang = pWin->GetInputLanguage();
-                if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
-                    aKeyboardLang = aLangTable.GetString( nLang );
-
-
-                // get the language that is in use
-                const String aMultipleLanguages = String::CreateFromAscii("*");
-                String aCurrentLang = aMultipleLanguages;
-                SfxItemSet aSet(pOLV->GetAttribs());
-                nLang = SwLangHelper::GetCurrentLanguage( aSet,nScriptType );
-                if (nLang != LANGUAGE_DONTKNOW)
-                    aCurrentLang = aLangTable.GetString( nLang );
-
-                // build sequence for status value
-                uno::Sequence< ::rtl::OUString > aSeq( 4 );
-                aSeq[0] = aCurrentLang;
-                aSeq[1] = aScriptTypesInUse;
-                aSeq[2] = aKeyboardLang;
-                aSeq[3] = SwLangHelper::GetTextForLanguageGuessing( pEditEngine, aSelection );
-
-                // set sequence as status value
-                SfxStringListItem aItem( SID_LANGUAGE_STATUS );
-                aItem.SetStringList( aSeq );
-                rSet.Put( aItem, SID_LANGUAGE_STATUS );
-                nSlotId = 0;
+                nSlotId = SwLangHelper::GetLanguageStatus(pOLV,rSet);;
+                break;
             }
-            break;
          case SID_ATTR_PARA_ADJUST_LEFT:    eAdjust = SVX_ADJUST_LEFT; goto ASK_ADJUST;
         case SID_ATTR_PARA_ADJUST_RIGHT:    eAdjust = SVX_ADJUST_RIGHT; goto ASK_ADJUST;
         case SID_ATTR_PARA_ADJUST_CENTER:   eAdjust = SVX_ADJUST_CENTER; goto ASK_ADJUST;
