@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PathSubstitution.idl,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,9 +63,11 @@ module com {  module sun {  module star {  module  util {
     </p>
     <dl>
     <dt>$(inst)</dt>
-    <dd>Installation path of the Office.</dd>
+    <dd>Installation path of the Office Basis layer.</dd>
     <dt>$(prog)</dt>
-    <dd>Program path of the Office.</dd>
+    <dd>Program path of the Office Basis layer.</dd>
+    <dt>$(brandbaseurl)</dt>
+    <dd>Installation path of the the Office Brand layer.</dd>
     <dt>$(user)</dt>
     <dd>The user installation directory.</dd>
     <dt>$(work)</dt>
