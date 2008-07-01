@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleCsvControl.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -377,21 +377,21 @@ public:
 
     /** Returns the description of the specified row in the table. */
     virtual ::rtl::OUString SAL_CALL getAccessibleRowDescription( sal_Int32 nRow )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     /** Returns the description text of the specified column in the table. */
     virtual ::rtl::OUString SAL_CALL getAccessibleColumnDescription( sal_Int32 nColumn )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     /** Returns the number of rows occupied at a specified row and column.
         @descr  Returns always 1 (Merged cells not supported). */
     virtual sal_Int32 SAL_CALL getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     /** Returns the number of rows occupied at a specified row and column.
         @descr  Returns always 1 (Merged cells not supported). */
     virtual sal_Int32 SAL_CALL getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     /** Returns the row headers as an AccessibleTable. */
     virtual XAccessibleTableRef SAL_CALL getAccessibleRowHeaders()
@@ -411,11 +411,11 @@ public:
 
     /** Returns true, if the specified row is selected. */
     virtual sal_Bool SAL_CALL isAccessibleRowSelected( sal_Int32 nRow )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     /** Returns true, if the specified column is selected. */
     virtual sal_Bool SAL_CALL isAccessibleColumnSelected( sal_Int32 nColumn )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     /** Returns the accessible cell object at the specified position. */
     virtual XAccessibleRef SAL_CALL getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
@@ -431,7 +431,7 @@ public:
 
     /** Returns true, if the cell at a specified position is selected. */
     virtual sal_Bool SAL_CALL isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     /** Returns the child index of the cell at the specified position. */
     virtual sal_Int32 SAL_CALL getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
