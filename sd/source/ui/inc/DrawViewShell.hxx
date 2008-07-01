@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DrawViewShell.hxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -435,6 +435,10 @@ private:
         asynchronously.
     */
     tools::AsynchronousCall maAsynchronousSwitchPageCall;
+
+    /** This flag is used to prevent nested calls to SwitchPage().
+    */
+    bool mbIsInSwitchPage;
 
     void Construct (DrawDocShell* pDocSh, PageKind ePageKind);
 
