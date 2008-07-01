@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdpage.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -441,7 +441,7 @@ friend class ChXChartDocument;
     INT32 nBordLwr; // Seitenrand unten
 
     // this is a weak reference to a possible living api wrapper for this page
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > mxUnoPage;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxUnoPage;
 
     // #108867# used by GetFillColor
     FASTBOOL ImplGetFillColor(const Point& rPnt, const SetOfByte& rVisLayers,
