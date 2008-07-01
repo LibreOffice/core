@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtparae.cxx,v $
- * $Revision: 1.148 $
+ * $Revision: 1.149 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1935,6 +1935,9 @@ void XMLTextParagraphExport::exportParagraph(
         }
         else
         {
+            // xml:id for RDF metadata
+            GetExport().AddAttributeXmlId(rTextContent);
+
             OUString sStyle;
             if( rPropSetHelper.hasProperty( PARA_STYLE_NAME ) )
             {
@@ -2310,6 +2313,11 @@ void XMLTextParagraphExport::exportTextMark(
         else
         {
             nElement = *(sal_Bool *)rPropSet->getPropertyValue(sIsStart).getValue() ? 1 : 2;
+        }
+
+        // bookmark, bookmark-start: xml:id for RDF metadata
+        if( nElement < 2 ) {
+            GetExport().AddAttributeXmlId(xName);
         }
 
         // export element
