@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabview5.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,8 +66,11 @@
 #include "scmod.hxx"
 #include "AccessibilityHints.hxx"
 #include "docsh.hxx"
+#include "viewuno.hxx"
 
 #include <vcl/svapp.hxx>
+
+using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -347,7 +350,23 @@ void ScTabView::TabChanged()
         SfxSimpleHint aAccHint(SC_HINT_ACC_TABLECHANGED);
         aViewData.GetViewShell()->BroadcastAccessibility(aAccHint);
     }
-    aViewData.GetDocument()->BroadcastUno( SfxSimpleHint( SC_HINT_TABLECHANGED ) );
+
+    // notification for XActivationBroadcaster
+    SfxViewFrame* pViewFrame = aViewData.GetViewShell()->GetViewFrame();
+    if (pViewFrame)
+    {
+        SfxFrame* pFrame = pViewFrame->GetFrame();
+        if (pFrame)
+        {
+            uno::Reference<frame::XController> xController = pFrame->GetController();
+            if (xController.is())
+            {
+                ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
+                if (pImp)
+                    pImp->SheetChanged();
+            }
+        }
+    }
 }
 
 void ScTabView::UpdateLayerLocks()
