@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: autofiltercontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -530,7 +530,7 @@ void OoxAutoFilterContext::importAutoFilter( const AttributeList& rAttribs )
     initialize();
 
     mbValidAddress = getAddressConverter().convertToCellRange(
-        maAutoFilterRange, rAttribs.getString( XML_ref ), getSheetIndex(), true );
+        maAutoFilterRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex(), true );
 }
 
 void OoxAutoFilterContext::importFilterColumn( const AttributeList& rAttribs )
@@ -685,7 +685,7 @@ void OoxAutoFilterContext::importCustomFilter( const AttributeList& rAttribs )
     TableFilterField* pField = aItem.mpField.get();
 #endif
     pField->Field = mnCurColID;
-    pField->StringValue = rAttribs.getString( XML_val );
+    pField->StringValue = rAttribs.getString( XML_val, OUString() );
     pField->NumericValue = pField->StringValue.toDouble();
     pField->Operator = lclTranslateFilterOp( nToken );
 
@@ -748,7 +748,7 @@ void OoxAutoFilterContext::importFilter( const AttributeList& rAttribs )
     if (mnCurColID == -1)
         return;
 
-    OUString value = rAttribs.getString( XML_val );
+    OUString value = rAttribs.getString( XML_val, OUString() );
     if ( value.getLength() )
         maFilterNames.push_back(value);
 }
