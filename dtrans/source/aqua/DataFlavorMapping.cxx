@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataFlavorMapping.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,10 +87,6 @@ namespace // private
 
 
   const NSString* PBTYPE_UT16 = @"CorePasteboardFlavorType 0x75743136";
-  const NSString* PBTYPE_OBJD = @"CorePasteboardFlavorType 0x4F424A44";
-  const NSString* PBTYPE_EMBS = @"CorePasteboardFlavorType 0x454D4253";
-  const NSString* PBTYPE_LKSD = @"CorePasteboardFlavorType 0x4C4B5344";
-  const NSString* PBTYPE_LNKS = @"CorePasteboardFlavorType 0x4C4E4B53";
   const NSString* PBTYPE_PICT = @"CorePasteboardFlavorType 0x50494354";
   const NSString* PBTYPE_HTML = @"CorePasteboardFlavorType 0x48544D4C";
   const NSString* PBTYPE_SODX = @"application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"";
@@ -104,6 +100,8 @@ namespace // private
   const NSString* PBTYPE_WMF = @"application/x-openoffice-wmf;windows_formatname=\"Image WMF\"";
   const NSString* PBTYPE_EMF = @"application/x-openoffice-emf;windows_formatname=\"Image EMF\"";
 
+  const NSString* PBTYPE_DUMMY_INTERNAL = @"application/x-openoffice-internal";
+
   const char* FLAVOR_SODX = "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"";
   const char* FLAVOR_SESX = "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
   const char* FLAVOR_SLSDX = "application/x-openoffice-linksrcdescriptor-xml;windows_formatname=\"Star Link Source Descriptor (XML)\"";
@@ -114,6 +112,8 @@ namespace // private
   const char* FLAVOR_GDIMF = "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"";
   const char* FLAVOR_WMF = "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"";
   const char* FLAVOR_EMF = "application/x-openoffice-emf;windows_formatname=\"Image EMF\"";
+
+  const char* FLAVOR_DUMMY_INTERNAL = "application/x-openoffice-internal";
 
 
   struct FlavorMap
@@ -143,10 +143,7 @@ namespace // private
       { PBTYPE_WMF, FLAVOR_WMF, "Windows MetaFile", CPPUTYPE_SEQINT8 },
       { PBTYPE_EMF, FLAVOR_EMF, "Windows Enhanced MetaFile", CPPUTYPE_SEQINT8 },
       { PBTYPE_SODX, FLAVOR_SODX, "Star Object Descriptor (XML)", CPPUTYPE_SEQINT8 },
-      { PBTYPE_OBJD, "application/x-openoffice-objectdescriptor-ole;windows_formatname=\"Object Descriptor\"", "Object Descriptor", CPPUTYPE_SEQINT8 },
-      { PBTYPE_EMBS, "application/x-openoffice-embed-source-ole;windows_formatname=\"Embed Source\"", "Embedded Object", CPPUTYPE_SEQINT8 },
-      { PBTYPE_LKSD, "application/x-openoffice-linkdescriptor-ole;windows_formatname=\"Link Source Descriptor\"", "Link Source Descriptor", CPPUTYPE_SEQINT8 },
-      { PBTYPE_LNKS, "application/x-openoffice-link-source-ole;windows_formatname=\"Link Source\"", "Link Source", CPPUTYPE_SEQINT8 }
+      { PBTYPE_DUMMY_INTERNAL, FLAVOR_DUMMY_INTERNAL, "internal data",CPPUTYPE_SEQINT8 }
       //      { PBTYPE_UT16, "text/plain;charset=utf-16", "Unicode Text (UTF-16)", CPPUTYPE_OUSTRING }
       //      { kUTTypePICT, @"PICT", "image/x-macpict;windows_formatname=\"Mac Pict\"", "Mac Pict", CPPUTYPE_SEQINT8 }
       //      { kUTTypeHTML, @"HTML", "text/html", "Plain Html", CPPUTYPE_SEQINT8 }
@@ -313,152 +310,6 @@ Any ByteSequenceDataProvider::getOOoData()
   return oOOData;
 }
 
-//###########################
-
-
-class ObjDescDataProvider : public DataProviderBaseImpl
-{
-public:
-  ObjDescDataProvider(const Any& data);
-
-  ObjDescDataProvider(NSData* data);
-
-  virtual NSData* getSystemData();
-
-  virtual Any getOOoData();
-};
-
-ObjDescDataProvider::ObjDescDataProvider(const Any& data) :
-  DataProviderBaseImpl(data)
-{
-}
-
-ObjDescDataProvider::ObjDescDataProvider(NSData* data) :
-  DataProviderBaseImpl(data)
-{
-}
-
-NSData* ObjDescDataProvider::getSystemData()
-{
-   Sequence<sal_Int8> rawData;
-   mData >>= rawData;
-
-   return [NSData dataWithBytes: rawData.getArray() length: rawData.getLength()];
-}
-
-/* On Mac OS X the OBJECTDESCRIPTOR struct is different
-   to that on Windows and MS Office 2004 seems to put
-   it with big endian alignment on to the clipboard.
-   Furthermore there is an additional 4 byte value
-   between dwStatus and dwFulUserTypeName.
-   That means we have to convert it to the expected
-   structure (see OleObjectDescriptor in
-   so3/source/dialog/pastedlg.cxx).
- */
-
-/* Some dummy declarations
- */
-struct ClsId
-{
-  sal_uInt32 dummy1;
-  sal_uInt32 dummy2;
-  sal_uInt32 dummy3;
-  sal_uInt32 dummy4;
-};
-
-struct Size_
-{
-  sal_uInt32 dummy1;
-  sal_uInt32 dummy2;
-};
-
-typedef Size_ Point_;
-
-/* This is the declaration of the original OBJECTDESCRIPTOR
-   struct on Windows:
-*/
-struct OleObjectDescriptor
-{
-  sal_uInt32 cbSize;
-  ClsId clsid;
-  sal_uInt32 dwDrawAspect;
-  Size_ sizel;
-  Point_        pointl;
-  sal_uInt32    dwStatus;
-  sal_uInt32    dwFullUserTypeName;
-  sal_uInt32    dwSrcOfCopy;
-};
-
-struct OSXOleObjectDescriptor
-{
-  sal_uInt32 cbSize;
-  ClsId clsid;
-  sal_uInt32 dwDrawAspect;
-  Size_ sizel;
-  Point_ pointl;
-  sal_uInt32 dwStatus;
-  sal_uInt32 dummy;
-  sal_uInt32 dwFullUserTypeName;
-  sal_uInt32 dwSrcOfCopy;
-};
-
-
-Any ObjDescDataProvider::getOOoData()
-{
-  Any oOOData;
-
-  if (mSystemData)
-    {
-      const OSXOleObjectDescriptor* pOSXObjDesc = reinterpret_cast<const OSXOleObjectDescriptor*>([mSystemData bytes]);
-      size_t sz = OSL_SWAPDWORD(pOSXObjDesc->cbSize) - sizeof(pOSXObjDesc->dummy);
-      Sequence<sal_Int8> byteSequence(sz);
-      OleObjectDescriptor* pObjDesc = reinterpret_cast<OleObjectDescriptor*>(byteSequence.getArray());
-
-      pObjDesc->cbSize = sz;
-      pObjDesc->clsid.dummy1 = OSL_SWAPDWORD(pOSXObjDesc->clsid.dummy1);
-      pObjDesc->clsid.dummy2 = OSL_SWAPDWORD(pOSXObjDesc->clsid.dummy1);
-      pObjDesc->clsid.dummy3 = OSL_SWAPDWORD(pOSXObjDesc->clsid.dummy1);
-      pObjDesc->clsid.dummy4 = OSL_SWAPDWORD(pOSXObjDesc->clsid.dummy1);
-      pObjDesc->dwDrawAspect = OSL_SWAPDWORD(pOSXObjDesc->dwDrawAspect);
-      pObjDesc->sizel.dummy1 = OSL_SWAPDWORD(pOSXObjDesc->sizel.dummy1);
-      pObjDesc->sizel.dummy2 = OSL_SWAPDWORD(pOSXObjDesc->sizel.dummy2);
-      pObjDesc->pointl.dummy1 = OSL_SWAPDWORD(pOSXObjDesc->pointl.dummy1);
-      pObjDesc->pointl.dummy2 = OSL_SWAPDWORD(pOSXObjDesc->pointl.dummy2);
-      pObjDesc->dwStatus = OSL_SWAPDWORD(pOSXObjDesc->dwStatus);
-      pObjDesc->dwFullUserTypeName = OSL_SWAPDWORD(pOSXObjDesc->dwFullUserTypeName) - sizeof(pOSXObjDesc->dummy);
-      pObjDesc->dwSrcOfCopy = OSL_SWAPDWORD(pOSXObjDesc->dwSrcOfCopy) - sizeof(pOSXObjDesc->dummy);
-
-      char* pDest = reinterpret_cast<char*>(reinterpret_cast<char*>(pObjDesc) + pObjDesc->dwFullUserTypeName);
-      const char* pSrc = reinterpret_cast<const char*>(reinterpret_cast<const char*>(pOSXObjDesc) + OSL_SWAPDWORD(pOSXObjDesc->dwFullUserTypeName));
-      size_t len = OSL_SWAPDWORD(pOSXObjDesc->cbSize) - OSL_SWAPDWORD(pOSXObjDesc->dwFullUserTypeName);
-
-      memcpy(pDest, pSrc, len);
-
-      // swap FullUserTypeName bytes
-      sal_Unicode* p = reinterpret_cast<sal_Unicode*>(pDest);
-      while (*p)
-        {
-          *p = OSL_SWAPWORD(*p);
-          p++;
-        }
-
-      // swap SrcOfCopy bytes
-      p = reinterpret_cast<sal_Unicode*>(reinterpret_cast<char*>(pObjDesc) + pObjDesc->dwSrcOfCopy);
-      while (*p)
-        {
-          *p = OSL_SWAPWORD(*p);
-          p++;
-        }
-
-      oOOData = makeAny(byteSequence);
-    }
-  else
-    {
-      oOOData =  mData;
-    }
-
-  return oOOData;
-}
 
 //###########################
 
@@ -767,10 +618,6 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider(const NSString* systemFlavor
     {
       dp = DataProviderPtr_t(new HTMLFormatDataProvider(systemData));
     }
-  else if ([systemFlavor caseInsensitiveCompare: PBTYPE_OBJD] == NSOrderedSame)
-    {
-      dp = DataProviderPtr_t(new ObjDescDataProvider(systemData));
-    }
   else if ([systemFlavor caseInsensitiveCompare: NSPICTPboardType] == NSOrderedSame)
     {
       dp = DataProviderPtr_t(new BMPDataProvider(systemData));
@@ -808,15 +655,22 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const com::sun::star::uno:
   sal_uInt32 nFlavors = flavors.getLength();
   NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity: 1];
 
-  for (sal_uInt32 i = 0; i < nFlavors; i++)
-    {
-      NSString* str = openOfficeToSystemFlavor(flavors[i]);
+  if( nFlavors == 0 ) // #i89462# work around insane impress implementation
+  {
+      [array addObject: PBTYPE_DUMMY_INTERNAL];
+  }
+  else
+  {
+      for (sal_uInt32 i = 0; i < nFlavors; i++)
+      {
+          NSString* str = openOfficeToSystemFlavor(flavors[i]);
 
-      if (str != NULL)
-        {
-          [array addObject: str];
-        }
-    }
+          if (str != NULL)
+          {
+              [array addObject: str];
+          }
+      }
+  }
 
   return [array autorelease];
 }
