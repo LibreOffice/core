@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextListBlockContext.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,6 +121,10 @@ XMLTextListBlockContext::XMLTextListBlockContext(
                                                             &aLocalName );
         switch( rTokenMap.Get( nPrefix, aLocalName ) )
         {
+        case XML_TOK_TEXT_LIST_BLOCK_XMLID:
+            sXmlId = rValue;
+//FIXME: there is no UNO API for lists
+            break;
         case XML_TOK_TEXT_LIST_BLOCK_CONTINUE_NUMBERING:
             mbRestartNumbering = !IsXMLToken(rValue, XML_TRUE);
             // --> OD 2008-05-07 #refactorlists#
@@ -208,7 +212,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         if( !mxNumRules.is() )
             return;
 
-        // Because its a new num rule, numbering mist be restarted never.
+        // Because it is a new num rule, numbering must be restarted never.
         mbRestartNumbering = sal_False;
         mbSetDefaults = sal_True;
     }
@@ -329,7 +333,7 @@ void XMLTextListBlockContext::EndElement()
     // Restore current list block.
     mrTxtImport.SetListBlock( pParent );
 
-    // Any paragraph following the list within the same list item mist not
+    // Any paragraph following the list within the same list item must not
     // be numbered.
     mrTxtImport.SetListItem( 0 );
 }
