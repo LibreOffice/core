@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saldata.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +53,7 @@ SalData::SalData()
     mxGraySpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericGray) ),
     maCursors( POINTER_COUNT, INVALID_CURSOR_PTR ),
     mbIsScrollbarDoubleMax( false ),
+    mnSystemVersion( VER_TIGER ),
     mbIsTestTool( false )
 {
     if( s_aAutoReleaseKey == 0 )
