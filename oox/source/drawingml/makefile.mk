@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -87,7 +87,8 @@ SLOFILES =	\
         $(SLO)$/texttabstoplistcontext.obj\
         $(SLO)$/theme.obj\
         $(SLO)$/themeelementscontext.obj\
-        $(SLO)$/themefragmenthandler.obj
+        $(SLO)$/themefragmenthandler.obj\
+        $(SLO)$/transform2dcontext.obj
 
 # --- Targets -------------------------------------------------------
 
