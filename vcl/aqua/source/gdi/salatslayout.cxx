@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salatslayout.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -617,18 +617,24 @@ long ATSLayout::FillDXArray( long* pDXArray ) const
 int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
     const long nPixelWidth = (nMaxWidth - (nCharExtra * mnCharCount)) / nFactor;
-    const ATSUTextMeasurement nATSUMaxWidth = Vcl2Fixed( nPixelWidth );
 
-    // TODO: massage ATSUBreakLine to like inword breaks:
-    //   we prefer BreakInWord instead of ATSUBreakLine trying to be smart
-    //   and moving the soft break inbetween words, as the ATSUI API says
+    // TODO: ATSUBreakLine needs to be dumbed down to treat spaces as normal
+    //       codepoints, to ignore word/syllable boundaries and so on:
+    // OOo's SW+SVX+I18N handle "logical line breaking" with the value
+    // returned from VCL's GetTextBreak(). Returning anything else than the
+    // "stupid visual line break" results in subtle problems in the app layers
     UniCharArrayOffset nBreakPos = mnMinCharPos;
+    const ATSUTextMeasurement nATSUMaxWidth = Vcl2Fixed( nPixelWidth );
     OSStatus nStatus = ATSUBreakLine( maATSULayout, mnMinCharPos,
         nATSUMaxWidth, false, &nBreakPos );
 
     if( (nStatus != noErr) && (nStatus != kATSULineBreakInWord) )
         return STRING_LEN;
 
+    // ATSU reports that everything fits even when trailing spaces would break the line
+    // #i89789# OOo's application layers expect STRING_LEN if everything fits
+    if( (sal_Int32)nBreakPos >= mnEndCharPos )
+            nBreakPos = STRING_LEN;
     return nBreakPos;
 }
 
