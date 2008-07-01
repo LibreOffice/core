@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: msdffimp.cxx,v $
- * $Revision: 1.155 $
+ * $Revision: 1.156 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -5018,70 +5018,40 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         pRet->SetSnapRect( aBoundRect );
                         EnhancedCustomShape2d aCustomShape2d( pRet );
                         aTextRect = aCustomShape2d.GetTextRect();
-                        bIsCustomShape = TRUE;
-                    }
-                }
-                else
-                {
-                    SvxMSDffCustomShape aCustomShape( *this, rSt, aObjData, aBoundRect, nObjectRotation, mpTracer );
-                    if ( !aCustomShape.IsEmpty() )
-                    {
-                        ApplyAttributes( rSt, aSet, aObjData.eShapeType, aObjData.nSpFlags );
-                        pRet = aCustomShape.GetObject( pSdrModel, aSet, TRUE );
-                        aTextRect = aCustomShape.GetTextRect();
-                        bIsCustomShape = TRUE;
-                    }
-                }
-                if ( !bIsCustomShape )
-                {
-                    if ( aObjData.eShapeType == mso_sptTextBox )
-                    {
-                        if ( ( GetPropertyValue( DFF_Prop_fNoLineDrawDash ) & 8 )
-                            || ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) )
-                        {
-                            pRet = new SdrRectObj( aBoundRect );  // SJ: changed the type from OBJ_TEXT to OBJ_RECT (#88277#)
-                        }
-                    }
-                    else if ( ( ( aObjData.eShapeType >= mso_sptCallout1 ) && ( aObjData.eShapeType <= mso_sptAccentBorderCallout3 ) )
-                                || ( aObjData.eShapeType == mso_sptCallout90 )
-                                || ( aObjData.eShapeType == mso_sptAccentCallout90 )
-                                || ( aObjData.eShapeType == mso_sptBorderCallout90 )
-                                || ( aObjData.eShapeType == mso_sptAccentBorderCallout90 ) )
-                    {
-                        pRet = new SdrCaptionObj( aBoundRect );
-                        INT32 nAdjust0 = GetPropertyValue( DFF_Prop_adjustValue, 0 );
-                        INT32 nAdjust1 = GetPropertyValue( DFF_Prop_adjust2Value, 0 );
-                        if( nAdjust0 | nAdjust1 )
-                        {   // AdjustValues anwenden, nur welche ?!?
-                            nAdjust0 = ( nAdjust0 * 100 ) / 850;
-                            nAdjust1 = ( nAdjust1 * 100 ) / 1275;
-                            Point aTailPos( nAdjust0 + aBoundRect.Left(), nAdjust1 + aBoundRect.Top() );
-                            ((SdrCaptionObj*)pRet)->NbcSetTailPos( aTailPos );
-                        }
-                    }
-                    else if( ( aObjData.eShapeType >= mso_sptTextPlainText ) && ( aObjData.eShapeType <= mso_sptTextCanDown ) ) // FontWork
-                    {
-                        aObjData.bIsAutoText = TRUE;
-                        if ( mbTracing )
-                            mpTracer->Trace( rtl::OUString::createFromAscii( "escher1000" ), rtl::OUString::valueOf( (sal_Int32)aObjData.eShapeType ) );
-                        pRet = ImportFontWork( rSt, aSet, aBoundRect );
-                    }
-                    else if ( aObjData.eShapeType == mso_sptLine )
-                    {
-                        basegfx::B2DPolygon aPoly;
-                        aPoly.append(basegfx::B2DPoint(aBoundRect.Left(), aBoundRect.Top()));
-                        aPoly.append(basegfx::B2DPoint(aBoundRect.Right(), aBoundRect.Bottom()));
-                        pRet = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPoly));
-                    }
-                    else if( bIsConnector )
-                    {
-                        // Konnektoren
-                        MSO_ConnectorStyle eConnectorStyle = (MSO_ConnectorStyle)GetPropertyValue( DFF_Prop_cxstyle, mso_cxstyleStraight );
 
-                        pRet = new SdrEdgeObj();
-                        if( pRet )
+                        bIsCustomShape = TRUE;
+
+                        if( bIsConnector )
                         {
+                            if( nObjectRotation )
+                            {
+                                double a = nObjectRotation * nPi180;
+                                pRet->NbcRotate( aBoundRect.Center(), nObjectRotation, sin( a ), cos( a ) );
+                            }
+                            // Horizontal gespiegelt?
+                            if ( nSpFlags & SP_FFLIPH )
+                            {
+                                Rectangle aBndRect( pRet->GetSnapRect() );
+                                Point aTop( ( aBndRect.Left() + aBndRect.Right() ) >> 1, aBndRect.Top() );
+                                Point aBottom( aTop.X(), aTop.Y() + 1000 );
+                                pRet->NbcMirror( aTop, aBottom );
+                            }
+                            // Vertikal gespiegelt?
+                            if ( nSpFlags & SP_FFLIPV )
+                            {
+                                Rectangle aBndRect( pRet->GetSnapRect() );
+                                Point aLeft( aBndRect.Left(), ( aBndRect.Top() + aBndRect.Bottom() ) >> 1 );
+                                Point aRight( aLeft.X() + 1000, aLeft.Y() );
+                                pRet->NbcMirror( aLeft, aRight );
+                            }
+                            basegfx::B2DPolyPolygon aPoly( SdrObjCustomShape::GetLineGeometry( (SdrObjCustomShape*)pRet, sal_True ) );
+                            SdrObject::Free( pRet );
+
+                            pRet = new SdrEdgeObj();
                             pRet->SetLogicRect(aBoundRect);
+
+                            // Konnektoren
+                            MSO_ConnectorStyle eConnectorStyle = (MSO_ConnectorStyle)GetPropertyValue( DFF_Prop_cxstyle, mso_cxstyleStraight );
 
                             ((SdrEdgeObj*)pRet)->ConnectToNode(TRUE, NULL);
                             ((SdrEdgeObj*)pRet)->ConnectToNode(FALSE, NULL);
@@ -5140,7 +5110,62 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             aSet.Put( SdrEdgeNode1VertDistItem( n1VertDist ) );
                             aSet.Put( SdrEdgeNode2HorzDistItem( n2HorzDist ) );
                             aSet.Put( SdrEdgeNode2VertDistItem( n2VertDist ) );
+
+                            ((SdrEdgeObj*)pRet)->SetEdgeTrackPath( aPoly );
                         }
+                    }
+                }
+                else
+                {
+                    SvxMSDffCustomShape aCustomShape( *this, rSt, aObjData, aBoundRect, nObjectRotation, mpTracer );
+                    if ( !aCustomShape.IsEmpty() )
+                    {
+                        ApplyAttributes( rSt, aSet, aObjData.eShapeType, aObjData.nSpFlags );
+                        pRet = aCustomShape.GetObject( pSdrModel, aSet, TRUE );
+                        aTextRect = aCustomShape.GetTextRect();
+                        bIsCustomShape = TRUE;
+                    }
+                }
+                if ( !bIsCustomShape )
+                {
+                    if ( aObjData.eShapeType == mso_sptTextBox )
+                    {
+                        if ( ( GetPropertyValue( DFF_Prop_fNoLineDrawDash ) & 8 )
+                            || ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) )
+                        {
+                            pRet = new SdrRectObj( aBoundRect );  // SJ: changed the type from OBJ_TEXT to OBJ_RECT (#88277#)
+                        }
+                    }
+                    else if ( ( ( aObjData.eShapeType >= mso_sptCallout1 ) && ( aObjData.eShapeType <= mso_sptAccentBorderCallout3 ) )
+                                || ( aObjData.eShapeType == mso_sptCallout90 )
+                                || ( aObjData.eShapeType == mso_sptAccentCallout90 )
+                                || ( aObjData.eShapeType == mso_sptBorderCallout90 )
+                                || ( aObjData.eShapeType == mso_sptAccentBorderCallout90 ) )
+                    {
+                        pRet = new SdrCaptionObj( aBoundRect );
+                        INT32 nAdjust0 = GetPropertyValue( DFF_Prop_adjustValue, 0 );
+                        INT32 nAdjust1 = GetPropertyValue( DFF_Prop_adjust2Value, 0 );
+                        if( nAdjust0 | nAdjust1 )
+                        {   // AdjustValues anwenden, nur welche ?!?
+                            nAdjust0 = ( nAdjust0 * 100 ) / 850;
+                            nAdjust1 = ( nAdjust1 * 100 ) / 1275;
+                            Point aTailPos( nAdjust0 + aBoundRect.Left(), nAdjust1 + aBoundRect.Top() );
+                            ((SdrCaptionObj*)pRet)->NbcSetTailPos( aTailPos );
+                        }
+                    }
+                    else if( ( aObjData.eShapeType >= mso_sptTextPlainText ) && ( aObjData.eShapeType <= mso_sptTextCanDown ) ) // FontWork
+                    {
+                        aObjData.bIsAutoText = TRUE;
+                        if ( mbTracing )
+                            mpTracer->Trace( rtl::OUString::createFromAscii( "escher1000" ), rtl::OUString::valueOf( (sal_Int32)aObjData.eShapeType ) );
+                        pRet = ImportFontWork( rSt, aSet, aBoundRect );
+                    }
+                    else if ( aObjData.eShapeType == mso_sptLine )
+                    {
+                        basegfx::B2DPolygon aPoly;
+                        aPoly.append(basegfx::B2DPoint(aBoundRect.Left(), aBoundRect.Top()));
+                        aPoly.append(basegfx::B2DPoint(aBoundRect.Right(), aBoundRect.Bottom()));
+                        pRet = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPoly));
                     }
                     else if ( ( (int)aObjData.eShapeType > (int)mso_sptRectangle ) && ( (int)aObjData.eShapeType < (int)mso_sptHostControl ) )
                     {
@@ -5155,7 +5180,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
             }
             if ( pRet )
             {
-                if ( !bIsCustomShape )
+                if ( bIsConnector || !bIsCustomShape )
                 {
                      ApplyAttributes( rSt, aSet, aObjData.eShapeType, aObjData.nSpFlags );
                     if ( !GetPropertyValue( DFF_Prop_gtextSize, 0 ) )
@@ -5198,7 +5223,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
             }
             if ( pRet )
             {
-                if( nObjectRotation && !bIsConnector )
+                if( nObjectRotation /* && !bIsConnector */ )
                 {
                     double a = nObjectRotation * nPi180;
                     pRet->NbcRotate( aBoundRect.Center(), nObjectRotation, sin( a ), cos( a ) );
