@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unofored.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -125,6 +125,11 @@ SfxItemSet SvxEditEngineForwarder::GetParaAttribs( USHORT nPara ) const
 void SvxEditEngineForwarder::SetParaAttribs( USHORT nPara, const SfxItemSet& rSet )
 {
     rEditEngine.SetParaAttribs( nPara, rSet );
+}
+
+void SvxEditEngineForwarder::RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich )
+{
+    rEditEngine.RemoveAttribs( rSelection, bRemoveParaAttribs, nWhich );
 }
 
 SfxItemPool* SvxEditEngineForwarder::GetPool() const
@@ -524,6 +529,16 @@ xub_StrLen SvxEditEngineForwarder::AppendTextPortion( USHORT nPara, const String
     }
 
     return nLen;
+}
+
+void SvxEditEngineForwarder::CopyText(const SvxTextForwarder& rSource)
+{
+    const SvxEditEngineForwarder* pSourceForwarder = dynamic_cast< const SvxEditEngineForwarder* >( &rSource );
+    if( !pSourceForwarder )
+        return;
+    EditTextObject* pNewTextObject = pSourceForwarder->rEditEngine.CreateTextObject();
+    rEditEngine.SetText( *pNewTextObject );
+    delete pNewTextObject;
 }
 
 //------------------------------------------------------------------------
