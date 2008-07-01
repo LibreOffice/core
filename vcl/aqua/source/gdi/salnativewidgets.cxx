@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salnativewidgets.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -630,6 +630,10 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
                 aPushInfo.kind = kThemePushButtonNormal;
                 nPaintHeight = PB_Norm_Height;
 
+                // avoid clipping when focused
+                rc.origin.x += FOCUS_RING_WIDTH/2;
+                rc.size.width -= FOCUS_RING_WIDTH;
+
                 if( (nState & CTRL_STATE_DEFAULT) != 0 )
                 {
                     AquaBlinker::Blink( mpFrame, buttonRect );
@@ -1111,6 +1115,26 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
     }
 
     CGContextRestoreGState( mrContext );
+
+    /* #i90291# in most cases invalidating the whole control region instead
+       of just the unclipped part of it is sufficient (and probably faster).
+       However for the window background we should not unnecessarily enlarge
+       the really changed rectangle since the difference is usually quite high
+       (the background is always drawn as a whole since we don't know anything
+       about its possible contents)
+    */
+    if( nType == CTRL_WINDOW_BACKGROUND )
+    {
+        CGRect aRect = { { 0, 0 }, { 0, 0 } };
+        if( mxClipRectsPath )
+            aRect = CGPathGetBoundingBox( mxClipRectsPath );
+        else if( mxClipPolysPath )
+            aRect = CGPathGetBoundingBox( mxClipPolysPath );
+        if( aRect.size.width != 0 && aRect.size.height != 0 )
+            buttonRect.Intersection( Rectangle( Point( aRect.origin.x, aRect.origin.y ),
+                                                Size( aRect.size.width, aRect.size.height ) ) );
+    }
+
     RefreshRect( buttonRect.Left(), buttonRect.Top(), buttonRect.GetWidth(), buttonRect.GetHeight() );
 
     return bOK;
@@ -1319,10 +1343,10 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                 else if( nPart == PART_SUB_EDIT ) {
                     w = rControlRegion.GetBoundRect().GetWidth() - SPIN_BUTTON_SPACE - SPIN_BUTTON_WIDTH;
                     h = TEXT_EDIT_HEIGHT_NORMAL;
-                    x += 3; // add an offset for rounded borders
+                    x += 4; // add an offset for rounded borders
                     y += 2; // don't draw into upper border
-                    w -= 3;
-                    h -= 4;
+                    w -= 8; // offset for left and right rounded border
+                    h -= 4; // don't draw into upper or ower border
 
                     rNativeContentRegion = Rectangle( Point( x + FOCUS_RING_WIDTH, y + FOCUS_RING_WIDTH ), Size( w - 2* FOCUS_RING_WIDTH, h ) );
                     rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h+2*FOCUS_RING_WIDTH ) );
