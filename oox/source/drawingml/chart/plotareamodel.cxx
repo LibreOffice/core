@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: plotareamodel.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,10 +38,7 @@ namespace chart {
 
 View3DModel::View3DModel() :
     mnDepthPercent( 100 ),
-    mnHeightPercent( 100 ),
     mnPerspective( 30 ),
-    mnRotationX( 0 ),
-    mnRotationY( 0 ),
     mbRightAngled( false )
 {
 }
