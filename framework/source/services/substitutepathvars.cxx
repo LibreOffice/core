@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: substitutepathvars.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +65,7 @@
 #include <tools/debug.hxx>
 #include <tools/wldcrd.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/bootstrap.hxx>
 
 #include <comphelper/configurationhelper.hxx>
 
@@ -219,8 +220,10 @@ static FixedVariable aFixedVarTable[] =
     { VARIABLE_WORKDIRURL,  PREDEFVAR_WORKDIRURL,   REPLACELENGTH_WORKDIRURL    },  // Special variable (transient) and don't use for resubstitution!
     // --> PB 2004-10-27 #i32656# - new variable of hierachy service
     { VARIABLE_BASEINSTURL, PREDEFVAR_BASEINSTURL,  REPLACELENGTH_BASEINSTURL   },
-    { VARIABLE_USERDATAURL, PREDEFVAR_USERDATAURL,  REPLACELENGTH_USERDATAURL   }
+    { VARIABLE_USERDATAURL, PREDEFVAR_USERDATAURL,  REPLACELENGTH_USERDATAURL   },
     // <--
+    { "$(brandbaseurl)", PREDEFVAR_BRANDBASEURL,
+      RTL_CONSTASCII_LENGTH("$(brandbaseurl)") }
 };
 
 //_________________________________________________________________________________________________________________
@@ -1235,6 +1238,11 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     // Set $(temp)
     osl::FileBase::getTempDirURL( aTmp );
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_TEMP ] = ConvertOSLtoUCBURL( aTmp );
+
+    aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR"));
+    rtl::Bootstrap::expandMacros(
+        aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL]);
 }
 
 } // namespace framework
