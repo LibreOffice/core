@@ -8,7 +8,7 @@
 #
 # $RCSfile: scriptitems.pm,v $
 #
-# $Revision: 1.47 $
+# $Revision: 1.48 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -413,6 +413,86 @@ sub remove_not_required_language_modules
     }
 
     return \@allmodules;
+}
+
+################################################################################
+# Removing all modules, that have a spellchecker language that is not
+# required for this product (spellchecker selection).
+# All required spellchecker languages are stored in
+# %installer::globals::spellcheckerlanguagehash
+################################################################################
+
+sub remove_not_required_spellcheckerlanguage_modules
+{
+    my ($modulesarrayref) = @_;
+
+    my $infoline = "";
+    my @allmodules = ();
+
+    for ( my $i = 0; $i <= $#{$modulesarrayref}; $i++ )
+    {
+        my $module = ${$modulesarrayref}[$i];
+        if ( $module->{'Spellcheckerlanguage'} )    # selecting modules with Spellcheckerlanguage
+        {
+            if ( exists($installer::globals::spellcheckerlanguagehash{$module->{'Spellcheckerlanguage'}}) )
+            {
+                push(@allmodules, $module);
+            }
+            else
+            {
+                $infoline = "Spellchecker selection: Removing module $module->{'gid'}\n";
+                push( @installer::globals::logfileinfo, $infoline);
+
+                # Collecting all files at modules that are removed
+
+                if ( $module->{'Files'} )
+                {
+                    if ( $module->{'Files'} =~ /^\s*\((.*?)\)\s*$/ )
+                    {
+                        my $filelist = $1;
+
+                        my $filelisthash = installer::converter::convert_stringlist_into_hash(\$filelist, ",");
+                        foreach my $onefile ( keys %{$filelisthash} ) { $installer::globals::spellcheckerfilehash{$onefile} = 1; }
+                    }
+                }
+            }
+        }
+        else
+        {
+            push(@allmodules, $module);
+        }
+    }
+
+    return \@allmodules;
+}
+
+################################################################################
+# Removing all modules, that belong to a module that was removed
+# in "remove_not_required_spellcheckerlanguage_modules" because of the
+# spellchecker language. The files belonging to the modules are collected
+# in %installer::globals::spellcheckerfilehash.
+################################################################################
+
+sub remove_not_required_spellcheckerlanguage_files
+{
+    my ($filesarrayref) = @_;
+
+    my @filesarray = ();
+    my $infoline = "";
+
+    for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
+    {
+        my $onefile = ${$filesarrayref}[$i];
+        if ( exists($installer::globals::spellcheckerfilehash{$onefile->{'gid'}}) )
+        {
+            $infoline = "Spellchecker selection: Removing file $onefile->{'gid'}\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            next;
+        }
+        push(@filesarray, $onefile);
+    }
+
+    return \@filesarray;
 }
 
 ################################################################################
