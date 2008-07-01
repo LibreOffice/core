@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: annotsh.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -683,24 +683,27 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
             break;
         case FN_PASTESPECIAL:
         {
-            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( &rView.GetEditWin() );
-
-            pDlg->Insert( SOT_FORMAT_STRING, aEmptyStr );
-            pDlg->Insert( SOT_FORMAT_RTF,    aEmptyStr );
-
-            TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( &rView.GetEditWin() ) );
-
-            ULONG nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
-
-            if (nFormat > 0)
+            if (pPostItMgr->GetActivePostIt()->GetStatus()!=SwPostItHelper::DELETED)
             {
-                if (nFormat == SOT_FORMAT_STRING)
-                    pOLV->Paste();
-                else
-                    pOLV->PasteSpecial();
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( &rView.GetEditWin() );
+
+                pDlg->Insert( SOT_FORMAT_STRING, aEmptyStr );
+                pDlg->Insert( SOT_FORMAT_RTF,    aEmptyStr );
+
+                TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( &rView.GetEditWin() ) );
+
+                ULONG nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
+
+                if (nFormat > 0)
+                {
+                    if (nFormat == SOT_FORMAT_STRING)
+                        pOLV->Paste();
+                    else
+                        pOLV->PasteSpecial();
+                }
+                delete pDlg;
             }
-            delete pDlg;
             break;
         }
         case SID_CLIPBOARD_FORMAT_ITEMS:
@@ -960,103 +963,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                 pOLV->GetEditView().SelectCurrentWord();
             }
 
-            ESelection   aSelection  = pOLV->GetSelection();
-            EditView   & rEditView   = pOLV->GetEditView();
-            EditEngine * pEditEngine = rEditView.GetEditEngine();
-
-            // get the language
-            String aNewLangTxt;
-
-            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, SID_LANGUAGE_STATUS , sal_False );
-            if (pItem)
-                aNewLangTxt = pItem->GetValue();
-
-            //!! Remember the view frame right now...
-            //!! (call to GetView().GetViewFrame() will break if the
-            //!! SwTextShell got destroyed meanwhile.)
-            SfxViewFrame *pViewFrame = rView.GetViewFrame();
-
-            if (aNewLangTxt.EqualsAscii( "*" ))
-            {
-                // open the dialog "Tools/Options/Language Settings - Language"
-                SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                if (pFact)
-                {
-                    VclAbstractDialog* pDlg = pFact->CreateVclDialog( rView.GetWindow(), SID_LANGUAGE_OPTIONS );
-                    pDlg->Execute();
-                    delete pDlg;
-                }
-            }
-            else
-            {
-
-                // setting the new language...
-                if (aNewLangTxt.Len() > 0)
-                {
-                    const String aSelectionLangPrefix( String::CreateFromAscii("Current_") );
-                    const String aParagraphLangPrefix( String::CreateFromAscii("Paragraph_") );
-                    const String aDocumentLangPrefix( String::CreateFromAscii("Default_") );
-                    const String aStrNone( String::CreateFromAscii("LANGUAGE_NONE") );
-
-                    xub_StrLen nPos = 0;
-                    bool bForSelection = true;
-                    bool bForParagraph = false;
-                    if (STRING_NOTFOUND != (nPos = aNewLangTxt.Search( aSelectionLangPrefix, 0 )))
-                    {
-                        // ... for the current selection
-                        aNewLangTxt = aNewLangTxt.Erase( nPos, aSelectionLangPrefix.Len() );
-                        bForSelection = true;
-                    }
-                    else if (STRING_NOTFOUND != (nPos = aNewLangTxt.Search( aParagraphLangPrefix , 0 )))
-                    {
-                        // ... for the current paragraph language
-                        aNewLangTxt = aNewLangTxt.Erase( nPos, aParagraphLangPrefix.Len() );
-                        bForSelection = true;
-                        bForParagraph = true;
-                    }
-                    else if (STRING_NOTFOUND != (nPos = aNewLangTxt.Search( aDocumentLangPrefix , 0 )))
-                    {
-                        // ... as default document language
-                        aNewLangTxt = aNewLangTxt.Erase( nPos, aDocumentLangPrefix.Len() );
-                        bForSelection = false;
-                    }
-
-                    if (bForParagraph)
-                    {
-                        bRestoreSelection = true;
-                        SwLangHelper::SelectPara( rEditView, aSelection );
-                        aSelection = pOLV->GetSelection();
-                    }
-                    if (!bForSelection) // document language to be changed...
-                    {
-                        rSh.StartAction();
-                        rSh.LockView( TRUE );
-                        rSh.Push();
-
-                        // prepare to apply new language to all text in document
-                        rSh.SelAll();
-                        rSh.ExtendedSelectAll();
-                    }
-
-                    if (aNewLangTxt != aStrNone)
-                        SwLangHelper::SetLanguage( rSh, pEditEngine, aSelection, aNewLangTxt, bForSelection, aEditAttr );
-                    else
-                        SwLangHelper::SetLanguage_None( rSh, pEditEngine, aSelection, bForSelection, aEditAttr );
-
-                    if (!bForSelection)
-                    {
-                        // need to release view and restore selection...
-                        rSh.Pop( FALSE );
-                        rSh.LockView( FALSE );
-                        rSh.EndAction();
-                    }
-                }
-            }
-
-            // invalidate slot to get the new language displayed
-            pViewFrame->GetBindings().Invalidate( nSlot );
-
-            rReq.Done();
+            bRestoreSelection = SwLangHelper::SetLanguageStatus(pOLV,rReq,rView,rSh);
             break;
         }
         case FN_THESAURUS_DLG:
@@ -1164,48 +1071,9 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
         {
             case SID_LANGUAGE_STATUS:
             {
-                ESelection aSelection = pOLV->GetSelection();
-                EditView& rEditView=pOLV->GetEditView();
-                EditEngine* pEditEngine=rEditView.GetEditEngine();
-
-                // the value of used script types
-                const USHORT nScriptType =pOLV->GetSelectedScriptType();
-                String aScriptTypesInUse( String::CreateFromInt32( nScriptType ) );//pEditEngine->GetScriptType(aSelection)
-
-                SvtLanguageTable aLangTable;
-
-                // get keyboard language
-                String aKeyboardLang;
-                LanguageType nLang = LANGUAGE_DONTKNOW;
-
-                Window* pWin = rEditView.GetWindow();
-                if(pWin)
-                    nLang = pWin->GetInputLanguage();
-                if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
-                    aKeyboardLang = aLangTable.GetString( nLang );
-
-
-                // get the language that is in use
-                const String aMultipleLanguages = String::CreateFromAscii("*");
-                String aCurrentLang = aMultipleLanguages;
-                SfxItemSet aSet(pOLV->GetAttribs());
-                nLang = SwLangHelper::GetCurrentLanguage( aSet,nScriptType );
-                if (nLang != LANGUAGE_DONTKNOW)
-                    aCurrentLang = aLangTable.GetString( nLang );
-
-                // build sequence for status value
-                uno::Sequence< ::rtl::OUString > aSeq( 4 );
-                aSeq[0] = aCurrentLang;
-                aSeq[1] = aScriptTypesInUse;
-                aSeq[2] = aKeyboardLang;
-                aSeq[3] = SwLangHelper::GetTextForLanguageGuessing( pEditEngine, aSelection );
-
-                // set sequence as status value
-                SfxStringListItem aItem( SID_LANGUAGE_STATUS );
-                aItem.SetStringList( aSeq );
-                rSet.Put( aItem, SID_LANGUAGE_STATUS );
+                SwLangHelper::GetLanguageStatus(pOLV,rSet);
+                break;
             }
-            break;
             // disable "Thesaurus" if the language is not supported
             case FN_THESAURUS_DLG:
             {
