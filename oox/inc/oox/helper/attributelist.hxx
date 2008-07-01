@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: attributelist.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #define OOX_HELPER_ATTRIBUTELIST_HXX
 
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
+#include "oox/helper/helper.hxx"
 #include "tokens.hxx"
 
 namespace oox {
@@ -57,13 +58,41 @@ public:
     /** Returns true, if the specified attribute is present. */
     bool                hasAttribute( sal_Int32 nElement ) const;
 
+    // optional return values -------------------------------------------------
+
+    /** Returns the token identifier of the value of the specified attribute. */
+    OptValue< sal_Int32 > getToken( sal_Int32 nElement ) const;
+
+    /** Returns the string value of the specified attribute. */
+    OptValue< ::rtl::OUString > _getString( sal_Int32 nElement ) const;
+
+    /** Returns the double value of the specified attribute. */
+    OptValue< double >  getDouble( sal_Int32 nElement ) const;
+
+    /** Returns the integer value of the specified attribute. */
+    OptValue< sal_Int32 > getInteger( sal_Int32 nElement ) const;
+
+    /** Returns the unsigned integer value of the specified attribute. */
+    OptValue< sal_uInt32 > getUnsignedInteger( sal_Int32 nElement ) const;
+
+    /** Returns the 64-bit integer value of the specified attribute. */
+    OptValue< sal_Int64 > getInteger64( sal_Int32 nElement ) const;
+
+    /** Returns the integer value of the specified hexadecimal attribute. */
+    OptValue< sal_Int32 > getHex( sal_Int32 nElement ) const;
+
+    /** Returns the boolean value of the specified attribute. */
+    OptValue< bool >    getBool( sal_Int32 nElement ) const;
+
+    // defaulted return values ------------------------------------------------
+
     /** Returns the token identifier of the value of the specified attribute,
         or the passed default identifier if the attribute is missing. */
-    sal_Int32           getToken( sal_Int32 nElement, sal_Int32 nDefault = XML_TOKEN_INVALID ) const;
+    sal_Int32           getToken( sal_Int32 nElement, sal_Int32 nDefault ) const;
 
-    /** Returns the string value of the specified attribute, or an empty string
-        if the attribute is missing. */
-    ::rtl::OUString     getString( sal_Int32 nElement ) const;
+    /** Returns the string value of the specified attribute, or the passed
+        default string if the attribute is missing. */
+    ::rtl::OUString     getString( sal_Int32 nElement, const ::rtl::OUString& rDefault ) const;
 
     /** Returns the double value of the specified attribute, or the passed
         default value if the attribute is missing or not convertible to a double. */
