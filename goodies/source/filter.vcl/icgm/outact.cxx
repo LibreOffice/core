@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outact.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -144,14 +144,6 @@ void CGMOutAct::SetGradientOffset( long nHorzOfs, long nVertOfs, sal_uInt32 /*nT
         mpGradient = new awt::Gradient;
     mpGradient->XOffset = ( (sal_uInt16)nHorzOfs & 0x7f );
     mpGradient->YOffset = ( (sal_uInt16)nVertOfs & 0x7f );
-}
-
-// ---------------------------------------------------------------
-
-void CGMOutAct::SetGradientEdge( long /*nEdge*/ )
-{
-    if ( !mpGradient )
-        mpGradient = new awt::Gradient;
 }
 
 // ---------------------------------------------------------------

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: class5.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -459,7 +459,6 @@ void CGM::ImplDoClass5()
         break;
         case 0x7b : ComOut( CGM_UNKNOWN_LEVEL, "set Gradient Edge" )
         {
-//          mpOutAct->SetGradientEdge( long nEdge );
             mnAct4PostReset |= ACT4_GRADIENT_ACTION;
         }
         break;
