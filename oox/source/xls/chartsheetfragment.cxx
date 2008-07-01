@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chartsheetfragment.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -180,7 +180,7 @@ void OoxChartsheetFragment::finalizeImport()
 
 void OoxChartsheetFragment::importDrawing( const AttributeList& rAttribs )
 {
-    setDrawingPath( getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ) ) ) );
+    setDrawingPath( getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) ) );
 }
 
 void OoxChartsheetFragment::importDrawing( RecordInputStream& rStrm )
