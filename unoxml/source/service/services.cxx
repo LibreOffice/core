@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: services.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,13 +54,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
-namespace sax_fastparser
-{
-extern Reference< XInterface > SAL_CALL FastSaxParser_CreateInstance( const Reference< XMultiServiceFactory  >  & ) throw(Exception);
-extern Sequence< OUString > FastSaxParser_getSupportedServiceNames();
-extern OUString FastSaxParser_getImplementationName();
-}
-
 extern "C"
 {
 
@@ -105,14 +98,6 @@ component_writeInfo(void * /*pServiceManager*/, void* pRegistryKey )
     xNewKey = xKey->createKey(aImpl);
     xNewKey->createKey(CTestListener::_getSupportedServiceNames()[0]);
 
-    // register fast sax parser service
-    aImpl = OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += sax_fastparser::FastSaxParser_getImplementationName();
-    aImpl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey(aImpl);
-    xNewKey->createKey(sax_fastparser::FastSaxParser_getSupportedServiceNames()[0]);
-
-
     return sal_True;
 }
 
@@ -154,13 +139,6 @@ component_getFactory(const sal_Char *pImplementationName, void *pServiceManager,
                 cppu::createSingleFactory(
                     xServiceManager, CTestListener::_getImplementationName(),
                     CTestListener::_getInstance, CTestListener::_getSupportedServiceNames()));
-        }
-        else if (sax_fastparser::FastSaxParser_getImplementationName().compareToAscii( pImplementationName ) == 0 )
-        {
-            xFactory = Reference< XSingleServiceFactory >(
-                cppu::createSingleFactory(
-                    xServiceManager, sax_fastparser::FastSaxParser_getImplementationName(),
-                    sax_fastparser::FastSaxParser_CreateInstance, sax_fastparser::FastSaxParser_getSupportedServiceNames()));
         }
 
         // Factory is valid - service was found.
