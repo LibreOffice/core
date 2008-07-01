@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: iras.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +65,6 @@ private:
     BYTE                mnRepCount, mnRepVal;   // RLE Decoding
     BOOL                mbPalette;
 
-    BOOL                ImplCallback( USHORT nPercent );
     BOOL                ImplReadBody();
     BOOL                ImplReadHeader();
     BYTE                ImplGetByte();
@@ -88,23 +87,6 @@ RASReader::RASReader() :
 
 RASReader::~RASReader()
 {
-}
-
-//----------------------------------------------------------------------------
-
-BOOL RASReader::ImplCallback( USHORT /*nPercent*/ )
-{
-/*
-    if ( pCallback != NULL )
-    {
-        if ( ( (*pCallback)( pCallerData, nPercent ) ) == TRUE )
-        {
-            mpRAS->SetError( SVSTREAM_FILEFORMAT_ERROR );
-            return TRUE;
-        }
-    }
-*/
-    return FALSE;
 }
 
 //----------------------------------------------------------------------------
