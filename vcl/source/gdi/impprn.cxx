@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impprn.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,15 +32,16 @@
 #include "precompiled_vcl.hxx"
 
 #define _SPOOLPRINTER_EXT
-#include <tools/queue.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/metaact.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/timer.hxx>
-#include <vcl/impprn.hxx>
+#include "tools/queue.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/metaact.hxx"
+#include "vcl/gdimtf.hxx"
+#include "vcl/timer.hxx"
+#include "vcl/impprn.hxx"
+#include "vcl/jobset.h"
 
-#include <vcl/svdata.hxx>
-#include <vcl/salprn.hxx>
+#include "vcl/svdata.hxx"
+#include "vcl/salprn.hxx"
 
 // -----------
 // - Defines -
@@ -362,7 +363,14 @@ void ImplQPrinter::PrintPage( unsigned int nPage )
 
 // -----------------------------------------------------------------------
 
-ULONG ImplQPrinter::GetPrintPageCount()
+ImplJobSetup* ImplQPrinter::GetPageSetup( unsigned int nPage ) const
+{
+    return nPage >= maQueue.size() ? NULL :
+    ( maQueue[nPage]->mpSetup ? maQueue[nPage]->mpSetup->ImplGetData() : NULL );
+}
+
+// -----------------------------------------------------------------------
+ULONG ImplQPrinter::GetPrintPageCount() const
 {
     ULONG nPageCount = maQueue.size() * ((mbUserCopy && !mbCollateCopy) ? mnCopyCount : 1);
     return nPageCount;
@@ -470,6 +478,70 @@ void ImplQPrinter::EndQueuePrint()
         pQueuePage->mbEndJob    = TRUE;
         maQueue.push_back( pQueuePage );
     }
+}
+
+// -----------------------------------------------------------------------
+
+bool ImplQPrinter::GetPaperRanges( std::vector< ULONG >& o_rRanges, bool i_bIncludeOrientationChanges ) const
+{
+    bool bRet = false;
+
+    if( ImplGetSVData()->maGDIData.mbPrinterPullModel )
+    {
+        bRet = true;
+        o_rRanges.clear();
+
+        if( ! maQueue.empty() )
+        {
+            ULONG nCurPage = 0;
+
+            // get first job data
+            const ImplJobSetup* pLastFormat = NULL;
+            if( maQueue.front()->mpSetup )
+                pLastFormat = maQueue.front()->mpSetup->ImplGetConstData();
+
+            // begin first range
+            o_rRanges.push_back( 0 );
+            for( std::vector< QueuePage* >::const_iterator it = maQueue.begin();
+                it != maQueue.end(); ++it, ++nCurPage )
+            {
+                const ImplJobSetup* pNewSetup = (*it)->mpSetup ? (*it)->mpSetup->ImplGetConstData() : NULL;
+                if( pNewSetup && pNewSetup != pLastFormat )
+                {
+                    bool bChange = false;
+                    if( pLastFormat == NULL )
+                    {
+                        bChange = true;
+                    }
+                    else if( ! i_bIncludeOrientationChanges &&
+                             pNewSetup->meOrientation != pLastFormat->meOrientation )
+                    {
+                        bChange = true;
+                    }
+                    else if( pNewSetup->mePaperFormat != pLastFormat->mePaperFormat ||
+                        ( pNewSetup->mePaperFormat == PAPER_USER &&
+                            ( pNewSetup->mnPaperWidth != pLastFormat->mnPaperWidth ||
+                              pNewSetup->mnPaperHeight != pLastFormat->mnPaperHeight ) ) )
+                    {
+                        bChange = true;
+                    }
+                    else if( pNewSetup->mnPaperBin != pLastFormat->mnPaperBin )
+                    {
+                        bChange = true;
+                    }
+                    if( bChange )
+                    {
+                        o_rRanges.push_back( nCurPage );
+                        pLastFormat = pNewSetup;
+                    }
+                }
+            }
+
+            o_rRanges.push_back( nCurPage );
+        }
+    }
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
