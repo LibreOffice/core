@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hyphenimp.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -198,6 +198,10 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
                 aSuppLocales[k++] = aTmp;
             }
 
+            //! now have one dictionary entry for each locale
+            //! (this is necessary in order to allow for several locales for one dictionary)
+            numdict = aSuppLocales.getLength();
+
             // add dictionary information
             aDicts = new HDInfo[numdict];
 /*
@@ -212,22 +216,32 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
                 if (aDictIt->aLocaleNames.getLength() > 0 &&
                     aDictIt->aLocations.getLength() > 0)
                 {
-                    aDicts[k].aPtr = NULL;
-                    aDicts[k].aEnc = 0;
-                    // currently HunSpell supports only one language per dictionary...
-                    aDicts[k].aLoc = MsLangId::convertLanguageToLocale(
-                                    MsLangId::convertIsoStringToLanguage( aDictIt->aLocaleNames[0] ));
-                    aDicts[k].apCC = new CharClass( aDicts[k].aLoc );
-                    // also both files have to be in the same directory and the
-                    // file names must only differ in the extension (.aff/.dic).
-                    // Thus we use the first location only and strip the extension part.
-                    rtl::OUString aLocation = aDictIt->aLocations[0];
-                    sal_Int32 nPos = aLocation.lastIndexOf( '.' );
-                    aLocation = aLocation.copy( 0, nPos );
-                    aDicts[k].aName = aLocation;
+                    uno::Sequence< rtl::OUString > aLocaleNames( aDictIt->aLocaleNames );
+                    sal_Int32 nLocales = aLocaleNames.getLength();
+
+                    // currently only one language per dictionary is supported in the actual implementation...
+                    // Thus here we work-around this by adding the same dictionary several times.
+                    // Once for each of it's supported locales.
+                    for (sal_Int32 i = 0;  i < nLocales;  ++i)
+                    {
+                        aDicts[k].aPtr = NULL;
+                        aDicts[k].aEnc = 0;
+                        aDicts[k].aLoc = MsLangId::convertLanguageToLocale(
+                                        MsLangId::convertIsoStringToLanguage( aDictIt->aLocaleNames[i] ));
+                        aDicts[k].apCC = new CharClass( aDicts[k].aLoc );
+                        // also both files have to be in the same directory and the
+                        // file names must only differ in the extension (.aff/.dic).
+                        // Thus we use the first location only and strip the extension part.
+                        rtl::OUString aLocation = aDictIt->aLocations[0];
+                        sal_Int32 nPos = aLocation.lastIndexOf( '.' );
+                        aLocation = aLocation.copy( 0, nPos );
+                        aDicts[k].aName = aLocation;
+
+                        ++k;
+                    }
                 }
-                ++k;
             }
+            DBG_ASSERT( k == numdict, "index mismatch?" );
         }
         else
         {
