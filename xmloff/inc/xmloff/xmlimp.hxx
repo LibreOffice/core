@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimp.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -415,6 +415,14 @@ public:
     String GetBaseURL() const;
     String GetDocumentBase() const;
 
+    /// relative path of stream in package, e.g. "someobject/content.xml"
+    ::rtl::OUString GetStreamPath() const;
+
+    /// set the XmlId attribute of given UNO object (for RDF metadata)
+    void SetXmlId(::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XInterface> const & i_xIfc,
+        ::rtl::OUString const & i_rXmlId);
+
     // #i31958# XForms helper method
     // (to be implemented by applications suporting XForms)
     virtual void initXForms();
@@ -431,7 +439,7 @@ public:
     static const sal_uInt16 OOo_2x = 20;
     static const sal_uInt16 OOo_Current = 30;
 
-    /** this checks the build it and returns
+    /** this checks the build ID and returns
 
         * OOo_1x for files created with OpenOffice.org 1.x or StarOffice 7 (this also includes binary import over binfilter)
         * OOo_2x for files created with OpenOffice.org 2.x or StarOffice 8
