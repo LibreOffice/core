@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleEmptyEditSource.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -118,6 +118,7 @@ namespace accessibility
         }
         SfxItemSet      GetParaAttribs( USHORT /*nPara*/ ) const { return GetAttribs(ESelection()); }
         void            SetParaAttribs( USHORT /*nPara*/, const SfxItemSet& /*rSet*/ ) {}
+        void            RemoveAttribs( const ESelection& /*rSelection*/, sal_Bool /*bRemoveParaAttribs*/, sal_uInt16 /*nWhich*/ ){}
         void            GetPortions( USHORT /*nPara*/, SvUShorts& /*rList*/ ) const {}
 
         USHORT          GetItemState( const ESelection& /*rSel*/, USHORT /*nWhich*/ ) const { return 0; }
@@ -134,6 +135,9 @@ namespace accessibility
 
         void        AppendParagraph() {}
         xub_StrLen  AppendTextPortion( USHORT /*nPara*/, const String & /*rText*/, const SfxItemSet & /*rSet*/ ) { return 0; }
+
+        //XTextCopy
+        void        CopyText(const SvxTextForwarder& ){}
 
         XubString       CalcFieldValue( const SvxFieldItem& /*rField*/, USHORT /*nPara*/, USHORT /*nPos*/, Color*& /*rpTxtColor*/, Color*& /*rpFldColor*/ )
         {
