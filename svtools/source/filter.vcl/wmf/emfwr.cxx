@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: emfwr.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -148,6 +148,20 @@
 #define FILL_SELECT                         0x00000002
 #define TEXT_SELECT                         0x00000004
 
+/* Text Alignment Options */
+#define TA_NOUPDATECP                       0
+#define TA_UPDATECP                         1
+
+#define TA_LEFT                             0
+#define TA_RIGHT                            2
+#define TA_CENTER                           6
+
+#define TA_TOP                              0
+#define TA_BOTTOM                           8
+#define TA_BASELINE                         24
+#define TA_RTLREADING                       256
+#define TA_MASK     (TA_BASELINE+TA_CENTER+TA_UPDATECP+TA_RTLREADING)
+
 // -------------
 // - EMFWriter -
 // -------------
@@ -158,7 +172,7 @@ BOOL EMFWriter::WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm, FilterConfig
 
     mpHandlesUsed = new BOOL[ MAXHANDLES ];
     memset( mpHandlesUsed, 0, MAXHANDLES * sizeof( BOOL ) );
-    mnHandleCount = mnLastPercent = mnRecordPos = mnRecordCount = 0;
+    mnHorTextAlign = mnHandleCount = mnLastPercent = mnRecordPos = mnRecordCount = 0;
     mnLineHandle = mnFillHandle = mnTextHandle = HANDLE_INVALID;
     mbRecordOpen = FALSE;
 
@@ -451,10 +465,11 @@ void EMFWriter::ImplCheckTextAttr()
 
         switch( rFont.GetAlign() )
         {
-            case ALIGN_TOP:    nTextAlign = 0; break;
-            case ALIGN_BOTTOM: nTextAlign = 8; break;
-            default:           nTextAlign = 24; break;
+            case ALIGN_TOP:    nTextAlign = TA_TOP; break;
+            case ALIGN_BOTTOM: nTextAlign = TA_BOTTOM; break;
+            default:           nTextAlign = TA_BASELINE; break;
         }
+        nTextAlign |= mnHorTextAlign;
 
         ImplBeginRecord( WIN_EMR_SETTEXTALIGN );
         (*mpStm) << nTextAlign;
@@ -1267,6 +1282,21 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             }
             break;
 
+            case( META_LAYOUTMODE_ACTION ):
+            {
+                sal_uInt32 nLayoutMode = ( (MetaLayoutModeAction*) pAction )->GetLayoutMode();
+                mnHorTextAlign = 0;
+                if (nLayoutMode & TEXT_LAYOUT_BIDI_RTL)
+                {
+                    mnHorTextAlign = TA_RIGHT | TA_RTLREADING;
+                }
+                if (nLayoutMode & TEXT_LAYOUT_TEXTORIGIN_RIGHT)
+                    mnHorTextAlign |= TA_RIGHT;
+                else if (nLayoutMode & TEXT_LAYOUT_TEXTORIGIN_LEFT)
+                    mnHorTextAlign &= ~TA_RIGHT;
+                break;
+            }
+
             case( META_MASK_ACTION ):
             case( META_MASKSCALE_ACTION ):
             case( META_MASKSCALEPART_ACTION ):
@@ -1274,7 +1304,6 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case( META_TEXTLINE_ACTION ):
             case( META_COMMENT_ACTION ):
             case( META_GRADIENTEX_ACTION ):
-            case( META_LAYOUTMODE_ACTION ):
             {
                 // !!! >>> we don't want to support these actions
             }
