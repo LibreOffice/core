@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: paintfrm.cxx,v $
- * $Revision: 1.120 $
+ * $Revision: 1.121 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1894,6 +1894,16 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
                                 ( ( aColor.GetTransparency() != 0) ||
                                     bTransparentGrfWithNoFillBackgrd );
 
+        // --> OD 2008-06-02 #i75614#
+        // reset draw mode in high contrast mode in order to get fill color set
+        const ULONG nOldDrawMode = pOutDev->GetDrawMode();
+        if ( pGlobalShell->GetWin() &&
+             Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+        {
+            pOutDev->SetDrawMode( 0 );
+        }
+        // <--
+
         /// OD 06.08.2002 #99657# - if background region have to be drawn
         ///     transparent, set only the RGB values of the background color as
         ///     the fill color for the output device.
@@ -1907,6 +1917,11 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
             if( pOutDev->GetFillColor() != aColor )
                 pOutDev->SetFillColor( aColor );
         }
+
+        // --> OD 2008-06-02 #i75614#
+        // restore draw mode
+        pOutDev->SetDrawMode( nOldDrawMode );
+        // <--
 
         /// OD 02.09.2002 #99657#
         if ( bDrawTransparent )
