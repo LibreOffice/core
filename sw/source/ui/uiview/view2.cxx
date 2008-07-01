@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view2.cxx,v $
- * $Revision: 1.87 $
+ * $Revision: 1.88 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -234,6 +234,7 @@ static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, USHORT nWhichId
 
         // prepare to apply new language to all text in document
         rWrtSh.SelAll();
+        rWrtSh.ExtendedSelectAll();
 
         // set language attribute to default for all text
         SvUShortsSort aAttribs;
@@ -1717,7 +1718,11 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
             bUp = TRUE;
         break;
         case SID_ATTR_INSERT:
-            rSh.ToggleInsMode();
+            SwPostItMgr* pMgr = GetPostItMgr();
+            if (pMgr && pMgr->GetActivePostIt())
+                pMgr->GetActivePostIt()->ToggleInsMode();
+            else
+                rSh.ToggleInsMode();
             bUp = TRUE;
         break;
 
