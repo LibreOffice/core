@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unopage.hxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,7 +109,6 @@ public:
     virtual ~SdGenericDrawPage() throw();
 
     // intern
-    void Invalidate() { SvxDrawPage::mpPage = NULL; mpModel = NULL; }
     sal_Bool isValid() { return (SvxDrawPage::mpPage != NULL) && (mpModel != NULL); }
 
     SdPage* GetPage() const { return (SdPage*)SvxDrawPage::mpPage; }
@@ -233,8 +232,6 @@ class SdMasterPage : public ::com::sun::star::presentation::XPresentationPage,
 private:
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > maTypeSequence;
 protected:
-    SdrObject* mpBackgroundObj;
-
     virtual void setBackground( const ::com::sun::star::uno::Any& rValue ) throw( ::com::sun::star::lang::IllegalArgumentException  );
     virtual void getBackground( ::com::sun::star::uno::Any& rValue ) throw();
 
