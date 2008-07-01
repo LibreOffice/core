@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewsettings.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -277,7 +277,7 @@ void SheetViewSettings::importSheetView( const AttributeList& rAttribs )
 {
     OoxSheetViewData& rData = *createSheetViewData();
     rData.maGridColor.setIndexed( rAttribs.getInteger( XML_colorId, OOX_COLOR_WINDOWTEXT ) );
-    rData.maFirstPos        = getAddressConverter().createValidCellAddress( rAttribs.getString( XML_topLeftCell ), getSheetIndex(), false );
+    rData.maFirstPos        = getAddressConverter().createValidCellAddress( rAttribs.getString( XML_topLeftCell, OUString() ), getSheetIndex(), false );
     rData.mnWorkbookViewId  = rAttribs.getToken( XML_workbookViewId, 0 );
     rData.mnViewType        = rAttribs.getToken( XML_view, XML_normal );
     rData.mnCurrentZoom     = rAttribs.getInteger( XML_zoomScale, 100 );
@@ -300,7 +300,7 @@ void SheetViewSettings::importPane( const AttributeList& rAttribs )
     if( !maSheetDatas.empty() )
     {
         OoxSheetViewData& rData = *maSheetDatas.back();
-        rData.maSecondPos    = getAddressConverter().createValidCellAddress( rAttribs.getString( XML_topLeftCell ), getSheetIndex(), false );
+        rData.maSecondPos    = getAddressConverter().createValidCellAddress( rAttribs.getString( XML_topLeftCell, OUString() ), getSheetIndex(), false );
         rData.mnActivePaneId = rAttribs.getToken( XML_activePane, XML_topLeft );
         rData.mnPaneState    = rAttribs.getToken( XML_state, XML_split );
         rData.mfSplitX       = rAttribs.getDouble( XML_xSplit, 0.0 );
@@ -317,11 +317,11 @@ void SheetViewSettings::importSelection( const AttributeList& rAttribs )
         sal_Int32 nPaneId = rAttribs.getToken( XML_pane, XML_topLeft );
         OoxSheetSelectionData& rSelData = maSheetDatas.back()->createSelectionData( nPaneId );
         // cursor position
-        rSelData.maActiveCell = getAddressConverter().createValidCellAddress( rAttribs.getString( XML_activeCell ), getSheetIndex(), false );
+        rSelData.maActiveCell = getAddressConverter().createValidCellAddress( rAttribs.getString( XML_activeCell, OUString() ), getSheetIndex(), false );
         rSelData.mnActiveCellId = rAttribs.getInteger( XML_activeCellId, 0 );
         // selection
         rSelData.maSelection.clear();
-        getAddressConverter().convertToCellRangeList( rSelData.maSelection, rAttribs.getString( XML_sqref ), getSheetIndex(), false );
+        getAddressConverter().convertToCellRangeList( rSelData.maSelection, rAttribs.getString( XML_sqref, OUString() ), getSheetIndex(), false );
     }
 }
 
