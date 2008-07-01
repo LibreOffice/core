@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FrameworkHelper.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -548,10 +548,13 @@ void FrameworkHelper::RequestTaskPanel (
             // Create the resource id from URLs for the pane, the task pane
             // view, and the task panel.
             mxConfigurationController->requestResourceActivation(
-                CreateResourceId(
-                    rsTaskPanelURL,
-                    msTaskPaneURL,
-                    msRightPaneURL),
+                CreateResourceId(msRightPaneURL),
+                ResourceActivationMode_ADD);
+            mxConfigurationController->requestResourceActivation(
+                CreateResourceId(msTaskPaneURL, msRightPaneURL),
+                ResourceActivationMode_REPLACE);
+            mxConfigurationController->requestResourceActivation(
+                CreateResourceId(rsTaskPanelURL, msTaskPaneURL, msRightPaneURL),
                 ResourceActivationMode_REPLACE);
         }
     }
