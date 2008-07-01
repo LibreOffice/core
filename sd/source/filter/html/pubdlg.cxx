@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pubdlg.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1380,6 +1380,9 @@ void SdPublishingDlg::UpdatePage()
 
         if( pPage2_WebCast->IsChecked() )
             pPage3_SldSound->Hide();
+
+        pPage3_Quality->Enable(pPage3_Jpg->IsChecked());
+
         break;
     case 5:
         if( m_bButtonsDirty )
