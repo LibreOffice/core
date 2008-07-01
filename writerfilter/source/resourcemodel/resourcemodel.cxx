@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: resourcemodel.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -213,6 +213,7 @@ WW8TableManager gTableManager;
 /* WW8StreamHandler */
 
 WW8StreamHandler::WW8StreamHandler()
+: mnUTextCount(0)
 {
     output.closeGroup();
     output.addItem("<stream>");
@@ -309,7 +310,9 @@ void WW8StreamHandler::text(const sal_uInt8 * data, size_t len)
 
 void WW8StreamHandler::utext(const sal_uInt8 * data, size_t len)
 {
-    string tmpStr = "<utext>";
+    static char sBuffer[256];
+    snprintf(sBuffer, sizeof(sBuffer), "<utext count=\"%d\">", mnUTextCount);
+    string tmpStr(sBuffer);
 
     for (unsigned int n = 0; n < len; ++n)
     {
@@ -333,8 +336,6 @@ void WW8StreamHandler::utext(const sal_uInt8 * data, size_t len)
         }
         else
         {
-            char sBuffer[256];
-
             snprintf(sBuffer, sizeof(sBuffer), "\\0x%04x", nChar);
 
             tmpStr += sBuffer;
@@ -346,6 +347,8 @@ void WW8StreamHandler::utext(const sal_uInt8 * data, size_t len)
     output.addItem(tmpStr);
 
     gTableManager.utext(data, len);
+
+    mnUTextCount++;
 }
 
 void WW8StreamHandler::props(writerfilter::Reference<Properties>::Pointer_t ref)
