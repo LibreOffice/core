@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: spdefcontext.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,7 @@
 
 #include "oox/drawingml/spdefcontext.hxx"
 #include "oox/drawingml/shapepropertiescontext.hxx"
+#include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/textbodypropertiescontext.hxx"
 #include "oox/drawingml/textliststylecontext.hxx"
 #include "oox/core/namespaces.hxx"
