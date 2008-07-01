@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: propertyset.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,26 +83,26 @@ bool PropertySet::getBoolProperty( const OUString& rPropName ) const
 
 void PropertySet::getProperties( Sequence< Any >& orValues, const Sequence< OUString >& rPropNames ) const
 {
-    try
+    if( mxMultiPropSet.is() )   // first try the XMultiPropertySet
     {
-        if( mxMultiPropSet.is() )   // first try the XMultiPropertySet
+        try
         {
             orValues = mxMultiPropSet->getPropertyValues( rPropNames );
         }
-        else if( mxPropSet.is() )
+        catch( Exception& )
         {
-            sal_Int32 nLen = rPropNames.getLength();
-            const OUString* pPropName = rPropNames.getConstArray();
-            const OUString* pPropNameEnd = pPropName + nLen;
-            orValues.realloc( nLen );
-            Any* pValue = orValues.getArray();
-            for( ; pPropName != pPropNameEnd; ++pPropName, ++pValue )
-                *pValue = mxPropSet->getPropertyValue( *pPropName );
+            OSL_ENSURE( false, "PropertySet::getProperties - cannot get all property values" );
         }
     }
-    catch( Exception& )
+    else if( mxPropSet.is() )
     {
-        OSL_ENSURE( false, "PropertySet::getProperties - cannot get all property values" );
+        sal_Int32 nLen = rPropNames.getLength();
+        const OUString* pPropName = rPropNames.getConstArray();
+        const OUString* pPropNameEnd = pPropName + nLen;
+        orValues.realloc( nLen );
+        Any* pValue = orValues.getArray();
+        for( ; pPropName != pPropNameEnd; ++pPropName, ++pValue )
+            getAnyProperty( *pValue, *pPropName );
     }
 }
 
@@ -126,24 +126,25 @@ void PropertySet::setProperties( const Sequence< OUString >& rPropNames, const S
 {
     OSL_ENSURE( rPropNames.getLength() == rValues.getLength(),
         "PropertySet::setProperties - length of sequences different" );
-    try
+
+    if( mxMultiPropSet.is() )   // first try the XMultiPropertySet
     {
-        if( mxMultiPropSet.is() )   // first try the XMultiPropertySet
+        try
         {
             mxMultiPropSet->setPropertyValues( rPropNames, rValues );
         }
-        else if( mxPropSet.is() )
+        catch( Exception& )
         {
-            const OUString* pPropName = rPropNames.getConstArray();
-            const OUString* pPropNameEnd = pPropName + rPropNames.getLength();
-            const Any* pValue = rValues.getConstArray();
-            for( ; pPropName != pPropNameEnd; ++pPropName, ++pValue )
-                mxPropSet->setPropertyValue( *pPropName, *pValue );
+            OSL_ENSURE( false, "PropertySet::setProperties - cannot set all property values" );
         }
     }
-    catch( Exception& )
+    else if( mxPropSet.is() )
     {
-        OSL_ENSURE( false, "PropertySet::setAnyProperty - cannot set all property values" );
+        const OUString* pPropName = rPropNames.getConstArray();
+        const OUString* pPropNameEnd = pPropName + rPropNames.getLength();
+        const Any* pValue = rValues.getConstArray();
+        for( ; pPropName != pPropNameEnd; ++pPropName, ++pValue )
+            setAnyProperty( *pPropName, *pValue );
     }
 }
 
