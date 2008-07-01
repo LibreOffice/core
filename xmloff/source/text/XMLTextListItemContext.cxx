@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextListItemContext.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -130,6 +130,12 @@ XMLTextListItemContext::XMLTextListItemContext(
             }
         }
         // <--
+        else if ( (XML_NAMESPACE_XML == nPrefix) &&
+             IsXMLToken(aLocalName, XML_ID)   )
+        {
+            (void) rValue;
+//FIXME: there is no UNO API for list items
+        }
     }
 
     DBG_ASSERT( !rTxtImport.GetListItem(),
