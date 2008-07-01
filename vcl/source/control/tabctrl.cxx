@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabctrl.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -864,7 +864,8 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
     if ( pItem->mnId == mnCurPageId )
     {
         nOff2 = 2;
-        nOff3 = 1;
+        if( ! ImplGetSVData()->maNWFData.mbNoActiveTabTextRaise )
+            nOff3 = 1;
     }
     else
     {
