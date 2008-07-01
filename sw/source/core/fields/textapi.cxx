@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textapi.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,8 @@
 #include "precompiled_sw.hxx"
 
 #include <textapi.hxx>
+#include <doc.hxx>
+#include <docsh.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/editeng.hxx>
 
@@ -75,6 +77,7 @@ struct SwTextAPIEditSource_Impl
 {
     // needed for "internal" refcounting
     SfxItemPool*                    mpPool;
+    SwDoc*                          mpDoc;
     Outliner*                       mpOutliner;
     SvxOutlinerForwarder*           mpTextForwarder;
     sal_Int32                       mnRef;
@@ -98,10 +101,11 @@ void SwTextAPIEditSource::UpdateData()
     // data is kept in outliner all the time
 }
 
-SwTextAPIEditSource::SwTextAPIEditSource(SfxItemPool* pPool)
+SwTextAPIEditSource::SwTextAPIEditSource(SwDoc* pDoc)
 : pImpl(new SwTextAPIEditSource_Impl)
 {
-    pImpl->mpPool = pPool;
+    pImpl->mpPool = &pDoc->GetDocShell()->GetPool();
+    pImpl->mpDoc = pDoc;
     pImpl->mpOutliner = 0;
     pImpl->mpTextForwarder = 0;
     pImpl->mnRef = 1;
@@ -116,6 +120,7 @@ SwTextAPIEditSource::~SwTextAPIEditSource()
 void SwTextAPIEditSource::Dispose()
 {
     pImpl->mpPool=0;
+    pImpl->mpDoc=0;
     DELETEZ(pImpl->mpTextForwarder);
     DELETEZ(pImpl->mpOutliner);
 }
@@ -126,7 +131,10 @@ SvxTextForwarder* SwTextAPIEditSource::GetTextForwarder()
         return 0; // mpPool == 0 can be used to flag this as disposed
 
     if( !pImpl->mpOutliner )
+    {
         pImpl->mpOutliner = new Outliner( pImpl->mpPool, OUTLINERMODE_TEXTOBJECT );
+        pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
+    }
 
     if( !pImpl->mpTextForwarder )
         pImpl->mpTextForwarder = new SvxOutlinerForwarder( *pImpl->mpOutliner, 0 );
@@ -139,8 +147,27 @@ void SwTextAPIEditSource::SetText( OutlinerParaObject& rText )
     if ( pImpl->mpPool )
     {
         if( !pImpl->mpOutliner )
+        {
             pImpl->mpOutliner = new Outliner( pImpl->mpPool, OUTLINERMODE_TEXTOBJECT );
+            pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
+        }
+
         pImpl->mpOutliner->SetText( rText );
+    }
+}
+
+void SwTextAPIEditSource::SetString( const String& rText )
+{
+    if ( pImpl->mpPool )
+    {
+        if( !pImpl->mpOutliner )
+        {
+            pImpl->mpOutliner = new Outliner( pImpl->mpPool, OUTLINERMODE_TEXTOBJECT );
+            pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
+        }
+        else
+            pImpl->mpOutliner->Clear();
+        pImpl->mpOutliner->Insert( rText );
     }
 }
 
