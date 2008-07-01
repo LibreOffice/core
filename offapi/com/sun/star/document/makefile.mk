@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.46 $
+# $Revision: 1.47 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -97,7 +97,8 @@ IDLFILES=\
     XInteractionFilterSelect.idl\
     XLinkTargetSupplier.idl\
     XMimeTypeInfo.idl\
-    XRedlinesSupplier.idl \
+    XOOXMLDocumentPropertiesImporter.idl\
+        XRedlinesSupplier.idl \
     XScriptInvocationContext.idl\
     XStandaloneDocumentInfo.idl\
     XStorageBasedDocument.idl\
