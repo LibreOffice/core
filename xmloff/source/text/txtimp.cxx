@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtimp.cxx,v $
- * $Revision: 1.142 $
+ * $Revision: 1.143 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -317,6 +317,10 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
     // draw fields
     { XML_NAMESPACE_TEXT, XML_MEASURE,  XML_TOK_TEXT_MEASURE },
 
+    // RDF metadata
+    { XML_NAMESPACE_TEXT, XML_META,         XML_TOK_TEXT_META },
+    { XML_NAMESPACE_TEXT, XML_META_FIELD,   XML_TOK_TEXT_META_FIELD },
+
     // redlining (aka change tracking)
     { XML_NAMESPACE_TEXT, XML_CHANGE_START, XML_TOK_TEXTP_CHANGE_START },
     { XML_NAMESPACE_TEXT, XML_CHANGE_END  , XML_TOK_TEXTP_CHANGE_END },
@@ -332,6 +336,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aTextPAttrTokenMap[] =
 {
+    { XML_NAMESPACE_XML , XML_ID,           XML_TOK_TEXT_P_XMLID },
     { XML_NAMESPACE_TEXT, XML_STYLE_NAME,   XML_TOK_TEXT_P_STYLE_NAME },
     { XML_NAMESPACE_TEXT, XML_COND_STYLE_NAME,
                                             XML_TOK_TEXT_P_COND_STYLE_NAME },
@@ -345,6 +350,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPAttrTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aTextListBlockAttrTokenMap[] =
 {
+    { XML_NAMESPACE_XML , XML_ID,           XML_TOK_TEXT_LIST_BLOCK_XMLID },
     { XML_NAMESPACE_TEXT, XML_STYLE_NAME,
             XML_TOK_TEXT_LIST_BLOCK_STYLE_NAME },
     { XML_NAMESPACE_TEXT, XML_CONTINUE_NUMBERING,
@@ -2115,18 +2121,21 @@ SvI18NMap& XMLTextImportHelper::GetRenameMap()
 
 void XMLTextImportHelper::InsertBookmarkStartRange(
     const OUString sName,
-    const Reference<XTextRange> & rRange)
+    const Reference<XTextRange> & rRange,
+    const OUString& i_rXmlId)
 {
-    aBookmarkStartRanges[sName].set(rRange);
+    aBookmarkStartRanges[sName] = std::make_pair(rRange, i_rXmlId);
 }
 
 sal_Bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
-    Reference<XTextRange> & rRange,
-    const OUString sName)
+    const OUString sName,
+    Reference<XTextRange> & o_rRange,
+    OUString& o_rXmlId)
 {
     if (aBookmarkStartRanges.count(sName))
     {
-        rRange.set(aBookmarkStartRanges[sName]);
+        o_rRange.set(aBookmarkStartRanges[sName].first);
+        o_rXmlId = aBookmarkStartRanges[sName].second;
         aBookmarkStartRanges.erase(sName);
         return sal_True;
     }
