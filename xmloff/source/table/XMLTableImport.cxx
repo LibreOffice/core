@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTableImport.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -349,11 +349,13 @@ SvXMLImportContext * XMLTableImportContext::ImportColumn( USHORT nPrefix, const 
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for(sal_Int16 i=0; i < nAttrCount; i++)
         {
-            OUString sAttrName = xAttrList->getNameByIndex( i );
+            const OUString sAttrName( xAttrList->getNameByIndex( i ) );
+            const OUString sValue( xAttrList->getValueByIndex( i ) );
             OUString aLocalName;
-            if( GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName ) == XML_NAMESPACE_TABLE )
+
+            sal_uInt16 nPrefix2 = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+            if( XML_NAMESPACE_TABLE == nPrefix2 )
             {
-                const OUString sValue( xAttrList->getValueByIndex( i ) );
                 if( IsXMLToken( aLocalName, XML_NUMBER_COLUMNS_REPEATED ) )
                 {
                     nRepeated = sValue.toInt32();
@@ -370,6 +372,12 @@ SvXMLImportContext * XMLTableImportContext::ImportColumn( USHORT nPrefix, const 
                 {
                     xInfo->mbVisibility = IsXMLToken( sValue, XML_VISIBLE );
                 }
+            }
+            else if ( (XML_NAMESPACE_XML == nPrefix2) &&
+                 IsXMLToken(aLocalName, XML_ID)   )
+            {
+                (void) sValue;
+//FIXME: TODO
             }
         }
 
@@ -457,13 +465,13 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( USHORT nPrefix, const OUS
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for(sal_Int16 i=0; i < nAttrCount; i++)
         {
-            OUString sAttrName = xAttrList->getNameByIndex( i );
+            const OUString sAttrName( xAttrList->getNameByIndex( i ) );
+            const OUString sValue( xAttrList->getValueByIndex( i ) );
             OUString aLocalName;
 
             sal_uInt16 nPrefix2 = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
             if( nPrefix2 == XML_NAMESPACE_TABLE )
             {
-                const OUString sValue( xAttrList->getValueByIndex( i ) );
                 if( IsXMLToken( aLocalName, XML_NUMBER_ROWS_REPEATED ) )
                 {
                     nRepeated = sValue.toInt32();
@@ -480,6 +488,12 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( USHORT nPrefix, const OUS
                 {
                     bVisibility = IsXMLToken( sValue, XML_VISIBLE );
                 }
+            }
+            else if ( (XML_NAMESPACE_XML == nPrefix2) &&
+                 IsXMLToken(aLocalName, XML_ID)   )
+            {
+                (void) sValue;
+//FIXME: TODO
             }
         }
 
@@ -618,16 +632,17 @@ XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport, const Referenc
 {
     OUString sStyleName;
 
-    // read attributes for the table-row
+    // read attributes for the table-cell
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
     {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
+        const OUString sAttrName( xAttrList->getNameByIndex( i ) );
+        const OUString sValue( xAttrList->getValueByIndex( i ) );
         OUString aLocalName;
 
-        if( GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName ) == XML_NAMESPACE_TABLE )
+        sal_uInt16 nPrefix2 = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        if( XML_NAMESPACE_TABLE == nPrefix2 )
         {
-            const OUString sValue( xAttrList->getValueByIndex( i ) );
             if( IsXMLToken( aLocalName, XML_NUMBER_COLUMNS_REPEATED ) )
             {
                 mnRepeated = sValue.toInt32();
@@ -645,6 +660,13 @@ XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport, const Referenc
                 sStyleName = sValue;
             }
         }
+        else if ( (XML_NAMESPACE_XML == nPrefix2) &&
+             IsXMLToken(aLocalName, XML_ID)   )
+        {
+            (void) sValue;
+//FIXME: TODO
+        }
+//FIXME: RDFa (table:table-cell)
     }
 
     // if there is no style name at the cell, try default style name from row
