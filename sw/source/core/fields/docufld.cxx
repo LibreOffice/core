@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docufld.cxx,v $
- * $Revision: 1.57 $
+ * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1121,12 +1121,19 @@ String SwDocInfoField::Expand() const
         // so we treat *every* unknown property as a custom property, even the "built-in" section in Word's document summary information stream
         // as these properties have not been inserted when the document summary information was imported, we do it here
         // this approach is still a lot better than the old one to import such fields as "user fields" and simple text
+        SwDocShell* pDocShell = GetDoc()->GetDocShell();
+        if( !pDocShell )
+            return aContent;
         try
         {
-            uno::Reference<document::XDocumentPropertiesSupplier> xDPS( GetDoc()->GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
+            uno::Reference<document::XDocumentPropertiesSupplier> xDPS( pDocShell->GetModel(), uno::UNO_QUERY_THROW);
             uno::Reference<document::XDocumentProperties> xDocProps( xDPS->getDocumentProperties());
             uno::Reference < beans::XPropertySet > xSet( xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
-            uno::Any aAny = xSet->getPropertyValue( aName );
+            uno::Reference < beans::XPropertySetInfo > xSetInfo = xSet->getPropertySetInfo();
+
+            uno::Any aAny;
+            if( xSetInfo->hasPropertyByName( aName ) )
+                aAny = xSet->getPropertyValue( aName );
             if ( aAny.getValueType() != ::getVoidCppuType() )
             {
                 // "void" type means that the property has not been inserted until now
