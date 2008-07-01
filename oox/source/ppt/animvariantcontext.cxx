@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: animvariantcontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,7 +106,7 @@ namespace oox { namespace ppt {
         }
         case NMSP_PPT|XML_strVal:
         {
-            OUString val = attribs.getString( XML_val );
+            OUString val = attribs.getString( XML_val, OUString() );
             convertMeasure( val ); // ignore success or failure if it fails, use as is
             maValue = makeAny( val );
             break;
