@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimp.cxx,v $
- * $Revision: 1.111 $
+ * $Revision: 1.112 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,6 +69,8 @@
 #ifndef _VCL_FONTCVT_HXX
 #include <vcl/fontcvt.hxx>
 #endif
+
+#include <com/sun/star/rdf/XMetadatable.hpp>
 
 #define LOGFILE_AUTHOR "unknown"
 
@@ -170,6 +172,9 @@ public:
     INetURLObject aBaseURL;
     INetURLObject aDocBase;
 
+    /// relative path of stream in package, e.g. "someobject/content.xml"
+    ::rtl::OUString mStreamPath;
+
     ::rtl::OUString aODFVersion;
 
     // --> OD 2004-08-10 #i28749# - boolean, indicating that position attributes
@@ -185,6 +190,7 @@ public:
         hBatsFontConv( 0 ), hMathFontConv( 0 ),
         mbOwnGraphicResolver( false ),
         mbOwnEmbeddedResolver( false ),
+        mStreamPath(),
         // --> OD 2004-08-11 #i28749#
         mbShapePositionInHoriL2R( sal_False ),
         // <--
@@ -218,6 +224,10 @@ void SvXMLImport::_InitCtor()
 {
     if( mnImportFlags != 0 )
     {
+        // implicit "xml" namespace prefix
+        const ::rtl::OUString Xml;
+        mpNamespaceMap->Add( GetXMLToken(XML_XML), GetXMLToken(XML_N_XML),
+                            XML_NAMESPACE_XML );
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__office ) ),
                             GetXMLToken(XML_N_OFFICE),
                             XML_NAMESPACE_OFFICE );
@@ -927,6 +937,9 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                         mpImpl->aBaseURL.insertName( sRelPath );
                     mpImpl->aBaseURL.insertName( sName );
                 }
+                OSL_ENSURE(sName.getLength(), "no StreamName ???");
+                mpImpl->mStreamPath = sRelPath.getLength() ? sRelPath +
+                    ::rtl::OUString::createFromAscii("/") + sName : sName;
                 // --> OD 2004-08-10 #i28749# - retrieve property <ShapePositionInHoriL2R>
                 sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("ShapePositionInHoriL2R" ) );
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
@@ -1752,6 +1765,11 @@ String SvXMLImport::GetDocumentBase() const
     return mpImpl->aDocBase.GetMainURL( INetURLObject::NO_DECODE );
 }
 
+::rtl::OUString SvXMLImport::GetStreamPath() const
+{
+    return mpImpl->mStreamPath;
+}
+
 // --> OD 2004-08-10 #i28749#
 sal_Bool SvXMLImport::IsShapePositionInHoriL2R() const
 {
@@ -1826,3 +1844,29 @@ bool SvXMLImport::isGraphicLoadOnDemandSupported() const
 {
     return mpImpl->aODFVersion;
 }
+
+// xml:id for RDF metadata
+void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
+    ::rtl::OUString const & i_rXmlId)
+{
+    if (i_rXmlId.getLength() > 0) {
+        try {
+            const uno::Reference<rdf::XMetadatable> xMeta(i_xIfc,
+                uno::UNO_QUERY);
+//FIXME: not yet
+//            OSL_ENSURE(xMeta.is(), "xml:id: not XMetadatable");
+            if (xMeta.is()) {
+                ::rtl::OUStringBuffer XmlId( GetStreamPath() );
+                XmlId.appendAscii("#");
+                XmlId.append(i_rXmlId);
+                try {
+                    xMeta->setXmlId(XmlId.makeStringAndClear());
+                } catch (lang::IllegalArgumentException &) {
+                    // probably duplicate; ignore
+                }
+            }
+        } catch (uno::Exception &) {
+        }
+    }
+}
+
