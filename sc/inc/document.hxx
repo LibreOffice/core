@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: document.hxx,v $
- * $Revision: 1.112 $
+ * $Revision: 1.113 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,7 @@
 #include "brdcst.hxx"
 #include "tabopparams.hxx"
 #include "grammar.hxx"
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <memory>
 #include <map>
@@ -496,6 +497,11 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
 
     SdrObject*      GetObjectAtPoint( SCTAB nTab, const Point& rPos );
     BOOL            HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pName = NULL );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > GetChartByName( const String& rChartName );
+    void            GetChartRanges( const String& rChartName, ::std::vector< ScRangeList >& rRanges, ScDocument* pSheetNameDoc );
+    void            SetChartRanges( const String& rChartName, const ::std::vector< ScRangeList >& rRanges );
+
     void            UpdateChartArea( const String& rChartName, const ScRange& rNewArea,
                                         BOOL bColHeaders, BOOL bRowHeaders, BOOL bAdd );
     void            UpdateChartArea( const String& rChartName,
