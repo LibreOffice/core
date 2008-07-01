@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLDocument.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,7 +90,8 @@ using namespace com::sun::star;
 class WRITERFILTER_DLLPUBLIC OOXMLStream
 {
 public:
-    enum StreamType_t { UNKNOWN, DOCUMENT, STYLES, FONTTABLE, NUMBERING, FOOTNOTES, ENDNOTES, COMMENTS, THEME };
+    enum StreamType_t { UNKNOWN, DOCUMENT, STYLES, FONTTABLE, NUMBERING,
+        FOOTNOTES, ENDNOTES, COMMENTS, THEME, SETTINGS };
     typedef boost::shared_ptr<OOXMLStream> Pointer_t;
 
     virtual ~OOXMLStream() {}
