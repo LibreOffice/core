@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unopage.cxx,v $
- * $Revision: 1.95 $
+ * $Revision: 1.96 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1742,7 +1742,7 @@ void SdGenericDrawPage::release() throw()
 // XComponent
 void SdGenericDrawPage::disposing() throw()
 {
-    Invalidate();
+    mpModel = 0;
     SvxFmDrawPage::disposing();
 }
 
@@ -2585,18 +2585,9 @@ Any SdGenericDrawPage::getNavigationOrder()
 //========================================================================
 
 SdMasterPage::SdMasterPage( SdXImpressDocument* pModel, SdPage* pPage ) throw()
-: SdGenericDrawPage( pModel, pPage, ImplGetMasterPagePropertyMap( pPage ? pPage->GetPageKind() : PK_STANDARD ) ),
-  mpBackgroundObj(NULL)
+: SdGenericDrawPage( pModel, pPage, ImplGetMasterPagePropertyMap( pPage ? pPage->GetPageKind() : PK_STANDARD ) )
 {
-    if( pPage && GetPage()->GetPageKind() == PK_STANDARD )
-    {
-        mpBackgroundObj = GetPage()->GetPresObj( PRESOBJ_BACKGROUND );
-
-        if( mpBackgroundObj && (mpBackgroundObj->GetOrdNum() != 0) )
-            mpBackgroundObj->SetOrdNum( 0 );
-
-        mbHasBackgroundObject = NULL != mpBackgroundObj;
-    }
+    mbHasBackgroundObject = pPage && GetPage()->GetPageKind() == PK_STANDARD;
 }
 
 SdMasterPage::~SdMasterPage() throw()
