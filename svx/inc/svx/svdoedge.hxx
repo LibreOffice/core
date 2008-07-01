@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoedge.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -148,7 +148,8 @@ public:
     SdrObjConnection            aCon1;  // Verbindungszustand des Linienanfangs
     SdrObjConnection            aCon2;  // Verbindungszustand des Linienendes
     XPolygon*                   pEdgeTrack;
-    FASTBOOL                    bEdgeTrackDirty;// TRUE=Verbindungsverlauf muss neu berechnet werden.
+    sal_Bool                    bEdgeTrackDirty;// TRUE=Verbindungsverlauf muss neu berechnet werden.
+    sal_Bool                    bEdgeTrackUserDefined;
     SdrEdgeInfoRec              aEdgeInfo;
 
 public:
@@ -180,6 +181,7 @@ protected:
 
     // bitfield
     unsigned                    bEdgeTrackDirty : 1; // TRUE=Verbindungsverlauf muss neu berechnet werden.
+    unsigned                    bEdgeTrackUserDefined : 1;
 
     // #109007#
     // Bool to allow supporession of default connects at object
@@ -216,6 +218,7 @@ protected:
     FASTBOOL ImpStripPolyPoints(XPolygon& rXP) const; // entfernen ueberfluessiger Punkte
     void ImpSetTailPoint(FASTBOOL bTail1, const Point& rPt);
     void ImpUndirtyEdgeTrack();  // eventuelle Neuberechnung des Verbindungsverlaufs
+    void ImpDirtyEdgeTrack();   // invalidate connector path, so it will be recalculated next time
     void ImpSetAttrToEdgeInfo(); // Werte vom Pool nach aEdgeInfo kopieren
     void ImpSetEdgeInfoToAttr(); // Werte vom aEdgeInfo in den Pool kopieren
 
@@ -254,6 +257,9 @@ public:
     virtual void operator=(const SdrObject& rObj);
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
+
+    void    SetEdgeTrackPath( const basegfx::B2DPolyPolygon& rPoly );
+    basegfx::B2DPolyPolygon GetEdgeTrackPath() const;
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
     virtual sal_uInt32 GetHdlCount() const;
