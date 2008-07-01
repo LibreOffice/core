@@ -57,6 +57,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\packages\manifest
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\packages\zip
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\plugin
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\presentation
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\rdf
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\rendering
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\report
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\report\inspection
@@ -169,6 +170,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\form
 ..\com\sun\star\packages\zip\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\packages\zip
 ..\com\sun\star\plugin\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\plugin
 ..\com\sun\star\presentation\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\presentation
+..\com\sun\star\rdf\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\rdf
 ..\com\sun\star\rendering\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\rendering
 ..\com\sun\star\report\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\report
 ..\com\sun\star\report\inspection\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\report\inspection
