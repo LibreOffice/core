@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLStreamImpl.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -130,6 +130,7 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     static rtl::OUString sEndnotesType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes"));
     static rtl::OUString sCommentsType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments"));
     static rtl::OUString sThemeType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme"));
+    static rtl::OUString sSettingsType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings"));
     static rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("Target"));
     static rtl::OUString sTargetMode(RTL_CONSTASCII_USTRINGPARAM("TargetMode"));
     static rtl::OUString sExternal(RTL_CONSTASCII_USTRINGPARAM("External"));
@@ -138,32 +139,35 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
 
     switch (nStreamType)
     {
-    case DOCUMENT:
-        sStreamType = sDocumentType;
-        break;
-    case STYLES:
-        sStreamType = sStylesType;
-        break;
-    case NUMBERING:
-        sStreamType = sNumberingType;
-        break;
-    case FONTTABLE:
-        sStreamType = sFonttableType;
-        break;
-    case FOOTNOTES:
-        sStreamType = sFootnotesType;
-        break;
-    case ENDNOTES:
-        sStreamType = sEndnotesType;
-        break;
-    case COMMENTS:
-        sStreamType = sCommentsType;
-        break;
-    case THEME:
-        sStreamType = sThemeType;
-    break;
-    default:
-        break;
+        case DOCUMENT:
+            sStreamType = sDocumentType;
+            break;
+        case STYLES:
+            sStreamType = sStylesType;
+            break;
+        case NUMBERING:
+            sStreamType = sNumberingType;
+            break;
+        case FONTTABLE:
+            sStreamType = sFonttableType;
+            break;
+        case FOOTNOTES:
+            sStreamType = sFootnotesType;
+            break;
+        case ENDNOTES:
+            sStreamType = sEndnotesType;
+            break;
+        case COMMENTS:
+            sStreamType = sCommentsType;
+            break;
+        case THEME:
+            sStreamType = sThemeType;
+            break;
+        case SETTINGS:
+            sStreamType = sSettingsType;
+            break;
+        default:
+            break;
     }
 
     if (xRelationshipAccess.is())
