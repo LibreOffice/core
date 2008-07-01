@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: worksheetbuffer.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,8 +115,8 @@ void WorksheetBuffer::initializeSingleSheet()
 void WorksheetBuffer::importSheet( const AttributeList& rAttribs )
 {
     OoxSheetInfo aSheetInfo;
-    aSheetInfo.maId = rAttribs.getString( R_TOKEN( id ) );
-    aSheetInfo.maName = rAttribs.getString( XML_name );
+    aSheetInfo.maId = rAttribs.getString( R_TOKEN( id ), OUString() );
+    aSheetInfo.maName = rAttribs.getString( XML_name, OUString() );
     aSheetInfo.mnSheetId = rAttribs.getInteger( XML_sheetId, -1 );
     aSheetInfo.mnState = rAttribs.getToken( XML_state, XML_visible );
     insertSheet( aSheetInfo );
