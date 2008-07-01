@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NamedRange.idl,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,7 +101,7 @@ published service NamedRange
         formula referring to this defined name will show the formula
         definition contained in the name instead.</p>
 
-        @since CWS xmlfilter03
+        @since OOo 3.0
      */
     [optional, property] boolean IsSharedFormula;
 };
