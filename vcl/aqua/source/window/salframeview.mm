@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframeview.mm,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -150,14 +150,8 @@ static const struct ExceptionalKey
     // is this event actually inside that NSWindow ?
     NSPoint aPt = [NSEvent mouseLocation];
     NSRect aFrameRect = [self frame];
-    if( aPt.x >= aFrameRect.origin.x &&
-        aPt.y >= aFrameRect.origin.y &&
-        aPt.x < aFrameRect.origin.x + aFrameRect.size.width &&
-        aPt.y < aFrameRect.origin.x + aFrameRect.size.height )
-    {
-        return YES;
-    }
-    return NO;
+    MacOSBOOL bInRect = NSPointInRect( aPt, aFrameRect );
+    return bInRect;
 }
 
 -(MacOSBOOL)canBecomeKeyWindow
@@ -179,8 +173,17 @@ static const struct ExceptionalKey
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
+        static const ULONG nGuessDocument = SAL_FRAME_STYLE_MOVEABLE|
+                                            SAL_FRAME_STYLE_SIZEABLE|
+                                            SAL_FRAME_STYLE_CLOSEABLE;
+        
         if( mpFrame->mpMenu )
             mpFrame->mpMenu->setMainMenu();
+        else if( ! mpFrame->mpParent &&
+                 (mpFrame->mnStyle & nGuessDocument) == nGuessDocument )
+        {
+            AquaSalMenu::setDefaultMenu();
+        }
         #if 0
         // FIXME: we should disable menus while in modal mode
         // however from down here there is currently no reliable way to
@@ -202,7 +205,10 @@ static const struct ExceptionalKey
 
 -(void)windowDidChangeScreen: (NSNotification*)pNotification
 {
-    // FIXME: multiscreen
+    YIELD_GUARD;
+
+    if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
+        mpFrame->screenParametersChanged();
 }
 
 -(void)windowDidMove: (NSNotification*)pNotification
@@ -267,6 +273,7 @@ static const struct ExceptionalKey
             bRet = NO; // application will close the window or not, AppKit shouldn't
         }
     }
+
     return bRet;
 }
 
@@ -794,6 +801,11 @@ static const struct ExceptionalKey
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_FORWARD character: 0  modifiers: 0];
 }
 
+-(void)moveWordLeft: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_WORD_BACKWARD character: 0  modifiers: 0];
+}
+
 -(void)moveWordBackward: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_WORD_BACKWARD character: 0  modifiers: 0];
@@ -802,6 +814,11 @@ static const struct ExceptionalKey
 -(void)moveWordBackwardAndModifySelection: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_BACKWARD character: 0  modifiers: 0];
+}
+
+-(void)moveWordRight: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_WORD_FORWARD character: 0  modifiers: 0];
 }
 
 -(void)moveWordForward: (id)aSender
@@ -932,18 +949,25 @@ static const struct ExceptionalKey
 -(void)noop: (id)aSender
 {
     if( ! mbKeyHandled )
-        [self sendSingleCharacter:mpLastEvent];
+    {
+        if( ! [self sendSingleCharacter:mpLastEvent] )
+        {
+            if( [NSApp respondsToSelector: @selector(sendSuperEvent:)] )
+                [NSApp performSelector:@selector(sendSuperEvent:) withObject: mpLastEvent];
+        }
+    }
 }
 
--(void)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode  character: (sal_Unicode)aChar
+-(MacOSBOOL)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode  character: (sal_Unicode)aChar
 {
-    [self sendKeyInputAndReleaseToFrame: nKeyCode character: aChar modifiers: mpFrame->mnLastModifierFlags];
+    return [self sendKeyInputAndReleaseToFrame: nKeyCode character: aChar modifiers: mpFrame->mnLastModifierFlags];
 }
 
--(void)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode  character: (sal_Unicode)aChar modifiers: (unsigned int)nMod
+-(MacOSBOOL)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode  character: (sal_Unicode)aChar modifiers: (unsigned int)nMod
 {
     YIELD_GUARD;
     
+    long nRet = 0;
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
         SalKeyEvent aEvent;
@@ -951,10 +975,11 @@ static const struct ExceptionalKey
         aEvent.mnCode           = nKeyCode | ImplGetModifierMask( nMod );
         aEvent.mnCharCode       = aChar;
         aEvent.mnRepeat         = FALSE;
-        mpFrame->CallCallback( SALEVENT_KEYINPUT, &aEvent );
+        nRet = mpFrame->CallCallback( SALEVENT_KEYINPUT, &aEvent );
         if( AquaSalFrame::isAlive( mpFrame ) )
             mpFrame->CallCallback( SALEVENT_KEYUP, &aEvent );
     }
+    return nRet ? YES : NO;
 }
 
 
@@ -971,13 +996,13 @@ static const struct ExceptionalKey
             // don't send unicodes in the private use area
             if( keyChar >= 0xf700 && keyChar < 0xf780 )
                 keyChar = 0;
-            [self sendKeyInputAndReleaseToFrame: nKeyCode character: keyChar];
+            MacOSBOOL bRet = [self sendKeyInputAndReleaseToFrame: nKeyCode character: keyChar];
             mbInKeyInput = false;
 
-            return TRUE;
+            return bRet;
         }
     }
-    return FALSE;
+    return NO;
 }
 
 
