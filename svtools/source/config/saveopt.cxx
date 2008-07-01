@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saveopt.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -464,8 +464,9 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                     case TIMEINTERVALL :
                         if ( pValues[nProp] >>= nTemp )
                             nAutoSaveTime = nTemp;
-                        else
+                        else {
                             DBG_ERROR( "Wrong Type!" );
+                        };
                         bROAutoSaveTime = pROStates[nProp];
                         break;
 
@@ -474,8 +475,9 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                         sal_Int16 nTmp = 0;
                         if ( pValues[nProp] >>= nTmp )
                             eODFDefaultVersion = SvtSaveOptions::ODFDefaultVersion( nTmp );
-                        else
+                        else {
                             DBG_ERRORFILE( "SvtSaveOptions_Impl::SvtSaveOptions_Impl(): Wrong Type!" );
+                        };
                         bROAutoSaveTime = pROStates[nProp];
                         break;
                     }
