@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ViewShellBase.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1613,15 +1613,8 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
             && mrBase.GetMainViewShell()!=NULL
             && mrBase.GetMainViewShell()->GetShellType()==ViewShell::ST_OUTLINE))
     {
-        // Set the visibility of the right pane.
-        framework::FrameworkHelper::Instance(mrBase)->RequestView(
-            framework::FrameworkHelper::msTaskPaneURL,
-            framework::FrameworkHelper::msRightPaneURL);
-
-        if (bShowToolPanel && bPanelIdGiven)
-            framework::FrameworkHelper::Instance(mrBase)->RunOnConfigurationEvent(
-                framework::FrameworkHelper::msConfigurationUpdateEndEvent,
-                toolpanel::PanelActivation(mrBase,nPanelId));
+        framework::FrameworkHelper::Instance(mrBase)->RequestTaskPanel(
+            framework::FrameworkHelper::msLayoutTaskPanelURL);
     }
 }
 
