@@ -1,13 +1,13 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: directory_ooo.scp,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1037,12 +1037,6 @@ End
 Directory gid_Dir_Share_Dict
     ParentID = gid_Dir_Share;
     DosName = "dict";
-End
-
-Directory gid_Dir_Share_Dict_Ooo
-    ParentID = gid_Dir_Share_Dict;
-    DosName = "ooo";
-    Styles = (CREATE);
 End
 
 Directory gid_Dir_Config
