@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: printfun.cxx,v $
- * $Revision: 1.57 $
+ * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -960,6 +960,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 
     DBG_ASSERT( pScaleItem && pScaleToItem && pScaleToPagesItem, "Missing ScaleItem! :-/" );
 
+    aTableParam.bCellContent    = TRUE;
     aTableParam.bNotes          = GET_BOOL(pParamSet,ATTR_PAGE_NOTES);
     aTableParam.bGrid           = GET_BOOL(pParamSet,ATTR_PAGE_GRID);
     aTableParam.bHeaders        = GET_BOOL(pParamSet,ATTR_PAGE_HEADERS);
@@ -1705,18 +1706,22 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     }
 
 //  aOutputData.SetMetaFileMode(TRUE);
-    aOutputData.DrawBackground();
+    if( aTableParam.bCellContent )
+        aOutputData.DrawBackground();
 
     pDev->SetClipRegion( Rectangle( aPos, Size( aOutputData.GetScrW(), aOutputData.GetScrH() ) ) );
     pDev->SetClipRegion();
 
 //  aOutputData.SetMetaFileMode(FALSE);
-    aOutputData.DrawExtraShadow( bShLeft, bShTop, bShRight, bShBottom );
-    aOutputData.DrawFrame();
-    aOutputData.DrawStrings();
+    if( aTableParam.bCellContent )
+    {
+        aOutputData.DrawExtraShadow( bShLeft, bShTop, bShRight, bShBottom );
+        aOutputData.DrawFrame();
+        aOutputData.DrawStrings();
 
-//  pDev->SetMapMode(aLogicMode);
-    aOutputData.DrawEdit(FALSE);
+    //  pDev->SetMapMode(aLogicMode);
+        aOutputData.DrawEdit(FALSE);
+    }
 
 //  pDev->SetMapMode(aOffsetMode);
     if (aTableParam.bGrid)
@@ -2493,6 +2498,17 @@ void ScPrintFunc::SetUseStyleColor( BOOL bFlag )
 void ScPrintFunc::SetRenderFlag( BOOL bFlag )
 {
     bIsRender = bFlag;      // set when using XRenderable (PDF)
+}
+
+void ScPrintFunc::SetExclusivelyDrawOleAndDrawObjects()
+{
+    aTableParam.bCellContent = false;
+    aTableParam.bNotes = false;
+    aTableParam.bGrid = false;
+    aTableParam.bHeaders = false;
+    aTableParam.bFormulas = false;;
+    aTableParam.bNullVals = false;;
+    aTableParam.bNullVals = false;;
 }
 
 //
