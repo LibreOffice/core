@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salinst.h,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,6 +95,7 @@ public:
     rtl::OUString                           maDefaultPrinter;
     vos::OThread::TThreadIdentifier         maMainThread;
     bool                                    mbWaitingYield;
+    int                                     mnActivePrintJobs;
     std::list< SalUserEvent >               maUserEvents;
     oslMutex                                maUserEventListMutex;
 
@@ -160,6 +161,9 @@ public:
     void delayedSettingsChanged( bool bInvalidate );
 
     bool isNSAppThread() const;
+
+    void startedPrintJob() { mnActivePrintJobs++; }
+    void endedPrintJob() { mnActivePrintJobs--; }
 
     // event subtypes for NSApplicationDefined events
     static const short AppExecuteSVMain   = 0x7fff;
