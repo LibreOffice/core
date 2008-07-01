@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: namespaces.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +60,13 @@ const sal_Int32 NMSP_EXCEL                  = 44 << 16; // Excel VML
 // PresentationML
 const sal_Int32 NMSP_PPT                    = 51 << 16;
 const sal_Int32 NMSP_POWERPOINT             = 52 << 16; // PowerPoint VML
+// Document properties
+const sal_Int32 NMSP_COREPR                 = 61 << 16;
+const sal_Int32 NMSP_DC                     = 62 << 16;
+const sal_Int32 NMSP_DCTERMS                = 63 << 16;
+const sal_Int32 NMSP_EXTPR                  = 64 << 16;
+const sal_Int32 NMSP_CUSTPR                 = 65 << 16;
+const sal_Int32 NMSP_VT                     = 66 << 16;
 
 // ----------------------------------------------------------------------------
 
