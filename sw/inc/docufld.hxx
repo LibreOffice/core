@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docufld.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -584,6 +584,7 @@ public:
     virtual String          GetCntnt(BOOL bName = FALSE) const;
     virtual SwField*        Copy() const;
     String                  GetName() const { return aName; }
+    void                    SetName( const String& rName ) { aName = rName; }
     inline void             SetExpansion(const String& rStr) { aContent = rStr; }
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
