@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drviewsa.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -144,7 +144,8 @@ DrawViewShell::DrawViewShell (
     PageKind ePageKind,
     FrameView* pFrameViewArgument)
     : ViewShell (pFrame, pParentWindow, rViewShellBase),
-    maTabControl(this, pParentWindow)
+      maTabControl(this, pParentWindow),
+      mbIsInSwitchPage(false)
 {
     if (pFrameViewArgument != NULL)
         mpFrameView = pFrameViewArgument;
@@ -164,7 +165,8 @@ DrawViewShell::DrawViewShell (
     ::Window* pParentWindow,
     const DrawViewShell& rShell)
     : ViewShell(pFrame, pParentWindow, rShell),
-      maTabControl(this, pParentWindow)
+      maTabControl(this, pParentWindow),
+      mbIsInSwitchPage(false)
 {
     mpFrameView = new FrameView(GetDoc());
     Construct (GetDocSh(), PK_STANDARD);
