@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sheetdatacontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -389,7 +389,7 @@ void OoxSheetDataContext::importRow( const AttributeList& rAttribs )
 void OoxSheetDataContext::importCell( const AttributeList& rAttribs )
 {
     maCurrCell.reset();
-    maCurrCell.mxCell         = getCell( rAttribs.getString( XML_r ), &maCurrCell.maAddress );
+    maCurrCell.mxCell         = getCell( rAttribs.getString( XML_r, OUString() ), &maCurrCell.maAddress );
     maCurrCell.mnCellType     = rAttribs.getToken( XML_t, XML_n );
     maCurrCell.mnXfId         = rAttribs.getInteger( XML_s, -1 );
     maCurrCell.mbShowPhonetic = rAttribs.getBool( XML_ph, false );
@@ -402,11 +402,11 @@ void OoxSheetDataContext::importCell( const AttributeList& rAttribs )
 
 void OoxSheetDataContext::importFormula( const AttributeList& rAttribs )
 {
-    maCurrCell.maFormulaRef   = rAttribs.getString( XML_ref );
+    maCurrCell.maFormulaRef   = rAttribs.getString( XML_ref, OUString() );
     maCurrCell.mnFormulaType  = rAttribs.getToken( XML_t, XML_normal );
     maCurrCell.mnSharedId     = rAttribs.getInteger( XML_si, -1 );
-    maTableData.maRef1        = rAttribs.getString( XML_r1 );
-    maTableData.maRef2        = rAttribs.getString( XML_r2 );
+    maTableData.maRef1        = rAttribs.getString( XML_r1, OUString() );
+    maTableData.maRef2        = rAttribs.getString( XML_r2, OUString() );
     maTableData.mb2dTable     = rAttribs.getBool( XML_dt2D, false );
     maTableData.mbRowTable    = rAttribs.getBool( XML_dtr, false );
     maTableData.mbRef1Deleted = rAttribs.getBool( XML_del1, false );
@@ -704,7 +704,7 @@ void OoxExternalSheetDataContext::onStartRecord( RecordInputStream& rStrm )
 void OoxExternalSheetDataContext::importCell( const AttributeList& rAttribs )
 {
     maCurrCell.reset();
-    maCurrCell.mxCell = getCell( rAttribs.getString( XML_r ), &maCurrCell.maAddress );
+    maCurrCell.mxCell = getCell( rAttribs.getString( XML_r, OUString() ), &maCurrCell.maAddress );
     maCurrCell.mnCellType = rAttribs.getToken( XML_t, XML_n );
 }
 
