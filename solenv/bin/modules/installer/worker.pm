@@ -8,7 +8,7 @@
 #
 # $RCSfile: worker.pm,v $
 #
-# $Revision: 1.62 $
+# $Revision: 1.63 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -2892,6 +2892,66 @@ sub key_in_a_is_also_key_in_b
     }
 
     return $returnvalue;
+}
+
+################################################
+# Setting all spellchecker languages
+################################################
+
+sub set_spellcheckerlanguages
+{
+    my ( $productlanguagesarrayref, $allvariables ) = @_;
+
+    my %productlanguages = ();
+    for ( my $i = 0; $i <= $#{$productlanguagesarrayref}; $i++ ) { $productlanguages{${$productlanguagesarrayref}[$i]} = 1;  }
+
+    my $spellcheckfilename = $allvariables->{'SPELLCHECKERFILE'};
+
+    my $spellcheckfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$spellcheckfilename, "", 1);
+
+    if ($$spellcheckfileref eq "") { installer::exiter::exit_program("ERROR: Could not find $spellcheckfilename!", "set_spellcheckerlanguages"); }
+
+    my $infoline = "Using spellchecker file: $$spellcheckfileref \n";
+    push( @installer::globals::globallogfileinfo, $infoline);
+
+    my $spellcheckfile = installer::files::read_file($$spellcheckfileref);
+    my %spellcheckhash = ();
+
+    for ( my $j = 0; $j <= $#{$spellcheckfile}; $j++ )
+    {
+        # Analyzing all "key=value" lines
+        my $oneline = ${$spellcheckfile}[$j];
+
+        if ( $oneline =~ /^\s*(\S+)\s*\=\s*\"(.*?)\"\s*$/ ) # no white space allowed in key
+        {
+            my $onelang = $1;
+            my $languagelist = $2;
+            $spellcheckhash{$onelang} = $languagelist;
+        }
+    }
+
+    # Collecting all required languages in %installer::globals::spellcheckerlanguagehash
+
+    foreach my $lang (keys %productlanguages)
+    {
+        my $languagelist = "";
+        if ( exists($spellcheckhash{$lang}) ) { $languagelist = $spellcheckhash{$lang}; }
+        else { $languagelist = $spellcheckhash{'en-US'}; }  # defaulting to English
+
+        my $langlisthash = installer::converter::convert_stringlist_into_hash(\$languagelist, ",");
+        foreach my $onelang ( keys %{$langlisthash} ) { $installer::globals::spellcheckerlanguagehash{$onelang} = 1; }
+    }
+
+    $installer::globals::analyze_spellcheckerlanguage = 1;
+
+    # Logging
+
+    my $langstring = "";
+    foreach my $lang (sort keys %installer::globals::spellcheckerlanguagehash) { $langstring = $langstring . "," . $lang }
+    $langstring =~ s/^\s*,//;
+
+    $infoline = "Collected spellchecker languages for spellchecker: $langstring \n";
+    push( @installer::globals::globallogfileinfo, $infoline);
 }
 
 1;
