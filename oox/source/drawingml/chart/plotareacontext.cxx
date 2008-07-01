@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: plotareacontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,19 +64,22 @@ ContextWrapper View3DContext::onCreateContext( sal_Int32 nElement, const Attribu
                     mrModel.mnDepthPercent = rAttribs.getInteger( XML_val, 100 );
                     return false;
                 case C_TOKEN( hPercent ):
-                    mrModel.mnHeightPercent = rAttribs.getInteger( XML_val, 100 );
+                    mrModel.monHeightPercent = rAttribs.getInteger( XML_val, 100 );
                     return false;
                 case C_TOKEN( perspective ):
                     mrModel.mnPerspective = rAttribs.getInteger( XML_val, 30 );
                     return false;
                 case C_TOKEN( rAngAx ):
-                    mrModel.mbRightAngled = rAttribs.getBool( XML_val, true );
+                    // default is 'false', not 'true' as specified
+                    mrModel.mbRightAngled = rAttribs.getBool( XML_val, false );
                     return false;
                 case C_TOKEN( rotX ):
-                    mrModel.mnRotationX = rAttribs.getInteger( XML_val, 0 );
+                    // default value dependent on chart type
+                    mrModel.monRotationX = rAttribs.getInteger( XML_val );
                     return false;
                 case C_TOKEN( rotY ):
-                    mrModel.mnRotationY = rAttribs.getInteger( XML_val, 0 );
+                    // default value dependent on chart type
+                    mrModel.monRotationY = rAttribs.getInteger( XML_val );
                     return false;
             }
         break;
