@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmltoken.hxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,6 +72,7 @@ namespace xmloff { namespace token {
         XML_XML_DOCTYPE_SUFFIX,
 
         // namespace prefixes and names
+        XML_N_XML,
         XML_NP_OFFICE,
         XML_N_OFFICE,
         XML_N_OFFICE_OLD,
@@ -132,6 +133,14 @@ namespace xmloff { namespace token {
 
         XML_NP_VERSIONS_LIST,
         XML_N_VERSIONS_LIST,
+
+        // erAck: 2008-04-09T20:02+0200  OpenFormula aka ODFF
+        XML_NP_OF,
+        XML_N_OF,
+
+        // ODF 1.2 metadata: RDFa
+        XML_NP_RDFA,
+        XML_N_RDFA,
 
         // units
         XML_UNIT_MM,
@@ -3010,15 +3019,16 @@ namespace xmloff { namespace token {
         XML_CELL_RANGE,
         XML_ERROR_LOWER_RANGE,
         XML_ERROR_UPPER_RANGE,
-        // erAck: 2008-04-09T20:02+0200  OpenFormula aka ODFF
-        XML_NP_OF,
-        XML_N_OF,
+
         // --> OD 2008-04-22 #refactorlists#
         XML_CONTINUE_LIST,
         XML_STYLE_OVERRIDE,
         // <--
+
         // fs: #i90243#
         XML_XFORM_MODEL_SETTINGS,
+
+        XML_META_FIELD,
 
         XML_TOKEN_END
     };
