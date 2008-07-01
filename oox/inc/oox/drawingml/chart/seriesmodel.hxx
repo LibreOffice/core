@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: seriesmodel.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,19 +45,19 @@ struct DataLabelModelBase
     typedef ModelRef< Shape >       ShapeRef;
     typedef ModelRef< TextBody >    TextBodyRef;
 
-    ShapeRef            mxShapeProp;        /// Data label frame formatting.
-    TextBodyRef         mxTextProp;         /// Data label text formatting.
-    OptString           moaFormatCode;      /// Number format for numeric labels.
-    OptString           moaSeparator;       /// Separator between label components.
-    OptInt32            monLabelPos;        /// Data label position.
-    OptBool             mobShowBubbleSize;  /// True = show size of bubbles in bubble charts.
-    OptBool             mobShowCatName;     /// True = show category name of data points.
-    OptBool             mobShowLegendKey;   /// True = show legend key of data series.
-    OptBool             mobShowPercent;     /// True = show percentual value in pie/doughnut charts.
-    OptBool             mobShowSerName;     /// True = show series name.
-    OptBool             mobShowVal;         /// True = show data point value.
-    OptBool             mobSourceLinked;    /// True = number format linked to source data.
-    bool                mbDeleted;          /// True = data label(s) deleted.
+    ShapeRef            mxShapeProp;            /// Data label frame formatting.
+    TextBodyRef         mxTextProp;             /// Data label text formatting.
+    OptValue< ::rtl::OUString > moaFormatCode;  /// Number format for numeric labels.
+    OptValue< ::rtl::OUString > moaSeparator;   /// Separator between label components.
+    OptValue< sal_Int32 > monLabelPos;          /// Data label position.
+    OptValue< bool >    mobShowBubbleSize;      /// True = show size of bubbles in bubble charts.
+    OptValue< bool >    mobShowCatName;         /// True = show category name of data points.
+    OptValue< bool >    mobShowLegendKey;       /// True = show legend key of data series.
+    OptValue< bool >    mobShowPercent;         /// True = show percentual value in pie/doughnut charts.
+    OptValue< bool >    mobShowSerName;         /// True = show series name.
+    OptValue< bool >    mobShowVal;             /// True = show data point value.
+    OptValue< bool >    mobSourceLinked;        /// True = number format linked to source data.
+    bool                mbDeleted;              /// True = data label(s) deleted.
 
     explicit            DataLabelModelBase();
                         ~DataLabelModelBase();
@@ -87,7 +87,7 @@ struct DataLabelsModel : public DataLabelModelBase
 
     DataLabelVector     maPointLabels;      /// Settings for individual data point labels.
     ShapeRef            mxLeaderLines;      /// Formatting of connector lines between data points and labels.
-    OptBool             mobShowLeaderLines; /// True = show connector lines between data points and labels.
+    OptValue< bool >    mobShowLeaderLines; /// True = show connector lines between data points and labels.
 
     explicit            DataLabelsModel();
                         ~DataLabelsModel();
@@ -126,9 +126,9 @@ struct TrendlineModel
 
     ShapeRef            mxShapeProp;        /// Trendline formatting.
     ::rtl::OUString     maName;             /// User-defined name of the trendline.
-    OptDouble           mfBackward;         /// Size of trendline before first data point.
-    OptDouble           mfForward;          /// Size of trendline behind last data point.
-    OptDouble           mfIntercept;        /// Crossing point with Y axis.
+    OptValue< double >  mfBackward;         /// Size of trendline before first data point.
+    OptValue< double >  mfForward;          /// Size of trendline behind last data point.
+    OptValue< double >  mfIntercept;        /// Crossing point with Y axis.
     sal_Int32           mnOrder;            /// Polynomial order in range [2, 6].
     sal_Int32           mnPeriod;           /// Moving average period in range [2, 255].
     sal_Int32           mnTypeId;           /// Type of the trendline.
@@ -147,12 +147,12 @@ struct DataPointModel
 
     ShapeRef            mxShapeProp;        /// Data point formatting.
     ShapeRef            mxMarkerProp;       /// Data point marker formatting.
-    OptInt32            monExplosion;       /// Pie slice moved from pie center.
-    OptInt32            monMarkerSize;      /// Size of the series line marker (2...72).
-    OptInt32            monMarkerSymbol;    /// Series line marker symbol.
-    OptBool             mobBubble3d;        /// True = show bubbles with 3D shade.
-    OptBool             mobInvertNeg;       /// True = invert negative data points.
+    OptValue< sal_Int32 > monExplosion;     /// Pie slice moved from pie center.
+    OptValue< sal_Int32 > monMarkerSize;    /// Size of the series line marker (2...72).
+    OptValue< sal_Int32 > monMarkerSymbol;  /// Series line marker symbol.
+    OptValue< bool >    mobBubble3d;        /// True = show bubbles with 3D shade.
     sal_Int32           mnIndex;            /// Unique data point index.
+    bool                mbInvertNeg;        /// True = invert negative data points (not derived from series!).
 
     explicit            DataPointModel();
                         ~DataPointModel();
@@ -185,15 +185,15 @@ struct SeriesModel
     ShapeRef            mxMarkerProp;       /// Data point marker formatting.
     TextRef             mxText;             /// Series title source.
     DataLabelsRef       mxLabels;           /// Data point label settings for all points.
-    OptInt32            monShape;           /// 3D bar shape type.
-    OptBool             mobBubble3d;        /// True = show bubbles with 3D shade.
-    OptBool             mobSmooth;          /// True = smooth series line.
+    OptValue< sal_Int32 > monShape;         /// 3D bar shape type.
     sal_Int32           mnExplosion;        /// Pie slice moved from pie center.
-    sal_Int32           mnIndex;            /// Unique series index.
+    sal_Int32           mnIndex;            /// Series index used for automatic formatting.
     sal_Int32           mnMarkerSize;       /// Size of the series line marker (2...72).
     sal_Int32           mnMarkerSymbol;     /// Series line marker symbol.
-    sal_Int32           mnOrder;            /// Series order used for automatic formatting.
+    sal_Int32           mnOrder;            /// Series order.
+    bool                mbBubble3d;         /// True = show bubbles with 3D shade.
     bool                mbInvertNeg;        /// True = invert negative data points.
+    bool                mbSmooth;           /// True = smooth series line.
 
     explicit            SeriesModel();
                         ~SeriesModel();
