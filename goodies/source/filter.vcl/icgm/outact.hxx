@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outact.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,7 +85,6 @@ class CGMOutAct
     void                        EndFigure() ;
     void                        RegPolyLine( Polygon&, sal_Bool bReverse = sal_False ) ;
     void                        SetGradientOffset( long nHorzOfs, long nVertOfs, sal_uInt32 nType );
-    void                        SetGradientEdge( long nEdge );
     void                        SetGradientAngle( long nAngle );
     void                        SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 nColorTo );
     void                        SetGradientStyle( sal_uInt32 nStyle, double fRatio );
@@ -102,18 +101,6 @@ class CGMOutAct
     virtual void                AppendText( char*, sal_uInt32, FinalFlag ) {} ;
     virtual sal_uInt32              DrawText( TextEntry*, NodeFrameSet&, sal_uInt32 ) { return 0; } ;
     virtual void                DrawChart(){} ;
-};
-
-class CGMMetaOutAct : public CGMOutAct
-{
-    public:
-                                CGMMetaOutAct( CGM& rCGM ) ;
-                                ~CGMMetaOutAct() {} ;
-    virtual void                DrawRectangle( FloatRect& ) ;
-    virtual void                DrawBitmap( CGMBitmapDescriptor* ) ;
-    virtual void                DrawPolygon( Polygon& ) ;
-    virtual void                DrawPolyLine( Polygon& ) ;
-    virtual void                DrawPolybezier( Polygon& ) ;
 };
 
 class CGMImpressOutAct : public CGMOutAct
@@ -137,7 +124,6 @@ class CGMImpressOutAct : public CGMOutAct
     void                        ImplSetLineBundle() ;
     void                        ImplSetFillBundle() ;
     void                        ImplSetTextBundle( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & ) ;
-    void                        ImplGetFrameSet( int NodeNumber, NodeFrameSet& );
 public:
                                 CGMImpressOutAct( CGM&, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & ) ;
                                 ~CGMImpressOutAct() {} ;

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dxfgrprd.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,14 +84,11 @@ public:
     // Mit folgenden Methoden koennen die aktuell gespeicherten Werte zu den
     // Gruppencodes veraendert werden. (z.B. um Defaultwerte zu setzen, bevor
     // 'blind' eine Menge von Gruppen eingelesen wird.)
-    void SetI(USHORT nG, long nI);
     void SetF(USHORT nG, double fF);
     void SetS(USHORT nG, const char * sS); // (wird kopiert)
 
 private:
 
-    void   FillIBuff();
-    char   ReadChar();
     void   ReadLine(char * ptgt);
     long   ReadI();
     double ReadF();
@@ -155,13 +152,6 @@ inline const char * DXFGroupReader::GetS()
 {
     return GetS(nLastG);
 }
-
-inline char DXFGroupReader::ReadChar()
-{
-    if (nIBuffPos>=nIBuffSize) FillIBuff();
-    return sIBuff[nIBuffPos++];
-}
-
 
 #endif
 
