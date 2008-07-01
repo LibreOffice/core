@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cgm.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,18 +65,6 @@ void CGM::ImplCGMInit()
 
 // ---------------------------------------------------------------
 
-CGM::CGM( sal_uInt32 nMode ) :
-    mpGraphic       ( NULL ),       //
-    mpCommentOut    ( NULL ),       //
-    mbStatus        ( sal_True ),
-    mpOutAct        ( new CGMOutAct( *this ) ),
-    mnMode          ( nMode )
-{
-    ImplCGMInit();
-};
-
-// ---------------------------------------------------------------
-
 #ifdef CGM_EXPORT_IMPRESS
 
 CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > & rModel )  :
@@ -89,24 +77,6 @@ CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > & rModel )  :
     mnMode |= CGM_EXPORT_IMPRESS;
     ImplCGMInit();
 }
-#endif
-
-// ---------------------------------------------------------------
-
-#ifdef CGM_EXPORT_META
-CGM::CGM( sal_uInt32 nMode, Graphic& rGraphic ) :
-    mpGraphic       ( &rGraphic ),
-    mpCommentOut    ( NULL ),
-    mbStatus        ( sal_True ),
-    mpOutAct        ( new CGMMetaOutAct( *this ) ),
-    mnMode          ( nMode ),
-    mpGDIMetaFile   ( new GDIMetaFile )
-{
-    ImplCGMInit();
-    mpVirDev = new VirtualDevice();
-    mpVirDev->EnableOutput( sal_False );
-    mpGDIMetaFile->Record( mpVirDev );
-};
 #endif
 
 // ---------------------------------------------------------------
@@ -855,31 +825,6 @@ sal_Bool CGM::Write( SvStream& rIStm )
         rIStm.SeekRel( 1 );
     ImplDoClass();
 
-
-#ifdef CGM_USER_BREAKPOINT
-#ifdef WNT
-    if ( !mbStatus || mnParaSize && ( mnElementSize != mnParaSize ) )
-        _asm int 0x3;
-#endif
-#endif
-
-    return mbStatus;
-};
-
-// ---------------------------------------------------------------
-
-sal_Bool CGM::Write( sal_uInt8* pSource )
-{
-    mpSource = pSource;
-    mnEscape = ImplGetUI16();
-    mnElementClass = mnEscape >> 12;
-    mnElementID = ( mnEscape & 0x0fe0 ) >> 5;
-    mnElementSize = mnEscape & 0x1f;
-    if ( mnElementSize == 31 )
-        mnElementSize = ImplGetUI16();
-    mpSource += mnParaSize;
-    mnParaSize = 0;
-    ImplDoClass();
 
 #ifdef CGM_USER_BREAKPOINT
 #ifdef WNT
