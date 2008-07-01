@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLIndexTOCContext.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -150,6 +150,50 @@ void XMLIndexTOCContext::StartElement(
 {
     if (bValid)
     {
+        // find text:style-name attribute and set section style
+        // find text:protected and set value
+        // find text:name and set value (if not empty)
+        sal_Int16 nCount = xAttrList->getLength();
+        sal_Bool bProtected = sal_False;
+        OUString sIndexName;
+        OUString sXmlId;
+        XMLPropStyleContext* pStyle(NULL);
+        for(sal_Int16 nAttr = 0; nAttr < nCount; nAttr++)
+        {
+            OUString sLocalName;
+            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+                GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
+                                  &sLocalName );
+            if ( XML_NAMESPACE_TEXT == nPrefix)
+            {
+                if ( IsXMLToken( sLocalName, XML_STYLE_NAME ) )
+                {
+                    pStyle = GetImport().GetTextImport()->FindSectionStyle(
+                                xAttrList->getValueByIndex(nAttr));
+                }
+                else if ( IsXMLToken( sLocalName, XML_PROTECTED ) )
+                {
+                    sal_Bool bTmp;
+                    if ( SvXMLUnitConverter::convertBool(
+                         bTmp, xAttrList->getValueByIndex(nAttr) ) )
+                    {
+                        bProtected = bTmp;
+                    }
+                }
+                else if ( IsXMLToken( sLocalName, XML_NAME ) )
+                {
+                    sIndexName = xAttrList->getValueByIndex(nAttr);
+                }
+            }
+            else if ( XML_NAMESPACE_XML == nPrefix)
+            {
+                if ( IsXMLToken( sLocalName, XML_ID ) )
+                {
+                    sXmlId = xAttrList->getValueByIndex(nAttr);
+                }
+            }
+        }
+
         // create table of content (via MultiServiceFactory)
         Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),
                                                  UNO_QUERY);
@@ -160,6 +204,10 @@ void XMLIndexTOCContext::StartElement(
                     OUString::createFromAscii(aIndexServiceMap[eIndexType]));
             if( xIfc.is() )
             {
+
+                // xml:id for RDF metadata
+                GetImport().SetXmlId(xIfc, sXmlId);
+
                 // get Property set
                 Reference<XPropertySet> xPropSet(xIfc, UNO_QUERY);
                 xTOCPropertySet = xPropSet;
@@ -213,45 +261,11 @@ void XMLIndexTOCContext::StartElement(
             GetImport().GetTextImport()->
                 RedlineAdjustStartNodeCursor(sal_True);
 
-        // find text:style-name attribute and set section style
-        // find text:protected and set value
-        // find text:name and set value (if not empty)
-        sal_Int16 nCount = xAttrList->getLength();
-        sal_Bool bProtected = sal_False;
-        OUString sIndexName;
-        for(sal_Int16 nAttr = 0; nAttr < nCount; nAttr++)
+        if (pStyle != NULL)
         {
-            OUString sLocalName;
-            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                                  &sLocalName );
-            if ( XML_NAMESPACE_TEXT == nPrefix)
-            {
-                if ( IsXMLToken( sLocalName, XML_STYLE_NAME ) )
-                {
-                    XMLPropStyleContext* pStyle =
-                        GetImport().GetTextImport()->FindSectionStyle(
-                                xAttrList->getValueByIndex(nAttr));
-                    if (pStyle != NULL)
-                    {
-                        pStyle->FillPropertySet( xTOCPropertySet );
-                    }
-                }
-                else if ( IsXMLToken( sLocalName, XML_PROTECTED ) )
-                {
-                    sal_Bool bTmp;
-                    if ( SvXMLUnitConverter::convertBool(
-                         bTmp, xAttrList->getValueByIndex(nAttr) ) )
-                    {
-                        bProtected = bTmp;
-                    }
-                }
-                else if ( IsXMLToken( sLocalName, XML_NAME ) )
-                {
-                    sIndexName = xAttrList->getValueByIndex(nAttr);
-                }
-            }
+            pStyle->FillPropertySet( xTOCPropertySet );
         }
+
         Any aAny;
         aAny.setValue( &bProtected, ::getBooleanCppuType() );
         xTOCPropertySet->setPropertyValue( sIsProtected, aAny );
