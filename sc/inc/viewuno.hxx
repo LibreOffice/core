@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewuno.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -216,8 +216,6 @@ public:
                             ScTabViewObj(ScTabViewShell* pViewSh);
     virtual                 ~ScTabViewObj();
 
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
                                     throw(::com::sun::star::uno::RuntimeException);
@@ -226,6 +224,7 @@ public:
 
     void                    SelectionChanged();
     void                    VisAreaChanged();
+    void                    SheetChanged();
     sal_Bool                IsMouseListening() { return aMouseClickHandlers.Count() > 0; }
     sal_Bool                MousePressed( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
     sal_Bool                MouseReleased( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
