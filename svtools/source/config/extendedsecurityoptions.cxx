@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: extendedsecurityoptions.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -258,8 +258,9 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
                 sal_Int32 nMode = SvtExtendedSecurityOptions::OPEN_WITHSECURITYCHECK;
                 if ( seqValues[nProperty] >>= nMode )
                     m_eOpenHyperlinkMode = (SvtExtendedSecurityOptions::OpenHyperlinkMode)nMode;
-                else
+                else {
                     DBG_ERROR("Wrong type for Open mode!");
+                }
                 m_bROOpenHyperlinkMode = seqRO[nProperty];
             }
             break;
