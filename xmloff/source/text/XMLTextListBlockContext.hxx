@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextListBlockContext.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,7 @@ class XMLTextListBlockContext : public SvXMLImportContext
 
     // text:style-name property of <list> element
     ::rtl::OUString         msListStyleName;
+    ::rtl::OUString         sXmlId;
 
     SvXMLImportContextRef   mxParentListBlock;
 
