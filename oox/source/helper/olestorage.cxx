@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: olestorage.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,7 +121,7 @@ Reference< XStorage > OleStorage::implGetXStorage() const
 void OleStorage::implGetElementNames( ::std::vector< OUString >& orElementNames ) const
 {
     Sequence< OUString > aNames;
-    if( mxStorage.is() ) try
+    if( mxElements.is() ) try
     {
         aNames = mxElements->getElementNames();
         if( aNames.getLength() > 0 )
