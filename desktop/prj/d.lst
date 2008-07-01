@@ -6,6 +6,7 @@ mkdir: %_DEST%\bin%_EXT%\so
 mkdir: %_DEST%\bin%_EXT%\c01
 mkdir: %_DEST%\bin%_EXT%\c05
 mkdir: %_DEST%\bin%_EXT%\c08
+mkdir: %_DEST%\bin%_EXT%\odf4ms
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\soffice.bin %_DEST%\bin%_EXT%\soffice.bin
@@ -129,3 +130,4 @@ mkdir: %COMMON_DEST%\pck%_EXT%\broffice_nologo
 ..\scripts\basis-link %_DEST%\bin%_EXT%\c05\basis-link
 ..\scripts\basis-link %_DEST%\bin%_EXT%\c08\basis-link
 ..\scripts\so-basis-link %_DEST%\bin%_EXT%\so\basis-link
+..\scripts\odf-basis-link %_DEST%\bin%_EXT%\odf4ms\basis-link
