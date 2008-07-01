@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accessibility.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +53,7 @@
 #include <vos/mutex.hxx>
 #include <svtools/itemset.hxx>
 
+#include <svx/editobj.hxx>
 #include <svx/editdata.hxx>
 #include <svx/editview.hxx>
 #include <svx/eeitem.hxx>
@@ -1101,6 +1102,13 @@ SfxItemPool* SmTextForwarder::GetPool() const
     return pEditEngine ? pEditEngine->GetEmptyItemSet().GetPool() : 0;
 }
 
+void SmTextForwarder::RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich )
+{
+    EditEngine *pEditEngine = rEditAcc.GetEditEngine();
+    if (pEditEngine)
+        pEditEngine->RemoveAttribs( rSelection, bRemoveParaAttribs, nWhich );
+}
+
 void SmTextForwarder::GetPortions( USHORT nPara, SvUShorts& rList ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
@@ -1500,6 +1508,23 @@ xub_StrLen SmTextForwarder::AppendTextPortion( USHORT /*nPara*/, const String &/
     DBG_ERROR("not yet implemented")
     return 0;
 }
+
+void SmTextForwarder::CopyText(const SvxTextForwarder& rSource)
+{
+
+    const SmTextForwarder* pSourceForwarder = dynamic_cast< const SmTextForwarder* >( &rSource );
+    if( !pSourceForwarder )
+        return;
+    EditEngine* pSourceEditEngine = pSourceForwarder->rEditAcc.GetEditEngine();
+    EditEngine *pEditEngine = rEditAcc.GetEditEngine();
+    if (pEditEngine && pSourceEditEngine )
+    {
+        EditTextObject* pNewTextObject = pSourceEditEngine->CreateTextObject();
+        pEditEngine->SetText( *pNewTextObject );
+        delete pNewTextObject;
+    }
+}
+
 //------------------------------------------------------------------------
 
 SmEditViewForwarder::SmEditViewForwarder( SmEditAccessible& rAcc ) :
