@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: substitutepathvars.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -197,6 +197,7 @@ enum PreDefVariable
     PREDEFVAR_BASEINSTURL,
     PREDEFVAR_USERDATAURL,
     // <--
+    PREDEFVAR_BRANDBASEURL,
     PREDEFVAR_COUNT
 };
 
