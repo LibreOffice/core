@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: float3d.src,v $
- * $Revision: 1.66 $
+ * $Revision: 1.67 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1146,11 +1146,6 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ en-US ] = "Material" ;
     };
 
-    Bitmap BMP_FAVORITES_H
-    {
-        File = "3dfavor_h.bmp";
-    };
-
     Bitmap BMP_GEO_H
     {
         File = "3dgeo_h.bmp";
@@ -1199,16 +1194,6 @@ DockingWindow RID_SVXFLOAT_3D
     Bitmap BMP_PERSPECTIVE_H
     {
         File = "persp3d_h.bmp";
-    };
-
-    Bitmap BMP_ONLY_3D_H
-    {
-        File = "only3d_h.bmp";
-    };
-
-    Bitmap BMP_ALL_ATTRIBUTES_H
-    {
-        File = "allattri_h.bmp";
     };
 
     Bitmap BMP_NORMALS_OBJ_H
