@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unomap.cxx,v $
- * $Revision: 1.210 $
+ * $Revision: 1.211 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -619,6 +619,8 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_CRSR_PARA_PROPERTIES_2
                     TABSTOPS_MAP_ENTRY
                     COMMON_TEXT_CONTENT_PROPERTIES
+                    { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAME), RES_TXTATR_CHARFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID,     0},\
+                    { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAMES), FN_UNO_CHARFMT_SEQUENCE,  CPPU_E2T(CPPUTYPE_OUSTRINGS),     PropertyAttribute::MAYBEVOID,     0},\
                     {0,0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aParagraphMap_Impl;
@@ -1242,6 +1244,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_IS_PIXEL_CONTOUR), FN_UNO_IS_PIXEL_CONTOUR, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0 },
                     { SW_PROP_NMID(UNO_NAME_IS_AUTOMATIC_CONTOUR), FN_UNO_IS_AUTOMATIC_CONTOUR , CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0 },
                     { SW_PROP_NMID(UNO_NAME_CLSID),                FN_UNO_CLSID, CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0 },
+                    { SW_PROP_NMID(UNO_NAME_STREAM_NAME),           FN_UNO_STREAM_NAME, CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0 },
                     { SW_PROP_NMID(UNO_NAME_MODEL), FN_UNO_MODEL, CPPU_E2T(CPPUTYPE_REFMODEL), PropertyAttribute::READONLY|PropertyAttribute::MAYBEVOID, 0},
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC_URL), FN_UNO_REPLACEMENT_GRAPHIC_URL, CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_COMPONENT),FN_UNO_COMPONENT, CPPU_E2T(CPPUTYPE_REFCOMPONENT), PropertyAttribute::READONLY, 0},
