@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Spreadsheet.idl,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -213,7 +213,7 @@ service Spreadsheet
 
     /** provides a method to set an external name at the sheet.
 
-        @since CWS xmlfilter02
+        @since OOo 3.0
      */
     [optional] interface com::sun::star::sheet::XExternalSheetName;
 
