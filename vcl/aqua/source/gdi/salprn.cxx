@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salprn.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,7 @@
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
+
 using namespace rtl;
 using namespace vcl;
 using namespace com::sun::star::uno;
@@ -188,7 +189,7 @@ static struct PaperSizeEntry
     { 792, 1224, PAPER_TABLOID }
 };
 
-static bool getPaperSize( double o_fWidth, double o_fHeight, const Paper i_ePaper )
+static bool getPaperSize( double& o_fWidth, double& o_fHeight, const Paper i_ePaper )
 {
     for(unsigned int i = 0; i < sizeof(aPaperSizes)/sizeof(aPaperSizes[0]); i++ )
     {
@@ -456,40 +457,65 @@ BOOL AquaSalInfoPrinter::StartJob( const String* pFileName,
         return FALSE;
 
     BOOL bSuccess = FALSE;
-    mnStartPageOffsetX = mnStartPageOffsetY = 0;
+    std::vector<ULONG> aPaperRanges;
+    if( ! pQPrinter->GetPaperRanges( aPaperRanges, true ) )
+        return FALSE;
 
-    // create view
-    NSView* pPrintView = [[AquaPrintView alloc] initWithQPrinter: pQPrinter withInfoPrinter: this];
+    size_t nRanges = aPaperRanges.size();
+    AquaSalInstance* pInst = GetSalData()->mpFirstInstance;
 
-    NSMutableDictionary* pPrintDict = [mpPrintInfo dictionary];
-
-    // set filename
-    if( pFileName )
+    for( ULONG nCurRange = 0; nCurRange < nRanges-1; nCurRange++ )
     {
-        [mpPrintInfo setJobDisposition: NSPrintSaveJob];
-        NSString* pPath = CreateNSString( *pFileName );
-        [pPrintDict setObject: pPath forKey: NSPrintSavePath];
-        [pPath release];
-    }
+        mnStartPageOffsetX = mnStartPageOffsetY = 0;
 
-    [pPrintDict setObject: [[NSNumber numberWithInt: (int)pQPrinter->GetCopyCount()] autorelease] forKey: NSPrintCopies];
-    [pPrintDict setObject: [[NSNumber numberWithBool: YES] autorelease] forKey: NSPrintDetailedErrorReporting];
-    [pPrintDict setObject: [[NSNumber numberWithInt: 1] autorelease] forKey: NSPrintFirstPage];
-    [pPrintDict setObject: [[NSNumber numberWithInt: (int)pQPrinter->GetPrintPageCount()] autorelease] forKey: NSPrintLastPage];
+        // update job data
+        ImplJobSetup* pSetup = pQPrinter->GetPageSetup( aPaperRanges[ nCurRange ] );
+        if( pSetup )
+            SetData( ~0, pSetup );
+        DBG_ASSERT( pSetup, "no job setup for range" );
+
+        mnCurPageRangeStart = aPaperRanges[nCurRange];
+        mnCurPageRangeCount = aPaperRanges[nCurRange+1] - aPaperRanges[nCurRange];
+        // create view
+        NSView* pPrintView = [[AquaPrintView alloc] initWithQPrinter: pQPrinter withInfoPrinter: this];
+
+        NSMutableDictionary* pPrintDict = [mpPrintInfo dictionary];
+
+        // set filename
+        if( pFileName )
+        {
+            [mpPrintInfo setJobDisposition: NSPrintSaveJob];
+            NSString* pPath = CreateNSString( *pFileName );
+            [pPrintDict setObject: pPath forKey: NSPrintSavePath];
+            [pPath release];
+
+            // in this case we can only deliver the print job in one file
+            mnCurPageRangeStart = 0;
+            mnCurPageRangeCount = aPaperRanges.back();
+            nCurRange = nRanges;
+        }
+
+        [pPrintDict setObject: [[NSNumber numberWithInt: (int)pQPrinter->GetCopyCount()] autorelease] forKey: NSPrintCopies];
+        [pPrintDict setObject: [[NSNumber numberWithBool: YES] autorelease] forKey: NSPrintDetailedErrorReporting];
+        [pPrintDict setObject: [[NSNumber numberWithInt: 1] autorelease] forKey: NSPrintFirstPage];
+        [pPrintDict setObject: [[NSNumber numberWithInt: (int)mnCurPageRangeCount] autorelease] forKey: NSPrintLastPage];
 
 
-    // create print operation
-    NSPrintOperation* pPrintOperation = [NSPrintOperation printOperationWithView: pPrintView printInfo: mpPrintInfo];
+        // create print operation
+        NSPrintOperation* pPrintOperation = [NSPrintOperation printOperationWithView: pPrintView printInfo: mpPrintInfo];
 
-    if( pPrintOperation )
-    {
-        bool bShowPanel = (! bIsQuickJob && getUseNativeDialog());
-        [pPrintOperation setShowsPrintPanel: bShowPanel ? YES : NO ];
-        // [pPrintOperation setShowsProgressPanel: NO];
-        bSuccess = TRUE;
-        mbJob = true;
-        [pPrintOperation runOperation];
-        mbJob = false;
+        if( pPrintOperation )
+        {
+            bool bShowPanel = (! bIsQuickJob && getUseNativeDialog() );
+            [pPrintOperation setShowsPrintPanel: bShowPanel ? YES : NO ];
+            // [pPrintOperation setShowsProgressPanel: NO];
+            bSuccess = TRUE;
+            mbJob = true;
+            pInst->startedPrintJob();
+            [pPrintOperation runOperation];
+            pInst->endedPrintJob();
+            mbJob = false;
+        }
     }
 
     return bSuccess;
