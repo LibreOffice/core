@@ -31,6 +31,7 @@ T4_WRITER = \
     writer8 \
     writer_MS_Word_2003_XML \
     writer_MS_Word_2007_XML \
+    writer_MS_Word_2007_XML_Template \
     MediaWiki_File \
     LaTeX \
     BibTeX
@@ -68,6 +69,7 @@ F4_WRITER = \
     writer_web_MediaWiki_File \
     MS_Word_2003_XML \
     MS_Word_2007_XML \
+    MS_Word_2007_XML_Template \
     LaTeX_Writer \
     BibTeX_Writer
 
@@ -85,7 +87,8 @@ F4_UI_WRITER = \
     writer8_ui \
     writer8_template_ui \
     MS_Word_2003_XML_ui \
-    MS_Word_2007_XML_ui
+    MS_Word_2007_XML_ui \
+    MS_Word_2007_XML_Template_ui
 
 # -----------------------------------------------
 # count = 0
