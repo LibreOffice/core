@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ximpshap.cxx,v $
- * $Revision: 1.126 $
+ * $Revision: 1.127 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3412,8 +3412,7 @@ void SdXMLCustomShapeContext::EndElement()
         sal_Int32 nUPD( 0 );
         sal_Int32 nBuild( 0 );
         GetImport().getBuildIds( nUPD, nBuild );
-        if ( nUPD < 680 ||
-             ( nUPD == 680 && nBuild <= 9221 ) )
+        if( ((nUPD >= 640 && nUPD <= 645) || (nUPD == 680)) && (nBuild <= 9221) )
         {
             Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( mxShape, UNO_QUERY );
             if( xDefaulter.is() )
