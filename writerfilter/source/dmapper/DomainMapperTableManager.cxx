@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DomainMapperTableManager.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,8 +80,11 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
         /* WRITERFILTERSTATUS: table: table_sprmdata */
         switch( nSprmId )
         {
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
+            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 2 */
             case NS_ooxml::LN_CT_TrPrBase_jc: //90706
+            /* WRITERFILTERSTATUS: done: 1, planned: 0.5, spent: 0.5 */
+            case NS_ooxml::LN_CT_TblPrBase_jc:
+            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 2 */
             case 0x5400: // sprmTJc
             {
                 //table justification 0: left, 1: center, 2: right
@@ -133,7 +136,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 }
             }
             break;
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
+            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 2 */
             case NS_ooxml::LN_CT_TrPrBase_trHeight: //90703
             {
                 //contains unit and value
