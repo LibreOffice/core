@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ShapeContextHandler.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,6 +27,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #include "ShapeContextHandler.hxx"
 #include "oox/vml/drawingfragmenthandler.hxx"
 
