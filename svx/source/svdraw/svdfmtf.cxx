@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdfmtf.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -680,6 +680,11 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const XubString& rS
     {
         pText->ClearMergedItem( SDRATTR_TEXT_AUTOGROWWIDTH );
         pText->SetMergedItem( SdrTextAutoGrowHeightItem( FALSE ) );
+        // don't let the margins eat the space needed for the text
+        pText->SetMergedItem ( SdrTextUpperDistItem (0));
+        pText->SetMergedItem ( SdrTextLowerDistItem (0));
+        pText->SetMergedItem ( SdrTextRightDistItem (0));
+        pText->SetMergedItem ( SdrTextLeftDistItem (0));
         pText->SetMergedItem( SdrTextFitToSizeTypeItem( SDRTEXTFIT_ALLLINES ) );
     }
     else
