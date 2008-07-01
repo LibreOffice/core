@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DomainMapper_Impl.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,14 +57,19 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XParagraphCursor.hpp>
+#include <com/sun/star/text/XRedline.hpp>
+#include <com/sun/star/text/XTextAppendAndConvert.hpp>
+#include <com/sun/star/text/XTextCopy.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/style/DropCapFormat.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.h>
 #include <resourcemodel/QNameToString.hxx>
+#include <ooxml/OOXMLFastTokens.hxx>
 
 
 #include <map>
@@ -391,12 +396,15 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bInAnyTableImport( false ),
         m_bLineNumberingSet( false ),
         m_bIsInFootnoteProperties( true ),
-        m_bIsCustomFtnMark( false )
+        m_bIsCustomFtnMark( false ),
+        n_CurrentRedlineToken( ooxml::OOXML_mod )
 {
     GetBodyText();
-    uno::Reference< text::XTextAppendAndConvert > xBodyTextAppendAndConvert = uno::Reference< text::XTextAppendAndConvert >( m_xBodyText, uno::UNO_QUERY );
-    m_aTextAppendStack.push(xBodyTextAppendAndConvert);
+    uno::Reference< text::XTextAppend > xBodyTextAppend = uno::Reference< text::XTextAppend >( m_xBodyText, uno::UNO_QUERY );
+    m_aTextAppendStack.push(xBodyTextAppend);
 
+    //todo: does it make sense to set the body text as static text interface?
+    uno::Reference< text::XTextAppendAndConvert > xBodyTextAppendAndConvert( m_xBodyText, uno::UNO_QUERY );
     TableDataHandler_t::Pointer_t pTableHandler
         (new DomainMapperTableHandler(xBodyTextAppendAndConvert, *this));
     m_TableManager.setHandler(pTableHandler);
@@ -480,9 +488,9 @@ void    DomainMapper_Impl::PushProperties(ContextType eId)
             // beginning with the second section group a section has to be inserted
             // into the document
             SectionPropertyMap* pSectionContext_ = dynamic_cast< SectionPropertyMap* >( pInsert.get() );
-            uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
-            if(xTextAppendAndConvert.is())
-                pSectionContext_->SetStart( xTextAppendAndConvert->getEnd() );
+             uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
+             if(xTextAppend.is())
+                 pSectionContext_->SetStart( xTextAppend->getEnd() );
         }
     }
     m_aPropertyStacks[eId].push( pInsert );
@@ -542,10 +550,10 @@ PropertyMapPtr DomainMapper_Impl::GetTopContextOfType(ContextType eId)
 /*-- 24.05.2007 15:54:51---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< text::XTextAppendAndConvert >  DomainMapper_Impl::GetTopTextAppendAndConvert()
+uno::Reference< text::XTextAppend >  DomainMapper_Impl::GetTopTextAppend()
 {
     OSL_ENSURE(!m_aTextAppendStack.empty(), "text append stack is empty" );
-    return m_aTextAppendStack.top().xTextAppendAndConvert;
+    return m_aTextAppendStack.top().xTextAppend;
 }
 
 /*-- 17.07.2006 08:47:04---------------------------------------------------
@@ -799,11 +807,11 @@ void lcl_MoveBorderPropertiesToFrame(uno::Sequence<beans::PropertyValue>& rFrame
   -----------------------------------------------------------------------*/
 void lcl_AddRangeAndStyle(
     ParagraphPropertiesPtr& pToBeSavedProperties,
-    uno::Reference< text::XTextAppendAndConvert > xTextAppendAndConvert,
+    uno::Reference< text::XTextAppend > xTextAppend,
     PropertyMapPtr pPropertyMap)
 {
     uno::Reference<text::XParagraphCursor> xParaCursor(
-        xTextAppendAndConvert->createTextCursorByRange(xTextAppendAndConvert->getEnd()), uno::UNO_QUERY_THROW);
+        xTextAppend->createTextCursorByRange( xTextAppend->getEnd()), uno::UNO_QUERY_THROW );
     pToBeSavedProperties->SetEndingRange(xParaCursor->getStart());
     xParaCursor->gotoStartOfParagraph( false );
 
@@ -829,9 +837,9 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 {
     ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pPropertyMap.get() );
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
-    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = rAppendContext.xTextAppendAndConvert;
+    uno::Reference< text::XTextAppend >  xTextAppend = rAppendContext.xTextAppend;
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-    if(xTextAppendAndConvert.is() && ! m_TableManager.isIgnore())
+    if(xTextAppend.is() && ! m_TableManager.isIgnore())
     {
         try
         {
@@ -857,7 +865,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
             if( bIsDropCap )
             {
                 uno::Reference<text::XParagraphCursor> xParaCursor(
-                    xTextAppendAndConvert->createTextCursorByRange(xTextAppendAndConvert->getEnd()), uno::UNO_QUERY_THROW);
+                    xTextAppend->createTextCursorByRange(xTextAppend->getEnd()), uno::UNO_QUERY_THROW);
                 //select paragraph
                 xParaCursor->gotoStartOfParagraph( true );
                 uno::Reference< beans::XPropertyState > xParaProperties( xParaCursor, uno::UNO_QUERY_THROW );
@@ -885,7 +893,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                 else if(*rAppendContext.pLastParagraphProperties == *pParaContext )
                 {
                     //handles (7)
-                    rAppendContext.pLastParagraphProperties->SetEndingRange(xTextAppendAndConvert->getEnd());
+                    rAppendContext.pLastParagraphProperties->SetEndingRange(xTextAppend->getEnd());
                     bKeepLastParagraphProperties = true;
                 }
                 else
@@ -999,7 +1007,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                             if( pParaContext->IsFrameMode() )
                             {
                                 pToBeSavedProperties.reset( new ParagraphProperties(*pParaContext) );
-                                lcl_AddRangeAndStyle(pToBeSavedProperties, xTextAppendAndConvert, pPropertyMap);
+                                lcl_AddRangeAndStyle(pToBeSavedProperties, xTextAppend, pPropertyMap);
                             }
                        }
                        catch( const uno::Exception& rEx )
@@ -1016,7 +1024,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                 if( !bIsDropCap && pParaContext->IsFrameMode() )
                 {
                     pToBeSavedProperties.reset( new ParagraphProperties(*pParaContext) );
-                    lcl_AddRangeAndStyle(pToBeSavedProperties, xTextAppendAndConvert, pPropertyMap);
+                    lcl_AddRangeAndStyle(pToBeSavedProperties, xTextAppend, pPropertyMap);
                 }
             }
             uno::Sequence< beans::PropertyValue > aProperties;
@@ -1034,7 +1042,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                     aProperties[nLength].Name = rPropNameSupplier.GetName(PROP_DROP_CAP_FORMAT);
                 }
                 uno::Reference< text::XTextRange > xTextRange =
-                    xTextAppendAndConvert->finishParagraph( aProperties );
+                    xTextAppend->finishParagraph( aProperties );
                 m_TableManager.handle(xTextRange);
             }
             else
@@ -1060,24 +1068,77 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 /*-------------------------------------------------------------------------
 
   -----------------------------------------------------------------------*/
+util::DateTime lcl_DateStringToDateTime( const ::rtl::OUString& rDateTime )
+{
+    util::DateTime aDateTime;
+    //xsd::DateTime in the format [-]CCYY-MM-DDThh:mm:ss[Z|(+|-)hh:mm] example: 2008-01-21T10:42:00Z
+    //OUString getToken( sal_Int32 token, sal_Unicode cTok, sal_Int32& index ) const SAL_THROW(())
+    sal_Int32 nIndex = 0;
+    ::rtl::OUString sDate = rDateTime.getToken( 0, 'T', nIndex );
+    ::rtl::OUString sTime = rDateTime.getToken( 0, 'Z', nIndex );
+    nIndex = 0;
+    aDateTime.Year = sal_uInt16( sDate.getToken( 0, '-', nIndex ).toInt32() );
+    aDateTime.Month = sal_uInt16( sDate.getToken( 0, '-', nIndex ).toInt32() );
+    aDateTime.Day = sal_uInt16( sDate.copy( nIndex ).toInt32() );
+
+    nIndex = 0;
+    aDateTime.Hours = sal_uInt16( sTime.getToken( 0, ':', nIndex ).toInt32() );
+    aDateTime.Minutes = sal_uInt16( sTime.getToken( 0, ':', nIndex ).toInt32() );
+    aDateTime.Seconds = sal_uInt16( sTime.copy( nIndex ).toInt32() );
+
+    return aDateTime;
+}
 void DomainMapper_Impl::appendTextPortion( const ::rtl::OUString& rString, PropertyMapPtr pPropertyMap )
 {
-    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
-    if(xTextAppendAndConvert.is() && ! m_TableManager.isIgnore())
+    uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
+    if(xTextAppend.is() && ! m_TableManager.isIgnore())
     {
         try
         {
             uno::Reference< text::XTextRange > xTextRange =
-                xTextAppendAndConvert->appendTextPortion
+                xTextAppend->appendTextPortion
                 (rString, pPropertyMap->GetPropertyValues());
+            if( m_CurrentRedlineDate.getLength() )
+            {
+                try
+                {
+                    ::rtl::OUString sType;
+                    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+                    switch(n_CurrentRedlineToken & 0xffff)
+                    {
+                        case ooxml::OOXML_mod : sType = rPropNameSupplier.GetName( PROP_FORMAT ); break;
+                        case ooxml::OOXML_ins : sType = rPropNameSupplier.GetName( PROP_INSERT ); break;
+                        case ooxml::OOXML_del : sType = rPropNameSupplier.GetName( PROP_DELETE ); break;
+                    }
+                    uno::Reference< text::XRedline > xRedline( xTextRange, uno::UNO_QUERY_THROW );
+                    beans::PropertyValues aRedlineProperties( 2 );
+                    beans::PropertyValue* pRedlineProperties = aRedlineProperties.getArray();
+                    pRedlineProperties[0].Name = rPropNameSupplier.GetName( PROP_REDLINE_AUTHOR );
+                    pRedlineProperties[0].Value <<= m_CurrentRedlineAuthor;
+                    pRedlineProperties[1].Name = rPropNameSupplier.GetName( PROP_REDLINE_DATE_TIME );
+                    pRedlineProperties[1].Value <<= lcl_DateStringToDateTime( m_CurrentRedlineDate );
+                    xRedline->makeRedline( sType, aRedlineProperties);
+
+                }
+                catch( const uno::Exception& rEx )
+                {
+                    (void)rEx;
+                    OSL_ENSURE( false, "Exception in makeRedline" );
+                }
+                ResetRedlineProperties();
+            }
 
             //m_TableManager.handle(xTextRange);
         }
-        catch(const lang::IllegalArgumentException& )
+        catch(const lang::IllegalArgumentException& rEx)
         {
+            (void)rEx;
+            OSL_ENSURE( false, "IllegalArgumentException in DomainMapper_Impl::appendTextPortion" );
         }
-        catch(const uno::Exception& )
+        catch(const uno::Exception& rEx)
         {
+            (void)rEx;
+            OSL_ENSURE( false, "Exception in DomainMapper_Impl::appendTextPortion" );
         }
     }
 }
@@ -1089,7 +1150,8 @@ void DomainMapper_Impl::appendTextContent(
     const uno::Sequence< beans::PropertyValue > xPropertyValues
     )
 {
-    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
+    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert( m_aTextAppendStack.top().xTextAppend, uno::UNO_QUERY );
+    OSL_ENSURE( xTextAppendAndConvert.is(), "trying to append a text content without XTextAppendAndConvert" );
     if(xTextAppendAndConvert.is() && ! m_TableManager.isIgnore())
     {
         try
@@ -1104,6 +1166,36 @@ void DomainMapper_Impl::appendTextContent(
         }
     }
 }
+/*-- 24.04.2008 08:38:07---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void DomainMapper_Impl::appendOLE( const ::rtl::OUString& rStreamName )
+{
+    static const rtl::OUString sEmbeddedService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextEmbeddedObject"));
+    try
+    {
+        uno::Reference< text::XTextContent > xOLE( m_xTextFactory->createInstance(sEmbeddedService), uno::UNO_QUERY_THROW );
+        uno::Reference< beans::XPropertySet > xOLEProperties(xOLE, uno::UNO_QUERY_THROW);
+
+        xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_STREAM_NAME ),
+                        uno::makeAny( rStreamName ));
+        //TODO: get real object properties
+        xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_WIDTH ),
+                        uno::makeAny(sal_Int32(1000)));
+        xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_HEIGHT ),
+                        uno::makeAny(sal_Int32(2000)));
+
+        //
+        appendTextContent( xOLE, uno::Sequence< beans::PropertyValue >() );
+
+    }
+    catch( const uno::Exception& rEx )
+    {
+        (void)rEx;
+        OSL_ENSURE( false, "Exception in creation of OLE object" );
+    }
+
+}
 /*-- 14.12.2006 12:26:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -1111,13 +1203,13 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
                                     uno::Reference< text::XTextRange >& xBefore )
 {
     uno::Reference< beans::XPropertySet > xRet;
-    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
-    if(xTextAppendAndConvert.is())
+    uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
+    if(xTextAppend.is())
     {
         try
         {
             uno::Reference< text::XParagraphCursor > xCursor(
-                xTextAppendAndConvert->createTextCursorByRange( xBefore ), uno::UNO_QUERY_THROW);
+                xTextAppend->createTextCursorByRange( xBefore ), uno::UNO_QUERY_THROW);
             //the cursor has been moved to the end of the paragraph because of the appendTextPortion() calls
             xCursor->gotoStartOfParagraph( false );
             xCursor->gotoEnd( true );
@@ -1136,44 +1228,6 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
 
     return xRet;
 }
-
-
-/*-- 14.12.2006 11:03:32---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-/*void DomainMapper_Impl::appendTextSection()
-{
-    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
-    if(xTextAppendAndConvert.is())
-    {
-        try
-        {
-            uno::Reference< text::XTextRange >  xRange = xTextAppendAndConvert->getEnd();
-            uno::Reference< beans::XPropertySet > xRangePropSet( xRange, uno::UNO_QUERY_THROW );
-            static const rtl::OUString sSectionProperty(RTL_CONSTASCII_USTRINGPARAM("TextSection"));
-            uno::Reference< text::XTextContent > xPrevSection;
-            xRangePropSet->getPropertyValue(sSectionProperty) >>= xPrevSection;
-            //close previous section by appending a new paragraph behind the current section
-            if(xPrevSection.is())
-            {
-                uno::Reference< text::XRelativeTextContentInsert > xRelativeInsert( xTextAppendAndConvert, uno::UNO_QUERY_THROW );
-                static const rtl::OUString sParagraphService(
-                    RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Paragraph"));
-                uno::Reference< text::XTextContent > xParagraph( m_xTextFactory->createInstance(sParagraphService), uno::UNO_QUERY_THROW );
-                xRelativeInsert->insertTextContentAfter( xParagraph, xPrevSection );
-            }
-            static const rtl::OUString sSectionService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextSection"));
-            uno::Reference< text::XTextContent > xSection( m_xTextFactory->createInstance(sSectionService), uno::UNO_QUERY_THROW );
-            xSection->attach( xRange );
-            //remove the appended paragraph behind the new section
-            uno::Reference< text::XRelativeTextContentRemove > xRemove( xTextAppendAndConvert, uno::UNO_QUERY_THROW );
-            xRemove->removeTextContentAfter( xSection );
-        }
-        catch(const uno::Exception& )
-        {
-        }
-    }
-} */
 /*-- 02.11.2006 12:08:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -1205,7 +1259,7 @@ void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
             //set the interface
             uno::Reference< text::XText > xHeaderText;
             xPageStyle->getPropertyValue(rPropNameSupplier.GetName( bLeft ? PROP_HEADER_TEXT_LEFT : PROP_HEADER_TEXT) ) >>= xHeaderText;
-            m_aTextAppendStack.push( uno::Reference< text::XTextAppendAndConvert >( xHeaderText, uno::UNO_QUERY_THROW));
+            m_aTextAppendStack.push( uno::Reference< text::XTextAppend >( xHeaderText, uno::UNO_QUERY_THROW));
         }
         catch( uno::Exception& )
         {
@@ -1242,7 +1296,7 @@ void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
             //set the interface
             uno::Reference< text::XText > xFooterText;
             xPageStyle->getPropertyValue(rPropNameSupplier.GetName( bLeft ? PROP_FOOTER_TEXT_LEFT : PROP_FOOTER_TEXT) ) >>= xFooterText;
-            m_aTextAppendStack.push(uno::Reference< text::XTextAppendAndConvert >( xFooterText, uno::UNO_QUERY_THROW ));
+            m_aTextAppendStack.push(uno::Reference< text::XTextAppend >( xFooterText, uno::UNO_QUERY_THROW ));
         }
         catch( uno::Exception& )
         {
@@ -1256,10 +1310,10 @@ void DomainMapper_Impl::PopPageHeaderFooter()
 {
     //header and footer always have an empty paragraph at the end
     //this has to be removed
-    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
+    uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
     try
     {
-        uno::Reference< text::XTextCursor > xCursor = xTextAppendAndConvert->createTextCursor();
+        uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursor();
         xCursor->gotoEnd(false);
         xCursor->goLeft( 1, true );
         xCursor->setString(::rtl::OUString());
@@ -1307,10 +1361,11 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         }
 
         appendTextContent( uno::Reference< text::XTextContent >( xFootnoteText, uno::UNO_QUERY_THROW ), aFontProperties );
-        m_aTextAppendStack.push(uno::Reference< text::XTextAppendAndConvert >( xFootnoteText, uno::UNO_QUERY_THROW ));
+        m_aTextAppendStack.push(uno::Reference< text::XTextAppend >( xFootnoteText, uno::UNO_QUERY_THROW ));
     }
     catch( uno::Exception& )
     {
+        OSL_ENSURE( false, "exception in PushFootOrEndnote" );
     }
 }
 /*-- 24.05.2007 14:22:29---------------------------------------------------
@@ -1319,6 +1374,58 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
 void DomainMapper_Impl::PopFootOrEndnote()
 {
     m_aTextAppendStack.pop();
+}
+/*-- 20.03.2008 09:01:58---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void DomainMapper_Impl::PushShapeContext()
+{
+    try
+    {
+        uno::Reference< text::XText > xTemporaryShape( GetTextFactory()->createInstance(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.RectangleShape") )),
+                uno::UNO_QUERY_THROW );
+        uno::Reference< text::XTextAppend > xShapeAppend( xTemporaryShape, uno::UNO_QUERY );
+        //insert into the document
+        uno::Reference< text::XTextContent > xShapeContent( xTemporaryShape, uno::UNO_QUERY_THROW );
+        xShapeContent->attach( GetBodyText()->getStart() );
+        m_aTextAppendStack.push(uno::Reference< text::XTextAppend >( xShapeAppend, uno::UNO_QUERY_THROW ));
+    }
+    catch( uno::Exception& )
+    {
+        OSL_ENSURE( false, "exception in DomainMapper_Impl::PushShapeContext" );
+    }
+}
+/*-- 20.03.2008 09:01:59---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void DomainMapper_Impl::PopShapeContext()
+{
+    m_xTemporaryShape = uno::Reference< drawing::XShape >( m_aTextAppendStack.top().xTextAppend, uno::UNO_QUERY );
+    m_aTextAppendStack.pop();
+}
+/*-- 20.03.2008 12:31:58---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void DomainMapper_Impl::CopyTemporaryShapeText( uno::Reference< drawing::XShape > xShape )
+{
+    uno::Reference< text::XTextCopy >xShapeText( xShape, uno::UNO_QUERY );
+    uno::Reference< text::XTextCopy >xTempShapeText( m_xTemporaryShape, uno::UNO_QUERY );
+    if( xShapeText.is() && xTempShapeText.is() )
+    {
+        xShapeText->copyText( xTempShapeText );
+    }
+    try
+    {
+        uno::Reference< lang::XComponent >xTemp( m_xTemporaryShape, uno::UNO_QUERY );
+        if( xTemp.is() )
+            xTemp->dispose();
+    }
+    catch( const uno::Exception& )
+    {
+    }
+    m_xTemporaryShape = uno::Reference< drawing::XShape >();
+
 }
 /*-- 12.09.2006 08:07:55---------------------------------------------------
 
@@ -2272,10 +2379,10 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::FindOrCreateFieldMaster
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::PushFieldContext()
 {
-    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
+    uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
     //insert a dummy char to make sure the start range doesn't move together with the to-be-appended text
-    xTextAppendAndConvert->appendTextPortion(::rtl::OUString( '-' ), uno::Sequence< beans::PropertyValue >() );
-    uno::Reference< text::XTextCursor > xCrsr = xTextAppendAndConvert->createTextCursorByRange( xTextAppendAndConvert->getEnd() );
+    xTextAppend->appendTextPortion(::rtl::OUString( '-' ), uno::Sequence< beans::PropertyValue >() );
+    uno::Reference< text::XTextCursor > xCrsr = xTextAppend->createTextCursorByRange( xTextAppend->getEnd() );
     xCrsr->goLeft( 1, false );
     m_aFieldStack.push( FieldContextPtr( new FieldContext( xCrsr->getStart() ) ) );
 }
@@ -2583,11 +2690,24 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 }
                             }
                             ::rtl::OUString sServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField."));
-                            if(sFieldServiceName.getLength())
+                            bool bIsCustomField = false;
+                            if(!sFieldServiceName.getLength())
+                            {
+                                //create a custom property field
+                                sServiceName += ::rtl::OUString::createFromAscii("DocInfo.Custom");
+                                bIsCustomField = true;
+                            }
+                            else
                             {
                                 sServiceName += sFieldServiceName;
-                                xFieldInterface = m_xTextFactory->createInstance(sServiceName);
-                                xFieldProperties = uno::Reference< beans::XPropertySet >( xFieldInterface, uno::UNO_QUERY_THROW);
+                            }
+                            xFieldInterface = m_xTextFactory->createInstance(sServiceName);
+                            xFieldProperties = uno::Reference< beans::XPropertySet >( xFieldInterface, uno::UNO_QUERY_THROW);
+                            if( bIsCustomField )
+                                xFieldProperties->setPropertyValue(
+                                    rPropNameSupplier.GetName(PROP_NAME), uno::makeAny( sParam ));
+                            else
+                            {
                                 if(0 != (aDocProperties[nMap].nFlags & SET_ARABIC))
                                     xFieldProperties->setPropertyValue(
                                         rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
@@ -2595,19 +2715,6 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 else if(0 != (aDocProperties[nMap].nFlags & SET_FULL_NAME))
                                     xFieldProperties->setPropertyValue(
                                         rPropNameSupplier.GetName(PROP_FULL_NAME), uno::makeAny( true ));
-
-                            }
-                            else
-                            {
-                                //create a user field and type
-                                uno::Reference< beans::XPropertySet > xMaster =
-                                    FindOrCreateFieldMaster( "com.sun.star.text.FieldMaster.User", sParam );
-                                sServiceName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("User"));
-                                xFieldInterface = m_xTextFactory->createInstance(sServiceName);
-                                xFieldProperties = uno::Reference< beans::XPropertySet >( xFieldInterface, uno::UNO_QUERY_THROW);
-                                uno::Reference< text::XDependentTextField > xDependentField( xFieldInterface, uno::UNO_QUERY_THROW );
-                                xDependentField->attachTextFieldMaster( xMaster );
-                                m_bSetUserFieldContent = true;
                             }
                         }
                     }
@@ -2880,6 +2987,10 @@ void DomainMapper_Impl::CloseFieldCommand()
     //                    if( lcl_FindInCommand( pContext->GetCommand(), 'z', sValue ))
     //                    { //todo: unsupported feature  }
 
+                        //if there's no option then it should be created from outline
+                        if( !bFromOutline && !bFromEntries && !sTemplate.getLength()  )
+                            bFromOutline = true;
+
                         uno::Reference< beans::XPropertySet > xTOC(
                                 m_xTextFactory->createInstance(
                                     bTableOfFigures ?
@@ -3031,8 +3142,10 @@ void DomainMapper_Impl::CloseFieldCommand()
             //set the text field if there is any
             pContext->SetTextField( uno::Reference< text::XTextField >( xFieldInterface, uno::UNO_QUERY ) );
         }
-        catch( uno::Exception& )
+        catch( uno::Exception& rEx)
         {
+            (void)rEx;
+            OSL_ENSURE( false, "Exception in CloseFieldCommand()" );
         }
         pContext->SetCommandCompleted();
     }
@@ -3094,55 +3207,12 @@ void DomainMapper_Impl::SetFieldResult( ::rtl::OUString& rResult )
                     //some fields don't have a CurrentPresentation (DateTime)
                 }
             }
-/*            else if(m_sHyperlinkURL.getLength())
-            {
-                //insert the string and apply hyperlink attribute to it
-                uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
-                if(xTextAppendAndConvert.is())
-                {
-                    try
-                    {
-                        uno::Sequence< beans::PropertyValue> aLink(1);
-                        aLink[0].Name = rPropNameSupplier.GetName(PROP_HYPER_LINK_U_R_L);
-                        aLink[0].Value = uno::makeAny(m_sHyperlinkURL);
-                        xTextAppendAndConvert->appendTextPortion(rResult, aLink);
-                    }
-                    catch(const lang::IllegalArgumentException& )
-                    {
-                    }
-                    catch(const uno::Exception& )
-                    {
-                    }
-                }
-            }
-            else if( m_xTOC.is() || m_xTC.is() )
-            {
-                uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
-                if(xTextAppendAndConvert.is())
-                {
-                    try
-                    {
-                        xTextAppendAndConvert->appendTextContent(
-                            uno::Reference< text::XTextContent >(m_xTOC.is() ? m_xTOC : m_xTC, uno::UNO_QUERY_THROW));
-                    }
-                    catch(const lang::IllegalArgumentException& )
-                    {
-                    }
-                    catch(const uno::Exception& )
-                    {
-                    }
-                    m_xTOC = 0;
-                    m_xTC = 0;
-                }
-            }*/
         }
         catch( uno::Exception& )
         {
 
         }
     }
-//    m_xTextField = 0;
-//    m_sHyperlinkURL = OUString();
 }
 
 /*-- 29.01.2007 11:33:17---------------------------------------------------
@@ -3158,12 +3228,12 @@ void DomainMapper_Impl::PopFieldContext()
             CloseFieldCommand();
 
         //insert the field, TC or TOC
-        uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
-        if(xTextAppendAndConvert.is())
+        uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
+        if(xTextAppend.is())
         {
             try
             {
-                uno::Reference< text::XTextCursor > xCrsr = xTextAppendAndConvert->createTextCursorByRange(pContext->GetStartRange());
+                uno::Reference< text::XTextCursor > xCrsr = xTextAppend->createTextCursorByRange(pContext->GetStartRange());
                 //remove the dummy character
                 xCrsr->goRight( 1, true );
                 xCrsr->setString( ::rtl::OUString() );
@@ -3179,7 +3249,10 @@ void DomainMapper_Impl::PopFieldContext()
                     if( !xToInsert.is() )
                         xToInsert = uno::Reference< text::XTextContent >(pContext->GetTextField(), uno::UNO_QUERY);
                     if( xToInsert.is() )
+                    {
+                        uno::Reference< text::XTextAppendAndConvert > xTextAppendAndConvert( xTextAppend, uno::UNO_QUERY_THROW );
                         xTextAppendAndConvert->appendTextContent( xToInsert, uno::Sequence< beans::PropertyValue >() );
+                    }
                     else if(pContext->GetHyperlinkURL().getLength())
                     {
                         PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
@@ -3194,9 +3267,11 @@ void DomainMapper_Impl::PopFieldContext()
             }
             catch(const lang::IllegalArgumentException& )
             {
+                OSL_ENSURE( false, "IllegalArgumentException in PopFieldContext()" );
             }
             catch(const uno::Exception& )
             {
+                OSL_ENSURE( false, "exception in PopFieldContext()" );
             }
         }
         //
@@ -3211,7 +3286,7 @@ void DomainMapper_Impl::PopFieldContext()
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::AddBookmark( const ::rtl::OUString& rBookmarkName, const ::rtl::OUString& rId )
 {
-    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top().xTextAppendAndConvert;
+    uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
     BookmarkMap_t::iterator aBookmarkIter = m_aBookmarkMap.find( rId );
     //is the bookmark name already registered?
     try
@@ -3230,17 +3305,17 @@ void DomainMapper_Impl::AddBookmark( const ::rtl::OUString& rBookmarkName, const
                 xCursor->goRight( 1, false );
             }
 
-            xCursor->gotoRange( xTextAppendAndConvert->getEnd(), true );
+            xCursor->gotoRange( xTextAppend->getEnd(), true );
             uno::Reference< container::XNamed > xBkmNamed( xBookmark, uno::UNO_QUERY_THROW );
             //todo: make sure the name is not used already!
             xBkmNamed->setName( aBookmarkIter->second.m_sBookmarkName );
-            xTextAppendAndConvert->insertTextContent( uno::Reference< text::XTextRange >( xCursor, uno::UNO_QUERY_THROW), xBookmark, !xCursor->isCollapsed() );
+            xTextAppend->insertTextContent( uno::Reference< text::XTextRange >( xCursor, uno::UNO_QUERY_THROW), xBookmark, !xCursor->isCollapsed() );
             m_aBookmarkMap.erase( aBookmarkIter );
         }
         else
         {
             //otherwise insert a text range as marker
-            uno::Reference< text::XTextCursor > xCursor = xTextAppendAndConvert->createTextCursorByRange( xTextAppendAndConvert->getEnd() );
+            uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursorByRange( xTextAppend->getEnd() );
             bool bIsStart = !xCursor->goLeft(1, false);
             uno::Reference< text::XTextRange > xCurrent = xCursor->getStart();
             m_aBookmarkMap.insert(BookmarkMap_t::value_type( rId, BookmarkInsertPosition( bIsStart, rBookmarkName, xCurrent ) ));
@@ -3434,13 +3509,15 @@ bool DomainMapper_Impl::ExecuteFrameConversion()
         bRet = true;
         try
         {
-            GetTopTextAppendAndConvert()->convertToTextFrame(
-            m_xFrameStartRange,
-            m_xFrameEndRange,
-            m_aFrameProperties );
+            uno::Reference< text::XTextAppendAndConvert > xTextAppendAndConvert( GetTopTextAppend(), uno::UNO_QUERY_THROW );
+            xTextAppendAndConvert->convertToTextFrame(
+                m_xFrameStartRange,
+                m_xFrameEndRange,
+                m_aFrameProperties );
         }
-        catch( const uno::Exception& )
+        catch( const uno::Exception& rEx)
         {
+            (void)rEx;
             bRet = false;
         }
         m_xFrameStartRange = 0;
@@ -3449,5 +3526,14 @@ bool DomainMapper_Impl::ExecuteFrameConversion()
     }
     return bRet;
 }
+/*-- 19.03.2008 11:35:38---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void DomainMapper_Impl::ResetRedlineProperties()
+{
+    m_CurrentRedlineAuthor = m_CurrentRedlineDate = m_CurrentRedlineId = ::rtl::OUString();
+    n_CurrentRedlineToken = ooxml::OOXML_mod;
+}
+
 
 }}
