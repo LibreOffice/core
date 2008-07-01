@@ -8,7 +8,7 @@
  *
  * $RCSfile: seriesconverter.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,9 +30,7 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/seriesconverter.hxx"
-#include <com/sun/star/chart2/CurveStyle.hpp>
-#include <com/sun/star/chart2/DataPointGeometry3D.hpp>
-#include <com/sun/star/chart2/ErrorBarStyle.hpp>
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
@@ -62,6 +60,47 @@ namespace chart {
 
 // ============================================================================
 
+namespace {
+
+Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
+        const ConverterRoot& rParent,
+        DataSourceModel* pValues, const OUString& rRole,
+        TextModel* pTitle = 0 )
+{
+    // create data sequence for values
+    Reference< XDataSequence > xValueSeq;
+    if( pValues )
+    {
+        DataSourceConverter aSourceConv( rParent, *pValues );
+        xValueSeq = aSourceConv.createDataSequence( rRole );
+    }
+
+    // create data sequence for title
+    Reference< XDataSequence > xTitleSeq;
+    if( pTitle )
+    {
+        TextConverter aTextConv( rParent, *pTitle );
+        xTitleSeq = aTextConv.createDataSequence( CREATE_OUSTRING( "label" ) );
+    }
+
+    // create the labeled data sequence, if values or title are present
+    Reference< XLabeledDataSequence > xLabeledSeq;
+    if( xValueSeq.is() || xTitleSeq.is() )
+    {
+        xLabeledSeq.set( ConverterRoot::createInstance( CREATE_OUSTRING( "com.sun.star.chart2.data.LabeledDataSequence" ) ), UNO_QUERY );
+        if( xLabeledSeq.is() )
+        {
+            xLabeledSeq->setValues( xValueSeq );
+            xLabeledSeq->setLabel( xTitleSeq );
+        }
+    }
+    return xLabeledSeq;
+}
+
+} // namespace
+
+// ============================================================================
+
 ErrorBarConverter::ErrorBarConverter( const ConverterRoot& rParent, ErrorBarModel& rModel ) :
     ConverterBase< ErrorBarModel >( rParent, rModel )
 {
@@ -71,13 +110,12 @@ ErrorBarConverter::~ErrorBarConverter()
 {
 }
 
-void ErrorBarConverter::convertModelToDocument( const Reference< XDataSeries >& rxDataSeries )
+void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxDataSeries )
 {
     bool bShowPos = (mrModel.mnTypeId == XML_plus) || (mrModel.mnTypeId == XML_both);
     bool bShowNeg = (mrModel.mnTypeId == XML_minus) || (mrModel.mnTypeId == XML_both);
     if( bShowPos || bShowNeg ) try
     {
-
         Reference< XPropertySet > xErrorBar( createInstance( CREATE_OUSTRING( "com.sun.star.chart2.ErrorBar" ) ), UNO_QUERY_THROW );
         PropertySet aBarProp( xErrorBar );
 
@@ -86,32 +124,60 @@ void ErrorBarConverter::convertModelToDocument( const Reference< XDataSeries >& 
         aBarProp.setProperty( CREATE_OUSTRING( "ShowNegativeError" ), bShowNeg );
 
         // type of displayed error
-        namespace cssc = ::com::sun::star::chart2;
+        namespace cssc = ::com::sun::star::chart;
         switch( mrModel.mnValueType )
         {
             case XML_cust:
-                // #i86465# manual error bar values not supported
-                xErrorBar.clear();
+            {
+                // #i87806# manual error bars
+                aBarProp.setProperty( CREATE_OUSTRING( "ErrorBarStyle" ), cssc::ErrorBarStyle::FROM_DATA );
+                // attach data sequences to erorr bar
+                Reference< XDataSink > xDataSink( xErrorBar, UNO_QUERY );
+                if( xDataSink.is() )
+                {
+                    // create vector of all value sequences
+                    ::std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
+                    // add positive values
+                    if( bShowPos )
+                    {
+                        Reference< XLabeledDataSequence > xValueSeq = createLabeledDataSequence( ErrorBarModel::PLUS );
+                        if( xValueSeq.is() )
+                            aLabeledSeqVec.push_back( xValueSeq );
+                    }
+                    // add negative values
+                    if( bShowNeg )
+                    {
+                        Reference< XLabeledDataSequence > xValueSeq = createLabeledDataSequence( ErrorBarModel::MINUS );
+                        if( xValueSeq.is() )
+                            aLabeledSeqVec.push_back( xValueSeq );
+                    }
+                    // attach labeled data sequences to series
+                    if( aLabeledSeqVec.empty() )
+                        xErrorBar.clear();
+                    else
+                        xDataSink->setData( ContainerHelper::vectorToSequence( aLabeledSeqVec ) );
+                }
+            }
             break;
             case XML_fixedVal:
-                aBarProp.setProperty( CREATE_OUSTRING( "ErrorBarStyle" ), cssc::ErrorBarStyle_ABSOLUTE );
+                aBarProp.setProperty( CREATE_OUSTRING( "ErrorBarStyle" ), cssc::ErrorBarStyle::ABSOLUTE );
                 aBarProp.setProperty( CREATE_OUSTRING( "PositiveError" ), mrModel.mfValue );
                 aBarProp.setProperty( CREATE_OUSTRING( "NegativeError" ), mrModel.mfValue );
             break;
             case XML_percentage:
-                aBarProp.setProperty( CREATE_OUSTRING( "ErrorBarStyle" ), cssc::ErrorBarStyle_RELATIVE );
+                aBarProp.setProperty( CREATE_OUSTRING( "ErrorBarStyle" ), cssc::ErrorBarStyle::RELATIVE );
                 aBarProp.setProperty( CREATE_OUSTRING( "PositiveError" ), mrModel.mfValue );
                 aBarProp.setProperty( CREATE_OUSTRING( "NegativeError" ), mrModel.mfValue );
             break;
             case XML_stdDev:
-                aBarProp.setProperty( CREATE_OUSTRING( "ErrorBarStyle" ), cssc::ErrorBarStyle_STANDARD_DEVIATION );
+                aBarProp.setProperty( CREATE_OUSTRING( "ErrorBarStyle" ), cssc::ErrorBarStyle::STANDARD_DEVIATION );
                 aBarProp.setProperty( CREATE_OUSTRING( "Weight" ), mrModel.mfValue );
             break;
             case XML_stdErr:
-                aBarProp.setProperty( CREATE_OUSTRING( "ErrorBarStyle" ), cssc::ErrorBarStyle_STANDARD_ERROR );
+                aBarProp.setProperty( CREATE_OUSTRING( "ErrorBarStyle" ), cssc::ErrorBarStyle::STANDARD_ERROR );
             break;
             default:
-                OSL_ENSURE( false, "ErrorBarConverter::convertModelToDocument - unknown error bar type" );
+                OSL_ENSURE( false, "ErrorBarConverter::convertFromModel - unknown error bar type" );
                 xErrorBar.clear();
         }
 
@@ -124,14 +190,40 @@ void ErrorBarConverter::convertModelToDocument( const Reference< XDataSeries >& 
             {
                 case XML_x: aSeriesProp.setProperty( CREATE_OUSTRING( "ErrorBarX" ), xErrorBar );   break;
                 case XML_y: aSeriesProp.setProperty( CREATE_OUSTRING( "ErrorBarY" ), xErrorBar );   break;
-                default:    OSL_ENSURE( false, "ErrorBarConverter::convertModelToDocument - invalid error bar direction" );
+                default:    OSL_ENSURE( false, "ErrorBarConverter::convertFromModel - invalid error bar direction" );
             }
         }
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "ErrorBarConverter::convertModelToDocument - error while creating error bars" );
+        OSL_ENSURE( false, "ErrorBarConverter::convertFromModel - error while creating error bars" );
     }
+}
+
+// private --------------------------------------------------------------------
+
+Reference< XLabeledDataSequence > ErrorBarConverter::createLabeledDataSequence( ErrorBarModel::SourceType eSourceType )
+{
+    OUString aRole;
+    switch( eSourceType )
+    {
+        case ErrorBarModel::PLUS:
+            switch( mrModel.mnDirection )
+            {
+                case XML_x: aRole = CREATE_OUSTRING( "error-bars-x-positive" ); break;
+                case XML_y: aRole = CREATE_OUSTRING( "error-bars-y-positive" ); break;
+            }
+        break;
+        case ErrorBarModel::MINUS:
+            switch( mrModel.mnDirection )
+            {
+                case XML_x: aRole = CREATE_OUSTRING( "error-bars-x-negative" ); break;
+                case XML_y: aRole = CREATE_OUSTRING( "error-bars-y-negative" ); break;
+            }
+        break;
+    }
+    OSL_ENSURE( aRole.getLength() > 0, "ErrorBarConverter::createLabeledDataSequence - invalid error bar direction" );
+    return lclCreateLabeledDataSequence( *this, mrModel.maSources.get( eSourceType ).get(), aRole );
 }
 
 // ============================================================================
@@ -145,7 +237,7 @@ TrendlineConverter::~TrendlineConverter()
 {
 }
 
-void TrendlineConverter::convertModelToDocument( const Reference< XDataSeries >& rxDataSeries )
+void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDataSeries )
 {
     try
     {
@@ -159,7 +251,7 @@ void TrendlineConverter::convertModelToDocument( const Reference< XDataSeries >&
             case XML_movingAvg: /* #i66819# moving average trendlines not supported */                              break;
             case XML_poly:      /* #i20819# polynomial trendlines not supported */                                  break;
             case XML_power:     aServiceName = CREATE_OUSTRING( "com.sun.star.chart2.PotentialRegressionCurve" );   break;
-            default:            OSL_ENSURE( false, "TrendlineConverter::convertModelToDocument - unknown trendline type" );
+            default:            OSL_ENSURE( false, "TrendlineConverter::convertFromModel - unknown trendline type" );
         }
         if( aServiceName.getLength() > 0 )
         {
@@ -181,7 +273,38 @@ void TrendlineConverter::convertModelToDocument( const Reference< XDataSeries >&
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "TrendlineConverter::convertModelToDocument - error while creating trendline" );
+        OSL_ENSURE( false, "TrendlineConverter::convertFromModel - error while creating trendline" );
+    }
+}
+
+// ============================================================================
+
+DataPointConverter::DataPointConverter( const ConverterRoot& rParent, DataPointModel& rModel ) :
+    ConverterBase< DataPointModel >( rParent, rModel )
+{
+}
+
+DataPointConverter::~DataPointConverter()
+{
+}
+
+void DataPointConverter::convertFromModel( const Reference< XDataSeries >& rxDataSeries,
+        const TypeGroupConverter& rTypeGroup, const SeriesModel& rSeries )
+{
+    try
+    {
+        PropertySet aPropSet( rxDataSeries->getDataPointByIndex( mrModel.mnIndex ) );
+
+        // data point marker
+        if( mrModel.monMarkerSymbol.differsFrom( rSeries.mnMarkerSymbol ) || mrModel.monMarkerSize.differsFrom( rSeries.mnMarkerSize ) )
+            rTypeGroup.convertMarker( aPropSet, mrModel.monMarkerSymbol.get( rSeries.mnMarkerSymbol ), mrModel.monMarkerSize.get( rSeries.mnMarkerSize ) );
+
+        // data point pie explosion
+        if( mrModel.monExplosion.differsFrom( rSeries.mnExplosion ) )
+            rTypeGroup.convertPieExplosion( aPropSet, mrModel.monExplosion.get() );
+    }
+    catch( Exception& )
+    {
     }
 }
 
@@ -198,7 +321,7 @@ SeriesConverter::~SeriesConverter()
 
 Reference< XLabeledDataSequence > SeriesConverter::createCategorySequence( const OUString& rRole )
 {
-    return createLabeledDataSequence( SeriesModel::CATEGORIES, rRole );
+    return createLabeledDataSequence( SeriesModel::CATEGORIES, rRole, false );
 }
 
 Reference< XLabeledDataSequence > SeriesConverter::createValueSequence( const OUString& rRole )
@@ -210,6 +333,7 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
 {
     // create the data series object
     Reference< XDataSeries > xDataSeries( createInstance( CREATE_OUSTRING( "com.sun.star.chart2.DataSeries" ) ), UNO_QUERY );
+    PropertySet aSeriesProp( xDataSeries );
 
     // attach data and title sequences to series
     Reference< XDataSink > xDataSink( xDataSeries, UNO_QUERY );
@@ -237,39 +361,33 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
     for( SeriesModel::ErrorBarVector::iterator aIt = mrModel.maErrorBars.begin(), aEnd = mrModel.maErrorBars.end(); aIt != aEnd; ++aIt )
     {
         ErrorBarConverter aErrorBarConv( *this, **aIt );
-        aErrorBarConv.convertModelToDocument( xDataSeries );
+        aErrorBarConv.convertFromModel( xDataSeries );
     }
 
     // trendlines
     for( SeriesModel::TrendlineVector::iterator aIt = mrModel.maTrendlines.begin(), aEnd = mrModel.maTrendlines.end(); aIt != aEnd; ++aIt )
     {
         TrendlineConverter aTrendlineConv( *this, **aIt );
-        aTrendlineConv.convertModelToDocument( xDataSeries );
+        aTrendlineConv.convertFromModel( xDataSeries );
     }
 
-    // series properties
-    namespace cssc = ::com::sun::star::chart2;
-    PropertySet aSeriesProp( xDataSeries );
-
-#if 0
-    // TODO: #i66858# smoothed lines per series
-    if( mrModel.mobSmooth.get( false ) )
-        aSeriesProp.setProperty( CREATE_OUSTRING( "CurveStyle" ), cssc::CurveStyle_CUBIC_SPLINES );
+    // data point markers
+    rTypeGroup.convertMarker( aSeriesProp, mrModel.mnMarkerSymbol, mrModel.mnMarkerSize );
+#if OOX_CHART_SMOOTHED_PER_SERIES
+    // #i66858# smoothed series lines
+    rTypeGroup.convertLineSmooth( aSeriesProp, mrModel.mbSmooth );
 #endif
-
     // 3D bar style (not possible to set at chart type -> set at all series)
-    sal_Int32 nApiShape = cssc::DataPointGeometry3D::CUBOID;
-    switch( mrModel.monShape.get( rTypeGroup.getModel().mnShape ) )
+    rTypeGroup.convertBarGeometry( aSeriesProp, mrModel.monShape.get( rTypeGroup.getModel().mnShape ) );
+    // pie explosion (restricted to [0%,100%] in Chart2)
+    rTypeGroup.convertPieExplosion( aSeriesProp, mrModel.mnExplosion );
+
+    // data point settings
+    for( SeriesModel::DataPointVector::iterator aIt = mrModel.maPoints.begin(), aEnd = mrModel.maPoints.end(); aIt != aEnd; ++aIt )
     {
-        case XML_box:           nApiShape = cssc::DataPointGeometry3D::CUBOID;      break;
-        case XML_cone:          nApiShape = cssc::DataPointGeometry3D::CONE;        break;
-        case XML_coneToMax:     nApiShape = cssc::DataPointGeometry3D::CONE;        break;
-        case XML_cylinder:      nApiShape = cssc::DataPointGeometry3D::CYLINDER;    break;
-        case XML_pyramid:       nApiShape = cssc::DataPointGeometry3D::PYRAMID;     break;
-        case XML_pyramidToMax:  nApiShape = cssc::DataPointGeometry3D::PYRAMID;     break;
-        default:                OSL_ENSURE( false, "SeriesConverter::createDataSeries - unknown 3D bar shape type" );
+        DataPointConverter aPointConv( *this, **aIt );
+        aPointConv.convertFromModel( xDataSeries, rTypeGroup, mrModel );
     }
-    aSeriesProp.setProperty( CREATE_OUSTRING( "Geometry3D" ), nApiShape );
 
     return xDataSeries;
 }
@@ -279,32 +397,9 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
 Reference< XLabeledDataSequence > SeriesConverter::createLabeledDataSequence(
         SeriesModel::SourceType eSourceType, const OUString& rRole, bool bUseTextLabel )
 {
-    // create data sequence for values and title
-    Reference< XDataSequence > xValueSeq;
-    if( DataSourceModel* pValues = mrModel.maSources.get( eSourceType ).get() )
-    {
-        DataSourceConverter aSourceConv( *this, *pValues );
-        xValueSeq = aSourceConv.createDataSequence( rRole );
-    }
-    Reference< XDataSequence > xTitleSeq;
-    if( bUseTextLabel && mrModel.mxText.is() )
-    {
-        TextConverter aTextConv( *this, *mrModel.mxText );
-        xTitleSeq = aTextConv.createDataSequence( CREATE_OUSTRING( "label" ) );
-    }
-
-    // create the labeled data sequence, if values or title are present
-    Reference< XLabeledDataSequence > xLabeledSeq;
-    if( xValueSeq.is() || xTitleSeq.is() )
-    {
-        xLabeledSeq.set( ConverterRoot::createInstance( CREATE_OUSTRING( "com.sun.star.chart2.data.LabeledDataSequence" ) ), UNO_QUERY );
-        if( xLabeledSeq.is() )
-        {
-            xLabeledSeq->setValues( xValueSeq );
-            xLabeledSeq->setLabel( xTitleSeq );
-        }
-    }
-    return xLabeledSeq;
+    DataSourceModel* pValues = mrModel.maSources.get( eSourceType ).get();
+    TextModel* pTitle = bUseTextLabel ? mrModel.mxText.get() : 0;
+    return lclCreateLabeledDataSequence( *this, pValues, rRole, pTitle );
 }
 
 // ============================================================================
