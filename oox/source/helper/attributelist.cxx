@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: attributelist.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Exception;
 using ::com::sun::star::xml::sax::XFastAttributeList;
 
 namespace oox {
@@ -50,60 +51,111 @@ bool AttributeList::hasAttribute( sal_Int32 nElement ) const
     return mxAttribs->hasAttribute( nElement );
 }
 
+// optional return values -----------------------------------------------------
+
+OptValue< sal_Int32 > AttributeList::getToken( sal_Int32 nElement ) const
+{
+    sal_Int32 nToken = mxAttribs->getOptionalValueToken( nElement, XML_TOKEN_INVALID );
+    return OptValue< sal_Int32 >( nToken != XML_TOKEN_INVALID, nToken );
+}
+
+OptValue< double > AttributeList::getDouble( sal_Int32 nElement ) const
+{
+    OUString aValue = mxAttribs->getOptionalValue( nElement );
+    bool bValid = aValue.getLength() > 0;
+    return OptValue< double >( bValid, bValid ? aValue.toDouble() : 0.0 );
+}
+
+OptValue< sal_Int32 > AttributeList::getInteger( sal_Int32 nElement ) const
+{
+    OUString aValue = mxAttribs->getOptionalValue( nElement );
+    bool bValid = aValue.getLength() > 0;
+    return OptValue< sal_Int32 >( bValid, bValid ? aValue.toInt32() : 0 );
+}
+
+OptValue< sal_uInt32 > AttributeList::getUnsignedInteger( sal_Int32 nElement ) const
+{
+    OUString aValue = mxAttribs->getOptionalValue( nElement );
+    bool bValid = aValue.getLength() > 0;
+    sal_Int64 nValue = bValid ? aValue.toInt64() : 0;
+    return OptValue< sal_uInt32 >( bValid, static_cast< sal_uInt32 >( ((nValue < 0) || (nValue > SAL_MAX_UINT32)) ? 0 : nValue ) );
+}
+
+OptValue< sal_Int64 > AttributeList::getInteger64( sal_Int32 nElement ) const
+{
+    OUString aValue = mxAttribs->getOptionalValue( nElement );
+    bool bValid = aValue.getLength() > 0;
+    return OptValue< sal_Int64 >( bValid, bValid ? aValue.toInt64() : 0 );
+}
+
+OptValue< sal_Int32 > AttributeList::getHex( sal_Int32 nElement ) const
+{
+    OUString aValue = mxAttribs->getOptionalValue( nElement );
+    bool bValid = aValue.getLength() > 0;
+    return OptValue< sal_Int32 >( bValid, bValid ? aValue.toInt32( 16 ) : 0 );
+}
+
+OptValue< bool > AttributeList::getBool( sal_Int32 nElement ) const
+{
+    // boolean attributes may be "true", "false", "on", "off", "1", or "0"
+    switch( getToken( nElement, -1 ) )
+    {
+        case XML_true:  return OptValue< bool >( true, true );
+        case XML_on:    return OptValue< bool >( true, true );
+        case XML_false: return OptValue< bool >( true, false );
+        case XML_off:   return OptValue< bool >( true, false );
+    }
+    OptValue< sal_Int32 > onValue = getInteger( nElement );
+    return OptValue< bool >( onValue.has(), onValue.get() != 0 );
+}
+
+// defaulted return values ----------------------------------------------------
+
 sal_Int32 AttributeList::getToken( sal_Int32 nElement, sal_Int32 nDefault ) const
 {
     return mxAttribs->getOptionalValueToken( nElement, nDefault );
 }
 
-OUString AttributeList::getString( sal_Int32 nElement ) const
+OUString AttributeList::getString( sal_Int32 nElement, const OUString& rDefault ) const
 {
-    return mxAttribs->getOptionalValue( nElement );
+    try
+    {
+        return mxAttribs->getValue( nElement );
+    }
+    catch( Exception& )
+    {
+    }
+    return rDefault;
 }
 
 double AttributeList::getDouble( sal_Int32 nElement, double fDefault ) const
 {
-    OUString aValue = getString( nElement );
-    return (aValue.getLength() == 0) ? fDefault : aValue.toDouble();
+    return getDouble( nElement ).get( fDefault );
 }
 
 sal_Int32 AttributeList::getInteger( sal_Int32 nElement, sal_Int32 nDefault ) const
 {
-    OUString aValue = getString( nElement );
-    return (aValue.getLength() == 0) ? nDefault : aValue.toInt32();
+    return getInteger( nElement ).get( nDefault );
 }
 
 sal_uInt32 AttributeList::getUnsignedInteger( sal_Int32 nElement, sal_uInt32 nDefault ) const
 {
-    OUString aValue = getString( nElement );
-    if( aValue.getLength() == 0 )
-        return nDefault;
-    sal_Int64 nValue = aValue.toInt64();
-    return static_cast< sal_uInt32 >( ((nValue < 0) || (nValue > SAL_MAX_UINT32)) ? 0 : nValue );
+    return getUnsignedInteger( nElement ).get( nDefault );
 }
 
 sal_Int64 AttributeList::getInteger64( sal_Int32 nElement, sal_Int64 nDefault ) const
 {
-    OUString aValue = getString( nElement );
-    return (aValue.getLength() == 0) ? nDefault : aValue.toInt64();
+    return getInteger64( nElement ).get( nDefault );
 }
 
 sal_Int32 AttributeList::getHex( sal_Int32 nElement, sal_Int32 nDefault ) const
 {
-    OUString aValue = getString( nElement );
-    return (aValue.getLength() == 0) ? nDefault : aValue.toInt32( 16 );
+    return getHex( nElement ).get( nDefault );
 }
 
 bool AttributeList::getBool( sal_Int32 nElement, bool bDefault ) const
 {
-    // boolean attributes may be "true", "false", "on", "off", "1", or "0"
-    switch( getToken( nElement ) )
-    {
-        case XML_true:  return true;
-        case XML_on:    return true;
-        case XML_false: return false;
-        case XML_off:   return false;
-    }
-    return getInteger( nElement, bDefault ? 1 : 0 ) != 0;
+    return getBool( nElement ).get( bDefault );
 }
 
 // ============================================================================
