@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eps.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -171,8 +171,6 @@ private:
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
-    void                MayCallback( ULONG nPercent );
-
     void                ImplWriteProlog( const Graphic* pPreviewEPSI = NULL );
     void                ImplWriteEpilog();
     void                ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev );
@@ -223,8 +221,6 @@ private:
 
     void                ImplSetClipRegion( Region& rRegion );
     void                ImplBmp( Bitmap*, Bitmap*, const Point &, double nWidth, double nHeight );
-    void                ImplGenerateBitmap( sal_Unicode nChar, sal_Int32 nResolution, VirtualDevice& rVirDev,
-                                            const Point& rPos, const Size& rSize, sal_Int32 nWidth );
     void                ImplText( const String& rUniString, const Point& rPos, const INT32* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev );
     void                ImplSetAttrForText( const Point & rPoint );
     void                ImplWriteCharacter( sal_Char );
@@ -257,19 +253,6 @@ public:
 };
 
 //========================== Methoden von PSWriter ==========================
-
-void PSWriter::MayCallback( ULONG nPercent )
-{
-    if ( xStatusIndicator.is() )
-    {
-        if( nPercent >= mnLastPercent + 3 )
-        {
-            mnLastPercent = nPercent;
-            if ( nPercent <= 100 )
-                xStatusIndicator->setValue( nPercent );
-        }
-    }
-}
 
 //---------------------------------------------------------------------------------
 
@@ -2007,46 +1990,6 @@ void PSWriter::ImplWriteString( const ByteString& rString, VirtualDevice& rVDev,
 }
 
 // ------------------------------------------------------------------------
-
-void PSWriter::ImplGenerateBitmap( sal_Unicode nChar, sal_Int32 nTextResolution, VirtualDevice& rVirDev,
-                                    const Point& rPos, const Size& rSize, sal_Int32 nWidth )
-{
-    Point       aEmptyPoint( 0, 0 );
-    Fraction    aFract( 1, nTextResolution );
-    MapMode     aMapModeInch( MAP_INCH, aEmptyPoint, aFract, aFract );
-    Size        aSizePixel = OutputDevice::LogicToLogic( rSize, rVirDev.GetMapMode(), aMapModeInch );
-
-    Color l_aTextColor( COL_BLACK );
-    rVirDev.SetTextColor( l_aTextColor );
-    rVirDev.SetTextAlign( ALIGN_TOP );
-    const Size aOutSize( rVirDev.PixelToLogic( aSizePixel, rVirDev.GetMapMode() ) );
-    rVirDev.SetOutputSize( aOutSize );
-    MapMode aScaledMapMode( rVirDev.GetMapMode() );
-    Fraction aFracX = aScaledMapMode.GetScaleX();
-    Fraction aFracY = aScaledMapMode.GetScaleY();
-    aFracX *= Fraction( aOutSize.Width(), rSize.Width() );
-    aFracY *= Fraction( aOutSize.Height(), rSize.Height() );
-    aScaledMapMode.SetScaleX( aFracX );
-    aScaledMapMode.SetScaleY( aFracY );
-    rVirDev.SetMapMode( aScaledMapMode );
-
-    String aUniString( nChar );
-    if ( nWidth )
-        rVirDev.DrawStretchText( aEmptyPoint, nWidth, aUniString );
-    else
-        rVirDev.DrawTextArray( aEmptyPoint, aUniString, NULL );
-
-    Bitmap aBmp = rVirDev.GetBitmap( aEmptyPoint, aOutSize );       // aBmp is a bitmap of the whole text in nTextResolution dpi
-
-    Bitmap aMask( aBmp );
-    BitmapEx aBmpEx( aBmp, aMask );
-
-//      SvFileStream aNew( String( ByteString( "d:\\test.png" ), RTL_TEXTENCODING_UTF8 ), STREAM_WRITE | STREAM_TRUNC );
-//      sal_uInt32 nErrCode = GraphicConverter::Export( aNew, Graphic( aBmpEx ), CVT_PNG );
-
-    ImplBmp( &aBmp, &aMask, rPos, rSize.Width(), rSize.Height() );
-}
-
 
 void PSWriter::ImplText( const String& rUniString, const Point& rPos, const INT32* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev )
 {
