@@ -8,7 +8,7 @@
  *
  * $RCSfile: floatingwindowaccessible.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_accessibility.hxx"
 
-#include "precompiled_accessibility.hxx"
 #include <floatingwindowaccessible.hxx>
 
 
