@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLDocumentImpl.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -321,6 +321,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         uno::Reference < xml::sax::XFastTokenHandler > xTokenHandler
             (mpStream->getFastTokenHandler(xContext));
 
+        resolveFastSubStream(rStream, OOXMLStream::SETTINGS);
         resolveFastSubStream(rStream, OOXMLStream::THEME);
         resolveFastSubStream(rStream, OOXMLStream::NUMBERING);
         resolveFastSubStream(rStream, OOXMLStream::FONTTABLE);
