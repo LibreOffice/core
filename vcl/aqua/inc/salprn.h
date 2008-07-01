@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salprn.h,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,6 +73,8 @@ class AquaSalInfoPrinter : public SalInfoPrinter
 
     int                       mnStartPageOffsetX;
     int                       mnStartPageOffsetY;
+    ULONG                     mnCurPageRangeStart;
+    ULONG                     mnCurPageRangeCount;
 
     public:
     AquaSalInfoPrinter( const SalPrinterQueueInfo& pInfo );
@@ -115,6 +117,8 @@ class AquaSalInfoPrinter : public SalInfoPrinter
 
     NSPrintInfo* getPrintInfo() const { return mpPrintInfo; }
     void setStartPageOffset( int nOffsetX, int nOffsetY ) { mnStartPageOffsetX = nOffsetX; mnStartPageOffsetY = nOffsetY; }
+    ULONG getCurPageRangeStart() const { return mnCurPageRangeStart; }
+    ULONG getCurPageRangeCount() const { return mnCurPageRangeCount; }
 
     private:
     AquaSalInfoPrinter( const AquaSalInfoPrinter& );
