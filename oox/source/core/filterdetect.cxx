@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filterdetect.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,12 +39,11 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/mediadescriptor.hxx>
-#include <comphelper/storagehelper.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 
 #include "oox/helper/attributelist.hxx"
-#include "oox/helper/helper.hxx"
+#include "oox/helper/zipstorage.hxx"
 #include "oox/core/fasttokenhandler.hxx"
 #include "oox/core/namespaces.hxx"
 #include "tokens.hxx"
@@ -106,21 +105,13 @@ private:
 
     OUString&           mrFilter;
     ContextVector       maContextStack;
-    const OUString      maWordFilterName;
-    const OUString      maExcelFilterName;
-    const OUString      maExcelBinFilterName;
-    const OUString      maPowerPointFilterName;
     OUString            maTargetPath;
 };
 
 // ============================================================================
 
 FilterDetectDocHandler::FilterDetectDocHandler( OUString& rFilter ) :
-    mrFilter( rFilter ),
-    maWordFilterName( CREATE_OUSTRING( "MS Word 2007 XML" ) ),
-    maExcelFilterName( CREATE_OUSTRING( "MS Excel 2007 XML" ) ),
-    maExcelBinFilterName( CREATE_OUSTRING( "MS Excel 2007 Binary" ) ),
-    maPowerPointFilterName( CREATE_OUSTRING( "MS PowerPoint 2007 XML" ) )
+    mrFilter( rFilter )
 {
     maContextStack.reserve( 2 );
 }
@@ -227,22 +218,32 @@ void SAL_CALL FilterDetectDocHandler::processingInstruction(
 
 void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
 {
-    OUString aType = rAttribs.getString( XML_Type );
+    OUString aType = rAttribs.getString( XML_Type, OUString() );
     if( aType.equalsAscii( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ) )
-        maTargetPath = OUString( sal_Unicode( '/' ) ) + rAttribs.getString( XML_Target );
+        maTargetPath = OUString( sal_Unicode( '/' ) ) + rAttribs.getString( XML_Target, OUString() );
 }
 
 OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& rContentType ) const
 {
-    if( rContentType.equalsAscii( "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" ) )
-        return maWordFilterName;
     if( rContentType.equalsAscii( "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml" ) ||
         rContentType.equalsAscii( "application/vnd.ms-excel.sheet.macroEnabled.main+xml" ) )
-        return maExcelFilterName;
+        return CREATE_OUSTRING( "MS Excel 2007 XML" );
+
+    if( rContentType.equalsAscii( "application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml" ) ||
+        rContentType.equalsAscii( "application/vnd.ms-excel.template.macroEnabled.main+xml" ) )
+        return CREATE_OUSTRING( "MS Excel 2007 XML Template" );
+
     if( rContentType.equalsAscii( "application/vnd.ms-excel.sheet.binary.macroEnabled.main" ) )
-        return maExcelBinFilterName;
-    if( rContentType.equalsAscii( "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml" ) )
-        return maPowerPointFilterName;
+        return CREATE_OUSTRING( "MS Excel 2007 Binary" );
+
+    if( rContentType.equalsAscii( "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml" ) ||
+        rContentType.equalsAscii( "application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml" ) )
+        return CREATE_OUSTRING( "MS PowerPoint 2007 XML" );
+
+    if( rContentType.equalsAscii( "application/vnd.openxmlformats-officedocument.presentationml.template.main+xml" ) ||
+        rContentType.equalsAscii( "application/vnd.ms-powerpoint.template.macroEnabled.main+xml" ) )
+        return CREATE_OUSTRING( "MS PowerPoint 2007 XML Template" );
+
     return OUString();
 }
 
@@ -252,17 +253,17 @@ void FilterDetectDocHandler::parseContentTypesDefault( const AttributeList& rAtt
     if( mrFilter.getLength() == 0 )
     {
         // check if target path ends with extension
-        OUString aExtension = rAttribs.getString( XML_Extension );
+        OUString aExtension = rAttribs.getString( XML_Extension, OUString() );
         sal_Int32 nExtPos = maTargetPath.getLength() - aExtension.getLength();
         if( (nExtPos > 0) && (maTargetPath[ nExtPos - 1 ] == '.') && maTargetPath.match( aExtension, nExtPos ) )
-            mrFilter = getFilterNameFromContentType( rAttribs.getString( XML_ContentType ) );
+            mrFilter = getFilterNameFromContentType( rAttribs.getString( XML_ContentType, OUString() ) );
     }
 }
 
 void FilterDetectDocHandler::parseContentTypesOverride( const AttributeList& rAttribs )
 {
-    if( rAttribs.getString( XML_PartName ).equals( maTargetPath ) )
-        mrFilter = getFilterNameFromContentType( rAttribs.getString( XML_ContentType ) );
+    if( rAttribs.getString( XML_PartName, OUString() ).equals( maTargetPath ) )
+        mrFilter = getFilterNameFromContentType( rAttribs.getString( XML_ContentType, OUString() ) );
 }
 
 // ============================================================================
@@ -322,48 +323,32 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& lDescriptor )
 {
     OUString aFilter;
 
-    Reference< XFastDocumentHandler > xHandler( new FilterDetectDocHandler(aFilter) );
-    Reference< XFastTokenHandler > xTokenHandler( new ::oox::FastTokenHandler );
-
     try
     {
         Reference< XFastParser > xParser( ::comphelper::getProcessServiceFactory()->createInstance(
             CREATE_OUSTRING( "com.sun.star.xml.sax.FastParser" ) ), UNO_QUERY_THROW );
 
-        xParser->setFastDocumentHandler( xHandler );
-        xParser->setTokenHandler( xTokenHandler );
+        xParser->setFastDocumentHandler( new FilterDetectDocHandler( aFilter ) );
+        xParser->setTokenHandler( new FastTokenHandler );
 
-        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/relationships" ),
-                                    NMSP_PACKAGE_RELATIONSHIPS );
-        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/officeDocument/2006/relationships" ),
-                                    NMSP_RELATIONSHIPS );
-        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/content-types" ),
-                                    NMSP_CONTENT_TYPES );
+        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/relationships" ), NMSP_PACKAGE_RELATIONSHIPS );
+        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/officeDocument/2006/relationships" ), NMSP_RELATIONSHIPS );
+        xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/content-types" ), NMSP_CONTENT_TYPES );
 
         MediaDescriptor aDescriptor( lDescriptor );
         aDescriptor.addInputStream();
-        Reference< XInputStream > xInputStream(
-            aDescriptor[MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY_THROW );
-
-        Reference< XStorage > xStorage( ::comphelper::OStorageHelper::GetStorageFromInputStream( xInputStream, mxFactory ),
-                                        UNO_QUERY_THROW );
+        Reference< XInputStream > xInputStream( aDescriptor[ MediaDescriptor::PROP_INPUTSTREAM() ], UNO_QUERY_THROW );
+        StorageRef xStorage( new ZipStorage( mxFactory, xInputStream ) );
 
         // Parse _rels/.rels to get the target path.
-        Reference< XStorage > xRels( xStorage->openStorageElement( CREATE_OUSTRING("_rels"), ElementModes::READ ) );
-        Reference< XInputStream > xStream( xRels->openStreamElement( CREATE_OUSTRING(".rels"), ElementModes::READ ),
-                                           UNO_QUERY_THROW );
-
         InputSource aParserInput;
-        aParserInput.sSystemId = CREATE_OUSTRING("_rels/.rels");
-        aParserInput.aInputStream = xStream;
+        aParserInput.sSystemId = CREATE_OUSTRING( "_rels/.rels" );
+        aParserInput.aInputStream = xStorage->openInputStream( aParserInput.sSystemId );
         xParser->parseStream( aParserInput );
 
         // Parse [Content_Types].xml to determine the content type of the part at the target path.
-        OUString aContentTypeName = CREATE_OUSTRING("[Content_Types].xml");
-        xStream.set( xStorage->openStreamElement( aContentTypeName, ElementModes::READ ), UNO_QUERY_THROW );
-
-        aParserInput.sSystemId = aContentTypeName;
-        aParserInput.aInputStream = xStream;
+        aParserInput.sSystemId = CREATE_OUSTRING( "[Content_Types].xml" );
+        aParserInput.aInputStream = xStorage->openInputStream( aParserInput.sSystemId );
         xParser->parseStream( aParserInput );
     }
     catch ( const Exception& )
