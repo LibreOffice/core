@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLSectionExport.cxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,7 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include "txtflde.hxx"
+
 
 
 using namespace ::com::sun::star;
@@ -153,6 +154,7 @@ XMLSectionExport::XMLSectionExport(
 {
 }
 
+
 void XMLSectionExport::ExportSectionStart(
     const Reference<XTextSection> & rSection,
     sal_Bool bAutoStyles)
@@ -172,6 +174,9 @@ void XMLSectionExport::ExportSectionStart(
                                      GetParaExport().Find(
                                      XML_STYLE_FAMILY_TEXT_SECTION,
                                      xPropertySet, sEmpty ) );
+
+        // xml:id for RDF metadata
+        GetExport().AddAttributeXmlId(rSection);
 
         // export index or regular section
         Reference<XDocumentIndex> xIndex;
