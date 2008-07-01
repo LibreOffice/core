@@ -8,7 +8,7 @@
  *
  * $RCSfile: titlecontext.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -161,7 +161,8 @@ ContextWrapper TitleContext::onCreateContext( sal_Int32 nElement, const Attribut
                 case C_TOKEN( layout ):
                     return new LayoutContext( *this, mrModel.mxLayout.create() );
                 case C_TOKEN( overlay ):
-                    mrModel.mbOverlay = rAttribs.getBool( XML_val, true );
+                    // default is 'false', not 'true' as specified
+                    mrModel.mbOverlay = rAttribs.getBool( XML_val, false );
                     return false;
                 case C_TOKEN( spPr ):
                     return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
@@ -199,7 +200,8 @@ ContextWrapper LegendContext::onCreateContext( sal_Int32 nElement, const Attribu
                     mrModel.mnPosition = rAttribs.getToken( XML_val, XML_r );
                     return false;
                 case C_TOKEN( overlay ):
-                    mrModel.mbOverlay = rAttribs.getBool( XML_val, true );
+                    // default is 'false', not 'true' as specified
+                    mrModel.mbOverlay = rAttribs.getBool( XML_val, false );
                     return false;
                 case C_TOKEN( spPr ):
                     return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
