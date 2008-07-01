@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wmfwr.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,6 +100,8 @@ private:
     Region    aSrcClipRegion;
     WMFWriterAttrStackMember * pAttrStack;
 
+    UINT32    eSrcHorTextAlign;
+
     // Aktuelle Attribute im Ziel-Metafile:
     Color     aDstLineColor;
     Color     aDstFillColor;
@@ -108,6 +110,8 @@ private:
     RasterOp  eDstROP2;
     FontAlign eDstTextAlign;
     Font      aDstFont;
+
+    UINT32    eDstHorTextAlign;
 
     BOOL      bDstIsClipping; // ???: derzeit unberuecksichtigt
     Region    aDstClipRegion; // ???: derzeit unberuecksichtigt
@@ -180,7 +184,7 @@ private:
     void WMFRecord_SetStretchBltMode();
     void WMFRecord_SetPixel(const Point & rPoint, const Color & rColor);
     void WMFRecord_SetROP2(RasterOp eROP);
-    void WMFRecord_SetTextAlign(FontAlign eFontAlign);
+    void WMFRecord_SetTextAlign(FontAlign eFontAlign, UINT32 eHorTextAlign);
     void WMFRecord_SetTextColor(const Color & rColor);
     void WMFRecord_SetWindowExt(const Size & rSize);
     void WMFRecord_SetWindowOrg(const Point & rPoint);
