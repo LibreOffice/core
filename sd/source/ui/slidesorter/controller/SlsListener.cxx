@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlsListener.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -491,6 +491,11 @@ void SAL_CALL Listener::propertyChange (
                 OSL_TRACE ("caught exception while accessing the page number of a slide: %s",
                     ::rtl::OUStringToOString(aEvent.Message,
                         RTL_TEXTENCODING_UTF8).getStr());
+            }
+            catch (lang::DisposedException&)
+            {
+                // Something is already disposed.  There is not much we can
+                // do, except not to crash.
             }
         }
     }
