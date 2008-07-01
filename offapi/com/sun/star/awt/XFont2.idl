@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XFont2.idl,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +44,7 @@ module com {  module sun {  module star {  module awt {
 /** extends the <type>XFont</type> interface and provides additional
     information for a font.
 
-    @since CWS xmlfilter02
+    @since OOo 3.0
  */
 interface XFont2: com::sun::star::awt::XFont
 {
