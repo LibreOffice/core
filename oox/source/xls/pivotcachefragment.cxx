@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pivotcachefragment.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,7 +103,7 @@ void OoxPivotCacheFragment::onStartElement( const AttributeList& rAttribs )
         break;
         case XLS_TOKEN( s ):
             if ( mbValidSource )
-                maPCacheData.maFields.back().maItems.push_back( rAttribs.getString( XML_v ) );
+                maPCacheData.maFields.back().maItems.push_back( rAttribs.getString( XML_v, OUString() ) );
         break;
     }
 }
@@ -120,7 +120,7 @@ void OoxPivotCacheFragment::importPivotCacheDefinition( const AttributeList& /*r
 
 void OoxPivotCacheFragment::importCacheSource( const AttributeList& rAttribs )
 {
-    switch ( rAttribs.getToken(XML_type) )
+    switch ( rAttribs.getToken(XML_type, XML_TOKEN_INVALID) )
     {
         case XML_worksheet:
             maPCacheData.meSourceType = PivotCacheData::WORKSHEET;
@@ -146,14 +146,14 @@ void OoxPivotCacheFragment::importWorksheetSource( const AttributeList& rAttribs
     PivotCacheData::WorksheetSource* pSrc = static_cast<PivotCacheData::WorksheetSource*>(
         maPCacheData.mpSourceProp.get() );
 
-    pSrc->maSrcRange  = rAttribs.getString( XML_ref );
-    pSrc->maSheetName = rAttribs.getString( XML_sheet );
+    pSrc->maSrcRange  = rAttribs.getString( XML_ref, OUString() );
+    pSrc->maSheetName = rAttribs.getString( XML_sheet, OUString() );
 }
 
 void OoxPivotCacheFragment::importCacheField( const AttributeList& rAttribs )
 {
     PivotCacheField aField;
-    aField.maName = rAttribs.getString( XML_name );
+    aField.maName = rAttribs.getString( XML_name, OUString() );
     maPCacheData.maFields.push_back(aField);
 }
 
