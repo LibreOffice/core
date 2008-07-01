@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmltoken.cxx,v $
- * $Revision: 1.129 $
+ * $Revision: 1.130 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,6 +79,8 @@ namespace xmloff { namespace token {
         TOKEN( " PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"office.dtd\">",      XML_XML_DOCTYPE_SUFFIX ),
 
         // namespace prefixes and names
+//        TOKEN( "xml",                   XML_NP_XML ),
+        TOKEN( "http://www.w3.org/XML/1998/namespace",      XML_N_XML ),
         TOKEN( "office",                XML_NP_OFFICE ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:office:1.0",      XML_N_OFFICE ),
         TOKEN( "http://sun.com/xmlns/staroffice/office",      XML_N_OFFICE_OLD ),
@@ -139,6 +141,14 @@ namespace xmloff { namespace token {
 
         TOKEN( "VL",                        XML_NP_VERSIONS_LIST ),
         TOKEN( "http://openoffice.org/2001/versions-list",      XML_N_VERSIONS_LIST ),
+
+        // erAck: 2008-04-09T20:12+0200  OpenFormula aka ODFF
+        TOKEN( "of",                    XML_NP_OF ),
+        TOKEN( "urn:oasis:names:tc:opendocument:xmlns:of:1.2",  XML_N_OF ),
+
+        // ODF 1.2 metadata: RDFa
+        TOKEN( "rdfa",                      XML_NP_RDFA ),
+        TOKEN( "http://docs.oasis-open.org/opendocument/meta/rdfa#", XML_N_RDFA ),
 
         // units
         TOKEN( "mm",                              XML_UNIT_MM ),
@@ -3012,16 +3022,16 @@ namespace xmloff { namespace token {
         TOKEN( "error-lower-range",     XML_ERROR_LOWER_RANGE ),
         TOKEN( "error-upper-range",     XML_ERROR_UPPER_RANGE ),
 
-        // erAck: 2008-04-09T20:12+0200  OpenFormula aka ODFF
-        TOKEN( "of",                    XML_NP_OF ),
-        TOKEN( "urn:oasis:names:tc:opendocument:xmlns:of:1.2",  XML_N_OF ),
-
         // --> OD 2008-04-22 #refactorlists#
         TOKEN( "continue-list",         XML_CONTINUE_LIST ),
         TOKEN( "style-override",        XML_STYLE_OVERRIDE ),
         // <--
+        //
         // fs: #i90243#
         TOKEN( "xforms-settings",       XML_XFORM_MODEL_SETTINGS ),
+
+        // ODF 1.2 metadata
+        TOKEN( "meta-field",            XML_META_FIELD ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
