@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DomainMapper.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,9 @@
 namespace com{ namespace sun {namespace star{
     namespace beans{
         struct PropertyValue;
+    }
+    namespace io{
+        class XInputStream;
     }
     namespace uno{
         class XComponentContext;
@@ -83,6 +86,7 @@ class WRITERFILTER_DLLPUBLIC DomainMapper : public Properties, public Table,
 
 public:
     DomainMapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+                                ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
                                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModel,
                                 SourceDocumentType eDocumentType );
     virtual ~DomainMapper();
