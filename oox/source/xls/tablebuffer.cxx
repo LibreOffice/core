@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tablebuffer.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,10 +68,10 @@ Table::Table( const WorkbookHelper& rHelper ) :
 
 void Table::importTable( const AttributeList& rAttribs, sal_Int16 nSheet )
 {
-    if( getAddressConverter().convertToCellRange( maOoxData.maRange, rAttribs.getString( XML_ref ), nSheet, true ) )
+    if( getAddressConverter().convertToCellRange( maOoxData.maRange, rAttribs.getString( XML_ref, OUString() ), nSheet, true ) )
     {
-        maOoxData.maProgName    = rAttribs.getString( XML_name );
-        maOoxData.maDisplayName = rAttribs.getString( XML_displayName );
+        maOoxData.maProgName    = rAttribs.getString( XML_name, OUString() );
+        maOoxData.maDisplayName = rAttribs.getString( XML_displayName, OUString() );
         maOoxData.mnId          = rAttribs.getInteger( XML_id, -1 );
         maOoxData.mnType        = rAttribs.getToken( XML_tableType, XML_worksheet );
         maOoxData.mnHeaderRows  = rAttribs.getInteger( XML_headerRowCount, 1 );
