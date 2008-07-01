@@ -8,7 +8,7 @@
  *
  * $RCSfile: chartspacefragment.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,7 +70,7 @@ ContextWrapper ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const At
                 case C_TOKEN( spPr ):
                     return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
                 case C_TOKEN( style ):
-                    mrModel.mnStyle = rAttribs.getInteger( XML_val, -1 );
+                    mrModel.mnStyle = rAttribs.getInteger( XML_val, 2 );
                     return false;
                 case C_TOKEN( txPr ):
                     return new TextBodyContext( *this, mrModel.mxTextProp.create() );
@@ -81,7 +81,8 @@ ContextWrapper ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const At
             switch( nElement )
             {
                 case C_TOKEN( autoTitleDeleted ):
-                    mrModel.mbAutoTitleDel = rAttribs.getBool( XML_val, true );
+                    // default is 'false', not 'true' as specified
+                    mrModel.mbAutoTitleDel = rAttribs.getBool( XML_val, false );
                     return false;
                 case C_TOKEN( dispBlanksAs ):
                     mrModel.mnDispBlanksAs = rAttribs.getToken( XML_val, XML_zero );
@@ -91,10 +92,12 @@ ContextWrapper ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const At
                 case C_TOKEN( plotArea ):
                     return new PlotAreaContext( *this, mrModel.mxPlotArea.create() );
                 case C_TOKEN( plotVisOnly ):
-                    mrModel.mbPlotVisOnly = rAttribs.getBool( XML_val, true );
+                    // default is 'false', not 'true' as specified
+                    mrModel.mbPlotVisOnly = rAttribs.getBool( XML_val, false );
                     return false;
                 case C_TOKEN( showDLblsOverMax ):
-                    mrModel.mbShowLabelsOverMax = rAttribs.getBool( XML_val, true );
+                    // default is 'false', not 'true' as specified
+                    mrModel.mbShowLabelsOverMax = rAttribs.getBool( XML_val, false );
                     return false;
                 case C_TOKEN( title ):
                     return new TitleContext( *this, mrModel.mxTitle.create() );
