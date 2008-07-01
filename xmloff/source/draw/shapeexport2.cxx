@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shapeexport2.cxx,v $
- * $Revision: 1.65 $
+ * $Revision: 1.66 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1442,6 +1442,44 @@ void XMLShapeExport::ImpExportConnectorShape(
             if( nGluePointId != -1 )
             {
                 mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_END_GLUE_POINT, OUString::valueOf( nGluePointId ));
+            }
+        }
+    }
+
+    if( xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("PolyPolygonBezier") ) ) >>= aAny )
+    {
+        // get PolygonBezier
+        drawing::PolyPolygonBezierCoords* pSourcePolyPolygon =
+            (drawing::PolyPolygonBezierCoords*)aAny.getValue();
+
+        if(pSourcePolyPolygon && pSourcePolyPolygon->Coordinates.getLength())
+        {
+            sal_Int32 nOuterCnt(pSourcePolyPolygon->Coordinates.getLength());
+            drawing::PointSequence* pOuterSequence = pSourcePolyPolygon->Coordinates.getArray();
+            drawing::FlagSequence*  pOuterFlags = pSourcePolyPolygon->Flags.getArray();
+
+            if(pOuterSequence && pOuterFlags)
+            {
+                // prepare svx:d element export
+                awt::Point aPoint( 0, 0 );
+                awt::Size aSize( 1, 1 );
+                SdXMLImExViewBox aViewBox( 0, 0, 1, 1 );
+                SdXMLImExSvgDElement aSvgDElement(aViewBox);
+
+                for(sal_Int32 a(0L); a < nOuterCnt; a++)
+                {
+                    drawing::PointSequence* pSequence = pOuterSequence++;
+                    drawing::FlagSequence* pFlags = pOuterFlags++;
+
+                    if(pSequence && pFlags)
+                    {
+                        aSvgDElement.AddPolygon(pSequence, pFlags,
+                            aPoint, aSize, sal_False );
+                    }
+                }
+
+                // write point array
+                mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aSvgDElement.GetExportString());
             }
         }
     }
