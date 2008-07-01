@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlnmspe.hxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,11 +76,12 @@ XML_NAMESPACE( XSD,             28U )
 XML_NAMESPACE( XSI,             29U )
 XML_NAMESPACE( SMIL,            30U )
 XML_NAMESPACE( ANIMATION,       31U )
-XML_NAMESPACE( XML,             32U )       // TODO: This 'implicit' namespace is not yet used
+XML_NAMESPACE( XML,             32U )
 XML_NAMESPACE( REPORT,          33U )
 XML_NAMESPACE( OF,              34U )       // OpenFormula aka ODFF
+XML_NAMESPACE( RDFA,            35U )
 
-#define _XML_OLD_NAMESPACE_BASE 35U
+#define _XML_OLD_NAMESPACE_BASE 36U
 
 // namespaces used in the technical preview (SO 5.2)
 XML_OLD_NAMESPACE( FO,      0U )
