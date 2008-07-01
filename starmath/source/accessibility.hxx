@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accessibility.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -227,6 +227,7 @@ public:
     virtual SfxItemSet  GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib = EditEngineAttribs_All ) const;
     virtual SfxItemSet  GetParaAttribs( USHORT nPara ) const;
     virtual void        SetParaAttribs( USHORT nPara, const SfxItemSet& rSet );
+    virtual void        RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich );
     virtual void        GetPortions( USHORT nPara, SvUShorts& rList ) const;
 
     virtual USHORT      GetItemState( const ESelection& rSel, USHORT nWhich ) const;
@@ -266,6 +267,8 @@ public:
     // implementation functions for XParagraphAppend and XTextPortionAppend
     virtual void        AppendParagraph();
     virtual xub_StrLen  AppendTextPortion( USHORT nPara, const String &rText, const SfxItemSet &rSet );
+
+    virtual void        CopyText(const SvxTextForwarder& rSource);
 };
 
 
