@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: defnamesbuffer.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -305,7 +305,7 @@ DefinedName::DefinedName( const WorkbookHelper& rHelper, sal_Int32 nLocalSheet )
 
 void DefinedName::importDefinedName( const AttributeList& rAttribs )
 {
-    maOoxData.maName        = rAttribs.getString( XML_name );
+    maOoxData.maName        = rAttribs.getString( XML_name, OUString() );
     maOoxData.mnSheet       = rAttribs.getInteger( XML_localSheetId, -1 );
     maOoxData.mnFuncGroupId = rAttribs.getInteger( XML_functionGroupId, -1 );
     maOoxData.mbMacro       = rAttribs.getBool( XML_xlm, false );
