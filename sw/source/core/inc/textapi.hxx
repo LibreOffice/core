@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textapi.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,8 @@
 #include <svx/unotext.hxx>
 #include <svx/eeitem.hxx>
 
+class SwDoc;
+
 struct SwTextAPIEditSource_Impl;
 class SwTextAPIEditSource : public SvxEditSource
 {
@@ -43,11 +45,12 @@ class SwTextAPIEditSource : public SvxEditSource
     explicit            SwTextAPIEditSource( const SwTextAPIEditSource& rSource );
 
 public:
-                        SwTextAPIEditSource(SfxItemPool* pPool);
+                        SwTextAPIEditSource(SwDoc* pDoc);
     virtual             ~SwTextAPIEditSource();
 
     void                Dispose();
     void                SetText( OutlinerParaObject& rText );
+    void                SetString( const String& rText );
     OutlinerParaObject* CreateText();
     String              GetText();
 };
@@ -60,6 +63,7 @@ public:
     virtual             ~SwTextAPIObject() throw();
     void                DisposeEditSource() { pSource->Dispose(); }
     OutlinerParaObject* CreateText() { return pSource->CreateText(); }
+    void                SetString( const String& rText ) { pSource->SetString( rText ); }
     void                SetText( OutlinerParaObject& rText ) { pSource->SetText( rText ); }
     String              GetText() { return pSource->GetText(); }
 };
