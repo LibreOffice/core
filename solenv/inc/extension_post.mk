@@ -8,7 +8,7 @@
 #
 # $RCSfile: extension_post.mk,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,30 +29,27 @@
 #
 #*************************************************************************
 
-.SOURCE.xcu : $(MISC)$/$(EXTNAME)$/merge $(MISC)$/$(EXTNAME)$/registry$/data .
+.SOURCE.xcu : $(MISC)$/$(EXTNAME)$/merge $(MISC)$/$(EXTNAME)$/registry$/data $(COMPONENT_CONFIGDIR) .
 
 fixme=$(MISC)$/$(EXTNAME)$/merge$/$(MISC)
 fixme2=$(fixme:n)
 
-$(EXTENSIONDIR)$/registry$/data$/%.xcu : %.xcu
+$(EXTENSIONDIR)$/$(COMPONENT_CONFIGDEST)$/%.xcu : %.xcu
 # ugly hacking to workaround prepended first source path
     @@-$(MKDIRHIER) $(subst,$(fixme2),$(MISC) $(@:d))
     $(GNUCOPY) $< $(subst,$(fixme2),$(MISC) $@)
-
-.IF "$(COMPONENT_CONFIGDIR)"!=""
-$(EXTENSIONDIR)$/%.xcu : $(COMPONENT_CONFIGDIR)$/%.xcu
-# ugly hacking to workaround prepended first source path
-    @@-$(MKDIRHIER) $(subst,$(fixme2),$(MISC) $(@:d))
-    $(GNUCOPY) $< $(subst,$(fixme2),$(MISC) $@)
-.ENDIF			# "$(COMPONENT__CONFIGDIR)"!=""
-
-$(EXTENSIONDIR)$/%.xcs : %.xcs
-    @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
 
 $(EXTENSIONDIR)$/%.jar : $(SOLARBINDIR)$/%.jar
     @@-$(MKDIRHIER) $(@:d)
     $(GNUCOPY) $< $@
+
+.IF "$(COMPONENT_FILES)"!=""
+# ugly hacking to workaround prepended first source path - also hits
+# here in case of "just copied" .xcu files
+$(COMPONENT_FILES) : $$(@:s|$(fixme2)|$(MISC)|:s|$(EXTENSIONDIR)$/|.$/|)
+    @@-$(MKDIRHIER) $(@:s|$(fixme2)|$(MISC)|:d)
+    $(COPY) $< $(@:s|$(fixme2)|$(MISC)|)
+.ENDIF			# "$(COMPONENT_FILES)"!=""
 
 .IF "$(COMPONENT_JARFILES)"!=""
 $(COMPONENT_JARFILES) : $(CLASSDIR)$/$$(@:f)
@@ -110,6 +107,7 @@ IMPLEMENTATION_IDENTIFIER*="com.sun.star.$(EXTENSIONNAME)-$(PLATFORMID)"
 .IF "$(LAST_WITH_LANG)"!="$(WITH_LANG)"
 PHONYDESC=.PHONY
 .ENDIF			# "$(LAST_WITH_LANG)"!="$(WITH_LANG)"
+.IF "$(DESCRIPTION)"!=""
 $(DESCRIPTION) $(PHONYDESC) : $(DESCRIPTION_SRC)
     @@-$(MKDIRHIER) $(@:d)
     $(PERL) $(SOLARENV)$/bin$/licinserter.pl $(DESCRIPTION_SRC) $(COMPONENT_LIC_TEMPL) $@.$(EXTNAME)
@@ -119,6 +117,7 @@ $(DESCRIPTION) $(PHONYDESC) : $(DESCRIPTION_SRC)
     $(TYPE) $(MISC)$/desc.tmp.$(EXTNAME) | sed s/UPDATED_SUPPORTED_PLATFORM/$(PLATFORMID)/ > $@
     @@-$(RM) $(MISC)$/desc.tmp.$(EXTNAME)
 
+.ENDIF			# "$(DESCRIPTION)"!=""
 # default OOo license text!!!
 # may not fit...
 .IF "$(CUSTOM_LICENSE)"==""
@@ -130,10 +129,13 @@ PACKLICDEPS=$(SOLARBINDIR)$/osl$/LICENSE$$(@:b:s/_/./:e:s/./_/)$$(@:e)
 .ELSE			# "$(CUSTOM_LICENSE)" == ""
 PACKLICDEPS=$(CUSTOM_LICENSE)
 .ENDIF			# "$(CUSTOM_LICENSE)" == ""
+.IF "$(PACKLICS)"!=""
 $(PACKLICS) : $(PACKLICDEPS)
     @@-$(MKDIRHIER) $(@:d)
     $(GNUCOPY) $< $@
+.ENDIF			# "$(PACKLICS)"!=""
 
+.IF "$(COMPONENT_MANIFEST)"!=""
 #$(COMPONENT_MANIFEST) : $$(@:f)
 $(COMPONENT_MANIFEST) : $(MANIFEST_SRC) $(MANIFEST_DEPS)
     @@-$(MKDIRHIER) $(@:d)
@@ -142,4 +144,5 @@ $(COMPONENT_MANIFEST) : $(MANIFEST_SRC) $(MANIFEST_DEPS)
 .ELSE			# "$(COMPONENT_MANIFEST_GENERIC)" != ""
     $(PERL) $(SOLARENV)$/bin$/makemani.pl $(PRJ)$/util$/manifest.xml $(EXTENSIONDIR) $(COMPONENT_MANIFEST_SEARCHDIR) $(@:d:d)
 .ENDIF			# "$(COMPONENT_MANIFEST_GENERIC)" != ""
+.ENDIF			# "$(COMPONENT_MANIFEST)"!=""
 

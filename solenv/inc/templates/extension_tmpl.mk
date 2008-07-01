@@ -8,7 +8,7 @@
 #
 # $RCSfile: extension_tmpl.mk,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -96,6 +96,14 @@ COMPONENT_MERGED_XCU= \
     $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/Addons.xcu \
     $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/extension$/MyExtension.xcu
 
+# other configuration files
+COMPONENT_XCU= \
+    $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/Data.xcu
+
+# location of configurationfiles inside extension,
+# "." for flat .xcu files
+#COMPONENT_CONFIGDEST=.
+
 # native libraries
 COMPONENT_LIBRARIES= \
     $(EXTENSIONDIR)$/$(SHL1TARGET)$(DLLPOST)
@@ -106,6 +114,8 @@ COMPONENT_JARFILES = \
 
 # disable fetching default OOo license text
 #CUSTOM_LICENSE=my_license.txt
+# override default license destination
+#PACKLICS= $(EXTENSIONDIR)$/registration$/$(CUSTOM_LICENSE)
 
 # -------------------------------
 #  variables for own targets specific to this extension; no common
