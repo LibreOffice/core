@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ipsd.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,7 +82,6 @@ private:
     BOOL                mbCompression;  // RLE decoding
     BYTE*               mpPalette;
 
-    BOOL                ImplCallback( USHORT nPercent );
     BOOL                ImplReadBody();
     BOOL                ImplReadHeader();
 
@@ -111,23 +110,6 @@ PSDReader::~PSDReader()
 {
     delete[] mpPalette;
     delete mpFileHeader;
-}
-
-// ------------------------------------------------------------------------
-
-BOOL PSDReader::ImplCallback( USHORT /*nPercent*/ )
-{
-/*
-    if ( pCallback != NULL )
-    {
-        if ( ( (*pCallback)( pCallerData, nPercent ) ) == TRUE )
-        {
-            mpPSD->SetError( SVSTREAM_FILEFORMAT_ERROR );
-            return TRUE;
-        }
-    }
-*/
-    return FALSE;
 }
 
 // ------------------------------------------------------------------------
