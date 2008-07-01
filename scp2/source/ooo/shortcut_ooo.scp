@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shortcut_ooo.scp,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -178,3 +178,72 @@ End
 #endif
 
 //i44154 -end-
+
+#ifndef SYSTEM_REDLAND
+#ifdef UNX
+Shortcut gid_Shortcut_Lib_Raptor_1
+    FileID = gid_File_Lib_Raptor;
+    Dir = gid_Dir_Program;
+#ifdef MACOSX
+    Name = STRING(CONCAT4(libraptor,.,RAPTOR_MAJOR,UNXSUFFIX));
+#else
+    Name = STRING(CONCAT4(libraptor,UNXSUFFIX,.,RAPTOR_MAJOR));
+#endif
+    Styles = (RELATIVE);
+End
+#endif
+
+#ifdef UNX
+Shortcut gid_Shortcut_Lib_Raptor_2
+    ShortcutID = gid_Shortcut_Lib_Raptor_1;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(libraptor,UNXSUFFIX));
+    Styles = (RELATIVE);
+End
+#endif
+
+#ifdef UNX
+Shortcut gid_Shortcut_Lib_Rasqal_1
+    FileID = gid_File_Lib_Rasqal;
+    Dir = gid_Dir_Program;
+#ifdef MACOSX
+    Name = STRING(CONCAT4(librasqal,.,RASQAL_MAJOR,UNXSUFFIX));
+#else
+    Name = STRING(CONCAT4(librasqal,UNXSUFFIX,.,RASQAL_MAJOR));
+#endif
+    Styles = (RELATIVE);
+End
+#endif
+
+#ifdef UNX
+Shortcut gid_Shortcut_Lib_Rasqal_2
+    ShortcutID = gid_Shortcut_Lib_Rasqal_1;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(librasqal,UNXSUFFIX));
+    Styles = (RELATIVE);
+End
+#endif
+
+#ifdef UNX
+Shortcut gid_Shortcut_Lib_Rdf_1
+    FileID = gid_File_Lib_Rdf;
+    Dir = gid_Dir_Program;
+#ifdef MACOSX
+    Name = STRING(CONCAT4(librdf,.,REDLAND_MAJOR,UNXSUFFIX));
+#else
+    Name = STRING(CONCAT4(librdf,UNXSUFFIX,.,REDLAND_MAJOR));
+#endif
+    Styles = (RELATIVE);
+End
+#endif
+
+#ifdef UNX
+Shortcut gid_Shortcut_Lib_Rdf_2
+    ShortcutID = gid_Shortcut_Lib_Rdf_1;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(librdf,UNXSUFFIX));
+    Styles = (RELATIVE);
+End
+#endif
+#endif // SYSTEM_REDLAND
+
