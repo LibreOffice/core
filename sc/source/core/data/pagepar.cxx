@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pagepar.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +60,7 @@ ScPageTableParam::~ScPageTableParam()
 
 void ScPageTableParam::Reset()
 {
+    bCellContent = TRUE;
     bNotes=bGrid=bHeaders=bDrawings=
     bLeftRight=bScaleAll=bScaleTo=bScalePageNum=
     bFormulas=bNullVals=bSkipEmpty          = FALSE;
