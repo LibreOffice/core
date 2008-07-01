@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pivottablefragment.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,7 +114,7 @@ void OoxPivotTableFragment::finalizeImport()
 void OoxPivotTableFragment::importLocation( const AttributeList& rAttribs )
 {
     CellRangeAddress aRange;
-    OUString aRangeName = rAttribs.getString( XML_ref );
+    OUString aRangeName = rAttribs.getString( XML_ref, OUString() );
     mbValidRange = getAddressConverter().convertToCellRange(
         aRange, aRangeName, getSheetIndex(), true );
 
@@ -127,7 +127,7 @@ void OoxPivotTableFragment::importPivotTableDefinition( const AttributeList& rAt
     if ( !rAttribs.hasAttribute( XML_cacheId ) )
         return;
 
-    maName = rAttribs.getString( XML_name );
+    maName = rAttribs.getString( XML_name, OUString() );
     maData.mnCacheId = rAttribs.getInteger( XML_cacheId, 0 );
 
     // name="PivotTable3"
@@ -163,7 +163,7 @@ void OoxPivotTableFragment::importPivotField( const AttributeList& rAttribs )
     rField.mbDataField = rAttribs.getBool( XML_dataField, false );
 
     // Possible values are: axisCol, axisRow, axisPage, axisValues
-    switch ( rAttribs.getToken( XML_axis ) )
+    switch ( rAttribs.getToken( XML_axis, XML_TOKEN_INVALID ) )
     {
         case XML_axisCol:
             rField.meAxis = PivotTableField::COLUMN;
