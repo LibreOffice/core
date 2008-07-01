@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textbodypropertiescontext.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/propertymap.hxx"
 #include "oox/core/namespaces.hxx"
 #include "tokens.hxx"
 
