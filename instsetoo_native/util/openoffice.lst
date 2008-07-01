@@ -57,6 +57,7 @@ OpenOffice
 			SERVICESPROJEKT 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
+			SPELLCHECKERFILE spellchecker_selection.txt
 			OPENSOURCE 1
 			SETSTATICPATH 1
 			OOODOWNLOADNAME 1
@@ -117,6 +118,7 @@ OpenOffice_wJRE
 			SERVICESPROJEKT 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
+			SPELLCHECKERFILE spellchecker_selection.txt
 			OPENSOURCE 1
 			SETSTATICPATH 1
 			OOODOWNLOADNAME 1
@@ -181,6 +183,7 @@ OpenOffice_Dev
 			SERVICESPROJEKT 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
+			SPELLCHECKERFILE spellchecker_selection.txt
 			OPENSOURCE 1
 			SETSTATICPATH 1
 			OOODOWNLOADNAME 1
@@ -316,6 +319,7 @@ BrOffice
 			SETSTATICPATH 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
+			SPELLCHECKERFILE spellchecker_selection.txt
 			OPENSOURCE 1
 			OOODOWNLOADNAME 1
 			PROGRAMFILESROOT 1
@@ -376,6 +380,7 @@ BrOffice_wJRE
 			SETSTATICPATH 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
+			SPELLCHECKERFILE spellchecker_selection.txt
 			OPENSOURCE 1
 			OOODOWNLOADNAME 1
 			PROGRAMFILESROOT 1
@@ -440,6 +445,7 @@ BrOffice_Dev
 			SETSTATICPATH 1
 			GLOBALFILEGID gid_File_Lib_Vcl
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
+			SPELLCHECKERFILE spellchecker_selection.txt
 			OPENSOURCE 1
 			OOODOWNLOADNAME 1
 			PROGRAMFILESROOT 1
