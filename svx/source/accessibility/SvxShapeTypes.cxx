@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SvxShapeTypes.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,6 +72,10 @@ AccessibleShape* CreateSvxAccessibleShape (
         // --> OD 2004-11-29 #i37790# - default accessiblility shape for
         // com::sun::star::drawing::CustomShape
         case DRAWING_CUSTOM:
+        // <--
+        // --> OD 2008-05-19 #i85429# - default accessiblility shape for
+        // com::sun::star::drawing::MediaShape
+        case DRAWING_MEDIA:
         // <--
             return new AccessibleShape (rShapeInfo, rShapeTreeInfo);
 
@@ -187,6 +191,9 @@ ShapeTypeDescriptor aSvxShapeTypeList[] = {
         CreateSvxAccessibleShape ),
     ShapeTypeDescriptor (   DRAWING_TABLE,
         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.TableShape" ) ),
+        CreateSvxAccessibleShape ),
+    ShapeTypeDescriptor (   DRAWING_MEDIA,
+        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.MediaShape" ) ),
         CreateSvxAccessibleShape ),
 
 };
