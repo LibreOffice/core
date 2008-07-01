@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtimp.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -222,10 +222,14 @@ enum XMLTextPElemTokens
     XML_TOK_TEXT_TABLE_FORMULA,
     XML_TOK_TEXT_DROPDOWN,
 
+    // RDF metadata
+    XML_TOK_TEXT_META,
+    XML_TOK_TEXT_META_FIELD,
+
     // misc
-    XML_TOK_TEXTP_CHANGE_START, // avoid ambigiouty with SwXMLTextElemTokens
-    XML_TOK_TEXTP_CHANGE_END,   // avoid ambigiouty with SwXMLTextElemTokens
-    XML_TOK_TEXTP_CHANGE,       // avoid ambigiouty with SwXMLTextElemTokens
+    XML_TOK_TEXTP_CHANGE_START, // TEXTP avoids clash with SwXMLTextElemTokens
+    XML_TOK_TEXTP_CHANGE_END,
+    XML_TOK_TEXTP_CHANGE,
     XML_TOK_DRAW_A,
     XML_TOK_TEXT_MEASURE,
 
@@ -239,6 +243,7 @@ enum XMLTextPElemTokens
 
 enum XMLTextPAttrTokens
 {
+    XML_TOK_TEXT_P_XMLID,
     XML_TOK_TEXT_P_STYLE_NAME,
     XML_TOK_TEXT_P_COND_STYLE_NAME,
     XML_TOK_TEXT_P_LEVEL,
@@ -252,6 +257,7 @@ enum XMLTextPAttrTokens
 
 enum XMLTextListBlockAttrTokens
 {
+    XML_TOK_TEXT_LIST_BLOCK_XMLID,
     XML_TOK_TEXT_LIST_BLOCK_STYLE_NAME,
     XML_TOK_TEXT_LIST_BLOCK_CONTINUE_NUMBERING,
     // --> OD 2008-04-22 #refactorlists#
@@ -392,8 +398,11 @@ class XMLOFF_DLLPUBLIC XMLTextImportHelper : public UniRefBase
 
     /// start ranges for open bookmarks
     ::std::map< ::rtl::OUString,
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::text::XTextRange>,
+                // start range, xml:id
+                ::std::pair<
+                    ::com::sun::star::uno::Reference<
+                        ::com::sun::star::text::XTextRange>,
+                    ::rtl::OUString>,
                 ::comphelper::UStringLess> aBookmarkStartRanges;
 
     /// backpatcher for references to footnotes and endnotes
@@ -725,13 +734,15 @@ public:
     void InsertBookmarkStartRange(
         const ::rtl::OUString sName,
         const ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextRange> & rRange);
+                ::com::sun::star::text::XTextRange> & rRange,
+        const ::rtl::OUString & i_rXmlId);
 
     /// process the start of a range reference
     sal_Bool FindAndRemoveBookmarkStartRange(
+        const ::rtl::OUString sName,
         ::com::sun::star::uno::Reference<
-                ::com::sun::star::text::XTextRange> & rRange,
-        const ::rtl::OUString sName);
+                ::com::sun::star::text::XTextRange> & o_rRange,
+        ::rtl::OUString& o_rXmlId);
 
     /// insert new footnote ID.
     /// Also fixup open references from the backpatch list to this ID.
