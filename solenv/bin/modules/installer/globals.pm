@@ -8,7 +8,7 @@
 #
 # $RCSfile: globals.pm,v $
 #
-# $Revision: 1.99 $
+# $Revision: 1.100 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -272,6 +272,10 @@ BEGIN
     $basisdirhostname = "";
     $uredirhostname = "";
     $sundirhostname = "";
+    $officedirgid = "";
+    $basisdirgid = "";
+    $uredirgid = "";
+    $sundirgid = "";
 
     %treestyles = ("UREDIRECTORY" => "INSTALLURE", "BASISDIRECTORY" => "INSTALLBASIS", "OFFICEDIRECTORY" => "INSTALLOFFICE");
     %installlocations = ("INSTALLLOCATION" => "1", "BASISINSTALLLOCATION" => "1", "OFFICEINSTALLLOCATION" => "1", "UREINSTALLLOCATION" => "1");
