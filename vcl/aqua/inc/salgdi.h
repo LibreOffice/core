@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.h,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -163,7 +163,8 @@ public:
     bool                IsWindowGraphics()      const   { return mbWindow; }
     bool                IsPrinterGraphics()     const   { return mbPrinter; }
     bool                IsVirDevGraphics()      const   { return mbVirDev; }
-    AquaSalFrame*       getGraphicsFrame() const { return mbWindow ? mpFrame : NULL; }
+    AquaSalFrame*       getGraphicsFrame() const { return mpFrame; }
+    void                setGraphicsFrame( AquaSalFrame* pFrame ) { mpFrame = pFrame; }
 
     void                ImplDrawPixel( long nX, long nY, const RGBAColor& ); // helper to draw single pixels
 
@@ -354,7 +355,7 @@ public:
 private:
     // differences between VCL, Quartz and kHiThemeOrientation coordinate systems
     // make some graphics seem to be vertically-mirrored from a VCL perspective
-    bool IsFlipped() const { return (mpFrame != NULL); }
+    bool IsFlipped() const { return mbWindow; }
 
     void ApplyXorContext();
 };
