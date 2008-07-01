@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: epict.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -143,14 +143,12 @@ private:
     void ConvertLinePattern(PictPattern & rPat, BOOL bVisible);
     void ConvertFillPattern(PictPattern & rPat, BOOL bVisible);
 
-    void WriteOpcode_BkPat(BOOL bVisible);
     void WriteOpcode_TxFace(const Font & rFont);
     void WriteOpcode_TxMode(RasterOp eMode);
     void WriteOpcode_PnSize(USHORT nSize);
     void WriteOpcode_PnMode(RasterOp eMode);
     void WriteOpcode_PnLinePat(BOOL bVisible);
     void WriteOpcode_PnFillPat(BOOL bVisible);
-    void WriteOpcode_FillPat(BOOL bVisible);
     void WriteOpcode_OvSize(const Size & rSize);
     void WriteOpcode_TxSize(USHORT nSize);
     void WriteOpcode_RGBFgCol(const Color & rColor);
@@ -474,18 +472,6 @@ void PictWriter::ConvertFillPattern(PictPattern & rPat, BOOL bVisible)
 }
 
 
-void PictWriter::WriteOpcode_BkPat(BOOL bVisible)
-{
-    if (bDstBkPatValid==FALSE || bDstBkPatVisible!=bVisible) {
-        PictPattern aPat;
-        ConvertFillPattern(aPat,bVisible);
-        *pPict << (USHORT)0x0002 << aPat.nHi << aPat.nLo;
-        bDstBkPatVisible=bVisible;
-        bDstBkPatValid=TRUE;
-    }
-}
-
-
 void PictWriter::WriteOpcode_TxFace(const Font & rFont)
 {
     BYTE nFace;
@@ -578,18 +564,6 @@ void PictWriter::WriteOpcode_PnFillPat(BOOL bVisible)
         *pPict << (USHORT)0x0009 << aPat.nHi << aPat.nLo;
         aDstPnPat=aPat;
         bDstPnPatValid=TRUE;
-    }
-}
-
-
-void PictWriter::WriteOpcode_FillPat(BOOL bVisible)
-{
-    if (bDstFillPatValid==FALSE || bDstFillPatVisible!=bVisible) {
-        PictPattern aPat;
-        ConvertFillPattern(aPat,bVisible);
-        *pPict << (USHORT)0x000a << aPat.nHi << aPat.nLo;
-        bDstFillPatVisible=bVisible;
-        bDstFillPatValid=TRUE;
     }
 }
 
