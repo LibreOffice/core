@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eppm.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +56,6 @@ private:
     BitmapReadAccess*   mpAcc;
     ULONG               mnWidth, mnHeight;  // Bildausmass in Pixeln
 
-    void                ImplCallback( USHORT nPercent );
     BOOL                ImplWriteHeader();
     void                ImplWriteBody();
     void                ImplWriteNumber( sal_Int32 );
@@ -82,14 +81,6 @@ PPMWriter::PPMWriter() :
 
 PPMWriter::~PPMWriter()
 {
-}
-
-// ------------------------------------------------------------------------
-
-void PPMWriter::ImplCallback( USHORT nPercent )
-{
-    if ( xStatusIndicator.is() && ( nPercent <= 100 ) )
-        xStatusIndicator->setValue( nPercent );
 }
 
 // ------------------------------------------------------------------------
