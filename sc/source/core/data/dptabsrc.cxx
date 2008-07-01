@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dptabsrc.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -561,7 +561,7 @@ long lcl_CountMinMembers(const vector<ScDPDimension*>& ppDim, const vector<ScDPL
     {
         --nPos;
 
-        if ( nPos < nLevels && ppDim[nPos] == ppDim[nPos+1] )
+        if ( nPos+1 < nLevels && ppDim[nPos] == ppDim[nPos+1] )
         {
             DBG_ERROR("lcl_CountMinMembers: multiple levels from one dimension not implemented");
             return 0;
