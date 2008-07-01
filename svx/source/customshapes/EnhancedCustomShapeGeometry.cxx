@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EnhancedCustomShapeGeometry.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -7294,6 +7294,341 @@ static const mso_CustomShape msoAccentBorderCallout3 =
     (SvxMSDffHandle*)mso_sptCalloutHandle3, sizeof( mso_sptCalloutHandle3 ) / sizeof( SvxMSDffHandle )
 };
 
+static const SvxMSDffVertPair mso_sptStraightConnector1Vert[] =
+{
+    { 0, 0 }, { 21600, 21600 }
+};
+static const sal_uInt16 mso_sptStraightConnector1Segm[] =
+{
+    0x4000, 0x0001, 0x8000
+};
+static const mso_CustomShape msoStraightConnector1 =
+{
+    (SvxMSDffVertPair*)mso_sptStraightConnector1Vert, sizeof( mso_sptStraightConnector1Vert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptStraightConnector1Segm, sizeof( mso_sptStraightConnector1Segm ) >> 1,
+    (SvxMSDffCalculationData*)NULL, 0,
+    (sal_Int32*)NULL,
+    NULL, 0,
+    21600, 21600,
+    0x80000000, 0x80000000,
+    NULL, 0,
+    (SvxMSDffHandle*)NULL, 0
+};
+
+static const SvxMSDffVertPair mso_sptBentConnector2Vert[] =
+{
+    { 0, 0 }, { 21600, 0 }, { 21600, 21600 }
+};
+static const sal_uInt16 mso_sptBentConnector2Segm[] =
+{
+    0x4000, 0x0002, 0x8000
+};
+static const mso_CustomShape msoBentConnector2 =
+{
+    (SvxMSDffVertPair*)mso_sptBentConnector2Vert, sizeof( mso_sptBentConnector2Vert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptBentConnector2Segm, sizeof( mso_sptBentConnector2Segm ) >> 1,
+    (SvxMSDffCalculationData*)NULL, 0,
+    (sal_Int32*)NULL,
+    NULL, 0,
+    21600, 21600,
+    0x80000000, 0x80000000,
+    NULL, 0,
+    (SvxMSDffHandle*)NULL, 0
+};
+
+static const SvxMSDffVertPair mso_sptBentConnector3Vert[] =
+{
+    { 0, 0 }, { 0 MSO_I, 0 }, { 0 MSO_I, 21600 }, { 21600, 21600 }
+};
+static const sal_uInt16 mso_sptBentConnector3Segm[] =
+{
+    0x4000, 0x0003, 0x8000
+};
+static const SvxMSDffCalculationData mso_sptBentConnector3Calc[] =
+{
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }
+};
+static const sal_Int32 mso_sptBentConnector3Default[] =
+{
+    1, 10800
+};
+static const SvxMSDffHandle mso_sptBentConnector3Handle[] =
+{
+    {   MSDFF_HANDLE_FLAGS_RANGE,
+        0x100, 10800, 10800, 10800, 0x80000000, 0x7fffffff, 0x80000000, 0x7fffffff }
+};
+static const mso_CustomShape msoBentConnector3 =
+{
+    (SvxMSDffVertPair*)mso_sptBentConnector3Vert, sizeof( mso_sptBentConnector3Vert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptBentConnector3Segm, sizeof( mso_sptBentConnector3Segm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptBentConnector3Calc, sizeof( mso_sptBentConnector3Calc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptBentConnector3Default,
+    NULL, 0,
+    21600, 21600,
+    0x80000000, 0x80000000,
+    NULL, 0,
+    (SvxMSDffHandle*)mso_sptBentConnector3Handle, sizeof( mso_sptBentConnector3Handle ) / sizeof( SvxMSDffHandle )
+};
+
+static const SvxMSDffVertPair mso_sptBentConnector4Vert[] =
+{
+    { 0, 0 }, { 0 MSO_I, 0 }, { 0 MSO_I, 1 MSO_I }, { 21600, 1 MSO_I }, { 21600, 21600 }
+};
+static const sal_uInt16 mso_sptBentConnector4Segm[] =
+{
+    0x4000, 0x0004, 0x8000
+};
+static const SvxMSDffCalculationData mso_sptBentConnector4Calc[] =
+{
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x2000, { 0x400, 21600, 0 } },
+    { 0x2001, { 0x402, 1, 2 } },
+    { 0x2001, { 0x401, 1, 2 } }
+};
+static const sal_Int32 mso_sptBentConnector4Default[] =
+{
+    2, 10800, 10800
+};
+static const SvxMSDffHandle mso_sptBentConnector4Handle[] =
+{
+    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+        0x100, 4 + 3, 10800, 10800, 0x80000000, 0x7fffffff, 4 + 3, 4 + 3 },
+    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+        3 + 3, 0x101, 10800, 10800, 3 + 3, 3 + 3, 0x80000000, 0x7fffffff }
+};
+static const mso_CustomShape msoBentConnector4 =
+{
+    (SvxMSDffVertPair*)mso_sptBentConnector4Vert, sizeof( mso_sptBentConnector4Vert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptBentConnector4Segm, sizeof( mso_sptBentConnector4Segm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptBentConnector4Calc, sizeof( mso_sptBentConnector4Calc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptBentConnector4Default,
+    NULL, 0,
+    21600, 21600,
+    0x80000000, 0x80000000,
+    NULL, 0,
+    (SvxMSDffHandle*)mso_sptBentConnector4Handle, sizeof( mso_sptBentConnector4Handle ) / sizeof( SvxMSDffHandle )
+};
+
+static const SvxMSDffVertPair mso_sptBentConnector5Vert[] =
+{
+    { 0, 0 }, { 0 MSO_I, 0 }, { 0 MSO_I, 4 MSO_I }, { 1 MSO_I, 4 MSO_I }, { 1 MSO_I, 21600 }, { 21600, 21600 }
+};
+static const sal_uInt16 mso_sptBentConnector5Segm[] =
+{
+    0x4000, 0x0005, 0x8000
+};
+static const SvxMSDffCalculationData mso_sptBentConnector5Calc[] =
+{
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },
+    { 0x6000, { 0x400, 0x401, 0 } },
+    { 0x2001, { 0x402, 1, 2 } },
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x2001, { 0x404, 1, 2 } },
+    { 0x4000, { 21600, 0x404, 0 } },
+    { 0x2001, { 0x406, 1, 2 } }
+};
+static const sal_Int32 mso_sptBentConnector5Default[] =
+{
+    3, 10800, 10800, 10800
+};
+static const SvxMSDffHandle mso_sptBentConnector5Handle[] =
+{
+    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+        0x100, 5 + 3, 10800, 10800, 0x80000000, 0x7fffffff, 5 + 3, 5 + 3 },
+    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+        3 + 3, 0x101, 10800, 10800, 3 + 3, 3 + 3, 0x80000000, 0x7fffffff },
+    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+        0x102, 7 + 3, 10800, 10800, 0x80000000, 0x7fffffff, 7 + 3, 7 + 3 }
+};
+static const mso_CustomShape msoBentConnector5 =
+{
+    (SvxMSDffVertPair*)mso_sptBentConnector5Vert, sizeof( mso_sptBentConnector5Vert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptBentConnector5Segm, sizeof( mso_sptBentConnector5Segm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptBentConnector5Calc, sizeof( mso_sptBentConnector5Calc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptBentConnector5Default,
+    NULL, 0,
+    21600, 21600,
+    0x80000000, 0x80000000,
+    NULL, 0,
+    (SvxMSDffHandle*)mso_sptBentConnector5Handle, sizeof( mso_sptBentConnector5Handle ) / sizeof( SvxMSDffHandle )
+};
+
+static const SvxMSDffVertPair mso_sptCurvedConnector2Vert[] =
+{
+    { 0, 0 }, { 10800, 0 }, { 21600, 10800 }, { 21600, 21600 }
+};
+static const sal_uInt16 mso_sptCurvedConnector2Segm[] =
+{
+    0x4000, 0x2001, 0x8000
+};
+static const mso_CustomShape msoCurvedConnector2 =
+{
+    (SvxMSDffVertPair*)mso_sptCurvedConnector2Vert, sizeof( mso_sptCurvedConnector2Vert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptCurvedConnector2Segm, sizeof( mso_sptCurvedConnector2Segm ) >> 1,
+    (SvxMSDffCalculationData*)NULL, 0,
+    (sal_Int32*)NULL,
+    NULL, 0,
+    21600, 21600,
+    0x80000000, 0x80000000,
+    NULL, 0,
+    (SvxMSDffHandle*)NULL, 0
+};
+
+static const SvxMSDffVertPair mso_sptCurvedConnector3Vert[] =
+{
+    { 0, 0 }, { 1 MSO_I, 0 }, { 0 MSO_I, 5400 }, { 0 MSO_I, 10800 }, { 0 MSO_I, 16200 }, { 3 MSO_I, 21600 }, { 21600, 21600 }
+};
+static const sal_uInt16 mso_sptCurvedConnector3Segm[] =
+{
+    0x4000, 0x2002, 0x8000
+};
+static const SvxMSDffCalculationData mso_sptCurvedConnector3Calc[] =
+{
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x2001, { 0x400, 1, 2 } },
+    { 0x2000, { 0x400, 21600, 0 } },
+    { 0x2001, { 0x402, 1, 2 } }
+};
+static const sal_Int32 mso_sptCurvedConnector3Default[] =
+{
+    1, 10800
+};
+static const SvxMSDffHandle mso_sptCurvedConnector3Handle[] =
+{
+    {   MSDFF_HANDLE_FLAGS_RANGE,
+        0x100, 10800, 10800, 10800, 0x80000000, 0x7fffffff, 0x80000000, 0x7fffffff }
+};
+static const mso_CustomShape msoCurvedConnector3 =
+{
+    (SvxMSDffVertPair*)mso_sptCurvedConnector3Vert, sizeof( mso_sptCurvedConnector3Vert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptCurvedConnector3Segm, sizeof( mso_sptCurvedConnector3Segm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptCurvedConnector3Calc, sizeof( mso_sptCurvedConnector3Calc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptCurvedConnector3Default,
+    NULL, 0,
+    21600, 21600,
+    0x80000000, 0x80000000,
+    NULL, 0,
+    (SvxMSDffHandle*)mso_sptCurvedConnector3Handle, sizeof( mso_sptCurvedConnector3Handle ) / sizeof( SvxMSDffHandle )
+};
+
+static const SvxMSDffVertPair mso_sptCurvedConnector4Vert[] =
+{
+    { 0, 0 }, { 1 MSO_I, 0 }, { 0 MSO_I, 10 MSO_I }, { 0 MSO_I, 9 MSO_I },
+    { 0 MSO_I, 12 MSO_I }, { 5 MSO_I, 8 MSO_I }, { 3 MSO_I, 8 MSO_I },
+    { 7 MSO_I, 8 MSO_I }, { 21600, 14 MSO_I }, { 21600, 21600 }
+
+};
+static const sal_uInt16 mso_sptCurvedConnector4Segm[] =
+{
+    0x4000, 0x2003, 0x8000
+};
+static const SvxMSDffCalculationData mso_sptCurvedConnector4Calc[] =
+{
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x2001, { 0x400, 1, 2 } },
+    { 0x4000, { 21600, 0x400, 0 } },
+    { 0x2001, { 0x402, 1, 2 } },
+    { 0x6000, { 0x400, 0x403, 0 } },
+    { 0x2001, { 0x404, 1, 2 } },
+    { 0x2000, { 0x403, 21600, 0 } },
+    { 0x2001, { 0x406, 1, 2 } },
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x2001, { DFF_Prop_adjust2Value, 1, 2 } },
+    { 0x2001, { DFF_Prop_adjust2Value, 1, 4 } },
+    { 0x6000, { 0x408, 0x409, 0 } },
+    { 0x2001, { 0x40b, 1, 2 } },
+    { 0x2000, { 0x408, 21600, 0 } },
+    { 0x2001, { 0x40d, 1, 2 } }
+};
+static const sal_Int32 mso_sptCurvedConnector4Default[] =
+{
+    2, 10800, 10800
+};
+static const SvxMSDffHandle mso_sptCurvedConnector4Handle[] =
+{
+    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+        0x100, 9 + 3, 10800, 10800, 0x80000000, 0x7fffffff, 9 + 3, 9 + 3 },
+    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+        3 + 3, 0x101, 10800, 10800, 3 + 3, 3 + 3, 0x80000000, 0x7fffffff }
+};
+static const mso_CustomShape msoCurvedConnector4 =
+{
+    (SvxMSDffVertPair*)mso_sptCurvedConnector4Vert, sizeof( mso_sptCurvedConnector4Vert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptCurvedConnector4Segm, sizeof( mso_sptCurvedConnector4Segm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptCurvedConnector4Calc, sizeof( mso_sptCurvedConnector4Calc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptCurvedConnector4Default,
+    NULL, 0,
+    21600, 21600,
+    0x80000000, 0x80000000,
+    NULL, 0,
+    (SvxMSDffHandle*)mso_sptCurvedConnector4Handle, sizeof( mso_sptCurvedConnector4Handle ) / sizeof( SvxMSDffHandle )
+};
+
+static const SvxMSDffVertPair mso_sptCurvedConnector5Vert[] =
+{
+    { 0, 0 },
+    { 21 MSO_I, 0 }, { 0 MSO_I, 12 MSO_I }, { 0 MSO_I, 11 MSO_I },
+    { 0 MSO_I, 14 MSO_I }, { 6 MSO_I, 4 MSO_I }, { 3 MSO_I, 4 MSO_I },
+    { 8 MSO_I, 4 MSO_I }, { 1 MSO_I, 18 MSO_I }, { 1 MSO_I, 16 MSO_I },
+    { 1 MSO_I, 20 MSO_I }, { 10 MSO_I, 21600 }, { 21600, 21600 }
+};
+static const sal_uInt16 mso_sptCurvedConnector5Segm[] =
+{
+    0x4000, 0x2004, 0x8000
+};
+static const SvxMSDffCalculationData mso_sptCurvedConnector5Calc[] =
+{
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
+    { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },
+    { 0x6000, { 0x400, 0x401, 0 } },
+    { 0x2001, { 0x402, 1, 2 } },
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x6000, { 0x400, 0x403, 0 } },
+    { 0x2001, { 0x405, 1, 2 } },
+    { 0x6000, { 0x401, 0x403, 0 } },
+    { 0x2001, { 0x407, 1, 2 } },
+    { 0x2000, { 0x401, 21600, 0 } },
+    { 0x2001, { 0x409, 1, 2 } },
+    { 0x2001, { 0x404, 1, 2 } },
+    { 0x2001, { 0x40b, 1, 2 } },
+    { 0x6000, { 0x404, 0x40b, 0 } },
+    { 0x2001, { 0x40d, 1, 2 } },
+    { 0x2000, { 0x404, 21600, 0 } },
+    { 0x2001, { 0x40f, 1, 2 } },
+    { 0x6000, { 0x404, 0x410, 0 } },
+    { 0x2001, { 0x411, 1, 2 } },
+    { 0x2000, { 0x410, 21600, 0 } },
+    { 0x2001, { 0x413, 1, 2 } },
+    { 0x2001, { 0x400, 1, 2 } }
+};
+static const sal_Int32 mso_sptCurvedConnector5Default[] =
+{
+    3, 10800, 10800, 10800
+};
+static const SvxMSDffHandle mso_sptCurvedConnector5Handle[] =
+{
+    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+        0x100, 11 + 3, 10800, 10800, 0x80000000, 0x7fffffff, 11 + 3, 11 + 3 },
+    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL,
+        3 + 3, 0x101, 10800, 10800, 3 + 3, 3 + 3, 0x80000000, 0x7fffffff },
+    {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL,
+        0x102, 16 + 3, 10800, 10800, 0x80000000, 0x7fffffff, 16 + 3, 16 + 3 }
+};
+static const mso_CustomShape msoCurvedConnector5 =
+{
+    (SvxMSDffVertPair*)mso_sptCurvedConnector5Vert, sizeof( mso_sptCurvedConnector5Vert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptCurvedConnector5Segm, sizeof( mso_sptCurvedConnector5Segm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptCurvedConnector5Calc, sizeof( mso_sptCurvedConnector5Calc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptCurvedConnector5Default,
+    NULL, 0,
+    21600, 21600,
+    0x80000000, 0x80000000,
+    NULL, 0,
+    (SvxMSDffHandle*)mso_sptCurvedConnector5Handle, sizeof( mso_sptCurvedConnector5Handle ) / sizeof( SvxMSDffHandle )
+};
+
 const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
 {
     const mso_CustomShape* pCustomShape = NULL;
@@ -7439,6 +7774,17 @@ const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
         case mso_sptAccentCallout90 :           pCustomShape = &msoAccentCallout90; break;
         case mso_sptBorderCallout90 :           pCustomShape = &msoBorderCallout90; break;
         case mso_sptAccentBorderCallout90 :     pCustomShape = &msoAccentBorderCallout90; break;
+
+        // connectors
+        case mso_sptStraightConnector1 :        pCustomShape = &msoStraightConnector1; break;
+        case mso_sptBentConnector2 :            pCustomShape = &msoBentConnector2; break;
+        case mso_sptBentConnector3 :            pCustomShape = &msoBentConnector3; break;
+        case mso_sptBentConnector4 :            pCustomShape = &msoBentConnector4; break;
+        case mso_sptBentConnector5 :            pCustomShape = &msoBentConnector5; break;
+        case mso_sptCurvedConnector2 :          pCustomShape = &msoCurvedConnector2; break;
+        case mso_sptCurvedConnector3 :          pCustomShape = &msoCurvedConnector3; break;
+        case mso_sptCurvedConnector4 :          pCustomShape = &msoCurvedConnector4; break;
+        case mso_sptCurvedConnector5 :          pCustomShape = &msoCurvedConnector5; break;
 
         // Dont know, simply mapping to TextSimple
         case mso_sptTextOnRing :
