@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slideshowimpl.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.55 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1458,15 +1458,21 @@ void SAL_CALL SlideshowImpl::resume() throw (RuntimeException)
 
     if( mbIsPaused ) try
     {
-        mbIsPaused = sal_False;;
-        if( mxShow.is() )
+        if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_BLANK )
         {
-            mxShow->pause(sal_False);
-            update();
+            mpShowWindow->RestartShow();
+        }
+        else
+        {
+            mbIsPaused = sal_False;;
+            if( mxShow.is() )
+            {
+                mxShow->pause(sal_False);
+                update();
 
-            if( mxListenerProxy.is() )
-                mxListenerProxy->resumed();
-
+                if( mxListenerProxy.is() )
+                    mxListenerProxy->resumed();
+            }
         }
     }
     catch( Exception& e )
@@ -1498,7 +1504,9 @@ void SAL_CALL SlideshowImpl::blankScreen( sal_Int32 nColor ) throw (RuntimeExcep
     if( mpShowWindow && mpSlideController )
     {
         if( mpShowWindow->SetBlankMode( mpSlideController->getCurrentSlideIndex(), nColor ) )
+        {
             pause();
+        }
     }
 }
 
@@ -1830,15 +1838,23 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
 
         if( mxShow.is() && ( fUpdate >= 0.0 ) )
         {
+/*
             if( fUpdate < 0.25 )
             {
                 mnUpdateEvent = Application::PostUserEvent(LINK(this, SlideshowImpl, updateHdl));
             }
             else
+*/
             {
-                const float MAX_UPDATE = 60.0; // do not wait longer than 60 seconds for next refresh
-                if( fUpdate > MAX_UPDATE )
-                    fUpdate = MAX_UPDATE;
+                const float MIN_UPDATE = 0.05f; // do not wait less than 50 ms
+                if( fUpdate < MIN_UPDATE )
+                    fUpdate = MIN_UPDATE;
+                else
+                {
+                    const float MAX_UPDATE = 4.0f; // do not wait longer than 4 seconds for next refresh, because dilbert said so
+                    if( fUpdate > MAX_UPDATE )
+                        fUpdate = MAX_UPDATE;
+                }
                 maUpdateTimer.SetTimeout(
                     ::std::max( 1UL, static_cast<ULONG>(fUpdate * 1000.0) ) );
                 maUpdateTimer.Start();
