@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dpgroup.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1264,9 +1264,12 @@ void ScDPGroupTableData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
         CalcRowData aData;
         FillRowDataFromCacheTable(nRow, rCacheTable, aInfoSrc, aData);
 
-        FillGroupValues(&aData.aColData[0], rInfo.aColLevelDims.size(), &rInfo.aColLevelDims[0]);
-        FillGroupValues(&aData.aRowData[0], rInfo.aRowLevelDims.size(), &rInfo.aRowLevelDims[0]);
-        FillGroupValues(&aData.aPageData[0], rInfo.aPageDims.size(), &rInfo.aPageDims[0]);
+        if ( !rInfo.aColLevelDims.empty() )
+            FillGroupValues(&aData.aColData[0], rInfo.aColLevelDims.size(), &rInfo.aColLevelDims[0]);
+        if ( !rInfo.aRowLevelDims.empty() )
+            FillGroupValues(&aData.aRowData[0], rInfo.aRowLevelDims.size(), &rInfo.aRowLevelDims[0]);
+        if ( !rInfo.aPageDims.empty() )
+            FillGroupValues(&aData.aPageData[0], rInfo.aPageDims.size(), &rInfo.aPageDims[0]);
 
         ProcessRowData(rInfo, aData, bAutoShow);
     }
