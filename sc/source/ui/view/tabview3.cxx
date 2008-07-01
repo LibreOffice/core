@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabview3.cxx,v $
- * $Revision: 1.67 $
+ * $Revision: 1.68 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2091,6 +2091,10 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
                             aEnd.X() = bLayoutRTL ? 0 : (pGridWin[i]->GetOutputSizePixel().Width());
                         aEnd.X() -= nLayoutSign;
                         aEnd.Y() -= 1;
+
+                        // #i85232# include area below cells (could be done in GetScrPos?)
+                        if ( eMode == SC_UPDATE_ALL && nRow2 >= MAXROW )
+                            aEnd.Y() = pGridWin[i]->GetOutputSizePixel().Height();
 
                         BOOL bShowChanges = TRUE;           //! ...
                         if (bShowChanges)
