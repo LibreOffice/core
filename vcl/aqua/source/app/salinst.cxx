@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salinst.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,6 +137,10 @@ bool AquaSalInstance::isOnCommandLine( const rtl::OUString& rArg )
 // returns an NSAutoreleasePool that must be released when the event loop begins
 static void initNSApp()
 {
+    SInt32 major  = NULL;
+    SInt32 minor  = NULL;
+    SInt32 bugFix = NULL;
+
     // create our cocoa NSApplication
     [VCL_NSApplication sharedApplication];
 
@@ -167,6 +171,9 @@ static void initNSApp()
                                           selector: @selector(scrollbarSettingsChanged:)
                                           name: @"AppleNoRedisplayAppearancePreferenceChanged"
                                           object: nil ];
+
+    // get System Version and store the value in GetSalData()->mnSystemVersion
+    [NSApp getSystemVersionMajor: (unsigned int *)major minor:(unsigned int *)minor bugFix:(unsigned int *)bugFix ];
 
     if( AquaSalInstance::isOnCommandLine( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "-enableautomation" ) ) ) )
     {
@@ -408,6 +415,7 @@ SalInstance* CreateSalInstance()
     // no focus rects on NWF aqua
     ImplGetSVData()->maNWFData.mbNoFocusRects = true;
     ImplGetSVData()->maNWFData.mbNoBoldTabFocus = true;
+    ImplGetSVData()->maNWFData.mbNoActiveTabTextRaise = true;
     ImplGetSVData()->maNWFData.mbCenteredTabs = true;
     ImplGetSVData()->maNWFData.mbProgressNeedsErase = true;
     ImplGetSVData()->maNWFData.mbCheckBoxNeedsErase = true;
@@ -433,6 +441,7 @@ AquaSalInstance::AquaSalInstance()
     maMainThread = vos::OThread::getCurrentIdentifier();
     mbWaitingYield = false;
     maUserEventListMutex = osl_createMutex();
+    mnActivePrintJobs = 0;
 }
 
 // -----------------------------------------------------------------------
@@ -615,7 +624,7 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
     // handle cocoa event queue
     // cocoa events mye be only handled in the thread the NSApp was created
-    if( isNSAppThread() )
+    if( isNSAppThread() && mnActivePrintJobs == 0 )
     {
         // we need to be woken up by a cocoa-event
         // if a user event should be posted by the event handling below
