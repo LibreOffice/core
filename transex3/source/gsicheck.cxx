@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gsicheck.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include "tagtest.hxx"
 #include "gsicheck.hxx"
 
+#define MAX_GID_LID_LEN 250
 
 /*****************************************************************************/
 void PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix,
@@ -164,10 +165,10 @@ GSILine::GSILine( const ByteString &rLine, ULONG nLine )
             PrintError( "The Language is invalid!", "Line format", aLangId, TRUE, GetLineNumber(), GetUniqId() );
             NotOK();
         }
-        // limit GID and LID to 125 chars each for database conformity, see #137575#
-        if ( rLine.GetToken( 4, '\t' ).Len() > 125 || rLine.GetToken( 5, '\t' ).Len() > 125 )
+        // limit GID and LID to MAX_GID_LID_LEN chars each for database conformity, see #137575#
+        if ( rLine.GetToken( 4, '\t' ).Len() > MAX_GID_LID_LEN || rLine.GetToken( 5, '\t' ).Len() > MAX_GID_LID_LEN )
         {
-            PrintError( "GID and LID may only be 125 chars long each!", "Line format", aLangId, TRUE, GetLineNumber(), GetUniqId() );
+            PrintError( ByteString("GID and LID may only be ").Append( ByteString::CreateFromInt32(MAX_GID_LID_LEN) ).Append( " chars long each!" ), "Line format", aLangId, TRUE, GetLineNumber(), GetUniqId() );
             NotOK();
         }
     }
@@ -423,31 +424,84 @@ BOOL GSIBlock::IsUTF8( const ByteString &aTestee, BOOL bFixTags, USHORT &nErrorP
         aFixed.Erase();
     }
 
-    if ( !bAllowKeyIDs && aTestee.GetTokenCount( '.' ) > 1 )
+    if ( !bAllowKeyIDs )
     {
-        nErrorPos = 1;
-        ByteString aPrefix( aTestee.GetToken( 0, '.' ) );
-        if ( aPrefix.Equals( "{&", 0, 2 ) )
+        BOOL bIsKeyID = FALSE;
+        BOOL bNewId = FALSE;
+        ByteString aID( aTestee );
+        USHORT nAfterID = 0;
+
+        if ( aTestee.Equals( "{&", 0, 2 ) )
         {   // check for strings from instset_native like "{&Tahoma8}335795.Installation Wiza ..."
-            USHORT nTagEnd = aPrefix.Search( '}' );
+            USHORT nTagEnd = aTestee.Search( '}' );
             if ( nTagEnd != STRING_NOTFOUND )
             {
                 if ( bFixTags )
-                    aFixed = aPrefix.Copy( 0, nTagEnd+1 );
+                    aFixed = aTestee.Copy( 0, nTagEnd+1 );
                 nErrorPos = nTagEnd+1;
-                aPrefix = aPrefix.Copy( nTagEnd+1 );
+                aID = aTestee.Copy( nTagEnd+1 );
+                nAfterID = nTagEnd+1;
             }
         }
 
-        if ( aPrefix.Len() > 0 && aPrefix.GetChar(aPrefix.Len()-1) == '*' )
-            aPrefix.Erase( aPrefix.Len()-1 );
+        ByteString aDelimiter( String( sal_Unicode(0x2016) ), RTL_TEXTENCODING_UTF8 );
 
-        if ( aPrefix.IsNumericAscii() && aPrefix.Len() >= 5 )
+        if ( aID.Equals( aDelimiter, 6, aDelimiter.Len() ) )
+        {   // New KeyId     6 Letters, digits and spechial chars followed by delimiter
+            bNewId = TRUE;
+            nErrorPos = 1;
+            aID = aID.Copy( 0, 6 );
+            nAfterID += 6;
+            nAfterID = nAfterID + aDelimiter.Len();
+        }
+        else if ( ( aID.GetChar(6) == '*' ) && aID.Equals( aDelimiter, 7, aDelimiter.Len() ) )
+        {   // New KeyId     6 Letters, digits and spechial chars followed by '*delimiter' to indicate translation in progress
+            bNewId = TRUE;
+            nErrorPos = 1;
+            aID = aID.Copy( 0, 6 );
+            nAfterID += 7;
+            nAfterID = nAfterID + aDelimiter.Len();
+        }
+        else if ( aID.GetTokenCount( '.' ) > 1 )
+        {   // test for old KeyIDs       5 to 6 digits followed by a dot   '44373.'
+            bNewId = FALSE;
+            nErrorPos = 1;
+            aID = aID.GetToken( 0, '.' );
+            nAfterID = nAfterID + aID.Len();
+        }
+        else
+        {
+            aID.Erase();
+        }
+
+        if ( bNewId )
+            {
+                if ( aID.Len() == 6 )
+                {
+                    bIsKeyID = TRUE;
+                    ByteString aDigits("0123456789abcdefghijklmnopqrstuvwxyz+-<=>");
+                    for ( USHORT i=0 ; i < aID.Len() ;i++ )
+                    {
+                        if ( aDigits.Search( aID.GetChar(i) ) == STRING_NOTFOUND )
+                            bIsKeyID = FALSE;
+                    }
+                }
+            }
+        else
+        {
+            if ( aID.Len() > 0 && aID.GetChar(aID.Len()-1) == '*' )
+                aID.Erase( aID.Len()-1 );
+
+            if ( aID.IsNumericAscii() && aID.Len() >= 5 )
+                bIsKeyID = TRUE;
+        }
+
+        if ( bIsKeyID )
         {
             aErrorMsg = ByteString( "String contains KeyID" );
             if ( bFixTags )
             {
-                aFixed += aTestee.Copy( aTestee.Search( '.' )+1 );
+                aFixed += aTestee.Copy( nAfterID );
                 bHasBeenFixed = TRUE;
                 aErrorMsg = ByteString( "FIXED String containing KeyID" );
             }
@@ -671,7 +725,7 @@ void GSIBlock::WriteFixed( LazySvFileStream &aFixOut, BOOL /*bRequireSourceLine*
         }
     }
 
-    if ( pSourceLine && bHasFixes )
+    if ( pSourceLine && ( bHasFixes || pSourceLine->IsFixed() ) )
     {
         aFixOut.LazyOpen();
         aFixOut.WriteLine( *pSourceLine );
@@ -692,12 +746,13 @@ void Help()
 /*****************************************************************************/
 {
     fprintf( stdout, "\n" );
-    fprintf( stdout, "gsicheck Version 1.8.7a (c)1999 - 2006 by SUN Microsystems\n" );
+    fprintf( stdout, "gsicheck Version 1.9.0 (c)1999 - 2006 by SUN Microsystems\n" );
     fprintf( stdout, "=========================================================\n" );
     fprintf( stdout, "\n" );
     fprintf( stdout, "gsicheck checks the syntax of tags in GSI-Files and SDF-Files\n" );
     fprintf( stdout, "         checks for inconsistencies and malicious UTF8 encoding\n" );
     fprintf( stdout, "         checks tags in Online Help\n" );
+    fprintf( stdout, "         checks for *new* KeyIDs and relax GID/LID length to %s\n", ByteString::CreateFromInt32(MAX_GID_LID_LEN).GetBuffer() );
     fprintf( stdout, "\n" );
     fprintf( stdout, "Syntax: gsicheck [ -c ] [-f] [ -we ] [ -wef ErrorFilename ] [ -wc ]\n" );
     fprintf( stdout, "                 [ -wcf CorrectFilename ] [ -s | -t ] [ -l LanguageID ]\n" );
