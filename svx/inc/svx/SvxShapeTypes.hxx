@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SvxShapeTypes.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,7 +77,8 @@ enum SvxShapeTypes
     DRAWING_3D_EXTRUDE,
     DRAWING_CUSTOM,
     DRAWING_TABLE, /* = 30 */
-    DRAWING_END = DRAWING_TABLE
+    DRAWING_MEDIA, /* = 31 */
+    DRAWING_END = DRAWING_MEDIA
 };
 
 /** List of shape type descriptors corresponding to the
