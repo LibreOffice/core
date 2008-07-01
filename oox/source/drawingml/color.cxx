@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: color.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -348,7 +348,7 @@ void Color::clearTransparence()
     mnAlpha = MAX_PERCENT;
 }
 
-sal_Int32 Color::getColor( const ::oox::core::XmlFilterBase& rFilter ) const
+sal_Int32 Color::getColor( const ::oox::core::XmlFilterBase& rFilter, sal_Int32 nPhClr ) const
 {
     switch( meMode )
     {
@@ -361,7 +361,7 @@ sal_Int32 Color::getColor( const ::oox::core::XmlFilterBase& rFilter ) const
 
         case COLOR_SCHEME:
             meMode = COLOR_RGB;
-            lclRgbToRgbComponents( mnC1, mnC2, mnC3, rFilter.getSchemeClr( mnC1 ) );
+            lclRgbToRgbComponents( mnC1, mnC2, mnC3, (mnC1 == XML_phClr) ? nPhClr : rFilter.getSchemeClr( mnC1 ) );
         break;
     }
 
