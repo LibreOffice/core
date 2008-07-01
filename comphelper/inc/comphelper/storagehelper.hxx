@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: storagehelper.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,18 +57,35 @@ public:
                             = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() )
         throw ( ::com::sun::star::uno::Exception );
 
+    static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >
+        GetFileSystemStorageFactory(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSF
+                            = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() )
+        throw ( ::com::sun::star::uno::Exception );
+
     static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
         GetTemporaryStorage(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory
                             = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() )
         throw ( ::com::sun::star::uno::Exception );
 
+    /// this one will only return Storage
     static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
         GetStorageFromURL(
             const ::rtl::OUString& aURL,
             sal_Int32 nStorageMode,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory
                             = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() )
+        throw ( ::com::sun::star::uno::Exception );
+
+    /// this one will return either Storage or FileSystemStorage
+    static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+        GetStorageFromURL2(
+            const ::rtl::OUString& aURL,
+            sal_Int32 nStorageMode,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory
+                            = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() )
+
         throw ( ::com::sun::star::uno::Exception );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
