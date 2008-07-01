@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accpara.cxx,v $
- * $Revision: 1.77 $
+ * $Revision: 1.78 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,6 +90,9 @@
 // <--
 // --> OD 2007-11-12 #i82637#
 #include <boost/scoped_ptr.hpp>
+// <--
+// --> OD 2008-05-26 #i71360#
+#include <textmarkuphelper.hxx>
 // <--
 
 #include <algorithm>
@@ -1071,6 +1074,20 @@ Any SwAccessibleParagraph::queryInterface( const Type& rType )
         aRet <<= aAccTextAttr;
     }
     // <--
+    // --> OD 2008-06-10 #i89175#
+    // add interface com::sun:star:accessibility::XAccessibleTextMarkup
+    else if ( rType == ::getCppuType((uno::Reference<XAccessibleTextMarkup> *)0) )
+    {
+        uno::Reference<XAccessibleTextMarkup> aAccTextMarkup = this;
+        aRet <<= aAccTextMarkup;
+    }
+    // add interface com::sun:star:accessibility::XAccessibleMultiLineText
+    else if ( rType == ::getCppuType((uno::Reference<XAccessibleMultiLineText> *)0) )
+    {
+        uno::Reference<XAccessibleMultiLineText> aAccMultiLineText = this;
+        aRet <<= aAccMultiLineText;
+    }
+    // <--
     else
     {
         aRet = SwAccessibleContext::queryInterface(rType);
@@ -1087,12 +1104,16 @@ Sequence< Type > SAL_CALL SwAccessibleParagraph::getTypes() throw(RuntimeExcepti
     sal_Int32 nIndex = aTypes.getLength();
     // --> OD 2006-07-13 #i63870#
     // add type accessibility::XAccessibleTextAttributes
-    aTypes.realloc( nIndex + 4 );
+    // --> OD 2008-06-10 #i89175#
+    // add type accessibility::XAccessibleTextMarkup and accessibility::XAccessibleMultiLineText
+    aTypes.realloc( nIndex + 6 );
 
     Type* pTypes = aTypes.getArray();
     pTypes[nIndex++] = ::getCppuType( static_cast< uno::Reference< XAccessibleEditableText > * >( 0 ) );
     pTypes[nIndex++] = ::getCppuType( static_cast< uno::Reference< XAccessibleTextAttributes > * >( 0 ) );
     pTypes[nIndex++] = ::getCppuType( static_cast< uno::Reference< XAccessibleSelection > * >( 0 ) );
+    pTypes[nIndex++] = ::getCppuType( static_cast< uno::Reference< XAccessibleTextMarkup > * >( 0 ) );
+    pTypes[nIndex++] = ::getCppuType( static_cast< uno::Reference< XAccessibleMultiLineText > * >( 0 ) );
     pTypes[nIndex] = ::getCppuType( static_cast< uno::Reference< XAccessibleHypertext > * >( 0 ) );
     // <--
 
@@ -2405,3 +2426,155 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkIndex( sal_Int32 nCharInde
 
     return nRet;
 }
+
+// --> OD 2008-05-26 #i71360#
+sal_Int32 SAL_CALL SwAccessibleParagraph::getTextMarkupCount( sal_Int32 nTextMarkupType )
+                                        throw (lang::IllegalArgumentException,
+                                               uno::RuntimeException)
+{
+    SwTextMarkupHelper aTextMarkupHelper( *GetTxtNode(), GetPortionData() );
+
+    return aTextMarkupHelper.getTextMarkupCount( nTextMarkupType );
+}
+
+/*accessibility::*/TextSegment SAL_CALL
+        SwAccessibleParagraph::getTextMarkup( sal_Int32 nTextMarkupIndex,
+                                              sal_Int32 nTextMarkupType )
+                                        throw (lang::IndexOutOfBoundsException,
+                                               lang::IllegalArgumentException,
+                                               uno::RuntimeException)
+{
+    SwTextMarkupHelper aTextMarkupHelper( *GetTxtNode(), GetPortionData() );
+
+    return aTextMarkupHelper.getTextMarkup( nTextMarkupIndex, nTextMarkupType );
+}
+
+uno::Sequence< /*accessibility::*/TextSegment > SAL_CALL
+        SwAccessibleParagraph::getTextMarkupAtIndex( sal_Int32 nCharIndex,
+                                                     sal_Int32 nTextMarkupType )
+                                        throw (lang::IndexOutOfBoundsException,
+                                               lang::IllegalArgumentException,
+                                               uno::RuntimeException)
+{
+    // parameter checking
+    const sal_Int32 nLength = GetString().getLength();
+    if ( ! IsValidPosition( nCharIndex, nLength ) )
+    {
+        throw lang::IndexOutOfBoundsException();
+    }
+
+    SwTextMarkupHelper aTextMarkupHelper( *GetTxtNode(), GetPortionData() );
+
+    return aTextMarkupHelper.getTextMarkupAtIndex( nCharIndex, nTextMarkupType );
+}
+// <--
+
+// --> OD 2008-05-29 #i89175#
+sal_Int32 SAL_CALL SwAccessibleParagraph::getLineNumberAtIndex( sal_Int32 nIndex )
+                                        throw (lang::IndexOutOfBoundsException,
+                                               uno::RuntimeException)
+{
+    // parameter checking
+    const sal_Int32 nLength = GetString().getLength();
+    if ( ! IsValidPosition( nIndex, nLength ) )
+    {
+        throw lang::IndexOutOfBoundsException();
+    }
+
+    const sal_Int32 nLineNo = GetPortionData().GetLineNo( nIndex );
+    return nLineNo;
+}
+
+/*accessibility::*/TextSegment SAL_CALL
+        SwAccessibleParagraph::getTextAtLineNumber( sal_Int32 nLineNo )
+                                        throw (lang::IndexOutOfBoundsException,
+                                               uno::RuntimeException)
+{
+    // parameter checking
+    if ( nLineNo < 0 ||
+         nLineNo >= GetPortionData().GetLineCount() )
+    {
+        throw lang::IndexOutOfBoundsException();
+    }
+
+    Boundary aLineBound;
+    GetPortionData().GetBoundaryOfLine( nLineNo, aLineBound );
+
+    /*accessibility::*/TextSegment aTextAtLine;
+    const ::rtl::OUString rText = GetString();
+    aTextAtLine.SegmentText = rText.copy( aLineBound.startPos,
+                                          aLineBound.endPos - aLineBound.startPos );
+    aTextAtLine.SegmentStart = aLineBound.startPos;
+    aTextAtLine.SegmentEnd = aLineBound.endPos;
+
+    return aTextAtLine;
+}
+
+/*accessibility::*/TextSegment SAL_CALL SwAccessibleParagraph::getTextAtLineWithCaret()
+                                        throw (uno::RuntimeException)
+{
+    const sal_Int32 nLineNoOfCaret = getNumberOfLineWithCaret();
+
+    if ( nLineNoOfCaret >= 0 &&
+         nLineNoOfCaret < GetPortionData().GetLineCount() )
+    {
+        return getTextAtLineNumber( nLineNoOfCaret );
+    }
+
+    return /*accessibility::*/TextSegment();
+}
+
+sal_Int32 SAL_CALL SwAccessibleParagraph::getNumberOfLineWithCaret()
+                                        throw (uno::RuntimeException)
+{
+    const sal_Int32 nCaretPos = getCaretPosition();
+    const sal_Int32 nLength = GetString().getLength();
+    if ( !IsValidPosition( nCaretPos, nLength ) )
+    {
+        return -1;
+    }
+
+    sal_Int32 nLineNo = GetPortionData().GetLineNo( nCaretPos );
+
+    // special handling for cursor positioned at end of text line via End key
+    if ( nCaretPos != 0 )
+    {
+        Boundary aLineBound;
+        GetPortionData().GetBoundaryOfLine( nLineNo, aLineBound );
+        if ( nCaretPos == aLineBound.startPos )
+        {
+            SwCrsrShell* pCrsrShell = SwAccessibleParagraph::GetCrsrShell();
+            if ( pCrsrShell != 0 )
+            {
+                const awt::Rectangle aCharRect = getCharacterBounds( nCaretPos );
+
+                const SwRect& aCursorCoreRect = pCrsrShell->GetCharRect();
+                // translate core coordinates into accessibility coordinates
+                Window *pWin = GetWindow();
+                CHECK_FOR_WINDOW( XAccessibleComponent, pWin );
+
+                Rectangle aScreenRect( GetMap()->CoreToPixel( aCursorCoreRect.SVRect() ));
+
+                SwRect aFrmLogBounds( GetBounds() ); // twip rel to doc root
+                Point aFrmPixPos( GetMap()->CoreToPixel( aFrmLogBounds.SVRect() ).TopLeft() );
+                aScreenRect.Move( -aFrmPixPos.X(), -aFrmPixPos.Y() );
+
+                // convert into AWT Rectangle
+                const awt::Rectangle aCursorRect( aScreenRect.Left(),
+                                                  aScreenRect.Top(),
+                                                  aScreenRect.GetWidth(),
+                                                  aScreenRect.GetHeight() );
+
+                if ( aCharRect.X != aCursorRect.X ||
+                     aCharRect.Y != aCursorRect.Y )
+                {
+                    --nLineNo;
+                }
+            }
+        }
+    }
+
+    return nLineNo;
+}
+
+// <--
