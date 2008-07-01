@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: typegroupcontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,7 +101,8 @@ ContextWrapper AreaTypeGroupContext::onCreateContext( sal_Int32 nElement, const 
         case C_TOKEN( ser ):
             return new AreaSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( varyColors ):
-            mrModel.mbVaryColors = rAttribs.getBool( XML_val, true );
+            // default is 'false', not 'true' as specified
+            mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
             return false;
     }
     return false;
@@ -137,7 +138,7 @@ ContextWrapper BarTypeGroupContext::onCreateContext( sal_Int32 nElement, const A
             mrModel.mnGapWidth = rAttribs.getInteger( XML_val, 150 );
             return false;
         case C_TOKEN( grouping ):
-            // default is XML_standard and *not* XML_clustered as specified
+            // default is 'standard', not 'clustered' as specified
             mrModel.mnGrouping = rAttribs.getToken( XML_val, XML_standard );
             return false;
         case C_TOKEN( overlap ):
@@ -151,7 +152,8 @@ ContextWrapper BarTypeGroupContext::onCreateContext( sal_Int32 nElement, const A
             mrModel.mnShape = rAttribs.getToken( XML_val, XML_box );
             return false;
         case C_TOKEN( varyColors ):
-            mrModel.mbVaryColors = rAttribs.getBool( XML_val, true );
+            // default is 'false', not 'true' as specified
+            mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
             return false;
     }
     return false;
@@ -176,7 +178,8 @@ ContextWrapper BubbleTypeGroupContext::onCreateContext( sal_Int32 nElement, cons
             mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
             return false;
         case C_TOKEN( bubble3D ):
-            mrModel.mbBubble3d = rAttribs.getBool( XML_val, true );
+            // default is 'false', not 'true' as specified
+            mrModel.mbBubble3d = rAttribs.getBool( XML_val, false );
             return false;
         case C_TOKEN( bubbleScale ):
             mrModel.mnBubbleScale = rAttribs.getInteger( XML_val, 100 );
@@ -186,13 +189,15 @@ ContextWrapper BubbleTypeGroupContext::onCreateContext( sal_Int32 nElement, cons
         case C_TOKEN( ser ):
             return new BubbleSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( showNegBubbles ):
-            mrModel.mbShowNegBubbles = rAttribs.getBool( XML_val, true );
+            // default is 'false', not 'true' as specified
+            mrModel.mbShowNegBubbles = rAttribs.getBool( XML_val, false );
             return false;
         case C_TOKEN( sizeRepresents ):
             mrModel.mnSizeRepresents = rAttribs.getToken( XML_val, XML_area );
             return false;
         case C_TOKEN( varyColors ):
-            mrModel.mbVaryColors = rAttribs.getBool( XML_val, true );
+            // default is 'false', not 'true' as specified
+            mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
             return false;
     }
     return false;
@@ -229,20 +234,20 @@ ContextWrapper LineTypeGroupContext::onCreateContext( sal_Int32 nElement, const 
         case C_TOKEN( hiLowLines ):
             return new ShapePrWrapperContext( *this, mrModel.mxHiLowLines.create() );
         case C_TOKEN( marker ):
-            /*  This value is *ignored* by Excel. Markers can be switched off
-                only by setting the <c:ser> -> <c:marker> -> <c:symbol> element
-                to 'none'. */
-            mrModel.mbShowMarker = rAttribs.getBool( XML_val, true );
+            // default is 'false', not 'true' as specified
+            mrModel.mbShowMarker = rAttribs.getBool( XML_val, false );
             return false;
         case C_TOKEN( ser ):
             return new LineSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( smooth ):
-            /*  This value is *ignored* by Excel. Line smoothing is always
-                controlled by the series. */
-            mrModel.mbSmooth = rAttribs.getBool( XML_val, true );
+            // default is 'false', not 'true' as specified
+            mrModel.mbSmooth = rAttribs.getBool( XML_val, false );
             return false;
+        case C_TOKEN( upDownBars ):
+            return new UpDownBarsContext( *this, mrModel.mxUpDownBars.create() );
         case C_TOKEN( varyColors ):
-            mrModel.mbVaryColors = rAttribs.getBool( XML_val, true );
+            // default is 'false', not 'true' as specified
+            mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
             return false;
     }
     return false;
@@ -291,7 +296,8 @@ ContextWrapper PieTypeGroupContext::onCreateContext( sal_Int32 nElement, const A
             mrModel.mnSplitType = rAttribs.getToken( XML_val, XML_auto );
             return false;
         case C_TOKEN( varyColors ):
-            mrModel.mbVaryColors = rAttribs.getBool( XML_val, true );
+            // default is 'false', not 'true' as specified
+            mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
             return false;
     }
     return false;
@@ -323,7 +329,8 @@ ContextWrapper RadarTypeGroupContext::onCreateContext( sal_Int32 nElement, const
         case C_TOKEN( ser ):
             return new RadarSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( varyColors ):
-            mrModel.mbVaryColors = rAttribs.getBool( XML_val, true );
+            // default is 'false', not 'true' as specified
+            mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
             return false;
     }
     return false;
@@ -355,7 +362,8 @@ ContextWrapper ScatterTypeGroupContext::onCreateContext( sal_Int32 nElement, con
         case C_TOKEN( ser ):
             return new ScatterSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( varyColors ):
-            mrModel.mbVaryColors = rAttribs.getBool( XML_val, true );
+            // default is 'false', not 'true' as specified
+            mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
             return false;
     }
     return false;
@@ -382,7 +390,8 @@ ContextWrapper SurfaceTypeGroupContext::onCreateContext( sal_Int32 nElement, con
         case C_TOKEN( ser ):
             return new SurfaceSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( wireframe ):
-            mrModel.mbWireframe = rAttribs.getBool( XML_val, true );
+            // default is 'false', not 'true' as specified
+            mrModel.mbWireframe = rAttribs.getBool( XML_val, false );
             return false;
     }
     return false;
