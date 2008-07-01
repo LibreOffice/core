@@ -8,7 +8,7 @@
 #
 # $RCSfile: tg_ext.mk,v $
 #
-# $Revision: 1.88 $
+# $Revision: 1.89 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -49,7 +49,7 @@ PATCHFLAGS=-b
 .ENDIF			# "$(OS)"=="NETBSD"
 
 .IF "$(OS)"=="MACOSX"
-LDFLAGS:=$(EXTRA_LINKFLAGS)
+LDFLAGS!:=$(EXTRA_LINKFLAGS) $(LDFLAGS)
 .EXPORT : LDFLAGS
 .ENDIF
 
