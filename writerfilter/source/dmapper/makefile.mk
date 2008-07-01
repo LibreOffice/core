@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.11 $
+# $Revision: 1.12 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -60,7 +60,8 @@ SLOFILES=           $(SLO)$/BorderHandler.obj \
                     $(SLO)$/StyleSheetTable.obj \
                     $(SLO)$/TDefTableHandler.obj \
             $(SLO)$/ThemeTable.obj \
-                    $(SLO)$/ModelEventListener.obj
+                    $(SLO)$/ModelEventListener.obj\
+                    $(SLO)$/OLEHandler.obj
 
 # --- Targets ----------------------------------
 
