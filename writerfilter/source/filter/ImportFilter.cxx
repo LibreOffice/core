@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ImportFilter.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,9 +77,11 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
                          + "</starttime>");
 #endif
 
-    writerfilter::dmapper::SourceDocumentType eType = m_sFilterName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_MS_Word_2007" ) ) ?
+    writerfilter::dmapper::SourceDocumentType eType =
+        (m_sFilterName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_MS_Word_2007" ) ) ||
+         m_sFilterName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_MS_Word_2007_Template" ) )) ?
                 writerfilter::dmapper::DOCUMENT_OOXML : writerfilter::dmapper::DOCUMENT_DOC;
-    writerfilter::Stream::Pointer_t pStream(new writerfilter::dmapper::DomainMapper(m_xContext, m_xDoc, eType));
+    writerfilter::Stream::Pointer_t pStream(new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDoc, eType));
     //create the tokenizer and domain mapper
     if( eType == writerfilter::dmapper::DOCUMENT_OOXML )
     {
