@@ -8,7 +8,7 @@
  *
  * $RCSfile: DomainMapper.cxx,v $
  *
- * $Revision: 1.67 $
+ * $Revision: 1.68 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,11 @@
 #include <ThemeTable.hxx>
 #include <ModelEventListener.hxx>
 #include <MeasureHandler.hxx>
+#include <OLEHandler.hxx>
 #include <i18npool/mslangid.hxx>
+#include <ooxml/OOXMLFastTokens.hxx>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -54,6 +58,7 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/BreakType.hpp>
@@ -67,6 +72,7 @@
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <comphelper/types.hxx>
+#include <comphelper/storagehelper.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <boost/shared_ptr.hpp>
@@ -121,6 +127,7 @@ struct _Columns
 
   -----------------------------------------------------------------------*/
 DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xContext,
+                            uno::Reference< io::XInputStream > xInputStream,
                             uno::Reference< lang::XComponent > xModel,
                             SourceDocumentType eDocumentType) :
     m_pImpl( new DomainMapper_Impl( *this, xContext, xModel, eDocumentType )),
@@ -134,6 +141,31 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
     m_pImpl->SetDocumentSettingsProperty(
         PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ADD_PARA_TABLE_SPACING ),
         uno::makeAny( false ) );
+
+    m_pImpl->SetDocumentSettingsProperty(
+        PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ADD_PARA_TABLE_SPACING ),
+        uno::makeAny( false ) );
+
+    //import document properties
+
+    try
+    {
+        uno::Reference< lang::XMultiServiceFactory > xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
+        uno::Reference< embed::XStorage > xDocumentStorage =
+            (comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(OFOPXML_STORAGE_FORMAT_STRING, xInputStream));
+
+        uno::Reference< uno::XInterface > xTemp = xContext->getServiceManager()->createInstanceWithContext(
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.OOXMLDocumentPropertiesImporter")),
+                                xContext);
+
+        uno::Reference< document::XOOXMLDocumentPropertiesImporter > xImporter( xTemp, uno::UNO_QUERY_THROW );
+        uno::Reference< document::XDocumentPropertiesSupplier > xPropSupplier( xModel, uno::UNO_QUERY_THROW);
+        xImporter->importProperties( xDocumentStorage, xPropSupplier->getDocumentProperties() );
+    }
+    catch( const uno::Exception& rEx )
+    {
+        (void)rEx;
+    }
 
 #ifdef DEBUG_DOMAINMAPPER
     logger("DOMAINMAPPER", "<domainmapper>");
@@ -1880,24 +1912,6 @@ void DomainMapper::attribute(Id nName, Value & val)
                              uno::makeAny( aLocale ) );
         }
         break;
-        case NS_ooxml::LN_CT_Markup_id: //          91782;
-            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-            //TODO: Redline still open
-            //m_pImpl->GetTopContext()->Insert( PROP_REDLINE_IDENTIFIER, true, uno::makeAny( ::rtl::OUString::valueOf( nIntValue ) ));
-        break;
-        case NS_ooxml::LN_CT_TrackChange_author: // 91784;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-            //TODO: Redline still open
-            //m_pImpl->GetTopContext()->Insert( PROP_REDLINE_AUTHOR, true, uno::makeAny( sStringValue ));
-        break;
-        case NS_ooxml::LN_CT_TrackChange_date: //   91785;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-        {
-            //TODO: Redline still open
-//            util::DateTime aDateTime = ConversionHelper::convertDateTime( sStringValue );
-//            m_pImpl->GetTopContext()->Insert( PROP_REDLINE_DATE_TIME, true, uno::makeAny( aDateTime ));
-        }
-        break;
 #define AUTO_PARA_SPACING sal_Int32(49)
         case NS_ooxml::LN_CT_Spacing_beforeAutospacing:
             /* WRITERFILTERSTATUS: done: 80, planned: 0.5, spent: 0.2 */
@@ -1947,6 +1961,13 @@ void DomainMapper::attribute(Id nName, Value & val)
             //afterwards the adding of the binary data.
             m_pImpl->GetGraphicImport( IMPORT_AS_DETECTED_INLINE )->attribute(nName, val);
             m_pImpl->ImportGraphic( val.getProperties(), IMPORT_AS_DETECTED_INLINE );
+            if( m_pImpl->IsInShapeContext() )
+            {
+                //imported text from temporary shape needs to be copied to the real shape
+                uno::Reference< drawing::XShape > xShape;
+                val.getAny() >>= xShape;
+                m_pImpl->CopyTemporaryShapeText( xShape );
+            }
         }
         break;
         case NS_ooxml::LN_CT_FramePr_dropCap:
@@ -2090,11 +2111,34 @@ void DomainMapper::attribute(Id nName, Value & val)
             }
         }
         break;
-        case NS_ooxml::LN_CT_LineNumber_countBy:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
         case NS_ooxml::LN_CT_LineNumber_start:
         /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
         case NS_ooxml::LN_CT_LineNumber_distance:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+        case NS_ooxml::LN_CT_TrackChange_author:
+            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
+            m_pImpl->SetCurrentRedlineAuthor( sStringValue );
+        break;
+        case NS_ooxml::LN_CT_TrackChange_date:
+            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
+            m_pImpl->SetCurrentRedlineDate( sStringValue );
+        break;
+        case NS_ooxml::LN_CT_Markup_id:
+            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
+            m_pImpl->SetCurrentRedlineId( sStringValue );
+        break;
+        case NS_ooxml::LN_token:
+            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
+            m_pImpl->SetCurrentRedlineToken( nIntValue );
+        break;
+        case NS_ooxml::LN_mark_shape:
+            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
+            if( nIntValue )
+                m_pImpl->PopShapeContext();
+            else
+                m_pImpl->PushShapeContext();
+        break;
+        case NS_ooxml::LN_CT_LineNumber_countBy:
         /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
         case NS_ooxml::LN_CT_LineNumber_restart:
         /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
@@ -2132,6 +2176,7 @@ void DomainMapper::attribute(Id nName, Value & val)
             // footnote or endnote reference id - not needed
         case NS_ooxml::LN_CT_Color_themeColor:
         case NS_ooxml::LN_CT_Color_themeTint:
+        case NS_ooxml::LN_CT_Color_themeShade:
             //unsupported
         break;
         default:
@@ -3922,7 +3967,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
                 break;
                 default:;
             }
-            rContext->Insert( eId, true, uno::makeAny(nMeasureValue), false);
+            rContext->Insert( eId, false, uno::makeAny(nMeasureValue), false);
         }
     }
     break;
@@ -4020,6 +4065,45 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         }
     }
     break;
+    case NS_ooxml::LN_trackchange:
+        /* WRITERFILTERSTATUS: done: 100, planned: 5, spent: 0 */
+    case NS_ooxml::LN_EG_RPrContent_rPrChange:
+        /* WRITERFILTERSTATUS: done: 100, planned: 5, spent: 0 */
+    {
+        resolveSprmProps( rSprm );
+        // now the properties author, date and id should be available
+        ::rtl::OUString sAuthor = m_pImpl->GetCurrentRedlineAuthor();
+        ::rtl::OUString sDate = m_pImpl->GetCurrentRedlineDate();
+        ::rtl::OUString sId = m_pImpl->GetCurrentRedlineId();
+        sal_Int32 nToken = m_pImpl->GetCurrentRedlineToken();
+        switch( nToken & 0xffff )
+        {
+            case ooxml::OOXML_mod :
+            case ooxml::OOXML_ins :
+            case ooxml::OOXML_del : break;
+            default: OSL_ENSURE( false, "redline token other than mod, ins or del" );
+        }
+    }
+    break;
+    case NS_ooxml::LN_CT_RPrChange_rPr:
+        /* WRITERFILTERSTATUS: done: 100, planned: 5, spent: 0 */
+    break;
+    /* WRITERFILTERSTATUS: done: 0, planned: 4, spent: 0 */
+    case NS_ooxml::LN_OLEObject_OLEObject:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if( pProperties.get())
+        {
+            OLEHandlerPtr pOLEHandler( new OLEHandler );
+            pProperties->resolve(*pOLEHandler);
+            ::rtl::OUString sStreamName = pOLEHandler->copyOLEOStream( m_pImpl->GetTextDocument() );
+            if(sStreamName.getLength())
+            {
+                m_pImpl->appendOLE( sStreamName );
+            }
+        }
+    }
+    break;
 //    case NS_ooxml::LN_CT_EdnProps_pos
         /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
 //    case NS_ooxml::LN_CT_EdnProps_numFmt
@@ -4034,6 +4118,17 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     case NS_ooxml::LN_EG_HdrFtrReferences_footerReference: // footer reference - not needed
         /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
     break;
+    case NS_ooxml::LN_EG_RPrBase_snapToGrid: // "Use document grid  settings for inter-paragraph spacing"
+    break;
+    case NS_sprm::LN_PContextualSpacing:
+        //TODO: determines whether top/bottom paragraph spacing is added if equal styles are following - unsupported
+    break;
+    case NS_ooxml::LN_EG_SectPrContents_formProt: //section protection, only form editing is enabled - unsupported
+    break;
+    case NS_ooxml::LN_CT_Lvl_pStyle:
+        //TODO: numbering style should apply current numbering level - not yet supported
+    break;
+
     default:
         {
 #if OSL_DEBUG_LEVEL > 0
@@ -4702,7 +4797,7 @@ void  DomainMapper::AddListIDToLFOTable( sal_Int32 nAbstractNumId )
   -----------------------------------------------------------------------*/
 uno::Reference< text::XTextRange > DomainMapper::GetCurrentTextRange()
 {
-    return m_pImpl->GetTopTextAppendAndConvert()->getEnd();
+    return m_pImpl->GetTopTextAppend()->getEnd();
 }
 
 /*-- 05.02.2008 10:26:26---------------------------------------------------
