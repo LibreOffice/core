@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoprnms.cxx,v $
- * $Revision: 1.138 $
+ * $Revision: 1.139 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -771,7 +771,8 @@ const SwPropNameTab aPropNameTab = {
 /* 0726 UNO_NAME_GRID_STANDARD_PAGE_MODE*/ {MAP_CHAR_LEN("StandardPageMode")},
 /* 0727 UNO_NAME_TABLE_BORDER_DISTANCES */ {MAP_CHAR_LEN("TableBorderDistances")},
 /* 0728 UNO_NAME_LIST_ID*/ {MAP_CHAR_LEN("ListId")},
-/* 0729 UNO_NAME_DEFAULT_LIST_ID*/ {MAP_CHAR_LEN("DefaultListId")}
+/* 0729 UNO_NAME_DEFAULT_LIST_ID*/ {MAP_CHAR_LEN("DefaultListId")},
+/* 0730 UNO_NAME_STREAM_NAME */ {MAP_CHAR_LEN("StreamName")}
 };
 
 const SwPropNameLen& SwGetPropName( USHORT nId )
