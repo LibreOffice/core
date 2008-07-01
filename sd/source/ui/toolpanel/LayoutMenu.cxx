@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LayoutMenu.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -516,6 +516,14 @@ void LayoutMenu::GetState (SfxItemSet& rItemSet)
     rItemSet.DisableItem (SID_CUT);
     rItemSet.DisableItem (SID_COPY);
     rItemSet.DisableItem (SID_PASTE);
+
+    // The SID_INSERTPAGE_LAYOUT_MENU slot depends on the SID_INSERTPAGE
+    // slot being supported elsewhere.
+    const SfxPoolItem* pItem = NULL;
+    const SfxItemState aState (
+        mrBase.GetViewFrame()->GetDispatcher()->QueryState(SID_INSERTPAGE, pItem));
+    if (aState == SFX_ITEM_DISABLED)
+        rItemSet.DisableItem(SID_INSERTPAGE_LAYOUT_MENU);
 }
 
 
@@ -524,17 +532,27 @@ void LayoutMenu::GetState (SfxItemSet& rItemSet)
 void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
 {
     ViewShell* pViewShell = mrBase.GetMainViewShell().get();
-    if (pViewShell != NULL)
-    {
-        // Call SID_INSERTPAGE with the right arguments.  This is because
-        // the popup menu can not call this slot with arguments directly.
-        SfxRequest aRequest (CreateRequest(SID_INSERTPAGE, aLayout));
-        mrBase.GetViewFrame()->GetDispatcher()->Execute(
+    if (pViewShell == NULL)
+        return;
+
+    SfxViewFrame* pViewFrame = mrBase.GetViewFrame();
+    if (pViewFrame == NULL)
+        return;
+
+    SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
+    if (pDispatcher == NULL)
+        return;
+
+    // Call SID_INSERTPAGE with the right arguments.  This is because
+    // the popup menu can not call this slot with arguments directly.
+    SfxRequest aRequest (CreateRequest(SID_INSERTPAGE, aLayout));
+    pDispatcher->Execute(
             SID_INSERTPAGE,
             SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
-            *aRequest.GetArgs());
-        UpdateSelection();
-    }
+            aRequest.GetArgs() != NULL
+                ? *aRequest.GetArgs()
+                    : pViewShell->GetPool());
+    UpdateSelection();
 }
 
 
