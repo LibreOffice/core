@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cellsh2.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1024,6 +1024,10 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     DBG_ASSERT( pDoc, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDoc is null!" );
 
                     ScImportExport aExport( pDoc, aRange );
+
+                    // #i87703# text to columns fails with tab separator
+                    aExport.SetDelimiter( static_cast< sal_Unicode >( 0 ) );
+
                     SvMemoryStream aStream;
                     aStream.SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
                     ScImportExport::SetNoEndianSwap( aStream );
