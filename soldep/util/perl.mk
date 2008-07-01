@@ -8,7 +8,7 @@
 #
 # $RCSfile: perl.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -35,10 +35,17 @@ PERL_LIB=$(BUILD_TOOLS)$/..$/perl$/lib$/core$/perl58.lib
 .ENDIF 
 
 .IF "$(OS)$(CPU)" == "LINUXI"
-SOLARINC+=-I$(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i686-linux$/CORE
-PERL_LIB=	-lcrypt \
+    .IF "$(OUTPATH)" == "unxubti8" # Hack for Ububtu x86 builds in SO environment 
+        SOLARINC+=-I$/usr$/lib$/perl$/5.8.8$/CORE
+        PERL_LIB=	-lcrypt \
+            $/usr$/lib$/libperl.a \
+            $/usr$/lib$/perl$/5.8.8$/auto/DynaLoader/DynaLoader.a
+    .ELSE
+        SOLARINC+=-I$(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i686-linux$/CORE
+        PERL_LIB=	-lcrypt \
             $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i686-linux$/CORE$/libperl.a \
             $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i686-linux$/auto/DynaLoader/DynaLoader.a
+    .ENDIF
 .ENDIF
 
 .IF "$(OS)$(CPU)" == "SOLARISS"
