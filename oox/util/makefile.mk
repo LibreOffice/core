@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -55,7 +55,8 @@ LIB1FILES=	\
     $(SLB)$/chart.lib\
     $(SLB)$/table.lib\
     $(SLB)$/shape.lib\
-    $(SLB)$/dump.lib
+    $(SLB)$/dump.lib\
+    $(SLB)$/docprop.lib
 
 # --- Shared-Library -----------------------------------------------
 
