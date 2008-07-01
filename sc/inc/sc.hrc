@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sc.hrc,v $
- * $Revision: 1.62 $
+ * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -357,6 +357,11 @@
 
 #define HID_SCDLG_CONFLICTS     ( HID_SC_OTHER_START + 25 )
 
+#define HID_SC_HF_HL_DEFINED    ( HID_SC_OTHER_START + 26 )
+#define HID_SC_HF_HR_DEFINED    ( HID_SC_OTHER_START + 27 )
+#define HID_SC_HF_FL_DEFINED    ( HID_SC_OTHER_START + 28 )
+#define HID_SC_HF_FR_DEFINED    ( HID_SC_OTHER_START + 29 )
+
 // Analysis Addin Functions (max.120) ----------------------------------------
 #define HID_AAI_FUNC_WORKDAY        ( HID_SC_AAI_FUNCS_START )
 #define HID_AAI_FUNC_YEARFRAC       ( HID_SC_AAI_FUNCS_START + 1 )
@@ -644,7 +649,6 @@
 #define SC_HINT_SHOWRANGEFINDER (SC_MESSAGE_START + 34)
 #define SC_HINT_DOC_SAVED       (SC_MESSAGE_START + 35)
 #define SC_HINT_FORCESETTAB     (SC_MESSAGE_START + 36)
-#define SC_HINT_TABLECHANGED    (SC_MESSAGE_START + 37)
 
 // Nachricht zum Oeffnen von Dialogen:
 #define SID_OPENDLG_CONSOLIDATE     (SC_MESSAGE_START + 50)
