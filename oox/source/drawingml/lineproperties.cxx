@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lineproperties.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/core/namespaces.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 #include "tokens.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
