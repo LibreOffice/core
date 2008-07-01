@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dxftblrd.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -177,7 +177,6 @@ public:
     // Suche nach Tabelleneintraegen:
     DXFLType * SearchLType(const char * pName) const;
     DXFLayer * SearchLayer(const char * pName) const;
-    DXFStyle * SearchStyle(const char * pName) const;
     DXFVPort * SearchVPort(const char * pName) const;
 
 };

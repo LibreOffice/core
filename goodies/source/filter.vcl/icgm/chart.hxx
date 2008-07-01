@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chart.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -208,8 +208,6 @@ class CGMChart
 
         void                    DeleteTextEntry( TextEntry* );
         void                    InsertTextEntry( TextEntry* );
-        TextEntry*              GetTextEntry( sal_uInt32 nLine, sal_uInt32 nColumn );
-        TextEntry*              GetFirstTextEntry();
 
         void                    ResetAnnotation();
         sal_Bool                    IsAnnotation();
