@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: iframe.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <tools/urlobj.hxx>
@@ -153,6 +154,10 @@ throw( uno::RuntimeException )
         uno::Reference < awt::XWindow > xWin( pWin->GetComponentInterface(), uno::UNO_QUERY );
         mxFrame->initialize( xWin );
         mxFrame->setName( maFrmDescr.GetName() );
+
+        uno::Reference < frame::XFramesSupplier > xFramesSupplier( xFrame, uno::UNO_QUERY );
+        if ( xFramesSupplier.is() )
+            mxFrame->setCreator( xFramesSupplier );
 
         uno::Reference< frame::XDispatchProvider > xProv( mxFrame, uno::UNO_QUERY );
 
