@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclnsapp.h,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,7 @@
 {
 }
 -(void)sendEvent:(NSEvent*)pEvent;
+-(void)sendSuperEvent:(NSEvent*)pEvent;
 -(NSMenu*)applicationDockMenu:(NSApplication *)sender;
 -(MacOSBOOL)application: (NSApplication*) app openFile: (NSString*)file;
 -(void)application: (NSApplication*) app openFiles: (NSArray*)files;
@@ -58,6 +59,7 @@
 -(void)scrollbarSettingsChanged: (NSNotification*) pNotification;
 -(void)addFallbackMenuItem: (NSMenuItem*)pNewItem;
 -(void)removeFallbackMenuItem: (NSMenuItem*)pOldItem;
+-(void)getSystemVersionMajor:(unsigned *)major minor:(unsigned *)minor bugFix:(unsigned *)bugFix;
 -(void)addDockMenuItem: (NSMenuItem*)pNewItem;
 @end
 
