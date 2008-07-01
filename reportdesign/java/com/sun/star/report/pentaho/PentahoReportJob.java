@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PentahoReportJob.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -340,6 +340,9 @@ public class PentahoReportJob implements ReportJob
             final String commandType = (String) officeReport.getAttribute(OfficeNamespaces.OOREPORT_NS, SDBCReportDataFactory.COMMAND_TYPE);
             report.setQuery(command);
             parameters.put(SDBCReportDataFactory.COMMAND_TYPE, commandType);
+
+            final String filter = (String) officeReport.getAttribute(OfficeNamespaces.OOREPORT_NS, "filter");
+            parameters.put(SDBCReportDataFactory.UNO_FILTER, filter);
 
             final long startTime = System.currentTimeMillis();
             final ReportProcessor rp = getProcessorForContentType(contentType);
