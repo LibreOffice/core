@@ -8,7 +8,7 @@
  *
  * $RCSfile: converterbase.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,12 +42,44 @@ namespace com { namespace sun { namespace star {
 } } }
 
 namespace oox { namespace core {
-    class FilterBase;
+    class XmlFilterBase;
 } }
 
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+/** Enumerates different object types for specific automatic formatting behaviour. */
+enum ObjectType
+{
+    OBJECTTYPE_CHARTSPACE,              /// Chart background.
+    OBJECTTYPE_CHARTTITLE,              /// Chart title.
+    OBJECTTYPE_LEGEND,                  /// Legend.
+    OBJECTTYPE_PLOTAREA2D,              /// Plot area containing axes and data series in 2D charts.
+    OBJECTTYPE_PLOTAREA3D,              /// Plot area containing axes and data series in 3D charts.
+    OBJECTTYPE_WALL,                    /// Background and side wall in 3D charts.
+    OBJECTTYPE_FLOOR,                   /// Floor in 3D charts.
+    OBJECTTYPE_AXIS,                    /// Axis line, labels, tick marks.
+    OBJECTTYPE_AXISTITLE,               /// Axis title.
+    OBJECTTYPE_AXISUNIT,                /// Axis unit label.
+    OBJECTTYPE_GRIDLINE,                /// Axis grid line.
+    OBJECTTYPE_LINEARSERIES2D,          /// Linear series in 2D line/radarline/scatter charts.
+    OBJECTTYPE_FILLEDSERIES2D,          /// Filled series in 2D bar/area/radararea/bubble/pie/surface charts.
+    OBJECTTYPE_FILLEDSERIES3D,          /// Filled series in 3D charts.
+    OBJECTTYPE_DATALABEL,               /// Labels for data points.
+    OBJECTTYPE_TRENDLINE,               /// Data series trend line.
+    OBJECTTYPE_TRENDLINELABEL,          /// Trend line label.
+    OBJECTTYPE_ERRORBAR,                /// Data series error indicator line.
+    OBJECTTYPE_SERLINE,                 /// Data point connector lines.
+    OBJECTTYPE_LEADERLINE,              /// Leader lines between pie slice and data label.
+    OBJECTTYPE_DROPLINE,                /// Drop lines between data points and X axis.
+    OBJECTTYPE_HILOLINE,                /// High/low lines in line/stock charts.
+    OBJECTTYPE_UPBAR,                   /// Up-bar in line/stock charts.
+    OBJECTTYPE_DOWNBAR,                 /// Down-bar in line/stock charts.
+    OBJECTTYPE_DATATABLE                /// Data table.
+};
 
 // ============================================================================
 
@@ -58,7 +90,7 @@ class ConverterRoot
 {
 public:
     explicit            ConverterRoot(
-                            ::oox::core::FilterBase& rFilter,
+                            ::oox::core::XmlFilterBase& rFilter,
                             ChartConverter& rChartConverter,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc );
     virtual             ~ConverterRoot();
@@ -75,12 +107,18 @@ public:
 
 protected:
     /** Returns the filter object of the imported/exported document. */
-    ::oox::core::FilterBase& getFilter() const;
+    ::oox::core::XmlFilterBase& getFilter() const;
     /** Returns the chart converter. */
     ChartConverter&     getChartConverter() const;
     /** Returns the API chart document model. */
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
                         getChartDocument() const;
+
+    /** Initializes the automatic formatting information. */
+    void                initAutoFormats( sal_Int32 nStyle );
+
+    /** Sets auto formatting properties to the passed property set. */
+    void                convertAutoFormats( PropertySet& rPropSet, ObjectType eObjType ) const;
 
 private:
     ::boost::shared_ptr< ConverterData > mxData;
