@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: colorchoicecontext.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,15 +73,15 @@ void colorChoiceContext::startFastElement( sal_Int32 aElementToken, const Refere
         break;
 
         case NMSP_DRAWINGML|XML_sysClr: // CT_SystemColor
-            mrColor.setSysClr( aAttribs.getToken( XML_val ), aAttribs.getHex( XML_lastClr, -1 ) );
+            mrColor.setSysClr( aAttribs.getToken( XML_val, XML_TOKEN_INVALID ), aAttribs.getHex( XML_lastClr, -1 ) );
         break;
 
         case NMSP_DRAWINGML|XML_schemeClr:  // CT_SchemeColor
-            mrColor.setSchemeClr( aAttribs.getToken( XML_val ) );
+            mrColor.setSchemeClr( aAttribs.getToken( XML_val, XML_TOKEN_INVALID ) );
         break;
 
         case NMSP_DRAWINGML|XML_prstClr:    // CT_PresetColor
-            mrColor.setPrstClr( aAttribs.getToken( XML_val ) );
+            mrColor.setPrstClr( aAttribs.getToken( XML_val, XML_TOKEN_INVALID ) );
         break;
     }
 }
