@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.66 $
+# $Revision: 1.67 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -142,6 +142,7 @@ SHL1STDLIBS+= \
         $(UNOTOOLSLIB)		\
         $(TOOLSLIB)			\
         $(I18NISOLANGLIB)   \
+        $(I18NUTILLIB)		\
         $(UCBHELPERLIB)		\
         $(COMPHELPERLIB)	\
         $(CPPUHELPERLIB)	\
