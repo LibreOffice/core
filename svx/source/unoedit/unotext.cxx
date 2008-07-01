@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unotext.cxx,v $
- * $Revision: 1.65 $
+ * $Revision: 1.66 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1702,6 +1702,7 @@ SvxUnoTextBase::SvxUnoTextBase( const SvxEditSource* pSource, const SfxItemPrope
 SvxUnoTextBase::SvxUnoTextBase( const SvxUnoTextBase& rText ) throw()
 :   SvxUnoTextRangeBase( rText )
 , text::XTextAppend()
+,   text::XTextCopy()
 ,   container::XEnumerationAccess()
 ,   text::XTextRangeMover()
 ,   lang::XTypeProvider()
@@ -1750,6 +1751,7 @@ uno::Any SAL_CALL SvxUnoTextBase::queryAggregation( const uno::Type & rType )
     QUERYINT( text::XTextRangeCompare );
     QUERYINT( lang::XServiceInfo );
     QUERYINT( text::XTextRangeMover );
+    QUERYINT( text::XTextCopy );
     QUERYINT( text::XTextAppend );
     QUERYINT( text::XParagraphAppend );
     QUERYINT( text::XTextPortionAppend );
@@ -1765,7 +1767,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextBase::getStaticTypes() throw()
 {
     if( maTypeSequence.getLength() == 0 )
     {
-        maTypeSequence.realloc( 13 ); // !DANGER! keep this updated
+        maTypeSequence.realloc( 14 ); // !DANGER! keep this updated
         uno::Type* pTypes = maTypeSequence.getArray();
 
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XText >*)0);
@@ -1776,6 +1778,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextBase::getStaticTypes() throw()
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertyState >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeMover >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextAppend >*)0);
+        *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextCopy >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XParagraphAppend >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextPortionAppend >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
@@ -2174,6 +2177,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendParagraph(
         const SfxItemPropertyMap *pMap = ImplGetSvxUnoOutlinerTextCursorPropertyMap();
         SvxPropertyValuesToItemSet( aItemSet, rCharAndParaProps, *pMap, pTextForwarder, nParaCount );
         pTextForwarder->QuickSetAttribs( aItemSet, aSel );
+        pEditSource->UpdateData();
         SvxUnoTextRange* pRange = new SvxUnoTextRange( *this );
         xRet = pRange;
         pRange->SetSelection( aSel );
@@ -2203,6 +2207,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::finishParagraph(
         const SfxItemPropertyMap *pMap = ImplGetSvxUnoOutlinerTextCursorPropertyMap();
         SvxPropertyValuesToItemSet( aItemSet, rCharAndParaProps, *pMap, pTextForwarder, nPara );
         pTextForwarder->QuickSetAttribs( aItemSet, aSel );
+        pEditSource->UpdateData();
         SvxUnoTextRange* pRange = new SvxUnoTextRange( *this );
         xRet = pRange;
         pRange->SetSelection( aSel );
@@ -2228,10 +2233,14 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendTextPortion(
         USHORT nPara = nParaCount - 1;
         SfxItemSet aSet( pTextForwarder->GetParaAttribs( nPara ) );
         xub_StrLen nStart = pTextForwarder->AppendTextPortion( nPara, rText, aSet );
+        pEditSource->UpdateData();
         xub_StrLen nEnd   = pTextForwarder->GetTextLen( nPara );
 
         // set properties for the new text portion
         ESelection aSel( nPara, nStart, nPara, nEnd );
+        pTextForwarder->RemoveAttribs( aSel, sal_False, 0 );
+        pEditSource->UpdateData();
+
         SfxItemSet aItemSet( *pTextForwarder->GetEmptyItemSetPtr() );
         const SfxItemPropertyMap *pMap = ImplGetSvxTextPortionPropertyMap();
         SvxPropertyValuesToItemSet( aItemSet, rCharAndParaProps, *pMap, pTextForwarder, nPara );
@@ -2239,8 +2248,44 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendTextPortion(
         SvxUnoTextRange* pRange = new SvxUnoTextRange( *this );
         xRet = pRange;
         pRange->SetSelection( aSel );
+        const beans::PropertyValue* pProps = rCharAndParaProps.getConstArray();
+        for( sal_Int32 nProp = 0; nProp < rCharAndParaProps.getLength(); ++nProp )
+            pRange->setPropertyValue( pProps[nProp].Name, pProps[nProp].Value );
     }
     return xRet;
+}
+/*-- 25.03.2008 08:16:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SvxUnoTextBase::copyText(
+    const uno::Reference< text::XTextCopy >& xSource ) throw ( uno::RuntimeException )
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+    uno::Reference< lang::XUnoTunnel > xUT( xSource, uno::UNO_QUERY );
+    SvxEditSource *pEditSource = GetEditSource();
+    SvxTextForwarder *pTextForwarder = pEditSource ? pEditSource->GetTextForwarder() : 0;
+    if( !pTextForwarder )
+        return;
+    if( xUT.is() )
+    {
+        SvxUnoTextBase* pSource = reinterpret_cast<SvxUnoTextBase*>(sal::static_int_cast<sal_uIntPtr>(
+                                                                    xUT->getSomething( SvxUnoTextBase::getUnoTunnelId())));
+        SvxEditSource *pSourceEditSource = pSource->GetEditSource();
+        SvxTextForwarder *pSourceTextForwarder = pSourceEditSource ? pSourceEditSource->GetTextForwarder() : 0;
+        if( pSourceTextForwarder )
+        {
+            pTextForwarder->CopyText( *pSourceTextForwarder );
+            pEditSource->UpdateData();
+        }
+    }
+    else
+    {
+        uno::Reference< text::XText > xSourceText( xSource, uno::UNO_QUERY );
+        if( xSourceText.is() )
+        {
+            setString( xSourceText->getString() );
+        }
+    }
 }
 
 // lang::XServiceInfo
@@ -2465,6 +2510,10 @@ void SvxDummyTextSource::SetParaAttribs( sal_uInt16, const SfxItemSet& )
 {
 }
 
+void SvxDummyTextSource::RemoveAttribs( const ESelection& , sal_Bool , sal_uInt16 )
+{
+}
+
 void SvxDummyTextSource::GetPortions( sal_uInt16, SvUShorts& ) const
 {
 }
@@ -2618,4 +2667,7 @@ xub_StrLen SvxDummyTextSource::AppendTextPortion( USHORT, const String &, const 
     return 0;
 }
 
+void  SvxDummyTextSource::CopyText(const SvxTextForwarder& )
+{
+}
 
