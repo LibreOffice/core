@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DDELink.idl,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,7 +83,7 @@ published service DDELink
 
     /** provides access to the DDE link results.
 
-        @since CWS xmlfilter02
+        @since OOo 3.0
      */
     [optional] interface com::sun::star::sheet::XDDELinkResults;
 
