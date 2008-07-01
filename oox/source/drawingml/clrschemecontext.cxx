@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: clrschemecontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,9 +74,9 @@ Reference< XFastContextHandler > clrMapContext::createFastChildContext( sal_Int3
     return xRet;
 }
 
-clrSchemeContext::clrSchemeContext( ContextHandler& rParent, const ClrSchemePtr pClrSchemePtr )
+clrSchemeContext::clrSchemeContext( ContextHandler& rParent, ClrScheme& rClrScheme )
 : ContextHandler( rParent )
-, mpClrSchemePtr( pClrSchemePtr )
+, mrClrScheme( rClrScheme )
 {
 }
 
@@ -101,7 +101,7 @@ void clrSchemeContext::endFastElement( sal_Int32 aElementToken ) throw (SAXExcep
         case NMSP_DRAWINGML|XML_hlink:
         case NMSP_DRAWINGML|XML_folHlink:
         {
-            mpClrSchemePtr->setColor( aElementToken & 0xffff, maColor.getColor( getFilter() ) );
+            mrClrScheme.setColor( aElementToken & 0xffff, maColor.getColor( getFilter() ) );
             break;
         }
     }
