@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: axiscontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include "oox/drawingml/chart/axismodel.hxx"
 #include "oox/drawingml/chart/titlecontext.hxx"
 
+using ::rtl::OUString;
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextWrapper;
 
@@ -121,7 +122,8 @@ ContextWrapper AxisContextBase::onCreateContext( sal_Int32 nElement, const Attri
                     mrModel.mofCrossesAt = rAttribs.getDouble( XML_val, 0.0 );
                     return false;
                 case C_TOKEN( delete ):
-                    mrModel.mbDeleted = rAttribs.getBool( XML_val, true );
+                    // default is 'false', not 'true' as specified
+                    mrModel.mbDeleted = rAttribs.getBool( XML_val, false );
                     return false;
                 case C_TOKEN( majorGridlines ):
                     return new ShapePrWrapperContext( *this, mrModel.mxMajorGridLines.create() );
@@ -134,8 +136,9 @@ ContextWrapper AxisContextBase::onCreateContext( sal_Int32 nElement, const Attri
                     mrModel.mnMinorTickMark = rAttribs.getToken( XML_val, XML_cross );
                     return false;
                 case C_TOKEN( numFmt ):
-                    mrModel.maFormatCode = rAttribs.getString( XML_formatCode );
-                    mrModel.mbSourceLinked = rAttribs.getBool( XML_sourceLinked, true );
+                    mrModel.maFormatCode = rAttribs.getString( XML_formatCode, OUString() );
+                    // default is 'false', not 'true' as specified
+                    mrModel.mbSourceLinked = rAttribs.getBool( XML_sourceLinked, false );
                     return false;
                 case C_TOKEN( scaling ):
                     return true;
@@ -188,10 +191,11 @@ ContextWrapper CatAxisContext::onCreateContext( sal_Int32 nElement, const Attrib
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( auto ):
-            mrModel.mbAuto = rAttribs.getBool( XML_val, true );
+            // default is 'false', not 'true' as specified
+            mrModel.mbAuto = rAttribs.getBool( XML_val, false );
             return false;
         case C_TOKEN( axPos ):
-            mrModel.mnAxisPos = rAttribs.getToken( XML_val );
+            mrModel.mnAxisPos = rAttribs.getToken( XML_val, XML_TOKEN_INVALID );
             return false;
         case C_TOKEN( lblAlgn ):
             mrModel.mnLabelAlign = rAttribs.getToken( XML_val, XML_ctr );
@@ -200,7 +204,8 @@ ContextWrapper CatAxisContext::onCreateContext( sal_Int32 nElement, const Attrib
             mrModel.mnLabelOffset = rAttribs.getInteger( XML_val, 100 );
             return false;
         case C_TOKEN( noMultiLvlLbl ):
-            mrModel.mbNoMultiLevel = rAttribs.getBool( XML_val, true );
+            // default is 'false', not 'true' as specified
+            mrModel.mbNoMultiLevel = rAttribs.getBool( XML_val, false );
             return false;
         case C_TOKEN( tickLblSkip ):
             mrModel.mnTickLabelSkip = rAttribs.getInteger( XML_val, 0 );
@@ -228,7 +233,8 @@ ContextWrapper DateAxisContext::onCreateContext( sal_Int32 nElement, const Attri
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( auto ):
-            mrModel.mbAuto = rAttribs.getBool( XML_val, true );
+            // default is 'false', not 'true' as specified
+            mrModel.mbAuto = rAttribs.getBool( XML_val, false );
             return false;
         case C_TOKEN( baseTimeUnit ):
             mrModel.mnBaseTimeUnit = rAttribs.getToken( XML_val, XML_days );
