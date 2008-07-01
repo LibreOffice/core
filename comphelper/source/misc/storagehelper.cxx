@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: storagehelper.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,11 +37,14 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 
+#include <ucbhelper/content.hxx>
+
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
 
 #include <comphelper/storagehelper.hxx>
+
 
 using namespace ::com::sun::star;
 
@@ -58,6 +61,25 @@ uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetStorageFactory(
 
     uno::Reference < lang::XSingleServiceFactory > xStorageFactory(
                     xFactory->createInstance ( ::rtl::OUString::createFromAscii( "com.sun.star.embed.StorageFactory" ) ),
+                    uno::UNO_QUERY );
+
+    if ( !xStorageFactory.is() )
+        throw uno::RuntimeException();
+
+    return xStorageFactory;
+}
+
+// ----------------------------------------------------------------------
+uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetFileSystemStorageFactory(
+                            const uno::Reference< lang::XMultiServiceFactory >& xSF )
+        throw ( uno::Exception )
+{
+    uno::Reference< lang::XMultiServiceFactory > xFactory = xSF.is() ? xSF : ::comphelper::getProcessServiceFactory();
+    if ( !xFactory.is() )
+        throw uno::RuntimeException();
+
+    uno::Reference < lang::XSingleServiceFactory > xStorageFactory(
+                    xFactory->createInstance ( ::rtl::OUString::createFromAscii( "com.sun.star.embed.FileSystemStorageFactory" ) ),
                     uno::UNO_QUERY );
 
     if ( !xStorageFactory.is() )
@@ -92,6 +114,38 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL(
 
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( xFactory )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY );
+    if ( !xTempStorage.is() )
+        throw uno::RuntimeException();
+
+    return xTempStorage;
+}
+
+// ----------------------------------------------------------------------
+uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL2(
+            const ::rtl::OUString& aURL,
+            sal_Int32 nStorageMode,
+            const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+    throw ( uno::Exception )
+{
+    uno::Sequence< uno::Any > aArgs( 2 );
+    aArgs[0] <<= aURL;
+    aArgs[1] <<= nStorageMode;
+
+    uno::Reference< lang::XSingleServiceFactory > xFact;
+    try {
+        ::ucbhelper::Content aCntnt( aURL,
+            uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        if (aCntnt.isDocument()) {
+            xFact = GetStorageFactory( xFactory );
+        } else {
+            xFact = GetFileSystemStorageFactory( xFactory );
+        }
+    } catch (uno::Exception &) { }
+
+    if (!xFact.is()) throw uno::RuntimeException();
+
+    uno::Reference< embed::XStorage > xTempStorage(
+        xFact->createInstanceWithArguments( aArgs ), uno::UNO_QUERY );
     if ( !xTempStorage.is() )
         throw uno::RuntimeException();
 
