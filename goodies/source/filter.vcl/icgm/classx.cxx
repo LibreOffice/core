@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: classx.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -263,26 +263,3 @@ void CGM::ImplDoClass15()
 };
 
 // ---------------------------------------------------------------
-
-void CGM::ImplDoClass16()
-{
-    switch ( mnElementID )
-    {
-        case 0x82 : ComOut( CGM_GDSF_ONLY, "Inquire Device Supported" ) break;
-        case 0x83 : ComOut( CGM_GDSF_ONLY, "Inquire Device Category" ) break;
-        case 0x84 : ComOut( CGM_GDSF_ONLY, "Inquire Device Type" ) break;
-        case 0x85 : ComOut( CGM_GDSF_ONLY, "Inquire Text Extent" ) break;
-        case 0x86 : ComOut( CGM_GDSF_ONLY, "Inquire Append Text Extent" ) break;
-        case 0x87 : ComOut( CGM_GDSF_ONLY, "Inquire Circle Extent" ) break;
-        case 0x88 : ComOut( CGM_GDSF_ONLY, "Inquire Circle Arc 3 Pt Extent" ) break;
-        case 0x89 : ComOut( CGM_GDSF_ONLY, "Inquire Circle Arc 3 Pt Close Extent" ) break;
-        case 0x8a : ComOut( CGM_GDSF_ONLY, "Inquire Circle Arc Centre Extent" ) break;
-        case 0x8b : ComOut( CGM_GDSF_ONLY, "Inquire Circle Arc Centre Close Extent" ) break;
-        case 0x8c : ComOut( CGM_GDSF_ONLY, "Inquire Ellipse Extent" ) break;
-        case 0x8d : ComOut( CGM_GDSF_ONLY, "Inquire Ellipse Arc Extent" ) break;
-        case 0x8e : ComOut( CGM_GDSF_ONLY, "Inquire Ellipse Arc Close Extent" ) break;
-        default: ComOut( CGM_UNKNOWN_COMMAND, "" ) break;
-    }
-};
-
-

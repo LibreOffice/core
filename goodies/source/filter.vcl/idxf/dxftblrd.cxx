@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dxftblrd.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -333,16 +333,6 @@ DXFLayer * DXFTables::SearchLayer(const char * pName) const
 {
     DXFLayer * p;
     for (p=pLayers; p!=NULL; p=p->pSucc) {
-        if (strcmp(pName,p->sName)==0) break;
-    }
-    return p;
-}
-
-
-DXFStyle * DXFTables::SearchStyle(const char * pName) const
-{
-    DXFStyle * p;
-    for (p=pStyles; p!=NULL; p=p->pSucc) {
         if (strcmp(pName,p->sName)==0) break;
     }
     return p;

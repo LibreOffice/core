@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chart.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,23 +87,6 @@ void CGMChart::InsertTextEntry( TextEntry* pTextEntry )
 };
 
 // ---------------------------------------------------------------
-
-TextEntry* CGMChart::GetTextEntry( sal_uInt32 nLine, sal_uInt32 nColumn )
-{
-    TextEntry* pTextEntry = (TextEntry*)maTextEntryList.First();
-    while( pTextEntry && ( ( pTextEntry->nRowOrLineNum != nLine ) && ( pTextEntry->nColumnNum == nColumn ) ) )
-    {
-        pTextEntry = (TextEntry*)maTextEntryList.Next();
-    }
-    return (pTextEntry);
-};
-
-// ---------------------------------------------------------------
-
-TextEntry* CGMChart::GetFirstTextEntry()
-{
-    return (TextEntry*)maTextEntryList.First();
-};
 
 // ---------------------------------------------------------------
 void CGMChart::ResetAnnotation()
