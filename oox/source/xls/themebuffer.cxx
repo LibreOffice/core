@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: themebuffer.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,9 +126,8 @@ sal_Int32 ThemeBuffer::getColorByToken( sal_Int32 nToken ) const
 {
     sal_Int32 nColor = 0;
     if( mxTheme.get() )
-        if( const ClrScheme* pClrScheme = mxTheme->getClrScheme().get() )
-            if( pClrScheme->getColor( nToken, nColor ) )
-                return nColor;
+        if( mxTheme->getClrScheme().getColor( nToken, nColor ) )
+            return nColor;
     return API_RGB_TRANSPARENT;
 }
 
