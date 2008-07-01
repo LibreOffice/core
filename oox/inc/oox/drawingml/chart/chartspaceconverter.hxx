@@ -8,7 +8,7 @@
  *
  * $RCSfile: chartspaceconverter.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +49,7 @@ public:
     virtual             ~ChartSpaceConverter();
 
     /** Converts the contained OOXML chart model to a chart2 document. */
-    void                convertModelToDocument();
+    void                convertFromModel();
 };
 
 // ============================================================================
