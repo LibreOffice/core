@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: csvgrid.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -202,13 +202,13 @@ sal_Int32 ScCsvGrid::GetNoScrollCol( sal_Int32 nPos ) const
 
 void ScCsvGrid::InitColors()
 {
-    maBackColor = Color( mrColorConfig.GetColorValue( ::svtools::DOCCOLOR ).nColor );
-    maGridColor = Color( mrColorConfig.GetColorValue( ::svtools::CALCGRID ).nColor );
-    maGridPBColor = Color( mrColorConfig.GetColorValue( ::svtools::CALCPAGEBREAK ).nColor );
-    maAppBackColor = Color( mrColorConfig.GetColorValue( ::svtools::APPBACKGROUND ).nColor );
+    maBackColor.SetColor( static_cast< sal_uInt32 >( mrColorConfig.GetColorValue( ::svtools::DOCCOLOR ).nColor ) );
+    maGridColor.SetColor( static_cast< sal_uInt32 >( mrColorConfig.GetColorValue( ::svtools::CALCGRID ).nColor ) );
+    maGridPBColor.SetColor( static_cast< sal_uInt32 >( mrColorConfig.GetColorValue( ::svtools::CALCPAGEBREAK ).nColor ) );
+    maAppBackColor.SetColor( static_cast< sal_uInt32 >( mrColorConfig.GetColorValue( ::svtools::APPBACKGROUND ).nColor ) );
+    maTextColor.SetColor( static_cast< sal_uInt32 >( mrColorConfig.GetColorValue( ::svtools::FONTCOLOR ).nColor ) );
 
     const StyleSettings& rSett = GetSettings().GetStyleSettings();
-    maTextColor = rSett.GetWindowTextColor();
     maHeaderBackColor = rSett.GetFaceColor();
     maHeaderGridColor = rSett.GetDarkShadowColor();
     maHeaderTextColor = rSett.GetButtonTextColor();
@@ -1131,14 +1131,13 @@ void ScCsvGrid::ImplDrawColumnBackgr( sal_uInt32 nColIndex )
 
     ImplSetColumnClipRegion( maBackgrDev, nColIndex );
 
+    // grid
+    maBackgrDev.SetLineColor();
+    maBackgrDev.SetFillColor( maBackColor );
     sal_Int32 nX1 = GetColumnX( nColIndex ) + 1;
     sal_Int32 nX2 = GetColumnX( nColIndex + 1 );
     sal_Int32 nY2 = GetY( GetLastVisLine() + 1 );
     sal_Int32 nHdrHt = GetHdrHeight();
-
-    // grid
-    maBackgrDev.SetLineColor();
-    maBackgrDev.SetFillColor( maBackColor );
     Rectangle aRect( nX1, nHdrHt, nX2, nY2 );
     maBackgrDev.DrawRect( aRect );
     maBackgrDev.SetLineColor( maGridColor );
@@ -1148,12 +1147,21 @@ void ScCsvGrid::ImplDrawColumnBackgr( sal_uInt32 nColIndex )
 
     // cell texts
     mpEditEngine->SetDefaultItem( SvxColorItem( maTextColor, EE_CHAR_COLOR ) );
-    size_t nLineCount = ::std::min( static_cast<size_t>(GetLastVisLine() - GetFirstVisLine() + 1UL), maTexts.size() );
+    size_t nLineCount = ::std::min( static_cast< size_t >( GetLastVisLine() - GetFirstVisLine() + 1 ), maTexts.size() );
+    // #i67432# cut string to avoid edit engine performance problems with very large strings
+    sal_Int32 nFirstVisPos = ::std::max( GetColumnPos( nColIndex ), GetFirstVisPos() );
+    sal_Int32 nLastVisPos = ::std::min( GetColumnPos( nColIndex + 1 ), GetLastVisPos() );
+    xub_StrLen nStrPos = static_cast< xub_StrLen >( nFirstVisPos - GetColumnPos( nColIndex ) );
+    xub_StrLen nStrLen = static_cast< xub_StrLen >( nLastVisPos - nFirstVisPos + 1 );
+    sal_Int32 nStrX = GetX( nFirstVisPos );
     for( size_t nLine = 0; nLine < nLineCount; ++nLine )
     {
         StringVec& rStrVec = maTexts[ nLine ];
-        if( nColIndex < rStrVec.size() )
-            ImplDrawCellText( Point( nX1, GetY( GetFirstVisLine() + nLine ) ), rStrVec[ nColIndex ] );
+        if( (nColIndex < rStrVec.size()) && (rStrVec[ nColIndex ].Len() > nStrPos) )
+        {
+            String aText( rStrVec[ nColIndex ], nStrPos, nStrLen );
+            ImplDrawCellText( Point( nStrX, GetY( GetFirstVisLine() + nLine ) ), aText );
+        }
     }
 
     // header
