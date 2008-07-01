@@ -8,7 +8,7 @@
  *
  * $RCSfile: PostItMgr.cxx,v $
  *
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -837,7 +837,8 @@ void SwPostItMgr::MakeVisible(const SwPostIt* pPostIt,long aPage )
     if (aPage!=-1)
         AutoScroll(pPostIt,aPage);
     Rectangle aNoteRect (Point(pPostIt->GetPosPixel().X(),pPostIt->GetPosPixel().Y()-5),pPostIt->GetSizePixel());
-    mpWrtShell->MakeVisible(SwRect(mpEditWin->PixelToLogic(aNoteRect)));
+    if (!aNoteRect.IsEmpty())
+        mpWrtShell->MakeVisible(SwRect(mpEditWin->PixelToLogic(aNoteRect)));
 }
 
 bool SwPostItMgr::ArrowEnabled(USHORT aDirection,unsigned long aPage) const
@@ -1585,7 +1586,7 @@ bool SwPostItMgr::ScrollbarHit(const unsigned long aPage,const Point &aPoint)
 
 void SwPostItMgr::CorrectPositions()
 {
-   if ( mbWaitingForCalcRects || mvPostItFlds.empty() || !(*mvPostItFlds.begin())->pPostIt )
+   if ( mbWaitingForCalcRects || mbLayouting || mvPostItFlds.empty() || !(*mvPostItFlds.begin())->pPostIt )
        return;
    // yeah, I know, if this is a left page it could be wrong, but finding the page and the note is probably not even faster
    const long aAnkorX = mpEditWin->LogicToPixel( Point((long)((*mvPostItFlds.begin())->pPostIt->Ankor()->GetSixthPosition().getX()),0)).X();
@@ -1598,11 +1599,14 @@ void SwPostItMgr::CorrectPositions()
        {
            for(SwPostItItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
            {
-               aAnkorPosX = mPages[n]->bMarginSide ?
-               mpEditWin->LogicToPixel( Point((long)((*i)->pPostIt->Ankor()->GetSeventhPosition().getX()),0)).X() :
-               mpEditWin->LogicToPixel( Point((long)((*i)->pPostIt->Ankor()->GetSixthPosition().getX()),0)).X();
-               aAnkorPosY = mpEditWin->LogicToPixel( Point(0,(long)((*i)->pPostIt->Ankor()->GetSixthPosition().getY()))).Y() + 1;
-               (*i)->pPostIt->SetPosPixel(Point(aAnkorPosX,aAnkorPosY));
+               if ((*i)->bShow)
+               {
+                    aAnkorPosX = mPages[n]->bMarginSide ?
+                        mpEditWin->LogicToPixel( Point((long)((*i)->pPostIt->Ankor()->GetSeventhPosition().getX()),0)).X() :
+                        mpEditWin->LogicToPixel( Point((long)((*i)->pPostIt->Ankor()->GetSixthPosition().getX()),0)).X();
+                    aAnkorPosY = mpEditWin->LogicToPixel( Point(0,(long)((*i)->pPostIt->Ankor()->GetSixthPosition().getY()))).Y() + 1;
+                    (*i)->pPostIt->SetPosPixel(Point(aAnkorPosX,aAnkorPosY));
+               }
            }
        }
    }
@@ -1704,7 +1708,10 @@ void SwPostItMgr::SetActivePostIt( SwPostIt* p)
         SwPostIt* pActive = mpActivePostIt;
         mpActivePostIt = p;
         if (pActive)
+        {
             pActive->DeactivatePostIt();
+            mShadowState.mpShadowFld = 0;
+        }
         if (mpActivePostIt)
         {
             mpWrtShell->GotoField( *mpActivePostIt->Field() );
