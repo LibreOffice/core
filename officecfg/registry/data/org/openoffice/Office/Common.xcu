@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Common.xcu,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,7 +140,7 @@
     </node>
     <prop oor:name="System">
       <value install:module="unx">UNIX</value>
-      <value install:module="macosx">UNIX</value>
+      <value install:module="macosx">MAC</value>
       <value install:module="wnt">WIN</value>
     </prop>
   </node>
