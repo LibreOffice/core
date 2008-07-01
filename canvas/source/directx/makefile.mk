@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -68,7 +68,6 @@ SHARED_SLOFILES = \
     $(SLO)$/dx_bitmap.obj			        \
     $(SLO)$/dx_bitmapcanvashelper.obj		\
     $(SLO)$/dx_canvasbitmap.obj 			\
-    $(SLO)$/dx_canvascustomsprite.obj 		\
     $(SLO)$/dx_canvasfont.obj 				\
     $(SLO)$/dx_canvashelper.obj			    \
     $(SLO)$/dx_canvashelper_texturefill.obj \
@@ -83,6 +82,7 @@ SHARED_SLOFILES = \
 DX_SLOFILES = \
     $(SLO)$/dx_5rm.obj					    \
     $(SLO)$/dx_9rm.obj					    \
+    $(SLO)$/dx_canvascustomsprite.obj 		\
     $(SLO)$/dx_config.obj					\
     $(SLO)$/dx_spritecanvas.obj 			\
     $(SLO)$/dx_spritecanvashelper.obj		\
@@ -206,8 +206,8 @@ SHL3DEF=$(MISC)$/$(SHL3TARGET).def
 DEF3NAME=$(SHL3TARGET)
 DEF3EXPORTFILE=exports.dxp
 
-SHL3STDLIBS += gdi32.lib
-SHL3STDLIBS += gdiplus.lib
+SHL3STDLIBS += $(GDI32LIB)
+SHL3STDLIBS += $(GDIPLUSLIB)
 
 .IF "$(dx_debug_images)"!="" || "$(DX_DEBUG_IMAGES)"!=""
 SHL3STDLIBS += imdebug.lib
