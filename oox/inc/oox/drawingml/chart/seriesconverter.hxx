@@ -8,7 +8,7 @@
  *
  * $RCSfile: seriesconverter.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,9 +44,10 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+// #i66858# enable this when Chart2 supports smoothed lines per data series
+#define OOX_CHART_SMOOTHED_PER_SERIES 0
 
-struct ErrorBarModel;
+// ============================================================================
 
 class ErrorBarConverter : public ConverterBase< ErrorBarModel >
 {
@@ -54,14 +55,16 @@ public:
     explicit            ErrorBarConverter( const ConverterRoot& rParent, ErrorBarModel& rModel );
     virtual             ~ErrorBarConverter();
 
-    /** Converts a OOXML errorbar and inserts it into the passed data series. */
-    void                convertModelToDocument(
+    /** Converts an OOXML errorbar and inserts it into the passed data series. */
+    void                convertFromModel(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& rxDataSeries );
+
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
+                        createLabeledDataSequence( ErrorBarModel::SourceType eSourceType );
 };
 
 // ============================================================================
-
-struct TrendlineModel;
 
 class TrendlineConverter : public ConverterBase< TrendlineModel >
 {
@@ -69,15 +72,30 @@ public:
     explicit            TrendlineConverter( const ConverterRoot& rParent, TrendlineModel& rModel );
     virtual             ~TrendlineConverter();
 
-    /** Converts a OOXML trendline and inserts it into the passed data series. */
-    void                convertModelToDocument(
+    /** Converts an OOXML trendline and inserts it into the passed data series. */
+    void                convertFromModel(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& rxDataSeries );
 };
 
 // ============================================================================
 
-struct SeriesModel;
 class TypeGroupConverter;
+class SeriesConverter;
+
+class DataPointConverter : public ConverterBase< DataPointModel >
+{
+public:
+    explicit            DataPointConverter( const ConverterRoot& rParent, DataPointModel& rModel );
+    virtual             ~DataPointConverter();
+
+    /** Converts settings for a data point in the passed series. */
+    void                convertFromModel(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& rxDataSeries,
+                            const TypeGroupConverter& rTypeGroup,
+                            const SeriesModel& rSeries );
+};
+
+// ============================================================================
 
 class SeriesConverter : public ConverterBase< SeriesModel >
 {
@@ -100,7 +118,7 @@ private:
                         createLabeledDataSequence(
                             SeriesModel::SourceType eSourceType,
                             const ::rtl::OUString& rRole,
-                            bool bUseTextLabel = false );
+                            bool bUseTextLabel );
 };
 
 // ============================================================================
