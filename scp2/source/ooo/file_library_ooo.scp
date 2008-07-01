@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_library_ooo.scp,v $
- * $Revision: 1.296 $
+ * $Revision: 1.297 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1792,3 +1792,65 @@ File gid_File_Moz_Msvcr71
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
 #endif
+
+#ifndef SYSTEM_REDLAND
+File gid_File_Lib_Raptor
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    #ifdef MACOSX
+       Name = STRING(CONCAT8(libraptor,.,RAPTOR_MAJOR,.,RAPTOR_MINOR,.,RAPTOR_MICRO,UNXSUFFIX));
+    #else
+       Name = STRING(CONCAT8(libraptor,UNXSUFFIX,.,RAPTOR_MAJOR,.,RAPTOR_MINOR,.,RAPTOR_MICRO));
+    #endif
+  #else
+   #ifdef _gcc3
+    Name = "libraptor-1.dll";
+   #else
+    Name = "raptor.dll";
+   #endif
+  #endif
+End
+
+File gid_File_Lib_Rasqal
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    #ifdef MACOSX
+       Name = STRING(CONCAT8(librasqal,.,RASQAL_MAJOR,.,RASQAL_MINOR,.,RASQAL_MICRO,UNXSUFFIX));
+    #else
+       Name = STRING(CONCAT8(librasqal,UNXSUFFIX,.,RASQAL_MAJOR,.,RASQAL_MINOR,.,RASQAL_MICRO));
+    #endif
+  #else
+   #ifdef _gcc3
+    Name = "librasqal-1.dll";
+   #else
+    Name = "rasqal.dll";
+   #endif
+  #endif
+End
+
+File gid_File_Lib_Rdf
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    #ifdef MACOSX
+       Name = STRING(CONCAT8(librdf,.,REDLAND_MAJOR,.,REDLAND_MINOR,.,REDLAND_MICRO,UNXSUFFIX));
+    #else
+       Name = STRING(CONCAT8(librdf,UNXSUFFIX,.,REDLAND_MAJOR,.,REDLAND_MINOR,.,REDLAND_MICRO));
+    #endif
+  #else
+   #ifdef _gcc3
+    Name = "librdf-1.dll";
+   #else
+    Name = "librdf.dll";
+   #endif
+  #endif
+End
+#endif // SYSTEM_REDLAND
+
+STD_UNO_LIB_FILE(gid_File_Lib_Unordf, unordf)
+
