@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewuno.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -531,33 +531,28 @@ void SAL_CALL ScTabViewObj::release() throw()
     SfxBaseController::release();
 }
 
-void ScTabViewObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScTabViewObj::SheetChanged()
 {
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SC_HINT_TABLECHANGED )
+    if (aActivationListeners.Count() > 0 && GetViewShell())
     {
-        if (aActivationListeners.Count() > 0)
+        sheet::ActivationEvent aEvent;
+        uno::Reference< sheet::XSpreadsheetView > xView(this);
+        uno::Reference< uno::XInterface > xSource(xView, uno::UNO_QUERY);
+        aEvent.Source = xSource;
+        aEvent.ActiveSheet = new ScTableSheetObj(GetViewShell()->GetViewData()->GetDocShell(), GetViewShell()->GetViewData()->GetTabNo());
+        for ( USHORT n=0; n<aActivationListeners.Count(); n++ )
         {
-            sheet::ActivationEvent aEvent;
-            uno::Reference< sheet::XSpreadsheetView > xView(this);
-            uno::Reference< uno::XInterface > xSource(xView, uno::UNO_QUERY);
-            aEvent.Source = xSource;
-            aEvent.ActiveSheet = new ScTableSheetObj(GetViewShell()->GetViewData()->GetDocShell(), GetViewShell()->GetViewData()->GetTabNo());
-            for ( USHORT n=0; n<aActivationListeners.Count(); n++ )
+            try
             {
-                try
-                {
-                    (*aActivationListeners[n])->activeSpreadsheetChanged( aEvent );
-                }
-                catch( uno::Exception& )
-                {
-                    aActivationListeners.DeleteAndDestroy( n );
-                    --n; // because it will be increased again in the loop
-                }
+                (*aActivationListeners[n])->activeSpreadsheetChanged( aEvent );
+            }
+            catch( uno::Exception& )
+            {
+                aActivationListeners.DeleteAndDestroy( n );
+                --n; // because it will be increased again in the loop
             }
         }
     }
-    ScViewPaneBase::Notify(rBC, rHint);
 }
 
 uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes() throw(uno::RuntimeException)
@@ -1303,8 +1298,6 @@ void ScTabViewObj::EndMouseListening()
 
 void ScTabViewObj::StartActivationListening()
 {
-    if (GetViewShell() && GetViewShell()->GetViewData()->GetDocument())
-        GetViewShell()->GetViewData()->GetDocument()->AddUnoObject(*this);
 }
 
 void ScTabViewObj::EndActivationListening()
@@ -1323,9 +1316,6 @@ void ScTabViewObj::EndActivationListening()
         }
     }
     aActivationListeners.DeleteAndDestroy(0, nCount);
-
-    if (GetViewShell() && GetViewShell()->GetViewData()->GetDocument())
-        GetViewShell()->GetViewData()->GetDocument()->RemoveUnoObject(*this);
 }
 
 void SAL_CALL ScTabViewObj::addEnhancedMouseClickHandler( const uno::Reference< awt::XEnhancedMouseClickHandler >& aListener )
