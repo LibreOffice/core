@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drviews5.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,21 +116,18 @@ void DrawViewShell::ModelHasChanged()
 
 void DrawViewShell::Resize (void)
 {
-    rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-    const bool bisRunning = xSlideshow.is() && xSlideshow->isRunning();
+    ViewShell::Resize();
 
-    if( !bisRunning || !xSlideshow->isFullScreen())
+    if ( GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
     {
-        ViewShell::Resize();
-
-        if ( GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-        {
-            SetZoomRect( GetDocSh()->GetVisArea(ASPECT_CONTENT) );
-        }
+        SetZoomRect( GetDocSh()->GetVisArea(ASPECT_CONTENT) );
     }
 
-    if(bisRunning)
+    rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
+    if( xSlideshow.is() && xSlideshow->isRunning() && !xSlideshow->isFullScreen() )
+    {
         xSlideshow->resize(maViewSize);
+    }
 }
 
 
