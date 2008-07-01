@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fly.cxx,v $
- * $Revision: 1.91 $
+ * $Revision: 1.92 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2171,7 +2171,28 @@ void SwFrm::RemoveFly( SwFlyFrm *pToRemove )
     //bereits destruiert wurde.
     SwPageFrm *pPage = pToRemove->FindPageFrm();
     if ( pPage && pPage->GetSortedObjs() )
+    {
         pPage->RemoveFlyFromPage( pToRemove );
+    }
+    // --> OD 2008-05-19 #i73201#
+    else
+    {
+        if ( pToRemove->IsAccessibleFrm() &&
+             pToRemove->GetFmt() &&
+             !pToRemove->IsFlyInCntFrm() )
+        {
+            SwRootFrm *pRootFrm = FindRootFrm();
+            if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
+            {
+                ViewShell *pVSh = pRootFrm->GetCurrShell();
+                if( pVSh && pVSh->Imp() )
+                {
+                    pVSh->Imp()->DisposeAccessibleFrm( pToRemove );
+                }
+            }
+        }
+    }
+    // <--
 
     pDrawObjs->Remove( *pToRemove );
     if ( !pDrawObjs->Count() )
