@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLFastContextHandler.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -224,13 +224,16 @@ OOXMLFastContextHandler::~OOXMLFastContextHandler()
 
 void OOXMLFastContextHandler::dumpOpenContexts()
 {
-    logger("DEBUG", "<open-contexts>");
+    XMLTag aTag("open-contexts");
 
     set<OOXMLFastContextHandler *>::iterator aIt(aSetContexts.begin());
     while (aIt != aSetContexts.end())
     {
-        logger("DEBUG", "<open-context>" + (*aIt)->toString()
-             + "</open-context>");
+        XMLTag::Pointer_t pTag1(new XMLTag("open-context"));
+
+        pTag1->addTag((*aIt)->toTag());
+        aTag.addTag(pTag1);
+
         aIt++;
     }
 
@@ -238,8 +241,10 @@ void OOXMLFastContextHandler::dumpOpenContexts()
     snprintf(buffer, sizeof(buffer), "%" SAL_PRI_SIZET "u",
              aSetContexts.size());
 
-    logger("DEBUG", string("<count>") + buffer + "</count>");
-    logger("DEBUG", "</open-contexts>");
+    aTag.addAttr("count", buffer);
+
+    string sTmp(aTag.toString());
+    logger("DEBUG", sTmp);
 }
 
 #ifdef DEBUG_MEMORY
@@ -281,13 +286,18 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
 #ifdef DEBUG_ELEMENT
-    string tmp = "<element token=\"";
-    tmp += fastTokenToId(Element);
-    tmp += "\" type=\"";
-    tmp += getType();
-    tmp += "\">";
-    logger("DEBUG", tmp);
-    logger("DEBUG", "<at-start>" + toString() + "</at-start>");
+    XMLTag aTagElement("element", XMLTag::START);
+    aTagElement.addAttr("token", fastTokenToId(Element));
+    aTagElement.addAttr("type", getType());
+
+    string sElement(aTagElement.toString());
+    logger("DEBUG", sElement);
+
+    XMLTag aTagStart("at-start");
+    aTagStart.addTag(toTag());
+
+    string sStart(aTagStart.toString());
+    logger("DEBUG", sStart);
 #endif
 #ifdef DEBUG_MEMORY
     static char buffer[256];
@@ -305,11 +315,13 @@ void SAL_CALL OOXMLFastContextHandler::startUnknownElement
 throw (uno::RuntimeException, xml::sax::SAXException)
 {
 #ifdef DEBUG_CONTEXT_STACK
-    static string s = "<unknown-element namespace=\"";
-    s += OUStringToOString(Namespace, RTL_TEXTENCODING_ASCII_US).getStr();
-    s += "\" name=\"";
-    s += OUStringToOString(Name, RTL_TEXTENCODING_ASCII_US).getStr();
-    s += "\">";
+    XMLTag aTag("unknown-element");
+    aTag.addAttr("namespace",
+                 OUStringToOString(Namespace,
+                                   RTL_TEXTENCODING_ASCII_US).getStr());
+    aTag.addAttr("name",
+                 OUStringToOString(Name, RTL_TEXTENCODING_ASCII_US).getStr());
+    string s(aTag.toString());
     logger("DEBUG", s);
 #else
     (void)Namespace;
@@ -321,7 +333,11 @@ void SAL_CALL OOXMLFastContextHandler::endFastElement(Token_t Element)
 throw (uno::RuntimeException, xml::sax::SAXException)
 {
 #ifdef DEBUG_ELEMENT
-    logger("DEBUG", "<at-end>" + toString() + "</at-end>");
+    XMLTag aTagEnd("at-end");
+    aTagEnd.addTag(toTag());
+
+    string sEnd(aTagEnd.toString());
+    logger("DEBUG", sEnd);
     logger("DEBUG", "</element>");
 #endif
 #ifdef DEBUG_MEMORY
@@ -370,12 +386,13 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
 #ifdef DEBUG_CONTEXT_STACK
-    string tmp = "<createFastChildContext token=\"";
-    tmp += fastTokenToId(Element);
-    tmp += "\" type=\"";
-    tmp += this->getType();
-    tmp += "\">";
-    logger("DEBUG", tmp);
+    XMLTag aTag("createFastChildContext", XMLTag::START);
+
+    aTag.addAttr("token", fastTokenToId(Element));
+    aTag.addAttr("type", this->getType());
+
+    string sTmp(aTag.toString());
+    logger("DEBUG", sTmp);
 #endif
 
     uno::Reference< xml::sax::XFastContextHandler > xResult
@@ -412,12 +429,13 @@ OOXMLFastContextHandler::createUnknownChildContext
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
 #ifdef DEBUG_ELEMENT
-    string s = "<createUnknownChildContext namespace=\"";
-    s += OUStringToOString(Namespace, RTL_TEXTENCODING_ASCII_US).getStr();
-    s += "\" name=\"";
-    s += OUStringToOString(Name, RTL_TEXTENCODING_ASCII_US).getStr();
-    s += "\"/>";
-
+    XMLTag aTag("createUnknownChildContext");
+    aTag.addAttr("namespace",
+                 OUStringToOString(Namespace,
+                                   RTL_TEXTENCODING_ASCII_US).getStr());
+    aTag.addAttr("name",
+                 OUStringToOString(Name, RTL_TEXTENCODING_ASCII_US).getStr());
+    string s(aTag.toString());
     logger("DEBUG", s);
 #else
     (void)Namespace;
@@ -560,6 +578,10 @@ bool OOXMLFastContextHandler::isFallback() const
 void OOXMLFastContextHandler::setToken(Token_t nToken)
 {
     mnToken = nToken;
+
+#ifdef DEBUG_CONTEXT_STACK
+    msTokenString = fastTokenToId(mnToken);
+#endif
 }
 
 Token_t OOXMLFastContextHandler::getToken() const
@@ -623,9 +645,9 @@ void OOXMLFastContextHandler::sendTableDepth() const
         }
 
 #ifdef DEBUG_PROPERTIES
-        logger("DEBUG", "<props>");
-        logger("DEBUG", pProps->toString());
-        logger("DEBUG", "</porps>");
+        XMLTag aTag("props");
+        aTag.chars(pProps->toString());
+        logger("DEBUG", aTag.toString());
 #endif
         mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
     }
@@ -923,6 +945,10 @@ void OOXMLFastContextHandler::propagateCharacterProperties()
 
 void OOXMLFastContextHandler::propagateCharacterPropertiesAsSet(const Id & rId)
 {
+#ifdef DEBUG_ELEMENT
+    logger("DEBUG", "<propagateCharacterPropertiesAsSet/>");
+#endif
+
     OOXMLValue::Pointer_t pValue(new OOXMLPropertySetValue(getPropertySet()));
     OOXMLPropertySet::Pointer_t pPropertySet(new OOXMLPropertySetImpl());
 
@@ -1229,7 +1255,12 @@ void OOXMLFastContextHandlerProperties::lcl_endFastElement
         OOXMLPropertySet::Pointer_t pProperties = (*mpParent).getPropertySet();
 
         if (pProperties.get() != NULL)
+        {
+#ifdef DEBUG_PROPERTIES
+            logger("DEBUG", "<property>" + pProperty->toString() + "</property>");
+#endif
             pProperties->add(pProperty);
+        }
 #ifdef DEBUG_PROPERTIES
         else if (! propagatesProperties())
             logger("DEBUG", "<warning>properties lost</warning>");
@@ -2058,19 +2089,34 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
 #endif
     uno::Reference< xml::sax::XFastContextHandler > xContextHandler;
 
-    if (mrShapeContext.is())
+    sal_uInt32 nNamespace = Element & 0xffff0000;
+
+    switch (nNamespace)
     {
-        OOXMLFastContextHandlerWrapper * pWrapper =
-            new OOXMLFastContextHandlerWrapper
-            (this, mrShapeContext->createFastChildContext(Element, Attribs));
+        case NS_wordprocessingml:
+        case NS_vml_wordprocessingDrawing:
+        case NS_office:
+            xContextHandler.set(createFromStart(Element, Attribs));
+            break;
+        default:
+            if (mrShapeContext.is())
+            {
+                uno::Reference<XFastContextHandler> pChildContext =
+                mrShapeContext->createFastChildContext(Element, Attribs);
 
-        pWrapper->addNamespace(NS_wordprocessingml);
-        pWrapper->addNamespace(NS_vml_wordprocessingDrawing);
+                OOXMLFastContextHandlerWrapper * pWrapper =
+                new OOXMLFastContextHandlerWrapper(this, pChildContext);
 
-        xContextHandler.set(pWrapper);
+                pWrapper->addNamespace(NS_wordprocessingml);
+                pWrapper->addNamespace(NS_vml_wordprocessingDrawing);
+                pWrapper->addNamespace(NS_office);
+
+                xContextHandler.set(pWrapper);
+            }
+            else
+                xContextHandler.set(this);
+            break;
     }
-    else
-        xContextHandler.set(this);
 
     return xContextHandler;
 }
@@ -2157,6 +2203,18 @@ OOXMLFastContextHandlerWrapper::createUnknownChildContext
     return xResult;
 }
 
+void OOXMLFastContextHandlerWrapper::attributes
+(const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+throw (uno::RuntimeException, xml::sax::SAXException)
+{
+    if (mxContext.is())
+    {
+        OOXMLFastContextHandler * pHandler = getFastContextHandler();
+        if (pHandler != NULL)
+            pHandler->attributes(Attribs);
+    }
+}
+
 OOXMLFastContextHandler::ResourceEnum_t
 OOXMLFastContextHandlerWrapper::getResource() const
 {
@@ -2194,6 +2252,23 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
     uno::Reference< xml::sax::XFastContextHandler > xResult;
 
     Id nNameSpace = Element & 0xffff0000;
+
+#ifdef DEBUG_ELEMENT
+    XMLTag aTag("Wrapper-createChildContext");
+    aTag.addAttr("token", fastTokenToId(Element));
+
+    set<Id>::const_iterator aIt(mMyNamespaces.begin());
+    while (aIt != mMyNamespaces.end())
+    {
+        XMLTag::Pointer_t pTag1(new XMLTag("namespace"));
+        pTag1->addAttr("id", fastTokenToId(*aIt));
+        aTag.addTag(pTag1);
+        aIt++;
+    }
+
+    string sTmp(aTag.toString());
+    logger("DEBUG", sTmp);
+#endif
 
     if (mMyNamespaces.find(nNameSpace) != mMyNamespaces.end())
         xResult.set(createFromStart(Element, Attribs));
