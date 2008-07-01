@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: axismodel.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,12 +74,12 @@ struct AxisModel
     ShapeRef            mxMajorGridLines;   /// Major grid lines formatting.
     ShapeRef            mxMinorGridLines;   /// Minor grid lines formatting.
     ::rtl::OUString     maFormatCode;       /// Number format code for tick mark labels.
-    OptDouble           mofCrossesAt;       /// Position on this axis where another axis crosses.
-    OptDouble           mofMajorUnit;       /// Unit for major tick marks on date/value axis.
-    OptDouble           mofMinorUnit;       /// Unit for minor tick marks on date/value axis.
-    OptDouble           mofLogBase;         /// Logarithmic base for logarithmic axes.
-    OptDouble           mofMax;             /// Maximum axis value.
-    OptDouble           mofMin;             /// Minimum axis value.
+    OptValue< double >  mofCrossesAt;       /// Position on this axis where another axis crosses.
+    OptValue< double >  mofMajorUnit;       /// Unit for major tick marks on date/value axis.
+    OptValue< double >  mofMinorUnit;       /// Unit for minor tick marks on date/value axis.
+    OptValue< double >  mofLogBase;         /// Logarithmic base for logarithmic axes.
+    OptValue< double >  mofMax;             /// Maximum axis value.
+    OptValue< double >  mofMin;             /// Minimum axis value.
     sal_Int32           mnAxisId;           /// Unique axis identifier.
     sal_Int32           mnAxisPos;          /// Position of the axis (top/bottom/left/right).
     sal_Int32           mnBaseTimeUnit;     /// Base time unit shown on a date axis.
