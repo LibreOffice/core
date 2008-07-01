@@ -14,7 +14,6 @@ cp    scp2\source\impress         nmake    -    all    cp_impress cp_langmacros 
 cp    scp2\source\javafilter      nmake    -    all    cp_javafilter cp_langmacros cp_langtemplates NULL
 cp    scp2\source\kde             nmake    -    all    cp_kde cp_langmacros cp_langtemplates NULL
 cp    scp2\source\layout          nmake    -    all    cp_layout cp_langmacros NULL
-cp    scp2\source\lingu           nmake    -    all    cp_lingu cp_langmacros cp_langtemplates NULL
 cp    scp2\source\math            nmake    -    all    cp_math cp_langmacros cp_langtemplates NULL
 cp    scp2\source\ooo             nmake    -    all    cp_ooo cp_langmacros cp_langtemplates NULL
 cp    scp2\source\python          nmake    -    all    cp_python cp_langmacros cp_langtemplates NULL
@@ -26,4 +25,4 @@ cp    scp2\source\base            nmake    -    all    cp_base cp_langmacros cp_
 cp    scp2\source\xsltfilter      nmake    -    all    cp_xsltfilter cp_langmacros cp_langtemplates NULL
 cp    scp2\source\winexplorerext  nmake    -    all    cp_winexplorerext cp_langmacros cp_langtemplates NULL
 cp    scp2\source\onlineupdate    nmake    -    all    cp_update cp_langmacros cp_langtemplates NULL
-cp    scp2\util                   nmake    -    all    cp_util cp_activex cp_binfilter cp_calc cp_canvas cp_crashrep cp_draw cp_gnome cp_graphicfilter cp_impress cp_javafilter cp_kde cp_layout cp_lingu cp_math cp_ooo cp_python cp_quickstart cp_testtool cp_writer cp_base cp_xsltfilter cp_winexplorerext cp_sdkoo cp_update NULL
+cp    scp2\util                   nmake    -    all    cp_util cp_activex cp_binfilter cp_calc cp_canvas cp_crashrep cp_draw cp_gnome cp_graphicfilter cp_impress cp_javafilter cp_kde cp_layout cp_math cp_ooo cp_python cp_quickstart cp_testtool cp_writer cp_base cp_xsltfilter cp_winexplorerext cp_sdkoo cp_update NULL
