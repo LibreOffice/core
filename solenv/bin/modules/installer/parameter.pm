@@ -8,7 +8,7 @@
 #
 # $RCSfile: parameter.pm,v $
 #
-# $Revision: 1.52 $
+# $Revision: 1.53 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -305,7 +305,7 @@ sub setglobalvariables
 
     if ( $installer::globals::compiler =~ /unxso[lg]i/ ) { $installer::globals::issolarisx86build = 1; }
 
-    if ( $installer::globals::compiler =~ /unxlng/ )
+    if ($ENV{OS} == 'LINUX')
     {
         $installer::globals::islinuxbuild = 1;
         if ( $installer::globals::packageformat eq "rpm" )
