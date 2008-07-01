@@ -233,6 +233,33 @@ common
         XSLTPROC
         ZIPDEP
 		ZIPSOURCE
+        AGG_VERSION
+        ANT_HOME
+        ANT_LIB
+        ANT
+        AWTLIB
+        CC
+        CXX
+        EXCEPTIONS
+        GXX_INCLUDE_PATH
+        EXTERNAL_WARNINGS_NOT_ERRORS
+        GNUMAKE
+        HAVE_LD_HASH_STYLE
+        JAVACOMPILER
+        JAVADOC
+        JDK
+        NO_HIDS
+        PAM_LINK
+        PAM
+        PSPRINT
+        PYTHONHOME
+        PYTHONPATH
+        SOLAR_PLUGIN
+        USE_FT_EMBOLDEN
+        USE_SHELL
+        USE_XINERAMA
+        VBA_EXTENSION
+        XINERAMA_LINK
 	}
 	restore
 	{
