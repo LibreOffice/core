@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accpara.hxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,12 @@
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
+// --> OD 2008-05-19 #i71360#
+#include <com/sun/star/accessibility/XAccessibleTextMarkup.hpp>
+// <--
+// --> OD 2008-05-29 #i89175#
+#include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
+// <--
 
 // --> OD 2006-07-11 #i63870#
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
@@ -64,6 +70,12 @@ class SwAccessibleParagraph :
         public ::com::sun::star::accessibility::XAccessibleEditableText,
         public com::sun::star::accessibility::XAccessibleSelection,
         public com::sun::star::accessibility::XAccessibleHypertext,
+        // --> OD 2008-05-19 #i71360#
+        public com::sun::star::accessibility::XAccessibleTextMarkup,
+        // <--
+        // --> OD 2008-05-29 #i89175#
+        public com::sun::star::accessibility::XAccessibleMultiLineText,
+        // <--
         // --> OD 2006-07-11 #i63870#
         public ::com::sun::star::accessibility::XAccessibleTextAttributes
         // <--
@@ -379,6 +391,46 @@ public:
     virtual sal_Int32 SAL_CALL getHyperLinkIndex( sal_Int32 nCharIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException);
+
+    // --> OD 2008-05-19 #i71360#
+    //=====  XAccesibleTextMarkup  ============================================
+    virtual sal_Int32 SAL_CALL getTextMarkupCount( sal_Int32 nTextMarkupType )
+            throw (::com::sun::star::lang::IllegalArgumentException,
+                   ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::accessibility::TextSegment SAL_CALL
+            getTextMarkup( sal_Int32 nTextMarkupIndex,
+                           sal_Int32 nTextMarkupType )
+            throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                   ::com::sun::star::lang::IllegalArgumentException,
+                   ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::accessibility::TextSegment > SAL_CALL
+            getTextMarkupAtIndex( sal_Int32 nCharIndex,
+                                  sal_Int32 nTextMarkupType )
+            throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                   ::com::sun::star::lang::IllegalArgumentException,
+                   ::com::sun::star::uno::RuntimeException);
+    // <--
+
+    // --> OD 2008-05-29 #i89175#
+    //=====  XAccessibleMultiLineText  ========================================
+    virtual sal_Int32 SAL_CALL getLineNumberAtIndex( sal_Int32 nIndex )
+            throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                   ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::accessibility::TextSegment SAL_CALL
+            getTextAtLineNumber( sal_Int32 nLineNo )
+            throw (::com::sun::star::lang::IndexOutOfBoundsException,
+                   ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::accessibility::TextSegment SAL_CALL
+            getTextAtLineWithCaret()
+            throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL getNumberOfLineWithCaret()
+            throw (::com::sun::star::uno::RuntimeException);
+    // <--
 
     // --> OD 2006-07-11 #i63870#
     //=====  XAccesibleTextAttributes  ========================================
