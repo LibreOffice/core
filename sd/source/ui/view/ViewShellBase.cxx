@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ViewShellBase.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -218,7 +218,8 @@ class FocusForwardingWindow : public ::Window
 public:
     FocusForwardingWindow (::Window& rParentWindow, ViewShellBase& rBase);
     virtual ~FocusForwardingWindow (void);
-    virtual void KeyInput (const KeyEvent& rKEvt);
+    virtual void KeyInput (const KeyEvent& rEvent);
+    virtual void Command (const CommandEvent& rEvent);
 
 private:
     ViewShellBase& mrBase;
@@ -1729,9 +1730,27 @@ void FocusForwardingWindow::KeyInput (const KeyEvent& rKEvt)
             pWindow->GrabFocus();
             // Forward the key press as well.
             pWindow->KeyInput(rKEvt);
+            ::Window::KeyInput(rKEvt);
         }
     }
 }
+
+
+
+
+void FocusForwardingWindow::Command (const CommandEvent& rEvent)
+{
+    ::boost::shared_ptr<ViewShell> pViewShell = mrBase.GetMainViewShell();
+    if (pViewShell.get() != NULL)
+    {
+        ::Window* pWindow = pViewShell->GetActiveWindow();
+        if (pWindow != NULL)
+        {
+            pWindow->Command(rEvent);
+        }
+    }
+}
+
 
 } // end of anonymouse namespace
 
