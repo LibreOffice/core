@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdotext.cxx,v $
- * $Revision: 1.88 $
+ * $Revision: 1.89 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1986,70 +1986,67 @@ sal_Bool SdrTextObj::IsVerticalWriting() const
 void SdrTextObj::SetVerticalWriting(sal_Bool bVertical)
 {
     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
-    if( pOutlinerParaObject )
+    if( !pOutlinerParaObject && bVertical )
     {
-        if( !pOutlinerParaObject && bVertical )
+        // we only need to force a outliner para object if the default of
+        // horizontal text is changed
+        ForceOutlinerParaObject();
+        pOutlinerParaObject = GetOutlinerParaObject();
+    }
+
+    if( pOutlinerParaObject && (pOutlinerParaObject->IsVertical() != bVertical) )
+    {
+        // get item settings
+        const SfxItemSet& rSet = GetObjectItemSet();
+        sal_Bool bAutoGrowWidth = ((SdrTextAutoGrowWidthItem&)rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue();
+        sal_Bool bAutoGrowHeight = ((SdrTextAutoGrowHeightItem&)rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
+
+        // #103516# Also exchange hor/ver adjust items
+        SdrTextHorzAdjust eHorz = ((SdrTextHorzAdjustItem&)(rSet.Get(SDRATTR_TEXT_HORZADJUST))).GetValue();
+        SdrTextVertAdjust eVert = ((SdrTextVertAdjustItem&)(rSet.Get(SDRATTR_TEXT_VERTADJUST))).GetValue();
+
+        // rescue object size
+        Rectangle aObjectRect = GetSnapRect();
+
+        // prepare ItemSet to set exchanged width and height items
+        SfxItemSet aNewSet(*rSet.GetPool(),
+            SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
+            // #103516# Expanded item ranges to also support hor and ver adjust.
+            SDRATTR_TEXT_VERTADJUST, SDRATTR_TEXT_VERTADJUST,
+            SDRATTR_TEXT_AUTOGROWWIDTH, SDRATTR_TEXT_HORZADJUST,
+            0, 0);
+
+        aNewSet.Put(rSet);
+        aNewSet.Put(SdrTextAutoGrowWidthItem(bAutoGrowHeight));
+        aNewSet.Put(SdrTextAutoGrowHeightItem(bAutoGrowWidth));
+
+        // #103516# Exchange horz and vert adjusts
+        switch(eVert)
         {
-            // we only need to force a outliner para object if the default of
-            // horizontal text is changed
-            ForceOutlinerParaObject();
-            pOutlinerParaObject = GetOutlinerParaObject();
+            case SDRTEXTVERTADJUST_TOP: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT)); break;
+            case SDRTEXTVERTADJUST_CENTER: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER)); break;
+            case SDRTEXTVERTADJUST_BOTTOM: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT)); break;
+            case SDRTEXTVERTADJUST_BLOCK: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK)); break;
+        }
+        switch(eHorz)
+        {
+            case SDRTEXTHORZADJUST_LEFT: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BOTTOM)); break;
+            case SDRTEXTHORZADJUST_CENTER: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER)); break;
+            case SDRTEXTHORZADJUST_RIGHT: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP)); break;
+            case SDRTEXTHORZADJUST_BLOCK: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BLOCK)); break;
         }
 
-        if( pOutlinerParaObject && (pOutlinerParaObject->IsVertical() != bVertical) )
+        SetObjectItemSet(aNewSet);
+
+        pOutlinerParaObject = GetOutlinerParaObject();
+        if( pOutlinerParaObject )
         {
-            // get item settings
-            const SfxItemSet& rSet = GetObjectItemSet();
-            sal_Bool bAutoGrowWidth = ((SdrTextAutoGrowWidthItem&)rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue();
-            sal_Bool bAutoGrowHeight = ((SdrTextAutoGrowHeightItem&)rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
-
-            // #103516# Also exchange hor/ver adjust items
-            SdrTextHorzAdjust eHorz = ((SdrTextHorzAdjustItem&)(rSet.Get(SDRATTR_TEXT_HORZADJUST))).GetValue();
-            SdrTextVertAdjust eVert = ((SdrTextVertAdjustItem&)(rSet.Get(SDRATTR_TEXT_VERTADJUST))).GetValue();
-
-            // rescue object size
-            Rectangle aObjectRect = GetSnapRect();
-
-            // prepare ItemSet to set exchanged width and height items
-            SfxItemSet aNewSet(*rSet.GetPool(),
-                SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
-                // #103516# Expanded item ranges to also support hor and ver adjust.
-                SDRATTR_TEXT_VERTADJUST, SDRATTR_TEXT_VERTADJUST,
-                SDRATTR_TEXT_AUTOGROWWIDTH, SDRATTR_TEXT_HORZADJUST,
-                0, 0);
-
-            aNewSet.Put(rSet);
-            aNewSet.Put(SdrTextAutoGrowWidthItem(bAutoGrowHeight));
-            aNewSet.Put(SdrTextAutoGrowHeightItem(bAutoGrowWidth));
-
-            // #103516# Exchange horz and vert adjusts
-            switch(eVert)
-            {
-                case SDRTEXTVERTADJUST_TOP: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT)); break;
-                case SDRTEXTVERTADJUST_CENTER: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER)); break;
-                case SDRTEXTVERTADJUST_BOTTOM: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT)); break;
-                case SDRTEXTVERTADJUST_BLOCK: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK)); break;
-            }
-            switch(eHorz)
-            {
-                case SDRTEXTHORZADJUST_LEFT: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BOTTOM)); break;
-                case SDRTEXTHORZADJUST_CENTER: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER)); break;
-                case SDRTEXTHORZADJUST_RIGHT: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP)); break;
-                case SDRTEXTHORZADJUST_BLOCK: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BLOCK)); break;
-            }
-
-            SetObjectItemSet(aNewSet);
-
-            pOutlinerParaObject = GetOutlinerParaObject();
-            if( pOutlinerParaObject )
-            {
-                // set ParaObject orientation accordingly
-                pOutlinerParaObject->SetVertical(bVertical);
-            }
-
-            // restore object size
-            SetSnapRect(aObjectRect);
+            // set ParaObject orientation accordingly
+            pOutlinerParaObject->SetVertical(bVertical);
         }
+
+        // restore object size
+        SetSnapRect(aObjectRect);
     }
 }
 
