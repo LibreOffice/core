@@ -8,7 +8,7 @@
  *
  * $RCSfile: chartconverter.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,7 @@ using ::com::sun::star::uno::Exception;
 using ::com::sun::star::chart2::XChartDocument;
 using ::com::sun::star::chart2::data::XDataProvider;
 using ::com::sun::star::chart2::data::XDataSequence;
-using ::oox::core::FilterBase;
+using ::oox::core::XmlFilterBase;
 
 namespace oox {
 namespace drawingml {
@@ -55,15 +55,15 @@ ChartConverter::~ChartConverter()
 {
 }
 
-void ChartConverter::convertModelToDocument( FilterBase& rFilter,
+void ChartConverter::convertFromModel( XmlFilterBase& rFilter,
         ChartSpaceModel& rModel, const Reference< XChartDocument >& rxChartDoc )
 {
-    OSL_ENSURE( rxChartDoc.is(), "ChartConverter::convertModelToDocument - missing chart document" );
+    OSL_ENSURE( rxChartDoc.is(), "ChartConverter::convertFromModel - missing chart document" );
     if( rxChartDoc.is() )
     {
         ConverterRoot aConvBase( rFilter, *this, rxChartDoc );
         ChartSpaceConverter aSpaceConv( aConvBase, rModel );
-        aSpaceConv.convertModelToDocument();
+        aSpaceConv.convertFromModel();
     }
 }
 
