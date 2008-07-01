@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objectdefaultcontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,7 @@
 
 #include "oox/drawingml/objectdefaultcontext.hxx"
 #include "oox/drawingml/spdefcontext.hxx"
+#include "oox/drawingml/theme.hxx"
 #include "oox/core/namespaces.hxx"
 #include "tokens.hxx"
 
@@ -48,29 +49,16 @@ objectDefaultContext::objectDefaultContext( ContextHandler& rParent, Theme& rThe
 
 Reference< XFastContextHandler > objectDefaultContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& /* xAttribs */ ) throw (SAXException, RuntimeException)
 {
-    Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
         case NMSP_DRAWINGML|XML_spDef:
-        {
-            xRet.set( new spDefContext( *this, *mrTheme.getspDef() ) );
-            break;
-        }
+            return new spDefContext( *this, mrTheme.getSpDef() );
         case NMSP_DRAWINGML|XML_lnDef:
-        {
-            xRet.set( new spDefContext( *this, *mrTheme.getlnDef() ) );
-            break;
-        }
+            return new spDefContext( *this, mrTheme.getLnDef() );
         case NMSP_DRAWINGML|XML_txDef:
-        {
-            xRet.set( new spDefContext( *this, *mrTheme.gettxDef() ) );
-            break;
-        }
+            return new spDefContext( *this, mrTheme.getTxDef() );
     }
-    if( !xRet.is() )
-        xRet.set( this );
-
-    return xRet;
+    return 0;
 }
 
 } }
