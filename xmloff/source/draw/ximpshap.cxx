@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ximpshap.cxx,v $
- * $Revision: 1.127 $
+ * $Revision: 1.128 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1765,6 +1765,35 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const ::r
             GetImport().GetMM100UnitConverter().convertMeasure(maEnd.Y, rValue);
             return;
         }
+        if( IsXMLToken( rLocalName, XML_D ) )
+        {
+            SdXMLImExViewBox aViewBox( 0, 0, 1, 1 );
+            awt::Point aPoint( 0, 0 );
+            awt::Size aSize( 1, 1 );
+
+            SdXMLImExSvgDElement aPoints( rValue, aViewBox,
+                aPoint, aSize, GetImport().GetMM100UnitConverter() );
+
+            if ( aPoints.IsCurve() )
+            {
+                drawing::PolyPolygonBezierCoords aSourcePolyPolygon(
+                    aPoints.GetPointSequenceSequence(),
+                    aPoints.GetFlagSequenceSequence());
+                maPath <<= aSourcePolyPolygon;
+            }
+            else
+            {
+                const drawing::PointSequenceSequence& rOuterSeq = aPoints.GetPointSequenceSequence();
+                drawing::FlagSequenceSequence aFlagSeqSeq( rOuterSeq.getLength() );
+                for ( int a = 0; a < rOuterSeq.getLength(); a++ )
+                    aFlagSeqSeq[ a ] = drawing::FlagSequence( rOuterSeq[ a ].getLength() );
+
+                drawing::PolyPolygonBezierCoords aSourcePolyPolygon(
+                    aPoints.GetPointSequenceSequence(),
+                    aFlagSeqSeq );
+                maPath <<= aSourcePolyPolygon;
+            }
+        }
     }
     }
 
@@ -1830,6 +1859,9 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
             }
             SetStyle();
             SetLayer();
+
+            if ( maPath.hasValue() )
+                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygonBezier") ), maPath );
 
             SdXMLShapeContext::StartElement(xAttrList);
         }
