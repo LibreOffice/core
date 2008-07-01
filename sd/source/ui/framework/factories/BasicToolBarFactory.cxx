@@ -8,7 +8,7 @@
  *
  * $RCSfile: BasicToolBarFactory.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,10 +35,9 @@
 
 #include "ViewTabBar.hxx"
 #include "framework/FrameworkHelper.hxx"
+#include <comphelper/mediadescriptor.hxx>
 
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
 #include "DrawController.hxx"
 
 using namespace ::com::sun::star;
@@ -143,16 +142,30 @@ void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
             if (pController != NULL)
                 mpViewShellBase = pController->GetViewShellBase();
 
-            // Register the factory for its supported tool bars.
-            Reference<XControllerManager> xControllerManager(mxController, UNO_QUERY_THROW);
-            mxConfigurationController = xControllerManager->getConfigurationController();
-            if (mxConfigurationController.is())
+            ::comphelper::MediaDescriptor aDescriptor (mxController->getModel()->getArgs());
+            if ( ! aDescriptor.getUnpackedValueOrDefault(
+                ::comphelper::MediaDescriptor::PROP_PREVIEW(),
+                sal_False))
             {
-                mxConfigurationController->addResourceFactory(FrameworkHelper::msViewTabBarURL, this);
+                // Register the factory for its supported tool bars.
+                Reference<XControllerManager> xControllerManager(mxController, UNO_QUERY_THROW);
+                mxConfigurationController = xControllerManager->getConfigurationController();
+                if (mxConfigurationController.is())
+                {
+                    mxConfigurationController->addResourceFactory(
+                        FrameworkHelper::msViewTabBarURL, this);
+                }
+
+                Reference<lang::XComponent> xComponent (mxConfigurationController, UNO_QUERY);
+                if (xComponent.is())
+                    xComponent->addEventListener(static_cast<lang::XEventListener*>(this));
             }
-            Reference<lang::XComponent> xComponent (mxConfigurationController, UNO_QUERY);
-            if (xComponent.is())
-                xComponent->addEventListener(static_cast<lang::XEventListener*>(this));
+            else
+            {
+                // The view shell is in preview mode and thus does not need
+                // the view tab bar.
+                mxConfigurationController = NULL;
+            }
         }
         catch (RuntimeException&)
         {
