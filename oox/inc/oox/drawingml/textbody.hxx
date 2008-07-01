@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textbody.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,8 +69,6 @@ protected:
     PropertyMap         maTextProperties;
     TextListStyle       maTextListStyle;
 };
-
-typedef boost::shared_ptr< TextBody > TextBodyPtr;
 
 } }
 
