@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accportions.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,30 +79,26 @@ class SwAccessiblePortionData : public SwPortionHandler
 
     /// returns the index of the first position whose value is smaller
     /// or equal, and whose following value is equal or larger
-    size_t FindBreak( const Positions_t& rPositions, sal_Int32 nValue );
+    size_t FindBreak( const Positions_t& rPositions, sal_Int32 nValue ) const;
 
     /// like FindBreak, but finds the last equal or larger position
-    size_t FindLastBreak( const Positions_t& rPositions, sal_Int32 nValue );
+    size_t FindLastBreak( const Positions_t& rPositions, sal_Int32 nValue ) const;
 
     /// fill the boundary with the values from rPositions[nPos]
     void FillBoundary(com::sun::star::i18n::Boundary& rBound,
                       const Positions_t& rPositions,
-                      size_t nPos );
+                      size_t nPos ) const;
 
     /// Access to portion attributes
-    sal_Bool IsPortionAttrSet( size_t nPortionNo, sal_uInt8 nAttr );
-    inline sal_Bool IsSpecialPortion( size_t nPortionNo );
-    inline sal_Bool IsReadOnlyPortion( size_t nPortionNo );
-    inline sal_Bool IsGrayPortion( size_t nPortionNo );
-
-    // Helper methods for SwPortionHandler:
-
-    /// Is a portion of this type gray?
-    sal_Bool IsGrayPortionType( USHORT nType );
+    sal_Bool IsPortionAttrSet( size_t nPortionNo, sal_uInt8 nAttr ) const;
+    sal_Bool IsSpecialPortion( size_t nPortionNo ) const;
+    sal_Bool IsReadOnlyPortion( size_t nPortionNo ) const;
+    sal_Bool IsGrayPortion( size_t nPortionNo ) const;
+    sal_Bool IsGrayPortionType( USHORT nType ) const;
 
     // helper method for GetEditableRange(...):
     void AdjustAndCheck( sal_Int32 nPos, size_t& nPortionNo,
-                         USHORT& nCorePos, sal_Bool& bEdit );
+                         USHORT& nCorePos, sal_Bool& bEdit ) const;
 
 public:
     SwAccessiblePortionData( const SwTxtNode* pTxtNd,
@@ -120,21 +116,28 @@ public:
     // access to the portion data
 
     /// get the text string, as presented by the layout
-    const rtl::OUString& GetAccessibleString();
+    const rtl::OUString& GetAccessibleString() const;
 
     /// get the start & end positions of the sentence
     void GetLineBoundary( com::sun::star::i18n::Boundary& rBound,
-                          sal_Int32 nPos );
+                          sal_Int32 nPos ) const;
 
     // get start and end position of the last line
-    void GetLastLineBoundary( com::sun::star::i18n::Boundary& rBound );
+    void GetLastLineBoundary( com::sun::star::i18n::Boundary& rBound ) const;
+
+    // --> OD 2008-05-30 #i89175#
+    sal_Int32 GetLineCount() const;
+    sal_Int32 GetLineNo( const sal_Int32 nPos ) const;
+    void GetBoundaryOfLine( const sal_Int32 nLineNo,
+                            com::sun::star::i18n::Boundary& rLineBound );
+    // <--
 
     /// get the position in the model string for a given
     /// (accessibility) position
-    USHORT GetModelPosition( sal_Int32 nPos );
+    USHORT GetModelPosition( sal_Int32 nPos ) const;
 
     /// get the position in the accessibility string for a given model position
-    sal_Int32 GetAccessiblePosition( USHORT nPos );
+    sal_Int32 GetAccessiblePosition( USHORT nPos ) const;
 
     /// fill a SwSpecialPos structure, suitable for calling
     /// SwTxtFrm->GetCharRect
@@ -142,7 +145,7 @@ public:
     /// with the &rPos, after putting the appropriate data into it.
     USHORT FillSpecialPos( sal_Int32 nPos,
                            SwSpecialPos& rPos,
-                           SwSpecialPos*& rpPos );
+                           SwSpecialPos*& rpPos ) const;
 
 
     // get boundaries of words/sentences. The data structures are
@@ -152,23 +155,23 @@ public:
 
     // get (a) boundary for attribut change
     void GetAttributeBoundary( com::sun::star::i18n::Boundary& rBound,
-                               sal_Int32 nPos );
+                               sal_Int32 nPos ) const;
 
     /// Convert start and end positions into core positions.
     /// @returns true if 'special' portions are included either completely
     ///          or not at all. This can be used to test whether editing
     ///          that range would be legal
     sal_Bool GetEditableRange( sal_Int32 nStart, sal_Int32 nEnd,
-                               USHORT& nCoreStart, USHORT& nCoreEnd );
+                               USHORT& nCoreStart, USHORT& nCoreEnd ) const;
 
     /// Determine whether this core position is valid for these portions.
     /// (A paragraph may be split into several frames, e.g. at page
     ///  boundaries. In this case, only part of a paragraph is represented
     ///  through this object. This method determines whether one particular
     ///  position is valid for this object or not.)
-    sal_Bool IsValidCorePosition( USHORT nPos );
-    USHORT GetFirstValidCorePosition();
-    USHORT GetLastValidCorePosition();
+    sal_Bool IsValidCorePosition( USHORT nPos ) const;
+    USHORT GetFirstValidCorePosition() const;
+    USHORT GetLastValidCorePosition() const;
 };
 
 
