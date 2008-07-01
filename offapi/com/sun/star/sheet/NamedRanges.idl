@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NamedRanges.idl,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +91,7 @@ published service NamedRanges
 
     /** provides methods to control the internal update of named ranges.
 
-        @since CWS xmlfilter02
+        @since OOo 3.0
      */
     [optional] interface com::sun::star::document::XActionLockable;
 
