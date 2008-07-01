@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtparai.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,7 @@ class XMLParaContext : public SvXMLImportContext
         ::com::sun::star::text::XTextRange > xStart;    // xub_StrLen nStart;
     ::rtl::OUString             sStyleName;
     ::rtl::OUString             sId;
+    ::rtl::OUString             sXmlId;
     sal_Int8                nOutlineLevel;
     XMLHints_Impl           *pHints;
     // --> OD 2007-07-25 #i73509#

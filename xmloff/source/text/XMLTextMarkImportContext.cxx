@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextMarkImportContext.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,8 +98,9 @@ void XMLTextMarkImportContext::StartElement(
 
 
     OUString sName;
+    OUString sXmlId;
 
-    if (FindName(GetImport(), xAttrList, sName))
+    if (FindName(GetImport(), xAttrList, sName, sXmlId))
     {
         sal_uInt16 nTmp;
         if (SvXMLUnitConverter::convertEnum(nTmp, GetLocalName(),
@@ -112,7 +113,8 @@ void XMLTextMarkImportContext::StartElement(
                     CreateAndInsertMark(GetImport(),
                                         sAPI_reference_mark,
                                         sName,
-                                       rHelper.GetCursorAsRange()->getStart());
+                                       rHelper.GetCursorAsRange()->getStart(),
+                                       ::rtl::OUString());
                     break;
 
                 case TypeBookmark:
@@ -120,21 +122,22 @@ void XMLTextMarkImportContext::StartElement(
                     CreateAndInsertMark(GetImport(),
                                         sAPI_bookmark,
                                         sName,
-                                       rHelper.GetCursorAsRange()->getStart());
+                                       rHelper.GetCursorAsRange()->getStart(),
+                                       sXmlId);
                     break;
 
                 case TypeBookmarkStart:
                     // save XTextRange for later construction of bookmark
                     rHelper.InsertBookmarkStartRange(
-                        sName, rHelper.GetCursorAsRange()->getStart());
+                        sName, rHelper.GetCursorAsRange()->getStart(), sXmlId);
                     break;
 
                 case TypeBookmarkEnd:
                 {
                     // get old range, and construct
                     Reference<XTextRange> xStartRange;
-                    if (rHelper.FindAndRemoveBookmarkStartRange(xStartRange,
-                                                                sName))
+                    if (rHelper.FindAndRemoveBookmarkStartRange(sName,
+                            xStartRange, sXmlId))
                     {
                         Reference<XTextRange> xEndRange(
                             rHelper.GetCursorAsRange()->getStart());
@@ -161,7 +164,8 @@ void XMLTextMarkImportContext::StartElement(
                             CreateAndInsertMark(GetImport(),
                                                 sAPI_bookmark,
                                                 sName,
-                                                xInsertionRange);
+                                                xInsertionRange,
+                                                sXmlId);
                         }
                         // else: beginning/end in different XText -> ignore!
                     }
@@ -187,7 +191,8 @@ void XMLTextMarkImportContext::CreateAndInsertMark(
     SvXMLImport& rImport,
     const OUString& sServiceName,
     const OUString& sMarkName,
-    const Reference<XTextRange> & rRange)
+    const Reference<XTextRange> & rRange,
+    const OUString& i_rXmlId)
 {
     // create mark
     Reference<XMultiServiceFactory> xFactory(rImport.GetModel(),UNO_QUERY);
@@ -200,6 +205,9 @@ void XMLTextMarkImportContext::CreateAndInsertMark(
         if (xNamed.is())
         {
             xNamed->setName(sMarkName);
+
+            // xml:id for RDF metadata
+            rImport.SetXmlId(xIfc, i_rXmlId);
 
             // cast to XTextContent and attach to document
             Reference<XTextContent> xTextContent(xIfc, UNO_QUERY);
@@ -224,7 +232,8 @@ void XMLTextMarkImportContext::CreateAndInsertMark(
 sal_Bool XMLTextMarkImportContext::FindName(
     SvXMLImport& rImport,
     const Reference<XAttributeList> & xAttrList,
-    OUString& sName)
+    OUString& sName,
+    OUString& o_rXmlId)
 {
     sal_Bool bNameOK = sal_False;
 
@@ -243,6 +252,12 @@ sal_Bool XMLTextMarkImportContext::FindName(
             sName = xAttrList->getValueByIndex(nAttr);
             bNameOK = sal_True;
         }
+        else if ( (XML_NAMESPACE_XML == nPrefix) &&
+             IsXMLToken(sLocalName, XML_ID)   )
+        {
+            o_rXmlId = xAttrList->getValueByIndex(nAttr);
+        }
+//FIXME: RDFa (text:bookmark-start)
     }
 
     return bNameOK;
