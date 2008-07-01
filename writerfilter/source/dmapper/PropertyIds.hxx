@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyIds.hxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -272,11 +272,10 @@ enum PropertyIds
 /*233*/ ,PROP_CHAR_PROP_HEIGHT
 /*234*/ ,PROP_CHAR_PROP_HEIGHT_ASIAN
 /*235*/ ,PROP_CHAR_PROP_HEIGHT_COMPLEX
-//*236*/ ,PROP_
-//*237*/ ,PROP_
-//*238*/ ,PROP_
-//*239*/ ,PROP_
-//*230*/ ,PROP_
+/*236*/ ,PROP_FORMAT
+/*237*/ ,PROP_INSERT
+/*238*/ ,PROP_DELETE
+/*239*/ ,PROP_STREAM_NAME
 
 };
 struct PropertyNameSupplier_Impl;
