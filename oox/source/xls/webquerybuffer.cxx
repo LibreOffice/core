@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: webquerybuffer.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,7 @@ WebQueryBuffer::WebQueryBuffer( const WorkbookHelper& rHelper ) :
 
 void WebQueryBuffer::importQueryTable( const AttributeList& rAttribs )
 {
-    OUString aName = rAttribs.getString( XML_name );
+    OUString aName = rAttribs.getString( XML_name, OUString() );
     if ( !aName.getLength() )
         return;
 
@@ -108,7 +108,7 @@ void WebQueryBuffer::importConnection( const AttributeList& rAttribs )
         maConnections.resize(nId + 1);
 
     Connection aConn;
-    aConn.maName = rAttribs.getString( XML_name );
+    aConn.maName = rAttribs.getString( XML_name, OUString() );
     aConn.mnType = rAttribs.getInteger( XML_type, 0 );
     maConnections[nId] = aConn;
     mnCurConnId = nId;
@@ -144,7 +144,7 @@ void WebQueryBuffer::importWebPr( const AttributeList& rAttribs )
     Connection& rConn = maConnections[mnCurConnId];
     rConn.mpProperties.reset( new WebProperties );
     WebProperties* pWebPr = static_cast< WebProperties* >( rConn.mpProperties.get() );
-    pWebPr->maURL = rAttribs.getString( XML_url );
+    pWebPr->maURL = rAttribs.getString( XML_url, OUString() );
 
     // All available attributes:
     //   consecutive (bool)
