@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoshape.cxx,v $
- * $Revision: 1.176 $
+ * $Revision: 1.177 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -4295,6 +4295,16 @@ bool SvxShapeText::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, co
 
 bool SvxShapeText::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
+    if( pProperty->nWID == SDRATTR_TEXTDIRECTION )
+    {
+        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mpObj.get() );
+        if( pTextObj && pTextObj->IsVerticalWriting() )
+            rValue <<= com::sun::star::text::WritingMode_TB_RL;
+        else
+            rValue <<= com::sun::star::text::WritingMode_LR_TB;
+        return true;
+    }
+
     return SvxShape::getPropertyValueImpl( pProperty, rValue );
 }
 
