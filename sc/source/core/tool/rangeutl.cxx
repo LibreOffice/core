@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rangeutl.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -498,13 +498,24 @@ sal_Bool ScRangeStringConverter::GetRangeFromString(
         else
         {
             if ( aUIString.GetChar(0) == (sal_Unicode) '.' )
+            {
                 aUIString.Erase( 0, 1 );
+                --nIndex;
+            }
 
             if ( nIndex < aUIString.Len() - 1 &&
                     aUIString.GetChar((xub_StrLen)nIndex + 1) == (sal_Unicode) '.' )
                 aUIString.Erase( (xub_StrLen)nIndex + 1, 1 );
 
             bResult = ((rRange.Parse(aUIString, const_cast<ScDocument*> (pDocument)) & SCA_VALID) == SCA_VALID);
+
+            // #i77703# chart ranges in the file format contain both sheet names, even for an external reference sheet.
+            // This isn't parsed by ScRange, so try to parse the two Addresses then.
+            if (!bResult)
+                bResult = ((rRange.aStart.Parse( aUIString.Copy(0, (xub_StrLen)nIndex), const_cast<ScDocument*>(pDocument),
+                                pDocument->GetAddressConvention()) & SCA_VALID) == SCA_VALID) &&
+                          ((rRange.aEnd.Parse( aUIString.Copy((xub_StrLen)nIndex+1), const_cast<ScDocument*>(pDocument),
+                                pDocument->GetAddressConvention()) & SCA_VALID) == SCA_VALID);
         }
     }
     return bResult;
