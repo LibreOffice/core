@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docuno.cxx,v $
- * $Revision: 1.67 $
+ * $Revision: 1.68 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,6 +91,10 @@
 #include "scmod.hxx"
 #include "rangeutl.hxx"
 #include "ViewSettingsSequenceDefines.hxx"
+
+#ifndef _SVX_UNOSHAPE_HXX
+#include <svx/unoshape.hxx>
+#endif
 
 using namespace com::sun::star;
 
@@ -605,6 +609,8 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection, ScMarkData& rMa
     if ( xInterface.is() )
     {
         ScCellRangesBase* pSelObj = ScCellRangesBase::getImplementation( xInterface );
+        uno::Reference< drawing::XShapes > xShapes( xInterface, uno::UNO_QUERY );
+
         if ( pSelObj && pSelObj->GetDocShell() == pDocShell )
         {
             BOOL bSheet = ( ScTableSheetObj::getImplementation( xInterface ) != NULL );
@@ -630,6 +636,38 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection, ScMarkData& rMa
                 bDone = TRUE;
             }
             // multi selection isn't supported
+        }
+        else if( xShapes.is() )
+        {
+            //print a selected ole object
+            uno::Reference< container::XIndexAccess > xIndexAccess( xShapes, uno::UNO_QUERY );
+            if( xIndexAccess.is() )
+            {
+                // multi selection isn't supported yet
+                uno::Reference< drawing::XShape > xShape( xIndexAccess->getByIndex(0), uno::UNO_QUERY );
+                SvxShape* pShape = SvxShape::getImplementation( xShape );
+                if( pShape )
+                {
+                    SdrObject *pSdrObj = pShape->GetSdrObject();
+                    if( pDocShell )
+                    {
+                        ScDocument* pDoc = pDocShell->GetDocument();
+                        if( pDoc && pSdrObj )
+                        {
+                            Rectangle aObjRect = pSdrObj->GetCurrentBoundRect();
+                            SCTAB nCurrentTab = ScDocShell::GetCurTab();
+                            ScRange aRange = pDoc->GetRange( nCurrentTab, aObjRect );
+                            rMark.SetMarkArea( aRange );
+
+                            if( rMark.IsMarked() && !rMark.IsMultiMarked() )
+                            {
+                                rStatus.SetMode( SC_PRINTSEL_RANGE_EXCLUSIVELY_OLE_AND_DRAW_OBJECTS );
+                                bDone = TRUE;
+                            }
+                        }
+                    }
+                }
+            }
         }
         else if ( ScModelObj::getImplementation( xInterface ) == this )
         {
@@ -798,6 +836,8 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
     ScPrintFunc aFunc( pDev, pDocShell, nTab, pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange );
     aFunc.SetDrawView( pDrawView );
     aFunc.SetRenderFlag( TRUE );
+    if( aStatus.GetMode() == SC_PRINTSEL_RANGE_EXCLUSIVELY_OLE_AND_DRAW_OBJECTS )
+        aFunc.SetExclusivelyDrawOleAndDrawObjects();
 
     Range aPageRange( nRenderer+1, nRenderer+1 );
     MultiSelection aPage( aPageRange );
