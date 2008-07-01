@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: float3d.hrc,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -154,7 +154,6 @@
 
 
 // high contrast
-#define BMP_FAVORITES_H             129
 #define BMP_GEO_H                   130
 #define BMP_REPRESENTATION_H        131
 #define BMP_LIGHT_H                 132
@@ -165,8 +164,6 @@
 #define BMP_CHANGE_TO_3D_H          137
 #define BMP_LATHE_OBJ_H             138
 #define BMP_PERSPECTIVE_H           139
-#define BMP_ONLY_3D_H               140
-#define BMP_ALL_ATTRIBUTES_H        141
 #define BMP_NORMALS_OBJ_H           142
 #define BMP_NORMALS_FLAT_H          143
 #define BMP_NORMALS_SPHERE_H        144
