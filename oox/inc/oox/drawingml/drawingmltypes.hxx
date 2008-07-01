@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawingmltypes.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,18 +31,28 @@
 #ifndef OOX_DRAWINGML_TYPES_HXX
 #define OOX_DRAWINGML_TYPES_HXX
 
+#include <boost/shared_ptr.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include "oox/drawingml/shape.hxx"
-#include "oox/core/contexthandler.hxx"
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 
-namespace oox { namespace core {
-    class PropertyMap;
-} }
+namespace oox {
+namespace drawingml {
 
-namespace oox { namespace drawingml {
+// ============================================================================
+
+class TextBody;
+typedef ::boost::shared_ptr< TextBody > TextBodyPtr;
+
+class Shape;
+typedef ::boost::shared_ptr< Shape > ShapePtr;
+
+class Theme;
+typedef ::boost::shared_ptr< Theme > ThemePtr;
+
+// ----------------------------------------------------------------------------
 
 /** converts the attributes from an CT_Point2D into an awt Point with 1/100th mm */
 com::sun::star::awt::Point GetPoint2D( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes );
@@ -92,6 +102,8 @@ void GetFontPitch( sal_Int32 nOoxValue, sal_Int16 & nPitch, sal_Int16 & nFamily 
 /** converts a paragraph align to a ParaAdjust */
 sal_Int16 GetParaAdjust( sal_Int32 nAlign );
 
+// ----------------------------------------------------------------------------
+
 // CT_IndexRange
 struct IndexRange {
     sal_Int32 start;
@@ -101,20 +113,10 @@ struct IndexRange {
 /** retrieve the content of CT_IndexRange */
 IndexRange GetIndexRange( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes );
 
+// ============================================================================
 
-/** context to import a CT_Transform2D */
-class Transform2DContext : public ::oox::core::ContextHandler
-{
-public:
-    Transform2DContext( ::oox::core::ContextHandler& rParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, Shape& rShape ) throw();
-    virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+} // namespace drawingml
+} // namespace oox
 
-protected:
-    Shape&              mrShape;
-};
+#endif
 
-} }
-
-#endif // OOX_DRAWINGML_TYPES_HXX
