@@ -9,7 +9,7 @@
  
   $RCSfile: dummyannotate.xsl,v $
  
-  $Revision: 1.9 $
+  $Revision: 1.10 $
  
   This file is part of OpenOffice.org.
  
@@ -711,7 +711,7 @@
         <xsl:text>Properties</xsl:text>
       </xsl:attribute>
       <xsl:for-each select=".//rng:element">
-        <xsl:element name="sprm">
+        <xsl:element name="element">
           <xsl:attribute name="name">
             <xsl:value-of select="@name"/>
           </xsl:attribute>
@@ -842,11 +842,7 @@ sed "s/wml/</xsl:text>
 
   <xsl:template match="/">
     <out>
-      <xsl:apply-templates select="//rng:define[@name='CT_GradientStopList']" 
-                           mode='resourcesPropertySetValue'/>
-      <xsl:apply-templates select="//rng:define[@name='CT_GradientFillProperties']" 
-                           mode='resourcesPropertySetValue'/>
-      <xsl:apply-templates select="//rng:define[@name='EG_LineFillProperties']"
+      <xsl:apply-templates select="//rng:define[@name='OLEObject']" 
                            mode='resourcesPropertySetValue'/>
     </out>
   </xsl:template>
