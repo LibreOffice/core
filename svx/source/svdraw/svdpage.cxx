@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdpage.cxx,v $
- * $Revision: 1.64 $
+ * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +34,6 @@
 #include <svx/svdpage.hxx>
 
 // HACK
-#ifdef SVX_LIGHT
-#define _IPOBJ_HXX
-#endif
 #include <sot/storage.hxx>
 #include <sot/clsids.hxx>
 #ifndef _SVSTOR_HXX //autogen
@@ -50,6 +47,8 @@
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
+
+#include <tools/diagnose_ex.h>
 
 #include <svx/svdetc.hxx>
 #include "svdxout.hxx"
@@ -67,11 +66,7 @@
 #include <svx/fmglob.hxx>
 #include <svx/polysc3d.hxx>
 
-#ifndef SVX_LIGHT
 #include <svx/fmdpage.hxx>
-#else
-#include <svx/unopage.hxx>
-#endif
 
 #include <sfx2/objsh.hxx>
 #include <vcl/salbtype.hxx>     // FRound
@@ -1294,6 +1289,17 @@ SdrPage::SdrPage(const SdrPage& rSrcPage)
 }
 SdrPage::~SdrPage()
 {
+    if( mxUnoPage.is() ) try
+    {
+        uno::Reference< lang::XComponent > xPageComponent( mxUnoPage, uno::UNO_QUERY_THROW );
+        mxUnoPage.clear();
+        xPageComponent->dispose();
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
     // #111111#
     // tell all the registered PageUsers that the page is in destruction
     // This causes some (all?) PageUsers to remove themselves from the list
@@ -1511,10 +1517,9 @@ void SdrPage::SetModel(SdrModel* pNewModel)
     // update listeners at possible api wrapper object
     if( pOldModel != pNewModel )
     {
-        uno::Reference< uno::XInterface > xPage( mxUnoPage );
-        if( xPage.is() )
+        if( mxUnoPage.is() )
         {
-            SvxDrawPage* pPage2 = SvxDrawPage::getImplementation( xPage );
+            SvxDrawPage* pPage2 = SvxDrawPage::getImplementation( mxUnoPage );
             if( pPage2 )
                 pPage2->ChangeModel( pNewModel );
         }
@@ -1729,27 +1734,19 @@ void SdrPage::SetInserted( FASTBOOL bIns )
 uno::Reference< uno::XInterface > SdrPage::getUnoPage()
 {
     // try weak reference first
-    uno::Reference< uno::XInterface > xPage( mxUnoPage );
-
-    if( !xPage.is() )
+    if( !mxUnoPage.is() )
     {
         // create one
-        xPage = createUnoPage();
-
-        mxUnoPage = xPage;
+        mxUnoPage = createUnoPage();
     }
 
-    return xPage;
+    return mxUnoPage;
 }
 
 uno::Reference< uno::XInterface > SdrPage::createUnoPage()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInt =
-#ifndef SVX_LIGHT
         static_cast<cppu::OWeakObject*>( new SvxFmDrawPage( this ) );
-#else
-        static_cast<cppu::OWeakObject*>( new SvxDrawPage( this ) );
-#endif
     return xInt;
 }
 
