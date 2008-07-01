@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawshape.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,7 +101,7 @@ namespace slideshow
             //get the chart model
             uno::Reference< beans::XPropertySet > xPropSet( xSource, uno::UNO_QUERY );
             uno::Reference< frame::XModel > xChartModel;
-            getPropertyValue( xChartModel, xPropSet, OUSTR("XModel"));
+            getPropertyValue( xChartModel, xPropSet, OUSTR("Model"));
             uno::Reference< lang::XMultiServiceFactory > xFact( xChartModel, uno::UNO_QUERY );
             OSL_ENSURE( xFact.is(), "Chart cannot be painted pretty!\n" );
             if(!xFact.is())
@@ -207,9 +207,9 @@ namespace slideshow
                   const uno::Reference< uno::XComponentContext >& rxContext )
         {
             uno::Reference<beans::XPropertySet> xProp( xSource, uno::UNO_QUERY );
-            sal_Bool bIsChart = sal_False;
-            getPropertyValue( bIsChart, xProp, OUSTR("IsChart"));
-            if( bIsChart && local_getMetafileForChart( xSource, xContainingPage, rMtf ) )
+            rtl::OUString sCLSID;
+            getPropertyValue( sCLSID, xProp, OUSTR("CLSID"));
+            if( sCLSID.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("12DCAE26-281F-416F-a234-c3086127382e")) && local_getMetafileForChart( xSource, xContainingPage, rMtf ) )
                 return true;
             return getMetaFile( xSource, xContainingPage, rMtf, mtfLoadFlags, rxContext );
         }
