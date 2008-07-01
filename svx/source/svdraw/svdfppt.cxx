@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdfppt.cxx,v $
- * $Revision: 1.162 $
+ * $Revision: 1.163 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2976,7 +2976,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                                 if ( pObj )
                                                 {
                                                     if ( aProcessData.pTableRowProperties )
-                                                        pObj = CreateTable( pObj, aProcessData.pTableRowProperties );
+                                                        pObj = CreateTable( pObj, aProcessData.pTableRowProperties, aProcessData.rPersistEntry.pSolverContainer );
 
                                                     pRet->NbcInsertObject( pObj );
 
@@ -7475,7 +7475,7 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
     }
 }
 
-SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTableArry ) const
+SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTableArry, SvxMSDffSolverContainer* pSolverContainer ) const
 {
     SdrObject* pRet = pGroup;
     sal_uInt32 nRows = pTableArry[ 1 ];
@@ -7545,6 +7545,24 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                         std::vector< sal_Int32 > vPositions;    // containing cell indexes + cell position
                         GetLinePositions( pObj, aRows, aColumns, vPositions, pGroup->GetSnapRect() );
                         ApplyCellLineAttributes( pObj, xTable, vPositions, aColumns.size() );
+                    }
+                }
+                // we are replacing the whole group object by a single table object, so
+                // possibly connections to the group object have to be removed.
+                if ( pSolverContainer )
+                {
+                    for ( SvxMSDffConnectorRule* pPtr = (SvxMSDffConnectorRule*)pSolverContainer->aCList.First();
+                        pPtr; pPtr = (SvxMSDffConnectorRule*)pSolverContainer->aCList.Next() )
+                    {
+                        SdrObjListIter aIter( *pGroup, IM_DEEPWITHGROUPS );
+                        while( aIter.IsMore() )
+                        {
+                            SdrObject* pPartObj = aIter.Next();
+                            if ( pPtr->pAObj == pPartObj )
+                                pPtr->pAObj = NULL;
+                            if ( pPtr->pBObj == pPartObj )
+                                pPtr->pBObj = NULL;
+                        }
                     }
                 }
                 SdrObject::Free( pGroup );
