@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salmenu.h,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,7 +68,7 @@ public:
     const AquaSalFrame* getFrame() const;
 
     void setMainMenu();
-    void unsetMainMenu();
+    static void unsetMainMenu();
     static void setDefaultMenu();
     static void enableMainMenu( bool bEnable );
     static void addFallbackMenuItem( NSMenuItem* NewItem );
