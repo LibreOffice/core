@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pfuncache.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +46,8 @@ enum ScPrintSelectionMode
     SC_PRINTSEL_INVALID,
     SC_PRINTSEL_DOCUMENT,
     SC_PRINTSEL_CURSOR,
-    SC_PRINTSEL_RANGE
+    SC_PRINTSEL_RANGE,
+    SC_PRINTSEL_RANGE_EXCLUSIVELY_OLE_AND_DRAW_OBJECTS
 };
 
 
@@ -67,6 +68,8 @@ public:
 
     BOOL    operator==(const ScPrintSelectionStatus& rOther) const
             { return eMode == rOther.eMode && aRanges == rOther.aRanges; }
+
+    ScPrintSelectionMode GetMode() const { return eMode; }
 };
 
 
