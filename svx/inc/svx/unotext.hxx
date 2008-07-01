@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unotext.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
+#include <com/sun/star/text/XTextCopy.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <svtools/itemprop.hxx>
@@ -196,6 +197,7 @@ public:
     virtual SfxItemSet      GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib = 0 ) const;
     virtual SfxItemSet      GetParaAttribs( sal_uInt16 nPara ) const;
     virtual void            SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet );
+    virtual void            RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich );
     virtual void            GetPortions( sal_uInt16 nPara, SvUShorts& rList ) const;
 
     sal_uInt16              GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const;
@@ -236,6 +238,8 @@ public:
     // implementation functions for XParagraphAppend and XTextPortionAppend
     virtual void        AppendParagraph();
     virtual xub_StrLen  AppendTextPortion( USHORT nPara, const String &rText, const SfxItemSet &rSet );
+    //XTextCopy
+    virtual void        CopyText(const SvxTextForwarder& rSource);
 };
 
 namespace accessibility
@@ -384,6 +388,7 @@ public:
 
 class SVX_DLLPUBLIC SvxUnoTextBase  : public SvxUnoTextRangeBase,
                         public ::com::sun::star::text::XTextAppend,
+                        public ::com::sun::star::text::XTextCopy,
                         public ::com::sun::star::container::XEnumerationAccess,
                         public ::com::sun::star::text::XTextRangeMover,
                         public ::com::sun::star::lang::XTypeProvider
@@ -443,6 +448,9 @@ public:
 
     // com::sun::star::text::XTextPortionAppend (new import API)
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL appendTextPortion( const ::rtl::OUString& Text, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& CharacterAndParagraphProperties ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+
+    // com::sun::star::text::XTextCopy
+    virtual void SAL_CALL copyText( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCopy >& xSource ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
