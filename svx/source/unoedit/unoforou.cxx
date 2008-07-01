@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoforou.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,7 @@
 
 #include <svx/unoforou.hxx>
 #include <svx/unofored.hxx>
+#include <svx/outlobj.hxx>
 
 using namespace ::com::sun::star;
 
@@ -191,6 +192,11 @@ void SvxOutlinerForwarder::SetParaAttribs( USHORT nPara, const SfxItemSet& rSet 
 
     if( pOldParent )
         ((SfxItemSet*)&rSet)->SetParent( pOldParent );
+}
+
+void SvxOutlinerForwarder::RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich )
+{
+    rOutliner.RemoveAttribs( rSelection, bRemoveParaAttribs, nWhich );
 }
 
 SfxItemPool* SvxOutlinerForwarder::GetPool() const
@@ -561,6 +567,16 @@ xub_StrLen SvxOutlinerForwarder::AppendTextPortion( USHORT nPara, const String &
     }
 
     return nLen;
+}
+
+void  SvxOutlinerForwarder::CopyText(const SvxTextForwarder& rSource)
+{
+    const SvxOutlinerForwarder* pSourceForwarder = dynamic_cast< const SvxOutlinerForwarder* >( &rSource );
+    if( !pSourceForwarder )
+        return;
+    OutlinerParaObject* pNewOutlinerParaObject = pSourceForwarder->rOutliner.CreateParaObject();
+    rOutliner.SetText( *pNewOutlinerParaObject );
+    delete pNewOutlinerParaObject;
 }
 
 //------------------------------------------------------------------------
