@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndtxt.hxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -200,6 +200,9 @@ public:
     void SetAutoCompleteWordDirty( bool bNew ) const;
     void SetWrong( SwWrongList* pNew, bool bDelete = true );
     SwWrongList* GetWrong();
+    // --> OD 2008-05-23 #i71360#
+    const SwWrongList* GetWrong() const;
+    // <--
     void SetGrammarCheck( SwWrongList* pNew, bool bDelete = true );
     SwWrongList* GetGrammarCheck();
     // SMARTTAGS
