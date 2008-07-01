@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: printfun.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -277,6 +277,8 @@ public:
     void            SetClearFlag( BOOL bFlag );
     void            SetUseStyleColor( BOOL bFlag );
     void            SetRenderFlag( BOOL bFlag );
+
+    void            SetExclusivelyDrawOleAndDrawObjects();//for printing selected objects without surrounding cell contents
 
     BOOL            UpdatePages();
 
