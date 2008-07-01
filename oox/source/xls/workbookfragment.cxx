@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: workbookfragment.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -315,7 +315,7 @@ void OoxWorkbookFragment::importDefinedName( const AttributeList& rAttribs )
 
 void OoxWorkbookFragment::importPivotCache( const AttributeList& rAttribs )
 {
-    OUString aFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ) ) );
+    OUString aFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
     if( (aFragmentPath.getLength() > 0) && rAttribs.hasAttribute( XML_cacheId ) )
     {
         sal_uInt32 nCacheId = rAttribs.getUnsignedInteger( XML_cacheId, 0 );
