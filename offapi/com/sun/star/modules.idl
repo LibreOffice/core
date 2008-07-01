@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: modules.idl,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -215,6 +215,46 @@ module xforms {};
 
 /// interfaces for report interfaces
 module report {};
+
+/** RDF (Resource Description Framework) and metadata interfaces.
+
+    <p>
+    This module provides interfaces for storing and accessing metadata
+    in <a href="http://www.w3.org/RDF/">Resource Description Framework</a>
+    format.
+    The API consists of two main parts: the RDF data model and the ODF
+    document integration.
+    </p>
+
+    <p>
+    The <a href="http://www.w3.org/TR/rdf-concepts/">RDF data model</a>
+    describes graphs of statements.
+    The nodes in the graph are of type <type scope="rdf">XNode</type>,
+    which has several subtypes: <type scope="rdf">XResource</type>,
+    <type scope="rdf">XBlankNode</type>,
+    <type scope="rdf">XURI</type> and <type scope="rdf">XLiteral</type>.
+    Statements are then triples of nodes, and have type
+    <type scope="rdf">Statement</type>.
+    </p>
+
+    <p>
+    The main part of the RDF data model is the
+    <type scope="rdf">XRepository</type>, which consists of a set of graphs.
+    The repository allows for importing/exporting graphs from/to files,
+    as well as querying the contents of the repository.
+    The type of the graphs is <type scope="rdf">XNamedGraph</type>.
+    </p>
+
+    <p>
+    Documents that support metadata implement the interfaces
+    <type scope="rdf">XRepositorySupplier</type> and
+    <type scope="rdf">XDocumentMetadataAccess</type>.
+    Furthermore, all elements of ODF documents that may have metadata attached
+    implement the interface <type scope="rdf">XMetadatable</type>.
+    </p>
+
+ */
+module rdf {};
 
 }; }; };
 
