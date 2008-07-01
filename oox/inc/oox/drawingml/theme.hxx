@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: theme.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,60 +31,78 @@
 #ifndef OOX_DRAWINGML_THEME_HXX
 #define OOX_DRAWINGML_THEME_HXX
 
-#include <boost/shared_ptr.hpp>
-#include "oox/helper/propertymap.hxx"
-#include "oox/drawingml/lineproperties.hxx"
-#include "oox/drawingml/fillproperties.hxx"
-#include <oox/drawingml/clrscheme.hxx>
-#include <map>
+#include "oox/helper/containerhelper.hxx"
+#include "oox/drawingml/clrscheme.hxx"
+#include "oox/drawingml/shape.hxx"
 
-namespace oox { namespace drawingml {
+namespace oox {
+namespace drawingml {
 
-class Shape;
+// ============================================================================
 
-typedef boost::shared_ptr< Shape > ShapePtr;
+const sal_Int32 THEMED_INDEX_SUBTLE     = 0;
+const sal_Int32 THEMED_INDEX_MODERATE   = 1;
+const sal_Int32 THEMED_INDEX_INTENSE    = 2;
+
+typedef RefVector< FillProperties >     FillStyleList;
+typedef RefVector< LineProperties >     LineStyleList;
+typedef RefVector< PropertyMap >        EffectStyleList;
+
+// ============================================================================
 
 class Theme
 {
-
 public:
+    explicit            Theme();
+                        ~Theme();
 
-    Theme();
-    ~Theme();
+    inline void                     setStyleName( const ::rtl::OUString& rStyleName ) { maStyleName = rStyleName; }
+    inline const ::rtl::OUString&   getStyleName() const { return maStyleName; }
 
-    oox::drawingml::ClrSchemePtr            getClrScheme() const { return mpClrSchemePtr; };
+    inline ClrScheme&               getClrScheme() { return maClrScheme; }
+    inline const ClrScheme&         getClrScheme() const { return maClrScheme; }
 
-    rtl::OUString&                          getStyleName() { return maStyleName; };
-    const rtl::OUString&                    getStyleName() const { return maStyleName; };
-    std::vector< FillPropertiesPtr >&       getFillStyleList() { return maFillStyleList; };
-    const std::vector< FillPropertiesPtr >& getFillStyleList() const { return maFillStyleList; };
-    std::vector< LinePropertiesPtr >&       getLineStyleList() { return maLineStyleList; };
-    const std::vector< LinePropertiesPtr >& getLineStyleList() const { return maLineStyleList; };
-    std::vector< PropertyMap >&             getEffectStyleList() { return maEffectStyleList; };
-    const std::vector< PropertyMap >&       getEffectStyleList() const { return maEffectStyleList; };
-    std::vector< FillPropertiesPtr >&       getBgFillStyleList() { return maBgFillStyleList; };
-    const std::vector< FillPropertiesPtr >& getBgFillStyleList() const { return maBgFillStyleList; };
+    inline FillStyleList&           getFillStyleList() { return maFillStyleList; }
+    inline const FillStyleList&     getFillStyleList() const { return maFillStyleList; }
+    inline const FillProperties*    getFillStyle( sal_Int32 nIndex ) const { return maFillStyleList.get( nIndex ).get(); }
 
-    ShapePtr                                getspDef() const { return mpspDefPtr; };
-    ShapePtr                                getlnDef() const { return mplnDefPtr; };
-    ShapePtr                                gettxDef() const { return mptxDefPtr; };
+    inline LineStyleList&           getLineStyleList() { return maLineStyleList; }
+    inline const LineStyleList&     getLineStyleList() const { return maLineStyleList; }
+    inline const LineProperties*    getLineStyle( sal_Int32 nIndex ) const { return maLineStyleList.get( nIndex ).get(); }
+
+    inline EffectStyleList&         getEffectStyleList() { return maEffectStyleList; }
+    inline const EffectStyleList&   getEffectStyleList() const { return maEffectStyleList; }
+    inline const PropertyMap*       getEffectStyle( sal_Int32 nIndex ) const { return maEffectStyleList.get( nIndex ).get(); }
+
+    inline FillStyleList&           getBgFillStyleList() { return maBgFillStyleList; }
+    inline const FillStyleList&     getBgFillStyleList() const { return maBgFillStyleList; }
+    inline const FillProperties*    getBgFillStyle( sal_Int32 nIndex ) const { return maBgFillStyleList.get( nIndex ).get(); }
+
+    inline Shape&                   getSpDef() { return maSpDef; }
+    inline const Shape&             getSpDef() const { return maSpDef; }
+
+    inline Shape&                   getLnDef() { return maLnDef; }
+    inline const Shape&             getLnDef() const { return maLnDef; }
+
+    inline Shape&                   getTxDef() { return maTxDef; }
+    inline const Shape&             getTxDef() const { return maTxDef; }
 
 private:
-
-    rtl::OUString                           maStyleName;
-    std::vector< FillPropertiesPtr >        maFillStyleList;
-    std::vector< LinePropertiesPtr >        maLineStyleList;
-    std::vector< PropertyMap >              maEffectStyleList;
-    std::vector< FillPropertiesPtr >        maBgFillStyleList;
-
-    ClrSchemePtr                            mpClrSchemePtr;
-    ShapePtr                                mpspDefPtr;
-    ShapePtr                                mplnDefPtr;
-    ShapePtr                                mptxDefPtr;
+    ::rtl::OUString     maStyleName;
+    ClrScheme           maClrScheme;
+    FillStyleList       maFillStyleList;
+    LineStyleList       maLineStyleList;
+    EffectStyleList     maEffectStyleList;
+    FillStyleList       maBgFillStyleList;
+    Shape               maSpDef;
+    Shape               maLnDef;
+    Shape               maTxDef;
 };
 
-typedef boost::shared_ptr< Theme > ThemePtr;
+// ============================================================================
 
-} }
+} // namespace drawingml
+} // namespace oox
 
-#endif  //  OOX_DRAWINGML_THEME_HXX
+#endif
+
