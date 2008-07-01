@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.47 $
+# $Revision: 1.48 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -239,6 +239,7 @@ IDLFILES=\
       XTextColumns.idl\
       XTextContent.idl\
       XTextCursor.idl\
+    XTextCopy.idl\
       XTextDocument.idl\
       XTextEmbeddedObject.idl\
       XTextEmbeddedObjectsSupplier.idl\
