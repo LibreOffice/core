@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accportions.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -245,30 +245,30 @@ void SwAccessiblePortionData::Finish()
 
 
 sal_Bool SwAccessiblePortionData::IsPortionAttrSet(
-    size_t nPortionNo, sal_uInt8 nAttr )
+    size_t nPortionNo, sal_uInt8 nAttr ) const
 {
     DBG_ASSERT( nPortionNo < aPortionAttrs.size(),
                 "Illegal portion number" );
     return (aPortionAttrs[nPortionNo] & nAttr) != 0;
 }
 
-sal_Bool SwAccessiblePortionData::IsSpecialPortion( size_t nPortionNo )
+sal_Bool SwAccessiblePortionData::IsSpecialPortion( size_t nPortionNo ) const
 {
     return IsPortionAttrSet(nPortionNo, PORATTR_SPECIAL);
 }
 
-sal_Bool SwAccessiblePortionData::IsReadOnlyPortion( size_t nPortionNo )
+sal_Bool SwAccessiblePortionData::IsReadOnlyPortion( size_t nPortionNo ) const
 {
     return IsPortionAttrSet(nPortionNo, PORATTR_READONLY);
 }
 
-sal_Bool SwAccessiblePortionData::IsGrayPortion( size_t nPortionNo )
+sal_Bool SwAccessiblePortionData::IsGrayPortion( size_t nPortionNo ) const
 {
     return IsPortionAttrSet(nPortionNo, PORATTR_GRAY);
 }
 
 
-sal_Bool SwAccessiblePortionData::IsGrayPortionType( USHORT nType )
+sal_Bool SwAccessiblePortionData::IsGrayPortionType( USHORT nType ) const
 {
     // gray portions?
     // Compare with: inftxt.cxx, SwTxtPaintInfo::DrawViewOpt(...)
@@ -298,7 +298,7 @@ sal_Bool SwAccessiblePortionData::IsGrayPortionType( USHORT nType )
 }
 
 
-const OUString& SwAccessiblePortionData::GetAccessibleString()
+const OUString& SwAccessiblePortionData::GetAccessibleString() const
 {
     DBG_ASSERT( bFinished, "Shouldn't call this before we are done!" );
 
@@ -308,14 +308,49 @@ const OUString& SwAccessiblePortionData::GetAccessibleString()
 
 void SwAccessiblePortionData::GetLineBoundary(
     Boundary& rBound,
-    sal_Int32 nPos )
+    sal_Int32 nPos ) const
 {
     FillBoundary( rBound, aLineBreaks,
                   FindBreak( aLineBreaks, nPos ) );
 }
 
+// --> OD 2008-05-30 #i89175#
+sal_Int32 SwAccessiblePortionData::GetLineCount() const
+{
+    size_t nBreaks = aLineBreaks.size();
+    // A non-empty paragraph has at least 4 breaks: one for each line3 and
+    // 3 additional ones.
+    // An empty paragraph has 3 breaks.
+    // Less than 3 breaks is an error case.
+    sal_Int32 nLineCount = ( nBreaks > 3 )
+                           ? nBreaks - 3
+                           : ( ( nBreaks == 3 ) ? 1 : 0 );
+    return nLineCount;
+}
+
+sal_Int32 SwAccessiblePortionData::GetLineNo( const sal_Int32 nPos ) const
+{
+    sal_Int32 nLineNo = FindBreak( aLineBreaks, nPos );
+
+    // handling of position after last character
+    const sal_Int32 nLineCount( GetLineCount() );
+    if ( nLineNo >= nLineCount )
+    {
+        nLineNo = nLineCount - 1;
+    }
+
+    return nLineNo;
+}
+
+void SwAccessiblePortionData::GetBoundaryOfLine( const sal_Int32 nLineNo,
+                                                 i18n::Boundary& rLineBound )
+{
+    FillBoundary( rLineBound, aLineBreaks, nLineNo );
+}
+// <--
+
 void SwAccessiblePortionData::GetLastLineBoundary(
-    Boundary& rBound )
+    Boundary& rBound ) const
 {
     DBG_ASSERT( aLineBreaks.size() >= 2, "need min + max value" );
 
@@ -325,7 +360,7 @@ void SwAccessiblePortionData::GetLastLineBoundary(
     FillBoundary( rBound, aLineBreaks, nBreaks <= 3 ? 0 : nBreaks-4 );
 }
 
-USHORT SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos )
+USHORT SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos ) const
 {
     DBG_ASSERT( nPos >= 0, "illegal position" );
     DBG_ASSERT( nPos <= sAccessibleString.getLength(), "illegal position" );
@@ -359,7 +394,7 @@ USHORT SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos )
 void SwAccessiblePortionData::FillBoundary(
     Boundary& rBound,
     const Positions_t& rPositions,
-    size_t nPos )
+    size_t nPos ) const
 {
     rBound.startPos = rPositions[nPos];
     rBound.endPos = rPositions[nPos+1];
@@ -368,7 +403,7 @@ void SwAccessiblePortionData::FillBoundary(
 
 size_t SwAccessiblePortionData::FindBreak(
     const Positions_t& rPositions,
-    sal_Int32 nValue )
+    sal_Int32 nValue ) const
 {
     DBG_ASSERT( rPositions.size() >= 2, "need min + max value" );
     DBG_ASSERT( rPositions[0] <= nValue, "need min value" );
@@ -425,7 +460,7 @@ size_t SwAccessiblePortionData::FindBreak(
 
 size_t SwAccessiblePortionData::FindLastBreak(
     const Positions_t& rPositions,
-    sal_Int32 nValue )
+    sal_Int32 nValue ) const
 {
     size_t nResult = FindBreak( rPositions, nValue );
 
@@ -501,7 +536,7 @@ void SwAccessiblePortionData::GetSentenceBoundary(
 
 void SwAccessiblePortionData::GetAttributeBoundary(
     Boundary& rBound,
-    sal_Int32 nPos)
+    sal_Int32 nPos) const
 {
     DBG_ASSERT( pTxtNode != NULL, "Need SwTxtNode!" );
 
@@ -511,7 +546,7 @@ void SwAccessiblePortionData::GetAttributeBoundary(
 }
 
 
-sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( USHORT nPos )
+sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( USHORT nPos ) const
 {
     DBG_ASSERT( nPos <= pTxtNode->GetTxt().Len(), "illegal position" );
 
@@ -549,7 +584,7 @@ sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( USHORT nPos )
 USHORT SwAccessiblePortionData::FillSpecialPos(
     sal_Int32 nPos,
     SwSpecialPos& rPos,
-    SwSpecialPos*& rpPos )
+    SwSpecialPos*& rpPos ) const
 {
     size_t nPortionNo = FindLastBreak( aAccessiblePositions, nPos );
 
@@ -646,7 +681,7 @@ void SwAccessiblePortionData::AdjustAndCheck(
     sal_Int32 nPos,
     size_t& nPortionNo,
     USHORT& nCorePos,
-    sal_Bool& bEdit)
+    sal_Bool& bEdit) const
 {
     // find portion and get mode position
     nPortionNo = FindBreak( aAccessiblePositions, nPos );
@@ -663,7 +698,7 @@ void SwAccessiblePortionData::AdjustAndCheck(
 
 sal_Bool SwAccessiblePortionData::GetEditableRange(
     sal_Int32 nStart, sal_Int32 nEnd,
-    USHORT& nCoreStart, USHORT& nCoreEnd )
+    USHORT& nCoreStart, USHORT& nCoreEnd ) const
 {
     sal_Bool bIsEditable = sal_True;
 
@@ -698,19 +733,19 @@ sal_Bool SwAccessiblePortionData::GetEditableRange(
     return bIsEditable;
 }
 
-sal_Bool SwAccessiblePortionData::IsValidCorePosition( USHORT nPos )
+sal_Bool SwAccessiblePortionData::IsValidCorePosition( USHORT nPos ) const
 {
     // a position is valid its within the model positions that we know
     return ( aModelPositions[0] <= nPos ) &&
            ( nPos <= aModelPositions[ aModelPositions.size()-1 ] );
 }
 
-USHORT SwAccessiblePortionData::GetFirstValidCorePosition()
+USHORT SwAccessiblePortionData::GetFirstValidCorePosition() const
 {
     return static_cast<USHORT>( aModelPositions[0] );
 }
 
-USHORT SwAccessiblePortionData::GetLastValidCorePosition()
+USHORT SwAccessiblePortionData::GetLastValidCorePosition() const
 {
     return static_cast<USHORT>( aModelPositions[ aModelPositions.size()-1 ] );
 }
