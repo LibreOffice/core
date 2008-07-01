@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlexp.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -566,6 +566,14 @@ public:
 
     /// returns the currently configured default version for odf export
     SvtSaveOptions::ODFDefaultVersion getDefaultVersion() const;
+
+    /// relative path of stream in package, e.g. "someobject/content.xml"
+    ::rtl::OUString GetStreamPath() const;
+
+    /// add xml:id attribute (for RDF metadata)
+    void AddAttributeXmlId(::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XInterface> const & i_xIfc);
+
 };
 
 inline UniReference< XMLTextParagraphExport > SvXMLExport::GetTextParagraphExport()
