@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eppt.hxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -259,6 +259,7 @@ class FontCollection : private List
                     FontCollection();
                     ~FontCollection();
 
+        short       GetScriptDirection( const String& rText ) const;
         sal_uInt32  GetId( FontCollectionEntry& rFontDescriptor );
         sal_uInt32  GetCount() const { return List::Count(); };
         const FontCollectionEntry*                      GetById( sal_uInt32 nId );
