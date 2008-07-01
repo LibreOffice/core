@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoshprp.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -192,7 +192,9 @@
 
 #define OWN_ATTR_STYLE                          (OWN_ATTR_VALUE_START+87)
 
-#define OWN_ATTR_VALUE_END                      OWN_ATTR_STYLE // WARNING: ee items start at 3991!
+#define OWN_ATTR_EDGE_POLYPOLYGONBEZIER         (OWN_ATTR_VALUE_START+88)
+
+#define OWN_ATTR_VALUE_END                      OWN_ATTR_EDGE_POLYPOLYGONBEZIER // WARNING: ee items start at 3991!
 
 // #FontWork#
 #define FONTWORK_PROPERTIES \
@@ -365,7 +367,9 @@
     { MAP_CHAR_LEN("EdgeStartConnection"),      OWN_ATTR_EDGE_START_OBJ,    &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >*)0),        ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,   0}, \
     { MAP_CHAR_LEN("EdgeStartPoint"),           OWN_ATTR_EDGE_START_POS,    &::getCppuType((const ::com::sun::star::awt::Point*)0),     ::com::sun::star::beans::PropertyAttribute::READONLY,    0}, \
     { MAP_CHAR_LEN("EdgeEndConnection"),        OWN_ATTR_EDGE_END_OBJ,      &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>*)0),     ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,   0}, \
-    { MAP_CHAR_LEN("EdgeEndPoint"),             OWN_ATTR_EDGE_END_POS,      &::getCppuType((const ::com::sun::star::awt::Point*)0),     ::com::sun::star::beans::PropertyAttribute::READONLY,    0},
+    { MAP_CHAR_LEN("EdgeEndPoint"),             OWN_ATTR_EDGE_END_POS,      &::getCppuType((const ::com::sun::star::awt::Point*)0),     ::com::sun::star::beans::PropertyAttribute::READONLY,    0}, \
+\
+    { MAP_CHAR_LEN(UNO_NAME_POLYPOLYGONBEZIER), OWN_ATTR_EDGE_POLYPOLYGONBEZIER,    &::getCppuType((const ::com::sun::star::drawing::PolyPolygonBezierCoords*)0),       0,  0},
 
 #define SPECIAL_DIMENSIONING_PROPERTIES_DEFAULTS \
     { MAP_CHAR_LEN(UNO_NAME_MEASUREBELOWREFEDGE),       SDRATTR_MEASUREBELOWREFEDGE,        &::getBooleanCppuType(),        0,  0}, \
