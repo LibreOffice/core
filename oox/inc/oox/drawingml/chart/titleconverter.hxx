@@ -8,7 +8,7 @@
  *
  * $RCSfile: titleconverter.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,7 +73,7 @@ public:
     virtual             ~TitleConverter();
 
     /** Creates a title text object and attaches it at the passed interface. */
-    void                convertModelToDocument(
+    void                convertFromModel(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitled >& rxTitled,
                             const ::rtl::OUString& rAutoTitle );
 };
@@ -89,7 +89,7 @@ public:
     virtual             ~LegendConverter();
 
     /** Creates a legend object and attaches it at the passed diagram. */
-    void                convertModelToDocument(
+    void                convertFromModel(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& rxDiagram );
 };
 
