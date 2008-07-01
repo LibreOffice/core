@@ -8,7 +8,7 @@
  *
  * $RCSfile: dpcachetable.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,6 +67,8 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::sheet::DataPilotFieldFilter;
+
+const double D_TIMEFACTOR = 86400.0;
 
 static BOOL lcl_HasQueryEntry( const ScQueryParam& rParam )
 {
@@ -422,8 +424,32 @@ void lcl_GetCellValue(const Reference<sdbc::XRow>& xRow, sal_Int32 nType, long n
             }
             break;
 
-                //! case sdbc::DataType::TIME:
-                //! case sdbc::DataType::TIMESTAMP:
+            case sdbc::DataType::TIME:
+            {
+                nNumType = NUMBERFORMAT_TIME;
+
+                util::Time aTime = xRow->getTime(nCol);
+                rCell.mfValue = ( aTime.Hours * 3600 + aTime.Minutes * 60 +
+                                  aTime.Seconds + aTime.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
+                bEmptyFlag = xRow->wasNull();
+                rCell.mbNumeric = true;
+                rCell.mnType = SC_VALTYPE_VALUE;
+            }
+            break;
+
+            case sdbc::DataType::TIMESTAMP:
+            {
+                nNumType = NUMBERFORMAT_DATETIME;
+
+                util::DateTime aStamp = xRow->getTimestamp(nCol);
+                rCell.mfValue = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) - rNullDate ) +
+                                ( aStamp.Hours * 3600 + aStamp.Minutes * 60 +
+                                  aStamp.Seconds + aStamp.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
+                bEmptyFlag = xRow->wasNull();
+                rCell.mbNumeric = true;
+                rCell.mnType = SC_VALTYPE_VALUE;
+            }
+            break;
 
             case sdbc::DataType::SQLNULL:
             case sdbc::DataType::BINARY:
