@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unopage.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -133,6 +133,7 @@ SvxDrawPage::~SvxDrawPage() throw()
 // XInterface
 void SvxDrawPage::release() throw()
 {
+/*
     uno::Reference< uno::XInterface > x( xDelegator );
     if (! x.is())
     {
@@ -160,6 +161,7 @@ void SvxDrawPage::release() throw()
         // restore the reference count
         osl_incrementInterlockedCount( &m_refCount );
     }
+*/
     OWeakAggObject::release();
 }
 
@@ -187,7 +189,10 @@ void SvxDrawPage::disposing() throw()
     mpPage = 0;
 }
 
+//----------------------------------------------------------------------
 // XComponent
+//----------------------------------------------------------------------
+
 void SvxDrawPage::dispose()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -242,7 +247,8 @@ void SvxDrawPage::dispose()
 
 }
 
-// XComponent
+//----------------------------------------------------------------------
+
 void SAL_CALL SvxDrawPage::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
@@ -253,7 +259,8 @@ void SAL_CALL SvxDrawPage::addEventListener( const ::com::sun::star::uno::Refere
     mrBHelper.addListener( ::getCppuType( &aListener ) , aListener );
 }
 
-// XComponent
+//----------------------------------------------------------------------
+
 void SAL_CALL SvxDrawPage::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
@@ -264,49 +271,35 @@ void SAL_CALL SvxDrawPage::removeEventListener( const ::com::sun::star::uno::Ref
     mrBHelper.removeListener( ::getCppuType( &aListener ) , aListener );
 }
 
-// SfxListener
-
 //----------------------------------------------------------------------
-void SvxDrawPage::Notify( SfxBroadcaster&, const SfxHint& rHint )
+// SfxListener
+//----------------------------------------------------------------------
+
+void SvxDrawPage::Notify( SfxBroadcaster&, const SfxHint& /*rHint*/ )
 {
+/*
     if( mpModel )
     {
         const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
-
-        sal_Bool bInvalid = sal_False;
-
         if( pSdrHint )
         {
             switch( pSdrHint->GetKind() )
             {
             case HINT_MODELCLEARED:
-                bInvalid = sal_True;
-                break;
-            case HINT_PAGEORDERCHG:
-                {
-                    const SdrPage* pPg=pSdrHint->GetPage();
-                    if( pPg == mpPage ) // own page?
-                    {
-                        if(!pPg->IsInserted()) // page removed?
-                            bInvalid = sal_True;
-                    }
-                }
+                dispose();
                 break;
             default:
                 break;
             }
         }
-
-        if( bInvalid )
-        {
-            dispose();
-        }
     }
+*/
 }
 
-// ::com::sun::star::drawing::XShapes
-
 //----------------------------------------------------------------------
+// ::com::sun::star::drawing::XShapes
+//----------------------------------------------------------------------
+
 void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape )
     throw( uno::RuntimeException )
 {
@@ -376,9 +369,10 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
         mpModel->SetChanged();
 }
 
-// ::com::sun::star::container::XIndexAccess
-
 //----------------------------------------------------------------------
+// ::com::sun::star::container::XIndexAccess
+//----------------------------------------------------------------------
+
 sal_Int32 SAL_CALL SvxDrawPage::getCount()
     throw( uno::RuntimeException )
 {
@@ -411,9 +405,10 @@ uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
 }
 
 
-// ::com::sun::star::container::XElementAccess
-
 //----------------------------------------------------------------------
+// ::com::sun::star::container::XElementAccess
+//----------------------------------------------------------------------
+
 uno::Type SAL_CALL SvxDrawPage::getElementType()
     throw( uno::RuntimeException )
 {
