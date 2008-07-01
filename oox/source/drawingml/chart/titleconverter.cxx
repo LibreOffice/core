@@ -8,7 +8,7 @@
  *
  * $RCSfile: titleconverter.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 #include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
+#include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/chart/datasourceconverter.hxx"
 #include "oox/drawingml/chart/titlemodel.hxx"
 
@@ -141,7 +142,7 @@ TitleConverter::~TitleConverter()
 {
 }
 
-void TitleConverter::convertModelToDocument( const Reference< XTitled >& rxTitled, const ::rtl::OUString& rAutoTitle )
+void TitleConverter::convertFromModel( const Reference< XTitled >& rxTitled, const ::rtl::OUString& rAutoTitle )
 {
     if( rxTitled.is() )
     {
@@ -172,7 +173,7 @@ LegendConverter::~LegendConverter()
 {
 }
 
-void LegendConverter::convertModelToDocument( const Reference< XDiagram >& rxDiagram )
+void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
 {
     if( rxDiagram.is() ) try
     {
