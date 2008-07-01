@@ -9,7 +9,7 @@
  *
  * $RCSfile: resourcestools.xsl,v $
  *
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,7 +105,7 @@
  *
  * $RCSfile: resourcestools.xsl,v $
  *
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -647,7 +647,6 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
       Chooses the action for the current <action> element.
   -->
   <xsl:template name="chooseaction">
-<!--
     <xsl:if test="@tokenid">
       <xsl:text>
         if (sal::static_int_cast&lt;Id&gt;(getId()) == </xsl:text>
@@ -657,7 +656,6 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
       <xsl:text>)
       {</xsl:text>
     </xsl:if>
--->
     <xsl:for-each select="./cond">
       <xsl:text>
     {
@@ -782,7 +780,7 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
           <xsl:text>
     sendProperty(</xsl:text>
         <xsl:call-template name="idtoqname">
-          <xsl:with-param name="id" select="@tokenid"/>
+          <xsl:with-param name="id" select="@sendtokenid"/>
         </xsl:call-template>
         <xsl:text>);</xsl:text>
         </xsl:when>
@@ -793,7 +791,7 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
           <xsl:text>
     propagateCharacterPropertiesAsSet(</xsl:text>
     <xsl:call-template name="idtoqname">
-      <xsl:with-param name="id" select="@tokenid"/>
+      <xsl:with-param name="id" select="@sendtokenid"/>
     </xsl:call-template>
     <xsl:text>);</xsl:text>
         </xsl:when>
@@ -836,7 +834,7 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
           <xsl:text>
     OOXMLFastHelper&lt;OOXMLIntegerValue&gt;::mark(this, </xsl:text>
     <xsl:call-template name="idtoqname">
-      <xsl:with-param name="id" select="@tokenid"/>
+      <xsl:with-param name="id" select="@sendtokenid"/>
     </xsl:call-template>
     <xsl:text>, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("</xsl:text>
     <xsl:value-of select="@value"/>
@@ -856,12 +854,10 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
         }
     }</xsl:text>
     </xsl:for-each>
-<!--
     <xsl:if test="@tokenid">
       <xsl:text>
     }</xsl:text>
     </xsl:if>
--->
   </xsl:template>
 
   <!-- 
@@ -1071,7 +1067,7 @@ extern rtl::OUString </xsl:text>
     </xsl:for-each>
   </xsl:template>
 
-  <xsl:key name="tokenids" match="@tokenid" use="."/>
+  <xsl:key name="tokenids" match="@tokenid|@sendtokenid" use="."/>
 
   <!--
       Generates contant definitions for tokenids.
@@ -1080,7 +1076,7 @@ extern rtl::OUString </xsl:text>
     <xsl:text>
 namespace NS_ooxml
 {</xsl:text>
-<xsl:for-each select="//@tokenid">
+<xsl:for-each select="//@tokenid|//@sendtokenid">
   <xsl:if test="contains(., 'ooxml:') and generate-id(.) = generate-id(key('tokenids', .)[1])">
     <xsl:text>
     const Id LN_</xsl:text>
@@ -1657,7 +1653,7 @@ uno::Reference &lt; xml::sax::XFastParser &gt; OOXMLStreamImpl::getFastParser()
       <xsl:call-template name="contextresource"/>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="$resource = 'Properties' or $resource = 'Stream' or $resource='XNote'" >
+      <xsl:when test="$resource = 'Properties' or $resource = 'Stream' or $resource='XNote' or $resource='Shape'" >
         <xsl:call-template name="fastattributesproperties"/>
       </xsl:when>
       <xsl:when test="$resource = 'StringValue'">
@@ -1732,7 +1728,7 @@ uno::Reference &lt; xml::sax::XFastParser &gt; OOXMLStreamImpl::getFastParser()
     <xsl:variable name="resource">
       <xsl:call-template name="contextresource"/>
     </xsl:variable>
-    <xsl:if test="not($resource='Shape')">
+    <!--<xsl:if test="not($resource='Shape')"> -->
       <xsl:variable name="body">
         <xsl:call-template name="fastattributebody"/>
       </xsl:variable>
@@ -1757,7 +1753,7 @@ void </xsl:text>
 }
 </xsl:text>
       </xsl:if>
-    </xsl:if>
+        <!-- </xsl:if> -->
   </xsl:template>
 
   <xsl:template name="fastelementcreatestatement">
