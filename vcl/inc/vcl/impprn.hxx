@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impprn.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,7 +113,32 @@ public:
     used by pull implementation to get the number of physical pages
     (that is how often PrintNextPage should be called)
     */
-    ULONG       GetPrintPageCount();
+    ULONG       GetPrintPageCount() const;
+
+    /**
+    used by pull implementation to get ranges of physical pages that
+    are to be printed on the same paper. If bIncludeOrientationChanges is true
+    then orientation changes will not break a page run; the implementation has
+    to rotate the page contents accordingly in that case.
+
+    The returned vector contains all pages indices beginning a new medium and additionally
+    the index that of the last page+1 (for convenience, so the length of a range
+    is always v[i+1] - v[i])
+
+    Example: 5 pages, all A4
+    return: [0 5]
+
+    Example: 6 pages, beginning A4, switching tol A5 on fourth page, back to A4 on fifth page
+    return [0 3 4 6]
+
+    returns an false in push model (error condition)
+    */
+    bool GetPaperRanges( std::vector< ULONG >& o_rRanges, bool i_bIncludeOrientationChanges ) const;
+
+    /**
+    get the jobsetup for a page
+    */
+    ImplJobSetup* GetPageSetup( unsigned int nPage ) const;
 };
 
 #endif  // _SV_IMPPRN_HXX
