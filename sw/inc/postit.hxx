@@ -8,7 +8,7 @@
  *
  * $RCSfile: postit.hxx,v $
  *
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -278,6 +278,7 @@ class SwPostIt : public Window
         void            HidePostIt();
         void            DoResize();
         void            ResizeIfNeccessary(long aOldHeight, long aNewHeight);
+        void            SetScrollbar();
 
         void            SetVirtualPosSize( const Point& aPoint, const Size& aSize);
         const Point     VirtualPos()    { return mPosSize.TopLeft(); }
@@ -309,6 +310,8 @@ class SwPostIt : public Window
         sal_Int32       GetScrollbarWidth();
 
         void            SetSpellChecking();
+
+        void            ToggleInsMode();
 
         void            SetChangeTracking(SwPostItHelper::SwLayoutStatus& aStatus,Color aColor);
         SwPostItHelper::SwLayoutStatus GetStatus() { return mStatus; }
