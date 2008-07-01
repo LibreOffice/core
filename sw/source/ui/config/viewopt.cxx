@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewopt.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -250,7 +250,6 @@ SwViewOption::SwViewOption() :
              bTest5 = bTest6 = bTest7 = bTest8 = bTest10 = FALSE;
 #endif
 }
-
 
 SwViewOption::SwViewOption(const SwViewOption& rVOpt)
 {
