@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframeview.h,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,8 +102,8 @@
 -(void)keyDown: (NSEvent*)pEvent;
 -(void)flagsChanged: (NSEvent*)pEvent;
 -(void)sendMouseEventToFrame:(NSEvent*)pEvent button:(USHORT)nButton eventtype:(USHORT)nEvent;
--(void)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode character: (sal_Unicode)aChar;
--(void)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode character: (sal_Unicode)aChar modifiers: (unsigned int)nMod;
+-(MacOSBOOL)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode character: (sal_Unicode)aChar;
+-(MacOSBOOL)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode character: (sal_Unicode)aChar modifiers: (unsigned int)nMod;
 -(MacOSBOOL)sendSingleCharacter:(NSEvent*)pEvent;
 -(MacOSBOOL)handleKeyDownException:(NSEvent*)pEvent;
 /*
