@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cgm.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,7 +70,6 @@ class CGM
         friend class CGMBitmap;
         friend class CGMElements;
         friend class CGMOutAct;
-        friend class CGMMetaOutAct;
         friend class CGMImpressOutAct;
 
         double              mnOutdx;                // Ausgabe Groesse in 1/100TH mm
@@ -159,24 +158,20 @@ class CGM
         void                ImplDoClass8();
         void                ImplDoClass9();
         void                ImplDoClass15();
-        void                ImplDoClass16();
 
     public:
 
-                            CGM( sal_uInt32 nMode );
                             ~CGM();
 
                             CGM( sal_uInt32 nMode, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel );
 #ifdef CGM_EXPORT_META
         VirtualDevice*      mpVirDev;
         GDIMetaFile*        mpGDIMetaFile;
-                            CGM( sal_uInt32 nMode, Graphic& rGraphic );
 #endif
         void                ImplComment( sal_uInt32, const char* );
         sal_uInt32              GetBackGroundColor();
         sal_Bool                IsValid() { return mbStatus; };
         sal_Bool                IsFinished() { return mbIsFinished; };
-        sal_Bool                Write( sal_uInt8* pSource );
         sal_Bool                Write( SvStream& rIStm );
 
         friend SvStream& operator>>( SvStream& rOStm, CGM& rCGM );
