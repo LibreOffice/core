@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtparai.cxx,v $
- * $Revision: 1.67 $
+ * $Revision: 1.68 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,9 +35,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 
-#ifndef _TOOLS_STRINGS_HXX
 #include <tools/string.hxx>
-#endif
 #include <svtools/svarray.hxx>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
@@ -47,6 +45,7 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/rdf/XMetadatable.hpp>
 
 
 #include <xmloff/xmlictxt.hxx>
@@ -54,23 +53,18 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmlnmspe.hxx"
-#ifndef _XMLOFF_TXTIMP_HXX
 #include <xmloff/txtimp.hxx>
-#endif
-#ifndef _XMLOFF_TXTPARAI_HXX
 #include "txtparai.hxx"
-#endif
 #include "txtfldi.hxx"
 #include <xmloff/xmluconv.hxx>
-#ifndef _XMLOFF_XMLFOOTNOTEIMPORTCONTEXT_HXX
 #include "XMLFootnoteImportContext.hxx"
-#endif
 #include "XMLTextMarkImportContext.hxx"
 #include "XMLTextFrameContext.hxx"
 #include <xmloff/XMLCharContext.hxx>
 #include "XMLTextFrameHyperlinkContext.hxx"
 #include <xmloff/XMLEventsImportContext.hxx>
 #include "XMLChangeImportContext.hxx"
+
 
 // OD 2004-04-21 #i26791#
 #include <txtparaimphint.hxx>
@@ -208,10 +202,11 @@ XMLStartReferenceContext_Impl::XMLStartReferenceContext_Impl(
         SvXMLImportContext(rImport, nPrefix, rLocalName)
 {
     OUString sName;
+    OUString dummy;
 
     // borrow FindName from XMLTextMarkImportContext, where bookmarks
     // and point references are handled.
-    if (XMLTextMarkImportContext::FindName(GetImport(), xAttrList, sName))
+    if (XMLTextMarkImportContext::FindName(GetImport(), xAttrList, sName, dummy))
     {
         XMLHint_Impl* pHint = new XMLReferenceHint_Impl(
             sName, rImport.GetTextImport()->GetCursor()->getStart() );
@@ -251,9 +246,10 @@ XMLEndReferenceContext_Impl::XMLEndReferenceContext_Impl(
         SvXMLImportContext(rImport, nPrefix, rLocalName)
 {
     OUString sName;
+    OUString dummy;
 
     // borrow from XMLTextMarkImportContext
-    if (XMLTextMarkImportContext::FindName(GetImport(), xAttrList, sName))
+    if (XMLTextMarkImportContext::FindName(GetImport(), xAttrList, sName, dummy))
     {
         // search for reference start
         sal_uInt16 nCount = rHints.Count();
@@ -669,6 +665,131 @@ SvXMLImportContext *XMLImpRubyContext_Impl::CreateChildContext(
                                                             xAttrList );
 
     return pContext;
+}
+
+// ---------------------------------------------------------------------
+
+/** text:meta and text:meta-field
+//FIXME neither finished nor tested
+ */
+class XMLMetaImportContext : public SvXMLImportContext
+{
+    XMLHints_Impl&    mrHints;
+//    XMLStyleHint_Impl    *pHint;
+
+    sal_Bool& mrIgnoreLeadingSpace;
+
+    /// start position
+    Reference<XTextRange> mxStart;
+
+    OUString mXmlId;
+
+public:
+    TYPEINFO();
+
+    XMLMetaImportContext(
+        SvXMLImport& i_rImport,
+        sal_uInt16 i_nPrefix,
+        const OUString& i_rLocalName,
+        const Reference< xml::sax::XAttributeList > & i_xAttrList,
+//        enum XMLTextPElemTokens nTok,
+        XMLHints_Impl& i_rHints,
+        sal_Bool & i_rIgnoreLeadingSpace );
+
+    virtual ~XMLMetaImportContext();
+
+    virtual void EndElement();
+
+    virtual SvXMLImportContext *CreateChildContext(
+            sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
+            const Reference< xml::sax::XAttributeList > & i_xAttrList );
+
+    virtual void Characters( const OUString& i_rChars );
+};
+
+TYPEINIT1( XMLMetaImportContext , SvXMLImportContext );
+
+XMLMetaImportContext::XMLMetaImportContext(
+        SvXMLImport& i_rImport,
+        sal_uInt16 i_nPrefix,
+        const OUString& i_rLocalName,
+        const Reference< xml::sax::XAttributeList > & i_xAttrList,
+        XMLHints_Impl& i_rHints,
+        sal_Bool & i_rIgnoreLeadingSpace )
+    :   SvXMLImportContext( i_rImport, i_nPrefix, i_rLocalName ),
+        mrHints( i_rHints ),
+        mrIgnoreLeadingSpace( i_rIgnoreLeadingSpace ),
+        mxStart()
+{
+//FIXME: RDFa (text:meta)
+    const sal_Int16 nAttrCount(i_xAttrList.is() ? i_xAttrList->getLength() : 0);
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        const OUString& rAttrName( i_xAttrList->getNameByIndex( i ) );
+        const OUString& rValue( i_xAttrList->getValueByIndex( i ) );
+
+        OUString sLocalName;
+        sal_uInt16 nPrefix =
+            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                                                            &sLocalName );
+// FIXME: only meta-field
+        if( XML_NAMESPACE_TEXT == nPrefix &&
+            IsXMLToken( sLocalName, XML_DATA_STYLE_NAME ) )
+        {
+//            pHint->SetStyleName( rValue );
+            break;
+        }
+        else if ( (XML_NAMESPACE_XML == nPrefix) &&
+             IsXMLToken(sLocalName, XML_ID)   )
+        {
+            mXmlId = rValue;
+        }
+    }
+    //FIXME meta-field xml:id mandatory
+    mxStart = GetImport().GetTextImport()->GetCursorAsRange()->getStart();
+}
+
+XMLMetaImportContext::~XMLMetaImportContext()
+{
+}
+
+void XMLMetaImportContext::EndElement()
+{
+    OSL_ENSURE(mxStart.is(), "no mxStart?");
+
+    Reference<XTextRange> xEndRange(
+        GetImport().GetTextImport()->GetCursorAsRange()->getStart() );
+
+    // create range for insertion
+    Reference<XTextCursor> xInsertionCursor(
+        GetImport().GetTextImport()->GetText()->createTextCursorByRange(
+            xEndRange) );
+    xInsertionCursor->gotoRange(mxStart, sal_True);
+
+    Reference<XTextRange> xInsertionRange(xInsertionCursor, UNO_QUERY);
+
+    OUString sName;
+//FIXME
+    // insert bookmark
+//    XMLTextMarkImportContext::CreateAndInsertMark
+}
+
+SvXMLImportContext * XMLMetaImportContext::CreateChildContext(
+            sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
+            const Reference< xml::sax::XAttributeList > & i_xAttrList )
+{
+    const SvXMLTokenMap& rTokenMap =
+        GetImport().GetTextImport()->GetTextPElemTokenMap();
+    sal_uInt16 nToken = rTokenMap.Get( i_nPrefix, i_rLocalName );
+
+    return XMLImpSpanContext_Impl::CreateChildContext( GetImport(), i_nPrefix,
+        i_rLocalName, i_xAttrList, nToken, mrHints, mrIgnoreLeadingSpace );
+}
+
+void XMLMetaImportContext::Characters( const OUString& i_rChars )
+{
+    //FIXME do we need to call ConvertStarFonts?
+    GetImport().GetTextImport()->InsertString( i_rChars, mrIgnoreLeadingSpace );
 }
 
 // ---------------------------------------------------------------------
@@ -1443,6 +1564,15 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
             sal_False);
         break;
 
+    case XML_TOK_TEXT_META:
+    case XML_TOK_TEXT_META_FIELD:
+// FIXME: should test before enabling...
+#if 0
+        pContext = new XMLMetaImportContext(rImport, nPrefix, rLocalName,
+            xAttrList, rHints, rIgnoreLeadingSpace );
+        break;
+#endif
+
     default:
         // none of the above? then it's probably  a text field!
         pContext =
@@ -1546,6 +1676,10 @@ XMLParaContext::XMLParaContext(
                                                             &aLocalName );
         switch( rTokenMap.Get( nPrefix, aLocalName ) )
         {
+//FIXME: RDFa
+        case XML_TOK_TEXT_P_XMLID:
+            sXmlId = rValue;
+            break;
         case XML_TOK_TEXT_P_STYLE_NAME:
             sStyleName = rValue;
             break;
@@ -1639,6 +1773,26 @@ XMLParaContext::~XMLParaContext()
     if( !xAttrCursor.is() )
         return; // Robust (defect file)
     xAttrCursor->gotoRange( xEnd, sal_True );
+
+    // xml:id for RDF metadata
+    if (sXmlId.getLength() > 0) {
+        try {
+            const uno::Reference<container::XEnumerationAccess> xEA
+                (xAttrCursor, uno::UNO_QUERY_THROW);
+            const uno::Reference<container::XEnumeration> xEnum(
+                xEA->createEnumeration(), uno::UNO_QUERY_THROW);
+            OSL_ENSURE(xEnum->hasMoreElements(), "xml:id: no paragraph?");
+            if (xEnum->hasMoreElements()) {
+                uno::Reference<rdf::XMetadatable> xMeta;
+                xEnum->nextElement() >>= xMeta;
+//FIXME not yet
+//                OSL_ENSURE(xMeta.is(), "xml:id: not XMetadatable");
+                GetImport().SetXmlId(xMeta, sXmlId);
+                OSL_ENSURE(!xEnum->hasMoreElements(), "xml:id: > 1 paragraph?");
+            }
+        } catch (uno::Exception &) {
+        }
+    }
 
     OUString sCellParaStyleName = xTxtImport->sCellParaStyleDefault;
     if( sCellParaStyleName.getLength() > 0 )
