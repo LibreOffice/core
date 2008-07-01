@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unotxdoc.cxx,v $
- * $Revision: 1.131 $
+ * $Revision: 1.132 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,7 +78,7 @@
 #include <unochart.hxx>
 #include <doc.hxx>
 #include <charatr.hxx>
-
+#include <svx/xmleohlp.hxx>
 
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
@@ -96,7 +96,7 @@
 #include <docstat.hxx>
 #ifndef _MODOPT_HXX //
 #include <modcfg.hxx>
- #endif
+#endif
 #include <ndtxt.hxx>
 #ifndef _UTLUI_HRC
 #include <utlui.hrc>
@@ -1756,6 +1756,10 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
             {
                 if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.Settings") ) )
                     xRet = Reference < XInterface > ( *new SwXDocumentSettings ( this ) );
+                if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver") ) )
+                {
+                    xRet = (::cppu::OWeakObject * )new SvXMLEmbeddedObjectHelper( *pDocShell, EMBEDDEDOBJECTHELPER_MODE_READ );
+                }
             }
             else if (sCategory == C2U ("text") )
             {
@@ -1769,6 +1773,7 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
                 if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.data.DataProvider") ) )
                     xRet = Reference < XInterface > ( dynamic_cast< chart2::data::XDataProvider * >(pDocShell->getIDocumentChartDataProviderAccess()->GetChartDataProvider()) );
             }
+
             if(!xRet.is())
             {
                 //! we don't want to insert OLE2 Shapes (e.g. "com.sun.star.drawing.OLE2Shape", ...)
