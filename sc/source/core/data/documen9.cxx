@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documen9.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
+#include <com/sun/star/chart2/data/XDataReceiver.hpp>
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -188,21 +189,26 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
 
                     if ( xIPObj.is() && SotExchange::IsChart( aObjectClassName ) )
                     {
-                        String aNewName = ((SdrOle2Obj*)pNewObject)->GetPersistName();
+                        String aChartName = ((SdrOle2Obj*)pNewObject)->GetPersistName();
 
-                        //! need to set new DataProvider, or does Chart handle this itself?
-
-                        ScRangeListRef aRanges( new ScRangeList );
-                        BOOL bColHeaders = FALSE;
-                        BOOL bRowHeaders = FALSE;
-                        GetOldChartParameters( aNewName, *aRanges, bColHeaders, bRowHeaders );
-                        if ( lcl_AdjustRanges( *aRanges, nSrcPos, nDestPos, GetTableCount() ) )
+                        uno::Reference< chart2::XChartDocument > xChartDoc( GetChartByName( aChartName ) );
+                        uno::Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
+                        if( xChartDoc.is() && xReceiver.is() )
                         {
-                            // orientation isn't changed by UpdateChartArea
-                            UpdateChartArea( aNewName, aRanges, bColHeaders, bRowHeaders, FALSE );
-                        }
+                            if( !xChartDoc->hasInternalDataProvider() )
+                            {
+                                ::std::vector< ScRangeList > aRangesVector;
+                                GetChartRanges( aChartName, aRangesVector, pSrcDoc );
 
-                        // update all charts, even if the ranges were not changed
+                                ::std::vector< ScRangeList >::iterator aIt( aRangesVector.begin() );
+                                for( ; aIt!=aRangesVector.end(); aIt++ )
+                                {
+                                    ScRangeList& rScRangeList( *aIt );
+                                    lcl_AdjustRanges( rScRangeList, nSrcPos, nDestPos, GetTableCount() );
+                                }
+                                SetChartRanges( aChartName, aRangesVector );
+                            }
+                        }
                     }
                 }
 
