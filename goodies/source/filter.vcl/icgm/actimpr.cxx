@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: actimpr.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1130,114 +1130,8 @@ return 0;
 */
 }
 
-
-// ---------------------------------------------------------------
-
-void CGMImpressOutAct::ImplGetFrameSet( int /*nNodeNumber*/, NodeFrameSet& /*rFrameSet*/ )
-{
-/*
-    DataNode* pDataNode = &mpCGM->mpChart->mDataNode[ nNodeNumber ];
-    FloatPoint aFloatPoint0, aFloatPoint1;
-
-    if ( pDataNode->nBoxX1 < pDataNode->nBoxX2 )
-    {
-        aFloatPoint0.X = (double)pDataNode->nBoxX1;
-        aFloatPoint1.X = (double)pDataNode->nBoxX2;
-    }
-    else
-    {
-        aFloatPoint0.X = (double)pDataNode->nBoxX2;
-        aFloatPoint1.X = (double)pDataNode->nBoxX1;
-    }
-
-    if ( pDataNode->nBoxY1 < pDataNode->nBoxY2 )
-    {
-        aFloatPoint0.Y = (double)( pDataNode->nBoxY1 );
-        aFloatPoint1.Y = (double)( pDataNode->nBoxY2 );
-    }
-    else
-    {
-        aFloatPoint0.Y = (double)pDataNode->nBoxY2;
-        aFloatPoint1.Y = (double)pDataNode->nBoxY1;
-    }
-    mpCGM->ImplMapPoint( aFloatPoint0 );
-    mpCGM->ImplMapPoint( aFloatPoint1 );
-    rFrameSet.nTopLeft.X() = (long)aFloatPoint0.X;
-    rFrameSet.nTopLeft.Y() = (long)aFloatPoint0.Y;
-    rFrameSet.nBottomRight.X() = (long)aFloatPoint1.X;
-    rFrameSet.nBottomRight.Y() = (long)aFloatPoint1.Y;
-    rFrameSet.nSize.Width() = ( (long)( aFloatPoint1.X - aFloatPoint0.X ) );
-    rFrameSet.nSize.Height() = ( (long)( aFloatPoint1.Y - aFloatPoint0.Y ) );
-*/
-}
-
 // ---------------------------------------------------------------
 
 void CGMImpressOutAct::DrawChart()
 {
-/*
-    NodeFrameSet    aNodeFrameSet;
-    CGMChart*       mpChart = mpCGM->mpChart;
-    switch ( mpChart->mnCurrentFileType )
-    {
-        case BULCHART :
-        {
-            sal_Bool    bBulletBody = sal_False;
-            sal_uInt32  nObjCount = 0;
-
-            TextEntry*  pTextEntry;
-            while( ( pTextEntry = mpChart->GetFirstTextEntry() ) )
-            {
-                switch( pTextEntry->nTypeOfText )
-                {
-                    case IOC_CHTTITLE :
-                    {
-                        switch( pTextEntry->nRowOrLineNum )
-                        {
-                            case 0 :        // MainTitle
-                            {
-                                ImplGetFrameSet( 2, aNodeFrameSet );
-                                nObjCount = DrawText( pTextEntry, aNodeFrameSet, 0 );
-                            }
-                            break;
-                        };
-                    }
-                    break;
-
-                    case IOC_BULLETBODY :
-                    {
-                        if ( bBulletBody )
-                        {
-                            DrawText( pTextEntry, aNodeFrameSet, nObjCount );
-                        }
-                        else
-                        {
-                            bBulletBody = sal_True; // this is the first text entry for the bullet zone
-                            ImplGetFrameSet( 3, aNodeFrameSet );
-                            nObjCount = DrawText( pTextEntry, aNodeFrameSet, 0 );
-                        }
-                    }
-                    break;
-
-                    default :
-                    break;
-                };
-                mpChart->DeleteTextEntry( pTextEntry );
-            }
-        }
-        break;
-
-        default :
-        {
-            TextEntry*  pTextEntry;
-            while( ( pTextEntry = mpChart->GetFirstTextEntry() ) )
-            {
-                mpChart->DeleteTextEntry( pTextEntry );
-            }
-        }
-        break;
-    }
-*/
 }
-
-
