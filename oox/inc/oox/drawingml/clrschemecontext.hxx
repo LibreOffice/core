@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: clrschemecontext.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,13 +48,13 @@ public:
 class clrSchemeContext : public oox::core::ContextHandler
 {
 public:
-    clrSchemeContext( ::oox::core::ContextHandler& rParent, const ClrSchemePtr pClrSchemePtr );
+    clrSchemeContext( ::oox::core::ContextHandler& rParent, ClrScheme& rClrScheme );
     virtual void SAL_CALL startFastElement( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL endFastElement( sal_Int32 aElementToken ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 private:
-    ClrSchemePtr    mpClrSchemePtr;
+    ClrScheme&      mrClrScheme;
     Color           maColor;
 };
 
