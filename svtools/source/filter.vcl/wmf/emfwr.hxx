@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: emfwr.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +61,7 @@ private:
     sal_uInt32          mnFillHandle;
     BOOL                mbTextChanged;
     sal_uInt32          mnTextHandle;
+    sal_uInt32          mnHorTextAlign;
 
     void                ImplBeginRecord( sal_uInt32 nType );
     void                ImplEndRecord();
