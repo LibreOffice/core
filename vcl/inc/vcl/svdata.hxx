@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdata.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -293,6 +293,8 @@ struct ImplSVNWFData
     bool                    mbNoFocusRects;               // on Aqua focus rects are not used
     bool                    mbNoBoldTabFocus;             // on Aqua and Gnome the focused tab has not bold text
     bool                    mbCenteredTabs;               // on Aqua, tabs are centered
+    bool                    mbNoActiveTabTextRaise;       // on Aqua the text for the selected tab
+                                                          // should not "jump up" a pixel
     bool                    mbProgressNeedsErase;         // set true for platforms that should draw the
                                                           // window background before drawing the native
                                                           // progress bar
