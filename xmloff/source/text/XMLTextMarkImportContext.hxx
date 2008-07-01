@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextMarkImportContext.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,13 +84,15 @@ public:
         const ::rtl::OUString& sServiceName,
         const ::rtl::OUString& sMarkName,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::text::XTextRange> & rRange);
+            ::com::sun::star::text::XTextRange> & rRange,
+        const ::rtl::OUString& i_rXmlId = ::rtl::OUString());
 
     static sal_Bool FindName(
         SvXMLImport& rImport,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList,
-        ::rtl::OUString& sName);
+        ::rtl::OUString& sName,
+        ::rtl::OUString& o_rXmlId);
 };
 
 #endif
