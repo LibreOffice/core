@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unofield.cxx,v $
- * $Revision: 1.106 $
+ * $Revision: 1.107 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2192,7 +2192,7 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
                 {
                     if (!m_pTextObject)
                     {
-                        SwTextAPIEditSource* pObj = new SwTextAPIEditSource( &m_pDoc->GetDocShell()->GetPool() );
+                        SwTextAPIEditSource* pObj = new SwTextAPIEditSource( m_pDoc );
                         m_pTextObject = new SwTextAPIObject( pObj );
                         m_pTextObject->acquire();
                     }
