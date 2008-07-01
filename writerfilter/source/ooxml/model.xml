@@ -1145,18 +1145,15 @@
     <resource name="CT_LineStyleList" resource="Properties">
       <element name="ln" tokenid="ooxml:CT_LineStyleList_ln"/>
     </resource>
-    <resource name="CT_LineStyleList" resource="Properties">
-      <sprm name="ln" tokenid="ooxml:CT_LineStyleList_ln"/>
-    </resource>
     <resource name="CT_EffectStyleList" resource="Properties">
-      <sprm name="effectStyle" tokenid="ooxml:CT_EffectStyleList_effectStyle"/>
+      <element name="effectStyle" tokenid="ooxml:CT_EffectStyleList_effectStyle"/>
     </resource>
     <resource name="CT_BackgroundFillStyleList" resource="Properties"/>
     <resource name="CT_StyleMatrix" resource="Properties">
-      <sprm name="fillStyleLst" tokenid="ooxml:CT_StyleMatrix_fillStyleLst"/>
-      <sprm name="lnStyleLst" tokenid="ooxml:CT_StyleMatrix_lnStyleLst"/>
-      <sprm name="effectStyleLst" tokenid="ooxml:CT_StyleMatrix_effectStyleLst"/>
-      <sprm name="bgFillStyleLst" tokenid="ooxml:CT_StyleMatrix_bgFillStyleLst"/>
+      <element name="fillStyleLst" tokenid="ooxml:CT_StyleMatrix_fillStyleLst"/>
+      <element name="lnStyleLst" tokenid="ooxml:CT_StyleMatrix_lnStyleLst"/>
+      <element name="effectStyleLst" tokenid="ooxml:CT_StyleMatrix_effectStyleLst"/>
+      <element name="bgFillStyleLst" tokenid="ooxml:CT_StyleMatrix_bgFillStyleLst"/>
       <attribute name="name" tokenid="ooxml:CT_StyleMatrix_name"/>
     </resource>
     <resource name="CT_BaseStyles" resource="Properties">
@@ -3200,10 +3197,10 @@
       <attribute name="len" tokenid="ooxml:CT_LineEndProperties_len"/>
     </resource>
     <resource name="EG_LineFillProperties" resource="Properties">
-      <sprm name="noFill" tokenid="ooxml:EG_LineFillProperties_noFill"/>
-      <sprm name="solidFill" tokenid="ooxml:EG_LineFillProperties_solidFill"/>
-      <sprm name="gradFill" tokenid="ooxml:EG_LineFillProperties_gradFill"/>
-      <sprm name="pattFill" tokenid="ooxml:EG_LineFillProperties_pattFill"/>
+      <element name="noFill" tokenid="ooxml:EG_LineFillProperties_noFill"/>
+      <element name="solidFill" tokenid="ooxml:EG_LineFillProperties_solidFill"/>
+      <element name="gradFill" tokenid="ooxml:EG_LineFillProperties_gradFill"/>
+      <element name="pattFill" tokenid="ooxml:EG_LineFillProperties_pattFill"/>
     </resource>
     <resource name="ST_PresetLineDashVal" resource="List" generated="yes">
       <value name="solid" tokenid="ooxml:Value_drawingml_ST_PresetLineDashVal_solid">solid</value>
@@ -6813,8 +6810,8 @@
       <value name="outsideMargin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromH_outsideMargin">outsideMargin</value>
     </resource>
     <resource name="CT_PosH" resource="Properties">
-      <sprm name="align" tokenid="ooxml:CT_PosH_align"/>
-      <sprm name="posOffset" tokenid="ooxml:CT_PosH_posOffset"/>
+      <element name="align" tokenid="ooxml:CT_PosH_align"/>
+      <element name="posOffset" tokenid="ooxml:CT_PosH_posOffset"/>
       <attribute name="relativeFrom" tokenid="ooxml:CT_PosH_relativeFrom"/>
     </resource>
     <resource name="ST_AlignV" resource="List" generated="yes">
@@ -6835,8 +6832,8 @@
       <value name="outsideMargin" tokenid="ooxml:Value_wordprocessingDrawing_ST_RelFromV_outsideMargin">outsideMargin</value>
     </resource>
     <resource name="CT_PosV" resource="Properties">
-      <sprm name="align" tokenid="ooxml:CT_PosV_align"/>
-      <sprm name="posOffset" tokenid="ooxml:CT_PosV_posOffset"/>
+      <element name="align" tokenid="ooxml:CT_PosV_align"/>
+      <element name="posOffset" tokenid="ooxml:CT_PosV_posOffset"/>
       <attribute name="relativeFrom" tokenid="ooxml:CT_PosV_relativeFrom"/>
     </resource>
     <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="CT_Anchor" resource="Properties">
@@ -8328,8 +8325,8 @@
       <element name="nvPicPr" tokenid="ooxml:CT_Picture_nvPicPr"/>
       <element name="blipFill" tokenid="ooxml:CT_Picture_blipFill"/>
       <element name="spPr" tokenid="ooxml:CT_Picture_spPr"/>
-      <action name="start" action="mark" tokenid="ooxml:mark_shape" value="0"/>
-      <action name="end" action="mark" tokenid="ooxml:mark_shape" value="1"/>
+      <action name="start" action="mark" sendtokenid="ooxml:mark_shape" value="0"/>
+      <action name="end" action="mark" sendtokenid="ooxml:mark_shape" value="1"/>
     </resource>
     <resource name="pic" resource="Properties">
       <element name="pic" tokenid="ooxml:pic_pic"/>
@@ -11844,12 +11841,12 @@
       </define>
     </grammar>
     <resource name="OLEObject" resource="Properties">
-      <sprm name="OLEObject" tokenid="ooxml:OLEObject_OLEObject"/>
+      <element name="OLEObject" tokenid="ooxml:OLEObject_OLEObject"/>
     </resource>
     <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_OLEObject" resource="Properties">
-      <sprm name="LinkType" tokenid="ooxml:CT_OLEObject_LinkType"/>
-      <sprm name="LockedField" tokenid="ooxml:CT_OLEObject_LockedField"/>
-      <sprm name="FieldCodes" tokenid="ooxml:CT_OLEObject_FieldCodes"/>
+      <element name="LinkType" tokenid="ooxml:CT_OLEObject_LinkType"/>
+      <element name="LockedField" tokenid="ooxml:CT_OLEObject_LockedField"/>
+      <element name="FieldCodes" tokenid="ooxml:CT_OLEObject_FieldCodes"/>
       <attribute name="Type" tokenid="ooxml:CT_OLEObject_Type"/>
       <attribute name="ProgID" tokenid="ooxml:CT_OLEObject_ProgID"/>
       <attribute name="ShapeID" tokenid="ooxml:CT_OLEObject_ShapeID"/>
@@ -21474,7 +21471,9 @@
       <value name="normal" tokenid="ooxml:Value_wordprocessingml_ST_View_normal">normal</value>
       <value name="web" tokenid="ooxml:Value_wordprocessingml_ST_View_web">web</value>
     </resource>
-    <resource name="CT_View" resource="StringValue" generated="yes"/>
+    <resource name="CT_View" resource="Properties">
+      <attribute name="val" tokenid="ooxml:CT_View_val"/>
+    </resource>
     <resource name="ST_Zoom" resource="List" generated="yes">
       <value name="none" tokenid="ooxml:Value_wordprocessingml_ST_Zoom_none">none</value>
       <value name="fullPage" tokenid="ooxml:Value_wordprocessingml_ST_Zoom_fullPage">fullPage</value>
@@ -21485,16 +21484,29 @@
       <attribute name="val" tokenid="ooxml:CT_Zoom_val"/>
       <attribute name="percent" tokenid="ooxml:CT_Zoom_percent"/>
     </resource>
-    <resource name="CT_WritingStyle" resource="NoResource"/>
+    <resource name="CT_WritingStyle" resource="Properties">
+      <attribute name="lang" tokenid="ooxml:CT_WritingStyle_lang"/>
+      <attribute name="vendorID" tokenid="ooxml:CT_WritingStyle_vendorID"/>
+      <attribute name="dllVersion" tokenid="ooxml:CT_WritingStyle_dllVersion"/>
+      <attribute name="nlCheck" tokenid="ooxml:CT_WritingStyle_nlCheck"/>
+      <attribute name="checkStyle" tokenid="ooxml:CT_WritingStyle_checkStyle"/>
+      <attribute name="appName" tokenid="ooxml:CT_WritingStyle_appName"/>
+    </resource>
     <resource name="ST_Proof" resource="List" generated="yes">
       <value name="clean" tokenid="ooxml:Value_wordprocessingml_ST_Proof_clean">clean</value>
       <value name="dirty" tokenid="ooxml:Value_wordprocessingml_ST_Proof_dirty">dirty</value>
     </resource>
-    <resource name="CT_Proof" resource="NoResource"/>
+    <resource name="CT_Proof" resource="Properties">
+      <attribute name="spelling" tokenid="ooxml:CT_Proof_spelling"/>
+      <attribute name="grammar" tokenid="ooxml:CT_Proof_grammar"/>
+    </resource>
     <resource name="ST_DocType" resource="List" generated="yes">
       <value name="notSpecified" tokenid="ooxml:Value_wordprocessingml_ST_DocType_notSpecified">notSpecified</value>
       <value name="letter" tokenid="ooxml:Value_wordprocessingml_ST_DocType_letter">letter</value>
       <value name="eMail" tokenid="ooxml:Value_wordprocessingml_ST_DocType_eMail">eMail</value>
+    </resource>
+    <resource name="CT_DocType" resource="Properties">
+      <attribute name="val" tokenid="ooxml:CT_DocType_val"/>
     </resource>
     <resource name="ST_DocProtect" resource="List" generated="yes">
       <value name="none" tokenid="ooxml:Value_wordprocessingml_ST_DocProtect_none">none</value>
@@ -21568,6 +21580,10 @@
       <attribute name="insDel" tokenid="ooxml:CT_TrackChangesView_insDel"/>
       <attribute name="formatting" tokenid="ooxml:CT_TrackChangesView_formatting"/>
       <attribute name="inkAnnotations" tokenid="ooxml:CT_TrackChangesView_inkAnnotations"/>
+    </resource>
+    <resource name="CT_Kinsoku" resource="Properties">
+      <attribute name="lang" tokenid="ooxml:CT_Kinsoku_lang"/>
+      <attribute name="val" tokenid="ooxml:CT_Kinsoku_val"/>
     </resource>
     <resource name="ST_TextDirection" resource="List">
       <value tokenid="ooxml:Value_ST_TextDirection_lrTb">lrTb</value>
@@ -21662,7 +21678,7 @@
     </resource>
     <resource name="CT_RunTrackChange" resource="Stream">
       <action name="start" action="tokenproperty"/>
-      <action name="start" action="propagateCharacterPropertiesAsSet" tokenid="ooxml:trackchange"/>
+      <action name="start" action="propagateCharacterPropertiesAsSet" sendtokenid="ooxml:trackchange"/>
       <action name="start" action="clearProps"/>
     </resource>
     <resource name="CT_NumPr" resource="Properties">
@@ -21748,7 +21764,7 @@
       <attribute name="r:id" tokenid="ooxml:CT_Rel_id"/>
     </resource>
     <resource name="CT_PictureBase" resource="Properties"/>
-    <resource name="CT_Object" resource="Properties">
+    <resource name="CT_Object" resource="Shape">
       <element name="control" tokenid="ooxml:CT_Object_control"/>
       <attribute name="dxaOrig" tokenid="ooxml:CT_Object_dxaOrig"/>
       <attribute name="dyaOrig" tokenid="ooxml:CT_Object_dyaOrig"/>
@@ -21756,8 +21772,8 @@
     <resource name="CT_Picture" resource="Shape">
       <element name="movie" tokenid="ooxml:CT_Picture_movie"/>
       <element name="control" tokenid="ooxml:CT_Picture_control"/>
-      <action name="start" action="mark" tokenid="ooxml:mark_shape" value="0"/>
-      <action name="end" action="mark" tokenid="ooxml:mark_shape" value="1"/>
+      <action name="start" action="mark" sendtokenid="ooxml:mark_shape" value="0"/>
+      <action name="end" action="mark" sendtokenid="ooxml:mark_shape" value="1"/>
     </resource>
     <resource name="CT_Drawing" resource="Properties">
       <action name="end" action="handlePicture"/>
@@ -21769,7 +21785,7 @@
       <attribute name="dirty" tokenid="ooxml:CT_SimpleField_dirty"/>
       <action name="start" action="fieldstart"/>
       <action name="start" action="startCharacterGroup"/>
-      <action name="start" action="printproperty" tokenid="ooxml:CT_SimpleField_instr"/>
+      <action name="start" action="printproperty" sendtokenid="ooxml:CT_SimpleField_instr"/>
       <action name="start" action="endCharacterGroup"/>
       <action name="start" action="fieldsep"/>
       <action name="end" action="fieldend"/>
@@ -22070,10 +22086,11 @@
       <value tokenid="ooxml:Value_ST_PTabLeader_underscore">underscore</value>
       <value tokenid="ooxml:Value_ST_PTabLeader_middleDot">middleDot</value>
     </resource>
-    <resource name="CT_PTab" resource="Properties">
+    <resource name="CT_PTab" resource="Stream">
       <attribute name="alignment" tokenid="ooxml:CT_PTab_alignment"/>
       <attribute name="relativeTo" tokenid="ooxml:CT_PTab_relativeTo"/>
       <attribute name="leader" tokenid="ooxml:CT_PTab_leader"/>
+      <action name="end" action="tab"/>
     </resource>
     <resource name="CT_Sym" resource="Properties">
       <attribute name="font" tokenid="ooxml:CT_Sym_font"/>
@@ -22513,6 +22530,24 @@
       <value name="master" tokenid="ooxml:Value_wordprocessingml_ST_MailMergeSourceType_master">master</value>
     </resource>
     <resource name="CT_MailMergeSourceType" resource="StringValue" generated="yes"/>
+    <resource name="CT_MailMerge" resource="Properties">
+      <element name="mainDocumentType" tokenid="ooxml:CT_MailMerge_mainDocumentType"/>
+      <element name="linkToQuery" tokenid="ooxml:CT_MailMerge_linkToQuery"/>
+      <element name="dataType" tokenid="ooxml:CT_MailMerge_dataType"/>
+      <element name="connectString" tokenid="ooxml:CT_MailMerge_connectString"/>
+      <element name="query" tokenid="ooxml:CT_MailMerge_query"/>
+      <element name="dataSource" tokenid="ooxml:CT_MailMerge_dataSource"/>
+      <element name="headerSource" tokenid="ooxml:CT_MailMerge_headerSource"/>
+      <element name="doNotSuppressBlankLines" tokenid="ooxml:CT_MailMerge_doNotSuppressBlankLines"/>
+      <element name="destination" tokenid="ooxml:CT_MailMerge_destination"/>
+      <element name="addressFieldName" tokenid="ooxml:CT_MailMerge_addressFieldName"/>
+      <element name="mailSubject" tokenid="ooxml:CT_MailMerge_mailSubject"/>
+      <element name="mailAsAttachment" tokenid="ooxml:CT_MailMerge_mailAsAttachment"/>
+      <element name="viewMergedData" tokenid="ooxml:CT_MailMerge_viewMergedData"/>
+      <element name="activeRecord" tokenid="ooxml:CT_MailMerge_activeRecord"/>
+      <element name="checkErrors" tokenid="ooxml:CT_MailMerge_checkErrors"/>
+      <element name="odso" tokenid="ooxml:CT_MailMerge_odso"/>
+    </resource>
     <resource name="ST_TargetScreenSz" resource="List" generated="yes">
       <value name="544x376" tokenid="ooxml:Value_wordprocessingml_ST_TargetScreenSz_544x376">544x376</value>
       <value name="640x480" tokenid="ooxml:Value_wordprocessingml_ST_TargetScreenSz_640x480">640x480</value>
@@ -22527,13 +22562,88 @@
       <value name="1920x1200" tokenid="ooxml:Value_wordprocessingml_ST_TargetScreenSz_1920x1200">1920x1200</value>
     </resource>
     <resource name="CT_TargetScreenSz" resource="StringValue" generated="yes"/>
+    <resource name="CT_Compat" resource="Properties">
+      <element name="useSingleBorderforContiguousCells" tokenid="ooxml:CT_Compat_useSingleBorderforContiguousCells"/>
+      <element name="wpJustification" tokenid="ooxml:CT_Compat_wpJustification"/>
+      <element name="noTabHangInd" tokenid="ooxml:CT_Compat_noTabHangInd"/>
+      <element name="noLeading" tokenid="ooxml:CT_Compat_noLeading"/>
+      <element name="spaceForUL" tokenid="ooxml:CT_Compat_spaceForUL"/>
+      <element name="noColumnBalance" tokenid="ooxml:CT_Compat_noColumnBalance"/>
+      <element name="balanceSingleByteDoubleByteWidth" tokenid="ooxml:CT_Compat_balanceSingleByteDoubleByteWidth"/>
+      <element name="noExtraLineSpacing" tokenid="ooxml:CT_Compat_noExtraLineSpacing"/>
+      <element name="doNotLeaveBackslashAlone" tokenid="ooxml:CT_Compat_doNotLeaveBackslashAlone"/>
+      <element name="ulTrailSpace" tokenid="ooxml:CT_Compat_ulTrailSpace"/>
+      <element name="doNotExpandShiftReturn" tokenid="ooxml:CT_Compat_doNotExpandShiftReturn"/>
+      <element name="spacingInWholePoints" tokenid="ooxml:CT_Compat_spacingInWholePoints"/>
+      <element name="lineWrapLikeWord6" tokenid="ooxml:CT_Compat_lineWrapLikeWord6"/>
+      <element name="printBodyTextBeforeHeader" tokenid="ooxml:CT_Compat_printBodyTextBeforeHeader"/>
+      <element name="printColBlack" tokenid="ooxml:CT_Compat_printColBlack"/>
+      <element name="wpSpaceWidth" tokenid="ooxml:CT_Compat_wpSpaceWidth"/>
+      <element name="showBreaksInFrames" tokenid="ooxml:CT_Compat_showBreaksInFrames"/>
+      <element name="subFontBySize" tokenid="ooxml:CT_Compat_subFontBySize"/>
+      <element name="suppressBottomSpacing" tokenid="ooxml:CT_Compat_suppressBottomSpacing"/>
+      <element name="suppressTopSpacing" tokenid="ooxml:CT_Compat_suppressTopSpacing"/>
+      <element name="suppressSpacingAtTopOfPage" tokenid="ooxml:CT_Compat_suppressSpacingAtTopOfPage"/>
+      <element name="suppressTopSpacingWP" tokenid="ooxml:CT_Compat_suppressTopSpacingWP"/>
+      <element name="suppressSpBfAfterPgBrk" tokenid="ooxml:CT_Compat_suppressSpBfAfterPgBrk"/>
+      <element name="swapBordersFacingPages" tokenid="ooxml:CT_Compat_swapBordersFacingPages"/>
+      <element name="convMailMergeEsc" tokenid="ooxml:CT_Compat_convMailMergeEsc"/>
+      <element name="truncateFontHeightsLikeWP6" tokenid="ooxml:CT_Compat_truncateFontHeightsLikeWP6"/>
+      <element name="mwSmallCaps" tokenid="ooxml:CT_Compat_mwSmallCaps"/>
+      <element name="usePrinterMetrics" tokenid="ooxml:CT_Compat_usePrinterMetrics"/>
+      <element name="doNotSuppressParagraphBorders" tokenid="ooxml:CT_Compat_doNotSuppressParagraphBorders"/>
+      <element name="wrapTrailSpaces" tokenid="ooxml:CT_Compat_wrapTrailSpaces"/>
+      <element name="footnoteLayoutLikeWW8" tokenid="ooxml:CT_Compat_footnoteLayoutLikeWW8"/>
+      <element name="shapeLayoutLikeWW8" tokenid="ooxml:CT_Compat_shapeLayoutLikeWW8"/>
+      <element name="alignTablesRowByRow" tokenid="ooxml:CT_Compat_alignTablesRowByRow"/>
+      <element name="forgetLastTabAlignment" tokenid="ooxml:CT_Compat_forgetLastTabAlignment"/>
+      <element name="adjustLineHeightInTable" tokenid="ooxml:CT_Compat_adjustLineHeightInTable"/>
+      <element name="autoSpaceLikeWord95" tokenid="ooxml:CT_Compat_autoSpaceLikeWord95"/>
+      <element name="noSpaceRaiseLower" tokenid="ooxml:CT_Compat_noSpaceRaiseLower"/>
+      <element name="doNotUseHTMLParagraphAutoSpacing" tokenid="ooxml:CT_Compat_doNotUseHTMLParagraphAutoSpacing"/>
+      <element name="layoutRawTableWidth" tokenid="ooxml:CT_Compat_layoutRawTableWidth"/>
+      <element name="layoutTableRowsApart" tokenid="ooxml:CT_Compat_layoutTableRowsApart"/>
+      <element name="useWord97LineBreakRules" tokenid="ooxml:CT_Compat_useWord97LineBreakRules"/>
+      <element name="doNotBreakWrappedTables" tokenid="ooxml:CT_Compat_doNotBreakWrappedTables"/>
+      <element name="doNotSnapToGridInCell" tokenid="ooxml:CT_Compat_doNotSnapToGridInCell"/>
+      <element name="selectFldWithFirstOrLastChar" tokenid="ooxml:CT_Compat_selectFldWithFirstOrLastChar"/>
+      <element name="applyBreakingRules" tokenid="ooxml:CT_Compat_applyBreakingRules"/>
+      <element name="doNotWrapTextWithPunct" tokenid="ooxml:CT_Compat_doNotWrapTextWithPunct"/>
+      <element name="doNotUseEastAsianBreakRules" tokenid="ooxml:CT_Compat_doNotUseEastAsianBreakRules"/>
+      <element name="useWord2002TableStyleRules" tokenid="ooxml:CT_Compat_useWord2002TableStyleRules"/>
+      <element name="growAutofit" tokenid="ooxml:CT_Compat_growAutofit"/>
+      <element name="useFELayout" tokenid="ooxml:CT_Compat_useFELayout"/>
+      <element name="useNormalStyleForList" tokenid="ooxml:CT_Compat_useNormalStyleForList"/>
+      <element name="doNotUseIndentAsNumberingTabStop" tokenid="ooxml:CT_Compat_doNotUseIndentAsNumberingTabStop"/>
+      <element name="useAltKinsokuLineBreakRules" tokenid="ooxml:CT_Compat_useAltKinsokuLineBreakRules"/>
+      <element name="allowSpaceOfSameStyleInTable" tokenid="ooxml:CT_Compat_allowSpaceOfSameStyleInTable"/>
+      <element name="doNotSuppressIndentation" tokenid="ooxml:CT_Compat_doNotSuppressIndentation"/>
+      <element name="doNotAutofitConstrainedTables" tokenid="ooxml:CT_Compat_doNotAutofitConstrainedTables"/>
+      <element name="autofitToFirstFixedWidthCell" tokenid="ooxml:CT_Compat_autofitToFirstFixedWidthCell"/>
+      <element name="underlineTabInNumList" tokenid="ooxml:CT_Compat_underlineTabInNumList"/>
+      <element name="displayHangulFixedWidth" tokenid="ooxml:CT_Compat_displayHangulFixedWidth"/>
+      <element name="splitPgBreakAndParaMark" tokenid="ooxml:CT_Compat_splitPgBreakAndParaMark"/>
+      <element name="doNotVertAlignCellWithSp" tokenid="ooxml:CT_Compat_doNotVertAlignCellWithSp"/>
+      <element name="doNotBreakConstrainedForcedTable" tokenid="ooxml:CT_Compat_doNotBreakConstrainedForcedTable"/>
+      <element name="doNotVertAlignInTxbx" tokenid="ooxml:CT_Compat_doNotVertAlignInTxbx"/>
+      <element name="useAnsiKerningPairs" tokenid="ooxml:CT_Compat_useAnsiKerningPairs"/>
+      <element name="cachedColBalance" tokenid="ooxml:CT_Compat_cachedColBalance"/>
+    </resource>
     <resource name="CT_DocVar" resource="StringValue" generated="yes"/>
+    <resource name="CT_DocRsids" resource="Properties">
+      <element name="rsidRoot" tokenid="ooxml:CT_DocRsids_rsidRoot"/>
+      <element name="rsid" tokenid="ooxml:CT_DocRsids_rsid"/>
+    </resource>
     <resource name="ST_CharacterSpacing" resource="List" generated="yes">
       <value name="doNotCompress" tokenid="ooxml:Value_wordprocessingml_ST_CharacterSpacing_doNotCompress">doNotCompress</value>
       <value name="compressPunctuation" tokenid="ooxml:Value_wordprocessingml_ST_CharacterSpacing_compressPunctuation">compressPunctuation</value>
       <value name="compressPunctuationAndJapaneseKana" tokenid="ooxml:Value_wordprocessingml_ST_CharacterSpacing_compressPunctuationAndJapaneseKana">compressPunctuationAndJapaneseKana</value>
     </resource>
     <resource name="CT_CharacterSpacing" resource="StringValue" generated="yes"/>
+    <resource name="CT_SaveThroughXslt" resource="Properties">
+      <attribute name="r:id" tokenid="ooxml:CT_SaveThroughXslt_r_id"/>
+      <attribute name="solutionID" tokenid="ooxml:CT_SaveThroughXslt_solutionID"/>
+    </resource>
     <resource name="CT_RPrDefault" resource="Properties">
       <element name="rPr" tokenid="ooxml:CT_RPrDefault_rPr"/>
     </resource>
@@ -22558,8 +22668,115 @@
       <value name="hyperlink" tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_hyperlink">hyperlink</value>
       <value name="followedHyperlink" tokenid="ooxml:Value_wordprocessingml_ST_ColorSchemeIndex_followedHyperlink">followedHyperlink</value>
     </resource>
+    <resource name="CT_ReadingModeInkLockDown" resource="Properties">
+      <attribute name="actualPg" tokenid="ooxml:CT_ReadingModeInkLockDown_actualPg"/>
+      <attribute name="w" tokenid="ooxml:CT_ReadingModeInkLockDown_w"/>
+      <attribute name="h" tokenid="ooxml:CT_ReadingModeInkLockDown_h"/>
+      <attribute name="fontSz" tokenid="ooxml:CT_ReadingModeInkLockDown_fontSz"/>
+    </resource>
     <resource name="CT_WriteProtection" resource="Properties">
       <attribute name="recommended" tokenid="ooxml:CT_WriteProtection_recommended"/>
+    </resource>
+    <resource name="CT_Settings" resource="Properties">
+      <element name="writeProtection" tokenid="ooxml:CT_Settings_writeProtection"/>
+      <element name="view" tokenid="ooxml:CT_Settings_view"/>
+      <element name="zoom" tokenid="ooxml:CT_Settings_zoom"/>
+      <element name="removePersonalInformation" tokenid="ooxml:CT_Settings_removePersonalInformation"/>
+      <element name="removeDateAndTime" tokenid="ooxml:CT_Settings_removeDateAndTime"/>
+      <element name="doNotDisplayPageBoundaries" tokenid="ooxml:CT_Settings_doNotDisplayPageBoundaries"/>
+      <element name="displayBackgroundShape" tokenid="ooxml:CT_Settings_displayBackgroundShape"/>
+      <element name="printPostScriptOverText" tokenid="ooxml:CT_Settings_printPostScriptOverText"/>
+      <element name="printFractionalCharacterWidth" tokenid="ooxml:CT_Settings_printFractionalCharacterWidth"/>
+      <element name="printFormsData" tokenid="ooxml:CT_Settings_printFormsData"/>
+      <element name="embedTrueTypeFonts" tokenid="ooxml:CT_Settings_embedTrueTypeFonts"/>
+      <element name="embedSystemFonts" tokenid="ooxml:CT_Settings_embedSystemFonts"/>
+      <element name="saveSubsetFonts" tokenid="ooxml:CT_Settings_saveSubsetFonts"/>
+      <element name="saveFormsData" tokenid="ooxml:CT_Settings_saveFormsData"/>
+      <element name="mirrorMargins" tokenid="ooxml:CT_Settings_mirrorMargins"/>
+      <element name="alignBordersAndEdges" tokenid="ooxml:CT_Settings_alignBordersAndEdges"/>
+      <element name="bordersDoNotSurroundHeader" tokenid="ooxml:CT_Settings_bordersDoNotSurroundHeader"/>
+      <element name="bordersDoNotSurroundFooter" tokenid="ooxml:CT_Settings_bordersDoNotSurroundFooter"/>
+      <element name="gutterAtTop" tokenid="ooxml:CT_Settings_gutterAtTop"/>
+      <element name="hideSpellingErrors" tokenid="ooxml:CT_Settings_hideSpellingErrors"/>
+      <element name="hideGrammaticalErrors" tokenid="ooxml:CT_Settings_hideGrammaticalErrors"/>
+      <element name="activeWritingStyle" tokenid="ooxml:CT_Settings_activeWritingStyle"/>
+      <element name="proofState" tokenid="ooxml:CT_Settings_proofState"/>
+      <element name="formsDesign" tokenid="ooxml:CT_Settings_formsDesign"/>
+      <element name="attachedTemplate" tokenid="ooxml:CT_Settings_attachedTemplate"/>
+      <element name="linkStyles" tokenid="ooxml:CT_Settings_linkStyles"/>
+      <element name="stylePaneFormatFilter" tokenid="ooxml:CT_Settings_stylePaneFormatFilter"/>
+      <element name="stylePaneSortMethod" tokenid="ooxml:CT_Settings_stylePaneSortMethod"/>
+      <element name="documentType" tokenid="ooxml:CT_Settings_documentType"/>
+      <element name="mailMerge" tokenid="ooxml:CT_Settings_mailMerge"/>
+      <element name="revisionView" tokenid="ooxml:CT_Settings_revisionView"/>
+      <element name="trackRevisions" tokenid="ooxml:CT_Settings_trackRevisions"/>
+      <element name="doNotTrackMoves" tokenid="ooxml:CT_Settings_doNotTrackMoves"/>
+      <element name="doNotTrackFormatting" tokenid="ooxml:CT_Settings_doNotTrackFormatting"/>
+      <element name="documentProtection" tokenid="ooxml:CT_Settings_documentProtection"/>
+      <element name="autoFormatOverride" tokenid="ooxml:CT_Settings_autoFormatOverride"/>
+      <element name="styleLockTheme" tokenid="ooxml:CT_Settings_styleLockTheme"/>
+      <element name="styleLockQFSet" tokenid="ooxml:CT_Settings_styleLockQFSet"/>
+      <element name="defaultTabStop" tokenid="ooxml:CT_Settings_defaultTabStop"/>
+      <element name="autoHyphenation" tokenid="ooxml:CT_Settings_autoHyphenation"/>
+      <element name="consecutiveHyphenLimit" tokenid="ooxml:CT_Settings_consecutiveHyphenLimit"/>
+      <element name="hyphenationZone" tokenid="ooxml:CT_Settings_hyphenationZone"/>
+      <element name="doNotHyphenateCaps" tokenid="ooxml:CT_Settings_doNotHyphenateCaps"/>
+      <element name="showEnvelope" tokenid="ooxml:CT_Settings_showEnvelope"/>
+      <element name="summaryLength" tokenid="ooxml:CT_Settings_summaryLength"/>
+      <element name="clickAndTypeStyle" tokenid="ooxml:CT_Settings_clickAndTypeStyle"/>
+      <element name="defaultTableStyle" tokenid="ooxml:CT_Settings_defaultTableStyle"/>
+      <element name="evenAndOddHeaders" tokenid="ooxml:CT_Settings_evenAndOddHeaders"/>
+      <element name="bookFoldRevPrinting" tokenid="ooxml:CT_Settings_bookFoldRevPrinting"/>
+      <element name="bookFoldPrinting" tokenid="ooxml:CT_Settings_bookFoldPrinting"/>
+      <element name="bookFoldPrintingSheets" tokenid="ooxml:CT_Settings_bookFoldPrintingSheets"/>
+      <element name="drawingGridHorizontalSpacing" tokenid="ooxml:CT_Settings_drawingGridHorizontalSpacing"/>
+      <element name="drawingGridVerticalSpacing" tokenid="ooxml:CT_Settings_drawingGridVerticalSpacing"/>
+      <element name="displayHorizontalDrawingGridEvery" tokenid="ooxml:CT_Settings_displayHorizontalDrawingGridEvery"/>
+      <element name="displayVerticalDrawingGridEvery" tokenid="ooxml:CT_Settings_displayVerticalDrawingGridEvery"/>
+      <element name="doNotUseMarginsForDrawingGridOrigin" tokenid="ooxml:CT_Settings_doNotUseMarginsForDrawingGridOrigin"/>
+      <element name="drawingGridHorizontalOrigin" tokenid="ooxml:CT_Settings_drawingGridHorizontalOrigin"/>
+      <element name="drawingGridVerticalOrigin" tokenid="ooxml:CT_Settings_drawingGridVerticalOrigin"/>
+      <element name="doNotShadeFormData" tokenid="ooxml:CT_Settings_doNotShadeFormData"/>
+      <element name="noPunctuationKerning" tokenid="ooxml:CT_Settings_noPunctuationKerning"/>
+      <element name="characterSpacingControl" tokenid="ooxml:CT_Settings_characterSpacingControl"/>
+      <element name="printTwoOnOne" tokenid="ooxml:CT_Settings_printTwoOnOne"/>
+      <element name="strictFirstAndLastChars" tokenid="ooxml:CT_Settings_strictFirstAndLastChars"/>
+      <element name="noLineBreaksAfter" tokenid="ooxml:CT_Settings_noLineBreaksAfter"/>
+      <element name="noLineBreaksBefore" tokenid="ooxml:CT_Settings_noLineBreaksBefore"/>
+      <element name="savePreviewPicture" tokenid="ooxml:CT_Settings_savePreviewPicture"/>
+      <element name="doNotValidateAgainstSchema" tokenid="ooxml:CT_Settings_doNotValidateAgainstSchema"/>
+      <element name="saveInvalidXml" tokenid="ooxml:CT_Settings_saveInvalidXml"/>
+      <element name="ignoreMixedContent" tokenid="ooxml:CT_Settings_ignoreMixedContent"/>
+      <element name="alwaysShowPlaceholderText" tokenid="ooxml:CT_Settings_alwaysShowPlaceholderText"/>
+      <element name="doNotDemarcateInvalidXml" tokenid="ooxml:CT_Settings_doNotDemarcateInvalidXml"/>
+      <element name="saveXmlDataOnly" tokenid="ooxml:CT_Settings_saveXmlDataOnly"/>
+      <element name="useXSLTWhenSaving" tokenid="ooxml:CT_Settings_useXSLTWhenSaving"/>
+      <element name="saveThroughXslt" tokenid="ooxml:CT_Settings_saveThroughXslt"/>
+      <element name="showXMLTags" tokenid="ooxml:CT_Settings_showXMLTags"/>
+      <element name="alwaysMergeEmptyNamespace" tokenid="ooxml:CT_Settings_alwaysMergeEmptyNamespace"/>
+      <element name="updateFields" tokenid="ooxml:CT_Settings_updateFields"/>
+      <element name="hdrShapeDefaults" tokenid="ooxml:CT_Settings_hdrShapeDefaults"/>
+      <element name="footnotePr" tokenid="ooxml:CT_Settings_footnotePr"/>
+      <element name="endnotePr" tokenid="ooxml:CT_Settings_endnotePr"/>
+      <element name="compat" tokenid="ooxml:CT_Settings_compat"/>
+      <element name="docVars" tokenid="ooxml:CT_Settings_docVars"/>
+      <element name="rsids" tokenid="ooxml:CT_Settings_rsids"/>
+      <element name="uiCompat97To2003" tokenid="ooxml:CT_Settings_uiCompat97To2003"/>
+      <element name="attachedSchema" tokenid="ooxml:CT_Settings_attachedSchema"/>
+      <element name="themeFontLang" tokenid="ooxml:CT_Settings_themeFontLang"/>
+      <element name="clrSchemeMapping" tokenid="ooxml:CT_Settings_clrSchemeMapping"/>
+      <element name="doNotIncludeSubdocsInStats" tokenid="ooxml:CT_Settings_doNotIncludeSubdocsInStats"/>
+      <element name="doNotAutoCompressPictures" tokenid="ooxml:CT_Settings_doNotAutoCompressPictures"/>
+      <element name="forceUpgrade" tokenid="ooxml:CT_Settings_forceUpgrade"/>
+      <element name="captions" tokenid="ooxml:CT_Settings_captions"/>
+      <element name="readModeInkLockDown" tokenid="ooxml:CT_Settings_readModeInkLockDown"/>
+      <element name="smartTagType" tokenid="ooxml:CT_Settings_smartTagType"/>
+      <element name="shapeDefaults" tokenid="ooxml:CT_Settings_shapeDefaults"/>
+      <element name="doNotEmbedSmartTags" tokenid="ooxml:CT_Settings_doNotEmbedSmartTags"/>
+      <element name="decimalSymbol" tokenid="ooxml:CT_Settings_decimalSymbol"/>
+      <element name="listSeparator" tokenid="ooxml:CT_Settings_listSeparator"/>
+      <action name="end" action="propagateCharacterProperties"/>
+      <action name="end" action="clearProps"/>
     </resource>
     <resource name="ST_FrameScrollbar" resource="List" generated="yes">
       <value name="on" tokenid="ooxml:Value_wordprocessingml_ST_FrameScrollbar_on">on</value>
@@ -22760,9 +22977,50 @@
       <action name="end" action="endParagraphGroup"/>
       <action name="end" action="endSectionGroup"/>
     </resource>
+    <resource xmlns:v="urn:schemas-microsoft-com:vml" name="CT_ShapeDefaults" resource="Properties">
+      <element name="v:fill" tokenid="ooxml:CT_ShapeDefaults_v_fill"/>
+      <element name="v:stroke" tokenid="ooxml:CT_ShapeDefaults_v_stroke"/>
+      <element name="v:textbox" tokenid="ooxml:CT_ShapeDefaults_v_textbox"/>
+      <element name="v:shadow" tokenid="ooxml:CT_ShapeDefaults_v_shadow"/>
+      <element name="colormru" tokenid="ooxml:CT_ShapeDefaults_colormru"/>
+      <element name="colormenu" tokenid="ooxml:CT_ShapeDefaults_colormenu"/>
+      <attribute name="spidmax" tokenid="ooxml:CT_ShapeDefaults_spidmax"/>
+      <attribute name="style" tokenid="ooxml:CT_ShapeDefaults_style"/>
+      <attribute name="fill" tokenid="ooxml:CT_ShapeDefaults_fill"/>
+      <attribute name="fillcolor" tokenid="ooxml:CT_ShapeDefaults_fillcolor"/>
+      <attribute name="stroke" tokenid="ooxml:CT_ShapeDefaults_stroke"/>
+      <attribute name="strokecolor" tokenid="ooxml:CT_ShapeDefaults_strokecolor"/>
+      <attribute name="allowincell" tokenid="ooxml:CT_ShapeDefaults_allowincell"/>
+    </resource>
+    <resource name="CT_ShapeDefaults" resource="Properties">
+      <element name="" tokenid="ooxml:CT_ShapeDefaults_"/>
+    </resource>
+    <resource name="CT_ShapeDefaults" resource="Properties">
+      <element name="v:fill" tokenid="ooxml:CT_ShapeDefaults_v_fill"/>
+      <element name="v:stroke" tokenid="ooxml:CT_ShapeDefaults_v_stroke"/>
+      <element name="v:textbox" tokenid="ooxml:CT_ShapeDefaults_v_textbox"/>
+      <element name="v:shadow" tokenid="ooxml:CT_ShapeDefaults_v_shadow"/>
+      <element name="colormru" tokenid="ooxml:CT_ShapeDefaults_colormru"/>
+      <element name="colormenu" tokenid="ooxml:CT_ShapeDefaults_colormenu"/>
+      <attribute name="spidmax" tokenid="ooxml:CT_ShapeDefaults_spidmax"/>
+      <attribute name="style" tokenid="ooxml:CT_ShapeDefaults_style"/>
+      <attribute name="fill" tokenid="ooxml:CT_ShapeDefaults_fill"/>
+      <attribute name="fillcolor" tokenid="ooxml:CT_ShapeDefaults_fillcolor"/>
+      <attribute name="stroke" tokenid="ooxml:CT_ShapeDefaults_stroke"/>
+      <attribute name="strokecolor" tokenid="ooxml:CT_ShapeDefaults_strokecolor"/>
+      <attribute name="allowincell" tokenid="ooxml:CT_ShapeDefaults_allowincell"/>
+    </resource>
+    <resource name="CT_ShapeDefaults" resource="Properties">
+      <element name="" tokenid="ooxml:CT_ShapeDefaults_"/>
+    </resource>
     <resource name="CT_Comments" resource="Stream">
       <action name="start" action="startSectionGroup"/>
       <action name="end" action="endSectionGroup"/>
+    </resource>
+    <resource name="CT_SmartTagType" resource="Properties">
+      <attribute name="namespaceuri" tokenid="ooxml:CT_SmartTagType_namespaceuri"/>
+      <attribute name="name" tokenid="ooxml:CT_SmartTagType_name"/>
+      <attribute name="url" tokenid="ooxml:CT_SmartTagType_url"/>
     </resource>
     <resource name="ST_ThemeColor" resource="List">
       <value tokenid="ooxml:Value_St_ThemeColor_dark1">dark1</value>
@@ -22841,6 +23099,9 @@
     </resource>
     <resource name="CT_DocPartGallery" resource="StringValue" generated="yes"/>
     <resource name="CT_DocPartName" resource="StringValue" generated="yes"/>
+    <resource name="settings" resource="Stream">
+      <element name="settings" tokenid="ooxml:settings_settings"/>
+    </resource>
     <resource name="numbering" resource="Stream"/>
     <resource name="ST_CaptionPos" resource="List" generated="yes">
       <value name="above" tokenid="ooxml:Value_wordprocessingml_ST_CaptionPos_above">above</value>
