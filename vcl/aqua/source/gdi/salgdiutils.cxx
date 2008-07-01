@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdiutils.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -157,7 +157,7 @@ void AquaSalGraphics::SetState()
 
 bool AquaSalGraphics::CheckContext()
 {
-    if( mpFrame != NULL )
+    if( mbWindow && mpFrame != NULL )
     {
         const unsigned int nWidth = mpFrame->maGeometry.nWidth;
         const unsigned int nHeight = mpFrame->maGeometry.nHeight;
