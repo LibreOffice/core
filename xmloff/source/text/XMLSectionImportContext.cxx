@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLSectionImportContext.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,6 +73,7 @@ const sal_Char sAPI_ProtectionKey[] = "ProtectionKey";
 
 enum XMLSectionToken
 {
+    XML_TOK_SECTION_XMLID,
     XML_TOK_SECTION_STYLE_NAME,
     XML_TOK_SECTION_NAME,
     XML_TOK_SECTION_CONDITION,
@@ -84,6 +85,7 @@ enum XMLSectionToken
 
 static __FAR_DATA SvXMLTokenMapEntry aSectionTokenMap[] =
 {
+    { XML_NAMESPACE_XML , XML_ID, XML_TOK_SECTION_XMLID },
     { XML_NAMESPACE_TEXT, XML_STYLE_NAME, XML_TOK_SECTION_STYLE_NAME },
     { XML_NAMESPACE_TEXT, XML_NAME, XML_TOK_SECTION_NAME },
     { XML_NAMESPACE_TEXT, XML_CONDITION, XML_TOK_SECTION_CONDITION },
@@ -161,6 +163,9 @@ void XMLSectionImportContext::StartElement(
 
                 // save PropertySet (for CreateChildContext)
                 xSectionPropertySet = xPropSet;
+
+                // xml:id for RDF metadata
+                GetImport().SetXmlId(xIfc, sXmlId);
 
                 // name
                 Reference<XNamed> xNamed(xPropSet, UNO_QUERY);
@@ -272,6 +277,9 @@ void XMLSectionImportContext::ProcessAttributes(
 
         switch (aTokenMap.Get(nNamePrefix, sLocalName))
         {
+            case XML_TOK_SECTION_XMLID:
+                sXmlId = sAttr;
+                break;
             case XML_TOK_SECTION_STYLE_NAME:
                 sStyleName = sAttr;
                 break;
