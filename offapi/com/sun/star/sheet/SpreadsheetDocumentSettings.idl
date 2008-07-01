@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SpreadsheetDocumentSettings.idl,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -206,7 +206,7 @@ published service SpreadsheetDocumentSettings
 
     /** specifies whether the document data are already loaded.
 
-        @since CWS xmlfilter02
+        @since OOo 3.0
      */
     [optional, property] boolean IsLoaded;
 
@@ -214,7 +214,7 @@ published service SpreadsheetDocumentSettings
 
     /** specifies whether the undo command is enabled.
 
-        @since CWS xmlfilter02
+        @since OOo 3.0
      */
     [optional, property] boolean IsUndoEnabled;
 
@@ -223,7 +223,7 @@ published service SpreadsheetDocumentSettings
     /** specifies whether the automatic adjustment of the row height is
         enabled.
 
-        @since CWS xmlfilter02
+        @since OOo 3.0
      */
     [optional, property] boolean IsAdjustHeightEnabled;
 
@@ -231,7 +231,7 @@ published service SpreadsheetDocumentSettings
 
     /** specifies whether the automatic execution of links is enabled.
 
-        @since CWS xmlfilter02
+        @since OOo 3.0
      */
     [optional, property] boolean IsExecuteLinkEnabled;
 
@@ -239,7 +239,7 @@ published service SpreadsheetDocumentSettings
 
     /** contains the reference device used for formatting the document.
 
-        @since CWS xmlfilter02
+        @since OOo 3.0
      */
     [readonly, optional, property] com::sun::star::awt::XDevice ReferenceDevice;
 
