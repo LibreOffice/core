@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documen5.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,6 +71,100 @@
 using namespace ::com::sun::star;
 
 // -----------------------------------------------------------------------
+
+void lcl_GetChartRanges( const uno::Reference< chart2::XChartDocument >& xChartDoc,
+            uno::Sequence< rtl::OUString >& rRanges )
+{
+    rRanges.realloc(0);
+    uno::Reference< chart2::data::XDataSource > xDataSource( xChartDoc, uno::UNO_QUERY );
+    if( !xDataSource.is() )
+        return;
+    //uno::Reference< chart2::data::XDataProvider > xProvider = xChartDoc->getDataProvider();
+
+    uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledDataSequences( xDataSource->getDataSequences() );
+    rRanges.realloc(2*aLabeledDataSequences.getLength());
+    sal_Int32 nRealCount=0;
+    for( sal_Int32 nN=0;nN<aLabeledDataSequences.getLength();nN++)
+    {
+        uno::Reference< chart2::data::XLabeledDataSequence > xLabeledSequence( aLabeledDataSequences[nN] );
+        if(!xLabeledSequence.is())
+            continue;
+        uno::Reference< chart2::data::XDataSequence > xLabel( xLabeledSequence->getLabel());
+        uno::Reference< chart2::data::XDataSequence > xValues( xLabeledSequence->getValues());
+
+        if( xLabel.is())
+            rRanges[nRealCount++] = xLabel->getSourceRangeRepresentation();
+        if( xValues.is())
+            rRanges[nRealCount++] = xValues->getSourceRangeRepresentation();
+    }
+    rRanges.realloc(nRealCount);
+}
+
+void lcl_SetChartRanges( const uno::Reference< chart2::XChartDocument >& xChartDoc,
+            const uno::Sequence< rtl::OUString >& rRanges )
+{
+    uno::Reference< chart2::data::XDataSource > xDataSource( xChartDoc, uno::UNO_QUERY );
+    if( !xDataSource.is() )
+        return;
+    uno::Reference< chart2::data::XDataProvider > xDataProvider = xChartDoc->getDataProvider();
+    if( !xDataProvider.is() )
+        return;
+
+    uno::Reference< frame::XModel > xModel( xChartDoc, uno::UNO_QUERY );
+    if( xModel.is() )
+        xModel->lockControllers();
+
+    try
+    {
+        rtl::OUString aPropertyNameRole( ::rtl::OUString::createFromAscii("Role") );
+
+        uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledDataSequences( xDataSource->getDataSequences() );
+        sal_Int32 nRange=0;
+        for( sal_Int32 nN=0; (nN<aLabeledDataSequences.getLength()) && (nRange<rRanges.getLength()); nN++ )
+        {
+            uno::Reference< chart2::data::XLabeledDataSequence > xLabeledSequence( aLabeledDataSequences[nN] );
+            if(!xLabeledSequence.is())
+                continue;
+            uno::Reference< beans::XPropertySet > xLabel( xLabeledSequence->getLabel(), uno::UNO_QUERY );
+            uno::Reference< beans::XPropertySet > xValues( xLabeledSequence->getValues(), uno::UNO_QUERY );
+
+            if( xLabel.is())
+            {
+                uno::Reference< chart2::data::XDataSequence > xNewSeq(
+                    xDataProvider->createDataSequenceByRangeRepresentation( rRanges[nRange++] ));
+
+                uno::Reference< beans::XPropertySet > xNewProps( xNewSeq, uno::UNO_QUERY );
+                if( xNewProps.is() )
+                    xNewProps->setPropertyValue( aPropertyNameRole, xLabel->getPropertyValue( aPropertyNameRole ) );
+
+                xLabeledSequence->setLabel( xNewSeq );
+            }
+
+            if( !(nRange<rRanges.getLength()) )
+                break;
+
+            if( xValues.is())
+            {
+                uno::Reference< chart2::data::XDataSequence > xNewSeq(
+                    xDataProvider->createDataSequenceByRangeRepresentation( rRanges[nRange++] ));
+
+                uno::Reference< beans::XPropertySet > xNewProps( xNewSeq, uno::UNO_QUERY );
+                if( xNewProps.is() )
+                    xNewProps->setPropertyValue( aPropertyNameRole, xValues->getPropertyValue( aPropertyNameRole ) );
+
+                xLabeledSequence->setValues( xNewSeq );
+            }
+        }
+    }
+    catch ( uno::Exception& ex )
+    {
+        (void)ex;
+        DBG_ERROR("Exception in lcl_SetChartRanges - invalid range string?");
+    }
+
+    if( xModel.is() )
+        xModel->unlockControllers();
+}
 
 void lcl_GetChartParameters( const uno::Reference< chart2::XChartDocument >& xChartDoc,
             rtl::OUString& rRanges, chart::ChartDataRowSource& rDataRowSource,
@@ -249,6 +343,76 @@ void ScDocument::UpdateChartArea( const String& rChartName,
     ScRangeListRef aRLR( new ScRangeList );
     aRLR->Append( rNewArea );
     UpdateChartArea( rChartName, aRLR, bColHeaders, bRowHeaders, bAdd );
+}
+
+uno::Reference< chart2::XChartDocument > ScDocument::GetChartByName( const String& rChartName )
+{
+    uno::Reference< chart2::XChartDocument > xReturn;
+
+    if (pDrawLayer)
+    {
+        sal_uInt16 nCount = pDrawLayer->GetPageCount();
+        for (sal_uInt16 nTab=0; nTab<nCount; nTab++)
+        {
+            SdrPage* pPage = pDrawLayer->GetPage(nTab);
+            DBG_ASSERT(pPage,"Page ?");
+
+            SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+            SdrObject* pObject = aIter.Next();
+            while (pObject)
+            {
+                if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
+                        ((SdrOle2Obj*)pObject)->GetPersistName() == rChartName )
+                {
+                    uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+                    if ( xIPObj.is() )
+                    {
+                        svt::EmbeddedObjectRef::TryRunningState( xIPObj );
+
+                        uno::Reference< util::XCloseable > xComponent = xIPObj->getComponent();
+                        xReturn.set( uno::Reference< chart2::XChartDocument >( xComponent, uno::UNO_QUERY ) );
+                    }
+                    return xReturn;
+                }
+                pObject = aIter.Next();
+            }
+        }
+    }
+    return xReturn;
+}
+void ScDocument::GetChartRanges( const String& rChartName, ::std::vector< ScRangeList >& rRangesVector, ScDocument* pSheetNameDoc )
+{
+    rRangesVector.clear();
+    uno::Reference< chart2::XChartDocument > xChartDoc( GetChartByName( rChartName ) );
+    if ( xChartDoc.is() )
+    {
+        uno::Sequence< rtl::OUString > aRangeStrings;
+        lcl_GetChartRanges( xChartDoc, aRangeStrings );
+        for( sal_Int32 nN=0; nN<aRangeStrings.getLength(); nN++ )
+        {
+            ScRangeList aRanges;
+            aRanges.Parse( aRangeStrings[nN], pSheetNameDoc );
+            rRangesVector.push_back(aRanges);
+        }
+    }
+}
+
+void ScDocument::SetChartRanges( const String& rChartName, const ::std::vector< ScRangeList >& rRangesVector )
+{
+    uno::Reference< chart2::XChartDocument > xChartDoc( GetChartByName( rChartName ) );
+    if ( xChartDoc.is() )
+    {
+        sal_Int32 nCount = static_cast<sal_Int32>( rRangesVector.size() );
+        uno::Sequence< rtl::OUString > aRangeStrings(nCount);
+        for( sal_Int32 nN=0; nN<nCount; nN++ )
+        {
+            ScRangeList aScRangeList( rRangesVector[nN] );
+            String sRangeStr;
+            aScRangeList.Format( sRangeStr, SCR_ABS_3D, this, GetAddressConvention() );
+            aRangeStrings[nN]=sRangeStr;
+        }
+        lcl_SetChartRanges( xChartDoc, aRangeStrings );
+    }
 }
 
 void ScDocument::GetOldChartParameters( const String& rName,
