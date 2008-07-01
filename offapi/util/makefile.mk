@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.108 $
+# $Revision: 1.109 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -140,7 +140,9 @@ UNOIDLDBFILES= \
     $(UCR)$/xsec-sax.db \
     $(UCR)$/xsec-wrapper.db \
     $(UCR)$/cssreport.db \
-    $(UCR)$/cssrptins.db
+    $(UCR)$/cssrptins.db \
+    $(UCR)$/cssrdf.db
+
 
 REFERENCE_RDB=$(PRJ)$/type_reference$/types.rdb
 
