@@ -8,7 +8,7 @@
 #
 # $RCSfile: scriptitems.pm,v $
 #
-# $Revision: 1.48 $
+# $Revision: 1.49 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -539,11 +539,98 @@ sub set_global_directory_hostnames
         my $styles = "";
         if ( $onedir->{'Styles'} ) { $styles = $onedir->{'Styles'}; }
 
-        if ( $styles =~ /\bOFFICEDIRECTORY\b/ ) { $installer::globals::officedirhostname = $onedir->{'HostName'}; }
-        if ( $styles =~ /\bBASISDIRECTORY\b/ ) { $installer::globals::basisdirhostname = $onedir->{'HostName'}; }
-        if ( $styles =~ /\bUREDIRECTORY\b/ ) { $installer::globals::uredirhostname = $onedir->{'HostName'}; }
-        if ( $styles =~ /\bSUNDIRECTORY\b/ ) { $installer::globals::sundirhostname = $onedir->{'HostName'}; }
+        if ( $styles =~ /\bOFFICEDIRECTORY\b/ )
+        {
+            $installer::globals::officedirhostname = $onedir->{'HostName'};
+            $installer::globals::officedirgid = $onedir->{'gid'};
+        }
+        if ( $styles =~ /\bBASISDIRECTORY\b/ )
+        {
+            $installer::globals::basisdirhostname = $onedir->{'HostName'};
+            $installer::globals::basisdirgid = $onedir->{'gid'};
+        }
+        if ( $styles =~ /\bUREDIRECTORY\b/ )
+        {
+            $installer::globals::uredirhostname = $onedir->{'HostName'};
+            $installer::globals::uredirgid = $onedir->{'gid'};
+        }
+        if ( $styles =~ /\bSUNDIRECTORY\b/ )
+        {
+            $installer::globals::sundirhostname = $onedir->{'HostName'};
+            $installer::globals::sundirgid = $onedir->{'gid'};
+        }
     }
+}
+
+########################################################
+# Recursively defined procedure to order
+# modules and directories
+########################################################
+
+sub get_children
+{
+    my ($allitems, $startparent, $newitemorder) = @_;
+
+    for ( my $i = 0; $i <= $#{$allitems}; $i++ )
+    {
+        my $gid = ${$allitems}[$i]->{'gid'};
+        my $parent = "";
+        if ( ${$allitems}[$i]->{'ParentID'} ) { $parent = ${$allitems}[$i]->{'ParentID'}; }
+
+        if ( $parent eq $startparent )
+        {
+            push(@{$newitemorder}, ${$allitems}[$i]);
+            my $parent = $gid;
+            get_children($allitems, $parent, $newitemorder);    # recursive!
+        }
+    }
+}
+
+################################################################################
+# Shifting parent directories of URE and Basis layer, so that
+# these directories are located below the Brand layer.
+# Style: SHIFT_BASIS_INTO_BRAND_LAYER
+################################################################################
+
+sub shift_basis_directory_parents
+{
+    my ($dirsref) = @_;
+
+    my @alldirs = ();
+    my @savedirs = ();
+    my @shifteddirs = ();
+
+    my $officedirgid = "";
+
+    for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
+    {
+        my $onedir = ${$dirsref}[$i];
+        my $styles = "";
+        if ( $onedir->{'Styles'} ) { $styles = $onedir->{'Styles'}; }
+
+        if ( $styles =~ /\bOFFICEDIRECTORY\b/ ) { $officedirgid = $onedir->{'gid'}; }
+    }
+
+    if ( $officedirgid ne "" )
+    {
+        for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
+        {
+            my $onedir = ${$dirsref}[$i];
+            my $styles = "";
+            if ( $onedir->{'Styles'} ) { $styles = $onedir->{'Styles'}; }
+
+            if (( $styles =~ /\bBASISDIRECTORY\b/ ) || ( $styles =~ /\bUREDIRECTORY\b/ ))
+            {
+                $onedir->{'ParentID'} = $officedirgid;
+            }
+        }
+
+        # Sorting directories
+        my $startgid = "PREDEFINED_PROGDIR";
+        get_children($dirsref, $startgid, \@alldirs);
+    }
+
+    return \@alldirs;
 }
 
 ################################################################################
