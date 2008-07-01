@@ -1,14 +1,3 @@
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
 ..\%__SRC%\lib\lib*.dylib %_DEST%\lib%_EXT%\lib*.dylib
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
-
-mkdir: %_DEST%\inc%_EXT%\com
-mkdir: %_DEST%\inc%_EXT%\com\sun
-mkdir: %_DEST%\inc%_EXT%\com\sun\star
-mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml
-mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\sax
-
-..\%__SRC%\inc\com\sun\star\xml\*.hdl %_DEST%\inc%_EXT%\com\sun\star\xml\*.hdl
-..\%__SRC%\inc\com\sun\star\xml\*.hpp %_DEST%\inc%_EXT%\com\sun\star\xml\*.hpp
-..\%__SRC%\inc\com\sun\star\xml\sax\*.hdl %_DEST%\inc%_EXT%\com\sun\star\xml\sax\*.hdl
-..\%__SRC%\inc\com\sun\star\xml\sax\*.hpp %_DEST%\inc%_EXT%\com\sun\star\xml\sax\*.hpp
