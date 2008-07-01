@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: util.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,6 +82,8 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
             "OPTIONAL"
         };
 
+    static const ::rtl::OUString sMetaFile(RTL_CONSTASCII_USTRINGPARAM("MetaFile"));
+
     uno::Reference<beans::XPropertySetInfo> xPropSetInfo
         (xPropSet->getPropertySetInfo());
 
@@ -97,20 +99,21 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
 
             if (xPropSetInfo->hasPropertyByName(sPropName))
             {
+                bool bPropertyFound = true;
                 uno::Any aAny;
                 try
                 {
-                    xPropSet->getPropertyValue(sPropName) >>= aAny;
+                    if (sPropName == sMetaFile)
+                        bPropertyFound = false;
+                    else
+                        xPropSet->getPropertyValue(sPropName) >>= aAny;
                 }
                 catch (beans::UnknownPropertyException)
                 {
-                    sResult += "<unknown-property>";
-                    sResult += OUStringToOString
-                        (sPropName, RTL_TEXTENCODING_ASCII_US).getStr();
-                    sResult += "</unknown-property>";
+                    bPropertyFound = false;
                 }
 
-                if (aAny.hasValue())
+                if (bPropertyFound)
                 {
                     sResult += "<property name=\"";
                     sResult += OUStringToOString
@@ -351,6 +354,13 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
 
                     sResult += "</property>";
                 }
+            }
+            else
+            {
+                sResult += "<unknown-property>";
+                sResult += OUStringToOString
+                (sPropName, RTL_TEXTENCODING_ASCII_US).getStr();
+                sResult += "</unknown-property>";
             }
         }
         sResult += "</propertyset>";
