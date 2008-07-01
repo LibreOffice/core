@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdfppt.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -609,7 +609,7 @@ public:
                                         UINT32& nMappedFontId, Font& rFont, char nDefault ) const;
     const PptDocumentAtom&              GetDocumentAtom() const { return aDocAtom; }
     virtual const PptSlideLayoutAtom*   GetSlideLayoutAtom() const;
-    SdrObject*  CreateTable( SdrObject* pGroupObject, sal_uInt32* pTableArry ) const;
+    SdrObject*  CreateTable( SdrObject* pGroupObject, sal_uInt32* pTableArry, SvxMSDffSolverContainer* ) const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
