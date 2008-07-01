@@ -8,7 +8,7 @@
  *
  * $RCSfile: plotareaconverter.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +54,7 @@ public:
     virtual             ~View3DConverter();
 
     /** Converts the OOXML plot area model to a chart2 diagram. */
-    void                convertModelToDocument(
+    void                convertFromModel(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& rxDiagram,
                             TypeGroupConverter& rTypeGroup );
 };
@@ -69,9 +69,9 @@ public:
     explicit            PlotAreaConverter( const ConverterRoot& rParent, PlotAreaModel& rModel );
     virtual             ~PlotAreaConverter();
 
-    /** Converts the OOXML plot area model to a chart2 diagram. Returns an
-        automatic chart title from a single series title, if possible. */
-    ::rtl::OUString     convertModelToDocument( View3DModel& rView3DModel );
+    /** Converts the OOXML plot area model to a chart2 diagram.
+        @return  Automatic chart title from a single series title, if possible. */
+    ::rtl::OUString     convertFromModel( View3DModel& rView3DModel );
 };
 
 // ============================================================================
