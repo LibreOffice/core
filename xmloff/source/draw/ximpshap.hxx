@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ximpshap.hxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -310,6 +310,9 @@ private:
     sal_Int32   mnDelta1;
     sal_Int32   mnDelta2;
     sal_Int32   mnDelta3;
+
+    com::sun::star::uno::Any maPath;
+
 public:
     TYPEINFO();
 
