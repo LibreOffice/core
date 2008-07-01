@@ -8,7 +8,7 @@
 #
 # $RCSfile: libs.mk,v $
 #
-# $Revision: 1.135 $
+# $Revision: 1.136 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,7 +28,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.135 $$"
+LIBSMKREV!:="$$Revision: 1.136 $$"
 
 .IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 
@@ -278,16 +278,22 @@ JVMACCESSLIB = -ljvmaccess$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 CPPUNITLIB = -lcppunit$(DLLPOSTFIX)
 .IF "$(GUI)$(COM)"=="WNTGCC"
-XSLTLIB=-lxslt-1 $(ZLIB3RD) $(LIBXML2LIB)
+XSLTLIB=-lxslt-1 $(ZLIB3RDLIB) $(LIBXML2LIB)
 JVMFWKLIB = -ljvmfwk$(UDK_MAJOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 .IF "$(SYSTEM_LIBXSLT)"=="YES"
 XSLTLIB=$(LIBXSLT_LIBS)
 .ELSE
-XSLTLIB=-lxslt $(ZLIB3RD) $(LIBXML2LIB)
+XSLTLIB=-lxslt $(ZLIB3RDLIB) $(LIBXML2LIB)
 .ENDIF
 JVMFWKLIB = -ljvmfwk
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(SYSTEM_REDLAND)"=="YES"
+REDLANDLIB=$(REDLAND_LIBS)
+.ELSE
+REDLANDLIB=-lrdf
+.ENDIF
+
 
 # #110743#
 # For BinFilters, some libs were added.
@@ -468,7 +474,8 @@ HELPLINKERLIB=ihelplinker.lib
 SYSSHELLLIB=sysshell.lib
 JVMACCESSLIB = ijvmaccess.lib
 CPPUNITLIB = cppunit.lib
-XSLTLIB = libxslt.lib $(ZLIB3RD) $(LIBXML2LIB)
+XSLTLIB = libxslt.lib $(ZLIB3RDLIB) $(LIBXML2LIB)
+REDLANDLIB = librdf.lib
 
 JVMFWKLIB = ijvmfwk.lib
 
