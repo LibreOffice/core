@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drviews1.cxx,v $
- * $Revision: 1.79 $
+ * $Revision: 1.80 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 
 #include "comphelper/anytostring.hxx"
+#include "comphelper/scopeguard.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "rtl/ref.hxx"
 
@@ -110,7 +111,9 @@
 #include <boost/bind.hpp>
 
 #ifdef _MSC_VER
+#if (_MSC_VER < 1400)
 #pragma optimize ( "", off )
+#endif
 #endif
 
 using namespace com::sun::star;
@@ -883,8 +886,21 @@ BOOL DrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 |*
 \************************************************************************/
 
+void LclResetFlag (bool& rbFlag) {rbFlag = false;}
+
 BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
 {
+    /** Under some circumstances there are nested calls to SwitchPage() and
+        may crash the application (activation of form controls when the
+        shell of the edit view is not on top of the shell stack, see issue
+        83888 for details.)  Therefore the nested calls are ignored (they
+        would jump to the wrong page anyway.)
+    */
+    if (mbIsInSwitchPage)
+        return FALSE;
+    mbIsInSwitchPage = true;
+    comphelper::ScopeGuard aGuard (::boost::bind(LclResetFlag, ::boost::ref(mbIsInSwitchPage)));
+
     if (GetActiveWindow()->IsInPaint())
     {
         // Switching the current page while a Paint is being executed is
@@ -923,7 +939,7 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
 
     if (IsSwitchPageAllowed())
     {
-        ModifyGuard aGuard( GetDoc() );
+        ModifyGuard aGuard2( GetDoc() );
 
         bOK = TRUE;
 
@@ -963,8 +979,10 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
                 {
                     SdrPageView* pPV = mpDrawView->GetSdrPageView();
 
-                    if (pPV && pNewPage == dynamic_cast< SdPage* >( pPV->GetPage() ) &&
-                        pNewPage->GetName() == maTabControl.GetPageText(nSelectedPage+1))
+                    SdPage* pCurrentPage = dynamic_cast< SdPage* >( pPV->GetPage());
+                    if (pPV
+                        && pNewPage == pCurrentPage
+                        && pNewPage->GetName() == maTabControl.GetPageText(nSelectedPage+1))
                     {
                         // this slide is already visible
                         return TRUE;
@@ -1404,6 +1422,8 @@ sal_Int8 DrawViewShell::ExecuteDrop (
 } // end of namespace sd
 
 #ifdef _MSC_VER
+#if (_MSC_VER < 1400)
 #pragma optimize ( "", on )
+#endif
 #endif
 
