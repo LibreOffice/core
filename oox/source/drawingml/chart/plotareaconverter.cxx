@@ -8,7 +8,7 @@
  *
  * $RCSfile: plotareaconverter.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,8 +30,7 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/plotareaconverter.hxx"
-#include <com/sun/star/drawing/CameraGeometry.hpp>
-#include <com/sun/star/drawing/HomogenMatrix.hpp>
+#include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -45,11 +44,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::drawing::CameraGeometry;
-using ::com::sun::star::drawing::Direction3D;
-using ::com::sun::star::drawing::HomogenMatrix;
-using ::com::sun::star::drawing::HomogenMatrixLine;
-using ::com::sun::star::drawing::Position3D;
 using ::com::sun::star::chart2::XCoordinateSystem;
 using ::com::sun::star::chart2::XCoordinateSystemContainer;
 using ::com::sun::star::chart2::XDiagram;
@@ -95,7 +89,7 @@ public:
 
     /** Converts the axes set model to a chart2 diagram. Returns an automatic
         chart title from a single series title, if possible. */
-    OUString            convertModelToDocument(
+    OUString            convertFromModel(
                             const Reference< XDiagram >& rxDiagram,
                             View3DModel& rView3DModel,
                             sal_Int32 nAxesSetIdx );
@@ -112,7 +106,7 @@ AxesSetConverter::~AxesSetConverter()
 {
 }
 
-OUString AxesSetConverter::convertModelToDocument( const Reference< XDiagram >& rxDiagram, View3DModel& rView3DModel, sal_Int32 nAxesSetIdx )
+OUString AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, View3DModel& rView3DModel, sal_Int32 nAxesSetIdx )
 {
     // create type group converter objects for all type groups
     typedef RefVector< TypeGroupConverter > TypeGroupConvVector;
@@ -121,7 +115,7 @@ OUString AxesSetConverter::convertModelToDocument( const Reference< XDiagram >& 
         aTypeGroups.push_back( TypeGroupConvVector::value_type( new TypeGroupConverter( *this, **aIt ) ) );
 
     OUString aAutoTitle;
-    OSL_ENSURE( !aTypeGroups.empty(), "AxesSetConverter::convertModelToDocument - no type groups in axes set" );
+    OSL_ENSURE( !aTypeGroups.empty(), "AxesSetConverter::convertFromModel - no type groups in axes set" );
     if( !aTypeGroups.empty() ) try
     {
         // first type group needed for coordinate system and axis conversion
@@ -131,6 +125,13 @@ OUString AxesSetConverter::convertModelToDocument( const Reference< XDiagram >& 
         if( aTypeGroups.size() == 1 )
             aAutoTitle = rFirstTypeGroup.getSingleSeriesTitle();
 
+        // plot area formatting
+        if( rxDiagram.is() && !rFirstTypeGroup.is3dChart() )
+        {
+            PropertySet aPropSet( rxDiagram->getWall() );
+            convertAutoFormats( aPropSet, OBJECTTYPE_PLOTAREA2D );
+        }
+
         /*  Create a coordinate system. For now, all type groups from all axes sets
             have to be inserted into one coordinate system. Later, chart2 should
             support using one coordinate system for each axes set. */
@@ -139,15 +140,22 @@ OUString AxesSetConverter::convertModelToDocument( const Reference< XDiagram >& 
         Sequence< Reference< XCoordinateSystem > > aCoordSystems = xCoordSystemCont->getCoordinateSystems();
         if( aCoordSystems.hasElements() )
         {
-            OSL_ENSURE( aCoordSystems.getLength() == 1, "AxesSetConverter::convertModelToDocument - too many coordinate systems" );
+            OSL_ENSURE( aCoordSystems.getLength() == 1, "AxesSetConverter::convertFromModel - too many coordinate systems" );
             xCoordSystem = aCoordSystems[ 0 ];
-            OSL_ENSURE( xCoordSystem.is(), "AxesSetConverter::convertModelToDocument - invalid coordinate system" );
+            OSL_ENSURE( xCoordSystem.is(), "AxesSetConverter::convertFromModel - invalid coordinate system" );
         }
         else
         {
             xCoordSystem = rFirstTypeGroup.createCoordinateSystem();
             if( xCoordSystem.is() )
                 xCoordSystemCont->addCoordinateSystem( xCoordSystem );
+        }
+
+        // 3D view settings
+        if( rFirstTypeGroup.is3dChart() )
+        {
+            View3DConverter aView3DConv( *this, rView3DModel );
+            aView3DConv.convertFromModel( rxDiagram, rFirstTypeGroup );
         }
 
         /*  Convert all chart type groups. Each type group will add its series to
@@ -165,20 +173,12 @@ OUString AxesSetConverter::convertModelToDocument( const Reference< XDiagram >& 
             for( AxesSetModel::AxisMap::iterator aAIt = aAxes.begin(), aAEnd = aAxes.end(); aAIt != aAEnd; ++aAIt )
             {
                 AxisConverter aAxisConv( *this, *aAIt->second );
-                aAxisConv.convertModelToDocument( xCoordSystem, rFirstTypeGroup, nAxesSetIdx, aAIt->first );
+                aAxisConv.convertFromModel( xCoordSystem, rFirstTypeGroup, nAxesSetIdx, aAIt->first );
             }
 
             // convert all chart type groups, this converts all series data and formatting
             for( TypeGroupConvVector::iterator aTIt = aTypeGroups.begin(), aTEnd = aTypeGroups.end(); aTIt != aTEnd; ++aTIt )
-                (*aTIt)->convertModelToDocument( rxDiagram, xCoordSystem, nAxesSetIdx );
-
-            /*  3D settings, needs chart types inserted into coordinate system
-                for correct 3D light default settings dependent on chart type. */
-            if( rFirstTypeGroup.is3dChart() )
-            {
-                View3DConverter aView3DConv( *this, rView3DModel );
-                aView3DConv.convertModelToDocument( rxDiagram, rFirstTypeGroup );
-            }
+                (*aTIt)->convertFromModel( rxDiagram, xCoordSystem, nAxesSetIdx );
         }
     }
     catch( Exception& )
@@ -200,34 +200,68 @@ View3DConverter::~View3DConverter()
 {
 }
 
-void View3DConverter::convertModelToDocument( const Reference< XDiagram >& rxDiagram, TypeGroupConverter& rTypeGroup )
+void View3DConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, TypeGroupConverter& rTypeGroup )
 {
+    namespace cssd = ::com::sun::star::drawing;
     PropertySet aPropSet( rxDiagram );
-    // do not set right-angled axes for pie charts
-    bool bRightAngled = rTypeGroup.isWall3dChart() && mrModel.mbRightAngled;
-    aPropSet.setProperty( CREATE_OUSTRING( "RightAngledAxes" ), bRightAngled );
-    aPropSet.setProperty( CREATE_OUSTRING( "D3DSceneAmbientColor" ), sal_Int32( 0xCCCCCC ) );
-    aPropSet.setProperty( CREATE_OUSTRING( "D3DSceneLightOn1" ), false );
-    aPropSet.setProperty( CREATE_OUSTRING( "D3DSceneLightOn2" ), true );
-    aPropSet.setProperty( CREATE_OUSTRING( "D3DSceneLightColor2" ), sal_Int32( 0x666666 ) );
-    aPropSet.setProperty( CREATE_OUSTRING( "D3DSceneLightDirection2" ), Direction3D( 0.2, 0.4, 1.0 ) );
-    aPropSet.setProperty( CREATE_OUSTRING( "D3DSceneShadeMode" ), ::com::sun::star::drawing::ShadeMode_FLAT );
 
-    // change 3D view of pie charts to Excel's default view
+    sal_Int32 nRotationY = 0;
+    sal_Int32 nRotationX = 0;
+    bool bRightAngled = false;
+    sal_Int32 nAmbientColor = 0;
+    sal_Int32 nLightColor = 0;
+
     if( rTypeGroup.getTypeInfo().meTypeCategory == TYPECATEGORY_PIE )
     {
-        static const HomogenMatrix saMatrix(
-            HomogenMatrixLine( 1.0,  0.0,  0.0,  0.0 ),
-            HomogenMatrixLine( 0.0,  0.5,  1.5,  0.0 ),
-            HomogenMatrixLine( 0.0, -1.5,  0.5,  0.0 ),
-            HomogenMatrixLine( 0.0,  0.0,  0.0,  1.0 ) );
-        aPropSet.setProperty( CREATE_OUSTRING( "D3DTransformMatrix" ), saMatrix );
-        static const CameraGeometry saCamera(
-            Position3D(   0.0,  0.0, 85000.0 ),
-            Direction3D(  0.0,  0.0,     1.0 ),
-            Direction3D(  0.0,  1.0,     0.0 ) );
-        aPropSet.setProperty( CREATE_OUSTRING( "D3DCameraGeometry" ), saCamera );
+        // Y rotation used as 'first pie slice angle' in 3D pie charts
+        rTypeGroup.convertPieRotation( aPropSet, mrModel.monRotationY.get( 0 ) );
+        // X rotation a.k.a. elevation (map OOXML [0..90] to Chart2 [-90,0])
+        nRotationX = getLimitedValue< sal_Int32, sal_Int32 >( mrModel.monRotationX.get( 15 ), 0, 90 ) - 90;
+        // no right-angled axes in pie charts
+        bRightAngled = false;
+        // ambient color (Gray 30%)
+        nAmbientColor = 0xB3B3B3;
+        // light color (Gray 70%)
+        nLightColor = 0x4C4C4C;
     }
+    else // 3D bar/area/line charts
+    {
+        // Y rotation (OOXML [0..359], Chart2 [-179,180])
+        nRotationY = mrModel.monRotationY.get( 20 );
+        // X rotation a.k.a. elevation (OOXML [-90..90], Chart2 [-179,180])
+        nRotationX = getLimitedValue< sal_Int32, sal_Int32 >( mrModel.monRotationX.get( 15 ), -90, 90 );
+        // right-angled axes
+        bRightAngled = mrModel.mbRightAngled;
+        // ambient color (Gray 20%)
+        nAmbientColor = 0xCCCCCC;
+        // light color (Gray 60%)
+        nLightColor = 0x666666;
+    }
+
+    // Y rotation (map OOXML [0..359] to Chart2 [-179,180])
+    nRotationY %= 360;
+    if( nRotationY > 180 ) nRotationY -= 360;
+    /*  Perspective (map OOXML [0..200] to Chart2 [0,100]). Seems that MSO 2007 is
+        buggy here, the XML plugin of MSO 2003 writes the correct perspective in
+        the range from 0 to 100. We will emulate the wrong behaviour of MSO 2007. */
+    sal_Int32 nPerspective = getLimitedValue< sal_Int32, sal_Int32 >( mrModel.mnPerspective / 2, 0, 100 );
+    // projection mode (parallel axes, if right-angled)
+    cssd::ProjectionMode eProjMode = bRightAngled ? cssd::ProjectionMode_PARALLEL : cssd::ProjectionMode_PERSPECTIVE;
+
+    // set rotation properties
+    aPropSet.setProperty( CREATE_OUSTRING( "RotationVertical" ), nRotationY );
+    aPropSet.setProperty( CREATE_OUSTRING( "RotationHorizontal" ), nRotationX );
+    aPropSet.setProperty( CREATE_OUSTRING( "Perspective" ), nPerspective );
+    aPropSet.setProperty( CREATE_OUSTRING( "RightAngledAxes" ), bRightAngled );
+    aPropSet.setProperty( CREATE_OUSTRING( "D3DScenePerspective" ), eProjMode );
+
+    // set light settings
+    aPropSet.setProperty( CREATE_OUSTRING( "D3DSceneShadeMode" ), cssd::ShadeMode_FLAT );
+    aPropSet.setProperty( CREATE_OUSTRING( "D3DSceneAmbientColor" ), nAmbientColor );
+    aPropSet.setProperty( CREATE_OUSTRING( "D3DSceneLightOn1" ), false );
+    aPropSet.setProperty( CREATE_OUSTRING( "D3DSceneLightOn2" ), true );
+    aPropSet.setProperty( CREATE_OUSTRING( "D3DSceneLightColor2" ), nLightColor );
+    aPropSet.setProperty( CREATE_OUSTRING( "D3DSceneLightDirection2" ), cssd::Direction3D( 0.2, 0.4, 1.0 ) );
 }
 
 // ============================================================================
@@ -241,7 +275,7 @@ PlotAreaConverter::~PlotAreaConverter()
 {
 }
 
-OUString PlotAreaConverter::convertModelToDocument( View3DModel& rView3DModel )
+OUString PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
 {
     /*  Create the diagram object and attach it to the chart document. One
         diagram is used to carry all coordinate systems and data series. */
@@ -261,8 +295,8 @@ OUString PlotAreaConverter::convertModelToDocument( View3DModel& rView3DModel )
     for( PlotAreaModel::AxisVector::iterator aAIt = mrModel.maAxes.begin(), aAEnd = mrModel.maAxes.end(); aAIt != aAEnd; ++aAIt )
     {
         PlotAreaModel::AxisVector::value_type xAxis = *aAIt;
-        OSL_ENSURE( xAxis->mnAxisId >= 0, "PlotAreaConverter::convertModelToDocument - invalid axis identifier" );
-        OSL_ENSURE( !aAxisMap.has( xAxis->mnAxisId ), "PlotAreaConverter::convertModelToDocument - axis identifiers not unique" );
+        OSL_ENSURE( xAxis->mnAxisId >= 0, "PlotAreaConverter::convertFromModel - invalid axis identifier" );
+        OSL_ENSURE( !aAxisMap.has( xAxis->mnAxisId ), "PlotAreaConverter::convertFromModel - axis identifiers not unique" );
         if( xAxis->mnAxisId >= 0 )
             aAxisMap[ xAxis->mnAxisId ] = xAxis;
     }
@@ -277,7 +311,7 @@ OUString PlotAreaConverter::convertModelToDocument( View3DModel& rView3DModel )
         {
             // try to find a compatible axes set for the type group
             AxesSetModel* pAxesSet = 0;
-            for( AxesSetVector::iterator aASIt = aAxesSets.begin(), aASEnd = aAxesSets.end(); (aASIt != aASEnd) && !pAxesSet; ++aASIt )
+            for( AxesSetVector::iterator aASIt = aAxesSets.begin(), aASEnd = aAxesSets.end(); !pAxesSet && (aASIt != aASEnd); ++aASIt )
                 if( (*aASIt)->maTypeGroups.front()->maAxisIds == xTypeGroup->maAxisIds )
                     pAxesSet = aASIt->get();
 
@@ -306,7 +340,7 @@ OUString PlotAreaConverter::convertModelToDocument( View3DModel& rView3DModel )
     {
         AxesSetConverter aAxesSetConv( *this, **aASIt );
         sal_Int32 nAxesSetIdx = static_cast< sal_Int32 >( aASIt - aAxesSets.begin() );
-        OUString aAxesSetAutoTitle = aAxesSetConv.convertModelToDocument( xDiagram, rView3DModel, nAxesSetIdx );
+        OUString aAxesSetAutoTitle = aAxesSetConv.convertFromModel( xDiagram, rView3DModel, nAxesSetIdx );
         aAutoTitle = (nAxesSetIdx == 0) ? aAxesSetAutoTitle : OUString();
     }
     return aAutoTitle;
