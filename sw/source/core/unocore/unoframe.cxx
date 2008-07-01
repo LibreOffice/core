@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoframe.cxx,v $
- * $Revision: 1.121 $
+ * $Revision: 1.122 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -747,8 +747,8 @@ public:
 sal_Bool  SwOLEProperties_Impl::AnyToItemSet(
         SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound)
 {
-    uno::Any* pCLSID;
-    if(!GetProperty(FN_UNO_CLSID, 0, pCLSID))
+    uno::Any* pTemp;
+    if(!GetProperty(FN_UNO_CLSID, 0, pTemp) && !GetProperty(FN_UNO_STREAM_NAME, 0, pTemp) )
         return FALSE;
     SwFrameProperties_Impl::AnyToItemSet( pDoc, rFrmSet, rSet, rSizeFound);
     //
@@ -1410,7 +1410,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
 
                 pFmt->GetDoc()->SetFlyFrmAttr( *pFmt, aSet );
             }
-            else if(FN_UNO_CLSID == pCur->nWID)
+            else if(FN_UNO_CLSID == pCur->nWID || FN_UNO_STREAM_NAME == pCur->nWID)
             {
                 throw lang::IllegalArgumentException();
             }
@@ -1608,7 +1608,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             }
         }
         else if(FN_UNO_CLSID == pCur->nWID || FN_UNO_MODEL == pCur->nWID||
-                FN_UNO_COMPONENT == pCur->nWID)
+                FN_UNO_COMPONENT == pCur->nWID ||FN_UNO_STREAM_NAME == pCur->nWID)
         {
             SwDoc* pDoc = pFmt->GetDoc();
             const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
@@ -1639,6 +1639,10 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
 
             if(FN_UNO_CLSID == pCur->nWID)
                 aAny <<= aHexCLSID;
+            else if(FN_UNO_STREAM_NAME == pCur->nWID)
+            {
+                aAny <<= ::rtl::OUString(pOleNode->GetOLEObj().GetCurrentPersistName());
+            }
         }
         else if(WID_LAYOUT_SIZE == pCur->nWID)
         {
@@ -2205,86 +2209,102 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         }
         else
         {
-            uno::Any* pCLSID;
-            if(!pProps->GetProperty(FN_UNO_CLSID, 0, pCLSID))
+            uno::Any* pCLSID = 0;
+            uno::Any* pStreamName = 0;
+            if(!pProps->GetProperty(FN_UNO_CLSID, 0, pCLSID) && !pProps->GetProperty( FN_UNO_STREAM_NAME, 0, pStreamName ))
                 throw uno::RuntimeException();
-            OUString aCLSID;
-            SvGlobalName aClassName;
-            uno::Reference < embed::XEmbeddedObject > xIPObj;
-            std::auto_ptr < comphelper::EmbeddedObjectContainer > pCnt;
-            if( (*pCLSID) >>= aCLSID )
+            if(pCLSID)
             {
-                if( !aClassName.MakeId( aCLSID ) )
+                OUString aCLSID;
+                SvGlobalName aClassName;
+                uno::Reference < embed::XEmbeddedObject > xIPObj;
+                std::auto_ptr < comphelper::EmbeddedObjectContainer > pCnt;
+                if( (*pCLSID) >>= aCLSID )
                 {
-                    lang::IllegalArgumentException aExcept;
-                    aExcept.Message = OUString::createFromAscii("CLSID invalid");
-                    throw aExcept;
+                    if( !aClassName.MakeId( aCLSID ) )
+                    {
+                        lang::IllegalArgumentException aExcept;
+                        aExcept.Message = OUString::createFromAscii("CLSID invalid");
+                        throw aExcept;
+                    }
+
+                    pCnt.reset( new comphelper::EmbeddedObjectContainer );
+                    ::rtl::OUString aName;
+                    xIPObj = pCnt->CreateEmbeddedObject( aClassName.GetByteSequence(), aName );
                 }
-
-                pCnt.reset( new comphelper::EmbeddedObjectContainer );
-                ::rtl::OUString aName;
-                xIPObj = pCnt->CreateEmbeddedObject( aClassName.GetByteSequence(), aName );
-            }
-            if ( xIPObj.is() )
-            {
-                //TODO/LATER: MISCSTATUS_RESIZEONPRINTERCHANGE
-                //if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xIPObj->GetMiscStatus() && pDoc->getPrinter( false ) )
-                //    xIPObj->OnDocumentPrinterChanged( pDoc->getPrinter( false ) );
-
-                UnoActionContext aAction(pDoc);
-                pDoc->StartUndo(UNDO_INSERT, NULL);
-                if(!bSizeFound)
+                if ( xIPObj.is() )
                 {
-                    //TODO/LATER: from where do I get a ViewAspect? And how do I transport it to the OLENode?
+                    //TODO/LATER: MISCSTATUS_RESIZEONPRINTERCHANGE
+                    //if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xIPObj->GetMiscStatus() && pDoc->getPrinter( false ) )
+                    //    xIPObj->OnDocumentPrinterChanged( pDoc->getPrinter( false ) );
+
+                    UnoActionContext aAction(pDoc);
+                    pDoc->StartUndo(UNDO_INSERT, NULL);
+                    if(!bSizeFound)
+                    {
+                        //TODO/LATER: from where do I get a ViewAspect? And how do I transport it to the OLENode?
+                        sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+
+                        // TODO/LEAN: VisualArea still needs running state
+                        svt::EmbeddedObjectRef::TryRunningState( xIPObj );
+
+                        // set parent to get correct VisArea(in case of object needing parent printer)
+                        uno::Reference < container::XChild > xChild( xIPObj, uno::UNO_QUERY );
+                        if ( xChild.is() )
+                            xChild->setParent( pDoc->GetDocShell()->GetModel() );
+
+                        //The Size should be suggested by the OLE server if not manually set
+                        MapUnit aRefMap = VCLUnoHelper::UnoEmbed2VCLMapUnit( xIPObj->getMapUnit( nAspect ) );
+                        awt::Size aSize;
+                        try
+                        {
+                            aSize = xIPObj->getVisualAreaSize( nAspect );
+                        }
+                        catch ( embed::NoVisualAreaSizeException& )
+                        {
+                            // the default size will be set later
+                        }
+
+                        Size aSz( aSize.Width, aSize.Height );
+                        if ( !aSz.Width() || !aSz.Height() )
+                        {
+                            aSz.Width() = aSz.Height() = 5000;
+                            aSz = OutputDevice::LogicToLogic
+                                                    ( aSz, MapMode( MAP_100TH_MM ), aRefMap );
+                        }
+                        MapMode aMyMap( MAP_TWIP );
+                        aSz = OutputDevice::LogicToLogic( aSz, aRefMap, aMyMap );
+                        SwFmtFrmSize aFrmSz;
+                        aFrmSz.SetSize(aSz);
+                        aFrmSet.Put(aFrmSz);
+                    }
+                    SwFlyFrmFmt* pFmt2 = 0;
+
+                    // TODO/LATER: Is it the only possible aspect here?
                     sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+                    pFmt2 = pDoc->Insert(aPam, ::svt::EmbeddedObjectRef( xIPObj, nAspect ), &aFrmSet, NULL, NULL );
+                    ASSERT( pFmt2, "Doc->Insert(notxt) failed." );
 
-                    // TODO/LEAN: VisualArea still needs running state
-                    svt::EmbeddedObjectRef::TryRunningState( xIPObj );
-
-                    // set parent to get correct VisArea(in case of object needing parent printer)
-                    uno::Reference < container::XChild > xChild( xIPObj, uno::UNO_QUERY );
-                    if ( xChild.is() )
-                        xChild->setParent( pDoc->GetDocShell()->GetModel() );
-
-                    //The Size should be suggested by the OLE server if not manually set
-                    MapUnit aRefMap = VCLUnoHelper::UnoEmbed2VCLMapUnit( xIPObj->getMapUnit( nAspect ) );
-                    awt::Size aSize;
-                    try
-                    {
-                        aSize = xIPObj->getVisualAreaSize( nAspect );
-                    }
-                    catch ( embed::NoVisualAreaSizeException& )
-                    {
-                        // the default size will be set later
-                    }
-
-                    Size aSz( aSize.Width, aSize.Height );
-                    if ( !aSz.Width() || !aSz.Height() )
-                    {
-                        aSz.Width() = aSz.Height() = 5000;
-                        aSz = OutputDevice::LogicToLogic
-                                                ( aSz, MapMode( MAP_100TH_MM ), aRefMap );
-                    }
-                    MapMode aMyMap( MAP_TWIP );
-                    aSz = OutputDevice::LogicToLogic( aSz, aRefMap, aMyMap );
-                    SwFmtFrmSize aFrmSz;
-                    aFrmSz.SetSize(aSz);
-                    aFrmSet.Put(aFrmSz);
+                    pDoc->EndUndo(UNDO_INSERT, NULL);
+                    pFmt2->Add(this);
+                    if(sName.Len())
+                        pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt2, sName);
                 }
-                SwFlyFrmFmt* pFmt2 = 0;
+            }
+            else if( pStreamName )
+            {
+                ::rtl::OUString sStreamName;
+                (*pStreamName) >>= sStreamName;
+                pDoc->StartUndo(UNDO_INSERT, NULL);
 
-                // TODO/LATER: Is it the only possible aspect here?
-                sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-                pFmt2 = pDoc->Insert(aPam, ::svt::EmbeddedObjectRef( xIPObj, nAspect ), &aFrmSet, NULL, NULL );
-                ASSERT( pFmt2, "Doc->Insert(notxt) failed." );
-
+                SwFlyFrmFmt* pFrmFmt = 0;
+                pFrmFmt = pDoc->InsertOLE( aPam, sStreamName, embed::Aspects::MSOLE_CONTENT, &aFrmSet, NULL, NULL );
                 pDoc->EndUndo(UNDO_INSERT, NULL);
-                pFmt2->Add(this);
+                pFrmFmt->Add(this);
                 if(sName.Len())
-                    pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt2, sName);
+                    pDoc->SetFlyName((SwFlyFrmFmt&)*pFrmFmt, sName);
             }
         }
-
         if( pFmt && pDoc->GetDrawModel() )
             GetOrCreateSdrObject( pFmt );
         uno::Any* pOrder;
