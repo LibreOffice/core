@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoshape.cxx,v $
- * $Revision: 1.177 $
+ * $Revision: 1.178 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,6 +102,7 @@
 // #i68523#
 #include "svx/lathe3d.hxx"
 #include "svx/extrud3d.hxx"
+#include "unopolyhelper.hxx"
 
 #include <comphelper/scopeguard.hxx>
 #include <boost/bind.hpp>
@@ -2387,6 +2388,7 @@ bool SvxShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const 
     case OWN_ATTR_GLUEID_TAIL:
     case OWN_ATTR_EDGE_START_POS:
     case OWN_ATTR_EDGE_END_POS:
+    case OWN_ATTR_EDGE_POLYPOLYGONBEZIER:
     {
         SdrEdgeObj* pEdgeObj = dynamic_cast< SdrEdgeObj* >(mpObj.get());
         if(pEdgeObj)
@@ -2434,6 +2436,25 @@ bool SvxShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const 
                     if( rValue >>= nId )
                     {
                         pEdgeObj->setGluePointIndex( pProperty->nWID == OWN_ATTR_GLUEID_HEAD, nId );
+                        return true;
+                    }
+                    break;
+                }
+            case OWN_ATTR_EDGE_POLYPOLYGONBEZIER:
+                {
+                    drawing::PolyPolygonBezierCoords aPolyPoly;
+                    if ( rValue >>= aPolyPoly )
+                    {
+                        basegfx::B2DPolyPolygon aNewPolyPolygon( SvxConvertPolyPolygonBezierToB2DPolyPolygon( &aPolyPoly ) );
+                        if( mpModel->IsWriter() )
+                        {
+                            Point aPoint( mpObj->GetAnchorPos() );
+
+                            basegfx::B2DHomMatrix aMatrix;
+                            aMatrix.translate( aPoint.X(), aPoint.Y() );
+                            aNewPolyPolygon.transform( aMatrix );
+                        }
+                        pEdgeObj->SetEdgeTrackPath( aNewPolyPolygon );
                         return true;
                     }
                 }
@@ -2818,6 +2839,7 @@ bool SvxShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com:
     case OWN_ATTR_EDGE_END_OBJ:
     case OWN_ATTR_GLUEID_HEAD:
     case OWN_ATTR_GLUEID_TAIL:
+    case OWN_ATTR_EDGE_POLYPOLYGONBEZIER:
     {
         SdrEdgeObj* pEdgeObj = dynamic_cast<SdrEdgeObj*>(mpObj.get());
         if(pEdgeObj)
@@ -2855,6 +2877,22 @@ bool SvxShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com:
             case OWN_ATTR_GLUEID_TAIL:
                 {
                     rValue <<= pEdgeObj->getGluePointIndex( pProperty->nWID == OWN_ATTR_GLUEID_HEAD );
+                    break;
+                }
+            case OWN_ATTR_EDGE_POLYPOLYGONBEZIER:
+                {
+                    basegfx::B2DPolyPolygon aPolyPoly( pEdgeObj->GetEdgeTrackPath() );
+                    if( mpModel->IsWriter() )
+                    {
+                        Point aPoint( mpObj->GetAnchorPos() );
+
+                        basegfx::B2DHomMatrix aMatrix;
+                        aMatrix.translate( -aPoint.X(), -aPoint.Y() );
+                        aPolyPoly.transform( aMatrix );
+                    }
+                    drawing::PolyPolygonBezierCoords aRetval;
+                    SvxConvertB2DPolyPolygonToPolyPolygonBezier( aPolyPoly, aRetval);
+                    rValue <<= aRetval;
                     break;
                 }
             }
