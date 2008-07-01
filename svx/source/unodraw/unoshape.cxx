@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoshape.cxx,v $
- * $Revision: 1.174 $
+ * $Revision: 1.175 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1206,8 +1206,18 @@ void SAL_CALL SvxShape::setSize( const awt::Size& rSize )
         else
         {
             //aRect.SetSize(aLocalSize); // this call substract 1 // http://www.openoffice.org/issues/show_bug.cgi?id=83193
-            aRect.setWidth(aLocalSize.Width());
-            aRect.setHeight(aLocalSize.Height());
+            if ( !aLocalSize.Width() )
+            {
+                aRect.Right() = RECT_EMPTY;
+            }
+            else
+                aRect.setWidth(aLocalSize.Width());
+            if ( !aLocalSize.Height() )
+            {
+                aRect.Bottom() = RECT_EMPTY;
+            }
+            else
+                aRect.setHeight(aLocalSize.Height());
 
             svx_setLogicRectHack( mpObj.get(), aRect );
         }
