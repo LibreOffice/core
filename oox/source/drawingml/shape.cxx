@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shape.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,6 +29,8 @@
  ************************************************************************/
 
 #include "oox/drawingml/shape.hxx"
+#include "oox/drawingml/theme.hxx"
+#include "oox/drawingml/textbody.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "tokens.hxx"
@@ -442,41 +444,30 @@ void addMissingProperties( const PropertyMap& rSource, PropertyMap& rDest )
 // merging styles, if a shape property is not set, we have to set the shape style property
 void Shape::setShapeStyles( const ThemePtr& rxTheme, LineProperties& rLineProperties, FillProperties& rFillProperties )
 {
+    if( !rxTheme ) return;
+
     ShapeStylesIndexMap::const_iterator aShapeStylesIndexIter( getShapeStylesIndex().begin() );
     while( aShapeStylesIndexIter != getShapeStylesIndex().end() )
     {
-        const rtl::OUString sIndex( (*aShapeStylesIndexIter).second );
-        sal_uInt32 nIndex( sIndex.toInt32() );
-        if ( nIndex-- )
+        sal_Int32 nIndex = aShapeStylesIndexIter->second.toInt32();
+        if ( nIndex-- > 0 )
         {
-            switch( (*aShapeStylesIndexIter).first )
+            switch( aShapeStylesIndexIter->first )
             {
                 case SHAPESTYLE_ln :
-                {
-                    if( rxTheme.get() )
-                    {
-                        const std::vector< LinePropertiesPtr >& rThemeLineStyleList( rxTheme->getLineStyleList() );
-                        if ( rThemeLineStyleList.size() > nIndex )
-                            rLineProperties = *rThemeLineStyleList[ nIndex ].get();
-                    }
-                }
+                    if( const LineProperties* pLineProps = rxTheme->getLineStyle( nIndex ) )
+                        rLineProperties = *pLineProps;
                 break;
                 case SHAPESTYLE_fill :
-                {
-                    if( rxTheme.get() )
-                    {
-                        const std::vector< FillPropertiesPtr >& rThemeFillStyleList( rxTheme->getFillStyleList() );
-                        if ( rThemeFillStyleList.size() > nIndex )
-                            rFillProperties = *rThemeFillStyleList[ nIndex ].get();
-                    }
-                }
+                    if( const FillProperties* pFillProps = rxTheme->getFillStyle( nIndex ) )
+                        rFillProperties = *pFillProps;
                 break;
                 case SHAPESTYLE_effect :
                 case SHAPESTYLE_font :
                 break;
             }
         }
-        aShapeStylesIndexIter++;
+        ++aShapeStylesIndexIter;
     }
 }
 
