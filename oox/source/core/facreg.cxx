@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: facreg.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,13 @@ extern uno::Reference< uno::XInterface > SAL_CALL className##_createInstance(   
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr )                \
     throw( uno::Exception )
 
+#define SERVICE2( className )                                       \
+extern OUString SAL_CALL className##_getImplementationName() throw();   \
+extern uno::Sequence< OUString > SAL_CALL className##_getSupportedServiceNames() throw();\
+extern uno::Reference< uno::XInterface > SAL_CALL className##_createInstance(           \
+        const uno::Reference< uno::XComponentContext > & xContext )             \
+    throw( uno::Exception )
+
 namespace oox {
     namespace core { SERVICE( FilterDetect ); }
     namespace ppt { SERVICE( PowerPointImport ); }
@@ -58,6 +65,7 @@ namespace oox {
     namespace xls { SERVICE( ExcelBiffFilter ); }
     namespace shape { SERVICE( ShapeContextHandler ); }
     namespace shape { SERVICE( FastTokenHandlerService ); }
+    namespace docprop { SERVICE2( OOXMLDocPropImportImpl ); }
 }
 
 //
@@ -99,6 +107,7 @@ OOX_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void * , void * pRegistryKe
             WRITEINFO( ::oox::xls::ExcelBiffFilter );
             WRITEINFO( ::oox::shape::ShapeContextHandler );
             WRITEINFO( ::oox::shape::FastTokenHandlerService );
+            WRITEINFO( ::oox::docprop::OOXMLDocPropImportImpl );
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -117,6 +126,15 @@ OOX_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void * , void * pRegistryKe
                 classname##_getSupportedServiceNames() );\
         }
 
+#define SINGLEFACTORY2(classname)\
+        if( classname##_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )\
+        {\
+            xCompFactory = ::cppu::createSingleComponentFactory(\
+                classname##_createInstance,\
+                classname##_getImplementationName(),\
+                classname##_getSupportedServiceNames() );\
+        }
+
 OOX_DLLPUBLIC void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * )
 {
     void * pRet = 0;
@@ -125,6 +143,7 @@ OOX_DLLPUBLIC void * SAL_CALL component_getFactory( const sal_Char * pImplName, 
         uno::Reference< lang::XMultiServiceFactory > xMSF( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
 
         uno::Reference< lang::XSingleServiceFactory > xFactory;
+        uno::Reference< lang::XSingleComponentFactory > xCompFactory;
 
         const sal_Int32 nImplNameLen = strlen( pImplName );
 
@@ -136,11 +155,17 @@ OOX_DLLPUBLIC void * SAL_CALL component_getFactory( const sal_Char * pImplName, 
         else SINGLEFACTORY( ::oox::xls::ExcelBiffFilter )
         else SINGLEFACTORY( ::oox::shape::ShapeContextHandler)
         else SINGLEFACTORY( ::oox::shape::FastTokenHandlerService)
+        else SINGLEFACTORY2( ::oox::docprop::OOXMLDocPropImportImpl )
 
         if( xFactory.is())
         {
             xFactory->acquire();
             pRet = xFactory.get();
+        }
+        else if ( xCompFactory.is() )
+        {
+            xCompFactory->acquire();
+            pRet = xCompFactory.get();
         }
     }
     return pRet;
