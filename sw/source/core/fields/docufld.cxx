@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docufld.cxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1896,13 +1896,15 @@ BOOL SwPostItField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
             {
                 SwPostItFieldType* pGetType = (SwPostItFieldType*)GetTyp();
                 SwDoc* pDoc = pGetType->GetDoc();
-                SwTextAPIEditSource* pObj = new SwTextAPIEditSource( &pDoc->GetDocShell()->GetPool() );
+                SwTextAPIEditSource* pObj = new SwTextAPIEditSource( pDoc );
                 const_cast <SwPostItField*> (this)->m_pTextObject = new SwTextAPIObject( pObj );
                 m_pTextObject->acquire();
             }
 
             if ( mpText )
                 m_pTextObject->SetText( *mpText );
+            else
+                m_pTextObject->SetString( sTxt );
 
             uno::Reference < text::XText > xText( m_pTextObject );
             rAny <<= xText;
