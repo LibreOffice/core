@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frmform.cxx,v $
- * $Revision: 1.70 $
+ * $Revision: 1.71 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2136,7 +2136,6 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
         //resolved into:
 #if OSL_DEBUG_LEVEL > 1
 #ifndef PRODUCT
-
         DbgLoop aDbgLoop2( (const void*) this );
 #endif
 #endif
