@@ -8,7 +8,7 @@
  *
  * $RCSfile: chartspacemodel.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,7 @@ namespace chart {
 
 ChartSpaceModel::ChartSpaceModel() :
     mnDispBlanksAs( XML_zero ),
-    mnStyle( -1 ),
+    mnStyle( 2 ),
     mbAutoTitleDel( false ),
     mbPlotVisOnly( false ),
     mbShowLabelsOverMax( false )
