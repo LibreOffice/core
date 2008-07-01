@@ -8,7 +8,7 @@
 #
 # $RCSfile: make_installer.pl,v $
 #
-# $Revision: 1.111 $
+# $Revision: 1.112 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -662,6 +662,12 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     installer::ziplist::list_all_files_from_include_path($includepatharrayref_lang);
 
+    ##############################################
+    # Analyzing spellchecker languages
+    ##############################################
+
+    if ( $allvariableshashref->{'SPELLCHECKERFILE'} ) { installer::worker::set_spellcheckerlanguages($languagesarrayref, $allvariableshashref); }
+
     #####################################
     # Language dependent directory part
     #####################################
@@ -1011,8 +1017,17 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         $modulesinproductlanguageresolvedarrayref = installer::scriptitems::remove_not_required_language_modules($modulesinproductlanguageresolvedarrayref, $languagesarrayref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes_modules($loggingdir . "modules2a.log", $modulesinproductlanguageresolvedarrayref); }
 
+        if ( $installer::globals::analyze_spellcheckerlanguage )
+        {
+            $modulesinproductlanguageresolvedarrayref = installer::scriptitems::remove_not_required_spellcheckerlanguage_modules($modulesinproductlanguageresolvedarrayref);
+            if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes_modules($loggingdir . "modules3.log", $modulesinproductlanguageresolvedarrayref); }
+
+            $filesinproductlanguageresolvedarrayref = installer::scriptitems::remove_not_required_spellcheckerlanguage_files($filesinproductlanguageresolvedarrayref);
+            if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles15b.log", $filesinproductlanguageresolvedarrayref); }
+        }
+
         installer::scriptitems::changing_name_of_language_dependent_keys($modulesinproductlanguageresolvedarrayref);
-        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes_modules($loggingdir . "modules3.log", $modulesinproductlanguageresolvedarrayref); }
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes_modules($loggingdir . "modules3a.log", $modulesinproductlanguageresolvedarrayref); }
 
         installer::scriptitems::collect_language_specific_names($modulesinproductlanguageresolvedarrayref);
     }
