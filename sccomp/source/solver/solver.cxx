@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: solver.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -131,19 +131,6 @@ uno::Reference<table::XCell> lcl_GetCell( const uno::Reference<sheet::XSpreadshe
     uno::Reference<container::XIndexAccess> xSheets( xDoc->getSheets(), uno::UNO_QUERY );
     uno::Reference<sheet::XSpreadsheet> xSheet( xSheets->getByIndex( rPos.Sheet ), uno::UNO_QUERY );
     return xSheet->getCellByPosition( rPos.Column, rPos.Row );
-}
-
-OUString lcl_GetString( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc, const table::CellAddress& rPos )
-{
-    uno::Reference<text::XTextRange> xText( lcl_GetCell( xDoc, rPos ), uno::UNO_QUERY );
-    return xText->getString();
-}
-
-void lcl_SetString( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
-                    const table::CellAddress& rPos, const OUString& rString )
-{
-    uno::Reference<text::XTextRange> xText( lcl_GetCell( xDoc, rPos ), uno::UNO_QUERY );
-    xText->setString( rString );
 }
 
 void lcl_SetValue( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
