@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: modelbase.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,35 +37,6 @@
 namespace oox {
 namespace drawingml {
 namespace chart {
-
-// ============================================================================
-
-template< typename Type >
-class OptValue
-{
-public:
-    inline explicit     OptValue() : mbHasValue( false ) {}
-    inline explicit     OptValue( const Type& rValue ) : maValue( rValue ), mbHasValue( true ) {}
-
-    inline bool         has() const { return mbHasValue; }
-    inline bool         operator!() const { return !mbHasValue; }
-
-    inline const Type&  get() const { return maValue; }
-    inline const Type&  get( const Type& rDefValue ) const { return mbHasValue ? maValue : rDefValue; }
-
-    inline void         reset() { mbHasValue = false; }
-    inline void         set( const Type& rValue ) { maValue = rValue; mbHasValue = true; }
-    inline OptValue&    operator=( const Type& rValue ) { set( rValue ); return *this; }
-
-private:
-    Type                maValue;
-    bool                mbHasValue;
-};
-
-typedef OptValue< bool >            OptBool;
-typedef OptValue< sal_Int32 >       OptInt32;
-typedef OptValue< double >          OptDouble;
-typedef OptValue< ::rtl::OUString > OptString;
 
 // ============================================================================
 
