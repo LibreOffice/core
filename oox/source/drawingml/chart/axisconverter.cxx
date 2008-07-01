@@ -8,7 +8,7 @@
  *
  * $RCSfile: axisconverter.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,17 +63,17 @@ namespace chart {
 namespace {
 
 template< typename Type >
-inline void lclSetValueOrClearAny( Any& orAny, const OptValue< Type >& rValue )
+inline void lclSetValueOrClearAny( Any& orAny, const OptValue< Type >& roValue )
 {
-    if( rValue.has() ) orAny <<= rValue.get(); else orAny.clear();
+    if( roValue.has() ) orAny <<= roValue.get(); else orAny.clear();
 }
 
-void lclSetScaledValueOrClearAny( Any& orAny, const OptDouble& rValue, const Reference< XScaling >& rxScaling )
+void lclSetScaledValueOrClearAny( Any& orAny, const OptValue< double >& rofValue, const Reference< XScaling >& rxScaling )
 {
-    if( rValue.has() && rxScaling.is() )
-        orAny <<= rxScaling->doScaling( rValue.get() );
+    if( rofValue.has() && rxScaling.is() )
+        orAny <<= rxScaling->doScaling( rofValue.get() );
     else
-        lclSetValueOrClearAny( orAny, rValue );
+        lclSetValueOrClearAny( orAny, rofValue );
 }
 
 } // namespace
@@ -89,24 +89,8 @@ AxisConverter::~AxisConverter()
 {
 }
 
-void AxisConverter::convertModelToDocument( const Reference< XCoordinateSystem >& rxCoordSystem,
+void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCoordSystem,
         TypeGroupConverter& rTypeGroup, sal_Int32 nAxesSetIdx, sal_Int32 nAxisIdx )
-{
-    Reference< XAxis > xAxis = createAxis( rTypeGroup, nAxesSetIdx, nAxisIdx );
-    if( xAxis.is() && rxCoordSystem.is() ) try
-    {
-        // insert axis into coordinate system
-        rxCoordSystem->setAxisByDimension( nAxisIdx, xAxis, nAxesSetIdx );
-    }
-    catch( Exception& )
-    {
-        OSL_ENSURE( false, "AxisConverter::convertModelToDocument - cannot insert axis into coordinate system" );
-    }
-}
-
-// private --------------------------------------------------------------------
-
-Reference< XAxis > AxisConverter::createAxis( TypeGroupConverter& rTypeGroup, sal_Int32 nAxesSetIdx, sal_Int32 nAxisIdx )
 {
     Reference< XAxis > xAxis;
     try
@@ -137,23 +121,23 @@ Reference< XAxis > AxisConverter::createAxis( TypeGroupConverter& rTypeGroup, sa
                 if( rTypeInfo.mbCategoryAxis )
                 {
                     OSL_ENSURE( (mrModel.mnTypeId == C_TOKEN( catAx )) || (mrModel.mnTypeId == C_TOKEN( dateAx )),
-                        "AxisConverter::createAxis - unexpected axis model type (must: c:catAx or c:dateEx)" );
+                        "AxisConverter::convertFromModel - unexpected axis model type (must: c:catAx or c:dateEx)" );
                     aScaleData.AxisType = ApiAxisType::CATEGORY;
                     aScaleData.Categories = rTypeGroup.createCategorySequence();
                 }
                 else
                 {
-                    OSL_ENSURE( mrModel.mnTypeId == C_TOKEN( valAx ), "AxisConverter::createAxis - unexpected axis model type (must: c:valAx)" );
+                    OSL_ENSURE( mrModel.mnTypeId == C_TOKEN( valAx ), "AxisConverter::convertFromModel - unexpected axis model type (must: c:valAx)" );
                     aScaleData.AxisType = ApiAxisType::REALNUMBER;
                 }
             break;
             case API_Y_AXIS:
-                OSL_ENSURE( mrModel.mnTypeId == C_TOKEN( valAx ), "AxisConverter::createAxis - unexpected axis model type (must: c:valAx)" );
+                OSL_ENSURE( mrModel.mnTypeId == C_TOKEN( valAx ), "AxisConverter::convertFromModel - unexpected axis model type (must: c:valAx)" );
                 aScaleData.AxisType = rTypeGroup.isPercent() ? ApiAxisType::PERCENT : ApiAxisType::REALNUMBER;
             break;
             case API_Z_AXIS:
-                OSL_ENSURE( mrModel.mnTypeId == C_TOKEN( serAx ), "AxisConverter::createAxis - unexpected axis model type (must: c:serAx)" );
-                OSL_ENSURE( rTypeGroup.isDeep3dChart(), "AxisConverter::createAxis - series axis not supported by this chart type" );
+                OSL_ENSURE( mrModel.mnTypeId == C_TOKEN( serAx ), "AxisConverter::convertFromModel - unexpected axis model type (must: c:serAx)" );
+                OSL_ENSURE( rTypeGroup.isDeep3dChart(), "AxisConverter::convertFromModel - series axis not supported by this chart type" );
                 aScaleData.AxisType = ApiAxisType::SERIES;
             break;
         }
@@ -201,24 +185,28 @@ Reference< XAxis > AxisConverter::createAxis( TypeGroupConverter& rTypeGroup, sa
                 // minor increment
                 Sequence< SubIncrement >& rSubIncrementSeq = rIncrementData.SubIncrements;
                 rSubIncrementSeq.realloc( 1 );
-                OptInt32 nCount;
+                OptValue< sal_Int32 > onCount;
                 if( mrModel.mofMajorUnit.has() && mrModel.mofMinorUnit.has() && (0.0 < mrModel.mofMinorUnit.get()) && (mrModel.mofMinorUnit.get() <= mrModel.mofMajorUnit.get()) )
                 {
                     double fCount = mrModel.mofMajorUnit.get() / mrModel.mofMinorUnit.get() + 0.5;
                     if( (1.0 <= fCount) && (fCount < 1001.0) )
-                        nCount = static_cast< sal_Int32 >( fCount );
+                        onCount = static_cast< sal_Int32 >( fCount );
                 }
-                lclSetValueOrClearAny( rSubIncrementSeq[ 0 ].IntervalCount, nCount );
+                lclSetValueOrClearAny( rSubIncrementSeq[ 0 ].IntervalCount, onCount );
             }
             break;
             default:
-                OSL_ENSURE( false, "AxisConverter::createAxis - unknown axis type" );
+                OSL_ENSURE( false, "AxisConverter::convertFromModel - unknown axis type" );
         }
 
         // axis orientation ---------------------------------------------------
 
-        // #i85167# pie/donut charts need hard reverse attribute at Y axis
-        bool bReverse = (mrModel.mnOrientation == XML_maxMin) || ((nAxisIdx == API_Y_AXIS) && (rTypeInfo.meTypeCategory == TYPECATEGORY_PIE));
+        // #i85167# pie/donut charts need opposite direction at Y axis
+        // #i87747# radar charts need opposite direction at X axis
+        bool bMirrorDirection =
+            ((nAxisIdx == API_Y_AXIS) && (rTypeInfo.meTypeCategory == TYPECATEGORY_PIE)) ||
+            ((nAxisIdx == API_X_AXIS) && (rTypeInfo.meTypeCategory == TYPECATEGORY_RADAR));
+        bool bReverse = (mrModel.mnOrientation == XML_maxMin) != bMirrorDirection;
         namespace cssc = ::com::sun::star::chart2;
         aScaleData.Orientation = bReverse ? cssc::AxisOrientation_REVERSE : cssc::AxisOrientation_MATHEMATICAL;
 
@@ -241,14 +229,22 @@ Reference< XAxis > AxisConverter::createAxis( TypeGroupConverter& rTypeGroup, sa
         {
             Reference< XTitled > xTitled( xAxis, UNO_QUERY_THROW );
             TitleConverter aTitleConv( *this, *mrModel.mxTitle );
-            aTitleConv.convertModelToDocument( xTitled, CREATE_OUSTRING( "Axis Title" ) );
+            aTitleConv.convertFromModel( xTitled, CREATE_OUSTRING( "Axis Title" ) );
         }
     }
     catch( Exception& )
     {
     }
 
-    return xAxis;
+    if( xAxis.is() && rxCoordSystem.is() ) try
+    {
+        // insert axis into coordinate system
+        rxCoordSystem->setAxisByDimension( nAxisIdx, xAxis, nAxesSetIdx );
+    }
+    catch( Exception& )
+    {
+        OSL_ENSURE( false, "AxisConverter::convertFromModel - cannot insert axis into coordinate system" );
+    }
 }
 
 // ============================================================================
