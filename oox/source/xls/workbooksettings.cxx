@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: workbooksettings.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
 
+using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::util::Date;
@@ -112,7 +113,7 @@ WorkbookSettings::WorkbookSettings( const WorkbookHelper& rHelper ) :
 
 void WorkbookSettings::importWorkbookPr( const AttributeList& rAttribs )
 {
-    maOoxBookData.maCodeName          = rAttribs.getString( XML_codePage );
+    maOoxBookData.maCodeName          = rAttribs.getString( XML_codePage, OUString() );
     maOoxBookData.mnShowObjectMode    = rAttribs.getToken( XML_showObjects, XML_all );
     maOoxBookData.mnUpdateLinksMode   = rAttribs.getToken( XML_updateLinks, XML_userSet );
     maOoxBookData.mnDefaultThemeVer   = rAttribs.getInteger( XML_defaultThemeVersion, -1 );
