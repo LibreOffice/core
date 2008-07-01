@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframe.cxx,v $
- * $Revision: 1.64 $
+ * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,6 +108,11 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, ULONG salFrameStyle ) :
 
 AquaSalFrame::~AquaSalFrame()
 {
+    // if the frame is destroyed and has the current menubar
+    // set the default menubar
+    if( mpMenu && mpMenu->mbMenuBar && AquaSalMenu::pCurrentMenuBar == mpMenu )
+        AquaSalMenu::setDefaultMenu();
+
     // cleanup clipping stuff
     ResetClipRegion();
 
@@ -402,31 +407,18 @@ void AquaSalFrame::Show(BOOL bVisible, BOOL bNoActivate)
     }
     else
     {
-        {
-            YieldMutexReleaser aRel;
+        // if the frame holding the current menubar gets hidden
+        // show the default menubar
+        if( mpMenu && mpMenu->mbMenuBar && AquaSalMenu::pCurrentMenuBar == mpMenu )
+            AquaSalMenu::setDefaultMenu();
 
-            [SalFrameView unsetMouseFrame: this];
-            if( mpParent )
-                [mpParent->mpWindow removeChildWindow: mpWindow];
+        YieldMutexReleaser aRel;
 
-            [mpWindow orderOut: NSApp];
-        }
+        [SalFrameView unsetMouseFrame: this];
+        if( mpParent )
+            [mpParent->mpWindow removeChildWindow: mpWindow];
 
-        // this could be the last frame with a menubar
-        // if so remove the menubar
-        if( mpMenu && mpMenu->mbMenuBar )
-        {
-            bool bLastMenubar = true;
-            const std::list<AquaSalFrame*>& rFrames( GetSalData()->maFrames );
-            for( std::list<AquaSalFrame*>::const_iterator it = rFrames.begin();
-                 it != rFrames.end() && bLastMenubar; ++it )
-            {
-                if( (*it)->mbShown && (*it)->mpMenu && (*it)->mpMenu->mbMenuBar )
-                    bLastMenubar = false;
-            }
-            if( bLastMenubar )
-                AquaSalMenu::setDefaultMenu();
-        }
+        [mpWindow orderOut: NSApp];
     }
 }
 
@@ -530,7 +522,7 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
     // relase and acquire mutex again since this call can block waiting for an internal lock
     {
         YieldMutexReleaser aRel;
-        [mpWindow setFrame: aStateRect display: FALSE];
+        [mpWindow setFrame: aStateRect display: NO];
     }
 
     // FIXME: HTH maximized state ?
@@ -555,12 +547,15 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
         CallCallback( nEvent, NULL );
 
     if( mbShown )
+    {
         // trigger filling our backbuffer
         SendPaintEvent();
 
-    YieldMutexReleaser aRel;
+        // tell the system the views need to be updated
+        YieldMutexReleaser aRel;
 
-    [mpWindow display];
+        [mpWindow display];
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -693,7 +688,7 @@ void AquaSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay )
         maFullScreenRect = [mpWindow frame];
         {
             YieldMutexReleaser aRel;
-            [mpWindow setFrame: [NSWindow frameRectForContentRect: aNewContentRect styleMask: mnStyleMask] display: YES];
+            [mpWindow setFrame: [NSWindow frameRectForContentRect: aNewContentRect styleMask: mnStyleMask] display: mbShown ? YES : NO];
         }
 
         UpdateFrameGeometry();
@@ -705,7 +700,7 @@ void AquaSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay )
     {
         {
             YieldMutexReleaser aRel;
-            [mpWindow setFrame: maFullScreenRect display: YES];
+            [mpWindow setFrame: maFullScreenRect display: mbShown ? YES : NO];
         }
         UpdateFrameGeometry();
 
@@ -812,7 +807,7 @@ void AquaSalFrame::SetPointerPos( long nX, long nY )
 
 void AquaSalFrame::Flush( void )
 {
-    if( !(mbGraphics && mpGraphics && mpView) )
+    if( !(mbGraphics && mpGraphics && mpView && mbShown) )
         return;
 
     [mpView setNeedsDisplay: YES];
@@ -830,7 +825,7 @@ void AquaSalFrame::Flush( void )
 
 void AquaSalFrame::Flush( const Rectangle& rRect )
 {
-    if( !(mbGraphics && mpGraphics && mpView) )
+    if( !(mbGraphics && mpGraphics && mpView && mbShown) )
         return;
 
     NSRect aNSRect = { {rRect.Left(), rRect.Top()}, { rRect.GetWidth(), rRect.GetHeight() } };
@@ -850,7 +845,7 @@ void AquaSalFrame::Flush( const Rectangle& rRect )
 
 void AquaSalFrame::Sync()
 {
-    if( mbGraphics && mpGraphics && mpView )
+    if( mbGraphics && mpGraphics && mpView && mbShown )
     {
         YieldMutexReleaser aRel;
 
@@ -1242,12 +1237,14 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, USHOR
         CallCallback(nEvent, NULL);
 
     if( mbShown && bPaint )
+    {
         // trigger filling our backbuffer
         SendPaintEvent();
 
-    // now inform the system that the views need to be drawn
-    YieldMutexReleaser aRel;
-    [mpWindow display];
+        // now inform the system that the views need to be drawn
+        YieldMutexReleaser aRel;
+        [mpWindow display];
+    }
 }
 
 void AquaSalFrame::GetWorkArea( Rectangle& rRect )
@@ -1381,7 +1378,8 @@ void AquaSalFrame::UpdateFrameGeometry()
     {
         maScreenRect = [pScreen frame];
         NSArray* pScreens = [NSScreen screens];
-        maGeometry.nScreenNumber = [pScreens indexOfObject: pScreen];
+        if( pScreens )
+            maGeometry.nScreenNumber = [pScreens indexOfObject: pScreen];
     }
 
     NSRect aFrameRect = [mpWindow frame];
@@ -1447,7 +1445,7 @@ void AquaSalFrame::ResetClipRegion()
     CGPathRelease( mrClippingPath );
     mrClippingPath = NULL;
 
-    if( mpView )
+    if( mpView && mbShown )
         [mpView setNeedsDisplay: YES];
     if( mpWindow )
     {
@@ -1487,7 +1485,7 @@ void AquaSalFrame::EndSetClipRegion()
         mrClippingPath = CGPathCreateMutable();
         CGPathAddRects( mrClippingPath, NULL, &maClippingRects[0], maClippingRects.size() );
     }
-    if( mpView )
+    if( mpView && mbShown )
         [mpView setNeedsDisplay: YES];
     if( mpWindow )
     {
