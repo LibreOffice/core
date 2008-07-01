@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nmspmap.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,9 @@
 #include <xmloff/xmltoken.hxx>
 #endif
 #include <xmloff/nmspmap.hxx>
+
+#include "xmlnmspe.hxx"
+
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -222,6 +225,15 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
             // don't bother caching this, it rarely happens
             OUStringBuffer sQName;
             sQName.append ( sXMLNS );
+            sQName.append ( sal_Unicode(':') );
+            sQName.append ( rLocalName );
+            return sQName.makeStringAndClear();;
+        }
+        case XML_NAMESPACE_XML:
+        {
+            // this namespace is reserved, and needs not to be declared
+            OUStringBuffer sQName;
+            sQName.append ( GetXMLToken(XML_XML) );
             sQName.append ( sal_Unicode(':') );
             sQName.append ( rLocalName );
             return sQName.makeStringAndClear();;
