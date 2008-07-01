@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salvd.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,16 +77,19 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX,
         mpGraphics = new AquaSalGraphics(); // never fails
         mnBitmapDepth = nBitCount;
 
-        if( nDX && nDY )
-            SetSize( nDX, nDY );
-
-        // inherit resolution from reference window
+        // inherit resolution from reference device
         if( pGraphic )
         {
             AquaSalFrame* pFrame = pGraphic->getGraphicsFrame();
-            if( pFrame )
+            if( pFrame && AquaSalFrame::isAlive( pFrame ) )
+            {
+                mpGraphics->setGraphicsFrame( pFrame );
                 mpGraphics->initResolution( pFrame->mpWindow );
+            }
         }
+
+        if( nDX && nDY )
+            SetSize( nDX, nDY );
 
         // NOTE: if SetSize does not succeed, we just ignore the nDX and nDY
     }
@@ -186,14 +189,22 @@ BOOL AquaSalVirtualDevice::SetSize( long nDX, long nDY )
             mnBitmapDepth, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
         xCGContext = mxBitmapContext;
     }
-    else if( !GetSalData()->maFrames.empty() )
+    else
     {
         // default to a NSView target context
-        AquaSalFrame* pSalFrame = *GetSalData()->maFrames.begin();
-        NSGraphicsContext* pNSContext = [NSGraphicsContext graphicsContextWithWindow: pSalFrame->getWindow()];
-        if( pNSContext )
-            xCGContext = reinterpret_cast<CGContextRef>([pNSContext graphicsPort]);
+        AquaSalFrame* pSalFrame = mpGraphics->getGraphicsFrame();
+        if( !pSalFrame && !GetSalData()->maFrames.empty() )
+            pSalFrame = *GetSalData()->maFrames.begin();
+        if( pSalFrame )
+        {
+            NSGraphicsContext* pNSContext = [NSGraphicsContext graphicsContextWithWindow: pSalFrame->getWindow()];
+            if( pNSContext )
+                xCGContext = reinterpret_cast<CGContextRef>([pNSContext graphicsPort]);
+        }
     }
+
+    DBG_ASSERT( xCGContext, "no context" );
+
     const CGSize aNewSize = { nDX, nDY };
     mxLayer = CGLayerCreateWithContext( xCGContext, aNewSize, NULL );
 
