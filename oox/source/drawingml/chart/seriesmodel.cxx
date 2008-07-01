@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: seriesmodel.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,7 +70,7 @@ DataLabelsModel::~DataLabelsModel()
 
 ErrorBarModel::ErrorBarModel() :
     mfValue( 0.0 ),
-    mnDirection( XML_TOKEN_INVALID ),
+    mnDirection( XML_y ),
     mnTypeId( XML_both ),
     mnValueType( XML_fixedVal ),
     mbNoEndCap( false )
@@ -99,7 +99,8 @@ TrendlineModel::~TrendlineModel()
 // ============================================================================
 
 DataPointModel::DataPointModel() :
-    mnIndex( -1 )
+    mnIndex( -1 ),
+    mbInvertNeg( false )
 {
 }
 
@@ -115,7 +116,9 @@ SeriesModel::SeriesModel() :
     mnMarkerSize( 5 ),
     mnMarkerSymbol( XML_auto ),
     mnOrder( -1 ),
-    mbInvertNeg( false )
+    mbBubble3d( false ),
+    mbInvertNeg( false ),
+    mbSmooth( false )
 {
 }
 
