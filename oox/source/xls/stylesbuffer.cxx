@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stylesbuffer.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -354,7 +354,7 @@ void Color::importColor( RecordInputStream& rStrm )
     // scale tint from signed 16-bit to double range -1.0 ... 1.0
     double fTint = nTint;
     if( nTint < 0 )
-        fTint /= SAL_MIN_INT16;
+        fTint /= -SAL_MIN_INT16;
     else if( nTint > 0 )
         fTint /= SAL_MAX_INT16;
 
@@ -707,7 +707,7 @@ void Font::importAttribs( sal_Int32 nElement, const AttributeList& rAttribs )
         case XLS_TOKEN( rFont ):
             if( rAttribs.hasAttribute( XML_val ) )
             {
-                maOoxData.maName = rAttribs.getString( XML_val );
+                maOoxData.maName = rAttribs.getString( XML_val, OUString() );
                 maUsedFlags.mbNameUsed = true;
             }
         break;
@@ -2676,7 +2676,7 @@ CellStyle::CellStyle( const WorkbookHelper& rHelper ) :
 
 void CellStyle::importCellStyle( const AttributeList& rAttribs )
 {
-    maOoxData.maName = rAttribs.getString( XML_name );
+    maOoxData.maName = rAttribs.getString( XML_name, OUString() );
     maOoxData.mnXfId = rAttribs.getInteger( XML_xfId, -1 );
     maOoxData.mnBuiltinId = rAttribs.getInteger( XML_builtinId, -1 );
     maOoxData.mnLevel = rAttribs.getInteger( XML_iLevel, 0 );
