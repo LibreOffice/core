@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hfedtdlg.src,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -489,6 +489,7 @@ TabPage RID_HFBASE
         Text [ en-US ] = "Hea~der" ;
     };
 
+    /* #i84123# list box needs own help id, which is set in the derived tab pages
     ListBox LB_DEFINED
     {
         Border = TRUE ;
@@ -497,6 +498,7 @@ TabPage RID_HFBASE
         DropDown = TRUE ;
         TabStop = TRUE ;
     };
+    */
 
     FixedText FT_HF_CUSTOM
     {
@@ -703,6 +705,15 @@ TabPage RID_SCPAGE_HFED_HL < RID_HFBASE
         Size = MAP_APPFONT ( 80 , 72 ) ;
         TabStop = TRUE ;
     };
+    ListBox LB_DEFINED
+    {
+        HelpId = HID_SC_HF_HL_DEFINED ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 100 ) ;
+        Size = MAP_APPFONT ( 130 , 80 ) ;
+        DropDown = TRUE ;
+        TabStop = TRUE ;
+    };
 };
 TabPage RID_SCPAGE_HFED_HR < RID_HFBASE
 {
@@ -730,6 +741,15 @@ TabPage RID_SCPAGE_HFED_HR < RID_HFBASE
         Border = TRUE ;
         Pos = MAP_APPFONT ( 174 , 18 ) ;
         Size = MAP_APPFONT ( 80 , 72 ) ;
+        TabStop = TRUE ;
+    };
+    ListBox LB_DEFINED
+    {
+        HelpId = HID_SC_HF_HR_DEFINED ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 100 ) ;
+        Size = MAP_APPFONT ( 130 , 80 ) ;
+        DropDown = TRUE ;
         TabStop = TRUE ;
     };
 };
@@ -761,6 +781,15 @@ TabPage RID_SCPAGE_HFED_FL < RID_HFBASE
         Size = MAP_APPFONT ( 80 , 72 ) ;
         TabStop = TRUE ;
     };
+    ListBox LB_DEFINED
+    {
+        HelpId = HID_SC_HF_FL_DEFINED ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 100 ) ;
+        Size = MAP_APPFONT ( 130 , 80 ) ;
+        DropDown = TRUE ;
+        TabStop = TRUE ;
+    };
 };
 TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
 {
@@ -788,6 +817,15 @@ TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
         Border = TRUE ;
         Pos = MAP_APPFONT ( 174 , 18 ) ;
         Size = MAP_APPFONT ( 80 , 72 ) ;
+        TabStop = TRUE ;
+    };
+    ListBox LB_DEFINED
+    {
+        HelpId = HID_SC_HF_FR_DEFINED ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 100 ) ;
+        Size = MAP_APPFONT ( 130 , 80 ) ;
+        DropDown = TRUE ;
         TabStop = TRUE ;
     };
 };
