@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: postit.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -237,6 +237,12 @@ void PostItTxt::KeyInput( const KeyEvent& rKeyEvt )
             mpPostIt->Delete();
         else
             mpPostIt->SwitchToFieldPos();
+    }
+    else
+    if (nKey == KEY_INSERT)
+    {
+        if (!rKeyCode.IsMod1() && !rKeyCode.IsMod2())
+            mpPostIt->ToggleInsMode();
     }
     else
     {
@@ -877,9 +883,11 @@ void SwPostIt::SetPosAndSize()
                                             basegfx::B2DPoint( mAnkorRect.Left(), mAnkorRect.Bottom()+2*15),
                                             basegfx::B2DPoint( mPageBorder ,mAnkorRect.Bottom()+2*15),
                                             basegfx::B2DPoint( aLineStart.X(),aLineStart.Y()),
-                                            basegfx::B2DPoint( aLineEnd.X(),aLineEnd.Y()) , mColorAnkor,LineInfo(LINE_SOLID,ANKORLINE_WIDTH*15), false);
+                                            basegfx::B2DPoint( aLineEnd.X(),aLineEnd.Y()) , mColorAnkor,LineInfo(LINE_DASH,ANKORLINE_WIDTH*15), false);
                 mpAnkor->SetHeight(mAnkorRect.Height());
                 mpAnkor->setVisible(false);
+                if (HasChildPathFocus())
+                    mpAnkor->SetLineInfo(LineInfo(LINE_SOLID,ANKORLINE_WIDTH*15));
                 pOverlayManager->add(*mpAnkor);
             }
         }
@@ -942,7 +950,8 @@ void SwPostIt::DoResize()
     mpVScrollbar->SetVisibleSize( PixelToLogic(Size(0,aHeight)).Height() );
     mpVScrollbar->SetPageSize( PixelToLogic(Size(0,aHeight)).Height() * 8 / 10 );
     mpVScrollbar->SetLineSize( mpOutliner->GetTextHeight() / 10 );
-    mpVScrollbar->SetThumbPos( mpOutlinerView->GetVisArea().Top()+ mpOutlinerView->GetEditView().GetCursor()->GetOffsetY());
+    //mpVScrollbar->SetThumbPos( mpOutlinerView->GetVisArea().Top()+ mpOutlinerView->GetEditView().GetCursor()->GetOffsetY());
+    SetScrollbar();
     mpVScrollbar->SetRange( Range(0, mpOutliner->GetTextHeight()));
 
     //calculate rects for meta- button
@@ -979,39 +988,37 @@ void SwPostIt::DoResize()
 void SwPostIt::SetSizePixel( const Size& rNewSize )
 {
     Window::SetSizePixel(rNewSize);
+
     if (mpShadow)
-        mpShadow->SetPosition(basegfx::B2DPoint(EditWin()->PixelToLogic(GetPosPixel()+Point(0,GetSizePixel().Height())).X(),EditWin()->PixelToLogic(GetPosPixel()+Point(0,GetSizePixel().Height())).Y()),
-                              basegfx::B2DPoint(EditWin()->PixelToLogic(GetPosPixel()+Point(GetSizePixel().Width(),GetSizePixel().Height())).X(),EditWin()->PixelToLogic(GetPosPixel()+Point(GetSizePixel().Width(),GetSizePixel().Height())).Y()));
+    {
+        Point aStart = EditWin()->PixelToLogic(GetPosPixel()+Point(0,GetSizePixel().Height()));
+        Point aEnd = EditWin()->PixelToLogic(GetPosPixel()+Point(GetSizePixel().Width()-1,GetSizePixel().Height()));
+        mpShadow->SetPosition(basegfx::B2DPoint(aStart.X(),aStart.Y()), basegfx::B2DPoint(aEnd.X(),aEnd.Y()));
+    }
+}
+
+void SwPostIt::SetScrollbar()
+{
+    mpVScrollbar->SetThumbPos( mpOutlinerView->GetVisArea().Top()+ mpOutlinerView->GetEditView().GetCursor()->GetOffsetY());
 }
 
 void SwPostIt::ResizeIfNeccessary(long aOldHeight, long aNewHeight)
 {
-    // TODO: do not resize if we have scrollbars on the page
     if (aOldHeight != aNewHeight)
     {
         //check for lower border or next note
         long aBorder = mpMgr->GetNextBorder();
         if (aBorder != -1)
         {
-
             if (aNewHeight > GetMinimumSizeWithoutMeta())
             {
-                if (aBorder == -1)
-                {
-                    // we have notes scrollbar on this page, do not set new size
-                    // TODO: seperate scrollbar pos stuff from real resizing
-                    DoResize();
-                }
+                long aNewLowerValue = GetPosPixel().Y() + aNewHeight + GetMetaHeight();
+                if (aNewLowerValue < aBorder)
+                    SetSizePixel(Size(GetSizePixel().Width(),aNewHeight+GetMetaHeight()));
                 else
-                {
-                    long aNewLowerValue = GetPosPixel().Y() + aNewHeight + GetMetaHeight();
-                    if (aNewLowerValue < aBorder)
-                        SetSizePixel(Size(GetSizePixel().Width(),aNewHeight+GetMetaHeight()));
-                    else
-                        SetSizePixel(Size(GetSizePixel().Width(),aBorder - GetPosPixel().Y()));
-                    DoResize();
-                    Invalidate();
-                }
+                    SetSizePixel(Size(GetSizePixel().Width(),aBorder - GetPosPixel().Y()));
+                DoResize();
+                Invalidate();
             }
             else
             {
@@ -1025,13 +1032,12 @@ void SwPostIt::ResizeIfNeccessary(long aOldHeight, long aNewHeight)
         }
         else
         {
-            DoResize();
+            SetScrollbar();
         }
     }
     else
     {
-        // TODO: seperate scrollbar pos stuff from real resizing
-        DoResize();
+        SetScrollbar();
     }
 }
 
@@ -1166,6 +1172,8 @@ void SwPostIt::ActivatePostIt()
     SetShadowState(SS_EDIT);
     View()->ShowCursor();
 
+    mpOutlinerView->GetEditView().SetInsertMode(mpView->GetWrtShellPtr()->IsInsMode());
+
     if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
         View()->SetBackgroundColor(mColorDark);
 
@@ -1215,6 +1223,18 @@ void SwPostIt::UpdateData()
     }
     mpOutliner->ClearModifyFlag();
     mpOutliner->GetUndoManager().Clear();
+}
+
+void SwPostIt::ToggleInsMode()
+{
+    //change outliner
+    mpOutlinerView->GetEditView().SetInsertMode(!mpOutlinerView->GetEditView().IsInsertMode());
+    //change documnet
+    mpView->GetWrtShell().ToggleInsMode();
+    //update statusbar
+    SfxBindings &rBnd = mpView->GetViewFrame()->GetBindings();
+    rBnd.Invalidate(SID_ATTR_INSERT);
+    rBnd.Update(SID_ATTR_INSERT);
 }
 
 void SwPostIt::Delete()
@@ -1411,6 +1431,9 @@ void SwPostIt::SetSpellChecking()
     else
         nCntrl &= ~EE_CNTRL_ONLINESPELLING;
     mpOutliner->SetControlWord(nCntrl);
+
+    mpOutliner->CompleteOnlineSpelling();
+    Invalidate();
 }
 
 void SwPostIt::SetShadowState(ShadowState bState)
