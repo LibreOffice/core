@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: itga.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,7 +107,6 @@ private:
     BOOL                mbIndexing;         // TRUE if source contains indexing color values
     BOOL                mbEncoding;         // TRUE if source is compressed
 
-    BOOL                Callback( USHORT nPercent );
     BOOL                ImplReadHeader();
     BOOL                ImplReadPalette();
     BOOL                ImplReadBody();
@@ -139,21 +138,6 @@ TGAReader::~TGAReader()
     delete mpFileHeader;
     delete mpExtension;
     delete mpFileFooter;
-}
-
-BOOL TGAReader::Callback( USHORT /*nPercent*/ )
-{
-/*
-    if ( pCallback != NULL )
-    {
-        if ( ( (*pCallback)( pCallerData,nPercent ) ) == TRUE )
-        {
-            mpTGA->SetError( SVSTREAM_FILEFORMAT_ERROR );
-            return TRUE;
-        }
-    }
-*/
-    return FALSE;
 }
 
 // -------------------------------------------------------------------------------------------
