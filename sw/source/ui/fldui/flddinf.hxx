@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: flddinf.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,6 +63,7 @@ class SwFldDokInfPage : public SwFldPage
 
     USHORT              nOldSel;
     ULONG               nOldFormat;
+    ::rtl::OUString     m_sOldCustomFieldName;
 
     DECL_LINK( TypeHdl, ListBox* pLB = 0 );
     DECL_LINK( SubTypeHdl, ListBox* pLB = 0 );
