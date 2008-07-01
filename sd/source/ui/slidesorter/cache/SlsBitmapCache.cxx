@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlsBitmapCache.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,7 +73,7 @@ public:
     void SetAccessTime (sal_Int32 nAccessTime) { mnLastAccessTime = nAccessTime; }
     ::boost::shared_ptr<BitmapEx> GetPreview (void) const { return mpPreview; }
     inline void SetPreview (const ::boost::shared_ptr<BitmapEx>& rpPreview);
-    bool HasPreview (void) const { return (mpPreview.get() != NULL); }
+    bool HasPreview (void) const;
     bool HasReplacement (void) const { return (mpReplacement.get() != NULL); }
     inline bool HasLosslessReplacement (void) const;
     void Clear (void) { mpPreview.reset(); mpReplacement.reset(); mpCompressor.reset(); }
@@ -383,8 +383,10 @@ void BitmapCache::SetPrecious (const CacheKey& rKey, bool bIsPrecious)
     {
         iEntry = mpBitmapContainer->insert(CacheBitmapContainer::value_type (
             rKey,
-            CacheEntry (::boost::shared_ptr<BitmapEx>(new BitmapEx()),
-                mnCurrentAccessTime++, bIsPrecious))).first;
+            CacheEntry (
+                ::boost::shared_ptr<BitmapEx>(),
+                mnCurrentAccessTime++, bIsPrecious))
+            ).first;
         UpdateCacheSize(iEntry->second, ADD);
     }
 }
@@ -642,6 +644,17 @@ inline void BitmapCache::CacheEntry::SetPreview (const ::boost::shared_ptr<Bitma
     mpPreview = rpPreview;
     mpReplacement.reset();
     mpCompressor.reset();
+}
+
+
+
+
+bool BitmapCache::CacheEntry::HasPreview (void) const
+{
+    if (mpPreview.get() != NULL)
+        return mpPreview->GetSizePixel().Width()>0 && mpPreview->GetSizePixel().Height()>0;
+    else
+        return false;
 }
 
 
