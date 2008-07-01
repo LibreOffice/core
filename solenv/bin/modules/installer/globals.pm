@@ -8,7 +8,7 @@
 #
 # $RCSfile: globals.pm,v $
 #
-# $Revision: 1.98 $
+# $Revision: 1.99 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -256,6 +256,9 @@ BEGIN
     $addeduserregitrykeys = 0;
     $desktoplinkexists = 0;
     $sundirexists = 0;
+    $analyze_spellcheckerlanguage = 0;
+    %spellcheckerlanguagehash = ();
+    %spellcheckerfilehash = ();
 
     $officeinstalldirectory = "";
     $officeinstalldirectoryset = 0;
