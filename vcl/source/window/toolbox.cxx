@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolbox.cxx,v $
- * $Revision: 1.106 $
+ * $Revision: 1.107 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -5954,16 +5954,18 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, BOOL bNoGrabFocus )
     mbChangingHighlight = TRUE;
 
     ImplToolItem* pOldItem = NULL;
-    USHORT        oldPos = 0;
 
     if ( mnHighItemId )
     {
         ImplHideFocus();
         USHORT nPos = GetItemPos( mnHighItemId );
+        pOldItem = ImplGetItem( mnHighItemId );
+        // #i89962# ImplDrawItem can cause Invalidate/Update
+        // which will in turn ImplShowFocus again
+        // set mnHighItemId to 0 already to prevent this hen/egg problem
+        mnHighItemId = 0;
         ImplDrawItem( nPos, FALSE );
         ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nPos ) );
-        pOldItem = ImplGetItem( mnHighItemId );
-        oldPos = ToolBox::ImplFindItemPos( pOldItem, mpData->m_aItems );
     }
 
     if( !bNoGrabFocus && pItem != pOldItem && pOldItem && pOldItem->mpWindow )
