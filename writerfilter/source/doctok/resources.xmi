@@ -29500,6 +29500,37 @@
 <!--Class FDG-->
 <!--WW8 resources-->
 <!--SPRMS-->
+<!--SPRM sprmPContextualSpacing-->
+        <UML:Class xmi.id="sprmPContextualSpacing" name="sprmPContextualSpacing">
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8sprm"/>
+          </UML:ModelElement.stereotype>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>0x246D</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="sprmcode"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>rtf:sprmPIContextualSpacing</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        </UML:Class>
+<!--SPRM sprmPContextualSpacing-->
 <!--SPRM sprmPIstdPermute-->
         <UML:Class xmi.id="sprmPIstdPermute" name="sprmPIstdPermute">
           <UML:ModelElement.stereotype>
