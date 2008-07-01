@@ -8,7 +8,7 @@
  *
  * $RCSfile: chartconverter.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +41,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 namespace oox { namespace core {
-    class FilterBase;
+    class XmlFilterBase;
 } }
 
 namespace oox {
@@ -59,8 +59,8 @@ public:
     virtual             ~ChartConverter();
 
     /** Converts the passed OOXML chart model to the passed chart2 document. */
-    void                convertModelToDocument(
-                            ::oox::core::FilterBase& rFilter,
+    void                convertFromModel(
+                            ::oox::core::XmlFilterBase& rFilter,
                             ChartSpaceModel& rModel,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc );
 
