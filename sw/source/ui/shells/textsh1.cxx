@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textsh1.cxx,v $
- * $Revision: 1.69 $
+ * $Revision: 1.70 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -403,6 +403,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                     if (bForParagraph)
                         SwLangHelper::SelectCurrentPara( rWrtSh );
+
                     if (!bForSelection) // document language to be changed...
                     {
                         rWrtSh.SelAll();
