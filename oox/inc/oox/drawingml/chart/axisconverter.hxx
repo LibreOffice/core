@@ -8,7 +8,7 @@
  *
  * $RCSfile: axisconverter.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,15 +66,8 @@ public:
     virtual             ~AxisConverter();
 
     /** Creates a chart2 axis and inserts it into the passed coordinate system. */
-    void                convertModelToDocument(
+    void                convertFromModel(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem >& rxCoordSystem,
-                            TypeGroupConverter& rTypeGroup,
-                            sal_Int32 nAxesSetIdx,
-                            sal_Int32 nAxisIdx );
-
-private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >
-                        createAxis(
                             TypeGroupConverter& rTypeGroup,
                             sal_Int32 nAxesSetIdx,
                             sal_Int32 nAxisIdx );
