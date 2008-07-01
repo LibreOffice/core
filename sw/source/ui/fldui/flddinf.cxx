@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: flddinf.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,11 +134,14 @@ void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& )
     SvLBoxEntry* pInfo = 0;
 
     USHORT nSubType = USHRT_MAX;
-
     if (IsFldEdit())
     {
         const SwField* pCurField = GetCurField();
         nSubType = ((SwDocInfoField*)pCurField)->GetSubType() & 0xff;
+        if( nSubType == DI_CUSTOM )
+        {
+            m_sOldCustomFieldName = static_cast<const SwDocInfoField*>(pCurField)->GetName();
+        }
         aFormatLB.SetAutomaticLanguage(pCurField->IsAutomaticLanguage());
         SwWrtShell *pSh = GetWrtShell();
         if(pSh)
@@ -175,7 +178,13 @@ void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& )
 
                     for (sal_Int32 n=0; n<aPropertyNames.getLength(); n++)
                     {
-                        pEntry = aTypeTLB.InsertEntry(String(aPropertyNames[n]), pInfo);
+                        rtl::OUString sEntry = aPropertyNames[n];
+                        pEntry = aTypeTLB.InsertEntry(sEntry, pInfo);
+                        if(m_sOldCustomFieldName.equals( sEntry ))
+                        {
+                            pSelEntry = pEntry;
+                            aTypeTLB.Expand( pInfo );
+                        }
                         pEntry->SetUserData(reinterpret_cast<void*>(i));
                     }
                 }
@@ -436,7 +445,7 @@ BOOL __EXPORT SwFldDokInfPage::FillItemSet(SfxItemSet& )
 
     USHORT nPos = aSelectionLB.GetSelectEntryPos();
 
-    String aName;
+    ::rtl::OUString aName;
     if (DI_CUSTOM == nSubType)
         aName = aTypeTLB.GetEntryText(pSelEntry);
 
@@ -451,7 +460,8 @@ BOOL __EXPORT SwFldDokInfPage::FillItemSet(SfxItemSet& )
         nFormat = aFormatLB.GetFormat();
 
     if (!IsFldEdit() || nOldSel != aSelectionLB.GetSelectEntryPos() ||
-        nOldFormat != nFormat || aFixedCB.GetState() != aFixedCB.GetSavedValue())
+        nOldFormat != nFormat || aFixedCB.GetState() != aFixedCB.GetSavedValue()
+        || (DI_CUSTOM == nSubType && !aName.equals( m_sOldCustomFieldName )))
     {
         InsertFld(nTypeId, nSubType, aName, aEmptyStr, nFormat,
                 ' ', aFormatLB.IsAutomaticLanguage());
