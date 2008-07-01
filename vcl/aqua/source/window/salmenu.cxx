@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salmenu.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,12 +33,15 @@
 #include "salmenu.h"
 #include "salnsmenu.h"
 #include "salframe.h"
+#include "salbmp.h"
 #include "vcl/svids.hrc"
 #include "vcl/cmdevt.hxx"
 #include "vcl/floatwin.hxx"
 #include "vcl/window.h"
 #include "vcl/window.hxx"
 #include "vcl/svapp.hxx"
+#include "vcl/impbmp.hxx"
+
 #include "rtl/ustrbuf.hxx"
 
 const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
@@ -260,24 +263,40 @@ AquaSalMenu::AquaSalMenu( bool bMenuBar ) :
 
 AquaSalMenu::~AquaSalMenu()
 {
+    // actually someone should have done AquaSalFrame::SetMenu( NULL )
+    // on our frame, alas it is not so
+    if( mpFrame && AquaSalFrame::isAlive( mpFrame ) && mpFrame->mpMenu == this )
+        const_cast<AquaSalFrame*>(mpFrame)->mpMenu = NULL;
+
     // is this leaking in some cases ? the release often leads to a duplicate release
     // it seems the parent item gets ownership of the menu
-    if( mpMenu && ! mbMenuBar )
+    if( mpMenu )
     {
-        // the system may still hold a reference on mpMenu
-        // so set the pointer to this AquaSalMenu to NULL
-        // to protect from calling a dead object
+        if( mbMenuBar )
+        {
+            if( pCurrentMenuBar == this )
+            {
+                // if the current menubar gets destroyed, set the default menubar
+                setDefaultMenu();
+            }
+        }
+        else
+            // the system may still hold a reference on mpMenu
+        {
+            // so set the pointer to this AquaSalMenu to NULL
+            // to protect from calling a dead object
 
-        // in ! mbMenuBar case our mpMenu is actually a SalNSMenu*
-        // so we can safely cast here
-        [static_cast<SalNSMenu*>(mpMenu) setSalMenu: NULL];
-        /* #i89860# FIXME:
-           using [autorelease] here (and in AquaSalMenuItem::~AquaSalMenuItem)
-           instead of [release] fixes an occasional crash. That should
-           indicate that we release menus / menu items in the wrong order
-           somewhere, but I could not find that case.
-        */
-        [mpMenu autorelease];
+            // in ! mbMenuBar case our mpMenu is actually a SalNSMenu*
+            // so we can safely cast here
+            [static_cast<SalNSMenu*>(mpMenu) setSalMenu: NULL];
+            /* #i89860# FIXME:
+               using [autorelease] here (and in AquaSalMenuItem::~AquaSalMenuItem)
+               instead of [release] fixes an occasional crash. That should
+               indicate that we release menus / menu items in the wrong order
+               somewhere, but I could not find that case.
+            */
+            [mpMenu autorelease];
+        }
     }
 }
 
@@ -383,14 +402,12 @@ const AquaSalFrame* AquaSalMenu::getFrame() const
 
 void AquaSalMenu::unsetMainMenu()
 {
-    DBG_ASSERT( mbMenuBar, "unsetMainMenu on non menubar" );
-    if( mbMenuBar )
-    {
-        pCurrentMenuBar = NULL;
-        // remove items from main menu
-        for( int nItems = [mpMenu numberOfItems]; nItems > 1; nItems-- )
-            [mpMenu removeItemAtIndex: 1];
-    }
+    pCurrentMenuBar = NULL;
+
+    // remove items from main menu
+    NSMenu* pMenu = [NSApp mainMenu];
+    for( int nItems = [pMenu numberOfItems]; nItems > 1; nItems-- )
+        [pMenu removeItemAtIndex: 1];
 }
 
 void AquaSalMenu::setMainMenu()
@@ -417,18 +434,15 @@ void AquaSalMenu::setDefaultMenu()
 {
     NSMenu* pMenu = [NSApp mainMenu];
 
-    pCurrentMenuBar = NULL;
-    // remove items from main menu
-    for( int nItems = [pMenu numberOfItems]; nItems > 1; nItems-- )
-        [pMenu removeItemAtIndex: 1];
+    unsetMainMenu();
 
     // insert default items
     std::vector< NSMenuItem* >& rFallbackMenu( GetSalData()->maFallbackMenu );
-    unsigned int nItems = rFallbackMenu.size();
-    for( unsigned int i = 0; i < nItems; i++ )
+    for( unsigned int i = 0, nAddItems = rFallbackMenu.size(); i < nAddItems; i++ )
     {
         NSMenuItem* pItem = rFallbackMenu[i];
-        [pMenu insertItem: pItem atIndex: i+1];
+        if( [pItem menu] == nil )
+            [pMenu insertItem: pItem atIndex: i+1];
     }
 }
 
@@ -515,6 +529,7 @@ void AquaSalMenu::SetFrame( const SalFrame *pFrame )
 void AquaSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 {
     AquaSalMenuItem *pAquaSalMenuItem = static_cast<AquaSalMenuItem*>(pSalMenuItem);
+
     pAquaSalMenuItem->mpParentMenu = this;
     DBG_ASSERT( pAquaSalMenuItem->mpVCLMenu == NULL        ||
                 pAquaSalMenuItem->mpVCLMenu == mpVCLMenu   ||
@@ -528,7 +543,10 @@ void AquaSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
     else if( nPos < maItems.size() )
         maItems.insert( maItems.begin() + nPos, pAquaSalMenuItem );
     else
+    {
         DBG_ERROR( "invalid item index in insert" );
+        return;
+    }
 
     if( ! mbMenuBar || pCurrentMenuBar == this )
         [mpMenu insertItem: pAquaSalMenuItem->mpMenuItem atIndex: getItemIndexByPos(nPos)];
@@ -536,12 +554,25 @@ void AquaSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 
 void AquaSalMenu::RemoveItem( unsigned nPos )
 {
-    if( nPos == MENU_APPEND )
+    AquaSalMenuItem* pRemoveItem = NULL;
+    if( nPos == MENU_APPEND || nPos == (maItems.size()-1) )
+    {
+        pRemoveItem = maItems.back();
         maItems.pop_back();
+    }
     else if( nPos < maItems.size() )
+    {
+        pRemoveItem = maItems[ nPos ];
         maItems.erase( maItems.begin()+nPos );
+    }
     else
+    {
         DBG_ERROR( "invalid item index in remove" );
+        return;
+    }
+
+    pRemoveItem->mpParentMenu = NULL;
+
     if( ! mbMenuBar || pCurrentMenuBar == this )
         [mpMenu removeItemAtIndex: getItemIndexByPos(nPos)];
 }
@@ -551,7 +582,6 @@ void AquaSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsi
     AquaSalMenuItem *pAquaSalMenuItem = static_cast<AquaSalMenuItem*>(pSalMenuItem);
     AquaSalMenu *subAquaSalMenu = static_cast<AquaSalMenu*>(pSubMenu);
 
-    // FIXME: in svtools - workben - svdem, pSubMenu is NULL!
     if (subAquaSalMenu)
     {
         pAquaSalMenuItem->mpSubMenu = subAquaSalMenu;
@@ -575,6 +605,16 @@ void AquaSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsi
             [pCopy setTitle: [pAquaSalMenuItem->mpMenuItem title]];
         }
     }
+    else
+    {
+        if( pAquaSalMenuItem->mpSubMenu )
+        {
+            if( pAquaSalMenuItem->mpSubMenu->mpParentSalMenu == this )
+                pAquaSalMenuItem->mpSubMenu->mpParentSalMenu = NULL;
+        }
+        pAquaSalMenuItem->mpSubMenu = NULL;
+        [pAquaSalMenuItem->mpMenuItem setSubmenu: nil];
+    }
 }
 
 void AquaSalMenu::CheckItem( unsigned nPos, BOOL bCheck )
@@ -595,8 +635,75 @@ void AquaSalMenu::EnableItem( unsigned nPos, BOOL bEnable )
     }
 }
 
-void AquaSalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage )
+void AquaSalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSMI, const Image& rImage )
 {
+    AquaSalMenuItem* pSalMenuItem = static_cast<AquaSalMenuItem*>( pSMI );
+    if( ! pSalMenuItem || ! pSalMenuItem->mpMenuItem )
+        return;
+
+    BitmapEx aBmpEx( rImage.GetBitmapEx() );
+    Bitmap aBmp( aBmpEx.GetBitmap() );
+
+    if( ! aBmp || ! aBmp.ImplGetImpBitmap() )
+        return;
+
+    // simple case, no transparency
+    AquaSalBitmap* pSalBmp = static_cast<AquaSalBitmap*>(aBmp.ImplGetImpBitmap()->ImplGetSalBitmap());
+
+    if( ! pSalBmp )
+        return;
+
+    CGImageRef xImage = NULL;
+    if( ! (aBmpEx.IsAlpha() || aBmpEx.IsTransparent() ) )
+        xImage = pSalBmp->CreateCroppedImage( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
+    else if( aBmpEx.IsAlpha() )
+    {
+        AlphaMask aAlphaMask( aBmpEx.GetAlpha() );
+        Bitmap aMask( aAlphaMask.GetBitmap() );
+        AquaSalBitmap* pMaskBmp = static_cast<AquaSalBitmap*>(aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
+        if( pMaskBmp )
+            xImage = pSalBmp->CreateWithMask( *pMaskBmp, 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
+        else
+            xImage = pSalBmp->CreateCroppedImage( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
+    }
+    else if( aBmpEx.GetTransparentType() == TRANSPARENT_BITMAP )
+    {
+        Bitmap aMask( aBmpEx.GetMask() );
+        AquaSalBitmap* pMaskBmp = static_cast<AquaSalBitmap*>(aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
+        if( pMaskBmp )
+            xImage = pSalBmp->CreateWithMask( *pMaskBmp, 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
+        else
+            xImage = pSalBmp->CreateCroppedImage( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
+    }
+    else if( aBmpEx.GetTransparentType() == TRANSPARENT_COLOR )
+    {
+        Color aTransColor( aBmpEx.GetTransparentColor() );
+        SalColor nTransColor = MAKE_SALCOLOR( aTransColor.GetRed(), aTransColor.GetGreen(), aTransColor.GetBlue() );
+        xImage = pSalBmp->CreateColorMask( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight, nTransColor );
+    }
+
+    if( ! xImage )
+        return;
+
+    NSImage* pImage = [[NSImage alloc] initWithSize: NSMakeSize( pSalBmp->mnWidth, pSalBmp->mnHeight )];
+    if( pImage )
+    {
+        [pImage setFlipped: YES];
+        [pImage lockFocus];
+
+        NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
+        CGContextRef rCGContext = reinterpret_cast<CGContextRef>([pContext graphicsPort]);
+
+        const CGRect aDstRect = { {0, 0}, { pSalBmp->mnWidth, pSalBmp->mnHeight } };
+        CGContextDrawImage( rCGContext, aDstRect, xImage );
+
+        [pImage unlockFocus];
+
+        [pSalMenuItem->mpMenuItem setImage: pImage];
+        [pImage release];
+    }
+
+    CGImageRelease( xImage );
 }
 
 void AquaSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const XubString& rText )
@@ -612,12 +719,14 @@ void AquaSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const X
     aText.EraseAllChars( '~' );
 
     NSString* pString = CreateNSString( aText );
-    [pAquaSalMenuItem->mpMenuItem setTitle: pString];
-    // if the menu item has a submenu, change its title as well
-    if (pAquaSalMenuItem->mpSubMenu)
-        [pAquaSalMenuItem->mpSubMenu->mpMenu setTitle: pString];
     if (pString)
+    {
+        [pAquaSalMenuItem->mpMenuItem setTitle: pString];
+        // if the menu item has a submenu, change its title as well
+        if (pAquaSalMenuItem->mpSubMenu)
+            [pAquaSalMenuItem->mpSubMenu->mpMenu setTitle: pString];
         [pString release];
+    }
 }
 
 void AquaSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName )
@@ -737,10 +846,11 @@ AquaSalMenuItem::AquaSalMenuItem( const SalItemParams* pItemData ) :
         mpMenuItem = [[SalNSMenuItem alloc] initWithMenuItem: this];
         [mpMenuItem setEnabled: YES];
         NSString* pString = CreateNSString( aText );
-        [mpMenuItem setTitle: pString];
         if (pString)
+        {
+            [mpMenuItem setTitle: pString];
             [pString release];
-
+        }
         // anything but a separator should set a menu to dispatch to
         DBG_ASSERT( mpVCLMenu, "no menu" );
     }
