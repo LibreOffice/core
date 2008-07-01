@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-06-24 11:59:33 $
+dnl * Date: $Date: 2008-07-01 16:08:22 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.272 $ )
+AC_REVISION( $Revision: 1.273 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -4534,6 +4534,28 @@ else
   AC_SUBST(SYSTEM_AGG)
   AC_SUBST(AGG_VERSION)
 fi
+
+dnl ===================================================================
+dnl Check for system redland
+dnl ===================================================================
+AC_MSG_CHECKING([which redland library to use])
+dnl if test -n "$with_system_redland" -o -n "$with_system_libs" && \
+dnl	test "$with_system_redland" != "no"; then
+dnl mst: NOTE: right now we need patches against redland
+dnl            so we only enable system redland if explicitly requested
+dnl            if next version includes patches, insert version check here
+if test -n "$with_system_redland" && \
+	test "$with_system_redland" != "no"; then
+	AC_MSG_RESULT([external])
+	SYSTEM_REDLAND=YES
+	PKG_CHECK_MODULES(REDLAND, redland)
+else
+	AC_MSG_RESULT([internal])
+	BUILD_TYPE="$BUILD_TYPE REDLAND"
+	SYSTEM_REDLAND=NO
+fi
+AC_SUBST(SYSTEM_REDLAND)
+AC_SUBST(REDLAND_LIBS)
 
 dnl ===================================================================
 dnl Check for system hunspell
