@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoedprx.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -590,6 +590,11 @@ void SvxAccessibleTextAdapter::SetParaAttribs( USHORT nPara, const SfxItemSet& r
     mrTextForwarder->SetParaAttribs( nPara, rSet );
 }
 
+void SvxAccessibleTextAdapter::RemoveAttribs( const ESelection& , sal_Bool , sal_uInt16 )
+{
+    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+}
+
 void SvxAccessibleTextAdapter::GetPortions( USHORT nPara, SvUShorts& rList ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
@@ -1162,6 +1167,10 @@ xub_StrLen SvxAccessibleTextAdapter::AppendTextPortion( USHORT, const String &, 
 {
     DBG_ERROR( "not implemented" );
     return 0;
+}
+void        SvxAccessibleTextAdapter::CopyText(const SvxTextForwarder&)
+{
+    DBG_ERROR( "not implemented" );
 }
 
 
