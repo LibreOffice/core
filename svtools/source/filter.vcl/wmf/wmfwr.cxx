@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wmfwr.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,9 @@
 #include <rtl/tencinfo.h>
 #include <tools/tenccvt.hxx>
 #include <osl/endian.h>
+#ifndef INCLUDED_I18NUTIL_UNICODE_HXX
+#include <i18nutil/unicode.hxx> //unicode::getUnicodeScriptType
+#endif
 
 
 #include <vcl/metric.hxx>
@@ -151,6 +154,7 @@
 #define W_TA_TOP             0x0000
 #define W_TA_BOTTOM          0x0008
 #define W_TA_BASELINE        0x0018
+#define W_TA_RTLREADING      0x0100
 
 #define W_SRCCOPY             0x00CC0020L
 #define W_SRCPAINT            0x00EE0086L
@@ -243,6 +247,34 @@
 #define W_MFCOMMENT         15
 
 #define PRIVATE_ESCAPE_UNICODE          2
+
+/// copied from writerwordglue.cxx
+
+/*
+    Utility to categorize unicode characters into the best fit windows charset
+    range for exporting to ww6, or as a hint to non \u unicode token aware rtf
+    readers
+*/
+rtl_TextEncoding getScriptClass(sal_Unicode cChar)
+{
+    using namespace com::sun::star::i18n;
+
+    static ScriptTypeList aScripts[] =
+    {
+        { UnicodeScript_kBasicLatin, UnicodeScript_kBasicLatin, RTL_TEXTENCODING_MS_1252},
+        { UnicodeScript_kLatin1Supplement, UnicodeScript_kLatin1Supplement, RTL_TEXTENCODING_MS_1252},
+        { UnicodeScript_kLatinExtendedA, UnicodeScript_kLatinExtendedA, RTL_TEXTENCODING_MS_1250},
+        { UnicodeScript_kLatinExtendedB, UnicodeScript_kLatinExtendedB, RTL_TEXTENCODING_MS_1257},
+        { UnicodeScript_kGreek, UnicodeScript_kGreek, RTL_TEXTENCODING_MS_1253},
+        { UnicodeScript_kCyrillic, UnicodeScript_kCyrillic, RTL_TEXTENCODING_MS_1251},
+        { UnicodeScript_kHebrew, UnicodeScript_kHebrew, RTL_TEXTENCODING_MS_1255},
+        { UnicodeScript_kArabic, UnicodeScript_kArabic, RTL_TEXTENCODING_MS_1256},
+        { UnicodeScript_kThai, UnicodeScript_kThai, RTL_TEXTENCODING_MS_1258},
+        { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount, RTL_TEXTENCODING_MS_1252}
+    };
+    return unicode::getUnicodeScriptType(cChar, aScripts,
+        RTL_TEXTENCODING_MS_1252);
+}
 
 //========================== Methoden von WMFWriter ==========================
 
@@ -563,15 +595,44 @@ sal_Bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const String&
         if ( aSrcFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL )     // symbol is always byte character, so there is no unicode loss
         {
             const sal_Unicode* pBuf = rUniStr.GetBuffer();
-
-            ByteString aByteStr( rUniStr, aSrcFont.GetCharSet() );
-            String     aUniStr2( aByteStr, aSrcFont.GetCharSet() );
+            const rtl_TextEncoding aTextEncodingOrg = aSrcFont.GetCharSet();
+            ByteString aByteStr( rUniStr, aTextEncodingOrg );
+            String     aUniStr2( aByteStr, aTextEncodingOrg );
             const sal_Unicode* pConversion = aUniStr2.GetBuffer();  // this is the unicode array after bytestring <-> unistring conversion
             for ( i = 0; i < nStringLen; i++ )
             {
                 if ( *pBuf++ != *pConversion++ )
                     break;
             }
+
+            if  ( i != nStringLen )                             // after conversion the characters are not original,
+            {                                                   // try again, with determining a better charset from unicode char
+                pBuf = rUniStr.GetBuffer();
+                const sal_Unicode* pCheckChar = pBuf;
+                rtl_TextEncoding aTextEncoding = getScriptClass (*pCheckChar); // try the first character
+                for ( i = 1; i < nStringLen; i++)
+                {
+                    if (aTextEncoding != aTextEncodingOrg) // found something
+                        break;
+                    pCheckChar++;
+                    aTextEncoding = getScriptClass (*pCheckChar); // try the next character
+                }
+
+                aByteStr = ByteString ( rUniStr,  aTextEncoding );
+                aUniStr2 = String ( aByteStr, aTextEncoding );
+                pConversion = aUniStr2.GetBuffer(); // this is the unicode array after bytestring <-> unistring conversion
+                for ( i = 0; i < nStringLen; i++ )
+                {
+                    if ( *pBuf++ != *pConversion++ )
+                        break;
+                }
+                if (i == nStringLen)
+                {
+                    aSrcFont.SetCharSet (aTextEncoding);
+                    SetAllAttr();
+                }
+            }
+
             if ( ( i != nStringLen ) || IsStarSymbol( aSrcFont.GetName() ) )    // after conversion the characters are not original, so we
             {                                                                   // will store the unicode string and a polypoly replacement
                 Color aOldFillColor( aSrcFillColor );
@@ -833,7 +894,7 @@ void WMFWriter::WMFRecord_SetROP2(RasterOp eROP)
 }
 
 
-void WMFWriter::WMFRecord_SetTextAlign(FontAlign eFontAlign)
+void WMFWriter::WMFRecord_SetTextAlign(FontAlign eFontAlign, UINT32 eHorTextAlign)
 {
     USHORT nAlign;
 
@@ -842,7 +903,7 @@ void WMFWriter::WMFRecord_SetTextAlign(FontAlign eFontAlign)
         case ALIGN_BOTTOM: nAlign=W_TA_BOTTOM; break;
         default:           nAlign=W_TA_BASELINE;
     }
-    nAlign|=W_TA_LEFT;
+    nAlign|=eHorTextAlign;
     nAlign|=W_TA_NOUPDATECP;
 
     WriteRecordHeader(0x00000004,W_META_SETTEXTALIGN);
@@ -1058,10 +1119,11 @@ void WMFWriter::SetAllAttr()
         aDstTextColor = aSrcTextColor;
         WMFRecord_SetTextColor(aDstTextColor);
     }
-    if ( eDstTextAlign != eSrcTextAlign )
+    if ( eDstTextAlign != eSrcTextAlign || eDstHorTextAlign != eSrcHorTextAlign )
     {
         eDstTextAlign = eSrcTextAlign;
-        WMFRecord_SetTextAlign( eDstTextAlign );
+        eDstHorTextAlign = eSrcHorTextAlign;
+        WMFRecord_SetTextAlign( eDstTextAlign, eDstHorTextAlign );
     }
     if ( aDstFont != aSrcFont )
     {
@@ -1639,6 +1701,21 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 }
                 break;
 
+                case( META_LAYOUTMODE_ACTION ):
+                {
+                    sal_uInt32 nLayoutMode = ( (MetaLayoutModeAction*) pMA )->GetLayoutMode();
+                    eSrcHorTextAlign = 0; // TA_LEFT
+                    if (nLayoutMode & TEXT_LAYOUT_BIDI_RTL)
+                    {
+                        eSrcHorTextAlign = W_TA_RIGHT | W_TA_RTLREADING;
+                    }
+                    if (nLayoutMode & TEXT_LAYOUT_TEXTORIGIN_RIGHT)
+                        eSrcHorTextAlign |= W_TA_RIGHT;
+                    else if (nLayoutMode & TEXT_LAYOUT_TEXTORIGIN_LEFT)
+                        eSrcHorTextAlign &= ~W_TA_RIGHT;
+                    break;
+                }
+
                 // Unsupported Actions
                 case META_MASK_ACTION:
                 case META_MASKSCALE_ACTION:
@@ -1827,7 +1904,8 @@ BOOL WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     CreateSelectDeleteFont(aDstFont);
 
     eDstTextAlign = eSrcTextAlign = ALIGN_BASELINE;
-    WMFRecord_SetTextAlign( eDstTextAlign );
+    eDstHorTextAlign = eSrcHorTextAlign = W_TA_LEFT;
+    WMFRecord_SetTextAlign( eDstTextAlign, eDstHorTextAlign );
 
     aDstTextColor = aSrcTextColor = Color( COL_WHITE );
     WMFRecord_SetTextColor(aDstTextColor);
