@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xstorage.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -4648,9 +4648,10 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getRelati
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
             if ( aSeq[nInd1][nInd2].First.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
             {
-                if ( aSeq[nInd1][nInd2].Second.equals( sType ) )
+                // the type is usually an URL, so the check should be case insensitive
+                if ( aSeq[nInd1][nInd2].Second.equalsIgnoreAsciiCase( sType ) )
                 {
-                    aResult.realloc( nEntriesNum );
+                    aResult.realloc( ++nEntriesNum );
                     aResult[nEntriesNum-1] = aSeq[nInd1];
                 }
                 break;
