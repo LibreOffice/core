@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlsPageCacheManager.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -317,10 +317,8 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
     const Size& rOldPreviewSize,
     const Size& rNewPreviewSize)
 {
-    OSL_TRACE("changing size of cache %x from %d %d to %d %d",
-        rpCache.get(),
-        rOldPreviewSize.Width(),rOldPreviewSize.Height(),
-        rNewPreviewSize.Width(),rNewPreviewSize.Height());
+    (void)rOldPreviewSize;
+
     ::boost::shared_ptr<Cache> pResult;
 
     if (rpCache.get() != NULL)
@@ -338,9 +336,11 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
             // Now, we can change the preview size of the existing one by
             // removing the cache from the list and re-insert it with the
             // updated size.
+            const ::sd::slidesorter::cache::PageCacheManager::DocumentKey aKey (
+                iCacheToChange->first.mpDocument);
             mpPageCaches->erase(iCacheToChange);
             mpPageCaches->insert(PageCacheContainer::value_type(
-                CacheDescriptor(iCacheToChange->first.mpDocument,rNewPreviewSize),
+                CacheDescriptor(aKey,rNewPreviewSize),
                 rpCache));
 
             pResult = rpCache;
