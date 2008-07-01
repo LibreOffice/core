@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoashp.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,8 +107,7 @@ private:
     // #i37011# render geometry shadow
     SdrObject*                                          mpLastShadowGeometry;
 
-    SVX_DLLPRIVATE com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeEngine > GetCustomShapeEngine( const SdrObjCustomShape* pCustomShape ) const;
-    SVX_DLLPRIVATE basegfx::B2DPolyPolygon GetLineGeometry( const SdrObjCustomShape* pCustomShape, const sal_Bool bBezierAllowed ) const;
+    static SVX_DLLPRIVATE com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeEngine > GetCustomShapeEngine( const SdrObjCustomShape* pCustomShape );
 
 //  SVX_DLLPRIVATE com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeHandle > >
 //      SdrObjCustomShape::GetInteraction( const SdrObjCustomShape* pCustomShape ) const;
@@ -137,6 +136,7 @@ public:
     const SdrObject* GetSdrObjectShadowFromCustomShape() const;
     const sal_Bool GetTextBounds( Rectangle& rTextBound ) const;
     const sal_Bool IsTextPath() const;
+    static SVX_DLLPRIVATE basegfx::B2DPolyPolygon GetLineGeometry( const SdrObjCustomShape* pCustomShape, const sal_Bool bBezierAllowed );
 
 protected:
 
