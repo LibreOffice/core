@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.76 $
+ * $Revision: 1.77 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -361,7 +361,11 @@ void AquaSalGraphics::initResolution( NSWindow* pWin )
     if( pWin )
         pScreen = [pWin screen];
     if( pScreen == nil )
-        pScreen = [NSScreen mainScreen];
+    {
+        NSArray* pScreens = [NSScreen screens];
+        if( pScreens )
+            pScreen = [pScreens objectAtIndex: 0];
+    }
 
     mnRealDPIX = mnRealDPIY = 96;
     if( pScreen )
@@ -441,7 +445,7 @@ USHORT AquaSalGraphics::GetBitCount()
 // -----------------------------------------------------------------------
 
 static void AddPolygonToPath( CGMutablePathRef xPath,
-    const ::basegfx::B2DPolygon& rPolygon, bool bPixelSnap )
+    const ::basegfx::B2DPolygon& rPolygon, bool bClosePath, bool bPixelSnap )
 {
     // short circuit if there is nothing to do
     const int nPointCount = rPolygon.count();
@@ -453,9 +457,17 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
 
     const bool bHasCurves = rPolygon.areControlPointsUsed();
     bool bPendingCurve = false;
-    for( int nPointIdx = 0, nPrevIdx = 0; nPointIdx <= nPointCount; nPrevIdx = nPointIdx++ )
+    for( int nPointIdx = 0, nPrevIdx = 0;; nPrevIdx = nPointIdx++ )
     {
-        const int nClosedIdx = (nPointIdx < nPointCount) ? nPointIdx : 0;
+        int nClosedIdx = nPointIdx;
+        if( nPointIdx >= nPointCount )
+        {
+            // prepare to close last curve segment if needed
+            if( bClosePath && (nPointIdx == nPointCount) )
+                nClosedIdx = 0;
+            else
+                break;
+        }
         const ::basegfx::B2DPoint& rPoint = rPolygon.getB2DPoint( nClosedIdx );
         if( !nPointIdx )            // first point
         {
@@ -477,7 +489,8 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
             bPendingCurve = rPolygon.isNextControlPointUsed( nClosedIdx );
     }
 
-    CGPathCloseSubpath( xPath );
+    if( bClosePath )
+        CGPathCloseSubpath( xPath );
 }
 
 static void AddPolyPolygonToPath( CGMutablePathRef xPath,
@@ -491,7 +504,7 @@ static void AddPolyPolygonToPath( CGMutablePathRef xPath,
     for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
     {
         const ::basegfx::B2DPolygon rPolygon = rPolyPoly.getB2DPolygon( nPolyIdx );
-        AddPolygonToPath( xPath, rPolygon, bPixelSnap );
+        AddPolygonToPath( xPath, rPolygon, true, bPixelSnap );
     }
 }
 
@@ -897,7 +910,7 @@ bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPol
     for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
     {
         const ::basegfx::B2DPolygon rPolygon = rPolyPoly.getB2DPolygon( nPolyIdx );
-        AddPolygonToPath( xPath, rPolygon, false );
+        AddPolygonToPath( xPath, rPolygon, true, false );
     }
     CGContextSaveGState( mrContext );
     CGContextBeginPath( mrContext );
@@ -928,7 +941,7 @@ bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
 
     // setup poly-polygon path
     CGMutablePathRef xPath = CGPathCreateMutable();
-    AddPolygonToPath( xPath, rPolyLine, false );
+    AddPolygonToPath( xPath, rPolyLine, false, false );
     CGContextSaveGState( mrContext );
     CGContextAddPath( mrContext, xPath );
     const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
@@ -987,7 +1000,7 @@ void AquaSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGrap
 
     // accelerate trivial operations
     /*const*/ AquaSalGraphics* pSrc = static_cast<AquaSalGraphics*>(pSrcGraphics);
-    const bool bSameGraphics = (this == pSrc) || (mpFrame && (mpFrame == pSrc->mpFrame));
+    const bool bSameGraphics = (this == pSrc) || (mbWindow && mpFrame && pSrc->mbWindow && (mpFrame == pSrc->mpFrame));
     if( bSameGraphics
     &&  (pPosAry->mnSrcWidth == pPosAry->mnDestWidth)
     &&  (pPosAry->mnSrcHeight == pPosAry->mnDestHeight))
@@ -1393,32 +1406,15 @@ void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
     // please see the comment in AquaSalGraphics::SetFont() for details
     const double fPixelSize = (mfFontScale * mfFakeDPIScale * fPointSize);
     pMetric->mnAscent       = static_cast<long>(+aMetrics.ascent  * fPixelSize + 0.5);
-    pMetric->mnDescent      = static_cast<long>((-aMetrics.descent + aMetrics.leading) * fPixelSize + 0.5);
+    pMetric->mnDescent      = static_cast<long>(-aMetrics.descent * fPixelSize + 0.5);
+    const long nExtDescent  = static_cast<long>((-aMetrics.descent + aMetrics.leading) * fPixelSize + 0.5);
+    pMetric->mnExtLeading   = nExtDescent - pMetric->mnDescent;
     pMetric->mnIntLeading   = 0;
-    pMetric->mnExtLeading   = 0;
     // ATSFontMetrics.avgAdvanceWidth is obsolete, so it is usually set to zero
     // since ImplFontMetricData::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough
     // it also makes the calculation of the stretch factor simple
     pMetric->mnWidth        = static_cast<long>(mfFontStretch * fPixelSize + 0.5);
-
-    // apply the "CJK needs extra leading" heuristic if needed
-#if 0 // #i85422# on MacOSX the CJK fonts have good metrics even without the heuristics below
-    if( mpMacFontData->HasCJKSupport() )
-    {
-        pMetric->mnIntLeading   += pMetric->mnExtLeading;
-
-        const long nHalfTmpExtLeading = pMetric->mnExtLeading / 2;
-        const long nOtherHalfTmpExtLeading = pMetric->mnExtLeading - nHalfTmpExtLeading;
-
-        long nCJKExtLeading = static_cast<long>(0.30 * (pMetric->mnAscent + pMetric->mnDescent));
-        nCJKExtLeading -= pMetric->mnExtLeading;
-        pMetric->mnExtLeading = (nCJKExtLeading > 0) ? nCJKExtLeading : 0;
-
-        pMetric->mnAscent   += nHalfTmpExtLeading;
-        pMetric->mnDescent  += nOtherHalfTmpExtLeading;
-    }
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1689,10 +1685,16 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
     if( pReqFont->mbNonAntialiased )
         nStyleRenderingOptions |= kATSStyleNoAntiAliasing;
 
+    // set horizontal/vertical mode
+    ATSUVerticalCharacterType aVerticalCharacterType = kATSUStronglyHorizontal;
+    if( pReqFont->mbVertical )
+        aVerticalCharacterType = kATSUStronglyVertical;
+
     // prepare ATS-fontid as type matching to the kATSUFontTag request
     ATSUFontID nFontID = static_cast<ATSUFontID>(pMacFont->GetFontId());
 
     // update ATSU style attributes with requested font parameters
+    // TODO: no need to set styles which are already defaulted
 
     const ATSUAttributeTag aTag[] =
     {
@@ -1700,7 +1702,8 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
         kATSUSizeTag,
         kATSUQDBoldfaceTag,
         kATSUQDItalicTag,
-        kATSUStyleRenderingOptionsTag
+        kATSUStyleRenderingOptionsTag,
+        kATSUVerticalCharacterTag
     };
 
     const ByteCount aValueSize[] =
@@ -1709,7 +1712,8 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
         sizeof(fFixedSize),
         sizeof(bFakeBold),
         sizeof(bFakeItalic),
-        sizeof(nStyleRenderingOptions)
+        sizeof(nStyleRenderingOptions),
+        sizeof(aVerticalCharacterType)
     };
 
     const ATSUAttributeValuePtr aValue[] =
@@ -1718,11 +1722,12 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
         &fFixedSize,
         &bFakeBold,
         &bFakeItalic,
-        &nStyleRenderingOptions
+        &nStyleRenderingOptions,
+        &aVerticalCharacterType
     };
 
-    OSStatus eStatus = ATSUSetAttributes( maATSUStyle,
-                             sizeof(aTag) / sizeof(ATSUAttributeTag),
+    static const int nTagCount = sizeof(aTag) / sizeof(*aTag);
+    OSStatus eStatus = ATSUSetAttributes( maATSUStyle, nTagCount,
                              aTag, aValueSize, aValue );
     DBG_ASSERT( (eStatus==noErr), "AquaSalGraphics::SetFont() : Could not set font attributes!\n");
 
