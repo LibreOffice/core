@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: WrappedScaleProperty.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +51,8 @@ public:
         , SCALE_PROP_MIN
         , SCALE_PROP_ORIGIN
         , SCALE_PROP_STEPMAIN
-        , SCALE_PROP_STEPHELP
+        , SCALE_PROP_STEPHELP //deprecated property
+        , SCALE_PROP_STEPHELP_COUNT
         , SCALE_PROP_AUTO_MAX
         , SCALE_PROP_AUTO_MIN
         , SCALE_PROP_AUTO_ORIGIN
