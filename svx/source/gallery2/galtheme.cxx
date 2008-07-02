@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: galtheme.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,6 +59,8 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+
+#include "gallerydrawmodel.hxx"
 
 // --------------
 // - Namespaces -
@@ -826,28 +828,28 @@ BOOL GalleryTheme::GetGraphic( ULONG nPos, Graphic& rGraphic, BOOL bProgress )
 
             case( SGA_OBJ_SVDRAW ):
             {
-                FmFormModel aModel;
+                SvxGalleryDrawModel aModel;
 
-                aModel.GetItemPool().FreezeIdRanges();
-
-                if( GetModel( nPos, aModel, bProgress ) )
+                if( aModel.GetModel() )
                 {
-                    ImageMap aIMap;
-
-                    if( CreateIMapGraphic( aModel, rGraphic, aIMap ) )
-                        bRet = TRUE;
-                    else
+                    if( GetModel( nPos, *aModel.GetModel(), bProgress ) )
                     {
-                        VirtualDevice aVDev;
-                        aVDev.SetMapMode( MapMode( MAP_100TH_MM ) );
-                        FmFormView aView( &aModel, &aVDev );
+                        ImageMap aIMap;
 
-                        aView.hideMarkHandles();
-                        aView.ShowSdrPage(aView.GetModel()->GetPage(0));
-//                      aView.ShowSdrPage(aView.GetModel()->GetPage(0), Point());
-                        aView.MarkAll();
-                        rGraphic = aView.GetAllMarkedGraphic();
-                        bRet = TRUE;
+                        if( CreateIMapGraphic( *aModel.GetModel(), rGraphic, aIMap ) )
+                            bRet = TRUE;
+                        else
+                        {
+                            VirtualDevice aVDev;
+                            aVDev.SetMapMode( MapMode( MAP_100TH_MM ) );
+                            FmFormView aView( aModel.GetModel(), &aVDev );
+
+                            aView.hideMarkHandles();
+                            aView.ShowSdrPage(aView.GetModel()->GetPage(0));
+                            aView.MarkAll();
+                            rGraphic = aView.GetAllMarkedGraphic();
+                            bRet = TRUE;
+                        }
                     }
                 }
             }
@@ -1055,23 +1057,24 @@ BOOL GalleryTheme::GetModelStream( ULONG nPos, SotStorageStreamRef& rxModelStrea
 
                 if( GalleryCodec::IsCoded( *xIStm, nVersion ) )
                 {
-                    FmFormModel aModel;
+                    SvxGalleryDrawModel aModel;
 
-                    aModel.GetItemPool().FreezeIdRanges();
-
-                    if( GallerySvDrawImport( *xIStm, aModel ) )
+                    if( aModel.GetModel() )
                     {
-                        aModel.BurnInStyleSheetAttributes();
-
+                        if( GallerySvDrawImport( *xIStm, *aModel.GetModel() ) )
                         {
-                            uno::Reference< io::XOutputStream > xDocOut( new utl::OOutputStreamWrapper( *rxModelStream ) );
+                            aModel.GetModel()->BurnInStyleSheetAttributes();
 
-                            if( SvxDrawingLayerExport( &aModel, xDocOut ) )
-                                rxModelStream->Commit();
+                            {
+                                uno::Reference< io::XOutputStream > xDocOut( new utl::OOutputStreamWrapper( *rxModelStream ) );
+
+                                if( SvxDrawingLayerExport( aModel.GetModel(), xDocOut ) )
+                                    rxModelStream->Commit();
+                            }
                         }
-                    }
 
-                    bRet = ( rxModelStream->GetError() == ERRCODE_NONE );
+                        bRet = ( rxModelStream->GetError() == ERRCODE_NONE );
+                    }
                 }
 
                 xIStm->SetBufferSize( 0 );
@@ -1300,19 +1303,19 @@ BOOL GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTran
                 // according to KA we don't need a BaseURL here
                 if( aDataHelper.GetImageMap( SOT_FORMATSTR_ID_SVIM, aImageMap ) )
                 {
-                    FmFormModel         aModel;
-                    SgaUserDataFactory  aFactory;
+                    SvxGalleryDrawModel aModel;
 
-                    aModel.GetItemPool().FreezeIdRanges();
+                    if( aModel.GetModel() )
+                    {
+                        SgaUserDataFactory  aFactory;
 
-                    SdrPage*    pPage = aModel.AllocPage( FALSE );
-                    SdrGrafObj* pGrafObj = new SdrGrafObj( *pGraphic );
+                        SdrPage*    pPage = aModel.GetModel()->GetPage(0);
+                        SdrGrafObj* pGrafObj = new SdrGrafObj( *pGraphic );
 
-                    pGrafObj->InsertUserData( new SgaIMapInfo( aImageMap ) );
-                    pPage->InsertObject( pGrafObj );
-                    aModel.SetPageNotValid( TRUE );
-                    aModel.InsertPage( pPage );
-                    bRet = InsertModel( aModel, nInsertPos );
+                        pGrafObj->InsertUserData( new SgaIMapInfo( aImageMap ) );
+                        pPage->InsertObject( pGrafObj );
+                        bRet = InsertModel( *aModel.GetModel(), nInsertPos );
+                    }
                 }
             }
 
