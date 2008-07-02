@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdview3.cxx,v $
- * $Revision: 1.75 $
+ * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -689,11 +689,13 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
         {
             BOOL bChanged = FALSE;
 
-            SdDrawDocument* pModel = new SdDrawDocument( DOCUMENT_TYPE_IMPRESS, mpDocSh );
-            pModel->GetItemPool().SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
-            Reference< XComponent > xComponent( new SdXImpressDocument( pModel, sal_True ) );
-            pModel->setUnoModel( Reference< XInterface >::query( xComponent ) );
+            DrawDocShellRef xShell = new DrawDocShell(SFX_CREATE_MODE_INTERNAL);
+            xShell->DoInitNew(0);
 
+            SdDrawDocument* pModel = xShell->GetDoc();
+            pModel->InsertPage(pModel->AllocPage(false));
+
+            Reference< XComponent > xComponent( xShell->GetModel(), UNO_QUERY );
             xStm->Seek( 0 );
 
             com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
@@ -707,10 +709,10 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
             {
                 if( bReturn )
                 {
-                    if( pModel->GetPage( 0 )->GetObjCount() == 1 )
+                    if( pModel->GetSdPage( 0, PK_STANDARD )->GetObjCount() == 1 )
                     {
                         // only one object
-                        SdrObject*      pObj = pModel->GetPage( 0 )->GetObj( 0 );
+                        SdrObject*      pObj = pModel->GetSdPage( 0, PK_STANDARD )->GetObj( 0 );
                         SdrObject*      pPickObj2 = NULL;
                         SdrPageView*    pPV = NULL;
                         PickObj( rPos, pPickObj2, pPV );
@@ -781,7 +783,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
                 if( !bChanged )
                 {
-                    SdrPage* pWorkPage = pModel->GetPage( 0 );
+                    SdrPage* pWorkPage = pModel->GetSdPage( 0, PK_STANDARD );
 
                     pWorkPage->SetRectsDirty();
 
@@ -796,6 +798,8 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     bReturn = Paste( *pModel, maDropPos, pPage, nPasteOptions );
                 }
+
+                xShell->DoClose();
             }
         }
     }
