@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pngread.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1037,6 +1037,7 @@ bool PNGReaderImpl::ImplPreparePass()
 
 void PNGReaderImpl::ImplApplyFilter()
 {
+    OSL_ASSERT( mnScansize >= mnBPP + 1 );
     const BYTE* const pScanEnd = mpInflateInBuf + mnScansize;
 
     BYTE nFilterType = *mpInflateInBuf; // the filter type may change each scanline
@@ -1066,9 +1067,11 @@ void PNGReaderImpl::ImplApplyFilter()
             const BYTE* p2 = mpScanPrior + 1;
 
             // use pixels from prior line
-            do
+            while( p1 < pScanEnd )
+            {
                 *p1 = static_cast<BYTE>( *p1 + *(p2++) );
-            while( ++p1 < pScanEnd );
+                ++p1;
+            }
         }
         break;
 
@@ -1083,9 +1086,11 @@ void PNGReaderImpl::ImplApplyFilter()
                 *p1 = static_cast<BYTE>( *p1 + (*p2 >> 1) );
 
             // predict by averaging the left and prior line pixels
-            do
+            while( p1 < pScanEnd )
+            {
                 *p1 = static_cast<BYTE>( *p1 + ((*(p2++) + *(p3++)) >> 1) );
-            while( ++p1 < pScanEnd );
+                ++p1;
+            }
         }
         break;
 
@@ -1101,7 +1106,7 @@ void PNGReaderImpl::ImplApplyFilter()
                 *p1 = static_cast<BYTE>( *p1 + *(p2++) );
 
             // predict by using the left and the prior line pixels
-            do
+            while( p1 < pScanEnd )
             {
                 int na = *(p2++);
                 int nb = *(p3++);
@@ -1124,8 +1129,8 @@ void PNGReaderImpl::ImplApplyFilter()
                     na = nc;
 
                 *p1 = static_cast<BYTE>( *p1 + na );
+                ++p1;
             }
-            while( ++p1 < pScanEnd );
         }
         break;
     }
