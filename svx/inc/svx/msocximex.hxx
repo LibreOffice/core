@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: msocximex.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -828,6 +828,8 @@ public:
 
     sal_uInt32  nScrollWidth;
     sal_uInt32  nScrollHeight;
+    sal_uInt32  nScrollLeft;
+    sal_uInt32  nScrollTop;
 
 
     sal_uInt8 pIconHeader[20];
@@ -909,7 +911,8 @@ public:
 
     sal_uInt32  nScrollWidth;
     sal_uInt32  nScrollHeight;
-
+    sal_uInt32  nScrollLeft;
+    sal_uInt32  nScrollTop;
 
     sal_uInt8 pIconHeader[20];
     sal_uInt32  nIconLen;
