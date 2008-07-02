@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xechart.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -123,6 +123,9 @@ public:
     sal_uInt16          ConvertFont(
                             const ScfPropertySet& rPropSet,
                             sal_Int16 nScript ) const;
+
+    /** Reads the pie rotation property and returns the converted angle. */
+    static sal_uInt16   ConvertPieRotation( const ScfPropertySet& rPropSet );
 
 private:
     typedef ScfRef< XclExpChRootData > XclExpChRootDataRef;
@@ -339,7 +342,7 @@ public:
     explicit            XclExpChSourceLink( const XclExpChRoot& rRoot, sal_uInt8 nDestType );
 
     /** Converts the passed source link, returns the number of linked values. */
-    sal_uInt16          ConvertDataSequence( XDataSequenceRef xDataSeq, bool bSplitToColumns );
+    sal_uInt16          ConvertDataSequence( XDataSequenceRef xDataSeq, bool bSplitToColumns, sal_uInt16 nDefCount = 0 );
     /** Converts the passed sequence of formatted string objects, returns leading font index. */
     sal_uInt16          ConvertStringSequence( const XFormattedStringSeq& rStringSeq );
     /** Converts the number format from the passed property set. */
@@ -625,7 +628,7 @@ public:
     explicit            XclExpChSerErrorBar( const XclExpChRoot& rRoot, sal_uInt8 nBarType );
 
     /** Converts the passed error bar settings, returns true if error bar type is supported. */
-    bool                Convert( const ScfPropertySet& rPropSet );
+    bool                Convert( XclExpChSourceLink& rValueLink, sal_uInt16& rnValueCount, const ScfPropertySet& rPropSet );
 
 private:
     virtual void        WriteBody( XclExpStream& rStrm );
@@ -663,9 +666,9 @@ public:
                             const ::rtl::OUString& rValueRole,
                             sal_uInt16 nGroupIdx, sal_uInt16 nFormatIdx, bool bCloseSymbol );
     /** Converts the passed error bar settings (called at trend line child series). */
-    bool                ConvertTrendLine( XRegressionCurveRef xRegCurve, sal_uInt16 nParentIdx );
+    bool                ConvertTrendLine( const XclExpChSeries& rParent, XRegressionCurveRef xRegCurve );
     /** Converts the passed error bar settings (called at error bar child series). */
-    bool                ConvertErrorBar( const ScfPropertySet& rPropSet, sal_uInt16 nParentIdx, sal_uInt8 nBarId );
+    bool                ConvertErrorBar( const XclExpChSeries& rParent, const ScfPropertySet& rPropSet, sal_uInt8 nBarId );
     /** Converts and inserts category ranges for all inserted series. */
     void                ConvertCategSequence( XLabeledDataSeqRef xCategSeq );
 
@@ -673,6 +676,8 @@ public:
     virtual void        WriteSubRecords( XclExpStream& rStrm );
 
 private:
+    /** Initializes members of this series to represent a child of the passed series. */
+    void                InitFromParent( const XclExpChSeries& rParent );
     /** Tries to create trend line series objects (called at parent series). */
     void                CreateTrendLines( XDataSeriesRef xDataSeries );
     /** Tries to create positive and negative error bar series objects (called at parent series). */
@@ -909,7 +914,7 @@ public:
     explicit            XclExpChLabelRange( const XclExpChRoot& rRoot );
 
     /** Converts category axis scaling settings. */
-    void                Convert( const ScaleData& rScaleData );
+    void                Convert( const ScaleData& rScaleData, bool bMirrorOrient );
     /** Sets flag for tickmark position between categories or on categories. */
     inline void         SetTicksBetweenCateg( bool bTicksBetween )
                             { ::set_flag( maData.mnFlags, EXC_CHLABELRANGE_BETWEEN, bTicksBetween ); }
