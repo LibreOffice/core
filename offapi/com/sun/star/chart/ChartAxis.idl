@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartAxis.idl,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,9 +110,19 @@ published service ChartAxis
 
     //-------------------------------------------------------------------------
 
-    /** Contains the distance between the help tick marks.
- */
+    /** @deprecated
+    User property StepHelpCount instead
+    Contains the distance between the help tick marks.
+    */
     [optional, property] double StepHelp;
+
+    //-------------------------------------------------------------------------
+
+    /**
+    Contains the number of help intervals within a main interval. E.g. a StepHelpCount of 5 divides
+    the main interval into 5 pieces and thus producces 4 help tick marks.
+    */
+    [optional, property] long StepHelpCount;
 
     //-------------------------------------------------------------------------
 
@@ -143,7 +153,7 @@ published service ChartAxis
 
     //-------------------------------------------------------------------------
 
-    /** The distance between the help tick marks is calculated by the
+    /** The number of help intervals within a main interval is calculated by the
         chart if this property is <TRUE/>.
     */
     [optional, property] boolean AutoStepHelp;
