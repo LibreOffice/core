@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: runtime.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -195,6 +195,7 @@ SbiRuntime::pStep2 SbiRuntime::aStep2[] = {// Alle Opcodes mit zwei Operanden
     &SbiRuntime::StepDCREATE_REDIMP, // Objekt-Array redimensionieren (+StringID+StringID)
     &SbiRuntime::StepFIND_CM,    // Search inside a class module (CM) to enable global search in time
     &SbiRuntime::StepPUBLIC_P,    // Search inside a class module (CM) to enable global search in time
+    &SbiRuntime::StepFIND_STATIC,    // Search inside a class module (CM) to enable global search in time
 };
 
 
