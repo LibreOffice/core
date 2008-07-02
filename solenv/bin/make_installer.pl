@@ -8,7 +8,7 @@
 #
 # $RCSfile: make_installer.pl,v $
 #
-# $Revision: 1.113 $
+# $Revision: 1.114 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -179,13 +179,10 @@ my $ziplistref = installer::files::read_file($installer::globals::ziplistname);
 
 installer::logger::print_message( "... analyzing $installer::globals::ziplistname ... \n" );
 
-my $productblockref = installer::ziplist::getproductblock($ziplistref, $installer::globals::product);       # product block from zip.lst
+my ($productblockref, $parent) = installer::ziplist::getproductblock($ziplistref, $installer::globals::product, 1);     # product block from zip.lst
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "productblock.log" ,$productblockref); }
 
-my $globalproductblockref = installer::ziplist::getproductblock($ziplistref, $installer::globals::globalblock);     # global product block from zip.lst
-if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "globalproductblock.log" ,$globalproductblockref); }
-
-my $settingsblockref = installer::ziplist::getproductblock($productblockref, "Settings");       # settings block from zip.lst
+my ($settingsblockref, undef) = installer::ziplist::getproductblock($productblockref, "Settings", 0);       # settings block from zip.lst
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "settingsblock1.log" ,$settingsblockref); }
 
 $settingsblockref = installer::ziplist::analyze_settings_block($settingsblockref);              # select data from settings block in zip.lst
@@ -197,9 +194,35 @@ if ( $installer::globals::globallogging ) { installer::files::save_file($logging
 my $allvariablesarrayref = installer::ziplist::get_variables_from_ziplist($settingsblockref);
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "allvariables1.log" ,$allvariablesarrayref); }
 
+my ($globalproductblockref, undef) = installer::ziplist::getproductblock($ziplistref, $installer::globals::globalblock, 0);     # global product block from zip.lst
+if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "globalproductblock.log" ,$globalproductblockref); }
+
+while (defined $parent)
+{
+    my $parentproductblockref;
+    ($parentproductblockref, $parent) = installer::ziplist::getproductblock(
+        $ziplistref, $parent, 1);
+    my ($parentsettingsblockref, undef) = installer::ziplist::getproductblock(
+        $parentproductblockref, "Settings", 0);
+    $parentsettingsblockref = installer::ziplist::analyze_settings_block(
+        $parentsettingsblockref);
+    my $allparentsettingsarrayref =
+        installer::ziplist::get_settings_from_ziplist($parentsettingsblockref);
+    my $allparentvariablesarrayref =
+        installer::ziplist::get_variables_from_ziplist($parentsettingsblockref);
+    $allsettingsarrayref =
+        installer::converter::combine_arrays_from_references_first_win(
+            $allsettingsarrayref, $allparentsettingsarrayref)
+        if $#{$allparentsettingsarrayref} > -1;
+    $allvariablesarrayref =
+        installer::converter::combine_arrays_from_references_first_win(
+            $allvariablesarrayref, $allparentvariablesarrayref)
+        if $#{$allparentvariablesarrayref} > -1;
+}
+
 if ( $#{$globalproductblockref} > -1 )
 {
-    my $globalsettingsblockref = installer::ziplist::getproductblock($globalproductblockref, "Settings");       # settings block from zip.lst
+    my ($globalsettingsblockref, undef) = installer::ziplist::getproductblock($globalproductblockref, "Settings", 0);       # settings block from zip.lst
     if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "globalsettingsblock1.log" ,$globalsettingsblockref); }
 
     $globalsettingsblockref = installer::ziplist::analyze_settings_block($globalsettingsblockref);              # select data from settings block in zip.lst
