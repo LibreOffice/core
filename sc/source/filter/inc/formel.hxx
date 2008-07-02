@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formel.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,10 +28,8 @@
  *
  ************************************************************************/
 
-
-#ifndef _FORMEL_HXX
-#define _FORMEL_HXX
-
+#ifndef SC_FORMEL_HXX
+#define SC_FORMEL_HXX
 
 #include <tools/solar.h>
 #include <tools/list.hxx>
