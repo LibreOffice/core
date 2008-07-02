@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sbmeth.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,12 +49,12 @@ class SbMethod : public SbxMethod
     friend class SbIfaceMapperMethod;
 
     SbMethodImpl* mpSbMethodImpl;           // Impl data
-
     SbModule* pMod;
     USHORT    nDebugFlags;
     USHORT    nLine1, nLine2;
     UINT32    nStart;
     BOOL      bInvalid;
+    SbxArrayRef refStatics;
     SbMethod( const String&, SbxDataType, SbModule* );
     SbMethod( const SbMethod& );
     virtual BOOL LoadData( SvStream&, USHORT );
@@ -67,6 +67,7 @@ public:
     virtual SbxInfo* GetInfo();
     SbxArray* GetLocals();
     SbxArray* GetStatics();
+    void      ClearStatics();
     SbModule* GetModule()                { return pMod;        }
     UINT32    GetId() const              { return nStart;      }
     USHORT    GetDebugFlags()            { return nDebugFlags; }
