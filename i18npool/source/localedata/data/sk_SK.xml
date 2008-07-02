@@ -363,7 +363,7 @@
 </LC_CALENDAR>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>Sk</CurrencyID>
+<CurrencyID>SKK</CurrencyID>
 <CurrencySymbol>Sk</CurrencySymbol>
 <BankSymbol>SKK</BankSymbol>
 <CurrencyName>Koruna</CurrencyName>
