@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excel.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,13 +31,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-// ============================================================================
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
-#ifndef _SVSTOR_HXX
 #include <sot/storage.hxx>
-#endif
 #include <sot/exchange.hxx>
 #include <tools/globname.hxx>
 #include "scitems.hxx"
