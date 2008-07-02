@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AxisWrapper.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,7 +79,8 @@ enum
     PROP_AXIS_MIN,
     PROP_AXIS_ORIGIN,
     PROP_AXIS_STEPMAIN,
-    PROP_AXIS_STEPHELP,
+    PROP_AXIS_STEPHELP, //deprecated property use 'StepHelpCount' instead
+    PROP_AXIS_STEPHELP_COUNT,
     PROP_AXIS_AUTO_MAX,
     PROP_AXIS_AUTO_MIN,
     PROP_AXIS_AUTO_ORIGIN,
@@ -133,10 +134,19 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
+    //deprecated property use 'StepHelpCount' instead
     rOutProperties.push_back(
         Property( C2U( "StepHelp" ),
                   PROP_AXIS_STEPHELP,
                   ::getCppuType( reinterpret_cast< const double * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
+
+    rOutProperties.push_back(
+        Property( C2U( "StepHelpCount" ),
+                  PROP_AXIS_STEPHELP_COUNT,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
@@ -529,60 +539,6 @@ const std::vector< WrappedProperty* > AxisWrapper::createWrappedProperties()
     WrappedCharacterHeightProperty::addWrappedProperties( aWrappedProperties, this );
 
     return aWrappedProperties;
-}
-
-
-void SAL_CALL AxisWrapper::setPropertyValue( const OUString& rPropertyName, const uno::Any& rValue )
-                                    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    bool bSetFixedHelpStepAfterwards = false;
-    uno::Any aHelpStep;
-    if( rPropertyName.equals( C2U( "StepHelp" ) ) )
-    {
-        bool bLogarithmic = false;
-        Reference< chart2::XAxis > xAxis( this->getAxis() );
-        if( xAxis.is() )
-        {
-            chart2::ScaleData aScaleData( xAxis->getScaleData() );
-            bLogarithmic = AxisHelper::isLogarithmic(aScaleData.Scaling);
-        }
-
-        if( !bLogarithmic )
-            m_aTemporaryHelpStepValue = rValue;
-    }
-    else if( rPropertyName.equals( C2U( "AutoStepHelp" ) ) )
-    {
-        sal_Bool bAuto=sal_False;
-        if( (rValue >>= bAuto) && bAuto )
-            m_aTemporaryHelpStepValue.clear();
-    }
-    else if( rPropertyName.equals( C2U( "StepMain" ) ) )
-    {
-        Reference< chart2::XAxis > xAxis( this->getAxis() );
-        if( xAxis.is() )
-        {
-            chart2::ScaleData aScaleData( xAxis->getScaleData() );
-            if( !AxisHelper::isLogarithmic(aScaleData.Scaling) )
-            {
-                if( aScaleData.IncrementData.SubIncrements.getLength()
-                    && aScaleData.IncrementData.SubIncrements[ 0 ].IntervalCount.hasValue() )
-                {
-                    aHelpStep = this->getPropertyValue( C2U( "StepHelp" ) );
-                    bSetFixedHelpStepAfterwards = true;
-                }
-                else if( m_aTemporaryHelpStepValue.hasValue() )
-                {
-                    aHelpStep = m_aTemporaryHelpStepValue;
-                    bSetFixedHelpStepAfterwards = true;
-                }
-            }
-        }
-    }
-
-    WrappedPropertySet::setPropertyValue( rPropertyName, rValue );
-
-    if( bSetFixedHelpStepAfterwards )
-        this->setPropertyValue( C2U( "StepHelp" ), aHelpStep );
 }
 
 // ================================================================================
