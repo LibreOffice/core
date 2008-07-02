@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.109 $
+# $Revision: 1.110 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -307,6 +307,12 @@ SHL2STDLIBS += -lXext -lSM -lICE -lX11
 SHL2STDLIBS+= -ldl
 .ENDIF
 
+.IF "$(ENABLE_RANDR)" != ""
+.IF "$(XRANDR_DLOPEN)" == "FALSE"
+SHL2STDLIBS+= $(XRANDR_LIBS)
+.ENDIF
+.ENDIF
+
 .ENDIF          # "$(GUIBASE)"=="unx"
 
 # gtk plugin
@@ -351,6 +357,12 @@ SHL4STDLIBS+=\
             $(VOSLIB)           \
             $(SALLIB)
 
+.IF "$(ENABLE_RANDR)" != ""
+.IF "$(XRANDR_DLOPEN)" == "FALSE"
+SHL4STDLIBS+= $(XRANDR_LIBS)
+.ENDIF
+.ENDIF
+
 .ENDIF # "$(ENABLE_GTK)" != ""
 
 # KDE plugin
@@ -373,6 +385,13 @@ SHL5STDLIBS+=\
         $(TOOLSLIB)     \
         $(VOSLIB)       \
         $(SALLIB)
+
+.IF "$(ENABLE_RANDR)" != ""
+.IF "$(XRANDR_DLOPEN)" == "FALSE"
+SHL5STDLIBS+= $(XRANDR_LIBS)
+.ENDIF
+.ENDIF
+
 .ENDIF # "$(ENABLE_KDE)" != ""
 
 .ENDIF # UNX
