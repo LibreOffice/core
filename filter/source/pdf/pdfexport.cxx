@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pdfexport.cxx,v $
- * $Revision: 1.68 $
+ * $Revision: 1.69 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1357,6 +1357,10 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                                     else if ( fTransparency == 1.0 )
                                         bSkipSequence = sal_True;
                                 }
+/* #i81548# removing optimization for fill textures, because most of the texture settings are not
+   exported properly. In OpenOffice 3.1 the drawing layer will support graphic primitives, then it
+   will not be a problem to optimize the filltexture export. But for wysiwyg is more important than
+   filesize.
                                 else if( aFill.getFillType() == SvtGraphicFill::fillTexture && aFill.isTiling() )
                                 {
                                     sal_Int32 nPattern = mnCachePatternId;
@@ -1434,6 +1438,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
 
                                     bSkipSequence = sal_True;
                                 }
+*/
                             }
                             if ( bSkipSequence )
                             {
