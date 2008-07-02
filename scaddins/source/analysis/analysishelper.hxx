@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: analysishelper.hxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +63,6 @@ class ScaAnyConverter;
 //double                _Test( sal_Int32 nMode, double f1, double f2, double f3 );
 inline sal_Bool     IsLeapYear( sal_uInt16 nYear );
 sal_uInt16          DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear );
-sal_uInt16          DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear, sal_Bool bLeapYear );
 sal_Int32           DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear );
 void                DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt16& rYear ) throw( ::com::sun::star::lang::IllegalArgumentException );
 sal_Int32           GetNullDate( const REF( CSS::beans::XPropertySet )& xOptions ) THROWDEF_RTE;
@@ -90,17 +89,10 @@ double              GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_
                         THROWDEF_RTE_IAE;
 inline double       GetYearFrac( constREFXPS& xOpt, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
                         THROWDEF_RTE_IAE;
-void                AddDate( sal_uInt16& nDay, sal_uInt16& nMonth, sal_uInt16& nYear,
-                            sal_Int32 nDeltaDay, sal_Int32 nDeltaMonth, sal_Int32 nDeltaYear );
-void                AddDate( sal_Int32 nNullDate, sal_Int32& rDate,
-                            sal_Int32 nDeltaDay, sal_Int32 nDeltaMonth, sal_Int32 nDeltaYear );
 inline void         AlignDate( sal_uInt16& rDay, sal_uInt16 nMonth, sal_uInt16 nYear );
 
 double              Fak( sal_Int32 n );
 double              GetGcd( double f1, double f2 );
-double              GammaHelp( double& x, sal_Bool& bReflect );
-double              Gamma( double f );
-double              GammaN( double f, sal_uInt32 nIter );
 double              ConvertToDec( const STRING& rFromNum, sal_uInt16 nBaseFrom, sal_uInt16 nCharLim ) THROWDEF_RTE_IAE;
 STRING              ConvertFromDec(
                         double fNum, double fMin, double fMax, sal_uInt16 nBase,
@@ -197,8 +189,6 @@ public:
     inline const STRING*    First( void );
     inline const STRING*    Next( void );
     inline const STRING*    Get( sal_uInt32 nIndex ) const;
-
-    sal_Bool                Contains( const STRING& rSearchString ) const;
 
     using MyList::Append;
     inline void             Append( STRING* pNew );
@@ -355,23 +345,8 @@ public:
     inline sal_Int32            Get( sal_uInt32 nIndex ) const
                                     { return (sal_Int32)(sal_IntPtr) MyList::GetObject( nIndex ); }
 
-                                /// @return  number of elements in the range of nMinVal to nMaxVal (both included)
-    sal_Int32                   CountCondition( sal_Int32 nMinVal, sal_Int32 nMaxVal ) const;
-
                                 /// @return  sal_True if nVal (internal date representation) is contained
     sal_Bool                    Find( sal_Int32 nVal ) const;
-
-                                /// @param bInsertOnWeekend  insertion mode: sal_False = holidays on weekend are omitted
-    void                        InsertHolidayList(
-                                    const CSS::uno::Sequence< CSS::uno::Sequence< sal_Int32 > >& rHolidaySeq,
-                                    sal_Int32 nNullDate,
-                                    sal_Bool bInsertOnWeekend );
-
-                                /// @param bInsertOnWeekend  insertion mode: sal_False = holidays on weekend are omitted
-    void                        InsertHolidayList(
-                                    const CSS::uno::Sequence< double >& rHolidaySeq,
-                                    sal_Int32 nNullDate,
-                                    sal_Bool bInsertOnWeekend ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
 
                                 /** @param rAnyConv  is an initialized or uninitialized ScaAnyConverter
                                     @param bInsertOnWeekend  insertion mode: sal_False = holidays on weekend are omitted */
@@ -436,23 +411,7 @@ public:
     void                        Append(
                                     ScaAnyConverter& rAnyConv,
                                     const CSS::uno::Reference< CSS::beans::XPropertySet >& xOpt,
-                                    const CSS::uno::Any& rAny,
-                                    sal_Bool bIgnoreEmpty = sal_True ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
-
-                                /** @param rAnyConv  is an initialized or uninitialized ScaAnyConverter
-                                    @param bIgnoreEmpty  handling of empty Any's/strings: sal_False = inserted as 0.0; sal_True = omitted */
-    void                        Append(
-                                    ScaAnyConverter& rAnyConv,
-                                    const CSS::uno::Reference< CSS::beans::XPropertySet >& xOpt,
                                     const CSS::uno::Sequence< CSS::uno::Any >& rAnySeq,
-                                    sal_Bool bIgnoreEmpty = sal_True ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
-
-                                /** @param rAnyConv  is an initialized or uninitialized ScaAnyConverter
-                                    @param bIgnoreEmpty  handling of empty Any's/strings: sal_False = inserted as 0.0; sal_True = omitted */
-    void                        Append(
-                                    ScaAnyConverter& rAnyConv,
-                                    const CSS::uno::Reference< CSS::beans::XPropertySet >& xOpt,
-                                    const CSS::uno::Sequence< CSS::uno::Sequence< CSS::uno::Any > >& rAnySeq,
                                     sal_Bool bIgnoreEmpty = sal_True ) throw( CSS::uno::RuntimeException, CSS::lang::IllegalArgumentException );
 
     virtual sal_Bool            CheckInsert( double fValue ) const
