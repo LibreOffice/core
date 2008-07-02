@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: about.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,10 +85,11 @@ static void layoutText( FixedInfo &rText, long &nY, long nTextWidth, Size a6Size
     nY += aTxtSiz.Height();
 }
 
-static bool impl_loadBitmap( const rtl::OUString &rBmpFileName, Image &rLogo )
+static bool impl_loadBitmap(
+    const rtl::OUString &rPath, const rtl::OUString &rBmpFileName,
+    Image &rLogo )
 {
-    rtl::OUString uri(
-        RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR/program" ) );
+    rtl::OUString uri( rPath );
     rtl::Bootstrap::expandMacros( uri );
     INetURLObject aObj( uri );
     aObj.insertName( rBmpFileName );
@@ -145,13 +146,23 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     sal_Int32 nIndex = 0;
     do
     {
-        bLoaded = impl_loadBitmap( aAbouts.getToken( 0, ',', nIndex ), aAppLogo );
+        bLoaded = impl_loadBitmap(
+            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
+            aAbouts.getToken( 0, ',', nIndex ), aAppLogo );
     }
     while ( !bLoaded && ( nIndex >= 0 ) );
 
     // fallback to "about.bmp"
-    if ( !bLoaded )
-        bLoaded = impl_loadBitmap( rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
+    if ( !bLoaded ) {
+        bLoaded = impl_loadBitmap(
+            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program/edition" ),
+            rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
+    }
+    if (!bLoaded) {
+        bLoaded = impl_loadBitmap(
+            rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ),
+            rtl::OUString::createFromAscii( "about.bmp" ), aAppLogo );
+    }
 
     // Transparenter Font
     Font aFont = GetFont();
