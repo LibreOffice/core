@@ -306,7 +306,7 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>kr.</CurrencyID>
+      <CurrencyID>ISK</CurrencyID>
       <CurrencySymbol>kr.</CurrencySymbol>
       <BankSymbol>ISK</BankSymbol>
       <CurrencyName>Íslensk króna</CurrencyName>
