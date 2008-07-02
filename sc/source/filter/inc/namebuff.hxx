@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: namebuff.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _NAMEBUFF_HXX
-#define _NAMEBUFF_HXX
+#ifndef SC_NAMEBUFF_HXX
+#define SC_NAMEBUFF_HXX
 
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
