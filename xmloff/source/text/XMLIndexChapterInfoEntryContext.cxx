@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLIndexChapterInfoEntryContext.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,8 +86,10 @@ static const SvXMLEnumMapEntry aChapterDisplayMap[] =
     { XML_NAME,                     ChapterFormat::NAME },
     { XML_NUMBER,                   ChapterFormat::NUMBER },
     { XML_NUMBER_AND_NAME,          ChapterFormat::NAME_NUMBER },
-// not supported by the template:
-//  { XML_PLAIN_NUMBER_AND_NAME,    ChapterFormat::NO_PREFIX_SUFFIX },
+    //---> i89791
+    // enabled for ODF 1.2, full index support in 3.0
+    { XML_PLAIN_NUMBER_AND_NAME,    ChapterFormat::NO_PREFIX_SUFFIX },
+    //<---
     { XML_PLAIN_NUMBER,             ChapterFormat::DIGIT },
     { XML_TOKEN_INVALID,            0 }
 };
@@ -145,6 +147,34 @@ void XMLIndexChapterInfoEntryContext::StartElement(
     if (bChapterInfoOK)
     {
         nValues++;
+        // --> OD 2008-06-26 #i89791#
+        if ( !bTOC )
+        {
+            bool bConvert( false );
+            {
+                sal_Int32 nUPD( 0 );
+                sal_Int32 nBuild( 0 );
+                const bool bBuildIdFound = GetImport().getBuildIds( nUPD, nBuild );
+                if ( GetImport().IsTextDocInOOoFileFormat() ||
+                     ( bBuildIdFound &&
+                       ( nUPD== 680 || nUPD == 645 || nUPD == 641 ) ) )
+                {
+                    bConvert = true;
+                }
+            }
+            if ( bConvert )
+            {
+                if ( nChapterInfo == ChapterFormat::NUMBER )
+                {
+                    nChapterInfo = ChapterFormat::DIGIT;
+                }
+                else if ( nChapterInfo == ChapterFormat::NAME_NUMBER )
+                {
+                    nChapterInfo = ChapterFormat::NO_PREFIX_SUFFIX;
+                }
+            }
+        }
+        // <--
     }
     if (bOutlineLevelOK)
         nValues++;
