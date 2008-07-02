@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salprnpsp.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -149,7 +149,7 @@ static Paper getPaperType( const String& rPaperName )
     ByteString aPaper( rPaperName, RTL_TEXTENCODING_ISO_8859_1 );
     for( unsigned int i = 0; i < sizeof( aPaperTab )/sizeof( aPaperTab[0] ); i++ )
     {
-        if( ! strcmp( aPaper.GetBuffer(), aPaperTab[i].name ) )
+        if( ! rtl_str_compareIgnoreAsciiCase( aPaper.GetBuffer(), aPaperTab[i].name ) )
             return aPaperTab[i].paper;
     }
     return PAPER_USER;
@@ -776,7 +776,7 @@ BOOL PspSalInfoPrinter::SetData(
                     aPaper = String( ByteString( aPaperTab[ pJobSetup->mePaperFormat ].name ), RTL_TEXTENCODING_ISO_8859_1 );
             }
             pKey = aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
-            pValue = pKey ? pKey->getValue( aPaper ) : NULL;
+            pValue = pKey ? pKey->getValueCaseInsensitive( aPaper ) : NULL;
             if( ! ( pKey && pValue && aData.m_aContext.setValue( pKey, pValue, false ) == pValue ) )
                 return FALSE;
         }
