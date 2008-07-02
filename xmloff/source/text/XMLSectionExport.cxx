@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLSectionExport.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,6 +55,7 @@
 #include <com/sun/star/text/BibliographyDataField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
+#include <com/sun/star/text/ChapterFormat.hpp> //i90246
 #include "xmlkywd.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "xmlnmspe.hxx"
@@ -1124,6 +1125,7 @@ sal_Bool XMLSectionExport::ExportIndexTemplate(
             nTemplateNo++)
         {
             ExportIndexTemplateElement(
+                eType,  //i90246
                 rValues[nTemplateNo]);
         }
     }
@@ -1227,6 +1229,7 @@ SvXMLEnumMapEntry __READONLY_DATA aBibliographyDataFieldMap[] =
 };
 
 void XMLSectionExport::ExportIndexTemplateElement(
+    SectionTypeEnum eType,  //i90246
     Sequence<PropertyValue> & rValues)
 {
     // variables for template values
@@ -1266,6 +1269,10 @@ void XMLSectionExport::ExportIndexTemplateElement(
     // With Tab Stop #i21237#
     sal_Bool bWithTabStop = sal_False;
     sal_Bool bWithTabStopOK = sal_False;
+
+    //i90246, the ODF version being written to is:
+    const SvtSaveOptions::ODFDefaultVersion aODFVersion = rExport.getDefaultVersion();
+    //the above version cannot be used for old OOo (OOo 1.0) formats!
 
     // token type
     enum TemplateTypeEnum nTokenType = TOK_TTYPE_INVALID;
@@ -1387,6 +1394,60 @@ void XMLSectionExport::ExportIndexTemplateElement(
             ; // unknown/unimplemented template
             break;
     }
+
+    //--->i90246
+    //check the ODF version being exported
+    if( aODFVersion == SvtSaveOptions::ODFVER_011
+        || aODFVersion == SvtSaveOptions::ODFVER_010)
+    {
+        bLevelOK = sal_False;
+        if (TOK_TTYPE_CHAPTER_INFO == nTokenType)
+        {
+            //if we are emitting for ODF 1.1 or 1.0, this information can be used for alphabetical index only
+            //it's not permitted in other indexes
+            if (eType != TEXT_SECTION_TYPE_ALPHABETICAL)
+            {
+                pElement = NULL; //not permitted, null the element
+            }
+            else //maps format for 1.1 & 1.0
+            {
+                // a few word here: OOo up to 2.4 uses the field chapter info in Alphabetical index
+                // in a way different from the ODF 1.1/1.0 specification:
+                //
+                // ODF1.1/1.0         OOo display in chapter info                       ODF1.2
+                //                    (used in alphabetical index only
+                //
+                // number             chapter number without pre/postfix                plain-number
+                // number-and-name    chapter number without pre/postfix plus title     plain-number-and-name
+                //
+                // with issue i89791 the reading of ODF 1.1 and 1.0 was corrected
+                // this one corrects the writing back from ODF 1.2 to ODF 1.1/1.0
+                // unfortunately if there is another application which interprets correctly ODF1.1/1.0,
+                // the resulting alphabetical index will be rendered wrong by OOo 2.4 version
+                //
+                switch( nChapterFormat )
+                {
+                case ChapterFormat::DIGIT:
+                    nChapterFormat = ChapterFormat::NUMBER;
+                    break;
+                case ChapterFormat::NO_PREFIX_SUFFIX:
+                    nChapterFormat = ChapterFormat::NAME_NUMBER;
+                    break;
+                }
+            }
+        }
+        else if (TOK_TTYPE_ENTRY_NUMBER == nTokenType)
+        {
+            //in case of ODF 1.1 or 1.0 the only allowed number format is "number"
+            //so, force it...
+            // The only expected 'foreign' nChapterFormat is
+            // ' ChapterFormat::DIGIT', forced to 'none, since the
+            // 'value allowed in ODF 1.1 and 1.0 is 'number' the default
+            // this can be obtained by simply disabling the chapter format
+            bChapterFormatOK = sal_False;
+        }
+    }
+//<---
 
     // ... and write Element
     if (pElement != NULL)
