@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLExportDataPilot.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLEXPORTDATAPILOT_HXX
-#define _SC_XMLEXPORTDATAPILOT_HXX
+#ifndef SC_XMLEXPORTDATAPILOT_HXX
+#define SC_XMLEXPORTDATAPILOT_HXX
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <rtl/ustring.hxx>
