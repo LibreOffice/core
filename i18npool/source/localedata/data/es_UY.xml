@@ -44,7 +44,7 @@
 <LC_CALENDAR ref="es_AR"/>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>$</CurrencyID>
+<CurrencyID>UYU</CurrencyID>
 <CurrencySymbol>$</CurrencySymbol>
 <BankSymbol>UYU</BankSymbol>
 <CurrencyName>Peso Uruguayo</CurrencyName>
