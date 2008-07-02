@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ColumnLineChartTypeTemplate.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -261,6 +261,27 @@ void ColumnLineChartTypeTemplate::createChartTypes(
     catch( uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
+    }
+}
+
+void SAL_CALL ColumnLineChartTypeTemplate::applyStyle(
+    const Reference< chart2::XDataSeries >& xSeries,
+    ::sal_Int32 nChartTypeIndex,
+    ::sal_Int32 nSeriesIndex,
+    ::sal_Int32 nSeriesCount )
+    throw (uno::RuntimeException)
+{
+    ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
+
+    if( nChartTypeIndex==1 ) // lines
+    {
+        Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY );
+        if( xProp.is() )
+        {
+            DataSeriesHelper::switchLinesOnOrOff( xProp, true );
+            DataSeriesHelper::switchSymbolsOnOrOff( xProp, false, nSeriesIndex );
+            DataSeriesHelper::makeLinesThickOrThin( xProp, true );
+        }
     }
 }
 
