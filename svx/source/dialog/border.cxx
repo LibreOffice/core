@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: border.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -778,17 +778,18 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     //
     bPut = TRUE;
 
-    if (   SFX_ITEM_DEFAULT == rOldSet.GetItemState( nBoxWhich,     FALSE )
-        || SFX_ITEM_DEFAULT == rOldSet.GetItemState( nBoxInfoWhich, FALSE ) )
+    if (   SFX_ITEM_DEFAULT == rOldSet.GetItemState( nBoxWhich,     FALSE ))
+    {
+        bPut = aBoxItem != (const SvxBoxItem&)(rOldSet.Get(nBoxWhich)) ? sal_True : sal_False;
+    }
+    if(  SFX_ITEM_DEFAULT == rOldSet.GetItemState( nBoxInfoWhich, FALSE ) )
     {
         const SvxBoxInfoItem& rOldBoxInfo = (const SvxBoxInfoItem&)
                                 rOldSet.Get(nBoxInfoWhich);
 
         aBoxInfoItem.SetMinDist( rOldBoxInfo.IsMinDist() );
         aBoxInfoItem.SetDefDist( rOldBoxInfo.GetDefDist() );
-        bPut =
-            (   (aBoxItem     != (const SvxBoxItem&)(rOldSet.Get(nBoxWhich)))
-             || (aBoxInfoItem != rOldBoxInfo ) );
+        bPut |= (aBoxInfoItem != rOldBoxInfo );
     }
 
     if ( bPut )
