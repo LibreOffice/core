@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -357,8 +357,10 @@ GC X11SalGraphics::GetTrackingGC()
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::DrawLines( ULONG              nPoints,
-                                       const SalPolyLine &rPoints,
-                                       GC                 pGC )
+                                const SalPolyLine &rPoints,
+                                GC                 pGC,
+                                bool               bClose
+                                )
 {
     // errechne wie viele Linien XWindow auf einmal zeichnen kann
     ULONG nMaxLines = (GetDisplay()->GetMaxRequestSize() - sizeof(xPolyPointReq))
@@ -382,6 +384,11 @@ void X11SalGraphics::DrawLines( ULONG              nPoints,
                     &rPoints[n],
                     nPoints - n,
                     CoordModeOrigin );
+    if( bClose )
+    {
+        if( rPoints[nPoints-1].x != rPoints[0].x || rPoints[nPoints-1].y != rPoints[0].y )
+            drawLine( rPoints[nPoints-1].x, rPoints[nPoints-1].y, rPoints[0].x, rPoints[0].y );
+    }
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -491,8 +498,8 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
         //if( (13*rDPIX >= 10*rDPIY) && (13*rDPIY >= 10*rDPIX) )  //+-30%
         {
 #ifdef DEBUG
-            printf("Forcing Resolution from %dx%d to %dx%d\n",
-                rDPIX,rDPIY,rDPIY,rDPIY);
+            printf("Forcing Resolution from %" SAL_PRIdINT32 "x%" SAL_PRIdINT32 " to %" SAL_PRIdINT32 "x%" SAL_PRIdINT32 "\n",
+                    rDPIX,rDPIY,rDPIY,rDPIY);
 #endif
             rDPIX = rDPIY; // y-resolution is more trustworthy
         }
@@ -787,26 +794,29 @@ void X11SalGraphics::drawRect( long nX, long nY, long nDX, long nDY )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::drawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
 {
+    drawPolyLine( nPoints, pPtAry, false );
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void X11SalGraphics::drawPolyLine( ULONG nPoints, const SalPoint *pPtAry, bool bClose )
+{
     if( nPenColor_ != 0xFFFFFFFF )
     {
         SalPolyLine Points( nPoints, pPtAry );
 
-        DrawLines( nPoints, Points, SelectPen() );
+        DrawLines( nPoints, Points, SelectPen(), bClose );
     }
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 {
+    if( nPoints == 0 )
+        return;
+
     if( nPoints < 3 )
     {
-        if( !nPoints )
-        {
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "X11SalGraphicsDrawPolygon !nPoints\n" );
-#endif
-        }
-        else if( !bXORMode_ )
+        if( !bXORMode_ )
         {
             if( 1 == nPoints  )
                 drawPixel( pPtAry[0].mnX, pPtAry[0].mnY );
@@ -840,9 +850,9 @@ void X11SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
         for(unsigned int i = 0; i < nPoints; i++ )
     {
             if( Points[i].x < 0 )
-         bLeft = true;
+                bLeft = true;
             else
-            bRight= true;
+                bRight= true;
     }
     if( bLeft && ! bRight )
         return;
@@ -862,7 +872,7 @@ void X11SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
                       Complex, CoordModeOrigin );
 
     if( nPenColor_ != 0xFFFFFFFF )
-        DrawLines( nPoints, Points, SelectPen() );
+        DrawLines( nPoints, Points, SelectPen(), true );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -910,7 +920,7 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
 
    if( nPenColor_ != 0xFFFFFFFF )
        for( ULONG i = 0; i < nPoly; i++ )
-           drawPolyLine( pPoints[i], pPtAry[i] );
+           drawPolyLine( pPoints[i], pPtAry[i], true );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -969,7 +979,7 @@ void X11SalGraphics::invert( ULONG nPoints,
             pGC = GetInvertGC();
 
     if( SAL_INVERT_TRACKFRAME & nFlags )
-        DrawLines ( nPoints, Points, pGC );
+        DrawLines ( nPoints, Points, pGC, true );
     else
         XFillPolygon( GetXDisplay(),
                       GetDrawable(),
