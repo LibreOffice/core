@@ -195,7 +195,7 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>$</CurrencyID>
+      <CurrencyID>ARS</CurrencyID>
       <CurrencySymbol>$</CurrencySymbol>
       <BankSymbol>ARS</BankSymbol>
       <CurrencyName>Peso Argentino</CurrencyName>
