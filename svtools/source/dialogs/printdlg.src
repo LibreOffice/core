@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: printdlg.src,v $
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,12 +37,12 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     SVLook = TRUE ;
     OutputSize = TRUE ;
     Moveable = TRUE ;
-    Size = MAP_APPFONT ( 260 , 210 ) ;
+    Size = MAP_APPFONT ( 265 , 210 ) ;
     Text [ en-US ] = "Print" ;
     FixedLine FL_PRINTER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Size = MAP_APPFONT ( 253 , 8 ) ;
         Text [ en-US ] = "Printer" ;
     };
     FixedText FT_NAME
@@ -55,13 +55,13 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 13 ) ;
-        Size = MAP_APPFONT ( 125 , 80 ) ;
+        Size = MAP_APPFONT ( 130 , 80 ) ;
         DropDown = TRUE ;
         Sort = TRUE ;
     };
     PushButton BTN_PROPERTIES
     {
-        Pos = MAP_APPFONT ( 188 , 12 ) ;
+        Pos = MAP_APPFONT ( 193 , 12 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "Propert~ies..." ;
     };
@@ -74,7 +74,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     FixedText FI_STATUS
     {
         Pos = MAP_APPFONT ( 60 , 29 ) ;
-        Size = MAP_APPFONT ( 188 , 8 ) ;
+        Size = MAP_APPFONT ( 193 , 8 ) ;
     };
     FixedText FT_TYPE
     {
@@ -85,7 +85,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     FixedText FI_TYPE
     {
         Pos = MAP_APPFONT ( 60 , 40 ) ;
-        Size = MAP_APPFONT ( 188 , 8 ) ;
+        Size = MAP_APPFONT ( 193 , 8 ) ;
     };
     FixedText FT_LOCATION
     {
@@ -96,7 +96,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     FixedText FI_LOCATION
     {
         Pos = MAP_APPFONT ( 60 , 51 ) ;
-        Size = MAP_APPFONT ( 188 , 8 ) ;
+        Size = MAP_APPFONT ( 193 , 8 ) ;
     };
     FixedText FT_COMMENT
     {
@@ -107,7 +107,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     FixedText FI_COMMENT
     {
         Pos = MAP_APPFONT ( 60 , 62 ) ;
-        Size = MAP_APPFONT ( 188 , 8 ) ;
+        Size = MAP_APPFONT ( 193 , 8 ) ;
     };
     FixedText FI_FAXNO
     {
@@ -130,7 +130,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     FixedText FI_PRINTFILE
     {
         Pos = MAP_APPFONT ( 90 , 74 ) ;
-        Size = MAP_APPFONT ( 158 , 8 ) ;
+        Size = MAP_APPFONT ( 163 , 8 ) ;
     };
     /*!!!
     PushButton BTN_BROWSE
@@ -205,7 +205,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     FixedLine FL_COPIES
     {
         Pos = MAP_APPFONT ( 129 , 91 ) ;
-        Size = MAP_APPFONT ( 125 , 8 ) ;
+        Size = MAP_APPFONT ( 130 , 8 ) ;
         Text [ en-US ] = "Copies" ;
     };
     FixedText FT_COPIES
@@ -230,7 +230,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     CheckBox CBX_COLLATE
     {
         Pos = MAP_APPFONT ( 201 , 123 ) ;
-        Size = MAP_APPFONT ( 53 , 10 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
         Text [ en-US ] = "Co~llate" ;
     };
     FixedImage IMG_COLLATE
@@ -248,7 +248,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     FixedLine FL_SEPBUTTONLINE
     {
         Pos = MAP_APPFONT( 0, 179 );
-        Size = MAP_APPFONT( 260, 8 );
+        Size = MAP_APPFONT( 265, 8 );
     };
     PushButton BTN_OPTIONS
     {
@@ -259,18 +259,18 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     };
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 95 , 190 ) ;
+        Pos = MAP_APPFONT ( 100 , 190 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 148 , 190 ) ;
+        Pos = MAP_APPFONT ( 153 , 190 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 204 , 190 ) ;
+        Pos = MAP_APPFONT ( 209 , 190 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     String STR_ALLFILTER
