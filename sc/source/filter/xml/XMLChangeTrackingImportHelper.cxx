@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -791,7 +791,20 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                              * wasn't done? */
                             static_cast<ScFormulaCell*>(pCell)->GetFormula(sFormula, ScGrammar::GRAM_ODFF);
                             rtl::OUString sOUFormula(sFormula);
-                            rtl::OUString sOUFormula2(sOUFormula.copy(2, sOUFormula.getLength() - 3));
+
+                            // #i87826# [Collaboration] Rejected move destroys formulas
+                            // FIXME: adjust ScFormulaCell::GetFormula(), so that the right formula string
+                            //        is returned and no further string handling is necessary
+                            rtl::OUString sOUFormula2;
+                            if ( nMatrixFlag != MM_NONE )
+                            {
+                                sOUFormula2 = sOUFormula.copy( 2, sOUFormula.getLength() - 3 );
+                            }
+                            else
+                            {
+                                sOUFormula2 = sOUFormula.copy( 1, sOUFormula.getLength() - 1 );
+                            }
+
                             String sFormula2(sOUFormula2);
                             pNewCell = new ScFormulaCell(pDoc, aAddress, sFormula2, ScGrammar::GRAM_ODFF, nMatrixFlag);
                             if (pNewCell)
