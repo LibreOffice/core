@@ -314,7 +314,7 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>rupee</CurrencyID>
+      <CurrencyID>NPR</CurrencyID>
       <CurrencySymbol>रू</CurrencySymbol>
       <BankSymbol>NPR</BankSymbol>
       <CurrencyName>Nepalese Rupee</CurrencyName>
