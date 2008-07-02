@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unomodel.cxx,v $
- * $Revision: 1.111 $
+ * $Revision: 1.112 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -209,13 +209,13 @@ const SfxItemPropertyMap* ImplGetDrawModelPropertyMap()
 }
 
 // this ctor is used from the DocShell
-SdXImpressDocument::SdXImpressDocument (::sd::DrawDocShell* pShell ) throw()
+SdXImpressDocument::SdXImpressDocument (::sd::DrawDocShell* pShell, bool bClipBoard ) throw()
 :   SfxBaseModel( pShell ),
     mpDocShell( pShell ),
     mpDoc( pShell ? pShell->GetDoc() : NULL ),
     mbDisposed(false),
     mbImpressDoc( pShell && pShell->GetDoc() && pShell->GetDoc()->GetDocumentType() == DOCUMENT_TYPE_IMPRESS ),
-    mbClipBoard( sal_False ),
+    mbClipBoard( bClipBoard ),
     maPropSet( ImplGetDrawModelPropertyMap() )
 {
     if( mpDoc )
@@ -228,7 +228,7 @@ SdXImpressDocument::SdXImpressDocument (::sd::DrawDocShell* pShell ) throw()
     }
 }
 
-SdXImpressDocument::SdXImpressDocument( SdDrawDocument* pDoc, sal_Bool bClipBoard ) throw()
+SdXImpressDocument::SdXImpressDocument( SdDrawDocument* pDoc, bool bClipBoard ) throw()
 :   SfxBaseModel( NULL ),
     mpDocShell( NULL ),
     mpDoc( pDoc ),
@@ -289,8 +289,6 @@ uno::Reference< drawing::XDrawPage >  SdXImpressDocument::CreateXDrawPage( SdPag
 }
 */
 
-UNO3_GETIMPLEMENTATION2_IMPL( SdXImpressDocument, SfxBaseModel );
-
 // XInterface
 uno::Any SAL_CALL SdXImpressDocument::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
 {
@@ -345,6 +343,46 @@ void SAL_CALL SdXImpressDocument::release() throw ( )
         }
         SfxBaseModel::release();
     }
+}
+
+// XUnoTunnel
+const ::com::sun::star::uno::Sequence< sal_Int8 > & SdXImpressDocument::getUnoTunnelId() throw()
+{
+    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = 0;
+    if( !pSeq )
+    {
+        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
+        if( !pSeq )
+        {
+            static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
+            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
+            pSeq = &aSeq;
+        }
+    }
+    return *pSeq;
+}
+
+SdXImpressDocument* SdXImpressDocument::getImplementation( uno::Reference< uno::XInterface > xInt ) throw()
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( xInt, ::com::sun::star::uno::UNO_QUERY );
+    if( xUT.is() )
+        return reinterpret_cast<SdXImpressDocument*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( SdXImpressDocument::getUnoTunnelId() )));
+    else
+        return NULL;
+}
+
+sal_Int64 SAL_CALL SdXImpressDocument::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException)
+{
+    if( rIdentifier.getLength() == 16 )
+    {
+        if( (0 == rtl_compareMemory( SdXImpressDocument::getUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 )) )
+            return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
+
+        if( (0 == rtl_compareMemory( SdrModel::getUnoTunnelImplementationId().getConstArray(), rIdentifier.getConstArray(), 16 )) )
+            return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(mpDoc));
+    }
+
+    return SfxBaseModel::getSomething( rIdentifier );
 }
 
 // XTypeProvider
