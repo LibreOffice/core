@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tvread.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,12 +56,9 @@ namespace treeview {
     class ConfigData
     {
     public:
-#define PRODUCTNAME    0
-#define PRODUCTVERSION 1
-#define VENDORNAME     2
-#define VENDORVERSION  3
-#define VENDORSHORT    4
-#define MAX_MODULE_COUNT 16
+        enum {
+            PRODUCTNAME, PRODUCTVERSION, VENDORNAME, VENDORVERSION,
+            VENDORSHORT };
         ConfigData();
         int                    m_vAdd[5];
         rtl::OUString          m_vReplacement[5];
