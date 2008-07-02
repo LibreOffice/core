@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLDetectiveContext.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLDETECTIVECONTEXT_HXX
-#define _SC_XMLDETECTIVECONTEXT_HXX
+#ifndef SC_XMLDETECTIVECONTEXT_HXX
+#define SC_XMLDETECTIVECONTEXT_HXX
 
 #include <xmloff/xmlimp.hxx>
 #include <com/sun/star/table/CellRangeAddress.hpp>
