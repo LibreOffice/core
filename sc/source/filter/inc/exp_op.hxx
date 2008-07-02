@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: exp_op.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _EXP_OP_HXX
-#define _EXP_OP_HXX
+#ifndef SC_EXP_OP_HXX
+#define SC_EXP_OP_HXX
 
 #include "filter.hxx"
 #include "root.hxx"
