@@ -8,7 +8,7 @@
  *
  * $RCSfile: documentlockfile.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,8 +29,8 @@
  *
  ************************************************************************/
 
-#ifndef _SVT_SHARECONTROLFILE_HXX
-#define _SVT_SHARECONTROLFILE_HXX
+#ifndef _SVT_DOCUMENTLOCKFILE_HXX
+#define _SVT_DOCUMENTLOCKFILE_HXX
 
 #include <svtools/svtdllapi.h>
 
