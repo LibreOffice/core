@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hi_factory.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,28 +136,28 @@ HtmlFactory_Idl::produce_Members( ce_list &               it_list,
 {
     csv_assert( it_list );
 
-    ::std::auto_ptr< HF_SubTitleTable > pSummary;
+    Dyn< HF_SubTitleTable > pSummary;
     if  (   ( i_viewType == viewtype_summary )
         ||  ( i_viewType == viewtype_complete )
         )
     {
-        pSummary.reset( new HF_SubTitleTable(
+        pSummary = new HF_SubTitleTable(
                 CurOut(),
                 i_summaryLabel,
                 i_summaryTitle,
-                2 ) );
+                2 );
     }
 
-    ::std::auto_ptr< HF_SubTitleTable > pDetails;
+    Dyn< HF_SubTitleTable > pDetails;
     if  (   ( i_viewType == viewtype_details )
         ||  ( i_viewType == viewtype_complete )
         )
     {
-        pDetails.reset( new HF_SubTitleTable(
+        pDetails = new HF_SubTitleTable(
                 CurOut(),
                 i_detailsLabel,
                 i_detailsTitle,
-                1 ) );
+                1 );
     }
 
     for ( ; it_list.operator bool(); ++it_list )
@@ -165,7 +165,7 @@ HtmlFactory_Idl::produce_Members( ce_list &               it_list,
         const ary::idl::CodeEntity &
             rCe = Env().Data().Find_Ce(*it_list);
 
-        if ( pSummary.get() )
+        if ( pSummary )
         {
             Xml::Element &
                 rSummaryRow = pSummary->Add_Row();
@@ -174,7 +174,7 @@ HtmlFactory_Idl::produce_Members( ce_list &               it_list,
             produce_ShortDoc(rSummaryRow, rCe);
         }
 
-        if ( pDetails.get() )
+        if ( pDetails )
             produce_MemberDetails(*pDetails, rCe);
     }
 }
