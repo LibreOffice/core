@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xepivot.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,9 +48,7 @@
 #include "dpsave.hxx"
 #include "dpdimsave.hxx"
 #include "dpshttab.hxx"
-#ifndef __GLOBSTR_HRC_
 #include "globstr.hrc"
-#endif
 #include "fapihelper.hxx"
 #include "xestring.hxx"
 #include "xelink.hxx"
