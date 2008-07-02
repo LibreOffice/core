@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drwtxtsh.sdi,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,6 +66,12 @@ interface TextDrawText
         StateMethod = StateClpbrd ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+
+        SID_CLIPBOARD_FORMAT_ITEMS  // api:
+        [
+                StateMethod = StateClpbrd ;
+                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        ]
 
     FN_ESCAPE // api:
     [
