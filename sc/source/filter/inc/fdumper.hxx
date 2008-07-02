@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fdumper.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,13 +31,13 @@
 #ifndef SC_FDUMPER_HXX
 #define SC_FDUMPER_HXX
 
-#define SCF_INCL_DUMPER (OSL_DEBUG_LEVEL > 0) && 0
-
-#if SCF_INCL_DUMPER
+#define SCF_INCL_DUMPER (OSL_DEBUG_LEVEL > 0)
 
 #include <map>
 #include <math.h>
 #include "ftools.hxx"
+
+#if SCF_INCL_DUMPER
 
 class SvStream;
 class SfxMedium;
