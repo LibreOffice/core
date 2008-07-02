@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gtkdata.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -229,7 +229,7 @@ void GtkSalDisplay::initScreen( int nScreen ) const
     }
     #if OSL_DEBUG_LEVEL > 1
     else
-        fprintf( stderr, "not GdkVisual for visual id %ld\n", rSD.m_aVisual.visualid );
+        fprintf( stderr, "not GdkVisual for visual id %d\n", (int)rSD.m_aVisual.visualid );
     #endif
 }
 
