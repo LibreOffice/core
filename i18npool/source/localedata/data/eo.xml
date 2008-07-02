@@ -313,7 +313,7 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>euro</CurrencyID>
+      <CurrencyID>EUR</CurrencyID>
       <CurrencySymbol>€</CurrencySymbol>
       <BankSymbol>EUR</BankSymbol>
       <CurrencyName>Euro</CurrencyName>
