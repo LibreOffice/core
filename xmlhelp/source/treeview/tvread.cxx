@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tvread.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,7 @@
 #include <expat/xmlparse.h>
 #endif
 #include <osl/file.hxx>
+#include <unotools/configmgr.hxx>
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -705,7 +706,12 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
 
     rtl::OUString productName( getKey(  xHierAccess,"Product/ooName" ) );
     setupversion = getKey(  xHierAccess,"Product/ooSetupVersion" );
-    setupextension = getKey(  xHierAccess,"Product/ooSetupExtension");
+    setupextension = rtl::OUString();
+    utl::ConfigManager * mgr = utl::ConfigManager::GetConfigManager();
+    if (mgr != NULL) {
+        mgr->GetDirectConfigProperty(utl::ConfigManager::PRODUCTEXTENSION) >>=
+            setupextension;
+    }
     rtl::OUString productVersion( setupversion +
                                   rtl::OUString::createFromAscii( " " ) +
                                   setupextension );
