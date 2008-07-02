@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shapestylecontext.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,16 +71,32 @@ Reference< XFastContextHandler > ShapeStyleContext::createFastChildContext( sal_
     switch( aElementToken )
     {
         case NMSP_DRAWINGML|XML_lnRef :     // CT_StyleMatrixReference
-            xRet.set( new StyleMatrixReferenceContext( *this, rxAttributes, mrShape.getShapeStylesIndex()[ SHAPESTYLE_ln ], *mrShape.getShapeStylesColor()[ SHAPESTYLE_ln ].get() ) );
+            {
+                Color* pColor( new Color );
+                mrShape.getShapeStylesColor()[ SHAPESTYLE_ln ] = ColorPtr( pColor );
+                xRet.set( new StyleMatrixReferenceContext( *this, rxAttributes, mrShape.getShapeStylesIndex()[ SHAPESTYLE_ln ], *pColor ) );
+            }
             break;
         case NMSP_DRAWINGML|XML_fillRef :   // CT_StyleMatrixReference
-            xRet.set( new StyleMatrixReferenceContext( *this, rxAttributes, mrShape.getShapeStylesIndex()[ SHAPESTYLE_fill ], *mrShape.getShapeStylesColor()[ SHAPESTYLE_fill ].get() ) );
+            {
+                Color* pColor( new Color );
+                mrShape.getShapeStylesColor()[ SHAPESTYLE_fill ] = ColorPtr( pColor );
+                xRet.set( new StyleMatrixReferenceContext( *this, rxAttributes, mrShape.getShapeStylesIndex()[ SHAPESTYLE_fill ], *pColor ) );
+            }
             break;
         case NMSP_DRAWINGML|XML_effectRef : // CT_StyleMatrixReference
-            xRet.set( new StyleMatrixReferenceContext( *this, rxAttributes, mrShape.getShapeStylesIndex()[ SHAPESTYLE_effect ], *mrShape.getShapeStylesColor()[ SHAPESTYLE_effect ].get() ) );
+            {
+                Color* pColor( new Color );
+                mrShape.getShapeStylesColor()[ SHAPESTYLE_effect ] = ColorPtr( pColor );
+                xRet.set( new StyleMatrixReferenceContext( *this, rxAttributes, mrShape.getShapeStylesIndex()[ SHAPESTYLE_effect ], *pColor ) );
+            }
             break;
         case NMSP_DRAWINGML|XML_fontRef :   // CT_FontReference
-            xRet.set( new StyleMatrixReferenceContext( *this, rxAttributes, mrShape.getShapeStylesIndex()[ SHAPESTYLE_font ], *mrShape.getShapeStylesColor()[ SHAPESTYLE_font ].get() ) );
+            {
+                Color* pColor( new Color );
+                mrShape.getShapeStylesColor()[ SHAPESTYLE_font ] = ColorPtr( pColor );
+                xRet.set( new StyleMatrixReferenceContext( *this, rxAttributes, mrShape.getShapeStylesIndex()[ SHAPESTYLE_font ], *pColor ) );
+            }
             break;
     }
     if ( !xRet.is() )
