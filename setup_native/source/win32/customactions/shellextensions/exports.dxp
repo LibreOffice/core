@@ -13,3 +13,4 @@ CheckInstallDirectory
 SetAdminInstallProperty
 CreateLayerLinks
 RemoveLayerLinks
+copyEditionData
