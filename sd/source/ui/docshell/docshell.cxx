@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docshell.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -141,7 +141,7 @@ SFX_IMPL_OBJECTFACTORY(
 |*
 \************************************************************************/
 
-void DrawDocShell::Construct()
+void DrawDocShell::Construct( bool bClipboard )
 {
     mbInDestruction = FALSE;
     SetSlotFilter();     // setzt Filter zurueck
@@ -154,7 +154,7 @@ void DrawDocShell::Construct()
     // the document's ref device.
     UpdateRefDevice();
 
-    SetModel( new SdXImpressDocument( this ) );
+    SetModel( new SdXImpressDocument( this, bClipboard ) );
     SetPool( &mpDoc->GetItemPool() );
     mpUndoManager = new sd::UndoManager;
     mpDoc->SetSdrUndoManager( mpUndoManager );
@@ -172,7 +172,7 @@ void DrawDocShell::Construct()
 DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
                                BOOL bDataObject,
                                DocumentType eDocumentType,BOOL bScriptSupport) :
-    SfxObjectShell(eMode),
+    SfxObjectShell( eMode == SFX_CREATE_MODE_INTERNAL ?  SFX_CREATE_MODE_EMBEDDED : eMode),
     mpFormatClipboard(new SdFormatClipboard()),
     mpDoc(NULL),
     mpUndoManager(NULL),
@@ -187,7 +187,7 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
 {
     if ( !bScriptSupport )
         SetHasNoBasic();
-    Construct();
+    Construct( eMode == SFX_CREATE_MODE_INTERNAL );
 }
 
 /*************************************************************************
@@ -199,7 +199,7 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
 DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
                                BOOL bDataObject,
                                DocumentType eDocumentType) :
-    SfxObjectShell(eMode),
+    SfxObjectShell(eMode == SFX_CREATE_MODE_INTERNAL ?  SFX_CREATE_MODE_EMBEDDED : eMode),
     mpFormatClipboard(new SdFormatClipboard()),
     mpDoc(pDoc),
     mpUndoManager(NULL),
@@ -212,7 +212,7 @@ DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
     mbOwnPrinter(FALSE),
     mbNewDocument( sal_True )
 {
-    Construct();
+    Construct( eMode == SFX_CREATE_MODE_INTERNAL );
 }
 
 /*************************************************************************
