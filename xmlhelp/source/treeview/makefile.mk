@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -63,7 +63,8 @@ SHL1STDLIBS=\
     $(EXPATASCII3RDLIB)      \
     $(SALLIB)  \
     $(VOSLIB) \
-    $(UCBHELPERLIB)
+    $(UCBHELPERLIB) \
+    $(UNOTOOLSLIB)
 SHL1VERSIONMAP=	$(TARGET).map
 
 DEF1NAME=$(SHL1TARGET)
