@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: windowscustomaction_ooo.scp,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -256,6 +256,16 @@ WindowsCustomAction gid_Customaction_Remove_Layerlinks
 	Target = "RemoveLayerLinks";
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"\"", "behind_CreateLayerLinks");
+End
+
+WindowsCustomAction gid_Customaction_CopyEditionData
+    Name = "CopyEditionData";
+    Typ = "1";
+    Source = "shlxtmsi.dll";
+    Target = "copyEditionData";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "end");
+    Assignment2 = ("AdminExecuteSequence", "", "end");
 End
 
 WindowsCustomAction gid_Customaction_RegCleanOld
