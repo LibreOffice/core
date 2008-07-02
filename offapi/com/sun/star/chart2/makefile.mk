@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,7 +51,6 @@ IDLFILES= \
     CurveStyle.idl \
     DataPointGeometry3D.idl \
     DataPointLabel.idl \
-    ErrorBarStyle.idl \
     ExplicitIncrementData.idl \
     ExplicitScaleData.idl \
     ExplicitSubIncrement.idl \
