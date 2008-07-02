@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: datefunc.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,8 +109,6 @@ public:
 
     inline ::rtl::OUString*     First();
     inline ::rtl::OUString*     Next();
-
-    sal_Bool                    Contains( const ::rtl::OUString& rSearch ) const;
 
     using ScaList::Append;
     inline void                 Append( ::rtl::OUString* pNew );
