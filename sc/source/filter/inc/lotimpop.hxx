@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lotimpop.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,10 +28,8 @@
  *
  ************************************************************************/
 
-
-
-#ifndef _LOTIMPOP_HXX
-#define _LOTIMPOP_HXX
+#ifndef SC_LOTIMPOP_HXX
+#define SC_LOTIMPOP_HXX
 
 #include <tools/string.hxx>
 
