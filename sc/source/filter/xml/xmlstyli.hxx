@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlstyli.hxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +27,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _XMLSTYLI_HXX
-#define _XMLSTYLI_HXX
+
+#ifndef SC_XMLSTYLI_HXX
+#define SC_XMLSTYLI_HXX
 
 #include <rtl/ustring.hxx>
 #include <vector>
@@ -37,12 +38,8 @@
 #include <xmloff/maptype.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlimppr.hxx>
-#ifndef _XMLTEXTMASTERPAGECONTEXT_HXX
 #include <xmloff/XMLTextMasterPageContext.hxx>
-#endif
-#ifndef _XMLTEXTMASTERSTYLESCONTEXT_HXX
 #include <xmloff/XMLTextMasterStylesContext.hxx>
-#endif
 #include <com/sun/star/sheet/ConditionOperator.hpp>
 #include "xmlimprt.hxx"
 
