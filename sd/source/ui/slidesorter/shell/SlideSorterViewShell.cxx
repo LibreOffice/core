@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlideSorterViewShell.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,6 +140,8 @@ SlideSorterViewShell::SlideSorterViewShell (
     GetFrameView()->Connect();
 
     SetName (String (RTL_CONSTASCII_USTRINGPARAM("SlideSorterViewShell")));
+
+    pParentWindow->SetStyle(pParentWindow->GetStyle() | WB_DIALOGCONTROL);
 }
 
 
