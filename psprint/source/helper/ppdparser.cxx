@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ppdparser.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1439,6 +1439,21 @@ const PPDValue* PPDKey::getValue( const String& rOption ) const
 {
     PPDKey::hash_type::const_iterator it = m_aValues.find( rOption );
     return it != m_aValues.end() ? &it->second : NULL;
+}
+
+// -------------------------------------------------------------------
+
+const PPDValue* PPDKey::getValueCaseInsensitive( const String& rOption ) const
+{
+    const PPDValue* pValue = getValue( rOption );
+    if( ! pValue )
+    {
+        for( size_t n = 0; n < m_aOrderedValues.size() && ! pValue; n++ )
+            if( m_aOrderedValues[n]->m_aOption.EqualsIgnoreCaseAscii( rOption ) )
+                pValue = m_aOrderedValues[n];
+    }
+
+    return pValue;
 }
 
 // -------------------------------------------------------------------
