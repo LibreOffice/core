@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salmisc.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -408,11 +408,31 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
     const long      nSrcX = rTwoRect.mnSrcX, nSrcY = rTwoRect.mnSrcY;
     const long      nSrcDX = rTwoRect.mnSrcWidth, nSrcDY = rTwoRect.mnSrcHeight;
     const long      nDstDX = rTwoRect.mnDestWidth, nDstDY = rTwoRect.mnDestHeight;
-    Scanline*       pSrcScan = new Scanline[ rSrcBuffer.mnHeight ];
-    Scanline*       pDstScan = new Scanline[ nDstDY ];
-    long*           pMapX = new long[ nDstDX ];
-    long*           pMapY = new long[ nDstDY ];
+    Scanline*       pSrcScan = NULL;
+    Scanline*       pDstScan = NULL;
+    long*           pMapX = NULL;
+    long*           pMapY = NULL;
     long            nTmp, nOffset;
+
+    try
+    {
+        pSrcScan = new Scanline[ rSrcBuffer.mnHeight ];
+        pDstScan = new Scanline[ nDstDY ];
+        pMapX = new long[ nDstDX ];
+        pMapY = new long[ nDstDY ];
+    }
+    catch( const std::bad_alloc& )
+    {
+        // memory exception, clean up
+        // remark: the buffer ptr causing the exception
+        // is still NULL here
+        delete pSrcScan;
+        delete pDstScan;
+        delete pMapX;
+        delete pMapY;
+        delete pDstBuffer;
+        return NULL;
+    }
 
     // horizontal mapping table
     if( nDstDX != nSrcDX )
