@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: langhelper.hxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 #define _SWLANGHELPER_HXX
 
 class SwWrtShell;
+class SwView;
 class EditEngine;
 class EditView;
 class SfxItemSet;
@@ -38,11 +39,13 @@ struct ESelection;
 
 namespace SwLangHelper
 {
+    extern USHORT GetLanguageStatus(OutlinerView* pOLV,SfxItemSet& rSet);
+    extern bool SetLanguageStatus(OutlinerView* pOLV,SfxRequest &rReq,SwView &rView,SwWrtShell &rSh);
+
     extern void SetLanguage(SwWrtShell &rWrtSh, const String &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet);
     extern void SetLanguage(SwWrtShell &rWrtSh, EditEngine* pEditEngine,ESelection aSelection, const String &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet);
     extern void SetLanguage_None(SwWrtShell &rWrtSh, EditEngine* pEditEngine,ESelection aSelection, bool bIsForSelection, SfxItemSet &rCoreSet );
     extern void SetLanguage_None(SwWrtShell &rWrtSh,bool bIsForSelection, SfxItemSet &rCoreSet );
-
 
     // document
     extern void SelectCurrentPara( SwWrtShell &rWrtSh );
