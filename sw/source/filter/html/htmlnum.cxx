@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: htmlnum.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -358,6 +358,18 @@ void SwHTMLParser::NewNumBulList( int nToken )
             aPropInfo.bLeftMargin = aPropInfo.bTextIndent = sal_False;
             if( !aPropInfo.bRightMargin )
                 aItemSet.ClearItem( RES_LR_SPACE );
+
+            // --> OD 2008-06-26 #i89812#
+            // Perform change to list style before calling <DoPositioning(..)>,
+            // because <DoPositioning(..)> may open a new context and thus may
+            // clear the <SwHTMLNumRuleInfo> instance hold by local variable <rInfo>.
+            if( bChangeNumFmt )
+            {
+                rInfo.GetNumRule()->Set( nLevel, aNumFmt );
+                pDoc->ChgNumRuleFmts( *rInfo.GetNumRule() );
+                bChangeNumFmt = sal_False;
+            }
+            // <--
 
             DoPositioning( aItemSet, aPropInfo, pCntxt );
 
