@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cmdevt.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -318,6 +318,28 @@ class VCL_DLLPUBLIC CommandDialogData
     int GetDialogId() const { return m_nDialogId; }
 };
 
+// --------------
+// Media Commands
+// --------------
+
+#define MEDIA_COMMAND_CHANNEL_DOWN           ((sal_Int16)1) // Decrement the channel value, for example, for a TV or radio tuner.
+#define MEDIA_COMMAND_CHANNEL_UP             ((sal_Int16)2) // Increment the channel value, for example, for a TV or radio tuner.
+#define MEDIA_COMMAND_NEXTTRACK              ((sal_Int16)3) // Go to next media track/slide.
+#define MEDIA_COMMAND_PAUSE                  ((sal_Int16)4) // Pause. If already paused, take no further action. This is a direct PAUSE command that has no state.
+#define MEDIA_COMMAND_PLAY                   ((sal_Int16)5) // Begin playing at the current position. If already paused, it will resume. This is a direct PLAY command that has no state.
+#define MEDIA_COMMAND_PLAY_PAUSE             ((sal_Int16)6) // Play or pause playback.
+#define MEDIA_COMMAND_PREVIOUSTRACK          ((sal_Int16)7) // Go to previous media track/slide.
+#define MEDIA_COMMAND_RECORD                 ((sal_Int16)8) // Begin recording the current stream.
+#define MEDIA_COMMAND_REWIND                 ((sal_Int16)9)// Go backward in a stream at a higher rate of speed.
+#define MEDIA_COMMAND_STOP                   ((sal_Int16)10)// Stop playback.
+#define MEDIA_COMMAND_MIC_ON_OFF_TOGGLE      ((sal_Int16)11)// Toggle the microphone.
+#define MEDIA_COMMAND_MICROPHONE_VOLUME_DOWN ((sal_Int16)12)// Increase microphone volume.
+#define MEDIA_COMMAND_MICROPHONE_VOLUME_MUTE ((sal_Int16)13)// Mute the microphone.
+#define MEDIA_COMMAND_MICROPHONE_VOLUME_UP   ((sal_Int16)14)// Decrease microphone volume.
+#define MEDIA_COMMAND_VOLUME_DOWN            ((sal_Int16)15)// Lower the volume.
+#define MEDIA_COMMAND_VOLUME_MUTE            ((sal_Int16)16)// Mute the volume.
+#define MEDIA_COMMAND_VOLUME_UP              ((sal_Int16)17)// Raise the volume.
+
 // ----------------
 // - CommandEvent -
 // ----------------
@@ -338,6 +360,7 @@ class VCL_DLLPUBLIC CommandDialogData
 #define COMMAND_HANGUL_HANJA_CONVERSION ((USHORT)14)
 #define COMMAND_INPUTLANGUAGECHANGE     ((USHORT)15)
 #define COMMAND_SHOWDIALOG              ((USHORT)16)
+#define COMMAND_MEDIA                   ((USHORT)17)
 
 #define COMMAND_USER                    ((USHORT)4096)
 
@@ -366,6 +389,7 @@ public:
     const CommandVoiceData*             GetVoiceData() const;
     const CommandModKeyData*            GetModKeyData() const;
     const CommandDialogData*            GetDialogData() const;
+    sal_Int16                           GetMediaCommand() const;
 };
 
 inline CommandEvent::CommandEvent()
@@ -438,6 +462,14 @@ inline const CommandDialogData* CommandEvent::GetDialogData() const
         return (const CommandDialogData*)mpData;
     else
         return NULL;
+}
+
+inline sal_Int16 CommandEvent::GetMediaCommand() const
+{
+    if( mnCommand == COMMAND_MEDIA )
+        return *(const sal_Int16*)(mpData);
+    else
+        return 0;
 }
 
 #endif // _VCL_CMDEVT_HXX
