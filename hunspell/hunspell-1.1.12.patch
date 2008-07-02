@@ -10,6 +10,18 @@
  
  
  am__api_version="1.9"
+--- misc/hunspell-1.1.12/intl/localename.c	2007-04-06 17:05:34.000000000 +0900
++++ misc/build/hunspell-1.1.12/intl/localename.c	2008-06-20 19:47:59.000875000 +0900
+@@ -140,6 +140,9 @@
+ # ifndef LANG_SINDHI
+ # define LANG_SINDHI 0x59
+ # endif
++# ifndef LANG_SORBIAN
++# define LANG_SORBIAN 0x2e
++# endif
+ # ifndef LANG_SLOVAK
+ # define LANG_SLOVAK 0x1b
+ # endif
 --- misc/hunspell-1.1.12/src/hunspell/affixmgr.cxx	2007-09-04 09:49:30.000000000 +0200
 +++ misc/build/hunspell-1.1.12/src/hunspell/affixmgr.cxx	2008-04-23 22:59:31.000000000 +0200
 @@ -25,6 +25,10 @@
@@ -304,6 +316,31 @@
  //    pass in address of array of char * pointers
  // onlycompoundsug: probably bad suggestions (need for ngram sugs, too)
  
+--- misc/hunspell-1.1.12/src/tools/hunspell.cxx	2007-07-24 20:47:52.000000000 +0900
++++ misc/build/hunspell-1.1.12/src/tools/hunspell.cxx	2008-06-20 20:06:35.469625000 +0900
+@@ -85,8 +85,10 @@
+ #if ENABLE_NLS
+ #ifdef HAVE_LOCALE_H
+ #include <locale.h>
++#ifdef HAVE_LANGINFO_CODESET
+ #include <langinfo.h>
+ #endif
++#endif
+ 
+ #ifdef HAVE_LIBINTL_H
+ #include <libintl.h>
+@@ -1227,9 +1229,11 @@
+ #ifdef HAVE_LOCALE_H
+ 	ui_lang = setlocale(LC_ALL, "");
+ 	textdomain("hunspell");
++#ifdef HAVE_LANGINFO_CODESET
+         ui_enc = nl_langinfo(CODESET);
+ #endif
+ #endif
++#endif
+ 
+ #ifdef HAVE_READLINE
+ 	rl_set_key("", rl_escape, rl_get_keymap());
 --- misc/hunspell-1.1.12/tests/Makefile.am	Tue Sep  4 01:25:35 2007
 +++ misc/build/hunspell-1.1.12/tests/Makefile.am	Wed Jun 18 11:53:11 2008
 @@ -6,29 +6,18 @@
