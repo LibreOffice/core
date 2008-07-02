@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtprmap.cxx,v $
- * $Revision: 1.104 $
+ * $Revision: 1.105 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -209,7 +209,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     //RES_CHRATR_RELIEF
     MT_E( "CharRelief",             STYLE,      FONT_RELIEF,                XML_TYPE_TEXT_FONT_RELIEF, 0 ),
     // RES_CHRATR_HIDDEN
-    MT_E( "CharHidden",              TEXT,       DISPLAY,                    XML_TYPE_TEXT_HIDDEN_AS_DISPLAY, CTF_TEXT_DISPLAY ),
+    MT_E( "CharHidden",              TEXT,       DISPLAY,                    XML_TYPE_TEXT_HIDDEN_AS_DISPLAY|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_TEXT_DISPLAY ),
 
     // RES_TXTATR_INETFMT
     // TODO
@@ -499,7 +499,7 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     //RES_CHRATR_RELIEF
     MT_E( "CharRelief",             STYLE,      FONT_RELIEF,                XML_TYPE_TEXT_FONT_RELIEF, 0 ),
     // RES_CHRATR_HIDDEN
-    MT_E( "CharHidden",              TEXT,       DISPLAY,                    XML_TYPE_TEXT_HIDDEN_AS_DISPLAY, CTF_TEXT_DISPLAY ),
+    MT_E( "CharHidden",              TEXT,       DISPLAY,                    XML_TYPE_TEXT_HIDDEN_AS_DISPLAY|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_TEXT_DISPLAY ),
 
     // RES_TXTATR_INETFMT
     MT_E( "HyperLinkURL",           TEXT,       XMLNS,                      XML_TYPE_STRING|MID_FLAG_NO_PROPERTY_IMPORT,    CTF_HYPERLINK_URL ),
