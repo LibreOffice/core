@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xechart.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,10 +47,10 @@
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
-#include <com/sun/star/chart2/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
 
 #include <vcl/outdev.hxx>
 #include <svx/escherex.hxx>
@@ -239,6 +239,13 @@ sal_uInt16 XclExpChRoot::ConvertFont( const ScfPropertySet& rPropSet, sal_Int16 
     XclFontData aFontData;
     GetFontPropSetHelper().ReadFontProperties( aFontData, rPropSet, EXC_FONTPROPSET_CHART, nScript );
     return GetFontBuffer().Insert( aFontData, EXC_COLOR_CHARTTEXT );
+}
+
+sal_uInt16 XclExpChRoot::ConvertPieRotation( const ScfPropertySet& rPropSet )
+{
+    sal_Int32 nApiRot = 0;
+    rPropSet.GetProperty( nApiRot, EXC_CHPROP_STARTINGANGLE );
+    return static_cast< sal_uInt16 >( (450 - (nApiRot % 360)) % 360 );
 }
 
 // ----------------------------------------------------------------------------
@@ -644,13 +651,14 @@ XclExpChSourceLink::XclExpChSourceLink( const XclExpChRoot& rRoot, sal_uInt8 nDe
     XclExpChRoot( rRoot )
 {
     maData.mnDestType = nDestType;
+    maData.mnLinkType = EXC_CHSRCLINK_DIRECTLY;
 }
 
-sal_uInt16 XclExpChSourceLink::ConvertDataSequence( Reference< XDataSequence > xDataSeq, bool bSplitToColumns )
+sal_uInt16 XclExpChSourceLink::ConvertDataSequence( Reference< XDataSequence > xDataSeq, bool bSplitToColumns, sal_uInt16 nDefCount )
 {
     mxLinkFmla.reset();
     maData.mnLinkType = EXC_CHSRCLINK_DEFAULT;
-    sal_uInt16 nValueCount = 0;
+    sal_uInt16 nValueCount = nDefCount;
 
     if( xDataSeq.is() )
     {
@@ -1350,29 +1358,60 @@ XclExpChSerErrorBar::XclExpChSerErrorBar( const XclExpChRoot& rRoot, sal_uInt8 n
     maData.mnBarType = nBarType;
 }
 
-bool XclExpChSerErrorBar::Convert( const ScfPropertySet& rPropSet )
+bool XclExpChSerErrorBar::Convert( XclExpChSourceLink& rValueLink, sal_uInt16& rnValueCount, const ScfPropertySet& rPropSet )
 {
-    namespace cssc = ::com::sun::star::chart2;
-    cssc::ErrorBarStyle eBarStyle;
-    bool bOk = rPropSet.GetProperty( eBarStyle, EXC_CHPROP_ERRORBARSTYLE );
+    sal_Int32 nBarStyle = 0;
+    bool bOk = rPropSet.GetProperty( nBarStyle, EXC_CHPROP_ERRORBARSTYLE );
     if( bOk )
     {
-        switch( eBarStyle )
+        namespace cssc = ::com::sun::star::chart;
+        switch( nBarStyle )
         {
-            case cssc::ErrorBarStyle_ABSOLUTE:
+            case cssc::ErrorBarStyle::ABSOLUTE:
                 maData.mnSourceType = EXC_CHSERERR_FIXED;
                 rPropSet.GetProperty( maData.mfValue, EXC_CHPROP_POSITIVEERROR );
             break;
-            case cssc::ErrorBarStyle_RELATIVE:
+            case cssc::ErrorBarStyle::RELATIVE:
                 maData.mnSourceType = EXC_CHSERERR_PERCENT;
                 rPropSet.GetProperty( maData.mfValue, EXC_CHPROP_POSITIVEERROR );
             break;
-            case cssc::ErrorBarStyle_STANDARD_DEVIATION:
+            case cssc::ErrorBarStyle::STANDARD_DEVIATION:
                 maData.mnSourceType = EXC_CHSERERR_STDDEV;
                 rPropSet.GetProperty( maData.mfValue, EXC_CHPROP_WEIGHT );
             break;
-            case cssc::ErrorBarStyle_STANDARD_ERROR:
+            case cssc::ErrorBarStyle::STANDARD_ERROR:
                 maData.mnSourceType = EXC_CHSERERR_STDERR;
+            break;
+            case cssc::ErrorBarStyle::FROM_DATA:
+            {
+                bOk = false;
+                maData.mnSourceType = EXC_CHSERERR_CUSTOM;
+                Reference< XDataSource > xDataSource( rPropSet.GetApiPropertySet(), UNO_QUERY );
+                if( xDataSource.is() )
+                {
+                    // find first sequence with current role
+                    OUString aRole = XclChartHelper::GetErrorBarValuesRole( maData.mnBarType );
+                    Reference< XDataSequence > xValueSeq;
+
+                    Sequence< Reference< XLabeledDataSequence > > aLabeledSeqVec = xDataSource->getDataSequences();
+                    const Reference< XLabeledDataSequence >* pBeg = aLabeledSeqVec.getConstArray();
+                    const Reference< XLabeledDataSequence >* pEnd = pBeg + aLabeledSeqVec.getLength();
+                    for( const Reference< XLabeledDataSequence >* pIt = pBeg; !xValueSeq.is() && (pIt != pEnd); ++pIt )
+                    {
+                        Reference< XDataSequence > xTmpValueSeq = (*pIt)->getValues();
+                        ScfPropertySet aValueProp( xTmpValueSeq );
+                        OUString aCurrRole;
+                        if( aValueProp.GetProperty( aCurrRole, EXC_CHPROP_ROLE ) && (aCurrRole == aRole) )
+                            xValueSeq = xTmpValueSeq;
+                    }
+                    if( xValueSeq.is() )
+                    {
+                        // #i86465# pass value count back to series
+                        rnValueCount = maData.mnValueCount = rValueLink.ConvertDataSequence( xValueSeq, true );
+                        bOk = maData.mnValueCount > 0;
+                    }
+                }
+            }
             break;
             default:
                 bOk = false;
@@ -1470,10 +1509,7 @@ bool XclExpChSeries::ConvertDataSeries( Reference< XDataSeries > xDataSeries,
             mxTitleLink->ConvertDataSequence( xTitleSeq, true );
 
             // X values of XY charts
-            if( xXValueSeq.is() )
-                maData.mnCategCount = mxCategLink->ConvertDataSequence( xXValueSeq, false );
-            else
-                maData.mnCategCount = maData.mnValueCount;
+            maData.mnCategCount = mxCategLink->ConvertDataSequence( xXValueSeq, false, maData.mnValueCount );
 
             // series formatting
             XclChDataPointPos aPointPos( mnSeriesIdx );
@@ -1551,32 +1587,30 @@ bool XclExpChSeries::ConvertStockSeries( XDataSeriesRef xDataSeries,
     return bOk;
 }
 
-bool XclExpChSeries::ConvertTrendLine( Reference< XRegressionCurve > xRegCurve, sal_uInt16 nParentIdx )
+bool XclExpChSeries::ConvertTrendLine( const XclExpChSeries& rParent, Reference< XRegressionCurve > xRegCurve )
 {
+    InitFromParent( rParent );
     mxTrendLine.reset( new XclExpChSerTrendLine( GetChRoot() ) );
     bool bOk = mxTrendLine->Convert( xRegCurve, mnSeriesIdx );
     if( bOk )
     {
         mxSeriesFmt = mxTrendLine->GetDataFormat();
         GetChartData().SetDataLabel( mxTrendLine->GetDataLabel() );
-        // index to parent series is stored 1-based
-        mnParentIdx = nParentIdx + 1;
     }
     return bOk;
 }
 
-bool XclExpChSeries::ConvertErrorBar( const ScfPropertySet& rPropSet, sal_uInt16 nParentIdx, sal_uInt8 nBarId )
+bool XclExpChSeries::ConvertErrorBar( const XclExpChSeries& rParent, const ScfPropertySet& rPropSet, sal_uInt8 nBarId )
 {
+    InitFromParent( rParent );
     // error bar settings
     mxErrorBar.reset( new XclExpChSerErrorBar( GetChRoot(), nBarId ) );
-    bool bOk = mxErrorBar->Convert( rPropSet );
+    bool bOk = mxErrorBar->Convert( *mxValueLink, maData.mnValueCount, rPropSet );
     if( bOk )
     {
         // error bar formatting
         mxSeriesFmt.reset( new XclExpChDataFormat( GetChRoot(), XclChDataPointPos( mnSeriesIdx ), 0 ) );
         mxSeriesFmt->ConvertLine( rPropSet, EXC_CHOBJTYPE_ERRORBAR );
-        // index to parent series is stored 1-based
-        mnParentIdx = nParentIdx + 1;
     }
     return bOk;
 }
@@ -1603,6 +1637,16 @@ void XclExpChSeries::WriteSubRecords( XclExpStream& rStrm )
     lclSaveRecord( rStrm, mxErrorBar );
 }
 
+void XclExpChSeries::InitFromParent( const XclExpChSeries& rParent )
+{
+    // index to parent series is stored 1-based
+    mnParentIdx = rParent.mnSeriesIdx + 1;
+    /*  #i86465# MSO2007 SP1 expects correct point counts in child series
+        (there was no problem in Excel2003 or Excel2007 without SP1...) */
+    maData.mnCategCount = rParent.maData.mnCategCount;
+    maData.mnValueCount = rParent.maData.mnValueCount;
+}
+
 void XclExpChSeries::CreateTrendLines( XDataSeriesRef xDataSeries )
 {
     Reference< XRegressionCurveContainer > xRegCurveCont( xDataSeries, UNO_QUERY );
@@ -1614,7 +1658,7 @@ void XclExpChSeries::CreateTrendLines( XDataSeriesRef xDataSeries )
         for( const Reference< XRegressionCurve >* pIt = pBeg; pIt != pEnd; ++pIt )
         {
             XclExpChSeriesRef xSeries = GetChartData().CreateSeries();
-            if( xSeries.is() && !xSeries->ConvertTrendLine( *pIt, mnSeriesIdx ) )
+            if( xSeries.is() && !xSeries->ConvertTrendLine( *this, *pIt ) )
                 GetChartData().RemoveLastSeries();
         }
     }
@@ -1638,7 +1682,7 @@ void XclExpChSeries::CreateErrorBar( const ScfPropertySet& rPropSet,
     if( rPropSet.GetBoolProperty( rShowPropName ) )
     {
         XclExpChSeriesRef xSeries = GetChartData().CreateSeries();
-        if( xSeries.is() && !xSeries->ConvertErrorBar( rPropSet, mnSeriesIdx, nBarId ) )
+        if( xSeries.is() && !xSeries->ConvertErrorBar( *this, rPropSet, nBarId ) )
             GetChartData().RemoveLastSeries();
     }
 }
@@ -1693,9 +1737,7 @@ void XclExpChType::Convert( Reference< XDiagram > xDiagram, Reference< XChartTyp
                 maData.mnPieHole = bDonut ? 50 : 0;
                 // #i85166# starting angle of first pie slice
                 ScfPropertySet aDiaProp( xDiagram );
-                sal_Int32 nApiRot = 0;
-                if( aDiaProp.GetProperty( nApiRot, EXC_CHPROP_STARTINGANGLE ) )
-                    maData.mnRotation = static_cast< sal_uInt16 >( (450 - (nApiRot % 360)) % 360 );
+                maData.mnRotation = XclExpChRoot::ConvertPieRotation( aDiaProp );
             }
             break;
             case EXC_CHTYPECATEG_SCATTER:
@@ -1789,8 +1831,8 @@ void XclExpChChart3d::Convert( const ScfPropertySet& rPropSet, bool b3dWallChart
     }
     else
     {
-        // Y rotation not used in pie charts, but 'first slice angle'
-        maData.mnRotation = 0;
+        // Y rotation not used in pie charts, but 'first pie slice angle'
+        maData.mnRotation = XclExpChRoot::ConvertPieRotation( rPropSet );
         // X rotation a.k.a. elevation (map Chart2 [-80,-10] to Excel [10..80])
         maData.mnElevation = limit_cast< sal_Int16 >( (nRotationX + 270) % 180, 10, 80 );
         // perspective (Excel and Chart2 [0,100])
@@ -2084,7 +2126,7 @@ XclExpChLabelRange::XclExpChLabelRange( const XclExpChRoot& rRoot ) :
 {
 }
 
-void XclExpChLabelRange::Convert( const ScaleData& rScaleData )
+void XclExpChLabelRange::Convert( const ScaleData& rScaleData, bool bMirrorOrient )
 {
     // origin
     double fOrigin = 0.0;
@@ -2092,7 +2134,7 @@ void XclExpChLabelRange::Convert( const ScaleData& rScaleData )
         maData.mnCross = limit_cast< sal_uInt16 >( fOrigin, 1, 32767 );
 
     // reverse order
-    if( rScaleData.Orientation == ::com::sun::star::chart2::AxisOrientation_REVERSE )
+    if( (rScaleData.Orientation == ::com::sun::star::chart2::AxisOrientation_REVERSE) != bMirrorOrient )
     {
         ::set_flag( maData.mnFlags, EXC_CHLABELRANGE_REVERSE );
         SwapAxisMaxCross();
@@ -2280,7 +2322,8 @@ void XclExpChAxis::Convert( Reference< XAxis > xAxis, const XclChExtTypeInfo& rT
         mxLabelRange.reset( new XclExpChLabelRange( GetChRoot() ) );
         mxLabelRange->SetTicksBetweenCateg( rTypeInfo.mbTicksBetweenCateg );
         if( xAxis.is() )
-            mxLabelRange->Convert( xAxis->getScaleData() );
+            // #i71684# radar charts have reversed rotation direction
+            mxLabelRange->Convert( xAxis->getScaleData(), (GetAxisType() == EXC_CHAXIS_X) && (rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_RADAR) );
         // swap max-cross flag for secondary X axis to have the secondary Y axis at right side
         if( (GetAxisType() == EXC_CHAXIS_X) && (nApiAxesSetIdx == EXC_CHAXESSET_SECONDARY) )
             mxLabelRange->SwapAxisMaxCross();
@@ -2300,11 +2343,14 @@ void XclExpChAxis::Convert( Reference< XAxis > xAxis, const XclChExtTypeInfo& rT
 
     // existence and position of axis labels
     sal_uInt8 nLabelPos = EXC_CHTICK_NOLABEL;
-    bool bHasLabels = aAxisProp.GetBoolProperty( EXC_CHPROP_DISPLAYLABELS );
-    // radar charts disable their category labels via chart type, not via axis
-    if( bHasLabels || (bCategoryAxis && (rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_RADAR)) )
-        // category axes in 3d charts have default position 'low', all other 'next to axis'
-        nLabelPos = (rTypeInfo.mb3dChart && bCategoryAxis) ? EXC_CHTICK_LOW : EXC_CHTICK_NEXT;
+    if( rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_RADAR )
+        /*  Radar charts disable their category labels via chart type, not via
+            axis, and axis labels are always 'near axis' in Chart2. */
+        nLabelPos = EXC_CHTICK_NEXT;
+    else if( aAxisProp.GetBoolProperty( EXC_CHPROP_DISPLAYLABELS ) )
+        /*  #i85862# Axis labels in other chart types always have position 'low'
+            in Chart2, but Excel expects 'near axis' at Y axes in 3D charts. */
+        nLabelPos = (rTypeInfo.mb3dChart && (GetAxisType() == EXC_CHAXIS_Y)) ? EXC_CHTICK_NEXT : EXC_CHTICK_LOW;
     mxTick->SetLabelPos( nLabelPos );
 
     // axis label formatting and rotation
@@ -2316,7 +2362,7 @@ void XclExpChAxis::Convert( Reference< XAxis > xAxis, const XclChExtTypeInfo& rT
     if( !bCategoryAxis && aAxisProp.GetProperty( nApiNumFmt, EXC_CHPROP_NUMBERFORMAT ) )
         mnNumFmtIdx = GetNumFmtBuffer().Insert( static_cast< sal_uInt32 >( nApiNumFmt ) );
 
-    // grid ---------------------------------------------------------------
+    // grid -------------------------------------------------------------------
 
     if( xAxis.is() )
     {
