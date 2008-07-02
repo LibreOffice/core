@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwshf.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -756,8 +756,9 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
             case FID_INS_TABLE:
             case FID_INS_TABLE_EXT:
             case FID_TAB_APPEND:
-                if (   !pDoc->IsDocEditable()
-                    || nTabCount > MAXTAB)
+                if ( !pDoc->IsDocEditable() ||
+                     nTabCount > MAXTAB ||
+                     ( nWhich == FID_INS_TABLE_EXT && pDocShell && pDocShell->IsDocShared() ) )
                     rSet.DisableItem( nWhich );
                 break;
 
