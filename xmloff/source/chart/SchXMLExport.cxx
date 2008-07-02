@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SchXMLExport.cxx,v $
- * $Revision: 1.99 $
+ * $Revision: 1.100 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -544,7 +544,7 @@ double lcl_getValueFromSequence( const Reference< chart2::data::XDataSequence > 
     else if( xSeq.is())
     {
         Sequence< uno::Any > aAnies( xSeq->getData());
-        aResult.resize( aAnies.getLength());
+        aResult.resize( aAnies.getLength(), fNan );
         for( sal_Int32 i=0; i<aAnies.getLength(); ++i )
             aAnies[i] >>= aResult[i];
     }
@@ -568,11 +568,12 @@ struct lcl_TableData
 template< class T >
     struct lcl_resize
     {
-        lcl_resize( typename T::size_type nSize ) : m_nSize( nSize ) {}
+        lcl_resize( typename T::size_type nSize, typename T::value_type fDefaultValue ) : m_nSize( nSize ), m_fDefaultValue( fDefaultValue ) {}
         void operator()( T & t )
-        { t.resize( m_nSize ); }
+        { t.resize( m_nSize, m_fDefaultValue ); }
     private:
         typename T::size_type m_nSize;
+        typename T::value_type m_fDefaultValue;
     };
 
 
@@ -666,7 +667,7 @@ lcl_TableData lcl_getDataForLocalTable(
     double fNan = 0.0;
     ::rtl::math::setNan( &fNan );
     ::std::for_each( aResult.aDataInRows.begin(), aResult.aDataInRows.end(),
-                     lcl_resize< lcl_TableData::tTwoDimNumberContainer::value_type >( nNumColumns ));
+                     lcl_resize< lcl_TableData::tTwoDimNumberContainer::value_type >( nNumColumns, fNan ));
     aResult.aFirstRowStrings.resize( nNumColumns );
     aResult.aFirstColumnStrings.resize( nNumRows );
 
