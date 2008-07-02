@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saldisp.cxx,v $
- * $Revision: 1.99 $
+ * $Revision: 1.100 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -551,6 +551,9 @@ SalDisplay::~SalDisplay( )
 #endif
         pDisp_ = NULL;
     }
+    // don't do this in doDestruct since RandR extension adds hooks into Display
+    // that is XCloseDisplay still needs the RandR library if it was used
+    DeInitRandR();
 }
 
 void SalDisplay::doDestruct()
@@ -677,9 +680,6 @@ SalX11Display::~SalX11Display()
         XCloseDisplay( pDisp_ );
         pDisp_ = NULL;
     }
-    // don't do this in doDestruct since RandR extension adds hooks into Display
-    // that is XCloseDisplay still needs the RandR library if it was used
-    DeInitRandR();
 }
 
 void SalDisplay::initScreen( int nScreen ) const
