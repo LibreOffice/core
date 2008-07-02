@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CandleStickChart.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -297,14 +297,6 @@ void CandleStickChart::createShapes()
                             drawing::PolyPolygonShape3D aPoly;
                             sal_Int32 nLineIndex =0;
                             AddPointToPoly( aPoly, aPosMiddleMinimum, nLineIndex);
-                            if( fY_First>fY_Min && fY_Last<fY_Max
-                                && isValidPosition(aPosMiddleFirst) && isValidPosition(aPosMiddleLast)
-                                )
-                            {
-                                //do not draw the line over the middle part because it might be transparent
-                                AddPointToPoly( aPoly, aPosMiddleFirst, nLineIndex);
-                                AddPointToPoly( aPoly, aPosMiddleLast, ++nLineIndex);
-                            }
                             AddPointToPoly( aPoly, aPosMiddleMaximum, nLineIndex);
                             xProp->setPropertyValue( C2U( UNO_NAME_POLYPOLYGON ), uno::makeAny( PolyToPointSequence(aPoly) ) );
                         }
