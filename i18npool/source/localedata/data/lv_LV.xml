@@ -363,7 +363,7 @@
 </LC_CALENDAR>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>lats</CurrencyID>
+<CurrencyID>LVL</CurrencyID>
 <CurrencySymbol>Ls</CurrencySymbol>
 <BankSymbol>LVL</BankSymbol>
 <CurrencyName>Lats</CurrencyName>
