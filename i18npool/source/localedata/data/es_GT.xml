@@ -229,7 +229,7 @@
 <LC_CALENDAR ref="es_AR"/>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>Q</CurrencyID>
+<CurrencyID>GTQ</CurrencyID>
 <CurrencySymbol>Q</CurrencySymbol>
 <BankSymbol>GTQ</BankSymbol>
 <CurrencyName>Quetzal</CurrencyName>
