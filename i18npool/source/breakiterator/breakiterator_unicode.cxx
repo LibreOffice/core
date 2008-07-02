@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: breakiterator_unicode.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,7 +111,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
                 case WordType::WORD_COUNT: breakType = 2; rule=wordRule = "count_word"; break;
             }
             break;
-        case LOAD_SENTENCE_BREAKITERATOR: icuBI=&sentence; break;
+        case LOAD_SENTENCE_BREAKITERATOR: icuBI=&sentence; breakType = 5; break;
         case LOAD_LINE_BREAKITERATOR: icuBI=&line; breakType = 4; break;
     }
     if (!icuBI->aBreakIterator || rWordType != aWordType ||
@@ -130,7 +130,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
 
             OOoRuleBasedBreakIterator *rbi = NULL;
 
-            if (breakRules.getLength() > 0 && breakRules[breakType].getLength() > 0) {
+            if (breakRules.getLength() > breakType && breakRules[breakType].getLength() > 0) {
                 rbi = new OOoRuleBasedBreakIterator(udata_open("OpenOffice", "brk",
                     OUStringToOString(breakRules[breakType], RTL_TEXTENCODING_ASCII_US).getStr(), &status), status);
             } else {
@@ -323,7 +323,7 @@ Boundary SAL_CALL BreakIterator_Unicode::getWordBoundary( const OUString& Text, 
 sal_Int32 SAL_CALL BreakIterator_Unicode::beginOfSentence( const OUString& Text, sal_Int32 nStartPos,
         const lang::Locale &rLocale ) throw(uno::RuntimeException)
 {
-        loadICUBreakIterator(rLocale, LOAD_SENTENCE_BREAKITERATOR, 0, NULL, Text);
+        loadICUBreakIterator(rLocale, LOAD_SENTENCE_BREAKITERATOR, 0, "sent", Text);
 
         sal_Int32 len = Text.getLength();
         if (len > 0 && nStartPos == len)
@@ -342,7 +342,7 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::beginOfSentence( const OUString& Text,
 sal_Int32 SAL_CALL BreakIterator_Unicode::endOfSentence( const OUString& Text, sal_Int32 nStartPos,
         const lang::Locale &rLocale ) throw(uno::RuntimeException)
 {
-        loadICUBreakIterator(rLocale, LOAD_SENTENCE_BREAKITERATOR, 0, NULL, Text);
+        loadICUBreakIterator(rLocale, LOAD_SENTENCE_BREAKITERATOR, 0, "sent", Text);
 
         sal_Int32 len = Text.getLength();
         if (len > 0 && nStartPos == len)
