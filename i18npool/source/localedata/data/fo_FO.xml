@@ -350,7 +350,7 @@
 </LC_CALENDAR>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>kr</CurrencyID>
+<CurrencyID>DKK</CurrencyID>
 <CurrencySymbol>kr</CurrencySymbol>
 <BankSymbol>DKK</BankSymbol>
 <CurrencyName>Dansk krone</CurrencyName>
