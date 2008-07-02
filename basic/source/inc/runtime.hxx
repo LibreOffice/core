@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: runtime.hxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -372,7 +372,7 @@ class SbiRuntime
     }
 
     SbxVariable* FindElement
-    ( SbxObject* pObj, UINT32 nOp1, UINT32 nOp2, SbError, BOOL );
+    ( SbxObject* pObj, UINT32 nOp1, UINT32 nOp2, SbError, BOOL bLocal, BOOL bStatic = FALSE );
     void SetupArgs( SbxVariable*, UINT32 );
     SbxVariable* CheckArray( SbxVariable* );
 
@@ -445,16 +445,19 @@ class SbiRuntime
     // Alle Opcodes mit zwei Operanden
     void StepRTL( UINT32, UINT32 ),     StepPUBLIC( UINT32, UINT32 ),   StepPUBLIC_P( UINT32, UINT32 );
     void StepPUBLIC_Impl( UINT32, UINT32, bool bUsedForClassModule );
+    void StepFIND_Impl( SbxObject* pObj, UINT32 nOp1, UINT32 nOp2, SbError, BOOL bLocal, BOOL bStatic = FALSE );
     void StepFIND( UINT32, UINT32 ),    StepELEM( UINT32, UINT32 );
     void StepGLOBAL( UINT32, UINT32 ),  StepLOCAL( UINT32, UINT32 );
     void StepPARAM( UINT32, UINT32),    StepCREATE( UINT32, UINT32 );
     void StepCALL( UINT32, UINT32 ),    StepCALLC( UINT32, UINT32 );
     void StepCASEIS( UINT32, UINT32 ),  StepSTMNT( UINT32, UINT32 );
+    SbxVariable* StepSTATIC_Impl( String& aName, SbxDataType& t );
     void StepOPEN( UINT32, UINT32 ),    StepSTATIC( UINT32, UINT32 );
     void StepTCREATE(UINT32,UINT32),    StepDCREATE(UINT32,UINT32);
     void StepGLOBAL_P( UINT32, UINT32 ),StepFIND_G( UINT32, UINT32 );
     void StepDCREATE_REDIMP(UINT32,UINT32), StepDCREATE_IMPL(UINT32,UINT32);
     void StepFIND_CM( UINT32, UINT32 );
+    void StepFIND_STATIC( UINT32, UINT32 );
 public:
     void          SetVBAEnabled( bool bEnabled ) { bVBAEnabled = bEnabled; };
     USHORT      GetImageFlag( USHORT n ) const;
@@ -541,6 +544,7 @@ inline String getFullPathUNC( const String& aRelPath )
     return getFullPath( aRelPath );
 }
 void implStepRenameOSL( const String& aSource, const String& aDest );
+bool IsBaseIndexOne();
 
 #endif
 
