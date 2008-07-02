@@ -179,7 +179,7 @@
   <LC_COLLATION ref="en_US" />
   <LC_SEARCH ref="en_US"/>
   <LC_INDEX>
-    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-Z Ñ Ó</IndexKey>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-N Ñ O Ó P-Z</IndexKey>
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
     <FollowPageWord> s.</FollowPageWord>
