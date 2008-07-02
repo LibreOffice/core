@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLCellRangeSourceContext.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLCELLRANGESOURCECONTEXT_HXX
-#define _SC_XMLCELLRANGESOURCECONTEXT_HXX
+#ifndef SC_XMLCELLRANGESOURCECONTEXT_HXX
+#define SC_XMLCELLRANGESOURCECONTEXT_HXX
 
 #include <xmloff/xmlimp.hxx>
 

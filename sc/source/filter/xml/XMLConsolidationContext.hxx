@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLConsolidationContext.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLCONSOLIDATIONCONTEXT_HXX
-#define _SC_XMLCONSOLIDATIONCONTEXT_HXX
+#ifndef SC_XMLCONSOLIDATIONCONTEXT_HXX
+#define SC_XMLCONSOLIDATIONCONTEXT_HXX
 
 #include "global.hxx"
 #include "address.hxx"
