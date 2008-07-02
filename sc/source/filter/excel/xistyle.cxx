@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xistyle.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,9 +58,7 @@
 #include "attrib.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
-#ifndef __GLOBSTR_HRC_
 #include "globstr.hrc"
-#endif
 #include "xltracer.hxx"
 #include "xistream.hxx"
 #include "xicontent.hxx"
