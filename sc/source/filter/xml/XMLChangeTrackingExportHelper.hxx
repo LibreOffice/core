@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLChangeTrackingExportHelper.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLCHANGETRACKINGEXPORTHELPER_HXX
-#define _SC_XMLCHANGETRACKINGEXPORTHELPER_HXX
+#ifndef SC_XMLCHANGETRACKINGEXPORTHELPER_HXX
+#define SC_XMLCHANGETRACKINGEXPORTHELPER_HXX
 
 #include <xmloff/xmltoken.hxx>
 #include <list>
