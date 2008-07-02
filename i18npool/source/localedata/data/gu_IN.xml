@@ -137,7 +137,7 @@
 </LC_CALENDAR>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>ઋુ.</CurrencyID>
+<CurrencyID>INR</CurrencyID>
 <CurrencySymbol>ઋુ.</CurrencySymbol>
 <BankSymbol>INR</BankSymbol>
 <CurrencyName>Rupee</CurrencyName>
