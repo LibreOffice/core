@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTableShapesContext.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLTABLESHAPESCONTEXT_HXX
-#define _SC_XMLTABLESHAPESCONTEXT_HXX
+#ifndef SC_XMLTABLESHAPESCONTEXT_HXX
+#define SC_XMLTABLESHAPESCONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
 
