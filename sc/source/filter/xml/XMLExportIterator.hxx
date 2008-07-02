@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLExportIterator.hxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLEXPORTITERATOR_HXX
-#define _SC_XMLEXPORTITERATOR_HXX
+#ifndef SC_XMLEXPORTITERATOR_HXX
+#define SC_XMLEXPORTITERATOR_HXX
 
 #include <vector>
 #include <list>
