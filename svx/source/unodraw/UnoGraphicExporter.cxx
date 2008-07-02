@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UnoGraphicExporter.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -711,15 +711,19 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
     {
         if( rSettings.mbExportOnlyBackground )
         {
+            SdrObject* pShape = 0;
             if( pPage->IsMasterPage() )
             {
-                aShapes.push_back( pPage->GetObj(0) );
+                if( pPage->GetObjCount() > 0 )
+                    pShape = pPage->GetObj(0);
             }
             else
             {
-                if( pPage->GetBackgroundObj() )
-                    aShapes.push_back( pPage->GetBackgroundObj() );
+                pShape = pPage->GetBackgroundObj();
             }
+
+            if( pShape )
+                aShapes.push_back( pShape );
         }
         else
         {
