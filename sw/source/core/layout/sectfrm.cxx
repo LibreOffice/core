@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sectfrm.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.55 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -360,6 +360,18 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 
     //In den Baum einhaengen.
     SwSectionFrm* pSect = pParent->FindSctFrm();
+    // --> OD 2008-06-23 #156927#
+    // Assure that parent is not inside a table frame, which is inside the found section frame.
+    if ( pSect )
+    {
+        SwTabFrm* pTableFrm = pParent->FindTabFrm();
+        if ( pTableFrm &&
+             pSect->IsAnLower( pTableFrm ) )
+        {
+            pSect = 0;
+        }
+    }
+    // <--
 
     SWRECTFN( pParent )
     if( pSect && HasToBreak( pSect ) )
@@ -1197,6 +1209,35 @@ class ExtraFormatToPositionObjs
             }
         }
 
+        // --> OD 2008-06-20 #i81555#
+        void InitObjs( SwFrm& rFrm )
+        {
+            SwSortedObjs* pObjs = rFrm.GetDrawObjs();
+            if ( pObjs )
+            {
+                sal_uInt32 i = 0;
+                for ( i = 0; i < pObjs->Count(); ++i )
+                {
+                    SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
+
+                    pAnchoredObj->UnlockPosition();
+                    pAnchoredObj->SetClearedEnvironment( false );
+                }
+            }
+            SwLayoutFrm* pLayoutFrm = dynamic_cast<SwLayoutFrm*>(&rFrm);
+            if ( pLayoutFrm != 0 )
+            {
+                SwFrm* pLowerFrm = pLayoutFrm->GetLower();
+                while ( pLowerFrm != 0 )
+                {
+                    InitObjs( *pLowerFrm );
+
+                    pLowerFrm = pLowerFrm->GetNext();
+                }
+            }
+        }
+        // <--
+
         void FormatSectionToPositionObjs()
         {
             // perform extra format for multi-columned section.
@@ -1235,26 +1276,12 @@ class ExtraFormatToPositionObjs
                 }
 
                 // unlock position of lower floating screen objects for the extra format
-                SwPageFrm* pPageFrm = mpSectFrm->FindPageFrm();
-                SwSortedObjs* pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : 0L;
-                if ( pObjs )
-                {
-                    sal_uInt32 i = 0;
-                    for ( i = 0; i < pObjs->Count(); ++i )
-                    {
-                        SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-
-                        if ( mpSectFrm->IsAnLower( pAnchoredObj->GetAnchorFrm() ) )
-                        {
-                            pAnchoredObj->UnlockPosition();
-                            // --> OD 2005-07-18 #i51474#
-                            // - reset flag for cleared environment.
-                            pAnchoredObj->SetClearedEnvironment( false );
-                            // <--
-
-                        }
-                    }
-                }
+                // --> OD 2008-06-20 #i81555#
+                // Section frame can already have changed the page and its content
+                // can still be on the former page.
+                // Thus, initialize objects via lower-relationship
+                InitObjs( *mpSectFrm );
+                // <--
 
                 // format content - first with collecting its foot-/endnotes before content
                 // format, second without collecting its foot-/endnotes.
@@ -1262,8 +1289,8 @@ class ExtraFormatToPositionObjs
                 ::CalcCntnt( mpSectFrm, true );
 
                 // keep locked position of lower floating screen objects
-                pPageFrm = mpSectFrm->FindPageFrm();
-                pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : 0L;
+                SwPageFrm* pPageFrm = mpSectFrm->FindPageFrm();
+                SwSortedObjs* pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : 0L;
                 if ( pObjs )
                 {
                     sal_uInt32 i = 0;
