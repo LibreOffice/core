@@ -300,7 +300,7 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>J$</CurrencyID>
+      <CurrencyID>JMD</CurrencyID>
       <CurrencySymbol>J$</CurrencySymbol>
       <BankSymbol>JMD</BankSymbol>
       <CurrencyName>Jamaican Dollar</CurrencyName>

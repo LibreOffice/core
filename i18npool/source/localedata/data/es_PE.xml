@@ -229,7 +229,7 @@
 <LC_CALENDAR ref="es_AR"/>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>S/</CurrencyID>
+<CurrencyID>PEN</CurrencyID>
 <CurrencySymbol>S/</CurrencySymbol>
 <BankSymbol>PEN</BankSymbol>
 <CurrencyName>Nuevo Sol</CurrencyName>

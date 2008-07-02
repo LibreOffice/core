@@ -300,7 +300,7 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>$</CurrencyID>
+      <CurrencyID>AUD</CurrencyID>
       <CurrencySymbol>$</CurrencySymbol>
       <BankSymbol>AUD</BankSymbol>
       <CurrencyName>Australian Dollar</CurrencyName>

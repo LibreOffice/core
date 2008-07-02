@@ -229,7 +229,7 @@
 <LC_CALENDAR ref="es_AR"/>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>RD$</CurrencyID>
+<CurrencyID>DOP</CurrencyID>
 <CurrencySymbol>RD$</CurrencySymbol>
 <BankSymbol>DOP</BankSymbol>
 <CurrencyName>Peso</CurrencyName>
