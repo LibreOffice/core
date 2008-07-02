@@ -313,7 +313,7 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>Ft</CurrencyID>
+      <CurrencyID>HUF</CurrencyID>
       <CurrencySymbol>Ft</CurrencySymbol>
       <BankSymbol>HUF</BankSymbol>
       <CurrencyName>Magyar forint</CurrencyName>
