@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VDataSeries.hxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,6 +102,8 @@ public:
 
     ::com::sun::star::uno::Sequence< double > getAllX() const;
     ::com::sun::star::uno::Sequence< double > getAllY() const;
+
+    double getYMeanValue() const;
 
     bool        hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const;
     sal_Int32   getExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const;
@@ -202,6 +204,8 @@ private: //member
     VDataSequence   m_aValues_Y_Max;
     VDataSequence   m_aValues_Y_First;
     VDataSequence   m_aValues_Y_Last;
+
+    mutable double m_fYMeanValue;
 
     ::com::sun::star::uno::Sequence< sal_Int32 >    m_aAttributedDataPointIndexList;
 
