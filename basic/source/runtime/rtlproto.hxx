@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtlproto.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -184,6 +184,7 @@ extern RTLFUNC(Log);
 extern RTLFUNC(LTrim);
 extern RTLFUNC(Mid);
 extern RTLFUNC(Oct);
+extern RTLFUNC(Replace);
 extern RTLFUNC(Right);
 extern RTLFUNC(RTrim);
 extern RTLFUNC(RTL);
@@ -342,6 +343,7 @@ extern RTLFUNC(CDateFromIso);
 extern RTLFUNC(CompatibilityMode);
 extern RTLFUNC(CDec);
 
+extern RTLFUNC(Partition); // Fong
 
 extern double Now_Impl();
 extern void Wait_Impl( bool bDurationBased, SbxArray& rPar );
