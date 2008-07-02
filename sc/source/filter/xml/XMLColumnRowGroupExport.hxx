@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLColumnRowGroupExport.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLCOLUMNROWGROUPEXPORT_HXX
-#define _SC_XMLCOLUMNROWGROUPEXPORT_HXX
+#ifndef SC_XMLCOLUMNROWGROUPEXPORT_HXX
+#define SC_XMLCOLUMNROWGROUPEXPORT_HXX
 
 #include <list>
 #include <rtl/ustring.hxx>
