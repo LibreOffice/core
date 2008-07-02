@@ -8,7 +8,7 @@
  *
  * $RCSfile: randrwrapper.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,9 @@
 
 namespace
 {
+
+# ifdef XRANDR_DLOPEN
+
 class RandRWrapper
 {
     oslModule m_pRandRLib;
@@ -54,6 +57,7 @@ class RandRWrapper
     XRRScreenSize*(*m_pXRRSizes)(Display*,int,int*);
     XRRScreenSize*(*m_pXRRConfigSizes)(XRRScreenConfiguration*,int*);
     SizeID(*m_pXRRConfigCurrentConfiguration)(XRRScreenConfiguration*,Rotation*);
+    int(*m_pXRRRootToScreen)(Display*, XLIB_Window);
 
     bool m_bValid;
 
@@ -106,8 +110,11 @@ public:
     {
         return m_bValid ? m_pXRRConfigCurrentConfiguration( i_pConfig, o_pRot ) : 0;
     }
+    int XRRRootToScreen( Display *dpy, XLIB_Window root )
+    {
+        return m_bValid ? m_pXRRRootToScreen( dpy, root ) : -1;
+    }
 };
-}
 
 void RandRWrapper::initFromModule()
 {
@@ -120,6 +127,7 @@ void RandRWrapper::initFromModule()
     m_pXRRSizes = (XRRScreenSize*(*)(Display*,int,int*))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRSizes" );
     m_pXRRConfigSizes = (XRRScreenSize*(*)(XRRScreenConfiguration*,int*))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRConfigSizes" );
     m_pXRRConfigCurrentConfiguration = (SizeID(*)(XRRScreenConfiguration*,Rotation*))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRConfigCurrentConfiguration" );
+    m_pXRRRootToScreen = (int(*)(Display*,XLIB_Window))osl_getAsciiFunctionSymbol( m_pRandRLib, "XRRRootToScreen" );
 
     m_bValid = m_pXRRQueryExtension             &&
                m_pXRRQueryVersion               &&
@@ -129,7 +137,8 @@ void RandRWrapper::initFromModule()
                m_pXRRUpdateConfiguration        &&
                m_pXRRSizes                      &&
                m_pXRRConfigSizes                &&
-               m_pXRRConfigCurrentConfiguration
+               m_pXRRConfigCurrentConfiguration &&
+               m_pXRRRootToScreen
                ;
 }
 
@@ -144,6 +153,7 @@ RandRWrapper::RandRWrapper( Display* pDisplay ) :
         m_pXRRSizes( NULL ),
         m_pXRRConfigSizes( NULL ),
         m_pXRRConfigCurrentConfiguration( NULL ),
+        m_pXRRRootToScreen( NULL ),
         m_bValid( false )
 {
     // first try in process space (e.g. gtk links that ?)
@@ -183,6 +193,91 @@ void RandRWrapper::releaseWrapper()
     pWrapper = NULL;
 }
 
+# else
+
+class RandRWrapper
+{
+    bool m_bValid;
+
+    RandRWrapper(Display*);
+public:
+    static RandRWrapper& get(Display*);
+    static void releaseWrapper();
+
+    Bool XRRQueryExtension(Display* i_pDisp, int* o_event_base, int* o_error_base )
+    {
+        Bool bRet = False;
+        if( m_bValid )
+            bRet = ::XRRQueryExtension( i_pDisp, o_event_base, o_error_base );
+        return bRet;
+    }
+    Status XRRQueryVersion( Display* i_pDisp, int* o_major, int* o_minor )
+    {
+        return m_bValid ? ::XRRQueryVersion( i_pDisp, o_major, o_minor ) : 0;
+    }
+    XRRScreenConfiguration* XRRGetScreenInfo( Display* i_pDisp, Drawable i_aDrawable )
+    {
+        return m_bValid ? ::XRRGetScreenInfo( i_pDisp, i_aDrawable ) : NULL;
+    }
+    void XRRFreeScreenConfigInfo( XRRScreenConfiguration* i_pConfig )
+    {
+        if( m_bValid )
+            ::XRRFreeScreenConfigInfo( i_pConfig );
+    }
+    void XRRSelectInput( Display* i_pDisp, XLIB_Window i_window, int i_nMask )
+    {
+        if( m_bValid )
+            ::XRRSelectInput( i_pDisp, i_window, i_nMask );
+    }
+    int XRRUpdateConfiguration( XEvent* i_pEvent )
+    {
+        return m_bValid ? ::XRRUpdateConfiguration( i_pEvent ) : 0;
+    }
+    XRRScreenSize* XRRSizes( Display* i_pDisp, int i_screen, int* o_nscreens )
+    {
+        return m_bValid ? ::XRRSizes( i_pDisp, i_screen, o_nscreens ) : NULL;
+    }
+    XRRScreenSize* XRRConfigSizes( XRRScreenConfiguration* i_pConfig, int* o_nSizes )
+    {
+        return m_bValid ? ::XRRConfigSizes( i_pConfig, o_nSizes ) : NULL;
+    }
+    SizeID XRRConfigCurrentConfiguration( XRRScreenConfiguration* i_pConfig, Rotation* o_pRot )
+    {
+        return m_bValid ? ::XRRConfigCurrentConfiguration( i_pConfig, o_pRot ) : 0;
+    }
+    int XRRRootToScreen( Display *dpy, XLIB_Window root )
+    {
+        return m_bValid ? ::XRRRootToScreen( dpy, root ) : -1;
+    }
+};
+
+RandRWrapper::RandRWrapper( Display* pDisplay ) :
+    m_bValid( true )
+{
+    int nEventBase = 0, nErrorBase = 0;
+    if( !XRRQueryExtension( pDisplay, &nEventBase, &nErrorBase ) )
+        m_bValid = false;
+}
+
+static RandRWrapper* pWrapper = NULL;
+
+RandRWrapper& RandRWrapper::get( Display* i_pDisplay )
+{
+    if( ! pWrapper )
+        pWrapper = new RandRWrapper( i_pDisplay );
+    return *pWrapper;
+}
+
+void RandRWrapper::releaseWrapper()
+{
+    delete pWrapper;
+    pWrapper = NULL;
+}
+
+#endif
+
+} // namespace
+
 #endif
 
 #include "saldisp.hxx"
@@ -202,6 +297,9 @@ void SalDisplay::DeInitRandR()
     #ifdef USE_RANDR
     if( m_bUseRandRWrapper )
         RandRWrapper::releaseWrapper();
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "SalDisplay::DeInitRandR()\n" );
+#endif
     #endif
 }
 
@@ -209,7 +307,8 @@ int SalDisplay::processRandREvent( XEvent* pEvent )
 {
     int nRet = 0;
     #ifdef USE_RANDR
-    if( m_bUseRandRWrapper && pWrapper )
+    XConfigureEvent* pCnfEvent=(XConfigureEvent*)pEvent;
+    if( m_bUseRandRWrapper && pWrapper && pWrapper->XRRRootToScreen(GetDisplay(),pCnfEvent->window) != -1 )
     {
         nRet = pWrapper->XRRUpdateConfiguration( pEvent );
         if( nRet == 1 && pEvent->type != ConfigureNotify) // this should then be a XRRScreenChangeNotifyEvent
@@ -235,7 +334,7 @@ int SalDisplay::processRandREvent( XEvent* pEvent )
                     pWrapper->XRRFreeScreenConfigInfo( pConfig );
 
                     #if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "screen %d changed to size %dx%d\n", i, pTargetSize->width, pTargetSize->height );
+                    fprintf( stderr, "screen %d changed to size %dx%d\n", (int)i, (int)pTargetSize->width, (int)pTargetSize->height );
                     #endif
                 }
             }
