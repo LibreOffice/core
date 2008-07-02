@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dim.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -181,7 +181,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, BOOL bAsNewAlreadyParsed )
 
 void SbiParser::Dim()
 {
-    DefVar( _DIM, FALSE );
+    DefVar( _DIM, ( pProc && bVBASupportOn ) ? pProc->IsStatic() : FALSE );
 }
 
 void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
@@ -267,7 +267,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
 
     // AB 9.7.97, #40689, Statics -> Modul-Initialisierung, in Sub ueberspringen
     UINT32 nEndOfStaticLbl = 0;
-    if( bStatic )
+    if( !bVBASupportOn && bStatic )
     {
         nEndOfStaticLbl = aGen.Gen( _JUMP, 0 );
         aGen.Statement();   // bei static hier nachholen
@@ -335,13 +335,11 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
                                 goto global;
                 case SbPUBLIC:  eOp2 = bPersistantGlobal ? _PUBLIC_P : _PUBLIC;
                                 // AB 9.7.97, #40689, kein eigener Opcode mehr
-                                /*
-                                if( bStatic )
+                                if( bVBASupportOn && bStatic )
                                 {
                                     eOp2 = _STATIC;
                                     break;
                                 }
-                                */
                 global:         aGen.BackChain( nGblChain );
                                 nGblChain = 0;
                                 bGblDefs = bNewGblDefs = TRUE;
@@ -472,14 +470,14 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
         // d.h. pPool muss immer am Schleifen-Ende zurueckgesetzt werden.
         // auch bei break
         pPool = pOldPool;
-        continue;       // MyBreak überspingen
+        continue;       // MyBreak Ã¼berspingen
     MyBreak:
         pPool = pOldPool;
         break;
     }
 
     // AB 9.7.97, #40689, Sprung ueber Statics-Deklaration abschliessen
-    if( bStatic )
+    if( !bVBASupportOn && bStatic )
     {
         // globalen Chain pflegen
         nGblChain = aGen.Gen( _JUMP, 0 );
@@ -496,7 +494,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
 
 void SbiParser::ReDim()
 {
-    DefVar( _REDIM, FALSE );
+    DefVar( _REDIM, (  pProc && bVBASupportOn ) ? pProc->IsStatic() : FALSE );
 }
 
 // ERASE array, ...
@@ -995,16 +993,20 @@ void SbiParser::DefProc( BOOL bStatic, BOOL bPrivate )
     // Prozedur.
     aPublics.SetProcId( pProc->GetId() );
     pProc->GetParams().SetParent( &aPublics );
-    if( !bStatic )
+    if( bStatic )
+        {
+        if ( bVBASupportOn )
+            pProc->SetStatic( TRUE );
+        else
+            Error( SbERR_NOT_IMPLEMENTED ); // STATIC SUB ...
+        }
+     else
     {
-        // Normalfall: Lokale Variable->Parameter->Globale Variable
-        pProc->GetLocals().SetParent( &pProc->GetParams() );
-        pPool = &pProc->GetLocals();
-    }
-    else
-    {
-        Error( SbERR_NOT_IMPLEMENTED ); // STATIC SUB ...
-    }
+        pProc->SetStatic( FALSE );
+        }
+    // Normalfall: Lokale Variable->Parameter->Globale Variable
+    pProc->GetLocals().SetParent( &pProc->GetParams() );
+    pPool = &pProc->GetLocals();
 
     pProc->Define();
     OpenBlock( eExit );
