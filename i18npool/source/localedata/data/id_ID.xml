@@ -300,7 +300,7 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>Rp</CurrencyID>
+      <CurrencyID>IDR</CurrencyID>
       <CurrencySymbol>Rp</CurrencySymbol>
       <BankSymbol>IDR</BankSymbol>
       <CurrencyName>IDR</CurrencyName>
