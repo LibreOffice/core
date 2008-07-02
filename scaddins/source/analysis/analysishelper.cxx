@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: analysishelper.cxx,v $
- * $Revision: 1.57 $
+ * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -152,48 +152,12 @@ const FuncDataBase pFuncDatas[] =
 #undef FUNCDATA
 
 
-/*double _Test( sal_Int32 nMode, double f1, double f2, double f3 )
-{
-    double      f = -1.0;
-    switch( nMode )
-    {
-        case 0:     f = GammaN( f1, sal_uInt32( f2 ) );     break;
-        case 1:     f = Gamma( f1 );                        break;
-    }
-
-    return f;
-}*/
-
-
-static sal_uInt16 aDaysInMonth[ 13 ] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-
 sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
 {
-
-    if( nMonth != 2 )
-        return aDaysInMonth[ nMonth ];
-    else
-    {
-        if( IsLeapYear( nYear ) )
-            return aDaysInMonth[ nMonth ] + 1;
-        else
-            return aDaysInMonth[ nMonth ];
-    }
-}
-
-
-sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16, sal_Bool bLeapYear )
-{
-
-    if( nMonth != 2 )
-        return aDaysInMonth[ nMonth ];
-    else
-    {
-        if( bLeapYear )
-            return aDaysInMonth[ nMonth ] + 1;
-        else
-            return aDaysInMonth[ nMonth ];
-    }
+    if( (nMonth == 2) && IsLeapYear( nYear ) )
+        return 29;
+    static const sal_uInt16 aDaysInMonth[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+    return aDaysInMonth[ nMonth ];
 }
 
 
@@ -561,74 +525,6 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
 }
 
 
-void AddDate( sal_uInt16& rD, sal_uInt16& rM, sal_uInt16& rY, sal_Int32 /*nDD*/, sal_Int32 nDM, sal_Int32 /*nDY*/ )
-{
-    sal_Int32   nD = rD;
-    sal_Int32   nM = rM;
-    sal_Int32   nY = rY;
-
-    sal_Bool    bMod = sal_False;
-
-    if( nDM )
-    {
-        bMod = sal_True;
-
-        nY += nDM / 12;
-        nM += nDM % 12;
-        if( nM <= 0 )
-        {
-            nY--;
-            nM += 12;
-        }
-        else if( nM > 12 )
-        {
-            nY++;
-            nM -= 12;
-        }
-    }
-
-    if( bMod )
-    {
-        rD = sal_uInt16( nD );
-        rM = sal_uInt16( nM );
-        rY = sal_uInt16( nY );
-
-        AlignDate( rD, sal_uInt16( nM ), sal_uInt16( nY ) );
-    }
-}
-
-
-void AddDate( sal_Int32 nND, sal_Int32& rD, sal_Int32 nDD, sal_Int32 nDM, sal_Int32 nDY )
-{
-    sal_uInt16  nD, nM, nY;
-    DaysToDate( rD + nND, nD, nM, nY );
-
-    AddDate( nD, nM, nY, nDD, nDM, nDY );
-
-    rD = DateToDays( nD, nM, nY ) - nND;
-}
-
-
-// if nRefDate is last day in month and day of nDate is >= day of nRefDate,
-// adjust nDate to last day in month and return
-sal_Int32 AdjustLastDayInMonth( sal_Int32 nNullDate, sal_Int32 nRefDate, sal_Int32 nDate )
-{
-    sal_uInt16 nRefDay, nRefMonth, nRefYear;
-    DaysToDate( nNullDate + nRefDate, nRefDay, nRefMonth, nRefYear );
-    if( nRefDay == DaysInMonth( nRefMonth, nRefYear ) )
-    {
-        sal_uInt16 nDay, nMonth, nYear;
-        DaysToDate( nNullDate + nDate, nDay, nMonth, nYear );
-        if( nDay >= nRefDay )
-        {
-            nDate += DaysInMonth( nMonth, nYear );
-            nDate -= nDay;
-        }
-    }
-    return nDate;
-}
-
-
 double Fak( sal_Int32 n )
 {
     if( n > 0 )
@@ -662,65 +558,6 @@ double GetGcd( double f1, double f2 )
     }
 
     return f2;
-}
-
-
-double GammaHelp( double& x, sal_Bool& bReflect )
-{
-    double c[6] = {76.18009173, -86.50532033, 24.01409822,
-                   -1.231739516, 0.120858003E-2, -0.536382E-5};
-    if (x >= 1.0)
-    {
-        bReflect = sal_False;
-        x -= 1.0;
-    }
-    else
-    {
-        bReflect = sal_True;
-        x = 1.0 - x;
-    }
-    double s, anum;
-    s = 1.0;
-    anum = x;
-    for (sal_uInt16 i = 0; i < 6; i++)
-    {
-        anum += 1.0;
-        s += c[i]/anum;
-    }
-    s *= 2.506628275;                   // sqrt(2*PI)
-    return s;
-}
-
-
-double Gamma( double x )
-{
-    sal_Bool bReflect;
-    double G = GammaHelp(x, bReflect);
-    G = pow(x+5.5,x+0.5)*G/exp(x+5.5);
-    if (bReflect)
-        G = PI*x/(G*sin(PI*x));
-    return G;
-}
-
-
-double GammaN( double x, sal_uInt32 nIter )
-{
-    double  n = nIter;
-    double  f = pow( n, x ) / x;
-    double  c = 1.0;
-
-    while( nIter )
-    {
-        x++;
-
-        f /= x;
-        f *= c;
-
-        nIter--;
-        c++;
-    }
-
-    return f;
 }
 
 
@@ -1844,26 +1681,6 @@ StringList::~StringList()
 }
 
 
-sal_Bool StringList::Contains( const STRING& r ) const
-{
-    sal_uInt32      n = 0;
-    const STRING*   p = Get( n );
-
-    while( p )
-    {
-        if( *p == r )
-            return sal_True;
-
-        n++;
-        p = Get( n );
-    }
-
-    return sal_False;
-}
-
-
-
-
 class AnalysisRscStrArrLoader : public Resource
 {
 private:
@@ -2018,33 +1835,6 @@ void SortedIndividualInt32List::Insert(
 }
 
 
-sal_Int32 SortedIndividualInt32List::CountCondition( sal_Int32 nMinVal, sal_Int32 nMaxVal ) const
-{
-    sal_uInt32  nE = Count();
-
-    if( !nE || nMaxVal < Get( 0 ) || nMinVal > Get( nE - 1 ) )
-        // don't care if list is empty
-        // ~ if nMaxVal is smaller than smallest value in list
-        // ~ if nMinVal is bigger than biggest value in list
-        return 0;
-
-    sal_uInt32  n;
-    sal_Int32   nCnt = 0;
-
-    for( n = 0 ; n < nE && Get( n ) < nMinVal ; n++);   // skip values less than nMinVal
-
-    for( ; n < nE ; n++ )
-    {
-        if( Get( n ) <= nMaxVal )
-            nCnt++;
-        else
-            break;
-    }
-
-    return nCnt;
-}
-
-
 sal_Bool SortedIndividualInt32List::Find( sal_Int32 nVal ) const
 {
     sal_uInt32  nE = Count();
@@ -2064,32 +1854,6 @@ sal_Bool SortedIndividualInt32List::Find( sal_Int32 nVal ) const
             return sal_False;
     }
     return sal_False;
-}
-
-
-void SortedIndividualInt32List::InsertHolidayList(
-        const uno::Sequence< uno::Sequence< sal_Int32 > >& rHolidaySeq,
-        sal_Int32 nNullDate, sal_Bool bInsertOnWeekend )
-{
-    const uno::Sequence< sal_Int32 >* pSeqArray = rHolidaySeq.getConstArray();
-    for( sal_Int32 nIndex1 = 0; nIndex1 < rHolidaySeq.getLength(); nIndex1++ )
-    {
-        const uno::Sequence< sal_Int32 >& rSubSeq = pSeqArray[ nIndex1 ];
-        const sal_Int32* pArray = rSubSeq.getConstArray();
-        for( sal_Int32 nIndex2 = 0; nIndex2 < rSubSeq.getLength(); nIndex2++ )
-            Insert( pArray[ nIndex2 ], nNullDate, bInsertOnWeekend );
-    }
-}
-
-
-void SortedIndividualInt32List::InsertHolidayList(
-        const uno::Sequence< double >& rHolidaySeq,
-        sal_Int32 nNullDate,
-        sal_Bool bInsertOnWeekend ) throw( uno::RuntimeException, lang::IllegalArgumentException )
-{
-    const double* pArray = rHolidaySeq.getConstArray();
-    for( sal_Int32 nIndex = 0; nIndex < rHolidaySeq.getLength(); nIndex++ )
-        Insert( pArray[ nIndex ], nNullDate, bInsertOnWeekend );
 }
 
 
@@ -2219,35 +1983,12 @@ void ScaDoubleList::Append(
 void ScaDoubleList::Append(
         ScaAnyConverter& rAnyConv,
         const uno::Reference< beans::XPropertySet >& xOpt,
-        const uno::Any& rAny,
-        sal_Bool bIgnoreEmpty ) throw( uno::RuntimeException, lang::IllegalArgumentException )
-{
-    rAnyConv.init( xOpt );
-    Append( rAnyConv, rAny, bIgnoreEmpty );
-}
-
-
-void ScaDoubleList::Append(
-        ScaAnyConverter& rAnyConv,
-        const uno::Reference< beans::XPropertySet >& xOpt,
         const uno::Sequence< uno::Any >& rAnySeq,
         sal_Bool bIgnoreEmpty ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     rAnyConv.init( xOpt );
     Append( rAnyConv, rAnySeq, bIgnoreEmpty );
 }
-
-
-void ScaDoubleList::Append(
-        ScaAnyConverter& rAnyConv,
-        const uno::Reference< beans::XPropertySet >& xOpt,
-        const uno::Sequence< uno::Sequence< uno::Any > >& rAnySeq,
-        sal_Bool bIgnoreEmpty ) throw( uno::RuntimeException, lang::IllegalArgumentException )
-{
-    rAnyConv.init( xOpt );
-    Append( rAnyConv, rAnySeq, bIgnoreEmpty );
-}
-
 
 
 sal_Bool ScaDoubleList::CheckInsert( double ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
