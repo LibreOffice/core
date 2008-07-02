@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fdumperole.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +31,11 @@
 #ifndef SC_FDUMPEROLE_HXX
 #define SC_FDUMPEROLE_HXX
 
+#include <sot/storage.hxx>
+#include <sot/storinfo.hxx>
 #include "fdumper.hxx"
 
 #if SCF_INCL_DUMPER
-#include <sot/storage.hxx>
-#include <sot/storinfo.hxx>
 
 namespace scf {
 namespace dump {

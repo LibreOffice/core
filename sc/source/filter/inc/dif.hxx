@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dif.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,9 +29,8 @@
  ************************************************************************/
 
 
-#ifndef _DIF_HXX
-#define _DIF_HXX
-
+#ifndef SC_DIF_HXX
+#define SC_DIF_HXX
 
 #include <tools/debug.hxx>
 #include <tools/list.hxx>
