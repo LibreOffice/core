@@ -344,14 +344,14 @@
 </LC_CALENDAR>
 <LC_CURRENCY>
 <Currency default="false" usedInCompatibleFormatCodes="true">
-<CurrencyID>Esc.</CurrencyID>
+<CurrencyID>PTE</CurrencyID>
 <CurrencySymbol>Esc.</CurrencySymbol>
 <BankSymbol>PTE</BankSymbol>
 <CurrencyName>Escudo</CurrencyName>
 <DecimalPlaces>2</DecimalPlaces>
 </Currency>
 <Currency default="true" usedInCompatibleFormatCodes="false">
-<CurrencyID>euro</CurrencyID>
+<CurrencyID>EUR</CurrencyID>
 <CurrencySymbol>€</CurrencySymbol>
 <BankSymbol>EUR</BankSymbol>
 <CurrencyName>Euro</CurrencyName>

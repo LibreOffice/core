@@ -226,7 +226,7 @@
 <LC_CALENDAR ref="pt_PT"/>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>R$</CurrencyID>
+<CurrencyID>BRL</CurrencyID>
 <CurrencySymbol>R$</CurrencySymbol>
 <BankSymbol>BRL</BankSymbol>
 <CurrencyName>Brazilian Real</CurrencyName>
