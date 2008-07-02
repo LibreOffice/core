@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unomodel.hxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,7 +103,7 @@ private:
     SdPage* InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate = sal_False ) throw();
 
     const sal_Bool mbImpressDoc;
-    sal_Bool mbClipBoard;
+    bool mbClipBoard;
 
     ::com::sun::star::uno::WeakReference< ::com::sun::star::drawing::XDrawPages > mxDrawPagesAccess;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::drawing::XDrawPages > mxMasterPagesAccess;
@@ -130,8 +130,8 @@ private:
 
     void initializeDocument();
 public:
-    SdXImpressDocument( ::sd::DrawDocShell* pShell ) throw();
-    SdXImpressDocument( SdDrawDocument* pDoc, sal_Bool bClipBoard = sal_False ) throw();
+    SdXImpressDocument( ::sd::DrawDocShell* pShell, bool bClipBoard = false ) throw();
+    SdXImpressDocument( SdDrawDocument* pDoc, bool bClipBoard = false ) throw();
     virtual ~SdXImpressDocument() throw();
 
     static rtl::Reference< SdXImpressDocument > GetModel( SdDrawDocument* pDoc );
