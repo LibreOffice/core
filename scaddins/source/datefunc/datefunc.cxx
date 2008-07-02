@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: datefunc.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,18 +111,6 @@ ScaStringList::~ScaStringList()
     for( OUString* pStr = First(); pStr; pStr = Next() )
         delete pStr;
 }
-
-sal_Bool ScaStringList::Contains( const OUString& rSearch ) const
-{
-    for( sal_uInt32 nIndex = 0; nIndex < Count(); nIndex++ )
-    {
-        const OUString* pStr = Get( nIndex );
-        if( *pStr == rSearch )
-            return sal_True;
-    }
-    return sal_False;
-}
-
 
 //------------------------------------------------------------------
 
