@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlconti.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,9 +30,6 @@
 #ifndef SC_XMLCONTI_HXX
 #define SC_XMLCONTI_HXX
 
-/*#ifndef _XMLOFF_XMLICTXT_HXX
-#include <xmloff/xmlictxt.hxx>
-#endif*/
 #include <xmloff/xmlimp.hxx>
 #include <rtl/ustrbuf.hxx>
 
