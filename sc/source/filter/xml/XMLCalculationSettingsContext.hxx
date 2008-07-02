@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLCalculationSettingsContext.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLCALCULATIONSETTINGSCONTEXT_HXX
-#define _SC_XMLCALCULATIONSETTINGSCONTEXT_HXX
+#ifndef SC_XMLCALCULATIONSETTINGSCONTEXT_HXX
+#define SC_XMLCALCULATIONSETTINGSCONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/util/Date.hpp>
