@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframe.cxx,v $
- * $Revision: 1.156 $
+ * $Revision: 1.157 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -5589,6 +5589,48 @@ static BOOL ImplHandleIMEEndComposition( HWND hWnd )
 
 // -----------------------------------------------------------------------
 
+static void ImplHandleAppCommand( HWND hWnd, LPARAM lParam )
+{
+    sal_Int16 nCommand = 0;
+    switch( GET_APPCOMMAND_LPARAM(lParam) )
+    {
+    case APPCOMMAND_MEDIA_CHANNEL_DOWN:         nCommand = MEDIA_COMMAND_CHANNEL_DOWN; break;
+    case APPCOMMAND_MEDIA_CHANNEL_UP:           nCommand = MEDIA_COMMAND_CHANNEL_UP; break;
+    case APPCOMMAND_MEDIA_NEXTTRACK:            nCommand = MEDIA_COMMAND_NEXTTRACK; break;
+    case APPCOMMAND_MEDIA_PAUSE:                nCommand = MEDIA_COMMAND_PAUSE; break;
+    case APPCOMMAND_MEDIA_PLAY:                 nCommand = MEDIA_COMMAND_PLAY; break;
+    case APPCOMMAND_MEDIA_PLAY_PAUSE:           nCommand = MEDIA_COMMAND_PLAY_PAUSE; break;
+    case APPCOMMAND_MEDIA_PREVIOUSTRACK:        nCommand = MEDIA_COMMAND_PREVIOUSTRACK; break;
+    case APPCOMMAND_MEDIA_RECORD:               nCommand = MEDIA_COMMAND_RECORD; break;
+    case APPCOMMAND_MEDIA_REWIND:               nCommand = MEDIA_COMMAND_REWIND; break;
+    case APPCOMMAND_MEDIA_STOP:                 nCommand = MEDIA_COMMAND_STOP; break;
+    case APPCOMMAND_MIC_ON_OFF_TOGGLE:          nCommand = MEDIA_COMMAND_MIC_ON_OFF_TOGGLE; break;
+    case APPCOMMAND_MICROPHONE_VOLUME_DOWN:     nCommand = MEDIA_COMMAND_MICROPHONE_VOLUME_DOWN; break;
+    case APPCOMMAND_MICROPHONE_VOLUME_MUTE:     nCommand = MEDIA_COMMAND_MICROPHONE_VOLUME_MUTE; break;
+    case APPCOMMAND_MICROPHONE_VOLUME_UP:       nCommand = MEDIA_COMMAND_MICROPHONE_VOLUME_UP; break;
+    case APPCOMMAND_VOLUME_DOWN:                nCommand = MEDIA_COMMAND_VOLUME_DOWN; break;
+    case APPCOMMAND_VOLUME_MUTE:                nCommand = MEDIA_COMMAND_VOLUME_MUTE; break;
+    case APPCOMMAND_VOLUME_UP:                  nCommand = MEDIA_COMMAND_VOLUME_UP; break;
+        break;
+    default:
+        return;
+    }
+
+    WinSalFrame* pFrame = GetWindowPtr( hWnd );
+    Window *pWindow = pFrame ? pFrame->GetWindow() : NULL;
+
+    if( pWindow )
+    {
+        const Point aPoint;
+        CommandEvent aCEvt( aPoint, COMMAND_MEDIA, FALSE, &nCommand );
+        NotifyEvent aNCmdEvt( EVENT_COMMAND, pWindow, &aCEvt );
+
+        if ( !ImplCallPreNotify( aNCmdEvt ) )
+            pWindow->Command( aCEvt );
+    }
+}
+
+
 static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
 {
     if ( wParam == (WPARAM)IMN_OPENCANDIDATE )
@@ -6057,6 +6099,10 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
 
         case WM_IME_NOTIFY:
             ImplHandleIMENotify( hWnd, wParam );
+            break;
+
+        case WM_APPCOMMAND:
+            ImplHandleAppCommand( hWnd, lParam );
             break;
     }
 
