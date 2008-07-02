@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excimp8.hxx,v $
- * $Revision: 1.70 $
+ * $Revision: 1.71 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _EXCIMP8_HXX
-#define _EXCIMP8_HXX
+#ifndef SC_EXCIMP8_HXX
+#define SC_EXCIMP8_HXX
 
 #include <string.h>
 #include "imp_op.hxx"
