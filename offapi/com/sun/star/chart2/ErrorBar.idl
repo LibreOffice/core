@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ErrorBar.idl,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,15 @@ service ErrorBar
      */
     service ::com::sun::star::drawing::LineProperties;
 
+    /** allows attaching data sequences to the error bars.
+        @see data::DataSequenceRole
+     */
+    optional interface data::XDataSink;
+
+    /** allows querying data sequences that were set at error bars.
+        @see data::DataSequenceRole
+     */
+    [optional] interface data::XDataSource;
     /**
      */
     [property] ::com::sun::star::chart::ErrorBarStyle ErrorBarStyle;
