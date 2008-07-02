@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: adiasync.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_ADIASYNC_HXX
-#define _SC_ADIASYNC_HXX
+#ifndef SC_ADIASYNC_HXX
+#define SC_ADIASYNC_HXX
 
 #include <svtools/broadcast.hxx>
 #include <svtools/svarray.hxx>
