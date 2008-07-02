@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlstyle.hxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLSTYLE_HXX
-#define _SC_XMLSTYLE_HXX
+#ifndef SC_XMLSTYLE_HXX
+#define SC_XMLSTYLE_HXX
 
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlaustp.hxx>
