@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hi_factory.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +65,13 @@ class HF_SubTitleTable;
 class HtmlFactory_Idl : public HtmlFactory<HtmlEnvironment_Idl>
 {
   public:
+    enum E_MemberViewType
+    {
+        viewtype_summary,   // the summary of the members
+        viewtype_details,   // the details of the members
+        viewtype_complete   // everything
+    };
+  public:
     typedef ary::idl::CodeEntity                client;
     typedef ary::idl::Ce_id                     ce_id;
     typedef ary::idl::Type_id                   type_id;
@@ -105,11 +112,12 @@ class HtmlFactory_Idl : public HtmlFactory<HtmlEnvironment_Idl>
                                 const client &   i_ce,
                                 const String &   i_sLabel ) const;
     void                produce_Members(
-                            ce_list &           it_list,
-                            const String &      i_summaryTitle,
-                            const String &      i_summaryLabel,
-                            const String &      i_detailsTitle,
-                            const String &      i_detailsLabel ) const;
+                            ce_list &               it_list,
+                            const String &          i_summaryTitle,
+                            const String &          i_summaryLabel,
+                            const String &          i_detailsTitle,
+                            const String &          i_detailsLabel,
+                            const E_MemberViewType  i_viewType = viewtype_complete ) const;
 
     void                produce_Title(
                             HF_TitleTable &     o_title,
