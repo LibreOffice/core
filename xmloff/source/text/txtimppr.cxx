@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtimppr.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -120,6 +120,7 @@ sal_Bool XMLTextImportPropertyMapper::handleSpecialItem(
     case CTF_FONTFAMILYNAME:
     case CTF_FONTFAMILYNAME_CJK:
     case CTF_FONTFAMILYNAME_CTL:
+    case CTF_TEXT_DISPLAY:
         bRet = getPropertySetMapper()->importXML( rValue, rProperty,
                                                   rUnitConverter );
         break;
