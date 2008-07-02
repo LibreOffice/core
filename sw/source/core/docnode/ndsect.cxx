@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndsect.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1120,7 +1120,20 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                 ASSERT( pFrm->IsSctFrm(), "Depend von Section keine Section." );
                 pNew = rIdx.GetNode().GetCntntNode()->MakeFrm();
 
-                SwSectionNode *pS = rIdx.GetNode().FindSectionNode();
+                SwSectionNode* pS = rIdx.GetNode().FindSectionNode();
+                // --> OD 2008-06-23 #156927#
+                // Assure that node is not inside a table, which is inside the
+                // found section.
+                if ( pS )
+                {
+                    SwTableNode* pTableNode = rIdx.GetNode().FindTableNode();
+                    if ( pTableNode &&
+                         pTableNode->GetIndex() > pS->GetIndex() )
+                    {
+                        pS = 0;
+                    }
+                }
+                // <--
                 // if the node is in a section, the sectionframe now
                 // has to be created..
                 // OD 14.11.2002 #104684# - boolean to control <Init()> of a new
