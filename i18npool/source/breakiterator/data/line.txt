@@ -60,7 +60,7 @@ $BB = [:LineBreak =  Break_Before:];
 $BK = [:LineBreak =  Mandatory_Break:];
 $B2 = [:LineBreak =  Break_Both:];
 $CB = [:LineBreak =  Contingent_Break:];
-$CL = [:LineBreak =  Close_Punctuation:];
+$CL = [[:LineBreak =  Close_Punctuation:] - [\u3001 \u3002]] ;
 $CM = [:LineBreak =  Combining_Mark:];
 $CR = [:LineBreak =  Carriage_Return:];
 $EX = [:LineBreak =  Exclamation:];
@@ -68,9 +68,9 @@ $GL = [:LineBreak =  Glue:];
 $HY = [:LineBreak =  Hyphen:];
 $H2 = [:LineBreak =  H2:];
 $H3 = [:LineBreak =  H3:];
-$ID = [:LineBreak =  Ideographic:];
+$ID = [[:LineBreak =  Ideographic:] - [\ufe30]];
 $IN = [:LineBreak =  Inseperable:];
-$IS = [:LineBreak =  Infix_Numeric:];
+$IS = [[:LineBreak =  Infix_Numeric:] [\ufe30]];
 $JL = [:LineBreak =  JL:];
 $JV = [:LineBreak =  JV:];
 $JT = [:LineBreak =  JT:];
@@ -344,7 +344,7 @@ $POcm $ALcm;
 #
 # LB 25   Numbers.
 #
-($PRcm | $POcm)? ($OPcm | $HYcm)? $NUcm ($NUcm | $SYcm | $IScm)* $CLcm? ($PRcm | $POcm)?;
+($PRcm | $POcm)? ($OPcm)? $NUcm ($NUcm | $SYcm | $IScm)* $CLcm? ($PRcm | $POcm)?;
 
 # LB 26  Do not break a Korean syllable
 #
@@ -563,9 +563,10 @@ $CM* $ALPlus $CM* $PR;
 $CM* $ALPlus $CM* $PO;
 
 $CM* $ALPlus $CM* ($IS | $SY | $HY)+ / $SP;
+$CM* $NU+ $CM* $HY+ / $SP;
 
 # LB 25
-($CM* ($PR | $PO))? ($CM* $CL)? ($CM* ($NU | $IS | $SY))* $CM* $NU ($CM* ($OP | $HY))? ($CM* ($PR | $PO))?;
+($CM* ($PR | $PO))? ($CM* $CL)? ($CM* ($NU | $IS | $SY))* $CM* $NU ($CM* ($OP))? ($CM* ($PR | $PO))?;
 
 # LB 26
 $CM* ($H3 | $H2 | $JV | $JL) $CM* $JL;
