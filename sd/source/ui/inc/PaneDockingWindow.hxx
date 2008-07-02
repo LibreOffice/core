@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PaneDockingWindow.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 #include <sfx2/viewfrm.hxx>
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 class ToolBox;
 
@@ -103,6 +104,8 @@ public:
 
     ::Window* GetContentWindow (void);
 
+    ::boost::shared_ptr<ToolBox> GetTitleToolBox (void) const;
+
 private:
     /** The pane which is represented by the docking window.
     */
@@ -115,7 +118,7 @@ private:
     /** The tool box that is displayed in the window title area contains
         menus and the closer button.
     */
-    ::boost::scoped_ptr<ToolBox> mpTitleToolBox;
+    ::boost::shared_ptr<ToolBox> mpTitleToolBox;
 
     /** The border that is painted arround the inner window.  The bevel
         shadow lines are part of the border, so where the border is 0 no
