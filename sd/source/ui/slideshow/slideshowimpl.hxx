@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slideshowimpl.hxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -300,6 +300,7 @@ private:
     DECL_LINK( ContextMenuSelectHdl, Menu * );
     DECL_LINK( ContextMenuHdl, void* );
     DECL_LINK( deactivateHdl, Timer* );
+    DECL_LINK( EventListenerHdl, VclSimpleEvent* );
 
     // helper
     void receiveRequest(SfxRequest& rReq);
