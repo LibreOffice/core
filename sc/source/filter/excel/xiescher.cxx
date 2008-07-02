@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xiescher.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1284,7 +1284,7 @@ SdrObject* XclImpChartObj::CreateSdrObject( const Rectangle& rAnchorRect, ScfPro
 {
     SdrObjectPtr xSdrObj;
     SfxObjectShell* pDocShell = GetDocShell();
-    if( SvtModuleOptions().IsChart() && pDocShell && mxChart.is() )
+    if( SvtModuleOptions().IsChart() && pDocShell && mxChart.is() && !mxChart->IsPivotChart() )
     {
         // create embedded chart object
         OUString aEmbObjName;
