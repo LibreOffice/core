@@ -314,7 +314,7 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>rupee</CurrencyID>
+      <CurrencyID>INR</CurrencyID>
       <CurrencySymbol>ଟ</CurrencySymbol>
       <BankSymbol>INR</BankSymbol>
       <CurrencyName>Indian Rupee</CurrencyName>
