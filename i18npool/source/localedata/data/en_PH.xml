@@ -19,7 +19,7 @@
 <LC_CALENDAR ref="en_US"/>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>Php</CurrencyID>
+<CurrencyID>PHP</CurrencyID>
 <CurrencySymbol>Php</CurrencySymbol>
 <BankSymbol>PHP</BankSymbol>
 <CurrencyName>Peso</CurrencyName>
