@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tokstack.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,12 +28,10 @@
  *
  ************************************************************************/
 
-#ifndef _TOKSTACK_HXX
-#define _TOKSTACK_HXX
+#ifndef SC_TOKSTACK_HXX
+#define SC_TOKSTACK_HXX
 
-#ifndef _INC_STRING
 #include <string.h>
-#endif
 #include <tools/debug.hxx>
 #include "compiler.hxx"
 
