@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLSectionExport.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -346,6 +346,7 @@ protected:
 
     /// export a single template element (e.g. span or tab-stop)
     void ExportIndexTemplateElement(
+        SectionTypeEnum eType, //i90246, needed for ODF 1.0, 1.0 and 1.2 management
         ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue> & rValues);
 
