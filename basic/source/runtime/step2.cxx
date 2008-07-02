@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: step2.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,7 +112,7 @@ SbxVariable* VBAFind( const String& rName, SbxClassType t )
 // 0x8000 - Argv ist belegt
 
 SbxVariable* SbiRuntime::FindElement
-    ( SbxObject* pObj, UINT32 nOp1, UINT32 nOp2, SbError nNotFound, BOOL bLocal )
+    ( SbxObject* pObj, UINT32 nOp1, UINT32 nOp2, SbError nNotFound, BOOL bLocal, BOOL bStatic )
 {
     bool bIsVBAInterOp = SbiRuntime::isVBAEnabled();
     if( bIsVBAInterOp )
@@ -149,9 +149,17 @@ SbxVariable* SbiRuntime::FindElement
             nOp1 = nOp1 | 0x8000; // indicate params are present
             aName = String::CreateFromAscii("Evaluate");
         }
-
         if( bLocal )
-            pElem = refLocals->Find( aName, SbxCLASS_DONTCARE );
+        {
+            if ( bStatic )
+            {
+                if ( pMeth )
+                    pElem = pMeth->GetStatics()->Find( aName, SbxCLASS_DONTCARE );
+            }
+
+            if ( !pElem )
+                pElem = refLocals->Find( aName, SbxCLASS_DONTCARE );
+        }
         if( !pElem )
         {
             // Die RTL brauchen wir nicht mehr zu durchsuchen!
@@ -251,12 +259,17 @@ SbxVariable* SbiRuntime::FindElement
                 }
                 else
                 {
-                    // Sonst Variable neu anlegen
-                    pElem = new SbxVariable( t );
-                    if( t != SbxVARIANT )
-                        pElem->SetFlag( SBX_FIXED );
-                    pElem->SetName( aName );
-                    refLocals->Put( pElem, refLocals->Count() );
+                    if ( bStatic )
+                        pElem = StepSTATIC_Impl( aName, t );
+                    if ( !pElem )
+                    {
+                        // Sonst Variable neu anlegen
+                        pElem = new SbxVariable( t );
+                        if( t != SbxVARIANT )
+                            pElem->SetFlag( SBX_FIXED );
+                        pElem->SetName( aName );
+                        refLocals->Put( pElem, refLocals->Count() );
+                    }
                 }
             }
         }
@@ -641,27 +654,37 @@ void SbiRuntime::StepRTL( UINT32 nOp1, UINT32 nOp2 )
     PushVar( FindElement( rBasic.pRtl, nOp1, nOp2, SbERR_PROC_UNDEFINED, FALSE ) );
 }
 
+void
+SbiRuntime::StepFIND_Impl( SbxObject* pObj, UINT32 nOp1, UINT32 nOp2, SbError nNotFound, BOOL bLocal, BOOL bStatic )
+{
+    if( !refLocals )
+        refLocals = new SbxArray;
+    PushVar( FindElement( pObj, nOp1, nOp2, nNotFound, bLocal, bStatic ) );
+}
 // Laden einer lokalen/globalen Variablen (+StringID+Typ)
 
 void SbiRuntime::StepFIND( UINT32 nOp1, UINT32 nOp2 )
 {
-    if( !refLocals )
-        refLocals = new SbxArray;
-    PushVar( FindElement( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, TRUE ) );
+    StepFIND_Impl( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, TRUE );
 }
 
 // Search inside a class module (CM) to enable global search in time
 void SbiRuntime::StepFIND_CM( UINT32 nOp1, UINT32 nOp2 )
 {
-    if( !refLocals )
-        refLocals = new SbxArray;
 
     SbClassModuleObject* pClassModuleObject = PTR_CAST(SbClassModuleObject,pMod);
     if( pClassModuleObject )
         pMod->SetFlag( SBX_GBLSEARCH );
-    PushVar( FindElement( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, TRUE ) );
+
+    StepFIND_Impl( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, TRUE );
+
     if( pClassModuleObject )
         pMod->ResetFlag( SBX_GBLSEARCH );
+}
+
+void SbiRuntime::StepFIND_STATIC( UINT32 nOp1, UINT32 nOp2 )
+{
+    StepFIND_Impl( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, TRUE, TRUE );
 }
 
 // Laden eines Objekt-Elements (+StringID+Typ)
@@ -1213,18 +1236,28 @@ void SbiRuntime::StepFIND_G( UINT32 nOp1, UINT32 nOp2 )
 }
 
 
+SbxVariable* SbiRuntime::StepSTATIC_Impl( String& aName, SbxDataType& t )
+{
+    SbxVariable* p = NULL;
+    if ( pMeth )
+    {
+        SbxArray* pStatics = pMeth->GetStatics();
+        if( pStatics && ( pStatics->Find( aName, SbxCLASS_DONTCARE ) == NULL ) )
+        {
+            p = new SbxVariable( t );
+            if( t != SbxVARIANT )
+                p->SetFlag( SBX_FIXED );
+            p->SetName( aName );
+            pStatics->Put( p, pStatics->Count() );
+        }
+    }
+    return p;
+}
 // Einrichten einer statischen Variablen (+StringID+Typ)
-
 void SbiRuntime::StepSTATIC( UINT32 nOp1, UINT32 nOp2 )
 {
-    (void)nOp1;
-    (void)nOp2;
-    /* AB #40689, wird nicht mehr verwendet
-    String aName( pImg->GetString( nOp1 ) );
+    String aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
     SbxDataType t = (SbxDataType) nOp2;
-    SbxVariable* p = new SbxVariable( t );
-    p->SetName( aName );
-    pInst -> GetStatics()->Put( p, pInst->GetStatics()->Count() );
-    */
+    StepSTATIC_Impl( aName, t );
 }
 
