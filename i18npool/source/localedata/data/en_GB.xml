@@ -226,7 +226,7 @@
 <LC_CALENDAR ref="en_US"/>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>£</CurrencyID>
+<CurrencyID>GBP</CurrencyID>
 <CurrencySymbol>£</CurrencySymbol>
 <BankSymbol>GBP</BankSymbol>
 <CurrencyName>Pound Sterling</CurrencyName>
