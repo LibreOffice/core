@@ -144,6 +144,20 @@
 			<Text id="Linuxi4a" xml:lang="en-US">It is recommended that you always backup your system before you remove or install software.</Text>
 		</Paragraph>
 		
+		<Paragraph id="MSOReg" os="WNT">
+			<Text id="MSOReg1" xml:lang="en-US">Registration of ${PRODUCTNAME} as default application for Microsoft Office formats can be forced or suppressed by using the following command line switches with the installer:</Text>
+			<List>
+				<Text id="MSOReg2" xml:lang="en-US">/msoreg=1 will force registration of ${PRODUCTNAME} as default application for Microsoft Office formats.</Text>
+				<Text id="MSOReg3" xml:lang="en-US">/msoreg=0 will suppress registration of ${PRODUCTNAME} as default application for Microsoft Office formats.</Text>
+			</List>
+		</Paragraph>
+		
+		<Paragraph id="DLLA" os="WNT">
+			<Text id="DLLA1" xml:lang="en-US" url="ahead">If you perform an administrative installation using setup /a, you need to make sure that the file msvc90.dll is installed on the system. This file is required for ${PRODUCTNAME} to start after an administrative installation. You can get the file from </Text>
+			<Text id="DLLA2" xml:lang="en-US" url="true">http://www.microsoft.com/downloads/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF </Text>
+			<Text id="DLLA3" xml:lang="en-US"></Text>
+		</Paragraph>
+		
 		<Paragraph id="StartupProblemsHeader" style="H3" os="all">
 			<Text id="naso" xml:lang="en-US">Problems During Program Startup</Text>
 		</Paragraph>
@@ -257,6 +271,39 @@
 		<Paragraph id="MACKeysBETA" os="MACOSX">
 			<Text id="mackeys1" xml:lang="en-US">The application help of ${PRODUCTNAME} may use shortcut combinations for PC keyboards only.</Text>
 		</Paragraph>
+		
+		<Paragraph id="KeysChanged">
+			<Text id="KeysChanged1" xml:lang="en-US">Due to a conflict with input method switching on multiple platforms, the following shortcut keys required to be changed at last minute:</Text>
+		</Paragraph>
+		
+		<Paragraph id="KeysChangedMAC" os="MACOSX">
+			<List>
+				<Text id="KeysChangedMAC2" xml:lang="en-US">Cmd-Space is now Cmd-Shift-Space</Text>
+				<Text id="KeysChangedMAC3" xml:lang="en-US">Cmd-Shift-Space is now Cmd-M</Text>
+			</List>
+		</Paragraph>
+		
+		<Paragraph id="KeysChangedWNT" os="WNT">
+			<List>
+				<Text id="KeysChangedWNT2" xml:lang="en-US">Ctrl-Space is now Ctrl-Shift-Space</Text>
+				<Text id="KeysChangedWNT3" xml:lang="en-US">Ctrl-Shift-Space is now Ctrl-M</Text>
+			</List>
+		</Paragraph>
+		
+		<Paragraph id="KeysChangedLIN" os="LINUX">
+			<List>
+				<Text id="KeysChangedLIN2" xml:lang="en-US">Ctrl-Space is now Ctrl-Shift-Space</Text>
+				<Text id="KeysChangedLIN" xml:lang="en-US">Ctrl-Shift-Space is now Ctrl-M</Text>
+			</List>
+		</Paragraph>
+		
+		<Paragraph id="KeysChangedSOL" os="SOLARIS">
+			<List>
+				<Text id="KeysChangedSOL2" xml:lang="en-US">Ctrl-Space is now Ctrl-Shift-Space</Text>
+				<Text id="KeysChangedSOL3" xml:lang="en-US">Ctrl-Shift-Space is now Ctrl-M</Text>
+			</List>
+		</Paragraph>
+		
 	</Section>
 
 	<Section id="FileLocking">
