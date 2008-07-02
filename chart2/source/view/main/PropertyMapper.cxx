@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyMapper.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -201,7 +201,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProper
 /////// ( C2U( "CharCrossedOut" ),          C2U("CharCrossedOut") ) //setting this explicitly somehow conflicts with CharStrikeout
         ( C2U( "CharEmphasis" ),            C2U("CharEmphasis") )//the service style::CharacterProperties  describes a property called 'CharEmphasize' wich is nowhere implemented
         ( C2U( "CharEscapement" ),          C2U("CharEscapement") )
-//      ( C2U( "CharEscapementHeight" ),    C2U("EscapementHeight") ) -> assertion
+        ( C2U( "CharEscapementHeight" ),    C2U("CharEscapementHeight") )
 //      ( C2U( "CharFlash" ),               C2U("Flashing") )
 
         ( C2U( "CharFontFamily" ),          C2U("CharFontFamily") )
