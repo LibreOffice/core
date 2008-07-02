@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTrackedChangesContext.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLTRACKEDCHANGESCONTEXT_HXX
-#define _SC_XMLTRACKEDCHANGESCONTEXT_HXX
+#ifndef SC_XMLTRACKEDCHANGESCONTEXT_HXX
+#define SC_XMLTRACKEDCHANGESCONTEXT_HXX
 
 #include "XMLChangeTrackingImportHelper.hxx"
 #include "chgtrack.hxx"
