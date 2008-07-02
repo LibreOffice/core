@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.h,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,7 +145,9 @@ protected:
     GC              SelectBrush();
     void            DrawLines( ULONG              nPoints,
                                const SalPolyLine &rPoints,
-                               GC                 pGC );
+                               GC                 pGC,
+                               bool bClose
+                               );
     BOOL            GetDitherPixmap ( SalColor nSalColor );
 
     inline  GC              GetMonoGC( Pixmap hPixmap );
@@ -281,6 +283,7 @@ public:
     virtual void            drawPixel( long nX, long nY, SalColor nSalColor );
     virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 );
     virtual void            drawRect( long nX, long nY, long nWidth, long nHeight );
+    void                    drawPolyLine( ULONG nPoints, const SalPoint* pPtAry, bool bClose );
     virtual void            drawPolyLine( ULONG nPoints, const SalPoint* pPtAry );
     virtual void            drawPolygon( ULONG nPoints, const SalPoint* pPtAry );
     virtual void            drawPolyPolygon( sal_uInt32 nPoly,
