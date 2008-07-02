@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sbxstr.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,10 @@
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 #include "sbxres.hxx"
-
+#include "runtime.hxx"
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 // AB 29.10.99 Unicode
 #ifndef _USE_NO_NAMESPACE
 using namespace rtl;
@@ -94,6 +97,14 @@ XubString ImpGetString( const SbxValues* p )
             SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
             if( pVal )
                 aRes = pVal->GetString();
+            else if( p->pObj && p->pObj->IsFixed()
+                    && (p->pObj->GetType() & (SbxARRAY | SbxBYTE )) )
+            {
+                // convert byte array to string
+                SbxArray* pArr = PTR_CAST(SbxArray, p->pObj);
+                if( pArr )
+                    aRes = ByteArrayToString( pArr );
+            }
             else
                 SbxBase::SetError( SbxERR_NO_OBJECT );
             break;
@@ -249,3 +260,65 @@ void ImpPutString( SbxValues* p, const XubString* n )
     delete pTmp;
 }
 
+// Convert string to an array of bytes, preserving unicode (2bytes per character)
+SbxArray* StringToByteArray(const String& rStr)
+{
+    USHORT nArraySize = rStr.Len() * 2;
+    const sal_Unicode* pSrc = rStr.GetBuffer();
+    SbxDimArray* pArray = new SbxDimArray(SbxBYTE);
+    bool bIncIndex = ( IsBaseIndexOne() && SbiRuntime::isVBAEnabled() );
+    if( nArraySize )
+    {
+        if( bIncIndex )
+            pArray->AddDim( 1, nArraySize );
+        else
+            pArray->AddDim( 0, nArraySize-1 );
+    }
+    else
+    {
+        pArray->unoAddDim( 0, -1 );
+    }
+
+    for( USHORT i=0; i< nArraySize; i++)
+    {
+        SbxVariable* pNew = new SbxVariable( SbxBYTE );
+        BYTE aByte = static_cast< BYTE >( i%2 ? ((*pSrc) >> 8) & 0xff : (*pSrc) & 0xff );
+        pNew->PutByte( aByte );
+        pNew->SetFlag( SBX_WRITE );
+        pArray->Put( pNew, i );
+        if( i%2 )
+            pSrc++;
+    }
+    return pArray;
+}
+
+// Convert an array of bytes to string (2bytes per character)
+String ByteArrayToString(SbxArray* pArr)
+{
+    USHORT nCount = pArr->Count();
+    OUStringBuffer aStrBuf;
+    sal_Unicode aChar = 0;
+    for( USHORT i = 0 ; i < nCount ; i++ )
+    {
+        sal_Unicode aTempChar = pArr->Get(i)->GetByte();
+        if( i%2 )
+        {
+            aChar = (aTempChar << 8 ) | aChar;
+            aStrBuf.append(aChar);
+            aChar = 0;
+        }
+        else
+        {
+            aChar = aTempChar;
+        }
+    }
+
+    if( nCount%2 )
+    {
+        aStrBuf.append(aChar);
+    }
+
+    String aStr(aStrBuf.makeStringAndClear());
+
+    return aStr;
+}
