@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bootstrap.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/profile.hxx>
+#include <osl/security.hxx>
 #include <rtl/alloc.h>
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -53,6 +54,9 @@
 
 #include <hash_map>
 #include <list>
+
+#define MY_STRING_(x) # x
+#define MY_STRING(x) MY_STRING_(x)
 
 //----------------------------------------------------------------------------
 
@@ -116,6 +120,23 @@ rtl::OUString expandMacros(
     Bootstrap_Impl const * file, rtl::OUString const & text,
     ExpandRequestLink const * requestStack);
 
+rtl::OUString recursivelyExpandMacros(
+    Bootstrap_Impl const * file, rtl::OUString const & text,
+    Bootstrap_Impl const * requestFile, rtl::OUString const & requestKey,
+    ExpandRequestLink const * requestStack)
+{
+    for (; requestStack != NULL; requestStack = requestStack->next) {
+        if (requestStack->file == requestFile &&
+            requestStack->key == requestKey)
+        {
+            return rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("***RECURSION DETECTED***"));
+        }
+    }
+    ExpandRequestLink link = { requestStack, requestFile, requestKey };
+    return expandMacros(file, text, &link);
+}
+
 }
 
 //----------------------------------------------------------------------------
@@ -139,6 +160,20 @@ typedef std::list<
     rtl::Allocator< rtl_bootstrap_NameValue >
 > NameValueList;
 
+bool find(
+    NameValueList const & list, rtl::OUString const & key,
+    rtl::OUString * value)
+{
+    OSL_ASSERT(value != NULL);
+    for (NameValueList::const_iterator i(list.begin()); i != list.end(); ++i) {
+        if (i->sName == key) {
+            *value = i->sValue;
+            return true;
+        }
+    }
+    return false;
+}
+
 namespace {
     struct rtl_bootstrap_set_list :
         public rtl::Static< NameValueList, rtl_bootstrap_set_list > {};
@@ -147,8 +182,9 @@ namespace {
 //----------------------------------------------------------------------------
 
 static sal_Bool getFromCommandLineArgs(
-    rtl_uString **ppValue , rtl_uString *pName )
+    rtl::OUString const & key, rtl::OUString * value )
 {
+    OSL_ASSERT(value != NULL);
     static NameValueList *pNameValueList = 0;
     if( ! pNameValueList )
     {
@@ -191,14 +227,13 @@ static sal_Bool getFromCommandLineArgs(
 
     sal_Bool found = sal_False;
 
-    OUString name( pName );
     for( NameValueList::iterator ii = pNameValueList->begin() ;
          ii != pNameValueList->end() ;
          ++ii )
     {
-        if( (*ii).sName.equals(name) )
+        if( (*ii).sName.equals(key) )
         {
-            rtl_uString_assign( ppValue, (*ii).sValue.pData );
+            *value = (*ii).sValue;
             found = sal_True;
             break;
         }
@@ -240,8 +275,7 @@ static OUString & getIniFileName_Impl()
         OUString fileName;
 
         if(getFromCommandLineArgs(
-               &fileName.pData,
-               OUString(RTL_CONSTASCII_USTRINGPARAM("INIFILENAME")).pData))
+               OUString(RTL_CONSTASCII_USTRINGPARAM("INIFILENAME")), &fileName))
         {
             resolvePathnameUrl(&fileName);
         }
@@ -280,42 +314,6 @@ static OUString & getIniFileName_Impl()
 
 //----------------------------------------------------------------------------
 
-static void getFromEnvironment( rtl_uString **ppValue, rtl_uString *pName )
-{
-    if( osl_Process_E_None != osl_getEnvironment( pName , ppValue ) )
-    {
-        // osl behaves different on win or unx.
-        if( *ppValue )
-        {
-            rtl_uString_release( *ppValue );
-            *ppValue = 0;
-        }
-    }
-
-}
-
-//----------------------------------------------------------------------------
-
-static void getFromList(
-    NameValueList const  * pNameValueList,
-    rtl_uString         ** ppValue,
-    rtl_uString          * pName )
-{
-    OUString const & name = * reinterpret_cast< OUString const * >( &pName );
-
-    NameValueList::const_iterator iEnd( pNameValueList->end() );
-    for( NameValueList::const_iterator ii = pNameValueList->begin(); ii != iEnd; ++ii )
-    {
-        if( (*ii).sName.equals(name) )
-        {
-            rtl_uString_assign( ppValue, (*ii).sValue.pData );
-            break;
-        }
-    }
-}
-
-//----------------------------------------------------------------------------
-
 static inline bool path_exists( OUString const & path )
 {
     DirectoryItem dirItem;
@@ -326,13 +324,11 @@ static inline bool path_exists( OUString const & path )
 // #111772#
 // ensure the given file url has no final slash
 
-inline void EnsureNoFinalSlash (rtl_uString** file_url)
+inline void EnsureNoFinalSlash (rtl::OUString & url)
 {
-    sal_Int32 l = rtl_uString_getLength(*file_url);
-    if (rtl_ustr_lastIndexOfChar((*file_url)->buffer, '/') == (l-1))
-    {
-        (*file_url)->buffer[l-1] = 0;
-        (*file_url)->length--;
+    sal_Int32 i = url.getLength();
+    if (i > 0 && url[i - 1] == '/') {
+        url = url.copy(0, i - 1);
     }
 }
 
@@ -355,7 +351,16 @@ struct Bootstrap_Impl
     static void operator delete (void * p , std::size_t) SAL_THROW(())
         { rtl_freeMemory (p); }
 
-    sal_Bool getValue( rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault, bool recursive, ExpandRequestLink const * requestStack ) const;
+    bool getValue(
+        rtl::OUString const & key, rtl_uString ** value,
+        rtl_uString * defaultValue, bool override,
+        ExpandRequestLink const * requestStack) const;
+    bool getDirectValue(
+        rtl::OUString const & key, rtl_uString ** value,
+        ExpandRequestLink const * requestStack) const;
+    bool getAmbienceValue(
+        rtl::OUString const & key, rtl_uString ** value,
+        ExpandRequestLink const * requestStack) const;
 };
 
 //----------------------------------------------------------------------------
@@ -435,156 +440,118 @@ Bootstrap_Impl::~Bootstrap_Impl()
 
 //----------------------------------------------------------------------------
 
-sal_Bool Bootstrap_Impl::getValue(
-    rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault,
-    bool recursive, ExpandRequestLink const * requestStack ) const
+bool Bootstrap_Impl::getValue(
+    rtl::OUString const & key, rtl_uString ** value, rtl_uString * defaultValue,
+    bool override, ExpandRequestLink const * requestStack) const
 {
-    // lookup this ini
-    sal_Bool result = sal_True;
-    bool further_macro_expansion = true;
-
-    OUString const & name = *reinterpret_cast< OUString const * >( &pName );
-    ExpandRequestLink link = { requestStack, this, name };
-    if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("_CPPU_ENV") ))
-    {
-#define MSTR_(x) # x
-#define MSTR(x) MSTR_(x)
-#define STR_CPPU_ENV() MSTR(CPPU_ENV)
-        OUString val( RTL_CONSTASCII_USTRINGPARAM(STR_CPPU_ENV()) );
-        rtl_uString_assign( ppValue, val.pData );
-        further_macro_expansion = false;
+    if (override && getDirectValue(key, value, requestStack)) {
+        return true;
     }
-    else if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ORIGIN") ))
-    {
-        OUString iniPath;
-        sal_Int32 last_slash = _iniName.lastIndexOf( '/' );
-        if (last_slash >= 0)
-            iniPath = _iniName.copy( 0, last_slash );
-        rtl_uString_assign( ppValue, iniPath.pData );
-        further_macro_expansion = false;
+    if (key.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_OS"))) {
+        rtl_uString_assign(
+            value, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(THIS_OS)).pData);
+        return true;
     }
-    else if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("_OS") ))
-    {
-        OUString val( RTL_CONSTASCII_USTRINGPARAM(THIS_OS) );
-        rtl_uString_assign( ppValue, val.pData );
-        further_macro_expansion = false;
+    if (key.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_ARCH"))) {
+        rtl_uString_assign(
+            value, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(THIS_ARCH)).pData);
+        return true;
     }
-    else if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("_ARCH") ))
-    {
-        OUString val( RTL_CONSTASCII_USTRINGPARAM(THIS_ARCH) );
-        rtl_uString_assign( ppValue, val.pData );
-        further_macro_expansion = false;
+    if (key.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_CPPU_ENV"))) {
+        rtl_uString_assign(
+            value,
+            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MY_STRING(CPPU_ENV))).
+             pData));
+        return true;
     }
-    else
+    if (key.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ORIGIN"))) {
+        rtl_uString_assign(
+            value,
+            _iniName.copy(
+                0, std::max<sal_Int32>(0, _iniName.lastIndexOf('/'))).pData);
+        return true;
+    }
+    if (getAmbienceValue(key, value, requestStack)) {
+        return true;
+    }
+    if (key.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SYSUSERCONFIG"))) {
+        rtl::OUString v;
+        bool b = osl::Security().getConfigDir(v);
+        EnsureNoFinalSlash(v);
+        rtl_uString_assign(value, v.pData);
+        return b;
+    }
+    if (key.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SYSUSERHOME"))) {
+        rtl::OUString v;
+        bool b = osl::Security().getHomeDir(v);
+        EnsureNoFinalSlash(v);
+        rtl_uString_assign(value, v.pData);
+        return b;
+    }
+    if (key.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SYSBINDIR"))) {
+        getExecutableDirectory_Impl(value);
+        return true;
+    }
+    if (_base_ini != NULL &&
+        _base_ini->getDirectValue(key, value, requestStack))
     {
-        if (0 != *ppValue)
+        return true;
+    }
+    if (!override && getDirectValue(key, value, requestStack)) {
+        return true;
+    }
+    if (!key.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(URE_BOOTSTRAP))) {
+        FundamentalIniData const & d = FundamentalIni::get();
+        Bootstrap_Impl const * b = static_cast<Bootstrap_Impl const *>(d.ini);
+        if (b != NULL && b != this &&
+            b->getDirectValue(key, value, requestStack))
         {
-            rtl_uString_release( *ppValue );
-            *ppValue = 0;
-        }
-        getFromList( &rtl_bootstrap_set_list::get(), ppValue, pName );
-        if (! *ppValue)
-        {
-            getFromCommandLineArgs( ppValue, pName );
-            if(!*ppValue)
-            {
-                getFromEnvironment( ppValue, pName );
-                if( ! *ppValue )
-                {
-                    if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SYSUSERCONFIG") ))
-                    {
-                        oslSecurity security = osl_getCurrentSecurity();
-                        result = osl_getConfigDir(security, ppValue);
-                        if (result) {
-                            EnsureNoFinalSlash(ppValue);
-                        }
-                        osl_freeSecurityHandle(security);
-                        further_macro_expansion = false;
-                    }
-                    else if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SYSUSERHOME") ))
-                    {
-                        oslSecurity security = osl_getCurrentSecurity();
-                        result = osl_getHomeDir(security, ppValue);
-                        if (result) {
-                            EnsureNoFinalSlash(ppValue);
-                        }
-                        osl_freeSecurityHandle(security);
-                        further_macro_expansion = false;
-                    }
-                    else if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SYSBINDIR") ))
-                    {
-                        getExecutableDirectory_Impl(ppValue);
-                        EnsureNoFinalSlash(ppValue);
-                        further_macro_expansion = false;
-                    }
-                    else if (!recursive && _base_ini && (_base_ini->getValue(pName, ppValue, NULL, true, &link)))
-                    {
-                        further_macro_expansion = false;
-                    }
-                    else
-                    {
-                        // note:  _base_ini->getValue assigns ppValue in any case
-                        if (0 != *ppValue)
-                        {
-                            rtl_uString_release( *ppValue );
-                            *ppValue = 0;
-                        }
-
-                        getFromList( &_nameValueList, ppValue, pName );
-                        if (*ppValue == NULL && !recursive &&
-                            !name.equalsAsciiL(
-                                RTL_CONSTASCII_STRINGPARAM(URE_BOOTSTRAP)))
-                        {
-                            FundamentalIniData & d = FundamentalIni::get();
-                            if (d.ini != NULL && d.ini != this) {
-                                if (static_cast< Bootstrap_Impl * >(d.ini)->
-                                    getValue(pName, ppValue, NULL, true, &link))
-                                {
-                                    further_macro_expansion = false;
-                                } else {
-                                    rtl_uString_release(*ppValue);
-                                    *ppValue = NULL;
-                                }
-                            }
-                        }
-                        if( ! *ppValue )
-                        {
-                            if(pDefault) {
-                                rtl_uString_assign( ppValue, pDefault );
-                                further_macro_expansion = false;
-                            }
-                            else
-                                result = sal_False;
-                        }
-                    }
-                }
-            }
+            return true;
         }
     }
-
-    if (0 == *ppValue)
-    {
-        rtl_uString_new(ppValue);
+    if (defaultValue != NULL) {
+        rtl_uString_assign(value, defaultValue);
+        return true;
     }
-    else
-    {
-        if (further_macro_expansion)
-        {
-            OUString val = expandMacros(
-                this, OUString::unacquired(ppValue), &link );
-            rtl_uString_assign( ppValue, val.pData );
-        }
+    rtl_uString_new(value);
+    return false;
+}
+
+bool Bootstrap_Impl::getDirectValue(
+    rtl::OUString const & key, rtl_uString ** value,
+    ExpandRequestLink const * requestStack) const
+{
+    rtl::OUString v;
+    if (find(_nameValueList, key, &v)) {
+        rtl_uString_assign(
+            value,
+            recursivelyExpandMacros(this, v, this, key, requestStack).pData);
+        return true;
+    } else {
+        return false;
     }
+}
 
-#if OSL_DEBUG_LEVEL > 1
-    OString sName = OUStringToOString(OUString(pName), RTL_TEXTENCODING_ASCII_US);
-    OString sValue = OUStringToOString(OUString(*ppValue), RTL_TEXTENCODING_ASCII_US);
-    OSL_TRACE(
-    __FILE__ " -- Bootstrap_Impl::getValue() - name:%s value:%s result:%i\n",
-    sName.getStr(), sValue.getStr(), result );
-#endif /* OSL_DEBUG_LEVEL > 1 */
-
-    return result;
+bool Bootstrap_Impl::getAmbienceValue(
+    rtl::OUString const & key, rtl_uString ** value,
+    ExpandRequestLink const * requestStack) const
+{
+    rtl::OUString v;
+    bool f;
+    {
+        osl::MutexGuard g(osl::Mutex::getGlobalMutex());
+        f = find(rtl_bootstrap_set_list::get(), key, &v);
+    }
+    if (f || getFromCommandLineArgs(key, &v) ||
+        osl_getEnvironment(key.pData, &v.pData) == osl_Process_E_None)
+    {
+        rtl_uString_assign(
+            value,
+            recursivelyExpandMacros(this, v, NULL, key, requestStack).pData);
+        return true;
+    } else {
+        return false;
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -725,19 +692,20 @@ void SAL_CALL rtl_bootstrap_args_close (
 
 //----------------------------------------------------------------------------
 
-static rtlBootstrapHandle get_static_bootstrap_handle() SAL_THROW(())
+static Bootstrap_Impl * get_static_bootstrap_handle() SAL_THROW(())
 {
     osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
-    static rtlBootstrapHandle s_handle = 0;
+    static Bootstrap_Impl * s_handle = 0;
     if (s_handle == 0)
     {
         OUString iniName (getIniFileName_Impl());
-        s_handle = rtl_bootstrap_args_open( iniName.pData );
+        s_handle = static_cast< Bootstrap_Impl * >(
+            rtl_bootstrap_args_open( iniName.pData ) );
         if (s_handle == 0)
         {
             Bootstrap_Impl * that = new Bootstrap_Impl( iniName );
             ++that->_nRefCount;
-            s_handle = static_cast<rtlBootstrapHandle>(that);
+            s_handle = that;
         }
     }
     return s_handle;
@@ -920,18 +888,12 @@ sal_Unicode read(rtl::OUString const & text, sal_Int32 * pos, bool * escaped) {
 }
 
 rtl::OUString lookup(
-    Bootstrap_Impl const * file, rtl::OUString const & key,
+    Bootstrap_Impl const * file, bool override, rtl::OUString const & key,
     ExpandRequestLink const * requestStack)
 {
     OSL_ASSERT(file != NULL);
-    for (; requestStack != NULL; requestStack = requestStack->next) {
-        if (requestStack->file == file && requestStack->key == key) {
-            return rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("***RECURSION DETECTED***"));
-        }
-    }
     rtl::OUString v;
-    file->getValue(key.pData, &v.pData, NULL, false, requestStack);
+    file->getValue(key, &v.pData, NULL, override, requestStack);
     return v;
 }
 
@@ -988,7 +950,7 @@ rtl::OUString expandMacros(
                     n = 2;
                 }
                 if (n == 1) {
-                    buf.append(lookup(file, seg[0], requestStack));
+                    buf.append(lookup(file, false, seg[0], requestStack));
                 } else if (n == 2) {
                     if (seg[0].equalsAsciiL(
                             RTL_CONSTASCII_STRINGPARAM(".link")))
@@ -1023,8 +985,21 @@ rtl::OUString expandMacros(
                         // Silently ignore bootstrap files that cannot be opened
                         // (is that good?):
                         if (f != NULL) {
-                            buf.append(lookup(f, seg[1], requestStack));
+                            buf.append(lookup(f, false, seg[1], requestStack));
                         }
+                    }
+                } else if (seg[0].equalsAsciiL(
+                               RTL_CONSTASCII_STRINGPARAM(".override")))
+                {
+                    rtl::Bootstrap b(seg[1]);
+                    Bootstrap_Impl * f = static_cast< Bootstrap_Impl * >(
+                        b.getHandle());
+                    // Silently ignore bootstrap files that cannot be opened:
+                    if (f != NULL) {
+                        buf.append(
+                            lookup(
+                                f == NULL ? get_static_bootstrap_handle() : f,
+                                f != NULL, seg[2], requestStack));
                     }
                 } else {
                     // Going through osl::Profile, this code erroneously does
@@ -1056,7 +1031,8 @@ rtl::OUString expandMacros(
                     i = j;
                 }
                 buf.append(
-                    lookup(file, kbuf.makeStringAndClear(), requestStack));
+                    lookup(
+                        file, false, kbuf.makeStringAndClear(), requestStack));
             }
         }
     }
