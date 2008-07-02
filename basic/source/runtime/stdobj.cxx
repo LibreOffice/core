@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stdobj.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -418,6 +418,11 @@ static Methods aMethods[] = {
 { "Oct",            SbxSTRING,    1 | _FUNCTION, RTLNAME(Oct),0             },
   { "number",       SbxLONG, 0,NULL,0 },
 
+{ "Partition",      SbxSTRING,    4 | _FUNCTION, RTLNAME(Partition),0       },
+  { "number",       SbxLONG,    0,NULL,0 },
+  { "start",        SbxLONG,    0,NULL,0 },
+  { "stop",         SbxLONG,    0,NULL,0 },
+  { "interval",     SbxLONG,    0,NULL,0 },
 { "Pi",             SbxDOUBLE,        _CPROP,    RTLNAME(PI),0              },
 { "Put",            SbxNULL,   3 | _FUNCTION, RTLNAME(Put),0                },
   { "filenumber",   SbxINTEGER, 0,NULL,0 },
@@ -438,6 +443,13 @@ static Methods aMethods[] = {
   { "Red",          SbxINTEGER, 0,NULL,0 },
   { "Green",        SbxINTEGER, 0,NULL,0 },
   { "Blue",         SbxINTEGER, 0,NULL,0 },
+{ "Replace",        SbxSTRING,    6 | _FUNCTION, RTLNAME(Replace),0         },
+  { "Expression",   SbxSTRING, 0,NULL,0 },
+  { "Find",         SbxSTRING, 0,NULL,0 },
+  { "Replace",      SbxSTRING, 0,NULL,0 },
+  { "Start",        SbxINTEGER,     _OPT, NULL,0 },
+  { "Count",        SbxINTEGER,     _OPT, NULL,0 },
+  { "Compare",      SbxINTEGER,     _OPT, NULL,0 },
 { "Right",          SbxSTRING,    2 | _FUNCTION, RTLNAME(Right),0           },
   { "String",       SbxSTRING, 0,NULL,0 },
   { "Count",        SbxLONG, 0,NULL,0 },
@@ -491,9 +503,10 @@ static Methods aMethods[] = {
   { "String1",      SbxSTRING, 0,NULL,0 },
   { "String2",      SbxSTRING, 0,NULL,0 },
   { "Compare",      SbxINTEGER,       _OPT, NULL,0 },
-{ "StrConv",        SbxSTRING,   2 | _FUNCTION, RTLNAME(StrConv),0          },
+{ "StrConv",        SbxOBJECT,   3 | _FUNCTION, RTLNAME(StrConv),0          },
   { "String",       SbxSTRING, 0,NULL,0 },
   { "Conversion",   SbxSTRING, 0,NULL,0 },
+  { "LCID",         SbxINTEGER, _OPT,NULL,0 },
 { "String",         SbxSTRING,    2 | _FUNCTION, RTLNAME(String),0          },
   { "Count",        SbxLONG, 0,NULL,0 },
   { "Filler",       SbxVARIANT, 0,NULL,0 },
