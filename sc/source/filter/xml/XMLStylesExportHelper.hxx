@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLStylesExportHelper.hxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLSTYLESEXPORTHELPER_HXX
-#define _SC_XMLSTYLESEXPORTHELPER_HXX
+#ifndef SC_XMLSTYLESEXPORTHELPER_HXX
+#define SC_XMLSTYLESEXPORTHELPER_HXX
 
 #include <vector>
 #include <list>
