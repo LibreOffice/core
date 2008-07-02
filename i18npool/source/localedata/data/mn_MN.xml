@@ -349,7 +349,7 @@
 </LC_CALENDAR>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>төгрөг</CurrencyID>
+<CurrencyID>MNT</CurrencyID>
 <CurrencySymbol>₮</CurrencySymbol>
 <BankSymbol>MNT</BankSymbol>
 <CurrencyName>Tugrik</CurrencyName>
