@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev3.cxx,v $
- * $Revision: 1.240 $
+ * $Revision: 1.241 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1880,6 +1880,7 @@ void ImplDevFontList::InitGenericGlyphFallback( void ) const
         "david", "nachlieli", "lucidagrande", "",
         "norasi", "angsanaupc", "",
         "khmerossystem", "",
+        "muktinarrow", "",
         "phetsarathot", "",
         0
     };
