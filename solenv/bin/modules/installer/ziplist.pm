@@ -8,7 +8,7 @@
 #
 # $RCSfile: ziplist.pm,v $
 #
-# $Revision: 1.20 $
+# $Revision: 1.21 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,22 +45,25 @@ use installer::systemactions;
 
 sub getproductblock
 {
-    my ($fileref, $search) = @_;
+    my ($fileref, $search, $inheritance) = @_;
 
     my @searchblock = ();
     my $searchexists = 0;
     my $record = 0;
     my $count = 0;
     my $line;
+    my $inh = $inheritance ? '(?::\s*(\S+)\s*)?' : "";
+    my $parent;
 
     for ( my $i = 0; $i <= $#{$fileref}; $i++ )
     {
         $line = ${$fileref}[$i];
 
-        if ( $line =~ /^\s*\Q$search\E\s*$/i )      # case insensitive
+        if ( $line =~ /^\s*\Q$search\E\s*$inh$/i )      # case insensitive
         {
             $record = 1;
             $searchexists = 1;
+            $parent = $1 if $inheritance;
         }
 
         if ($record)
@@ -100,7 +103,7 @@ sub getproductblock
         }
     }
 
-    return \@searchblock;
+    return (\@searchblock, $parent);
 }
 
 ###############################################
