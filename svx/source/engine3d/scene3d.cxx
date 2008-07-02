@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scene3d.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -824,6 +824,19 @@ void E3dScene::InitTransformationSet()
 
     // 3D Ausgabe vorbereiten, Maximas holen in DeviceKoordinaten
     basegfx::B3DRange aVolume(FitInSnapRect());
+
+    // #i85887#
+    static basegfx::B3DRange aLastVolume;
+    if(aVolume != aLastVolume)
+    {
+        // The BoundRects for the contained 3D SdrObjects depend on the
+        // calculated BoundVolume. If the BoundVolume changes, those rects
+        // need to be invalidated. Since the first inits when importing a ODF
+        // work with wrong 3D Volumes, the initially calculated BoundRects
+        // tend to be wrong and need to be invalidated on 3D Volume change.
+        SetRectsDirty();
+        aLastVolume = aVolume;
+    }
 
     // Maximas fuer Abbildung verwenden
     rSet.SetDeviceVolume(aVolume, FALSE);
