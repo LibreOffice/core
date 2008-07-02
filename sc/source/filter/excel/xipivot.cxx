@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xipivot.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -679,34 +679,34 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
         }
         else
         {
-            // reference to missing sheet -> exit
-            maSrcRange.SetInvalid();
-            return;
+            // create dummy sheet for deleted internal sheet
+            bGenerateSource = true;
         }
     }
     else
     {
-        // create dummy table for external linked source data
-        bGenerateSource = rDoc.GetTableCount() < MAXTABCOUNT;
-        if( bGenerateSource )
-        {
-            nScTab = rDoc.GetTableCount();
-            rDoc.MakeTable( nScTab );
-            String aDummyName = CREATE_STRING( "DPCache" );
-            if( maTabName.Len() > 0 )
-                aDummyName.Append( '_' ).Append( maTabName );
-            ScfTools::ConvertToScSheetName( aDummyName );
-            rDoc.CreateValidTabName( aDummyName );
-            rDoc.RenameTab( nScTab, aDummyName );
-            // set sheet index to source range
-            maSrcRange.aStart.SetTab( nScTab );
-            maSrcRange.aEnd.SetTab( nScTab );
-        }
-        else
-        {
+        // create dummy sheet for external sheet
+        bGenerateSource = true;
+    }
+
+    // create dummy sheet for source data from external or deleted sheet
+    if( bGenerateSource )
+    {
+        if( rDoc.GetTableCount() >= MAXTABCOUNT )
             // cannot create more sheets -> exit
             return;
-        }
+
+        nScTab = rDoc.GetTableCount();
+        rDoc.MakeTable( nScTab );
+        String aDummyName = CREATE_STRING( "DPCache" );
+        if( maTabName.Len() > 0 )
+            aDummyName.Append( '_' ).Append( maTabName );
+        ScfTools::ConvertToScSheetName( aDummyName );
+        rDoc.CreateValidTabName( aDummyName );
+        rDoc.RenameTab( nScTab, aDummyName );
+        // set sheet index to source range
+        maSrcRange.aStart.SetTab( nScTab );
+        maSrcRange.aEnd.SetTab( nScTab );
     }
 
     // open pivot cache storage stream
