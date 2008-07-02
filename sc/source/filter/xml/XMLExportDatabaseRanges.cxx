@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLExportDatabaseRanges.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,9 +45,7 @@
 #include "unonames.hxx"
 #include "dbcolect.hxx"
 #include "document.hxx"
-#ifndef __GLOBSTR_HRC_
 #include "globstr.hrc"
-#endif
 #include "XMLExportSharedData.hxx"
 #include "rangeutl.hxx"
 #include <com/sun/star/sheet/DataImportMode.hpp>
