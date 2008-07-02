@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: epptso.cxx,v $
- * $Revision: 1.106 $
+ * $Revision: 1.107 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -174,33 +174,38 @@ sal_uInt16 PPTExBulletProvider::GetId( const ByteString& rUniqueId, Size& rGraph
 
     if ( rUniqueId.Len() )
     {
-        GraphicObject   aGraphicObject( rUniqueId );
-        Graphic         aGraph( aGraphicObject.GetGraphic() );
-        Size            aPrefSize( aGraph.GetPrefSize() );
-        double          fQ1 = ( (double)aPrefSize.Width() / (double)aPrefSize.Height() );
-        double          fQ2 = ( (double)rGraphicSize.Width() / (double)rGraphicSize.Height() );
-        double          fXScale = 1;
-        double          fYScale = 1;
-
-        if ( fQ1 > fQ2 )
-            fYScale = fQ1 / fQ2;
-        else if ( fQ1 < fQ2 )
-            fXScale = fQ2 / fQ1;
-
         Rectangle       aRect;
-        Graphic         aGraphic( aGraphicObject.GetGraphic() );
+        GraphicObject   aGraphicObject( rUniqueId );
+        Graphic         aMappedGraphic, aGraphic( aGraphicObject.GetGraphic() );
+        Size            aPrefSize( aGraphic.GetPrefSize() );
         BitmapEx        aBmpEx( aGraphic.GetBitmapEx() );
-        if ( ( fXScale != 1.0 ) || ( fYScale != 1.0 ) )
-        {
-            aBmpEx.Scale( fXScale, fYScale );
-            Size aNewSize( (sal_Int32)((double)rGraphicSize.Width() / fXScale + 0.5 ),
-                            (sal_Int32)((double)rGraphicSize.Height() / fYScale + 0.5 ) );
-            rGraphicSize = aNewSize;
-        }
-        Graphic         aBmpGraphic( aBmpEx );
-        GraphicObject   aMappedGraphicObject( aBmpGraphic );
 
-        nId = pGraphicProv->GetBlibID( aBuExPictureStream, aMappedGraphicObject.GetUniqueID(), aRect, NULL, NULL );
+        if ( rGraphicSize.Width() && rGraphicSize.Height() )
+        {
+            double          fQ1 = ( (double)aPrefSize.Width() / (double)aPrefSize.Height() );
+            double          fQ2 = ( (double)rGraphicSize.Width() / (double)rGraphicSize.Height() );
+            double          fXScale = 1;
+            double          fYScale = 1;
+
+            if ( fQ1 > fQ2 )
+                fYScale = fQ1 / fQ2;
+            else if ( fQ1 < fQ2 )
+                fXScale = fQ2 / fQ1;
+
+            if ( ( fXScale != 1.0 ) || ( fYScale != 1.0 ) )
+            {
+                aBmpEx.Scale( fXScale, fYScale );
+                Size aNewSize( (sal_Int32)((double)rGraphicSize.Width() / fXScale + 0.5 ),
+                                (sal_Int32)((double)rGraphicSize.Height() / fYScale + 0.5 ) );
+
+                rGraphicSize = aNewSize;
+
+                aMappedGraphic = Graphic( aBmpEx );
+                aGraphicObject = GraphicObject( aMappedGraphic );
+            }
+        }
+
+        nId = pGraphicProv->GetBlibID( aBuExPictureStream, aGraphicObject.GetUniqueID(), aRect, NULL, NULL );
 
         if ( nId && ( nId < 0x10000 ) )
             nRetValue = (sal_uInt16)nId - 1;
@@ -2568,20 +2573,27 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
 
                 if ( aGraphicURL.Len() )
                 {
-                    xub_StrLen nIndex = aGraphicURL.Search( (sal_Unicode)':', 0 );
-                    if ( nIndex != STRING_NOTFOUND )
+                    if ( aBuGraSize.Width() && aBuGraSize.Height() )
                     {
-                        nIndex++;
-                        if ( aGraphicURL.Len() > nIndex  )
+                        xub_StrLen nIndex = aGraphicURL.Search( (sal_Unicode)':', 0 );
+                        if ( nIndex != STRING_NOTFOUND )
                         {
-                            ByteString aUniqueId( aGraphicURL, nIndex, aGraphicURL.Len() - nIndex, RTL_TEXTENCODING_UTF8 );
-                            if ( aUniqueId.Len() )
+                            nIndex++;
+                            if ( aGraphicURL.Len() > nIndex  )
                             {
-                                nBulletId = rBuProv.GetId( aUniqueId, aBuGraSize );
-                                if ( nBulletId != 0xffff )
-                                    bExtendedBulletsUsed = TRUE;
+                                ByteString aUniqueId( aGraphicURL, nIndex, aGraphicURL.Len() - nIndex, RTL_TEXTENCODING_UTF8 );
+                                if ( aUniqueId.Len() )
+                                {
+                                    nBulletId = rBuProv.GetId( aUniqueId, aBuGraSize );
+                                    if ( nBulletId != 0xffff )
+                                        bExtendedBulletsUsed = TRUE;
+                                }
                             }
                         }
+                    }
+                    else
+                    {
+                        nNumberingType = SVX_NUM_NUMBER_NONE;
                     }
                 }
 
