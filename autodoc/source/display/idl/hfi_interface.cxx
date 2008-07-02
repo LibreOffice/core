@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hfi_interface.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,9 +85,9 @@ const String
 
 enum E_SubListIndices
 {
-    sli_Methods = 0,
-    sli_MethodDetails = 1,
-    sli_AttributesSummary = 2,
+    sli_MethodsSummay = 0,
+    sli_AttributesSummary = 1,
+    sli_MethodDetails = 2,
     sli_AttributesDetails = 3
 };
 
@@ -131,7 +131,6 @@ HF_IdlInterface::Produce_byData( const client & i_ce ) const
 
     dyn_ce_list dpFunctions;
     ary::idl::ifc_interface::attr::Get_Functions(dpFunctions, i_ce);
-
     if ( (*dpFunctions).operator bool() )
     {
         eCurProducedMembers = mem_Functions;
@@ -140,9 +139,9 @@ HF_IdlInterface::Produce_byData( const client & i_ce ) const
                          C_sList_Methods,
                          C_sList_Methods_Label,
                          C_sDetails_Methods,
-                         C_sDetails_Methods_Label );
-        pNaviSubRow->SwitchOn(sli_Methods);
-        pNaviSubRow->SwitchOn(sli_MethodDetails);
+                         C_sDetails_Methods_Label,
+                         HtmlFactory_Idl::viewtype_summary );
+        pNaviSubRow->SwitchOn(sli_MethodsSummay);
     }
 
     dyn_ce_list
@@ -156,10 +155,39 @@ HF_IdlInterface::Produce_byData( const client & i_ce ) const
                          C_sList_Attributes,
                          C_sList_Attributes_Label,
                          C_sList_AttributesDetails,
-                         C_sList_AttributesDetails_Label );
+                         C_sList_AttributesDetails_Label,
+                         HtmlFactory_Idl::viewtype_summary );
         pNaviSubRow->SwitchOn(sli_AttributesSummary);
+    }
+
+    ary::idl::ifc_interface::attr::Get_Functions(dpFunctions, i_ce);
+    if ( (*dpFunctions).operator bool() )
+    {
+        eCurProducedMembers = mem_Functions;
+
+        produce_Members( *dpFunctions,
+                         C_sList_Methods,
+                         C_sList_Methods_Label,
+                         C_sDetails_Methods,
+                         C_sDetails_Methods_Label,
+                         HtmlFactory_Idl::viewtype_details );
+        pNaviSubRow->SwitchOn(sli_MethodDetails);
+    }
+
+    ary::idl::ifc_interface::attr::Get_Attributes(dpAttributes, i_ce);
+    if ( (*dpAttributes).operator bool() )
+    {
+        eCurProducedMembers = mem_Attributes;
+
+        produce_Members( *dpAttributes,
+                         C_sList_Attributes,
+                         C_sList_Attributes_Label,
+                         C_sList_AttributesDetails,
+                         C_sList_AttributesDetails_Label,
+                         HtmlFactory_Idl::viewtype_details );
         pNaviSubRow->SwitchOn(sli_AttributesDetails);
     }
+
     eCurProducedMembers = mem_none;
 
     pNaviSubRow->Produce_Row();
@@ -175,8 +203,8 @@ HF_IdlInterface::make_Navibar( const client & i_ce ) const
     DYN HF_NaviSubRow &
         ret = aNaviBar.Add_SubRow();
     ret.AddItem(C_sList_Methods, C_sList_Methods_Label, false);
-    ret.AddItem(C_sDetails_Methods, C_sDetails_Methods_Label, false);
     ret.AddItem(C_sList_Attributes, C_sList_Attributes_Label, false);
+    ret.AddItem(C_sDetails_Methods, C_sDetails_Methods_Label, false);
     ret.AddItem(C_sList_AttributesDetails, C_sList_AttributesDetails_Label, false);
 
     CurOut() << new Html::HorizontalLine();
