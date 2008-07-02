@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: provider.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,6 +55,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <rtl/bootstrap.hxx>
+#include <unotools/configmgr.hxx>
 
 #include "databases.hxx"
 #include "provider.hxx"
@@ -322,8 +323,12 @@ void ContentProvider::init()
 
     rtl::OUString setupversion(
         getKey( xHierAccess,"Product/ooSetupVersion" ) );
-    rtl::OUString setupextension(
-        getKey( xHierAccess,"Product/ooSetupExtension") );
+    rtl::OUString setupextension;
+    utl::ConfigManager * mgr = utl::ConfigManager::GetConfigManager();
+    if (mgr != NULL) {
+        mgr->GetDirectConfigProperty(utl::ConfigManager::PRODUCTEXTENSION) >>=
+            setupextension;
+    }
     rtl::OUString productversion(
         setupversion +
         rtl::OUString::createFromAscii( " " ) +
