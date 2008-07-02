@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xeformula.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,7 +81,6 @@ struct XclExpCompConfig
     XclExpLinkMgrType   meLinkMgrType;  /// Link manager to be used.
     bool                mbFromCell;     /// True = Any kind of cell formula (cell, array, shared).
     bool                mb3DRefOnly;    /// True = Only 3D references allowed (e.g. names).
-    bool                mbStopAtSep;    /// True = Stop compilation at ocSep in root level.
     bool                mbAllowArrays;  /// True = Allow inline arrays.
 };
 
@@ -272,19 +271,19 @@ private:
     bool                GetNextToken( XclExpTokenData& rTokData );
     XclExpTokenData     GetNextToken();
 
-    XclExpTokenData     Expression( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bStopAtSep );
+    XclExpTokenData     Expression( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses, bool bStopAtSep );
     XclExpTokenData     SkipExpression( XclExpTokenData aTokData, bool bStopAtSep );
 
-    XclExpTokenData     OrTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass );
-    XclExpTokenData     AndTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass );
-    XclExpTokenData     CompareTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass );
-    XclExpTokenData     ConcatTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass );
-    XclExpTokenData     AddSubTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass );
-    XclExpTokenData     MulDivTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass );
-    XclExpTokenData     PowTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass );
-    XclExpTokenData     UnaryPostTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass );
-    XclExpTokenData     UnaryPreTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass );
-    XclExpTokenData     ListTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass );
+    XclExpTokenData     OrTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses );
+    XclExpTokenData     AndTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses );
+    XclExpTokenData     CompareTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses );
+    XclExpTokenData     ConcatTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses );
+    XclExpTokenData     AddSubTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses );
+    XclExpTokenData     MulDivTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses );
+    XclExpTokenData     PowTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses );
+    XclExpTokenData     UnaryPostTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses );
+    XclExpTokenData     UnaryPreTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses );
+    XclExpTokenData     ListTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses );
     XclExpTokenData     IntersectTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool& rbHasRefOp );
     XclExpTokenData     RangeTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool& rbHasRefOp );
     XclExpTokenData     Factor( XclExpTokenData aTokData, sal_uInt8 nExpClass );
@@ -404,17 +403,17 @@ namespace {
 /** The table containing configuration data for all formula types. */
 static const XclExpCompConfig spConfigTable[] =
 {
-    // formula type         token class type      link manager type       inCell 3dOnly StopSp allowArray
-    { EXC_FMLATYPE_CELL,    EXC_CLASSTYPE_CELL,   EXC_LINKMGRTYPE_LOCAL,  true,  false, true,  true  },
-    { EXC_FMLATYPE_SHARED,  EXC_CLASSTYPE_CELL,   EXC_LINKMGRTYPE_LOCAL,  true,  false, true,  true  },
-    { EXC_FMLATYPE_MATRIX,  EXC_CLASSTYPE_ARRAY,  EXC_LINKMGRTYPE_LOCAL,  true,  false, true,  true  },
-    { EXC_FMLATYPE_CONDFMT, EXC_CLASSTYPE_ARRAY,  EXC_LINKMGRTYPE_NONE,   false, false, true,  false },
-    { EXC_FMLATYPE_DATAVAL, EXC_CLASSTYPE_ARRAY,  EXC_LINKMGRTYPE_NONE,   false, false, true,  false },
-    { EXC_FMLATYPE_NAME,    EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_GLOBAL, false, true,  false, true  },
-    { EXC_FMLATYPE_CHART,   EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_LOCAL,  false, true,  false, true  },
-    { EXC_FMLATYPE_CONTROL, EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_LOCAL,  false, false, true,  false },
-    { EXC_FMLATYPE_WQUERY,  EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_LOCAL,  false, true,  false, false },
-    { EXC_FMLATYPE_LISTVAL, EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_NONE,   false, false, true,  false }
+    // formula type         token class type      link manager type       inCell 3dOnly allowArray
+    { EXC_FMLATYPE_CELL,    EXC_CLASSTYPE_CELL,   EXC_LINKMGRTYPE_LOCAL,  true,  false, true  },
+    { EXC_FMLATYPE_SHARED,  EXC_CLASSTYPE_CELL,   EXC_LINKMGRTYPE_LOCAL,  true,  false, true  },
+    { EXC_FMLATYPE_MATRIX,  EXC_CLASSTYPE_ARRAY,  EXC_LINKMGRTYPE_LOCAL,  true,  false, true  },
+    { EXC_FMLATYPE_CONDFMT, EXC_CLASSTYPE_ARRAY,  EXC_LINKMGRTYPE_NONE,   false, false, false },
+    { EXC_FMLATYPE_DATAVAL, EXC_CLASSTYPE_ARRAY,  EXC_LINKMGRTYPE_NONE,   false, false, false },
+    { EXC_FMLATYPE_NAME,    EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_GLOBAL, false, true,  true  },
+    { EXC_FMLATYPE_CHART,   EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_LOCAL,  false, true,  true  },
+    { EXC_FMLATYPE_CONTROL, EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_LOCAL,  false, false, false },
+    { EXC_FMLATYPE_WQUERY,  EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_LOCAL,  false, true,  false },
+    { EXC_FMLATYPE_LISTVAL, EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_NONE,   false, false, false }
 };
 
 } // namespace
@@ -458,7 +457,7 @@ XclTokenArrayRef XclExpFmlaCompImpl::CreateFormula( XclFormulaType eType,
         {
             // expected class is VAL in cell and array formulas, and REF in names
             sal_uInt8 nExpClass = (maCfg.meClassType == EXC_CLASSTYPE_NAME) ? EXC_TOKCLASS_REF : EXC_TOKCLASS_VAL;
-            aTokData = Expression( aTokData, nExpClass, maCfg.mbStopAtSep );
+            aTokData = Expression( aTokData, nExpClass, false, false );
         }
         else
         {
@@ -466,15 +465,11 @@ XclTokenArrayRef XclExpFmlaCompImpl::CreateFormula( XclFormulaType eType,
             mbOk = false;
         }
 
-        /*  Do unknown tokens follow? Calc accepts "comments" following a formula,
-            e.g.: =1+1;"This is a comment". Ignore this without error. */
         if( mbOk )
         {
             // #i44907# auto-generated SUBTOTAL formula cells have trailing ocStop token
-            bool bUnknownTail = aTokData.Is() && (aTokData.GetOpCode() != ocSep) && (aTokData.GetOpCode() != ocStop);
-            DBG_ASSERT( !bUnknownTail, "XclExpFmlaCompImpl::CreateFormula - unknown garbage behind formula" );
-            // Tokens left? -> error
-            mbOk = !bUnknownTail;
+            mbOk = !aTokData.Is() || (aTokData.GetOpCode() == ocStop);
+            DBG_ASSERT( mbOk, "XclExpFmlaCompImpl::CreateFormula - unknown garbage behind formula" );
         }
     }
 
@@ -886,7 +881,7 @@ inline sal_uInt8 lclGetRangeTokenId( OpCode eOpCode )
 
 } // namespace
 
-XclExpTokenData XclExpFmlaCompImpl::Expression( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bStopAtSep )
+XclExpTokenData XclExpFmlaCompImpl::Expression( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses, bool bStopAtSep )
 {
     if( mbOk && aTokData.Is() )
     {
@@ -894,7 +889,7 @@ XclExpTokenData XclExpFmlaCompImpl::Expression( XclExpTokenData aTokData, sal_uI
         bool bOldStopAtSep = mbStopAtSep;
         mbStopAtSep = bStopAtSep;
         // start compilation of the subexpression
-        aTokData = OrTerm( aTokData, nExpClass );
+        aTokData = OrTerm( aTokData, nExpClass, bInParentheses );
         // restore old stop-at-ocSep mode
         mbStopAtSep = bOldStopAtSep;
     }
@@ -915,15 +910,15 @@ XclExpTokenData XclExpFmlaCompImpl::SkipExpression( XclExpTokenData aTokData, bo
     return aTokData;
 }
 
-XclExpTokenData XclExpFmlaCompImpl::OrTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass )
+XclExpTokenData XclExpFmlaCompImpl::OrTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses )
 {
-    aTokData = AndTerm( aTokData, nExpClass );
+    aTokData = AndTerm( aTokData, nExpClass, bInParentheses );
     sal_uInt8 nParamCount = 1;
     while( mbOk && (aTokData.GetOpCode() == ocOr) )
     {
         AdjustLastTokenClassForEastereggOp();   // see comment in this function
         RemoveTrailingParen();
-        aTokData = AndTerm( GetNextToken(), EXC_TOKCLASS_REF );
+        aTokData = AndTerm( GetNextToken(), EXC_TOKCLASS_REF, bInParentheses );
         RemoveTrailingParen();
         ++nParamCount;
         if( mbOk ) mbOk = nParamCount <= EXC_FUNC_MAXPARAM;
@@ -933,15 +928,15 @@ XclExpTokenData XclExpFmlaCompImpl::OrTerm( XclExpTokenData aTokData, sal_uInt8 
     return aTokData;
 }
 
-XclExpTokenData XclExpFmlaCompImpl::AndTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass )
+XclExpTokenData XclExpFmlaCompImpl::AndTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses )
 {
-    aTokData = CompareTerm( aTokData, nExpClass );
+    aTokData = CompareTerm( aTokData, nExpClass, bInParentheses );
     sal_uInt8 nParamCount = 1;
     while( mbOk && (aTokData.GetOpCode() == ocAnd) )
     {
         AdjustLastTokenClassForEastereggOp();   // see comment in this function
         RemoveTrailingParen();
-        aTokData = CompareTerm( GetNextToken(), EXC_TOKCLASS_REF );
+        aTokData = CompareTerm( GetNextToken(), EXC_TOKCLASS_REF, bInParentheses );
         RemoveTrailingParen();
         ++nParamCount;
         if( mbOk ) mbOk = nParamCount <= EXC_FUNC_MAXPARAM;
@@ -951,79 +946,79 @@ XclExpTokenData XclExpFmlaCompImpl::AndTerm( XclExpTokenData aTokData, sal_uInt8
     return aTokData;
 }
 
-XclExpTokenData XclExpFmlaCompImpl::CompareTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass )
+XclExpTokenData XclExpFmlaCompImpl::CompareTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses )
 {
-    aTokData = ConcatTerm( aTokData, nExpClass );
+    aTokData = ConcatTerm( aTokData, nExpClass, bInParentheses );
     sal_uInt8 nOpTokenId = EXC_TOKID_NONE;
     while( mbOk && ((nOpTokenId = lclGetCompareTokenId( aTokData.GetOpCode() )) != EXC_TOKID_NONE) )
     {
         AdjustLastTokenClass( nExpClass | EXC_TOKCLASS_INOP_FLAG );
         sal_uInt8 nSpaces = aTokData.mnSpaces;
-        aTokData = ConcatTerm( GetNextToken(), nExpClass | EXC_TOKCLASS_INOP_FLAG );
+        aTokData = ConcatTerm( GetNextToken(), nExpClass | EXC_TOKCLASS_INOP_FLAG, bInParentheses );
         AppendOpTokenId( nOpTokenId, nExpClass, nSpaces );
     }
     return aTokData;
 }
 
-XclExpTokenData XclExpFmlaCompImpl::ConcatTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass )
+XclExpTokenData XclExpFmlaCompImpl::ConcatTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses )
 {
-    aTokData = AddSubTerm( aTokData, nExpClass );
+    aTokData = AddSubTerm( aTokData, nExpClass, bInParentheses );
     sal_uInt8 nOpTokenId = EXC_TOKID_NONE;
     while( mbOk && ((nOpTokenId = lclGetConcatTokenId( aTokData.GetOpCode() )) != EXC_TOKID_NONE) )
     {
         AdjustLastTokenClass( nExpClass | EXC_TOKCLASS_INOP_FLAG );
         sal_uInt8 nSpaces = aTokData.mnSpaces;
-        aTokData = AddSubTerm( GetNextToken(), nExpClass | EXC_TOKCLASS_INOP_FLAG );
+        aTokData = AddSubTerm( GetNextToken(), nExpClass | EXC_TOKCLASS_INOP_FLAG, bInParentheses );
         AppendOpTokenId( nOpTokenId, nExpClass, nSpaces );
     }
     return aTokData;
 }
 
-XclExpTokenData XclExpFmlaCompImpl::AddSubTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass )
+XclExpTokenData XclExpFmlaCompImpl::AddSubTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses )
 {
-    aTokData = MulDivTerm( aTokData, nExpClass );
+    aTokData = MulDivTerm( aTokData, nExpClass, bInParentheses );
     sal_uInt8 nOpTokenId = EXC_TOKID_NONE;
     while( mbOk && ((nOpTokenId = lclGetAddSubTokenId( aTokData.GetOpCode() )) != EXC_TOKID_NONE) )
     {
         AdjustLastTokenClass( nExpClass | EXC_TOKCLASS_INOP_FLAG );
         sal_uInt8 nSpaces = aTokData.mnSpaces;
-        aTokData = MulDivTerm( GetNextToken(), nExpClass | EXC_TOKCLASS_INOP_FLAG );
+        aTokData = MulDivTerm( GetNextToken(), nExpClass | EXC_TOKCLASS_INOP_FLAG, bInParentheses );
         AppendOpTokenId( nOpTokenId, nExpClass, nSpaces );
     }
     return aTokData;
 }
 
-XclExpTokenData XclExpFmlaCompImpl::MulDivTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass )
+XclExpTokenData XclExpFmlaCompImpl::MulDivTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses )
 {
-    aTokData = PowTerm( aTokData, nExpClass );
+    aTokData = PowTerm( aTokData, nExpClass, bInParentheses );
     sal_uInt8 nOpTokenId = EXC_TOKID_NONE;
     while( mbOk && ((nOpTokenId = lclGetMulDivTokenId( aTokData.GetOpCode() )) != EXC_TOKID_NONE) )
     {
         AdjustLastTokenClass( nExpClass | EXC_TOKCLASS_INOP_FLAG );
         sal_uInt8 nSpaces = aTokData.mnSpaces;
-        aTokData = PowTerm( GetNextToken(), nExpClass | EXC_TOKCLASS_INOP_FLAG );
+        aTokData = PowTerm( GetNextToken(), nExpClass | EXC_TOKCLASS_INOP_FLAG, bInParentheses );
         AppendOpTokenId( nOpTokenId, nExpClass, nSpaces );
     }
     return aTokData;
 }
 
-XclExpTokenData XclExpFmlaCompImpl::PowTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass )
+XclExpTokenData XclExpFmlaCompImpl::PowTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses )
 {
-    aTokData = UnaryPostTerm( aTokData, nExpClass );
+    aTokData = UnaryPostTerm( aTokData, nExpClass, bInParentheses );
     sal_uInt8 nOpTokenId = EXC_TOKID_NONE;
     while( mbOk && ((nOpTokenId = lclGetPowTokenId( aTokData.GetOpCode() )) != EXC_TOKID_NONE) )
     {
         AdjustLastTokenClass( nExpClass | EXC_TOKCLASS_INOP_FLAG );
         sal_uInt8 nSpaces = aTokData.mnSpaces;
-        aTokData = UnaryPostTerm( GetNextToken(), nExpClass | EXC_TOKCLASS_INOP_FLAG );
+        aTokData = UnaryPostTerm( GetNextToken(), nExpClass | EXC_TOKCLASS_INOP_FLAG, bInParentheses );
         AppendOpTokenId( nOpTokenId, nExpClass, nSpaces );
     }
     return aTokData;
 }
 
-XclExpTokenData XclExpFmlaCompImpl::UnaryPostTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass )
+XclExpTokenData XclExpFmlaCompImpl::UnaryPostTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses )
 {
-    aTokData = UnaryPreTerm( aTokData, nExpClass );
+    aTokData = UnaryPreTerm( aTokData, nExpClass, bInParentheses );
     sal_uInt8 nOpTokenId = EXC_TOKID_NONE;
     while( mbOk && ((nOpTokenId = lclGetUnaryPostTokenId( aTokData.GetOpCode() )) != EXC_TOKID_NONE) )
     {
@@ -1034,35 +1029,36 @@ XclExpTokenData XclExpFmlaCompImpl::UnaryPostTerm( XclExpTokenData aTokData, sal
     return aTokData;
 }
 
-XclExpTokenData XclExpFmlaCompImpl::UnaryPreTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass )
+XclExpTokenData XclExpFmlaCompImpl::UnaryPreTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses )
 {
     sal_uInt8 nOpTokenId = mbOk ? lclGetUnaryPreTokenId( aTokData.GetOpCode() ) : EXC_TOKID_NONE;
     if( nOpTokenId != EXC_TOKID_NONE )
     {
         sal_uInt8 nSpaces = aTokData.mnSpaces;
-        aTokData = UnaryPreTerm( GetNextToken(), nExpClass | EXC_TOKCLASS_INOP_FLAG );
+        aTokData = UnaryPreTerm( GetNextToken(), nExpClass | EXC_TOKCLASS_INOP_FLAG, bInParentheses );
         AppendOpTokenId( nOpTokenId, nExpClass, nSpaces );
     }
     else
-        aTokData = ListTerm( aTokData, nExpClass );
+        aTokData = ListTerm( aTokData, nExpClass, bInParentheses );
     return aTokData;
 }
 
-XclExpTokenData XclExpFmlaCompImpl::ListTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass )
+XclExpTokenData XclExpFmlaCompImpl::ListTerm( XclExpTokenData aTokData, sal_uInt8 nExpClass, bool bInParentheses )
 {
     sal_uInt16 nSubExprPos = GetSize();
-    bool bHasRefOp = false;
-    aTokData = IntersectTerm( aTokData, nExpClass, bHasRefOp );
+    bool bHasAnyRefOp = false;
+    bool bHasListOp = false;
+    aTokData = IntersectTerm( aTokData, nExpClass, bHasAnyRefOp );
     sal_uInt8 nOpTokenId = EXC_TOKID_NONE;
     while( mbOk && ((nOpTokenId = lclGetListTokenId( aTokData.GetOpCode(), mbStopAtSep )) != EXC_TOKID_NONE) )
     {
         AdjustLastTokenClass( EXC_TOKCLASS_ANY_IN_REFOP );
         sal_uInt8 nSpaces = aTokData.mnSpaces;
-        aTokData = IntersectTerm( GetNextToken(), EXC_TOKCLASS_ANY_IN_REFOP, bHasRefOp );
+        aTokData = IntersectTerm( GetNextToken(), EXC_TOKCLASS_ANY_IN_REFOP, bHasAnyRefOp );
         AppendOpTokenId( nOpTokenId, nExpClass, nSpaces );
-        bHasRefOp = true;
+        bHasAnyRefOp = bHasListOp = true;
     }
-    if( bHasRefOp )
+    if( bHasAnyRefOp )
     {
         // adjust last added token back to REF
         AdjustLastTokenClass( EXC_TOKCLASS_ANY_IN_REFOP );
@@ -1075,6 +1071,9 @@ XclExpTokenData XclExpFmlaCompImpl::ListTerm( XclExpTokenData aTokData, sal_uInt
         mnLastTokPos = nSubExprPos;
         AdjustLastTokenClass( nExpClass );
     }
+    // #i86439# enclose list operator into parentheses, e.g. Calc's =AREAS(A1~A2) to Excel's =AREAS((A1;A2))
+    if( bHasListOp && !bInParentheses )
+        AppendParenToken();
     return aTokData;
 }
 
@@ -1189,7 +1188,7 @@ void XclExpFmlaCompImpl::ProcessBad( const XclExpTokenData& rTokData )
 
 void XclExpFmlaCompImpl::ProcessParentheses( const XclExpTokenData& rTokData, sal_uInt8 nExpClass )
 {
-    XclExpTokenData aTokData( Expression( GetNextToken(), nExpClass, false ) );
+    XclExpTokenData aTokData( Expression( GetNextToken(), nExpClass, true, false ) );
     mbOk = aTokData.GetOpCode() == ocClose;
     AppendParenToken( rTokData.mnSpaces, aTokData.mnSpaces );
 }
@@ -1479,7 +1478,7 @@ XclExpTokenData XclExpFmlaCompImpl::ProcessParam( XclExpTokenData aTokData, XclE
         {
             case ocSep:
             case ocClose:   AppendMissingToken();   break;  // empty parameter
-            default:        aTokData = Expression( aTokData, nExpClass, true );
+            default:        aTokData = Expression( aTokData, nExpClass, false, true );
         }
         // restore old expected ARR class mode
         SetArrExpFlag( bOldIsArrExp );
