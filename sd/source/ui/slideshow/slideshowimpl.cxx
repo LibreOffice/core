@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slideshowimpl.cxx,v $
- * $Revision: 1.55 $
+ * $Revision: 1.56 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -559,10 +559,14 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
         // no autosave during show
     if( aOptions.IsAutoSave() )
         mbAutoSaveWasOn = true;
+
+    Application::AddEventListener( LINK( this, SlideshowImpl, EventListenerHdl ) );
 }
 
 SlideshowImpl::~SlideshowImpl()
 {
+    Application::RemoveEventListener( LINK( this, SlideshowImpl, EventListenerHdl ) );
+
     maDeactivateTimer.Stop();
 
     if( !mbDisposed )
@@ -699,11 +703,7 @@ void SAL_CALL SlideshowImpl::disposing()
     }
 
     if( mpShowWindow )
-    {
         mpShowWindow->Hide();
-        delete mpShowWindow;
-        mpShowWindow = 0;
-    }
 
     if ( mpViewShell )
     {
@@ -729,6 +729,12 @@ void SAL_CALL SlideshowImpl::disposing()
         }
 
         mpViewShell->GetViewShellBase().UpdateBorder(true);
+    }
+
+    if( mpShowWindow )
+    {
+        delete mpShowWindow;
+        mpShowWindow = 0;
     }
 
     mbDisposed = true;
@@ -2000,6 +2006,60 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
     }
 
     return bRet;
+}
+
+IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent*, pEvent )
+{
+    if( !mxShow.is() || mbInputFreeze )
+        return 0;
+
+    if( pEvent && (pEvent->GetId() == VCLEVENT_WINDOW_COMMAND) && static_cast<VclWindowEvent*>(pEvent)->GetData() )
+    {
+        const CommandEvent& rEvent = *(const CommandEvent*)static_cast<VclWindowEvent*>(pEvent)->GetData();
+
+        if( rEvent.GetCommand() == COMMAND_MEDIA )
+        {
+            switch( rEvent.GetMediaCommand() )
+            {
+            case MEDIA_COMMAND_NEXTTRACK:
+                gotoNextEffect();
+                break;
+            case MEDIA_COMMAND_PAUSE:
+                if( !mbIsPaused )
+                    blankScreen(0);
+                break;
+            case MEDIA_COMMAND_PLAY:
+                if( mbIsPaused )
+                    resume();
+                break;
+            case MEDIA_COMMAND_PLAY_PAUSE:
+                if( mbIsPaused )
+                    resume();
+                else
+                    blankScreen(0);
+                break;
+            case MEDIA_COMMAND_PREVIOUSTRACK:
+                gotoPreviousSlide();
+                break;
+
+            case MEDIA_COMMAND_REWIND:
+                gotoFirstSlide();
+                break;
+            case MEDIA_COMMAND_STOP:
+                // in case the user cancels the presentation, switch to current slide
+                // in edit mode
+                if( mpSlideController.get() && (ANIMATIONMODE_SHOW == meAnimationMode) )
+                {
+                    if( mpSlideController->getCurrentSlideNumber() != -1 )
+                        mnRestoreSlide = mpSlideController->getCurrentSlideNumber();
+                }
+                endPresentation();
+                break;
+            }
+        }
+    }
+
+    return 0;
 }
 
 // ---------------------------------------------------------
