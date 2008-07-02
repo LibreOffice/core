@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sharecontrolfile.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,6 +90,7 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > GetUsersData();
     void SetUsersDataAndStore( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > >& aUserNames );
     ::com::sun::star::uno::Sequence< ::rtl::OUString > InsertOwnEntry();
+    bool HasOwnEntry();
     void RemoveEntry( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aOptionalSpecification = ::com::sun::star::uno::Sequence< ::rtl::OUString >() );
     void RemoveFile();
 };
