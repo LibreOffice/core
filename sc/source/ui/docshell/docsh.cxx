@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh.cxx,v $
- * $Revision: 1.101 $
+ * $Revision: 1.102 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2474,11 +2474,11 @@ void ScDocShell::SetDocumentModified( BOOL bIsModified /* = TRUE */ )
     //! auch bei SetDrawModified, wenn Drawing angebunden ist
     //! dann eigener Hint???
 
-    if (bIsModified)
-        aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
-
     if ( pPaintLockData && bIsModified )
     {
+        //! BCA_BRDCST_ALWAYS etc. also needed here?
+        aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+
         pPaintLockData->SetModified();          // spaeter...
         return;
     }
@@ -2513,6 +2513,9 @@ void ScDocShell::SetDocumentModified( BOOL bIsModified /* = TRUE */ )
             }
             aDocument.SetDetectiveDirty(FALSE);         // always reset, also if not refreshed
         }
+
+        // #b6697848# notify UNO objects after BCA_BRDCST_ALWAYS etc.
+        aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
     }
 }
 
