@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xichart.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,10 +54,10 @@
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
-#include <com/sun/star/chart2/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
 
 #include <sfx2/objsh.hxx>
 
@@ -276,6 +276,12 @@ void XclImpChRoot::ConvertFont( ScfPropertySet& rPropSet,
         sal_uInt16 nFontIdx, const Color* pFontColor ) const
 {
     GetFontBuffer().WriteFontProperties( rPropSet, EXC_FONTPROPSET_CHART, nFontIdx, pFontColor );
+}
+
+void XclImpChRoot::ConvertPieRotation( ScfPropertySet& rPropSet, sal_uInt16 nAngle )
+{
+    sal_Int32 nApiRot = (450 - (nAngle % 360)) % 360;
+    rPropSet.SetProperty( EXC_CHPROP_STARTINGANGLE, nApiRot );
 }
 
 // ----------------------------------------------------------------------------
@@ -545,6 +551,39 @@ void XclImpChFrame::Convert( ScfPropertySet& rPropSet ) const
 }
 
 // Source links ===============================================================
+
+namespace {
+
+/** Creates a labeled data sequence object, adds link for series title if present. */
+Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
+        XclImpChSourceLinkRef xValueLink, const OUString& rValueRole,
+        const XclImpChSourceLink* pTitleLink = 0 )
+{
+    // create data sequence for values and title
+    Reference< XDataSequence > xValueSeq;
+    if( xValueLink.is() )
+        xValueSeq = xValueLink->CreateDataSequence( rValueRole );
+    Reference< XDataSequence > xTitleSeq;
+    if( pTitleLink )
+        xTitleSeq = pTitleLink->CreateDataSequence( EXC_CHPROP_ROLE_LABEL );
+
+    // create the labeled data sequence, if values or title are present
+    Reference< XLabeledDataSequence > xLabeledSeq;
+    if( xValueSeq.is() || xTitleSeq.is() )
+        xLabeledSeq.set( ScfApiHelper::CreateInstance( SERVICE_CHART2_LABELEDDATASEQ ), UNO_QUERY );
+    if( xLabeledSeq.is() )
+    {
+        if( xValueSeq.is() )
+            xLabeledSeq->setValues( xValueSeq );
+        if( xTitleSeq.is() )
+            xLabeledSeq->setLabel( xTitleSeq );
+    }
+    return xLabeledSeq;
+}
+
+} // namespace
+
+// ----------------------------------------------------------------------------
 
 XclImpChSourceLink::XclImpChSourceLink( const XclImpChRoot& rRoot ) :
     XclImpChRoot( rRoot )
@@ -1341,43 +1380,90 @@ void XclImpChSerErrorBar::ReadChSerErrorBar( XclImpStream& rStrm )
     rStrm >> maData.mfValue >> maData.mnValueCount;
 }
 
-Reference< XPropertySet > XclImpChSerErrorBar::CreateErrorBar( bool bPosBar, bool bNegBar ) const
+void XclImpChSerErrorBar::SetSeriesData( XclImpChSourceLinkRef xValueLink, XclImpChDataFormatRef xDataFmt )
 {
-    Reference< XPropertySet > xErrorBar( ScfApiHelper::CreateInstance( SERVICE_CHART2_ERRORBAR ), UNO_QUERY );
-    ScfPropertySet aBarProp( xErrorBar );
+    mxValueLink = xValueLink;
+    mxDataFmt = xDataFmt;
+}
 
-    // plus/minus bars visible?
-    aBarProp.SetBoolProperty( EXC_CHPROP_SHOWPOSITIVEERROR, bPosBar );
-    aBarProp.SetBoolProperty( EXC_CHPROP_SHOWNEGATIVEERROR, bNegBar );
+Reference< XLabeledDataSequence > XclImpChSerErrorBar::CreateValueSequence() const
+{
+    return lclCreateLabeledDataSequence( mxValueLink, XclChartHelper::GetErrorBarValuesRole( maData.mnBarType ) );
+}
 
-    // type of displayed error
-    namespace cssc = ::com::sun::star::chart2;
-    switch( maData.mnSourceType )
+Reference< XPropertySet > XclImpChSerErrorBar::CreateErrorBar( const XclImpChSerErrorBar* pPosBar, const XclImpChSerErrorBar* pNegBar )
+{
+    Reference< XPropertySet > xErrorBar;
+
+    if( const XclImpChSerErrorBar* pPrimaryBar = pPosBar ? pPosBar : pNegBar )
     {
-        case EXC_CHSERERR_PERCENT:
-            aBarProp.SetProperty( EXC_CHPROP_ERRORBARSTYLE, cssc::ErrorBarStyle_RELATIVE );
-            aBarProp.SetProperty( EXC_CHPROP_POSITIVEERROR, maData.mfValue );
-            aBarProp.SetProperty( EXC_CHPROP_NEGATIVEERROR, maData.mfValue );
-        break;
-        case EXC_CHSERERR_FIXED:
-            aBarProp.SetProperty( EXC_CHPROP_ERRORBARSTYLE, cssc::ErrorBarStyle_ABSOLUTE );
-            aBarProp.SetProperty( EXC_CHPROP_POSITIVEERROR, maData.mfValue );
-            aBarProp.SetProperty( EXC_CHPROP_NEGATIVEERROR, maData.mfValue );
-        break;
-        case EXC_CHSERERR_STDDEV:
-            aBarProp.SetProperty( EXC_CHPROP_ERRORBARSTYLE, cssc::ErrorBarStyle_STANDARD_DEVIATION );
-            aBarProp.SetProperty( EXC_CHPROP_WEIGHT, maData.mfValue );
-        break;
-        case EXC_CHSERERR_STDERR:
-            aBarProp.SetProperty( EXC_CHPROP_ERRORBARSTYLE, cssc::ErrorBarStyle_STANDARD_ERROR );
-        break;
-        default:
-            xErrorBar.clear();
-    }
+        xErrorBar.set( ScfApiHelper::CreateInstance( SERVICE_CHART2_ERRORBAR ), UNO_QUERY );
+        ScfPropertySet aBarProp( xErrorBar );
 
-    // error bar formatting
-    if( mxDataFmt.is() && xErrorBar.is() )
-        mxDataFmt->ConvertLine( aBarProp, EXC_CHOBJTYPE_ERRORBAR );
+        // plus/minus bars visible?
+        aBarProp.SetBoolProperty( EXC_CHPROP_SHOWPOSITIVEERROR, pPosBar != 0 );
+        aBarProp.SetBoolProperty( EXC_CHPROP_SHOWNEGATIVEERROR, pNegBar != 0 );
+
+        // type of displayed error
+        namespace cssc = ::com::sun::star::chart;
+        switch( pPrimaryBar->maData.mnSourceType )
+        {
+            case EXC_CHSERERR_PERCENT:
+                aBarProp.SetProperty( EXC_CHPROP_ERRORBARSTYLE, cssc::ErrorBarStyle::RELATIVE );
+                aBarProp.SetProperty( EXC_CHPROP_POSITIVEERROR, pPrimaryBar->maData.mfValue );
+                aBarProp.SetProperty( EXC_CHPROP_NEGATIVEERROR, pPrimaryBar->maData.mfValue );
+            break;
+            case EXC_CHSERERR_FIXED:
+                aBarProp.SetProperty( EXC_CHPROP_ERRORBARSTYLE, cssc::ErrorBarStyle::ABSOLUTE );
+                aBarProp.SetProperty( EXC_CHPROP_POSITIVEERROR, pPrimaryBar->maData.mfValue );
+                aBarProp.SetProperty( EXC_CHPROP_NEGATIVEERROR, pPrimaryBar->maData.mfValue );
+            break;
+            case EXC_CHSERERR_STDDEV:
+                aBarProp.SetProperty( EXC_CHPROP_ERRORBARSTYLE, cssc::ErrorBarStyle::STANDARD_DEVIATION );
+                aBarProp.SetProperty( EXC_CHPROP_WEIGHT, pPrimaryBar->maData.mfValue );
+            break;
+            case EXC_CHSERERR_STDERR:
+                aBarProp.SetProperty( EXC_CHPROP_ERRORBARSTYLE, cssc::ErrorBarStyle::STANDARD_ERROR );
+            break;
+            case EXC_CHSERERR_CUSTOM:
+            {
+                aBarProp.SetProperty( EXC_CHPROP_ERRORBARSTYLE, cssc::ErrorBarStyle::FROM_DATA );
+                // attach data sequences to erorr bar
+                Reference< XDataSink > xDataSink( xErrorBar, UNO_QUERY );
+                if( xDataSink.is() )
+                {
+                    // create vector of all value sequences
+                    ::std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
+                    // add positive values
+                    if( pPosBar )
+                    {
+                        Reference< XLabeledDataSequence > xValueSeq = pPosBar->CreateValueSequence();
+                        if( xValueSeq.is() )
+                            aLabeledSeqVec.push_back( xValueSeq );
+                    }
+                    // add negative values
+                    if( pNegBar )
+                    {
+                        Reference< XLabeledDataSequence > xValueSeq = pNegBar->CreateValueSequence();
+                        if( xValueSeq.is() )
+                            aLabeledSeqVec.push_back( xValueSeq );
+                    }
+                    // attach labeled data sequences to series
+                    if( aLabeledSeqVec.empty() )
+                        xErrorBar.clear();
+                    else
+                        xDataSink->setData( ScfApiHelper::VectorToSequence( aLabeledSeqVec ) );
+                }
+            }
+            break;
+            default:
+                xErrorBar.clear();
+        }
+
+        // error bar formatting
+        if( pPrimaryBar->mxDataFmt.is() && xErrorBar.is() )
+            pPrimaryBar->mxDataFmt->ConvertLine( aBarProp, EXC_CHOBJTYPE_ERRORBAR );
+    }
 
     return xErrorBar;
 }
@@ -1484,7 +1570,7 @@ void XclImpChSeries::FinalizeDataFormats()
         for( XclImpChSerTrendLineList::iterator aLIt = maTrendLines.begin(), aLEnd = maTrendLines.end(); aLIt != aLEnd; ++aLIt )
             (*aLIt)->SetDataFormat( mxSeriesFmt );
         for( XclImpChSerErrorBarMap::iterator aMIt = maErrorBars.begin(), aMEnd = maErrorBars.end(); aMIt != aMEnd; ++aMIt )
-            aMIt->second->SetDataFormat( mxSeriesFmt );
+            aMIt->second->SetSeriesData( mxValueLink, mxSeriesFmt );
     }
     else if( XclImpChTypeGroup* pTypeGroup = GetChartData().GetTypeGroup( mnGroupIdx ).get() )
     {
@@ -1520,33 +1606,6 @@ void XclImpChSeries::FinalizeDataFormats()
 }
 
 namespace {
-
-/** Creates a labeled data sequence object, adds link for series title if present. */
-Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
-        XclImpChSourceLinkRef xValueLink, const OUString& rValueRole,
-        const XclImpChSourceLink* pTitleLink = 0 )
-{
-    // create data sequence for values and title
-    Reference< XDataSequence > xValueSeq;
-    if( xValueLink.is() )
-        xValueSeq = xValueLink->CreateDataSequence( rValueRole );
-    Reference< XDataSequence > xTitleSeq;
-    if( pTitleLink )
-        xTitleSeq = pTitleLink->CreateDataSequence( EXC_CHPROP_ROLE_LABEL );
-
-    // create the labeled data sequence, if values or title are present
-    Reference< XLabeledDataSequence > xLabeledSeq;
-    if( xValueSeq.is() || xTitleSeq.is() )
-        xLabeledSeq.set( ScfApiHelper::CreateInstance( SERVICE_CHART2_LABELEDDATASEQ ), UNO_QUERY );
-    if( xLabeledSeq.is() )
-    {
-        if( xValueSeq.is() )
-            xLabeledSeq->setValues( xValueSeq );
-        if( xTitleSeq.is() )
-            xLabeledSeq->setLabel( xTitleSeq );
-    }
-    return xLabeledSeq;
-}
 
 /** Returns the property set of the specified data point. */
 ScfPropertySet lclGetPointPropSet( Reference< XDataSeries > xDataSeries, sal_uInt16 nPointIdx )
@@ -1742,12 +1801,7 @@ void XclImpChSeries::ConvertTrendLines( Reference< XDataSeries > xDataSeries ) c
 
 Reference< XPropertySet > XclImpChSeries::CreateErrorBar( sal_uInt8 nPosBarId, sal_uInt8 nNegBarId ) const
 {
-    Reference< XPropertySet > xErrorBar;
-    XclImpChSerErrorBarRef xPosBar = maErrorBars.get( nPosBarId );
-    XclImpChSerErrorBarRef xNegBar = maErrorBars.get( nNegBarId );
-    if( const XclImpChSerErrorBar* pPrimaryBar = xPosBar.is() ? xPosBar.get() : xNegBar.get() )
-        xErrorBar = pPrimaryBar->CreateErrorBar( xPosBar.is(), xNegBar.is() );
-    return xErrorBar;
+    return XclImpChSerErrorBar::CreateErrorBar( maErrorBars.get( nPosBarId ).get(), maErrorBars.get( nNegBarId ).get() );
 }
 
 // Chart type groups ==========================================================
@@ -1926,7 +1980,7 @@ Reference< XCoordinateSystem > XclImpChType::CreateCoordSystem( bool b3dChart ) 
     return xCoordSystem;
 }
 
-Reference< XChartType > XclImpChType::CreateChartType( Reference< XDiagram > xDiagram ) const
+Reference< XChartType > XclImpChType::CreateChartType( Reference< XDiagram > xDiagram, bool b3dChart ) const
 {
     OUString aService = OUString::createFromAscii( maTypeInfo.mpcServiceName );
     Reference< XChartType > xChartType( ScfApiHelper::CreateInstance( aService ), UNO_QUERY );
@@ -1948,10 +2002,14 @@ Reference< XChartType > XclImpChType::CreateChartType( Reference< XDiagram > xDi
         {
             ScfPropertySet aTypeProp( xChartType );
             aTypeProp.SetBoolProperty( EXC_CHPROP_USERINGS, maTypeInfo.meTypeId == EXC_CHTYPEID_DONUT );
-            // #i85166# starting angle of first pie slice
-            ScfPropertySet aDiaProp( xDiagram );
-            sal_Int32 nApiRot = (450 - (maData.mnRotation % 360)) % 360;
-            aDiaProp.SetProperty( EXC_CHPROP_STARTINGANGLE, nApiRot );
+            /*  #i85166# starting angle of first pie slice. 3D pie charts use Y
+                rotation setting in view3D element. Of-pie charts do not
+                support pie rotation. */
+            if( !b3dChart && (maTypeInfo.meTypeId != EXC_CHTYPEID_PIEEXT) )
+            {
+                ScfPropertySet aDiaProp( xDiagram );
+                XclImpChRoot::ConvertPieRotation( aDiaProp, maData.mnRotation );
+            }
         }
         break;
         default:;
@@ -2004,8 +2062,9 @@ void XclImpChChart3d::Convert( ScfPropertySet& rPropSet, bool b3dWallChart ) con
     }
     else
     {
-        // Y rotation not used in pie charts, but 'first slice angle'
+        // Y rotation not used in pie charts, but 'first pie slice angle'
         nRotationY = 0;
+        XclImpChRoot::ConvertPieRotation( rPropSet, maData.mnRotation );
         // X rotation a.k.a. elevation (map Excel [10..80] to Chart2 [-80,-10])
         nRotationX = limit_cast< sal_Int32, sal_Int32 >( maData.mnElevation, 10, 80 ) - 90;
         // perspective (Excel and Chart2 [0,100])
@@ -2253,7 +2312,7 @@ Reference< XChartType > XclImpChTypeGroup::CreateChartType( Reference< XDiagram 
     DBG_ASSERT( IsValidGroup(), "XclImpChTypeGroup::CreateChartType - type group without series" );
 
     // create the chart type object
-    Reference< XChartType > xChartType = maType.CreateChartType( xDiagram );
+    Reference< XChartType > xChartType = maType.CreateChartType( xDiagram, Is3dChart() );
 
     // bar chart connector lines
     if( HasConnectorLines() )
@@ -2446,7 +2505,7 @@ void XclImpChLabelRange::ReadChLabelRange( XclImpStream& rStrm )
     rStrm >> maData.mnCross >> maData.mnLabelFreq >> maData.mnTickFreq >> maData.mnFlags;
 }
 
-void XclImpChLabelRange::Convert( ScfPropertySet& rPropSet, ScaleData& rScaleData ) const
+void XclImpChLabelRange::Convert( ScfPropertySet& rPropSet, ScaleData& rScaleData, bool bMirrorOrient ) const
 {
     namespace cssc = ::com::sun::star::chart2;
 
@@ -2460,7 +2519,7 @@ void XclImpChLabelRange::Convert( ScfPropertySet& rPropSet, ScaleData& rScaleDat
     lclSetValueOrClearAny( rScaleData.Origin, static_cast< double >( maData.mnCross ), bMaxCross );
 
     // reverse order
-    bool bReverse = ::get_flag( maData.mnFlags, EXC_CHLABELRANGE_REVERSE );
+    bool bReverse = ::get_flag( maData.mnFlags, EXC_CHLABELRANGE_REVERSE ) != bMirrorOrient;
     rScaleData.Orientation = bReverse ? cssc::AxisOrientation_REVERSE : cssc::AxisOrientation_MATHEMATICAL;
 
     //! TODO #i58731# show n-th category
@@ -2483,7 +2542,7 @@ void XclImpChValueRange::ReadChValueRange( XclImpStream& rStrm )
             >> maData.mnFlags;
 }
 
-void XclImpChValueRange::Convert( ScaleData& rScaleData ) const
+void XclImpChValueRange::Convert( ScaleData& rScaleData, bool bMirrorOrient ) const
 {
     // scaling algorithm
     bool bLogScale = ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_LOGSCALE );
@@ -2525,7 +2584,7 @@ void XclImpChValueRange::Convert( ScaleData& rScaleData ) const
 
     // reverse order
     namespace cssc = ::com::sun::star::chart2;
-    bool bReverse = ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_REVERSE );
+    bool bReverse = ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_REVERSE ) != bMirrorOrient;
     rScaleData.Orientation = bReverse ? cssc::AxisOrientation_REVERSE : cssc::AxisOrientation_MATHEMATICAL;
 }
 
@@ -2636,6 +2695,11 @@ void XclImpChAxis::ReadSubRecord( XclImpStream& rStrm )
 
 void XclImpChAxis::Finalize()
 {
+    // add default scaling, needed e.g. to adjust rotation direction of pie and radar charts
+    if( !mxLabelRange )
+        mxLabelRange.reset( new XclImpChLabelRange( GetChRoot() ) );
+    if( !mxValueRange )
+        mxValueRange.reset( new XclImpChValueRange( GetChRoot() ) );
     // remove invisible grid lines completely
     if( mxMajorGrid.is() && !mxMajorGrid->HasLine() )
         mxMajorGrid.reset();
@@ -2740,20 +2804,17 @@ Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup
         {
             case ApiAxisType::CATEGORY:
             case ApiAxisType::SERIES:
-                if( mxLabelRange.is() )
-                    mxLabelRange->Convert( aAxisProp, aScaleData );
+                // #i71684# radar charts have reversed rotation direction
+                mxLabelRange->Convert( aAxisProp, aScaleData, rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_RADAR );
             break;
             case ApiAxisType::REALNUMBER:
             case ApiAxisType::PERCENT:
-                if( mxValueRange.is() )
-                    mxValueRange->Convert( aScaleData );
+                // #i85167# pie/donut charts have reversed rotation direction (at Y axis!)
+                mxValueRange->Convert( aScaleData, rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_PIE );
             break;
             default:
                 DBG_ERRORFILE( "XclImpChAxis::CreateAxis - unknown axis type" );
         }
-        // #i85167# pie/donut charts need hard reverse attribute at Y axis (after mxValueRange->Convert())
-        if( (GetAxisType() == EXC_CHAXIS_Y) && (rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_PIE) )
-            aScaleData.Orientation = ::com::sun::star::chart2::AxisOrientation_REVERSE;
         // write back
         xAxis->setScaleData( aScaleData );
 
@@ -3400,7 +3461,8 @@ void XclImpChChart::FinalizeTitle()
 
 XclImpChart::XclImpChart( const XclImpRoot& rRoot, bool bOwnTab ) :
     XclImpRoot( rRoot ),
-    mbOwnTab( bOwnTab )
+    mbOwnTab( bOwnTab ),
+    mbIsPivotChart( false )
 {
 }
 
@@ -3447,7 +3509,10 @@ void XclImpChart::ReadChartSubStream( XclImpStream& rStrm )
 
             case EXC_ID_CHCHART:        ReadChChart( rStrm );                   break;
             case EXC_ID_OBJ:            GetTracer().TraceChartEmbeddedObj();    break;
-            case EXC_ID8_CHPIVOTREF:    GetTracer().TracePivotChartExists();    break;
+            case EXC_ID8_CHPIVOTREF:
+                GetTracer().TracePivotChartExists();
+                mbIsPivotChart = true;
+            break;
         }
     }
 }
