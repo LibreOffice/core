@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyMaps.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.55 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -214,6 +214,10 @@ void XMLChartExportPropertyMapper::ContextFilter(
                 bCheckAuto = sal_True;
                 aAutoPropName = ::rtl::OUString::createFromAscii( "AutoStepMain" );
                 break;
+            case XML_SCH_CONTEXT_STEP_HELP_COUNT:
+                bCheckAuto = sal_True;
+                aAutoPropName = ::rtl::OUString::createFromAscii( "AutoStepHelp" );
+                break;
 
             case XML_SCH_CONTEXT_ORIGIN:
                 bCheckAuto = sal_True;
@@ -235,39 +239,6 @@ void XMLChartExportPropertyMapper::ContextFilter(
                 if( mrExport.getExportFlags() & EXPORT_OASIS )
                     property->mnIndex = -1;
                 break;
-
-            case XML_SCH_CONTEXT_SPECIAL_STEP_HELP:
-            {
-                // do auto-check directly
-                sal_Bool bAuto = false;
-                uno::Any aAny = rPropSet->getPropertyValue( ::rtl::OUString::createFromAscii( "AutoStepHelp" ) );
-                aAny >>= bAuto;
-                if( bAuto )
-                    property->mnIndex = -1;
-                else
-                {
-                    double fValue = 0.0, fMainStep = 0.0;
-                    sal_Bool bIsLogarithmic = sal_False;
-                    (*property).maValue >>= fValue;
-                    sal_Int32 nDivisor = static_cast< sal_Int32 >( fValue );
-                    if( (rPropSet->getPropertyValue(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Logarithmic" ))) >>= bIsLogarithmic) &&
-                        (rPropSet->getPropertyValue(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StepMain" ))) >>= fMainStep) )
-                    {
-                        // for logarithmic scaling the help steps are already divisors
-                        if( ! bIsLogarithmic &&
-                            (fValue <= fMainStep) &&
-                            (fValue != 0.0) )
-                        {
-                            nDivisor = static_cast< sal_Int32 >(
-                                ::rtl::math::round( fMainStep / fValue ));
-                        }
-                    }
-                    (*property).maValue <<= nDivisor;
-                }
-            }
-            break;
         }
 
         if( bCheckAuto )
@@ -456,13 +427,6 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                     break;
                 }
 
-            case XML_SCH_CONTEXT_SPECIAL_STEP_HELP:
-                {
-                    OSL_ENSURE( false, "Should not get here" );
-                    // handled in ContextFilter
-                    break;
-                }
-
             default:
                 bHandled = sal_False;
                 break;
@@ -604,66 +568,6 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
             case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME:
                 rProperty.maValue <<= mrImport.ResolveGraphicObjectURL( rValue, sal_False );
                 break;
-
-            case XML_SCH_CONTEXT_SPECIAL_STEP_HELP:
-            {
-                double fStepHelp = 0.0;
-                double fStepMain = 0.0;
-                sal_Bool bIsLogarithmic = sal_False;
-                bool bHelpStepValid = false;
-                bool bAutoMainStep = true;
-                sal_Int32 nDivisor = 0;
-                SvXMLUnitConverter::convertNumber( nDivisor, rValue );
-
-                if( nDivisor != 0 )
-                {
-                    for( ::std::vector< XMLPropertyState >::const_iterator aIt = rProperties.begin();
-                         aIt != rProperties.end();
-                         aIt++ )
-                    {
-                        if( (*aIt).mnIndex != -1 )
-                        {
-                            switch( getPropertySetMapper()->GetEntryContextId( (*aIt).mnIndex ))
-                            {
-                                case XML_SCH_CONTEXT_STEP_MAIN:
-                                    (*aIt).maValue >>= fStepMain;
-                                    bAutoMainStep = false;
-                                    break;
-                                case XML_SCH_CONTEXT_LOGARITHMIC:
-                                    (*aIt).maValue >>= bIsLogarithmic;
-                                    break;
-                            }
-                        }
-                    }
-
-                    if( bIsLogarithmic )
-                    {
-                        fStepHelp = static_cast< double >( nDivisor );
-                        bHelpStepValid = true;
-                    }
-                    else if( !bAutoMainStep && nDivisor != 0 )
-                    {
-                        fStepHelp = fStepMain / static_cast< double >( nDivisor );
-                        bHelpStepValid = true;
-                    }
-                    else
-                    {
-                        // no logarithmic scaling, the divisor is 0 (which
-                        // doesn't make sense) or we have an auto main step,
-                        // where the concrete value cannot be determined unless
-                        // the data is attached to the cahrt.  This is some more
-                        // or less unspecific point of time in the
-                        // future. Therefore we fall back to auto help step here
-                        bHelpStepValid = false;
-                    }
-                }
-
-                if( bHelpStepValid )
-                    rProperty.maValue <<= fStepHelp;
-                else
-                    rProperty.mnIndex = -1;
-            }
-            break;
 
             default:
                 bRet = sal_False;
