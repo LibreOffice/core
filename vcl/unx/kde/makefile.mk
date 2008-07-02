@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -62,6 +62,10 @@ dummy:
 .IF "$(ENABLE_KDE)" != ""
 
 CFLAGS+=$(KDE_CFLAGS)
+
+.IF "$(ENABLE_RANDR)" != ""
+CDEFS+=-DUSE_RANDR
+.ENDIF
 
 SLOFILES=\
     $(SLO)$/kdedata.obj	\
