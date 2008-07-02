@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ppdparser.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,6 +95,7 @@ public:
     // neither getValue will return the query option
     const PPDValue*         getValue( int n ) const;
     const PPDValue*         getValue( const String& rOption ) const;
+    const PPDValue*         getValueCaseInsensitive( const String& rOption ) const;
     const PPDValue*         getDefaultValue() const { return m_pDefaultValue; }
     const PPDValue*     getQueryValue() const { return m_bQueryValue ? &m_aQueryValue : NULL; }
 
