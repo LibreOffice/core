@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VSeriesPlotter.hxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -379,7 +379,7 @@ protected: //methods
         , const ::com::sun::star::drawing::Position3D & rPos
         , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet > & xErrorBarProperties
-        , const ::com::sun::star::uno::Sequence< double > & rData
+        , const VDataSeries& rVDataSeries
         , sal_Int32 nIndex
         , bool bVertical
         );
