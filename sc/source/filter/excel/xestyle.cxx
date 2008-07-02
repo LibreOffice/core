@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xestyle.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,9 +53,7 @@
 #include "stlsheet.hxx"
 #include "patattr.hxx"
 #include "attrib.hxx"
-#ifndef __GLOBSTR_HRC_
 #include "globstr.hrc"
-#endif
 #include "xestring.hxx"
 
 // PALETTE record - color information =========================================
