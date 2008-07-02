@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lotfntbf.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _LOTFNTBF_HXX
-#define _LOTFNTBF_HXX
+#ifndef SC_LOTFNTBF_HXX
+#define SC_LOTFNTBF_HXX
 
 #include <tools/solar.h>
 

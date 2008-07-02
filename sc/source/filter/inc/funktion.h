@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: funktion.h,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef __FUNKTION_H__
-#define __FUNKTION_H__
+#ifndef SC_FUNKTION_H
+#define SC_FUNKTION_H
 
 // Bearbeitungsfunktionen
 void P0( void );    // 0 Parameter

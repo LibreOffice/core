@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: flttypes.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _FLTTYPES_HXX
-#define _FLTTYPES_HXX
+#ifndef SC_FLTTYPES_HXX
+#define SC_FLTTYPES_HXX
 
 enum BiffTyp
 {

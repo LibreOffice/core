@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fkttab.h,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef __FKTTAB_H__
-#define __FKTTAB_H__
+#ifndef SC_FKTTAB_H
+#define SC_FKTTAB_H
 
 #include "decl.h"
 
