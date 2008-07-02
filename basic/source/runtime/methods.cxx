@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: methods.cxx,v $
- * $Revision: 1.80 $
+ * $Revision: 1.81 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,8 +54,13 @@
 
 #include "runtime.hxx"
 #include "sbunoobj.hxx"
-#ifdef _OLD_FILE_IMPL
+#ifdef WNT
+#include <tools/prewin.h>
+#include "winbase.h"
+#include <tools/postwin.h>
+#ifndef _FSYS_HXX //autogen
 #include <tools/fsys.hxx>
+#endif
 #else
 #include <osl/file.hxx>
 #endif
@@ -1315,6 +1320,87 @@ RTLFUNC(Oct)
         else
             snprintf( aBuffer, sizeof(aBuffer), "%lo", static_cast<long unsigned int>(pArg->GetLong()) );
         rPar.Get(0)->PutString( String::CreateFromAscii( aBuffer ) );
+    }
+}
+
+// Replace(expression, find, replace[, start[, count[, compare]]])
+
+RTLFUNC(Replace)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    ULONG nArgCount = rPar.Count()-1;
+    if ( nArgCount < 3 || nArgCount > 6 )
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    else
+    {
+        String aExpStr = rPar.Get(1)->GetString();
+        String aFindStr = rPar.Get(2)->GetString();
+        String aReplaceStr = rPar.Get(3)->GetString();
+
+        INT32 lStartPos = 1;
+        if ( nArgCount >= 4 )
+        {
+            if( rPar.Get(4)->GetType() != SbxEMPTY )
+                lStartPos = rPar.Get(4)->GetLong();
+            if( lStartPos < 1  || lStartPos > 0xffff )
+            {
+                StarBASIC::Error( SbERR_BAD_ARGUMENT );
+                lStartPos = 1;
+            }
+        }
+
+        INT32 lCount = -1;
+        if( nArgCount >=5 )
+        {
+            if( rPar.Get(5)->GetType() != SbxEMPTY )
+                lCount = rPar.Get(5)->GetLong();
+            if( lCount < -1 || lCount > 0xffff )
+            {
+                StarBASIC::Error( SbERR_BAD_ARGUMENT );
+                lCount = -1;
+            }
+        }
+
+        SbiInstance* pInst = pINST;
+        int bTextMode;
+        bool bCompatibility = ( pInst && pInst->IsCompatibility() );
+        if( bCompatibility )
+        {
+            SbiRuntime* pRT = pInst ? pInst->pRun : NULL;
+            bTextMode = pRT ? pRT->GetImageFlag( SBIMG_COMPARETEXT ) : FALSE;
+        }
+        else
+        {
+            bTextMode = 1;
+        }
+        if ( nArgCount == 6 )
+            bTextMode = rPar.Get(6)->GetInteger();
+
+        USHORT nStrLen = aExpStr.Len();
+
+        if( lStartPos <= nStrLen )
+        {
+            String aSrcStr( aExpStr );
+            if( bTextMode )
+            {
+                    aSrcStr.ToUpperAscii();
+                    aFindStr.ToUpperAscii();
+            }
+
+            USHORT nPos = aSrcStr.Search( aFindStr, static_cast<USHORT>( lStartPos - 1 ) );
+            USHORT nCounts = 0;
+            USHORT nReplaceLength = aReplaceStr.Len() ? aReplaceStr.Len():1;
+            while( nPos != STRING_NOTFOUND && (lCount == -1 || lCount > nCounts) )
+            {
+                aExpStr.Replace( nPos, aFindStr.Len(), aReplaceStr );
+                nPos = nPos + nReplaceLength;
+                nPos = aSrcStr.Search( aFindStr, nPos );
+                nCounts++;
+            }
+        }
+        rPar.Get(0)->PutString( aExpStr.Copy( static_cast<USHORT>(lStartPos - 1) )  );
     }
 }
 
@@ -2801,6 +2887,32 @@ RTLFUNC(GetAttr)
     {
         INT16 nFlags = 0;
 
+        // In Windows, We want to use Windows API to get the file attributes
+        // for VBA interoperability.
+    #if defined( WNT )
+        if( SbiRuntime::isVBAEnabled() )
+        {
+            DirEntry aEntry( rPar.Get(1)->GetString() );
+            aEntry.ToAbs();
+
+            // #57064 Bei virtuellen URLs den Real-Path extrahieren
+            ByteString aByteStrFullPath( aEntry.GetFull(), gsl_getSystemTextEncoding() );
+            DWORD nRealFlags = GetFileAttributes (aByteStrFullPath.GetBuffer());
+            if (nRealFlags != 0xffffffff)
+            {
+                if (nRealFlags == FILE_ATTRIBUTE_NORMAL)
+                    nRealFlags = 0;
+                nFlags = (INT16) (nRealFlags);
+            }
+            else
+                StarBASIC::Error( SbERR_FILE_NOT_FOUND );
+
+            rPar.Get(0)->PutInteger( nFlags );
+
+            return;
+        }
+    #endif
+
         // <-- UCB
         if( hasUno() )
         {
@@ -2838,51 +2950,6 @@ RTLFUNC(GetAttr)
         else
         // --> UCB
         {
-#ifdef _OLD_FILE_IMPL
-            DirEntry aEntry( rPar.Get(1)->GetString() );
-            aEntry.ToAbs();
-            BOOL bUseFileStat = FALSE;
-
-            // #57064 Bei virtuellen URLs den Real-Path extrahieren
-            String aFile = aEntry.GetFull();
-            ByteString aByteStrFullPath( aEntry.GetFull(), gsl_getSystemTextEncoding() );
-    #if defined( WIN )
-            int nErr = _dos_getfileattr( aByteStrFullPath.GetBuffer(),(unsigned *) &nFlags );
-            if ( nErr )
-                StarBASIC::Error( SbERR_FILE_NOT_FOUND );
-    #elif defined( WNT )
-            DWORD nRealFlags = GetFileAttributes (aByteStrFullPath.GetBuffer());
-            if (nRealFlags != 0xffffffff)
-            {
-                if (nRealFlags == FILE_ATTRIBUTE_NORMAL)
-                    nRealFlags = 0;
-                nFlags = (INT16) (nRealFlags);
-            }
-            else
-                StarBASIC::Error( SbERR_FILE_NOT_FOUND );
-    #elif defined( OS2 )
-            FILESTATUS3 aFileStatus;
-            APIRET rc = DosQueryPathInfo(aByteStrFullPath.GetBuffer(),1,
-                                         &aFileStatus,sizeof(FILESTATUS3));
-            if (!rc)
-                nFlags = (INT16) aFileStatus.attrFile;
-            else
-                StarBASIC::Error( SbERR_FILE_NOT_FOUND );
-    #else
-            bUseFileStat = TRUE;
-    #endif
-            if( bUseFileStat )
-            {
-                if( FileStat::GetReadOnlyFlag( aEntry ) )
-                    nFlags |= 0x0001; // ATTR_READONLY
-                FileStat aStat( aEntry );
-                DirEntryKind eKind = aStat.GetKind();
-                if( eKind & FSYS_KIND_DIR )
-                    nFlags |= 0x0010; // ATTR_DIRECTORY
-                if( aEntry.GetFlag() & FSYS_FLAG_VOLUME )
-                    nFlags |= 0x0008; // ATTR_VOLUME
-            }
-#else
             DirectoryItem aItem;
             FileBase::RC nRet = DirectoryItem::get( getFullPathUNC( rPar.Get(1)->GetString() ), aItem );
             FileStatus aFileStatus( FileStatusMask_Attributes | FileStatusMask_Type );
@@ -2896,8 +2963,6 @@ RTLFUNC(GetAttr)
                 nFlags |= 0x0001; // ATTR_READONLY
             if( bDirectory )
                 nFlags |= 0x0010; // ATTR_DIRECTORY
-
-#endif
         }
         rPar.Get(0)->PutInteger( nFlags );
     }
@@ -3831,20 +3896,134 @@ RTLFUNC(QBColor)
     rPar.Get(0)->PutLong( nRGB );
 }
 
-
+// StrConv(string, conversion, LCID)
 RTLFUNC(StrConv)
 {
     (void)pBasic;
     (void)bWrite;
-    (void)rPar;
 
-    DBG_ASSERT(0,"StrConv:Not implemented");
-//  if ( rPar.Count() != 3 )
-//  {
+    ULONG nArgCount = rPar.Count()-1;
+    if( nArgCount < 2 || nArgCount > 3 )
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-//      return;
-//  }
+        return;
+    }
+
+    String aOldStr = rPar.Get(1)->GetString();
+    INT32 nConversion = rPar.Get(2)->GetLong();
+
+    USHORT nLanguage = LANGUAGE_SYSTEM;
+    if( nArgCount == 3 )
+    {
+        // LCID not supported now
+        //nLanguage = rPar.Get(3)->GetInteger();
+    }
+
+    USHORT nOldLen = aOldStr.Len();
+    if( nOldLen == 0 )
+    {
+        // null string,return
+        rPar.Get(0)->PutString(aOldStr);
+        return;
+    }
+
+    INT32 nType = 0;
+    if ( (nConversion & 0x03) == 3 ) //  vbProperCase
+    {
+        CharClass& rCharClass = GetCharClass();
+        aOldStr = rCharClass.toTitle( aOldStr.ToLowerAscii(), 0, nOldLen );
+    }
+    else if ( (nConversion & 0x01) == 1 ) // vbUpperCase
+        nType |= ::com::sun::star::i18n::TransliterationModules_LOWERCASE_UPPERCASE;
+    else if ( (nConversion & 0x02) == 2 ) // vbLowerCase
+        nType |= ::com::sun::star::i18n::TransliterationModules_UPPERCASE_LOWERCASE;
+
+    if ( (nConversion & 0x04) == 4 ) // vbWide
+        nType |= ::com::sun::star::i18n::TransliterationModules_HALFWIDTH_FULLWIDTH;
+    else if ( (nConversion & 0x08) == 8 ) // vbNarrow
+        nType |= ::com::sun::star::i18n::TransliterationModules_FULLWIDTH_HALFWIDTH;
+
+    if ( (nConversion & 0x10) == 16) // vbKatakana
+        nType |= ::com::sun::star::i18n::TransliterationModules_HIRAGANA_KATAKANA;
+    else if ( (nConversion & 0x20) == 32 ) // vbHiragana
+        nType |= ::com::sun::star::i18n::TransliterationModules_KATAKANA_HIRAGANA;
+
+    String aNewStr( aOldStr );
+    if( nType != 0 )
+    {
+        Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
+        ::utl::TransliterationWrapper aTransliterationWrapper( xSMgr,nType );
+        com::sun::star::uno::Sequence<sal_Int32> aOffsets;
+        aTransliterationWrapper.loadModuleIfNeeded( nLanguage );
+        aNewStr = aTransliterationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );
+    }
+
+    if ( (nConversion & 0x40) == 64 ) // vbUnicode
+    {
+        // convert the string to byte string, preserving unicode (2 bytes per character)
+        USHORT nSize = aNewStr.Len()*2;
+        const sal_Unicode* pSrc = aNewStr.GetBuffer();
+        sal_Char* pChar = new sal_Char[nSize+1];
+        for( USHORT i=0; i < nSize; i++ )
+        {
+            pChar[i] = static_cast< sal_Char >( i%2 ? ((*pSrc) >> 8) & 0xff : (*pSrc) & 0xff );
+            if( i%2 )
+                pSrc++;
+        }
+        pChar[nSize] = '\0';
+        OString aOStr(pChar);
+
+        // there is no concept about default codepage in unix. so it is incorrectly in unix
+        OUString aOUStr = OStringToOUString(aOStr, osl_getThreadTextEncoding());
+        aNewStr = String(aOUStr);
+        rPar.Get(0)->PutString( aNewStr );
+        return;
+    }
+    else if ( (nConversion & 0x80) == 128 ) // vbFromUnicode
+    {
+        OUString aOUStr(aNewStr);
+        // there is no concept about default codepage in unix. so it is incorrectly in unix
+        OString aOStr = OUStringToOString(aNewStr,osl_getThreadTextEncoding());
+        const sal_Char* pChar = aOStr.getStr();
+        USHORT nArraySize = static_cast< USHORT >( aOStr.getLength() );
+        SbxDimArray* pArray = new SbxDimArray(SbxBYTE);
+        bool bIncIndex = (IsBaseIndexOne() && SbiRuntime::isVBAEnabled() );
+        if(nArraySize)
+        {
+            if( bIncIndex )
+                pArray->AddDim( 1, nArraySize );
+            else
+                pArray->AddDim( 0, nArraySize-1 );
+        }
+        else
+        {
+            pArray->unoAddDim( 0, -1 );
+        }
+
+        for( USHORT i=0; i< nArraySize; i++)
+        {
+            SbxVariable* pNew = new SbxVariable( SbxBYTE );
+            pNew->PutByte(*pChar);
+            pChar++;
+            pNew->SetFlag( SBX_WRITE );
+            short index = i;
+            if( bIncIndex )
+                ++index;
+            pArray->Put( pNew, &index );
+        }
+
+        SbxVariableRef refVar = rPar.Get(0);
+        USHORT nFlags = refVar->GetFlags();
+        refVar->ResetFlag( SBX_FIXED );
+        refVar->PutObject( pArray );
+        refVar->SetFlags( nFlags );
+        refVar->SetParameters( NULL );
+           return;
+    }
+
+    rPar.Get(0)->PutString(aNewStr);
 }
+
 
 RTLFUNC(Beep)
 {
@@ -4229,3 +4408,82 @@ RTLFUNC(FileExists)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 }
 
+RTLFUNC(Partition)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    if ( rPar.Count() != 5 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    INT32 nNumber = rPar.Get(1)->GetLong();
+    INT32 nStart = rPar.Get(2)->GetLong();
+    INT32 nStop = rPar.Get(3)->GetLong();
+    INT32 nInterval = rPar.Get(4)->GetLong();
+
+    if( nStart < 0 || nStop <= nStart || nInterval < 1 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    // the Partition function inserts leading spaces before lowervalue and uppervalue
+    // so that they both have the same number of characters as the string
+    // representation of the value (Stop + 1). This ensures that if you use the output
+    // of the Partition function with several values of Number, the resulting text
+    // will be handled properly during any subsequent sort operation.
+
+    // calculate the  maximun number of characters before lowervalue and uppervalue
+    OUString aBeforeStart = OUString::valueOf( nStart - 1 );
+    OUString aAfterStop = OUString::valueOf( nStop + 1 );
+    INT32 nLen1 = aBeforeStart.getLength();
+    INT32 nLen2 = aAfterStop.getLength();
+    INT32 nLen = nLen1 >= nLen2 ? nLen1:nLen2;
+
+    OUStringBuffer aRetStr( nLen * 2 + 1);
+    OUString aLowerValue;
+    OUString aUpperValue;
+    if( nNumber < nStart )
+    {
+        aUpperValue = aBeforeStart;
+    }
+    else if( nNumber > nStop )
+    {
+        aLowerValue = aAfterStop;
+    }
+    else
+    {
+        INT32 nLowerValue = nNumber;
+        INT32 nUpperValue = nLowerValue;
+        if( nInterval > 1 )
+        {
+            nLowerValue = ((( nNumber - nStart ) / nInterval ) * nInterval ) + nStart;
+            nUpperValue = nLowerValue + nInterval - 1;
+        }
+
+        aLowerValue = OUString::valueOf( nLowerValue );
+        aUpperValue = OUString::valueOf( nUpperValue );
+    }
+
+    nLen1 = aLowerValue.getLength();
+    nLen2 = aUpperValue.getLength();
+
+    if( nLen > nLen1 )
+    {
+        // appending the leading spaces for the lowervalue
+        for ( INT32 i= (nLen - nLen1) ; i > 0; --i )
+            aRetStr.appendAscii(" ");
+    }
+    aRetStr.append( aLowerValue ).appendAscii(":");
+    if( nLen > nLen2 )
+    {
+        // appending the leading spaces for the uppervalue
+        for ( INT32 i= (nLen - nLen2) ; i > 0; --i )
+            aRetStr.appendAscii(" ");
+    }
+    aRetStr.append( aUpperValue );
+    rPar.Get(0)->PutString( String(aRetStr.makeStringAndClear()) );
+}
