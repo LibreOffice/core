@@ -176,12 +176,7 @@
 <FormatCode>#.##0,-- [CURRENCY];[RED]-#.##0,-- [CURRENCY]</FormatCode>
 </FormatElement>
 </LC_FORMAT>
-<LC_COLLATION>
-<Collator unoid="alphanumeric" default="true"/>
-<CollationOptions>
-<TransliterationModules>IGNORE_CASE</TransliterationModules>
-</CollationOptions>
-</LC_COLLATION>
+<LC_COLLATION ref="sh_RS"/>
 <LC_SEARCH>
 <SearchOptions>
 <TransliterationModules>IGNORE_CASE</TransliterationModules>
@@ -315,7 +310,7 @@
 </LC_CALENDAR>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>kuna</CurrencyID>
+<CurrencyID>HRK</CurrencyID>
 <CurrencySymbol>kn</CurrencySymbol>
 <BankSymbol>HRK</BankSymbol>
 <CurrencyName>Hrvatska Kuna</CurrencyName>
