@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excform.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,9 +28,8 @@
  *
  ************************************************************************/
 
-
-#ifndef _EXCFORM_HXX
-#define _EXCFORM_HXX
+#ifndef SC_EXCFORM_HXX
+#define SC_EXCFORM_HXX
 
 #include "xlformula.hxx"
 #include "xiroot.hxx"
