@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excrecds.hxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _EXCRECDS_HXX
-#define _EXCRECDS_HXX
+#ifndef SC_EXCRECDS_HXX
+#define SC_EXCRECDS_HXX
 
 #include <tools/solar.h>
 #include <svtools/zforlist.hxx>
