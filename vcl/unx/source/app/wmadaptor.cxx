@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wmadaptor.cxx,v $
- * $Revision: 1.70 $
+ * $Revision: 1.71 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2036,6 +2036,10 @@ int GnomeWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* p
                 Rectangle( Point( rGeom.nX, rGeom.nY ),
                            Size( rGeom.nWidth, rGeom.nHeight ) );
         }
+    }
+    else if( pEvent->atom == m_aWMAtoms[ NET_WM_DESKTOP ] )
+    {
+        pFrame->m_nWorkArea = getWindowWorkArea( pFrame->GetShellWindow() );
     }
     else
         nHandled = 0;
