@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excdefs.hxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _EXCDEFS_HXX
-#define _EXCDEFS_HXX
+#ifndef SC_EXCDEFS_HXX
+#define SC_EXCDEFS_HXX
 
 #include <sal/types.h>
 
