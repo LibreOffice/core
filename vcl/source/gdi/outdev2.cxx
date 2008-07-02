@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev2.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -681,41 +681,51 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
                  if( meOutDevType == OUTDEV_WINDOW ||
                      (meOutDevType == OUTDEV_VIRDEV && mpPDFWriter == 0 ) )
                 {
-                    // reduce scaling to something reasonable taking into account the output size
-                    if( aPosAry.mnDestWidth > 3*mnOutWidth && aPosAry.mnSrcWidth )
+                    // #i81576# do the following trick only if there is overlap at all
+                    // else the formulae don't work
+                    // theoretically in this case we wouldn't need to draw the bitmap at all
+                    // however there are some esoteric case where that is needed
+                    if( aPosAry.mnDestX + aPosAry.mnDestWidth >= 0
+                        && aPosAry.mnDestX < mnOutWidth
+                        && aPosAry.mnDestY + aPosAry.mnDestHeight >= 0
+                        && aPosAry.mnDestY < mnOutHeight )
                     {
-                        const double nScaleX = aPosAry.mnDestWidth/double(aPosAry.mnSrcWidth);
-
-                        if( aPosAry.mnDestX + aPosAry.mnDestWidth > mnOutWidth )
+                        // reduce scaling to something reasonable taking into account the output size
+                        if( aPosAry.mnDestWidth > 3*mnOutWidth && aPosAry.mnSrcWidth )
                         {
-                            aPosAry.mnDestWidth = Max(long(0),mnOutWidth-aPosAry.mnDestX);
-                        }
-                        if( aPosAry.mnDestX < 0 )
-                        {
-                            aPosAry.mnDestWidth = Max(long(0),aPosAry.mnDestWidth+aPosAry.mnDestX);
-                            aPosAry.mnSrcX -= sal::static_int_cast<long>(aPosAry.mnDestX / nScaleX);
-                            aPosAry.mnDestX = 0;
-                        }
+                            const double nScaleX = aPosAry.mnDestWidth/double(aPosAry.mnSrcWidth);
 
-                        aPosAry.mnSrcWidth = sal::static_int_cast<long>(aPosAry.mnDestWidth / nScaleX);
-                    }
+                            if( aPosAry.mnDestX + aPosAry.mnDestWidth > mnOutWidth )
+                            {
+                                aPosAry.mnDestWidth = Max(long(0),mnOutWidth-aPosAry.mnDestX);
+                            }
+                            if( aPosAry.mnDestX < 0 )
+                            {
+                                aPosAry.mnDestWidth += aPosAry.mnDestX;
+                                aPosAry.mnSrcX -= sal::static_int_cast<long>(aPosAry.mnDestX / nScaleX);
+                                aPosAry.mnDestX = 0;
+                            }
 
-                    if( aPosAry.mnDestHeight > 3*mnOutHeight && aPosAry.mnSrcHeight != 0 )
-                    {
-                        const double nScaleY = aPosAry.mnDestHeight/double(aPosAry.mnSrcHeight);
-
-                        if( aPosAry.mnDestY + aPosAry.mnDestHeight > mnOutHeight )
-                        {
-                            aPosAry.mnDestHeight = Max(long(0),mnOutHeight-aPosAry.mnDestY);
-                        }
-                        if( aPosAry.mnDestY < 0 )
-                        {
-                            aPosAry.mnDestHeight = Max(long(0),aPosAry.mnDestHeight+aPosAry.mnDestY);
-                            aPosAry.mnSrcY -= sal::static_int_cast<long>(aPosAry.mnDestY / nScaleY);
-                            aPosAry.mnDestY = 0;
+                            aPosAry.mnSrcWidth = sal::static_int_cast<long>(aPosAry.mnDestWidth / nScaleX);
                         }
 
-                        aPosAry.mnSrcHeight = sal::static_int_cast<long>(aPosAry.mnDestHeight / nScaleY);
+                        if( aPosAry.mnDestHeight > 3*mnOutHeight && aPosAry.mnSrcHeight != 0 )
+                        {
+                            const double nScaleY = aPosAry.mnDestHeight/double(aPosAry.mnSrcHeight);
+
+                            if( aPosAry.mnDestY + aPosAry.mnDestHeight > mnOutHeight )
+                            {
+                                aPosAry.mnDestHeight = Max(long(0),mnOutHeight-aPosAry.mnDestY);
+                            }
+                            if( aPosAry.mnDestY < 0 )
+                            {
+                                aPosAry.mnDestHeight += aPosAry.mnDestY;
+                                aPosAry.mnSrcY -= sal::static_int_cast<long>(aPosAry.mnDestY / nScaleY);
+                                aPosAry.mnDestY = 0;
+                            }
+
+                            aPosAry.mnSrcHeight = sal::static_int_cast<long>(aPosAry.mnDestHeight / nScaleY);
+                        }
                     }
                 }
             }
