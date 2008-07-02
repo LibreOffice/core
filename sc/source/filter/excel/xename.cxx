@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xename.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +34,7 @@
 
 #include <map>
 
-#ifndef __GLOBSTR_HRC_
 #include "globstr.hrc"
-#endif
 #include "document.hxx"
 #include "rangenam.hxx"
 #include "dbcolect.hxx"
