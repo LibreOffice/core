@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optab.h,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _OPTAB_H
-#define _OPTAB_H
+#ifndef SC_OPTAB_H
+#define SC_OPTAB_H
 
 typedef void ( *OPCODE_FKT )( SvStream &aStream, USHORT nLaenge );
 
