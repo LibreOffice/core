@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DrawDocShell.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -239,7 +239,7 @@ protected:
     static Link*            mpSpecialProgressHdl;
 
     bool                    mbOwnDocument;          // if true, we own mpDoc and will delete it in our d'tor
-    void                    Construct();
+    void                    Construct(bool bClipboard);
     virtual void            InPlaceActivate( BOOL bActive );
 };
 
