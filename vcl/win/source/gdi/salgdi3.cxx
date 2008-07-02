@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi3.cxx,v $
- * $Revision: 1.95 $
+ * $Revision: 1.96 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2524,13 +2524,26 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
 #endif
 
     // get raw font file data
-    DWORD nFontSize1 = ::GetFontData( mhDC, 0, 0, NULL, 0 );
-    if( nFontSize1 == GDI_ERROR )
+    DWORD nFontSize = ::GetFontData( mhDC, 0, 0, NULL, 0 );
+    if( nFontSize == GDI_ERROR )
         return FALSE;
-    ScopedCharArray xRawFontData(new char[ nFontSize1 ]);
-    DWORD nFontSize2 = ::GetFontData( mhDC, 0, 0, (void*)xRawFontData.get(), nFontSize1 );
-    if( nFontSize1 != nFontSize2 )
-        return FALSE;
+    ScopedCharArray xRawFontData(new char[ nFontSize ]);
+    for( DWORD nRawDataOfs = 0;;)
+    {
+        // calculate remaining raw data to get
+        DWORD nFDGet = nFontSize - nRawDataOfs;
+        if( nFDGet <= 0 )
+            break;
+        // #i56745# limit GetFontData requests
+        static const DWORD FDLIMIT = 0x100000;
+        if( nFDGet > FDLIMIT )
+            nFDGet = FDLIMIT;
+        const DWORD nFDGot = ::GetFontData( mhDC, 0, nRawDataOfs,
+            (void*)(xRawFontData.get() + nRawDataOfs), nFDGet );
+        if( (nFDGot == GDI_ERROR) || !nFDGot )
+            return FALSE;
+        nRawDataOfs += nFDGot;
+    }
 
     // open font file
     sal_uInt32 nFaceNum = 0;
@@ -2538,7 +2551,7 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
         nFaceNum = ~0U;  // indicate "TTC font extracts only"
 
     ScopedTrueTypeFont aSftTTF;
-    int nRC = aSftTTF.open( xRawFontData.get(), nFontSize1, nFaceNum );
+    int nRC = aSftTTF.open( xRawFontData.get(), nFontSize, nFaceNum );
     if( nRC != SF_OK )
         return FALSE;
 
