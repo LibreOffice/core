@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: opcodes.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -163,6 +163,8 @@ enum SbiOpcode {
     _DCREATE_REDIMP,    // Objekt-Array redimensionieren (+StringId+StringID)
     _FIND_CM,           // Search inside a class module (CM) to enable global search in time
     _PUBLIC_P,          //  Module global Variable (persisted between calls)(+StringID+Typ)
+    _FIND_STATIC,           //  local static var lookup (+StringID+Typ)
+
     SbOP2_END
 
 };
