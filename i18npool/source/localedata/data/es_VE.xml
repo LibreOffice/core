@@ -22,14 +22,14 @@
 <LC_CALENDAR ref="es_AR"/>
 <LC_CURRENCY>
 <Currency default="false" usedInCompatibleFormatCodes="true">
-<CurrencyID>Bs</CurrencyID>
+<CurrencyID>VEB</CurrencyID>
 <CurrencySymbol>Bs</CurrencySymbol>
 <BankSymbol>VEB</BankSymbol>
 <CurrencyName>Bolivar</CurrencyName>
 <DecimalPlaces>2</DecimalPlaces>
 </Currency>
 <Currency default="true" usedInCompatibleFormatCodes="false">
-<CurrencyID>BsF</CurrencyID>
+<CurrencyID>VEF</CurrencyID>
 <CurrencySymbol>BsF</CurrencySymbol>
 <BankSymbol>VEF</BankSymbol>
 <CurrencyName>Bolivar Fuerte</CurrencyName>
