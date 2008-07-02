@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlsFocusManager.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,12 +32,14 @@
 #include "controller/SlsFocusManager.hxx"
 
 #include "SlideSorter.hxx"
+#include "PaneDockingWindow.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsSelectionManager.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
 #include "view/SlsLayouter.hxx"
+#include <vcl/toolbox.hxx>
 
 #include "Window.hxx"
 #include "sdpage.hxx"
@@ -46,8 +48,8 @@ namespace sd { namespace slidesorter { namespace controller {
 
 FocusManager::FocusManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
-      mnPageIndex (-1),
-      mbPageIsFocused (false)
+      mnPageIndex(0),
+      mbPageIsFocused(false)
 {
     if (mrSlideSorter.GetModel().GetPageCount() > 0)
         mnPageIndex = 0;
@@ -80,13 +82,19 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
             case FMD_LEFT:
                 mnPageIndex -= 1;
                 if (mnPageIndex < 0)
+                {
                     mnPageIndex = mrSlideSorter.GetModel().GetPageCount() - 1;
+                    SetFocusToToolBox();
+                }
                 break;
 
             case FMD_RIGHT:
                 mnPageIndex += 1;
                 if (mnPageIndex >= mrSlideSorter.GetModel().GetPageCount())
+                {
                     mnPageIndex = 0;
+                    SetFocusToToolBox();
+                }
                 break;
 
             case FMD_UP:
@@ -124,7 +132,8 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
             break;
         }
 
-        ShowFocusIndicator (GetFocusedPageDescriptor());
+        if (mbPageIsFocused)
+            ShowFocusIndicator(GetFocusedPageDescriptor());
     }
 }
 
@@ -134,7 +143,7 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
 void FocusManager::ShowFocus (void)
 {
     mbPageIsFocused = true;
-    ShowFocusIndicator (GetFocusedPageDescriptor());
+    ShowFocusIndicator(GetFocusedPageDescriptor());
 }
 
 
@@ -143,7 +152,7 @@ void FocusManager::ShowFocus (void)
 void FocusManager::HideFocus (void)
 {
     mbPageIsFocused = false;
-    HideFocusIndicator (GetFocusedPageDescriptor());
+    HideFocusIndicator(GetFocusedPageDescriptor());
 }
 
 
@@ -281,6 +290,31 @@ void FocusManager::RemoveFocusChangeListener (const Link& rListener)
 {
     maFocusChangeListeners.erase (
         ::std::find (maFocusChangeListeners.begin(), maFocusChangeListeners.end(), rListener));
+}
+
+
+
+
+void FocusManager::SetFocusToToolBox (void)
+{
+    HideFocus();
+
+    if (mrSlideSorter.GetViewShell() != NULL)
+    {
+        ::Window* pParentWindow = mrSlideSorter.GetViewShell()->GetParentWindow();
+        DockingWindow* pDockingWindow = NULL;
+        while (pParentWindow!=NULL && pDockingWindow==NULL)
+        {
+            pDockingWindow = dynamic_cast<DockingWindow*>(pParentWindow);
+            pParentWindow = pParentWindow->GetParent();
+        }
+        if (pDockingWindow)
+        {
+            PaneDockingWindow* pPaneDockingWindow = dynamic_cast<PaneDockingWindow*>(pDockingWindow);
+            if (pPaneDockingWindow != NULL)
+                pPaneDockingWindow->GetTitleToolBox()->GrabFocus();
+        }
+    }
 }
 
 
