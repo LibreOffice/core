@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -66,7 +66,8 @@ SHL1STDLIBS=                     \
     $(UCBHELPERLIB)          \
     $(SVTOOLLIB)             	 \
     $(BERKELEYLIB)		 	 \
-    $(XSLTLIB)
+    $(XSLTLIB) \
+    $(UNOTOOLSLIB)
 
 SHL1LIBS =                       \
     $(SLB)$/jaqe.lib         \
