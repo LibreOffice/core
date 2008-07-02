@@ -159,7 +159,7 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>Z$</CurrencyID>
+      <CurrencyID>ZWD</CurrencyID>
       <CurrencySymbol>Z$</CurrencySymbol>
       <BankSymbol>ZWD</BankSymbol>
       <CurrencyName>Zimbabwean Dollar</CurrencyName>

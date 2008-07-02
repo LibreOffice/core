@@ -22,7 +22,7 @@
 <LC_CALENDAR ref="es_AR"/>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>$</CurrencyID>
+<CurrencyID>USD</CurrencyID>
 <CurrencySymbol>$</CurrencySymbol>
 <BankSymbol>USD</BankSymbol>
 <CurrencyName>US Dollar</CurrencyName>

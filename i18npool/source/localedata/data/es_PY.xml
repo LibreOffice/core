@@ -22,7 +22,7 @@
 <LC_CALENDAR ref="es_AR"/>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>G</CurrencyID>
+<CurrencyID>PYG</CurrencyID>
 <CurrencySymbol>G</CurrencySymbol>
 <BankSymbol>PYG</BankSymbol>
 <CurrencyName>Guarani</CurrencyName>

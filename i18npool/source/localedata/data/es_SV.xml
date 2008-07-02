@@ -22,7 +22,7 @@
 <LC_CALENDAR ref="es_AR"/>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>C</CurrencyID>
+<CurrencyID>SVC</CurrencyID>
 <CurrencySymbol>C</CurrencySymbol>
 <BankSymbol>SVC</BankSymbol>
 <CurrencyName>Colon</CurrencyName>

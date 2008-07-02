@@ -22,7 +22,7 @@
 <LC_CALENDAR ref="es_AR"/>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>L</CurrencyID>
+<CurrencyID>HNL</CurrencyID>
 <CurrencySymbol>L</CurrencySymbol>
 <BankSymbol>HNL</BankSymbol>
 <CurrencyName>Lempira</CurrencyName>

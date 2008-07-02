@@ -159,7 +159,7 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>TT$</CurrencyID>
+      <CurrencyID>TTD</CurrencyID>
       <CurrencySymbol>TT$</CurrencySymbol>
       <BankSymbol>TTD</BankSymbol>
       <CurrencyName>Trinidad and Tobago Dollar</CurrencyName>
