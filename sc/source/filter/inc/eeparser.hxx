@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eeparser.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,17 +27,14 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef SC_EEPARSER_HXX
 #define SC_EEPARSER_HXX
 
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 #include <svtools/itemset.hxx>
 #include <svx/editdata.hxx>
 #include <address.hxx>
