@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lotrange.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,9 +28,8 @@
  *
  ************************************************************************/
 
-
-#ifndef _LOTRANGE_HXX
-#define _LOTRANGE_HXX
+#ifndef SC_LOTRANGE_HXX
+#define SC_LOTRANGE_HXX
 
 #include <tools/solar.h>
 #include <compiler.hxx>

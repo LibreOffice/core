@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lotattr.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _LOTATTR_HXX
-#define _LOTATTR_HXX
+#ifndef SC_LOTATTR_HXX
+#define SC_LOTATTR_HXX
 
 #include <tools/solar.h>
 #include <tools/list.hxx>

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: op.h,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _OP_H
-#define _OP_H
+#ifndef SC_OP_H
+#define SC_OP_H
 
 #include <tools/solar.h>
 #include <patattr.hxx>

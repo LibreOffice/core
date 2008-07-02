@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: otlnbuff.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _OTLNBUFF_HXX
-#define _OTLNBUFF_HXX
+#ifndef SC_OTLNBUFF_HXX
+#define SC_OTLNBUFF_HXX
 
 #include <tools/solar.h>
 

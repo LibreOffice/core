@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tool.h,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _TOOL_H
-#define _TOOL_H
+#ifndef SC_TOOL_H
+#define SC_TOOL_H
 
 #include <attrib.hxx>    //!!! noch noetig?????
 #include <document.hxx>
