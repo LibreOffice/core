@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataSequenceRole.idl,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,11 +64,17 @@ module data
      <dt>sizes</dt>
        <dd>values are used as radius of the bubbles in a
            Bubble-Diagram</dd>
-     <dt>error-bars-x</dt>
-       <dd>values are used as error-information in x-direction for
+     <dt>error-bars-x-positive</dt>
+       <dd>values are used as error-information in positive x-direction for
            displaying error-bars</dd>
-     <dt>error-bars-y</dt>
-       <dd>values are used as error-information in y-direction for
+     <dt>error-bars-x-negative</dt>
+       <dd>values are used as error-information in negative x-direction for
+           displaying error-bars</dd>
+     <dt>error-bars-y-positive</dt>
+       <dd>values are used as error-information in positive y-direction for
+           displaying error-bars</dd>
+     <dt>error-bars-y-negative</dt>
+       <dd>values are used as error-information in negative y-direction for
            displaying error-bars</dd>
      <dt>categories</dt>
        <dd>values are used for categories in the diagram</dd>
