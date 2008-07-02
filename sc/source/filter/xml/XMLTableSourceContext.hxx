@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTableSourceContext.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLTABLESOURCECONTEXT_HXX
-#define _SC_XMLTABLESOURCECONTEXT_HXX
+#ifndef SC_XMLTABLESOURCECONTEXT_HXX
+#define SC_XMLTABLESOURCECONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/sheet/SheetLinkMode.hpp>
