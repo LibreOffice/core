@@ -23,9 +23,7 @@ file != FILENAME {
     file = FILENAME
     line = 0
     nFormats = 0
-    nSymbols = 0
-    bSymbolDefault = 0
-    bSymbolCompati = 0
+    nCurrencies = 0
     bFormatAuto = 0
     sReplaceFrom = ""
     sReplaceTo = ""
@@ -136,30 +134,51 @@ END {
 
 
 function getCurrencyParams() {
+    # Assumes that each element is on a line on its own!
     if ( $1 ~ /^<Currency(>|$)/ )
     {
         if ( $0 ~ /default="true"/ )
-            bSymbolDefault = 1
+            SymbolDefault[nCurrencies] = 1
         else
-            bSymbolDefault = 0
+            SymbolDefault[nCurrencies] = 0
         if ( $0 ~ /usedInCompatibleFormatCodes="true"/ )
-            bSymbolCompati = 1
+            SymbolCompati[nCurrencies] = 1
         else
-            bSymbolCompati = 0
+            SymbolCompati[nCurrencies] = 0
+    }
+    else if ( $0 ~ /^[[:blank:]]*<CurrencyID>/ )
+    {
+        split( $0, arr, /<|>/ )
+        if ( sRefCurrencyFromLocale )
+            IDLine[nCurrencies] = file " line " line \
+                " (referenced from " sRefCurrencyFromLocale ")"
+        else
+            IDLine[nCurrencies] = file " line " line
+        IDs[nCurrencies] = arr[3]
     }
     else if ( $0 ~ /^[[:blank:]]*<CurrencySymbol>/ )
     {
         split( $0, arr, /<|>/ )
         if ( sRefCurrencyFromLocale )
-            SymbolLine[nSymbols] = file " line " line \
+            SymbolLine[nCurrencies] = file " line " line \
                 " (referenced from " sRefCurrencyFromLocale ")"
         else
-            SymbolLine[nSymbols] = file " line " line
-        SymbolDefault[nSymbols] = bSymbolDefault
-        SymbolCompati[nSymbols] = bSymbolCompati
-        Symbols[nSymbols++] = arr[3]
-        bSymbolDefault = 0
-        bSymbolCompati = 0
+            SymbolLine[nCurrencies] = file " line " line
+        Symbols[nCurrencies] = arr[3]
+    }
+    else if ( $0 ~ /^[[:blank:]]*<BankSymbol>/ )
+    {
+        split( $0, arr, /<|>/ )
+        if ( sRefCurrencyFromLocale )
+            BankSymbolLine[nCurrencies] = file " line " line \
+                " (referenced from " sRefCurrencyFromLocale ")"
+        else
+            BankSymbolLine[nCurrencies] = file " line " line
+        BankSymbols[nCurrencies] = arr[3]
+    }
+    else if ( $1 ~ /^<\/Currency>/ )
+    {
+        ++nCurrencies
     }
 }
 
@@ -187,7 +206,7 @@ function checkIt() {
     }
     if ( bad )
     {
-        for ( j=0; j<nSymbols; ++j )
+        for ( j=0; j<nCurrencies; ++j )
         {
             bDef = 0
             if ( Symbols[j] == "\xc2\xa4" )
@@ -210,7 +229,7 @@ function checkIt() {
     {
         bHasDefault = 0
         bHasCompati = 0
-        for ( j=0; j<nSymbols; ++j )
+        for ( j=0; j<nCurrencies; ++j )
         {
             if ( Symbols[j] == "\xc2\xa4" )
             {
@@ -249,23 +268,51 @@ function checkIt() {
             print "  no compati: (" file ")"
         }
     }
+    for ( j=0; j<nCurrencies; ++j )
+    {
+        # Check if CurrencyID at least resembles some ISO 4217 code.
+        # The only exception is zh_MO that had an erroneous original data set
+        # with BankSymbol="P" (stored as ISO code in documents, hence copied to
+        # CurrencyID now) and needs that entry for legacy documents.
+        # There is a strange bug in gawk 3.1.4 that does a match of [A-Z] on
+        # lower case except 'a', regardless of IGNORECASE setting, hence this
+        # ugly notation. [[:upper:]] wouldn't be correct since we want only
+        # ASCII to match.
+        if ( IDs[j] !~ /^[ABCDEFGHIJKLMNOPQRSTUVWXYZ][ABCDEFGHIJKLMNOPQRSTUVWXYZ][ABCDEFGHIJKLMNOPQRSTUVWXYZ]$/ \
+              && !(file == "zh_MO.xml" && IDs[j] == "P") )
+        {
+            bad = 1
+            print "no ISO 4217 code: `" IDs[j] "'   (" IDLine[j] ")"
+        }
+        # CurrencyID should equal BankSymbol for now.
+        if ( IDs[j] != BankSymbols[j] )
+        {
+            bad = 1
+            print "not equal: CurrencyID `" IDs[j] "' != BankSymbol `" BankSymbols[j] \
+                  "'   (" IDLine[j] " and " BankSymbolLine[j] ")"
+        }
+    }
     if ( bad )
         print ""
 }
 
 
 function FormatInSymbol( format ) {
-    for ( nSym=0; nSym<nSymbols; ++nSym )
+    state = 0
+    for ( nSym=0; nSym<nCurrencies; ++nSym )
     {
         if ( format == Symbols[nSym] )
         {
+            # Two currencies can have the same symbol (e.g. az_AZ.xml 'man.'
+            # for AZM and AZN), continue to lookup if the match isn't the
+            # compatible one.
             if ( SymbolCompati[nSym] )
                 return 2
             else
-                return 1
+                state = 1
         }
     }
-    return 0
+    return state
 }
 
 # vim: ts=4 sw=4 expandtab
