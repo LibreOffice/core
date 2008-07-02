@@ -411,7 +411,7 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>ngultrum</CurrencyID>
+      <CurrencyID>BTN</CurrencyID>
       <CurrencySymbol>Nu</CurrencySymbol>
       <BankSymbol>BTN</BankSymbol>
       <CurrencyName>Ngultrum</CurrencyName>
