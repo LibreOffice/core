@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -72,7 +72,14 @@ OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.1.a
 
 
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+CONFIGURE_ACTION=configure
+CONFIGURE_FLAGS= --disable-shared --with-pic
+BUILD_ACTION=make
+OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.1.a
+.ELSE
 BUILD_ACTION=cd src/hunspell && dmake
+.ENDIF
 .ENDIF # "$(GUI)"=="WNT"
 
 
