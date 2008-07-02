@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pptshape.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,73 +81,76 @@ void PPTShape::addShape(
         {
             oox::drawingml::TextListStylePtr aMasterTextListStyle;
             Reference< lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), UNO_QUERY_THROW );
-            switch( mnSubType )
+
+            if ( sServiceName != OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) )
             {
-                case XML_ctrTitle :
-                case XML_title :
+                switch( mnSubType )
                 {
-                    const rtl::OUString sTitleShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.TitleTextShape" ) );
-                    sServiceName = sTitleShapeService;
-                    aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
-                }
-                break;
-                case XML_obj :
-                {
-                    const rtl::OUString sOutlinerShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.OutlinerShape" ) );
-                    sServiceName = sOutlinerShapeService;
-                    aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getBodyTextStyle() : rSlidePersist.getBodyTextStyle();
-                }
-                break;
-                case XML_body :
-                {
-                    const rtl::OUString sNotesShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.NotesShape" ) );
-                    const rtl::OUString sOutlinerShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.OutlinerShape" ) );
-                    if ( rSlidePersist.isNotesPage() )
+                    case XML_ctrTitle :
+                    case XML_title :
                     {
-                        sServiceName = sNotesShapeService;
-                        aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getNotesTextStyle() : rSlidePersist.getNotesTextStyle();
+                        const rtl::OUString sTitleShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.TitleTextShape" ) );
+                        sServiceName = sTitleShapeService;
+                        aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
                     }
-                    else
+                    break;
+                    case XML_obj :
                     {
+                        const rtl::OUString sOutlinerShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.OutlinerShape" ) );
                         sServiceName = sOutlinerShapeService;
                         aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getBodyTextStyle() : rSlidePersist.getBodyTextStyle();
                     }
-                }
-                break;
-                case XML_dt :
-                {
-                    const rtl::OUString sDateTimeShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.DateTimeShape" ) );
-                    sServiceName = sDateTimeShapeService;
-                }
-                break;
-                case XML_hdr :
-                {
-                    const rtl::OUString sHeaderShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.HeaderShape" ) );
-                    sServiceName = sHeaderShapeService;
-                }
-                break;
-                case XML_ftr :
-                {
-                    const rtl::OUString sFooterShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.FooterShape" ) );
-                    sServiceName = sFooterShapeService;
-                }
-                break;
-                case XML_sldNum :
-                {
-                    const rtl::OUString sSlideNumberShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.SlideNumberShape" ) );
-                    sServiceName = sSlideNumberShapeService;
-                }
-                break;
-                case XML_sldImg :
-                {
-                    const rtl::OUString sPageShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PageShape" ) );
-                    sServiceName = sPageShapeService;
-                }
-                break;
+                    break;
+                    case XML_body :
+                    {
+                        const rtl::OUString sNotesShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.NotesShape" ) );
+                        const rtl::OUString sOutlinerShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.OutlinerShape" ) );
+                        if ( rSlidePersist.isNotesPage() )
+                        {
+                            sServiceName = sNotesShapeService;
+                            aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getNotesTextStyle() : rSlidePersist.getNotesTextStyle();
+                        }
+                        else
+                        {
+                            sServiceName = sOutlinerShapeService;
+                            aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getBodyTextStyle() : rSlidePersist.getBodyTextStyle();
+                        }
+                    }
+                    break;
+                    case XML_dt :
+                    {
+                        const rtl::OUString sDateTimeShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.DateTimeShape" ) );
+                        sServiceName = sDateTimeShapeService;
+                    }
+                    break;
+                    case XML_hdr :
+                    {
+                        const rtl::OUString sHeaderShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.HeaderShape" ) );
+                        sServiceName = sHeaderShapeService;
+                    }
+                    break;
+                    case XML_ftr :
+                    {
+                        const rtl::OUString sFooterShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.FooterShape" ) );
+                        sServiceName = sFooterShapeService;
+                    }
+                    break;
+                    case XML_sldNum :
+                    {
+                        const rtl::OUString sSlideNumberShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.SlideNumberShape" ) );
+                        sServiceName = sSlideNumberShapeService;
+                    }
+                    break;
+                    case XML_sldImg :
+                    {
+                        const rtl::OUString sPageShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PageShape" ) );
+                        sServiceName = sPageShapeService;
+                    }
+                    break;
 
-                default:
-                break;
-
+                    default:
+                    break;
+                }
             }
             if ( !aMasterTextListStyle.get() )
                 aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getOtherTextStyle() : rSlidePersist.getOtherTextStyle();
