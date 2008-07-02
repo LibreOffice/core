@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PaneDockingWindow.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +62,7 @@ PaneDockingWindow::PaneDockingWindow (
         ),
       msPaneURL(rsPaneURL),
       msTitle(rsTitle),
-      mpTitleToolBox(NULL),
+      mpTitleToolBox(),
       maBorder (3,1,3,3),
       mnChildWindowId(pChildWindow->GetType()),
       mpContentWindow(new ::Window(this)),
@@ -401,5 +401,14 @@ void PaneDockingWindow::DataChanged (const DataChangedEvent& rEvent)
 {
     return mpContentWindow.get();
 }
+
+
+
+
+::boost::shared_ptr<ToolBox> PaneDockingWindow::GetTitleToolBox (void) const
+{
+    return mpTitleToolBox;
+}
+
 
 } // end of namespace ::sd
