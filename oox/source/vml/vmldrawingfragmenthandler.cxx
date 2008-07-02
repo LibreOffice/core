@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vmldrawingfragmenthandler.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -501,7 +501,9 @@ DrawingFragmentHandler::~DrawingFragmentHandler()
 Reference< XFastContextHandler > DrawingFragmentHandler::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
     throw (SAXException, RuntimeException)
 {
-    return StaticCreateContext( *this, aElementToken, xAttribs, mrShapes, mrShapeTypes );
+    return aElementToken == XML_xml
+        ? getFastContextHandler()
+        : StaticCreateContext( *this, aElementToken, xAttribs, mrShapes, mrShapeTypes );
 }
 
 void SAL_CALL DrawingFragmentHandler::endDocument()
