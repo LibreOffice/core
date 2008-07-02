@@ -8,7 +8,7 @@
 #
 # $RCSfile: work.pm,v $
 #
-# $Revision: 1.11 $
+# $Revision: 1.12 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -49,7 +49,7 @@ sub split_line
 {
     my ($line, $parfile) = @_;
 
-    while ( $line =~ /^(.*?\;\s+)\s*(.*)$/ )
+    while ( $line =~ /^((?:[^"]|\"(?:[^"\\]|\\.)*\")*?\;\s+)\s*(.*)$/ )
     {
         my $oneline = $1;
         $line = $2;
