@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CharacterProperties.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -131,7 +131,7 @@ void CharacterProperties::AddPropertiesToVector(
                   PROP_CHAR_ESCAPEMENT,
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEVOID ));
     // CharHeight
     rOutProperties.push_back(
         Property( C2U( "CharHeight" ),
@@ -219,7 +219,7 @@ void CharacterProperties::AddPropertiesToVector(
                   PROP_CHAR_ESCAPEMENT_HEIGHT,
                   ::getCppuType( reinterpret_cast< const sal_Int8 * >(0)),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEVOID ));
 
     // CharCrossedOut
 //     rOutProperties.push_back(
@@ -479,7 +479,6 @@ void CharacterProperties::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_CHAR_SET, sal_Int16(aFont.GetCharSet()) );//use awt::CharSet::DONTKNOW instead of SYSTEM to avoid assertion issue 50249
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_PITCH, sal_Int16(aFont.GetPitch()) );//awt::FontPitch::VARIABLE
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_CHAR_COLOR, -1 ); //automatic color (COL_AUTO)
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_CHAR_ESCAPEMENT, 0 );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_CHAR_HEIGHT, fDefaultFontHeight );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_UNDERLINE, awt::FontUnderline::NONE );
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_CHAR_UNDERLINE_COLOR, -1 ); //automatic color (COL_AUTO)
@@ -492,7 +491,6 @@ void CharacterProperties::AddDefaultsToMap(
 //     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_CASE_MAPPING, style::CaseMap::NONE );
 //     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_CHAR_ROTATION, 0 );
 //     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_CHAR_SCALE_WIDTH, 71 );
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int8 >( rOutMap, PROP_CHAR_ESCAPEMENT_HEIGHT, 0 );
 
 //     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_CROSSED_OUT, false );
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_CHAR_STRIKE_OUT, awt::FontStrikeout::NONE );
