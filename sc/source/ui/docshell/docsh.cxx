@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh.cxx,v $
- * $Revision: 1.100 $
+ * $Revision: 1.101 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,6 +66,7 @@
 #include <svx/svxmsbas.hxx>
 #include <svtools/fltrcfg.hxx>
 #include <svtools/documentlockfile.hxx>
+#include <svtools/sharecontrolfile.hxx>
 #include <unotools/charclass.hxx>
 #include <vcl/virdev.hxx>
 #include "chgtrack.hxx"
@@ -819,7 +820,18 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                     bShared = pSharedDocShell->HasSharedXMLFlagSet();
                                 }
 
-                                if ( bShared )
+                                // #i87870# check if shared status was disabled and enabled again
+                                bool bOwnEntry = false;
+                                try
+                                {
+                                    ::svt::ShareControlFile aControlFile( GetSharedFileURL() );
+                                    bOwnEntry = aControlFile.HasOwnEntry();
+                                }
+                                catch ( uno::Exception& )
+                                {
+                                }
+
+                                if ( bShared && bOwnEntry )
                                 {
                                     uno::Reference< frame::XStorable > xStorable( xModel, uno::UNO_QUERY_THROW );
 
