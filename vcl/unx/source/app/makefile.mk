@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.33 $
+# $Revision: 1.34 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -79,8 +79,11 @@ EXCEPTIONSFILES=\
 
 
 .IF "$(ENABLE_RANDR)" != ""
-.IF "$(OS)" != "SOLARIS"
 CDEFS+=-DUSE_RANDR
+.IF "$(XRANDR_DLOPEN)" == "FALSE"
+CDEFS+=$(XRANDR_CFLAGS)
+.ELSE
+CDEFS+=-DXRANDR_DLOPEN
 .ENDIF
 .ENDIF
 
