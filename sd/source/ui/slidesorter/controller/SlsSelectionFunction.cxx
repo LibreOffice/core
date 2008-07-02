@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlsSelectionFunction.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -333,12 +333,8 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
             break;
 
         case KEY_ESCAPE:
-            rFocusManager.HideFocus();
-            if (mrSlideSorter.GetViewShell() != NULL)
-            {
-                mrSlideSorter.GetViewShell()->GetParentWindow()->GrabFocus();
-                bResult = TRUE;
-            }
+            rFocusManager.SetFocusToToolBox();
+            bResult = TRUE;
             break;
 
         case KEY_SPACE:
