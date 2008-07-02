@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: configmgr.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <osl/diagnose.h>
+#include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
 #if OSL_DEBUG_LEVEL > 0
 #include <rtl/strbuf.hxx>
@@ -466,6 +467,20 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
     {
         aRet <<= rWriterCompatibilityVersionOOo11;
         return aRet;
+    }
+
+    if (eProp == PRODUCTEXTENSION) {
+        rtl::OUString name(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "${BRAND_BASE_DIR}/program/edition/edition.ini")));
+        rtl::Bootstrap::expandMacros(name);
+        if (rtl::Bootstrap(name).getFrom(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EDITIONNAME")),
+                rProductExtension))
+        {
+            return com::sun::star::uno::Any(rProductExtension);
+        }
     }
 
     OUString sPath = C2U(cConfigBaseURL);
