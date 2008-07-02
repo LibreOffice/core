@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ControllerCommandDispatch.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -545,6 +545,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
 
     // text
     m_aCommandAvailability[ C2U(".uno:ScaleText")] = bIsWritable && bModelStateIsValid ;
+    m_aCommandArguments[ C2U(".uno:ScaleText")] = uno::makeAny( m_apModelState->bHasAutoScaledText );
 
     // axes
     m_aCommandAvailability[ C2U(".uno:DiagramAxisX")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasXAxis;
