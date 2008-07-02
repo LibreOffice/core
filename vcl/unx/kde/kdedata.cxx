@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: kdedata.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,8 +101,17 @@ SalKDEDisplay::~SalKDEDisplay()
 
 KDEXLib::~KDEXLib()
 {
+    // #158056# on 64 bit linux using libXRandr.so.2 will crash in
+    // XCloseDisplay when freeing extension data
+    // no known work around, therefor currently leak. Hopefully
+    // this does not make problems since we're shutting down anyway
+    // should we ever get a real kde plugin that uses the KDE event loop
+    // we should use kde's method to signal screen changes similar
+    // to the gtk plugin
+    #if ! defined USE_RANDR || ! (defined LINUX && defined X86_64)
     // properly deinitialize KApplication
     delete (VCLKDEApplication*)m_pApplication;
+    #endif
     // free the faked cmdline arguments no longer needed by KApplication
     for( int i = 0; i < m_nFakeCmdLineArgs; i++ )
         free( m_pFreeCmdLineArgs[i] );
