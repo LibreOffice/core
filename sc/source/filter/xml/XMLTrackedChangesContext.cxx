@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTrackedChangesContext.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,9 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-// INCLUDE ---------------------------------------------------------------
 #include "XMLTrackedChangesContext.hxx"
 #include "xmlimprt.hxx"
 #include "xmlconti.hxx"
@@ -47,9 +44,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <svtools/zforlist.hxx>
 #include <com/sun/star/text/XTextCursor.hpp>
-#ifndef _COM_SUN_STAR_text_CONTROLCHARACTER_HPP_
 #include <com/sun/star/text/ControlCharacter.hpp>
-#endif
 
 using namespace com::sun::star;
 using namespace xmloff::token;
