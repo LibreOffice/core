@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cnttab.cxx,v $
- * $Revision: 1.77 $
+ * $Revision: 1.78 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1898,7 +1898,38 @@ public:
     void SetTabAlign(SvxTabAdjust eAlign)
          {  aFormToken.eTabAlign = eAlign;}
 
-    void SetChapterInfo(sal_uInt16 nSet) { aFormToken.nChapterFormat = nSet;}
+//---> i89791
+    //used for entry number format, in TOC only
+    //needed for different UI dialog position
+    void SetEntryNumberFormat(sal_uInt16 nSet) {
+        switch(nSet)
+        {
+        default:
+        case 0:
+            aFormToken.nChapterFormat = CF_NUMBER;
+            break;
+        case 1:
+            aFormToken.nChapterFormat = CF_NUM_NOPREPST_TITLE;
+            break;
+        }
+    }
+
+    void SetChapterInfo(sal_uInt16 nSet) {
+        switch(nSet)
+        {
+        default:
+        case 0:
+            aFormToken.nChapterFormat = CF_NUM_NOPREPST_TITLE;
+            break;
+        case 1:
+            aFormToken.nChapterFormat = CF_TITLE;
+            break;
+        case 2:
+            aFormToken.nChapterFormat = CF_NUMBER_NOPREPST;
+            break;
+        }
+    }
+//<---
     sal_uInt16 GetChapterInfo() const{ return aFormToken.nChapterFormat;}
 
     void SetOutlineLevel( sal_uInt16 nSet ) { aFormToken.nOutlineLevel = nSet;}//i53420
@@ -2582,12 +2613,15 @@ void SwTOXEntryTabPage::PreTokenButtonRemoved(const SwFormToken& rToken)
 }
 /*-- 16.06.99 10:47:35---------------------------------------------------
 
+This function inizializes the default value in the Token
+put here the UI dependent initializations
   -----------------------------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
 {
     String sText;
     FormTokenType eTokenType = TOKEN_ENTRY_NO;
     String sCharStyle;
+    USHORT  nChapterFormat = CF_NUMBER; // i89791
     if(pBtn == &aEntryNoPB)
     {
         sText.AssignAscii(SwForm::aFormEntryNum);
@@ -2610,6 +2644,7 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
     {
         sText.AssignAscii( SwForm::aFormChapterMark);
         eTokenType = TOKEN_CHAPTER_INFO;
+        nChapterFormat = CF_NUM_NOPREPST_TITLE; // i89791
     }
     else if(pBtn == &aPageNoPB)
     {
@@ -2630,6 +2665,7 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
     SwFormToken aInsert(eTokenType);
     aInsert.sCharStyleName = sCharStyle;
     aInsert.nTabStopPosition = 0;
+    aInsert.nChapterFormat = nChapterFormat; // i89791
     aTokenWIN.InsertAtSelection(sText, aInsert);
     ModifyHdl(0);
     return 0;
@@ -2748,10 +2784,23 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
 
     if(pToken->eTokenType == TOKEN_CHAPTER_INFO)
     {
-        if(pToken->nChapterFormat < 3)
-            aChapterEntryLB.SelectEntryPos(pToken->nChapterFormat);
-        else
-            aChapterEntryLB.SetNoSelection();
+//---> i89791
+        switch(pToken->nChapterFormat)
+        {
+        default:
+            aChapterEntryLB.SetNoSelection();//to alert the user
+            break;
+        case CF_NUM_NOPREPST_TITLE:
+            aChapterEntryLB.SelectEntryPos(0);
+            break;
+        case CF_TITLE:
+            aChapterEntryLB.SelectEntryPos(1);
+           break;
+        case CF_NUMBER_NOPREPST:
+            aChapterEntryLB.SelectEntryPos(2);
+            break;
+        }
+//<---
 //i53420
 //move into position the fixed text
 //         aEntryOutlineLevelFT.SetPosPixel( aEntryOutlineLevelFTPosition );
@@ -2919,11 +2968,7 @@ IMPL_LINK(SwTOXEntryTabPage, NumberFormatHdl, ListBox*, pBox)
         DBG_ASSERT(pCtrl, "no active control?")
         if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
         {
-            sal_uInt16 nFormat = CF_NUMBER;
-            if(nPos == 1)
-                nFormat = CF_NUM_NOPREPST_TITLE;
-
-            ((SwTOXButton*)pCtrl)->SetChapterInfo(nFormat);
+           ((SwTOXButton*)pCtrl)->SetEntryNumberFormat(nPos);//i89791
         }
         ModifyHdl(0);
     }
