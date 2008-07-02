@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lotform.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,9 +28,8 @@
  *
  ************************************************************************/
 
-
-#ifndef _LOTFORM_HXX
-#define _LOTFORM_HXX
+#ifndef SC_LOTFORM_HXX
+#define SC_LOTFORM_HXX
 
 #include "formel.hxx"
 #include <tools/string.hxx>
