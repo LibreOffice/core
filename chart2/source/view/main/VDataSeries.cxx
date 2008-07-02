@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VDataSeries.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,8 @@
 #include "LabelPositionHelper.hxx"
 #include "ChartTypeHelper.hxx"
 #include "ContainerHelper.hxx"
+#include "MeanValueRegressionCurveCalculator.hxx"
+
 #include <com/sun/star/chart2/Symbol.hpp>
 
 //#include "CommonConverters.hxx"
@@ -225,6 +227,8 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     , m_aValues_Y_First()
     , m_aValues_Y_Last()
 
+    , m_fYMeanValue(1.0)
+
     , m_aAttributedDataPointIndexList()
 
     , m_eStackingDirection(StackingDirection_NO_STACKING)
@@ -252,6 +256,8 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     , m_apSymbolProperties_InvisibleSymbolForSelection(NULL)
     , m_nCurrentAttributedPoint(-1)
 {
+    ::rtl::math::setNan( & m_fYMeanValue );
+
     uno::Reference<data::XDataSource> xDataSource =
             uno::Reference<data::XDataSource>( xDataSeries, uno::UNO_QUERY );
 
@@ -666,6 +672,19 @@ uno::Sequence< double > VDataSeries::getAllX() const
 uno::Sequence< double > VDataSeries::getAllY() const
 {
     return m_aValues_Y.Doubles;
+}
+
+double VDataSeries::getYMeanValue() const
+{
+    if( ::rtl::math::isNan( m_fYMeanValue ) )
+    {
+        uno::Reference< XRegressionCurveCalculator > xCalculator( new MeanValueRegressionCurveCalculator() );
+        uno::Sequence< double > aXValuesDummy;
+        xCalculator->recalculateRegression( aXValuesDummy, getAllY() );
+        double fXDummy = 1.0;
+        m_fYMeanValue = xCalculator->getCurveValue( fXDummy );
+    }
+    return m_fYMeanValue;
 }
 
 ::std::auto_ptr< Symbol > getSymbolPropertiesFromPropertySet(
