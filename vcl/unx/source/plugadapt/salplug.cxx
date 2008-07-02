@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salplug.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -453,6 +453,15 @@ SalInstance *CreateSalInstance()
 
     if( !(pUsePlugin && *pUsePlugin) )
         pInst = check_headless_plugin();
+
+    if( ! pInst )
+    {
+        /* #i90094#
+           from now on we know that an X connection will be
+           established, so protect X against itself
+        */
+        XInitThreads();
+    }
 
     if( ! pInst && !(pUsePlugin && *pUsePlugin) )
         pUsePlugin = autodetect_plugin();
