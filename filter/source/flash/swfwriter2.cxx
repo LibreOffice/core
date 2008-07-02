@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swfwriter2.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -393,6 +393,9 @@ void Sprite::write( SvStream& out )
     SvMemoryStream aTmp;
     for(vector< Tag* >::iterator i = maTags.begin(); i != maTags.end(); i++)
         (*i)->write( aTmp );
+
+    if( !mnFrames )
+        mnFrames = 1;
 
     aTmp.Seek(0);
 
