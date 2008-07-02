@@ -315,7 +315,7 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>dong</CurrencyID>
+      <CurrencyID>VND</CurrencyID>
       <CurrencySymbol>₫</CurrencySymbol>
       <BankSymbol>VND</BankSymbol>
       <CurrencyName>Việt Nam Đồng</CurrencyName>
