@@ -8,7 +8,7 @@
  *
  * $RCSfile: BasicViewFactory.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -280,8 +280,14 @@ void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxV
                         mpFrameView->Connect();
                 }
 
+                // With the view in the center pane the sub controller is
+                // released, too.
                 mpBase->GetDrawController().SetSubController(
                     Reference<drawing::XDrawSubController>());
+
+                SfxViewShell* pSfxViewShell = pViewShell->GetViewShell();
+                if (pSfxViewShell != NULL)
+                    pSfxViewShell->DisconnectAllClients();
             }
 
             ReleaseView(*iViewShell);
