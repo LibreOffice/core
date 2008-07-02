@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sallayout.cxx,v $
- * $Revision: 1.93 $
+ * $Revision: 1.94 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -783,7 +783,7 @@ Point SalLayout::GetDrawPosition( const Point& rRelative ) const
 // If the range doesn't match in 0x3000 and 0x30FB, please change
 // also ImplCalcKerning.
 
-int SalLayout::CalcAsianKerning( sal_UCS4 c, bool bLeft, bool bVertical )
+int SalLayout::CalcAsianKerning( sal_UCS4 c, bool bLeft, bool /*TODO:? bVertical*/ )
 {
     // http://www.asahi-net.or.jp/~sd5a-ucd/freetexts/jis/x4051/1995/appendix.html
     static signed char nTable[0x30] =
@@ -794,20 +794,32 @@ int SalLayout::CalcAsianKerning( sal_UCS4 c, bool bLeft, bool bVertical )
     };
 
     int nResult = 0;
-    if( c>=0x3000 && c<0x3030 )
+    if( (c >= 0x3000) && (c < 0x3030) )
         nResult = nTable[ c - 0x3000 ];
     else switch( c )
     {
+#if 0 // TODO: enable it for real-fixed-width fonts?
         case ':': case ';': case '!':
             if( !bVertical )
                 nResult = bLeft ? -1 : +1;  // 25% left and right
             break;
+#endif
         case 0x30FB:
             nResult = bLeft ? -1 : +1;      // 25% left/right/top/bottom
+            break;
+        case 0x2019: case 0x201D:
+        case 0xFF01: case 0xFF09: case 0xFF0C:
+        case 0xFF1A: case 0xFF1B:
+            nResult = -2;
+            break;
+        case 0x2018: case 0x201C:
+        case 0xFF08:
+            nResult = +2;
             break;
         default:
             break;
     }
+
     return nResult;
 }
 
@@ -1229,15 +1241,23 @@ void GenericSalLayout::ApplyAsianKerning( const sal_Unicode* pStr, int nLength )
     GlyphItem* pGEnd = mpGlyphItems + mnGlyphCount;
     for( GlyphItem* pG = mpGlyphItems; pG < pGEnd; ++pG )
     {
-        int n = pG->mnCharPos;
-        if( (n < nLength - 1)
-        &&  (0x3000 == (0xFF00 & pStr[n]))
-        &&  (0x3000 == (0xFF00 & pStr[n+1])) )
+        const int n = pG->mnCharPos;
+        if( n < nLength - 1)
         {
-            const bool bVertical = false;
-            long nKernFirst = +CalcAsianKerning( pStr[n], true, bVertical );
-            long nKernNext  = -CalcAsianKerning( pStr[n+1], false, bVertical );
+            // ignore code ranges that are not affected by asian punctuation compression
+            const sal_Unicode cHere = pStr[n];
+            if( (0x3000 != (cHere & 0xFF00)) && (0x2010 != (cHere & 0xFFF0)) || (0xFF00 != (cHere & 0xFF00)) )
+                continue;
+            const sal_Unicode cNext = pStr[n+1];
+            if( (0x3000 != (cNext & 0xFF00)) && (0x2010 != (cNext & 0xFFF0)) || (0xFF00 != (cNext & 0xFF00)) )
+                continue;
 
+            // calculate compression values
+            const bool bVertical = false;
+            long nKernFirst = +CalcAsianKerning( cHere, true, bVertical );
+            long nKernNext  = -CalcAsianKerning( cNext, false, bVertical );
+
+            // apply punctuation compression to logical glyph widths
             long nDelta = (nKernFirst < nKernNext) ? nKernFirst : nKernNext;
             if( nDelta<0 && nKernFirst!=0 && nKernNext!=0 )
             {
@@ -1249,6 +1269,7 @@ void GenericSalLayout::ApplyAsianKerning( const sal_Unicode* pStr, int nLength )
             }
         }
 
+        // adjust the glyph positions to the new glyph widths
         if( pG+1 != pGEnd )
             pG->maLinearPos.X() += nOffset;
     }
