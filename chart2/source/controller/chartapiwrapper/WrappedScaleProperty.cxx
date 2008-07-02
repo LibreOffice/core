@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: WrappedScaleProperty.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,6 +77,9 @@ WrappedScaleProperty::WrappedScaleProperty( tScaleProperty eScaleProperty
         case SCALE_PROP_STEPHELP:
             m_aOuterName = C2U("StepHelp");
             break;
+        case SCALE_PROP_STEPHELP_COUNT:
+            m_aOuterName = C2U("StepHelpCount");
+            break;
         case SCALE_PROP_AUTO_MAX:
             m_aOuterName = C2U("AutoMax");
             break;
@@ -117,6 +120,7 @@ void WrappedScaleProperty::addWrappedProperties( std::vector< WrappedProperty* >
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_ORIGIN, spChart2ModelContact ) );
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_STEPMAIN, spChart2ModelContact ) );
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_STEPHELP, spChart2ModelContact ) );
+    rList.push_back( new WrappedScaleProperty( SCALE_PROP_STEPHELP_COUNT, spChart2ModelContact ) );
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_AUTO_MAX, spChart2ModelContact ) );
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_AUTO_MIN, spChart2ModelContact ) );
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_AUTO_ORIGIN, spChart2ModelContact ) );
@@ -198,6 +202,19 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
             bSetScaleData = true;
             break;
         }
+        case SCALE_PROP_STEPHELP_COUNT:
+        {
+            Sequence< chart2::SubIncrement >& rSubIncrements( aScaleData.IncrementData.SubIncrements );
+            if( rSubIncrements.getLength() == 0 )
+                rSubIncrements.realloc( 1 );
+            sal_Int32 nIntervalCount=0;
+            if( rOuterValue>>=nIntervalCount )
+                rSubIncrements[ 0 ].IntervalCount <<= nIntervalCount;
+            else
+                rSubIncrements[ 0 ].IntervalCount  = Any();
+            bSetScaleData = true;
+            break;
+        }
         case SCALE_PROP_AUTO_MAX:
         {
             if( (rOuterValue >>= bBool) && bBool )
@@ -234,7 +251,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
             if( (rOuterValue >>= bBool) && bBool )
                 rSubIncrements[ 0 ].IntervalCount = Any();
             else
-                rSubIncrements[ 0 ].IntervalCount = getPropertyValue( SCALE_PROP_STEPHELP, xInnerPropertySet );
+                rSubIncrements[ 0 ].IntervalCount = getPropertyValue( SCALE_PROP_STEPHELP_COUNT, xInnerPropertySet );
             bSetScaleData = true;
             break;
         }
@@ -412,6 +429,25 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
                         aRet <<= aExplicitIncrement.Distance;
                 }
             }
+            break;
+        }
+        case SCALE_PROP_STEPHELP_COUNT:
+        {
+            sal_Int32 nIntervalCount = 0;
+            bool bNeedToCalculateExplicitValues = true;
+            Sequence< chart2::SubIncrement >& rSubIncrements( aScaleData.IncrementData.SubIncrements );
+            if( rSubIncrements.getLength() > 0 )
+            {
+                if( (rSubIncrements[ 0 ].IntervalCount >>= nIntervalCount) && (nIntervalCount > 0) )
+                    bNeedToCalculateExplicitValues = false;
+            }
+            if( bNeedToCalculateExplicitValues )
+            {
+                m_spChart2ModelContact->getExplicitValuesForAxis( xAxis, aExplicitScale, aExplicitIncrement );
+                if( aExplicitIncrement.SubIncrements.getLength() > 0 )
+                    nIntervalCount = aExplicitIncrement.SubIncrements[ 0 ].IntervalCount;
+            }
+            aRet = uno::makeAny( nIntervalCount );
             break;
         }
         case SCALE_PROP_AUTO_MAX:
