@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: step0.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -313,8 +313,10 @@ void SbiRuntime::StepIS()
     SbxVariableRef refVar2 = PopVar();
     BOOL bRes = BOOL(
         refVar1->GetType() == SbxOBJECT
-     && refVar2->GetType() == SbxOBJECT
-     && refVar1->GetObject() == refVar2->GetObject() );
+     && refVar2->GetType() == SbxOBJECT );
+    if ( bVBAEnabled  && !bRes )
+        Error( SbERR_INVALID_USAGE_OBJECT );
+    bRes = ( bRes && refVar1->GetObject() == refVar2->GetObject() );
     SbxVariable* pRes = new SbxVariable;
     pRes->PutBool( bRes );
     PushVar( pRes );
