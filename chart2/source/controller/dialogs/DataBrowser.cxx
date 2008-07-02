@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataBrowser.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1307,8 +1307,46 @@ void DataBrowser::EndScroll()
     SetUpdateMode( FALSE );
 
     EditBrowseBox::EndScroll();
-    ImplAdjustHeaderControls();
+    RenewSeriesHeaders();
+
     SetUpdateMode( bLastUpdateMode );
+}
+
+void DataBrowser::RenewSeriesHeaders()
+{
+    Window * pWin = this->GetParent();
+    if( !pWin )
+        pWin = this;
+
+    clearHeaders();
+    DataBrowserModel::tDataHeaderVector aHeaders( m_apDataBrowserModel->getDataHeaders());
+    Link aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
+    Link aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
+    bool bIsHighContrast = pWin ? (pWin->GetDisplayBackground().GetColor().IsDark()) : false;
+
+    for( DataBrowserModel::tDataHeaderVector::const_iterator aIt( aHeaders.begin());
+         aIt != aHeaders.end(); ++aIt )
+    {
+        ::boost::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( pWin ));
+        Reference< beans::XPropertySet > xSeriesProp( aIt->m_xDataSeries, uno::UNO_QUERY );
+        sal_Int32 nColor = 0;
+        if( xSeriesProp.is() &&
+            ( xSeriesProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Color"))) >>= nColor ))
+            spHeader->SetColor( Color( nColor ));
+        spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis, bIsHighContrast );
+        spHeader->SetSeriesName(
+            String( DataSeriesHelper::getDataSeriesLabel(
+                        aIt->m_xDataSeries,
+                        (aIt->m_xChartType.is() ?
+                         aIt->m_xChartType->getRoleOfSequenceForSeriesLabel() :
+                         OUString( RTL_CONSTASCII_USTRINGPARAM("values-y"))))));
+        spHeader->SetRange( aIt->m_nStartColumn + 1, aIt->m_nEndColumn + 1 );
+        spHeader->SetGetFocusHdl( aFocusLink );
+        spHeader->SetEditChangedHdl( aSeriesHeaderChangedLink );
+        m_aSeriesHeaders.push_back( spHeader );
+    }
+
+    ImplAdjustHeaderControls();
 }
 
 void DataBrowser::ImplAdjustHeaderControls()
