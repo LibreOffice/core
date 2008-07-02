@@ -443,7 +443,7 @@
 </LC_CALENDAR>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>N.I.S</CurrencyID>
+<CurrencyID>ILS</CurrencyID>
 <CurrencySymbol>₪</CurrencySymbol>
 <BankSymbol>ILS</BankSymbol>
 <CurrencyName>New Israeli Sheqel</CurrencyName>
