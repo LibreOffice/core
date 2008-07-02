@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLStylesImportHelper.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLSTYLESIMPORTHELPER_HXX
-#define _SC_XMLSTYLESIMPORTHELPER_HXX
+#ifndef SC_XMLSTYLESIMPORTHELPER_HXX
+#define SC_XMLSTYLESIMPORTHELPER_HXX
 
 #include "rangelst.hxx"
 #include <rtl/ustring.hxx>
