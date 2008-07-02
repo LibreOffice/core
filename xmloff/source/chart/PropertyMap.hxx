@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyMap.hxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,10 +63,11 @@
 #define XML_SCH_CONTEXT_MIN                         ( XML_SCH_CTF_START + 1 )
 #define XML_SCH_CONTEXT_MAX                         ( XML_SCH_CTF_START + 2 )
 #define XML_SCH_CONTEXT_STEP_MAIN                   ( XML_SCH_CTF_START + 3 )
-#define XML_SCH_CONTEXT_ORIGIN                      ( XML_SCH_CTF_START + 4 )
-#define XML_SCH_CONTEXT_LOGARITHMIC                 ( XML_SCH_CTF_START + 5 )
-#define XML_SCH_CONTEXT_STOCK_WITH_VOLUME           ( XML_SCH_CTF_START + 6 )
-#define XML_SCH_CONTEXT_LINES_USED                  ( XML_SCH_CTF_START + 7 )
+#define XML_SCH_CONTEXT_STEP_HELP_COUNT             ( XML_SCH_CTF_START + 4 )
+#define XML_SCH_CONTEXT_ORIGIN                      ( XML_SCH_CTF_START + 5 )
+#define XML_SCH_CONTEXT_LOGARITHMIC                 ( XML_SCH_CTF_START + 6 )
+#define XML_SCH_CONTEXT_STOCK_WITH_VOLUME           ( XML_SCH_CTF_START + 7 )
+#define XML_SCH_CONTEXT_LINES_USED                  ( XML_SCH_CTF_START + 8 )
 
 #define XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_INNER     ( XML_SCH_CTF_START + 10 )
 #define XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_OUTER     ( XML_SCH_CTF_START + 11 )
@@ -82,8 +83,7 @@
 #define XML_SCH_CONTEXT_SPECIAL_SYMBOL_HEIGHT       ( XML_SCH_CTF_START + 21 )
 #define XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME   ( XML_SCH_CTF_START + 22 )
 #define XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE        ( XML_SCH_CTF_START + 23 )
-#define XML_SCH_CONTEXT_SPECIAL_STEP_HELP           ( XML_SCH_CTF_START + 24 )
-#define XML_SCH_CONTEXT_SPECIAL_LABEL_SEPARATOR     ( XML_SCH_CTF_START + 25 )
+#define XML_SCH_CONTEXT_SPECIAL_LABEL_SEPARATOR     ( XML_SCH_CTF_START + 24 )
 
 #define MAP_ENTRY( a, ns, nm, t )            { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFVER_010 }
 #define MAP_ENTRY_ODF12( a, ns, nm, t )      { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, 0, SvtSaveOptions::ODFVER_012 }
@@ -151,7 +151,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_CONTEXT( "Max", CHART, XML_MAXIMUM, XML_TYPE_DOUBLE, MAX ),
     MAP_CONTEXT( "Origin", CHART, XML_ORIGIN, XML_TYPE_DOUBLE, ORIGIN ),
     MAP_CONTEXT( "StepMain", CHART, XML_INTERVAL_MAJOR, XML_TYPE_DOUBLE, STEP_MAIN ),
-//  MAP_CONTEXT( "StepHelp", CHART, XML_INTERVAL_MINOR, XML_TYPE_DOUBLE, STEP_HELP ),
+     MAP_CONTEXT( "StepHelpCount", CHART, XML_INTERVAL_MINOR_DIVISOR, XML_TYPE_NUMBER, STEP_HELP_COUNT ),
     MAP_ENTRY( "GapWidth", CHART, XML_GAP_WIDTH, XML_TYPE_NUMBER ),
     MAP_ENTRY( "Overlap", CHART, XML_OVERLAP, XML_TYPE_NUMBER ),
     MAP_ENTRY( "TextCanOverlap", CHART, XML_TEXT_OVERLAP, XML_TYPE_BOOL ),
@@ -191,10 +191,6 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     // for compatability to pre 6.0beta documents
 //     MAP_SPECIAL( "SymbolBitmapURL", CHART, XML_SYMBOL_IMAGE_NAME, XML_TYPE_STRING, SYMBOL_IMAGE_NAME ),
 
-    // changed for Oasis file-format
-    // Oasis proposal, see http://lists.oasis-open.org/archives/office/200312/msg00000.html
-    MAP_SPECIAL_IMP( "StepHelp", CHART, XML_INTERVAL_MINOR_DIVISOR, XML_TYPE_NUMBER, STEP_HELP ),
-
     MAP_ENTRY( "ChartUserDefinedAttributes", TEXT, XML_XMLNS, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM ),
 
     MAP_ENTRY_END
@@ -206,7 +202,6 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
 
 SvXMLEnumMapEntry aXMLChartAxisArrangementEnumMap[] =
 {
-    { ::xmloff::token::XML_AUTOMATIC,       ::com::sun::star::chart::ChartAxisArrangeOrderType_AUTO },
     { ::xmloff::token::XML_SIDE_BY_SIDE,        ::com::sun::star::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE },
     { ::xmloff::token::XML_STAGGER_EVEN,        ::com::sun::star::chart::ChartAxisArrangeOrderType_STAGGER_EVEN },
     { ::xmloff::token::XML_STAGGER_ODD,     ::com::sun::star::chart::ChartAxisArrangeOrderType_STAGGER_ODD },
