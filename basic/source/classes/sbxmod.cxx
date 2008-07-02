@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sbxmod.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1926,6 +1926,7 @@ SbMethod::SbMethod( const String& r, SbxDataType t, SbModule* p )
     nDebugFlags  =
     nLine1       =
     nLine2       = 0;
+    refStatics = new SbxArray;
     // AB: 2.7.1996: HACK wegen 'Referenz kann nicht gesichert werden'
     SetFlag( SBX_NO_MODIFY );
 }
@@ -1939,6 +1940,7 @@ SbMethod::SbMethod( const SbMethod& r )
     nDebugFlags  = r.nDebugFlags;
     nLine1       = r.nLine1;
     nLine2       = r.nLine2;
+        refStatics = r.refStatics;
     SetFlag( SBX_NO_MODIFY );
 }
 
@@ -1954,10 +1956,14 @@ SbxArray* SbMethod::GetLocals()
         return NULL;
 }
 
+void SbMethod::ClearStatics()
+{
+    refStatics = new SbxArray;
+
+}
 SbxArray* SbMethod::GetStatics()
 {
-    DBG_ERROR( "SbMethod::GetStatics() invalid, AB fragen" )
-    return NULL;
+    return refStatics;
 }
 
 BOOL SbMethod::LoadData( SvStream& rStrm, USHORT nVer )
