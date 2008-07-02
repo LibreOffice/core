@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdmodel.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 #ifndef _SVDMODEL_HXX
 #define _SVDMODEL_HXX
 
+#include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <sot/storage.hxx>
 #include <tools/link.hxx>
@@ -730,6 +731,8 @@ public:
     void MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSet, SdrModel* pNewModel );
 
     bool IsInDestruction() const;
+
+    static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelImplementationId();
 };
 
 typedef tools::WeakReference< SdrModel > SdrModelWeakRef;
