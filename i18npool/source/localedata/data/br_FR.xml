@@ -311,14 +311,14 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="false" usedInCompatibleFormatCodes="true">
-      <CurrencyID>franc</CurrencyID>
+      <CurrencyID>FRF</CurrencyID>
       <CurrencySymbol>F</CurrencySymbol>
       <BankSymbol>FRF</BankSymbol>
       <CurrencyName>Franc</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
     <Currency default="true" usedInCompatibleFormatCodes="false">
-      <CurrencyID>euro</CurrencyID>
+      <CurrencyID>EUR</CurrencyID>
       <CurrencySymbol>€</CurrencySymbol>
       <BankSymbol>EUR</BankSymbol>
       <CurrencyName>Euro</CurrencyName>
