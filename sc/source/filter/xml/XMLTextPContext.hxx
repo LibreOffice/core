@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextPContext.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLTEXTPCONTEXT_HXX
-#define _SC_XMLTEXTPCONTEXT_HXX
+#ifndef SC_XMLTEXTPCONTEXT_HXX
+#define SC_XMLTEXTPCONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
 #include <rtl/ustrbuf.hxx>

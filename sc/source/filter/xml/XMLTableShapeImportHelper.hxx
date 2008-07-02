@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTableShapeImportHelper.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLTABLESHAPEIMPORTHELPER_HXX
-#define _SC_XMLTABLESHAPEIMPORTHELPER_HXX
+#ifndef SC_XMLTABLESHAPEIMPORTHELPER_HXX
+#define SC_XMLTABLESHAPEIMPORTHELPER_HXX
 
 #include <xmloff/shapeimport.hxx>
 #include <com/sun/star/table/CellAddress.hpp>
