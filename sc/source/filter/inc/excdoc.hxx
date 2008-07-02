@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excdoc.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _EXCDOC_HXX
-#define _EXCDOC_HXX
+#ifndef SC_EXCDOC_HXX
+#define SC_EXCDOC_HXX
 
 #include <tools/solar.h>
 #include "xeroot.hxx"
