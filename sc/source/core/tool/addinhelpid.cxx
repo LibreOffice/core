@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: addinhelpid.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,15 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-// ============================================================================
 #include "addinhelpid.hxx"
-
-#ifndef SC_SC_HRC
 #include "sc.hrc"
-#endif
-
 
 // ============================================================================
 
