@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sbxvalue.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -307,6 +307,30 @@ SbxValue& SbxValue::operator=( const SbxValue& r )
             SetError( SbxERR_PROP_READONLY );
         else
         {
+            // string -> byte array
+            if( IsFixed() && (aData.eType == SbxOBJECT)
+                && aData.pObj && ( aData.pObj->GetType() & (SbxARRAY | SbxBYTE) )
+                && (r.aData.eType == SbxSTRING) )
+            {
+                String aStr = r.GetString();
+                SbxArray* pArr = StringToByteArray(aStr);
+                PutObject(pArr);
+                return *this;
+            }
+            // byte array -> string
+            if( r.IsFixed() && (r.aData.eType == SbxOBJECT)
+                && r.aData.pObj && ( r.aData.pObj->GetType() & (SbxARRAY | SbxBYTE) )
+                && (aData.eType == SbxSTRING) )
+            {
+                SbxBase* pObj = r.GetObject();
+                SbxArray* pArr = PTR_CAST(SbxArray, pObj);
+                if( pArr )
+                {
+                    String aStr = ByteArrayToString( pArr );
+                    PutString(aStr);
+                    return *this;
+                }
+            }
             // Den Inhalt der Variablen auslesen
             SbxValues aNew;
             if( IsFixed() )
@@ -1434,8 +1458,10 @@ BOOL SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
         ResetError();
     if( !CanRead() || !rOp.CanRead() )
         SetError( SbxERR_PROP_WRITEONLY );
-    else if( GetType() == SbxNULL && rOp.GetType() == SbxNULL )
+    else if( GetType() == SbxNULL && rOp.GetType() == SbxNULL && !bVBAInterop )
+    {
         bRes = TRUE;
+    }
     else if( GetType() == SbxEMPTY && rOp.GetType() == SbxEMPTY )
         bRes = TRUE;
     // Sonderregel 1: Ist ein Operand Null, ist das Ergebnis FALSE
