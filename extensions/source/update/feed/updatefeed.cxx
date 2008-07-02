@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updatefeed.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,6 +70,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/memory.h>
 #include <rtl/bootstrap.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <osl/process.h>
 #include <osl/conditn.hxx>
 
@@ -364,7 +365,7 @@ public:
 protected:
 
     virtual ~UpdateInformationProvider();
-    static uno::Any getUILanguage(uno::Reference<uno::XComponentContext> const & xContext);
+    static uno::Any getConfigurationItem(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, rtl::OUString const & node, rtl::OUString const & item);
 
 private:
     uno::Reference< io::XInputStream > load(const rtl::OUString& rURL);
@@ -506,15 +507,70 @@ UpdateInformationProvider::UpdateInformationProvider(
     rtl::OUString aPath;
     if( rtl::Bootstrap::get( UNISTRING("BRAND_BASE_DIR"), aPath ) )
     {
+        uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
+        if( !xServiceManager.is() )
+            throw uno::RuntimeException(
+                UNISTRING("unable to obtain service manager from component context"),
+                uno::Reference< uno::XInterface >());
+
+        uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
+            xServiceManager->createInstanceWithContext(
+                UNISTRING("com.sun.star.configuration.ConfigurationProvider"),
+                xContext ),
+            uno::UNO_QUERY_THROW);
+
         aPath += UNISTRING( "/program/" SAL_CONFIGFILE( "version" ) );
 
         rtl::Bootstrap aVersionFile(aPath);
 
+        rtl::OUStringBuffer buf;
+        rtl::OUString name;
+        getConfigurationItem(
+            xConfigurationProvider,
+            UNISTRING("org.openoffice.Setup/Product"),
+            UNISTRING("ooName")) >>= name;
+        buf.append(name);
+        buf.append(sal_Unicode(' '));
+        rtl::OUString version;
+        getConfigurationItem(
+            xConfigurationProvider,
+            UNISTRING("org.openoffice.Setup/Product"),
+            UNISTRING("ooSetupVersion")) >>= version;
+        buf.append(version);
+        rtl::OUString edition(
+            UNISTRING(
+                "${${BRAND_BASE_DIR}/program/edition/edition.ini:"
+                "EDITIONNAME}"));
+        rtl::Bootstrap::expandMacros(edition);
+        if (edition.getLength() != 0) {
+            buf.append(sal_Unicode(' '));
+            buf.append(edition);
+        }
+        rtl::OUString extension;
+        getConfigurationItem(
+            xConfigurationProvider,
+            UNISTRING("org.openoffice.Setup/Product"),
+            UNISTRING("ooSetupExtension")) >>= extension;
+        if (extension.getLength() != 0) {
+            buf.append(sal_Unicode(' '));
+            buf.append(extension);
+        }
+        rtl::OUString product(buf.makeStringAndClear());
         rtl::OUString aUserAgent;
         aVersionFile.getFrom(UNISTRING("UpdateUserAgent"), aUserAgent, rtl::OUString());
+        for (sal_Int32 i = 0;;) {
+            i = aUserAgent.indexOfAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("<PRODUCT>"), i);
+            if (i == -1) {
+                break;
+            }
+            aUserAgent = aUserAgent.replaceAt(
+                i, RTL_CONSTASCII_LENGTH("<PRODUCT>"), product);
+            i += product.getLength();
+        }
 
         m_aRequestHeaderList[0].Name = UNISTRING("Accept-Language");
-        m_aRequestHeaderList[0].Value = getUILanguage( xContext );
+        m_aRequestHeaderList[0].Value = getConfigurationItem( xConfigurationProvider, UNISTRING("org.openoffice.Setup/L10N"), UNISTRING("ooLocale") );
         m_aRequestHeaderList[1].Name = UNISTRING("Accept-Encoding");
         m_aRequestHeaderList[1].Value = uno::makeAny( UNISTRING("gzip,deflate") );
 
@@ -565,34 +621,22 @@ UpdateInformationProvider::~UpdateInformationProvider()
 //------------------------------------------------------------------------------
 
 uno::Any
-UpdateInformationProvider::getUILanguage(uno::Reference<uno::XComponentContext> const & xContext)
+UpdateInformationProvider::getConfigurationItem(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, rtl::OUString const & node, rtl::OUString const & item)
 {
-    uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
-    if( !xServiceManager.is() )
-        throw uno::RuntimeException(
-            UNISTRING("unable to obtain service manager from component context"),
-            uno::Reference< uno::XInterface >());
-
-    uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
-        xServiceManager->createInstanceWithContext(
-            UNISTRING("com.sun.star.configuration.ConfigurationProvider"),
-            xContext ),
-        uno::UNO_QUERY_THROW);
-
     beans::PropertyValue aProperty;
     aProperty.Name  = UNISTRING("nodepath");
-    aProperty.Value = uno::makeAny(UNISTRING("org.openoffice.Setup/L10N"));
+    aProperty.Value = uno::makeAny(node);
 
     uno::Sequence< uno::Any > aArgumentList( 1 );
     aArgumentList[0] = uno::makeAny( aProperty );
 
     uno::Reference< container::XNameAccess > xNameAccess(
-        xConfigurationProvider->createInstanceWithArguments(
+        configurationProvider->createInstanceWithArguments(
             UNISTRING("com.sun.star.configuration.ConfigurationAccess"),
             aArgumentList ),
         uno::UNO_QUERY_THROW);
 
-    return xNameAccess->getByName(UNISTRING("ooLocale"));
+    return xNameAccess->getByName(item);
 }
 
 //------------------------------------------------------------------------------
