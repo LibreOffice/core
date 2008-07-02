@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlsFocusManager.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -168,6 +168,11 @@ public:
             removed previously.  Such calls are ignored.
     */
     void RemoveFocusChangeListener (const Link& rListener);
+
+    /** Move focus to sibling outside the actual slide sorter.  This is
+        typically the tool bar with the close button.
+    */
+    void SetFocusToToolBox (void);
 
     /** Create an instance of this class to temporarily hide the focus
         indicator.  It is restored to its former visibility state when the
