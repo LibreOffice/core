@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlwrap.cxx,v $
- * $Revision: 1.69 $
+ * $Revision: 1.70 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,19 +60,14 @@
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HXX_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <comphelper/extract.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
-#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HXX_
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
-
 
 #include <svx/xmleohlp.hxx>
 #include <rtl/logfile.hxx>
@@ -83,19 +78,9 @@
 #include "xmlimprt.hxx"
 #include "xmlexprt.hxx"
 #include "global.hxx"
-#ifndef __GLOBSTR_HRC_
 #include "globstr.hrc"
-#endif
 #include "scerrors.hxx"
 #include "XMLExportSharedData.hxx"
-
-#ifndef SEQTYPE
- #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
-  #define SEQTYPE(x) (new ::com::sun::star::uno::Type( x ))
- #else
-  #define SEQTYPE(x) &(x)
- #endif
-#endif
 
 #define MAP_LEN(x) x, sizeof(x) - 1
 
