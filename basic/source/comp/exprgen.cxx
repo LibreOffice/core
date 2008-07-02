@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: exprgen.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -127,9 +127,17 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
                     (aVar.pDef->IsGlobal() ? _FIND_G : _FIND);
         }
 
-        if( eOp == _FIND && pGen->GetParser()->bClassModule )
-            eOp = _FIND_CM;
+        if( eOp == _FIND )
+        {
 
+            SbiProcDef* pProc = aVar.pDef->GetProcDef();
+            if ( pGen->GetParser()->bClassModule )
+                eOp = _FIND_CM;
+            else if ( aVar.pDef->IsStatic() || pProc && pProc->IsStatic() )
+            {
+                eOp = _FIND_STATIC;
+            }
+        }
         for( SbiExprNode* p = this; p; p = p->aVar.pNext )
         {
             if( p == this && pWithParent_ != NULL )
