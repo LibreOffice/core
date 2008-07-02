@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XclImpChangeTrack.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,13 +31,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-//___________________________________________________________________
 #include "XclImpChangeTrack.hxx"
 #include <tools/debug.hxx>
-#ifndef _SVSTOR_HXX
 #include <sot/storage.hxx>
-#endif
 #include <svtools/zforlist.hxx>
 #include "chgviset.hxx"
 #include "cell.hxx"
