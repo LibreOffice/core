@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: addincol.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -235,7 +235,12 @@ BOOL ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, String& rRetExcel
                 return TRUE;
             }
 
-        //  third: use first (default) entry
+        // third: #i57772# fall-back to en-US
+
+        if ( eDestLang != LANGUAGE_ENGLISH_US )
+            return GetExcelName( LANGUAGE_ENGLISH_US, rRetExcelName );
+
+        //  forth: use first (default) entry
 
         rRetExcelName = pArray[0].Name;
         return TRUE;
