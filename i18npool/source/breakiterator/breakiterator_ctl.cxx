@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: breakiterator_ctl.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -135,8 +135,10 @@ LineBreakResults SAL_CALL BreakIterator_CTL::getLineBreak(
 {
     LineBreakResults lbr = BreakIterator_Unicode::getLineBreak(Text, nStartPos,
                     rLocale, nMinBreakPos, hOptions, bOptions );
-    makeIndex(Text, lbr.breakIndex);
-    lbr.breakIndex = previousCellIndex[ lbr.breakIndex ];
+    if (lbr.breakIndex < Text.getLength()) {
+        makeIndex(Text, lbr.breakIndex);
+        lbr.breakIndex = previousCellIndex[ lbr.breakIndex ];
+    }
     return lbr;
 }
 
