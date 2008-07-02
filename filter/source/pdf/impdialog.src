@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impdialog.src,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -760,7 +760,7 @@ ModalDialog RID_PDF_ERROR_DLG
         WordBreak = TRUE;
         Pos = MAP_APPFONT( 5, 5 );
         Size = MAP_APPFONT( 210, 24 );
-        Text [en-US] = "During PDF export the following problems occured:";
+        Text [en-US] = "During PDF export the following problems occurred:";
     };
 
     Bitmap IMG_WARN
