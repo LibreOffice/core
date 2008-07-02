@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excimp8.cxx,v $
- * $Revision: 1.125 $
+ * $Revision: 1.126 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,9 +84,7 @@
 #include "markdata.hxx"
 #include "rangenam.hxx"
 #include "docoptio.hxx"
-#ifndef __GLOBSTR_HRC_
 #include "globstr.hrc"
-#endif
 #include "fprogressbar.hxx"
 #include "xlocx.hxx"
 #include "xltracer.hxx"
