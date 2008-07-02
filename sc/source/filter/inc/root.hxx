@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: root.hxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _ROOT_HXX
-#define _ROOT_HXX
+#ifndef SC_ROOT_HXX
+#define SC_ROOT_HXX
 
 #include <tools/solar.h>
 #include "global.hxx"
