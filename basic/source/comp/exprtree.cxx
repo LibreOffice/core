@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: exprtree.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -291,6 +291,11 @@ SbiExprNode* SbiExpression::Term( void )
         if( bObj )
             eType = SbxOBJECT;
         pDef = AddSym( eTok, *pParser->pPool, eCurExpr, aSym, eType, pPar );
+        // Looks like this is a local ( but undefined variable )
+        // if it is in a static procedure then make this Symbol
+        // static
+        if ( !bObj && pParser->pProc && pParser->pProc->IsStatic() )
+            pDef->SetStatic();
     }
     else
     {
