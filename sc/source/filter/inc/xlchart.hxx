@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xlchart.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,7 +134,12 @@ namespace com { namespace sun { namespace star {
 
 // data series roles
 #define EXC_CHPROP_ROLE_CATEG               CREATE_OUSTRING( "categories" )
+#define EXC_CHPROP_ROLE_ERRORBARS_NEGX      CREATE_OUSTRING( "error-bars-x-negative" )
+#define EXC_CHPROP_ROLE_ERRORBARS_NEGY      CREATE_OUSTRING( "error-bars-y-negative" )
+#define EXC_CHPROP_ROLE_ERRORBARS_POSX      CREATE_OUSTRING( "error-bars-x-positive" )
+#define EXC_CHPROP_ROLE_ERRORBARS_POSY      CREATE_OUSTRING( "error-bars-y-positive" )
 #define EXC_CHPROP_ROLE_LABEL               CREATE_OUSTRING( "label" )
+#define EXC_CHPROP_ROLE_SIZES               CREATE_OUSTRING( "sizes" )
 #define EXC_CHPROP_ROLE_XVALUES             CREATE_OUSTRING( "values-x" )
 #define EXC_CHPROP_ROLE_YVALUES             CREATE_OUSTRING( "values-y" )
 #define EXC_CHPROP_ROLE_OPENVALUES          CREATE_OUSTRING( "values-first" )
@@ -1038,6 +1043,8 @@ public:
     static sal_uInt16   GetAutoMarkerType( sal_uInt16 nFormatIdx );
     /** Returns true, if the passed marker type is filled. */
     static bool         HasMarkerFillColor( sal_uInt16 nMarkerType );
+    /** Returns the role name for a manual data source for error bars. */
+    static ::rtl::OUString GetErrorBarValuesRole( sal_uInt8 nBarType );
 };
 
 // Chart formatting info provider =============================================
