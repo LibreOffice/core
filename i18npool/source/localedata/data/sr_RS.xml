@@ -34,7 +34,7 @@
     <TimePM>поп.</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
-  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$ДИН-8C1A]">
+  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$РСД-8C1A]">
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
       <FormatCode>Standard</FormatCode>
     </FormatElement>
@@ -303,7 +303,7 @@
         <Era>
           <EraID>ad</EraID>
           <DefaultAbbrvName>н. е.</DefaultAbbrvName>
-          <DefaultFullName>нова ера</DefaultFullName>
+          <DefaultFullName>нове ере</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
@@ -313,18 +313,39 @@
     </Calendar>
   </LC_CALENDAR>
   <LC_CURRENCY>
-    <Currency default="false" usedInCompatibleFormatCodes="true">
-      <CurrencyID>CSD</CurrencyID>
-      <CurrencySymbol>ДИН</CurrencySymbol>
-      <BankSymbol>CSD</BankSymbol>
-      <CurrencyName>Српски Динар</CurrencyName>
+    <Currency default="true" usedInCompatibleFormatCodes="true">
+      <CurrencyID>RSD</CurrencyID>
+      <CurrencySymbol>РСД</CurrencySymbol>
+      <BankSymbol>RSD</BankSymbol>
+      <CurrencyName>Српски динар</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
-    <Currency default="true" usedInCompatibleFormatCodes="false">
+    <Currency default="false" usedInCompatibleFormatCodes="false">
+      <CurrencyID>RSD</CurrencyID>
+      <CurrencySymbol>дин.</CurrencySymbol>
+      <BankSymbol>RSD</BankSymbol>
+      <CurrencyName>Српски динар</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+    <Currency default="false" usedInCompatibleFormatCodes="false">
+      <CurrencyID>CSD</CurrencyID>
+      <CurrencySymbol>ЦСД</CurrencySymbol>
+      <BankSymbol>CSD</BankSymbol>
+      <CurrencyName>Српски динар</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+    <Currency default="false" usedInCompatibleFormatCodes="false" legacyOnly="true">
       <CurrencyID>RSD</CurrencyID>
       <CurrencySymbol>ДИН</CurrencySymbol>
       <BankSymbol>RSD</BankSymbol>
-      <CurrencyName>Српски Динар</CurrencyName>
+      <CurrencyName>Српски динар</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+    <Currency default="false" usedInCompatibleFormatCodes="false" legacyOnly="true">
+      <CurrencyID>CSD</CurrencyID>
+      <CurrencySymbol>ДИН</CurrencySymbol>
+      <BankSymbol>CSD</BankSymbol>
+      <CurrencyName>Српски динар</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
   </LC_CURRENCY>
