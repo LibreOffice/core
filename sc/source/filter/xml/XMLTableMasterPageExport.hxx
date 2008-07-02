@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTableMasterPageExport.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLTABLEMASTERPAGEEXPORT_HXX
-#define _SC_XMLTABLEMASTERPAGEEXPORT_HXX
+#ifndef SC_XMLTABLEMASTERPAGEEXPORT_HXX
+#define SC_XMLTABLEMASTERPAGEEXPORT_HXX
 
 #include <rtl/ustring.hxx>
 #include <xmloff/xmltoken.hxx>

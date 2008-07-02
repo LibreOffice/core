@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTableHeaderFooterContext.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,17 +27,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SC_XMLTABLEHEADERFOOTERCONTEXT_HXX_
-#define _SC_XMLTABLEHEADERFOOTERCONTEXT_HXX_
+#ifndef SC_XMLTABLEHEADERFOOTERCONTEXT_HXX_
+#define SC_XMLTABLEHEADERFOOTERCONTEXT_HXX_
 
 
-#ifndef _XMLOFF_XMLICTXT_HXX_
 #include <xmloff/xmlictxt.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLIMP_HXX_
 #include <xmloff/xmlimp.hxx>
-#endif
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 
 namespace com { namespace sun { namespace star {
