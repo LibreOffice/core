@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sbxconv.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,8 @@
 #define _SBXCONV_HXX
 
 #include "sbxdec.hxx"
+
+class SbxArray;
 
 // SBXSCAN.CXX
 extern void ImpCvtNum( double nNum, short nPrec, String& rRes, BOOL bCoreString=FALSE );
@@ -144,5 +146,9 @@ void    ImpPutULong( SbxValues*, UINT32 );
 
 enum SbxBOOL ImpGetBool( const SbxValues* );
 void    ImpPutBool( SbxValues*, INT16 );
+
+// ByteArry <--> String
+SbxArray* StringToByteArray(const String& rStr);
+String ByteArrayToString(SbxArray* pArr);
 
 #endif
