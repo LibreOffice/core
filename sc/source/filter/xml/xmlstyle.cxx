@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlstyle.cxx,v $
- * $Revision: 1.69 $
+ * $Revision: 1.70 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,9 +36,6 @@
 #include "xmlexprt.hxx"
 #include "xmlimprt.hxx"
 
-/*#ifndef _PROPIMP0_HXX
-#include "propimp0.hxx"
-#endif*/
 #include "XMLConverter.hxx"
 #include "rangeutl.hxx"
 
