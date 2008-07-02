@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xltools.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,9 +42,7 @@
 #include "docuno.hxx"
 #include "editutil.hxx"
 #include "errorcodes.hxx"
-#ifndef __GLOBSTR_HRC_
 #include "globstr.hrc"
-#endif
 #include "xlstyle.hxx"
 #include "xlname.hxx"
 #include "xistream.hxx"
