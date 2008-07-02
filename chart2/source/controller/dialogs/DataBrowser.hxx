@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataBrowser.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -169,6 +169,8 @@ public:
     bool IsDataValid();
     void ShowWarningBox();
     bool ShowQueryBox();
+
+    void RenewSeriesHeaders();
 
 private:
     ::com::sun::star::uno::Reference<
