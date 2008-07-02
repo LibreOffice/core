@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hi_factory.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -127,38 +127,55 @@ HtmlFactory_Idl::produce_Bases( Xml::Element &   o_screen,
 }
 
 void
-HtmlFactory_Idl::produce_Members( ce_list &           it_list,
-                                  const String &      i_summaryTitle,
-                                  const String &      i_summaryLabel,
-                                  const String &      i_detailsTitle,
-                                  const String &      i_detailsLabel ) const
+HtmlFactory_Idl::produce_Members( ce_list &               it_list,
+                                  const String &          i_summaryTitle,
+                                  const String &          i_summaryLabel,
+                                  const String &          i_detailsTitle,
+                                  const String &          i_detailsLabel,
+                                  const E_MemberViewType  i_viewType ) const
 {
     csv_assert( it_list );
 
-    HF_SubTitleTable
-        aSummary(   CurOut(),
-                    i_summaryLabel,
-                    i_summaryTitle,
-                    2 );
+    ::std::auto_ptr< HF_SubTitleTable > pSummary;
+    if  (   ( i_viewType == viewtype_summary )
+        ||  ( i_viewType == viewtype_complete )
+        )
+    {
+        pSummary.reset( new HF_SubTitleTable(
+                CurOut(),
+                i_summaryLabel,
+                i_summaryTitle,
+                2 ) );
+    }
 
-    HF_SubTitleTable
-        aDetails(   CurOut(),
-                    i_detailsLabel,
-                    i_detailsTitle,
-                    1 );
+    ::std::auto_ptr< HF_SubTitleTable > pDetails;
+    if  (   ( i_viewType == viewtype_details )
+        ||  ( i_viewType == viewtype_complete )
+        )
+    {
+        pDetails.reset( new HF_SubTitleTable(
+                CurOut(),
+                i_detailsLabel,
+                i_detailsTitle,
+                1 ) );
+    }
 
     for ( ; it_list.operator bool(); ++it_list )
     {
         const ary::idl::CodeEntity &
             rCe = Env().Data().Find_Ce(*it_list);
 
-        Xml::Element &
-            rSummaryRow = aSummary.Add_Row();
-        produce_SummaryDeclaration(rSummaryRow, rCe);
-//        produce_InternalLink(rSummaryRow, rCe);
-        produce_ShortDoc(rSummaryRow, rCe);
+        if ( pSummary.get() )
+        {
+            Xml::Element &
+                rSummaryRow = pSummary->Add_Row();
+            produce_SummaryDeclaration(rSummaryRow, rCe);
+//            produce_InternalLink(rSummaryRow, rCe);
+            produce_ShortDoc(rSummaryRow, rCe);
+        }
 
-        produce_MemberDetails(aDetails, rCe);
+        if ( pDetails.get() )
+            produce_MemberDetails(*pDetails, rCe);
     }
 }
 
