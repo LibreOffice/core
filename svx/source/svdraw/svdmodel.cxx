@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdmodel.cxx,v $
- * $Revision: 1.80 $
+ * $Revision: 1.81 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 #include <svx/svdmodel.hxx>
 
+#include <rtl/uuid.h>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <osl/endian.h>
 #include <rtl/logfile.hxx>
@@ -2043,6 +2044,22 @@ void SdrModel::SetAllowShapePropertyChangeListener( bool bAllow )
     {
         mpImpl->mbAllowShapePropertyChangeListener = bAllow;
     }
+}
+
+const ::com::sun::star::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelImplementationId()
+{
+    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = 0;
+    if( !pSeq )
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if( !pSeq )
+        {
+            static Sequence< sal_Int8 > aSeq( 16 );
+            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
+            pSeq = &aSeq;
+        }
+    }
+    return *pSeq;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
