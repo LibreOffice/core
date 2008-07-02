@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swfwriter.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -162,7 +162,7 @@ void Writer::storeTo( Reference< XOutputStream > &xOutStream )
     }
 
     // Endtag
-    *mpMovieStream << (sal_uInt8)0;
+    *mpMovieStream << (sal_uInt16)0;
 
     Tag aHeader( 0xff );
 
