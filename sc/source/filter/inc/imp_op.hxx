@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: imp_op.hxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,10 +28,8 @@
  *
  ************************************************************************/
 
-
-#ifndef _IMP_OP_HXX
-#define _IMP_OP_HXX
-
+#ifndef SC_IMP_OP_HXX
+#define SC_IMP_OP_HXX
 
 #include <tools/gen.hxx>
 #include "xiroot.hxx"
