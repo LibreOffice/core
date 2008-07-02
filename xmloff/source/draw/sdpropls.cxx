@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdpropls.cxx,v $
- * $Revision: 1.100 $
+ * $Revision: 1.101 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,7 +121,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "FillColor",                      XML_NAMESPACE_DRAW, XML_FILL_COLOR,             XML_TYPE_COLOR, 0 ),
     GMAP( "FillColor2",                     XML_NAMESPACE_DRAW, XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR, 0 ),
     GMAP( "FillGradientName",               XML_NAMESPACE_DRAW, XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLGRADIENTNAME ),
-    GMAP( "FillGradientStepCount",          XML_NAMESPACE_DRAW, XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER, 0 ),
+    GMAP( "FillGradientStepCount",          XML_NAMESPACE_DRAW, XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER16, 0 ),
     GMAP( "FillHatchName",                  XML_NAMESPACE_DRAW, XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLHATCHNAME ),
     GMAP( "FillBackground",                 XML_NAMESPACE_DRAW, XML_FILL_HATCH_SOLID,       XML_TYPE_BOOL, 0 ),
     GMAP( "FillBitmapName",                 XML_NAMESPACE_DRAW, XML_FILL_IMAGE_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLBITMAPNAME ),
@@ -320,7 +320,7 @@ const XMLPropertyMapEntry aXMLSDPresPageProps[] =
     DPMAP( "FillStyle",                 XML_NAMESPACE_DRAW, XML_FILL,                   XML_SD_TYPE_FILLSTYLE, 0 ),
     DPMAP( "FillColor",                 XML_NAMESPACE_DRAW, XML_FILL_COLOR,             XML_TYPE_COLOR, 0 ),
     DPMAP( "FillGradientName",          XML_NAMESPACE_DRAW, XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLGRADIENTNAME ),
-    DPMAP( "FillGradientStepCount",     XML_NAMESPACE_DRAW, XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER, 0 ),
+    DPMAP( "FillGradientStepCount",     XML_NAMESPACE_DRAW, XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER16, 0 ),
     DPMAP( "FillHatchName",             XML_NAMESPACE_DRAW, XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLHATCHNAME ),
     DPMAP( "FillBitmapName",                XML_NAMESPACE_DRAW, XML_FILL_IMAGE_NAME,    XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLBITMAPNAME ),
     DPMAP( "FillTransparenceGradientName",  XML_NAMESPACE_DRAW, XML_OPACITY_NAME,       XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLTRANSNAME ),
