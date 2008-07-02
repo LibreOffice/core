@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh3.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,6 +83,10 @@
 #include "inputhdl.hxx"
 #include "conflictsdlg.hxx"
 #include "globstr.hrc"
+
+#if DEBUG_CHANGETRACK
+#include <stdio.h>
+#endif // DEBUG_CHANGETRACK
 
 
 //------------------------------------------------------------------
@@ -966,7 +970,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
 
                 pThisTrack->SetUser( pSourceAction->GetUser() );
                 pThisTrack->SetFixDateTimeUTC( pSourceAction->GetDateTimeUTC() );
-                ULONG nNextAction = pThisTrack->GetActionMax() + 1;
+                ULONG nOldActionMax = pThisTrack->GetActionMax();
 
                 bool bExecute = true;
                 ULONG nReject = pSourceAction->GetRejectAction();
@@ -1107,7 +1111,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                 if ( rComment.Len() )
                 {
                     ScChangeAction* pAct = pThisTrack->GetLast();
-                    if ( pAct && pAct->GetActionNumber() >= nNextAction )
+                    if ( pAct && pAct->GetActionNumber() > nOldActionMax )
                         pAct->SetComment( rComment );
 #ifndef PRODUCT
                     else
@@ -1122,7 +1126,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                 if ( bShared && !pSourceAction->IsRejected() )
                 {
                     ScChangeAction* pAct = pThisTrack->GetLast();
-                    if ( pAct && pAct->GetActionNumber() >= nNextAction )
+                    if ( pAct && pAct->GetActionNumber() > nOldActionMax )
                     {
                         pThisTrack->MergeActionState( pAct, pSourceAction );
                     }
@@ -1132,15 +1136,22 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                 if ( bShared && pMergeMap )
                 {
                     ScChangeAction* pAct = pThisTrack->GetLast();
-                    if ( pAct && pAct->GetActionNumber() == nNextAction )
+                    if ( pAct && pAct->GetActionNumber() > nOldActionMax )
                     {
-                        if ( bInverseMap )
+                        ULONG nActionMax = pAct->GetActionNumber();
+                        ULONG nActionCount = nActionMax - nOldActionMax;
+                        ULONG nAction = nActionMax - nActionCount + 1;
+                        ULONG nSourceAction = pSourceAction->GetActionNumber() - nActionCount + 1;
+                        while ( nAction <= nActionMax )
                         {
-                            (*pMergeMap)[ pAct->GetActionNumber() ] = pSourceAction->GetActionNumber();
-                        }
-                        else
-                        {
-                            (*pMergeMap)[ pSourceAction->GetActionNumber() ] = pAct->GetActionNumber();
+                            if ( bInverseMap )
+                            {
+                                (*pMergeMap)[ nAction++ ] = nSourceAction++;
+                            }
+                            else
+                            {
+                                (*pMergeMap)[ nSourceAction++ ] = nAction++;
+                            }
                         }
                     }
                 }
@@ -1197,7 +1208,10 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
 #if DEBUG_CHANGETRACK
     ::rtl::OUString aMessage = ::rtl::OUString::createFromAscii( "\nbefore merge:\n" );
     aMessage += pThisTrack->ToString();
-    OSL_ENSURE( false, ::rtl::OUStringToOString( aMessage, RTL_TEXTENCODING_ASCII_US ).getStr() );
+    ::rtl::OString aMsg = ::rtl::OUStringToOString( aMessage, RTL_TEXTENCODING_UTF8 );
+    OSL_ENSURE( false, aMsg.getStr() );
+    //fprintf( stdout, "%s ", aMsg.getStr() );
+    //fflush( stdout );
 #endif // DEBUG_CHANGETRACK
 
     // reset show changes
@@ -1231,7 +1245,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             }
             aDocument.GetChangeTrack()->Clone( pTmpDoc );
             ScChangeActionMergeMap aOwnInverseMergeMap;
-            pSharedDocShell->MergeDocument( *pTmpDoc, true, false, 0, &aOwnInverseMergeMap, true );
+            pSharedDocShell->MergeDocument( *pTmpDoc, true, true, 0, &aOwnInverseMergeMap, true );
             delete pTmpDoc;
             ULONG nActStartOwn = nActEndShared + 1;
             ULONG nActEndOwn = pSharedTrack->GetActionMax();
@@ -1288,7 +1302,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
 
             // merge shared changes into own document
             ScChangeActionMergeMap aSharedMergeMap;
-            MergeDocument( rSharedDoc, true, false, 0, &aSharedMergeMap );
+            MergeDocument( rSharedDoc, true, true, 0, &aSharedMergeMap );
             ULONG nEndShared = pThisTrack->GetActionMax();
 
             // resolve conflicts for shared non-content actions
@@ -1347,7 +1361,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
         {
             // merge shared changes into own document
             ULONG nStartShared = pThisTrack->GetActionMax() + 1;
-            MergeDocument( rSharedDoc, true );
+            MergeDocument( rSharedDoc, true, true );
             ULONG nEndShared = pThisTrack->GetActionMax();
 
             // only show changes from shared document
@@ -1369,7 +1383,10 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
 #if DEBUG_CHANGETRACK
     aMessage = ::rtl::OUString::createFromAscii( "\nafter merge:\n" );
     aMessage += pThisTrack->ToString();
-    OSL_ENSURE( false, ::rtl::OUStringToOString( aMessage, RTL_TEXTENCODING_ASCII_US ).getStr() );
+    aMsg = ::rtl::OUStringToOString( aMessage, RTL_TEXTENCODING_UTF8 );
+    OSL_ENSURE( false, aMsg.getStr() );
+    //fprintf( stdout, "%s ", aMsg.getStr() );
+    //fflush( stdout );
 #endif // DEBUG_CHANGETRACK
 
     return ( pThisAction != NULL );
