@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: decl.h,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,8 +29,8 @@
  ************************************************************************/
 
 
-#ifndef __DECL_H
-#define __DECL_H
+#ifndef SC_DECL_H
+#define SC_DECL_H
 
 #include <tools/solar.h>
 #include <tools/string.hxx>
