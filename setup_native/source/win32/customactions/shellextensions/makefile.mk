@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.18 $
+# $Revision: 1.19 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -64,7 +64,8 @@ SLOFILES = \
     $(SLO)$/checkdirectory.obj \
     $(SLO)$/setadmininstall.obj \
     $(SLO)$/layerlinks.obj \
-    $(SLO)$/registerextensions.obj
+    $(SLO)$/registerextensions.obj \
+    $(SLO)$/copyeditiondata.obj
 
 STDSHL += \
     $(ADVAPI32LIB)\
