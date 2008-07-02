@@ -406,7 +406,7 @@
 </LC_CALENDAR>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>yuan</CurrencyID>
+<CurrencyID>CNY</CurrencyID>
 <CurrencySymbol>￥</CurrencySymbol>
 <BankSymbol>CNY</BankSymbol>
 <CurrencyName>人民币</CurrencyName>
