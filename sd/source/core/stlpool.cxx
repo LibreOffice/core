@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stlpool.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -657,7 +657,12 @@ void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool& rSourcePool)
                             xTargetNames->replaceByName( aName, Any( xTargetStyle ) );
                     }
                 }
-                xTarget->insertByName( Reference< XNamed >( xSourceTableStyle, UNO_QUERY_THROW )->getName(), Any( xNewTableStyle ) );
+
+                OUString sName( Reference< XNamed >( xSourceTableStyle, UNO_QUERY_THROW )->getName() );
+                if( xTarget->hasByName( sName ) )
+                    xTarget->replaceByName( sName, Any( xNewTableStyle ) );
+                else
+                    xTarget->insertByName( sName, Any( xNewTableStyle ) );
             }
         }
         catch( Exception& )
