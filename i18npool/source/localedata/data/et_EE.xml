@@ -176,7 +176,12 @@
       <FormatCode>DD.MM.YYYY HH:MM:SS</FormatCode>
     </FormatElement>
   </LC_FORMAT>
-  <LC_COLLATION ref="en_US" />
+  <LC_COLLATION>
+    <Collator default="true" unoid="alphanumeric">&amp;[before 1]T&lt;š&lt;&lt;&lt;Š&lt;z&lt;&lt;&lt;Z&lt;ž&lt;&lt;&lt;Ž&amp;v&lt;&lt;&lt;V&lt;w&lt;&lt;&lt;W&amp;[before 1]X&lt;õ&lt;&lt;&lt;Õ&lt;ä&lt;&lt;&lt;Ä&lt;ö&lt;&lt;&lt;Ö&lt;ü&lt;&lt;&lt;Ü</Collator>
+    <CollationOptions>
+      <TransliterationModules>IGNORE_CASE</TransliterationModules>
+    </CollationOptions>
+  </LC_COLLATION>
   <LC_SEARCH ref="en_US"/>
   <LC_INDEX>
     <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-S Š Z Ž T U V W Õ Ä Ö Ü X Y</IndexKey>
