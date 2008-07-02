@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: doctxm.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1846,27 +1846,17 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                                 dynamic_cast<const SwCntntNode*>(pTOXSource->pNd),
                                 TRUE );
                             // <--
-/* TODO beppec56: the meaning of CF_NUMBER here is different than the one
- * set in sw/inc/chpfld.hxx:47, IMHO it should be as follows:
- *                          internal                            field format                ODF definition
- *                   xmloff/source/text/txtfldi.cxx:2643  sw/source/core/
- *                                                          unocore/unoidx.cxx:2521         see 6.2.7.1 on ODF 1.2 (1.0 it's the same)
- * ODF 1.0 & 1.2
- *
- * name                     ChapterFormat::NAME                 CF_TITLE                    the chapter name
- * number                   ChapterFormat::NUMBER               CF_NUMBER                   the chapter number with pre/postfix
- * number-and-name          ChapterFormat::NAME_NUMBER          CF_NUM_TITLE                the chapter number with pre/postfix and the chapter name
- * plain-number-and-name    ChapterFormat::NO_PREFIX_SUFFIX     CF_NUMBER_NOPREPST          the plain chapter number and the chapter name
- * plain-number             ChapterFormat::DIGIT                CF_NUM_NOPREPST_TITLE       the plain chapter number
- * in the index generation we have:
- * CF_NUMBER used instead of CF_NUM_NOPREPST_TITLE
- * CF_NUM_TITLE used instead of CF_NUMBER_NOPREPST
- * should we do something with ODF 1.2?
- *
- */
-                            if(CF_NUMBER == aToken.nChapterFormat)
+                            //---> i89791
+                            // OD 2008-06-26 - continue to support CF_NUMBER
+                            // and CF_NUM_TITLE in order to handle ODF 1.0/1.1
+                            // written by OOo 3.x in the same way as OOo 2.x
+                            // would handle them.
+                            if ( CF_NUM_NOPREPST_TITLE == aToken.nChapterFormat ||
+                                 CF_NUMBER == aToken.nChapterFormat )
                                 rTxt.Insert(aFld.GetNumber()); //get the string number without pre/postfix
-                            else if(CF_NUM_TITLE == aToken.nChapterFormat)
+                            else if ( CF_NUMBER_NOPREPST == aToken.nChapterFormat ||
+                                      CF_NUM_TITLE == aToken.nChapterFormat )
+                            //<---
                             {
                                 rTxt += aFld.GetNumber();
                                 rTxt += ' ';
