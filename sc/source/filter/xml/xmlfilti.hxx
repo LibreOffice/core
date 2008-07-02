@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlfilti.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +27,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef SC_XMLFILTI_HXX
 #define SC_XMLFILTI_HXX
+
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <com/sun/star/table/CellAddress.hpp>
