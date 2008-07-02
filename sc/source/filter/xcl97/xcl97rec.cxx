@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xcl97rec.cxx,v $
- * $Revision: 1.87 $
+ * $Revision: 1.88 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-
 
 #include <svx/svdpool.hxx>
 #include <svx/sdtaitm.hxx>
@@ -62,12 +61,8 @@
 #include <svx/brshitem.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/frmdiritem.hxx>
-#ifndef _SVX_ADJITEM_HX
 #include <svx/adjitem.hxx>
-#endif
-
 #include <svx/eeitem.hxx>
-
 #include <svx/msoleexp.hxx>
 
 #include <svtools/useroptions.hxx>
