@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: breakiteratorImpl.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,8 +122,11 @@ Boundary SAL_CALL BreakIteratorImpl::nextWord( const OUString& Text, sal_Int32 n
             if ( nStartPos != result.startPos) {
                 if( nStartPos >= len )
                     result.startPos = result.endPos = len;
-                else
+                else {
                     result = LBI->getWordBoundary(Text, nStartPos, rLocale, rWordType, sal_True);
+                    // i88041: avoid startPos goes back to nStartPos when switching between Latin and CJK scripts
+                    if (result.startPos < nStartPos) result.startPos = nStartPos;
+                }
             }
         }
         return result;
