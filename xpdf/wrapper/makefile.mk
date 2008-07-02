@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,6 +54,9 @@ APP1STDLIBS+=-lxpdf -lfofi -lGoo -lgdi32 -ladvapi32
 APP1STDLIBS+=xpdf.lib fofi.lib Goo.lib gdi32.lib advapi32.lib
 .ENDIF
 .ELSE
+.IF "$(OS)" == "MACOSX" && "$(GUIBASE)"=="unx"
+APP1STDLIBS+=-lobjc
+.ENDIF
 APP1STDLIBS+=-lxpdf -lfofi -lGoo
 .ENDIF
 
