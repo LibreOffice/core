@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bootstrap.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +56,6 @@
 #define BOOTSTRAP_ITEM_PRODUCT_KEY          "ProductKey"
 #define BOOTSTRAP_ITEM_PRODUCT_SOURCE       "ProductSource"
 #define BOOTSTRAP_ITEM_VERSIONFILE          "Location"
-#define BOOTSTRAP_ITEM_LOGO                 "Logo"
 #define BOOTSTRAP_ITEM_BUILDID              "buildid"
 
 #define BOOTSTRAP_ITEM_BASEINSTALLATION     "BaseInstallation"
@@ -665,14 +664,6 @@ OUString Bootstrap::getProductSource(OUString const& _sDefault)
     // read ProductSource from version.ini (versionrc)
     data().getVersionValue( csProductSourceItem, sProductSource, _sDefault );
     return sProductSource;
-}
-// ---------------------------------------------------------------------------------------
-
-OUString Bootstrap::getLogoData(OUString const& _sDefault)
-{
-    OUString const csLogoItem(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_LOGO));
-
-    return data().getBootstrapValue( csLogoItem, _sDefault );
 }
 // ---------------------------------------------------------------------------------------
 
