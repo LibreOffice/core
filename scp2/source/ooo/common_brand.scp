@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: common_brand.scp,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -974,7 +974,7 @@ ProfileItem gid_Brand_Profileitem_Version_Useragent
     Section = "Version";
     Order = 17;
     Key = "UpdateUserAgent";
-    Value = "<useragent>";
+    Value = "<PRODUCT> (${buildid}; ${_OS}; ${_ARCH}; BundledLanguages=${AllLanguages})";
 End
 
 ProfileItem gid_Brand_Profileitem_Version_Ooobaseversion
@@ -1001,14 +1001,6 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Brand_Base_Dir
     Section = "Bootstrap";
     Key = "BRAND_BASE_DIR";
     Value = "${ORIGIN}/..";
-End
-
-ProfileItem gid_Brand_Profileitem_Fundamental_Customdataurl
-    ModuleID = gid_Module_Root_Brand;
-    ProfileID = gid_Brand_Profile_Fundamental_Ini;
-    Section = "Bootstrap";
-    Key = "CustomDataUrl";
-    Value = "${BRAND_BASE_DIR}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ooo_Base_Dir
