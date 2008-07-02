@@ -8,7 +8,7 @@
 #
 # $RCSfile: scriptitems.pm,v $
 #
-# $Revision: 1.49 $
+# $Revision: 1.50 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -748,11 +748,6 @@ sub replace_setup_variables
     my $updateid = $productname . "_" . $userdirproductversion . "_" . $$languagestringref;
     $updateid =~ s/ /_/g;
 
-    # $useragent
-    # OpenOffice.org/2.2 (680m212 (Build:9263); Solaris; SPARC; BundledLanguages=en-US_fr)
-    my $useragent = $productname . " " . $productversion . " (" . $buildidstring . "; \$_OS; \$_ARCH; " .
-            "BundledLanguages=" . $languagesstring . ")";
-
     for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
     {
         my $oneitem = ${$itemsarrayref}[$i];
@@ -770,7 +765,6 @@ sub replace_setup_variables
         $value =~ s/\<sourceid\>/$installer::globals::build/;
         $value =~ s/\<productupdate\>/$productupdatestring/;
         $value =~ s/\<updateid\>/$updateid/;
-        $value =~ s/\<useragent\>/$useragent/;
         $value =~ s/\<pkgformat\>/$installer::globals::packageformat/;
 
         $oneitem->{'Value'} = $value;
@@ -1159,6 +1153,7 @@ sub get_Source_Directory_For_Files_From_Includepathlist
         if ( ! $onefile->{'Name'} ) { installer::exiter::exit_program("ERROR: $item without name ! GID: $onefile->{'gid'} ! Language: $onelanguage", "get_Source_Directory_For_Files_From_Includepathlist"); }
 
         my $onefilename = $onefile->{'Name'};
+        if ( $item eq "ScpActions" ) { $onefilename =~ s/\//$installer::globals::separator/g; }
         $onefilename =~ s/^\s*\Q$installer::globals::separator\E//;     # filename begins with a slash, for instance /registry/schema/org/openoffice/VCL.xcs
 
         my $styles = "";
