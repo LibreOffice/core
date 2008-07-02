@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bcaslot.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_BCASLOT_HXX
-#define _SC_BCASLOT_HXX
+#ifndef SC_BCASLOT_HXX
+#define SC_BCASLOT_HXX
 
 #include <set>
 #include <hash_set>
