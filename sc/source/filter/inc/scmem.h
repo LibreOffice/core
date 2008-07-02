@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scmem.h,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef __SCMEM_H__
-#define __SCMEM_H__
+#ifndef SC_SCMEM_H
+#define SC_SCMEM_H
 
 #include <tools/solar.h>
 
