@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: msocximex.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3848,7 +3848,7 @@ OCX_Frame::OCX_Frame( SotStorageRef& parent,
         nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nSpecialEffect(0),
         nPicture(0), nPictureAlignment(2), nPictureSizeMode(0),
         bPictureTiling(FALSE), nAccelerator(0), nIcon(0), pCaption(0),
-        nScrollWidth(0), nScrollHeight(0), nIconLen(0), pIcon(0), nPictureLen(0),
+        nScrollWidth(0), nScrollHeight(0), nScrollLeft(0), nScrollTop(0), nIconLen(0), pIcon(0), nPictureLen(0),
         pPicture(0)
 {
     msDialogType = C2U("com.sun.star.awt.UnoControlGroupBoxModel");
@@ -3973,6 +3973,12 @@ sal_Bool OCX_Frame::Read(SvStorageStream *pS)
     *pS >> nScrollWidth;
     *pS >> nScrollHeight;
 
+    if (pBlockFlags[1] & 0x10)
+    {
+        *pS >> nScrollLeft;
+        *pS >> nScrollTop;
+    }
+
     if ( bCaption )
     {
         lclReadCharArray( *pS, pCaption, nCaptionLen, pS->Tell() - nStart);
@@ -4038,7 +4044,7 @@ OCX_UserForm::OCX_UserForm( SotStorageRef& parent,
         nKeepScrollBarsVisible(3), nCycle(0), nBorderStyle(0), nSpecialEffect(0),
         nPicture(0), nPictureAlignment(2), nPictureSizeMode(0),
         bPictureTiling(FALSE), nAccelerator(0), nIcon(0), pCaption(0),
-        nScrollWidth(0), nScrollHeight(0), nIconLen(0), pIcon(0), nPictureLen(0),
+        nScrollWidth(0), nScrollHeight(0), nScrollLeft(0), nScrollTop(0), nIconLen(0), pIcon(0), nPictureLen(0),
         pPicture(0)
     {
             mnForeColor = 0x80000012;
@@ -4154,6 +4160,12 @@ sal_Bool OCX_UserForm::Read(SvStorageStream *pS)
     *pS >> nHeight;
     *pS >> nScrollWidth;
     *pS >> nScrollHeight;
+
+    if (pBlockFlags[1] & 0x10)
+    {
+        *pS >> nScrollLeft;
+        *pS >> nScrollTop;
+    }
 
     if (nIcon)
     {
