@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xlchart.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -423,6 +423,19 @@ bool XclChartHelper::HasMarkerFillColor( sal_uInt16 nMarkerType )
     static const bool spbFilled[] = {
         false, true, true, true, false, false, false, false, true, false };
     return (nMarkerType < STATIC_TABLE_SIZE( spbFilled )) && spbFilled[ nMarkerType ];
+}
+
+OUString XclChartHelper::GetErrorBarValuesRole( sal_uInt8 nBarType )
+{
+    switch( nBarType )
+    {
+        case EXC_CHSERERR_XPLUS:    return EXC_CHPROP_ROLE_ERRORBARS_POSX;
+        case EXC_CHSERERR_XMINUS:   return EXC_CHPROP_ROLE_ERRORBARS_NEGX;
+        case EXC_CHSERERR_YPLUS:    return EXC_CHPROP_ROLE_ERRORBARS_POSY;
+        case EXC_CHSERERR_YMINUS:   return EXC_CHPROP_ROLE_ERRORBARS_NEGY;
+        default:    DBG_ERRORFILE( "XclChartHelper::GetErrorBarValuesRole - unknown bar type" );
+    }
+    return OUString();
 }
 
 // Chart formatting info provider =============================================
