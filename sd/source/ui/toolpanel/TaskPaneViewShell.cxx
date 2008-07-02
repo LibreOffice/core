@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TaskPaneViewShell.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -358,6 +358,7 @@ TaskPaneViewShell::TaskPaneViewShell (
     mpImpl.reset (new Implementation());
 
     mpContentWindow->SetCenterAllowed (false);
+    pParentWindow->SetStyle(pParentWindow->GetStyle() | WB_DIALOGCONTROL);
 
     mpTaskPane = ::std::auto_ptr<ToolPanel>(new ToolPanel (
         mpContentWindow.get(), *this));
