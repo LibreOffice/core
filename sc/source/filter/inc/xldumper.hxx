@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xldumper.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,14 +33,14 @@
 
 #include "fdumper.hxx"
 
-#if SCF_INCL_DUMPER
-
 #include <stack>
 #include "fdumperdff.hxx"
 #include "fdumperole.hxx"
 #include "xlconst.hxx"
 #include "xlstring.hxx"
 #include "xlstyle.hxx"
+
+#if SCF_INCL_DUMPER
 
 class SfxMedium;
 class SfxObjectShell;

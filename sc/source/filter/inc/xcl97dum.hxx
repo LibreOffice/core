@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xcl97dum.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,12 +28,10 @@
  *
  ************************************************************************/
 
-#ifndef _XCL97DUM_HXX
-#define _XCL97DUM_HXX
-
+#ifndef SC_XCL97DUM_HXX
+#define SC_XCL97DUM_HXX
 
 #include "excrecds.hxx"
-
 
 // --- class ExcDummy8_xx --------------------------------------------
 
