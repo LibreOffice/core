@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drwtxtex.cxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -825,6 +825,11 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
             case FN_PASTESPECIAL:
                 rSet.DisableItem( FN_PASTESPECIAL );
                 break;
+            // --> OD 2008-06-20 #151110#
+            case SID_CLIPBOARD_FORMAT_ITEMS:
+                rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
+                break;
+            // <--
         }
         nWhich = aIter.NextWhich();
     }
