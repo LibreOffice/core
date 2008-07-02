@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TickmarkHelper.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -313,8 +313,7 @@ double TickmarkHelper::getMinimumAtIncrement( double fMin, const ExplicitIncreme
         return fMin;
 
     double fRet = rIncrement.BaseValue +
-        static_cast<sal_Int32>(
-                approxSub( fMin, rIncrement.BaseValue )
+        floor( approxSub( fMin, rIncrement.BaseValue )
                     / rIncrement.Distance)
             *rIncrement.Distance;
 
@@ -333,8 +332,7 @@ double TickmarkHelper::getMaximumAtIncrement( double fMax, const ExplicitIncreme
         return fMax;
 
     double fRet = rIncrement.BaseValue +
-        static_cast<sal_Int32>(
-                approxSub( fMax, rIncrement.BaseValue )
+        floor( approxSub( fMax, rIncrement.BaseValue )
                     / rIncrement.Distance)
             *rIncrement.Distance;
 
