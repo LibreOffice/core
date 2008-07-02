@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLExportDDELinks.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLEXPORTDDELINKS_HXX
-#define _SC_XMLEXPORTDDELINKS_HXX
+#ifndef SC_XMLEXPORTDDELINKS_HXX
+#define SC_XMLEXPORTDDELINKS_HXX
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
