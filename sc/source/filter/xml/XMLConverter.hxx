@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLConverter.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLCONVERTER_HXX
-#define _SC_XMLCONVERTER_HXX
+#ifndef SC_XMLCONVERTER_HXX
+#define SC_XMLCONVERTER_HXX
 
 #include "global.hxx"
 #include "detfunc.hxx"
