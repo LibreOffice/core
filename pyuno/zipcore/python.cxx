@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: python.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,7 +77,11 @@ wchar_t * encode(wchar_t * buffer, wchar_t const * text) {
     return buffer;
 }
 
+#ifdef __MINGW32__
+int main(int argc, char ** argv, char **) {
+#else
 int wmain(int argc, wchar_t ** argv, wchar_t **) {
+#endif
     wchar_t path[MAX_PATH];
     DWORD n = GetModuleFileNameW(NULL, path, MAX_PATH);
     if (n == 0 || n >= MAX_PATH) {
@@ -147,7 +151,11 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         // 4 * len: each char preceded by backslash, each trailing backslash
         // doubled
     for (int i = 1; i < argc; ++i) {
+#ifdef __MINGW32__
+        clSize += MY_LENGTH(L" \"") + 4 * strlen(argv[i]) +
+#else
         clSize += MY_LENGTH(L" \"") + 4 * wcslen(argv[i]) +
+#endif
             MY_LENGTH(L"\""); //TODO: overflow
     }
     wchar_t * cl = new wchar_t[clSize];
@@ -157,7 +165,16 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
     wchar_t * cp = encode(cl, pythonhome);
     for (int i = 1; i < argc; ++i) {
         *cp++ = L' ';
+#ifdef __MINGW32__
+        int nNeededWStrBuffSize = MultiByteToWideChar(CP_ACP, 0, argv[i], -1, NULL, 0);
+        WCHAR *buff = new WCHAR[nNeededWStrBuffSize+1];
+        MultiByteToWideChar(CP_ACP, 0, argv[i], -1, buff, nNeededWStrBuffSize);
+        buff[nNeededWStrBuffSize] = 0;
+        cp = encode(cp, buff);
+        delete buff;
+#else
         cp = encode(cp, argv[i]);
+#endif
     }
     *cp = L'\0';
     n = GetEnvironmentVariableW(L"PATH", NULL, 0);
