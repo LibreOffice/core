@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sbcomp.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,6 +134,13 @@ BOOL SbModule::Compile()
     if( bRet )
     {
         pBasic->ClearAllModuleVars();
+        // clear all method statics
+        for( USHORT i = 0; i < pMethods->Count(); i++ )
+        {
+            SbMethod* p = PTR_CAST(SbMethod,pMethods->Get( i ) );
+            if( p )
+                p->ClearStatics();
+        }
 
         // #i31510 Init other libs only if Basic isn't running
         if( pINST == NULL )
