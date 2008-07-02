@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: instbdlg.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,18 +129,24 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
         aEdName.Disable();
     }
 
-    if( bFromFile )
+    bool bShared = ( rViewData.GetDocShell() ? rViewData.GetDocShell()->IsDocShared() : false );
+
+    if ( !bFromFile || bShared )
+    {
+        aBtnNew.Check();
+        SetNewTable_Impl();
+        if ( bShared )
+        {
+            aBtnFromFile.Disable();
+        }
+    }
+    else
     {
         aBtnFromFile.Check();
         SetFromTo_Impl();
 
         aBrowseTimer.SetTimeoutHdl( LINK( this, ScInsertTableDlg, BrowseTimeoutHdl ) );
         aBrowseTimer.SetTimeout( 200 );
-    }
-    else
-    {
-        aBtnNew.Check();
-        SetNewTable_Impl();
     }
 }
 
