@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sbxscan.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -650,14 +650,94 @@ public:
 };
 
 
+enum VbaFormatType
+{
+    VBA_FORMAT_TYPE_OFFSET, // standard number format
+    VBA_FORMAT_TYPE_USERDEFINED, // user defined number format
+    VBA_FORMAT_TYPE_NULL
+};
+
+struct VbaFormatInfo
+{
+    VbaFormatType meType;
+    const char* mpVbaFormat; // Format string in vba
+    NfIndexTableOffset meOffset; // SvNumberFormatter format index, if meType = VBA_FORMAT_TYPE_OFFSET
+    const char* mpOOoFormat; // if meType = VBA_FORMAT_TYPE_USERDEFINED
+};
+
+#define VBA_FORMAT_OFFSET( pcUtf8, eOffset ) \
+    { VBA_FORMAT_TYPE_OFFSET, pcUtf8, eOffset, 0 }
+
+#define VBA_FORMAT_USERDEFINED( pcUtf8, pcDefinedUtf8 ) \
+    { VBA_FORMAT_TYPE_USERDEFINED, pcUtf8, NF_NUMBER_STANDARD, pcDefinedUtf8 }
+
+static VbaFormatInfo pFormatInfoTable[] =
+{
+    VBA_FORMAT_OFFSET( "Long Date", NF_DATE_SYSTEM_LONG ),
+    VBA_FORMAT_USERDEFINED( "Medium Date", "DD-MMM-YY" ),
+    VBA_FORMAT_OFFSET( "Short Date", NF_DATE_SYSTEM_SHORT ),
+    VBA_FORMAT_USERDEFINED( "Long Time", "H:MM:SS AM/PM" ),
+    VBA_FORMAT_OFFSET( "Medium Time", NF_TIME_HHMMAMPM ),
+    VBA_FORMAT_OFFSET( "Short Time", NF_TIME_HHMM ),
+    VBA_FORMAT_OFFSET( "ddddd", NF_DATE_SYSTEM_SHORT ),
+    VBA_FORMAT_OFFSET( "dddddd", NF_DATE_SYSTEM_LONG ),
+    VBA_FORMAT_USERDEFINED( "ttttt", "H:MM:SS AM/PM" ),
+    VBA_FORMAT_OFFSET( "ww", NF_DATE_WW ),
+    { VBA_FORMAT_TYPE_NULL, 0, NF_INDEX_TABLE_ENTRIES, 0 }
+};
+
+VbaFormatInfo* getFormatInfo( const String& rFmt )
+{
+    VbaFormatInfo* pInfo = NULL;
+    INT16 i = 0;
+    while( (pInfo = pFormatInfoTable + i )->mpVbaFormat != NULL )
+    {
+        if( rFmt.EqualsIgnoreCaseAscii( pInfo->mpVbaFormat ) )
+            break;
+        i++;
+    }
+    return pInfo;
+}
+
+#define VBAFORMAT_GENERALDATE       "General Date"
+#define VBAFORMAT_C                 "c"
+#define VBAFORMAT_N                 "n"
+#define VBAFORMAT_NN                "nn"
+#define VBAFORMAT_W                 "w"
+#define VBAFORMAT_Y                 "y"
+#define VBAFORMAT_LOWERCASE         "<"
+#define VBAFORMAT_UPPERCASE         ">"
+
+// From methods1.cxx
+INT16 implGetWeekDay( double aDate, bool bFirstDayParam = false, INT16 nFirstDay = 0 );
+// from methods.cxx
+INT16 implGetMinute( double dDate );
+INT16 implGetDateYear( double aDate );
+BOOL implDateSerial( INT16 nYear, INT16 nMonth, INT16 nDay, double& rdRet );
+
 void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
 {
     short nComma = 0;
     double d = 0;
 
-    // Check for date format
+    // pflin, It is better to use SvNumberFormatter to handle the date/time/number format.
+    // the SvNumberFormatter output is mostly compatible with
+    // VBA output besides the OOo-basic output
     if( pFmt && !SbxBasicFormater::isBasicFormat( *pFmt ) )
     {
+        String aStr = GetString();
+
+        if( pFmt->EqualsIgnoreCaseAscii( VBAFORMAT_LOWERCASE ) )
+        {
+            rRes = aStr.ToLowerAscii();
+            return;
+        }
+        if( pFmt->EqualsIgnoreCaseAscii( VBAFORMAT_UPPERCASE ) )
+        {
+            rRes = aStr.ToUpperAscii();
+            return;
+        }
+
         LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
             xFactory = comphelper::getProcessServiceFactory();
@@ -666,22 +746,92 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
         sal_uInt32 nIndex;
         xub_StrLen nCheckPos = 0;
         short nType;
+        double nNumber;
+        Color* pCol;
 
-        String aFmtStr = *pFmt;
-        aFormatter.PutandConvertEntry( aFmtStr,
-            nCheckPos,
-            nType,
-            nIndex,
-            LANGUAGE_ENGLISH,
-            eLangType );
+        BOOL bSuccess = aFormatter.IsNumberFormat( aStr, nIndex, nNumber );
 
-        if( nType == NUMBERFORMAT_DATE ||
-            nType == NUMBERFORMAT_TIME ||
-            nType == NUMBERFORMAT_DATETIME )
+        // number format, use SvNumberFormatter to handle it.
+        if( bSuccess )
         {
-            double dt = GetDate();
-            Color* pColor;
-            aFormatter.GetOutputString( dt, nIndex, rRes, &pColor );
+            String aFmtStr = *pFmt;
+            VbaFormatInfo* pInfo = getFormatInfo( aFmtStr );
+            if( pInfo && pInfo->meType != VBA_FORMAT_TYPE_NULL )
+               {
+                if( pInfo->meType == VBA_FORMAT_TYPE_OFFSET )
+                {
+                    nIndex = aFormatter.GetFormatIndex( pInfo->meOffset, eLangType );
+                }
+                else
+                   {
+                    aFmtStr.AssignAscii( pInfo->mpOOoFormat );
+                    aFormatter.PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType );
+                }
+                aFormatter.GetOutputString( nNumber, nIndex, rRes, &pCol );
+            }
+            else if( aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_GENERALDATE )
+                    || aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_C ))
+            {
+                if( nNumber <=-1.0 || nNumber >= 1.0 )
+                {
+                    // short date
+                    nIndex = aFormatter.GetFormatIndex( NF_DATE_SYSTEM_SHORT, eLangType );
+                       aFormatter.GetOutputString( nNumber, nIndex, rRes, &pCol );
+
+                    // long time
+                    if( floor( nNumber ) != nNumber )
+                    {
+                        aFmtStr.AssignAscii( "H:MM:SS AM/PM" );
+                        aFormatter.PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType );
+                        String aTime;
+                        aFormatter.GetOutputString( nNumber, nIndex, aTime, &pCol );
+                        rRes.AppendAscii(" ");
+                        rRes += aTime;
+                    }
+                }
+                else
+                {
+                    // long time only
+                    aFmtStr.AssignAscii( "H:MM:SS AM/PM" );
+                    aFormatter.PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType );
+                    aFormatter.GetOutputString( nNumber, nIndex, rRes, &pCol );
+                }
+            }
+            else if( aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_N )
+                    || aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_NN ))
+            {
+                INT32 nMin = implGetMinute( nNumber );
+                if( nMin < 10 && aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_NN ) )
+                {
+                    // Minute in two digits
+                     sal_Unicode* p = rRes.AllocBuffer( 2 );
+                     *p++ = '0';
+                     *p = sal_Unicode( '0' + nMin );
+                }
+                else
+                {
+                    rRes = String::CreateFromInt32( nMin );
+                }
+            }
+            else if( aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_W ))
+            {
+                INT32 nWeekDay = implGetWeekDay( nNumber );
+                rRes = String::CreateFromInt32( nWeekDay );
+            }
+            else if( aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_Y ))
+            {
+                INT16 nYear = implGetDateYear( nNumber );
+                double dBaseDate;
+                implDateSerial( nYear, 1, 1, dBaseDate );
+                INT32 nYear32 = 1 + INT32( nNumber - dBaseDate );
+                rRes = String::CreateFromInt32( nYear32 );
+            }
+            else
+            {
+                aFormatter.PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType );
+                aFormatter.GetOutputString( nNumber, nIndex, rRes, &pCol );
+            }
+
             return;
         }
     }
