@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xcl97rec.hxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _XCL97REC_HXX
-#define _XCL97REC_HXX
+#ifndef SC_XCL97REC_HXX
+#define SC_XCL97REC_HXX
 
 #include "excrecds.hxx"
 #include "xcl97esc.hxx"
