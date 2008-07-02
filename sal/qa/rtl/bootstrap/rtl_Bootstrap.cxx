@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtl_Bootstrap.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -768,6 +768,16 @@ namespace rtl_Bootstrap
                 t.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("qadev17")));
         }
 
+        void testOverride() {
+            rtl::OUString t(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "${.override:$ORIGIN/" SAL_CONFIGFILE("rtl") ":ORIGIN}"));
+            Bootstrap(t_getSourcePath("rtl")).expandMacrosFrom(t);
+            CPPUNIT_ASSERT_MESSAGE(
+                "override",
+                t.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("direct")));
+        }
+
         void testSection() {
             rtl::OUStringBuffer b;
             b.appendAscii(RTL_CONSTASCII_STRINGPARAM("${"));
@@ -799,6 +809,7 @@ namespace rtl_Bootstrap
         CPPUNIT_TEST(expandMacrosFrom_003);
         CPPUNIT_TEST(testRecursion);
         CPPUNIT_TEST(testLink);
+        CPPUNIT_TEST(testOverride);
         CPPUNIT_TEST(testSection);
         CPPUNIT_TEST_SUITE_END();
     }; // class expandMacrosFrom
@@ -915,6 +926,7 @@ static void create_rtlrc()
     sLines += "RTLVALUE=qadev17\n";
     sLines += "TESTSHL_SOVALUE=rtlfile\n";
     sLines += "RECURSIVE=${$ORIGIN/" SAL_CONFIGFILE("testshl2") ":RECURSIVE}\n";
+    sLines += "ORIGIN=direct\n";
     sLines += "[Other_Section]\n";
     sLines += "TESTSHL_SOVALUE=rtlfile_other\n";
 
