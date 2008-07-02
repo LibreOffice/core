@@ -358,7 +358,7 @@
 </LC_CALENDAR>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>km</CurrencyID>
+<CurrencyID>BAM</CurrencyID>
 <CurrencySymbol>KM</CurrencySymbol>
 <BankSymbol>BAM</BankSymbol>
 <CurrencyName>Konvertibilna marka</CurrencyName>
