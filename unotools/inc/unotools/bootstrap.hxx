@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bootstrap.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,9 +59,6 @@ namespace utl
 
         /// retrieve the product source (MWS name)
         static ::rtl::OUString getProductSource(rtl::OUString const& _sDefault);
-
-        /// retrieve the LOGO information item; uses the given default, if not found
-        static rtl::OUString getLogoData(rtl::OUString const& _sDefault);     //
 
         /// retrieve the BUILDID information item; uses the given default, if not found
         static rtl::OUString getBuildIdData(rtl::OUString const& _sDefault);
