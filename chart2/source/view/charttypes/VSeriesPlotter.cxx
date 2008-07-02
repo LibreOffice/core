@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VSeriesPlotter.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -764,7 +764,7 @@ void VSeriesPlotter::createErrorBar(
       const uno::Reference< drawing::XShapes >& xTarget
     , const drawing::Position3D& rUnscaledLogicPosition
     , const uno::Reference< beans::XPropertySet > & xErrorBarProperties
-    , const uno::Sequence< double > & rData
+    , const VDataSeries& rVDataSeries
     , sal_Int32 nIndex
     , bool bYError /* = true */
     )
@@ -791,20 +791,26 @@ void VSeriesPlotter::createErrorBar(
         if(nErrorBarStyle==::com::sun::star::chart::ErrorBarStyle::NONE)
             return;
 
+        drawing::Position3D aUnscaledLogicPosition(rUnscaledLogicPosition);
+        if(nErrorBarStyle==::com::sun::star::chart::ErrorBarStyle::STANDARD_DEVIATION)
+            aUnscaledLogicPosition.PositionY = rVDataSeries.getYMeanValue();
+
         bool bCreateNegativeBorder = false;//make a vertical line at the negative end of the error bar
         bool bCreatePositiveBorder = false;//make a vertical line at the positive end of the error bar
-        drawing::Position3D aMiddle(rUnscaledLogicPosition);
-        const double fX = rUnscaledLogicPosition.PositionX;
-        const double fY = rUnscaledLogicPosition.PositionY;
-        const double fZ = rUnscaledLogicPosition.PositionZ;
+        drawing::Position3D aMiddle(aUnscaledLogicPosition);
+        const double fX = aUnscaledLogicPosition.PositionX;
+        const double fY = aUnscaledLogicPosition.PositionY;
+        const double fZ = aUnscaledLogicPosition.PositionZ;
         aMiddle = m_pPosHelper->transformLogicToScene( fX, fY, fZ, true );
 
         drawing::Position3D aNegative(aMiddle);
         drawing::Position3D aPositive(aMiddle);
 
+        uno::Sequence< double > aData( bYError ? rVDataSeries.getAllY() : rVDataSeries.getAllX() );
+
         if( bShowPositive )
         {
-            double fLength = lcl_getErrorBarLogicLength( rData, xErrorBarProperties, nErrorBarStyle, nIndex, true );
+            double fLength = lcl_getErrorBarLogicLength( aData, xErrorBarProperties, nErrorBarStyle, nIndex, true );
             if( ::rtl::math::isFinite( fLength ) )
             {
                 double fLocalX = fX;
@@ -822,7 +828,7 @@ void VSeriesPlotter::createErrorBar(
 
         if( bShowNegative )
         {
-            double fLength = lcl_getErrorBarLogicLength( rData, xErrorBarProperties, nErrorBarStyle, nIndex, false );
+            double fLength = lcl_getErrorBarLogicLength( aData, xErrorBarProperties, nErrorBarStyle, nIndex, false );
             if( ::rtl::math::isFinite( fLength ) )
             {
                 double fLocalX = fX;
@@ -853,13 +859,13 @@ void VSeriesPlotter::createErrorBar(
 
         if( bShowNegative && bCreateNegativeBorder )
         {
-            ::basegfx::B2DVector aMainDirection = lcl_getErrorBarMainDirection( aMiddle, aNegative, m_pPosHelper, rUnscaledLogicPosition, bYError );
+            ::basegfx::B2DVector aMainDirection = lcl_getErrorBarMainDirection( aMiddle, aNegative, m_pPosHelper, aUnscaledLogicPosition, bYError );
             nSequenceIndex++;
             lcl_AddErrorBottomLine( aNegative, aMainDirection, aPoly, nSequenceIndex );
         }
         if( bShowPositive && bCreatePositiveBorder )
         {
-            ::basegfx::B2DVector aMainDirection = lcl_getErrorBarMainDirection( aMiddle, aPositive, m_pPosHelper, rUnscaledLogicPosition, bYError );
+            ::basegfx::B2DVector aMainDirection = lcl_getErrorBarMainDirection( aMiddle, aPositive, m_pPosHelper, aUnscaledLogicPosition, bYError );
             nSequenceIndex++;
             lcl_AddErrorBottomLine( aPositive, aMainDirection, aPoly, nSequenceIndex );
         }
@@ -890,7 +896,7 @@ void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogic
 
         createErrorBar( xErrorBarsGroup_Shapes
             , rUnscaledLogicPosition, xErrorBarProp
-            , rVDataSeries.getAllY(), nPointIndex
+            , rVDataSeries, nPointIndex
             , true /* bYError */ );
     }
 }
