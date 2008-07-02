@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ColumnLineChartTypeTemplate.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,6 +83,12 @@ protected:
         getChartTypeForNewSeries( const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartType > >& aFormerlyUsedChartTypes )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL applyStyle(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& xSeries,
+        ::sal_Int32 nChartTypeGroupIndex,
+        ::sal_Int32 nSeriesIndex,
+        ::sal_Int32 nSeriesCount )
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataInterpreter > SAL_CALL getDataInterpreter()
         throw (::com::sun::star::uno::RuntimeException);
