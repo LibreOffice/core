@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: galobj.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,13 @@
 
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <sfx2/objsh.hxx>
+#include <sfx2/docfac.hxx>
+
+#include <comphelper/classids.hxx>
+#include <svtools/pathoptions.hxx>
+
 #include <tools/rcid.h>
 #include <tools/vcompat.hxx>
 #include <vcl/virdev.hxx>
@@ -45,6 +52,10 @@
 #include "galobj.hxx"
 #include <vcl/salbtype.hxx>     // FRound
 #include <vcl/svapp.hxx>
+
+#include "gallerydrawmodel.hxx"
+
+using namespace ::com::sun::star;
 
 // -------------
 // - SgaObject -
@@ -445,16 +456,51 @@ SgaObjectSvDraw::SgaObjectSvDraw( const FmFormModel& rModel, const INetURLObject
 
 // ------------------------------------------------------------------------
 
+SvxGalleryDrawModel::SvxGalleryDrawModel()
+: mpFormModel( 0 )
+{
+    const String sFactoryURL(RTL_CONSTASCII_USTRINGPARAM("sdraw"));
+
+    mxDoc = SfxObjectShell::CreateObjectByFactoryName( sFactoryURL );
+
+    if( mxDoc.Is() )
+    {
+        mxDoc->DoInitNew(0);
+
+        uno::Reference< lang::XUnoTunnel > xTunnel( mxDoc->GetModel(), uno::UNO_QUERY );
+        if( xTunnel.is() )
+        {
+            mpFormModel = dynamic_cast< FmFormModel* >(
+                reinterpret_cast<SdrModel*>(xTunnel->getSomething(SdrModel::getUnoTunnelImplementationId())));
+            if( mpFormModel )
+            {
+                mpFormModel->InsertPage( mpFormModel->AllocPage( false ) );
+            }
+        }
+    }
+}
+
+// ------------------------------------------------------------------------
+
+SvxGalleryDrawModel::~SvxGalleryDrawModel()
+{
+    if( mxDoc.Is() )
+        mxDoc->DoClose();
+}
+
+// ------------------------------------------------------------------------
+
 SgaObjectSvDraw::SgaObjectSvDraw( SvStream& rIStm, const INetURLObject& rURL )
 {
-    FmFormModel aModel;
+    SvxGalleryDrawModel aModel;
 
-    aModel.GetItemPool().FreezeIdRanges();
-
-    if( GallerySvDrawImport( rIStm, aModel ) )
+    if( aModel.GetModel() )
     {
-        aURL = rURL;
-        bIsValid = CreateThumb( aModel );
+        if( GallerySvDrawImport( rIStm, *aModel.GetModel()  ) )
+        {
+            aURL = rURL;
+            bIsValid = CreateThumb( *aModel.GetModel()  );
+        }
     }
 }
 
