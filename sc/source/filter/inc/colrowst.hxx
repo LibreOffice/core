@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: colrowst.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,12 +28,10 @@
  *
  ************************************************************************/
 
-#ifndef _COLROWST_HXX
-#define _COLROWST_HXX
+#ifndef SC_COLROWST_HXX
+#define SC_COLROWST_HXX
 
-#ifndef EXC_XIROOT_HXX
 #include "xiroot.hxx"
-#endif
 
 class XclImpStream;
 
