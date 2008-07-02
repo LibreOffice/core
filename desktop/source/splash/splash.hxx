@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: splash.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +41,6 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/virdev.hxx>
-#include <rtl/bootstrap.hxx>
 
 
 using namespace ::rtl;
@@ -77,11 +76,12 @@ private:
     void loadConfig();
     void initBitmap();
     void updateStatus();
-    bool findScreenBitmap();
-    bool findAppBitmap();
-    bool findBitmap( const rtl::OUString aBmpFileName );
-    bool loadBitmap( const rtl::OUString &rBmpFileName, const rtl::OUString &rExecutePath, Bitmap &rBmp );
-    void determineProgressRatioValues( rtl::Bootstrap& rIniFile, double& rXRelPos, double& rYRelPos, double& rRelWidth, double& rRelHeight );
+    bool findScreenBitmap(rtl::OUString const & path);
+    bool findAppBitmap(rtl::OUString const & path);
+    bool findBitmap(rtl::OUString const & path);
+    bool loadBitmap(
+        rtl::OUString const & path, const rtl::OUString &rBmpFileName );
+    void determineProgressRatioValues( double& rXRelPos, double& rYRelPos, double& rRelWidth, double& rRelHeight );
 
     static  SplashScreen *_pINSTANCE;
 
@@ -92,7 +92,6 @@ private:
     Bitmap          _aIntroBmp;
     Color           _cProgressFrameColor;
     Color           _cProgressBarColor;
-    OUString        _sExecutePath;
     OUString        _sAppName;
     std::vector< FullScreenProgressRatioValue > _sFullScreenProgressRatioValues;
 
@@ -102,6 +101,7 @@ private:
     sal_Bool    _bPaintBitmap;
     sal_Bool    _bPaintProgress;
     sal_Bool    _bVisible;
+    sal_Bool    _bShowLogo;
     sal_Bool    _bFullScreenSplash;
     sal_Bool    _bProgressEnd;
     long _height, _width, _tlx, _tly, _barwidth;
