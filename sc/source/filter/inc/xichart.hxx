@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xichart.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -135,6 +135,11 @@ public:
                             ScfPropertySet& rPropSet,
                             sal_uInt16 nFontIdx,
                             const Color* pFontColor = 0 ) const;
+
+    /** Writes the pie rotation property for the passed angle. */
+    static void         ConvertPieRotation(
+                            ScfPropertySet& rPropSet,
+                            sal_uInt16 nAngle );
 
 private:
     typedef ScfRef< XclImpChRootData > XclImpChRootDataRef;
@@ -704,24 +709,32 @@ typedef ScfRef< XclImpChSerTrendLine > XclImpChSerTrendLineRef;
 class XclImpChSerErrorBar : protected XclImpChRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > XPropertySetRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >    XLabeledDataSeqRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >                   XPropertySetRef;
 
 public:
     explicit            XclImpChSerErrorBar( const XclImpChRoot& rRoot );
 
     /** Reads the CHSERERRORBAR record. */
     void                ReadChSerErrorBar( XclImpStream& rStrm );
-    /** Sets formatting information for the error bars. */
-    inline void         SetDataFormat( XclImpChDataFormatRef xDataFmt ) { mxDataFmt = xDataFmt; }
+    /** Sets link and formatting information for the error bars. */
+    void                SetSeriesData(
+                            XclImpChSourceLinkRef xValueLink,
+                            XclImpChDataFormatRef xDataFmt );
 
     /** Returns the type of this error bar (X/Y, plus/minus). */
     inline sal_uInt8    GetBarType() const { return maData.mnBarType; }
+    /** Creates a labeled data sequence object from value data link. */
+    XLabeledDataSeqRef  CreateValueSequence() const;
 
     /** Tries to create an error bar API object from the specified Excel error bars. */
-    XPropertySetRef     CreateErrorBar( bool bPosBar, bool bNegBar ) const;
+    static XPropertySetRef CreateErrorBar(
+                            const XclImpChSerErrorBar* pPosBar,
+                            const XclImpChSerErrorBar* pNegBar );
 
 private:
     XclChSerErrorBar    maData;             /// Contents of the CHSERERRORBAR record.
+    XclImpChSourceLinkRef mxValueLink;      /// Link data for manual error bar values.
     XclImpChDataFormatRef mxDataFmt;        /// Formatting settings of the error bars.
 };
 
@@ -862,7 +875,7 @@ public:
     /** Creates a coordinate system according to the contained chart type. */
     XCoordSystemRef     CreateCoordSystem( bool b3dChart ) const;
     /** Creates and returns an object that represents the contained chart type. */
-    XChartTypeRef       CreateChartType( XDiagramRef xDiagram ) const;
+    XChartTypeRef       CreateChartType( XDiagramRef xDiagram, bool b3dChart ) const;
 
 private:
     XclChType           maData;             /// Contents of the chart type record.
@@ -1076,7 +1089,7 @@ public:
     /** Reads the CHLABELRANGE record (category axis scaling properties). */
     void                ReadChLabelRange( XclImpStream& rStrm );
     /** Converts category axis scaling settings. */
-    void                Convert( ScfPropertySet& rPropSet, ScaleData& rScaleData ) const;
+    void                Convert( ScfPropertySet& rPropSet, ScaleData& rScaleData, bool bMirrorOrient ) const;
 
 private:
     XclChLabelRange     maData;             /// Contents of the CHLABELRANGE record.
@@ -1096,7 +1109,7 @@ public:
     /** Reads the CHVALUERANGE record (numeric axis scaling properties). */
     void                ReadChValueRange( XclImpStream& rStrm );
     /** Converts value axis scaling settings. */
-    void                Convert( ScaleData& rScaleData ) const;
+    void                Convert( ScaleData& rScaleData, bool bMirrorOrient ) const;
 
 private:
     XclChValueRange     maData;             /// Contents of the CHVALUERANGE record.
@@ -1380,6 +1393,8 @@ public:
 
     /** Returns the number of units on the progress bar needed for the chart. */
     sal_Size            GetProgressSize() const;
+    /** Returns true, if the chart is based on a pivot table. */
+    inline bool         IsPivotChart() const { return mbIsPivotChart; }
 
     /** Creates the chart object in the passed component. */
     void                Convert( XModelRef xModel, ScfProgressBar& rProgress ) const;
@@ -1391,6 +1406,7 @@ private:
 private:
     XclImpChChartRef    mxChartData;        /// The chart data (CHCHART group).
     bool                mbOwnTab;           /// true = own sheet; false = embedded object.
+    bool                mbIsPivotChart;     /// true = chart is based on a pivot table.
 };
 
 // ============================================================================
