@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimprt.hxx,v $
- * $Revision: 1.96 $
+ * $Revision: 1.97 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +27,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef SC_XMLIMPRT_HXX
 #define SC_XMLIMPRT_HXX
+
 #include <rsc/rscsfx.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -43,9 +45,7 @@
 #include "global.hxx"
 #include "grammar.hxx"
 
-#ifndef _XMLSTYLE_HXX
 #include "xmlstyle.hxx"
-#endif
 #include "XMLDetectiveContext.hxx"
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
