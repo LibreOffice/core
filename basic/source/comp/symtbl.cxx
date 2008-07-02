@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: symtbl.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -423,6 +423,7 @@ SbiProcDef::SbiProcDef( SbiParser* pParser, const String& rName,
     mePropMode = PROPERTY_MODE_NONE;
     bPublic = TRUE;
     bCdecl  = FALSE;
+    bStatic = FALSE;
     // Fuer Returnwerte ist das erste Element der Parameterliste
     // immer mit dem Namen und dem Typ der Proc definiert
     aParams.AddSym( aName );
