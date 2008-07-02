@@ -359,7 +359,7 @@
 </LC_CALENDAR>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>kr</CurrencyID>
+<CurrencyID>NOK</CurrencyID>
 <CurrencySymbol>kr</CurrencySymbol>
 <BankSymbol>NOK</BankSymbol>
 <CurrencyName>Norske kroner</CurrencyName>
