@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTableShapeResizer.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _SC_XMLTABLESHAPERESIZER_HXX
-#define _SC_XMLTABLESHAPERESIZER_HXX
+#ifndef SC_XMLTABLESHAPERESIZER_HXX
+#define SC_XMLTABLESHAPERESIZER_HXX
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
