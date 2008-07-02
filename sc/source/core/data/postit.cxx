@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: postit.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,10 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-
-// INCLUDE ---------------------------------------------------------------
 #include "postit.hxx"
 #include <svtools/itemset.hxx>
 #include <sfx2/objsh.hxx>
@@ -55,9 +51,7 @@
 #include <svx/xflclit.hxx>
 #include <svx/xlnstcit.hxx>
 #include <svx/xlnstit.hxx>
-#ifndef _SVX_XLNSWIT_HXX
 #include <svx/xlnstwit.hxx>
-#endif
 #include <com/sun/star/uno/Reference.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
