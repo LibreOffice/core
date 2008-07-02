@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sharecontrolfile.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -406,6 +406,33 @@ uno::Sequence< ::rtl::OUString > ShareControlFile::InsertOwnEntry()
     SetUsersDataAndStore( aNewData );
 
     return aNewEntry;
+}
+
+// ----------------------------------------------------------------------
+bool ShareControlFile::HasOwnEntry()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( !IsValid() )
+    {
+        throw io::NotConnectedException();
+    }
+
+    GetUsersData();
+    uno::Sequence< ::rtl::OUString > aEntry = GenerateOwnEntry();
+
+    for ( sal_Int32 nInd = 0; nInd < m_aUsersData.getLength(); ++nInd )
+    {
+        if ( m_aUsersData[nInd].getLength() == SHARED_ENTRYSIZE &&
+             m_aUsersData[nInd][SHARED_LOCALHOST_ID] == aEntry[SHARED_LOCALHOST_ID] &&
+             m_aUsersData[nInd][SHARED_SYSUSERNAME_ID] == aEntry[SHARED_SYSUSERNAME_ID] &&
+             m_aUsersData[nInd][SHARED_USERURL_ID] == aEntry[SHARED_USERURL_ID] )
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 // ----------------------------------------------------------------------
