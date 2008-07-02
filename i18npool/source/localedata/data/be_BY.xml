@@ -305,7 +305,7 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>р.</CurrencyID>
+      <CurrencyID>BYR</CurrencyID>
       <CurrencySymbol>р.</CurrencySymbol>
       <BankSymbol>BYR</BankSymbol>
       <CurrencyName>Ruble</CurrencyName>
