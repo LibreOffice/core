@@ -351,7 +351,7 @@
 </LC_CALENDAR>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>leu</CurrencyID>
+<CurrencyID>ROL</CurrencyID>
 <CurrencySymbol>lei</CurrencySymbol>
 <BankSymbol>ROL</BankSymbol>
 <CurrencyName>Leu</CurrencyName>

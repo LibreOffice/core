@@ -361,7 +361,7 @@
 </LC_CALENDAR>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>грн.</CurrencyID>
+<CurrencyID>UAH</CurrencyID>
 <CurrencySymbol>грн.</CurrencySymbol>
 <BankSymbol>UAH</BankSymbol>
 <CurrencyName>Hrivnya</CurrencyName>
