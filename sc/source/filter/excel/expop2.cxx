@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: expop2.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,6 +110,9 @@ FltError ExportBiff5::Write()
 
     if( pDocShell && xRootStrg.Is() )
     {
+        // #i88642# update doc info (revision etc)
+        pDocShell->UpdateDocInfoForSave();
+
         using namespace ::com::sun::star;
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                 pDocShell->GetModel(), uno::UNO_QUERY_THROW);
