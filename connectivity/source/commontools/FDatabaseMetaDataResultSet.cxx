@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FDatabaseMetaDataResultSet.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -734,7 +734,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
 {
     if ( _aArguments.getLength() == 2 )
     {
-        sal_Int32 nResultSetType;
+        sal_Int32 nResultSetType = 0;
         if ( _aArguments[0] >>= nResultSetType)
         {
             setType(static_cast<MetaDataResultSetType>(nResultSetType));
@@ -756,7 +756,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
                         {
                             case TypeClass_BOOLEAN:
                                 {
-                                    sal_Bool bValue;
+                                    sal_Bool bValue = sal_False;
                                     *pRowIter >>= bValue;
                                     aValue = new ORowSetValueDecorator(ORowSetValue(bValue));
                                 }
