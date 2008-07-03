@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: symtbl.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,7 +160,7 @@ public:
     void       SetOptional()    { bOpt = TRUE;      }
     void       SetParamArray()  { bParamArray = TRUE;       }
     void       SetByVal()       { bByVal = TRUE;    }
-    void       SetStatic()      { bStatic = TRUE;   }
+    void       SetStatic( BOOL bAsStatic = TRUE )       { bStatic = bAsStatic;  }
     void       SetNew()         { bNew = TRUE;      }
     void       SetDefinedAs()   { bAs = TRUE;       }
     void       SetGlobal(BOOL b){ bGlobal = b;  }
@@ -194,7 +194,6 @@ class SbiProcDef : public SbiSymDef {   // Prozedur-Definition (aus Basic):
     BOOL   bCdecl  : 1;             // TRUE: CDECL angegeben
     BOOL   bPublic : 1;             // TRUE: proc ist PUBLIC
     BOOL   mbProcDecl : 1;          // TRUE: instanciated by SbiParser::ProcDecl
-    BOOL   bStatic : 1;             // TRUE:
 public:
     SbiProcDef( SbiParser*, const String&, BOOL bProcDecl=false );
     virtual ~SbiProcDef();
@@ -207,8 +206,6 @@ public:
     String& GetAlias()              { return aAlias;   }
     void SetPublic( BOOL b )        { bPublic = b;     }
     BOOL IsPublic() const           { return bPublic;  }
-    void SetStatic( BOOL b )        { bStatic = b;     }
-    BOOL IsStatic() const           { return bStatic;  }
     void SetCdecl( BOOL b = TRUE)   { bCdecl = b;      }
     BOOL IsCdecl() const            { return bCdecl;   }
     BOOL IsUsedForProcDecl() const  { return mbProcDecl; }
