@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.71 $
+# $Revision: 1.72 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -117,6 +117,10 @@ SCPDEFS+=-DUSE_SYSTEM_STL
 
 .IF "$(WITH_MOZILLA)" == "NO"
 SCPDEFS+=-DWITHOUT_MOZILLA
+.ENDIF
+
+.IF "$(WITH_MYSPELL_DICTS)" == "NO"
+SCPDEFS+=-DWITHOUT_MYSPELL_DICTS
 .ENDIF
 
 .IF "$(SYSTEM_MOZILLA)" == "YES"
