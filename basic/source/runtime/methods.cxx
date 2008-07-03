@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: methods.cxx,v $
- * $Revision: 1.81 $
+ * $Revision: 1.82 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3971,19 +3971,19 @@ RTLFUNC(StrConv)
                 pSrc++;
         }
         pChar[nSize] = '\0';
-        OString aOStr(pChar);
+        ::rtl::OString aOStr(pChar);
 
         // there is no concept about default codepage in unix. so it is incorrectly in unix
-        OUString aOUStr = OStringToOUString(aOStr, osl_getThreadTextEncoding());
+        ::rtl::OUString aOUStr = ::rtl::OStringToOUString(aOStr, osl_getThreadTextEncoding());
         aNewStr = String(aOUStr);
         rPar.Get(0)->PutString( aNewStr );
         return;
     }
     else if ( (nConversion & 0x80) == 128 ) // vbFromUnicode
     {
-        OUString aOUStr(aNewStr);
+        ::rtl::OUString aOUStr(aNewStr);
         // there is no concept about default codepage in unix. so it is incorrectly in unix
-        OString aOStr = OUStringToOString(aNewStr,osl_getThreadTextEncoding());
+        ::rtl::OString aOStr = ::rtl::OUStringToOString(aNewStr,osl_getThreadTextEncoding());
         const sal_Char* pChar = aOStr.getStr();
         USHORT nArraySize = static_cast< USHORT >( aOStr.getLength() );
         SbxDimArray* pArray = new SbxDimArray(SbxBYTE);
@@ -4437,15 +4437,15 @@ RTLFUNC(Partition)
     // will be handled properly during any subsequent sort operation.
 
     // calculate the  maximun number of characters before lowervalue and uppervalue
-    OUString aBeforeStart = OUString::valueOf( nStart - 1 );
-    OUString aAfterStop = OUString::valueOf( nStop + 1 );
+    ::rtl::OUString aBeforeStart = ::rtl::OUString::valueOf( nStart - 1 );
+    ::rtl::OUString aAfterStop = ::rtl::OUString::valueOf( nStop + 1 );
     INT32 nLen1 = aBeforeStart.getLength();
     INT32 nLen2 = aAfterStop.getLength();
     INT32 nLen = nLen1 >= nLen2 ? nLen1:nLen2;
 
-    OUStringBuffer aRetStr( nLen * 2 + 1);
-    OUString aLowerValue;
-    OUString aUpperValue;
+    ::rtl::OUStringBuffer aRetStr( nLen * 2 + 1);
+    ::rtl::OUString aLowerValue;
+    ::rtl::OUString aUpperValue;
     if( nNumber < nStart )
     {
         aUpperValue = aBeforeStart;
@@ -4464,8 +4464,8 @@ RTLFUNC(Partition)
             nUpperValue = nLowerValue + nInterval - 1;
         }
 
-        aLowerValue = OUString::valueOf( nLowerValue );
-        aUpperValue = OUString::valueOf( nUpperValue );
+        aLowerValue = ::rtl::OUString::valueOf( nLowerValue );
+        aUpperValue = ::rtl::OUString::valueOf( nUpperValue );
     }
 
     nLen1 = aLowerValue.getLength();
