@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.11 $
+# $Revision: 1.12 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,6 +54,12 @@ SLOFILES= \
     $(SLO)$/resourcemodel.obj \
     $(SLO)$/util.obj \
     $(SLO)$/WW8Analyzer.obj
+
+# linux 64 bit: compiler (gcc 4.2.3) fails with 'out of memory'
+.IF "$(OUTPATH)"=="unxlngx6"
+NOOPTFILES= \
+    $(SLO)$/qnametostr.obj
+.ENDIF
 
 SHL1TARGET=$(TARGET)
 
