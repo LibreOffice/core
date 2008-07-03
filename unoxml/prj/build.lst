@@ -2,7 +2,5 @@ ux	unoxml	:	offuh cppuhelper LIBXML2:libxml2 REDLAND:redland tools NULL
 ux	unoxml\source\dom			nmake	-	all	ux_dom      NULL
 ux	unoxml\source\xpath			nmake	-	all	ux_xpath    ux_dom NULL
 ux	unoxml\source\events		nmake	-	all	ux_events   ux_dom NULL
-ux  unoxml\source\fastsax\api	nmake   -   all ux_fapi		NULL
-ux  unoxml\source\fastsax		nmake	-	all ux_fastsax ux_fapi NULL
-ux	unoxml\source\service		nmake	-	all ux_service  ux_dom ux_xpath ux_events ux_fapi ux_fastsax NULL
+ux	unoxml\source\service		nmake	-	all ux_service  ux_dom ux_xpath ux_events NULL
 ux	unoxml\source\rdf           nmake	-	all ux_librdf   NULL
