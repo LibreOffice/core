@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optgdlg.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -784,6 +784,28 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
         m_aSystemFont.Check( FALSE );
         m_aSystemFont.Enable( FALSE );
     }
+
+    // add real theme name to 'auto' theme, e.g. 'auto' => 'auto (classic)'
+    if( aIconStyleLB.GetEntryCount() > 1 )
+    {
+        ::rtl::OUString aAutoStr( aIconStyleLB.GetEntry( 0 ) );
+
+        aAutoStr += ::rtl::OUString::createFromAscii( " (" );
+
+        switch( Application::GetSettings().GetStyleSettings().GetAutoSymbolsStyle() )
+        {
+            case STYLE_SYMBOLS_DEFAULT:     aAutoStr += aIconStyleLB.GetEntry( 1 ); break;
+            case STYLE_SYMBOLS_INDUSTRIAL:  aAutoStr += aIconStyleLB.GetEntry( 2 ); break;
+            case STYLE_SYMBOLS_CRYSTAL:     aAutoStr += aIconStyleLB.GetEntry( 3 ); break;
+            case STYLE_SYMBOLS_TANGO:       aAutoStr += aIconStyleLB.GetEntry( 4 ); break;
+            case STYLE_SYMBOLS_CLASSIC:     aAutoStr += aIconStyleLB.GetEntry( 5 ); break;
+            case STYLE_SYMBOLS_HICONTRAST:  aAutoStr += aIconStyleLB.GetEntry( 6 ); break;
+        }
+
+        aIconStyleLB.RemoveEntry( 0 );
+        aIconStyleLB.InsertEntry( aAutoStr += ::rtl::OUString::createFromAscii( ")" ), 0 );
+        aIconStyleLB.SetSeparatorPos( aIconStyleLB.GetEntryCount() - 2 );
+    }
 }
 
 OfaViewTabPage::~OfaViewTabPage()
@@ -855,10 +877,11 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& )
         {
             case 0: eSet = SFX_SYMBOLS_STYLE_AUTO;       break;
             case 1: eSet = SFX_SYMBOLS_STYLE_DEFAULT;    break;
-            case 2: eSet = SFX_SYMBOLS_STYLE_HICONTRAST; break;
-            case 3: eSet = SFX_SYMBOLS_STYLE_INDUSTRIAL; break;
-            case 4: eSet = SFX_SYMBOLS_STYLE_CRYSTAL;    break;
-            case 5: eSet = SFX_SYMBOLS_STYLE_TANGO;      break;
+            case 2: eSet = SFX_SYMBOLS_STYLE_INDUSTRIAL; break;
+            case 3: eSet = SFX_SYMBOLS_STYLE_CRYSTAL;    break;
+            case 4: eSet = SFX_SYMBOLS_STYLE_TANGO;      break;
+            case 5: eSet = SFX_SYMBOLS_STYLE_CLASSIC;    break;
+            case 6: eSet = SFX_SYMBOLS_STYLE_HICONTRAST; break;
             default:
                 DBG_ERROR( "OfaViewTabPage::FillItemSet(): This state of aIconStyleLB should not be possible!" );
         }
@@ -1026,13 +1049,15 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
         switch ( aMiscOptions.GetCurrentSymbolsStyle() )
         {
             case SFX_SYMBOLS_STYLE_DEFAULT:    nStyleLB_InitialSelection = 1; break;
-            case SFX_SYMBOLS_STYLE_HICONTRAST: nStyleLB_InitialSelection = 2; break;
-            case SFX_SYMBOLS_STYLE_INDUSTRIAL: nStyleLB_InitialSelection = 3; break;
-            case SFX_SYMBOLS_STYLE_CRYSTAL:    nStyleLB_InitialSelection = 4; break;
-            case SFX_SYMBOLS_STYLE_TANGO:      nStyleLB_InitialSelection = 5; break;
+            case SFX_SYMBOLS_STYLE_INDUSTRIAL: nStyleLB_InitialSelection = 2; break;
+            case SFX_SYMBOLS_STYLE_CRYSTAL:    nStyleLB_InitialSelection = 3; break;
+            case SFX_SYMBOLS_STYLE_TANGO:      nStyleLB_InitialSelection = 4; break;
+            case SFX_SYMBOLS_STYLE_CLASSIC:    nStyleLB_InitialSelection = 5; break;
+            case SFX_SYMBOLS_STYLE_HICONTRAST: nStyleLB_InitialSelection = 6; break;
             default:                           nStyleLB_InitialSelection = 0; break;
         }
     }
+
     aIconStyleLB.SelectEntryPos( nStyleLB_InitialSelection );
     aIconStyleLB.SaveValue();
 
