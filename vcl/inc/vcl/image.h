@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: image.h,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,14 +66,14 @@ public:
 private:
 
     BitmapEx    maBmpEx;
-    Bitmap      maDisabledBmp;
+    BitmapEx    maDisabledBmpEx;
     BitmapEx*   mpDisplayBmp;
     Size        maSize;
     BYTE*       mpInfoAry;
     USHORT      mnSize;
 
     void        ImplUpdateDisplayBmp( OutputDevice* pOutDev );
-    void        ImplUpdateDisabledBmp( int nPos );
+    void        ImplUpdateDisabledBmpEx( int nPos );
 
 private:    // prevent assignment and copy construction
     ImplImageBmp( const ImplImageBmp& );
