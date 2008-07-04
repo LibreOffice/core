@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: imgdef.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +45,8 @@ enum SfxSymbolsStyle
     SFX_SYMBOLS_STYLE_HICONTRAST,
     SFX_SYMBOLS_STYLE_INDUSTRIAL,
     SFX_SYMBOLS_STYLE_CRYSTAL,
-    SFX_SYMBOLS_STYLE_TANGO
+    SFX_SYMBOLS_STYLE_TANGO,
+    SFX_SYMBOLS_STYLE_CLASSIC
 };
 
 #define SFX_TOOLBOX_CHANGESYMBOLSET     0x0001
