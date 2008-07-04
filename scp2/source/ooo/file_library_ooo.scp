@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_library_ooo.scp,v $
- * $Revision: 1.297 $
+ * $Revision: 1.298 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -931,27 +931,8 @@ End
 
 #if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) 
 
-File gid_File_Lib_Mozab_2
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libmozab2,UNXSUFFIX));
-  #else
-    Name = "mozab2.dll";
-  #endif
-End
-
-#endif
-
-STD_UNO_LIB_FILE(gid_File_Lib_Wpft,wpft)
-
-STD_UNO_LIB_FILE(gid_File_Lib_T602Filter,t602filter)
-
-STD_UNO_LIB_FILE(gid_File_Lib_Writerfilter,writerfilter)
-
-#if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA)
+#ifndef MACOSX
+    // #i91209#
 
 File gid_File_Lib_Mozabdrv
     TXT_FILE_BODY;
@@ -964,7 +945,27 @@ File gid_File_Lib_Mozabdrv
     Styles = (PACKED);
 End
 
+File gid_File_Lib_Mozab_2
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT2(libmozab2,UNXSUFFIX));
+  #else
+    Name = "mozab2.dll";
+  #endif
+End
+
+#endif  // #ifndef MACOSX
+
 #endif
+
+STD_UNO_LIB_FILE(gid_File_Lib_Wpft,wpft)
+
+STD_UNO_LIB_FILE(gid_File_Lib_T602Filter,t602filter)
+
+STD_UNO_LIB_FILE(gid_File_Lib_Writerfilter,writerfilter)
 
 #ifdef WNT
 #if defined(_gcc3)
