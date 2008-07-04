@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_ooo.scp,v $
- * $Revision: 1.252 $
+ * $Revision: 1.253 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2902,7 +2902,7 @@ End
 File gid_File_ImagesClassic8_Zip
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Config;
-    Name = "images_classic8.zip";
+    Name = "images_classic.zip";
     Styles = (PACKED);
 End
 
