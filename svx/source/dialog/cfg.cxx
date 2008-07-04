@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cfg.cxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -5562,10 +5562,13 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
             Image img = Image( graphics[ 0 ] );
             aTbSymbol.InsertItem( nId, img, pConstIter->first );
 
-            graphics[ 0 ]->acquire();
+            uno::Reference< graphic::XGraphic > xGraphic = graphics[ 0 ];
+
+            if ( xGraphic.is() )
+                xGraphic->acquire();
 
             aTbSymbol.SetItemData(
-                nId, static_cast< void * > ( graphics[ 0 ].get() ) );
+                nId, static_cast< void * > ( xGraphic.get() ) );
 
             ++nId;
         }
