@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: miscopt.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -274,6 +274,7 @@ static sal_Int16 implSymbolsStyleFromVCL( ULONG nStyle )
         case STYLE_SYMBOLS_INDUSTRIAL: return SFX_SYMBOLS_STYLE_INDUSTRIAL;
         case STYLE_SYMBOLS_CRYSTAL:    return SFX_SYMBOLS_STYLE_CRYSTAL;
         case STYLE_SYMBOLS_TANGO:      return SFX_SYMBOLS_STYLE_TANGO;
+        case STYLE_SYMBOLS_CLASSIC:    return SFX_SYMBOLS_STYLE_CLASSIC;
     }
 
     return SFX_SYMBOLS_STYLE_AUTO;
@@ -289,6 +290,7 @@ static ULONG implSymbolsStyleToVCL( sal_Int16 nStyle )
         case SFX_SYMBOLS_STYLE_INDUSTRIAL: return STYLE_SYMBOLS_INDUSTRIAL;
         case SFX_SYMBOLS_STYLE_CRYSTAL:    return STYLE_SYMBOLS_CRYSTAL;
         case SFX_SYMBOLS_STYLE_TANGO:      return STYLE_SYMBOLS_TANGO;
+        case SFX_SYMBOLS_STYLE_CLASSIC:    return STYLE_SYMBOLS_CLASSIC;
     }
 
     return STYLE_SYMBOLS_AUTO;
