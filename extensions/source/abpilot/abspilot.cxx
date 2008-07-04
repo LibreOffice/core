@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: abspilot.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,7 +122,9 @@ namespace abp
         m_pCancel->SetClickHdl( LINK( this, OAddessBookSourcePilot, OnCancelClicked) );
 
         // some initial settings
-#ifdef WITH_MOZILLA
+#ifdef MACOSX
+        m_aSettings.eType = AST_MACAB;
+#elif WITH_MOZILLA
 #ifdef UNX
         m_aSettings.eType = AST_MORK;
 #else
