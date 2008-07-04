@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: typeselectionpage.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +76,7 @@ namespace abp
         bool bHaveEvolution = true, bHaveKab = true;
         bool bHaveMacab = true;
 
-#ifndef WITH_MOZILLA
+#if !defined WITH_MOZILLA || defined MACOSX
         bWithMozilla = false;
 #endif
 #ifndef UNX
