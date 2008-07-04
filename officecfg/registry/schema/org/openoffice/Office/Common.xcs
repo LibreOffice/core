@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Common.xcs,v $
- * $Revision: 1.152 $
+ * $Revision: 1.153 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -5578,6 +5578,11 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					<enumeration oor:value="tango">
 						<info>
 							<desc>Tango - the Gnome default theme</desc>
+						</info>
+					</enumeration>
+					<enumeration oor:value="classic">
+						<info>
+							<desc>Classic - the OpenOffice.org 2.0 default theme</desc>
 						</info>
 					</enumeration>
 				</constraints>
