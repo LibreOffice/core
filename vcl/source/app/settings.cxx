@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: settings.cxx,v $
- * $Revision: 1.76 $
+ * $Revision: 1.77 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,7 @@
 #include "vcl/unohelp.hxx"
 #include "unotools/localedatawrapper.hxx"
 #include "unotools/collatorwrapper.hxx"
+#include "unotools/configmgr.hxx"
 #include "unotools/confignode.hxx"
 
 #ifdef WNT
@@ -699,6 +700,7 @@ void StyleSettings::Set3DColors( const Color& rColor )
         case STYLE_SYMBOLS_INDUSTRIAL: return ::rtl::OUString::createFromAscii( "industrial" );
         case STYLE_SYMBOLS_CRYSTAL:    return ::rtl::OUString::createFromAscii( "crystal" );
         case STYLE_SYMBOLS_TANGO:      return ::rtl::OUString::createFromAscii( "tango" );
+        case STYLE_SYMBOLS_CLASSIC:    return ::rtl::OUString::createFromAscii( "classic" );
     }
 
     return ::rtl::OUString::createFromAscii( "auto" );
@@ -718,6 +720,8 @@ ULONG StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) cons
         return STYLE_SYMBOLS_CRYSTAL;
     else if ( rName == ::rtl::OUString::createFromAscii( "tango" ) )
         return STYLE_SYMBOLS_TANGO;
+    else if ( rName == ::rtl::OUString::createFromAscii( "classic" ) )
+        return STYLE_SYMBOLS_CLASSIC;
 
     return STYLE_SYMBOLS_AUTO;
 }
@@ -763,13 +767,7 @@ ULONG StyleSettings::GetCurrentSymbolsStyle() const
 
             if ( !sbFallbackDesktopChecked )
             {
-                const ::rtl::OUString &rDesktopEnvironment = Application::GetDesktopEnvironment();
-
-                if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "gnome" ) )
-                    snFallbackDesktopStyle = STYLE_SYMBOLS_TANGO;
-                else if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde" ) )
-                    snFallbackDesktopStyle = STYLE_SYMBOLS_CRYSTAL;
-
+                snFallbackDesktopStyle = GetAutoSymbolsStyle();
                 sbFallbackDesktopChecked = true;
             }
 
@@ -780,6 +778,39 @@ ULONG StyleSettings::GetCurrentSymbolsStyle() const
     }
 
     return nStyle;
+}
+
+// -----------------------------------------------------------------------
+
+ULONG StyleSettings::GetAutoSymbolsStyle() const
+{
+    const ::rtl::OUString&      rDesktopEnvironment = Application::GetDesktopEnvironment();
+    ULONG                       nRet = STYLE_SYMBOLS_DEFAULT;
+    bool                        bCont = true;
+
+    try
+    {
+        const ::com::sun::star::uno::Any aAny( ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::OPENSOURCECONTEXT ) );
+        sal_Int32 nValue( 0 );
+
+        aAny >>= nValue;
+
+        if( 0 == nValue )
+            bCont = false;
+    }
+    catch ( ::com::sun::star::uno::Exception& )
+    {
+    }
+
+    if( bCont )
+    {
+        if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "gnome" ) )
+            nRet = STYLE_SYMBOLS_TANGO;
+        else if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde" ) )
+            nRet = STYLE_SYMBOLS_CRYSTAL;
+    }
+
+    return nRet;
 }
 
 // -----------------------------------------------------------------------
