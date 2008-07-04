@@ -1,4 +1,4 @@
-﻿/*************************************************************************
+/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optgdlg.src,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -224,7 +224,7 @@ TabPage OFA_TP_VIEW
     ListBox LB_ICONSIZE
     {
         Pos = MAP_APPFONT ( 12 , ROW_LB_ICONSIZESTYLE ) ;
-        Size = MAP_APPFONT ( 55 , 60 ) ;
+        Size = MAP_APPFONT ( 45 , 60 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -237,8 +237,8 @@ TabPage OFA_TP_VIEW
     };
     ListBox LB_ICONSTYLE
     {
-        Pos = MAP_APPFONT ( 71 , ROW_LB_ICONSIZESTYLE ) ;
-        Size = MAP_APPFONT ( 55 , 60 ) ;
+        Pos = MAP_APPFONT ( 61 , ROW_LB_ICONSIZESTYLE ) ;
+        Size = MAP_APPFONT ( 65 , 70 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -250,6 +250,7 @@ TabPage OFA_TP_VIEW
             < "Industrial" ; > ;
             < "Crystal" ; > ;
             < "Tango" ; > ;
+            < "Classic" ; > ;
         };
     };
     CheckBox CB_SYSTEM_FONT
