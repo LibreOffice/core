@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impimage.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -219,7 +219,7 @@ void ImplImageBmp::Create( long nItemWidth, long nItemHeight, USHORT nInitSize )
     const Size aTotalSize( nInitSize * nItemWidth, nItemHeight );
 
     maBmpEx = Bitmap( aTotalSize, 24 );
-    maDisabledBmp.SetEmpty();
+    maDisabledBmpEx.SetEmpty();
 
     delete mpDisplayBmp;
     mpDisplayBmp = NULL;
@@ -237,7 +237,7 @@ void ImplImageBmp::Create( long nItemWidth, long nItemHeight, USHORT nInitSize )
 void ImplImageBmp::Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHeight, USHORT nInitSize )
 {
     maBmpEx = rBmpEx;
-    maDisabledBmp.SetEmpty();
+    maDisabledBmpEx.SetEmpty();
 
     delete mpDisplayBmp;
     mpDisplayBmp = NULL;
@@ -262,8 +262,8 @@ void ImplImageBmp::Expand( USHORT nGrowSize )
 
     maBmpEx.Expand( nDX, 0UL );
 
-    if( !maDisabledBmp.IsEmpty() )
-        maDisabledBmp.Expand( nDX, 0UL );
+    if( !maDisabledBmpEx.IsEmpty() )
+        maDisabledBmpEx.Expand( nDX, 0UL );
 
     delete mpDisplayBmp;
     mpDisplayBmp = NULL;
@@ -294,8 +294,8 @@ void ImplImageBmp::Replace( USHORT nPos, USHORT nSrcPos )
 
     maBmpEx.CopyPixel( aDstRect, aSrcRect );
 
-    if( !maDisabledBmp.IsEmpty() )
-        maDisabledBmp.CopyPixel( aDstRect, aSrcRect );
+    if( !maDisabledBmpEx.IsEmpty() )
+        maDisabledBmpEx.CopyPixel( aDstRect, aSrcRect );
 
     delete mpDisplayBmp;
     mpDisplayBmp = NULL;
@@ -313,7 +313,7 @@ void ImplImageBmp::Replace( USHORT nPos, const ImplImageBmp& rImageBmp, USHORT n
 
     maBmpEx.CopyPixel( aDstRect, aSrcRect, &rImageBmp.maBmpEx );
 
-    ImplUpdateDisabledBmp( nPos );
+    ImplUpdateDisabledBmpEx( nPos );
     delete mpDisplayBmp;
     mpDisplayBmp = NULL;
 
@@ -330,7 +330,7 @@ void ImplImageBmp::Replace( USHORT nPos, const BitmapEx& rBmpEx )
 
     maBmpEx.CopyPixel( aDstRect, aSrcRect, &rBmpEx );
 
-    ImplUpdateDisabledBmp( nPos );
+    ImplUpdateDisabledBmpEx( nPos );
     delete mpDisplayBmp;
     mpDisplayBmp = NULL;
 
@@ -401,13 +401,8 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
 
         if( nStyle & IMAGE_DRAW_DISABLE )
         {
-            const Point             aOutPos1( rPos.X() + 1, rPos.Y() + 1 );
-            const StyleSettings&    rSettings = pOutDev->GetSettings().GetStyleSettings();
-
-            ImplUpdateDisabledBmp( -1 );
-
-            pOutDev->DrawMask( aOutPos1, aOutSize, aSrcPos, maSize, maDisabledBmp, rSettings.GetLightColor() );
-            pOutDev->DrawMask( rPos, aOutSize, aSrcPos, maSize, maDisabledBmp, rSettings.GetShadowColor() );
+            ImplUpdateDisabledBmpEx( nPos);
+            pOutDev->DrawBitmapEx( rPos, aOutSize, aSrcPos, maSize, maDisabledBmpEx );
         }
         else
         {
@@ -588,160 +583,55 @@ pOutDev
 
 // -----------------------------------------------------------------------
 
-void ImplImageBmp::ImplUpdateDisabledBmp( int nPos )
+void ImplImageBmp::ImplUpdateDisabledBmpEx( int nPos )
 {
-    if( ( nPos >= 0 && !maDisabledBmp.IsEmpty() ) ||
-        ( nPos < 0 && maDisabledBmp.IsEmpty() ) )
+    const Size aTotalSize( maBmpEx.GetSizePixel() );
+
+    if( maDisabledBmpEx.IsEmpty() )
     {
-        Bitmap aBmp( maBmpEx.GetBitmap() );
-        Bitmap aMask;
+        Bitmap      aGrey( aTotalSize, 8, &Bitmap::GetGreyPalette( 256 ) );
+        AlphaMask   aGreyAlphaMask( aTotalSize );
 
-        if( maBmpEx.IsTransparent() )
-            aMask = maBmpEx.GetMask();
-        else
-        {
-            aMask = aBmp;
-            aMask.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
-        }
-
-        if( maDisabledBmp.IsEmpty() )
-            maDisabledBmp = Bitmap( aBmp.GetSizePixel(), 1 );
-
-        BitmapReadAccess*   pAcc = aBmp.AcquireReadAccess();
-        BitmapReadAccess*   pMsk = aMask.AcquireReadAccess();
-        BitmapWriteAccess*  pDis = maDisabledBmp.AcquireWriteAccess();
-
-        if( pAcc && pMsk && pDis )
-        {
-            const Color         aWhite( COL_WHITE );
-            const Color         aBlack( COL_BLACK );
-            const BitmapColor   aAccWhite( pAcc->GetBestMatchingColor( aWhite ) );
-            const BitmapColor   aMskWhite( pMsk->GetBestMatchingColor( aWhite ) );
-            const BitmapColor   aDisWhite( pDis->GetBestMatchingColor( aWhite ) );
-            const BitmapColor   aDisBlack( pDis->GetBestMatchingColor( aBlack ) );
-            long                nLeft, nTop, nRight, nBottom;
-            long                nCurLeft, nCurRight;
-            const long          nBlackThreshold = FRound( maSize.Width() * maSize.Height() * 0.10 );
-
-            if( nPos >= 0 )
-            {
-                const Point aPos( nPos * maSize.Width(), 0 );
-
-                nLeft = aPos.X();
-                nTop = 0;
-                nRight = nLeft + maSize.Width();
-                nBottom = nTop + maSize.Height();
-            }
-            else
-            {
-                nLeft = nTop = 0L;
-                nRight = pDis->Width();
-                nBottom = pDis->Height();
-            }
-
-            nCurLeft = nLeft;
-            nCurRight = nCurLeft + maSize.Width();
-
-            while( nCurLeft < nRight )
-            {
-                sal_Int32 nBlackCount = 0;
-
-                if( pAcc->GetScanlineFormat() == BMP_FORMAT_4BIT_MSN_PAL &&
-                    pMsk->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL )
-                {
-                    // optimized version
-                    const BYTE cAccTest = aAccWhite.GetIndex();
-                    const BYTE cMskTest = aMskWhite.GetIndex();
-
-                    for( long nY = nTop; nY < nBottom; nY++ )
-                    {
-                        Scanline pAccScan = pAcc->GetScanline( nY );
-                        Scanline pMskScan = pMsk->GetScanline( nY );
-
-                        for( long nX = nCurLeft; nX < nCurRight; nX++ )
-                        {
-                            if( ( cMskTest == ( pMskScan[ nX >> 3 ] & ( 1 << ( 7 - ( nX & 7 ) ) ) ? 1 : 0 ) ) ||
-                                ( cAccTest == ( ( pAccScan[ nX >> 1 ] >> ( nX & 1 ? 0 : 4 ) ) & 0x0f ) ) )
-                            {
-                                pDis->SetPixel( nY, nX, aDisWhite );
-                            }
-                            else
-                            {
-                                pDis->SetPixel( nY, nX, aDisBlack );
-                                ++nBlackCount;
-                            }
-                        }
-                    }
-                }
-                else if( pAcc->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL &&
-                        pMsk->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL )
-                {
-                    // optimized version
-                    const BYTE cAccTest = aAccWhite.GetIndex();
-                    const BYTE cMskTest = aMskWhite.GetIndex();
-
-                    for( long nY = nTop; nY < nBottom; nY++ )
-                    {
-                        Scanline pAccScan = pAcc->GetScanline( nY );
-                        Scanline pMskScan = pMsk->GetScanline( nY );
-
-                        for( long nX = nCurLeft; nX < nCurRight; nX++ )
-                        {
-                            if( ( cMskTest == ( pMskScan[ nX >> 3 ] & ( 1 << ( 7 - ( nX & 7 ) ) ) ? 1 : 0 ) ) ||
-                                ( cAccTest == pAccScan[ nX ] ) )
-                            {
-                                pDis->SetPixel( nY, nX, aDisWhite );
-                            }
-                            else
-                            {
-                                pDis->SetPixel( nY, nX, aDisBlack );
-                                ++nBlackCount;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    for( long nY = nTop; nY < nBottom; nY++ )
-                    {
-                        for( long nX = nCurLeft; nX < nCurRight; nX++ )
-                        {
-                            if( ( aMskWhite == pMsk->GetPixel( nY, nX ) ) ||
-                                ( aAccWhite == pAcc->GetPixel( nY, nX ) ) )
-                            {
-                                pDis->SetPixel( nY, nX, aDisWhite );
-                            }
-                            else
-                            {
-                                pDis->SetPixel( nY, nX, aDisBlack );
-                                ++nBlackCount;
-                            }
-                        }
-                    }
-                }
-
-                if( nBlackCount < nBlackThreshold )
-                {
-                    // emergency solution if paint bitmap is mostly white
-                    for( long nY = nTop; nY < nBottom; nY++ )
-                    {
-                        for( long nX = nCurLeft; nX < nCurRight; nX++ )
-                        {
-                            if( aMskWhite == pMsk->GetPixel( nY, nX ) )
-                                pDis->SetPixel( nY, nX, aDisWhite );
-                            else
-                                pDis->SetPixel( nY, nX, aDisBlack );
-                        }
-                    }
-                }
-
-                nCurLeft += maSize.Width();
-                nCurRight += maSize.Width();
-            }
-        }
-
-        aBmp.ReleaseAccess( pAcc );
-        aMask.ReleaseAccess( pMsk );
-        maDisabledBmp.ReleaseAccess( pDis );
+        maDisabledBmpEx = BitmapEx( aGrey, aGreyAlphaMask );
+        nPos = -1;
     }
+
+    Bitmap              aBmp( maBmpEx.GetBitmap() );
+    BitmapReadAccess*   pBmp( aBmp.AcquireReadAccess() );
+    AlphaMask           aBmpAlphaMask( maBmpEx.GetAlpha() );
+    BitmapReadAccess*   pBmpAlphaMask( aBmpAlphaMask.AcquireReadAccess() );
+    Bitmap              aGrey( maDisabledBmpEx.GetBitmap() );
+    BitmapWriteAccess*  pGrey( aGrey.AcquireWriteAccess() );
+    AlphaMask           aGreyAlphaMask( maDisabledBmpEx.GetAlpha() );
+    BitmapWriteAccess*  pGreyAlphaMask( aGreyAlphaMask.AcquireWriteAccess() );
+
+    if( pBmp && pBmpAlphaMask && pGrey && pGreyAlphaMask )
+    {
+        BitmapColor aGreyVal( 0 );
+        BitmapColor aGreyAlphaMaskVal( 0 );
+        const Point aPos( ( nPos < 0 ) ? 0 : ( nPos * maSize.Width() ), 0 );
+        const int  nLeft = aPos.X(), nRight = nLeft + ( ( nPos < 0 ) ? aTotalSize.Width() : maSize.Width() );
+        const int  nTop = aPos.Y(), nBottom = nTop + maSize.Height();
+
+        for( int nY = nTop; nY < nBottom; ++nY )
+        {
+            for( int nX = nLeft; nX < nRight; ++nX )
+            {
+                aGreyVal.SetIndex( pBmp->GetLuminance( nY, nX ) );
+                pGrey->SetPixel( nY, nX, aGreyVal );
+
+                const BitmapColor aBmpAlphaMaskVal( pBmpAlphaMask->GetPixel( nY, nX ) );
+
+                aGreyAlphaMaskVal.SetIndex( static_cast< sal_uInt8 >( ::std::min( aBmpAlphaMaskVal.GetIndex() + 178ul, 255ul ) ) );
+                pGreyAlphaMask->SetPixel( nY, nX, aGreyAlphaMaskVal );
+            }
+        }
+    }
+
+    aBmp.ReleaseAccess( pBmp );
+    aBmpAlphaMask.ReleaseAccess( pBmpAlphaMask );
+    aGrey.ReleaseAccess( pGrey );
+    aGreyAlphaMask.ReleaseAccess( pGreyAlphaMask );
+
+    maDisabledBmpEx = BitmapEx( aGrey, aGreyAlphaMask );
 }
