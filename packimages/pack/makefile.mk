@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,13 +41,13 @@ RSCCUSTOMIMG*=$(PRJ)
 IMAGES := $(COMMONBIN)$/images.zip
 SORTED_LIST=$(RES)$/img$/sorted.lst
 # Custom sets, at 24x24 & 16x16 fall-back to industrial preferentially
-CUSTOM_IMAGE_SETS=hicontrast industrial crystal tango classic8
+CUSTOM_IMAGE_SETS=hicontrast industrial crystal tango classic
 CUSTOM_IMAGES+=$(foreach,i,$(CUSTOM_IMAGE_SETS) images_$i)
 CUSTOM_PREFERRED_FALLBACK_1*=-c $(SOLARSRC)$/ooo_custom_images$/tango
 CUSTOM_PREFERRED_FALLBACK_2*=-c $(SOLARSRC)$/ooo_custom_images$/industrial
 
 CRYSTAL_TARBALL=$(SOLARSRC)$/external_images$/ooo_crystal_images-1.tar.gz
-CLASSIC8_TARBALL=$(SOLARSRC)$/ooo_custom_images$/classic8/classic8_images.tar.gz
+CLASSIC_TARBALL=$(SOLARSRC)$/ooo_custom_images$/classic/classic_images.tar.gz
 
 ALLTAR : $(IMAGES) $(CUSTOM_IMAGES) $(COMMONBIN)$/images_brand.zip
 
@@ -89,18 +89,18 @@ $(MISC)$/crystal.flag : $(CRYSTAL_TARBALL)
 .ENDIF
     @$(TYPE) $@ || echo "ERROR: unpacking $(CRYSTAL_TARBALL) failed"
 
-# unpack the classic8 icon set
-$(MISC)$/classic8.flag : $(CLASSIC8_TARBALL)
-    cd $(MISC) && gunzip -c $(CLASSIC8_TARBALL) | ( tar -xf - ) && $(TOUCH) $(@:f)
+# unpack the classic icon set
+$(MISC)$/classic.flag : $(CLASSIC_TARBALL)
+    cd $(MISC) && gunzip -c $(CLASSIC_TARBALL) | ( tar -xf - ) && $(TOUCH) $(@:f)
 .IF "$(GUI)"=="UNX"
-    chmod -R g+w $(MISC)$/classic8
+    chmod -R g+w $(MISC)$/classic
 .ENDIF
-    @$(TYPE) $@ || echo "ERROR: unpacking $(CLASSIC8_TARBALL) failed"
+    @$(TYPE) $@ || echo "ERROR: unpacking $(CLASSIC_TARBALL) failed"
 
 # dependencies
 images_hicontrast : $(MISC)$/hicontrast.flag $(RES)$/img$/commandimagelist.ilst
 
 images_crystal : $(MISC)$/crystal.flag $(RES)$/img$/commandimagelist.ilst
 
-images_classic8 : $(MISC)$/classic8.flag $(RES)$/img$/commandimagelist.ilst
+images_classic : $(MISC)$/classic.flag $(RES)$/img$/commandimagelist.ilst
 
