@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: moduldlg.hxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,7 +134,6 @@ public:
     void            RemoveEntry( ULONG nPos );
     SvLBoxEntry*    FindEntry( const String& rName );
 
-    void            SelectEntryPos( ULONG nPos, BOOL bSelect = TRUE );
     ULONG           GetSelectEntryPos() const;
 
     ULONG           GetCheckedEntryCount() const;
