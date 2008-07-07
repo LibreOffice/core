@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unofield.cxx,v $
- * $Revision: 1.107 $
+ * $Revision: 1.108 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1674,10 +1674,15 @@ void SwXTextField::attachToRange(
                 }
                 //make sure the SubType matches the field type
                 SwFieldType* pSetExpFld = pDoc->GetFldType(RES_SETEXPFLD, m_pProps->sPar1, sal_False);
-                if( pSetExpFld && nSubType != nsSwGetSetExpType::GSE_STRING &&
-                    static_cast< SwSetExpFieldType* >(pSetExpFld)->GetType() == nsSwGetSetExpType::GSE_STRING
-                    )
+                bool bSetGetExpFieldUninitialized = false;
+                if( pSetExpFld )
+                {
+                    if( nSubType != nsSwGetSetExpType::GSE_STRING &&
+                        static_cast< SwSetExpFieldType* >(pSetExpFld)->GetType() == nsSwGetSetExpType::GSE_STRING )
                     nSubType = nsSwGetSetExpType::GSE_STRING;
+                }
+                else
+                    bSetGetExpFieldUninitialized = true; // #i82544#
 
                 if(m_pProps->bBool2)
                     nSubType |= nsSwExtendedSubType::SUB_CMD;
@@ -1689,6 +1694,9 @@ void SwXTextField::attachToRange(
                 //TODO: SubType auswerten!
                 if(m_pProps->sPar4.Len())
                     ((SwGetExpField*)pFld)->ChgExpStr(m_pProps->sPar4);
+                // #i82544#
+                if( bSetGetExpFieldUninitialized )
+                    ((SwGetExpField*)pFld)->SetLateInitialization();
             }
             break;
             case SW_SERVICE_FIELDTYPE_INPUT_USER:
