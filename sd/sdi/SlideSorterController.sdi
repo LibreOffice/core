@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlideSorterController.sdi,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,12 +91,12 @@ interface SlideSorterView
     SID_DELETE_PAGE
     [
         ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
+        StateMethod = GetClipboardState ;
     ]
     SID_DELETE_MASTER_PAGE
     [
         ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
+        StateMethod = GetClipboardState ;
     ]
     SID_RENAMEPAGE
     [
@@ -116,17 +116,22 @@ interface SlideSorterView
     SID_CUT // ole : no, status : ?
     [
         ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
+        StateMethod = GetClipboardState ;
     ]
     SID_COPY // ole : no, status : ?
     [
         ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
+        StateMethod = GetClipboardState ;
     ]
     SID_PASTE // ole : no, status : ?
     [
         ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
+        StateMethod = GetClipboardState ;
+    ]
+    SID_PASTE2 // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetClipboardState ;
     ]
     SID_REHEARSE_TIMINGS // ole : no, status : ?
     [
