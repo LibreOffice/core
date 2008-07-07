@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: htmlform.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -706,6 +706,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
                                    sal_Bool bMinHeight,
                                    int nToken )
 {
+    nToken = 0;
     if( !rTextSz.Width() && !rTextSz.Height() && !bMinWidth  && !bMinHeight )
         return;
 
@@ -721,34 +722,13 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
         // one, no view shell will be created. That for, we have to do that of
         // our own. This happens if a linked section is inserted or refreshed.
         SwDocShell *pDocSh = pDoc->GetDocShell();
-        if( pDocSh && SFX_CREATE_MODE_INTERNAL == pDocSh->GetCreateMode() )
+        if( pDocSh )
         {
-            SfxViewFrame::CreateViewFrame( *pDocSh, 0, sal_True );
+
+            pTempViewFrame = SfxViewFrame::CreateViewFrame( *pDocSh, 0, sal_True );
             CallStartAction();
             pDoc->GetEditShell( &pVSh );
         }
-    }
-    if( !pVSh )
-    {
-        // If there is no view shell by now, but the document is loaded
-        // asynchronous, the view shell will be created delayed because
-        // the view was locked during the call to DocumentDetected. If this
-        // is the case we wait until another call to our DataAvailable
-        // link, because the SFX calls it if it creates the view.
-        ASSERT( bDocInitalized, "DocumentDetected nocht nicht augerufen" );
-        ASSERT( !IsParserWorking() || nEventId,
-                "Keine ViewShell bei nicht gesetztem DataAvailable-Link" );
-        if( IsParserWorking() && bDocInitalized && nEventId )
-        {
-            pPendStack = new SwPendingStack( nToken, pPendStack );
-            pPendStack->pData =
-                new SwHTMLFormPendingStackData_Impl( rShape, rTextSz,
-                                                     bMinWidth, bMinHeight );
-            SaveState( nToken );
-            eState = SVPAR_PENDING;
-        }
-
-        return;
     }
 
     uno::Reference< XUnoTunnel> xTunnel( xPropSet, UNO_QUERY );
@@ -768,8 +748,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
     ASSERT( pObj, "SdrObject nicht gefunden" );
     ASSERT( FmFormInventor == pObj->GetObjInventor(), "falscher Inventor" );
 
-    const SdrView* pDrawView = pVSh->GetDrawView();
-    ASSERT( pDrawView, "DrawView not found" );
+    const SdrView* pDrawView = pVSh ? pVSh->GetDrawView() : 0;
 
     SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pObj );
     uno::Reference< awt::XControl > xControl;
