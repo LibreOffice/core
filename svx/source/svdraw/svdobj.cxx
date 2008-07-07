@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdobj.cxx,v $
- * $Revision: 1.96 $
+ * $Revision: 1.97 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -730,6 +730,7 @@ void SdrObject::SetName(const String& rStr)
     {
         pPlusData->aObjName = rStr;
         SetChanged();
+        BroadcastObjectChange();
     }
 }
 
@@ -754,6 +755,7 @@ void SdrObject::SetTitle(const String& rStr)
     {
         pPlusData->aObjTitle = rStr;
         SetChanged();
+        BroadcastObjectChange();
     }
 }
 
@@ -778,6 +780,7 @@ void SdrObject::SetDescription(const String& rStr)
     {
         pPlusData->aObjDescription = rStr;
         SetChanged();
+        BroadcastObjectChange();
     }
 }
 
