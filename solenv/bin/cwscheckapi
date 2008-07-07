@@ -8,7 +8,7 @@
 #
 # $RCSfile: cwscheckapi,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -157,7 +157,7 @@ if [ -n "$WORK_STAMP" ]; then
 	fi
 fi
 
-PARAM="$PARAM -cmd '$OFFICEBIN -norestore -nocrashreport -nolockcheck -accept=pipe,name=$USER;urp;'"
+PARAM="$PARAM -cmd '$OFFICEBIN  -nofirststartwizard -norestore -nocrashreport -nolockcheck -accept=pipe,name=$USER;urp;'"
 PARAM="$PARAM -cs pipe,name=$USER"
 PARAM="$PARAM -NoOffice true"
 PARAM="$PARAM -OOO_EnvSet setsolar"
