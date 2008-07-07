@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlideSorterViewShell.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,6 +101,7 @@ public:
     void ExecStatusBar (SfxRequest& rRequest);
     virtual void Command (const CommandEvent& rEvent, ::sd::Window* pWindow);
     virtual void GetMenuState (SfxItemSet &rSet);
+    virtual void GetClipboardState (SfxItemSet &rSet);
 
     virtual void ReadFrameViewData (FrameView* pView);
     virtual void WriteFrameViewData (void);
