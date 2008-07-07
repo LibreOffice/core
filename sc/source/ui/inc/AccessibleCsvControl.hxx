@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleCsvControl.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <svx/AccessibleStaticTextBase.hxx>
+#include <comphelper/uno3.hxx>
 #include "AccessibleContextBase.hxx"
 
 
@@ -621,27 +622,16 @@ public:
 
     // XInterface -------------------------------------------------------------
 
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
-        throw( ::com::sun::star::uno::RuntimeException );
+    DECLARE_XINTERFACE()
 
-    virtual void SAL_CALL acquire() throw();
+    // XTypeProvider ----------------------------------------------------------
 
-    virtual void SAL_CALL release() throw();
+    DECLARE_XTYPEPROVIDER()
 
     // XServiceInfo -----------------------------------------------------------
 
     /** Returns an identifier for the implementation of this object. */
     virtual ::rtl::OUString SAL_CALL getImplementationName()
-        throw( ::com::sun::star::uno::RuntimeException );
-
-    // XTypeProvider ----------------------------------------------------------
-
-    /** Returns a sequence with all supported interface types. */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( ::com::sun::star::uno::RuntimeException );
-
-    /** Returns an implementation ID. */
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
         throw( ::com::sun::star::uno::RuntimeException );
 
     // helpers ----------------------------------------------------------------
