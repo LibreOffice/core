@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ximpshap.cxx,v $
- * $Revision: 1.128 $
+ * $Revision: 1.129 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,9 @@
 
 
 #include <tools/debug.hxx>
+#include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/container/XNameReplace.hpp>
+#include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include "unointerfacetouniqueidentifiermapper.hxx"
@@ -99,6 +102,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::document;
 using namespace ::xmloff::token;
 using namespace ::xmloff::EnhancedCustomShapeToken;
 
@@ -370,6 +374,35 @@ void SdXMLShapeContext::EndElement()
     {
         GetImport().GetTextImport()->_SetListBlock( mxOldListBlock );
         GetImport().GetTextImport()->_SetListItem( mxOldListItem );
+    }
+
+    if( msHyperlink.getLength() != 0 ) try
+    {
+        Reference< XEventsSupplier > xEventsSupplier( mxShape, UNO_QUERY_THROW );
+        Reference< XNameReplace > xEvents( xEventsSupplier->getEvents(), UNO_QUERY_THROW );
+
+        uno::Sequence< beans::PropertyValue > aProperties( 3 );
+        aProperties[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EventType" ) );
+        aProperties[0].Handle = -1;
+        aProperties[0].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM("Presentation") );
+        aProperties[0].State = beans::PropertyState_DIRECT_VALUE;
+
+        aProperties[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ClickAction" ) );
+        aProperties[1].Handle = -1;
+        aProperties[1].Value <<= ::com::sun::star::presentation::ClickAction_DOCUMENT;
+        aProperties[1].State = beans::PropertyState_DIRECT_VALUE;
+
+        aProperties[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Bookmark" ) );
+        aProperties[2].Handle = -1;
+        aProperties[2].Value <<= msHyperlink;
+        aProperties[2].State = beans::PropertyState_DIRECT_VALUE;
+
+        const OUString sAPIEventName( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ) );
+        xEvents->replaceByName( sAPIEventName, Any( aProperties ) );
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("xmloff::SdXMLShapeContext::EndElement(), exception caught!");
     }
 
     if( mxLockable.is() )
@@ -830,7 +863,7 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
             maShapeDescription = rValue;
         }
     }
-    else if( XML_NAMESPACE_NONE == nPrefix )
+    else if( (XML_NAMESPACE_NONE == nPrefix) || (XML_NAMESPACE_XML == nPrefix) )
     {
         if( IsXMLToken( rLocalName, XML_ID ) )
         {
