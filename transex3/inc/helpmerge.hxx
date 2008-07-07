@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: helpmerge.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,7 @@
 #include <memory> /* auto_ptr */
 #include "tools/isofallback.hxx"
 
-
+#define MOVEFILE_REPLACE_EXISTING 0x01
 
 /// This Class is responsible for extracting/merging OpenOffice XML Helpfiles
 class HelpParser
