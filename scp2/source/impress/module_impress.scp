@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_impress.scp,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,6 +67,7 @@ Module gid_Module_Brand_Prg_Impress
     Description = "gid_Module_Brand_Prg_Impress";
     ParentID = gid_Module_Prg_Impress;
     Sortkey = "100";
+    InstallOrder = "1040";
     Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
