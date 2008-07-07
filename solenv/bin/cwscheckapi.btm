@@ -8,7 +8,7 @@ REM * OpenOffice.org - a multi-platform office productivity suite
 REM *
 REM * $RCSfile: cwscheckapi.btm,v $
 REM *
-REM * $Revision: 1.2 $
+REM * $Revision: 1.3 $
 REM *
 REM * This file is part of OpenOffice.org.
 REM *
@@ -107,7 +107,7 @@ ENDIFF
 
 SET KILLCOMMAND="%SOLARVERSION%\%INPATH%\bin%UPDMINOREXT%\kill.exe -9 soffice.bin"
 
-SET PARAM=%PARAM% -cmd '\"%OFFICEBIN%\" -norestore -nocrashreport -nolockcheck -accept=pipe,name=%USERNAME%;urp;'
+SET PARAM=%PARAM% -cmd '\"%OFFICEBIN%\"  -nofirststartwizard -norestore -nocrashreport -nolockcheck -accept=pipe,name=%USERNAME%;urp;'
 SET PARAM=%PARAM% -cs pipe,name=%USERNAME%
 SET PARAM=%PARAM% -NoOffice true
 SET PARAM=%PARAM% -OOO_EnvSet setsolar
