@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: expfld.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,6 +99,8 @@ class SwGetExpField : public SwFormulaField
     BOOL            bIsInBodyTxt;
     USHORT          nSubType;
 
+    bool            bLateInitialization; // #i82544#
+
 public:
     SwGetExpField( SwGetExpFieldType*, const String& rFormel,
                    USHORT nSubType = nsSwGetSetExpType::GSE_EXPR, ULONG nFmt = 0);
@@ -132,6 +134,8 @@ public:
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 
     static USHORT       GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc);
+    // #i82544#
+    void                SetLateInitialization() { bLateInitialization = true;}
 };
 
 inline void SwGetExpField::ChgExpStr(const String& rExpand)
