@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textparagraphproperties.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
 
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/namespaces.hxx"
@@ -65,6 +66,12 @@ void BulletList::setBulletChar( const ::rtl::OUString & sChar )
 {
     mnNumberingType <<= NumberingType::CHAR_SPECIAL;
     msBulletChar <<= sChar;
+}
+
+void BulletList::setGraphic( ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rXGraphic )
+{
+    mnNumberingType <<= NumberingType::BITMAP;
+    maGraphic <<= rXGraphic;
 }
 
 void BulletList::setNone( )
@@ -267,6 +274,8 @@ void BulletList::apply( const BulletList& rSource )
         mnFontSize = rSource.mnFontSize;
     if ( rSource.maStyleName.hasValue() )
         maStyleName = rSource.maStyleName;
+    if ( rSource.maGraphic.hasValue() )
+        maGraphic = rSource.maGraphic;
 }
 
 void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase& rFilterBase, PropertyMap& rPropMap ) const
@@ -319,6 +328,13 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase& rFilterBase, P
         const rtl::OUString sBulletChar( CREATE_OUSTRING( "BulletChar" ) );
         rPropMap[ sBulletChar ] = msBulletChar;
     }
+    if ( maGraphic.hasValue() )
+    {
+        const rtl::OUString sGraphic( CREATE_OUSTRING( "Graphic" ) );
+        Reference< com::sun::star::awt::XBitmap > xBitmap( maGraphic, UNO_QUERY );
+        if ( xBitmap.is() )
+            rPropMap[ sGraphic ] <<= xBitmap;
+    }
     if( mnSize.hasValue() )
     {
         const rtl::OUString sBulletRelSize( CREATE_OUSTRING( "BulletRelSize" ) );
@@ -353,14 +369,27 @@ void TextParagraphProperties::apply( const TextParagraphPropertiesPtr& rSourceTe
         maParaTopMargin = rSourceTextParagraphProperties->maParaTopMargin;
     if ( rSourceTextParagraphProperties->maParaBottomMargin.bHasValue )
         maParaBottomMargin = rSourceTextParagraphProperties->maParaBottomMargin;
+    if ( rSourceTextParagraphProperties->getParaLeftMargin() )
+        moParaLeftMargin = rSourceTextParagraphProperties->getParaLeftMargin();
+    if ( rSourceTextParagraphProperties->getFirstLineIndentation() )
+        moFirstLineIndentation = rSourceTextParagraphProperties->getFirstLineIndentation();
 }
 void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
-    const Reference < XPropertySet >& xPropSet, PropertyMap& rioBulletMap, sal_Bool bApplyBulletMap ) const
+    const Reference < XPropertySet >& xPropSet, PropertyMap& rioBulletMap, const BulletList* pMasterBuList, sal_Bool bApplyBulletMap, float fCharacterSize ) const
 {
-//       maTextParagraphPropertyMap.dump_debug("TextParagraph paragraph props");
-
     PropertySet aPropSet( xPropSet );
     aPropSet.setProperties( maTextParagraphPropertyMap );
+
+    sal_Int32 nNumberingType = NumberingType::NUMBER_NONE;
+    if ( maBulletList.mnNumberingType.hasValue() )
+        maBulletList.mnNumberingType >>= nNumberingType;
+    else if ( pMasterBuList && pMasterBuList->mnNumberingType.hasValue() )
+        pMasterBuList->mnNumberingType >>= nNumberingType;
+    if ( nNumberingType == NumberingType::NUMBER_NONE )
+    {
+        const OUString sNumberingLevel( CREATE_OUSTRING( "NumberingLevel" ) );
+        aPropSet.setAnyProperty( sNumberingLevel, Any( (sal_Int16)-1 ) );
+    }
 
     maTextCharacterPropertiesPtr->pushToPropSet( rFilterBase, xPropSet );
     maBulletList.pushToPropMap( rFilterBase, rioBulletMap );
@@ -368,15 +397,42 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase& r
     if ( maParaTopMargin.bHasValue )
     {
         const OUString sParaTopMargin( CREATE_OUSTRING( "ParaTopMargin" ) );
-        //OSL_TRACE( "OOX: ParaTopMargin unit = %d, value = %d", maParaTopMargin.nUnit, maParaTopMargin.nValue );
         xPropSet->setPropertyValue( sParaTopMargin, Any( maParaTopMargin.toMargin( getCharacterSize( 18 ) ) ) );
     }
     if ( maParaBottomMargin.bHasValue )
     {
         const OUString sParaBottomMargin( CREATE_OUSTRING( "ParaBottomMargin" ) );
-        //OSL_TRACE( "OOX: ParaBottomMargin unit = %d, value = %d", maParaBottomMargin.nUnit, maParaBottomMargin.nValue );
         xPropSet->setPropertyValue( sParaBottomMargin, Any( maParaBottomMargin.toMargin( getCharacterSize( 18 ) ) ) );
     }
+    if ( nNumberingType == NumberingType::BITMAP )
+    {
+        const rtl::OUString sGraphicSize( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "GraphicSize" ) ) );
+        fCharacterSize = getCharacterSize( fCharacterSize );
+
+        com::sun::star::awt::Size aBulletSize;
+        aBulletSize.Width = aBulletSize.Height = static_cast< sal_Int32 >( ( fCharacterSize * ( 2540.0 / 72.0 ) * 0.8 ) );
+        rioBulletMap[ sGraphicSize ] <<= aBulletSize;
+    }
+
+    boost::optional< sal_Int32 > noParaLeftMargin( moParaLeftMargin );
+    boost::optional< sal_Int32 > noFirstLineIndentation( moFirstLineIndentation );
+
+    if ( nNumberingType != NumberingType::NUMBER_NONE )
+    {
+        if ( noParaLeftMargin )
+        {
+            const rtl::OUString sLeftMargin( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "LeftMargin" ) ) );
+            rioBulletMap[ sLeftMargin ] <<= static_cast< sal_Int32 >( *noParaLeftMargin );
+            noParaLeftMargin = boost::optional< sal_Int32 >( 0 );
+        }
+        if ( noFirstLineIndentation )
+        {
+            const rtl::OUString sFirstLineOffset( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "FirstLineOffset" ) ) );
+            rioBulletMap[ sFirstLineOffset ] <<= static_cast< sal_Int32 >( *noFirstLineIndentation );
+            noFirstLineIndentation = boost::optional< sal_Int32 >( 0 );
+        }
+    }
+
     if ( bApplyBulletMap )
     {
         Any aValue;
@@ -388,17 +444,23 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase& r
         OSL_ENSURE( xNumRule.is(), "can't get Numbering rules");
         if( xNumRule.is() )
         {
-//          OSL_TRACE("OOX: BulletList for level %d", getLevel());
-//          pProps->getBulletListPropertyMap().dump_debug();
             Sequence< PropertyValue > aBulletPropSeq;
             rioBulletMap.makeSequence( aBulletPropSeq );
             if( aBulletPropSeq.hasElements() )
-            {
-//              OSL_TRACE("OOX: bullet props inserted at level %d", getLevel());
                 xNumRule->replaceByIndex( getLevel(), makeAny( aBulletPropSeq ) );
-            }
+
             xPropSet->setPropertyValue( sNumberingRules, makeAny( xNumRule ) );
         }
+    }
+    if ( noParaLeftMargin )
+    {
+        const OUString sParaLeftMargin( CREATE_OUSTRING( "ParaLeftMargin" ) );
+        xPropSet->setPropertyValue( sParaLeftMargin, Any( *noParaLeftMargin ) );
+    }
+    if ( noFirstLineIndentation )
+    {
+        const OUString sParaFirstLineIndent( CREATE_OUSTRING( "ParaFirstLineIndent" ) );
+        xPropSet->setPropertyValue( sParaFirstLineIndent, Any( *noFirstLineIndentation ) );
     }
 }
 float TextParagraphProperties::getCharacterSize( float fValue ) const
