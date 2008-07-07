@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleCell.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,24 +124,11 @@ void SAL_CALL ScAccessibleCell::disposing()
 
     //=====  XInterface  =====================================================
 
-uno::Any SAL_CALL ScAccessibleCell::queryInterface( uno::Type const & rType )
-    throw (uno::RuntimeException)
-{
-    SC_QUERYINTERFACE( XAccessibleText )
-    return ScAccessibleCellBase::queryInterface(rType);
-}
+IMPLEMENT_FORWARD_XINTERFACE2( ScAccessibleCell, ScAccessibleCellBase, AccessibleStaticTextBase )
 
-void SAL_CALL ScAccessibleCell::acquire()
-    throw ()
-{
-    ScAccessibleCellBase::acquire();
-}
+    //=====  XTypeProvider  ===================================================
 
-void SAL_CALL ScAccessibleCell::release()
-    throw ()
-{
-    ScAccessibleCellBase::release();
-}
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( ScAccessibleCell, ScAccessibleCellBase, AccessibleStaticTextBase )
 
     //=====  XAccessibleComponent  ============================================
 
@@ -318,32 +305,6 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
     pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.AccessibleCell"));
 
     return aSequence;
-}
-
-//=====  XTypeProvider  =======================================================
-
-uno::Sequence< uno::Type > SAL_CALL ScAccessibleCell::getTypes()
-        throw (uno::RuntimeException)
-{
-    uno::Sequence< uno::Type > aSeq;
-    aSeq.realloc(1);
-    aSeq[0] = getCppuType((const uno::Reference<XAccessibleText>*)0);
-    return comphelper::concatSequences(ScAccessibleCellBase::getTypes(), aSeq);
-}
-
-uno::Sequence<sal_Int8> SAL_CALL
-    ScAccessibleCell::getImplementationId(void)
-    throw (uno::RuntimeException)
-{
-    ScUnoGuard aGuard;
-    IsObjectValid();
-    static uno::Sequence<sal_Int8> aId;
-    if (aId.getLength() == 0)
-    {
-        aId.realloc (16);
-        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
-    }
-    return aId;
 }
 
     //====  internal  =========================================================
