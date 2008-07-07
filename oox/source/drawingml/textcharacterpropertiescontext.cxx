@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textcharacterpropertiescontext.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,8 +107,8 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
     rPropertyMap[ sCharStrikeout ] <<= GetFontStrikeout( rXAttributes->getOptionalValueToken( XML_strike, XML_noStrike ) );
 
     // ST_TextCapsType
-    const rtl::OUString sCharCaseMap( CREATE_OUSTRING( "CharCaseMap" ) );
-    rPropertyMap[ sCharCaseMap ] <<= GetCaseMap( rXAttributes->getOptionalValueToken( XML_cap, XML_none ) );
+//  const rtl::OUString sCharCaseMap( CREATE_OUSTRING( "CharCaseMap" ) );
+//  rPropertyMap[ sCharCaseMap ] <<= GetCaseMap( rXAttributes->getOptionalValueToken( XML_cap, XML_none ) );
 
 
     OUString sLang = rXAttributes->getOptionalValue( XML_lang );
