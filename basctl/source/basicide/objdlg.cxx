@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objdlg.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +45,6 @@
 #include <bastypes.hxx>
 #include <basidesh.hrc>
 #include <basidesh.hxx>
-#include <moptions.hxx>
 #include <iderdll.hxx>
 #include <iderdll2.hxx>
 #include <sbxitem.hxx>
