@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlideSorterViewShell.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include "controller/SlsFocusManager.hxx"
 #include "controller/SlsScrollBarManager.hxx"
 #include "controller/SlsPageSelector.hxx"
+#include "controller/SlsSlotManager.hxx"
 #include "controller/SlsCurrentSlideManager.hxx"
 #include "controller/SlsSelectionManager.hxx"
 #include "view/SlideSorterView.hxx"
@@ -393,7 +394,17 @@ void SlideSorterViewShell::GetMenuState ( SfxItemSet& rSet)
 {
     ViewShell::GetMenuState(rSet);
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
-    mpSlideSorter->GetController().GetMenuState(rSet);
+    mpSlideSorter->GetController().GetSlotManager()->GetMenuState(rSet);
+}
+
+
+
+
+void SlideSorterViewShell::GetClipboardState ( SfxItemSet& rSet)
+{
+    ViewShell::GetMenuState(rSet);
+    OSL_ASSERT(mpSlideSorter.get()!=NULL);
+    mpSlideSorter->GetController().GetSlotManager()->GetClipboardState(rSet);
 }
 
 
