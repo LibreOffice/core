@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DrawController.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -405,8 +405,14 @@ Reference< drawing::XDrawPage > SAL_CALL DrawController::getCurrentPage (void)
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     Reference<drawing::XDrawPage> xPage;
 
+    // Get current page from sub controller.
     if (mxSubController.is())
         xPage = mxSubController->getCurrentPage();
+
+    // When there is not yet a sub controller (during initialization) then fall back
+    // to the current page in mpCurrentPage.
+    if ( ! xPage.is() && mpCurrentPage != NULL)
+        xPage = Reference<drawing::XDrawPage>(mpCurrentPage->getUnoPage(), UNO_QUERY);
 
     return xPage;
 }
