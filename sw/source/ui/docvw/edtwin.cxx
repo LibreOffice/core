@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edtwin.cxx,v $
- * $Revision: 1.160 $
+ * $Revision: 1.161 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3694,8 +3694,10 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         case 0:
         {
             if ( pApplyTempl )
+                        {
                 UpdatePointer(aDocPt, 0); // evtl. muss hier ein Rahmen markiert werden
-
+                                break;
+                        }
             //#i6193#, change ui if mouse is over SwPostItField
             SwRect aFldRect;
             SwContentAtPos aCntntAtPos( SwContentAtPos::SW_FIELD);
@@ -3711,7 +3713,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             }
             else
                 rView.GetPostItMgr()->SetShadowState(0,false);
-            break;
+                // no break;
         }
         case KEY_SHIFT:
         case KEY_MOD2:
