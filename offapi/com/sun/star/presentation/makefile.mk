@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -65,6 +65,7 @@ IDLFILES=\
     OutlineView.idl\
     PageShape.idl\
     Presentation.idl\
+    Presentation2.idl\
     PresentationDocument.idl\
     PresentationRange.idl\
     PresentationView.idl\
