@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: namecont.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +57,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <sot/storage.hxx>
 #include <xmlscript/xmllib_imexp.hxx>
+#include <com/sun/star/deployment/XPackage.hpp>
 
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/compbase6.hxx>
@@ -171,7 +172,6 @@ public:
     virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XContainerListener >& xListener )
             throw (::com::sun::star::uno::RuntimeException);
-
 };
 
 //============================================================================
@@ -358,6 +358,8 @@ protected:
 private:
     sal_Bool init_Impl( const ::rtl::OUString& rInitialDocumentURL,
                    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxInitialStorage );
+    void implScanExtensions( void );
+
 public:
     SfxLibraryContainer( void );
     ~SfxLibraryContainer();
@@ -553,6 +555,7 @@ private:
     ::rtl::OUString maPassword;
 
     sal_Bool mbSharedIndexFile;
+    sal_Bool mbExtension;
 
     // Additional functionality for localisation
     // Provide modify state including resources
@@ -651,6 +654,52 @@ public:
 protected:
     virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const = 0;
 };
+
+//===================================================================
+enum IteratorState
+{
+    USER_EXTENSIONS,
+    SHARED_EXTENSIONS,
+    END_REACHED
+};
+
+class ScriptExtensionIterator
+{
+public:
+    ScriptExtensionIterator( void );
+    rtl::OUString nextBasicOrDialogLibrary( bool& rbPureDialogLib );
+
+private:
+    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetScriptPackageFromPackage
+        ( const com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage,
+          com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle,
+          bool& rbPureDialogLib );
+
+protected:
+    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetNextUserScriptPackage
+        ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle,
+          bool& rbPureDialogLib );
+    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetNextSharedScriptPackage
+        ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle,
+          bool& rbPureDialogLib );
+
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    m_xContext;
+
+    IteratorState                                                               m_eState;
+
+    com::sun::star::uno::Sequence< com::sun::star::uno::Reference
+        < com::sun::star::deployment::XPackage > >                              m_aUserPackagesSeq;
+    bool                                                                        m_bUserPackagesLoaded;
+
+    com::sun::star::uno::Sequence< com::sun::star::uno::Reference
+        < com::sun::star::deployment::XPackage > >                              m_aSharedPackagesSeq;
+    bool                                                                        m_bSharedPackagesLoaded;
+
+    int                                                                         m_iUserPackage;
+    int                                                                         m_iSharedPackage;
+
+}; // end class ScriptExtensionIterator
+
 
 
 }   // namespace basic
