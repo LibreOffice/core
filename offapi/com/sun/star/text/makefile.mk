@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.48 $
+# $Revision: 1.49 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -106,7 +106,7 @@ IDLFILES=\
      HoriOrientationFormat.idl\
      HorizontalAdjust.idl\
      HypertextDocument.idl\
-     IllustrationIndex.idl\
+    IllustrationsIndex.idl\
      InvalidTextContentException.idl\
         LabelFollow.idl\
      LineNumberingProperties.idl\
