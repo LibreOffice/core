@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basdoc.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,9 +60,6 @@ public:
                         SFX_DECL_INTERFACE( SVX_INTERFACE_BASIDE_DOCSH )
                         BasicDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_STANDARD );
                         ~BasicDocShell();
-
-    void                Execute( SfxRequest& rReq );
-    void                GetState( SfxItemSet& rSet );
 
     SfxPrinter*         GetPrinter( BOOL bCreate );
     void                SetPrinter( SfxPrinter* pPrinter );
