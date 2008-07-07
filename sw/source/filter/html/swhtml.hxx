@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swhtml.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,6 +59,7 @@
 #include "htmlvsh.hxx"
 
 class SfxMedium;
+class SfxViewFrame;
 class SdrObject;
 class SvxMacroTableDtor;
 class SvStringsDtor;
@@ -498,6 +499,8 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     sal_Bool bInFootEndNoteAnchor : 1;
     sal_Bool bInFootEndNoteSymbol : 1;
     sal_Bool bIgnoreHTMLComments : 1;
+
+    SfxViewFrame* pTempViewFrame;
 
     void DeleteFormImpl();
 
