@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par6.cxx,v $
- * $Revision: 1.186 $
+ * $Revision: 1.187 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3277,7 +3277,11 @@ void SwWW8ImplReader::Read_SubSuperProp( USHORT, const BYTE* pData, short nLen )
     const SvxFontHeightItem* pF
         = (const SvxFontHeightItem*)GetFmtAttr(RES_CHRATR_FONTSIZE);
     ASSERT(pF, "Expected to have the fontheight available here");
-    INT32 nHeight = pF ? pF->GetHeight() : 240;
+
+    // #i59022: Check ensure nHeight != 0. Div by zero otherwise.
+    INT32 nHeight = 240;
+    if (pF != NULL && pF->GetHeight() != 0)
+        nHeight = pF->GetHeight();
     nPos2 /= nHeight;                       // ... nun in % ( gerundet )
     if( nPos2 > 100 )                       // zur Sicherheit
         nPos2 = 100;
