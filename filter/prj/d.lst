@@ -25,6 +25,7 @@ mkdir: %_DEST%\bin%_EXT%\xslt\import\uof
 mkdir: %_DEST%\bin%_EXT%\xslt\import\wordml
 mkdir: %_DEST%\xml%_EXT%\registry
 mkdir: %_DEST%\xml%_EXT%\registry\spool
+mkdir: %_DEST%\bin%_EXT%\pdfimport
 ..\source\xslt\common\*.xsl %_DEST%\bin%_EXT%\xslt\common\*.xsl
 ..\source\xslt\export\common\*.xsl %_DEST%\bin%_EXT%\xslt\export\common\*.xsl
 ..\source\xslt\odf2xhtml\export\common\*.xsl %_DEST%\bin%_EXT%\xslt\export\common\*.xsl
@@ -41,10 +42,10 @@ mkdir: %_DEST%\xml%_EXT%\registry\spool
 ..\source\xslt\import\spreadsheetml\*.xsl %_DEST%\bin%_EXT%\xslt\import\spreadsheetml\*.xsl
 ..\source\xslt\import\wordml\*.xsl %_DEST%\bin%_EXT%\xslt\import\wordml\*.xsl
 ..\source\xslt\import\uof\*.xsl %_DEST%\bin%_EXT%\xslt\import\uof\*.xsl
-..\%__SRC%\bin\*.oxt %_DEST%\bin%_EXT%\*.oxt
 ..\%__SRC%\bin\*.xsl %_DEST%\bin%_EXT%\*.xsl
 ..\%__SRC%\bin\*.stw %_DEST%\bin%_EXT%\*.stw
 ..\%__SRC%\bin\pdf2xml.* %_DEST%\bin%_EXT%\pdf2xml.*
 ..\%__SRC%\bin\pdfunzip.* %_DEST%\bin%_EXT%\pdfunzip.*
+..\%__SRC%\bin\pdfimport.oxt %_DEST%\bin%_EXT%\pdfimport\pdfimport.oxt
 ..\%__SRC%\misc\filters\modulepacks\fcfg_*.xcu %_DEST%\xml%_EXT%\registry\spool\fcfg_*.xcu
 ..\%COMMON_OUTDIR%\bin\fcfg_langpack_*.zip %_DEST%\pck%_EXT%\fcfg_langpack_*.zip
