@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLClipPropertyHandler.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +51,11 @@ using namespace ::xmloff::token;
 // class XMLMeasurePropHdl
 //
 
+XMLClipPropertyHandler::XMLClipPropertyHandler( sal_Bool bODF11 ) :
+    m_bODF11( bODF11 )
+{
+}
+
 XMLClipPropertyHandler::~XMLClipPropertyHandler()
 {
     // nothing to do
@@ -81,7 +86,9 @@ sal_Bool XMLClipPropertyHandler::importXML( const OUString& rStrImpValue, uno::A
     {
         GraphicCrop aCrop;
         OUString sTmp( rStrImpValue.copy( 5, nLen-6 ) );
-        SvXMLTokenEnumerator aTokenEnum( sTmp );
+
+        sal_Bool bHasComma = sTmp.indexOf( ',' ) != -1;
+        SvXMLTokenEnumerator aTokenEnum( sTmp, bHasComma ? ',' : ' ' );
 
         sal_uInt16 nPos = 0;
         OUString aToken;
@@ -121,10 +128,16 @@ sal_Bool XMLClipPropertyHandler::exportXML( OUString& rStrExpValue, const uno::A
         aOut.append( GetXMLToken(XML_RECT) );
         aOut.append( (sal_Unicode)'(' );
         rUnitConverter.convertMeasure( aOut, aCrop.Top );
+        if( !m_bODF11 )
+            aOut.append( (sal_Unicode)',' );
         aOut.append( (sal_Unicode)' ' );
         rUnitConverter.convertMeasure( aOut, aCrop.Right );
+        if( !m_bODF11 )
+            aOut.append( (sal_Unicode)',' );
         aOut.append( (sal_Unicode)' ' );
         rUnitConverter.convertMeasure( aOut, aCrop.Bottom );
+        if( !m_bODF11 )
+            aOut.append( (sal_Unicode)',' );
         aOut.append( (sal_Unicode)' ' );
         rUnitConverter.convertMeasure( aOut, aCrop.Left );
         aOut.append( (sal_Unicode)')' );
