@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scriptdlg.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,7 +110,8 @@ protected:
 
 public:
     void                    Init( const ::rtl::OUString& language );
-    void  RequestSubEntries(  SvLBoxEntry* pRootEntry, ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node );
+    void  RequestSubEntries(  SvLBoxEntry* pRootEntry, ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node,
+                              ::com::sun::star::uno::Reference< com::sun::star::frame::XModel>& model  );
                     SFTreeListBox( Window* pParent, const ResId& rRes );
                     ~SFTreeListBox();
 
@@ -155,14 +156,17 @@ private:
     BYTE            nType;
     bool            loaded;
         ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > nodes;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > model;
     SFEntry(){}
 public:
                     SFEntry( BYTE nT )              { nType = nT; loaded=false; }
-                    SFEntry( BYTE nT, const ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& entryNodes ) { nType = nT; nodes = entryNodes; loaded=false; }
+                    SFEntry( BYTE nT,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& entryNodes ,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& entryModel) { nType = nT; nodes = entryNodes; loaded=false; model = entryModel; }
                     SFEntry( const SFEntry& r ) { nType = r.nType; nodes = r.nodes; loaded = r.loaded; }
     virtual         ~SFEntry() {}
     ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > GetNode() { return nodes ;}
-
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModel() { return model ;};
     BYTE            GetType() const                     { return nType; }
     bool            isLoaded() const                    { return loaded; }
     void            setLoaded()                         { loaded=true; }
@@ -202,12 +206,14 @@ protected:
     BOOL                getBoolProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xProps, ::rtl::OUString& propName );
     void                CheckButtons(  ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node );
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
+
     void        createEntry( SvLBoxEntry* pEntry );
     void        renameEntry( SvLBoxEntry* pEntry );
     void        deleteEntry( SvLBoxEntry* pEntry );
     ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
                 getBrowseNode( SvLBoxEntry* pEntry );
-
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getModel( SvLBoxEntry* pEntry );
     void        EnableButton( Button& rButton, BOOL bEnable );
     String      getListOfChildren( ::com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node, int depth );
     void        StoreCurrentSelection();
