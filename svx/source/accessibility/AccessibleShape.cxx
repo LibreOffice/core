@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleShape.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <rtl/ref.hxx>
 #include <svx/unoedsrc.hxx>
 #include <svx/unoshtxt.hxx>
 #include <svx/svdobj.hxx>
@@ -67,19 +68,52 @@
 #include <svx/svdview.hxx>
 #include "AccessibleEmptyEditSource.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
+using ::rtl::OUString;
 
 namespace accessibility {
+
+namespace {
+
+OUString GetOptionalProperty (
+    const Reference<beans::XPropertySet>& rxSet,
+    const OUString& rsPropertyName)
+{
+    OUString sValue;
+
+    if (rxSet.is())
+    {
+        const Reference<beans::XPropertySetInfo> xInfo (rxSet->getPropertySetInfo());
+        if ( ! xInfo.is() || xInfo->hasPropertyByName(rsPropertyName))
+        {
+            try
+            {
+                rxSet->getPropertyValue(rsPropertyName) >>= sValue;
+            }
+            catch (beans::UnknownPropertyException&)
+            {
+                // This exception should only be thrown when the property
+                // does not exits (of course) and the XPropertySetInfo is
+                // not available.
+            }
+        }
+    }
+    return sValue;
+}
+
+} // end of anonymous namespace
+
+
+
 
 //=====  internal  ============================================================
 
 AccessibleShape::AccessibleShape (
     const AccessibleShapeInfo& rShapeInfo,
     const AccessibleShapeTreeInfo& rShapeTreeInfo)
-    : AccessibleContextBase (rShapeInfo.mxParent,AccessibleRole::SHAPE),
+    : AccessibleContextBase (rShapeInfo.mxParent,AccessibleRole::LIST_ITEM),
       mpChildrenManager(NULL),
       mxShape (rShapeInfo.mxShape),
       maShapeTreeInfo (rShapeTreeInfo),
@@ -89,6 +123,7 @@ AccessibleShape::AccessibleShape (
       mpParent (rShapeInfo.mpChildrenManager)
 {
     m_pShape = GetSdrObjectFromXShape(mxShape);
+    UpdateNameAndDescription();
 }
 
 
@@ -219,32 +254,6 @@ void AccessibleShape::UpdateStates (void)
         bShapeIsSelected = maShapeTreeInfo.GetSdrView()->IsObjMarked(m_pShape) == TRUE;
     }
 
-
-//  Reference<view::XSelectionSupplier> xSelectionSupplier ( maShapeTreeInfo.GetController(), uno::UNO_QUERY);
-//    if ( xSelectionSupplier.is() )
-//    {
-//      uno::Any aSelection(xSelectionSupplier->getSelection());
-//        Reference<drawing::XShape> xSelectedShape;
-//      aSelection >>= xSelectedShape;
-//        if ( xSelectedShape.is() && xSelectedShape.get() == mxShape.get() )
-//            bShapeIsSelected = true;
-//        else
-//        {
-//            Reference<container::XIndexAccess> xSelectedShapes;
-//          aSelection >>= xSelectedShapes;
-//          if ( xSelectedShapes.is() )
-//          {
-//              for (sal_Int32 i=0,nCount=xSelectedShapes->getCount();
-//                   i<nCount && !bShapeIsSelected; ++i)
-//              {
-//                  xSelectedShapes->getByIndex(i) >>= xSelectedShape;
-//                  bShapeIsSelected = xSelectedShape.get() == mxShape.get();
-//              }
-//          }
-//        }
-//  }
-
-
     if (bShapeIsSelected)
         pStateSet->AddState (AccessibleStateType::SELECTED);
     else
@@ -258,6 +267,7 @@ bool AccessibleShape::operator== (const AccessibleShape& rShape)
 {
     return this==&rShape;
 }
+
 
 
 
@@ -912,6 +922,10 @@ void SAL_CALL
                 AccessibleEventId::VISIBLE_DATA_CHANGED,
                 uno::Any(),
                 uno::Any());
+
+            // Name and Description may have changed.  Update the local
+            // values accordingly.
+            UpdateNameAndDescription();
         }
     }
 }
@@ -1183,6 +1197,42 @@ sal_Int32 SAL_CALL
         nIndex = AccessibleContextBase::getAccessibleIndexInParent();
     return nIndex;
 }
+
+
+
+
+void AccessibleShape::UpdateNameAndDescription (void)
+{
+    // Ignore missing title, name, or description.  There are fallbacks for
+    // them.
+    try
+    {
+        Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY_THROW);
+        OUString sString;
+
+        // Get the accessible name.
+        sString = GetOptionalProperty(xSet, OUString(RTL_CONSTASCII_USTRINGPARAM("Title")));
+        if (sString.getLength() > 0)
+        {
+            SetAccessibleName(sString, AccessibleContextBase::FromShape);
+        }
+        else
+        {
+            sString = GetOptionalProperty(xSet, OUString(RTL_CONSTASCII_USTRINGPARAM("Name")));
+            if (sString.getLength() > 0)
+                SetAccessibleName(sString, AccessibleContextBase::FromShape);
+        }
+
+        // Get the accessible description.
+        sString = GetOptionalProperty(xSet, OUString(RTL_CONSTASCII_USTRINGPARAM("Description")));
+        if (sString.getLength() > 0)
+            SetAccessibleDescription(sString, AccessibleContextBase::FromShape);
+    }
+    catch (uno::RuntimeException&)
+    {
+    }
+}
+
 
 
 
