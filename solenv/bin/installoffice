@@ -7,7 +7,7 @@
 #
 # $RCSfile: installoffice,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -27,7 +27,7 @@
 # for a copy of the LGPLv3 License.
 #***********************************************************************/
 
-#!/bin/sh
+#!/bin/bash
 EXIT_SUCCESS=0
 EXIT_FAILURE=1
 EXIT_ERROR=2
@@ -38,25 +38,30 @@ if [ x${SOLARENV}x = xx ]; then
     exit $EXIT_FAILURE
 fi
 usage() {
-        echo "Usage: $SCRIPTNAME [-t DESTPATH] [-o] [-d]" >&2
+        echo "Usage: $SCRIPTNAME [-t DESTPATH] [-o] [-d] [-a]" >&2
         echo "" >&2
         echo "[-t] target path: path wehre tho office should installed to. The default is '$DESTPATH'" >&2
         echo "" >&2
         echo "[-o] force OpenOffice.org installation instead of StarOffice" >&2
         echo "" >&2
         echo "[-d] installation with debug output" >&2
+        echo "" >&2
+        echo "[-a] the office will be patched to run without FirstStartWizard" >&2
         exit $EXIT_FAILURE
 }
 
 DESTPATH=/tmp/$USER
-DEBUG=false
-OOO=false
+PARAM=""
 
-while getopts ':m:dho' OPTION ; do
+while getopts ':mt:acdhot' OPTION ; do
         case $OPTION in
-        d)        DEBUG=true
+        d)        PARAM="$PARAM -debug true"
                 ;;
-        o)        OOO=true
+        c)        PARAM="$PARAM -cwscheckapi true"
+                ;;
+        o)        PARAM="$PARAM -ooo true"
+                ;;
+        a)        PARAM="$PARAM -autorun true"
                 ;;
         t)        DESTPATH="$OPTARG"
                 ;;
@@ -79,7 +84,7 @@ LOCALUNPACKDIR=$DESTPATH/unpack
 export LOCALINSTALLDIR
 export LOCALUNPACKDIR
 
-echo "### $SOLARENV/bin/installoffice.pl -debug $DEBUG $@"
-exec perl -w $SOLARENV/bin/installoffice.pl -debug $DEBUG -ooo $OOO -cleanup true $@
+echo "### $SOLARENV/bin/installoffice.pl $PARAM -cleanup true $@"
+exec perl -w $SOLARENV/bin/installoffice.pl $PARAM -cleanup true $@
 
-exit $EXIT_SUCCESS
+exit $?
