@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: moduldl2.cxx,v $
- * $Revision: 1.64 $
+ * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -251,14 +251,6 @@ SvLBoxEntry* BasicCheckBox::FindEntry( const String& rName )
             return pEntry;
     }
     return 0;
-}
-
-//----------------------------------------------------------------------------
-
-void BasicCheckBox::SelectEntryPos( ULONG nPos, BOOL bSelect )
-{
-    if ( nPos < GetEntryCount() )
-        Select( GetEntry( nPos ), bSelect );
 }
 
 //----------------------------------------------------------------------------
