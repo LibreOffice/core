@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: expfld.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -293,7 +293,8 @@ SwGetExpField::SwGetExpField(SwGetExpFieldType* pTyp, const String& rFormel,
                             USHORT nSub, ULONG nFmt)
     : SwFormulaField( pTyp, nFmt, 0.0 ),
     bIsInBodyTxt( TRUE ),
-    nSubType(nSub)
+    nSubType(nSub),
+    bLateInitialization( false )
 {
     SetFormula( rFormel );
 }
@@ -329,6 +330,8 @@ SwField* SwGetExpField::Copy() const
     pTmp->sExpand       = sExpand;
     pTmp->bIsInBodyTxt  = bIsInBodyTxt;
     pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
+    if( bLateInitialization )
+        pTmp->SetLateInitialization();
 
     return pTmp;
 }
@@ -354,6 +357,18 @@ void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
     //
     if(!pTxtNode)
         return;
+    // #i82544#
+    if( bLateInitialization )
+    {
+        SwFieldType* pSetExpFld = rDoc.GetFldType(RES_SETEXPFLD, GetFormula(), sal_False);
+        if( pSetExpFld )
+        {
+            bLateInitialization = false;
+            if( !(GetSubType() & nsSwGetSetExpType::GSE_STRING) &&
+                static_cast< SwSetExpFieldType* >(pSetExpFld)->GetType() == nsSwGetSetExpType::GSE_STRING )
+            SetSubType( nsSwGetSetExpType::GSE_STRING );
+        }
+    }
 
     _SetGetExpFld aEndFld( aPos.nNode, &rFld, &aPos.nContent );
     if(GetSubType() & nsSwGetSetExpType::GSE_STRING)
