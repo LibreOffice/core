@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.11 $
+# $Revision: 1.12 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -43,7 +43,6 @@ COMP1TYPELIST=$(TARGET)
 # ------------------------------------------------------------------
 
 SLOFILES=\
-        $(SLO)$/InvocationCtxProperties.obj\
         $(SLO)$/MasterScriptProvider.obj\
         $(SLO)$/URIHelper.obj\
         $(SLO)$/ActiveMSPList.obj\

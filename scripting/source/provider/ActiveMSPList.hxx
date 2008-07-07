@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ActiveMSPList.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,8 +87,6 @@ public:
         getMSPFromInvocationContext( const css::uno::Reference< css::document::XScriptInvocationContext >& context )
             SAL_THROW(( css::lang::IllegalArgumentException, css::uno::RuntimeException ));
 
-    css::uno::Sequence< css::uno::Reference< css::script::provider::XScriptProvider > >
-        getActiveProviders();
     //XEventListener
     //======================================================================
 
