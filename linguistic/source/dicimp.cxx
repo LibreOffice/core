@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dicimp.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -247,6 +247,8 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
     }
     else
     {
+        // non persistent dictionaries (like IgnoreAllList) should always be writable
+        bIsReadonly  = FALSE;
         bNeedEntries = FALSE;
     }
 }
