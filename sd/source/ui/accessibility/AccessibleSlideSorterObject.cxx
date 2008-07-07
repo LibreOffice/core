@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleSlideSorterObject.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -388,6 +388,8 @@ Reference<XAccessible> SAL_CALL
 awt::Rectangle SAL_CALL AccessibleSlideSorterObject::getBounds (void)
     throw (RuntimeException)
 {
+    ThrowIfDisposed ();
+
     const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
 
     Rectangle aBBox (mrSlideSorter.GetView().GetPageBoundingBox (
@@ -422,6 +424,7 @@ awt::Rectangle SAL_CALL AccessibleSlideSorterObject::getBounds (void)
 awt::Point SAL_CALL AccessibleSlideSorterObject::getLocation ()
     throw (RuntimeException)
 {
+    ThrowIfDisposed ();
     const awt::Rectangle aBBox (getBounds());
     return awt::Point(aBBox.X, aBBox.Y);
 }
@@ -432,6 +435,8 @@ awt::Point SAL_CALL AccessibleSlideSorterObject::getLocation ()
 awt::Point SAL_CALL AccessibleSlideSorterObject::getLocationOnScreen (void)
     throw (RuntimeException)
 {
+    ThrowIfDisposed ();
+
     const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
 
     awt::Point aLocation (getLocation());
@@ -456,6 +461,7 @@ awt::Point SAL_CALL AccessibleSlideSorterObject::getLocationOnScreen (void)
 awt::Size SAL_CALL AccessibleSlideSorterObject::getSize (void)
     throw (RuntimeException)
 {
+    ThrowIfDisposed ();
     const awt::Rectangle aBBox (getBounds());
     return awt::Size(aBBox.Width,aBBox.Height);
 }
@@ -475,6 +481,7 @@ void SAL_CALL AccessibleSlideSorterObject::grabFocus (void)
 sal_Int32 SAL_CALL AccessibleSlideSorterObject::getForeground (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
     svtools::ColorConfig aColorConfig;
     UINT32 nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
     return static_cast<sal_Int32>(nColor);
@@ -486,6 +493,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getForeground (void)
 sal_Int32 SAL_CALL AccessibleSlideSorterObject::getBackground (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
     UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
     return static_cast<sal_Int32>(nColor);
 }
@@ -510,6 +518,8 @@ sal_Bool SAL_CALL
      AccessibleSlideSorterObject::supportsService (const OUString& sServiceName)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
+
     //  Iterate over all supported service names and return true if on of them
     //  matches the given name.
     uno::Sequence< ::rtl::OUString> aSupportedServices (
@@ -527,6 +537,8 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
        AccessibleSlideSorterObject::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
+
     static const OUString sServiceNames[2] = {
         OUString(RTL_CONSTASCII_USTRINGPARAM(
             "com.sun.star.accessibility.Accessible")),
