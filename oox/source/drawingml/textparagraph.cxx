@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textparagraph.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,18 +89,30 @@ void TextParagraph::insertAt(
         }
         xAt->gotoEnd(true);
 
+#ifdef DEBUG
+    if ( false )
+    {
+        if ( pTextParagraphStyle.get() )
+            pTextParagraphStyle->getTextParagraphPropertyMap().dump_debug("TextParagraph paragraph props");
+    }
+#endif
+
         PropertyMap aioBulletList;
         Reference< XPropertySet > xProps( xStart, UNO_QUERY);
+        float fCharacterSize = 18;
         if ( pTextParagraphStyle.get() )
-            pTextParagraphStyle->pushToPropSet( rFilterBase, xProps, aioBulletList, sal_False );
+        {
+            pTextParagraphStyle->pushToPropSet( rFilterBase, xProps, aioBulletList, NULL, sal_False, fCharacterSize );
+            fCharacterSize = pTextParagraphStyle->getCharacterSize( 18 );
+        }
 
-        mpProperties->pushToPropSet( rFilterBase, xProps, aioBulletList, sal_True );
+        mpProperties->pushToPropSet( rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), sal_True, fCharacterSize );
 
         // empty paragraphs do not have bullets in ppt
         if ( !nParagraphSize )
         {
-            const rtl::OUString sIsNumbering( CREATE_OUSTRING( "IsNumbering" ) );
-            xProps->setPropertyValue( sIsNumbering, Any( sal_False ) );
+            const OUString sNumberingLevel( CREATE_OUSTRING( "NumberingLevel" ) );
+            xProps->setPropertyValue( sNumberingLevel, Any( static_cast< sal_Int16 >( -1 ) ) );
         }
 
 // FIXME this is causing a lot of dispruption (ie does not work). I wonder what to do -- Hub
