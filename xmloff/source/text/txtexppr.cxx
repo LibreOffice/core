@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtexppr.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -451,6 +451,10 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     // filter list style name
     XMLPropertyState* pListStyleName = NULL;
 
+    // filter fo:clip
+    XMLPropertyState* pClip11State = NULL;
+    XMLPropertyState* pClipState = NULL;
+
     sal_Bool bNeedsAnchor = sal_False;
 
     for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
@@ -565,6 +569,8 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_UNDERLINE_COLOR:       pUnderlineColorState = propertie; break;
         case CTF_UNDERLINE_HASCOLOR:    pUnderlineHasColorState = propertie; break;
         case CTF_NUMBERINGSTYLENAME:    pListStyleName = propertie; break;
+        case CTF_TEXT_CLIP11:           pClip11State = propertie; break;
+        case CTF_TEXT_CLIP:             pClipState = propertie; break;
         }
     }
 
@@ -1000,6 +1006,9 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         if( lcl_IsOutlineStyle( GetExport(), sListStyleName ) )
             pListStyleName->mnIndex = -1;
     }
+
+    if( pClipState != NULL && pClip11State != NULL  )
+        pClip11State->mnIndex = -1;
 
     SvXMLExportPropertyMapper::ContextFilter(rProperties,rPropSet);
 }
