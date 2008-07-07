@@ -13,4 +13,6 @@
                        manifest:full-path="registry/data/org/openoffice/Office/ProtocolHandler.xcu"/>
   <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-data"
                        manifest:full-path="registry/data/org/openoffice/Office/UI/ImpressWindowState.xcu"/>
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.package-bundle-description"
+                       manifest:full-path="help/component.txt"/>
 </manifest:manifest>
