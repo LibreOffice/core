@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shapeimport.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,6 +82,8 @@ enum SdXMLGroupShapeElemTokenMap
     XML_TOK_GROUP_CUSTOM_SHAPE,
 
     XML_TOK_GROUP_ANNOTATION,
+
+    XML_TOK_GROUP_A,
 
     XML_TOK_GROUP_LAST
 };
@@ -259,6 +261,7 @@ class SvXMLShapeContext : public SvXMLImportContext
 protected:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape >   mxShape;
     sal_Bool                                                            mbTemporaryShape;
+    rtl::OUString                                                       msHyperlink;
 
 public:
     SvXMLShapeContext( SvXMLImport& rImp, USHORT nPrfx,
@@ -267,6 +270,8 @@ public:
     TYPEINFO();
 
     const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& getShape() const { return mxShape; }
+
+    void setHyperlink( const ::rtl::OUString& rHyperlink );
 };
 
 //////////////////////////////////////////////////////////////////////////////
