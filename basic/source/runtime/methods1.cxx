@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: methods1.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1390,6 +1390,15 @@ RTLFUNC(CreateUnoService)
 
     RTL_Impl_CreateUnoService( pBasic, rPar, bWrite );
 }
+
+RTLFUNC(CreateUnoServiceWithArguments)
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    RTL_Impl_CreateUnoServiceWithArguments( pBasic, rPar, bWrite );
+}
+
 
 RTLFUNC(CreateUnoValue)
 {
