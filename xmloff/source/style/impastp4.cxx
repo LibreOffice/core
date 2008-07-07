@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impastp4.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,7 +92,18 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
 {
     // store family in a list if not already stored
     ULONG nPos;
-    XMLFamilyData_Impl *pFamily = new XMLFamilyData_Impl( nFamily, rStrName, rMapper, rStrPrefix, bAsFamily );
+
+    sal_uInt16 nExportFlags = GetExport().getExportFlags();
+    sal_Bool bStylesOnly = (nExportFlags & EXPORT_STYLES) != 0 && (nExportFlags & EXPORT_CONTENT) == 0;
+
+    OUString aPrefix( rStrPrefix );
+    if( bStylesOnly )
+    {
+        aPrefix = OUString( 'M' );
+        aPrefix += rStrPrefix;
+    }
+
+    XMLFamilyData_Impl *pFamily = new XMLFamilyData_Impl( nFamily, rStrName, rMapper, aPrefix, bAsFamily );
     if( !maFamilyList.Seek_Entry( pFamily, &nPos ) )
         maFamilyList.Insert( pFamily );
     else
