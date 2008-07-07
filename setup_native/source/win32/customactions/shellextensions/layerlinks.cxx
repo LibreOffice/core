@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: layerlinks.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,6 +87,16 @@ namespace
     {
         MsiSetProperty(handle, sProperty.c_str(), TEXT("1"));
     }
+
+    void stripFinalBackslash(std::string * path) {
+        std::string::size_type i = path->size();
+        if (i > 1) {
+            --i;
+            if ((*path)[i] == '\\') {
+                path->erase(i);
+            }
+        }
+    }
 } // namespace
 
 extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
@@ -112,6 +122,9 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
         }
         sUreInstallPath = TEXT("..\\URE");
    }
+
+    stripFinalBackslash(&sBasisInstallPath);
+    stripFinalBackslash(&sUreInstallPath);
 
     // string myText1 = TEXT("Creating Basis-Link: ") + sBasisLinkPath;
     // string myText2 = TEXT("Creating Ure-Link: ") + sUreLinkPath;
