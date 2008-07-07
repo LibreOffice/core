@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basobj.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,51 +62,39 @@ extern "C" {
 }
 
 
-class BasicIDE
+namespace BasicIDE
 {
-protected:
-    static BOOL         StringCompareLessThan( const String& rStr1, const String& rStr2 )
-                            { return (rStr1.CompareIgnoreCaseToAscii( rStr2 ) == COMPARE_LESS); }
-public:
-                        BasicIDE();
-                        ~BasicIDE();
-
-    static SfxMacro*    CreateMacro();
-    static void         Organize( INT16 tabId );
-
-    static USHORT       GetBasicDialogCount();
-    static void         IncBasicDialogCount();
-    static void         DecBasicDialogCount();
+    SfxMacro*   CreateMacro();
+    void            Organize( INT16 tabId );
 
 
     // Hilfsmethoden fuer den allg. Gebrauch:
-    static SbMethod*    FindMacro( SbModule* pModule, const String& rMacroName );
-    static SbMethod*    CreateMacro( SbModule* pModule, const String& rMacroName );
-    static void         RunMethod( SbMethod* pMethod );
+    SbMethod*   CreateMacro( SbModule* pModule, const String& rMacroName );
+    void            RunMethod( SbMethod* pMethod );
 
-    static StarBASIC*   FindBasic( const SbxVariable* pVar );
-    static void         StopBasic();
-    static long         HandleBasicError( StarBASIC* pBasic );
-    static void         BasicStopped( BOOL* pbAppWindowDisabled = 0, BOOL* pbDispatcherLocked = 0, USHORT* pnWaitCount = 0,
+    StarBASIC*  FindBasic( const SbxVariable* pVar );
+    void            StopBasic();
+    long         HandleBasicError( StarBASIC* pBasic );
+    void            BasicStopped( BOOL* pbAppWindowDisabled = 0, BOOL* pbDispatcherLocked = 0, USHORT* pnWaitCount = 0,
                             SfxUInt16Item** ppSWActionCount = 0, SfxUInt16Item** ppSWLockViewCount = 0 );
 
-    static BOOL         IsValidSbxName( const String& rName );
+    BOOL            IsValidSbxName( const String& rName );
 
-    static BasicManager*        FindBasicManager( StarBASIC* pLib );
+    BasicManager*       FindBasicManager( StarBASIC* pLib );
 
-    static SfxBindings*         GetBindingsPtr();
+    SfxBindings*        GetBindingsPtr();
 
-    static void         InvalidateDebuggerSlots();
+    void            InvalidateDebuggerSlots();
 
     // libraries
 
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > GetMergedLibraryNames(
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > GetMergedLibraryNames(
         const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xModLibContainer,
         const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xDlgLibContainer );
 
     // new methods for modules
 
-    static ::rtl::OUString      GetModule(
+    ::rtl::OUString     GetModule(
         const ScriptDocument& rDocument, const String& rLibName, const String& rModName )
         throw( ::com::sun::star::container::NoSuchElementException );
 
@@ -114,25 +102,25 @@ public:
 
         Will show an error message when renaming fails because the new name is already used.
     */
-    static bool                 RenameModule(
+    bool                 RenameModule(
         Window* pErrorParent, const ScriptDocument& rDocument,
         const String& rLibName, const String& rOldName, const String& rNewName );
 
     // new methods for macros
 
-    static ::rtl::OUString      ChooseMacro( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxLimitToDocument,
+    ::rtl::OUString     ChooseMacro( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxLimitToDocument,
         BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc );
 
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > GetMethodNames(
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > GetMethodNames(
         const ScriptDocument& rDocument, const String& rLibName, const String& rModName )
         throw( ::com::sun::star::container::NoSuchElementException );
 
-    static BOOL                 HasMethod(
+    BOOL                    HasMethod(
         const ScriptDocument& rDocument, const String& rLibName, const String& rModName, const String& rMethName );
 
     // new methods for dialogs
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStreamProvider > GetDialog(
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStreamProvider > GetDialog(
         const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName )
         throw( ::com::sun::star::container::NoSuchElementException );
 
@@ -140,14 +128,14 @@ public:
 
         Will show an error message when renaming fails because the new name is already used.
     */
-    static bool                 RenameDialog(
+    bool                 RenameDialog(
         Window* pErrorParent, const ScriptDocument& rDocument, const String& rLibName, const String& rOldName, const String& rNewName )
         throw( ::com::sun::star::container::ElementExistException, ::com::sun::star::container::NoSuchElementException );
 
-    static bool                 RemoveDialog(
+    bool                 RemoveDialog(
         const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName );
 
-    static void                 MarkDocumentModified( const ScriptDocument& rDocument );
-};
+    void                MarkDocumentModified( const ScriptDocument& rDocument );
+}
 
 #endif  // _BASOBJ_HXX
