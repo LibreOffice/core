@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basidesh.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,12 +76,17 @@ DECLARE_TABLE( IDEWindowTable, IDEBaseWindow* )
 typedef Table IDEWindowTable;
 #endif
 
+namespace BasicIDE
+{
+    bool RemoveDialog( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName );
+}
+
 class BasicIDEShell :public SfxViewShell
                     ,public ::basctl::DocumentEventListener
 {
 friend class JavaDebuggingListenerImpl;
 friend class LocalizationMgr;
-friend class BasicIDE;
+friend bool BasicIDE::RemoveDialog( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName );
 
     ObjectCatalog*      pObjectCatalog;
 
@@ -158,8 +163,6 @@ protected:
     void                DestroyModulWindowLayout();
     void                UpdateModulWindowLayout( bool bBasicStopped );
 
-    sal_Bool            HasBasic() const;
-
     // DocumentEventListener
     virtual void onDocumentCreated( const ScriptDocument& _rDocument );
     virtual void onDocumentOpened( const ScriptDocument& _rDocument );
@@ -176,9 +179,7 @@ public:
                         SFX_DECL_INTERFACE( SVX_INTERFACE_BASIDE_VIEWSH )
                         SFX_DECL_VIEWFACTORY(BasicIDEShell);
 
-                        BasicIDEShell( SfxViewFrame *pFrame, Window *);
                         BasicIDEShell( SfxViewFrame *pFrame, SfxViewShell *pOldSh );
-                        BasicIDEShell( SfxViewFrame *pFrame, const BasicIDEShell &rOrig );
                         ~BasicIDEShell();
 
     IDEBaseWindow*      GetCurWindow() const    { return pCurWin; }
