@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgedclip.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,18 +45,6 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::clipboard;
 
-
-//============================================================================
-// DlgEdTransferableImpl
-//============================================================================
-
-//----------------------------------------------------------------------------
-
-DlgEdTransferableImpl::DlgEdTransferableImpl()
-    :m_SeqFlavors(0)
-    ,m_SeqData(0)
-{
-}
 
 //----------------------------------------------------------------------------
 
