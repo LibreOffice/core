@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgedlist.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +49,6 @@ private:
     DlgEdObj*       pDlgEdObj;
 
 public:
-    DlgEdPropListenerImpl();
     DlgEdPropListenerImpl(DlgEdObj* pObj);
     virtual ~DlgEdPropListenerImpl();
 
@@ -73,7 +72,6 @@ private:
     DlgEdObj*       pDlgEdObj;
 
 public:
-    DlgEdEvtContListenerImpl();
     DlgEdEvtContListenerImpl(DlgEdObj* pObj);
     virtual ~DlgEdEvtContListenerImpl();
 
