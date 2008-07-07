@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sfxhelp.cxx,v $
- * $Revision: 1.80 $
+ * $Revision: 1.81 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -782,10 +782,19 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
     INetProtocol nProtocol = aParser.GetProtocol();
     if ( nProtocol != INET_PROT_VND_SUN_STAR_HELP )
     {
-        if ( rURL.Len() > 0 )
+        // #90162 Accept anything that is not invalid as help id, as both
+        // uno: URLs used as commands/help ids in the Office and the scheme
+        // used in extension help ids (e.g. com.foocorp.foo-ext:FooDialogButton)
+        // are accepted as INET_PROT_UNO respectively INET_PROT_GENERIC
+        if ( nProtocol != INET_PROT_NOT_VALID )
+        {
             aHelpURL = CreateHelpURL_Impl( rURL, GetHelpModuleName_Impl( ) );
+        }
         else
+        {
             aHelpURL  = CreateHelpURL_Impl( 0, GetHelpModuleName_Impl( ) );
+            sKeyword = ::rtl::OUString( rURL );
+        }
     }
 
     Reference < XFrame > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
