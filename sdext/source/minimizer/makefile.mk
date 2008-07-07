@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.12 $
+# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -112,7 +112,8 @@ COMPONENT_BITMAPS= \
 # rather freestyle or common to all?
 COMPONENT_HELP= \
     $(EXTENSIONDIR)$/help$/help_de.odt \
-    $(EXTENSIONDIR)$/help$/help_en-US.odt
+    $(EXTENSIONDIR)$/help$/help_en-US.odt \
+    $(EXTENSIONDIR)$/help$/component.txt
 
 # make sure to add your custom files here
 EXTENSION_PACKDEPS=$(COMPONENT_BITMAPS) $(COMPONENT_HELP)
@@ -132,4 +133,3 @@ $(COMPONENT_BITMAPS) : $(SOLARSRC)$/$(RSCDEFIMG)$/minimizer$/$$(@:f)
 $(COMPONENT_HELP) : help$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
-
