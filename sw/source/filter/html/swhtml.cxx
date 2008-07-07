@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swhtml.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,6 +113,8 @@
 #include <linkenum.hxx>
 #include <breakit.hxx>
 #include <SwAppletImpl.hxx>
+
+#include <sfx2/viewfrm.hxx>
 
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
@@ -330,7 +332,9 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     bSelect( FALSE ),
     bInFootEndNoteAnchor( FALSE ),
     bInFootEndNoteSymbol( FALSE ),
-    bIgnoreHTMLComments( bNoHTMLComments )
+//    bIgnoreHTMLComments( bNoHTMLComments )
+    bIgnoreHTMLComments( bNoHTMLComments ),
+    pTempViewFrame(0)
 {
     nEventId = 0;
     bUpperSpace = bViewCreated = bChkJumpMark =
@@ -390,9 +394,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     SwDocShell* pDocSh = pDoc->GetDocShell();
     if( pDocSh )
     {
-        if( SFX_CREATE_MODE_INTERNAL == pDocSh->GetCreateMode() ||
-            SFX_CREATE_MODE_PREVIEW == pDocSh->GetCreateMode() )
-            bViewCreated = TRUE;            // dann nicht, synchron laden
+        bViewCreated = TRUE;            // nicht, synchron laden
 
         // es ist ein Sprungziel vorgegeben.
 
@@ -500,6 +502,9 @@ __EXPORT SwHTMLParser::~SwHTMLParser()
         // keiner will mehr das Doc haben, also weg damit
         delete pDoc;
     }
+
+    if ( pTempViewFrame )
+        pTempViewFrame->DoClose();
 }
 
 IMPL_LINK( SwHTMLParser, AsyncCallback, void*, /*pVoid*/ )
@@ -596,7 +601,7 @@ void __EXPORT SwHTMLParser::Continue( int nToken )
     // Die ViewShell vom Dokument holen, merken und als aktuelle setzen.
     ViewShell *pInitVSh = CallStartAction();
 
-    if( SVPAR_ERROR != eState && !pInitVSh && GetMedium() && !bViewCreated )
+    if( SVPAR_ERROR != eState && GetMedium() && !bViewCreated )
     {
         // Beim ersten Aufruf erstmal returnen, Doc anzeigen
         // und auf Timer Callback warten.
@@ -2465,8 +2470,7 @@ ViewShell *SwHTMLParser::CallStartAction( ViewShell *pVSh, BOOL bChkPtr )
         ViewShell *pOldVSh = pVSh;
 #endif
         pDoc->GetEditShell( &pVSh );
-        ASSERT( !pVSh || !pOldVSh || pOldVSh == pVSh,
-                "CallStartAction: Wer hat die ViewShell ausgetauscht?" );
+        ASSERT( !pVSh || !pOldVSh || pOldVSh == pVSh, "CallStartAction: Wer hat die ViewShell ausgetauscht?" );
 #ifndef PRODUCT
         if( pOldVSh && !pVSh )
             pVSh = 0;
