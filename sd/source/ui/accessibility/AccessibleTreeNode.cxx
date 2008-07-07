@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleTreeNode.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -171,6 +171,7 @@ Reference<XAccessibleContext > SAL_CALL
     AccessibleTreeNode::getAccessibleContext (void)
     throw (uno::RuntimeException)
 {
+    ThrowIfDisposed ();
     return this;
 }
 
@@ -351,6 +352,7 @@ lang::Locale SAL_CALL AccessibleTreeNode::getLocale (void)
     throw (IllegalAccessibleComponentStateException,
         RuntimeException)
 {
+    ThrowIfDisposed ();
     Reference<XAccessibleContext> xParentContext;
     Reference<XAccessible> xParent (getAccessibleParent());
     if (xParent.is())
@@ -468,6 +470,8 @@ Reference<XAccessible> SAL_CALL
 awt::Rectangle SAL_CALL AccessibleTreeNode::getBounds (void)
     throw (RuntimeException)
 {
+    ThrowIfDisposed ();
+
     awt::Rectangle aBBox;
 
     ::Window* pWindow = mrTreeNode.GetWindow();
@@ -600,6 +604,8 @@ sal_Bool SAL_CALL
      AccessibleTreeNode::supportsService (const OUString& sServiceName)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
+
     //  Iterate over all supported service names and return true if on of them
     //  matches the given name.
     uno::Sequence< ::rtl::OUString> aSupportedServices (
@@ -617,6 +623,7 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
        AccessibleTreeNode::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
     static const OUString sServiceNames[2] = {
         OUString(RTL_CONSTASCII_USTRINGPARAM(
             "com.sun.star.accessibility.Accessible")),
