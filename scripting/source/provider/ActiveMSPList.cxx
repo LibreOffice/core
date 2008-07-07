@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ActiveMSPList.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,34 +79,6 @@ ActiveMSPList::createNewMSP( const uno::Any& context )
             serviceName, args, m_xContext ), UNO_QUERY );
     return msp;
 }
-
-Sequence < Reference< provider::XScriptProvider > >
-ActiveMSPList::getActiveProviders()
-{
-    ::osl::MutexGuard guard( m_mutex );
-
-    sal_Int32 numChildNodes = m_hMsps.size() + m_mScriptComponents.size();
-    // get providers for application
-    Msp_hash::iterator h_itEnd =  m_hMsps.end();
-    Sequence< Reference< provider::XScriptProvider > > children( numChildNodes );
-    sal_Int32 count = 0;
-
-
-    for ( Msp_hash::iterator h_it = m_hMsps.begin(); h_it != h_itEnd; ++h_it )
-    {
-        children[ count++ ] =  h_it->second;
-    }
-
-    // get providers for active documents
-    ScriptComponent_map::iterator m_itEnd =  m_mScriptComponents.end();
-
-    for ( ScriptComponent_map::iterator m_it = m_mScriptComponents.begin(); m_it != m_itEnd; ++m_it )
-    {
-        children[ count++ ] = m_it->second;
-    }
-    return children;
-}
-
 
 Reference< provider::XScriptProvider >
 ActiveMSPList::getMSPFromAnyContext( const Any& aContext )
