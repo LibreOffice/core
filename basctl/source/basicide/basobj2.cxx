@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basobj2.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,9 +76,11 @@ extern "C" {
     }
 }
 
+namespace BasicIDE
+{
 //----------------------------------------------------------------------------
 
-SfxMacro* BasicIDE::CreateMacro()
+SfxMacro* CreateMacro()
 {
     DBG_ERROR( "BasicIDE::CreateMacro() - war eigentlich nur fuer Macro-Recording!" );
     IDE_DLL()->GetExtraData()->ChoosingMacro() = TRUE;
@@ -103,7 +105,7 @@ SfxMacro* BasicIDE::CreateMacro()
 
 //----------------------------------------------------------------------------
 
-void BasicIDE::Organize( INT16 tabId )
+void Organize( INT16 tabId )
 {
     BasicIDEDLL::Init();
 
@@ -124,7 +126,7 @@ void BasicIDE::Organize( INT16 tabId )
 
 //----------------------------------------------------------------------------
 
-BOOL BasicIDE::IsValidSbxName( const String& rName )
+BOOL IsValidSbxName( const String& rName )
 {
     for ( USHORT nChar = 0; nChar < rName.Len(); nChar++ )
     {
@@ -138,38 +140,14 @@ BOOL BasicIDE::IsValidSbxName( const String& rName )
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-
-SbMethod* BasicIDE::FindMacro( SbModule* pModule, const String& rMacroName )
+static BOOL StringCompareLessThan( const String& rStr1, const String& rStr2 )
 {
-    return (SbMethod*)pModule->GetMethods()->Find( rMacroName, SbxCLASS_METHOD );
+    return (rStr1.CompareIgnoreCaseToAscii( rStr2 ) == COMPARE_LESS);
 }
 
 //----------------------------------------------------------------------------
 
-USHORT BasicIDE::GetBasicDialogCount()
-{
-    return IDE_DLL()->GetExtraData()->GetBasicDialogCount();
-}
-
-//----------------------------------------------------------------------------
-
-void BasicIDE::IncBasicDialogCount()
-{
-    IDE_DLL()->GetExtraData()->IncBasicDialogCount();
-}
-
-//----------------------------------------------------------------------------
-
-void BasicIDE::DecBasicDialogCount()
-{
-    DBG_ASSERT( GetBasicDialogCount(), "DecBasicDialogCount() - Count allready 0!" );
-    IDE_DLL()->GetExtraData()->DecBasicDialogCount();
-}
-
-//----------------------------------------------------------------------------
-
-Sequence< ::rtl::OUString > BasicIDE::GetMergedLibraryNames( const Reference< script::XLibraryContainer >& xModLibContainer, const Reference< script::XLibraryContainer >& xDlgLibContainer )
+Sequence< ::rtl::OUString > GetMergedLibraryNames( const Reference< script::XLibraryContainer >& xModLibContainer, const Reference< script::XLibraryContainer >& xDlgLibContainer )
 {
     // create a sorted list of module library names
     ::std::vector<String> aModLibList;
@@ -212,7 +190,7 @@ Sequence< ::rtl::OUString > BasicIDE::GetMergedLibraryNames( const Reference< sc
 
 //----------------------------------------------------------------------------
 
-bool BasicIDE::RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const String& rLibName, const String& rOldName, const String& rNewName )
+bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const String& rLibName, const String& rOldName, const String& rNewName )
 {
     if ( !rDocument.hasModule( rLibName, rOldName ) )
     {
@@ -268,7 +246,7 @@ bool BasicIDE::RenameModule( Window* pErrorParent, const ScriptDocument& rDocume
 
 //----------------------------------------------------------------------------
 
-::rtl::OUString BasicIDE::ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc )
+::rtl::OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc )
 {
     (void)rMacroDesc;
 
@@ -402,7 +380,7 @@ bool BasicIDE::RenameModule( Window* pErrorParent, const ScriptDocument& rDocume
 
 //----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > BasicIDE::GetMethodNames( const ScriptDocument& rDocument, const String& rLibName, const String& rModName )
+Sequence< ::rtl::OUString > GetMethodNames( const ScriptDocument& rDocument, const String& rLibName, const String& rModName )
     throw(NoSuchElementException )
 {
     Sequence< ::rtl::OUString > aSeqMethods;
@@ -429,7 +407,7 @@ Sequence< ::rtl::OUString > BasicIDE::GetMethodNames( const ScriptDocument& rDoc
 
 //----------------------------------------------------------------------------
 
-BOOL BasicIDE::HasMethod( const ScriptDocument& rDocument, const String& rLibName, const String& rModName, const String& rMethName )
+BOOL HasMethod( const ScriptDocument& rDocument, const String& rLibName, const String& rModName, const String& rMethName )
 {
     BOOL bHasMethod = FALSE;
 
@@ -449,5 +427,5 @@ BOOL BasicIDE::HasMethod( const ScriptDocument& rDocument, const String& rLibNam
 
     return bHasMethod;
 }
-
+} //namespace BasicIDE
 //----------------------------------------------------------------------------
