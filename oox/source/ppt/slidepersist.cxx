@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slidepersist.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +65,13 @@ SlidePersist::SlidePersist( sal_Bool bMaster, sal_Bool bNotes,
 , maNotesTextStylePtr( new oox::drawingml::TextListStyle )
 , maOtherTextStylePtr( new oox::drawingml::TextListStyle )
 {
+    if ( pDefaultTextStyle )
+    {
+        maTitleTextStylePtr->apply( *pDefaultTextStyle.get() );
+        maBodyTextStylePtr->apply( *pDefaultTextStyle.get() );
+        maNotesTextStylePtr->apply( *pDefaultTextStyle.get() );
+        maOtherTextStylePtr->apply( *pDefaultTextStyle.get() );
+    }
 }
 
 SlidePersist::~SlidePersist()
@@ -194,9 +201,21 @@ void setTextStyle( Reference< beans::XPropertySet >& rxPropSet,
         return;
     }
 
+    PropertyMap& rTextParagraphPropertyMap( pTextParagraphPropertiesPtr->getTextParagraphPropertyMap() );
+#ifdef DEBUG
+    if ( false )
+        rTextParagraphPropertyMap.dump_debug("TextParagraph paragraph props");
+#endif
+
+    PropertyMap& rTextCharacterPropertyMap( pTextCharacterPropertiesPtr->getTextCharacterPropertyMap() );
+#ifdef DEBUG
+    if ( false )
+        rTextCharacterPropertyMap.dump_debug("TextParagraph paragraph props");
+#endif
+
     PropertySet aPropSet( rxPropSet );
-    aPropSet.setProperties( pTextParagraphPropertiesPtr->getTextParagraphPropertyMap() );
-    aPropSet.setProperties( pTextCharacterPropertiesPtr->getTextCharacterPropertyMap() );
+    aPropSet.setProperties( rTextParagraphPropertyMap );
+    aPropSet.setProperties( rTextCharacterPropertyMap );
 }
 
 void SlidePersist::applyTextStyles( const oox::core::XmlFilterBase& rFilterBase )
@@ -273,22 +292,24 @@ void SlidePersist::applyTextStyles( const oox::core::XmlFilterBase& rFilterBase 
                                     Reference< beans::XPropertySet > xPropSet( aXStyle, UNO_QUERY_THROW );
                                     setTextStyle( xPropSet, maDefaultTextStylePtr, 0 );
                                     setTextStyle( xPropSet, pTextListStylePtr, 0 );
-                                    for ( int nLevel = 1; nLevel < 5; nLevel++ )
+                                    if ( i == 1 /* BodyStyle */ )
                                     {
-                                        if ( i == 1 /* BodyStyle */ )
+                                        for ( int nLevel = 1; nLevel < 5; nLevel++ )
                                         {
-                                            sal_Char pOutline[ 9 ] = "outline1";
-                                            pOutline[ 7 ] = static_cast< sal_Char >( '1' + i );
-                                            rtl::OUString sOutlineStyle( rtl::OUString::createFromAscii( pOutline ) );
-                                            if ( xFamilies->hasByName( sOutlineStyle ) )
                                             {
-                                                xFamilies->getByName( sOutlineStyle ) >>= aXStyle;
-                                                if( aXStyle.is() )
-                                                    xPropSet = Reference< beans::XPropertySet >( aXStyle, UNO_QUERY_THROW );
+                                                sal_Char pOutline[ 9 ] = "outline1";
+                                                pOutline[ 7 ] = static_cast< sal_Char >( '0' + nLevel );
+                                                rtl::OUString sOutlineStyle( rtl::OUString::createFromAscii( pOutline ) );
+                                                if ( xFamilies->hasByName( sOutlineStyle ) )
+                                                {
+                                                    xFamilies->getByName( sOutlineStyle ) >>= aXStyle;
+                                                    if( aXStyle.is() )
+                                                        xPropSet = Reference< beans::XPropertySet >( aXStyle, UNO_QUERY_THROW );
+                                                }
                                             }
+                                            setTextStyle( xPropSet, maDefaultTextStylePtr, nLevel );
+                                            setTextStyle( xPropSet, pTextListStylePtr, nLevel );
                                         }
-                                        setTextStyle( xPropSet, maDefaultTextStylePtr, nLevel );
-                                        setTextStyle( xPropSet, pTextListStylePtr, nLevel );
                                     }
                                 }
                             }
