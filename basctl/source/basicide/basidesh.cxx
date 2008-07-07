@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basidesh.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,34 +114,6 @@ SFX_IMPL_INTERFACE( BasicIDEShell, SfxViewShell, IDEResId( RID_STR_IDENAME ) )
 static sal_Int32 GnBasicIDEShellCount;
 sal_Int32 getBasicIDEShellCount( void )
     { return GnBasicIDEShellCount; }
-
-BasicIDEShell::BasicIDEShell( SfxViewFrame *pFrame_, Window * ):
-        SfxViewShell( pFrame_, IDE_VIEWSHELL_FLAGS ),
-        m_aCurDocument( ScriptDocument::getApplicationScriptDocument() ),
-        aHScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG ) ),
-        aVScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG ) ),
-        aScrollBarBox( &GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE ) ),
-        m_bAppBasicModified( FALSE ),
-        m_aNotifier( *this )
-{
-    Init();
-    GnBasicIDEShellCount++;
-}
-
-
-BasicIDEShell::BasicIDEShell( SfxViewFrame *pFrame_, const BasicIDEShell& ):
-        SfxViewShell( pFrame_, IDE_VIEWSHELL_FLAGS ),
-        m_aCurDocument( ScriptDocument::getApplicationScriptDocument() ),
-        aHScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG ) ),
-        aVScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG ) ),
-        aScrollBarBox( &GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE ) ),
-        m_bAppBasicModified( FALSE ),
-        m_aNotifier( *this )
-{
-    DBG_ERROR( "Zweite Ansicht auf Debugger nicht moeglich!" );
-    GnBasicIDEShellCount++;
-}
-
 
 BasicIDEShell::BasicIDEShell( SfxViewFrame* pFrame_, SfxViewShell* /* pOldShell */ ) :
         SfxViewShell( pFrame_, IDE_VIEWSHELL_FLAGS ),
@@ -251,11 +223,6 @@ __EXPORT BasicIDEShell::~BasicIDEShell()
     IDE_DLL()->GetExtraData()->ShellInCriticalSection() = FALSE;
 
     GnBasicIDEShellCount--;
-}
-
-sal_Bool BasicIDEShell::HasBasic() const
-{
-    return FALSE;
 }
 
 void BasicIDEShell::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
