@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,10 +54,12 @@ XHPFILES= \
 
 HLANGXHPFILES:=$(foreach,i,$(XHPFILES) $(foreach,j,$(MEDIAWIKI_LANG) $(OUT_HELP)$/$j$/$(PACKAGE)$/$(i:f)))
 
-ALLTAR : $(OUT_MEDIAWIKI)$/$(TARGET).done
+ALLTAR : $(OUT_MEDIAWIKI)$/$(TARGET).done $(OUT_HELP)$/component.txt
 
 #$(OUT_MEDIAWIKI)$/xhp_changed.flag optix
 
+$(OUT_HELP)$/component.txt : component.txt
+    $(COPY) component.txt $(OUT_HELP)$/component.txt
 
 $(HLANGXHPFILES) : #$$(@:d)thisdir.created
     -$(MKDIRHIER) $(@:d)
