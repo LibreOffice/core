@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undomanager.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@ using namespace sd;
 UndoManager::UndoManager( USHORT nMaxUndoActionCount /* = 20 */ )
 : SfxUndoManager( nMaxUndoActionCount )
 , mnListLevel( 0 )
+, mpLinkedUndoManager(NULL)
 {
 }
 
@@ -45,6 +46,7 @@ void UndoManager::EnterListAction(const UniString &rComment, const UniString& rR
 {
     if( !isInUndo() )
     {
+        ClearLinkedRedoActions();
         mnListLevel++;
         SfxUndoManager::EnterListAction( rComment, rRepeatComment, nId );
     }
@@ -70,6 +72,7 @@ void UndoManager::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg /* = FALS
 {
     if( !isInUndo() )
     {
+        ClearLinkedRedoActions();
         SfxUndoManager::AddUndoAction( pAction, bTryMerg );
     }
     else
@@ -91,3 +94,19 @@ BOOL UndoManager::Redo( USHORT nCount )
     return SfxUndoManager::Redo( nCount );
 }
 
+
+
+
+void UndoManager::SetLinkedUndoManager (SfxUndoManager* pLinkedUndoManager)
+{
+    mpLinkedUndoManager = pLinkedUndoManager;
+}
+
+
+
+
+void UndoManager::ClearLinkedRedoActions (void)
+{
+    if (mpLinkedUndoManager != NULL)
+        mpLinkedUndoManager->ClearRedo();
+}
