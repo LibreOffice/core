@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: iderdll2.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,8 +66,6 @@ private:
     BOOL            bChoosingMacro;
     BOOL            bShellInCriticalSection;
 
-    void            InitAccelerator();
-
 protected:
     DECL_LINK( GlobalBasicBreakHdl, StarBASIC * );
 
@@ -105,13 +103,6 @@ public:
 
     const String&           GetAddLibFilter() const { return aAddLibFilter; }
     void                    SetAddLibFilter( const String& rFilter )  { aAddLibFilter = rFilter; }
-
-    Accelerator*            GetAccelerator()
-                            {
-                                if ( !pAccelerator )
-                                    InitAccelerator();
-                                return pAccelerator;
-                            }
 
     DECL_LINK( ExecuteMacroEvent, void * );
 };
