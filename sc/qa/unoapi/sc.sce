@@ -3,10 +3,11 @@
 # i88241 -o sc.AccessibleEditableTextPara_HeaderFooter
 -o sc.AccessibleEditableTextPara_PreviewCell
 -o sc.ScAccessibleCell
--o sc.ScAccessibleCsvCell
-# i84726 -o sc.ScAccessibleCsvGrid
+# i91044 -o sc.ScAccessibleCsvCell
+-o sc.ScAccessibleCsvGrid
 # i84641 -o sc.ScAccessibleCsvRuler
 # i88330 -o sc.ScAccessibleDocument
+# i91045 -o sc.ScAccessibleDocumentPagePreview
 -o sc.ScAccessiblePageHeader
 -o sc.ScAccessiblePageHeaderArea
 -o sc.ScAccessiblePreviewCell
@@ -121,5 +122,4 @@
 -o sc.XMLSettingsImporter
 -o sc.XMLStylesExporter
 -o sc.XMLStylesImporter
--o sc.ScAccessibleDocumentPagePreview
 -o sc.XMLExporter
