@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-07-01 16:08:22 $
+dnl * Date: $Date: 2008-07-07 09:00:32 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.273 $ )
+AC_REVISION( $Revision: 1.274 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -6041,6 +6041,53 @@ if test "$ANT_HOME" != "NO_ANT_HOME"; then
 fi
 AC_SUBST(ANT_LIB)
 fi
+
+if test "$ENABLE_MEDIAWIKI" = "YES"; then
+AC_MSG_CHECKING([whether ant supports mapper type="regexp"])
+rm -rf confdir
+mkdir confdir
+cat > conftest.java << EOF
+    public class conftest {
+	int testmethod(int a, int b) {
+            return a + b;
+	}
+    }
+EOF
+
+cat > conftest.xml << EOF
+    <project name="conftest" default="conftest">
+	<target name="conftest" depends="copytest">
+            <javac srcdir="." includes="conftest.java">
+	    </javac>
+	</target>
+        <target name="copytest">
+             <copy todir="confdir">
+                 <fileset dir="confdir" includes="**/*.abc" casesensitive="yes"/>
+                 <filterset/>
+                 <mapper type="regexp" from="^(.*[/\\])foo([/\\].*)" to="\1baa\2"/>
+             </copy>
+        </target>
+    </project>
+EOF
+  if test "$JAVACISGCJ" = "yes"; then
+    JAVA_HOME=; export JAVA_HOME
+    ant_cmd="$ANT -Dbuild.compiler=gcj -buildfile conftest.xml 1>&2"
+  else
+    ant_cmd="$ANT -buildfile conftest.xml 1>&2"
+  fi
+  AC_TRY_EVAL(ant_cmd)
+  if test $? = 0 && test -f ./conftest.class ; then
+    AC_MSG_RESULT([yes]) 
+    rm -rf confdir
+  else
+    echo "configure: Ant test failed" >&5
+    cat conftest.java >&5
+    cat conftest.xml >&5
+    rm -rf confdir
+    AC_MSG_ERROR([no. Did you install ant-apache-regexp?])
+  fi
+fi
+rm -f conftest* core core.* *.core
 
 AC_MSG_CHECKING([which languages to be built])
 WITH_LANG="$with_lang"
