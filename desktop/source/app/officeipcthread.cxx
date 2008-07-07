@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: officeipcthread.cxx,v $
- * $Revision: 1.61 $
+ * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +52,7 @@
 #include <rtl/strbuf.hxx>
 #include <comphelper/processfactory.hxx>
 #include "osl/file.hxx"
+#include "rtl/process.h"
 #include "tools/getprocessworkingdir.hxx"
 
 using namespace vos;
@@ -525,10 +526,10 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         {
             aArguments += '0';
         }
-        ULONG nCount = aInfo.getCommandArgCount();
-        for( ULONG i=0; i < nCount; i++ )
+        sal_uInt32 nCount = rtl_getAppCommandArgCount();
+        for( sal_uInt32 i=0; i < nCount; i++ )
         {
-            aInfo.getCommandArg( i, aDummy );
+            rtl_getAppCommandArg( i, &aDummy.pData );
             if( aDummy.indexOf('-',0) != 0 )
             {
                 bWaitBeforeClose = sal_True;
