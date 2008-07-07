@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fntcache.cxx,v $
- * $Revision: 1.95 $
+ * $Revision: 1.96 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -347,7 +347,7 @@ USHORT SwFntObj::GetFontAscent( const ViewShell *pSh, const OutputDevice& rOut )
     {
         CreateScrFont( *pSh, rOut );
         ASSERT( USHRT_MAX != nScrAscent, "nScrAscent is going berzerk" )
-        nRet = nScrAscent + GetFontLeading( pSh, rRefDev );;
+        nRet = nScrAscent;
     }
     else
     {
@@ -361,8 +361,13 @@ USHORT SwFntObj::GetFontAscent( const ViewShell *pSh, const OutputDevice& rOut )
             ( (OutputDevice&)rRefDev).SetFont( aOldFnt );
         }
 
-        nRet = nPrtAscent + GetFontLeading( pSh, rRefDev );;
+        nRet = nPrtAscent;
     }
+
+#if !defined(MACOSX) // #i89844# extleading is below the line for Mac
+    // TODO: move extleading below the line for all platforms too
+    nRet += GetFontLeading( pSh, rRefDev );
+#endif
 
     ASSERT( USHRT_MAX != nRet, "GetFontAscent returned USHRT_MAX" )
     return nRet;
