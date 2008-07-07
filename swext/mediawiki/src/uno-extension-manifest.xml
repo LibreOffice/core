@@ -9,7 +9,7 @@
 
   $RCSfile: uno-extension-manifest.xml,v $
 
-  $Revision: 1.3 $
+  $Revision: 1.4 $
 
   This file is part of OpenOffice.org.
 
@@ -46,4 +46,6 @@
                        manifest:full-path="OptionsDialog.xcu"/>
   <manifest:file-entry manifest:media-type="application/vnd.sun.star.help"
                        manifest:full-path="help"/>
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.package-bundle-description"
+                       manifest:full-path="help/component.txt"/>
 </manifest:manifest>
