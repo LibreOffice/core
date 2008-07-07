@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawdoc4.cxx,v $
- * $Revision: 1.57 $
+ * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -519,7 +519,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(SvxPostureItem(ITALIC_NORMAL, EE_CHAR_ITALIC ));
     pISet->Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
 
-    pISet->Put(SvxFontHeightItem(494, 0, EE_CHAR_FONTHEIGHT ));        // 14 pt
+    pISet->Put(SvxFontHeightItem(494, 100, EE_CHAR_FONTHEIGHT ));        // 14 pt
 
     pISet->Put(SvxULSpaceItem(420, 210, EE_PARA_ULSPACE ));      // Absatzrand oben 4,2 mm,
                                                 // unten 2,1 mm
@@ -561,19 +561,22 @@ static Any implMakeSolidCellStyle( SdStyleSheetPool* pSSPool, const OUString& rN
 
 static void implCreateTableTemplate( const Reference< XNameContainer >& xTableFamily, const OUString& rName, const Any& rBody, const Any& rHeading, const Any& rBanding )
 {
-    try
+    if( xTableFamily.is() ) try
     {
-        Reference< XSingleServiceFactory > xFactory( xTableFamily, UNO_QUERY_THROW );
-        Reference< XNameReplace > xDefaultTableStyle( xFactory->createInstance(), UNO_QUERY_THROW );
-        xTableFamily->insertByName( OUString( rName ), Any( xDefaultTableStyle ) );
+        if( !xTableFamily->hasByName( OUString( rName ) ) )
+        {
+            Reference< XSingleServiceFactory > xFactory( xTableFamily, UNO_QUERY_THROW );
+            Reference< XNameReplace > xDefaultTableStyle( xFactory->createInstance(), UNO_QUERY_THROW );
+            xTableFamily->insertByName( OUString( rName ), Any( xDefaultTableStyle ) );
 
-        xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("body") ), rBody  );
-        xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("odd-rows") ), rBanding );
-        xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("odd-columns") ), rBanding );
-        xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("first-row") ), rHeading );
-        xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("first-column") ), rHeading );
-        xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("last-row") ), rHeading );
-        xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("last-column") ), rHeading );
+            xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("body") ), rBody  );
+            xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("odd-rows") ), rBanding );
+            xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("odd-columns") ), rBanding );
+            xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("first-row") ), rHeading );
+            xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("first-column") ), rHeading );
+            xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("last-row") ), rHeading );
+            xDefaultTableStyle->replaceByName( OUString( RTL_CONSTASCII_USTRINGPARAM("last-column") ), rHeading );
+        }
     }
     catch( Exception& )
     {
