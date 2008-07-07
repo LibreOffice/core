@@ -8,7 +8,7 @@
  *
  * $RCSfile: SlsSelectionManager.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,13 +35,13 @@
 
 #include "SlideSorter.hxx"
 #include "SlsSelectionCommand.hxx"
-#include "SlsSlotManager.hxx"
-#include "controller/SlsAnimator.hxx"
 #include "controller/SlideSorterController.hxx"
-#include "controller/SlsFocusManager.hxx"
+#include "controller/SlsAnimator.hxx"
 #include "controller/SlsCurrentSlideManager.hxx"
-#include "controller/SlsScrollBarManager.hxx"
+#include "controller/SlsFocusManager.hxx"
 #include "controller/SlsProperties.hxx"
+#include "controller/SlsScrollBarManager.hxx"
+#include "controller/SlsSlotManager.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "model/SlsPageDescriptor.hxx"
