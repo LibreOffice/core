@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -72,4 +72,3 @@ $(DESCRIPTION) $(PHONYDESC) : $$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(PERL) $(SOLARENV)$/bin$/licinserter.pl description.xml license/LICENSE_xxx $@
     @echo LAST_WITH_LANG=$(WITH_LANG) > $(MISC)$/$(TARGET)_lang_track.mk
-
