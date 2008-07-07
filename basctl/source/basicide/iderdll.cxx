@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: iderdll.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -163,22 +163,6 @@ BasicIDEData::~BasicIDEData()
 
     delete pSearchItem;
     //delete pAccelerator;
-}
-
-void BasicIDEData::InitAccelerator()
-{/*
-    if ( !pAccelerator )
-    {
-        pAccelerator = new Accelerator;
-        pAccelerator->InsertItem( 1, KeyCode( KEY_F5 ) );
-        pAccelerator->InsertItem( 2, KeyCode( KEY_F5, KEY_SHIFT ) );
-        pAccelerator->InsertItem( 4, KeyCode( KEY_F7 ) );
-        pAccelerator->InsertItem( 5, KeyCode( KEY_F8 ) );
-        pAccelerator->InsertItem( 6, KeyCode( KEY_F8, KEY_SHIFT ) );
-        pAccelerator->InsertItem( 7, KeyCode( KEY_F9 ) );
-        pAccelerator->InsertItem( 8, KeyCode( KEY_F9, KEY_SHIFT ) );
-    }
- */
 }
 
 SvxSearchItem& BasicIDEData::GetSearchItem() const
