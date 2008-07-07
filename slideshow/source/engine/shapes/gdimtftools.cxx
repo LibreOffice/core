@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gdimtftools.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -426,11 +426,24 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
 
             case DISPOSE_BACK:
             {
+                // #i70772# react on no mask
+                const Bitmap aMask(rAnimBmp.aBmpEx.GetMask());
+                const Bitmap aContent(rAnimBmp.aBmpEx.GetBitmap());
+
                 aVDevMask.Erase();
-                aVDev.DrawBitmap(rAnimBmp.aPosPix,
-                                 rAnimBmp.aBmpEx.GetBitmap());
-                aVDevMask.DrawBitmap(rAnimBmp.aPosPix,
-                                     rAnimBmp.aBmpEx.GetMask());
+                aVDev.DrawBitmap(rAnimBmp.aPosPix, aContent);
+
+                if(aMask.IsEmpty())
+                {
+                    const Rectangle aRect(rAnimBmp.aPosPix, aContent.GetSizePixel());
+                    aVDevMask.SetFillColor(COL_BLACK);
+                    aVDevMask.SetLineColor();
+                    aVDevMask.DrawRect(aRect);
+                }
+                else
+                {
+                    aVDevMask.DrawBitmap(rAnimBmp.aPosPix, aMask);
+                }
                 break;
             }
 
