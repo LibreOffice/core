@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: compiler.hxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,6 +92,7 @@ namespace com { namespace sun { namespace star {
 #define SC_COMPILER_C_IDENT         0x00020000  // identifier continuation
 #define SC_COMPILER_C_ODF_LBRACKET  0x00040000  // ODF '[' reference bracket
 #define SC_COMPILER_C_ODF_RBRACKET  0x00080000  // ODF ']' reference bracket
+#define SC_COMPILER_C_ODF_LABEL_OP  0x00100000  // ODF '!!' automatic intersection of labels
 
 #define SC_COMPILER_FILE_TAB_SEP    '#'         // 'Doc'#Tab
 
@@ -299,6 +300,9 @@ public:
 
         /// Is it an ODF 1.1 compatibility mapping?
         inline bool isPODF() const { return ScGrammar::isPODF( meGrammar); }
+
+        /// Is it an ODFF / ODF 1.2 mapping?
+        inline bool isODFF() const { return ScGrammar::isODFF( meGrammar); }
 
         /// Does it have external symbol/name mappings?
         inline bool hasExternals() const { return !mpExternalHashMap->empty(); }
