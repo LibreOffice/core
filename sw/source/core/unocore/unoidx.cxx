@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoidx.cxx,v $
- * $Revision: 1.67 $
+ * $Revision: 1.68 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -238,7 +238,7 @@ BOOL SwXDocumentIndex::supportsService(const OUString& rServiceName) throw( uno:
                 ( TOX_INDEX == eTOXType && C2U("com.sun.star.text.DocumentIndex") == rServiceName) ||
                 ( TOX_CONTENT == eTOXType && C2U("com.sun.star.text.ContentIndex") == rServiceName) ||
                 ( TOX_USER == eTOXType && C2U("com.sun.star.text.UserDefinedIndex") == rServiceName) ||
-                ( TOX_ILLUSTRATIONS == eTOXType && C2U("com.sun.star.text.IllustrationIndex") == rServiceName) ||
+                ( TOX_ILLUSTRATIONS == eTOXType && C2U("com.sun.star.text.IllustrationsIndex") == rServiceName) ||
                 ( TOX_TABLES == eTOXType && C2U("com.sun.star.text.TableIndex") == rServiceName) ||
                 ( TOX_OBJECTS == eTOXType && C2U("com.sun.star.text.ObjectIndex") == rServiceName) ||
                 ( TOX_AUTHORITIES == eTOXType && C2U("com.sun.star.text.Bibliography") == rServiceName);
@@ -256,7 +256,7 @@ uno::Sequence< OUString > SwXDocumentIndex::getSupportedServiceNames(void) throw
         case TOX_INDEX:         pArray[1] = C2U("com.sun.star.text.DocumentIndex");break;
         case TOX_CONTENT:       pArray[1] = C2U("com.sun.star.text.ContentIndex");break;
         case TOX_TABLES:        pArray[1] = C2U("com.sun.star.text.TableIndex");break;
-        case TOX_ILLUSTRATIONS: pArray[1] = C2U("com.sun.star.text.IllustrationIndex");break;
+        case TOX_ILLUSTRATIONS: pArray[1] = C2U("com.sun.star.text.IllustrationsIndex");break;
         case TOX_OBJECTS:       pArray[1] = C2U("com.sun.star.text.ObjectIndex");break;
         case TOX_AUTHORITIES :  pArray[1] = C2U("com.sun.star.text.Bibliography");break;
         //case TOX_USER:
