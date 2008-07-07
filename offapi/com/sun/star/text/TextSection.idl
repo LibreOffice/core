@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TextSection.idl,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,6 +59,9 @@
 #ifndef __com_sun_star_text_XTextColumns_idl__
 #include <com/sun/star/text/XTextColumns.idl>
 #endif
+#ifndef _com_sun_star_xml_UserDefinedAttributesSupplier_idl_
+#include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
+#endif
 
 
 //=============================================================================
@@ -79,6 +82,9 @@ module com { module sun { module star { module text {
 published service TextSection
 {
     service com::sun::star::text::TextContent;
+
+    [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
+
     interface com::sun::star::text::XTextSection;
     interface com::sun::star::container::XNamed;
     interface com::sun::star::beans::XPropertySet;
