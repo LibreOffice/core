@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleControlShape.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -422,11 +422,15 @@ void SAL_CALL AccessibleControlShape::propertyChange( const PropertyChangeEvent&
         ||  _rEvent.PropertyName.equals( lcl_getLabelPropertyName( ) )
         )
     {
-        SetAccessibleName (CreateAccessibleName());
+        SetAccessibleName(
+            CreateAccessibleName(),
+            AccessibleContextBase::AutomaticallyCreated);
     }
     else if ( _rEvent.PropertyName.equals( lcl_getDescPropertyName() ) )
     {
-        SetAccessibleDescription (CreateAccessibleDescription());
+        SetAccessibleDescription(
+            CreateAccessibleDescription(),
+            AccessibleContextBase::AutomaticallyCreated);
     }
 #if OSL_DEBUG_LEVEL > 0
     else
