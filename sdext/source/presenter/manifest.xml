@@ -6,8 +6,6 @@
   <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-data"
     manifest:full-path="registry/data/org/openoffice/Office/Jobs.xcu"/>
   <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-data"
-    manifest:full-path="registry/data/org/openoffice/Office/Addons.xcu"/>
-  <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-data"
     manifest:full-path="registry/data/org/openoffice/Office/ProtocolHandler.xcu"/>
   <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-data"
     manifest:full-path="registry/data/org/openoffice/Office/extension/PresenterScreen.xcu"/>
