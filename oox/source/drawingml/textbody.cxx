@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textbody.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,7 +59,22 @@ void TextBody::insertAt(
         const Reference < XTextCursor > & xAt,
         const TextListStylePtr& pMasterTextListStylePtr )
 {
-    TextListStylePtr aCombinedTextStyle( new TextListStyle( *pMasterTextListStylePtr ) );
+#ifdef DEBUG
+    if ( false )
+    {
+        const TextParagraphPropertiesVector& rListStyle( pMasterTextListStylePtr->getListStyle() );
+        TextParagraphPropertiesVector::const_iterator aIter( rListStyle.begin() );
+        while( aIter != rListStyle.end() )
+        {
+            (*aIter)->getTextParagraphPropertyMap().dump_debug("TextParagraph paragraph props");
+            (*aIter)->getTextCharacterProperties()->getTextCharacterPropertyMap().dump_debug("TextParagraph paragraph props");
+            aIter++;
+        }
+    }
+#endif
+
+    TextListStylePtr aCombinedTextStyle( new TextListStyle() );
+    aCombinedTextStyle->apply( *pMasterTextListStylePtr );
     aCombinedTextStyle->apply( maTextListStyle );
 
     TextParagraphVector::iterator begin( maParagraphs.begin() );
