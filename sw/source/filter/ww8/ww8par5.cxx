@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par5.cxx,v $
- * $Revision: 1.109 $
+ * $Revision: 1.110 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -436,7 +436,7 @@ void SwWW8ImplReader::ConvertFFileName( String& rName, const String& rOrg )
     //#82900# Need the more sophisticated url converter. cmc
     if (rName.Len())
         rName = URIHelper::SmartRel2Abs(
-            INetURLObject(sBaseURL), rName, URIHelper::GetMaybeFileHdl());
+            INetURLObject(sBaseURL), rName, Link(), false);
 }
 
 // ConvertUFNneme uebersetzt FeldParameter-Namen u. ae. in den
