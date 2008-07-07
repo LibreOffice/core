@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleStaticTextBase.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,9 +40,11 @@
 #include <limits.h>
 #include <vector>
 #include <algorithm>
+#include <boost/bind.hpp>
 #include <vos/mutex.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/sequenceasvector.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/awt/Point.hpp>
@@ -76,6 +78,19 @@ using namespace ::com::sun::star::accessibility;
 
 namespace accessibility
 {
+    typedef ::comphelper::SequenceAsVector< beans::PropertyValue > PropertyValueVector;
+
+    class PropertyValueEqualFunctor : public ::std::binary_function< beans::PropertyValue, beans::PropertyValue, bool >
+    {
+    public:
+        PropertyValueEqualFunctor()
+        {}
+        bool operator() ( const beans::PropertyValue& lhs, const beans::PropertyValue& rhs ) const
+        {
+            return ( lhs.Name == rhs.Name && lhs.Value == rhs.Value );
+        }
+    };
+
     //------------------------------------------------------------------------
     //
     // Static Helper
@@ -916,6 +931,74 @@ namespace accessibility
 
         return mpImpl->CopyText( aStartIndex.nPara, aStartIndex.nIndex,
                                  aEndIndex.nPara, aEndIndex.nIndex );
+    }
+
+    // XAccessibleTextAttributes
+    uno::Sequence< beans::PropertyValue > AccessibleStaticTextBase::getDefaultAttributes( const uno::Sequence< ::rtl::OUString >& RequestedAttributes ) throw (uno::RuntimeException)
+    {
+        // get the intersection of the default attributes of all paragraphs
+
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        PropertyValueVector aDefAttrVec( mpImpl->GetParagraph( 0 ).getDefaultAttributes( RequestedAttributes ) );
+
+        const sal_Int32 nParaCount = mpImpl->GetParagraphCount();
+        for ( sal_Int32 nPara = 1; nPara < nParaCount; ++nPara )
+        {
+            uno::Sequence< beans::PropertyValue > aSeq = mpImpl->GetParagraph( nPara ).getDefaultAttributes( RequestedAttributes );
+            PropertyValueVector aIntersectionVec;
+
+            PropertyValueVector::const_iterator aEnd = aDefAttrVec.end();
+            for ( PropertyValueVector::const_iterator aItr = aDefAttrVec.begin(); aItr != aEnd; ++aItr )
+            {
+                const beans::PropertyValue* pItr = aSeq.getConstArray();
+                const beans::PropertyValue* pEnd  = pItr + aSeq.getLength();
+                const beans::PropertyValue* pFind = ::std::find_if( pItr, pEnd, ::std::bind2nd( PropertyValueEqualFunctor(), boost::cref( *aItr ) ) );
+                if ( pFind != pEnd )
+                {
+                    aIntersectionVec.push_back( *pFind );
+                }
+            }
+
+            aDefAttrVec.swap( aIntersectionVec );
+
+            if ( aDefAttrVec.empty() )
+            {
+                break;
+            }
+        }
+
+        return aDefAttrVec.getAsConstList();
+    }
+
+    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getRunAttributes( sal_Int32 nIndex, const uno::Sequence< ::rtl::OUString >& RequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    {
+        // get those default attributes of the paragraph, which are not part
+        // of the intersection of all paragraphs and add them to the run attributes
+
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        EPosition aPos( mpImpl->Index2Internal( nIndex ) );
+        AccessibleEditableTextPara& rPara = mpImpl->GetParagraph( aPos.nPara );
+        uno::Sequence< beans::PropertyValue > aDefAttrSeq = rPara.getDefaultAttributes( RequestedAttributes );
+        uno::Sequence< beans::PropertyValue > aRunAttrSeq = rPara.getRunAttributes( aPos.nIndex, RequestedAttributes );
+        uno::Sequence< beans::PropertyValue > aIntersectionSeq = getDefaultAttributes( RequestedAttributes );
+        PropertyValueVector aDiffVec;
+
+        const beans::PropertyValue* pDefAttr = aDefAttrSeq.getConstArray();
+        const sal_Int32 nLength = aDefAttrSeq.getLength();
+        for ( sal_Int32 i = 0; i < nLength; ++i )
+        {
+            const beans::PropertyValue* pItr = aIntersectionSeq.getConstArray();
+            const beans::PropertyValue* pEnd  = pItr + aIntersectionSeq.getLength();
+            const beans::PropertyValue* pFind = ::std::find_if( pItr, pEnd, ::std::bind2nd( PropertyValueEqualFunctor(), boost::cref( pDefAttr[i] ) ) );
+            if ( pFind == pEnd )
+            {
+                aDiffVec.push_back( *pFind );
+            }
+        }
+
+        return ::comphelper::concatSequences( aRunAttrSeq, aDiffVec.getAsConstList() );
     }
 
    Rectangle AccessibleStaticTextBase::GetParagraphBoundingBox() const
