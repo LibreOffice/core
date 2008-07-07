@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textparagraphpropertiescontext.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,8 +108,7 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler& 
     if ( xAttribs->hasAttribute( XML_indent ) )
     {
         sValue = xAttribs->getOptionalValue( XML_indent );
-        const OUString sParaFirstLineIndent( CREATE_OUSTRING( "ParaFirstLineIndent" ) );
-        rPropertyMap[ sParaFirstLineIndent ] <<= ( sValue.getLength() == 0 ? 0 : GetCoordinate(  sValue ) );
+        mrTextParagraphProperties.getFirstLineIndentation() = boost::optional< sal_Int32 >( sValue.getLength() == 0 ? 0 : GetCoordinate( sValue ) );
     }
 
   // ST_TextIndentLevelType
@@ -132,9 +131,7 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler& 
     if ( xAttribs->hasAttribute( XML_marL ) )
     {
         sValue = xAttribs->getOptionalValue( XML_marL );
-        sal_Int32 nMarL = ( sValue.getLength() == 0 ? 0 : GetCoordinate(  sValue ) );
-        const OUString sParaLeftMargin( CREATE_OUSTRING( "ParaLeftMargin" ) );
-        rPropertyMap[ sParaLeftMargin ] <<= nMarL;
+        mrTextParagraphProperties.getParaLeftMargin() = boost::optional< sal_Int32 >( sValue.getLength() == 0 ? 0 : GetCoordinate( sValue ) );
     }
 
     // ParaRightMargin
@@ -174,6 +171,12 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
         ::std::copy( maTabList.begin(), maTabList.end(), aArray );
         const OUString sParaTabStops( CREATE_OUSTRING( "ParaTabStops" ) );
         rPropertyMap[ sParaTabStops ] <<= aSeq;
+    }
+    if ( mpFillPropertiesPtr )
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > xGraphic( mpFillPropertiesPtr->getXGraphic() );
+        if ( xGraphic.is() )
+            mrBulletList.setGraphic( xGraphic );
     }
     if( mrBulletList.is() )
     {
@@ -279,7 +282,10 @@ Reference< XFastContextHandler > TextParagraphPropertiesContext::createFastChild
             }
             break;
         case NMSP_DRAWINGML|XML_buBlip:         // CT_TextBlipBullet
-            // TODO
+            {
+                mpFillPropertiesPtr = FillPropertiesPtr( new FillProperties() );
+                xRet.set( new BlipFillPropertiesContext( *this, rXAttributes, *mpFillPropertiesPtr.get() ) );
+            }
             break;
 
         case NMSP_DRAWINGML|XML_tabLst:         // CT_TextTabStopList
