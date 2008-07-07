@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleSlideSorterView.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -196,6 +196,7 @@ Reference<XAccessibleContext > SAL_CALL
     AccessibleSlideSorterView::getAccessibleContext (void)
     throw (uno::RuntimeException)
 {
+    ThrowIfDisposed ();
     return this;
 }
 
@@ -271,7 +272,7 @@ sal_Int16 SAL_CALL AccessibleSlideSorterView::getAccessibleRole (void)
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    static sal_Int16 nRole = AccessibleRole::PANEL;
+    static sal_Int16 nRole = AccessibleRole::DOCUMENT;
     return nRole;
 }
 
@@ -344,6 +345,7 @@ lang::Locale SAL_CALL AccessibleSlideSorterView::getLocale (void)
     throw (IllegalAccessibleComponentStateException,
         RuntimeException)
 {
+    ThrowIfDisposed ();
     Reference<XAccessibleContext> xParentContext;
     Reference<XAccessible> xParent (getAccessibleParent());
     if (xParent.is())
@@ -644,6 +646,7 @@ void SAL_CALL AccessibleSlideSorterView::selectAllAccessibleChildren (void)
 sal_Int32 SAL_CALL AccessibleSlideSorterView::getSelectedAccessibleChildCount (void)
     throw (uno::RuntimeException)
 {
+    ThrowIfDisposed ();
     const vos::OGuard aSolarGuard (Application::GetSolarMutex());
     return mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount();
 }
@@ -655,6 +658,7 @@ Reference<XAccessible > SAL_CALL
     AccessibleSlideSorterView::getSelectedAccessibleChild (sal_Int32 nSelectedChildIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
+    ThrowIfDisposed ();
     const vos::OGuard aSolarGuard (Application::GetSolarMutex());
     Reference<XAccessible> xChild;
 
@@ -716,6 +720,8 @@ sal_Bool SAL_CALL
      AccessibleSlideSorterView::supportsService (const OUString& sServiceName)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
+
     //  Iterate over all supported service names and return true if on of them
     //  matches the given name.
     uno::Sequence< ::rtl::OUString> aSupportedServices (
@@ -733,6 +739,8 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
        AccessibleSlideSorterView::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
+
     static const OUString sServiceNames[3] = {
         OUString(RTL_CONSTASCII_USTRINGPARAM(
             "com.sun.star.accessibility.Accessible")),
@@ -1004,6 +1012,8 @@ IMPL_LINK(AccessibleSlideSorterView::Implementation, WindowEventListener, VclWin
                 AccessibleEventId::SELECTION_CHANGED,
                 Any(),
                 Any());
+            break;
+        default:
             break;
     }
     return 1;
