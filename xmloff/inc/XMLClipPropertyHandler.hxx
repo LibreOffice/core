@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLClipPropertyHandler.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,9 @@
 */
 class XMLClipPropertyHandler : public XMLPropertyHandler
 {
+    sal_Bool m_bODF11;
 public:
+    XMLClipPropertyHandler( sal_Bool bODF11 );
     virtual ~XMLClipPropertyHandler();
 
     virtual bool equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const;
