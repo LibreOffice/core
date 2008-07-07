@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: texteng.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3096,9 +3096,7 @@ void TextEngine::ImpInitWritingDirections( ULONG nPara )
 
     if ( pParaPortion->GetNode()->GetText().Len() )
     {
-        //TODO The following line needs to be fixed, see #i67789#:
-        const BYTE nDefaultDir = sal::static_int_cast< BYTE >(
-            IsRightToLeft() ? UBIDI_RTL : UBIDI_LTR);
+        const UBiDiLevel nBidiLevel = IsRightToLeft() ? 1 /*RTL*/ : 0 /*LTR*/;
         String aText( pParaPortion->GetNode()->GetText() );
 
         //
@@ -3108,7 +3106,7 @@ void TextEngine::ImpInitWritingDirections( ULONG nPara )
         UBiDi* pBidi = ubidi_openSized( aText.Len(), 0, &nError );
         nError = U_ZERO_ERROR;
 
-        ubidi_setPara( pBidi, aText.GetBuffer(), aText.Len(), nDefaultDir, NULL, &nError );
+        ubidi_setPara( pBidi, aText.GetBuffer(), aText.Len(), nBidiLevel, NULL, &nError );
         nError = U_ZERO_ERROR;
 
         long nCount = ubidi_countRuns( pBidi, &nError );
