@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FieldFormatter.java,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -135,8 +135,8 @@ public class FieldFormatter  implements XItemListener{
                 new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Text", "Width"},
                 new Object[] { UIConsts.INTEGER_12, "HID:41225", new Integer(274), new Integer(37), IFieldFormatStep, new Short(curtabindex++),"", new Integer(50)});
         txtfieldname.addTextListener(CurUnoDialog);
-        CurUnoDialog.getPeerConfiguration().setAccessiblityName(btnplus, sbtnplushelptext);
-        CurUnoDialog.getPeerConfiguration().setAccessiblityName(btnminus, sbtnminushelptext);
+        CurUnoDialog.getPeerConfiguration().setAccessibleName(btnplus, sbtnplushelptext);
+        CurUnoDialog.getPeerConfiguration().setAccessibleName(btnminus, sbtnminushelptext);
     }
 
 
