@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-07-07 09:00:32 $
+dnl * Date: $Date: 2008-07-07 16:05:05 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.274 $ )
+AC_REVISION( $Revision: 1.275 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -339,6 +339,13 @@ AC_ARG_WITH(system-icu,
 AC_ARG_WITH(system-db,
 [  --with-system-db        Use berkeley db already on system
 ],,)
+AC_ARG_WITH(system-lucene,
+[  --with-system-lucene    Use lucene already on system
+],,)
+AC_ARG_WITH(lucene-core-jar,
+[  --with-lucene-core-jar=JARFILE   Specify path to jarfile manually ],
+[ LUCENE_CORE_JAR="$withval"
+])
 AC_ARG_WITH(system-hsqldb,
 [  --with-system-hsqldb    Use hsqldb already on system
 ],,)
@@ -3658,6 +3665,27 @@ AC_SUBST(SYSTEM_DB)
 AC_SUBST(DB_VERSION)
 AC_SUBST(DB_INCLUDES)
 AC_SUBST(DB_JAR)
+
+dnl ===================================================================
+dnl Check for system lucene
+dnl ===================================================================
+AC_MSG_CHECKING([which lucene to use])
+if test -n "$with_system_lucene" -o -n "$with_system_libs" && \
+       test "$with_system_lucene" != "no" && test "$with_system_jars" != "no"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_LUCENE=YES
+        if test -z $LUCENE_CORE_JAR; then
+               LUCENE_CORE_JAR=/usr/share/java/lucene-core-2.3.jar
+        fi
+        AC_CHECK_FILE($LUCENE_CORE_JAR, [],
+               [AC_MSG_ERROR(lucene-core.jar not found.)], [])
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_LUCENE=NO
+    BUILD_TYPE="$BUILD_TYPE LUCENE"
+fi
+AC_SUBST(SYSTEM_LUCENE)
+AC_SUBST(LUCENE_CORE_JAR)
 
 dnl ===================================================================
 dnl Check for system hsqldb
