@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtlproto.hxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -326,6 +326,7 @@ extern RTLFUNC(GetPathSeparator);
 extern RTLFUNC(ResolvePath);
 extern RTLFUNC(CreateUnoStruct);
 extern RTLFUNC(CreateUnoService);
+extern RTLFUNC(CreateUnoServiceWithArguments);
 extern RTLFUNC(CreateUnoValue);
 extern RTLFUNC(GetProcessServiceManager);
 extern RTLFUNC(GetDefaultContext);
