@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shapeimport.cxx,v $
- * $Revision: 1.67 $
+ * $Revision: 1.68 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,9 +30,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include "unointerfacetouniqueidentifiermapper.hxx"
+
 #include <tools/debug.hxx>
+
+#include <com/sun/star/text/PositionLayoutDir.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
+
+#include "unointerfacetouniqueidentifiermapper.hxx"
 
 #include <list>
 
@@ -49,9 +53,7 @@
 #include "ximp3dscene.hxx"
 #include "ximp3dobject.hxx"
 #include "ximpgrp.hxx"
-// --> OD 2004-10-28 #i28749#, #i36248#
-#include <com/sun/star/text/PositionLayoutDir.hpp>
-// <--
+#include "ximplink.hxx"
 
 #include <map>
 #include <vector>
@@ -296,6 +298,7 @@ static __FAR_DATA SvXMLTokenMapEntry aGroupShapeElemTokenMap[] =
 
     { XML_NAMESPACE_DRAW,           XML_CUSTOM_SHAPE,   XML_TOK_GROUP_CUSTOM_SHAPE  },
     { XML_NAMESPACE_OFFICE,         XML_ANNOTATION,     XML_TOK_GROUP_ANNOTATION    },
+    { XML_NAMESPACE_DRAW,           XML_A,              XML_TOK_GROUP_A             },
 
     XML_TOKEN_MAP_END
 };
@@ -826,12 +829,10 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
             pContext = new SdXMLCustomShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes, sal_False );
             break;
         }
-//      case XML_TOK_GROUP_CUSTOM_SHAPE:
-//      {
-//          // draw:customshape
-//          pContext = new SdXMLCustomShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes );
-//          break;
-//      }
+         case XML_TOK_GROUP_A:
+         {
+             return new SdXMLShapeLinkContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes );
+         }
         // add other shapes here...
         default:
             return new SvXMLShapeContext( rImport, p_nPrefix, rLocalName, bTemporaryShape );
@@ -1384,4 +1385,9 @@ const rtl::Reference< XMLTableImport >& XMLShapeImportHelper::GetShapeTableImpor
     }
 
     return mxShapeTableImport;
+}
+
+void SvXMLShapeContext::setHyperlink( const OUString& rHyperlink )
+{
+    msHyperlink = rHyperlink;
 }
