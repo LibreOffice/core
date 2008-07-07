@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtprhdl.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1328,6 +1328,7 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         break;
     case XML_TYPE_TEXT_VERTICAL_POS:
         pHdl = new XMLConstantsPropertyHandler( pXML_VertPos_Enum, XML_TOKEN_INVALID );
+        break;
     case XML_TYPE_TEXT_VERTICAL_POS_AT_CHAR:
         pHdl = new XMLConstantsPropertyHandler( pXML_VertPosAtChar_Enum, XML_TOKEN_INVALID );
         break;
@@ -1359,7 +1360,10 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         // <--
         break;
     case XML_TYPE_TEXT_CLIP:
-        pHdl = new XMLClipPropertyHandler;
+        pHdl = new XMLClipPropertyHandler( sal_False );
+        break;
+    case XML_TYPE_TEXT_CLIP11:
+        pHdl = new XMLClipPropertyHandler( sal_True );
         break;
     case XML_TYPE_TEXT_EMPHASIZE:
         pHdl = new XMLTextEmphasizePropHdl_Impl;
