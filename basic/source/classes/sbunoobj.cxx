@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sbunoobj.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2222,6 +2222,7 @@ Reference< XInvocation > createDynamicInvocationFor( const Any& aAny );
 
 SbUnoObject::SbUnoObject( const String& aName_, const Any& aUnoObj_ )
     : SbxObject( aName_ )
+    , bNeedIntrospection( TRUE )
 {
     static Reference< XIntrospection > xIntrospection;
 
@@ -2269,8 +2270,6 @@ SbUnoObject::SbUnoObject( const String& aName_, const Any& aUnoObj_ )
         }
     }
 
-    // Introspection-Flag
-    bNeedIntrospection = TRUE;
     maTmpUnoObj = aUnoObj_;
 
 
@@ -2877,6 +2876,64 @@ void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
         try
         {
             xInterface = xFactory->createInstance( aServiceName );
+        }
+        catch( const Exception& )
+        {
+            implHandleAnyException( ::cppu::getCaughtException() );
+        }
+    }
+
+    SbxVariableRef refVar = rPar.Get(0);
+    if( xInterface.is() )
+    {
+        Any aAny;
+        aAny <<= xInterface;
+
+        // SbUnoObject daraus basteln und zurueckliefern
+        SbUnoObjectRef xUnoObj = new SbUnoObject( aServiceName, aAny );
+        if( xUnoObj->getUnoAny().getValueType().getTypeClass() != TypeClass_VOID )
+        {
+            // Objekt zurueckliefern
+            refVar->PutObject( (SbUnoObject*)xUnoObj );
+        }
+        else
+        {
+            refVar->PutObject( NULL );
+        }
+    }
+    else
+    {
+        refVar->PutObject( NULL );
+    }
+}
+
+void RTL_Impl_CreateUnoServiceWithArguments( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
+{
+    (void)pBasic;
+    (void)bWrite;
+
+    // Wir brauchen mindestens 2 Parameter
+    if ( rPar.Count() < 3 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    // Klassen-Name der struct holen
+    String aServiceName = rPar.Get(1)->GetString();
+    Any aArgAsAny = sbxToUnoValue( rPar.Get(2),
+                getCppuType( (Sequence<Any>*)0 ) );
+    Sequence< Any > aArgs;
+    aArgAsAny >>= aArgs;
+
+    // Service suchen und instanzieren
+    Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
+    Reference< XInterface > xInterface;
+    if ( xFactory.is() )
+    {
+        try
+        {
+            xInterface = xFactory->createInstanceWithArguments( aServiceName, aArgs );
         }
         catch( const Exception& )
         {
