@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documen2.cxx,v $
- * $Revision: 1.73 $
+ * $Revision: 1.74 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,11 +95,23 @@
 #include "lookupcache.hxx"
 
 // pImpl because including lookupcache.hxx in document.hxx isn't wanted, and
-// dtor is convenient.
+// dtor plus helpers are convenient.
 struct ScLookupCacheMapImpl
 {
     ScLookupCacheMap aCacheMap;
     ~ScLookupCacheMapImpl()
+    {
+        freeCaches();
+    }
+    void clear()
+    {
+        freeCaches();
+        // Zap map.
+        ScLookupCacheMap aTmp;
+        aCacheMap.swap( aTmp);
+    }
+private:
+    void freeCaches()
     {
         for (ScLookupCacheMap::iterator it( aCacheMap.begin()); it != aCacheMap.end(); ++it)
             delete (*it).second;
@@ -1856,4 +1868,9 @@ void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
         pLookupCacheMapImpl->aCacheMap.erase( it);
         EndListeningArea( pCache->getRange(), &rCache);
     }
+}
+
+void ScDocument::ClearLookupCaches()
+{
+    pLookupCacheMapImpl->clear();
 }
