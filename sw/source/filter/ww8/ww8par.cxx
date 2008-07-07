@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par.cxx,v $
- * $Revision: 1.193 $
+ * $Revision: 1.194 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
+
+#include <hash_set>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <unotools/ucbstreamhelper.hxx>
@@ -1233,6 +1235,7 @@ void SwWW8ImplReader::Read_Tab(USHORT , const BYTE* pData, short nLen)
     }
 
     bool bFound = false;
+    ::std::hash_set<size_t> aLoopWatch;
     while (pSty && !bFound)
     {
         const SfxPoolItem* pTabs;
@@ -1254,7 +1257,14 @@ void SwWW8ImplReader::Read_Tab(USHORT , const BYTE* pData, short nLen)
                     nTabBase != ww::stiNil
                )
             {
+                // #i61789: Stop searching when next style is the same as the
+                // current one (prevent loop)
+                aLoopWatch.insert(reinterpret_cast<size_t>(pSty));
                 pSty = (const SwTxtFmtColl*)pCollA[nTabBase].pFmt;
+
+                if (aLoopWatch.find(reinterpret_cast<size_t>(pSty)) !=
+                    aLoopWatch.end())
+                    pSty = 0;
             }
             else
                 pSty = 0;                           // gib die Suche auf
