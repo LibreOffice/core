@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextListAutoStylePool.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +51,7 @@ class XMLOFF_DLLPUBLIC XMLTextListAutoStylePool
 {
     SvXMLExport& rExport;
 
-    const ::rtl::OUString sPrefix;
+    ::rtl::OUString sPrefix;
 
     XMLTextListAutoStylePool_Impl *pPool;
     XMLTextListAutoStylePoolNames_Impl *pNames;
