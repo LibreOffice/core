@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svmain.cxx,v $
- * $Revision: 1.72 $
+ * $Revision: 1.73 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -452,6 +452,13 @@ void DeInitVCL()
         pSVData->mpDefaultWin = NULL;
     }
 
+    // #114285# Moved here from ImplDeInitSVData...
+    if ( pSVData->mpUnoWrapper )
+    {
+        pSVData->mpUnoWrapper->Destroy();
+        pSVData->mpUnoWrapper = NULL;
+    }
+
     pSVData->maAppData.mxMSF.clear();
 
     if( pSVData->mpApp )
@@ -505,13 +512,6 @@ void DeInitVCL()
         ImplFreeHotKeyData();
     if ( pSVData->maAppData.mpFirstEventHook )
         ImplFreeEventHookData();
-
-    // #114285# Moved here from ImplDeInitSVData...
-    if ( pSVData->mpUnoWrapper )
-    {
-        pSVData->mpUnoWrapper->Destroy();
-        pSVData->mpUnoWrapper = NULL;
-    }
 
     ImplDeletePrnQueueList();
     delete pSVData->maGDIData.mpScreenFontList;
