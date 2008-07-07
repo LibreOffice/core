@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlideSorterController.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,13 +39,13 @@
 #include "controller/SlsCurrentSlideManager.hxx"
 #include "SlsListener.hxx"
 #include "controller/SlsFocusManager.hxx"
-#include "SlsSlotManager.hxx"
 #include "SlsSelectionCommand.hxx"
+#include "controller/SlsAnimator.hxx"
 #include "controller/SlsClipboard.hxx"
 #include "controller/SlsScrollBarManager.hxx"
 #include "controller/SlsPageObjectFactory.hxx"
 #include "controller/SlsSelectionManager.hxx"
-#include "controller/SlsAnimator.hxx"
+#include "controller/SlsSlotManager.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "model/SlsPageDescriptor.hxx"
@@ -724,14 +724,6 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
     {
         rSet.Put (SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, TRUE));
     }
-}
-
-
-
-
-void SlideSorterController::GetMenuState ( SfxItemSet& rSet)
-{
-    mpSlotManager->GetMenuState (rSet);
 }
 
 
