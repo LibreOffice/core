@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impedit3.cxx,v $
- * $Revision: 1.123 $
+ * $Revision: 1.124 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -4200,7 +4200,8 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, USHORT nPara, USH
         ContentNode* pNode = GetEditDoc().SaveGetObject( nPara );
         short nScriptType = GetScriptType( EditPaM( pNode, nIndex+1 ) );
         bCTL = nScriptType == i18n::ScriptType::COMPLEX;
-        bR2L = GetRightToLeft( nPara, nIndex );
+        bR2L = GetRightToLeft( nPara, nIndex + 1);  // this change was discussed in issue 37190
+                                                    // it also works for issue 55927
     }
 
     ULONG nLayoutMode = pOutDev->GetLayoutMode();
