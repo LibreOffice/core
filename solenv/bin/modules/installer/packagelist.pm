@@ -8,7 +8,7 @@
 #
 # $RCSfile: packagelist.pm,v $
 #
-# $Revision: 1.18 $
+# $Revision: 1.19 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -581,7 +581,7 @@ sub get_packinfo
                    ( $onekey eq "solarisrequires" ) ||
                    ( $onekey eq "packagename" ) ||
                    ( $onekey eq "requires" )) { $locallang =~ s/_/-/g; } # avoiding illegal package abbreviation
-                $onepackage->{$onekey} =~ s/\%LANGUAGESTRING/$locallang/;
+                $onepackage->{$onekey} =~ s/\%LANGUAGESTRING/$locallang/g;
             }
 
             # Saving the language for the package
