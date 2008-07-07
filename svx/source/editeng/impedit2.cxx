@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impedit2.cxx,v $
- * $Revision: 1.121 $
+ * $Revision: 1.122 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -972,10 +972,8 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
         UErrorCode nError = U_ZERO_ERROR;
         UBiDi* pBidi = ubidi_openSized( aLine.Len(), 0, &nError );
 
-        //TODO The following line needs to be fixed, see #i67789#:
-        const BYTE nDefaultDir = sal::static_int_cast< BYTE >(
-            IsRightToLeft( nPara ) ? UBIDI_RTL : UBIDI_LTR );
-        ubidi_setPara( pBidi, pLineString, aLine.Len(), nDefaultDir, NULL, &nError );
+        const UBiDiLevel  nBidiLevel = IsRightToLeft( nPara ) ? 1 /*RTL*/ : 0 /*LTR*/;
+        ubidi_setPara( pBidi, pLineString, aLine.Len(), nBidiLevel, NULL, &nError );
 
         USHORT nVisPos = bStart ? 0 : aLine.Len()-1;
         USHORT nLogPos = (USHORT)ubidi_getLogicalIndex( pBidi, nVisPos, &nError );
@@ -1096,10 +1094,8 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
         UErrorCode nError = U_ZERO_ERROR;
         UBiDi* pBidi = ubidi_openSized( aLine.Len(), 0, &nError );
 
-        //TODO The following line needs to be fixed, see #i67789#:
-        const BYTE nDefaultDir = sal::static_int_cast< BYTE >(
-            IsRightToLeft( nPara ) ? UBIDI_RTL : UBIDI_LTR);
-        ubidi_setPara( pBidi, pLineString, aLine.Len(), nDefaultDir, NULL, &nError );
+        const UBiDiLevel  nBidiLevel = IsRightToLeft( nPara ) ? 1 /*RTL*/ : 0 /*LTR*/;
+        ubidi_setPara( pBidi, pLineString, aLine.Len(), nBidiLevel, NULL, &nError );
 
         if ( !pEditView->IsInsertMode() )
         {
@@ -1856,10 +1852,8 @@ void ImpEditEngine::InitWritingDirections( USHORT nPara )
         }
     }
 
-    //TODO The following line needs to be fixed, see #i67789#:
-    const BYTE nDefaultDir = sal::static_int_cast< BYTE >(
-        IsRightToLeft( nPara ) ? UBIDI_RTL : UBIDI_LTR );
-    if ( ( bCTL || ( nDefaultDir == UBIDI_RTL ) ) && pParaPortion->GetNode()->Len() )
+    const UBiDiLevel nBidiLevel = IsRightToLeft( nPara ) ? 1 /*RTL*/ : 0 /*LTR*/;
+    if ( ( bCTL || ( nBidiLevel == 1 /*RTL*/ ) ) && pParaPortion->GetNode()->Len() )
     {
 
         String aText( *pParaPortion->GetNode() );
@@ -1871,7 +1865,7 @@ void ImpEditEngine::InitWritingDirections( USHORT nPara )
         UBiDi* pBidi = ubidi_openSized( aText.Len(), 0, &nError );
         nError = U_ZERO_ERROR;
 
-        ubidi_setPara( pBidi, aText.GetBuffer(), aText.Len(), nDefaultDir, NULL, &nError );
+        ubidi_setPara( pBidi, aText.GetBuffer(), aText.Len(), nBidiLevel, NULL, &nError );
         nError = U_ZERO_ERROR;
 
         long nCount = ubidi_countRuns( pBidi, &nError );
