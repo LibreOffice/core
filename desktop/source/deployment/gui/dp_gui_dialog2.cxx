@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_dialog2.cxx,v $
  *
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -807,6 +807,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
         pEntry->m_pPublisher->SetDescription( pEntry->m_sPublisher );
         Size aSize = FixedText::CalcMinimumTextSize( pEntry->m_pPublisher );
         pEntry->m_pPublisher->SetSizePixel( aSize );
+        pEntry->m_pPublisher->SetClickHdl( LINK( this, ExtensionBox_Impl, HandleHyperlink ) );
     }
 
     // Get max title width
@@ -1038,8 +1039,6 @@ void ExtensionBox_Impl::Paint( const Rectangle &rPaintRect )
         Rectangle aEntryRect( aStart, aSize );
         if ( aEntryRect.IsOver( rPaintRect ) )
             DrawRow( aEntryRect, *iIndex );
-        else if ( (*iIndex)->m_pPublisher )
-            (*iIndex)->m_pPublisher->Hide();
         aStart.Y() += aSize.Height();
     }
 }
@@ -1276,9 +1275,6 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
     PackageState eState = m_pManager->getPackageState( xPackage );
 
     TEntry_Impl pEntry( new Entry_Impl( xPackage, xPackageManager, eState ) );
-
-    if ( pEntry->m_pPublisher )
-        pEntry->m_pPublisher->SetClickHdl( LINK( this, ExtensionBox_Impl, HandleHyperlink ) );
 
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
     if ( m_vEntries.empty() )
