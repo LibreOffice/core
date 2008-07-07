@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basobj3.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,9 +79,11 @@ extern "C" {
     }
 }
 
+namespace BasicIDE
+{
 //----------------------------------------------------------------------------
 
-SbMethod* BasicIDE::CreateMacro( SbModule* pModule, const String& rMacroName )
+SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
 {
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
@@ -176,7 +178,7 @@ SbMethod* BasicIDE::CreateMacro( SbModule* pModule, const String& rMacroName )
 
 //----------------------------------------------------------------------------
 
-bool BasicIDE::RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const String& rLibName, const String& rOldName, const String& rNewName )
+bool RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const String& rLibName, const String& rOldName, const String& rNewName )
     throw(ElementExistException, NoSuchElementException)
 {
     if ( !rDocument.hasDialog( rLibName, rOldName ) )
@@ -236,7 +238,7 @@ bool BasicIDE::RenameDialog( Window* pErrorParent, const ScriptDocument& rDocume
 
 //----------------------------------------------------------------------------
 
-bool BasicIDE::RemoveDialog( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName )
+bool RemoveDialog( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName )
 {
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
     if ( pIDEShell )
@@ -254,7 +256,7 @@ bool BasicIDE::RemoveDialog( const ScriptDocument& rDocument, const String& rLib
 
 //----------------------------------------------------------------------------
 
-StarBASIC* BasicIDE::FindBasic( const SbxVariable* pVar )
+StarBASIC* FindBasic( const SbxVariable* pVar )
 {
     const SbxVariable* pSbx = pVar;
     while ( pSbx && !pSbx->ISA( StarBASIC ) )
@@ -266,7 +268,7 @@ StarBASIC* BasicIDE::FindBasic( const SbxVariable* pVar )
 
 //----------------------------------------------------------------------------
 
-BasicManager* BasicIDE::FindBasicManager( StarBASIC* pLib )
+BasicManager* FindBasicManager( StarBASIC* pLib )
 {
     ScriptDocuments aDocuments( ScriptDocument::getAllScriptDocuments( ScriptDocument::AllWithApplication ) );
     for (   ScriptDocuments::const_iterator doc = aDocuments.begin();
@@ -295,7 +297,7 @@ BasicManager* BasicIDE::FindBasicManager( StarBASIC* pLib )
 
 //----------------------------------------------------------------------------
 
-void BasicIDE::MarkDocumentModified( const ScriptDocument& rDocument )
+void MarkDocumentModified( const ScriptDocument& rDocument )
 {
     // Muss ja nicht aus einem Document kommen...
     if ( rDocument.isApplication() )
@@ -326,7 +328,7 @@ void BasicIDE::MarkDocumentModified( const ScriptDocument& rDocument )
 
 //----------------------------------------------------------------------------
 
-void BasicIDE::RunMethod( SbMethod* pMethod )
+void RunMethod( SbMethod* pMethod )
 {
     SbxValues aRes;
     aRes.eType = SbxVOID;
@@ -335,7 +337,7 @@ void BasicIDE::RunMethod( SbMethod* pMethod )
 
 //----------------------------------------------------------------------------
 
-void BasicIDE::StopBasic()
+void StopBasic()
 {
     StarBASIC::Stop();
     BasicIDEShell* pShell = IDE_DLL()->GetShell();
@@ -356,7 +358,7 @@ void BasicIDE::StopBasic()
 
 //----------------------------------------------------------------------------
 
-void BasicIDE::BasicStopped( BOOL* pbAppWindowDisabled,
+void BasicStopped( BOOL* pbAppWindowDisabled,
         BOOL* pbDispatcherLocked, USHORT* pnWaitCount,
         SfxUInt16Item** ppSWActionCount, SfxUInt16Item** ppSWLockViewCount )
 {
@@ -409,7 +411,7 @@ void BasicIDE::BasicStopped( BOOL* pbAppWindowDisabled,
 
 //----------------------------------------------------------------------------
 
-void BasicIDE::InvalidateDebuggerSlots()
+void InvalidateDebuggerSlots()
 {
     SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
     if ( pBindings )
@@ -435,7 +437,7 @@ void BasicIDE::InvalidateDebuggerSlots()
 
 //----------------------------------------------------------------------------
 
-long BasicIDE::HandleBasicError( StarBASIC* pBasic )
+long HandleBasicError( StarBASIC* pBasic )
 {
     BasicIDEDLL::Init();
     BasicIDE::BasicStopped();
@@ -494,7 +496,7 @@ long BasicIDE::HandleBasicError( StarBASIC* pBasic )
 
 //----------------------------------------------------------------------------
 
-SfxBindings* BasicIDE::GetBindingsPtr()
+SfxBindings* GetBindingsPtr()
 {
     SfxBindings* pBindings = NULL;
 
@@ -523,5 +525,7 @@ SfxBindings* BasicIDE::GetBindingsPtr()
 
     return pBindings;
 }
+
+} //namespace BasicIDE
 
 //----------------------------------------------------------------------------
