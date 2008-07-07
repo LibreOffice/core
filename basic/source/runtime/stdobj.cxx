@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stdobj.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -154,6 +154,9 @@ static Methods aMethods[] = {
   { "dialogname",   SbxSTRING, 0,NULL,0 },
 { "CreateUnoService",SbxOBJECT,   1 | _FUNCTION, RTLNAME( CreateUnoService ),0 },
   { "servicename",  SbxSTRING, 0,NULL,0 },
+{ "CreateUnoServiceWithArguments",SbxOBJECT,   2 | _FUNCTION, RTLNAME( CreateUnoServiceWithArguments ),0 },
+  { "servicename",  SbxSTRING, 0,NULL,0 },
+  { "arguments",  SbxARRAY, 0,NULL,0 },
 { "CreateUnoStruct",SbxOBJECT,    1 | _FUNCTION, RTLNAME( CreateUnoStruct ),0 },
   { "classname",    SbxSTRING, 0,NULL,0 },
 { "CreateUnoValue", SbxOBJECT,    2 | _FUNCTION, RTLNAME( CreateUnoValue ),0 },
