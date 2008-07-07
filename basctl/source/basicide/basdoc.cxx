@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basdoc.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,14 +71,6 @@ BasicDocShell::BasicDocShell( SfxObjectCreateMode eMode ) : SfxObjectShell( eMod
 __EXPORT BasicDocShell::~BasicDocShell()
 {
     delete pPrinter;
-}
-
-void __EXPORT BasicDocShell::Execute( SfxRequest& )
-{
-}
-
-void __EXPORT BasicDocShell::GetState( SfxItemSet& )
-{
 }
 
 SfxPrinter* BasicDocShell::GetPrinter( BOOL bCreate )
