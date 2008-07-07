@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slidepersist.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,6 +98,8 @@ public:
     void setLayoutValueToken( sal_Int32 nLayoutValueToken ) { mnLayoutValueToken = nLayoutValueToken; }
     short getLayoutFromValueToken();
 
+
+    oox::drawingml::TextListStylePtr getDefaultTextStyle() const { return maDefaultTextStylePtr; }
     oox::drawingml::TextListStylePtr getTitleTextStyle() const { return maTitleTextStylePtr; }
     oox::drawingml::TextListStylePtr getBodyTextStyle() const { return maBodyTextStylePtr; }
     oox::drawingml::TextListStylePtr getNotesTextStyle() const { return maNotesTextStylePtr; }
