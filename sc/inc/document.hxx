@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: document.hxx,v $
- * $Revision: 1.113 $
+ * $Revision: 1.114 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -831,11 +831,17 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
 
     ScAutoNameCache* GetAutoNameCache()     { return pAutoNameCache; }
 
-                    // Creates a ScLookupCache cache for the range if it doesn't already exist.
+                    /** Creates a ScLookupCache cache for the range if it
+                        doesn't already exist. */
     ScLookupCache & GetLookupCache( const ScRange & rRange );
-                    // Only ScLookupCache ctor/dtor use Add/Remove.
+                    /** Only ScLookupCache ctor uses AddLookupCache(), do not
+                        use elsewhere! */
     void            AddLookupCache( ScLookupCache & rCache );
+                    /** Only ScLookupCache dtor uses RemoveLookupCache(), do
+                        not use elsewhere! */
     void            RemoveLookupCache( ScLookupCache & rCache );
+                    /** Zap all caches. */
+    void            ClearLookupCaches();
 
                     // Automatisch Berechnen
     void            SetAutoCalc( BOOL bNewAutoCalc );
