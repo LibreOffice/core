@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleStaticTextBase.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,10 +33,12 @@
 
 #include <memory>
 #include <tools/gen.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
+#include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
 #include "svx/svxdllapi.h"
 
@@ -47,6 +49,10 @@ namespace accessibility
 {
 
     class AccessibleStaticTextBase_Impl;
+
+    typedef ::cppu::ImplHelper2<
+        ::com::sun::star::accessibility::XAccessibleText,
+        ::com::sun::star::accessibility::XAccessibleTextAttributes > AccessibleStaticTextBase_BASE;
 
     /** Helper class for objects containing EditEngine/Outliner text
 
@@ -91,7 +97,7 @@ namespace accessibility
         edit source. Every interface method will then properly throw
         an exception.
     */
-    class SVX_DLLPUBLIC AccessibleStaticTextBase : public ::com::sun::star::accessibility::XAccessibleText
+    class SVX_DLLPUBLIC AccessibleStaticTextBase : public AccessibleStaticTextBase_BASE
     {
 
     public:
@@ -246,6 +252,10 @@ namespace accessibility
         virtual ::com::sun::star::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
         /// This will only work with a functional SvxEditViewForwarder, i.e. an EditEngine/Outliner in edit mode
         virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
+        // XAccessibleTextAttributes
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getDefaultAttributes( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& RequestedAttributes ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getRunAttributes( sal_Int32 Index, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& RequestedAttributes ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
         // child-related methods from XAccessibleContext
         virtual sal_Int32 SAL_CALL getAccessibleChildCount() throw (::com::sun::star::uno::RuntimeException);
