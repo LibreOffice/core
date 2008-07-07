@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stlfamily.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,9 +65,42 @@ typedef std::map< rtl::OUString, rtl::Reference< SdStyleSheet > > PresStyleMap;
 
 struct SdStyleFamilyImpl
 {
-    PresStyleMap maStyleSheets;
     SdrPageWeakRef mxMasterPage;
+    String maLayoutName;
+
+    PresStyleMap& getStyleSheets();
+    rtl::Reference< SfxStyleSheetPool > mxPool;
+
+private:
+    PresStyleMap maStyleSheets;
 };
+
+PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
+{
+    if( mxMasterPage.is() && (mxMasterPage->GetLayoutName() != maLayoutName) )
+    {
+        maLayoutName = mxMasterPage->GetLayoutName();
+
+        String aLayoutName( maLayoutName );
+        const sal_uInt16 nLen = aLayoutName.Search(String( RTL_CONSTASCII_USTRINGPARAM(SD_LT_SEPARATOR)))+4;
+        aLayoutName.Erase( nLen );
+
+        if( (maStyleSheets.size() == 0) || !((*maStyleSheets.begin()).second->GetName().Equals( aLayoutName, 0, nLen )) )
+        {
+            maStyleSheets.clear();
+
+            const SfxStyles& rStyles = mxPool->GetStyles();
+            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
+            {
+                SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
+                if( pStyle && (pStyle->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE) && (pStyle->GetName().Equals( aLayoutName, 0, nLen )) )
+                    maStyleSheets[ pStyle->GetApiName() ] = rtl::Reference< SdStyleSheet >( pStyle );
+            }
+        }
+    }
+
+    return maStyleSheets;
+}
 
 // ----------------------------------------------------------
 
@@ -83,21 +116,10 @@ SdStyleFamily::SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, 
 SdStyleFamily::SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, const SdPage* pMasterPage )
 : mnFamily( SD_STYLE_FAMILY_MASTERPAGE )
 , mxPool( xPool )
-, mpImpl( new SdStyleFamilyImpl )
+, mpImpl( new SdStyleFamilyImpl() )
 {
     mpImpl->mxMasterPage.reset( const_cast< SdPage* >( pMasterPage ) );
-
-    String aLayoutName( pMasterPage->GetLayoutName() );
-    const sal_uInt16 nLen = aLayoutName.Search(String( RTL_CONSTASCII_USTRINGPARAM(SD_LT_SEPARATOR)))+4;
-    aLayoutName.Erase( nLen );
-
-    const SfxStyles& rStyles = mxPool->GetStyles();
-    for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
-    {
-        SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
-        if( pStyle && (pStyle->GetFamily() == mnFamily) && (pStyle->GetName().Equals( aLayoutName, 0, nLen )) )
-            mpImpl->maStyleSheets[ pStyle->GetApiName() ] = rtl::Reference< SdStyleSheet >( pStyle );
-    }
+    mpImpl->mxPool = xPool;
 }
 
 // ----------------------------------------------------------
@@ -133,15 +155,15 @@ SdStyleSheet* SdStyleFamily::GetValidNewSheet( const Any& rElement ) throw(Illeg
 
 SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName ) throw(NoSuchElementException, WrappedTargetException )
 {
+    SdStyleSheet* pRet = 0;
     if( rName.getLength() )
     {
         if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
         {
-            PresStyleMap::iterator iter( mpImpl->maStyleSheets.find(rName) );
-            if( iter == mpImpl->maStyleSheets.end() )
-                throw NoSuchElementException();
-
-            return (*iter).second.get();
+            PresStyleMap& rStyleMap = mpImpl->getStyleSheets();
+            PresStyleMap::iterator iter( rStyleMap.find(rName) );
+            if( iter != rStyleMap.end() )
+                pRet = (*iter).second.get();
         }
         else
         {
@@ -150,10 +172,16 @@ SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName ) throw(NoSuc
             {
                 SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
                 if( pStyle && (pStyle->GetFamily() == mnFamily) && (pStyle->GetApiName() == rName) )
-                    return pStyle;
+                {
+                    pRet = pStyle;
+                    break;
+                }
             }
         }
     }
+    if( pRet )
+        return pRet;
+
     throw NoSuchElementException();
 }
 
@@ -233,11 +261,12 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames() throw(RuntimeExce
 
     if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
     {
-        Sequence< OUString > aNames( mpImpl->maStyleSheets.size() );
+        PresStyleMap& rStyleMap = mpImpl->getStyleSheets();
+        Sequence< OUString > aNames( rStyleMap.size() );
 
-        PresStyleMap::iterator iter( mpImpl->maStyleSheets.begin() );
+        PresStyleMap::iterator iter( rStyleMap.begin() );
         OUString* pNames = aNames.getArray();
-        while( iter != mpImpl->maStyleSheets.end() )
+        while( iter != rStyleMap.end() )
         {
             const OUString sName( (*iter).first );
             rtl::Reference< SdStyleSheet > xStyle( (*iter++).second );
@@ -280,8 +309,9 @@ sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName ) throw(Runtim
     {
         if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
         {
-            PresStyleMap::iterator iter( mpImpl->maStyleSheets.find(aName) );
-            return ( iter != mpImpl->maStyleSheets.end() ) ? sal_True : sal_False;
+            PresStyleMap& rStyleSheets = mpImpl->getStyleSheets();
+            PresStyleMap::iterator iter( rStyleSheets.find(aName) );
+            return ( iter != rStyleSheets.end() ) ? sal_True : sal_False;
         }
         else
         {
@@ -344,7 +374,7 @@ sal_Int32 SAL_CALL SdStyleFamily::getCount() throw(RuntimeException)
     sal_Int32 nCount = 0;
     if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
     {
-        return mpImpl->maStyleSheets.size();
+        return mpImpl->getStyleSheets().size();
     }
     else
     {
@@ -371,13 +401,14 @@ Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index ) throw(IndexOutOfBounds
     {
         if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
         {
-            if( !mpImpl->maStyleSheets.empty() )
+            PresStyleMap& rStyleSheets = mpImpl->getStyleSheets();
+            if( !rStyleSheets.empty() )
             {
-                PresStyleMap::iterator iter( mpImpl->maStyleSheets.begin() );
-                while( Index-- && (iter != mpImpl->maStyleSheets.end()) )
+                PresStyleMap::iterator iter( rStyleSheets.begin() );
+                while( Index-- && (iter != rStyleSheets.end()) )
                     iter++;
 
-                if( (Index==-1) && (iter != mpImpl->maStyleSheets.end()) )
+                if( (Index==-1) && (iter != rStyleSheets.end()) )
                     return Any( Reference< XStyle >( (*iter).second.get() ) );
             }
         }
