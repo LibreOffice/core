@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.23 $
+# $Revision: 1.24 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -80,7 +80,8 @@ SLOFILES =	\
         $(SLO)$/ximpcustomshape.obj \
         $(SLO)$/EnhancedCustomShapeToken.obj \
         $(SLO)$/XMLReplacementImageContext.obj \
-        $(SLO)$/descriptionimp.obj
+        $(SLO)$/descriptionimp.obj \
+        $(SLO)$/ximplink.obj
 
 # --- Targets --------------------------------------------------------------
 
