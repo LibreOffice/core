@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scriptdocument.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -988,8 +988,9 @@ namespace basctl
                 OSL_VERIFY( aFileItem.getFileStatus( aFileStatus ) == ::osl::FileBase::E_None );
                 ::rtl::OUString aCanonicalFileURL( aFileStatus.getFileURL() );
 
-                ::rtl::OUString aSearchURL( RTL_CONSTASCII_USTRINGPARAM( "share/basic" ) );
-                if( aCanonicalFileURL.indexOf( aSearchURL ) != -1 )
+                ::rtl::OUString aSearchURL1( RTL_CONSTASCII_USTRINGPARAM( "share/basic" ) );
+                ::rtl::OUString aSearchURL2( RTL_CONSTASCII_USTRINGPARAM( "share/uno_packages" ) );
+                if( aCanonicalFileURL.indexOf( aSearchURL1 ) != -1 || aCanonicalFileURL.indexOf( aSearchURL2 ) != -1 )
                     bIsShared = true;
             }
         }
