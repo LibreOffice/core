@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlideSorterController.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -152,7 +152,6 @@ public:
         ::sd::Window* pWindow);
 
     void GetCtrlState (SfxItemSet &rSet);
-    void GetMenuState (SfxItemSet &rSet);
     void GetStatusBarState (SfxItemSet& rSet);
 
     void ExecCtrl (SfxRequest& rRequest);
