@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleFrameSelector.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,10 +37,15 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
+#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <tools/resary.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/accessibleeventnotifier.hxx>
 #include <svx/framebordertype.hxx>
+
+class VclSimpleEvent;
+class VclWindowEvent;
 
 namespace svx {
 
@@ -51,10 +56,11 @@ namespace a11y {
 // ============================================================================
 
 class AccFrameSelector :
-    public ::cppu::WeakImplHelper4<
+    public ::cppu::WeakImplHelper5<
                 ::com::sun::star::accessibility::XAccessible,
                 ::com::sun::star::accessibility::XAccessibleContext,
                 ::com::sun::star::accessibility::XAccessibleComponent,
+                ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
                 ::com::sun::star::lang::XServiceInfo
                 >,
     public Resource
@@ -98,6 +104,10 @@ public:
     virtual sal_Int32 SAL_CALL getForeground(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
 
+    // XAccessibleEventBroadcaster
+    virtual void SAL_CALL addEventListener ( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener ( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener) throw (::com::sun::star::uno::RuntimeException);
+
     //XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
@@ -105,6 +115,15 @@ public:
 
     void    Invalidate();
     void    NotifyFocusListeners(sal_Bool bGetFocus);
+
+protected:
+    DECL_LINK( WindowEventListener, VclSimpleEvent* );
+
+    virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+
+    void    NotifyAccessibleEvent( const sal_Int16 _nEventId,
+                                   const ::com::sun::star::uno::Any& _rOldValue,
+                                   const ::com::sun::star::uno::Any& _rNewValue );
 
 private:
     void                IsValid() throw (::com::sun::star::uno::RuntimeException);
@@ -120,6 +139,8 @@ private:
 
     ResStringArray      maNames;
     ResStringArray      maDescriptions;
+
+    ::comphelper::AccessibleEventNotifier::TClientId    mnClientId;
 };
 
 // ============================================================================
