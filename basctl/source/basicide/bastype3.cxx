@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bastype3.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -169,34 +169,6 @@ void BasicTreeListBox::ScanAllEntries()
     {
         if ( doc->isAlive() )
             ScanEntry( *doc, LIBRARY_LOCATION_DOCUMENT );
-    }
-}
-
-void BasicTreeListBox::ExpandTree( SvLBoxEntry* pRootEntry )
-{
-    DBG_ASSERT( pRootEntry, "Keine Wurzel ?" );
-
-    Expand( pRootEntry );
-
-    SvLBoxEntry* pLibEntry = FirstChild( pRootEntry );
-    while ( pLibEntry )
-    {
-        // Nur die mit Childs, sonst waere ChildsOnDemand ueberfluessig
-        if ( !IsEntryProtected( pLibEntry ) && GetChildCount( pLibEntry ) )
-            Expand( pLibEntry );
-
-        pLibEntry = NextSibling( pLibEntry );
-    }
-}
-
-void BasicTreeListBox::ExpandAllTrees()
-{
-    ULONG nRootPos = 0;
-    SvLBoxEntry* pRootEntry = GetEntry( nRootPos );
-    while ( pRootEntry )
-    {
-        ExpandTree( pRootEntry );
-        pRootEntry = GetEntry( ++nRootPos );
     }
 }
 
