@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleFrameSelector.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,7 @@
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HDL_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/awt/FocusChangeReason.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
@@ -72,6 +73,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::lang::Locale;
 using ::com::sun::star::lang::EventObject;
 using ::com::sun::star::beans::XPropertyChangeListener;
@@ -98,15 +100,25 @@ AccFrameSelector::AccFrameSelector( FrameSelector& rFrameSel, FrameBorderType eB
     maFocusListeners( maFocusMutex ),
     maPropertyListeners( maPropertyMutex ),
     maNames( SVX_RES( ARR_TEXTS ) ),
-    maDescriptions( SVX_RES(ARR_DESCRIPTIONS ) )
+    maDescriptions( SVX_RES(ARR_DESCRIPTIONS ) ),
+    mnClientId( 0 )
 {
     FreeResource();
+
+    if ( mpFrameSel )
+    {
+        mpFrameSel->AddEventListener( LINK( this, AccFrameSelector, WindowEventListener ) );
+    }
 }
 
 // ----------------------------------------------------------------------------
 
 AccFrameSelector::~AccFrameSelector()
 {
+    if ( mpFrameSel )
+    {
+        mpFrameSel->RemoveEventListener( LINK( this, AccFrameSelector, WindowEventListener ) );
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -526,6 +538,41 @@ sal_Int32 AccFrameSelector::getBackground(  )
 
 // ----------------------------------------------------------------------------
 
+void AccFrameSelector::addEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
+{
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    if ( xListener.is() )
+    {
+        if ( !mnClientId )
+        {
+            mnClientId = ::comphelper::AccessibleEventNotifier::registerClient();
+        }
+        ::comphelper::AccessibleEventNotifier::addEventListener( mnClientId, xListener );
+    }
+}
+
+// ----------------------------------------------------------------------------
+
+void AccFrameSelector::removeEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
+{
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    if ( xListener.is() && mnClientId != 0 &&
+         ::comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener ) == 0 )
+    {
+        // no listeners anymore
+        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+        // and at least to us not firing any events anymore, in case somebody calls
+        // NotifyAccessibleEvent, again
+        ::comphelper::AccessibleEventNotifier::TClientId nId( mnClientId );
+        mnClientId = 0;
+        ::comphelper::AccessibleEventNotifier::revokeClient( nId );
+    }
+}
+
+// ----------------------------------------------------------------------------
+
 OUString AccFrameSelector::getImplementationName(  ) throw (RuntimeException)
 {
     return OUString::createFromAscii("AccFrameSelector");
@@ -609,6 +656,71 @@ void    AccFrameSelector::NotifyFocusListeners(sal_Bool bGetFocus)
             xListener->focusGained( aEvent );
         else
             xListener->focusLost( aEvent );
+    }
+}
+
+// ----------------------------------------------------------------------------
+
+IMPL_LINK( AccFrameSelector, WindowEventListener, VclSimpleEvent*, pEvent )
+{
+    VclWindowEvent* pWinEvent = dynamic_cast< VclWindowEvent* >( pEvent );
+    DBG_ASSERT( pWinEvent, "AccFrameSelector::WindowEventListener - unknown window event" );
+    if ( pWinEvent )
+    {
+        Window* pWindow = pWinEvent->GetWindow();
+        DBG_ASSERT( pWindow, "AccFrameSelector::WindowEventListener: no window!" );
+        if ( !pWindow->IsAccessibilityEventsSuppressed() || ( pWinEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
+        {
+            ProcessWindowEvent( *pWinEvent );
+        }
+    }
+
+    return 0;
+}
+
+// ----------------------------------------------------------------------------
+
+void AccFrameSelector::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
+{
+    switch ( rVclWindowEvent.GetId() )
+    {
+        case VCLEVENT_WINDOW_GETFOCUS:
+        {
+            if ( meBorder == FRAMEBORDER_NONE )
+            {
+                Any aOldValue, aNewValue;
+                aNewValue <<= AccessibleStateType::FOCUSED;
+                NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_LOSEFOCUS:
+        {
+            if ( meBorder == FRAMEBORDER_NONE )
+            {
+                Any aOldValue, aNewValue;
+                aOldValue <<= AccessibleStateType::FOCUSED;
+                NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
+            }
+        }
+        break;
+        default:
+        {
+        }
+        break;
+    }
+}
+
+// ----------------------------------------------------------------------------
+
+void AccFrameSelector::NotifyAccessibleEvent( const sal_Int16 _nEventId,
+    const Any& _rOldValue, const Any& _rNewValue )
+{
+    if ( mnClientId )
+    {
+        Reference< XInterface > xSource( *this );
+        AccessibleEventObject aEvent( xSource, _nEventId, _rNewValue, _rOldValue );
+        ::comphelper::AccessibleEventNotifier::addEvent( mnClientId, aEvent );
     }
 }
 
