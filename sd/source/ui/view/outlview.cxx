@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlview.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -216,6 +216,12 @@ OutlineView::OutlineView( DrawDocShell* pDocSh, ::Window* pWindow, OutlineViewSh
 
     const OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( ".uno:ShowSlide" ));
     maSlideImage = GetImage( xFrame, aSlotURL, true, false /* todo, hc mode */ );
+
+    // Tell undo manager of the document about the undo manager of the
+    // outliner, so that the former can synchronize with the later.
+    sd::UndoManager* pDocUndoMgr = dynamic_cast<sd::UndoManager*>(mpDocSh->GetUndoManager());
+    if (pDocUndoMgr != NULL)
+        pDocUndoMgr->SetLinkedUndoManager(&mpOutliner->GetUndoManager());
 }
 
 /*************************************************************************
@@ -1236,6 +1242,10 @@ SdrTextObj* OutlineView::CreateOutlineTextObject(SdPage* pPage)
 /** updates draw model with all changes from outliner model */
 BOOL OutlineView::PrepareClose(BOOL)
 {
+    ::sd::UndoManager* pDocUndoMgr = dynamic_cast<sd::UndoManager*>(mpDocSh->GetUndoManager());
+    if (pDocUndoMgr != NULL)
+        pDocUndoMgr->SetLinkedUndoManager(NULL);
+
     mpOutliner->GetUndoManager().Clear();
 
     const String aUndoStr(SdResId(STR_UNDO_CHANGE_TITLE_AND_LAYOUT));
