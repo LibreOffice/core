@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: createaddresslistdialog.src,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -163,7 +163,7 @@ ModalDialog DLG_MM_CREATEADDRESSLIST
 
     String ST_FILTERNAME
     {
-        Text [ en-US ] = "%PRODUCTNAME Adress List (.csv)";
+        Text [ en-US ] = "%PRODUCTNAME Address List (.csv)";
     };
 };
 
