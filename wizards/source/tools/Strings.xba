@@ -112,13 +112,8 @@ End Function
 Function ArrayOutOfString(BigString, Separator as String, Optional MaxIndex as Integer)
 Dim LocList() as String
 	LocList=Split(BigString,Separator)
-&apos; The following line has no effect because it seems that Optional variables are
-&apos; always passed as ByValue variables. But MaxIndex must remain in the function for
-&apos; compatibility reasons
-&apos; The user of the function can always use ubund on the return value to get the
-&apos; highest index of the array.
 
-&apos;	If not isMissing(MaxIndex) then maxIndex=ubound(LocList())	
+	If not isMissing(MaxIndex) then maxIndex=ubound(LocList())	
 
 	ArrayOutOfString=LocList
 End Function
