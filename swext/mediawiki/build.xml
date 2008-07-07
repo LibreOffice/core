@@ -9,7 +9,7 @@
 
   $RCSfile: build.xml,v $
 
-  $Revision: 1.17 $
+  $Revision: 1.18 $
 
   This file is part of OpenOffice.org.
 
@@ -111,7 +111,7 @@
     </target>
 
     <target name="tmpdir" depends="xcumerge, jar, init">
-        <copy todir="${out}/misc/${target}/package_tmp">
+        <copy todir="${out}/misc/${target}/package_tmp" overwrite="true" encoding="UTF-8">
             <fileset dir="${out}/misc/${target}" includes="description.xml" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}/registry/schema/org/openoffice/Office/Custom" includes="*.xcs" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}/registry/data/org/openoffice/Office" includes="ProtocolHandler.xcu" casesensitive="yes"/>
@@ -123,7 +123,7 @@
                 <filter token="WIKIEXTENSIONFILENAME" value="${name}"/>
             </filterset>
         </copy>
-        <copy todir="${out}/misc/${target}/package_tmp/help">
+        <copy todir="${out}/misc/${target}/package_tmp/help" overwrite="true" encoding="UTF-8">
             <fileset dir="${out}/misc/${target}/help" includes="**/*.xhp" casesensitive="yes"/>
             <filterset>
                 <filter token="WIKIEXTENSIONPRODUCTNAME" value="Wiki Publisher"/>
