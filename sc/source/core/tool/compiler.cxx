@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: compiler.cxx,v $
- * $Revision: 1.79 $
+ * $Revision: 1.80 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1035,6 +1035,8 @@ ScCompiler::Convention::Convention( ScAddress::Convention eConv )
 
 /*   */     t[32] = SC_COMPILER_C_CHAR_DONTCARE | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
 /* ! */     t[33] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
+    if (ScAddress::CONV_ODF == meConv)
+            t[33] |= SC_COMPILER_C_ODF_LABEL_OP;
 /* " */     t[34] = SC_COMPILER_C_CHAR_STRING | SC_COMPILER_C_STRING_SEP;
 /* # */     t[35] = SC_COMPILER_C_WORD_SEP;
 /* $ */     t[36] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT;
@@ -1812,6 +1814,7 @@ xub_StrLen ScCompiler::NextSymbol()
     sal_Unicode cDecSep = (mxSymbols->isEnglish() ? '.' :
             ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0));
     int nDecSeps = 0;
+    bool bAutoIntersection = false;
     int nRefInSheetName = 0;
     mnPredetectedReference = 0;
     // try to parse simple tokens before calling i18n parser
@@ -1843,7 +1846,34 @@ xub_StrLen ScCompiler::NextSymbol()
         {
             case ssGetChar :
             {
-                if( nMask & SC_COMPILER_C_CHAR )
+                // Order is important!
+                if( nMask & SC_COMPILER_C_ODF_LABEL_OP )
+                {
+                    // '!!' automatic intersection
+                    if (GetCharTableFlags( pSrc[0] ) & SC_COMPILER_C_ODF_LABEL_OP)
+                    {
+                        /* TODO: For now the UI "space operator" is used, this
+                         * could be enhanced using a specialized OpCode to get
+                         * rid of the space ambiguity, which would need some
+                         * places to be adapted though. And we would still need
+                         * to support the ambiguous space operator for UI
+                         * purposes anyway. However, we then could check for
+                         * invalid usage of '!!', which currently isn't
+                         * possible. */
+                        if (!bAutoIntersection)
+                        {
+                            ++pSrc;
+                            nSpaces += 2;   // must match the character count
+                            bAutoIntersection = true;
+                        }
+                        else
+                        {
+                            pSrc--;
+                            eState = ssStop;
+                        }
+                    }
+                }
+                else if( nMask & SC_COMPILER_C_CHAR )
                 {
                     *pSym++ = c;
                     eState = ssStop;
@@ -1953,7 +1983,7 @@ xub_StrLen ScCompiler::NextSymbol()
                 }
                 else if (c == 'E' || c == 'e')
                 {
-                    if (GetCharTableFlags( pSrc[1] ) & SC_COMPILER_C_VALUE_EXP)
+                    if (GetCharTableFlags( pSrc[0] ) & SC_COMPILER_C_VALUE_EXP)
                         *pSym++ = c;
                     else
                     {
@@ -1965,7 +1995,7 @@ xub_StrLen ScCompiler::NextSymbol()
                 else if( nMask & SC_COMPILER_C_VALUE_SIGN )
                 {
                     if (((cLast == 'E') || (cLast == 'e')) &&
-                            (GetCharTableFlags( pSrc[1] ) & SC_COMPILER_C_VALUE_VALUE))
+                            (GetCharTableFlags( pSrc[0] ) & SC_COMPILER_C_VALUE_VALUE))
                     {
                         *pSym++ = c;
                     }
@@ -2160,6 +2190,8 @@ xub_StrLen ScCompiler::NextSymbol()
     }
     if ( bAutoCorrect )
         aCorrectedSymbol = cSymbol;
+    if (bAutoIntersection && nSpaces > 1)
+        --nSpaces;  // replace '!!' with only one space
     return nSpaces;
 }
 
@@ -5353,11 +5385,28 @@ ScToken* ScCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuffer, ScToke
         rBuffer.append(sal_Unicode(' '));
 
     if( eOp == ocSpaces )
-    {   // most times it's just one blank
-        BYTE n = t->GetByte();
-        for ( BYTE j=0; j<n; ++j )
+    {
+        bool bIntersectionOp = mxSymbols->isODFF();
+        if (bIntersectionOp)
         {
-            rBuffer.append(sal_Unicode(' '));
+            const ScToken* p = pArr->PeekPrevNoSpaces();
+            bIntersectionOp = (p && p->GetOpCode() == ocColRowName);
+            if (bIntersectionOp)
+            {
+                p = pArr->PeekNextNoSpaces();
+                bIntersectionOp = (p && p->GetOpCode() == ocColRowName);
+            }
+        }
+        if (bIntersectionOp)
+            rBuffer.appendAscii( "!!");
+        else
+        {
+            // most times it's just one blank
+            BYTE n = t->GetByte();
+            for ( BYTE j=0; j<n; ++j )
+            {
+                rBuffer.append(sal_Unicode(' '));
+            }
         }
     }
     else if( eOp >= ocInternalBegin && eOp <= ocInternalEnd )
