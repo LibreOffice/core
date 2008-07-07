@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextListAutoStylePool.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -179,6 +179,11 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
     Reference<ucb::XAnyCompareFactory> xCompareFac( rExp.GetModel(), uno::UNO_QUERY );
     if( xCompareFac.is() )
         mxNumRuleCompare = xCompareFac->createAnyCompareByName( OUString( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) ) );
+    sal_uInt16 nExportFlags = rExport.getExportFlags();
+    sal_Bool bStylesOnly = (nExportFlags & EXPORT_STYLES) != 0 && (nExportFlags & EXPORT_CONTENT) == 0;
+    if( bStylesOnly )
+        sPrefix = OUString( RTL_CONSTASCII_USTRINGPARAM("ML") );
+
 }
 
 XMLTextListAutoStylePool::~XMLTextListAutoStylePool()
