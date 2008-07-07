@@ -9,7 +9,7 @@
 
   $RCSfile: build.xml,v $
 
-  $Revision: 1.18 $
+  $Revision: 1.19 $
 
   This file is part of OpenOffice.org.
 
@@ -148,6 +148,7 @@
             <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor"/>
             <zipfileset dir="${out}/misc/${target}/license" includes="LICENSE*" casesensitive="yes" prefix="license"/>
             <zipfileset dir="src" includes="THIRDPARTYLICENSEREADME.html" casesensitive="yes" prefix="license"/>
+            <zipfileset dir="help" includes="component.txt" casesensitive="yes" prefix="help"/>
         </zip>
     </target>
 
@@ -166,6 +167,7 @@
             <zipfileset dir="src" includes="uno-extension-manifest.xml" casesensitive="yes" fullpath="META-INF/manifest.xml"/>
             <zipfileset dir="${out}/misc/${target}/license" includes="LICENSE*" casesensitive="yes" prefix="license"/>
             <zipfileset dir="src" includes="THIRDPARTYLICENSEREADME.html" casesensitive="yes" prefix="license"/>
+            <zipfileset dir="help" includes="component.txt" casesensitive="yes" prefix="help"/>
         </zip>
     </target>
 
