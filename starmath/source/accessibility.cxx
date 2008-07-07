@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accessibility.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1496,17 +1496,41 @@ sal_Bool SmTextForwarder::InsertText( const String& rStr, const ESelection& rSel
 
 const SfxItemSet*   SmTextForwarder::GetEmptyItemSetPtr()
 {
-    DBG_ERROR("not yet implemented")
-    return 0;
+    const SfxItemSet *pItemSet = 0;
+    EditEngine *pEditEngine = rEditAcc.GetEditEngine();
+    if (pEditEngine)
+    {
+        pItemSet = &pEditEngine->GetEmptyItemSet();
+    }
+    return pItemSet;
 }
+
 void SmTextForwarder::AppendParagraph()
 {
-    DBG_ERROR("not yet implemented")
+    // append an empty paragraph
+    EditEngine *pEditEngine = rEditAcc.GetEditEngine();
+    if (pEditEngine)
+    {
+        USHORT nParaCount = pEditEngine->GetParagraphCount();
+        pEditEngine->InsertParagraph( nParaCount, String() );
+    }
 }
-xub_StrLen SmTextForwarder::AppendTextPortion( USHORT /*nPara*/, const String &/*rText*/, const SfxItemSet &/*rSet*/ )
+
+xub_StrLen SmTextForwarder::AppendTextPortion( USHORT nPara, const String &rText, const SfxItemSet &rSet )
 {
-    DBG_ERROR("not yet implemented")
-    return 0;
+    xub_StrLen nRes = 0;
+    EditEngine *pEditEngine = rEditAcc.GetEditEngine();
+    if (pEditEngine && nPara < pEditEngine->GetParagraphCount())
+    {
+        // append text
+        ESelection aSel( nPara, pEditEngine->GetTextLen( nPara ) );
+        pEditEngine->QuickInsertText( rText, aSel );
+
+        // set attributes for new appended text
+        nRes = aSel.nEndPos = pEditEngine->GetTextLen( nPara );
+        pEditEngine->QuickSetAttribs( rSet, aSel );
+    }
+    return nRes;
 }
 
 void SmTextForwarder::CopyText(const SvxTextForwarder& rSource)
