@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleEditObject.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +65,7 @@ ScAccessibleEditObject::ScAccessibleEditObject(
         EditView* pEditView, Window* pWin, const rtl::OUString& rName,
         const rtl::OUString& rDescription, EditObjectType eObjectType)
     :
-    ScAccessibleContextBase(rxParent, AccessibleRole::PANEL),
+    ScAccessibleContextBase(rxParent, AccessibleRole::TEXT_FRAME),
     mpTextHelper(NULL),
     mpEditView(pEditView),
     mpWindow(pWin),
@@ -99,16 +99,18 @@ void SAL_CALL ScAccessibleEditObject::disposing()
 
 void ScAccessibleEditObject::LostFocus()
 {
+    mbHasFocus = sal_False;
     if (mpTextHelper)
         mpTextHelper->SetFocus(sal_False);
-    mbHasFocus = sal_False;
+    CommitFocusLost();
 }
 
 void ScAccessibleEditObject::GotFocus()
 {
+    mbHasFocus = sal_True;
+    CommitFocusGained();
     if (mpTextHelper)
         mpTextHelper->SetFocus(sal_True);
-    mbHasFocus = sal_True;
 }
 
     //=====  XAccessibleComponent  ============================================
@@ -135,40 +137,62 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleEditObject::getAccessibleAtPo
 Rectangle ScAccessibleEditObject::GetBoundingBoxOnScreen(void) const
         throw (uno::RuntimeException)
 {
-    Rectangle aCellRect(GetBoundingBox());
-    if (mpWindow)
+    Rectangle aScreenBounds;
+
+    if ( mpWindow )
     {
-        Point aLoc = aCellRect.TopLeft();
-        Rectangle aRect = mpWindow->GetWindowExtentsRelative(NULL);
-        Point aLoc2 = aRect.TopLeft();
-        aCellRect.SetPos(Point(aLoc.getX() + aLoc2.getX(), aLoc.getY() + aLoc2.getY()));
-        //aCellRect.setX(aCellRect.getX() + aRect.getX());
-        //aCellRect.setY(aCellRect.getY() + aRect.getY());
+        if ( meObjectType == CellInEditMode )
+        {
+            if ( mpEditView && mpEditView->GetEditEngine() )
+            {
+                MapMode aMapMode( mpEditView->GetEditEngine()->GetRefMapMode() );
+                aScreenBounds = mpWindow->LogicToPixel( mpEditView->GetOutputArea(), aMapMode );
+                Point aCellLoc = aScreenBounds.TopLeft();
+                Rectangle aWindowRect = mpWindow->GetWindowExtentsRelative( NULL );
+                Point aWindowLoc = aWindowRect.TopLeft();
+                Point aPos( aCellLoc.getX() + aWindowLoc.getX(), aCellLoc.getY() + aWindowLoc.getY() );
+                aScreenBounds.SetPos( aPos );
+            }
+        }
+        else
+        {
+            aScreenBounds = mpWindow->GetWindowExtentsRelative( NULL );
+        }
     }
-    return aCellRect;
+
+    return aScreenBounds;
 }
 
 Rectangle ScAccessibleEditObject::GetBoundingBox(void) const
         throw (uno::RuntimeException)
 {
-    Rectangle aCellRect;
-    if (meObjectType == CellInEditMode)
-    {
-        if (mpEditView && mpWindow && mpEditView->GetEditEngine())
-        {
-            MapMode aMapMode(mpEditView->GetEditEngine()->GetRefMapMode());
+    Rectangle aBounds( GetBoundingBoxOnScreen() );
 
-            aCellRect = mpWindow->LogicToPixel( mpEditView->GetOutputArea() , aMapMode );
-        }
-    }
-    else
+    if ( mpWindow )
     {
-        if (mpWindow)
+        uno::Reference< XAccessible > xThis( mpWindow->GetAccessible() );
+        if ( xThis.is() )
         {
-            aCellRect = mpWindow->GetWindowExtentsRelative(mpWindow->GetAccessibleParentWindow());
+            uno::Reference< XAccessibleContext > xContext( xThis->getAccessibleContext() );
+            if ( xContext.is() )
+            {
+                uno::Reference< XAccessible > xParent( xContext->getAccessibleParent() );
+                if ( xParent.is() )
+                {
+                    uno::Reference< XAccessibleComponent > xParentComponent( xParent->getAccessibleContext(), uno::UNO_QUERY );
+                    if ( xParentComponent.is() )
+                    {
+                        Point aScreenLoc = aBounds.TopLeft();
+                        awt::Point aParentScreenLoc = xParentComponent->getLocationOnScreen();
+                        Point aPos( aScreenLoc.getX() - aParentScreenLoc.X, aScreenLoc.getY() - aParentScreenLoc.Y );
+                        aBounds.SetPos( aPos );
+                    }
+                }
+            }
         }
     }
-    return aCellRect;
+
+    return aBounds;
 }
 
     //=====  XAccessibleContext  ==============================================
@@ -215,6 +239,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         // all states are const, because this object exists only in one state
         pStateSet->AddState(AccessibleStateType::EDITABLE);
         pStateSet->AddState(AccessibleStateType::ENABLED);
+        pStateSet->AddState(AccessibleStateType::SENSITIVE);
         pStateSet->AddState(AccessibleStateType::MULTI_LINE);
         pStateSet->AddState(AccessibleStateType::MULTI_SELECTABLE);
         pStateSet->AddState(AccessibleStateType::SHOWING);
