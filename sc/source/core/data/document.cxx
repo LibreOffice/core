@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: document.cxx,v $
- * $Revision: 1.88 $
+ * $Revision: 1.89 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2464,6 +2464,7 @@ void ScDocument::AddTableOpFormulaCell( ScFormulaCell* pCell )
 
 void ScDocument::CalcAll()
 {
+    ClearLookupCaches();    // Ensure we don't deliver zombie data.
     BOOL bOldAutoCalc = GetAutoCalc();
     SetAutoCalc( TRUE );
     SCTAB i;
