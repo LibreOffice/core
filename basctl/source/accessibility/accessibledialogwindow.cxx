@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accessibledialogwindow.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,25 +65,9 @@ DBG_NAME( AccessibleDialogWindow )
 //  class ChildDescriptor
 // -----------------------------------------------------------------------------
 
-AccessibleDialogWindow::ChildDescriptor::ChildDescriptor()
-    :pDlgEdObj( 0 )
-    ,rxAccessible( 0 )
-{
-}
-
-// -----------------------------------------------------------------------------
-
 AccessibleDialogWindow::ChildDescriptor::ChildDescriptor( DlgEdObj* _pDlgEdObj )
     :pDlgEdObj( _pDlgEdObj )
     ,rxAccessible( 0 )
-{
-}
-
-// -----------------------------------------------------------------------------
-
-AccessibleDialogWindow::ChildDescriptor::ChildDescriptor( DlgEdObj* _pDlgEdObj, const Reference< XAccessible >& _rxAccessible )
-    :pDlgEdObj( _pDlgEdObj )
-    ,rxAccessible( _rxAccessible )
 {
 }
 
