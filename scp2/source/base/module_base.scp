@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_base.scp,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,6 +79,7 @@ Module gid_Module_Brand_Prg_Base
     Description = "gid_Module_Brand_Prg_Base";
     ParentID = gid_Module_Prg_Base;
     Sortkey = "100";
+    InstallOrder = "1040";
     Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
