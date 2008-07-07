@@ -8,7 +8,7 @@
 #
 # $RCSfile: extension_post.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -145,4 +145,6 @@ $(COMPONENT_MANIFEST) : $(MANIFEST_SRC) $(MANIFEST_DEPS)
     $(PERL) $(SOLARENV)$/bin$/makemani.pl $(PRJ)$/util$/manifest.xml $(EXTENSIONDIR) $(COMPONENT_MANIFEST_SEARCHDIR) $(@:d:d)
 .ENDIF			# "$(COMPONENT_MANIFEST_GENERIC)" != ""
 .ENDIF			# "$(COMPONENT_MANIFEST)"!=""
+
+ALLTAR : $(EXTENSION_PACKDEPS)
 
