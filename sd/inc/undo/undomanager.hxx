@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undomanager.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,12 +53,30 @@ public:
     virtual BOOL            Undo( USHORT nCount=1 );
     virtual BOOL            Redo( USHORT nCount=1 );
 
+    /** Set or reset the undo manager linked with the called undo manager.
+    */
+    void SetLinkedUndoManager (SfxUndoManager* pLinkedUndoManager);
+
 private:
     using SfxUndoManager::Undo;
     using SfxUndoManager::Redo;
 
     int mnListLevel;
     ScopeLock maIsInUndoLock;
+
+    /** Used when the outline view is visible as a last resort to
+        synchronize the undo managers.
+    */
+    SfxUndoManager* mpLinkedUndoManager;
+
+    /** Call ClearRedo() at the linked undo manager, when present.
+
+        It should not be necessary to call ClearRedo() explicitly, but the
+        synchronization between the under managers of the document and the
+        outline view seems to have a bug.  Therefore this method is called
+        whenever a new undo action is added.
+    */
+    void ClearLinkedRedoActions (void);
 };
 
 }
