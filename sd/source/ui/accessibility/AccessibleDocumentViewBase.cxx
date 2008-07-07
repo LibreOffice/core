@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleDocumentViewBase.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -254,6 +254,8 @@ Reference<XAccessible> SAL_CALL
        AccessibleDocumentViewBase::getAccessibleParent (void)
     throw (uno::RuntimeException)
 {
+    ThrowIfDisposed ();
+
     return AccessibleContextBase::getAccessibleParent();
 }
 
@@ -263,6 +265,8 @@ sal_Int32 SAL_CALL
     AccessibleDocumentViewBase::getAccessibleChildCount (void)
     throw (uno::RuntimeException)
 {
+    ThrowIfDisposed ();
+
     if (mxAccessibleOLEObject.is())
         return 1;
     else
@@ -276,6 +280,8 @@ Reference<XAccessible> SAL_CALL
     AccessibleDocumentViewBase::getAccessibleChild (sal_Int32 nIndex)
     throw (uno::RuntimeException)
 {
+    ThrowIfDisposed ();
+
     ::osl::MutexGuard aGuard (maMutex);
     if (mxAccessibleOLEObject.is())
         if (nIndex == 0)
@@ -301,6 +307,8 @@ uno::Reference<XAccessible > SAL_CALL
         const awt::Point& aPoint)
     throw (uno::RuntimeException)
 {
+    ThrowIfDisposed ();
+
     ::osl::MutexGuard aGuard (maMutex);
     uno::Reference<XAccessible> xChildAtPosition;
 
@@ -339,6 +347,8 @@ awt::Rectangle SAL_CALL
     AccessibleDocumentViewBase::getBounds (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
+
     // Transform visible area into screen coordinates.
     ::Rectangle aVisibleArea (
         maShapeTreeInfo.GetViewForwarder()->GetVisibleArea());
@@ -388,6 +398,7 @@ awt::Point SAL_CALL
     AccessibleDocumentViewBase::getLocationOnScreen (void)
     throw (uno::RuntimeException)
 {
+    ThrowIfDisposed ();
     ::Point aLogicalPoint (maShapeTreeInfo.GetViewForwarder()->GetVisibleArea().TopLeft());
     ::Point aPixelPoint (maShapeTreeInfo.GetViewForwarder()->LogicToPixel (aLogicalPoint));
     return awt::Point (aPixelPoint.X(), aPixelPoint.Y());
@@ -400,6 +411,8 @@ awt::Size SAL_CALL
     AccessibleDocumentViewBase::getSize (void)
     throw (uno::RuntimeException)
 {
+    ThrowIfDisposed ();
+
     // Transform visible area into screen coordinates.
     ::Rectangle aVisibleArea (
         maShapeTreeInfo.GetViewForwarder()->GetVisibleArea());
@@ -476,6 +489,7 @@ void SAL_CALL
     AccessibleDocumentViewBase::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
     return AccessibleContextBase::getSupportedServiceNames ();
 }
 
@@ -489,6 +503,8 @@ void SAL_CALL
     AccessibleDocumentViewBase::getTypes (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
+
     // Get list of types from the context base implementation, ...
     uno::Sequence<uno::Type> aTypeList (AccessibleContextBase::getTypes());
     // ... get list of types from component base implementation, ...
@@ -535,6 +551,8 @@ void SAL_CALL
     AccessibleDocumentViewBase::disposing (const lang::EventObject& rEventObject)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
+
     // Register this object as dispose event and document::XEventListener
     // listener at the model.
 
@@ -576,7 +594,11 @@ void SAL_CALL
 void SAL_CALL AccessibleDocumentViewBase::propertyChange (const beans::PropertyChangeEvent& )
     throw (::com::sun::star::uno::RuntimeException)
 {
+    // Empty
 }
+
+
+
 
 //=====  XWindowListener  =====================================================
 
@@ -645,6 +667,7 @@ void SAL_CALL
 void AccessibleDocumentViewBase::focusGained (const ::com::sun::star::awt::FocusEvent& e)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
     if (e.Source == mxWindow)
         Activated ();
 }
@@ -652,6 +675,7 @@ void AccessibleDocumentViewBase::focusGained (const ::com::sun::star::awt::Focus
 void AccessibleDocumentViewBase::focusLost (const ::com::sun::star::awt::FocusEvent& e)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
     if (e.Source == mxWindow)
         Deactivated ();
 }
