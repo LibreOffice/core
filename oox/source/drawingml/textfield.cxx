@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textfield.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -143,11 +143,10 @@ namespace oox { namespace drawingml {
             const TextCharacterPropertiesPtr& rTextCharacterStyle )
     {
         try {
-
             PropertyMap aioBulletList;
             Reference< XTextRange > xStart( xAt, UNO_QUERY );
             Reference< XPropertySet > xProps( xStart, UNO_QUERY);
-            mpTextParagraphPropertiesPtr->pushToPropSet( rFilterBase, xProps, aioBulletList, sal_True );
+            mpTextParagraphPropertiesPtr->pushToPropSet( rFilterBase, xProps, aioBulletList, NULL, sal_True, 18 );
 
             if ( rTextCharacterStyle.get() )
                 rTextCharacterStyle->pushToPropSet( rFilterBase, xProps );
