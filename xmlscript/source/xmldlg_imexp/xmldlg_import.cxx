@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmldlg_import.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1452,7 +1452,19 @@ void ImportContext::importEvents(
                             descr.ScriptCode = buf.makeStringAndClear();
                         }
                     }
-
+                    else if ( descr.ScriptType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "Script" ) ) ) )
+                    {
+                        // Check if there is a protocol, if not assume
+                        // this is an early scripting framework url ( without
+                        // the protocol ) and fix it up!!
+                        if ( descr.ScriptCode.indexOf( ':' ) == -1 )
+                        {
+                            ::rtl::OUStringBuffer buf;
+                            buf.append( OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:" ) ) );
+                            buf.append( descr.ScriptCode );
+                            descr.ScriptCode = buf.makeStringAndClear();
+                        }
+                    }
 
                     // script:event element
                     if (aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
