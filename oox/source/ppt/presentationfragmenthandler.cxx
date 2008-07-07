@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: presentationfragmenthandler.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,6 +82,18 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
     try
     {
         PowerPointImport& rFilter = dynamic_cast< PowerPointImport& >( getFilter() );
+
+#ifdef DEBUG
+    if ( false )
+    {
+        if ( mpTextListStyle.get() )
+        {
+            ::oox::drawingml::TextParagraphPropertiesPtr rParaProps( mpTextListStyle->getListStyle()[ 0 ] );
+            rParaProps->getTextParagraphPropertyMap().dump_debug("TextParagraph paragraph props");
+        }
+    }
+
+#endif
 
         Reference< frame::XModel > xModel( rFilter.getModel() );
         Reference< drawing::XDrawPage > xSlide;
