@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleDrawDocumentView.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -222,6 +222,8 @@ sal_Int32 SAL_CALL
     AccessibleDrawDocumentView::getAccessibleChildCount (void)
     throw (uno::RuntimeException)
 {
+    ThrowIfDisposed ();
+
     long mpChildCount = AccessibleDocumentViewBase::getAccessibleChildCount();
 
     // Forward request to children manager.
@@ -238,6 +240,8 @@ uno::Reference<XAccessible> SAL_CALL
     AccessibleDrawDocumentView::getAccessibleChild (sal_Int32 nIndex)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
+
     ::osl::ClearableMutexGuard aGuard (maMutex);
 
     // Take care of children of the base class.
@@ -274,6 +278,8 @@ void SAL_CALL
     AccessibleDrawDocumentView::disposing (const lang::EventObject& rEventObject)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
+
     AccessibleDocumentViewBase::disposing (rEventObject);
     if (rEventObject.Source == mxModel)
     {
@@ -293,6 +299,8 @@ void SAL_CALL
     AccessibleDrawDocumentView::propertyChange (const beans::PropertyChangeEvent& rEventObject)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
+
     AccessibleDocumentViewBase::propertyChange (rEventObject);
 
     OSL_TRACE ("AccessibleDrawDocumentView::propertyChange");
