@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UnoDialog.java,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,7 +69,7 @@ public class UnoDialog implements EventNames {
     public Hashtable ControlList;
     public Resource m_oResource;
     public XWindowPeer xWindowPeer = null;
-    protected PeerConfig oPeerConfig;
+    private PeerConfig m_oPeerConfig;
 
     protected AbstractListener guiEventListener;
 
@@ -95,7 +95,8 @@ public class UnoDialog implements EventNames {
             xDlgNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xDialogModel);
             xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xUnoDialog);
             xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xUnoDialog);
-            setPeerConfiguration();
+
+            // setPeerConfiguration(); // LLA: will be done, if really used!
         } catch (com.sun.star.uno.Exception exception) {
             exception.printStackTrace(System.out);
         }
@@ -118,15 +119,19 @@ public class UnoDialog implements EventNames {
     }
 
 
-    public void setPeerConfiguration(){
-        oPeerConfig = new PeerConfig(this);
+    public void createPeerConfiguration()
+    {
+        m_oPeerConfig = new PeerConfig(this);
     }
 
 
-    public PeerConfig getPeerConfiguration(){
-        if (oPeerConfig == null)
-            setPeerConfiguration();
-        return oPeerConfig;
+    public PeerConfig getPeerConfiguration()
+    {
+        if (m_oPeerConfig == null)
+        {
+            createPeerConfiguration();
+        }
+        return m_oPeerConfig;
     }
 
 
