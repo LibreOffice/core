@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basprov.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -197,26 +197,9 @@ namespace basprov
                 OSL_VERIFY( aFileItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None );
                 ::rtl::OUString aCanonicalFileURL( aFileStatus.getFileURL() );
 
-                ::rtl::OUString aShareURL;
-                OSL_VERIFY( osl_getExecutableFile( &aShareURL.pData ) == osl_Process_E_None );
-                sal_Int32 nIndex = aShareURL.lastIndexOf( '/' );
-                if ( nIndex >= 0 )
-                {
-                    nIndex = aShareURL.lastIndexOf( '/', nIndex );
-                    if ( nIndex >= 0 )
-                    {
-                        aShareURL = aShareURL.copy( 0, nIndex + 1 );
-                        aShareURL += ::rtl::OUString::createFromAscii( "share" );
-                    }
-                }
-
-                osl::DirectoryItem aShareItem;
-                osl::FileStatus aShareStatus( FileStatusMask_FileURL );
-                OSL_VERIFY( osl::DirectoryItem::get( aShareURL, aShareItem ) == osl::FileBase::E_None );
-                OSL_VERIFY( aShareItem.getFileStatus( aShareStatus ) == osl::FileBase::E_None );
-                ::rtl::OUString aCanonicalShareURL( aShareStatus.getFileURL() );
-
-                if ( aCanonicalFileURL.match( aCanonicalShareURL ) )
+                ::rtl::OUString aSearchURL1( RTL_CONSTASCII_USTRINGPARAM( "share/basic" ) );
+                ::rtl::OUString aSearchURL2( RTL_CONSTASCII_USTRINGPARAM( "share/uno_packages" ) );
+                if( aCanonicalFileURL.indexOf( aSearchURL1 ) != -1 || aCanonicalFileURL.indexOf( aSearchURL2 ) != -1 )
                     bIsShared = true;
             }
         }
