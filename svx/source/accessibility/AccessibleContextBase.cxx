@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleContextBase.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,6 +73,10 @@ AccessibleContextBase::AccessibleContextBase (
         mxStateSet (NULL),
         mxRelationSet (NULL),
         mxParent(rxParent),
+        msDescription(),
+        meDescriptionOrigin(NotSet),
+        msName(),
+        meNameOrigin(NotSet),
         mnClientId(0),
         maRole(aRole)
 {
@@ -314,10 +318,7 @@ sal_Int16 SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
-    if (msDescription.getLength() == 0)
-        // Do not send an event because this is the first time it has been
-        // requested.
-        msDescription = CreateAccessibleDescription();
+
     return msDescription;
 }
 
@@ -329,10 +330,15 @@ OUString SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
-    if (msName.getLength() == 0)
+
+    if (meNameOrigin == NotSet)
+    {
         // Do not send an event because this is the first time it has been
         // requested.
         msName = CreateAccessibleName();
+        meNameOrigin = AutomaticallyCreated;
+    }
+
     return msName;
 }
 
@@ -583,16 +589,20 @@ void SAL_CALL AccessibleContextBase::disposing (void)
 
 
 
-void AccessibleContextBase::SetAccessibleDescription (const ::rtl::OUString& rDescription)
+void AccessibleContextBase::SetAccessibleDescription (
+    const ::rtl::OUString& rDescription,
+    StringOrigin eDescriptionOrigin)
     throw (uno::RuntimeException)
 {
-    if (msDescription != rDescription)
+    if (eDescriptionOrigin < meDescriptionOrigin
+        || (eDescriptionOrigin == meDescriptionOrigin && msDescription != rDescription))
     {
         uno::Any aOldValue, aNewValue;
         aOldValue <<= msDescription;
         aNewValue <<= rDescription;
 
         msDescription = rDescription;
+        meDescriptionOrigin = eDescriptionOrigin;
 
         CommitChange(
             AccessibleEventId::DESCRIPTION_CHANGED,
@@ -604,16 +614,20 @@ void AccessibleContextBase::SetAccessibleDescription (const ::rtl::OUString& rDe
 
 
 
-void AccessibleContextBase::SetAccessibleName (const ::rtl::OUString& rName)
+void AccessibleContextBase::SetAccessibleName (
+    const ::rtl::OUString& rName,
+    StringOrigin eNameOrigin)
     throw (uno::RuntimeException)
 {
-    if (msName != rName)
+    if (eNameOrigin < meNameOrigin
+        || (eNameOrigin == meNameOrigin && msName != rName))
     {
         uno::Any aOldValue, aNewValue;
         aOldValue <<= msName;
         aNewValue <<= rName;
 
         msName = rName;
+        meNameOrigin = eNameOrigin;
 
         CommitChange(
             AccessibleEventId::NAME_CHANGED,
