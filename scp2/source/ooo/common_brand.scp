@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: common_brand.scp,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -130,6 +130,7 @@ Module gid_Module_Langpack_Brand_Template
     Name = "gid_Module_Langpack_Brand_Template";
     Description = "gid_Module_Langpack_Brand_Template";
     Styles = (TEMPLATEMODULE);
+    InstallOrder = "1050";
     Dirs = (gid_Brand_Dir_Help,
             gid_Brand_Dir_Help_Isolanguage,
             gid_Brand_Dir_License,
@@ -1104,33 +1105,6 @@ ProfileItem gid_Brand_Profileitem_Redirect_Ure_Bootstrap
     Value = "${ORIGIN}/" PROFILENAME(fundamental);
 End
 #endif
-
-ProfileItem gid_Brand_Profileitem_Setup_Uno_Java_Comppath
-    ProfileID = gid_Brand_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Bootstrap";
-    Order = 1;
-    Key = "UNO_JAVA_COMPPATH";
-    Value = "$ORIGIN/classes";
-End
-
-ProfileItem gid_Brand_Profileitem_Setup_Uno_Services
-    ProfileID = gid_Brand_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Bootstrap";
-    Order = 2;
-    Key = "UNO_SERVICES";
-    Value = "$ORIGIN/setup_services.rdb";
-End
-
-ProfileItem gid_Brand_Profileitem_Setup_Uno_Types
-    ProfileID = gid_Brand_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Bootstrap";
-    Order = 3;
-    Key = "UNO_TYPES";
-    Value = "$ORIGIN/types.rdb";
-End
 
 #ifdef WNT
 ProfileItem gid_Brand_Profileitem_Setup_Alluserset
