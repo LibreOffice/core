@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accessibledialogwindow.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,9 +77,7 @@ private:
         DlgEdObj*                                                                                   pDlgEdObj;
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >    rxAccessible;
 
-        ChildDescriptor();
         ChildDescriptor( DlgEdObj* _pDlgEdObj );
-        ChildDescriptor( DlgEdObj* _pDlgEdObj, const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxAccessible );
         ~ChildDescriptor();
 
         ChildDescriptor( const ChildDescriptor& rDesc );
