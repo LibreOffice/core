@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stlpool.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1216,7 +1216,7 @@ void SdStyleSheetPool::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if( pSdrHint && pSdrHint->GetKind() == HINT_PAGEORDERCHG )
     {
         const SdPage* pPage = static_cast< const SdPage* >( pSdrHint->GetPage() );
-        if( pPage && pPage->IsMasterPage() )
+        if( pPage && pPage->IsMasterPage() && (pPage->GetPageKind() == PK_STANDARD) )
         {
             if( pPage->IsInserted() )
             {
