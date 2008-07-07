@@ -8,7 +8,7 @@
 #
 # $RCSfile: epmfile.pm,v $
 #
-# $Revision: 1.83 $
+# $Revision: 1.84 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -1588,7 +1588,7 @@ sub is_extension_package
     for ( my $i = 0; $i <= $#{$specfile}; $i++ )
     {
         my $line = ${$specfile}[$i];
-        if ( $line =~ /share\/extension\/install\/(\w+?)\.oxt\"\s*$/ )
+        if ( $line =~ /share\/extension\/install\/.*?\.oxt\"\s*$/ )
         {
             $is_extension_package = 1;
             last;
