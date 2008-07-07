@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlsSlotManager.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,7 @@
 
 #include <com/sun/star/presentation/XPresentation2.hpp>
 
-#include "SlsSlotManager.hxx"
+#include "controller/SlsSlotManager.hxx"
 #include "SlideSorter.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "controller/SlideSorterController.hxx"
@@ -324,9 +324,32 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
             }
             break;
 
+        case SID_PASTE:
+        {
+            SdTransferable* pTransferClip = SD_MOD()->pTransferClip;
+            SfxObjectShell* pTransferDocShell = pTransferClip->GetDocShell();
+
+            DrawDocShell* pDocShell = dynamic_cast<DrawDocShell*>(pTransferDocShell);
+            if (pDocShell && pDocShell->GetDoc()->GetPageCount() > 1)
+            {
+                mrSlideSorter.GetController().GetClipboard().HandleSlotCall(rRequest);
+            }
+            else
+            {
+                ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
+                if (pBase != NULL)
+                {
+                    ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
+                        ::boost::dynamic_pointer_cast<DrawViewShell>(pBase->GetMainViewShell()));
+                    if (pDrawViewShell.get() != NULL)
+                        pDrawViewShell->FuSupport(rRequest);
+                }
+            }
+        }
+        break;
+
         case SID_CUT:
         case SID_COPY:
-        case SID_PASTE:
         case SID_DELETE:
             mrSlideSorter.GetController().GetClipboard().HandleSlotCall(rRequest);
             break;
@@ -628,21 +651,96 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
         }
     }
 
+
+    // Disable the rename slots when there are no or more than one slides/master
+    // pages selected.
+    if (rSet.GetItemState(SID_RENAMEPAGE) == SFX_ITEM_AVAILABLE
+        || rSet.GetItemState(SID_RENAME_MASTER_PAGE)  == SFX_ITEM_AVAILABLE)
+    {
+        if (mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount() != 1)
+        {
+            rSet.DisableItem(SID_RENAMEPAGE);
+            rSet.DisableItem(SID_RENAME_MASTER_PAGE);
+        }
+    }
+
+    if (rSet.GetItemState(SID_HIDE_SLIDE) == SFX_ITEM_AVAILABLE
+        || rSet.GetItemState(SID_SHOW_SLIDE)  == SFX_ITEM_AVAILABLE)
+    {
+        model::PageEnumeration aSelectedPages (
+            model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
+                mrSlideSorter.GetModel()));
+        HideSlideFunction::ExclusionState eState (
+            HideSlideFunction::GetExclusionState(aSelectedPages));
+        switch (eState)
+        {
+            case HideSlideFunction::MIXED:
+                // Show both entries.
+                break;
+
+            case HideSlideFunction::EXCLUDED:
+                rSet.DisableItem(SID_HIDE_SLIDE);
+                break;
+
+            case HideSlideFunction::INCLUDED:
+                rSet.DisableItem(SID_SHOW_SLIDE);
+                break;
+
+            case HideSlideFunction::UNDEFINED:
+                rSet.DisableItem(SID_HIDE_SLIDE);
+                rSet.DisableItem(SID_SHOW_SLIDE);
+                break;
+        }
+    }
+}
+
+
+
+
+void SlotManager::GetClipboardState ( SfxItemSet& rSet)
+{
     SdTransferable* pTransferClip = SD_MOD()->pTransferClip;
 
-    // Keine eigenen Clipboard-Daten?
-    if ( !pTransferClip || !pTransferClip->GetDocShell() )
+    if (rSet.GetItemState(SID_PASTE)  == SFX_ITEM_AVAILABLE
+        || rSet.GetItemState(SID_PASTE2)  == SFX_ITEM_AVAILABLE)
     {
-        rSet.DisableItem(SID_PASTE);
-    }
-    else
-    {
-        SfxObjectShell* pTransferDocShell = pTransferClip->GetDocShell();
-
-        if( !pTransferDocShell || ( (DrawDocShell*) pTransferDocShell)->GetDoc()->GetPageCount() <= 1 )
+        // Keine eigenen Clipboard-Daten?
+        if ( !pTransferClip || !pTransferClip->GetDocShell() )
         {
-            // Eigene Clipboard-Daten haben nur eine Seite
             rSet.DisableItem(SID_PASTE);
+            rSet.DisableItem(SID_PASTE2);
+        }
+        else
+        {
+            SfxObjectShell* pTransferDocShell = pTransferClip->GetDocShell();
+
+            if( !pTransferDocShell || ( (DrawDocShell*) pTransferDocShell)->GetDoc()->GetPageCount() <= 1 )
+            {
+                bool bIsPastingSupported (false);
+
+                // No or just one page.  Check if there is anything that can be
+                // pasted via a DrawViewShell.
+                ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
+                if (pBase != NULL)
+                {
+                    ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
+                        ::boost::dynamic_pointer_cast<DrawViewShell>(pBase->GetMainViewShell()));
+                    if (pDrawViewShell.get() != NULL)
+                    {
+                        TransferableDataHelper aDataHelper (
+                            TransferableDataHelper::CreateFromSystemClipboard(
+                                pDrawViewShell->GetActiveWindow()));
+                        if (aDataHelper.GetFormatCount() > 0)
+                            bIsPastingSupported = true;
+                    }
+                }
+
+                if ( ! bIsPastingSupported)
+                {
+                    rSet.DisableItem(SID_PASTE);
+                    rSet.DisableItem(SID_PASTE2);
+                }
+            }
         }
     }
 
@@ -714,47 +812,6 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
             rSet.DisableItem(SID_CUT);
             rSet.DisableItem(SID_DELETE_PAGE);
             rSet.DisableItem(SID_DELETE_MASTER_PAGE);
-        }
-    }
-
-    // Disable the rename slots when there are no or more than one slides/master
-    // pages selected.
-    if (rSet.GetItemState(SID_RENAMEPAGE) == SFX_ITEM_AVAILABLE
-        || rSet.GetItemState(SID_RENAME_MASTER_PAGE)  == SFX_ITEM_AVAILABLE)
-    {
-        if (mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount() != 1)
-        {
-            rSet.DisableItem(SID_RENAMEPAGE);
-            rSet.DisableItem(SID_RENAME_MASTER_PAGE);
-        }
-    }
-
-    if (rSet.GetItemState(SID_HIDE_SLIDE) == SFX_ITEM_AVAILABLE
-        || rSet.GetItemState(SID_SHOW_SLIDE)  == SFX_ITEM_AVAILABLE)
-    {
-        model::PageEnumeration aSelectedPages (
-            model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
-                mrSlideSorter.GetModel()));
-        HideSlideFunction::ExclusionState eState (
-            HideSlideFunction::GetExclusionState(aSelectedPages));
-        switch (eState)
-        {
-            case HideSlideFunction::MIXED:
-                // Show both entries.
-                break;
-
-            case HideSlideFunction::EXCLUDED:
-                rSet.DisableItem(SID_HIDE_SLIDE);
-                break;
-
-            case HideSlideFunction::INCLUDED:
-                rSet.DisableItem(SID_SHOW_SLIDE);
-                break;
-
-            case HideSlideFunction::UNDEFINED:
-                rSet.DisableItem(SID_HIDE_SLIDE);
-                rSet.DisableItem(SID_SHOW_SLIDE);
-                break;
         }
     }
 }
