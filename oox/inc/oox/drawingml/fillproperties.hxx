@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fillproperties.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,6 +89,7 @@ public:
     ::oox::drawingml::ColorPtr&                                         getFillColor(){ return maFillColor; };
     ::oox::drawingml::ColorPtr&                                         getColorChangeFrom(){ return maColorChangeFrom; };
     ::oox::drawingml::ColorPtr&                                         getColorChangeTo(){ return maColorChangeTo; };
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > getXGraphic(){ return mxGraphic; };
 
 private:
 
