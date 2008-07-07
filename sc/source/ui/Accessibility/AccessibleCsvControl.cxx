@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleCsvControl.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1581,29 +1581,13 @@ Reference< XAccessibleStateSet > SAL_CALL ScAccessibleCsvCell::getAccessibleStat
     return pStateSet;
 }
 
-
 // XInterface -----------------------------------------------------------------
 
-Any SAL_CALL ScAccessibleCsvCell::queryInterface( const ::com::sun::star::uno::Type& rType )
-        throw( RuntimeException )
-{
-    Any aAny;
-    if( rType == getCppuType( static_cast< const Reference< XAccessibleText >* >( NULL ) ) )
-        aAny <<= Reference< XAccessibleText >( this );
-    else
-        aAny <<= ScAccessibleCsvControl::queryInterface( rType );
-    return aAny;
-}
+IMPLEMENT_FORWARD_XINTERFACE2( ScAccessibleCsvCell, ScAccessibleCsvControl, AccessibleStaticTextBase )
 
-void SAL_CALL ScAccessibleCsvCell::acquire() throw()
-{
-    ScAccessibleCsvControl::acquire();
-}
+// XTypeProvider --------------------------------------------------------------
 
-void SAL_CALL ScAccessibleCsvCell::release() throw()
-{
-    ScAccessibleCsvControl::release();
-}
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( ScAccessibleCsvCell, ScAccessibleCsvControl, AccessibleStaticTextBase )
 
 // XServiceInfo ---------------------------------------------------------------
 
@@ -1611,24 +1595,6 @@ OUString SAL_CALL ScAccessibleCsvCell::getImplementationName() throw( RuntimeExc
 {
     return CREATE_OUSTRING( CELL_IMPL_NAME );
 }
-
-
-// XTypeProvider --------------------------------------------------------------
-
-Sequence< ::com::sun::star::uno::Type > SAL_CALL ScAccessibleCsvCell::getTypes() throw( RuntimeException )
-{
-    Sequence< ::com::sun::star::uno::Type > aSeq( 1 );
-    aSeq[ 0 ] = getCppuType( static_cast< const Reference< XAccessibleText >* >( NULL ) );
-    return ::comphelper::concatSequences( ScAccessibleCsvControl::getTypes(), aSeq );
-}
-
-Sequence< sal_Int8 > SAL_CALL ScAccessibleCsvCell::getImplementationId() throw( RuntimeException )
-{
-    static Sequence< sal_Int8 > aSeq;
-    getUuid( aSeq );
-    return aSeq;
-}
-
 
 // helpers --------------------------------------------------------------------
 
