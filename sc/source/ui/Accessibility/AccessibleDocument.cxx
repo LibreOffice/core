@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleDocument.cxx,v $
- * $Revision: 1.75 $
+ * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1411,6 +1411,12 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             FreeAccessibleSpreadsheet();
             if (mpChildrenShapes)
                 DELETEZ(mpChildrenShapes);
+
+            // #124567# Accessibility: Shapes / form controls after reload not accessible
+            if ( !mpChildrenShapes )
+            {
+                mpChildrenShapes = new ScChildrenShapes( this, mpViewShell, meSplitPos );
+            }
 
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::INVALIDATE_ALL_CHILDREN;
