@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editeng.cxx,v $
- * $Revision: 1.113 $
+ * $Revision: 1.114 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2408,7 +2408,9 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_uInt16 nPara )
     if ( pImpEditEngine->IsFormatted() )
     {
         ParaPortion* pParaPortion = pImpEditEngine->GetParaPortions()[nPara];
-        EditLine* pLine = pParaPortion ? pParaPortion->GetLines().GetObject( 0 ) : NULL;
+        EditLine* pLine = (pParaPortion && pParaPortion->GetLines().Count()) ?
+                pParaPortion->GetLines().GetObject( 0 ) : NULL;
+
         DBG_ASSERT( pParaPortion && pLine, "GetParagraphInfos - Paragraph out of range" );
         if ( pParaPortion && pLine )
         {
