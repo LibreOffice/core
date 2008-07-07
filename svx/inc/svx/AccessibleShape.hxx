@@ -1,5 +1,37 @@
 /*************************************************************************
  *
+<<<<<<< AccessibleShape.hxx
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: AccessibleShape.hxx,v $
+ *
+ *  $Revision: 1.4 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-07-07 14:28:01 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+=======
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
@@ -7,7 +39,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleShape.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -25,8 +57,10 @@
  * version 3 along with OpenOffice.org.  If not, see
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
+>>>>>>> 1.3
  *
  ************************************************************************/
+
 
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
 #define _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
@@ -163,6 +197,7 @@ public:
     */
     sal_Bool GetState (sal_Int16 aState);
 
+
     //=====  XAccessibleContext  ==============================================
 
     /// Return the number of currently visible children.
@@ -183,6 +218,7 @@ public:
             ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 nIndex)
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
 
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
@@ -220,6 +256,8 @@ public:
     virtual sal_Int32 SAL_CALL getBackground (void)
         throw (::com::sun::star::uno::RuntimeException);
 
+
+
     //=====  XComponent  ========================================================
 
     using WeakComponentImplHelperBase::addEventListener;
@@ -252,6 +290,7 @@ public:
             ::com::sun::star::accessibility::XAccessibleEventListener >& rxListener)
         throw (::com::sun::star::uno::RuntimeException);
 
+
     //=====  XInterface  ======================================================
 
     virtual com::sun::star::uno::Any SAL_CALL
@@ -265,6 +304,7 @@ public:
     virtual void SAL_CALL
         release (void)
         throw ();
+
 
     //=====  XServiceInfo  ====================================================
 
@@ -302,6 +342,7 @@ public:
     virtual void SAL_CALL
         notifyEvent (const ::com::sun::star::document::EventObject& rEventObject)
         throw (::com::sun::star::uno::RuntimeException);
+
 
     //===== XUnoTunnel ========================================================
 
@@ -389,6 +430,13 @@ private:
     SVX_DLLPRIVATE explicit AccessibleShape (const AccessibleShape&);
     /// Don't use the assignment operator.  Do we need this?
     SVX_DLLPRIVATE AccessibleShape& operator= (const AccessibleShape&);
+
+    /** Call this method when the title, name, or description of the mxShape
+        member (may) have been changed.
+        This method adapts the name and description members of the
+        AccessibleContextBase base class.
+    */
+    void UpdateNameAndDescription (void);
 };
 
 } // end of namespace accessibility
