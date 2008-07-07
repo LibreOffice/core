@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scriptdlg.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +58,7 @@
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
 
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/documentinfo.hxx>
@@ -76,6 +77,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::document;
 
 void ShowErrorDialog( const Any& aException )
 {
@@ -209,6 +212,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
         // TODO exception handling
     }
 
+    Reference<XModel> xDocumentModel;
     for ( sal_Int32 n = 0; n < children.getLength(); n++ )
     {
         bool app = false;
@@ -228,8 +232,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
         }
         else
         {
-            Reference<XInterface> xDocumentModel =
-                getDocumentModel(xCtx, uiName );
+            xDocumentModel.set(getDocumentModel(xCtx, uiName ), UNO_QUERY);
 
             if ( xDocumentModel.is() )
             {
@@ -269,7 +272,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
 
         /*SvLBoxEntry* pBasicManagerRootEntry =*/
             insertEntry( uiName, app ? IMG_HARDDISK : IMG_DOCUMENT,
-                0, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries )), factoryURL );
+                0, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries, xDocumentModel )), factoryURL );
     }
 
     SetUpdateMode( TRUE );
@@ -332,7 +335,8 @@ SFTreeListBox::getLangNodeFromRootNode( Reference< browse::XBrowseNode >& rootNo
     return langNode;
 }
 
-void SFTreeListBox:: RequestSubEntries( SvLBoxEntry* pRootEntry, Reference< ::com::sun::star::script::browse::XBrowseNode >& node )
+void SFTreeListBox:: RequestSubEntries( SvLBoxEntry* pRootEntry, Reference< ::com::sun::star::script::browse::XBrowseNode >& node,
+                                       Reference< XModel >& model )
 {
     if (! node.is() )
     {
@@ -351,15 +355,16 @@ void SFTreeListBox:: RequestSubEntries( SvLBoxEntry* pRootEntry, Reference< ::co
 
     for ( sal_Int32 n = 0; n < children.getLength(); n++ )
     {
+        ::rtl::OUString name( children[ n ]->getName() );
         if (  children[ n ]->getType() !=  browse::BrowseNodeTypes::SCRIPT)
         {
-            insertEntry( children[ n ]->getName(), IMG_LIB, pRootEntry, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, children[ n ] )));
+            insertEntry( name, IMG_LIB, pRootEntry, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, children[ n ],model )));
         }
         else
         {
             if ( children[ n ]->getType() == browse::BrowseNodeTypes::SCRIPT )
             {
-                insertEntry( children[ n ]->getName(), IMG_MACRO, pRootEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, children[ n ] )));
+                insertEntry( name, IMG_MACRO, pRootEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, children[ n ],model )));
 
             }
         }
@@ -453,10 +458,12 @@ void __EXPORT SFTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
     userData = (SFEntry*)pEntry->GetUserData();
 
     Reference< browse::XBrowseNode > node;
+    Reference< XModel > model;
     if ( userData && !userData->isLoaded() )
     {
         node = userData->GetNode();
-        RequestSubEntries( pEntry, node );
+        model = userData->GetModel();
+        RequestSubEntries( pEntry, node, model );
         userData->setLoaded();
     }
 }
@@ -765,18 +772,30 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
             if ( userData )
             {
                 Reference< browse::XBrowseNode > node;
+                Reference< XModel > xModel;
+
                 node = userData->GetNode();
-                if ( !node.is() )
+                xModel = userData->GetModel();
+
+                if ( !node.is() || !xModel.is() )
                 {
                     return 0;
                 }
+
                 if ( pButton == &aRunButton )
                 {
                     ::rtl::OUString tmpString;
                     Reference< beans::XPropertySet > xProp( node, UNO_QUERY );
                     Reference< provider::XScriptProvider > mspNode;
-                    if( !xProp.is() )
+                    Reference< XEmbeddedScripts >  xEmbeddedScripts( xModel, UNO_QUERY);
+                    if( !xProp.is() || !xEmbeddedScripts.is() )
                     {
+                        return 0;
+                    }
+
+                    if (!xEmbeddedScripts->getAllowMacroExecution())
+                    {
+                        // Please FIXME: Show a message box if AllowMacroExecution is false
                         return 0;
                     }
 
@@ -880,6 +899,53 @@ Reference< browse::XBrowseNode > SvxScriptOrgDialog::getBrowseNode( SvLBoxEntry*
     }
 
     return node;
+}
+
+Reference< XModel > SvxScriptOrgDialog::getModel( SvLBoxEntry* pEntry )
+{
+    Reference< XModel > model;
+    if ( pEntry )
+    {
+        SFEntry* userData = (SFEntry*)pEntry->GetUserData();
+        if ( userData )
+        {
+            model = userData->GetModel();
+        }
+    }
+
+    return model;
+}
+
+Reference< XInterface  >
+SvxScriptOrgDialog::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OUString& docName )
+{
+    Reference< XInterface > xModel;
+    Reference< lang::XMultiComponentFactory > mcf =
+            xCtx->getServiceManager();
+    Reference< frame::XDesktop > desktop (
+        mcf->createInstanceWithContext(
+            ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"), xCtx ),
+            UNO_QUERY );
+
+    Reference< container::XEnumerationAccess > componentsAccess =
+        desktop->getComponents();
+    Reference< container::XEnumeration > components =
+        componentsAccess->createEnumeration();
+    while (components->hasMoreElements())
+    {
+        Reference< frame::XModel > model(
+            components->nextElement(), UNO_QUERY );
+        if ( model.is() )
+        {
+            ::rtl::OUString sTdocUrl = ::comphelper::DocumentInfo::getDocumentTitle( model );
+            if( sTdocUrl.equals( docName ) )
+            {
+                xModel = model;
+                break;
+            }
+        }
+    }
+    return xModel;
 }
 
 void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
@@ -1021,6 +1087,10 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
         String aChildName = aChildNode->getName();
         SvLBoxEntry* pNewEntry = NULL;
 
+
+        ::rtl::OUString name( aChildName );
+        Reference<XModel> xDocumentModel = getModel( pEntry );
+
         // ISSUE do we need to remove all entries for parent
         // to achieve sort? Just need to determine position
         // SvTreeListBox::InsertEntry can take position arg
@@ -1030,13 +1100,13 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
         if ( aChildNode->getType() == browse::BrowseNodeTypes::SCRIPT )
         {
             pNewEntry = aScriptsBox.insertEntry( aChildName,
-                    IMG_MACRO, pEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, aChildNode ) ) );
+                    IMG_MACRO, pEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, aChildNode,xDocumentModel ) ) );
 
         }
         else
         {
             pNewEntry = aScriptsBox.insertEntry( aChildName,
-                IMG_LIB, pEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, aChildNode ) ) );
+                IMG_LIB, pEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, aChildNode,xDocumentModel ) ) );
                         // If the Parent is not loaded then set to
                         // loaded, this will prevent RequestingChilds ( called
                         // from vcl via RequestingChilds ) from
