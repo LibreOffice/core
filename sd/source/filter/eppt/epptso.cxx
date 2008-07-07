@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: epptso.cxx,v $
- * $Revision: 1.107 $
+ * $Revision: 1.108 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2540,7 +2540,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                         else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StartWith" ) ) )
                             nStartWith = *( (sal_Int16*)pValue );
                         else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LeftMargin" ) ) )
-                            nTextOfs += (sal_Int16)( *( (sal_Int32*)pValue ) / ( 2540.0 / 576 ) );
+                            nTextOfs = nTextOfs + static_cast< sal_Int16 >( *( (sal_Int32*)pValue ) / ( 2540.0 / 576 ) );
                         else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FirstLineOffset" ) ) )
                             nBulletOfs += (sal_Int16)( *( (sal_Int32*)pValue ) / ( 2540.0 / 576 ) );
                         else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BulletColor" ) ) )
