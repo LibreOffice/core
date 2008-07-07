@@ -124,3 +124,8 @@
 03/17/08 (TL, JSC): TaskID=i85576
   remove two never implemented properties 'TopMargin' and 'ButtomMargin' from
   com.sun.star.text.CellRange. 
+  
+06/26/08 (TL, JSC): TaskID=i86515
+  change css.text.IllustrationIndex into css.text.IllustrationsIndex because the 
+  implementation used the plural version.
+  
