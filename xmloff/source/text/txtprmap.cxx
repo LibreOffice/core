@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtprmap.cxx,v $
- * $Revision: 1.105 $
+ * $Revision: 1.106 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,9 @@ using namespace ::xmloff::token;
 #define _M_E( a, p, l, t, c ) \
     { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, t, c, SvtSaveOptions::ODFVER_010 }
 
+#define _M_EV( a, p, l, t, c, v ) \
+    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, t, c, v }
+
 #define _M_ED( a, p, l, t, c ) \
     { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, (t) | MID_FLAG_DEFAULT_ITEM_EXPORT, c, SvtSaveOptions::ODFVER_010 }
 
@@ -67,6 +70,8 @@ using namespace ::xmloff::token;
     _M_E( a, p, l, (t|XML_TYPE_PROP_GRAPHIC), c )
 #define MG_ED( a, p, l, t, c ) \
     _M_ED( a, p, l, (t|XML_TYPE_PROP_GRAPHIC), c )
+#define MG_EV( a, p, l, t, c, v ) \
+    _M_EV( a, p, l, (t|XML_TYPE_PROP_GRAPHIC), c, v )
 
 // section properties
 #define MS_E( a, p, l, t, c ) \
@@ -665,7 +670,8 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     MG_E( "HoriMirroredOnOddPages",     STYLE,  MIRROR,     XML_TYPE_TEXT_MIRROR_HORIZONTAL_RIGHT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
     MG_E( "VertMirrored",       STYLE,  MIRROR,     XML_TYPE_TEXT_MIRROR_VERTICAL|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
     // RES_GRFATR_CROPGRF
-    MG_E( "GraphicCrop",            FO,     CLIP,       XML_TYPE_TEXT_CLIP, 0 ),
+    MG_EV( "GraphicCrop",           FO,     CLIP,       XML_TYPE_TEXT_CLIP, CTF_TEXT_CLIP, SvtSaveOptions::ODFVER_012 ),
+    MG_E( "GraphicCrop",            FO,     CLIP,       XML_TYPE_TEXT_CLIP11, CTF_TEXT_CLIP11 ),
     // RES_GRFATR_ROTATION
     // not required (exported as svg:transform attribute)
     // RES_GRFATR_LUMINANCE
