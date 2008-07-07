@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swdtflvr.cxx,v $
- * $Revision: 1.119 $
+ * $Revision: 1.120 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -125,6 +125,7 @@
 #include <swunodef.hxx>
 #include <vcl/sound.hxx>
 #include <swerror.h>
+#include <SwCapObjType.hxx>
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -172,6 +173,8 @@ extern BOOL bExecuteDrag;
 #define SWTRANSFER_OBJECTTYPE_STRING            0x00000008
 #define SWTRANSFER_OBJECTTYPE_SWOLE             0x00000010
 #define SWTRANSFER_OBJECTTYPE_DDE               0x00000020
+
+#define SWTRANSFER_GRAPHIC_INSERTED             0x00000040
 
 using namespace ::svx;
 using ::rtl::OUString;
@@ -1211,6 +1214,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
     SwModule* pMod = SW_MOD();
 
     int nRet = 0;
+    bool bCallAutoCaption = false;
 
     if( pPt )
     {
@@ -1434,6 +1438,8 @@ ASSERT( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
             nRet = SwTransferable::_PasteFileName( rData, rSh, nFormat,
                                         SW_PASTESDR_INSERT, pPt,
                                         nActionFlags, bMsg );
+            if( nRet & SWTRANSFER_GRAPHIC_INSERTED )
+                bCallAutoCaption = true;
             break;
 
         case EXCHG_OUT_ACTION_INSERT_OLE:
@@ -1554,6 +1560,8 @@ ASSERT( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
 
     if( pAction )
         delete pAction;
+    if( bCallAutoCaption )
+        rSh.GetView().AutoCaption( GRAPHIC_CAP );
 
     return nRet;
 }
@@ -2358,7 +2366,7 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         case SW_PASTESDR_INSERT:
             SwTransferable::SetSelInShell( rSh, FALSE, pPt );
             rSh.Insert( sURL, aEmptyStr, aGrf );
-            break;
+        break;
 
         case SW_PASTESDR_REPLACE:
             if( rSh.IsObjSelected() )
@@ -2519,7 +2527,8 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
 {
     int nRet = SwTransferable::_PasteGrf( rData, rSh, nFmt, nAction,
                                             pPt, nActionFlags, bMsg );
-
+    if( nRet )
+        nRet |= SWTRANSFER_GRAPHIC_INSERTED;
     if( !nRet )
     {
         String sFile, sDesc;
