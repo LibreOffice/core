@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: baside2.cxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -747,22 +747,10 @@ long __EXPORT ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
 
     AddStatus( BASWIN_INRESCHEDULE );
 
-    // #80085 removed
-    //if( BasicIDE::GetBasicDialogCount() )
-    //{
-        //Application::GetDefDialogParent()->EnableInput( TRUE, TRUE );
-    //}
-
     BasicIDE::InvalidateDebuggerSlots();
 
     while( aStatus.bIsRunning )
         Application::Yield();
-
-    // #80085 removed
-    //if( BasicIDE::GetBasicDialogCount() )
-    //{
-        //Application::GetDefDialogParent()->EnableInput( FALSE, TRUE );
-    //}
 
     aStatus.bIsInReschedule = FALSE;
     aXEditorWindow.GetBrkWindow().SetMarkerPos( MARKER_NOMARKER );
