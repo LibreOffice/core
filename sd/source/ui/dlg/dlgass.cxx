@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgass.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,6 +124,32 @@ public:
 };
 
 DECLARE_LIST( PasswordEntryList, PasswordEntry * )
+
+// ====================================================================
+
+/** A simple wrapper that looks like a PushButton and is used to force the
+    broadcasting of focus events primarly for accessibility tools.
+    Forcing focus events is achieved by using two identical PushButtons
+    which, when the focus event is requested, are exchanged and play focus
+    ping-pong by moving the focus from one to the other.
+*/
+class NextButton
+{
+public:
+    NextButton (::Window* pParent, const ResId& rResId);
+
+    void ForceFocusEventBroadcast (void);
+    void SetClickHdl (const Link& rLink);
+    bool IsEnabled (void);
+    void Enable (bool bEnable);
+
+private:
+    PushButton maNextButton1;
+    PushButton maNextButton2;
+    bool mbIsFirstButtonActive;
+};
+
+
 
 // ====================================================================
 
@@ -274,7 +300,7 @@ public:
     HelpButton          maHelpButton;
     CancelButton        maCancelButton;
     PushButton          maLastPageButton;
-    PushButton          maNextPageButton;
+    NextButton          maNextPageButton;
     OKButton            maFinishButton;
     SdDocPreviewWin     maPreview;
 
@@ -568,6 +594,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
 
     mpPage5PageListCT->SetSelectHdl(LINK(this,AssistentDlgImpl, PageSelectHdl));
 
+
     // generell
     InterpolateFixedBitmap( mpPage1FB );
     InterpolateFixedBitmap( mpPage2FB );
@@ -577,6 +604,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
 
     maLastPageButton.SetClickHdl(LINK(this,AssistentDlgImpl, LastPageHdl ));
     maNextPageButton.SetClickHdl(LINK(this,AssistentDlgImpl, NextPageHdl ));
+
     maPreviewFlag.Check( mbPreview );
     maPreviewFlag.SetClickHdl(LINK(this, AssistentDlgImpl, PreviewFlagHdl ));
     maPreview.SetClickHdl(LINK(this,AssistentDlgImpl, EffectPreviewHdl ));
@@ -1089,7 +1117,9 @@ void AssistentDlgImpl::ChangePage()
     UpdatePage();
 
     if( maNextPageButton.IsEnabled() )
-        maNextPageButton.GrabFocus();
+    {
+      maNextPageButton.ForceFocusEventBroadcast();
+    }
     else
         maFinishButton.GrabFocus();
 }
@@ -1138,7 +1168,7 @@ void AssistentDlgImpl::UpdatePage()
     case 3:
         {
             if(GetStartType() != ST_TEMPLATE)
-                maNextPageButton.Disable();
+                maNextPageButton.Enable(false);
 
             BOOL bKiosk = mpPage3PresTypeKioskRB->IsChecked();
             mpPage3PresTimeFT->Enable(bKiosk);
@@ -1311,7 +1341,9 @@ IMPL_LINK( AssistentDlgImpl, LastPageHdl, PushButton *, EMPTYARG )
 IMPL_LINK( AssistentDlgImpl, PresTypeHdl, RadioButton*, EMPTYARG )
 {
     if(maDocFile.Len() == 0)
-        maNextPageButton.Disable();
+      {
+        maNextPageButton.Enable(false);
+      }
 
     BOOL bKiosk = mpPage3PresTypeKioskRB->IsChecked();
     mpPage3PresTimeFT->Enable(bKiosk);
@@ -1948,4 +1980,71 @@ BOOL AssistentDlg::IsDocEmpty() const
 String AssistentDlg::GetPassword()
 {
     return mpImpl->GetPassword( mpImpl->maDocFile );
+}
+
+
+
+
+//===== NextButton ============================================================
+
+NextButton::NextButton (::Window* pParent, const ResId& rResId)
+    : maNextButton1(pParent, rResId),
+      maNextButton2(pParent, rResId),
+      mbIsFirstButtonActive(true)
+{
+    // Hide the unused button.
+    maNextButton2.Hide();
+}
+
+
+
+
+void NextButton::ForceFocusEventBroadcast (void)
+{
+    // Hide the currently visible button and show and focus the other one.
+    if (mbIsFirstButtonActive)
+    {
+        mbIsFirstButtonActive = false;
+        maNextButton2.Show();
+        maNextButton2.GrabFocus();
+        maNextButton1.Hide();
+    }
+    else
+    {
+        mbIsFirstButtonActive = true;
+        maNextButton1.Show();
+        maNextButton1.GrabFocus();
+        maNextButton2.Hide();
+    }
+}
+
+
+
+
+void NextButton::SetClickHdl (const Link& rLink)
+{
+    // Forward the setting of the click handler to the two buttons
+    // regardless of which one is currently visible.
+    maNextButton1.SetClickHdl(rLink);
+    maNextButton2.SetClickHdl(rLink);
+}
+
+
+
+
+bool NextButton::IsEnabled (void)
+{
+    // Because the buttons are both either enabled or disabled, it is
+    // sufficient to ask one to determine the state.
+    return maNextButton1.IsEnabled();
+}
+
+
+
+
+void NextButton::Enable (bool bEnable)
+{
+    // Enable or disable both buttons but do not change visibility or focus.
+    maNextButton1.Enable(bEnable);
+    maNextButton2.Enable(bEnable);
 }
