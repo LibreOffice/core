@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_extensioncmdqueue.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,6 +110,7 @@ public:
     */
     void stopAndWait();
 
+    bool isBusy();
 private:
     ExtensionCmdQueue(ExtensionCmdQueue &); // not defined
     void operator =(ExtensionCmdQueue &); // not defined
