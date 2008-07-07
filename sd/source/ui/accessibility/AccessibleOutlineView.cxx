@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleOutlineView.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -141,6 +141,8 @@ sal_Int32 SAL_CALL
     AccessibleOutlineView::getAccessibleChildCount (void)
     throw (uno::RuntimeException)
 {
+    ThrowIfDisposed ();
+
     // forward
     return maTextHelper.GetChildCount();
 }
@@ -150,6 +152,7 @@ uno::Reference<XAccessible> SAL_CALL
     AccessibleOutlineView::getAccessibleChild (sal_Int32 nIndex)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
     // Forward request to children manager.
     return maTextHelper.GetChild(nIndex);
 }
@@ -159,13 +162,15 @@ uno::Reference<XAccessible> SAL_CALL
 void SAL_CALL AccessibleOutlineView::addEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
 {
     // delegate listener handling to children manager.
-    maTextHelper.AddEventListener(xListener);
+    if ( ! IsDisposed())
+        maTextHelper.AddEventListener(xListener);
 }
 
 void SAL_CALL AccessibleOutlineView::removeEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
 {
     // forward
-    maTextHelper.RemoveEventListener(xListener);
+    if ( ! IsDisposed())
+        maTextHelper.RemoveEventListener(xListener);
 }
 
 //=====  XServiceInfo  ========================================================
@@ -225,6 +230,8 @@ void SAL_CALL
     AccessibleOutlineView::propertyChange (const beans::PropertyChangeEvent& rEventObject)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
+
     AccessibleDocumentViewBase::propertyChange (rEventObject);
 
     OSL_TRACE ("AccessibleOutlineView::propertyChange");
