@@ -1,0 +1,3 @@
+The Presentation Minimizer is used to reduce the file size of the current
+presentation. Images will be compressed, and data that is no longer needed
+will be removed.
