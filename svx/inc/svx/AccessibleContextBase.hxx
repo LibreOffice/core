@@ -1,5 +1,37 @@
 /*************************************************************************
  *
+<<<<<<< AccessibleContextBase.hxx
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: AccessibleContextBase.hxx,v $
+ *
+ *  $Revision: 1.4 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-07-07 14:27:26 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+=======
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
@@ -7,7 +39,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleContextBase.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -25,6 +57,7 @@
  * version 3 along with OpenOffice.org.  If not, see
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
+>>>>>>> 1.3
  *
  ************************************************************************/
 
@@ -53,6 +86,7 @@
 #include <cppuhelper/compbase4.hxx>
 #include "svx/svxdllapi.h"
 
+
 namespace accessibility {
 
 struct MutexOwner {mutable ::osl::Mutex maMutex;};
@@ -73,12 +107,24 @@ class SVX_DLLPUBLIC AccessibleContextBase
         >
 {
 public:
+
     //=====  internal  ========================================================
+
+    /** The origin of the accessible name or description.
+    */
+    enum StringOrigin {
+        ManuallySet,
+        FromShape,
+        AutomaticallyCreated,
+        NotSet
+    };
+
     AccessibleContextBase (
         const ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>& rxParent,
+            ::com::sun::star::accessibility::XAccessible>& rxParent,
         const sal_Int16 aRole);
     virtual ~AccessibleContextBase (void);
+
 
     /** Call all accessiblity event listeners to inform them about the
         specified event.
@@ -99,16 +145,29 @@ public:
         the old one, broadcast an accessibility event.
         @param rsDescription
             The new description.
+        @param eDescriptionOrigin
+            The origin of the description.  This is used to determine
+            whether the given description overrules the existing one.  An
+            origin with a lower numerical value overrides one with a higher
+            value.
     */
-    void SetAccessibleDescription (const ::rtl::OUString& rsDescription)
+    void SetAccessibleDescription (
+        const ::rtl::OUString& rsDescription,
+        StringOrigin eDescriptionOrigin)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Set a new description and, provided that the new name differs from
         the old one, broadcast an accessibility event.
         @param rsName
             The new name.
+        @param eNameOrigin
+            The origin of the name.  This is used to determine whether the
+            given name overrules the existing one.  An origin with a lower
+            numerical value overrides one with a higher value.
     */
-    void SetAccessibleName (const ::rtl::OUString& rsName)
+    void SetAccessibleName (
+        const ::rtl::OUString& rsName,
+        StringOrigin eNameOrigin)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Set the specified state (turn it on) and send events to all
@@ -157,12 +216,14 @@ public:
         ::com::sun::star::accessibility::XAccessibleRelationSet>& rxRelationSet)
         throw (::com::sun::star::uno::RuntimeException);
 
+
     //=====  XAccessible  =====================================================
 
     /// Return the XAccessibleContext.
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleContext> SAL_CALL
         getAccessibleContext (void) throw (::com::sun::star::uno::RuntimeException);
+
 
     //=====  XAccessibleContext  ==============================================
 
@@ -239,6 +300,7 @@ public:
                 ::com::sun::star::accessibility::XAccessibleEventListener >& xListener)
         throw (::com::sun::star::uno::RuntimeException);
 
+
     //=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
@@ -259,6 +321,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
+
 
     //=====  XTypeProvider  ===================================================
 
@@ -344,10 +407,22 @@ private:
     */
     ::rtl::OUString msDescription;
 
+    /** The origin of the description is used to determine whether new
+        descriptions given to the SetAccessibleDescription is ignored or
+        whether that replaces the old value in msDescription.
+    */
+    StringOrigin meDescriptionOrigin;
+
     /** Name of this object.  It changes according the the draw page's
         display mode.
     */
     ::rtl::OUString msName;
+
+    /** The origin of the name is used to determine whether new
+        name given to the SetAccessibleName is ignored or
+        whether that replaces the old value in msName.
+    */
+    StringOrigin meNameOrigin;
 
     /** client id in the AccessibleEventNotifier queue
     */
