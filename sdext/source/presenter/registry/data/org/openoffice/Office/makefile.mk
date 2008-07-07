@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,13 +42,11 @@ EXTNAME=presenter
 # --- Targets ------------------------------------------------------
 
 XCUFILES=				\
-    Addons.xcu			\
     Jobs.xcu			\
     ProtocolHandler.xcu
 
 MODULEFILES=
 
-LOCALIZEDFILES= \
-    Addons.xcu
+LOCALIZEDFILES=
 
 .INCLUDE :  target.mk
