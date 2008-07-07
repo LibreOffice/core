@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_writer.scp,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,6 +96,7 @@ Module gid_Module_Brand_Prg_Wrt
     Description = "gid_Module_Brand_Prg_Wrt";
     ParentID = gid_Module_Prg_Wrt;
     Sortkey = "100";
+    InstallOrder = "1040";
     Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
