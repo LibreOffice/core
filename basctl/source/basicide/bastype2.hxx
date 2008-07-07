@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bastype2.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -157,7 +157,6 @@ private:
     void            SetEntryBitmaps( SvLBoxEntry * pEntry, const Image& rImage, const Image& rImageHC );
 
 protected:
-    void                    ExpandTree( SvLBoxEntry* pRootEntry );
     virtual void            RequestingChilds( SvLBoxEntry* pParent );
     virtual void            ExpandedHdl();
     virtual SvLBoxEntry*    CloneEntry( SvLBoxEntry* pSource );
@@ -184,8 +183,6 @@ public:
     void            ScanEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     void            ScanAllEntries();
     void            UpdateEntries();
-
-    void            ExpandAllTrees();
 
     BOOL            IsEntryProtected( SvLBoxEntry* pEntry );
 
