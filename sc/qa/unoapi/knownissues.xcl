@@ -101,10 +101,6 @@ sc.ScStyleObj::com::sun::star::style::Style
 ### i86793 ###
 sc.ScTableSheetObj::com::sun::star::sheet::XFormulaQuery
 
-### i84726 ###
-sc.ScAccessibleCsvGrid::com::sun::star::accessibility::XAccessibleTable::getAccessibleRowDescription() 
-#-> disabled in sc.sce
-
 ### i84554 ###
 sc.AccessibleEditableTextPara_PreviewNote 
 #-> disabled in sc.sce
@@ -157,3 +153,14 @@ sc.XMLMetaImporter
 
 ### i90346 ### 
 sc.ScTableValidationObj::com::sun::star::sheet::TableValidation
+
+### i91043 ###
+sc.ScModelObj::com::sun::star::document::XEventBroadcaster
+
+### i91044 ###
+sc.ScAccessibleCsvCell
+#-> disabled in sc.sce
+
+### i91045 ###
+sc.ScAccessibleDocumentPagePreview
+#-> disabled in sc.sce
