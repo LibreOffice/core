@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: compiler.src,v $
- * $Revision: 1.58 $
+ * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1655,7 +1655,7 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_FISHER_INV { Text = "FISHERINV" ; };
     String SC_OPCODE_S_NORM_INV { Text = "LEGACY.NORMSINV" ; };
     String SC_OPCODE_GAMMA_LN { Text = "GAMMALN" ; };
-    String SC_OPCODE_ERROR_TYPE { Text = "ERROR.TYPE" ; };
+    String SC_OPCODE_ERROR_TYPE { Text = "ORG.OPENOFFICE.ERRORTYPE" ; };
     String SC_OPCODE_ERR_CELL { Text = "ZellError" ; };  // TODO: ancient legacy only, remove?
     String SC_OPCODE_FORMULA { Text = "FORMULA"; };
     String SC_OPCODE_ARC_TAN_2 { Text = "ATAN2" ; };
