@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessiblePageShape.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -284,6 +284,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
     AccessiblePageShape::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
     return AccessibleShape::getSupportedServiceNames();
 }
 
@@ -296,6 +297,7 @@ void SAL_CALL
     AccessiblePageShape::disposing (const ::com::sun::star::lang::EventObject& aEvent)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ThrowIfDisposed ();
     AccessibleShape::disposing (aEvent);
 }
 
