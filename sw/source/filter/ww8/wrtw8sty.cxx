@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtw8sty.cxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1566,7 +1566,7 @@ void WW8_WrPlcSepx::WriteSepx( SvStream& rStrm ) const
     for( i = 0; i < aSects.Count(); i++ ) // ueber alle Sections
     {
         WW8_PdAttrDesc* pA = pAttrs + i;
-        if( pA->nLen )
+        if( pA->nLen && pA->pData != NULL)
         {
             SVBT16 nL;
             pA->nSepxFcPos = rStrm.Tell();
