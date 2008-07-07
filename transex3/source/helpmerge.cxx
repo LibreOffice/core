@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: helpmerge.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,10 @@
 #include "rtl/strbuf.hxx"
 #ifdef WNT
 #include <direct.h>
+//#include <WinBase.h>
+#include "tools/prewin.h"
+#include <windows.h>
+#include "tools/postwin.h"
 #endif
 
 /*****************************************************************************/
@@ -466,6 +470,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
         ProcessHelp( aLangHM , sLanguage, &pResData , aMergeDataFile );
      }
 
+
     // Init temp and target file
     ByteString sTempFile;
     ByteString sTargetFile( sPath );
@@ -506,17 +511,22 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
     {
         remove( sTargetFile.GetBuffer() );
     }
-    int rc = rename( sTempFile.GetBuffer() , sTargetFile.GetBuffer() );
+    int rc;
+#ifdef UNX
+    rc = rename( sTempFile.GetBuffer() , sTargetFile.GetBuffer() );
+#else
+    rc = MoveFileEx( sTempFile.GetBuffer() , sTargetFile.GetBuffer(), MOVEFILE_REPLACE_EXISTING );
+#endif
     FileStat aFS( aTar );
 
     //cout << "mv " << sTempFile.GetBuffer() << " " << sTargetFile.GetBuffer() << "\n";
     //cout << "rc -> " << rc << " filesize -> " << aFS.GetSize() << "\n";
 // Windows rename returns -1 if the file already exits
-#ifdef WNT
-    if( aFS.GetSize() < 1 )
-#else
+//#ifdef UNX
     if( rc < 0 || aFS.GetSize() < 1 )
-#endif
+//#else
+//    if( aFS.GetSize() < 1 )
+//#endif
     {
 #ifdef UNX
         sleep( 3 );
@@ -528,18 +538,22 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
         {
             remove( sTargetFile.GetBuffer() );
         }
+#ifdef UNX
         rc = rename( sTempFileCopy.GetBuffer() , sTargetFile.GetBuffer() );
+#else
+        rc = MoveFileEx( sTempFileCopy.GetBuffer() , sTargetFile.GetBuffer() , MOVEFILE_REPLACE_EXISTING );
+#endif
         aFS.Update( aTar );
 
         //cout << "mv2 " << sTempFileCopy.GetBuffer() << " " << sTargetFile.GetBuffer() << "\n";
         //cout << "rc -> " << rc << " filesize -> " << aFS.GetSize() << "\n";
 
 // Windows rename returns -1 if the file already exits
-#ifdef WNT
-        if( aFS.GetSize() < 1 )
-#else
+//#ifdef WNT
+//        if( aFS.GetSize() < 1 )
+//#else
         if( rc < 0 || aFS.GetSize() < 1 )
-#endif
+//#endif
         {
             cerr << "ERROR: helpex Can't rename file " << sTempFileCopy.GetBuffer() << " to " << sTargetFile.GetBuffer() << " rename rc=" << rc << " filesize=" << aFS.GetSize() << "\n";
             aTmp.Kill();
