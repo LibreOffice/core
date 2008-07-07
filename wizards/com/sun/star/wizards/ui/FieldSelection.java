@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FieldSelection.java,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -248,25 +248,25 @@ public class FieldSelection {
                                     new String[] { "Enabled", "FontDescriptor", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
                                     new Object[] { Boolean.FALSE, oFontDesc, new Integer(14), "HID:" + Integer.toString(_FirstHelpIndex+7), String.valueOf((char) 8744), cmdMoveButtonPosX, MoveButtonPosY[1], IStep, new Short(curtabindex++), CmdButtonWidth });
 
-            CurUnoDialog.getPeerConfiguration().setAccessiblityName(btnmoveselected, AccessTextMoveSelected);
-            CurUnoDialog.getPeerConfiguration().setAccessiblityName(btnremoveselected, AccessTextMoveSelected);
-            CurUnoDialog.getPeerConfiguration().setAccessiblityName(xFieldsListBox, JavaTools.replaceSubString(slblFields, "", "~"));
-            CurUnoDialog.getPeerConfiguration().setAccessiblityName(xSelFieldsListBox, JavaTools.replaceSubString(slblSelFields, "", "~"));
+            CurUnoDialog.getPeerConfiguration().setAccessibleName(btnmoveselected, AccessTextMoveSelected);
+            CurUnoDialog.getPeerConfiguration().setAccessibleName(btnremoveselected, AccessTextRemoveSelected);
+            CurUnoDialog.getPeerConfiguration().setAccessibleName(xFieldsListBox, JavaTools.replaceSubString(slblFields, "", "~"));
+            CurUnoDialog.getPeerConfiguration().setAccessibleName(xSelFieldsListBox, JavaTools.replaceSubString(slblSelFields, "", "~"));
             if (btnmoveall != null)
             {
-                CurUnoDialog.getPeerConfiguration().setAccessiblityName(btnmoveall, AccessTextMoveAll);
+                CurUnoDialog.getPeerConfiguration().setAccessibleName(btnmoveall, AccessTextMoveAll);
             }
             if (btnremoveall != null)
             {
-                CurUnoDialog.getPeerConfiguration().setAccessiblityName(btnremoveall, AccessTextRemoveAll);
+                CurUnoDialog.getPeerConfiguration().setAccessibleName(btnremoveall, AccessTextRemoveAll);
             }
             if (btnmoveup != null)
             {
-                CurUnoDialog.getPeerConfiguration().setAccessiblityName(btnmoveup, AccessMoveFieldUp);
+                CurUnoDialog.getPeerConfiguration().setAccessibleName(btnmoveup, AccessMoveFieldUp);
             }
             if (btnmovedown != null)
             {
-                CurUnoDialog.getPeerConfiguration().setAccessiblityName(btnmovedown, AccessMoveFieldDown );
+                CurUnoDialog.getPeerConfiguration().setAccessibleName(btnmovedown, AccessMoveFieldDown );
             }
 
         } catch (Exception exception) {
