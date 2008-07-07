@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PeerConfig.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,6 @@ package com.sun.star.wizards.ui;
 import java.util.Vector;
 
 import com.sun.star.awt.*;
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
@@ -46,7 +45,7 @@ import com.sun.star.wizards.common.Helper;
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
 public class PeerConfig implements XWindowListener{
-    Vector aPeerTasks = new Vector();
+    private Vector m_aPeerTasks = new Vector();
     Vector aControlTasks = new Vector();
     Vector aImageUrlTasks = new Vector();
     UnoDialog oUnoDialog = null;
@@ -104,13 +103,17 @@ public class PeerConfig implements XWindowListener{
 
     public void windowShown(EventObject arg0) {
     try {
-        for (int i = 0; i < this.aPeerTasks.size(); i++){
-            PeerTask aPeerTask = (PeerTask) aPeerTasks.elementAt(i);
+        for (int i = 0; i < this.m_aPeerTasks.size(); i++)
+        {
+            PeerTask aPeerTask = (PeerTask) m_aPeerTasks.elementAt(i);
             XVclWindowPeer xVclWindowPeer = (XVclWindowPeer) UnoRuntime.queryInterface(XVclWindowPeer.class, aPeerTask.xControl.getPeer());
             for (int n = 0; n < aPeerTask.propnames.length; n++)
+            {
                 xVclWindowPeer.setProperty(aPeerTask.propnames[n], aPeerTask.propvalues[n]);
         }
-        for (int i = 0; i < this.aControlTasks.size(); i++){
+        }
+        for (int i = 0; i < this.aControlTasks.size(); i++)
+        {
             ControlTask aControlTask = (ControlTask) aControlTasks.elementAt(i);
             Helper.setUnoPropertyValue(aControlTask.oModel, aControlTask.propname, aControlTask.propvalue);
         }
@@ -118,11 +121,17 @@ public class PeerConfig implements XWindowListener{
             ImageUrlTask aImageUrlTask = (ImageUrlTask) aImageUrlTasks.elementAt(i);
             String sImageUrl = "";
             if (AnyConverter.isInt(aImageUrlTask.oResource))
+            {
                 sImageUrl = oUnoDialog.getWizardImageUrl(((Integer) aImageUrlTask.oResource).intValue(), ((Integer) aImageUrlTask.oHCResource).intValue());
+            }
             else if (AnyConverter.isString(aImageUrlTask.oResource))
+            {
                 sImageUrl = oUnoDialog.getImageUrl(((String) aImageUrlTask.oResource), ((String) aImageUrlTask.oHCResource));
+            }
             if (!sImageUrl.equals(""))
+            {
                 Helper.setUnoPropertyValue(aImageUrlTask.oModel, "ImageURL", sImageUrl);
+        }
         }
 
     } catch (RuntimeException re) {
@@ -141,33 +150,37 @@ public class PeerConfig implements XWindowListener{
     /**
      *
      * @param oAPIControl an API control that the interface XControl can be derived from
-     * @param _scontrolname
+     * @param _saccessname
      */
-    public void setAccessiblityName(Object oAPIControl, String _saccessname) {
+    public void setAccessibleName(Object oAPIControl, String _saccessname)
+    {
         XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, oAPIControl);
-        setPeerProperties(xControl, new String[] { "AccessibilityName" }, new String[]{_saccessname});
+        setPeerProperties(xControl, new String[] { "AccessibleName" }, new String[]{_saccessname});
     }
 
 
-    public void setAccessiblityName(XControl _xControl, String _saccessname) {
-        setPeerProperties(_xControl, new String[] { "AccessibilityName" }, new String[]{_saccessname});
+    public void setAccessibleName(XControl _xControl, String _saccessname)
+    {
+        setPeerProperties(_xControl, new String[] { "AccessibleName" }, new String[]{_saccessname});
     }
 
     /**
      *
      * @param oAPIControl an API control that the interface XControl can be derived from
-     * @param propnames
-     * @param propvalues
+     * @param _propnames
+     * @param _propvalues
      */
-    public void setPeerProperties(Object oAPIControl, String[] _propnames, Object[] _propvalues) {
+    public void setPeerProperties(Object oAPIControl, String[] _propnames, Object[] _propvalues)
+    {
         XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, oAPIControl);
         setPeerProperties(xControl, _propnames, _propvalues);
     }
 
 
-    public void setPeerProperties(XControl _xControl, String[] propnames, Object[] propvalues) {
+    public void setPeerProperties(XControl _xControl, String[] propnames, Object[] propvalues)
+    {
         PeerTask  oPeerTask = new PeerTask(_xControl, propnames, propvalues);
-        this.aPeerTasks.add(oPeerTask);
+        this.m_aPeerTasks.add(oPeerTask);
     }
 
     /**
@@ -213,8 +226,8 @@ public class PeerConfig implements XWindowListener{
      * within the wizards project
      * wizards project
      * @param _ocontrolmodel
-     * @param _nResId
-     * @param _nhcResId
+     * @param _oResource
+     * @param _oHCResource
      */
     public void setImageUrl(Object _ocontrolmodel, Object _oResource, Object _oHCResource){
         ImageUrlTask oImageUrlTask = new ImageUrlTask(_ocontrolmodel, _oResource, _oHCResource);
