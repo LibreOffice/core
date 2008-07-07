@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleBase.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -650,7 +650,7 @@ sal_Int32 SAL_CALL AccessibleBase::getAccessibleIndexInParent()
 sal_Int16 SAL_CALL AccessibleBase::getAccessibleRole()
     throw (RuntimeException)
 {
-    return AccessibleRole::SHAPE;
+    return AccessibleRole::LIST_ITEM; // #i73747# role SHAPE seems more appropriate, but is not read
 }
 
 Reference< XAccessibleRelationSet > SAL_CALL AccessibleBase::getAccessibleRelationSet()
