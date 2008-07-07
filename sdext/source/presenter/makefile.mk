@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -240,14 +240,17 @@ COMPONENT_MANIFEST= 							\
 COMPONENT_LIBRARY= 								\
     $(ZIP1DIR)$/$(TARGET).uno$(DLLPOST)
 
+COMPONENT_HELP= 								\
+    $(ZIP1DIR)$/help/component.txt
+
 ZIP1DEPS=					\
     $(PACKLICS) 			\
     $(DESCRIPTION)			\
     $(COMPONENT_MANIFEST)	\
     $(COMPONENT_FILES)		\
     $(COMPONENT_BITMAPS)	\
-    $(COMPONENT_LIBRARY)
-
+    $(COMPONENT_LIBRARY)	\
+    $(COMPONENT_HELP)
 
 PLATFORMID:=$(RTL_OS:l)_$(RTL_ARCH:l)
 
@@ -264,6 +267,10 @@ $(INCCOM)$/PresenterExtensionIdentifier.hxx : PresenterExtensionIdentifier.txx
 $(COMPONENT_MANIFEST) : $$(@:f)
     @-$(MKDIRHIER) $(@:d)
     +$(TYPE) $< | $(SED) "s/SHARED_EXTENSION/$(DLLPOST)/" > $@
+
+$(COMPONENT_HELP) : help$/$$(@:f)
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
 
 #$(COMPONENT_FILES) : $$(@:f)
 #	@-$(MKDIRHIER) $(@:d)
@@ -305,7 +312,7 @@ $(COMPONENT_LIBRARY) : $(DLLDEST)$/$$(@:f)
             $(GNUCOPY) $(SOLARBINDIR)$/Microsoft.VC90.CRT.manifest $(ZIP1DIR)
         .ENDIF
     .ENDIF         # "$(PACKMS)"!=""
- .ENDIF	#"$(COM)"=="GCC" 
+ .ENDIF	#"$(COM)"=="GCC"
 .ENDIF
 
 
@@ -339,7 +346,7 @@ $(DESCRIPTION) $(PHONYDESC) : $$(@:f)
     $(PERL) $(SOLARENV)$/bin$/licinserter.pl description.xml registry/LICENSE_xxx $(DESCRIPTION_TMP)
     @echo LAST_WITH_LANG=$(WITH_LANG) > $(ZIP1DIR)_lang_track.mk
     $(TYPE) $(DESCRIPTION_TMP) | sed s/UPDATED_PLATFORM/$(PLATFORMID)/ > $@
-    @@-$(RM) $(DESCRIPTION_TMP)	
+    @@-$(RM) $(DESCRIPTION_TMP)
 
 
 .ENDIF # "$(ENABLE_PRESENTER_SCREEN)" != "NO"
