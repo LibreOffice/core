@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleCell.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <svx/AccessibleStaticTextBase.hxx>
+#include <comphelper/uno3.hxx>
 
 class ScTabViewShell;
 class ScAccessibleDocument;
@@ -74,13 +75,11 @@ protected:
 public:
     ///=====  XInterface  =====================================================
 
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-        ::com::sun::star::uno::Type const & rType )
-        throw (::com::sun::star::uno::RuntimeException);
+    DECLARE_XINTERFACE()
 
-    virtual void SAL_CALL acquire() throw ();
+    ///=====  XTypeProvider  ===================================================
 
-    virtual void SAL_CALL release() throw ();
+    DECLARE_XTYPEPROVIDER()
 
     ///=====  XAccessibleComponent  ============================================
 
@@ -140,19 +139,6 @@ public:
     */
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
         getSupportedServiceNames(void)
-        throw (::com::sun::star::uno::RuntimeException);
-
-    ///=====  XTypeProvider  ===================================================
-
-    /// returns the possible types
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
-        getTypes()
-        throw (::com::sun::star::uno::RuntimeException);
-
-    /** Returns a implementation id.
-    */
-    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
-        getImplementationId(void)
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
