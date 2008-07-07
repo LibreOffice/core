@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_extensioncmdqueue.cxx,v $
  *
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -271,6 +271,7 @@ public:
                          const uno::Reference< deployment::XPackage > &rPackage );
     void stop();
     bool hasTerminated();
+    bool isBusy();
 
     static OUString searchAndReplaceAll( const OUString &rSource,
                                          const OUString &rWhat,
@@ -316,6 +317,7 @@ private:
     Input            m_eInput;
     bool             m_bTerminated;
     bool             m_bStopped;
+    bool             m_bWorking;
 };
 
 //------------------------------------------------------------------------------
@@ -659,7 +661,8 @@ ExtensionCmdQueue::Thread::Thread( ExtMgrDialog *pDialog,
     m_sRemovingPackages( ExtMgrDialog::getResourceString( RID_STR_REMOVING_PACKAGES ) ),
     m_eInput( NONE ),
     m_bTerminated( false ),
-    m_bStopped( false )
+    m_bStopped( false ),
+    m_bWorking( false )
 {
     OSL_ASSERT( pDialog );
 }
@@ -779,6 +782,13 @@ bool ExtensionCmdQueue::Thread::hasTerminated()
 }
 
 //------------------------------------------------------------------------------
+bool ExtensionCmdQueue::Thread::isBusy()
+{
+    osl::MutexGuard aGuard( m_mutex );
+    return m_bWorking;
+}
+
+//------------------------------------------------------------------------------
 ExtensionCmdQueue::Thread::~Thread() {}
 
 //------------------------------------------------------------------------------
@@ -806,6 +816,7 @@ void ExtensionCmdQueue::Thread::execute()
             eInput = m_eInput;
             m_eInput = NONE;
             nSize = m_queue.size();
+            m_bWorking = false;
         }
 
         // If this thread has been woken up by anything else except start, stop
@@ -828,6 +839,11 @@ void ExtensionCmdQueue::Thread::execute()
 
         while ( !currentCmdEnv->isAborted() && --nSize >= 0 )
         {
+            {
+                osl::MutexGuard aGuard( m_mutex );
+                m_bWorking = true;
+            }
+
             try
             {
                 TExtensionCmd pEntry;
@@ -913,7 +929,10 @@ void ExtensionCmdQueue::Thread::execute()
                 box->Execute();
                     //Continue with installation of the remaining extensions
             }
-
+            {
+                osl::MutexGuard aGuard( m_mutex );
+                m_bWorking = false;
+            }
         }
 
         if ( !bStartProgress )
@@ -1177,6 +1196,11 @@ void ExtensionCmdQueue::stopAndWait()
 bool ExtensionCmdQueue::hasTerminated()
 {
     return m_thread->hasTerminated();
+}
+
+bool ExtensionCmdQueue::isBusy()
+{
+    return m_thread->isBusy();
 }
 
 } //namespace dp_gui
