@@ -8,7 +8,7 @@
  *
  * $RCSfile: XPresentation2.idl,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,7 @@
     a <type>XSlideShowController</type>  and
     to start a presentation with arguments.
 
-    @since OOo 2.4
+    @since OOo 3.0
 */
 interface XPresentation2
 {
