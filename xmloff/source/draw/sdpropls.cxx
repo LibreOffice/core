@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdpropls.cxx,v $
- * $Revision: 1.101 $
+ * $Revision: 1.102 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,7 +88,9 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 #define _MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010 }
+#define _MAPV(name,prefix,token,type,context,version)  { name, sizeof(name)-1, prefix, token, type, context, version }
 #define GMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_GRAPHIC,context)
+#define GMAPV(name,prefix,token,type,context,version) _MAPV(name,prefix,token,type|XML_TYPE_PROP_GRAPHIC,context,version)
 #define DPMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_DRAWING_PAGE,context)
 #define TMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_TEXT,context)
 #define PMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_PARAGRAPH,context)
@@ -174,7 +176,8 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "AdjustRed",                      XML_NAMESPACE_DRAW, XML_RED,                    XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
     GMAP( "AdjustGreen",                    XML_NAMESPACE_DRAW, XML_GREEN,                  XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
     GMAP( "AdjustBlue",                     XML_NAMESPACE_DRAW, XML_BLUE,                   XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
-    GMAP( "GraphicCrop",                    XML_NAMESPACE_FO,   XML_CLIP,                   XML_TYPE_TEXT_CLIP, 0 ), // exists in SW, too, with same property name
+    GMAPV( "GraphicCrop",                   XML_NAMESPACE_FO,   XML_CLIP,                   XML_TYPE_TEXT_CLIP, CTF_TEXT_CLIP, SvtSaveOptions::ODFVER_012 ), // exists in SW, too, with same property name
+    GMAP( "GraphicCrop",                    XML_NAMESPACE_FO,   XML_CLIP,                   XML_TYPE_TEXT_CLIP11, CTF_TEXT_CLIP11 ), // exists in SW, too, with same property name
     GMAP( "Transparency",                   XML_NAMESPACE_DRAW, XML_IMAGE_OPACITY,          XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 ), // exists in SW, too, with same property name // #i25616#
     GMAP( "IsMirrored",                     XML_NAMESPACE_STYLE,    XML_MIRROR,             XML_TYPE_SD_MIRROR|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too // #i40214#
 
@@ -1061,8 +1064,11 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                     pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_BELOW), GetXMLToken(XML_ABOVE) );
                 }
                 break;
+            case XML_TYPE_TEXT_CLIP11:
+                pHdl = new XMLClipPropertyHandler( sal_True );
+                break;
             case XML_TYPE_TEXT_CLIP:
-                pHdl = new XMLClipPropertyHandler;
+                pHdl = new XMLClipPropertyHandler( sal_False );
                 break;
 
             // #FontWork#
@@ -1214,6 +1220,10 @@ void XMLShapeExportPropertyMapper::ContextFilter(
     XMLPropertyState* pCaptionEscRel = NULL;
     XMLPropertyState* pCaptionEscAbs = NULL;
 
+    // filter fo:clip
+    XMLPropertyState* pClip11State = NULL;
+    XMLPropertyState* pClipState = NULL;
+
     // filter properties
     for( std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
          aIter != rProperties.end();
@@ -1332,6 +1342,8 @@ void XMLShapeExportPropertyMapper::ContextFilter(
             case CTF_CAPTION_ISESCREL:              pCaptionIsEscRel = property;    break;
             case CTF_CAPTION_ESCREL:                pCaptionEscRel = property;      break;
             case CTF_CAPTION_ESCABS:                pCaptionEscAbs = property;      break;
+            case CTF_TEXT_CLIP11:           pClip11State = property; break;
+            case CTF_TEXT_CLIP:             pClipState = property; break;
         }
     }
 
@@ -1462,6 +1474,9 @@ void XMLShapeExportPropertyMapper::ContextFilter(
 
         pCaptionIsEscRel->mnIndex = -1;
     }
+
+    if( pClipState != NULL && pClip11State != NULL  )
+        pClip11State->mnIndex = -1;
 
     SvXMLExportPropertyMapper::ContextFilter(rProperties, rPropSet);
 }
