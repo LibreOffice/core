@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textparagraphproperties.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #define OOX_DRAWINGML_TEXTPARAGRAPHPROPERTIES_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/textcharacterproperties.hxx"
 #include <com/sun/star/style/NumberingType.hpp>
 #include "oox/drawingml/textfont.hxx"
@@ -62,6 +63,7 @@ public:
     void setBulletSize(sal_Int16 nSize);
     void setFontSize(sal_Int16 nSize);
     void setStyleName( const rtl::OUString& rStyleName ) { maStyleName <<= rStyleName; }
+    void setGraphic( ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rXGraphic );
 
     ::oox::drawingml::ColorPtr  maBulletColorPtr;
     ::com::sun::star::uno::Any  mbBulletColorFollowText;
@@ -75,6 +77,8 @@ public:
     ::com::sun::star::uno::Any  mnSize;
     ::com::sun::star::uno::Any  mnFontSize;
     ::com::sun::star::uno::Any  maStyleName;
+    ::com::sun::star::uno::Any  maGraphic;
+    boost::optional< float >    maFollowFontSize;
 };
 
 class TextParagraphProperties
@@ -95,11 +99,13 @@ public:
 
     oox::drawingml::TextSpacing&        getParaTopMargin() { return maParaTopMargin; };
     oox::drawingml::TextSpacing&        getParaBottomMargin() { return maParaBottomMargin; };
+    boost::optional< sal_Int32 >&       getParaLeftMargin(){ return moParaLeftMargin; };
+    boost::optional< sal_Int32 >&       getFirstLineIndentation(){ return moFirstLineIndentation; };
 
     void                                apply( const TextParagraphPropertiesPtr& );
     void                                pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
                                             const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet,
-                                                PropertyMap& rioBulletList, sal_Bool bApplyBulletList ) const;
+                                                PropertyMap& rioBulletList, const BulletList* pMasterBuList, sal_Bool bApplyBulletList, float fFontSize ) const;
 
     float                               getCharacterSize( float fDefault ) const;   // returns the largest character size of this paragraph,
                                                                                     // if possible the masterstyle should have been applied before,
@@ -113,6 +119,8 @@ protected:
     BulletList                      maBulletList;
     oox::drawingml::TextSpacing     maParaTopMargin;
     oox::drawingml::TextSpacing     maParaBottomMargin;
+    boost::optional< sal_Int32 >    moParaLeftMargin;
+    boost::optional< sal_Int32 >    moFirstLineIndentation;
     sal_Int16                       mnLevel;
 };
 
