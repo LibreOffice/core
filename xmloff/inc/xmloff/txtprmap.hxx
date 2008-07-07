@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtprmap.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -179,6 +179,8 @@
 #define CTF_OLD_FLOW_WITH_TEXT              (XML_TEXT_CTF_START + 141)
 #define CTF_ISNUMBERING                     (XML_TEXT_CTF_START + 142)
 #define CTF_TEXT_DISPLAY                    (XML_TEXT_CTF_START + 143)
+#define CTF_TEXT_CLIP                       (XML_TEXT_CTF_START + 144)
+#define CTF_TEXT_CLIP11                     (XML_TEXT_CTF_START + 145)
 #define TEXT_PROP_MAP_TEXT 0
 #define TEXT_PROP_MAP_PARA 1
 #define TEXT_PROP_MAP_FRAME 2
