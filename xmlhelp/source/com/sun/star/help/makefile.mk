@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.36 $
+# $Revision: 1.37 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -100,7 +100,12 @@ JAVACLASSFILES = \
     $(CLASSDIR)$/$(PACKAGE)$/HelpIndexer.class			        \
     $(CLASSDIR)$/$(PACKAGE)$/HelpFileDocument.class
 
-JARFILES  = lucene-core-2.3.jar ridl.jar jurt.jar unoil.jar juh.jar
+JARFILES  = ridl.jar jurt.jar unoil.jar juh.jar
+.IF "$(SYSTEM_LUCENE)" == "YES"
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(LUCENE_CORE_JAR)
+.ELSE
+JARFILES += lucene-core-2.3.jar
+.ENDIF
 JAVAFILES = $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
   
 JARTARGET	   = LuceneHelpWrapper.jar
