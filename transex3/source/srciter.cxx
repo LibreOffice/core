@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: srciter.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,6 +77,8 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
         static rtl::OUString WCARD9 ( rtl::OUString::createFromAscii( "unxsolsu" ) );
         static rtl::OUString WCARD10 ( rtl::OUString::createFromAscii( "wntmscx" ) );
         static rtl::OUString WCARD11 ( rtl::OUString::createFromAscii( "unxubti8" ) );
+        static rtl::OUString WCARD12 ( rtl::OUString::createFromAscii( "unxsolx" ) );
+        static rtl::OUString WCARD13 ( rtl::OUString::createFromAscii( "unxsolu" ) );
 
 
         if( sDirName.indexOf( WCARD1 , 0 ) > -1 ||
@@ -89,7 +91,9 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
             sDirName.indexOf( WCARD8 , 0 ) > -1 ||
             sDirName.indexOf( WCARD9 , 0 ) > -1 ||
             sDirName.indexOf( WCARD10 , 0 ) > -1 ||
-            sDirName.indexOf( WCARD11 , 0 ) > -1
+            sDirName.indexOf( WCARD11 , 0 ) > -1 ||
+            sDirName.indexOf( WCARD12 , 0 ) > -1 ||
+            sDirName.indexOf( WCARD13 , 0 ) > -1
            )    return;
         //printf("**** %s \n", OUStringToOString( sDirName , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
 
