@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.28 $
+# $Revision: 1.29 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -79,9 +79,7 @@ SLOFILES =  $(EXCEPTIONSFILES) \
             $(SLO)$/basdoc.obj	\
             $(SLO)$/basicbox.obj	\
             $(SLO)$/baside2b.obj	\
-            $(SLO)$/basobj.obj	\
             $(SLO)$/brkdlg.obj	\
-            $(SLO)$/moptions.obj	\
             $(SLO)$/objdlg.obj	\
 
 SRS1NAME=$(TARGET)
