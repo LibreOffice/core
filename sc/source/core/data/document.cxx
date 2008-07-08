@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: document.cxx,v $
- * $Revision: 1.89 $
+ * $Revision: 1.90 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -167,40 +167,41 @@ BOOL ScDocument::GetTable( const String& rName, SCTAB& rTab ) const
 
 BOOL ScDocument::ValidTabName( const String& rName ) const
 {
-    // behaviour must be equal to ConvertToValidTabName(), see below
-    using namespace ::com::sun::star::i18n;
-    sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER |
-        KParseTokens::ASC_UNDERSCORE;
-    sal_Int32 nContFlags = nStartFlags;
-    String aContChars( RTL_CONSTASCII_USTRINGPARAM(" ") );
-    ParseResult aRes = ScGlobal::pCharClass->parsePredefinedToken(
-        KParseType::IDENTNAME, rName, 0, nStartFlags, EMPTY_STRING, nContFlags, aContChars );
-    return (aRes.TokenType & KParseType::IDENTNAME) && aRes.EndPos == rName.Len();
-}
+    xub_StrLen nLen = rName.Len();
+    if (!nLen)
+        return false;
 
-
-void ScDocument::ConvertToValidTabName( String& rName, sal_Unicode cReplaceChar )
-{
-    // behaviour must be equal to ValidTabName(), see above
-    using namespace ::com::sun::star::i18n;
-    sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER |
-        KParseTokens::ASC_UNDERSCORE;
-    sal_Int32 nContFlags = nStartFlags;
-    String aStartChars;
-    String aContChars( RTL_CONSTASCII_USTRINGPARAM(" ") );
-    sal_Int32 nStartPos = 0;
-    while( nStartPos < rName.Len() )
+#if 1
+    // Restrict sheet names to what Excel accepts.
+    /* TODO: We may want to remove this restriction for full ODFF compliance.
+     * Merely loading and calculating ODF documents using these characters in
+     * sheet names is not affected by this, but all sheet name editing and
+     * copying functionality is, maybe falling back to "Sheet4" or similar. */
+    for (xub_StrLen i = 0; i < nLen; ++i)
     {
-        ParseResult aRes = ScGlobal::pCharClass->parsePredefinedToken( KParseType::IDENTNAME,
-            rName, nStartPos, nStartFlags, aStartChars, nContFlags, aContChars );
-        if( aRes.EndPos < rName.Len() )
+        const sal_Unicode c = rName.GetChar(i);
+        switch (c)
         {
-            rName.SetChar( static_cast< xub_StrLen >( aRes.EndPos ), cReplaceChar );
-            nStartFlags = nContFlags;
-            aStartChars = aContChars;
+            case ':':
+            case '\\':
+            case '/':
+            case '?':
+            case '*':
+            case '[':
+            case ']':
+                // these characters are not allowed to match XL's convention.
+                return false;
+            case '\'':
+                if (i == 0 || i == nLen - 1)
+                    // single quote is not allowed at the first or last
+                    // character position.
+                    return false;
+            break;
         }
-        nStartPos = aRes.EndPos + 1;
     }
+#endif
+
+    return true;
 }
 
 
