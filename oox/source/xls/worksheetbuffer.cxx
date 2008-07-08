@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: worksheetbuffer.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +33,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/i18n/XCharacterClassification.hpp>
-#include <com/sun/star/i18n/KParseTokens.hpp>
-#include <com/sun/star/i18n/KParseType.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XExternalSheetName.hpp>
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
@@ -57,9 +54,7 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::container::XNamed;
-using ::com::sun::star::lang::Locale;
 using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::i18n::ParseResult;
 using ::com::sun::star::sheet::XSpreadsheetDocument;
 using ::com::sun::star::sheet::XSpreadsheets;
 using ::com::sun::star::sheet::XSpreadsheet;
@@ -100,8 +95,6 @@ WorksheetBuffer::WorksheetBuffer( const WorkbookHelper& rHelper ) :
 {
     // character classification service for conversion to valid sheet names
     Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-    mxCharClass.set( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.i18n.CharacterClassification" ) ), UNO_QUERY );
-    OSL_ENSURE( mxCharClass.is(), "WorksheetBuffer::WorksheetBuffer - no character classification service" );
 }
 
 void WorksheetBuffer::initializeSingleSheet()
@@ -246,38 +239,9 @@ const OoxSheetInfo* WorksheetBuffer::getSheetInfo( sal_Int32 nSheet ) const
         &maSheetInfos[ static_cast< size_t >( nSheet ) ] : 0;
 }
 
-OUString WorksheetBuffer::convertToValidSheetName( const OUString& rName, sal_Unicode cReplaceChar ) const
-{
-    if( !mxCharClass.is() ) return rName;
-
-    using namespace ::com::sun::star::i18n::KParseTokens;
-    using namespace ::com::sun::star::i18n::KParseType;
-
-    OUStringBuffer aFinalName( rName );
-    Locale aLocale( CREATE_OUSTRING( "en" ), CREATE_OUSTRING( "US" ), OUString() );
-    sal_Int32 nStartFlags = ANY_LETTER_OR_NUMBER | ASC_UNDERSCORE;
-    sal_Int32 nContFlags = nStartFlags;
-    OUString aStartChars;
-    OUString aContChars( sal_Unicode( ' ' ) );
-    sal_Int32 nStartPos = 0;
-    while( nStartPos < aFinalName.getLength() )
-    {
-        ParseResult aRes = mxCharClass->parsePredefinedToken(
-            IDENTNAME, rName, nStartPos, aLocale, nStartFlags, aStartChars, nContFlags, aContChars );
-        if( aRes.EndPos < aFinalName.getLength() )
-        {
-            aFinalName.setCharAt( aRes.EndPos, cReplaceChar );
-            nStartFlags = nContFlags;
-            aStartChars = aContChars;
-        }
-        nStartPos = aRes.EndPos + 1;
-    }
-    return aFinalName.makeStringAndClear();
-}
-
 OUString WorksheetBuffer::insertSheet( const OUString& rName, sal_Int16 nSheet, bool bVisible )
 {
-    OUString aFinalName = (rName.getLength() == 0) ? CREATE_OUSTRING( "Sheet" ) : convertToValidSheetName( rName, '_' );
+    OUString aFinalName = (rName.getLength() == 0) ? CREATE_OUSTRING( "Sheet" ) : rName;
     try
     {
         Reference< XSpreadsheets > xSheets( getDocument()->getSheets(), UNO_QUERY_THROW );
