@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filtergrouping.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1042,58 +1042,66 @@ namespace sfx2
         if ( !_rxFilterManager.is() )
             return;
 
-        sal_Int32                           nPDFIndex   = -1;
         sal_Int32                           nHTMLIndex  = -1;
+        sal_Int32                           nXHTMLIndex  = -1;
+        sal_Int32                           nPDFIndex   = -1;
         sal_Int32                           nFlashIndex = -1;
-        sal_Int32                           nCount      = 0;
-        String                              sPDFExtension = String::CreateFromAscii( "*.pdf" );
-        String                              sHTMLExtension = String::CreateFromAscii( "*.htm*" );
-        String                              sFlashExtension = String::CreateFromAscii( "*.swf" );
-        WildCard                            aHTMLWildcardMatcher( sHTMLExtension, ';' );
-        WildCard                            aPDFWildcardMatcher( sPDFExtension, ';' );
-        WildCard                            aFlashWildcardMatcher( sFlashExtension, ';' );
         ::rtl::OUString                     sUIName;
         ::rtl::OUString                     sExtensions;
         std::vector< ExportFilter >         aImportantFilterGroup;
         std::vector< ExportFilter >         aFilterGroup;
         Reference< XFilterGroupManager >    xFilterGroupManager( _rxFilterManager, UNO_QUERY );
+        ::rtl::OUString                     sTypeName;
+        const ::rtl::OUString               sWriterHTMLType( DEFINE_CONST_OUSTRING("writer_web_HTML") );
+        const ::rtl::OUString               sGraphicHTMLType( DEFINE_CONST_OUSTRING("graphic_HTML") );
+        const ::rtl::OUString               sXHTMLType( DEFINE_CONST_OUSTRING("XHTML_File") );
+        const ::rtl::OUString               sPDFType( DEFINE_CONST_OUSTRING("pdf_Portable_Document_Format") );
+        const ::rtl::OUString               sFlashType( DEFINE_CONST_OUSTRING("graphic_SWF") );
 
         for ( const SfxFilter* pFilter = _rFilterMatcher.First(); pFilter; pFilter = _rFilterMatcher.Next() )
         {
+            sTypeName   = pFilter->GetTypeName();
             sUIName     = pFilter->GetUIName();
             sExtensions = pFilter->GetWildcard().GetWildCard();
-
             ExportFilter aExportFilter( sUIName, sExtensions );
-
             String aExt = sExtensions;
-            if ( nHTMLIndex == -1 && aHTMLWildcardMatcher.Matches( aExt ))
+
+            if ( nHTMLIndex == -1 &&
+                ( sTypeName.equals( sWriterHTMLType ) || sTypeName.equals( sGraphicHTMLType ) ) )
             {
                 aImportantFilterGroup.insert( aImportantFilterGroup.begin(), aExportFilter );
                 nHTMLIndex = 0;
-                nCount++;
             }
-            else if ( nPDFIndex == -1 && aPDFWildcardMatcher.Matches( aExt ))
+            else if ( nXHTMLIndex == -1 && sTypeName.equals( sXHTMLType ) )
             {
                 std::vector< ExportFilter >::iterator aIter = aImportantFilterGroup.begin();
                 if ( nHTMLIndex == -1 )
                     aImportantFilterGroup.insert( aIter, aExportFilter );
                 else
                     aImportantFilterGroup.insert( ++aIter, aExportFilter );
-                nPDFIndex = 0;
-                nCount++;
+                nXHTMLIndex = 0;
             }
-            else if ( nFlashIndex == -1 && aFlashWildcardMatcher.Matches( aExt ))
+            else if ( nPDFIndex == -1 && sTypeName.equals( sPDFType ) )
             {
                 std::vector< ExportFilter >::iterator aIter = aImportantFilterGroup.begin();
                 if ( nHTMLIndex != -1 )
                     aIter++;
-
+                if ( nXHTMLIndex != -1 )
+                    aIter++;
+                aImportantFilterGroup.insert( aIter, aExportFilter );
+                nPDFIndex = 0;
+            }
+            else if ( nFlashIndex == -1 && sTypeName.equals( sFlashType ) )
+            {
+                std::vector< ExportFilter >::iterator aIter = aImportantFilterGroup.begin();
+                if ( nHTMLIndex != -1 )
+                    aIter++;
+                if ( nXHTMLIndex != -1 )
+                    aIter++;
                 if ( nPDFIndex != -1 )
                     aIter++;
-
                 aImportantFilterGroup.insert( aIter, aExportFilter );
                 nFlashIndex = 0;
-                nCount++;
             }
             else
                 aFilterGroup.push_back( aExportFilter );
