@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: roadmapskeletonpages.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,18 +50,6 @@ namespace udlg
     //--------------------------------------------------------------------
     RoadmapSkeletonPage::~RoadmapSkeletonPage()
     {
-    }
-
-    //--------------------------------------------------------------------
-    const RoadmapSkeletonDialog& RoadmapSkeletonPage::getDialog() const
-    {
-        return *dynamic_cast< const RoadmapSkeletonDialog* >( GetParent() );
-    }
-
-    //--------------------------------------------------------------------
-    RoadmapSkeletonDialog& RoadmapSkeletonPage::getDialog()
-    {
-        return *dynamic_cast< RoadmapSkeletonDialog* >( GetParent() );
     }
 
     //====================================================================
