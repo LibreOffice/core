@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shellio.cxx,v $
- * $Revision: 1.57 $
+ * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -850,8 +850,17 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
         // keine Shell oder alles schreiben -> eigenen Pam erzeugen
         SwDoc* pOutDoc = pDoc ? pDoc : &rDoc;
         pPam = new SwPaM( pOutDoc->GetNodes().GetEndOfContent() );
-        pPam->SetMark();
-        pPam->Move( fnMoveBackward, fnGoDoc );
+        if( pOutDoc->IsClipBoard() )
+        {
+            pPam->Move( fnMoveBackward, fnGoDoc );
+            pPam->SetMark();
+            pPam->Move( fnMoveForward, fnGoDoc );
+        }
+        else
+        {
+            pPam->SetMark();
+            pPam->Move( fnMoveBackward, fnGoDoc );
+        }
     }
 
     rxWriter->bWriteAll = bWriteAll;
