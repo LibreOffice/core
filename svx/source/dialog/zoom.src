@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: zoom.src,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,48 +37,48 @@ ModalDialog RID_SVXDLG_ZOOM
     HelpId = SID_ATTR_ZOOM ;
     OutputSize = TRUE ;
     SvLook = TRUE ;
-    Size = MAP_APPFONT ( 202 , 116 ) ;
+    Size = MAP_APPFONT ( 218 , 112 ) ;
     Moveable = TRUE ;
-
+    Text [ en-US ] = "Zoom & View Layout";
     FixedLine FL_ZOOM
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 92 , 8 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
         Text [ en-US ] = "Zoom factor";
     };
     RadioButton BTN_OPTIMAL
     {
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 91 , 10 ) ;
         Text [ en-US ] = "~Optimal" ;
     };
     RadioButton BTN_WHOLE_PAGE
     {
-        Pos = MAP_APPFONT ( 12 , 29 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 91 , 10 ) ;
         Text [ en-US ] = "~Fit width and height" ;
     };
     RadioButton BTN_PAGE_WIDTH
     {
-        Pos = MAP_APPFONT ( 12 , 43 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Size = MAP_APPFONT ( 91 , 10 ) ;
         Text [ en-US ] = "Fit ~width" ;
     };
     RadioButton BTN_100
     {
-        Pos = MAP_APPFONT ( 12 , 57 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Size = MAP_APPFONT ( 91 , 10 ) ;
         Text = "~100 %" ;
     };
     RadioButton BTN_USER
     {
-        Pos = MAP_APPFONT ( 12 , 71 ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 67 ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
         Text [ en-US ] = "~Variable" ;
     };
     MetricField ED_USER
     {
-        Pos = MAP_APPFONT ( 60 , 70 ) ;
+        Pos = MAP_APPFONT ( 74 , 66 ) ;
         Size = MAP_APPFONT ( 32 , 12 ) ;
         Border = TRUE ;
         Group = TRUE ;
@@ -89,35 +89,34 @@ ModalDialog RID_SVXDLG_ZOOM
         CustomUnitText = "%" ;
         SpinSize = 1 ;
     };
-
     FixedLine FL_VIEWLAYOUT
     {
-        Pos = MAP_APPFONT ( 104 , 3 ) ;
-        Size = MAP_APPFONT ( 92 , 8 ) ;
+        Pos = MAP_APPFONT ( 112 , 3 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
         Text [ en-US ] = "View layout";
     };
     RadioButton BTN_AUTOMATIC
     {
-        Pos = MAP_APPFONT ( 110 , 15 ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
+        Pos = MAP_APPFONT ( 118 , 14 ) ;
+        Size = MAP_APPFONT ( 91 , 10 ) ;
         Text [ en-US ] = "~Automatic" ;
     };
     RadioButton BTN_SINGLE
     {
-        Pos = MAP_APPFONT ( 110 , 29 ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
+        Pos = MAP_APPFONT ( 118 , 27 ) ;
+        Size = MAP_APPFONT ( 91 , 10 ) ;
         Text [ en-US ] = "~Single page" ;
     };
     RadioButton BTN_COLUMNS
     {
-        Pos = MAP_APPFONT ( 110 , 43 ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
+        Pos = MAP_APPFONT ( 118 , 41 ) ;
+        Size = MAP_APPFONT ( 64 , 10 ) ;
         Text [ en-US ] = "~Columns" ;
     };
     MetricField ED_COLUMNS
     {
-        Pos = MAP_APPFONT ( 164 , 42 ) ;
-        Size = MAP_APPFONT ( 26 , 12 ) ;
+        Pos = MAP_APPFONT ( 185 , 40 ) ;
+        Size = MAP_APPFONT ( 24 , 12 ) ;
         Border = TRUE ;
         Group = TRUE ;
         Left = TRUE ;
@@ -125,36 +124,36 @@ ModalDialog RID_SVXDLG_ZOOM
         Spin = TRUE ;
         SpinSize = 1 ;
         Minimum = 1;
+        Maximum = 999;
     };
     CheckBox CHK_BOOK
     {
-        Pos = MAP_APPFONT ( 116 , 57 ) ;
-        Size = MAP_APPFONT ( 42 , 10 ) ;
+        Pos = MAP_APPFONT ( 124 , 55 ) ;
+        Size = MAP_APPFONT ( 85 , 10 ) ;
         Text [ en-US ] = "~Book mode" ;
     };
-
     FixedLine FL_BOTTOM
     {
-        Pos = MAP_APPFONT ( 6 , 86 ) ;
-        Size = MAP_APPFONT ( 190 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 81 ) ;
+        Size = MAP_APPFONT ( 206 , 8 ) ;
     };
     OKButton BTN_ZOOM_OK
     {
-        Pos = MAP_APPFONT ( 34 , 96 ) ;
+        Pos = MAP_APPFONT ( 53 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE ;
     };
     CancelButton BTN_ZOOM_CANCEL
     {
-        Pos = MAP_APPFONT ( 90 , 96 ) ;
+        Pos = MAP_APPFONT ( 106 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     HelpButton BTN_ZOOM_HELP
     {
-        Pos = MAP_APPFONT ( 146 , 96 ) ;
+        Pos = MAP_APPFONT ( 162 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text [ en-US ] = "Zoom & View Layout";
 };
- // ********************************************************************** EOF
+
+// ********************************************************************** EOF
 
