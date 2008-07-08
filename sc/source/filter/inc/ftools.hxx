@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ftools.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -292,10 +292,6 @@ public:
 
 // *** conversion of names *** ------------------------------------------------
 
-    /** Converts a string to a valid Calc sheet name.
-        @descr  Sheet names in Calc may contain letters, digits, underscores, and spaces
-        (space characters are not allowed at first position). */
-    static void         ConvertToScSheetName( String& rName );
     /** Converts a string to a valid Calc defined name or database range name.
         @descr  Defined names in Calc may contain letters, digits (*), underscores, periods (*),
         colons (*), question marks, and dollar signs.
