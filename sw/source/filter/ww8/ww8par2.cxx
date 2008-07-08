@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par2.cxx,v $
- * $Revision: 1.143 $
+ * $Revision: 1.144 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -798,7 +798,11 @@ SwNumRule* SwWW8ImplReader::GetStyRule()
     const String aBaseName(CREATE_CONST_ASC( "WW8StyleNum" ));
     const String aName( rDoc.GetUniqueNumRuleName( &aBaseName, false) );
 
-    USHORT nRul = rDoc.MakeNumRule( aName );
+    // --> OD 2008-06-04 #i86652#
+//    USHORT nRul = rDoc.MakeNumRule( aName );
+    USHORT nRul = rDoc.MakeNumRule( aName, 0, FALSE,
+                                    SvxNumberFormat::LABEL_ALIGNMENT );
+    // <--
     pStyles->pStyRule = rDoc.GetNumRuleTbl()[nRul];
     // Auto == false-> Nummerierungsvorlage
     pStyles->pStyRule->SetAutoRule(false);
@@ -1009,7 +1013,14 @@ void SwWW8ImplReader::StartAnl(const BYTE* pSprm13)
     if (!sNumRule.Len())
     {
         if (!pNumRule)
-            pNumRule = rDoc.GetNumRuleTbl()[rDoc.MakeNumRule(sNumRule)];
+        {
+            // --> OD 2008-06-04 #i86652#
+//            pNumRule = rDoc.GetNumRuleTbl()[rDoc.MakeNumRule(sNumRule)];
+            pNumRule = rDoc.GetNumRuleTbl()[
+                            rDoc.MakeNumRule( sNumRule, 0, FALSE,
+                                              SvxNumberFormat::LABEL_ALIGNMENT ) ];
+            // <--
+        }
         if (pTableDesc)
         {
             if (!pS12)
