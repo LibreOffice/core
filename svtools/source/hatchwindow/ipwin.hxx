@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ipwin.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,7 +71,6 @@ public:
     void        Draw( OutputDevice * );
     void        InvalidateBorder( Window * );
     BOOL        SelectBegin( Window *, const Point & rPos );
-    void        SelectBegin( Window *, short nGrab );
     short       SelectMove( Window * pWin, const Point & rPos );
     Point       GetTrackPosPixel( const Rectangle & rRect ) const;
     Rectangle   GetTrackRectPixel( const Point & rTrackPos ) const;
@@ -95,9 +94,6 @@ public:
     SvResizeWindow( Window* pParent, VCLXHatchWindow* pWrapper );
 
     void    SetHatchBorderPixel( const Size & rSize );
-    const Size & GetHatchBorderPixel() const;
-    void TerminateResizing() ;
-    SvBorder GetAllBorderPixel() const;
 
     void    SelectMouse( const Point & rPos );
     virtual void    MouseButtonUp( const MouseEvent & rEvt );
