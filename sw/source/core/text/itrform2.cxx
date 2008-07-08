@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: itrform2.cxx,v $
- * $Revision: 1.105 $
+ * $Revision: 1.106 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -757,6 +757,18 @@ void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
         ((SwFldPortion*)pPor)->Height( pFldFnt->GetHeight( rInf.GetVsh(), *rInf.GetOut() ) );
         ((SwFldPortion*)pPor)->SetAscent( pFldFnt->GetAscent( rInf.GetVsh(), *rInf.GetOut() ) );
     }
+    // --> OD 2008-06-05 #i89179#
+    // tab portion representing the list tab of a list label gets the
+    // same height and ascent as the corresponding number portion
+    else if ( pPor->InTabGrp() && pPor->GetLen() == 0 &&
+              rInf.GetLast() && rInf.GetLast()->InNumberGrp() &&
+              static_cast<const SwNumberPortion*>(rInf.GetLast())->HasFont() )
+    {
+        const SwLinePortion* pLast = rInf.GetLast();
+        pPor->Height( pLast->Height() );
+        pPor->SetAscent( pLast->GetAscent() );
+    }
+    // <--
     else
     {
         const SwLinePortion *pLast = rInf.GetLast();
