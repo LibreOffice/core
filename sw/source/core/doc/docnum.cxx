@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docnum.cxx,v $
- * $Revision: 1.75 $
+ * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -877,7 +877,10 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
         // <--
         pOld->CheckCharFmts( &rDoc );
         pOld->SetContinusNum( rRule.IsContinusNum() );
-        pOld->SetRuleType( rRule.GetRuleType() );
+        // --> OD 2008-06-17 #i87166#
+        // Do NOT change list style type
+//        pOld->SetRuleType( rRule.GetRuleType() );
+        // <--
         // --> OD 2006-04-27 #i64311#
         if ( bInvalidateNumRule )
         {
@@ -932,7 +935,10 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
     pOld->CheckCharFmts( &rDoc );
     pOld->SetInvalidRule(TRUE);
     pOld->SetContinusNum( rRule.IsContinusNum() );
-    pOld->SetRuleType( rRule.GetRuleType() );
+    // --> OD 2008-06-17 #i87166#
+    // Do NOT change list style type
+//    pOld->SetRuleType( rRule.GetRuleType() );
+    // <--
 
     // --> OD 2008-02-19 #refactorlists#
 //    delete pUpd;
