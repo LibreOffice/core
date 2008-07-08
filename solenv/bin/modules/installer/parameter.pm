@@ -8,7 +8,7 @@
 #
 # $RCSfile: parameter.pm,v $
 #
-# $Revision: 1.54 $
+# $Revision: 1.55 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -321,6 +321,10 @@ sub setglobalvariables
             {
                 $installer::globals::islinuxppcrpmbuild = 1;
             }
+            if ( $installer::globals::compiler =~ /unxlngx/ )
+            {
+                $installer::globals::islinuxx86_64rpmbuild = 1;
+            }
         }
 
         # Creating Debian packages ?
@@ -341,6 +345,10 @@ sub setglobalvariables
             if ( $installer::globals::compiler =~ /unxlngppc/ )
             {
                 $installer::globals::islinuxppcdebbuild = 1;
+            }
+            if ( $installer::globals::compiler =~ /unxlngx/ )
+            {
+                $installer::globals::islinuxx86_64debbuild = 1;
             }
         }
     }

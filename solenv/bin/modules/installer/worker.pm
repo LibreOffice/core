@@ -8,7 +8,7 @@
 #
 # $RCSfile: worker.pm,v $
 #
-# $Revision: 1.63 $
+# $Revision: 1.64 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -2225,6 +2225,10 @@ sub get_platform_name
     elsif (( $installer::globals::islinuxppcrpmbuild ) || ( $installer::globals::islinuxppcdebbuild ))
     {
         $platformname = "LinuxPowerPC";
+    }
+    elsif (( $installer::globals::islinuxx86_64rpmbuild ) || ( $installer::globals::islinuxx86_64debbuild ))
+    {
+        $platformname = "LinuxX86-64";
     }
     elsif ( $installer::globals::issolarissparcbuild )
     {
