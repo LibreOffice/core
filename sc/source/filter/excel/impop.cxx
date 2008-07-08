@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impop.cxx,v $
- * $Revision: 1.94 $
+ * $Revision: 1.95 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -435,7 +435,6 @@ void ImportExcel::Externsheet( void )
     bool bSameWorkBook;
     String aEncodedUrl( aIn.ReadByteString( false ) );
     XclImpUrlHelper::DecodeUrl( aUrl, aTabName, bSameWorkBook, *pExcRoot->pIR, aEncodedUrl );
-    ScfTools::ConvertToScSheetName( aTabName );
     pExcRoot->pExtSheetBuff->Add( aUrl, aTabName, bSameWorkBook );
 }
 
@@ -686,7 +685,6 @@ void ImportExcel::Boundsheet( void )
     }
 
     String aName( aIn.ReadByteString( FALSE ) );
-    ScfTools::ConvertToScSheetName( aName );
 
     *pExcRoot->pTabNameBuff << aName;
 
