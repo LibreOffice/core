@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lnkbase2.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -357,6 +357,16 @@ void SvBaseLink::SetUpdateMode( USHORT nMode )
     }
 }
 
+// --> OD 2008-06-19 #i88291#
+void SvBaseLink::clearStreamToLoadFrom()
+{
+    m_xInputStreamToLoadFrom.clear();
+    if( xObj.Is() )
+    {
+        xObj->clearStreamToLoadFrom();
+    }
+}
+// <--
 
 BOOL SvBaseLink::Update()
 {
