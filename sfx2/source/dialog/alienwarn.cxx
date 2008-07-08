@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: alienwarn.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,10 +56,6 @@ SfxAlienWarningDialog::SfxAlienWarningDialog( Window* pParent, const String& _rF
 
 {
     FreeResource();
-
-    // accessibility issue #i73576#: the buttons don't want the info text as label
-    m_aKeepCurrentBtn.SetStyle( m_aKeepCurrentBtn.GetStyle() | WB_NOLABEL );
-    m_aSaveODFBtn.SetStyle( m_aSaveODFBtn.GetStyle() | WB_NOLABEL );
 
     // set questionmark image
     m_aQueryImage.SetImage( QueryBox::GetStandardImage() );
