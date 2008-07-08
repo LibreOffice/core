@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtsh4.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,46 +95,66 @@ BOOL SwWrtShell::_EndWrd()
 
 BOOL SwWrtShell::_NxtWrd()
 {
-    if( IsEndPara() )               // wenn schon am Ende, dann naechsten ???
+    BOOL bRet = FALSE;
+    while( IsEndPara() )                // wenn schon am Ende, dann naechsten ???
     {
         if(!SwCrsrShell::Right(1,CRSR_SKIP_CHARS))  // Document - Ende ??
         {
             Pop( FALSE );
-            return 0L;
+            return bRet;
         }
-        return 1;
+        bRet = IsStartWord();
     }
     Push();
     ClearMark();
-    if( !GoNextWord() )
-            // nicht gefunden --> das AbsatzEnde ist Ende vom Wort
-        SwCrsrShell::MovePara( fnParaCurr, fnParaEnd );
+    while( !bRet )
+    {
+        if( !GoNextWord() )
+        {
+            if( (!IsEndPara() && !SwCrsrShell::MovePara( fnParaCurr, fnParaEnd ) )
+                || !SwCrsrShell::Right(1,CRSR_SKIP_CHARS) )
+                break;
+            bRet = IsStartWord();
+        }
+        else
+            bRet = TRUE;
+    }
     ClearMark();
     Combine();
-    return 1;
+    return bRet;
 }
 
 
 
 BOOL SwWrtShell::_PrvWrd()
 {
-    if(IsSttPara())
+    BOOL bRet = FALSE;
+    while( IsSttPara() )
     {                               // wenn schon am Anfang, dann naechsten ???
         if(!SwCrsrShell::Left(1,CRSR_SKIP_CHARS))
         {                           // Document - Anfang ??
             Pop( FALSE );
-            return 0;
+            return bRet;
         }
-        return 1;
+        bRet = IsStartWord();
     }
     Push();
     ClearMark();
-    if( !GoPrevWord() )
-            // nicht gefunden --> an den Absatz Anfang
-        SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
+    while( !bRet )
+    {
+        if( !GoPrevWord() )
+        {
+            if( (!IsSttPara() && !SwCrsrShell::MovePara( fnParaCurr, fnParaStart ) )
+                || !SwCrsrShell::Left(1,CRSR_SKIP_CHARS) )
+                break;
+            bRet = IsStartWord();
+        }
+        else
+            bRet = TRUE;
+    }
     ClearMark();
     Combine();
-    return 1;
+    return bRet;
 }
 
 
