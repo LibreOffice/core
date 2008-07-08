@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excform.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1581,12 +1581,6 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz, sal_uInt8 nMinParamCo
         // Funktionen, bei denen Parameter wegfallen muessen
         if( eId == ocPercentrank && nAnz == 3 )
             nSkipEnd = 0;       // letzten Parameter bei Bedarf weglassen
-
-        else if( eId == ocIndirect && nAnz == 2 )
-            nSkipEnd = 0;
-
-        else if( eId == ocAddress && nAnz > 3 )
-            nNull = nAnz - 4;
 
         // Joost-Spezialfaelle
         else if( eId == ocIf )
