@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SfxDocumentMetaData.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -886,8 +886,10 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
             ::rtl::OUString s;
             any >>= s;
             values.push_back(s);
-            as.push_back(std::make_pair(vt,
-                ::rtl::OUString::createFromAscii("string")));
+// #i90847# OOo 2.x does stupid things if value-type="string";
+// fortunately string is default anyway, so we can just omit it
+//            as.push_back(std::make_pair(vt,
+//                ::rtl::OUString::createFromAscii("string")));
         } else if (type == ::cppu::UnoType<css::util::DateTime>::get()) {
             css::util::DateTime dt;
             any >>= dt;
