@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpr6.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,150 +31,165 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-
 #include <math.h>
-#include <tools/debug.hxx>
 
+#include <tools/debug.hxx>
 #include "interpre.hxx"
 
+double const fHalfMachEps = 0.5 * ::std::numeric_limits<double>::epsilon();
 
-//! #66556# for os2icci3 this function MUST be compiled without optimizations,
-//! otherwise it won't work at all or even worse will produce false results!
-double ScInterpreter::GetGammaDist(double x, double alpha, double beta)
+// The idea how this group of gamma functions is calculated, is
+// based on the Cephes library
+// online http://www.moshier.net/#Cephes [called 2008-02]
+
+/** You must ensure fA>0.0 && fX>0.0
+    valid results only if fX > fA+1.0
+    uses continued fraction with odd items */
+double ScInterpreter::GetGammaContFraction( double fA, double fX )
 {
-    if (x == 0.0)
-        return 0.0;
 
-    x /= beta;
-    double gamma = alpha;
-
-    double c = 0.918938533204672741;
-    double d[10] = {
-        0.833333333333333333E-1,
-        -0.277777777777777778E-2,
-        0.793650793650793651E-3,
-        -0.595238095238095238E-3,
-        0.841750841750841751E-3,
-        -0.191752691752691753E-2,
-        0.641025641025641025E-2,
-        -0.295506535947712418E-1,
-        0.179644372368830573,
-        -0.139243221690590111E1
-    };
-
-    double dx = x;
-    double dgamma = gamma;
-    int maxit = 10000;
-
-    double z = dgamma;
-    double den = 1.0;
-    while ( z < 10.0 )      //! approx?
+    double const fBigInv = ::std::numeric_limits<double>::epsilon();
+    double const fBig = 1.0/fBigInv;
+    double fCount = 0.0;
+    double fNum = 0.0;  // dummy value
+    double fY = 1.0 - fA;
+    double fDenom = fX + 2.0-fA;
+    double fPk = 0.0;   // dummy value
+    double fPkm1 = fX + 1.0;
+    double fPkm2 = 1.0;
+    double fQk = 1.0;   // dummy value
+    double fQkm1 = fDenom * fX;
+    double fQkm2 = fX;
+    double fApprox = fPkm1/fQkm1;
+    bool bFinished = false;
+    double fR = 0.0;    // dummy value
+    do
     {
-        den *= z;
-        z += 1.0;
-    }
-
-    double z2 = z*z;
-    double z3 = z*z2;
-    double z4 = z2*z2;
-    double z5 = z2*z3;
-    double a = ( z - 0.5 ) * log(z) - z + c;
-    double b = d[0]/z + d[1]/z3 + d[2]/z5 + d[3]/(z2*z5) + d[4]/(z4*z5) +
-               d[5]/(z*z5*z5) + d[6]/(z3*z5*z5) + d[7]/(z5*z5*z5) + d[8]/(z2*z5*z5*z5);
-    // double g = exp(a+b) / den;
-
-    double sum = 1.0 / dgamma;
-    double term = 1.0 / dgamma;
-    double cut1 = dx - dgamma;
-    double cut2 = dx * 10000000000.0;
-
-    for ( int i=1; i<=maxit; i++ )
-    {
-        double ai = i;
-        term = dx * term / ( dgamma + ai );
-        sum += term;
-        double cutoff = cut1 + ( cut2 * term / sum );
-        if ( ai > cutoff )
+        fCount = fCount +1.0;
+        fY = fY+ 1.0;
+        fNum = fY * fCount;
+        fDenom = fDenom +2.0;
+        fPk = fPkm1 * fDenom  -  fPkm2 * fNum;
+        fQk = fQkm1 * fDenom  -  fQkm2 * fNum;
+        if (fQk != 0.0)
         {
-            double t = sum;
-            // return pow( dx, dgamma ) * exp( -dx ) * t / g;
-            return exp( dgamma * log(dx) - dx - a - b ) * t * den;
+            fR = fPk/fQk;
+            bFinished = (fabs( (fApprox - fR)/fR ) <= fHalfMachEps);
+            fApprox = fR;
         }
+        fPkm2 = fPkm1;
+        fPkm1 = fPk;
+        fQkm2 = fQkm1;
+        fQkm1 = fQk;
+        if (fabs(fPk) > fBig)
+        {
+            // reduce a fraction does not change the value
+            fPkm2 = fPkm2 * fBigInv;
+            fPkm1 = fPkm1 * fBigInv;
+            fQkm2 = fQkm2 * fBigInv;
+            fQkm1 = fQkm1 * fBigInv;
+        }
+    } while (!bFinished && fCount<10000);
+    // most iterations, if fX==fAlpha+1.0; approx sqrt(fAlpha) iterations then
+    if (!bFinished)
+    {
+        SetError(errNoConvergence);
     }
-
-//  DBG_ERROR("GetGammaDist bricht nicht ab");
-
-    return 1.0;     // should not happen ...
+    return fApprox;
 }
 
-#if 0
-//! this algorithm doesn't work right in every cases!
-double ScInterpreter::GetGammaDist(double x, double alpha, double beta)
+/** You must ensure fA>0.0 && fX>0.0
+    valid results only if fX <= fA+1.0
+    uses power series */
+double ScInterpreter::GetGammaSeries( double fA, double fX )
 {
-    if (x == 0.0)
-        return 0.0;
-    double fEps = 1.0E-6;
-    double fGamma;
-    double G = GetLogGamma(alpha);
-    x /= beta;
-    G = alpha*log(x)-x-G;
-    if (x <= alpha+1.0)
+    double fDenomfactor = fA;
+    double fSummand = 1.0/fA;
+    double fSum = fSummand;
+    int nCount=1;
+    do
     {
-        if (x < fEps || fabs(G) >= 500.0)
-            fGamma = 0.0;
-        else
-        {
-            double fF = 1.0/alpha;
-            double fS = fF;
-            double anum = alpha;
-            for (USHORT i = 0; i < 100; i++)
-            {
-                anum += 1.0;
-                fF *= x/anum;
-                fS += fF;
-                if (fF < fEps)
-                    i = 100;
-            }
-            fGamma = fS*exp(G);
-        }
+        fDenomfactor = fDenomfactor + 1.0;
+        fSummand = fSummand * fX/fDenomfactor;
+        fSum = fSum + fSummand;
+        nCount = nCount+1;
+    } while ( fSummand/fSum > fHalfMachEps && nCount<=10000);
+    // large amount of iterations will be carried out for huge fAlpha, even
+    // if fX <= fAlpha+1.0
+    if (nCount>10000)
+    {
+        SetError(errNoConvergence);
     }
+    return fSum;
+}
+
+/** You must ensure fA>0.0 && fX>0.0) */
+double ScInterpreter::GetLowRegIGamma( double fA, double fX )
+{
+    double fLnFactor = fA * log(fX) - fX - GetLogGamma(fA);
+    double fFactor = exp(fLnFactor);    // Do we need more accuracy than exp(ln()) has?
+    if (fX>fA+1.0)  // includes fX>1.0; 1-GetUpRegIGamma, continued fraction
+        return 1.0 - fFactor * GetGammaContFraction(fA,fX);
+    else            // fX<=1.0 || fX<=fA+1.0, series
+        return fFactor * GetGammaSeries(fA,fX);
+}
+
+/** You must ensure fA>0.0 && fX>0.0) */
+double ScInterpreter::GetUpRegIGamma( double fA, double fX )
+{
+
+    double fLnFactor= fA*log(fX)-fX-GetLogGamma(fA);
+    double fFactor = exp(fLnFactor); //Do I need more accuracy than exp(ln()) has?;
+    if (fX>fA+1.0) // includes fX>1.0
+            return fFactor * GetGammaContFraction(fA,fX);
+    else //fX<=1 || fX<=fA+1, 1-GetLowRegIGamma, series
+            return 1.0 -fFactor * GetGammaSeries(fA,fX);
+}
+
+/** Gamma distribution, probability density function.
+    fLambda is "scale" parameter
+    You must ensure fAlpha>0.0 and fLambda>0.0 */
+double ScInterpreter::GetGammaDistPDF( double fX, double fAlpha, double fLambda )
+{
+    if (fX <= 0.0)
+        return 0.0;     // see ODFF
     else
     {
-        if (fabs(G) >= 500.0)
-            fGamma = 1.0;
-        else
+        double fXr = fX / fLambda;
+        // use exp(ln()) only for large arguments because of less accuracy
+        if (fXr > 1.0)
         {
-            double a0, b0, a1, b1, cf, fnorm, a2j, a2j1, cfnew;
-            a0 = 0.0; b0 = 1.0; a1 = 1.0;
-            b1 = x;
-            cf = fEps;
-            fnorm = 1.0;
-            cfnew = 0.0;
-            for (USHORT j = 1; j <= 100; j++)
+            const double fLogDblMax = log( ::std::numeric_limits<double>::max());
+            if (log(fXr) * (fAlpha-1.0) < fLogDblMax && fAlpha < fMaxGammaArgument)
             {
-                a2j = ((double) j) - alpha;
-                a2j1 = (double) j;
-                a0 = (a1+a2j*a0); // *fnorm;
-                b0 = (b1+a2j*b0); // *fnorm;
-                a1 = (x*a0+a2j1*a1)*fnorm;
-                b1 = (x*b0+a2j1*b1)*fnorm;
-                if (b1 != 0.0)
-                {
-                    fnorm = 1.0/b1;
-                    cfnew = a1*fnorm;
-                    if (fabs(cf-cfnew)/cf < fEps)
-                        j = 101;
-                    else
-                        cf = cfnew;
-                }
+                return pow( fXr, fAlpha-1.0) * exp(-fXr) / fLambda / GetGamma(fAlpha);
             }
-            fGamma = 1.0 - exp(G)*cfnew;
+            else
+            {
+                return exp( (fAlpha-1.0) * log(fXr) - fXr - log(fLambda) - GetLogGamma(fAlpha));
+            }
+        }
+        else    // fXr near to zero
+        {
+            if (fAlpha<fMaxGammaArgument)
+            {
+                return pow( fXr, fAlpha-1.0) * exp(-fXr) / fLambda / GetGamma(fAlpha);
+            }
+            else
+            {
+                return pow( fXr, fAlpha-1.0) * exp(-fXr) / fLambda / exp( GetLogGamma(fAlpha));
+            }
         }
     }
-    return fGamma;
 }
-#endif
 
-
+/** Gamma distribution, cumulative distribution function.
+    fLambda is "scale" parameter
+    You must ensure fAlpha>0.0 and fLambda>0.0 */
+double ScInterpreter::GetGammaDist( double fX, double fAlpha, double fLambda )
+{
+    if (fX <= 0.0)
+        return 0.0;
+    else
+        return GetLowRegIGamma( fAlpha, fX / fLambda);
+}
