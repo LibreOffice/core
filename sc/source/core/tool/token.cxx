@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: token.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,8 @@
 #else
 #include <cstddef>
 #endif
+#include <cstdio>
+
 #include <string.h>
 #include <tools/mempool.hxx>
 #include <tools/debug.hxx>
@@ -111,21 +113,32 @@ xub_StrLen ScRawToken::GetStrLen( const sal_Unicode* pStr )
 void ScRawToken::SetOpCode( OpCode e )
 {
     eOp   = e;
-    if( eOp == ocIf )
+    switch (eOp)
     {
-        eType = svJump; nJump[ 0 ] = 3; // If, Else, Behind
-    }
-    else if( eOp == ocChose )
-    {
-        eType = svJump; nJump[ 0 ] = MAXJUMPCOUNT+1;
-    }
-    else if( eOp == ocMissing )
-        eType = svMissing;
-    else
-    {
-        eType = svByte;
-        sbyte.cByte = 0;
-        sbyte.bHasForceArray = ScParameterClassification::HasForceArray( eOp);
+        case ocIf:
+            eType = svJump;
+            nJump[ 0 ] = 3; // If, Else, Behind
+            break;
+        case ocChose:
+            eType = svJump;
+            nJump[ 0 ] = MAXJUMPCOUNT+1;
+            break;
+        case ocMissing:
+            eType = svMissing;
+            break;
+        case ocSep:
+        case ocOpen:
+        case ocClose:
+        case ocArrayRowSep:
+        case ocArrayColSep:
+        case ocArrayOpen:
+        case ocArrayClose:
+            eType = svSep;
+            break;
+        default:
+            eType = svByte;
+            sbyte.cByte = 0;
+            sbyte.bHasForceArray = ScParameterClassification::HasForceArray( eOp);
     }
     nRefCnt = 0;
 }
@@ -249,6 +262,7 @@ ScRawToken* ScRawToken::Clone() const
 
         switch( eType )
         {
+            case svSep:         break;
             case svByte:        n += sizeof(ScRawToken::sbyte); break;
             case svDouble:      n += sizeof(double); break;
             case svString:      n = sal::static_int_cast<USHORT>( n + GetStrLenBytes( cStr ) + GetStrLenBytes( 1 ) ); break;
@@ -325,6 +339,9 @@ ScToken* ScRawToken::CreateToken() const
         case svMissing :
             IF_NOT_OPCODE_ERROR( ocMissing, ScMissingToken);
             return new ScMissingToken;
+        //break;
+        case svSep :
+            return new ScOpToken( eOp, svSep );
         //break;
         case svUnknown :
             return new ScUnknownToken( eOp );
@@ -516,6 +533,9 @@ ScToken* ScToken::Clone() const
         //break;
         case svEmptyCell :
             return new ScEmptyCellToken( *static_cast<const ScEmptyCellToken*>(this) );
+        //break;
+        case svSep :
+            return new ScOpToken( *static_cast<const ScOpToken*>(this) );
         //break;
         case svUnknown :
             return new ScUnknownToken( *static_cast<const ScUnknownToken*>(this) );
@@ -2166,15 +2186,13 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
 
 // --- POF (plain old formula) rewrite of a token array ---------------------
 
-/* TODO: When both POF OOoXML and ODFF are to be supported, the
+/* TODO: When both POF OOoXML and ODFF are to be supported differently, the
  * ScMissingContext and ScTokenArray::*Pof* methods should go to a convention
- * on its own and the ScCompiler ctor be refactored to take that convention
- * instead of doing conditional stuff in ScFormulaCell and all those single
- * SetCompileXML() calls and similar bits.
+ * on its own.
  */
 
 #if 0
-// static function can't be compiled and not used (warning)
+// static function can't be compiled if not used (warning)
 //#if OSL_DEBUG_LEVEL > 0
 static void DumpTokArr( ScTokenArray *pCode )
 {
@@ -2212,7 +2230,15 @@ inline bool ScMissingContext::AddDefaultArg( ScTokenArray* pNewArr, int nArg, do
 
 inline bool ScMissingContext::IsRewriteNeeded( OpCode eOp )
 {
-    return eOp == ocMissing || eOp == ocLog;
+    switch (eOp)
+    {
+        case ocMissing:
+        case ocLog:
+        case ocAddress:
+            return true;
+        default:
+            return false;
+    }
 }
 
 bool ScMissingContext::AddMissingExternal( ScTokenArray *pNewArr ) const
@@ -2234,11 +2260,6 @@ bool ScMissingContext::AddMissingExternal( ScTokenArray *pNewArr ) const
     {
         return AddDefaultArg( pNewArr, 3, 1000.0 );
     }
-/* FIXME: when we implement EUROCONVERT */
-#if 0
-    if (rName.EqualsIgnoreCaseAscii( "EUROCONVERT" ))
-        return AddDefaultArg( pNewArr, 3, 0.0 );
-#endif
     return false;
 }
 
@@ -2282,10 +2303,6 @@ bool ScMissingContext::AddMissing( ScTokenArray *pNewArr ) const
             // FIXME: rather tough.
             // if arg 3 (height) ommitted, export arg1 (rows)
             break;
-        case ocAddress:
-            // FIXME - should we adjust 'ADDRESS_XL(?)' at this point?
-            // (arg 4 -> 'TRUE' ? [ or no arg. 4 ;-] )
-            break;
         default:
             break;
     }
@@ -2322,43 +2339,79 @@ ScTokenArray * ScTokenArray::RewriteMissingToPof()
 {
     const size_t nAlloc = 256;
     ScMissingContext aCtx[ nAlloc ];
+    int aOpCodeAddressStack[ nAlloc ];  // use of ADDRESS() function
+    const int nOmitAddressArg = 3;      // ADDRESS() 4th parameter A1/R1C1
     USHORT nTokens = GetLen() + 1;
     ScMissingContext* pCtx = (nAlloc < nTokens ? new ScMissingContext[nTokens] : &aCtx[0]);
+    int* pOcas = (nAlloc < nTokens ? new int[nTokens] : &aOpCodeAddressStack[0]);
     // Never go below 0, never use 0, mpFunc always NULL.
     pCtx[0].Clear();
     int nFn = 0;
+    int nOcas = 0;
 
     ScTokenArray *pNewArr = new ScTokenArray;
+    // At least RECALCMODE_ALWAYS needs to be set.
+    pNewArr->AddRecalcMode( GetRecalcMode());
 
     for ( ScToken *pCur = First(); pCur; pCur = Next() )
     {
         bool bAdd = true;
+        // Don't write the expression of the new inserted ADDRESS() parameter.
+        // Do NOT omit the new second parameter of INDIRECT() though. If that
+        // was done for both, INDIRECT() actually could calculate different and
+        // valid (but wrong) results with the then changed return value of
+        // ADDRESS(). Better let it generate an error instead.
+        for (int i = nOcas; i-- > 0 && bAdd; )
+        {
+            if (pCtx[ pOcas[ i ] ].mnCurArg == nOmitAddressArg)
+            {
+                // Omit erverything except a trailing separator, the leading
+                // separator is omitted below. The other way around would leave
+                // an extraneous separator if no parameter followed.
+                if (!(pOcas[ i ] == nFn && pCur->GetOpCode() == ocSep))
+                    bAdd = false;
+            }
+            //fprintf( stderr, "ocAddress %d arg %d%s\n", (int)i, (int)pCtx[ pOcas[ i ] ].mnCurArg, (bAdd ? "" : " omitted"));
+        }
         switch ( pCur->GetOpCode() )
         {
             case ocOpen:
                 ++nFn;      // all following operations on _that_ function
                 pCtx[ nFn ].mpFunc = PeekPrevNoSpaces();
                 pCtx[ nFn ].mnCurArg = 0;
+                if (pCtx[ nFn ].mpFunc && pCtx[ nFn ].mpFunc->GetOpCode() == ocAddress)
+                    pOcas[ nOcas++ ] = nFn;     // entering ADDRESS()
                 break;
             case ocClose:
                 pCtx[ nFn ].AddMoreArgs( pNewArr );
                 DBG_ASSERT( nFn > 0, "ScTokenArray::RewriteMissingToPof: underflow");
+                if (nOcas > 0 && pOcas[ nOcas-1 ] == nFn)
+                    --nOcas;                    // leaving ADDRESS()
                 if (nFn > 0)
                     --nFn;
                 break;
             case ocSep:
                 pCtx[ nFn ].mnCurArg++;
+                // Omit leading separator of ADDRESS() parameter.
+                if (nOcas && pOcas[ nOcas-1 ] == nFn && pCtx[ nFn ].mnCurArg == nOmitAddressArg)
+                {
+                    bAdd = false;
+                    //fprintf( stderr, "ocAddress %d sep %d omitted\n", (int)nOcas-1, nOmitAddressArg);
+                }
                 break;
             case ocMissing:
-                bAdd = !pCtx[ nFn ].AddMissing( pNewArr );
+                if (bAdd)
+                    bAdd = !pCtx[ nFn ].AddMissing( pNewArr );
                 break;
             default:
                 break;
         }
-        if ( bAdd )
+        if (bAdd)
             pNewArr->AddToken( *pCur );
     }
 
+    if (pOcas != &aOpCodeAddressStack[0])
+        delete [] pOcas;
     if (pCtx != &aCtx[0])
         delete [] pCtx;
 
