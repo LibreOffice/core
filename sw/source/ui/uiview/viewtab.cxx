@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewtab.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -630,7 +630,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             // <--
 
             SwPosition aPos(*pNumRuleNodeFromDoc);
-            rSh.NumIndent( static_cast< short >(aParaMargin.GetTxtLeft() - rLR.GetTxtLeft()), aPos);
+            // --> OD 2008-06-09 #i90078#
+            rSh.SetIndent( static_cast< short >(aParaMargin.GetTxtLeft() - rLR.GetTxtLeft()), aPos);
+            // <--
             // --> OD 2005-02-18 #i42921# - invalidate state of indent in order
             // to get a ruler update.
             aParaMargin.SetWhich( nSlot );
