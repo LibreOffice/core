@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xicontent.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -354,12 +354,7 @@ void XclImpHyperlink::ConvertToValidTabName(String& rUrl)
         {
             bInQuote = !bInQuote;
             if (!bInQuote && aTabName.Len() > 0)
-            {
-                // Sheet name exists.  Convert it to valid name the same way the
-                // sheet names are converted.
-                ScDocument::ConvertToValidTabName(aTabName, sal_Unicode('_'));
                 aNewUrl.Append(aTabName);
-            }
         }
         else if (bInQuote)
             aTabName.Append(c);
