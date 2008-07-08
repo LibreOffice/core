@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cell.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -777,8 +777,6 @@ void ScFormulaCell::GetFormula( rtl::OUStringBuffer& rBuffer,
                 ((ScFormulaCell*)pCell)->GetFormula( rBuffer, eGrammar);
                 return;
             }
-            else if (ScGrammar::isPODF( eGrammar))
-                GetFormulaForPof( rBuffer, aPos, eGrammar);
             else
             {
                 ScCompiler aComp( pDocument, aPos, *pCode, eGrammar);
@@ -790,8 +788,6 @@ void ScFormulaCell::GetFormula( rtl::OUStringBuffer& rBuffer,
             DBG_ERROR("ScFormulaCell::GetFormula: not a matrix");
         }
     }
-    else if (ScGrammar::isPODF( eGrammar))
-        GetFormulaForPof( rBuffer, aPos, eGrammar);
     else
     {
         ScCompiler aComp( pDocument, aPos, *pCode, eGrammar);
@@ -813,26 +809,6 @@ void ScFormulaCell::GetFormula( String& rFormula, const ScGrammar::Grammar eGram
     rtl::OUStringBuffer rBuffer( rFormula );
     GetFormula( rBuffer, eGrammar );
     rFormula = rBuffer;
-}
-
-
-void ScFormulaCell::GetFormulaForPof( rtl::OUStringBuffer &rBuffer,
-        const ScAddress &rPos, const ScGrammar::Grammar eGrammar ) const
-{
-    ScTokenArray *pCompileCode = pCode;
-    if (ScGrammar::isPODF( eGrammar))
-    {
-        /* Scan pCode [ token array ! ] for missing args &
-           re-write if present */
-        if (pCode->NeedsPofRewrite())
-            pCompileCode = pCode->RewriteMissingToPof();
-    }
-
-    ScCompiler aComp( pDocument, rPos, *pCompileCode, eGrammar);
-    aComp.CreateStringFromTokenArray( rBuffer );
-
-    if ( pCompileCode != pCode )
-        delete pCompileCode;
 }
 
 void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
