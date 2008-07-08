@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh.cxx,v $
- * $Revision: 1.102 $
+ * $Revision: 1.103 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -896,9 +896,19 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                             }
 
                                             uno::Reference< frame::XStorable > xStor( GetModel(), uno::UNO_QUERY_THROW );
+                                            // TODO/LATER: More entries from the MediaDescriptor might be interesting for the merge
                                             uno::Sequence< beans::PropertyValue > aValues(1);
                                             aValues[0].Name = ::rtl::OUString::createFromAscii( "FilterName" );
                                             aValues[0].Value <<= ::rtl::OUString( GetMedium()->GetFilter()->GetFilterName() );
+
+                                            SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False);
+                                            if ( pPasswordItem && pPasswordItem->GetValue().Len() )
+                                            {
+                                                aValues.realloc( 2 );
+                                                aValues[1].Name = ::rtl::OUString::createFromAscii( "Password" );
+                                                aValues[1].Value <<= ::rtl::OUString( pPasswordItem->GetValue() );
+                                            }
+
                                             SC_MOD()->SetInSharedDocSaving( true );
                                             xStor->storeToURL( GetSharedFileURL(), aValues );
                                             SC_MOD()->SetInSharedDocSaving( false );
