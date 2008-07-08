@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: regactivex.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,6 +92,11 @@ void WarningMessageInt( wchar_t* pWarning, unsigned int nValue )
 //----------------------------------------------------------
 void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser )
 {
+#ifdef OWN_DEBUG_PRINT
+    MessageBoxW(NULL, L"RegisterActiveXNative", L"Information", MB_OK | MB_ICONINFORMATION);
+    MessageBoxA(NULL, pActiveXPath, "Library Path", MB_OK | MB_ICONINFORMATION);
+#endif
+
     // For Win98/WinME the values should be written to the local machine
     OSVERSIONINFO       aVerInfo;
     aVerInfo.dwOSVersionInfoSize = sizeof( aVerInfo );
@@ -103,7 +108,12 @@ void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallFor
     {
         DllNativeRegProc pNativeProc = ( DllNativeRegProc )GetProcAddress( hModule, "DllRegisterServerNative" );
         if( pNativeProc!=NULL )
+        {
+#ifdef OWN_DEBUG_PRINT
+            MessageBoxA(NULL, pActiveXPath, "Library Path", MB_OK | MB_ICONINFORMATION);
+#endif
             ( *pNativeProc )( nMode, InstallForAllUser, pActiveXPath );
+        }
 
         FreeLibrary( hModule );
     }
@@ -155,6 +165,11 @@ BOOL GetActiveXControlPath( MSIHANDLE hMSI, char** ppActiveXPath )
     if ( GetMsiProp( hMSI, L"BASISINSTALLLOCATION", &pProgPath ) && pProgPath )
        {
         char* pCharProgPath = UnicodeToAnsiString( pProgPath );
+#ifdef OWN_DEBUG_PRINT
+        MessageBox(NULL, pProgPath, L"Basis Installation Path", MB_OK | MB_ICONINFORMATION);
+        MessageBoxA(NULL, pCharProgPath, "Basis Installation Path( char )", MB_OK | MB_ICONINFORMATION);
+#endif
+
         if ( pCharProgPath )
         {
             int nLen = strlen( pCharProgPath );
