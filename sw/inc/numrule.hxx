@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: numrule.hxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -300,9 +300,20 @@ public:
     SvxNumRule  MakeSvxNumRule() const;
 
     // #i23726#, #i23725#
-    void        Indent(short aAmount, int nLevel = -1,
-                       int nReferenceLevel = -1, BOOL bRelative = TRUE,
-                       BOOL bFirstLine = TRUE, BOOL bCheckGtZero = TRUE);
+    // --> OD 2008-06-09 #i90078#
+    // refactoring: provide certain method for certain purpose
+//    void        Indent(short aAmount, int nLevel = -1,
+//                       int nReferenceLevel = -1, BOOL bRelative = TRUE,
+//                       BOOL bFirstLine = TRUE, BOOL bCheckGtZero = TRUE);
+    // change indent of all list levels by given difference
+    void ChangeIndent( const short nDiff );
+    // set indent of certain list level to given value
+    void SetIndent( const short nNewIndent,
+                    const USHORT nListLevel );
+    // set indent of first list level to given value and change other list level's
+    // indents accordingly
+    void SetIndentOfFirstListLevelAndChangeOthers( const short nNewIndent );
+    // <--
 
     void Validate();
 };
@@ -316,6 +327,15 @@ namespace numfunc
         @author OD
     */
     const String& GetDefBulletFontname();
+
+    /** determine if default bullet font is user defined
+
+        OD 2008-06-06 #i63395#
+        The default bullet font is user defined, if it is given in the user configuration
+
+        @author OD
+    */
+    const bool IsDefBulletFontUserDefined();
 
     /** retrieve font used for the default bullet list characters
 
@@ -339,6 +359,13 @@ namespace numfunc
         @author OD
     */
     const sal_Bool ChangeIndentOnTabAtFirstPosOfFirstListItem();
+
+    /**
+        OD 2008-06-06 #i89178#
+
+        @author OD
+    */
+    const SvxNumberFormat::SvxNumPositionAndSpaceMode GetDefaultPositionAndSpaceMode();
 }
 
 #endif  // _NUMRULE_HXX
