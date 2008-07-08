@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpre.hxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -635,8 +635,7 @@ BOOL RGetVariances( ScMatrix* pV, ScMatrix* pX, SCSIZE nC, SCSIZE nR,
 void ScRGP();
 void ScRKP();
 void ScForecast();
-//--------------------------------------------------------------------------------
-// Funktionen in interpr3.cxx
+//------------------------- Functions in interpr3.cxx -------------------------
 void ScNoName();
 void ScBadName();
 // Statistik:
@@ -644,17 +643,17 @@ double phi(double x);
 double taylor(double* pPolynom, USHORT nMax, double x);
 double gauss(double x);
 double gaussinv(double x);
-double GetGammaDist(double x, double alpha, double beta);
 double GetBetaDist(double x, double alpha, double beta);
-double GetChiDist(double fChi, double fDF);
+double GetChiDist(double fChi, double fDF);     // for LEGACY.CHIDIST, returns right tail
+double GetChiSqDistCDF(double fX, double fDF);  // for CHISQDIST, returns left tail
 double GetFDist(double x, double fF1, double fF2);
 double GetTDist(double T, double fDF);
 double Fakultaet(double x);
 double BinomKoeff(double n, double k);
-double GammaHelp(double& x, BOOL& bReflect);
 double GetGamma(double x);
 double GetLogGamma(double x);
 void ScLogGamma();
+void ScGamma();     // ready for ODF 1.2 GAMMA
 void ScPhi();
 void ScGauss();
 void ScStdNormDist();
@@ -677,7 +676,8 @@ void ScLogNormDist();
 void ScLogNormInv();
 void ScTDist();
 void ScFDist();
-void ScChiDist();
+void ScChiDist();   // for LEGACY.CHIDIST, returns right tail
+// TODO: void ScChiSqDist;
 void ScWeibull();
 void ScBetaDist();
 void ScFInv();
@@ -722,7 +722,20 @@ void ScSlope();
 void ScTrend();
 void ScInfo();
 
+//------------------------ Functions in interpr6.cxx -------------------------
 
+static const double fMaxGammaArgument;  // defined in interpr3.cxx
+
+double GetGammaContFraction(double fA,double fX);
+double GetGammaSeries(double fA,double fX);
+double GetLowRegIGamma(double fA,double fX);    // lower regularized incomplete gamma function, GAMMAQ
+double GetUpRegIGamma(double fA,double fX);     // upper regularized incomplete gamma function, GAMMAP
+// probability density function; fLambda is "scale" parameter
+double GetGammaDistPDF(double fX, double fAlpha, double fLambda);
+// cumulative distribution function; fLambda is "scale" parameter
+double GetGammaDist(double fX, double fAlpha, double fLambda);
+
+//----------------------------------------------------------------------------
 public:
     ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
                     const ScAddress&, ScTokenArray& );
