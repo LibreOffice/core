@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: token.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,6 +67,7 @@ enum StackVarEnum
 
     svError,                            // error token
     svMissing = 0x70,                   // 0 or ""
+    svSep,                              // separator, ocSep, ocOpen, ocClose
     svUnknown                           // unknown StackType
 };
 
