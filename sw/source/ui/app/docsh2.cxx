@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh2.cxx,v $
- * $Revision: 1.103 $
+ * $Revision: 1.104 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,6 +126,7 @@
 #include <swmodule.hxx>
 #include <unoobj.hxx>
 #include <swwait.hxx>
+#include <swcli.hxx>
 
 #ifndef _CMDID_H
 #include <cmdid.h>
@@ -1827,5 +1828,23 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
     delete pPam;
     delete pReader;
     return nErr;
+}
+
+/*--------------------------------------------------------------------
+    Get a client for an embedded object if possible.
+ --------------------------------------------------------------------*/
+SfxInPlaceClient* SwDocShell::GetIPClient( const ::svt::EmbeddedObjectRef& xObjRef )
+{
+    SfxInPlaceClient* pResult = NULL;
+
+    SwWrtShell* pShell = GetWrtShell();
+    if ( pShell )
+    {
+        pResult = pShell->GetView().FindIPClient( xObjRef.GetObject(), (Window*)&pShell->GetView().GetEditWin() );
+        if ( !pResult )
+            pResult = new SwOleClient( &pShell->GetView(), &pShell->GetView().GetEditWin(), xObjRef );
+    }
+
+    return pResult;
 }
 
