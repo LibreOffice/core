@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: numitem.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -538,34 +538,38 @@ void SvxNumberFormat::SetPositionAndSpaceMode( SvxNumPositionAndSpaceMode ePosit
 
 short SvxNumberFormat::GetLSpace() const
 {
-#if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( mePositionAndSpaceMode == LABEL_WIDTH_AND_POSITION,
-                "<SvxNumberFormat::GetLSpace()> - misusage: position-and-space-mode equals LABEL_ALIGNMENT");
-#endif
+//#if OSL_DEBUG_LEVEL > 1
+//    DBG_ASSERT( mePositionAndSpaceMode == LABEL_WIDTH_AND_POSITION,
+//                "<SvxNumberFormat::GetLSpace()> - misusage: position-and-space-mode does not equal LABEL_WIDTH_AND_POSITION");
+//#endif
     return mePositionAndSpaceMode == LABEL_WIDTH_AND_POSITION ? nLSpace : 0;
 }
 short SvxNumberFormat::GetAbsLSpace() const
 {
-#if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( mePositionAndSpaceMode == LABEL_WIDTH_AND_POSITION,
-                "<SvxNumberFormat::GetLSpace()> - misusage: position-and-space-mode equals LABEL_ALIGNMENT");
-#endif
-    return mePositionAndSpaceMode == LABEL_WIDTH_AND_POSITION ? nAbsLSpace : 0;
+//#if OSL_DEBUG_LEVEL > 1
+//    DBG_ASSERT( mePositionAndSpaceMode == LABEL_WIDTH_AND_POSITION,
+//                "<SvxNumberFormat::GetAbsLSpace()> - misusage: position-and-space-mode does not equal LABEL_WIDTH_AND_POSITION");
+//#endif
+    return mePositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
+           ? nAbsLSpace
+           : static_cast<short>( GetFirstLineIndent() + GetIndentAt() );
 }
 short SvxNumberFormat::GetFirstLineOffset() const
 {
-#if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( mePositionAndSpaceMode == LABEL_WIDTH_AND_POSITION,
-                "<SvxNumberFormat::GetLSpace()> - misusage: position-and-space-mode equals LABEL_ALIGNMENT");
-#endif
-    return mePositionAndSpaceMode == LABEL_WIDTH_AND_POSITION ? nFirstLineOffset : 0;
+//#if OSL_DEBUG_LEVEL > 1
+//    DBG_ASSERT( mePositionAndSpaceMode == LABEL_WIDTH_AND_POSITION,
+//                "<SvxNumberFormat::GetFirstLineOffset()> - misusage: position-and-space-mode does not equal LABEL_WIDTH_AND_POSITION");
+//#endif
+    return mePositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
+           ? nFirstLineOffset
+           : static_cast<short>( GetFirstLineIndent() );
 }
 short SvxNumberFormat::GetCharTextDistance() const
 {
-#if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( mePositionAndSpaceMode == LABEL_WIDTH_AND_POSITION,
-                "<SvxNumberFormat::GetLSpace()> - misusage: position-and-space-mode equals LABEL_ALIGNMENT");
-#endif
+//#if OSL_DEBUG_LEVEL > 1
+//    DBG_ASSERT( mePositionAndSpaceMode == LABEL_WIDTH_AND_POSITION,
+//                "<SvxNumberFormat::GetCharTextDistance()> - misusage: position-and-space-mode does not equal LABEL_WIDTH_AND_POSITION");
+//#endif
     return mePositionAndSpaceMode == LABEL_WIDTH_AND_POSITION ? nCharTextDistance : 0;
 }
 
