@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.22 $
+# $Revision: 1.23 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,6 +47,7 @@ PROF_EDITION=TRUE
 VERSIONOBJ=
 LIBTARGET=NO
 USE_DEFFILE=YES
+UWINAPILIB=
 
 INCPRE+=$(foreach,i,$(ATL_INCLUDE) -I$(i)) \
     -I$(MISC) \
