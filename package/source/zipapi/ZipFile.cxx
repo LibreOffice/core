@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ZipFile.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -876,14 +876,24 @@ sal_Int32 ZipFile::recover()
                     for( EntryHash::iterator aIter = aEntries.begin(); aIter != aEntries.end(); aIter++ )
                     {
                         ZipEntry aTmp = (*aIter).second;
-                        if( (*aIter).second.nMethod == DEFLATED && (*aIter).second.nFlag & 8 )
+
+                        // this is a broken package, accept this block not only for DEFLATED streams
+                        if( (*aIter).second.nFlag & 8 )
                         {
                             sal_Int32 nStreamOffset = nGenPos + nPos - nCompressedSize;
                             if ( nStreamOffset == (*aIter).second.nOffset && nCompressedSize > (*aIter).second.nCompressedSize )
                             {
-                                sal_Int32 nRealSize = 0, nRealCRC = 0;
-                                getSizeAndCRC( nStreamOffset, nCompressedSize, &nRealSize, &nRealCRC );
-                                if ( nRealSize == nSize && nRealCRC == nCRC32 )
+                                // only DEFLATED blocks need to be checked
+                                sal_Bool bAcceptBlock = ( (*aIter).second.nMethod == STORED && nCompressedSize == nSize );
+
+                                if ( !bAcceptBlock )
+                                {
+                                    sal_Int32 nRealSize = 0, nRealCRC = 0;
+                                    getSizeAndCRC( nStreamOffset, nCompressedSize, &nRealSize, &nRealCRC );
+                                    bAcceptBlock = ( nRealSize == nSize && nRealCRC == nCRC32 );
+                                }
+
+                                if ( bAcceptBlock )
                                 {
                                     (*aIter).second.nCrc = nCRC32;
                                     (*aIter).second.nCompressedSize = nCompressedSize;
