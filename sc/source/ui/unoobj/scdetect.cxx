@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scdetect.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -164,32 +164,53 @@ static BOOL lcl_MayBeAscii( SvStream& rStream )
 
 static BOOL lcl_MayBeDBase( SvStream& rStream )
 {
-    //  for dBase, look for the 0d character at the end of the header
+    // Look for dbf marker, see connectivity/source/inc/dbase/DTable.hxx
+    // DBFType for values.
+    const BYTE nValidMarks[] = {
+        0x03, 0x04, 0x05, 0x30, 0x43, 0xB3, 0x83, 0x8b, 0x8e, 0xf5 };
+    BYTE nMark;
+    rStream.Seek(STREAM_SEEK_TO_BEGIN);
+    rStream >> nMark;
+    bool bValidMark = false;
+    for (size_t i=0; i < sizeof(nValidMarks)/sizeof(nValidMarks[0]) && !bValidMark; ++i)
+    {
+        if (nValidMarks[i] == nMark)
+            bValidMark = true;
+    }
+    if ( !bValidMark )
+        return FALSE;
+
+    const size_t nHeaderBlockSize = 32;
+    // Empty dbf is >= 32*2+1 bytes in size.
+    const size_t nEmptyDbf = nHeaderBlockSize * 2 + 1;
 
     rStream.Seek(STREAM_SEEK_TO_END);
     ULONG nSize = rStream.Tell();
+    if ( nSize < nEmptyDbf )
+        return FALSE;
 
     // length of header starts at 8
-
-    if ( nSize < 10 )
-        return FALSE;
     rStream.Seek(8);
     USHORT nHeaderLen;
     rStream >> nHeaderLen;
 
-    if ( nHeaderLen < 32 || nSize < nHeaderLen )
+    if ( nHeaderLen < nEmptyDbf || nSize < nHeaderLen )
         return FALSE;
 
     // Last byte of header must be 0x0d, this is how it's specified.
     // #i9581#,#i26407# but some applications don't follow the specification
-    // and pad the header with one byte 0x00 to reach an even boundary.
+    // and pad the header with one byte 0x00 to reach an
+    // even boundary. Some (#i88577# ) even pad more or pad using a 0x1a ^Z
+    // control character (#i8857#). This results in:
+    // Last byte of header must be 0x0d on 32 bytes boundary.
+    USHORT nBlocks = (nHeaderLen - 1) / nHeaderBlockSize;
+    BYTE nEndFlag = 0;
+    while ( nBlocks > 1 && nEndFlag != 0x0d ) {
+        rStream.Seek( nBlocks-- * nHeaderBlockSize );
+        rStream >> nEndFlag;
+    }
 
-    rStream.Seek( nHeaderLen - 2 );
-    BYTE nOneBefore, nEndFlag;
-    rStream >> nOneBefore >> nEndFlag;
-
-    return ( nEndFlag == 0x0d ||
-            ((nHeaderLen % 2 == 0) && nOneBefore == 0x0d && nEndFlag == 0x00) );
+    return ( 0x0d == nEndFlag );
 }
 
 #if 0
