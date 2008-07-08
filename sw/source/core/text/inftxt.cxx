@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inftxt.cxx,v $
- * $Revision: 1.120 $
+ * $Revision: 1.121 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,6 +107,7 @@ using namespace ::com::sun::star::beans;
 namespace numfunc
 {
     extern const String& GetDefBulletFontname();
+    extern const bool IsDefBulletFontUserDefined();
 }
 // <--
 
@@ -879,10 +880,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
     {
         pFnt = new SwFont( *pOldFnt );
         pFnt->SetFamily( FAMILY_DONTKNOW, pFnt->GetActual() );
-        // --> OD 2006-06-27 #b6440955#
-//        pFnt->SetName( XubString::CreateFromAscii( sBulletFntName ), pFnt->GetActual() );
         pFnt->SetName( numfunc::GetDefBulletFontname(), pFnt->GetActual() );
-        // <--
         pFnt->SetStyleName( aEmptyStr, pFnt->GetActual() );
         pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, pFnt->GetActual() );
     }
@@ -1808,12 +1806,8 @@ SwDefFontSave::SwDefFontSave( const SwTxtSizeInfo &rInf )
          ( RTL_TEXTENCODING_SYMBOL == pFnt->GetCharSet(pFnt->GetActual()) )
         ;
 
-    // --> OD 2006-06-27 #b6440955#
-//    const sal_Bool bFamily = bAlter && COMPARE_EQUAL !=
-//            pFnt->GetName( pFnt->GetActual() ).CompareToAscii( sBulletFntName );
     const sal_Bool bFamily = bTmpAlter &&
-         pFnt->GetName( pFnt->GetActual() ) != numfunc::GetDefBulletFontname();
-    // <--
+          pFnt->GetName( pFnt->GetActual() ) != numfunc::GetDefBulletFontname();
     const sal_Bool bRotation = (sal_Bool)pFnt->GetOrientation() &&
                                 ! rInf.GetTxtFrm()->IsVertical();
 
@@ -1824,11 +1818,7 @@ SwDefFontSave::SwDefFontSave( const SwTxtSizeInfo &rInf )
         if ( bFamily )
         {
             pNewFnt->SetFamily( FAMILY_DONTKNOW, pFnt->GetActual() );
-            // --> OD 2006-06-27 #b6440955#
-//            pNewFnt->SetName( XubString::CreateFromAscii( sBulletFntName ),
-//                              pFnt->GetActual() );
             pNewFnt->SetName( numfunc::GetDefBulletFontname(), pFnt->GetActual() );
-            // <--
             pNewFnt->SetStyleName( aEmptyStr, pFnt->GetActual() );
             pNewFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, pFnt->GetActual() );
             pNewFnt->SetFixKerning( 0 );
