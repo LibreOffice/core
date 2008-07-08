@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlnume.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -388,9 +388,14 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
         OUStringBuffer sBuffer;
         if ( ePosAndSpaceMode == PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION )
         {
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-                                      XML_LIST_LEVEL_POSITION_AND_SPACE_MODE,
-                                      XML_LABEL_WIDTH_AND_POSITION );
+            // --> OD 2008-06-05 #i89178#
+            // optimization of XML stream size:
+            // suppress export of property list-level-position-and-space-mode,
+            // if its value is "label-width-and-position" - its the default value
+//            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+//                                      XML_LIST_LEVEL_POSITION_AND_SPACE_MODE,
+//                                      XML_LABEL_WIDTH_AND_POSITION );
+            // <--
 
             nSpaceBefore += nMinLabelWidth;
             nMinLabelWidth = -nMinLabelWidth;
@@ -413,7 +418,12 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
                               sBuffer.makeStringAndClear() );
             }
         }
-        else if ( ePosAndSpaceMode == PositionAndSpaceMode::LABEL_ALIGNMENT )
+        // --> OD 2008-06-06 #i89178#
+        // check, if properties for position-and-space-mode LABEL_ALIGNMENT
+        // are allowed to be exported.
+        else if ( ePosAndSpaceMode == PositionAndSpaceMode::LABEL_ALIGNMENT &&
+                  mbExportPositionAndSpaceModeLabelAlignment )
+        // <--
         {
             GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                       XML_LIST_LEVEL_POSITION_AND_SPACE_MODE,
@@ -501,7 +511,12 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
             SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_STYLE,
                                       XML_LIST_LEVEL_PROPERTIES, sal_True, sal_True );
 
-            if ( ePosAndSpaceMode == PositionAndSpaceMode::LABEL_ALIGNMENT )
+            // --> OD 2008-06-06 #i89178#
+            // check, if properties for position-and-space-mode LABEL_ALIGNMENT
+            // are allowed to be exported.
+            if ( ePosAndSpaceMode == PositionAndSpaceMode::LABEL_ALIGNMENT &&
+                 mbExportPositionAndSpaceModeLabelAlignment )
+            // <--
             {
                 enum XMLTokenEnum eValue = XML_LISTTAB;
                 if ( eLabelFollowedBy == LabelFollow::SPACE )
@@ -655,61 +670,80 @@ SvxXMLNumRuleExport::SvxXMLNumRuleExport( SvXMLExport& rExp ) :
     rExport( rExp ),
     sNumberingRules( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) ),
     sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) ),
-    sIsContinuousNumbering( RTL_CONSTASCII_USTRINGPARAM( "IsContinuousNumbering" ) )
+    sIsContinuousNumbering( RTL_CONSTASCII_USTRINGPARAM( "IsContinuousNumbering" ) ),
+    // --> OD 2008-06-06 #i89178#
+    mbExportPositionAndSpaceModeLabelAlignment( true )
+    // <--
 {
+    switch ( GetExport().getDefaultVersion() )
+    {
+        case SvtSaveOptions::ODFVER_010:
+        case SvtSaveOptions::ODFVER_011:
+        {
+            mbExportPositionAndSpaceModeLabelAlignment = false;
+        }
+        break;
+        default: // ODFVER_UNKNOWN or ODFVER_012
+        {
+            mbExportPositionAndSpaceModeLabelAlignment = true;
+        }
+    }
 }
 
 SvxXMLNumRuleExport::~SvxXMLNumRuleExport()
 {
 }
 
-void SvxXMLNumRuleExport::Export( const OUString& rName,
-                                  sal_Bool bContNumbering )
-{
-    GetExport().CheckAttrList();
+// --> OD 2008-06-17 #i90780#
+// refactoring: removing unused methods
+//void SvxXMLNumRuleExport::Export( const OUString& rName,
+//                                sal_Bool bContNumbering )
+//{
+//  GetExport().CheckAttrList();
 
-    // style:name="..."
-    if( rName.getLength() )
-    {
-        sal_Bool bEncoded = sal_False;
-        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
-                          GetExport().EncodeStyleName( rName, &bEncoded ) );
-        if( bEncoded )
-            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_DISPLAY_NAME,
-                                     rName);
-    }
+//  // style:name="..."
+//  if( rName.getLength() )
+//  {
+//      sal_Bool bEncoded = sal_False;
+//      GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
+//                        GetExport().EncodeStyleName( rName, &bEncoded ) );
+//      if( bEncoded )
+//          GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_DISPLAY_NAME,
+//                                   rName);
+//  }
 
-    // text:consecutive-numbering="..."
-    if( bContNumbering )
-        GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_CONSECUTIVE_NUMBERING,
-                             XML_TRUE );
+//  // text:consecutive-numbering="..."
+//  if( bContNumbering )
+//      GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_CONSECUTIVE_NUMBERING,
+//                         XML_TRUE );
 
-    // other application specific attributes
-    AddListStyleAttributes();
+//  // other application specific attributes
+//  AddListStyleAttributes();
 
-    OUString sElem = GetExport().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TEXT,
-                                   GetXMLToken(XML_LIST_STYLE) );
-    GetExport().IgnorableWhitespace();
-    GetExport().StartElement( XML_NAMESPACE_TEXT, XML_LIST_STYLE, sal_False );
+//  OUString sElem = GetExport().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TEXT,
+//                                 GetXMLToken(XML_LIST_STYLE) );
+//  GetExport().IgnorableWhitespace();
+//  GetExport().StartElement( XML_NAMESPACE_TEXT, XML_LIST_STYLE, sal_False );
 
-    uno::Reference< ::com::sun::star::container::XIndexReplace >  xNumRule = GetUNONumRule();
-    if( xNumRule.is() )
-        exportLevelStyles( xNumRule );
+//  uno::Reference< ::com::sun::star::container::XIndexReplace >  xNumRule = GetUNONumRule();
+//  if( xNumRule.is() )
+//      exportLevelStyles( xNumRule );
 
-    GetExport().EndElement( XML_NAMESPACE_TEXT, XML_LIST_STYLE, sal_True );
-}
+//  GetExport().EndElement( XML_NAMESPACE_TEXT, XML_LIST_STYLE, sal_True );
+//}
 
-void SvxXMLNumRuleExport::ExportOutline()
-{
-    GetExport().IgnorableWhitespace( );
-    GetExport().StartElement( XML_NAMESPACE_TEXT, XML_OUTLINE_STYLE, sal_False );
+//void SvxXMLNumRuleExport::ExportOutline()
+//{
+//  GetExport().IgnorableWhitespace( );
+//  GetExport().StartElement( XML_NAMESPACE_TEXT, XML_OUTLINE_STYLE, sal_False );
 
-    uno::Reference< ::com::sun::star::container::XIndexReplace >  xNumRule = GetUNONumRule();
-    if( xNumRule.is() )
-        exportLevelStyles( xNumRule, sal_True );
+//  uno::Reference< ::com::sun::star::container::XIndexReplace >  xNumRule = GetUNONumRule();
+//  if( xNumRule.is() )
+//      exportLevelStyles( xNumRule, sal_True );
 
-    GetExport().EndElement( XML_NAMESPACE_TEXT, XML_OUTLINE_STYLE, sal_True );
-}
+//  GetExport().EndElement( XML_NAMESPACE_TEXT, XML_OUTLINE_STYLE, sal_True );
+//}
+// <--
 
 void SvxXMLNumRuleExport::exportNumberingRule(
         const OUString& rName,
@@ -795,23 +829,46 @@ void SvxXMLNumRuleExport::exportOutline()
 
         if( xNumRule.is() )
         {
-            // --> OD 2006-09-27 #i69627#
-            if ( GetExport().writeOutlineStyleAsNormalListStyle() )
+            // --> OD 2008-06-17 #i90780#
+            // Outline style has property style:name since ODF 1.2
+            // Thus, export this property and adjust fix for issue #i69627#
+            OUString sOutlineStyleName;
             {
-                OUString sOutlineStyleName;
+                Reference<XPropertySet> xNumRulePropSet(
+                    xCNSupplier->getChapterNumberingRules(), UNO_QUERY );
+                if (xNumRulePropSet.is())
                 {
-                    Reference<XPropertySet> xNumRulePropSet(
-                        xCNSupplier->getChapterNumberingRules(), UNO_QUERY );
-                    if (xNumRulePropSet.is())
-                    {
-                        OUString sName( RTL_CONSTASCII_USTRINGPARAM("Name") );
-                        xNumRulePropSet->getPropertyValue( sName ) >>= sOutlineStyleName;
-                    }
+                    const OUString sName( RTL_CONSTASCII_USTRINGPARAM("Name") );
+                    xNumRulePropSet->getPropertyValue( sName ) >>= sOutlineStyleName;
                 }
+            }
+            const SvtSaveOptions::ODFDefaultVersion nODFVersion =
+                                                GetExport().getDefaultVersion();
+            if ( ( nODFVersion == SvtSaveOptions::ODFVER_010 ||
+                   nODFVersion == SvtSaveOptions::ODFVER_011 ) &&
+                 GetExport().writeOutlineStyleAsNormalListStyle() )
+            {
                 exportNumberingRule( sOutlineStyleName, xNumRule );
             }
             else
             {
+                if ( nODFVersion != SvtSaveOptions::ODFVER_010 &&
+                     nODFVersion != SvtSaveOptions::ODFVER_011 )
+                {
+                    // style:name="..."
+                    GetExport().CheckAttrList();
+                    if ( sOutlineStyleName.getLength() > 0 )
+                     {
+                        sal_Bool bEncoded = sal_False;
+                        GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
+                                        GetExport().EncodeStyleName( sOutlineStyleName,
+                                                                     &bEncoded ) );
+                        if( bEncoded )
+                            GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                                      XML_DISPLAY_NAME,
+                                                      sOutlineStyleName );
+                    }
+                }
                 SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
                                           XML_OUTLINE_STYLE, sal_True, sal_True );
                 exportLevelStyles( xNumRule, sal_True );
