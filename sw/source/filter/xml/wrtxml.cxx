@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtxml.cxx,v $
- * $Revision: 1.61 $
+ * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/frame/XModule.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <unotools/streamwrap.hxx>
@@ -365,8 +366,25 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     sal_Bool bWarn = sal_False, bErr = sal_False;
     String sWarnFile, sErrFile;
 
-    if( !bOrganizerMode && !bBlock &&
-        SFX_CREATE_MODE_EMBEDDED != pDoc->GetDocShell()->GetCreateMode() )
+    sal_Bool bStoreMeta = ( SFX_CREATE_MODE_EMBEDDED != pDoc->GetDocShell()->GetCreateMode() );
+    if ( !bStoreMeta )
+    {
+        try
+        {
+            Reference< frame::XModule > xModule( xModelComp, UNO_QUERY );
+            if ( xModule.is() )
+            {
+                ::rtl::OUString aModuleID = xModule->getIdentifier();
+                bStoreMeta = ( aModuleID.getLength()
+                  && ( aModuleID.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.FormDesign" ) ) )
+                    || aModuleID.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.TextReportDesign" ) ) ) ) );
+            }
+        }
+        catch( uno::Exception& )
+        {}
+    }
+
+    if( !bOrganizerMode && !bBlock && bStoreMeta )
     {
         if( !WriteThroughComponent(
                 xModelComp, "meta.xml", xServiceFactory,
