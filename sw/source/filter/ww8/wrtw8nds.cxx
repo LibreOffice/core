@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtw8nds.cxx,v $
- * $Revision: 1.108 $
+ * $Revision: 1.109 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1768,14 +1768,26 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 pTmpSet = new SfxItemSet( pNd->GetSwAttrSet() );
 
             SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*pTmpSet, RES_LR_SPACE));
-            aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetAbsLSpace() );
+            // --> OD 2008-06-03 #i86652#
+            if ( pFmt->GetPositionAndSpaceMode() ==
+                                    SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+            {
+                aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetAbsLSpace() );
+            }
+            // <--
 
             if( pNd->IsNumbered() && pNd->IsCountedInList() )
             {
-                if (bParaRTL)
-                        aLR.SetTxtFirstLineOfstValue(pFmt->GetAbsLSpace() - pFmt->GetFirstLineOffset());
-                else
-                        aLR.SetTxtFirstLineOfst(GetWordFirstLineOffset(*pFmt));
+                // --> OD 2008-06-03 #i86652#
+                if ( pFmt->GetPositionAndSpaceMode() ==
+                                        SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+                {
+                    if (bParaRTL)
+                            aLR.SetTxtFirstLineOfstValue(pFmt->GetAbsLSpace() - pFmt->GetFirstLineOffset());
+                    else
+                            aLR.SetTxtFirstLineOfst(GetWordFirstLineOffset(*pFmt));
+                }
+                // <--
 
                 if (SFX_ITEM_SET !=
                     pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
@@ -1790,16 +1802,21 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             else
                 pTmpSet->ClearItem(RES_PARATR_NUMRULE);
 
-            pTmpSet->Put(aLR);
+            // --> OD 2008-06-03 #i86652#
+            if ( pFmt->GetPositionAndSpaceMode() ==
+                                    SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+            {
+                pTmpSet->Put(aLR);
 
-            //#i21847#
-            SvxTabStopItem aItem(
-                ItemGet<SvxTabStopItem>(*pTmpSet, RES_PARATR_TABSTOP));
-            SvxTabStop aTabStop(pFmt->GetAbsLSpace());
-            aItem.Insert(aTabStop);
-            pTmpSet->Put(aItem);
+                //#i21847#
+                SvxTabStopItem aItem(
+                    ItemGet<SvxTabStopItem>(*pTmpSet, RES_PARATR_TABSTOP));
+                SvxTabStop aTabStop(pFmt->GetAbsLSpace());
+                aItem.Insert(aTabStop);
+                pTmpSet->Put(aItem);
 
-            SwWW8Writer::CorrTabStopInSet(*pTmpSet, pFmt->GetAbsLSpace());
+                SwWW8Writer::CorrTabStopInSet(*pTmpSet, pFmt->GetAbsLSpace());
+            }
         }
 
         /*
@@ -1848,15 +1865,21 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             // new left margin = old left + label space
             const SwNumRule* pRule = pNd->GetNumRule();
             const SwNumFmt& rNumFmt = pRule->Get( static_cast< USHORT >(pNd->GetActualListLevel()) );
-            aLRSpace.SetTxtLeft( aLRSpace.GetLeft() + rNumFmt.GetAbsLSpace() );
+            // --> OD 2008-06-03 #i86652#
+            if ( rNumFmt.GetPositionAndSpaceMode() ==
+                                    SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+            {
+                aLRSpace.SetTxtLeft( aLRSpace.GetLeft() + rNumFmt.GetAbsLSpace() );
 
-            // new first line indent = 0
-            // (first line indent is ignored for NO_NUMLEVEL)
-            if (!bParaRTL)
-                aLRSpace.SetTxtFirstLineOfst( 0 );
+                // new first line indent = 0
+                // (first line indent is ignored for NO_NUMLEVEL)
+                if (!bParaRTL)
+                    aLRSpace.SetTxtFirstLineOfst( 0 );
 
-            // put back the new item
-            pTmpSet->Put( aLRSpace );
+                // put back the new item
+                pTmpSet->Put( aLRSpace );
+            }
+            // <--
 
             // assure that numbering rule is in <pTmpSet>
             if (SFX_ITEM_SET != pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
