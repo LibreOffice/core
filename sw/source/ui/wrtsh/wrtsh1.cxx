@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtsh1.cxx,v $
- * $Revision: 1.71 $
+ * $Revision: 1.72 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1235,11 +1235,15 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                     aFmt.SetNumberingType(SVX_NUM_ARABIC);
                 else
                 {
-                    // --> OD 2006-06-29 #b6440955#
-                    const Font* pFnt = &numfunc::GetDefBulletFont();
-                    aFmt.SetBulletFont( pFnt );
-                    aFmt.SetBulletChar( numfunc::GetBulletChar(nLevel));
+                    // --> OD 2008-06-03 #i63395#
+                    // Only apply user defined default bullet font
+                    if ( numfunc::IsDefBulletFontUserDefined() )
+                    {
+                        const Font* pFnt = &numfunc::GetDefBulletFont();
+                        aFmt.SetBulletFont( pFnt );
+                    }
                     // <--
+                    aFmt.SetBulletChar( numfunc::GetBulletChar(nLevel));
                     aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                 }
                 aNumRule.Set(nLevel, aFmt);
@@ -1257,13 +1261,18 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
     {
         // --> OD 2008-02-11 #newlistlevelattrs#
         SwNumRule aNumRule( GetUniqueNumRuleName(),
-                            SvxNumberFormat::LABEL_ALIGNMENT );
+                            // --> OD 2008-06-06 #i89178#
+                            numfunc::GetDefaultPositionAndSpaceMode() );
+                            // <--
         // <--
         // Zeichenvorlage an die Numerierung haengen
         SwCharFmt* pChrFmt;
         SwDocShell* pDocSh = GetView().GetDocShell();
-        // --> OD 2006-06-29 #b6440955#
-        const Font* pFnt = &numfunc::GetDefBulletFont();
+        // --> OD 2008-06-03 #i63395#
+        // Only apply user defined default bullet font
+        const Font* pFnt = numfunc::IsDefBulletFontUserDefined()
+                           ? &numfunc::GetDefBulletFont()
+                           : 0;
         // <--
 
         if (bNum)
@@ -1289,10 +1298,13 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
 
             if (! bNum)
             {
-                aFmt.SetBulletFont( pFnt );
-                // --> OD 2006-06-29 #b6440955#
+                // --> OD 2008-06-03 #i63395#
+                // Only apply user defined default bullet font
+                if ( pFnt )
+                {
+                    aFmt.SetBulletFont( pFnt );
+                }
                 aFmt.SetBulletChar( numfunc::GetBulletChar(nLvl) );
-                // <--
                 aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             }
 
