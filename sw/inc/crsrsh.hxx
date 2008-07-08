@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: crsrsh.hxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,6 +75,9 @@ class SwTOXMark;
 class SwRedline;
 class IBlockCursor;
 class SwCntntNode; //  #i23726#
+// --> OD 2008-06-19 #i90516#
+class SwPostItField;
+// <--
 struct SwPosition;
 
 namespace com { namespace sun { namespace star { namespace util {
@@ -792,6 +795,10 @@ public:
                             SwContentAtPos& rCntntAtPos,
                             BOOL bSetCrsr = FALSE,
                             SwRect* pFldRect = 0 );
+
+    // --> OD 2008-06-19 #i90516#
+    const SwPostItField* GetPostItFieldAtCursor() const;
+    // <--
 
     // get smart tags at point position
     void GetSmartTagTerm( const Point& rPt,
