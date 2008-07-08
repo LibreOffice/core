@@ -148,7 +148,7 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\inc\svtools\ttprops.hxx %_DEST%\inc%_EXT%\svtools\ttprops.hxx
 ..\inc\svtools\transfer.hxx %_DEST%\inc%_EXT%\svtools\transfer.hxx
 ..\inc\svtools\embedtransfer.hxx %_DEST%\inc%_EXT%\svtools\embedtransfer.hxx
-..\inc\embedhlp.hxx %_DEST%\inc%_EXT%\svtools\embedhlp.hxx
+..\inc\svtools\embedhlp.hxx %_DEST%\inc%_EXT%\svtools\embedhlp.hxx
 ..\inc\cliplistener.hxx %_DEST%\inc%_EXT%\svtools\cliplistener.hxx
 ..\inc\txtcmp.hxx %_DEST%\inc%_EXT%\svtools\txtcmp.hxx
 ..\inc\urlbmk.hxx %_DEST%\inc%_EXT%\svtools\urlbmk.hxx
