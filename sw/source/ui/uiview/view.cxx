@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view.cxx,v $
- * $Revision: 1.111 $
+ * $Revision: 1.112 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -599,20 +599,24 @@ IMPL_LINK( SwView, AttrChangedNotify, SwWrtShell *, EMPTYARG )
     //#i6193#, change ui if cursor is at a SwPostItField
     if (mpPostItMgr)
     {
-        SwRect aFldRect;
-        SwContentAtPos aCntntAtPos( SwContentAtPos::SW_FIELD);
-        if( pWrtShell->GetContentAtPos( pWrtShell->GetCrsrDocPos(), aCntntAtPos, FALSE, &aFldRect ) )
-        {
-            const SwField* pFld = aCntntAtPos.aFnd.pFld;
-            if (pFld->Which()== RES_POSTITFLD)
-            {
-                mpPostItMgr->SetShadowState(reinterpret_cast<const SwPostItField*>(pFld));
-            }
-            else
-                mpPostItMgr->SetShadowState(0);
-        }
-        else
-            mpPostItMgr->SetShadowState(0);
+        // --> OD 2008-06-19 #i90516#
+        // only perform the code that is needed to determine, if at the
+        // actual cursor position is a post-it field
+//        SwRect aFldRect;
+//        SwContentAtPos aCntntAtPos( SwContentAtPos::SW_FIELD);
+//        if( pWrtShell->GetContentAtPos( pWrtShell->GetCrsrDocPos(), aCntntAtPos, FALSE, &aFldRect ) )
+//        {
+//            const SwField* pFld = aCntntAtPos.aFnd.pFld;
+//            if (pFld->Which()== RES_POSTITFLD)
+//            {
+//                mpPostItMgr->SetShadowState(reinterpret_cast<const SwPostItField*>(pFld));
+//            }
+//            else
+//                mpPostItMgr->SetShadowState(0);
+//        }
+//        else
+//            mpPostItMgr->SetShadowState(0);
+        mpPostItMgr->SetShadowState( pWrtShell->GetPostItFieldAtCursor() );
     }
 
     return 0;
