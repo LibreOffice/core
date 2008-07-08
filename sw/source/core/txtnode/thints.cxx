@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: thints.cxx,v $
- * $Revision: 1.64 $
+ * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -223,6 +223,9 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint, USHORT nMod
         }
 
         SwpHintsArr::Insert( &rNewHint );
+        if ( pHistory )
+            pHistory->Add( &rNewHint, TRUE );
+
         return;
     }
 
