@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: porfld.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +63,6 @@ protected:
     sal_Bool bPlaceHolder : 1;
 
     inline void SetFont( SwFont *pNew ) { pFnt = pNew; }
-    inline const SwFont *GetFont() const { return pFnt; }
 public:
     SwFldPortion( const SwFldPortion& rFld );
     SwFldPortion( const XubString &rExpand, SwFont *pFnt = 0, sal_Bool bPlaceHolder = sal_False );
@@ -72,6 +71,9 @@ public:
     void TakeNextOffset( const SwFldPortion* pFld );
     void CheckScript( const SwTxtSizeInfo &rInf );
     inline const sal_Bool HasFont() const { return 0 != pFnt; }
+    // --> OD 2008-06-05 #i89179# - made public
+    inline const SwFont *GetFont() const { return pFnt; }
+    // <--
 
     inline const XubString &GetExp() const { return aExpand; }
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
