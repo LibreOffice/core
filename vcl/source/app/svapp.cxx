@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svapp.cxx,v $
- * $Revision: 1.83 $
+ * $Revision: 1.84 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1938,6 +1938,18 @@ void Application::EnableHeadlessMode( BOOL bEnable )
 BOOL Application::IsHeadlessModeEnabled()
 {
     return IsDialogCancelEnabled();
+}
+
+// -----------------------------------------------------------------------
+
+void Application::ShowNativeErrorBox(const String& sTitle  ,
+                                     const String& sMessage)
+{
+    ImplGetSalSystem()->ShowNativeMessageBox (
+            sTitle,
+            sMessage,
+            SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK,
+            SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK);
 }
 
 // -----------------------------------------------------------------------
