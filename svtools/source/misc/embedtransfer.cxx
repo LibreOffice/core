@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: embedtransfer.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +47,7 @@
 #include <unotools/tempfile.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include "embedhlp.hxx"
+#include <svtools/embedhlp.hxx>
 
 using namespace ::com::sun::star;
 
