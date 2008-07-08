@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edtwin.cxx,v $
- * $Revision: 1.161 $
+ * $Revision: 1.162 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2285,12 +2285,16 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
                 // -> #i23726#
             case KS_NumIndentInc:
-                rSh.NumIndent(360);
+                // --> OD 2008-06-16 #i90078#
+                rSh.ChangeIndentOfAllListLevels(360);
+                // <--
                 nKS_NUMINDENTINC_Count = 2;
                 break;
 
             case KS_NumIndentDec:
-                rSh.NumIndent(-360);
+                // --> OD 2008-06-16 #i90078#
+                rSh.ChangeIndentOfAllListLevels(-360);
+                // <--
                 break;
                 // <- #i23726#
 
