@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: regactivex.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +51,8 @@
 
 // #define OWN_DEBUG_PRINT
 
-typedef int ( __stdcall * DllNativeProc ) ( int, BOOL );
+typedef int ( __stdcall * DllNativeRegProc ) ( int, BOOL, const char* );
+typedef int ( __stdcall * DllNativeUnregProc ) ( int, BOOL );
 
 BOOL UnicodeEquals( wchar_t* pStr1, wchar_t* pStr2 )
 {
@@ -100,9 +101,9 @@ void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallFor
     HINSTANCE hModule = LoadLibraryExA( pActiveXPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
     if( !( hModule <= ( HINSTANCE )HINSTANCE_ERROR ) )
     {
-        DllNativeProc pNativeProc = ( DllNativeProc )GetProcAddress( hModule, "DllRegisterServerNative" );
+        DllNativeRegProc pNativeProc = ( DllNativeRegProc )GetProcAddress( hModule, "DllRegisterServerNative" );
         if( pNativeProc!=NULL )
-            ( *pNativeProc )( nMode, InstallForAllUser );
+            ( *pNativeProc )( nMode, InstallForAllUser, pActiveXPath );
 
         FreeLibrary( hModule );
     }
@@ -120,7 +121,7 @@ void UnregisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallF
     HINSTANCE hModule = LoadLibraryExA( pActiveXPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
     if( !( hModule <= ( HINSTANCE )HINSTANCE_ERROR ) )
     {
-        DllNativeProc pNativeProc = ( DllNativeProc )GetProcAddress( hModule, "DllUnregisterServerNative" );
+        DllNativeUnregProc pNativeProc = ( DllNativeUnregProc )GetProcAddress( hModule, "DllUnregisterServerNative" );
         if( pNativeProc!=NULL )
             ( *pNativeProc )( nMode, InstallForAllUser );
 
