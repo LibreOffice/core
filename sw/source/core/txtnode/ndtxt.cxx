@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndtxt.cxx,v $
- * $Revision: 1.83 $
+ * $Revision: 1.84 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2640,10 +2640,14 @@ long SwTxtNode::GetLeftMarginWithNum( BOOL bTxtLeft ) const
             if ( AreListLevelIndentsApplicable() )
             {
                 nRet = rFmt.GetIndentAt();
-                if ( !bTxtLeft )
+                // --> OD 2008-06-06 #i90401#
+                // Only negative first line indents have consider for the left margin
+                if ( !bTxtLeft &&
+                     rFmt.GetFirstLineIndent() < 0 )
                 {
                     nRet = nRet + rFmt.GetFirstLineIndent();
                 }
+                // <--
             }
         }
         // <--
