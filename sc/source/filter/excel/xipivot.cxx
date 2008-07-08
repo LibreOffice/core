@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xipivot.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -701,7 +701,6 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
         String aDummyName = CREATE_STRING( "DPCache" );
         if( maTabName.Len() > 0 )
             aDummyName.Append( '_' ).Append( maTabName );
-        ScfTools::ConvertToScSheetName( aDummyName );
         rDoc.CreateValidTabName( aDummyName );
         rDoc.RenameTab( nScTab, aDummyName );
         // set sheet index to source range
