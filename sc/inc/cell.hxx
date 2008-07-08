@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cell.hxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -261,12 +261,6 @@ private:
                         SCITP_CLOSE_ITERATION_CIRCLE
                     };
     void            InterpretTail( ScInterpretTailParameter );
-
-    /** Get formula, if eGrammar is one of GRAM_PODF in Plain Old Formula
-        format, which means missing parameters are substituded. */
-    void            GetFormulaForPof( rtl::OUStringBuffer &rBuffer,
-                                      const ScAddress &rPos,
-                                      const ScGrammar::Grammar eGrammar ) const;
 
 public:
 
