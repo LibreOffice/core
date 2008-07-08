@@ -137,13 +137,13 @@ BOOL createKey( HKEY hkey,
 
     return ( ERROR_SUCCESS == RegCreateKey( hkey, aKeyToCreate, &hkey1 )
            && ( !aValue || ERROR_SUCCESS == RegSetValueEx( hkey1,
-                                                              "",
+                                                           "",
                                                            0,
                                                            REG_SZ,
                                                            (const BYTE*)aValue,
                                                            strlen( aValue ) ) )
            && ( !aChildName || ERROR_SUCCESS == RegSetValueEx( hkey1,
-                                                                  aChildName,
+                                                               aChildName,
                                                                0,
                                                                REG_SZ,
                                                                (const BYTE*)aChildValue,
@@ -153,7 +153,7 @@ BOOL createKey( HKEY hkey,
 }
 
 STDAPI DllUnregisterServerNative( int nMode, BOOL bForAllUsers );
-STDAPI DllRegisterServerNative( int nMode, BOOL bForAllUsers )
+STDAPI DllRegisterServerNative( int nMode, BOOL bForAllUsers, const char* pActiveXPath )
 {
     BOOL aResult = FALSE;
 
@@ -166,10 +166,9 @@ STDAPI DllRegisterServerNative( int nMode, BOOL bForAllUsers )
     int         ind;
     const char* aPrefix = aLocalPrefix; // bForAllUsers ? "" : aLocalPrefix;
 
-    // get iervp.dll path
-    char aActiveXPath[1019];
-    char aActiveXPath101[1024];
-    char aPrCatalogPath[1019];
+    char pActiveXPath101[1024];
+    char pPrCatalogPath[1019];
+
 
     // In case SO7 is installed for this user he can have local registry entries that will prevent him from
     // using SO8 ActiveX control. The fix is just to clean up the local entries related to ActiveX control.
@@ -177,76 +176,74 @@ STDAPI DllRegisterServerNative( int nMode, BOOL bForAllUsers )
     if ( bForAllUsers )
         DllUnregisterServerNative( nMode, sal_False );
 
-    HMODULE aCurModule = GetModuleHandleA( "so_activex.dll" );
-    if( aCurModule && GetModuleFileNameA( aCurModule, aActiveXPath, 1019 ) )
+    if ( pActiveXPath )
     {
-        sprintf( aActiveXPath101, "%s, 101", aActiveXPath );
+        sprintf( pActiveXPath101, "%s, 101", pActiveXPath );
 
-        int nPrCatLength = strlen( aActiveXPath ) - 14;
-        strncpy( aPrCatalogPath, aActiveXPath, nPrCatLength );
-        aPrCatalogPath[ nPrCatLength ] = 0;
+        int nPrCatLength = strlen( pActiveXPath ) - sizeof( "so_activex.dll" ) + 1;
+        strncpy( pPrCatalogPath, pActiveXPath, nPrCatLength );
+        pPrCatalogPath[ nPrCatLength ] = 0;
 
-        if( aActiveXPath )
         {
-               wsprintf( aSubKey, "%sCLSID\\%s", aPrefix, aClassID );
+            wsprintf( aSubKey, "%sCLSID\\%s", aPrefix, aClassID );
             aResult =
                 ( ERROR_SUCCESS == RegCreateKey( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, &hkey )
-                      && ERROR_SUCCESS == RegSetValueEx( hkey, "", 0, REG_SZ, (const BYTE*)"SOActiveX Class", 17 )
+                    && ERROR_SUCCESS == RegSetValueEx( hkey, "", 0, REG_SZ, (const BYTE*)"SOActiveX Class", 17 )
                     && createKey( hkey, "Control" )
                     && createKey( hkey, "EnableFullPage" )
-                    && createKey( hkey, "InprocServer32", aActiveXPath, "ThreadingModel", "Apartment" )
+                    && createKey( hkey, "InprocServer32", pActiveXPath, "ThreadingModel", "Apartment" )
                     && createKey( hkey, "MiscStatus", "0" )
                     && createKey( hkey, "MiscStatus\\1", "131473" )
                     && createKey( hkey, "ProgID", "so_activex.SOActiveX.1" )
                     && createKey( hkey, "Programmable" )
-                    && createKey( hkey, "ToolboxBitmap32", aActiveXPath101 )
+                    && createKey( hkey, "ToolboxBitmap32", pActiveXPath101 )
                     && createKey( hkey, "TypeLib", aTypeLib )
                     && createKey( hkey, "Version", "1.0" )
                     && createKey( hkey, "VersionIndependentProgID", "so_activex.SOActiveX" )
                 && ERROR_SUCCESS == RegCloseKey( hkey )
-                  && ERROR_SUCCESS == RegCreateKey( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aPrefix, &hkey )
+                && ERROR_SUCCESS == RegCreateKey( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aPrefix, &hkey )
                     && createKey( hkey, "so_activex.SOActiveX", "SOActiveX Class" )
-                      && ERROR_SUCCESS == RegCreateKey( hkey, "so_activex.SOActiveX", &hkey1 )
+                    && ERROR_SUCCESS == RegCreateKey( hkey, "so_activex.SOActiveX", &hkey1 )
                         && createKey( hkey1, "CLSID", aClassID )
                         && createKey( hkey1, "CurVer", "so_activex.SOActiveX.1" )
-                      && ERROR_SUCCESS == RegCloseKey( hkey1 )
+                    && ERROR_SUCCESS == RegCloseKey( hkey1 )
                     && createKey( hkey, "so_activex.SOActiveX.1", "SOActiveX Class" )
-                      && ERROR_SUCCESS == RegCreateKey( hkey, "so_activex.SOActiveX.1", &hkey1 )
+                    && ERROR_SUCCESS == RegCreateKey( hkey, "so_activex.SOActiveX.1", &hkey1 )
                         && createKey( hkey1, "CLSID", aClassID )
-                      && ERROR_SUCCESS == RegCloseKey( hkey1 )
-                      && ERROR_SUCCESS == RegCreateKey( hkey, "TypeLib", &hkey1 )
-                          && ERROR_SUCCESS == RegCreateKey( hkey1, aTypeLib, &hkey2 )
+                    && ERROR_SUCCESS == RegCloseKey( hkey1 )
+                    && ERROR_SUCCESS == RegCreateKey( hkey, "TypeLib", &hkey1 )
+                        && ERROR_SUCCESS == RegCreateKey( hkey1, aTypeLib, &hkey2 )
                             && createKey( hkey2, "1.0", "wrap_activex 1.0 Type Library" )
-                              && ERROR_SUCCESS == RegCreateKey( hkey2, "1.0", &hkey3 )
-                                  && ERROR_SUCCESS == RegCreateKey( hkey3, "0", &hkey4 )
-                                    && createKey( hkey4, "win32", aActiveXPath )
-                                  && ERROR_SUCCESS == RegCloseKey( hkey4 )
+                            && ERROR_SUCCESS == RegCreateKey( hkey2, "1.0", &hkey3 )
+                                && ERROR_SUCCESS == RegCreateKey( hkey3, "0", &hkey4 )
+                                    && createKey( hkey4, "win32", pActiveXPath )
+                                && ERROR_SUCCESS == RegCloseKey( hkey4 )
                                 && createKey( hkey3, "FLAGS", "0" )
-                                && createKey( hkey3, "HELPDIR", aPrCatalogPath )
-                              && ERROR_SUCCESS == RegCloseKey( hkey3 )
-                          && ERROR_SUCCESS == RegCloseKey( hkey2 )
-                      && ERROR_SUCCESS == RegCloseKey( hkey1 )
-                      && ERROR_SUCCESS == RegCreateKey( hkey, "Interface", &hkey1 )
+                                && createKey( hkey3, "HELPDIR", pPrCatalogPath )
+                            && ERROR_SUCCESS == RegCloseKey( hkey3 )
+                        && ERROR_SUCCESS == RegCloseKey( hkey2 )
+                    && ERROR_SUCCESS == RegCloseKey( hkey1 )
+                    && ERROR_SUCCESS == RegCreateKey( hkey, "Interface", &hkey1 )
                         && createKey( hkey1, aInterIDWinPeer, "ISOComWindowPeer" )
-                          && ERROR_SUCCESS == RegCreateKey( hkey1, aInterIDWinPeer, &hkey2 )
+                        && ERROR_SUCCESS == RegCreateKey( hkey1, aInterIDWinPeer, &hkey2 )
                             && createKey( hkey2, "ProxyStubClsid", aProxyStubWinPeer )
                             && createKey( hkey2, "ProxyStubClsid32", aProxyStubWinPeer )
                             && createKey( hkey2, "TypeLib", aTypeLib, "Version", "1.0" )
-                          && ERROR_SUCCESS == RegCloseKey( hkey2 )
+                        && ERROR_SUCCESS == RegCloseKey( hkey2 )
                         && createKey( hkey1, aInterIDActApprove, "ISOActionsApproval" )
-                          && ERROR_SUCCESS == RegCreateKey( hkey1, aInterIDActApprove, &hkey2 )
+                        && ERROR_SUCCESS == RegCreateKey( hkey1, aInterIDActApprove, &hkey2 )
                             && createKey( hkey2, "ProxyStubClsid", aProxyStubActApprove )
                             && createKey( hkey2, "ProxyStubClsid32", aProxyStubActApprove )
                             && createKey( hkey2, "TypeLib", aTypeLib, "Version", "1.0" )
-                          && ERROR_SUCCESS == RegCloseKey( hkey2 )
+                        && ERROR_SUCCESS == RegCloseKey( hkey2 )
                         && createKey( hkey1, aInterIDDispInt, "ISODispatchInterceptor" )
-                          && ERROR_SUCCESS == RegCreateKey( hkey1, aInterIDDispInt, &hkey2 )
+                        && ERROR_SUCCESS == RegCreateKey( hkey1, aInterIDDispInt, &hkey2 )
                             && createKey( hkey2, "ProxyStubClsid", aProxyStubDispInt )
                             && createKey( hkey2, "ProxyStubClsid32", aProxyStubDispInt )
                             && createKey( hkey2, "TypeLib", aTypeLib, "Version", "1.0" )
-                          && ERROR_SUCCESS == RegCloseKey( hkey2 )
-                      && ERROR_SUCCESS == RegCloseKey( hkey1 )
-                  && ERROR_SUCCESS == RegCloseKey( hkey ) );
+                        && ERROR_SUCCESS == RegCloseKey( hkey2 )
+                    && ERROR_SUCCESS == RegCloseKey( hkey1 )
+                && ERROR_SUCCESS == RegCloseKey( hkey ) );
 
             hkey = hkey1 = hkey2 = hkey3 = hkey4 = NULL;
         }
@@ -549,9 +546,16 @@ STDAPI DllUnregisterServerDoc( int nMode, BOOL bForAllUsers )
 
 STDAPI DllRegisterServer( void )
 {
-    HRESULT aResult = DllRegisterServerNative( 31, TRUE );
-    if( FAILED( aResult ) )
-        aResult = DllRegisterServerNative( 31, FALSE );
+    char pActiveXPath[1019];
+    HRESULT aResult = E_FAIL;
+
+    HMODULE aCurModule = GetModuleHandleA( "so_activex.dll" );
+    if( aCurModule && GetModuleFileNameA( aCurModule, pActiveXPath, 1019 ) )
+    {
+        aResult = DllRegisterServerNative( 31, TRUE, pActiveXPath );
+        if( FAILED( aResult ) )
+            aResult = DllRegisterServerNative( 31, FALSE, pActiveXPath );
+    }
 
     return aResult;
 }
