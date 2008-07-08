@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8atr.cxx,v $
- * $Revision: 1.112 $
+ * $Revision: 1.113 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -747,7 +747,12 @@ void SwWW8Writer::ExportOutlineNumbering(BYTE nLvl, const SwNumFmt &rNFmt,
     else
     {
         Out_SwNumLvl( nLvl );
-        if (rNFmt.GetAbsLSpace())
+        // --> OD 2008-06-03 #i86652#
+//        if (rNFmt.GetAbsLSpace())
+        if ( rNFmt.GetPositionAndSpaceMode() ==
+                                   SvxNumberFormat::LABEL_WIDTH_AND_POSITION  &&
+             rNFmt.GetAbsLSpace() )
+        // <--
         {
             SwNumFmt aNumFmt(rNFmt);
             const SvxLRSpaceItem& rLR =
@@ -819,7 +824,12 @@ void SwWW8Writer::Out_SwFmt(const SwFmt& rFmt, bool bPapFmt, bool bChpFmt,
                 if (bStyDef)
                     ExportOutlineNumbering(nLvl, rNFmt, rFmt);
 
-                if (rNFmt.GetAbsLSpace())
+                // --> OD 2008-06-03 #i86652#
+//                if (rNFmt.GetAbsLSpace())
+                if ( rNFmt.GetPositionAndSpaceMode() ==
+                                           SvxNumberFormat::LABEL_WIDTH_AND_POSITION  &&
+                     rNFmt.GetAbsLSpace() )
+                // <--
                 {
                     SfxItemSet aSet( rFmt.GetAttrSet() );
                     SvxLRSpaceItem aLR(
