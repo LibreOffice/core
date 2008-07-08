@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xeformula.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1555,9 +1555,6 @@ void XclExpFmlaCompImpl::AppendDefaultParam( XclExpFuncData& rFuncData )
 
     switch( rFuncData.GetOpCode() )
     {
-        case ocAddress:
-            AppendBoolToken( true );
-        break;
         case ocExternal:
             AppendAddInFuncToken( rFuncData.GetExtFuncData(), EXC_TOKCLASS_REF );
         break;
