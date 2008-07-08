@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh4.cxx,v $
- * $Revision: 1.63 $
+ * $Revision: 1.64 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2663,6 +2663,18 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
         uno::Sequence < beans::PropertyValue > aArgs( 1 );
         aArgs[0].Name = ::rtl::OUString::createFromAscii( "Hidden" );
         aArgs[0].Value <<= sal_True;
+
+        if ( GetMedium() )
+        {
+            SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False);
+            if ( pPasswordItem && pPasswordItem->GetValue().Len() )
+            {
+                aArgs.realloc( 2 );
+                aArgs[1].Name = ::rtl::OUString::createFromAscii( "Password" );
+                aArgs[1].Value <<= ::rtl::OUString( pPasswordItem->GetValue() );
+            }
+        }
+
         xModel.set(
             xLoader->loadComponentFromURL( GetSharedFileURL(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" ) ), 0, aArgs ),
             uno::UNO_QUERY_THROW );
