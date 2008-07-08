@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: document.hxx,v $
- * $Revision: 1.114 $
+ * $Revision: 1.115 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -565,7 +565,6 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     void            SnapVisArea( Rectangle& rRect ) const;          // 1/100 mm
 
     SC_DLLPUBLIC BOOL           ValidTabName( const String& rName ) const;
-    static SC_DLLPUBLIC void      ConvertToValidTabName( String& rName, sal_Unicode cReplaceChar );
     SC_DLLPUBLIC BOOL           ValidNewTabName( const String& rName ) const;
     SC_DLLPUBLIC void           CreateValidTabName(String& rName) const;
     BOOL            InsertTab( SCTAB nPos, const String& rName,
