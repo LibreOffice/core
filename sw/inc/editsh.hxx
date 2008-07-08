@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editsh.hxx,v $
- * $Revision: 1.68 $
+ * $Revision: 1.69 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -465,8 +465,13 @@ public:
     // No-/Numerierung ueber Delete/Backspace ein/abschalten #115901#
     BOOL NumOrNoNum( BOOL bDelete = FALSE, BOOL bChkStart = TRUE);
     // -> #i23726#
-    void NumIndent(short nIndent, int nLevel = -1, BOOL bRelative = TRUE);
-    void NumIndent(short nIndent, const SwPosition & rPos);
+    // --> OD 2008-06-09 #i90078#
+    // Remove unused default parameter <nLevel> and <bRelative>.
+    // Adjust method name and parameter name
+    void ChangeIndentOfAllListLevels( short nDiff );
+    // Adjust method name
+    void SetIndent(short nIndent, const SwPosition & rPos);
+    // <--
     BOOL IsFirstOfNumRule() const;
     BOOL IsFirstOfNumRule(const SwPaM & rPaM) const;
     // <- #i23726#
