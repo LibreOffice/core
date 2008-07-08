@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: linksrc.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -211,6 +211,13 @@ void SvLinkSource::setStreamToLoadFrom(const com::sun::star::uno::Reference<com:
     pImpl->m_xInputStreamToLoadFrom = xInputStream;
     pImpl->m_bIsReadOnly = bIsReadOnly;
 }
+
+// --> OD 2008-06-18 #i88291#
+void SvLinkSource::clearStreamToLoadFrom()
+{
+    pImpl->m_xInputStreamToLoadFrom.clear();
+}
+// <--
 
 void  SvLinkSource::Closed()
 {
