@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ftools.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -157,11 +157,6 @@ Color ScfTools::GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt8
 }
 
 // *** conversion of names *** ------------------------------------------------
-
-void ScfTools::ConvertToScSheetName( String& rName )
-{
-    ScDocument::ConvertToValidTabName( rName, '_' );
-}
 
 void ScfTools::ConvertToScDefinedName( String& rName )
 {
