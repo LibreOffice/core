@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: compiler.cxx,v $
- * $Revision: 1.80 $
+ * $Revision: 1.81 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1132,6 +1132,34 @@ for (i = 97; i < 123; i++)
 
 //-----------------------------------------------------------------------------
 
+static bool lcl_isValidQuotedText( const String& rFormula, xub_StrLen nSrcPos, ParseResult& rRes )
+{
+    // Tokens that start at ' can have anything in them until a final '
+    // but '' marks an escaped '
+    // We've earlier guaranteed that a string containing '' will be
+    // surrounded by '
+    if (rFormula.GetChar(nSrcPos) == '\'')
+    {
+        xub_StrLen nPos = nSrcPos+1;
+        while (nPos < rFormula.Len())
+        {
+            if (rFormula.GetChar(nPos) == '\'')
+            {
+                if ( (nPos+1 == rFormula.Len()) || (rFormula.GetChar(nPos+1) != '\'') )
+                {
+                    rRes.TokenType = KParseType::SINGLE_QUOTE_NAME;
+                    rRes.EndPos = nPos+1;
+                    return false;
+                }
+                ++nPos;
+            }
+            ++nPos;
+        }
+    }
+
+    return true;
+}
+
 struct Convention_A1 : public ScCompiler::Convention
 {
     Convention_A1( ScAddress::Convention eConv ) : ScCompiler::Convention( eConv ) { }
@@ -1144,6 +1172,10 @@ struct Convention_A1 : public ScCompiler::Convention
                                xub_StrLen nSrcPos,
                                const CharClass* pCharClass) const
     {
+        ParseResult aRet;
+        if ( !lcl_isValidQuotedText(rFormula, nSrcPos, aRet) )
+            return aRet;
+
         static const sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER |
             KParseTokens::ASC_UNDERSCORE | KParseTokens::ASC_DOLLAR;
         static const sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
@@ -1318,6 +1350,19 @@ struct ConventionOOO_A1 : public Convention_A1
     {
         MakeRefStrImpl( rBuffer, rComp, rRef, bSingleRef, false);
     }
+
+    virtual sal_Unicode getSpecialSymbol( SpecialSymbolType eSymType ) const
+    {
+        switch (eSymType)
+        {
+            case ScCompiler::Convention::ABS_SHEET_PREFIX:
+                return '$';
+            case ScCompiler::Convention::SHEET_SEPARATOR:
+                return '.';
+        }
+
+        return sal_Unicode(0);
+    }
 };
 
 
@@ -1427,6 +1472,18 @@ struct ConventionXL
             rBuf.append( sal_Unicode( '!' ) );
         }
     }
+
+    static sal_Unicode getSpecialSymbol( ScCompiler::Convention::SpecialSymbolType eSymType )
+    {
+        switch (eSymType)
+        {
+            case ScCompiler::Convention::ABS_SHEET_PREFIX:
+                return sal_Unicode(0);
+            case ScCompiler::Convention::SHEET_SEPARATOR:
+                return '!';
+        }
+        return sal_Unicode(0);
+    }
 };
 
 struct ConventionXL_A1 : public Convention_A1, public ConventionXL
@@ -1502,6 +1559,11 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
                 rBuf.append(sal_Unicode('$'));
             MakeRowStr( rBuf, aRef.Ref2.nRow );
         }
+    }
+
+    virtual sal_Unicode getSpecialSymbol( SpecialSymbolType eSymType ) const
+    {
+        return ConventionXL::getSpecialSymbol(eSymType);
     }
 };
 
@@ -1612,6 +1674,10 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
                                xub_StrLen nSrcPos,
                                const CharClass* pCharClass) const
     {
+        ParseResult aRet;
+        if ( !lcl_isValidQuotedText(rFormula, nSrcPos, aRet) )
+            return aRet;
+
         static const sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER |
             KParseTokens::ASC_UNDERSCORE ;
         static const sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
@@ -1620,6 +1686,11 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 
         return pCharClass->parseAnyToken( rFormula,
                 nSrcPos, nStartFlags, aAddAllowed, nContFlags, aAddAllowed );
+    }
+
+    virtual sal_Unicode getSpecialSymbol( SpecialSymbolType eSymType ) const
+    {
+        return ConventionXL::getSpecialSymbol(eSymType);
     }
 };
 
@@ -1678,29 +1749,18 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
 void ScCompiler::CheckTabQuotes( String& rString,
                                  const ScAddress::Convention eConv )
 {
-    register const xub_StrLen nLen = rString.Len();
-    register xub_StrLen i;
-
-    bool bNeedsQuote = false;
-
-    for ( i = 0 ; i < nLen ; i++ )
-    {
-        if( !IsWordChar( rString, i ) )
-        {
-            bNeedsQuote = true;
-            break;
-        }
-    }
-    if ( !bNeedsQuote && CharClass::isAsciiNumeric( rString ) )
-    {
-        bNeedsQuote = true;
-    }
+    using namespace ::com::sun::star::i18n;
+    sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER | KParseTokens::ASC_UNDERSCORE;
+    sal_Int32 nContFlags = nStartFlags;
+    ParseResult aRes = ScGlobal::pCharClass->parsePredefinedToken(
+        KParseType::IDENTNAME, rString, 0, nStartFlags, EMPTY_STRING, nContFlags, EMPTY_STRING);
+    bool bNeedsQuote = !((aRes.TokenType & KParseType::IDENTNAME) && aRes.EndPos == rString.Len());
 
     switch ( eConv ) {
         default :
         case ScAddress::CONV_UNSPECIFIED :
-        case ScAddress::CONV_OOO :
             break;
+        case ScAddress::CONV_OOO :
         case ScAddress::CONV_XL_A1 :
         case ScAddress::CONV_XL_R1C1 :
             if( bNeedsQuote )
@@ -1711,6 +1771,12 @@ void ScCompiler::CheckTabQuotes( String& rString,
                 rString.SearchAndReplaceAll( one_quote, two_quote );
             }
             break;
+    }
+
+    if ( !bNeedsQuote && CharClass::isAsciiNumeric( rString ) )
+    {
+        // Prevent any possible confusion resulting from pure numeric sheet names.
+        bNeedsQuote = true;
     }
 
     if( bNeedsQuote )
@@ -1813,6 +1879,11 @@ xub_StrLen ScCompiler::NextSymbol()
     sal_Unicode cSep = mxSymbols->getSymbol( ocSep).GetChar(0);
     sal_Unicode cDecSep = (mxSymbols->isEnglish() ? '.' :
             ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0));
+
+    // special symbols specific to address convention used
+    sal_Unicode cSheetPrefix = pConv->getSpecialSymbol(ScCompiler::Convention::ABS_SHEET_PREFIX);
+    sal_Unicode cSheetSep    = pConv->getSpecialSymbol(ScCompiler::Convention::SHEET_SEPARATOR);
+
     int nDecSeps = 0;
     bool bAutoIntersection = false;
     int nRefInSheetName = 0;
@@ -2148,8 +2219,8 @@ xub_StrLen ScCompiler::NextSymbol()
         do
         {
             bi18n = FALSE;
-            // special case  $'sheetname'
-            if ( pStart[nSrcPos] == '$' && pStart[nSrcPos+1] == '\'' )
+            // special case  (e.g. $'sheetname' in OOO A1)
+            if ( pStart[nSrcPos] == cSheetPrefix && pStart[nSrcPos+1] == '\'' )
                 aSymbol += pStart[nSrcPos++];
 
             ParseResult aRes = pConv->parseAnyToken( aFormula, nSrcPos, pCharClass );
@@ -2167,9 +2238,9 @@ xub_StrLen ScCompiler::NextSymbol()
                 aSymbol.Append( pStart + nSrcPos, (xub_StrLen)aRes.EndPos - nSrcPos );
                 nSrcPos = (xub_StrLen) aRes.EndPos;
                 if ( aRes.TokenType & KParseType::SINGLE_QUOTE_NAME )
-                {   // special cases  'sheetname'.  'filename'#
+                {   // special cases (e.g. 'sheetname'. or 'filename'# in OOO A1)
                     c = pStart[nSrcPos];
-                    bi18n = (c == '.' || c == SC_COMPILER_FILE_TAB_SEP);
+                    bi18n = (c == cSheetSep || c == SC_COMPILER_FILE_TAB_SEP);
                     if ( bi18n )
                         aSymbol += pStart[nSrcPos++];
                 }
@@ -3220,65 +3291,129 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula )
         if ( bAutoCorrect )
             aCorrectedFormula += '=';
     }
+    struct FunctionStack
+    {
+        OpCode  eOp;
+        short   nPar;
+    };
+    // FunctionStack only used if PODF!
+    bool bPODF = ScGrammar::isPODF( meGrammar);
+    const size_t nAlloc = 512;
+    FunctionStack aFuncs[ nAlloc ];
+    FunctionStack* pFunctionStack = (bPODF && rFormula.Len() > nAlloc ?
+            new FunctionStack[ rFormula.Len() ] : &aFuncs[0]);
+    pFunctionStack[0].eOp = ocNone;
+    pFunctionStack[0].nPar = 0;
+    size_t nFunction = 0;
     short nBrackets = 0;
     bool bInArray = false;
     eLastOp = ocOpen;
     while( NextNewToken( bInArray ) )
     {
-        if( pRawToken->GetOpCode() == ocOpen )
-            nBrackets++;
-        else if( pRawToken->GetOpCode() == ocClose )
+        const OpCode eOp = pRawToken->GetOpCode();
+        switch (eOp)
         {
-            if( !nBrackets )
+            case ocOpen:
             {
-                SetError( errPairExpected );
-                if ( bAutoCorrect )
+                ++nBrackets;
+                if (bPODF)
                 {
-                    bCorrected = TRUE;
-                    aCorrectedSymbol.Erase();
+                    ++nFunction;
+                    pFunctionStack[ nFunction ].eOp = eLastOp;
+                    pFunctionStack[ nFunction ].nPar = 0;
                 }
             }
-            else
-                nBrackets--;
-        }
-        else if( pRawToken->GetOpCode() == ocArrayOpen )
-        {
-            if( bInArray )
-                SetError( errNestedArray );
-            else
-                bInArray = true;
-        }
-        else if( pRawToken->GetOpCode() == ocArrayClose )
-        {
-            if( bInArray )
+            break;
+            case ocClose:
             {
-                bInArray = false;
-            }
-            else
-            {
-                SetError( errPairExpected );
-                if ( bAutoCorrect )
+                if( !nBrackets )
                 {
-                    bCorrected = TRUE;
-                    aCorrectedSymbol.Erase();
+                    SetError( errPairExpected );
+                    if ( bAutoCorrect )
+                    {
+                        bCorrected = TRUE;
+                        aCorrectedSymbol.Erase();
+                    }
+                }
+                else
+                    nBrackets--;
+                if (bPODF && nFunction)
+                    --nFunction;
+            }
+            break;
+            case ocSep:
+            {
+                if (bPODF)
+                    ++pFunctionStack[ nFunction ].nPar;
+            }
+            break;
+            case ocArrayOpen:
+            {
+                if( bInArray )
+                    SetError( errNestedArray );
+                else
+                    bInArray = true;
+                // Don't count following column separator as parameter separator.
+                if (bPODF)
+                {
+                    ++nFunction;
+                    pFunctionStack[ nFunction ].eOp = eOp;
+                    pFunctionStack[ nFunction ].nPar = 0;
                 }
             }
+            break;
+            case ocArrayClose:
+            {
+                if( bInArray )
+                {
+                    bInArray = false;
+                }
+                else
+                {
+                    SetError( errPairExpected );
+                    if ( bAutoCorrect )
+                    {
+                        bCorrected = TRUE;
+                        aCorrectedSymbol.Erase();
+                    }
+                }
+                if (bPODF && nFunction)
+                    --nFunction;
+            }
+            default:
+            break;
         }
         if( (eLastOp == ocSep ||
              eLastOp == ocArrayRowSep ||
              eLastOp == ocArrayColSep ||
              eLastOp == ocArrayOpen) &&
-            (pRawToken->GetOpCode() == ocSep ||
-             pRawToken->GetOpCode() == ocArrayRowSep ||
-             pRawToken->GetOpCode() == ocArrayColSep ||
-             pRawToken->GetOpCode() == ocArrayClose) )
+            (eOp == ocSep ||
+             eOp == ocArrayRowSep ||
+             eOp == ocArrayColSep ||
+             eOp == ocArrayClose) )
         {
             // FIXME: should we check for known functions with optional empty
             // args so the correction dialog can do better?
-            ScMissingToken aMissingToken;
-            if ( !pArr->AddToken( aMissingToken ) )
+            if ( !pArr->Add( new ScMissingToken ) )
             {
                 SetError(errCodeOverflow); break;
+            }
+        }
+        else if (bPODF)
+        {
+            /* TODO: for now this is the only PODF adapter. If there were more,
+             * factor this out. */
+            // Insert ADDRESS() new empty parameter 4 if there is a 4th, now to be 5th.
+            if (eOp == ocSep &&
+                    pFunctionStack[ nFunction ].eOp == ocAddress &&
+                    pFunctionStack[ nFunction ].nPar == 3)
+            {
+                if (!pArr->Add( new ScOpToken( ocSep, svSep)) ||
+                        !pArr->Add( new ScDoubleToken( 1.0)))
+                {
+                    SetError(errCodeOverflow); break;
+                }
+                ++pFunctionStack[ nFunction ].nPar;
             }
         }
         ScToken* pNewToken = pArr->Add( pRawToken->CreateToken());
@@ -3319,6 +3454,10 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula )
     }
     if ( nForced >= 2 )
         pArr->SetRecalcModeForced();
+
+    if (pFunctionStack != &aFuncs[0])
+        delete [] pFunctionStack;
+
     // remember pArr, in case a subsequent CompileTokenArray() is executed.
     return pArr = new ScTokenArray( aArr );
 }
@@ -5518,6 +5657,7 @@ ScToken* ScCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuffer, ScToke
         case svJump:
         case svFAP:
         case svMissing:
+        case svSep:
             break;      // Opcodes
         default:
             DBG_ERROR("ScCompiler:: GetStringFromToken errUnknownVariable");
@@ -5629,7 +5769,7 @@ void ScCompiler::AppendString( rtl::OUStringBuffer& rBuffer, const String & rStr
 
 void ScCompiler::CreateStringFromTokenArray( String& rFormula )
 {
-    rtl::OUStringBuffer aBuffer( pArr->GetLen() * 2 );
+    rtl::OUStringBuffer aBuffer( pArr->GetLen() * 5 );
     CreateStringFromTokenArray( aBuffer );
     rFormula = aBuffer;
 }
@@ -5640,14 +5780,29 @@ void ScCompiler::CreateStringFromTokenArray( rtl::OUStringBuffer& rBuffer )
     if( !pArr->GetLen() )
         return;
 
-    // at least one char per token, plus some are references, some are function names
-    rBuffer.ensureCapacity( pArr->GetLen() * 2 );
+    ScTokenArray* pSaveArr = pArr;
+    if (ScGrammar::isPODF( meGrammar))
+    {
+        // Scan token array for missing args and re-write if present.
+        if (pArr->NeedsPofRewrite())
+            pArr = pArr->RewriteMissingToPof();
+    }
+
+    // At least one character per token, plus some are references, some are
+    // function names, some are numbers, ...
+    rBuffer.ensureCapacity( pArr->GetLen() * 5 );
 
     if ( pArr->IsRecalcModeForced() )
         rBuffer.append(sal_Unicode('='));
     ScToken* t = pArr->First();
     while( t )
         t = CreateStringFromToken( rBuffer, t, TRUE );
+
+    if (pSaveArr != pArr)
+    {
+        delete pArr;
+        pArr = pSaveArr;
+    }
 }
 
 // Put quotes around string if non-alphanumeric characters are contained,
