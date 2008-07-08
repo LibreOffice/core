@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docholder.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -180,12 +180,16 @@ DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory
   m_nNoBorderResizeReact( 0 ),
   m_nNoResizeReact( 0 )
 {
-    m_aOutplaceFrameProps.realloc( 2 );
+    m_aOutplaceFrameProps.realloc( 3 );
     beans::NamedValue aArg;
 
     aArg.Name = ::rtl::OUString::createFromAscii("TopWindow");
     aArg.Value <<= sal_True;
     m_aOutplaceFrameProps[0] <<= aArg;
+
+    aArg.Name = ::rtl::OUString::createFromAscii("MakeVisible");
+    aArg.Value <<= sal_False;
+    m_aOutplaceFrameProps[1] <<= aArg;
 
     const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
     uno::Reference< frame::XDesktop > xDesktop( m_xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
@@ -203,10 +207,10 @@ DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory
 
         aArg.Name = ::rtl::OUString::createFromAscii("ParentFrame");
         aArg.Value <<= xDesktop; //TODO/LATER: should use parent document frame
-        m_aOutplaceFrameProps[1] <<= aArg;
+        m_aOutplaceFrameProps[2] <<= aArg;
     }
     else
-        m_aOutplaceFrameProps.realloc( 1 );
+        m_aOutplaceFrameProps.realloc( 2 );
 }
 
 //---------------------------------------------------------------------------
@@ -932,6 +936,41 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
 
         if ( xOwnLM.is() )
             xOwnLM->unlock();
+    }
+
+    try
+    {
+        uno::Reference< awt::XWindow > xHWindow = m_xFrame->getContainerWindow();
+
+        if( xHWindow.is() )
+        {
+            uno::Reference< beans::XPropertySet > xMonProps( m_xFactory->createInstance(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DisplayAccess" ) ) ), uno::UNO_QUERY_THROW );
+            const rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "DefaultDisplay" ) );
+            sal_Int32 nDisplay = 0;
+            xMonProps->getPropertyValue( sPropName ) >>= nDisplay;
+
+            uno::Reference< container::XIndexAccess > xMultiMon( xMonProps, uno::UNO_QUERY_THROW );
+            uno::Reference< beans::XPropertySet > xMonitor( xMultiMon->getByIndex( nDisplay ), uno::UNO_QUERY_THROW );
+            awt::Rectangle aWorkRect;
+            xMonitor->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WorkArea" ) ) ) >>= aWorkRect;
+            awt::Rectangle aWindowRect = xHWindow->getPosSize();
+
+            if (( aWindowRect.Width < aWorkRect.Width) && ( aWindowRect.Height < aWorkRect.Height ))
+            {
+                int OffsetX = ( aWorkRect.Width - aWindowRect.Width ) / 2 + aWorkRect.X;
+                int OffsetY = ( aWorkRect.Height - aWindowRect.Height ) /2 + aWorkRect.Y;
+                xHWindow->setPosSize( OffsetX, OffsetY, aWindowRect.Width, aWindowRect.Height, awt::PosSize::POS );
+            }
+            else
+            {
+                xHWindow->setPosSize( aWorkRect.X, aWorkRect.Y, aWorkRect.Width, aWorkRect.Height, awt::PosSize::POSSIZE );
+            }
+
+            xHWindow->setVisible( sal_True );
+        }
+    }
+    catch ( uno::Exception& )
+    {
     }
 
     return m_xFrame;
