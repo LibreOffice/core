@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: embedhlp.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include "embedhlp.hxx"
+#include <svtools/embedhlp.hxx>
 
 #include <svtools/filter.hxx>
 #include <svtools/svtools.hrc>
