@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excimp8.cxx,v $
- * $Revision: 1.126 $
+ * $Revision: 1.127 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -184,7 +184,6 @@ void ImportExcel8::Boundsheet( void )
     String aName( aIn.ReadUniString( nLen ) );
     GetTabInfo().AppendXclTabName( aName, nBdshtTab );
 
-    ScfTools::ConvertToScSheetName( aName );
     *pExcRoot->pTabNameBuff << aName;
 
     SCTAB nScTab = static_cast< SCTAB >( nBdshtTab );
