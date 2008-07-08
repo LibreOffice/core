@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtw8num.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -149,6 +149,9 @@ USHORT SwWW8Writer::GetId( const SwNumRule& rNumRule ) const
 //here in the ww export filter
 sal_Int16 GetWordFirstLineOffset(const SwNumFmt &rFmt)
 {
+    ASSERT( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
+            "<GetWordFirstLineOffset> - misusage: position-and-space-mode does not equal LABEL_WIDTH_AND_POSITION" );
+
     short nFirstLineOffset;
     if (rFmt.GetNumAdjust() == SVX_ADJUST_RIGHT)
         nFirstLineOffset = -rFmt.GetCharTextDistance();
@@ -206,7 +209,9 @@ void SwWW8Writer::OutListTab()
     for( n = 0; n < nCount; ++n )
     {
         const SwNumRule& rRule = *pUsedNumTbl->GetObject( n );
-        BYTE nLvl, nFlags, nAlign;
+        BYTE nLvl;
+        BYTE nFlags = 0;
+        BYTE nAlign;
         BYTE nLevels = static_cast< BYTE >(rRule.IsContinusNum() ?
             WW8ListManager::nMinLevel : WW8ListManager::nMaxLevel);
         for( nLvl = 0; nLvl < nLevels; ++nLvl )
@@ -232,7 +237,41 @@ void SwWW8Writer::OutListTab()
             }
             *pTableStrm << nAlign;
 
-            nFlags = 2;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
+            // --> OD 2008-06-03 #i86652#
+            if ( rFmt.GetPositionAndSpaceMode() ==
+                                    SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+            {
+                nFlags = 2;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
+            }
+            else if ( rFmt.GetPositionAndSpaceMode() ==
+                                            SvxNumberFormat::LABEL_ALIGNMENT )
+            {
+                switch ( rFmt.GetLabelFollowedBy() )
+                {
+                    case SvxNumberFormat::LISTTAB:
+                    {
+                        nFlags = 0;
+                    }
+                    break;
+                    case SvxNumberFormat::SPACE:
+                    {
+                        nFlags = 1;
+                    }
+                    break;
+                    case SvxNumberFormat::NOTHING:
+                    {
+                        nFlags = 2;
+                    }
+                    break;
+                    default:
+                    {
+                        nFlags = 0;
+                        ASSERT( false,
+                                "unknown GetLabelFollowedBy() return value" );
+                    }
+                }
+            }
+            // <--
 
             // Build the NumString for this Level
             String sNumStr;
@@ -250,10 +289,7 @@ void SwWW8Writer::OutListTab()
                 pBulletFont = rFmt.GetBulletFont();
                 if (!pBulletFont)
                 {
-                    // --> OD 2006-06-27 #b6440955#
-//                    pBulletFont = &SwNumRule::GetDefBulletFont();
                     pBulletFont = &numfunc::GetDefBulletFont();
-                    // <--
                 }
 
                 eChrSet = pBulletFont->GetCharSet();
@@ -263,12 +299,18 @@ void SwWW8Writer::OutListTab()
                 if (sw::util::IsStarSymbol(sFontName))
                     SubstituteBullet(sNumStr,eChrSet,sFontName);
 
-                // --> OD 2007-07-23 #148661#
-                // <nFlags = 2>, if minimum label width equals 0 and
-                // minimum distance between label and text equals 0
-                nFlags = ( rFmt.GetFirstLineOffset() == 0 &&
-                           rFmt.GetCharTextDistance() == 0 )
-                         ? 2 : 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
+                // --> OD 2008-06-03 #i86652#
+                if ( rFmt.GetPositionAndSpaceMode() ==
+                                        SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+                {
+                    // --> OD 2007-07-23 #148661#
+                    // <nFlags = 2>, if minimum label width equals 0 and
+                    // minimum distance between label and text equals 0
+                    nFlags = ( rFmt.GetFirstLineOffset() == 0 &&
+                               rFmt.GetCharTextDistance() == 0 )
+                             ? 2 : 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
+                    // <--
+                }
                 // <--
             }
             else
@@ -293,12 +335,18 @@ void SwWW8Writer::OutListTab()
                             sNumStr.SetChar( nFnd, (char)i );
                         }
                     }
-                    // --> OD 2007-07-23 #148661#
-                    // <nFlags = 2>, if minimum label width equals 0 and
-                    // minimum distance between label and text equals 0
-                    nFlags = ( rFmt.GetFirstLineOffset() == 0 &&
-                               rFmt.GetCharTextDistance() == 0 )
-                             ? 2 : 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
+                    // --> OD 2008-06-03 #i86652#
+                    if ( rFmt.GetPositionAndSpaceMode() ==
+                                            SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+                    {
+                        // --> OD 2007-07-23 #148661#
+                        // <nFlags = 2>, if minimum label width equals 0 and
+                        // minimum distance between label and text equals 0
+                        nFlags = ( rFmt.GetFirstLineOffset() == 0 &&
+                                   rFmt.GetCharTextDistance() == 0 )
+                                 ? 2 : 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
+                        // <--
+                    }
                     // <--
                 }
 
@@ -367,16 +415,38 @@ void SwWW8Writer::OutListTab()
             // reserved
             SwWW8Writer::WriteShort( *pTableStrm, 0 );
 
-            const sal_uInt16 nAbsLSpace = rFmt.GetAbsLSpace();
-            const sal_Int16 nFirstLineOffset = GetWordFirstLineOffset(rFmt);
+            // --> OD 2008-06-03 #i86652#
+            if ( rFmt.GetPositionAndSpaceMode() ==
+                                    SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+            {
+                const sal_uInt16 nAbsLSpace = rFmt.GetAbsLSpace();
+                const sal_Int16 nFirstLineOffset = GetWordFirstLineOffset(rFmt);
 
-            // write Papx
-            BYTE* pData = aPapSprms + 2;
-            Set_UInt16( pData, nAbsLSpace );
-            pData += 2;
-            Set_UInt16( pData, nFirstLineOffset );
-            pData += 5;
-            Set_UInt16( pData, nAbsLSpace );
+                // write Papx
+                BYTE* pData = aPapSprms + 2;
+                Set_UInt16( pData, nAbsLSpace );
+                pData += 2;
+                Set_UInt16( pData, nFirstLineOffset );
+                pData += 5;
+                Set_UInt16( pData, nAbsLSpace );
+            }
+            else if ( rFmt.GetPositionAndSpaceMode() ==
+                                            SvxNumberFormat::LABEL_ALIGNMENT )
+            {
+                const sal_Int16 nIndentAt = static_cast<sal_Int16>(rFmt.GetIndentAt());
+                const sal_Int16 nFirstLineIndenx = static_cast<sal_Int16>(rFmt.GetFirstLineIndent());
+                const sal_Int16 nListTabPos =
+                        rFmt.GetLabelFollowedBy() == SvxNumberFormat::LISTTAB
+                        ? static_cast<sal_Int16>(rFmt.GetListtabPos())
+                        : 0;
+                // write Papx
+                BYTE* pData = aPapSprms + 2;
+                Set_UInt16( pData, nIndentAt );
+                pData += 2;
+                Set_UInt16( pData, nFirstLineIndenx );
+                pData += 5;
+                Set_UInt16( pData, nListTabPos );
+            }
 
             pTableStrm->Write( aPapSprms, sizeof( aPapSprms ));
             // write Chpx
@@ -516,8 +586,13 @@ void SwWW8Writer::BuildAnlvBulletBase(WW8_ANLV& rAnlv, BYTE*& rpCh,
             break;
     }
 
-    if (GetWordFirstLineOffset(rFmt) < 0)
-        nb |= 0x8;          // number will be displayed using a hanging indent
+    // --> OD 2008-06-03 #i86652#
+    if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+    {
+        if (GetWordFirstLineOffset(rFmt) < 0)
+            nb |= 0x8;          // number will be displayed using a hanging indent
+    }
+    // <--
     ByteToSVBT8(nb, rAnlv.aBits1);
 
     if (1 < rCharLen)
@@ -572,8 +647,18 @@ void SwWW8Writer::BuildAnlvBulletBase(WW8_ANLV& rAnlv, BYTE*& rpCh,
         ShortToSVBT16(nFontId, rAnlv.ftc);
         ByteToSVBT8( 1, rAnlv.cbTextBefore );
     }
-    ShortToSVBT16( -GetWordFirstLineOffset(rFmt), rAnlv.dxaIndent );
-    ShortToSVBT16( rFmt.GetCharTextDistance(), rAnlv.dxaSpace );
+    // --> OD 2008-06-03 #i86652#
+    if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+    {
+        ShortToSVBT16( -GetWordFirstLineOffset(rFmt), rAnlv.dxaIndent );
+        ShortToSVBT16( rFmt.GetCharTextDistance(), rAnlv.dxaSpace );
+    }
+    else
+    {
+        ShortToSVBT16( 0, rAnlv.dxaIndent );
+        ShortToSVBT16( 0, rAnlv.dxaSpace );
+    }
+    // <--
 }
 
 void SwWW8Writer::SubstituteBullet(String& rNumStr,
@@ -706,8 +791,18 @@ void SwWW8Writer::BuildAnlvBase(WW8_ANLV& rAnlv, BYTE*& rpCh,
     }
 
     ShortToSVBT16( rFmt.GetStart(), rAnlv.iStartAt );
-    ShortToSVBT16( -GetWordFirstLineOffset(rFmt), rAnlv.dxaIndent );
-    ShortToSVBT16( rFmt.GetCharTextDistance(), rAnlv.dxaSpace );
+    // --> OD 2008-06-03 #i86652#
+    if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+    {
+        ShortToSVBT16( -GetWordFirstLineOffset(rFmt), rAnlv.dxaIndent );
+        ShortToSVBT16( rFmt.GetCharTextDistance(), rAnlv.dxaSpace );
+    }
+    else
+    {
+        ShortToSVBT16( 0, rAnlv.dxaIndent );
+        ShortToSVBT16( 0, rAnlv.dxaSpace );
+    }
+    // <--
 }
 
 void SwWW8Writer::Out_NumRuleAnld( const SwNumRule& rRul, const SwNumFmt& rFmt,
@@ -758,8 +853,12 @@ bool SwWW8Writer::Out_SwNum(const SwTxtNode* pNd)
     bool bRet = true;
 
     SwNumFmt aFmt(pRul->Get(nSwLevel));
-    const SvxLRSpaceItem& rLR = ItemGet<SvxLRSpaceItem>(*pNd, RES_LR_SPACE);
-    aFmt.SetAbsLSpace(writer_cast<short>(aFmt.GetAbsLSpace() + rLR.GetLeft()));
+    // --> OD 2008-06-03 #i86652#
+    if ( aFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+    {
+        const SvxLRSpaceItem& rLR = ItemGet<SvxLRSpaceItem>(*pNd, RES_LR_SPACE);
+        aFmt.SetAbsLSpace(writer_cast<short>(aFmt.GetAbsLSpace() + rLR.GetLeft()));
+    }
 
     if (
          aFmt.GetNumberingType() == SVX_NUM_NUMBER_NONE ||
