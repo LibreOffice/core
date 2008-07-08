@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: printopt.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,6 +109,24 @@ SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( Window* pParent, con
 
     aReduceGradientsStripesRB.SetToggleHdl( LINK( this, SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl ) );
     aReduceBitmapsResolutionRB.SetToggleHdl( LINK( this, SfxCommonPrintOptionsTabPage, ToggleReduceBitmapsResolutionRBHdl ) );
+
+    // --> PB 2008-06-09 #i89164#
+    // calculate dynamically the width of radiobutton and listbox
+    const long nOffset = 10;
+    Size aOldSize = aReduceBitmapsResolutionRB.GetSizePixel();
+    Size aNewSize = aReduceBitmapsResolutionRB.GetOptimalSize( WINDOWSIZE_PREFERRED );
+    aNewSize.Width() += nOffset;
+    aNewSize.Height() = aOldSize.Height();
+    long nDelta = aOldSize.Width() - aNewSize.Width();
+    aReduceBitmapsResolutionRB.SetSizePixel( aNewSize );
+    Point aPos = aReduceBitmapsResolutionLB.GetPosPixel();
+    aPos.X() -= nDelta;
+    aOldSize = aReduceBitmapsResolutionLB.GetSizePixel();
+    aNewSize = aReduceBitmapsResolutionLB.GetOptimalSize( WINDOWSIZE_PREFERRED );
+    aNewSize.Width() += nOffset;
+    aNewSize.Height() = aOldSize.Height();
+    aReduceBitmapsResolutionLB.SetPosSizePixel( aPos, aNewSize );
+    // <--
 }
 
 // -----------------------------------------------------------------------------
