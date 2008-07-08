@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formulabase.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -335,7 +335,7 @@ static const FunctionData saFuncTableBiff2[] =
     { "SLN",                    "SLN",              142,    142,    3,  3,  V, { V }, 0 },
     { "SYD",                    "SYD",              143,    143,    4,  4,  V, { V }, 0 },
     { "DDB",                    "DDB",              144,    144,    4,  5,  V, { V }, 0 },
-    { "INDIRECT",               "INDIRECT",         148,    148,    1,  2,  R, { V, EV, I }, FUNCFLAG_VOLATILE },
+    { "INDIRECT",               "INDIRECT",         148,    148,    1,  2,  R, { V }, FUNCFLAG_VOLATILE },
     { "CLEAN",                  "CLEAN",            162,    162,    1,  1,  V, { V }, 0 },
     { "MDETERM",                "MDETERM",          163,    163,    1,  1,  V, { A }, 0 },
     { "MINVERSE",               "MINVERSE",         164,    164,    1,  1,  A, { A }, 0 },
@@ -377,7 +377,7 @@ static const FunctionData saFuncTableBiff3[] =
     { "ROUNDDOWN",              "ROUNDDOWN",        213,    213,    2,  2,  V, { V }, 0 },
     { "ASC",                    "ASC",              214,    214,    1,  1,  V, { V }, 0 },
     { "JIS",                    "DBCS",             215,    215,    1,  1,  V, { V }, 0 },
-    { "ADDRESS",                "ADDRESS",          219,    219,    2,  5,  V, { V, V, V, EV, V }, 0 },
+    { "ADDRESS",                "ADDRESS",          219,    219,    2,  5,  V, { V, V, V, V, V }, 0 },
     { "DAYS360",                "DAYS360",          220,    220,    2,  2,  V, { V, V, C, I }, 0 },
     { "TODAY",                  "TODAY",            221,    221,    0,  0,  V, {}, FUNCFLAG_VOLATILE },
     { "VDB",                    "VDB",              222,    222,    5,  7,  V, { V }, 0 },
