@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unosett.cxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1321,7 +1321,10 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
     sal_uInt16 nIndex =
 #endif
     // --> OD 2008-02-11 #newlistlevelattrs#
-    rDoc.MakeNumRule( sCreatedNumRuleName, 0, FALSE, SvxNumberFormat::LABEL_ALIGNMENT );
+    rDoc.MakeNumRule( sCreatedNumRuleName, 0, FALSE,
+                      // --> OD 2008-06-06 #i89178#
+                      numfunc::GetDefaultPositionAndSpaceMode() );
+                      // <--
     // <--
 #if OSL_DEBUG_LEVEL > 1
     (void)nIndex;
