@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: worksheetbuffer.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,7 +101,6 @@ public:
 private:
     sal_Int16           getTotalSheetCount() const;
     const OoxSheetInfo* getSheetInfo( sal_Int32 nSheet ) const;
-    ::rtl::OUString     convertToValidSheetName( const ::rtl::OUString& rName, sal_Unicode cReplaceChar ) const;
 
     ::rtl::OUString     insertSheet( const ::rtl::OUString& rName, sal_Int16 nSheet, bool bVisible );
     void                insertSheet( const OoxSheetInfo& rSheetInfo );
@@ -112,7 +111,6 @@ private:
     typedef ::std::map< ExternalSheetName, sal_Int16 >      ExternalSheetMap;
 
     const ::rtl::OUString maIsVisibleProp;
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification > mxCharClass;
     SheetInfoVec        maSheetInfos;
     ExternalSheetMap    maExternalSheets;
 };
