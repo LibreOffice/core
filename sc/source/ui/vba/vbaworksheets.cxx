@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vbaworksheets.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -402,9 +402,7 @@ ScVbaWorksheets::Item( const uno::Any& Index, const uno::Any& Index2  ) throw (u
 uno::Any
 ScVbaWorksheets::getItemByStringIndex( const rtl::OUString& sIndex ) throw (uno::RuntimeException)
 {
-    String sScIndex = sIndex;
-    ScDocument::ConvertToValidTabName( sScIndex, '_' );
-    return ScVbaWorksheets_BASE::getItemByStringIndex( sScIndex );
+    return ScVbaWorksheets_BASE::getItemByStringIndex( sIndex );
 }
 
 rtl::OUString&
