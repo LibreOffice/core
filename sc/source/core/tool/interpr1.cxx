@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpr1.cxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +65,7 @@
 #include "cellkeytranslator.hxx"
 #include "lookupcache.hxx"
 #include "rangenam.hxx"
+#include "compiler.hxx"
 
 #define SC_DOUBLE_MAXVALUE  1.7e307
 
@@ -6058,84 +6059,23 @@ void ScInterpreter::ScDBVarP()
 }
 
 
-#if 0
-// This could be the code to handle Excel notation. However, we don't offer it
-// (yet) at UI level and documents must not use it, as it isn't clarified how
-// to handle interoperability issues.
-
-void ScInterpreter::ScIndirectXL()
-{
-    BYTE nParamCount = GetByte();
-    ScAddress::Convention conv = ScAddress::CONV_XL_A1;
-
-    if (nParamCount == 2 && 0. == GetDouble())
-        conv = ScAddress::CONV_XL_R1C1;
-
-    if ( MustHaveParamCount( nParamCount, 1, 2 )  )
-    {
-        ScAddress::Details const details( conv, aPos );
-        SCTAB nTab = aPos.Tab();
-        String sRefStr( GetString() );
-        ScRefAddress aRefAd, aRefAd2;
-        if ( ConvertDoubleRef( pDok, sRefStr, nTab, aRefAd, aRefAd2, details ) )
-            PushDoubleRef( aRefAd.Col(), aRefAd.Row(), aRefAd.Tab(),
-                aRefAd2.Col(), aRefAd2.Row(), aRefAd2.Tab() );
-        else if ( ConvertSingleRef ( pDok, sRefStr, nTab, aRefAd, details ) )
-            PushSingleRef( aRefAd.Col(), aRefAd.Row(), aRefAd.Tab() );
-        else
-        {
-            do
-            {
-                ScRangeName* pNames = pDok->GetRangeName();
-                if (!pNames)
-                    break;
-
-                USHORT nPos = 0;
-                if (!pNames->SearchName(sRefStr, nPos))
-                    break;
-
-                ScRangeData* rData = (*pNames)[nPos];
-                if (!rData)
-                    break;
-
-                rData->ValidateTabRefs();
-
-                ScRange aRange;
-                if (!rData->IsReference(aRange, ScAddress(aPos.Tab(), 0, 0)))
-                    break;
-
-                if ( aRange.aStart == aRange.aEnd )
-                    PushSingleRef(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab());
-                else
-                    PushDoubleRef(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab(),
-                                  aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aEnd.Tab());
-
-                // success!
-                return;
-            }
-            while (false);
-
-            PushIllegalArgument();
-        }
-    }
-}
-
-#endif  // ScIndirectXL
-
-
 void ScInterpreter::ScIndirect()
 {
     BYTE nParamCount = GetByte();
-    if ( MustHaveParamCount( nParamCount, 1 )  )
+    if ( MustHaveParamCount( nParamCount, 1, 2 )  )
     {
+        ScAddress::Convention eConv = ScAddress::CONV_OOO;
+        if (nParamCount == 2 && 0.0 == ::rtl::math::approxFloor( GetDouble()))
+            eConv = ScAddress::CONV_XL_R1C1;
+
+        const ScAddress::Details aDetails( eConv, aPos );
         SCTAB nTab = aPos.Tab();
         String sRefStr( GetString() );
         ScRefAddress aRefAd, aRefAd2;
-        /* Always OOO format which does not require a position */
-        if ( ConvertDoubleRef( pDok, sRefStr, nTab, aRefAd, aRefAd2 ) )
+        if ( ConvertDoubleRef( pDok, sRefStr, nTab, aRefAd, aRefAd2, aDetails ) )
             PushDoubleRef( aRefAd.Col(), aRefAd.Row(), aRefAd.Tab(),
                 aRefAd2.Col(), aRefAd2.Row(), aRefAd2.Tab() );
-        else if ( ConvertSingleRef( pDok, sRefStr, nTab, aRefAd ) )
+        else if ( ConvertSingleRef ( pDok, sRefStr, nTab, aRefAd, aDetails ) )
             PushSingleRef( aRefAd.Col(), aRefAd.Row(), aRefAd.Tab() );
         else
         {
@@ -6146,25 +6086,36 @@ void ScInterpreter::ScIndirect()
                     break;
 
                 USHORT nPos = 0;
-                if (!pNames->SearchName(sRefStr, nPos))
+                if (!pNames->SearchName( sRefStr, nPos))
                     break;
 
                 ScRangeData* rData = (*pNames)[nPos];
                 if (!rData)
                     break;
 
-                // we need this in order to obtain good range
+                // We need this in order to obtain a good range.
                 rData->ValidateTabRefs();
 
                 ScRange aRange;
-                if (!rData->IsReference(aRange, aPos))
+#if 0
+                // This is some really odd Excel behavior and renders named
+                // ranges containing relative references totally useless.
+                if (!rData->IsReference(aRange, ScAddress( aPos.Tab(), 0, 0)))
                     break;
+#else
+                // This is the usual way to treat named ranges containing
+                // relative references.
+                if (!rData->IsReference( aRange, aPos))
+                    break;
+#endif
 
-                if ( aRange.aStart == aRange.aEnd )
-                    PushSingleRef(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab());
+                if (aRange.aStart == aRange.aEnd)
+                    PushSingleRef( aRange.aStart.Col(), aRange.aStart.Row(),
+                            aRange.aStart.Tab());
                 else
-                    PushDoubleRef(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab(),
-                                  aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aEnd.Tab());
+                    PushDoubleRef( aRange.aStart.Col(), aRange.aStart.Row(),
+                            aRange.aStart.Tab(), aRange.aEnd.Col(),
+                            aRange.aEnd.Row(), aRange.aEnd.Tab());
 
                 // success!
                 return;
@@ -6179,56 +6130,6 @@ void ScInterpreter::ScIndirect()
 
 void ScInterpreter::ScAddressFunc()
 {
-    BYTE nParamCount = GetByte();
-    if ( MustHaveParamCount( nParamCount, 2, 4 ) )
-    {
-        String sTabStr;
-        USHORT nAbs = 1;
-        if (nParamCount == 4)
-            sTabStr = GetString();
-        if (nParamCount >= 3)
-            nAbs = (USHORT) ::rtl::math::approxFloor(GetDouble());
-        SCCOL nCol = (SCCOL) ::rtl::math::approxFloor(GetDouble());
-        SCROW nRow = (SCROW) ::rtl::math::approxFloor(GetDouble());
-        if (nCol < 1 || nCol > MAXCOL + 1 || nRow < 1 || nRow > MAXROW + 1)
-        {
-            PushIllegalArgument();
-            return;
-        }
-        else
-        {
-            nRow--;
-            nCol--;
-        }
-        String aRefStr;
-        ScAddress aAdr( nCol, nRow, 0);
-        if (nAbs == 4)
-            aRefStr = aAdr.GetColRowString();
-        else
-        {
-            aRefStr = aAdr.GetColRowString(TRUE);
-            if (nAbs == 2)
-                aRefStr.EraseLeadingChars('$');
-            else if (nAbs == 3)
-                aRefStr.Erase(aRefStr.Search('$',1),1);
-        }
-        if ( sTabStr.Len() )
-        {
-            aRefStr.Insert('.',0);
-            aRefStr.Insert(sTabStr,0);
-        }
-        PushString(aRefStr);
-    }
-}
-
-
-#if 0
-// This could be the code to handle Excel notation. However, we don't offer it
-// (yet) at UI level and documents must not use it, as it isn't clarified how
-// to handle interoperability issues.
-
-void ScInterpreter::ScAddressXL()
-{
     String  sTabStr;
 
     BYTE    nParamCount = GetByte();
@@ -6238,8 +6139,8 @@ void ScInterpreter::ScAddressXL()
     if( nParamCount >= 5 )
         sTabStr = GetString();
 
-    ScAddress::Convention eConv = ScAddress::CONV_XL_A1;    // default
-    if( nParamCount >= 4 && (USHORT) ::rtl::math::approxFloor(GetDouble()) == 0 )
+    ScAddress::Convention eConv = ScAddress::CONV_OOO;      // default
+    if( nParamCount >= 4 && 0.0 == ::rtl::math::approxFloor( GetDoubleWithDefault( 1.0)))
         eConv = ScAddress::CONV_XL_R1C1;
 
     USHORT  nFlags = SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE;   // default
@@ -6248,18 +6149,18 @@ void ScInterpreter::ScAddressXL()
         USHORT n = (USHORT) ::rtl::math::approxFloor(GetDouble());
         switch ( n )
         {
-        default :
-            PushNoValue();
-            return;
+            default :
+                PushNoValue();
+                return;
 
-        case 5:
-        case 1 : break; // default
-        case 6:
-        case 2 : nFlags = SCA_ROW_ABSOLUTE; break;
-        case 7:
-        case 3 : nFlags = SCA_COL_ABSOLUTE; break;
-        case 8:
-        case 4 : nFlags = 0; break; // both relative
+            case 5:
+            case 1 : break; // default
+            case 6:
+            case 2 : nFlags = SCA_ROW_ABSOLUTE; break;
+            case 7:
+            case 3 : nFlags = SCA_COL_ABSOLUTE; break;
+            case 8:
+            case 4 : nFlags = 0; break; // both relative
         }
     }
     nFlags |= SCA_VALID | SCA_VALID_ROW | SCA_VALID_COL;
@@ -6276,28 +6177,29 @@ void ScInterpreter::ScAddressXL()
             nRow += aPos.Row() + 1;
     }
 
-    if( nCol < 1 || nCol > MAXCOL + 1 || nRow < 1 || nRow > MAXROW + 1 )
+    --nCol;
+    --nRow;
+    if(!ValidCol( nCol) || !ValidRow( nRow))
     {
-        PushNoValue();
+        PushIllegalArgument();
         return;
     }
 
     String aRefStr;
-    const ScAddress::Details    aDetails( eConv, aPos );
-    const ScAddress aAdr( nCol-1, nRow-1, 0);
+    const ScAddress::Details aDetails( eConv, aPos );
+    const ScAddress aAdr( nCol, nRow, 0);
     aAdr.Format( aRefStr, nFlags, pDok, aDetails );
 
     if( nParamCount >= 5 )
-    {   // TODO Do we need to quote this ?
-        sTabStr += static_cast<sal_Unicode>('!');
+    {
+        ScCompiler::CheckTabQuotes( sTabStr, eConv);
+        sTabStr += static_cast<sal_Unicode>(eConv == ScAddress::CONV_XL_R1C1 ? '!' : '.');
         sTabStr += aRefStr;
         PushString( sTabStr );
     }
     else
         PushString( aRefStr );
 }
-
-#endif  // ScAddressXL()
 
 
 void ScInterpreter::ScOffset()
