@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentbuilder.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -316,6 +316,16 @@ namespace DOM
 
     } // extern "C"
 
+    void throwEx(xmlParserCtxtPtr ctxt) {
+        OUString msg = make_error_message(ctxt);
+        xmlFreeParserCtxt(ctxt);
+        com::sun::star::xml::sax::SAXParseException saxex;
+        saxex.Message = msg;
+        saxex.LineNumber = static_cast<sal_Int32>(ctxt->lastError.line);
+        saxex.ColumnNumber = static_cast<sal_Int32>(ctxt->lastError.int2);
+        throw saxex;
+    }
+
     Reference< XDocument > SAL_CALL CDocumentBuilder::parse(const Reference< XInputStream >& is)
         throw (RuntimeException, SAXParseException, IOException)
     {
@@ -345,15 +355,10 @@ namespace DOM
         xmlDocPtr pDoc = xmlCtxtReadIO(ctxt, xmlIO_read_func, xmlIO_close_func, &c,
                      0, 0, 0);
 
-        xmlFreeParserCtxt(ctxt);
         if (pDoc == 0) {
-            OUString msg = make_error_message(ctxt);
-            com::sun::star::xml::sax::SAXParseException saxex;
-            saxex.Message = msg;
-            saxex.LineNumber = static_cast<sal_Int32>(ctxt->lastError.line);
-            saxex.ColumnNumber = static_cast<sal_Int32>(ctxt->lastError.int2);
-            throw saxex;
+            throwEx(ctxt);
         }
+        xmlFreeParserCtxt(ctxt);
         return Reference< XDocument >(static_cast< CDocument* >(CNode::get((xmlNodePtr)pDoc)));
     }
 
@@ -399,15 +404,10 @@ namespace DOM
         OString oUri = OUStringToOString(sUri, RTL_TEXTENCODING_UTF8);
         char *uri = (char*) oUri.getStr();
         xmlDocPtr pDoc = xmlCtxtReadFile(ctxt, uri, 0, 0);
-        xmlFreeParserCtxt(ctxt);
         if (pDoc == 0) {
-            OUString msg = make_error_message(ctxt);
-            com::sun::star::xml::sax::SAXParseException saxex;
-            saxex.Message = msg;
-            saxex.LineNumber = static_cast<sal_Int32>(ctxt->lastError.line);
-            saxex.ColumnNumber = static_cast<sal_Int32>(ctxt->lastError.int2);
-            throw saxex;
+            throwEx(ctxt);
         }
+        xmlFreeParserCtxt(ctxt);
         return Reference< XDocument >(static_cast< CDocument* >(CNode::get((xmlNodePtr)pDoc)));
     }
 
