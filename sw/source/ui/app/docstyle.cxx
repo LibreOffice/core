@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docstyle.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1345,7 +1345,10 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                     // was sind die default Werte?
                     {
                         // --> OD 2008-02-11 #newlistlevelattrs#
-                        SwNumRule aRule( pNumRule->GetName(), SvxNumberFormat::LABEL_ALIGNMENT );
+                        SwNumRule aRule( pNumRule->GetName(),
+                                         // --> OD 2008-06-06 #i89178#
+                                         numfunc::GetDefaultPositionAndSpaceMode() );
+                                         // <--
                         // <--
                         rDoc.ChgNumRuleFmts( aRule );
                     }
@@ -1799,8 +1802,10 @@ void SwDocStyleSheet::Create()
 
                 // --> OD 2008-02-11 #newlistlevelattrs#
                 SwNumRule* pRule = rDoc.GetNumRuleTbl()[
-                        rDoc.MakeNumRule( sTmpNm, 0, FALSE,
-                                          SvxNumberFormat::LABEL_ALIGNMENT ) ];
+                    rDoc.MakeNumRule( sTmpNm, 0, FALSE,
+                                      // --> OD 2008-06-06 #i89178#
+                                      numfunc::GetDefaultPositionAndSpaceMode() ) ];
+                                      // <--
                 // <--
                 pRule->SetAutoRule( FALSE );
                 if( !aName.Len() )
