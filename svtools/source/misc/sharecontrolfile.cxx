@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sharecontrolfile.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,10 @@
 #include <stdio.h>
 
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/ucb/XContent.hpp>
+#include <com/sun/star/ucb/InsertCommandArgument.hpp>
+#include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 
 #include <osl/time.h>
@@ -46,9 +50,12 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <ucbhelper/content.hxx>
 
 #include <tools/urlobj.hxx>
+#include <tools/stream.hxx>
 #include <unotools/bootstrap.hxx>
+#include <unotools/streamwrap.hxx>
 
 #include <svtools/useroptions.hxx>
 
@@ -95,18 +102,51 @@ ShareControlFile::~ShareControlFile()
 // ----------------------------------------------------------------------
 void ShareControlFile::OpenStream()
 {
-    // if it is called outside of constructor the mutex must be locked
+    // if it is called outside of constructor the mutex must be locked already
 
     if ( !m_xStream.is() && m_aURL.getLength() )
     {
-        // TODO/LATER: let it work with html access as well
-        // TODO/LATER: let the new file locking be used
-        uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-            uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleFileAccess(
-                xFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess") ),
-                uno::UNO_QUERY_THROW );
+        uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
+        ::ucbhelper::Content aContent = ::ucbhelper::Content( m_aURL, xDummyEnv );
 
-        uno::Reference< io::XStream > xStream = xSimpleFileAccess->openFileReadWrite( m_aURL );
+        uno::Reference< ucb::XContentIdentifier > xContId( aContent.get().is() ? aContent.get()->getIdentifier() : 0 );
+        if ( !xContId.is() || !xContId->getContentProviderScheme().equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "file" ) ) ) )
+            throw io::IOException(); // the implementation supports only local files for now
+
+        uno::Reference< io::XStream > xStream;
+
+        // Currently the locking of the original document is intended to be used.
+        // That means that the shared file should be accessed only when the original document is locked and only by user who has locked the document.
+        // TODO/LATER: should the own file locking be used?
+
+        try
+        {
+            xStream = aContent.openWriteableStreamNoLock();
+        }
+        catch ( ucb::InteractiveIOException const & e )
+        {
+            if ( e.Code == ucb::IOErrorCode_NOT_EXISTING )
+            {
+                // Create file...
+                SvMemoryStream aStream(0,0);
+                uno::Reference< io::XInputStream > xInput( new ::utl::OInputStreamWrapper( aStream ) );
+                ucb::InsertCommandArgument aInsertArg;
+                aInsertArg.Data = xInput;
+                aInsertArg.ReplaceExisting = sal_False;
+                aContent.executeCommand( rtl::OUString::createFromAscii( "insert" ), uno::makeAny( aInsertArg ) );
+
+                // try to let the file be hidden if possible
+                try {
+                    aContent.setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsHidden" ) ), uno::makeAny( sal_True ) );
+                } catch( uno::Exception& ) {}
+
+                // Try to open one more time
+                xStream = aContent.openWriteableStreamNoLock();
+            }
+            else
+                throw;
+        }
+
         m_xSeekable.set( xStream, uno::UNO_QUERY_THROW );
         m_xInputStream.set( xStream->getInputStream(), uno::UNO_QUERY_THROW );
         m_xOutputStream.set( xStream->getOutputStream(), uno::UNO_QUERY_THROW );
