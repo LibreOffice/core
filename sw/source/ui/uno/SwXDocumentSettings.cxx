@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SwXDocumentSettings.cxx,v $
- * $Revision: 1.64 $
+ * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,7 +126,10 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAMES,
     HANDLE_UNIX_FORCE_ZERO_EXT_LEADING,
     HANDLE_USE_OLD_PRINTER_METRICS,
-    HANDLE_TABS_RELATIVE_TO_INDENT
+    HANDLE_TABS_RELATIVE_TO_INDENT,
+    // --> OD 2008-06-05 #i89181#
+    HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST
+    // <--
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -177,6 +180,8 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("UnxForceZeroExtLeading"), HANDLE_UNIX_FORCE_ZERO_EXT_LEADING, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("UseOldPrinterMetrics"), HANDLE_USE_OLD_PRINTER_METRICS, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("TabsRelativeToIndent"), HANDLE_TABS_RELATIVE_TO_INDENT, CPPUTYPE_BOOLEAN, 0, 0},
+        // --> OD 2008-06-05 #i89181#
+        { RTL_CONSTASCII_STRINGPARAM("TabAtLeftIndentForParagraphsInList"), HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST, CPPUTYPE_BOOLEAN, 0, 0},
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -657,6 +662,14 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->set(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT, bTmp);
         }
         break;
+        // --> OD 2008-06-05 #i89181#
+        case HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST, bTmp);
+        }
+        break;
+        // <--
         default:
             throw UnknownPropertyException();
     }
@@ -970,6 +983,14 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
+        // --> OD 2008-06-05 #i89181#
+        case HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
+        {
+            sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST);
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        // <--
 
         default:
             throw UnknownPropertyException();
