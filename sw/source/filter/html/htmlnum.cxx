@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: htmlnum.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -155,9 +155,12 @@ void SwHTMLParser::NewNumBulList( int nToken )
             // so macht. Dadurch wurd immer auch eine 9pt-Schrift
             // eingestellt, was in Netscape nicht der Fall ist. Bisher hat
             // das noch niemanden gestoert.
-            // --> OD 2006-06-27 #b6440955#
-//            aNumFmt.SetBulletFont( &rInfo.GetNumRule()->GetDefBulletFont() );
-            aNumFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
+            // --> OD 2008-06-03 #i63395#
+            // Only apply user defined default bullet font
+            if ( numfunc::IsDefBulletFontUserDefined() )
+            {
+                aNumFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
+            }
             // <--
             aNumFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aNumFmt.SetBulletChar( cBulletChar );       // das Bulletzeichen !!
@@ -441,10 +444,12 @@ void SwHTMLParser::EndNumBulList( int nToken )
                                         ? pRefNumFmt->GetNumberingType() : style::NumberingType::CHAR_SPECIAL);
                     if( SVX_NUM_CHAR_SPECIAL == aNumFmt.GetNumberingType() )
                     {
-                        // --> OD 2006-06-27 #b6440955#
-//                        aNumFmt.SetBulletFont(
-//                                &rInfo.GetNumRule()->GetDefBulletFont() );
-                        aNumFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
+                        // --> OD 2008-06-03 #i63395#
+                        // Only apply user defined default bullet font
+                        if ( numfunc::IsDefBulletFontUserDefined() )
+                        {
+                            aNumFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
+                        }
                         // <--
                         aNumFmt.SetBulletChar( cBulletChar );
                     }
@@ -557,9 +562,12 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
                             SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
         // <--
         SwNumFmt aNumFmt( aNumRule.Get( 0 ) );
-        // --> OD 2006-06-27 #b6440955#
-//        aNumFmt.SetBulletFont( &SwNumRule::GetDefBulletFont() );
-        aNumFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
+        // --> OD 2008-06-03 #i63395#
+        // Only apply user defined default bullet font
+        if ( numfunc::IsDefBulletFontUserDefined() )
+        {
+            aNumFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
+        }
         // <--
         aNumFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
         aNumFmt.SetBulletChar( cBulletChar );   // das Bulletzeichen !!
