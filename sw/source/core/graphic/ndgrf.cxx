@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndgrf.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1202,6 +1202,10 @@ void SwGrfNode::UpdateLinkWithInputStream()
         SwMsgPoolItem aMsgHint( RES_GRAPHIC_ARRIVED );
         Modify( &aMsgHint, &aMsgHint );
 
+        // --> OD 2008-06-18 #i88291#
+        mxInputStream.clear();
+        GetLink()->clearStreamToLoadFrom();
+        // <--
         mbLinkedInputStreamReady = false;
         mpThreadConsumer.reset();
     }
