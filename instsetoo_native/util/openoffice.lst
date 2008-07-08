@@ -42,7 +42,7 @@ OpenOffice
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.0.0
 			BASEPRODUCTVERSION 3.0
-            REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0Beta/register.html?id=${INSTANCE_URN}&amp;cid=923142
+            REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0/register.html?id=${INSTANCE_URN}&amp;cid=923142
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
@@ -103,7 +103,7 @@ OpenOffice_wJRE
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.0.0
 			BASEPRODUCTVERSION 3.0
-            REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0Beta/register.html?id=${INSTANCE_URN}&amp;cid=923142
+            REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0/register.html?id=${INSTANCE_URN}&amp;cid=923142
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat
@@ -303,7 +303,7 @@ BrOffice
 			BRANDPACKAGEVERSION 3
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.0.0
-            REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0Beta/register.html?id=${INSTANCE_URN}&amp;cid=923142
+            REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0/register.html?id=${INSTANCE_URN}&amp;cid=923142
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
@@ -364,7 +364,7 @@ BrOffice_wJRE
 			BRANDPACKAGEVERSION 3
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.0.0
-            REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0Beta/register.html?id=${INSTANCE_URN}&amp;cid=923142
+            REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0/register.html?id=${INSTANCE_URN}&amp;cid=923142
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat
