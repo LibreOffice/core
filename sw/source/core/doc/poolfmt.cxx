@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: poolfmt.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1214,13 +1214,14 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
 
     case RES_POOLCHR_BUL_LEVEL:             // Aufzaehlungszeichen
         {
-            // --> OD 2006-06-29 #6440955#
             const Font& rBulletFont = numfunc::GetDefBulletFont();
-            // <--
             SetAllScriptItem( aSet, SvxFontItem( rBulletFont.GetFamily(),
-                        rBulletFont.GetName(), rBulletFont.GetStyleName(),
+                      rBulletFont.GetName(), rBulletFont.GetStyleName(),
                         rBulletFont.GetPitch(), rBulletFont.GetCharSet(), RES_CHRATR_FONT ));
-            SetAllScriptItem( aSet, SvxFontHeightItem( PT_9, 100, RES_CHRATR_FONTSIZE ));
+            // --> OD 2008-06-02 #i63395#
+            // no font and no font size any more
+//            SetAllScriptItem( aSet, SvxFontHeightItem( PT_9, 100, RES_CHRATR_FONTSIZE ));
+            // <--
         }
         break;
 
@@ -1648,7 +1649,9 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
 
     // --> OD 2008-02-11 #newlistlevelattrs#
     const SvxNumberFormat::SvxNumPositionAndSpaceMode eNumberFormatPositionAndSpaceMode
-                                            = SvxNumberFormat::LABEL_ALIGNMENT;
+                                  // --> OD 2008-06-06 #i89178#
+                                  = numfunc::GetDefaultPositionAndSpaceMode();
+                                  // <--
     // <--
     {
         BOOL bIsModified = IsModified();
