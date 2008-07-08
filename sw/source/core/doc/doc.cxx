@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: doc.cxx,v $
- * $Revision: 1.66 $
+ * $Revision: 1.67 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -180,6 +180,9 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case UNIX_FORCE_ZERO_EXT_LEADING: return mbUnixForceZeroExtLeading;
         case USE_OLD_PRINTER_METRICS: return mbOldPrinterMetrics;
         case TABS_RELATIVE_TO_INDENT : return mbTabRelativeToIndent;
+        // --> OD 2008-06-05 #i89181#
+        case TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST: return mbTabAtLeftIndentForParagraphsInList;
+        // <--
          // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE: return mbBrowseMode;
@@ -295,6 +298,10 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
         case TABS_RELATIVE_TO_INDENT:
             mbTabRelativeToIndent = value;
         break;
+        // --> OD 2008-06-05 #i89181#
+        case TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
+            mbTabAtLeftIndentForParagraphsInList = value;
+        // <--
          // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE:
