@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XclImpChangeTrack.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -175,7 +175,6 @@ sal_Bool XclImpChangeTrack::Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab 
         pStrm->Ignore( 1 );
         // - sheet name, always separated from URL
         String aTabName( pStrm->ReadUniString() );
-        ScfTools::ConvertToScSheetName( aTabName );
         pStrm->Ignore( 1 );
         rFirstTab = rLastTab = static_cast<SCTAB>(GetLinkManager().GetScTab( aUrl, aTabName ));
     }
