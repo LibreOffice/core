@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: uinums.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -327,7 +327,8 @@ SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream, USHORT nVersion )
 void SwNumRulesWithName::MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const
 {
     // --> OD 2008-02-11 #newlistlevelattrs#
-    rChg = SwNumRule( aName, SvxNumberFormat::LABEL_ALIGNMENT );
+    // --> OD 2008-06-06 #i89178#
+    rChg = SwNumRule( aName, numfunc::GetDefaultPositionAndSpaceMode() );
     // <--
     rChg.SetAutoRule( FALSE );
     _SwNumFmtGlobal* pFmt;
