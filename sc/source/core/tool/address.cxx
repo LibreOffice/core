@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: address.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -717,23 +717,30 @@ lcl_ScAddress_Parse_OOo( BOOL& bExternal, const sal_Unicode* p,
     BOOL    bExtDoc = FALSE;
     BOOL    bNeedExtTab = FALSE;
 
+    // Lets see if this is a reference to something in an external file.
+    // A Documentname is always quoted and has a trailing #
     if ( *p == '\'' && ScGlobal::UnicodeStrChr( p, SC_COMPILER_FILE_TAB_SEP ) )
     {
-        BOOL bQuote = TRUE;         // Dokumentenname ist immer quoted
+        const sal_Unicode *pStart = p;
+        BOOL bQuote = TRUE;         // A Documentname is always quoted
         aDocTab += *p++;
         while ( bQuote && *p )
         {
             if ( *p == '\'' && *(p-1) != '\\' )
                 bQuote = FALSE;
             else if( !(*p == '\\' && *(p+1) == '\'') )
-                aDocName += *p;     // falls escaped Quote: nur Quote in den Namen
+                aDocName += *p;     // An escaped Quote in the Documentname
             aDocTab += *p++;
         }
         aDocTab += *p;              // den SC_COMPILER_FILE_TAB_SEP mitnehmen
         if( *p++ == SC_COMPILER_FILE_TAB_SEP )
             bExtDoc = TRUE;
         else
-            return nRes;
+        {
+            // It wasn't a document after all, reset and continue as normal
+            p = pStart;
+            aDocTab = String();
+        }
     }
 
     SCCOL   nCol = 0;
@@ -748,12 +755,33 @@ lcl_ScAddress_Parse_OOo( BOOL& bExternal, const sal_Unicode* p,
             nRes |= SCA_TAB_ABSOLUTE;
         if (*p == '$')
             nRes |= SCA_TAB_ABSOLUTE, p++;
-        BOOL bQuote = FALSE;
+
+        // Tokens that start at ' can have anything in them until a final '
+        // but '' marks an escaped '
+        // We've earlier guaranteed that a string containing '' will be
+        // surrounded by '
         if( *p == '\'' )
-            p++, bQuote = TRUE;
-        while (*p && (*p != '.'))
         {
-            if( bQuote && *p == '\'' )
+            ++p;
+            while (*p)
+            {
+                if (*p == '\'')
+                {
+                    if ( (*(p+1) != '\'') )
+                        break;
+                    else
+                        *p++;
+                }
+                aTab += *p++;
+            }
+        }
+
+        while (*p)
+        {
+            if( *p == '.')
+                break;
+
+            if( *p == '\'' )
             {
                 p++; break;
             }
