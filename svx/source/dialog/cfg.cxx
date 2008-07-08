@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cfg.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3397,6 +3397,10 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
 
     aMoveUpButton.SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
     aMoveDownButton.SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
+    // Always enable Up and Down buttons
+    // added for issue i53677 by shizhoubo
+    aMoveDownButton.Enable( TRUE );
+    aMoveUpButton.Enable( TRUE );
 
     PopupMenu* pMenu = new PopupMenu( SVX_RES( MODIFY_TOOLBAR ) );
     pMenu->SetMenuFlags(
@@ -4867,19 +4871,6 @@ IMPL_LINK( SvxToolbarConfigPage, SelectToolbarEntry, Control *, pBox )
 void SvxToolbarConfigPage::UpdateButtonStates()
 {
     PopupMenu* pPopup = aModifyCommandButton.GetPopupMenu();
-
-    //Always enable Up and Down buttons
-    // added for issue53677 by shizhoubo
-    aMoveDownButton.Enable(TRUE);
-    aMoveUpButton.Enable(TRUE);
-    SvLBoxEntry* selection = aContentsListBox->GetCurEntry();
-    SvLBoxEntry* first = aContentsListBox->First();
-    SvLBoxEntry* last = aContentsListBox->Last();
-    if (selection == first || selection == last)
-    {
-        return;
-    }
-
     pPopup->EnableItem( ID_RENAME, FALSE );
     pPopup->EnableItem( ID_DELETE, FALSE );
     pPopup->EnableItem( ID_BEGIN_GROUP, FALSE );
@@ -4892,20 +4883,15 @@ void SvxToolbarConfigPage::UpdateButtonStates()
 
     aDescriptionField.Clear();
 
+    SvLBoxEntry* selection = aContentsListBox->GetCurEntry();
     if ( aContentsListBox->GetEntryCount() == 0 || selection == NULL )
     {
         return;
     }
 
-    SvxConfigEntry* pEntryData =
-        (SvxConfigEntry*) selection->GetUserData();
-
+    SvxConfigEntry* pEntryData = (SvxConfigEntry*) selection->GetUserData();
     if ( pEntryData->IsSeparator() )
-    {
         pPopup->EnableItem( ID_DELETE, TRUE );
-        pPopup->EnableItem( ID_BEGIN_GROUP, FALSE );
-        pPopup->EnableItem( ID_RENAME, FALSE );
-    }
     else
     {
         pPopup->EnableItem( ID_BEGIN_GROUP, TRUE );
@@ -4917,14 +4903,10 @@ void SvxToolbarConfigPage::UpdateButtonStates()
         pPopup->EnableItem( ID_CHANGE_SYMBOL, TRUE );
 
         if ( !pEntryData->IsUserDefined() )
-        {
             pPopup->EnableItem( ID_DEFAULT_COMMAND, TRUE );
-        }
 
         if ( pEntryData->IsIconModified() )
-        {
             pPopup->EnableItem( ID_RESET_SYMBOL, TRUE );
-        }
 
         aDescriptionField.SetNewText( pEntryData->GetHelpText() );
     }
