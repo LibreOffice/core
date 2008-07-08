@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par3.cxx,v $
- * $Revision: 1.91 $
+ * $Revision: 1.92 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,9 +37,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XImageProducerSupplier.hpp>
@@ -66,12 +64,8 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
-#endif
-#ifndef __SGI_STL_FUNCTIONAL
 #include <functional>
-#endif
 #include <hintids.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/lrspitem.hxx>
@@ -446,6 +440,9 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     //
     // 2. ggfs. PAPx einlesen und nach Einzug-Werten suchen
     //
+    // --> OD 2008-06-04 #i86652# - read tab setting
+    short nTabPos = 0;
+    // <--
     if( aLVL.nLenGrpprlPapx )
     {
         sal_uInt8 aGrpprlPapx[ 255 ];
@@ -472,49 +469,21 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
             aLVL.nDxaLeft1 = SVBT16ToShort(  pSprm );
         }
 
-        // If there is a tab setting with a larger value, then use that.
-        // Ideally we would allow tabs to be used in numbering fields and set
-        // this on the containing paragraph which would make it actually work
-        // most of the time.
+        // --> OD 2008-06-04 #i86652# - read tab setting
         if(0 != (pSprm = GrpprlHasSprm(0xC615,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) )
         {
-            bool bDone=false;
+            bool bDone = false;
             if (*(pSprm-1) == 5)
             {
                 if (*pSprm++ == 0) //nDel
                 {
                     if (*pSprm++ == 1) //nIns
                     {
-                        short nTabPos = SVBT16ToShort(pSprm);
+                        nTabPos = SVBT16ToShort(pSprm);
                         pSprm+=2;
                         if (*pSprm == 6) //type
                         {
-                            USHORT nDesired = aLVL.nDxaLeft + aLVL.nDxaLeft1;
-
-                            bool bDoAdjust = false;
-                            if (nDesired < aLVL.nDxaLeft)
-                            {
-                                if (nDesired < nTabPos &&
-                                    nTabPos < aLVL.nDxaLeft)
-                                    bDoAdjust = true;
-                            }
-                            else
-                            {
-                                if (aLVL.nDxaLeft < nTabPos &&
-                                    nTabPos < nDesired)
-                                    bDoAdjust = true;
-                            }
-
-                            if (bDoAdjust)
-                            {
-                                aLVL.nDxaLeft =
-                                    (0 < nTabPos) ? (sal_uInt16)nTabPos
-                                    : (sal_uInt16)(-nTabPos);
-
-                                aLVL.nDxaLeft1 = nDesired - aLVL.nDxaLeft;
-                            }
-
-                            bDone=true;
+                            bDone = true;
                         }
                     }
                 }
@@ -522,7 +491,44 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
             ASSERT(bDone, "tab setting in numbering is "
                 "of unexpected configuration");
         }
+        if ( rNumFmt.GetPositionAndSpaceMode() ==
+                                  SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+        {
+            // If there is a tab setting with a larger value, then use that.
+            // Ideally we would allow tabs to be used in numbering fields and set
+            // this on the containing paragraph which would make it actually work
+            // most of the time.
+            if ( nTabPos != 0 )
+            {
+                const USHORT nDesired = aLVL.nDxaLeft + aLVL.nDxaLeft1;
 
+                bool bDoAdjust = false;
+                if ( nDesired < aLVL.nDxaLeft )
+                {
+                    if ( nDesired < nTabPos && nTabPos < aLVL.nDxaLeft )
+                    {
+                        bDoAdjust = true;
+                    }
+                }
+                else
+                {
+                    if ( aLVL.nDxaLeft < nTabPos && nTabPos < nDesired )
+                    {
+                        bDoAdjust = true;
+                    }
+                }
+
+                if (bDoAdjust)
+                {
+                    aLVL.nDxaLeft = (0 < nTabPos)
+                                    ? (sal_uInt16)nTabPos
+                                    : (sal_uInt16)(-nTabPos);
+
+                    aLVL.nDxaLeft1 = nDesired - aLVL.nDxaLeft;
+                }
+            }
+        }
+        // <--
     }
     //
     // 3. ggfs. CHPx einlesen und
@@ -759,16 +765,47 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         rNumFmt.SetIncludeUpperLevels( nUpperLevel );
     }
 
-    if (eAdj == SVX_ADJUST_RIGHT)
+    // --> OD 2008-06-04 #i89181#
+    if ( rNumFmt.GetPositionAndSpaceMode() ==
+                              SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
-        rNumFmt.SetAbsLSpace(aLVL.nDxaLeft);
-        rNumFmt.SetFirstLineOffset(-aLVL.nDxaLeft);
-        rNumFmt.SetCharTextDistance(-aLVL.nDxaLeft1);
+        if (eAdj == SVX_ADJUST_RIGHT)
+        {
+            rNumFmt.SetAbsLSpace(aLVL.nDxaLeft);
+            rNumFmt.SetFirstLineOffset(-aLVL.nDxaLeft);
+            rNumFmt.SetCharTextDistance(-aLVL.nDxaLeft1);
+        }
+        else
+        {
+            rNumFmt.SetAbsLSpace( aLVL.nDxaLeft );
+            rNumFmt.SetFirstLineOffset(aLVL.nDxaLeft1);
+        }
     }
     else
     {
-        rNumFmt.SetAbsLSpace( aLVL.nDxaLeft );
-        rNumFmt.SetFirstLineOffset(aLVL.nDxaLeft1);
+        rNumFmt.SetIndentAt( aLVL.nDxaLeft );
+        rNumFmt.SetFirstLineIndent(aLVL.nDxaLeft1);
+        rNumFmt.SetListtabPos( nTabPos );
+        SvxNumberFormat::SvxNumLabelFollowedBy eNumLabelFollowedBy = SvxNumberFormat::LISTTAB;
+        switch ( ixchFollow )
+        {
+            case 0:
+            {
+                eNumLabelFollowedBy = SvxNumberFormat::LISTTAB;
+            }
+            break;
+            case 1:
+            {
+                eNumLabelFollowedBy = SvxNumberFormat::SPACE;
+            }
+            break;
+            case 2:
+            {
+                eNumLabelFollowedBy = SvxNumberFormat::NOTHING;
+            }
+            break;
+        }
+        rNumFmt.SetLabelFollowedBy( eNumLabelFollowedBy );
     }
 
     return true;
@@ -886,7 +923,12 @@ SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
     // wird erstmal zur Bildung des Style Namens genommen
     String sPrefix(CREATE_CONST_ASC("WW8Num"));
     sPrefix += String::CreateFromInt32(nUniqueList++);
-    sal_uInt16 nRul = rDoc.MakeNumRule(rDoc.GetUniqueNumRuleName(&sPrefix));
+    // --> OD 2008-06-04 #i86652#
+//    sal_uInt16 nRul = rDoc.MakeNumRule(rDoc.GetUniqueNumRuleName(&sPrefix));
+    sal_uInt16 nRul =
+            rDoc.MakeNumRule( rDoc.GetUniqueNumRuleName(&sPrefix), 0, FALSE,
+                              SvxNumberFormat::LABEL_ALIGNMENT );
+    // <--
     SwNumRule* pMyNumRule = rDoc.GetNumRuleTbl()[nRul];
     pMyNumRule->SetAutoRule(false);
     pMyNumRule->SetContinusNum(bSimple);
@@ -1484,26 +1526,36 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
 
 void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
 {
-    long nAbsLSpace = rFmt.GetAbsLSpace();
-    long nListFirstLineIndent = GetListFirstLineIndent(rFmt);
-    SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.pFmt, RES_LR_SPACE));
-    aLR.SetTxtLeft(nAbsLSpace);
-    aLR.SetTxtFirstLineOfst(writer_cast<short>(nListFirstLineIndent));
-    rStyle.pFmt->SetFmtAttr(aLR);
-    rStyle.bListReleventIndentSet = true;
+    // --> OD 2008-06-03 #i86652#
+    if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+    {
+        const long nAbsLSpace = rFmt.GetAbsLSpace();
+        const long nListFirstLineIndent = GetListFirstLineIndent(rFmt);
+        SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.pFmt, RES_LR_SPACE));
+        aLR.SetTxtLeft(nAbsLSpace);
+        aLR.SetTxtFirstLineOfst(writer_cast<short>(nListFirstLineIndent));
+        rStyle.pFmt->SetFmtAttr(aLR);
+        rStyle.bListReleventIndentSet = true;
+    }
+    // <--
 }
 
 void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
 {
-    SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.pFmt, RES_LR_SPACE));
-    if (rStyle.bListReleventIndentSet)
-        SyncIndentWithList(aLR, rFmt);
-    else
+    // --> OD 2008-06-03 #i86652#
+    if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+    // <--
     {
-        aLR.SetTxtLeft(0);
-        aLR.SetTxtFirstLineOfst(0);
+        SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.pFmt, RES_LR_SPACE));
+        if (rStyle.bListReleventIndentSet)
+            SyncIndentWithList(aLR, rFmt);
+        else
+        {
+            aLR.SetTxtLeft(0);
+            aLR.SetTxtFirstLineOfst(0);
+        }
+        rStyle.pFmt->SetFmtAttr(aLR);
     }
-    rStyle.pFmt->SetFmtAttr(aLR);
 }
 
 void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
