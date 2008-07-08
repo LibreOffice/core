@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ednumber.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -303,7 +303,10 @@ BOOL SwEditShell::IsFirstOfNumRule(const SwPaM & rPaM) const
 // <- #i23726#
 
 // -> #i23725#
-void SwEditShell::NumIndent(short nIndent, int nLevel, BOOL bRelative)
+// --> OD 2008-06-09 #i90078#
+// Remove unused default parameter <nLevel> and <bRelative>.
+// Adjust method name and parameter name
+void SwEditShell::ChangeIndentOfAllListLevels( short nDiff )
 {
     StartAllAction();
 
@@ -312,9 +315,8 @@ void SwEditShell::NumIndent(short nIndent, int nLevel, BOOL bRelative)
     if (pCurNumRule)
     {
         SwNumRule aRule(*pCurNumRule);
-        // --> OD 2005-02-18 #i42921# - correction:
-        // consider change of synopsis: 3rd parameter has to be -1
-        aRule.Indent(nIndent, nLevel, -1, bRelative);
+        // --> OD 2008-06-09 #i90078#
+        aRule.ChangeIndent( nDiff );
         // <--
 
         // --> OD 2008-03-17 #refactorlists#
@@ -326,7 +328,10 @@ void SwEditShell::NumIndent(short nIndent, int nLevel, BOOL bRelative)
     EndAllAction();
 }
 
-void SwEditShell::NumIndent(short nIndent, const SwPosition & rPos)
+// --> OD 2008-06-09 #i90078#
+// Adjust method name
+void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
+// <--
 {
     StartAllAction();
 
@@ -337,14 +342,24 @@ void SwEditShell::NumIndent(short nIndent, const SwPosition & rPos)
         SwPaM aPaM(rPos);
         SwTxtNode * pTxtNode = aPaM.GetNode()->GetTxtNode();
 
-        int nLevel = -1;
-        int nReferenceLevel = pTxtNode->GetActualListLevel();
-
-        if (! IsFirstOfNumRule(aPaM))
-            nLevel = nReferenceLevel;
+        // --> OD 2008-06-09 #i90078#
+//        int nLevel = -1;
+//        int nReferenceLevel = pTxtNode->GetActualListLevel();
+//        if (! IsFirstOfNumRule(aPaM))
+//            nLevel = nReferenceLevel;
 
         SwNumRule aRule(*pCurNumRule);
-        aRule.Indent(nIndent, nLevel, nReferenceLevel, FALSE);
+//        aRule.ChangeIndent(nIndent, nLevel, nReferenceLevel, FALSE);
+        if ( IsFirstOfNumRule() )
+        {
+            aRule.SetIndentOfFirstListLevelAndChangeOthers( nIndent );
+        }
+        else if ( pTxtNode->GetActualListLevel() >= 0  )
+        {
+            aRule.SetIndent( nIndent,
+                             static_cast<USHORT>(pTxtNode->GetActualListLevel()) );
+        }
+        // <--
 
         // --> OD 2005-02-18 #i42921# - 3rd parameter = false in order to
         // suppress setting of num rule at <aPaM>.
