@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xlformula.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -202,7 +202,7 @@ static const XclFunctionInfo saFuncTable_3[] =
     { ocRKP,                51,     1,  4,  A, { R, R, V, V }, 0, 0 },    // BIFF2: 1-2, BIFF3: 1-4
     { ocGrowth,             52,     1,  4,  A, { R, R, R, V }, 0, 0 },    // BIFF2: 1-3, BIFF3: 1-4
     { ocTrunc,              197,    1,  2,  V, { V }, 0, 0 },             // BIFF2: 1,   BIFF3: 1-2
-    { ocAddress,            219,    2,  5,  V, { V, V, V, E, V }, 0, 0 },
+    { ocAddress,            219,    2,  5,  V, { V, V, V, V, V }, 0, 0 },
     { ocGetDiffDate360,     220,    2,  2,  V, { V, V, C, I }, 0, 0 },
     { ocGetActDate,         221,    0,  0,  V, {}, EXC_FUNCFLAG_VOLATILE, 0 },
     { ocVBD,                222,    5,  7,  V, { V }, 0, 0 },
