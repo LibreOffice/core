@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: exctools.cxx,v $
- * $Revision: 1.61 $
+ * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -391,7 +391,6 @@ void ExcScenario::Apply( const XclImpRoot& rRoot, const BOOL bLast )
     ScDocument&         r = rRoot.GetDoc();
     ExcScenarioCell*    p = EXCSCFIRST();
     String              aSzenName( *pName );
-    ScfTools::ConvertToScSheetName( aSzenName );
     UINT16              nNewTab = nTab + 1;
 
     if( !r.InsertTab( nNewTab, aSzenName ) )
