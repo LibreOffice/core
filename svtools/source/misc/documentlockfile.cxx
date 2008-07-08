@@ -8,7 +8,7 @@
  *
  * $RCSfile: documentlockfile.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -139,6 +139,11 @@ sal_Bool DocumentLockFile::CreateOwnLockFile()
         uno::Any aCmdArg;
         aCmdArg <<= aInsertArg;
         aTargetContent.executeCommand( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ), aCmdArg );
+
+        // try to let the file be hidden if possible
+        try {
+            aTargetContent.setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsHidden" ) ), uno::makeAny( sal_True ) );
+        } catch( uno::Exception& ) {}
     }
     catch( ucb::NameClashException& )
     {
@@ -307,6 +312,7 @@ uno::Reference< io::XInputStream > DocumentLockFile::OpenStream()
             xFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess") ),
             uno::UNO_QUERY_THROW );
 
+    // the file can be opened readonly, no locking will be done
     return xSimpleFileAccess->openFileRead( m_aURL );
 }
 
