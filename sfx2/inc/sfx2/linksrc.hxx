@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: linksrc.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -127,6 +127,9 @@ public:
 
     StreamToLoadFrom getStreamToLoadFrom();
     void setStreamToLoadFrom(const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream,sal_Bool bIsReadOnly );
+    // --> OD 2008-06-18 #i88291#
+    void clearStreamToLoadFrom();
+    // <--
 };
 
 SV_DECL_IMPL_REF(SvLinkSource);

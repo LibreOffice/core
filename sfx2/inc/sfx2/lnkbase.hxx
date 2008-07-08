@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lnkbase.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -173,6 +173,9 @@ public:
                         sal_Bool bIsReadOnly )
                             { m_xInputStreamToLoadFrom = xInputStream;
                               m_bIsReadOnly = bIsReadOnly; }
+    // --> OD 2008-06-18 #i88291#
+    void            clearStreamToLoadFrom();
+    // <--
 
     inline BOOL         WasLastEditOK() const       { return bWasLastEditOK; }
     FileDialogHelper*   GetFileDialog( sal_uInt32 nFlags, const String& rFactory ) const;
