@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: autofmt.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1479,7 +1479,9 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
     // falls die Numerierung gesetzt werden, die akt. besorgen
     // --> OD 2008-02-11 #newlistlevelattrs#
     SwNumRule aRule( pDoc->GetUniqueNumRuleName(),
-                     SvxNumberFormat::LABEL_ALIGNMENT );
+                     // --> OD 2008-06-06 #i89178#
+                     numfunc::GetDefaultPositionAndSpaceMode() );
+                     // <--
     // <--
     const SwNumRule* pCur = 0;
     if( aFlags.bSetNumRule && 0 != (pCur = pAktTxtNd->GetNumRule()) )
@@ -1507,7 +1509,7 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                 {
                     int nBulletPos = pFndBulletChr - pBulletChar;
                     sal_Unicode cBullChar;
-                    const Font* pBullFnt;
+                    const Font* pBullFnt( 0 );
                     if( nBulletPos < cnPosEnDash )
                     {
                         cBullChar = aFlags.cBullet;
@@ -1518,8 +1520,12 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                         cBullChar = nBulletPos < cnPosEmDash
                                         ? cStarSymbolEnDash
                                         : cStarSymbolEmDash;
-                        // --> OD 2006-06-28 #b6440955#
-                        pBullFnt = &numfunc::GetDefBulletFont();
+                        // --> OD 2008-06-03 #i63395#
+                        // Only apply user defined default bullet font
+                        if ( numfunc::IsDefBulletFontUserDefined() )
+                        {
+                            pBullFnt = &numfunc::GetDefBulletFont();
+                        }
                         // <--
                     }
 
