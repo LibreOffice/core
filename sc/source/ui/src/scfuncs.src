@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scfuncs.src,v $
- * $Revision: 1.94 $
+ * $Revision: 1.95 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -7071,7 +7071,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             ID_FUNCTION_GRP_TABLE;
             U2S( HID_FUNC_ADRESSE );
             5;  0;  0;  1;  1;  1;
-            1;  3;  // A1/R1C1 not supported yet.
+            0;
         };
         String 2 // Name of Parameter 1
         {
@@ -7473,7 +7473,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             ID_FUNCTION_GRP_TABLE;
             U2S( HID_FUNC_INDIREKT );
             2;  0;  1;
-            1;  1;  // A1/R1C1 not supported yet.
+            0;
         };
         String 2 // Name of Parameter 1
         {
