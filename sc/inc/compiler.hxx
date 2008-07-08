@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: compiler.hxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -227,6 +227,22 @@ public:
                     parseAnyToken( const String& rFormula,
                                    xub_StrLen nSrcPos,
                                    const CharClass* pCharClass) const = 0;
+
+        enum SpecialSymbolType
+        {
+            /**
+             * Character between sheet name and address.  In OOO A1 this is
+             * '.', while XL A1 and XL R1C1 this is '!'.
+             */
+            SHEET_SEPARATOR,
+
+            /**
+             * In OOO A1, a sheet name may be prefixed with '$' to indicate an
+             * absolute sheet position.
+             */
+            ABS_SHEET_PREFIX
+        };
+        virtual sal_Unicode getSpecialSymbol( SpecialSymbolType eSymType ) const = 0;
     };
     friend struct Convention;
 
