@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoframe.cxx,v $
- * $Revision: 1.122 $
+ * $Revision: 1.123 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2282,7 +2282,8 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
 
                     // TODO/LATER: Is it the only possible aspect here?
                     sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-                    pFmt2 = pDoc->Insert(aPam, ::svt::EmbeddedObjectRef( xIPObj, nAspect ), &aFrmSet, NULL, NULL );
+                    ::svt::EmbeddedObjectRef xObjRef( xIPObj, nAspect );
+                    pFmt2 = pDoc->Insert(aPam, xObjRef, &aFrmSet, NULL, NULL );
                     ASSERT( pFmt2, "Doc->Insert(notxt) failed." );
 
                     pDoc->EndUndo(UNDO_INSERT, NULL);
@@ -3076,6 +3077,10 @@ uno::Reference< lang::XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(voi
         uno::Reference < embed::XEmbeddedObject > xIP = pOleNode->GetOLEObj().GetOleRef();
         if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )
         {
+            // TODO/LATER: the listener registered after client creation should be able to handle scaling, after that the client is not necessary here
+            if ( pDoc->GetDocShell() )
+                pDoc->GetDocShell()->GetIPClient( svt::EmbeddedObjectRef( xIP, embed::Aspects::MSOLE_CONTENT ) );
+
             xRet = uno::Reference < lang::XComponent >( xIP->getComponent(), uno::UNO_QUERY );
             uno::Reference< util::XModifyBroadcaster >  xBrdcst( xRet, uno::UNO_QUERY);
             uno::Reference< frame::XModel > xModel( xRet, uno::UNO_QUERY);
@@ -3119,6 +3124,10 @@ uno::Reference< embed::XEmbeddedObject > SAL_CALL SwXTextEmbeddedObject::getExte
         xResult = pOleNode->GetOLEObj().GetOleRef();
         if ( svt::EmbeddedObjectRef::TryRunningState( xResult ) )
         {
+            // TODO/LATER: the listener registered after client creation should be able to handle scaling, after that the client is not necessary here
+            if ( pDoc->GetDocShell() )
+                pDoc->GetDocShell()->GetIPClient( svt::EmbeddedObjectRef( xResult, embed::Aspects::MSOLE_CONTENT ) );
+
             uno::Reference < lang::XComponent > xComp( xResult->getComponent(), uno::UNO_QUERY );
             uno::Reference< util::XModifyBroadcaster >  xBrdcst( xComp, uno::UNO_QUERY);
             uno::Reference< frame::XModel > xModel( xComp, uno::UNO_QUERY);
