@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: number.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,6 +62,9 @@
 // --> OD 2008-02-19 #refactorlists#
 #include <list.hxx>
 #include <algorithm>
+// <--
+// --> OD 2008-06-06 #i89178#
+#include <svtools/saveopt.hxx>
 // <--
 
 using namespace ::com::sun::star;
@@ -993,70 +996,150 @@ void SwNumRule::SetInvalidRule(BOOL bFlag)
     bInvalidRuleFlag = bFlag;
 }
 
+// --> OD 2008-06-16 #i90078#
 // #i23725#, #i23726#
-void SwNumRule::Indent(short nAmount, int nLevel, int nReferenceLevel,
-                       BOOL bRelative, BOOL bFirstLine, BOOL bCheckGtZero)
+//void SwNumRule::Indent(short nAmount, int nLevel, int nReferenceLevel,
+//                       BOOL bRelative, BOOL bFirstLine, BOOL bCheckGtZero)
+//{
+//    int nStartLevel = 0;
+//    int nEndLevel = MAXLEVEL - 1;
+//    BOOL bGotInvalid = FALSE;
+
+//    if (nLevel >= 0)
+//        nStartLevel = nEndLevel = nLevel;
+
+//    int i;
+//    short nRealAmount =  nAmount;
+
+//    if (! bRelative)
+//    {
+//        if (bFirstLine)
+//        {
+//            if (nReferenceLevel >= 0)
+//                nAmount = nAmount - Get(static_cast<USHORT>(nReferenceLevel)).GetFirstLineOffset();
+//            else
+//                nAmount = nAmount - Get(static_cast<USHORT>(nStartLevel)).GetFirstLineOffset();
+//        }
+
+//        BOOL bFirst = TRUE;
+
+//        if (nReferenceLevel >= 0)
+//            nRealAmount = nAmount - Get(static_cast<USHORT>(nReferenceLevel)).GetAbsLSpace();
+//        else
+//            for (i = nStartLevel; i < nEndLevel + 1; i++)
+//            {
+//                short nTmp = nAmount - Get(static_cast<USHORT>(i)).GetAbsLSpace();
+
+//                if (bFirst || nTmp > nRealAmount)
+//                {
+//                    nRealAmount = nTmp;
+//                    bFirst = FALSE;
+//                }
+//            }
+//    }
+
+//    if (nRealAmount < 0)
+//        for (i = nStartLevel; i < nEndLevel + 1; i++)
+//            if (Get(static_cast<USHORT>(i)).GetAbsLSpace() + nRealAmount < 0)
+//                nRealAmount = -Get(static_cast<USHORT>(i)).GetAbsLSpace();
+
+//    for (i = nStartLevel; i < nEndLevel + 1; i++)
+//    {
+//        short nNew = Get(static_cast<USHORT>(i)).GetAbsLSpace() + nRealAmount;
+
+//        if (bCheckGtZero && nNew < 0)
+//            nNew = 0;
+
+//        SwNumFmt aTmpNumFmt(Get(static_cast<USHORT>(i)));
+//        aTmpNumFmt.SetAbsLSpace(nNew);
+
+//        Set(static_cast<USHORT>(i), aTmpNumFmt);
+
+//        bGotInvalid = TRUE;
+//    }
+
+//    if (bGotInvalid)
+//        SetInvalidRule(bGotInvalid);
+//}
+
+// change indent of all list levels by given difference
+void SwNumRule::ChangeIndent( const short nDiff )
 {
-    int nStartLevel = 0;
-    int nEndLevel = MAXLEVEL - 1;
-    BOOL bGotInvalid = FALSE;
-
-    if (nLevel >= 0)
-        nStartLevel = nEndLevel = nLevel;
-
-    int i;
-    short nRealAmount =  nAmount;
-
-    if (! bRelative)
+    for ( USHORT i = 0; i < MAXLEVEL; ++i )
     {
-        if (bFirstLine)
+        SwNumFmt aTmpNumFmt( Get(i) );
+
+        const SvxNumberFormat::SvxNumPositionAndSpaceMode ePosAndSpaceMode(
+                                        aTmpNumFmt.GetPositionAndSpaceMode() );
+        if ( ePosAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
         {
-            if (nReferenceLevel >= 0)
-                nAmount = nAmount - Get(static_cast<USHORT>(nReferenceLevel)).GetFirstLineOffset();
-            else
-                nAmount = nAmount - Get(static_cast<USHORT>(nStartLevel)).GetFirstLineOffset();
+            short nNewIndent = nDiff +
+                               aTmpNumFmt.GetAbsLSpace();
+            if ( nNewIndent < 0 )
+            {
+                nNewIndent = 0;
+            }
+            aTmpNumFmt.SetAbsLSpace( nNewIndent );
+        }
+        else if ( ePosAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
+        {
+            long nNewIndent = nDiff +
+                              aTmpNumFmt.GetIndentAt();
+            aTmpNumFmt.SetIndentAt( nNewIndent );
         }
 
-        BOOL bFirst = TRUE;
-
-        if (nReferenceLevel >= 0)
-            nRealAmount = nAmount - Get(static_cast<USHORT>(nReferenceLevel)).GetAbsLSpace();
-        else
-            for (i = nStartLevel; i < nEndLevel + 1; i++)
-            {
-                short nTmp = nAmount - Get(static_cast<USHORT>(i)).GetAbsLSpace();
-
-                if (bFirst || nTmp > nRealAmount)
-                {
-                    nRealAmount = nTmp;
-                    bFirst = FALSE;
-                }
-            }
+        Set( i, aTmpNumFmt );
     }
 
-    if (nRealAmount < 0)
-        for (i = nStartLevel; i < nEndLevel + 1; i++)
-            if (Get(static_cast<USHORT>(i)).GetAbsLSpace() + nRealAmount < 0)
-                nRealAmount = -Get(static_cast<USHORT>(i)).GetAbsLSpace();
-
-    for (i = nStartLevel; i < nEndLevel + 1; i++)
-    {
-        short nNew = Get(static_cast<USHORT>(i)).GetAbsLSpace() + nRealAmount;
-
-        if (bCheckGtZero && nNew < 0)
-            nNew = 0;
-
-        SwNumFmt aTmpNumFmt(Get(static_cast<USHORT>(i)));
-        aTmpNumFmt.SetAbsLSpace(nNew);
-
-        Set(static_cast<USHORT>(i), aTmpNumFmt);
-
-        bGotInvalid = TRUE;
-    }
-
-    if (bGotInvalid)
-        SetInvalidRule(bGotInvalid);
+    SetInvalidRule( TRUE );
 }
+
+// set indent of certain list level to given value
+void SwNumRule::SetIndent( const short nNewIndent,
+                           const USHORT nListLevel )
+{
+    SwNumFmt aTmpNumFmt( Get(nListLevel) );
+
+    const SvxNumberFormat::SvxNumPositionAndSpaceMode ePosAndSpaceMode(
+                                        aTmpNumFmt.GetPositionAndSpaceMode() );
+    if ( ePosAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+    {
+        aTmpNumFmt.SetAbsLSpace( nNewIndent );
+    }
+    else if ( ePosAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
+    {
+        aTmpNumFmt.SetIndentAt( nNewIndent );
+    }
+
+    SetInvalidRule( TRUE );
+}
+
+// set indent of first list level to given value and change other list level's
+// indents accordingly
+void SwNumRule::SetIndentOfFirstListLevelAndChangeOthers( const short nNewIndent )
+{
+    SwNumFmt aTmpNumFmt( Get(0) );
+
+    short nDiff( 0 );
+    const SvxNumberFormat::SvxNumPositionAndSpaceMode ePosAndSpaceMode(
+                                        aTmpNumFmt.GetPositionAndSpaceMode() );
+    if ( ePosAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+    {
+        nDiff = nNewIndent
+                - aTmpNumFmt.GetFirstLineOffset()
+                - aTmpNumFmt.GetAbsLSpace();
+    }
+    else if ( ePosAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
+    {
+        nDiff = static_cast<short>(nNewIndent
+                                   - aTmpNumFmt.GetIndentAt());
+    }
+    if ( nDiff != 0  )
+    {
+        ChangeIndent( nDiff );
+    }
+}
+// <--
 
 void SwNumRule::Validate()
 {
@@ -1141,6 +1224,12 @@ namespace numfunc
             {
                 return msFontname;
             }
+            // --> OD 2008-06-02 #i63395#
+            inline const bool IsFontnameUserDefined() const
+            {
+                return mbUserDefinedFontname;
+            }
+            // <--
             inline const Font& GetFont() const
             {
                 return *mpFont;
@@ -1201,6 +1290,9 @@ namespace numfunc
 
             // default bullet list configuration data
             String msFontname;
+            // --> OD 2008-06-02 #i63395#
+            bool mbUserDefinedFontname;
+            // <--
             FontWeight meFontWeight;
             FontItalic meFontItalic;
             sal_Unicode mnLevelChars[MAXLEVEL];
@@ -1213,7 +1305,11 @@ namespace numfunc
 
     SwDefBulletConfig::SwDefBulletConfig()
         : ConfigItem( rtl::OUString::createFromAscii("Office.Writer/Numbering/DefaultBulletList") ),
-          msFontname( String::CreateFromAscii("StarSymbol") ),
+          // --> OD 2008-06-02 #i63395#
+          // default bullet font is now OpenSymbol
+          msFontname( String::CreateFromAscii("OpenSymbol") ),
+          mbUserDefinedFontname( false ),
+          // <--
           meFontWeight( WEIGHT_DONTKNOW ),
           meFontItalic( ITALIC_NONE ),
           mpFont( 0 )
@@ -1228,20 +1324,38 @@ namespace numfunc
 
     void SwDefBulletConfig::SetToDefault()
     {
-        msFontname = String::CreateFromAscii("StarSymbol");
+        // --> OD 2008-06-02 #i63395#
+        // default bullet font name is now OpenSymbol
+//        msFontname = String::CreateFromAscii("StarSymbol");
+        msFontname = String::CreateFromAscii("OpenSymbol");
+        mbUserDefinedFontname = false;
+        // <--
         meFontWeight = WEIGHT_DONTKNOW;
         meFontItalic = ITALIC_NONE;
 
-        mnLevelChars[0] = 0x25cf;
-        mnLevelChars[1] = 0x25cb;
-        mnLevelChars[2] = 0x25a0;
-        mnLevelChars[3] = 0x25cf;
-        mnLevelChars[4] = 0x25cb;
-        mnLevelChars[5] = 0x25a0;
-        mnLevelChars[6] = 0x25cf;
-        mnLevelChars[7] = 0x25cb;
-        mnLevelChars[8] = 0x25a0;
-        mnLevelChars[9] = 0x25cf;
+        // --> OD 2008-06-03 #i63395#
+        // new bullet characters
+//        mnLevelChars[0] = 0x25cf;
+//        mnLevelChars[1] = 0x25cb;
+//        mnLevelChars[2] = 0x25a0;
+//        mnLevelChars[3] = 0x25cf;
+//        mnLevelChars[4] = 0x25cb;
+//        mnLevelChars[5] = 0x25a0;
+//        mnLevelChars[6] = 0x25cf;
+//        mnLevelChars[7] = 0x25cb;
+//        mnLevelChars[8] = 0x25a0;
+//        mnLevelChars[9] = 0x25cf;
+        mnLevelChars[0] = 0x2022;
+        mnLevelChars[1] = 0x25e6;
+        mnLevelChars[2] = 0x25aa;
+        mnLevelChars[3] = 0x2022;
+        mnLevelChars[4] = 0x25e6;
+        mnLevelChars[5] = 0x25aa;
+        mnLevelChars[6] = 0x2022;
+        mnLevelChars[7] = 0x25e6;
+        mnLevelChars[8] = 0x25aa;
+        mnLevelChars[9] = 0x2022;
+        // <--
     }
 
     uno::Sequence<rtl::OUString> SwDefBulletConfig::GetPropNames() const
@@ -1286,6 +1400,9 @@ namespace numfunc
                             rtl::OUString aStr;
                             pValues[nProp] >>= aStr;
                             msFontname = aStr;
+                            // --> OD 2008-06-02 #i63395#
+                            mbUserDefinedFontname = true;
+                            // <--
                         }
                         break;
                         case 1:
@@ -1342,6 +1459,13 @@ namespace numfunc
     {
         return SwDefBulletConfig::getInstance()->GetFontname();
     }
+
+    // --> OD 2008-06-02 #i63395#
+    const bool IsDefBulletFontUserDefined()
+    {
+        return SwDefBulletConfig::getInstance()->IsFontnameUserDefined();
+    }
+    // <--
 
     const Font& GetDefBulletFont()
     {
@@ -1483,5 +1607,28 @@ namespace numfunc
     {
         return SwNumberingUIBehaviorConfig::getInstance()->ChangeIndentOnTabAtFirstPosOfFirstListItem();
     }
+
+    // --> OD 2008-06-06 #i89178#
+    const SvxNumberFormat::SvxNumPositionAndSpaceMode GetDefaultPositionAndSpaceMode()
+    {
+        SvxNumberFormat::SvxNumPositionAndSpaceMode ePosAndSpaceMode;
+        SvtSaveOptions aSaveOptions;
+        switch ( aSaveOptions.GetODFDefaultVersion() )
+        {
+            case SvtSaveOptions::ODFVER_010:
+            case SvtSaveOptions::ODFVER_011:
+            {
+                ePosAndSpaceMode = SvxNumberFormat::LABEL_WIDTH_AND_POSITION;
+            }
+            break;
+            default: // ODFVER_UNKNOWN or ODFVER_012
+            {
+                ePosAndSpaceMode = SvxNumberFormat::LABEL_ALIGNMENT;
+            }
+        }
+
+        return ePosAndSpaceMode;
+    }
+    // <--
 }
 // <--
