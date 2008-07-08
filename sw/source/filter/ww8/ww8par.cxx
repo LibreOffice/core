@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par.cxx,v $
- * $Revision: 1.194 $
+ * $Revision: 1.195 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -732,6 +732,13 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                                     DFF_Prop_cropFromRight, 0 );
 
         UINT32 nLineFlags = GetPropertyValue( DFF_Prop_fNoLineDrawDash );
+        // --> OD 2008-06-16 #156765#
+        if ( !IsHardAttribute( DFF_Prop_fLine ) &&
+             pImpRec->eShapeType == mso_sptPictureFrame )
+        {
+            nLineFlags &= ~0x08;
+        }
+        // <--
         pImpRec->eLineStyle = (nLineFlags & 8)
                             ? (MSO_LineStyle)GetPropertyValue(
                                                 DFF_Prop_lineStyle,
@@ -842,6 +849,9 @@ void SwWW8FltControlStack::SetAttr(const SwPosition& rPos, USHORT nAttrId,
 
 long GetListFirstLineIndent(const SwNumFmt &rFmt)
 {
+    ASSERT( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
+            "<GetListFirstLineIndent> - misusage: position-and-space-mode does not equal LABEL_WIDTH_AND_POSITION" );
+
     SvxAdjust eAdj = rFmt.GetNumAdjust();
     long nReverseListIndented;
     if (eAdj == SVX_ADJUST_RIGHT)
@@ -856,12 +866,15 @@ long GetListFirstLineIndent(const SwNumFmt &rFmt)
 long lcl_GetTrueMargin(const SvxLRSpaceItem &rLR, const SwNumFmt &rFmt,
     long &rFirstLinePos)
 {
-    long nBodyIndent = rLR.GetTxtLeft();
-    long nFirstLineDiff = rLR.GetTxtFirstLineOfst();
+    ASSERT( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
+            "<lcl_GetTrueMargin> - misusage: position-and-space-mode does not equal LABEL_WIDTH_AND_POSITION" );
+
+    const long nBodyIndent = rLR.GetTxtLeft();
+    const long nFirstLineDiff = rLR.GetTxtFirstLineOfst();
     rFirstLinePos = nBodyIndent + nFirstLineDiff;
 
-    long nPseudoListBodyIndent = rFmt.GetAbsLSpace();
-    long nReverseListIndented = GetListFirstLineIndent(rFmt);
+    const long nPseudoListBodyIndent = rFmt.GetAbsLSpace();
+    const long nReverseListIndented = GetListFirstLineIndent(rFmt);
     long nExtraListIndent = nPseudoListBodyIndent + nReverseListIndented;
 
     return nExtraListIndent > 0 ? nExtraListIndent : 0;
@@ -932,8 +945,15 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                         if (!pNum)
                             pNum = GetNumFmtFromTxtNode(*pTxtNode);
 
-                        if (pNum)
+                        // --> OD 2008-06-03 #i86652#
+//                        if (pNum)
+                        if ( pNum &&
+                             pNum->GetPositionAndSpaceMode() ==
+                               SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
+                        // <--
+                        {
                             SyncIndentWithList(aNewLR, *pNum);
+                        }
 
                         if (aNewLR == aOldLR)
                             continue;
