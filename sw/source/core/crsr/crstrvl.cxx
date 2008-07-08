@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: crstrvl.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,6 +78,7 @@
 #include <wrong.hxx>
 
 #include <vcl/window.hxx>
+#include <docufld.hxx> // OD 2008-06-19 #i90516#
 
 using namespace ::com::sun::star;
 
@@ -1508,6 +1509,32 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
     }
     return bRet;
 }
+
+// --> OD 2008-06-19 #i90516#
+const SwPostItField* SwCrsrShell::GetPostItFieldAtCursor() const
+{
+    const SwPostItField* pPostItFld = 0;
+
+    if ( !IsTableMode() )
+    {
+        const SwPosition* pCursorPos = _GetCrsr()->GetPoint();
+        const SwTxtNode* pTxtNd = pCursorPos->nNode.GetNode().GetTxtNode();
+        if ( pTxtNd )
+        {
+            SwTxtAttr* pTxtAttr =
+                        pTxtNd->GetTxtAttr( pCursorPos->nContent.GetIndex(),
+                                            RES_TXTATR_FIELD );
+            const SwField* pFld = pTxtAttr ? pTxtAttr->GetFld().GetFld() : 0;
+            if ( pFld && pFld->Which()== RES_POSTITFLD )
+            {
+                pPostItFld = static_cast<const SwPostItField*>(pFld);
+            }
+        }
+    }
+
+    return pPostItFld;
+}
+// <--
 
 // befindet sich der Node in einem geschuetzten Bereich?
 BOOL SwContentAtPos::IsInProtectSect() const
