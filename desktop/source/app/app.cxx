@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: app.cxx,v $
- * $Revision: 1.222 $
+ * $Revision: 1.223 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -293,23 +293,38 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
     return aDiagnosticMessage.makeStringAndClear();
 }
 
-void FatalError(OUString const & aMessage)
+//=============================================================================
+// shows a simple error box with the given message ... but exits from these process !
+//
+// Fatal errors cant be solved by the process ... nor any recovery can help.
+// Mostly the installation was damaged and must be repaired manually .. or by calling
+// setup again.
+//
+// On the other side we must make sure that no further actions will be possible within
+// the current office process ! No pipe requests, no menu/toolbar/shortuct actions
+// are allowed. Otherwise we will force a "crash inside a crash".
+//
+// Thats why we have to use a special native message box here which does not use yield :-)
+//=============================================================================
+void FatalError(const ::rtl::OUString& sMessage)
 {
-    OUString aProductKey = ::utl::Bootstrap::getProductKey();
-
-    if (!aProductKey.getLength())
+    ::rtl::OUString sProductKey = ::utl::Bootstrap::getProductKey();
+    if ( ! sProductKey.getLength())
     {
         ::vos::OStartupInfo aInfo;
-        aInfo.getExecutableFile( aProductKey );
+        aInfo.getExecutableFile( sProductKey );
 
-        sal_uInt32     lastIndex = aProductKey.lastIndexOf('/');
-        if ( lastIndex > 0 )
-            aProductKey = aProductKey.copy( lastIndex+1 );
+        ::sal_uInt32 nLastIndex = sProductKey.lastIndexOf('/');
+        if ( nLastIndex > 0 )
+            sProductKey = sProductKey.copy( nLastIndex+1 );
     }
 
-    ErrorBox aBootstrapFailedBox( NULL, WB_OK, aMessage );
-    aBootstrapFailedBox.SetText( aProductKey );
-    aBootstrapFailedBox.Execute();
+    ::rtl::OUStringBuffer sTitle (128);
+    sTitle.append      (sProductKey     );
+    sTitle.appendAscii (" - Fatal Error");
+
+    Application::ShowNativeErrorBox (sTitle.makeStringAndClear (), sMessage);
+    _exit(ExitHelper::E_FATAL_ERROR);
 }
 
 static bool ShouldSuppressUI(CommandLineArgs* pCmdLine)
