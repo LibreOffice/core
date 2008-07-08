@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh.hxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,10 +40,12 @@
 #include <shellid.hxx>
 
 #include <svtools/lstner.hxx>
+#include <svtools/embedhlp.hxx>
 
 class SwDoc;
 class SfxDocumentInfoDialog;
 class SfxStyleSheetBasePool;
+class SfxInPlaceClient;
 class FontList;
 class SwView;
 class SwWrtShell;
@@ -294,6 +296,8 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
                                 GetController();
+
+    SfxInPlaceClient* GetIPClient( const ::svt::EmbeddedObjectRef& xObjRef );
 };
 
 class Graphic;
