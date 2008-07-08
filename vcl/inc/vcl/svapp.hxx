@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svapp.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -445,6 +445,9 @@ public:
 
     static void                 EnableHeadlessMode( BOOL bEnable = TRUE );
     static BOOL                 IsHeadlessModeEnabled();
+
+    static void                 ShowNativeErrorBox(const String& sTitle  ,
+                                                   const String& sMessage);
 
     // IME Status Window Control:
 
