@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtnum.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -148,7 +148,9 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         {
             // --> OD 2008-02-11 #newlistlevelattrs#
             SwNumRule aRule( GetShell().GetUniqueNumRuleName(),
-                             SvxNumberFormat::LABEL_ALIGNMENT );
+                             // --> OD 2008-06-06 #i89178#
+                             numfunc::GetDefaultPositionAndSpaceMode() );
+                             // <--
             // <--
             SvxNumRule aSvxRule = aRule.MakeSvxNumRule();
             const bool bRightToLeft = GetShell().IsInRightToLeftText( 0 );
@@ -202,7 +204,9 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 SwNumRule aSetRule( pCurRule
                                         ? pCurRule->GetName()
                                         : GetShell().GetUniqueNumRuleName(),
-                                    SvxNumberFormat::LABEL_ALIGNMENT );
+                                    // --> OD 2008-06-06 #i89178#
+                                    numfunc::GetDefaultPositionAndSpaceMode() );
+                                    // <--
                 // <--
                 aSetRule.SetSvxRule( *pSetRule, GetShell().GetDoc());
                 aSetRule.SetAutoRule( TRUE );
@@ -223,7 +227,9 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 SvxNumRule* pSetRule = ((SvxNumBulletItem*)pItem)->GetNumRule();
                 // --> OD 2008-02-11 #newlistlevelattrs#
                 SwNumRule aSetRule( GetShell().GetUniqueNumRuleName(),
-                                    SvxNumberFormat::LABEL_ALIGNMENT );
+                                    // --> OD 2008-06-06 #i89178#
+                                    numfunc::GetDefaultPositionAndSpaceMode() );
+                                    // <--
                 // <--
                 aSetRule.SetSvxRule(*pSetRule, GetShell().GetDoc());
                 aSetRule.SetAutoRule( TRUE );
