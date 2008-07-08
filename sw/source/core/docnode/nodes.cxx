@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nodes.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -545,6 +545,9 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             if( pTmpNd->IsCntntNode() )
                             {
                                 pCNd = (SwCntntNode*)pTmpNd;
+                                if( pTmpNd->IsTxtNode() )
+                                    ((SwTxtNode*)pTmpNd)->RemoveFromList();
+
 //                              if( bNewFrms )
 //                                  pCNd->DelFrms();
 
@@ -563,6 +566,8 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
                             if( bInsOutlineIdx && pCNd )
                                 pOutlineNds->Insert( pCNd );
+                            if( pTmpNd->IsTxtNode() )
+                                ((SwTxtNode*)pTmpNd)->AddToList();
                         }
                     }
                     else
@@ -1283,6 +1288,7 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, ULONG nNodes)
                             pOutlineNds->Remove( nIdxPos );
                             bUpdateOutline = TRUE;
                         }
+                        ((SwTxtNode*)pNd)->InvalidateNumRule();
                     }
                     else if( pNd->IsEndNode() &&
                             pNd->pStartOfSection->IsTableNode() )
