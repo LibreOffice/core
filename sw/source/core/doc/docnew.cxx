@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docnew.cxx,v $
- * $Revision: 1.87 $
+ * $Revision: 1.88 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -319,6 +319,9 @@ SwDoc::SwDoc() :
     mbUnixForceZeroExtLeading               = false;        // hidden
     mbOldPrinterMetrics                     = false;        // hidden
     mbTabRelativeToIndent                   = true;         // hidden
+    // --> OD 2008-06-05 #i89181#
+    mbTabAtLeftIndentForParagraphsInList    = false;        // hidden
+    // <--
 
     //
     // COMPATIBILITY FLAGS END
@@ -356,7 +359,9 @@ SwDoc::SwDoc() :
     // lege (fuer die Filter) eine Default-OutlineNumRule an
     // --> OD 2008-02-11 #newlistlevelattrs#
     pOutlineRule = new SwNumRule( String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ),
-                                  SvxNumberFormat::LABEL_ALIGNMENT,
+                                  // --> OD 2008-06-06 #i89178#
+                                  numfunc::GetDefaultPositionAndSpaceMode(),
+                                  // <--
                                   OUTLINE_RULE );
     // <--
     // #115901#
@@ -794,7 +799,9 @@ void SwDoc::ClearDoc()
     // creation of new outline numbering rule
     // --> OD 2008-02-11 #newlistlevelattrs#
     pOutlineRule = new SwNumRule( String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ),
-                                  SvxNumberFormat::LABEL_ALIGNMENT,
+                                  // --> OD 2008-06-06 #i89178#
+                                  numfunc::GetDefaultPositionAndSpaceMode(),
+                                  // <--
                                   OUTLINE_RULE );
     // <--
     AddNumRule(pOutlineRule);
