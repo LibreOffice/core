@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frmpaint.cxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,6 +77,7 @@
 namespace numfunc
 {
     extern const String& GetDefBulletFontname();
+    extern const bool IsDefBulletFontUserDefined();
 }
 // <--
 
@@ -520,18 +521,10 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
             if( pSh->GetViewOptions()->IsParagraph() && Prt().Height() )
             {
                 if( RTL_TEXTENCODING_SYMBOL == pFnt->GetCharSet( SW_LATIN ) &&
-                    // --> OD 2006-06-27 #b6440955#
-//                    COMPARE_EQUAL != pFnt->GetName( SW_LATIN ).
-//                                        CompareToAscii( sBulletFntName ) )
                     pFnt->GetName( SW_LATIN ) != numfunc::GetDefBulletFontname() )
-                    // <--
                 {
                     pFnt->SetFamily( FAMILY_DONTKNOW, SW_LATIN );
-                    // --> OD 2006-06-27 #b6440955#
-//                    pFnt->SetName( String::CreateFromAscii( sBulletFntName ),
-//                                    SW_LATIN );
                     pFnt->SetName( numfunc::GetDefBulletFontname(), SW_LATIN );
-                    // <--
                     pFnt->SetStyleName( aEmptyStr, SW_LATIN );
                     pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, SW_LATIN );
                 }
