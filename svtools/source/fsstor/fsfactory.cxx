@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fsfactory.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,45 +50,6 @@
 
 
 using namespace ::com::sun::star;
-
-//-------------------------------------------------------------------------
-// Checks whether it is a file URL that represents a folder
-sal_Bool isLocalNotFile_Impl( ::rtl::OUString aURL )
-{
-    sal_Bool bResult = sal_False;
-
-    ::rtl::OUString aSystemPath;
-    ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
-    if ( !pBroker )
-        throw uno::RuntimeException();
-
-    uno::Reference< ucb::XContentProviderManager > xManager =
-            pBroker->getContentProviderManagerInterface();
-    try
-    {
-           aSystemPath = ::ucbhelper::getSystemPathFromFileURL( xManager, aURL );
-    }
-    catch ( uno::Exception& )
-    {
-    }
-
-    if ( aSystemPath.getLength() != 0 )
-    {
-        // it is a local file URL, check that it is not a file
-        try
-        {
-            uno::Reference< ucb::XCommandEnvironment > xDummyEnv;
-            ::ucbhelper::Content aContent( aURL, xDummyEnv );
-            bResult = aContent.isFolder();
-        }
-        catch( uno::Exception& )
-        {
-            bResult = sal_True;
-        }
-    }
-
-    return bResult;
-}
 
 //-------------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString > SAL_CALL FSStorageFactory::impl_staticGetSupportedServiceNames()
