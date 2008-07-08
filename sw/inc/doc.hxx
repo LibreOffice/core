@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: doc.hxx,v $
- * $Revision: 1.153 $
+ * $Revision: 1.154 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -569,6 +569,10 @@ private:
     // SO9
     // #i24363# tab stops relative to indent
     // mbTabRelativeToIndent                    def = TRUE, hidden
+    // #i89181# suppress tab stop at left indent for paragraphs in lists, whose
+    // list level position and space mode equals LABEL_ALIGNMENT and whose list
+    // label is followed by a tab character.
+    // mbTabAtLeftIndentForParagraphsInList     def = FALSE, hidden
 
     bool mbParaSpaceMax                     : 1;
     bool mbParaSpaceMaxAtPages              : 1;
@@ -597,6 +601,7 @@ private:
     bool mbUnixForceZeroExtLeading                  : 1;   // FME 2006-10-09 #i60945#
     bool mbOldPrinterMetrics                        : 1;   // FME 2007-05-14 #147385#
     bool mbTabRelativeToIndent;                            // #i24363# tab stops relative to indent
+    bool mbTabAtLeftIndentForParagraphsInList;             // OD 2008-06-05 #i89181# - see above
 
     // #i78591#
     sal_uInt32  n32DummyCompatabilityOptions1;
