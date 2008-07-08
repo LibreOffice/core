@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ipwin.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+
+#include <vcl/svapp.hxx>
 
 #include <ipwin.hxx>
 #include <hatchwindow.hxx>
@@ -177,19 +179,6 @@ BOOL SvResizeHelper::SelectBegin( Window * pWin, const Point & rPos )
 }
 
 /*************************************************************************
-|*    SvResizeHelper::SelectBegin()
-|*
-|*    Beschreibung
-*************************************************************************/
-void SvResizeHelper::SelectBegin( Window * pWin, short nGrabP )
-{
-    nGrab = nGrabP;
-    // aSelPos = GetInnerRectPixel().TopLeft(); // Start-Position merken
-    aSelPos = GetOuterRectPixel().TopLeft(); // Start-Position merken
-    pWin->CaptureMouse();
-}
-
-/*************************************************************************
 |*    SvResizeHelper::SelectMove()
 |*
 |*    Beschreibung
@@ -311,6 +300,8 @@ Rectangle SvResizeHelper::GetTrackRectPixel( const Point & rTrackPos ) const
                 aTrackRect.Left() += aDiff.X();
                 break;
             case 8:
+                if( Application::GetSettings().GetLayoutRTL() )
+                    aDiff.X() = -aDiff.X(); // workaround for move in RTL mode
                 aTrackRect.SetPos( aTrackRect.TopLeft() + aDiff );
                 break;
 /*
@@ -494,37 +485,6 @@ void SvResizeWindow::SetHatchBorderPixel( const Size & rSize )
 }
 
 /*************************************************************************
-|*    SvResizeWindow::GetHatchBorderPixel()
-|*
-|*    Beschreibung
-*************************************************************************/
-const Size & SvResizeWindow::GetHatchBorderPixel() const
-{
-    return m_aResizer.GetBorderPixel();
-}
-
-/*************************************************************************
-|*    SvResizeWindow::TerminateResizing()
-|*
-|*    Beschreibung
-*************************************************************************/
-void SvResizeWindow::TerminateResizing()
-{
-    m_aResizer.Release( this );
-}
-
-/*************************************************************************
-|*    SvResizeWindow::GetAllBorderPixel()
-|*
-|*    Beschreibung
-*************************************************************************/
-SvBorder SvResizeWindow::GetAllBorderPixel() const
-{
-    return SvBorder( GetHatchBorderPixel() );
-}
-
-
-/*************************************************************************
 |*    SvResizeWindow::SelectMouse()
 |*
 |*    Beschreibung
@@ -586,11 +546,9 @@ void SvResizeWindow::MouseMove( const MouseEvent & rEvt )
         Rectangle aRect( m_aResizer.GetTrackRectPixel( rEvt.GetPosPixel() ) );
         Point aDiff = GetPosPixel();
         aRect.SetPos( aRect.TopLeft() + aDiff );
-        // aRect -= GetAllBorderPixel();
         m_aResizer.ValidateRect( aRect );
 
         m_pWrapper->QueryObjAreaPixel( aRect );
-        // aRect += GetAllBorderPixel();
         aRect.SetPos( aRect.TopLeft() - aDiff );
         Point aPos = m_aResizer.GetTrackPosPixel( aRect );
 
@@ -612,6 +570,7 @@ void SvResizeWindow::MouseButtonUp( const MouseEvent & rEvt )
         aRect.SetPos( aRect.TopLeft() + aDiff );
         // aRect -= GetAllBorderPixel();
         m_aResizer.ValidateRect( aRect );
+
         m_pWrapper->QueryObjAreaPixel( aRect );
 
         Rectangle aOutRect;
