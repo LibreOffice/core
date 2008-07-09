@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nthesimp.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -243,7 +243,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
                     }
                 }
             }
-            DBG_ASSERT( k == numdict, "index mismatch?" );
+            DBG_ASSERT( k == numthes, "index mismatch?" );
         }
         else
         {
