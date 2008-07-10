@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlFormatCondition.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@ namespace rptxml
     class ORptFilter;
     class OXMLFormatCondition : public SvXMLImportContext
     {
+        ORptFilter& m_rImport;
         ::rtl::OUString m_sStyleName;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XFormatCondition >  m_xComponent;
         OXMLFormatCondition(const OXMLFormatCondition&);
