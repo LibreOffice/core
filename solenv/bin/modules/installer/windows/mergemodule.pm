@@ -8,7 +8,7 @@
 #
 # $RCSfile: mergemodule.pm,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -140,8 +140,18 @@ sub merge_mergemodules_into_msi_database
                 # Solution: Export of all tables by using "*" . Some tables must exist (File Component Directory), other
                 # tables do not need to exist (MsiAssembly).
 
-                # $systemcall = $msidb . " -d " . $filename . " -f " . $workdir . " -e File Component MsiAssembly Directory";
-                $systemcall = $msidb . " -d " . $filename . " -f " . $workdir . " -e \*";
+                if ( $^O =~ /cygwin/i ) {
+                    # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+                    my $localworkdir = $workdir;
+                    $localworkdir =~ s/\//\\\\/g;
+                    $systemcall = $msidb . " -d " . $filename . " -f " . $localworkdir . " -e \\\*";
+                }
+                else
+                {
+                    # $systemcall = $msidb . " -d " . $filename . " -f " . $workdir . " -e File Component MsiAssembly Directory";
+                    $systemcall = $msidb . " -d " . $filename . " -f " . $workdir . " -e \*";
+                }
+
                 $returnvalue = system($systemcall);
 
                 $infoline = "Systemcall: $systemcall\n";
@@ -251,7 +261,19 @@ sub merge_mergemodules_into_msi_database
                     if ( ! -f $completeremovedest ) { installer::exiter::exit_program("ERROR: msm file not found: $completeremovedest !", "merge_mergemodules_into_msi_database"); }
 
                     # Unpacking msm file
-                    $systemcall = $msidb . " -d " . $completeremovedest . " -f " . $removeworkdir . " -e \*";
+                    if ( $^O =~ /cygwin/i ) {
+                        # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+                        my $localcompleteremovedest = $completeremovedest;
+                        my $localremoveworkdir = $removeworkdir;
+                        $localcompleteremovedest =~ s/\//\\\\/g;
+                        $localremoveworkdir =~ s/\//\\\\/g;
+                        $systemcall = $msidb . " -d " . $localcompleteremovedest . " -f " . $localremoveworkdir . " -e \\\*";
+                    }
+                    else
+                    {
+                        $systemcall = $msidb . " -d " . $completeremovedest . " -f " . $removeworkdir . " -e \*";
+                    }
+
                     $returnvalue = system($systemcall);
 
                     my $idtfilename = $removeworkdir . $installer::globals::separator . "File.idt";
@@ -259,7 +281,18 @@ sub merge_mergemodules_into_msi_database
                     unlink $completeremovedest;
 
                     # Packing msm file without "File.idt"
-                    $systemcall = $msidb . " -c -d " . $completeremovedest . " -f " . $removeworkdir . " -i \*";
+                    if ( $^O =~ /cygwin/i ) {
+                        # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+                        my $localcompleteremovedest = $completeremovedest;
+                        my $localremoveworkdir = $removeworkdir;
+                        $localcompleteremovedest =~ s/\//\\\\/g;
+                        $localremoveworkdir =~ s/\//\\\\/g;
+                        $systemcall = $msidb . " -c -d " . $localcompleteremovedest . " -f " . $localremoveworkdir . " -i \\\*";
+                    }
+                    else
+                    {
+                        $systemcall = $msidb . " -c -d " . $completeremovedest . " -f " . $removeworkdir . " -i \*";
+                    }
                     $returnvalue = system($systemcall);
 
                     # Using this msm file for merging
@@ -336,7 +369,18 @@ sub merge_mergemodules_into_msi_database
 
             installer::logger::include_timestamp_into_logfile("\nPerformance Info: Before merging database");
 
-            $systemcall = $msidb . " -d " . $msifilename . " -m " . $mergemodulehash->{'mergefilepath'};
+            if ( $^O =~ /cygwin/i ) {
+                # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+                my $localmergemodulepath = $mergemodulehash->{'mergefilepath'};
+                my $localmsifilename = $msifilename;
+                $localmergemodulepath =~ s/\//\\\\/g;
+                $localmsifilename =~ s/\//\\\\/g;
+                $systemcall = $msidb . " -d " . $localmsifilename . " -m " . $localmergemodulepath;
+            }
+            else
+            {
+                $systemcall = $msidb . " -d " . $msifilename . " -m " . $mergemodulehash->{'mergefilepath'};
+            }
             $returnvalue = system($systemcall);
 
             $infoline = "Systemcall: $systemcall\n";
@@ -375,7 +419,18 @@ sub merge_mergemodules_into_msi_database
             if ( $mergemodulehash->{'hasmsiassemblies'} ) { $workingtables = $workingtables . " MsiAssembly"; }
 
             # Table "Feature" has to be exported, but it is not necessary to import it.
-            $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -e " . "Feature " . $workingtables;
+            if ( $^O =~ /cygwin/i ) {
+                # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+                my $localmsifilename = $msifilename;
+                my $localworkdir = $workdir;
+                $localmsifilename =~ s/\//\\\\/g;
+                $localworkdir =~ s/\//\\\\/g;
+                $systemcall = $msidb . " -d " . $localmsifilename . " -f " . $localworkdir . " -e " . "Feature " . $workingtables;
+            }
+            else
+            {
+                $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -e " . "Feature " . $workingtables;
+            }
             $returnvalue = system($systemcall);
 
             $infoline = "Systemcall: $systemcall\n";
@@ -434,10 +489,33 @@ sub merge_mergemodules_into_msi_database
             my $moduleexecutetables = "ModuleInstallExecuteSequence ModuleAdminExecuteSequence ModuleAdvtExecuteSequence"; # new tables
             my $executetables = "InstallExecuteSequence InstallUISequence AdminExecuteSequence AdvtExecuteSequence"; # tables to be merged
 
-            $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -e " . "Feature " . $moduleexecutetables;
+
+            if ( $^O =~ /cygwin/i ) {
+                # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+                my $localmsifilename = $msifilename;
+                my $localworkdir = $workdir;
+                $localmsifilename =~ s/\//\\\\/g;
+                $localworkdir =~ s/\//\\\\/g;
+                $systemcall = $msidb . " -d " . $localmsifilename . " -f " . $localworkdir . " -e " . "Feature " . $moduleexecutetables;
+            }
+            else
+            {
+                $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -e " . "Feature " . $moduleexecutetables;
+            }
             $returnvalue = system($systemcall);
 
-            $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -e " . "Feature " . $executetables;
+            if ( $^O =~ /cygwin/i ) {
+                # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+                my $localmsifilename = $msifilename;
+                my $localworkdir = $workdir;
+                $localmsifilename =~ s/\//\\\\/g;
+                $localworkdir =~ s/\//\\\\/g;
+                $systemcall = $msidb . " -d " . $localmsifilename . " -f " . $localworkdir . " -e " . "Feature " . $executetables;
+            }
+            else
+            {
+                $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -e " . "Feature " . $executetables;
+            }
             $returnvalue = system($systemcall);
 
             # Using 8+3 table names, that are used, when tables are integrated into database. The export of tables
@@ -476,7 +554,18 @@ sub merge_mergemodules_into_msi_database
 
             installer::logger::include_timestamp_into_logfile("\nPerformance Info: Before including tables");
 
-            $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -i " . $workingtables. " " . $executetables;
+            if ( $^O =~ /cygwin/i ) {
+                # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+                my $localmsifilename = $msifilename;
+                my $localworkdir = $workdir;
+                $localmsifilename =~ s/\//\\\\/g;
+                $localworkdir =~ s/\//\\\\/g;
+                $systemcall = $msidb . " -d " . $localmsifilename . " -f " . $localworkdir . " -i " . $workingtables. " " . $executetables;
+            }
+            else
+            {
+                $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -i " . $workingtables. " " . $executetables;
+            }
             $returnvalue = system($systemcall);
 
             $infoline = "Systemcall: $systemcall\n";
