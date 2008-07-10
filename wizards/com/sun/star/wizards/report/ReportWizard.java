@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportWizard.java,v $
- * $Revision: 1.75 $
+ * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -583,7 +583,11 @@ public XComponent[] startReportWizard(XMultiServiceFactory _xMSF, PropertyValue[
             //     CurReportDocument = ReportTextImplementation.create(xMSF, m_oResource  );
             // }
             boolean bUseOld = false;
-            if (_bDebug == true && isReportBuilderInstalled() && !bUseOld)
+            if (!isReportBuilderInstalled())
+            {
+                bUseOld = true;
+            }
+            if (_bDebug == true && !bUseOld)
             {
                 try
                 {
