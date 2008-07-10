@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportDefinition.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -527,6 +527,7 @@ struct OReportDefinitionImpl
     uno::Reference< sdbc::XConnection>                      m_xActiveConnection;
     uno::Reference< frame::XTitle >                         m_xTitleHelper;
     uno::Reference< frame::XUntitledNumbers >               m_xNumberedControllers;
+    uno::Reference< document::XDocumentProperties >         m_xDocumentProperties;
 
     ::boost::shared_ptr< ::comphelper::EmbeddedObjectContainer>
                                                             m_pObjectContainer;
@@ -1409,6 +1410,21 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
             }
         }
     }
+
+    if( !bErr )
+    {
+        if( !WriteThroughComponent(
+            xCom, "meta.xml",
+            "com.sun.star.comp.report.XMLMetaExporter",
+            aDelegatorArguments, aProps, sal_True,_xStorageToSaveTo ) )
+        {
+            if( !bWarn )
+            {
+                bWarn = sal_True;
+                sWarnFile = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("meta.xml"));
+            }
+        }
+    } // if( !bErr )
 
     if( !bErr )
     {
@@ -2583,7 +2599,6 @@ uno::Reference< frame::XUntitledNumbers > OReportDefinition::impl_getUntitledHel
     {
         uno::Reference< frame::XModel > xThis   (static_cast< frame::XModel* >(this), uno::UNO_QUERY_THROW);
         ::comphelper::NumberedCollection*         pHelper = new ::comphelper::NumberedCollection();
-
         m_pImpl->m_xNumberedControllers = uno::Reference< frame::XUntitledNumbers >(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
 
         pHelper->setOwner          (xThis);
@@ -2700,7 +2715,20 @@ void SAL_CALL OReportDefinition::releaseNumberForComponent( const uno::Reference
     return impl_getUntitledHelper_throw()->getUntitledPrefix ();
 }
 // -----------------------------------------------------------------------------
-
+uno::Reference< document::XDocumentProperties > SAL_CALL OReportDefinition::getDocumentProperties(  ) throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+    if ( !m_pImpl->m_xDocumentProperties.is() )
+    {
+        uno::Reference< lang::XInitialization > xDocProps(
+            m_aProps->m_xContext->getServiceManager()->createInstanceWithContext(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.DocumentProperties")) ,m_aProps->m_xContext),
+                uno::UNO_QUERY_THROW);
+        m_pImpl->m_xDocumentProperties.set(xDocProps, uno::UNO_QUERY_THROW);
+    }
+    return m_pImpl->m_xDocumentProperties;
+}
 // =============================================================================
 }// namespace reportdesign
 // =============================================================================
