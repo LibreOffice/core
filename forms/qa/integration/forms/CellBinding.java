@@ -12,14 +12,13 @@ import com.sun.star.lang.*;
 import com.sun.star.beans.*;
 import com.sun.star.form.binding.*;
 import com.sun.star.accessibility.*;
+import com.sun.star.awt.XListBox;
 import com.sun.star.table.CellAddress;
 import com.sun.star.table.XCell;
 import com.sun.star.sheet.XCellRangeData;
 import com.sun.star.sheet.XCellRangeFormula;
+import com.sun.star.table.CellRangeAddress;
 import com.sun.star.text.XTextRange;
-
-import integration.forms.SpreadsheetDocument;
-import integration.forms.dbfTools;
 
 /**
  *
@@ -47,7 +46,8 @@ public class CellBinding extends complexlib.ComplexTestCase
             "checkStringRadioBinding",
             "checkBooleanCheckBoxBinding",
             "checkStringCheckBoxBinding",
-            "checkListBoxBinding"
+            "checkListBoxBinding",
+            "checkListBoxIndexBinding"
         };
     }
 
@@ -87,7 +87,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     public void after() throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        closeDocument();
+        //closeDocument();
     }
 
     /* ------------------------------------------------------------------ */
@@ -100,7 +100,7 @@ public class CellBinding extends complexlib.ComplexTestCase
         final String yetAnotherText = new String( "yet another text" );
 
         // cretae a normal text control
-        XPropertySet controlModel = m_formLayer.createControlAndShape( "DatabaseTextField", 30, 10, 30, 6 );
+        XPropertySet controlModel = m_formLayer.createControlAndShape( "DatabaseTextField", 30, 9, 30, 6 );
 
         // bind it to cell A1
         bindToCell( controlModel, col, row );
@@ -255,9 +255,87 @@ public class CellBinding extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
+    /** verifies that a list box, which is bound via an ordinary value binding,
+     *  works as expected
+     */
     public void checkListBoxBinding( ) throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        // TODO
+        XPropertySet listBox = m_formLayer.createControlAndShape( "DatabaseListBox", 30, 80, 40, 6 );
+        listBox.setPropertyValue( "Dropdown", new Boolean( true ) );
+        listBox.setPropertyValue( "StringItemList", new String[] { "Apples", "Oranges", "Peaches" } );
+
+        short col = (short)0;
+        short row = (short)18;
+
+        // ...............................................................
+        // add a list entry source which fills the list boxes list from cells in the
+        // spreadsheet
+        short sourceCol = (short)4;
+        setCellText( sourceCol, (short)( row - 1 ), "Apples" );
+        setCellText( sourceCol, (short)( row + 0 ), "Oranges" );
+        setCellText( sourceCol, (short)( row + 1 ), "Peaches" );
+
+        //setListSource( listBox, sourceCol, row, (short)( row + 2 ) );
+            // TODO: this is currently prone to deadlocks
+
+        // ...............................................................
+        // bind to a cell
+        bindToCell( listBox, col, row );
+
+        // ...............................................................
+        // do the tests
+        listBox.setPropertyValue( "SelectedItems", new short[] { (short)0 } );
+        verifyStringCellContent( col, row, "Apples", "programmatically selecting a list entry is not propagated to the cell." );
+
+        simulateUserListBoxSelection( listBox, "Oranges" );
+        verifyStringCellContent( col, row, "Oranges", "UI-selecting a list entry is not propagated to the cell." );
+
+        setCellText( col, row, "Peaches" );
+        short[] selectedItems = (short[])listBox.getPropertyValue( "SelectedItems" );
+        assureEquals( "changes in the cell bound to a list box are not propagated to the list box selection",
+            2, selectedItems[0] );
+    }
+
+    /* ------------------------------------------------------------------ */
+    /** verifies that a list box, which is bound via a value binding exchanging the <b>index</b>
+     *  of the selected entry, works as expected
+     */
+    public void checkListBoxIndexBinding() throws com.sun.star.uno.Exception, java.lang.Exception
+    {
+        XPropertySet listBox = m_formLayer.createControlAndShape( "DatabaseListBox", 30, 94, 40, 6 );
+        listBox.setPropertyValue( "Dropdown", new Boolean( true ) );
+        listBox.setPropertyValue( "StringItemList", new String[] { "Pears", "Bananas", "Strawberries" } );
+
+        short col = (short)0;
+        short row = (short)21;
+
+        // ...............................................................
+        // add a list entry source which fills the list boxes list from cells in the
+        // spreadsheet
+        short sourceCol = (short)4;
+        setCellText( sourceCol, (short)( row - 1 ), "Pears" );
+        setCellText( sourceCol, (short)( row + 0 ), "Bananas" );
+        setCellText( sourceCol, (short)( row + 1 ), "Strawberries" );
+
+        //setListSource( listBox, sourceCol, row, (short)( row + 2 ) );
+            // TODO: this is currently prone to deadlocks
+
+        // ...............................................................
+        // bind to a cell
+        bindToCell( listBox, col, row, "com.sun.star.table.ListPositionCellBinding" );
+
+        // ...............................................................
+        // do the tests
+        listBox.setPropertyValue( "SelectedItems", new short[] { (short)0 } );
+        verifyNumericCellContent( col, row, 1, "programmatically selecting a list entry is not propagated (as index) to the cell." );
+
+        simulateUserListBoxSelection( listBox, "Bananas" );
+        verifyNumericCellContent( col, row, 2, "UI-selecting a list entry is not propagated (as index) to the cell." );
+
+        setCellValue( col, row, 3 );
+        short[] selectedItems = (short[])listBox.getPropertyValue( "SelectedItems" );
+        assureEquals( "changes in the cell bound to a list box via list index are not propagated to the list box selection",
+            2, selectedItems[0] );
     }
 
     /* ------------------------------------------------------------------ */
@@ -374,9 +452,10 @@ public class CellBinding extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
-    /** binds the given control model to the given cell in the first sheet
-    */
-    private void bindToCell( XPropertySet controlModel, short column, short row ) throws com.sun.star.uno.Exception
+    /** binds the given control model to the given cell in the first sheet,
+     *  using the given service name for the binding
+     */
+    private void bindToCell( XPropertySet controlModel, short column, short row, String _bindingServiceName ) throws com.sun.star.uno.Exception
     {
         XBindableValue bindableModel = (XBindableValue)UnoRuntime.queryInterface( XBindableValue.class,
             controlModel
@@ -392,10 +471,34 @@ public class CellBinding extends complexlib.ComplexTestCase
         parameters[0].Value = address;
 
         XValueBinding cellBinding = (XValueBinding)UnoRuntime.queryInterface( XValueBinding.class,
-            m_document.createInstanceWithArguments( "com.sun.star.table.CellValueBinding", parameters )
+            m_document.createInstanceWithArguments( _bindingServiceName, parameters )
         );
 
         bindableModel.setValueBinding( cellBinding );
+    }
+
+    /* ------------------------------------------------------------------ */
+    /** binds the given control model to the given cell in the first sheet
+    */
+    private void bindToCell( XPropertySet _controlModel, short _column, short _row ) throws com.sun.star.uno.Exception
+    {
+        bindToCell( _controlModel, _column, _row, "com.sun.star.table.CellValueBinding" );
+    }
+
+    /* ------------------------------------------------------------------ */
+    /** sets the given cell range as list entry source for the given control
+    */
+    private void setListSource( XPropertySet _listSink, short _sourceCol, short _rowStart, short _rowEnd ) throws com.sun.star.uno.Exception
+    {
+        CellRangeAddress listSourceAddress = new CellRangeAddress( (short)0, (int)_sourceCol, (int)_rowStart, (int)_sourceCol, (int)_rowEnd );
+        NamedValue addressParameter = new NamedValue( "CellRange", listSourceAddress );
+
+        XListEntrySource listSource = (XListEntrySource)UnoRuntime.queryInterface( XListEntrySource.class,
+            m_document.createInstanceWithArguments( "com.sun.star.table.CellRangeListSource", new NamedValue[]{ addressParameter } )
+        );
+        XListEntrySink listSink = (XListEntrySink)UnoRuntime.queryInterface( XListEntrySink.class,
+            _listSink );
+        listSink.setListEntrySource( listSource );
     }
 
     /* ------------------------------------------------------------------ */
@@ -409,7 +512,7 @@ public class CellBinding extends complexlib.ComplexTestCase
         XAccessibleValue xValue = (XAccessibleValue)UnoRuntime.queryInterface(
             XAccessibleValue.class, accessible.getAccessibleContext() );
 
-    Integer newValue = new Integer( 1 );
+        Integer newValue = new Integer( 1 );
         xValue.setCurrentValue( newValue );
     }
 
@@ -425,6 +528,16 @@ public class CellBinding extends complexlib.ComplexTestCase
             XAccessibleValue.class, accessible.getAccessibleContext() );
 
         xValue.setCurrentValue( new Short( state ) );
+    }
+
+    /* ------------------------------------------------------------------ */
+    /** simulates a user selecting an entry in a list box
+    */
+    private void simulateUserListBoxSelection( XPropertySet _listBox, String _selectEntry ) throws com.sun.star.uno.Exception
+    {
+        XListBox listBoxControl = (XListBox)UnoRuntime.queryInterface(
+            XListBox.class, m_document.getCurrentView().getControl( _listBox ) );
+        listBoxControl.selectItem( _selectEntry, true );
     }
 
     /* ------------------------------------------------------------------ */
