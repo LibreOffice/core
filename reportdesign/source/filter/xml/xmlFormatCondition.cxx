@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlFormatCondition.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,7 @@ OXMLFormatCondition::OXMLFormatCondition( ORptFilter& rImport,
                 const Reference< XAttributeList > & _xAttrList
                 ,const Reference< XFormatCondition > & _xComponent ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
+,m_rImport(rImport)
 ,m_xComponent(_xComponent)
 {
     DBG_CTOR( rpt_OXMLFormatCondition,NULL);
@@ -113,7 +114,7 @@ OXMLFormatCondition::~OXMLFormatCondition()
 // -----------------------------------------------------------------------------
 void OXMLFormatCondition::EndElement()
 {
-    OXMLHelper::copyStyleElements(m_sStyleName,GetImport().GetAutoStyles(),m_xComponent.get());
+    OXMLHelper::copyStyleElements(m_rImport.isOldFormat(),m_sStyleName,GetImport().GetAutoStyles(),m_xComponent.get());
 }
 //----------------------------------------------------------------------------
 } // namespace rptxml
