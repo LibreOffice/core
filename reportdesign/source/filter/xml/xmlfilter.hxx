@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlfilter.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,13 +108,14 @@ private:
 
     Reference<XReportDefinition>                    m_xReportDefinition;
     ::boost::shared_ptr<rptui::OReportModel>        m_pReportModel;
-    sal_Int32                                       m_nPreviewMode;
 
     sal_Bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
 
     SvXMLImportContext* CreateStylesContext(const ::rtl::OUString& rLocalName,
                                      const Reference< XAttributeList>& xAttrList, sal_Bool bIsAutoStyle );
-    SvXMLImportContext *CreateFontDeclsContext(const ::rtl::OUString& rLocalName,
+    SvXMLImportContext* CreateMetaContext(const ::rtl::OUString& rLocalName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+    SvXMLImportContext* CreateFontDeclsContext(const ::rtl::OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 protected:
     // SvXMLImport
@@ -187,6 +188,8 @@ public:
 
     virtual void                        enterEventContext();
     virtual void                        leaveEventContext();
+
+    sal_Bool                            isOldFormat() const;
 };
 
 /** Imports only settings
@@ -220,6 +223,19 @@ public:
  *
  */
 class ORptStylesImportHelper
+{
+public:
+    static ::rtl::OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
+    static Sequence< ::rtl::OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+        create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
+};
+
+/** Imports only meta data
+ * \ingroup reportdesign_source_filter_xml
+ *
+ */
+class ORptMetaImportHelper
 {
 public:
     static ::rtl::OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
