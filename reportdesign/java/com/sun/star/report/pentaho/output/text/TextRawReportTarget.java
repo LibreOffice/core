@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TextRawReportTarget.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,8 @@ package com.sun.star.report.pentaho.output.text;
 import com.sun.star.report.DataSourceFactory;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.InputStream;
+import org.jfree.io.IOUtils;
 import java.io.OutputStreamWriter;
 import java.util.Iterator;
 import java.util.Map;
@@ -1338,6 +1340,21 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             xmlWriter.writeCloseTag();
             xmlWriter.writeCloseTag();
             xmlWriter.close();
+
+            // now copy the meta.xml
+            if (getInputRepository().isReadable("meta.xml"))
+            {
+                final InputStream inputStream = getInputRepository().createInputStream("meta.xml");
+                try
+                {
+                    final OutputStream outputMetaStream = getOutputRepository().createOutputStream("meta.xml", "text/xml");
+                    IOUtils.getInstance().copyStreams(inputStream, outputMetaStream);
+                    outputMetaStream.close();
+                } finally
+                {
+                    inputStream.close();
+                }
+            }
         }
         catch (IOException ioe)
         {
