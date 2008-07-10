@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeDocumentReportTarget.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -250,6 +250,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
      */
     private OfficeStylesCollection contentStylesCollection;
     private final OutputRepository outputRepository;
+    private final InputRepository inputRepository;
     private final AttributeNameGenerator tableNameGenerator;
     private final AttributeNameGenerator frameNameGenerator;
     private final AttributeNameGenerator autoStyleNameGenerator;
@@ -290,6 +291,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         this.frameNameGenerator = new AttributeNameGenerator();
         this.autoStyleNameGenerator = new AttributeNameGenerator();
         this.outputRepository = outputRepository;
+        this.inputRepository = inputRepository;
         this.states = new FastStack();
         this.xmlWriters = new FastStack();
         this.imageNames = new AttributeNameGenerator();
@@ -313,6 +315,11 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     protected OutputRepository getOutputRepository()
     {
         return outputRepository;
+    }
+
+    protected InputRepository getInputRepository()
+    {
+        return inputRepository;
     }
 
     /**
