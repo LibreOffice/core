@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: smoketest.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:03 $
+'* last change: $Author: rt $ $Date: 2008-07-10 15:39:30 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -100,7 +100,7 @@ testcase tSmokeTest
         for i = 1 to x
             sTemp = LibraryTreeList.getItemText(i)
             'printlog "("+i+"/"+x+"): '" + sTemp + "'"
-            if (("10erTest_680"=sTemp) OR ("10ERTEST_680"=sTemp)) then
+            if (instr(sTemp,"10erTest_680")>0 OR instr(sTemp,"10ERTEST_680")) then
                 a = i
                 printlog "Found library ("+i+"/"+x+"): '" + sTemp + "'"
             endif
