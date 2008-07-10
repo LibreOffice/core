@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlExport.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -259,6 +259,18 @@ public:
         create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 };
 
+/** Exports only meta data
+ * \ingroup reportdesign_source_filter_xml
+ *
+ */
+class ORptMetaExportHelper
+{
+public:
+    static ::rtl::OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
+    static Sequence< ::rtl::OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+        create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
+};
 /** Exports all
  * \ingroup reportdesign_source_filter_xml
  *

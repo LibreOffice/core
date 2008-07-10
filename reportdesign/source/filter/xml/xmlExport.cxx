@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlExport.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -128,6 +128,24 @@ namespace rptxml
     }
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > ORptStylesExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+    {
+        Sequence< ::rtl::OUString > aSupported(1);
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.ExportFilter");
+        return aSupported;
+    }
+
+    //---------------------------------------------------------------------
+    Reference< XInterface > ORptMetaExportHelper::create(Reference< XComponentContext > const & xContext)
+    {
+        return static_cast< XServiceInfo* >(new ORptExport(Reference< XMultiServiceFactory >(xContext->getServiceManager(),UNO_QUERY),EXPORT_META ));
+    }
+    //---------------------------------------------------------------------
+    ::rtl::OUString ORptMetaExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
+    {
+        return ::rtl::OUString::createFromAscii("com.sun.star.comp.report.XMLMetaExporter");
+    }
+    //---------------------------------------------------------------------
+    Sequence< ::rtl::OUString > ORptMetaExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
         aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.ExportFilter");
