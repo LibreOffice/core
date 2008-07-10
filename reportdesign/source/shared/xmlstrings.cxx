@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlstrings.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@ IMPLEMENT_CONSTASCII_USTRING(SERVICE_SETTINGSIMPORTER           , "com.sun.star.
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_STYLESIMPORTER             , "com.sun.star.comp.Report.XMLOasisStylesImporter");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_CONTENTIMPORTER            , "com.sun.star.comp.Report.XMLOasisContentImporter");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_IMPORTFILTER               , "com.sun.star.comp.document.ImportFilter");
+IMPLEMENT_CONSTASCII_USTRING(SERVICE_METAIMPORTER               , "com.sun.star.comp.Report.XMLOasisMetaImporter");
 
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_BORDERLEFT                , "BorderLeft");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_BORDERRIGHT               , "BorderRight");
