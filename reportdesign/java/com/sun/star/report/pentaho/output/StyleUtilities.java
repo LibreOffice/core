@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StyleUtilities.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import org.jfree.report.ReportProcessingException;
 import org.jfree.report.structure.Element;
+import org.jfree.report.structure.Section;
 import org.jfree.report.util.AttributeNameGenerator;
 import org.jfree.util.Log;
 
@@ -191,8 +192,7 @@ public class StyleUtilities
                 Log.warn("Inconsistent styles: " + styleFamily + ":" + styleParent + " does not exist.");
             }
             return preStyle;
-        }
-        catch (CloneNotSupportedException e)
+        } catch (CloneNotSupportedException e)
         {
             throw new ReportProcessingException("Failed to derive a stylesheet", e);
         }
@@ -247,8 +247,7 @@ public class StyleUtilities
                     currentFonts.addFontFace((FontFaceElement) element.clone());
                 }
             }
-        }
-        catch (CloneNotSupportedException e)
+        } catch (CloneNotSupportedException e)
         {
             throw new ReportProcessingException("Failed to clone font-face element");
         }
@@ -259,49 +258,75 @@ public class StyleUtilities
             final OfficeStylesCollection predefCollection)
             throws ReportProcessingException
     {
-        final Object attribute = style.getAttribute(OfficeNamespaces.STYLE_NS, "data-style-name");
-        if (attribute == null)
+        final Section derivedStyle = performDataStyleProcessing(style, stylesCollection, predefCollection, "data-style-name");
+        if (derivedStyle != null)
         {
-            // the easy case: It has no number style at all.
-            return;
-        }
-
-        final String styleName = String.valueOf(attribute);
-        if (stylesCollection.getAutomaticStyles().containsDataStyle(styleName))
-        {
-            return;
-        }
-        if (stylesCollection.getCommonStyles().containsDataStyle(styleName))
-        {
-            return;
-        }
-
-
-        try
-        {
-            final OfficeStyles automaticStyles = predefCollection.getAutomaticStyles();
-            final DataStyle autoDataStyle = automaticStyles.getDataStyle(styleName);
-            if (autoDataStyle != null)
+            try
             {
-                final DataStyle derivedStyle = (DataStyle) autoDataStyle.clone();
-                stylesCollection.getAutomaticStyles().addDataStyle(derivedStyle);
-                return;
-            }
-            final OfficeStyles commonStyles = predefCollection.getCommonStyles();
-            final DataStyle commonDataStyle = commonStyles.getDataStyle(styleName);
-            if (commonDataStyle != null)
+                final Section styleMap = (Section) derivedStyle.findFirstChild(OfficeNamespaces.STYLE_NS,"map");
+                if (styleMap != null)
+                {
+                    performDataStyleProcessing(styleMap, stylesCollection, predefCollection, "apply-style-name");
+                }
+            } catch (Exception e)
             {
-                final DataStyle derivedStyle = (DataStyle) commonDataStyle.clone();
-                stylesCollection.getCommonStyles().addDataStyle(derivedStyle);
-                return;
             }
+        }
+    }
 
-            Log.warn("Dangling data style: " + styleName);
-        }
-        catch (CloneNotSupportedException e)
+    private static Section performDataStyleProcessing(final Section style,
+            final OfficeStylesCollection stylesCollection,
+            final OfficeStylesCollection predefCollection,
+            final String attributeName)
+            throws ReportProcessingException
+    {
+        final Object attribute = style.getAttribute(OfficeNamespaces.STYLE_NS, attributeName);
+        final DataStyle derivedStyle;
+        if (attribute != null)
         {
-            throw new ReportProcessingException("Failed to copy style. This should not have happened.");
+            final String styleName = String.valueOf(attribute);
+            if (!stylesCollection.getAutomaticStyles().containsDataStyle(styleName) &&
+                    !stylesCollection.getCommonStyles().containsDataStyle(styleName))
+            {
+                try
+                {
+                    final OfficeStyles automaticStyles = predefCollection.getAutomaticStyles();
+                    final DataStyle autoDataStyle = automaticStyles.getDataStyle(styleName);
+                    if (autoDataStyle != null)
+                    {
+                        derivedStyle = (DataStyle) autoDataStyle.clone();
+                        stylesCollection.getAutomaticStyles().addDataStyle(derivedStyle);
+                    }
+                    else
+                    {
+                        final OfficeStyles commonStyles = predefCollection.getCommonStyles();
+                        final DataStyle commonDataStyle = commonStyles.getDataStyle(styleName);
+                        if (commonDataStyle != null)
+                        {
+                            derivedStyle = (DataStyle) commonDataStyle.clone();
+                            stylesCollection.getCommonStyles().addDataStyle(derivedStyle);
+                        }
+                        else
+                        {
+                            Log.warn("Dangling data style: " + styleName);
+                            derivedStyle = null;
+                        }
+                    }
+                } catch (CloneNotSupportedException e)
+                {
+                    throw new ReportProcessingException("Failed to copy style. This should not have happened.");
+                }
+            }
+            else
+            {
+                derivedStyle = null;
+            }
         }
+        else
+        {
+            derivedStyle = null;
+        }
+        return derivedStyle;
     }
 
     /**
@@ -482,8 +507,7 @@ public class StyleUtilities
                         predefCollection);
             }
             return autostyle;
-        }
-        catch (CloneNotSupportedException e)
+        } catch (CloneNotSupportedException e)
         {
             throw new ReportProcessingException(
                     "Deriving the style failed. Clone error: ", e);
@@ -508,13 +532,15 @@ public class StyleUtilities
             final ArrayList propertyName,
             final ArrayList propertyValues)
     {
-        if ( propertyNamespace.size() != propertyName.size())
+        if (propertyNamespace.size() != propertyName.size())
+        {
             return null;
+        }
         final OfficeStyle[] styles = predefCollection.getAutomaticStyles().getAllStyles();
         for (int i = 0; i < styles.length; i++)
         {
             final OfficeStyle officeStyle = styles[i];
-            if ( officeStyle.getStyleFamily().equals(styleFamily) )
+            if (officeStyle.getStyleFamily().equals(styleFamily))
             {
                 final Element section = officeStyle.findFirstChild(OfficeNamespaces.STYLE_NS, sectionName);
                 if (section != null)
@@ -522,16 +548,20 @@ public class StyleUtilities
                     int j = 0;
                     for (; j < propertyNamespace.size(); j++)
                     {
-                        final String ns = (String)propertyNamespace.get(j);
-                        final String prop = (String)propertyName.get(j);
+                        final String ns = (String) propertyNamespace.get(j);
+                        final String prop = (String) propertyName.get(j);
                         final Object obj = section.getAttribute(ns, prop);
                         final Object value = propertyValues.get(j);
-                        if ( obj == null && value == null)
+                        if (obj == null && value == null)
+                        {
                             continue;
+                        }
                         if (!propertyValues.get(j).equals(obj))
+                        {
                             break;
+                        }
                     }
-                    if ( j == propertyName.size() )
+                    if (j == propertyName.size())
                     {
                         return officeStyle;
                     }
