@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormComponent.cxx,v $
- * $Revision: 1.61 $
+ * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1403,7 +1403,7 @@ void OBoundControlModel::disposing()
 //------------------------------------------------------------------------------
 void OBoundControlModel::_propertyChanged( const PropertyChangeEvent& _rEvt ) throw ( RuntimeException )
 {
-    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
 
     OSL_ENSURE( _rEvt.PropertyName == m_sValuePropertyName,
         "OBoundControlModel::_propertyChanged: where did this come from (1)?" );
@@ -1417,7 +1417,7 @@ void OBoundControlModel::_propertyChanged( const PropertyChangeEvent& _rEvt ) th
         {   // the control value changed, while we have an external value binding
             // -> forward the value to it
             if ( m_eControlValueChangeInstigator != eExternalBinding )
-                transferControlValueToExternal( );
+                transferControlValueToExternal( aGuard );
         }
         else if ( !m_bCommitable && m_xColumnUpdate.is() )
         {   // the control value changed, while we are  bound to a database column,
@@ -1870,6 +1870,8 @@ void SAL_CALL OBoundControlModel::removeUpdateListener(const Reference< XUpdateL
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OBoundControlModel::commit() throw(RuntimeException)
 {
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
+
     OSL_PRECOND( m_bCommitable, "OBoundControlModel::commit: invalid call (I'm not commitable !) " );
     if ( hasExternalValueBinding() )
     {
@@ -1879,29 +1881,30 @@ sal_Bool SAL_CALL OBoundControlModel::commit() throw(RuntimeException)
         if ( !m_sValuePropertyName.getLength() )
             // but for those derivees which did not use this feature, we need an
             // explicit transfer
-            transferControlValueToExternal( );
+            transferControlValueToExternal( aGuard );
         return sal_True;
     }
 
     OSL_ENSURE( !hasExternalValueBinding(), "OBoundControlModel::commit: control flow broken!" );
         // we reach this only if we're not working with an external binding
 
-    {
-        osl::MutexGuard aGuard(m_aMutex);
-        if ( !m_xField.is() )
-            return sal_True;
-    }
+    if ( !m_xField.is() )
+        return sal_True;
 
     ::cppu::OInterfaceIteratorHelper aIter( m_aUpdateListeners );
     EventObject aEvent;
     aEvent.Source = static_cast< XWeak* >( this );
     sal_Bool bSuccess = sal_True;
+
+    aGuard.clear();
+    // >>>>>>>> ----- UNSAFE ----- >>>>>>>>
     while (aIter.hasMoreElements() && bSuccess)
         bSuccess = static_cast< XUpdateListener* >( aIter.next() )->approveUpdate( aEvent );
+    // <<<<<<<< ----- UNSAFE ----- <<<<<<<<
+    aGuard.reset();
 
     if ( bSuccess )
     {
-        osl::MutexGuard aGuard(m_aMutex);
         try
         {
             if ( m_xColumnUpdate.is() )
@@ -1914,7 +1917,10 @@ sal_Bool SAL_CALL OBoundControlModel::commit() throw(RuntimeException)
     }
 
     if ( bSuccess )
+    {
+        aGuard.clear();
         m_aUpdateListeners.notifyEach( &XUpdateListener::updated, aEvent );
+    }
 
     return bSuccess;
 }
@@ -2269,7 +2275,7 @@ void OBoundControlModel::reset() throw (RuntimeException)
     if (!bContinue)
         return;
 
-    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
 
     // on a new record?
     sal_Bool bIsNewRecord = sal_False;
@@ -2373,7 +2379,7 @@ void OBoundControlModel::reset() throw (RuntimeException)
 
         // transfer to the external binding, if necessary
         if ( hasExternalValueBinding() )
-            transferControlValueToExternal();
+            transferControlValueToExternal( aGuard );
     }
 
     // revalidate, if necessary
@@ -2602,7 +2608,7 @@ void OBoundControlModel::transferExternalValueToControl( ::osl::ResettableMutexG
         Type aValueExchangeType( getExternalValueType() );
 
         _rInstanceLock.clear();
-         // >>>>>>>> ----- UNSAFE ----- >>>>>>>>
+        // >>>>>>>> ----- UNSAFE ----- >>>>>>>>
         Any aExternalValue;
         try
         {
@@ -2619,41 +2625,29 @@ void OBoundControlModel::transferExternalValueToControl( ::osl::ResettableMutexG
 }
 
 //------------------------------------------------------------------------------
-void OBoundControlModel::transferControlValueToExternal( )
+void OBoundControlModel::transferControlValueToExternal( ::osl::ResettableMutexGuard& _rInstanceLock )
 {
     OSL_PRECOND( m_bSupportsExternalBinding && hasExternalValueBinding(),
         "OBoundControlModel::transferControlValueToExternal: precondition not met!" );
 
     if ( m_xExternalBinding.is() )
     {
+        Any aExternalValue( translateControlValueToExternalValue() );
         m_bTransferingValue = sal_True;
+
+        _rInstanceLock.clear();
+         // >>>>>>>> ----- UNSAFE ----- >>>>>>>>
         try
         {
-            m_xExternalBinding->setValue( translateControlValueToExternalValue( ) );
+            m_xExternalBinding->setValue( aExternalValue );
         }
-        catch( const IncompatibleTypesException& )
+        catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OBoundControlModel::transferControlValueToExternal: could not commit the value (incomptible types)!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
-        catch( const NoSupportException& )
-        {
-            OSL_ENSURE( sal_False, "OBoundControlModel::transferControlValueToExternal: could not commit the value (no support)!" );
-        }
-        catch( const DisposedException& )
-        {
-            OSL_ENSURE( sal_False, "OBoundControlModel::transferControlValueToExternal: could not commit the value: the binding is already disposed!!" );
-        }
-        catch( const Exception& e )
-        {
-#if OSL_DEBUG_LEVEL > 0
-            ::rtl::OString sMessage( "OBoundControlModel::transferControlValueToExternal: could not commit the value: unexpected exception type!\n" );
-            sMessage += "message:\n";
-            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
-            OSL_ENSURE( sal_False, sMessage.getStr() );
-#else
-            (void) e; // avoid warnings
-#endif
-        }
+        // <<<<<<<< ----- UNSAFE ----- <<<<<<<<
+        _rInstanceLock.reset();
+
         m_bTransferingValue = sal_False;
     }
 }
