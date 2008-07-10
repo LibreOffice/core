@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlCell.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -256,7 +256,7 @@ void OXMLCell::EndElement()
         }
     }
     else
-        OXMLHelper::copyStyleElements(m_sStyleName,GetImport().GetAutoStyles(),m_xComponent.get());
+        OXMLHelper::copyStyleElements(GetOwnImport().isOldFormat(),m_sStyleName,GetImport().GetAutoStyles(),m_xComponent.get());
 }
 // -----------------------------------------------------------------------------
 ORptFilter& OXMLCell::GetOwnImport()
