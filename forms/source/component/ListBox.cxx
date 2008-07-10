@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ListBox.cxx,v $
- * $Revision: 1.60 $
+ * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1321,10 +1321,10 @@ namespace frm
     Sequence< Type > OListBoxModel::getSupportedBindingTypes()
     {
         Sequence< Type > aTypes(4);
-        aTypes[0] = ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
-        aTypes[1] = ::getCppuType( static_cast< Sequence< ::rtl::OUString >* >( NULL ) );
-        aTypes[2] = ::getCppuType( static_cast< sal_Int32* >( NULL ) );
-        aTypes[3] = ::getCppuType( static_cast< Sequence< sal_Int32 >* >( NULL ) );
+        aTypes[0] = ::getCppuType( static_cast< Sequence< sal_Int32 >* >( NULL ) );
+        aTypes[1] = ::getCppuType( static_cast< sal_Int32* >( NULL ) );
+        aTypes[2] = ::getCppuType( static_cast< Sequence< ::rtl::OUString >* >( NULL ) );
+        aTypes[3] = ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
         return aTypes;
     }
 
