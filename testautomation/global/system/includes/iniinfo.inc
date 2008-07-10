@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: iniinfo.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: tbo $ $Date: 2008-06-18 10:02:29 $
+'* last change: $Author: rt $ $Date: 2008-07-10 15:39:45 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -922,6 +922,10 @@ function getSofficeNative() as string
                 if fileExists(sCandidates(i)) then
                     '/// cut off program//soffice from link destination ///'
                     y = instr(sCandidates(i), "program/soffice")
+                    if gPlatform = lcase("osx") AND y < 1 then
+                        ' Accept also MacOS in link to soffice binary
+                        y = instr(sCandidates(i), "MacOS/soffice")
+                    end if 
                     if (y > 0) then
                         sCandidates(i) = left(sCandidates(i), y-1)
                     else
