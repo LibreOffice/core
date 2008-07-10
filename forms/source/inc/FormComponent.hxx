@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormComponent.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1025,11 +1025,11 @@ protected:
 
     /** transfers the control value to the external binding
         @precond
-            our own mutex is locked
+            our own mutex is locked, and _rInstanceLock is the guard locking it
         @precond
             we do have an active external binding in place
     */
-    void        transferControlValueToExternal( );
+    void        transferControlValueToExternal( ::osl::ResettableMutexGuard& _rInstanceLock );
 
     /** calculates the type which is to be used to communicate with the current external binding,
         and stores it in m_aExternalValueType
