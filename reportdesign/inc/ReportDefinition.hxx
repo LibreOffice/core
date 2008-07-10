@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportDefinition.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,7 @@
 #define REPORTDESIGN_API_REPORTDEFINITION_HXX
 
 #include <com/sun/star/report/XReportDefinition.hpp>
-#include <cppuhelper/compbase10.hxx>
+#include <cppuhelper/compbase11.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -40,6 +40,7 @@
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
@@ -61,7 +62,7 @@ namespace comphelper
 namespace reportdesign
 {
     class OReportComponentProperties;
-    typedef ::cppu::WeakComponentImplHelper10<  com::sun::star::report::XReportDefinition
+    typedef ::cppu::WeakComponentImplHelper11<  com::sun::star::report::XReportDefinition
                                  ,com::sun::star::document::XEventBroadcaster
                                  ,com::sun::star::lang::XServiceInfo
                                  ,com::sun::star::frame::XModule
@@ -70,6 +71,7 @@ namespace reportdesign
                                  ,::com::sun::star::frame::XTitle
                                  ,::com::sun::star::frame::XTitleChangeBroadcaster
                                  ,::com::sun::star::frame::XUntitledNumbers
+                                 ,::com::sun::star::document::XDocumentPropertiesSupplier
                                  ,SvxUnoDrawMSFactory> ReportDefinitionBase;
     typedef ::cppu::PropertySetMixin<com::sun::star::report::XReportDefinition> ReportDefinitionPropertySet;
 
@@ -352,6 +354,9 @@ namespace reportdesign
         virtual void SAL_CALL releaseNumber( ::sal_Int32 nNumber ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL releaseNumberForComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xComponent ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
         virtual ::rtl::OUString SAL_CALL getUntitledPrefix(  ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XDocumentPropertiesSupplier
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > SAL_CALL getDocumentProperties(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // comphelper::IEmbeddedHelper
         virtual com::sun::star::uno::Reference < com::sun::star::embed::XStorage > getStorage() const;
