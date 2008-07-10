@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlEnums.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +41,8 @@ namespace rptxml
         XML_TOK_DOC_REPORT,
         XML_TOK_DOC_STYLES,
         XML_TOK_DOC_FONTDECLS,
-        XML_TOK_DOC_MASTERSTYLES
+        XML_TOK_DOC_MASTERSTYLES,
+        XML_TOK_DOC_META
     };
     enum XMLReportToken
     {
