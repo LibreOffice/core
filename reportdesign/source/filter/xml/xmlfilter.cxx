@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlfilter.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,9 @@
 #include <rtl/logfile.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+
+#include <comphelper/genericpropertyset.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -54,6 +57,7 @@
 #include <tools/urlobj.hxx>
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <xmloff/xmlmetai.hxx>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
@@ -229,7 +233,8 @@ sal_Int32 ReadThroughComponent(
     const uno::Reference<XMultiServiceFactory> & rFactory,
     const Reference< document::XGraphicObjectResolver > & _xGraphicObjectResolver,
     const Reference<document::XEmbeddedObjectResolver>& _xEmbeddedObjectResolver,
-    const ::rtl::OUString& _sFilterName)
+    const ::rtl::OUString& _sFilterName
+    ,const uno::Reference<beans::XPropertySet>& _xProp)
 {
     DBG_ASSERT( xStorage.is(), "Need storage!");
     DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
@@ -278,6 +283,8 @@ sal_Int32 ReadThroughComponent(
             nArgs++;
         if( _xEmbeddedObjectResolver.is())
             nArgs++;
+        if ( _xProp.is() )
+            nArgs++;
 
         uno::Sequence< uno::Any > aFilterCompArgs( nArgs );
 
@@ -286,6 +293,8 @@ sal_Int32 ReadThroughComponent(
             aFilterCompArgs[nArgs++] <<= _xGraphicObjectResolver;
         if( _xEmbeddedObjectResolver.is())
             aFilterCompArgs[ nArgs++ ] <<= _xEmbeddedObjectResolver;
+        if ( _xProp.is() )
+            aFilterCompArgs[ nArgs++ ] <<= _xProp;
 
         Reference< xml::sax::XDocumentHandler > xDocHandler(
             rFactory->createInstanceWithArguments( _sFilterName, aFilterCompArgs ),
@@ -354,6 +363,25 @@ Reference< XInterface > ORptStylesImportHelper::create(Reference< XComponentCont
 }
 //---------------------------------------------------------------------
 Sequence< ::rtl::OUString > ORptStylesImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+{
+    Sequence< ::rtl::OUString > aSupported(1);
+    aSupported[0] = SERVICE_IMPORTFILTER;
+    return aSupported;
+}
+
+//---------------------------------------------------------------------
+Reference< XInterface > ORptMetaImportHelper::create(Reference< XComponentContext > const & xContext)
+{
+    return static_cast< XServiceInfo* >(new ORptFilter(Reference< XMultiServiceFactory >(xContext->getServiceManager(),UNO_QUERY),
+        IMPORT_META));
+}
+//---------------------------------------------------------------------
+::rtl::OUString ORptMetaImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
+{
+    return ::rtl::OUString(SERVICE_METAIMPORTER);
+}
+//---------------------------------------------------------------------
+Sequence< ::rtl::OUString > ORptMetaImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
     Sequence< ::rtl::OUString > aSupported(1);
     aSupported[0] = SERVICE_IMPORTFILTER;
@@ -533,9 +561,39 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             xEmbeddedObjectResolver.set( xReportServiceFactory->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver")),aArgs) , uno::UNO_QUERY);
         }
 
+        static const ::rtl::OUString s_sOld(RTL_CONSTASCII_USTRINGPARAM("OldFormat"));
+        static comphelper::PropertyMapEntry pMap[] =
+        {
+            {"OldFormat",           9,          1,          &::getCppuType((const sal_Bool*)0)          ,PropertyAttribute::BOUND,0},
+            { NULL, 0, 0, NULL, 0, 0 }
+        };
+        uno::Reference<beans::XPropertySet> xProp = comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));
 
         uno::Reference<XComponent> xModel(GetModel(),UNO_QUERY);
         sal_Int32 nRet = ReadThroughComponent( xStorage
+                                    ,xModel
+                                    ,"meta.xml"
+                                    ,"Meta.xml"
+                                    ,getServiceFactory()
+                                    ,xGraphicObjectResolver
+                                    ,xEmbeddedObjectResolver
+                                    ,SERVICE_METAIMPORTER
+                                    ,xProp
+                                    );
+
+        static const ::rtl::OUString s_sMeta(RTL_CONSTASCII_USTRINGPARAM("meta.xml"));
+        try
+        {
+            xProp->setPropertyValue(s_sOld,uno::makeAny(!(xStorage->hasByName(s_sMeta) || xStorage->isStreamElement( s_sMeta ))));
+        }
+        catch(uno::Exception&)
+        {
+            xProp->setPropertyValue(s_sOld,uno::makeAny(sal_True));
+        }
+
+        if ( nRet == 0 )
+        {
+            nRet = ReadThroughComponent( xStorage
                                     ,xModel
                                     ,"settings.xml"
                                     ,"Settings.xml"
@@ -543,7 +601,9 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,xGraphicObjectResolver
                                     ,xEmbeddedObjectResolver
                                     ,SERVICE_SETTINGSIMPORTER
+                                    ,xProp
                                     );
+        }
         if ( nRet == 0 )
             nRet = ReadThroughComponent(xStorage
                                     ,xModel
@@ -552,7 +612,8 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,getServiceFactory()
                                     ,xGraphicObjectResolver
                                     ,xEmbeddedObjectResolver
-                                    ,SERVICE_STYLESIMPORTER );
+                                    ,SERVICE_STYLESIMPORTER
+                                    ,xProp);
 
         if ( nRet == 0 )
             nRet = ReadThroughComponent( xStorage
@@ -563,7 +624,9 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,xGraphicObjectResolver
                                     ,xEmbeddedObjectResolver
                                     ,SERVICE_CONTENTIMPORTER
+                                    ,xProp
                                     );
+
 
         bRet = nRet == 0;
 
@@ -645,6 +708,10 @@ SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
                 SetMasterStyles( pStyleContext );
             }
             break;
+        case XML_TOK_DOC_META:
+            GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+            pContext = CreateMetaContext( rLocalName,xAttrList );
+            break;
         default:
             break;
     }
@@ -671,6 +738,7 @@ const SvXMLTokenMap& ORptFilter::GetDocElemTokenMap() const
             { XML_NAMESPACE_OOO,    XML_REPORT,             XML_TOK_DOC_REPORT      },
             { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,    XML_TOK_DOC_FONTDECLS   },
             { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,      XML_TOK_DOC_MASTERSTYLES    },
+            { XML_NAMESPACE_OFFICE, XML_DOCUMENT_META,      XML_TOK_DOC_META        },
             //{ XML_NAMESPACE_OOO,    XML_FONT_FACE_DECLS,  XML_TOK_DOC_FONTDECLS   },
             XML_TOKEN_MAP_END
         };
@@ -1017,6 +1085,38 @@ void ORptFilter::insertFunction(const ::com::sun::star::uno::Reference< ::com::s
 {
     m_aFunctions.insert(TGroupFunctionMap::value_type(_xFunction->getName(),_xFunction));
 }
+// -----------------------------------------------------------------------------
+SvXMLImportContext* ORptFilter::CreateMetaContext(const ::rtl::OUString& rLocalName,const uno::Reference<xml::sax::XAttributeList>&)
+{
+    SvXMLImportContext* pContext = NULL;
+
+    if ( (getImportFlags() & IMPORT_META) )
+    {
+        uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
+            getServiceFactory()->createInstance(::rtl::OUString::createFromAscii(
+                "com.sun.star.xml.dom.SAXDocumentBuilder")),
+                uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(GetModel(), uno::UNO_QUERY_THROW);
+        pContext = new SvXMLMetaDocumentContext(*this,XML_NAMESPACE_OFFICE, rLocalName,xDPS->getDocumentProperties(), xDocBuilder);
+    }
+    return pContext;
+}
+// -----------------------------------------------------------------------------
+sal_Bool ORptFilter::isOldFormat() const
+{
+    sal_Bool bOldFormat = sal_True;
+    uno::Reference<beans::XPropertySet> xProp = getImportInfo();
+    if ( xProp.is() )
+    {
+        const static ::rtl::OUString s_sOld(RTL_CONSTASCII_USTRINGPARAM("OldFormat"));
+        if ( xProp->getPropertySetInfo()->hasPropertyByName(s_sOld))
+        {
+            xProp->getPropertyValue(s_sOld) >>= bOldFormat;
+        }
+    } // if ( xProp.is() )
+    return bOldFormat;
+}
+
 // -----------------------------------------------------------------------------
 }// rptxml
 // -----------------------------------------------------------------------------

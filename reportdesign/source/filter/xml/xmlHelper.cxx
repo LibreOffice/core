@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlHelper.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -286,7 +286,7 @@ const SvXMLEnumMapEntry* OXMLHelper::GetCommandTypeOptions()
 #define PROPERTY_ID_FONTKERNING      14
 #define PROPERTY_ID_FONTWORDLINEMODE 15
 #define PROPERTY_ID_FONTTYPE         16
-void OXMLHelper::copyStyleElements(const ::rtl::OUString& _sStyleName,const SvXMLStylesContext* _pAutoStyles,const uno::Reference<beans::XPropertySet>& _xProp)
+void OXMLHelper::copyStyleElements(const bool _bOld,const ::rtl::OUString& _sStyleName,const SvXMLStylesContext* _pAutoStyles,const uno::Reference<beans::XPropertySet>& _xProp)
 {
     if ( !_xProp.is() || !_sStyleName.getLength() || !_pAutoStyles )
         return;
@@ -324,6 +324,8 @@ void OXMLHelper::copyStyleElements(const ::rtl::OUString& _sStyleName,const SvXM
         try
         {
             pAutoStyle->FillPropertySet(_xProp);
+            if ( _bOld && _xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_CHARHIDDEN) )
+                _xProp->setPropertyValue(PROPERTY_CHARHIDDEN,uno::makeAny(sal_False));
 
             uno::Reference<beans::XPropertySet> xProp = comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));
             pAutoStyle->FillPropertySet(xProp);
