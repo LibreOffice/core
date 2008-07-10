@@ -8,7 +8,7 @@
 #
 # $RCSfile: download.pm,v $
 #
-# $Revision: 1.44 $
+# $Revision: 1.45 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -120,6 +120,9 @@ sub save_script_file
     my $infoline = "Saving script file $newscriptfilename\n";
     push( @installer::globals::logfileinfo, $infoline);
 
+    my $localcall = "chmod 775 $newscriptfilename \>\/dev\/null 2\>\&1";
+    system($localcall);
+
     return $newscriptfilename;
 }
 
@@ -225,16 +228,9 @@ sub get_md5sum
 
 sub call_sum
 {
-    my ($installdir, $getuidlibrary) = @_;
+    my ($filename, $getuidlibrary) = @_;
 
-#   my $ownerstring = "";
-#   if ( $installer::globals::islinuxrpmbuild ) { $ownerstring = "--owner=0"; }
-#   my $systemcall = "cd $installdir; tar $ownerstring -cf - * | /usr/bin/sum |";
-
-    my $ldpreloadstring = "";
-    if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
-
-    my $systemcall = "cd $installdir; $ldpreloadstring tar -cf - * | /usr/bin/sum |";
+    my $systemcall = "/usr/bin/sum $filename |";
 
     my $sumoutput = "";
 
@@ -258,6 +254,7 @@ sub call_sum
         push( @installer::globals::logfileinfo, $infoline);
     }
 
+    $sumoutput =~ s/\s+$filename\s$//;
     return $sumoutput;
 }
 
@@ -277,21 +274,44 @@ sub get_path_for_library
 }
 
 #########################################################
-# Including the binary package into the script
+# Include the tar file into the script
 #########################################################
 
-sub include_package_into_script
+sub include_tar_into_script
 {
-    my ( $installdir, $scriptfilename, $getuidlibrary) = @_;
+    my ($scriptfile, $temporary_tarfile) = @_;
 
-#   my $ownerstring = "";
-#   if ( $installer::globals::islinuxrpmbuild ) { $ownerstring = "--owner=0"; }
-#   my $systemcall = "cd $installdir; tar $ownerstring -cf - * >> $scriptfilename";
+    my $systemcall = "cat $temporary_tarfile >> $scriptfile && rm $temporary_tarfile";
+    my $returnvalue = system($systemcall);
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    return $returnvalue;
+}
+
+#########################################################
+# Create a tar file from the binary package
+#########################################################
+
+sub tar_package
+{
+    my ( $installdir, $tarfilename, $getuidlibrary) = @_;
 
     my $ldpreloadstring = "";
     if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
 
-    my $systemcall = "cd $installdir; $ldpreloadstring tar -cf - * >> $scriptfilename";
+    my $systemcall = "cd $installdir; $ldpreloadstring tar -cf - * > $tarfilename";
 
     my $returnvalue = system($systemcall);
 
@@ -309,8 +329,10 @@ sub include_package_into_script
         push( @installer::globals::logfileinfo, $infoline);
     }
 
-    my $localcall = "chmod 775 $scriptfilename \>\/dev\/null 2\>\&1";
-    system($localcall);
+    my $localcall = "chmod 775 $tarfilename \>\/dev\/null 2\>\&1";
+    $returnvalue = system($localcall);
+
+    return ( -s $tarfilename );
 }
 
 #########################################################
@@ -1693,21 +1715,24 @@ sub create_download_sets
             # replace linenumber in script template
             put_linenumber_into_script($scriptfile);
 
+            # create tar file
+            my $temporary_tarfile_name = $downloaddir . $installer::globals::separator . 'installset.tar';
+            my $size = tar_package($installationdir, $temporary_tarfile_name, $getuidlibrary);
+            installer::exiter::exit_program("ERROR: Could not create tar file $temporary_tarfile_name!", "create_download_sets") unless $size;
+
             # calling sum to determine checksum and size of the tar file
-            my $sumout = call_sum($installationdir, $getuidlibrary);
+            my $sumout = call_sum($temporary_tarfile_name);
 
             # writing checksum and size into scriptfile
             put_checksum_and_size_into_script($scriptfile, $sumout);
 
             # saving the script file
             my $newscriptfilename = determine_scriptfile_name($downloadname);
-
-            installer::logger::print_message( "... including installation set into $newscriptfilename ... \n" );
-
             $newscriptfilename = save_script_file($downloaddir, $newscriptfilename, $scriptfile);
 
-            if (( $installer::globals::issolarisbuild ) && ( $ENV{'SPECIAL_ADA_BUILD'} )) { create_tar_gz_file_from_package($installationdir, $getuidlibrary); }
-            else { include_package_into_script($installationdir, $newscriptfilename, $getuidlibrary); }
+            installer::logger::print_message( "... including installation set into $newscriptfilename ... \n" );
+            # Append tar file to script
+            include_tar_into_script($newscriptfilename, $temporary_tarfile_name);
         }
     }
     else    # Windows specific part
