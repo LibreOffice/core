@@ -255,6 +255,7 @@ common
         PYTHONHOME
         PYTHONPATH
         SOLAR_PLUGIN
+        URE_BOOTSTRAP
         USE_FT_EMBOLDEN
         USE_SHELL
         USE_XINERAMA
