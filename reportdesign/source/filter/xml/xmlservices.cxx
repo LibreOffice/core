@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlservices.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,8 @@ cppu::ImplementationEntry entries[] = {
         &cppu::createSingleComponentFactory, 0, 0 },
     { &ORptStylesExportHelper::create, &ORptStylesExportHelper::getImplementationName_Static, &ORptStylesExportHelper::getSupportedServiceNames_Static,
         &cppu::createSingleComponentFactory, 0, 0 },
+    { &ORptMetaExportHelper::create, &ORptMetaExportHelper::getImplementationName_Static, &ORptMetaExportHelper::getSupportedServiceNames_Static,
+        &cppu::createSingleComponentFactory, 0, 0 },
 
     { &ORptImportHelper::create, &ORptImportHelper::getImplementationName_Static, &ORptImportHelper::getSupportedServiceNames_Static,
         &cppu::createSingleComponentFactory, 0, 0 },
@@ -74,6 +76,8 @@ cppu::ImplementationEntry entries[] = {
     { &ExportDocumentHandler::create, &ExportDocumentHandler::getImplementationName_Static, &ExportDocumentHandler::getSupportedServiceNames_static,
         &cppu::createSingleComponentFactory, 0, 0 },
     { &ImportDocumentHandler::create, &ImportDocumentHandler::getImplementationName_Static, &ImportDocumentHandler::getSupportedServiceNames_static,
+        &cppu::createSingleComponentFactory, 0, 0 },
+    { &ORptMetaImportHelper::create, &ORptMetaImportHelper::getImplementationName_Static, &ORptMetaImportHelper::getSupportedServiceNames_Static,
         &cppu::createSingleComponentFactory, 0, 0 },
     { 0, 0, 0, 0, 0, 0 }
 };
