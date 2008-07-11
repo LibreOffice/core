@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: astoperation.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +54,6 @@ public:
 
     sal_Bool isOneway()
         { return ((m_flags & OP_ONEWAY) == OP_ONEWAY); }
-    sal_Bool isVoid();
 
     bool isVariadic() const;
 

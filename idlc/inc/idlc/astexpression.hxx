@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: astexpression.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,17 +106,12 @@ class AstExpression
 {
 public:
     // Constructor(s)
-    AstExpression(AstExpression *pExpr, ExprType et);
     AstExpression(ExprComb c, AstExpression *pExpr1, AstExpression *pExpr2);
 
-    AstExpression(sal_Int16         s);
-    AstExpression(sal_uInt16        us);
     AstExpression(sal_Int32         l);
     AstExpression(sal_Int32         l, ExprType et);
-    AstExpression(sal_uInt32        ul);
     AstExpression(sal_Int64         h);
     AstExpression(sal_uInt64        uh);
-    AstExpression(float             f);
     AstExpression(double            d);
     AstExpression(::rtl::OString* scopedName);
 
@@ -157,7 +152,6 @@ public:
         { m_pSymbolicName = pSymbolicName; }
 
     // Evaluation and value coercion
-    AstExprValue* eval(EvalKind ek);
     AstExprValue* coerce(ExprType type, sal_Bool bAssign=sal_True);
 
     // Evaluate then store value inside this AstExpression
