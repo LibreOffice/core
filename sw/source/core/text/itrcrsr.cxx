@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: itrcrsr.cxx,v $
- * $Revision: 1.80 $
+ * $Revision: 1.81 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -316,6 +316,11 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     bOneBlock = rAdjust.GetOneWord() == SVX_ADJUST_BLOCK;
     bLastBlock = rAdjust.GetLastBlock() == SVX_ADJUST_BLOCK;
     bLastCenter = rAdjust.GetLastBlock() == SVX_ADJUST_CENTER;
+
+    // --> OD 2008-07-01 #i91133#
+    mnTabLeft = pNode->GetLeftMarginForTabCalculation();
+    // <--
+
 #if OSL_DEBUG_LEVEL > 1
     static sal_Bool bOne = sal_False;
     static sal_Bool bLast = sal_False;
