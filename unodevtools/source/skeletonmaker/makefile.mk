@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,6 +42,8 @@ ENABLE_EXCEPTIONS := TRUE
 .INCLUDE : $(PRJ)$/unodevtools.pmk
 
 APP1TARGET = $(TARGET)
+APP1RPATH=SDK
+
 APP1OBJS = $(OBJ)$/skeletonmaker.obj \
     $(OBJ)$/skeletoncommon.obj \
     $(OBJ)$/javatypemaker.obj \
