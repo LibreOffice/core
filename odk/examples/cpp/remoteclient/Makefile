@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.13 $
+#  $Revision: 1.14 $
 #
-#  last change: $Author: obo $ $Date: 2007-01-25 11:08:54 $
+#  last change: $Author: rt $ $Date: 2008-07-11 14:27:53 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -48,49 +48,47 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-COMPONENT_NAME=remoteclientsample
-COMPONENT_IMPL_NAME=$(COMPONENT_NAME).uno.$(SHAREDLIB_EXT) 
-COMPONENT_IMPL=$(SHAREDLIB_OUT)/$(COMPONENT_IMPL_NAME)
-COMPONENT_RDB_NAME = $(COMPONENT_NAME).uno.rdb
-COMPONENT_RDB = $(OUT_BIN)/$(COMPONENT_RDB_NAME)
-COMPONENT_XML=$(COMPONENT_NAME).uno.xml
+COMP_NAME=remoteclientsample
+COMP_IMPL_NAME=$(COMP_NAME).uno.$(SHAREDLIB_EXT) 
+COMP_IMPL=$(SHAREDLIB_OUT)/$(COMP_IMPL_NAME)
+COMP_RDB_NAME = $(COMP_NAME).uno.rdb
+COMP_RDB = $(OUT_BIN)/$(COMP_RDB_NAME)
+COMP_MAPFILE = $(OUT_COMP_GEN)/$(COMP_NAME).uno.map
 
-OUT_COMP_INC=$(OUT_INC)/$(COMPONENT_NAME)
-OUT_COMP_GEN=$(OUT_MISC)/$(COMPONENT_NAME)
-OUT_COMP_SLO=$(OUT_SLO)/$(COMPONENT_NAME)
+OUT_COMP_INC=$(OUT_INC)/$(COMP_NAME)
+OUT_COMP_GEN=$(OUT_MISC)/$(COMP_NAME)
+OUT_COMP_SLO=$(OUT_SLO)/$(COMP_NAME)
 
-COMPONENT_ENV_FLAG = $(OUT_MISC)/cpp_$(COMPONENT_NAME)_prepare_env.flag
-COMPONENT_TYPEFLAG = $(OUT_MISC)/cpp_$(COMPONENT_NAME)_types.flag
+COMP_ENV_FLAG = $(OUT_MISC)/cpp_$(COMP_NAME)_prepare_env.flag
+COMP_TYPEFLAG = $(OUT_MISC)/cpp_$(COMP_NAME)_types.flag
 
 CXXFILES = remoteclient.cxx
 
 SLOFILES = $(patsubst %.cxx,$(OUT_COMP_SLO)/%.$(OBJ_EXT),$(CXXFILES))
 
-TYPES = $(shell $(XML2CMP) -types stdout $(COMPONENT_XML))
-TYPESLIST = $(foreach t,$(TYPES),-T$(t))
-
 # Targets
 .PHONY: ALL
 ALL : \
-	CppOfficeClientExample
+	CppClientExample
 
 include $(SETTINGS)/stdtarget.mk
 
-# This example type library will be extended by the office types
+# This example type library will be extended by the URE types
 $(OUT_BIN)/%.rdb :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
-	$(REGMERGE) $@ / $(OFFICE_TYPE_LIBRARY) 
+	$(REGMERGE) $@ / $(URE_TYPES) 
 
-$(COMPONENT_TYPEFLAG) : $(COMPONENT_RDB) $(COMPONENT_XML)
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_TYPEFLAG)))
-	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB)
-	echo flagged > $@
-
-$(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG)
+$(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx $(SDKTYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
+
+$(COMP_MAPFILE) : $(SLOFILES)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cat $(PRJ)/settings/component.uno.map > $(COMP_MAPFILE) 
+ifeq "$(OS)" "MACOSX"
+	nm -gx $(SLOFILES) | $(ADDSYMBOLS) >> $(COMP_MAPFILE)
+endif
 
 ifeq "$(OS)" "WIN"
 $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
@@ -101,13 +99,16 @@ $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) msvcrt.lib kernel32.lib
 	$(LINK_MANIFEST_VC8_ONLY)
 else
-$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
+$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES) $(COMP_MAPFILE)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(LINK) $(COMP_LINK_FLAGS) $(LINK_LIBS) -o $@ $^ \
-	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB)
+	$(LINK) $(COMP_LINK_FLAGS) $(LINK_LIBS) -o $@ $(SLOFILES) \
+	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB) $(CPPUHELPERDYLIB) $(CPPUDYLIB) $(SALDYLIB)
+ifeq "$(OS)" "MACOSX"
+	$(INSTALL_NAME_URELIBS)  $@
+endif
 endif	
 
-$(COMPONENT_ENV_FLAG) : $(COMPONENT_RDB) $(OUT_BIN)/remoteserver.rdb
+$(COMP_ENV_FLAG) : $(COMP_RDB) $(OUT_BIN)/remoteserver.rdb
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	@echo --------------------------------------------------------------------------------
@@ -118,13 +119,13 @@ $(COMPONENT_ENV_FLAG) : $(COMPONENT_RDB) $(OUT_BIN)/remoteserver.rdb
 	$(REGCOMP) -register -r $(OUT_BIN)/remoteserver.rdb -c bridgefac.uno.$(SHAREDLIB_EXT)
 	$(REGCOMP) -register -r $(OUT_BIN)/remoteserver.rdb -c uuresolver.uno.$(SHAREDLIB_EXT)
 	$(REGCOMP) -register -r $(OUT_BIN)/remoteserver.rdb -c streams.uno.$(SHAREDLIB_EXT)
-	$(REGCOMP) -register -r $(COMPONENT_RDB) -c connector.uno.$(SHAREDLIB_EXT)
-	$(REGCOMP) -register -r $(COMPONENT_RDB) -c remotebridge.uno.$(SHAREDLIB_EXT)
-	$(REGCOMP) -register -r $(COMPONENT_RDB) -c bridgefac.uno.$(SHAREDLIB_EXT)
-	$(REGCOMP) -register -r $(COMPONENT_RDB) -c uuresolver.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(COMP_RDB) -c connector.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(COMP_RDB) -c remotebridge.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(COMP_RDB) -c bridgefac.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(COMP_RDB) -c uuresolver.uno.$(SHAREDLIB_EXT)
 	@echo bla > $@
 
-CppOfficeClientExample : $(COMPONENT_IMPL) $(COMPONENT_ENV_FLAG)
+CppClientExample : $(COMP_IMPL) $(COMP_ENV_FLAG)
 	@echo --------------------------------------------------------------------------------
 	@echo The remoteclient C++ component can be used by using the uno binary. Use the 
 	@echo the follwong command to start the example. The run target starts a remote 
@@ -133,7 +134,7 @@ CppOfficeClientExample : $(COMPONENT_IMPL) $(COMPONENT_ENV_FLAG)
 	@echo $(MAKE) remoteclient.run
 	@echo --------------------------------------------------------------------------------
 
-%.run: $(COMPONENT_IMPL) $(COMPONENT_ENV_FLAG)
+%.run: $(COMP_IMPL) $(COMP_ENV_FLAG)
 	@echo Start the remote server process ...
 	@echo -
 ifeq "$(OS)" "WIN"
@@ -150,8 +151,8 @@ endif
 	@echo -
 	@echo Start remote client process ...
 	@echo -
-	uno -l $(COMPONENT_IMPL) -c com.sun.star.comp.product.example.RemoteClientSample \
-	-rw $(COMPONENT_RDB) -- "uno:socket,host=localhost,port=2083;urp;MyPipe"
+	uno -l $(COMP_IMPL) -c com.sun.star.comp.product.example.RemoteClientSample \
+	-rw $(COMP_RDB) -- "uno:socket,host=localhost,port=2083;urp;MyPipe"
 	@echo -
 
 .PHONY: clean
@@ -159,7 +160,7 @@ clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_INC))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_SLO))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_ENV_FLAG)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_TYPEFLAG)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(SHAREDLIB_OUT)/$(COMPONENT_NAME).*))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_ENV_FLAG)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_TYPEFLAG)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(SHAREDLIB_OUT)/$(COMP_NAME).*))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/remoteserver.rdb))
