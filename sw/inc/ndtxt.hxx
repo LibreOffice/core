@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndtxt.hxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -449,6 +449,16 @@ public:
        @retval FALSE  else
      */
     BOOL GetFirstLineOfsWithNum( short& rFirstOffset ) const;
+
+    /** return left margin for tab stop position calculation
+
+        OD 2008-06-30 #i91133#
+        Needed for text formatting
+        Method considers new list level attributes, which also can provide a left margin value
+
+        @author OD
+    */
+    long GetLeftMarginForTabCalculation() const;
 
     /** -> #i29560
         Returns if this text node has a number.
