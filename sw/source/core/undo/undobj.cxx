@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undobj.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -737,15 +737,17 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     bool bMayBe = false;
                     if( *pStt <= pBkmk->GetBookmarkPos() && pBkmk->GetBookmarkPos() <= *pEnd )
                     {
-                        if( pBkmk->GetBookmarkPos() == *pEnd )
+                        if( pBkmk->GetBookmarkPos() == *pEnd ||
+                            ( *pStt == pBkmk->GetBookmarkPos() && pBkmk->GetOtherBookmarkPos() ) )
                             bMayBe = true;
                         else
                             nTyp = SwHstryBookmark::BKMK_POS;
                     }
                     if( pBkmk->GetOtherBookmarkPos() &&
-                        *pStt <= *pBkmk->GetOtherBookmarkPos() )
+                        *pStt <= *pBkmk->GetOtherBookmarkPos() && *pBkmk->GetOtherBookmarkPos() <= *pEnd )
                     {
-                        if( nTyp || *pBkmk->GetOtherBookmarkPos() < *pEnd )
+                        if( nTyp || ( *pBkmk->GetOtherBookmarkPos() < *pEnd &&
+                            *pBkmk->GetOtherBookmarkPos() > *pStt ) )
                         {
                             if( bMayBe )
                                 nTyp = SwHstryBookmark::BKMK_POS;
