@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:18:16 $
+#  last change: $Author: rt $ $Date: 2008-07-11 14:20:00 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -72,7 +72,7 @@ $(OUT_COMP_GEN)/%.rdb : $(GENURDFILES)
 
 $(OUT_COMP_CLASS)/%.class : $(COMPONENT_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(JAVAMAKER) -BUCR -nD $(GENTYPELIST) -O$(OUT_COMP_CLASS) $(COMPONENT_RDB) $(OFFICE_TYPE_LIBRARY)
+	$(JAVAMAKER) -BUCR -nD $(GENTYPELIST) -O$(OUT_COMP_CLASS) $(COMPONENT_RDB) -X$(URE_TYPES) -X$(OFFICE_TYPES)
 
 .PHONY: clean
 clean :
