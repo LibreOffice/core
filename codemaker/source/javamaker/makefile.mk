@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -52,7 +52,7 @@ OBJFILES = \
     $(OBJ)$/javatype.obj
 
 APP1TARGET= $(TARGET)
-
+APP1RPATH=SDK
 APP1OBJS = $(OBJFILES)
 
 APP1DEPN= $(OUT)$/lib$/$(CODEMAKERLIBDEPN) $(OUT)$/lib$/$(COMMONJAVALIBDEPN)
