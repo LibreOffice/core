@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ConfigurationClassifier.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,11 +117,11 @@ void ConfigurationClassifier::PartitionResources (
         aC1andC2);
 
 #if defined VERBOSE && VERBOSE >= 2
-    OSL_TRACE("copying resource ids to C1-C2");
+    OSL_TRACE("copying resource ids to C1-C2\r");
 #endif
     CopyResources(aC1minusC2, mxConfiguration1, maC1minusC2);
 #if defined VERBOSE && VERBOSE >= 2
-    OSL_TRACE("copying resource ids to C2-C1");
+    OSL_TRACE("copying resource ids to C2-C1\r");
 #endif
     CopyResources(aC2minusC1, mxConfiguration2, maC2minusC1);
 
@@ -206,7 +206,7 @@ void ConfigurationClassifier::CopyResources (
         rTarget.push_back(*iResource);
 
 #if defined VERBOSE && VERBOSE >= 2
-        OSL_TRACE("    copying %s",
+        OSL_TRACE("    copying %s\r",
             OUStringToOString(FrameworkHelper::ResourceIdToString(*iResource),
                 RTL_TEXTENCODING_UTF8).getStr());
 #endif
@@ -216,7 +216,7 @@ void ConfigurationClassifier::CopyResources (
         {
             rTarget.push_back(aA[i]);
 #if defined VERBOSE && VERBOSE >= 2
-            OSL_TRACE("    copying %s",
+            OSL_TRACE("    copying %s\r",
                 OUStringToOString(FrameworkHelper::ResourceIdToString(aA[i]),
                     RTL_TEXTENCODING_UTF8).getStr());
 #endif
@@ -237,7 +237,7 @@ void ConfigurationClassifier::TraceResourceIdVector (
     for (iResource=rResources.begin(); iResource!=rResources.end(); ++iResource)
     {
         OUString sResource (FrameworkHelper::ResourceIdToString(*iResource));
-        OSL_TRACE("    %s",
+        OSL_TRACE("    %s\r",
             OUStringToOString(sResource, RTL_TEXTENCODING_UTF8).getStr());
     }
 }
