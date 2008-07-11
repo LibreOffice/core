@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swparrtf.cxx,v $
- * $Revision: 1.80 $
+ * $Revision: 1.81 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3838,7 +3838,7 @@ void SwRTFParser::SetSwgValues( SfxItemSet& rSet )
         {
             const SvxFontHeightItem& rFH = GetSize( rSet );
             nEsc *= 1000L;
-            nEsc /= long(rFH.GetHeight());
+            if(rFH.GetHeight()) nEsc /= long(rFH.GetHeight()); // #i77256#
 
             SvxEscapementItem aEsc( (short) nEsc,
                                 ((SvxEscapementItem*)pItem)->GetProp(), RES_CHRATR_ESCAPEMENT);
@@ -4032,7 +4032,7 @@ void SwRTFParser::SetStyleAttr( SfxItemSet& rCollSet,
 
 SwTxtFmtColl* SwRTFParser::MakeStyle( USHORT nNo, const SvxRTFStyleType& rStyle)
 {
-     bool bCollExist;
+    bool bCollExist;
     SwTxtFmtColl* pColl = MakeColl( rStyle.sName, USHORT(nNo),
         rStyle.nOutlineNo, bCollExist);
     aTxtCollTbl.Insert( nNo, pColl );
