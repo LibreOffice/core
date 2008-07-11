@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: includes.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -198,23 +198,19 @@ void Includes::dump(FileStream & out, rtl::OString const * companionHdl) {
     static char const * hxxExtension[2] = { "h", "hxx" };
     if (m_includeAny) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"com/sun/star/uno/Any." << hxxExtension[m_hpp]
-            << "\"\n";
+        out << "#include \"com/sun/star/uno/Any." << hxxExtension[m_hpp] << "\"\n";
     }
     if (m_includeReference) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"com/sun/star/uno/Reference."
-            << hxxExtension[m_hpp] << "\"\n";
+        out << "#include \"com/sun/star/uno/Reference." << hxxExtension[m_hpp] << "\"\n";
     }
     if (m_includeSequence) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"com/sun/star/uno/Sequence." << hxxExtension[m_hpp]
-            << "\"\n";
+        out << "#include \"com/sun/star/uno/Sequence." << hxxExtension[m_hpp] << "\"\n";
     }
     if (m_includeType) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"com/sun/star/uno/Type." << hxxExtension[m_hpp]
-            << "\"\n";
+        out << "#include \"com/sun/star/uno/Type." << hxxExtension[m_hpp] << "\"\n";
     }
     if (m_includeCppuMacrosHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
@@ -275,8 +271,7 @@ void Includes::dumpInclude(
     rtl::OString const & suffix)
 {
     static char const * extension[2] = { "hdl", "hpp" };
-    out << "#include \""
-        << registryType;
+    out << "#include \"" << registryType;
     if (suffix.getLength() > 0) {
         out << "/" << suffix;
     }
