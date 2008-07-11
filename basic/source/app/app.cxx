@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: app.cxx,v $
- * $Revision: 1.78 $
+ * $Revision: 1.79 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,9 +74,7 @@
 #include <comphelper/regpathhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
-#include <com/sun/star/beans/XComponent.hpp>
-#endif
+#include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
