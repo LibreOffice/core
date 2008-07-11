@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterSlideSorter.cxx,v $
  *
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1679,6 +1679,7 @@ void PresenterSlideSorter::Layout::UpdateScrollBars (void)
             + 2*mnHorizontalBorder);
         mpHorizontalScrollBar->SetThumbPosition(mnHorizontalOffset, false);
         mpHorizontalScrollBar->SetThumbSize(maBoundingBox.X2 - maBoundingBox.X1 + 1);
+        mpHorizontalScrollBar->SetLineHeight(maPreviewSize.Width);
     }
     if (mpVerticalScrollBar.get() != NULL)
     {
@@ -1688,6 +1689,7 @@ void PresenterSlideSorter::Layout::UpdateScrollBars (void)
             + 2*mnVerticalGap);
         mpVerticalScrollBar->SetThumbPosition(mnVerticalOffset, false);
         mpVerticalScrollBar->SetThumbSize(maBoundingBox.Y2 - maBoundingBox.Y1 + 1);
+        mpVerticalScrollBar->SetLineHeight(maPreviewSize.Height);
     }
 
 
@@ -1991,6 +1993,7 @@ OUString PresenterSlideSorter::MouseOverManager::GetFittingText (
     else
         return rsText;
 }
+
 
 
 
