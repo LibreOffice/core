@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docstyle.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -883,7 +883,9 @@ BOOL  SwDocStyleSheet::SetName( const String& rStr)
                 }
                 else
                 {
-                    ((SwNumRule*)pNumRule)->SetName( rStr );
+                    // --> OD 2008-07-08 #i91400#
+                    ((SwNumRule*)pNumRule)->SetName( rStr, rDoc );
+                    // <--
                     rDoc.SetModified();
 
                     bChg = TRUE;
@@ -1809,7 +1811,11 @@ void SwDocStyleSheet::Create()
                 // <--
                 pRule->SetAutoRule( FALSE );
                 if( !aName.Len() )
-                    pRule->SetName( aName );
+                {
+                    // --> OD 2008-07-08 #i91400#
+                    pRule->SetName( aName, rDoc );
+                    // <--
+                }
                 pNumRule = pRule;
             }
             break;
