@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cnttab.cxx,v $
- * $Revision: 1.78 $
+ * $Revision: 1.79 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2450,7 +2450,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
         aEntryNoPB.Show(        bToxIsContent );
         aHyperLinkPB.Show(      bToxIsContent );
         aRelToStyleCB.Show(    !bToxIsAuthorities );
-        aChapterInfoPB.Show(    !bToxIsContent);
+        aChapterInfoPB.Show(    !bToxIsContent && !bToxIsAuthorities);
         aEntryPB.Show(         !bToxIsAuthorities );
         aPageNoPB.Show(        !bToxIsAuthorities );
         aAuthFieldsLB.Show(     bToxIsAuthorities );
