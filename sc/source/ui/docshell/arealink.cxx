@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: arealink.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -323,7 +323,9 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
         aNewRange.aEnd.SetRow( aNewRange.aStart.Row() + nHeight - 1 );
     }
 
-    BOOL bCanDo = pDoc->CanFitBlock( aOldRange, aNewRange );    //! nach bDoInsert unterscheiden
+    //! check CanFitBlock only if bDoInsert is set?
+    BOOL bCanDo = ValidColRow( aNewRange.aEnd.Col(), aNewRange.aEnd.Row() ) &&
+                  pDoc->CanFitBlock( aOldRange, aNewRange );
     if (bCanDo)
     {
         ScDocShellModificator aModificator( *pImpl->m_pDocSh );
