@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentLoader.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 15:04:14 $
+ *  last change: $Author: rt $ $Date: 2008-07-11 14:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -53,9 +53,11 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/registry/XSimpleRegistry.hpp>
 
 #include <string.h>
 
