@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: errorhandler.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -566,33 +566,6 @@ void ErrorHandler::warning0(WarningCode w, const sal_Char* warningmsg)
         idlc()->incWarningCount();
 }
 
-void ErrorHandler::warning1(WarningCode w, AstDeclaration* d)
-{
-    if ( idlc()->getOptions()->isValid("-w") || idlc()->getOptions()->isValid("-we") ) {
-        warningHeader(w);
-        fprintf(stderr, "'%s'\n", d->getScopedName().getStr());
-    }
-
-    if ( idlc()->getOptions()->isValid("-we") )
-        idlc()->incErrorCount();
-    else
-        idlc()->incWarningCount();
-}
-
-void ErrorHandler::warning2(WarningCode w, AstDeclaration* d1, AstDeclaration* d2)
-{
-    if ( idlc()->getOptions()->isValid("-w") || idlc()->getOptions()->isValid("-we") ) {
-        warningHeader(w);
-        fprintf(stderr, "'%s', '%s'\n", d1->getScopedName().getStr(),
-                d2->getScopedName().getStr());
-    }
-
-    if ( idlc()->getOptions()->isValid("-we") )
-        idlc()->incErrorCount();
-    else
-        idlc()->incWarningCount();
-}
-
 void ErrorHandler::syntaxError(ParseState ps, sal_Int32 lineNumber, const sal_Char* errmsg)
 {
     errorHeader(EIDL_SYNTAX_ERROR, lineNumber);
@@ -715,8 +688,8 @@ void ErrorHandler::enumValLookupFailure(AstUnion* pUnion, AstEnum* pEnum, const 
     idlc()->incErrorCount();
 }
 
-bool ErrorHandler::checkPublished(AstDeclaration const * decl) {
-    if (idlc()->isPublished() && !decl->isPublished()) {
+bool ErrorHandler::checkPublished(AstDeclaration const * decl, bool bOptional) {
+    if (idlc()->isPublished() && !decl->isPublished() && !bOptional) {
         error1(EIDL_PUBLISHED_USES_UNPUBLISHED, decl);
         return false;
     } else {
