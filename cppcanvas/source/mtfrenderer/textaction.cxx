@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textaction.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1641,7 +1641,7 @@ namespace cppcanvas
                                      VirtualDevice&     rVDev )
             {
                 const ::basegfx::B2DSize aFontSize( 0,
-                                                    rVDev.GetFont().GetHeight() / 32.0 );
+                                                    rVDev.GetFont().GetHeight() / 64.0 );
 
                 const double nOutlineWidth(
                     (rState.mapModeTransform * aFontSize).getY() );
@@ -1755,21 +1755,26 @@ namespace cppcanvas
 
                 // TODO(P1): implement caching
 
-                // underlines/strikethrough
-                rCanvas->fillPolyPolygon( mxTextLines,
-                                          rViewState,
-                                          rRenderState );
-
                 // background of text
-                mpCanvas->getUNOCanvas()->fillPolyPolygon( mxTextPoly,
-                                                           rViewState,
-                                                           aLocalState );
+                rCanvas->fillPolyPolygon( mxTextPoly,
+                                          rViewState,
+                                          aLocalState );
 
                 // border line of text
-                mpCanvas->getUNOCanvas()->strokePolyPolygon( mxTextPoly,
-                                                             rViewState,
-                                                             rRenderState,
-                                                             aStrokeAttributes );
+                rCanvas->strokePolyPolygon( mxTextPoly,
+                                            rViewState,
+                                            rRenderState,
+                                            aStrokeAttributes );
+
+                // underlines/strikethrough - background
+                rCanvas->fillPolyPolygon( mxTextLines,
+                                          rViewState,
+                                          aLocalState );
+                // underlines/strikethrough - border
+                rCanvas->strokePolyPolygon( mxTextLines,
+                                            rViewState,
+                                            rRenderState,
+                                            aStrokeAttributes );
 
                 return true;
             }
@@ -1839,10 +1844,15 @@ namespace cppcanvas
                                                  rRenderState,
                                                  aStrokeAttributes );
 
-                    // underlines/strikethrough
-                    mrCanvas->drawPolyPolygon( mrLinePolygon,
+                    // underlines/strikethrough - background
+                    mrCanvas->fillPolyPolygon( mrLinePolygon,
                                                mrViewState,
-                                               rRenderState );
+                                               aLocalState );
+                    // underlines/strikethrough - border
+                    mrCanvas->strokePolyPolygon( mrLinePolygon,
+                                                 mrViewState,
+                                                 rRenderState,
+                                                 aStrokeAttributes );
 
                     return true;
                 }
