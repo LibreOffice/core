@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InstanceInspector.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 17:10:43 $
+ *  last change: $Author: rt $ $Date: 2008-07-11 14:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,8 +38,8 @@
  *
  *************************************************************************/
 
-#ifndef _org_OpenOffice_InstanceInspector_idl_
-#define _org_OpenOffice_InstanceInspector_idl_
+#ifndef INCLUDED_ORG_OPENOFFICE_INSTANCEINSPECTOR_IDL
+#define INCLUDED_ORG_OPENOFFICE_INSTANCEINSPECTOR_IDL
 
 #include <XInstanceInspector.idl>
 
