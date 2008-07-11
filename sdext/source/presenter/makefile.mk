@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -288,28 +288,38 @@ $(COMPONENT_LIBRARY) : $(DLLDEST)$/$$(@:f)
     $(GNUCOPY) $(SOLARBINDIR)$/mingwm10.dll $(ZIP1DIR)
  .ELSE
     .IF "$(PACKMS)"!=""
-        .IF "$(CCNUMVER)" <= "001499999999"
-            $(GNUCOPY) $(PACKMS)$/msvcr80.dll $(ZIP1DIR)
-            $(GNUCOPY) $(PACKMS)$/msvcp80.dll $(ZIP1DIR)
-            $(GNUCOPY) $(PACKMS)$/msvcm80.dll $(ZIP1DIR)
-            $(GNUCOPY) $(PACKMS)$/Microsoft.VC80.CRT.manifest $(ZIP1DIR)
+        .IF "$(CCNUMVER)" <= "001399999999"
+            $(GNUCOPY) $(PACKMS)$/msvcr71.dll $(ZIP1DIR)
+            $(GNUCOPY) $(PACKMS)$/msvcp71.dll $(ZIP1DIR)
         .ELSE
-            $(GNUCOPY) $(PACKMS)$/msvcr90.dll $(ZIP1DIR)
-            $(GNUCOPY) $(PACKMS)$/msvcp90.dll $(ZIP1DIR)
-            $(GNUCOPY) $(PACKMS)$/msvcm90.dll $(ZIP1DIR)
-            $(GNUCOPY) $(PACKMS)$/Microsoft.VC90.CRT.manifest $(ZIP1DIR)
+            .IF "$(CCNUMVER)" <= "001499999999"
+                $(GNUCOPY) $(PACKMS)$/msvcr80.dll $(ZIP1DIR)
+                $(GNUCOPY) $(PACKMS)$/msvcp80.dll $(ZIP1DIR)
+                $(GNUCOPY) $(PACKMS)$/msvcm80.dll $(ZIP1DIR)
+                $(GNUCOPY) $(PACKMS)$/Microsoft.VC80.CRT.manifest $(ZIP1DIR)
+            .ELSE
+                $(GNUCOPY) $(PACKMS)$/msvcr90.dll $(ZIP1DIR)
+                $(GNUCOPY) $(PACKMS)$/msvcp90.dll $(ZIP1DIR)
+                $(GNUCOPY) $(PACKMS)$/msvcm90.dll $(ZIP1DIR)
+                $(GNUCOPY) $(PACKMS)$/Microsoft.VC90.CRT.manifest $(ZIP1DIR)
+            .ENDIF
         .ENDIF
     .ELSE        # "$(PACKMS)"!=""
-        .IF "$(CCNUMVER)" <= "001499999999"
-            $(GNUCOPY) $(SOLARBINDIR)$/msvcr80.dll $(ZIP1DIR)
-            $(GNUCOPY) $(SOLARBINDIR)$/msvcp80.dll $(ZIP1DIR)
-            $(GNUCOPY) $(SOLARBINDIR)$/msvcm80.dll $(ZIP1DIR)
-            $(GNUCOPY) $(SOLARBINDIR)$/Microsoft.VC80.CRT.manifest $(ZIP1DIR)
+        .IF "$(CCNUMVER)" <= "001399999999"
+            $(GNUCOPY) $(SOLARBINDIR)$/msvcr71.dll $(ZIP1DIR)
+            $(GNUCOPY) $(SOLARBINDIR)$/msvcp71.dll $(ZIP1DIR)
         .ELSE
-            $(GNUCOPY) $(SOLARBINDIR)$/msvcr90.dll $(ZIP1DIR)
-            $(GNUCOPY) $(SOLARBINDIR)$/msvcp90.dll $(ZIP1DIR)
-            $(GNUCOPY) $(SOLARBINDIR)$/msvcm90.dll $(ZIP1DIR)
-            $(GNUCOPY) $(SOLARBINDIR)$/Microsoft.VC90.CRT.manifest $(ZIP1DIR)
+            .IF "$(CCNUMVER)" <= "001499999999"
+                $(GNUCOPY) $(SOLARBINDIR)$/msvcr80.dll $(ZIP1DIR)
+                $(GNUCOPY) $(SOLARBINDIR)$/msvcp80.dll $(ZIP1DIR)
+                $(GNUCOPY) $(SOLARBINDIR)$/msvcm80.dll $(ZIP1DIR)
+                $(GNUCOPY) $(SOLARBINDIR)$/Microsoft.VC80.CRT.manifest $(ZIP1DIR)
+            .ELSE
+                $(GNUCOPY) $(SOLARBINDIR)$/msvcr90.dll $(ZIP1DIR)
+                $(GNUCOPY) $(SOLARBINDIR)$/msvcp90.dll $(ZIP1DIR)
+                $(GNUCOPY) $(SOLARBINDIR)$/msvcm90.dll $(ZIP1DIR)
+                $(GNUCOPY) $(SOLARBINDIR)$/Microsoft.VC90.CRT.manifest $(ZIP1DIR)
+            .ENDIF
         .ENDIF
     .ENDIF         # "$(PACKMS)"!=""
  .ENDIF	#"$(COM)"=="GCC"
