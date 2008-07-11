@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterViewFactory.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -320,6 +320,8 @@ void SAL_CALL PresenterViewFactory::releaseResource (const Reference<XResource>&
     {
         try
         {
+            if (pView != NULL)
+                pView->ReleaseView();
             Reference<lang::XComponent> xComponent (rxView, UNO_QUERY);
             if (xComponent.is())
                 xComponent->dispose();
@@ -638,6 +640,13 @@ void CachablePresenterView::ActivatePresenterView (void)
 void CachablePresenterView::DeactivatePresenterView (void)
 {
     mbIsPresenterViewActive = false;
+}
+
+
+
+
+void CachablePresenterView::ReleaseView (void)
+{
 }
 
 

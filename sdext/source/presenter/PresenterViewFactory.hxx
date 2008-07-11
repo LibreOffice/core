@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterViewFactory.hxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,6 +68,12 @@ public:
         itself while being deactive.
     */
     virtual void DeactivatePresenterView (void);
+
+    /** Called before the view is disposed.  This gives the view the
+        oportunity to trigger actions that may lead to (synchronous)
+        callbacks that do not result in DisposedExceptions.
+    */
+    virtual void ReleaseView (void);
 
 protected:
     bool mbIsPresenterViewActive;
