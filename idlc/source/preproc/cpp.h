@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cpp.h,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -147,7 +147,6 @@ enum errtype
 };
 
 void expandlex(void);
-void fixlex(void);
 void setup(int, char **);
 int gettokens(Tokenrow *, int);
 int comparetokens(Tokenrow *, Tokenrow *);
