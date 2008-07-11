@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.73 $
+# $Revision: 1.74 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -105,6 +105,12 @@ SCPDEFS+=-DSYSTEM_LIBXML
 
 .IF "$(SYSTEM_LIBXSLT)" == "YES"
 SCPDEFS+=-DSYSTEM_LIBXSLT
+.ELSE
+.INCLUDE :  libxsltversion.mk
+SCPDEFS+=\
+    -DLIBXSLT_MAJOR=$(LIBXSLT_MAJOR) \
+    -DLIBXSLT_MINOR=$(LIBXSLT_MINOR) \
+    -DLIBXSLT_MICRO=$(LIBXSLT_MICRO)
 .ENDIF
 
 .IF "$(SYSTEM_DB)" == "YES"
