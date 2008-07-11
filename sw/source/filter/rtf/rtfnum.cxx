@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtfnum.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -385,7 +385,10 @@ void SwRTFParser::ReadListTable()
                     RTL_CONSTASCII_STRINGPARAM( RTF_NUMRULE_NAME " 1" )));
                 aEntry.nListDocPos = pDoc->MakeNumRule( sTmp );
                 pCurRule = pDoc->GetNumRuleTbl()[ aEntry.nListDocPos ];
-                pCurRule->SetName( pDoc->GetUniqueNumRuleName( &sTmp, FALSE ) );
+                // --> OD 2008-07-08 #i91400#
+                pCurRule->SetName( pDoc->GetUniqueNumRuleName( &sTmp, FALSE ),
+                                   *pDoc );
+                // <--
                 pCurRule->SetAutoRule( FALSE );
                 nNumLvl = (BYTE)-1;
             }
@@ -402,7 +405,11 @@ void SwRTFParser::ReadListTable()
             {
                 String sTmp( DelCharAtEnd( aToken, ';' ));
                 if( sTmp.Len() && !pDoc->FindNumRulePtr( sTmp ))
-                    pCurRule->SetName( sTmp );
+                {
+                    // --> OD 2008-07-08 #i91400#
+                    pCurRule->SetName( sTmp, *pDoc );
+                    // <--
+                }
             }
             SkipGroup();
             break;
@@ -580,7 +587,10 @@ void SwRTFParser::ReadListOverrideTable()
                                 RTL_CONSTASCII_STRINGPARAM( RTF_NUMRULE_NAME " 1" )));
                             aEntry.nListDocPos = pDoc->MakeNumRule( sTmp, pRule );
                             pRule = pDoc->GetNumRuleTbl()[ aEntry.nListDocPos ];
-                            pRule->SetName( pDoc->GetUniqueNumRuleName( &sTmp, FALSE ) );
+                            // --> OD 2008-07-08 #i91400#
+                            pRule->SetName( pDoc->GetUniqueNumRuleName( &sTmp, FALSE ),
+                                            *pDoc );
+                            // <--
                             pRule->SetAutoRule( FALSE );
                             nNumLvl = (BYTE)-1;
                             aListArr.Insert( aEntry, aListArr.Count() );
@@ -842,7 +852,9 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
         aEntry.nListNo = nListNo;
         aListArr.Insert( aEntry, aListArr.Count() );
         pCurRule = pDoc->GetNumRuleTbl()[ aEntry.nListDocPos ];
-        pCurRule->SetName( pDoc->GetUniqueNumRuleName( &sTmp, FALSE ));
+        // --> OD 2008-07-08 #i91400#
+        pCurRule->SetName( pDoc->GetUniqueNumRuleName( &sTmp, FALSE ), *pDoc );
+        // <--
         pCurRule->SetAutoRule( FALSE );
         pCurRule->SetContinusNum( bContinus );
     }
