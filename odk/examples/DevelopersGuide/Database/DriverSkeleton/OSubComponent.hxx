@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OSubComponent.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2008-04-10 16:30:10 $
+ *  last change: $Author: rt $ $Date: 2008-07-11 14:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -153,8 +153,6 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const = 0;
         };
 
-#ifndef MACOSX
-
         template<class TYPE>
         sal_Int32                       OPropertyArrayUsageHelper< TYPE >::s_nRefCount  = 0;
 
@@ -163,8 +161,6 @@ namespace connectivity
 
         template<class TYPE>
         ::osl::Mutex                    OPropertyArrayUsageHelper< TYPE >::s_aMutex;
-
-#endif /* MACOSX */
 
         //------------------------------------------------------------------
         template <class TYPE>
