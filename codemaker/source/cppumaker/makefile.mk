@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.11 $
+# $Revision: 1.12 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -60,7 +60,7 @@ NOOPTFILES= \
             $(OBJ)$/cpputype.obj
 
 APP1TARGET= $(TARGET)
-
+APP1RPATH=SDK
 APP1OBJS=   $(OBJFILES)
 
 APP1DEPN= $(OUT)$/lib$/$(CODEMAKERLIBDEPN) $(OUT)$/lib$/$(COMMONCPPLIBDEPN)
