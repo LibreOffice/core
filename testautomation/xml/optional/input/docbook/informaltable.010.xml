@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: informaltable.010</title>
+<releaseinfo role="CVS">$Id: informaltable.010.xml,v 1.2 2008-07-11 07:49:26 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<!--
++........+........+........+........+
+|   A    |        |        |    F   |
++........+........+........+........+
+|        |   B    |                 |
++........+........+        D        +
+|   C    |        |                 |
++........+........+........+........+
+-->
+
+<informaltable frame="all">
+<tgroup cols="4">
+<colspec colname="c1a" colnum="1"/>
+<colspec colname="c2a" colnum="2"/>
+<colspec colname="c3a" colnum="3"/>
+<colspec colname="c4a" colnum="4"/>
+<tbody>
+<row>
+  <entry>A</entry>
+  <entry colname="c4a">F</entry>
+</row>
+<row>
+  <entry colname="c2a">B</entry>
+  <entry namest="c3a" nameend="c4a" morerows="1">D</entry>
+</row>
+<row>
+  <entry>C</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+</article>
