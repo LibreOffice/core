@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -69,16 +69,22 @@ APP1OBJS= $(COMMON_OBJFILES) $(TESTSHL_OBJFILES)
 
 APP1STDLIBS=$(SALLIB)
 
-APP1DEPN= \
-    $(LB)$/cppunit_no_regallfkt.lib \
-    $(SLB)$/testresult.lib
+# the c5t*.lib files are out of the cppunit module
+# APP1DEPN= \
+# 	$(SOLARLIBDIR)$/c5t_no_regallfkt.lib \
+# 	$(SOLARLIBDIR)$/c5t_testresult.lib
 
+.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 APP1LIBS= \
-    $(LB)$/cppunit_no_regallfkt.lib \
-    $(SLB)$/testresult.lib
+    $(SOLARLIBDIR)$/c5t_no_regallfkt.lib \
+    $(SOLARLIBDIR)$/c5t_testresult.lib
+APP1LIBS += $(SOLARLIBDIR)$/c5t_winstuff.lib
+.ENDIF
 
-.IF "$(GUI)"=="WNT" 
-APP1LIBS += $(LB)$/winstuff.lib
+.IF "$(GUI)" == "UNX"
+APP1STDLIBS+= \
+    $(SOLARLIBDIR)$/libc5t_testresult$(DLLPOSTFIX).a \
+    $(SOLARLIBDIR)$/libc5t_no_regallfkt$(DLLPOSTFIX).a
 .ENDIF
 
 #
@@ -101,7 +107,7 @@ APP3DEPN=
 APP3LIBS= 
 
 .IF "$(GUI)"=="WNT" 
-APP3LIBS += $(LB)$/winstuff.lib
+APP3LIBS += $(SOLARLIBDIR)$/c5t_winstuff.lib
 .ENDIF
 
 
