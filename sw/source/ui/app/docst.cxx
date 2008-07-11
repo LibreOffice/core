@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docst.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1036,7 +1036,10 @@ USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* 
                 0 != ( pCurRule = pCurrWrtShell->GetCurNumRule() ))
             {
                 SwNumRule aRule( *pCurRule );
-                aRule.SetName( pStyle->GetNumRule()->GetName() );
+                // --> OD 2008-07-08 #i91400#
+                aRule.SetName( pStyle->GetNumRule()->GetName(),
+                               *(pCurrWrtShell->GetDoc()) );
+                // <--
                 pCurrWrtShell->ChgNumRuleFmts( aRule );
             }
         }
@@ -1193,7 +1196,10 @@ USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
 
             SwNumRule aRule( *pCurrWrtShell->GetCurNumRule() );
             String sOrigRule( aRule.GetName() );
-            aRule.SetName( pStyle->GetNumRule()->GetName() );
+            // --> OD 2008-07-08 #i91400#
+            aRule.SetName( pStyle->GetNumRule()->GetName(),
+                           *(pCurrWrtShell->GetDoc()) );
+            // <--
             pCurrWrtShell->ChgNumRuleFmts( aRule );
 
             pCurrWrtShell->ReplaceNumRule( sOrigRule, aRule.GetName() );
