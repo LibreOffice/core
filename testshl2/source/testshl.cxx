@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: testshl.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,7 @@
 #endif
 
 #ifdef WNT
-# include "winstuff.hxx"
+# include "testshl/winstuff.hxx"
 #endif
 
 #include <iostream>
@@ -50,11 +50,11 @@
 #include <rtl/string.hxx>
 
 // #include <rtl/tres.h>
-#include "autoregisterhelper.hxx"
+#include "testshl/autoregisterhelper.hxx"
 // #include "cmdlinebits.hxx"
-#include "log.hxx"
-#include "filehelper.hxx"
-#include "getopt.hxx"
+#include "testshl/log.hxx"
+#include "testshl/filehelper.hxx"
+#include "testshl/getopt.hxx"
 #include "cppunit/result/outputter.hxx"
 #include "cppunit/joblist.hxx"
 
@@ -266,7 +266,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(, argv)
 
     if ( opt.hasOpt("-verbose") )
     {
-        fprintf(stderr, "testshl2 $Revision: 1.24 $\n");
+        fprintf(stderr, "testshl2 $Revision: 1.25 $\n");
     }
 
     if ( opt.hasOpt("-endless"))                 // this exists only for self test issues
