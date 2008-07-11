@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: stamp.012</title>
+<releaseinfo role="CVS">$Id: stamp.012.xml,v 1.2 2008-07-11 08:00:08 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<para>The stamp image has a natural size of 200x128 pixels.</para>
+
+<para>The stamp image: width=75%; scalefit=1</para>
+
+<mediaobject>
+  <imageobject>
+    <?dbhtml background-color="green"?>
+    <imagedata
+      width="75%"
+      scalefit="1"
+      fileref="graphics/stamp.png"/>
+  </imageobject>
+  <textobject><phrase>The DocBook Stamp</phrase></textobject>
+</mediaobject>
+
+<para>The stamp image: depth=25%; scalefit=1</para>
+
+<mediaobject>
+  <imageobject>
+    <?dbhtml background-color="green"?>
+    <imagedata
+      depth="25%"
+      scalefit="1"
+      fileref="graphics/stamp.png"/>
+  </imageobject>
+  <textobject><phrase>The DocBook Stamp</phrase></textobject>
+</mediaobject>
+
+</article>
