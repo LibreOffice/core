@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: codemaker.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +32,7 @@
 #define INCLUDED_CODEMAKER_CODEMAKER_HXX
 
 #include "sal/config.h"
-#ifndef INCLUDED_CODEMAKER_UNOTYPES_HXX
 #include "codemaker/unotype.hxx"
-#endif
 #include "registry/types.h"
 #include "sal/types.h"
 
