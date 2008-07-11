@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filterdetect.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2008-04-10 16:46:24 $
+ *  last change: $Author: rt $ $Date: 2008-07-11 14:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -58,9 +58,6 @@
 #include <com/sun/star/style/XStyleLoader.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNamesAccess.hpp>
-#endif
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
