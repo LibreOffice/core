@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: skeletonjava.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 #define INCLUDED_UNODEVTOOLS_SKELETONJAVA_HXX
 
 #include <fstream>
+
 #include "codemaker/generatedtypeset.hxx"
 #include "skeletoncommon.hxx"
 
