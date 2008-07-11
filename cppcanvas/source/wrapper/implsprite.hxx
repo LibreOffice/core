@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: implsprite.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +33,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#ifndef _COM_SUN_STAR_RENDERING_XSPRITE_HPP_
-#include <com.sun.star.rendering.XSprites.hpp>
-#endif
+#include <com/sun/star/rendering/XSprite.hpp>
 
 #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
