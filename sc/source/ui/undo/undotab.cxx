@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undotab.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -784,25 +784,26 @@ BOOL __EXPORT ScUndoCopyTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 //
 
 ScUndoMakeScenario::ScUndoMakeScenario( ScDocShell* pNewDocShell,
-                        SCTAB nSrc, SCTAB nDest, ScDocument* pUndo,
+                        SCTAB nSrc, SCTAB nDest,
                         const String& rN, const String& rC,
                         const Color& rCol, USHORT nF,
                         const ScMarkData& rMark ) :
     ScSimpleUndo( pNewDocShell ),
     nSrcTab( nSrc ),
     nDestTab( nDest ),
-    pUndoDoc( pUndo ),
     aName( rN ),
     aComment( rC ),
     aColor( rCol ),
     nFlags( nF ),
-    aMarkData( rMark )
+    aMarkData( rMark ),
+    pDrawUndo( NULL )
 {
+    pDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
 }
 
 __EXPORT ScUndoMakeScenario::~ScUndoMakeScenario()
 {
-    delete pUndoDoc;
+    DeleteSdrUndoAction( pDrawUndo );
 }
 
 String __EXPORT ScUndoMakeScenario::GetComment() const
@@ -813,7 +814,15 @@ String __EXPORT ScUndoMakeScenario::GetComment() const
 void __EXPORT ScUndoMakeScenario::Undo()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
+
+    pDocShell->SetInUndo( TRUE );
+    bDrawIsInUndo = TRUE;
     pDoc->DeleteTab( nDestTab );
+    bDrawIsInUndo = FALSE;
+    pDocShell->SetInUndo( FALSE );
+
+    DoSdrUndoAction( pDrawUndo, pDoc );
+
     pDocShell->PostPaint(0,0,nDestTab,MAXCOL,MAXROW,MAXTAB, PAINT_ALL);
     pDocShell->PostDataChanged();
 
@@ -822,6 +831,9 @@ void __EXPORT ScUndoMakeScenario::Undo()
         pViewShell->SetTabNo( nSrcTab, TRUE );
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+
+    //  SetTabNo(...,TRUE) for all views to sync with drawing layer pages
+    pDocShell->Broadcast( SfxSimpleHint( SC_HINT_FORCESETTAB ) );
 }
 
 void __EXPORT ScUndoMakeScenario::Redo()
@@ -830,7 +842,15 @@ void __EXPORT ScUndoMakeScenario::Redo()
     if (pViewShell)
         pViewShell->SetMarkData( aMarkData );
 
+    RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
+
+    pDocShell->SetInUndo( TRUE );
+    bDrawIsInUndo = TRUE;
+
     pDocShell->MakeScenario( nSrcTab, aName, aComment, aColor, nFlags, aMarkData, FALSE );
+
+    bDrawIsInUndo = FALSE;
+    pDocShell->SetInUndo( FALSE );
 
     if (pViewShell)
         pViewShell->SetTabNo( nDestTab, TRUE );
