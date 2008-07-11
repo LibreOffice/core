@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterSlideShowView.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -211,15 +211,7 @@ void PresenterSlideShowView::disposing (void)
         mxWindow = NULL;
     }
     mxSlideShowController = NULL;
-    if (mxSlideShow.is())
-    {
-        if (mbIsViewAdded)
-        {
-            mxSlideShow->removeView(this);
-            mbIsViewAdded = false;
-        }
-        mxSlideShow = NULL;
-    }
+    mxSlideShow = NULL;
     if (mxViewCanvas.is())
     {
         Reference<XComponent> xComponent (mxViewCanvas, UNO_QUERY);
@@ -234,8 +226,38 @@ void PresenterSlideShowView::disposing (void)
         if (xComponent.is())
             xComponent->dispose();
     }
+    if (mxPointer.is())
+    {
+        Reference<XComponent> xComponent (mxPointer, UNO_QUERY);
+        mxPointer = NULL;
+        if (xComponent.is())
+            xComponent->dispose();
+    }
+    if (mxBackgroundPolygon1.is())
+    {
+        Reference<XComponent> xComponent (mxBackgroundPolygon1, UNO_QUERY);
+        mxBackgroundPolygon1 = NULL;
+        if (xComponent.is())
+            xComponent->dispose();
+    }
+    if (mxBackgroundPolygon2.is())
+    {
+        Reference<XComponent> xComponent (mxBackgroundPolygon2, UNO_QUERY);
+        mxBackgroundPolygon2 = NULL;
+        if (xComponent.is())
+            xComponent->dispose();
+    }
 
     mxComponentContext = NULL;
+    mpPresenterController = NULL;
+    mxViewId = NULL;
+    mxController = NULL;
+    mxCanvas = NULL;
+    mpBackground.reset();
+    msClickToExitPresentationText = OUString();
+    msClickToExitPresentationTitle = OUString();
+    msTitleTemplate = OUString();
+    mxCurrentSlide = NULL;
 }
 
 
@@ -293,6 +315,20 @@ css::uno::Reference<css::drawing::XDrawPage> SAL_CALL PresenterSlideShowView::ge
     throw (css::uno::RuntimeException)
 {
     return mxCurrentSlide;
+}
+
+
+
+
+//----- CachablePresenterView -------------------------------------------------
+
+void PresenterSlideShowView::ReleaseView (void)
+{
+    if (mxSlideShow.is() && mbIsViewAdded)
+    {
+        mxSlideShow->removeView(this);
+        mbIsViewAdded = false;
+    }
 }
 
 
@@ -868,7 +904,7 @@ void PresenterSlideShowView::PaintEndSlide (const awt::Rectangle& rRepaintBox)
 
 void PresenterSlideShowView::PaintInnerWindow (const awt::PaintEvent& rEvent)
 {
-    // Forward windowpaint to listeners.
+    // Forward window paint to listeners.
     awt::PaintEvent aEvent (rEvent);
     aEvent.Source = static_cast<XWeak*>(this);
     ::cppu::OInterfaceContainerHelper* pIterator
@@ -880,14 +916,6 @@ void PresenterSlideShowView::PaintInnerWindow (const awt::PaintEvent& rEvent)
 
     if (mbIsForcedPaintPending)
         ForceRepaint();
-
-    // Schedule the processing of the events caused by the previous notifies.
-    if (mxSlideShow.is())
-    {
-        double nTimeToNextUpdateCall (0);
-        mxSlideShow->update(nTimeToNextUpdateCall);
-        // We do not call update regularly, so we ignore the returned values.
-    }
 
     // Finally, in double buffered environments, request the changes to be
     // made visible.
@@ -1019,32 +1047,11 @@ void PresenterSlideShowView::Resize (void)
 
 void PresenterSlideShowView::ForceRepaint (void)
 {
-    // The modify listeners are called twice.  The first time the
-    // mbIsInModifyNotification flag leads to a slightly modified
-    // transformation returned by getTransformation().  With this hack we
-    // get past the optimization that otherwise prevents a proper repaint
-    // when the size of the preview does not change.
-    mbIsInModifyNotification = true;
-    try
+    if (mxSlideShow.is() && mbIsViewAdded)
     {
-        lang::EventObject aEvent;
-        aEvent.Source = static_cast<XWeak*>(this);
-        ::cppu::OInterfaceContainerHelper* pIterator
-              = maBroadcaster.getContainer(getCppuType((Reference<util::XModifyListener>*)NULL));
-        if (pIterator != NULL)
-            pIterator->notifyEach(&util::XModifyListener::modified, aEvent);
+        mxSlideShow->removeView(this);
+        mxSlideShow->addView(this);
     }
-    catch (Exception&)
-    {
-    }
-    mbIsInModifyNotification = false;
-
-    lang::EventObject aEvent;
-    aEvent.Source = static_cast<XWeak*>(this);
-    ::cppu::OInterfaceContainerHelper* pIterator
-          = maBroadcaster.getContainer(getCppuType((Reference<util::XModifyListener>*)NULL));
-    if (pIterator != NULL)
-        pIterator->notifyEach(&util::XModifyListener::modified, aEvent);
 }
 
 
