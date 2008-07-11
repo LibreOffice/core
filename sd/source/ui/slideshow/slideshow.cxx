@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slideshow.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,7 @@
 #include "sdattr.hrc"
 #include "FactoryIds.hxx"
 #include "ViewShell.hxx"
-
+#include "SlideShowRestarter.hxx"
 #include <boost/bind.hpp>
 
 using ::com::sun::star::presentation::XSlideShowController;
@@ -83,6 +83,36 @@ using namespace ::com::sun::star::drawing::framework;
 extern String getUiNameFromPageApiNameImpl( const ::rtl::OUString& rApiName );
 
 #define C2U(x) OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
+
+
+namespace {
+    /** This local version of the work window overloads DataChanged() so that it
+        can restart the slide show when a displau is added or removed.
+    */
+    class FullScreenWorkWindow : public WorkWindow
+    {
+    public:
+        FullScreenWorkWindow (
+            const ::rtl::Reference<SlideShow>& rpSlideShow,
+            ViewShellBase* pViewShellBase)
+            : WorkWindow(NULL, WB_HIDE | WB_CLIPCHILDREN),
+              mpRestarter(new SlideShowRestarter(rpSlideShow, pViewShellBase))
+        {}
+
+
+        virtual void DataChanged (const DataChangedEvent& rEvent)
+        {
+            if (rEvent.GetType() == DATACHANGED_DISPLAY)
+            {
+                mpRestarter->Restart();
+            }
+        }
+
+    private:
+        ::boost::shared_ptr<SlideShowRestarter> mpRestarter;
+    };
+}
+
 
 //////////////////////////////////////////////////////////////////////////////
 // --------------------------------------------------------------------
@@ -1123,7 +1153,7 @@ void SlideShow::StartFullscreenPresentation( )
     // will be created.  This is done here explicitly so that we can make it
     // fullscreen.
     const sal_Int32 nDisplay (GetDisplay());
-    WorkWindow* pWorkWindow = new WorkWindow (NULL, WB_HIDE | WB_CLIPCHILDREN);
+    WorkWindow* pWorkWindow = new FullScreenWorkWindow(this, mpCurrentViewShellBase);
     pWorkWindow->StartPresentationMode( TRUE, mpDoc->getPresentationSettings().mbAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0, nDisplay);
     //    pWorkWindow->ShowFullScreenMode(FALSE, nDisplay);
     pWorkWindow->SetBackground(Wallpaper(COL_BLACK));
