@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: global.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 #include <set>
 
 #include <stdio.h>
+
 #include "osl/file.hxx"
 #include "rtl/ustring.hxx"
 #include "rtl/strbuf.hxx"
