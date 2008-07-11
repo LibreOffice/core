@@ -8,7 +8,7 @@
 #
 # $RCSfile: epmfile.pm,v $
 #
-# $Revision: 1.84 $
+# $Revision: 1.85 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -2870,7 +2870,8 @@ sub analyze_rootpath
     if ( $installer::globals::islinuxdebbuild )
     {
         $$relocatablepathref = "";
-        $$staticpathref = $rootpath . $installer::globals::separator . $$staticpathref;  # no relocatibility for Debian
+        # $$staticpathref is already "/opt/openoffice.org3", no additional $rootpath required.
+        # $$staticpathref = $rootpath . $installer::globals::separator . $$staticpathref;  # no relocatibility for Debian
     }
 
 }
