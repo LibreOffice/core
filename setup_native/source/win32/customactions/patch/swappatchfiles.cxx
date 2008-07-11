@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swappatchfiles.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -546,8 +546,9 @@ static std::queue< std::_tstring > getProfileKeys( const std::_tstring& aFileNam
 
 extern "C" UINT __stdcall InstallPatchedFiles( MSIHANDLE handle )
 {
-    std::_tstring   sInstDir = GetMsiProperty( handle, TEXT("BASISINSTALLLOCATION") );
-    std::_tstring   sProgramDir = sInstDir + TEXT("program\\");
+    std::_tstring   sInstDir = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
+    std::_tstring   sBasisInstDir = GetMsiProperty( handle, TEXT("BASISINSTALLLOCATION") );
+    std::_tstring   sProgramDir = sBasisInstDir + TEXT("program\\");
     std::_tstring   sPatchFile = sProgramDir + TEXT("patchlist.txt");
 
     std::queue< std::_tstring > aSectionNames;
@@ -557,7 +558,7 @@ extern "C" UINT __stdcall InstallPatchedFiles( MSIHANDLE handle )
 
     // std::_tstring    mystr;
     // mystr = "Patchfile: " + sPatchFile;
-    // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
+    // MessageBox( NULL, mystr.c_str(), "Patchfile", MB_OK );
 
     aSectionNames = getProfileSections( sPatchFile );
     while ( !aSectionNames.empty() )
@@ -607,12 +608,17 @@ extern "C" UINT __stdcall UninstallPatchedFiles( MSIHANDLE handle )
     HKEY    hKey;
 
     std::_tstring   sInstDir;
+    std::_tstring   sBasisInstDir;
 
     std::_tstring   sProductKey = GetMsiProperty( handle, TEXT("FINDPRODUCT") );
 
     if ( ERROR_SUCCESS == RegOpenKey( HKEY_CURRENT_USER,  sProductKey.c_str(), &hKey ) )
     {
-        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("OFFICEINSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("BASISINSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        {
+            sBasisInstDir = szValue;
+        }
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
         {
             sInstDir = szValue;
         }
@@ -620,7 +626,11 @@ extern "C" UINT __stdcall UninstallPatchedFiles( MSIHANDLE handle )
     }
     else if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  sProductKey.c_str(), &hKey ) )
     {
-        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("OFFICEINSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("BASISINSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        {
+            sBasisInstDir = szValue;
+        }
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
         {
             sInstDir = szValue;
         }
@@ -629,7 +639,7 @@ extern "C" UINT __stdcall UninstallPatchedFiles( MSIHANDLE handle )
     else
         return ERROR_SUCCESS;
 
-    std::_tstring   sProgramDir = sInstDir + TEXT("program\\");
+    std::_tstring   sProgramDir = sBasisInstDir + TEXT("program\\");
     std::_tstring   sPatchFile = sProgramDir + TEXT("patchlist.txt");
 
     std::queue< std::_tstring > aSectionNames;
