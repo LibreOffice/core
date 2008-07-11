@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: corbamaker.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 #include <stdio.h>
 
 #include "sal/main.h"
+
 #include <codemaker/typemanager.hxx>
 #include <codemaker/dependency.hxx>
 
