@@ -8,7 +8,7 @@
 #
 # $RCSfile: rules.mk,v $
 #
-# $Revision: 1.99 $
+# $Revision: 1.100 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -98,11 +98,32 @@ $(OBJ)$/%.obj : %.cc
 .ENDIF
 .ENDIF
 
-.IF "$(ENABLE_PCH)"!="" && ( "$(PRJNAME)"!="sw" || "$(BUILD_SPECIAL)"!="TRUE" )
+.IF "$(ENABLE_PCH)"!=""
+# workaround for file locking problems on network volumes
+.IF "$(NETWORK_BUILD)"==""
+PCHOUTDIR=$(SLO)$/pch
+PCHEXOUTDIR=$(SLO)$/pch_ex
+.ELSE			# "$(NETWORK_BUILD)"==""
+PCHOUTDIR=$(TMP)$/$(BUILD)$(CWS_WORK_STAMP)
+PCHEXOUTDIR=$(TMP)$/$(BUILD)$(CWS_WORK_STAMP)_ex
+.ENDIF			# "$(NETWORK_BUILD)"==""
 $(SLO)$/precompiled.% .PHONY:
     -$(MKDIRHIER) $(SLO)$/pch
 .IF "$(COM)"=="MSC"
-    $(CXX) @$(mktmp -Fp$(SLO)$/pch$/precompiled_$(PRJNAME).hxx$(PCHPOST) $(CFLAGS_CREATE_PCH) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGS_NO_EXCEPTIONS) -DEXCEPTIONS_OFF $(CFLAGSAPPEND) $(INCPCH)$/precompiled_$(PRJNAME).cxx)
+.IF "$(NETWORK_BUILD)"!=""
+    -$(MKDIRHIER) $(PCHOUTDIR)
+.IF "$(HAVE_BIG_TMP)"==""
+    -$(COPY) $(SLO)$/pch$/precompiled_$(PRJNAME).hxx$(PCHPOST) $(PCHOUTDIR)$/precompiled_$(PRJNAME).hxx$(PCHPOST) 
+.ENDIF			# "$(HAVE_BIG_TMP)"==""
+.ENDIF			# "$(NETWORK_BUILD)"!=""
+    $(CXX) @$(mktmp -Fp$(PCHOUTDIR)$/precompiled_$(PRJNAME).hxx$(PCHPOST) $(CFLAGS_CREATE_PCH) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGS_NO_EXCEPTIONS) -DEXCEPTIONS_OFF $(CFLAGSAPPEND) $(INCPCH)$/precompiled_$(PRJNAME).cxx)
+.IF "$(NETWORK_BUILD)"!=""
+    $(COPY) $(PCHOUTDIR)$/precompiled_$(PRJNAME).hxx$(PCHPOST) $(SLO)$/pch$/precompiled_$(PRJNAME).hxx$(PCHPOST)
+.IF "$(HAVE_BIG_TMP)"==""
+    $(RM) $(PCHOUTDIR)$/precompiled_$(PRJNAME).hxx$(PCHPOST)
+    $(RMDIR) $(PCHOUTDIR)
+.ENDIF			# "$(HAVE_BIG_TMP)"==""
+.ENDIF			# "$(NETWORK_BUILD)"!=""
 .ELIF "$(COM)"=="GCC" && "$(CCNUMVER)">="000300040000"
     $(CXX) -o$(SLO)$/pch$/precompiled_$(PRJNAME).hxx$(PCHPOST) $(CFLAGS_CREATE_PCH) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGS_NO_EXCEPTIONS) -DEXCEPTIONS_OFF $(CFLAGSAPPEND) $(INCPCH)/precompiled_$(PRJNAME).hxx
     @echo "#error Tried to use wrong precompiled header" > $(SLO)$/pch$/precompiled_$(PRJNAME).hxx
@@ -114,7 +135,20 @@ $(SLO)$/precompiled.% .PHONY:
 $(SLO)$/precompiled_ex.% .PHONY:
     -$(MKDIRHIER) $(SLO)$/pch_ex
 .IF "$(COM)"=="MSC"
-    $(CXX) @$(mktmp -Fp$(SLO)$/pch_ex$/precompiled_$(PRJNAME).hxx$(PCHPOST) $(CFLAGS_CREATE_PCH:s/pchname/pchname_ex/) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSEXCEPTIONS) -DEXCEPTIONS_ON $(CFLAGSAPPEND) $(INCPCH)$/precompiled_$(PRJNAME).cxx)
+.IF "$(NETWORK_BUILD)"!=""
+    -$(MKDIRHIER) $(PCHEXOUTDIR)
+.IF "$(HAVE_BIG_TMP)"==""
+    -$(COPY) $(SLO)$/pch_ex$/precompiled_$(PRJNAME).hxx$(PCHPOST) $(PCHEXOUTDIR)$/precompiled_$(PRJNAME).hxx$(PCHPOST) 
+.ENDIF			# "$(HAVE_BIG_TMP)"==""
+.ENDIF			# "$(NETWORK_BUILD)"!=""
+    $(CXX) @$(mktmp -Fp$(PCHEXOUTDIR)$/precompiled_$(PRJNAME).hxx$(PCHPOST) $(CFLAGS_CREATE_PCH:s/pchname/pchname_ex/) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSEXCEPTIONS) -DEXCEPTIONS_ON $(CFLAGSAPPEND) $(INCPCH)$/precompiled_$(PRJNAME).cxx)
+.IF "$(NETWORK_BUILD)"!=""
+    $(COPY) $(PCHEXOUTDIR)$/precompiled_$(PRJNAME).hxx$(PCHPOST) $(SLO)$/pch_ex$/precompiled_$(PRJNAME).hxx$(PCHPOST)
+.IF "$(HAVE_BIG_TMP)"==""
+    $(RM) $(PCHEXOUTDIR)$/precompiled_$(PRJNAME).hxx$(PCHPOST)
+    $(RMDIR) $(PCHEXOUTDIR)
+.ENDIF			# "$(HAVE_BIG_TMP)"==""
+.ENDIF			# "$(NETWORK_BUILD)"!=""
 .ELIF "$(COM)"=="GCC" && "$(CCNUMVER)">="000300040000"
     $(CXX) -o$(SLO)$/pch_ex$/precompiled_$(PRJNAME).hxx$(PCHPOST) $(CFLAGS_CREATE_PCH) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSEXCEPTIONS) -DEXCEPTIONS_ON $(CFLAGSAPPEND) $(INCPCH)/precompiled_$(PRJNAME).hxx
     @echo "#error Tried to use wrong precompiled header" > $(SLO)$/pch_ex$/precompiled_$(PRJNAME).hxx
