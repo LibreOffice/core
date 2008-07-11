@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterButton.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -166,9 +166,10 @@ private:
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const css::geometry::IntegerSize2D& rSize,
         const PresenterTheme::SharedFontDescriptor& rFont,
-        const css::uno::Reference<css::rendering::XBitmap>& rxLeft,
-        const css::uno::Reference<css::rendering::XBitmap>& rxCenter,
-        const css::uno::Reference<css::rendering::XBitmap>& rxRight);
+        const PresenterBitmapDescriptor::Mode eMode,
+        const SharedBitmapDescriptor& rpLeft,
+        const SharedBitmapDescriptor& rpCenter,
+        const SharedBitmapDescriptor& rpRight);
     css::geometry::IntegerSize2D CalculateButtonSize (void);
     void Invalidate (void);
     css::uno::Reference<css::rendering::XBitmap> GetBitmap (
