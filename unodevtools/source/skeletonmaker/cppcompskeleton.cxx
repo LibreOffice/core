@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cppcompskeleton.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -679,8 +679,7 @@ OString generateClassDefinition(std::ostream& o,
 
     o << "\n{\npublic:\n"
       << "    explicit " << classname << "("
-      << "css::uno::Reference< css::uno::XComponentContext > const & context);\n"
-      << "    virtual ~" << classname << "() {}\n\n";
+      << "css::uno::Reference< css::uno::XComponentContext > const & context);\n\n";
 
     // generate component/service helper functions
 //     o << "    // component and service helper functions:\n"
@@ -731,7 +730,9 @@ OString generateClassDefinition(std::ostream& o,
     }
 
     o << "private:\n    " << classname << "(const " << classname << " &); // not defined\n"
-      << "    " << classname << "& operator=(const " << classname << " &); // not defined\n\n";
+      << "    " << classname << "& operator=(const " << classname << " &); // not defined\n\n"
+      << "    // destructor is private and will be called indirectly by the release call"
+      << "    virtual ~" << classname << "() {}\n\n";
 
     if (options.componenttype == 2) {
         o << "    typedef std::hash_map< ::sal_Int32, rtl::OUString, "
