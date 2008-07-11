@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: embeddedobjectcontainer.hxx,v $
- * $Revision: 1.15 $
+ *
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,9 +36,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
-#include <com/sun/star/io/XInputStrem.hpp>
-#endif
+#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include "comphelper/comphelperdllapi.h"
