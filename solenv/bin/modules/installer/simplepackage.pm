@@ -8,7 +8,7 @@
 #
 # $RCSfile: simplepackage.pm,v $
 #
-# $Revision: 1.17 $
+# $Revision: 1.18 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -118,7 +118,14 @@ sub register_extensions
             my $localtemppath = $installer::globals::temppath;
             if ( $installer::globals::iswindowsbuild )
             {
-                $windowsslash = "\/";
+                if (( $^O =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" ))
+                {
+                    $localtemppath = $installer::globals::cyg_temppath;
+                }
+                else
+                {
+                    $windowsslash = "\/";
+                }
                 $localtemppath =~ s/\\/\//g;
                 $localtemppath = "/".$localtemppath;
             }
