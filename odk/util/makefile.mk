@@ -15,13 +15,14 @@ ZIP1LIST=examples -x "*CVS*" -x "*makefile.mk" -x "*Container1*" -x "*Storage*" 
 .INCLUDE :  target.mk
 
 ALLTAR:\
-    $(BIN)$/$(PRODUCTZIPFILE)\
-    $(BIN)$/odk_oo.zip
+    $(BIN)$/$(PRODUCTZIPFILE)
+#    $(BIN)$/odk_oo.zip
 
 
 $(BIN)$/$(PRODUCTZIPFILE) : $(SDK_CONTENT_CHECK_FILES) $(SDK_CHECK_FLAGS)
-    cd $(BIN)$/$(PRODUCT_NAME) && zip -urq ..$/$(PRODUCTZIPFILE) . -x "idl/*" $(CHECKZIPRESULT)
-    cd $(BIN)$/$(PRODUCT_NAME) && zip -urq ..$/odkidl.zip idl/* $(CHECKZIPRESULT)
+    cd $(BIN)$/$(PRODUCT_NAME) && zip -urq ..$/$(PRODUCTZIPFILE) . $(CHECKZIPRESULT)
+#	cd $(BIN)$/$(PRODUCT_NAME) && zip -urq ..$/$(PRODUCTZIPFILE) . -x "idl/*" $(CHECKZIPRESULT)
+#	cd $(BIN)$/$(PRODUCT_NAME) && zip -urq ..$/odkidl.zip idl/* $(CHECKZIPRESULT)
 
 ODK_OO_FILES=\
     $(PRJ)$/index.html \
