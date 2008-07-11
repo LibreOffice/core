@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: doc.hxx,v $
- * $Revision: 1.154 $
+ * $Revision: 1.155 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1046,6 +1046,10 @@ public:
     virtual SwList* createListForListStyle( const String sListStyleName );
     virtual SwList* getListForListStyle( const String sListStyleName ) const;
     virtual void deleteListForListStyle( const String sListStyleName );
+    // --> OD 2008-07-08 #i91400#
+    virtual void trackChangeOfListStyleName( const String sListStyleName,
+                                             const String sNewListStyleName );
+    // <--
 
     /** INextInterface here
     */
