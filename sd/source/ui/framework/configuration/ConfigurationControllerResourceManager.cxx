@@ -8,7 +8,7 @@
  *
  * $RCSfile: ConfigurationControllerResourceManager.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,7 +140,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
    }
 
 #if defined VERBOSE && VERBOSE>=1
-    OSL_TRACE("activating resource %s", OUStringToOString(
+    OSL_TRACE("activating resource %s\n", OUStringToOString(
         FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
 #endif
 
@@ -150,7 +150,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
     if ( ! xFactory.is())
     {
 #if defined VERBOSE && VERBOSE>=1
-        OSL_TRACE("    no factory found fo %s",
+        OSL_TRACE("    no factory found fo %s\n",
             OUStringToOString(sResourceURL, RTL_TEXTENCODING_UTF8).getStr());
 #endif
         return;
@@ -178,7 +178,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
         if (xResource.is())
         {
 #if defined VERBOSE && VERBOSE>=1
-            OSL_TRACE("    successfully created");
+            OSL_TRACE("    successfully created\n");
 #endif
             // 3. Add resource to URL->Object map.
             AddResource(xResource, xFactory);
@@ -191,6 +191,12 @@ void ConfigurationControllerResourceManager::ActivateResource (
                 FrameworkHelper::msResourceActivationEvent,
                 rxResourceId,
                 xResource);
+        }
+        else
+        {
+#if defined VERBOSE && VERBOSE>=1
+            OSL_TRACE("    resource creation failed\n");
+#endif
         }
     }
     catch (RuntimeException&)
@@ -260,10 +266,10 @@ void ConfigurationControllerResourceManager::DeactivateResource (
 
 #if defined VERBOSE && VERBOSE>=1
     if (bSuccess)
-        OSL_TRACE("successfully deactivated %s", OUStringToOString(
+        OSL_TRACE("successfully deactivated %s\n", OUStringToOString(
             FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
     else
-        OSL_TRACE("activating resource %s failed", OUStringToOString(
+        OSL_TRACE("activating resource %s failed\n", OUStringToOString(
             FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
 #endif
 }
@@ -288,7 +294,7 @@ void ConfigurationControllerResourceManager::AddResource (
     maResourceMap[rxResource->getResourceId()] = aDescriptor;
 
 #if defined VERBOSE && VERBOSE>=2
-    OSL_TRACE("ConfigurationControllerResourceManager::AddResource(): added %s -> %x",
+    OSL_TRACE("ConfigurationControllerResourceManager::AddResource(): added %s -> %x\n",
         OUStringToOString(
             FrameworkHelper::ResourceIdToString(rxResource->getResourceId()),
             RTL_TEXTENCODING_UTF8).getStr(),
@@ -309,7 +315,7 @@ ConfigurationControllerResourceManager::ResourceDescriptor
     if (iResource != maResourceMap.end())
     {
 #if defined VERBOSE && VERBOSE>=2
-        OSL_TRACE("ConfigurationControllerResourceManager::RemoveResource(): removing %s -> %x",
+        OSL_TRACE("ConfigurationControllerResourceManager::RemoveResource(): removing %s -> %x\n",
             OUStringToOString(
                 FrameworkHelper::ResourceIdToString(rxResourceId),
                 RTL_TEXTENCODING_UTF8).getStr(),
