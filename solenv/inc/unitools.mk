@@ -8,7 +8,7 @@
 #
 # $RCSfile: unitools.mk,v $
 #
-# $Revision: 1.57 $
+# $Revision: 1.58 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -153,6 +153,7 @@ LS*=$(BUILD_TOOLS)$/ls.exe
 PERL*:=+call perl5.btm
 .EXPORT : PERL
 RENAME*=+ren
+RMDIR:=$(PERL) $(SOLARENV)$/bin$/rmdir.pl
 TOUCH*=$(PERL) $(SOLARENV)$/bin$/touch.pl
 TYPE*=+type
 XARGS*=tr -d "\015" | xargs
@@ -196,6 +197,7 @@ ECHONL=echo
 DELAY*=sleep
 MKDIR*=mkdir$E
 MKDIRHIER*=mkdir$E -p
+RMDIR*=rmdir
 XARGS*=xargs
 
 RM+=$(RMFLAGS)
