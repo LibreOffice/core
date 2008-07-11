@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbgoutsw.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -397,7 +397,7 @@ const char * dbg_out(const SwPaM & rPam)
     return dbg_out(lcl_dbg_out(rPam));
 }
 
-String lcl_dbg_out(const SwNodeNum & rNum)
+String lcl_dbg_out(const SwNodeNum & )
 {
     return String();/*rNum.ToString();*/
 }
