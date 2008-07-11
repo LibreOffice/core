@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterScrollBar.hxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,7 @@ namespace css = ::com::sun::star;
 
 namespace sdext { namespace presenter {
 
+class PresenterCanvasHelper;
 class PresenterPaintManager;
 
 namespace {
@@ -87,19 +88,29 @@ public:
         double nPosition,
         const bool bAsynchronousRepaint);
 
+    double GetThumbPosition (void) const;
+
     /** Set the upper border of the slider range.
     */
     void SetTotalSize (const double nTotalSize);
+
+    double GetTotalSize (void) const;
 
     /** Set the size of the movable thumb.
         @param nThumbSize
             A value not larger than the last value given to SetTotalSize().
     */
     void SetThumbSize (const double nThumbSize);
+    double GetThumbSize (void) const;
+
+    void SetLineHeight (const double nLineHeight);
+    double GetLineHeight (void) const;
 
     /** Set the canvas that is used for painting the scroll bar.
     */
     void SetCanvas (const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
+
+    void SetBackground (const SharedBitmapDescriptor& rpBackgroundBitmap);
 
     /** Call this after changing total size or thumb position or size to
         move the thumb to a valid position.
@@ -165,6 +176,9 @@ public:
         throw (css::uno::RuntimeException);
 
 
+    enum Area { Total, Pager, Thumb, PagerUp, PagerDown, PrevButton, NextButton, None,
+                __AreaCount__ = None };
+
 protected:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     css::uno::Reference<css::awt::XWindow> mxParentWindow;
@@ -175,10 +189,9 @@ protected:
     double mnThumbPosition;
     double mnTotalSize;
     double mnThumbSize;
+    double mnLineHeight;
     css::geometry::RealPoint2D maDragAnchor;
     ::boost::function<void(double)> maThumbMotionListener;
-    enum Area { Total, Pager, Thumb, PagerUp, PagerDown, PrevButton, NextButton, None,
-                __AreaCount__ = None };
     Area meButtonDownArea;
     Area meMouseMoveArea;
     css::geometry::RealRectangle2D maBox[__AreaCount__];
@@ -219,6 +232,8 @@ protected:
     void Repaint (
         const css::geometry::RealRectangle2D aBox,
         const bool bAsynchronous);
+    void PaintBackground (
+        const css::awt::Rectangle& rRepaintBox);
     void PaintBitmap(
         const css::awt::Rectangle& rRepaintBox,
         const Area eArea,
@@ -233,13 +248,18 @@ protected:
         const Area eArea) const;
     bool IsDisabled (const Area eArea) const;
     double ValidateThumbPosition (double nPosition);
-        void SetThumbPosition (
+    void SetThumbPosition (
         double nPosition,
         const bool bAsynchronousRepaint,
         const bool bValidate,
         const bool bNotify);
 
 private:
+    class MousePressRepeater;
+    ::boost::shared_ptr<MousePressRepeater> mpMousePressRepeater;
+    SharedBitmapDescriptor mpBackgroundBitmap;
+    ::boost::scoped_ptr<PresenterCanvasHelper> mpCanvasHelper;
+
     Area GetArea (const double nX, const double nY) const;
 };
 
