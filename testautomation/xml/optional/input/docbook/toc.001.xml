@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<book>
+<bookinfo>
+<title>Unit Test: toc.001</title>
+<releaseinfo role="CVS">$Id: toc.001.xml,v 1.2 2008-07-11 08:01:55 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</bookinfo>
+
+<toc>
+<tocchap>
+<tocentry>Preface</tocentry>
+<toclevel1>
+  <tocentry>Fake Entry</tocentry>
+  <tocentry pagenum="i">Why Read This Book?</tocentry>
+  <tocentry>This Book's Audience</tocentry>
+  <tocentry>Organization of This Book</tocentry>
+  <tocentry>Conventions Used in This Book</tocentry>
+  <tocentry>Getting This Book</tocentry>
+  <tocentry>Getting Examples from This Book</tocentry>
+  <tocentry>Getting DocBook</tocentry>
+  <tocentry>Request for Comments</tocentry>
+  <tocentry>Acknowledgements from Norm</tocentry>
+  <tocentry>Acknowledgements from Lenny</tocentry>
+  <tocentry>Acknowledgements from Norm and Lenny</tocentry>
+</toclevel1>
+</tocchap>
+<tocpart>
+<tocentry>Introduction</tocentry>
+<tocchap>
+<tocentry>Getting Started with SGML/XML</tocentry>
+<toclevel1>
+  <tocentry>HTML and SGML vs. XML</tocentry>
+  <tocentry>Basic SGML/XML Concepts</tocentry>
+  <tocentry>Elements and Attributes</tocentry>
+  <tocentry>Entities</tocentry>
+  <tocentry>How Does DocBook Fit In?</tocentry>
+  <toclevel2>
+    <tocentry>Testing a third level TOC</tocentry>
+  </toclevel2>
+</toclevel1>
+</tocchap>
+<tocchap>
+<tocentry>Creating DocBook Documents</tocentry>
+<toclevel1>
+  <tocentry>Making an SGML Document</tocentry>
+  <tocentry>Making an XML Document</tocentry>
+</toclevel1>
+</tocchap>
+</tocpart>
+</toc>
+
+<preface><title>Preface</title>
+
+<para>This book is really just a toc test.</para>
+
+</preface>
+
+</book>
+

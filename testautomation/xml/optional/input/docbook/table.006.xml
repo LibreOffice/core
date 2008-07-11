@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: table.006</title>
+<releaseinfo role="CVS">$Id: table.006.xml,v 1.2 2008-07-11 08:01:34 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<para>All frames:</para>
+
+<informaltable frame="all">
+<tgroup cols="3">
+<tbody>
+<row>
+<entry>a foo</entry>
+<entry>a bar</entry>
+<entry>a baz</entry>
+</row>
+<row>
+<entry>b foo</entry>
+<entry>b bar</entry>
+<entry>b baz</entry>
+</row>
+<row>
+<entry>c foo</entry>
+<entry>c foo</entry>
+<entry>c baz</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>No frames:</para>
+
+<informaltable frame="none">
+<tgroup cols="3">
+<tbody>
+<row>
+<entry>a foo</entry>
+<entry>a bar</entry>
+<entry>a baz</entry>
+</row>
+<row>
+<entry>b foo</entry>
+<entry>b bar</entry>
+<entry>b baz</entry>
+</row>
+<row>
+<entry>c foo</entry>
+<entry>c foo</entry>
+<entry>c baz</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>Outer edge:</para>
+
+<informaltable frame="all">
+<tgroup cols="3" rowsep="0" colsep="0">
+<tbody>
+<row>
+<entry>a foo</entry>
+<entry>a bar</entry>
+<entry>a baz</entry>
+</row>
+<row>
+<entry>b foo</entry>
+<entry>b bar</entry>
+<entry>b baz</entry>
+</row>
+<row>
+<entry>c foo</entry>
+<entry>c foo</entry>
+<entry>c baz</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>Rows:</para>
+
+<informaltable frame="topbot">
+<tgroup cols="3" rowsep="1" colsep="0">
+<tbody>
+<row>
+<entry>a foo</entry>
+<entry>a bar</entry>
+<entry>a baz</entry>
+</row>
+<row>
+<entry>b foo</entry>
+<entry>b bar</entry>
+<entry>b baz</entry>
+</row>
+<row>
+<entry>c foo</entry>
+<entry>c foo</entry>
+<entry>c baz</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>Columns:</para>
+
+<informaltable frame="sides">
+<tgroup cols="3" rowsep="0" colsep="1">
+<tbody>
+<row>
+<entry>a foo</entry>
+<entry>a bar</entry>
+<entry>a baz</entry>
+</row>
+<row>
+<entry>b foo</entry>
+<entry>b bar</entry>
+<entry>b baz</entry>
+</row>
+<row>
+<entry>c foo</entry>
+<entry>c foo</entry>
+<entry>c baz</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>Tic Tac Toe:</para>
+
+<informaltable frame="none">
+<tgroup cols="3" rowsep="0" colsep="0">
+<colspec colnum="1" colsep="1"/>
+<colspec colnum="2" colsep="1"/>
+<tbody>
+<row rowsep="1">
+<entry>a foo</entry>
+<entry>a bar</entry>
+<entry>a baz</entry>
+</row>
+<row rowsep="1">
+<entry>b foo</entry>
+<entry>b bar</entry>
+<entry>b baz</entry>
+</row>
+<row>
+<entry>c foo</entry>
+<entry>c foo</entry>
+<entry>c baz</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>Box in the middle:</para>
+
+<informaltable frame="none">
+<tgroup cols="3">
+<tbody>
+<row>
+<entry>a foo</entry>
+<entry rowsep="1">a bar</entry>
+<entry>a baz</entry>
+</row>
+<row>
+<entry colsep="1">b foo</entry>
+<entry colsep="1" rowsep="1">b bar</entry>
+<entry>b baz</entry>
+</row>
+<row>
+<entry>c foo</entry>
+<entry>c foo</entry>
+<entry>c baz</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>Jigsaw:</para>
+
+<informaltable frame="all">
+<tgroup cols="3" rowsep="0" colsep="0">
+<tbody>
+<row>
+<entry rowsep="1">a foo</entry>
+<entry colsep="1">a bar</entry>
+<entry>a baz</entry>
+</row>
+<row>
+<entry colsep="1">b foo</entry>
+<entry colsep="1" rowsep="1">b bar</entry>
+<entry>b baz</entry>
+</row>
+<row>
+<entry>c foo</entry>
+<entry>c foo</entry>
+<entry>c baz</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+</article>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: variablelist.003</title>
+<releaseinfo role="CVS">$Id: variablelist.003.xml,v 1.2 2008-07-11 08:02:37 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<variablelist>
+<title>VariableList Title</title>
+<varlistentry><term>Term1</term>
+<listitem><para>Definition of Term1</para></listitem>
+</varlistentry>
+<varlistentry><term>Term2</term>
+<listitem><para>Definition of Term2</para></listitem>
+</varlistentry>
+<varlistentry id="someVLI"><term>Term3a</term><term>Term3b</term><term>Term3c</term>
+<listitem><para>Definition of Term3a,b,c</para></listitem>
+</varlistentry>
+</variablelist>
+
+</article>
