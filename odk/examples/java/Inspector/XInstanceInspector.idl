@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInstanceInspector.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:03:38 $
+ *  last change: $Author: rt $ $Date: 2008-07-11 14:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,10 +38,9 @@
  *
  *************************************************************************/
 
-#ifndef _org_openoffice_XInstanceInspector_idl_
-#define _org_openoffice_XInstanceInspector_idl_
+#ifndef INCLUDED_ORG_OPENOFFICE_XINSTANCEINSPECTOR_IDL
+#define INCLUDED_ORG_OPENOFFICE_XINSTANCEINSPECTOR_IDL
 
-// must be included always for compatibility reasons
 #include <com/sun/star/uno/XInterface.idl>
 
 module org {  module openoffice {
