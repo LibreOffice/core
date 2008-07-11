@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docnum.cxx,v $
- * $Revision: 1.76 $
+ * $Revision: 1.77 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,8 +91,11 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     }
 
     pOutlineRule->SetRuleType( OUTLINE_RULE );
+    // --> OD 2008-07-08 #i91400#
     pOutlineRule->SetName( String::CreateFromAscii(
-                                        SwNumRule::GetOutlineRuleName() ));
+                                        SwNumRule::GetOutlineRuleName() ),
+                           *this);
+    // <--
     // --> OD 2006-09-21 #i69522#
     // assure that the outline numbering rule is an automatic rule
     pOutlineRule->SetAutoRule( TRUE );
@@ -1300,7 +1303,9 @@ sal_Bool SwDoc::RenameNumRule(const String & rOldName, const String & rNewName,
         pNumRule->GetTxtNodeList( aTxtNodeList );
         // <--
 
-        pNumRule->SetName(rNewName);
+        // --> OD 2008-07-08 #i91400#
+        pNumRule->SetName( rNewName, *this );
+        // <--
 
         SwNumRuleItem aItem(rNewName);
         // --> OD 2008-02-19 #refactorlists#
@@ -1533,7 +1538,10 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
 //                        pReplaceNumRule = new SwNumRule(*pRule);
 //                        pReplaceNumRule->SetName(GetUniqueNumRuleName());
                         aListStyleData.pReplaceNumRule = new SwNumRule(*pRule);
-                        aListStyleData.pReplaceNumRule->SetName(GetUniqueNumRuleName());
+                        // --> OD 2008-07-08 #i91400#
+                        aListStyleData.pReplaceNumRule->SetName(
+                                                GetUniqueNumRuleName(), *this );
+                        // <--
                         aListStyleData.bCreateNewList = true;
                     }
 
@@ -2475,7 +2483,9 @@ USHORT SwDoc::MakeNumRule( const String &rName,
     {
         pNew = new SwNumRule( *pCpy );
 
-        pNew->SetName( GetUniqueNumRuleName( &rName ));
+        // --> OD 2008-07-08 #i91400#
+        pNew->SetName( GetUniqueNumRuleName( &rName ), *this );
+        // <--
         if( pNew->GetName() != rName )
         {
             pNew->SetPoolFmtId( USHRT_MAX );
@@ -2883,7 +2893,21 @@ void SwDoc::deleteListForListStyle( const String sListStyleName )
         deleteList( sListId );
     }
 }
+// <--
+// --> OD 2008-07-08 #i91400#
+void SwDoc::trackChangeOfListStyleName( const String sListStyleName,
+                                        const String sNewListStyleName )
+{
+    SwList* pList = getListForListStyle( sListStyleName );
+    ASSERT( pList,
+            "<SwDoc::changeOfListStyleName(..)> - misusage of method: no list found for given list style name" );
 
+    if ( pList != 0 )
+    {
+        maListStyleLists.erase( sListStyleName );
+        maListStyleLists[sNewListStyleName] = pList;
+    }
+}
 // <--
 
 // --> OD 2008-03-13 #refactorlists#
