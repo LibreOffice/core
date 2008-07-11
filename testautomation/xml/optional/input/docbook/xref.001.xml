@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY blah "<para>Blah blah blah blah. Blah blah blah blah. Blah blah blah blah.
+Blah blah blah blah blah blah blah blah. Blah blah blah blah.
+Blah. Blah blah blah blah. Blah blah. Blah blah blah blah.
+Blah blah blah blah blah blah blah blah. Blah blah blah blah.
+Blah. Blah blah blah blah. Blah blah. Blah blah blah blah.
+Blah blah blah blah blah blah blah blah. Blah blah blah blah.
+Blah. Blah blah blah blah. Blah blah. Blah blah blah blah.
+Blah blah blah blah blah blah blah blah. Blah blah blah blah.
+Blah. Blah blah blah blah. Blah blah. Blah blah blah blah.
+Blah blah blah blah blah blah blah blah. Blah blah blah blah.
+Blah. Blah blah blah blah. Blah blah. Blah blah blah blah.
+Blah blah blah blah blah blah blah blah. Blah blah blah blah.
+Blah. Blah blah blah blah. Blah blah. Blah blah blah blah.
+Blah blah blah blah blah blah blah blah. Blah blah blah blah.
+Blah. Blah blah blah blah. Blah blah. Blah blah blah blah.
+Blah blah blah blah blah blah blah blah. Blah blah blah blah.
+Blah. Blah blah blah blah. Blah blah. Blah blah blah blah.
+</para>">
+]>
+<book>
+<bookinfo>
+<title>Unit Test: xref.001</title>
+<releaseinfo role="CVS">$Id: xref.001.xml,v 1.2 2008-07-11 08:02:58 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</bookinfo>
+
+<dedication id="dedication"><title>Dedication</title>
+
+&blah;
+
+<para>For no good reason, this dedication includes cross-references:</para>
+
+<itemizedlist>
+<listitem><para>dedication: <xref linkend="dedication"/>.</para>
+</listitem>
+<listitem><para>preface: <xref linkend="preface"/>.</para>
+</listitem>
+<listitem><para>part: <xref linkend="part"/>.</para>
+</listitem>
+<listitem><para>chapter: <xref linkend="chapter"/>.</para>
+</listitem>
+<listitem><para>appendix: <xref linkend="appendix"/>.</para>
+</listitem>
+<listitem><para>para: <xref linkend="para"/>.</para>
+</listitem>
+</itemizedlist>
+
+</dedication>
+
+<preface id="preface"><title>Preface</title>
+
+<para>A preface.</para>
+
+&blah;
+
+</preface>
+
+<part id="part">
+<title>Part One Title</title>
+<partintro>
+<title>PartIntro Title</title>
+
+<para>Partintro content<footnote>
+<para>This is a footnote in a partintro.</para>
+</footnote>.</para>
+
+&blah;
+
+<sect1>
+<title>PartIntro Section</title>
+<para>PartIntros can actually have section content as well.</para>
+&blah;
+</sect1>
+</partintro>
+
+<chapter id="chapter"><title>Chapter</title>
+
+&blah;
+<para id="para">This paragraph has an ID.</para>
+
+</chapter>
+
+</part>
+<part><title>Appendixes</title>
+
+<appendix id="appendix"><title>First Appendix</title>
+
+&blah;
+
+</appendix>
+
+</part>
+</book>
