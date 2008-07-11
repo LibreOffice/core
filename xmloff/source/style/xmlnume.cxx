@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlnume.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -556,7 +556,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
                 }
 
                 SvXMLElementExport aLabelAlignmentElement( GetExport(), XML_NAMESPACE_STYLE,
-                                             XML_LABEL_ALIGNMENT,
+                                             XML_LIST_LEVEL_LABEL_ALIGNMENT,
                                              sal_True, sal_True );
             }
         }
