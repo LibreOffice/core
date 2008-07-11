@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cpp.c,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +46,7 @@ int ifdepth;
 int ifsatisfied[NIF];
 int skipping;
 
-char rcsid[] = "$Version 1.2 $ $Revision: 1.9 $ $Date: 2008-04-11 10:37:48 $";
+char rcsid[] = "$Version 1.2 $ $Revision: 1.10 $ $Date: 2008-07-11 14:50:24 $";
 
 int realargc;
 char* realargv[512];
@@ -151,7 +151,6 @@ int main(int argc, char **argv)
     maketokenrow(3, &tr);
     expandlex();
     setup(realargc, realargv);
-    /* fixlex(); */
     if (!Pflag)
         genline();
     process(&tr);
