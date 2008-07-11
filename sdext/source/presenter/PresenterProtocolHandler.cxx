@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterProtocolHandler.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -161,7 +161,7 @@ namespace {
     public:
         NotesFontSizeCommand(
             const rtl::Reference<PresenterController>& rpPresenterController,
-            const double nSizeChange);
+            const sal_Int32 nSizeChange);
         virtual ~NotesFontSizeCommand (void) {}
         virtual void Execute (void);
         virtual bool IsEnabled (void) const;
@@ -170,7 +170,7 @@ namespace {
         ::rtl::Reference<PresenterNotesView> GetNotesView (void) const;
     private:
         rtl::Reference<PresenterController> mpPresenterController;
-        const double mnSizeChange;
+        const sal_Int32 mnSizeChange;
     };
 
 } // end of anonymous namespace
@@ -951,7 +951,7 @@ Any SetHelpViewCommand::GetState (void) const
 
 NotesFontSizeCommand::NotesFontSizeCommand(
     const rtl::Reference<PresenterController>& rpPresenterController,
-    const double nSizeChange)
+    const sal_Int32 nSizeChange)
     : mpPresenterController(rpPresenterController),
       mnSizeChange(nSizeChange)
 {
