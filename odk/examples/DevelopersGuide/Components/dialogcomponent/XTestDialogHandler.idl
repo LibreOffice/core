@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTestDialogHandler.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 11:05:36 $
+ *  last change: $Author: rt $ $Date: 2008-07-11 14:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,8 +38,8 @@
  *
  *************************************************************************/
 
-#ifndef _com_sun_star_test_XSomethingB_idl_
-#define _com_sun_star_test_XSomethingB_idl_
+#ifndef INCLUDED_COM_SUN_STAR_TEST_XTESTDIALOGHANDLER_IDL
+#define INCLUDED_COM_SUN_STAR_TEST_XTESTDIALOGHANDLER_IDL
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/awt/XDialog.idl>
@@ -57,5 +57,3 @@ module com {  module sun {  module star {  module test {
 }; }; }; };
 
 #endif
-
-
