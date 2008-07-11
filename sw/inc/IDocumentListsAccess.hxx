@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: IDocumentListsAccess.hxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,10 @@ class IDocumentListsAccess
         virtual SwList* createListForListStyle( const String sListStyleName ) = 0;
         virtual SwList* getListForListStyle( const String sListStyleName ) const = 0;
         virtual void deleteListForListStyle( const String sListStyleName ) = 0;
+        // --> OD 2008-07-08 #i91400#
+        virtual void trackChangeOfListStyleName( const String sListStyleName,
+                                                 const String sNewListStyleName ) = 0;
+        // <--
 
     protected:
         virtual ~IDocumentListsAccess() {};
