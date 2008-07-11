@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ViewShellManager.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1074,9 +1074,9 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
 
 
 #ifdef VERBOSE
-    OSL_TRACE("Current SFX Stack");
+    OSL_TRACE("Current SFX Stack\r");
     DumpShellStack(aSfxShellStack);
-    OSL_TRACE("Target Stack");
+    OSL_TRACE("Target Stack\r");
     DumpShellStack(aTargetStack);
 #endif
 
@@ -1100,7 +1100,7 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
         SfxShell* pShell = aSfxShellStack.back();
         aSfxShellStack.pop_back();
 #ifdef VERBOSE
-        OSL_TRACE("removing shell %p from stack", pShell);
+        OSL_TRACE("removing shell %p from stack\r", pShell);
 #endif
         mrBase.RemoveSubShell(pShell);
     }
@@ -1111,7 +1111,7 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
     while (iTargetShell != aTargetStack.end())
     {
 #ifdef VERBOSE
-        OSL_TRACE("pushing shell %p on stack", *iTargetShell);
+        OSL_TRACE("pushing shell %p on stack\r", *iTargetShell);
 #endif
         mrBase.AddSubShell(**iTargetShell);
         ++iTargetShell;
@@ -1136,7 +1136,7 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
     mbShellStackIsUpToDate = true;
 
 #ifdef VERBOSE
-    OSL_TRACE("New current stack");
+    OSL_TRACE("New current stack\r");
     DumpSfxShellStack();
 #endif
 }
@@ -1155,7 +1155,7 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
         : NULL;
 
 #ifdef VERBOSE
-    OSL_TRACE("TakeShellsFromStack(%p)", pShell);
+    OSL_TRACE("TakeShellsFromStack(%p)\r", pShell);
     DumpSfxShellStack();
 #endif
 
@@ -1192,7 +1192,7 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
         {
             SfxShell* pShellOnStack = mrBase.GetSubShell(0);
 #ifdef VERBOSE
-            OSL_TRACE("removing shell %p from stack", pShellOnStack);
+            OSL_TRACE("removing shell %p from stack\r", pShellOnStack);
 #endif
             mrBase.RemoveSubShell(pShellOnStack);
             if (pShellOnStack == pShell)
@@ -1211,7 +1211,7 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
     }
 
 #ifdef VERBOSE
-    OSL_TRACE("Sfx shell stack is:");
+    OSL_TRACE("Sfx shell stack is:\r");
     DumpSfxShellStack();
 #endif
 }
@@ -1497,7 +1497,7 @@ void ViewShellManager::Implementation::Shutdown (void)
 void ViewShellManager::Implementation::DumpActiveShell (const ActiveShellList& rList)
 {
     for (ActiveShellList::const_iterator aI=rList.begin(); aI!=rList.end(); ++aI)
-        OSL_TRACE ("    %d %p", aI->mnId, aI->mpShell);
+        OSL_TRACE ("    %d %p\r", aI->mnId, aI->mpShell);
 }
 
 
@@ -1508,11 +1508,11 @@ void ViewShellManager::Implementation::DumpShellStack (const ShellStack& rStack)
     ShellStack::const_reverse_iterator iEntry;
     for (iEntry=rStack.rbegin(); iEntry!=rStack.rend(); ++iEntry)
         if (*iEntry != NULL)
-            OSL_TRACE ("    %p : %s",
+            OSL_TRACE ("    %p : %s\r",
                 *iEntry,
                 ::rtl::OUStringToOString((*iEntry)->GetName(),RTL_TEXTENCODING_UTF8).getStr());
         else
-            OSL_TRACE("     null");
+            OSL_TRACE("     null\r");
 }
 
 
