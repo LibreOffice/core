@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: autoregisterhelper.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "autoregisterhelper.hxx"
+#include "testshl/autoregisterhelper.hxx"
 
 #include <rtl/ustring.hxx>
 
@@ -42,7 +42,7 @@
 #include <cppunit/autoregister/callbackstructure.h>
 #include <cppunit/result/callbackfunc.h>
 #include <cppunit/autoregister/testfunc.h>
-#include "filehelper.hxx"
+#include "testshl/filehelper.hxx"
 
 FunctionList m_Functions;
 // osl::Mutex   m_Mutex;
