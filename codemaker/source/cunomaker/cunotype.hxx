@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cunotype.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _CUNOMAKER_CUNOTYPE_HXX_
-#define _CUNOMAKER_CUNOTYPE_HXX_
+#ifndef INCLUDED_CODEMAKER_SOURCE_CUNOMAKER_CUNOTYPE_HXX_
+#define INCLUDED_CODEMAKER_SOURCE_CUNOMAKER_CUNOTYPE_HXX
 
 #include    <codemaker/typemanager.hxx>
 #include    <codemaker/dependency.hxx>
@@ -308,5 +308,5 @@ sal_Bool produceType(const ::rtl::OString& typeName,
                            sal_Bool bNoNameSpace=sal_False);
 
 
-#endif // _CUNOMAKER_CUNOTYPE_HXX_
+#endif // INCLUDED_CODEMAKER_SOURCE_CUNOMAKER_CUNOTYPE_HXX
 
