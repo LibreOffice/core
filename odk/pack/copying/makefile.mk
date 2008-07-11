@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.88 $
+# $Revision: 1.89 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,64 +46,27 @@ DESTINCLUDELIST+=$(DESTDIRINC)$/udkversion.mk
 
 DESTINCDIRLIST={$(subst,$(INCOUT),$(DESTDIRINC) $(INCLUDEDIRLIST))}
 
-#COMPONENTLIST = \
-#	acceptor	\
-#	bridgefac	\
-#	connector	\
-#	reflection		\
-#	shlibloader		\
-#	nestedreg		\
-#	dynamicloader	\
-#	implreg		\
-#	introspection		\
-#	invocation		\
-#	invocadapt		\
-#	javavm		\
-#	namingservice	\
-#	proxyfac	\
-#	regtypeprov		\
-#	remotebridge	\
-#	simplereg		\
-#	servicemgr		\
-#	streams		\
-#	typeconverter		\
-#	typemgr		\
-#	uuresolver \
-#	javaloader \
-#	security
+IDL_DOCU_INDEX_FILE = $(DESTDIRGENIDLREF)$/module-ix.html
+IDL_DOCU_CLEANUP_FLAG = $(MISC)$/idl_docu_cleanup.flag
 
-#XMLLIST= \
-#	$(foreach,c,$(COMPONENTLIST) $(DESTDIRXML)$/$c.uno.xml) \
-#	$(DESTDIRXML)$/module-description.dtd
+IDL_CHAPTER_REFS=idl_chapter_refs.txt
+IDL_SINCE_TAGS=apiref-autodoc.since
 
 EXELIST = \
     $(DESTDIRBIN)$/cppumaker$(EXEPOSTFIX) 	\
-    $(DESTDIRBIN)$/sp2bv$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)$/regcompare$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)$/regmerge$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)$/regview$(EXEPOSTFIX) 	\
-    $(DESTDIRBIN)$/rdbmaker$(EXEPOSTFIX)	\
     $(DESTDIRBIN)$/idlcpp$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)$/idlc$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)$/javamaker$(EXEPOSTFIX) 	\
-    $(DESTDIRBIN)$/xml2cmp$(EXEPOSTFIX)	\
     $(DESTDIRBIN)$/autodoc$(EXEPOSTFIX) \
     $(DESTDIRBIN)$/unoapploader$(EXEPOSTFIX) \
     $(DESTDIRBIN)$/uno-skeletonmaker$(EXEPOSTFIX)
 
 .IF "$(GUI)"=="WNT"
-.IF "$(COM)"=="GCC"
 EXELIST += \
-    $(DESTDIRBIN)$/regcomp$(EXEPOSTFIX)
-.ELSE
-EXELIST += \
-    $(DESTDIRBIN)$/regcomp$(EXEPOSTFIX) \
     $(DESTDIRBIN)$/climaker$(EXEPOSTFIX)
-.ENDIF
-.ELSE
-EXELIST += \
-    $(DESTDIRBIN)$/regcomp.bin 	\
-    $(DESTDIRBIN)$/regcomp
 .ENDIF
 
 .IF "$(GUI)"=="WNT"
@@ -128,7 +91,7 @@ LIBLIST = \
 
 .IF "$(COMEX)"=="8"
     LIBLIST += $(DESTDIRLIB)$/stlport_vc7.lib
-.ELIF "$(COMEX)"=="10"
+.ELIF "$(COMEX)"=="10" || "$(COMEX)"=="11" || "$(COMEX)"=="12" 
     LIBLIST += $(DESTDIRLIB)$/stlport_vc71.lib
 .ELSE
     LIBLIST += $(DESTDIRLIB)$/stlport_vc6.lib
@@ -151,7 +114,9 @@ DESTCLASSESLIST= \
 SETTINGSLIST= \
     $(DESTDIRSETTINGS)$/settings.mk \
     $(DESTDIRSETTINGS)$/std.mk \
-    $(DESTDIRSETTINGS)$/stdtarget.mk
+    $(DESTDIRSETTINGS)$/stdtarget.mk \
+    $(DESTDIRSETTINGS)$/dk.mk
+
 
 .IF "$(GUI)"=="WNT"
 SETTINGSLIST+=$(DESTDIRSETTINGS)$/component.uno.def
@@ -163,37 +128,37 @@ SETTINGSLIST+=$(DESTDIRSETTINGS)$/component.uno.map
 
 
 DOCUHTMLFILES+= \
-    $(DESTDIR2)$/index.html \
-    $(DESTDIRDOCU2)$/tools.html \
-    $(DESTDIRDOCU2)$/notsupported.html \
-    $(DESTDIRDOCU2)$/install.html \
-    $(DESTDIREXAMPLES2)$/examples.html \
-    $(DESTDIREXAMPLES2)$/DevelopersGuide$/examples.html
+    $(DESTDIR)$/index.html \
+    $(DESTDIRDOCU)$/tools.html \
+    $(DESTDIRDOCU)$/notsupported.html \
+    $(DESTDIRDOCU)$/install.html \
+    $(DESTDIREXAMPLES)$/examples.html \
+    $(DESTDIREXAMPLES)$/DevelopersGuide$/examples.html
 
 DOCUFILES= \
+    $(DOCUHTMLFILES) \
+    $(DESTDIRDOCU)$/sdk_styles.css \
+    $(DESTDIRGENIDLREF)$/idl.css \
     $(DESTDIRDOCUIMAGES)$/nada.gif \
     $(DESTDIRDOCUIMAGES)$/arrow-2.gif \
     $(DESTDIRDOCUIMAGES)$/bluball.gif \
     $(DESTDIRDOCUIMAGES)$/so-main-app_32.png \
-    $(DESTDIRDOCUIMAGES)$/ooo-main-app_32.png
-
-DOCUFILES_OO= \
-    $(DOCUHTMLFILES) \
-    $(DESTDIRDOCUIMAGES2)$/arrow-1.gif \
-    $(DESTDIRDOCUIMAGES2)$/arrow-3.gif \
-    $(DESTDIRDOCUIMAGES2)$/bg_table.gif \
-    $(DESTDIRDOCUIMAGES2)$/bg_table2.gif \
-    $(DESTDIRDOCUIMAGES2)$/bg_table3.gif \
-    $(DESTDIRDOCUIMAGES2)$/nav_down.png \
-    $(DESTDIRDOCUIMAGES2)$/nav_home.png \
-    $(DESTDIRDOCUIMAGES2)$/nav_left.png \
-    $(DESTDIRDOCUIMAGES2)$/nav_right.png \
-    $(DESTDIRDOCUIMAGES2)$/nav_up.png \
-    $(DESTDIRDOCUIMAGES2)$/sdk_head-1.gif \
-    $(DESTDIRDOCUIMAGES2)$/sdk_head-2.gif \
-    $(DESTDIRDOCUIMAGES2)$/sdk_head-3.gif \
-    $(DESTDIRDOCUIMAGES2)$/sdk_line-1.gif \
-    $(DESTDIRDOCUIMAGES2)$/sdk_line-2.gif
+    $(DESTDIRDOCUIMAGES)$/ooo-main-app_32.png \
+    $(DESTDIRDOCUIMAGES)$/arrow-1.gif \
+    $(DESTDIRDOCUIMAGES)$/arrow-3.gif \
+    $(DESTDIRDOCUIMAGES)$/bg_table.gif \
+    $(DESTDIRDOCUIMAGES)$/bg_table2.gif \
+    $(DESTDIRDOCUIMAGES)$/bg_table3.gif \
+    $(DESTDIRDOCUIMAGES)$/nav_down.png \
+    $(DESTDIRDOCUIMAGES)$/nav_home.png \
+    $(DESTDIRDOCUIMAGES)$/nav_left.png \
+    $(DESTDIRDOCUIMAGES)$/nav_right.png \
+    $(DESTDIRDOCUIMAGES)$/nav_up.png \
+    $(DESTDIRDOCUIMAGES)$/sdk_head-1.gif \
+    $(DESTDIRDOCUIMAGES)$/sdk_head-2.gif \
+    $(DESTDIRDOCUIMAGES)$/sdk_head-3.gif \
+    $(DESTDIRDOCUIMAGES)$/sdk_line-1.gif \
+    $(DESTDIRDOCUIMAGES)$/sdk_line-2.gif
 
 .IF "$(GUI)"=="UNX"
 INSTALLSCRIPT= \
@@ -220,8 +185,14 @@ DIR_FILE_LIST=\
     $(INSTALLSCRIPT) \
     $(DESTIDLLIST)  \
     $(DESTINCLUDELIST) \
-    $(DESTCLASSESLIST)
+    $(DESTCLASSESLIST) \
+    $(IDL_DOCU_INDEX_FILE) \
+    $(CONVERTTAGFLAG) 
 
+.IF "$(OS)"=="MACOSX"
+DIR_FILE_LIST += $(DESTDIRBIN)$/addsym-macosx.sh
+.ENDIF
+    
 .IF "$(SOLAR_JAVA)" != ""
 DIR_FILE_LIST += $(DESTDIRJAR)$/win$/unowinreg.dll
 .ENDIF
@@ -244,7 +215,7 @@ MYZIPLIST=com$/* win$/*
 #--------------------------------------------------
 # TARGETS
 #--------------------------------------------------
-all : \
+all : CLEAN_DKVERSION_CHECK \
     $(DIR_FILE_LIST) \
     $(DIR_FILE_FLAG) \
 
@@ -253,6 +224,46 @@ all : \
 #--------------------------------------------------
 .INCLUDE: $(PRJ)$/util$/odk_rules.pmk
 
+
+CLEANUP_DKVERSION_FILE=$(DESTDIRSETTINGS)$/dk.mk
+
+    
+CLEAN_DKVERSION_CHECK:
+    @@-rm -f $(CLEANUP_DKVERSION_FILE)
+
+$(DESTDIRBIN)$/addsym-macosx.sh : addsym-macosx.sh
+    @@-rm -f $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+    -chmod 755 $@
+
+$(DESTDIRSETTINGS)$/dk.mk :
+    @@-rm -f $@
+    -$(MKDIRHIER) $(@:d)    
+    @echo # $(TITLE) dependent settings > $@
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+    @echo 'SDKVERSION=$(PRODUCT_RELEASE)'>> $@
+    @echo 'BUILDID=$(RSCREVISION)'>> $@
+.ELSE
+    @echo SDKVERSION=$(PRODUCT_RELEASE)>> $@
+    @echo BUILDID=$(RSCREVISION)>> $@
+.ENDIF
+
+$(CONVERTTAGFLAG) : $(DOCUHTMLFILES)
+    $(PERL) $(CONVERTTAGSCRIPT) 1 $(TITLE) $(OFFICEPRODUCTNAME) $(DOCUHTMLFILES)
+    @echo "tags converted" > $@
+
+$(IDL_DOCU_CLEANUP_FLAG) : $(IDL_CHAPTER_REFS) $(IDL_SINCE_TAGS) $(PRJ)$/docs$/common$/ref$/idl.css
+    @@-$(MY_DELETE_RECURSIVE) $(DESTDIRGENIDLREF)
+    $(TOUCH) $@
+
+$(IDL_DOCU_INDEX_FILE) : $(IDL_DOCU_CLEANUP_FLAG) 
+    -$(MKDIRHIER) $(@:d) 
+    $(MY_AUTODOC) -html $(DESTDIRGENIDLREF) -dvgroot "http://wiki.services.openoffice.org/wiki" -sincefile $(IDL_SINCE_TAGS)  -name $(IDLDOCREFNAME) -lg \
+    idl -dvgfile $(IDL_CHAPTER_REFS) -t $(DESTDIRIDL)
+    -rm $(@:d)$/idl.css
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/docs$/common$/ref$/idl.css $(MY_TEXTCOPY_TARGETPRE) $(@:d:d)$/idl.css
+
+ 
 .IF "$(SOLAR_JAVA)" != ""
 $(MYZIPTARGET) : $(BIN)$/unowinreg.dll $(DESTCLASSESLIST)
     cd $(MYZIPDIR) && zip $(MYZIPFLAGS) ..$/..$/..$/bin$/$(MYZIPTARGET:b) $(MYZIPLIST)
