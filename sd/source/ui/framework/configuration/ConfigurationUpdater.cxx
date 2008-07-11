@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ConfigurationUpdater.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -131,7 +131,7 @@ void ConfigurationUpdater::RequestUpdate (
     if (IsUpdatePossible())
     {
 #if defined VERBOSE && VERBOSE>=1
-        OSL_TRACE("UpdateConfiguration start");
+        OSL_TRACE("UpdateConfiguration start\n");
 #endif
 
         // Call UpdateConfiguration while that is possible and while someone
@@ -149,7 +149,7 @@ void ConfigurationUpdater::RequestUpdate (
     {
         mbUpdatePending = true;
 #if defined VERBOSE && VERBOSE>=1
-        OSL_TRACE("scheduling update for later");
+        OSL_TRACE("scheduling update for later\n");
 #endif
     }
 }
@@ -188,7 +188,7 @@ bool ConfigurationUpdater::IsUpdatePossible (void)
 void ConfigurationUpdater::UpdateConfiguration (void)
 {
 #if defined VERBOSE && VERBOSE>=1
-        OSL_TRACE("UpdateConfiguration update");
+        OSL_TRACE("UpdateConfiguration update\n");
 #endif
     SetUpdateBeingProcessed(true);
     comphelper::ScopeGuard aScopeGuard (
@@ -203,7 +203,7 @@ void ConfigurationUpdater::UpdateConfiguration (void)
         if (aClassifier.Partition())
         {
 #if defined VERBOSE && VERBOSE>=2
-            OSL_TRACE("ConfigurationUpdater::UpdateConfiguration(");
+            OSL_TRACE("ConfigurationUpdater::UpdateConfiguration(\n");
             ConfigurationTracer::TraceConfiguration(
                 mxRequestedConfiguration, "requested configuration");
             ConfigurationTracer::TraceConfiguration(
@@ -235,7 +235,13 @@ void ConfigurationUpdater::UpdateConfiguration (void)
         else
         {
 #if defined VERBOSE && VERBOSE>0
-            OSL_TRACE("nothing to do");
+            OSL_TRACE("nothing to do\n");
+#if defined VERBOSE && VERBOSE>=2
+            ConfigurationTracer::TraceConfiguration(
+                mxRequestedConfiguration, "requested configuration");
+            ConfigurationTracer::TraceConfiguration(
+                mxCurrentConfiguration, "current configuration");
+#endif
 #endif
         }
     }
@@ -307,11 +313,11 @@ void ConfigurationUpdater::UpdateCore (const ConfigurationClassifier& rClassifie
     {
 #if defined VERBOSE && VERBOSE>=2
         rClassifier.TraceResourceIdVector(
-            "requested but not current resources:", rClassifier.GetC1minusC2());
+            "requested but not current resources:\n", rClassifier.GetC1minusC2());
         rClassifier.TraceResourceIdVector(
-            "current but not requested resources:", rClassifier.GetC2minusC1());
+            "current but not requested resources:\n", rClassifier.GetC2minusC1());
         rClassifier.TraceResourceIdVector(
-            "requested and current resources:", rClassifier.GetC1andC2());
+            "requested and current resources:\n", rClassifier.GetC1andC2());
 #endif
 
         // Updating of the sub controllers is done in two steps.  In the
@@ -322,11 +328,11 @@ void ConfigurationUpdater::UpdateCore (const ConfigurationClassifier& rClassifie
         mpResourceManager->ActivateResources(rClassifier.GetC1minusC2(), mxCurrentConfiguration);
 
 #if defined VERBOSE && VERBOSE>=2
-        OSL_TRACE("ConfigurationController::UpdateConfiguration)");
+        OSL_TRACE("ConfigurationController::UpdateConfiguration)\n");
         ConfigurationTracer::TraceConfiguration(
-            mxRequestedConfiguration, "requested configuration");
+            mxRequestedConfiguration, "requested configuration\n");
         ConfigurationTracer::TraceConfiguration(
-            mxCurrentConfiguration, "current configuration");
+            mxCurrentConfiguration, "current configuration\n");
 #endif
 
         // Deactivate pure anchors that have no child.
@@ -398,7 +404,7 @@ void ConfigurationUpdater::CheckPureAnchors (
         if (bDeactiveCurrentResource)
         {
 #if defined VERBOSE && VERBOSE>=2
-            OSL_TRACE("deactiving pure anchor %s because it has no children",
+            OSL_TRACE("deactiving pure anchor %s because it has no children\n",
                 OUStringToOString(
                     FrameworkHelper::ResourceIdToString(xResourceId),
                     RTL_TEXTENCODING_UTF8).getStr());
@@ -455,14 +461,14 @@ void ConfigurationUpdater::SetUpdateBeingProcessed (bool bValue)
 
 IMPL_LINK(ConfigurationUpdater, TimeoutHandler, Timer*, EMPTYARG)
 {
-    OSL_TRACE("configuration update timer");
+    OSL_TRACE("configuration update timer\n");
     if ( ! mbUpdateBeingProcessed
         && mxCurrentConfiguration.is()
         && mxRequestedConfiguration.is())
     {
         if ( ! AreConfigurationsEquivalent(mxCurrentConfiguration, mxRequestedConfiguration))
         {
-            OSL_TRACE("configurations differ, requesting update");
+            OSL_TRACE("configurations differ, requesting update\n");
             RequestUpdate(mxRequestedConfiguration);
         }
     }
