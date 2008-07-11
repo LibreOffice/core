@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: ch2_menu.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-13 14:27:01 $
+'* last change: $Author: rt $ $Date: 2008-07-11 07:25:53 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -43,25 +43,21 @@
 
 testcase tMainMenu
     dim iCount as integer ' the numbers of the items in the menu.
-
-    '/// Close all document windows (File / Close)
+    
+    printlog "Close all document windows (File / Close)"
     Do Until GetDocumentCount = 0
         Call hCloseDocument
-    Loop    
-    
-    '/// File / New / Spreadsheet
-    printlog "open a new spreadsheet"
+    Loop            
+    printlog "File / New / Spreadsheet"    
     call hNewDocument
-    
-    '/// Insert a Chart Object
+        
     printlog "insert a Chart Object"
     if fInsertOLE = FALSE then
         warnlog "It was not possible to insert a chart as OLE."
         Call hCloseDocument
     else
         Kontext "DocumentCalc"
-        DocumentCalc.UseMenu
-        '/// check if there are 21 items in the FILE menu.
+        DocumentCalc.UseMenu        
         printlog "check if there are 21 items in the FILE menu."
         hMenuSelectNr(1) ' FILE        
         iCount = hMenuItemGetCount()        
@@ -69,8 +65,7 @@ testcase tMainMenu
             warnlog "There should be 21 items in the file menu but there are " + iCount + " items."
         end if        
         call hMenuClose() ' close the FILE menu
-        
-        '/// check if there are 12 items in the FILE/NEW menu.
+
         printlog "check if there are 12 items in the FILE/NEW menu."
         DocumentCalc.UseMenu
         hMenuSelectNr(1) ' FILE
@@ -80,16 +75,15 @@ testcase tMainMenu
             warnlog "There should 12 items in the FILE/NEW menu but there are " + iCount + " items."
         end if        
         call hMenuClose() ' close the FILE menu
-        
-        '/// check if there are 8 items in the FILE/AUTOPILOT menu.
-        printlog "check if there are 8 items in the FILE/AUTOPILOT menu."        
+                
+        printlog "check if there are 8 (StarOffice)/9 (openOffice.org) items in the FILE/AUTOPILOT menu."        
         DocumentCalc.UseMenu        
         hMenuSelectNr(1) ' FILE
         hMenuSelectNr(4) ' AUTOPILOT        
         iCount = hMenuItemGetCount()
         if (gOOO) then   
-            if (iCount <> 10) then
-                warnlog "There should 10 items in the FILE/AUTOPILOTS menu but there are " + iCount + " items."
+            if (iCount <> 9) then
+                warnlog "There should 9 items in the FILE/AUTOPILOTS menu but there are " + iCount + " items."
             end if
         else
             if (iCount <> 8) then
@@ -97,8 +91,7 @@ testcase tMainMenu
             end if
         endif
         call hMenuClose()
-        
-        '/// check if there are 5 items in the EDIT menu.
+                
         printlog "check if there are 5 items in the EDIT menu."
         DocumentCalc.UseMenu 
         hMenuSelectNr(2)        
@@ -107,8 +100,7 @@ testcase tMainMenu
             warnlog "There should 5 items in the edit menu but there are " + iCount + " items."
         end if
         call hMenuClose()
-
-        '/// check if there are 4 items in the VIEW menu.
+        
         printlog "check if there are 4 items in the VIEW menu."
         DocumentCalc.UseMenu 
         hMenuSelectNr(3)        
@@ -117,8 +109,7 @@ testcase tMainMenu
             warnlog "There should 4 items in the view menu but there are " + iCount + " items."
         end if
         call hMenuClose()
-       
-        '/// check if there are 4 items in the VIEW/TOOLBAR menu.        
+               
         printlog "check if there are 4 items in the VIEW/TOOLBAR menu."        
         DocumentCalc.UseMenu 
         hMenuSelectNr(3) ' VIEW        
@@ -129,7 +120,6 @@ testcase tMainMenu
         end if
         call hMenuClose()
         
-        '/// check if there are 9 items in the INSERT menu.
         printlog "check if there are 9 items in the INSERT menu."
         DocumentCalc.UseMenu 
         hMenuSelectNr(4)       
@@ -139,8 +129,6 @@ testcase tMainMenu
         end if
         call hMenuClose()
  
-        
-        '/// check if there are 13 items in the FORMAT menu.
         printlog "check if there are 13 items in the FORMAT menu."
         DocumentCalc.UseMenu
         hMenuSelectNr(5) ' FORMAT        
@@ -149,7 +137,6 @@ testcase tMainMenu
             warnlog "There should 13 items in the FORMAT menu but there are " + iCount + " items."
         end if
 
-        '/// check if there are 2 items in the FORMAT/ARRANGEMENT menu.
         printlog "check if there are 2 items in the FORMAT/ARRANGEMENT menu."
         DocumentCalc.UseMenu
         hMenuSelectNr(5) ' FORMAT
@@ -159,7 +146,6 @@ testcase tMainMenu
             warnlog "There should 2 items in the FORMAT/ARRANGEMENT menu but there are " + iCount + " items."
         end if
         
-        '/// check if there are 6 items in the FORMAT/AXIS menu.
         printlog "check if there are 6 items in the FORMAT/AXIS menu."
         DocumentCalc.UseMenu
         hMenuSelectNr(5) ' FORMAT
@@ -169,7 +155,6 @@ testcase tMainMenu
             warnlog "There should 6 items in the FORMAT/AXIS menu but there are " + iCount + " items."
         end if
 
-        '/// check if there are 7 items in the FORMAT/GRID menu.
         printlog "check if there are 7 items in the FORMAT/GRID menu."
         DocumentCalc.UseMenu
         hMenuSelectNr(5) ' FORMAT
@@ -179,7 +164,6 @@ testcase tMainMenu
             warnlog "There should 7 items in the FORMAT/GRID menu but there are " + iCount + " items."
         end if
         
-        '/// check if there are 8 items in the FORMAT/TITLE menu.
         printlog "check if there are 6 items in the FORMAT/Title menu."
         DocumentCalc.UseMenu
         hMenuSelectNr(5) ' FORMAT
@@ -189,8 +173,6 @@ testcase tMainMenu
             warnlog "There should 8 items in the FORMAT/Title menu but there are " + iCount + " items."
         end if
 
-
-        '/// check if there are 13 items in the TOOLS menu.
         printlog "check if there are 13 items in the TOOLS menu."        
         DocumentCalc.UseMenu 
         hMenuSelectNr(5)        
@@ -200,7 +182,6 @@ testcase tMainMenu
         end if
         call hMenuClose()
         
-        '/// check if there are 4 items in the TOOLS/MACRO menu.
         printlog "check if there are 4 items in the TOOLS/MACRO menu."        
         DocumentCalc.UseMenu 
         hMenuSelectNr(6)
@@ -211,7 +192,6 @@ testcase tMainMenu
         end if
         call hMenuClose()
         
-        '/// check if there are 5 items in the WINDOW menu.
         printlog "check if there are 5 items in the WINDOW menu."        
         DocumentCalc.UseMenu 
         hMenuSelectNr(7)        
@@ -221,7 +201,6 @@ testcase tMainMenu
         end if
         call hMenuClose()
  
-        '/// check if there are 5 or 6 items in the HELP menu. Depends on if it's a patched version
         printlog "check if there are 5 or 6 items in the HELP menu. Depends on if it's a patched version"        
         DocumentCalc.UseMenu 
         hMenuSelectNr(8)        
