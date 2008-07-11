@@ -7,7 +7,7 @@ include $(SETTINGS)/settings.mk
 include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
-CSC_FLAGS = -warnaserror+ -incremental- -noconfig
+CSC_FLAGS = -warnaserror+ -noconfig
 VBC_FLAGS = -warnaserror+
 ifeq "$(DEBUG)" "yes"
 CC_FLAGS+=-Zi -MT
@@ -21,7 +21,7 @@ endif
 THIS_OUT_MISC = $(OUT_MISC)/csharp_SpreadsheetExamples
 
 SPREADSHEET_OUT:= $(OUT_BIN)/CSharp_SpreadsheetExamples
-CLI_LIB_LOCATION = $(OFFICE_PROGRAM_PATH)\assembly
+CLI_LIB_LOCATION = $(PRJ)\cli
 
 # Targets
 .PHONY : ALL
