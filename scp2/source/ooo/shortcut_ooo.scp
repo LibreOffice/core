@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shortcut_ooo.scp,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,9 +37,9 @@ Shortcut gid_Shortcut_Lib_Xslt
     FileID = gid_File_Lib_Xslt;
     Dir = gid_Dir_Program;
 #ifdef MACOSX
-    Name = STRING(CONCAT2(libxslt.1,UNXSUFFIX));
+    Name = STRING(CONCAT4(libxslt,.,LIBXSLT_MAJOR,UNXSUFFIX));
 #else
-    Name = STRING(CONCAT3(libxslt,UNXSUFFIX,.1));
+    Name = STRING(CONCAT4(libxslt,UNXSUFFIX,.,LIBXSLT_MAJOR));
 #endif
     Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
 End
