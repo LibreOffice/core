@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgprov.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -185,9 +185,17 @@ static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAs
         return xControlModel;
     }
 
-    Reference< container::XNameContainer > DialogProviderImpl::createDialogModel( const Reference< io::XInputStream >& xInput, const Reference< resource::XStringResourceManager >& xStringResourceManager ) throw ( Exception )
+    Reference< container::XNameContainer > DialogProviderImpl::createDialogModel(
+        const Reference< io::XInputStream >& xInput,
+        const Reference< resource::XStringResourceManager >& xStringResourceManager,
+        const Any &aDialogSourceURL) throw ( Exception )
     {
         Reference< container::XNameContainer > xDialogModel(  createControlModel() );
+
+        ::rtl::OUString aDlgSrcUrlPropName( RTL_CONSTASCII_USTRINGPARAM( "DialogSourceURL" ) );
+        Reference< beans::XPropertySet > xDlgPropSet( xDialogModel, UNO_QUERY );
+        xDlgPropSet->setPropertyValue( aDlgSrcUrlPropName, aDialogSourceURL );
+
         ::xmlscript::importDialogModel( xInput, xDialogModel, m_xContext );
         // Set resource property
         if( xStringResourceManager.is() )
@@ -207,7 +215,11 @@ static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAs
             // shouln't get here
             throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No information to create dialog" ) ), Reference< XInterface >() );
         Reference< resource::XStringResourceManager > xStringResourceManager = getStringResourceFromDialogLibrary( m_BasicInfo->mxDlgLib );
-        Reference< XControlModel > xCtrlModel( createDialogModel( m_BasicInfo->mxInput, xStringResourceManager ), UNO_QUERY_THROW );
+
+        rtl::OUString aURL(RTL_CONSTASCII_USTRINGPARAM("" ));
+        Any aDialogSourceURL;
+        aDialogSourceURL <<= aURL;
+        Reference< XControlModel > xCtrlModel( createDialogModel( m_BasicInfo->mxInput, xStringResourceManager, aDialogSourceURL ), UNO_QUERY_THROW );
         return xCtrlModel;
     }
 
@@ -441,13 +453,10 @@ static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAs
                 xStringResourceManager = getStringResourceFromDialogLibrary( xDialogLib );
             }
 
-            Reference< container::XNameContainer > xDialogModel( createDialogModel( xInput , xStringResourceManager ), UNO_QUERY_THROW );
             Any aDialogSourceURLAny;
             aDialogSourceURLAny <<= aURL;
-            ::rtl::OUString aDlgSrcUrlPropName( RTL_CONSTASCII_USTRINGPARAM( "DialogSourceURL" ) );
-            Reference< beans::XPropertySet > xDlgPropSet( xDialogModel, UNO_QUERY );
-            xDlgPropSet->setPropertyValue( aDlgSrcUrlPropName, aDialogSourceURLAny );
 
+            Reference< container::XNameContainer > xDialogModel( createDialogModel( xInput , xStringResourceManager, aDialogSourceURLAny  ), UNO_QUERY_THROW);
 
             xCtrlModel = Reference< XControlModel >( xDialogModel, UNO_QUERY );
         }
