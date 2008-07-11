@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: javacompskeleton.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,12 +47,13 @@ void generatePackage(std::ostream & o, const OString & implname)
         o << "package " << implname.copy(0, index) << ";\n\n";
 }
 
-void generateImports(std::ostream & o,
+void generateImports(std::ostream & o, ProgramOptions const & options,
          const std::hash_set< OString, OStringHash >& /*interfaces*/,
          const OString & propertyhelper,
          bool serviceobject, bool supportxcomponent)
 {
-    o << "import com.sun.star.uno.UnoRuntime;\n";
+    if (options.componenttype == 3)
+        o << "import com.sun.star.uno.UnoRuntime;\n";
     o << "import com.sun.star.uno.XComponentContext;\n";
     if (serviceobject) {
         o << "import com.sun.star.lib.uno.helper.Factory;\n";
@@ -958,7 +959,7 @@ void generateSkeleton(ProgramOptions const & options,
 
         generatePackage(*pofs, options.implname);
 
-        generateImports(*pofs, interfaces, propertyhelper,
+        generateImports(*pofs, options, interfaces, propertyhelper,
                         serviceobject, supportxcomponent);
 
         OString classname(options.implname);
