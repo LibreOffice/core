@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterCanvasHelper.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,6 +71,22 @@ void PresenterCanvasHelper::Paint (
     const css::awt::Rectangle& rOuterBoundingBox,
     const css::awt::Rectangle& rContentBoundingBox) const
 {
+    PaintRectangle(rpBitmap,rxCanvas,rRepaintBox,rOuterBoundingBox,rContentBoundingBox,
+        maDefaultViewState, maDefaultRenderState);
+}
+
+
+
+
+void PresenterCanvasHelper::PaintRectangle (
+    const SharedBitmapDescriptor& rpBitmap,
+    const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+    const css::awt::Rectangle& rRepaintBox,
+    const css::awt::Rectangle& rOuterBoundingBox,
+    const css::awt::Rectangle& rContentBoundingBox,
+    const css::rendering::ViewState& rDefaultViewState,
+    const css::rendering::RenderState& rDefaultRenderState)
+{
     if (rpBitmap.get() == NULL)
         return;
 
@@ -104,7 +120,9 @@ void PresenterCanvasHelper::Paint (
                 rxCanvas,
                 rRepaintBox,
                 xPolyPolygon,
-                rContentBoundingBox);
+                rContentBoundingBox,
+                rDefaultViewState,
+                rDefaultRenderState);
         }
         else
         {
@@ -113,7 +131,9 @@ void PresenterCanvasHelper::Paint (
                 awt::Point(rOuterBoundingBox.X, rOuterBoundingBox.Y),
                 rxCanvas,
                 rRepaintBox,
-                xPolyPolygon);
+                xPolyPolygon,
+                rDefaultViewState,
+                rDefaultRenderState);
         }
     }
     else
@@ -122,8 +142,30 @@ void PresenterCanvasHelper::Paint (
             rpBitmap->maReplacementColor,
             rxCanvas,
             rRepaintBox,
-            xPolyPolygon);
+            xPolyPolygon,
+            rDefaultViewState,
+            rDefaultRenderState);
     }
+}
+
+
+
+
+void PresenterCanvasHelper::PaintRectangle (
+    const SharedBitmapDescriptor& rpBitmap,
+    const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+    const css::awt::Rectangle& rRepaintBox,
+    const css::awt::Rectangle& rOuterBoundingBox,
+    const css::awt::Rectangle& rContentBoundingBox)
+{
+    rendering::ViewState aViewState (geometry::AffineMatrix2D(1,0,0, 0,1,0),NULL);
+    rendering::RenderState aRenderState(
+        geometry::AffineMatrix2D(1,0,0, 0,1,0),
+        NULL,
+        Sequence<double>(3),
+        rendering::CompositeOperation::SOURCE);
+    PaintRectangle(rpBitmap,rxCanvas,rRepaintBox,rOuterBoundingBox,rContentBoundingBox,
+        aViewState, aRenderState);
 }
 
 
@@ -134,7 +176,9 @@ void PresenterCanvasHelper::PaintTiledBitmap (
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
     const css::awt::Rectangle& rRepaintBox,
     const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxPolygon,
-    const css::awt::Rectangle& rHole) const
+    const css::awt::Rectangle& rHole,
+    const css::rendering::ViewState& rDefaultViewState,
+    const css::rendering::RenderState& rDefaultRenderState)
 {
     if ( ! rxCanvas.is() || ! rxCanvas->getDevice().is())
         return;
@@ -145,12 +189,12 @@ void PresenterCanvasHelper::PaintTiledBitmap (
     if ( ! rxPolygon.is())
         return;
 
-    rendering::ViewState aViewState (maDefaultViewState);
+    rendering::ViewState aViewState (rDefaultViewState);
     aViewState.Clip = rxPolygon;
 
     // Create a local render state at which the location of the bitmap is
     // set.
-    rendering::RenderState aRenderState (maDefaultRenderState);
+    rendering::RenderState aRenderState (rDefaultRenderState);
 
 
     // Tile the bitmap over the repaint box.
@@ -187,7 +231,9 @@ void PresenterCanvasHelper::PaintTexture (
     const css::uno::Reference<css::rendering::XBitmap>& rxTexture,
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
     const css::awt::Rectangle& rRepaintBox,
-    const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxPolygon) const
+    const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxPolygon,
+    const css::rendering::ViewState& rDefaultViewState,
+    const css::rendering::RenderState& rDefaultRenderState)
 {
     if ( ! rxCanvas.is() || ! rxCanvas->getDevice().is())
         return;
@@ -199,7 +245,7 @@ void PresenterCanvasHelper::PaintTexture (
         return;
 
     // Set the repaint box as clip rectangle at the view state.
-    rendering::ViewState aViewState (maDefaultViewState);
+    rendering::ViewState aViewState (rDefaultViewState);
     aViewState.Clip = PresenterGeometryHelper::CreatePolygon(rRepaintBox, rxCanvas->getDevice());
 
 
@@ -222,7 +268,7 @@ void PresenterCanvasHelper::PaintTexture (
     rxCanvas->fillTexturedPolyPolygon(
         rxPolygon,
         aViewState,
-        maDefaultRenderState,
+        rDefaultRenderState,
         aTextures);
 }
 
@@ -234,7 +280,9 @@ void PresenterCanvasHelper::PaintBitmap (
     const awt::Point& rLocation,
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
     const css::awt::Rectangle& rRepaintBox,
-    const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxPolygon) const
+    const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxPolygon,
+    const css::rendering::ViewState& rDefaultViewState,
+    const css::rendering::RenderState& rDefaultRenderState)
 {
     if ( ! rxCanvas.is() || ! rxCanvas->getDevice().is())
         return;
@@ -246,13 +294,13 @@ void PresenterCanvasHelper::PaintBitmap (
         return;
 
     // Set the repaint box as clip rectangle at the view state.
-    rendering::ViewState aViewState (maDefaultViewState);
+    rendering::ViewState aViewState (rDefaultViewState);
     aViewState.Clip = PresenterGeometryHelper::CreatePolygon(rRepaintBox, rxCanvas->getDevice());
 
 
     // Setup the rendering state so that the bitmap is painted top left in
     // the polygon bounding box.
-    rendering::RenderState aRenderState (maDefaultRenderState);
+    rendering::RenderState aRenderState (rDefaultRenderState);
     aRenderState.AffineTransform = geometry::AffineMatrix2D(1,0, rLocation.X, 0,1,rLocation.Y);
     aRenderState.Clip = rxPolygon;
 
@@ -269,7 +317,9 @@ void PresenterCanvasHelper::PaintColor (
     const css::util::Color nColor,
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
     const css::awt::Rectangle& rRepaintBox,
-    const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxPolygon) const
+    const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxPolygon,
+    const css::rendering::ViewState& rDefaultViewState,
+    const css::rendering::RenderState& rDefaultRenderState)
 {
     if ( ! rxCanvas.is() || ! rxCanvas->getDevice().is())
         return;
@@ -278,12 +328,12 @@ void PresenterCanvasHelper::PaintColor (
         return;
 
     // Set the repaint box as clip rectangle at the view state.
-    rendering::ViewState aViewState (maDefaultViewState);
+    rendering::ViewState aViewState (rDefaultViewState);
     aViewState.Clip = PresenterGeometryHelper::CreatePolygon(rRepaintBox, rxCanvas->getDevice());
 
 
     // Setup the rendering state to use the given color.
-    rendering::RenderState aRenderState (maDefaultRenderState);
+    rendering::RenderState aRenderState (rDefaultRenderState);
     aRenderState.DeviceColor[0] = ((nColor >> 16) & 0x0ff) / 255.0;
     aRenderState.DeviceColor[1] = ((nColor >> 8) & 0x0ff) / 255.0;
     aRenderState.DeviceColor[2] = ((nColor >> 0) & 0x0ff) / 255.0;
