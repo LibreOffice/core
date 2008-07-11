@@ -1,0 +1,213 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="http://www.w3.org/TR/REC-html40">
+    <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+        <Author>Gavin Lu</Author>
+        <LastAuthor>Gavin Lu</LastAuthor>
+        <Created>2003-07-07T08:45:43Z</Created>
+        <Company>Sun China Engineering &amp; Research Institute</Company>
+        <Version>11.5329</Version>
+    </DocumentProperties>
+    <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+        <WindowHeight>9000</WindowHeight>
+        <WindowWidth>13860</WindowWidth>
+        <WindowTopX>240</WindowTopX>
+        <WindowTopY>75</WindowTopY>
+        <ProtectStructure>False</ProtectStructure>
+        <ProtectWindows>False</ProtectWindows>
+    </ExcelWorkbook>
+    <Styles>
+        <Style ss:ID="Default" ss:Name="Normal">
+            <Alignment ss:Vertical="Center"/>
+            <Borders/>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12"/>
+            <Interior/>
+            <NumberFormat/>
+            <Protection/>
+        </Style>
+        <Style ss:ID="s21">
+            <Alignment ss:Vertical="Center"/>
+            <Interior/>
+        </Style>
+        <Style ss:ID="s22">
+            <Interior/>
+        </Style>
+        <Style ss:ID="s23">
+            <Interior ss:Color="#00FFFF" ss:Pattern="Solid"/>
+        </Style>
+        <Style ss:ID="s24">
+            <Interior ss:Color="#FFFF00" ss:Pattern="Solid"/>
+        </Style>
+        <Style ss:ID="s25">
+            <Interior ss:Color="#FFFF00" ss:Pattern="Solid"/>
+            <Protection x:HideFormula="1"/>
+        </Style>
+        <Style ss:ID="s26">
+            <NumberFormat ss:Format="@"/>
+        </Style>
+        <Style ss:ID="s38">
+            <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+            <Font ss:FontName="宋体" x:CharSet="134" ss:Size="36" ss:Color="#FF6600" ss:Bold="1"/>
+            <Interior ss:Color="#0000FF" ss:Pattern="Solid"/>
+        </Style>
+    </Styles>
+    <Names>
+        <NamedRange ss:Name="name1" ss:RefersTo="=Sheet2!R4C2"/>
+        <NamedRange ss:Name="name2" ss:RefersTo="=Sheet1!R4C2"/>
+        <NamedRange ss:Name="name3" ss:RefersTo="=1"/>
+        <NamedRange ss:Name="name4" ss:RefersTo="=3"/>
+    </Names>
+    <Worksheet ss:Name="Sheet1" ss:Protected="1">
+        <Table ss:ExpandedColumnCount="9" ss:ExpandedRowCount="13" x:FullColumns="1" x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25">
+            <Row ss:AutoFitHeight="0">
+                <Cell>
+                    <Data ss:Type="String">name3/4's virtual base</Data>
+                </Cell>
+                <Cell ss:Index="5">
+                    <Data ss:Type="String">name4</Data>
+                </Cell>
+                <Cell ss:Index="7">
+                    <Data ss:Type="String">name3</Data>
+                </Cell>
+            </Row>
+            <Row ss:AutoFitHeight="0">
+                <Cell ss:Index="2" ss:StyleID="s21"/>
+                <Cell ss:StyleID="s21"/>
+                <Cell ss:StyleID="s21"/>
+                <Cell ss:Formula="=name4">
+                    <Data ss:Type="Number">3</Data>
+                </Cell>
+                <Cell ss:Index="7" ss:StyleID="s22" ss:Formula="=name3">
+                    <Data ss:Type="Number">1</Data>
+                </Cell>
+            </Row>
+            <Row ss:AutoFitHeight="0">
+                <Cell ss:Index="2" ss:StyleID="s23">
+                    <Data ss:Type="Number">23</Data>
+                </Cell>
+                <Cell ss:StyleID="s23"/>
+                <Cell ss:StyleID="s23"/>
+                <Cell ss:Index="7" ss:StyleID="s24" ss:Formula="=(RC2 * 655+Sheet2!R[-1]C[-5]-R[1]C[2])">
+                    <Data ss:Type="Number">15063</Data>
+                </Cell>
+                <Cell ss:Index="9">
+                    <Data ss:Type="Number">232</Data>
+                </Cell>
+            </Row>
+            <Row ss:AutoFitHeight="0">
+                <Cell>
+                    <Data ss:Type="String">name2-&gt;</Data>
+                </Cell>
+                <Cell ss:StyleID="s23">
+                    <Data ss:Type="Number">65</Data>
+                    <NamedCell ss:Name="name2"/>
+                </Cell>
+                <Cell ss:StyleID="s23">
+                    <Data ss:Type="Number">2342</Data>
+                </Cell>
+                <Cell ss:StyleID="s23">
+                    <Data ss:Type="Number">32.898000000000003</Data>
+                </Cell>
+                <Cell>
+                    <Data ss:Type="String">hidden formula&#45;&#45;-&gt;</Data>
+                </Cell>
+                <Cell ss:Index="7" ss:StyleID="s25" ss:Formula="=AVERAGE(RC[-5]:RC[-3])">
+                    <Data ss:Type="Number">813.29933333333338</Data>
+                </Cell>
+                <Cell ss:Index="9">
+                    <Data ss:Type="Number">234</Data>
+                </Cell>
+            </Row>
+            <Row ss:AutoFitHeight="0">
+                <Cell ss:Index="2" ss:StyleID="s23">
+                    <Data ss:Type="Number">35</Data>
+                </Cell>
+                <Cell ss:StyleID="s23"/>
+                <Cell ss:StyleID="s23"/>
+                <Cell ss:Index="6" ss:StyleID="s26">
+                    <Data ss:Type="String">+name1-&gt;</Data>
+                </Cell>
+                <Cell ss:StyleID="s24" ss:Formula="=SUM(R[-2]C[-5],R[-1]C[-5],R[-1]C[-3],name1)">
+                    <Data ss:Type="Number">463.89800000000002</Data>
+                </Cell>
+                <Cell ss:Index="9">
+                    <Data ss:Type="Number">2342</Data>
+                </Cell>
+            </Row>
+            <Row ss:AutoFitHeight="0">
+                <Cell ss:Index="6" ss:StyleID="s26">
+                    <Data ss:Type="String">+name2-&gt;</Data>
+                </Cell>
+                <Cell ss:StyleID="s24" ss:Formula="=SUM(R[-3]C[-5],R[-2]C[-5],R[-2]C[-3],name2)">
+                    <Data ss:Type="Number">185.898</Data>
+                </Cell>
+            </Row>
+            <Row ss:AutoFitHeight="0"/>
+            <Row ss:AutoFitHeight="0">
+                <Cell ss:Index="2" ss:MergeAcross="7" ss:MergeDown="5" ss:StyleID="s38">
+                    <Data ss:Type="String">Protected Sheet</Data>
+                </Cell>
+            </Row>
+            <Row ss:AutoFitHeight="0" ss:Span="4"/>
+        </Table>
+        <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+            <Unsynced/>
+            <Print>
+                <ValidPrinterInfo/>
+                <PaperSizeIndex>9</PaperSizeIndex>
+                <HorizontalResolution>600</HorizontalResolution>
+                <VerticalResolution>600</VerticalResolution>
+            </Print>
+            <Selected/>
+            <Panes>
+                <Pane>
+                    <Number>3</Number>
+                    <ActiveRow>7</ActiveRow>
+                    <ActiveCol>1</ActiveCol>
+                    <RangeSelection>R8C2:R13C9</RangeSelection>
+                </Pane>
+            </Panes>
+            <ProtectObjects>True</ProtectObjects>
+            <ProtectScenarios>True</ProtectScenarios>
+        </WorksheetOptions>
+    </Worksheet>
+    <Worksheet ss:Name="Sheet2">
+        <Table ss:ExpandedColumnCount="2" ss:ExpandedRowCount="4" x:FullColumns="1" x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25">
+            <Row ss:AutoFitHeight="0"/>
+            <Row ss:AutoFitHeight="0">
+                <Cell ss:Index="2">
+                    <Data ss:Type="Number">232</Data>
+                </Cell>
+            </Row>
+            <Row ss:AutoFitHeight="0"/>
+            <Row ss:AutoFitHeight="0">
+                <Cell>
+                    <Data ss:Type="String">name1-&gt;</Data>
+                </Cell>
+                <Cell>
+                    <Data ss:Type="Number">343</Data>
+                    <NamedCell ss:Name="name1"/>
+                </Cell>
+            </Row>
+        </Table>
+        <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+            <Unsynced/>
+            <Panes>
+                <Pane>
+                    <Number>3</Number>
+                    <ActiveRow>30</ActiveRow>
+                </Pane>
+            </Panes>
+            <ProtectObjects>False</ProtectObjects>
+            <ProtectScenarios>False</ProtectScenarios>
+        </WorksheetOptions>
+    </Worksheet>
+    <Worksheet ss:Name="Sheet3">
+        <Table ss:ExpandedColumnCount="0" ss:ExpandedRowCount="0" x:FullColumns="1" x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25"/>
+        <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+            <Unsynced/>
+            <ProtectObjects>False</ProtectObjects>
+            <ProtectScenarios>False</ProtectScenarios>
+        </WorksheetOptions>
+    </Worksheet>
+</Workbook>

@@ -1,0 +1,1314 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>Gavin Lu</Author>
+  <LastAuthor>Guang Gavin Lu</LastAuthor>
+  <Created>2003-07-09T05:25:37Z</Created>
+  <Company>Sun China Engineering &amp; Research Institute</Company>
+  <Version>11.5329</Version>
+ </DocumentProperties>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>9000</WindowHeight>
+  <WindowWidth>10620</WindowWidth>
+  <WindowTopX>240</WindowTopX>
+  <WindowTopY>75</WindowTopY>
+  <TabRatio>272</TabRatio>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Center"/>
+   <Borders/>
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s21">
+   <Interior ss:Color="#00FFFF" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="s22">
+   <Interior ss:Color="#FFFF00" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="s23">
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12" ss:Bold="1"/>
+   <NumberFormat/>
+  </Style>
+  <Style ss:ID="s24">
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12" ss:Bold="1"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Sheet1">
+  <Names>
+   <NamedRange ss:Name="_FilterDatabase" ss:RefersTo="=Sheet1!R13C2:R17C6"
+    ss:Hidden="1"/>
+   <NamedRange ss:Name="Criteria" ss:RefersTo="=Sheet1!R19C2:R20C6"/>
+   <NamedRange ss:Name="default.aspx?CTT_6_Origin_EC010229861033"
+    ss:RefersTo="=Sheet1!R3C8:R5C8"/>
+   <NamedRange ss:Name="Extract" ss:RefersTo="=Sheet1!R22C2:R25C6"/>
+   <NamedRange ss:Name="Query_from_biblio" ss:RefersTo="=Sheet1!R9C8:R44C10"/>
+  </Names>
+  <Table ss:ExpandedColumnCount="10" ss:ExpandedRowCount="44" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25">
+   <Column ss:Index="8" ss:AutoFitWidth="0" ss:Width="79.5"/>
+   <Column ss:AutoFitWidth="0" ss:Width="37.5"/>
+   <Column ss:Width="376.5"/>
+   <Row ss:AutoFitHeight="0"/>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2" ss:StyleID="s21"><Data ss:Type="String">Month</Data></Cell>
+    <Cell ss:StyleID="s21"><Data ss:Type="String">persons</Data></Cell>
+    <Cell ss:StyleID="s21"><Data ss:Type="String">cars</Data></Cell>
+    <Cell ss:StyleID="s21"><Data ss:Type="String">bags</Data></Cell>
+    <Cell ss:StyleID="s21"><Data ss:Type="String">currency</Data></Cell>
+    <Cell ss:Index="8" ss:StyleID="s22"><Data ss:Type="String">Web Query Result</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2"><Data ss:Type="String">March</Data></Cell>
+    <Cell><Data ss:Type="Number">2</Data></Cell>
+    <Cell><Data ss:Type="Number">3</Data></Cell>
+    <Cell><Data ss:Type="Number">4</Data></Cell>
+    <Cell><Data ss:Type="Number">5</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">Information for professionals</Data><NamedCell
+      ss:Name="default.aspx?CTT_6_Origin_EC010229861033"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2" ss:StyleID="s23"><Data ss:Type="String">March Total</Data></Cell>
+    <Cell ss:Index="6" ss:Formula="=SUBTOTAL(9,R[-1]C:R[-1]C)"><Data
+      ss:Type="Number">5</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2"><Data ss:Type="String">April</Data></Cell>
+    <Cell><Data ss:Type="Number">21</Data></Cell>
+    <Cell><Data ss:Type="Number">31</Data></Cell>
+    <Cell><Data ss:Type="Number">41</Data></Cell>
+    <Cell><Data ss:Type="Number">51</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">Healthcare</Data><NamedCell
+      ss:Name="default.aspx?CTT_6_Origin_EC010229861033"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2" ss:StyleID="s24"><Data ss:Type="String">April Total</Data></Cell>
+    <Cell ss:Index="6" ss:Formula="=SUBTOTAL(9,R[-1]C:R[-1]C)"><Data
+      ss:Type="Number">51</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2"><Data ss:Type="String">June</Data></Cell>
+    <Cell><Data ss:Type="Number">22</Data></Cell>
+    <Cell><Data ss:Type="Number">32</Data></Cell>
+    <Cell><Data ss:Type="Number">42</Data></Cell>
+    <Cell><Data ss:Type="Number">52</Data></Cell>
+    <Cell ss:Index="8" ss:StyleID="s22"><Data ss:Type="String">Database Query Result</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2" ss:StyleID="s24"><Data ss:Type="String">June Total</Data></Cell>
+    <Cell ss:Index="6" ss:Formula="=SUBTOTAL(9,R[-1]C:R[-1]C)"><Data
+      ss:Type="Number">52</Data></Cell>
+    <Cell ss:Index="8" ss:StyleID="s22"/>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2"><Data ss:Type="String">July</Data></Cell>
+    <Cell><Data ss:Type="Number">23</Data></Cell>
+    <Cell><Data ss:Type="Number">33</Data></Cell>
+    <Cell><Data ss:Type="Number">43</Data></Cell>
+    <Cell><Data ss:Type="Number">53</Data></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">BOR02a</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Borges, Malte; Schumacher, J攔g</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2" ss:StyleID="s24"><Data ss:Type="String">July Total</Data></Cell>
+    <Cell ss:Index="6" ss:Formula="=SUBTOTAL(9,R[-1]C:R[-1]C)"><Data
+      ss:Type="Number">53</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2" ss:StyleID="s24"><Data ss:Type="String">Grand Total</Data></Cell>
+    <Cell ss:Index="6" ss:Formula="=SUBTOTAL(9,R[-8]C:R[-2]C)"><Data
+      ss:Type="Number">161</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">STA99</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Staas, Dieter</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2" ss:StyleID="s24"><Data ss:Type="String">a</Data><NamedCell
+      ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="String">b</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="String">c</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="String">d</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="String">e</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">ESS99A</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Esser, Heinz-Christian; Meseke, Bodo; Rottenberger, Dirk</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2"><Data ss:Type="Number">-454</Data><NamedCell
+      ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="Number">5633</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="Number">553</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="Number">753</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="Number">35</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">BOR98</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Borges, Malte; M乴ler, Carsten</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2"><Data ss:Type="Number">12</Data><NamedCell
+      ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="Number">33</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="Number">45</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="Number">66</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="Number">44</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">SEE98B</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Seeboerger-Weichselbaum, Michael</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2"><Data ss:Type="Number">22</Data><NamedCell
+      ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="Number">3</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="Number">64</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="Number">943</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="Number">464</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">BOR99B</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Borges, Malte; Elser, Eike; Schumacher. J攔g</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2"><Data ss:Type="Number">333</Data><NamedCell
+      ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="Number">5</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="Number">326</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="Number">669</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell><Data ss:Type="Number">4232</Data><NamedCell ss:Name="_FilterDatabase"/></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">STA98</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Staas, Dieter</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">DAN1999</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Dangel, David</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2"><Data ss:Type="String">a</Data><NamedCell ss:Name="Criteria"/></Cell>
+    <Cell><Data ss:Type="String">b</Data><NamedCell ss:Name="Criteria"/></Cell>
+    <Cell><Data ss:Type="String">c</Data><NamedCell ss:Name="Criteria"/></Cell>
+    <Cell><Data ss:Type="String">d</Data><NamedCell ss:Name="Criteria"/></Cell>
+    <Cell><Data ss:Type="String">e</Data><NamedCell ss:Name="Criteria"/></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">BOR99C</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Borges, Malte; Elser, Eike; Schumacher. J攔g</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2"><Data ss:Type="String">&gt;3</Data><NamedCell
+      ss:Name="Criteria"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="Number">66</Data><NamedCell
+      ss:Name="Criteria"/></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">ESS99B</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Esser, Heinz-Christian; M乴ler, Carsten; Meseke, Bodo</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">MEA99</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Meadhra, Michael</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2" ss:StyleID="s24"><Data ss:Type="String">a</Data><NamedCell
+      ss:Name="Extract"/></Cell>
+    <Cell><Data ss:Type="String">b</Data><NamedCell ss:Name="Extract"/></Cell>
+    <Cell><Data ss:Type="String">c</Data><NamedCell ss:Name="Extract"/></Cell>
+    <Cell><Data ss:Type="String">d</Data><NamedCell ss:Name="Extract"/></Cell>
+    <Cell><Data ss:Type="String">e</Data><NamedCell ss:Name="Extract"/></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">SPA00</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Spanik, Christian; Fette, Joachim</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2"><Data ss:Type="Number">12</Data><NamedCell ss:Name="Extract"/></Cell>
+    <Cell><Data ss:Type="Number">33</Data><NamedCell ss:Name="Extract"/></Cell>
+    <Cell><Data ss:Type="Number">45</Data><NamedCell ss:Name="Extract"/></Cell>
+    <Cell><Data ss:Type="Number">66</Data><NamedCell ss:Name="Extract"/></Cell>
+    <Cell><Data ss:Type="Number">44</Data><NamedCell ss:Name="Extract"/></Cell>
+    <Cell ss:Index="8"><Data ss:Type="String">MIC00</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">de Micheli, Fulvio</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">GIE00</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Giersig, Jutta</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">WEL99</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Wells, Nicholas; Taylor, R. Dean</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">KOC99</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Koch, Michael; Murray, Sarah; Roth, Werner</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">PRO99A</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Proffitt, Brian</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">ART00</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Artymiak, Jacek; Wrightson, Kate; Merlino, Joe</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">MEA99A</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Meadhra, Michael</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">PRO99B</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Proffitt, Brian</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">PRO99C</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Proffitt, Brian</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">BUS00</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Busch, David D.</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">BOR02b</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Borges, Malte; Schumacher, J攔g</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">BUS00</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Busch, David D.; Olsen, J.W.</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">DAN00</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Dandenell, Malin; Ek, Jesper</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">FAC01</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Facundo Arena, Hector</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">GAE02</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">G刡ler, Rene</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">HAB00</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Habraken, Joe</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">JON00</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Jones, Floyd; Haugland, Solveig</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">MOL02</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Molla, Ricard</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">RAP00</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Rapion, Anne</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">RIN01</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Rinne , Karin</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">WAR01a</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Warner, Nancy D.</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="8"><Data ss:Type="String">WAR01b</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="Query_from_biblio"/></Cell>
+    <Cell><Data ss:Type="String">Warner, Nancy D.</Data><NamedCell
+      ss:Name="Query_from_biblio"/></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Unsynced/>
+   <Print>
+    <ValidPrinterInfo/>
+    <PaperSizeIndex>9</PaperSizeIndex>
+    <HorizontalResolution>600</HorizontalResolution>
+    <VerticalResolution>600</VerticalResolution>
+   </Print>
+   <Selected/>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>1</ActiveRow>
+     <ActiveCol>1</ActiveCol>
+     <RangeSelection>R2C2:R11C6</RangeSelection>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+  <QueryTable xmlns="urn:schemas-microsoft-com:office:excel">
+   <Name>default.aspx?CTT=6&amp;Origin=EC010229861033</Name>
+   <AutoFormatFont/>
+   <AutoFormatPattern/>
+   <QuerySource>
+    <QueryType>Web</QueryType>
+    <EnableRedirections/>
+    <RefreshedInXl9/>
+    <URLString
+     x:HRef="http://officebeta.microsoft.com/officeupdate/default.aspx?CTT=6&amp;Origin=EC010229861033"/>
+    <HTMLTables>
+     <Number>39</Number>
+    </HTMLTables>
+    <VersionLastEdit>2</VersionLastEdit>
+    <VersionLastRefresh>2</VersionLastRefresh>
+   </QuerySource>
+  </QueryTable>
+  <QueryTable xmlns="urn:schemas-microsoft-com:office:excel">
+   <Name>Query from biblio</Name>
+   <AutoFormatFont/>
+   <AutoFormatPattern/>
+   <QuerySource>
+    <Connection>CollatingSequence=ASCII;DBQ=C:\PROGRAM FILES\STAROFFICE7\USER\DATABASE\BIBLIO;DefaultDir=C:\PROGRAM FILES\STAROFFICE7\USER\DATA</Connection>
+    <Connection>BASE\BIBLIO;Deleted=0;Driver={Microsoft dBase Driver (*.dbf)};DriverId=533;FIL=dBase 5.0;MaxBufferSize=2048;MaxScanRows=8;PageT</Connection>
+    <Connection>imeout=5;SafeTransactions=0;Statistics=0;Threads=3;UID=admin;UserCommitSync=Yes;</Connection>
+    <CommandText>SELECT biblio.Identifier, biblio.Type, biblio.Author&#13;&#10;FROM biblio biblio</CommandText>
+    <VersionLastEdit>2</VersionLastEdit>
+    <VersionLastRefresh>2</VersionLastRefresh>
+   </QuerySource>
+   <RefreshInfo>
+    <NoTitles/>
+    <NextId>4</NextId>
+    <ColumnInfo>
+     <Id>1</Id>
+     <Name>Identifier</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>2</Id>
+     <Name>Type</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>3</Id>
+     <Name>Author</Name>
+    </ColumnInfo>
+   </RefreshInfo>
+  </QueryTable>
+  <DataValidation xmlns="urn:schemas-microsoft-com:office:excel">
+   <Range>R14C2:R17C6</Range>
+   <Type>Decimal</Type>
+   <Min>4</Min>
+   <Max>55555</Max>
+  </DataValidation>
+  <Sorting xmlns="urn:schemas-microsoft-com:office:excel">
+   <Sort>a</Sort>
+   <Sort>b</Sort>
+   <Descending/>
+   <Sort>c</Sort>
+   <Order>3</Order>
+   <CaseSensitive/>
+  </Sorting>
+ </Worksheet>
+ <Worksheet ss:Name="Sheet2">
+  <Names>
+   <NamedRange ss:Name="biblio" ss:RefersTo="=Sheet2!R1C1:R37C31"/>
+  </Names>
+  <Table ss:ExpandedColumnCount="31" ss:ExpandedRowCount="37" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25">
+   <Column ss:Width="79.5"/>
+   <Column ss:Width="37.5"/>
+   <Column ss:Width="96.75"/>
+   <Column ss:Width="51"/>
+   <Column ss:Width="376.5"/>
+   <Column ss:Width="72"/>
+   <Column ss:Width="57.75" ss:Span="1"/>
+   <Column ss:Index="9" ss:Width="51"/>
+   <Column ss:Width="79.5"/>
+   <Column ss:Width="72"/>
+   <Column ss:Width="57.75"/>
+   <Column ss:Width="44.25"/>
+   <Column ss:Width="37.5"/>
+   <Column ss:Width="51"/>
+   <Column ss:Width="72"/>
+   <Column ss:Width="44.25"/>
+   <Column ss:Width="169.5"/>
+   <Column ss:Width="51" ss:Span="1"/>
+   <Column ss:Index="21" ss:Width="466.5"/>
+   <Column ss:Width="57.75"/>
+   <Column ss:Width="51"/>
+   <Column ss:Width="37.5"/>
+   <Column ss:Width="30.75"/>
+   <Column ss:Width="57.75" ss:Span="4"/>
+   <Column ss:Index="31" ss:Width="90"/>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Identifier</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Type</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Address</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Annote</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Author</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Booktitle</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Chapter</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Edition</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Editor</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Howpublish</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Institutn</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Journal</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Month</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Note</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Number</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Organizat</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Pages</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Publisher</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">School</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Series</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Title</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">RepType</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Volume</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Year</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">URL</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Custom1</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Custom2</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Custom3</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Custom4</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">Custom5</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="String">ISBN</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">BOR02a</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Borges, Malte; Schumacher, J攔g</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">900</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Markt &amp; Technik Verlag</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">StarOffice 6.0 Kompendium</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">2002</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">3827262763</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">SEE98A</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Kaarst-B乼tgen</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Seeboerger-Weichselbaum, Michael</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">446</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">BHV</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">Das Einsteiger-Seminar. StarOffice 5.0</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">1998</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">3-8287-1012-3</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">BOR99A</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">M乶chen</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Borges, Malte; Elser, Eike; Schuhmacher, J攔g</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">532</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Heyne</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">Markt &amp; Technik bei Heyne, Bd.40, StarOffice 5.0</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">1999</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">3-4531-4974-2</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">STA99</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">M乶chen</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Staas, Dieter</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">480</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Carl Hanser</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">StarBasic Programmierung</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">1999</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">3-4461-9585-8</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">ESS99A</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">D乻seldorf</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Esser, Heinz-Christian; Meseke, Bodo; Rottenberger, Dirk</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">306</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Sybex</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">StarOffice 5 TopTenThemen</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">1999</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">3-8155-8012-9</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">BOR98</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Haar</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Borges, Malte; M乴ler, Carsten</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">144</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Markt und Technik</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">StarOffice 5.0 Training. Einf乭rung</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">1998</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">3-8272-5430-2</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">SEE98B</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Kaarst-B乼tgen</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Seeboerger-Weichselbaum, Michael</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">1016</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">BHV</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">StarOffice 5.0. Das bhv Taschenbuch</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">1998</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">3-8287-5012-5</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">BOR99B</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Haar</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Borges, Malte; Elser, Eike; Schumacher. J攔g</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">647</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Markt und Technik</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">StarOffice 5.0. f乺 Linux</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">1999</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">3-8272-5545-7</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">STA98</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">M乶chen</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Staas, Dieter</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">709</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Carl Hanser</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">StarOffice 5.0. Praxisbuch und Referenz</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">1998</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">3-4461-9415-0</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">DAN1999</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">M乶chen</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Dangel, David</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">358</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Beck-DTV</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">StarOffice 5.1. Die L攕ung f乺 alle Office- Aufgaben</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">1999</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">3-4235-0221-5</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">BOR99C</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Haar</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Borges, Malte; Elser, Eike; Schumacher. J攔g</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">948</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Markt und Technik</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">StarOffice 5.1 Kompendium</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">1999</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">3-8272-5633-X</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">ESS99B</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">D乻seldorf</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Esser, Heinz-Christian; M乴ler, Carsten; Meseke, Bodo</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">312</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Sybex</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">StarOffice 5.x f乺 Linux TopTenThemen</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">1999</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">3-8155-8002-1</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">MEA99</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Bonn</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Meadhra, Michael</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">400</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">MITP</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">Staroffice f乺 Dummies</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">1999</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">3-8266-2841-1</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">SPA00</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">K攏igswinter</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Spanik, Christian; Fette, Joachim</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">416</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">More Software</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">Chip Bibliothek Staroffice 5.1 Schulung</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">2000</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">3-8982-6125-5</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">MIC00</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">de Micheli, Fulvio</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">240</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">SMARTBOOKS</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">Das SmartBook zu StarOffice 5.x, m. CD-ROM</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">2000</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">3-9084-9059-6</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">GIE00</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Giersig, Jutta</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">GIERSIG</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">StarOffice 5.1, Internet, drei Tage zum Erfolg</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">2000</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">3-9324-2118-3</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">WEL99</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Wells, Nicholas; Taylor, R. Dean</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">505</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">MacMillan</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">Sams Teach Yourself Staroffice for Linux in 24 Hours</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">1999</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">0-6723-1412-6</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">KOC99</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Koch, Michael; Murray, Sarah; Roth, Werner</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">1519</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Que</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">Special Edition Using StarOffice</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">1999</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">0-7897-1993-2</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">PRO99A</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Proffitt, Brian</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">512</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Prima Publishing</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">Staroffice 5.1 for Linux Fast &amp; Easy</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">1999</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">0-7615-2447-9</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">ART00</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Artymiak, Jacek; Wrightson, Kate; Merlino, Joe</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">700</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">IDG Books Worldwide</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">StarOffice For Linux Bible</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">2000</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">0-7645-3363-0</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">MEA99A</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Meadhra, Michael</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">404</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">IDG Books Worldwide</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">Staroffice for Linux for Dummies</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">1999</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">PRO99B</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Proffitt, Brian</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">528</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Prima Publishing</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">Sun StarOffice 5.1 for Linux</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">1999</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">0-7615-2454-1</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">PRO99C</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Proffitt, Brian</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">500</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Prima Publishing</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">Suns Staroffice 5.1 for Windows</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">1999</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">0-7615-2693-5</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">BUS00</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Busch, David D.</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">640</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Sybex</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">Mastering StarOffice 5.1 for Linux</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">2000</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">0-7821-2709-6</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">BOR02b</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Borges, Malte; Schumacher, J攔g</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">384</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Heyne Wilhelm Verlag GmbH</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">StarOffice 6.0</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">2002</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">345317335X</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">BUS00</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Busch, David D.; Olsen, J.W.</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">704</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Sybex</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">Mastering StarOffice 5.2 for Linux</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">2000</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">0782127096</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">DAN00</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Dandenell, Malin; Ek, Jesper</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">423</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Pagina</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">StarOffice 5.2 f攔 Alla</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">2000</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">9163606194</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">FAC01</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Facundo Arena, Hector</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">216</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Mp Ediciones Sa</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">StarOffice 5 Libros en 1 con CD-ROM: Manuales Users, en Espanol / Spanish</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">2001</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">987526086X</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">GAE02</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">G刡ler, Rene</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">350</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Computer  u.  Literatur</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">Star Office 6.0</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">2002</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">3932311949</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">HAB00</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Habraken, Joe</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">366</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Prentice Hall</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">StarOffice 5.2 Calc Handbook</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">2000</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">013029389X</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">JON00</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Jones, Floyd; Haugland, Solveig</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">1144</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Prentice Hall</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">StarOffice 5.2 Companion</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">2000</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">0130307033</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">MOL02</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Molla, Ricard</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">312</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Editores Alfaomega</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">Primeros pasos con StarOffice: Manual interactico</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">2002</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">9701507177</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">RAP00</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Rapion, Anne</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="18"><Data ss:Type="String">ENI (Bien utiliser)</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">StarOffice Writer 5.2 : Le traitement de texte de StarOffice</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">2000</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">2746011123</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">RIN01</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Rinne , Karin</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">256</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Franzis Verlag</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">StarOffice 5.2 echt einfach. Das kinderleichte Computerbuch.</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">2001</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">377236585X</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">WAR01a</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Warner, Nancy D.</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">432</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Prentice Hall</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">StarOffice 5.2 Writer Handbook</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">2001</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">0130293865</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">WAR01b</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">1</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">Warner, Nancy D.</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">300</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell><Data ss:Type="String">Prentice Hall</Data><NamedCell ss:Name="biblio"/></Cell>
+    <Cell ss:Index="21"><Data ss:Type="String">Staroffice Impress Handbook</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="24"><Data ss:Type="String">2001</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+    <Cell ss:Index="31"><Data ss:Type="String">0130293873</Data><NamedCell
+      ss:Name="biblio"/></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Unsynced/>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>3</ActiveRow>
+     <ActiveCol>1</ActiveCol>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+  <QueryTable xmlns="urn:schemas-microsoft-com:office:excel">
+   <Name>biblio</Name>
+   <AutoFormatFont/>
+   <AutoFormatPattern/>
+   <QuerySource>
+    <Connection>CollatingSequence=ASCII;DBQ=C:\PROGRAM FILES\STAROFFICE7\USER\DATABASE\BIBLIO;DefaultDir=C:\PROGRAM FILES\STAROFFICE7\USER\DATA</Connection>
+    <Connection>BASE\BIBLIO;Deleted=0;Driver={Microsoft dBase Driver (*.dbf)};DriverId=533;FIL=dBase 5.0;MaxBufferSize=2048;MaxScanRows=8;PageT</Connection>
+    <Connection>imeout=5;SafeTransactions=0;Statistics=0;Threads=3;UserCommitSync=Yes;</Connection>
+    <CommandText>SELECT * FROM `biblio`</CommandText>
+    <VersionLastEdit>2</VersionLastEdit>
+    <VersionLastRefresh>2</VersionLastRefresh>
+   </QuerySource>
+   <RefreshInfo>
+    <NextId>32</NextId>
+    <ColumnInfo>
+     <Id>1</Id>
+     <Name>Identifier</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>2</Id>
+     <Name>Type</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>3</Id>
+     <Name>Address</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>4</Id>
+     <Name>Annote</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>5</Id>
+     <Name>Author</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>6</Id>
+     <Name>Booktitle</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>7</Id>
+     <Name>Chapter</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>8</Id>
+     <Name>Edition</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>9</Id>
+     <Name>Editor</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>10</Id>
+     <Name>Howpublish</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>11</Id>
+     <Name>Institutn</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>12</Id>
+     <Name>Journal</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>13</Id>
+     <Name>Month</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>14</Id>
+     <Name>Note</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>15</Id>
+     <Name>Number</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>16</Id>
+     <Name>Organizat</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>17</Id>
+     <Name>Pages</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>18</Id>
+     <Name>Publisher</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>19</Id>
+     <Name>School</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>20</Id>
+     <Name>Series</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>21</Id>
+     <Name>Title</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>22</Id>
+     <Name>RepType</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>23</Id>
+     <Name>Volume</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>24</Id>
+     <Name>Year</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>25</Id>
+     <Name>URL</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>26</Id>
+     <Name>Custom1</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>27</Id>
+     <Name>Custom2</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>28</Id>
+     <Name>Custom3</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>29</Id>
+     <Name>Custom4</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>30</Id>
+     <Name>Custom5</Name>
+    </ColumnInfo>
+    <ColumnInfo>
+     <Id>31</Id>
+     <Name>ISBN</Name>
+    </ColumnInfo>
+   </RefreshInfo>
+  </QueryTable>
+ </Worksheet>
+ <Worksheet ss:Name="Sheet3">
+  <Table ss:ExpandedColumnCount="0" ss:ExpandedRowCount="0" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25"/>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Unsynced/>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>
