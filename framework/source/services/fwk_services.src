@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fwk_services.src,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,6 +75,10 @@ Window DLG_BACKING
     Bitmap BMP_BACKING_DATABASE
     {
         File = "odb_32.png";
+    };
+    Bitmap BMP_BACKING_FORMULA
+    {
+        File = "odf_32.png";
     };
     Bitmap BMP_BACKING_OPENFILE
     {
