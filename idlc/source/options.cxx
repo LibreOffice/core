@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: options.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -340,11 +340,6 @@ const OString& Options::getProgramName() const
     return m_program;
 }
 
-sal_uInt16 Options::getNumberOfOptions() const
-{
-    return (sal_uInt16)(m_options.size());
-}
-
 sal_Bool Options::isValid(const OString& option)
 {
     return (m_options.count(option) > 0);
@@ -360,9 +355,4 @@ const OString Options::getOption(const OString& option)
     {
         throw IllegalArgument("Option is not valid or currently not set.");
     }
-}
-
-const OptionMap& Options::getOptions()
-{
-    return m_options;
 }
