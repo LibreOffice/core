@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: preload.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +61,8 @@ static fptr_createRegistryServiceFactory s_createRegistryServiceFactory;
 static fptr_bootstrap s_bootstrap;
 static bool s_inited = false;
 
+extern "C" { static void SAL_CALL thisModule() {} }
+
 //--------------------------------------------------------------------------------------------------
 static bool inited_juhx( JNIEnv * jni_env )
 {
@@ -68,7 +70,7 @@ static bool inited_juhx( JNIEnv * jni_env )
         return true;
     OUString lib_name = OUSTR(SAL_DLLPREFIX "juhx" SAL_DLLEXTENSION);
     oslModule hModule =
-        osl_loadModule( lib_name.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
+        osl_loadModuleRelative( &thisModule, lib_name.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     if (0 == hModule)
     {
         jclass c = jni_env->FindClass( "java/lang/RuntimeException" );
