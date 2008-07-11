@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: except.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,7 +136,14 @@ static OString toRTTImangledname( const OString & rRTTIname )
             }
             else
                 aRet.append( (sal_Char)( nBytes + 'A' ) );
-            aRet.append( aToken );
+            for (sal_Int32 i = 0; i < aToken.getLength(); ++i) {
+                char c = aToken[i];
+                if (c == 'Q') {
+                    aRet.append("QdD");
+                } else {
+                    aRet.append(c);
+                }
+            }
         }
     } while( nIndex != -1 );
 
