@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: programlistingco.002</title>
+<releaseinfo role="CVS">$Id: programlistingco.002.xml,v 1.2 2008-07-11 07:54:49 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<programlistingco>
+<areaspec>
+<area coords="1" id="prologue2"/>
+<area coords="4" id="skipeof2"/>
+<areaset coords="" id="xreq2">
+<area coords="9" id="require12"/>
+<area coords="10" id="require22"/>
+</areaset>
+<area coords="11 12" id="use2"/>
+<area coords="27" id="funccall2"/>
+</areaspec>
+<programlisting linenumbering="numbered"
+><?dbhtml linenumbering.everyNth="2" linenumbering.separator=" >"
+?><?dbfo linenumbering.everyNth="2" linenumbering.separator=" >"
+?><inlinemediaobject>
+<imageobject>
+<imagedata format="linespecific" fileref="sample.txt"/>
+</imageobject>
+</inlinemediaobject></programlisting>
+</programlistingco>
+
+</article>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook EBNF Module V1.0//EN"
+                      "http://www.oasis-open.org/docbook/xml/ebnf/1.0/dbebnf.dtd">
+<book>
+<bookinfo>
+<title>Unit Test: productionset.005</title>
+<releaseinfo role="CVS">$Id: productionset.005.xml,v 1.2 2008-07-11 07:53:57 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</bookinfo>
+
+<preface><title>Preface</title>
+<para>This book tests EBNF constraint links that cross chunk boundaries.</para>
+</preface>
+
+<chapter><title>EBNF</title>
+
+<productionset>
+<production id="NT-SDDecl">
+<lhs>SDDecl</lhs>
+<rhs><nonterminal def="#NT-S">S</nonterminal> 'standalone' <nonterminal def="#NT-Eq">Eq</nonterminal>
+<!-- The above line break in the source file has nothing to do with the
+line breaks in the output. -->
+(("'" ('yes' | 'no') "'") | ('"' ('yes' | 'no') '"'))
+</rhs>
+<constraint linkend="check-rmd"/>
+</production>
+<production id="NT-element">
+<lhs>element</lhs>
+<rhs>
+<nonterminal def="#NT-EmptyElemTag">EmptyElemTag</nonterminal>
+<sbr/><!-- There will be a line break in the output because of the sbr. -->
+| <nonterminal def="#NT-STag">STag</nonterminal> <nonterminal def="#NT-content">content</nonterminal>
+<!-- The above line break has nothing to do with the output. -->
+<nonterminal def="#NT-SDDecl"/>
+</rhs>
+<constraint linkend="GIMatch"/>
+<constraint linkend="elementvalid"/>
+</production>
+<productionrecap linkend="NT-SDDecl"/>
+</productionset>
+
+</chapter>
+
+<chapter><title>Constraints</title>
+
+<constraintdef id="GIMatch" role="WFC">
+<title>Element Type Match</title>
+<para>Some description...</para>
+</constraintdef>
+
+<constraintdef id="elementvalid" role="VC">
+<title>Element Valid</title>
+<para>Some description...</para>
+</constraintdef>
+
+<constraintdef id="check-rmd" role="VC">
+<title>Standalone Document Declaration</title>
+<para>Some description...</para>
+</constraintdef>
+
+<constraintdef id="NT-S">
+<title>NT-S</title>
+<para>Just for link integrity...</para>
+</constraintdef>
+
+<constraintdef id="NT-Eq">
+<title>NT-Eq</title>
+<para>Just for link integrity...</para>
+</constraintdef>
+
+<constraintdef id="NT-EmptyElemTag">
+<title>NT-EmptyElemTag</title>
+<para>Just for link integrity...</para>
+</constraintdef>
+
+<constraintdef id="NT-STag">
+<title>NT-STag</title>
+<para>Just for link integrity...</para>
+</constraintdef>
+
+<constraintdef id="NT-content">
+<title>NT-content</title>
+<para>Just for link integrity...</para>
+</constraintdef>
+
+</chapter>
+</book>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: qandaset.003</title>
+<releaseinfo role="CVS">$Id: qandaset.003.xml,v 1.2 2008-07-11 07:55:20 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+       <qandaset>
+    <title>QandA Title</title>
+<para>Some introductory preamble. Some introductory preamble.
+Some introductory preamble. Some introductory preamble.
+Some introductory preamble. Some introductory preamble.
+Some introductory preamble. Some introductory preamble.</para>
+<para>Some introductory preamble. Some introductory preamble.
+Some introductory preamble. Some introductory preamble.
+Some introductory preamble. Some introductory preamble.
+Some introductory preamble. Some introductory preamble.</para>
+    <qandadiv><title>Division 1</title>
+         <qandaentry>
+           <question>
+             <para>Blah blah blah.</para>
+           </question>
+      <answer>
+        <example>
+          <title><filename
+              moreinfo="none">file.name</filename></title>
+          <programlisting format="linespecific">// Hello, World</programlisting>
+        </example>
+        <example>
+          <title><filename
+              moreinfo="none">file2.name</filename></title>
+          <programlisting format="linespecific">// Goodbye, World</programlisting>
+        </example>
+      </answer>
+         </qandaentry>
+    </qandadiv>
+    <qandadiv><title>Division 2</title>
+<para>Some introductory preamble. Some introductory preamble.
+Some introductory preamble. Some introductory preamble.
+Some introductory preamble. Some introductory preamble.
+Some introductory preamble. Some introductory preamble.</para>
+<para>Some introductory preamble. Some introductory preamble.
+Some introductory preamble. Some introductory preamble.
+Some introductory preamble. Some introductory preamble.
+Some introductory preamble. Some introductory preamble.</para>
+    <qandadiv><title>Division 2.1</title>
+         <qandaentry>
+           <question>
+             <para>Blah blah blah.</para>
+           </question>
+      <answer>
+        <example>
+          <title><filename
+              moreinfo="none">file.name</filename></title>
+          <programlisting format="linespecific">// Hello, World</programlisting>
+        </example>
+        <example>
+          <title><filename
+              moreinfo="none">file2.name</filename></title>
+          <programlisting format="linespecific">// Goodbye, World</programlisting>
+        </example>
+      </answer>
+         </qandaentry>
+    </qandadiv>
+    <qandadiv><title>Division 2.2</title>
+         <qandaentry>
+           <question>
+             <para>Blah blah blah.</para>
+           </question>
+      <answer>
+        <example>
+          <title><filename
+              moreinfo="none">file.name</filename></title>
+          <programlisting format="linespecific">// Hello, World</programlisting>
+        </example>
+        <example>
+          <title><filename
+              moreinfo="none">file2.name</filename></title>
+          <programlisting format="linespecific">// Goodbye, World</programlisting>
+        </example>
+      </answer>
+         </qandaentry>
+    </qandadiv>
+    </qandadiv>
+       </qandaset>
+
+</article>

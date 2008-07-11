@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: qandaset.001</title>
+<releaseinfo role="CVS">$Id: qandaset.001.xml,v 1.2 2008-07-11 07:55:00 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<para>What about <xref linkend="Two"/>?</para>
+
+  <qandaset defaultlabel='number'>
+    <?dbhtml table-summary="summary"?>
+    <qandaentry id="qa1">
+      <question id="q1"><para>Question one.</para></question>
+      <answer id="a1">
+    <para>Answer one.
+See <xref linkend="faq-Two"/></para>
+      </answer>
+    </qandaentry>
+
+    <qandaentry id="Two">
+      <question id="faq-Two"><para>Question two.</para></question>
+      <answer id="faa-Two">
+    <para>Answer two.</para>
+      </answer>
+    </qandaentry>
+
+    <qandaentry id="Twoc">
+      <question id="faq-Twoc"><para>Question two.</para></question>
+      <answer id="faa-Twoc">
+    <orderedlist>
+      <listitem><para>testing a list</para></listitem>
+      <listitem><para>testing a list</para></listitem>
+      <listitem><para>testing a list</para></listitem>
+    </orderedlist>
+      </answer>
+    </qandaentry>
+
+  </qandaset>
+
+</article>
