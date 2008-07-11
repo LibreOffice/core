@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: javatype.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_codemaker_source_javamaker_javatype_hxx
-#define INCLUDED_codemaker_source_javamaker_javatype_hxx
+#ifndef INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_JAVATYPE_HXX
+#define INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_JAVATYPE_HXX
 
 namespace codemaker { class GeneratedTypeSet; }
 namespace rtl { class OString; }
@@ -45,4 +45,4 @@ bool produceType(RegistryKey& typeName, bool bIsExtraType, TypeManager const & t
                  codemaker::GeneratedTypeSet & generated,
                  JavaOptions* pOptions);
 
-#endif
+#endif // INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_JAVATYPE_HXX
