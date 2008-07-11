@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par.cxx,v $
- * $Revision: 1.195 $
+ * $Revision: 1.196 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1741,6 +1741,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
             aIdx++;
         }
         rDoc.DeleteSection( &aNdIdx.GetNode() );
+        this->pFmtOfJustInsertedApo = 0;
     }
 
     rDoc.Insert( *pPaM, SwFmtFld( SwPostItField(
