@@ -9,7 +9,7 @@
  *
  * $RCSfile: PresenterScreen.xcu,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -814,16 +814,19 @@
             <prop oor:name="Name"><value>ButtonFrameLeft</value></prop>
             <prop oor:name="NormalFileName"><value>bitmaps/ButtonFrameLeftNormal.png</value></prop>
             <prop oor:name="MouseOverFileName"><value>bitmaps/ButtonFrameLeftMouseOver.png</value></prop>
+            <prop oor:name="YOffset"><value>2</value></prop>
           </node>
           <node oor:name="ButtonFrameCenter" oor:op="replace">
             <prop oor:name="Name"><value>ButtonFrameCenter</value></prop>
             <prop oor:name="NormalFileName"><value>bitmaps/ButtonFrameCenterNormal.png</value></prop>
             <prop oor:name="MouseOverFileName"><value>bitmaps/ButtonFrameCenterMouseOver.png</value></prop>
+            <prop oor:name="YOffset"><value>2</value></prop>
           </node>
           <node oor:name="ButtonFrameRight" oor:op="replace">
             <prop oor:name="Name"><value>ButtonFrameRight</value></prop>
             <prop oor:name="NormalFileName"><value>bitmaps/ButtonFrameRightNormal.png</value></prop>
             <prop oor:name="MouseOverFileName"><value>bitmaps/ButtonFrameRightMouseOver.png</value></prop>
+            <prop oor:name="YOffset"><value>2</value></prop>
           </node>
           <node oor:name="LabelLeft" oor:op="replace">
             <prop oor:name="NormalFileName"><value>bitmaps/LabelMouseOverLeft.png</value></prop>
