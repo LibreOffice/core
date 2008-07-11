@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChangeRequestQueueProcessor.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +56,7 @@ void TraceRequest (const Reference<XConfigurationChangeRequest>& rxRequest)
 {
     Reference<container::XNamed> xNamed (rxRequest, UNO_QUERY);
     if (xNamed.is())
-        OSL_TRACE("    %s",
+        OSL_TRACE("    %s\n",
             ::rtl::OUStringToOString(xNamed->getName(), RTL_TEXTENCODING_UTF8).getStr());
 }
 
@@ -111,11 +111,11 @@ void ChangeRequestQueueProcessor::AddRequest (
 #ifdef VERBOSE
     if (maQueue.empty())
     {
-        OSL_TRACE("Adding requests to empty queue");
+        OSL_TRACE("Adding requests to empty queue\n");
         ConfigurationTracer::TraceConfiguration(
             mxConfiguration, "current configuration of queue processor");
     }
-    OSL_TRACE("Adding request");
+    OSL_TRACE("Adding request\n");
     TraceRequest(rxRequest);
 #endif
 
@@ -135,7 +135,7 @@ void ChangeRequestQueueProcessor::StartProcessing (void)
         && ! maQueue.empty())
     {
 #ifdef VERBOSE
-        OSL_TRACE("ChangeRequestQueueProcessor scheduling processing");
+        OSL_TRACE("ChangeRequestQueueProcessor scheduling processing\n");
 #endif
         mnUserEventId = Application::PostUserEvent(
             LINK(this,ChangeRequestQueueProcessor,ProcessEvent));
@@ -172,7 +172,7 @@ void ChangeRequestQueueProcessor::ProcessOneEvent (void)
     ::osl::MutexGuard aGuard (maMutex);
 
 #ifdef VERBOSE
-    OSL_TRACE("ProcessOneEvent");
+    OSL_TRACE("ProcessOneEvent\n");
 #endif
 
     if (mxConfiguration.is()
@@ -194,12 +194,17 @@ void ChangeRequestQueueProcessor::ProcessOneEvent (void)
         if (maQueue.empty())
         {
 #ifdef VERBOSE
-            OSL_TRACE("All requests are processed");
+            OSL_TRACE("All requests are processed\n");
 #endif
             // The queue is empty so tell the ConfigurationManager to update
             // its state.
             if (mpConfigurationUpdater.get() != NULL)
+            {
+                ConfigurationTracer::TraceConfiguration (
+                    mxConfiguration, "updating to configuration");
+
                 mpConfigurationUpdater->RequestUpdate(mxConfiguration);
+            }
         }
     }
 }
