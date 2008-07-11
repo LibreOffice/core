@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: content.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1107,7 +1107,7 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
             }
         }
     }
-    else
+    else if( pEntry )
     {
         SwContentType* pType = (SwContentType*)pEntry->GetUserData();
         if ( (pType->GetType() == CONTENT_TYPE_POSTIT) &&  (!pActiveShell->GetView().GetDocShell()->IsReadOnly()) && ( pType->GetMemberCount() > 0) )
