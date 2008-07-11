@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: getopt.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,9 +30,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_testshl2.hxx"
-#include "getopt.hxx"
+#include "testshl/getopt.hxx"
 
-#include "filehelper.hxx"
+#include "testshl/filehelper.hxx"
 
 using namespace std;
 //----------------------------------------------------------------------------
