@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: includes.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,8 +29,7 @@
  ************************************************************************/
 
 #ifndef INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_INCLUDES_HXX
-#define INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_INCLUDES_HXX \
-    INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_INCLUDES_HXX
+#define INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_INCLUDES_HXX
 
 #include "codemaker/dependencies.hxx"
 #include "rtl/ustring.hxx"
