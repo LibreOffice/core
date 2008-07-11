@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterScrollBar.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,9 +31,11 @@
 
 #include "PresenterScrollBar.hxx"
 #include "PresenterBitmapContainer.hxx"
+#include "PresenterCanvasHelper.hxx"
 #include "PresenterComponent.hxx"
 #include "PresenterGeometryHelper.hxx"
 #include "PresenterPaintManager.hxx"
+#include "PresenterTimer.hxx"
 #include "PresenterUIPainter.hxx"
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
@@ -42,6 +44,8 @@
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
+#include <boost/bind.hpp>
+#include <boost/enable_shared_from_this.hpp>
 #include <boost/weak_ptr.hpp>
 #include <cmath>
 
@@ -54,6 +58,29 @@ using ::rtl::OUString;
 const static double gnScrollBarGap (10);
 
 namespace sdext { namespace presenter {
+
+//===== PresenterScrollBar::MousePressRepeater ================================
+
+class PresenterScrollBar::MousePressRepeater
+    : public ::boost::enable_shared_from_this<MousePressRepeater>
+{
+public:
+    MousePressRepeater (const ::rtl::Reference<PresenterScrollBar>& rpScrollBar);
+    void Dispose (void);
+    void Start (const PresenterScrollBar::Area& reArea);
+    void Stop (void);
+    void SetMouseArea (const PresenterScrollBar::Area& reArea);
+
+private:
+    void Callback (const TimeValue& rCurrentTime);
+    void Execute (void);
+
+    sal_Int32 mnMousePressRepeaterTaskId;
+    ::rtl::Reference<PresenterScrollBar> mpScrollBar;
+    PresenterScrollBar::Area meMouseArea;
+};
+
+
 
 
 //===== PresenterScrollBar ====================================================
@@ -75,6 +102,7 @@ PresenterScrollBar::PresenterScrollBar (
       mnThumbPosition(0),
       mnTotalSize(0),
       mnThumbSize(0),
+      mnLineHeight(10),
       maDragAnchor(-1,-1),
       maThumbMotionListener(rThumbMotionListener),
       meButtonDownArea(None),
@@ -88,7 +116,10 @@ PresenterScrollBar::PresenterScrollBar (
       mpPagerEndDescriptor(),
       mpThumbStartDescriptor(),
       mpThumbCenterDescriptor(),
-      mpThumbEndDescriptor()
+      mpThumbEndDescriptor(),
+      mpMousePressRepeater(new MousePressRepeater(this)),
+      mpBackgroundBitmap(),
+      mpCanvasHelper(new PresenterCanvasHelper())
 {
     try
     {
@@ -139,6 +170,8 @@ PresenterScrollBar::~PresenterScrollBar (void)
 
 void SAL_CALL PresenterScrollBar::disposing (void)
 {
+    mpMousePressRepeater->Dispose();
+
     if (mxWindow.is())
     {
         mxWindow->removeWindowListener(this);
@@ -217,6 +250,14 @@ void PresenterScrollBar::SetThumbPosition (
 
 
 
+double PresenterScrollBar::GetThumbPosition (void) const
+{
+    return mnThumbPosition;
+}
+
+
+
+
 void PresenterScrollBar::SetTotalSize (const double nTotalSize)
 {
     if (mnTotalSize != nTotalSize)
@@ -225,6 +266,14 @@ void PresenterScrollBar::SetTotalSize (const double nTotalSize)
         UpdateBorders();
         Repaint(GetRectangle(Total), false);
     }
+}
+
+
+
+
+double PresenterScrollBar::GetTotalSize (void) const
+{
+    return mnTotalSize;
 }
 
 
@@ -239,6 +288,30 @@ void PresenterScrollBar::SetThumbSize (const double nThumbSize)
         UpdateBorders();
         Repaint(GetRectangle(Total), false);
     }
+}
+
+
+
+
+double PresenterScrollBar::GetThumbSize (void) const
+{
+    return mnThumbSize;
+}
+
+
+
+
+void PresenterScrollBar::SetLineHeight (const double nLineHeight)
+{
+    mnLineHeight = nLineHeight;
+}
+
+
+
+
+double PresenterScrollBar::GetLineHeight (void) const
+{
+    return mnLineHeight;
 }
 
 
@@ -284,6 +357,13 @@ void PresenterScrollBar::SetCanvas (const Reference<css::rendering::XCanvas>& rx
 
 
 
+void PresenterScrollBar::SetBackground (const SharedBitmapDescriptor& rpBackgroundBitmap)
+{
+    mpBackgroundBitmap = rpBackgroundBitmap;
+}
+
+
+
 void PresenterScrollBar::CheckValues (void)
 {
     mnThumbPosition = ValidateThumbPosition(mnThumbPosition);
@@ -321,6 +401,7 @@ void PresenterScrollBar::Paint (
             return;
     }
 
+    PaintBackground(rUpdateBox);
     PaintComposite(rUpdateBox, PagerUp,
         mpPagerStartDescriptor, mpPagerCenterDescriptor, SharedBitmapDescriptor());
     PaintComposite(rUpdateBox, PagerDown,
@@ -409,6 +490,8 @@ void SAL_CALL PresenterScrollBar::mousePressed (const css::awt::MouseEvent& rEve
     maDragAnchor.X = rEvent.X;
     maDragAnchor.Y = rEvent.Y;
     meButtonDownArea = GetArea(rEvent.X, rEvent.Y);
+
+    mpMousePressRepeater->Start(meButtonDownArea);
 }
 
 
@@ -418,33 +501,11 @@ void SAL_CALL PresenterScrollBar::mouseReleased (const css::awt::MouseEvent& rEv
     throw(css::uno::RuntimeException)
 {
     (void)rEvent;
+
+    mpMousePressRepeater->Stop();
+
     if (mxPresenterHelper.is())
         mxPresenterHelper->releaseMouse(mxWindow);
-
-    if (meButtonDownArea != None && meButtonDownArea == GetArea(rEvent.X, rEvent.Y))
-    {
-        switch (meButtonDownArea)
-        {
-            case PrevButton:
-                SetThumbPosition(mnThumbPosition - mnTotalSize / 100.0, true, true, true);
-                break;
-
-            case NextButton:
-                SetThumbPosition(mnThumbPosition + mnTotalSize / 100.0, true, true, true);
-                break;
-
-            case PagerUp:
-                SetThumbPosition(mnThumbPosition - mnTotalSize / 20.0, true, true, true);
-                break;
-
-            case PagerDown:
-                SetThumbPosition(mnThumbPosition + mnTotalSize / 20.0, true, true, true);
-                break;
-
-            default:
-                break;
-        }
-    }
 }
 
 
@@ -471,6 +532,8 @@ void SAL_CALL PresenterScrollBar::mouseExited (const css::awt::MouseEvent& rEven
     }
     meButtonDownArea = None;
     meMouseMoveArea = None;
+
+    mpMousePressRepeater->Stop();
 }
 
 
@@ -492,6 +555,7 @@ void SAL_CALL PresenterScrollBar::mouseMoved (const css::awt::MouseEvent& rEvent
         if (meMouseMoveArea != None)
             Repaint(GetRectangle(meMouseMoveArea), true);
     }
+    mpMousePressRepeater->SetMouseArea(eArea);
 }
 
 
@@ -502,6 +566,9 @@ void SAL_CALL PresenterScrollBar::mouseDragged (const css::awt::MouseEvent& rEve
 {
     if (meButtonDownArea != Thumb)
         return;
+
+    mpMousePressRepeater->Stop();
+
     if (mxPresenterHelper.is())
         mxPresenterHelper->captureMouse(mxWindow);
 
@@ -509,7 +576,7 @@ void SAL_CALL PresenterScrollBar::mouseDragged (const css::awt::MouseEvent& rEve
     UpdateDragAnchor(nDragDistance);
     if (nDragDistance != 0)
     {
-        SetThumbPosition(mnThumbPosition + nDragDistance, true, true, true);
+        SetThumbPosition(mnThumbPosition + nDragDistance, false, true, true);
     }
 }
 
@@ -549,6 +616,24 @@ void PresenterScrollBar::Repaint (
             mxWindow,
             PresenterGeometryHelper::ConvertRectangle(aBox),
             bAsynchronousUpdate);
+}
+
+
+
+
+void PresenterScrollBar::PaintBackground(
+    const css::awt::Rectangle& rUpdateBox)
+{
+    if (mpBackgroundBitmap.get() == NULL)
+        return;
+
+    const awt::Rectangle aWindowBox (mxWindow->getPosSize());
+    mpCanvasHelper->Paint(
+        mpBackgroundBitmap,
+        mxCanvas,
+        rUpdateBox,
+        aWindowBox,
+        awt::Rectangle());
 }
 
 
@@ -1138,6 +1223,123 @@ void PresenterHorizontalScrollBar::PaintComposite(
         GetBitmap(eArea, rpEndBitmaps));
 }
 
+
+
+
+//===== PresenterScrollBar::MousePressRepeater ================================
+
+PresenterScrollBar::MousePressRepeater::MousePressRepeater (
+    const ::rtl::Reference<PresenterScrollBar>& rpScrollBar)
+    : mnMousePressRepeaterTaskId(PresenterTimer::NotAValidTaskId),
+      mpScrollBar(rpScrollBar),
+      meMouseArea(PresenterScrollBar::None)
+{
+}
+
+
+
+
+void PresenterScrollBar::MousePressRepeater::Dispose (void)
+{
+    Stop();
+    mpScrollBar = NULL;
+}
+
+
+
+
+void PresenterScrollBar::MousePressRepeater::Start (const PresenterScrollBar::Area& reArea)
+{
+    meMouseArea = reArea;
+
+    if (mnMousePressRepeaterTaskId == PresenterTimer::NotAValidTaskId)
+    {
+        // Execute key press operation at least this one time.
+        Execute();
+
+        // Schedule repeated executions.
+        mnMousePressRepeaterTaskId = PresenterTimer::ScheduleRepeatedTask (
+            ::boost::bind(&PresenterScrollBar::MousePressRepeater::Callback, shared_from_this(), _1),
+            500000000,
+            250000000);
+    }
+    else
+    {
+        // There is already an active repeating task.
+    }
+}
+
+
+
+
+void PresenterScrollBar::MousePressRepeater::Stop (void)
+{
+    if (mnMousePressRepeaterTaskId != PresenterTimer::NotAValidTaskId)
+    {
+        const sal_Int32 nTaskId (mnMousePressRepeaterTaskId);
+        mnMousePressRepeaterTaskId = PresenterTimer::NotAValidTaskId;
+        PresenterTimer::CancelTask(nTaskId);
+    }
+}
+
+
+
+
+void PresenterScrollBar::MousePressRepeater::SetMouseArea(const PresenterScrollBar::Area& reArea)
+{
+    if (meMouseArea != reArea)
+    {
+        if (mnMousePressRepeaterTaskId != PresenterTimer::NotAValidTaskId)
+        {
+            Stop();
+        }
+    }
+}
+
+
+
+
+void PresenterScrollBar::MousePressRepeater::Callback (const TimeValue& rCurrentTime)
+{
+    (void)rCurrentTime;
+
+    if (mpScrollBar.get() == NULL)
+    {
+        Stop();
+        return;
+    }
+
+    Execute();
+}
+
+
+
+
+void PresenterScrollBar::MousePressRepeater::Execute (void)
+{
+    const double nThumbPosition (mpScrollBar->GetThumbPosition());
+    switch (meMouseArea)
+    {
+        case PrevButton:
+            mpScrollBar->SetThumbPosition(nThumbPosition - mpScrollBar->GetLineHeight(), true);
+            break;
+
+        case NextButton:
+            mpScrollBar->SetThumbPosition(nThumbPosition + mpScrollBar->GetLineHeight(), true);
+            break;
+
+        case PagerUp:
+            mpScrollBar->SetThumbPosition(nThumbPosition - mpScrollBar->GetThumbSize()*0.8, true);
+            break;
+
+        case PagerDown:
+            mpScrollBar->SetThumbPosition(nThumbPosition + mpScrollBar->GetThumbSize()*0.8, true);
+            break;
+
+        default:
+            break;
+    }
+}
 
 
 
