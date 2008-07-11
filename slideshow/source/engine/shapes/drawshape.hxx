@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawshape.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -292,7 +292,7 @@ namespace slideshow
             void ensureVerboseMtfComments() const;
             bool hasIntrinsicAnimation() const;
             bool hasHyperlinks() const;
-            void prepareHyperlinkIndices();
+            void prepareHyperlinkIndices() const;
 
             /// The associated XShape
             ::com::sun::star::uno::Reference<
@@ -350,7 +350,7 @@ namespace slideshow
             typedef ::std::pair<sal_Int32 /* mtf start */,
                                 sal_Int32 /* mtf end */> HyperlinkIndexPair;
             typedef ::std::vector<HyperlinkIndexPair> HyperlinkIndexPairVector;
-            HyperlinkIndexPairVector                                                maHyperlinkIndices;
+            mutable HyperlinkIndexPairVector                                        maHyperlinkIndices;
             mutable HyperlinkRegions                                                maHyperlinkRegions;
 
             /// Delegated subset handling
