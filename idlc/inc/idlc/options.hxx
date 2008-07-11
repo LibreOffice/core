@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: options.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,11 +63,9 @@ public:
     ::rtl::OString prepareVersion();
 
     const ::rtl::OString&   getProgramName() const;
-    sal_uInt16              getNumberOfOptions() const;
     sal_Bool                isValid(const ::rtl::OString& option);
     const ::rtl::OString    getOption(const ::rtl::OString& option)
         throw( IllegalArgument );
-    const OptionMap&        getOptions();
 
     const StringVector& getInputFiles() const { return m_inputFiles; }
     bool readStdin() const { return m_stdin; }
