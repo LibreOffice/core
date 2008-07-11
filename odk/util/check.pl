@@ -8,7 +8,7 @@
 #
 # $RCSfile: check.pl,v $
 #
-# $Revision: 1.25 $
+# $Revision: 1.26 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,44 +46,33 @@ print "Check for $OperatingSystem\n";
 if (-d "$StartDir") {
     # check binaries
     print "check binaries: ";
-    if (-d "$StartDir/$OperatingSystem/bin") {
-    my @binarylist = ( "idlc","idlcpp","cppumaker","javamaker","rdbmaker",
-               "sp2bv","regcompare","regmerge","regview","autodoc",
-               "xml2cmp", "unoapploader", "uno-skeletonmaker" );
+    if (-d "$StartDir/bin") {
+    my @binarylist = ( "idlc","idlcpp","cppumaker","javamaker",
+               "regcompare","regmerge","regview","autodoc",
+               "unoapploader", "uno-skeletonmaker" );
 
     foreach $i (@binarylist)
     {
-        if (! -e "$StartDir/$OperatingSystem/bin/$i$ExePrefix") {
+        if (! -e "$StartDir/bin/$i$ExePrefix") {
         $return++;
-        print "\nERROR: \"$StartDir/$OperatingSystem/bin/$i$ExePrefix\" is missing\n";
+        print "\nERROR: \"$StartDir/bin/$i$ExePrefix\" is missing\n";
         } else {
         print "+";
         }
     }
 
     if ($OperatingSystem eq "windows" || $OperatingSystem eq "mingw") {
-        if (! -e "$StartDir/$OperatingSystem/bin/regcomp.exe") {
+        if ($OperatingSystem eq "windows" && ! -e "$StartDir/bin/climaker.exe") {
         $return++;
-        print "\nERROR: \"$StartDir/$OperatingSystem/bin/regcomp.exe\" is missing\n";
+        print "\nERROR: \"$StartDir/bin/climaker.exe\" is missing\n";
         } else {
         print "+";
         }
-        if ($OperatingSystem eq "windows" && ! -e "$StartDir/$OperatingSystem/bin/climaker.exe") {
+    }
+    if ($OperatingSystem eq "macosx") {
+        if (! -e "$StartDir/bin/addsym-macosx.sh") {
         $return++;
-        print "\nERROR: \"$StartDir/$OperatingSystem/bin/climaker.exe\" is missing\n";
-        } else {
-        print "+";
-        }
-    } else {
-        if (! -e "$StartDir/$OperatingSystem/bin/regcomp.bin") {
-        $return++;
-        print "\nERROR: \"$StartDir/$OperatingSystem/bin/regcomp.bin\" is missing\n";
-        } else {
-        print "+";
-        }
-        if (! -e "$StartDir/$OperatingSystem/bin/regcomp") {
-        $return++;
-        print "\nERROR: \"$StartDir/$OperatingSystem/bin/regcomp\" is missing\n";
+        print "\nERROR: \"$StartDir/bin/addsym-macosx.sh\" is missing\n";
         } else {
         print "+";
         }
@@ -96,7 +85,17 @@ if (-d "$StartDir") {
     # packaging files
     print "check packaging files: ";
     if (-d "$StartDir/docs") {
-    my @filelist = ( "images/nada.gif","images/arrow-2.gif",
+    my @filelist = ( "install.html",
+             "notsupported.html","sdk_styles.css","tools.html",
+             "images/arrow-1.gif", "images/arrow-3.gif",
+             "images/bg_table.gif","images/bg_table2.gif",
+             "images/bg_table3.gif", "images/nav_down.png",
+             "images/nav_home.png","images/nav_left.png",
+             "images/nav_right.png","images/nav_up.png",
+             "images/sdk_head-1.gif", "images/sdk_head-2.gif",
+             "images/sdk_head-3.gif", "images/sdk_line-1.gif",
+             "images/sdk_line-2.gif", "common/ref/idl.css",
+             "images/nada.gif","images/arrow-2.gif",
              "images/bluball.gif","images/so-main-app_32.png",
              "images/ooo-main-app_32.png");
 
@@ -331,6 +330,151 @@ if (-d "$StartDir") {
     }
     print "\n";
     }
+
+    #check idl docu, it is only a first and simple check
+    # improvement required
+    print "check idl docu: ";
+    if (-d "$StartDir/docs/common/ref") {
+    if (! -e "$StartDir/docs/common/ref/module-ix.html") {
+        print "\nERROR: \"$StartDir/docs/common/ref/module-ix.html\" is missing\n";
+        $return++;
+    }
+    if (! -d "$StartDir/docs/common/ref/index-files") {
+        print "\nERROR: \"$StartDir/docs/common/ref/index-files\" is missing\n";
+        $return++;
+    }
+    if (! -e "$StartDir/docs/common/ref/index-files/index-10.html") {
+        print "\nERROR: \"$StartDir/docs/common/ref/index-files/index-10.html\" is missing\n";
+        $return++;
+    }
+
+    my @idl_dirlist = ( "accessibility",
+                "animations",
+                "auth",
+                "awt",
+                "awt/tree",
+                "beans",
+                "bridge",
+                "bridge/oleautomation",
+                "chart",
+                "chart2",
+                "chart2/data",
+                "configuration",
+                "configuration/backend",
+                "configuration/backend/xml",
+                "configuration/bootstrap",
+                "connection",
+                "container",
+                "datatransfer",
+                "datatransfer/clipboard",
+                "datatransfer/dnd",
+                "deployment",
+                "deployment/ui",
+                "document",
+                "drawing",
+                "drawing/framework",
+                "embed",
+                "form",
+                "form/binding",
+                "form/component",
+                "form/control",
+                "form/inspection",
+                "form/runtime",
+                "form/submission",
+                "form/validation",
+                "formula",
+                "frame",
+                "frame/status",
+                "gallery",
+                "geometry",
+                "graphic",
+                "i18n",
+                "image",
+                "inspection",
+                "installation",
+                "io",
+                "java",
+                "lang",
+                "ldap",
+                "linguistic2",
+                "loader",
+                "logging",
+                "mail",
+                "media",
+                "mozilla",
+                "packages",
+                "packages/manifest",
+                "packages/zip",
+                "plugin",
+                "presentation",
+                "reflection",
+                "registry",
+                "rendering",
+                "report",
+                "report/inspection",
+                "resource",
+                "scanner",
+                "script",
+                "script/browse",
+                "script/provider",
+                "sdb",
+                "sdb/application",
+                "sdb/tools",
+                "sdbc",
+                "sdbcx",
+                "security",
+                "setup",
+                "sheet",
+                "smarttags",
+                "style",
+                "svg",
+                "sync",
+                "sync2",
+                "system",
+                "table",
+                "task",
+                "test",
+                "test/bridge",
+                "test/performance",
+                "text",
+                "text/FieldMaster",
+                "text/textfield",
+                "text/textfield/docinfo",
+                "ucb",
+                "ui",
+                "ui/dialogs",
+                "uno",
+                "uri",
+                "util",
+                "util/logging",
+                "view",
+                "xforms",
+                "xml",
+                "xml/crypto",
+                "xml/crypto/sax",
+                "xml/csax",
+                "xml/dom",
+                "xml/dom/events",
+                "xml/dom/views",
+                "xml/input",
+                "xml/sax",
+                "xml/wrapper",
+                "xml/xpath",
+                "xsd" );
+
+    foreach $i (@idl_dirlist)
+    {
+        if (! -d "$StartDir/docs/common/ref/com/sun/star/$i") {
+        $return++;
+        print "\nERROR: \"$StartDir/docs/common/ref/com/sun/star/$i\" is missing\n";
+        } else {
+        print "+";
+        }
+    }
+    } else {
+    $return++;
+    }
+    print "\n";
 
 } else {
     $return++;
