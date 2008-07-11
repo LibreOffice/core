@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: directory_ooo.scp,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1468,6 +1468,15 @@ End
 Directory gid_Dir_Share_Fingerprint
     ParentID = gid_Dir_Share;
     DosName = "fingerprint";
+End
+
+Directory gid_Dir_Basis_Sdk
+#if defined MACOSX
+    ParentID = gid_Brand_Dir_BasisLink;
+#else
+    ParentID = gid_Dir_Ooo_Basis;
+#endif
+    DosName = "sdk";
 End
 
 Directory gid_Dir_Help
