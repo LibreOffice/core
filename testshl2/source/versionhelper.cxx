@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: versionhelper.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,7 @@
 #include "precompiled_testshl2.hxx"
 
 #include <stdlib.h>
-#include "versionhelper.hxx"
+#include "testshl/versionhelper.hxx"
 
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
