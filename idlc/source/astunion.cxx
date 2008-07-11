@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: astunion.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -386,12 +386,6 @@ AstUnionBranch::~AstUnionBranch()
 {
     if ( m_pLabel )
         delete m_pLabel;
-}
-
-AstUnionLabel::AstUnionLabel()
-    : m_label(UL_default)
-    , m_pLabelValue(NULL)
-{
 }
 
 AstUnionLabel::AstUnionLabel(UnionLabel labelKind, AstExpression* pExpr)
