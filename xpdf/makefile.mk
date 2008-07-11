@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -65,9 +65,15 @@ CXXFLAGS:=-O $(ARCH_FLAGS)
 LDFLAGS:=$(ARCH_FLAGS)
 .EXPORT : CFLAGS CXXFLAGS LDFLAGS
 .ENDIF
+
+.IF "$(COM)$(OS)$(CPU)" == "GCCMACOSXP"
+CONFIGURE_ACTION=./configure --without-x --enable-multithreaded --enable-exceptions CXXFLAGS="-malign-natural"
+.ELSE
 #CONFIGURE_ACTION=./configure
 #CONFIGURE_ACTION=./configure --without-x --enable-multithreaded --enable-exceptions CFLAGS="-g -O0" CXXFLAGS="-g -O0"
 CONFIGURE_ACTION=./configure --without-x --enable-multithreaded --enable-exceptions
+.ENDIF
+
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 .ELSE
 .IF "$(COM)"=="GCC"
