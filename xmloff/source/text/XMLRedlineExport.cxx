@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLRedlineExport.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,9 +38,7 @@
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
-#include <com/sun/star/beans/XEnumeration.hpp>
-#endif
+#include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
