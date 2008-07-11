@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filglob.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,12 +53,8 @@
 #include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
-#include "com/sun/star/breans/PropertyState.hpp"
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include "com/sun/star/breans/PropertyValue.hpp"
-#endif
+#include "com/sun/star/beans/PropertyState.hpp"
+#include "com/sun/star/beans/PropertyValue.hpp"
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Sequence.hxx"
