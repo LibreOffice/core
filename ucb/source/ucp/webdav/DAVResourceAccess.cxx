@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DAVResourceAccess.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -166,6 +166,7 @@ void DAVResourceAccess::OPTIONS(
     initialize();
 
     bool bRetry;
+    int errorCount = 0;
     do
     {
         bRetry = false;
@@ -187,7 +188,8 @@ void DAVResourceAccess::OPTIONS(
         }
         catch ( DAVException & e )
         {
-            bRetry = handleException( e );
+            errorCount++;
+            bRetry = handleException( e, errorCount );
             if ( !bRetry )
                 throw;
         }
@@ -205,6 +207,7 @@ void DAVResourceAccess::PROPFIND(
 {
     initialize();
 
+    int errorCount = 0;
     bool bRetry;
     do
     {
@@ -212,6 +215,7 @@ void DAVResourceAccess::PROPFIND(
         try
         {
             DAVRequestHeaders aHeaders;
+
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
                                    rtl::OUString::createFromAscii(
@@ -229,7 +233,8 @@ void DAVResourceAccess::PROPFIND(
         }
         catch ( DAVException & e )
         {
-            bRetry = handleException( e );
+            errorCount++;
+            bRetry = handleException( e, errorCount );
             if ( !bRetry )
                 throw;
         }
@@ -246,6 +251,7 @@ void DAVResourceAccess::PROPFIND(
 {
     initialize();
 
+    int errorCount = 0;
     bool bRetry;
     do
     {
@@ -269,7 +275,8 @@ void DAVResourceAccess::PROPFIND(
         }
         catch ( DAVException & e )
         {
-            bRetry = handleException( e );
+            errorCount++;
+            bRetry = handleException( e, errorCount );
             if ( !bRetry )
                 throw;
         }
@@ -285,6 +292,7 @@ void DAVResourceAccess::PROPPATCH(
 {
     initialize();
 
+    int errorCount = 0;
     bool bRetry;
     do
     {
@@ -307,7 +315,8 @@ void DAVResourceAccess::PROPPATCH(
         }
         catch ( DAVException & e )
         {
-            bRetry = handleException( e );
+            errorCount++;
+            bRetry = handleException( e, errorCount );
             if ( !bRetry )
                 throw;
         }
@@ -323,7 +332,7 @@ void DAVResourceAccess::HEAD(
   throw( DAVException )
 {
     initialize();
-
+    int errorCount = 0;
     bool bRetry;
     do
     {
@@ -346,7 +355,8 @@ void DAVResourceAccess::HEAD(
         }
         catch ( DAVException & e )
         {
-            bRetry = handleException( e );
+            errorCount++;
+            bRetry = handleException( e, errorCount );
             if ( !bRetry )
                 throw;
         }
@@ -362,6 +372,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
     initialize();
 
     uno::Reference< io::XInputStream > xStream;
+    int errorCount = 0;
     bool bRetry;
     do
     {
@@ -382,7 +393,8 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
         }
         catch ( DAVException & e )
         {
-            bRetry = handleException( e );
+            errorCount++;
+            bRetry = handleException( e, errorCount );
             if ( !bRetry )
                 throw;
         }
@@ -400,6 +412,7 @@ void DAVResourceAccess::GET(
 {
     initialize();
 
+    int errorCount = 0;
     bool bRetry;
     do
     {
@@ -421,7 +434,8 @@ void DAVResourceAccess::GET(
         }
         catch ( DAVException & e )
         {
-            bRetry = handleException( e );
+            errorCount++;
+            bRetry = handleException( e, errorCount );
             if ( !bRetry )
                 throw;
         }
@@ -439,6 +453,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
     initialize();
 
     uno::Reference< io::XInputStream > xStream;
+    int errorCount = 0;
     bool bRetry;
     do
     {
@@ -461,7 +476,8 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
         }
         catch ( DAVException & e )
         {
-            bRetry = handleException( e );
+            errorCount++;
+            bRetry = handleException( e, errorCount );
             if ( !bRetry )
                 throw;
         }
@@ -482,6 +498,7 @@ void DAVResourceAccess::GET(
     initialize();
 
     bool bRetry;
+    int errorCount = 0;
     do
     {
         bRetry = false;
@@ -504,7 +521,8 @@ void DAVResourceAccess::GET(
         }
         catch ( DAVException & e )
         {
-            bRetry = handleException( e );
+            errorCount++;
+            bRetry = handleException( e, errorCount );
             if ( !bRetry )
                 throw;
         }
@@ -553,6 +571,7 @@ void DAVResourceAccess::PUT(
         = comphelper::OSeekableInputWrapper::CheckSeekableCanWrap(
             rStream, m_xSMgr );
 
+    int errorCount = 0;
     bool bRetry = false;
     do
     {
@@ -577,7 +596,8 @@ void DAVResourceAccess::PUT(
         }
         catch ( DAVException & e )
         {
-            bRetry = handleException( e );
+            errorCount++;
+            bRetry = handleException( e, errorCount );
             if ( !bRetry )
                 throw;
         }
@@ -601,6 +621,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
             rInputStream, m_xSMgr );
 
     uno::Reference< io::XInputStream > xStream;
+    int errorCount = 0;
     bool bRetry = false;
     do
     {
@@ -629,7 +650,8 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
         }
         catch ( DAVException & e )
         {
-            bRetry = handleException( e );
+            errorCount++;
+            bRetry = handleException( e, errorCount );
             if ( !bRetry )
                 throw;
 
@@ -662,6 +684,7 @@ void DAVResourceAccess::POST(
         = comphelper::OSeekableInputWrapper::CheckSeekableCanWrap(
             rInputStream, m_xSMgr );
 
+    int errorCount = 0;
     bool bRetry  = false;
     do
     {
@@ -691,7 +714,8 @@ void DAVResourceAccess::POST(
         }
         catch ( DAVException & e )
         {
-            bRetry = handleException( e );
+            errorCount++;
+            bRetry = handleException( e, errorCount );
             if ( !bRetry )
                 throw;
 
@@ -712,7 +736,7 @@ void DAVResourceAccess::MKCOL(
   throw( DAVException )
 {
     initialize();
-
+    int errorCount = 0;
     bool bRetry;
     do
     {
@@ -733,7 +757,8 @@ void DAVResourceAccess::MKCOL(
         }
         catch ( DAVException & e )
         {
-            bRetry = handleException( e );
+            errorCount++;
+            bRetry = handleException( e, errorCount );
             if ( !bRetry )
                 throw;
         }
@@ -750,7 +775,7 @@ void DAVResourceAccess::COPY(
   throw( DAVException )
 {
     initialize();
-
+    int errorCount = 0;
     bool bRetry;
     do
     {
@@ -773,7 +798,8 @@ void DAVResourceAccess::COPY(
         }
         catch ( DAVException & e )
         {
-            bRetry = handleException( e );
+            errorCount++;
+            bRetry = handleException( e, errorCount );
             if ( !bRetry )
                 throw;
         }
@@ -790,7 +816,7 @@ void DAVResourceAccess::MOVE(
   throw( DAVException )
 {
     initialize();
-
+    int errorCount = 0;
     bool bRetry;
     do
     {
@@ -813,7 +839,8 @@ void DAVResourceAccess::MOVE(
         }
         catch ( DAVException & e )
         {
-            bRetry = handleException( e );
+            errorCount++;
+            bRetry = handleException( e, errorCount );
             if ( !bRetry )
                 throw;
         }
@@ -828,6 +855,7 @@ void DAVResourceAccess::DESTROY(
 {
     initialize();
 
+    int errorCount = 0;
     bool bRetry;
     do
     {
@@ -849,7 +877,8 @@ void DAVResourceAccess::DESTROY(
         }
         catch ( DAVException & e )
         {
-            bRetry = handleException( e );
+            errorCount++;
+            bRetry = handleException( e, errorCount );
             if ( !bRetry )
                 throw;
         }
@@ -891,43 +920,40 @@ void DAVResourceAccess::setURL( const rtl::OUString & rNewURL )
 void DAVResourceAccess::initialize()
     throw ( DAVException )
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if ( m_aPath.getLength() == 0 )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if ( m_aPath.getLength() == 0 )
+        NeonUri aURI( m_aURL );
+        rtl::OUString aPath( aURI.GetPath() );
+
+        /* #134089# - Check URI */
+        if ( !aPath.getLength() )
+            throw DAVException( DAVException::DAV_INVALID_ARG );
+
+        /* #134089# - Check URI */
+        if ( !aURI.GetHost().getLength() )
+            throw DAVException( DAVException::DAV_INVALID_ARG );
+
+        if ( !m_xSession.is() || !m_xSession->CanUse( m_aURL ) )
         {
-            NeonUri aURI( m_aURL );
-            rtl::OUString aPath( aURI.GetPath() );
+            m_xSession.clear();
 
-            /* #134089# - Check URI */
-            if ( !aPath.getLength() )
-                throw DAVException( DAVException::DAV_INVALID_ARG );
+            // create new webdav session
+            m_xSession
+                = m_xSessionFactory->createDAVSession( m_aURL, m_xSMgr );
 
-            /* #134089# - Check URI */
-            if ( !aURI.GetHost().getLength() )
-                throw DAVException( DAVException::DAV_INVALID_ARG );
-
-            if ( !m_xSession.is() || !m_xSession->CanUse( m_aURL ) )
-            {
-                m_xSession.clear();
-
-                // create new webdav session
-                m_xSession
-                    = m_xSessionFactory->createDAVSession( m_aURL, m_xSMgr );
-
-                if ( !m_xSession.is() )
-                    return;
-            }
-
-            // Own URI is needed for redirect cycle detection.
-            m_aRedirectURIs.push_back( aURI );
-
-            // Success.
-            m_aPath = aPath;
-
-            // Not only the path has to be encoded
-            m_aURL = aURI.GetURI();
+            if ( !m_xSession.is() )
+                return;
         }
+
+        // Own URI is needed for redirect cycle detection.
+        m_aRedirectURIs.push_back( aURI );
+
+        // Success.
+        m_aPath = aPath;
+
+        // Not only the path has to be encoded
+        m_aURL = aURI.GetURI();
     }
 }
 
@@ -1006,7 +1032,23 @@ sal_Bool DAVResourceAccess::detectRedirectCycle(
 }
 
 //=========================================================================
-sal_Bool DAVResourceAccess::handleException( DAVException & e )
+void DAVResourceAccess::resetUri()
+{
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    if ( m_aRedirectURIs.size() > 0 )
+    {
+        std::vector< NeonUri >::const_iterator it  = m_aRedirectURIs.begin();
+
+        NeonUri aUri( (*it) );
+        m_aRedirectURIs.clear();
+        setURL ( aUri.GetURI() );
+        initialize();
+    }
+}
+
+
+//=========================================================================
+sal_Bool DAVResourceAccess::handleException( DAVException & e, int errorCount )
     throw ( DAVException )
 {
     switch ( e.getError() )
@@ -1020,7 +1062,19 @@ sal_Bool DAVResourceAccess::handleException( DAVException & e )
             return sal_True;
         }
         return sal_False;
-
+    // --> tkr #67048# copy & paste images doesn't display.
+    // if we have a bad connection try again. Up to three times.
+    case DAVException::DAV_HTTP_ERROR:
+        if (errorCount < 3)
+        {
+            return sal_True;
+        }
+        return sal_False;
+    // <--
+    // --> tkr: if connection has said retry then retry!
+    case DAVException::DAV_HTTP_RETRY:
+        return sal_True;
+    // <--
     default:
         return sal_False; // Abort
     }
