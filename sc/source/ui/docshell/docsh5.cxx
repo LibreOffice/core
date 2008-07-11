@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh5.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -751,14 +751,15 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const String& rName, const String& r
 
         ScDocShellModificator aModificator( *this );
 
+        if (bRecord)
+            aDocument.BeginDrawUndo();      // drawing layer must do its own undo actions
+
         if (aDocument.CopyTab( nTab, nNewTab, pCopyMark ))
         {
             if (bRecord)
             {
-                ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-                pUndoDoc->InitUndo( &aDocument, nTab,nTab );
                 GetUndoManager()->AddUndoAction(
-                        new ScUndoMakeScenario( this, nTab, nNewTab, pUndoDoc,
+                        new ScUndoMakeScenario( this, nTab, nNewTab,
                                                 rName, rComment, rColor, nFlags, rMark ));
             }
 
