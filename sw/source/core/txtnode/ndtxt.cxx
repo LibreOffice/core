@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndtxt.cxx,v $
- * $Revision: 1.84 $
+ * $Revision: 1.85 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2704,6 +2704,34 @@ BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
 
     return bRet;
 }
+
+// --> OD 2008-07-01 #i91133#
+long SwTxtNode::GetLeftMarginForTabCalculation() const
+{
+    long nLeftMarginForTabCalc = 0;
+
+    bool bLeftMarginForTabCalcSetToListLevelIndent( false );
+    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    if( pRule )
+    {
+        const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(GetActualListLevel()));
+        if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+        {
+            if ( AreListLevelIndentsApplicable() )
+            {
+                nLeftMarginForTabCalc = rFmt.GetIndentAt();
+                bLeftMarginForTabCalcSetToListLevelIndent = true;
+            }
+        }
+    }
+    if ( !bLeftMarginForTabCalcSetToListLevelIndent )
+    {
+        nLeftMarginForTabCalc = GetSwAttrSet().GetLRSpace().GetTxtLeft();
+    }
+
+    return nLeftMarginForTabCalc;
+}
+// <--
 
 void SwTxtNode::Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
                             xub_StrLen nEndPos, BOOL bExpandFlds ) const
