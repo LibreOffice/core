@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCalcAddins.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 17:16:24 $
+ *  last change: $Author: rt $ $Date: 2008-07-11 14:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,13 +37,8 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-
-// Guard against multiple includes
-#ifndef _org_openoffice_sheet_addin_XCalcAddins_
-#define _org_openoffice_sheet_addin_XCalcAddins_
-
-// must be included always for compatibility reasons
-#include <com/sun/star/uno/XInterface.idl>
+#ifndef INCLUDED_ORG_OPENOFFICE_SHEET_ADDIN_XCALCADDIN_IDL
+#define INCLUDED_ORG_OPENOFFICE_SHEET_ADDIN_XCALCADDIN_IDL
 
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/sheet/AddIn.idl>

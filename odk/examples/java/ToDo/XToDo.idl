@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XToDo.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 17:20:52 $
+ *  last change: $Author: rt $ $Date: 2008-07-11 14:32:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,11 +38,9 @@
  *
  *************************************************************************/
 
-#ifndef _org_openoffice_XToDo_idl_
-#define _org_openoffice_XToDo_idl_
+#ifndef INCLUDED_ORG_OPENOFFICE_XTODO_IDL
+#define INCLUDED_ORG_OPENOFFICE_XTODO_IDL
 
-// must be included always for compatibility reasons
-#include <com/sun/star/uno/XInterface.idl>
 
 /// org
 module org {
