@@ -8,7 +8,7 @@
 #
 # $RCSfile: packinfo_sdkoo.txt,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -31,13 +31,15 @@
 
 Start
 module = "gid_Module_Root"
-solarispackagename = "OpenOfficeorg%WITHOUTDOTPRODUCTVERSIONSDK"
-packagename = "openoffice.org%PRODUCTVERSION-sdk"
-copyright = "2005-2007 by OpenOffice.org"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-sdk"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01"
+packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-sdk"
+freebsdrequires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-core01"
+requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-core01"
+copyright = "1999-2007 by OpenOffice.org"
 solariscopyright = "solariscopyrightfile"
 vendor = "OpenOffice.org"
-description = "OpenOffice.org %PRODUCTVERSION SDK"
-destpath = "/opt/openoffice.org%PRODUCTVERSION_sdk"
-relocatablepath = "/opt"
-packageversion = "%PACKAGEVERSION"
+description = "Software Development Kit for OpenOffice.org %OOOBASEVERSION"
+destpath = "/opt"
+packageversion = "%OOOPACKAGEVERSION"
 End
