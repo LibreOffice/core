@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgprov.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,7 +100,10 @@ namespace dlgprov
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxHandler );
     // helper methods
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createControlModel() throw ( ::com::sun::star::uno::Exception );
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createDialogModel( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInput, const ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager >& xStringResourceManager ) throw ( ::com::sun::star::uno::Exception );
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createDialogModel(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInput,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager >& xStringResourceManager,
+                const ::com::sun::star::uno::Any &aDialogSourceURL) throw ( ::com::sun::star::uno::Exception );
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > createDialogModelForBasic() throw ( ::com::sun::star::uno::Exception );
 
         // XDialogProvider / XDialogProvider2 impl method
