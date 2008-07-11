@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ContentProperties.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -293,8 +293,10 @@ ContentProperties::ContentProperties( const ContentProperties & rOther )
 //=========================================================================
 bool ContentProperties::contains( const rtl::OUString & rName ) const
 {
-    const uno::Any & rValue = getValue( rName );
-    return rValue.hasValue();
+    if ( get( rName ) )
+        return true;
+    else
+        return false;
 }
 
 //=========================================================================
@@ -551,6 +553,11 @@ void ContentProperties::addProperties(
                 // Add it.
                 (*m_xProps)[ rName ] = PropertyValue( *pProp );
             }
+            else
+            {
+                (*m_xProps)[ rName ] = PropertyValue( uno::Any(), false );
+            }
+
         }
 
         ++it;
