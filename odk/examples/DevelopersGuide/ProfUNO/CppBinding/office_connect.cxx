@@ -2,9 +2,9 @@
  *
  *  $RCSfile: office_connect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 15:03:17 $
+ *  last change: $Author: rt $ $Date: 2008-07-11 14:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -43,6 +43,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
