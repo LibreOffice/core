@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: errorhandler.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -118,8 +118,6 @@ public:
 
     // Warning
     void    warning0(WarningCode e, const sal_Char* warningmsg);
-    void    warning1(WarningCode e, AstDeclaration* d);
-    void    warning2(WarningCode e, AstDeclaration* d1, AstDeclaration* d2);
 
     // Report a syntax error in IDL input
     void    syntaxError(ParseState state, sal_Int32 lineNumber, const sal_Char* errmsg);
@@ -155,7 +153,7 @@ public:
     // Report a failed enumerator lookup in an enum
     void    enumValLookupFailure(AstUnion* pUnion, AstEnum* pEnum, const ::rtl::OString& name);
 
-    bool checkPublished(AstDeclaration const * decl);
+    bool checkPublished(AstDeclaration const * decl, bool bOptiional=false);
 };
 
 #endif // _IDLC_ERRORHANDLER_HXX_
