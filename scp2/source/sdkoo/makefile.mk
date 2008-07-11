@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -35,7 +35,16 @@ TARGET=sdkoo
 
 .INCLUDE: settings.mk
 
-SCP_PRODUCT_TYPE=sdk
-PARFILES = sdkoo.par
+SCP_PRODUCT_TYPE=osl
+
+PARFILES= \
+        sdkoo.par          
+
+#.IF "$(OS)" == "MACOSX"
+#PARFILES+= module_sdkoo.par
+#
+#ULFFILES= module_sdkoo.ulf
+#.ENDIF
+
 
 .INCLUDE: target.mk
