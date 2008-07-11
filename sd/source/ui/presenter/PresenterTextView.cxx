@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterTextView.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -507,6 +507,7 @@ void PresenterTextView::Implementation::SetFontDescriptor (
     mxBitmap = NULL;
 
     CheckTop();
+    mnTotalHeight = -1;
 }
 
 
