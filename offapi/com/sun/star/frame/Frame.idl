@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Frame.idl,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -197,9 +197,9 @@ published service Frame
     [optional, property] XDispatchRecorderSupplier RecorderSupplier;
 
     //-------------------------------------------------------------------------
-    /** provides access to the layout manager of the frame
+    /** provides access to the <type>LayoutManager</type> of the frame.
     */
-    [optional, property] com::sun::star::uno::XInterface LayoutManger;
+    [optional, property] com::sun::star::uno::XInterface LayoutManager;
 };
 
 //=============================================================================
