@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cunooptions.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _CUNOMAKER_CUNOOPTIONS_HXX_
-#define _CUNOMAKER_CUNOOPTIONS_HXX_
+#ifndef INCLUDED_CODEMAKER_SOURCE_CUNOMAKER_CUNOOPTIONS_HXX
+#define INCLUDED_CODEMAKER_SOURCE_CUNOMAKER_CUNOOPTIONS_HXX
 
 #include    <codemaker/options.hxx>
 
@@ -51,4 +51,4 @@ public:
 protected:
 };
 
-#endif // _CUNOMAKER_CUNOOPTIONS_HXX_
+#endif // INCLUDED_CODEMAKER_SOURCE_CUNOMAKER_CUNOOPTIONS_HXX
