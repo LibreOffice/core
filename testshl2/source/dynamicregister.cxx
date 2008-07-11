@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dynamicregister.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,12 +31,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_testshl2.hxx"
 
-#include "dynamicregister.hxx"
+#include "testshl/dynamicregister.hxx"
 #include <osl/process.h>
 // #include <osl/mutex.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include "filehelper.hxx"
+#include "testshl/filehelper.hxx"
 
 #include <unistd.h>
 
