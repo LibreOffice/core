@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: idltype.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _CPPUMAKER_CPPUTYPE_HXX_
-#define _CPPUMAKER_CPPUTYPE_HXX_
+#ifndef INCLUDED_CODEMAKER_SOURCE_IDLMAKER_IDLTYPE_HXX
+#define INCLUDED_CODEMAKER_SOURCE_IDLMAKER_IDLTYPE_HXX
 
 #include    <codemaker/typemanager.hxx>
 #include    <codemaker/dependency.hxx>
@@ -248,5 +248,5 @@ sal_Bool produceType(const ::rtl::OString& typeName,
 ::rtl::OString scope(const ::rtl::OString& scope, const ::rtl::OString& type );
 
 
-#endif // _CPPUMAKER_CPPUTYPE_HXX_
+#endif // INCLUDED_CODEMAKER_SOURCE_IDLMAKER_IDLTYPE_HXX
 
