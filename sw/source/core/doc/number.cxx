@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: number.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,6 +66,9 @@
 // --> OD 2008-06-06 #i89178#
 #include <svtools/saveopt.hxx>
 // <--
+// --> OD 2008-07-08 #i91400#
+#include <IDocumentListsAccess.hxx>
+// <--
 
 using namespace ::com::sun::star;
 
@@ -105,16 +108,28 @@ const SwNumFmt* SwNumRule::GetNumFmt( USHORT i ) const
     return aFmts[ i ];
 }
 
-void SwNumRule::SetName(const String & rName)
+// --> OD 2008-07-08 #i91400#
+void SwNumRule::SetName( const String & rName,
+                         IDocumentListsAccess& rDocListAccess)
+// <--
 {
-
-    if (pNumRuleMap)
+    if ( sName != rName )
     {
-        pNumRuleMap->erase(sName);
-        (*pNumRuleMap)[rName] = this;
-    }
+        if (pNumRuleMap)
+        {
+            pNumRuleMap->erase(sName);
+            (*pNumRuleMap)[rName] = this;
 
-    sName = rName;
+            // --> OD 2008-07-08 #i91400#
+            if ( GetDefaultListId().Len() > 0 )
+            {
+                rDocListAccess.trackChangeOfListStyleName( sName, rName );
+            }
+            // <--
+        }
+
+        sName = rName;
+    }
 }
 
 // --> OD 2008-02-19 #refactorlists#
