@@ -29,6 +29,7 @@
 #define SV_ICON_ID_DRAWING                      6
 #define SV_ICON_ID_PRESENTATION                 8
 #define SV_ICON_ID_DATABASE                    14
+#define SV_ICON_ID_FORMULA                     15
 #define SV_ICON_ID_TEMPLATE                    16
 
 using namespace ::rtl;
@@ -241,6 +242,10 @@ static void populate_menu( GtkWidget *pMenu )
     if ( aModuleOptions.IsDataBase() )
         add_ugly_db_item (pMenuShell, BASE_URL,
                           SV_ICON_ID_DATABASE, G_CALLBACK( open_url_cb ));
+
+    if ( aModuleOptions.IsMath() )
+        add_item (pMenuShell, MATH_URL, NULL,
+                  SV_ICON_ID_FORMULA, G_CALLBACK( open_url_cb ));
 
     OUString aULabel = pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE );
     add_item (pMenuShell, "dummy", &aULabel,
