@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DAVResourceAccess.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,6 +75,8 @@ public:
 
     void setURL( const rtl::OUString & rNewURL )
     throw( DAVException );
+
+    void resetUri();
 
     const rtl::OUString & getURL() const { return m_aURL; }
 
@@ -225,7 +227,7 @@ private:
     const rtl::OUString & getRequestURI() const;
     sal_Bool detectRedirectCycle( const rtl::OUString& rRedirectURL )
         throw ( DAVException );
-    sal_Bool handleException( DAVException & e )
+    sal_Bool handleException( DAVException & e, int errorCount )
         throw ( DAVException );
     void initialize()
         throw ( DAVException );
