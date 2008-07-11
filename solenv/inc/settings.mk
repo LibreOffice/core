@@ -8,7 +8,7 @@
 #
 # $RCSfile: settings.mk,v $
 #
-# $Revision: 1.233 $
+# $Revision: 1.234 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -50,6 +50,12 @@ use_shell*=$(USE_SHELL)
 .IF "$(USE_PCH)"!=""
 ENABLE_PCH=TRUE
 .ENDIF			# "$(USE_PCH)"!=""
+
+.IF "$(ENABLE_PCH)"!="" && "$(BUILD_SPECIAL)"!=""
+.IF "$(SOLARSRC)"=="$(SRC_ROOT)"
+NETWORK_BUILD:=TRUE
+.ENDIF			# "$(SOLARSRC)"=="$(SRC_ROOT)"
+.ENDIF			# "$(ENABLE_PCH)"!="" && "$(BUILD_SPECIAL)"!=""
 
 .INCLUDE : unitools.mk
 
