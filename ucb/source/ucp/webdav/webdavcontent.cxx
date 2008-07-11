@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: webdavcontent.cxx,v $
- * $Revision: 1.63 $
+ * $Revision: 1.64 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -857,7 +857,7 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
     throw( uno::RuntimeException )
 {
     // @@@ Implement logic to abort running commands, if this makes
-    //     sense for your content.
+    //     sense for your conten.t
 }
 
 //=========================================================================
@@ -1343,6 +1343,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     uno::Reference< ucb::XContentIdentifier >    xIdentifier;
     rtl::Reference< ::ucbhelper::ContentProviderImplHelper > xProvider;
 
+    const ResourceType & rType = getResourceType( xEnv );
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -1362,60 +1363,105 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             {
                 // All properties are already in cache! No server access needed.
                 bHasAll = true;
-                xProps.reset( new ContentProperties( *xCachedProps.get() ) );
             }
-        }
 
-        if ( !xProps.get() )
-        {
-            // No server access for just created (not yet committed) objects.
-            // Only a minimal set of properties supported at this stage.
-            if ( m_bTransient )
-                xProps.reset( new ContentProperties( aEscapedTitle,
-                                                     m_bCollection ) );
+            // use the cached ContentProperties instance
+            xProps.reset( new ContentProperties( *xCachedProps.get() ) );
         }
     }
 
-    if ( !xProps.get() )
+    if ( !m_bTransient && !bHasAll )
     {
         /////////////////////////////////////////////////////////////////////
         // Obtain values from server...
         /////////////////////////////////////////////////////////////////////
 
         // First, identify whether resource is DAV or not
-        const ResourceType & rType = getResourceType( xEnv, xResAccess );
+        //const ResourceType & rType = getResourceType( xEnv, xResAccess );
 
-        // getResourceType() accesses server and might trigger HTTP redirect.
-        // Therefore, title must be upadated here.
-        NeonUri aUri( xResAccess->getURL() );
-        aEscapedTitle = aUri.GetPathBaseName();
+        bool bNetworkAccessAllowed = true;
 
-        if ( rType == UNKNOWN )
+        if ( DAV == rType )
         {
-            xProps.reset(
-                new ContentProperties( aEscapedTitle ) );
+            // Only DAV resources support PROPFIND
+            std::vector< rtl::OUString > aPropNames;
+
+            ContentProperties::UCBNamesToDAVNames(
+                rProperties, aPropNames );
+
+            if ( aPropNames.size() > 0 )
+            {
+                std::vector< DAVResource > resources;
+                try
+                {
+                    xResAccess->PROPFIND(
+                        DAVZERO, aPropNames, resources, xEnv );
+
+                    if ( 1 == resources.size() )
+                    {
+                        if ( xProps.get())
+                            xProps->addProperties( aPropNames, ContentProperties( resources[ 0 ] ));
+                        else
+                            xProps.reset( new ContentProperties( resources[ 0 ] ) );
+                    }
+                }
+                catch ( DAVException const & e )
+                {
+                    bNetworkAccessAllowed
+                        = shouldAccessNetworkAfterException( e );
+
+                    if ( !bNetworkAccessAllowed )
+                    {
+                        cancelCommandExecution( e, xEnv );
+                        // unreachable
+                    }
+                }
+            }
         }
 
-        if ( !xProps.get() )
+        if ( bNetworkAccessAllowed )
         {
-            bool bNetworkAccessAllowed = true;
-
-            if ( rType == DAV )
+            // All properties obtained already?
+            std::vector< rtl::OUString > aMissingProps;
+            if ( !( xProps.get()
+                    && xProps->containsAllNames(
+                        rProperties, aMissingProps ) ) )
             {
-                // Only DAV resources support PROPFIND
+                // Possibly the missing props can be obtained using a HEAD
+                // request.
 
-                std::vector< rtl::OUString > aPropNames;
-                ContentProperties::UCBNamesToDAVNames(
-                    rProperties, aPropNames );
+                std::vector< rtl::OUString > aHeaderNames;
+                ContentProperties::UCBNamesToHTTPNames(
+                    rProperties,
+                    aHeaderNames,
+                    false /* bIncludeUnmatched */ );
 
-                if ( aPropNames.size() > 0 )
+                // Note: Setting bIncludeUnmatched to true would provide
+                // support for obtaining arbitrary header values, but will
+                // result in additional network traffic (HEAD requests).
+                // For the moment it is okay only to support the header
+                // values which can be mapped to UCB properties (like
+                // "Content-Length" header <-> "Size" property)
+
+                if ( aHeaderNames.size() > 0 )
                 {
-                    std::vector< DAVResource > resources;
-
                     try
                     {
-                        xResAccess->PROPFIND(
-                            DAVZERO, aPropNames, resources, xEnv );
+                        DAVResource resource;
+                        xResAccess->HEAD( aHeaderNames, resource, xEnv );
+
+                        if ( xProps.get() )
+                            xProps->addProperties(
+                                    aMissingProps,
+                                    ContentProperties( resource ) );
+                        else
+                            xProps.reset ( new ContentProperties( resource ) );
+
+                        if ( m_eResourceType == NON_DAV )
+                            xProps->addProperties( aMissingProps,
+                                                   ContentProperties(
+                                                    aEscapedTitle,
+                                                    false ) );
                     }
                     catch ( DAVException const & e )
                     {
@@ -1428,135 +1474,76 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                             // unreachable
                         }
                     }
-
-                    if ( resources.size() == 1 )
-                        xProps.reset( new ContentProperties( resources[ 0 ] ) );
-                }
-            }
-
-            if ( bNetworkAccessAllowed )
-            {
-                // All properties obtained already?
-                std::vector< rtl::OUString > aMissingProps;
-                if ( !( xProps.get()
-                        && xProps->containsAllNames(
-                            rProperties, aMissingProps ) ) )
-                {
-                    // Possibly the missing props can be obtained using a HEAD
-                    // request.
-
-                    std::vector< rtl::OUString > aHeaderNames;
-                    ContentProperties::UCBNamesToHTTPNames(
-                        rProperties,
-                        aHeaderNames,
-                        false /* bIncludeUnmatched */ );
-
-                    // Note: Setting bIncludeUnmatched to true would provide
-                    // support for obtaining arbitrary header values, but will
-                    // result in additional network traffic (HEAD requests).
-                    // For the moment it is okay only to support the header
-                    // values which can be mapped to UCB properties (like
-                    // "Content-Length" header <-> "Size" property)
-
-                    if ( aHeaderNames.size() > 0 )
-                    {
-                        try
-                        {
-                            DAVResource resource;
-                            xResAccess->HEAD( aHeaderNames, resource, xEnv );
-
-                            if ( xProps.get() )
-                            {
-                                xProps->addProperties(
-                                    aMissingProps,
-                                    ContentProperties( resource ) );
-                            }
-                            else
-                            {
-                                xProps.reset(
-                                    new ContentProperties( resource ) );
-                            }
-
-                            if ( rType == NON_DAV )
-                                xProps->addProperties( aMissingProps,
-                                                       ContentProperties(
-                                                        aEscapedTitle,
-                                                        false ) );
-                        }
-                        catch ( DAVException const & e )
-                        {
-                            bNetworkAccessAllowed
-                                = shouldAccessNetworkAfterException( e );
-
-                            if ( !bNetworkAccessAllowed )
-                            {
-                                cancelCommandExecution( e, xEnv );
-                                // unreachable
-                            }
-                        }
-                    }
-                }
-            }
-
-            if ( !xProps.get() )
-            {
-                // For DAV resources we only know the Title, for non-DAV
-                // resources we additionally know that it is a document.
-                if ( rType == DAV )
-                {
-                    xProps.reset(
-                        new ContentProperties( aEscapedTitle ) );
-                }
-                else
-                {
-                    xProps.reset(
-                        new ContentProperties( aEscapedTitle, false ) );
                 }
             }
         }
-    }
+        // might trigger HTTP redirect.
+        // Therefore, title must be upadated here.
+        NeonUri aUri( xResAccess->getURL() );
+        aEscapedTitle = aUri.GetPathBaseName();
 
-//    OSL_ENSURE( xProps.get(), "Content::getPropertyValues - no properties!" );
-
-    // All values obtained? If not, is there something valueable in the cache?
-    if ( !bHasAll && xCachedProps.get() )
-    {
-        std::vector< rtl::OUString > aMissingProps;
-        if ( !xProps->containsAllNames( rProperties, aMissingProps ) )
+        if ( UNKNOWN == rType )
         {
-            // Add props contained in cache...
-            xProps->addProperties( aMissingProps, *xCachedProps );
+            xProps.reset(
+                new ContentProperties( aEscapedTitle ) );
         }
+
+        // For DAV resources we only know the Title, for non-DAV
+        // resources we additionally know that it is a document.
+        if ( DAV == rType  )
+        {
+            //xProps.reset(
+            //    new ContentProperties( aEscapedTitle ) );
+            xProps->addProperty( rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM(
+                                    "Title" )),
+                                    uno::makeAny( aEscapedTitle), true);
+        }
+        else
+        {
+            if ( !xProps.get() )
+                xProps.reset(
+                    new ContentProperties( aEscapedTitle, false ) );
+            else
+                xProps->addProperty( rtl::OUString(
+                                    RTL_CONSTASCII_USTRINGPARAM(
+                                        "Title" )),
+                                        uno::makeAny( aEscapedTitle), true);
+
+            xProps->addProperty( rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM(
+                                    "IsFolder" )),
+                                    uno::makeAny( false), true);
+            xProps->addProperty( rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM(
+                                    "IsDocument" )),
+                                    uno::makeAny( true), true);
+
+        }
+
+
+    }
+    else
+    {
+
+        // No server access for just created (not yet committed) objects.
+        // Only a minimal set of properties supported at this stage.
+        if (m_bTransient)
+            xProps.reset( new ContentProperties( aEscapedTitle,
+                                                 m_bCollection ) );
     }
 
     // Add BaseURI property, if requested.
     if ( !xProps->contains(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseURI" ) ) ) )
     {
-        sal_Int32 nCount = rProperties.getLength();
-        if ( nCount )
-        {
-            const beans::Property* pProps = rProperties.getConstArray();
-            for ( sal_Int32 n = 0; n < nCount; ++n )
-            {
-                const rtl::OUString & rName = pProps[ n ].Name;
-
-                if ( rName.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "BaseURI" ) ) )
-                {
-                    // BaseURI requested! Append value.
-                    xProps->addProperty( rtl::OUString(
-                                            RTL_CONSTASCII_USTRINGPARAM(
-                                                "BaseURI" ) ),
-                                         uno::makeAny(
-                                            getBaseURI( xResAccess ) ),
-                                         true );
-                    break;
-                }
-            }
-        }
+        xProps->addProperty( rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM(
+                                    "BaseURI" ) ),
+                             uno::makeAny(
+                                getBaseURI( xResAccess ) ),
+                             true );
     }
-
     uno::Reference< sdbc::XRow > xResultRow
         = getPropertyValues( xSMgr,
                              rProperties,
@@ -1566,6 +1553,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        m_xCachedProps.reset( new ContentProperties( *xProps.get() ) );
         m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
         m_aEscapedTitle = aEscapedTitle;
     }
@@ -2074,7 +2062,7 @@ uno::Any Content::open(
                     osl::MutexGuard aGuard( m_aMutex );
 
                     // throw away previously cached headers.
-                    m_xCachedProps.reset();
+//                    m_xCachedProps.reset();
 
                     xResAccess.reset(
                         new DAVResourceAccess( *m_xResAccess.get() ) );
@@ -2092,7 +2080,16 @@ uno::Any Content::open(
                     osl::MutexGuard aGuard( m_aMutex );
 
                     // cache headers.
-                    m_xCachedProps.reset( new ContentProperties( aResource ) );
+//                    m_xCachedProps.reset( new ContentProperties( aResource ) );
+                    std::vector< DAVPropertyValue >::const_iterator it = aResource.properties.begin();
+                      std::vector< DAVPropertyValue >::const_iterator end   = aResource.properties.end();
+                      while ( it != end )
+                      {
+                        DAVPropertyValue aProp = (*it++);
+                        m_xCachedProps->addProperty( aProp.Name, aProp.Value, true);
+                    }
+
+
 
                     m_xResAccess.reset(
                         new DAVResourceAccess( *xResAccess.get() ) );
@@ -2119,7 +2116,7 @@ uno::Any Content::open(
                         osl::MutexGuard aGuard( m_aMutex );
 
                         // throw away previously cached headers.
-                        m_xCachedProps.reset();
+//                        m_xCachedProps.reset();
 
                         xResAccess.reset(
                             new DAVResourceAccess( *m_xResAccess.get() ) );
@@ -2137,8 +2134,8 @@ uno::Any Content::open(
 
                     {
                         osl::MutexGuard aGuard( m_aMutex );
-                        m_xCachedProps.reset(
-                            new ContentProperties( aResource ) );
+  //                      m_xCachedProps.reset(
+  //                          new ContentProperties( aResource ) );
 
                         m_xResAccess.reset(
                             new DAVResourceAccess( *xResAccess.get() ) );
@@ -3098,15 +3095,13 @@ const Content::ResourceType & Content::getResourceType(
                     const std::auto_ptr< DAVResourceAccess > & rResAccess )
     throw ( uno::Exception )
 {
-    ResourceType eResourceType;
-
+    if ( m_eResourceType == UNKNOWN )
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        eResourceType = m_eResourceType;
-    }
 
-    if ( eResourceType == UNKNOWN )
-    {
+        ResourceType eResourceType;
+        eResourceType = m_eResourceType;
+
         const rtl::OUString & rURL = rResAccess->getURL();
         const rtl::OUString aScheme(
             rURL.copy( 0, rURL.indexOf( ':' ) ).toAsciiLowerCase() );
@@ -3118,81 +3113,68 @@ const Content::ResourceType & Content::getResourceType(
         }
         else
         {
+
+            /*
+            // collaps redirect
             try
             {
-                DAVCapabilities caps;
-                rResAccess->OPTIONS( caps, xEnv );
-
-                if ( caps.class1 )
-                {
-                    // DAV resource
-                    eResourceType = DAV;
-                }
-                else
-                {
-                    // HTTP (non-DAV) resource
-                    eResourceType = NON_DAV;
-                }
+                std::vector< rtl::OUString > aHeaderNames;
+                DAVResource resource;
+                rResAccess->HEAD(
+                    aHeaderNames, resource, xEnv );
             }
-            catch ( DAVException const & exc )
+            catch ( DAVException const & e )
             {
-                if ( shouldAccessNetworkAfterException( exc ) )
-                {
-                    // OPTIONS is an optional HTTP method. Server can reply
-                    // with an error message. Last chance: try a PROPFIND
-                    // obtain resourcetype property. If it succeeds, we know
-                    // the resource is DAV enabled. If not, try a HEAD
-                    // (mandatory method). If this succeeds, it's an
-                    // existing HTTP resource.
+                cancelCommandExecution( e, xEnv );
+                // Unreachable
+            }
+            */
 
-                    try
-                    {
-                        std::vector< rtl::OUString > aPropNames;
-                        aPropNames.push_back( DAVProperties::RESOURCETYPE );
-                        std::vector< DAVResource > resources;
-                        rResAccess->PROPFIND(
-                            DAVZERO, aPropNames, resources, xEnv );
+            try
+            {
 
-                        eResourceType = DAV;
-                    }
-                    catch ( DAVException const & ex )
-                    {
-                        if ( shouldAccessNetworkAfterException( ex ) )
-                        {
-                            try
-                            {
-                                std::vector< rtl::OUString > aHeaderNames;
-                                DAVResource resource;
-                                rResAccess->HEAD(
-                                    aHeaderNames, resource, xEnv );
+                std::vector< DAVResource > resources;
+                std::vector< rtl::OUString > aPropNames;
+                uno::Sequence< beans::Property > aProperties( 4 );
+                aProperties[ 0 ].Name   = rtl::OUString::createFromAscii( "IsFolder" );
+                aProperties[ 1 ].Name   = rtl::OUString::createFromAscii( "IsDocument" );
+                aProperties[ 2 ].Name   = rtl::OUString::createFromAscii( "IsReadOnly" );
+                aProperties[ 3 ].Name   = rtl::OUString::createFromAscii( "MediaType" );
 
-                                eResourceType = NON_DAV;
-                            }
-                            catch ( DAVException const & e )
-                            {
-                                cancelCommandExecution( e, xEnv );
-                                // Unreachable
-                            }
-                        }
-                        else
-                        {
-                            cancelCommandExecution( ex, xEnv );
-                            // Unreachable
-                        }
-                    }
+                ContentProperties::UCBNamesToDAVNames(
+                    aProperties, aPropNames );
+
+                rResAccess->PROPFIND(
+                    DAVZERO, aPropNames, resources, xEnv );
+
+                std::vector<  DAVResource >::const_iterator it
+                    = resources.begin();
+                  std::vector<  DAVResource >::const_iterator end
+                    = resources.end();
+
+                  while ( it != end )
+                  {
+                     DAVResource aRes = (*it++);
+                    m_xCachedProps.reset( new ContentProperties( aRes ) );
+                    //m_xCachedProps.addProperty( new ContentProperties( aRes ) );
                 }
-                else
-                {
-                    cancelCommandExecution( exc, xEnv );
-                    // Unreachable
-                }
+/*              std::vector< rtl::OUString > aPropNames;
+                aPropNames.push_back( DAVProperties::RESOURCETYPE );
+                std::vector< DAVResource > resources;
+                rResAccess->PROPFIND(
+                    DAVZERO, aPropNames, resources, xEnv );
+*/
+                eResourceType = DAV;
+            }
+            catch ( DAVException const& )
+            {
+                //Fallback
+                rResAccess->resetUri();
+                eResourceType = NON_DAV;
             }
         }
+        m_eResourceType = eResourceType;
 
-        {
-            osl::Guard< osl::Mutex > aGuard( m_aMutex );
-            m_eResourceType = eResourceType;
-        }
     }
     return m_eResourceType;
 }
