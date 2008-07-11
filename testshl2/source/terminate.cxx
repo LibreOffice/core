@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: terminate.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +45,7 @@
 #include <iostream>
 #include <string>
 
-#include "getopt.hxx"
+#include "testshl/getopt.hxx"
 
 #if (defined UNX) || (defined OS2)
 #include <unistd.h> /* usleep */
@@ -54,7 +54,7 @@
 #endif
 
 #ifdef WNT
-# include "winstuff.hxx"
+# include "testshl/winstuff.hxx"
 #endif
 
 using namespace std;
@@ -261,7 +261,7 @@ int _cdecl main( int, char* argv[] )
 
     if ( opt.hasOpt("-version") )
     {
-        fprintf(stderr, "testshl2_timeout $Revision: 1.8 $\n");
+        fprintf(stderr, "testshl2_timeout $Revision: 1.9 $\n");
         exit(0);
     }
 
