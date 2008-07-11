@@ -8,7 +8,7 @@
 #
 # $RCSfile: simplepackage.pm,v $
 #
-# $Revision: 1.18 $
+# $Revision: 1.19 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -207,8 +207,16 @@ sub create_package
     {
         installer::worker::put_scpactions_into_installset("$tempdir/$packagename");
         my $folder = ( -l "$tempdir/$packagename/Applications" ) ? $packagename : "\.";
+
+        if ( $allvariables->{'PACK_INSTALLED'} ) {
+            $folder = $packagename;
+        }
+
         my $volume_name = $allvariables->{'PRODUCTNAME'} . ' ' . $allvariables->{'PRODUCTVERSION'};
         $volume_name = $volume_name . ' ' . $allvariables->{'PRODUCTEXTENSION'} if $allvariables->{'PRODUCTEXTENSION'};
+        if ( $allvariables->{'DMG_VOLUMEEXTENSION'} ) {
+            $volume_name = $volume_name . ' ' . $allvariables->{'DMG_VOLUMEEXTENSION'};
+        }
 
         my $sla = 'sla.r';
         my $ref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$sla, $includepatharrayref, 0);
