@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.17 $
+#  $Revision: 1.18 $
 #
-#  last change: $Author: rt $ $Date: 2005-03-29 12:15:10 $
+#  last change: $Author: rt $ $Date: 2008-07-11 14:25:54 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -57,23 +57,10 @@ OUT_COMP_GEN = $(OUT_MISC)/$(COMPONENT_NAME)
 OUT_COMP_OBJ=$(OUT_OBJ)/$(COMPONENT_NAME)
 
 COMPOENNT_ENV_FLAG = $(OUT_MISC)/cpp_$(COMPONENT_NAME)_prepare_env.flag
-COMPONENT_TYPEFLAG = $(OUT_MISC)/cpp_$(COMPONENT_NAME)_types.flag
 
 CXXFILES = DocumentLoader.cxx
 
 OBJFILES = $(patsubst %.cxx,$(OUT_SLO_COMP)/%.$(OBJ_EXT),$(CXXFILES))
-
-TYPES = \
-	com.sun.star.lang.XMultiServiceFactory \
-	com.sun.star.lang.XComponent \
-	com.sun.star.beans.XPropertySet \
-	com.sun.star.bridge.XUnoUrlResolver \
-	com.sun.star.frame.XComponentLoader \
-	com.sun.star.lang.XMultiComponentFactory \
-	com.sun.star.container.XHierarchicalNameAccess \
-	com.sun.star.registry.XSimpleRegistry
-
-TYPESLIST = $(foreach t,$(TYPES),-T$(t))
 
 # Targets
 .PHONY: ALL
@@ -82,19 +69,13 @@ ALL : \
 
 include $(SETTINGS)/stdtarget.mk
 
-# This example type library will be extended by the office types
+# This example type library will be extended by the URE and office types
 $(OUT_BIN)/%.rdb :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
-	$(REGMERGE) $@ / $(OFFICE_TYPE_LIBRARY) 
+	$(REGMERGE) $@ / $(URE_TYPES) $(OFFICE_TYPES) 
 
-$(COMPONENT_TYPEFLAG) : $(COMPONENT_RDB)
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_TYPEFLAG)))
-	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB)
-	echo flagged > $@
-
-$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG)
+$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(SDKTYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
@@ -106,19 +87,22 @@ ifeq "$(OS)" "WIN"
 	  $< $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB)
 else
 	$(LINK) $(EXE_LINK_FLAGS) $(LINK_LIBS) -o $@ $< \
-	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB)
+	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB) $(CPPUHELPERDYLIB) $(CPPUDYLIB) $(SALHELPERDYLIB) $(SALDYLIB)
+ifeq "$(OS)" "MACOSX"
+	$(INSTALL_NAME_URELIBS_BIN)  $@
+endif
 endif
 
-$(COMPOENNT_ENV_FLAG) : 
+$(COMPOENNT_ENV_FLAG) : $(COMPONENT_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	@echo --------------------------------------------------------------------------------
 	@echo        Register necessary runtime components in the DocumentLoader.rdb 
 	@echo --------------------------------------------------------------------------------
-	$(REGCOMP) -register -r $(OUT_BIN)/DocumentLoader.rdb -c connector.uno.$(SHAREDLIB_EXT)
-	$(REGCOMP) -register -r $(OUT_BIN)/DocumentLoader.rdb -c remotebridge.uno.$(SHAREDLIB_EXT)
-	$(REGCOMP) -register -r $(OUT_BIN)/DocumentLoader.rdb -c bridgefac.uno.$(SHAREDLIB_EXT)
-	$(REGCOMP) -register -r $(OUT_BIN)/DocumentLoader.rdb -c uuresolver.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(COMPONENT_RDB) -c connector.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(COMPONENT_RDB) -c remotebridge.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(COMPONENT_RDB) -c bridgefac.uno.$(SHAREDLIB_EXT)
+	$(REGCOMP) -register -r $(COMPONENT_RDB) -c uuresolver.uno.$(SHAREDLIB_EXT)
 	@echo bla > $@
 
 CppDocumentLoaderExample : $(OUT_BIN)/DocumentLoader$(EXE_EXT) $(COMPOENNT_ENV_FLAG)
@@ -144,7 +128,6 @@ clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_INC))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_OBJ))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_TYPEFLAG)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPOENNT_ENV_FLAG)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_RDB)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/DocumentLoader*))
