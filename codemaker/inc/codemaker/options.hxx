@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: options.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #define INCLUDED_CODEMAKER_OPTIONS_HXX
 
 #include <hash_map>
+
 #include <codemaker/global.hxx>
 
 #if defined( _MSC_VER ) && ( _MSC_VER < 1200 )
