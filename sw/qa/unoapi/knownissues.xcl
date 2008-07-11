@@ -145,3 +145,6 @@ sw.SwAccessiblePageView
 
 ### i89419 ###
 sw.SwXTextEmbeddedObject::com::sun::star::text::BaseFrameProperties
+
+### i91530 ###
+sw.SwXTextPortion::com::sun::star::style::CharacterProperties
