@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.2 $
+#  $Revision: 1.3 $
 #
-#  last change: $Author: hr $ $Date: 2007-06-26 16:02:22 $
+#  last change: $Author: rt $ $Date: 2008-07-11 14:28:54 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -56,8 +56,8 @@ SAMPLE_GEN_OUT=$(OUT_MISC)/$(SAMPLE_NAME)
 COMP_NAME=OwnEmbeddedObject
 COMP_CLASS_OUT=$(SAMPLE_CLASS_OUT)/$(COMP_NAME)
 COMP_GEN_OUT=$(SAMPLE_GEN_OUT)/$(COMP_NAME)
-COMP_PACKAGE=$(OUT_BIN)/$(COMP_NAME).$(UNOPKG_EXT)
-COMP_PACKAGE_URL=$(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOPKG_EXT)")
+COMP_PACKAGE=$(OUT_BIN)/$(COMP_NAME).$(UNOOXT_EXT)
+COMP_PACKAGE_URL=$(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOOXT_EXT)")
 COMP_JAR_NAME=$(COMP_NAME).uno.jar
 COMP_JAR=$(SAMPLE_CLASS_OUT)/$(COMP_JAR_NAME)
 COMP_JAR_MANIFEST=$(COMP_GEN_OUT)/$(COMP_NAME).Manifest
@@ -136,9 +136,15 @@ endif
 $(COMP_NAME) : $(COMP_REGISTERFLAG)
 	@echo ------
 	@echo The $(COMP_NAME) component was installed if SDK_AUTO_DEPLOYMENT = YES.
-	@echo You can use this component inside your office installation, see the example
+	@echo Load the "$(QM)$(SAMPLE_NAME).odt$(QM)" document to see how this component works. 
+	@echo You can use this component inside your office installation, see the example 
 	@echo description.
+	@echo -
+	@echo $(MAKE) $(SAMPLE_NAME).odt.load
 	@echo --------------------------------------------------------------------------------
+
+$(SAMPLE_NAME).odt.load : $(COMP_REGISTERFLAG)
+	"$(OFFICE_PROGRAM_PATH)$(PS)soffice" $(basename $@)
 
 .PHONY: clean
 clean :
