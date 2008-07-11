@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestCppComponent.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:59:41 $
+ *  last change: $Author: rt $ $Date: 2008-07-11 14:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,14 +38,13 @@
  *
  *************************************************************************/
 
-#include <iostream>
+#include <stdio.h>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <my_module/MyService1.hpp>
 #include <my_module/MyService2.hpp>
 
-using namespace std;
 using namespace rtl;
 using namespace com::sun::star::uno;
 //namespace cssuno = ::com::sun::star::uno;
@@ -58,7 +57,7 @@ int SAL_CALL main( int, char ** )
     {
         // get the remote office component context
         Reference< XComponentContext > xContext( ::cppu::bootstrap() );
-        cout << "\nconnected to a running office...\n";
+        fprintf(stdout, "\nconnected to a running office...\n");
 
         // create a new instance of MyService1
         Reference<my_module::XSomething> xSomething =
@@ -66,34 +65,28 @@ int SAL_CALL main( int, char ** )
 
         // call methodOne and print the return value on stdout
         OUString s = xSomething->methodOne(OUString(RTL_CONSTASCII_USTRINGPARAM("Hello World!")));
-        cout << "\nCreate new instance of MyService1\n"
-             << "Call of XSomething.methOne at MyService1 = "
-             << OUStringToOString( s, RTL_TEXTENCODING_ASCII_US ).getStr();
+        fprintf(stdout,"\nCreate new instance of MyService1\nCall of XSomething.methOne at MyService1 = %s", OUStringToOString( s, RTL_TEXTENCODING_ASCII_US ).getStr());
 
         // create a new instance of MyService2 with the specified string argument
         xSomething = my_module::MyService2::create(xContext, OUString(RTL_CONSTASCII_USTRINGPARAM("Hello My World!")));
 
         // call methodTwo and print the return value of methodTwo
         s = xSomething->methodTwo();
-        cout << "\n\nCreate new instance of MyService2 with argument\n"
-             << "Call of XSomething.methTwo at MyService2 = "
-             << OUStringToOString( s, RTL_TEXTENCODING_ASCII_US ).getStr();
+        fprintf(stdout, "\n\nCreate new instance of MyService2 with argument\nCall of XSomething.methTwo at MyService2 = %s", OUStringToOString( s, RTL_TEXTENCODING_ASCII_US ).getStr());
 
-        cout <<"\n\nPlease press 'return' to finish the example!\n";
+        fprintf(stdout, "\n\nPlease press 'return' to finish the example!\n");
         getchar();
     }
     catch ( ::cppu::BootstrapException & e )
     {
-        cerr << "\ncaught BootstrapException: "
-             << OUStringToOString( e.getMessage(), RTL_TEXTENCODING_ASCII_US ).getStr()
-             << '\n';
+        fprintf(stderr, "\ncaught BootstrapException: %s\n",
+                OUStringToOString( e.getMessage(), RTL_TEXTENCODING_ASCII_US ).getStr());
         return 1;
     }
     catch ( Exception & e )
     {
-        cerr << "\ncaught UNO exception: "
-             << OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr()
-             << '\n';
+        fprintf(stderr, "\ncaught UNO exception: %s\n",
+                OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
         return 1;
     }
 
