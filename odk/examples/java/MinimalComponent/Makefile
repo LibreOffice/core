@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.18 $
+#  $Revision: 1.19 $
 #
-#  last change: $Author: obo $ $Date: 2007-01-25 11:09:22 $
+#  last change: $Author: rt $ $Date: 2008-07-11 14:30:17 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -117,7 +117,7 @@ $(COMP_GEN_OUT)/%.rdb : $(GEN_URDFILES)
 
 $(GEN_CLASSFILES) : $(COMP_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(JAVAMAKER) -BUCR -nD $(GEN_TYPELIST) -O$(SAMPLE_CLASS_OUT) $(COMP_RDB) $(OFFICE_TYPE_LIBRARY)
+	$(JAVAMAKER) -BUCR -nD $(GEN_TYPELIST) -O$(SAMPLE_CLASS_OUT) $(COMP_RDB) -X$(URE_TYPES) -X$(OFFICE_TYPES)
 
 # component as well as application are dependent from the generated types
 # rule for component class files
