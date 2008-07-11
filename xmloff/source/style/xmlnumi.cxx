@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlnumi.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -991,7 +991,7 @@ SvXMLImportContext* SvxXMLListLevelStyleAttrContext_Impl::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
     if ( XML_NAMESPACE_STYLE == nPrefix &&
-         IsXMLToken( rLocalName, XML_LABEL_ALIGNMENT ) )
+         IsXMLToken( rLocalName, XML_LIST_LEVEL_LABEL_ALIGNMENT ) )
     {
         pContext = new SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl( GetImport(),
                                                              nPrefix,
