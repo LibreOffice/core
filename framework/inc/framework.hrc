@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: framework.hrc,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,16 +59,17 @@
 #define BMP_BACKING_IMPRESS                 8
 #define BMP_BACKING_DRAW                    9
 #define BMP_BACKING_DATABASE                10
-#define BMP_BACKING_OPENFILE                11
-#define BMP_BACKING_OPENTEMPLATE            12
-#define BMP_BACKING_EXT                     13
-#define STR_BACKING_EXTHELP                 14
-#define BMP_BACKING_REG                     15
-#define STR_BACKING_REGHELP                 16
-#define BMP_BACKING_INFO                    17
-#define STR_BACKING_INFOHELP                18
-#define BMP_BACKING_TPLREP                  19
-#define STR_BACKING_TPLREP                  20
+#define BMP_BACKING_FORMULA                 11
+#define BMP_BACKING_OPENFILE                12
+#define BMP_BACKING_OPENTEMPLATE            13
+#define BMP_BACKING_EXT                     14
+#define STR_BACKING_EXTHELP                 15
+#define BMP_BACKING_REG                     16
+#define STR_BACKING_REGHELP                 17
+#define BMP_BACKING_INFO                    18
+#define STR_BACKING_INFOHELP                19
+#define BMP_BACKING_TPLREP                  20
+#define STR_BACKING_TPLREP                  21
 
 #define RES_BACKING_IMAGES                  (DLG_BACKING+1)
 #define RES_BACKING_IMAGES_HC               (DLG_BACKING+2)
