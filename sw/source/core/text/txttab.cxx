@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txttab.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,27 +106,14 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         // #i24363# tab stops relative to indent
         // nTabLeft: The absolute value, the tab stops are relative to: Tabs origin.
         //
-        // --> OD 2008-02-07 #newlistlevelattrs#
-//        const SwTwips nTmpIndent = pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) ?
-//                                   pFrm->GetAttrSet()->GetLRSpace().GetTxtLeft() : 0;
-//        const SwTwips nTabLeft = bRTL ?
-//                                 pFrm->Frm().Right() - nTmpIndent :
-//                                 pFrm->Frm().Left() + nTmpIndent;
-        SwTwips nTabLeft( 0 );
-        if ( pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) )
-        {
-            nTabLeft = Left();
-            if ( bRTL )
-            {
-                Point aPoint( nTabLeft, 0 );
-                pFrm->SwitchLTRtoRTL( aPoint );
-                nTabLeft = aPoint.X();
-            }
-        }
-        else
-        {
-            nTabLeft = bRTL ? pFrm->Frm().Right() : pFrm->Frm().Left();
-        }
+        // --> OD 2008-07-01 #i91133#
+        const bool bTabsRelativeToIndent =
+            pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT);
+        const SwTwips nTabLeft = bRTL
+                                 ? pFrm->Frm().Right() -
+                                   ( bTabsRelativeToIndent ? GetTabLeft() : 0 )
+                                 : pFrm->Frm().Left() +
+                                   ( bTabsRelativeToIndent ? GetTabLeft() : 0 );
         // <--
 
         //
@@ -225,7 +212,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         }
         // --> OD 2008-02-07 #newlistlevelattrs#
         long nForced = 0;
-        if ( !pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) )
+        if ( !bTabsRelativeToIndent )
         {
             if ( bRTL )
             {
