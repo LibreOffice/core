@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: parser.y,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1742,7 +1742,11 @@ service_export :
 					pDecl = pScope->lookupByName(*iter);
 					if ( pDecl && (pDecl->getNodeType() == NT_interface) )
 					{
-                        if ( idlc()->error()->checkPublished(pDecl) )
+                        /* we relax the strict published check and allow to add new
+                         * interfaces if they are optional
+                         */
+                        bool bOptional = (($1 & AF_OPTIONAL) == AF_OPTIONAL);
+                        if ( idlc()->error()->checkPublished(pDecl, bOptional) )
                         {
                             pIMember = new AstInterfaceMember(
                                 $1, (AstInterface*)pDecl, *iter, pScope);
