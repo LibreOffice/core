@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: windowscustomaction_ooo.scp,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -325,15 +325,6 @@ WindowsCustomAction gid_Customaction_Patch_Deregister_Extensions
 	Assignment1 = ("InstallExecuteSequence", "", "InstallInitialize");
 End
 
-WindowsCustomAction gid_Customaction_Patch_SetNewFeatureState
-	Name = "SetNewFeatureState";
-	Typ = "65";
-	Source = "patchmsi.dll";
-	Target = "SetNewFeatureState";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not Installed And gm_o_Onlineupdate", "InstallValidate");
-End
-
 WindowsCustomAction gid_Customaction_Patch_SetFeatureState
 	Name = "SetFeatureState";
 	Typ = "65";
@@ -341,15 +332,6 @@ WindowsCustomAction gid_Customaction_Patch_SetFeatureState
 	Target = "SetFeatureState";
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "Not Installed", "SetNewFeatureState");
-End
-
-WindowsCustomAction gid_Customaction_Patch_ShowOnlineUpdateDialog
-	Name = "ShowOnlineUpdateDialog";
-	Typ = "65";
-	Source = "patchmsi.dll";
-	Target = "ShowOnlineUpdateDialog";
-	Inbinarytable = 1;
-	Assignment1 = ("ControlEvent", "DestinationFolder", "Next", "DoAction", "ShowOnlineUpdateDialog", "1", "0");
 End
 
 WindowsCustomAction gid_Customaction_Patch_DeinstallExchangeFiles
