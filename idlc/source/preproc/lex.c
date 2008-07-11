@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lex.c,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -325,14 +325,6 @@ void
         if (bigfsm[EOFC][i] >= 0)
             bigfsm[EOFC][i] = ~S_EOF;
     }
-}
-
-void
-    fixlex(void)
-{
-    /* do C++ comments? */
-    if ((Cplusplus == 0) || (Cflag != 0))
-        bigfsm['/'][COM1] = bigfsm['x'][COM1];
 }
 
 /*
