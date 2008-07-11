@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.22 $
+#  $Revision: 1.23 $
 #
-#  last change: $Author: rt $ $Date: 2007-01-30 08:10:58 $
+#  last change: $Author: rt $ $Date: 2008-07-11 14:29:48 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -122,7 +122,7 @@ $(COMP_GEN_OUT)/%.rdb : $(GEN_URDFILES)
 # rule for creating IDL dependent class files
 $(GEN_CLASSFILES) : $(COMP_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(JAVAMAKER) -BUCR -nD $(GEN_TYPELIST) -O$(SAMPLE_CLASS_OUT) $(COMP_RDB) $(OFFICE_TYPE_LIBRARY)
+	$(JAVAMAKER) -BUCR -nD $(GEN_TYPELIST) -O$(SAMPLE_CLASS_OUT) $(COMP_RDB) -X$(URE_TYPES) -X$(OFFICE_TYPES)
 
 # component as well as application are dependent from the generated types
 # rule for component class files
