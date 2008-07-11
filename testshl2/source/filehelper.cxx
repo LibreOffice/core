@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filehelper.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,8 +36,9 @@
 #include <stdio.h>
 #include <string>
 
-#include "filehelper.hxx"
-#include "getopt.hxx"
+#include "testshl/filehelper.hxx"
+#include "testshl/getopt.hxx"
+
 #include <osl/process.h>
 #include <osl/file.hxx>
 
