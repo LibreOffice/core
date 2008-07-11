@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ConfigurationController.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -191,8 +191,8 @@ void SAL_CALL ConfigurationController::disposing (void)
         return;
 
 #if defined VERBOSE && VERBOSE>=1
-    OSL_TRACE("ConfigurationController::disposing");
-    OSL_TRACE("    requesting empty configuration");
+    OSL_TRACE("ConfigurationController::disposing\n");
+    OSL_TRACE("    requesting empty configuration\n");
 #endif
     // To destroy all resources an empty configuration is requested and then,
     // synchronously, all resulting requests are processed.
@@ -200,7 +200,7 @@ void SAL_CALL ConfigurationController::disposing (void)
     restoreConfiguration(new Configuration(this,false));
     mpImplementation->mpQueueProcessor->ProcessUntilEmpty();
 #if defined VERBOSE && VERBOSE>=1
-    OSL_TRACE("    all requests processed");
+    OSL_TRACE("    all requests processed\n");
 #endif
 
     // Now that all resources have been deactivated, mark the controller as
@@ -332,7 +332,7 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
     if (rBHelper.bInDispose)
     {
 #if defined VERBOSE && VERBOSE>=1
-        OSL_TRACE("ConfigurationController::requestResourceActivation(): ignoring %s",
+        OSL_TRACE("ConfigurationController::requestResourceActivation(): ignoring %s\n",
             OUStringToOString(
                 FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
 #endif
@@ -340,7 +340,7 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
     }
 
 #if defined VERBOSE && VERBOSE>=2
-    OSL_TRACE("ConfigurationController::requestResourceActivation() %s",
+    OSL_TRACE("ConfigurationController::requestResourceActivation() %s\n",
         OUStringToOString(
             FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
 #endif
@@ -390,7 +390,7 @@ void SAL_CALL ConfigurationController::requestResourceDeactivation (
     ThrowIfDisposed();
 
 #if defined VERBOSE && VERBOSE>=2
-    OSL_TRACE("ConfigurationController::requestResourceDeactivation() %s",
+    OSL_TRACE("ConfigurationController::requestResourceDeactivation() %s\n",
             OUStringToOString(
                 FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
 #endif
@@ -540,7 +540,7 @@ void SAL_CALL ConfigurationController::restoreConfiguration (
     // Get lists of resources that are to be activated or deactivated.
     Reference<XConfiguration> xCurrentConfiguration (mpImplementation->mxRequestedConfiguration);
 #if defined VERBOSE && VERBOSE>=1
-    OSL_TRACE("ConfigurationController::restoreConfiguration(");
+    OSL_TRACE("ConfigurationController::restoreConfiguration(\n");
     ConfigurationTracer::TraceConfiguration(rxNewConfiguration, "requested configuration");
     ConfigurationTracer::TraceConfiguration(xCurrentConfiguration, "current configuration");
 #endif
@@ -548,11 +548,11 @@ void SAL_CALL ConfigurationController::restoreConfiguration (
     aClassifier.Partition();
 #if defined VERBOSE && VERBOSE>=3
     aClassifier.TraceResourceIdVector(
-        "requested but not current resources:", aClassifier.GetC1minusC2());
+        "requested but not current resources:\n", aClassifier.GetC1minusC2());
     aClassifier.TraceResourceIdVector(
-        "current but not requested resources:", aClassifier.GetC2minusC1());
+        "current but not requested resources:\n", aClassifier.GetC2minusC1());
     aClassifier.TraceResourceIdVector(
-        "requested and current resources:", aClassifier.GetC1andC2());
+        "requested and current resources:\n", aClassifier.GetC1andC2());
 #endif
 
     ConfigurationClassifier::ResourceIdVector::const_iterator iResource;
