@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndcopy.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -528,8 +528,9 @@ void lcl_CopyBookmarks( const SwPaM& rPam, SwPaM& rCpyPam )
             *pBkmk->GetOtherBookmarkPos() > rEnd ) )
             continue;
 
-        if( pBkmk->GetBookmarkPos() == rEnd &&
-            ( !pBkmk->GetOtherBookmarkPos() || *pBkmk->GetOtherBookmarkPos() == rEnd ) )
+        bool bMayBe = !pBkmk->GetOtherBookmarkPos() || *pBkmk->GetOtherBookmarkPos() == rEnd ||
+                      *pBkmk->GetOtherBookmarkPos() == rStt;
+        if( bMayBe && ( pBkmk->GetBookmarkPos() == rEnd || pBkmk->GetBookmarkPos() == rStt ) )
             continue;
 
         aNewBookmarks.push_back( pBkmk );
