@@ -10,7 +10,7 @@ if "%@RIGHT[5,%SDK_DIR%]" EQU "~0,-1" (
    unset LENGTH
 )
 
-call "%SDK_DIR%\setsdkname.bat" "%SDK_DIR%" 
+set OO_SDK_NAME=__SDKNAME__
 
 set OO_USER_SDK_DIR=%APPDATA%\%OO_SDK_NAME%
 set OO_USER_SDKENV_SCRIPT=%OO_USER_SDK_DIR%\setsdkenv_windows.bat
