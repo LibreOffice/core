@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.89 $
+# $Revision: 1.90 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -155,8 +155,6 @@ brofficewithjre: $(foreach,i,$(alllangiso) brofficewithjre_$i)
 
 broolanguagepack : $(foreach,i,$(alllangiso) broolanguagepack_$i)
 
-sdkbro: $(foreach,i,$(alllangiso) sdkbro_$i)
-
 MSIOFFICETEMPLATESOURCE=$(PRJ)$/inc_openoffice$/windows$/msi_templates
 MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
 MSIURETEMPLATESOURCE=$(PRJ)$/inc_ure$/windows$/msi_templates
@@ -167,7 +165,7 @@ MSIOFFICETEMPLATEDIR=$(MSIOFFICETEMPLATESOURCE)
 MSILANGPACKTEMPLATEDIR=$(MSILANGPACKTEMPLATESOURCE)
 MSIURETEMPLATEDIR=$(MSIURETEMPLATESOURCE)
 MSISDKOOTEMPLATEDIR=$(MSISDKOOTEMPLATESOURCE)
-MSIURETEMPLATEDIR=$(MSIURETEMPLATESOURCE)
+#MSIURETEMPLATEDIR=$(MSIURETEMPLATESOURCE)
 .ELSE			# "$(BUILD_SPECIAL)"!=""
 NOLOGOSPLASH:=$(BIN)$/intro.zip
 DEVNOLOGOSPLASH:=$(BIN)$/dev$/intro.zip
@@ -196,7 +194,7 @@ $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $(ADDDEPS)
 $(foreach,i,$(alllangiso) ooodevlanguagepack_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) sdkoo_$i) : $(ADDDEPS)
-
+             
 $(foreach,i,$(alllangiso) ure_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) broffice_$i) : $(ADDDEPS)
@@ -206,8 +204,6 @@ $(foreach,i,$(alllangiso) brofficedev_$i) : $(ADDDEPS)
 $(foreach,i,$(alllangiso) brofficewithjre_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) broolanguagepack_$i) : $(ADDDEPS)
-
-$(foreach,i,$(alllangiso) sdkbro_$i) : $(ADDDEPS)
 
 .IF "$(MAKETARGETS)"!=""
 $(MAKETARGETS) : $(ADDDEPS)
@@ -334,14 +330,6 @@ broolanguagepack_% :
 .ENDIF			# "$(PKGFORMAT)"!=""
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSILANGPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH) $(VERBOSESWITCH))
 
-.IF "$(PKGFORMAT)"!=""
-$(foreach,i,$(alllangiso) sdkbro_$i) : $$@{$(PKGFORMAT:^".")}
-sdkbro_%{$(PKGFORMAT:^".")} :
-.ELSE			# "$(PKGFORMAT)"!=""
-sdkbro_% :
-.ENDIF			# "$(PKGFORMAT)"!=""
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice_SDK -u $(OUT) -buildid $(BUILD) -msitemplate $(MSISDKOOTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) -dontstrip $(PKGFORMATSWITCH) $(VERBOSESWITCH))
-
 .ELSE			# "$(alllangiso)"!=""
 openoffice:
     @echo cannot pack nothing...
@@ -394,21 +382,21 @@ hack_msitemplates .PHONY:
     -$(MKDIRHIER) $(MSILANGPACKTEMPLATEDIR)
     -$(MKDIRHIER) $(MSIURETEMPLATEDIR)
     -$(MKDIRHIER) $(MSISDKOOTEMPLATEDIR)
-    -$(MKDIRHIER) $(MSIURETEMPLATEDIR)
+#	-$(MKDIRHIER) $(MSIURETEMPLATEDIR)
     $(GNUCOPY) -ua $(MSIOFFICETEMPLATESOURCE) $(MSIOFFICETEMPLATEDIR:d:d)
     $(GNUCOPY) -ua $(MSILANGPACKTEMPLATESOURCE) $(MSILANGPACKTEMPLATEDIR:d:d)
     $(GNUCOPY) -ua $(MSIURETEMPLATESOURCE) $(MSIURETEMPLATEDIR:d:d)
     $(GNUCOPY) -ua $(MSISDKOOTEMPLATESOURCE) $(MSISDKOOTEMPLATEDIR:d:d)
-    $(GNUCOPY) -ua $(MSIURETEMPLATESOURCE) $(MSIURETEMPLATEDIR:d:d)
+#	$(GNUCOPY) -ua $(MSIURETEMPLATESOURCE) $(MSIURETEMPLATEDIR:d:d)
     $(RM) $(MSIOFFICETEMPLATEDIR)$/Binary$/Image.bmp
     $(RM) $(MSILANGPACKTEMPLATEDIR)$/Binary$/Image.bmp
     $(RM) $(MSIURETEMPLATEDIR)$/Binary$/Image.bmp
     $(RM) $(MSISDKOOTEMPLATEDIR)$/Binary$/Image.bmp
-    $(RM) $(MSIURETEMPLATEDIR)$/Binary$/Image.bmp
+#	$(RM) $(MSIURETEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIOFFICETEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSILANGPACKTEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIURETEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSISDKOOTEMPLATEDIR)$/Binary$/Image.bmp
-    $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIURETEMPLATEDIR)$/Binary$/Image.bmp
+#	$(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIURETEMPLATEDIR)$/Binary$/Image.bmp
 
 
