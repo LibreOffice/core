@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Bootstrap.java,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -205,7 +205,7 @@ public class Bootstrap {
 
         if (! m_loaded_juh)
         {
-            System.loadLibrary( "juh" );
+            NativeLibraryLoader.loadLibrary( Bootstrap.class.getClassLoader(), "juh" );
             m_loaded_juh = true;
         }
         return (XComponentContext)UnoRuntime.queryInterface(
