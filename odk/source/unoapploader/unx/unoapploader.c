@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoapploader.c,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,6 +62,7 @@ const char* PATHSEPARATOR = ":";
  * the modified LD_LIBRARY_PATH environment variable. The application's
  * executable name must be the same as the name of this executable, prefixed
  * by '_'.</p>
+ * <p>On MACOSX DYLD_LIBRARY_PATH is used instead of LD_LIBRARY_PATH!<p>
  *
  * <p>A UNO installation can be specified by the user by setting the UNO_PATH
  * environment variable to the program directory of the UNO installation.
@@ -83,8 +84,11 @@ int main( int argc, char *argv[] )
 
     if ( path != NULL )
     {
+#ifdef MACOSX
+        static const char* ENVVARNAME = "DYLD_LIBRARY_PATH";
+#else
         static const char* ENVVARNAME = "LD_LIBRARY_PATH";
-
+#endif
         char * libpath;
         int freeLibpath;
 
