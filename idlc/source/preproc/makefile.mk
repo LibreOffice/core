@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -58,6 +58,8 @@ OBJFILES=   \
 # --- CPP -------------------------------------------------------
 
 APP1TARGET= $(TARGET)
+APP1RPATH=SDK
+
 .IF "$(GUI)" != "UNX"
 .IF "$(COM)" != "GCC"
 APP1OBJS=$(OBJ)$/cpp.obj
