@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY olink.001.xml SYSTEM "olink.001.xml" NDATA SGML>
+]>
+<article>
+<articleinfo>
+<title>Unit Test: olink.001</title>
+<releaseinfo role="CVS">$Id: olink.001.xml,v 1.2 2008-07-11 07:52:21 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+<modespec id="olink">file:///sourceforge/projects/docbook/testdocs/tests/olink.001.html</modespec>
+</articleinfo>
+
+<para>This is an <olink targetdocent="olink.001.xml" linkmode="olink">OLink</olink>
+with a linkmode. (It is self-referential).</para>
+
+<para>This is an <olink targetdocent="olink.001.xml">OLink</olink>
+without a linkmode. (It is also self-referential).</para>
+
+</article>

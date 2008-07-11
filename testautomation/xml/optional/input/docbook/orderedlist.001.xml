@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: orderedlist.001</title>
+<releaseinfo role="CVS">$Id: orderedlist.001.xml,v 1.2 2008-07-11 07:52:30 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<orderedlist>
+  <listitem><para>Level 1</para>
+    <orderedlist>
+    <listitem><para>Level 2</para>
+      <orderedlist>
+      <listitem id="someOLI"><para>Level 3</para>
+        <orderedlist>
+        <listitem><para>Level 4</para>
+          <orderedlist>
+          <listitem><para>Level 5</para>
+            <orderedlist>
+            <listitem override="13"><para>Level 6, override=13</para>
+            </listitem>
+            </orderedlist>
+          </listitem>
+          </orderedlist>
+        </listitem>
+        </orderedlist>
+    </listitem>
+    </orderedlist>
+  </listitem>
+  </orderedlist>
+</listitem>
+</orderedlist>
+
+</article>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY blah "<para>Blah blah blah blah. Blah blah blah blah. Blah blah blah blah.
+Blah blah blah blah blah blah blah blah. Blah blah blah blah.
+</para>">
+]>
+<book id="book">
+<bookinfo>
+<title>Unit Test: lot.001</title>
+<releaseinfo role="CVS">$Id: lot.001.xml,v 1.2 2008-07-11 07:51:35 rt Exp $
+</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</bookinfo>
+
+<chapter id="chap1"><title>First Chapter</title>
+
+&blah;
+
+<figure id="figduck1"><title>A Test Figure</title>
+<programlisting>
+A figure. Just to test the numeration.</programlisting>
+</figure>
+
+<section><title>First Section</title>
+
+&blah;
+
+</section>
+</chapter>
+
+<chapter id="chap2"><title>Second Chapter</title>
+
+&blah;
+
+<figure id="figduck2"><title>A Test Figure</title>
+<programlisting>
+A figure. Just to test the numeration.</programlisting>
+</figure>
+
+<sidebar><title>A Sidebar</title>
+
+&blah;
+
+<figure id="figduck3"><title>A Test Figure</title>
+<programlisting>
+A figure. Just to test the numeration.</programlisting>
+</figure>
+
+&blah;
+
+</sidebar>
+</chapter>
+</book>

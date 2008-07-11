@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook EBNF Module V1.0//EN"
+                  "http://www.oasis-open.org/docbook/xml/ebnf/1.0/dbebnf.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: productionset.003</title>
+<releaseinfo role="CVS">$Id: productionset.003.xml,v 1.2 2008-07-11 07:53:37 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<productionset><title>Standalone Document Declaration</title>
+<production id="NT-SDDecl">
+<lhs>SDDecl</lhs>
+<rhs><nonterminal def="#NT-S">S</nonterminal> 'standalone' <nonterminal def="#NT-Eq">Eq</nonterminal>
+<!-- The above line break in the source file has nothing to do with the
+line breaks in the output. -->
+(("'" ('yes' | 'no') "'") | ('"' ('yes' | 'no') '"'))
+</rhs>
+<constraint linkend="check-rmd"/>
+</production>
+</productionset>
+
+<constraintdef id="check-rmd" role="VC">
+<title>Standalone Document Declaration</title>
+<para>Some description...</para>
+</constraintdef>
+
+</article>

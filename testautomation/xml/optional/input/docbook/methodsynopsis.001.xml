@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article id="article">
+<articleinfo>
+<title>Unit Test: methodsynopsis.001.xml</title>
+<releaseinfo role="CVS">$Id: methodsynopsis.001.xml,v 1.2 2008-07-11 07:51:56 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<para>Here's a <sgmltag>methodsynopsis</sgmltag> in a <sgmltag>classsynopsis</sgmltag>:
+</para>
+
+<classsynopsis>
+<ooclass>
+<classname>Foo</classname>
+</ooclass>
+<methodsynopsis>
+<modifier>public</modifier>
+<modifier>static</modifier>
+<type>double</type>
+<methodname>getQuote</methodname>
+<methodparam>
+<type>String</type>
+<parameter>symbol</parameter>
+</methodparam>
+<methodparam>
+<type>double</type>
+<parameter>price</parameter>
+</methodparam>
+</methodsynopsis>
+</classsynopsis>
+
+<para>Here's a <sgmltag>methodsynopsis</sgmltag>
+<emphasis>outside</emphasis> a <sgmltag>classsynopsis</sgmltag>:
+</para>
+
+<methodsynopsis>
+<modifier>public</modifier>
+<modifier>static</modifier>
+<type>double</type>
+<methodname>getQuote</methodname>
+<methodparam>
+<type>String</type>
+<parameter>symbol</parameter>
+</methodparam>
+<methodparam>
+<type>double</type>
+<parameter>price</parameter>
+</methodparam>
+</methodsynopsis>
+
+</article>
