@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undotab.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -230,7 +230,6 @@ public:
                     ScUndoMakeScenario(
                             ScDocShell* pNewDocShell,
                             SCTAB nSrc, SCTAB nDest,
-                            ScDocument* pUndo,
                             const String& rN, const String& rC,
                             const Color& rCol, USHORT nF,
                             const ScMarkData& rMark );
@@ -246,12 +245,12 @@ public:
 private:
     SCTAB       nSrcTab;
     SCTAB       nDestTab;
-    ScDocument* pUndoDoc;
     String      aName;
     String      aComment;
     Color       aColor;
     USHORT      nFlags;
     ScMarkData  aMarkData;
+    SdrUndoAction* pDrawUndo;
 };
 
 
