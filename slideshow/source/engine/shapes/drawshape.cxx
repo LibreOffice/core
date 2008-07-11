@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawshape.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1056,8 +1056,14 @@ namespace slideshow
         }
 
         // hyperlink support
-        void DrawShape::prepareHyperlinkIndices()
+        void DrawShape::prepareHyperlinkIndices() const
         {
+            if ( !maHyperlinkIndices.empty())
+            {
+                maHyperlinkIndices.clear();
+                maHyperlinkRegions.clear();
+            }
+
             sal_Int32 nIndex = 0;
             for ( MetaAction * pCurrAct = mpCurrMtf->FirstAction();
                   pCurrAct != 0; pCurrAct = mpCurrMtf->NextAction() )
@@ -1423,6 +1429,11 @@ namespace slideshow
                                             DocTreeNode::NodeType   eNodeType ) const // throw ShapeLoadFailedException
         {
             ensureVerboseMtfComments();
+
+            if ( hasHyperlinks())
+            {
+                prepareHyperlinkIndices();
+            }
 
             return maSubsetting.getTreeNode( nNodeIndex, eNodeType );
         }
