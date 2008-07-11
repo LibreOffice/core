@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pagechg.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2071,6 +2071,17 @@ void lcl_MoveAllLowers( SwFrm* pFrm, const Point& rOffset )
 // PAGES01: Calculate how the pages have to be positioned
 void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVisArea )
 {
+    // --> OD 2008-07-07 #i91432#
+    // No calculation of page positions, if only an empty page is present.
+    // This situation occurs when <SwRootFrm> instance is in construction
+    // and the document contains only left pages.
+    if ( Lower()->GetNext() == 0 &&
+         static_cast<SwPageFrm*>(Lower())->IsEmptyPage() )
+    {
+        return;
+    }
+    // <--
+
     if ( !pVisArea )
     {
         // no early return for bNewPage
