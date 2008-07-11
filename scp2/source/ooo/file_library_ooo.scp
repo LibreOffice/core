@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_library_ooo.scp,v $
- * $Revision: 1.298 $
+ * $Revision: 1.299 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1589,9 +1589,9 @@ File gid_File_Lib_Xslt
     Dir = gid_Dir_Program;
   #ifdef UNX
     #ifdef MACOSX
-       Name = STRING(CONCAT3(libxslt,.1.1.16,UNXSUFFIX));
+       Name = STRING(CONCAT8(libxslt,.,LIBXSLT_MAJOR,.,LIBXSLT_MINOR,.,LIBXSLT_MICRO,UNXSUFFIX));
     #else
-       Name = STRING(CONCAT3(libxslt,UNXSUFFIX,.1.1.16));
+       Name = STRING(CONCAT8(libxslt,UNXSUFFIX,.,LIBXSLT_MAJOR,.,LIBXSLT_MINOR,.,LIBXSLT_MICRO));
     #endif
   #else
    #ifdef _gcc3
