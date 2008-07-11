@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentinfo.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +60,7 @@ namespace comphelper {
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::frame::XModel;
+    using ::com::sun::star::frame::XTitle;
     using ::com::sun::star::frame::XController;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::document::XDocumentPropertiesSupplier;
@@ -161,6 +162,19 @@ namespace comphelper {
                 nLastSepPos = sDocURL.lastIndexOf( '/' );
             }
             sTitle = sDocURL.copy( nLastSepPos + 1 );
+
+            if ( sTitle.getLength() != 0 )
+                return sTitle;
+
+            // 5.
+            // <-- #i88104# (05-16-08) TKR: use the new XTitle Interface to get the Title -->
+
+            Reference< XTitle > xTitle( _rxDocument, UNO_QUERY );
+            if ( xTitle.is() )
+            {
+                if ( xTitle->getTitle().getLength() != 0 )
+                    return xTitle->getTitle();
+            }
         }
         catch ( const Exception& )
         {
