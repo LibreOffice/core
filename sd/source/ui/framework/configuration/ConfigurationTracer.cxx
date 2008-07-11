@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ConfigurationTracer.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,16 +44,16 @@ void ConfigurationTracer::TraceConfiguration (
     const char* pMessage)
 {
 #ifdef DEBUG
-    OSL_TRACE("%s at %p {", pMessage, rxConfiguration.get());
+    OSL_TRACE("%s at %p {\n", pMessage, rxConfiguration.get());
     if (rxConfiguration.is())
     {
         TraceBoundResources(rxConfiguration, NULL, 0);
     }
     else
     {
-        OSL_TRACE("    empty");
+        OSL_TRACE("    empty\n");
     }
-    OSL_TRACE("}");
+    OSL_TRACE("}\n");
 #else
     (void)rxConfiguration;
     (void)pMessage;
@@ -77,7 +77,7 @@ void ConfigurationTracer::TraceBoundResources (
         ::rtl::OUString sLine (aResourceList[nIndex]->getResourceURL());
         for (int i=0; i<nIndentation; ++i)
             sLine = sIndentation + sLine;
-        OSL_TRACE("%s", OUStringToOString(sLine, RTL_TEXTENCODING_UTF8).getStr());
+        OSL_TRACE("%s\n", OUStringToOString(sLine, RTL_TEXTENCODING_UTF8).getStr());
         TraceBoundResources(rxConfiguration, aResourceList[nIndex], nIndentation+1);
     }
 #else
