@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bitmap2.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -750,12 +750,24 @@ BOOL Bitmap::ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, BOOL bCompre
 
     if( maPrefSize.Width() && maPrefSize.Height() && ( maPrefMapMode != aMapPixel ) )
     {
-        const Size aSize100( OutputDevice::LogicToLogic( maPrefSize, maPrefMapMode, MAP_100TH_MM ) );
-
-        if( aSize100.Width() && aSize100.Height() )
+        // #i48108# Try to recover xpels/ypels as previously stored on
+        // disk. The problem with just converting maPrefSize to 100th
+        // mm and then relating that to the bitmap pixel size is that
+        // MapMode is integer-based, and suffers from roundoffs,
+        // especially if maPrefSize is small. Trying to circumvent
+        // that by performing part of the math in floating point.
+        const Size aScale10000(
+            OutputDevice::LogicToLogic( Size(100000L,
+                                             100000L),
+                                        maPrefMapMode,
+                                        MAP_100TH_MM ) );
+        const double fScaleX((double)aScale10000.Width() * maPrefSize.Width());
+        const double fScaleY((double)aScale10000.Height() * maPrefSize.Height());
+        if( fabs(fScaleX) > 0.000000001 &&
+            fabs(fScaleY) > 0.000000001 )
         {
-            aHeader.nXPelsPerMeter = ( rAcc.Width() * 100000UL ) / aSize100.Width();
-            aHeader.nYPelsPerMeter = ( rAcc.Height() * 100000UL ) / aSize100.Height();
+            aHeader.nXPelsPerMeter = (UINT32)(rAcc.Width() / fScaleX + .5);
+            aHeader.nYPelsPerMeter = (UINT32)(rAcc.Height() / fScaleY + .5);
         }
     }
 
