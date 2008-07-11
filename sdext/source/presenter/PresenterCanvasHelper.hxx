@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterCanvasHelper.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,31 +63,21 @@ public:
         const css::awt::Rectangle& rBackgroundBoundingBox,
         const css::awt::Rectangle& rContentBoundingBox) const;
 
-    void PaintTexture (
-        const css::uno::Reference<css::rendering::XBitmap>& rxTexture,
+    static void PaintRectangle (
+        const SharedBitmapDescriptor& rpBitmap,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const css::awt::Rectangle& rRepaintBox,
-        const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxPolygon) const;
+        const css::awt::Rectangle& rBackgroundBoundingBox,
+        const css::awt::Rectangle& rContentBoundingBox);
 
-    void PaintTiledBitmap (
-        const css::uno::Reference<css::rendering::XBitmap>& rxTexture,
+    static void PaintRectangle (
+        const SharedBitmapDescriptor& rpBitmap,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const css::awt::Rectangle& rRepaintBox,
-        const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxPolygon,
-        const css::awt::Rectangle& rHole) const;
-
-    void PaintBitmap (
-        const css::uno::Reference<css::rendering::XBitmap>& rxBitmap,
-        const css::awt::Point& rLocation,
-        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-        const css::awt::Rectangle& rRepaintBox,
-        const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxPolygon) const;
-
-    void PaintColor (
-        const css::util::Color nColor,
-        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-        const css::awt::Rectangle& rRepaintBox,
-        const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxPolygon) const;
+        const css::awt::Rectangle& rBackgroundBoundingBox,
+        const css::awt::Rectangle& rContentBoundingBox,
+        const css::rendering::ViewState& rDefaultViewState,
+        const css::rendering::RenderState& rDefaultRenderState);
 
     static void SetDeviceColor(
         css::rendering::RenderState& rRenderState,
@@ -100,6 +90,40 @@ public:
 private:
     const css::rendering::ViewState maDefaultViewState;
     const css::rendering::RenderState maDefaultRenderState;
+
+    static void PaintTexture (
+        const css::uno::Reference<css::rendering::XBitmap>& rxTexture,
+        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+        const css::awt::Rectangle& rRepaintBox,
+        const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxPolygon,
+        const css::rendering::ViewState& rDefaultViewState,
+        const css::rendering::RenderState& rDefaultRenderState);
+
+    static void PaintTiledBitmap (
+        const css::uno::Reference<css::rendering::XBitmap>& rxTexture,
+        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+        const css::awt::Rectangle& rRepaintBox,
+        const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxPolygon,
+        const css::awt::Rectangle& rHole,
+        const css::rendering::ViewState& rDefaultViewState,
+        const css::rendering::RenderState& rDefaultRenderState);
+
+    static void PaintBitmap (
+        const css::uno::Reference<css::rendering::XBitmap>& rxBitmap,
+        const css::awt::Point& rLocation,
+        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+        const css::awt::Rectangle& rRepaintBox,
+        const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxPolygon,
+        const css::rendering::ViewState& rDefaultViewState,
+        const css::rendering::RenderState& rDefaultRenderState);
+
+    static void PaintColor (
+        const css::util::Color nColor,
+        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+        const css::awt::Rectangle& rRepaintBox,
+        const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxPolygon,
+        const css::rendering::ViewState& rDefaultViewState,
+        const css::rendering::RenderState& rDefaultRenderState);
 };
 
 } }
