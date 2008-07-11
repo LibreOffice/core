@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: vg $ $Date: 2006-03-15 09:29:18 $
+#  last change: $Author: rt $ $Date: 2008-07-11 14:25:00 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -54,22 +54,9 @@ OUT_APP_INC = $(OUT_INC)/$(APP_NAME)
 OUT_APP_GEN = $(OUT_MISC)/$(APP_NAME)
 OUT_APP_OBJ=$(OUT_OBJ)/$(APP_NAME)
 
-APP_TYPEFLAG = $(OUT_MISC)/cpp_$(APP_NAME)_types.flag
-
 CXXFILES = SimpleBootstrap_cpp.cxx
 
 OBJFILES = $(patsubst %.cxx,$(OUT_SLO_COMP)/%.$(OBJ_EXT),$(CXXFILES))
-
-TYPES = \
-	com.sun.star.lang.XMultiServiceFactory \
-	com.sun.star.lang.XComponent \
-	com.sun.star.bridge.XUnoUrlResolver \
-	com.sun.star.frame.XComponentLoader \
-	com.sun.star.lang.XMultiComponentFactory \
-	com.sun.star.container.XHierarchicalNameAccess \
-	com.sun.star.registry.XSimpleRegistry
-
-TYPESLIST = $(foreach t,$(TYPES),-T$(t))
 
 # Targets
 .PHONY: ALL
@@ -78,13 +65,7 @@ ALL : \
 
 include $(SETTINGS)/stdtarget.mk
 
-$(APP_TYPEFLAG) :
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(APP_TYPEFLAG)))
-	$(CPPUMAKER) -Gc -BUCR -O$(OUT_APP_INC) $(TYPESLIST) $(OFFICE_TYPE_LIBRARY)
-	echo flagged > $@
-
-$(OUT_APP_OBJ)/%.$(OBJ_EXT) : %.cxx $(APP_TYPEFLAG)
+$(OUT_APP_OBJ)/%.$(OBJ_EXT) : %.cxx $(SDKTYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_APP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
@@ -96,7 +77,10 @@ ifeq "$(OS)" "WIN"
 	  $< $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB)
 else
 	$(LINK) $(EXE_LINK_FLAGS) $(LINK_LIBS) -o $@ $< \
-	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB)
+	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB) $(CPPUHELPERDYLIB) $(CPPUDYLIB) $(SALHELPERDYLIB) $(SALDYLIB)
+ifeq "$(OS)" "MACOSX"
+	$(INSTALL_NAME_URELIBS_BIN)  $@
+endif
 endif
 
 $(OUT_BIN)/$(APP_NAME)$(EXE_EXT) : $(OUT_BIN)/_$(APP_NAME)$(EXE_EXT)
@@ -120,5 +104,4 @@ clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_APP_INC))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_APP_GEN))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_APP_OBJ))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(APP_TYPEFLAG)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/*SimpleBootstrap*))
