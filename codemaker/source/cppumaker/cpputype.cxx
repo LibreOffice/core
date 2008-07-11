@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cpputype.cxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -331,7 +331,7 @@ OString CppuType::dumpHeaderDefine(
 
     OStringBuffer tmpBuf(length);
 
-    tmpBuf.append('_');
+    tmpBuf.append("INCLUDED_");
     tmpBuf.append(m_typeName);
     tmpBuf.append('_');
     if (bExtended)
@@ -340,7 +340,6 @@ OString CppuType::dumpHeaderDefine(
         tmpBuf.append('_');
     }
     tmpBuf.append(prefix);
-    tmpBuf.append('_');
 
     OString tmp(tmpBuf.makeStringAndClear().replace('/', '_').toAsciiUpperCase());
 
