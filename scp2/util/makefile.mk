@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.53 $
+# $Revision: 1.54 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -353,10 +353,9 @@ SCP3FILES = ure_standalone.par  \
 # ------------------------------------------------------------------------
 # SDK
 
-SCP4LINK_PRODUCT_TYPE = sdk
+SCP4LINK_PRODUCT_TYPE = osl
 SCP4TARGET = sdkoo
 SCP4FILES = sdkoo.par
 
 # --- target -------------------------------------------------------------
 .INCLUDE :  target.mk
-
