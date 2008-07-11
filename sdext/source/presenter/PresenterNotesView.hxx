@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterNotesView.hxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,7 +98,7 @@ public:
 
     css::uno::Reference<css::awt::XWindow> GetWindow (void) const;
 
-    void ChangeFontSize (const double nSizeChange);
+    void ChangeFontSize (const sal_Int32 nSizeChange);
 
     // lang::XEventListener
 
@@ -154,32 +154,38 @@ public:
     virtual void SAL_CALL keyReleased (const css::awt::KeyEvent& rEvent)
         throw (css::uno::RuntimeException);
 
+    class BitmapContainer;
+    class BitmapFactory;
+
 private:
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewId;
     ::rtl::Reference<PresenterController> mpPresenterController;
-    css::uno::Reference<css::beans::XPropertySet> mxTextView;
     css::uno::Reference<css::awt::XWindow> mxParentWindow;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
-    css::uno::Reference<css::rendering::XBitmap> mxBitmap;
+    ::boost::scoped_ptr<BitmapContainer> mpBitmapContainer;
+    ::boost::shared_ptr<BitmapFactory> mpBitmapFactory;
     css::uno::Reference<css::drawing::XDrawPage> mxCurrentNotesPage;
-    PresenterTheme::SharedFontDescriptor mpFont;
-    css::awt::FontDescriptor maFontDescriptor;
     ::rtl::Reference<PresenterScrollBar> mpScrollBar;
     css::uno::Reference<css::awt::XWindow> mxToolBarWindow;
     css::uno::Reference<css::rendering::XCanvas> mxToolBarCanvas;
     ::rtl::Reference<PresenterToolBar> mpToolBar;
     ::rtl::Reference<PresenterButton> mpCloseButton;
+    css::util::Color maSeparatorColor;
     sal_Int32 mnSeparatorYLocation;
     css::geometry::RealRectangle2D maTextBoundingBox;
     SharedBitmapDescriptor mpBackground;
+    double mnTop;
+    sal_Int32 mnFontSize;
 
     void CreateToolBar (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     void Layout (void);
     void Paint (const css::awt::Rectangle& rUpdateBox);
+    void PaintToolBar (const css::awt::Rectangle& rUpdateBox);
+    void PaintText (const css::awt::Rectangle& rUpdateBox);
     void Invalidate (void);
-    void Scroll (const ::rtl::OUString& rsDistance);
+    void Scroll (const double nDistance);
     void SetTop (const double nTop);
     void UpdateScrollBar (void);
 
