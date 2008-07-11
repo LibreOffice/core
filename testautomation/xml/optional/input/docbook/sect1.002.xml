@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: sect1.002</title>
+<releaseinfo role="CVS">$Id: sect1.002.xml,v 1.2 2008-07-11 07:56:58 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+    <sect1 id="c1s2"><title>Section 2</title>
+      <para>blah.</para>
+      <sect2 id="c1s2s1"><title>Section 2.1</title>
+    <para>blah.</para>
+    <sect3 id="c1s2s1s1"><title>Section 2.1.1</title>
+      <para>blah.</para>
+      <sect4 id="c1s2s1s1s1"><title>Section 2.1.1.1</title>
+        <para>blah.</para>
+        <sect5 id="c1s2s1s1s1s1s"><title>Section 2.1.1.1.1</title>
+          <para>blah.</para>
+        </sect5>
+        <sect5 id="c1s2s1s1s1s2"><title>Section 2.1.1.1.2</title>
+          <para>blah.</para>
+        </sect5>
+        <sect5 id="c1s2s1s1s1s3"><title>Section 2.1.1.1.3</title>
+          <para>blah.</para>
+        </sect5>
+      </sect4>
+      <sect4 id="c1s2s1s1s2"><title>Section 2.1.1.2</title>
+        <para>blah.</para>
+      </sect4>
+      <sect4 id="c1s2s1s1s3"><title>Section 2.1.1.3</title>
+        <para>blah.</para>
+      </sect4>
+    </sect3>
+    <sect3 id="c1s2s1s2"><title>Section 2.1.2</title>
+      <para>blah.</para>
+    </sect3>
+    <sect3 id="c1s2s1s3"><title>Section 2.1.3</title>
+      <para>blah.</para>
+    </sect3>
+      </sect2>
+      <sect2 id="c1s2s2"><title>Section 2.2</title>
+    <para>blah.</para>
+      </sect2>
+      <sect2 id="c1s2s3"><title>Section 2.3</title>
+    <para>blah.</para>
+      </sect2>
+    </sect1>
+    <sect1 id="c1s3"><title>Section 3</title>
+      <para>blah.</para>
+    </sect1>
+
+</article>
