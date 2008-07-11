@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,12 +46,13 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 
-SLOFILES =	\
-        $(SLO)$/slideshow.obj \
-        $(SLO)$/showwin.obj\
-        $(SLO)$/slideshowimpl.obj\
-        $(SLO)$/slideshowviewimpl.obj\
-        $(SLO)$/PaneHider.obj
+SLOFILES =							\
+    $(SLO)$/slideshow.obj			\
+    $(SLO)$/showwin.obj				\
+    $(SLO)$/slideshowimpl.obj		\
+    $(SLO)$/slideshowviewimpl.obj	\
+    $(SLO)$/PaneHider.obj			\
+    $(SLO)$/SlideShowRestarter.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =	\
