@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.10 $
+# $Revision: 1.11 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -39,7 +39,7 @@ TARGET  = juh
 JARCLASSDIRS = com
 JARTARGET		= $(TARGET).jar
 JARCOMPRESS		= TRUE
-JARCLASSPATH = $(JARFILES)
+JARCLASSPATH = $(JARFILES) ../../lib/ ../bin/
 CUSTOMMANIFESTFILE = manifest
 
 # Special work necessary for building java reference with javadoc.
