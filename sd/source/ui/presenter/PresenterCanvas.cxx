@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterCanvas.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,7 +102,8 @@ public:
     PresenterCustomSprite (
         const rtl::Reference<PresenterCanvas>& rpCanvas,
         const Reference<rendering::XCustomSprite>& rxSprite,
-        const Reference<awt::XWindow>& rxBaseWindow);
+        const Reference<awt::XWindow>& rxBaseWindow,
+        const css::geometry::RealSize2D& rSpriteSize);
     virtual ~PresenterCustomSprite (void);
     virtual void SAL_CALL disposing (void)
         throw (RuntimeException);
@@ -142,6 +143,9 @@ private:
     rtl::Reference<PresenterCanvas> mpCanvas;
     Reference<rendering::XCustomSprite> mxSprite;
     Reference<awt::XWindow> mxBaseWindow;
+    geometry::RealPoint2D maPosition;
+    geometry::RealSize2D maSpriteSize;
+
     void ThrowIfDisposed (void)
         throw (css::lang::DisposedException);
 };
@@ -184,7 +188,6 @@ PresenterCanvas::PresenterCanvas (
       mpUpdateRequester(),
       maClipRectangle(),
       mbOffsetUpdatePending(true)
-
 {
     if (mxWindow.is())
         mxWindow->addWindowListener(this);
@@ -663,15 +666,16 @@ Reference<rendering::XCustomSprite> SAL_CALL
         return new PresenterCustomSprite(
             this,
             xSpriteCanvas->createCustomSprite(rSpriteSize),
-            mxSharedWindow);
-
-    if (mxUpdateCanvas.is())
+            mxSharedWindow,
+            rSpriteSize);
+    else if (mxUpdateCanvas.is())
         return new PresenterCustomSprite(
             this,
             mxUpdateCanvas->createCustomSprite(rSpriteSize),
-            mxUpdateWindow);
-
-    return NULL;
+            mxUpdateWindow,
+            rSpriteSize);
+    else
+        return NULL;
 }
 
 
@@ -1007,6 +1011,69 @@ awt::Point PresenterCanvas::GetOffset (const Reference<awt::XWindow>& rxBaseWind
 
 
 
+Reference<rendering::XPolyPolygon2D> PresenterCanvas::UpdateSpriteClip (
+    const Reference<rendering::XPolyPolygon2D>& rxOriginalClip,
+    const geometry::RealPoint2D& rLocation,
+    const geometry::RealSize2D& rSize)
+{
+    (void)rSize;
+
+    // Check used resources and just return the original clip when not
+    // every one of them is available.
+    if ( ! mxWindow.is())
+        return rxOriginalClip;
+
+    Reference<rendering::XGraphicDevice> xDevice (mxSharedCanvas->getDevice());
+    if ( ! xDevice.is())
+        return rxOriginalClip;
+
+    // Determine the bounds of the clip rectangle (the window border) in the
+    // coordinate system of the sprite.
+    const awt::Rectangle aWindowBox (mxWindow->getPosSize());
+    const double nMinX (-rLocation.X);
+    const double nMinY (-rLocation.Y);
+    const double nMaxX (aWindowBox.Width-rLocation.X);
+    const double nMaxY (aWindowBox.Height-rLocation.Y);
+
+    // Create a clip polygon.
+    Reference<rendering::XPolyPolygon2D> xPolygon;
+    if (rxOriginalClip.is())
+    {
+        // Combine the original clip with the window clip.
+        const ::basegfx::B2DPolyPolygon aOriginalClip (
+            ::canvas::tools::polyPolygonFromXPolyPolygon2D(rxOriginalClip));
+        ::basegfx::B2DRectangle aWindowRange (nMinX, nMinY, nMaxX, nMaxY);
+        const ::basegfx::B2DPolyPolygon aClippedClipPolygon (
+            ::basegfx::tools::clipPolyPolygonOnRange(
+                aOriginalClip,
+                aWindowRange,
+                true, /* bInside */
+                false /* bStroke */));
+        xPolygon = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+            xDevice,
+            aClippedClipPolygon);
+    }
+    else
+    {
+        // Create a new clip polygon from the window clip rectangle.
+        Sequence<Sequence<geometry::RealPoint2D> > aPoints (1);
+        aPoints[0] = Sequence<geometry::RealPoint2D>(4);
+        aPoints[0][0] = geometry::RealPoint2D(nMinX,nMinY);
+        aPoints[0][1] = geometry::RealPoint2D(nMaxX,nMinY);
+        aPoints[0][2] = geometry::RealPoint2D(nMaxX,nMaxY);
+        aPoints[0][3] = geometry::RealPoint2D(nMinX,nMaxY);
+        Reference<rendering::XLinePolyPolygon2D> xLinePolygon(
+            xDevice->createCompatibleLinePolyPolygon(aPoints));
+        if (xLinePolygon.is())
+            xLinePolygon->setClosed(0, sal_True);
+        xPolygon = Reference<rendering::XPolyPolygon2D>(xLinePolygon, UNO_QUERY);
+    }
+
+    return xPolygon;
+}
+
+
+
 
 void PresenterCanvas::ThrowIfDisposed (void)
     throw (css::lang::DisposedException)
@@ -1029,11 +1096,14 @@ void PresenterCanvas::ThrowIfDisposed (void)
 PresenterCustomSprite::PresenterCustomSprite (
     const rtl::Reference<PresenterCanvas>& rpCanvas,
     const Reference<rendering::XCustomSprite>& rxSprite,
-    const Reference<awt::XWindow>& rxBaseWindow)
+    const Reference<awt::XWindow>& rxBaseWindow,
+    const css::geometry::RealSize2D& rSpriteSize)
     : PresenterCustomSpriteInterfaceBase(m_aMutex),
       mpCanvas(rpCanvas),
       mxSprite(rxSprite),
-      mxBaseWindow(rxBaseWindow)
+      mxBaseWindow(rxBaseWindow),
+      maPosition(0,0),
+      maSpriteSize(rSpriteSize)
 {
 }
 
@@ -1072,16 +1142,23 @@ void SAL_CALL PresenterCustomSprite::setAlpha (const double nAlpha)
 
 
 
-void SAL_CALL PresenterCustomSprite::move (const geometry::RealPoint2D& rNewPos,
+void SAL_CALL PresenterCustomSprite::move (
+    const geometry::RealPoint2D& rNewPos,
     const rendering::ViewState& rViewState,
     const rendering::RenderState& rRenderState)
     throw (lang::IllegalArgumentException,RuntimeException)
 {
     ThrowIfDisposed();
+    maPosition = rNewPos;
     mxSprite->move(
         rNewPos,
         mpCanvas->MergeViewState(rViewState, mpCanvas->GetOffset(mxBaseWindow)),
         rRenderState);
+    // Clip sprite against window bounds.  This call is necessary because
+    // sprite clipping is done in the corrdinate system of the sprite.
+    // Therefore, after each change of the sprites location the window
+    // bounds have to be transformed into the sprites coordinate system.
+    clip(NULL);
 }
 
 
@@ -1101,7 +1178,10 @@ void SAL_CALL PresenterCustomSprite::clip (const Reference<rendering::XPolyPolyg
     throw (RuntimeException)
 {
     ThrowIfDisposed();
-    mxSprite->clip(rxClip);
+    // The clip region is expected in the coordinate system of the sprite.
+    // UpdateSpriteClip() integrates the window bounds, transformed into the
+    // sprites coordinate system, with the given clip.
+    mxSprite->clip(mpCanvas->UpdateSpriteClip(rxClip, maPosition, maSpriteSize));
 }
 
 
@@ -1161,6 +1241,7 @@ void PresenterCustomSprite::ThrowIfDisposed (void)
             static_cast<uno::XWeak*>(this));
     }
 }
+
 
 
 
