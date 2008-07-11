@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.20 $
+#  $Revision: 1.21 $
 #
-#  last change: $Author: obo $ $Date: 2007-01-25 11:10:01 $
+#  last change: $Author: rt $ $Date: 2008-07-11 14:31:23 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -106,7 +106,7 @@ $(COMP_GEN_OUT)/%.rdb : $(GEN_URDFILES)
 
 $(GEN_CLASSFILES) : $(COMP_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(JAVAMAKER) -BUCR -nD $(GEN_TYPELIST) -O$(COMP_CLASS_OUT) $(COMP_RDB) $(OFFICE_TYPE_LIBRARY)
+	$(JAVAMAKER) -BUCR -nD $(GEN_TYPELIST) -O$(COMP_CLASS_OUT) $(COMP_RDB) -X$(URE_TYPES) -X$(OFFICE_TYPES)
 
 $(COMP_CLASSFILES) : $(COMP_JAVAFILES) $(GEN_CLASSFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
