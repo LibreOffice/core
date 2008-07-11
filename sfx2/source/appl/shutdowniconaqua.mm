@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shutdowniconaqua.mm,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,7 +59,8 @@ using namespace ::com::sun::star::beans;
 #define MI_IMPRESS                 4
 #define MI_DRAW                    5
 #define MI_BASE                    6
-#define MI_TEMPLATE                7
+#define MI_MATH                    7
+#define MI_TEMPLATE                8
 
 
 @interface QSMenuExecute : NSObject
@@ -90,6 +91,9 @@ using namespace ::com::sun::star::beans;
         break;
     case MI_BASE:
         ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( BASE_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+        break;
+    case MI_MATH:
+        ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( MATH_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
         break;
     case MI_TEMPLATE:
         ShutdownIcon::FromTemplate();
@@ -212,7 +216,8 @@ void aqua_init_systray()
                 { SvtModuleOptions::E_SCALC,      MI_CALC,    CALC_URL },
                 { SvtModuleOptions::E_SIMPRESS,   MI_IMPRESS, IMPRESS_WIZARD_URL },
                 { SvtModuleOptions::E_SDRAW,      MI_DRAW,    DRAW_URL },
-                { SvtModuleOptions::E_SDATABASE,  MI_BASE,    BASE_URL }
+                { SvtModuleOptions::E_SDATABASE,  MI_BASE,    BASE_URL },
+                { SvtModuleOptions::E_SMATH,      MI_MATH,    MATH_URL }
             };
 
             // insert the menu entries for launching the applications
