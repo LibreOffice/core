@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.10 $
+#  $Revision: 1.11 $
 #
-#  last change: $Author: obo $ $Date: 2007-01-25 11:04:13 $
+#  last change: $Author: rt $ $Date: 2008-07-11 14:17:49 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -60,12 +60,12 @@ COMP_IMPL_NAME=$(COMP_NAME).uno.$(SHAREDLIB_EXT)
 APP1_NAME= TestCppComponent
 APP1_BINARY= $(OUT_BIN)/$(APP1_NAME)$(EXE_EXT)
 
-COMP_XML=$(COMP_NAME).uno.xml
 COMP_RDB_NAME = $(COMP_NAME).uno.rdb
 COMP_RDB = $(SAMPLE_GEN_OUT)/$(COMP_RDB_NAME)
 COMP_PACKAGE = $(OUT_BIN)/$(COMP_NAME).$(UNOOXT_EXT)
 COMP_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOOXT_EXT)")
 COMP_UNOPKG_MANIFEST = $(SAMPLE_GEN_OUT)/$(COMP_NAME)/META-INF/manifest.xml
+COMP_MAPFILE = $(SAMPLE_GEN_OUT)/$(COMP_NAME).uno.map
 
 COMP_REGISTERFLAG = $(SAMPLE_GEN_OUT)/devguide_$(COMP_NAME)_register_component.flag
 COMP_TYPEFLAG = $(SAMPLE_GEN_OUT)/devguide_$(COMP_NAME)_types.flag
@@ -79,21 +79,10 @@ SLOFILES = $(patsubst %.cxx,$(SAMPLE_SLO_OUT)/%.$(OBJ_EXT),$(CXXFILES))
 
 GENURDFILES = $(patsubst %.idl,$(SAMPLE_GEN_OUT)/%.urd,$(IDLFILES))
 
-TYPES = $(shell $(XML2CMP) -types stdout $(COMP_XML))
-
-# some more types necessary for the demo application
-TYPES += \
-	com.sun.star.lang.XComponent \
-	com.sun.star.bridge.XUnoUrlResolver \
-	com.sun.star.frame.XComponentLoader \
-	com.sun.star.container.XHierarchicalNameAccess \
-	com.sun.star.uno.DeploymentException \
-	com.sun.star.registry.XSimpleRegistry
-
-
-TYPESLIST = $(foreach t,$(TYPES),-T$(t))
-GENHPPFILES = $(foreach t,$(TYPES),$(SAMPLE_INC_OUT)/$(subst .,/,$(t)).hpp)
-
+TYPELIST=-Tmy_module.XSomething  \
+	-Tmy_modules.MyService1 \
+	-Tmy_module.MyService2
+ 
 # Targets
 .PHONY: ALL
 ALL : \
@@ -110,15 +99,22 @@ $(SAMPLE_GEN_OUT)/%.rdb : $(GENURDFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(REGMERGE) $@ /UCR $(GENURDFILES)
 
-$(COMP_TYPEFLAG) : $(COMP_RDB) $(COMP_XML)
+$(COMP_TYPEFLAG) : $(COMP_RDB) $(SDKTYPEFLAG)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(CPPUMAKER) -Gc -BUCR -O$(SAMPLE_INC_OUT) $(TYPESLIST) $(COMP_RDB) $(OFFICE_TYPE_LIBRARY)
+	$(CPPUMAKER) -Gc -BUCR -O$(SAMPLE_INC_OUT) $(TYPESLIST) $(COMP_RDB) -X$(URE_TYPES) -X$(OFFICE_TYPES)
 	echo flagged > $@
 
 $(SAMPLE_SLO_OUT)/%.$(OBJ_EXT) : %.cxx $(COMP_TYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(SAMPLE_INC_OUT) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
+
+$(COMP_MAPFILE) : $(SLOFILES)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cat $(PRJ)/settings/component.uno.map > $(COMP_MAPFILE) 
+ifeq "$(OS)" "MACOSX"
+	nm -gx $(SLOFILES) | $(ADDSYMBOLS) >> $(COMP_MAPFILE)
+endif
 
 ifeq "$(OS)" "WIN"
 $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
@@ -129,10 +125,13 @@ $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) msvcrt.lib kernel32.lib
 	$(LINK_MANIFEST_VC8_ONLY)
 else
-$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
+$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES) $(COMP_MAPFILE)
 	-$(MKDIR) $(subst /,$(PS),$(@D)) && $(DEL) $(subst \\,\,$(subst /,$(PS),$@))
-	$(LINK) $(COMP_LINK_FLAGS) $(LINK_LIBS) -o $@ $^ \
-	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB)
+	$(LINK) $(COMP_LINK_FLAGS) $(LINK_LIBS) -o $@ $(SLOFILES) \
+	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB) $(CPPUHELPERDYLIB) $(CPPUDYLIB) $(SALDYLIB)
+ifeq "$(OS)" "MACOSX"
+	$(INSTALL_NAME_URELIBS)  $@
+endif
 endif	
 
 # rule for component package manifest
@@ -182,7 +181,10 @@ ifeq "$(OS)" "WIN"
 	  $< $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB)
 else
 	$(LINK) $(EXE_LINK_FLAGS) $(LINK_LIBS) -o $@ $< \
-	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB)
+	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB) $(CPPUHELPERDYLIB) $(CPPUDYLIB) $(SALHELPERDYLIB) $(SALDYLIB)
+ifeq "$(OS)" "MACOSX"
+	$(INSTALL_NAME_URELIBS_BIN)  $@
+endif
 endif
 
 $(OUT_BIN)/$(APP1_NAME)$(EXE_EXT) : $(OUT_BIN)/_$(APP1_NAME)$(EXE_EXT)
