@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: numrule.hxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,9 @@ class SwNodeNum;
 // --> OD 2008-02-19 #refactorlists#
 #include <vector>
 class SwTxtFmtColl;
+// <--
+// --> OD 2008-07-08 #i91400#
+class IDocumentListsAccess;
 // <--
 
 class Font;
@@ -266,7 +269,10 @@ public:
     void CheckCharFmts( SwDoc* pDoc );
 
     const String& GetName() const       { return sName; }
-    void SetName( const String& rNm ); // #i36749#
+    // --> OD 2008-07-08 #i91400#
+    void SetName( const String& rNm,
+                  IDocumentListsAccess& rDocListAccess ); // #i36749#
+    // <--
 
     BOOL IsAutoRule() const             { return bAutoRuleFlag; }
     void SetAutoRule( BOOL bFlag )      { bAutoRuleFlag = bFlag; }
