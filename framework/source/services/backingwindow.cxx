@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: backingwindow.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,6 +69,7 @@ using namespace framework;
 #define IMPRESS_WIZARD_URL     "private:factory/simpress?slot=6686"
 #define DRAW_URL        "private:factory/sdraw"
 #define BASE_URL        "private:factory/sdatabase?Interactive"
+#define MATH_URL        "private:factory/smath"
 #define TEMPLATE_URL    "slot:5500"
 #define OPEN_URL        ".uno:Open"
 
@@ -125,6 +126,8 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     maDrawButton( this, WB_CENTER | WB_BEVELBUTTON ),
     maDBText( this, WB_WORDBREAK | WB_VCENTER ),
     maDBButton( this, WB_CENTER | WB_BEVELBUTTON ),
+    maMathText( this, WB_WORDBREAK | WB_VCENTER ),
+    maMathButton( this, WB_CENTER | WB_BEVELBUTTON ),
     maTemplateText( this, WB_WORDBREAK | WB_VCENTER ),
     maTemplateButton( this, WB_CENTER | WB_BEVELBUTTON ),
     maOpenText( this, WB_WORDBREAK | WB_VCENTER ),
@@ -147,6 +150,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     loadImage( FwkResId( BMP_BACKING_IMPRESS ), maImpressButton );
     loadImage( FwkResId( BMP_BACKING_DRAW ), maDrawButton );
     loadImage( FwkResId( BMP_BACKING_DATABASE ), maDBButton );
+    loadImage( FwkResId( BMP_BACKING_FORMULA ), maMathButton );
     loadImage( FwkResId( BMP_BACKING_OPENFILE ), maOpenButton );
     loadImage( FwkResId( BMP_BACKING_OPENTEMPLATE ), maTemplateButton );
 
@@ -208,6 +212,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     maImpressButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:ImpressButton" ) ) ) );
     maDrawButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:DrawButton" ) ) ) );
     maDBButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:DBButton" ) ) ) );
+    maMathButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:MathButton" ) ) ) );
     maTemplateButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:TemplateButton" ) ) ) );
     maOpenButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:OpenButton" ) ) ) );
     maToolbox.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:Toolbox" ) ) ) );
@@ -288,6 +293,8 @@ void BackingWindow::initBackground()
     maDrawText.SetControlBackground( aTextBGColor );
     maDBText.SetControlForeground( maLabelTextColor );
     maDBText.SetControlBackground( aTextBGColor );
+    maMathText.SetControlForeground( maLabelTextColor );
+    maMathText.SetControlBackground( aTextBGColor );
     maTemplateText.SetControlForeground( maLabelTextColor );
     maTemplateText.SetControlBackground( aTextBGColor );
     maOpenText.SetControlForeground( maLabelTextColor );
@@ -423,11 +430,16 @@ void BackingWindow::initControls()
     layoutButtonAndText( BASE_URL, 0, aFileNewAppsAvailable,
                          aModuleOptions, SvtModuleOptions::E_SDATABASE,
                          maDBButton, maDBText, aMnemns );
-    layoutButtonAndText( NULL, 1, aFileNewAppsAvailable,
+    layoutButtonAndText( MATH_URL, 1, aFileNewAppsAvailable,
+                         aModuleOptions, SvtModuleOptions::E_SMATH,
+                         maMathButton, maMathText, aMnemns );
+
+    nYPos += 3*maButtonImageSize.Height() / 2;
+    layoutButtonAndText( NULL, -1, aFileNewAppsAvailable,
                          aModuleOptions, SvtModuleOptions::E_SWRITER,
                          maTemplateButton, maTemplateText, aMnemns, maTemplateString );
 
-    nYPos += 2*maButtonImageSize.Height();
+    nYPos += 10;
     layoutButtonAndText( NULL, -1, aFileNewAppsAvailable,
                          aModuleOptions, SvtModuleOptions::E_SWRITER,
                          maOpenButton, maOpenText, aMnemns, maOpenString );
@@ -612,10 +624,15 @@ void BackingWindow::Resize()
     maDBButton.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos, nYPos ), maButtonImageSize );
     maDBText.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + maButtonImageSize.Width() + 10, nYPos ),
                                   Size( mnColumnWidth[0] - maButtonImageSize.Width() - 10, maButtonImageSize.Height() ) );
-    maTemplateButton.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + mnColumnWidth[0], nYPos ), maButtonImageSize );
-    maTemplateText.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + maButtonImageSize.Width() + 10 + mnColumnWidth[0], nYPos ),
+    maMathButton.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + mnColumnWidth[0], nYPos ), maButtonImageSize );
+    maMathText.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + maButtonImageSize.Width() + 10 + mnColumnWidth[0], nYPos ),
                                     Size( mnColumnWidth[1] - maButtonImageSize.Width() - 10, maButtonImageSize.Height() ) );
-    nYPos += 2*maButtonImageSize.Height();
+
+    nYPos += 3*maButtonImageSize.Height()/2;
+    maTemplateButton.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos, nYPos ), maButtonImageSize );
+    maTemplateText.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + maButtonImageSize.Width() + 10, nYPos ),
+                                Size( mnColumnWidth[0]+mnColumnWidth[1] - maButtonImageSize.Width() - 10, maButtonImageSize.Height() ) );
+    nYPos += maButtonImageSize.Height() + 10;
     maOpenButton.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos, nYPos ), maButtonImageSize );
     maOpenText.SetPosSizePixel( Point( maControlRect.Left() + nBtnPos + maButtonImageSize.Width() + 10, nYPos ),
                                 Size( mnColumnWidth[0]+mnColumnWidth[1] - maButtonImageSize.Width() - 10, maButtonImageSize.Height() ) );
@@ -710,6 +727,8 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
         dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(DRAW_URL) ) );
     else if( pButton == &maDBButton )
         dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(BASE_URL) ) );
+    else if( pButton == &maMathButton )
+        dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(MATH_URL) ) );
     else if( pButton == &maOpenButton )
     {
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
@@ -749,6 +768,8 @@ Window* BackingWindow::GetParentLabelFor( const Window* pLabel ) const
         pRet = &maDrawButton;
     else if( pLabel == &maDBText )
         pRet = &maDBButton;
+    else if( pLabel == &maMathText )
+        pRet = &maMathButton;
     else if( pLabel == &maTemplateText )
         pRet = &maTemplateButton;
     else if( pLabel == &maOpenText )
@@ -771,6 +792,8 @@ Window* BackingWindow::GetParentLabeledBy( const Window* pLabeled ) const
         pRet = &maDrawText;
     else if( pLabeled == &maDBButton )
         pRet = &maDBText;
+    else if( pLabeled == &maMathButton )
+        pRet = &maMathText;
     else if( pLabeled == &maTemplateButton )
         pRet = &maTemplateText;
     else if( pLabeled == &maOpenButton )
