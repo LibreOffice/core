@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shutdowniconw32.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,6 +88,7 @@ using namespace ::osl;
 #   define IDM_DRAW                    7
 #   define IDM_BASE                    8
 #   define IDM_TEMPLATE                9
+#   define IDM_MATH                   12
 #endif
 #define IDM_INSTALL                 10
 #define IDM_UNINSTALL               11
@@ -243,7 +244,8 @@ static HMENU createSystrayMenu( )
         { SvtModuleOptions::E_SCALC,      IDM_CALC,   ICON_SPREADSHEET_DOCUMENT,  CALC_URL },
         { SvtModuleOptions::E_SIMPRESS,   IDM_IMPRESS,ICON_PRESENTATION_DOCUMENT, IMPRESS_WIZARD_URL },
         { SvtModuleOptions::E_SDRAW,      IDM_DRAW,   ICON_DRAWING_DOCUMENT,      DRAW_URL },
-        { SvtModuleOptions::E_SDATABASE,  IDM_BASE,   ICON_DATABASE_DOCUMENT,     BASE_URL }
+        { SvtModuleOptions::E_SDATABASE,  IDM_BASE,   ICON_DATABASE_DOCUMENT,     BASE_URL },
+        { SvtModuleOptions::E_SMATH,      IDM_MATH,   ICON_MATH_DOCUMENT,         MATH_URL },
     };
 
     // insert the menu entries for launching the applications
@@ -434,6 +436,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                         case IDM_DRAW:
                         case IDM_TEMPLATE:
                         case IDM_BASE:
+                        case IDM_MATH:
                             break;
 #endif
                         case IDM_INSTALL:
@@ -535,6 +538,10 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 case IDM_BASE:
                     if (checkOEM())
                     ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( BASE_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
+                break;
+                case IDM_MATH:
+                    if (checkOEM())
+                    ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( MATH_URL ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
                 break;
                 case IDM_TEMPLATE:
                     if ( !ShutdownIcon::bModalMode && checkOEM())
