@@ -8,7 +8,7 @@
 #
 # $RCSfile: odk_rules.pmk,v $
 #
-# $Revision: 1.31 $
+# $Revision: 1.32 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -31,6 +31,14 @@
 
 
 $(DESTDIRDOCU)$/%.html : $(PRJ)$/docs$/%.html
+    @@-rm -f $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.html : $(PRJ)$/examples$/%.html
+    @@-rm -f $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIR)$/index.html : $(PRJ)$/index.html
     @@-rm -f $@
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
@@ -77,12 +85,26 @@ $(DESTDIR)$/setsdkenv_unix : $(PRJ)$/setsdkenv_unix
     -chmod 755 $@
 .ENDIF
 
+#.IF "$(USE_SHELL)"=="4nt"
+#	$(TYPE) $< | $(SED) "s/__SDKNAME__/$(SDKDIRNAME)/" > $@
+#.ELSE
+#	$(TYPE) $< | $(SED) 's#__SDKNAME__#$(SDKDIRNAME)#' > $@
+#.ENDIF			
+
 $(DESTDIR)$/setsdkenv_unix.%.in : $(PRJ)$/setsdkenv_unix.%.in
     @@-rm -f $@
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     -chmod 644 $@
 .ENDIF
+
+$(DESTDIR)$/setsdkenv_windows.bat : $(PRJ)$/setsdkenv_windows.bat
+    @@-rm -f $@
+.IF "$(USE_SHELL)"=="4nt"
+    $(TYPE) $< | $(SED) "s/__SDKNAME__/$(SDKDIRNAME)/" > $@
+.ELSE
+    $(TYPE) $< | $(SED) 's#__SDKNAME__#$(SDKDIRNAME)#' > $@
+.ENDIF			
 
 $(DESTDIR)$/%.bat : $(PRJ)$/%.bat
     @@-rm -f $@
@@ -154,6 +176,7 @@ $(DESTDIRJAR)$/com$/sun$/star$/lib$/loader$/%.class : $(CLASSDIR)$/com$/sun$/sta
 
 $(DESTDIRIDL)$/% : $(IDLOUT)$/%
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+    @touch $(IDL_DOCU_CLEANUP_FLAG)
 
 $(DESTDIRINC)$/udkversion.mk :
     @@-rm -f $@
@@ -192,6 +215,9 @@ $(DESTDIRSETTINGS)$/component.uno.map : $(SOLARENV)$/bin$/addsym.awk $(SOLARENV)
     @@-$(RM) -f $@
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SOLARENV)$/src$/component.map | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
+.IF "$(OS)"=="MACOSX"
+    tr -d "\015" < $(SOLARENV)$/src$/component.map | tail --lines +3 | head -3 | sed -e 's/.*component/_component/g' -e 's/;[ ]*$//' > $@
+.ENDIF
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SOLARENV)$/src$/component.map > $@
 .ENDIF          # "$(COMID)"=="gcc3"
