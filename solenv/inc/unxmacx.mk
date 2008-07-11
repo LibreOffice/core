@@ -8,7 +8,7 @@
 #
 # $RCSfile: unxmacx.mk,v $
 #
-# $Revision: 1.33 $
+# $Revision: 1.34 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -196,6 +196,7 @@ LINKFLAGSDEFS*=-Wl,-multiply_defined,suppress
 LINKFLAGSRUNPATH_URELIB=-install_name '@__________________________________________________URELIB$/$(@:f)'
 LINKFLAGSRUNPATH_UREBIN=
 LINKFLAGSRUNPATH_OOO=-install_name '@__________________________________________________OOO$/$(@:f)'
+LINKFLAGSRUNPATH_SDK=
 LINKFLAGSRUNPATH_BRAND=
 LINKFLAGSRUNPATH_OXT=
 LINKFLAGSRUNPATH_NONE=
