@@ -1,19 +1,29 @@
 #! /bin/sh
 
+OSTYPE=`uname -s`
+HOSTNAME=`hostname`
 CURRENTDIR=`/bin/pwd`
 SDKTMPDIR=`dirname $0`
-SDKDIRECTORY=`(cd $SDKTMPDIR && pwd && cd $CURRENTDIR) | head -n 1`
-OO_SDK_NAME=`basename $SDKDIRECTORY`
+OO_SDK_HOME=`(cd $SDKTMPDIR && pwd && cd $CURRENTDIR) | head -n 1`
+OOVERSION=`cat $OO_SDK_HOME/settings/dk.mk | tail +2 | head -1 | cut -d"=" -f2 | cut -d"." -f1,2`
+if [ "$OSTYPE" = "Darwin" ] 
+then
+    OO_SDK_NAME=`basename $OO_SDK_HOME`
+else
+    OO_SDK_NAME=openoffice.org${OOVERSION}_sdk
+fi
+
+export OO_SDK_HOME
 
 if [ "$1" = "--force-configure" ]
 then
-    if [ -r $HOME/$OO_SDK_NAME/setsdkenv_unix.sh ]
+    if [ -r $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.sh ]
     then
-	rm $HOME/$OO_SDK_NAME/setsdkenv_unix.sh
+	rm $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.sh
     fi	
-    if [ -r $HOME/$OO_SDK_NAME/setsdkenv_unix.csh ]
+    if [ -r $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.csh ]
     then
-	rm $HOME/$OO_SDK_NAME/setsdkenv_unix.csh
+	rm $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.csh
     fi
     shift
 elif [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ -n "$1" ]
@@ -32,9 +42,9 @@ then
 fi
 
 # source the prepared environment and start a new shell
-if [ -r $HOME/$OO_SDK_NAME/setsdkenv_unix.sh ]
+if [ -r $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.sh ]
 then
-    . $HOME/$OO_SDK_NAME/setsdkenv_unix.sh
+    . $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.sh
 else
     echo 
     echo " ************************************************************************"
@@ -44,13 +54,13 @@ else
     echo " *"
     echo " ************************************************************************"
     echo 
-    perl $SDKDIRECTORY/configure.pl $SDKDIRECTORY
+    perl $OO_SDK_HOME/configure.pl $HOSTNAME $OO_SDK_HOME $OO_SDK_NAME
 
-    . $HOME/$OO_SDK_NAME/setsdkenv_unix.sh
+    . $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.sh
 fi
 
 "$SHELL" "$@"
 echo  Shell terminated.
 
-TERMHEAD=`hostname`
+TERMHEAD=$HOSTNAME
 echo "]2;$TERMHEAD"
