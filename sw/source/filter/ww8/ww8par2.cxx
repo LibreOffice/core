@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par2.cxx,v $
- * $Revision: 1.144 $
+ * $Revision: 1.145 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2739,6 +2739,7 @@ void WW8TabDesc::FinishSwTable()
                 }
             }
         }
+        pIo->pFmtOfJustInsertedApo = 0;
         DELETEZ( pMergeGroups );
     }
 }
