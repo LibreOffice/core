@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: astexpression.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,22 +45,6 @@
 
 using namespace ::rtl;
 
-AstExpression::AstExpression(AstExpression *pExpr, ExprType et)
-    : m_combOperator(EC_none)
-    , m_subExpr1(NULL)
-    , m_subExpr2(NULL)
-    , m_exprValue(NULL)
-    , m_pSymbolicName(NULL)
-{
-    fillDefinitionDetails();
-
-    m_exprValue = pExpr->coerce(et);
-    if ( !m_exprValue)
-    {
-        idlc()->error()->coercionError(pExpr, et);
-    }
-}
-
 AstExpression::AstExpression(ExprComb c, AstExpression *pExpr1, AstExpression *pExpr2)
     : m_combOperator(c)
     , m_subExpr1(pExpr1)
@@ -70,34 +54,6 @@ AstExpression::AstExpression(ExprComb c, AstExpression *pExpr1, AstExpression *p
 {
     fillDefinitionDetails();
 
-}
-
-AstExpression::AstExpression(sal_Int16 s)
-    : m_combOperator(EC_none)
-    , m_subExpr1(NULL)
-    , m_subExpr2(NULL)
-    , m_exprValue(NULL)
-    , m_pSymbolicName(NULL)
-{
-    fillDefinitionDetails();
-
-    m_exprValue = new AstExprValue();
-    m_exprValue->et = ET_short;
-    m_exprValue->u.sval = s;
-}
-
-AstExpression::AstExpression(sal_uInt16 us)
-    : m_combOperator(EC_none)
-    , m_subExpr1(NULL)
-    , m_subExpr2(NULL)
-    , m_exprValue(NULL)
-    , m_pSymbolicName(NULL)
-{
-    fillDefinitionDetails();
-
-    m_exprValue = new AstExprValue();
-    m_exprValue->et = ET_ushort;
-    m_exprValue->u.usval = us;
 }
 
 AstExpression::AstExpression(sal_Int32 l)
@@ -128,20 +84,6 @@ AstExpression::AstExpression(sal_Int32  l, ExprType et)
     m_exprValue->u.lval = l;
 }
 
-AstExpression::AstExpression(sal_uInt32 ul)
-    : m_combOperator(EC_none)
-    , m_subExpr1(NULL)
-    , m_subExpr2(NULL)
-    , m_exprValue(NULL)
-    , m_pSymbolicName(NULL)
-{
-    fillDefinitionDetails();
-
-    m_exprValue = new AstExprValue();
-    m_exprValue->et = ET_ulong;
-    m_exprValue->u.ulval = ul;
-}
-
 AstExpression::AstExpression(sal_Int64  h)
     : m_combOperator(EC_none)
     , m_subExpr1(NULL)
@@ -168,20 +110,6 @@ AstExpression::AstExpression(sal_uInt64 uh)
     m_exprValue = new AstExprValue();
     m_exprValue->et = ET_uhyper;
     m_exprValue->u.uhval = uh;
-}
-
-AstExpression::AstExpression(float f)
-    : m_combOperator(EC_none)
-    , m_subExpr1(NULL)
-    , m_subExpr2(NULL)
-    , m_exprValue(NULL)
-    , m_pSymbolicName(NULL)
-{
-    fillDefinitionDetails();
-
-    m_exprValue = new AstExprValue();
-    m_exprValue->et = ET_float;
-    m_exprValue->u.fval = f;
 }
 
 AstExpression::AstExpression(double d)
@@ -793,23 +721,6 @@ eval_kind(AstExprValue *ev, EvalKind ek)
         return coerce_value(ev, ET_ulong);
 
     return NULL;
-}
-
-
-
-AstExprValue* AstExpression::eval(EvalKind ek)
-{
-    AstExprValue *v = NULL;
-
-    /*
-     * Call internal evaluator which does not coerce value to
-     * EvalKind-expected format
-     */
-    v = eval_internal(ek);
-    /*
-     * Then coerce according to EvalKind-expected format
-     */
-    return eval_kind(v, ek);
 }
 
 AstExprValue* AstExpression::coerce(ExprType t, sal_Bool bAssign)
