@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSomethingA.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 16:16:03 $
+ *  last change: $Author: rt $ $Date: 2008-07-11 14:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,8 +38,8 @@
  *
  *************************************************************************/
 
-#ifndef _com_sun_star_test_XSomethingA_idl_
-#define _com_sun_star_test_XSomethingA_idl_
+#ifndef INCLUDED_COM_SUN_STAR_TEST_XSOMETHINGA_IDL
+#define INCLUDED_COM_SUN_STAR_TEST_XSOMETHINGA_IDL
 
 #include <com/sun/star/uno/XInterface.idl>
 
