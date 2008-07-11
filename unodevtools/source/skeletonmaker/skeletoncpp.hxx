@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: skeletoncpp.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 #define INCLUDED_UNODEVTOOLS_SOURCE_SKELETONMAKER_SKELETONCPP_HXX
 
 #include <fstream>
+
 #include "codemaker/generatedtypeset.hxx"
 #include "skeletoncommon.hxx"
 
