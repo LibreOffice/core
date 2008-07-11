@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterCanvas.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -142,6 +142,17 @@ public:
             polygons are clipped against the window bounds.
     */
     void SetClip (const css::awt::Rectangle& rClipRectangle);
+
+    /** Called by custom sprites to update their clip polygon so that they
+        are clipped at the borders of the canvas.  This method has to be
+        called after each change of the sprite location so that the bounds
+        of the canvas can be transformed into the coordinate system of the
+        sprite.
+    */
+    css::uno::Reference<css::rendering::XPolyPolygon2D> UpdateSpriteClip (
+        const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxOriginalClip,
+        const css::geometry::RealPoint2D& rLocation,
+        const css::geometry::RealSize2D& rSize);
 
 
     // XInitialization
@@ -416,7 +427,6 @@ private:
         changes its position.
     */
     bool mbOffsetUpdatePending;
-
 
     ::basegfx::B2DRectangle GetClipRectangle (
         const css::geometry::AffineMatrix2D& rViewTransform,
