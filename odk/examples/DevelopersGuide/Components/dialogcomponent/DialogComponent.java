@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DialogComponent.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:05:22 $
+ *  last change: $Author: rt $ $Date: 2008-07-11 14:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -177,9 +177,9 @@ public class DialogComponent {
                 "Event Object = " + aEventObject );
         }
 
-        private String aHandlerMethod1 = "doit1";
-        private String aHandlerMethod2 = "doit2";
-        private String aHandlerMethod3 = "doit3";
+        private final String aHandlerMethod1 = "doit1";
+        private final String aHandlerMethod2 = "doit2";
+        private final String aHandlerMethod3 = "doit3";
 
         //XDialogEventHandler
         public boolean callHandlerMethod( /*IN*/XDialog xDialog, /*IN*/Object EventObject, /*IN*/String MethodName ) {
@@ -202,9 +202,10 @@ public class DialogComponent {
         }
 
         public String[] getSupportedMethodNames() {
-            String[] retValue= new String[1];
+            String[] retValue= new String[3];
             retValue[0]= aHandlerMethod1;
             retValue[1]= aHandlerMethod2;
+            retValue[2]= aHandlerMethod3;
             return retValue;
         }
 
