@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterButton.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -460,9 +460,10 @@ void PresenterButton::RenderButton (
     const Reference<rendering::XCanvas>& rxCanvas,
     const geometry::IntegerSize2D& rSize,
     const PresenterTheme::SharedFontDescriptor& rpFont,
-    const css::uno::Reference<css::rendering::XBitmap>& rxLeft,
-    const css::uno::Reference<css::rendering::XBitmap>& rxCenter,
-    const css::uno::Reference<css::rendering::XBitmap>& rxRight)
+    const PresenterBitmapDescriptor::Mode eMode,
+    const SharedBitmapDescriptor& rpLeft,
+    const SharedBitmapDescriptor& rpCenter,
+    const SharedBitmapDescriptor& rpRight)
 {
     if ( ! rxCanvas.is())
         return;
@@ -473,10 +474,12 @@ void PresenterButton::RenderButton (
         rxCanvas,
         aBox,
         aBox,
-        rxLeft,
-        rxCenter,
-        rxRight);
+        GetBitmap(rpLeft, eMode),
+        GetBitmap(rpCenter, eMode),
+        GetBitmap(rpRight, eMode));
 
+    sal_Int32 nBottomOffset (
+        ::std::max(rpLeft->mnYOffset, ::std::max(rpCenter->mnYOffset, rpRight->mnYOffset)));
     if (rpFont.get()==NULL || ! rpFont->mxFont.is())
         return;
 
@@ -489,7 +492,7 @@ void PresenterButton::RenderButton (
         Sequence<double>(3), rendering::CompositeOperation::SOURCE);
     PresenterCanvasHelper::SetDeviceColor(aRenderState, rpFont->mnColor);
     aRenderState.AffineTransform.m02 = (rSize.Width - aTextBBox.X2 + aTextBBox.X1)/2;
-    aRenderState.AffineTransform.m12 = rSize.Height - aTextBBox.Y2 - gnVerticalBorder;
+    aRenderState.AffineTransform.m12 = rSize.Height - aTextBBox.Y2 - gnVerticalBorder - nBottomOffset;
 
     rxCanvas->drawText(
         aContext,
@@ -550,9 +553,10 @@ void PresenterButton::SetupButtonBitmaps (void)
             xCanvas,
             maButtonSize,
             mpFont,
-            GetBitmap(pLeftBitmap, PresenterBitmapDescriptor::Normal),
-            GetBitmap(pCenterBitmap, PresenterBitmapDescriptor::Normal),
-            GetBitmap(pRightBitmap, PresenterBitmapDescriptor::Normal));
+            PresenterBitmapDescriptor::Normal,
+            pLeftBitmap,
+            pCenterBitmap,
+            pRightBitmap);
 
     mxMouseOverBitmap = mxCanvas->getDevice()->createCompatibleAlphaBitmap(maButtonSize);
     xCanvas = Reference<rendering::XCanvas>(mxMouseOverBitmap, UNO_QUERY);
@@ -563,9 +567,10 @@ void PresenterButton::SetupButtonBitmaps (void)
             xCanvas,
             maButtonSize,
             mpMouseOverFont,
-            GetBitmap(pLeftBitmap, PresenterBitmapDescriptor::MouseOver),
-            GetBitmap(pCenterBitmap, PresenterBitmapDescriptor::MouseOver),
-            GetBitmap(pRightBitmap, PresenterBitmapDescriptor::MouseOver));
+            PresenterBitmapDescriptor::MouseOver,
+            pLeftBitmap,
+            pCenterBitmap,
+            pRightBitmap);
 }
 
 
