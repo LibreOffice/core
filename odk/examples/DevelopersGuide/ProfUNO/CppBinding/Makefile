@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.7 $
+#  $Revision: 1.8 $
 #
-#  last change: $Author: rt $ $Date: 2005-03-29 12:12:47 $
+#  last change: $Author: rt $ $Date: 2008-07-11 14:24:18 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -71,25 +71,6 @@ CXXFILES = \
 	 office_connect.cxx \
 	 string_samples.cxx
 
-TYPES := \
-	com.sun.star.uno.XNamingService \
-	com.sun.star.uno.XComponentContext \
-	com.sun.star.uno.XWeak \
-	com.sun.star.uno.XAggregation \
-	com.sun.star.lang.XMain \
-	com.sun.star.lang.XMultiServiceFactory \
-	com.sun.star.lang.XSingleComponentFactory \
-	com.sun.star.lang.XTypeProvider \
-	com.sun.star.lang.XComponent \
-	com.sun.star.registry.XSimpleRegistry \
-	com.sun.star.registry.XImplementationRegistration \
-	com.sun.star.bridge.XBridgeFactory \
-	com.sun.star.bridge.XUnoUrlResolver \
-	com.sun.star.container.XHierarchicalNameAccess
-
-TYPESLIST = $(foreach t,$(TYPES),-T$(t))
-GENHPPFILES = $(foreach t,$(TYPES),$(SAMPLE_INC_OUT)/$(subst .,/,$(t)).hpp)
-
 # Targets
 .PHONY: ALL
 ALL : \
@@ -103,13 +84,9 @@ $(OUT_BIN)/%$(INI_EXTENSION) : %$(INI_EXTENSION)
 
 $(OUT_BIN)/%.rdb :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(REGMERGE) $@ / $(OFFICE_TYPE_LIBRARY)
+	$(REGMERGE) $@ / $(URE_TYPES) $(OFFICE_TYPES)
 
-$(GENHPPFILES) :
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(CPPUMAKER) -Gc -BUCR -O$(SAMPLE_INC_OUT) $(TYPESLIST) $(OFFICE_TYPE_LIBRARY)
-
-$(SAMPLE_OBJ_OUT)/%.$(OBJ_EXT) : %.cxx $(GENHPPFILES)
+$(SAMPLE_OBJ_OUT)/%.$(OBJ_EXT) : %.cxx $(SDKTYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(SAMPLE_INC_OUT) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
@@ -121,7 +98,10 @@ ifeq "$(OS)" "WIN"
 	  $< $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB)
 else
 	$(LINK) $(EXE_LINK_FLAGS) $(LINK_LIBS) -o $@ $< \
-	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB)
+	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB) $(CPPUHELPERDYLIB) $(CPPUDYLIB) $(SALHELPERDYLIB) $(SALDYLIB)
+ifeq "$(OS)" "MACOSX"
+	$(INSTALL_NAME_URELIBS_BIN)  $@
+endif
 endif
 
 $(OUT_BIN)/office_connect$(EXE_EXT) : $(APP1_ENV_FLAG) $(OUT_BIN)/office_connect$(INI_EXTENSION) $(SAMPLE_OBJ_OUT)/office_connect.$(OBJ_EXT) 
