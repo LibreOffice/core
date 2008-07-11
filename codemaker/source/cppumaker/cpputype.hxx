@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cpputype.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,9 +35,7 @@
 #include "codemaker/options.hxx"
 #include "codemaker/typemanager.hxx"
 #include "codemaker/commoncpp.hxx"
-#ifndef INCLUDED_regisry_reader_hxx
 #include "registry/reader.hxx"
-#endif
 #include "registry/types.h"
 #include "rtl/string.hxx"
 
