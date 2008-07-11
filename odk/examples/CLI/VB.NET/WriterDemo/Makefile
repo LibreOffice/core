@@ -31,10 +31,10 @@ $(WRITERDEMO_OUT)/%.exe: %.vb
 	vbc $(VBC_FLAGS) \
 		-target:exe \
 		-out:$@ \
-		-libpath:"$(OFFICE_PROGRAM_PATH)\assembly" \
+		-libpath:"$(PRJ)\cli" \
 		-reference:cli_basetypes.dll \
 		-reference:cli_uretypes.dll \
-		-reference:cli_ootypes.dll \
+		-reference:cli_oootypes.dll \
 		-reference:cli_ure.dll \
 		-reference:cli_cppuhelper.dll \
 		-reference:System.dll \
