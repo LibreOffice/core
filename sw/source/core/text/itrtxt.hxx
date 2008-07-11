@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: itrtxt.hxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -146,6 +146,9 @@ private:
           KSHORT  nDropDescent;
           MSHORT  nDropLines;
           MSHORT  nAdjust;
+          // --> OD 2008-06-30 #i91133#
+          SwTwips mnTabLeft;
+          // <--
 
 protected:
     // fuer FormatQuoVadis
@@ -175,6 +178,12 @@ public:
     inline SwTwips GetLeftMin() const { return nFirst < nLeft ? nFirst : nLeft; }
     inline sal_Bool HasNegFirst() const { return nFirst < nLeft; }
 
+    // --> OD 2008-06-30 #i91133#
+    inline SwTwips GetTabLeft() const
+    {
+        return mnTabLeft;
+    }
+    // <--
     // DropCaps
     inline MSHORT GetDropLines() const { return nDropLines; }
     inline void SetDropLines( const MSHORT nNew ) { nDropLines = nNew; }
