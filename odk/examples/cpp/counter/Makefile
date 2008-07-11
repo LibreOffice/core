@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.12 $
+#  $Revision: 1.13 $
 #
-#  last change: $Author: obo $ $Date: 2007-01-25 11:08:39 $
+#  last change: $Author: rt $ $Date: 2008-07-11 14:27:06 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -48,19 +48,18 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-COMPONENT_NAME=counter
-COMPONENT_IMPL_NAME=$(COMPONENT_NAME).uno.$(SHAREDLIB_EXT) 
-COMPONENT_IMPL=$(SHAREDLIB_OUT)/$(COMPONENT_IMPL_NAME)
-COMPONENT_XML=$(COMPONENT_NAME).uno.xml
-COMPONENT_RDB_NAME = $(COMPONENT_NAME).uno.rdb
-COMPONENT_RDB = $(OUT_BIN)/$(COMPONENT_RDB_NAME)
+COMP_NAME=counter
+COMP_IMPL_NAME=$(COMP_NAME).uno.$(SHAREDLIB_EXT) 
+COMP_IMPL=$(SHAREDLIB_OUT)/$(COMP_IMPL_NAME)
+COMP_RDB_NAME = $(COMP_NAME).uno.rdb
+COMP_RDB = $(OUT_BIN)/$(COMP_RDB_NAME)
+COMP_MAPFILE = $(OUT_COMP_GEN)/$(COMP_NAME).uno.map
+OUT_COMP_INC = $(OUT_INC)/$(COMP_NAME)
+OUT_COMP_GEN = $(OUT_MISC)/$(COMP_NAME)
+OUT_COMP_OBJ = $(OUT_OBJ)/$(COMP_NAME)
+OUT_COMP_SLO = $(OUT_SLO)/$(COMP_NAME)
 
-OUT_COMP_INC = $(OUT_INC)/$(COMPONENT_NAME)
-OUT_COMP_GEN = $(OUT_MISC)/$(COMPONENT_NAME)
-OUT_COMP_OBJ = $(OUT_OBJ)/$(COMPONENT_NAME)
-OUT_COMP_SLO = $(OUT_SLO)/$(COMPONENT_NAME)
-
-COMPONENT_TYPEFLAG = $(OUT_MISC)/cpp_$(COMPONENT_NAME)_types.flag
+COMP_TYPEFLAG = $(OUT_MISC)/cpp_$(COMP_NAME)_types.flag
 
 IDLFILES = XCountable.idl
 
@@ -73,8 +72,7 @@ OBJFILES = $(patsubst %.cxx,$(OUT_COMP_SLO)/%.$(OBJ_EXT),$(CXXFILES))
 
 GENURDFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/%.urd,$(IDLFILES))
 
-TYPES = $(shell $(XML2CMP) -types stdout $(COMPONENT_XML))
-TYPESLIST = $(foreach t,$(TYPES),-T$(t))
+TYPESLIST = -Tfoo.XCountable
 
 # Targets
 .PHONY: ALL
@@ -87,28 +85,35 @@ $(OUT_COMP_GEN)/%.urd : %.idl
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(IDLC) -I. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $<
 
-# This example type library will be extended by the office types
+# This example type library will be extended by the URE types
 $(OUT_BIN)/%.rdb : $(GENURDFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	$(REGMERGE) $@ /UCR $(GENURDFILES)
-	$(REGMERGE) $@ / $(OFFICE_TYPE_LIBRARY) 
+	$(REGMERGE) $@ / $(URE_TYPES) 
 
-$(COMPONENT_TYPEFLAG) : $(COMPONENT_RDB) $(COMPONENT_XML)
+$(COMP_TYPEFLAG) : $(COMP_RDB) $(SDKTYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_TYPEFLAG)))
-	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_TYPEFLAG)))
+	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMP_RDB)
 	echo flagged > $@
 
-$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG)
+$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(COMP_TYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(OUT_OBJ))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
-$(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG)
+$(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx $(COMP_TYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(OUT_SLO))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
+
+$(COMP_MAPFILE) : $(SLOFILES)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cat $(PRJ)/settings/component.uno.map > $(COMP_MAPFILE) 
+ifeq "$(OS)" "MACOSX"
+	nm -gx $(SLOFILES) | $(ADDSYMBOLS) >> $(COMP_MAPFILE)
+endif
 
 ifeq "$(OS)" "WIN"
 $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
@@ -119,10 +124,13 @@ $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) msvcrt.lib kernel32.lib
 	$(LINK_MANIFEST_VC8_ONLY)
 else
-$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
+$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES) $(COMP_MAPFILE)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(LINK) $(COMP_LINK_FLAGS) $(LINK_LIBS) -o $@ $^ \
-	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB)
+	$(LINK) $(COMP_LINK_FLAGS) $(LINK_LIBS) -o $@ $(SLOFILES) \
+	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB) $(CPPUHELPERDYLIB) $(CPPUDYLIB) $(SALDYLIB)
+ifeq "$(OS)" "MACOSX"
+	$(INSTALL_NAME_URELIBS)  $@
+endif
 endif	
 
 $(OUT_BIN)/countermain$(EXE_EXT) : $(OUT_COMP_OBJ)/countermain.$(OBJ_EXT) $(SHAREDLIB_OUT)/counter.uno.$(SHAREDLIB_EXT)
@@ -137,14 +145,14 @@ else
 endif
 
 
-CppCounterExample : $(OUT_BIN)/countermain$(EXE_EXT) $(COMPONENT_IMPL)
+CppCounterExample : $(OUT_BIN)/countermain$(EXE_EXT) $(COMP_IMPL)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
 	@echo $(MAKE) countermain.run
 	@echo --------------------------------------------------------------------------------
 
-%.run: $(OUT_BIN)/countermain$(EXE_EXT) $(COMPONENT_IMPL)
+%.run: $(OUT_BIN)/countermain$(EXE_EXT) $(COMP_IMPL)
 	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@)
 
 .PHONY: clean
@@ -153,7 +161,7 @@ clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_OBJ))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_SLO))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_TYPEFLAG)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_RDB)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(SHAREDLIB_OUT)/$(COMPONENT_NAME).*))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_TYPEFLAG)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_RDB)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(SHAREDLIB_OUT)/$(COMP_NAME).*))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/countermain*))
