@@ -8,7 +8,7 @@
 #
 # $RCSfile: macosx-change-install-names.pl,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -38,6 +38,7 @@ sub action($$$)
         ('app/UREBIN/URELIB' => '@executable_path/../lib',
          'app/OOO/URELIB' => '@executable_path/../ure-link/lib',
          'app/OOO/OOO' => '@executable_path',
+         'app/SDK/URELIB' => '@executable_path/../../ure-link/lib',
          'app/BRAND/URELIB' => '@executable_path/../basis-link/ure-link/lib',
          'app/BRAND/OOO' => '@executable_path/../basis-link/program',
          'shl/URELIB/URELIB' => '@loader_path',
