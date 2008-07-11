@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: backingwindow.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,6 +101,8 @@ namespace framework
         ImageButton                     maDrawButton;
         FixedText                       maDBText;
         ImageButton                     maDBButton;
+        FixedText                       maMathText;
+        ImageButton                     maMathButton;
         FixedText                       maTemplateText;
         ImageButton                     maTemplateButton;
         FixedText                       maOpenText;
