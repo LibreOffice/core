@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textmarkuphelper.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -120,7 +120,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( sal_Int32 nTextMarkupType )
         throw lang::IndexOutOfBoundsException();
     }
 
-    accessibility::TextSegment aTextMarkupSegment;
+    ::com::sun::star::accessibility::TextSegment aTextMarkupSegment;
     aTextMarkupSegment.SegmentStart = -1;
     aTextMarkupSegment.SegmentEnd = -1;
 
@@ -166,10 +166,10 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( sal_Int32 nTextMarkupType )
     // paragraph - e.g. numbering portion.
     if ( mrPortionData.GetAccessiblePosition( nCoreCharIndex ) > nCharIndex )
     {
-        return uno::Sequence< accessibility::TextSegment >();
+        return uno::Sequence< ::com::sun::star::accessibility::TextSegment >();
     }
 
-    ::std::vector< accessibility::TextSegment > aTmpTextMarkups;
+    ::std::vector< ::com::sun::star::accessibility::TextSegment > aTmpTextMarkups;
     const SwWrongList* pTextMarkupList =
                             getTextMarkupList( mrTxtNode, nTextMarkupType );
     if ( pTextMarkupList )
@@ -191,7 +191,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( sal_Int32 nTextMarkupType )
                     mrPortionData.GetAccessiblePosition( pTextMarkup->mnPos );
                 const sal_Int32 nEndPos =
                     mrPortionData.GetAccessiblePosition( pTextMarkup->mnPos + pTextMarkup->mnLen );
-                accessibility::TextSegment aTextMarkupSegment;
+                ::com::sun::star::accessibility::TextSegment aTextMarkupSegment;
                 aTextMarkupSegment.SegmentText = rText.copy( nStartPos, nEndPos - nStartPos );
                 aTextMarkupSegment.SegmentStart = nStartPos;
                 aTextMarkupSegment.SegmentEnd = nEndPos;
@@ -200,7 +200,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( sal_Int32 nTextMarkupType )
         }
     }
 
-    uno::Sequence< accessibility::TextSegment > aTextMarkups(
+    uno::Sequence< ::com::sun::star::accessibility::TextSegment > aTextMarkups(
                                                     aTmpTextMarkups.size() );
     ::std::copy( aTmpTextMarkups.begin(), aTmpTextMarkups.end(),
                  ::comphelper::stl_begin( aTextMarkups ) );
