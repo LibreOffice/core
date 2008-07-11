@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.7 $
+#  $Revision: 1.8 $
 #
-#  last change: $Author: rt $ $Date: 2005-03-29 12:13:15 $
+#  last change: $Author: rt $ $Date: 2008-07-11 14:24:47 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -66,25 +66,6 @@ OBJFILES = $(patsubst %.cxx,$(OUT_COMP_OBJ)/%.$(OBJ_EXT),$(CXXFILES))
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
 
-TYPES := \
-	com.sun.star.uno.XNamingService \
-	com.sun.star.uno.XComponentContext \
-	com.sun.star.uno.XWeak \
-	com.sun.star.uno.XAggregation \
-	com.sun.star.lang.XMain \
-	com.sun.star.lang.XMultiServiceFactory \
-	com.sun.star.lang.XSingleComponentFactory \
-	com.sun.star.lang.XTypeProvider \
-	com.sun.star.lang.XComponent \
-	com.sun.star.registry.XSimpleRegistry \
-	com.sun.star.registry.XImplementationRegistration \
-	com.sun.star.bridge.XBridgeFactory \
-	com.sun.star.bridge.XUnoUrlResolver \
-	com.sun.star.container.XHierarchicalNameAccess 
-
-TYPESLIST = $(foreach t,$(TYPES),-T$(t))
-GENHPPFILES = $(foreach t,$(TYPES),$(OUT_COMP_INC)/$(subst .,/,$(t)).hpp)
-
 
 # Targets
 .PHONY: ALL
@@ -97,15 +78,11 @@ $(OUT_COMP_CLASS)/%.class : %.java
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $<
 
-$(GENHPPFILES) :
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(OFFICE_TYPE_LIBRARY)
-
-$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(GENHPPFILES)
+$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(SDKTYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
-$(OUT_BIN)/%$(EXE_EXT) : $(OBJFILES)
+$(OUT_BIN)/$(COMPONENT_NAME)$(EXE_EXT) : $(OBJFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN))
 ifeq "$(OS)" "WIN"
@@ -113,7 +90,10 @@ ifeq "$(OS)" "WIN"
 	  $(OBJFILES) $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB)
 else
 	$(LINK) $(EXE_LINK_FLAGS) $(LINK_LIBS) -o $@ $(OBJFILES) \
-	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB)
+	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB) $(CPPUHELPERDYLIB) $(CPPUDYLIB) $(SALHELPERDYLIB) $(SALDYLIB)
+ifeq "$(OS)" "MACOSX"
+	$(INSTALL_NAME_URELIBS_BIN)  $@
+endif
 endif
 
 ProUNOLifetimeExamples : $(OUT_BIN)/$(COMPONENT_NAME)$(EXE_EXT) $(OUT_COMP_CLASS)/MyUnoObject.class
@@ -136,4 +116,4 @@ clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_OBJ))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/$(COMPONENT_NAME).*))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/$(COMPONENT_NAME)$(EXE_EXT)))
