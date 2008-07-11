@@ -226,15 +226,15 @@ URE
             PRODUCTVERSION 1.4
             PACKAGEVERSION 1.4
             PACKAGEREVISION 1
-			PRODUCTEXTENSION
-			LONG_PRODUCTEXTENSION
-			SHORT_PRODUCTEXTENSION
+            PRODUCTEXTENSION
+            LONG_PRODUCTEXTENSION
+            SHORT_PRODUCTEXTENSION
             LICENSENAME LGPL
-			SERVICESPROJEKT 1
-			SETSTATICPATH 1
+            SERVICESPROJEKT 1
+            SETSTATICPATH 1
             NOVERSIONINDIRNAME 1
-			PROGRAMFILESROOT 1
-			GLOBALFILEGID gid_File_Dl_Cppu
+            PROGRAMFILESROOT 1
+            GLOBALFILEGID gid_File_Dl_Cppu
             DOWNLOADBANNER urebanner.bmp
             DOWNLOADBITMAP urebitmap.bmp
             DOWNLOADSETUPICO ooosetup.ico
@@ -262,12 +262,20 @@ OpenOffice_SDK
         {
             PRODUCTNAME OpenOffice.org
             PRODUCTVERSION 3.0
+            PRODUCTEXTENSION
+            LONG_PRODUCTEXTENSION
+            SHORT_PRODUCTEXTENSION
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
-			BRANDPACKAGEVERSION 3
+            BRANDPACKAGEVERSION 3
             PACKAGEVERSION 3.0.0
             PACKAGEREVISION {milestone}
+            PACK_INSTALLED 1
+            DMG_VOLUMEEXTENSION SDK
+	    DATABASENAME openofficeorg30sdk
+            NO_README_IN_ROOTDIR 1
             LICENSENAME LGPL
+            IGNOREDIRECTORYLAYER 1
             NOVERSIONINDIRNAME 0
             NOSPACEINDIRECTORYNAME 1
             CHANGETARGETDIR 1
@@ -474,34 +482,4 @@ BrOffice_Dev
 		langpackdownloadname	BrOo_{productversion}_languagepack_{os}_install_{languages}
 		include			.,{localpath}/bin/broffice_dev,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/broffice,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor}/osl,{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/broffice_dev,{solarcommonpath}/pck.{minor}/broffice,{solarcommonpath}/pck.{minor}/openoffice_dev,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
-}
-
-BrOffice_SDK
-{
-    Settings
-    {
-        downloadname BrOo-SDK_{productversion}_{os}_install_{languages}
-        variables
-        {
-            PRODUCTNAME BrOffice.org
-            PRODUCTVERSION 3.0
-            POSTVERSIONEXTENSION SDK
-            POSTVERSIONEXTENSIONUNIX sdk
-            PACKAGEVERSION 3.0.0
-			BRANDPACKAGEVERSION 3
-            PACKAGEREVISION {milestone}
-            LICENSENAME LGPL
-            NOVERSIONINDIRNAME 0
-            NOSPACEINDIRECTORYNAME 1
-            CHANGETARGETDIR 1
-            DOWNLOADBANNER brosdkbanner.bmp
-            DOWNLOADBITMAP ooosdkbitmap.bmp
-            DOWNLOADSETUPICO ooosetup.ico
-            RELATIVE_PATHES_IN_DDF 1
-        }
-        active 1
-        compression 5
-        script sdkoo
-        include {solarpath}/bin.{minor}/sdkoo,{solarpath}/bin.{minor}/broffice,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarcommonpath}/bin.{minor},{solarenvpath}/{os}/MS
-    }
 }
