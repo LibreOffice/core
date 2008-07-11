@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleBootstrap_cpp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 15:04:00 $
+ *  last change: $Author: rt $ $Date: 2008-07-11 14:25:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,12 +38,12 @@
  *
  *************************************************************************/
 
-#include <iostream>
+#include <stdio.h>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
-using namespace std;
 using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -58,7 +58,7 @@ int SAL_CALL main( int argc, char **argv )
         Reference< XComponentContext > xContext( ::cppu::bootstrap() );
         if ( !xContext.is() )
         {
-            cerr << "no component context!\n";
+            fprintf(stderr, "no component context!\n");
             return 1;
         }
 
@@ -67,7 +67,7 @@ int SAL_CALL main( int argc, char **argv )
             xContext->getServiceManager() );
         if ( !xServiceManager.is() )
         {
-            cerr << "no service manager!\n";
+            fprintf(stderr, "no service manager!\n");
             return 1;
         }
 
@@ -85,22 +85,20 @@ int SAL_CALL main( int argc, char **argv )
             Sequence < ::com::sun::star::beans::PropertyValue >() ) );
         if ( !xComponent.is() )
         {
-            cerr << "opening spreadsheet document failed!\n";
+            fprintf(stderr, "opening spreadsheet document failed!\n");
             return 1;
         }
     }
     catch ( ::cppu::BootstrapException & e )
     {
-        cerr << "caught BootstrapException: "
-             << OUStringToOString( e.getMessage(), RTL_TEXTENCODING_ASCII_US ).getStr()
-             << '\n';
+        fprintf(stderr, "caught BootstrapException: %s\n",
+                OUStringToOString( e.getMessage(), RTL_TEXTENCODING_ASCII_US ).getStr());
         return 1;
     }
     catch ( Exception & e )
     {
-        cerr << "caught UNO exception: "
-             << OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr()
-             << '\n';
+        fprintf(stderr, "caught UNO exception: %s\n",
+                OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
         return 1;
     }
 
