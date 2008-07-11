@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.9 $
+#  $Revision: 1.10 $
 #
-#  last change: $Author: obo $ $Date: 2007-01-25 11:05:49 $
+#  last change: $Author: rt $ $Date: 2008-07-11 14:21:12 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -48,21 +48,18 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-COMPONENT_NAME=DatabaseSDBCDriverSkeleton
-COMPONENT_IMPL_NAME=$(COMPONENT_NAME).uno.$(SHAREDLIB_EXT) 
-COMPONENT_LIBRARY=$(SHAREDLIB_OUT)/$(COMPONENT_IMPL_NAME)
-OUT_COMP_INC=$(OUT_INC)/$(COMPONENT_NAME)
-OUT_COMP_MISC=$(OUT_MISC)/$(COMPONENT_NAME)
-OUT_COMP_SLO=$(OUT_SLO)/$(COMPONENT_NAME)
-COMPONENT_XML=skeleton.xml
-COMPONENT_RDB_NAME = $(COMPONENT_NAME).uno.rdb
-COMPONENT_RDB = $(OUT_COMP_MISC)/$(COMPONENT_RDB_NAME)
-COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).$(UNOOXT_EXT)
-COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOOXT_EXT)")
-COMPONENT_UNOPKG_MANIFEST = $(OUT_COMP_MISC)/$(COMPONENT_NAME)/META-INF/manifest.xml
+COMP_NAME=DatabaseSDBCDriverSkeleton
+COMP_IMPL_NAME=$(COMP_NAME).uno.$(SHAREDLIB_EXT) 
+COMP_LIBRARY=$(SHAREDLIB_OUT)/$(COMP_IMPL_NAME)
+OUT_COMP_INC=$(OUT_INC)/$(COMP_NAME)
+OUT_COMP_MISC=$(OUT_MISC)/$(COMP_NAME)
+OUT_COMP_SLO=$(OUT_SLO)/$(COMP_NAME)
+COMP_PACKAGE = $(OUT_BIN)/$(COMP_NAME).$(UNOOXT_EXT)
+COMP_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOOXT_EXT)")
+COMP_UNOPKG_MANIFEST = $(OUT_COMP_MISC)/$(COMP_NAME)/META-INF/manifest.xml
+COMP_MAPFILE = $(OUT_COMP_MISC)/$(COMP_NAME).uno.map
 
-REGISTERFLAG = $(OUT_COMP_MISC)/devguide_$(COMPONENT_NAME)_register_component.flag
-COMPONENT_TYPEFLAG = $(OUT_COMP_MISC)/devguide_$(COMPONENT_NAME)_types.flag
+REGISTERFLAG = $(OUT_COMP_MISC)/devguide_$(COMP_NAME)_register_component.flag
 
 CXXFILES = SConnection.cxx \
 	SDatabaseMetaData.cxx \
@@ -76,10 +73,6 @@ CXXFILES = SConnection.cxx \
 
 SLOFILES = $(patsubst %.cxx,$(OUT_COMP_SLO)/%.$(OBJ_EXT),$(CXXFILES))
 
-TYPES = $(shell $(XML2CMP) -types stdout $(COMPONENT_XML))
-TYPESLIST = $(foreach t,$(TYPES),-T$(t))
-GENHPPFILES = $(foreach t,$(TYPES),$(OUT_COMP_INC)/$(subst .,/,$(t)).hpp)
-
 # Targets
 .PHONY: ALL
 ALL : \
@@ -87,28 +80,33 @@ ALL : \
 
 include $(SETTINGS)/stdtarget.mk
 
-$(COMPONENT_TYPEFLAG) : $(COMPONENT_XML)
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
-	-$(MKDIR) $(subst /,$(PS),$(@D))	 
-	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(OFFICE_TYPE_LIBRARY)
-	echo flagged > $@
-
-$(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG)
+$(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx $(SDKTYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))	 
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) $(STL_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
+
+$(COMP_MAPFILE) : $(SLOFILES)
+	-$(MKDIR) $(subst /,$(PS),$(@D))	 
+	cat $(PRJ)/settings/component.uno.map > $(COMP_MAPFILE) 
+ifeq "$(OS)" "MACOSX"
+	nm -gx $(SLOFILES) | $(ADDSYMBOLS) >> $(COMP_MAPFILE)
+endif
 
 ifeq "$(OS)" "WIN"
 $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
+	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_MISC))
 	$(LINK) $(COMP_LINK_FLAGS) /OUT:$@ \
-	/MAP:$(OUT_COMP_MISC)/$(COMPONENT_NAME).map $(SLOFILES) \
+	/MAP:$(OUT_COMP_MISC)/$(COMP_NAME).map $(SLOFILES) \
 	 $(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) msvcrt.lib kernel32.lib
 	$(LINK_MANIFEST_VC8_ONLY)
 else
-$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
+$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES) $(COMP_MAPFILE)
 	-$(MKDIR) $(subst /,$(PS),$(@D))	 
-	$(LINK) $(COMP_LINK_FLAGS) $(LINK_LIBS) -o $@ $^ \
-	 $(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB)
+	$(LINK) $(COMP_LINK_FLAGS) $(LINK_LIBS) -o $@ $(SLOFILES) \
+	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB) $(CPPUHELPERDYLIB) $(CPPUDYLIB) $(SALDYLIB)
+ifeq "$(OS)" "MACOSX"
+	$(INSTALL_NAME_URELIBS)  $@
+endif
 endif
 
 # rule for component package manifest
@@ -121,18 +119,18 @@ $(OUT_COMP_MISC)/%/manifest.xml :
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_MISC)/,,$(UNOPKG_PLATFORM)/$(@D))).uno.$(SHAREDLIB_EXT)$(QM)"/$(CSEP) >> $@
 	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
-$(COMPONENT_PACKAGE) : $(COMPONENT_LIBRARY) $(COMPONENT_UNOPKG_MANIFEST)
+$(COMP_PACKAGE) : $(COMP_LIBRARY) $(COMP_UNOPKG_MANIFEST)
 	-$(MKDIR) $(subst /,$(PS),$(@D)) && $(DEL) $(subst \\,\,$(subst /,$(PS),$@))	 
 	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_MISC)/$(UNOPKG_PLATFORM))	 
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_COMP_MISC)/$(UNOPKG_PLATFORM))
 	cd $(subst /,$(PS),$(OUT_COMP_MISC)) && $(SDK_ZIP) ../../bin/$(@F) $(UNOPKG_PLATFORM)/$(<F)
 	cd $(subst /,$(PS),$(OUT_COMP_MISC)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
-$(REGISTERFLAG) : $(COMPONENT_PACKAGE)
+$(REGISTERFLAG) : $(COMP_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 	-$(MKDIR) $(subst /,$(PS),$(@D))	 
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
-	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
+	$(DEPLOYTOOL) $(COMP_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
 	@echo --------------------------------------------------------------------------------
@@ -154,5 +152,5 @@ clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_INC))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_MISC))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_SLO))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_LIBRARY)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_LIBRARY)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_PACKAGE_URL)))
