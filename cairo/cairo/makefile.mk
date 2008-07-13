@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mox $ $Date: 2008-07-13 11:34:49 $
+#   last change: $Author: mox $ $Date: 2008-07-13 12:36:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,8 +63,8 @@ CAIROVERSION=1.6.4
 TARFILE_NAME=$(PRJNAME)-$(CAIROVERSION)
 #PATCH_FILE_NAME=$(TARFILE_NAME).patch
 
-cairo_CFLAGS=-I$(SOLARINCDIR)
-cairo_LDFLAGS=-L$(SOLARLIBDIR)
+cairo_CFLAGS=-I$(SOLARINC)
+cairo_LDFLAGS=-L$(SOLARLIB)
 
 # pixman is in this module
 pixman_CFLAGS=-I$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/inc
@@ -113,8 +113,7 @@ LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec 
 .ELIF "$(OS)$(COM)"=="SOLARISC52"
 LDFLAGS:=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
 .ELIF "$(OS)"=="MACOSX"      # X11 on Mac OS X
-cairo_CFLAGS+=-I/usr/X11/include 
-cairo_LDFLAGS+=-L/usr/X11/lib -lfontconfig -lXrender
+cairo_LDFLAGS+=-lfontconfig -lXrender
 .ENDIF  # "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
 
 .IF "$(SYSBASE)"!=""
