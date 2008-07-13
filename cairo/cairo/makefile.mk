@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mox $ $Date: 2008-06-03 04:23:47 $
+#   last change: $Author: mox $ $Date: 2008-07-13 11:34:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,9 @@ CAIROVERSION=1.6.4
 TARFILE_NAME=$(PRJNAME)-$(CAIROVERSION)
 #PATCH_FILE_NAME=$(TARFILE_NAME).patch
 
+cairo_CFLAGS=-I$(SOLARINCDIR)
+cairo_LDFLAGS=-L$(SOLARLIBDIR)
+
 # pixman is in this module
 pixman_CFLAGS=-I$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/inc
 pixman_LIBS=-L$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/lib -lpixman-1
@@ -107,11 +110,12 @@ OUT2INC+=src$/cairo-quartz.h
 # ----------- Unix ---------------------------------------------------------
 .IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
 LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec -Wl,-z,noexecstack
-.ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
-
-.IF "$(OS)$(COM)"=="SOLARISC52"
+.ELIF "$(OS)$(COM)"=="SOLARISC52"
 LDFLAGS:=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
-.ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
+.ELIF "$(OS)"=="MACOSX"      # X11 on Mac OS X
+cairo_CFLAGS+=-I/usr/X11/include 
+cairo_LDFLAGS+=-L/usr/X11/lib -lfontconfig -lXrender
+.ENDIF  # "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
 
 .IF "$(SYSBASE)"!=""
 cairo_CFLAGS+=-I$(SYSBASE)$/usr$/include -I$(SOLARINCDIR)$/external $(EXTRA_CFLAGS)
@@ -129,6 +133,10 @@ cairo_CFLAGS+=-xc99=none
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
 CONFIGURE_FLAGS=--enable-xlib --enable-freetype --disable-svg --disable-png --enable-gtk-doc=no --enable-test-surfaces=no --enable-static=no CFLAGS="$(cairo_CFLAGS)" LDFLAGS="$(cairo_LDFLAGS)" pixman_CFLAGS="$(pixman_CFLAGS)" pixman_LIBS="$(pixman_LIBS)" ZLIB3RDLIB=$(ZLIB3RDLIB)
+.IF "$(OS)"=="MACOSX"      # X11 on Mac OS X
+CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/configure
+CONFIGURE_FLAGS+=--disable-quartz --disable-quartz-font PKG_CONFIG=./dummy_pkg_config
+.ENDIF
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
