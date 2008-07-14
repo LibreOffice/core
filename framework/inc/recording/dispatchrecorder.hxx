@@ -21,16 +21,10 @@
 #include <com/sun/star/frame/XDispatchRecorder.hpp>
 #include <com/sun/star/frame/DispatchStatement.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
-
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.HPP>
-#endif
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-
-#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HDL_
 #include <com/sun/star/uno/RuntimeException.hdl>
-#endif
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <cppuhelper/weak.hxx>
 
