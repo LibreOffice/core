@@ -8,7 +8,7 @@
 #
 # $RCSfile: rules.mk,v $
 #
-# $Revision: 1.100 $
+# $Revision: 1.101 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -104,8 +104,8 @@ $(OBJ)$/%.obj : %.cc
 PCHOUTDIR=$(SLO)$/pch
 PCHEXOUTDIR=$(SLO)$/pch_ex
 .ELSE			# "$(NETWORK_BUILD)"==""
-PCHOUTDIR=$(TMP)$/$(BUILD)$(CWS_WORK_STAMP)
-PCHEXOUTDIR=$(TMP)$/$(BUILD)$(CWS_WORK_STAMP)_ex
+PCHOUTDIR=$(TMP)$/$(BUILD)$(CWS_WORK_STAMP)$(PRJNAME)
+PCHEXOUTDIR=$(TMP)$/$(BUILD)$(CWS_WORK_STAMP)$(PRJNAME)_ex
 .ENDIF			# "$(NETWORK_BUILD)"==""
 $(SLO)$/precompiled.% .PHONY:
     -$(MKDIRHIER) $(SLO)$/pch
