@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XmlFilterAdaptor.cxx,v $
- * $Revision: 1.20 $
+ *
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,15 +57,10 @@
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyleLoader.hpp>
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/conainer/XNameAccess.hpp>
-#endif
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/mediadescriptor.hxx>
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HXX_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
 
