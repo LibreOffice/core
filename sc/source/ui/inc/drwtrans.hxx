@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drwtrans.hxx,v $
- * $Revision: 1.16 $
+ *
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +33,7 @@
 #define SC_DRWTRANS_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-
-#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
-#include <com/sun/star/embed/XEmbeddedObject.hxx>
-#endif
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <svtools/transfer.hxx>
 
 #include <sfx2/objsh.hxx>
