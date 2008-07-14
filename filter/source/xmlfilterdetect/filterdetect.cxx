@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filterdetect.cxx,v $
- * $Revision: 1.11 $
+ *
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,26 +52,16 @@
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyleLoader.hpp>
-
-
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
-
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNamesAccess.hpp>
-#endif
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
-
 
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <unotools/ucbhelper.hxx>
-
-#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#endif
-
 
 
 
