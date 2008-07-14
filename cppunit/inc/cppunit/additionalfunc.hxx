@@ -1,12 +1,8 @@
 #ifndef ADDITIONALFUNC_HXX
 #define ADDITIONALFUNC_HXX
 
-#ifndef _registertestfunction_h
 #include "cppunit/autoregister/registertestfunction.h"
-#endif
-#ifndef _SAL_TYPES_H_
 #include "sal/types.h"
-#endif
 
 extern "C" void SAL_CALL RegisterAdditionalFunctions(FktRegFuncPtr _pFunc);
 

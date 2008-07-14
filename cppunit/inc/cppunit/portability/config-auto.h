@@ -10,9 +10,9 @@
 #define CPPUNIT_FUNC_STRING_COMPARE_STRING_FIRST  1
 #endif
 
-/* define if the library defines strstream */
-#ifndef CPPUNIT_HAVE_CLASS_STRSTREAM
-#define CPPUNIT_HAVE_CLASS_STRSTREAM  1
+/* define if the library defines sstream */
+#ifndef CPPUNIT_HAVE_SSTREAM
+#define CPPUNIT_HAVE_SSTREAM 1
 #endif
 
 /* Define if you have the <cmath> header file. */
@@ -36,7 +36,9 @@
 #endif
 
 /* define if the compiler has stringstream */
-/* #undef CPPUNIT_HAVE_SSTREAM */
+#ifndef CPPUNIT_HAVE_SSTREAM
+#define CPPUNIT_HAVE_SSTREAM 1
+#endif
 
 /* Define if you have the <strstream> header file. */
 #ifndef CPPUNIT_HAVE_STRSTREAM
