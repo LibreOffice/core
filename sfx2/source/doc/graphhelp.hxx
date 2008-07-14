@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: graphhelp.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,10 +29,7 @@
  ************************************************************************/
 
 #include <com/sun/star/uno/Reference.hxx>
-
-#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
-#include <com/sun/star/uno/XStream.hpp>
-#endif
+#include <com/sun/star/io/XStream.hpp>
 
 #include <rtl/ustring.hxx>
 class SvMemoryStream;
