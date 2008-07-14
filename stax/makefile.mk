@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.1 $
+# $Revision: 1.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -56,7 +56,7 @@ TARFILE_ROOTDIR=src
 
 BUILD_ACTION=$(JAVAC) javax$/xml$/stream$/*.java && jar -cf jsr173_1.0_api.jar javax$/xml$/stream$/*.class javax$/xml$/stream$/events$/*.class javax$/xml$/stream$/util$/*.class
 
-OUT2CLASS=stax-api-1.0.jar
+OUT2CLASS=jsr173_1.0_api.jar
 
 .ENDIF			# $(SOLAR_JAVA)!= ""
 # --- Targets ------------------------------------------------------
