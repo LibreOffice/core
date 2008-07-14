@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterCanvas.cxx,v $
  *
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1041,7 +1041,7 @@ Reference<rendering::XPolyPolygon2D> PresenterCanvas::UpdateSpriteClip (
     {
         // Combine the original clip with the window clip.
         const ::basegfx::B2DPolyPolygon aOriginalClip (
-            ::canvas::tools::polyPolygonFromXPolyPolygon2D(rxOriginalClip));
+            ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rxOriginalClip));
         ::basegfx::B2DRectangle aWindowRange (nMinX, nMinY, nMaxX, nMaxY);
         const ::basegfx::B2DPolyPolygon aClippedClipPolygon (
             ::basegfx::tools::clipPolyPolygonOnRange(
