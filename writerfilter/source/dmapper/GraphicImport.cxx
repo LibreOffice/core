@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GraphicImport.cxx,v $
- * $Revision: 1.12 $
+ *
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,23 +46,15 @@
 //#include <com/sun/star/drawing/PointSequenceSequence.hpp>
 //#endif
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
-#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
-#include <com/sun/star/graphic/XGraphicr.hpp>
-#endif
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HDL_
 #include <com/sun/star/text/HoriOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_RELORIENTATION_HDL_
 #include <com/sun/star/text/RelOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_VERTORIENTATION_HDL_
 #include <com/sun/star/text/VertOrientation.hpp>
-#endif
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <rtl/ustrbuf.hxx>
