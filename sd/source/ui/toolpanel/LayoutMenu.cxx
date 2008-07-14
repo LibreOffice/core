@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LayoutMenu.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -546,12 +546,13 @@ void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
     // Call SID_INSERTPAGE with the right arguments.  This is because
     // the popup menu can not call this slot with arguments directly.
     SfxRequest aRequest (CreateRequest(SID_INSERTPAGE, aLayout));
-    pDispatcher->Execute(
+    if (aRequest.GetArgs() != NULL)
+    {
+        pDispatcher->Execute(
             SID_INSERTPAGE,
             SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
-            aRequest.GetArgs() != NULL
-                ? *aRequest.GetArgs()
-                    : pViewShell->GetPool());
+            *aRequest.GetArgs());
+    }
     UpdateSelection();
 }
 
