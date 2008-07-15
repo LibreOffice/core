@@ -9,7 +9,7 @@
  *
  * $RCSfile: Paths.xcu,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,10 +30,7 @@
  *
  ************************************************************************ -->
 
-<oor:component-data
- oor:package="org.openoffice.Office"
- oor:name="Paths"
- xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" > <node oor:name="Paths">
+<oor:component-data oor:package="org.openoffice.Office" oor:name="Paths" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" > <node oor:name="Paths">
 
         <node oor:name="Template" oor:op="fuse">
             <node oor:name="InternalPaths">
