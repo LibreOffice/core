@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndtxt.cxx,v $
- * $Revision: 1.85 $
+ * $Revision: 1.86 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,7 +84,7 @@
 #include <section.hxx>              // fuer SwSection
 #include <mvsave.hxx>
 #include <swcache.hxx>
-#include <wrong.hxx>                // fuer die WrongList des OnlineSpellings
+#include <SwGrammarMarkUp.hxx>
 #include <dcontact.hxx>
 #include <redline.hxx>
 #include <doctxm.hxx>
@@ -433,7 +433,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         SetWrongDirty( true );
 
         if( GetGrammarCheck() )
-            pNode->SetGrammarCheck( GetGrammarCheck()->SplitList( nSplitPos ) );
+            pNode->SetGrammarCheck( GetGrammarCheck()->SplitGrammarList( nSplitPos ) );
         SetGrammarCheckDirty( true );
 
         // SMARTTAGS
@@ -528,7 +528,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         SetWrong( 0, false );
         SetWrongDirty( true );
 
-        SwWrongList *pList3 = GetGrammarCheck();
+        SwGrammarMarkUp *pList3 = GetGrammarCheck();
         SetGrammarCheck( 0, false );
         SetGrammarCheckDirty( true );
 
@@ -565,7 +565,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
 
         if( pList3 )
         {
-            pNode->SetGrammarCheck( pList3->SplitList( nSplitPos ) );
+            pNode->SetGrammarCheck( pList3->SplitGrammarList( nSplitPos ) );
             SetGrammarCheck( pList3, false );
         }
 
@@ -653,10 +653,10 @@ SwCntntNode *SwTxtNode::JoinNext()
             }
         }
 
-        SwWrongList *pList3 = GetGrammarCheck();
+        SwGrammarMarkUp *pList3 = GetGrammarCheck();
         if( pList3 )
         {
-            pList3->JoinList( pTxtNode->GetGrammarCheck(), nOldLen );
+            pList3->JoinGrammarList( pTxtNode->GetGrammarCheck(), nOldLen );
             SetGrammarCheckDirty( true );
             SetGrammarCheck( 0, false );
         }
@@ -665,7 +665,7 @@ SwCntntNode *SwTxtNode::JoinNext()
             pList3 = pTxtNode->GetGrammarCheck();
             if( pList3 )
             {
-                pList3->Move( 0, nOldLen );
+                pList3->MoveGrammar( 0, nOldLen );
                 SetGrammarCheckDirty( true );
                 pTxtNode->SetGrammarCheck( 0, false );
             }
@@ -746,10 +746,10 @@ SwCntntNode *SwTxtNode::JoinPrev()
             }
         }
 
-        SwWrongList *pList3 = pTxtNode->GetGrammarCheck();
+        SwGrammarMarkUp *pList3 = pTxtNode->GetGrammarCheck();
         if( pList3 )
         {
-            pList3->JoinList( GetGrammarCheck(), Len() );
+            pList3->JoinGrammarList( GetGrammarCheck(), Len() );
             SetGrammarCheckDirty( true );
             pTxtNode->SetGrammarCheck( 0, false );
             SetGrammarCheck( NULL );
@@ -759,7 +759,7 @@ SwCntntNode *SwTxtNode::JoinPrev()
             pList3 = GetGrammarCheck();
             if( pList3 )
             {
-                pList3->Move( 0, nLen );
+                pList3->MoveGrammar( 0, nLen );
                 SetGrammarCheckDirty( true );
                 SetGrammarCheck( 0, false );
             }
