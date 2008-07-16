@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par6.cxx,v $
- * $Revision: 1.187 $
+ * $Revision: 1.188 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -910,7 +910,7 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
     if (aNewSection.maSep.nfcPgn > 4)
         aNewSection.maSep.nfcPgn = 0;
 
-    aNewSection.maSep.fUnlocked = eVer <= ww::eWW2 ? ReadBSprm(pSep, (eVer <= ww::eWW7 ? 139 : 0x3006), 0 ) : 0;
+    aNewSection.maSep.fUnlocked = eVer > ww::eWW2 ? ReadBSprm(pSep, (eVer <= ww::eWW7 ? 139 : 0x3006), 0 ) : 0;
 
     // sprmSFBiDi
     aNewSection.maSep.fBiDi = eVer >= ww::eWW8 ? ReadBSprm(pSep, 0x3228, 0) : 0;
