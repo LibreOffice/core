@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.10 $
+# $Revision: 1.11 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -60,7 +60,7 @@ OBJFILES= \
 APP1TARGET=so$/swriter
 APP1NOSAL=TRUE
 APP1LINKRES=$(MISC)$/$(TARGET)1.res
-APP1ICON=$(SOLARRESDIR)$/icons/so8-writer-app.ico
+APP1ICON=$(SOLARRESDIR)$/icons/so9_writer_app.ico
 APP1OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/swriter.obj
@@ -69,7 +69,7 @@ APP1STDLIBS = $(SHELL32LIB)
 APP2TARGET=so$/scalc
 APP2NOSAL=TRUE
 APP2LINKRES=$(MISC)$/$(TARGET)2.res
-APP2ICON=$(SOLARRESDIR)$/icons/so8-calc-app.ico
+APP2ICON=$(SOLARRESDIR)$/icons/so9_calc_app.ico
 APP2OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/scalc.obj
@@ -78,7 +78,7 @@ APP2STDLIBS = $(SHELL32LIB)
 APP3TARGET=so$/sdraw
 APP3NOSAL=TRUE
 APP3LINKRES=$(MISC)$/$(TARGET)3.res
-APP3ICON=$(SOLARRESDIR)$/icons/so8-draw-app.ico
+APP3ICON=$(SOLARRESDIR)$/icons/so9_draw_app.ico
 APP3OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/sdraw.obj
@@ -87,7 +87,7 @@ APP3STDLIBS = $(SHELL32LIB)
 APP4TARGET=so$/simpress
 APP4NOSAL=TRUE
 APP4LINKRES=$(MISC)$/$(TARGET)4.res
-APP4ICON=$(SOLARRESDIR)$/icons/so8-impress-app.ico
+APP4ICON=$(SOLARRESDIR)$/icons/so9_impress_app.ico
 APP4OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/simpress.obj
@@ -96,7 +96,7 @@ APP4STDLIBS = $(SHELL32LIB)
 APP5TARGET=so$/sbase
 APP5NOSAL=TRUE
 APP5LINKRES=$(MISC)$/$(TARGET)5.res
-APP5ICON=$(SOLARRESDIR)$/icons/so8-base-app.ico
+APP5ICON=$(SOLARRESDIR)$/icons/so9_base_app.ico
 APP5OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/sbase.obj
@@ -105,11 +105,21 @@ APP5STDLIBS = $(SHELL32LIB)
 APP6TARGET=so$/smath
 APP6NOSAL=TRUE
 APP6LINKRES=$(MISC)$/$(TARGET)6.res
-APP6ICON=$(SOLARRESDIR)$/icons/so8-math-app.ico
+APP6ICON=$(SOLARRESDIR)$/icons/so9_math_app.ico
 APP6OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/smath.obj
 APP6STDLIBS = $(SHELL32LIB)
+
+APP7TARGET=so$/sweb
+APP7NOSAL=TRUE
+APP7LINKRES=$(MISC)$/$(TARGET)7.res
+APP7ICON=$(SOLARRESDIR)$/icons/so9_html_doc.ico
+APP7OBJS = \
+        $(OBJ)$/launcher.obj\
+        $(OBJ)$/sweb.obj
+APP7STDLIBS = $(SHELL32LIB)
+
 
 .ENDIF			# "$(BUILD_SPECIAL)"!=""
 
