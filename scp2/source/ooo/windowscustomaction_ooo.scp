@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: windowscustomaction_ooo.scp,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,35 +30,13 @@
 
 #include "macros.inc"
 
-WindowsCustomAction gid_Customaction_Regmsdocmsidll1
-	Name = "Regmsdocmsidll1";
+WindowsCustomAction gid_Customaction_Regallmsdocdll
+	Name = "Regallmsdocdll";
 	Typ = "65";
-	Source = "reg4msdocmsi.dll";
-	Target = "InstallUiSequenceEntry";
+	Source = "reg4allmsdoc.dll";
+	Target = "FindRegisteredExtensions";
 	Inbinarytable = 1;
-	Assignment1 = ("ControlEvent", "SetupType", "Next", "DoAction", "Regmsdocmsidll1", "(_IsSetupTypeMin = \"Typical\") AND (BETAPRODUCT <> 1)", "1");
-	Assignment2 = ("ControlEvent", "CustomSetup", "Next", "DoAction", "Regmsdocmsidll1", "BETAPRODUCT <> 1", "1");
-	Assignment3 = ("ControlCondition", "FileTypeDialog", "CheckBox1", "Disable", "(\!gm_p_Wrt_Bin=2 And \&gm_p_Wrt_Bin=-1) Or (\!gm_p_Wrt_Bin=3 And \&gm_p_Wrt_Bin=2)");
-	Assignment4 = ("ControlCondition", "FileTypeDialog", "CheckBox2", "Disable", "(\!gm_p_Calc_Bin=2 And \&gm_p_Calc_Bin=-1) Or (\!gm_p_Calc_Bin=3 And \&gm_p_Calc_Bin=2)");
-	Assignment5 = ("ControlCondition", "FileTypeDialog", "CheckBox3", "Disable", "(\!gm_p_Impress_Bin=2 And \&gm_p_Impress_Bin=-1) Or (\!gm_p_Impress_Bin=3 And \&gm_p_Impress_Bin=2)");
-End
-
-WindowsCustomAction gid_Customaction_Regmsdocmsidll2
-	Name = "Regmsdocmsidll2";
-	Typ = "65";
-	Source = "reg4msdocmsi.dll";
-	Target = "InstallExecSequenceEntry";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "end");
-End
-
-WindowsCustomAction gid_Customaction_Regmsdocmsidll3
-	Name = "Regmsdocmsidll3";
-	Typ = "65";
-	Source = "reg4msdocmsi.dll";
-	Target = "DeinstallExecSequenceEntry";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "REMOVE\<\>\"\" And Not PATCH", "end");
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "CostFinalize");
 End
 
 WindowsCustomAction gid_Customaction_Regactivexdll1
