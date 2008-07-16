@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.81 $
+# $Revision: 1.82 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -94,7 +94,7 @@ APP1DEPN= $(APP1RES) verinfo.rc
 
 .IF "$(GUI)" == "WNT"
 APP1RES=    $(RES)$/desktop.res
-APP1ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
+APP1ICON=$(SOLARRESDIR)$/icons/so9_main_app.ico
 APP1VERINFO=verinfo.rc
 APP1LINKRES=$(MISC)$/$(TARGET)1.res
 APP1STACK=10000000
@@ -122,7 +122,7 @@ APP5DEF=    $(MISCX)$/$(TARGET).def
 
 .IF "$(GUI)" == "WNT"
 APP5RES=    $(RES)$/oodesktop.res
-APP5ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
+APP5ICON=$(SOLARRESDIR)$/icons/ooo3_main_app.ico
 APP5VERINFO=ooverinfo.rc
 APP5LINKRES=$(MISC)$/ooffice5.res
 APP5STACK=10000000
@@ -131,7 +131,7 @@ APP5STACK=10000000
 .IF "$(GUI)" == "OS2"
 APP5DEF= # automatic
 APP5RES=    $(RES)$/oodesktop.res
-APP5ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
+APP5ICON=$(SOLARRESDIR)$/icons/ooo3_main_app.ico
 APP5VERINFO=ooverinfo2.rc
 APP5LINKRES=$(MISC)$/ooffice.res
 .ENDIF # OS2
@@ -143,7 +143,7 @@ APP6NOSAL=TRUE
 APP6DEPN= $(APP1TARGETN) $(APP6RES) verinfo.rc
 APP6VERINFO=verinfo.rc
 APP6LINKRES=$(MISC)$/soffice6.res
-APP6ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
+APP6ICON=$(SOLARRESDIR)$/icons/so9_main_app.ico
 APP6OBJS = \
     $(OBJ)$/extendloaderenvironment.obj \
     $(OBJ)$/officeloader.obj \
@@ -156,7 +156,7 @@ APP7NOSAL=TRUE
 APP7DEPN= $(APP1TARGETN) $(APP7RES) ooverinfo.rc
 APP7VERINFO=ooverinfo.rc
 APP7LINKRES=$(MISC)$/ooffice7.res
-APP7ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
+APP7ICON=$(SOLARRESDIR)$/icons/ooo3_main_app.ico
 APP7OBJS = \
     $(OBJ)$/extendloaderenvironment.obj \
     $(OBJ)$/officeloader.obj \
