@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inftxt.hxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -758,6 +758,8 @@ class SwTxtSlot
     XubString aTxt;
     const XubString *pOldTxt;
     const SwWrongList* pOldSmartTagList;
+    const SwWrongList* pOldGrammarCheckList;
+    SwWrongList* pTempList;
     xub_StrLen nIdx;
     xub_StrLen nLen;
     sal_Bool bOn;
@@ -767,7 +769,7 @@ public:
     // Der Ersetzungstring kommt wahlweise aus der Portion via GetExpText()
     // oder aus dem char Pointer pCh, wenn dieser ungleich NULL ist.
     SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor, bool bTxtLen,
-               bool bExgSmartTagList, const sal_Char *pCh = NULL );
+               bool bExgLists, const sal_Char *pCh = NULL );
     ~SwTxtSlot();
     inline sal_Bool IsOn() const { return bOn; }
 };
