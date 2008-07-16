@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlelstnr.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,11 +35,13 @@
 
 
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
-#ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARYLIST_HPP_
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
-#endif
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+#include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
+#include <com/sun/star/linguistic2/XGrammarCheckingIterator.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
+
+#include <svtools/lingucfg.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/processfactory.hxx>
@@ -70,18 +72,32 @@ SwLinguServiceEventListener::SwLinguServiceEventListener()
     Reference< XMultiServiceFactory > xMgr( comphelper::getProcessServiceFactory() );
     if (xMgr.is())
     {
-        OUString aSvcName( A2OU( "com.sun.star.frame.Desktop" ) );
-        xDesktop = Reference< frame::XDesktop >(
-                xMgr->createInstance( aSvcName ), UNO_QUERY );
-        if (xDesktop.is())
-            xDesktop->addTerminateListener( this );
+        try
+        {
+            OUString aSvcName( A2OU( "com.sun.star.frame.Desktop" ) );
+            xDesktop = Reference< frame::XDesktop >(
+                    xMgr->createInstance( aSvcName ), UNO_QUERY );
+            if (xDesktop.is())
+                xDesktop->addTerminateListener( this );
 
-        aSvcName = A2OU( "com.sun.star.linguistic2.LinguServiceManager" );
-        xLngSvcMgr = Reference< XLinguServiceManager >(
-                xMgr->createInstance( aSvcName ), UNO_QUERY );
-        if (xLngSvcMgr.is())
-            xLngSvcMgr->addLinguServiceManagerListener(
-                (XLinguServiceEventListener *) this );
+            aSvcName = A2OU( "com.sun.star.linguistic2.LinguServiceManager" );
+            xLngSvcMgr = Reference< XLinguServiceManager >( xMgr->createInstance( aSvcName ), UNO_QUERY );
+            if (xLngSvcMgr.is())
+                xLngSvcMgr->addLinguServiceManagerListener( (XLinguServiceEventListener *) this );
+
+            if (SvtLinguConfig().HasGrammarChecker())
+            {
+                aSvcName = A2OU( "com.sun.star.lingu2.GrammarCheckingIterator" );
+                xGCIterator = Reference< XGrammarCheckingIterator >( xMgr->createInstance( aSvcName ), UNO_QUERY );
+                Reference< XLinguServiceEventBroadcaster > xBC( xGCIterator, UNO_QUERY );
+                if (xBC.is())
+                    xBC->addLinguServiceEventListener( (XLinguServiceEventListener *) this );
+            }
+        }
+        catch (uno::Exception &)
+        {
+            DBG_ASSERT(0, "exception caught in SwLinguServiceEventListener c-tor" );
+        }
     }
 }
 /* -----------------------------17.03.00 09:07--------------------------------
@@ -127,6 +143,11 @@ void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
+    if (rLngSvcEvent.nEvent == GRAMMAR_CHECK_AGAIN)
+    {
+        // have all text spell and grammar checked again
+        SW_MOD()->CheckSpellChanges( sal_False, sal_True, sal_True, sal_False );
+    }
     if (rLngSvcEvent.Source == xLngSvcMgr)
     {
         sal_Bool bIsSpellWrong =
@@ -162,9 +183,9 @@ void SAL_CALL SwLinguServiceEventListener::disposing(
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     if (xLngSvcMgr.is()  &&  rEventObj.Source == xLngSvcMgr)
-    {
         xLngSvcMgr = 0;
-    }
+    if (xLngSvcMgr.is()  &&  rEventObj.Source == xGCIterator)
+        xGCIterator = 0;
 }
 
 
@@ -185,11 +206,9 @@ void SAL_CALL SwLinguServiceEventListener::notifyTermination(
     if (xDesktop.is()  &&  rEventObj.Source == xDesktop)
     {
         if (xLngSvcMgr.is())
-        {
-            xLngSvcMgr->removeLinguServiceManagerListener(
-                    (XLinguServiceEventListener *) this );
             xLngSvcMgr = 0;
-        }
+        if (xGCIterator.is())
+            xGCIterator = 0;
         xDesktop = NULL;
     }
 }
