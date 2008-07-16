@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registryitem_math.ulf,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +33,6 @@ en-US = "&New"
 
 [STR_REG_VAL_SO60_FORMULA]
 en-US = "%PRODUCTNAME %SXWFORMATVERSION Formula"
-
-[STR_REG_VAL_SO51_FORMULA_OOO]
-en-US = "StarOffice 5.0 Formula"
 
 [STR_REG_VAL_OO_FORMULA]
 en-US = "OpenDocument Formula"
