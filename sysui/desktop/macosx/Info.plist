@@ -527,6 +527,309 @@
 			</dict>
 		</dict>
 	</array>
+
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<!-- Microsoft Word XML -->
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>org.openxmlformats.openxml</string>
+				<string>public.composite-content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Office Open XML word processing document</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.openxmlformats.wordprocessingml.document</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>docx</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.openxmlformats-officedocument.wordprocessingml.document</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>org.openxmlformats.openxml</string>
+				<string>public.composite-content</string>
+				<string>public.executable</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Office Open XML word processing document (macros enabled)</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.openxmlformats.wordprocessingml.document.macroenabled</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>docm</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.ms-word.document.macroEnabled.12</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>org.openxmlformats.openxml</string>
+				<string>public.composite-content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Office Open XML word processing template</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.openxmlformats.wordprocessingml.template</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>dotx</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.openxmlformats-officedocument.wordprocessingml.template</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>org.openxmlformats.openxml</string>
+				<string>public.composite-content</string>
+				<string>public.executable</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Office Open XML word processing template (macros enabled)</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.openxmlformats.wordprocessingml.template.macroenabled</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>dotm</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.ms-word.template.macroEnabled.12</string>
+				</array>
+			</dict>
+		</dict>
+
+		<!--- Microsoft Excel XML -->
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>org.openxmlformats.openxml</string>
+				<string>public.composite-content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Office Open XML spreadsheet template</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.openxmlformats.spreadsheetml.template</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>xltx</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.openxmlformats-officedocument.spreadsheetml.template</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>org.openxmlformats.openxml</string>
+				<string>public.composite-content</string>
+				<string>public.executable</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Office Open XML spreadsheet template (macros enabled)</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.openxmlformats.spreadsheetml.template.macroenabled</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>xltm</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.ms-excel.template.macroEnabled.12</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>org.openxmlformats.openxml</string>
+				<string>public.composite-content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Office Open XML spreadsheet</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.openxmlformats.spreadsheetml.sheet</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>xlsx</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.zip-archive</string>
+				<string>public.composite-content</string>
+				<string>public.executable</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Microsoft Excel 2007 spreadsheet (macros enabled)</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.microsoft.excel.sheet.binary.macroenabled</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>xlsb</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.ms-excel.sheet.binary.macroEnabled.12</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>org.openxmlformats.openxml</string>
+				<string>public.composite-content</string>
+				<string>public.executable</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Office Open XML spreadsheet (macros enabled)</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.openxmlformats.spreadsheetml.sheet.macroenabled</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>xlsm</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.ms-excel.sheet.macroEnabled.12</string>
+				</array>
+			</dict>
+		</dict>
+
+		<!-- Microsoft Powerpoint XML -->
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>org.openxmlformats.openxml</string>
+				<string>public.presentation</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Office Open XML presentation</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.openxmlformats.presentationml.presentation</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>pptx</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.openxmlformats-officedocument.presentationml.presentation</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>org.openxmlformats.openxml</string>
+				<string>public.presentation</string>
+				<string>public.executable</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Office Open XML presentation (macros enabled)</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.openxmlformats.presentationml.presentation.macroenabled</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>pptm</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.ms-powerpoint.presentation.macroEnabled.12</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>org.openxmlformats.openxml</string>
+				<string>public.presentation</string>
+				<string>public.executable</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Office Open XML presentation template</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.openxmlformats.presentationml.template</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>potx</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.openxmlformats-officedocument.presentationml.template</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>org.openxmlformats.openxml</string>
+				<string>public.presentation</string>
+				<string>public.executable</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Office Open XML presentation template (macros enabled)</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.openxmlformats.presentationml.template.macroenabled</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>potm</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.ms-powerpoint.template.macroEnabled.12</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 	
 	<!-- Document type declaration for OS X < 10.4 -->
 	<key>CFBundleDocumentTypes</key>
@@ -1042,6 +1345,19 @@
 				<string>com.microsoft.word.doc</string>
 				<string>com.microsoft.excel.xls</string>
 				<string>com.microsoft.powerpoint.ppt</string>
+				<string>org.openxmlformats.wordprocessingml.document</string>
+				<string>org.openxmlformats.wordprocessingml.document.macroenabled</string>
+				<string>org.openxmlformats.wordprocessingml.template</string>
+				<string>org.openxmlformats.wordprocessingml.template.macroenabled</string>
+				<string>org.openxmlformats.spreadsheetml.sheet</string>
+				<string>org.openxmlformats.spreadsheetml.sheet.macroenabled</string>
+				<string>com.microsoft.excel.sheet.binary.macroenabled</string>
+				<string>org.openxmlformats.spreadsheetml.template</string>
+				<string>org.openxmlformats.spreadsheetml.template.macroenabled</string>
+				<string>org.openxmlformats.presentationml.presentation</string>
+				<string>org.openxmlformats.presentationml.presentation.macroenabled</string>
+				<string>org.openxmlformats.presentationml.template</string>
+				<string>org.openxmlformats.presentationml.template.macroenabled</string>
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
