@@ -8,7 +8,7 @@
 #
 # $RCSfile: odk_rules.pmk,v $
 #
-# $Revision: 1.32 $
+# $Revision: 1.33 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -216,7 +216,7 @@ $(DESTDIRSETTINGS)$/component.uno.map : $(SOLARENV)$/bin$/addsym.awk $(SOLARENV)
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SOLARENV)$/src$/component.map | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .IF "$(OS)"=="MACOSX"
-    tr -d "\015" < $(SOLARENV)$/src$/component.map | tail --lines +3 | head -3 | sed -e 's/.*component/_component/g' -e 's/;[ ]*$//' > $@
+    tr -d "\015" < $(SOLARENV)$/src$/component.map | tail -n +3 | head -3 | sed -e 's/.*component/_component/g' -e 's/;[ ]*$//' > $@
 .ENDIF
 .ELSE           # "$(COMID)"=="gcc3"
     tr -d "\015" < $(SOLARENV)$/src$/component.map > $@
