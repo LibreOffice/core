@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editeng.cxx,v $
- * $Revision: 1.114 $
+ * $Revision: 1.115 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2176,18 +2176,18 @@ void EditEngine::EndSpelling()
 /*-- 13.10.2003 16:43:27---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-bool EditEngine::SpellSentence(EditView& rView, ::svx::SpellPortions& rToFill)
+bool EditEngine::SpellSentence(EditView& rView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking )
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->SpellSentence( rView, rToFill );
+    return pImpEditEngine->SpellSentence( rView, rToFill, bIsGrammarChecking  );
 }
 /*-- 13.10.2003 16:43:27---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void EditEngine::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions)
+void EditEngine::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bIsGrammarChecking )
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    pImpEditEngine->ApplyChangedSentence( rEditView, rNewPortions );
+    pImpEditEngine->ApplyChangedSentence( rEditView, rNewPortions, bIsGrammarChecking  );
 }
 
 sal_Bool EditEngine::HasConvertibleTextPortion( LanguageType nLang )
