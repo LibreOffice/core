@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impedit4.cxx,v $
- * $Revision: 1.77 $
+ * $Revision: 1.78 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2003,7 +2003,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& r
 /*-- 13.10.2003 16:43:27---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-bool ImpEditEngine::SpellSentence(EditView& rEditView, ::svx::SpellPortions& rToFill)
+bool ImpEditEngine::SpellSentence(EditView& rEditView, ::svx::SpellPortions& rToFill, bool /*bIsGrammarChecking*/ )
 {
 #ifdef SVX_LIGHT
 #else
@@ -2174,7 +2174,7 @@ void ImpEditEngine::AddPortionIterated(
 /*-- 13.10.2003 16:43:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void ImpEditEngine::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions)
+void ImpEditEngine::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool /*bIsGrammarChecking*/ )
 {
 #ifdef SVX_LIGHT
 #else
