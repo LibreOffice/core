@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: setup.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,6 +88,8 @@ class SetupAppX : public SetupApp
     boolean     m_bQuiet            : 1;
     boolean     m_bAdministrative   : 1;
     boolean     m_bIgnoreAlreadyRunning : 1;
+    boolean     m_bRegNoMsoTypes :1;
+    boolean     m_bRegAllMsoTypes :1;
 
     FILE       *m_pLogFile;
 
