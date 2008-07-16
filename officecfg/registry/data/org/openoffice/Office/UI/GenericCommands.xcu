@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GenericCommands.xcu,v $
- * $Revision: 1.71 $
+ * $Revision: 1.72 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2957,7 +2957,7 @@
             </node>
             <node oor:name=".uno:SpellDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Spellcheck...</value>
+                    <value xml:lang="en-US">~Spelling...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
