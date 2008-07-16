@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docedt.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +54,7 @@
 #include <cntfrm.hxx>           // fuers Spell
 #include <crsrsh.hxx>
 #include <doc.hxx>
+#include <docsh.hxx>
 #include <docary.hxx>
 #include <doctxm.hxx>       // beim Move: Verzeichnisse korrigieren
 #include <ftnidx.hxx>
@@ -75,6 +76,7 @@
 #include <vcl/msgbox.hxx>
 #include "comcore.hrc"
 #include "editsh.hxx"
+#include <unoflatpara.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -1806,7 +1808,8 @@ bool SwDoc::Delete( SwPaM & rPam )
 uno::Any SwDoc::Spell( SwPaM& rPaM,
                     uno::Reference< XSpellChecker1 >  &xSpeller,
                     sal_uInt16* pPageCnt, sal_uInt16* pPageSt,
-                    SwConversionArgs *pConvArgs ) const
+                    bool bGrammarCheck,
+                    SwConversionArgs *pConvArgs  ) const
 {
     SwPosition* pSttPos = rPaM.Start(), *pEndPos = rPaM.End();
     uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
@@ -1821,11 +1824,13 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
     else
         pSpellArgs = new SwSpellArgs( xSpeller,
                             pSttPos->nNode.GetNode().GetTxtNode(), pSttPos->nContent,
-                            pEndPos->nNode.GetNode().GetTxtNode(), pEndPos->nContent );
+                            pEndPos->nNode.GetNode().GetTxtNode(), pEndPos->nContent,
+                            bGrammarCheck );
 
     ULONG nCurrNd = pSttPos->nNode.GetIndex();
     ULONG nEndNd = pEndPos->nNode.GetIndex();
 
+    uno::Any aRet;
     if( nCurrNd <= nEndNd )
     {
         SwCntntFrm* pCntFrm;
@@ -1862,6 +1867,16 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                 nStat = nPageNr + *pPageCnt - *pPageSt + 1;
                             ::SetProgressState( nStat, (SwDocShell*)GetDocShell() );
                         }
+                        //Spell() changes the pSpellArgs in case an error is found
+                        xub_StrLen nBeginGrammarCheck = 0;
+                        xub_StrLen nEndGrammarCheck = 0;
+                        if( pSpellArgs && pSpellArgs->bIsGrammarCheck)
+                        {
+                            nBeginGrammarCheck = pSpellArgs->pStartNode == pNd ?  pSpellArgs->pStartIdx->GetIndex() : 0;
+                            nEndGrammarCheck = pSpellArgs->pEndNode == pNd ? pSpellArgs->pEndIdx->GetIndex() : ((SwTxtNode*)pNd)->GetTxt().Len();
+                        }
+
+                        xub_StrLen nSpellErrorPosition = ((SwTxtNode*)pNd)->GetTxt().Len();
                         if( (!pConvArgs &&
                                 ((SwTxtNode*)pNd)->Spell( pSpellArgs )) ||
                             ( pConvArgs &&
@@ -1871,6 +1886,57 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             pSttPos->nNode = nCurrNd;
                             pEndPos->nNode = nCurrNd;
                             nCurrNd = nEndNd;
+                            if( pSpellArgs )
+                                nSpellErrorPosition = pSpellArgs->pStartIdx->GetIndex();
+                        }
+
+
+                        if( pSpellArgs && pSpellArgs->bIsGrammarCheck )
+                        {
+                            uno::Reference< linguistic2::XGrammarCheckingIterator >  xGCIterator( GetGCIterator() );
+                            if (xGCIterator.is())
+                            {
+                                String aText( ((SwTxtNode*)pNd)->GetTxt().Copy( nBeginGrammarCheck, nEndGrammarCheck - nBeginGrammarCheck ) );
+                                uno::Reference< lang::XComponent > xDoc( ((SwDocShell*)GetDocShell())->GetBaseModel(), uno::UNO_QUERY );
+                                // Expand the string:
+                                rtl::OUString aExpandText;
+                                const ModelToViewHelper::ConversionMap* pConversionMap =
+                                        ((SwTxtNode*)pNd)->BuildConversionMap( aExpandText );
+                                // get XFlatParagraph to use...
+                                uno::Reference< text::XFlatParagraph > xFlatPara = new SwXFlatParagraph( *((SwTxtNode*)pNd), aExpandText, pConversionMap );
+
+                                // get error position of cursor in XFlatParagraph
+                                sal_Int32 nGrammarErrorPosInText;
+                                linguistic2::GrammarCheckingResult aResult;
+                                sal_Int32 nGrammarErrors;
+                                do
+                                {
+                                    nGrammarErrorPosInText = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nBeginGrammarCheck );
+                                    aResult = xGCIterator->checkGrammarAtPos(
+                                            xDoc, xFlatPara, aExpandText, lang::Locale(), nBeginGrammarCheck, -1, -1 );
+
+                                    // get suggestions to use for the specific error position
+                                    nGrammarErrors = aResult.aGrammarErrors.getLength();
+                                    // prepare next iteration
+                                    nBeginGrammarCheck = (xub_StrLen)aResult.nEndOfSentencePos;
+                                }
+                                while( nSpellErrorPosition > aResult.nEndOfSentencePos && !nGrammarErrors && aResult.nEndOfSentencePos < nEndGrammarCheck );
+
+                                if( nGrammarErrors > 0 && nSpellErrorPosition >= aResult.nEndOfSentencePos )
+                                {
+                                    aRet <<= aResult;
+                                    //put the cursor to the current error
+                                    const linguistic2::SingleGrammarError &rError = aResult.aGrammarErrors[0];
+                                    nCurrNd = pNd->GetIndex();
+                                    pSttPos->nNode = nCurrNd;
+                                    pEndPos->nNode = nCurrNd;
+                                    pSpellArgs->pStartNode = ((SwTxtNode*)pNd);
+                                    pSpellArgs->pEndNode = ((SwTxtNode*)pNd);
+                                    pSpellArgs->pStartIdx->Assign(((SwTxtNode*)pNd), (xub_StrLen)rError.nErrorStart );
+                                    pSpellArgs->pEndIdx->Assign(((SwTxtNode*)pNd), (xub_StrLen)(rError.nErrorStart + rError.nErrorLength));
+                                    nCurrNd = nEndNd;
+                                }
+                            }
                         }
                     }
                 }
@@ -1891,14 +1957,16 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
         }
     }
 
-    uno::Any aRes;
-    if (pConvArgs)
-        aRes <<= pConvArgs->aConvText;
-    else
-        aRes <<= pSpellArgs->xSpellAlt;
+    if( !aRet.hasValue() )
+    {
+        if (pConvArgs)
+            aRet <<= pConvArgs->aConvText;
+        else
+            aRet <<= pSpellArgs->xSpellAlt;
+    }
     delete pSpellArgs;
 
-    return aRes;
+    return aRet;
 }
 
 class SwHyphArgs : public SwInterHyphInfo
