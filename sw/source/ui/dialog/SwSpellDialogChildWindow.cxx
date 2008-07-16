@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SwSpellDialogChildWindow.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,9 @@
 #include <svx/svdview.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
+#include <svtools/linguprops.hxx>
+#include <svtools/lingucfg.hxx>
+#include <swlinguconfig.hxx>
 #include <doc.hxx>
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
@@ -62,14 +65,15 @@
 #include <dialog.hrc>
 #endif
 #include <bookmrk.hxx>
+#include <cmdid.h>
 
-
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::beans;
 
-SFX_IMPL_CHILDWINDOW(SwSpellDialogChildWindow, SID_SPELL_DIALOG)
+SFX_IMPL_CHILDWINDOW(SwSpellDialogChildWindow, FN_SPELL_GRAMMAR_DIALOG)
 
 
 #define SPELL_START_BODY        0   // body text area
@@ -174,6 +178,9 @@ SwSpellDialogChildWindow::SwSpellDialogChildWindow (
                     _pParent, nId, pBindings, pInfo),
                     m_pSpellState(new SpellState)
 {
+
+    String aPropName( String::CreateFromAscii(UPN_IS_GRAMMAR_INTERACTIVE ) );
+    SwLinguConfig().GetProperty( aPropName ) >>= m_bIsGrammarCheckingOn;
 }
 /*-- 09.09.2003 10:39:22---------------------------------------------------
 
@@ -284,7 +291,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
                     if(!m_pSpellState->m_bOtherSpelled && pWrtShell->HasOtherCnt())
                     {
                         pWrtShell->SpellStart(DOCPOS_OTHERSTART, DOCPOS_OTHEREND, DOCPOS_OTHERSTART, FALSE );
-                        if(!pWrtShell->SpellSentence(aRet))
+                        if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
                         {
                             pWrtShell->SpellEnd();
                             m_pSpellState->m_bOtherSpelled = true;
@@ -296,7 +303,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
                     if(!m_pSpellState->m_bBodySpelled && !aRet.size())
                     {
                         pWrtShell->SpellStart(DOCPOS_START, DOCPOS_END, DOCPOS_START, FALSE );
-                        if(!pWrtShell->SpellSentence(aRet))
+                        if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
                         {
                             m_pSpellState->m_bBodySpelled = true;
                             pWrtShell->SpellEnd();
@@ -309,7 +316,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
         else
         {
             //spell inside of the Writer text
-            if(!pWrtShell->SpellSentence(aRet))
+            if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
             {
                 //find out which text has been spelled body or other
                 bOtherText = !(pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY);
@@ -321,7 +328,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
                     delete m_pSpellState->pOtherCursor;
                     m_pSpellState->pOtherCursor = 0;
                     pWrtShell->SpellStart(DOCPOS_OTHERSTART, DOCPOS_CURR, DOCPOS_OTHERSTART, FALSE );
-                    pWrtShell->SpellSentence(aRet);
+                    pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn);
                 }
                 if(!aRet.size())
                 {
@@ -334,7 +341,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
                         if(!m_pSpellState->m_bBodySpelled)
                         {
                             pWrtShell->SpellStart(DOCPOS_START, DOCPOS_END, DOCPOS_START, FALSE );
-                            if(!pWrtShell->SpellSentence(aRet))
+                            if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
                             {
                                 m_pSpellState->m_bBodySpelled = true;
                                 pWrtShell->SpellEnd();
@@ -347,7 +354,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
                          if(!m_pSpellState->m_bOtherSpelled && pWrtShell->HasOtherCnt())
                          {
                             pWrtShell->SpellStart(DOCPOS_OTHERSTART, DOCPOS_OTHEREND, DOCPOS_OTHERSTART, FALSE );
-                            if(!pWrtShell->SpellSentence(aRet))
+                            if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
                             {
                                 pWrtShell->SpellEnd();
                                 m_pSpellState->m_bOtherSpelled = true;
@@ -388,7 +395,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
                     {
                         pWrtShell->SetSelection(aPam);
                         pWrtShell->SpellStart(DOCPOS_START, DOCPOS_CURR, DOCPOS_START);
-                        if(!pWrtShell->SpellSentence(aRet))
+                        if(!pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn))
                             pWrtShell->SpellEnd();
                     }
                     m_pSpellState->m_xStartRange = 0;
@@ -415,7 +422,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
             }
 
             //close the spelling dialog
-            GetBindings().GetDispatcher()->Execute(SID_SPELL_DIALOG, SFX_CALLMODE_ASYNCHRON);
+            GetBindings().GetDispatcher()->Execute(FN_SPELL_GRAMMAR_DIALOG, SFX_CALLMODE_ASYNCHRON);
         }
     }
     return aRet;
@@ -438,12 +445,12 @@ void SwSpellDialogChildWindow::ApplyChangedSentence(const svx::SpellPortions& rC
             SHELL_MODE_TABLE_LIST_TEXT == eSelMode ||
             SHELL_MODE_TEXT == eSelMode;
         if(bNormalText)
-            pWrtShell->ApplyChangedSentence(rChanged);
+            pWrtShell->ApplyChangedSentence(rChanged, m_bIsGrammarCheckingOn);
         else if(bDrawText )
         {
             SdrView* pDrView = pWrtShell->GetDrawView();
             SdrOutliner *pOutliner = pDrView->GetTextEditOutliner();
-            pOutliner->ApplyChangedSentence(pDrView->GetTextEditOutlinerView()->GetEditView(), rChanged);
+            pOutliner->ApplyChangedSentence(pDrView->GetTextEditOutlinerView()->GetEditView(), rChanged, m_bIsGrammarCheckingOn);
         }
     }
 }
@@ -463,6 +470,63 @@ bool SwSpellDialogChildWindow::HasAutoCorrection()
 {
     return true;
 }
+/*-- 16.06.2008 11:59:17---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+bool SwSpellDialogChildWindow::HasGrammarChecking()
+{
+    return SvtLinguConfig().HasGrammarChecker();
+}
+/*-- 18.06.2008 12:27:11---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+bool SwSpellDialogChildWindow::IsGrammarChecking()
+{
+    return m_bIsGrammarCheckingOn;
+}
+/*-- 18.06.2008 12:27:11---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwSpellDialogChildWindow::SetGrammarChecking(bool bOn)
+{
+    uno::Any aVal;
+    aVal <<= bOn;
+    m_bIsGrammarCheckingOn = bOn;
+    String aPropName( C2S(UPN_IS_GRAMMAR_INTERACTIVE ) );
+    SwLinguConfig().SetProperty( aPropName, aVal );
+}
+/*-- 16.06.2008 12:00:03---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+bool SwSpellDialogChildWindow::HasAnyVendor()
+{
+#if DEBUG
+    return true;
+#else
+    return false;
+#endif
+}
+/*-- 16.06.2008 12:00:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+String SwSpellDialogChildWindow::GetVendorForLanguage( LanguageType eLanguage )
+{
+    String sRet;
+#if DEBUG
+    if( eLanguage == LANGUAGE_GERMAN_SWISS )
+        sRet = String::CreateFromAscii( "SwissGrammar" );
+#endif
+    (void) eLanguage;
+    return sRet;
+}
+/*-- 19.06.2008 15:55:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Image SwSpellDialogChildWindow::GetVendorLogoForLanguage( LanguageType /*eLanguage*/ )
+{
+    return Image();
+}
+
 /*-- 28.10.2003 08:41:09---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -812,7 +876,7 @@ bool SwSpellDialogChildWindow::SpellDrawText_Impl(SwWrtShell& rSh, ::svx::SpellP
     DBG_ASSERT(pOutliner, "No Outliner in SwSpellDialogChildWindow::SpellDrawText_Impl")
     if(pOutliner)
     {
-        bRet = pOutliner->SpellSentence(pSdrView->GetTextEditOutlinerView()->GetEditView(), rPortions);
+        bRet = pOutliner->SpellSentence(pSdrView->GetTextEditOutlinerView()->GetEditView(), rPortions, m_bIsGrammarCheckingOn);
         //find out if the current selection is in the first spelled drawing object
         //and behind the initial selection
         if(bRet && m_pSpellState->m_bRestartDrawing)
