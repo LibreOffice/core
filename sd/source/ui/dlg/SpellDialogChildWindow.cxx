@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SpellDialogChildWindow.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,7 +136,7 @@ void SpellDialogChildWindow::ApplyChangedSentence (
         if (pOutlinerView != NULL)
             mpSdOutliner->ApplyChangedSentence (
                 pOutlinerView->GetEditView(),
-                rChanged);
+                rChanged, false);
     }
 }
 
