@@ -54,7 +54,7 @@
     <accel:item accel:code="KEY_F7" accel:mod1="true" xlink:href=".uno:ThesaurusDialog"/>
     <accel:item accel:code="KEY_ADD" accel:mod1="true" xlink:href=".uno:CalculateSel"/>
     <accel:item accel:code="KEY_F3" accel:mod1="true" xlink:href=".uno:EditGlossary"/>
-    <accel:item accel:code="KEY_F7" xlink:href=".uno:SpellDialog"/>
+        <accel:item accel:code="KEY_F7" xlink:href=".uno:SpellingAndGrammarDialog"/>
     <accel:item accel:code="KEY_F3" xlink:href=".uno:ExpandGlossary"/>
     <accel:item accel:code="KEY_F5" accel:shift="true" accel:mod1="true" xlink:href=".uno:GotoPage"/>
     <accel:item accel:code="KEY_LEFT" accel:shift="true" xlink:href=".uno:CharLeftSel"/>
