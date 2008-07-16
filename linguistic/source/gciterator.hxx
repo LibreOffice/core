@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gciterator.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,155 +31,173 @@
 #ifndef _LINGUISTIC_GRAMMARCHECKINGITERATOR_HXX_
 #define _LINGUISTIC_GRAMMARCHECKINGITERATOR_HXX_
 
-
-#include <cppuhelper/implbase4.hxx>
-#include <com/sun/star/linguistic2/XGrammarCheckingIterator.hpp>
-#include <com/sun/star/linguistic2/XGrammarCheckingResultListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/linguistic2/XGrammarCheckingIterator.hpp>
+#include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
+#include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/XChangesBatch.hpp>
+
+#include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <osl/mutex.hxx>
 
 #include <map>
 #include <deque>
 
 
+//////////////////////////////////////////////////////////////////////
+
+
+struct FPEntry
+{
+    // flat paragraph iterator
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XFlatParagraphIterator > m_xParaIterator;
+
+    // flat paragraph
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::text::XFlatParagraph > m_xPara;
+
+    // document ID to identify different documents
+    sal_Int32     m_nDocId;
+
+    // the starting position to be checked
+    sal_Int32     m_nStartIndex;
+
+    // the flag to identify whether the document does automatical grammar checking
+    sal_Bool      m_bAutomatic;
+
+    FPEntry()
+        : m_nDocId( 0 )
+        , m_nStartIndex( 0 )
+        , m_bAutomatic( 0 )
+    {
+    }
+};
+
+
+///////////////////////////////////////////////////////////////////////////
+
+
 class GrammarCheckingIterator:
-    public cppu::WeakImplHelper4
+    public cppu::WeakImplHelper5
     <
         ::com::sun::star::linguistic2::XGrammarCheckingIterator,
-        ::com::sun::star::linguistic2::XGrammarCheckingResultListener,
+        ::com::sun::star::linguistic2::XLinguServiceEventListener,
+        ::com::sun::star::linguistic2::XLinguServiceEventBroadcaster,
         ::com::sun::star::lang::XComponent,
         ::com::sun::star::lang::XServiceInfo
     >
 {
-//    uno::Reference< uno::XComponentContext >    m_xContext;
-
-    //the struct for every entry stored in the queue
-    //FlatParagraphEntry
-    struct FPEntry
-    {
-        // flat paragraph iterator
-        ::com::sun::star::uno::Reference< ::com::sun::star::text::XFlatParagraphIterator > m_xParaIterator;
-        // flat paragraph
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::text::XFlatParagraph > m_xPara;
-        // document ID to identify different documents
-        ::sal_Int32     m_nDocID;
-        // the starting position to be checked
-        ::sal_Int32     m_nStartIndex;
-        // the flag to identify whether the document does automatical grammar checking
-        ::sal_Bool      m_bAutomatic;
-
-        FPEntry() :
-            m_nDocID( 0 ),
-            m_nStartIndex( 0 ),
-            m_bAutomatic( 0 )
-        {
-        }
-    };
+    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xMSF;
 
 
     //the queue is keeping track of all senteces to be checked
     //every element of this queue is a FlatParagraphEntry struct-object
-    //FlatParagraphQueue_t
     typedef std::deque< FPEntry > FPQueue_t;
 
-    //m_aFlatParagraphQueue
-    FPQueue_t m_aFPQueue;
+    // queue for entries to be processed
+    FPQueue_t       m_aFPEntriesQueue;
 
     // the flag to end the endless loop
-    ::sal_Bool m_bEnd;
+    sal_Bool        m_bEnd;
 
-    //m_aDocumentInterfaceMap
-    //parameter ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > -->the document
-    //parameter sal_Int32 -->DocID to indentify the document
-    typedef std::map< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >, ::sal_Int32 > DocMap_t;
-    DocMap_t m_aDocMap;
+    // parameter ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponen > --> the document
+    // parameter sal_Int32 --> DocId to indentify the document
+    typedef std::map< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >, sal_Int32 > DocMap_t;
+    DocMap_t        m_aDocIdMap;
 
-    //m_aGrammarCheckerLocales is mapping all existing grammar checkers
-    //parameter ::rtl::OUString -->implementation name
-    //parameter ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > -->
-    //    a list of languages in which every grammar checker could check grammar errors
-    typedef std::map< ::rtl::OUString, ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > > GCLocales_t;
-    GCLocales_t m_aGCLocales;
+    // parameter ::rtl::OUString --> implementation name
+    // parameter ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > --> list of locales supported by service
+//    typedef std::map< ::rtl::OUString, ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > > GCLocales_t;
+//    GCLocales_t     m_aGCLocalesByService;
 
-    osl::Condition m_aCondition;
+    // language -> implname mapping
+    typedef std::map< LanguageType, ::rtl::OUString > GCImplNames_t;
+    GCImplNames_t   m_aGCImplNamesByLang;
 
-    ::sal_Int32 m_nDocID;
+    // implname -> UNO reference mapping
+    typedef std::map< ::rtl::OUString, ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XGrammarChecker > > GCReferences_t;
+    GCReferences_t  m_aGCReferencesByService;
 
-    const ::sal_Int32 NextDocId();
+    sal_Bool        m_bGCServicesChecked;
+    sal_Int32       m_nDocIdCounter;
+    sal_Int32       m_nCurCheckedDocId;
+    sal_Int32       m_nLastEndOfSentencePos;
+    osl::Condition  m_aWakeUpThread;
+    osl::Condition  m_aRequestEndThread;
 
+    //! beware of initilization order !
+    osl::Mutex                          m_aMutex;
+    cppu::OInterfaceContainerHelper     m_aEventListeners;
+    cppu::OInterfaceContainerHelper     m_aNotifyListeners;
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > m_xBreakIterator;
+    mutable ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesBatch >  m_xUpdateAccess;
 
-    void doGrammarChecking_Impl( ::sal_Int32 nDocId,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFlatParagraph >& xFlatPara,
-        const ::com::sun::star::lang::Locale & rLocale,
-        ::sal_Int32 nStartOfSentencePos,
-        ::sal_Int32 nSuggestedSentenceEndPos);
+    sal_Int32 NextDocId();
+    sal_Int32 GetOrCreateDocId( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &xComp );
 
     void AddEntry(
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::text::XFlatParagraphIterator > xFlatParaIterator,
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::text::XFlatParagraph > xFlatPara,
-        ::sal_Int32 nDocID, ::sal_Int32 nStartIndex, ::sal_Bool bAutomatic );
+            ::com::sun::star::uno::WeakReference< ::com::sun::star::text::XFlatParagraphIterator > xFlatParaIterator,
+            ::com::sun::star::uno::WeakReference< ::com::sun::star::text::XFlatParagraph > xFlatPara,
+            sal_Int32 nDocId, sal_Int32 nStartIndex, sal_Bool bAutomatic );
 
-    sal_Int32 getSuggestedEndOfSentence( const ::rtl::OUString aText, sal_Int32 nSentenceStartPos, const ::com::sun::star::lang::Locale aLocale );
+    void ProcessResult( const ::com::sun::star::linguistic2::GrammarCheckingResult &rRes, sal_Int32 nSentenceStartPos,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFlatParagraphIterator > &rxFlatParagraphIterator,
+            bool bIsAutomaticChecking );
 
-    const void GetAvailableGCSvcs_Impl();
+    sal_Int32 GetSuggestedEndOfSentence( const ::rtl::OUString &rText, sal_Int32 nSentenceStartPos, const ::com::sun::star::lang::Locale &rLocale );
+
+//    void GetConfiguredGCSvcs_Impl();
+    void GetMatchingGCSvcs_Impl();
+//    void GetAvailableGCSvcs_Impl();
+    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XGrammarChecker > GetGrammarChecker( const ::com::sun::star::lang::Locale & rLocale );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesBatch >   GetUpdateAccess() const;
+
     // disallow use of copy c-tor and assignment operator
     GrammarCheckingIterator( const GrammarCheckingIterator & );
     GrammarCheckingIterator & operator = ( const GrammarCheckingIterator & );
 
 public:
-    void dequeueAndCheck();
-    explicit GrammarCheckingIterator( /* com::sun::star::uno::Reference< uno::XComponentContext > const & rXContext */ );
+
+    void DequeueAndCheck();
+
+    explicit GrammarCheckingIterator( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & rxMgr );
     virtual ~GrammarCheckingIterator();
 
     // XGrammarCheckingIterator
-
     virtual void SAL_CALL startGrammarChecking( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xDoc, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFlatParagraphIteratorProvider >& xIteratorProvider, ::sal_Bool bAutomatic ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL checkGrammarAtPos( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xDoc, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFlatParagraph >& xStartPara, ::sal_Int32 nPosInPara ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getEndOfSentence( ::sal_Int32 nSentenceStartPos ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL isChecking( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xDoc ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::linguistic2::GrammarCheckingResult SAL_CALL checkGrammarAtPos( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xDoc, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFlatParagraph >& xFlatPara, const ::rtl::OUString& aText, const ::com::sun::star::lang::Locale& aLocale, ::sal_Int32 nStartOfSentencePos, ::sal_Int32 nSuggestedEndOfSentencePos, ::sal_Int32 nErrorPosInPara ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getEndOfSentence( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFlatParagraph >& xFlatPara, ::sal_Int32 nSentenceStartPos ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isGrammarChecking( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xDoc, ::sal_Bool bAutomatic ) throw (::com::sun::star::uno::RuntimeException);
 
+    // XLinguServiceEventListener
+    virtual void SAL_CALL processLinguServiceEvent( const ::com::sun::star::linguistic2::LinguServiceEvent& aLngSvcEvent ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XGrammarCheckingResultListener
-    virtual ::sal_Bool SAL_CALL GrammarCheckingFinished( const ::com::sun::star::linguistic2::GrammarCheckingResult& aRes ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-
-    //virtual void SAL_CALL processGrammarCheckingResult( ::com::sun::star::linguistic2::GrammarCheckingResult aRes, ::sal_Bool bLastInCurrentPara )throw (::com::sun::staruno::RuntimeException);
-
+    // XLinguServiceEventBroadcaster
+    virtual ::sal_Bool SAL_CALL addLinguServiceEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLinguServiceEventListener >& xLstnr ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL removeLinguServiceEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLinguServiceEventListener >& xLstnr ) throw (::com::sun::star::uno::RuntimeException);
 
     // XComponent
     virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException);
-
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
-
-
+    // XEventListener
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-
-    virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
-
-    static inline ::rtl::OUString getImplementationName_Static();
-
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static() throw();
-
-    inline ::osl::Mutex & GetMutex()
-    {
-        static osl::Mutex aMutex;
-        return aMutex;
-    }
 
 };
 
-inline ::rtl::OUString GrammarCheckingIterator::getImplementationName_Static()
-{
-    return A2OU( "com.sun.star.lingu2.GrammarCheckingIterator" );
-}
+
+///////////////////////////////////////////////////////////////////////////
 
 #endif
 
