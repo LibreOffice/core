@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cmdid.h,v $
- * $Revision: 1.80 $
+ * $Revision: 1.81 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -897,7 +897,8 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_REPLACEMENT_GRAPHIC_URL      (FN_EXTRA2 + 102)
 #define FN_UNO_CELL_ROW_SPAN                (FN_EXTRA2 + 103)
 #define FN_UNO_TABLE_BORDER_DISTANCES       (FN_EXTRA2 + 104)
-#define FN_UNO_STREAM_NAME                  (FN_EXTRA2 + 105)
+#define FN_SPELL_GRAMMAR_DIALOG             (FN_EXTRA2 + 105)
+#define FN_UNO_STREAM_NAME                  (FN_EXTRA2 + 106)
 
 /*--------------------------------------------------------------------
     Bereich: Hilfe
@@ -952,7 +953,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_SHIFT_BACKSPACE          (FN_SELECTION + 42) /* wie Backspace */
 #define FN_SELECT_WORD              (FN_SELECTION + 43) /* Wort selektieren */
 
-#define FN_GOTO_NEXT_OBJ            (FN_SELECTION + 44)   /* N„chstes Objekt anspringen */
+#define FN_GOTO_NEXT_OBJ            (FN_SELECTION + 44)   /* Nï¿½chstes Objekt anspringen */
 #define FN_GOTO_PREV_OBJ            (FN_SELECTION + 45)   /* Vorhergehendes Objekt anspringen */
 
 #define FN_START_TABLE              (FN_SELECTION + 47) /* an den Anfang der Tabelle */
@@ -986,7 +987,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_PREV_PARA                (FN_SELECTION + 74)
 #define FN_NEXT_PARA                (FN_SELECTION + 75)
 
-#define FN_GOTO_NEXT_MARK           (FN_SELECTION + 76)   /* N„chsten Platzhalter anspringen */
+#define FN_GOTO_NEXT_MARK           (FN_SELECTION + 76)   /* Nï¿½chsten Platzhalter anspringen */
 #define FN_GOTO_PREV_MARK           (FN_SELECTION + 77)   /* Vorhergehenden Platzhalter anspringen */
 
 // schon im SVX unter der gleichen Id
