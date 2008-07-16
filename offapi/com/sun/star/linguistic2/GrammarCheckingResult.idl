@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GrammarCheckingResult.idl,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,27 +42,44 @@
 #include <com/sun/star/linguistic2/SingleGrammarError.idl>
 #endif
 
+//#ifndef __com_sun_star_linguistic2_XGrammarChecker_idl__
+//#include <com/sun/star/linguistic2/XGrammarChecker.idl>
+//#endif
+
+
 //=============================================================================
 
 module com {  module sun {  module star {  module linguistic2 {
 
+// forward declaration
+interface XGrammarChecker;
+
 //=============================================================================
 struct GrammarCheckingResult
 {
-    //the paragraph that was checked
-    com::sun::star::text::XFlatParagraph xPara;
+    // the document ID
+    long nDocumentId;
 
-    //text that was checked(may have changed meanwhile!)
+    // the paragraph that was checked
+    com::sun::star::text::XFlatParagraph xFlatParagraph;
+
+    // text that was checked (the paragraphs content may have changed meanwhile!)
     string aText;
 
-    //language used for checking
+    // language used for checking
     com::sun::star::lang::Locale aLocale;
 
-    // the sentence boundary
+    // the start of sentence position passed to the grammar checker
+    long nStartOfSentencePos;
+
+    // the end of sentence position found by the grammar checker
     long nEndOfSentencePos;
 
-    //a list of grammar error
+    // the list of errors
     sequence< com::sun::star::linguistic2::SingleGrammarError > aGrammarErrors;
+
+    // reference to the specific grammar checker implementation that reported the error
+    com::sun::star::linguistic2::XGrammarChecker xGrammarChecker;
 };
 
 //=============================================================================
