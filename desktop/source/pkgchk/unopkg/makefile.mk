@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -52,7 +52,7 @@ APP1DEPN = $(SHL1TARGETN)
 APP1NOSAL = TRUE
 APP1RPATH = BRAND
 .IF "$(OS)" == "WNT"
-APP1ICON = $(SOLARRESDIR)$/icons/so8-main-app.ico
+APP1ICON = $(SOLARRESDIR)$/icons/so9_main_app.ico
 APP1LINKRES = $(MISC)$/$(TARGET)1.res
 .ENDIF
 
@@ -63,7 +63,7 @@ APP2DEPN = $(SHL1TARGETN)
 APP2NOSAL = TRUE
 APP2RPATH = BRAND
 .IF "$(OS)" == "WNT"
-APP2ICON = $(SOLARRESDIR)$/icons/ooo-main-app.ico
+APP2ICON = $(SOLARRESDIR)$/icons/ooo3_main_app.ico
 APP2LINKRES = $(MISC)$/$(TARGET)2.res
 .ENDIF
 
