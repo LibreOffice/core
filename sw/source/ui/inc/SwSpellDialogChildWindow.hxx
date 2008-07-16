@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SwSpellDialogChildWindow.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,7 @@ struct SpellState;
 class SwSpellDialogChildWindow
     : public ::svx::SpellDialogChildWindow
 {
+    bool            m_bIsGrammarCheckingOn;
     SpellState*     m_pSpellState;
 
     SwWrtShell*     GetWrtShell_Impl();
@@ -54,6 +55,12 @@ protected:
     virtual void ApplyChangedSentence(const svx::SpellPortions& rChanged);
     virtual void AddAutoCorrection(const String& rOld, const String& rNew, LanguageType eLanguage);
     virtual bool HasAutoCorrection();
+    virtual bool HasGrammarChecking();
+    virtual bool IsGrammarChecking();
+    virtual void SetGrammarChecking(bool bOn);
+    virtual bool HasAnyVendor();
+    virtual String GetVendorForLanguage( LanguageType eLanguage );
+    virtual Image GetVendorLogoForLanguage( LanguageType eLanguage );
     virtual void GetFocus();
     virtual void LoseFocus();
 
