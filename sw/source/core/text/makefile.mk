@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -94,6 +94,7 @@ SLOFILES =  \
         $(SLO)$/widorp.obj \
         $(SLO)$/blink.obj \
         $(SLO)$/noteurl.obj \
+        $(SLO)$/SwGrammarMarkUp.obj \
         $(SLO)$/wrong.obj
 
 .IF "$(product)$(cap)" == ""
@@ -102,10 +103,12 @@ SLOFILES +=  \
 .ENDIF
 
 EXCEPTIONSFILES = \
-                $(SLO)$/EnhancedPDFExportHelper.obj \
+        $(SLO)$/EnhancedPDFExportHelper.obj \
+        $(SLO)$/inftxt.obj \
         $(SLO)$/itradj.obj \
         $(SLO)$/porlay.obj \
         $(SLO)$/pormulti.obj \
+        $(SLO)$/SwGrammarMarkUp.obj \
         $(SLO)$/txtfly.obj \
         $(SLO)$/wrong.obj
 
