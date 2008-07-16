@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,10 +45,12 @@ SCP_PRODUCT_TYPE=osl
 
 PARFILES= \
         module_binfilter.par            \
-        file_binfilter.par
+        file_binfilter.par              \
+        registryitem_binfilter.par
 
 ULFFILES= \
-        module_binfilter.ulf
+        module_binfilter.ulf            \
+        registryitem_binfilter.ulf
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk
