@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registryitem_calc.ulf,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +34,6 @@ en-US = "&New"
 [STR_REG_VAL_SO60_SPREADSHEET]
 en-US = "%PRODUCTNAME %SXWFORMATVERSION Spreadsheet"
 
-[STR_REG_VAL_SO51_SPREADSHEET_OOO]
-en-US = "StarOffice 5.0 Spreadsheet"
-
 [STR_REG_VAL_SO60_CALC_TEMPLATE]
 en-US = "%PRODUCTNAME %SXWFORMATVERSION Spreadsheet Template"
 
@@ -45,3 +42,16 @@ en-US = "OpenDocument Spreadsheet"
 
 [STR_REG_VAL_OO_CALC_TEMPLATE]
 en-US = "OpenDocument Spreadsheet Template"
+
+[STR_REG_VAL_MS_EXCEL_WORKSHEET_OLD]
+en-US = "Microsoft Excel 97-2003 Worksheet"
+
+[STR_REG_VAL_MS_EXCEL_WORKSHEET]
+en-US = "Microsoft Excel Worksheet"
+
+[STR_REG_VAL_MS_EXCEL_TEMPLATE_OLD]
+en-US = "Microsoft Excel 97-2003 Template"
+
+[STR_REG_VAL_MS_EXCEL_TEMPLATE]
+en-US = "Microsoft Excel Template"
+
