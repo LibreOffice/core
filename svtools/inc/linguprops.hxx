@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: linguprops.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,6 +83,9 @@
 #define UPN_CURRENT_ACTIVE_DICTIONARIES     "CurrentActiveDictionaries"
 #define UPN_LAST_ACTIVE_DICTIONARIES        "LastActiveDictionaries"
 
+#define UPN_IS_GRAMMAR_AUTO                 "IsAutoGrammarCheck"
+#define UPN_IS_GRAMMAR_INTERACTIVE          "IsInteractiveGrammarCheck"
+
 // uno property handles
 #define UPH_IS_GERMAN_PRE_REFORM             0
 #define UPH_IS_USE_DICTIONARY_LIST           1
@@ -115,5 +118,7 @@
 #define UPH_IS_USE_CHARACTER_VARIANTS       31
 #define UPH_IS_TRANSLATE_COMMON_TERMS       32
 #define UPH_IS_REVERSE_MAPPING              33
+#define UPH_IS_GRAMMAR_AUTO                 34
+#define UPH_IS_GRAMMAR_INTERACTIVE          35
 #endif
 
