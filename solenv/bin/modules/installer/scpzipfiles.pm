@@ -8,7 +8,7 @@
 #
 # $RCSfile: scpzipfiles.pm,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -140,62 +140,47 @@ sub resolving_scpzip_replace_flag
             my $replacedir = $replacedirbase . $installer::globals::separator . $onelanguage . $installer::globals::separator;
             installer::systemactions::create_directory($replacedir);    # creating language specific directories
 
-            if (!( $styles =~ /\bARCHIVE\b/ ))      # The simple case
+            # copy files and edit them with the variables defined in the zip.lst
+
+            my $longfilename = 0;
+
+            my $onefilename = $onefile->{'Name'};
+            my $sourcepath = $onefile->{'sourcepath'};
+
+            if ( $onefilename =~ /^\s*\Q$installer::globals::separator\E/ ) # filename begins with a slash, for instance /registry/schema/org/openoffice/VCL.xcs
             {
-                # copy files and edit them with the variables defined in the zip.lst
-
-                my $longfilename = 0;
-
-                my $onefilename = $onefile->{'Name'};
-                my $sourcepath = $onefile->{'sourcepath'};
-
-                if ( $onefilename =~ /^\s*\Q$installer::globals::separator\E/ ) # filename begins with a slash, for instance /registry/schema/org/openoffice/VCL.xcs
-                {
-                    $onefilename =~ s/^\s*\Q$installer::globals::separator\E//;
-                    $longfilename = 1;
-                }
-
-                my $destinationpath = $replacedir . $onefilename;
-                my $movepath = $destinationpath . ".orig";
-
-                if ( $longfilename )    # the destination directory has to be created before copying
-                {
-                    my $destdir = $movepath;
-                    installer::pathanalyzer::get_path_from_fullqualifiedname(\$destdir);
-                    installer::systemactions::create_directory_structure($destdir);
-                }
-
-                my $copysuccess = installer::systemactions::copy_one_file($sourcepath, $movepath);
-
-                if ( $copysuccess )
-                {
-                    # Now the file can be edited
-                    # ToDo: How about binary patching?
-
-                    my $onefileref = installer::files::read_file($movepath);
-                    replace_all_ziplistvariables_in_file($onefileref, $variableshashref);
-                    installer::files::save_file($destinationpath ,$onefileref);
-                }
-
-                # Saving the original source, where the file was found
-                $onefile->{'originalsourcepath'} = $onefile->{'sourcepath'};
-
-                # Saving the original source, where the file was found
-                $onefile->{'originalsourcepath'} = $onefile->{'sourcepath'};
-
-                # Saving the original source, where the file was found
-                $onefile->{'originalsourcepath'} = $onefile->{'sourcepath'};
-
-                # Writing the new sourcepath into the hashref, even if it was no copied
-
-                $onefile->{'sourcepath'} = $destinationpath;
+                $onefilename =~ s/^\s*\Q$installer::globals::separator\E//;
+                $longfilename = 1;
             }
-            else
+
+            my $destinationpath = $replacedir . $onefilename;
+            my $movepath = $destinationpath . ".orig";
+
+            if ( $longfilename )    # the destination directory has to be created before copying
             {
-                # ToDo: How about SCPZIP_REPLACE and ARCHIVE?
-                # Requires that the zip file was unpacked in resolving_archive_flag
-                # and that $installer::globals::dounzip is set (Parameter -unzip).
+                my $destdir = $movepath;
+                installer::pathanalyzer::get_path_from_fullqualifiedname(\$destdir);
+                installer::systemactions::create_directory_structure($destdir);
             }
+
+            my $copysuccess = installer::systemactions::copy_one_file($sourcepath, $movepath);
+
+            if ( $copysuccess )
+            {
+                # Now the file can be edited
+                # ToDo: How about binary patching?
+
+                my $onefileref = installer::files::read_file($movepath);
+                replace_all_ziplistvariables_in_file($onefileref, $variableshashref);
+                installer::files::save_file($destinationpath ,$onefileref);
+            }
+
+            # Saving the original source, where the file was found
+            $onefile->{'originalsourcepath'} = $onefile->{'sourcepath'};
+
+            # Writing the new sourcepath into the hashref, even if it was no copied
+
+            $onefile->{'sourcepath'} = $destinationpath;
         }
     }
 
