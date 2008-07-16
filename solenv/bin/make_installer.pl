@@ -8,7 +8,7 @@
 #
 # $RCSfile: make_installer.pl,v $
 #
-# $Revision: 1.114 $
+# $Revision: 1.115 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -65,6 +65,7 @@ use installer::setupscript;
 use installer::simplepackage;
 use installer::sorter;
 use installer::strip;
+use installer::substfilenamefiles;
 use installer::upx;
 use installer::systemactions;
 use installer::windows::assembly;
@@ -710,7 +711,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     installer::scriptitems::checking_directories_with_corrupt_hostname($dirsinproductlanguageresolvedarrayref, $languagesarrayref);
 
-    installer::scriptitems::set_global_directory_hostnames($dirsinproductlanguageresolvedarrayref);
+    installer::scriptitems::set_global_directory_hostnames($dirsinproductlanguageresolvedarrayref, $allvariableshashref);
 
     #####################################
     # files part, language dependent
@@ -790,6 +791,15 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         installer::scriptitems::quoting_illegal_filenames($filesinproductlanguageresolvedarrayref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles12.log", $filesinproductlanguageresolvedarrayref); }
     }
+
+    #####################################
+    # Files with flag SUBST_FILENAME
+    #####################################
+
+    installer::logger::print_message( "... analyzing files with flag SUBST_FILENAME ...\n" );
+
+    installer::substfilenamefiles::resolving_subst_filename_flag($filesinproductlanguageresolvedarrayref, $allvariableshashref, $languagestringref);
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles12d.log", $filesinproductlanguageresolvedarrayref); }
 
     #####################################
     # Files with flag SCPZIP_REPLACE
