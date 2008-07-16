@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SpellAttrib.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,34 +33,74 @@
 #include <svtools/txtattr.hxx>
 #include <i18npool/lang.h>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/lang/Locale.hpp>
 #include <tools/color.hxx>
-namespace com{ namespace sun{ namespace star{ namespace linguistic2{
-    class XSpellAlternatives;
-}}}}
+//namespace com{ namespace sun{ namespace star{ namespace linguistic2{
+//    class XSpellAlternatives;
+//}}}}
 
 #define TEXTATTR_SPELL_ERROR            (TEXTATTR_USER_START + 1)
 #define TEXTATTR_SPELL_LANGUAGE         (TEXTATTR_USER_START + 2)
 #define TEXTATTR_SPELL_BACKGROUND       (TEXTATTR_USER_START + 3)
 
 namespace svx{
+struct SpellErrorDescription
+{
+    bool                                                bIsGrammarError;
+    ::rtl::OUString                                     sErrorText;
+    ::rtl::OUString                                     sExplanation;
+    ::com::sun::star::lang::Locale                      aLocale;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >  aSuggestions;
+
+    SpellErrorDescription() :
+        bIsGrammarError( false ){};
+    SpellErrorDescription( bool bGrammar,
+                      const ::rtl::OUString& rText,
+                      const ::com::sun::star::lang::Locale& rLocale,
+                      const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rSuggestions,
+                      const ::rtl::OUString* pExplanation = 0) :
+        bIsGrammarError( bGrammar ),
+        sErrorText( rText ),
+        aLocale( rLocale ),
+        aSuggestions( rSuggestions )
+        {
+            if( pExplanation )
+                sExplanation = *pExplanation;
+        };
+
+    int operator==( const SpellErrorDescription& rDesc ) const
+    {
+        return bIsGrammarError == rDesc.bIsGrammarError &&
+                sErrorText.equals( rDesc.sErrorText ) &&
+                aLocale.Language.equals( rDesc.aLocale.Language ) &&
+                aLocale.Country.equals( rDesc.aLocale.Country ) &&
+                aLocale.Variant.equals( rDesc.aLocale.Variant ) &&
+                aSuggestions == rDesc.aSuggestions &&
+                sExplanation.equals( rDesc.sExplanation );
+    }
+};
 /* -----------------10.09.2003 14:23-----------------
 
  --------------------------------------------------*/
 class SpellErrorAttrib : public TextAttrib
 {
-    com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellAlternatives> m_xAlternatives;
+public:
+
+private:
+    //com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellAlternatives> m_xAlternatives;
+    SpellErrorDescription        m_aSpellErrorDescription;
 
                             //not accessible
                             SpellErrorAttrib();
 public:
-                            SpellErrorAttrib(com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellAlternatives> xAlternatives);
+//                            SpellErrorAttrib(com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellAlternatives> xAlternatives);
+                            SpellErrorAttrib( const SpellErrorDescription& );
                             SpellErrorAttrib( const SpellErrorAttrib& rAttr );
                             ~SpellErrorAttrib();
 
-    com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellAlternatives>
-                            GetAlternatives() const { return m_xAlternatives;}
-    void                    SetAlternatives(com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellAlternatives> xAlt)
-                                {m_xAlternatives = xAlt;}
+    const SpellErrorDescription& GetErrorDescription() const { return m_aSpellErrorDescription; }
+
 
     virtual void            SetFont( Font& rFont ) const;
     virtual TextAttrib*     Clone() const;
