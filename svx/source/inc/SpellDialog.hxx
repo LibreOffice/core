@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SpellDialog.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,31 +33,15 @@
 // include ---------------------------------------------------------------
 
 #include <sfx2/basedlgs.hxx>
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
-
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
-
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-
-#ifndef _MENUBTN_HXX //autogen
 #include <vcl/menubtn.hxx>
-#endif
-
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <vcl/decoview.hxx>
+#include <vcl/image.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 
@@ -84,6 +68,7 @@ namespace linguistic2{
 }}}}
 namespace svx{
 class SpellDialog;
+struct SpellErrorDescription;
 // ------------------------------------------------------------------
 class SentenceEditWindow_Impl : public MultiLineEdit/*, public SfxListener*/
 {
@@ -113,13 +98,15 @@ public:
 
     bool            MarkNextError();
     void            ChangeMarkedWord(const String& rNewWord, LanguageType eLanguage);
-    void            MoveErrorMarkTo(USHORT nErrorStart, USHORT nErrorEnd);
+    void            MoveErrorMarkTo(USHORT nErrorStart, USHORT nErrorEnd, bool bGrammar);
     String          GetErrorText() const;
     void            RestoreCurrentError();
 
-    com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellAlternatives> GetAlternatives();
     void            SetAlternatives(
                         com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellAlternatives> );
+
+    const SpellErrorDescription* GetAlternatives();
+
 
     void            ResetModified()   { GetTextEngine()->SetModified(FALSE); m_bIsUndoEditMode = false;}
     BOOL            IsModified() const              { return GetTextEngine()->IsModified(); }
@@ -142,20 +129,36 @@ public:
 
 // class SvxSpellDialog ---------------------------------------------
 class SpellDialogChildWindow;
+class ExplainButton : public PushButton
+{
+    String              m_sExplanation;
+
+    virtual void        RequestHelp( const HelpEvent& rHEvt );
+public:
+    ExplainButton( Window* pParent, const ResId& rResId ) : PushButton( pParent, rResId ){}
+    ~ExplainButton();
+    void                SetExplanation( const String& rText ) {m_sExplanation = rText;}
+    bool                HasExplanation() { return m_sExplanation.Len() > 0;}
+
+};
+
 class SpellDialog : public SfxModelessDialog
 {
     using Window::Invalidate;
 
     friend class SentenceEditWindow_Impl;
 private:
+
+    FixedImage      aVendorImageFI;
+
+    FixedText       aLanguageFT;
+    SvxLanguageBox  aLanguageLB;
+
     FixedText           aNotInDictFT;
     SentenceEditWindow_Impl  aSentenceED;
 
     FixedText       aSuggestionFT;
     ListBox         aSuggestionLB;
-
-    FixedText       aLanguageFT;
-    SvxLanguageBox  aLanguageLB;
 
     PushButton      aIgnorePB;
     PushButton      aIgnoreAllPB;
@@ -163,19 +166,28 @@ private:
 
     PushButton      aChangePB;
     PushButton      aChangeAllPB;
+    ExplainButton   aExplainPB;
     PushButton      aAutoCorrPB;
 
-    PushButton      aOptionsPB;
+    CheckBox        aCheckGrammarCB;
+
     HelpButton      aHelpPB;
+    PushButton      aOptionsPB;
     PushButton      aUndoPB;
     PushButton      aClosePB;
 
     GroupBox        aBackgroundGB;
 
-    String          aTitel;
+    Image           aVendorImage;
+    Image           aVendorImageHC;
+
     String          aResumeST;
     String          aIgnoreOnceST;
     String          aNoSuggestionsST;
+
+    const String    m_sTitleSpelling;
+    const String    m_sTitleSpellingGrammar;
+    const String    m_sTitleSpellingGrammarVendor;
 
     Size            aOldWordEDSize;
     Link            aDialogUndoLink;
@@ -195,6 +207,7 @@ private:
     DECL_LINK( ChangeAllHdl, Button * );
     DECL_LINK( IgnoreAllHdl, Button * );
     DECL_LINK( IgnoreHdl, Button * );
+    DECL_LINK( CheckGrammarHdl, CheckBox* );
     DECL_LINK( ExtClickHdl, Button * );
     DECL_LINK( CancelHdl, Button * );
     DECL_LINK( ModifyHdl, SentenceEditWindow_Impl *);
@@ -211,6 +224,7 @@ private:
     void            Init_Impl();
     void            SpellContinue_Impl(bool UseSavedSentence = false);
     void            LockFocusChanges( bool bLock ) {bFocusLocked = bLock;}
+    void            Impl_Restore();
 
     void            SetSelectedLang_Impl( LanguageType nLang );
     LanguageType    GetSelectedLang_Impl() const;
@@ -221,6 +235,7 @@ private:
     /** Corrects all errors that have been selected to be changed always
      */
     bool            ApplyChangeAllList_Impl(SpellPortions& rSentence, bool& bHasReplaced);
+    void            SetTitle_Impl(LanguageType nLang);
 
 protected:
     virtual void    Paint( const Rectangle& rRect );
