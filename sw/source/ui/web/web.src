@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: web.src,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,8 +126,8 @@ ToolBox RID_WEBTOOLS_TOOLBOX
         };
         ToolBoxItem
         {
-            Identifier = SID_SPELL_DIALOG;
-            HelpID = SID_SPELL_DIALOG;
+            Identifier = FN_SPELL_GRAMMAR_DIALOG;
+            HelpID = FN_SPELL_GRAMMAR_DIALOG;
         };
         ToolBoxItem
         {
