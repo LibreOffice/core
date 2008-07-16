@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lingucfg.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,7 @@
 #include <unotools/configitem.hxx>
 #include <osl/mutex.hxx>
 #include <svtools/options.hxx>
+#include <i18npool/lang.h>
 
 #include <vector>
 
@@ -138,6 +139,12 @@ struct SVL_DLLPUBLIC SvtLinguOptions
     INT32   nDataFilesChangedCheckValue;
     BOOL    bRODataFilesChangedCheckValue;
 
+    BOOL    bIsGrammarAuto;
+    BOOL    bIsGrammarInteractive;
+
+    BOOL    bROIsGrammarAuto;
+    BOOL    bROIsGrammarInteractive;
+
     SvtLinguOptions();
 };
 
@@ -170,7 +177,11 @@ class SVL_DLLPUBLIC SvtLinguConfig: public svt::detail::Options
     // configuration update access for the 'Linguistic/ServiceManager' node
     mutable com::sun::star::uno::Reference< com::sun::star::util::XChangesBatch > m_xUpdateAccess;
 
+    // configuration update access for the 'Linguistic' main node
+    mutable com::sun::star::uno::Reference< com::sun::star::util::XChangesBatch > m_xMainUpdateAccess;
+
     com::sun::star::uno::Reference< com::sun::star::util::XChangesBatch > GetUpdateAccess() const;
+    com::sun::star::uno::Reference< com::sun::star::util::XChangesBatch > GetMainUpdateAccess() const;
 
     com::sun::star::uno::Sequence< rtl::OUString > GetCurrentOrLastActiveDicts_Impl( const rtl::OUString &rPropName ) const;
     void SetCurrentOrLastActiveDicts_Impl( const rtl::OUString &rPropName, const com::sun::star::uno::Sequence< rtl::OUString > &rDictionaries ) const;
@@ -227,6 +238,11 @@ public:
     //
     std::vector< SvtLinguConfigDictionaryEntry > GetActiveDictionariesByFormat( const rtl::OUString &rFormatName );
 
+    ::rtl::OUString     GetSpellAndGrammarDialogImage( LanguageType nLang ) const;
+    ::rtl::OUString     GetSpellAndGrammarContextImage( LanguageType nLang ) const;
+    bool                HasAnySpellAndGrammarDialogImage() const;
+    bool                HasAnySpellAndGrammarContextImage() const;
+    bool                HasGrammarChecker() const;
 };
 
 //////////////////////////////////////////////////////////////////////
