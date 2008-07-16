@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoflatpara.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
+#include <svx/unolingu.hxx>
+
 #include <unoflatpara.hxx>
 
 #include <vos/mutex.hxx>
@@ -47,6 +50,9 @@
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
 #include <rootfrm.hxx>
+#include <poolfmt.hxx>
+#include <pagedesc.hxx>
+#include <IGrammarContact.hxx>
 
 using namespace ::com::sun::star;
 
@@ -62,6 +68,47 @@ SwXFlatParagraph::SwXFlatParagraph( SwTxtNode& rTxtNode, rtl::OUString aExpandTe
 
 SwXFlatParagraph::~SwXFlatParagraph()
 {
+}
+
+uno::Sequence< uno::Type > SwXFlatParagraph::getTypes(  ) throw(uno::RuntimeException)
+{
+    uno::Sequence< uno::Type > aTypes = SwXTextMarkup::getTypes();
+    aTypes.realloc( aTypes.getLength() + 1 );
+    aTypes[aTypes.getLength()-1] = ::getCppuType((uno::Reference< text::XFlatParagraph >*)0);
+    return aTypes;
+}
+
+uno::Sequence< sal_Int8 > SwXFlatParagraph::getImplementationId(  ) throw(uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    static uno::Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
+    if(!bInit)
+    {
+        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
+        bInit = sal_True;
+    }
+    return aId;
+}
+
+uno::Any SAL_CALL SwXFlatParagraph::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException)
+{
+    if ( rType == ::getCppuType((uno::Reference< text::XFlatParagraph >*)0) )
+    {
+        return uno::makeAny( uno::Reference < text::XFlatParagraph >(this) );
+    }
+    else
+        return SwXTextMarkup::queryInterface( rType );
+}
+
+void SAL_CALL SwXFlatParagraph::acquire() throw()
+{
+    SwXTextMarkup::acquire();
+}
+
+void SAL_CALL SwXFlatParagraph::release() throw()
+{
+    SwXTextMarkup::release();
 }
 
 const SwTxtNode* SwXFlatParagraph::getTxtNode() const
@@ -95,16 +142,21 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, ::sal_Bool bVal )
     {
         if ( text::TextMarkupType::SPELLCHECK == nType )
             mpTxtNode->SetWrongDirty( !bVal );
-        else if ( text::TextMarkupType::GRAMMAR == nType )
-            mpTxtNode->SetGrammarCheckDirty( !bVal );
         else if ( text::TextMarkupType::SMARTTAG == nType )
             mpTxtNode->SetSmartTagDirty( !bVal );
+        else if( text::TextMarkupType::GRAMMAR == nType )
+        {
+            mpTxtNode->SetGrammarCheckDirty( !bVal );
+            if( bVal )
+                ::finishGrammarCheck( *mpTxtNode );
+        }
     }
 }
 
 // text::XFlatParagraph:
 ::sal_Bool SAL_CALL SwXFlatParagraph::isChecked( ::sal_Int32 nType ) throw (uno::RuntimeException)
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     if ( mpTxtNode )
     {
         if ( text::TextMarkupType::SPELLCHECK == nType )
@@ -121,6 +173,7 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, ::sal_Bool bVal )
 // text::XFlatParagraph:
 ::sal_Bool SAL_CALL SwXFlatParagraph::isModified() throw (uno::RuntimeException)
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     return 0 == mpTxtNode;
 }
 
@@ -128,6 +181,10 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, ::sal_Bool bVal )
 lang::Locale SAL_CALL SwXFlatParagraph::getLanguageOfText(::sal_Int32 nPos, ::sal_Int32 nLen)
     throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    if (!mpTxtNode)
+        return SvxCreateLocale( LANGUAGE_NONE );
+
     const lang::Locale aLocale( SW_BREAKITER()->GetLocale( mpTxtNode->GetLang( static_cast<USHORT>(nPos), static_cast<USHORT>(nLen) ) ) );
     return aLocale;
 }
@@ -136,6 +193,11 @@ lang::Locale SAL_CALL SwXFlatParagraph::getLanguageOfText(::sal_Int32 nPos, ::sa
 lang::Locale SAL_CALL SwXFlatParagraph::getPrimaryLanguageOfText(::sal_Int32 nPos, ::sal_Int32 nLen)
     throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    if (!mpTxtNode)
+        return SvxCreateLocale( LANGUAGE_NONE );
+
     const lang::Locale aLocale( SW_BREAKITER()->GetLocale( mpTxtNode->GetLang( static_cast<USHORT>(nPos), static_cast<USHORT>(nLen) ) ) );
     return aLocale;
 }
@@ -196,6 +258,7 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
 // text::XFlatParagraph:
 css::uno::Sequence< ::sal_Int32 > SAL_CALL SwXFlatParagraph::getLanguagePortions() throw (css::uno::RuntimeException)
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     return css::uno::Sequence< ::sal_Int32>();
 }
 
@@ -213,11 +276,27 @@ SwXFlatParagraphIterator::SwXFlatParagraphIterator( SwDoc& rDoc, sal_Int32 nType
       mbWrapped( sal_False )
 {
     //mnStartNode = mnCurrentNode = get node from current cursor TODO!
+
+    // register as listener and get notified when document is closed
+    mpDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD )->Add(this);
 }
 
 SwXFlatParagraphIterator::~SwXFlatParagraphIterator()
 {
 }
+
+
+void SwXFlatParagraphIterator::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+{
+    ClientModify( this, pOld, pNew );
+    // check if document gets closed...
+    if(!GetRegisteredIn())
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+        mpDoc = 0;
+    }
+}
+
 
 uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getFirstPara()
     throw( uno::RuntimeException )
@@ -230,9 +309,11 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    uno::Reference< text::XFlatParagraph > xRet = 0;
-    SwTxtNode* pRet = 0;
+    uno::Reference< text::XFlatParagraph > xRet;
+    if (!mpDoc)
+        return xRet;
 
+    SwTxtNode* pRet = 0;
     if ( mbAutomatic )
     {
         ViewShell* pViewShell = 0;
@@ -244,7 +325,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
 
         while ( pCurrentPage != pStopPage )
         {
-            if ( pCurrentPage->IsInvalidSpelling() )
+            if (mnType != text::TextMarkupType::SPELLCHECK || pCurrentPage->IsInvalidSpelling() )
             {
                 // search for invalid content:
                 SwCntntFrm* pCnt = pCurrentPage->ContainsCntnt();
@@ -319,6 +400,15 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
         m_aFlatParaList.insert( xRet );
     }
 
+    // in case that grammar checking will be finished we now have to reset
+    // the flag at the root frame that indicated grammar checking was still active.
+    if (!xRet.is() && mnType == text::TextMarkupType::GRAMMAR)
+    {
+        SwRootFrm *pRootFrm = mpDoc? mpDoc->GetRootFrm() : NULL;
+        if (pRootFrm)
+            pRootFrm->SetGrammarCheckActive( false );
+    }
+
     return xRet;
 }
 
@@ -331,7 +421,11 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getLastPara()
 uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(const uno::Reference< text::XFlatParagraph > & xPara)
     throw ( uno::RuntimeException, lang::IllegalArgumentException )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
     uno::Reference< text::XFlatParagraph > xRet;
+    if (!mpDoc)
+        return xRet;
 
     text::XFlatParagraph* pFP = xPara.get();
     SwXFlatParagraph* pFlatParagraph = static_cast<SwXFlatParagraph*>(pFP);
@@ -373,7 +467,11 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(co
 uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(const uno::Reference< text::XFlatParagraph > & xPara )
     throw ( uno::RuntimeException, lang::IllegalArgumentException )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
     uno::Reference< text::XFlatParagraph > xRet;
+    if (!mpDoc)
+        return xRet;
 
     text::XFlatParagraph* pFP = xPara.get();
     SwXFlatParagraph* pFlatParagraph = static_cast<SwXFlatParagraph*>(pFP);
