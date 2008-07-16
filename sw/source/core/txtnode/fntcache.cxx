@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fntcache.cxx,v $
- * $Revision: 1.96 $
+ * $Revision: 1.97 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -891,8 +891,13 @@ static sal_Bool lcl_IsMonoSpaceFont( const OutputDevice& rOut )
 #pragma optimize("g",off)
 #endif
 
+/* This helper structure (SwForbidden) contains the already marked parts of the string
+    to avoid double lines (e.g grammar + spell check error) */
+
+typedef std::vector< std::pair< xub_StrLen, xub_StrLen > > SwForbidden;
 
 static void lcl_DrawLineForWrongListData(
+    SwForbidden &rForbidden,
     const SwDrawTextInfo    &rInf,
     const SwWrongList       *pWList,
     const CalcLinePosData   &rCalcLinePosData,
@@ -913,7 +918,7 @@ static void lcl_DrawLineForWrongListData(
             aLineColor = SwViewOption::GetSpellColor();
         else if (pWList == rInf.GetGrammarCheck())  // ... for grammar checking
             // currently there is no specific color for grammar check errors available in the configuration
-            aLineColor = Color( 0, 255, 0 );
+            aLineColor = Color( COL_LIGHTBLUE );
         else if (pWList == rInf.GetSmartTags())  // ... for smart tags
             aLineColor = SwViewOption::GetSmarttagColor();
 
@@ -923,6 +928,7 @@ static void lcl_DrawLineForWrongListData(
         // Lines for smart tags will always be drawn.
         if (pWList == rInf.GetSmartTags() || WRONG_SHOW_MIN < nHght)
         {
+            SwForbidden::iterator pIter = rForbidden.begin();
             if (rInf.GetOut().GetConnectMetaFile())
                 rInf.GetOut().Push();
 
@@ -936,33 +942,62 @@ static void lcl_DrawLineForWrongListData(
             {
                 nStart = nStart - rInf.GetIdx();
 
-                // determine line pos
-                Point aStart( rInf.GetPos() );
-                Point aEnd;
                 const xub_StrLen nEnd = nStart + nWrLen;
-                lcl_calcLinePos( rCalcLinePosData, aStart, aEnd, nStart, nWrLen );
-
-                // draw line for smart tags?
-                if (pWList == rInf.GetSmartTags())
+                xub_StrLen nNext = nStart;
+                while( nNext < nEnd )
                 {
-                    aStart.Y() +=30;
-                    aEnd.Y() +=30;
+                    while( pIter != rForbidden.end() && pIter->second <= nNext )
+                        ++pIter;
+                    xub_StrLen nNextStart = nNext;
+                    xub_StrLen nNextEnd = nEnd;
+                    if( pIter == rForbidden.end() || nNextEnd <= pIter->first )
+                    {
+                        // No overlapping mark up found
+                        std::pair< xub_StrLen, xub_StrLen > aNew;
+                        aNew.first = nNextStart;
+                        aNew.second = nNextEnd;
+                        rForbidden.insert( pIter, aNew );
+                        pIter = rForbidden.begin();
+                        nNext = nEnd;
+                    }
+                    else
+                    {
+                        nNext = pIter->second;
+                        if( nNextStart < pIter->first )
+                        {
+                            nNextEnd = pIter->first;
+                            pIter->first = nNextStart;
+                        }
+                        else
+                            continue;
+                    }
+                    // determine line pos
+                    Point aStart( rInf.GetPos() );
+                    Point aEnd;
+                    lcl_calcLinePos( rCalcLinePosData, aStart, aEnd, nNextStart, nNextEnd - nNextStart );
 
-                    LineInfo aLineInfo( LINE_DASH );
-                    aLineInfo.SetDistance( 40 );
-                    aLineInfo.SetDashLen( 1 );
-                    aLineInfo.SetDashCount(1);
+                    // draw line for smart tags?
+                    if (pWList == rInf.GetSmartTags())
+                    {
+                        aStart.Y() +=30;
+                        aEnd.Y() +=30;
 
-                    rInf.GetOut().DrawLine( aStart, aEnd, aLineInfo );
-                }
-                else    // draw wavy lines for spell or grammar errors
-                {
-                    // get wavy line type to use
-                    USHORT nWave =
-                        WRONG_SHOW_MEDIUM < nHght ? WAVE_NORMAL :
-                        ( WRONG_SHOW_SMALL < nHght ? WAVE_SMALL : WAVE_FLAT );
+                        LineInfo aLineInfo( LINE_DASH );
+                        aLineInfo.SetDistance( 40 );
+                        aLineInfo.SetDashLen( 1 );
+                        aLineInfo.SetDashCount(1);
 
-                    rInf.GetOut().DrawWaveLine( aStart, aEnd, nWave );
+                        rInf.GetOut().DrawLine( aStart, aEnd, aLineInfo );
+                    }
+                    else    // draw wavy lines for spell or grammar errors
+                    {
+                        // get wavy line type to use
+                        USHORT nWave =
+                            WRONG_SHOW_MEDIUM < nHght ? WAVE_NORMAL :
+                            ( WRONG_SHOW_SMALL < nHght ? WAVE_SMALL : WAVE_FLAT );
+
+                        rInf.GetOut().DrawWaveLine( aStart, aEnd, nWave );
+                    }
                 }
 
                 nStart = nEnd + rInf.GetIdx();
@@ -1948,12 +1983,16 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             nCnt, bSwitchH2V, bSwitchL2R,
                             nHalfSpace, pKernArray, bBidiPor);
 
-                    // draw wave line for spell check errors
-                    lcl_DrawLineForWrongListData( rInf, rInf.GetWrong(), aCalcLinePosData, pPrtFont->GetSize() );
-                    // draw wave line for grammar check errors
-                    lcl_DrawLineForWrongListData( rInf, rInf.GetGrammarCheck(), aCalcLinePosData, pPrtFont->GetSize() );
+                    SwForbidden aForbidden;
                     // draw line for smart tag data
-                    lcl_DrawLineForWrongListData( rInf, rInf.GetSmartTags(), aCalcLinePosData, Size() );
+                    lcl_DrawLineForWrongListData( aForbidden, rInf, rInf.GetSmartTags(), aCalcLinePosData, Size() );
+                    // draw wave line for spell check errors
+                    // draw them BEFORE the grammar check lines to 'override' the latter in case of conflict.
+                    // reason: some grammar errors can only be found if spelling errors are fixed,
+                    // therefore we don't want the user to miss a spelling error.
+                    lcl_DrawLineForWrongListData( aForbidden, rInf, rInf.GetWrong(), aCalcLinePosData, pPrtFont->GetSize() );
+                    // draw wave line for grammar check errors
+                    lcl_DrawLineForWrongListData( aForbidden, rInf, rInf.GetGrammarCheck(), aCalcLinePosData, pPrtFont->GetSize() );
                 }
             }
 
