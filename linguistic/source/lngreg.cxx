@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lngreg.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,10 +72,10 @@ extern sal_Bool SAL_CALL GrammarCheckingIterator_writeInfo
     void * /*pServiceManager*/, XRegistryKey * pRegistryKey
 );
 
-extern sal_Bool SAL_CALL GrammarChecker_writeInfo
-(
-    void * /*pServiceManager*/, XRegistryKey * pRegistryKey
-);
+//extern sal_Bool SAL_CALL GrammarChecker_writeInfo
+//(
+//    void * /*pServiceManager*/, XRegistryKey * pRegistryKey
+//);
 
 extern void * SAL_CALL LngSvcMgr_getFactory
 (
@@ -112,12 +112,13 @@ extern void * SAL_CALL GrammarCheckingIterator_getFactory
     void *
 );
 
-extern void * SAL_CALL GrammarChecker_getFactory
-(
-    const sal_Char * pImplName,
-    XMultiServiceFactory * pServiceManager,
-    void *
-);
+//extern void * SAL_CALL GrammarChecker_getFactory
+//(
+//    const sal_Char * pImplName,
+//    XMultiServiceFactory * pServiceManager,
+//    void *
+//);
+
 ////////////////////////////////////////
 // definition of the two functions that are used to provide the services
 //
@@ -146,8 +147,10 @@ sal_Bool SAL_CALL component_writeInfo
         bRet = ConvDicList_writeInfo( pServiceManager, pRegistryKey );
     if(bRet)
         bRet = GrammarCheckingIterator_writeInfo( pServiceManager, pRegistryKey );
+/*
     if(bRet)
         bRet = GrammarChecker_writeInfo( pServiceManager, pRegistryKey );
+*/
     return bRet;
 }
 
@@ -183,13 +186,13 @@ void * SAL_CALL component_getFactory(
             pImplName,
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
             pRegistryKey );
-
+/*
     if(!pRet)
         pRet =  GrammarChecker_getFactory(
             pImplName,
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
             pRegistryKey );
-
+*/
     return pRet;
 }
 }
