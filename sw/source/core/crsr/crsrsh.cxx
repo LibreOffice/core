@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: crsrsh.cxx,v $
- * $Revision: 1.75 $
+ * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,6 +71,7 @@
 #include <unoobj.hxx> // SMARTTAGS
 #include <vcl/svapp.hxx>
 #include <numrule.hxx>
+#include <IGrammarContact.hxx>
 
 #include <globals.hrc>
 
@@ -1254,6 +1255,9 @@ void SwCrsrShell::UpdateCrsrPos()
         if( pShellCrsr->HasMark())
             pShellCrsr->DeleteMark();
     }
+    IGrammarContact *pGrammarContact = GetDoc() ? GetDoc()->getGrammarContact() : 0;
+    if( pGrammarContact )
+        pGrammarContact->updateCursorPosition( *pCurCrsr->GetPoint() );
     --nStartAction;
     if( aOldSz != GetDocSize() )
         SizeChgNotify();
