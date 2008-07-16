@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SpellDialogChildWindow.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include <sfx2/childwin.hxx>
 #include <svx/SpellPortions.hxx>
 #include "svx/svxdllapi.h"
+#include <vcl/image.hxx>
 
 class AbstractSpellDialog;
 
@@ -91,6 +92,25 @@ protected:
         this class as well.  The bindings may be necessary to be used
         by the abstract methods.
     */
+    /** This method determines if grammar checking is supported
+     */
+    virtual bool HasGrammarChecking();
+    /** determines if grammar checking is switched on
+     */
+    virtual bool IsGrammarChecking();
+    /** switches grammar checking on/off
+     */
+    virtual void SetGrammarChecking(bool bOn);
+    /** This method determines if a vendor dependent Image is to be displayed in any language
+     */
+    virtual bool HasAnyVendor();
+    /** This method returns the name of the vendor of the grammar/spell checker for a specific language
+     */
+    virtual String GetVendorForLanguage( LanguageType eLanguage);
+    /** This method returns the vendor image for the requested language
+     */
+    virtual Image GetVendorLogoForLanguage( LanguageType eLanguage );
+
     SfxBindings& GetBindings (void) const;
     /** Set the spell dialog into the 'resume' state. This method should be called
         to notify the SpellDialog about changes in the document that invalidate the
