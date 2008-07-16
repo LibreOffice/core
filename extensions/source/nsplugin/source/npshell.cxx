@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: npshell.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,6 +76,27 @@
 #include <errno.h>
 #include "boost/scoped_array.hpp"
 #include "tools/pathutils.hxx"
+
+//http://qa.openoffice.org/issues/show_bug.cgi?id=82545
+//https://bugzilla.mozilla.org/show_bug.cgi?id=241262
+#ifdef UNIX
+#  ifndef _UINT32
+#    if defined(__alpha) || defined(__LP64__)
+       typedef unsigned int uint32;
+#    else  /* __alpha */
+       typedef unsigned long uint32;
+#    endif
+#    define _UINT32
+#  endif
+#  ifndef _INT32
+#    if defined(__alpha) || defined(__LP64__)
+       typedef int int32;
+#    else  /* __alpha */
+       typedef long int32;
+#    endif
+#    define _INT32
+#  endif
+#endif
 
 #include "npapi.h"
 #include "npshell.hxx"
