@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: spelldialog.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,7 +94,7 @@ void ScSpellDialogChildWindow::InvalidateSpellDialog()
             {
                 if( mbNeedNextObj )
                     mxEngine->SpellNextDocument();
-                mbNeedNextObj = !mxEngine->IsFinished() && !mxEngine->SpellSentence( *pEditView, aPortions );
+                mbNeedNextObj = !mxEngine->IsFinished() && !mxEngine->SpellSentence( *pEditView, aPortions, false );
             }
             while( mbNeedNextObj );
         }
@@ -110,7 +110,7 @@ void ScSpellDialogChildWindow::ApplyChangedSentence( const ::svx::SpellPortions&
 {
     if( mxEngine.get() && mpViewData )
         if( EditView* pEditView = mpViewData->GetSpellingView() )
-            mxEngine->ApplyChangedSentence( *pEditView, rChanged );
+            mxEngine->ApplyChangedSentence( *pEditView, rChanged, false );
 }
 
 void ScSpellDialogChildWindow::GetFocus()
