@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Linguistic.xcs,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,9 +71,79 @@
                 </info>
             </prop>
         </group>
+
+        <group oor:name="VendorEntry">
+            <info>
+                <desc>Provides the service implementation name for further look-up.</desc>
+            </info>
+            <prop oor:name="VendorName" oor:type="xs:string">
+                <info>
+                    <desc>Contains the vendor name (actually the service implementation name).</desc>
+                    <label>Vendor entry</label>
+                </info>
+            </prop>
+        </group>
+
+        <group oor:name="VendorImagesEntry">
+            <info>
+                <desc>The bitmaps for vendor specifc branding in the UI. The node name is the service implementation name.</desc>
+            </info>
+            <prop oor:name="SpellAndGrammarDialogImage" oor:type="xs:string">
+                <info>
+                    <desc>The path to the image for the spell and grammar checking dialog.</desc>
+                    <label>Spell and grammar dialog image</label>
+                </info>
+            </prop>
+            <prop oor:name="SpellAndGrammarContextMenuImage" oor:type="xs:string">
+                <info>
+                    <desc>The path to the image for the spell and grammar checking context menu.</desc>
+                    <label>Spell and grammar context menu image</label>
+                </info>
+            </prop>
+        </group>
+
+        <group oor:name="GrammarCheckerEntry">
+            <info>
+                <desc>Specifies the settings for a grammar checker. The node name is the grammar checkers implemetation name.</desc>
+            </info>
+            <prop oor:name="Locales" oor:type="oor:string-list">
+                <info>
+                    <desc>The list of supported locales.</desc>
+                    <label>Grammar checker locales</label>
+                </info>
+            </prop>
+        </group>
+
     </templates>
 
 	<component>
+
+        <group oor:name="Bitmaps">
+            <info>
+                <desc>Contains settings for special bitmaps to be used.</desc>
+            </info>
+            <set oor:name="VendorImages" oor:node-type="VendorImagesEntry">
+                <info>
+                    <desc>Contains the images to use. The node names are the service implementation names.</desc>
+                    <label>Vendor images</label>
+                </info>
+            </set>
+
+            <set oor:name="SpellAndGrammarDialog" oor:node-type="VendorEntry">
+                <info>
+                    <desc>Contains the vendor name (service implementation name) to look up for the image to use. The node names are the langauges.</desc>
+                    <label>Spell and grammar dialog vendor list</label>
+                </info>
+            </set>
+
+            <set oor:name="SpellAndGrammarContextMenu" oor:node-type="VendorEntry">
+                <info>
+                    <desc>Contains the vendor name (service implementation name) to look up for the image to use. The node names are the langauges.</desc>
+                    <label>Spell and grammar context menu vendor list</label>
+                </info>
+            </set>
+        </group>
+
 		<group oor:name="General">
 			<info>
 				<desc>Contains general settings for the linguistic configurations.</desc>
@@ -334,6 +404,27 @@
 				<value>false</value>
 			</prop>
 		</group>
+                <group oor:name="GrammarChecking">
+                        <info>
+                                <desc>Contains grammar checking relevant settings.</desc>
+                        </info>
+                        <prop oor:name="IsAutoCheck" oor:type="xs:boolean">
+                                <info>
+                                        <author>OS</author>
+                                        <desc>determines if grammar is automatically checked.</desc>
+                                        <label>Automatic grammar checking</label>
+                                </info>
+                                <value>false</value>
+                        </prop>
+                        <prop oor:name="IsInteractiveCheck" oor:type="xs:boolean">
+                                <info>
+                                        <author>OS</author>
+                                        <desc>determines if grammar is check in the spelling and grammar dialog.</desc>
+                                        <label>Interactive grammar checking</label>
+                                </info>
+                                <value>false</value>
+                        </prop>
+                </group>
 		<group oor:name="Hyphenation">
 			<info>
 				<desc>Contains hyphenation relevant settings.</desc>
@@ -465,6 +556,13 @@
                 </info>
             </prop>
 
+            <set oor:name="GrammarCheckers" oor:node-type="GrammarCheckerEntry">
+                <info>
+                    <desc>Contains all grammar checkers.</desc>
+                    <label>Grammar Checkers</label>
+                </info>
+            </set>
+
             <prop oor:name="DataFilesChangedCheckValue" oor:type="xs:int">
                 <info>
                     <author>TL</author>
@@ -488,6 +586,11 @@
 					<desc>Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
 				</info>
 			</group>
+            <group oor:name="GrammarCheckerList" oor:extensible="true">
+                <info>
+                    <desc>Contains a list of languages and grammar-checking-service pairs. Only languages that are listed are supported.</desc>
+                </info>
+            </group>
 			<group oor:name="LastFoundSpellCheckers" oor:extensible="true">
 				<info>
 					<desc>Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
@@ -503,6 +606,11 @@
 					<desc>Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
 				</info>
 			</group>
+            <group oor:name="LastFoundGrammarCheckers" oor:extensible="true">
+                <info>
+                    <desc>Contains a list of languages and grammar-checking-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
+                </info>
+            </group>
 		</group>
 	</component>
 </oor:component-schema>
