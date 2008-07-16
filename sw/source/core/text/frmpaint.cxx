@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frmpaint.cxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,6 +63,7 @@
 #include <swmodule.hxx> // SW_MOD
 #include <tabfrm.hxx>   // SwTabFrm (Redlining)
 #include <scrrect.hxx>
+#include <SwGrammarMarkUp.hxx>
 
 // --> FME 2004-06-08 #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
