@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoflatpara.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,13 +54,22 @@ class SwDoc;
  ******************************************************************************/
 
 class SwXFlatParagraph:
-    public ::cppu::WeakImplHelper1<
-        css::text::XFlatParagraph >,
+    public ::cppu::WeakImplHelper1
+    <
+        css::text::XFlatParagraph
+    >,
     public SwXTextMarkup
 {
 public:
     SwXFlatParagraph( SwTxtNode& rTxtNode, rtl::OUString aExpandText, const ModelToViewHelper::ConversionMap* pConversionMap );
     virtual ~SwXFlatParagraph();
+
+    virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire(  ) throw();
+    virtual void SAL_CALL release(  ) throw();
+
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // text::XTextMarkup:
     virtual css::uno::Reference< css::container::XStringKeyMap > SAL_CALL getMarkupInfoContainer() throw (css::uno::RuntimeException);
@@ -91,8 +100,11 @@ private:
  ******************************************************************************/
 
 class SwXFlatParagraphIterator:
-    public ::cppu::WeakImplHelper1<
-        css::text::XFlatParagraphIterator>
+    public ::cppu::WeakImplHelper1
+    <
+        css::text::XFlatParagraphIterator
+    >,
+    public SwClient     // to get notified when doc is closed...
 {
 public:
     SwXFlatParagraphIterator( SwDoc& rDoc, sal_Int32 nType, sal_Bool bAutomatic );
@@ -104,6 +116,9 @@ public:
     virtual css::uno::Reference< css::text::XFlatParagraph > SAL_CALL getLastPara() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< css::text::XFlatParagraph > SAL_CALL getParaBefore(const css::uno::Reference< css::text::XFlatParagraph > & xPara) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
     virtual css::uno::Reference< css::text::XFlatParagraph > SAL_CALL getParaAfter(const css::uno::Reference< css::text::XFlatParagraph > & xPara) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
+
+    // SwClient
+    virtual void    Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
 
 private:
     SwXFlatParagraphIterator( const SwXFlatParagraphIterator & ); // not defined
