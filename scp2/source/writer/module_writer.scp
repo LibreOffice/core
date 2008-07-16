@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_writer.scp,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,7 +100,7 @@ Module gid_Module_Brand_Prg_Wrt
     Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
-    Files = (gid_File_Exe_Swriter);
+    Files = (gid_File_Exe_Swriter,gid_File_Exe_Sweb);
 End
 
 Module gid_Module_Langpack_Writer_Template
