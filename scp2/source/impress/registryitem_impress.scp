@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registryitem_impress.scp,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -267,102 +267,6 @@ RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Versionind
 End
 
 
-
-RegistryItem gid_Regitem_Sdd_Contenttype
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = ".sdd";
-    Name = "Content Type";
-    Value = "application/vnd.stardivision.impress";
-End
-
-RegistryItem gid_Regitem_Sdd_Mime_Database
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "MIME\Database\Content Type\application/vnd.stardivision.impress";
-    Name = "Extension";
-    Value = ".sdd";
-End
-
-RegistryItem gid_Regitem_Sdd_So4_Mime_Database
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "MIME\Database\Content Type\application/x-starimpress";
-    Name = "Extension";
-    Value = ".sdd";
-End
-
-RegistryItem gid_Regitem_Sdp_Contenttype
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = ".sdp";
-    Name = "Content Type";
-    Value = "application/vnd.stardivision.impress-packed";
-End
-
-RegistryItem gid_Regitem_Sdp_Mime_Database
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "MIME\Database\Content Type\application/vnd.stardivision.impress-packed";
-    Name = "Extension";
-    Value = ".sdp";
-End
-
-RegistryItem gid_Regitem_Soffice_Starimpressdocument_5
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.5";
-    REG_VALUE_LNG(SO51_PRESENT_OOO)
-End
-
-RegistryItem gid_Regitem_Soffice_Starimpressdocument_5_Defaulticon
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.5\DefaultIcon";
-    Value = "<progpath>\program\soffice.exe,33";
-End
-
-RegistryItem gid_Regitem_Soffice_Starimpressdocument_5_Shell
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.5\shell";
-    Value = "open";
-End
-
-RegistryItem gid_Regitem_Soffice_Starimpressdocument_5_Shell_New
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.5\shell\new";
-    REG_VALUE_LNG(NEW)
-End
-
-RegistryItem gid_Regitem_Soffice_Starimpressdocument_5_Shell_New_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.5\shell\new\command";
-    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Starimpressdocument_5_Shell_Open_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.5\shell\open\command";
-    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Starimpressdocument_5_Shell_Print_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.5\shell\print\command";
-    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Starimpressdocument_5_Shell_Printto_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = "soffice.StarImpressDocument.5\shell\printto\command";
-    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
-End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -624,39 +528,6 @@ RegistryItem gid_Regitem_Sxi_Mime_Database
     Name = "Extension";
     Value = ".sxi";
 End
-
-RegistryItem gid_Regitem__Sdd
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = ".sdd";
-    Value = "soffice.StarImpressDocument.5";
-End
-
-RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sdd
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
-    Name = ".sdd";
-    Value = "soffice.StarImpressDocument.5";
-    Styles = ();
-End
-
-RegistryItem gid_Regitem__Sdp
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Subkey = ".sdp";
-    Value = "soffice.StarStorageDocument.5";
-End
-
-// .sdp no longer supported
-// RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sdp
-//     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-//     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-//     ModuleID = gid_Module_Root;
-//     Name = ".sdp";
-//     Value = "soffice.StarStorageDocument.5";
-//     Styles = ();
-// End
 
 RegistryItem gid_Regitem__Sxi
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -1019,73 +890,10 @@ RegistryItem gid_Regitem_OpenOffice_STI_OpenWith_Impress
     Value = " ";
 End
 
-// .PPT
-RegistryItem gid_Regitem_OpenOffice_PPT_OpenWith_Impress
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".ppt\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Name = "opendocument.ImpressDocument.1";
-    Value = " ";
-End
-
-// .PPS
-RegistryItem gid_Regitem_OpenOffice_PPS_OpenWith_Impress
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".pps\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Name = "opendocument.ImpressDocument.1";
-    Value = " ";
-End
-
-// .POT
-RegistryItem gid_Regitem_OpenOffice_POT_OpenWith_Impress
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".pot\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Name = "opendocument.ImpressDocument.1";
-    Value = " ";
-End
-
 // .SXD
 RegistryItem gid_Regitem_OpenOffice_SXD_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sxd\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Name = "opendocument.ImpressDocument.1";
-    Value = " ";
-End
-
-// .SDA
-RegistryItem gid_Regitem_OpenOffice_SDA_OpenWith_Impress
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".sda\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Name = "opendocument.ImpressDocument.1";
-    Value = " ";
-End
-
-// .SDD
-RegistryItem gid_Regitem_OpenOffice_SDD_OpenWith_Impress
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".sdd\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Name = "opendocument.ImpressDocument.1";
-    Value = " ";
-End
-
-// .SDP
-RegistryItem gid_Regitem_OpenOffice_SDP_OpenWith_Impress
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".sdp\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Impress_Bin;
-    Name = "opendocument.ImpressDocument.1";
-    Value = " ";
-End
-
-// .VOR
-RegistryItem gid_Regitem_OpenOffice_VOR_OpenWith_Impress
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".vor\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = "opendocument.ImpressDocument.1";
     Value = " ";
@@ -1160,3 +968,12 @@ RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Simp
     Name = "Path";
     Value = "<progpath>";
 End
+
+CONDITIONAL_REGISTER_DOC_EXTENSION( Ppt,  gid_Module_Prg_Impress_Bin, ppt,  PPT,  MS_POWERPOINT_PRESENTATION_OLD, 7, simpress.exe, open, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Pps,  gid_Module_Prg_Impress_Bin, pps,  PPS,  MS_POWERPOINT_SHOW, 7, simpress.exe, open, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Pptx, gid_Module_Prg_Impress_Bin, pptx, PPTX, MS_POWERPOINT_PRESENTATION, 7, simpress.exe, open, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Pptm, gid_Module_Prg_Impress_Bin, pptm, PPTM, MS_POWERPOINT_PRESENTATION, 7, simpress.exe, open, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Pot,  gid_Module_Prg_Impress_Bin, pot,  POT,  MS_POWERPOINT_TEMPLATE_OLD, 8, simpress.exe, new, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Potx, gid_Module_Prg_Impress_Bin, potx, POTX, MS_POWERPOINT_TEMPLATE, 8, simpress.exe, new, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Potm, gid_Module_Prg_Impress_Bin, potm, POTM, MS_POWERPOINT_TEMPLATE, 8, simpress.exe, new, Impress )
+
