@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -68,6 +68,29 @@ all: \
     $(MISC)$/ooo-writer-app.ico \
     $(MISC)$/ooo-writer-doc.ico \
     $(MISC)$/ooo-writer-tem.ico \
+    $(MISC)$/ooo3_calc_doc.ico \
+    $(MISC)$/ooo3_macro_doc.ico \
+    $(MISC)$/ooo3_impress_app.ico \
+    $(MISC)$/ooo3_global_doc.ico \
+    $(MISC)$/ooo3_draw_doc.ico \
+    $(MISC)$/ooo3_chart_doc.ico \
+    $(MISC)$/ooo3_calc_app.ico \
+    $(MISC)$/ooo3_draw_app.ico \
+    $(MISC)$/ooo3_impress_doc.ico \
+    $(MISC)$/ooo3_impress_tem.ico \
+    $(MISC)$/ooo3_html_doc.ico \
+    $(MISC)$/ooo3_base_app.ico \
+    $(MISC)$/ooo3_draw_tem.ico \
+    $(MISC)$/ooo3_base_doc.ico \
+    $(MISC)$/ooo3_calc_tem.ico \
+    $(MISC)$/ooo3_writer_app.ico \
+    $(MISC)$/ooo3_math_app.ico \
+    $(MISC)$/ooo3_main_app.ico \
+    $(MISC)$/ooo3_empty_doc.ico \
+    $(MISC)$/ooo3_writer_doc.ico \
+    $(MISC)$/ooo3_math_doc.ico \
+    $(MISC)$/ooo3_writer_tem.ico \
+    $(MISC)$/ooo3_empty_tem.ico \
     $(MISC)$/ooo11-base-doc.ico \
     $(MISC)$/ooo11-calc-doc.ico \
     $(MISC)$/ooo11-calc-tem.ico \
@@ -107,6 +130,29 @@ all: \
     $(MISC)$/so8-writer-app.ico \
     $(MISC)$/so8-writer-doc.ico \
     $(MISC)$/so8-writer-tem.ico \
+    $(MISC)$/so9_empty_tem.ico \
+    $(MISC)$/so9_math_app.ico \
+    $(MISC)$/so9_global_doc.ico \
+    $(MISC)$/so9_main_app.ico \
+    $(MISC)$/so9_empty_doc.ico \
+    $(MISC)$/so9_math_doc.ico \
+    $(MISC)$/so9_base_app.ico \
+    $(MISC)$/so9_html_doc.ico \
+    $(MISC)$/so9_impress_doc.ico \
+    $(MISC)$/so9_draw_tem.ico \
+    $(MISC)$/so9_writer_tem.ico \
+    $(MISC)$/so9_impress_app.ico \
+    $(MISC)$/so9_calc_tem.ico \
+    $(MISC)$/so9_base_doc.ico \
+    $(MISC)$/so9_macro_doc.ico \
+    $(MISC)$/so9_calc_doc.ico \
+    $(MISC)$/so9_draw_doc.ico \
+    $(MISC)$/so9_writer_doc.ico \
+    $(MISC)$/so9_calc_app.ico \
+    $(MISC)$/so9_impress_tem.ico \
+    $(MISC)$/so9_chart_doc.ico \
+    $(MISC)$/so9_writer_app.ico \
+    $(MISC)$/so9_draw_app.ico \
     $(MISC)$/so7-base-doc.ico \
     $(MISC)$/so7-calc-doc.ico \
     $(MISC)$/so7-calc-tem.ico \
@@ -125,4 +171,3 @@ $(MISC)$/%.ico: %.ico
     $(COPY) $< $@
 
 .INCLUDE :  target.mk
-
