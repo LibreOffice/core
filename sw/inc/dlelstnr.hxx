@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlelstnr.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,7 @@ namespace com { namespace sun { namespace star {
     namespace linguistic2 {
         class XDictionaryList;
         class XLinguServiceManager;
+        class XGrammarCheckingIterator;
     }
     namespace frame {
         class XTerminateListener;
@@ -64,9 +65,11 @@ class SwLinguServiceEventListener :
     >
 {
     com::sun::star::uno::Reference<
-        com::sun::star::frame::XDesktop >                   xDesktop;
+        com::sun::star::frame::XDesktop >                       xDesktop;
     com::sun::star::uno::Reference<
-        com::sun::star::linguistic2::XLinguServiceManager > xLngSvcMgr;
+        com::sun::star::linguistic2::XLinguServiceManager >     xLngSvcMgr;
+    com::sun::star::uno::Reference<
+        com::sun::star::linguistic2::XGrammarCheckingIterator > xGCIterator;
 
     // disallow use of copy-constructor and assignment operator
     SwLinguServiceEventListener(const SwLinguServiceEventListener &);
@@ -77,27 +80,17 @@ public:
     virtual ~SwLinguServiceEventListener();
 
     // XEventListener
-    virtual void SAL_CALL disposing(
-            const ::com::sun::star::lang::EventObject& rEventObj )
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rEventObj ) throw(::com::sun::star::uno::RuntimeException);
 
     // XDictionaryListEventListener
-    virtual void    SAL_CALL processDictionaryListEvent(
-            const ::com::sun::star::linguistic2::DictionaryListEvent& rDicListEvent)
-        throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL processDictionaryListEvent( const ::com::sun::star::linguistic2::DictionaryListEvent& rDicListEvent) throw( ::com::sun::star::uno::RuntimeException );
 
     // XLinguServiceEventListener
-    virtual void SAL_CALL processLinguServiceEvent(
-            const ::com::sun::star::linguistic2::LinguServiceEvent& rLngSvcEvent )
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL processLinguServiceEvent( const ::com::sun::star::linguistic2::LinguServiceEvent& rLngSvcEvent ) throw(::com::sun::star::uno::RuntimeException);
 
     // XTerminateListener
-    virtual void SAL_CALL queryTermination(
-            const ::com::sun::star::lang::EventObject& rEventObj )
-        throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL notifyTermination(
-            const ::com::sun::star::lang::EventObject& rEventObj )
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& rEventObj ) throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& rEventObj ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 
