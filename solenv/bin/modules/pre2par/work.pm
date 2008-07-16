@@ -8,7 +8,7 @@
 #
 # $RCSfile: work.pm,v $
 #
-# $Revision: 1.12 $
+# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -56,6 +56,12 @@ sub split_line
         pre2par::remover::remove_leading_and_ending_whitespaces(\$oneline);
         $oneline = $oneline . "\n";
         push(@{$parfile}, $oneline);
+
+        if ( $line =~ /^\s*End\s+(\w+.*$)/i )
+        {
+            $line = $1;
+            push(@{$parfile}, "End\n\n");
+        }
     }
 
     # the last line
@@ -65,6 +71,32 @@ sub split_line
     push(@{$parfile}, $line);
 
     if ( $line =~ /^\s*End\s*$/i ) { push(@{$parfile}, "\n"); }
+}
+
+###################################################################
+# Preprocessing the pre file to split all lines with semicolon
+###################################################################
+
+sub preprocess_macros
+{
+    my ($prefile) = @_;
+
+    my @newprefile = ();
+
+    for ( my $i = 0; $i <= $#{$prefile}; $i++ )
+    {
+        my $oneline = ${$prefile}[$i];
+        if ( $oneline =~ /\;\s*\w+/ )
+        {
+            split_line($oneline, \@newprefile);
+        }
+        else
+        {
+            push(@newprefile, $oneline);
+        }
+    }
+
+    return \@newprefile;
 }
 
 ############################################
@@ -80,6 +112,9 @@ sub convert
     my $iscodesection = 0;
     my $ismultiliner = 0;
     my $globalline = "";
+
+    # Preprocessing the pre file to split all lines with semicolon
+    $prefile = preprocess_macros($prefile);
 
     for ( my $i = 0; $i <= $#{$prefile}; $i++ )
     {
