@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editsh.hxx,v $
- * $Revision: 1.69 $
+ * $Revision: 1.70 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,7 @@
 #include <itabenum.hxx>
 #include <swdbdata.hxx>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
+#include <com/sun/star/linguistic2/GrammarCheckingResult.hpp>
 #include <fldupde.hxx>
 #include <tblenum.hxx>
 
@@ -733,9 +734,9 @@ public:
 
     // spells on a sentence basis - the SpellPortions are needed
     // returns false if no error could be found
-    bool SpellSentence(::svx::SpellPortions& rToFill);
+    bool SpellSentence(::svx::SpellPortions& rToFill, bool bIsGrammarCheck );
     //applies a changed sentence
-    void ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions);
+    void ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions, bool bIsGrammarCheck);
 
     // Is text conversion active somewhere else?
     BOOL HasConvIter() const;
@@ -745,6 +746,13 @@ public:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellAlternatives >
             GetCorrection( const Point* pPt, SwRect& rSelectRect );
+
+
+    bool GetGrammarCorrection( ::com::sun::star::linguistic2::GrammarCheckingResult /*out*/ &rResult,
+            sal_Int32 /*out*/ &rErrorPosInText,
+            sal_Int32 /*out*/ &rErrorIndexInResult,
+            ::com::sun::star::uno::Sequence< rtl::OUString > /*out*/ &rSuggestions,
+            const Point* pPt, SwRect& rSelectRect );
 
     void SetLinguRange( SwDocPositions eStart, SwDocPositions eEnde );
 
