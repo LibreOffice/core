@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: olmenu.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,13 +29,18 @@
  ************************************************************************/
 #ifndef _OLMENU_HXX
 #define _OLMENU_HXX
+
 #include <com/sun/star/linguistic2/XDictionary.hpp>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
+#include <com/sun/star/linguistic2/GrammarCheckingResult.hpp>
+#include <com/sun/star/uno/Sequence.h>
 
-#ifndef _MENU_HXX //autogen
+#include <rtl/ustring.hxx>
 #include <vcl/menu.hxx>
-#endif
+
 #include <map>
+#include <vector>
+
 
 class SwWrtShell;
 
@@ -47,6 +52,9 @@ class SwSpellPopup : public PopupMenu
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellAlternatives > xSpellAlt;
 
+    ::com::sun::star::uno::Sequence< rtl::OUString >  aSuggestions;
+    LanguageType                nCheckedLanguage;
+
     LanguageType                nGuessLangWord;
     LanguageType                nGuessLangPara;
 
@@ -56,14 +64,23 @@ class SwSpellPopup : public PopupMenu
     std::map< sal_Int16, ::rtl::OUString > aLangTable_Text;
     std::map< sal_Int16, ::rtl::OUString > aLangTable_Paragraph;
     std::map< sal_Int16, ::rtl::OUString > aLangTable_Document;
+
+    bool    bGrammarResults;    // show grammar results? Or show spellcheck results?
+
     USHORT fillLangPopupMenu( PopupMenu *pPopupMenu , USHORT Lang_Start, ::com::sun::star::uno::Sequence< ::rtl::OUString > aSeq,SwWrtShell* pWrtSh, USHORT nLangTable);
 
     using PopupMenu::Execute;
 
 public:
-    SwSpellPopup( SwWrtShell*,
+    SwSpellPopup( SwWrtShell *pWrtSh,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XSpellAlternatives >  &xAlt,
+            const String & rParaText );
+
+    SwSpellPopup( SwWrtShell *pWrtSh,
+            const ::com::sun::star::linguistic2::GrammarCheckingResult &rResult,
+            sal_Int32 nErrorInResult,
+            const ::com::sun::star::uno::Sequence< rtl::OUString > &rSuggestions,
             const String & rParaText );
 
     sal_uInt16  Execute( const Rectangle& rPopupPos, Window* pWin );
