@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_writer.scp,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,15 @@ File gid_File_Exe_Swriter
     Name = EXENAME(swriter);
     Styles = (PACKED);
 End
+
+#ifdef WNT
+File gid_File_Exe_Sweb
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = EXENAME(sweb);
+    Styles = (PACKED);
+End
+#endif
 
 #ifdef SOLAR_JAVA
 #ifndef WITHOUT_WRITER2LATEX
