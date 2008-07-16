@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlin2.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -790,14 +790,14 @@ void Outliner::EndSpelling()
 /*-- 13.10.2003 16:56:23---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-bool Outliner::SpellSentence(EditView& rEditView, ::svx::SpellPortions& rToFill)
+bool Outliner::SpellSentence(EditView& rEditView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking )
 {
-    return pEditEngine->SpellSentence(rEditView, rToFill);
+    return pEditEngine->SpellSentence(rEditView, rToFill, bIsGrammarChecking );
 }
 /*-- 13.10.2003 16:56:25---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void Outliner::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions)
+void Outliner::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bIsGrammarChecking )
 {
-    pEditEngine->ApplyChangedSentence( rEditView, rNewPortions);
+    pEditEngine->ApplyChangedSentence( rEditView, rNewPortions, bIsGrammarChecking );
 }
