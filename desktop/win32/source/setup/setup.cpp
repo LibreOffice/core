@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: setup.cpp,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,8 +68,12 @@
 #define PARAM_ADMIN         TEXT( "/A " )
 #define PARAM_TRANSFORM     TEXT( " TRANSFORMS=" )
 #define PARAM_REBOOT        TEXT( " REBOOT=Force" )
+#define PARAM_REG_ALL_MSO_TYPES TEXT( "REGISTER_ALL_MSO_TYPES=1 " )
+#define PARAM_REG_NO_MSO_TYPES  TEXT( "REGISTER_NO_MSO_TYPES=1 " )
 
-#define PARAM_RUNNING       TEXT( "ignore_running" )
+#define PARAM_RUNNING           TEXT( "ignore_running" )
+#define CMDLN_REG_ALL_MSO_TYPES TEXT( "msoreg=1" )
+#define CMDLN_REG_NO_MSO_TYPES  TEXT( "msoreg=0" )
 
 #define MSI_DLL             TEXT( "msi.dll" )
 #define ADVAPI32_DLL        TEXT( "advapi32.dll" )
@@ -135,6 +139,9 @@ SetupAppX::SetupAppX()
 
     m_bQuiet          = false;
     m_bAdministrative = false;
+    m_bRegNoMsoTypes  = false;
+    m_bRegAllMsoTypes = false;
+
     m_bIgnoreAlreadyRunning = false;
 }
 
@@ -844,6 +851,11 @@ boolean SetupAppX::Install( long nLanguage )
     // we will always use the parameter setup used
     int nParLen = lstrlen( PARAM_SETUP_USED );
 
+    if ( m_bRegNoMsoTypes )
+        nParLen += lstrlen( PARAM_REG_NO_MSO_TYPES );
+    else if ( m_bRegAllMsoTypes )
+        nParLen += lstrlen( PARAM_REG_ALL_MSO_TYPES );
+
     if ( m_pAdvertise )
         nParLen += lstrlen( m_pAdvertise ) + 1;     // one for the space
     else
@@ -866,6 +878,11 @@ boolean SetupAppX::Install( long nLanguage )
     TCHAR *pParams = new TCHAR[ nParLen ];
 
     StringCchCopy( pParams, nParLen, PARAM_SETUP_USED );
+
+    if ( m_bRegNoMsoTypes )
+        StringCchCat( pParams, nParLen, PARAM_REG_NO_MSO_TYPES );
+    else if ( m_bRegAllMsoTypes )
+        StringCchCat( pParams, nParLen, PARAM_REG_ALL_MSO_TYPES );
 
     if ( m_pAdvertise )
         StringCchCat( pParams, nParLen, m_pAdvertise );
@@ -1501,6 +1518,14 @@ boolean SetupAppX::GetCmdLineParameters( LPTSTR *pCmdLine )
             else if ( _tcsnicmp( pSub, PARAM_RUNNING, _tcslen( PARAM_RUNNING ) ) == 0 )
             {
                 m_bIgnoreAlreadyRunning = true;
+            }
+            else if ( _tcsnicmp( pSub, CMDLN_REG_ALL_MSO_TYPES, _tcslen( CMDLN_REG_ALL_MSO_TYPES ) ) == 0 )
+            {
+                m_bRegAllMsoTypes = true;
+            }
+            else if ( _tcsnicmp( pSub, CMDLN_REG_NO_MSO_TYPES, _tcslen( CMDLN_REG_NO_MSO_TYPES ) ) == 0 )
+            {
+                m_bRegNoMsoTypes = true;
             }
             else if ( (*pSub) == 'i' || (*pSub) == 'I' || (*pSub) == 'f' || (*pSub) == 'F' ||
                       (*pSub) == 'p' || (*pSub) == 'P' || (*pSub) == 'x' || (*pSub) == 'X' ||
