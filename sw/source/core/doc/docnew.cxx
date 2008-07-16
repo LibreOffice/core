@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docnew.cxx,v $
- * $Revision: 1.88 $
+ * $Revision: 1.89 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,12 @@
 #include <doc.hxx>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/linguistic2/XGrammarCheckingIterator.hpp>
+#include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
+
+#include <unotools/processfactory.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <rtl/logfile.hxx>
 #include <sfx2/printer.hxx>
@@ -50,6 +56,7 @@
 #include <svx/forbiddencharacterstable.hxx>
 #include <svtools/zforlist.hxx>
 #include <svtools/compatibility.hxx>
+#include <svtools/lingucfg.hxx>
 #include <svx/svdpage.hxx>
 #include <paratr.hxx>
 #include <fchrfmt.hxx>
@@ -97,6 +104,7 @@
 #include <mvsave.hxx>
 #include <istyleaccess.hxx>
 #include <swstylemanager.hxx>
+#include <IGrammarContact.hxx>
 
 #include <unochart.hxx>
 
@@ -137,6 +145,53 @@ SV_IMPL_PTRARR( SwNumRuleTbl, SwNumRulePtr)
 SV_IMPL_PTRARR( SwTxtFmtColls, SwTxtFmtCollPtr)
 SV_IMPL_PTRARR( SwGrfFmtColls, SwGrfFmtCollPtr)
 
+/*
+ * global functions...
+ */
+
+ uno::Reference< linguistic2::XGrammarCheckingIterator > SwDoc::GetGCIterator() const
+{
+    if (!m_xGCIterator.is() && SvtLinguConfig().HasGrammarChecker())
+    {
+        uno::Reference< lang::XMultiServiceFactory >  xMgr( utl::getProcessServiceFactory() );
+        if (xMgr.is())
+        {
+            try
+            {
+                rtl::OUString aServiceName( rtl::OUString::createFromAscii("com.sun.star.lingu2.GrammarCheckingIterator") );
+                m_xGCIterator = uno::Reference< linguistic2::XGrammarCheckingIterator >
+                    ( xMgr->createInstance( aServiceName ), uno::UNO_QUERY_THROW );
+            }
+            catch (uno::Exception &)
+            {
+                DBG_ERROR( "No GCIterator" );
+            }
+        }
+    }
+
+    return m_xGCIterator;
+}
+
+void StartGrammarChecking( SwDoc &rDoc, SwRootFrm &rRootFrame )
+{
+//    if (rRootFrame.IsGrammarCheckActive())
+//        return;
+
+    uno::Reference< linguistic2::XGrammarCheckingIterator > xGCIterator( rDoc.GetGCIterator() );
+    if ( xGCIterator.is() )
+    {
+        uno::Reference< lang::XComponent >  xDoc( rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
+        uno::Reference< text::XFlatParagraphIteratorProvider >  xFPIP( xDoc, uno::UNO_QUERY );
+
+        // start automatic background checking
+        if ( xFPIP.is() && !xGCIterator->isGrammarChecking( xDoc, sal_True ) )
+        {
+            rRootFrame.SetNeedGrammarCheck( false );
+            rRootFrame.SetGrammarCheckActive( true );
+            xGCIterator->startGrammarChecking( xDoc, xFPIP, true /*bAutomatic*/ );
+        }
+    }
+}
 
 /*
  * interne Funktionen
@@ -216,6 +271,7 @@ SwDoc::SwDoc() :
     // <--
     pLayoutCache( 0 ),
     pUnoCallBack(new SwUnoCallBack(0)),
+    mpGrammarContact( 0 ),
     aChartDataProviderImplRef(),
     pChartControllerHelper( 0 ),
     // --> OD 2007-10-31 #i83479#
@@ -329,6 +385,8 @@ SwDoc::SwDoc() :
 
     pMacroTable = new SvxMacroTableDtor;
 
+    mpGrammarContact = ::createGrammarContact();
+
     /*
      * Defaultformate und DefaultFormatsammlungen (FmtColl)
      * werden an der Position 0 in das jeweilige Array eingetragen.
@@ -441,6 +499,9 @@ SwDoc::~SwDoc()
     // this assures that dipose gets called if there is need for it.
     aChartDataProviderImplRef.reset();
     delete pChartControllerHelper;
+
+    delete mpGrammarContact;
+    mpGrammarContact = 0;
 
     //!! needs to be done to destroy a possible SwFmtDrop format that may
     //!! be connected to a char format which may not otherwise be removed
@@ -900,6 +961,14 @@ void SwDoc::ReadLayoutCache( SvStream& rStream )
 void SwDoc::WriteLayoutCache( SvStream& rStream )
 {
     pLayoutCache->Write( rStream, *this );
+}
+
+IGrammarContact* getGrammarContact( const SwTxtNode& rTxtNode )
+{
+    const SwDoc* pDoc = rTxtNode.GetDoc();
+    if( !pDoc || pDoc->IsInDtor() )
+        return 0;
+    return pDoc->getGrammarContact();
 }
 
 // --> FME 2005-02-25 #i42634# Moved common code of SwReader::Read() and
