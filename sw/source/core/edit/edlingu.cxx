@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edlingu.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/linguistic2/GrammarCheckingResult.hpp>
+#include <com/sun/star/linguistic2/XGrammarChecker.hpp>
+#include <com/sun/star/linguistic2/XGrammarCheckingIterator.hpp>
+#include <com/sun/star/text/XFlatParagraph.hpp>
+
+#include <unoflatpara.hxx>
 
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
@@ -53,7 +59,7 @@
 #include <ndtxt.hxx>        // AdjHyphPos
 #include <viewopt.hxx>      // HyphStart/End
 #include <viscrs.hxx>       // SwShellCrsr
-#include <wrong.hxx>        // SwWrongList
+#include <SwGrammarMarkUp.hxx>      // SwWrongList
 #include <mdiexp.hxx>       // Statusanzeige
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>      // StatLine-String
@@ -63,6 +69,7 @@
 #include <splargs.hxx>
 #include <redline.hxx>      // SwRedline
 #include <docary.hxx>       // SwRedlineTbl
+#include <docsh.hxx>
 
 using namespace ::svx;
 using namespace ::com::sun::star;
@@ -131,8 +138,11 @@ class SwSpellIter : public SwLinguIter
 
 
     void    CreatePortion(uno::Reference< XSpellAlternatives > xAlt,
+                linguistic2::GrammarCheckingResult* pGrammarResult,
                 bool bIsField, bool bIsHidden);
+
     void    AddPortion(uno::Reference< XSpellAlternatives > xAlt,
+                       linguistic2::GrammarCheckingResult* pGrammarResult,
                        const SpellContentPositions& rDeletedRedlines);
 public:
     SwSpellIter() {}
@@ -141,7 +151,7 @@ public:
 
     uno::Any    Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
 
-    bool                                SpellSentence(::svx::SpellPortions& rPortions);
+    bool                                SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammarCheck);
     const ::svx::SpellPortions          GetLastPortions(){ return aLastPortions;}
     SpellContentPositions               GetLastPositions() {return aLastPositions;}
 };
@@ -361,7 +371,7 @@ uno::Any SwSpellIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
         *pMySh->GetCrsr()->GetPoint() = *GetCurr();
         *pMySh->GetCrsr()->GetMark() = *GetEnd();
         pMySh->GetDoc()->Spell(*pMySh->GetCrsr(),
-                    xSpeller, pPageCnt, pPageSt ) >>= xSpellRet;
+                    xSpeller, pPageCnt, pPageSt, false ) >>= xSpellRet;
         bGoOn = GetCrsrCnt() > 1;
         if( xSpellRet.is() )
         {
@@ -439,7 +449,7 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
         // call function to find next text portion to be converted
         uno::Reference< linguistic2::XSpellChecker1 > xEmpty;
         pMySh->GetDoc()->Spell( *pMySh->GetCrsr(),
-                    xEmpty, pPageCnt, pPageSt, &rArgs ) >>= aConvText;
+                    xEmpty, pPageCnt, pPageSt, false, &rArgs ) >>= aConvText;
 
         bGoOn = GetCrsrCnt() > 1;
         if( aConvText.getLength() )
@@ -1026,7 +1036,7 @@ uno::Reference< XSpellAlternatives >
                 }
             }
 
-            if ( xSpellAlt.is() )
+            if ( xSpellAlt.is() )   // error found?
             {
                 //save the start and end positons of the line and the starting point
                 Push();
@@ -1085,15 +1095,160 @@ uno::Reference< XSpellAlternatives >
     return xSpellAlt;
 }
 
+/*-------------------------------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+
+bool SwEditShell::GetGrammarCorrection(
+    linguistic2::GrammarCheckingResult /*out*/ &rResult,    // the complete result
+    sal_Int32 /*out*/ &rErrorPosInText,                     // offset of error position in string that was grammar checked...
+    sal_Int32 /*out*/ &rErrorIndexInResult,                 // index of error in rResult.aGrammarErrors
+    uno::Sequence< rtl::OUString > /*out*/ &rSuggestions,   // suggestions to be used for the error found
+    const Point *pPt, SwRect &rSelectRect )
+{
+    bool bRes = false;
+
+    if( IsTableMode() )
+        return bRes;
+
+    SwPaM* pCrsr = GetCrsr();
+    SwPosition aPos( *pCrsr->GetPoint() );
+    Point aPt( *pPt );
+    SwCrsrMoveState eTmpState( MV_SETONLYTEXT );
+    SwTxtNode *pNode;
+    SwGrammarMarkUp *pWrong;
+    if( GetLayout()->GetCrsrOfst( &aPos, aPt, &eTmpState ) &&
+        0 != (pNode = aPos.nNode.GetNode().GetTxtNode()) &&
+        0 != (pWrong = pNode->GetGrammarCheck()) &&
+        !pNode->IsInProtectSect() )
+    {
+        xub_StrLen nBegin = aPos.nContent.GetIndex();
+        xub_StrLen nLen = 1;
+        if (pWrong->InWrongWord(nBegin, nLen))
+        {
+            String aText( pNode->GetTxt().Copy( nBegin, nLen ) );
+            String aWord( aText );
+            aWord.EraseAllChars( CH_TXTATR_BREAKWORD ).EraseAllChars( CH_TXTATR_INWORD );
+
+            uno::Reference< linguistic2::XGrammarCheckingIterator >  xGCIterator( pDoc->GetGCIterator() );
+            if (xGCIterator.is())
+            {
+//                LanguageType eActLang = (LanguageType)pNode->GetLang( nBegin, nLen );
+                uno::Reference< lang::XComponent > xDoc( pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
+
+                // Expand the string:
+                rtl::OUString aExpandText;
+                const ModelToViewHelper::ConversionMap* pConversionMap =
+                        pNode->BuildConversionMap( aExpandText );
+                // get XFlatParagraph to use...
+                uno::Reference< text::XFlatParagraph > xFlatPara = new SwXFlatParagraph( *pNode, aExpandText, pConversionMap );
+
+                // get error position of cursor in XFlatParagraph
+                rErrorPosInText = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nBegin );
+
+                sal_Int32 nStartOfSentence = ModelToViewHelper::ConvertToViewPosition( pConversionMap, pWrong->getSentenceStart( nBegin ) );
+                sal_Int32 nEndOfSentence = ModelToViewHelper::ConvertToViewPosition( pConversionMap, pWrong->getSentenceEnd( nBegin ) );
+                if( nEndOfSentence == STRING_LEN )
+                {
+                    if( nStartOfSentence == 0 )
+                    {
+                        nStartOfSentence = -1;
+                        nEndOfSentence = -1;
+                    }
+                    else
+                        nEndOfSentence = aExpandText.getLength();
+                }
+
+                rResult = xGCIterator->checkGrammarAtPos(
+                        xDoc, xFlatPara, aExpandText, lang::Locale(), nStartOfSentence, nEndOfSentence, rErrorPosInText );
+                bRes = true;
+
+                // get suggestions to use for the specific error position
+                sal_Int32 nErrors = rResult.aGrammarErrors.getLength();
+                rSuggestions.realloc( 0 );
+                for (sal_Int32 i = 0;  i < nErrors; ++i )
+                {
+                    // return suggestions for first error that includes the given error position
+                    const linguistic2::SingleGrammarError &rError = rResult.aGrammarErrors[i];
+                    if (rError.nErrorStart <= rErrorPosInText &&
+                        rErrorPosInText < rError.nErrorStart + rError.nErrorLength)
+                    {
+                        rSuggestions = rError.aSuggestions;
+                        rErrorIndexInResult = i;
+                        break;
+                    }
+                }
+            }
+
+            if (rResult.aGrammarErrors.getLength() > 0)    // error found?
+            {
+                //save the start and end positons of the line and the starting point
+                Push();
+                LeftMargin();
+                xub_StrLen nLineStart = GetCrsr()->GetPoint()->nContent.GetIndex();
+                RightMargin();
+                xub_StrLen nLineEnd = GetCrsr()->GetPoint()->nContent.GetIndex();
+                Pop(FALSE);
+
+#if OSL_DEBUG_LEVEL > 1
+//                pNode->GetGrammarCheck()->Invalidate( 0, STRING_LEN );
+//                pNode->SetGrammarCheckDirty( true );
+#endif
+                // make sure the selection build later from the
+                // data below does not include footnotes and other
+                // "in word" character to the left and right in order
+                // to preserve those. Therefore count those "in words"
+                // in order to modify the selection accordingly.
+                const sal_Unicode* pChar = aText.GetBuffer();
+                xub_StrLen nLeft = 0;
+                while (pChar && *pChar++ == CH_TXTATR_INWORD)
+                    ++nLeft;
+                pChar = aText.Len() ? aText.GetBuffer() + aText.Len() - 1 : 0;
+                xub_StrLen nRight = 0;
+                while (pChar && *pChar-- == CH_TXTATR_INWORD)
+                    ++nRight;
+
+                aPos.nContent = nBegin + nLeft;
+                pCrsr = GetCrsr();
+                *pCrsr->GetPoint() = aPos;
+                pCrsr->SetMark();
+                ExtendSelection( sal_True, nLen - nLeft - nRight );
+                //no determine the rectangle in the current line
+                xub_StrLen nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
+                //take one less than the line end - otherwise the next line would be calculated
+                xub_StrLen nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd ? nLineEnd - 1: (nBegin + nLen - nLeft - nRight);
+                Push();
+                pCrsr->DeleteMark();
+                SwIndex& rContent = GetCrsr()->GetPoint()->nContent;
+                rContent = nWordStart;
+                SwRect aStartRect;
+                SwCrsrMoveState aState;
+                aState.bRealWidth = TRUE;
+                SwCntntNode* pCntntNode = pCrsr->GetCntntNode();
+                SwCntntFrm *pCntntFrame = pCntntNode->GetFrm(pPt, pCrsr->GetPoint(), FALSE);
+
+                pCntntFrame->GetCharRect( aStartRect, *pCrsr->GetPoint(), &aState );
+                rContent = nWordEnd;
+                SwRect aEndRect;
+                pCntntFrame->GetCharRect( aEndRect, *pCrsr->GetPoint(),&aState );
+                rSelectRect = aStartRect.Union( aEndRect );
+                Pop(FALSE);
+            }
+        }
+    }
+
+    return bRes;
+}
+
 /*-- 18.09.2003 15:08:18---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-bool SwEditShell::SpellSentence(::svx::SpellPortions& rPortions)
+bool SwEditShell::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammarCheck)
 {
     ASSERT(  pSpellIter, "SpellIter missing" );
     if(!pSpellIter)
         return false;
-    bool bRet = pSpellIter->SpellSentence(rPortions);
+    bool bRet = pSpellIter->SpellSentence(rPortions, bIsGrammarCheck);
 
     // make Selection visible - this should simply move the
     // cursor to the end of the sentence
@@ -1119,7 +1274,7 @@ sal_uInt32 lcl_CountRedlines(
 /*-- 18.09.2003 15:08:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions)
+void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions, bool bIsGrammarCheck)
 {
     ASSERT(  pSpellIter, "SpellIter missing" );
     if(pSpellIter)
@@ -1224,8 +1379,16 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions)
 
             }
         }
-        //set the cursor to the end of the new sentence
-        *pCrsr->Start() = *pCrsr->End();
+        if( !bIsGrammarCheck)
+        {
+            //set the cursor to the end of the new sentence
+            *pCrsr->Start() = *pCrsr->End();
+        }
+        else
+        {
+            //in grammar check the current sentence has to be checked again
+            *pCrsr->Start() = *pSpellIter->GetStart();
+        }
         pDoc->EndUndo( UNDO_OVERWRITE, NULL );
         EndAction();
     }
@@ -1312,7 +1475,7 @@ SpellContentPosition  lcl_FindNextDeletedRedline(
 /*-- 18.09.2003 15:08:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions)
+bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammarCheck)
 {
     bool bRet = false;
     aLastPortions.clear();
@@ -1325,7 +1488,9 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions)
     ASSERT( GetEnd(), "SwEditShell::SpellSentence() ohne Start?");
 
     uno::Reference< XSpellAlternatives >  xSpellRet;
+    linguistic2::GrammarCheckingResult aGrammarResult;
     sal_Bool bGoOn = sal_True;
+    bool bGrammarErrorFound = false;
     do {
         SwPaM *pCrsr = pMySh->GetCrsr();
         if ( !pCrsr->HasMark() )
@@ -1334,10 +1499,14 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions)
         *pCrsr->GetPoint() = *GetCurr();
         *pCrsr->GetMark() = *GetEnd();
 
+        uno::Any aSpellRet =
         pMySh->GetDoc()->Spell(*pCrsr,
-                    xSpeller, 0, 0 ) >>= xSpellRet;
+                    xSpeller, 0, 0, bIsGrammarCheck );
+        aSpellRet >>= xSpellRet;
+        aSpellRet >>= aGrammarResult;
         bGoOn = GetCrsrCnt() > 1;
-        if( xSpellRet.is() )
+        bGrammarErrorFound = aGrammarResult.aGrammarErrors.getLength() > 0;
+        if( xSpellRet.is() || bGrammarErrorFound )
         {
             bGoOn = sal_False;
             SwPosition* pNewPoint = new SwPosition( *pCrsr->GetPoint() );
@@ -1365,7 +1534,7 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions)
         }
     }
     while ( bGoOn );
-    if(xSpellRet.is())
+    if(xSpellRet.is() || bGrammarErrorFound)
     {
         //an error has been found
         //To fill the spell portions the beginning of the sentence has to be found
@@ -1378,12 +1547,12 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions)
         if(bStartSent)
         {
             //create a portion from the start part
-            AddPortion(0, aDeletedRedlines);
+            AddPortion(0, 0, aDeletedRedlines);
         }
         //Set the cursor to the error already found
         *pCrsr->GetPoint() = *GetCurrX();
         *pCrsr->GetMark() = *GetCurr();
-        AddPortion(xSpellRet, aDeletedRedlines);
+        AddPortion(xSpellRet, &aGrammarResult, aDeletedRedlines);
 
 
         //determine the end of the current sentence
@@ -1405,53 +1574,71 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions)
         //now the rest of the sentence has to be searched for errors
         // for each error the non-error text between the current and the last error has
         // to be added to the portions - if necessary broken into same-language-portions
-        do
+        if( !bGrammarErrorFound ) //in grammar check there's only one error returned
         {
-            pMySh->GetDoc()->Spell(*pCrsr,
-                        xSpeller, 0, 0 ) >>= xSpellRet;
-            if ( *pCrsr->GetPoint() > *pCrsr->GetMark() )
-                pCrsr->Exchange();
-            SetCurr( new SwPosition( *pCrsr->GetPoint() ));
-            SetCurrX( new SwPosition( *pCrsr->GetMark() ));
-
-            //if an error has been found go back to the text
-            //preceeding the error
-            if(xSpellRet.is())
+            do
             {
-                *pCrsr->GetPoint() = aSaveStartPos;
-                *pCrsr->GetMark() = *GetCurr();
-            }
-            //add the portion
-            AddPortion(0, aDeletedRedlines);
+                xSpellRet = 0;
+                // don't search for grammar errors here anymore!
+                pMySh->GetDoc()->Spell(*pCrsr,
+                            xSpeller, 0, 0, false ) >>= xSpellRet;
+                if ( *pCrsr->GetPoint() > *pCrsr->GetMark() )
+                    pCrsr->Exchange();
+                SetCurr( new SwPosition( *pCrsr->GetPoint() ));
+                SetCurrX( new SwPosition( *pCrsr->GetMark() ));
 
-            if(xSpellRet.is())
-            {
-                *pCrsr->GetPoint() = *GetCurr();
-                *pCrsr->GetMark() = *GetCurrX();
-                AddPortion(xSpellRet, aDeletedRedlines);
-                //move the cursor to the end of the error string
-                *pCrsr->GetPoint() = *GetCurrX();
-                //and save the end of the error as new start position
-                aSaveStartPos = *GetCurrX();
-                //and the end of the sentence
-                *pCrsr->GetMark() = *GetEnd();
+                //if an error has been found go back to the text
+                //preceeding the error
+                if(xSpellRet.is())
+                {
+                    *pCrsr->GetPoint() = aSaveStartPos;
+                    *pCrsr->GetMark() = *GetCurr();
+                }
+                //add the portion
+                AddPortion(0, 0, aDeletedRedlines);
+
+                if(xSpellRet.is())
+                {
+                    *pCrsr->GetPoint() = *GetCurr();
+                    *pCrsr->GetMark() = *GetCurrX();
+                    AddPortion(xSpellRet, 0, aDeletedRedlines);
+                    //move the cursor to the end of the error string
+                    *pCrsr->GetPoint() = *GetCurrX();
+                    //and save the end of the error as new start position
+                    aSaveStartPos = *GetCurrX();
+                    //and the end of the sentence
+                    *pCrsr->GetMark() = *GetEnd();
+                }
+                // if the end of the sentence has already been reached then break here
+                if(*GetCurrX() >= *GetEnd())
+                    break;
             }
-            // if the end of the sentence has already been reached then break here
-            if(*GetCurrX() >= *GetEnd())
-                break;
+            while(xSpellRet.is());
         }
-        while(xSpellRet.is());
+        else
+        {
+            //go to the end of sentence as the grammar check returned it
+            // at this time the Point is behind the grammar error
+            // and the mark points to the sentence end as
+            if ( *pCrsr->GetPoint() < *pCrsr->GetMark() )
+                pCrsr->Exchange();
+            if( aGrammarResult.nEndOfSentencePos != pCrsr->GetPoint()->nContent.GetIndex())
+                pCrsr->GetPoint()->nContent.Assign( pCrsr->GetPoint()->nNode.GetNode().GetCntntNode(), (xub_StrLen)aGrammarResult.nEndOfSentencePos );
+        }
 
         // the part between the last error and the end of the sentence has to be added
         *pMySh->GetCrsr()->GetPoint() = *GetEnd();
         if(*GetCurrX() < *GetEnd())
         {
-            AddPortion(0, aDeletedRedlines);
+            AddPortion(0, 0, aDeletedRedlines);
         }
         //set the shell cursor to the end of the sentence to prevent a visible selection
         *pCrsr->GetMark() = *GetEnd();
-        //set the current position to the end of the sentence
-        SetCurr( new SwPosition(*GetEnd()) );
+        if( !bIsGrammarCheck )
+        {
+            //set the current position to the end of the sentence
+            SetCurr( new SwPosition(*GetEnd()) );
+        }
         //restore the 'global' end
         SetEnd( new SwPosition(aSaveEndPos) );
         rPortions = aLastPortions;
@@ -1488,6 +1675,7 @@ LanguageType lcl_GetLanguage(SwEditShell& rSh)
     create a text portion at the given position
   -----------------------------------------------------------------------*/
 void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > xAlt,
+                        linguistic2::GrammarCheckingResult* pGrammarResult,
         bool bIsField, bool bIsHidden)
 {
     svx::SpellPortion aPortion;
@@ -1499,6 +1687,15 @@ void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > xAlt,
         //the same as the _real_ word
         if(xAlt.is())
             aPortion.sText = xAlt->getWord();
+        else if(pGrammarResult)
+        {
+            aPortion.bIsGrammarError = true;
+            if(pGrammarResult->aGrammarErrors.getLength())
+            {
+                aPortion.aGrammarError = pGrammarResult->aGrammarErrors[0];
+                aPortion.sText = pGrammarResult->aText.copy( aPortion.aGrammarError.nErrorStart, aPortion.aGrammarError.nErrorLength );
+            }
+        }
         else
             aPortion.sText = sText;
         aPortion.eLanguage = lcl_GetLanguage(*GetSh());
@@ -1517,6 +1714,7 @@ void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > xAlt,
 
   -----------------------------------------------------------------------*/
 void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
+                                linguistic2::GrammarCheckingResult* pGrammarResult,
                                 const SpellContentPositions& rDeletedRedlines)
 {
     SwEditShell *pMySh = GetSh();
@@ -1524,9 +1722,9 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
     pMySh->GetSelectedText( sText );
     if(sText.Len())
     {
-        if(xAlt.is())
+        if(xAlt.is() || pGrammarResult != 0)
         {
-            CreatePortion(xAlt, false, false);
+            CreatePortion(xAlt, pGrammarResult, false, false);
         }
         else
         {
@@ -1549,7 +1747,7 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
                 xub_StrLen nEnd = aEnd.nContent.GetIndex() < aNextRedline.nRight ?
                             aEnd.nContent.GetIndex() : aNextRedline.nRight;
                 pCrsr->GetPoint()->nContent.Assign( pTxtNode, nEnd );
-                CreatePortion(xAlt, false, true);
+                CreatePortion(xAlt, pGrammarResult, false, true);
                 aStart = *pCrsr->End();
                 //search for next redline
                 aNextRedline = lcl_FindNextDeletedRedline(
@@ -1602,14 +1800,14 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
                     //create portion should only be called if a selection exists
                     //there's no selection if there's a field at the beginning
                     if(*pCrsr->Start() != *pCrsr->End())
-                        CreatePortion(xAlt, false, false);
+                        CreatePortion(xAlt, pGrammarResult, false, false);
                     aStart = *pCrsr->End();
                     //now export the field - if there is any
                     if(bField)
                     {
                         *pCrsr->GetMark() = *pCrsr->GetPoint();
                         GetSh()->Right(1, CRSR_SKIP_CELLS);
-                        CreatePortion(xAlt, true, false);
+                        CreatePortion(xAlt, pGrammarResult, true, false);
                         aStart = *pCrsr->End();
                     }
                 }
@@ -1621,7 +1819,7 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
                     xub_StrLen nEnd = aEnd.nContent.GetIndex() < aNextRedline.nRight ?
                                 aEnd.nContent.GetIndex() : aNextRedline.nRight;
                     pCrsr->GetPoint()->nContent.Assign( pTxtNode, nEnd );
-                    CreatePortion(xAlt, false, true);
+                    CreatePortion(xAlt, pGrammarResult, false, true);
                     aStart = *pCrsr->End();
                     //search for next redline
                     aNextRedline = lcl_FindNextDeletedRedline(
@@ -1631,7 +1829,7 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
             }
             pCrsr->SetMark();
             *pCrsr->GetMark() = aStart;
-            CreatePortion(xAlt, false, false);
+            CreatePortion(xAlt, pGrammarResult, false, false);
         }
     }
 }
