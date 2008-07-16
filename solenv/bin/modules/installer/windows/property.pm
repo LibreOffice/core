@@ -8,7 +8,7 @@
 #
 # $RCSfile: property.pm,v $
 #
-# $Revision: 1.27 $
+# $Revision: 1.28 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -362,6 +362,46 @@ sub set_important_properties
 
 }
 
+#######################################################
+# Setting properties needed for ms file type registration
+#######################################################
+
+sub set_ms_file_types_properties
+{
+    my ($propertyfile) = @_;
+
+    push(@{$propertyfile}, "REGISTER_PPS"  . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_PPSX" . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_PPSM" . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_PPAM" . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_PPT"  . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_PPTX" . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_PPTM" . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_POT"  . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_POTX" . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_POTM" . "\t" . "0" . "\n");
+
+    push(@{$propertyfile}, "REGISTER_DOC"  . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_DOCX" . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_DOCM" . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_DOT"  . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_DOTX" . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_DOTM" . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_RTF"  . "\t" . "0" . "\n");
+
+    push(@{$propertyfile}, "REGISTER_XLS"  . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_XLSX" . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_XLSM" . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_XLSB" . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_XLAM" . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_XLT"  . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_XLTX" . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_XLTM" . "\t" . "0" . "\n");
+
+    push(@{$propertyfile}, "REGISTER_NO_MSO_TYPES"  . "\t" . "0" . "\n");
+    push(@{$propertyfile}, "REGISTER_ALL_MSO_TYPES"  . "\t" . "0" . "\n");
+}
+
 ####################################################################################
 # Updating the file Property.idt dynamically
 # Content:
@@ -407,6 +447,9 @@ sub update_property_table
 
     # Setting feature names as properties for Windows patch mechanism
     if ( $installer::globals::patch ) { set_featurename_properties_for_patch($propertyfile); }
+
+    # Setting variables for register for ms file types
+    set_ms_file_types_properties($propertyfile);
 
     # Saving the file
 
