@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TextMarkupType.idl,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,6 +55,10 @@ constants TextMarkupType
 
     /// Markup originates from smart tag checking.
     const long SMARTTAG = 3;
+
+    /// Markup originates from grammar checking.
+    /// An inivisible markup used to identify sentence boundaries.
+    const long SENTENCE = 4;
 };
 
 }; }; }; };
