@@ -391,6 +391,118 @@
         RegistryID = gid_Starregistry_Services_Rdb; \
     End
 
+// ---------------------------------------
+#define CONDITIONAL_MODULE_ENTRY(name,modid) \
+    Module gid_Module_Root_Reg_##name \
+	ParentID = modid; \
+	Name = STRING(CONCAT2(gid_Module_Root_,name)); \
+	Description = STRING(CONCAT2(gid_Module_Root_,name)); \
+	Default = YES; \
+	Styles = (HIDDEN_ROOT); \
+End
+
+#define REGISTRY_ENTRY_OPEN_WITH(name,cond,doc_type,modid,key) \
+    RegistryItem gid_Regitem_OpenOffice_##cond##_OpenWith_##doc_type \
+        ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
+        ModuleID = modid; \
+        Subkey = STRING(CONCAT3(.,key,\OpenWithProgIDs)); \
+        Name = STRING(CONCAT2(OpenOffice.org.,name)); \
+        Value = " "; \
+    End
+
+#define CONDITIONAL_REGISTRY_ENTRY_EXT(name,cond,key) \
+    RegistryItem gid_Regitem__##name \
+        ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
+        ModuleID = gid_Module_Root_Reg_##name; \
+        Subkey = STRING(CONCAT2(.,key)); \
+        Value = STRING(CONCAT2(OpenOffice.org.,name)); \
+        ComponentCondition = STRING(CONCAT3(REGISTER_,cond,=1)); \
+    End
+
+#define CONDITIONAL_REGISTRY_ENTRY_DOC(name,cond,disp_name) \
+    RegistryItem CONCAT2(gid_Regitem_Openoffice_,name) \
+        ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
+        ModuleID = gid_Module_Root_Reg_##name; \
+        Subkey = STRING(CONCAT2(OpenOffice.org.,name)); \
+        REG_VALUE_LNG(disp_name) \
+        ComponentCondition = STRING(CONCAT3(REGISTER_,cond,=1)); \
+    End
+
+#define CONDITIONAL_REGISTRY_ENTRY_ICON(name,cond,icon_id) \
+    RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Defaulticon) \
+        ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
+        ModuleID = gid_Module_Root_Reg_##name; \
+        Subkey = STRING(CONCAT3(OpenOffice.org.,name,\DefaultIcon)); \
+        Value = "<progpath>\program\soffice.exe," STRING(icon_id); \
+        ComponentCondition = STRING(CONCAT3(REGISTER_,cond,=1)); \
+    End
+
+#define CONDITIONAL_REGISTRY_ENTRY_SHELL(name,default,cond) \
+    RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell) \
+        ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
+        ModuleID = gid_Module_Root_Reg_##name; \
+        Subkey = STRING(CONCAT3(OpenOffice.org.,name,\shell)); \
+        Value = STRING(default); \
+        ComponentCondition = STRING(CONCAT3(REGISTER_,cond,=1)); \
+    End
+
+#define CONDITIONAL_REGISTRY_ENTRY_NEW_CMD(name,cond,app) \
+    RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell_New) \
+        ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
+        ModuleID = gid_Module_Root_Reg_##name; \
+        Subkey = STRING(CONCAT3(OpenOffice.org.,name,\shell\new)); \
+        REG_VALUE_LNG(NEW) \
+        ComponentCondition = STRING(CONCAT3(REGISTER_,cond,=1)); \
+    End \
+    RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell_New_Command) \
+        ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
+        ModuleID = gid_Module_Root_Reg_##name; \
+        Subkey = STRING(CONCAT3(OpenOffice.org.,name,\shell\new\command)); \
+        Value = "\"<progpath>\program\\" STRING(app) "\" -n \"%1\""; \
+        ComponentCondition = STRING(CONCAT3(REGISTER_,cond,=1)); \
+    End
+
+#define CONDITIONAL_REGISTRY_ENTRY_OPEN_CMD(name,cond,app) \
+    RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell_Open_Command) \
+        ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
+        ModuleID = gid_Module_Root_Reg_##name; \
+        Subkey = STRING(CONCAT3(OpenOffice.org.,name,\shell\open\command)); \
+        Value = "\"<progpath>\program\\" STRING(app) "\" -o \"%1\""; \
+        ComponentCondition = STRING(CONCAT3(REGISTER_,cond,=1)); \
+    End
+
+#define CONDITIONAL_REGISTRY_ENTRY_PRINT_CMD(name,cond,app) \
+    RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell_Print_Command) \
+        ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
+        ModuleID = gid_Module_Root_Reg_##name; \
+        Subkey = STRING(CONCAT3(OpenOffice.org.,name,\shell\print\command)); \
+        Value = "\"<progpath>\program\\" STRING(app) "\" -p \"%1\""; \
+        ComponentCondition = STRING(CONCAT3(REGISTER_,cond,=1)); \
+    End
+
+#define CONDITIONAL_REGISTRY_ENTRY_PRINTTO_CMD(name,cond,app) \
+    RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell_Printto_Command) \
+        ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
+        ModuleID = gid_Module_Root_Reg_##name; \
+        Subkey = STRING(CONCAT3(OpenOffice.org.,name,\shell\printto\command)); \
+        Value = "\"<progpath>\program\\" STRING(app) "\" -pt \"%2\" \"%1\""; \
+        ComponentCondition = STRING(CONCAT3(REGISTER_,cond,=1)); \
+    End
+
+#define CONDITIONAL_REGISTER_DOC_EXTENSION(name,modid,key,cond,disp_name,icon_id,app,default,doc_type) \
+    CONDITIONAL_MODULE_ENTRY(name,modid) \
+    REGISTRY_ENTRY_OPEN_WITH(name,cond,doc_type,modid,key) \
+    CONDITIONAL_REGISTRY_ENTRY_EXT(name,cond,key) \
+    CONDITIONAL_REGISTRY_ENTRY_DOC(name,cond,disp_name) \
+    CONDITIONAL_REGISTRY_ENTRY_ICON(name,cond,icon_id) \
+    CONDITIONAL_REGISTRY_ENTRY_SHELL(name,default,cond) \
+    CONDITIONAL_REGISTRY_ENTRY_NEW_CMD(name,cond,app) \
+    CONDITIONAL_REGISTRY_ENTRY_OPEN_CMD(name,cond,app) \
+    CONDITIONAL_REGISTRY_ENTRY_PRINT_CMD(name,cond,app) \
+    CONDITIONAL_REGISTRY_ENTRY_PRINTTO_CMD(name,cond,app) \
+
+// ---------------------------------------
+
 #if defined WNT
 #define SCP2_URE_DL_DIR gid_Dir_Ure_Bin
 #define SCP2_URE_DL_NORMAL(n) n ".dll"
