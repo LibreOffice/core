@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: postit.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -348,11 +348,8 @@ void PostItTxt::MouseButtonUp( const MouseEvent& rMEvt )
 
 IMPL_LINK(PostItTxt, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
 {
-    if (mpPostIt)
-    {
-        if ( pInfo->nCommand == SPELLCMD_STARTSPELLDLG)
-            mpPostIt->DocView()->GetViewFrame()->GetDispatcher()->Execute( SID_SPELL_DIALOG, SFX_CALLMODE_ASYNCHRON);
-    }
+    if (mpPostIt && pInfo->nCommand == SPELLCMD_STARTSPELLDLG)
+        mpPostIt->DocView()->GetViewFrame()->GetDispatcher()->Execute( FN_SPELL_GRAMMAR_DIALOG, SFX_CALLMODE_ASYNCHRON);
     return 0;
 }
 
