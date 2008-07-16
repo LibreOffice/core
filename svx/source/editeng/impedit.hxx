@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impedit.hxx,v $
- * $Revision: 1.87 $
+ * $Revision: 1.88 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -964,9 +964,9 @@ public:
     //initialize sentence spelling
     void            StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc);
     //spell and return a sentence
-    bool                SpellSentence(EditView& rView, ::svx::SpellPortions& rToFill);
+    bool                SpellSentence(EditView& rView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking );
     //applies a changed sentence
-    void                ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions);
+    void                ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bIsGrammarChecking );
     //deinitialize sentence spelling
     void            EndSpelling();
     //adds one or more portions of text to the SpellPortions depending on language changes
