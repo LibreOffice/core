@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registryitem_writer.scp,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -267,102 +267,6 @@ RegistryItem gid_Regitem_Clsid__F616b81f_7bb8_4f22_B8a5_47428d59f8ad__Versionind
 End
 
 
-RegistryItem gid_Regitem_Sdw_Contenttype
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = ".sdw";
-    Name = "Content Type";
-    Value = "application/vnd.stardivision.writer";
-End
-
-RegistryItem gid_Regitem_Sdw_Mime_Database
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "MIME\Database\Content Type\application/vnd.stardivision.writer";
-    Name = "Extension";
-    Value = ".sdw";
-End
-
-RegistryItem gid_Regitem_Sdw_So4_Mime_Database
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "MIME\Database\Content Type\application/x-starwriter";
-    Name = "Extension";
-    Value = ".sdw";
-End
-
-RegistryItem gid_Regitem_Sgl_Contenttype
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = ".sgl";
-    Name = "Content Type";
-    Value = "application/vnd.stardivision.writer-global";
-End
-
-RegistryItem gid_Regitem_Sgl_Mime_Database
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "MIME\Database\Content Type\application/vnd.stardivision.writer-global";
-    Name = "Extension";
-    Value = ".sgl";
-End
-
-RegistryItem gid_Regitem_Soffice_Starwriterdocument_5
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarWriterDocument.5";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    REG_VALUE_LNG(SO52_TEXT_OOO)
-End
-
-RegistryItem gid_Regitem_Soffice_Starwriterdocument_5_Defaulticon
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "soffice.StarWriterDocument.5\DefaultIcon";
-    Value = "<progpath>\program\soffice.exe,27";
-End
-
-RegistryItem gid_Regitem_Soffice_Starwriterdocument_5_Shell
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "soffice.StarWriterDocument.5\shell";
-    Value = "open";
-End
-
-RegistryItem gid_Regitem_Soffice_Starwriterdocument_5_Shell_New
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "soffice.StarWriterDocument.5\shell\new";
-    REG_VALUE_LNG(NEW)
-End
-
-RegistryItem gid_Regitem_Soffice_Starwriterdocument_5_Shell_New_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "soffice.StarWriterDocument.5\shell\new\command";
-    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Starwriterdocument_5_Shell_Open_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "soffice.StarWriterDocument.5\shell\open\command";
-    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Starwriterdocument_5_Shell_Print_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "soffice.StarWriterDocument.5\shell\print\command";
-    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Starwriterdocument_5_Shell_Printto_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "soffice.StarWriterDocument.5\shell\printto\command";
-    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
-End
-
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_6
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
@@ -465,62 +369,6 @@ RegistryItem gid_Regitem_Soffice_Starwriterdocument_Curver
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "soffice.StarWriterDocument\CurVer";
     Value = "soffice.StarWriterDocument.6";
-End
-
-RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_5
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarWriterGlobalDocument.5";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    REG_VALUE_LNG(SO51_MASTERDOC_OOO)
-End
-
-RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_5_Defaulticon
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarWriterGlobalDocument.5\DefaultIcon";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Value = "<progpath>\program\soffice.exe,35";
-End
-
-RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_5_Shell
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarWriterGlobalDocument.5\shell";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Value = "open";
-End
-
-RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_5_Shell_New
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarWriterGlobalDocument.5\shell\new";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    REG_VALUE_LNG(NEW)
-End
-
-RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_5_Shell_New_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarWriterGlobalDocument.5\shell\new\command";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_5_Shell_Open_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarWriterGlobalDocument.5\shell\open\command";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_5_Shell_Print_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarWriterGlobalDocument.5\shell\print\command";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_5_Shell_Printto_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarWriterGlobalDocument.5\shell\printto\command";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
 
 RegistryItem gid_Regitem_StarWriterGlobalDocument_6_Shellex_PropertySheetHandlers_MyPropSheet1
@@ -780,39 +628,6 @@ RegistryItem gid_Regitem_StarWriterDocument_6_Shellex_PropertySheetHandlers_MyPr
     Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
-RegistryItem gid_Regitem__Sdw
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = ".sdw";
-    Value = "soffice.StarWriterDocument.5";
-End
-
-RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sdw
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
-    Name = ".sdw";
-    Value = "soffice.StarWriterDocument.5";
-    Styles = ();
-End
-
-RegistryItem gid_Regitem__Sgl
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".sgl";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Value = "soffice.StarWriterGlobalDocument.5";
-End
-
-RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sgl
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
-    Name = ".sgl";
-    Value = "soffice.StarWriterGlobalDocument.5";
-    Styles = ();
-End
-
-
 RegistryItem gid_Regitem__Sxw
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
@@ -1020,6 +835,29 @@ RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Shell_Printto_Command
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "opendocument.WriterDocument.1\shell\printto\command";
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
+End
+
+// Writer Web Document
+RegistryItem gid_Regitem_Openoffice_Writerwebdocument_Curver
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "opendocument.WriterWebDocument\CurVer";
+    Value = "opendocument.WriterWebDocument.1";
+End
+
+RegistryItem gid_Regitem_Openoffice_Writerwebdocument_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "opendocument.WriterWebDocument.1";
+    REG_VALUE_LNG(OO_WRITER)
+End
+
+RegistryItem gid_Regitem_Openoffice_Writerwebdocument_1_Shell_Open_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = "opendocument.WriterWebDocument.1\shell\open\command";
+    Value = "\"<progpath>\program\sweb.exe\" -o \"%1\"";
+    Styles = ();
 End
 
 // new ott file extension 
@@ -1393,51 +1231,6 @@ RegistryItem gid_Regitem_OpenOffice_STW_OpenWith_Writer
     Value = " ";
 End
 
-// .DOC
-RegistryItem gid_Regitem_OpenOffice_DOC_OpenWith_Writer
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".doc\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "opendocument.WriterDocument.1";
-    Value = " ";
-End
-
-// .DOT
-RegistryItem gid_Regitem_OpenOffice_DOT_OpenWith_Writer
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".dot\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "opendocument.WriterDocument.1";
-    Value = " ";
-End
-
-// .RTF
-RegistryItem gid_Regitem_OpenOffice_RTF_OpenWith_Writer
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".rtf\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "opendocument.WriterDocument.1";
-    Value = " ";
-End
-
-// .SDW
-RegistryItem gid_Regitem_OpenOffice_SDW_OpenWith_Writer
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".sdw\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "opendocument.WriterDocument.1";
-    Value = " ";
-End
-
-// .VOR
-RegistryItem gid_Regitem_OpenOffice_VOR_OpenWith_Writer
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".vor\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "opendocument.WriterDocument.1";
-    Value = " ";
-End
-
 // .TXT
 RegistryItem gid_Regitem_OpenOffice_TXT_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -1452,7 +1245,7 @@ RegistryItem gid_Regitem_OpenOffice_HTM_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".htm\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "opendocument.WriterDocument.1";
+    Name = "opendocument.WriterWebDocument.1";
     Value = " ";
 End
 
@@ -1461,7 +1254,7 @@ RegistryItem gid_Regitem_OpenOffice_HTML_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".html\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "opendocument.WriterDocument.1";
+    Name = "opendocument.WriterWebDocument.1";
     Value = " ";
 End
 
@@ -1546,15 +1339,6 @@ RegistryItem gid_Regitem_OpenOffice_SXG_OpenWith_Writer
     Value = " ";
 End
 
-// .SGL
-RegistryItem gid_Regitem_OpenOffice_SGL_OpenWith_Writer
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".sgl\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "opendocument.WriterDocument.1";
-    Value = " ";
-End
-
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Ott
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
@@ -1614,7 +1398,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Root;
     Name = ".htm";
-    Value = "opendocument.WriterDocument.1";
+    Value = "opendocument.WriterWebDocument.1";
     Styles = ();
 End
 
@@ -1623,7 +1407,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Root;
     Name = ".html";
-    Value = "opendocument.WriterDocument.1";
+    Value = "opendocument.WriterWebDocument.1";
     Styles = ();
 End
 
@@ -1722,3 +1506,14 @@ RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Swri
     Name = "Path";
     Value = "<progpath>";
 End
+
+// CONDITIONAL_REGISTER_DOC_EXTENSION(name,modid,                 key,  cond, disp_name,        icon_id, app, default, dox_type)
+
+CONDITIONAL_REGISTER_DOC_EXTENSION( Doc,  gid_Module_Prg_Wrt_Bin, doc,  DOC,  MS_WORD_DOCUMENT_OLD, 1, swriter.exe, open, Writer )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Docx, gid_Module_Prg_Wrt_Bin, docx, DOCX, MS_WORD_DOCUMENT, 1, swriter.exe, open, Writer )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Docm, gid_Module_Prg_Wrt_Bin, docm, DOCM, MS_WORD_DOCUMENT, 1, swriter.exe, open, Writer )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Dot,  gid_Module_Prg_Wrt_Bin, dot,  DOT,  MS_WORD_TEMPLATE_OLD, 2, swriter.exe, new, Writer )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Dotx, gid_Module_Prg_Wrt_Bin, dotx, DOTX, MS_WORD_TEMPLATE, 2, swriter.exe, new, Writer )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Dotm, gid_Module_Prg_Wrt_Bin, dotm, DOTM, MS_WORD_TEMPLATE, 2, swriter.exe, new, Writer )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Rtf,  gid_Module_Prg_Wrt_Bin, rtf,  RTF,  MS_RTF_DOCUMENT, 1, swriter.exe, open, Writer )
+
