@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SpellDialog.src,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,7 @@
 ModelessDialog RID_SVXDLG_SPELLCHECK
 {
     HelpId = HID_SPELLCHECK ;
-    Size = MAP_APPFONT( 270, 168 );
+    Size = MAP_APPFONT( 270, 188 );
     OutputSize = TRUE;
     Closeable = TRUE ;
     SVLook = TRUE;
@@ -48,16 +48,37 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
 
     Moveable = TRUE ;
 
+    FixedImage IMG_VENDOR
+    {
+        Pos = MAP_APPFONT ( 0, 0 ) ;
+        Size = MAP_APPFONT ( 270, 21  ) ;
+        Hide = TRUE;
+    };
+
+    FixedText FT_LANGUAGE
+    {
+        Pos = MAP_APPFONT(  6, 8 );
+        Size = MAP_APPFONT( 100, 8 );
+        Text [ en-US ] = "Dictionary languag~e" ;
+    };
+    ListBox LB_LANGUAGE
+    {
+        Pos = MAP_APPFONT( 110, 6 );
+        Size = MAP_APPFONT( 93, 55 );
+        Border = TRUE;
+        Sort = TRUE;
+        DropDown = TRUE;
+    };
     FixedText FT_NOTINDICT
     {
-        Pos = MAP_APPFONT(  6, 6 );
+        Pos = MAP_APPFONT(  6, 26 );
         Size = MAP_APPFONT( 120, 8 );
         Text [ en-US ] = "~Not in dictionary" ;
     };
 
     MultiLineEdit ED_NEWWORD
     {
-        Pos = MAP_APPFONT( 6, 17 );
+        Pos = MAP_APPFONT( 6, 37 );
         Size = MAP_APPFONT( 197, 48 );
         Border = TRUE;
         VScroll = TRUE;
@@ -66,62 +87,48 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
 
     FixedText FT_SUGGESTION
     {
-        Pos = MAP_APPFONT( 6, 68 );
+        Pos = MAP_APPFONT( 6, 88 );
         Size = MAP_APPFONT( 120, 8 );
         Text [ en-US ] = "~Suggestions" ;
     };
     ListBox LB_SUGGESTION
     {
-        Pos = MAP_APPFONT( 6, 79 );
+        Pos = MAP_APPFONT( 6, 99 );
         Size = MAP_APPFONT( 197, 48 );
         Border = TRUE;
     };
 
-    FixedText FT_LANGUAGE
+    CheckBox CB_CHECK_GRAMMAR
     {
-        Pos = MAP_APPFONT(  6, 133 );
-        Size = MAP_APPFONT( 100, 8 );
-        Text [ en-US ] = "Dictionary languag~e" ;
-    };
-    FixedText FT_CHECK_GRAMMAR
-    {
-        Pos = MAP_APPFONT(  6, 133 );
-        Size = MAP_APPFONT( 100, 8 );
+        Pos = MAP_APPFONT(  6, 153 );
+        Size = MAP_APPFONT( 100, 10 );
         Text [ en-US ] = "Check ~grammar" ;
         Hide = TRUE;
     };
 
-    ListBox LB_LANGUAGE
-    {
-        Pos = MAP_APPFONT( 110, 131 );
-        Size = MAP_APPFONT( 93, 55 );
-        Border = TRUE;
-        Sort = TRUE;
-        DropDown = TRUE;
-    };
     PushButton PB_IGNORE
     {
-        Pos = MAP_APPFONT( 209, 17 );
+        Pos = MAP_APPFONT( 209, 37 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "~Ignore Once" ;
     };
 
     PushButton PB_IGNOREALL
     {
-        Pos = MAP_APPFONT( 209, 34 );
+        Pos = MAP_APPFONT( 209, 54 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "I~gnore All" ;
     };
     MenuButton MB_ADDTODICT
     {
-        Pos = MAP_APPFONT( 209, 51 );
+        Pos = MAP_APPFONT( 209, 71 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "~Add" ;
     };
 
     PushButton PB_CHANGE
     {
-        Pos = MAP_APPFONT( 209, 79 );
+        Pos = MAP_APPFONT( 209, 99 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "~Change" ;
         DefButton = TRUE ;
@@ -129,52 +136,51 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
 
     PushButton PB_CHANGEALL
     {
-        Pos = MAP_APPFONT( 209, 97 );
+        Pos = MAP_APPFONT( 209, 117 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "Change A~ll" ;
     };
+    PushButton PB_EXPLAIN
+    {
+        Pos = MAP_APPFONT( 209, 117 );
+        Size = MAP_APPFONT( 55, 14 );
+        Hide = TRUE;
+        Text [ en-US ] = "~Explain..." ;
+    };
     PushButton PB_AUTOCORR
     {
-        Pos = MAP_APPFONT( 209, 114 );
+        Pos = MAP_APPFONT( 209, 134 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "AutoCor~rect" ;
     };
-    PushButton PB_EXPLAIN
-    {
-        Pos = MAP_APPFONT( 209, 97 );
-        Size = MAP_APPFONT( 55, 14 );
-        Text [ en-US ] = "Explain..." ;
-        Hide = TRUE;
-    };
-
     GroupBox GB_BACKGROUND
     {
-        Pos = MAP_APPFONT( 1, 1 );
+        Pos = MAP_APPFONT( 1, 21 );
         Size = MAP_APPFONT( 268, 146 );
         Hide=TRUE;
     };
 
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT( 6, 170 );
+        Size = MAP_APPFONT( 55, 14 );
+    };
     PushButton PB_OPTIONS
     {
-        Pos = MAP_APPFONT( 6, 150 );
+        Pos = MAP_APPFONT( 87, 170 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "O~ptions..." ;
     };
-    HelpButton PB_HELP
-    {
-        Pos = MAP_APPFONT( 87, 150 );
-        Size = MAP_APPFONT( 55, 14 );
-    };
     PushButton PB_UNDO
     {
-        Pos = MAP_APPFONT( 148, 150 );
+        Pos = MAP_APPFONT( 148, 170 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "~Undo" ;
     };
 
     PushButton PB_CLOSE
     {
-        Pos = MAP_APPFONT ( 209 , 150 ) ;
+        Pos = MAP_APPFONT ( 209 , 170 ) ;
         Size = MAP_APPFONT ( 55 , 14 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Cl~ose" ;
@@ -199,6 +205,15 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
     {
         Text[ en-US ] = "Spelling and Grammar: $LANGUAGE ($LOCATION) [$VendorName]";
     };
+    Image IMG_DEFAULT_VENDOR
+    {
+        ImageBitmap = Bitmap { File = "vendor01.png"; };
+    };
+    Image IMG_DEFAULT_VENDOR_HC
+    {
+        ImageBitmap = Bitmap { File = "vendor01h.png"; };
+    };
+
 };
  // ********************************************************************** EOF
 
