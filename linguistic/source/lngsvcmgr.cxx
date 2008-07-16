@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lngsvcmgr.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -858,20 +858,24 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
                 while (xEnum->hasMoreElements())
                 {
                     Any aCurrent = xEnum->nextElement();
+                    Reference< XSingleComponentFactory > xCompFactory;
                     Reference< XSingleServiceFactory > xFactory;
 
-                    if (!::cppu::extractInterface( xFactory, aCurrent ) ||
-                        !xFactory.is())
-                        continue;
-
                     Reference< XSpellChecker > xSvc;
-                    try
+                    if ( cppu::extractInterface( xCompFactory, aCurrent ) || ::cppu::extractInterface( xFactory, aCurrent ) )
                     {
-                        xSvc = Reference< XSpellChecker >( xFactory->createInstance(), UNO_QUERY );
-                    }
-                    catch (uno::Exception &)
-                    {
-                        DBG_ERROR( "createInstance failed" );
+                        try
+                        {
+                            Reference < XComponentContext > xContext;
+                            Reference< XPropertySet > xProps( xFac, UNO_QUERY );
+
+                            xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
+                            xSvc = Reference< XSpellChecker >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), UNO_QUERY );
+                        }
+                        catch (uno::Exception &)
+                        {
+                            DBG_ERROR( "createInstance failed" );
+                        }
                     }
 
                     if (xSvc.is())
@@ -905,35 +909,38 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
     if (!pAvailHyphSvcs)
     {
         pAvailHyphSvcs = new SvcInfoArray;
-
         Reference< XMultiServiceFactory >  xFac( getProcessServiceFactory() );
         if (xFac.is())
         {
             Reference< XContentEnumerationAccess > xEnumAccess( xFac, UNO_QUERY );
             Reference< XEnumeration > xEnum;
             if (xEnumAccess.is())
-                xEnum = xEnumAccess->createContentEnumeration(
-                        A2OU( SN_HYPHENATOR ) );
+                xEnum = xEnumAccess->createContentEnumeration( A2OU( SN_HYPHENATOR ) );
 
             if (xEnum.is())
             {
                 while (xEnum->hasMoreElements())
                 {
                     Any aCurrent = xEnum->nextElement();
+                    Reference< XSingleComponentFactory > xCompFactory;
                     Reference< XSingleServiceFactory > xFactory;
 
-                    if (!::cppu::extractInterface( xFactory, aCurrent ) ||
-                        !xFactory.is())
-                        continue;
-
                     Reference< XHyphenator > xSvc;
-                    try
+                    if ( cppu::extractInterface( xCompFactory, aCurrent ) || ::cppu::extractInterface( xFactory, aCurrent ) )
                     {
-                        xSvc = Reference< XHyphenator >( xFactory->createInstance(), UNO_QUERY );
-                    }
-                    catch (uno::Exception &)
-                    {
-                        DBG_ERROR( "createInstance failed" );
+                        try
+                        {
+                            Reference < XComponentContext > xContext;
+                            Reference< XPropertySet > xProps( xFac, UNO_QUERY );
+
+                            xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
+                            xSvc = Reference< XHyphenator >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), UNO_QUERY );
+
+                        }
+                        catch (uno::Exception &)
+                        {
+                            DBG_ERROR( "createInstance failed" );
+                        }
                     }
 
                     if (xSvc.is())
@@ -982,20 +989,25 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                 while (xEnum->hasMoreElements())
                 {
                     Any aCurrent = xEnum->nextElement();
+
+                    Reference< XSingleComponentFactory > xCompFactory;
                     Reference< XSingleServiceFactory > xFactory;
 
-                    if (!::cppu::extractInterface( xFactory, aCurrent ) ||
-                        !xFactory.is())
-                        continue;
-
                     Reference< XThesaurus > xSvc;
-                    try
+                    if ( cppu::extractInterface( xCompFactory, aCurrent ) || ::cppu::extractInterface( xFactory, aCurrent ) )
                     {
-                        xSvc = Reference< XThesaurus >( xFactory->createInstance(), UNO_QUERY );
-                    }
-                    catch (uno::Exception &)
-                    {
-                        DBG_ERROR( "createInstance failed" );
+                        try
+                        {
+                            Reference < XComponentContext > xContext;
+                            Reference< XPropertySet > xProps( xFac, UNO_QUERY );
+
+                            xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
+                            xSvc = Reference< XThesaurus >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), UNO_QUERY );
+                        }
+                        catch (uno::Exception &)
+                        {
+                            DBG_ERROR( "createInstance failed" );
+                        }
                     }
 
                     if (xSvc.is())
