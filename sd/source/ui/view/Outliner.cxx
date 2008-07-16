@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Outliner.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -486,7 +486,7 @@ void Outliner::HandleOutsideChange (ChangeHint eHint)
             // Advance to the next sentence.
             bFoundNextSentence = SpellSentence (
                 pOutlinerView->GetEditView(),
-                aResult);
+                aResult, false);
         }
 
         // When no sentence with spelling errors has been found in the
