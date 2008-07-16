@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: misc.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,7 +64,7 @@ namespace com { namespace sun { namespace star { namespace frame {
 class LocaleDataWrapper;
 
 ///////////////////////////////////////////////////////////////////////////
-
+#define SN_GRAMMARCHECKER           "com.sun.star.linguistic2.GrammarChecker"
 #define SN_SPELLCHECKER             "com.sun.star.linguistic2.SpellChecker"
 #define SN_HYPHENATOR               "com.sun.star.linguistic2.Hyphenator"
 #define SN_THESAURUS                "com.sun.star.linguistic2.Thesaurus"
