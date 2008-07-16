@@ -31,7 +31,7 @@ CustomSetup	Details	SelectionBrowse	DiskSpaceRequirements	1	1
 CustomSetup	Help	SpawnDialog	CustomSetupTips	1	1
 CustomSetup	Next	[_IsSetupTypeMin]	Custom	1	0
 CustomSetup	Next	NewDialog	OutOfSpace	OutOfNoRbDiskSpace = 1	0
-CustomSetup	Next	NewDialog	FileTypeDialog	OutOfNoRbDiskSpace <> 1	0
+CustomSetup	Next	NewDialog	ReadyToInstall	OutOfNoRbDiskSpace <> 1	0
 CustomSetupTips	OK	EndDialog	Return	1	1
 DatabaseFolder	Back	NewDialog	CustomerInformation	1	1
 DatabaseFolder	Cancel	SpawnDialog	CancelSetup	1	1
@@ -48,10 +48,6 @@ DiskSpaceRequirements	OK	EndDialog	Return	1	0
 FilesInUse	Exit	EndDialog	Exit	1	0
 FilesInUse	Ignore	EndDialog	Ignore	1	0
 FilesInUse	Retry	EndDialog	Retry	1	0
-FileTypeDialog	Back	NewDialog	CustomSetup	Installed OR _IsSetupTypeMin = "Custom"	2
-FileTypeDialog	Back	NewDialog	SetupType	NOT Installed AND _IsSetupTypeMin <> "Custom"	1
-FileTypeDialog	Cancel	SpawnDialog	CancelSetup	1	0
-FileTypeDialog	Next	NewDialog	ReadyToInstall	1	0
 InstallChangeFolder	Cancel	EndDialog	Return	1	2
 InstallChangeFolder	Cancel	Reset	0	1	1
 InstallChangeFolder	NewFolder	DirectoryListNew	0	1	0
@@ -135,6 +131,6 @@ SetupType	Back	NewDialog	CustomerInformation	1	0
 SetupType	Cancel	SpawnDialog	CancelSetup	1	0
 SetupType	Next	AddLocal	ALL	_IsSetupTypeMin = "Typical"	0
 SetupType	Next	NewDialog	CustomSetup	_IsSetupTypeMin = "Custom"	0
-SetupType	Next	NewDialog	FileTypeDialog	_IsSetupTypeMin <> "Custom"	0
+SetupType	Next	NewDialog	ReadyToInstall	_IsSetupTypeMin <> "Custom"	0
 SplashBitmap	Cancel	SpawnDialog	CancelSetup	1	0
 SplashBitmap	Next	NewDialog	InstallWelcome	1	0
