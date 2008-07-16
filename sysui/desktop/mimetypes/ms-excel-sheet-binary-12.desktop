@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=
+Type=MimeType
+Patterns=*.xlsb
+MimeType=application/vnd.ms-excel.sheet.binary.macroenabled.12
+Comment=Microsoft Excel Worksheet
