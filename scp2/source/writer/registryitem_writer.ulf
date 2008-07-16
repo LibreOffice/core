@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registryitem_writer.ulf,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,12 +34,6 @@ en-US = "&New"
 [STR_REG_VAL_SO60_TEXT]
 en-US = "%PRODUCTNAME %SXWFORMATVERSION Text Document"
 
-[STR_REG_VAL_SO52_TEXT_OOO]
-en-US = "StarOffice 5.0 Text Document"
-
-[STR_REG_VAL_SO51_MASTERDOC_OOO]
-en-US = "StarOffice 5.0 Master Document"
-
 [STR_REG_VAL_SO60_MASTERDOC]
 en-US = "%PRODUCTNAME %SXWFORMATVERSION Master Document"
 
@@ -57,3 +51,19 @@ en-US = "OpenDocument Master Document"
 
 [STR_REG_VAL_OO_WEBDOC]
 en-US = "HTML Document Template"
+
+[STR_REG_VAL_MS_WORD_DOCUMENT_OLD]
+en-US = "Microsoft Word 97-2003 Document"
+
+[STR_REG_VAL_MS_WORD_DOCUMENT]
+en-US = "Microsoft Word Document"
+
+[STR_REG_VAL_MS_WORD_TEMPLATE_OLD]
+en-US = "Microsoft Word 97-2003 Template"
+
+[STR_REG_VAL_MS_WORD_TEMPLATE]
+en-US = "Microsoft Word Template"
+
+[STR_REG_VAL_MS_RTF_DOCUMENT]
+en-US = "Rich Text Document"
+
