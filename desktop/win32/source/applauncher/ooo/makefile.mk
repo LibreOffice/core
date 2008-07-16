@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,7 +46,7 @@ UWINAPILIB=
 APP1TARGET=swriter
 APP1NOSAL=TRUE
 APP1LINKRES=$(MISC)$/$(TARGET)1.res
-APP1ICON=$(SOLARRESDIR)$/icons/ooo-writer-app.ico
+APP1ICON=$(SOLARRESDIR)$/icons/ooo3_writer_app.ico
 APP1OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/swriter.obj
@@ -55,7 +55,7 @@ APP1STDLIBS = $(SHELL32LIB)
 APP2TARGET=scalc
 APP2NOSAL=TRUE
 APP2LINKRES=$(MISC)$/$(TARGET)2.res
-APP2ICON=$(SOLARRESDIR)$/icons/ooo-calc-app.ico
+APP2ICON=$(SOLARRESDIR)$/icons/ooo3_calc_app.ico
 APP2OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/scalc.obj
@@ -64,7 +64,7 @@ APP2STDLIBS = $(SHELL32LIB)
 APP3TARGET=sdraw
 APP3NOSAL=TRUE
 APP3LINKRES=$(MISC)$/$(TARGET)3.res
-APP3ICON=$(SOLARRESDIR)$/icons/ooo-draw-app.ico
+APP3ICON=$(SOLARRESDIR)$/icons/ooo3_draw_app.ico
 APP3OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/sdraw.obj
@@ -73,7 +73,7 @@ APP3STDLIBS = $(SHELL32LIB)
 APP4TARGET=simpress
 APP4NOSAL=TRUE
 APP4LINKRES=$(MISC)$/$(TARGET)4.res
-APP4ICON=$(SOLARRESDIR)$/icons/ooo-impress-app.ico
+APP4ICON=$(SOLARRESDIR)$/icons/ooo3_impress_app.ico
 APP4OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/simpress.obj
@@ -82,7 +82,7 @@ APP4STDLIBS = $(SHELL32LIB)
 APP5TARGET=smath
 APP5NOSAL=TRUE
 APP5LINKRES=$(MISC)$/$(TARGET)5.res
-APP5ICON=$(SOLARRESDIR)$/icons/ooo-math-app.ico
+APP5ICON=$(SOLARRESDIR)$/icons/ooo3_math_app.ico
 APP5OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/smath.obj
@@ -91,11 +91,20 @@ APP5STDLIBS = $(SHELL32LIB)
 APP6TARGET=sbase
 APP6NOSAL=TRUE
 APP6LINKRES=$(MISC)$/$(TARGET)6.res
-APP6ICON=$(SOLARRESDIR)$/icons/ooo-base-app.ico
+APP6ICON=$(SOLARRESDIR)$/icons/ooo3_base_app.ico
 APP6OBJS = \
         $(OBJ)$/launcher.obj\
        $(OBJ)$/sbase.obj
 APP6STDLIBS = $(SHELL32LIB)
+
+APP7TARGET=sweb
+APP7NOSAL=TRUE
+APP7LINKRES=$(MISC)$/$(TARGET)7.res
+APP7ICON=$(SOLARRESDIR)$/icons/ooo3_html_doc.ico
+APP7OBJS = \
+        $(OBJ)$/launcher.obj\
+       $(OBJ)$/sweb.obj
+APP7STDLIBS = $(SHELL32LIB)
 
 # --- Targets ------------------------------------------------------
 
