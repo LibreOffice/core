@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inftxt.cxx,v $
- * $Revision: 1.121 $
+ * $Revision: 1.122 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +76,7 @@
 #include <porrst.hxx>       // SwHangingPortion
 #include <itratr.hxx>
 #include <accessibilityoptions.hxx>
-#include <wrong.hxx>
+#include <SwGrammarMarkUp.hxx>
 
 // --> FME 2004-06-08 #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
@@ -703,8 +703,8 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     const sal_Bool bBullet = OnWin() && GetOpt().IsBlank() && IsNoSymbol();
     const sal_Bool bTmpWrong = bWrong && OnWin() && GetOpt().IsOnlineSpell() &&
                                !GetOpt().IsHideSpell();
-    const sal_Bool bTmpGrammarCheck = bGrammarCheck && OnWin() /*&& GetOpt().IsOnlineSpell() &&
-                               !GetOpt().IsHideSpell()*/;
+    const sal_Bool bTmpGrammarCheck = bGrammarCheck && OnWin() && GetOpt().IsOnlineSpell() &&
+                               !GetOpt().IsHideSpell();
     const sal_Bool bTmpSmart = bSmartTag && OnWin() && !GetOpt().IsPagePreview() && SwSmartTagMgr::Get().IsSmartTagsEnabled(); // SMARTTAGS
 
     ASSERT( GetParaPortion(), "No paragraph!");
@@ -1678,9 +1678,11 @@ BOOL SwTxtFormatInfo::LastKernPortion()
  *************************************************************************/
 
 SwTxtSlot::SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor,
-                      bool bTxtLen, bool bExgSmartTagList, const sal_Char *pCh )
+                      bool bTxtLen, bool bExgLists, const sal_Char *pCh )
     : pOldTxt( 0 ),
-      pOldSmartTagList( 0 )
+      pOldSmartTagList( 0 ),
+      pOldGrammarCheckList( 0 ),
+      pTempList( 0 )
 {
     if( pCh )
     {
@@ -1702,16 +1704,39 @@ SwTxtSlot::SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor,
         pInf->SetLen( bTxtLen ? pInf->GetTxt().Len() : pPor->GetLen() );
 
         // ST2
-        if ( bExgSmartTagList )
+        if ( bExgLists )
         {
             pOldSmartTagList = static_cast<SwTxtPaintInfo*>(pInf)->GetSmartTags();
             if ( pOldSmartTagList )
             {
                 const USHORT nPos = pOldSmartTagList->GetWrongPos(nIdx);
-                if ( pOldSmartTagList->Pos(nPos) == nIdx )
+                const xub_StrLen nListPos = pOldSmartTagList->Pos(nPos);
+                if( nListPos == nIdx )
                     ((SwTxtPaintInfo*)pInf)->SetSmartTags( pOldSmartTagList->SubList( nPos ) );
+                else if( !pTempList && nPos < pOldSmartTagList->Count() && nListPos < nIdx && aTxt.Len() )
+                {
+                    pTempList = new SwWrongList( WRONGLIST_SMARTTAG );
+                    pTempList->Insert( rtl::OUString(), 0, 0, aTxt.Len(), 0 );
+                    ((SwTxtPaintInfo*)pInf)->SetSmartTags( pTempList );
+                }
                 else
                     ((SwTxtPaintInfo*)pInf)->SetSmartTags( 0);
+            }
+            pOldGrammarCheckList = static_cast<SwTxtPaintInfo*>(pInf)->GetGrammarCheckList();
+            if ( pOldGrammarCheckList )
+            {
+                const USHORT nPos = pOldGrammarCheckList->GetWrongPos(nIdx);
+                const xub_StrLen nListPos = pOldGrammarCheckList->Pos(nPos);
+                if( nListPos == nIdx )
+                    ((SwTxtPaintInfo*)pInf)->SetGrammarCheckList( pOldGrammarCheckList->SubList( nPos ) );
+                else if( !pTempList && nPos < pOldGrammarCheckList->Count() && nListPos < nIdx && aTxt.Len() )
+                {
+                    pTempList = new SwWrongList( WRONGLIST_GRAMMAR );
+                    pTempList->Insert( rtl::OUString(), 0, 0, aTxt.Len(), 0 );
+                    ((SwTxtPaintInfo*)pInf)->SetGrammarCheckList( pTempList );
+                }
+                else
+                    ((SwTxtPaintInfo*)pInf)->SetGrammarCheckList( 0);
             }
         }
     }
@@ -1733,6 +1758,9 @@ SwTxtSlot::~SwTxtSlot()
         // Restore old smart tag list
         if ( pOldSmartTagList )
             ((SwTxtPaintInfo*)pInf)->SetSmartTags( pOldSmartTagList );
+        if ( pOldGrammarCheckList )
+            ((SwTxtPaintInfo*)pInf)->SetGrammarCheckList( pOldGrammarCheckList );
+        delete pTempList;
     }
 }
 
