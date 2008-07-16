@@ -6,7 +6,7 @@ pk  setup_native\source\win32\customactions\tools         nmake   -  w   sn_tool
 pk  setup_native\source\win32\customactions\relnotes      nmake   -  w   sn_relnotes NULL
 pk  setup_native\source\win32\customactions\regactivex    nmake   -  w   sn_regactivex NULL
 pk  setup_native\source\win32\customactions\regpatchactivex nmake -  w   sn_regpatchactivex NULL
-pk  setup_native\source\win32\customactions\reg4msdoc     nmake   -  w   sn_reg4msdoc NULL
+pk  setup_native\source\win32\customactions\reg4allmsdoc  nmake   -  w   sn_reg4allmsdoc NULL
 pk  setup_native\source\win32\customactions\javafilter    nmake   -  w   sn_javafilter NULL
 pk  setup_native\source\win32\customactions\quickstarter  nmake   -  w   sn_quickstarter NULL
 pk  setup_native\source\win32\customactions\shellextensions nmake   -  w   sn_shellextensions sn_tools.w NULL
