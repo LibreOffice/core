@@ -10185,4 +10185,30 @@ SfxBoolItem SelectionModeBlock FN_SELECTION_MODE_BLOCK
     ToolBoxConfig = TRUE,
     GroupId = GID_EDIT;
 ]
+//--------------------------------------------------------------------------
+SfxBoolItem SpellingAndGrammarDialog FN_SPELL_GRAMMAR_DIALOG
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_EDIT;
+]
 
