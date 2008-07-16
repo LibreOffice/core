@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.54 $
+# $Revision: 1.55 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -93,7 +93,8 @@ SCP1FILES  = installation_ooo.par          \
 
 .IF "$(WITH_BINFILTER)" != "NO"
 SCP1FILES +=                               \
-             module_binfilter.par         \
+             module_binfilter.par          \
+             registryitem_binfilter.par    \
              file_binfilter.par
 .ENDIF
 
@@ -246,6 +247,7 @@ SCP2FILES  = installation_ooo.par          \
 .IF "$(WITH_BINFILTER)" != "NO"
 SCP2FILES +=                               \
              module_binfilter.par          \
+             registryitem_binfilter.par    \
              file_binfilter.par
 .ENDIF
 
