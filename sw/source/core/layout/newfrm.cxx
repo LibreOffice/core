@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: newfrm.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +57,7 @@
 #include "IDocumentSettingAccess.hxx"
 #include "IDocumentDrawModelAccess.hxx"
 #include <hints.hxx>
+#include <viewopt.hxx>
 
 SwLayVout     *SwRootFrm::pVout = 0;
 BOOL           SwRootFrm::bInPaint = FALSE;
@@ -433,6 +434,8 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     mnColumns( 0 ),
     mbBookMode( false ),
     mbSidebarChanged( false ),
+    mbNeedGrammarCheck( false ),
+    mbGrammarCheckActive( false ),
     // <--
     nBrowseWidth( MM50*4 ), //2cm Minimum
     pTurbo( 0 ),
@@ -529,6 +532,10 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
 
     pTimerAccess->StartIdling();
     bCallbackActionEnabled = TRUE;
+
+    ViewShell *pViewSh  = GetCurrShell();
+    if (pViewSh)
+        mbNeedGrammarCheck = pViewSh->GetViewOptions()->IsOnlineSpell();
 }
 
 /*************************************************************************
