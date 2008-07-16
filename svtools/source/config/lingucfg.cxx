@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lingucfg.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -185,6 +185,11 @@ SvtLinguOptions::SvtLinguOptions()
     nHyphMinWordLength      = 0;
 
     nDataFilesChangedCheckValue = 0;
+
+    //grammar options
+    bIsGrammarAuto = sal_False,
+    bIsGrammarInteractive = sal_False;
+
 }
 
 
@@ -309,6 +314,9 @@ static struct NamesToHdl
 {/* 28 */    "TextConversion/IsReverseMapping",               UPN_IS_REVERSE_MAPPING,                    UPH_IS_REVERSE_MAPPING},
 
 {/* 29 */    "ServiceManager/DataFilesChangedCheckValue",     UPN_DATA_FILES_CHANGED_CHECK_VALUE,        UPH_DATA_FILES_CHANGED_CHECK_VALUE},
+
+{/* 30 */    "GrammarChecking/IsAutoCheck",                   UPN_IS_GRAMMAR_AUTO,                      UPH_IS_GRAMMAR_AUTO},
+{/* 31 */    "GrammarChecking/IsInteractiveCheck",            UPN_IS_GRAMMAR_INTERACTIVE,               UPH_IS_GRAMMAR_INTERACTIVE},
 
             /* similar to entry 0 (thus no own configuration entry) but with different property name and type */
 {            NULL,                                           UPN_DEFAULT_LANGUAGE,                      UPH_DEFAULT_LANGUAGE},
@@ -456,6 +464,8 @@ uno::Any SvtLinguConfigItem::GetProperty( INT32 nPropertyHandle ) const
         case UPH_IS_REVERSE_MAPPING :                   pbVal = &rOpt.bIsReverseMapping; break;
 
         case UPH_DATA_FILES_CHANGED_CHECK_VALUE :       pnInt32Val = &rOpt.nDataFilesChangedCheckValue; break;
+        case UPH_IS_GRAMMAR_AUTO:                       pbVal = &rOpt.bIsGrammarAuto; break;
+        case UPH_IS_GRAMMAR_INTERACTIVE:                pbVal = &rOpt.bIsGrammarInteractive; break;
         default :
             DBG_ERROR( "unexpected property handle" );
     }
@@ -558,6 +568,8 @@ BOOL SvtLinguConfigItem::SetProperty( INT32 nPropertyHandle, const uno::Any &rVa
         case UPH_IS_REVERSE_MAPPING :                   pbVal = &rOpt.bIsReverseMapping; break;
 
         case UPH_DATA_FILES_CHANGED_CHECK_VALUE :       pnInt32Val = &rOpt.nDataFilesChangedCheckValue; break;
+        case UPH_IS_GRAMMAR_AUTO:                       pbVal = &rOpt.bIsGrammarAuto; break;
+        case UPH_IS_GRAMMAR_INTERACTIVE:                pbVal = &rOpt.bIsGrammarInteractive; break;
         default :
             DBG_ERROR( "unexpected property handle" );
     }
@@ -733,6 +745,14 @@ BOOL SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
 
                 case UPH_DATA_FILES_CHANGED_CHECK_VALUE :
                     { rOpt.bRODataFilesChangedCheckValue = pROStates[i]; rVal >>= rOpt.nDataFilesChangedCheckValue;  } break;
+
+                case UPH_IS_GRAMMAR_AUTO:
+                    { rOpt.bROIsGrammarAuto = pROStates[i]; rVal >>= rOpt.bIsGrammarAuto; }
+                break;
+                case UPH_IS_GRAMMAR_INTERACTIVE:
+                    { rOpt.bROIsGrammarInteractive = pROStates[i]; rVal >>= rOpt.bIsGrammarInteractive; }
+                break;
+
                 default:
                     DBG_ERROR( "unexpected case" );
             }
@@ -805,6 +825,8 @@ BOOL SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
         pValue++->setValue( &rOpt.bIsReverseMapping, rBOOL ); //  28
 
         pValue++->setValue( &rOpt.nDataFilesChangedCheckValue, rINT32 ); //  29
+        pValue++->setValue( &rOpt.bIsGrammarAuto, rBOOL ); //  30
+        pValue++->setValue( &rOpt.bIsGrammarInteractive, rBOOL ); // 31
 
         bRet |= PutProperties( rProperyNames, aValues );
     }
@@ -866,6 +888,8 @@ BOOL SvtLinguConfigItem::IsReadOnly( INT32 nPropertyHandle ) const
         case UPH_IS_TRANSLATE_COMMON_TERMS : bReadOnly = rOpt.bROIsTranslateCommonTerms; break;
         case UPH_IS_REVERSE_MAPPING :        bReadOnly = rOpt.bROIsReverseMapping; break;
         case UPH_DATA_FILES_CHANGED_CHECK_VALUE :       bReadOnly = rOpt.bRODataFilesChangedCheckValue; break;
+        case UPH_IS_GRAMMAR_AUTO:                       bReadOnly = rOpt.bROIsGrammarAuto; break;
+        case UPH_IS_GRAMMAR_INTERACTIVE:                bReadOnly = rOpt.bROIsGrammarInteractive; break;
         default :
             DBG_ERROR( "unexpected property handle" );
     }
@@ -918,7 +942,6 @@ SvtLinguConfigItem & SvtLinguConfig::GetConfigItem()
         pCfgItem = new SvtLinguConfigItem;
         ItemHolder1::holdConfigItem(E_LINGUCFG);
     }
-    ++nCfgItemRefCount;
     return *pCfgItem;
 }
 
@@ -1330,7 +1353,170 @@ std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionari
     {
     }
 
+#if OSL_DEBUG_LEVEL > 1
+    {
+        // just for testing...
+        LanguageType nLang = LANGUAGE_GERMAN;
+        HasAnySpellAndGrammarDialogImage();
+        HasAnySpellAndGrammarContextImage();
+        GetSpellAndGrammarDialogImage( nLang );
+        GetSpellAndGrammarContextImage( nLang );
+    }
+#endif
     return aRes;
+}
+
+
+uno::Reference< util::XChangesBatch > SvtLinguConfig::GetMainUpdateAccess() const
+{
+    if (!m_xMainUpdateAccess.is())
+    {
+        try
+        {
+            // get configuration provider
+            uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider;
+            uno::Reference< lang::XMultiServiceFactory > xMgr = comphelper::getProcessServiceFactory();
+            if (xMgr.is())
+            {
+                xConfigurationProvider = uno::Reference< lang::XMultiServiceFactory > (
+                        xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.configuration.ConfigurationProvider" ) ) ),
+                        uno::UNO_QUERY_THROW ) ;
+            }
+
+            // get configuration update access
+            beans::PropertyValue aValue;
+            aValue.Name  = A2OU( "nodepath" );
+            aValue.Value = uno::makeAny( A2OU("org.openoffice.Office.Linguistic") );
+            uno::Sequence< uno::Any > aProps(1);
+            aProps[0] <<= aValue;
+            m_xMainUpdateAccess = uno::Reference< util::XChangesBatch >(
+                    xConfigurationProvider->createInstanceWithArguments(
+                        A2OU( "com.sun.star.configuration.ConfigurationUpdateAccess" ), aProps ),
+                        uno::UNO_QUERY_THROW );
+        }
+        catch (uno::Exception &)
+        {
+        }
+    }
+
+    return m_xMainUpdateAccess;
+}
+
+rtl::OUString SvtLinguConfig::GetSpellAndGrammarDialogImage( LanguageType nLang ) const
+{
+    rtl::OUString   aRes;
+
+    rtl::OUString   aLangIsoName( lcl_LanguageToCfgLocaleStr( nLang ) );
+    try
+    {
+        uno::Reference< container::XNameAccess > xBitmapsNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
+        xBitmapsNA.set( xBitmapsNA->getByName( A2OU("Bitmaps") ), uno::UNO_QUERY_THROW );
+
+        uno::Reference< container::XNameAccess > xNA( xBitmapsNA->getByName( A2OU("SpellAndGrammarDialog") ), uno::UNO_QUERY_THROW );
+        uno::Any aAny( xNA->getByName( aLangIsoName ) );
+        rtl::OUString aVendorImplName;
+        if (aAny >>= aVendorImplName)
+        {
+            xNA = xBitmapsNA;
+            xNA.set( xNA->getByName( A2OU("VendorImages") ), uno::UNO_QUERY_THROW );
+            xNA.set( xNA->getByName( aVendorImplName ), uno::UNO_QUERY_THROW );
+            aAny = xNA->getByName( A2OU("SpellAndGrammarDialogImage") );
+            rtl::OUString aTmp;
+            if (aAny >>= aTmp)
+            {
+                aRes = aTmp;
+            }
+        }
+    }
+    catch (uno::Exception &)
+    {
+        DBG_ASSERT( 0, "exception caught. GetSpellAndGrammarDialogImage failed" );
+    }
+
+    return aRes;
+}
+
+
+rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextImage( LanguageType nLang ) const
+{
+    rtl::OUString   aRes;
+
+    rtl::OUString   aLangIsoName( lcl_LanguageToCfgLocaleStr( nLang ) );
+    try
+    {
+        (void) aLangIsoName;
+    }
+    catch (uno::Exception &)
+    {
+        DBG_ASSERT( 0, "exception caught. GetSpellAndGrammarContextImage failed" );
+    }
+    return aRes;
+}
+
+
+bool SvtLinguConfig::HasAnySpellAndGrammarDialogImage() const
+{
+    bool bRes = false;
+    try
+    {
+        uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( A2OU("Bitmaps") ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( A2OU("SpellAndGrammarDialog") ), uno::UNO_QUERY_THROW );
+
+        uno::Sequence< rtl::OUString > aElementNames( xNA->getElementNames() );
+        bRes = aElementNames.getLength() > 0;
+    }
+    catch (uno::Exception &)
+    {
+        DBG_ASSERT( 0, "exception caught. HasAnySpellAndGrammarDialogImage failed" );
+    }
+    return bRes;
+}
+
+
+bool SvtLinguConfig::HasAnySpellAndGrammarContextImage() const
+{
+    bool bRes = false;
+    try
+    {
+        uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( A2OU("Bitmaps") ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( A2OU("SpellAndGrammarContextMenu") ), uno::UNO_QUERY_THROW );
+
+        uno::Sequence< rtl::OUString > aElementNames( xNA->getElementNames() );
+        bRes = aElementNames.getLength() > 0;
+    }
+    catch (uno::Exception &)
+    {
+        DBG_ASSERT( 0, "exception caught. HasAnySpellAndGrammarContextImage failed" );
+    }
+    return bRes;
+}
+
+
+bool SvtLinguConfig::HasGrammarChecker() const
+{
+    static bool bGrammarCheckerChecked  = false;
+    static bool bFound      = false;
+
+    if (!bGrammarCheckerChecked)
+    {
+        try
+        {
+            uno::Reference< container::XNameAccess > xNA( GetUpdateAccess(), uno::UNO_QUERY_THROW );
+            xNA.set( xNA->getByName( A2OU("GrammarCheckerList") ), uno::UNO_QUERY_THROW );
+
+            uno::Sequence< rtl::OUString > aElementNames( xNA->getElementNames() );
+            bFound = aElementNames.getLength() > 0;
+        }
+        catch (uno::Exception &)
+        {
+        }
+        bGrammarCheckerChecked = true;
+    }
+
+    return bFound;
 }
 
 //////////////////////////////////////////////////////////////////////
