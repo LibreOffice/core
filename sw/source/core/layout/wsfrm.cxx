@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wsfrm.cxx,v $
- * $Revision: 1.85 $
+ * $Revision: 1.86 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -465,6 +465,14 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
             }
         }
         pRoot->SetIdleFlags();
+
+        const SwTxtFrm *pTxtFrm = dynamic_cast< const SwTxtFrm * >(this);
+        if (pTxtFrm)
+        {
+            const SwTxtNode *pTxtNode = pTxtFrm->GetTxtNode();
+            if (pTxtNode && pTxtNode->IsGrammarCheckDirty())
+                pRoot->SetNeedGrammarCheck( TRUE );
+        }
     }
 }
 
