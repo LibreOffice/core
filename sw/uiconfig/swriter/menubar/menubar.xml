@@ -378,7 +378,7 @@
     </menu:menu>
     <menu:menu menu:id=".uno:ToolsMenu">
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:SpellDialog"/>
+                <menu:menuitem menu:id=".uno:SpellingAndGrammarDialog"/>
             <menu:menu menu:id=".uno:LanguageMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:SetLanguageSelectionMenu"/>
