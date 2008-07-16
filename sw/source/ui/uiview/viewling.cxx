@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewling.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@
 #endif
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
+#include <com/sun/star/linguistic2/GrammarCheckingResult.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <linguistic/lngprops.hxx>
 #include <comphelper/processfactory.hxx>
@@ -101,6 +102,8 @@
 #include <svx/dialogs.hrc>
 
 #include <unomid.h>
+
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -716,22 +719,56 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
             pWrtShell->LockView( sal_True );
             pWrtShell->Push();
             SwRect aToFill;
+
+            // decide which variant of the context menu to use...
+            // if neither spell checking nor grammar checking provides suggestions use the
+            // default context menu.
+            bool bUseGrammarContext = false;
             Reference< XSpellAlternatives >  xAlt( pWrtShell->GetCorrection(&rPt, aToFill) );
-            if ( xAlt.is() )
+            /*linguistic2::*/GrammarCheckingResult aGrammarCheckRes;
+            sal_Int32 nErrorPosInText = -1;
+            sal_Int32 nErrorInResult = -1;
+            uno::Sequence< rtl::OUString > aSuggestions;
+            bool bCorrectionRes = false;
+            if (!xAlt.is() || xAlt->getAlternatives().getLength() == 0)
+            {
+                bCorrectionRes = pWrtShell->GetGrammarCorrection( aGrammarCheckRes, nErrorPosInText, nErrorInResult, aSuggestions, &rPt, aToFill );
+                ::rtl::OUString aMessageText;
+                if (nErrorInResult >= 0)
+                    aMessageText = aGrammarCheckRes.aGrammarErrors[ nErrorInResult ].aShortComment;
+                // we like to use the grammar checking context menu if we either get
+                // some suggestions or at least a comment about the error found...
+                bUseGrammarContext = bCorrectionRes &&
+                        (aSuggestions.getLength() > 0 || aMessageText.getLength() > 0);
+            }
+
+            // open respective context menu for spell check or grammar errors with correction suggestions...
+            if ((!bUseGrammarContext && xAlt.is()) ||
+                (bUseGrammarContext && bCorrectionRes && aGrammarCheckRes.aGrammarErrors.getLength() > 0))
             {
                 // get paragraph text
                 String aParaText;
+                SwPosition aPoint( *pWrtShell->GetCrsr()->GetPoint() );
                 const SwTxtNode *pNode = dynamic_cast< const SwTxtNode * >(
-                                            &pWrtShell->GetCrsr()->GetPoint()->nNode.GetNode() );
+                                            &aPoint.nNode.GetNode() );
                 if (pNode)
                     aParaText = pNode->GetTxt();    // this may include hidden text but that should be Ok
-                else {
+                else
+                {
                     DBG_ERROR( "text node expected but not found" );
                 }
 
                 bRet = sal_True;
                 pWrtShell->SttSelect();
-                SwSpellPopup aPopup( pWrtShell, xAlt, aParaText );
+                std::auto_ptr< SwSpellPopup > pPopup;
+                if (bUseGrammarContext)
+                {
+                    sal_Int32 nPos = aPoint.nContent.GetIndex();
+                    (void) nPos;
+                    pPopup = std::auto_ptr< SwSpellPopup >(new SwSpellPopup( pWrtShell, aGrammarCheckRes, nErrorInResult, aSuggestions, aParaText ));
+                }
+                else
+                    pPopup = std::auto_ptr< SwSpellPopup >(new SwSpellPopup( pWrtShell, xAlt, aParaText ));
                 ui::ContextMenuExecuteEvent aEvent;
                 const Point aPixPos = GetEditWin().LogicToPixel( rPt );
 
@@ -740,17 +777,17 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                 aEvent.ExecutePosition.Y = aPixPos.Y();
                 Menu* pMenu = 0;
 
-                if(TryContextMenuInterception( aPopup, pMenu, aEvent ))
+                if(TryContextMenuInterception( *pPopup, pMenu, aEvent ))
                 {
                     if ( pMenu )
                     {
                         USHORT nId = ((PopupMenu*)pMenu)->Execute(pEditWin, aPixPos);
                         if(!ExecuteMenuCommand( *dynamic_cast<PopupMenu*>(pMenu), *GetViewFrame(), nId ))
-                            aPopup.Execute(nId);
+                            pPopup->Execute(nId);
                     }
                     else
                     {
-                        aPopup.Execute( aToFill.SVRect(), pEditWin );
+                        pPopup->Execute( aToFill.SVRect(), pEditWin );
                     }
                 }
             }
