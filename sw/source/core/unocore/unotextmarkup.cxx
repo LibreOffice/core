@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unotextmarkup.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,9 @@
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <com/sun/star/container/XStringKeyMap.hpp>
 #include <ndtxt.hxx>
-#include <wrong.hxx>
+#include <SwGrammarMarkUp.hxx>
+
+#include <IGrammarContact.hxx>
 
 using namespace ::com::sun::star;
 
@@ -75,7 +77,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     // paragraph already dead or modified?
-    if ( !mpTxtNode )
+    if ( !mpTxtNode || nLength <= 0 )
         return;
 
     if ( nType == text::TextMarkupType::SMARTTAG &&
@@ -84,32 +86,53 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
 
     // get appropriate list to use...
     SwWrongList* pWList = 0;
-    if ( nType == text::TextMarkupType::SPELLCHECK && nLength > 0 )
+    bool bRepaint = false;
+    if ( nType == text::TextMarkupType::SPELLCHECK )
     {
         pWList = mpTxtNode->GetWrong();
         if ( !pWList )
         {
-            pWList = new SwWrongList;
+            pWList = new SwWrongList( WRONGLIST_SPELL );
             mpTxtNode->SetWrong( pWList );
         }
     }
-    else if ( nType == text::TextMarkupType::GRAMMAR && nLength > 0 )
+    else if ( nType == text::TextMarkupType::GRAMMAR || nType == text::TextMarkupType::SENTENCE )
     {
-        pWList = mpTxtNode->GetGrammarCheck();
-        if ( !pWList )
+        IGrammarContact *pGrammarContact = getGrammarContact( *mpTxtNode );
+        if( pGrammarContact )
         {
-            pWList = new SwWrongList;
-            mpTxtNode->SetGrammarCheck( pWList );
+            pWList = pGrammarContact->getGrammarCheck( *mpTxtNode, true );
+            ASSERT( pWList, "GrammarContact _has_ to deliver a wrong list" )
+        }
+        else
+        {
+            pWList = mpTxtNode->GetGrammarCheck();
+            if ( !pWList )
+            {
+                mpTxtNode->SetGrammarCheck( new SwGrammarMarkUp() );
+                pWList = mpTxtNode->GetGrammarCheck();
+            }
+        }
+        bRepaint = pWList == mpTxtNode->GetGrammarCheck();
+        if( pWList->GetBeginInv() < STRING_LEN )
+        {
+            ((SwGrammarMarkUp*)pWList)->ClearGrammarList();
+            pWList->Validate();
         }
     }
-    else if ( nType == text::TextMarkupType::SMARTTAG && nLength > 0 )
+    else if ( nType == text::TextMarkupType::SMARTTAG )
     {
         pWList = mpTxtNode->GetSmartTags();
         if ( !pWList )
         {
-            pWList = new SwWrongList;
+            pWList = new SwWrongList( WRONGLIST_SMARTTAG );
             mpTxtNode->SetSmartTags( pWList );
         }
+    }
+    else
+    {
+        ASSERT( false, "Unknown mark-up type" )
+        return;
     }
 
 
@@ -124,31 +147,92 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
 
     if ( bStartInField && bEndInField && aStartPos.mnPos == aEndPos.mnPos )
     {
+        nStart = aStartPos.mnSubPos;
         const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aStartPos.mnPos);
         const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
 
         SwWrongList* pSubList = pWList->SubList( nInsertPos );
         if ( !pSubList )
         {
-            pSubList = new SwWrongList;
+            if( nType == text::TextMarkupType::GRAMMAR || nType == text::TextMarkupType::SENTENCE )
+                pSubList = new SwGrammarMarkUp();
+            else
+                pSubList = new SwWrongList( pWList->GetWrongListType() );
             pWList->InsertSubList( nFieldPosModel, 1, nInsertPos, pSubList );
         }
 
         pWList = pSubList;
-        nStart = aStartPos.mnSubPos;
         bCommit = true;
     }
     else if ( !bStartInField && !bEndInField )
     {
         nStart = aStartPos.mnPos;
         bCommit = true;
+        nLength = aEndPos.mnPos + 1 - aStartPos.mnPos;
+    }
+    else if( nType == text::TextMarkupType::GRAMMAR || nType == text::TextMarkupType::SENTENCE )
+    {
+        bCommit = true;
+        nStart = aStartPos.mnPos;
+        sal_Int32 nEnd = aEndPos.mnPos;
+        if( bStartInField && nType != text::TextMarkupType::SENTENCE )
+        {
+            const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aStartPos.mnPos);
+            const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+            SwWrongList* pSubList = pWList->SubList( nInsertPos );
+            if ( !pSubList )
+            {
+                pSubList = new SwGrammarMarkUp();
+                pWList->InsertSubList( nFieldPosModel, 1, nInsertPos, pSubList );
+            }
+            const sal_uInt32 nTmpStart = ModelToViewHelper::ConvertToViewPosition( mpConversionMap, aStartPos.mnPos );
+            const sal_uInt32 nTmpLen = ModelToViewHelper::ConvertToViewPosition( mpConversionMap, aStartPos.mnPos + 1 )
+                                       - nTmpStart - aStartPos.mnSubPos;
+            if( nTmpLen > 0 )
+            {
+                if( nType == text::TextMarkupType::SENTENCE )
+                {
+                    ((SwGrammarMarkUp*)pSubList)->setSentence( static_cast< xub_StrLen >(aStartPos.mnSubPos) );
+                    bCommit = false;
+                }
+                else
+                    pSubList->Insert( rIdentifier, xMarkupInfoContainer,
+                        static_cast< xub_StrLen >(aStartPos.mnSubPos), static_cast< xub_StrLen >(nTmpLen) );
+            }
+            ++nStart;
+        }
+        if( bEndInField && nType != text::TextMarkupType::SENTENCE )
+        {
+            const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aEndPos.mnPos);
+            const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+            SwWrongList* pSubList = pWList->SubList( nInsertPos );
+            if ( !pSubList )
+            {
+                pSubList = new SwGrammarMarkUp();
+                pWList->InsertSubList( nFieldPosModel, 1, nInsertPos, pSubList );
+            }
+            const sal_uInt32 nTmpLen = aEndPos.mnSubPos + 1;
+            pSubList->Insert( rIdentifier, xMarkupInfoContainer, 0, static_cast< xub_StrLen >(nTmpLen) );
+        }
+        else
+            ++nEnd;
+        if( nEnd > nStart )
+            nLength = nEnd - nStart;
+        else
+            bCommit = false;
     }
 
     if ( bCommit )
     {
-        pWList->Insert( rIdentifier, xMarkupInfoContainer,
+        if( nType == text::TextMarkupType::SENTENCE )
+            ((SwGrammarMarkUp*)pWList)->setSentence( static_cast< xub_StrLen >(nStart) );
+        else
+            pWList->Insert( rIdentifier, xMarkupInfoContainer,
                 static_cast< xub_StrLen >(nStart), static_cast< xub_StrLen >(nLength) );
     }
+
+    if( bRepaint )
+        finishGrammarCheck( *mpTxtNode );
 }
 
 void SwXTextMarkup::Modify( SfxPoolItem* /*pOld*/, SfxPoolItem* /*pNew*/ )
@@ -159,6 +243,7 @@ void SwXTextMarkup::Modify( SfxPoolItem* /*pOld*/, SfxPoolItem* /*pNew*/ )
         pRegisteredIn->Remove( this );
     // <--
 
+    vos::OGuard aGuard(Application::GetSolarMutex());
     mpTxtNode = 0;
 }
 
