@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=
+Type=MimeType
+Patterns=*.docm
+MimeType=application/vnd.ms-word.document.macroenabled.12
+Comment=Microsoft Word Document
