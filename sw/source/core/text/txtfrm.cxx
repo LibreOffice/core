@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtfrm.cxx,v $
- * $Revision: 1.107 $
+ * $Revision: 1.108 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,7 @@
 #include <SwSmartTagMgr.hxx>
 #include <doc.hxx>      // GetDoc()
 #include <pagefrm.hxx>  // InvalidateSpelling
+#include <rootfrm.hxx>
 #include <viewsh.hxx>   // ViewShell
 #include <pam.hxx>      // SwPosition
 #include <ndtxt.hxx>        // SwTxtNode
@@ -72,7 +73,7 @@
 #include <widorp.hxx>       // SwFrmBreak
 #include <txtcache.hxx>
 #include <fntcache.hxx>     // GetLineSpace benutzt pLastFont
-#include <wrong.hxx>        // SwWrongList
+#include <SwGrammarMarkUp.hxx>
 #ifndef _LINEINFO_HXX
 #include <lineinfo.hxx>
 #endif
@@ -91,6 +92,7 @@
 // <--
 #include <swtable.hxx>
 #include <fldupde.hxx>
+#include <IGrammarContact.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <txtpaint.hxx>     // DbgRect
@@ -788,38 +790,55 @@ void SwTxtFrm::CalcLineSpace()
 }
 
 //
-// SET_WRONG( nPos, nCnt, fnFunc )
+// SET_WRONG( nPos, nCnt, bMove )
 //
-#define SET_WRONG( nPos, nCnt, fnFunc ) \
+#define SET_WRONG( nPos, nCnt, bMove ) \
 { \
-    if ( !IsFollow() && GetTxtNode()->GetWrong() ) \
-        GetTxtNode()->GetWrong()->fnFunc( nPos, nCnt ); \
-    if ( !IsFollow() && GetTxtNode()->GetGrammarCheck() ) \
-        GetTxtNode()->GetGrammarCheck()->fnFunc( nPos, nCnt ); \
-    if ( !IsFollow() && GetTxtNode()->GetSmartTags() ) \
-        GetTxtNode()->GetSmartTags()->fnFunc( nPos, nCnt ); \
-    lcl_SetWrong( *this, nPos, nCnt ); \
+    lcl_SetWrong( *this, nPos, nCnt, bMove ); \
 }
 
-void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt )
+void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt, bool bMove )
 {
     if ( !rFrm.IsFollow() )
     {
         SwTxtNode* pTxtNode = rFrm.GetTxtNode();
+        IGrammarContact* pGrammarContact = getGrammarContact( *pTxtNode );
+        SwGrammarMarkUp* pWrongGrammar = pGrammarContact ?
+            pGrammarContact->getGrammarCheck( *pTxtNode, false ) :
+            pTxtNode->GetGrammarCheck();
+        bool bGrammarProxy = pWrongGrammar != pTxtNode->GetGrammarCheck();
+        if( bMove )
+        {
+            if( pTxtNode->GetWrong() )
+                pTxtNode->GetWrong()->Move( nPos, nCnt );
+            if( pWrongGrammar )
+            {
+                pWrongGrammar->MoveGrammar( nPos, nCnt );
+                if( bGrammarProxy && pTxtNode->GetGrammarCheck() )
+                    pTxtNode->GetGrammarCheck()->MoveGrammar( nPos, nCnt );
+            }
+            if( pTxtNode->GetSmartTags() )
+                pTxtNode->GetSmartTags()->Move( nPos, nCnt );
+        }
+        else
+        {
+            xub_StrLen nLen = (xub_StrLen)nCnt;
+            if( pTxtNode->GetWrong() )
+                pTxtNode->GetWrong()->Invalidate( nPos, nLen );
+            if( pWrongGrammar )
+                pWrongGrammar->Invalidate( nPos, nLen );
+            if( pTxtNode->GetSmartTags() )
+                pTxtNode->GetSmartTags()->Invalidate( nPos, nLen );
+        }
         if ( !pTxtNode->GetWrong() && !pTxtNode->IsWrongDirty() )
         {
-            pTxtNode->SetWrong( new SwWrongList );
+            pTxtNode->SetWrong( new SwWrongList( WRONGLIST_SPELL ) );
             pTxtNode->GetWrong()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) );
-        }
-        if ( !pTxtNode->GetGrammarCheck() && !pTxtNode->IsGrammarCheckDirty() )
-        {
-            pTxtNode->SetGrammarCheck( new SwWrongList() );
-            pTxtNode->GetGrammarCheck()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) );
         }
         if ( !pTxtNode->GetSmartTags() && !pTxtNode->IsSmartTagDirty() )
         {
             // SMARTTAGS
-            pTxtNode->SetSmartTags( new SwWrongList );
+            pTxtNode->SetSmartTags( new SwWrongList( WRONGLIST_SMARTTAG ) );
             pTxtNode->GetSmartTags()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) );
         }
         pTxtNode->SetWrongDirty( true );
@@ -828,6 +847,12 @@ void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt )
         pTxtNode->SetAutoCompleteWordDirty( true );
         // SMARTTAGS
         pTxtNode->SetSmartTagDirty( true );
+    }
+
+    SwRootFrm *pRootFrm = rFrm.FindRootFrm();
+    if (pRootFrm)
+    {
+        pRootFrm->SetNeedGrammarCheck( TRUE );
     }
 
     SwPageFrm *pPage = rFrm.FindPageFrm();
@@ -882,7 +907,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             // Collection hat sich geaendert
             Prepare( PREP_CLEAR );
             _InvalidatePrt();
-            SET_WRONG( 0, STRING_LEN, Invalidate );
+            SET_WRONG( 0, STRING_LEN, false );
             SetDerivedR2L( sal_False );
             CheckDirChange();
             // OD 09.12.2002 #105576# - Force complete paint due to existing
@@ -914,7 +939,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         {
             nPos = ((SwInsChr*)pNew)->nPos;
             InvalidateRange( SwCharRange( nPos, 1 ), 1 );
-            SET_WRONG( nPos, 1, Move )
+            SET_WRONG( nPos, 1, true )
             SET_SCRIPT_INVAL( nPos )
             bSetFldsDirty = sal_True;
             if( HasFollow() )
@@ -938,7 +963,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                 else
                     _InvalidateRange( SwCharRange( nPos, nLen ), nLen );
             }
-            SET_WRONG( nPos, nLen, Move )
+            SET_WRONG( nPos, nLen, true )
             SET_SCRIPT_INVAL( nPos )
             bSetFldsDirty = sal_True;
             if( HasFollow() )
@@ -949,7 +974,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         {
             nPos = ((SwDelChr*)pNew)->nPos;
             InvalidateRange( SwCharRange( nPos, 1 ), -1 );
-            SET_WRONG( nPos, -1, Move )
+            SET_WRONG( nPos, -1, true )
             SET_SCRIPT_INVAL( nPos )
             bSetFldsDirty = bRecalcFtnFlag = sal_True;
             if( HasFollow() )
@@ -969,7 +994,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                 else
                     InvalidateRange( SwCharRange( nPos, 1 ), m );
             }
-            SET_WRONG( nPos, m, Move )
+            SET_WRONG( nPos, m, true )
             SET_SCRIPT_INVAL( nPos )
             bSetFldsDirty = bRecalcFtnFlag = sal_True;
             if( HasFollow() )
@@ -997,7 +1022,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                 if( ! nTmp || RES_TXTATR_CHARFMT == nTmp || RES_TXTATR_AUTOFMT ||
                     RES_FMT_CHG == nTmp || RES_ATTRSET_CHG == nTmp )
                 {
-                    SET_WRONG( nPos, nPos + nLen, Invalidate )
+                    SET_WRONG( nPos, nPos + nLen, false )
                     SET_SCRIPT_INVAL( nPos )
                 }
             }
@@ -1045,7 +1070,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             bSetFldsDirty = sal_True;
             // ST2
             if ( SwSmartTagMgr::Get().IsSmartTagsEnabled() )
-                SET_WRONG( nPos, nPos + 1, Invalidate )
+                SET_WRONG( nPos, nPos + 1, false )
         }
         break;
         case RES_TXTATR_FTN :
@@ -1176,7 +1201,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             if ( SFX_ITEM_SET ==
                  rNewSet.GetItemState( RES_TXTATR_CHARFMT, sal_False ) )
             {
-                SET_WRONG( 0, STRING_LEN, Invalidate )
+                SET_WRONG( 0, STRING_LEN, false )
                 SET_SCRIPT_INVAL( 0 )
             }
             else if ( SFX_ITEM_SET ==
@@ -1185,7 +1210,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                       rNewSet.GetItemState( RES_CHRATR_CJK_LANGUAGE, sal_False ) ||
                       SFX_ITEM_SET ==
                       rNewSet.GetItemState( RES_CHRATR_CTL_LANGUAGE, sal_False ) )
-                SET_WRONG( 0, STRING_LEN, Invalidate )
+                SET_WRONG( 0, STRING_LEN, false )
             else if ( SFX_ITEM_SET ==
                       rNewSet.GetItemState( RES_CHRATR_FONT, sal_False ) ||
                       SFX_ITEM_SET ==
