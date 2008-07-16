@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: doclay.cxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,7 @@
 #include <svx/svdouno.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/frmdiritem.hxx>
+
 #include <swmodule.hxx>
 #include <modcfg.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -1812,6 +1813,7 @@ void SwDoc::UnblockIdling()
         aIdleTimer.Start();
 }
 
+
 /*************************************************************************
 |*
 |*  SwDoc::DoIdleJobs()
@@ -1843,6 +1845,13 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
             }
             pSh = (ViewShell*)pSh->GetNext();
         } while( pSh != pStartSh );
+
+        if (GetRootFrm()->IsNeedGrammarCheck())
+        {
+            BOOL bIsOnlineSpell = pSh->GetViewOptions()->IsOnlineSpell();
+            if (bIsOnlineSpell)
+                StartGrammarChecking( *this, *GetRootFrm() );
+        }
 
         sal_uInt16 nFldUpdFlag;
         if( GetRootFrm()->IsIdleFormat() )
