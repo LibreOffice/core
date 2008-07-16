@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrong.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,12 +60,16 @@ public:
         : maType(rType), mxPropertyBag(xPropertyBag), mnPos(nPos), mnLen(nLen), mpSubList(pSubList) {}
 };
 
+enum WrongListType  { WRONGLIST_SPELL, WRONGLIST_GRAMMAR, WRONGLIST_SMARTTAG };
+
 class SwWrongList
 {
     std::vector<SwWrongArea> maList;
+    WrongListType            meType;
 
     xub_StrLen nBeginInvalid;   // Start des ungueltigen Bereichs
     xub_StrLen nEndInvalid;     // Ende des ungueltigen Bereichs
+
     void ShiftLeft( xub_StrLen &rPos, xub_StrLen nStart, xub_StrLen nEnd )
     { if( rPos > nStart ) rPos = rPos > nEnd ? rPos - nEnd + nStart : nStart; }
     void ShiftRight( xub_StrLen &rPos, xub_StrLen nStart, xub_StrLen nEnd )
@@ -81,28 +85,20 @@ class SwWrongList
 
 public:
 
-    SwWrongList();
+    SwWrongList( WrongListType eType );
     ~SwWrongList()
     {
-        for ( unsigned int i=0; i< maList.size(); i++)
-        {
-            if (maList[i].mpSubList)
-                delete maList[i].mpSubList;
-            maList[i].mpSubList = NULL;
-        }
-        //maList.resize(0);
+        ClearList();
     }
 
+    inline WrongListType GetWrongListType() const { return meType; }
     inline xub_StrLen GetBeginInv() const { return nBeginInvalid; }
     inline xub_StrLen GetEndInv() const { return nEndInvalid; }
     inline BOOL InsideInvalid( xub_StrLen nChk ) const
         { return nChk >= nBeginInvalid && nChk <= nEndInvalid; }
-    inline void SetInvalid( xub_StrLen nBegin, xub_StrLen nEnd )
-        { nBeginInvalid = nBegin; nEndInvalid = nEnd; }
+    void SetInvalid( xub_StrLen nBegin, xub_StrLen nEnd );
     inline void Validate(){ nBeginInvalid = STRING_LEN; }
-    inline void Invalidate( xub_StrLen nBegin, xub_StrLen nEnd )
-        { if( STRING_LEN == GetBeginInv() ) SetInvalid( nBegin, nEnd );
-          else _Invalidate( nBegin, nEnd ); }
+    void Invalidate( xub_StrLen nBegin, xub_StrLen nEnd );
     BOOL InvalidateWrong();
     BOOL Fresh( xub_StrLen &rStart, xub_StrLen &rEnd, xub_StrLen nPos,
             xub_StrLen nLen, USHORT nIndex, xub_StrLen nCursorPos );
@@ -113,6 +109,7 @@ public:
     xub_StrLen NextWrong( xub_StrLen nChk ) const;
 
     void Move( xub_StrLen nPos, long nDiff );
+    void ClearList();
 
     // Divide the list into two part, the wrong words until nSplitPos will be
     // removed and transferred to a new SwWrongList.
@@ -154,15 +151,7 @@ public:
         return nIdx < maList.size() ? maList[nIdx].mpSubList : 0;
     }
 
-    inline void InsertSubList( xub_StrLen nNewPos, xub_StrLen nNewLen, USHORT nWhere, SwWrongList* pSubList )
-    {
-        std::vector<SwWrongArea>::iterator i = maList.begin();
-        if ( nWhere >= maList.size() )
-            i = maList.end(); // robust
-        else
-            i += nWhere;
-        maList.insert(i, SwWrongArea( rtl::OUString(), 0, nNewPos, nNewLen, pSubList ) );
-    }
+    void InsertSubList( xub_StrLen nNewPos, xub_StrLen nNewLen, USHORT nWhere, SwWrongList* pSubList );
 
     inline const SwWrongArea* GetElement( USHORT nIdx ) const
     {
