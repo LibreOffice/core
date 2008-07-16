@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registryitem_draw.scp,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -268,86 +268,6 @@ End
 
 
 
-RegistryItem gid_Regitem_Sda_Contenttype
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = ".sda";
-    Name = "Content Type";
-    Value = "application/vnd.stardivision.draw";
-End
-
-RegistryItem gid_Regitem_Sda_Mime_Database
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "MIME\Database\Content Type\application/vnd.stardivision.draw";
-    Name = "Extension";
-    Value = ".sda";
-End
-
-RegistryItem gid_Regitem_Sda_So4_Mime_Database
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "MIME\Database\Content Type\application/x-stardraw";
-    Name = "Extension";
-    Value = ".sda";
-End
-
-RegistryItem gid_Regitem_Soffice_Stardrawdocument_5
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "soffice.StarDrawDocument.5";
-    REG_VALUE_LNG(SO51_DRAWING_OOO)
-End
-
-RegistryItem gid_Regitem_Soffice_Stardrawdocument_5_Defaulticon
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "soffice.StarDrawDocument.5\DefaultIcon";
-    Value = "<progpath>\program\soffice.exe,31";
-End
-
-RegistryItem gid_Regitem_Soffice_Stardrawdocument_5_Shell
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "soffice.StarDrawDocument.5\shell";
-    Value = "open";
-End
-
-RegistryItem gid_Regitem_Soffice_Stardrawdocument_5_Shell_New
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "soffice.StarDrawDocument.5\shell\new";
-    REG_VALUE_LNG(NEW)
-End
-
-RegistryItem gid_Regitem_Soffice_Stardrawdocument_5_Shell_New_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "soffice.StarDrawDocument.5\shell\new\command";
-    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Stardrawdocument_5_Shell_Open_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "soffice.StarDrawDocument.5\shell\open\command";
-    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Stardrawdocument_5_Shell_Print_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "soffice.StarDrawDocument.5\shell\print\command";
-    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Stardrawdocument_5_Shell_Printto_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = "soffice.StarDrawDocument.5\shell\printto\command";
-    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
-End
-
 RegistryItem gid_Regitem_Soffice_Stardrawdocument_6
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
@@ -593,22 +513,6 @@ RegistryItem gid_Regitem_Sxd_Mime_Database
     Subkey = "MIME\Database\Content Type\application/vnd.sun.xml.draw";
     Name = "Extension";
     Value = ".sxd";
-End
-
-RegistryItem gid_Regitem__Sda
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Subkey = ".sda";
-    Value = "soffice.StarDrawDocument.5";
-End
-
-RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sda
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
-    Name = ".sda";
-    Value = "soffice.StarDrawDocument.5";
-    Styles = ();
 End
 
 RegistryItem gid_Regitem__Sxd
@@ -952,33 +856,6 @@ End
 RegistryItem gid_Regitem_OpenOffice_STD_OpenWith_Draw
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".std\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Name = "opendocument.DrawDocument.1";
-    Value = " ";
-End
-
-// .SDA
-RegistryItem gid_Regitem_OpenOffice_SDA_OpenWith_Draw
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".sda\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Name = "opendocument.DrawDocument.1";
-    Value = " ";
-End
-
-// .SDD
-RegistryItem gid_Regitem_OpenOffice_SDD_OpenWith_Draw
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".sdd\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Draw_Bin;
-    Name = "opendocument.DrawDocument.1";
-    Value = " ";
-End
-
-// .VOR
-RegistryItem gid_Regitem_OpenOffice_VOR_OpenWith_Draw
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".vor\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Draw_Bin;
     Name = "opendocument.DrawDocument.1";
     Value = " ";
