@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view0.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +57,7 @@
 #include <sfx2/objface.hxx>
 #include <navipi.hxx>
 #include <wrtsh.hxx>
+#include "doc.hxx"
 #include "view.hxx"
 #include "basesh.hxx"
 #include "docsh.hxx"
@@ -490,6 +491,17 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
                 if (xLngProp.is())
                     xLngProp->setPropertyValue( aPropName, aVal );
+
+                // for the time being we do not have a specific option for grammarchecking.
+                // thus we'll use the one for spell checking...
+                if (bSet)
+                {
+                    SwDocShell *pDocSh = GetDocShell();
+                    SwDoc *pDoc = pDocSh? pDocSh->GetDoc() : NULL;
+                    SwRootFrm *pRootFrm = pDoc ? pDoc->GetRootFrm() : NULL;
+                    if (pDoc && pRootFrm)
+                        StartGrammarChecking( *pDoc, *pRootFrm );
+                }
             }
             if (!(STATE_TOGGLE == eState && bSet && ( pOpt->IsHideSpell() )))
                 break;
