@@ -67,4 +67,41 @@ en-US = "HTML Document Template"
 [extension]
 en-US = "%PRODUCTNAME Extension"
 
+[ms-excel-sheet-12]
+en-US = "Microsoft Excel Worksheet"
 
+[ms-excel-template-12]
+en-US = "Microsoft Excel Worksheet Template"
+
+[ms-powerpoint-presentation-12]
+en-US = "Microsoft PowerPoint Presentation"
+
+[ms-powerpoint-template-12]
+en-US = "Microsoft PowerPoint Presentation Template"
+
+[ms-word-document-12]
+en-US = "Microsoft Word Document"
+
+[ms-word-template-12]
+en-US = "Microsoft Word Document Template"
+
+[openxmlformats-officedocument-presentationml-presentation]
+en-US = "Microsoft PowerPoint Presentation"
+
+[openxmlformats-officedocument-presentationml-template]
+en-US = "Microsoft PowerPoint Presentation Template"
+
+[openxmlformats-officedocument-spreadsheetml-sheet]
+en-US = "Microsoft Excel Worksheet"
+
+[openxmlformats-officedocument-spreadsheetml-template]
+en-US = "Microsoft Excel Worksheet Template"
+
+[openxmlformats-officedocument-wordprocessingml-document]
+en-US = "Microsoft Word Document"
+
+[openxmlformats-officedocument-wordprocessingml-template]
+en-US = "Microsoft Word Document Template"
+
+[ms-excel-sheet-binary-12]
+en-US = "Microsoft Excel Worksheet"
