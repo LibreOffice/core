@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtedt.cxx,v $
- * $Revision: 1.91 $
+ * $Revision: 1.92 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +76,8 @@
 #include <hints.hxx>
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
-#include <wrong.hxx>
+#include <SwGrammarMarkUp.hxx>
+
 #include <txttypes.hxx>
 #include <breakit.hxx>
 #include <crstate.hxx>
@@ -1243,7 +1244,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
                     {
                         if( !pNode->GetWrong() )
                         {
-                            pNode->SetWrong( new SwWrongList() );
+                            pNode->SetWrong( new SwWrongList( WRONGLIST_SPELL ) );
                             pNode->GetWrong()->SetInvalid( 0, nEnd );
                         }
                         if( pNode->GetWrong()->Fresh( nChgStart, nChgEnd,
@@ -1812,7 +1813,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
 struct SwParaIdleData_Impl
 {
     SwWrongList* pWrong;            // for spell checking
-    SwWrongList* pGrammarCheck;     // for grammar checking /  proof reading
+    SwGrammarMarkUp* pGrammarCheck;     // for grammar checking /  proof reading
     SwWrongList* pSmartTags;
     ULONG nNumberOfWords;
     ULONG nNumberOfChars;
@@ -1871,7 +1872,8 @@ const SwWrongList* SwTxtNode::GetWrong() const
 }
 // <--
 
-void SwTxtNode::SetGrammarCheck( SwWrongList* pNew, bool bDelete )
+
+void SwTxtNode::SetGrammarCheck( SwGrammarMarkUp* pNew, bool bDelete )
 {
     if ( pParaIdleData_Impl )
     {
@@ -1881,7 +1883,7 @@ void SwTxtNode::SetGrammarCheck( SwWrongList* pNew, bool bDelete )
     }
 }
 
-SwWrongList* SwTxtNode::GetGrammarCheck()
+SwGrammarMarkUp* SwTxtNode::GetGrammarCheck()
 {
     return pParaIdleData_Impl ? pParaIdleData_Impl->pGrammarCheck : 0;
 }
