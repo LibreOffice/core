@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SpellPortions.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include <i18npool/lang.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/linguistic2/SingleGrammarError.hpp>
 #include <vector>
 
 namespace com{ namespace sun{ namespace star{ namespace linguistic2{
@@ -65,12 +66,21 @@ struct SpellPortion
         it's an empty reference
      */
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellAlternatives> xAlternatives;
+    /** determines whether the error type is a grammar error
+    */
+    bool bIsGrammarError;
+    /** contains the grammar error information
+    */
+    com::sun::star::linguistic2::SingleGrammarError aGrammarError;
 
     SpellPortion() :
         bIsField(false),
         bIsHidden(false),
-        eLanguage(LANGUAGE_DONTKNOW)
-        {}
+        eLanguage(LANGUAGE_DONTKNOW),
+        bIsGrammarError(false)
+        {
+            aGrammarError.nErrorStart = aGrammarError.nErrorLength = aGrammarError.nErrorLevel = aGrammarError.nErrorType = 0;
+        }
 };
 typedef std::vector<SpellPortion> SpellPortions;
 }//namespace svx
