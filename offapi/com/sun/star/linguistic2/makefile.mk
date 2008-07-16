@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -90,10 +90,7 @@ IDLFILES=\
     SingleGrammarError.idl\
     GrammarCheckingResult.idl\
     XGrammarChecker.idl\
-    XGrammarCheckerListener.idl\
     XGrammarCheckingIterator.idl\
-    XGrammarCheckingResultBroadcaster.idl\
-    XGrammarCheckingResultListener.idl\
     GrammarCheckingIterator.idl
 
 
