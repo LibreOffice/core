@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SpellAttrib.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,20 +41,22 @@
 using namespace svx;
 using namespace com::sun::star::linguistic2;
 using namespace com::sun::star::uno;
-/*-- 10.09.2003 12:54:34---------------------------------------------------
+
+/*-- 26.06.2008 10:41:57---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SpellErrorAttrib::SpellErrorAttrib(Reference<XSpellAlternatives> xAlt) :
+SpellErrorAttrib::SpellErrorAttrib( const SpellErrorDescription& rDesc ) :
     TextAttrib(TEXTATTR_SPELL_ERROR),
-    m_xAlternatives(xAlt)
+    m_aSpellErrorDescription( rDesc )
 {
 }
+
 /*-- 10.09.2003 12:54:34---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 SpellErrorAttrib::SpellErrorAttrib( const SpellErrorAttrib& rAttr ) :
     TextAttrib(TEXTATTR_SPELL_ERROR),
-    m_xAlternatives( rAttr.m_xAlternatives )
+    m_aSpellErrorDescription( rAttr.m_aSpellErrorDescription )
 {
 }
 /*-- 10.09.2003 12:54:34---------------------------------------------------
@@ -83,7 +85,7 @@ TextAttrib*     SpellErrorAttrib::Clone() const
 int SpellErrorAttrib::operator==( const TextAttrib& rAttr ) const
 {
     return Which() == rAttr.Which() &&
-             m_xAlternatives.get() == static_cast<const SpellErrorAttrib&>(rAttr).m_xAlternatives.get();
+            m_aSpellErrorDescription == static_cast<const SpellErrorAttrib&>(rAttr).m_aSpellErrorDescription;
 }
 /*-- 10.09.2003 14:27:43---------------------------------------------------
 
