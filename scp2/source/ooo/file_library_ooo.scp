@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_library_ooo.scp,v $
- * $Revision: 1.299 $
+ * $Revision: 1.300 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1208,11 +1208,11 @@ End
 
 #ifdef WNT
 
-File gid_File_Lib_Reg4msdocmsi
+File gid_File_Lib_Reg4allmsdoc
     TXT_FILE_BODY;
     Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
     Dir = gid_Dir_Program;
-    Name = "reg4msdocmsi.dll";
+    Name = "reg4allmsdoc.dll";
 End
 
 #endif
