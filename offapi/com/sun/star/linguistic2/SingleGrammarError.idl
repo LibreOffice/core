@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SingleGrammarError.idl,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,10 +30,6 @@
 #ifndef __com_sun_star_linguistic2_SingleGrammarError_idl__
 #define __com_sun_star_linguistic2_SingleGrammarError_idl__
 
-#ifndef __com_sun_star_linguistic2_XGrammarChecker_idl__
-#include <com/sun/star/linguistic2/XGrammarChecker.idl>
-#endif
-
 #ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
 #endif
@@ -51,29 +47,24 @@ struct SingleGrammarError
 
     // the length of the error text
     // indicating the text to be replaced if suggestions are applied
-    long nErrorLen;
-
-    long nErrorType;
+    long nErrorLength;
 
     // definitely wrong, maybe wrong...
     long nErrorLevel;
 
-    // the sentence boundary
-    //long nEndOfSentencePos;
+    long nErrorType;
 
-    // link to specific implementation that reported the error
-    com::sun::star::linguistic2::XGrammarChecker xGC;
-
-    // error text
+    // short error description text
     string aShortComment;
 
-    // error text
+    // full error description text
     string aFullComment;
 
-    // language
+    // new locale to be applied if the error is just because of a wron language attribute
     com::sun::star::lang::Locale aNewLocale;
 
     // a list of correction suggestions
+    // may be emtpy if only automatic checking was done
     sequence< string > aSuggestions;
 };
 
