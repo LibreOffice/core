@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.13 $
+# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -58,6 +58,7 @@ SLOFILES =  \
         $(SLO)$/fntcap.obj \
         $(SLO)$/fntcache.obj \
         $(SLO)$/swfntcch.obj \
+        $(SLO)$/SwGrammarContact.obj \
                 $(SLO)$/modeltoviewhelper.obj \
                 $(SLO)$/ndhints.obj \
         $(SLO)$/ndtxt.obj \
@@ -70,10 +71,14 @@ SLOFILES =  \
 
 
 EXCEPTIONSFILES = \
+        $(SLO)$/atrtox.obj \
+        $(SLO)$/atrflyin.obj \
+        $(SLO)$/docnew.obj \
+        $(SLO)$/fntcache.obj \
         $(SLO)$/ndtxt.obj \
         $(SLO)$/thints.obj \
-                $(SLO)$/txtedt.obj
-
+        $(SLO)$/txtedt.obj
+        
 
 .IF "$(dbutil)" != ""
 OFILES+=$(SLO)$/dbchratr.$(QBJX)
