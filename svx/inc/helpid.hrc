@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: helpid.hrc,v $
- * $Revision: 1.77 $
+ * $Revision: 1.78 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -512,6 +512,8 @@
 #define HID_HANGULDLG_EDIT_NEWWORD              (HID_SVX_EXT0_START + 27)
 #define HID_DLG_SECURITY_OPTIONS                (HID_SVX_EXT0_START + 28)
 #define HID_DLG_WEBCONNECTION_INFO              (HID_SVX_EXT0_START + 29)
+#define HID_SPLDLG_BUTTON_EXPLAIN               (HID_SVX_EXT0_START + 30)
+#define HID_SPLDLG_CHECKBOX_CHECKGRAMMAR        (HID_SVX_EXT0_START + 31)
 
 #define HID_AUTOCORR_DLG                (HID_OFA_START +  0)
 #define HID_OFAPAGE_AUTOCORR_OPTIONS    (HID_OFA_START +  1)
