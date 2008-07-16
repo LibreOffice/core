@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: grammarchecker.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,6 @@
 #include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/linguistic2/XGrammarCheckingResultBroadcaster.hpp>
 #include "misc.hxx"
 #include "defs.hxx"
 #include <cppuhelper/factory.hxx>
@@ -65,9 +64,8 @@ using namespace ::com::sun::star;
 
 ////////////////////////////////////////////////////////////
 
-GrammarChecker::GrammarChecker( /*uno::Reference< uno::XComponentContext > const & context*/ ) :
-    m_aGCListeners( GetMutex() ) /*:
-    m_xContext(context)*/
+GrammarChecker::GrammarChecker( /*uno::Reference< uno::XComponentContext > const & context*/ )
+    /*m_xContext(context)*/
 {}
 
 GrammarChecker::~GrammarChecker()
@@ -75,43 +73,23 @@ GrammarChecker::~GrammarChecker()
 }
 
 
-// linguistic2::XGrammarChecker:
-::sal_Bool SAL_CALL GrammarChecker::isSpellChecker( const lang::Locale & aLocale) throw (uno::RuntimeException)
+sal_Bool SAL_CALL GrammarChecker::isSpellChecker() throw (uno::RuntimeException)
 {
-    (void) aLocale;
-    // TODO: Exchange the default return implementation for "isSpellChecker" !!!
-    // Exchange the default return implementation.
-    // NOTE: Default initialized polymorphic structs can cause problems because of
-    // missing default initialization of primitive types of some C++ compilers or
-    // different Any initialization in Java and C++ polymorphic structs.
-
-    //MutexGuard    aGuard( GetMutex() );
+    osl::Guard< osl::Mutex > aGuard(GetMutex());
     return sal_False;
 }
 
 
-// linguistic2::XSupportedLocales:
-::sal_Bool SAL_CALL GrammarChecker::hasLocale( const lang::Locale & aLocale ) throw (uno::RuntimeException)
+sal_Bool SAL_CALL GrammarChecker::hasLocale( const lang::Locale & aLocale ) throw (uno::RuntimeException)
 {
-    // TODO: Exchange the default return implementation for "hasLocale" !!!
-    // Exchange the default return implementation.
-    // NOTE: Default initialized polymorphic structs can cause problems because of
-    // missing default initialization of primitive types of some C++ compilers or
-    // different Any initialization in Java and C++ polymorphic structs.
-
+    osl::Guard< osl::Mutex > aGuard(GetMutex());
     (void) aLocale;
-    //MutexGuard    aGuard( GetMutex() );
     return sal_False;
 }
 
-// linguistic2::XSupportedLocales:
 uno::Sequence< lang::Locale > SAL_CALL GrammarChecker::getLocales(  ) throw (uno::RuntimeException)
 {
-    // TODO: Exchange the default return implementation for "getLocales" !!!
-    // Exchange the default return implementation.
-    // NOTE: Default initialized polymorphic structs can cause problems because of
-    // missing default initialization of primitive types of some C++ compilers or
-    // different Any initialization in Java and C++ polymorphic structs.
+    osl::Guard< osl::Mutex > aGuard(GetMutex());
     return uno::Sequence< lang::Locale >();
 }
 
@@ -119,79 +97,66 @@ uno::Sequence< lang::Locale > SAL_CALL GrammarChecker::getLocales(  ) throw (uno
 void SAL_CALL GrammarChecker::startDocument(sal_Int32 nDocId)
     throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
+    osl::Guard< osl::Mutex > aGuard(GetMutex());
     (void) nDocId;
-    // TODO: Insert your implementation for "startDocument" here.
 }
 
 void SAL_CALL GrammarChecker::startParagraph(sal_Int32 nDocId)
     throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
+    osl::Guard< osl::Mutex > aGuard(GetMutex());
     (void) nDocId;
-    // TODO: Insert your implementation for "startParagraph" here.
 }
 
 void SAL_CALL GrammarChecker::endParagraph( sal_Int32 nDocId )
     throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
+    osl::Guard< osl::Mutex > aGuard(GetMutex());
     (void) nDocId;
-    // TODO: Insert your implementation for "endParagraph" here.
 }
 
 void SAL_CALL GrammarChecker::endDocument(sal_Int32 nDocId)
     throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
+    osl::Guard< osl::Mutex > aGuard(GetMutex());
     (void) nDocId;
-    // TODO: Insert your implementation for "endDocument" here.
 }
 
-
-void SAL_CALL GrammarChecker::doGrammarChecking(
+linguistic2::GrammarCheckingResult SAL_CALL GrammarChecker::doGrammarChecking(
         sal_Int32 nDocId,
-        const uno::Reference< text::XFlatParagraph > & xFlatPara,
-        const lang::Locale & aLocale,
+        const rtl::OUString& rText,
+        const lang::Locale& rLocale,
         sal_Int32 nStartOfSentencePos,
-        sal_Int32 nSuggestedSentenceEndPos)
-    throw (uno::RuntimeException, lang::IllegalArgumentException)
+        sal_Int32 nSuggestedSentenceEndPos,
+        const uno::Sequence< ::sal_Int32 >& rLanguagePortions,
+        const uno::Sequence< lang::Locale >& rLanguagePortionsLocales )
+    throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    // TODO: Insert your implementation for "doGrammarChecking" here.
-    (void) nDocId;
+    osl::Guard< osl::Mutex > aGuard(GetMutex());
 
-    OUString aFlatParaText = xFlatPara->getText();
-    linguistic2::GrammarCheckingResult paRes;
-    //paRes->nDocId=nDocId;
-    paRes.xPara=xFlatPara;
-    paRes.aText=aFlatParaText;//.copy(nStartOfSentencePos, nSuggestedSentenceEndPos-nStartOfSentencePos);
-    paRes.aLocale=aLocale;
-    paRes.nEndOfSentencePos=nSuggestedSentenceEndPos;
-    uno::Sequence< linguistic2::SingleGrammarError > aError;
+    (void) rLanguagePortions;
+    (void) rLanguagePortionsLocales;
 
-    aError=GrammarCheckingInDummy(nDocId, aFlatParaText, aLocale, nStartOfSentencePos, nSuggestedSentenceEndPos);
+    linguistic2::GrammarCheckingResult  aRes;
+    aRes.nDocumentId                = nDocId;
+    aRes.aText                      = rText;
+    aRes.aLocale                    = rLocale;
+    aRes.nEndOfSentencePos          = nSuggestedSentenceEndPos;
+    aRes.xGrammarChecker            = this;
+    aRes.aGrammarErrors             = GrammarCheckingInDummy( nDocId, rText, rLocale, nStartOfSentencePos, nSuggestedSentenceEndPos );;
 
-    paRes.aGrammarErrors=aError;
-
-    if(m_aGCListeners.getLength() > 0)
-    {
-
-        ::cppu::OInterfaceIteratorHelper pIterator( m_aGCListeners );
-        while ( pIterator.hasMoreElements( ) )
-        {
-            uno::Reference< linguistic2::XGrammarCheckingResultListener > xLstnr( pIterator.next(), uno::UNO_QUERY );
-            xLstnr->GrammarCheckingFinished(paRes);
-        }
-    }
-
+    return aRes;
 }
 
 uno::Sequence< linguistic2::SingleGrammarError > GrammarChecker::GrammarCheckingInDummy(
     sal_Int32 nDocId,
-    const OUString aFlatParaText,
+    const OUString & rFlatParaText,
     const lang::Locale & rLocale,
     sal_Int32 nStartOfSentencePos,
-    sal_Int32 nSuggestedSentenceEndPos
-    )
+    sal_Int32 nSuggestedSentenceEndPos )
 {
     (void) nDocId;
-    (void) aFlatParaText;
+    (void) rFlatParaText;
     (void) rLocale;
     (void) nStartOfSentencePos;
     (void) nSuggestedSentenceEndPos;
@@ -199,17 +164,17 @@ uno::Sequence< linguistic2::SingleGrammarError > GrammarChecker::GrammarChecking
 
     typedef std::map< OUString, uno::Sequence<OUString> > Error_t;
     Error_t aError;
-    uno::Sequence< OUString > aSeggestion(1);
-    OUString *pSeggestion = aSeggestion.getArray();
+    uno::Sequence< OUString > aSuggestion(1);
+    OUString *pSeggestion = aSuggestion.getArray();
     pSeggestion[0] = OUString::createFromAscii("Modified");
 
-    aError[OUString::createFromAscii("GrammarError")]=aSeggestion;
-    aError[OUString::createFromAscii("Grammar Error")]=aSeggestion;
+    aError[OUString::createFromAscii("GrammarError")]  = aSuggestion;
+    aError[OUString::createFromAscii("Grammar Error")] = aSuggestion;
 
     typedef std::vector< linguistic2::SingleGrammarError> ErrorVector_t;
     ErrorVector_t aErrorVector;
 
-    OUString aText=aFlatParaText.copy(nStartOfSentencePos, nSuggestedSentenceEndPos-nStartOfSentencePos);
+    OUString aText = rFlatParaText.copy( nStartOfSentencePos, nSuggestedSentenceEndPos - nStartOfSentencePos );
     sal_Int32 nIndexOf = 0;
     for(Error_t::const_iterator it = aError.begin(); it != aError.end(); ++it)
     {
@@ -221,16 +186,16 @@ uno::Sequence< linguistic2::SingleGrammarError > GrammarChecker::GrammarChecking
             {
                 //error found
                 linguistic2::SingleGrammarError aErr;
-                aErr.nErrorStart=nIndexOf + nStartOfSentencePos;
+                aErr.nErrorStart        = nIndexOf + nStartOfSentencePos;
                 nIndexOf += it->first.getLength();
-                aErr.nErrorLen=it->first.getLength();
-                aErr.nErrorType=text::TextMarkupType::GRAMMAR;
-                aErr.nErrorLevel=0;
-                aErr.xGC=this;
-                aErr.aShortComment=String::CreateFromAscii("");
-                aErr.aFullComment=String::CreateFromAscii("");
-                aErr.aNewLocale=rLocale;
-                aErr.aSuggestions=it->second;
+                aErr.nErrorLength       = it->first.getLength();
+                aErr.nErrorType         = text::TextMarkupType::GRAMMAR;
+                aErr.nErrorLevel        = 0;
+                aErr.aShortComment      = OUString();
+                aErr.aFullComment       = OUString();
+                aErr.aNewLocale         = rLocale;
+                aErr.aSuggestions       = it->second;
+
                 aErrorVector.push_back( aErr );
             }
         }
@@ -251,147 +216,34 @@ uno::Sequence< linguistic2::SingleGrammarError > GrammarChecker::GrammarChecking
 }
 
 
-sal_Int32 SAL_CALL GrammarChecker::getEndOfSentencePos(
-        sal_Int32 nDocId,
-        const OUString & aFlatParaText,
-        const lang::Locale & aLocale,
-        sal_Int32 nStartOfSentencePos)
-    throw (uno::RuntimeException, lang::IllegalArgumentException)
+sal_Bool SAL_CALL GrammarChecker::hasOptionsDialog(  ) throw (uno::RuntimeException)
 {
-    (void) nDocId;
-    // TODO: Exchange the default return implementation for "getEndOfSentencePos" !!!
-    // Exchange the default return implementation.
-    // NOTE: Default initialized polymorphic structs can cause problems because of
-    // missing default initialization of primitive types of some C++ compilers or
-    // different Any initialization in Java and C++ polymorphic structs.
-    uno::Reference< i18n::XBreakIterator > xBreakIterator;
-    if(!xBreakIterator.is())
-    {
-        xBreakIterator=vcl::unohelper::CreateBreakIterator();
-    }
-    sal_Int32 nEndPosition=0;
-    if(xBreakIterator.is())
-    {
-        nEndPosition=xBreakIterator->endOfSentence(aFlatParaText, nStartOfSentencePos, aLocale);
-    }
-    return nEndPosition;
-}
-
-sal_Int32 SAL_CALL GrammarChecker::getStartOfSentencePos(
-        sal_Int32 nDocId,
-        const OUString & aFlatParaText,
-        const lang::Locale & aLocale)
-    throw (uno::RuntimeException, lang::IllegalArgumentException)
-{
-    (void) nDocId;
-    // TODO: Exchange the default return implementation for "getStartOfSentencePos" !!!
-    // Exchange the default return implementation.
-    // NOTE: Default initialized polymorphic structs can cause problems because of
-    // missing default initialization of primitive types of some C++ compilers or
-    // different Any initialization in Java and C++ polymorphic structs.
-    uno::Reference< i18n::XBreakIterator > xBreakIterator;
-    if(!xBreakIterator.is())
-    {
-        xBreakIterator=vcl::unohelper::CreateBreakIterator();
-    }
-    sal_Int32 nStartPosition=0;
-    if(xBreakIterator.is())
-    {
-        nStartPosition=xBreakIterator->beginOfSentence(aFlatParaText, 0, aLocale);
-    }
-    return nStartPosition;
-
-}
-
-::sal_Bool SAL_CALL GrammarChecker::requiresPreviousText(  ) throw (uno::RuntimeException)
-{
-    // TODO: Exchange the default return implementation for "requiresPreviousText" !!!
-    // Exchange the default return implementation.
-    // NOTE: Default initialized polymorphic structs can cause problems because of
-    // missing default initialization of primitive types of some C++ compilers or
-    // different Any initialization in Java and C++ polymorphic structs.
+    osl::Guard< osl::Mutex > aGuard(GetMutex());
     return sal_False;
 }
 
-::sal_Bool SAL_CALL GrammarChecker::hasCheckingDialog(  ) throw (uno::RuntimeException)
-{
-    // TODO: Exchange the default return implementation for "hasCheckingDialog" !!!
-    // Exchange the default return implementation.
-    // NOTE: Default initialized polymorphic structs can cause problems because of
-    // missing default initialization of primitive types of some C++ compilers or
-    // different Any initialization in Java and C++ polymorphic structs.
-    return sal_False;
-}
-
-::sal_Bool SAL_CALL GrammarChecker::hasOptionsDialog(  ) throw (uno::RuntimeException)
-{
-    // TODO: Exchange the default return implementation for "hasOptionsDialog" !!!
-    // Exchange the default return implementation.
-    // NOTE: Default initialized polymorphic structs can cause problems because of
-    // missing default initialization of primitive types of some C++ compilers or
-    // different Any initialization in Java and C++ polymorphic structs.
-    return sal_False;
-}
-
-void SAL_CALL GrammarChecker::runCheckingDialog( sal_Int32 nDocId )
-    throw (uno::RuntimeException, lang::IllegalArgumentException)
-{
-    (void) nDocId;
-    // TODO: Insert your implementation for "runCheckingDialog" here.
-}
-
-void SAL_CALL GrammarChecker::runOptionsDialog( sal_Int32 nDocId )
-    throw (uno::RuntimeException, lang::IllegalArgumentException)
-{
-    (void) nDocId;
-    // TODO: Insert your implementation for "runOptionsDialog" here.
-}
-
-::sal_Bool SAL_CALL GrammarChecker::addGrammarCheckingResultListener( const uno::Reference< linguistic2::XGrammarCheckingResultListener >& xLstnr )
+void SAL_CALL GrammarChecker::runOptionsDialog()
     throw (uno::RuntimeException)
 {
-    (void) xLstnr;
-
     osl::Guard< osl::Mutex > aGuard(GetMutex());
-
-    sal_Bool bRes = sal_False;
-    if (xLstnr.is())
-    {
-        sal_Int32   nCount = m_aGCListeners.getLength();
-        bRes = m_aGCListeners.addInterface( xLstnr ) != nCount;
-    }
-    return bRes;
-}
-
-::sal_Bool SAL_CALL GrammarChecker::removeGrammarCheckingResultListener( const uno::Reference< linguistic2::XGrammarCheckingResultListener >& xLstnr )
-    throw (uno::RuntimeException)
-{
-    (void) xLstnr;
-
-    osl::Guard< osl::Mutex > aGuard(GetMutex());
-
-    sal_Bool bRes = sal_False;
-    if (xLstnr.is())
-    {
-        sal_Int32   nCount = m_aGCListeners.getLength();
-        bRes = m_aGCListeners.removeInterface( xLstnr ) != nCount;
-    }
-    return bRes;
 }
 
 void SAL_CALL GrammarChecker::dispose(  ) throw (uno::RuntimeException)
 {
+    osl::Guard< osl::Mutex > aGuard(GetMutex());
 }
 
 void SAL_CALL GrammarChecker::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw (uno::RuntimeException)
 {
+    osl::Guard< osl::Mutex > aGuard(GetMutex());
     (void) xListener;
 }
 
 void SAL_CALL GrammarChecker::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw (uno::RuntimeException)
 {
+    osl::Guard< osl::Mutex > aGuard(GetMutex());
     (void) xListener;
 }
 
