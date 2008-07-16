@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrong.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,19 +33,37 @@
 
 
 #include <tools/string.hxx>
+#include <tools/debug.hxx>
 #include "errhdl.hxx"
 #include "swtypes.hxx"
 #include "txttypes.hxx"
 
-#include "wrong.hxx"
+#include "SwGrammarMarkUp.hxx"
+
 
 /*************************************************************************
  * SwWrongList::SwWrongList()
  *************************************************************************/
-SwWrongList::SwWrongList() :
-    nBeginInvalid( STRING_LEN )
+SwWrongList::SwWrongList( WrongListType eType ) :
+    meType       (eType),
+    nBeginInvalid(STRING_LEN),  // everything correct... (the invalid area starts beyond the string)
+    nEndInvalid  (STRING_LEN)
 {
     maList.reserve( 5 );
+}
+
+/*************************************************************************
+ * SwWrongList::ClearList()
+ *************************************************************************/
+void SwWrongList::ClearList()
+{
+    for ( size_t i = 0; i < maList.size(); ++i)
+    {
+        if (maList[i].mpSubList)
+            delete maList[i].mpSubList;
+        maList[i].mpSubList = NULL;
+    }
+    maList.clear();
 }
 
 /*************************************************************************
@@ -198,7 +216,7 @@ MSHORT SwWrongList::GetWrongPos( xub_StrLen nValue ) const
 }
 
 /*************************************************************************
- *                 void SwWrongList::Invalidate()
+ *                 void SwWrongList::_Invalidate()
  *************************************************************************/
 
 void SwWrongList::_Invalidate( xub_StrLen nBegin, xub_StrLen nEnd )
@@ -207,7 +225,20 @@ void SwWrongList::_Invalidate( xub_StrLen nBegin, xub_StrLen nEnd )
         nBeginInvalid = nBegin;
     if ( nEnd > GetEndInv() )
         nEndInvalid = nEnd;
+    if( meType == WRONGLIST_GRAMMAR )
+    {
+        ((SwGrammarMarkUp*)this)->removeSentence( nBegin, nEnd );
+    }
 }
+
+void SwWrongList::SetInvalid( xub_StrLen nBegin, xub_StrLen nEnd )
+{
+    nBeginInvalid = nBegin;
+    nEndInvalid = nEnd;
+    if( meType == WRONGLIST_GRAMMAR )
+        ((SwGrammarMarkUp*)this)->removeSentence( nBegin, nEnd );
+}
+
 
 /*************************************************************************
  *                      SwWrongList::Move( xub_StrLen nPos, long nDiff )
@@ -343,6 +374,14 @@ sal_Bool SwWrongList::Fresh( xub_StrLen &rStart, xub_StrLen &rEnd, xub_StrLen nP
     return bRet;
 }
 
+void SwWrongList::Invalidate( xub_StrLen nBegin, xub_StrLen nEnd )
+{
+    if (STRING_LEN == GetBeginInv())
+        SetInvalid( nBegin, nEnd );
+    else
+        _Invalidate( nBegin, nEnd );
+}
+
 sal_Bool SwWrongList::InvalidateWrong( )
 {
     if( Count() )
@@ -373,13 +412,14 @@ SwWrongList* SwWrongList::SplitList( xub_StrLen nSplitPos )
     }
     if( nLst )
     {
-        pRet = new SwWrongList;
+        if( WRONGLIST_GRAMMAR == GetWrongListType() )
+            pRet = new SwGrammarMarkUp();
+        else
+            pRet = new SwWrongList( GetWrongListType() );
         pRet->Insert(0, maList.begin(), ( nLst >= maList.size() ? maList.end() : maList.begin() + nLst ) );
-
         pRet->SetInvalid( GetBeginInv(), GetEndInv() );
         pRet->_Invalidate( nSplitPos ? nSplitPos - 1 : nSplitPos, nSplitPos );
         Remove( 0, nLst );
-
     }
     if( STRING_LEN == GetBeginInv() )
         SetInvalid( 0, 1 );
@@ -400,6 +440,10 @@ SwWrongList* SwWrongList::SplitList( xub_StrLen nSplitPos )
 
 void SwWrongList::JoinList( SwWrongList* pNext, xub_StrLen nInsertPos )
 {
+    if (pNext)
+    {
+        DBG_ASSERT( GetWrongListType() == pNext->GetWrongListType(), "type mismatch with next list" );
+    }
     if( pNext )
     {
         USHORT nCnt = Count();
@@ -423,12 +467,27 @@ void SwWrongList::JoinList( SwWrongList* pNext, xub_StrLen nInsertPos )
                 nWrLen = nWrLen + Len( nCnt - 1 );
                 maList[nCnt - 1].mnLen = nWrLen;
                 Remove( nCnt, 1 );
-
             }
         }
     }
     Invalidate( nInsertPos ? nInsertPos - 1 : nInsertPos, nInsertPos + 1 );
 }
+
+
+void SwWrongList::InsertSubList( xub_StrLen nNewPos, xub_StrLen nNewLen, USHORT nWhere, SwWrongList* pSubList )
+{
+    if (pSubList)
+    {
+        DBG_ASSERT( GetWrongListType() == pSubList->GetWrongListType(), "type mismatch with sub list" );
+    }
+    std::vector<SwWrongArea>::iterator i = maList.begin();
+    if ( nWhere >= maList.size() )
+        i = maList.end(); // robust
+    else
+        i += nWhere;
+    maList.insert(i, SwWrongArea( rtl::OUString(), 0, nNewPos, nNewLen, pSubList ) );
+}
+
 
 // New functions: Necessary because SwWrongList has been changed to use std::vector
 void SwWrongList::Insert(USHORT nWhere, std::vector<SwWrongArea>::iterator startPos, std::vector<SwWrongArea>::iterator endPos)
