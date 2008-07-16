@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndtxt.hxx,v $
- * $Revision: 1.60 $
+ * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,6 +62,7 @@ struct SwSpellArgs;             // for Spell(), splargs.hxx
 struct SwConversionArgs;        // for Convert(), splargs.hxx
 class SwInterHyphInfo;          // for Hyphenate(), splargs.hxx
 class SwWrongList;      // fuer OnlineSpelling
+class SwGrammarMarkUp;
 class OutputDevice;
 class SwScriptInfo;
 struct SwDocStat;
@@ -203,8 +204,8 @@ public:
     // --> OD 2008-05-23 #i71360#
     const SwWrongList* GetWrong() const;
     // <--
-    void SetGrammarCheck( SwWrongList* pNew, bool bDelete = true );
-    SwWrongList* GetGrammarCheck();
+    void SetGrammarCheck( SwGrammarMarkUp* pNew, bool bDelete = true );
+    SwGrammarMarkUp* GetGrammarCheck();
     // SMARTTAGS
     void SetSmartTags( SwWrongList* pNew, bool bDelete = true );
     SwWrongList* GetSmartTags();
