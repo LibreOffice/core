@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ooverinfo.rc,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -148,32 +148,32 @@ VS_VERSION_INFO rcdata
 };
 
 
-2 ICON "icons\\ooo-writer-doc.ico"
-3 ICON "icons\\ooo-writer-tem.ico"
-4 ICON "icons\\ooo-calc-doc.ico"
-5 ICON "icons\\ooo-calc-tem.ico"
-6 ICON "icons\\ooo-draw-doc.ico"
-7 ICON "icons\\ooo-draw-tem.ico"
-8 ICON "icons\\ooo-impress-doc.ico"
-9 ICON "icons\\ooo-impress-tem.ico"
-10 ICON "icons\\ooo-impress-doc.ico"
-11 ICON "icons\\ooo-master-doc.ico"
-12 ICON "icons\\ooo-web-doc.ico"
-13 ICON "icons\\ooo-chart-doc.ico"
-14 ICON "icons\\ooo-base-doc.ico"
-15 ICON "icons\\ooo-math-doc.ico"
-16 ICON "icons\\ooo-empty-tem.ico"
-17 ICON "icons\\ooo-macro-doc.ico"
+2 ICON "icons\\ooo3_writer_doc.ico"
+3 ICON "icons\\ooo3_writer_tem.ico"
+4 ICON "icons\\ooo3_calc_doc.ico"
+5 ICON "icons\\ooo3_calc_tem.ico"
+6 ICON "icons\\ooo3_draw_doc.ico"
+7 ICON "icons\\ooo3_draw_tem.ico"
+8 ICON "icons\\ooo3_impress_doc.ico"
+9 ICON "icons\\ooo3_impress_tem.ico"
+10 ICON "icons\\ooo3_impress_doc.ico"
+11 ICON "icons\\ooo3_global_doc.ico"
+12 ICON "icons\\ooo3_html_doc.ico"
+13 ICON "icons\\ooo3_chart_doc.ico"
+14 ICON "icons\\ooo3_base_doc.ico"
+15 ICON "icons\\ooo3_math_doc.ico"
+16 ICON "icons\\ooo3_empty_tem.ico"
+17 ICON "icons\\ooo3_macro_doc.ico"
 18 ICON "icons\\ooo-configuration.ico"
 19 ICON "icons\\ooo-open.ico"
 20 ICON "icons\\ooo-image-doc.ico"
-21 ICON "icons\\ooo-writer-app.ico"
-22 ICON "icons\\ooo-calc-app.ico"
-23 ICON "icons\\ooo-draw-app.ico"
-24 ICON "icons\\ooo-impress-app.ico"
-25 ICON "icons\\ooo-math-app.ico"
-26 ICON "icons\\ooo-base-app.ico"
-27 ICON "icons\\ooo-empty-doc.ico"
+21 ICON "icons\\ooo3_writer_app.ico"
+22 ICON "icons\\ooo3_calc_app.ico"
+23 ICON "icons\\ooo3_draw_app.ico"
+24 ICON "icons\\ooo3_impress_app.ico"
+25 ICON "icons\\ooo3_math_app.ico"
+26 ICON "icons\\ooo3_base_app.ico"
+27 ICON "icons\\ooo3_empty_doc.ico"
 28 ICON "icons\\ooo11-writer-doc.ico"
 29 ICON "icons\\ooo11-writer-tem.ico"
 30 ICON "icons\\ooo11-calc-doc.ico"
