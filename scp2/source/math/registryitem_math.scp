@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registryitem_math.scp,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -267,86 +267,6 @@ End
 
 
 
-RegistryItem gid_Regitem_Smf_Contenttype
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = ".smf";
-    Name = "Content Type";
-    Value = "application/vnd.stardivision.math";
-End
-
-RegistryItem gid_Regitem_Smf_Mime_Database
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "MIME\Database\Content Type\application/vnd.stardivision.math";
-    Name = "Extension";
-    Value = ".smf";
-End
-
-RegistryItem gid_Regitem_Smf_So4_Mime_Database
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "MIME\Database\Content Type\application/x-starmath";
-    Name = "Extension";
-    Value = ".smf";
-End
-
-RegistryItem gid_Regitem_Soffice_Starmathdocument_5
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "soffice.StarMathDocument.5";
-    REG_VALUE_LNG(SO51_FORMULA_OOO)
-End
-
-RegistryItem gid_Regitem_Soffice_Starmathdocument_5_Defaulticon
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "soffice.StarMathDocument.5\DefaultIcon";
-    Value = "<progpath>\program\soffice.exe,38";
-End
-
-RegistryItem gid_Regitem_Soffice_Starmathdocument_5_Shell
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "soffice.StarMathDocument.5\shell";
-    Value = "open";
-End
-
-RegistryItem gid_Regitem_Soffice_Starmathdocument_5_Shell_New
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "soffice.StarMathDocument.5\shell\new";
-    REG_VALUE_LNG(NEW)
-End
-
-RegistryItem gid_Regitem_Soffice_Starmathdocument_5_Shell_New_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "soffice.StarMathDocument.5\shell\new\command";
-    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Starmathdocument_5_Shell_Open_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "soffice.StarMathDocument.5\shell\open\command";
-    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Starmathdocument_5_Shell_Print_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "soffice.StarMathDocument.5\shell\print\command";
-    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Starmathdocument_5_Shell_Printto_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "soffice.StarMathDocument.5\shell\printto\command";
-    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
-End
-
 RegistryItem gid_Regitem_Soffice_Starmathdocument_6
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
@@ -508,22 +428,6 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = ".sxm";
     Value = "soffice.StarMathDocument.6";
-    Styles = ();
-End
-
-RegistryItem gid_Regitem__Smf
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = ".smf";
-    Value = "soffice.StarMathDocument.5";
-End
-
-RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_smf
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
-    Name = ".smf";
-    Value = "soffice.StarMathDocument.5";
     Styles = ();
 End
 
@@ -725,15 +629,6 @@ End
 RegistryItem gid_Regitem_OpenOffice_SXM_OpenWith_Math
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sxm\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Math_Bin;
-    Name = "opendocument.MathDocument.1";
-    Value = " ";
-End
-
-// .SMF
-RegistryItem gid_Regitem_OpenOffice_SMF_OpenWith_Math
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".smf\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Math_Bin;
     Name = "opendocument.MathDocument.1";
     Value = " ";
