@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: splargs.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,12 +115,16 @@ struct SwSpellArgs : SwArgsBase
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellAlternatives > xSpellAlt;
 
+    bool bIsGrammarCheck;
+
     SwSpellArgs(::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XSpellChecker1 > &rxSplChk,
             SwTxtNode* pStart, SwIndex& rStart,
-            SwTxtNode* pEnd, SwIndex& rEnd )
+            SwTxtNode* pEnd, SwIndex& rEnd,
+            bool bGrammar )
         :   SwArgsBase( pStart, rStart, pEnd, rEnd ),
-            xSpeller( rxSplChk )
+            xSpeller( rxSplChk ),
+            bIsGrammarCheck( bGrammar )
         {}
 };
 
