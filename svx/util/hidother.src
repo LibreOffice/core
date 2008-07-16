@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hidother.src,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -310,6 +310,11 @@ hidspecial HID_SPLDLG_BUTTON_IGNORE             { HelpID =  HID_SPLDLG_BUTTON_IG
 hidspecial HID_SPLDLG_BUTTON_IGNOREALL          { HelpID =  HID_SPLDLG_BUTTON_IGNOREALL   ; };
 hidspecial HID_SPLDLG_BUTTON_CHANGE             { HelpID =  HID_SPLDLG_BUTTON_CHANGE      ; };
 hidspecial HID_SPLDLG_BUTTON_CHANGEALL          { HelpID =  HID_SPLDLG_BUTTON_CHANGEALL   ; };
+hidspecial HID_SPLDLG_BUTTON_EXPLAIN            { HelpID =  HID_SPLDLG_BUTTON_EXPLAIN     ; };
+hidspecial HID_SPLDLG_CHECKBOX_CHECKGRAMMAR     { HelpID =  HID_SPLDLG_CHECKBOX_CHECKGRAMMAR ; };
+
+
+
 hidspecial HID_HANGULDLG_BUTTON_CLOSE           { HelpID =  HID_HANGULDLG_BUTTON_CLOSE    ; };
 hidspecial HID_HANGULDLG_BUTTON_IGNORE          { HelpID =  HID_HANGULDLG_BUTTON_IGNORE   ; };
 hidspecial HID_HANGULDLG_BUTTON_IGNOREALL       { HelpID =  HID_HANGULDLG_BUTTON_IGNOREALL; };
