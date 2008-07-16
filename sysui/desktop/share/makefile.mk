@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.27 $
+# $Revision: 1.28 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -84,6 +84,19 @@ MIMELIST = \
     oasis-master-document \
     oasis-database \
     oasis-web-template \
+    ms-excel-sheet-12 \
+    ms-excel-template-12 \
+    ms-powerpoint-presentation-12 \
+    ms-powerpoint-template-12 \
+    ms-word-document-12 \
+    ms-word-template-12 \
+    openxmlformats-officedocument-presentationml-presentation \
+    openxmlformats-officedocument-presentationml-template \
+    openxmlformats-officedocument-spreadsheetml-sheet \
+    openxmlformats-officedocument-spreadsheetml-template \
+    openxmlformats-officedocument-wordprocessingml-document \
+    openxmlformats-officedocument-wordprocessingml-template \
+    ms-excel-sheet-binary-12	\
     extension
 
 MIMEICONLIST = \
