@@ -52,7 +52,7 @@
   <accel:item accel:code="KEY_F5" accel:shift="true" xlink:href=".uno:RestoreEditingView"/>
   <accel:item accel:code="KEY_F5" xlink:href=".uno:Navigator"/>
   <accel:item accel:code="KEY_F7" accel:mod1="true" xlink:href=".uno:ThesaurusDialog"/>
-  <accel:item accel:code="KEY_F7" xlink:href=".uno:SpellDialog"/>
+  <accel:item accel:code="KEY_F7" xlink:href=".uno:SpellingAndGrammarDialog"/>
   <accel:item accel:code="KEY_F8" accel:mod1="true" xlink:href=".uno:Marks"/>
   <accel:item accel:code="KEY_F8" accel:shift="true" xlink:href=".uno:SetMultiSelection"/>
   <accel:item accel:code="KEY_F8" xlink:href=".uno:SetExtSelection"/>
