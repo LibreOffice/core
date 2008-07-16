@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view2.cxx,v $
- * $Revision: 1.88 $
+ * $Revision: 1.89 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1082,17 +1082,17 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             GenerateFormLetter(bUseCurrentDocument);
         }
         break;
-        case SID_SPELL_DIALOG:
+        case FN_SPELL_GRAMMAR_DIALOG:
         {
             SfxViewFrame* pViewFrame = GetViewFrame();
             if (rReq.GetArgs() != NULL)
-                pViewFrame->SetChildWindow (SID_SPELL_DIALOG,
+                pViewFrame->SetChildWindow (nSlot,
                     ((const SfxBoolItem&) (rReq.GetArgs()->
-                        Get(SID_SPELL_DIALOG))).GetValue());
+                        Get(nSlot))).GetValue());
             else
-                pViewFrame->ToggleChildWindow(SID_SPELL_DIALOG);
+                pViewFrame->ToggleChildWindow(nSlot);
 
-            pViewFrame->GetBindings().Invalidate(SID_SPELL_DIALOG);
+            pViewFrame->GetBindings().Invalidate(nSlot);
             rReq.Ignore ();
         }
         break;
