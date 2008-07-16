@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LinguServiceEventFlags.idl,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +58,11 @@ published constants LinguServiceEventFlags
     /** The hyphenation of words may have changed.
     */
     const short HYPHENATE_AGAIN = 4;
+
+    //-------------------------------------------------------------------------
+    /** The results for grammar checking may have changed.
+    */
+    const short GRAMMAR_CHECK_AGAIN = 5;
 
 };
 
