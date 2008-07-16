@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rootfrm.hxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,6 +86,9 @@ class SwRootFrm: public SwLayoutFrm
     bool    mbSidebarChanged;       // the notes sidebar state has changed
     // <--
 
+    bool    mbNeedGrammarCheck;     // true when sth needs to be checked (not necessarily started yet!)
+    bool    mbGrammarCheckActive;   // true when grammar checking has been started
+
     static SwLayVout     *pVout;
     static BOOL           bInPaint;     //Schutz gegen doppelte Paints.
     static BOOL           bNoVirDev;    //Bei SystemPaints kein virt. Device
@@ -101,6 +104,7 @@ class SwRootFrm: public SwLayoutFrm
     BOOL    bIsNewLayout        :1; //Layout geladen oder neu erzeugt.
     BOOL    bCallbackActionEnabled:1; //Keine Action in Benachrichtung erwuenscht
                                     //siehe dcontact.cxx, ::Changed()
+
     //Fuer den BrowseMode. nBrowseWidth ist die Aeussere Kante des am weitesten
     //rechts stehenden Objectes. Die rechte Kante der Seiten soll im BrowseMode
     //nicht kleiner werden als dieser Wert.
@@ -214,6 +218,11 @@ public:
     void SetIdleFlags() { bIdleFormat = TRUE; }
     BOOL IsIdleFormat()  const { return bIdleFormat; }
     void ResetIdleFormat()     { bIdleFormat = FALSE; }
+
+    bool IsNeedGrammarCheck() const         { return mbNeedGrammarCheck; }
+    void SetNeedGrammarCheck( bool bVal )   { mbNeedGrammarCheck = bVal; }
+    bool IsGrammarCheckActive() const       { return mbGrammarCheckActive; }
+    void SetGrammarCheckActive( bool bVal ) { mbGrammarCheckActive = bVal; }
 
     //Sorgt dafuer, dass alle gewuenschten Seitengebunden Flys eine Seite finden
     void SetAssertFlyPages() { bAssertFlyPages = TRUE; }
