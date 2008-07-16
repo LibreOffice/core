@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: doc.cxx,v $
- * $Revision: 1.67 $
+ * $Revision: 1.68 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,7 +86,7 @@
 #include <grfatr.hxx>
 #include <poolfmt.hxx>          // PoolVorlagen-Id's
 #include <mvsave.hxx>           // fuer Server-Funktionalitaet
-#include <wrong.hxx>            // fuer OnlineSpell-Invalidierung
+#include <SwGrammarMarkUp.hxx>
 #include <scriptinfo.hxx>
 #include <acorrect.hxx>         // Autokorrektur
 #include <mdiexp.hxx>           // Statusanzeige
@@ -1348,6 +1348,7 @@ void SwDoc::SpellItAgainSam( BOOL bInvalid, BOOL bOnlyWrong, BOOL bSmartTags )
             pPage->InvalidateSpelling();
             pPage = (SwPageFrm*)pPage->GetNext();
         }
+        GetRootFrm()->SetNeedGrammarCheck( true );
 
         if ( bSmartTags )
             GetNodes().ForEach( lcl_CheckSmartTagsAgain, &bOnlyWrong );
