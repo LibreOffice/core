@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: porexp.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,8 +121,9 @@ void SwExpandPortion::Paint( const SwTxtPaintInfo &rInf ) const
     aLayoutModeModifier.SetAuto();
 
     // ST2
-    if ( rInf.GetSmartTags() )
-        rInf.DrawMarkedText( *this, rInf.GetLen(), sal_False, sal_False, sal_True, sal_False );
+    if ( rInf.GetSmartTags() || rInf.GetGrammarCheckList() )
+        rInf.DrawMarkedText( *this, rInf.GetLen(), sal_False, sal_False,
+            0 != rInf.GetSmartTags(), 0 != rInf.GetGrammarCheckList() );
     else
         rInf.DrawText( *this, rInf.GetLen(), sal_False );
 }
