@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registryitem_ooo.scp,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,30 +86,6 @@ RegistryItem gid_Regitem_Sdg
     Value = "soffice.StarConfigFile.6";
 End
 
-RegistryItem gid_Regitem_Sds_Contenttype
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Root;
-    Subkey = ".sds";
-    Name = "Content Type";
-    Value = "application/vnd.stardivision.chart";
-End
-
-RegistryItem gid_Regitem_Sds_Mime_Database
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Root;
-    Subkey = "MIME\Database\Content Type\application/vnd.stardivision.chart";
-    Name = "Extension";
-    Value = ".sds";
-End
-
-RegistryItem gid_Regitem_Sds_So4_Mime_Database
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Root;
-    Subkey = "MIME\Database\Content Type\application/x-starchart";
-    Name = "Extension";
-    Value = ".sds";
-End
-
 RegistryItem gid_Regitem_Sdv
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sdv";
@@ -145,69 +121,6 @@ RegistryItem gid_Regitem_Soe
     Value = "soffice.StarConfigFile.6";
 End
 
-RegistryItem gid_Regitem_Soffice_Starchartdocument_5
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarChartDocument.5";
-    ModuleID = gid_Module_Root;
-    REG_VALUE_LNG(SO52_CHART_OOO)
-End
-
-RegistryItem gid_Regitem_Soffice_Starchartdocument_5_Defaulticon
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarChartDocument.5\DefaultIcon";
-    ModuleID = gid_Module_Root;
-    Value = "<progpath>\program\soffice.exe,36";
-End
-
-RegistryItem gid_Regitem_Soffice_Starchartdocument_5_Shell
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarChartDocument.5\shell";
-    ModuleID = gid_Module_Root;
-    Value = "open";
-End
-
-RegistryItem gid_Regitem_Soffice_Starchartdocument_5_Shell_New
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarChartDocument.5\shell\new";
-    ModuleID = gid_Module_Root;
-    REG_VALUE_LNG(NEW)
-End
-
-RegistryItem gid_Regitem_Soffice_Starchartdocument_5_Shell_New_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarChartDocument.5\shell\new\command";
-    ModuleID = gid_Module_Root;
-    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Starchartdocument_5_Shell_Open_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarChartDocument.5\shell\open\command";
-    ModuleID = gid_Module_Root;
-    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Starchartdocument_5_Shell_Print_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarChartDocument.5\shell\print\command";
-    ModuleID = gid_Module_Root;
-    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Starchartdocument_5_Shell_Printto_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarChartDocument.5\shell\printto\command";
-    ModuleID = gid_Module_Root;
-    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Starchartdocument_Curver
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarChartDocument\CurVer";
-    ModuleID = gid_Module_Root;
-    Value = "soffice.StarChartDocument.5";
-End
-
 RegistryItem gid_Regitem_Soffice_Starconfigfile_6
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "soffice.StarConfigFile.6";
@@ -220,62 +133,6 @@ RegistryItem gid_Regitem_Soffice_Starconfigfile_6_Defaulticon
     ModuleID = gid_Module_Root;
     Subkey = "soffice.StarConfigFile.6\DefaultIcon";
     Value = "<progpath>\program\soffice.exe,17";
-End
-
-RegistryItem gid_Regitem_Soffice_Starofficetemplate_5
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarOfficeTemplate.5";
-    ModuleID = gid_Module_Root;
-    REG_VALUE_LNG(SO50_TEMPLATE_OOO)
-End
-
-RegistryItem gid_Regitem_Soffice_Starofficetemplate_5_Defaulticon
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarOfficeTemplate.5\DefaultIcon";
-    ModuleID = gid_Module_Root;
-    Value = "<progpath>\program\soffice.exe,15";
-End
-
-RegistryItem gid_Regitem_Soffice_Starofficetemplate_5_Shell
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarOfficeTemplate.5\shell";
-    ModuleID = gid_Module_Root;
-    Value = "new";
-End
-
-RegistryItem gid_Regitem_Soffice_Starofficetemplate_5_Shell_New
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarOfficeTemplate.5\shell\new";
-    ModuleID = gid_Module_Root;
-    REG_VALUE_LNG(NEW)
-End
-
-RegistryItem gid_Regitem_Soffice_Starofficetemplate_5_Shell_New_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarOfficeTemplate.5\shell\new\command";
-    ModuleID = gid_Module_Root;
-    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Starofficetemplate_5_Shell_Open_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarOfficeTemplate.5\shell\open\command";
-    ModuleID = gid_Module_Root;
-    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Starofficetemplate_5_Shell_Print_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarOfficeTemplate.5\shell\print\command";
-    ModuleID = gid_Module_Root;
-    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
-End
-
-RegistryItem gid_Regitem_Soffice_Starofficetemplate_5_Shell_Printto_Command
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "soffice.StarOfficeTemplate.5\shell\printto\command";
-    ModuleID = gid_Module_Root;
-    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
 
 RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Soffice_Exe
@@ -626,38 +483,6 @@ RegistryItem gid_Regitem_Xdl
     Subkey = ".xdl";
     ModuleID = gid_Module_Root;
     Value = "soffice.StarConfigFile.6";
-End
-
-RegistryItem gid_Regitem__Sds
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".sds";
-    ModuleID = gid_Module_Root;
-    Value = "soffice.StarChartDocument.5";
-End
-
-RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sds
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
-    Name = ".sds";
-    Value = "soffice.StarChartDocument.5";
-    Styles = ();
-End
-
-RegistryItem gid_Regitem__Vor
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".vor";
-    ModuleID = gid_Module_Root;
-    Value = "soffice.StarOfficeTemplate.5";
-End
-
-RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_vor
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
-    Name = ".vor";
-    Value = "soffice.StarOfficeTemplate.5";
-    Styles = ();
 End
 
 RegistryItem gid_Regitem_Software_Openofficeorg_Uno_Installpath
