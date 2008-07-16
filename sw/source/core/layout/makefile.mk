@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.19 $
+# $Revision: 1.20 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -56,6 +56,7 @@ EXCEPTIONSFILES = \
     $(SLO)$/laycache.obj \
     $(SLO)$/layouter.obj \
     $(SLO)$/movedfwdfrmsbyobjpos.obj \
+    $(SLO)$/newfrm.obj \
     $(SLO)$/objectformatter.obj \
     $(SLO)$/objstmpconsiderwrapinfl.obj \
     $(SLO)$/paintfrm.obj \
