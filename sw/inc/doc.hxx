@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: doc.hxx,v $
- * $Revision: 1.155 $
+ * $Revision: 1.156 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,6 +106,7 @@ class SwList;
 #include <svx/numitem.hxx>
 #include "comphelper/implementationreference.hxx"
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
+#include <com/sun/star/linguistic2/XGrammarCheckingIterator.hpp>
 
 #include <hash_map>
 #include <stringhash.hxx>
@@ -237,6 +238,7 @@ class SwRewriter;
 class SwMsgPoolItem;
 class SwChartDataProvider;
 class SwChartLockController_Helper;
+class IGrammarContact;
 
 
 namespace com { namespace sun { namespace star {
@@ -261,6 +263,9 @@ SV_DECL_PTRARR_DEL( SwPageDescs, SwPageDescPtr, 4, 4 )
 
 // forward declartion
 void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );
+
+// global function to start grammar checking in the document
+void StartGrammarChecking( SwDoc &rDoc, SwRootFrm &rRootFrame );
 
 class SwDoc :
     public IInterface,
@@ -312,6 +317,7 @@ class SwDoc :
     SvStringsDtor aPatternNms;          // Array fuer die Namen der Dokument-Vorlagen
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>
         xXForms;                        // container with XForms models
+    mutable com::sun::star::uno::Reference< com::sun::star::linguistic2::XGrammarCheckingIterator > m_xGCIterator;
 
     // -------------------------------------------------------------------
     // die Pointer
@@ -402,6 +408,7 @@ class SwDoc :
                                     // document for a faster formatting
 
     SwUnoCallBack   *pUnoCallBack;
+    IGrammarContact *mpGrammarContact;   // for grammar checking in paragraphs during editing
 
     mutable  comphelper::ImplementationReference< SwChartDataProvider
         , ::com::sun::star::chart2::data::XDataProvider >
@@ -1133,7 +1140,7 @@ public:
     ::com::sun::star::uno::Any
             Spell( SwPaM&, ::com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XSpellChecker1 > &,
-                   sal_uInt16* pPageCnt, sal_uInt16* pPageSt,
+                   sal_uInt16* pPageCnt, sal_uInt16* pPageSt, bool bGrammarCheck,
                    SwConversionArgs *pConvArgs = 0 ) const;
 
     ::com::sun::star::uno::Reference<
@@ -1984,6 +1991,8 @@ public:
     // call back for API wrapper
     SwModify*   GetUnoCallBack() const;
 
+    IGrammarContact* getGrammarContact() const { return mpGrammarContact; }
+
     // -> #i27615#
     /** Marks/Unmarks a list level of a certain list
 
@@ -2052,6 +2061,8 @@ public:
     /// access container for XForms model; will be NULL if !isXForms()
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>
         getXForms() const;
+
+    com::sun::star::uno::Reference< com::sun::star::linguistic2::XGrammarCheckingIterator > GetGCIterator() const;
 
     /// is this an XForms document?
     bool isXForms() const;
