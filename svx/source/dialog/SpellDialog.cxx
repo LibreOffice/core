@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SpellDialog.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +61,7 @@
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <sfx2/app.hxx>
+#include <vcl/help.hxx>
 
 
 #include <svx/dialogs.hrc>
@@ -205,12 +206,13 @@ SpellDialog::SpellDialog(
                                     pParent,
                                     SVX_RES(RID_SVXDLG_SPELLCHECK)),
 
+    aVendorImageFI  ( this , SVX_RES( IMG_VENDOR ) ),
+    aLanguageFT     ( this, SVX_RES( FT_LANGUAGE ) ),
+    aLanguageLB     ( this, SVX_RES( LB_LANGUAGE ) ),
     aNotInDictFT    ( this, SVX_RES( FT_NOTINDICT ) ),
     aSentenceED      ( this, SVX_RES( ED_NEWWORD ) ),
     aSuggestionFT   ( this, SVX_RES( FT_SUGGESTION ) ),
     aSuggestionLB   ( this, SVX_RES( LB_SUGGESTION ) ),
-    aLanguageFT     ( this, SVX_RES( FT_LANGUAGE ) ),
-    aLanguageLB     ( this, SVX_RES( LB_LANGUAGE ) ),
 
     aIgnorePB       ( this, SVX_RES( PB_IGNORE ) ),
     aIgnoreAllPB    ( this, SVX_RES( PB_IGNOREALL ) ),
@@ -218,17 +220,26 @@ SpellDialog::SpellDialog(
 
     aChangePB       ( this, SVX_RES( PB_CHANGE ) ),
     aChangeAllPB    ( this, SVX_RES( PB_CHANGEALL ) ),
+    aExplainPB      ( this, SVX_RES( PB_EXPLAIN) ),
     aAutoCorrPB     ( this, SVX_RES( PB_AUTOCORR ) ),
 
-    aOptionsPB      ( this, SVX_RES( PB_OPTIONS ) ),
+    aCheckGrammarCB ( this, SVX_RES( CB_CHECK_GRAMMAR ) ),
+
     aHelpPB         ( this, SVX_RES( PB_HELP ) ),
+    aOptionsPB      ( this, SVX_RES( PB_OPTIONS ) ),
     aUndoPB         ( this, SVX_RES( PB_UNDO ) ),
     aClosePB        ( this, SVX_RES( PB_CLOSE ) ),
     aBackgroundGB   ( this, SVX_RES( GB_BACKGROUND ) ),
 
+    aVendorImage    ( SVX_RES( IMG_DEFAULT_VENDOR ) ),
+    aVendorImageHC  ( SVX_RES( IMG_DEFAULT_VENDOR_HC ) ),
+
     aResumeST       ( SVX_RES(ST_RESUME )),
     aIgnoreOnceST   ( aIgnorePB.GetText()),
     aNoSuggestionsST( SVX_RES(ST_NOSUGGESTIONS)),
+    m_sTitleSpelling              ( SVX_RES( ST_SPELLING                        ) ),
+    m_sTitleSpellingGrammar       ( SVX_RES( ST_SPELLING_AND_GRAMMAR            ) ),
+    m_sTitleSpellingGrammarVendor ( SVX_RES( ST_SPELLING_AND_GRAMMAR_VENDORNAME ) ),
     aDialogUndoLink( LINK (this, SpellDialog, DialogUndoHdl)),
     bModified( false ),
     bFocusLocked( false ),
@@ -246,7 +257,7 @@ SpellDialog::SpellDialog(
     aIgnoreAllPB.   SetHelpId(HID_SPLDLG_BUTTON_IGNOREALL);
     aChangePB.      SetHelpId(HID_SPLDLG_BUTTON_CHANGE   );
     aChangeAllPB.   SetHelpId(HID_SPLDLG_BUTTON_CHANGEALL);
-
+    aExplainPB.     SetHelpId(HID_SPLDLG_BUTTON_EXPLAIN );
     Init_Impl();
 
     // disable controls if service is missing
@@ -285,6 +296,7 @@ void SpellDialog::Init_Impl()
     aUndoPB.SetClickHdl(LINK( this, SpellDialog, UndoHdl ) );
 
     aAutoCorrPB.SetClickHdl( LINK( this, SpellDialog, ExtClickHdl ) );
+    aCheckGrammarCB.SetClickHdl( LINK( this, SpellDialog, CheckGrammarHdl ));
     aOptionsPB .SetClickHdl( LINK( this, SpellDialog, ExtClickHdl ) );
 
     aSuggestionLB.SetDoubleClickHdl( LINK( this, SpellDialog, ChangeHdl ) );
@@ -292,8 +304,6 @@ void SpellDialog::Init_Impl()
     aSentenceED.SetModifyHdl(LINK ( this, SpellDialog, ModifyHdl) );
     aAddToDictMB.SetSelectHdl(LINK ( this, SpellDialog, AddToDictionaryHdl ) );
     aLanguageLB.SetSelectHdl(LINK( this, SpellDialog, LanguageSelectHdl ) );
-    // Save heading
-    aTitel = GetText();
 
     // initialize language ListBox
     aLanguageLB.SetLanguageList( LANG_LIST_SPELL_USED, FALSE, FALSE, TRUE );
@@ -315,26 +325,23 @@ void SpellDialog::UpdateBoxes_Impl()
     sal_Int32 i;
     aSuggestionLB.Clear();
 
-    Reference< XSpellAlternatives >  xAlt( aSentenceED.GetAlternatives(), UNO_QUERY );
+    const SpellErrorDescription* pSpellErrorDescription = aSentenceED.GetAlternatives();
 
     LanguageType nAltLanguage = LANGUAGE_NONE;
-    String       aAltWord;
+    //String      aAltWord;
     Sequence< ::rtl::OUString > aNewWords;
-    if (xAlt.is())
+    bool bIsGrammarError = false;
+    ::rtl::OUString sExplanation;
+    if( pSpellErrorDescription )
     {
-        nAltLanguage    = SvxLocaleToLanguage( xAlt->getLocale() );
-        aAltWord        = String( xAlt->getWord() );
-        aNewWords       = xAlt->getAlternatives();
+        nAltLanguage    = SvxLocaleToLanguage( pSpellErrorDescription->aLocale );
+        //aAltWord       = String( xAlt->getWord() );
+        aNewWords       = pSpellErrorDescription->aSuggestions;
+        bIsGrammarError = pSpellErrorDescription->bIsGrammarError;
+        aExplainPB.SetExplanation(pSpellErrorDescription->sExplanation );
     }
 
-
-    String aStr( aTitel );
-    aStr.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( " (" ) ) );
-    if (xAlt.is())
-        aStr.Append( ::GetLanguageString( nAltLanguage ) );
-    aStr.Append( sal_Unicode( ')' ) );
-    SetText( aStr );
-
+    SetTitle_Impl( nAltLanguage );
     SetSelectedLang_Impl( nAltLanguage );
 
 
@@ -360,6 +367,13 @@ void SpellDialog::UpdateBoxes_Impl()
     }
     aChangePB.Enable( nSize > 0);
     aChangeAllPB.Enable(nSize > 0);
+    bool bShowChangeAll = !bIsGrammarError;
+    aChangeAllPB.Show( bShowChangeAll );
+    aExplainPB.Show( !bShowChangeAll );
+    //aExplainPB.SetExplanation( sExplanation );
+    aExplainPB.Enable( aExplainPB.HasExplanation() );
+    aAutoCorrPB.Show( bShowChangeAll && rParent.HasAutoCorrection() );
+
 }
 // -----------------------------------------------------------------------
 
@@ -371,8 +385,8 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence)
     if((!aSentenceED.IsUndoEditMode() && aSentenceED.MarkNextError()) ||
             GetNextSentence_Impl(bUseSavedSentence) && aSentenceED.MarkNextError())
     {
-        Reference< XSpellAlternatives > xAlt = aSentenceED.GetAlternatives();
-        if(xAlt.is())
+        const SpellErrorDescription* pSpellErrorDescription = aSentenceED.GetAlternatives();
+        if( pSpellErrorDescription )
         {
             UpdateBoxes_Impl();
             Control* aControls[] =
@@ -400,6 +414,7 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence)
  --------------------------------------------------*/
 IMPL_STATIC_LINK( SpellDialog, InitHdl, SpellDialog *, EMPTYARG )
 {
+    pThis->SetUpdateMode( sal_False );
     //show or hide AutoCorrect depending on the modules abilities
     pThis->aAutoCorrPB.Show(pThis->rParent.HasAutoCorrection());
     pThis->SpellContinue_Impl();
@@ -414,6 +429,75 @@ IMPL_STATIC_LINK( SpellDialog, InitHdl, SpellDialog *, EMPTYARG )
     else if( pThis->aClosePB.IsEnabled() )
         pThis->aClosePB.GrabFocus();
     pThis->LockFocusChanges(false);
+    //show grammar CheckBox depending on the modules abilities
+    bool bHasGrammarChecking = pThis->rParent.HasGrammarChecking();
+    pThis->aCheckGrammarCB.Show( bHasGrammarChecking );
+    if( !bHasGrammarChecking )
+    {
+        //resize the dialog to hide the hidden area of the CheckBox
+        Size aBackSize = pThis->aBackgroundGB.GetSizePixel();
+        sal_Int32 nDiff = pThis->aBackgroundGB.GetPosPixel().Y() + aBackSize.Height()
+                            - pThis->aCheckGrammarCB.GetPosPixel().Y();
+        aBackSize.Height() -= nDiff;
+        pThis->aBackgroundGB.SetSizePixel(aBackSize);
+        Button* aButtons[] = { &pThis->aHelpPB, &pThis->aOptionsPB, &pThis->aUndoPB, &pThis->aClosePB, 0 };
+        sal_Int32 nButton = 0;
+        while( aButtons[nButton])
+        {
+            Point aPos = aButtons[nButton]->GetPosPixel();
+            aPos.Y() -= nDiff;
+            aButtons[nButton]->SetPosPixel(aPos);
+            ++nButton;
+        }
+        Size aDlgSize = pThis->GetSizePixel();
+        aDlgSize.Height() -= nDiff;
+        pThis->SetSizePixel( aDlgSize );
+    }
+    else
+    {
+        if( pThis->rParent.HasAnyVendor() )
+        {
+            pThis->aVendorImageFI.Show();
+            bool bHighContrast = pThis->GetDisplayBackground().GetColor().IsDark() != 0;
+            pThis->aVendorImageFI.SetImage( bHighContrast ? pThis->aVendorImageHC : pThis->aVendorImage );
+            sal_Int32 nDiff = pThis->aVendorImageFI.GetSizePixel().Height();
+            Control* aControls[] = {
+                &pThis->aLanguageFT,
+                &pThis->aLanguageLB,
+                &pThis->aNotInDictFT,
+                &pThis->aSentenceED,
+                &pThis->aSuggestionFT,
+                &pThis->aSuggestionLB,
+                &pThis->aIgnorePB,
+                &pThis->aIgnoreAllPB,
+                &pThis->aAddToDictMB,
+                &pThis->aChangePB,
+                &pThis->aChangeAllPB,
+                &pThis->aExplainPB,
+                &pThis->aAutoCorrPB,
+                &pThis->aCheckGrammarCB,
+                &pThis->aHelpPB,
+                &pThis->aOptionsPB,
+                &pThis->aUndoPB,
+                &pThis->aClosePB,
+                &pThis->aBackgroundGB,
+                0
+            };
+            sal_Int32 nControl = 0;
+            while( aControls[nControl])
+            {
+                Point aPos = aControls[nControl]->GetPosPixel();
+                aPos.Y() += nDiff;
+                aControls[nControl]->SetPosPixel(aPos);
+                ++nControl;
+            }
+            Size aDlgSize = pThis->GetSizePixel();
+            aDlgSize.Height() += nDiff;
+            pThis->SetSizePixel( aDlgSize );
+        }
+    }
+    pThis->aCheckGrammarCB.Check( pThis->rParent.IsGrammarChecking() );
+    pThis->SetUpdateMode( sal_True );
 
     return 0;
 };
@@ -429,10 +513,10 @@ IMPL_LINK( SpellDialog, ExtClickHdl, Button *, pBtn )
         //get the currently selected wrong word
         String sCurrentErrorText = aSentenceED.GetErrorText();
         //get the wrong word from the XSpellAlternative
-        Reference< XSpellAlternatives > xAlt = aSentenceED.GetAlternatives();
-        if(xAlt.is())
+        const SpellErrorDescription* pSpellErrorDescription = aSentenceED.GetAlternatives();
+        if( pSpellErrorDescription )
         {
-            String sWrong(xAlt->getWord());
+            String sWrong(pSpellErrorDescription->sErrorText);
             //if the word has not been edited in the MultiLineEdit then
             //the current suggestion should be used
             //if it's not the 'no suggestions' entry
@@ -453,6 +537,12 @@ IMPL_LINK( SpellDialog, ExtClickHdl, Button *, pBtn )
     return 0;
 }
 // -----------------------------------------------------------------------
+IMPL_LINK( SpellDialog, CheckGrammarHdl, CheckBox*, pBox )
+{
+    rParent.SetGrammarChecking( pBox->IsChecked() );
+    Impl_Restore();
+    return 0;
+}
 
 void SpellDialog::StartSpellOptDlg_Impl()
 {
@@ -607,7 +697,7 @@ IMPL_LINK( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl*, pAction )
         break;
         case SPELLUNDO_CHANGE_NEXTERROR:
         {
-            aSentenceED.MoveErrorMarkTo((USHORT)pAction->GetOldErrorStart(), (USHORT)pAction->GetOldErrorEnd());
+            aSentenceED.MoveErrorMarkTo((USHORT)pAction->GetOldErrorStart(), (USHORT)pAction->GetOldErrorEnd(), false);
             if(pAction->IsErrorLanguageSelected())
             {
                 UpdateBoxes_Impl();
@@ -637,18 +727,22 @@ IMPL_LINK( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl*, pAction )
     return 0;
 }
 // -----------------------------------------------------------------------
+void SpellDialog::Impl_Restore()
+{
+    //clear the "ChangeAllList"
+    SvxGetChangeAllList()->clear();
+    //get a new sentence
+    aSentenceED.SetText(rtl::OUString());
+    aSentenceED.ResetModified();
+    SpellContinue_Impl();
+    aIgnorePB.SetText(aIgnoreOnceST);
+}
 
 IMPL_LINK( SpellDialog, IgnoreHdl, Button *, EMPTYARG )
 {
     if(aIgnorePB.GetText() == aResumeST)
     {
-        //clear the "ChangeAllList"
-        SvxGetChangeAllList()->clear();
-        //get a new sentence
-        aSentenceED.SetText(rtl::OUString());
-        aSentenceED.ResetModified();
-        SpellContinue_Impl();
-        aIgnorePB.SetText(aIgnoreOnceST);
+        Impl_Restore();
     }
     else
     {
@@ -667,7 +761,7 @@ IMPL_LINK( SpellDialog, IgnoreHdl, Button *, EMPTYARG )
 sal_Bool SpellDialog::Close()
 {
     GetBindings().GetDispatcher()->
-        Execute(SID_SPELL_DIALOG,
+        Execute(rParent.GetType(),
         SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
     return sal_True;
 }
@@ -715,14 +809,35 @@ void SpellDialog::SetLanguage( sal_uInt16 nLang )
 */
 
 {
-    String aStr( aTitel );
-    aStr.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( " (" ) ) );
-    aStr.Append( ::GetLanguageString( (LanguageType)nLang ) );
-    aStr.Append( sal_Unicode( ')' ) );;
-    SetText( aStr );
+    SetTitle_Impl( nLang );
 
     // den richtigen Eintrag finden, da sortiert
     aLanguageLB.SelectLanguage( nLang );
+}
+/*-- 16.06.2008 11:27:02---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SpellDialog::SetTitle_Impl(LanguageType nLang)
+{
+    String sTitle( m_sTitleSpelling );
+    if( rParent.HasGrammarChecking() )
+    {
+        String sVendor = rParent.GetVendorForLanguage( nLang );
+        if( sVendor.Len() )
+        {
+            sTitle = m_sTitleSpellingGrammarVendor;
+            sTitle.SearchAndReplaceAscii( "$VendorName", sVendor );
+            aVendorImageFI.SetImage( rParent.GetVendorLogoForLanguage( nLang ) );
+        }
+        else
+        {
+            bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+            aVendorImageFI.SetImage( bHighContrast ? aVendorImageHC : aVendorImage );
+            sTitle = m_sTitleSpellingGrammar;
+        }
+    }
+    sTitle.SearchAndReplaceAscii( "$LANGUAGE ($LOCATION)", ::GetLanguageString(nLang) );
+    SetText( sTitle );
 }
 /*-------------------------------------------------------------------------
 
@@ -1001,7 +1116,20 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence)
             {
                 nEndPosition += aStart->sText.getLength();
                 if(aStart->xAlternatives.is())
-                    aSentenceED.SetAttrib( SpellErrorAttrib(aStart->xAlternatives), 0, (USHORT) nStartPosition, (USHORT) nEndPosition );
+                {
+                    SpellErrorDescription aDesc( false, aStart->xAlternatives->getWord(),
+                                    aStart->xAlternatives->getLocale(), aStart->xAlternatives->getAlternatives());
+                    aSentenceED.SetAttrib( SpellErrorAttrib(aDesc), 0, (USHORT) nStartPosition, (USHORT) nEndPosition );
+                }
+                else if(aStart->bIsGrammarError )
+                {
+                    SpellErrorDescription aDesc( true,
+                        aStart->sText,
+                        aStart->aGrammarError.aNewLocale,
+                        aStart->aGrammarError.aSuggestions,
+                        &aStart->aGrammarError.aFullComment );
+                    aSentenceED.SetAttrib( SpellErrorAttrib(aDesc), 0, (USHORT) nStartPosition, (USHORT) nEndPosition );
+                }
                 if(aStart->bIsField)
                     aSentenceED.SetAttrib( SpellBackgroundAttrib(COL_LIGHTGRAY), 0, (USHORT) nStartPosition, (USHORT) nEndPosition );
                 aSentenceED.SetAttrib( SpellLanguageAttrib(aStart->eLanguage), 0, (USHORT) nStartPosition, (USHORT) nEndPosition );
@@ -1336,7 +1464,10 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                     SetAttrib( *pNewError, 0, nStart, ++nEnd );
                     //only active errors move the mark
                     if(bIsErrorActive)
-                        MoveErrorMarkTo(nStart, nEnd);
+                    {
+                        bool bGrammar = static_cast<const SpellErrorAttrib&>(*pNewError).GetErrorDescription().bIsGrammarError;
+                        MoveErrorMarkTo(nStart, nEnd, bGrammar);
+                    }
                     delete pNewError;
                 }
                 //text has been added on the left then the error attribute has to be expanded and the
@@ -1354,7 +1485,10 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                     SetAttrib( *pNewError, 0, nStart - nAddedChars, nEnd );
                     //only if the error is active the mark is moved here
                     if(bIsErrorActive)
-                        MoveErrorMarkTo(nStart, nEnd);
+                    {
+                        bool bGrammar = static_cast<const SpellErrorAttrib&>(*pNewError).GetErrorDescription().bIsGrammarError;
+                        MoveErrorMarkTo(nStart, nEnd, bGrammar);
+                    }
                     delete pNewError;
 
                     if(pBackAttrLeft)
@@ -1426,6 +1560,7 @@ bool SentenceEditWindow_Impl::MarkNextError()
     const TextCharAttrib* pNextError = 0;
     //iterate over the text and search for the next error that maybe has
     //to be replace by a ChangeAllList replacement
+    bool bGrammarError = false;
     while(aCursor.GetIndex() < nTextLen)
     {
         while(aCursor.GetIndex() < nTextLen &&
@@ -1438,16 +1573,20 @@ bool SentenceEditWindow_Impl::MarkNextError()
         Reference<XDictionary> xChangeAll( SvxGetChangeAllList(), UNO_QUERY );
         Reference<XDictionaryEntry> xEntry;
 
-        Reference <XSpellAlternatives> xAlternatives;
+//        Reference <XSpellAlternatives> xAlternatives;
+        const SpellErrorDescription* pSpellErrorDescription = 0;
         if(pNextError)
-            xAlternatives = static_cast<const SpellErrorAttrib&>(pNextError->GetAttr()).GetAlternatives();
-        if(xChangeAll->getCount() && xAlternatives.is() &&
-                (xEntry = xChangeAll->getEntry( xAlternatives->getWord() )).is())
+        {
+            pSpellErrorDescription = &static_cast<const SpellErrorAttrib&>(pNextError->GetAttr()).GetErrorDescription();
+            bGrammarError = pSpellErrorDescription->bIsGrammarError;
+        }
+        if(xChangeAll->getCount() && pSpellErrorDescription &&
+                (xEntry = xChangeAll->getEntry( pSpellErrorDescription->sErrorText )).is())
         {
             m_nErrorStart = pNextError->GetStart();
             m_nErrorEnd = pNextError->GetEnd();
             ChangeMarkedWord(xEntry->getReplacementText(),
-                    SvxLocaleToLanguage( xAlternatives->getLocale() ));
+                    SvxLocaleToLanguage( pSpellErrorDescription->aLocale ));
             aCursor.GetIndex() = aCursor.GetIndex() + (USHORT)(xEntry->getReplacementText().getLength());
         }
         else
@@ -1459,7 +1598,7 @@ bool SentenceEditWindow_Impl::MarkNextError()
     {
         m_nErrorStart = aCursor.GetIndex();
         m_nErrorEnd = pNextError->GetEnd();
-        MoveErrorMarkTo(m_nErrorStart, m_nErrorEnd);
+        MoveErrorMarkTo(m_nErrorStart, m_nErrorEnd, bGrammarError);
         bRet = true;
         //add an undo action
         SpellUndoAction_Impl* pAction = new SpellUndoAction_Impl(
@@ -1467,8 +1606,8 @@ bool SentenceEditWindow_Impl::MarkNextError()
         pAction->SetErrorMove(m_nErrorStart, m_nErrorEnd, nOldErrorStart, nOldErrorEnd);
         const SpellErrorAttrib* pOldAttrib = static_cast<const SpellErrorAttrib*>(
                 pTextEngine->FindAttrib( TextPaM(0, nOldErrorStart), TEXTATTR_SPELL_ERROR ));
-        pAction->SetErrorLanguageSelected(pOldAttrib && pOldAttrib->GetAlternatives().is() &&
-                SvxLocaleToLanguage( pOldAttrib->GetAlternatives()->getLocale()) ==
+        pAction->SetErrorLanguageSelected(pOldAttrib && pOldAttrib->GetErrorDescription().aSuggestions.getLength() &&
+                SvxLocaleToLanguage( pOldAttrib->GetErrorDescription().aLocale) ==
                                         GetSpellDialog()->aLanguageLB.GetSelectLanguage());
         AddUndoAction(pAction);
     }
@@ -1487,13 +1626,13 @@ bool SentenceEditWindow_Impl::MarkNextError()
 /*-- 06.11.2003 13:30:26---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SentenceEditWindow_Impl::MoveErrorMarkTo(USHORT nStart, USHORT nEnd)
+void SentenceEditWindow_Impl::MoveErrorMarkTo(USHORT nStart, USHORT nEnd, bool bGrammarError)
 {
     TextEngine* pTextEngine = GetTextEngine();
     pTextEngine->RemoveAttribs( 0, (USHORT)TEXTATTR_FONTCOLOR, TRUE );
     pTextEngine->RemoveAttribs( 0, (USHORT)TEXTATTR_FONTWEIGHT, TRUE );
     pTextEngine->SetAttrib( TextAttribFontWeight(WEIGHT_BOLD), 0, nStart, nEnd );
-    pTextEngine->SetAttrib( TextAttribFontColor(COL_LIGHTRED), 0, nStart, nEnd );
+    pTextEngine->SetAttrib( TextAttribFontColor(bGrammarError ? COL_LIGHTBLUE : COL_LIGHTRED), 0, nStart, nEnd );
     m_nErrorStart = nStart;
     m_nErrorEnd = nEnd;
 }
@@ -1511,11 +1650,12 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const String& rNewWord, LanguageT
     pTextEngine->UndoActionStart( TEXTUNDO_INSERT );
     const TextCharAttrib*  pErrorAttrib = pTextEngine->FindCharAttrib( TextPaM(0, m_nErrorStart), TEXTATTR_SPELL_ERROR );
     DBG_ASSERT(pErrorAttrib, "no error attribute found")
-    Reference <XSpellAlternatives> xAlternatives;
+//  Reference <XSpellAlternatives> xAlternatives;
+    const SpellErrorDescription* pSpellErrorDescription = 0;
     if(pErrorAttrib)
     {
         pTextEngine->RemoveAttrib(0, *pErrorAttrib);
-        xAlternatives = static_cast<const SpellErrorAttrib&>(pErrorAttrib->GetAttr()).GetAlternatives();
+        pSpellErrorDescription = &static_cast<const SpellErrorAttrib&>(pErrorAttrib->GetAttr()).GetErrorDescription();
     }
     const TextCharAttrib*  pBackAttrib = pTextEngine->FindCharAttrib( TextPaM(0, m_nErrorStart), TEXTATTR_SPELL_BACKGROUND );
     pTextEngine->ReplaceText( aSel, rNewWord );
@@ -1557,7 +1697,8 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const String& rNewWord, LanguageT
                     SPELLUNDO_MOVE_ERROREND, GetSpellDialog()->aDialogUndoLink);
     pAction->SetOffset(nDiffLen);
     AddUndoAction(pAction);
-    SetAttrib( SpellErrorAttrib(xAlternatives), 0, m_nErrorStart, m_nErrorEnd );
+    if(pSpellErrorDescription)
+        SetAttrib( SpellErrorAttrib(*pSpellErrorDescription), 0, m_nErrorStart, m_nErrorEnd );
     SetAttrib( SpellLanguageAttrib(eLanguage), 0, m_nErrorStart, m_nErrorEnd );
     pTextEngine->UndoActionEnd( TEXTUNDO_INSERT );
 }
@@ -1568,18 +1709,15 @@ String SentenceEditWindow_Impl::GetErrorText() const
 {
     return GetTextEngine()->GetText(TextSelection(TextPaM(0, m_nErrorStart), TextPaM(0, m_nErrorEnd) ));
 }
-/*-- 10.09.2003 13:38:14---------------------------------------------------
+/*-- 26.06.2008 10:54:13---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference<XSpellAlternatives> SentenceEditWindow_Impl::GetAlternatives()
+const SpellErrorDescription* SentenceEditWindow_Impl::GetAlternatives()
 {
     TextPaM aCursor(0, m_nErrorStart);
     const SpellErrorAttrib* pAttrib = static_cast<const SpellErrorAttrib*>(
             GetTextEngine()->FindAttrib( aCursor, TEXTATTR_SPELL_ERROR));
-    Reference <XSpellAlternatives> xRet;
-    if(pAttrib)
-        xRet = pAttrib->GetAlternatives();
-    return xRet;
+    return pAttrib ? &pAttrib->GetErrorDescription() : 0;
 }
 /*-- 06.09.2004 10:50:32---------------------------------------------------
 
@@ -1589,13 +1727,11 @@ void SentenceEditWindow_Impl::RestoreCurrentError()
     TextPaM aCursor(0, m_nErrorStart);
     const SpellErrorAttrib* pAttrib = static_cast<const SpellErrorAttrib*>(
             GetTextEngine()->FindAttrib( aCursor, TEXTATTR_SPELL_ERROR));
-    Reference <XSpellAlternatives> xRet;
-    Reference<XSpellAlternatives> xAlt = pAttrib ? pAttrib->GetAlternatives() : 0;
-    if(xAlt.is())
+    if( pAttrib )
     {
-        String sError = xAlt->getWord();
-        if( GetErrorText() != sError )
-            ChangeMarkedWord(sError, SvxLocaleToLanguage( xAlt->getLocale() ));
+        const SpellErrorDescription& rDesc = pAttrib->GetErrorDescription();
+        if( !rDesc.sErrorText.equals( GetErrorText() ) )
+            ChangeMarkedWord(rDesc.sErrorText, SvxLocaleToLanguage( rDesc.aLocale ));
     }
 }
 /*-- 28.10.2003 14:44:10---------------------------------------------------
@@ -1606,7 +1742,9 @@ void SentenceEditWindow_Impl::SetAlternatives( Reference< XSpellAlternatives> xA
     TextPaM aCursor(0, m_nErrorStart);
     DBG_ASSERT(static_cast<const SpellErrorAttrib*>(
             GetTextEngine()->FindAttrib( aCursor, TEXTATTR_SPELL_ERROR)), "no error set?")
-    GetTextEngine()->SetAttrib( SpellErrorAttrib(xAlt), 0, m_nErrorStart, m_nErrorEnd );
+
+    SpellErrorDescription aDesc( false, xAlt->getWord(), xAlt->getLocale(), xAlt->getAlternatives());
+    GetTextEngine()->SetAttrib( SpellErrorAttrib(aDesc), 0, m_nErrorStart, m_nErrorEnd );
 }
 
 /*-- 10.09.2003 14:43:02---------------------------------------------------
@@ -1845,6 +1983,7 @@ void  SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
     Control* aControls[] =
     {
         &pSpellDialog->aChangeAllPB,
+        &pSpellDialog->aExplainPB,
         &pSpellDialog->aIgnoreAllPB,
         &pSpellDialog->aIgnorePB,
         &pSpellDialog->aSuggestionLB,
@@ -1873,4 +2012,19 @@ void  SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
     AddUndoAction(pAction);
     pSpellDialog->aChangePB.Enable();
 }
+
+/*-- 30.06.2008 14:15:19---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+ExplainButton::~ExplainButton()
+{
+}
+/*-- 30.06.2008 14:15:19---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void ExplainButton::RequestHelp( const HelpEvent& )
+{
+    Help::ShowBalloon( this, GetPosPixel(), m_sExplanation );
+}
+
 
