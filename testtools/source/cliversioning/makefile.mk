@@ -7,7 +7,7 @@
 #  OpenOffice.org - a multi-platform office productivity suite
 # 
 #  $RCSfile: makefile.mk,v $
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 # 
 #  This file is part of OpenOffice.org.
 # 
@@ -37,6 +37,9 @@ TARGET := test_climaker
 PACKAGE = cliversion
 
 .INCLUDE: settings.mk
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
+
+#.IF "$(BUILD_FOR_CLI)" == ""
 
 .IF "$(debug)" != ""
 CSCFLAGS += -checked+ -define:DEBUG -define:TRACE -debug+
@@ -60,16 +63,21 @@ CLI_BASETYPES = $(SOLARBINDIR)$/cli_basetypes.dll
 CLI_CPPUHELPER = $(SOLARBINDIR)$/cli_cppuhelper.dll
 CLI_OOOTYPES = $(SOLARBINDIR)$/cli_oootypes.dll
 
-.IF "$(GUI)"=="WNT"
-ALLTAR: $(EXETARGET2) \
+
+.INCLUDE: target.mk
+
+.IF "$(BUILD_FOR_CLI)" == ""
+ALLTAR:
+
+.ELSE
+ALLTAR: \
+    $(EXETARGET2) \
     $(TESTLIB) \
     $(MISC)$/copyassemblies.done \
     COPYVERSIONLIBS \
     RUNINSTRUCTIONS
-.ELSE
-ALLTAR:
+    
 .ENDIF
-
 
 
 COPYVERSIONLIBS: 
@@ -87,7 +95,7 @@ $(MISC)$/copyassemblies.done .ERRREMOVE:
 
 CSFILES2 = runtests.cs
 $(EXETARGET2): $(CSFILES2)
-    $(CSC) $(CSCFLAGS) -target:exe -out:$(EXETARGET2) \
+    $(CSC) $(CSCFLAGS) -target:exe -out:$(EXETARGET2) -platform:x86\
         $(CSFILES2)
 
 
@@ -101,22 +109,6 @@ $(TESTLIB): $(CSFILESLIB) $(SOLARBINDIR)$/cliureversion.mk
         -reference:$(SOLARBINDIR)$/cli_oootypes.dll \
         $(CSFILESLIB)
 
-
-
-#-----------------------------------------------------------------------------
-CLIMAKERFLAGS =
-.IF "$(debug)" != ""
-CLIMAKERFLAGS += --verbose
-.ENDIF
-
-
-.IF "$(depend)" == ""
-ALL: ALLTAR
-.ELSE
-ALL: ALLDEP
-.ENDIF
-
-.INCLUDE: target.mk
 
 
 RUNINSTRUCTIONS : 
@@ -144,3 +136,5 @@ RUNINSTRUCTIONS :
     @echo .	
 
 
+
+#.ENDIF
