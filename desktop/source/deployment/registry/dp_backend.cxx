@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_backend.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -352,10 +352,7 @@ OUString Package::getDisplayName() throw (RuntimeException)
 //______________________________________________________________________________
 OUString Package::getDescription() throw (RuntimeException)
 {
-    if (m_xPackageType.is())
-        return m_xPackageType->getDescription();
-    else
-        return OUString();
+    return OUString();
 }
 
 //______________________________________________________________________________
