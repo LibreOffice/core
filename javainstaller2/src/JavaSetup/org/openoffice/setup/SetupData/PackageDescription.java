@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PackageDescription.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,6 +102,7 @@ public class PackageDescription implements TreeNode {
     private boolean isApplicationPackage = false;
     private boolean isJavaPackage = false;
     private boolean installCanFail = false;
+    private boolean useForce = false;
     private boolean isNewInstalled = false;
     private boolean wasAlreadyInstalled = false;
 
@@ -207,6 +208,10 @@ public class PackageDescription implements TreeNode {
 
     public boolean installCanFail() {
         return installCanFail;
+    }
+
+    public boolean useForce() {
+        return useForce;
     }
 
     public void setIsNewInstalled(boolean installed) {
@@ -450,6 +455,12 @@ public class PackageDescription implements TreeNode {
             if (subSection != null) {
                 String installCanFailValue = subSection.getValue();
                 installCanFail = Parser.parseBoolean(installCanFailValue);
+            }
+
+            subSection = section.getElement("useforce");
+            if (subSection != null) {
+                String useForceValue = subSection.getValue();
+                useForce = Parser.parseBoolean(useForceValue);
             }
 
         }

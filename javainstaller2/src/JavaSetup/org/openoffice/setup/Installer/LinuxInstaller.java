@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LinuxInstaller.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -184,6 +184,14 @@ public class LinuxInstaller extends Installer {
                     // relocations: "/opt/staroffice8=" + fixedInstallDir;
                 }
 
+                // Some packages have to be installed with parameter "--force", if the link "/usr/bin/soffice"
+                // already exists. These pacakges return true with methode "useForce()".
+                boolean useForce = false;
+                if ( packageData.useForce() ) {
+                    File sofficeLink = new File("/usr/bin/soffice");
+                    if ( sofficeLink.exists() ) { useForce = true; }
+                }
+
                 String rpmCommand = "";
                 String[] rpmCommandArray;
                 String databasePath = null;
@@ -203,55 +211,111 @@ public class LinuxInstaller extends Installer {
                     useLocalDatabase = true;
                 }
 
-                if (useLocalDatabase) {
-                    if ( relocations != null )
-                    {
-                        rpmCommand = "rpm --upgrade --ignoresize -vh " +
-                                "--relocate " + relocations + " " + databaseString +
-                                " " + databasePath + " " + packageName;
-                        rpmCommandArray = new String[9];
-                        rpmCommandArray[0] = "rpm";
-                        rpmCommandArray[1] = "--upgrade";
-                        rpmCommandArray[2] = "--ignoresize";
-                        rpmCommandArray[3] = "-vh";
-                        rpmCommandArray[4] = "--relocate";
-                        rpmCommandArray[5] = relocations;
-                        rpmCommandArray[6] = databaseString;
-                        rpmCommandArray[7] = databasePath;
-                        rpmCommandArray[8] = packageName;
+                if (useForce) {
+                    if (useLocalDatabase) {
+                        if ( relocations != null ) {
+                            rpmCommand = "rpm --upgrade --ignoresize --force -vh " +
+                                    "--relocate " + relocations + " " + databaseString +
+                                    " " + databasePath + " " + packageName;
+                            rpmCommandArray = new String[10];
+                            rpmCommandArray[0] = "rpm";
+                            rpmCommandArray[1] = "--upgrade";
+                            rpmCommandArray[2] = "--ignoresize";
+                            rpmCommandArray[3] = "--force";
+                            rpmCommandArray[4] = "-vh";
+                            rpmCommandArray[5] = "--relocate";
+                            rpmCommandArray[6] = relocations;
+                            rpmCommandArray[7] = databaseString;
+                            rpmCommandArray[8] = databasePath;
+                            rpmCommandArray[9] = packageName;
+                        } else {
+                            rpmCommand = "rpm --upgrade --ignoresize --force -vh " +
+                                    databaseString + " " + databasePath + " " + packageName;
+                            rpmCommandArray = new String[8];
+                            rpmCommandArray[0] = "rpm";
+                            rpmCommandArray[1] = "--upgrade";
+                            rpmCommandArray[2] = "--ignoresize";
+                            rpmCommandArray[3] = "--force";
+                            rpmCommandArray[4] = "-vh";
+                            rpmCommandArray[5] = databaseString;
+                            rpmCommandArray[6] = databasePath;
+                            rpmCommandArray[7] = packageName;
+                        }
                     } else {
-                        rpmCommand = "rpm --upgrade --ignoresize -vh " +
-                                databaseString + " " + databasePath + " " + packageName;
-                        rpmCommandArray = new String[7];
-                        rpmCommandArray[0] = "rpm";
-                        rpmCommandArray[1] = "--upgrade";
-                        rpmCommandArray[2] = "--ignoresize";
-                        rpmCommandArray[3] = "-vh";
-                        rpmCommandArray[4] = databaseString;
-                        rpmCommandArray[5] = databasePath;
-                        rpmCommandArray[6] = packageName;
+                        if ( relocations != null )
+                        {
+                            rpmCommand = "rpm --upgrade --ignoresize --force -vh " +
+                                    "--relocate " + relocations + " " + packageName;
+                            rpmCommandArray = new String[8];
+                            rpmCommandArray[0] = "rpm";
+                            rpmCommandArray[1] = "--upgrade";
+                            rpmCommandArray[2] = "--ignoresize";
+                            rpmCommandArray[3] = "--force";
+                            rpmCommandArray[4] = "-vh";
+                            rpmCommandArray[5] = "--relocate";
+                            rpmCommandArray[6] = relocations;
+                            rpmCommandArray[7] = packageName;
+                        } else {
+                            rpmCommand = "rpm --upgrade --ignoresize --force -vh " + packageName;
+                            rpmCommandArray = new String[6];
+                            rpmCommandArray[0] = "rpm";
+                            rpmCommandArray[1] = "--upgrade";
+                            rpmCommandArray[2] = "--ignoresize";
+                            rpmCommandArray[3] = "--force";
+                            rpmCommandArray[4] = "-vh";
+                            rpmCommandArray[5] = packageName;
+                        }
                     }
                 } else {
-                    if ( relocations != null )
-                    {
-                        rpmCommand = "rpm --upgrade --ignoresize -vh " +
-                                "--relocate " + relocations + " " + packageName;
-                        rpmCommandArray = new String[7];
-                        rpmCommandArray[0] = "rpm";
-                        rpmCommandArray[1] = "--upgrade";
-                        rpmCommandArray[2] = "--ignoresize";
-                        rpmCommandArray[3] = "-vh";
-                        rpmCommandArray[4] = "--relocate";
-                        rpmCommandArray[5] = relocations;
-                        rpmCommandArray[6] = packageName;
+                    if (useLocalDatabase) {
+                        if ( relocations != null ) {
+                            rpmCommand = "rpm --upgrade --ignoresize -vh " +
+                                    "--relocate " + relocations + " " + databaseString +
+                                    " " + databasePath + " " + packageName;
+                            rpmCommandArray = new String[9];
+                            rpmCommandArray[0] = "rpm";
+                            rpmCommandArray[1] = "--upgrade";
+                            rpmCommandArray[2] = "--ignoresize";
+                            rpmCommandArray[3] = "-vh";
+                            rpmCommandArray[4] = "--relocate";
+                            rpmCommandArray[5] = relocations;
+                            rpmCommandArray[6] = databaseString;
+                            rpmCommandArray[7] = databasePath;
+                            rpmCommandArray[8] = packageName;
+                        } else {
+                            rpmCommand = "rpm --upgrade --ignoresize -vh " +
+                                    databaseString + " " + databasePath + " " + packageName;
+                            rpmCommandArray = new String[7];
+                            rpmCommandArray[0] = "rpm";
+                            rpmCommandArray[1] = "--upgrade";
+                            rpmCommandArray[2] = "--ignoresize";
+                            rpmCommandArray[3] = "-vh";
+                            rpmCommandArray[4] = databaseString;
+                            rpmCommandArray[5] = databasePath;
+                            rpmCommandArray[6] = packageName;
+                        }
                     } else {
-                        rpmCommand = "rpm --upgrade --ignoresize -vh " + packageName;
-                        rpmCommandArray = new String[5];
-                        rpmCommandArray[0] = "rpm";
-                        rpmCommandArray[1] = "--upgrade";
-                        rpmCommandArray[2] = "--ignoresize";
-                        rpmCommandArray[3] = "-vh";
-                        rpmCommandArray[4] = packageName;
+                        if ( relocations != null )
+                        {
+                            rpmCommand = "rpm --upgrade --ignoresize -vh " +
+                                    "--relocate " + relocations + " " + packageName;
+                            rpmCommandArray = new String[7];
+                            rpmCommandArray[0] = "rpm";
+                            rpmCommandArray[1] = "--upgrade";
+                            rpmCommandArray[2] = "--ignoresize";
+                            rpmCommandArray[3] = "-vh";
+                            rpmCommandArray[4] = "--relocate";
+                            rpmCommandArray[5] = relocations;
+                            rpmCommandArray[6] = packageName;
+                        } else {
+                            rpmCommand = "rpm --upgrade --ignoresize -vh " + packageName;
+                            rpmCommandArray = new String[5];
+                            rpmCommandArray[0] = "rpm";
+                            rpmCommandArray[1] = "--upgrade";
+                            rpmCommandArray[2] = "--ignoresize";
+                            rpmCommandArray[3] = "-vh";
+                            rpmCommandArray[4] = packageName;
+                        }
                     }
                 }
 
