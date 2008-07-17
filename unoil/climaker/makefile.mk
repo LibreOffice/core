@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -68,7 +68,7 @@ CLIMAKERFLAGS += --verbose
 RDB = $(SOLARBINDIR)$/offapi.rdb
 EXTRA_RDB = $(SOLARBINDIR)$/udkapi.rdb
 
-$(BIN)/cli_oootypes.dll : $(RDB) $(EXTRA_RDB) 
+$(BIN)/cli_oootypes.dll : $(RDB) $(EXTRA_RDB) version.txt
     $(WRAPCMD) $(SOLARBINDIR)$/climaker.exe $(CLIMAKERFLAGS) \
         --out $@ \
          --assembly-version $(CLI_OOOTYPES_NEW_VERSION) \
