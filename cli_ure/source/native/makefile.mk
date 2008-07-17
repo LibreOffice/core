@@ -7,7 +7,7 @@
 #  OpenOffice.org - a multi-platform office productivity suite
 # 
 #  $RCSfile: makefile.mk,v $
-#  $Revision: 1.25 $
+#  $Revision: 1.26 $
 # 
 #  This file is part of OpenOffice.org.
 # 
@@ -54,7 +54,11 @@ ECHOQUOTE='
 ECHOQUOTE=
 .ENDIF
 
-.IF "$(BUILD_FOR_CLI)" != ""
+
+.IF "$(BUILD_FOR_CLI)" == ""
+#do not even build the cxx files because they contain cli cpp
+all:
+.ELSE
 
 .INCLUDE : $(BIN)$/cliureversion.mk
 
@@ -122,7 +126,6 @@ SHL1VERSIONMAP = msvc.map
 SHL1DEF = $(MISC)$/$(SHL1TARGET).def
 DEF1NAME = $(SHL1TARGET)
 
-.ENDIF			# "$(BUILD_FOR_CLI)" != ""
 
 .INCLUDE : $(PRJ)$/util$/target.pmk
 .INCLUDE : target.mk
@@ -162,6 +165,10 @@ $(SIGN): $(SHL1TARGETN)
 #do not forget to deliver cli_cppuhelper.config. It is NOT embedded in the policy file.
 .IF "$(CCNUMVER)" >= "001399999999"		
 #.NET 2 and higher	
+# If the x86 switch is ommitted then the system assumes the assembly to be MSIL.
+# The policy file is still found when an application tries to load an older
+# cli_cppuhelper.dll but the system cannot locate it. It possibly assumes that the
+# assembly is also 'MSIL'  like its policy file.
 $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_cppuhelper.config
     $(WRAPCMD) AL.exe -out:$@ \
             -version:$(CLI_CPPUHELPER_POLICY_VERSION) \
@@ -182,3 +189,4 @@ $(BIN)$/cli_cppuhelper.config: cli_cppuhelper_config $(BIN)$/cliureversion.mk
     $(PERL) $(SOLARENV)$/bin$/clipatchconfig.pl \
     $< $@
     
+.ENDIF			# "$(BUILD_FOR_CLI)" != ""
