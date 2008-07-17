@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -50,9 +50,9 @@ TARFILE_NAME=commons-logging-1.1.1-src
 
 TARFILE_ROOTDIR=commons-logging-1.1.1-src
 
-PATCH_FILE_NAME=patches$/logging.patch
+PATCH_FILE_NAME=$(PRJ)$/patches$/logging.patch
 
-#CONVERTFILES=build.xml
+CONVERTFILES=build.xml
                 
 OUT2CLASS=target$/commons-logging-1.1.1-SNAPSHOT.jar
 
