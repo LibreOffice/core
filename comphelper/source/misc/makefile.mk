@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.47 $
+# $Revision: 1.48 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,51 +42,52 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files -------------------------------------
 
-SLOFILES=	\
-            $(SLO)$/weak.obj\
-            $(SLO)$/asyncnotification.obj \
-            $(SLO)$/listenernotification.obj \
-            $(SLO)$/evtlistenerhlp.obj \
+SLOFILES=   \
             $(SLO)$/accessiblecomponenthelper.obj \
             $(SLO)$/accessiblecontexthelper.obj \
+            $(SLO)$/accessibleeventbuffer.obj \
+            $(SLO)$/accessibleeventnotifier.obj  \
             $(SLO)$/accessiblekeybindinghelper.obj \
             $(SLO)$/accessibleselectionhelper.obj \
             $(SLO)$/accessibletexthelper.obj \
+            $(SLO)$/accessiblewrapper.obj \
             $(SLO)$/accimplaccess.obj \
-            $(SLO)$/interaction.obj \
-            $(SLO)$/instancelocker.obj \
-            $(SLO)$/types.obj \
-            $(SLO)$/numbers.obj \
-            $(SLO)$/sequence.obj \
-            $(SLO)$/querydeep.obj \
-            $(SLO)$/regpathhelper.obj \
-            $(SLO)$/facreg.obj \
-            $(SLO)$/accessibleeventbuffer.obj	\
-            $(SLO)$/weakeventlistener.obj	\
-            $(SLO)$/accessibleeventnotifier.obj	 \
-            $(SLO)$/accessiblewrapper.obj	\
-            $(SLO)$/proxyaggregation.obj    \
-            $(SLO)$/sequenceashashmap.obj	\
-            $(SLO)$/storagehelper.obj \
-            $(SLO)$/anytostring.obj		\
-            $(SLO)$/mediadescriptor.obj \
-            $(SLO)$/locale.obj \
-            $(SLO)$/configurationhelper.obj \
-            $(SLO)$/mimeconfighelper.obj \
-            $(SLO)$/servicedecl.obj \
-            $(SLO)$/scopeguard.obj \
-            $(SLO)$/componentmodule.obj \
+            $(SLO)$/anytostring.obj \
+            $(SLO)$/asyncnotification.obj \
             $(SLO)$/componentcontext.obj \
-            $(SLO)$/officeresourcebundle.obj \
-            $(SLO)$/SelectionMultiplex.obj \
+            $(SLO)$/componentmodule.obj \
+            $(SLO)$/configurationhelper.obj \
+            $(SLO)$/documentinfo.obj \
+            $(SLO)$/evtlistenerhlp.obj \
+            $(SLO)$/facreg.obj \
+            $(SLO)$/ihwrapnofilter.obj \
+            $(SLO)$/instancelocker.obj \
+            $(SLO)$/interaction.obj \
+            $(SLO)$/legacysingletonfactory.obj \
+            $(SLO)$/listenernotification.obj \
+            $(SLO)$/locale.obj \
+            $(SLO)$/logging.obj \
+            $(SLO)$/mediadescriptor.obj \
+            $(SLO)$/mimeconfighelper.obj \
             $(SLO)$/namedvaluecollection.obj \
             $(SLO)$/numberedcollection.obj \
-            $(SLO)$/logging.obj \
-            $(SLO)$/documentinfo.obj \
-            $(SLO)$/string.obj \
-            $(SLO)$/legacysingletonfactory.obj \
+            $(SLO)$/numbers.obj \
+            $(SLO)$/officeresourcebundle.obj \
+            $(SLO)$/proxyaggregation.obj \
+            $(SLO)$/querydeep.obj \
+            $(SLO)$/regpathhelper.obj \
+            $(SLO)$/scopeguard.obj \
+            $(SLO)$/SelectionMultiplex.obj \
+            $(SLO)$/sequenceashashmap.obj \
+            $(SLO)$/sequence.obj \
+            $(SLO)$/servicedecl.obj \
             $(SLO)$/synchronousdispatch.obj \
-            $(SLO)$/ihwrapnofilter.obj
+            $(SLO)$/storagehelper.obj \
+            $(SLO)$/string.obj \
+            $(SLO)$/types.obj \
+            $(SLO)$/uieventslogger.obj \
+            $(SLO)$/weakeventlistener.obj \
+            $(SLO)$/weak.obj \
 
 # --- Targets ----------------------------------
 
