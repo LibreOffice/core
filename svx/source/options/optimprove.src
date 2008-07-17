@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optimprove.src,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,54 +50,64 @@ TabPage RID_SVXPAGE_IMPROVEMENT
     };
     FixedText FT_INVITATION
     {
-        Hide = TRUE;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 242 , 72 ) ;
+        WordBreak = TRUE ;
         Text [ en-US ] = "We invite you to join our %PRODUCTNAME Improvement Program to help optimize the quality of %PRODUCTNAME.\n\nIf you are willing to participate, we will collect anonymous statistics about how you use %PRODUCTNAME. The data is used to identify usage patterns.\n\nThe %PRODUCTNAME Improvement Program will not collect any personal data, or document content." ;
     };
     RadioButton RB_YES
     {
-        Pos = MAP_APPFONT ( 12 , 89 ) ;
-        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 92 ) ;
+        Size = MAP_APPFONT ( 215 , 10 ) ;
+        Check = TRUE ;
         Text [ en-US ] = "~Yes, I am willing to participate in the %PRODUCTNAME Improvement Program" ;
     };
     RadioButton RB_NO
     {
-        Pos = MAP_APPFONT ( 12 , 102 ) ;
-        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 105 ) ;
+        Size = MAP_APPFONT ( 215 , 10 ) ;
         Text [ en-US ] = "~No, I do not wish to participate" ;
+    };
+    FixedImage FI_INFO
+    {
+        Pos = MAP_APPFONT ( 230 , 91 ) ;
+        Size = MAP_APPFONT ( 24 , 24 ) ;
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "info.png"; };
+        };
     };
     FixedLine FL_DATA
     {
-        Pos = MAP_APPFONT ( 6 , 118 ) ;
+        Pos = MAP_APPFONT ( 6 , 121 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Tracked Data" ;
     };
     FixedText FT_NR_REPORTS
     {
-        Pos = MAP_APPFONT ( 12 , 129 ) ;
+        Pos = MAP_APPFONT ( 12 , 132 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
         Text [ en-US ] = "Number of reports send:" ;
     };
     FixedText FT_NR_REPORTS_VALUE
     {
-        Pos = MAP_APPFONT ( 95 , 129 ) ;
+        Pos = MAP_APPFONT ( 95 , 132 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
     };
     FixedText FT_NR_ACTIONS
     {
-        Pos = MAP_APPFONT ( 12 , 142 ) ;
+        Pos = MAP_APPFONT ( 12 , 145 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
         Text [ en-US ] = "Number of tracked actions:" ;
     };
     FixedText FT_NR_ACTIONS_VALUE
     {
-        Pos = MAP_APPFONT ( 95 , 142 ) ;
+        Pos = MAP_APPFONT ( 95 , 145 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
     };
     PushButton PB_SHOWDATA
     {
-        Pos = MAP_APPFONT ( 12 , 158 ) ;
+        Pos = MAP_APPFONT ( 12 , 161 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Show Data" ;
     };
@@ -108,6 +118,56 @@ TabPage RID_SVXPAGE_IMPROVEMENT
     String STR_MOREINFO
     {
         Text [ en-US ] = "More Information" ;
+    };
+};
+
+ModalDialog RID_SVXPAGE_IMPROVEMENT
+{
+    //!HelpId = HID_OPTIONS_IMPROVEMENT ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 210 , 173 ) ;
+    Moveable = TRUE ;
+    Window WIN_INFO
+    {
+        Pos = MAP_APPFONT ( 0 , 0 ) ;
+        Size = MAP_APPFONT ( 210 , 30 ) ;
+    };
+    FixedText FT_INVITATION
+    {
+        Pos = MAP_APPFONT ( 6 , 36 ) ;
+        Size = MAP_APPFONT ( 198 , 72 ) ;
+        WordBreak = TRUE ;
+    };
+    RadioButton RB_YES
+    {
+        Pos = MAP_APPFONT ( 6 , 114 ) ;
+        Size = MAP_APPFONT ( 198 , 10 ) ;
+        Check = TRUE ;
+    };
+    RadioButton RB_NO
+    {
+        Pos = MAP_APPFONT ( 6 , 127 ) ;
+        Size = MAP_APPFONT ( 198 , 10 ) ;
+    };
+    FixedLine FL_IMPROVE
+    {
+        Pos = MAP_APPFONT ( 0 , 140 ) ;
+        Size = MAP_APPFONT ( 210 , 8 ) ;
+    };
+    FixedImage FI_INFO
+    {
+        Pos = MAP_APPFONT ( 6 , 151 ) ;
+        Size = MAP_APPFONT ( 18 , 18 ) ;
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "info.png"; };
+        };
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 154, 153 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 };
 
