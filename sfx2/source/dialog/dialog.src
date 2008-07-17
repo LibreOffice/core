@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dialog.src,v $
- * $Revision: 1.57 $
+ * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -319,4 +319,13 @@ String STR_RECHECK_DOCUMENT
   Text [ en-US ] = "Recheck Document" ;
 };
 
+Image IMG_INFO
+{
+    ImageBitmap = Bitmap
+    {
+        File = "info.png" ;
+    };
+};
+
 // ******************************************************************* EOF
+
