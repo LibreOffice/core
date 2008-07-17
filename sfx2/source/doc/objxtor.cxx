@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objxtor.cxx,v $
- * $Revision: 1.84 $
+ * $Revision: 1.85 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -166,6 +166,7 @@ public:
 void SAL_CALL SfxDocInfoListener_Impl::modified( const lang::EventObject& )
         throw ( uno::RuntimeException )
 {
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     bGotModified = true;
 
     // notify changes to the SfxObjectShell
@@ -200,12 +201,14 @@ void SAL_CALL SfxModelListener_Impl::queryClosing( const com::sun::star::lang::E
 
 void SAL_CALL SfxModelListener_Impl::notifyClosing( const com::sun::star::lang::EventObject& ) throw ( com::sun::star::uno::RuntimeException )
 {
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     mpDoc->Broadcast( SfxSimpleHint(SFX_HINT_DEINITIALIZING) );
 }
 
 void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::EventObject& _rEvent ) throw ( com::sun::star::uno::RuntimeException )
 {
     // am I ThisComponent in AppBasic?
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     if ( SfxObjectShell::GetCurrentComponent() == _rEvent.Source )
     {
         // remove ThisComponent reference from AppBasic
