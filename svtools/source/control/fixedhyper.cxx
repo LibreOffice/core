@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fixedhyper.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -138,6 +138,96 @@ void FixedHyperlink::SetDescription( const String& rNewDescription )
 {
     SetText( rNewDescription );
     m_nTextLen = GetCtrlTextWidth( GetText() );
+}
+
+// class FixedHyperlinkImage ---------------------------------------------
+
+FixedHyperlinkImage::FixedHyperlinkImage( Window* pParent, const ResId& rResId ) :
+    FixedImage( pParent, rResId )
+{
+    Initialize();
+}
+
+FixedHyperlinkImage::FixedHyperlinkImage( Window* pParent, WinBits nWinStyle  ) :
+    FixedImage( pParent, nWinStyle )
+{
+    Initialize();
+}
+
+FixedHyperlinkImage::~FixedHyperlinkImage()
+{
+}
+
+void FixedHyperlinkImage::Initialize()
+{
+    // saves the old pointer
+    m_aOldPointer = GetPointer();
+}
+
+void FixedHyperlinkImage::MouseMove( const MouseEvent& rMEvt )
+{
+    // changes the pointer if the control is enabled and the mouse is over the text.
+    if ( !rMEvt.IsLeaveWindow() && IsEnabled() )
+        SetPointer( POINTER_REFHAND );
+    else
+        SetPointer( m_aOldPointer );
+}
+
+void FixedHyperlinkImage::MouseButtonUp( const MouseEvent& )
+{
+    // calls the link if the control is enabled and the mouse is over the text.
+    if ( IsEnabled() )
+        ImplCallEventListenersAndHandler( VCLEVENT_BUTTON_CLICK, m_aClickHdl, this );
+
+    Size aSize = GetSizePixel();
+    Size aImgSz = GetImage().GetSizePixel();
+    if ( aSize.Width() < aImgSz.Width() )
+    {
+        DBG_ERRORFILE("xxx");
+    }
+}
+
+void FixedHyperlinkImage::RequestHelp( const HelpEvent& rHEvt )
+{
+    if ( IsEnabled() )
+        FixedImage::RequestHelp( rHEvt );
+}
+
+void FixedHyperlinkImage::GetFocus()
+{
+    Paint( Rectangle( Point(), GetSizePixel() ) );
+    ShowFocus( Rectangle( Point( 1, 1 ), Size( GetSizePixel().Width() - 2, GetSizePixel().Height() - 2 ) ) );
+}
+
+void FixedHyperlinkImage::LoseFocus()
+{
+    Paint( Rectangle( Point(), GetSizePixel() ) );
+    HideFocus();
+}
+
+void FixedHyperlinkImage::KeyInput( const KeyEvent& rKEvt )
+{
+    switch ( rKEvt.GetKeyCode().GetCode() )
+    {
+        case KEY_SPACE:
+        case KEY_RETURN:
+            m_aClickHdl.Call( this );
+            break;
+
+        default:
+            FixedImage::KeyInput( rKEvt );
+    }
+}
+
+void FixedHyperlinkImage::SetURL( const String& rNewURL )
+{
+    m_sURL = rNewURL;
+    SetQuickHelpText( m_sURL );
+}
+
+String  FixedHyperlinkImage::GetURL() const
+{
+    return m_sURL;
 }
 
 //.........................................................................
