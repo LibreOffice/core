@@ -52,6 +52,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\logging
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\mail
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\media
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\mozilla
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\oooimprovement
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\packages
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\packages\manifest
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\packages\zip
@@ -165,6 +166,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\form
 ..\com\sun\star\mail\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\mail
 ..\com\sun\star\media\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\media
 ..\com\sun\star\mozilla\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\mozilla
+..\com\sun\star\oooimprovement\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\oooimprovement
 ..\com\sun\star\packages\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\packages
 ..\com\sun\star\packages\manifest\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\packages\manifest
 ..\com\sun\star\packages\zip\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\packages\zip
