@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: controlmenucontroller.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,6 +68,7 @@
 #include <tools/rcid.h>
 #include <vcl/image.hxx>
 #include <svtools/menuoptions.hxx>
+#include <comphelper/uieventslogger.hxx>
 
 // Copied from svx
 // Function-Id's
@@ -383,6 +384,12 @@ void SAL_CALL ControlMenuController::select( const css::awt::MenuEvent& rEvent )
             if ( pIter != m_aURLToDispatchMap.end() )
             {
                 Reference< XDispatch > xDispatch = pIter->second;
+                if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+                {
+                    Sequence<css::beans::PropertyValue> source;
+                    ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("ControlMenuController"));
+                    ::comphelper::UiEventsLogger::logDispatch(aTargetURL, source);
+                }
                 if ( xDispatch.is() )
                     xDispatch->dispatch( aTargetURL, aArgs );
             }
