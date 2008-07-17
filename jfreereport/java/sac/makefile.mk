@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -50,7 +50,7 @@ TARFILE_NAME=sacjava-1.3
 
 TARFILE_ROOTDIR=$(TARGET)
 
-PATCH_FILE_NAME=patches$/sac.patch
+PATCH_FILE_NAME=$(PRJ)$/patches$/sac.patch
 
 ADDITIONAL_FILES=build.xml
 
