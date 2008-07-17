@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,45 +40,53 @@ TARGET=zipintro
 DEFAULT_FLAVOURS=dev dev_nologo nologo broffice dev_broffice nologo_broffice nologo_dev_broffice intro
 
 ZIP1LIST= \
-    $(null,$(INTRO_BITMAPS) $(SOLARSRC)$/ooo_custom_images$/dev$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
-    $(null,$(ABOUT_BITMAPS) $(SOLARSRC)$/$(RSCDEFIMG)$/introabout$/about.bmp $(ABOUT_BITMAPS))
+    $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/dev$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
+    $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/introabout$/about.bmp $(ABOUT_BITMAPS))
 ZIP2LIST= \
-    $(null,$(INTRO_BITMAPS) $(SOLARSRC)$/ooo_custom_images$/dev_nologo$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
-    $(null,$(ABOUT_BITMAPS) $(SOLARSRC)$/$(RSCDEFIMG)$/introabout$/about.bmp $(ABOUT_BITMAPS))
+    $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/dev_nologo$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
+    $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/introabout$/about.bmp $(ABOUT_BITMAPS))
 ZIP3LIST= \
-    $(null,$(INTRO_BITMAPS) $(SOLARSRC)$/ooo_custom_images$/nologo$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
-    $(null,$(ABOUT_BITMAPS) $(SOLARSRC)$/$(RSCDEFIMG)$/introabout$/about.bmp $(ABOUT_BITMAPS))
+    $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/nologo$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
+    $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/introabout$/about.bmp $(ABOUT_BITMAPS))
 ZIP4LIST= \
-    $(null,$(INTRO_BITMAPS) $(SOLARSRC)$/$(RSCDEFIMG)$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
-    $(null,$(ABOUT_BITMAPS) $(SOLARSRC)$/$(RSCDEFIMG)$/introabout$/about.bmp $(ABOUT_BITMAPS))
+    $(null,$(INTRO_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
+    $(null,$(ABOUT_BITMAPS) $(MISC)$/$(RSCDEFIMG)$/introabout$/about.bmp $(ABOUT_BITMAPS))
 ZIP5LIST= \
-    $(null,$(INTRO_BITMAPS) $(SOLARSRC)$/ooo_custom_images$/dev_broffice$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
-    $(null,$(ABOUT_BITMAPS) $(SOLARSRC)$/ooo_custom_images$/broffice$/introabout$/about.bmp $(ABOUT_BITMAPS))
+    $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/dev_broffice$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
+    $(null,$(ABOUT_BITMAPS) $(MISC)$/ooo_custom_images$/broffice$/introabout$/about.bmp $(ABOUT_BITMAPS))
 ZIP6LIST= \
-    $(null,$(INTRO_BITMAPS) $(SOLARSRC)$/ooo_custom_images$/broffice$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
-    $(null,$(ABOUT_BITMAPS) $(SOLARSRC)$/ooo_custom_images$/broffice$/introabout$/about.bmp $(ABOUT_BITMAPS))
+    $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/broffice$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
+    $(null,$(ABOUT_BITMAPS) $(MISC)$/ooo_custom_images$/broffice$/introabout$/about.bmp $(ABOUT_BITMAPS))
 ZIP7LIST= \
-        $(null,$(INTRO_BITMAPS) $(SOLARSRC)$/ooo_custom_images$/nologo_broffice$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
-        $(null,$(ABOUT_BITMAPS) $(SOLARSRC)$/ooo_custom_images$/broffice$/introabout$/about.bmp $(ABOUT_BITMAPS))
+        $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/nologo_broffice$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
+        $(null,$(ABOUT_BITMAPS) $(MISC)$/ooo_custom_images$/broffice$/introabout$/about.bmp $(ABOUT_BITMAPS))
 ZIP8LIST= \
-        $(null,$(INTRO_BITMAPS) $(SOLARSRC)$/ooo_custom_images$/dev_nologo_broffice$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
-        $(null,$(ABOUT_BITMAPS) $(SOLARSRC)$/ooo_custom_images$/broffice$/introabout$/about.bmp $(ABOUT_BITMAPS))
+        $(null,$(INTRO_BITMAPS) $(MISC)$/ooo_custom_images$/dev_nologo_broffice$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
+        $(null,$(ABOUT_BITMAPS) $(MISC)$/ooo_custom_images$/broffice$/introabout$/about.bmp $(ABOUT_BITMAPS))
 
 ZIP1TARGET=dev_intro
+ZIP1DEPS=$(ZIP1LIST)
 
 ZIP2TARGET=dev_nologo_intro
+ZIP2DEPS=$(ZIP2LIST)
 
 ZIP3TARGET=nologo_intro
+ZIP3DEPS=$(ZIP3LIST)
 
 ZIP4TARGET=intro_intro
+ZIP4DEPS=$(ZIP4LIST)
 
 ZIP5TARGET=dev_broffice_intro
+ZIP5DEPS=$(ZIP5LIST)
 
 ZIP6TARGET=broffice_intro
+ZIP6DEPS=$(ZIP6LIST)
 
 ZIP7TARGET=nologo_broffice_intro
+ZIP7DEPS=$(ZIP7LIST)
 
 ZIP8TARGET=nologo_dev_broffice_intro
+ZIP8DEPS=$(ZIP8LIST)
 
 .INCLUDE :  target.mk
 
@@ -120,4 +128,8 @@ $(COMMONBIN)$/nologo_dev_broffice$/intro.zip : $(COMMONBIN)$/nologo_dev_broffice
 $(COMMONBIN)$/intro$/intro.zip : $(COMMONBIN)$/intro_intro.zip
     @@-$(MKDIR) $(@:d)
     @$(COPY) $< $@
+
+$(MISC)$/%.bmp : $(SOLARSRC)$/%.bmp
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
 
