@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,7 +51,7 @@ TARFILE_NAME=$(TARGET)
 
 TARFILE_ROOTDIR=$(TARGET)
 
-PATCH_FILE_NAME=patches$/$(TARGET).patch
+PATCH_FILE_NAME=$(PRJ)$/patches$/$(TARGET).patch
 
 CONVERTFILES=build.xml\
             build.properties
