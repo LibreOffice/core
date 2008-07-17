@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: recentfilesmenucontroller.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,6 +67,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <osl/file.hxx>
 //#include <tools/solar.hrc>
+#include <comphelper/uieventslogger.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -530,6 +531,12 @@ IMPL_STATIC_LINK_NOINSTANCE( RecentFilesMenuController, ExecuteHdl_Impl, LoadRec
         // Asynchronous execution as this can lead to our own destruction!
         // Framework can recycle our current frame and the layout manager disposes all user interface
         // elements if a component gets detached from its frame!
+        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+        {
+            Sequence<PropertyValue> source;
+            ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("RecentFilesMenuController"));
+            ::comphelper::UiEventsLogger::logDispatch(pLoadRecentFile->aTargetURL, source);
+        }
         pLoadRecentFile->xDispatch->dispatch( pLoadRecentFile->aTargetURL, pLoadRecentFile->aArgSeq );
     }
     catch ( Exception& )
