@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: acceleratorexecute.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -365,9 +365,17 @@ IMPL_LINK(AcceleratorExecute, impl_ts_asyncCallback, void*, pVoid)
 
     // ask for dispatch object
     css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aURL, ::rtl::OUString(), 0);
+    css::uno::Sequence< css::beans::PropertyValue> aArgs;
     if (xDispatch.is())
+    {
+        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+        {
+            Sequence<css::beans::PropertyValue> source;
+            ::comphelper::UiEventsLogger::appendDispatchOrigin(OUString::createFromAscii("AcceleratorExecute"));
+            ::comphelper::UiEventsLogger::logDispatch(aURL, source);
+        }
         xDispatch->dispatch(aURL, css::uno::Sequence< css::beans::PropertyValue >());
-
+    }
     return 0;
 }
 
