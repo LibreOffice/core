@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -52,7 +52,7 @@ all:
 RAPTORVERSION=$(RAPTOR_MAJOR).4.17
 
 TARFILE_NAME=raptor-$(RAPTORVERSION)
-PATCH_FILE_NAME=$(TARFILE_NAME).patch
+PATCH_FILE_NAME=..$/$(TARFILE_NAME).patch
 
 ADDITIONAL_FILES=src/makefile.mk
 
