@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: aboutdialog.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +49,7 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::container;
 
 #define ABOUT_DIALOG_WIDTH  200
-#define ABOUT_DIALOG_HEIGHT 145
+#define ABOUT_DIALOG_HEIGHT 155
 
 // -----------------------------------------------------------------------------
 
@@ -202,7 +202,7 @@ void AboutDialog::InitDialog()
         Any( sal_True ),
         Any( sal_Int32( 113 ) ),
         Any( sal_Int32( 42 ) ),
-        Any( getString( STR_ABOUT_VERSION ) ),
+        Any( getString( STR_ABOUT_VERSION2 ) ),
         Any( sal_Int32( ABOUT_DIALOG_WIDTH ) ) };
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
@@ -224,9 +224,9 @@ void AboutDialog::InitDialog()
 //    int nHeight = (int) getMapsFromPixels( 95 );
 
     InsertImage( *this, rtl::OUString( rtl::OUString::createFromAscii( "aboutimage" ) ), sURL, 0, 0, nWidth, 60 );
-    InsertFixedText( *this, rtl::OUString( rtl::OUString::createFromAscii( "fixedtext" ) ), getString( STR_ABOUT_PRN ), 9, 66, nWidth - 18, ABOUT_DIALOG_HEIGHT - 94, sal_True, 0 );
+    InsertFixedText( *this, rtl::OUString( rtl::OUString::createFromAscii( "fixedtext" ) ), getString( STR_ABOUT_PRN ), 9, 66, nWidth - 18, 50, sal_True, 0 );
 //  InsertSeparator( *this, rtl::OUString( rtl::OUString::createFromAscii( "separator" ) ), 0, 0, ABOUT_DIALOG_HEIGHT - 25, nWidth, 8 );
-    InsertButton( *this, rtl::OUString( rtl::OUString::createFromAscii( "button" ) ), mxActionListener, ( nWidth / 2 ) - 25, ABOUT_DIALOG_HEIGHT - 17, 50, 14, 1, STR_OK );
+    InsertButton( *this, rtl::OUString( rtl::OUString::createFromAscii( "button" ) ), mxActionListener, ( nWidth / 2 ) - 25, 120, 50, 14, 1, STR_OK );
 }
 
 // -----------------------------------------------------------------------------
