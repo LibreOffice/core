@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_ooo.scp,v $
- * $Revision: 1.255 $
+ * $Revision: 1.256 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2266,6 +2266,13 @@ File gid_File_Registry_Spool_Oo_Common_Korean_Xcu
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
     Name (ko) = "/registry/spool/org/openoffice/Office/Common-korea.xcu";
+End
+
+File gid_File_Registry_Spool_Oo_Office_Writer_PyMailMerge_Xcu
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Writer;
+    Name = "/registry/spool/org/openoffice/Office/Writer-javamail.xcu";
+    Styles = (PACKED);
 End
 
 File gid_File_Scripts_Beanshell
