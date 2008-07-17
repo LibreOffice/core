@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optimizerdialog.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,7 +78,7 @@ void OptimizerDialog::InitDialog()
         Any( sal_True ),
         Any( sal_Int32( 200 ) ),
         Any( sal_Int32( 52 ) ),
-        Any( getString( STR_SUN_OPTIMIZATION_WIZARD ) ),
+        Any( getString( STR_SUN_OPTIMIZATION_WIZARD2 ) ),
         Any( sal_Int32( OD_DIALOG_WIDTH ) ) };
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );

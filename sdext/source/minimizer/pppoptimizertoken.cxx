@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pppoptimizertoken.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -231,7 +231,7 @@ static const TokenTable pTokenTableArray[] =
     { "OLEObjects",         TK_OLEObjects },
     { "CurrentOLEObject",   TK_CurrentOLEObject },
 
-    { "STR_SUN_OPTIMIZATION_WIZARD",STR_SUN_OPTIMIZATION_WIZARD },
+    { "STR_SUN_OPTIMIZATION_WIZARD2",STR_SUN_OPTIMIZATION_WIZARD2 },
     { "STR_STEPS",                  STR_STEPS },
     { "STR_HELP",                   STR_HELP },
     { "STR_BACK",                   STR_BACK },
@@ -286,8 +286,8 @@ static const TokenTable pTokenTableArray[] =
     { "STR_DEFAULT_SESSION",        STR_DEFAULT_SESSION },
     { "STR_MODIFY_WARNING",         STR_MODIFY_WARNING },
     { "STR_YES",                    STR_YES },
-    { "STR_ABOUT",                  STR_ABOUT },
-    { "STR_ABOUT_VERSION",          STR_ABOUT_VERSION },
+    { "STR_ABOUT2",                 STR_ABOUT2 },
+    { "STR_ABOUT_VERSION2",         STR_ABOUT_VERSION2 },
     { "STR_ABOUT_PRN",              STR_ABOUT_PRN },
     { "STR_OK",                     STR_OK },
     { "STR_INFO_1",                 STR_INFO_1 },
