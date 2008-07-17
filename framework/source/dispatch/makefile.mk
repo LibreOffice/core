@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.16 $
+# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -30,14 +30,14 @@
 #*************************************************************************
 PRJ=..$/..
 
-PRJNAME=			framework
-TARGET=				fwk_dispatch
-USE_DEFFILE=		TRUE
-ENABLE_EXCEPTIONS=	TRUE
+PRJNAME=            framework
+TARGET=             fwk_dispatch
+USE_DEFFILE=        TRUE
+ENABLE_EXCEPTIONS=  TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  		settings.mk
+.INCLUDE :          settings.mk
 
 # --- defines ------------------------------------------------------
 
@@ -45,21 +45,22 @@ CDEFS+=-DCOMPMOD_NAMESPACE=framework
 
 # --- Generate -----------------------------------------------------
 
-SLOFILES=			$(SLO)$/interceptionhelper.obj				\
-                    $(SLO)$/dispatchprovider.obj				\
-                    $(SLO)$/dispatchinformationprovider.obj	    \
-                    $(SLO)$/loaddispatcher.obj                  \
-                    $(SLO)$/menudispatcher.obj					\
-                    $(SLO)$/helpagentdispatcher.obj				\
-                    $(SLO)$/mailtodispatcher.obj				\
-                    $(SLO)$/interaction.obj						\
-                    $(SLO)$/servicehandler.obj                  \
-                    $(SLO)$/closedispatcher.obj                 \
-                    $(SLO)$/systemexec.obj						\
-                    $(SLO)$/popupmenudispatcher.obj             \
-                    $(SLO)$/oxt_handler.obj                     \
-                    $(SLO)$/windowcommanddispatch.obj
+SLOFILES=\
+    $(SLO)$/closedispatcher.obj                 \
+    $(SLO)$/dispatchinformationprovider.obj     \
+    $(SLO)$/dispatchprovider.obj                \
+    $(SLO)$/helpagentdispatcher.obj             \
+    $(SLO)$/interaction.obj                     \
+    $(SLO)$/interceptionhelper.obj              \
+    $(SLO)$/loaddispatcher.obj                  \
+    $(SLO)$/mailtodispatcher.obj                \
+    $(SLO)$/menudispatcher.obj                  \
+    $(SLO)$/oxt_handler.obj                     \
+    $(SLO)$/popupmenudispatcher.obj             \
+    $(SLO)$/servicehandler.obj                  \
+    $(SLO)$/systemexec.obj		                \
+    $(SLO)$/windowcommanddispatch.obj           \
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE :			target.mk
+.INCLUDE :          target.mk
