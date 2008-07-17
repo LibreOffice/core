@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolbarsmenucontroller.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,6 +84,7 @@
 #include <vcl/window.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/cmdoptions.hxx>
+#include <comphelper/uieventslogger.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -946,7 +947,15 @@ IMPL_STATIC_LINK_NOINSTANCE( ToolbarsMenuController, ExecuteHdl_Impl, ExecuteInf
         // Framework can recycle our current frame and the layout manager disposes all user interface
         // elements if a component gets detached from its frame!
         if ( pExecuteInfo->xDispatch.is() )
+        {
+            if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+            {
+                Sequence<PropertyValue> source;
+                ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("ToolbarsMenuController"));
+                ::comphelper::UiEventsLogger::logDispatch(pExecuteInfo->aTargetURL, source);
+            }
             pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
+        }
     }
     catch ( Exception& )
     {
