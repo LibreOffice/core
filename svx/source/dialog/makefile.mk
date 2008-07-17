@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.64 $
+# $Revision: 1.65 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -287,7 +287,9 @@ SLOFILES+=\
     $(SLO)$/optsave.obj \
     $(SLO)$/optasian.obj \
     $(SLO)$/optpath.obj    \
-    $(SLO)$/optjava.obj
+    $(SLO)$/optjava.obj \
+    $(SLO)$/optimprove.obj \
+    $(SLO)$/optimprove2.obj
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 
@@ -363,6 +365,7 @@ LIB1OBJFILES= \
     $(SLO)$/framelink.obj	\
     $(SLO)$/framelinkarray.obj \
     $(SLO)$/databaseregistrationui.obj \
+    $(SLO)$/optimprove.obj \
     $(SLO)$/radiobtnbox.obj
 
 .IF "$(GUI)"=="UNX"
@@ -440,7 +443,8 @@ LIB2OBJFILES= \
     $(SLO)$/webconninfo.obj \
     $(SLO)$/optctl.obj	\
     $(SLO)$/optjava.obj	\
-    $(SLO)$/optupdt.obj	\
+    $(SLO)$/optupdt.obj \
+    $(SLO)$/optimprove2.obj \
     $(SLO)$/optgenrl.obj	\
     $(SLO)$/connect.obj \
     $(SLO)$/tabarea.obj \
