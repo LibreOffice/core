@@ -100,8 +100,8 @@
   <accel:item accel:code="KEY_RIGHT" accel:shift="true" accel:mod1="true" xlink:href=".uno:WordRightSel"/>
   <accel:item accel:code="KEY_RIGHT" accel:shift="true" xlink:href=".uno:CharRightSel"/>
   <accel:item accel:code="KEY_RIGHT" xlink:href=".uno:GoRight"/>
-  <accel:item accel:code="KEY_SPACE" accel:mod1="true" accel:shift="true" xlink:href=".uno:ResetAttributes"/>
-  <accel:item accel:code="KEY_SPACE" accel:mod1="true" xlink:href=".uno:InsertNonBreakingSpace"/>
+  <accel:item accel:code="KEY_M" accel:mod1="true" xlink:href=".uno:ResetAttributes"/>
+  <accel:item accel:code="KEY_SPACE" accel:shift="true" accel:mod1="true" xlink:href=".uno:InsertNonBreakingSpace"/>
   <accel:item accel:code="KEY_SUBTRACT" accel:mod1="true" xlink:href=".uno:InsertSoftHyphen"/>
   <accel:item accel:code="KEY_SUBTRACT" accel:shift="true" accel:mod1="true" xlink:href=".uno:InsertHardHyphen"/>
   <accel:item accel:code="KEY_T" accel:shift="true" accel:mod1="true" xlink:href=".uno:ResetTableProtection"/>

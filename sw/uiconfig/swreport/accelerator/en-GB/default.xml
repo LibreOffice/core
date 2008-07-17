@@ -45,7 +45,7 @@
     <accel:item accel:code="KEY_RETURN" accel:mod1="true" xlink:href=".uno:InsertPagebreak"/>
     <accel:item accel:code="KEY_F12" accel:mod1="true" xlink:href=".uno:InsertTable"/>
     <accel:item accel:code="KEY_SUBTRACT" accel:mod1="true" xlink:href=".uno:InsertSoftHyphen"/>
-    <accel:item accel:code="KEY_SPACE" accel:mod1="true" xlink:href=".uno:InsertNonBreakingSpace"/>
+    <accel:item accel:code="KEY_SPACE" accel:shift="true" accel:mod1="true" xlink:href=".uno:InsertNonBreakingSpace"/>
     <accel:item accel:code="KEY_SUBTRACT" accel:shift="true" accel:mod1="true" xlink:href=".uno:InsertHardHyphen"/>
     <accel:item accel:code="KEY_D" accel:mod1="true" xlink:href=".uno:UnderlineDouble"/>
     <accel:item accel:code="KEY_P" accel:shift="true" accel:mod1="true" xlink:href=".uno:SuperScript"/>
@@ -107,7 +107,7 @@
     <accel:item accel:code="KEY_3" accel:mod1="true" xlink:href=".uno:StyleApply?Style:string=Heading 3&amp;FamilyName:string=ParagraphStyles"/>
     <accel:item accel:code="KEY_4" accel:mod1="true" xlink:href=".uno:StyleApply?Style:string=Heading 4&amp;FamilyName:string=ParagraphStyles"/>
     <accel:item accel:code="KEY_5" accel:mod1="true" xlink:href=".uno:StyleApply?Style:string=Heading 5&amp;FamilyName:string=ParagraphStyles"/>
-    <accel:item accel:code="KEY_SPACE" accel:mod1="true" accel:shift="true" xlink:href=".uno:ResetAttributes"/>
+    <accel:item accel:code="KEY_M" accel:mod1="true" xlink:href=".uno:ResetAttributes"/>
     <accel:item accel:code="KEY_J" accel:shift="true" accel:mod1="true" xlink:href=".uno:FullScreen"/>
     <accel:item accel:code="KEY_X" accel:shift="true" accel:mod1="true" xlink:href=".uno:RemoveDirectCharFormats"/>
     <accel:item accel:code="KEY_DIVIDE" accel:mod1="true" xlink:href=".uno:InsertZWSP"/>
