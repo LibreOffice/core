@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframe.h,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,6 +78,7 @@ public:
     bool                    mbInitShow:1;
     bool                    mbPositioned:1;
     bool                    mbSized:1;
+    bool                    mbPresentation:1;
 
     ULONG                   mnStyle;
     unsigned int            mnStyleMask;            // our style mask from NSWindow creation
