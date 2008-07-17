@@ -105,7 +105,7 @@
         <prop oor:name="BitmapPath" oor:type="xs:string"/>
         <prop oor:name="HelpFile" oor:type="xs:string"/>
 		<group oor:name="Strings">
-			<prop oor:name="STR_SUN_OPTIMIZATION_WIZARD" oor:type="xs:string" oor:localized="false">
+			<prop oor:name="STR_SUN_OPTIMIZATION_WIZARD2" oor:type="xs:string" oor:localized="true">
 				<value>Sun Presentation Minimizer</value>
 			</prop>
 			<prop oor:name="STR_STEPS" oor:type="xs:string" oor:localized="true">
@@ -279,11 +279,11 @@ The current presentation contains no OLE objects.</value>
 			<prop oor:name="STR_YES" oor:type="xs:string" oor:localized="true">
 				<value>~Yes</value>
 			</prop>			
-			<prop oor:name="STR_ABOUT" oor:type="xs:string" oor:localized="true">
+			<prop oor:name="STR_ABOUT2" oor:type="xs:string" oor:localized="true">
 				<value>Sun Presentation Minimizer</value>
 			</prop>
-            <prop oor:name="STR_ABOUT_VERSION" oor:type="xs:string" oor:localized="true">
-                <value>About Sun Presentation Minimizer</value>
+            <prop oor:name="STR_ABOUT_VERSION2" oor:type="xs:string" oor:localized="true">
+                <value>About Sun Presentation Minimizer 1.0.0</value>
            </prop>
             <prop oor:name="STR_ABOUT_PRN" oor:type="xs:string" oor:localized="true">
                 <value>Copyright 2000-2007 Sun Microsystems, Inc.
