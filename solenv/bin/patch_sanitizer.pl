@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: patch_sanitizer.pl,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -92,6 +92,7 @@ sub parse_patch {
     open PATCHFILE, "< $patchfile" or die "Cannot open file $patchfile $!";
     my @patchfile = <PATCHFILE>;
     close PATCHFILE;
+    return %hunks if ( $#patchfile == -1 );
     if ( $patchfile[0] =~ /^---/ ) {
         $patchtype = "unified";
         $pfirst = '^--- [^\*]*$';
