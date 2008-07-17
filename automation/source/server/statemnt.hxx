@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: statemnt.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -368,8 +368,6 @@ protected:
     BOOL UnpackStorage( SotStorageRef xStorage, DirEntry &aBaseDir );
 
     void HandleSAXParser();
-
-    void HandleMacroRecorder();
 
 public:
     StatementCommand( SCmdStream *pIn );
