@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: recorder.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,11 +30,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_automation.hxx"
+#include <osl/mutex.hxx>
+
 #include <vcl/window.hxx>
 #include <vcl/vclevent.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/edit.hxx>
 #include <vcl/spinfld.hxx>
 #include <vcl/msgbox.hxx>
@@ -43,41 +43,15 @@
 #include <vcl/sound.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/floatwin.hxx>
+#include <basic/ttstrhlp.hxx>
 #include "statemnt.hxx"
 #include "retstrm.hxx"
 #include "rcontrol.hxx"
+#include "recorder.hxx"
 
-class MacroRecorder
-{
-private:
-    Window* GetParentWithID( Window* pThis );
+#include <comphelper/uieventslogger.hxx>
 
-    Link aEventListenerHdl;
-    DECL_LINK( EventListener, VclSimpleEvent* );
-
-    Window* pLastWin;
-    Window* pEditModify;
-    String aEditModifyString;
-
-    ToolBox *pActionParent;      // toolbox from which a tearoff or OpenMenu might happen
-
-    // record keys
-    String aKeyString;
-    SmartId aKeyUniqueID;     // has to be remembert seperately since Window might be gone when needed
-    Window* pKeyWin;
-    BOOL bKeyFollowFocus;
-
-    AutoTimer aHookRefresh;
-    void AddEventHooks();
-    void RemoveEventHooks();
-    DECL_LINK( HookRefreskHdl, void* );
-
-public:
-
-    MacroRecorder();
-    ~MacroRecorder();
-};
-
+MacroRecorder* MacroRecorder::pMacroRecorder = NULL;
 
 MacroRecorder::MacroRecorder()
 : pLastWin( NULL )
@@ -86,9 +60,11 @@ MacroRecorder::MacroRecorder()
 , aKeyUniqueID()
 , pKeyWin( NULL )
 , bKeyFollowFocus( FALSE )
+, m_bRecord( FALSE )
+, m_bLog( FALSE )
 {
     aHookRefresh.SetTimeout( 500 );
-    aHookRefresh.SetTimeoutHdl( LINK( this, MacroRecorder, HookRefreskHdl) );
+    aHookRefresh.SetTimeoutHdl( LINK( this, MacroRecorder, HookRefreshHdl) );
     aHookRefresh.Start();
     aEventListenerHdl = LINK( this, MacroRecorder, EventListener );
     AddEventHooks();
@@ -126,12 +102,21 @@ void MacroRecorder::RemoveEventHooks()
     }
 }
 
-IMPL_LINK( MacroRecorder, HookRefreskHdl, void*, EMPTYARG )
+IMPL_LINK( MacroRecorder, HookRefreshHdl, void*, EMPTYARG )
 {
     AddEventHooks();
     return 0;
 }
 
+void MacroRecorder::LogVCL( SmartId aParentID, USHORT nVCLWindowType, SmartId aID, String aMethod, USHORT nParam )
+{
+    ::comphelper::UiEventsLogger::logVcl( aParentID.GetText(), nVCLWindowType, aID.GetText(), aMethod, nParam );
+}
+
+void MacroRecorder::LogVCL( SmartId aParentID, USHORT nVCLWindowType, SmartId aID, String aMethod )
+{
+    ::comphelper::UiEventsLogger::logVcl( aParentID.GetText(), nVCLWindowType, aID.GetText(), aMethod );
+}
 
 Window* MacroRecorder::GetParentWithID( Window* pThis )
 {
@@ -139,6 +124,14 @@ Window* MacroRecorder::GetParentWithID( Window* pThis )
     while ( pOverlap != pThis && !pThis->GetSmartUniqueOrHelpId().HasAny() && pThis->GET_REAL_PARENT() )
         pThis = pThis->GET_REAL_PARENT();
     return pThis;
+}
+
+SmartId MacroRecorder::GetParentID( Window* pThis )
+{
+    if ( pThis->GetParent() )
+        return pThis->GetParent()->GetSmartUniqueOrHelpId();
+    else
+        return SmartId();
 }
 
 IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
@@ -162,25 +155,38 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
         // and eather event_is_not_of_interest
         //     or ( new_window and new_window_is_interesting )    ( ignore interesting events to uninteresting window )
 
-            if (  aKeyString.Len()
-                && (  ( nEventID != VCLEVENT_WINDOW_KEYINPUT && nEventID != VCLEVENT_WINDOW_MOUSEMOVE )
-                    || ( pKeyWin != pWin
-                        && ( pWin->GetType() == WINDOW_CONTROL || pWin->GetType() == WINDOW_WINDOW )
-                        )
+        if (  aKeyString.Len()
+            && (  ( nEventID != VCLEVENT_WINDOW_KEYINPUT
+                 && nEventID != VCLEVENT_WINDOW_MOUSEMOVE
+                 && nEventID != VCLEVENT_WINDOW_COMMAND
+                 && nEventID != VCLEVENT_WINDOW_KEYUP )
+                || ( pKeyWin != pWin
+                    && ( pWin->GetType() == WINDOW_CONTROL || pWin->GetType() == WINDOW_WINDOW )
                    )
                )
+           )
+        {
+            if ( m_bRecord )
             {
                 // we cannot access pKeyWin since it might have dissapeared
                 if ( bKeyFollowFocus )
                     StatementList::pRet->GenReturn( RET_MacroRecorder, aKeyUniqueID, (USHORT)M_TypeKeys, aKeyString, bKeyFollowFocus );
                 else
                     StatementList::pRet->GenReturn( RET_MacroRecorder, aKeyUniqueID, (USHORT)M_TypeKeys, aKeyString );
+#if OSL_DEBUG_LEVEL > 1
+                StatementList::pRet->GenReturn( RET_MacroRecorder, aKeyUniqueID, (USHORT)M_TypeKeys, String::CreateFromInt32( nEventID ) );
+#endif
                 bSendData = TRUE;
-                // cleanup
-                aKeyString.Erase();
-                pKeyWin = NULL;
-                bKeyFollowFocus = FALSE;
             }
+            if ( m_bLog )
+            {
+                LogVCL( SmartId(), 0, aKeyUniqueID, CUniString("TypeKeys"), aKeyString.Len() );
+            }
+            // cleanup
+            aKeyString.Erase();
+            pKeyWin = NULL;
+            bKeyFollowFocus = FALSE;
+        }
 
         switch ( pWin->GetType() )
         {
@@ -188,8 +194,15 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                 switch( nEventID )
                 {
                     case VCLEVENT_WINDOW_ACTIVATE:
-                        StatementList::pRet->GenReturn( RET_MacroRecorder, SmartId(), (comm_USHORT)(M_SetPage|M_RET_NUM_CONTROL), static_cast<comm_ULONG>(pWin->GetSmartUniqueOrHelpId().GetNum()) ); //GetNum() ULONG != comm_ULONG on 64bit
-                        bSendData = TRUE;
+                        if ( m_bRecord )
+                        {
+                            StatementList::pRet->GenReturn( RET_MacroRecorder, SmartId(), (comm_USHORT)(M_SetPage|M_RET_NUM_CONTROL), static_cast<comm_ULONG>(pWin->GetSmartUniqueOrHelpId().GetNum()) ); //GetNum() ULONG != comm_ULONG on 64bit
+                            bSendData = TRUE;
+                        }
+                        if ( m_bLog )
+                        {
+                            LogVCL( SmartId(), pWin->GetType(), pWin->GetSmartUniqueOrHelpId(), CUniString("SetPage") );
+                        }
                         break;
                 }
                 break;
@@ -201,8 +214,15 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                         {
                             if ( ((RadioButton*)pWin)->IsChecked() )
                             {
-                                StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetSmartUniqueOrHelpId(), (comm_USHORT)M_Check );
-                                bSendData = TRUE;
+                                if ( m_bRecord )
+                                {
+                                    StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetSmartUniqueOrHelpId(), (comm_USHORT)M_Check );
+                                    bSendData = TRUE;
+                                }
+                                if ( m_bLog )
+                                {
+                                    LogVCL( GetParentID( pWin ), pWin->GetType(), pWin->GetSmartUniqueOrHelpId(), CUniString("Check") );
+                                }
                             }
                         }
                         break;
@@ -215,16 +235,24 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                     case VCLEVENT_BUTTON_CLICK: //VCLEVENT_CHECKBOX_TOGGLE:
                         {
                             comm_USHORT nMethod;
+                            String aMethod;
                             switch ( ((TriStateBox*)pWin)->GetState() )
                             {
-                                case STATE_CHECK: nMethod = M_Check; break;
-                                case STATE_NOCHECK: nMethod = M_UnCheck; break;
-                                case STATE_DONTKNOW: nMethod = M_TriState; break;
+                                case STATE_CHECK: nMethod = M_Check; aMethod = CUniString("Check"); break;
+                                case STATE_NOCHECK: nMethod = M_UnCheck; aMethod = CUniString("UnCheck"); break;
+                                case STATE_DONTKNOW: nMethod = M_TriState; aMethod = CUniString("TriState"); break;
                                 default: nMethod = M_Check;
                                     DBG_ERROR( "Unknown state in TriStateBox::GetState()" );
                             }
-                            StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetSmartUniqueOrHelpId(), nMethod );
-                            bSendData = TRUE;
+                            if ( m_bRecord )
+                            {
+                                StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetSmartUniqueOrHelpId(), nMethod );
+                                bSendData = TRUE;
+                            }
+                            if ( m_bLog )
+                            {
+                                LogVCL( GetParentID( pWin ), pWin->GetType(), pWin->GetSmartUniqueOrHelpId(), aMethod );
+                            }
                         }
                         break;
                 }
@@ -250,8 +278,15 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                 {
 //                    case VCLEVENT_LISTBOX_DOUBLECLICK:
                     case VCLEVENT_LISTBOX_SELECT:
-                        StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetSmartUniqueOrHelpId(), (comm_USHORT)M_Select, comm_ULONG( ((ListBox*)pWin)->GetSelectEntryPos() +1 ) );
-                        bSendData = TRUE;
+                        if ( m_bRecord )
+                        {
+                            StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetSmartUniqueOrHelpId(), (comm_USHORT)M_Select, comm_ULONG( ((ListBox*)pWin)->GetSelectEntryPos() +1 ) );
+                            bSendData = TRUE;
+                        }
+                        if ( m_bLog )
+                        {
+                            LogVCL( GetParentID( pWin ), pWin->GetType(), pWin->GetSmartUniqueOrHelpId(), CUniString("Select"), ((ListBox*)pWin)->GetSelectEntryPos() );
+                        }
                         break;
                 }
                 break;
@@ -274,12 +309,19 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                             aEditModifyString.Erase();
 
                             USHORT nPos = ((ComboBox*)pWin)->GetEntryPos(((ComboBox*)pWin)->GetText());
-                            if ( nPos == COMBOBOX_ENTRY_NOTFOUND )
-                                Sound::Beep();
-                            else
+                            if ( m_bRecord )
                             {
-                                StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetSmartUniqueOrHelpId(), (comm_USHORT)M_Select, (comm_ULONG) nPos+1 );
-                                bSendData = TRUE;
+                                if ( nPos == COMBOBOX_ENTRY_NOTFOUND )
+                                    Sound::Beep();
+                                else
+                                {
+                                    StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetSmartUniqueOrHelpId(), (comm_USHORT)M_Select, (comm_ULONG) nPos+1 );
+                                    bSendData = TRUE;
+                                }
+                            }
+                            if ( m_bLog )
+                            {
+                                LogVCL( GetParentID( pWin ), pWin->GetType(), pWin->GetSmartUniqueOrHelpId(), CUniString("Select"), nPos );
                             }
                         }
                 }
@@ -294,6 +336,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                 {
                     case VCLEVENT_BUTTON_CLICK:
                         Window* pParent = pWin->GetParent();
+                        BOOL bDone = FALSE;
                         if ( pParent->IsDialog() && !pWin->GetSmartUniqueOrHelpId().HasAny() )
                         {
                             switch ( pParent->GetType() )
@@ -306,6 +349,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                 case WINDOW_BUTTONDIALOG:
                                     {
                                         comm_USHORT nMethod;
+                                        String aMethod;
                                         ButtonDialog* pBD = (ButtonDialog*)pParent;
 
                                         // we have to find the current Button ID ourselves since it is not generated at this point :-(
@@ -322,42 +366,70 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
 
                                         switch ( nCurrentButtonId )
                                         {
-                                            case BUTTONID_OK: nMethod = M_OK; break;
-                                            case BUTTONID_CANCEL: nMethod = M_Cancel; break;
-                                            case BUTTONID_YES: nMethod = M_Yes; break;
-                                            case BUTTONID_NO: nMethod = M_No; break;
-                                            case BUTTONID_RETRY: nMethod = M_Repeat; break;
-                                            case BUTTONID_HELP: nMethod = M_Help; break;
-                                            default: nMethod = M_Click;
+                                            case BUTTONID_OK: nMethod = M_OK; aMethod = CUniString("OK"); break;
+                                            case BUTTONID_CANCEL: nMethod = M_Cancel; aMethod = CUniString("Cancel"); break;
+                                            case BUTTONID_YES: nMethod = M_Yes; aMethod = CUniString("Yes"); break;
+                                            case BUTTONID_NO: nMethod = M_No; aMethod = CUniString("No"); break;
+                                            case BUTTONID_RETRY: nMethod = M_Repeat; aMethod = CUniString("Repeat"); break;
+                                            case BUTTONID_HELP: nMethod = M_Help; aMethod = CUniString("Help"); break;
+                                            default: nMethod = M_Click; aMethod = CUniString("Click");
                                         }
-                                        if ( nMethod != M_Click )
-                                            StatementList::pRet->GenReturn( RET_MacroRecorder, SmartId( 0 ), nMethod );
-                                        else
-                                            StatementList::pRet->GenReturn( RET_MacroRecorder, SmartId( 0 ), nMethod, (comm_ULONG)nCurrentButtonId );
-                                        bSendData = TRUE;
+                                        if ( m_bRecord )
+                                        {
+                                            if ( nMethod != M_Click )
+                                                StatementList::pRet->GenReturn( RET_MacroRecorder, SmartId( 0 ), nMethod );
+                                            else
+                                                StatementList::pRet->GenReturn( RET_MacroRecorder, SmartId( 0 ), nMethod, (comm_ULONG)nCurrentButtonId );
+                                            bSendData = TRUE;
+                                        }
+                                        if ( m_bLog )
+                                        {
+                                            if ( nMethod != M_Click )
+                                                LogVCL( SmartId(), pWin->GetType(), pWin->GetSmartUniqueOrHelpId(), aMethod );
+                                            else
+                                                LogVCL( SmartId(), pWin->GetType(), pWin->GetSmartUniqueOrHelpId(), aMethod, nCurrentButtonId );
+                                            bDone = TRUE;
+                                        }
                                     }
                                     break;
                                 default:
                                     {
                                         comm_USHORT nMethod;
+                                        String aMethod;
                                         switch ( pWin->GetType() )
                                         {
-                                            case WINDOW_OKBUTTON: nMethod = M_OK; break;
-                                            case WINDOW_CANCELBUTTON: nMethod = M_Cancel; break;
-                                            case WINDOW_HELPBUTTON: nMethod = M_Help; break;
-                                            default: nMethod = M_OK;
+                                            case WINDOW_OKBUTTON: nMethod = M_OK; aMethod = CUniString("OK"); break;
+                                            case WINDOW_CANCELBUTTON: nMethod = M_Cancel; aMethod = CUniString("Cancel"); break;
+                                            case WINDOW_HELPBUTTON: nMethod = M_Help; aMethod = CUniString("Help"); break;
+                                            default: nMethod = M_Default;aMethod = CUniString("Unknown Button");
                                                 DBG_ERROR( "Unknown Button" );
                                         }
-                                        StatementList::pRet->GenReturn( RET_MacroRecorder, pParent->GetSmartUniqueOrHelpId(), nMethod );
-                                        bSendData = TRUE;
+                                        if ( m_bRecord )
+                                        {
+                                            StatementList::pRet->GenReturn( RET_MacroRecorder, pParent->GetSmartUniqueOrHelpId(), nMethod );
+                                            bSendData = TRUE;
+                                        }
+                                        if ( m_bLog )
+                                        {
+                                            LogVCL( GetParentID( pWin ), pWin->GetType(), pWin->GetSmartUniqueOrHelpId(), aMethod );
+                                            bDone = TRUE;
+                                        }
                                     }
                                     break;
                             }
                         }
-                        if ( !bSendData && pWin->GetSmartUniqueOrHelpId().HasAny() )
+                        if ( m_bRecord )
                         {
-                            StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetSmartUniqueOrHelpId(), (comm_USHORT)M_Click );
-                            bSendData = TRUE;
+                            if ( !bSendData && pWin->GetSmartUniqueOrHelpId().HasAny() )
+                            {
+                                StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetSmartUniqueOrHelpId(), (comm_USHORT)M_Click );
+                                bSendData = TRUE;
+                            }
+                        }
+                        if ( m_bLog )
+                        {
+                            if ( !bDone )
+                                LogVCL( GetParentID( pWin ), pWin->GetType(), pWin->GetSmartUniqueOrHelpId(), CUniString("Click") );
                         }
                 }
                 break;
@@ -399,17 +471,25 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                             aEditModifyString.Erase();
 
                             comm_USHORT nMethod;
+                            String aMethod;
                             switch ( nEventID )
                             {
-                                case VCLEVENT_SPINFIELD_UP: nMethod = M_More; break;
-                                case VCLEVENT_SPINFIELD_DOWN: nMethod = M_Less; break;
-                                case VCLEVENT_SPINFIELD_FIRST: nMethod = M_ToMin; break;
-                                case VCLEVENT_SPINFIELD_LAST: nMethod = M_ToMax; break;
-                                default: nMethod = M_ToMin;
+                                case VCLEVENT_SPINFIELD_UP: nMethod = M_More; aMethod = CUniString("More"); break;
+                                case VCLEVENT_SPINFIELD_DOWN: nMethod = M_Less; aMethod = CUniString("Less"); break;
+                                case VCLEVENT_SPINFIELD_FIRST: nMethod = M_ToMin; aMethod = CUniString("ToMin"); break;
+                                case VCLEVENT_SPINFIELD_LAST: nMethod = M_ToMax; aMethod = CUniString("ToMax"); break;
+                                default: nMethod = M_ToMin; aMethod = CUniString("Unknown");
                                     DBG_ERROR( "Unknown EventID in Spinfield" );
                             }
-                            StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetSmartUniqueOrHelpId(), nMethod );
-                            bSendData = TRUE;
+                            if ( m_bRecord )
+                            {
+                                StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetSmartUniqueOrHelpId(), nMethod );
+                                bSendData = TRUE;
+                            }
+                            if ( m_bLog )
+                            {
+                                LogVCL( GetParentID( pWin ), pWin->GetType(), pWin->GetSmartUniqueOrHelpId(), aMethod );
+                            }
                         }
                         break;
                     case VCLEVENT_EDIT_MODIFY:
@@ -423,8 +503,15 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                     switch( nEventID )
                     {
                     case VCLEVENT_BUTTON_CLICK:
-                        StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetSmartUniqueOrHelpId(), (comm_USHORT)M_Click );
-                        bSendData = TRUE;
+                        if ( m_bRecord )
+                        {
+                            StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetSmartUniqueOrHelpId(), (comm_USHORT)M_Click );
+                            bSendData = TRUE;
+                        }
+                        if ( m_bLog )
+                        {
+                            LogVCL( GetParentID( pWin ), pWin->GetType(), pWin->GetSmartUniqueOrHelpId(), CUniString("Click") );
+                        }
                         break;
 /*      Keyevent or Timeout
                     case M_Open :
@@ -454,35 +541,48 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                 // so this cannot be a tearoff or OpenMenu anymore
                                 pActionParent = NULL;
                                 // compare to 1 for floating ToolBoxes
-                                if ( !pWin->GetSmartUniqueOrHelpId().HasAny() || pWin->GetSmartUniqueOrHelpId().Matches( 1 ) )
-                                    // generate direct Button access
-                                    StatementList::pRet->GenReturn( RET_MacroRecorder, SmartId( pTB->GetItemCommand( pTB->GetCurItemId() ) ), (comm_USHORT)(M_Click) );
-                                else
-                                    // access via Toolbox
-                                    StatementList::pRet->GenReturn( RET_MacroRecorder, pTB->GetSmartUniqueOrHelpId(), (comm_USHORT)(M_Click|M_RET_NUM_CONTROL), static_cast<comm_ULONG>(pTB->GetHelpId( pTB->GetCurItemId() )) ); // GetHelpId() ULONG != comm_ULONG on 64bit
-                                bSendData = TRUE;
-                            }
-                            break;
-                        case VCLEVENT_TOOLBOX_CLICK:
-                            pActionParent = pTB;
-                            break;
-                        case VCLEVENT_WINDOW_SHOW:
-                            if ( pActionParent )
-                            {   // a new toolbox opens up, might be a tearoff
-                                if ( pActionParent != pWin )
-                                {   // it IS a tearoff not an undock
-                                    // compare to 1 for floating ToolBoxes
+                                if ( m_bRecord )
+                                {
                                     if ( !pWin->GetSmartUniqueOrHelpId().HasAny() || pWin->GetSmartUniqueOrHelpId().Matches( 1 ) )
                                         // generate direct Button access
-                                        StatementList::pRet->GenReturn( RET_MacroRecorder, SmartId( pActionParent->GetHelpId( pActionParent->GetCurItemId() ) ), (comm_USHORT)(M_TearOff) );
+                                        StatementList::pRet->GenReturn( RET_MacroRecorder, SmartId( pTB->GetItemCommand( pTB->GetCurItemId() ) ), (comm_USHORT)(M_Click) );
                                     else
                                         // access via Toolbox
-                                        StatementList::pRet->GenReturn( RET_MacroRecorder, pActionParent->GetSmartUniqueOrHelpId(), (comm_USHORT)(M_TearOff|M_RET_NUM_CONTROL), static_cast<comm_ULONG>(pActionParent->GetHelpId( pActionParent->GetCurItemId() )) ); // GetHelpId() ULONG != comm_ULONG on 64bit
+                                        StatementList::pRet->GenReturn( RET_MacroRecorder, pTB->GetSmartUniqueOrHelpId(), (comm_USHORT)(M_Click|M_RET_NUM_CONTROL), static_cast<comm_ULONG>(pTB->GetHelpId( pTB->GetCurItemId() )) ); // GetHelpId() ULONG != comm_ULONG on 64bit
                                     bSendData = TRUE;
                                 }
-                                pActionParent = NULL;
+/* not needed                               if ( m_bLog )
+                                {
+                                }*/
                             }
                             break;
+                        case VCLEVENT_TOOLBOX_CLICK:  /// ATTENTION this is called during initialisation of toolbox. whoever 'invented' this
+                            pActionParent = pTB;
+                            break;
+//                        case VCLEVENT_WINDOW_SHOW:        // not usable ATM. see above
+//                            if ( pActionParent )
+//                            {   // a new toolbox opens up, might be a tearoff
+//                                if ( pActionParent != pWin )
+//                                {   // it IS a tearoff not an undock
+//                                    // compare to 1 for floating ToolBoxes
+//                                  if ( m_bRecord )
+//                                  {
+//                                      if ( !pWin->GetSmartUniqueOrHelpId().HasAny() || pWin->GetSmartUniqueOrHelpId().Matches( 1 ) )
+//                                          // generate direct Button access
+//                                          StatementList::pRet->GenReturn( RET_MacroRecorder, SmartId( pActionParent->GetHelpId( pActionParent->GetCurItemId() ) ), (comm_USHORT)(M_TearOff) );
+//                                      else
+//                                          // access via Toolbox
+//                                          StatementList::pRet->GenReturn( RET_MacroRecorder, pActionParent->GetSmartUniqueOrHelpId(), (comm_USHORT)(M_TearOff|M_RET_NUM_CONTROL), static_cast<comm_ULONG>(pActionParent->GetHelpId( pActionParent->GetCurItemId() )) ); // GetHelpId() ULONG != comm_ULONG on 64bit
+//                                      bSendData = TRUE;
+//                                  }
+//                                    if ( m_bLog )
+//                                    {
+//                                        LogVCL( pActionParent->GetSmartUniqueOrHelpId(), pWin->GetType(), SmartId( pActionParent->GetHelpId( pActionParent->GetCurItemId() ) ), CUniString("TearOff") );
+//                                    }
+//                                }
+//                                pActionParent = NULL;
+//                            }
+//                            break;
                         case VCLEVENT_TOOLBOX_DEACTIVATE:
                             pActionParent = NULL;
                             break;
@@ -575,6 +675,16 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                             const KeyCode aKeyCode = pKeyEvent->GetKeyCode();
                             if ( pKeyEvent )
                             {
+                                pKeyWin = pWin;
+                                Window *pIdWin = GetParentWithID( pWin );
+                                if ( pIdWin != pWin )
+                                   bKeyFollowFocus = TRUE;
+                                aKeyUniqueID = pIdWin->GetSmartUniqueOrHelpId();
+                                if ( m_bLog )
+                                {
+                                    if ( aKeyString.Len() == 0 )
+                                        LogVCL( SmartId(), 0, aKeyUniqueID, CUniString("TypeKeysStart") );
+                                }
                                 if ( ( !aKeyCode.IsMod1() && !aKeyCode.IsMod2() ) &&
                                       (( aKeyCode.GetGroup() == KEYGROUP_NUM)   ||
                                        ( aKeyCode.GetGroup() == KEYGROUP_ALPHA) ||
@@ -594,20 +704,12 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                 else
                                 {   // not a regular key, transfer KeyCode
                                     aKeyString += sal_Unicode(1);   // mask it
-                                    // extra for '>' which is coded as <SHIFT LESS>
+                                    // extra for '>' which is coded as <SHIFT GREATER>
                                     if ( pKeyEvent->GetCharCode() == '>' )
                                         aKeyString += sal_Unicode( KEY_GREATER | aKeyCode.GetAllModifier() & ~KEY_SHIFT );
                                     else
                                         aKeyString += sal_Unicode( aKeyCode.GetCode() | aKeyCode.GetAllModifier() );
                                 }
-                                pKeyWin = pWin;
-                                Window *pIdWin = pWin;
-                                while ( pIdWin->GetParent() && !pIdWin->GetSmartUniqueOrHelpId().HasAny() )
-                                {
-                                    pIdWin = pIdWin->GetParent();
-                                    bKeyFollowFocus = TRUE;
-                                }
-                                aKeyUniqueID = pIdWin->GetSmartUniqueOrHelpId();
                             }
                         }
                         break;
@@ -915,30 +1017,6 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                  */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         }
 
 
@@ -947,8 +1025,15 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
             case VCLEVENT_CONTROL_LOSEFOCUS:
                 if ( pEditModify == pWin )
                 {
-                    StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetSmartUniqueOrHelpId(), M_SetText, aEditModifyString );
-                    bSendData = TRUE;
+                    if ( m_bRecord )
+                    {
+                        StatementList::pRet->GenReturn( RET_MacroRecorder, pWin->GetSmartUniqueOrHelpId(), M_SetText, aEditModifyString );
+                        bSendData = TRUE;
+                    }
+                    if ( m_bLog )
+                    {
+                        LogVCL( GetParentID( pWin ), pWin->GetType(), pWin->GetSmartUniqueOrHelpId(), CUniString("Modify") );
+                    }
                     pEditModify = NULL;
                     aEditModifyString.Erase();  //could be somewhat lengthy
                 }
@@ -971,22 +1056,43 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
 }
 
 
-void StatementCommand::HandleMacroRecorder()
+
+static ::osl::Mutex * getRecorderMutex()
 {
-    static MacroRecorder *pMacroRecorder = NULL;
-
-    if ( ! (nParams & PARAM_BOOL_1) )
-        bBool1 = TRUE;
-
-    if ( bBool1 )
+    static ::osl::Mutex * pMutex  = NULL;
+    if(pMutex==NULL)
     {
-        if ( !pMacroRecorder )
-            pMacroRecorder = new MacroRecorder;
+        ::osl::MutexGuard aGuard(::osl::Mutex::getGlobalMutex());
+        if(pMutex==NULL)
+            pMutex = new ::osl::Mutex();
     }
-    else
+    return pMutex;
+}
+
+
+void MacroRecorder::CheckDelete()
+{
+    ::osl::MutexGuard aGuard( getRecorderMutex() );
+    if ( !m_bRecord && !m_bLog )
     {
-        delete pMacroRecorder;
         pMacroRecorder = NULL;
+        delete this;
     }
+}
+
+
+MacroRecorder* MacroRecorder::GetMacroRecorder()
+{
+    ::osl::MutexGuard aGuard( getRecorderMutex() );
+    if ( !pMacroRecorder )
+        pMacroRecorder = new MacroRecorder;
+
+    return pMacroRecorder;
+}
+
+BOOL MacroRecorder::HasMacroRecorder()
+{
+    ::osl::MutexGuard aGuard( getRecorderMutex() );
+    return pMacroRecorder != NULL;
 }
 
