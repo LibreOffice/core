@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: menubarmanager.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,6 +99,7 @@
 #include "svtools/miscopt.hxx"
 #include <classes/addonmenu.hxx>
 #include <uielement/menubarmerger.hxx>
+#include <comphelper/uieventslogger.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -1397,6 +1398,12 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
     if ( xDispatch.is() )
     {
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+        {
+            Sequence<PropertyValue> source;
+            ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("MenuBarManager"));
+            ::comphelper::UiEventsLogger::logDispatch(aTargetURL, source);
+        }
         xDispatch->dispatch( aTargetURL, aArgs );
         Application::AcquireSolarMutex( nRef );
     }
