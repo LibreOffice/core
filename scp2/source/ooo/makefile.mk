@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.74 $
+# $Revision: 1.75 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -302,11 +302,6 @@ ULFFILES=                          \
         module_java.ulf            \
         registryitem_ooo.ulf       \
         module_systemint.ulf
-
-.IF "$(GUIBASE)"=="unx"
-    PARFILES+=module_headless.par
-    ULFFILES+=module_headless.ulf
-.ENDIF
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk
