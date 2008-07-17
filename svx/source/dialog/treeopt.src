@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: treeopt.src,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -163,6 +163,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Network Identity" ; RID_SVXPAGE_SSO ; > ;
             < "Online Update" ; RID_SVXPAGE_ONLINEUPDATE ; > ;
+            < "" ; RID_SVXPAGE_IMPROVEMENT ; > ;
         };
     };
     StringArray SID_LANGUAGE_OPTIONS
