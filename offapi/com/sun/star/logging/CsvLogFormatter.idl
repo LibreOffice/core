@@ -1,0 +1,66 @@
+/*************************************************************************
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2008 by Sun Microsystems, Inc.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* $RCSfile: CsvLogFormatter.idl,v $
+*
+* $Revision: 1.2 $
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+************************************************************************/
+
+#ifndef __com_sun_star_logging_CsvLogFormatter_idl__
+#define __com_sun_star_logging_CsvLogFormatter_idl__
+
+//=============================================================================
+
+module com { module sun { module star { module logging {
+
+interface XCsvLogFormatter;
+
+//=============================================================================
+
+/** specifies a service which formats log records for RFC4180-style CSV-Files
+
+    <p>Every log record, as passed to <member>XCsvLogFormatter::format</member>,
+    will be formatted into a single row for a CSV file.
+    The sequence number, the thread ID, the time of the logged event,
+    the source class/method name will get logged alongside the message, if this
+    is not disabled. The Formatter also supports logging an arbitrary number of
+    userdefined columns. If the Formatter is configured to have more than one
+    (userdefined) column the data to log has to be preformatted with the
+    formatMultiColumn method.</p>
+
+    @since OOo 3.0
+ */
+service CsvLogFormatter : XCsvLogFormatter
+{
+    /// creates a CsvLogFormatter instance
+    create();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif
