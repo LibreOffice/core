@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.109 $
+# $Revision: 1.110 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -83,6 +83,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssmail.db \
     $(UCR)$/cssmedia.db \
     $(UCR)$/cssmozilla.db \
+    $(UCR)$/cssoooimprovement.db \
     $(UCR)$/csspackages.db \
     $(UCR)$/cssmanifest.db \
     $(UCR)$/csszippackage.db \
@@ -103,8 +104,8 @@ UNOIDLDBFILES= \
     $(UCR)$/csssdbtools.db \
     $(UCR)$/csssdbapp.db \
     $(UCR)$/csssheet.db \
-        $(UCR)$/csssmarttags.db \
-        $(UCR)$/cssstyle.db \
+    $(UCR)$/csssmarttags.db \
+    $(UCR)$/cssstyle.db \
     $(UCR)$/csssystem.db\
     $(UCR)$/csstable.db \
     $(UCR)$/csstask.db \
