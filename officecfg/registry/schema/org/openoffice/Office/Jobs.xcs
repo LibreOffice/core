@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Jobs.xcs,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,15 +90,3 @@
 		</set>
 	</component>
 </oor:component-schema>
-
-
-
-
-
-
-
-
-
-
-
-
