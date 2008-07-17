@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_package.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -904,10 +904,7 @@ void BackendImpl::PackageImpl::processPackage_(
 //______________________________________________________________________________
 OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException)
 {
-    if (m_description.getLength() == 0)
-        return Package::getDescription();
-    else
-        return m_description;
+     return m_description;
 }
 
 //______________________________________________________________________________
