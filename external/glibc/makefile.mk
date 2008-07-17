@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,7 +44,7 @@ TARFILE_NAME=glibc-2.1.3-stub
 TARFILE_ROOTDIR=glibc-2.1.3
 ADDITIONAL_FILES=posix$/makefile.mk posix$/config.h posix$/readdir_r.c
 
-PATCH_FILE_NAME=glibc-2.1.3.patch
+PATCH_FILE_NAME=$(PRJ)$/glibc-2.1.3.patch
 
 #CONFIGURE_DIR=glibc-2.1.3/posix
 CONFIGURE_ACTION=
