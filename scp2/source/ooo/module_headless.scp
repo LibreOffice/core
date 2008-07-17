@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_headless.scp,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,11 +28,3 @@
  *
 ************************************************************************/
 #include "macros.inc"
-
-Module gid_Module_Optional_Headless
-    PackageInfo = "packinfo_office.txt";
-    ParentID = gid_Module_Optional;
-	Sortkey = "1050";
-    MOD_NAME_DESC(MODULE_OPTIONAL_HEADLESS);
-    Files = (gid_File_Lib_Vclplug_Svp, gid_File_Lib_BaseBmp);
-End
