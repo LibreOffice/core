@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_dialog2.cxx,v $
  *
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1021,7 +1021,7 @@ MENU_COMMAND ExtensionBox_Impl::ShowPopupMenu( const Point & rPos, const long nP
 }
 
 // -----------------------------------------------------------------------
-void ExtensionBox_Impl::Paint( const Rectangle &rPaintRect )
+void ExtensionBox_Impl::Paint( const Rectangle &/*rPaintRect*/ )
 {
     if ( m_bNeedsRecalc )
         RecalcAll();
@@ -1037,7 +1037,7 @@ void ExtensionBox_Impl::Paint( const Rectangle &rPaintRect )
     {
         aSize.Height() = (*iIndex)->m_bActive ? m_nActiveHeight : m_nStdHeight;
         Rectangle aEntryRect( aStart, aSize );
-        if ( aEntryRect.IsOver( rPaintRect ) )
+//        if ( aEntryRect.IsOver( rPaintRect ) )
             DrawRow( aEntryRect, *iIndex );
         aStart.Y() += aSize.Height();
     }
