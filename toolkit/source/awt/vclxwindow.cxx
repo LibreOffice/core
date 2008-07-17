@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxwindow.cxx,v $
- * $Revision: 1.88 $
+ * $Revision: 1.89 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2492,6 +2492,10 @@ void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& 
     using namespace ::com::sun::star;
 
     ::vos::OGuard aGuard( GetMutex() );
+
+    // already disposed
+    if( ! mpImpl )
+        return uno::Reference< accessibility::XAccessibleContext >();
 
     if ( !mxAccessibleContext.is() && GetWindow() )
     {
