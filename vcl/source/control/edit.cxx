@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edit.cxx,v $
- * $Revision: 1.96 $
+ * $Revision: 1.97 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -527,30 +527,22 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
     else
         SetTextColor( rStyleSettings.GetDisableColor() );
 
-    if( IsPaintTransparent() )
+    // Set background color of the normal text
+    if( (GetStyle() & WB_FORCECTRLBACKGROUND) != 0 && IsControlBackground() )
+    {
+        // check if we need to set ControlBackground even in NWF case
+        Push( PUSH_FILLCOLOR | PUSH_LINECOLOR );
+        SetLineColor();
+        SetFillColor( GetControlBackground() );
+        DrawRect( Rectangle( aPos, Size( GetOutputSizePixel().Width() - 2*mnXOffset, nTH ) ) );
+        Pop();
+
+        SetTextFillColor( GetControlBackground() );
+    }
+    else if( IsPaintTransparent() || ImplUseNativeBorder( GetStyle() ) )
         SetTextFillColor();
     else
-    {
-        // Set background color of the normal text
-        if ( ImplUseNativeBorder( GetStyle() ) )
-        {
-            if( (GetStyle() & WB_FORCECTRLBACKGROUND) != 0 && IsControlBackground() )
-            {
-                // check if we need to set ControlBackground even in NWF case
-                Push( PUSH_FILLCOLOR | PUSH_LINECOLOR );
-                SetLineColor();
-                SetFillColor( GetControlBackground() );
-                DrawRect( Rectangle( aPos, Size( GetOutputSizePixel().Width() - 2*mnXOffset, nTH ) ) );
-                Pop();
-
-                SetTextFillColor( GetControlBackground() );
-            }
-            else
-                SetTextFillColor();
-        }
-        else
-            SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
-    }
+        SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
 
     BOOL bDrawSelection = maSelection.Len() && ( HasFocus() || ( GetStyle() & WB_NOHIDESELECTION ) || mbActivePopup );
 
