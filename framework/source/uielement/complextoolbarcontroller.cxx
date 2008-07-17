@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: complextoolbarcontroller.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +65,7 @@
 #include <vcl/mnemonic.hxx>
 #endif
 #include <tools/urlobj.hxx>
+#include <comphelper/uieventslogger.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -239,6 +240,12 @@ IMPL_STATIC_LINK_NOINSTANCE( ComplexToolbarController, ExecuteHdl_Impl, ExecuteI
    const sal_uInt32 nRef = Application::ReleaseSolarMutex();
    try
    {
+        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+        {
+            Sequence<PropertyValue> source;
+            ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("ComplexToolbarController"));
+            ::comphelper::UiEventsLogger::logDispatch(pExecuteInfo->aTargetURL, source);
+        }
        // Asynchronous execution as this can lead to our own destruction!
        // Framework can recycle our current frame and the layout manager disposes all user interface
        // elements if a component gets detached from its frame!
