@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_hidden_ooo.scp,v $
- * $Revision: 1.110 $
+ * $Revision: 1.111 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -225,6 +225,7 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_TextConversionDlgs,
 	gid_File_Lib_Tk,
     gid_File_Lib_Acc,
+    gid_File_Lib_BaseBmp,
 	gid_File_Lib_Tools,
 	gid_File_Lib_Utl,
 	gid_File_Lib_Uui,
@@ -241,6 +242,7 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Vclplug_Gen,
 	gid_File_Lib_Vclplug_Gtk,
 	gid_File_Lib_Vclplug_Kde,
+	gid_File_Lib_Vclplug_Svp,
 	gid_File_Lib_Basctl,
 	gid_File_Lib_CanvasTools,
 	gid_File_Lib_CppCanvas,
@@ -763,6 +765,8 @@ Module gid_Module_Root_Files_6
 	gid_File_Registry_Spool_Oo_TypeDetection_Impress_UISort_Xcu,
 	gid_File_Registry_Spool_Oo_TypeDetection_Math_UISort_Xcu,
 	gid_File_Registry_Spool_Oo_Office_Linguistic_Forcedefaultlanguage_Xcu,
+	gid_File_Registry_Spool_Oo_Office_Writer_PyMailMerge_Xcu,
+	gid_File_Pymailmerge,
     gid_File_Xsl_Common_Measure_Conversion,
 	gid_File_Xsl_Common_Math_Functions,
 	gid_File_Xsl_Export_Common_Body,
