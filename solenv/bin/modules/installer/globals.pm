@@ -8,7 +8,7 @@
 #
 # $RCSfile: globals.pm,v $
 #
-# $Revision: 1.101 $
+# $Revision: 1.102 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -241,6 +241,8 @@ BEGIN
     $shellnewfilesadded = 0;
     %multilingual_only_modules = ();
     %application_modules = ();
+    $defaultinstallorder = 1000;
+    $defaultsystemintinstallorder = 1200;
 
     $is_copy_only_project = 0;
     $is_simple_packager_project = 0;
