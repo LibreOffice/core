@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: about.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,8 +68,8 @@ private:
 
     AutoTimer       aTimer;
     long            nOff;
-    long            nEnd;
     long            m_nDeltaWidth;
+    int             m_nPendingScrolls;
 
     BOOL            bNormal;
 
