@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_library_ooo.scp,v $
- * $Revision: 1.300 $
+ * $Revision: 1.301 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,7 +137,7 @@ STD_UNO_LIB_FILE(gid_File_Lib_Charttools, charttools)
 STD_UNO_LIB_FILE(gid_File_Lib_Chartview, chartview)
 
 
-#if defined WNT
+#if defined WNT && defined MSC
 
 File gid_File_Lib_Cli_Oootypes_Assembly
     TXT_FILE_BODY;
@@ -155,7 +155,8 @@ File gid_File_Lib_Cli_Oootypes_Assembly
 End
 
 #endif
-#if defined WNT 
+
+#if defined WNT && defined MSC
 File gid_File_Lib_Policy_Cli_Oootypes_Assembly
     TXT_FILE_BODY;
     Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
@@ -173,7 +174,7 @@ End
 
 #endif
 
-#if defined WNT
+#if defined WNT && defined MSC
 
 File gid_File_Lib_Policy_Cli_Oootypes_Config
     TXT_FILE_BODY;
