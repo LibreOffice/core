@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: treeopt.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2172,6 +2172,11 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
 #if defined WNT
             // Disable E-mail tab-page on Windows
             if ( nPageId == RID_SVXPAGE_INET_MAIL )
+                continue;
+#endif
+#if defined MACOSX
+            // Disable Mozilla Plug-in tab-page on Mac
+            if ( nPageId == RID_SVXPAGE_INET_MOZPLUGIN )
                 continue;
 #endif
             AddTabPage( nPageId, rInetArray.GetString(i), nGroup );
