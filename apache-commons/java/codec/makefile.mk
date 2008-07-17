@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -50,7 +50,7 @@ TARFILE_NAME=commons-codec-1.3-src
 
 TARFILE_ROOTDIR=commons-codec-1.3
 
-PATCH_FILE_NAME=patches$/codec.patch
+PATCH_FILE_NAME=$(PRJ)$/patches$/codec.patch
 
 #CONVERTFILES=build.xml
                 

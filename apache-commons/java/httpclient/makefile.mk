@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -50,7 +50,7 @@ TARFILE_NAME=commons-httpclient-3.1-src
 
 TARFILE_ROOTDIR=commons-httpclient-3.1
 
-#PATCH_FILE_NAME=patches$/httpclient.patch
+#PATCH_FILE_NAME=$(PRJ)$/patches$/httpclient.patch
 
 #CONVERTFILES=build.xml
                 
