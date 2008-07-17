@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mnumgr.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -234,6 +234,16 @@ IMPL_LINK( SfxMenuManager, Select, Menu *, pSelMenu )
 
     USHORT nId = (USHORT) pSelMenu->GetCurItemId();
     String aCommand = pSelMenu->GetItemCommand( nId );
+    if ( !aCommand.Len() && pBindings )
+    {
+        const SfxSlot* pSlot = SfxSlotPool::GetSlotPool( pBindings->GetDispatcher()->GetFrame() ).GetSlot( nId );
+        if ( pSlot && pSlot->pUnoName )
+        {
+            aCommand = DEFINE_CONST_UNICODE(".uno:");
+            aCommand += String::CreateFromAscii( pSlot->GetUnoName() );
+        }
+    }
+
     if ( aCommand.Len() )
     {
         pBindings->ExecuteCommand_Impl( aCommand );
