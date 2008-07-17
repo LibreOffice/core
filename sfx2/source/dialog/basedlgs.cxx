@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basedlgs.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,14 +34,12 @@
 // include ---------------------------------------------------------------
 
 #include <stdlib.h>
+#include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/viewoptions.hxx>
-#ifndef GCC
-#endif
-
-#include <vcl/fixed.hxx>
+#include <svtools/fixedhyper.hxx>
 #include <svtools/controldims.hrc>
 
 #include <sfx2/basedlgs.hxx>
@@ -54,6 +52,8 @@
 #include <sfx2/viewsh.hxx>
 #include "sfxhelp.hxx"
 #include "workwin.hxx"
+#include "sfxresid.hxx"
+#include "dialog.hrc"
 
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
@@ -820,6 +820,34 @@ SfxSingleTabDialog::SfxSingleTabDialog
 
 // -----------------------------------------------------------------------
 
+SfxSingleTabDialog::SfxSingleTabDialog
+(
+    Window* pParent,
+    sal_uInt16 nUniqueId,
+    const String& rInfoURL
+)
+
+/*      [Beschreibung]
+
+    Konstruktor der allgemeinen Basisklasse f"ur SingleTab-Dialoge;
+    ID f"ur das ini-file wird "ubergeben.
+ */
+
+:   SfxModalDialog( pParent, nUniqueId, WinBits( WB_STDMODAL | WB_3DLOOK ) ),
+
+    pOKBtn          ( NULL ),
+    pCancelBtn      ( NULL ),
+    pHelpBtn        ( NULL ),
+    pImpl           ( new SingleTabDlgImpl ),
+    pOptions        ( NULL ),
+    pOutSet         ( NULL )
+
+{
+    pImpl->m_sInfoURL = rInfoURL;
+}
+
+// -----------------------------------------------------------------------
+
 SfxSingleTabDialog::~SfxSingleTabDialog()
 {
     delete pOKBtn;
@@ -828,6 +856,7 @@ SfxSingleTabDialog::~SfxSingleTabDialog()
     delete pImpl->m_pTabPage;
     delete pImpl->m_pSfxPage;
     delete pImpl->m_pLine;
+    delete pImpl->m_pInfoImage;
     delete pImpl;
     delete pOutSet;
 }
@@ -845,6 +874,19 @@ void SfxSingleTabDialog::SetPage( TabPage* pNewPage )
         pOKBtn->SetClickHdl( LINK( this, SfxSingleTabDialog, OKHdl_Impl ) );
     }
 
+    if ( pImpl->m_sInfoURL.Len() > 0 && !pImpl->m_pInfoImage )
+    {
+        pImpl->m_pInfoImage = new ::svt::FixedHyperlinkImage( this );
+        Image aInfoImage = Image( SfxResId( IMG_INFO ) );
+        Size aImageSize = aInfoImage.GetSizePixel();
+        aImageSize.Width() += 4;
+        aImageSize.Height() += 4;
+        pImpl->m_pInfoImage->SetSizePixel( aImageSize );
+        pImpl->m_pInfoImage->SetImage( aInfoImage );
+        pImpl->m_pInfoImage->SetURL( pImpl->m_sInfoURL );
+        pImpl->m_pInfoImage->SetClickHdl( pImpl->m_aInfoLink );
+    }
+
     if ( pImpl->m_pTabPage )
         delete pImpl->m_pTabPage;
     if ( pImpl->m_pSfxPage )
@@ -856,7 +898,7 @@ void SfxSingleTabDialog::SetPage( TabPage* pNewPage )
         // Gr"ossen und Positionen anpassen
         pImpl->m_pTabPage->SetPosPixel( Point() );
         Size aOutSz( pImpl->m_pTabPage->GetSizePixel() );
-        Size aOffSz = LogicToPixel( Size( RSC_SP_CTRL_X, RSC_SP_CTRL_Y ) );
+        Size aOffSz = LogicToPixel( Size( RSC_SP_CTRL_X, RSC_SP_CTRL_Y ), MAP_APPFONT );
         Size aFLSz = LogicToPixel( Size( aOutSz.Width(), RSC_CD_FIXEDLINE_HEIGHT ) );
         Size aBtnSz = LogicToPixel( Size( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT ), MAP_APPFONT );
 
@@ -865,6 +907,15 @@ void SfxSingleTabDialog::SetPage( TabPage* pNewPage )
         aPnt.X() = aOutSz.Width() - aOffSz.Width() - aBtnSz.Width();
         aPnt.Y() +=  aFLSz.Height() + ( aOffSz.Height() / 2 );
         pOKBtn->SetPosSizePixel( aPnt, aBtnSz );
+
+        if ( pImpl->m_pInfoImage )
+        {
+            aPnt.X() = aOffSz.Width();
+            long nDelta = ( pImpl->m_pInfoImage->GetSizePixel().Height() - aBtnSz.Height() ) / 2;
+            aPnt.Y() -= nDelta;
+            pImpl->m_pInfoImage->SetPosPixel( aPnt );
+            pImpl->m_pInfoImage->Show();
+        }
 
         aOutSz.Height() += aFLSz.Height() + ( aOffSz.Height() / 2 ) + aBtnSz.Height() + aOffSz.Height();
         SetOutputSizePixel( aOutSz );
@@ -950,6 +1001,13 @@ void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
         SetHelpId( pImpl->m_pSfxPage->GetHelpId() );
         SetUniqueId( pImpl->m_pSfxPage->GetUniqueId() );
     }
+}
+
+// -----------------------------------------------------------------------
+
+void SfxSingleTabDialog::SetInfoLink( const Link& rLink )
+{
+    pImpl->m_aInfoLink = rLink;
 }
 
 //--------------------------------------------------------------------
