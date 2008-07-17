@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: informationdialog.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -265,7 +265,7 @@ void InformationDialog::InitDialog()
         Any( sal_True ),
         Any( sal_Int32( 245 ) ),
         Any( sal_Int32( 115 ) ),
-        Any( getString( STR_ABOUT ) ),
+        Any( getString( STR_ABOUT2 ) ),
         Any( sal_Int32( DIALOG_WIDTH ) ) };
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
@@ -337,7 +337,7 @@ void InformationDialog::InitDialog()
 
     sal_Int32 l = aInfoString.indexOf( aExtensionPlaceholder, 0 );
     if ( l >= 0 )
-        aInfoString = aInfoString.replaceAt( l, aExtensionPlaceholder.getLength(), getString( STR_SUN_OPTIMIZATION_WIZARD ) );
+        aInfoString = aInfoString.replaceAt( l, aExtensionPlaceholder.getLength(), getString( STR_SUN_OPTIMIZATION_WIZARD2 ) );
 
     com::sun::star::uno::Reference< com::sun::star::awt::XItemListener > xItemListener;
     InsertImage( *this, rtl::OUString( rtl::OUString::createFromAscii( "aboutimage" ) ), ImpGetStandardImage( rtl::OUString::createFromAscii( "private:standardimage/query" ) ), 5, 5, 25, 25 );
