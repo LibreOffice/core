@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_extensioncmdqueue.cxx,v $
  *
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1029,9 +1029,10 @@ void ExtensionCmdQueue::Thread::_checkForUpdates( const uno::Sequence< uno::Refe
         pUpdateDialog = new UpdateDialog( m_xContext, m_pDialog, rtl::Reference< SelectedPackage >(),
                                           rPackageManagers, &vData );
 
+    pUpdateDialog->notifyMenubar( true, false ); // prepare the checking, if there updates to be notified via menu bar icon
+
     if ( ( pUpdateDialog->Execute() == RET_OK ) && !vData.empty() )
     {
-        pUpdateDialog->notifyMenubar( true, false ); // prepare the checking, if there updates to be notified via menu bar icon
         // If there is at least one directly downloadable dialog then we
         // open the install dialog.
         ::std::vector< UpdateData > dataDownload;
@@ -1065,6 +1066,8 @@ void ExtensionCmdQueue::Thread::_checkForUpdates( const uno::Sequence< uno::Refe
             }
         }
     }
+    else
+        pUpdateDialog->notifyMenubar( false, false ); // check if there updates to be notified via menu bar icon
 
     delete pUpdateDialog;
 }
