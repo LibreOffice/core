@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: macrosmenucontroller.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +49,7 @@
 #include <vcl/i18nhelp.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/uieventslogger.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -198,6 +199,12 @@ IMPL_STATIC_LINK_NOINSTANCE( MacrosMenuController, ExecuteHdl_Impl, ExecuteInfo*
        // Asynchronous execution as this can lead to our own destruction!
        // Framework can recycle our current frame and the layout manager disposes all user interface
        // elements if a component gets detached from its frame!
+        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+        {
+            Sequence<PropertyValue> source;
+            ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("MacrosMenuController"));
+            ::comphelper::UiEventsLogger::logDispatch(pExecuteInfo->aTargetURL, source);
+        }
        pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
    }
    catch ( Exception& )
