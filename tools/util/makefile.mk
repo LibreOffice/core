@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.26 $
+# $Revision: 1.27 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -113,7 +113,7 @@ SHL1LIBS=       $(LIB1TARGET)
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 SHL1IMPLIB=     itools
 SHL1USE_EXPORTS=name
-SHL1STDLIBS+=   $(SALLIB) $(VOSLIB) $(BASEGFXLIB) $(I18NISOLANGLIB)
+SHL1STDLIBS+=   $(SALLIB) $(VOSLIB) $(BASEGFXLIB) $(I18NISOLANGLIB) $(COMPHELPERLIB)
 
 .IF "$(WITH_LIBART)"=="YES"
 SHL1STDLIBS+=   $(LIBART_LIBS)
