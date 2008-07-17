@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.55 $
+# $Revision: 1.56 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -160,10 +160,6 @@ SCP1FILES += \
              module_kde.par     \
              file_kde.par
 .ENDIF
-
-.IF "$(GUIBASE)" == "unx"
-SCP1FILES += module_headless.par
-.ENDIF
 .ENDIF
 
 .IF "$(ENABLE_CRASHDUMP)" != ""
@@ -313,10 +309,6 @@ SCP2FILES += \
 SCP2FILES += \
              module_kde.par     \
              file_kde.par
-.ENDIF
-
-.IF "$(GUIBASE)" == "unx"
-SCP2FILES += module_headless.par
 .ENDIF
 .ENDIF
 
