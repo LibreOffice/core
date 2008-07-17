@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pppoptimizertoken.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -210,7 +210,7 @@ enum PPPOptimizerTokenEnum
     TK_OLEObjects,
     TK_CurrentOLEObject,
 
-    STR_SUN_OPTIMIZATION_WIZARD,
+    STR_SUN_OPTIMIZATION_WIZARD2,
     STR_STEPS,
     STR_HELP,
     STR_BACK,
@@ -265,8 +265,8 @@ enum PPPOptimizerTokenEnum
     STR_DEFAULT_SESSION,
     STR_MODIFY_WARNING,
     STR_YES,
-    STR_ABOUT,
-    STR_ABOUT_VERSION,
+    STR_ABOUT2,
+    STR_ABOUT_VERSION2,
     STR_ABOUT_PRN,
     STR_OK,
     STR_INFO_1,
