@@ -36,3 +36,4 @@ mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Jobs
 ..\%__SRC%\misc\registry\spool\org\openoffice\Office\Addons\*.xcu %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Addons
 ..\%__SRC%\misc\registry\spool\org\openoffice\Office\Jobs\*.xcu %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Jobs
 
+..\%__SRC%\bin\*.oxt %_DEST%\pck%_EXT%\*
