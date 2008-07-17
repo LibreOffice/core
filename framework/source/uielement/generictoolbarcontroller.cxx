@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: generictoolbarcontroller.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,7 @@
 #include <vcl/mnemonic.hxx>
 #endif
 #include <tools/urlobj.hxx>
+#include <comphelper/uieventslogger.hxx>
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
@@ -284,10 +285,16 @@ IMPL_STATIC_LINK_NOINSTANCE( GenericToolbarController, ExecuteHdl_Impl, ExecuteI
    const sal_uInt32 nRef = Application::ReleaseSolarMutex();
    try
    {
-       // Asynchronous execution as this can lead to our own destruction!
-       // Framework can recycle our current frame and the layout manager disposes all user interface
-       // elements if a component gets detached from its frame!
-       pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
+        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+        {
+            Sequence<PropertyValue> source;
+            ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("GenericToolbarController"));
+            ::comphelper::UiEventsLogger::logDispatch(pExecuteInfo->aTargetURL, source);
+        }
+        // Asynchronous execution as this can lead to our own destruction!
+        // Framework can recycle our current frame and the layout manager disposes all user interface
+        // elements if a component gets detached from its frame!
+        pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
    }
    catch ( Exception& )
    {
