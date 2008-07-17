@@ -8,7 +8,7 @@
 #
 # $RCSfile: settings.mk,v $
 #
-# $Revision: 1.235 $
+# $Revision: 1.236 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -575,6 +575,20 @@ ROUT=$(OUTPATH).tt
 OUT=$(PRJ)$/$(OUTPATH).tlk
 ROUT=$(OUTPATH).tlk
 .ENDIF
+
+.IF "$(PRJ)"!="."
+.IF "$(GUI)"=="WNT"
+.IF "$(USE_SHELL)"!="4nt"
+PATH_IN_MODULE:=$(subst,$(normpath $(shell @+cd $(PRJ) && pwd))$/, $(PWD))
+.ELSE			# "$(USE_SHELL)"!="4nt"
+PATH_IN_MODULE:=$(subst,$(shell @+cd $(PRJ) && echo %_cwd)$/, $(PWD))
+.ENDIF			# "$(USE_SHELL)"!="4nt"
+.ELSE			# "$(GUI)"=="WNT"
+PATH_IN_MODULE:=$(subst,$(shell @+cd $(PRJ) && pwd)$/, $(PWD))
+.ENDIF			# "$(GUI)"=="WNT"
+.ELSE			# "$(PRJ)"!="."
+PATH_IN_MODULE:=
+.ENDIF			# "$(PRJ)"!="."
 
 # common output tree
 .IF "$(common_build)"!=""
