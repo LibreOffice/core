@@ -1,0 +1,86 @@
+/*************************************************************************
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2008 by Sun Microsystems, Inc.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* $RCSfile: XCsvLogFormatter.idl,v $
+*
+* $Revision: 1.2 $
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+************************************************************************/
+
+
+#ifndef __com_sun_star_logging_XCsvLogFormatter_idl__
+#define __com_sun_star_logging_XCsvLogFormatter_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_logging_XLogFormatter_idl__
+#include <com/sun/star/logging/XLogFormatter.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module logging {
+
+//=============================================================================
+
+/** specifies the interface used for formatting log records for RFC4180 csv
+    output
+
+    @see XLogFormatter, XLogHandler
+
+    @since OOo 3.0
+*/
+interface XCsvLogFormatter : XLogFormatter
+{
+    /** Defines if the EventNo should be logged */
+    [attribute] boolean LogEventNo;
+    /** Defines if the ThreadId should be logged */
+    [attribute] boolean LogThread;
+    /** Defines if the Timestamp should be logged */
+    [attribute] boolean LogTimestamp;
+    /** Defines if the Source should be logged */
+    [attribute] boolean LogSource;
+    /** Defines the names of the additional columns
+        this defaults to only one row titled "message".
+        if this is set to more than one column, the
+        messages need to be preformatted using
+        <code>formatMultiColumn</code>*/
+    [attribute] sequence< string >  Columnnames;
+    /** if the CsvLogFormatter is set to have more than one
+        column, any logged infomation has to be send through this
+        method before calling log(). E.g.:
+
+        <code>XLoggerInstance.log(1000, XCsvLogFormatterInstance.formatMultiColumn(column_data))</code>
+    */
+    string formatMultiColumn( [in] sequence< string > column_data);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif
