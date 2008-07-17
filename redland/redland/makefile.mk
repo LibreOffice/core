@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -52,7 +52,7 @@ all:
 REDLANDVERSION=1.0.7
 
 TARFILE_NAME=redland-$(REDLANDVERSION)
-PATCH_FILE_NAME=$(TARFILE_NAME).patch
+PATCH_FILE_NAME=..$/$(TARFILE_NAME).patch
 
 ADDITIONAL_FILES=librdf/makefile.mk
 
