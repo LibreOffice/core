@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tbxitem.cxx,v $
- * $Revision: 1.69 $
+ * $Revision: 1.70 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,6 +111,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/module.hxx>
 #include "imagemgr.hxx"
+
+#include <comphelper/uieventslogger.hxx>
 
 //using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
@@ -460,7 +462,15 @@ void SfxToolBoxControl::Dispatch(
 
         Reference < XDispatch > xDispatch = rProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
         if ( xDispatch.is() )
+        {
+            if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+            {
+                Sequence<PropertyValue> source;
+                ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("SfxToolBoxControl"));
+                ::comphelper::UiEventsLogger::logDispatch(aTargetURL, source);
+            }
             xDispatch->dispatch( aTargetURL, aArgs );
+        }
     }
 }
 
