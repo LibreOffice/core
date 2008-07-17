@@ -8,7 +8,7 @@
 #
 # $RCSfile: xpdinstaller.pm,v $
 #
-# $Revision: 1.17 $
+# $Revision: 1.18 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -31,6 +31,7 @@
 package installer::xpdinstaller;
 
 use Cwd;
+use installer::converter;
 use installer::exiter;
 use installer::globals;
 use installer::languages;
@@ -371,6 +372,24 @@ sub get_isjavamodule_value
     my $styles = "";
     if ( $module->{'Styles'} ) { $styles = $module->{'Styles'}; }
     if ( $styles =~ /\bJAVAMODULE\b/ ) { $value = "true"; }
+
+    return $value;
+}
+
+#####################################################################
+# Asking module, if installation shall use --force
+# scp style: USEFORCE  (Linux only)
+#####################################################################
+
+sub get_useforce_value
+{
+    my ( $module ) = @_;
+
+    my $value = "false";
+
+    my $styles = "";
+    if ( $module->{'Styles'} ) { $styles = $module->{'Styles'}; }
+    if ( $styles =~ /\bUSEFORCE\b/ ) { $value = "true"; }
 
     return $value;
 }
@@ -1097,6 +1116,10 @@ sub get_file_content
     $line = get_tag_line($doubleindent, "installcanfail", $value);
     push(@xpdfile, $line);
 
+    $value = get_useforce_value($module);
+    $line = get_tag_line($doubleindent, "useforce", $value);
+    push(@xpdfile, $line);
+
     # iterating over all languages to get names and descriptions
     collect_lang_values($doubleindent, $module, \@xpdfile, "Name", "name");
     collect_lang_values($doubleindent, $module, \@xpdfile, "Description", "description");
@@ -1470,6 +1493,7 @@ sub create_xpd_file_for_systemintegration
     for ( my $i = 0; $i <= $#{$newcontent}; $i++ )
     {
         my $newpackagename = ${$newcontent}[$i];
+
         # installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$newpackagename);
 
         my $infoline = "Creating xpd file for package: $newpackagename\n";
@@ -1477,6 +1501,7 @@ sub create_xpd_file_for_systemintegration
 
         my $childmodule = installer::worker::copy_hash_from_references($module);
         $childmodule->{'ParentID'} = $module->{'gid'};  # the module gid is the new parent
+        $childmodule->{'InstallOrder'} = $installer::globals::defaultsystemintinstallorder;
         my $number = $i + 1;
         my $modulegid = $module->{'gid'} . "_child_" . $number; # setting a dynamic new gid
         $childmodule->{'gid'} = $modulegid;
@@ -1490,6 +1515,29 @@ sub create_xpd_file_for_systemintegration
         $childmodule->{'PackageName'} = $shortpackagename;
         $childmodule->{'Name'} = $modulegid;
         $childmodule->{'Description'} = $modulegid;
+
+        # Checking, if installorder can be set:
+        # scp syntax: InstallOrder = "desktop:1050, suse:1060";
+        # The string before the number can be compared with $shortpackagename
+        if ( $module->{'InstallOrder'} )
+        {
+            my $installorder = $module->{'InstallOrder'};
+            $installorder =~ s/^\s*\"//g;
+            $installorder =~ s/\"\s*$//g;
+            # $installorder is comma separated list
+            my $allorders = installer::converter::convert_stringlist_into_array(\$installorder, ",");
+            for ( my $j = 0; $j <= $#{$allorders}; $j++ )
+            {
+                my $oneitem = ${$allorders}[$j];
+                if ( $oneitem =~ /^\s*(\S+?)\s*:\s*(\S+?)\s*$/ )
+                {
+                    my $name = $1;
+                    my $order = $2;
+
+                    if ( $shortpackagename =~ /\Q$name\E/ ) { $childmodule->{'InstallOrder'} = $order; }
+                }
+            }
+        }
 
         # all content saved in scp is now available and can be used to create the xpd file
         my ( $xpdfile, $parentgid_ ) = get_file_content($childmodule, $newpackagename, "", 0, 0, $subdir, 0, "");
