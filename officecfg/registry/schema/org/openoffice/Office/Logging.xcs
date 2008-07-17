@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Logging.xcs,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,6 +82,34 @@
     </group>
   </templates>
   <component>
+    <group oor:name="OOoImprovement">
+      <info>
+		<author>b_michaelsen</author>
+        <desc>specifies settings for the logging of userinterface events.</desc>
+      </info>
+      <prop oor:name="EnablingAllowed" oor:type="xs:boolean">
+        <info>
+          <desc>if true and the OOoImprovement Extension is installed, userinterface events (clicks on toolbars and menus for
+          example) will get logged in a CSV-File. Sending these files to the
+          OpenOffice.org team helps optimizing the user experience.</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="LogPath" oor:type="xs:string">
+        <info>
+          <desc>directory where the logs will get saved
+          </desc>
+        </info>
+        <value>$(user)/temp/Feedback</value>
+      </prop>
+      <prop oor:name="IdleTimeout" oor:type="xs:int">
+        <info>
+          <desc>idle time in minutes. If two log event are separated by a longer
+          time, the log will be rotated.</desc>
+        </info>
+        <value>180</value>
+      </prop>
+    </group>
     <set oor:name="Settings" oor:node-type="LoggerSettings">
       <info>
         <desc>contains the settings for all known loggers in OpenOffice.org.</desc>
