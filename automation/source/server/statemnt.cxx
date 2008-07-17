@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: statemnt.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/uieventslogger.hxx>
 
 #include <vcl/wintypes.hxx>
 #ifndef _DIALOG_HXX //autogen
@@ -128,6 +129,8 @@
 #include "testtool.hxx"
 
 #include "profiler.hxx"
+
+#include "recorder.hxx"
 
 #include "testtool.hrc"
 #include <basic/svtmsg.hrc>
@@ -3457,7 +3460,10 @@ BOOL StatementCommand::Execute()
             break;
         case RC_RecordMacro:
             {
-                HandleMacroRecorder();
+                if ( ! (nParams & PARAM_BOOL_1) )
+                    bBool1 = TRUE;
+
+                MacroRecorder::GetMacroRecorder()->SetActionRecord( bBool1 );
             }
             break;
         case RC_GetDocumentCount :
