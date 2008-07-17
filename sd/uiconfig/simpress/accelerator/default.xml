@@ -61,8 +61,8 @@
     <accel:item accel:code="KEY_K" accel:shift="true" accel:mod1="true" accel:mod2="true" xlink:href=".uno:Dismantle"/>
     <accel:item accel:code="KEY_F3" xlink:href=".uno:EnterGroup"/>
     <accel:item accel:code="KEY_F3" accel:mod1="true" xlink:href=".uno:LeaveGroup"/>
-    <accel:item accel:code="KEY_SPACE" accel:mod1="true" accel:shift="true" xlink:href=".uno:ResetAttributes"/>
-    <accel:item accel:code="KEY_SPACE" accel:mod1="true" xlink:href=".uno:InsertNonBreakingSpace"/>
+    <accel:item accel:code="KEY_M" accel:mod1="true" xlink:href=".uno:ResetAttributes"/>
+    <accel:item accel:code="KEY_SPACE" accel:shift="true" accel:mod1="true" xlink:href=".uno:InsertNonBreakingSpace"/>
     <accel:item accel:code="KEY_DIVIDE" accel:mod1="true" xlink:href=".uno:InsertZWSP"/>
     <accel:item accel:code="KEY_UP" accel:shift="true" accel:mod2="true" xlink:href=".uno:OutlineUp"/>
     <accel:item accel:code="KEY_DOWN" accel:shift="true" accel:mod2="true" xlink:href=".uno:OutlineDown"/>
