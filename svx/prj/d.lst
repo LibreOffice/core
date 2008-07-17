@@ -656,3 +656,5 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\table
 ..\inc\svx\svdtext.hxx %_DEST%\inc%_EXT%\svx\svdtext.hxx
 ..\inc\svx\svdotable.hxx %_DEST%\inc%_EXT%\svx\svdotable.hxx
 ..\inc\svx\selectioncontroller.hxx %_DEST%\inc%_EXT%\svx\selectioncontroller.hxx
+..\inc\svx\optimprove.hxx %_DEST%\inc%_EXT%\svx\optimprove.hxx
+
