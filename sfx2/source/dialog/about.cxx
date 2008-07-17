@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: about.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,12 +61,11 @@
 
 // defines ---------------------------------------------------------------
 
-#define SCROLL_OFFSET   ((long)2)
-#define SPACE_OFFSET    ((long)5)
-#define WELCOME_URL     DEFINE_CONST_UNICODE( "http://www.openoffice.org/welcome/credits.html" )
+#define SCROLL_OFFSET   1
+#define SPACE_OFFSET    5
+#define SCROLL_TIMER    30
 
-typedef unsigned short (*fncUshort)();
-typedef const char* (*fncChar)();
+#define WELCOME_URL     DEFINE_CONST_UNICODE( "http://www.openoffice.org/welcome/credits.html" )
 
 // class AboutDialog -----------------------------------------------------
 static void layoutText( FixedInfo &rText, long &nY, long nTextWidth, Size a6Size )
@@ -115,13 +114,11 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     aDeveloperAry   (           ResId( ABOUT_STR_DEVELOPER_ARY, *rId.GetResMgr() ) ),
     aDevVersionStr  ( rVerStr ),
     aAccelStr       (           ResId( ABOUT_STR_ACCEL, *rId.GetResMgr() ) ),
-
     aTimer          (),
     nOff            ( 0 ),
-    nEnd            ( 0 ),
     m_nDeltaWidth   ( 0 ),
+    m_nPendingScrolls( 0 ),
     bNormal         ( TRUE )
-
 {
     rtl::OUString sProduct;
     utl::ConfigManager::GetDirectConfigProperty(utl::ConfigManager::PRODUCTNAME) >>= sProduct;
@@ -335,18 +332,8 @@ AboutDialog::~AboutDialog()
 IMPL_LINK( AboutDialog, TimerHdl, Timer *, pTimer )
 {
     (void)pTimer; //unused
-    // Text scrollen
-    nOff -= SCROLL_OFFSET;
-    MapMode aMapMode( MAP_PIXEL, Point( 0, nOff ), Fraction( 1, 1 ), Fraction( 1, 1 ) );
-    SetMapMode( aMapMode );
-    Scroll( 0, -SCROLL_OFFSET );
-
-    // Wenn der Text zuende gescrollt wurde, Dialogbox beenden
-    if ( ( nOff * -1 ) > nEnd )
-    {
-        bNormal = TRUE;
-        Close();
-    }
+    ++m_nPendingScrolls;
+    Invalidate( INVALIDATE_NOERASE | INVALIDATE_NOCHILDREN );
     return 0;
 }
 
@@ -354,7 +341,7 @@ IMPL_LINK( AboutDialog, TimerHdl, Timer *, pTimer )
 
 IMPL_LINK( AboutDialog, AccelSelectHdl, Accelerator *, pAccelerator )
 {
-#ifdef OS2
+#ifdef YURI_DARIO
     aCopyrightText.SetHelpText( DEFINE_CONST_UNICODE("Conoscere qualcuno ovunque egli sia, con cui comprendersi nonostante le distanze\n"
                       "e le differenze, puo' trasformare la terra in un giardino. baci Valeria") );
 #endif
@@ -365,12 +352,12 @@ IMPL_LINK( AboutDialog, AccelSelectHdl, Accelerator *, pAccelerator )
 
     // init scroll mode
     nOff = GetOutputSizePixel().Height();
-    MapMode aMapMode( MAP_PIXEL, Point( 0, nOff ), Fraction( 1, 1 ), Fraction( 1, 1 ) );
+    MapMode aMapMode( MAP_PIXEL );
     SetMapMode( aMapMode );
     bNormal = FALSE;
 
     // start scroll Timer
-    aTimer.SetTimeout( 60 );
+    aTimer.SetTimeout( SCROLL_TIMER );
     aTimer.Start();
     return 0;
 }
@@ -389,6 +376,8 @@ BOOL AboutDialog::Close()
 
 void AboutDialog::Paint( const Rectangle& rRect )
 {
+    SetClipRegion( rRect );
+
     if ( bNormal ) // not in scroll mode
     {
         Point aPos( m_nDeltaWidth / 2, 0 );
@@ -396,56 +385,63 @@ void AboutDialog::Paint( const Rectangle& rRect )
         return;
     }
 
-    Point aPnt;
-    Size aSize;
-    long nPos = 0, nPos1, nPos2, nTop = rRect.Top();
-    long nFullWidth = GetOutputSizePixel().Width();
-    long nW = nFullWidth / 2 - 5;
-    USHORT nDevCnt = static_cast< USHORT >( aDeveloperAry.Count() );
-    USHORT nCount = nDevCnt;
+    // scroll the content
+    const int nDeltaY = -SCROLL_OFFSET * m_nPendingScrolls;
+    if( !nDeltaY )
+        return;
+    nOff += nDeltaY;
+    Scroll( 0, nDeltaY, SCROLL_NOERASE );
+    m_nPendingScrolls = 0;
 
-    if ( nCount )
+    // draw the credits text
+    const Font aOrigFont = GetFont();
+    const int nFullWidth = GetOutputSizePixel().Width();
+
+    int nY = nOff;
+    const int nDevCnt = static_cast<int>( aDeveloperAry.Count() );
+    for( int i = 0; i < nDevCnt; ++i )
     {
-        for ( USHORT i = 0; i < nCount; ++i )
+        if( nY >= rRect.Bottom() )
+            break;
+
+        int nPos2 = nY + GetTextHeight() + 3;
+        if( nPos2 >= rRect.Top() + nDeltaY )
         {
-            String aStr;
-            long nVal = 0;
+            const String aStr = aDeveloperAry.GetString(i);
+            const long nVal = aDeveloperAry.GetValue(i);
 
-            if ( i < nDevCnt )
+            if ( nVal )
             {
-                aStr = aDeveloperAry.GetString(i);
-                nVal = aDeveloperAry.GetValue(i);
+                // emphasize the headers
+                Font aFont = aOrigFont;
+                aFont.SetWeight( (FontWeight)nVal );
+                SetFont( aFont );
+                nPos2 = nY + GetTextHeight() + 3;
             }
 
-            aSize = Size( GetTextWidth( aStr ), GetTextHeight() );
-            aPnt = Point( nW - ( aSize.Width() / 2 ), nPos );
-            nPos1 = aPnt.Y();
-            nPos2 = nPos1 + aSize.Height();
+            // clear text background
+            Rectangle aEraseRect( Point(0,nY), Size( nFullWidth, nPos2-nY));
+            Erase( aEraseRect );
 
-            if ( nPos1 <= nTop && nTop < nPos2 )
-            {
-                if ( nVal )
-                {
-                    // emphasize the headers
-                    Font aFont = GetFont();
-                    FontWeight eOldWeight = aFont.GetWeight();
-                    aFont.SetWeight( (FontWeight)nVal );
-                    SetFont( aFont );
-                    long nOldW = aSize.Width();
-                    aSize = Size(GetTextWidth( aStr ),GetTextHeight());
-                    aPnt.X() -= ( aSize.Width() - nOldW ) / 2;
-                    if ( aPnt.X() < 0 )
-                        aPnt.X() = SPACE_OFFSET;
-                    DrawText( aPnt, aStr );
-                    aFont.SetWeight( eOldWeight );
-                    SetFont( aFont );
-                }
-                else
-                    DrawText( aPnt, aStr );
-            }
-            nPos += aSize.Height() + 3;
+            // draw centered text
+            const long nTextWidth = GetTextWidth( aStr );
+            long nX = (nFullWidth - 5 - nTextWidth) / 2;
+            if( nX < 0 )
+                nX = SPACE_OFFSET;
+            const Point aPnt( nX, nY );
+            DrawText( aPnt, aStr );
+
+            // restore the font if needed
+            if( nVal )
+                SetFont( aOrigFont );
         }
+        nY = nPos2;
     }
-    nEnd = nPos - 4;
-}
 
+    // close dialog if the whole text has been scrolled
+    if ( nY <= 0 )
+    {
+        bNormal = TRUE;
+        Close();
+    }
+}
