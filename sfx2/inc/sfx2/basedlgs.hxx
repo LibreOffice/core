@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basedlgs.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -168,13 +168,19 @@ public:
 
 // class SfxSingleTabDialog --------------------------------------------------
 
+namespace svt { class FixedHyperlinkImage; }
+
 struct SingleTabDlgImpl
 {
-    TabPage*        m_pTabPage;
-    SfxTabPage*     m_pSfxPage;
-    FixedLine*      m_pLine;
+    TabPage*                    m_pTabPage;
+    SfxTabPage*                 m_pSfxPage;
+    FixedLine*                  m_pLine;
+    ::svt::FixedHyperlinkImage* m_pInfoImage;
+    String                      m_sInfoURL;
+    Link                        m_aInfoLink;
 
-    SingleTabDlgImpl() : m_pTabPage( NULL ), m_pSfxPage( NULL ), m_pLine( NULL ) {}
+    SingleTabDlgImpl() :
+        m_pTabPage( NULL ), m_pSfxPage( NULL ), m_pLine( NULL ), m_pInfoImage( NULL ) {}
 };
 
 typedef USHORT* (*GetTabPageRanges)(); // liefert internationale Which-Werte
@@ -184,6 +190,7 @@ class SFX2_DLLPUBLIC SfxSingleTabDialog : public SfxModalDialog
 public:
     SfxSingleTabDialog( Window* pParent, const SfxItemSet& rOptionsSet, USHORT nUniqueId );
     SfxSingleTabDialog( Window* pParent, USHORT nUniqueId, const SfxItemSet* pInSet = 0 );
+    SfxSingleTabDialog( Window* pParent, USHORT nUniqueId, const String& rInfoURL );
 
     virtual             ~SfxSingleTabDialog();
 
@@ -198,6 +205,7 @@ public:
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
     OKButton*           GetOKButton() const { return pOKBtn; }
     CancelButton*       GetCancelButton() const { return pCancelBtn; }
+    void                SetInfoLink( const Link& rLink );
 
 private:
     GetTabPageRanges    fnGetRanges;
