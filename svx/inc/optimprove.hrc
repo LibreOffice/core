@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optimprove.hrc,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,9 @@
 #define FT_NR_ACTIONS           17
 #define FT_NR_ACTIONS_VALUE     18
 #define PB_SHOWDATA             19
+#define FI_INFO                 20
+#define WIN_INFO                21
+#define BTN_OK                  22
 
 #define STR_INFO                10
 #define STR_MOREINFO            11
