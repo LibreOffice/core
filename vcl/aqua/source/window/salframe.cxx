@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframe.cxx,v $
- * $Revision: 1.65 $
+ * $Revision: 1.66 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,6 +82,7 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, ULONG salFrameStyle ) :
     mbInitShow(true),
     mbPositioned(false),
     mbSized(false),
+    mbPresentation( false ),
     mnStyle( salFrameStyle ),
     mnStyleMask( 0 ),
     mnLastEventTime( 0 ),
@@ -197,7 +198,6 @@ void AquaSalFrame::initWindowAndView()
 
     mpWindow = [[SalFrameWindow alloc] initWithSalFrame: this];
     mpView = [[SalFrameView alloc] initWithSalFrame: this];
-    [mpWindow setContentView: mpView];
     if( (mnStyle & SAL_FRAME_STYLE_TOOLTIP) )
         [mpWindow setIgnoresMouseEvents: YES];
     else
@@ -211,6 +211,10 @@ void AquaSalFrame::initWindowAndView()
     maSysData.pView = mpView;
 
     UpdateFrameGeometry();
+
+    // setContentView causes a display; in multithreaded use this can deadlock
+    YieldMutexReleaser aRel;
+    [mpWindow setContentView: mpView];
 }
 
 // -----------------------------------------------------------------------
@@ -404,6 +408,9 @@ void AquaSalFrame::Show(BOOL bVisible, BOOL bNoActivate)
 
         if( mpParent )
             [mpParent->mpWindow addChildWindow: mpWindow ordered: NSWindowAbove];
+
+        if( mbPresentation )
+            [mpWindow makeMainWindow];
     }
     else
     {
@@ -413,6 +420,11 @@ void AquaSalFrame::Show(BOOL bVisible, BOOL bNoActivate)
             AquaSalMenu::setDefaultMenu();
 
         YieldMutexReleaser aRel;
+
+        // #i90440# work around the focus going back to some other window
+        // if a child gets hidden for a fullscreen window
+        if( mpParent && mpParent->mbFullScreen && mpParent->mbShown )
+            [mpParent->mpWindow makeKeyAndOrderFront: NSApp];
 
         [SalFrameView unsetMouseFrame: this];
         if( mpParent )
@@ -719,6 +731,16 @@ void AquaSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay )
 
 void AquaSalFrame::StartPresentation( BOOL bStart )
 {
+    if( bStart )
+    {
+        [mpWindow setLevel: NSScreenSaverWindowLevel];
+        if( mbShown )
+            [mpWindow makeMainWindow];
+    }
+    else
+    {
+        [mpWindow setLevel: NSNormalWindowLevel];
+    }
 }
 
 // -----------------------------------------------------------------------
