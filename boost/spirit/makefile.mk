@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -62,7 +62,7 @@ all:
 .ELSE
 
 TARFILE_NAME=spirit-1.6.1
-PATCH_FILE_NAME=$(TARFILE_NAME).patch
+PATCH_FILE_NAME=$(PRJ)$/$(TARFILE_NAME).patch
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
@@ -73,20 +73,9 @@ BUILD_FLAGS=
 
 # --- Targets ------------------------------------------------------
 
-all: \
-    $(MISC)$/$(TARGET)_remove_build.flag \
-    ALLTAR
-
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
-
-# Since you never know what will be in a patch (for example, it may already
-# patch at configure level), we remove the entire package directory if a patch
-# is newer.
-$(MISC)$/$(TARGET)_remove_build.flag : $(PRJ)$/$(PATCH_FILE_NAME)
-    $(REMOVE_PACKAGE_COMMAND)
-    $(TOUCH) $(MISC)$/$(TARGET)_remove_build.flag
 
 .ENDIF
 .ENDIF
