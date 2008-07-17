@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: treeopt.cxx,v $
- * $Revision: 1.57 $
+ * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,6 +113,7 @@
 #include "optjsearch.hxx"
 #include "connpooloptions.hxx"
 #include "optupdt.hxx"
+#include "svx/optimprove.hxx"
 #include "optchart.hxx"
 
 #include "optgdlg.hxx"
@@ -374,6 +375,7 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItem
         case RID_SVXPAGE_OPTIONS_JAVA:              fnCreate = &SvxJavaOptionsPage::Create ; break;
         case RID_SVXPAGE_ONLINEUPDATE:              fnCreate = &SvxOnlineUpdateTabPage::Create; break;
         case RID_OPTPAGE_CHART_DEFCOLORS:           fnCreate = &SvxDefaultColorOptPage::Create; break;
+        case RID_SVXPAGE_IMPROVEMENT:               fnCreate = &SvxImprovementOptionsPage::Create; break;
     }
 
     SfxTabPage* pRet = fnCreate ? (*fnCreate)( pParent, rSet ) : NULL;
@@ -406,6 +408,7 @@ static OptionsMapping_Impl __READONLY_DATA OptionsMap_Impl[] =
     { "ProductName",        "Java",                 RID_SVXPAGE_OPTIONS_JAVA },
     { "ProductName",        "NetworkIdentity",      RID_SVXPAGE_SSO },
     { "ProductName",        "OnlineUpdate",         RID_SVXPAGE_ONLINEUPDATE },
+    { "ProductName",        "ImprovementProgram",   RID_SVXPAGE_IMPROVEMENT },
     { "LanguageSettings",   NULL,                   SID_LANGUAGE_OPTIONS },
     { "LanguageSettings",   "Languages",            OFA_TP_LANGUAGES  },
     { "LanguageSettings",   "WritingAids",          RID_SFXPAGE_LINGU },
@@ -1913,26 +1916,55 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         setGroupName( C2U("ProductName"), rGeneralArray.GetString(0) );
         nGroup = AddGroup( rGeneralArray.GetString(0), 0, 0, SID_GENERAL_OPTIONS );
         sal_uInt16 nEnd = static_cast< sal_uInt16 >( rGeneralArray.Count() );
+        String sPageTitle;
 
         for ( i = 1; i < nEnd; ++i )
         {
+            bool bImprovePage = false;
             nPageId = (sal_uInt16)rGeneralArray.GetValue(i);
             if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                 continue;
 
             // Disable Online Update page if service not installed
-            if( nPageId == RID_SVXPAGE_ONLINEUPDATE )
+            if( RID_SVXPAGE_ONLINEUPDATE == nPageId || RID_SVXPAGE_IMPROVEMENT == nPageId )
             {
+                    bImprovePage = ( RID_SVXPAGE_IMPROVEMENT == nPageId );
+                ::rtl::OUString sService = bImprovePage ?
+                    C2U("com.sun.star.oooimprovement.CoreController") :
+                    C2U("com.sun.star.setup.UpdateCheck");
                 Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-                Reference < XInterface > xService( xFactory->createInstance(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.setup.UpdateCheck"))) );
+                Reference < XInterface > xService( xFactory->createInstance( sService ) );
 
                 if( ! xService.is() )
                     continue;
+                else if ( bImprovePage )
+                {
+                    SvxEmptyPage* pTempPage = new SvxEmptyPage( this );
+                    sPageTitle = pTempPage->GetText();
+                    delete pTempPage;
+                    xub_StrLen nPos = sPageTitle.Search( rGeneralArray.GetString(0) );
+                    if ( nPos != STRING_NOTFOUND )
+                    {
+                        xub_StrLen nLen = rGeneralArray.GetString(0).Len();
+                        if ( sPageTitle.GetChar( nPos + nLen ) == ' ' )
+                            nLen++;
+                        else if ( nPos + nLen == sPageTitle.Len() &&
+                                    sPageTitle.GetChar( nPos + nLen ) == ' ' )
+                        {
+                            nPos++;
+                            nLen++;
+                        }
+                        sPageTitle.Erase( nPos, nLen );
+                    }
+                }
             }
 
             if ( nPageId != RID_SVXPAGE_SSO || isSSOEnabled )
-                AddTabPage( nPageId, rGeneralArray.GetString(i), nGroup );
+            {
+                String sNewTitle =
+                    ( bImprovePage && sPageTitle.Len() > 0 ) ? sPageTitle : rGeneralArray.GetString(i);
+                AddTabPage( nPageId, sNewTitle, nGroup );
+            }
         }
     }
 
