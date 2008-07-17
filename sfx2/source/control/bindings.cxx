@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bindings.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,6 +74,8 @@
 #include <sfx2/topfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/msgpool.hxx>
+#include <comphelper/uieventslogger.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -133,7 +135,13 @@ IMPL_LINK(SfxAsyncExec_Impl, TimerHdl, Timer*, pTimer)
     (void)pTimer; // unused
     aTimer.Stop();
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq;
+    if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+    {
+        Sequence<beans::PropertyValue> source;
+        ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("SfxAsyncExec"));
+        ::comphelper::UiEventsLogger::logDispatch(aCommand, source);
+    }
+    Sequence<beans::PropertyValue> aSeq;
     xDisp->dispatch( aCommand, aSeq );
 
     delete this;
