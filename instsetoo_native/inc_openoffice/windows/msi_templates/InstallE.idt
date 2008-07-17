@@ -10,6 +10,7 @@ CostInitialize		350
 CreateFolders		1850
 CreateShortcuts		2150
 DeleteServices	VersionNT	1000
+DontRemoveProducts	REMOVEOLDPRODUCTS<>"1"	155
 DuplicateFiles		2050
 FileCost		400
 FindRelatedProducts	NOT ISSETUPDRIVEN	100
