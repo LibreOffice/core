@@ -80,7 +80,7 @@
     <accel:item accel:code="KEY_PAGEUP" accel:mod1="true" xlink:href=".uno:JumpToPrevTable"/>
     <accel:item accel:code="KEY_TAB" xlink:href=".uno:JumpToNextUnprotected"/>
     <accel:item accel:code="KEY_TAB" accel:shift="true" xlink:href=".uno:JumpToPreviousUnprotected"/>
-    <accel:item accel:code="KEY_SPACE" accel:mod1="true" xlink:href=".uno:SelectColumn"/>
+    <accel:item accel:code="KEY_SPACE" accel:shift="true" accel:mod1="true" xlink:href=".uno:SelectColumn"/>
     <accel:item accel:code="KEY_SPACE" accel:shift="true" xlink:href=".uno:SelectRow"/>
     <accel:item accel:code="KEY_BACKSPACE" accel:shift="true" xlink:href=".uno:Deselect"/>
     <accel:item accel:code="KEY_BACKSPACE" accel:mod1="true" xlink:href=".uno:GoToCurrentCell"/>
@@ -96,6 +96,6 @@
     <accel:item accel:code="KEY_F" accel:shift="true" accel:mod1="true" xlink:href=".uno:RepeatSearch"/>
     <accel:item accel:code="KEY_T" accel:shift="true" accel:mod1="true" xlink:href=".uno:FocusCellAddress"/>
     <accel:item accel:code="KEY_F5" accel:shift="true" accel:mod1="true" xlink:href=".uno:FocusCellAddress"/>
-    <accel:item accel:code="KEY_SPACE" accel:mod1="true" accel:shift="true" xlink:href=".uno:ResetAttributes"/>
+    <accel:item accel:code="KEY_M" accel:mod1="true" xlink:href=".uno:ResetAttributes"/>
     <accel:item accel:code="KEY_J" accel:shift="true" accel:mod1="true" xlink:href=".uno:FullScreen"/>
 </accel:acceleratorlist>
