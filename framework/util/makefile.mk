@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.123 $
+# $Revision: 1.124 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -30,12 +30,12 @@
 #*************************************************************************
 PRJ=..
 
-PRJNAME=			framework
-TARGET=				framework
+PRJNAME=            framework
+TARGET=             framework
 
-USE_DEFFILE=		TRUE
-ENABLE_EXCEPTIONS=	TRUE
-NO_BSYMBOLIC=		TRUE
+USE_DEFFILE=        TRUE
+ENABLE_EXCEPTIONS=  TRUE
+NO_BSYMBOLIC=       TRUE
 GEN_HID=            TRUE
 GEN_HID_OTHER=      TRUE
 
@@ -51,7 +51,7 @@ LIB1OBJFILES=   \
                 $(SLO)$/converter.obj                           \
                 $(SLO)$/lockhelper.obj                          \
                 $(SLO)$/transactionmanager.obj                  \
-                $(SLO)$/protocolhandlercache.obj				\
+                $(SLO)$/protocolhandlercache.obj                \
                 $(SLO)$/networkdomain.obj                       \
                 $(SLO)$/configaccess.obj                        \
                 $(SLO)$/framelistanalyzer.obj                   \
@@ -92,11 +92,11 @@ LIB2OBJFILES=   \
                 $(SLO)$/rootactiontriggercontainer.obj          \
                 $(SLO)$/actiontriggerhelper.obj                 \
                 $(SLO)$/imagewrapper.obj                        \
-                $(SLO)$/interaction.obj							\
-                $(SLO)$/addonmenu.obj							\
-                $(SLO)$/addonsoptions.obj						\
-                $(SLO)$/fwkresid.obj						    \
-                $(SLO)$/acceleratorinfo.obj        	            \
+                $(SLO)$/interaction.obj                         \
+                $(SLO)$/addonmenu.obj                           \
+                $(SLO)$/addonsoptions.obj                       \
+                $(SLO)$/fwkresid.obj                            \
+                $(SLO)$/acceleratorinfo.obj                     \
                 $(SLO)$/sfxhelperfunctions.obj                  \
                 $(SLO)$/uielementwrapperbase.obj                \
                 $(SLO)$/uiconfigelementwrapperbase.obj          \
@@ -114,19 +114,19 @@ SHL1IMPLIB=     ifwi
 SHL1LIBS=       $(LIB1TARGET)
 
 SHL1STDLIBS=    \
-                $(UNOTOOLSLIB)	    \
-                $(CPPUHELPERLIB)	\
-                $(TOOLSLIB)		    \
-                $(VOSLIB)		    \
-                $(CPPULIB)		    \
+                $(UNOTOOLSLIB)      \
+                $(CPPUHELPERLIB)    \
+                $(TOOLSLIB)         \
+                $(VOSLIB)           \
+                $(CPPULIB)          \
                 $(SALLIB)
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+=\
-         $(UWINAPILIB) \
-         $(UNICOWSLIB) \
-         $(ADVAPI32LIB) \
-         $(KERNEL32LIB)
+        $(UWINAPILIB) \
+        $(UNICOWSLIB) \
+        $(ADVAPI32LIB) \
+        $(KERNEL32LIB)
 .ENDIF
 
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
@@ -146,16 +146,16 @@ SHL2IMPLIB=     ifwe
 SHL2LIBS=       $(LIB2TARGET)
 
 SHL2STDLIBS=    \
-                $(FWILIB)							\
+                $(FWILIB)                           \
                 $(VCLLIB)                           \
                 $(SVLLIB)                           \
-                $(SVTOOLLIB)						\
+                $(SVTOOLLIB)                        \
                 $(UNOTOOLSLIB)                      \
-                $(TOOLSLIB)							\
-                $(COMPHELPERLIB)					\
-                $(CPPUHELPERLIB)					\
-                $(CPPULIB)							\
-                $(VOSLIB)							\
+                $(TOOLSLIB)                         \
+                $(COMPHELPERLIB)                    \
+                $(CPPUHELPERLIB)                    \
+                $(CPPULIB)                          \
+                $(VOSLIB)                           \
                 $(SALLIB)
 
 SHL2DEF=        $(MISC)$/$(SHL2TARGET).def
@@ -168,26 +168,26 @@ DEF2DEPN=       $(MISC)$/$(SHL2TARGET).flt
 
 # --- light services library ----------------------------------------------------
 
-SHL3TARGET=		fwl$(DLLPOSTFIX)
+SHL3TARGET=     fwl$(DLLPOSTFIX)
 
-SHL3IMPLIB=		ifwl
+SHL3IMPLIB=     ifwl
 
 SHL3OBJS=       $(SLO)$/mediatypedetectionhelper.obj\
-                $(SLO)$/registertemp.obj			\
-                $(SLO)$/substitutepathvars.obj		\
+                $(SLO)$/registertemp.obj            \
+                $(SLO)$/substitutepathvars.obj      \
                 $(SLO)$/pathsettings.obj
 
-SHL3STDLIBS=	\
-                $(FWILIB)							\
-                $(SVLLIB)							\
-                $(UNOTOOLSLIB)						\
-                $(TOOLSLIB) 						\
-                $(I18NISOLANGLIB)   				\
-                $(COMPHELPERLIB)					\
-                $(CPPUHELPERLIB)					\
-                $(COMPHELPERLIB)					\
-                $(CPPULIB)							\
-                $(VOSLIB)							\
+SHL3STDLIBS=    \
+                $(FWILIB)                           \
+                $(SVLLIB)                           \
+                $(UNOTOOLSLIB)                      \
+                $(TOOLSLIB)                         \
+                $(I18NISOLANGLIB)                   \
+                $(COMPHELPERLIB)                    \
+                $(CPPUHELPERLIB)                    \
+                $(COMPHELPERLIB)                    \
+                $(CPPULIB)                          \
+                $(VOSLIB)                           \
                 $(SALLIB)
 
 SHL3DEF=        $(MISC)$/$(SHL3TARGET).def
@@ -199,171 +199,171 @@ SHL3VERSIONMAP= exports.map
 
 # --- services library ----------------------------------------------------
 
-SHL4TARGET=		fwk$(DLLPOSTFIX)
+SHL4TARGET=     fwk$(DLLPOSTFIX)
 
-SHL4IMPLIB=		ifwk
+SHL4IMPLIB=     ifwk
 
 SHL4OBJS=       \
-                $(SLO)$/desktop.obj					\
-                $(SLO)$/loaddispatcher.obj          \
-                $(SLO)$/dispatchprovider.obj		\
-                $(SLO)$/dispatchinformationprovider.obj		\
-                $(SLO)$/droptargetlistener.obj		\
-                $(SLO)$/frame.obj					\
-                $(SLO)$/framecontainer.obj			\
-                $(SLO)$/helpagentdispatcher.obj		\
-                $(SLO)$/interceptionhelper.obj		\
-                $(SLO)$/mailtodispatcher.obj		\
-                $(SLO)$/menudispatcher.obj			\
-                $(SLO)$/menumanager.obj				\
-                $(SLO)$/ocomponentaccess.obj		\
-                $(SLO)$/ocomponentenumeration.obj	\
-                $(SLO)$/oframes.obj					\
-                $(SLO)$/registerservices.obj		\
+                $(SLO)$/acceleratorcache.obj                \
+                $(SLO)$/acceleratorconfiguration.obj        \
+                $(SLO)$/acceleratorconfigurationreader.obj  \
+                $(SLO)$/acceleratorconfigurationwriter.obj  \
+                $(SLO)$/addonstoolbarmanager.obj    \
+                $(SLO)$/addonstoolbarwrapper.obj    \
+                $(SLO)$/addonstoolboxfactory.obj    \
+                $(SLO)$/autorecovery.obj            \
+                $(SLO)$/backingcomp.obj             \
+                $(SLO)$/backingwindow.obj           \
+                $(SLO)$/buttontoolbarcontroller.obj       \
                 $(SLO)$/closedispatcher.obj         \
-                $(SLO)$/oxt_handler.obj    			\
-                $(SLO)$/statusindicator.obj			\
-                $(SLO)$/statusindicatorfactory.obj	\
-                $(SLO)$/targetfinder.obj		  	\
-                $(SLO)$/taskcreator.obj		  		\
-                $(SLO)$/timerhelper.obj				\
-                $(SLO)$/titlebarupdate.obj			\
-                $(SLO)$/urltransformer.obj			\
+                $(SLO)$/colorlistener.obj           \
+                $(SLO)$/comboboxtoolbarcontroller.obj     \
+                $(SLO)$/complextoolbarcontroller.obj      \
                 $(SLO)$/configaccess.obj            \
-                $(SLO)$/job.obj                     \
+                $(SLO)$/containerquery.obj          \
+                $(SLO)$/contenthandler.obj          \
+                $(SLO)$/controlmenucontroller.obj   \
+                $(SLO)$/desktop.obj                 \
+                $(SLO)$/dispatchhelper.obj          \
+                $(SLO)$/dispatchinformationprovider.obj     \
+                $(SLO)$/dispatchprovider.obj        \
+                $(SLO)$/dispatchrecorder.obj        \
+                $(SLO)$/dispatchrecordersupplier.obj\
+                $(SLO)$/dockingareadefaultacceptor.obj  \
+                $(SLO)$/documentacceleratorconfiguration.obj \
+                $(SLO)$/dropdownboxtoolbarcontroller.obj  \
+                $(SLO)$/droptargetlistener.obj      \
+                $(SLO)$/edittoolbarcontroller.obj         \
+                $(SLO)$/filter.obj                  \
+                $(SLO)$/fontmenucontroller.obj      \
+                $(SLO)$/fontsizemenucontroller.obj  \
+                $(SLO)$/footermenucontroller.obj    \
+                $(SLO)$/framecontainer.obj          \
+                $(SLO)$/frameloader.obj             \
+                $(SLO)$/frame.obj                   \
+                $(SLO)$/generictoolbarcontroller.obj    \
+                $(SLO)$/globalacceleratorconfiguration.obj  \
+                $(SLO)$/globalsettings.obj                \
+                $(SLO)$/graphicnameaccess.obj       \
+                $(SLO)$/headermenucontroller.obj    \
+                $(SLO)$/helpagentdispatcher.obj     \
+                $(SLO)$/imagebuttontoolbarcontroller.obj  \
+                $(SLO)$/imagemanager.obj            \
+                $(SLO)$/interceptionhelper.obj      \
                 $(SLO)$/jobdata.obj                 \
                 $(SLO)$/jobdispatch.obj             \
                 $(SLO)$/jobexecutor.obj             \
+                $(SLO)$/job.obj                     \
                 $(SLO)$/jobresult.obj               \
                 $(SLO)$/joburl.obj                  \
-                $(SLO)$/dispatchrecordersupplier.obj\
-                $(SLO)$/dispatchrecorder.obj		\
-                $(SLO)$/servicehandler.obj          \
-                $(SLO)$/stillinteraction.obj		\
-                $(SLO)$/restricteduiinteraction.obj \
-                $(SLO)$/persistentwindowstate.obj   \
-                $(SLO)$/colorlistener.obj           \
-                $(SLO)$/backingcomp.obj				\
-                $(SLO)$/backingwindow.obj			\
-                $(SLO)$/dispatchhelper.obj          \
-                $(SLO)$/layoutmanager.obj           \
-                $(SLO)$/menubarmanager.obj          \
-                $(SLO)$/menubarwrapper.obj          \
-                $(SLO)$/popupmenucontrollerfactory.obj\
-                $(SLO)$/uielementfactorymanager.obj \
-                $(SLO)$/popupmenucontrollerbase.obj \
-                $(SLO)$/fontmenucontroller.obj      \
-                $(SLO)$/fontsizemenucontroller.obj  \
-                $(SLO)$/objectmenucontroller.obj    \
-                $(SLO)$/headermenucontroller.obj    \
-                $(SLO)$/footermenucontroller.obj    \
-                $(SLO)$/controlmenucontroller.obj   \
-                $(SLO)$/macrosmenucontroller.obj   \
-                $(SLO)$/dockingareadefaultacceptor.obj  \
-                $(SLO)$/uicommanddescription.obj    \
-                $(SLO)$/modulemanager.obj           \
-                $(SLO)$/uiconfigurationmanager.obj  \
-                $(SLO)$/moduleuicfgsupplier.obj     \
-                $(SLO)$/moduleuiconfigurationmanager.obj \
-                $(SLO)$/menubarfactory.obj          \
-                $(SLO)$/filter.obj                  \
-                $(SLO)$/frameloader.obj             \
-                $(SLO)$/contenthandler.obj          \
-                $(SLO)$/containerquery.obj          \
-                $(SLO)$/loadenv.obj                 \
-                $(SLO)$/targethelper.obj            \
                 $(SLO)$/keymapping.obj              \
-                $(SLO)$/storageholder.obj                \
-                $(SLO)$/acceleratorcache.obj                \
-                $(SLO)$/acceleratorconfigurationreader.obj  \
-                $(SLO)$/acceleratorconfigurationwriter.obj  \
-                $(SLO)$/acceleratorconfiguration.obj        \
-                $(SLO)$/presethandler.obj                   \
-                $(SLO)$/globalacceleratorconfiguration.obj  \
-                $(SLO)$/moduleacceleratorconfiguration.obj  \
-                $(SLO)$/documentacceleratorconfiguration.obj \
+                $(SLO)$/langselectionmenucontroller.obj   \
+                $(SLO)$/langselectionstatusbarcontroller.obj \
+                $(SLO)$/layoutmanager.obj           \
                 $(SLO)$/license.obj                 \
-                $(SLO)$/windowstateconfiguration.obj    \
-                $(SLO)$/toolboxfactory.obj          \
-                $(SLO)$/addonstoolboxfactory.obj    \
-                $(SLO)$/toolbarwrapper.obj          \
-                $(SLO)$/toolbarmanager.obj          \
-                $(SLO)$/generictoolbarcontroller.obj    \
-                $(SLO)$/toolbar.obj                 \
-                $(SLO)$/addonstoolbarwrapper.obj    \
-                $(SLO)$/addonstoolbarmanager.obj    \
-                $(SLO)$/toolbarsmenucontroller.obj  \
-                $(SLO)$/toolbarcontrollerfactory.obj\
+                $(SLO)$/loaddispatcher.obj          \
                 $(SLO)$/loaddispatchlistener.obj    \
-                $(SLO)$/autorecovery.obj			\
-                $(SLO)$/statusbarcontrollerfactory.obj\
-                $(SLO)$/moduleimagemanager.obj      \
-                $(SLO)$/imagemanager.obj            \
-                $(SLO)$/graphicnameaccess.obj       \
-                $(SLO)$/statusbarwrapper.obj        \
-                $(SLO)$/statusbar.obj               \
-                $(SLO)$/statusbarmanager.obj        \
-                $(SLO)$/statusbarfactory.obj			\
-                $(SLO)$/recentfilesmenucontroller.obj   \
-                $(SLO)$/progressbarwrapper.obj          \
-                $(SLO)$/statusindicatorinterfacewrapper.obj \
-                $(SLO)$/uicategorydescription.obj       \
-                $(SLO)$/vclstatusindicator.obj          \
-                $(SLO)$/wakeupthread.obj               \
-                $(SLO)$/sessionlistener.obj         \
-                $(SLO)$/newmenucontroller.obj          \
-                $(SLO)$/taskcreatorsrv.obj              \
+                $(SLO)$/loadenv.obj                 \
                 $(SLO)$/logoimagestatusbarcontroller.obj  \
                 $(SLO)$/logotextstatusbarcontroller.obj   \
-                $(SLO)$/globalsettings.obj                \
-                $(SLO)$/simpletextstatusbarcontroller.obj \
-                $(SLO)$/complextoolbarcontroller.obj      \
-                $(SLO)$/comboboxtoolbarcontroller.obj     \
-                $(SLO)$/imagebuttontoolbarcontroller.obj  \
-                $(SLO)$/togglebuttontoolbarcontroller.obj \
-                $(SLO)$/buttontoolbarcontroller.obj       \
-                $(SLO)$/spinfieldtoolbarcontroller.obj    \
-                $(SLO)$/edittoolbarcontroller.obj         \
-                $(SLO)$/dropdownboxtoolbarcontroller.obj  \
-                $(SLO)$/uriabbreviation.obj               \
-                $(SLO)$/popupmenudispatcher.obj           \
-                $(SLO)$/windowcommanddispatch.obj         \
+                $(SLO)$/macrosmenucontroller.obj   \
+                $(SLO)$/mailtodispatcher.obj        \
+                $(SLO)$/menubarfactory.obj          \
+                $(SLO)$/menubarmanager.obj          \
                 $(SLO)$/menubarmerger.obj                 \
+                $(SLO)$/menubarwrapper.obj          \
+                $(SLO)$/menudispatcher.obj          \
+                $(SLO)$/menumanager.obj             \
+                $(SLO)$/moduleacceleratorconfiguration.obj  \
+                $(SLO)$/moduleimagemanager.obj      \
+                $(SLO)$/modulemanager.obj           \
+                $(SLO)$/moduleuicfgsupplier.obj     \
+                $(SLO)$/moduleuiconfigurationmanager.obj \
+                $(SLO)$/newmenucontroller.obj          \
+                $(SLO)$/objectmenucontroller.obj    \
+                $(SLO)$/ocomponentaccess.obj        \
+                $(SLO)$/ocomponentenumeration.obj   \
+                $(SLO)$/oframes.obj                 \
+                $(SLO)$/oxt_handler.obj    			\
+                $(SLO)$/persistentwindowstate.obj   \
+                $(SLO)$/popupmenucontrollerbase.obj \
+                $(SLO)$/popupmenucontrollerfactory.obj\
+                $(SLO)$/popupmenudispatcher.obj           \
+                $(SLO)$/presethandler.obj                   \
+                $(SLO)$/progressbarwrapper.obj          \
+                $(SLO)$/recentfilesmenucontroller.obj   \
+                $(SLO)$/registerservices.obj        \
+                $(SLO)$/restricteduiinteraction.obj \
+                $(SLO)$/servicehandler.obj          \
+                $(SLO)$/sessionlistener.obj         \
+                $(SLO)$/simpletextstatusbarcontroller.obj \
+                $(SLO)$/spinfieldtoolbarcontroller.obj    \
+                $(SLO)$/statusbarcontrollerfactory.obj\
+                $(SLO)$/statusbarfactory.obj            \
+                $(SLO)$/statusbarmanager.obj        \
+                $(SLO)$/statusbar.obj               \
+                $(SLO)$/statusbarwrapper.obj        \
+                $(SLO)$/statusindicatorfactory.obj  \
+                $(SLO)$/statusindicatorinterfacewrapper.obj \
+                $(SLO)$/statusindicator.obj         \
+                $(SLO)$/stillinteraction.obj        \
+                $(SLO)$/storageholder.obj                \
+                $(SLO)$/tagwindowasmodified.obj           \
+                $(SLO)$/targetfinder.obj            \
+                $(SLO)$/targethelper.obj            \
+                $(SLO)$/taskcreator.obj             \
+                $(SLO)$/taskcreatorsrv.obj              \
+                $(SLO)$/timerhelper.obj             \
+                $(SLO)$/titlebarupdate.obj          \
+                $(SLO)$/togglebuttontoolbarcontroller.obj \
+                $(SLO)$/toolbarcontrollerfactory.obj\
+                $(SLO)$/toolbarmanager.obj          \
                 $(SLO)$/toolbarmerger.obj                 \
-                $(SLO)$/langselectionstatusbarcontroller.obj \
-                $(SLO)$/langselectionmenucontroller.obj   \
-                $(SLO)$/tagwindowasmodified.obj
+                $(SLO)$/toolbar.obj                 \
+                $(SLO)$/toolbarsmenucontroller.obj  \
+                $(SLO)$/toolbarwrapper.obj          \
+                $(SLO)$/toolboxfactory.obj          \
+                $(SLO)$/uicategorydescription.obj       \
+                $(SLO)$/uicommanddescription.obj    \
+                $(SLO)$/uiconfigurationmanager.obj  \
+                $(SLO)$/uielementfactorymanager.obj \
+                $(SLO)$/uriabbreviation.obj               \
+                $(SLO)$/urltransformer.obj          \
+                $(SLO)$/vclstatusindicator.obj          \
+                $(SLO)$/wakeupthread.obj               \
+                $(SLO)$/windowcommanddispatch.obj         \
+                $(SLO)$/windowstateconfiguration.obj    \
 
-SHL4STDLIBS=	\
+SHL4STDLIBS=    \
                 $(FWILIB)                           \
-                $(FWELIB)							\
-                $(SVTOOLLIB)						\
-                $(TKLIB)							\
-                $(VCLLIB)							\
-                $(SVLLIB)							\
-                $(SOTLIB)							\
-                $(UNOTOOLSLIB)						\
-                $(TOOLSLIB) 						\
-                $(COMPHELPERLIB)					\
-                $(CPPUHELPERLIB)					\
-                $(CPPULIB)							\
-                $(VOSLIB)							\
-                $(SALLIB)					        \
+                $(FWELIB)                           \
+                $(SVTOOLLIB)                        \
+                $(TKLIB)                            \
+                $(VCLLIB)                           \
+                $(SVLLIB)                           \
+                $(SOTLIB)                           \
+                $(UNOTOOLSLIB)                      \
+                $(TOOLSLIB)                         \
+                $(COMPHELPERLIB)                    \
+                $(CPPUHELPERLIB)                    \
+                $(CPPULIB)                          \
+                $(VOSLIB)                           \
+                $(SALLIB)                           \
                 $(UCBHELPERLIB)                     \
                 $(I18NISOLANGLIB)
 
-SHL4DEF=		$(MISC)$/$(SHL4TARGET).def
-SHL4DEPN=		$(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2IMPLIBN) $(SHL2TARGETN)
+SHL4DEF=        $(MISC)$/$(SHL4TARGET).def
+SHL4DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2IMPLIBN) $(SHL2TARGETN)
 
-DEF4NAME=		$(SHL4TARGET)
+DEF4NAME=       $(SHL4TARGET)
 
 SHL4VERSIONMAP= exports.map
 
 # --- services library ----------------------------------------------------
 
-SHL5TARGET=		fwm$(DLLPOSTFIX)
+SHL5TARGET=     fwm$(DLLPOSTFIX)
 
-SHL5IMPLIB=		ifwm
+SHL5IMPLIB=     ifwm
 
 SHL5OBJS=       \
                 $(SLO)$/helponstartup.obj   \
@@ -373,31 +373,31 @@ SHL5OBJS=       \
                 $(SLO)$/shelljob.obj        \
                 $(SLO)$/register3rdcomponents.obj
 
-SHL5STDLIBS=	\
-                $(FWILIB)			\
-                $(TKLIB)			\
-                $(VCLLIB)			\
-                $(TOOLSLIB) 		\
-                $(COMPHELPERLIB)	\
-                $(CPPUHELPERLIB)	\
-                $(CPPULIB)			\
+SHL5STDLIBS=    \
+                $(FWILIB)           \
+                $(TKLIB)            \
+                $(VCLLIB)           \
+                $(TOOLSLIB)         \
+                $(COMPHELPERLIB)    \
+                $(CPPUHELPERLIB)    \
+                $(CPPULIB)          \
                 $(SALLIB)
 
-SHL5DEF=		$(MISC)$/$(SHL5TARGET).def
-SHL5DEPN=		$(SHL1IMPLIBN) $(SHL1TARGETN)
+SHL5DEF=        $(MISC)$/$(SHL5TARGET).def
+SHL5DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN)
 
-DEF5NAME=		$(SHL5TARGET)
+DEF5NAME=       $(SHL5TARGET)
 
 SHL5VERSIONMAP= exports.map
             
-RESLIB1NAME=		fwe
-RESLIB1IMAGES=		$(PRJ)$/res
-RESLIB1SRSFILES= 	$(SRS)$/fwk_classes.srs \
+RESLIB1NAME=        fwe
+RESLIB1IMAGES=      $(PRJ)$/res
+RESLIB1SRSFILES=    $(SRS)$/fwk_classes.srs \
                     $(SRS)$/fwk_services.srs \
 
 # --- Targets -----------------------------------------------------------------
 
-.INCLUDE :	target.mk
+.INCLUDE :  target.mk
 
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
