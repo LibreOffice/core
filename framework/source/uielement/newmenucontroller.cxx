@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: newmenucontroller.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,6 +69,7 @@
 #include <svtools/menuoptions.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <svtools/moduleoptions.hxx>
+#include <comphelper/uieventslogger.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -633,6 +634,12 @@ IMPL_STATIC_LINK_NOINSTANCE( NewMenuController, ExecuteHdl_Impl, NewDocument*, p
         // Asynchronous execution as this can lead to our own destruction!
         // Framework can recycle our current frame and the layout manager disposes all user interface
         // elements if a component gets detached from its frame!
+        if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+        {
+            Sequence<PropertyValue> source;
+            ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("NewMenuController"));
+            ::comphelper::UiEventsLogger::logDispatch(pNewDocument->aTargetURL, source);
+        }
         pNewDocument->xDispatch->dispatch( pNewDocument->aTargetURL, pNewDocument->aArgSeq );
 /*
     }
