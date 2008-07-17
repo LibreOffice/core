@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.77 $
+ * $Revision: 1.78 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -296,9 +296,6 @@ AquaSalGraphics::AquaSalGraphics()
     , mbVirDev( false )
     , mbWindow( false )
 {
-    long nDummyX, nDummyY;
-    GetResolution( nDummyX, nDummyY );
-
     // create the style object for font attributes
     ATSUCreateStyle( &maATSUStyle );
 }
@@ -358,8 +355,22 @@ void AquaSalGraphics::updateResolution()
 void AquaSalGraphics::initResolution( NSWindow* pWin )
 {
     NSScreen* pScreen = nil;
+
+    /* #i91301#
+       many woes went into the try to have different resolutions
+       on different screens. The result of these trials is that OOo is not ready
+       for that yet, vcl and applications would need to be adapted.
+
+       Unfortunately this is not possible in the 3.0 timeframe.
+       So let's stay with one resolution for all Windows and VirtualDevices
+       which is the resolution of the main screen
+
+       This of course also means that measurements are exact only on the main screen.
+       For activating different resolutions again just comment out the two lines below.
+
     if( pWin )
         pScreen = [pWin screen];
+    */
     if( pScreen == nil )
     {
         NSArray* pScreens = [NSScreen screens];
