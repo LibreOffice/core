@@ -20,6 +20,8 @@ ReadyToInstall	DlgTitle	Show	ProgressType0="Modify"
 ReadyToInstall	DlgTitle2	Show	ProgressType0="Repair"
 ReadyToInstall	DlgTitle3	Show	ProgressType0="install"
 ReadyToInstall	DesktopLink	Hide	NOT DESKTOPLINKEXISTS
+ReadyToInstall	UpdateCheckBox	Hide	OLDPRODUCTS=""
+ReadyToInstall	UpdateCheckBox	Show	OLDPRODUCTS<>""
 SetupCompleteError	Back	Default	UpdateStarted
 SetupCompleteError	Back	Disable	NOT UpdateStarted
 SetupCompleteError	Back	Enable	UpdateStarted
