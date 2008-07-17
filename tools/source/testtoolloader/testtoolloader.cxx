@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: testtoolloader.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,8 @@
 #include "tools/string.hxx"
 #include "tools/debug.hxx"
 
+#include <comphelper/uieventslogger.hxx>
+
 using namespace rtl;
 
 namespace tools
@@ -46,7 +48,12 @@ namespace tools
     typedef void ( *pfunc_CreateRemoteControl)();
     typedef void ( *pfunc_DestroyRemoteControl)();
 
+    typedef void ( *pfunc_CreateEventLogger)();
+    typedef void ( *pfunc_DestroyEventLogger)();
+
 static oslModule    aTestToolModule = 0;
+// are we to be automated at all?
+static bool bAutomate = false;
 
 
 sal_uInt32 GetCommandLineParamCount()
@@ -71,13 +78,22 @@ String GetCommandLineParam( sal_uInt32 nParam )
 
 extern "C" { static void SAL_CALL thisModule() {} }
 
+void LoadLib()
+{
+    if ( !aTestToolModule )
+    {
+        aTestToolModule = osl_loadModuleRelative(
+            &thisModule,
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("sts"))).pData,
+            SAL_LOADMODULE_DEFAULT );
+    }
+}
+
 void InitTestToolLib()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::InitTestToolLib" );
 
     sal_uInt32 i;
-    // are we to be automated at all?
-    bool bAutomate = false;
 
     for ( i = 0 ; i < GetCommandLineParamCount() ; i++ )
     {
@@ -89,30 +105,51 @@ void InitTestToolLib()
         }
     }
 
-    if ( !bAutomate )
-        return;
-
-
-    OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "CreateRemoteControl" ));
-
-    aTestToolModule = osl_loadModuleRelative(
-        &thisModule,
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("sts"))).pData,
-        SAL_LOADMODULE_GLOBAL );
-    if ( aTestToolModule )
+    if ( bAutomate )
     {
-        oslGenericFunction pInitFunc = osl_getFunctionSymbol(
-            aTestToolModule, aFuncName.pData );
-        if ( pInitFunc )
-            (reinterpret_cast< pfunc_CreateRemoteControl >(pInitFunc))();
+        OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "CreateRemoteControl" ));
+
+        LoadLib();
+        if ( aTestToolModule )
+        {
+            oslGenericFunction pInitFunc = osl_getFunctionSymbol(
+                aTestToolModule, aFuncName.pData );
+            if ( pInitFunc )
+                (reinterpret_cast< pfunc_CreateRemoteControl >(pInitFunc))();
+            else
+            {
+                DBG_ERROR1( "Unable to get Symbol 'CreateRemoteControl' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+            }
+        }
         else
         {
-            DBG_ERROR1( "Unable to get Symbol 'CreateRemoteControl' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+            DBG_ERROR1( "Unable to access library %s while loading testtool support.", SVLIBRARY( "sts" ) );
         }
     }
-    else
+
+    if ( ::comphelper::UiEventsLogger::isEnabled() )
     {
-        DBG_ERROR1( "Unable to access library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+        OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "CreateEventLogger" ));
+
+        aTestToolModule = osl_loadModuleRelative(
+            &thisModule,
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("sts"))).pData,
+            SAL_LOADMODULE_GLOBAL );
+        if ( aTestToolModule )
+        {
+            oslGenericFunction pInitFunc = osl_getFunctionSymbol(
+                aTestToolModule, aFuncName.pData );
+            if ( pInitFunc )
+                (reinterpret_cast< pfunc_CreateRemoteControl >(pInitFunc))();
+            else
+            {
+                DBG_ERROR1( "Unable to get Symbol 'CreateRemoteControl' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+            }
+        }
+        else
+        {
+            DBG_ERROR1( "Unable to access library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+        }
     }
 }
 
@@ -120,12 +157,25 @@ void DeInitTestToolLib()
 {
     if ( aTestToolModule )
     {
-        OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "DestroyRemoteControl" ));
+        if ( bAutomate )
+        {
+            OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "DestroyRemoteControl" ));
 
-        oslGenericFunction pDeInitFunc = osl_getFunctionSymbol(
-            aTestToolModule, aFuncName.pData );
-        if ( pDeInitFunc )
-            (reinterpret_cast< pfunc_DestroyRemoteControl >(pDeInitFunc))();
+            oslGenericFunction pDeInitFunc = osl_getFunctionSymbol(
+                aTestToolModule, aFuncName.pData );
+            if ( pDeInitFunc )
+                (reinterpret_cast< pfunc_DestroyRemoteControl >(pDeInitFunc))();
+        }
+
+        if ( ::comphelper::UiEventsLogger::isEnabled() )
+        {
+            OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "DestroyEventLogger" ));
+
+            oslGenericFunction pDeInitFunc = osl_getFunctionSymbol(
+                aTestToolModule, aFuncName.pData );
+            if ( pDeInitFunc )
+                (reinterpret_cast< pfunc_DestroyEventLogger >(pDeInitFunc))();
+        }
 
         osl_unloadModule( aTestToolModule );
     }
