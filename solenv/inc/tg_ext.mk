@@ -8,7 +8,7 @@
 #
 # $RCSfile: tg_ext.mk,v $
 #
-# $Revision: 1.89 $
+# $Revision: 1.90 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,12 +42,6 @@ INCLUDE!:=$(INCLUDE:s/ -I/;/)
 .EXPORT : INCLUDE
 .ENDIF			# "$(GUI)$(COM)"=="WNTMSC"
 
-.IF "$(OS)"!="NETBSD"
-.IF "$(OS)"!="FREEBSD"
-PATCHFLAGS=-b
-.ENDIF			# "$(OS)"=="FREEBSD"
-.ENDIF			# "$(OS)"=="NETBSD"
-
 .IF "$(OS)"=="MACOSX"
 LDFLAGS!:=$(EXTRA_LINKFLAGS) $(LDFLAGS)
 .EXPORT : LDFLAGS
@@ -77,7 +71,7 @@ P_INSTALL_TARGET_DIR=$(MISC)$/install
 NEW_PATCH_FILE_NAME:=$(TARFILE_NAME)
 .ELSE			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 NEW_PATCH_FILE_NAME:=$(PATCH_FILE_NAME)
-PATCH_FILE_DEP:=$(PRJ)$/$(NEW_PATCH_FILE_NAME)
+PATCH_FILE_DEP:=$(PRJ)$/$(PATH_IN_MODULE)$/$(NEW_PATCH_FILE_NAME)
 .ENDIF			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 
 .IF "$(TAR_EXCLUDES)"!=""
@@ -160,8 +154,7 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.zip
 $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack $(PATCH_FILE_DEP)
     $(IFEXIST) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) $(THEN) $(RENAME:s/+//) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)_removeme $(FI)
     -rm -rf $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)_removeme
-    @-$(MKDIR) $(PACKAGE_DIR:d)
-    @-$(MKDIR) $(PACKAGE_DIR)
+    @-$(MKDIRHIER) $(PACKAGE_DIR)
     cd $(PACKAGE_DIR) && ( $(shell @$(TYPE) $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack)) && $(TOUCH) $(UNTAR_FLAG_FILE)
     @echo make writeable...
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
@@ -191,15 +184,15 @@ $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
 # hack to make 4nt version 4,01 work and still get propper
 # errorcodes for versions < 3,00
 .IF "$(my4ver:s/.//:s/,//)" >= "300"
-    cd $(PACKAGE_DIR) && ( $(TYPE:s/+//) $(BACK_PATH)$(PATCH_FILE_NAME) | tr -d "\015" | patch $(PATCHFLAGS) -p2 ) && $(TOUCH) $(PATCH_FLAG_FILE)
+    cd $(PACKAGE_DIR) && ( $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)$/$(PATCH_FILE_NAME) | tr -d "\015" | patch $(PATCHFLAGS) -p2 ) && $(TOUCH) $(PATCH_FLAG_FILE)
 .ELSE			# "$(my4ver:s/.//:s/,//)" >= "300"
-    cd $(PACKAGE_DIR) && $(TYPE:s/+//) $(BACK_PATH)$(PATCH_FILE_NAME) | tr -d "\015" | patch $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+    cd $(PACKAGE_DIR) && $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)$/$(PATCH_FILE_NAME) | tr -d "\015" | patch $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
 .ENDIF			# "$(my4ver:s/.//:s/,//)" >= "300"
 .ELSE           # "$(GUI)"=="WNT"
 .IF "$(BSCLIENT)"=="TRUE"
-    cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | $(GNUPATCH) -f $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+    cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)$/$(PATCH_FILE_NAME) | $(GNUPATCH) -f $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
 .ELSE           # "$(BSCLIENT)"!=""
-    cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATCH_FILE_NAME) | $(GNUPATCH) $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+    cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)$/$(PATCH_FILE_NAME) | $(GNUPATCH) $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
 .ENDIF          # "$(BSCLIENT)"!=""
 .ENDIF          # "$(GUI)"=="WNT"
 .ENDIF			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
@@ -315,15 +308,15 @@ $(T_ADDITIONAL_FILES:+".dummy") : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
 .ENDIF			 "$(T_ADDITIONAL_FILES)"!=""
 
 create_patch : $(MISC)$/$(TARFILE_ROOTDIR) $(P_ADDITIONAL_FILES) $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
-    @@-$(MKDIRHIER) $(NEW_PATCH_FILE_NAME:d)
-    @@-$(RM) $(MISC)$/$(NEW_PATCH_FILE_NAME).tmp
-    @@-$(RM) $(NEW_PATCH_FILE_NAME).bak
+    @@-$(MKDIRHIER) $(PRJ)$/$(NEW_PATCH_FILE_NAME:d)
+    @@-$(RM) $(MISC)$/$(NEW_PATCH_FILE_NAME:f).tmp
+    @@-$(RM) $(PRJ)$/$(PATH_IN_MODULE)$/$(NEW_PATCH_FILE_NAME).bak
 #ignore returncode of 1 (indicates differences...)	
 # hard coded again to get the same directory level as before. quite ugly...
     -cd $(PRJ)$/$(ROUT) && diff -ru misc$/$(TARFILE_ROOTDIR) misc$/build$/$(TARFILE_ROOTDIR) | $(PERL) $(SOLARENV)$/bin$/cleandiff.pl | tr -d "\015" > misc$/$(NEW_PATCH_FILE_NAME:f).tmp
-    -mv $(NEW_PATCH_FILE_NAME) $(NEW_PATCH_FILE_NAME).bak
-    $(PERL) $(SOLARENV)$/bin$/patch_sanitizer.pl $(NEW_PATCH_FILE_NAME).bak $(MISC)$/$(NEW_PATCH_FILE_NAME:f).tmp $(PRJ)$/$(NEW_PATCH_FILE_NAME)
-    @@-$(RM) $(MISC)$/$(NEW_PATCH_FILE_NAME).tmp
+    -mv $(PRJ)$/$(PATH_IN_MODULE)$/$(NEW_PATCH_FILE_NAME) $(PRJ)$/$(PATH_IN_MODULE)$/$(NEW_PATCH_FILE_NAME).bak
+    $(PERL) $(SOLARENV)$/bin$/patch_sanitizer.pl $(PRJ)$/$(PATH_IN_MODULE)$/$(NEW_PATCH_FILE_NAME).bak $(MISC)$/$(NEW_PATCH_FILE_NAME:f).tmp $(PRJ)$/$(PATH_IN_MODULE)$/$(NEW_PATCH_FILE_NAME)
+    @@-$(RM) $(MISC)$/$(NEW_PATCH_FILE_NAME:f).tmp
     $(MAKECMD) $(MAKEMACROS) patch
     @echo still some problems with win32 generated patches...
 
