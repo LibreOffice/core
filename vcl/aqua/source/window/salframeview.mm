@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframeview.mm,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -164,6 +164,8 @@ static const struct ExceptionalKey
         return YES;
     if( (mpFrame->mnStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) != 0 )
         return YES;
+    if( mpFrame->mbFullScreen )
+        return YES;
     return [super canBecomeKeyWindow];
 }
 
@@ -180,7 +182,8 @@ static const struct ExceptionalKey
         if( mpFrame->mpMenu )
             mpFrame->mpMenu->setMainMenu();
         else if( ! mpFrame->mpParent &&
-                 (mpFrame->mnStyle & nGuessDocument) == nGuessDocument )
+                 ( (mpFrame->mnStyle & nGuessDocument) == nGuessDocument || // set default menu for e.g. help
+                    mpFrame->mbFullScreen ) )                               // ser default menu for e.g. presentation
         {
             AquaSalMenu::setDefaultMenu();
         }
@@ -863,7 +866,8 @@ static const struct ExceptionalKey
 
 -(void)insertNewline: (id)aSender
 {
-    [self sendKeyInputAndReleaseToFrame: KEY_RETURN character: '\n' modifiers: 0];
+    // #i91267# make enter and shift-enter work by evaluating the modifiers
+    [self sendKeyInputAndReleaseToFrame: KEY_RETURN character: '\n' modifiers: mpFrame->mnLastModifierFlags];
 }
 
 -(void)deleteBackward: (id)aSender
