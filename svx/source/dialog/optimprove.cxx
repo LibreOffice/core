@@ -1,0 +1,331 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: optimprove.cxx,v $
+ * $Revision: 1.2 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svx.hxx"
+
+// include ---------------------------------------------------------------
+
+#define _SVX_OPTIMPROVE_CXX
+
+#include <svx/optimprove.hxx>
+#include <svx/dialmgr.hxx>
+#include <vcl/msgbox.hxx>
+
+#include "optimprove.hrc"
+#include "helpid.hrc"
+#include <svx/dialogs.hrc>
+
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/oooimprovement/XCoreController.hpp>
+#include <comphelper/configurationhelper.hxx>
+#include <comphelper/processfactory.hxx>
+
+namespace lang  = ::com::sun::star::lang;
+namespace uno   = ::com::sun::star::uno;
+using namespace com::sun::star::system;
+
+// class SvxImprovementPage ----------------------------------------------
+
+SvxImprovementPage::SvxImprovementPage( Window* pParent ) :
+
+    TabPage( pParent, SVX_RES( RID_SVXPAGE_IMPROVEMENT ) ),
+
+    m_aImproveFL                ( this, SVX_RES( FL_IMPROVE ) ),
+    m_aInvitationFT             ( this, SVX_RES( FT_INVITATION ) ),
+    m_aYesRB                    ( this, SVX_RES( RB_YES ) ),
+    m_aNoRB                     ( this, SVX_RES( RB_NO ) ),
+    m_aDataFL                   ( this, SVX_RES( FL_DATA ) ),
+    m_aNumberOfReportsFT        ( this, SVX_RES( FT_NR_REPORTS ) ),
+    m_aNumberOfReportsValueFT   ( this, SVX_RES( FT_NR_REPORTS_VALUE ) ),
+    m_aNumberOfActionsFT        ( this, SVX_RES( FT_NR_ACTIONS ) ),
+    m_aNumberOfActionsValueFT   ( this, SVX_RES( FT_NR_ACTIONS_VALUE ) ),
+    m_aShowDataPB               ( this, SVX_RES( PB_SHOWDATA ) ),
+
+    m_sInfo                     (       SVX_RES( STR_INFO ) ),
+    m_sMoreInfo                 (       SVX_RES( STR_MOREINFO ) )
+
+{
+    FreeResource();
+
+    m_aInvitationFT.Show();
+    m_aDataFL.Hide();
+    m_aNumberOfReportsFT.Hide();
+    m_aNumberOfReportsValueFT.Hide();
+    m_aNumberOfActionsFT.Hide();
+    m_aNumberOfActionsValueFT.Hide();
+    m_aShowDataPB.Hide();
+
+    Size aNewSize = m_aInvitationFT.GetSizePixel();
+    const long nNewWidth = aNewSize.Width() * 4 / 5;
+    const long nWDelta = aNewSize.Width() - nNewWidth;
+    aNewSize.Width() = nNewWidth;
+    Size aCalcSize = m_aInvitationFT.CalcMinimumSize( nNewWidth );
+    long nHDelta = aCalcSize.Height() - aNewSize.Height();
+    aNewSize.Height() = aCalcSize.Height();
+    m_aInvitationFT.SetSizePixel( aNewSize );
+
+    aNewSize = m_aYesRB.GetSizePixel();
+    aNewSize.Width() = nNewWidth;
+    Point aNewPos = m_aYesRB.GetPosPixel();
+    aNewPos.Y() += nHDelta;
+    m_aYesRB.SetPosSizePixel( aNewPos, aNewSize );
+    aNewSize = m_aNoRB.GetSizePixel();
+    aNewSize.Width() = nNewWidth;
+    aNewPos = m_aNoRB.GetPosPixel();
+    aNewPos.Y() += nHDelta;
+    m_aNoRB.SetPosSizePixel( aNewPos, aNewSize );
+    aNewSize = m_aImproveFL.GetSizePixel();
+    aNewSize.Width() -= nWDelta;
+    m_aImproveFL.SetSizePixel( aNewSize );
+
+    Size aSize = GetOutputSizePixel();
+    aSize.Width() -= nWDelta;
+    aSize.Height() = m_aDataFL.GetPosPixel().Y();
+    aSize.Height() += nHDelta;
+    SetSizePixel( aSize );
+}
+
+// -----------------------------------------------------------------------
+
+SvxImprovementPage::~SvxImprovementPage()
+{
+}
+
+// class SvxImprovementDialog --------------------------------------------
+
+SvxImprovementDialog::SvxImprovementDialog( Window* pParent, const String& rInfoURL ) :
+
+    SfxSingleTabDialog( pParent, RID_SVXPAGE_IMPROVEMENT, rInfoURL ),
+
+    m_pPage( NULL )
+
+{
+    m_pPage = new SvxImprovementPage( this );
+    SetInfoLink( LINK( this, SvxImprovementDialog, HandleHyperlink ) );
+    SetPage( m_pPage );
+    if ( GetOKButton() )
+        GetOKButton()->SetClickHdl( LINK( this, SvxImprovementDialog, HandleOK ) );
+}
+
+IMPL_LINK( SvxImprovementDialog, HandleHyperlink, svt::FixedHyperlinkImage*, pHyperlinkImage )
+{
+    ::rtl::OUString sURL( pHyperlinkImage->GetURL() );
+
+    if ( sURL.getLength() > 0 )
+    {
+        try
+        {
+            uno::Reference< lang::XMultiServiceFactory > xSMGR =
+                ::comphelper::getProcessServiceFactory();
+            uno::Reference< XSystemShellExecute > xSystemShell(
+                xSMGR->createInstance( ::rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
+                uno::UNO_QUERY_THROW );
+            if ( xSystemShell.is() )
+            {
+                xSystemShell->execute(
+                    sURL, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+            }
+        }
+        catch( const uno::Exception& e )
+        {
+             OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
+                rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
+    }
+
+    return 0;
+}
+
+IMPL_LINK( SvxImprovementDialog, HandleOK, OKButton*, EMPTYARG )
+{
+    uno::Reference< lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+    uno::Reference< com::sun::star::oooimprovement::XCoreController > core_c(
+            xSMGR->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.oooimprovement.CoreController")),
+            uno::UNO_QUERY);
+    if(core_c.is())
+    {
+        ::comphelper::ConfigurationHelper::writeDirectKey(
+            xSMGR,
+            ::rtl::OUString::createFromAscii("/org.openoffice.Office.OOoImprovement.Settings"),
+            ::rtl::OUString::createFromAscii("Participation"),
+            ::rtl::OUString::createFromAscii("ShowedInvitation"),
+            uno::makeAny( true ),
+            ::comphelper::ConfigurationHelper::E_STANDARD );
+        ::comphelper::ConfigurationHelper::writeDirectKey(
+            xSMGR,
+            ::rtl::OUString::createFromAscii("/org.openoffice.Office.OOoImprovement.Settings"),
+            ::rtl::OUString::createFromAscii("Participation"),
+            ::rtl::OUString::createFromAscii("InvitationAccepted"),
+            uno::makeAny( m_pPage->IsYesChecked() ),
+            ::comphelper::ConfigurationHelper::E_STANDARD );
+    }
+    EndDialog( RET_OK );
+    return 0;
+}
+
+// class SvxInfoWindow ---------------------------------------------------
+
+SvxInfoWindow::SvxInfoWindow( Window* pParent, const ResId& rResId ) :
+    Window( pParent, rResId ),
+    m_aInfoText( this )
+{
+    m_aInfoText.SetPosSizePixel( Point( 10, 10 ), Size( 150, 10 ) );
+
+    const StyleSettings& rSettings = GetSettings().GetStyleSettings();
+    Wallpaper aWall( rSettings.GetWindowColor() );
+    SetBackground( aWall );
+    Font aNewFont( m_aInfoText.GetFont() );
+    aNewFont.SetTransparent( TRUE );
+    m_aInfoText.SetFont( aNewFont );
+    m_aInfoText.SetBackground( aWall );
+    m_aInfoText.SetControlForeground( rSettings.GetWindowTextColor() );
+}
+
+void SvxInfoWindow::SetInfoText( const String& rText )
+{
+    m_aInfoText.SetText( rText );
+    Size aSize = m_aInfoText.CalcMinimumSize();
+    Size aWinSize = GetSizePixel();
+    Point aPos( ( aWinSize.Width() - aSize.Width() ) / 2, ( aWinSize.Height() - aSize.Height() ) / 2 );
+    m_aInfoText.SetPosSizePixel( aPos, aSize );
+}
+
+// class SvxImprovementDialog2 -------------------------------------------
+
+SvxImprovementDialog2::SvxImprovementDialog2( Window* pParent ) :
+
+    ModalDialog( pParent, SVX_RES( RID_SVXPAGE_IMPROVEMENT ) ),
+
+    m_aInfoWin      ( this, SVX_RES( WIN_INFO ) ),
+    m_aInvitationFT ( this, SVX_RES( FT_INVITATION ) ),
+    m_aYesRB        ( this, SVX_RES( RB_YES ) ),
+    m_aNoRB         ( this, SVX_RES( RB_NO ) ),
+    m_aButtonLine   ( this, SVX_RES( FL_IMPROVE ) ),
+    m_aInfoFI       ( this, SVX_RES( FI_INFO ) ),
+    m_aOKBtn        ( this, SVX_RES( BTN_OK ) )
+
+{
+    FreeResource();
+
+    SvxImprovementPage* pPage = new SvxImprovementPage( this );
+    m_aInfoWin.Show();
+    m_aInfoWin.SetInfoText( pPage->GetInfoText() );
+    m_aInvitationFT.SetText( pPage->GetInvitationText() );
+    m_aYesRB.SetText( pPage->GetYesButtonText() );
+    m_aNoRB.SetText( pPage->GetNoButtonText() );
+    SetText( pPage->GetPageText() );
+    delete pPage;
+
+    m_aInfoFI.SetClickHdl( LINK( this, SvxImprovementDialog2, HandleHyperlink ) );
+    m_aOKBtn.SetClickHdl( LINK( this, SvxImprovementDialog2, HandleOK ) );
+
+    Size aImgSz = m_aInfoFI.GetImage().GetSizePixel();
+    Size aCtrlSz = m_aInfoFI.GetSizePixel();
+    Point aCtrlPos = m_aInfoFI.GetPosPixel();
+
+    long nDeltaW = aCtrlSz.Width() - aImgSz.Width();
+    long nDeltaH = aCtrlSz.Height() - aImgSz.Height();
+    if ( nDeltaW > 4 )
+    {
+        nDeltaW -= 4;
+        aCtrlSz.Width() -= nDeltaW;
+        aCtrlPos.X() -= ( nDeltaW / 2 );
+    }
+    if ( nDeltaH > 4 )
+    {
+        nDeltaH -= 4;
+        aCtrlSz.Height() -= nDeltaH;
+        aCtrlPos.Y() -= ( nDeltaH / 2 );
+    }
+    m_aInfoFI.SetPosSizePixel( aCtrlPos, aCtrlSz );
+}
+
+IMPL_LINK( SvxImprovementDialog2, HandleHyperlink, svt::FixedHyperlinkImage*, pHyperlinkImage )
+{
+    ::rtl::OUString sURL( pHyperlinkImage->GetURL() );
+
+    if ( sURL.getLength() > 0 )
+    {
+        try
+        {
+            uno::Reference< lang::XMultiServiceFactory > xSMGR =
+                ::comphelper::getProcessServiceFactory();
+            uno::Reference< XSystemShellExecute > xSystemShell(
+                xSMGR->createInstance( ::rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
+                uno::UNO_QUERY_THROW );
+            if ( xSystemShell.is() )
+            {
+                xSystemShell->execute(
+                    sURL, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+            }
+        }
+        catch( const uno::Exception& e )
+        {
+             OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
+                rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
+    }
+
+    return 0;
+}
+
+IMPL_LINK( SvxImprovementDialog2, HandleOK, OKButton*, EMPTYARG )
+{
+    uno::Reference< lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+    uno::Reference< com::sun::star::oooimprovement::XCoreController > core_c(
+            xSMGR->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.oooimprovement.CoreController")),
+            uno::UNO_QUERY);
+    if(core_c.is())
+    {
+        ::comphelper::ConfigurationHelper::writeDirectKey(
+            xSMGR,
+            ::rtl::OUString::createFromAscii("/org.openoffice.Office.OOoImprovement.Settings"),
+            ::rtl::OUString::createFromAscii("Participation"),
+            ::rtl::OUString::createFromAscii("ShowedInvitation"),
+            uno::makeAny( true ),
+            ::comphelper::ConfigurationHelper::E_STANDARD );
+        ::comphelper::ConfigurationHelper::writeDirectKey(
+            xSMGR,
+            ::rtl::OUString::createFromAscii("/org.openoffice.Office.OOoImprovement.Settings"),
+            ::rtl::OUString::createFromAscii("Participation"),
+            ::rtl::OUString::createFromAscii("InvitationAccepted"),
+            uno::makeAny( m_aYesRB.IsChecked() != FALSE ),
+            ::comphelper::ConfigurationHelper::E_STANDARD );
+    }
+    EndDialog( RET_OK );
+    return 0;
+}
+
