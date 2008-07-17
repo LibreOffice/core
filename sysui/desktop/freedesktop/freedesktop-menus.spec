@@ -8,6 +8,10 @@ Name: %pkgprefix-freedesktop-menus
 Group: Office
 License: LGPL
 Provides: openoffice.org3-desktop-integration
+Conflicts: %pkgprefix-suse-menus
+Conflicts: %pkgprefix-debian-menus
+Conflicts: %pkgprefix-redhat-menus
+Conflicts: %pkgprefix-mandriva-menus
 BuildArch: noarch
 AutoReqProv: no
 
