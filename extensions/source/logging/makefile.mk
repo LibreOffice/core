@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,13 +41,14 @@ TARGET=log
 
 # ... object files ............................
 EXCEPTIONSFILES= \
+        $(SLO)$/consolehandler.obj      \
+        $(SLO)$/csvformatter.obj        \
+        $(SLO)$/filehandler.obj         \
         $(SLO)$/log_services.obj        \
         $(SLO)$/logger.obj              \
-        $(SLO)$/filehandler.obj         \
-        $(SLO)$/plaintextformatter.obj  \
-        $(SLO)$/consolehandler.obj      \
-        $(SLO)$/loghandler.obj          \
         $(SLO)$/loggerconfig.obj        \
+        $(SLO)$/loghandler.obj          \
+        $(SLO)$/plaintextformatter.obj  \
 
 SLOFILES= \
         $(EXCEPTIONSFILES) \
