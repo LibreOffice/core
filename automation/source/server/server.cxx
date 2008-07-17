@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: server.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +74,8 @@
 #include "rcontrol.hxx"
 #include "server.hxx"
 #include "testtool.hxx"
-#include <automation/automation.hxx>
+#include "automation/automation.hxx"
+#include "recorder.hxx"
 
 #include "basic/svtmsg.hrc"
 
@@ -888,6 +889,10 @@ ImplRemoteControl::ImplRemoteControl()
 
 ImplRemoteControl::~ImplRemoteControl()
 {
+    if ( MacroRecorder::HasMacroRecorder() )
+        MacroRecorder::GetMacroRecorder()->SetActionRecord( FALSE );   // Will delete MacroRecorder if necessary
+
+
     StatementList::bDying = TRUE;
 #if OSL_DEBUG_LEVEL > 1
     if ( m_pDbgWin )
@@ -962,5 +967,15 @@ extern "C" void DestroyRemoteControl()
     ::osl::MutexGuard aGuard( aMutex );
     delete pRemoteControl;
     pRemoteControl = 0;
+}
+
+extern "C" void CreateEventLogger()
+{
+    MacroRecorder::GetMacroRecorder()->SetActionLog();
+}
+
+extern "C" void DestroyEventLogger()
+{
+    MacroRecorder::GetMacroRecorder()->SetActionLog( FALSE );   // Will delete MacroRecorder if necessary
 }
 
