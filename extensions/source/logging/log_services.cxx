@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: log_services.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,7 @@ namespace logging
     extern void createRegistryInfo_FileHandler();
     extern void createRegistryInfo_ConsoleHandler();
     extern void createRegistryInfo_PlainTextFormatter();
+    extern void createRegistryInfo_CsvFormatter();
 
     static void initializeModule()
     {
@@ -58,6 +59,7 @@ namespace logging
                 createRegistryInfo_FileHandler();
                 createRegistryInfo_ConsoleHandler();
                 createRegistryInfo_PlainTextFormatter();
+                createRegistryInfo_CsvFormatter();
             }
         }
     }
