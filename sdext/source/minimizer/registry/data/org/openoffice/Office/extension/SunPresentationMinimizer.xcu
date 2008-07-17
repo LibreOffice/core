@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE local [
-    <!ENTITY ProductName "Sun Presentation Minimizer">
-    <!ENTITY ProductVersion "1.0.0">
-]>
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="SunPresentationMinimizer" oor:package="org.openoffice.Office.extension">
 
     <prop oor:name="BitmapPath" oor:type="xs:string">
@@ -18,8 +14,8 @@
     </prop>
 
     <node oor:name="Strings">
-        <prop oor:name="STR_SUN_OPTIMIZATION_WIZARD">
-            <value xml:lang="en-US">&ProductName;</value>
+        <prop oor:name="STR_SUN_OPTIMIZATION_WIZARD2">
+            <value xml:lang="en-US">Sun Presentation Minimizer</value>
         </prop>
         <prop oor:name="STR_STEPS">
             <value xml:lang="en-US">Steps</value>
@@ -189,11 +185,11 @@ The current presentation contains no OLE objects.</value>
         <prop oor:name="STR_YES">
             <value xml:lang="en-US">~Yes</value>
         </prop>
-        <prop oor:name="STR_ABOUT">
-            <value xml:lang="en-US">&ProductName;</value>
+        <prop oor:name="STR_ABOUT2">
+            <value xml:lang="en-US">Sun Presentation Minimizer</value>
         </prop>
-        <prop oor:name="STR_ABOUT_VERSION">
-            <value xml:lang="en-US">About &ProductName; &ProductVersion;</value>
+        <prop oor:name="STR_ABOUT_VERSION2">
+            <value xml:lang="en-US">About Sun Presentation Minimizer 1.0.0</value>
         </prop>
         <prop oor:name="STR_ABOUT_PRN">
             <value xml:lang="en-US">Copyright 2000-2007 Sun Microsystems, Inc.
