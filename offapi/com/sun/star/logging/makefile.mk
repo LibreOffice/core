@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -39,16 +39,18 @@ PACKAGE := com$/sun$/star$/logging
 
 IDLFILES = \
     ConsoleHandler.idl\
+    CsvLogFormatter.idl\
     FileHandler.idl\
     LoggerPool.idl\
     LogLevel.idl\
     LogRecord.idl\
     PlainTextFormatter.idl\
     XConsoleHandler.idl\
+    XCsvLogFormatter.idl\
+    XLogFormatter.idl\
     XLogger.idl\
     XLoggerPool.idl\
-    XLogFormatter.idl\
-    XLogHandler.idl\
+    XLogHandler.idl
 
 .INCLUDE: target.mk
 .INCLUDE: $(PRJ)$/util$/target.pmk
