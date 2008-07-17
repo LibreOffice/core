@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.13 $
+# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -83,7 +83,7 @@ $(SLO)$/splash.obj : $(INCCOM)$/introbmpnames.hxx
 
 .INCLUDE .IGNORE : $(MISC)$/intro_bmp_names.mk
 
-.IF "$(INTO_BITMAPS:f)"!="$(LASTTIME_INTRO_BITMAPS)"
+.IF "$(INTRO_BITMAPS:f)"!="$(LASTTIME_INTRO_BITMAPS)"
 DO_PHONY=.PHONY
 .ENDIF			# "$(INTRO_BITMAPS:f)"!="$(LASTTIME_INTRO_BITMAPS)"
 
