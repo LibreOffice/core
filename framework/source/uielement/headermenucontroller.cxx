@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: headermenucontroller.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,6 +67,7 @@
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 //#include <tools/solar.hrc>
+#include <comphelper/uieventslogger.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -281,6 +282,12 @@ void SAL_CALL HeaderMenuController::select( const css::awt::MenuEvent& rEvent ) 
             }
 
             xURLTransformer->parseStrict( aTargetURL );
+            if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+            {
+                Sequence<PropertyValue> source;
+                ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("HeaderMenuController"));
+                ::comphelper::UiEventsLogger::logDispatch(aTargetURL, source);
+            }
             xDispatch->dispatch( aTargetURL, aArgs );
         }
     }
