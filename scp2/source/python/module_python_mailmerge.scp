@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_python_mailmerge.scp,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,28 +30,10 @@
 
 #include "macros.inc"
 
-Module gid_Module_Optional_Pymailmerge
-    PackageInfo = "packinfo_office.txt";
-    InstallOrder = "1100";
-    MOD_NAME_DESC ( MODULE_OPTIONAL_PYTHON_MAILMERGE );
-    ParentID = gid_Module_Optional_Pyuno;
-    Files = (gid_File_Pymailmerge, gid_File_Registry_Spool_Oo_Office_Writer_PyMailMerge_Xcu);
-    Minimal = NO;
-    Default = YES;
-    Styles = ();
-End
-
 File gid_File_Pymailmerge
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "mailmerge.py";
     RegistryID = gid_Starregistry_Services_Rdb;
     Styles = (PACKED,UNO_COMPONENT);
-End
-
-File gid_File_Registry_Spool_Oo_Office_Writer_PyMailMerge_Xcu
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Writer;
-    Name = "/registry/spool/org/openoffice/Office/Writer-javamail.xcu";
-    Styles = (PACKED,SCPZIP_REPLACE);
 End
