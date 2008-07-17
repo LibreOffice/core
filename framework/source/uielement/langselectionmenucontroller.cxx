@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: langselectionmenucontroller.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,6 +77,7 @@
 #ifndef __FRAMEWORK_CLASSES_RESOURCE_HRC_
 #include <classes/resource.hrc>
 #endif
+#include <comphelper/uieventslogger.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -233,6 +234,12 @@ void SAL_CALL LanguageSelectionMenuController::select( const css::awt::MenuEvent
 
             if ( xDispatch.is() )
             {
+                if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+                {
+                    Sequence<PropertyValue> source;
+                    ::comphelper::UiEventsLogger::appendDispatchOrigin(source, rtl::OUString::createFromAscii("LanguageSelectionMenuController"));
+                    ::comphelper::UiEventsLogger::logDispatch(aTargetURL, source);
+                }
                 xDispatch->dispatch( aTargetURL, aArgs );
             }
         }
