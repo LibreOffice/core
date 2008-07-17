@@ -1,32 +1,33 @@
-ex	extensions	:	rdbmaker svx SANE:sane TWAIN:twain np_sdk offuh stoc uui officecfg ZLIB:zlib NULL
-ex	extensions					usr1	-	all	ex_mkout NULL
-ex	extensions\inc					nmake		-	all	ex_inc NULL
-ex	extensions\inc\ucbhelper			get		-	all	ex_incucbh ex_inc NULL
-ex	extensions\source\plugin\workben		get	-	all	ex_plwkb ex_inc NULL
-ex	extensions\source\plugin\inc\plugin\win		get	-	all	ex_piwi ex_inc NULL
-ex	extensions\source\plugin\inc\plugin\unx		get	-	all	ex_piux ex_inc NULL
-ex	extensions\source\activex\msidl		nmake	-	w	ex_axmsidl ex_inc NULL
-ex	extensions\source\activex\main		nmake	-	w	ex_axmain ex_axmsidl.w ex_inc NULL
-ex	extensions\source\ole				nmake	-	w	ex_ole ex_xmlextr ex_inc NULL
-ex	extensions\source\resource			nmake	-	all	ex_resrc ex_inc NULL
-ex	extensions\source\plugin\aqua			nmake	-	u	ex_plaqua ex_plbase NULL
-ex	extensions\source\plugin\base			nmake	-	all	ex_plbase ex_inc NULL
-ex	extensions\source\plugin\win			nmake	-	w	ex_plwin ex_plbase ex_inc NULL
-ex	extensions\source\plugin\unx			nmake	-	u	ex_plunx ex_inc NULL
-ex	extensions\source\plugin\util			nmake	-	all	ex_plutil ex_plbase ex_plunx.u ex_plwin.w ex_plaqua.u ex_inc NULL
-ex	extensions\source\macosx\spotlight			nmake	-	u	ex_mxspotlight NULL
-ex	extensions\source\scanner			nmake	-	all	ex_scan ex_resrc ex_inc NULL
-ex	extensions\source\svg				nmake	-	all	ex_svg ex_scan ex_inc NULL
-ex	extensions\source\bibliography			nmake	-	all	ex_bib ex_inc NULL
-ex	extensions\source\xmlextract			nmake	-	all	ex_xmlextr ex_svg ex_inc NULL
-ex	extensions\source\propctrlr			nmake	-	all	ex_propctrlr ex_bib ex_inc NULL
-ex	extensions\source\dbpilots			nmake	-	all	ex_dbpilots ex_inc NULL
-ex	extensions\source\abpilot			nmake	-	all	ex_abpilot ex_inc NULL
-ex  extensions\source\logging           nmake   -   all ex_logging ex_inc NULL
-ex	extensions\source\preload			nmake	-	all	ex_preload	ex_inc NULL
-ex	extensions\source\config\ldap		nmake 	-	all ex_ldap ex_inc NULL
-ex	extensions\source\nsplugin\source	nmake	-	all	ex_nsplugin ex_inc NULL
-ex	extensions\source\update\feed    	nmake	-	all	ex_updchkfeed ex_inc NULL
-ex	extensions\source\update\check      	nmake	-	all	ex_updchk ex_inc NULL
-ex	extensions\source\update\ui      	nmake	-	all	ex_updchkui ex_inc NULL
-ex  extensions\util                        nmake   -   all ex_util ex_preload ex_abpilot ex_dbpilots ex_logging ex_ldap ex_propctrlr ex_bib ex_plutil NULL
+ex  extensions : rdbmaker svx SANE:sane TWAIN:twain np_sdk offuh stoc uui officecfg ZLIB:zlib NULL
+ex  extensions                                  usr1    -   all ex_mkout NULL
+ex  extensions\inc                              nmake   -   all ex_inc NULL
+ex  extensions\inc\ucbhelper                    get     -   all ex_incucbh ex_inc NULL
+ex  extensions\source\plugin\workben            get     -   all ex_plwkb ex_inc NULL
+ex  extensions\source\plugin\inc\plugin\win     get     -   all ex_piwi ex_inc NULL
+ex  extensions\source\plugin\inc\plugin\unx     get     -   all ex_piux ex_inc NULL
+ex  extensions\source\activex\msidl             nmake   -   w   ex_axmsidl ex_inc NULL
+ex  extensions\source\activex\main              nmake   -   w   ex_axmain ex_axmsidl.w ex_inc NULL
+ex  extensions\source\ole                       nmake   -   w   ex_ole ex_xmlextr ex_inc NULL
+ex  extensions\source\resource                  nmake   -   all ex_resrc ex_inc NULL
+ex  extensions\source\plugin\aqua               nmake   -   u   ex_plaqua ex_plbase NULL
+ex  extensions\source\plugin\base               nmake   -   all ex_plbase ex_inc NULL
+ex  extensions\source\plugin\win                nmake   -   w   ex_plwin ex_plbase ex_inc NULL
+ex  extensions\source\plugin\unx                nmake   -   u   ex_plunx ex_inc NULL
+ex  extensions\source\plugin\util               nmake   -   all ex_plutil ex_plbase ex_plunx.u ex_plwin.w ex_plaqua.u ex_inc NULL
+ex  extensions\source\macosx\spotlight          nmake   -   u   ex_mxspotlight NULL
+ex  extensions\source\scanner                   nmake   -   all ex_scan ex_resrc ex_inc NULL
+ex  extensions\source\svg                       nmake   -   all ex_svg ex_scan ex_inc NULL
+ex  extensions\source\bibliography              nmake   -   all ex_bib ex_inc NULL
+ex  extensions\source\xmlextract                nmake   -   all ex_xmlextr ex_svg ex_inc NULL
+ex  extensions\source\propctrlr                 nmake   -   all ex_propctrlr ex_bib ex_inc NULL
+ex  extensions\source\dbpilots                  nmake   -   all ex_dbpilots ex_inc NULL
+ex  extensions\source\abpilot                   nmake   -   all ex_abpilot ex_inc NULL
+ex  extensions\source\logging                   nmake   -   all ex_logging ex_inc NULL
+ex  extensions\source\oooimprovecore            nmake   -   all ex_oooimprovecore ex_inc NULL
+ex  extensions\source\preload                   nmake   -   all ex_preload  ex_inc NULL
+ex  extensions\source\config\ldap               nmake   -   all ex_ldap ex_inc NULL
+ex  extensions\source\nsplugin\source           nmake   -   all ex_nsplugin ex_inc NULL
+ex  extensions\source\update\feed               nmake   -   all ex_updchkfeed ex_inc NULL
+ex  extensions\source\update\check              nmake   -   all ex_updchk ex_inc NULL
+ex  extensions\source\update\ui                 nmake   -   all ex_updchkui ex_inc NULL
+ex  extensions\util                             nmake   -   all ex_util ex_preload ex_abpilot ex_dbpilots ex_logging ex_ldap ex_propctrlr ex_bib ex_plutil ex_oooimprovecore NULL
