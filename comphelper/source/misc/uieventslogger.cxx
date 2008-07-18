@@ -7,7 +7,7 @@
 *
 * $RCSfile: uieventslogger.cxx,v $
 *
-* $Revision: 1.2 $
+* $Revision: 1.3 $
 *
 * This file is part of OpenOffice.org.
 *
@@ -26,6 +26,9 @@
 * <http://www.openoffice.org/license.html>
 * for a copy of the LGPLv3 License.
 ***********************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_comphelper.hxx"
 
 #include <comphelper/uieventslogger.hxx>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
