@@ -30,7 +30,7 @@
 +#
 +# $RCSfile: rasqal-0.9.15.patch,v $
 +#
-+# $Revision: 1.2 $
++# $Revision: 1.3 $
 +#
 +# This file is part of OpenOffice.org.
 +#
@@ -199,3 +199,29 @@
  #ifdef _DEBUG
  #define RASQAL_DEBUG 1
  #endif
+--- misc/rasqal-0.9.15/ltmain.sh	2006-03-12 03:49:04.000000000 +0900
++++ misc/build/rasqal-0.9.15/ltmain.sh	2008-07-08 12:00:00.000000000 +0900
+@@ -3195,9 +3195,9 @@
+ 	    revision="$number_revision"
+ 	    ;;
+ 	  freebsd-aout|freebsd-elf|sunos)
+-	    current="$number_major"
+-	    revision="$number_minor"
+-	    age="0"
++	    current=`expr $number_major + $number_minor`
++	    age="$number_minor"
++	    revision="$number_revision"
+ 	    ;;
+ 	  irix|nonstopux)
+ 	    current=`expr $number_major + $number_minor - 1`
+@@ -3275,8 +3275,8 @@
+ 	  ;;
+ 
+ 	freebsd-elf)
+-	  major=".$current"
+-	  versuffix=".$current";
++	  major=.`expr $current - $age`
++	  versuffix="$major.$age.$revision"
+ 	  ;;
+ 
+ 	irix | nonstopux)

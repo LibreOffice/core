@@ -30,7 +30,7 @@
 +#
 +# $RCSfile: redland-1.0.7.patch,v $
 +#
-+# $Revision: 1.2 $
++# $Revision: 1.3 $
 +#
 +# This file is part of OpenOffice.org.
 +#
@@ -684,3 +684,29 @@
 +later version may be used, or where a choice of which version of the 
 +LGPL is applied is otherwise unspecified.
 +
+--- misc/redland-1.0.7/ltmain.sh	2007-11-28 06:23:09.000000000 +0900
++++ misc/build/redland-1.0.7/ltmain.sh	2008-07-08 11:59:22.000000000 +0900
+@@ -3237,9 +3237,9 @@
+ 	    revision="$number_revision"
+ 	    ;;
+ 	  freebsd-aout|freebsd-elf|sunos)
+-	    current="$number_major"
+-	    revision="$number_minor"
+-	    age="0"
++	    current=`expr $number_major + $number_minor`
++	    age="$number_minor"
++	    revision="$number_revision"
+ 	    ;;
+ 	  irix|nonstopux)
+ 	    current=`expr $number_major + $number_minor`
+@@ -3319,8 +3319,8 @@
+ 	  ;;
+ 
+ 	freebsd-elf)
+-	  major=".$current"
+-	  versuffix=".$current";
++	  major=.`expr $current - $age`
++	  versuffix="$major.$age.$revision"
+ 	  ;;
+ 
+ 	irix | nonstopux)
