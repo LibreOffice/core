@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,7 +44,7 @@ TARGET=templates
 COMPLETELANGISO_VAR:=$(uniq $(completelangiso) $(alllangiso))
 .EXPORT : COMPLETELANGISO_VAR
 
-ALLTAR : $(INCCOM)$/alllangmodules.inc $(INCCOM)$/alllangmodules_root.inc $(INCCOM)$/alllangmodules_base.inc $(INCCOM)$/alllangmodules_calc.inc $(INCCOM)$/alllangmodules_draw.inc $(INCCOM)$/alllangmodules_impress.inc $(INCCOM)$/alllangmodules_math.inc $(INCCOM)$/alllangmodules_writer.inc $(INCCOM)$/alllangmodules_binfilter.inc $(INCCOM)$/alllangmodules_onlineupdate.inc
+ALLTAR : $(INCCOM)$/alllangmodules.inc $(INCCOM)$/alllangmodules_root.inc $(INCCOM)$/alllangmodules_base.inc $(INCCOM)$/alllangmodules_calc.inc $(INCCOM)$/alllangmodules_draw.inc $(INCCOM)$/alllangmodules_impress.inc $(INCCOM)$/alllangmodules_math.inc $(INCCOM)$/alllangmodules_writer.inc $(INCCOM)$/alllangmodules_binfilter.inc
 
 .PHONY $(INCCOM)$/alllangmodules.inc:
     @@-$(RENAME) $@ $@.tmp
@@ -81,7 +81,3 @@ ALLTAR : $(INCCOM)$/alllangmodules.inc $(INCCOM)$/alllangmodules_root.inc $(INCC
 .PHONY $(INCCOM)$/alllangmodules_binfilter.inc:
     @@-$(RENAME) $@ $@.tmp
     $(PERL) -w modules.pl -i $(PRJ)$/source$/templates$/module_langpack_binfilter.sct -o $@.tmp && $(RENAME:s/+//) $@.tmp $@
-
-.PHONY $(INCCOM)$/alllangmodules_onlineupdate.inc:
-    @@-$(RENAME) $@ $@.tmp
-    $(PERL) -w modules.pl -i $(PRJ)$/source$/templates$/module_langpack_onlineupdate.sct -o $@.tmp && $(RENAME:s/+//) $@.tmp $@

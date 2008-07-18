@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_onlineupdate.scp,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,13 +40,3 @@ Module gid_Module_Optional_Onlineupdate
     Files = (gid_File_Lib_Updchk, gid_File_Registry_Spool_Oo_Office_Addons_Onlineupdate_Xcu, gid_File_Registry_Spool_Oo_Office_Jobs_Onlineupdate_Xcu, gid_File_Bin_UnpackUpdate);
     Dirs = (gid_Dir_Share_Registry_Modules_Oo_Office_Addons, gid_Dir_Share_Registry_Modules_Oo_Office_Jobs);
 End
-
-Module gid_Module_Langpack_Onlineupdate_Template
-    ParentID = gid_Module_Optional_Onlineupdate;
-    Name = "gid_Module_Langpack_Onlineupdate_Template";
-    Description = "gid_Module_Langpack_Onlineupdate_Template";
-    Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Res_Upd);
-End
-
-#include "alllangmodules_onlineupdate.inc"
