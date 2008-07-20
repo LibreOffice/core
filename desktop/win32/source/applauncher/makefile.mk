@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.11 $
+# $Revision: 1.12 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -53,7 +53,8 @@ OBJFILES= \
     $(OBJ)$/sdraw.obj \
     $(OBJ)$/simpress.obj \
     $(OBJ)$/sbase.obj \
-    $(OBJ)$/smath.obj
+    $(OBJ)$/smath.obj \
+    $(OBJ)$/sweb.obj
 
 # SO launcher
 .IF "$(BUILD_SPECIAL)"!=""
