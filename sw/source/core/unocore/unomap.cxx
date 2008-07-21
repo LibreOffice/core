@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unomap.cxx,v $
- * $Revision: 1.211 $
+ * $Revision: 1.212 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -272,6 +272,7 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
         { SW_PROP_NMID(UNO_NAME_TEXT_SECTION), FN_UNO_TEXT_SECTION, CPPU_E2T(CPPUTYPE_REFTEXTSECTION),  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },                    \
         { SW_PROP_NMID(UNO_NAME_PARA_CHAPTER_NUMBERING_LEVEL), FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL,CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE, 0},                                                     \
         { SW_PROP_NMID(UNO_NAME_PARA_CONDITIONAL_STYLE_NAME), FN_UNO_PARA_CONDITIONAL_STYLE_NAME, CPPU_E2T(CPPUTYPE_OUSTRING),      PropertyAttribute::READONLY, 0},                                                     \
+        { SW_PROP_NMID(UNO_NAME_LIST_ID), FN_UNO_LIST_ID, CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID, 0}, \
         { SW_PROP_NMID(UNO_NAME_PARA_IS_NUMBERING_RESTART), FN_NUMBER_NEWSTART,     CPPU_E2T(CPPUTYPE_BOOLEAN),     PropertyAttribute::MAYBEVOID, 0 },
 
 #define COMMON_HYPERLINK_PROPERTIES \
@@ -369,7 +370,6 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
         { SW_PROP_NMID(UNO_NAME_CHAR_RELIEF), RES_CHRATR_RELIEF,      CPPU_E2T(CPPUTYPE_INT16),    PropertyAttribute::MAYBEVOID,      MID_RELIEF }, \
         { SW_PROP_NMID(UNO_NAME_SNAP_TO_GRID), RES_PARATR_SNAPTOGRID, CPPU_E2T(CPPUTYPE_BOOLEAN), PropertyAttribute::MAYBEVOID, 0 }, \
         { SW_PROP_NMID(UNO_NAME_PARA_IS_CONNECT_BORDER), RES_PARATR_CONNECT_BORDER, CPPU_E2T(CPPUTYPE_BOOLEAN), PropertyAttribute::MAYBEVOID, 0}, \
-        { SW_PROP_NMID(UNO_NAME_LIST_ID), RES_PARATR_LIST_ID, CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID, 0}, \
         { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
 
 #define COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN \
