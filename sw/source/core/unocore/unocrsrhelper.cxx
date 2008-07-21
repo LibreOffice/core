@@ -8,7 +8,7 @@
  *
  * $RCSfile: unocrsrhelper.cxx,v $
  *
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -168,6 +168,9 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
         break;
         case FN_UNO_NUM_LEVEL  :
         case FN_UNO_IS_NUMBER  :
+        // --> OD 2008-07-14 #i91601#
+        case FN_UNO_LIST_ID:
+        // <--
         case FN_NUMBER_NEWSTART:
         {
             const SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
@@ -187,6 +190,13 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                         BOOL bIsNumber = pTxtNd->IsCountedInList();
                         pAny->setValue(&bIsNumber, ::getBooleanCppuType());
                     }
+                    // --> OD 2008-07-14 #i91601#
+                    else if ( pMap->nWID == FN_UNO_LIST_ID )
+                    {
+                        const String sListId = pTxtNd->GetListId();
+                        *pAny <<= OUString(sListId);
+                    }
+                    // <--
                     else /*if(pMap->nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
                     {
                         BOOL bIsRestart = pTxtNd->IsListRestart();
@@ -205,6 +215,12 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                         *pAny <<= static_cast<sal_Int16>( 0 );
                     else if(pMap->nWID == FN_UNO_IS_NUMBER)
                         *pAny <<= false;
+                    // --> OD 2008-07-14 #i91601#
+                    else if ( pMap->nWID == FN_UNO_LIST_ID )
+                    {
+                        *pAny <<= OUString();
+                    }
+                    // <--
                     else /*if(pMap->nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
                         *pAny <<= false;
                 }
