@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: t_doc2.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-13 10:27:10 $
+'* last change: $Author: obo $ $Date: 2008-07-21 12:08:27 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -127,34 +127,30 @@ end sub
 '
 '-------------------------------------------------------------------------------
 '
-sub sMakeReadOnlyDocumentEditable
-    If IsItLoaded() then
-        '/// After the document has been loaded...
+sub sMakeReadOnlyDocumentEditable    
+    If IsItLoaded() then        
         Kontext "Standardbar"
         if Bearbeiten.IsEnabled then
-            '/// ...check if the button is enabled. 
+            'Check if the button is enabled. 
             if Bearbeiten.getState(2) = 0 then                
-                '/// Check if the document has been loaded read-only and if yes    
-                Bearbeiten.Click()
-                '/// click on the 'Edit'-button
+                'Check if the document has been loaded read-only and if yes
+                'click on the 'Edit'-button
+                Bearbeiten.Click()                
                 sleep (2)
                 Kontext
                 if Active.Exists(5) then
-                    '/// If there is a messagebox coming up, click on Yes/OK
+                    'If there is a messagebox coming up, click on Yes/OK
+                    printlog "Document was read-only. A copy will be used."
                     Active.Yes
-                end if
-                sleep (2)        
+                end if                        
                 Kontext
-                if Active.Exists(1) then
+                if Active.Exists(2) then
                     ' Sometimes an messagebox will be opened that the file does
                     ' not exists. 
                     QAErrorLog Active.GetText
                     Active.OK
-                end if
-                sleep (2)
+                end if                
             end if
-        else
-            printlog "Document opened with write access."
         end if
     else
         warnlog "The document has not been loaded correctly."
