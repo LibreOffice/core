@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edit.cxx,v $
- * $Revision: 1.97 $
+ * $Revision: 1.98 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1484,6 +1484,9 @@ void Edit::Tracking( const TrackingEvent& rTEvt )
             ImplSetCursorPos( nChar, TRUE );
         }
     }
+
+    if ( mpUpdateDataTimer && !mbIsSubEdit && mpUpdateDataTimer->IsActive() )
+        mpUpdateDataTimer->Start();//do not update while the user is still travelling in the control
 }
 
 // -----------------------------------------------------------------------
@@ -1725,6 +1728,9 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
 
 void Edit::KeyInput( const KeyEvent& rKEvt )
 {
+    if ( mpUpdateDataTimer && !mbIsSubEdit && mpUpdateDataTimer->IsActive() )
+        mpUpdateDataTimer->Start();//do not update while the user is still travelling in the control
+
     if ( mpSubEdit || !ImplHandleKeyEvent( rKEvt ) )
         Control::KeyInput( rKEvt );
 }
@@ -1931,6 +1937,13 @@ Window* Edit::GetPreferredKeyInputWindow()
 
 void Edit::LoseFocus()
 {
+    if ( mpUpdateDataTimer && !mbIsSubEdit && mpUpdateDataTimer->IsActive() )
+    {
+        //notify an update latest when the focus is lost
+        mpUpdateDataTimer->Stop();
+        mpUpdateDataTimer->Timeout();
+    }
+
     if ( !mpSubEdit )
     {
         // FIXME: this is currently only on aqua
