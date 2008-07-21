@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chart2uno.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -334,6 +334,9 @@ ScChart2DataProvider::createDataSource(
     USHORT nValid = aRangeList->Parse( aRangeRepresentation, m_pDocument);
     if ( (nValid & SCA_VALID) == SCA_VALID )
     {
+        if(bLabel)
+            addUpperLeftCornerIfMissing( aRangeList );
+
         ScChartPositioner aChartPositioner(m_pDocument, aRangeList);
         BOOL bColHeaders = (bOrientCol ? bLabel : FALSE );
         BOOL bRowHeaders = (bOrientCol ? FALSE : bLabel );
@@ -628,9 +631,7 @@ void lcl_detectRanges(
     chart::ChartDataRowSource & rOutRowSource,
     bool & rOutRowSourceDetected,
     const uno::Reference< chart2::data::XDataSource >& xDataSource,
-    ScDocument * pDoc,
-    SCCOL * pOutMinColumn = 0,
-    SCROW * pOutMinRow = 0 )
+    ScDocument * pDoc )
 {
     if(!pDoc)
         return;
@@ -640,8 +641,6 @@ void lcl_detectRanges(
     sal_Int32 nDataInRows = 0;
     sal_Int32 nDataInColumns = 0;
     bool bRowSourceAmbiguous = false;
-    SCCOL nMinColumn = MAXCOLCOUNT;
-    SCROW nMinRow = MAXROWCOUNT;
 
     ::std::vector< ::rtl::OUString > aRangeRepresentations(
         lcl_getRangeRepresentationsFromDataSource( xDataSource ));
@@ -658,10 +657,6 @@ void lcl_detectRanges(
             {
                 bool bColDiff( ( pR->aEnd.Col() - pR->aStart.Col() ) != 0 );
                 bool bRowDiff( ( pR->aEnd.Row() - pR->aStart.Row() ) != 0 );
-                nMinColumn = ::std::min( nMinColumn, pR->aStart.Col());
-                nMinColumn = ::std::min( nMinColumn, pR->aEnd.Col());
-                nMinRow = ::std::min( nMinRow, pR->aStart.Row());
-                nMinRow = ::std::min( nMinRow, pR->aEnd.Row());
 
                 if( bColDiff && ! bRowDiff )
                     ++nDataInRows;
@@ -691,11 +686,6 @@ void lcl_detectRanges(
                            ? chart::ChartDataRowSource_ROWS
                            : chart::ChartDataRowSource_COLUMNS );
     }
-
-    if( pOutMinColumn )
-        *pOutMinColumn = nMinColumn;
-    if( pOutMinRow )
-        *pOutMinRow = nMinRow;
 }
 
 bool lcl_HasCategories(
@@ -742,6 +732,82 @@ bool lcl_HasFirstCellAsLabel(
 
 } // anonymous namespace
 
+bool ScChart2DataProvider::addUpperLeftCornerIfMissing( ScRangeListRef& xRanges )
+{
+    bool bChanged=false;
+
+    //returns true if the corner was added
+    ScRangePtr pR = xRanges->First();
+    if( !pR )
+        return bChanged;
+
+    SCCOL nMinColumn = MAXCOLCOUNT;
+    SCROW nMinRow = MAXROWCOUNT;
+    SCCOL nMaxColumn = ::std::max( pR->aStart.Col(), pR->aEnd.Col());
+    SCROW nMaxRow = ::std::max( pR->aStart.Row(), pR->aEnd.Row());
+    SCTAB nTable = pR->aStart.Tab();
+    bool bUniqueTable = true;
+    for(; pR; pR=xRanges->Next() )
+    {
+        if( bUniqueTable && pR->aStart.Tab() != nTable )
+        {
+            bUniqueTable = false;
+            break;
+        }
+
+        nMinColumn = ::std::min( nMinColumn, pR->aStart.Col());
+        nMinColumn = ::std::min( nMinColumn, pR->aEnd.Col());
+        nMinRow = ::std::min( nMinRow, pR->aStart.Row());
+        nMinRow = ::std::min( nMinRow, pR->aEnd.Row());
+
+        nMaxColumn = ::std::max( nMaxColumn, pR->aStart.Col());
+        nMaxColumn = ::std::max( nMaxColumn, pR->aEnd.Col());
+        nMaxRow = ::std::max( nMaxRow, pR->aStart.Row());
+        nMaxRow = ::std::max( nMaxRow, pR->aEnd.Row());
+    }
+
+    if( bUniqueTable
+        && nMinRow < nMaxRow && nMinColumn < nMaxColumn
+        && nMinRow < MAXROWCOUNT && nMinColumn < MAXCOLCOUNT
+        && nMaxRow < MAXROWCOUNT && nMaxColumn < MAXCOLCOUNT )
+    {
+        ScRange aCorner( nMinColumn, nMinRow, nTable );
+
+        //check whether the corner is contained
+        bool bCornerMissing = !xRanges->In( aCorner );
+
+        //and check whether the cells around the corner are contained thus the corner would be a natural part of the range
+        bCornerMissing = bCornerMissing && xRanges->In( ScRange( nMinColumn, nMinRow+1, nTable ) );
+        bCornerMissing = bCornerMissing && xRanges->In( ScRange( nMinColumn+1, nMinRow, nTable ) );
+        bCornerMissing = bCornerMissing && xRanges->In( ScRange( nMinColumn+1, nMinRow+1, nTable ) );
+
+        if( bCornerMissing )
+        {
+            //make a simple rectangular range if possible
+            bool bSimpleRange = false;
+            if( xRanges->Count()==2 )
+            {
+                ScRange aRightPart( ScAddress( nMinColumn+1, nMinRow, nTable),  ScAddress( nMaxColumn, nMaxRow, nTable) );
+                ScRange aBottomPart( ScAddress( nMinColumn, nMinRow+1, nTable),  ScAddress( nMaxColumn, nMaxRow, nTable) );
+                if( xRanges->In(aRightPart) && xRanges->In(aBottomPart)  )
+                {
+                    xRanges->RemoveAll();
+                    xRanges->Append( ScRange( ScAddress( nMinColumn, nMinRow, nTable),  ScAddress( nMaxColumn, nMaxRow, nTable) ) );
+                    bChanged=true;
+                    bSimpleRange = true;
+                }
+            }
+
+            if( !bSimpleRange )
+            {
+                xRanges->Join( aCorner );
+                bChanged=true;
+            }
+        }
+    }
+    return bChanged;
+}
+
 uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArguments(
     const uno::Reference< chart2::data::XDataSource >& xDataSource )
     throw (uno::RuntimeException)
@@ -751,54 +817,35 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     bool bFirstCellAsLabel = false;
     bool bHasCategories = true;
     ::rtl::OUString sRangeRep;
-    ::rtl::OUString sRangeRepWithUpperLeftCorner;
 
     chart::ChartDataRowSource eRowSource = chart::ChartDataRowSource_COLUMNS;
+
+    ScRangeListRef xRanges = new ScRangeList;
 
     // CellRangeRepresentation
     {
         ScUnoGuard aGuard;
-        SCCOL nMinColumn = MAXCOLCOUNT;
-        SCROW nMinRow = MAXROWCOUNT;
         DBG_ASSERT( m_pDocument, "No Document -> no detectArguments" );
         if(!m_pDocument)
             return lcl_VectorToSequence( aResult );
 
-        ScRangeListRef xRanges = new ScRangeList;
-        lcl_detectRanges( xRanges, eRowSource, bRowSourceDetected, xDataSource, m_pDocument, &nMinColumn, &nMinRow );
+        lcl_detectRanges( xRanges, eRowSource, bRowSourceDetected, xDataSource, m_pDocument );
 
+        //get range string
+        String sRet;
+        xRanges->Format(sRet, SCR_ABS_3D, m_pDocument);
+        sRangeRep = ::rtl::OUString( sRet );
+    }
+
+    // TableNumberList
+    {
         ::std::list< SCTAB > aTableNumList;
-
+        ScRangePtr pR=xRanges->First();
+        if( pR )
         {
-            String sRet;
-            xRanges->Format(sRet, SCR_ABS_3D, m_pDocument);
-            sRangeRep = ::rtl::OUString( sRet );
-
-            bool bUniqueTableNumber = true;
-            ScRangePtr pR=xRanges->First();
-            SCTAB nTableNumber = 0;
-            if( pR )
-            {
-                nTableNumber = pR->aStart.Tab();
-                for (; pR; pR=xRanges->Next())
-                {
-                    if( bUniqueTableNumber && pR->aStart.Tab() != nTableNumber )
-                        bUniqueTableNumber = false;
-                    aTableNumList.push_back( pR->aStart.Tab());
-                }
-
-                if( bUniqueTableNumber &&
-                    nMinRow < MAXROWCOUNT &&
-                    nMinColumn < MAXCOLCOUNT )
-                {
-                    xRanges->Join( ScRange( nMinColumn, nMinRow, nTableNumber ));
-                    xRanges->Format(sRet, SCR_ABS_3D, m_pDocument);
-                    sRangeRepWithUpperLeftCorner = ::rtl::OUString( sRet );
-                }
-            }
+            for (; pR; pR=xRanges->Next())
+                aTableNumList.push_back( pR->aStart.Tab());
         }
-
-
         aResult.push_back(
             beans::PropertyValue( ::rtl::OUString::createFromAscii("TableNumberList"), -1,
                                   uno::makeAny( lcl_createTableNumberList( aTableNumList ) ),
@@ -833,11 +880,15 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                                   uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE ));
     }
 
-    // add upper left corner
-    if( bRowSourceDetected && bFirstCellAsLabel && bHasCategories &&
-        sRangeRepWithUpperLeftCorner.getLength() )
+    //add the left upper corner to the range when it is missing
+    if( bRowSourceDetected && bFirstCellAsLabel && bHasCategories  )
     {
-        sRangeRep = sRangeRepWithUpperLeftCorner;
+        if( addUpperLeftCornerIfMissing( xRanges ) )
+        {
+            String sRange;
+            xRanges->Format( sRange, SCR_ABS_3D, m_pDocument );
+            sRangeRep = ::rtl::OUString( sRange );
+        }
     }
 
     // add cell range property
@@ -919,29 +970,6 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     }
 
     return lcl_VectorToSequence( aResult );
-}
-
-// static
-void ScChart2DataProvider::detectArguments(
-    const uno::Reference< chart2::data::XDataSource >& xDataSource,
-    ScDocument * pDoc,
-    ScRangeListRef& rOutRanges, bool & rOutHasColumnLabels, bool & rOutHasRowLabels )
-{
-    chart::ChartDataRowSource eRowSource = chart::ChartDataRowSource_COLUMNS;
-    bool bRowSourceDetected = false;
-
-    // #i68229# lcl_HasCategories/lcl_HasFirstCellAsLabel modifies out-param only when returning true
-    rOutHasColumnLabels = rOutHasRowLabels = false;
-
-    lcl_detectRanges( rOutRanges, eRowSource, bRowSourceDetected, xDataSource, pDoc );
-    if( bRowSourceDetected )
-    {
-        bool & rHasCategories = (eRowSource == chart::ChartDataRowSource_COLUMNS) ? rOutHasRowLabels : rOutHasColumnLabels;
-        bool & rHasFirtCellLabels = (eRowSource == chart::ChartDataRowSource_COLUMNS) ? rOutHasColumnLabels : rOutHasRowLabels;
-
-        lcl_HasCategories( xDataSource, rHasCategories );
-        lcl_HasFirstCellAsLabel( xDataSource, rHasFirtCellLabels );
-    }
 }
 
 ::sal_Bool SAL_CALL ScChart2DataProvider::createDataSequenceByRangeRepresentationPossible( const ::rtl::OUString& aRangeRepresentation )
