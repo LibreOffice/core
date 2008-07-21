@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_RangeChooser.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,13 +77,12 @@ protected: //methods
 
     void initControlsFromModel();
     void changeDialogModelAccordingToControls();
-    void changeModelAccordingToControls();
     bool isValid();
     void setDirty();
-    bool isDirty() const;
 
     DECL_LINK( ChooseRangeHdl, void* );
     DECL_LINK( ControlChangedHdl, void* );
+    DECL_LINK( ControlEditedHdl, void* );
 
 protected: //member
 
