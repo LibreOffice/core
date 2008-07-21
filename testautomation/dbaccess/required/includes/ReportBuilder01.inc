@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: ReportBuilder01.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 07:43:45 $
+'* last change: $Author: obo $ $Date: 2008-07-21 12:31:42 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -60,11 +60,6 @@ end sub
 '-------------------------------------------------------------------------
 '-------------------------------------------------------------------------
 testcase tMainMenuBar
-
-    if(gPlatform = "x86" or gPlatform = "sol") then
-        warnlog "#88579# crash on closing report design"
-        goto endsub
-    endif    
 
     dim iCount as Integer
 
@@ -244,11 +239,6 @@ endcase
 '-------------------------------------------------------------------------
 testcase tConditionalFormatingDialog
 
-    if(gPlatform = "x86" or gPlatform = "sol") then
-        warnlog "#88579# crash on closing report design"
-        goto endsub
-    endif
-    
     '/// open Bibliography database
     printlog "open Bibliography database"    
     call fOpenDatabase(gOfficePath + ConvertPath("user/database/biblio.odb"))
@@ -310,11 +300,6 @@ endcase
 '-------------------------------------------------------------------------
 testcase tExecuteReport
 
-    if(gPlatform = "x86" or gPlatform = "sol") then
-        warnlog "#88579# crash on closing report design"
-        goto endsub
-    endif
-
     '/// open Bibliography database    
     call fOpenDatabase(gOfficePath + ConvertPath("user/database/biblio.odb"))
     
@@ -369,11 +354,6 @@ endcase
 '-------------------------------------------------------------------------
 testcase tPageNumber
 
-    if(gPlatform = "x86" or gPlatform = "sol") then
-        warnlog "#88579# crash on closing report design"
-        goto endsub
-    endif
-
     '/// open Bibliography database
     printlog "open Bibliography database"    
     call fOpenDatabase(gOfficePath + ConvertPath("user/database/biblio.odb"))
@@ -423,11 +403,6 @@ testcase tPageNumber
 endcase    
 '-------------------------------------------------------------------------
 testcase tDateTime
-
-    if(gPlatform = "x86" or gPlatform = "sol") then
-        warnlog "#88579# crash on closing report design"
-        goto endsub
-    endif
 
     '/// open Bibliography database
     printlog "open Bibliography database"    
@@ -480,11 +455,6 @@ endcase
 '-------------------------------------------------------------------------
 testcase tGroupingSorting
 
-    if(gPlatform = "x86" or gPlatform = "sol") then
-        warnlog "#88579# crash on closing report design"
-        goto endsub
-    endif
-
     '/// open Bibliography database
     printlog "open Bibliography database"    
     call fOpenDatabase(gOfficePath + ConvertPath("user/database/biblio.odb"))
@@ -536,11 +506,6 @@ endcase
 '-------------------------------------------------------------------------
 testcase tReportNavigator
 
-    if(gPlatform = "x86" or gPlatform = "sol") then
-        warnlog "#88579# crash on closing report design"
-        goto endsub
-    endif
-
     '/// open Bibliography database
     printlog "open Bibliography database"    
     call fOpenDatabase(gOfficePath + ConvertPath("user/database/biblio.odb"))
@@ -591,11 +556,6 @@ testcase tReportNavigator
 endcase
 '-------------------------------------------------------------------------
 testcase tReportHeaderFooter
-
-    if(gPlatform = "x86" or gPlatform = "sol") then
-        warnlog "#88579# crash on closing report design"
-        goto endsub
-    endif
 
     '/// open Bibliography database
     printlog "open Bibliography database"    
@@ -679,11 +639,6 @@ endcase
 '-------------------------------------------------------------------------
 testcase tPageHeaderFooter
 
-    if(gPlatform = "x86" or gPlatform = "sol") then
-        warnlog "#88579# crash on closing report design"
-        goto endsub
-    endif
-
     '/// open Bibliography database
     printlog "open Bibliography database"    
     call fOpenDatabase(gOfficePath + ConvertPath("user/database/biblio.odb"))
@@ -764,11 +719,6 @@ testcase tPageHeaderFooter
 endcase
 '-------------------------------------------------------------------------
 testcase tEditReport
-
-    if(gPlatform = "x86" or gPlatform = "sol") then
-        warnlog "#88579# crash on closing report design"
-        goto endsub
-    endif
 
     '/// open Bibliography database    
     call fOpenDatabase(gOfficePath + ConvertPath("user/database/biblio.odb"))
