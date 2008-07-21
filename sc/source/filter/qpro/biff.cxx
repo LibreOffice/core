@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: biff.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,7 +81,7 @@ bool ScBiffReader::nextRecord()
     mnOffset = mpStream->Tell();
 #ifdef DEBUG
     fprintf( stderr, "Read record 0x%x length 0x%x at offset 0x%x\n",
-        mnId, mnLength, mnOffset );
+        (unsigned)mnId, (unsigned)mnLength, (unsigned)mnOffset );
 
 #if 1  // rather verbose
     int len = mnLength;
