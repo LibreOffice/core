@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpr5.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -760,7 +760,7 @@ static int lcl_LUP_decompose( ScMatrix* mA, const SCSIZE n,
     }
     fprintf( stderr, "\n%s\n", "lcl_LUP_decompose(): P");
     for (SCSIZE j=0; j < n; ++j)
-        fprintf( stderr, "%5u ", P[j]);
+        fprintf( stderr, "%5u ", (unsigned)P[j]);
     fprintf( stderr, "\n%s\n", "");
 #endif
     return nSign;
