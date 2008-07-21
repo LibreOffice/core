@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlbodyi.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,7 +87,7 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
         sal_Int32 nLen = aVer.getLength();
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "\n ScXMLBodyContext ODFVersion: nLen: %d, str: %s\n",
-                nLen, OUStringToOString( aVer, RTL_TEXTENCODING_UTF8).getStr());
+                (int)nLen, OUStringToOString( aVer, RTL_TEXTENCODING_UTF8).getStr());
 #endif
         if (!nLen)
             eGrammar = ScGrammar::GRAM_PODF;
