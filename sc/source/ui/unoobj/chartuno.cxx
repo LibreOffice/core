@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chartuno.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -478,19 +478,56 @@ void ScChartObj::GetData_Impl( ScRangeListRef& rRanges, bool& rColHeaders, bool&
 {
     bool bFound = false;
     ScDocument* pDoc = (pDocShell? pDocShell->GetDocument(): 0);
-    uno::Reference< embed::XComponentSupplier > xCompSupp;
+    uno::Reference< embed::XEmbeddedObject > xIPObj;
     if( pDoc )
-        xCompSupp.set( pDoc->FindOleObjectByName( aChartName ), uno::UNO_QUERY );
-    if( xCompSupp.is())
+        xIPObj.set( pDoc->FindOleObjectByName( aChartName ), uno::UNO_QUERY );
+    if( xIPObj.is())
     {
-        uno::Reference< chart2::data::XDataReceiver > xReceiver( xCompSupp->getComponent(), uno::UNO_QUERY );
-        if( xReceiver.is())
-        {
-            uno::Reference< chart2::data::XDataSource > xUsedData( xReceiver->getUsedData());
+        //make sure that the chart is loaded
+        svt::EmbeddedObjectRef::TryRunningState( xIPObj );
 
-            ScChart2DataProvider::detectArguments(
-                xUsedData, pDoc,
-                rRanges, rColHeaders, rRowHeaders );
+        uno::Reference< chart2::XChartDocument > xChartDoc( xIPObj->getComponent(), uno::UNO_QUERY );
+        uno::Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
+        if( xReceiver.is() )
+        {
+            uno::Reference< chart2::data::XDataProvider > xProvider = xChartDoc->getDataProvider();
+            if( xProvider.is() )
+            {
+                uno::Sequence< beans::PropertyValue > aArgs( xProvider->detectArguments( xReceiver->getUsedData() ) );
+
+                rtl::OUString aRanges;
+                chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
+                bool bHasCategories=false;
+                bool bFirstCellAsLabel=false;
+                const beans::PropertyValue* pPropArray = aArgs.getConstArray();
+                long nPropCount = aArgs.getLength();
+                for (long i = 0; i < nPropCount; i++)
+                {
+                    const beans::PropertyValue& rProp = pPropArray[i];
+                    String aPropName(rProp.Name);
+
+                    if (aPropName.EqualsAscii( "CellRangeRepresentation" ))
+                        rProp.Value >>= aRanges;
+                    else if (aPropName.EqualsAscii( "DataRowSource" ))
+                        eDataRowSource = (chart::ChartDataRowSource)ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
+                    else if (aPropName.EqualsAscii( "HasCategories" ))
+                        bHasCategories = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
+                    else if (aPropName.EqualsAscii( "FirstCellAsLabel" ))
+                        bFirstCellAsLabel = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
+                }
+
+                if( chart::ChartDataRowSource_COLUMNS == eDataRowSource )
+                {
+                    rColHeaders=bFirstCellAsLabel;
+                    rRowHeaders=bHasCategories;
+                }
+                else
+                {
+                    rColHeaders=bHasCategories;
+                    rRowHeaders=bFirstCellAsLabel;
+                }
+                rRanges->Parse( aRanges, pDoc);
+            }
             bFound = true;
         }
      }
