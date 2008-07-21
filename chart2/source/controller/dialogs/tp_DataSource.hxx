@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_DataSource.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,8 +98,8 @@ public:
     DECL_LINK( CategoriesRangeButtonClickedHdl, void* );
     DECL_LINK( AddButtonClickedHdl, void* );
     DECL_LINK( RemoveButtonClickedHdl, void* );
-    DECL_LINK( RangeModifiedHdl, void* );
-    DECL_LINK( CategoriesRangeModifiedHdl, void* );
+    DECL_LINK( RangeModifiedHdl, Edit* );
+    DECL_LINK( RangeUpdateDataHdl, Edit* );
     DECL_LINK( UpButtonClickedHdl, void* );
     DECL_LINK( DownButtonClickedHdl, void* );
 
@@ -134,7 +134,6 @@ protected:
      */
     bool isValid();
     void setDirty();
-    bool isDirty() const;
 
     void updateControlsFromDialogModel();
 
