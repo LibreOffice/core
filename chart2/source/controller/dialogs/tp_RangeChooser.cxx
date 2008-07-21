@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_RangeChooser.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -166,7 +166,8 @@ RangeChooserTabPage::RangeChooserTabPage( Window* pParent
     // #i75179# enable setting the background to a different color
     m_aED_Range.SetStyle( m_aED_Range.GetStyle() | WB_FORCECTRLBACKGROUND );
 
-    m_aED_Range.SetModifyHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ));
+    m_aED_Range.SetUpdateDataHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ));
+    m_aED_Range.SetModifyHdl( LINK( this, RangeChooserTabPage, ControlEditedHdl ));
     m_aRB_Rows.SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
     m_aCB_FirstRowAsLabel.SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
     m_aCB_FirstColumnAsLabel.SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
@@ -179,7 +180,6 @@ RangeChooserTabPage::~RangeChooserTabPage()
 void RangeChooserTabPage::ActivatePage()
 {
     OWizardPage::ActivatePage();
-
     initControlsFromModel();
 }
 
@@ -216,11 +216,6 @@ void RangeChooserTabPage::initControlsFromModel()
     m_nChangingControlCalls--;
 }
 
-void RangeChooserTabPage::changeModelAccordingToControls()
-{
-    changeDialogModelAccordingToControls();
-}
-
 void RangeChooserTabPage::changeDialogModelAccordingToControls()
 {
     if(m_nChangingControlCalls>0)
@@ -237,7 +232,7 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
         }
     }
 
-    if( isDirty() )
+    if( m_bIsDirty )
     {
         sal_Bool bFirstCellAsLabel = ( m_aCB_FirstColumnAsLabel.IsChecked() && !m_aRB_Columns.IsChecked() )
             || ( m_aCB_FirstRowAsLabel.IsChecked()    && !m_aRB_Rows.IsChecked() );
@@ -332,6 +327,12 @@ bool RangeChooserTabPage::isValid()
     return bIsValid;
 }
 
+IMPL_LINK( RangeChooserTabPage, ControlEditedHdl, void*, EMPTYARG )
+{
+    setDirty();
+    isValid();
+    return 0;
+}
 
 IMPL_LINK( RangeChooserTabPage, ControlChangedHdl, void*, EMPTYARG )
 {
@@ -386,11 +387,6 @@ void RangeChooserTabPage::setDirty()
 {
     if( m_nChangingControlCalls == 0 )
         m_bIsDirty = true;
-}
-
-bool RangeChooserTabPage::isDirty() const
-{
-    return m_bIsDirty;
 }
 
 //.............................................................................
