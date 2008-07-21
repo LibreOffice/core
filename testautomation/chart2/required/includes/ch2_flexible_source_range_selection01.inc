@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: ch2_flexible_source_range_selection01.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-13 14:27:01 $
+'* last change: $Author: obo $ $Date: 2008-07-21 12:07:53 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -789,7 +789,8 @@ endcase
 function fOpenWriterTestDocumentAndInsertChart(sInputFile as STRING) as BOOLEAN
     fOpenWriterTestDocumentAndInsertChart = FALSE
     call hFileOpen(sInputFile)
-    sleep(2)        
+    sleep(2)
+    Call sMakeReadOnlyDocumentEditable()
     '///Menu Insert Object Chart to open chart wizard
     printlog "Menu Insert Object Chart to open chart wizard"
     InsertObjectChart
