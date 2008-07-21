@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_DataSource.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -331,7 +331,9 @@ DataSourceTabPage::DataSourceTabPage(
     m_aBTN_DOWN.SetClickHdl( LINK( this, DataSourceTabPage, DownButtonClickedHdl ));
 
     m_aEDT_RANGE.SetModifyHdl( LINK( this, DataSourceTabPage, RangeModifiedHdl ));
-    m_aEDT_CATEGORIES.SetModifyHdl( LINK( this, DataSourceTabPage, CategoriesRangeModifiedHdl ));
+    m_aEDT_CATEGORIES.SetModifyHdl( LINK( this, DataSourceTabPage, RangeModifiedHdl ));
+    m_aEDT_RANGE.SetUpdateDataHdl( LINK( this, DataSourceTabPage, RangeUpdateDataHdl ));
+    m_aEDT_CATEGORIES.SetUpdateDataHdl( LINK( this, DataSourceTabPage, RangeUpdateDataHdl ));
 
     // #i75179# enable setting the background to a different color
     m_aEDT_RANGE.SetStyle( m_aEDT_RANGE.GetStyle() | WB_FORCECTRLBACKGROUND );
@@ -421,11 +423,6 @@ bool DataSourceTabPage::isValid()
 void DataSourceTabPage::setDirty()
 {
     m_bIsDirty = true;
-}
-
-bool DataSourceTabPage::isDirty() const
-{
-    return m_bIsDirty;
 }
 
 void DataSourceTabPage::updateControlsFromDialogModel()
@@ -819,28 +816,29 @@ IMPL_LINK( DataSourceTabPage, DownButtonClickedHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( DataSourceTabPage, RangeModifiedHdl, void *, EMPTYARG )
+IMPL_LINK( DataSourceTabPage, RangeModifiedHdl, Edit*, pEdit )
 {
-    // note: isValid sets the color of the edit field
-    if( isRangeFieldContentValid( m_aEDT_RANGE ))
-    {
+    if( isRangeFieldContentValid( *pEdit ))
         setDirty();
-        updateModelFromControl( & m_aEDT_RANGE );
-        if( ! lcl_UpdateCurrentSeriesName( *m_apLB_SERIES ))
-            fillSeriesListBox();
-    }
+
     // enable/disable OK button
     isValid();
 
     return 0;
 }
 
-IMPL_LINK( DataSourceTabPage, CategoriesRangeModifiedHdl, void *, EMPTYARG )
+IMPL_LINK( DataSourceTabPage, RangeUpdateDataHdl, Edit*, pEdit )
 {
-    if( isRangeFieldContentValid( m_aEDT_CATEGORIES ))
+    // note: isValid sets the color of the edit field
+    if( isRangeFieldContentValid( *pEdit ))
     {
         setDirty();
-        updateModelFromControl( & m_aEDT_CATEGORIES );
+        updateModelFromControl( pEdit );
+        if( pEdit== &m_aEDT_RANGE )
+        {
+            if( ! lcl_UpdateCurrentSeriesName( *m_apLB_SERIES ))
+                fillSeriesListBox();
+        }
     }
     // enable/disable OK button
     isValid();
@@ -896,7 +894,7 @@ void DataSourceTabPage::disposingRangeSelection()
 
 bool DataSourceTabPage::updateModelFromControl( Edit * pField )
 {
-    if( ! isDirty())
+    if( !m_bIsDirty )
         return true;
 
     ControllerLockGuard aLockedControllers( m_rDialogModel.getChartModel() );
