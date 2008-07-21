@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoobj.cxx,v $
- * $Revision: 1.110 $
+ * $Revision: 1.111 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -562,6 +562,9 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                 }
                 break;
             case FN_UNO_NUM_LEVEL  :
+            // --> OD 2008-07-14 #i91601#
+            case FN_UNO_LIST_ID:
+            // <--
             case FN_UNO_IS_NUMBER  :
             {
                 // multi selection is not considered
@@ -578,6 +581,14 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                     pTxtNd->SetAttrListLevel(nLevel);
 
                 }
+                // --> OD 2008-07-14 #i91601#
+                else if( FN_UNO_LIST_ID == pMap->nWID )
+                {
+                    ::rtl::OUString sListId;
+                    aValue >>= sListId;
+                    pTxtNd->SetListId( sListId );
+                }
+                // <--
                 else if( FN_UNO_IS_NUMBER == pMap->nWID )
                 {
                     BOOL bIsNumber = *(sal_Bool*) aValue.getValue();
