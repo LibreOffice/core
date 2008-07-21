@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docglos.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,17 +134,19 @@ BOOL SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
             // entry document.
             // To be able to do this, we copy the document properties of the
             // target document to the glossary document
-            DBG_ASSERT(GetDocShell(), "no SwDocShell");
-            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
-            uno::Reference<document::XDocumentProperties> xDocProps
-                = xDPS->getDocumentProperties();
+//            DBG_ASSERT(GetDocShell(), "no SwDocShell"); // may be clipboard!
             DBG_ASSERT(pGDoc->GetDocShell(), "no SwDocShell at glossary");
-            uno::Reference<document::XDocumentPropertiesSupplier> xGlosDPS(
-                pGDoc->GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
-            uno::Reference<document::XDocumentProperties> xGlosDocProps
-                = xGlosDPS->getDocumentProperties();
-            lcl_copyDocumentProperties(xDocProps, xGlosDocProps);
+            if (GetDocShell() && pGDoc->GetDocShell()) {
+                uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                    GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
+                uno::Reference<document::XDocumentProperties> xDocProps(
+                    xDPS->getDocumentProperties() );
+                uno::Reference<document::XDocumentPropertiesSupplier> xGlosDPS(
+                    pGDoc->GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
+                uno::Reference<document::XDocumentProperties> xGlosDocProps(
+                    xGlosDPS->getDocumentProperties() );
+                lcl_copyDocumentProperties(xDocProps, xGlosDocProps);
+        }
             pGDoc->SetFixFields(false, NULL);
 
             //StartAllAction();
