@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdobj.cxx,v $
- * $Revision: 1.97 $
+ * $Revision: 1.98 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -468,6 +468,7 @@ SdrObject::~SdrObject()
         SvxShape* pSvxShape = getSvxShape( xShape );
         if ( pSvxShape )
         {
+            OSL_ENSURE(!pSvxShape->HasSdrObjectOwnership(),"Please check where this call come from and replace it with SdrObject::Free");
             pSvxShape->InvalidateSdrObject();
             uno::Reference< lang::XComponent > xShapeComp( xShape, uno::UNO_QUERY_THROW );
             xShapeComp->dispose();
