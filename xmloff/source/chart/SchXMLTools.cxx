@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SchXMLTools.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -595,6 +595,14 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const uno::Reference< frame:
         {
             ::rtl::OUString aParentGenerator( lcl_getGeneratorFromModel( uno::Reference< frame::XModel >( xChild->getParent(), uno::UNO_QUERY) ) );
             if( aParentGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project") ) ) != -1 )
+                bResult= true;
+            else if(
+                   ( aParentGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org 1") ) ) == 0 )
+                || ( aParentGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarOffice 6") ) ) == 0 )
+                || ( aParentGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarOffice 7") ) ) == 0 )
+                || ( aParentGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarSuite 6") ) ) == 0 )
+                || ( aParentGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("StarSuite 7") ) ) == 0 )
+                )
                 bResult= true;
         }
     }
