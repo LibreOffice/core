@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasprocessor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:30:17 $
+ *  last change: $Author: aw $ $Date: 2008-07-21 17:41:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <com/sun/star/rendering/RenderState.hpp>
 #include <i18npool/lang.h>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // forward declaration
@@ -50,7 +51,6 @@
 namespace basegfx {
     class BColor;
     class B2DPolygon;
-    class B2DPolyPolygon;
 }
 
 namespace com { namespace sun { namespace star { namespace rendering {
@@ -78,9 +78,8 @@ namespace drawinglayer
             // SvtOptionsDrawinglayer incarnation to react on diverse settings
             const SvtOptionsDrawinglayer                            maDrawinglayerOpt;
 
-            // stack value (increment and decrement) to count how deep we are in
-            // PolygonStrokePrimitive2D's decompositions (normally only one)
-            sal_uInt32                                              mnPolygonStrokePrimitive2D;
+            // the current clipping PolyPolygon from MaskPrimitive2D
+            basegfx::B2DPolyPolygon                                 maClipPolyPolygon;
 
             // determined LanguageType
             LanguageType                                            meLang;

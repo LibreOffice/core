@@ -4,9 +4,9 @@
  *
  *  $RCSfile: markerarrayprimitive2d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
+ *  last change: $Author: aw $ $Date: 2008-07-21 17:41:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,17 +88,19 @@ namespace drawinglayer
                             case MARKERSTYLE2D_CROSS :
                             {
                                 // two lines forming the intended cross. Prefer vector decompose
-                                // over also possible bitmap/PointArrayPrimitive decompose for better quality
+                                // over also possible bitmap/PointArrayPrimitive decompose for better quality.
+                                // Also make the discrete unit based lines one pixel longer since non-closed
+                                // polygon primitives will be rendered without the last point by convention
                                 aTemplate.realloc(2);
                                 basegfx::B2DPolygon aPolygon;
 
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * -1.0, aDist.getY()));
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * +2.0, aDist.getY()));
+                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * -1.0, 0.0));
+                                aPolygon.append(basegfx::B2DPoint(aDist.getX() *  2.0, 0.0));
                                 aTemplate[0] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, getRGBColor()));
 
                                 aPolygon.clear();
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX(), aDist.getY() * -1.0));
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX(), aDist.getY() * +2.0));
+                                aPolygon.append(basegfx::B2DPoint(0.0, aDist.getY() * -1.0));
+                                aPolygon.append(basegfx::B2DPoint(0.0, aDist.getY() *  2.0));
                                 aTemplate[1] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, getRGBColor()));
 
                                 break;
@@ -107,38 +109,40 @@ namespace drawinglayer
                             {
                                 // six lines forming the intended gluepoint cross. Prefer vector decompose
                                 // over also possible bitmap/PointArrayPrimitive decompose for better quality
+                                // Also make the discrete unit based lines one pixel longer since non-closed
+                                // polygon primitives will be rendered without the last point by convention
                                 aTemplate.realloc(6);
                                 basegfx::B2DPolygon aPolygon;
 
                                 aPolygon.append(basegfx::B2DPoint(aDist.getX() * -2.0, aDist.getY() * -3.0));
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * +4.0, aDist.getY() * +3.0));
+                                aPolygon.append(basegfx::B2DPoint(aDist.getX() *  4.0, aDist.getY() *  3.0));
                                 aTemplate[0] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, getRGBColor()));
 
                                 aPolygon.clear();
                                 aPolygon.append(basegfx::B2DPoint(aDist.getX() * -3.0, aDist.getY() * -2.0));
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * +3.0, aDist.getY() * +4.0));
+                                aPolygon.append(basegfx::B2DPoint(aDist.getX() *  3.0, aDist.getY() *  4.0));
                                 aTemplate[1] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, getRGBColor()));
 
                                 aPolygon.clear();
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * -3.0, aDist.getY() * +2.0));
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * +3.0, aDist.getY() * -4.0));
+                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * -3.0, aDist.getY() *  2.0));
+                                aPolygon.append(basegfx::B2DPoint(aDist.getX() *  3.0, aDist.getY() * -4.0));
                                 aTemplate[2] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, getRGBColor()));
 
                                 aPolygon.clear();
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * -2.0, aDist.getY() * +3.0));
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * +4.0, aDist.getY() * -3.0));
+                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * -2.0, aDist.getY() *  3.0));
+                                aPolygon.append(basegfx::B2DPoint(aDist.getX() *  4.0, aDist.getY() * -3.0));
                                 aTemplate[3] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, getRGBColor()));
 
                                 const basegfx::BColor aRGBFrontColor(0.0, 0.0, 1.0); // COL_LIGHTBLUE
 
                                 aPolygon.clear();
                                 aPolygon.append(basegfx::B2DPoint(aDist.getX() * -2.0, aDist.getY() * -2.0));
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * +3.0, aDist.getY() * +3.0));
+                                aPolygon.append(basegfx::B2DPoint(aDist.getX() *  3.0, aDist.getY() *  3.0));
                                 aTemplate[4] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, aRGBFrontColor));
 
                                 aPolygon.clear();
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * -2.0, aDist.getY() * +2.0));
-                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * +3.0, aDist.getY() * -3.0));
+                                aPolygon.append(basegfx::B2DPoint(aDist.getX() * -2.0, aDist.getY() *  2.0));
+                                aPolygon.append(basegfx::B2DPoint(aDist.getX() *  3.0, aDist.getY() * -3.0));
                                 aTemplate[5] = Primitive2DReference(new PolygonHairlinePrimitive2D(aPolygon, aRGBFrontColor));
 
                                 break;

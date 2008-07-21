@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:31:09 $
+ *  last change: $Author: aw $ $Date: 2008-07-21 17:41:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1310,8 +1310,11 @@ namespace drawinglayer
                             if(maClipPolyPolygon.count())
                             {
                                 // set VCL clip region; subdivide before conversion to tools polygon. Subdivision necessary (!)
+                                // Removed subdivision and fixed in Region::ImplPolyPolyRegionToBandRegionFunc() in VCL where
+                                // the ClipRegion is built from the Polygon. A AdaptiveSubdivide on the source polygon was missing there
                                 mpOutputDevice->Push(PUSH_CLIPREGION);
-                                mpOutputDevice->SetClipRegion(Region(PolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(maClipPolyPolygon))));
+                                //mpOutputDevice->SetClipRegion(Region(PolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(maClipPolyPolygon))));
+                                mpOutputDevice->SetClipRegion(Region(PolyPolygon(maClipPolyPolygon)));
                             }
 
                             // recursively paint content
@@ -1325,6 +1328,11 @@ namespace drawinglayer
 
                             // restore to rescued clip polygon
                             maClipPolyPolygon = aLastClipPolyPolygon;
+                        }
+                        else
+                        {
+                            // no mask, no clipping. recursively paint content
+                            process(rMaskCandidate.getChildren());
                         }
                     }
 

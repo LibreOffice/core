@@ -4,9 +4,9 @@
  *
  *  $RCSfile: groupprimitive2d.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:17 $
+ *  last change: $Author: aw $ $Date: 2008-07-21 17:41:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ namespace drawinglayer
             GroupPrimitive2D(const Primitive2DSequence& rChildren);
 
             // data access
-            Primitive2DSequence getChildren() const { return maChildren; }
+            const Primitive2DSequence& getChildren() const { return maChildren; }
 
             // compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasprocessor.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
+ *  last change: $Author: aw $ $Date: 2008-07-21 17:41:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,10 +48,27 @@
 #include <canvas/canvastools.hxx>
 #include <svtools/ctloptions.hxx>
 #include <vcl/svapp.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
+#include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
+#include <cppcanvas/basegfxfactory.hxx>
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
+#include <cppcanvas/vclfactory.hxx>
+#include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <com/sun/star/rendering/TextDirection.hpp>
+#include <vclhelperbitmaptransform.hxx>
+#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
+#include <basegfx/tuple/b2i64tuple.hxx>
+#include <basegfx/range/b2irange.hxx>
+#include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
+
+//////////////////////////////////////////////////////////////////////////////
 
 using namespace com::sun::star;
-namespace css = com::sun::star;
-namespace cssgeom = com::sun::star::geometry;
 
 //////////////////////////////////////////////////////////////////////////////
 // AW: Adding the canvas example from THB here to extract stuff later
@@ -1271,18 +1288,24 @@ namespace drawinglayer
                     const basegfx::BColor aHairlineColor(maBColorModifierStack.getModifiedColor(rPolygonCandidate.getBColor()));
 
                     maRenderState.DeviceColor = aHairlineColor.colorToDoubleSequence(mxCanvas->getDevice());
-                    mxCanvas->drawPolyPolygon(basegfx::unotools::xPolyPolygonFromB2DPolygon(mxCanvas->getDevice(), rPolygonCandidate.getB2DPolygon()), maViewState,  maRenderState);
+                    canvas::tools::setIdentityAffineMatrix2D(maRenderState.AffineTransform);
+                    mxCanvas->drawPolyPolygon(
+                        basegfx::unotools::xPolyPolygonFromB2DPolygon(mxCanvas->getDevice(), rPolygonCandidate.getB2DPolygon()),
+                        maViewState,  maRenderState);
 
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :
                 {
                     // direct draw of PolyPolygon with color
-                        const primitive2d::PolyPolygonColorPrimitive2D& rPolygonCandidate = static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(rCandidate);
+                       const primitive2d::PolyPolygonColorPrimitive2D& rPolygonCandidate = static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(rCandidate);
                     const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rPolygonCandidate.getBColor()));
 
                     maRenderState.DeviceColor = aPolygonColor.colorToDoubleSequence(mxCanvas->getDevice());
-                    mxCanvas->fillPolyPolygon(basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(mxCanvas->getDevice(), rPolygonCandidate.getB2DPolyPolygon()), maViewState,  maRenderState);
+                    canvas::tools::setIdentityAffineMatrix2D(maRenderState.AffineTransform);
+                    mxCanvas->fillPolyPolygon(
+                        basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(mxCanvas->getDevice(), rPolygonCandidate.getB2DPolyPolygon()),
+                        maViewState,  maRenderState);
 
                     break;
                 }
@@ -1296,6 +1319,76 @@ namespace drawinglayer
                         maBColorModifierStack.push(rModifiedCandidate.getColorModifier());
                         process(rModifiedCandidate.getChildren());
                         maBColorModifierStack.pop();
+                    }
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
+                {
+                    // mask group. Special handling for MetaFiles.
+                    const primitive2d::MaskPrimitive2D& rMaskCandidate = static_cast< const primitive2d::MaskPrimitive2D& >(rCandidate);
+
+                    if(rMaskCandidate.getChildren().hasElements())
+                    {
+                        basegfx::B2DPolyPolygon aMask(rMaskCandidate.getMask());
+
+                        if(aMask.count())
+                        {
+                            // transform new mask polygon to World coordinates for processing. All masks
+                            // are processed in World coordinates and clipped against each other evtl. to
+                            // create multi-clips
+                            aMask.transform(getViewInformation2D().getObjectTransformation());
+
+                            // remember last current clip polygon
+                            const basegfx::B2DPolyPolygon aLastClipPolyPolygon(maClipPolyPolygon);
+
+                            if(maClipPolyPolygon.count())
+                            {
+                                // there is already a clip polygon set; build clipped union of
+                                // current mask polygon and new one
+                                maClipPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(aMask, maClipPolyPolygon, false, false);
+                            }
+                            else
+                            {
+                                // use mask directly
+                                maClipPolyPolygon = aMask;
+                            }
+
+                            // set at ViewState
+                            if(maClipPolyPolygon.count())
+                            {
+                                // set new as clip polygon
+                                maViewState.Clip = basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(mxCanvas->getDevice(), maClipPolyPolygon);
+                            }
+                            else
+                            {
+                                // empty, reset
+                                maViewState.Clip.clear();
+                            }
+
+                            // recursively paint content
+                            process(rMaskCandidate.getChildren());
+
+                            // restore local current to rescued clip polygon
+                            maClipPolyPolygon = aLastClipPolyPolygon;
+
+                            // set at ViewState
+                            if(maClipPolyPolygon.count())
+                            {
+                                // set new as clip polygon
+                                maViewState.Clip = basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(mxCanvas->getDevice(), maClipPolyPolygon);
+                            }
+                            else
+                            {
+                                // empty, reset
+                                maViewState.Clip.clear();
+                            }
+                        }
+                        else
+                        {
+                            // no mask, no clipping. recursively paint content
+                            process(rMaskCandidate.getChildren());
+                        }
                     }
 
                     break;
@@ -1330,6 +1423,339 @@ namespace drawinglayer
 
                     break;
                 }
+                case PRIMITIVE2D_ID_PAGEPREVIEWPRIMITIVE2D :
+                {
+                    // new XDrawPage for ViewInformation2D
+                    const primitive2d::PagePreviewPrimitive2D& rPagePreviewCandidate = static_cast< const primitive2d::PagePreviewPrimitive2D& >(rCandidate);
+
+                    // remember current transformation and ViewInformation
+                    const geometry::ViewInformation2D aLastViewInformation2D(getViewInformation2D());
+
+                    // create new local ViewInformation2D
+                    const geometry::ViewInformation2D aViewInformation2D(
+                        getViewInformation2D().getObjectTransformation(),
+                        getViewInformation2D().getViewTransformation(),
+                        getViewInformation2D().getViewport(),
+                        rPagePreviewCandidate.getXDrawPage(),
+                        getViewInformation2D().getViewTime(),
+                        getViewInformation2D().getExtendedInformationSequence());
+                    updateViewInformation(aViewInformation2D);
+
+                    // proccess decomposed content
+                    process(rPagePreviewCandidate.get2DDecomposition(getViewInformation2D()));
+
+                    // restore transformations
+                    updateViewInformation(aLastViewInformation2D);
+                    break;
+                }
+                case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
+                {
+                    // MetaFile primitive
+                    const primitive2d::MetafilePrimitive2D& rMetaCandidate = static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate);
+                    GDIMetaFile aMetaFile;
+
+                    if(maBColorModifierStack.count())
+                    {
+                        const ::basegfx::BColor aRGBBaseColor(0, 0, 0);
+                        const ::basegfx::BColor aRGBColor(maBColorModifierStack.getModifiedColor(aRGBBaseColor));
+                        aMetaFile = rMetaCandidate.getMetaFile().GetMonochromeMtf(Color(aRGBColor));
+                    }
+                    else
+                    {
+                        aMetaFile = rMetaCandidate.getMetaFile();
+                    }
+
+                    cppcanvas::BitmapCanvasSharedPtr pCanvas(cppcanvas::VCLFactory::getInstance().createCanvas(
+                            uno::Reference<rendering::XBitmapCanvas>(mxCanvas, uno::UNO_QUERY_THROW)));
+                    cppcanvas::RendererSharedPtr pMtfRenderer(cppcanvas::VCLFactory::getInstance().createRenderer(
+                            pCanvas, aMetaFile, cppcanvas::Renderer::Parameters()));
+
+                    if(pMtfRenderer)
+                    {
+                        pCanvas->setTransformation(getViewInformation2D().getObjectToViewTransformation());
+                        pMtfRenderer->setTransformation(rMetaCandidate.getTransform());
+                        pMtfRenderer->draw();
+                    }
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_POINTARRAYPRIMITIVE2D :
+                {
+                    // PointArray primitive
+                    const primitive2d::PointArrayPrimitive2D& rPointArrayCandidate = static_cast< const primitive2d::PointArrayPrimitive2D& >(rCandidate);
+
+                    // set point color
+                    const basegfx::BColor aRGBColor(maBColorModifierStack.getModifiedColor(rPointArrayCandidate.getRGBColor()));
+                    maRenderState.DeviceColor = aRGBColor.colorToDoubleSequence(mxCanvas->getDevice());
+                    canvas::tools::setIdentityAffineMatrix2D(maRenderState.AffineTransform);
+
+                    const std::vector< basegfx::B2DPoint >& rPointVector = rPointArrayCandidate.getPositions();
+                    const sal_uInt32 nPointCount(rPointVector.size());
+
+                    for(sal_uInt32 a(0); a < nPointCount; a++)
+                    {
+                        const basegfx::B2DPoint& rPoint = rPointVector[a];
+                        mxCanvas->drawPoint(basegfx::unotools::point2DFromB2DPoint(rPoint), maViewState, maRenderState);
+                    }
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D :
+                {
+                    // TextSimplePortion primitive
+                    const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate = static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(rCandidate);
+
+                    if(rTextCandidate.getTextLength())
+                    {
+                        const primitive2d::FontAttributes& rFontAttrs(rTextCandidate.getFontAttributes());
+                        rendering::FontRequest aFontRequest;
+
+                        aFontRequest.FontDescription.FamilyName = rFontAttrs.getFamilyName();
+                        aFontRequest.FontDescription.StyleName = rFontAttrs.getStyleName();
+                        aFontRequest.FontDescription.IsSymbolFont = rFontAttrs.getSymbol() ? util::TriState_YES : util::TriState_NO;
+                        aFontRequest.FontDescription.IsVertical = rFontAttrs.getVertical() ? util::TriState_YES : util::TriState_NO;
+                        // TODO(F2): improve vclenum->panose conversion
+                        aFontRequest.FontDescription.FontDescription.Weight = static_cast< sal_uInt8 >(rFontAttrs.getWeight());
+                        aFontRequest.FontDescription.FontDescription.Letterform = rFontAttrs.getItalic() ? 9 : 0;
+
+                        // init CellSize to 1.0, else a default font height will be used
+                        aFontRequest.CellSize = 1.0;
+                        aFontRequest.Locale = rTextCandidate.getLocale();
+
+                        // font matrix should only be used for glyph rotations etc.
+                        com::sun::star::geometry::Matrix2D aFontMatrix;
+                        canvas::tools::setIdentityMatrix2D(aFontMatrix);
+
+                        uno::Reference<rendering::XCanvasFont> xFont(mxCanvas->createFont(
+                            aFontRequest, uno::Sequence< beans::PropertyValue >(), aFontMatrix));
+
+                        if(xFont.is())
+                        {
+                            // got a font, now try to get a TextLayout
+                            const rendering::StringContext aStringContext(
+                                rTextCandidate.getText(), rTextCandidate.getTextPosition(), rTextCandidate.getTextLength());
+                            uno::Reference<rendering::XTextLayout> xLayout(xFont->createTextLayout(
+                                aStringContext, com::sun::star::rendering::TextDirection::WEAK_LEFT_TO_RIGHT, 0));
+
+                            if(xLayout.is())
+                            {
+                                // got a text layout, apply DXArray if given
+                                const ::std::vector< double >& rDXArray = rTextCandidate.getDXArray();
+                                const sal_uInt32 nDXCount(rDXArray.size());
+
+                                if(nDXCount)
+                                {
+                                    // DXArray does not need to be adapted to getTextPosition/getTextLength,
+                                    // it is already provided correctly
+                                    const uno::Sequence< double > aDXSequence(&rDXArray[0], nDXCount);
+                                    xLayout->applyLogicalAdvancements(aDXSequence);
+                                }
+
+                                // set text color
+                                const ::basegfx::BColor aRGBColor(maBColorModifierStack.getModifiedColor(rTextCandidate.getFontColor()));
+                                maRenderState.DeviceColor = aRGBColor.colorToDoubleSequence(mxCanvas->getDevice());
+
+                                // set text transformation
+                                canvas::tools::setRenderStateTransform(maRenderState, rTextCandidate.getTextTransform());
+
+                                // paint
+                                mxCanvas->drawTextLayout(xLayout, maViewState, maRenderState);
+                            }
+                        }
+                    }
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
+                {
+                    // Bitmap primitive
+                    const primitive2d::BitmapPrimitive2D& rBitmapCandidate = static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate);
+
+                    if(rBitmapCandidate.getBitmapEx().IsEmpty())
+                    {
+                        // replace with color filled polygon
+                        const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(basegfx::BColor()));
+                        const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+
+                        maRenderState.DeviceColor = aModifiedColor.colorToDoubleSequence(mxCanvas->getDevice());
+                        canvas::tools::setRenderStateTransform(maRenderState, rBitmapCandidate.getTransform());
+
+                        mxCanvas->fillPolyPolygon(basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                            mxCanvas->getDevice(), basegfx::B2DPolyPolygon(aPolygon)), maViewState,  maRenderState);
+                    }
+                    else
+                    {
+                        // apply possible color modification to BitmapEx
+                        BitmapEx aBitmapEx(impModifyBitmapEx(maBColorModifierStack, rBitmapCandidate.getBitmapEx()));
+
+                        // adapt object's transformation to the correct scale
+                        basegfx::B2DVector aScale, aTranslate;
+                        double fRotate, fShearX;
+                        basegfx::B2DHomMatrix aNewMatrix;
+                        const Size aSizePixel(aBitmapEx.GetSizePixel());
+                        const double fBitmapWidth(aSizePixel.Width() == 0 ? 1.0 : aSizePixel.Width());
+                        const double fBitmapHeight(aSizePixel.Height() == 0 ? 1.0 : aSizePixel.Height());
+
+                        rBitmapCandidate.getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
+                        aNewMatrix.scale(aScale.getX() / fBitmapWidth, aScale.getY() / fBitmapHeight);
+                        aNewMatrix.shearX(fShearX);
+                        aNewMatrix.rotate(fRotate);
+                        aNewMatrix.translate(aTranslate.getX(), aTranslate.getY());
+
+                        canvas::tools::setRenderStateTransform(maRenderState, aNewMatrix);
+
+                        mxCanvas->drawBitmap(
+                            vcl::unotools::xBitmapFromBitmapEx(mxCanvas->getDevice(), aBitmapEx),
+                            maViewState, maRenderState);
+                    }
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_ALPHAPRIMITIVE2D :
+                {
+                    // Alpha primitive
+                    const primitive2d::AlphaPrimitive2D& rAlphaCandidate = static_cast< const primitive2d::AlphaPrimitive2D& >(rCandidate);
+                    const primitive2d::Primitive2DSequence& rChildren = rAlphaCandidate.getChildren();
+
+                    if(rChildren.hasElements())
+                    {
+                        // get logic and discrete range of transparent part
+                        basegfx::B2DRange aLogicRange(primitive2d::getB2DRangeFromPrimitive2DSequence(rChildren, getViewInformation2D()));
+                        basegfx::B2DRange aDiscreteRange(aLogicRange);
+                        aDiscreteRange.transform(getViewInformation2D().getObjectToViewTransformation());
+
+                        // expand to next covering discrete values (pixel bounds)
+                        aDiscreteRange.expand(basegfx::B2DTuple(floor(aDiscreteRange.getMinX()), floor(aDiscreteRange.getMinY())));
+                        aDiscreteRange.expand(basegfx::B2DTuple(ceil(aDiscreteRange.getMaxX()), ceil(aDiscreteRange.getMaxY())));
+
+                        // determine integer bitmap size
+                        const com::sun::star::geometry::IntegerSize2D aIntegerSize2D(
+                            basegfx::fround(aDiscreteRange.getWidth()),
+                            basegfx::fround(aDiscreteRange.getHeight()));
+
+                        // create XBitmap for rendering child context
+                        uno::Reference< rendering::XCanvas > xChildBitmap(
+                            mxCanvas->getDevice()->createCompatibleBitmap(aIntegerSize2D),
+                            uno::UNO_QUERY_THROW);
+
+                        if(xChildBitmap.is())
+                        {
+                            // create and set ViewInformation2D for Sub-Canvas
+                            const geometry::ViewInformation2D aLastViewInformation2D(getViewInformation2D());
+
+                            // prepare discrete offset for XBitmap
+                            basegfx::B2DHomMatrix aDiscreteOffset;
+                            aDiscreteOffset.translate(-aDiscreteRange.getMinX(), -aDiscreteRange.getMinY());
+
+                            // create new local ViewInformation2D with new transformation
+                            const geometry::ViewInformation2D aViewInformation2D(
+                                getViewInformation2D().getObjectTransformation(),
+                                aDiscreteOffset * getViewInformation2D().getViewTransformation(),
+                                getViewInformation2D().getViewport(),
+                                getViewInformation2D().getVisualizedPage(),
+                                getViewInformation2D().getViewTime(),
+                                getViewInformation2D().getExtendedInformationSequence());
+                            updateViewInformation(aViewInformation2D);
+                            canvas::tools::setViewStateTransform(maViewState, getViewInformation2D().getObjectToViewTransformation());
+
+                            // remember last canvas
+                            uno::Reference< rendering::XCanvas > xLastCanvas(mxCanvas);
+
+                            // set child bitmap as target and paint child content
+                            mxCanvas = xChildBitmap;
+                            process(rChildren);
+
+                            // check if alpha is simple alpha (just one PolyPolygonColor primitive)
+                            bool bIsSimpleTransparence(false);
+                            const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = 0;
+                            uno::Reference< rendering::XCanvas > xAlphaBitmap;
+                            const primitive2d::Primitive2DSequence& rAlpha = rAlphaCandidate.getAlpha();
+
+                            if(rAlpha.hasElements() && 1 == rAlpha.getLength())
+                            {
+                                const primitive2d::Primitive2DReference xReference(rAlpha[0]);
+                                pPoPoColor = dynamic_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(xReference.get());
+
+                                if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitiveID())
+                                {
+                                    bIsSimpleTransparence = true;
+                                }
+                            }
+
+                            if(!bIsSimpleTransparence)
+                            {
+                                // create XBitmap for rendering alpha context
+                                xAlphaBitmap = uno::Reference< rendering::XCanvas >(
+                                    mxCanvas->getDevice()->createCompatibleBitmap(aIntegerSize2D),  uno::UNO_QUERY_THROW);
+
+                                if(xAlphaBitmap.is())
+                                {
+                                    // set alpha bitmap as target and paint child content
+                                    mxCanvas = xAlphaBitmap;
+                                    process(rAlpha);
+                                }
+                            }
+
+                            // restore old canvas and ViewInformation
+                            mxCanvas = xLastCanvas;
+                            updateViewInformation(aLastViewInformation2D);
+                            canvas::tools::setViewStateTransform(maViewState, getViewInformation2D().getObjectToViewTransformation());
+
+                            // prepare bitmap transformation for local painting
+                            const double fBitmapWidth(std::max(1.0, aDiscreteRange.getWidth()));
+                            const double fBitmapHeight(std::max(1.0, aDiscreteRange.getHeight()));
+                            basegfx::B2DHomMatrix aBitmapTransform;
+
+                            // transform back logic range from discrete range to work on same bounds and
+                            // to have the correct logic width/Height for bitmap render state due to discrete
+                            // roundings (pixel alignments)
+                            aLogicRange = aDiscreteRange;
+                            aLogicRange.transform(getViewInformation2D().getInverseObjectToViewTransformation());
+
+                            // LogicRange Width/Height is correct
+                            aBitmapTransform.scale(aLogicRange.getWidth() / fBitmapWidth, aLogicRange.getHeight() / fBitmapHeight);
+                            aBitmapTransform.translate(aLogicRange.getMinX(), aLogicRange.getMinY());
+                            canvas::tools::setRenderStateTransform(maRenderState, aBitmapTransform);
+
+                            if(bIsSimpleTransparence)
+                            {
+                                // it's a simple transparence, draw modulated content XBitmap. The alpha
+                                // is contained in the fill color of pPoPoColor, all color channels are
+                                // the same to build a gray value
+                                const basegfx::BColor& rAlphaFill = pPoPoColor->getBColor();
+
+                                // add alpha modulation value to DeviceColor
+                                uno::Sequence< double > aColor(4);
+
+                                aColor[0] = 1.0;
+                                aColor[1] = 1.0;
+                                aColor[2] = 1.0;
+                                aColor[3] = rAlphaFill.getRed();
+                                maRenderState.DeviceColor = aColor;
+
+                                // draw child bitmap
+                                mxCanvas->drawBitmapModulated(uno::Reference< rendering::XBitmap >(xChildBitmap, uno::UNO_QUERY_THROW),
+                                    maViewState, maRenderState);
+                            }
+                            else
+                            {
+                                // It's a alpha with various geometry, need to combine child and alpha bitmap to a single
+                                // BitmapEx. I konow no other way here than to get the VCL Bitmaps and using VCL functionality
+                                // for this combination. This is very slow and needs to be enchanced ASAP.
+                                const uno::Reference< rendering::XIntegerReadOnlyBitmap > xReadOnlyChild(xChildBitmap, uno::UNO_QUERY_THROW);
+                                const uno::Reference< rendering::XIntegerReadOnlyBitmap > xReadOnlyAlpha(xAlphaBitmap, uno::UNO_QUERY_THROW);
+                                const Bitmap aChildBitmap(vcl::unotools::bitmapExFromXBitmap(xReadOnlyChild).GetBitmap());
+                                const AlphaMask aAlphaBitmap(vcl::unotools::bitmapExFromXBitmap(xReadOnlyAlpha).GetBitmap());
+
+                                // draw bitmap
+                                mxCanvas->drawBitmap(vcl::unotools::xBitmapFromBitmapEx(mxCanvas->getDevice(), BitmapEx(aChildBitmap, aAlphaBitmap)),
+                                    maViewState, maRenderState);
+                            }
+                        }
+                    }
+
+                    break;
+                }
                 default :
                 {
                     // process recursively
@@ -1352,7 +1778,7 @@ namespace drawinglayer
             maRenderState(),
             maBColorModifierStack(),
             maDrawinglayerOpt(),
-            mnPolygonStrokePrimitive2D(0),
+            maClipPolyPolygon(),
             meLang(LANGUAGE_SYSTEM)
         {
             const SvtCTLOptions aSvtCTLOptions;
