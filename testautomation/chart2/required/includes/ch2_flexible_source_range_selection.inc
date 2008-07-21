@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: ch2_flexible_source_range_selection.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-13 14:27:01 $
+'* last change: $Author: obo $ $Date: 2008-07-21 12:07:40 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -526,8 +526,8 @@ testcase tDataRangeDialogCalc
         printlog "Check if the data range in edit field is $ChartFlexRange.$D$4:$G$6;$ChartFlexRange.$C$5:$G$6;$ChartFlexRange.$C$4"
         Kontext "TabChartTypeDataRange"
         sDataRange = DataRange.GetText
-        if sDataRange <> "$ChartFlexRange.$D$4:$G$6;$ChartFlexRange.$C$5:$G$6;$ChartFlexRange.$C$4" then
-            warnlog "This is not the expected datarange, it is " & sDataRange & " but should be $ChartFlexRange.$D$4:$G$6;$ChartFlexRange.$C$5:$G$6;$ChartFlexRange.$C$4" 
+        if sDataRange <> "$ChartFlexRange.$C$4:$G$6" then
+            warnlog "This is not the expected datarange, it is " & sDataRange & " but should be $ChartFlexRange.$C$4:$G$6" 
         else
             printlog "    Datarange is correct"
         endif    
@@ -923,7 +923,8 @@ endcase
 function fOpenTestDocumentAndInsertChart(sInputFile as string) as BOOLEAN
     fOpenTestDocumentAndInsertChart = FALSE
     call hFileOpen(sInputFile)
-    sleep(2)    
+    sleep(2)
+    Call sMakeReadOnlyDocumentEditable()    
     Kontext "DocumentCalc"
     '/// Type <STRG+HOME>
     printlog "Type <STRG+HOME>"    
