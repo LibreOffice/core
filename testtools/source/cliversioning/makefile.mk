@@ -7,7 +7,7 @@
 #  OpenOffice.org - a multi-platform office productivity suite
 # 
 #  $RCSfile: makefile.mk,v $
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 # 
 #  This file is part of OpenOffice.org.
 # 
@@ -92,12 +92,17 @@ $(MISC)$/copyassemblies.done .ERRREMOVE:
     $(GNUCOPY) -p $(CLI_OOOTYPES) $(BIN)$/$(CLI_OOOTYPES:f)
     $(TOUCH) $@
  
-
 CSFILES2 = runtests.cs
-$(EXETARGET2): $(CSFILES2)
-    $(CSC) $(CSCFLAGS) -target:exe -out:$(EXETARGET2) -platform:x86\
-        $(CSFILES2)
 
+.IF "$(CCNUMVER)" >= "001399999999"
+CSCPLATFORMX86 = -platform:x86
+.ELSE
+CSCPLATFORMX86 =
+.ENDIF
+
+$(EXETARGET2): $(CSFILES2)
+    $(CSC) $(CSCFLAGS) -target:exe -out:$(EXETARGET2) $(CSCPLATFORMX86)\
+        $(CSFILES2)
 
 CSFILESLIB = version.cs
 $(TESTLIB): $(CSFILESLIB) $(SOLARBINDIR)$/cliureversion.mk
