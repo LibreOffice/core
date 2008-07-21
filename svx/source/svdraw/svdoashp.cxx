@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoashp.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2310,7 +2310,8 @@ FASTBOOL SdrObjCustomShape::BegDrag( SdrDragStat& rDrag ) const
 
         if(pUser)
         {
-            delete pUser->pCustoObj;
+            SdrObject* pObj = static_cast<SdrObject*>(pUser->pCustoObj);
+            SdrObject::Free(pObj);
             delete pUser;
         }
 
@@ -2585,7 +2586,8 @@ FASTBOOL SdrObjCustomShape::MovDrag( SdrDragStat& rDrag ) const
             case HDL_LOWER :
             case HDL_LWRGT :
             {
-                delete pUser->pCustoObj;
+                SdrObject* pObj = static_cast<SdrObject*>(pUser->pCustoObj);
+                SdrObject::Free(pObj);
                 pUser->pCustoObj = (SdrObjCustomShape*)Clone();
                 pUser->aR = ImpDragCalcRect( rDrag );
                 DragResizeCustomShape( pUser->aR, pUser->pCustoObj );
@@ -2594,7 +2596,8 @@ FASTBOOL SdrObjCustomShape::MovDrag( SdrDragStat& rDrag ) const
 
             case HDL_MOVE :
             {
-                delete pUser->pCustoObj;
+                SdrObject* pObj = static_cast<SdrObject*>(pUser->pCustoObj);
+                SdrObject::Free(pObj);
                 pUser->pCustoObj = (SdrObjCustomShape*)Clone();
                 pUser->pCustoObj->Move( Size( rDrag.GetDX(), rDrag.GetDY() ) );
             }
@@ -2655,7 +2658,8 @@ FASTBOOL SdrObjCustomShape::EndDrag( SdrDragStat& rDrag )
             default: break;
         }
 
-        delete pUser->pCustoObj;
+        SdrObject* pObj = static_cast<SdrObject*>(pUser->pCustoObj);
+        SdrObject::Free(pObj);
         delete pUser;
         rDrag.SetUser(NULL);
     }
@@ -2669,7 +2673,8 @@ void SdrObjCustomShape::BrkDrag( SdrDragStat& rDrag ) const
 
     if(pUser)
     {
-        delete pUser->pCustoObj;
+        SdrObject* pObj = static_cast<SdrObject*>(pUser->pCustoObj);
+        SdrObject::Free(pObj);
         delete pUser;
         rDrag.SetUser( NULL );
     }
