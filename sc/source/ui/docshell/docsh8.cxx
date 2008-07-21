@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh8.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1071,7 +1071,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
         sal_Int32 nError = aException.ErrorCode;
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "ScDocShell::DBaseExport: SQLException ErrorCode: %d, SQLState: %s, Message: %s\n",
-                nError, OUStringToOString( aException.SQLState,
+                (int)nError, OUStringToOString( aException.SQLState,
                     RTL_TEXTENCODING_UTF8).getStr(), OUStringToOString(
                         aException.Message, RTL_TEXTENCODING_UTF8).getStr());
 #endif
