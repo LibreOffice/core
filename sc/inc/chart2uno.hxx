@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chart2uno.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -128,10 +128,7 @@ public:
         getSupportedServiceNames() throw(
                 ::com::sun::star::uno::RuntimeException);
 
-    static void detectArguments(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xDataSource,
-        ScDocument * pDoc,
-        ScRangeListRef& rOutRanges, bool & rOutHasColumnLabels, bool & bOutHasRowLabels );
+    static bool addUpperLeftCornerIfMissing( ScRangeListRef& xRanges );//returns true if the corner was added
 
 private:
 
