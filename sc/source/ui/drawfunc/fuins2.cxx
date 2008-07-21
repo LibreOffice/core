@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuins2.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -172,6 +172,13 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
                 aRangeString = aTmpStr;
 
                 ScChartPositioner aChartPositioner( pScDoc, aRangeListRef );
+                const ScChartPositionMap* pPositionMap( aChartPositioner.GetPositionMap() );
+                if( pPositionMap )
+                {
+                    SCSIZE nRowCount = pPositionMap->GetRowCount();
+                    if( 1==nRowCount )
+                        eDataRowSource = chart::ChartDataRowSource_ROWS;
+                }
                 if ( eDataRowSource == chart::ChartDataRowSource_COLUMNS )
                 {
                     bHasCategories = aChartPositioner.HasRowHeaders();
