@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: ch_tools_common.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-13 14:27:02 $
+'* last change: $Author: obo $ $Date: 2008-07-21 12:08:07 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -157,7 +157,8 @@ end function
 function fOpenTestDocumentAndSelectDataRange(sInputFile as string) as BOOLEAN
     fOpenTestDocumentAndSelectDataRange = FALSE
     call hFileOpen(sInputFile)
-    sleep(2)    
+    sleep(2)
+    Call sMakeReadOnlyDocumentEditable()    
     '/// Select chart using navigator
     printlog "Select chart using navigator"
     call fSelectFirstOLE    
