@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: axismodel.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,9 +57,9 @@ AxisModel::AxisModel( sal_Int32 nTypeId ) :
     mnCrossMode( XML_autoZero ),
     mnLabelAlign( XML_ctr ),
     mnLabelOffset( 100 ),
-    mnMajorTickMark( XML_cross ),
+    mnMajorTickMark( XML_out ),
     mnMajorTimeUnit( XML_days ),
-    mnMinorTickMark( XML_cross ),
+    mnMinorTickMark( XML_none ),
     mnMinorTimeUnit( XML_days ),
     mnOrientation( XML_minMax ),
     mnTickLabelPos( XML_nextTo ),
@@ -68,8 +68,7 @@ AxisModel::AxisModel( sal_Int32 nTypeId ) :
     mnTypeId( nTypeId ),
     mbAuto( false ),
     mbDeleted( false ),
-    mbNoMultiLevel( false ),
-    mbSourceLinked( false )
+    mbNoMultiLevel( false )
 {
 }
 
