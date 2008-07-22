@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: compiler.cxx,v $
- * $Revision: 1.81 $
+ * $Revision: 1.82 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1716,7 +1716,8 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
         bIgnoreErrors( FALSE ),
         pConv( pConvOOO_A1 ),
         mbCloseBrackets( true ),
-        meGrammar( ScGrammar::GRAM_UNSPECIFIED )
+        meGrammar( ScGrammar::GRAM_UNSPECIFIED ),
+        mbExtendedErrorDetection( false )
 {
     SetGrammar( eGrammar);
     nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
@@ -1740,7 +1741,8 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
         bIgnoreErrors( FALSE ),
         pConv( pConvOOO_A1 ),
         mbCloseBrackets( true ),
-        meGrammar( ScGrammar::GRAM_UNSPECIFIED )
+        meGrammar( ScGrammar::GRAM_UNSPECIFIED ),
+        mbExtendedErrorDetection( false )
 {
     SetGrammar( eGrammar);
     nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
@@ -3239,15 +3241,24 @@ BOOL ScCompiler::NextNewToken( bool bAllowBooleans )
               && !(bMayBeFuncName && IsMacro( aUpper ))
               && !(bMayBeFuncName && IsOpCode2( aUpper )) )
             {
-                // Provide single token information and continue. Do not set an
-                // error, that would prematurely end compilation. Simple
-                // unknown names are handled by the interpreter.
-                ScGlobal::pCharClass->toLower( aUpper );
-                aToken.SetString( aUpper.GetBuffer() );
-                aToken.NewOpCode( ocBad );
-                pRawToken = aToken.Clone();
-                if ( bAutoCorrect )
-                    AutoCorrectParsedSymbol();
+                if ( mbExtendedErrorDetection )
+                {
+                    // set an error and end compilation
+                    SetError( errNoName );
+                    return FALSE;
+                }
+                else
+                {
+                    // Provide single token information and continue. Do not set an
+                    // error, that would prematurely end compilation. Simple
+                    // unknown names are handled by the interpreter.
+                    ScGlobal::pCharClass->toLower( aUpper );
+                    aToken.SetString( aUpper.GetBuffer() );
+                    aToken.NewOpCode( ocBad );
+                    pRawToken = aToken.Clone();
+                    if ( bAutoCorrect )
+                        AutoCorrectParsedSymbol();
+                }
             }
         }
         return TRUE;
