@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salinst.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -789,7 +789,8 @@ void Os2SalInstance::DestroyFrame( SalFrame* pFrame )
 // -----------------------------------------------------------------------
 
 SalObject* Os2SalInstance::CreateObject( SalFrame* pParent,
-                                        SystemWindowData* /*pWindowData*/ ) // SystemWindowData meaningless on Windows
+                                         SystemWindowData* /*pWindowData*/, // SystemWindowData meaningless on Windows
+                                         BOOL /*bShow*/ )
 {
     // Um auf Main-Thread umzuschalten
     return (SalObject*)WinSendMsg( mhComWnd, SAL_MSG_CREATEOBJECT, 0, (MPARAM)pParent );
