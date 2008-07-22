@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclevent.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -178,6 +178,7 @@ class Menu;
 #define VCLEVENT_WINDOW_ENDPOPUPMODE            1222    // pData = EndPopupModeData
 
 #define VCLEVENT_TOOLBOX_BUTTONSTATECHANGED     1223    // pData = itempos
+#define VCLEVENT_TABLECELL_NAMECHANGED          1224    // pData = struct(Entry, Column, oldText)
 
 class VCL_DLLPUBLIC VclSimpleEvent
 {
