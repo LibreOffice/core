@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: themeelementscontext.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,23 +32,30 @@
 #define OOX_DRAWINGML_THEMEELEMENTSCONTEXT_HXX
 
 #include "oox/core/contexthandler.hxx"
-#include "oox/drawingml/theme.hxx"
 
-namespace oox { namespace drawingml {
+namespace oox {
+namespace drawingml {
 
-class themeElementsContext : public oox::core::ContextHandler
+class Theme;
+
+// ============================================================================
+
+class ThemeElementsContext : public oox::core::ContextHandler
 {
 public:
-    themeElementsContext( ::oox::core::ContextHandler& rParent, Theme& );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element,
+    ThemeElementsContext( ::oox::core::ContextHandler& rParent, Theme& rTheme );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 nElement,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 private:
     Theme& mrTheme;
-
 };
 
-} }
+// ============================================================================
 
-#endif  //  OOX_DRAWINGML_THEMEELEMENTSCONTEXT_HXX
+} // namespace drawingml
+} // namespace oox
+
+#endif
+
