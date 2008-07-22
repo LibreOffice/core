@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filebuff.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,7 +59,11 @@ LoadXmlFile( Buffer &           o_rBuffer,
 
     // Read file:
     aXmlFile.read(o_rBuffer.Data(), (int) nBufferSize);
+#ifdef OS2 // YD eof&fail are set, so check for fail&bad
+    bool ret = aXmlFile.fail() != 0;
+#else
     bool ret = aXmlFile.good() != 0;
+#endif
     aXmlFile.close();
     return ret;
 }
