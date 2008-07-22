@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: os2.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,8 +42,6 @@
 #include <tools/bigint.hxx>
 #include <fsys.hxx>
 #include "comdep.hxx"
-
-//#include "fastfsys.hxx"
 
 #ifdef OS2
 #ifndef _VOS_MUTEX_HXX //autogen
