@@ -8,7 +8,7 @@
  *
  * $RCSfile: titleconverter.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include "oox/drawingml/textbody.hxx"
+#include "oox/drawingml/textparagraph.hxx"
 #include "oox/drawingml/chart/datasourceconverter.hxx"
 #include "oox/drawingml/chart/titlemodel.hxx"
 
@@ -50,31 +51,13 @@ using ::com::sun::star::chart2::XLegend;
 using ::com::sun::star::chart2::XTitle;
 using ::com::sun::star::chart2::XTitled;
 using ::com::sun::star::chart2::data::XDataSequence;
+using ::oox::core::XmlFilterBase;
 
 namespace oox {
 namespace drawingml {
 namespace chart {
 
 // ============================================================================
-
-namespace {
-
-void lclAppendFormattedString( ::std::vector< Reference< XFormattedString > >& orStringVec, const OUString& rString, bool bAddNewLine )
-{
-    try
-    {
-        Reference< XFormattedString > xFmtStr( ConverterRoot::createInstance( CREATE_OUSTRING( "com.sun.star.chart2.FormattedString" ) ), UNO_QUERY_THROW );
-        xFmtStr->setString( bAddNewLine ? (rString + OUString( sal_Unicode( '\n' ) )) : rString );
-        orStringVec.push_back( xFmtStr );
-    }
-    catch( Exception& )
-    {
-    }
-}
-
-} // namespace
-
-// ----------------------------------------------------------------------------
 
 TextConverter::TextConverter( const ConverterRoot& rParent, TextModel& rModel ) :
     ConverterBase< TextModel >( rParent, rModel )
@@ -96,39 +79,67 @@ Reference< XDataSequence > TextConverter::createDataSequence( const OUString& rR
     return xDataSeq;
 }
 
-Sequence< Reference< XFormattedString > > TextConverter::createStringSequence( const OUString& rDefaultText )
+Sequence< Reference< XFormattedString > > TextConverter::createStringSequence(
+        const OUString& rDefaultText, const ModelRef< TextBody >& rxTextProp, ObjectType eObjType )
 {
-    ::std::vector< Reference< XFormattedString > > aStringVec;
-
     OSL_ENSURE( !mrModel.mxDataSeq || !mrModel.mxTextBody, "TextConverter::createStringSequence - linked string and rich text found" );
+    ::std::vector< Reference< XFormattedString > > aStringVec;
+    if( mrModel.mxTextBody.is() )
+    {
+        // rich-formatted text objects can be created, but currently Chart2 is not able to show them
+        const TextParagraphVector& rTextParas = mrModel.mxTextBody->getParagraphs();
+        for( TextParagraphVector::const_iterator aPIt = rTextParas.begin(), aPEnd = rTextParas.end(); aPIt != aPEnd; ++aPIt )
+        {
+            const TextParagraph& rTextPara = **aPIt;
+            const TextCharacterProperties& rParaProps = rTextPara.getProperties().getTextCharacterProperties();
+            for( TextRunVector::const_iterator aRIt = rTextPara.getRuns().begin(), aREnd = rTextPara.getRuns().end(); aRIt != aREnd; ++aRIt )
+            {
+                const TextRun& rTextRun = **aRIt;
+                bool bAddNewLine = (aRIt + 1 == aREnd) && (aPIt + 1 != aPEnd);
+                Reference< XFormattedString > xFmtStr = appendFormattedString( aStringVec, rTextRun.getText(), bAddNewLine );
+                PropertySet aPropSet( xFmtStr );
+                TextCharacterProperties aRunProps( rParaProps );
+                aRunProps.assignUsed( rTextRun.getTextCharacterProperties() );
+                getFormatter().convertTextFormatting( aPropSet, aRunProps, eObjType );
+            }
+        }
+    }
+    else
+    {
+        OUString aString;
+        // try to create string from linked data
+        if( mrModel.mxDataSeq.is() && !mrModel.mxDataSeq->maData.empty() )
+            mrModel.mxDataSeq->maData.begin()->second >>= aString;
+        // no linked string -> fall back to default string
+        if( aString.getLength() == 0 )
+            aString = rDefaultText;
 
-    // try to create string from linked data
-    if( mrModel.mxDataSeq.is() )
-    {
-        const DataSequenceModel::AnyMap& rData = mrModel.mxDataSeq->maData;
-        if( !rData.empty() )
+        // create formatted string object
+        if( aString.getLength() > 0 )
         {
-            ::rtl::OUString aString;
-            if( rData.begin()->second >>= aString )
-                lclAppendFormattedString( aStringVec, aString, false );
+            Reference< XFormattedString > xFmtStr = appendFormattedString( aStringVec, aString, false );
+            PropertySet aPropSet( xFmtStr );
+            getFormatter().convertTextFormatting( aPropSet, rxTextProp, eObjType );
         }
-    }
-    else if( mrModel.mxTextBody.is() )
-    {
-        const TextParagraphVector& rParas = mrModel.mxTextBody->getParagraphs();
-        for( TextParagraphVector::const_iterator aPIt = rParas.begin(), aPEnd = rParas.end(); aPIt != aPEnd; ++aPIt )
-        {
-            const TextRunVector& rRuns = (*aPIt)->getRuns();
-            for( TextRunVector::const_iterator aRIt = rRuns.begin(), aREnd = rRuns.end(); aRIt != aREnd; ++aRIt )
-                lclAppendFormattedString( aStringVec, (*aRIt)->getText(), (aRIt + 1 == aREnd) && (aPIt + 1 != aPEnd) );
-        }
-    }
-    else if( rDefaultText.getLength() > 0 )
-    {
-        lclAppendFormattedString( aStringVec, rDefaultText, false );
     }
 
     return ContainerHelper::vectorToSequence( aStringVec );
+}
+
+Reference< XFormattedString > TextConverter::appendFormattedString(
+        ::std::vector< Reference< XFormattedString > >& orStringVec, const OUString& rString, bool bAddNewLine ) const
+{
+    Reference< XFormattedString > xFmtStr;
+    try
+    {
+        xFmtStr.set( ConverterRoot::createInstance( CREATE_OUSTRING( "com.sun.star.chart2.FormattedString" ) ), UNO_QUERY_THROW );
+        xFmtStr->setString( bAddNewLine ? (rString + OUString( sal_Unicode( '\n' ) )) : rString );
+        orStringVec.push_back( xFmtStr );
+    }
+    catch( Exception& )
+    {
+    }
+    return xFmtStr;
 }
 
 // ============================================================================
@@ -142,19 +153,29 @@ TitleConverter::~TitleConverter()
 {
 }
 
-void TitleConverter::convertFromModel( const Reference< XTitled >& rxTitled, const ::rtl::OUString& rAutoTitle )
+void TitleConverter::convertFromModel( const Reference< XTitled >& rxTitled, const OUString& rAutoTitle, ObjectType eObjType )
 {
     if( rxTitled.is() )
     {
         // create the formatted strings
-        TextConverter aTextConv( *this, mrModel.mxText.getOrCreate() );
-        Sequence< Reference< XFormattedString > > aStringSeq = aTextConv.createStringSequence( rAutoTitle );
+        TextModel& rText = mrModel.mxText.getOrCreate();
+        TextConverter aTextConv( *this, rText );
+        Sequence< Reference< XFormattedString > > aStringSeq = aTextConv.createStringSequence( rAutoTitle, mrModel.mxTextProp, eObjType );
         if( aStringSeq.hasElements() ) try
         {
             // create the title object and set the string data
             Reference< XTitle > xTitle( createInstance( CREATE_OUSTRING( "com.sun.star.chart2.Title" ) ), UNO_QUERY_THROW );
             xTitle->setText( aStringSeq );
             rxTitled->setTitleObject( xTitle );
+
+            // frame formatting (text formatting already done in TextConverter::createStringSequence())
+            PropertySet aPropSet( xTitle );
+            getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, eObjType );
+
+            // frame rotation
+            OSL_ENSURE( !mrModel.mxTextProp || !rText.mxTextBody, "TitleConverter::convertFromModel - multiple text properties" );
+            ModelRef< TextBody > xTextProp = mrModel.mxTextProp.is() ? mrModel.mxTextProp : rText.mxTextBody;
+            getFormatter().convertTextRotation( aPropSet, xTextProp );
         }
         catch( Exception& )
         {
@@ -177,8 +198,13 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
 {
     if( rxDiagram.is() ) try
     {
+        // create the legend
         Reference< XLegend > xLegend( createInstance( CREATE_OUSTRING( "com.sun.star.chart2.Legend" ) ), UNO_QUERY_THROW );
         rxDiagram->setLegend( xLegend );
+
+        // legend formatting
+        PropertySet aPropSet( xLegend );
+        getFormatter().convertFormatting( aPropSet, mrModel.mxShapeProp, mrModel.mxTextProp, OBJECTTYPE_LEGEND );
     }
     catch( Exception& )
     {
