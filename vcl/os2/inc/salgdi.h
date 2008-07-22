@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.h,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,7 +69,7 @@ public:
     bool                    HasChar( sal_uInt32 cChar ) const;
 
     PFONTMETRICS            GetFontMetrics() const          { return pFontMetric; }
-    BYTE                    GetCharSet() const          { return meOs2CharSet; }
+    USHORT                  GetCharSet() const          { return meOs2CharSet; }
     BYTE                    GetPitchAndFamily() const   { return mnPitchAndFamily; }
     bool                    IsGlyphApiDisabled() const  { return mbDisableGlyphApi; }
     bool                    SupportsKorean() const      { return mbHasKoreanRange; }
@@ -90,7 +90,7 @@ private:
     // TODO: get rid of the members below needed to work with the Win9x non-unicode API
     BYTE*                   mpFontCharSets;     // all Charsets for the current font (used on W98 for kerning)
     BYTE                    mnFontCharSetCount; // Number of Charsets of the current font; 0 - if not queried
-    BYTE                    meOs2CharSet;
+    USHORT                  meOs2CharSet;
     BYTE                    mnPitchAndFamily;
     bool                    mbAliasSymbolsHigh;
     bool                    mbAliasSymbolsLow;
