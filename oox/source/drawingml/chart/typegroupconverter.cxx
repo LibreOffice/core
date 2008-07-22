@@ -8,7 +8,7 @@
  *
  * $RCSfile: typegroupconverter.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,7 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/typegroupconverter.hxx"
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
@@ -38,6 +39,8 @@
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
+#include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/chart/seriesconverter.hxx"
 #include "oox/drawingml/chart/typegroupmodel.hxx"
 
@@ -73,28 +76,31 @@ const sal_Char SERVICE_CHART2_LINE[]    = "com.sun.star.chart2.LineChartType";
 const sal_Char SERVICE_CHART2_NET[]     = "com.sun.star.chart2.NetChartType";
 const sal_Char SERVICE_CHART2_PIE[]     = "com.sun.star.chart2.PieChartType";
 const sal_Char SERVICE_CHART2_SCATTER[] = "com.sun.star.chart2.ScatterChartType";
+const sal_Char SERVICE_CHART2_BUBBLE[]  = "com.sun.star.chart2.ScatterChartType";   // Todo
 const sal_Char SERVICE_CHART2_SURFACE[] = "com.sun.star.chart2.ColumnChartType";    // Todo
+
+namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
 
 static const TypeGroupInfo spTypeInfos[] =
 {
-    // type-id          type-category         service                 varied-point-color   comb2d supp3d polar  area2d area3d 1stvis xcateg swap   stack  revers betw
-    { TYPEID_BAR,       TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,  VARPOINTMODE_SINGLE, true,  true,  false, true,  true,  false, true,  false, true,  false, true  },
-    { TYPEID_HORBAR,    TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,  VARPOINTMODE_SINGLE, false, true,  false, true,  true,  false, true,  true,  true,  false, true  },
-    { TYPEID_LINE,      TYPECATEGORY_LINE,    SERVICE_CHART2_LINE,    VARPOINTMODE_SINGLE, true,  true,  false, false, true,  false, true,  false, true,  false, true  },
-    { TYPEID_AREA,      TYPECATEGORY_LINE,    SERVICE_CHART2_AREA,    VARPOINTMODE_NONE,   true,  true,  false, true,  true,  false, true,  false, true,  true,  false },
-    { TYPEID_STOCK,     TYPECATEGORY_LINE,    SERVICE_CHART2_CANDLE,  VARPOINTMODE_NONE,   true,  false, false, false, false, false, true,  false, true,  false, true  },
-    { TYPEID_RADARLINE, TYPECATEGORY_RADAR,   SERVICE_CHART2_NET,     VARPOINTMODE_SINGLE, false, false, true,  false, true,  false, true,  false, false, false, false },
-    { TYPEID_RADARAREA, TYPECATEGORY_RADAR,   SERVICE_CHART2_NET,     VARPOINTMODE_NONE,   false, false, true,  true,  true,  false, true,  false, false, false, false },
-    { TYPEID_PIE,       TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,     VARPOINTMODE_MULTI,  false, true,  true,  true,  true,  true,  true,  false, false, false, false },
-    { TYPEID_DOUGHNUT,  TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,     VARPOINTMODE_MULTI,  false, true,  true,  true,  true,  false, true,  false, false, false, false },
-    { TYPEID_OFPIE,     TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,     VARPOINTMODE_MULTI,  false, true,  true,  true,  true,  true,  true,  false, false, false, false },
-    { TYPEID_SCATTER,   TYPECATEGORY_SCATTER, SERVICE_CHART2_SCATTER, VARPOINTMODE_SINGLE, true,  true,  false, false, true,  false, false, false, false, false, false },
-    { TYPEID_BUBBLE,    TYPECATEGORY_SCATTER, SERVICE_CHART2_SCATTER, VARPOINTMODE_SINGLE, false, true,  false, true,  true,  false, false, false, false, false, false },
-    { TYPEID_SURFACE,   TYPECATEGORY_SURFACE, SERVICE_CHART2_SURFACE, VARPOINTMODE_NONE,   false, true,  false, true,  true,  false, true,  false, false, false, false },
+    // type-id          type-category         service                 varied-point-color   default label pos     comb2d supp3d polar  area2d 1stvis xcateg swap   stack  revers betw
+    { TYPEID_BAR,       TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,  VARPOINTMODE_SINGLE, csscd::OUTSIDE,       true,  true,  false, true,  false, true,  false, true,  false, true  },
+    { TYPEID_HORBAR,    TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,  VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  false, true,  true,  true,  false, true  },
+    { TYPEID_LINE,      TYPECATEGORY_LINE,    SERVICE_CHART2_LINE,    VARPOINTMODE_SINGLE, csscd::RIGHT,         true,  true,  false, false, false, true,  false, true,  false, true  },
+    { TYPEID_AREA,      TYPECATEGORY_LINE,    SERVICE_CHART2_AREA,    VARPOINTMODE_NONE,   csscd::CENTER,        true,  true,  false, true,  false, true,  false, true,  true,  false },
+    { TYPEID_STOCK,     TYPECATEGORY_LINE,    SERVICE_CHART2_CANDLE,  VARPOINTMODE_NONE,   csscd::RIGHT,         true,  false, false, false, false, true,  false, true,  false, true  },
+    { TYPEID_RADARLINE, TYPECATEGORY_RADAR,   SERVICE_CHART2_NET,     VARPOINTMODE_SINGLE, csscd::TOP,           false, false, true,  false, false, true,  false, false, false, false },
+    { TYPEID_RADARAREA, TYPECATEGORY_RADAR,   SERVICE_CHART2_NET,     VARPOINTMODE_NONE,   csscd::TOP,           false, false, true,  true,  false, true,  false, false, false, false },
+    { TYPEID_PIE,       TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,     VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  true,  false, false, false, false },
+    { TYPEID_DOUGHNUT,  TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,     VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  false, true,  false, false, false, false },
+    { TYPEID_OFPIE,     TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,     VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  true,  false, false, false, false },
+    { TYPEID_SCATTER,   TYPECATEGORY_SCATTER, SERVICE_CHART2_SCATTER, VARPOINTMODE_SINGLE, csscd::RIGHT,         true,  true,  false, false, false, false, false, false, false, false },
+    { TYPEID_BUBBLE,    TYPECATEGORY_SCATTER, SERVICE_CHART2_BUBBLE,  VARPOINTMODE_SINGLE, csscd::RIGHT,         false, true,  false, true,  false, false, false, false, false, false },
+    { TYPEID_SURFACE,   TYPECATEGORY_SURFACE, SERVICE_CHART2_SURFACE, VARPOINTMODE_NONE,   csscd::RIGHT,         false, true,  false, true,  false, true,  false, false, false, false },
 };
 
 static const TypeGroupInfo saUnknownTypeInfo =
-    { TYPEID_UNKNOWN,   TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,  VARPOINTMODE_SINGLE, true,  true,  false, true,  true,  false, true,  false, true,  false, true  };
+    { TYPEID_UNKNOWN,   TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,  VARPOINTMODE_SINGLE, csscd::OUTSIDE,       true,  true,  false, true,  false, true,  false, true,  false, true  };
 
 const TypeGroupInfo& lclGetTypeInfoFromTypeId( TypeId eTypeId )
 {
@@ -123,21 +129,21 @@ void UpDownBarsConverter::convertFromModel( const Reference< XChartType >& rxCha
 {
     PropertySet aTypeProp( rxChartType );
 
-    // TODO: upbar format
-//    Reference< XPropertySet > xWhitePropSet;
-//    if( aTypeProp.getProperty( xWhitePropSet, CREATE_OUSTRING( "WhiteDay" ) ) )
-//    {
-//        PropertySet aBarProp( xWhitePropSet );
-//        mrModel.mxUpBars.getOrCreate().convert( aBarProp, OBJECTTYPE_UPBAR );
-//    }
+    // upbar format
+    Reference< XPropertySet > xWhitePropSet;
+    if( aTypeProp.getProperty( xWhitePropSet, CREATE_OUSTRING( "WhiteDay" ) ) )
+    {
+        PropertySet aPropSet( xWhitePropSet );
+        getFormatter().convertFrameFormatting( aPropSet, mrModel.mxUpBars, OBJECTTYPE_UPBAR );
+    }
 
-    // TODO: downbar format
-//    Reference< XPropertySet > xBlackPropSet;
-//    if( aTypeProp.getProperty( xBlackPropSet, CREATE_OUSTRING( "BlackDay" ) ) )
-//    {
-//        PropertySet aBarProp( xBlackPropSet );
-//        mrModel.mxDownBars.getOrCreate().convert( aBarProp, OBJECTTYPE_DOWNBAR );
-//    }
+    // downbar format
+    Reference< XPropertySet > xBlackPropSet;
+    if( aTypeProp.getProperty( xBlackPropSet, CREATE_OUSTRING( "BlackDay" ) ) )
+    {
+        PropertySet aPropSet( xBlackPropSet );
+        getFormatter().convertFrameFormatting( aPropSet, mrModel.mxDownBars, OBJECTTYPE_DOWNBAR );
+    }
 }
 
 // ============================================================================
@@ -181,6 +187,11 @@ TypeGroupConverter::TypeGroupConverter( const ConverterRoot& rParent, TypeGroupM
             if( mrModel.mnRadarStyle == XML_filled )
                 eTypeId = TYPEID_RADARAREA;
         break;
+        case TYPEID_BUBBLE:
+            // create a symbol-only scatter chart from bubble charts
+            for( TypeGroupModel::SeriesVector::iterator aIt = mrModel.maSeries.begin(), aEnd = mrModel.maSeries.end(); aIt != aEnd; ++aIt )
+                (*aIt)->mxShapeProp.getOrCreate().getLineProperties().maLineFill.moFillType = XML_noFill;
+        break;
         case TYPEID_SURFACE:
             // create a deep 3D bar chart from surface charts
             mrModel.mnGrouping = XML_standard;
@@ -190,6 +201,16 @@ TypeGroupConverter::TypeGroupConverter( const ConverterRoot& rParent, TypeGroupM
 
     // set the chart type info struct for the current chart type
     maTypeInfo = lclGetTypeInfoFromTypeId( eTypeId );
+
+    // change type info for some chart types
+    switch( eTypeId )
+    {
+        case TYPEID_BUBBLE:
+            // bubble chart has fill properties, but we create a scatter chart
+            maTypeInfo.mbSeriesIsFrame2d = false;
+        break;
+        default:;
+    }
 }
 
 TypeGroupConverter::~TypeGroupConverter()
@@ -223,7 +244,13 @@ bool TypeGroupConverter::isDeep3dChart() const
 
 bool TypeGroupConverter::isSeriesFrameFormat() const
 {
-    return mb3dChart ? maTypeInfo.mbSeriesIsFrame3d : maTypeInfo.mbSeriesIsFrame2d;
+    return mb3dChart || maTypeInfo.mbSeriesIsFrame2d;
+}
+
+ObjectType TypeGroupConverter::getSeriesObjectType() const
+{
+    return mb3dChart ? OBJECTTYPE_FILLEDSERIES3D :
+        (maTypeInfo.mbSeriesIsFrame2d ? OBJECTTYPE_FILLEDSERIES2D : OBJECTTYPE_LINEARSERIES2D);
 }
 
 bool TypeGroupConverter::isReverseSeries() const
@@ -292,7 +319,8 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
 }
 
 void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
-        const Reference< XCoordinateSystem >& rxCoordSystem, sal_Int32 nAxesSetIdx )
+        const Reference< XCoordinateSystem >& rxCoordSystem,
+        sal_Int32 nAxesSetIdx, bool bSupportsVaryColorsByPoint )
 {
     try
     {
@@ -337,6 +365,15 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
         if( isReverseSeries() )
             ::std::reverse( aSeries.begin(), aSeries.end() );
 
+        // decide whether to use varying colors for each data point
+        bool bVaryColorsByPoint = bSupportsVaryColorsByPoint && mrModel.mbVaryColors;
+        switch( maTypeInfo.meVarPointMode )
+        {
+            case VARPOINTMODE_NONE:     bVaryColorsByPoint = false;                             break;
+            case VARPOINTMODE_SINGLE:   bVaryColorsByPoint &= (mrModel.maSeries.size() == 1);   break;
+            case VARPOINTMODE_MULTI:                                                            break;
+        }
+
         /*  Stock chart needs special processing. Create one 'big' series with
             data sequences of different roles. */
         if( maTypeInfo.meTypeId == TYPEID_STOCK )
@@ -369,20 +406,20 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
                 // attach labeled data sequences to series and insert series into chart type
                 xDataSink->setData( ContainerHelper::vectorToSequence( aLabeledSeqVec ) );
 
-                // formatting of special stock chart elements
-                aTypeProp.setProperty( CREATE_OUSTRING( "Japanese" ), mrModel.mxUpDownBars.is() );
-                aTypeProp.setProperty( CREATE_OUSTRING( "ShowFirst" ), mrModel.mxUpDownBars.is() );
+                // formatting of high/low lines
                 aTypeProp.setProperty( CREATE_OUSTRING( "ShowHighLow" ), true );
-
-                // TODO: formatting of high/low lines
-//                if( mrModel.mxHiLowLines.is() )
-//                {
-//                    PropertySet aSeriesProp( xDataSeries );
-//                    xHiLoLine->convert( aSeriesProp, OBJECTTYPE_HILOLINE );
-//                }
+                PropertySet aSeriesProp( xDataSeries );
+                if( mrModel.mxHiLowLines.is() )
+                    getFormatter().convertFrameFormatting( aSeriesProp, mrModel.mxHiLowLines, OBJECTTYPE_HILOLINE );
+                else
+                    // hi/low-lines cannot be switched off via "ShowHighLow" property (?)
+                    aSeriesProp.setProperty( CREATE_OUSTRING( "LineStyle" ), ::com::sun::star::drawing::LineStyle_NONE );
 
                 // formatting of up/down bars
-                if( mrModel.mxUpDownBars.is() )
+                bool bUpDownBars = mrModel.mxUpDownBars.is();
+                aTypeProp.setProperty( CREATE_OUSTRING( "Japanese" ), bUpDownBars );
+                aTypeProp.setProperty( CREATE_OUSTRING( "ShowFirst" ), bUpDownBars );
+                if( bUpDownBars )
                 {
                     UpDownBarsConverter aUpDownConv( *this, *mrModel.mxUpDownBars );
                     aUpDownConv.convertFromModel( xChartType );
@@ -397,7 +434,7 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
             for( SeriesConvVector::iterator aIt = aSeries.begin(), aEnd = aSeries.end(); aIt != aEnd; ++aIt )
             {
                 SeriesConverter& rSeriesConv = **aIt;
-                Reference< XDataSeries > xDataSeries = rSeriesConv.createDataSeries( *this );
+                Reference< XDataSeries > xDataSeries = rSeriesConv.createDataSeries( *this, bVaryColorsByPoint );
                 insertDataSeries( xChartType, xDataSeries, nAxesSetIdx );
 
                 /*  Excel does not use the value of the c:smooth element of the
