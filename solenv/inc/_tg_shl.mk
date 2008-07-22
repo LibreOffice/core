@@ -52,7 +52,7 @@ $(MISC)$/$(SHL1VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL1VE
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL1IMPLIB)" == ""
 SHL1IMPLIB=i$(TARGET)_t1
 .ENDIF			# "$(SHL1IMPLIB)" == ""
@@ -65,7 +65,7 @@ ALLTAR : $(SHL1IMPLIBN)
 .IF "$(USE_DEFFILE)"==""
 USE_1IMPLIB_DEPS=$(LB)$/$(SHL1IMPLIB).lib
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 USE_SHL1DEF=$(SHL1DEF)
 .ELSE			# "$(GUI)" != "UNX"
 USE_SHL1DEF=
@@ -200,7 +200,7 @@ SHL1LINKRESO*=$(MISC)$/$(SHL1TARGET)_res.o
 #.IF "$(SHL1TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL1LIBS)"!=""
 $(MISC)$/$(SHL1TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -213,7 +213,7 @@ $(SHL1TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
 .IF "$(SHL1USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(COM)"!="GCC"
 .IF "$(SHL1LIBS)"!=""
 SHL1LINKLIST=$(MISC)$/$(SHL1TARGET)_link.lst
@@ -230,6 +230,20 @@ $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(GUI)" == "OS2"
+#21/02/2006 YD dll names must be 8.3, invoke fix script
+#check osl/os2/module.c/osl_loadModule()
+SHL1TARGET8=$(shell @fix_shl $(SHL1TARGET))
+.ENDIF
+
+.IF "$(GUI)" == "OS2"
+_SHL1IMP_ORD = $(SHL1STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(SHL1STDLIBS:^"$(LB)$/") 
+SHL1IMP_ORD = $(foreach,i,$(_SHL1IMP_ORD) $(shell @-ls $i))
+.ELSE
+SHL1IMP_ORD = 
+.ENDIF
+
+
 $(SHL1TARGETN) : \
                     $(SHL1OBJS)\
                     $(SHL1LIBS)\
@@ -238,6 +252,7 @@ $(SHL1TARGETN) : \
                     $(USE_SHL1VERSIONMAP)\
                     $(SHL1RES)\
                     $(SHL1DEPN) \
+                    $(SHL1IMP_ORD) \
                     $(SHL1LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL1TARGETN)
@@ -447,6 +462,71 @@ $(SHL1TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 
+.IF "$(GUI)" == "OS2"
+
+.IF "$(SHL1DEFAULTRES)"!=""
+    @+-$(RM) $(MISC)$/$(SHL1DEFAULTRES:b).rc >& $(NULLDEV)
+.IF "$(SHL1ICON)" != ""
+    @-+echo 1 ICON $(SHL1ICON) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+.ENDIF
+.IF "$(use_shl_versions)" != ""
+.IF "$(SHL1ADD_VERINFO)"!=""
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL1ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+.ENDIF			# "$(SHL1ADD_VERINFO)"!=""
+    @-+echo MENU 1 BEGIN END >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+#	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+.ENDIF			# "$(use_shl_versions)" != ""
+# YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
+    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL1DEFAULTRES:b).rc
+.ENDIF			# "$(SHL1DEFAULTRES)"!=""
+
+.IF "$(SHL1ALLRES)"!=""
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) $(SHL1ALLRES:s/res /res+/) $(SHL1LINKRES)
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(SHL1ALLRES) > $(SHL1LINKRES)
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF			# "$(SHL1ALLRES)"!=""
+
+.IF "$(USE_DEFFILE)"!=""
+
+    $(SHL1LINKER) $(SHL1LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+        $(SHL1DEF) \
+        $(STDOBJ) \
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL1OBJS) $(SHL1VERSIONOBJ) \
+        $(SHL1LIBS) \
+        $(SHL1STDLIBS:^"-l") \
+        $(SHL1LINKRES) \
+        $(SHL1STDSHL:^"-l") $(STDSHL1:^"-l") 
+
+.ELSE			# "$(USE_DEFFILE)"!=""
+
+    $(SHL1LINKER) -v 	$(SHL1LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL1BASEX)		\
+        $(SHL1STACK) -o $(SHL1TARGETN)	\
+        $(SHL1DEF) \
+        $(STDOBJ)							\
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL1OBJS) $(SHL1VERSIONOBJ) \
+        $(SHL1LIBS) \
+        $(SHL1STDLIBS:^"-l") \
+        $(SHL1LINKRES) \
+        $(SHL1STDSHL:^"-l") $(STDSHL1:^"-l")                           \
+    $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
+
+.ENDIF			# "$(USE_DEFFILE)"!=""
+
+.IF "$(SHL1TARGET8)" != "$(SHL1TARGET)"
+    +$(COPY) $@ $(@:d)$(SHL1TARGET8).dll
+.ENDIF
+
+.ENDIF			# "$(GUI)" == "OS2"
+
+
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
 
@@ -512,7 +592,7 @@ $(MISC)$/$(SHL2VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL2VE
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL2IMPLIB)" == ""
 SHL2IMPLIB=i$(TARGET)_t2
 .ENDIF			# "$(SHL2IMPLIB)" == ""
@@ -525,7 +605,7 @@ ALLTAR : $(SHL2IMPLIBN)
 .IF "$(USE_DEFFILE)"==""
 USE_2IMPLIB_DEPS=$(LB)$/$(SHL2IMPLIB).lib
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 USE_SHL2DEF=$(SHL2DEF)
 .ELSE			# "$(GUI)" != "UNX"
 USE_SHL2DEF=
@@ -660,7 +740,7 @@ SHL2LINKRESO*=$(MISC)$/$(SHL2TARGET)_res.o
 #.IF "$(SHL2TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL2LIBS)"!=""
 $(MISC)$/$(SHL2TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -673,7 +753,7 @@ $(SHL2TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
 .IF "$(SHL2USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(COM)"!="GCC"
 .IF "$(SHL2LIBS)"!=""
 SHL2LINKLIST=$(MISC)$/$(SHL2TARGET)_link.lst
@@ -690,6 +770,20 @@ $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(GUI)" == "OS2"
+#21/02/2006 YD dll names must be 8.3, invoke fix script
+#check osl/os2/module.c/osl_loadModule()
+SHL2TARGET8=$(shell @fix_shl $(SHL2TARGET))
+.ENDIF
+
+.IF "$(GUI)" == "OS2"
+_SHL2IMP_ORD = $(SHL2STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(SHL2STDLIBS:^"$(LB)$/") 
+SHL2IMP_ORD = $(foreach,i,$(_SHL2IMP_ORD) $(shell @-ls $i))
+.ELSE
+SHL2IMP_ORD = 
+.ENDIF
+
+
 $(SHL2TARGETN) : \
                     $(SHL2OBJS)\
                     $(SHL2LIBS)\
@@ -698,6 +792,7 @@ $(SHL2TARGETN) : \
                     $(USE_SHL2VERSIONMAP)\
                     $(SHL2RES)\
                     $(SHL2DEPN) \
+                    $(SHL2IMP_ORD) \
                     $(SHL2LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL2TARGETN)
@@ -907,6 +1002,71 @@ $(SHL2TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 
+.IF "$(GUI)" == "OS2"
+
+.IF "$(SHL2DEFAULTRES)"!=""
+    @+-$(RM) $(MISC)$/$(SHL2DEFAULTRES:b).rc >& $(NULLDEV)
+.IF "$(SHL2ICON)" != ""
+    @-+echo 1 ICON $(SHL2ICON) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+.ENDIF
+.IF "$(use_shl_versions)" != ""
+.IF "$(SHL2ADD_VERINFO)"!=""
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL2ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+.ENDIF			# "$(SHL2ADD_VERINFO)"!=""
+    @-+echo MENU 1 BEGIN END >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+#	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+.ENDIF			# "$(use_shl_versions)" != ""
+# YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
+    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL2DEFAULTRES:b).rc
+.ENDIF			# "$(SHL2DEFAULTRES)"!=""
+
+.IF "$(SHL2ALLRES)"!=""
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) $(SHL2ALLRES:s/res /res+/) $(SHL2LINKRES)
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(SHL2ALLRES) > $(SHL2LINKRES)
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF			# "$(SHL2ALLRES)"!=""
+
+.IF "$(USE_DEFFILE)"!=""
+
+    $(SHL2LINKER) $(SHL2LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+        $(SHL2DEF) \
+        $(STDOBJ) \
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL2OBJS) $(SHL2VERSIONOBJ) \
+        $(SHL2LIBS) \
+        $(SHL2STDLIBS:^"-l") \
+        $(SHL2LINKRES) \
+        $(SHL2STDSHL:^"-l") $(STDSHL2:^"-l") 
+
+.ELSE			# "$(USE_DEFFILE)"!=""
+
+    $(SHL2LINKER) -v 	$(SHL2LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL2BASEX)		\
+        $(SHL2STACK) -o $(SHL2TARGETN)	\
+        $(SHL2DEF) \
+        $(STDOBJ)							\
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL2OBJS) $(SHL2VERSIONOBJ) \
+        $(SHL2LIBS) \
+        $(SHL2STDLIBS:^"-l") \
+        $(SHL2LINKRES) \
+        $(SHL2STDSHL:^"-l") $(STDSHL2:^"-l")                           \
+    $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
+
+.ENDIF			# "$(USE_DEFFILE)"!=""
+
+.IF "$(SHL2TARGET8)" != "$(SHL2TARGET)"
+    +$(COPY) $@ $(@:d)$(SHL2TARGET8).dll
+.ENDIF
+
+.ENDIF			# "$(GUI)" == "OS2"
+
+
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
 
@@ -972,7 +1132,7 @@ $(MISC)$/$(SHL3VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL3VE
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL3IMPLIB)" == ""
 SHL3IMPLIB=i$(TARGET)_t3
 .ENDIF			# "$(SHL3IMPLIB)" == ""
@@ -985,7 +1145,7 @@ ALLTAR : $(SHL3IMPLIBN)
 .IF "$(USE_DEFFILE)"==""
 USE_3IMPLIB_DEPS=$(LB)$/$(SHL3IMPLIB).lib
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 USE_SHL3DEF=$(SHL3DEF)
 .ELSE			# "$(GUI)" != "UNX"
 USE_SHL3DEF=
@@ -1120,7 +1280,7 @@ SHL3LINKRESO*=$(MISC)$/$(SHL3TARGET)_res.o
 #.IF "$(SHL3TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL3LIBS)"!=""
 $(MISC)$/$(SHL3TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -1133,7 +1293,7 @@ $(SHL3TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
 .IF "$(SHL3USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(COM)"!="GCC"
 .IF "$(SHL3LIBS)"!=""
 SHL3LINKLIST=$(MISC)$/$(SHL3TARGET)_link.lst
@@ -1150,6 +1310,20 @@ $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(GUI)" == "OS2"
+#21/02/2006 YD dll names must be 8.3, invoke fix script
+#check osl/os2/module.c/osl_loadModule()
+SHL3TARGET8=$(shell @fix_shl $(SHL3TARGET))
+.ENDIF
+
+.IF "$(GUI)" == "OS2"
+_SHL3IMP_ORD = $(SHL3STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(SHL3STDLIBS:^"$(LB)$/") 
+SHL3IMP_ORD = $(foreach,i,$(_SHL3IMP_ORD) $(shell @-ls $i))
+.ELSE
+SHL3IMP_ORD = 
+.ENDIF
+
+
 $(SHL3TARGETN) : \
                     $(SHL3OBJS)\
                     $(SHL3LIBS)\
@@ -1158,6 +1332,7 @@ $(SHL3TARGETN) : \
                     $(USE_SHL3VERSIONMAP)\
                     $(SHL3RES)\
                     $(SHL3DEPN) \
+                    $(SHL3IMP_ORD) \
                     $(SHL3LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL3TARGETN)
@@ -1367,6 +1542,71 @@ $(SHL3TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 
+.IF "$(GUI)" == "OS2"
+
+.IF "$(SHL3DEFAULTRES)"!=""
+    @+-$(RM) $(MISC)$/$(SHL3DEFAULTRES:b).rc >& $(NULLDEV)
+.IF "$(SHL3ICON)" != ""
+    @-+echo 1 ICON $(SHL3ICON) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+.ENDIF
+.IF "$(use_shl_versions)" != ""
+.IF "$(SHL3ADD_VERINFO)"!=""
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL3ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+.ENDIF			# "$(SHL3ADD_VERINFO)"!=""
+    @-+echo MENU 1 BEGIN END >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+#	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+.ENDIF			# "$(use_shl_versions)" != ""
+# YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
+    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL3DEFAULTRES:b).rc
+.ENDIF			# "$(SHL3DEFAULTRES)"!=""
+
+.IF "$(SHL3ALLRES)"!=""
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) $(SHL3ALLRES:s/res /res+/) $(SHL3LINKRES)
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(SHL3ALLRES) > $(SHL3LINKRES)
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF			# "$(SHL3ALLRES)"!=""
+
+.IF "$(USE_DEFFILE)"!=""
+
+    $(SHL3LINKER) $(SHL3LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+        $(SHL3DEF) \
+        $(STDOBJ) \
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL3OBJS) $(SHL3VERSIONOBJ) \
+        $(SHL3LIBS) \
+        $(SHL3STDLIBS:^"-l") \
+        $(SHL3LINKRES) \
+        $(SHL3STDSHL:^"-l") $(STDSHL3:^"-l") 
+
+.ELSE			# "$(USE_DEFFILE)"!=""
+
+    $(SHL3LINKER) -v 	$(SHL3LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL3BASEX)		\
+        $(SHL3STACK) -o $(SHL3TARGETN)	\
+        $(SHL3DEF) \
+        $(STDOBJ)							\
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL3OBJS) $(SHL3VERSIONOBJ) \
+        $(SHL3LIBS) \
+        $(SHL3STDLIBS:^"-l") \
+        $(SHL3LINKRES) \
+        $(SHL3STDSHL:^"-l") $(STDSHL3:^"-l")                           \
+    $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
+
+.ENDIF			# "$(USE_DEFFILE)"!=""
+
+.IF "$(SHL3TARGET8)" != "$(SHL3TARGET)"
+    +$(COPY) $@ $(@:d)$(SHL3TARGET8).dll
+.ENDIF
+
+.ENDIF			# "$(GUI)" == "OS2"
+
+
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
 
@@ -1432,7 +1672,7 @@ $(MISC)$/$(SHL4VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL4VE
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL4IMPLIB)" == ""
 SHL4IMPLIB=i$(TARGET)_t4
 .ENDIF			# "$(SHL4IMPLIB)" == ""
@@ -1445,7 +1685,7 @@ ALLTAR : $(SHL4IMPLIBN)
 .IF "$(USE_DEFFILE)"==""
 USE_4IMPLIB_DEPS=$(LB)$/$(SHL4IMPLIB).lib
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 USE_SHL4DEF=$(SHL4DEF)
 .ELSE			# "$(GUI)" != "UNX"
 USE_SHL4DEF=
@@ -1580,7 +1820,7 @@ SHL4LINKRESO*=$(MISC)$/$(SHL4TARGET)_res.o
 #.IF "$(SHL4TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL4LIBS)"!=""
 $(MISC)$/$(SHL4TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -1593,7 +1833,7 @@ $(SHL4TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
 .IF "$(SHL4USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(COM)"!="GCC"
 .IF "$(SHL4LIBS)"!=""
 SHL4LINKLIST=$(MISC)$/$(SHL4TARGET)_link.lst
@@ -1610,6 +1850,20 @@ $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(GUI)" == "OS2"
+#21/02/2006 YD dll names must be 8.3, invoke fix script
+#check osl/os2/module.c/osl_loadModule()
+SHL4TARGET8=$(shell @fix_shl $(SHL4TARGET))
+.ENDIF
+
+.IF "$(GUI)" == "OS2"
+_SHL4IMP_ORD = $(SHL4STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(SHL4STDLIBS:^"$(LB)$/") 
+SHL4IMP_ORD = $(foreach,i,$(_SHL4IMP_ORD) $(shell @-ls $i))
+.ELSE
+SHL4IMP_ORD = 
+.ENDIF
+
+
 $(SHL4TARGETN) : \
                     $(SHL4OBJS)\
                     $(SHL4LIBS)\
@@ -1618,6 +1872,7 @@ $(SHL4TARGETN) : \
                     $(USE_SHL4VERSIONMAP)\
                     $(SHL4RES)\
                     $(SHL4DEPN) \
+                    $(SHL4IMP_ORD) \
                     $(SHL4LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL4TARGETN)
@@ -1827,6 +2082,71 @@ $(SHL4TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 
+.IF "$(GUI)" == "OS2"
+
+.IF "$(SHL4DEFAULTRES)"!=""
+    @+-$(RM) $(MISC)$/$(SHL4DEFAULTRES:b).rc >& $(NULLDEV)
+.IF "$(SHL4ICON)" != ""
+    @-+echo 1 ICON $(SHL4ICON) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+.ENDIF
+.IF "$(use_shl_versions)" != ""
+.IF "$(SHL4ADD_VERINFO)"!=""
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL4ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+.ENDIF			# "$(SHL4ADD_VERINFO)"!=""
+    @-+echo MENU 1 BEGIN END >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+#	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+.ENDIF			# "$(use_shl_versions)" != ""
+# YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
+    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL4DEFAULTRES:b).rc
+.ENDIF			# "$(SHL4DEFAULTRES)"!=""
+
+.IF "$(SHL4ALLRES)"!=""
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) $(SHL4ALLRES:s/res /res+/) $(SHL4LINKRES)
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(SHL4ALLRES) > $(SHL4LINKRES)
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF			# "$(SHL4ALLRES)"!=""
+
+.IF "$(USE_DEFFILE)"!=""
+
+    $(SHL4LINKER) $(SHL4LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+        $(SHL4DEF) \
+        $(STDOBJ) \
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL4OBJS) $(SHL4VERSIONOBJ) \
+        $(SHL4LIBS) \
+        $(SHL4STDLIBS:^"-l") \
+        $(SHL4LINKRES) \
+        $(SHL4STDSHL:^"-l") $(STDSHL4:^"-l") 
+
+.ELSE			# "$(USE_DEFFILE)"!=""
+
+    $(SHL4LINKER) -v 	$(SHL4LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL4BASEX)		\
+        $(SHL4STACK) -o $(SHL4TARGETN)	\
+        $(SHL4DEF) \
+        $(STDOBJ)							\
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL4OBJS) $(SHL4VERSIONOBJ) \
+        $(SHL4LIBS) \
+        $(SHL4STDLIBS:^"-l") \
+        $(SHL4LINKRES) \
+        $(SHL4STDSHL:^"-l") $(STDSHL4:^"-l")                           \
+    $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
+
+.ENDIF			# "$(USE_DEFFILE)"!=""
+
+.IF "$(SHL4TARGET8)" != "$(SHL4TARGET)"
+    +$(COPY) $@ $(@:d)$(SHL4TARGET8).dll
+.ENDIF
+
+.ENDIF			# "$(GUI)" == "OS2"
+
+
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
 
@@ -1892,7 +2212,7 @@ $(MISC)$/$(SHL5VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL5VE
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL5IMPLIB)" == ""
 SHL5IMPLIB=i$(TARGET)_t5
 .ENDIF			# "$(SHL5IMPLIB)" == ""
@@ -1905,7 +2225,7 @@ ALLTAR : $(SHL5IMPLIBN)
 .IF "$(USE_DEFFILE)"==""
 USE_5IMPLIB_DEPS=$(LB)$/$(SHL5IMPLIB).lib
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 USE_SHL5DEF=$(SHL5DEF)
 .ELSE			# "$(GUI)" != "UNX"
 USE_SHL5DEF=
@@ -2040,7 +2360,7 @@ SHL5LINKRESO*=$(MISC)$/$(SHL5TARGET)_res.o
 #.IF "$(SHL5TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL5LIBS)"!=""
 $(MISC)$/$(SHL5TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -2053,7 +2373,7 @@ $(SHL5TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
 .IF "$(SHL5USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(COM)"!="GCC"
 .IF "$(SHL5LIBS)"!=""
 SHL5LINKLIST=$(MISC)$/$(SHL5TARGET)_link.lst
@@ -2070,6 +2390,20 @@ $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(GUI)" == "OS2"
+#21/02/2006 YD dll names must be 8.3, invoke fix script
+#check osl/os2/module.c/osl_loadModule()
+SHL5TARGET8=$(shell @fix_shl $(SHL5TARGET))
+.ENDIF
+
+.IF "$(GUI)" == "OS2"
+_SHL5IMP_ORD = $(SHL5STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(SHL5STDLIBS:^"$(LB)$/") 
+SHL5IMP_ORD = $(foreach,i,$(_SHL5IMP_ORD) $(shell @-ls $i))
+.ELSE
+SHL5IMP_ORD = 
+.ENDIF
+
+
 $(SHL5TARGETN) : \
                     $(SHL5OBJS)\
                     $(SHL5LIBS)\
@@ -2078,6 +2412,7 @@ $(SHL5TARGETN) : \
                     $(USE_SHL5VERSIONMAP)\
                     $(SHL5RES)\
                     $(SHL5DEPN) \
+                    $(SHL5IMP_ORD) \
                     $(SHL5LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL5TARGETN)
@@ -2287,6 +2622,71 @@ $(SHL5TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 
+.IF "$(GUI)" == "OS2"
+
+.IF "$(SHL5DEFAULTRES)"!=""
+    @+-$(RM) $(MISC)$/$(SHL5DEFAULTRES:b).rc >& $(NULLDEV)
+.IF "$(SHL5ICON)" != ""
+    @-+echo 1 ICON $(SHL5ICON) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+.ENDIF
+.IF "$(use_shl_versions)" != ""
+.IF "$(SHL5ADD_VERINFO)"!=""
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL5ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+.ENDIF			# "$(SHL5ADD_VERINFO)"!=""
+    @-+echo MENU 1 BEGIN END >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+#	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+.ENDIF			# "$(use_shl_versions)" != ""
+# YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
+    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL5DEFAULTRES:b).rc
+.ENDIF			# "$(SHL5DEFAULTRES)"!=""
+
+.IF "$(SHL5ALLRES)"!=""
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) $(SHL5ALLRES:s/res /res+/) $(SHL5LINKRES)
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(SHL5ALLRES) > $(SHL5LINKRES)
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF			# "$(SHL5ALLRES)"!=""
+
+.IF "$(USE_DEFFILE)"!=""
+
+    $(SHL5LINKER) $(SHL5LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+        $(SHL5DEF) \
+        $(STDOBJ) \
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL5OBJS) $(SHL5VERSIONOBJ) \
+        $(SHL5LIBS) \
+        $(SHL5STDLIBS:^"-l") \
+        $(SHL5LINKRES) \
+        $(SHL5STDSHL:^"-l") $(STDSHL5:^"-l") 
+
+.ELSE			# "$(USE_DEFFILE)"!=""
+
+    $(SHL5LINKER) -v 	$(SHL5LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL5BASEX)		\
+        $(SHL5STACK) -o $(SHL5TARGETN)	\
+        $(SHL5DEF) \
+        $(STDOBJ)							\
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL5OBJS) $(SHL5VERSIONOBJ) \
+        $(SHL5LIBS) \
+        $(SHL5STDLIBS:^"-l") \
+        $(SHL5LINKRES) \
+        $(SHL5STDSHL:^"-l") $(STDSHL5:^"-l")                           \
+    $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
+
+.ENDIF			# "$(USE_DEFFILE)"!=""
+
+.IF "$(SHL5TARGET8)" != "$(SHL5TARGET)"
+    +$(COPY) $@ $(@:d)$(SHL5TARGET8).dll
+.ENDIF
+
+.ENDIF			# "$(GUI)" == "OS2"
+
+
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
 
@@ -2352,7 +2752,7 @@ $(MISC)$/$(SHL6VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL6VE
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL6IMPLIB)" == ""
 SHL6IMPLIB=i$(TARGET)_t6
 .ENDIF			# "$(SHL6IMPLIB)" == ""
@@ -2365,7 +2765,7 @@ ALLTAR : $(SHL6IMPLIBN)
 .IF "$(USE_DEFFILE)"==""
 USE_6IMPLIB_DEPS=$(LB)$/$(SHL6IMPLIB).lib
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 USE_SHL6DEF=$(SHL6DEF)
 .ELSE			# "$(GUI)" != "UNX"
 USE_SHL6DEF=
@@ -2500,7 +2900,7 @@ SHL6LINKRESO*=$(MISC)$/$(SHL6TARGET)_res.o
 #.IF "$(SHL6TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL6LIBS)"!=""
 $(MISC)$/$(SHL6TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -2513,7 +2913,7 @@ $(SHL6TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
 .IF "$(SHL6USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(COM)"!="GCC"
 .IF "$(SHL6LIBS)"!=""
 SHL6LINKLIST=$(MISC)$/$(SHL6TARGET)_link.lst
@@ -2530,6 +2930,20 @@ $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(GUI)" == "OS2"
+#21/02/2006 YD dll names must be 8.3, invoke fix script
+#check osl/os2/module.c/osl_loadModule()
+SHL6TARGET8=$(shell @fix_shl $(SHL6TARGET))
+.ENDIF
+
+.IF "$(GUI)" == "OS2"
+_SHL6IMP_ORD = $(SHL6STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(SHL6STDLIBS:^"$(LB)$/") 
+SHL6IMP_ORD = $(foreach,i,$(_SHL6IMP_ORD) $(shell @-ls $i))
+.ELSE
+SHL6IMP_ORD = 
+.ENDIF
+
+
 $(SHL6TARGETN) : \
                     $(SHL6OBJS)\
                     $(SHL6LIBS)\
@@ -2538,6 +2952,7 @@ $(SHL6TARGETN) : \
                     $(USE_SHL6VERSIONMAP)\
                     $(SHL6RES)\
                     $(SHL6DEPN) \
+                    $(SHL6IMP_ORD) \
                     $(SHL6LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL6TARGETN)
@@ -2747,6 +3162,71 @@ $(SHL6TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 
+.IF "$(GUI)" == "OS2"
+
+.IF "$(SHL6DEFAULTRES)"!=""
+    @+-$(RM) $(MISC)$/$(SHL6DEFAULTRES:b).rc >& $(NULLDEV)
+.IF "$(SHL6ICON)" != ""
+    @-+echo 1 ICON $(SHL6ICON) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+.ENDIF
+.IF "$(use_shl_versions)" != ""
+.IF "$(SHL6ADD_VERINFO)"!=""
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL6ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+.ENDIF			# "$(SHL6ADD_VERINFO)"!=""
+    @-+echo MENU 1 BEGIN END >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+#	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+.ENDIF			# "$(use_shl_versions)" != ""
+# YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
+    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL6DEFAULTRES:b).rc
+.ENDIF			# "$(SHL6DEFAULTRES)"!=""
+
+.IF "$(SHL6ALLRES)"!=""
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) $(SHL6ALLRES:s/res /res+/) $(SHL6LINKRES)
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(SHL6ALLRES) > $(SHL6LINKRES)
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF			# "$(SHL6ALLRES)"!=""
+
+.IF "$(USE_DEFFILE)"!=""
+
+    $(SHL6LINKER) $(SHL6LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+        $(SHL6DEF) \
+        $(STDOBJ) \
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL6OBJS) $(SHL6VERSIONOBJ) \
+        $(SHL6LIBS) \
+        $(SHL6STDLIBS:^"-l") \
+        $(SHL6LINKRES) \
+        $(SHL6STDSHL:^"-l") $(STDSHL6:^"-l") 
+
+.ELSE			# "$(USE_DEFFILE)"!=""
+
+    $(SHL6LINKER) -v 	$(SHL6LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL6BASEX)		\
+        $(SHL6STACK) -o $(SHL6TARGETN)	\
+        $(SHL6DEF) \
+        $(STDOBJ)							\
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL6OBJS) $(SHL6VERSIONOBJ) \
+        $(SHL6LIBS) \
+        $(SHL6STDLIBS:^"-l") \
+        $(SHL6LINKRES) \
+        $(SHL6STDSHL:^"-l") $(STDSHL6:^"-l")                           \
+    $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
+
+.ENDIF			# "$(USE_DEFFILE)"!=""
+
+.IF "$(SHL6TARGET8)" != "$(SHL6TARGET)"
+    +$(COPY) $@ $(@:d)$(SHL6TARGET8).dll
+.ENDIF
+
+.ENDIF			# "$(GUI)" == "OS2"
+
+
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
 
@@ -2812,7 +3292,7 @@ $(MISC)$/$(SHL7VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL7VE
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL7IMPLIB)" == ""
 SHL7IMPLIB=i$(TARGET)_t7
 .ENDIF			# "$(SHL7IMPLIB)" == ""
@@ -2825,7 +3305,7 @@ ALLTAR : $(SHL7IMPLIBN)
 .IF "$(USE_DEFFILE)"==""
 USE_7IMPLIB_DEPS=$(LB)$/$(SHL7IMPLIB).lib
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 USE_SHL7DEF=$(SHL7DEF)
 .ELSE			# "$(GUI)" != "UNX"
 USE_SHL7DEF=
@@ -2960,7 +3440,7 @@ SHL7LINKRESO*=$(MISC)$/$(SHL7TARGET)_res.o
 #.IF "$(SHL7TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL7LIBS)"!=""
 $(MISC)$/$(SHL7TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -2973,7 +3453,7 @@ $(SHL7TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
 .IF "$(SHL7USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(COM)"!="GCC"
 .IF "$(SHL7LIBS)"!=""
 SHL7LINKLIST=$(MISC)$/$(SHL7TARGET)_link.lst
@@ -2990,6 +3470,20 @@ $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(GUI)" == "OS2"
+#21/02/2006 YD dll names must be 8.3, invoke fix script
+#check osl/os2/module.c/osl_loadModule()
+SHL7TARGET8=$(shell @fix_shl $(SHL7TARGET))
+.ENDIF
+
+.IF "$(GUI)" == "OS2"
+_SHL7IMP_ORD = $(SHL7STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(SHL7STDLIBS:^"$(LB)$/") 
+SHL7IMP_ORD = $(foreach,i,$(_SHL7IMP_ORD) $(shell @-ls $i))
+.ELSE
+SHL7IMP_ORD = 
+.ENDIF
+
+
 $(SHL7TARGETN) : \
                     $(SHL7OBJS)\
                     $(SHL7LIBS)\
@@ -2998,6 +3492,7 @@ $(SHL7TARGETN) : \
                     $(USE_SHL7VERSIONMAP)\
                     $(SHL7RES)\
                     $(SHL7DEPN) \
+                    $(SHL7IMP_ORD) \
                     $(SHL7LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL7TARGETN)
@@ -3207,6 +3702,71 @@ $(SHL7TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 
+.IF "$(GUI)" == "OS2"
+
+.IF "$(SHL7DEFAULTRES)"!=""
+    @+-$(RM) $(MISC)$/$(SHL7DEFAULTRES:b).rc >& $(NULLDEV)
+.IF "$(SHL7ICON)" != ""
+    @-+echo 1 ICON $(SHL7ICON) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+.ENDIF
+.IF "$(use_shl_versions)" != ""
+.IF "$(SHL7ADD_VERINFO)"!=""
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL7ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+.ENDIF			# "$(SHL7ADD_VERINFO)"!=""
+    @-+echo MENU 1 BEGIN END >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+#	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+.ENDIF			# "$(use_shl_versions)" != ""
+# YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
+    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL7DEFAULTRES:b).rc
+.ENDIF			# "$(SHL7DEFAULTRES)"!=""
+
+.IF "$(SHL7ALLRES)"!=""
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) $(SHL7ALLRES:s/res /res+/) $(SHL7LINKRES)
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(SHL7ALLRES) > $(SHL7LINKRES)
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF			# "$(SHL7ALLRES)"!=""
+
+.IF "$(USE_DEFFILE)"!=""
+
+    $(SHL7LINKER) $(SHL7LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+        $(SHL7DEF) \
+        $(STDOBJ) \
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL7OBJS) $(SHL7VERSIONOBJ) \
+        $(SHL7LIBS) \
+        $(SHL7STDLIBS:^"-l") \
+        $(SHL7LINKRES) \
+        $(SHL7STDSHL:^"-l") $(STDSHL7:^"-l") 
+
+.ELSE			# "$(USE_DEFFILE)"!=""
+
+    $(SHL7LINKER) -v 	$(SHL7LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL7BASEX)		\
+        $(SHL7STACK) -o $(SHL7TARGETN)	\
+        $(SHL7DEF) \
+        $(STDOBJ)							\
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL7OBJS) $(SHL7VERSIONOBJ) \
+        $(SHL7LIBS) \
+        $(SHL7STDLIBS:^"-l") \
+        $(SHL7LINKRES) \
+        $(SHL7STDSHL:^"-l") $(STDSHL7:^"-l")                           \
+    $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
+
+.ENDIF			# "$(USE_DEFFILE)"!=""
+
+.IF "$(SHL7TARGET8)" != "$(SHL7TARGET)"
+    +$(COPY) $@ $(@:d)$(SHL7TARGET8).dll
+.ENDIF
+
+.ENDIF			# "$(GUI)" == "OS2"
+
+
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
 
@@ -3272,7 +3832,7 @@ $(MISC)$/$(SHL8VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL8VE
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL8IMPLIB)" == ""
 SHL8IMPLIB=i$(TARGET)_t8
 .ENDIF			# "$(SHL8IMPLIB)" == ""
@@ -3285,7 +3845,7 @@ ALLTAR : $(SHL8IMPLIBN)
 .IF "$(USE_DEFFILE)"==""
 USE_8IMPLIB_DEPS=$(LB)$/$(SHL8IMPLIB).lib
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 USE_SHL8DEF=$(SHL8DEF)
 .ELSE			# "$(GUI)" != "UNX"
 USE_SHL8DEF=
@@ -3420,7 +3980,7 @@ SHL8LINKRESO*=$(MISC)$/$(SHL8TARGET)_res.o
 #.IF "$(SHL8TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL8LIBS)"!=""
 $(MISC)$/$(SHL8TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -3433,7 +3993,7 @@ $(SHL8TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
 .IF "$(SHL8USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(COM)"!="GCC"
 .IF "$(SHL8LIBS)"!=""
 SHL8LINKLIST=$(MISC)$/$(SHL8TARGET)_link.lst
@@ -3450,6 +4010,20 @@ $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(GUI)" == "OS2"
+#21/02/2006 YD dll names must be 8.3, invoke fix script
+#check osl/os2/module.c/osl_loadModule()
+SHL8TARGET8=$(shell @fix_shl $(SHL8TARGET))
+.ENDIF
+
+.IF "$(GUI)" == "OS2"
+_SHL8IMP_ORD = $(SHL8STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(SHL8STDLIBS:^"$(LB)$/") 
+SHL8IMP_ORD = $(foreach,i,$(_SHL8IMP_ORD) $(shell @-ls $i))
+.ELSE
+SHL8IMP_ORD = 
+.ENDIF
+
+
 $(SHL8TARGETN) : \
                     $(SHL8OBJS)\
                     $(SHL8LIBS)\
@@ -3458,6 +4032,7 @@ $(SHL8TARGETN) : \
                     $(USE_SHL8VERSIONMAP)\
                     $(SHL8RES)\
                     $(SHL8DEPN) \
+                    $(SHL8IMP_ORD) \
                     $(SHL8LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL8TARGETN)
@@ -3667,6 +4242,71 @@ $(SHL8TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 
+.IF "$(GUI)" == "OS2"
+
+.IF "$(SHL8DEFAULTRES)"!=""
+    @+-$(RM) $(MISC)$/$(SHL8DEFAULTRES:b).rc >& $(NULLDEV)
+.IF "$(SHL8ICON)" != ""
+    @-+echo 1 ICON $(SHL8ICON) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+.ENDIF
+.IF "$(use_shl_versions)" != ""
+.IF "$(SHL8ADD_VERINFO)"!=""
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL8ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+.ENDIF			# "$(SHL8ADD_VERINFO)"!=""
+    @-+echo MENU 1 BEGIN END >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+#	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+.ENDIF			# "$(use_shl_versions)" != ""
+# YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
+    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL8DEFAULTRES:b).rc
+.ENDIF			# "$(SHL8DEFAULTRES)"!=""
+
+.IF "$(SHL8ALLRES)"!=""
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) $(SHL8ALLRES:s/res /res+/) $(SHL8LINKRES)
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(SHL8ALLRES) > $(SHL8LINKRES)
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF			# "$(SHL8ALLRES)"!=""
+
+.IF "$(USE_DEFFILE)"!=""
+
+    $(SHL8LINKER) $(SHL8LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+        $(SHL8DEF) \
+        $(STDOBJ) \
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL8OBJS) $(SHL8VERSIONOBJ) \
+        $(SHL8LIBS) \
+        $(SHL8STDLIBS:^"-l") \
+        $(SHL8LINKRES) \
+        $(SHL8STDSHL:^"-l") $(STDSHL8:^"-l") 
+
+.ELSE			# "$(USE_DEFFILE)"!=""
+
+    $(SHL8LINKER) -v 	$(SHL8LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL8BASEX)		\
+        $(SHL8STACK) -o $(SHL8TARGETN)	\
+        $(SHL8DEF) \
+        $(STDOBJ)							\
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL8OBJS) $(SHL8VERSIONOBJ) \
+        $(SHL8LIBS) \
+        $(SHL8STDLIBS:^"-l") \
+        $(SHL8LINKRES) \
+        $(SHL8STDSHL:^"-l") $(STDSHL8:^"-l")                           \
+    $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
+
+.ENDIF			# "$(USE_DEFFILE)"!=""
+
+.IF "$(SHL8TARGET8)" != "$(SHL8TARGET)"
+    +$(COPY) $@ $(@:d)$(SHL8TARGET8).dll
+.ENDIF
+
+.ENDIF			# "$(GUI)" == "OS2"
+
+
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
 
@@ -3732,7 +4372,7 @@ $(MISC)$/$(SHL9VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL9VE
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL9IMPLIB)" == ""
 SHL9IMPLIB=i$(TARGET)_t9
 .ENDIF			# "$(SHL9IMPLIB)" == ""
@@ -3745,7 +4385,7 @@ ALLTAR : $(SHL9IMPLIBN)
 .IF "$(USE_DEFFILE)"==""
 USE_9IMPLIB_DEPS=$(LB)$/$(SHL9IMPLIB).lib
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 USE_SHL9DEF=$(SHL9DEF)
 .ELSE			# "$(GUI)" != "UNX"
 USE_SHL9DEF=
@@ -3880,7 +4520,7 @@ SHL9LINKRESO*=$(MISC)$/$(SHL9TARGET)_res.o
 #.IF "$(SHL9TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL9LIBS)"!=""
 $(MISC)$/$(SHL9TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -3893,7 +4533,7 @@ $(SHL9TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
 .IF "$(SHL9USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(COM)"!="GCC"
 .IF "$(SHL9LIBS)"!=""
 SHL9LINKLIST=$(MISC)$/$(SHL9TARGET)_link.lst
@@ -3910,6 +4550,20 @@ $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(GUI)" == "OS2"
+#21/02/2006 YD dll names must be 8.3, invoke fix script
+#check osl/os2/module.c/osl_loadModule()
+SHL9TARGET8=$(shell @fix_shl $(SHL9TARGET))
+.ENDIF
+
+.IF "$(GUI)" == "OS2"
+_SHL9IMP_ORD = $(SHL9STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(SHL9STDLIBS:^"$(LB)$/") 
+SHL9IMP_ORD = $(foreach,i,$(_SHL9IMP_ORD) $(shell @-ls $i))
+.ELSE
+SHL9IMP_ORD = 
+.ENDIF
+
+
 $(SHL9TARGETN) : \
                     $(SHL9OBJS)\
                     $(SHL9LIBS)\
@@ -3918,6 +4572,7 @@ $(SHL9TARGETN) : \
                     $(USE_SHL9VERSIONMAP)\
                     $(SHL9RES)\
                     $(SHL9DEPN) \
+                    $(SHL9IMP_ORD) \
                     $(SHL9LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL9TARGETN)
@@ -4127,6 +4782,71 @@ $(SHL9TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 
+.IF "$(GUI)" == "OS2"
+
+.IF "$(SHL9DEFAULTRES)"!=""
+    @+-$(RM) $(MISC)$/$(SHL9DEFAULTRES:b).rc >& $(NULLDEV)
+.IF "$(SHL9ICON)" != ""
+    @-+echo 1 ICON $(SHL9ICON) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+.ENDIF
+.IF "$(use_shl_versions)" != ""
+.IF "$(SHL9ADD_VERINFO)"!=""
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL9ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+.ENDIF			# "$(SHL9ADD_VERINFO)"!=""
+    @-+echo MENU 1 BEGIN END >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+#	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+.ENDIF			# "$(use_shl_versions)" != ""
+# YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
+    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL9DEFAULTRES:b).rc
+.ENDIF			# "$(SHL9DEFAULTRES)"!=""
+
+.IF "$(SHL9ALLRES)"!=""
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) $(SHL9ALLRES:s/res /res+/) $(SHL9LINKRES)
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(SHL9ALLRES) > $(SHL9LINKRES)
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF			# "$(SHL9ALLRES)"!=""
+
+.IF "$(USE_DEFFILE)"!=""
+
+    $(SHL9LINKER) $(SHL9LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+        $(SHL9DEF) \
+        $(STDOBJ) \
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL9OBJS) $(SHL9VERSIONOBJ) \
+        $(SHL9LIBS) \
+        $(SHL9STDLIBS:^"-l") \
+        $(SHL9LINKRES) \
+        $(SHL9STDSHL:^"-l") $(STDSHL9:^"-l") 
+
+.ELSE			# "$(USE_DEFFILE)"!=""
+
+    $(SHL9LINKER) -v 	$(SHL9LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL9BASEX)		\
+        $(SHL9STACK) -o $(SHL9TARGETN)	\
+        $(SHL9DEF) \
+        $(STDOBJ)							\
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL9OBJS) $(SHL9VERSIONOBJ) \
+        $(SHL9LIBS) \
+        $(SHL9STDLIBS:^"-l") \
+        $(SHL9LINKRES) \
+        $(SHL9STDSHL:^"-l") $(STDSHL9:^"-l")                           \
+    $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
+
+.ENDIF			# "$(USE_DEFFILE)"!=""
+
+.IF "$(SHL9TARGET8)" != "$(SHL9TARGET)"
+    +$(COPY) $@ $(@:d)$(SHL9TARGET8).dll
+.ENDIF
+
+.ENDIF			# "$(GUI)" == "OS2"
+
+
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
 
@@ -4192,7 +4912,7 @@ $(MISC)$/$(SHL10VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(SHL10
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL10IMPLIB)" == ""
 SHL10IMPLIB=i$(TARGET)_t10
 .ENDIF			# "$(SHL10IMPLIB)" == ""
@@ -4205,7 +4925,7 @@ ALLTAR : $(SHL10IMPLIBN)
 .IF "$(USE_DEFFILE)"==""
 USE_10IMPLIB_DEPS=$(LB)$/$(SHL10IMPLIB).lib
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 USE_SHL10DEF=$(SHL10DEF)
 .ELSE			# "$(GUI)" != "UNX"
 USE_SHL10DEF=
@@ -4340,7 +5060,7 @@ SHL10LINKRESO*=$(MISC)$/$(SHL10TARGET)_res.o
 #.IF "$(SHL10TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL10LIBS)"!=""
 $(MISC)$/$(SHL10TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -4353,7 +5073,7 @@ $(SHL10TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
 .IF "$(SHL10USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(COM)"!="GCC"
 .IF "$(SHL10LIBS)"!=""
 SHL10LINKLIST=$(MISC)$/$(SHL10TARGET)_link.lst
@@ -4370,6 +5090,20 @@ $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(GUI)" == "OS2"
+#21/02/2006 YD dll names must be 8.3, invoke fix script
+#check osl/os2/module.c/osl_loadModule()
+SHL10TARGET8=$(shell @fix_shl $(SHL10TARGET))
+.ENDIF
+
+.IF "$(GUI)" == "OS2"
+_SHL10IMP_ORD = $(SHL10STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(SHL10STDLIBS:^"$(LB)$/") 
+SHL10IMP_ORD = $(foreach,i,$(_SHL10IMP_ORD) $(shell @-ls $i))
+.ELSE
+SHL10IMP_ORD = 
+.ENDIF
+
+
 $(SHL10TARGETN) : \
                     $(SHL10OBJS)\
                     $(SHL10LIBS)\
@@ -4378,6 +5112,7 @@ $(SHL10TARGETN) : \
                     $(USE_SHL10VERSIONMAP)\
                     $(SHL10RES)\
                     $(SHL10DEPN) \
+                    $(SHL10IMP_ORD) \
                     $(SHL10LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL10TARGETN)
@@ -4587,6 +5322,71 @@ $(SHL10TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 
+.IF "$(GUI)" == "OS2"
+
+.IF "$(SHL10DEFAULTRES)"!=""
+    @+-$(RM) $(MISC)$/$(SHL10DEFAULTRES:b).rc >& $(NULLDEV)
+.IF "$(SHL10ICON)" != ""
+    @-+echo 1 ICON $(SHL10ICON) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+.ENDIF
+.IF "$(use_shl_versions)" != ""
+.IF "$(SHL10ADD_VERINFO)"!=""
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL10ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+.ENDIF			# "$(SHL10ADD_VERINFO)"!=""
+    @-+echo MENU 1 BEGIN END >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+#	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+.ENDIF			# "$(use_shl_versions)" != ""
+# YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
+    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL10DEFAULTRES:b).rc
+.ENDIF			# "$(SHL10DEFAULTRES)"!=""
+
+.IF "$(SHL10ALLRES)"!=""
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) $(SHL10ALLRES:s/res /res+/) $(SHL10LINKRES)
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(SHL10ALLRES) > $(SHL10LINKRES)
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF			# "$(SHL10ALLRES)"!=""
+
+.IF "$(USE_DEFFILE)"!=""
+
+    $(SHL10LINKER) $(SHL10LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+        $(SHL10DEF) \
+        $(STDOBJ) \
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL10OBJS) $(SHL10VERSIONOBJ) \
+        $(SHL10LIBS) \
+        $(SHL10STDLIBS:^"-l") \
+        $(SHL10LINKRES) \
+        $(SHL10STDSHL:^"-l") $(STDSHL10:^"-l") 
+
+.ELSE			# "$(USE_DEFFILE)"!=""
+
+    $(SHL10LINKER) -v 	$(SHL10LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL10BASEX)		\
+        $(SHL10STACK) -o $(SHL10TARGETN)	\
+        $(SHL10DEF) \
+        $(STDOBJ)							\
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL10OBJS) $(SHL10VERSIONOBJ) \
+        $(SHL10LIBS) \
+        $(SHL10STDLIBS:^"-l") \
+        $(SHL10LINKRES) \
+        $(SHL10STDSHL:^"-l") $(STDSHL10:^"-l")                           \
+    $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
+
+.ENDIF			# "$(USE_DEFFILE)"!=""
+
+.IF "$(SHL10TARGET8)" != "$(SHL10TARGET)"
+    +$(COPY) $@ $(@:d)$(SHL10TARGET8).dll
+.ENDIF
+
+.ENDIF			# "$(GUI)" == "OS2"
+
+
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
 
@@ -4621,7 +5421,7 @@ $(SHL1IMPLIBN):	\
 $(SHL1IMPLIBN):	\
                     $(SHL1LIBS)
 .ENDIF
-    @echo ------------------------------
+    @echo ------------------------------1
     @echo Making: $(SHL1IMPLIBN)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
@@ -4638,6 +5438,14 @@ $(SHL1IMPLIBN):	\
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
+
+.ELIF "$(GUI)" == "OS2"
+
+# touch creates an empty file, but this is not good for emxomfar, so
+# create a dummy lib here
+    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL1VERSIONOBJ)
+    +@echo build of $(SHL1TARGETN) creates $@
+
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
@@ -4668,7 +5476,7 @@ $(SHL2IMPLIBN):	\
 $(SHL2IMPLIBN):	\
                     $(SHL2LIBS)
 .ENDIF
-    @echo ------------------------------
+    @echo ------------------------------1
     @echo Making: $(SHL2IMPLIBN)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
@@ -4685,6 +5493,14 @@ $(SHL2IMPLIBN):	\
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
+
+.ELIF "$(GUI)" == "OS2"
+
+# touch creates an empty file, but this is not good for emxomfar, so
+# create a dummy lib here
+    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL2VERSIONOBJ)
+    +@echo build of $(SHL2TARGETN) creates $@
+
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
@@ -4715,7 +5531,7 @@ $(SHL3IMPLIBN):	\
 $(SHL3IMPLIBN):	\
                     $(SHL3LIBS)
 .ENDIF
-    @echo ------------------------------
+    @echo ------------------------------1
     @echo Making: $(SHL3IMPLIBN)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
@@ -4732,6 +5548,14 @@ $(SHL3IMPLIBN):	\
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
+
+.ELIF "$(GUI)" == "OS2"
+
+# touch creates an empty file, but this is not good for emxomfar, so
+# create a dummy lib here
+    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL3VERSIONOBJ)
+    +@echo build of $(SHL3TARGETN) creates $@
+
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
@@ -4762,7 +5586,7 @@ $(SHL4IMPLIBN):	\
 $(SHL4IMPLIBN):	\
                     $(SHL4LIBS)
 .ENDIF
-    @echo ------------------------------
+    @echo ------------------------------1
     @echo Making: $(SHL4IMPLIBN)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
@@ -4779,6 +5603,14 @@ $(SHL4IMPLIBN):	\
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
+
+.ELIF "$(GUI)" == "OS2"
+
+# touch creates an empty file, but this is not good for emxomfar, so
+# create a dummy lib here
+    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL4VERSIONOBJ)
+    +@echo build of $(SHL4TARGETN) creates $@
+
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
@@ -4809,7 +5641,7 @@ $(SHL5IMPLIBN):	\
 $(SHL5IMPLIBN):	\
                     $(SHL5LIBS)
 .ENDIF
-    @echo ------------------------------
+    @echo ------------------------------1
     @echo Making: $(SHL5IMPLIBN)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
@@ -4826,6 +5658,14 @@ $(SHL5IMPLIBN):	\
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
+
+.ELIF "$(GUI)" == "OS2"
+
+# touch creates an empty file, but this is not good for emxomfar, so
+# create a dummy lib here
+    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL5VERSIONOBJ)
+    +@echo build of $(SHL5TARGETN) creates $@
+
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
@@ -4856,7 +5696,7 @@ $(SHL6IMPLIBN):	\
 $(SHL6IMPLIBN):	\
                     $(SHL6LIBS)
 .ENDIF
-    @echo ------------------------------
+    @echo ------------------------------1
     @echo Making: $(SHL6IMPLIBN)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
@@ -4873,6 +5713,14 @@ $(SHL6IMPLIBN):	\
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
+
+.ELIF "$(GUI)" == "OS2"
+
+# touch creates an empty file, but this is not good for emxomfar, so
+# create a dummy lib here
+    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL6VERSIONOBJ)
+    +@echo build of $(SHL6TARGETN) creates $@
+
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
@@ -4903,7 +5751,7 @@ $(SHL7IMPLIBN):	\
 $(SHL7IMPLIBN):	\
                     $(SHL7LIBS)
 .ENDIF
-    @echo ------------------------------
+    @echo ------------------------------1
     @echo Making: $(SHL7IMPLIBN)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
@@ -4920,6 +5768,14 @@ $(SHL7IMPLIBN):	\
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
+
+.ELIF "$(GUI)" == "OS2"
+
+# touch creates an empty file, but this is not good for emxomfar, so
+# create a dummy lib here
+    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL7VERSIONOBJ)
+    +@echo build of $(SHL7TARGETN) creates $@
+
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
@@ -4950,7 +5806,7 @@ $(SHL8IMPLIBN):	\
 $(SHL8IMPLIBN):	\
                     $(SHL8LIBS)
 .ENDIF
-    @echo ------------------------------
+    @echo ------------------------------1
     @echo Making: $(SHL8IMPLIBN)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
@@ -4967,6 +5823,14 @@ $(SHL8IMPLIBN):	\
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
+
+.ELIF "$(GUI)" == "OS2"
+
+# touch creates an empty file, but this is not good for emxomfar, so
+# create a dummy lib here
+    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL8VERSIONOBJ)
+    +@echo build of $(SHL8TARGETN) creates $@
+
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
@@ -4997,7 +5861,7 @@ $(SHL9IMPLIBN):	\
 $(SHL9IMPLIBN):	\
                     $(SHL9LIBS)
 .ENDIF
-    @echo ------------------------------
+    @echo ------------------------------1
     @echo Making: $(SHL9IMPLIBN)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
@@ -5014,6 +5878,14 @@ $(SHL9IMPLIBN):	\
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
+
+.ELIF "$(GUI)" == "OS2"
+
+# touch creates an empty file, but this is not good for emxomfar, so
+# create a dummy lib here
+    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL9VERSIONOBJ)
+    +@echo build of $(SHL9TARGETN) creates $@
+
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
@@ -5044,7 +5916,7 @@ $(SHL10IMPLIBN):	\
 $(SHL10IMPLIBN):	\
                     $(SHL10LIBS)
 .ENDIF
-    @echo ------------------------------
+    @echo ------------------------------1
     @echo Making: $(SHL10IMPLIBN)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
@@ -5061,6 +5933,14 @@ $(SHL10IMPLIBN):	\
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
+
+.ELIF "$(GUI)" == "OS2"
+
+# touch creates an empty file, but this is not good for emxomfar, so
+# create a dummy lib here
+    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL10VERSIONOBJ)
+    +@echo build of $(SHL10TARGETN) creates $@
+
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
