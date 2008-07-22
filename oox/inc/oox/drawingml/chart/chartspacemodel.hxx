@@ -8,7 +8,7 @@
  *
  * $RCSfile: chartspacemodel.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,13 +47,17 @@ struct ChartSpaceModel
     typedef ModelRef< Shape >           ShapeRef;
     typedef ModelRef< TextBody >        TextBodyRef;
     typedef ModelRef< PlotAreaModel >   PlotAreaRef;
+    typedef ModelRef< WallFloorModel >  WallFloorRef;
     typedef ModelRef< View3DModel >     View3DRef;
     typedef ModelRef< TitleModel >      TitleRef;
     typedef ModelRef< LegendModel >     LegendRef;
 
     ShapeRef            mxShapeProp;        /// Chart frame formatting.
-    TextBodyRef         mxTextProp;         /// Text default formatting.
+    TextBodyRef         mxTextProp;         /// Global chart text formatting.
     PlotAreaRef         mxPlotArea;         /// Plot area of the chart.
+    WallFloorRef        mxFloor;            /// Floor formatting in 3D charts.
+    WallFloorRef        mxBackWall;         /// Back wall formatting in 3D charts.
+    WallFloorRef        mxSideWall;         /// Side wall formatting in 3D charts.
     View3DRef           mxView3D;           /// 3D settings.
     TitleRef            mxTitle;            /// Chart main title.
     LegendRef           mxLegend;           /// Chart legend.
