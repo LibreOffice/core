@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoforou.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -601,3 +601,4 @@ void SvxTextForwarder::SetParaIsNumberingRestart( sal_uInt16, sal_Bool )
 }
 
 //------------------------------------------------------------------------
+
