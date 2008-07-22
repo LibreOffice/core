@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fillproperties.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,48 +28,99 @@
  *
  ************************************************************************/
 
-#include <comphelper/processfactory.hxx>
 #include "oox/drawingml/fillproperties.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/helper/helper.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/core/namespaces.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "tokens.hxx"
-#include <com/sun/star/awt/Gradient.hpp>
-#include <com/sun/star/awt/GradientStyle.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/graphic/XGraphicTransformer.hpp>
-#include <com/sun/star/drawing/RectanglePoint.hpp>
-#include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/awt/XDevice.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/RectanglePoint.hpp>
+#include <com/sun/star/graphic/XGraphicTransformer.hpp>
+#include "oox/core/modelobjectcontainer.hxx"
+#include "oox/core/xmlfilterbase.hxx"
+#include "oox/helper/propertymap.hxx"
+#include "oox/helper/propertyset.hxx"
+#include "tokens.hxx"
 
-using rtl::OUString;
-using namespace ::oox::core;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::graphic;
-using namespace ::com::sun::star::frame;
 
-namespace oox { namespace drawingml {
+using ::rtl::OUString;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::oox::core::ModelObjectContainer;
+using ::oox::core::XmlFilterBase;
 
+namespace oox {
+namespace drawingml {
 
-const awt::DeviceInfo& GetDeviceInfo( const Reference< lang::XMultiServiceFactory >& rxFact )
+// ============================================================================
+
+namespace {
+
+static const sal_Char* const sppcDefaultFillNames[] =
+{
+    "FillStyle", "FillColor", "FillTransparence", "FillGradient",
+    "FillBitmap", "FillBitmapMode", "FillBitmapTile", "FillBitmapStretch",
+    "FillBitmapLogicalSize", "FillBitmapSizeX", "FillBitmapSizeY",
+    "FillBitmapOffsetX", "FillBitmapOffsetY", "FillBitmapRectanglePoint", 0
+};
+
+static const sal_Char* const sppcDefaultPicNames[] =
+{
+    "FillStyle", "FillColor", "FillTransparence", "FillGradient",
+    "Graphic", "FillBitmapMode", "FillBitmapTile", "FillBitmapStretch",
+    "FillBitmapLogicalSize", "FillBitmapSizeX", "FillBitmapSizeY",
+    "FillBitmapOffsetX", "FillBitmapOffsetY", "FillBitmapRectanglePoint", 0
+};
+
+BitmapMode lclGetBitmapMode( sal_Int32 nToken )
+{
+    switch( nToken )
+    {
+        case XML_tile:      return BitmapMode_REPEAT;
+        case XML_stretch:   return BitmapMode_STRETCH;
+    }
+    return BitmapMode_NO_REPEAT;
+}
+
+RectanglePoint lclGetRectanglePoint( sal_Int32 nToken )
+{
+    switch( nToken )
+    {
+        case XML_tl:    return RectanglePoint_LEFT_TOP;
+        case XML_t:     return RectanglePoint_MIDDLE_TOP;
+        case XML_tr:    return RectanglePoint_RIGHT_TOP;
+        case XML_l:     return RectanglePoint_LEFT_MIDDLE;
+        case XML_ctr:   return RectanglePoint_MIDDLE_MIDDLE;
+        case XML_r:     return RectanglePoint_RIGHT_MIDDLE;
+        case XML_bl:    return RectanglePoint_LEFT_BOTTOM;
+        case XML_b:     return RectanglePoint_MIDDLE_BOTTOM;
+        case XML_br:    return RectanglePoint_RIGHT_BOTTOM;
+    }
+    return RectanglePoint_LEFT_TOP;
+}
+
+const awt::DeviceInfo& lclGetDeviceInfo( const XmlFilterBase& rFilter )
 {
     static awt::DeviceInfo aDeviceInfo;
-    if( !aDeviceInfo.Width )
+    if( aDeviceInfo.Width <= 0 )
     {
         try
         {
-            Reference< XFramesSupplier > xDesktop( rxFact->createInstance(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) ), UNO_QUERY_THROW );
-            Reference< XFrame > xFrame( xDesktop->getActiveFrame() );
-            Reference< XWindow > xWindow( xFrame->getContainerWindow() );
-            Reference< XDevice > xDevice( xWindow, UNO_QUERY_THROW );
+            Reference< lang::XMultiServiceFactory > xMSFT( rFilter.getServiceFactory(), UNO_QUERY_THROW );
+            Reference< frame::XFramesSupplier > xDesktop( xMSFT->createInstance(
+                    CREATE_OUSTRING( "com.sun.star.frame.Desktop" ) ), UNO_QUERY_THROW );
+            Reference< frame::XFrame > xFrame( xDesktop->getActiveFrame() );
+            Reference< awt::XWindow > xWindow( xFrame->getContainerWindow() );
+            Reference< awt::XDevice > xDevice( xWindow, UNO_QUERY_THROW );
             aDeviceInfo = xDevice->getInfo();
         }
         catch( Exception& )
@@ -79,258 +130,319 @@ const awt::DeviceInfo& GetDeviceInfo( const Reference< lang::XMultiServiceFactor
     return aDeviceInfo;
 }
 
-// ---------------------------------------------------------------------
-
-const awt::Size GetOriginalSize( const Reference< lang::XMultiServiceFactory >& rxFact, const Reference< XGraphic >& rxGraphic )
+const awt::Size lclGetOriginalSize( const XmlFilterBase& rFilter, const Reference< XGraphic >& rxGraphic )
 {
     awt::Size aSize100thMM( 0, 0 );
-    Reference< XPropertySet > xGraphicPropertySet( rxGraphic, UNO_QUERY_THROW );
-    static const OUString sSize100thMM = CREATE_OUSTRING( "Size100thMM" );
-    if ( xGraphicPropertySet->getPropertyValue( sSize100thMM ) >>= aSize100thMM )
-    {
-        if ( !aSize100thMM.Width && !aSize100thMM.Height )
-        {   // MAPMODE_PIXEL USED :-(
-            awt::Size aSourceSizePixel( 0, 0 );
-            static const OUString sSizePixel = CREATE_OUSTRING( "SizePixel" );
-            if ( xGraphicPropertySet->getPropertyValue( sSizePixel ) >>= aSourceSizePixel )
-            {
-                const DeviceInfo& rDeviceInfo( GetDeviceInfo( rxFact ) );
-                if ( rDeviceInfo.PixelPerMeterX && rDeviceInfo.PixelPerMeterY )
-                {
-                    aSize100thMM.Width = static_cast< sal_Int32 >( ( aSourceSizePixel.Width * 100000.0 ) / rDeviceInfo.PixelPerMeterX );
-                    aSize100thMM.Height = static_cast< sal_Int32 >( ( aSourceSizePixel.Height * 100000.0 ) / rDeviceInfo.PixelPerMeterY );
-                }
-            }
-        }
-    }
-    return aSize100thMM;
-}
-
-// ---------------------------------------------------------------------
-
-FillProperties::FillProperties( sal_Int32 nContext )
-: mnContext( nContext )
-, maFillColor( new Color() )
-, maColorChangeFrom( new Color() )
-, maColorChangeTo( new Color() )
-{
-}
-FillProperties::~FillProperties()
-{
-}
-
-void FillProperties::apply( const FillProperties& rSourceFillProperties )
-{
-    if ( rSourceFillProperties.moFillStyle )
-        moFillStyle = rSourceFillProperties.moFillStyle;
-    if ( rSourceFillProperties.maFillColor->isUsed() )
-        maFillColor = rSourceFillProperties.maFillColor;
-    if ( rSourceFillProperties.moBitmapMode )
-        moBitmapMode = rSourceFillProperties.moBitmapMode;
-    if ( rSourceFillProperties.moRotateWithShape )
-        moRotateWithShape = rSourceFillProperties.moRotateWithShape;
-    if ( rSourceFillProperties.moShadeScaled )
-        moShadeScaled = rSourceFillProperties.moShadeScaled;
-    if ( rSourceFillProperties.moShadeAngle )
-        moShadeAngle = rSourceFillProperties.moShadeAngle;
-    if ( rSourceFillProperties.moShadeTypeToken )
-        moShadeTypeToken = rSourceFillProperties.moShadeTypeToken;
-    if ( rSourceFillProperties.moFlipModeToken )
-        moFlipModeToken = rSourceFillProperties.moFlipModeToken;
-    if ( rSourceFillProperties.moFillToRect )
-        moFillToRect = rSourceFillProperties.moFillToRect;
-    if ( rSourceFillProperties.moTileRect )
-        moTileRect = rSourceFillProperties.moTileRect;
-    if ( rSourceFillProperties.moTileAlign )
-        moTileAlign = rSourceFillProperties.moTileAlign;
-    if ( rSourceFillProperties.moTileX )
-        moTileX = rSourceFillProperties.moTileX;
-    if ( rSourceFillProperties.moTileY )
-        moTileY = rSourceFillProperties.moTileY;
-    if ( rSourceFillProperties.moTileSX )
-        moTileSX = rSourceFillProperties.moTileSX;
-    if ( rSourceFillProperties.moTileSY )
-        moTileSY = rSourceFillProperties.moTileSY;
-    if ( rSourceFillProperties.mvGradientStops.size() )
-        mvGradientStops = rSourceFillProperties.mvGradientStops;
-    if ( rSourceFillProperties.mxGraphic.is() )
-        mxGraphic = rSourceFillProperties.mxGraphic;
-    if ( rSourceFillProperties.maColorChangeFrom->isUsed() )
-        maColorChangeFrom = rSourceFillProperties.maColorChangeFrom;
-    if ( rSourceFillProperties.maColorChangeTo->isUsed() )
-        maColorChangeTo = rSourceFillProperties.maColorChangeTo;
-}
-
-void FillProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
-    const Reference < XPropertySet >& xPropSet, sal_Int32 nShapeRotation ) const
-{
     try
     {
-        if ( !moRotateWithShape || !(*moRotateWithShape) )
-            nShapeRotation = 0;
-
-        ::com::sun::star::drawing::FillStyle eFillStyle( moFillStyle ? *moFillStyle : drawing::FillStyle_NONE );
-        const rtl::OUString sFillStyle( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ) );
-        xPropSet->setPropertyValue( sFillStyle, Any( eFillStyle ) );
-        if ( maFillColor->isUsed() )
+        Reference< beans::XPropertySet > xGraphicPropertySet( rxGraphic, UNO_QUERY_THROW );
+        if( xGraphicPropertySet->getPropertyValue( CREATE_OUSTRING( "Size100thMM" ) ) >>= aSize100thMM )
         {
-            const rtl::OUString sFillColor( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ) );
-            xPropSet->setPropertyValue( sFillColor, Any( maFillColor->getColor( rFilterBase ) ) );
-        }
-        if ( eFillStyle == drawing::FillStyle_SOLID )
-        {
-            if ( maFillColor->isUsed() && maFillColor->hasTransparence() )
-            {
-                const rtl::OUString sFillTransparence( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "FillTransparence" ) ) );
-                xPropSet->setPropertyValue( sFillTransparence, Any( maFillColor->getTransparence() ) );
-            }
-        }
-        else if ( eFillStyle == drawing::FillStyle_GRADIENT )
-        {
-            awt::Gradient aGradient;
-            aGradient.Angle = 900;
-            aGradient.StartIntensity = 100;
-            aGradient.EndIntensity = 100;
-            if ( !moShadeTypeToken )
-            {
-                aGradient.Style = awt::GradientStyle_LINEAR;
-                aGradient.Angle = static_cast< sal_Int16 >( moShadeAngle ? 4500 - ( ( *moShadeAngle - nShapeRotation ) / 6000 ) : 900 ) % 3600;
-                if ( mvGradientStops.size() > 1 )
+            if( !aSize100thMM.Width && !aSize100thMM.Height )
+            {   // MAPMODE_PIXEL USED :-(
+                awt::Size aSourceSizePixel( 0, 0 );
+                if( xGraphicPropertySet->getPropertyValue( CREATE_OUSTRING( "SizePixel" ) ) >>= aSourceSizePixel )
                 {
-                    aGradient.StartColor = mvGradientStops[ 0 ].maColor->getColor( rFilterBase );
-                    aGradient.EndColor = mvGradientStops[ mvGradientStops.size() - 1 ].maColor->getColor( rFilterBase );
+                    const awt::DeviceInfo& rDeviceInfo = lclGetDeviceInfo( rFilter );
+                    if( rDeviceInfo.PixelPerMeterX && rDeviceInfo.PixelPerMeterY )
+                    {
+                        aSize100thMM.Width = static_cast< sal_Int32 >( ( aSourceSizePixel.Width * 100000.0 ) / rDeviceInfo.PixelPerMeterX );
+                        aSize100thMM.Height = static_cast< sal_Int32 >( ( aSourceSizePixel.Height * 100000.0 ) / rDeviceInfo.PixelPerMeterY );
+                    }
                 }
-            }
-            else
-            {
-                aGradient.Style = awt::GradientStyle_RECT;
-                aGradient.Angle = static_cast< sal_Int16 >( 900 - ( nShapeRotation / 6000 ) ) % 3600;
-                if ( mvGradientStops.size() > 1 )
-                {
-                    aGradient.StartColor = mvGradientStops[ mvGradientStops.size() - 1 ].maColor->getColor( rFilterBase );
-                    aGradient.EndColor = mvGradientStops[ 0 ].maColor->getColor( rFilterBase );
-                }
-                aGradient.XOffset = 50;
-                aGradient.YOffset = 50;
-                if ( moFillToRect )
-                {
-                    sal_Int32 nX = moFillToRect->X1 / 1000;
-                    sal_Int32 nY = moFillToRect->Y1 / 1000;
-                    if ( nX <= 30 )
-                        nX = 30;
-                    if ( nY < 30 )
-                        nY = 30;
-                    if ( nX > 70 )
-                        nX = 70;
-                    if ( nY > 70 )
-                        nY = 70;
-                    aGradient.XOffset = static_cast< sal_Int16 >( nX );
-                    aGradient.YOffset = static_cast< sal_Int16 >( nY );
-                }
-            }
-            static const OUString sFillGradient = CREATE_OUSTRING( "FillGradient" );
-            xPropSet->setPropertyValue( sFillGradient, Any( aGradient ) );
-        }
-        else if ( eFillStyle == drawing::FillStyle_BITMAP )
-        {
-            // TODO: RotateWithShape is not possible with our current core
-
-            drawing::BitmapMode eBitmapMode( moBitmapMode ? *moBitmapMode : drawing::BitmapMode_NO_REPEAT );
-            static const OUString sFillBitmapMode = CREATE_OUSTRING( "FillBitmapMode" );
-            xPropSet->setPropertyValue( sFillBitmapMode, Any( eBitmapMode ) );
-
-            if ( eBitmapMode == drawing::BitmapMode_REPEAT )
-            {
-                static const OUString sFillBitmapTile = CREATE_OUSTRING( "FillBitmapTile" );
-                xPropSet->setPropertyValue( sFillBitmapTile, Any( sal_True ) );
-                static const OUString sFillBitmapStretch = CREATE_OUSTRING( "FillBitmapStretch" );
-                xPropSet->setPropertyValue( sFillBitmapStretch, Any( sal_True ) );
-                static const OUString sFillBitmapLogicalSize = CREATE_OUSTRING( "FillBitmapLogicalSize" );
-                xPropSet->setPropertyValue( sFillBitmapLogicalSize, Any( sal_True ) );
-
-                sal_Int32 nSX = moTileSX ? *moTileSX : 100000;
-                sal_Int32 nSY = moTileSY ? *moTileSY : 100000;
-
-                Reference< lang::XMultiServiceFactory > xMSFT( rFilterBase.getServiceFactory(), UNO_QUERY_THROW );
-                awt::Size aOriginalSize = GetOriginalSize( xMSFT, mxGraphic );
-
-                sal_Int32 nSizeX = static_cast< sal_Int32 >( ( aOriginalSize.Width / 100000.0 ) * nSX );
-                sal_Int32 nSizeY = static_cast< sal_Int32 >( ( aOriginalSize.Height / 100000.0 ) * nSY );
-                static const OUString sFillBitmapSizeX = CREATE_OUSTRING( "FillBitmapSizeX" );
-                xPropSet->setPropertyValue( sFillBitmapSizeX, Any( nSizeX ) );
-                static const OUString sFillBitmapSizeY = CREATE_OUSTRING( "FillBitmapSizeY" );
-                xPropSet->setPropertyValue( sFillBitmapSizeY, Any( nSizeY ) );
-/*
-                if ( moTileX )
-                {
-                    static const OUString sFillBitmapOffsetX = CREATE_OUSTRING( "FillBitmapOffsetX" );
-                    xPropSet->setPropertyValue( sFillBitmapOffsetX, Any( *moTileX / 360 ) );
-                }
-                if ( moTileY )
-                {
-                    static const OUString sFillBitmapOffsetY = CREATE_OUSTRING( "FillBitmapOffsetY" );
-                    xPropSet->setPropertyValue( sFillBitmapOffsetY, Any( *moTileY / 360 ) );
-                }
-*/
-            }
-            if ( moTileAlign )
-            {
-                drawing::RectanglePoint eRectPoint = drawing::RectanglePoint_LEFT_TOP;
-                switch ( *moTileAlign )
-                {
-                    case XML_tl :   eRectPoint = drawing::RectanglePoint_LEFT_TOP; break;
-                    case XML_t :    eRectPoint = drawing::RectanglePoint_MIDDLE_TOP; break;
-                    case XML_tr :   eRectPoint = drawing::RectanglePoint_RIGHT_TOP; break;
-                    case XML_l :    eRectPoint = drawing::RectanglePoint_LEFT_MIDDLE; break;
-                    case XML_ctr :  eRectPoint = drawing::RectanglePoint_MIDDLE_MIDDLE; break;
-                    case XML_r :    eRectPoint = drawing::RectanglePoint_RIGHT_MIDDLE; break;
-                    case XML_bl :   eRectPoint = drawing::RectanglePoint_LEFT_BOTTOM; break;
-                    case XML_b :    eRectPoint = drawing::RectanglePoint_MIDDLE_BOTTOM; break;
-                    case XML_br :   eRectPoint = drawing::RectanglePoint_RIGHT_BOTTOM; break;
-                }
-                static const OUString sFillBitmapRectanglePoint = CREATE_OUSTRING( "FillBitmapRectanglePoint" );
-                xPropSet->setPropertyValue( sFillBitmapRectanglePoint, Any( eRectPoint ) );
             }
         }
     }
     catch( Exception& )
     {
-//....
     }
-    createTransformedGraphic( rFilterBase, xPropSet );
+    return aSize100thMM;
 }
 
-void FillProperties::createTransformedGraphic( const oox::core::XmlFilterBase& rFilterBase, const Reference < XPropertySet >& xPropSet ) const
+Reference< XGraphic > lclTransformGraphic( const Reference< XGraphic >& rxGraphic,
+        const Color& rFromColor, const Color& rToColor, const XmlFilterBase& rFilter, sal_Int32 nPhClr )
 {
-    if( mxGraphic.is() )
+    if( rxGraphic.is() && rFromColor.isUsed() && rToColor.isUsed() ) try
     {
-        if ( mnContext == XML_pic )
+        sal_Int32 nFromColor = rFromColor.getColor( rFilter, nPhClr );
+        sal_Int32 nToColor = rToColor.getColor( rFilter, nPhClr );
+        if ( (nFromColor != nToColor) || rToColor.hasTransparence() )
         {
-            Reference< XGraphic > xGraphic( mxGraphic );
-            if ( maColorChangeFrom.get() && maColorChangeTo.get() )
-            {
-                sal_Int32 nClrChangeFrom = maColorChangeFrom->getColor( rFilterBase );
-                sal_Int32 nClrChangeTo = maColorChangeTo->getColor( rFilterBase );
-                if ( ( nClrChangeFrom != nClrChangeTo ) || maColorChangeTo->hasTransparence() )
+            sal_Int16 nToTransparence = rToColor.getTransparence();
+            sal_Int8 nToAlpha = static_cast< sal_Int8 >( (100 - nToTransparence) / 39.062 );   // ?!? correct ?!?
+            Reference< XGraphicTransformer > xTransformer( rxGraphic, UNO_QUERY_THROW );
+            return xTransformer->colorChange( rxGraphic, nFromColor, 9, nToColor, nToAlpha );
+        }
+    }
+    catch( Exception& )
+    {
+    }
+    return rxGraphic;
+}
+
+} // namespace
+
+// ============================================================================
+
+FillPropertyNames::FillPropertyNames() :
+    mbNamedFillGradient( false ),
+    mbNamedFillBitmap( false ),
+    mbTransformGraphic( false )
+{
+}
+
+FillPropertyNames::FillPropertyNames( const sal_Char* const* ppcPropertyNames, bool bNamedFillGradient, bool bNamedFillBitmap, bool bTransformGraphic ) :
+    maFillStyle( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maFillColor( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maFillTransparence( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maFillGradient( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maFillBitmap( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maFillBitmapMode( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maFillBitmapTile( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maFillBitmapStretch( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maFillBitmapLogicalSize( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maFillBitmapSizeX( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maFillBitmapSizeY( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maFillBitmapOffsetX( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maFillBitmapOffsetY( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maFillBitmapRectanglePoint( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    mbNamedFillGradient( bNamedFillGradient ),
+    mbNamedFillBitmap( bNamedFillBitmap ),
+    mbTransformGraphic( bTransformGraphic )
+{
+    OSL_ENSURE( !*ppcPropertyNames, "FillPropertyNames::FillPropertyNames - unexpected trailing property names" );
+}
+
+// ============================================================================
+
+FillPropertyNames FillProperties::DEFAULTNAMES( sppcDefaultFillNames, false, false, false );
+FillPropertyNames FillProperties::DEFAULTPICNAMES( sppcDefaultPicNames, false, false, true );
+
+void FillProperties::assignUsed( const FillProperties& rSourceProps )
+{
+    moFillType.assignIfUsed( rSourceProps.moFillType );
+    moRotateWithShape.assignIfUsed( rSourceProps.moRotateWithShape );
+
+    maFillColor.assignIfUsed( rSourceProps.maFillColor );
+
+    if( !rSourceProps.maGradientStops.empty() )
+        maGradientStops = rSourceProps.maGradientStops;
+    moGradientPath.assignIfUsed( rSourceProps.moGradientPath );
+    moShadeAngle.assignIfUsed( rSourceProps.moShadeAngle );
+    moShadeScaled.assignIfUsed( rSourceProps.moShadeScaled );
+    moFlipModeToken.assignIfUsed( rSourceProps.moFlipModeToken );
+    moFillToRect.assignIfUsed( rSourceProps.moFillToRect );
+    moTileRect.assignIfUsed( rSourceProps.moTileRect );
+
+    if( rSourceProps.mxGraphic.is() )
+        mxGraphic = rSourceProps.mxGraphic;
+    maColorChangeFrom.assignIfUsed( rSourceProps.maColorChangeFrom );
+    maColorChangeTo.assignIfUsed( rSourceProps.maColorChangeTo );
+    moBitmapMode.assignIfUsed( rSourceProps.moBitmapMode );
+    moTileX.assignIfUsed( rSourceProps.moTileX );
+    moTileY.assignIfUsed( rSourceProps.moTileY );
+    moTileSX.assignIfUsed( rSourceProps.moTileSX );
+    moTileSY.assignIfUsed( rSourceProps.moTileSY );
+    moTileAlign.assignIfUsed( rSourceProps.moTileAlign );
+}
+
+Color FillProperties::getBestSolidColor() const
+{
+    Color aSolidColor;
+    if( moFillType.has() ) switch( moFillType.get() )
+    {
+        case XML_solidFill:
+            aSolidColor = maFillColor;
+        break;
+        case XML_gradFill:
+            if( !maGradientStops.empty() )
+                aSolidColor = maGradientStops.begin()->second;
+        break;
+        case XML_pattFill:
+            aSolidColor = maPattBgColor.isUsed() ? maPattBgColor : maPattFgColor;
+        break;
+    }
+    return aSolidColor;
+}
+
+void FillProperties::pushToPropMap( PropertyMap& rPropMap, const FillPropertyNames& rPropNames,
+        const XmlFilterBase& rFilter, ModelObjectContainer& rObjContainer,
+        sal_Int32 nShapeRotation, sal_Int32 nPhClr ) const
+{
+    if( moFillType.has() )
+    {
+        // "rotate with shape" not set, or set to false -> do not rotate
+        if ( !moRotateWithShape.get( false ) )
+            nShapeRotation = 0;
+
+        FillStyle eFillStyle = FillStyle_NONE;
+        switch( moFillType.get() )
+        {
+            case XML_noFill:
+                eFillStyle = FillStyle_NONE;
+            break;
+
+            case XML_solidFill:
+                if( maFillColor.isUsed() )
                 {
-                    Reference< XGraphicTransformer > xTransformer( xGraphic, UNO_QUERY );
-                    if ( xTransformer.is() )
+                    rPropMap.setProperty( rPropNames.maFillColor, maFillColor.getColor( rFilter, nPhClr ) );
+                    if( maFillColor.hasTransparence() )
+                        rPropMap.setProperty( rPropNames.maFillTransparence, maFillColor.getTransparence() );
+                    eFillStyle = FillStyle_SOLID;
+                }
+            break;
+
+            case XML_gradFill:
+                // do not create gradient struct without property name...
+                if( rPropNames.maFillGradient.getLength() > 0 )
+                {
+                    awt::Gradient aGradient;
+                    aGradient.Angle = 900;
+                    aGradient.StartIntensity = 100;
+                    aGradient.EndIntensity = 100;
+
+                    if( maGradientStops.size() > 1 )
                     {
-                        sal_Int16 nTransTo = maColorChangeTo->getTransparence();
-                        sal_Int8 nAlphaTo = static_cast< sal_Int8 >( (100 - nTransTo) / 39.062 );
-                        xGraphic = xTransformer->colorChange( xGraphic, nClrChangeFrom, 9, nClrChangeTo, nAlphaTo );
+                        aGradient.StartColor = maGradientStops.begin()->second.getColor( rFilter, nPhClr );
+                        aGradient.EndColor = maGradientStops.rbegin()->second.getColor( rFilter, nPhClr );
+                    }
+
+                    if( moGradientPath.has() )
+                    {
+                        aGradient.Style = (moGradientPath.get() == XML_circle) ? awt::GradientStyle_ELLIPTICAL : awt::GradientStyle_RECT;
+                        aGradient.Angle = static_cast< sal_Int16 >( (900 - (nShapeRotation / 6000)) % 3600 );
+                        aGradient.XOffset = moFillToRect.has() ? getLimitedValue< sal_Int16, sal_Int32 >( moFillToRect.get().X1 / 1000, 30, 70 ) : 50;
+                        aGradient.YOffset = moFillToRect.has() ? getLimitedValue< sal_Int16, sal_Int32 >( moFillToRect.get().Y1 / 1000, 30, 70 ) : 50;
+                        ::std::swap( aGradient.StartColor, aGradient.EndColor );
+                    }
+                    else
+                    {
+                        aGradient.Style = awt::GradientStyle_LINEAR;
+                        aGradient.Angle = static_cast< sal_Int16 >( (4500 - ((moShadeAngle.get( 0 ) - nShapeRotation) / 6000)) % 3600 );
+                    }
+
+                    // push gradient or named gradient to property map
+                    if( rPropNames.mbNamedFillGradient )
+                    {
+                        OUString aGradientName = rObjContainer.insertFillGradient( aGradient );
+                        if( aGradientName.getLength() > 0 )
+                        {
+                            rPropMap.setProperty( rPropNames.maFillGradient, aGradientName );
+                            eFillStyle = FillStyle_GRADIENT;
+                        }
+                    }
+                    else
+                    {
+                        rPropMap.setProperty( rPropNames.maFillGradient, aGradient );
+                        eFillStyle = FillStyle_GRADIENT;
                     }
                 }
+            break;
+
+            case XML_blipFill:
+                // do not start complex graphic transformation without property name...
+                if( mxGraphic.is() && (rPropNames.maFillBitmap.getLength() > 0) )
+                {
+                    // TODO: "rotate with shape" is not possible with our current core
+
+                    // created transformed graphic
+                    Reference< XGraphic > xGraphic = rPropNames.mbTransformGraphic ?
+                        lclTransformGraphic( mxGraphic, maColorChangeFrom, maColorChangeTo, rFilter, nPhClr ) :
+                        mxGraphic;
+
+                    if( xGraphic.is() )
+                    {
+                        // push bitmap or named bitmap to property map
+                        if( rPropNames.mbNamedFillBitmap )
+                        {
+                            OUString aBitmapName = rObjContainer.insertFillBitmap( Reference< awt::XBitmap >( xGraphic, UNO_QUERY ) );
+                            if( aBitmapName.getLength() > 0 )
+                            {
+                                rPropMap.setProperty( rPropNames.maFillBitmap, aBitmapName );
+                                eFillStyle = FillStyle_BITMAP;
+                            }
+                        }
+                        else
+                        {
+                            rPropMap.setProperty( rPropNames.maFillBitmap, xGraphic );
+                            eFillStyle = FillStyle_BITMAP;
+                        }
+                    }
+
+                    // set other bitmap properties, if bitmap has been inserted into the map
+                    if( eFillStyle == FillStyle_BITMAP )
+                    {
+                        // bitmap mode (single, repeat, stretch)
+                        BitmapMode eBitmapMode = lclGetBitmapMode( moBitmapMode.get( XML_TOKEN_INVALID ) );
+                        rPropMap.setProperty( rPropNames.maFillBitmapMode, eBitmapMode );
+
+                        // anchor position inside bitmap
+                        RectanglePoint eRectPoint = lclGetRectanglePoint( moTileAlign.get( XML_tl ) );
+                        rPropMap.setProperty( rPropNames.maFillBitmapRectanglePoint, eRectPoint );
+
+                        // additional settings for repeated bitmap
+                        if( eBitmapMode == BitmapMode_REPEAT )
+                        {
+                            rPropMap.setProperty( rPropNames.maFillBitmapTile, true );
+                            rPropMap.setProperty( rPropNames.maFillBitmapStretch, true );
+                            rPropMap.setProperty( rPropNames.maFillBitmapLogicalSize, true );
+
+                            // size of one bitmap tile
+                            awt::Size aOriginalSize = lclGetOriginalSize( rFilter, mxGraphic );
+                            if( (aOriginalSize.Width > 0) && (aOriginalSize.Height > 0) )
+                            {
+                                sal_Int32 nFillBmpSizeX = static_cast< sal_Int32 >( (aOriginalSize.Width / 100000.0) * moTileSX.get( 100000 ) );
+                                rPropMap.setProperty( rPropNames.maFillBitmapSizeX, nFillBmpSizeX );
+                                sal_Int32 nFillBmpSizeY = static_cast< sal_Int32 >( (aOriginalSize.Height / 100000.0) * moTileSY.get( 100000 ) );
+                                rPropMap.setProperty( rPropNames.maFillBitmapSizeY, nFillBmpSizeY );
+                            }
+
+                            // offset of the first bitmap tile
+//                            if( moTileX.has() )
+//                                rPropMap.setProperty( rPropNames.maFillBitmapOffsetX, static_cast< sal_Int16 >( moTileX.get() / 360 ) );
+//                            if( moTileY.has() )
+//                                rPropMap.setProperty( rPropNames.maFillBitmapOffsetY, static_cast< sal_Int16 >( moTileY.get() / 360 ) );
+                        }
+                    }
+                }
+            break;
+
+            case XML_pattFill:
+            {
+                // todo
+                Color aColor = getBestSolidColor();
+                if( aColor.isUsed() )
+                {
+                    rPropMap.setProperty( rPropNames.maFillColor, aColor.getColor( rFilter, nPhClr ) );
+                    if( aColor.hasTransparence() )
+                        rPropMap.setProperty( rPropNames.maFillTransparence, aColor.getTransparence() );
+                    eFillStyle = FillStyle_SOLID;
+                }
             }
-            static const OUString sGraphic( CREATE_OUSTRING( "Graphic" ) );
-            xPropSet->setPropertyValue( sGraphic, Any( xGraphic ) );
+            break;
+
+            case XML_grpFill:
+                // todo
+                eFillStyle = FillStyle_NONE;
+            break;
         }
-        else if ( mnContext == XML_spPr )
-        {
-            static const OUString sFillBitmap( CREATE_OUSTRING( "FillBitmap" ) );
-            xPropSet->setPropertyValue( sFillBitmap, Any( mxGraphic ) );
-        }
+
+        // set final fill style property
+        rPropMap.setProperty( rPropNames.maFillStyle, eFillStyle );
     }
 }
 
-} }
+void FillProperties::pushToPropSet( PropertySet& rPropSet, const FillPropertyNames& rPropNames,
+        const XmlFilterBase& rFilter, ModelObjectContainer& rObjContainer,
+        sal_Int32 nShapeRotation, sal_Int32 nPhClr ) const
+{
+    PropertyMap aPropMap;
+    pushToPropMap( aPropMap, rPropNames, rFilter, rObjContainer, nShapeRotation, nPhClr );
+    rPropSet.setProperties( aPropMap );
+}
+
+// ============================================================================
+
+} // namespace drawingml
+} // namespace oox
+
