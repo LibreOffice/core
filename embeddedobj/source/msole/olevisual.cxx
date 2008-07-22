@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: olevisual.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,6 +96,16 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
 {
     RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::setVisualAreaSize" );
 
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->setVisualAreaSize( nAspect, aSize );
+        return;
+    }
+    // end wrapping related part ====================
+
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -166,6 +176,15 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                 uno::RuntimeException )
 {
     RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::getVisualAreaSize" );
+
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        return xWrappedObject->getVisualAreaSize( nAspect );
+    }
+    // end wrapping related part ====================
 
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -306,6 +325,15 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
 {
     RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::getPreferredVisualRepresentation" );
 
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        return xWrappedObject->getPreferredVisualRepresentation( nAspect );
+    }
+    // end wrapping related part ====================
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -390,6 +418,15 @@ sal_Int32 SAL_CALL OleEmbeddedObject::getMapUnit( sal_Int64 nAspect )
         throw ( uno::Exception,
                 uno::RuntimeException)
 {
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        return xWrappedObject->getMapUnit( nAspect );
+    }
+    // end wrapping related part ====================
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
