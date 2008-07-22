@@ -8,7 +8,7 @@
  *
  * $RCSfile: titlemodel.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
