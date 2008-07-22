@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLStreamImpl.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,7 @@
 
 #include "OOXMLStreamImpl.hxx"
 #include "OOXMLFastTokenHandler.hxx"
+#include "ooxmlLoggers.hxx"
 #include <iostream>
 
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALSTORAGEACCESS_HPP_
@@ -103,7 +104,7 @@ OOXMLStreamImpl::OOXMLStreamImpl
 OOXMLStreamImpl::~OOXMLStreamImpl()
 {
 #ifdef DEBUG_STREAM
-    logger("DEBUG", "</stream>");
+    debug_logger->endElement("stream");
 #endif
 }
 
@@ -235,9 +236,8 @@ void OOXMLStreamImpl::init()
     bool bFound = lcl_getTarget(mxRelationshipAccess,
                                 mnStreamType, msId, msTarget);
 #ifdef DEBUG_STREAM
-    logger("DEBUG", string("<stream>")
-           + OUStringToOString(msTarget,
-                               RTL_TEXTENCODING_ASCII_US).getStr());
+    debug_logger->startElement("stream");
+    debug_logger->attribute("target", msTarget);
 #endif
 
     if (bFound)
