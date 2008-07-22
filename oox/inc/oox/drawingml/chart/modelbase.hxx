@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: modelbase.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,10 @@
 #define OOX_DRAWINGML_CHART_MODELBASE_HXX
 
 #include "oox/helper/containerhelper.hxx"
+#include "oox/helper/helper.hxx"
 #include "tokens.hxx"
+
+namespace oox { class AttributeList; }
 
 namespace oox {
 namespace drawingml {
@@ -97,6 +100,18 @@ public:
 
 private:
     inline ModelType&   insert( KeyType eKey, ModelType* pModel ) { (*this)[ eKey ].reset( pModel ); return *pModel; }
+};
+
+// ============================================================================
+
+struct NumberFormat
+{
+    ::rtl::OUString     maFormatCode;       /// Number format code.
+    bool                mbSourceLinked;     /// True = number format linked to source data.
+
+    explicit            NumberFormat();
+
+    void                setAttributes( const AttributeList& rAttribs );
 };
 
 // ============================================================================
