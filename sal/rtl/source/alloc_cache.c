@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: alloc_cache.c,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1114,7 +1114,7 @@ SAL_CALL rtl_cache_create (
     void *           userarg,
     rtl_arena_type * source,
     int              flags
-)
+) SAL_THROW_EXTERN_C()
 {
     rtl_cache_type * result = 0;
     sal_Size         size   = sizeof(rtl_cache_type);
@@ -1169,7 +1169,7 @@ try_alloc:
  */
 void SAL_CALL rtl_cache_destroy (
     rtl_cache_type * cache
-)
+) SAL_THROW_EXTERN_C()
 {
     if (cache != 0)
     {
@@ -1184,7 +1184,7 @@ void SAL_CALL rtl_cache_destroy (
 void *
 SAL_CALL rtl_cache_alloc (
     rtl_cache_type * cache
-)
+) SAL_THROW_EXTERN_C()
 {
     void * obj = 0;
 
@@ -1257,7 +1257,7 @@ void
 SAL_CALL rtl_cache_free (
     rtl_cache_type * cache,
     void *           obj
-)
+) SAL_THROW_EXTERN_C()
 {
     if ((obj != 0) && (cache != 0))
     {
