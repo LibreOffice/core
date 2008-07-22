@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optgenrl.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,35 +99,35 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
 
     SfxTabPage( pParent, SVX_RES(RID_SFXPAGE_GENERAL), rCoreSet ),
 
-    aCompanyLbl     ( this, SVX_RES( FT_COMPANY ) ),
-    aCompanyEdit    ( this, SVX_RES( ED_COMPANY ) ),
-    aNameLbl        ( this, SVX_RES( FT_NAME ) ),
-    aNameLblRuss    ( this, SVX_RES( FT_NAME_RUSS ) ),
-    aFirstName      ( this, SVX_RES( ED_FIRSTNAME ) ),
+    aCompanyLbl     ( this, SVX_RES( FT_COMPANY ), true ),
+    aCompanyEdit    ( this, SVX_RES( ED_COMPANY ), INDEX_NOTSET, &aCompanyLbl ),
+    aNameLbl        ( this, SVX_RES( FT_NAME ), true ),
+    aNameLblRuss    ( this, SVX_RES( FT_NAME_RUSS ), true ),
+    aFirstName      ( this, SVX_RES( ED_FIRSTNAME ), 0, &aNameLbl ),
     aFatherName     ( this, SVX_RES( ED_FATHERNAME ) ),
-    aName           ( this, SVX_RES( ED_NAME ) ),
-    aShortName      ( this, SVX_RES( ED_SHORTNAME ) ),
-    aStreetLbl      ( this, SVX_RES( FT_STREET ) ),
-    aStreetLblRuss  ( this, SVX_RES( FT_STREET_RUSS ) ),
-    aStreetEdit     ( this, SVX_RES( ED_STREET ) ),
-    aApartmentNrEdit( this, SVX_RES( ED_APARTMENTNR ) ),
-    aCityLbl        ( this, SVX_RES( FT_CITY ) ),
-    aPLZEdit        ( this, SVX_RES( ED_PLZ ) ),
-    aCityEdit       ( this, SVX_RES( ED_CITY ) ),
-    aUsCityEdit     ( this, SVX_RES( ED_US_CITY ) ),
-    aUsStateEdit    ( this, SVX_RES( ED_US_STATE ) ),
-    aUsZipEdit      ( this, SVX_RES( ED_US_ZIPCODE ) ),
-    aCountryLbl     ( this, SVX_RES( FT_COUNTRY ) ),
-    aCountryEdit    ( this, SVX_RES( ED_COUNTRY ) ),
-    aTitlePosLbl    ( this, SVX_RES( FT_TITLEPOS ) ),
-    aTitleEdit      ( this, SVX_RES( ED_TITLE ) ),
-    aPositionEdit   ( this, SVX_RES( ED_POSITION ) ),
-    aPhoneLbl       ( this, SVX_RES( FT_PHONE ) ),
-    aTelPrivEdit    ( this, SVX_RES( ED_TELPRIVAT ) ),
-    aTelCompanyEdit ( this, SVX_RES( ED_TELCOMPANY ) ),
-    aFaxMailLbl     ( this, SVX_RES( FT_FAXMAIL ) ),
-    aFaxEdit        ( this, SVX_RES( ED_FAX ) ),
-    aEmailEdit      ( this, SVX_RES( ED_EMAIL ) ),
+    aName           ( this, SVX_RES( ED_NAME ), 1, &aNameLbl ),
+    aShortName      ( this, SVX_RES( ED_SHORTNAME ), 2, &aNameLbl ),
+    aStreetLbl      ( this, SVX_RES( FT_STREET ), true ),
+    aStreetLblRuss  ( this, SVX_RES( FT_STREET_RUSS ), true ),
+    aStreetEdit     ( this, SVX_RES( ED_STREET ), 0, &aStreetLbl ),
+    aApartmentNrEdit( this, SVX_RES( ED_APARTMENTNR ), 1, &aStreetLblRuss ),
+    aCityLbl        ( this, SVX_RES( FT_CITY ), true ),
+    aPLZEdit        ( this, SVX_RES( ED_PLZ ), 0, &aCityLbl ),
+    aCityEdit       ( this, SVX_RES( ED_CITY ), 1, &aCityLbl ),
+    aUsCityEdit     ( this, SVX_RES( ED_US_CITY ), 0, &aCityLbl ),
+    aUsStateEdit    ( this, SVX_RES( ED_US_STATE ), 1, &aCityLbl ),
+    aUsZipEdit      ( this, SVX_RES( ED_US_ZIPCODE ), 2, &aCityLbl ),
+    aCountryLbl     ( this, SVX_RES( FT_COUNTRY ), true ),
+    aCountryEdit    ( this, SVX_RES( ED_COUNTRY ), INDEX_NOTSET, &aCountryLbl ),
+    aTitlePosLbl    ( this, SVX_RES( FT_TITLEPOS ), true ),
+    aTitleEdit      ( this, SVX_RES( ED_TITLE ), 0, &aTitlePosLbl ),
+    aPositionEdit   ( this, SVX_RES( ED_POSITION ), 1, &aTitlePosLbl ),
+    aPhoneLbl       ( this, SVX_RES( FT_PHONE ), true ),
+    aTelPrivEdit    ( this, SVX_RES( ED_TELPRIVAT ), 0, &aPhoneLbl ),
+    aTelCompanyEdit ( this, SVX_RES( ED_TELCOMPANY ), 1, &aPhoneLbl ),
+    aFaxMailLbl     ( this, SVX_RES( FT_FAXMAIL ), true ),
+    aFaxEdit        ( this, SVX_RES( ED_FAX ), 0, &aFaxMailLbl ),
+    aEmailEdit      ( this, SVX_RES( ED_EMAIL ), 1, &aFaxMailLbl ),
     aAddrFrm        ( this, SVX_RES( GB_ADDRESS ) ),
     aUseDataCB      ( this, SVX_RES( CB_USEDATA ) ),
 
@@ -153,8 +153,15 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
         aNameLblRuss.Show();
         aStreetLbl.Hide();
         aStreetLblRuss.Show();
-
         aFatherName.Show();
+        aName.SetIndex( 0 );
+        aName.SetLabel( &aNameLblRuss );
+        aFirstName.SetIndex( 1 );
+        aFirstName.SetLabel( &aNameLblRuss );
+        aFatherName.SetIndex( 2 );
+        aFatherName.SetLabel( &aNameLblRuss );
+        aShortName.SetIndex( 3 );
+        aShortName.SetLabel( &aNameLblRuss );
 
         Point aEditPoint = LogicToPixel( Point( MID, LINE(1) ), MAP_APPFONT );
         Point aRightPoint = LogicToPixel( Point( RIGHT, LINE(1) ), MAP_APPFONT );
@@ -197,6 +204,35 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
     Link aLink = LINK( this, SvxGeneralTabPage, ModifyHdl_Impl );
     aFirstName.SetModifyHdl( aLink );
     aName.SetModifyHdl( aLink );
+
+    // because some labels have text for more than one edit field we have to split these texts
+    // and set these texts as accessible name of the corresponding edit fields
+    SvxUserEdit* pEdits[] =
+    {
+        &aCompanyEdit, &aFirstName, &aFatherName, &aName, &aShortName, &aStreetEdit,
+        &aApartmentNrEdit, &aPLZEdit, &aCityEdit, &aUsCityEdit, &aUsStateEdit, &aUsZipEdit,
+        &aCountryEdit, &aTitleEdit, &aPositionEdit, &aTelPrivEdit, &aTelCompanyEdit,
+        &aFaxEdit, &aEmailEdit, NULL
+    };
+    SvxUserEdit** pCurrent = pEdits;
+    while ( *pCurrent )
+    {
+        Window* pLabel = (*pCurrent)->GetLabel();
+        if ( pLabel )
+        {
+            String sName, sText = pLabel->GetDisplayText();
+            sal_Int16 nIndex = (*pCurrent)->GetIndex();
+            if ( INDEX_NOTSET == nIndex )
+                sName = sText;
+            else
+                sName = sText.GetToken( nIndex, '/' );
+            sName.EraseAllChars( '(' );
+            sName.EraseAllChars( ')' );
+            if ( sName.Len() > 0 )
+                (*pCurrent)->SetAccessibleName( sName );
+        }
+        pCurrent++;
+    }
 }
 
 //------------------------------------------------------------------------
