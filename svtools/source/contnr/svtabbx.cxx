@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svtabbx.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -327,6 +327,11 @@ void SvTabListBox::SetEntryText( const XubString& rStr, SvLBoxEntry* pEntry, USH
     if( !pEntry )
         return;
 
+    String sOldText = GetEntryText( pEntry, nCol );
+    if ( sOldText == rStr )
+        return;
+
+    USHORT nTextColumn = nCol;
     const xub_Unicode* pCurToken = rStr.GetBuffer();
     USHORT nCurTokenLen;
     const xub_Unicode* pNextToken = GetToken( pCurToken, nCurTokenLen );
@@ -367,6 +372,10 @@ void SvTabListBox::SetEntryText( const XubString& rStr, SvLBoxEntry* pEntry, USH
         nCur++;
     }
     GetModel()->InvalidateEntry( pEntry );
+
+    TabListBoxEventData* pData = new TabListBoxEventData( pEntry, nTextColumn, sOldText );
+    ImplCallEventListeners( VCLEVENT_TABLECELL_NAMECHANGED, pData );
+    delete pData;
 }
 
 String SvTabListBox::GetCellText( ULONG nPos, USHORT nCol ) const
