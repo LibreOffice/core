@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: color.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -276,6 +276,11 @@ sal_Int32 Color::getSystemColor( sal_Int32 nToken, sal_Int32 nDefault )
     return nDefault;
 }
 
+void Color::setUnused()
+{
+    meMode = COLOR_UNUSED;
+}
+
 void Color::setSrgbClr( sal_Int32 nRGB )
 {
     OSL_ENSURE( (0 <= nRGB) && (nRGB <= 0xFFFFFF), "Color::setSrgbClr - invalid RGB value" );
@@ -335,6 +340,15 @@ void Color::addTransformation( sal_Int32 nElement, sal_Int32 nValue )
         case XML_alphaOff:  lclOffValue( mnAlpha, nValue ); break;
         default:            maTransforms.push_back( Transformation( nToken, nValue ) );
     }
+}
+
+void Color::addChartTintTransformation( double fTint )
+{
+    sal_Int32 nValue = getLimitedValue< sal_Int32, double >( fTint * MAX_PERCENT + 0.5, -MAX_PERCENT, MAX_PERCENT );
+    if( nValue < 0 )
+        maTransforms.push_back( Transformation( XML_shade, nValue + MAX_PERCENT ) );
+    else if( nValue > 0 )
+        maTransforms.push_back( Transformation( XML_tint, MAX_PERCENT - nValue ) );
 }
 
 void Color::addExcelTintTransformation( double fTint )
