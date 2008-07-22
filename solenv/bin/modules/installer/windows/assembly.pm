@@ -8,7 +8,7 @@
 #
 # $RCSfile: assembly.pm,v $
 #
-# $Revision: 1.10 $
+# $Revision: 1.11 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -348,7 +348,8 @@ sub add_assembly_condition_into_component_table
                 {
                     # setting the condition
 
-                    $condition = "MsiNetAssemblySupport";
+                    # $condition = "MsiNetAssemblySupport";
+                    $condition = "DOTNET_SUFFICIENT=1";
                     $oneline = $component . "\t" . $componentid . "\t" . $directory . "\t" . $attributes . "\t" . $condition . "\t" . $keypath . "\n";
                     ${$componenttable}[$j] = $oneline;
                     $changed = 1;
