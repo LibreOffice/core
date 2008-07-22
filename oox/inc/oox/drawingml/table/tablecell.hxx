@@ -8,7 +8,7 @@
  *
  * $RCSfile: tablecell.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,8 +34,10 @@
 
 #include "oox/helper/propertymap.hxx"
 #include "oox/drawingml/color.hxx"
-#include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
+#include "oox/drawingml/lineproperties.hxx"
+#include "oox/drawingml/fillproperties.hxx"
+#include "oox/drawingml/textliststyle.hxx"
 #include <com/sun/star/table/XCell.hpp>
 
 #include <boost/shared_ptr.hpp>
@@ -47,6 +49,8 @@ namespace oox { namespace drawingml { namespace table {
 
 class TableCellContext;
 class TableProperties;
+class TableStyle;
+
 class TableCell
 {
     friend class TableCellContext;
