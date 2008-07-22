@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textbody.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,16 +31,20 @@
 #ifndef OOX_DRAWINGML_TEXTBODY_HXX
 #define OOX_DRAWINGML_TEXTBODY_HXX
 
-#include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/text/XTextCursor.hpp>
-
 #include "oox/helper/containerhelper.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/drawingml/textparagraph.hxx"
+#include "oox/drawingml/textbodyproperties.hxx"
 #include "oox/drawingml/textliststyle.hxx"
+
+namespace com { namespace sun { namespace star {
+    namespace text { class XText; }
+    namespace text { class XTextCursor; }
+} } }
+
+namespace oox { namespace core { class XmlFilterBase; } }
 
 namespace oox { namespace drawingml {
 
+class TextParagraph;
 typedef RefVector< TextParagraph > TextParagraphVector;
 
 class TextBody
@@ -52,21 +56,22 @@ public:
     inline const TextParagraphVector&   getParagraphs() const { return maParagraphs; }
     TextParagraph&                      addParagraph();
 
-    inline const TextListStyle& getTextListStyle() const { return maTextListStyle; }
-    inline TextListStyle&       getTextListStyle() { return maTextListStyle; }
+    inline const TextListStyle&         getTextListStyle() const { return maTextListStyle; }
+    inline TextListStyle&               getTextListStyle() { return maTextListStyle; }
 
-    inline const PropertyMap&   getTextProperties() const { return maTextProperties; }
-    inline PropertyMap&         getTextProperties() { return maTextProperties; }
+    inline const TextBodyProperties&    getTextProperties() const { return maTextProperties; }
+    inline TextBodyProperties&          getTextProperties() { return maTextProperties; }
 
     /** insert the text body at the text cursor */
     void                insertAt(
                             const ::oox::core::XmlFilterBase& rFilterBase,
                             const ::com::sun::star::uno::Reference < ::com::sun::star::text::XText > & xText,
                             const ::com::sun::star::uno::Reference < ::com::sun::star::text::XTextCursor > & xAt,
-                            const TextListStylePtr& pMasterTextListStyle );
+                            const TextCharacterProperties& rTextStyleProperties,
+                            const TextListStylePtr& pMasterTextListStyle ) const;
 protected:
     TextParagraphVector maParagraphs;
-    PropertyMap         maTextProperties;
+    TextBodyProperties  maTextProperties;
     TextListStyle       maTextListStyle;
 };
 
