@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: condformatbuffer.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -577,14 +577,8 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
                 break;
                 case 'T':       // comparison text
                     if( aText.getLength() == 0 )
-                    {
-                        // handle quote characters in comparison text
-                        aText = maOoxData.maText;
-                        sal_Int32 nQuotePos = aText.getLength();
-                        while( (nQuotePos = aText.lastIndexOf( '"', nQuotePos )) >= 0 )
-                            aText = aText.replaceAt( nQuotePos, 1, CREATE_OUSTRING( "\"\"" ) );
-                        aText = OUStringBuffer().append( sal_Unicode( '"' ) ).append( aText ).append( sal_Unicode( '"' ) ).makeStringAndClear();
-                    }
+                        // quote the comparison text, and handle embedded quote characters
+                        aText = FormulaProcessorBase::generateApiString( maOoxData.maText );
                     aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2, aText );
                 break;
                 case 'L':       // length of comparison text
