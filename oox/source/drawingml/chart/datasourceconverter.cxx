@@ -8,7 +8,7 @@
  *
  * $RCSfile: datasourceconverter.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,12 +55,8 @@ DataSequenceConverter::~DataSequenceConverter()
 
 Reference< XDataSequence > DataSequenceConverter::createDataSequence( const OUString& rRole )
 {
-    // create data sequence from formula (virtual call at chart converter)
-    Reference< XDataSequence > xDataSeq;
-    if( mrModel.maFormula.getLength() > 0 )
-        xDataSeq = getChartConverter().createDataSequence( getChartDocument()->getDataProvider(), mrModel.maFormula );
-
-    // TODO: create data sequence from literal data
+    // create data sequence from data source model (virtual call at chart converter)
+    Reference< XDataSequence > xDataSeq = getChartConverter().createDataSequence( getChartDocument()->getDataProvider(), mrModel );
 
     // set sequence role
     PropertySet aSeqProp( xDataSeq );
