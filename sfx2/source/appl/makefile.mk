@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.55 $
+# $Revision: 1.56 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -130,6 +130,10 @@ SLOFILES += $(QUICKSTART_OBJECTS)
 
 LIB2TARGET= $(SLB)$/quickstart.lib
 LIB2OBJFILES= $(QUICKSTART_OBJECTS)
+.ENDIF
+
+.IF "$(GUI)"=="OS2"
+SLOFILES +=  $(SLO)$/shutdowniconOs2.obj
 .ENDIF
 
 EXCEPTIONSFILES=\
