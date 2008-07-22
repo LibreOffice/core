@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: axiscontext.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -128,17 +128,17 @@ ContextWrapper AxisContextBase::onCreateContext( sal_Int32 nElement, const Attri
                 case C_TOKEN( majorGridlines ):
                     return new ShapePrWrapperContext( *this, mrModel.mxMajorGridLines.create() );
                 case C_TOKEN( majorTickMark ):
-                    mrModel.mnMajorTickMark = rAttribs.getToken( XML_val, XML_cross );
+                    // default is 'out', not 'cross' as specified
+                    mrModel.mnMajorTickMark = rAttribs.getToken( XML_val, XML_out );
                     return false;
                 case C_TOKEN( minorGridlines ):
                     return new ShapePrWrapperContext( *this, mrModel.mxMinorGridLines.create() );
                 case C_TOKEN( minorTickMark ):
-                    mrModel.mnMinorTickMark = rAttribs.getToken( XML_val, XML_cross );
+                    // default is 'none', not 'cross' as specified
+                    mrModel.mnMinorTickMark = rAttribs.getToken( XML_val, XML_none );
                     return false;
                 case C_TOKEN( numFmt ):
-                    mrModel.maFormatCode = rAttribs.getString( XML_formatCode, OUString() );
-                    // default is 'false', not 'true' as specified
-                    mrModel.mbSourceLinked = rAttribs.getBool( XML_sourceLinked, false );
+                    mrModel.maNumberFormat.setAttributes( rAttribs );
                     return false;
                 case C_TOKEN( scaling ):
                     return true;
