@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.23 $
+# $Revision: 1.24 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -88,8 +88,13 @@ xml2_LDFLAGS+=-Wl,-z,noexecstack
 .ENDIF
 
 CONFIGURE_DIR=
+.IF "$(OS)"=="OS2"
+CONFIGURE_ACTION=sh .$/configure
+CONFIGURE_FLAGS=--enable-ipv6=no --without-python --enable-static=yes --with-sax1=yes ADDCFLAGS="$(xml2_CFLAGS)" CFLAGS="$(EXTRA_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS) $(EXTRA_LINKFLAGS)"
+.ELSE
 CONFIGURE_ACTION=.$/configure
 CONFIGURE_FLAGS=--enable-ipv6=no --without-python --enable-static=no --with-sax1=yes ADDCFLAGS="$(xml2_CFLAGS) $(EXTRA_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS) $(EXTRA_LINKFLAGS)"
+.ENDIF
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
