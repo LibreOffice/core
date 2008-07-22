@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shlinfo.rc,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +52,13 @@
 #endif
 
 #define VER_FIRSTYEAR	VER_YEAR
+
+
+#if defined(OS2)
+
+#define OS2_VERSION "hello world"
+
+#else
 
 #include <windows.h>
 #include "verinfo.hrc"
@@ -155,3 +162,4 @@ VS_VERSION_INFO rcdata
 	VERSION, VERVARIANT, VER_COUNT
 };
 
+#endif // OS2
