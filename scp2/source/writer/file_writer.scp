@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_writer.scp,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -182,13 +182,6 @@ File gid_File_Registry_Spool_Oo_Setup_Writer_Xcu
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
     Name = "/registry/spool/org/openoffice/Setup-writer.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_Common_Dicooo_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
-    Name = "/registry/spool/org/openoffice/Office/Common-dicooo.xcu";
 End
 
 File gid_File_Oo_Office_Ui_Writerwindowstate_Xcs
