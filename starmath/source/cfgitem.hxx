@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cfgitem.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,6 +160,8 @@ protected:
     inline BOOL IsOtherModified() const     { return bIsOtherModified; }
     void        SetFormatModified( BOOL bVal );
     inline BOOL IsFormatModified() const    { return bIsFormatModified; }
+    void        SetFontFormatListModified( BOOL bVal );
+    inline BOOL IsFontFormatListModified() const    { return pFontFormatList ? pFontFormatList->IsModified(): FALSE; }
 
     SmFontFormatList &          GetFontFormatList();
     const SmFontFormatList &    GetFontFormatList() const
@@ -190,7 +192,7 @@ public:
     const SmSym *       GetSymbol( USHORT nIndex ) const;
 
     const SmFormat &    GetStandardFormat() const;
-    void                SetStandardFormat( const SmFormat &rFormat );
+    void                SetStandardFormat( const SmFormat &rFormat, BOOL bSaveFontFormatList = FALSE );
 
     BOOL            IsPrintTitle() const;
     void            SetPrintTitle( BOOL bVal );
