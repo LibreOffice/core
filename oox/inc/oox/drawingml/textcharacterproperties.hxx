@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textcharacterproperties.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,51 +31,61 @@
 #ifndef OOX_DRAWINGML_TEXTCHARACTERPROPERTIES_HXX
 #define OOX_DRAWINGML_TEXTCHARACTERPROPERTIES_HXX
 
+#include "oox/helper/helper.hxx"
 #include "oox/helper/propertymap.hxx"
-#include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/color.hxx"
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <boost/shared_ptr.hpp>
+#include "oox/drawingml/textfont.hxx"
 
-namespace oox { namespace drawingml {
+namespace oox { class PropertySet; }
 
-class TextCharacterProperties;
+namespace oox {
+namespace drawingml {
 
-typedef boost::shared_ptr< TextCharacterProperties > TextCharacterPropertiesPtr;
+// ============================================================================
 
-class TextCharacterProperties
+struct TextCharacterProperties
 {
-public:
+    PropertyMap         maHyperlinkPropertyMap;
+    TextFont            maLatinFont;
+    TextFont            maAsianFont;
+    TextFont            maComplexFont;
+    TextFont            maSymbolFont;
+    Color               maCharColor;
+    Color               maUnderlineColor;
+    Color               maHighlightColor;
+    OptValue< ::rtl::OUString > moLang;
+    OptValue< sal_Int32 > moHeight;
+    OptValue< sal_Int32 > moUnderline;
+    OptValue< sal_Int32 > moStrikeout;
+    OptValue< sal_Int32 > moCaseMap;
+    OptValue< bool >    moBold;
+    OptValue< bool >    moItalic;
+    OptValue< bool >    moUnderlineLineFollowText;
+    OptValue< bool >    moUnderlineFillFollowText;
 
-    TextCharacterProperties();
-    ~TextCharacterProperties();
+    /** Overwrites all members that are explicitly set in rSourceProps. */
+    void                assignUsed( const TextCharacterProperties& rSourceProps );
 
-    PropertyMap&                    getTextCharacterPropertyMap()   { return maTextCharacterPropertyMap; }
-    PropertyMap&                    getHyperlinkPropertyMap()        { return maHyperlinkPropertyMap; }
-    ::oox::drawingml::ColorPtr      getCharColor()                  { return maCharColorPtr; }
-    ::oox::drawingml::ColorPtr      getUnderlineColor()             { return maUnderlineColorPtr; }
-    ::oox::drawingml::ColorPtr      getHighlightColor()             { return maHighlightColorPtr; }
-    ::com::sun::star::uno::Any&     getHasUnderline()               { return maHasUnderline; }
-    ::com::sun::star::uno::Any&     getUnderlineLineFollowText()    { return maUnderlineLineFollowText; }
-    ::com::sun::star::uno::Any&     getUnderlineFillFollowText()    { return maUnderlineFillFollowText; }
+    /** Returns the current character size. If possible the masterstyle should
+        have been applied before, otherwise the character size can be zero and
+        the default value is returned. */
+    float               getCharHeightPoints( float fDefault ) const;
 
+    /** Writes the properties to the passed property map. */
+    void                pushToPropMap(
+                            PropertyMap& rPropMap,
+                            const ::oox::core::XmlFilterBase& rFilter ) const;
 
-    void apply( const TextCharacterPropertiesPtr& rSource );
-    void pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase, const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet ) const;
-    void pushToUrlFieldPropSet( const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet ) const;
-    float getCharacterSize( float fDefault ) const;
-
-protected:
-    PropertyMap                     maTextCharacterPropertyMap;
-    PropertyMap                     maHyperlinkPropertyMap;
-    ::oox::drawingml::ColorPtr      maCharColorPtr;
-    ::oox::drawingml::ColorPtr      maUnderlineColorPtr;
-    ::oox::drawingml::ColorPtr      maHighlightColorPtr;
-    ::com::sun::star::uno::Any      maHasUnderline;
-    ::com::sun::star::uno::Any      maUnderlineLineFollowText;
-    ::com::sun::star::uno::Any      maUnderlineFillFollowText;
+    /** Writes the properties to the passed property set. */
+    void                pushToPropSet(
+                            PropertySet& rPropSet,
+                            const ::oox::core::XmlFilterBase& rFilter ) const;
 };
 
-} }
+// ============================================================================
 
-#endif  //  OOX_DRAWINGML_TEXTCHARACTERPROPERTIES_HXX
+} // namespace drawingml
+} // namespace oox
+
+#endif
+
