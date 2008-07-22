@@ -8,7 +8,7 @@
  *
  * $RCSfile: stylematrixreferencecontext.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,23 +34,20 @@
 #include "oox/core/namespaces.hxx"
 #include "tokens.hxx"
 
-using rtl::OUString;
+using ::rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-StyleMatrixReferenceContext::StyleMatrixReferenceContext( ContextHandler& rParent,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs,
-        rtl::OUString& rIdentifier, Color& rColor )
+StyleMatrixReferenceContext::StyleMatrixReferenceContext( ContextHandler& rParent, Color& rColor )
 : ContextHandler( rParent )
 , mrColor( rColor )
 {
-    rIdentifier = rxAttribs->getOptionalValue( XML_idx );
 }
 
-Reference< XFastContextHandler > StyleMatrixReferenceContext::createFastChildContext( sal_Int32 /* aElementToken */, const Reference< XFastAttributeList >& /* xAttribs */ ) throw (SAXException, RuntimeException)
+Reference< XFastContextHandler > StyleMatrixReferenceContext::createFastChildContext( sal_Int32 /* aElementToken */, const Reference< XFastAttributeList >& /* rxAttributes */ ) throw (SAXException, RuntimeException)
 {
     return new colorChoiceContext( *this, mrColor );
 }
