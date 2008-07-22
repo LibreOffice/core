@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.18 $
+# $Revision: 1.19 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -71,6 +71,10 @@ SHL1STDLIBS=\
     $(UCBHELPERLIB)
 
 SHL1VERSIONMAP=exports.map
+
+.IF "$(GUI)" == "OS2"
+DEF1EXPORTFILE=exports2.dxp
+.ENDIF
 
 DEF1NAME=$(SHL1TARGET)
 
