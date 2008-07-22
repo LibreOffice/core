@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ShapeFilterBase.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +51,9 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
 
     virtual             ~ShapeFilterBase();
+
+    /** Has to be implemented by each filter, returns the current theme. */
+    virtual const ::oox::drawingml::Theme* getCurrentTheme() const;
 
     /** Has to be implemented by each filter to resolve scheme colors. */
     virtual sal_Int32   getSchemeClr( sal_Int32 nColorSchemeToken ) const;
