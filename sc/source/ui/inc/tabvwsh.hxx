@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwsh.hxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -252,6 +252,7 @@ public:
 
     Window*         GetDialogParent();
 
+    bool            IsRefInputMode() const;
     void            ExecuteInputDirect();
 
     ScInputHandler* GetInputHandler() const;
