@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: numberformatsbuffer.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,6 @@
 #include "oox/xls/stylespropertyhelper.hxx"
 
 namespace com { namespace sun { namespace star {
-    namespace lang { struct Locale; }
     namespace util { class XNumberFormats; }
 } } }
 
@@ -60,9 +59,6 @@ struct OoxNumFmtData
 class NumberFormat : public WorkbookHelper
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > XNumberFormatsRef;
-
-public:
     explicit            NumberFormat( const WorkbookHelper& rHelper );
 
     /** Sets the passed format code. */
@@ -76,9 +72,9 @@ public:
                             const ::com::sun::star::lang::Locale& rLocale,
                             sal_Int16 nPredefId );
 
-    /** Final processing after import of all style settings. */
-    void                finalizeImport(
-                            const XNumberFormatsRef& rxNumFmts,
+    /** Final processing after import of all style settings. Returns the API format index. */
+    sal_Int32           finalizeImport(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& rxNumFmts,
                             const ::com::sun::star::lang::Locale& rFromLocale );
 
     /** Writes the number format to the passed property set. */
