@@ -8,7 +8,7 @@
 #
 # $RCSfile: property.pm,v $
 #
-# $Revision: 1.28 $
+# $Revision: 1.29 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -357,6 +357,16 @@ sub set_important_properties
     if ( $allvariables->{'HIDELICENSEDIALOG'} )
     {
         my $onepropertyline = "HIDEEULA" . "\t" . "1" . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
+    # Setting .NET requirements
+    if ( $installer::globals::required_dotnet_version ne "" )
+    {
+        my $onepropertyline = "REQUIRED_DOTNET_VERSION" . "\t" . $installer::globals::required_dotnet_version . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+
+        $onepropertyline = "DOTNET_SUFFICIENT" . "\t" . "1" . "\n"; # default value for found .NET
         push(@{$propertyfile}, $onepropertyline);
     }
 
