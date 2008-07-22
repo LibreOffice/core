@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: contexthandler2.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,16 +70,18 @@ ContextInfo::ContextInfo() :
 
 // ============================================================================
 
-ContextHandler2Helper::ContextHandler2Helper() :
+ContextHandler2Helper::ContextHandler2Helper( bool bEnableTrimSpace ) :
     mxContextStack( new ContextStack ),
-    mnRootStackSize( 0 )
+    mnRootStackSize( 0 ),
+    mbEnableTrimSpace( bEnableTrimSpace )
 {
     pushContextInfo( XML_ROOT_CONTEXT );
 }
 
 ContextHandler2Helper::ContextHandler2Helper( const ContextHandler2Helper& rParent ) :
     mxContextStack( rParent.mxContextStack ),
-    mnRootStackSize( rParent.mxContextStack->size() )
+    mnRootStackSize( rParent.mxContextStack->size() ),
+    mbEnableTrimSpace( rParent.mbEnableTrimSpace )
 {
 }
 
@@ -186,7 +188,7 @@ void ContextHandler2Helper::appendCollectedChars()
     if( rInfo.maCurrChars.getLength() > 0 )
     {
         OUString aChars = rInfo.maCurrChars.makeStringAndClear();
-        rInfo.maFinalChars.append( rInfo.mbTrimSpaces ? aChars.trim() : aChars );
+        rInfo.maFinalChars.append( (mbEnableTrimSpace && rInfo.mbTrimSpaces) ? aChars.trim() : aChars );
     }
 }
 
