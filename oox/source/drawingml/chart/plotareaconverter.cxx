@@ -8,7 +8,7 @@
  *
  * $RCSfile: plotareaconverter.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,7 +75,7 @@ void lclCopyOrCreate( AxesSetModel::AxisMap& orToAxes, const AxesSetModel::AxisM
     if( xAxis.get() )
         orToAxes[ nAxisIdx ] = xAxis;
     else
-        orToAxes.create( nAxisIdx, nDefTypeId );
+        orToAxes.create( nAxisIdx, nDefTypeId ).mbDeleted = true;   // missing axis is invisible
 }
 
 // ============================================================================
@@ -89,16 +89,31 @@ public:
 
     /** Converts the axes set model to a chart2 diagram. Returns an automatic
         chart title from a single series title, if possible. */
-    OUString            convertFromModel(
+    void                convertFromModel(
                             const Reference< XDiagram >& rxDiagram,
                             View3DModel& rView3DModel,
-                            sal_Int32 nAxesSetIdx );
+                            sal_Int32 nAxesSetIdx,
+                            bool bSupportsVaryColorsByPoint );
+
+    /** Returns the automatic chart title if the axes set contains only one series. */
+    inline const ::rtl::OUString& getAutomaticTitle() const { return maAutoTitle; }
+    /** Returns true, if the chart is three-dimensional. */
+    inline bool         is3dChart() const { return mb3dChart; }
+    /** Returns true, if chart type supports wall and floor format in 3D mode. */
+    inline bool         isWall3dChart() const { return mbWall3dChart; }
+
+private:
+    ::rtl::OUString     maAutoTitle;
+    bool                mb3dChart;
+    bool                mbWall3dChart;
 };
 
 // ----------------------------------------------------------------------------
 
 AxesSetConverter::AxesSetConverter( const ConverterRoot& rParent, AxesSetModel& rModel ) :
-    ConverterBase< AxesSetModel >( rParent, rModel )
+    ConverterBase< AxesSetModel >( rParent, rModel ),
+    mb3dChart( false ),
+    mbWall3dChart( false )
 {
 }
 
@@ -106,7 +121,8 @@ AxesSetConverter::~AxesSetConverter()
 {
 }
 
-OUString AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, View3DModel& rView3DModel, sal_Int32 nAxesSetIdx )
+void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
+        View3DModel& rView3DModel, sal_Int32 nAxesSetIdx, bool bSupportsVaryColorsByPoint )
 {
     // create type group converter objects for all type groups
     typedef RefVector< TypeGroupConverter > TypeGroupConvVector;
@@ -114,7 +130,6 @@ OUString AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiag
     for( AxesSetModel::TypeGroupVector::iterator aIt = mrModel.maTypeGroups.begin(), aEnd = mrModel.maTypeGroups.end(); aIt != aEnd; ++aIt )
         aTypeGroups.push_back( TypeGroupConvVector::value_type( new TypeGroupConverter( *this, **aIt ) ) );
 
-    OUString aAutoTitle;
     OSL_ENSURE( !aTypeGroups.empty(), "AxesSetConverter::convertFromModel - no type groups in axes set" );
     if( !aTypeGroups.empty() ) try
     {
@@ -123,14 +138,7 @@ OUString AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiag
 
         // get automatic chart title, if there is only one type group
         if( aTypeGroups.size() == 1 )
-            aAutoTitle = rFirstTypeGroup.getSingleSeriesTitle();
-
-        // plot area formatting
-        if( rxDiagram.is() && !rFirstTypeGroup.is3dChart() )
-        {
-            PropertySet aPropSet( rxDiagram->getWall() );
-            convertAutoFormats( aPropSet, OBJECTTYPE_PLOTAREA2D );
-        }
+            maAutoTitle = rFirstTypeGroup.getSingleSeriesTitle();
 
         /*  Create a coordinate system. For now, all type groups from all axes sets
             have to be inserted into one coordinate system. Later, chart2 should
@@ -152,7 +160,9 @@ OUString AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiag
         }
 
         // 3D view settings
-        if( rFirstTypeGroup.is3dChart() )
+        mb3dChart = rFirstTypeGroup.is3dChart();
+        mbWall3dChart = rFirstTypeGroup.isWall3dChart();
+        if( mb3dChart )
         {
             View3DConverter aView3DConv( *this, rView3DModel );
             aView3DConv.convertFromModel( rxDiagram, rFirstTypeGroup );
@@ -178,13 +188,12 @@ OUString AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiag
 
             // convert all chart type groups, this converts all series data and formatting
             for( TypeGroupConvVector::iterator aTIt = aTypeGroups.begin(), aTEnd = aTypeGroups.end(); aTIt != aTEnd; ++aTIt )
-                (*aTIt)->convertFromModel( rxDiagram, xCoordSystem, nAxesSetIdx );
+                (*aTIt)->convertFromModel( rxDiagram, xCoordSystem, nAxesSetIdx, bSupportsVaryColorsByPoint );
         }
     }
     catch( Exception& )
     {
     }
-    return aAutoTitle;
 }
 
 } // namespace
@@ -266,8 +275,37 @@ void View3DConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, 
 
 // ============================================================================
 
+WallFloorConverter::WallFloorConverter( const ConverterRoot& rParent, WallFloorModel& rModel ) :
+    ConverterBase< WallFloorModel >( rParent, rModel )
+{
+}
+
+WallFloorConverter::~WallFloorConverter()
+{
+}
+
+void WallFloorConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, ObjectType eObjType )
+{
+    if( rxDiagram.is() )
+    {
+        PropertySet aPropSet;
+        switch( eObjType )
+        {
+            case OBJECTTYPE_FLOOR:  aPropSet.set( rxDiagram->getFloor() );  break;
+            case OBJECTTYPE_WALL:   aPropSet.set( rxDiagram->getWall() );   break;
+            default:                OSL_ENSURE( false, "WallFloorConverter::convertFromModel - invalid object type" );
+        }
+        if( aPropSet.is() )
+            getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, eObjType );
+    }
+}
+
+// ============================================================================
+
 PlotAreaConverter::PlotAreaConverter( const ConverterRoot& rParent, PlotAreaModel& rModel ) :
-    ConverterBase< PlotAreaModel >( rParent, rModel )
+    ConverterBase< PlotAreaModel >( rParent, rModel ),
+    mb3dChart( false ),
+    mbWall3dChart( false )
 {
 }
 
@@ -275,7 +313,7 @@ PlotAreaConverter::~PlotAreaConverter()
 {
 }
 
-OUString PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
+void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
 {
     /*  Create the diagram object and attach it to the chart document. One
         diagram is used to carry all coordinate systems and data series. */
@@ -304,6 +342,7 @@ OUString PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
     // group the type group models into different axes sets
     typedef ModelVector< AxesSetModel > AxesSetVector;
     AxesSetVector aAxesSets;
+    sal_Int32 nMaxSeriesIdx = -1;
     for( PlotAreaModel::TypeGroupVector::iterator aTIt = mrModel.maTypeGroups.begin(), aTEnd = mrModel.maTypeGroups.end(); aTIt != aTEnd; ++aTIt )
     {
         PlotAreaModel::TypeGroupVector::value_type xTypeGroup = *aTIt;
@@ -331,19 +370,41 @@ OUString PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
 
             // insert the type group model
             pAxesSet->maTypeGroups.push_back( xTypeGroup );
+
+            // collect the maximum series index for automatic series formatting
+            for( TypeGroupModel::SeriesVector::iterator aSIt = xTypeGroup->maSeries.begin(), aSEnd = xTypeGroup->maSeries.end(); aSIt != aSEnd; ++aSIt )
+                nMaxSeriesIdx = ::std::max( nMaxSeriesIdx, (*aSIt)->mnIndex );
+        }
+    }
+    getFormatter().setMaxSeriesIndex( nMaxSeriesIdx );
+
+    // varying point colors only for single series in single chart type
+    bool bSupportsVaryColorsByPoint = mrModel.maTypeGroups.size() == 1;
+
+    // convert all axes sets
+    for( AxesSetVector::iterator aASBeg = aAxesSets.begin(), aASIt = aASBeg, aASEnd = aAxesSets.end(); aASIt != aASEnd; ++aASIt )
+    {
+        AxesSetConverter aAxesSetConv( *this, **aASIt );
+        sal_Int32 nAxesSetIdx = static_cast< sal_Int32 >( aASIt - aASBeg );
+        aAxesSetConv.convertFromModel( xDiagram, rView3DModel, nAxesSetIdx, bSupportsVaryColorsByPoint );
+        if( nAxesSetIdx == 0 )
+        {
+            maAutoTitle = aAxesSetConv.getAutomaticTitle();
+            mb3dChart = aAxesSetConv.is3dChart();
+            mbWall3dChart = aAxesSetConv.isWall3dChart();
+        }
+        else
+        {
+            maAutoTitle = OUString();
         }
     }
 
-    // convert all axes sets
-    OUString aAutoTitle;
-    for( AxesSetVector::iterator aASIt = aAxesSets.begin(), aASEnd = aAxesSets.end(); aASIt != aASEnd; ++aASIt )
+    // plot area formatting
+    if( xDiagram.is() && !mb3dChart )
     {
-        AxesSetConverter aAxesSetConv( *this, **aASIt );
-        sal_Int32 nAxesSetIdx = static_cast< sal_Int32 >( aASIt - aAxesSets.begin() );
-        OUString aAxesSetAutoTitle = aAxesSetConv.convertFromModel( xDiagram, rView3DModel, nAxesSetIdx );
-        aAutoTitle = (nAxesSetIdx == 0) ? aAxesSetAutoTitle : OUString();
+        PropertySet aPropSet( xDiagram->getWall() );
+        getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, OBJECTTYPE_PLOTAREA2D );
     }
-    return aAutoTitle;
 }
 
 // ============================================================================
