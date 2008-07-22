@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: WW8StreamImpl.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,10 +35,14 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
+#include <doctokLoggers.hxx>
+
 namespace writerfilter {
 namespace doctok
 {
 using namespace ::com::sun::star;
+
+    TagLogger::Pointer_t debug_logger(TagLogger::getInstance("DEBUG"));
 
 WW8Stream::~WW8Stream()
 {
@@ -60,6 +64,7 @@ WW8StreamImpl::WW8StreamImpl(uno::Reference<uno::XComponentContext> rContext,
           ("com.sun.star.embed.OLESimpleStorage"),
           aArgs, mrComponentContext ),
          uno::UNO_QUERY );
+
 }
 
 WW8StreamImpl::~WW8StreamImpl()
