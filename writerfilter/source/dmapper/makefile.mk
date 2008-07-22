@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.12 $
+# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,6 +45,7 @@ ENABLE_EXCEPTIONS=TRUE
 SLOFILES=           $(SLO)$/BorderHandler.obj \
                     $(SLO)$/CellColorHandler.obj \
                     $(SLO)$/CellMarginHandler.obj \
+                    $(SLO)$/SectionColumnHandler.obj \
                     $(SLO)$/ConversionHelper.obj \
                     $(SLO)$/DomainMapper.obj \
                     $(SLO)$/DomainMapper_Impl.obj \
