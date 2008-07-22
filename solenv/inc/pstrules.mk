@@ -8,7 +8,7 @@
 #
 # $RCSfile: pstrules.mk,v $
 #
-# $Revision: 1.49 $
+# $Revision: 1.50 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -143,7 +143,7 @@ $(PAR)$/%.par :
     @echo ------------------------------
     @echo Making: $@
     @@-$(MKDIR) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
     $(CPPLCC) -+ -P $(INCLUDE) $(CDEFS) $(SCPDEFS) -DDLLPOSTFIX=$(DLLPOSTFIX) $(*:b).scp > $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre
 .ENDIF
 .IF "$(GUI)"=="UNX"
