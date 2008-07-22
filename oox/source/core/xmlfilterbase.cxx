@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlfilterbase.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@
 #include "oox/helper/zipstorage.hxx"
 #include "oox/core/fasttokenhandler.hxx"
 #include "oox/core/fragmenthandler.hxx"
+#include "oox/core/modelobjectcontainer.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/core/recordparser.hxx"
 #include "oox/core/relationshandler.hxx"
@@ -78,7 +79,8 @@ struct XmlFilterBaseImpl
     RelationsMap        maRelationsMap;
     ::std::set< OUString > maPictureSet;        /// Already copied picture stream names.
     Reference< XStorage > mxPictureStorage;     /// Target model picture storage.
-    Reference< XNameContainer > mxMarkerTable;  /// Table to create new arrow names.
+    ::boost::shared_ptr< ModelObjectContainer >
+                        mxObjContainer;         /// Tables to create new named drawing objects.
 
     explicit            XmlFilterBaseImpl();
 };
@@ -263,17 +265,11 @@ OUString XmlFilterBase::copyPictureStream( const OUString& rPicturePath )
     return sUrlPrefix + sPictureName;
 }
 
-Reference< XNameContainer >& XmlFilterBase::getMarkerTable() const
+ModelObjectContainer& XmlFilterBase::getModelObjectContainer() const
 {
-    if( !mxImpl->mxMarkerTable.is() ) try
-    {
-        mxImpl->mxMarkerTable.set( getServiceFactory()->createInstance(
-            CREATE_OUSTRING( "com.sun.star.drawing.MarkerTable" ) ), UNO_QUERY_THROW );
-    }
-    catch( Exception& )
-    {
-    }
-    return mxImpl->mxMarkerTable;
+    if( !mxImpl->mxObjContainer )
+        mxImpl->mxObjContainer.reset( new ModelObjectContainer( getModel() ) );
+    return *mxImpl->mxObjContainer;
 }
 
 StorageRef XmlFilterBase::implCreateStorage(
