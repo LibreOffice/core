@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: linepropertiescontext.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,16 +32,12 @@
 #define OOX_DRAWINGML_LINEPROPERTIESCONTEXT_HXX
 
 #include "oox/core/contexthandler.hxx"
-#include "oox/drawingml/lineproperties.hxx"
-
-namespace oox { namespace core {
-    class PropertyMap;
-} }
 
 namespace oox { namespace drawingml {
 
-
 // ---------------------------------------------------------------------
+
+struct LineProperties;
 
 class LinePropertiesContext : public ::oox::core::ContextHandler
 {
