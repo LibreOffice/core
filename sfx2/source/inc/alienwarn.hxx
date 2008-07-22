@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: alienwarn.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,13 +40,13 @@
 class SfxAlienWarningDialog : public SfxModalDialog
 {
 private:
-    FixedImage              m_aQueryImage;
-    FixedText               m_aInfoText;
     OKButton                m_aKeepCurrentBtn;
     CancelButton            m_aSaveODFBtn;
     HelpButton              m_aMoreInfoBtn;
     FixedLine               m_aOptionLine;
     CheckBox                m_aWarningOnBox;
+    FixedImage              m_aQueryImage;
+    FixedText               m_aInfoText;
 
     void                    InitSize();
 
