@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: olemisc.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,6 +77,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_nStatusAspect( 0 )
 , m_pOwnView( NULL )
 , m_bFromClipboard( sal_False )
+, m_bTriedConversion( sal_False )
 {
 }
 
@@ -108,6 +109,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_nStatusAspect( 0 )
 , m_pOwnView( NULL )
 , m_bFromClipboard( sal_False )
+, m_bTriedConversion( sal_False )
 {
 }
 #ifdef WNT
@@ -138,6 +140,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_nStatusAspect( 0 )
 , m_pOwnView( NULL )
 , m_bFromClipboard( sal_True )
+, m_bTriedConversion( sal_False )
 {
 }
 #endif
@@ -307,6 +310,15 @@ void OleEmbeddedObject::Dispose()
 uno::Sequence< sal_Int8 > SAL_CALL OleEmbeddedObject::getClassID()
         throw ( uno::RuntimeException )
 {
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        return xWrappedObject->getClassID();
+    }
+    // end wrapping related part ====================
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -318,6 +330,15 @@ uno::Sequence< sal_Int8 > SAL_CALL OleEmbeddedObject::getClassID()
 ::rtl::OUString SAL_CALL OleEmbeddedObject::getClassName()
         throw ( uno::RuntimeException )
 {
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        return xWrappedObject->getClassName();
+    }
+    // end wrapping related part ====================
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -327,10 +348,20 @@ uno::Sequence< sal_Int8 > SAL_CALL OleEmbeddedObject::getClassID()
 
 //------------------------------------------------------
 void SAL_CALL OleEmbeddedObject::setClassInfo(
-                const uno::Sequence< sal_Int8 >& /*aClassID*/, const ::rtl::OUString& /*aClassName*/ )
+                const uno::Sequence< sal_Int8 >& aClassID, const ::rtl::OUString& aClassName )
         throw ( lang::NoSupportException,
                 uno::RuntimeException )
 {
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->setClassInfo( aClassID, aClassName );
+        return;
+    }
+    // end wrapping related part ====================
+
     // the object class info can not be changed explicitly
     throw lang::NoSupportException(); //TODO:
 }
@@ -339,6 +370,15 @@ void SAL_CALL OleEmbeddedObject::setClassInfo(
 uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
         throw ( uno::RuntimeException )
 {
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        return xWrappedObject->getComponent();
+    }
+    // end wrapping related part ====================
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -369,6 +409,16 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
 void SAL_CALL OleEmbeddedObject::addStateChangeListener( const uno::Reference< embed::XStateChangeListener >& xListener )
     throw ( uno::RuntimeException )
 {
+    // begin wrapping related part ====================
+    uno::Reference< embed::XStateChangeBroadcaster > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->addStateChangeListener( xListener );
+        return;
+    }
+    // end wrapping related part ====================
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -385,6 +435,16 @@ void SAL_CALL OleEmbeddedObject::removeStateChangeListener(
                     const uno::Reference< embed::XStateChangeListener >& xListener )
     throw (uno::RuntimeException)
 {
+    // begin wrapping related part ====================
+    uno::Reference< embed::XStateChangeBroadcaster > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->removeStateChangeListener( xListener );
+        return;
+    }
+    // end wrapping related part ====================
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_pInterfaceContainer )
         m_pInterfaceContainer->removeInterface( ::getCppuType( (const uno::Reference< embed::XStateChangeListener >*)0 ),
@@ -397,6 +457,16 @@ void SAL_CALL OleEmbeddedObject::close( sal_Bool bDeliverOwnership )
     throw ( util::CloseVetoException,
             uno::RuntimeException )
 {
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->close( bDeliverOwnership );
+        return;
+    }
+    // end wrapping related part ====================
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -450,6 +520,16 @@ void SAL_CALL OleEmbeddedObject::close( sal_Bool bDeliverOwnership )
 void SAL_CALL OleEmbeddedObject::addCloseListener( const uno::Reference< util::XCloseListener >& xListener )
     throw ( uno::RuntimeException )
 {
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->addCloseListener( xListener );
+        return;
+    }
+    // end wrapping related part ====================
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -464,6 +544,16 @@ void SAL_CALL OleEmbeddedObject::addCloseListener( const uno::Reference< util::X
 void SAL_CALL OleEmbeddedObject::removeCloseListener( const uno::Reference< util::XCloseListener >& xListener )
     throw (uno::RuntimeException)
 {
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->removeCloseListener( xListener );
+        return;
+    }
+    // end wrapping related part ====================
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -477,6 +567,16 @@ void SAL_CALL OleEmbeddedObject::removeCloseListener( const uno::Reference< util
 void SAL_CALL OleEmbeddedObject::addEventListener( const uno::Reference< document::XEventListener >& xListener )
         throw ( uno::RuntimeException )
 {
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->addEventListener( xListener );
+        return;
+    }
+    // end wrapping related part ====================
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -492,6 +592,16 @@ void SAL_CALL OleEmbeddedObject::removeEventListener(
                 const uno::Reference< document::XEventListener >& xListener )
         throw ( uno::RuntimeException )
 {
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->removeEventListener( xListener );
+        return;
+    }
+    // end wrapping related part ====================
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -499,5 +609,96 @@ void SAL_CALL OleEmbeddedObject::removeEventListener(
     if ( m_pInterfaceContainer )
         m_pInterfaceContainer->removeInterface( ::getCppuType( (const uno::Reference< document::XEventListener >*)0 ),
                                                 xListener );
+}
+
+// XInplaceObject ( wrapper related implementation )
+//------------------------------------------------------
+void SAL_CALL OleEmbeddedObject::setObjectRectangles( const awt::Rectangle& aPosRect,
+                                                           const awt::Rectangle& aClipRect )
+        throw ( embed::WrongStateException,
+                uno::Exception,
+                uno::RuntimeException )
+{
+    // begin wrapping related part ====================
+    uno::Reference< embed::XInplaceObject > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->setObjectRectangles( aPosRect, aClipRect );
+        return;
+    }
+    // end wrapping related part ====================
+
+    throw embed::WrongStateException();
+}
+
+//------------------------------------------------------
+void SAL_CALL OleEmbeddedObject::enableModeless( sal_Bool bEnable )
+        throw ( embed::WrongStateException,
+                uno::Exception,
+                uno::RuntimeException )
+{
+    // begin wrapping related part ====================
+    uno::Reference< embed::XInplaceObject > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->enableModeless( bEnable );
+        return;
+    }
+    // end wrapping related part ====================
+
+    throw embed::WrongStateException();
+}
+
+//------------------------------------------------------
+void SAL_CALL OleEmbeddedObject::translateAccelerators(
+                    const uno::Sequence< awt::KeyEvent >& aKeys )
+        throw ( embed::WrongStateException,
+                uno::RuntimeException )
+{
+    // begin wrapping related part ====================
+    uno::Reference< embed::XInplaceObject > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->translateAccelerators( aKeys );
+        return;
+    }
+    // end wrapping related part ====================
+
+    // throw embed::WrongStateException();
+}
+
+// XChild
+//------------------------------------------------------
+com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL OleEmbeddedObject::getParent() throw (::com::sun::star::uno::RuntimeException)
+{
+    // begin wrapping related part ====================
+    uno::Reference< container::XChild > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        return xWrappedObject->getParent();
+    }
+    // end wrapping related part ====================
+
+    return m_xParent;
+}
+
+//------------------------------------------------------
+void SAL_CALL OleEmbeddedObject::setParent( const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& xParent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException)
+{
+    // begin wrapping related part ====================
+    uno::Reference< container::XChild > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->setParent( xParent );
+        return;
+    }
+    // end wrapping related part ====================
+
+    m_xParent = xParent;
 }
 
