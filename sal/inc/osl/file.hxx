@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file.hxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -335,9 +335,15 @@ public:
 
     @see VolumeInfo
 */
+#ifdef OS2
+class VolumeInfo;
+#endif
 
 class VolumeDevice : public FileBase
 {
+#ifdef OS2
+public:
+#endif
     oslVolumeDeviceHandle   _aHandle;
 
 public:
