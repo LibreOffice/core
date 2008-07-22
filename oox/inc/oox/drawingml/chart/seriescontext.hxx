@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: seriescontext.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,6 +80,21 @@ class ErrorBarContext : public ContextBase< ErrorBarModel >
 public:
     explicit            ErrorBarContext( ::oox::core::ContextHandler2Helper& rParent, ErrorBarModel& rModel );
     virtual             ~ErrorBarContext();
+
+    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+};
+
+// ============================================================================
+
+struct TrendlineLabelModel;
+
+/** Handler for a series trendline label context (c:trendlineLbl element).
+ */
+class TrendlineLabelContext : public ContextBase< TrendlineLabelModel >
+{
+public:
+    explicit            TrendlineLabelContext( ::oox::core::ContextHandler2Helper& rParent, TrendlineLabelModel& rModel );
+    virtual             ~TrendlineLabelContext();
 
     virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
