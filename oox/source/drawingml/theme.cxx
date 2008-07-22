@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: theme.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,8 @@
 
 #include "oox/drawingml/theme.hxx"
 
+using ::rtl::OUString;
+
 namespace oox {
 namespace drawingml {
 
@@ -41,6 +43,32 @@ Theme::Theme()
 
 Theme::~Theme()
 {
+}
+
+const TextFont* Theme::resolveFont( const OUString& rName ) const
+{
+    /*  Resolves the following names:
+        +mj-lt, +mj-ea, +mj-cs  --  major Latin, Asian, Complex font
+        +mn-lt, +mn-ea, +mn-cs  --  minor Latin, Asian, Complex font
+     */
+    if( (rName.getLength() == 6) && (rName[ 0 ] == '+') && (rName[ 3 ] == '-') )
+    {
+        const TextCharacterProperties* pCharProps = 0;
+        if( (rName[ 1 ] == 'm') && (rName[ 2 ] == 'j') )
+            pCharProps = maFontScheme.get( XML_major ).get();
+        else if( (rName[ 1 ] == 'm') && (rName[ 2 ] == 'n') )
+            pCharProps = maFontScheme.get( XML_minor ).get();
+        if( pCharProps )
+        {
+            if( (rName[ 4 ] == 'l') && (rName[ 5 ] == 't') )
+                return &pCharProps->maLatinFont;
+            if( (rName[ 4 ] == 'e') && (rName[ 5 ] == 'a') )
+                return &pCharProps->maAsianFont;
+            if( (rName[ 4 ] == 'c') && (rName[ 5 ] == 's') )
+                return &pCharProps->maComplexFont;
+        }
+    }
+    return 0;
 }
 
 // ============================================================================
