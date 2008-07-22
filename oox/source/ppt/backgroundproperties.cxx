@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: backgroundproperties.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,28 +29,22 @@
  ************************************************************************/
 
 #include "oox/ppt/backgroundproperties.hxx"
-
-#include <comphelper/propertysethelper.hxx>
-
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/core/namespaces.hxx"
 #include "tokens.hxx"
 
 using ::rtl::OUString;
-using ::com::sun::star::beans::NamedValue;
-using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::beans::XPropertySet;
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace drawingml {
+namespace oox { namespace ppt {
 // ---------------------------------------------------------------------
 
-BackgroundPropertiesContext::BackgroundPropertiesContext( ContextHandler& rParent, FillPropertiesPtr pFillPropertiesPtr ) throw()
+BackgroundPropertiesContext::BackgroundPropertiesContext( ContextHandler& rParent, ::oox::drawingml::FillProperties& rFillProperties ) throw()
 : ContextHandler( rParent )
-, mpFillPropertiesPtr( pFillPropertiesPtr )
+, mrFillProperties( rFillProperties )
 {
 }
 
@@ -66,7 +60,7 @@ Reference< XFastContextHandler > BackgroundPropertiesContext::createFastChildCon
 
     // FillPropertiesGroupContext
     if( !xRet.is() )
-        xRet = FillPropertiesGroupContext::StaticCreateContext( *this, aElementToken, xAttribs, *mpFillPropertiesPtr );
+        xRet = ::oox::drawingml::FillPropertiesGroupContext::StaticCreateContext( *this, aElementToken, xAttribs, mrFillProperties );
 
     return xRet;
 }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: attributelist.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +57,11 @@ OptValue< sal_Int32 > AttributeList::getToken( sal_Int32 nElement ) const
 {
     sal_Int32 nToken = mxAttribs->getOptionalValueToken( nElement, XML_TOKEN_INVALID );
     return OptValue< sal_Int32 >( nToken != XML_TOKEN_INVALID, nToken );
+}
+
+OptValue< OUString > AttributeList::getString( sal_Int32 nElement ) const
+{
+    return OptValue< OUString >( mxAttribs->hasAttribute( nElement ), mxAttribs->getOptionalValue( nElement ) );
 }
 
 OptValue< double > AttributeList::getDouble( sal_Int32 nElement ) const
