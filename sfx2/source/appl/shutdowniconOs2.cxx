@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shutdowniconOs2.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +51,7 @@ using namespace ::osl;
 //
 // This ObjectID must match the one created in WarpIN scripts!!
 //
-#define QUICKSTART_OBJID    "OOB2_QUICKSTART_2B"
+#define QUICKSTART_OBJID    "OO2B_QUICKSTART"
 
 bool ShutdownIcon::IsQuickstarterInstalled()
 {
