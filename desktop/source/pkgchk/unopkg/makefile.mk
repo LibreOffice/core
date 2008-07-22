@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.16 $
+# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -33,7 +33,11 @@ PRJ = ..$/..$/..
 
 PRJNAME = desktop
 TARGET = unopkg
+.IF "$(GUI)" == "OS2"
+TARGETTYPE = CUI
+.ELSE
 TARGETTYPE = GUI
+.ENDIF
 ENABLE_EXCEPTIONS = TRUE
 LIBTARGET=NO
 
@@ -98,3 +102,5 @@ $(APP1TARGETN) : $(MISC)$/binso_created.flg
 
 $(MISC)$/binso_created.flg:
     @@-$(MKDIRHIER) $(BIN)$/so && $(TOUCH) $@
+    @@-$(MKDIRHIER) $(MISC)$/so && $(TOUCH) $@
+
