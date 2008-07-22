@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outliner.cxx,v $
- * $Revision: 1.72 $
+ * $Revision: 1.73 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -174,8 +174,9 @@ void Outliner::ParagraphInserted( USHORT nPara )
     else
     {
         sal_Int16 nDepth = -1;
-        if ( nPara )
-            nDepth = pParaList->GetParagraph( nPara-1 )->GetDepth();
+        Paragraph* pParaBefore = pParaList->GetParagraph( nPara-1 );
+        if ( pParaBefore )
+            nDepth = pParaBefore->GetDepth();
 
         Paragraph* pPara = new Paragraph( nDepth );
         pParaList->Insert( pPara, nPara );
@@ -197,6 +198,9 @@ void Outliner::ParagraphDeleted( USHORT nPara )
         return;
 
     Paragraph* pPara = pParaList->GetParagraph( nPara );
+        if (!pPara)
+            return;
+
     sal_Int16 nDepth = pPara->GetDepth();
 
     if( !pEditEngine->IsInUndo() )
@@ -270,7 +274,7 @@ void Outliner::SetMaxDepth( sal_Int16 nDepth, BOOL bCheckParagraphs )
             for ( USHORT nPara = 0; nPara < nParagraphs; nPara++ )
             {
                 Paragraph* pPara = pParaList->GetParagraph( nPara );
-                if( pPara->GetDepth() > nMaxDepth )
+                if( pPara && pPara->GetDepth() > nMaxDepth )
                 {
                     SetDepth( pPara, nMaxDepth );
                 }
@@ -688,12 +692,13 @@ XubString __EXPORT Outliner::CalcFieldValue( const SvxFieldItem& rField, USHORT 
 void Outliner::SetStyleSheet( ULONG nPara, SfxStyleSheet* pStyle )
 {
     DBG_CHKTHIS(Outliner,0);
-    pEditEngine->SetStyleSheet( (USHORT)nPara, pStyle );
-
     Paragraph* pPara = pParaList->GetParagraph( nPara );
-    pPara->nFlags |= PARAFLAG_SETBULLETTEXT;
-
-    ImplCheckNumBulletItem( (USHORT) nPara );
+        if (pPara)
+        {
+            pEditEngine->SetStyleSheet( (USHORT)nPara, pStyle );
+            pPara->nFlags |= PARAFLAG_SETBULLETTEXT;
+            ImplCheckNumBulletItem( (USHORT) nPara );
+        }
 }
 
 void Outliner::SetVisible( Paragraph* pPara, BOOL bVisible )
@@ -701,15 +706,19 @@ void Outliner::SetVisible( Paragraph* pPara, BOOL bVisible )
     DBG_CHKTHIS(Outliner,0);
     DBG_ASSERT( pPara, "SetVisible: pPara = NULL" );
 
-    pPara->bVisible = bVisible;
-    ULONG nPara = pParaList->GetAbsPos( pPara );
-    pEditEngine->ShowParagraph( (USHORT)nPara, bVisible );
+        if (pPara)
+        {
+            pPara->bVisible = bVisible;
+            ULONG nPara = pParaList->GetAbsPos( pPara );
+            pEditEngine->ShowParagraph( (USHORT)nPara, bVisible );
+        }
 }
 
 void Outliner::ImplCheckNumBulletItem( USHORT nPara )
 {
     Paragraph* pPara = pParaList->GetParagraph( nPara );
-    pPara->aBulSize.Width() = -1;
+        if (pPara)
+            pPara->aBulSize.Width() = -1;
 }
 
 void Outliner::ImplSetLevelDependendStyleSheet( USHORT nPara, SfxStyleSheet* pLevelStyle )
@@ -754,6 +763,8 @@ void Outliner::ImplInitDepth( USHORT nPara, sal_Int16 nDepth, BOOL bCreateUndo, 
     DBG_ASSERT( ( nDepth >= nMinDepth ) && ( nDepth <= nMaxDepth ), "ImplInitDepth - Depth is invalid!" );
 
     Paragraph* pPara = pParaList->GetParagraph( nPara );
+        if (!pPara)
+            return;
     sal_Int16 nOldDepth = pPara->GetDepth();
     pPara->SetDepth( nDepth );
 
@@ -1229,17 +1240,20 @@ void Outliner::ImpFilterIndents( ULONG nFirstPara, ULONG nLastPara )
     for( ULONG nPara = nFirstPara; nPara <= nLastPara; nPara++ )
     {
         Paragraph* pPara = pParaList->GetParagraph( nPara );
-        if( ImpConvertEdtToOut( nPara ) )
-        {
-            pLastConverted = pPara;
-        }
-        else if ( pLastConverted )
-        {
-            // Normale Absaetze unter der Ueberschrift anordnen...
-            pPara->SetDepth( pLastConverted->GetDepth() );
-        }
+                if (pPara)
+                {
+                    if( ImpConvertEdtToOut( nPara ) )
+                    {
+                            pLastConverted = pPara;
+                    }
+                    else if ( pLastConverted )
+                    {
+                            // Normale Absaetze unter der Ueberschrift anordnen...
+                            pPara->SetDepth( pLastConverted->GetDepth() );
+                    }
 
-        ImplInitDepth( (USHORT)nPara, pPara->GetDepth(), FALSE );
+                    ImplInitDepth( (USHORT)nPara, pPara->GetDepth(), FALSE );
+        }
     }
 
     pEditEngine->SetUpdateMode( bUpdate );
@@ -1484,7 +1498,7 @@ const SvxNumberFormat* Outliner::GetNumberFormat( USHORT nPara ) const
     const SvxNumberFormat* pFmt = NULL;
 
     Paragraph* pPara = pParaList->GetParagraph( nPara );
-    sal_Int16 nDepth = pPara->GetDepth();
+    sal_Int16 nDepth = pPara? pPara->GetDepth() : -1;
 
     if( nDepth >= 0 )
     {
@@ -1499,6 +1513,8 @@ const SvxNumberFormat* Outliner::GetNumberFormat( USHORT nPara ) const
 Size Outliner::ImplGetBulletSize( USHORT nPara )
 {
     Paragraph* pPara = pParaList->GetParagraph( nPara );
+        if (!pPara)
+            return Size();
 
     if( pPara->aBulSize.Width() == -1 )
     {
@@ -1536,8 +1552,11 @@ void Outliner::ImplCheckParagraphs( USHORT nStart, USHORT nEnd )
     for ( USHORT n = nStart; n <= nEnd; n++ )
     {
         Paragraph* pPara = pParaList->GetParagraph( n );
-        pPara->Invalidate();
-        ImplCalcBulletText( n, FALSE, FALSE );
+                if (pPara)
+                {
+                    pPara->Invalidate();
+                    ImplCalcBulletText( n, FALSE, FALSE );
+                }
     }
 }
 
@@ -1567,7 +1586,7 @@ void Outliner::ParaAttribsChanged( USHORT nPara )
         {
             Paragraph* pPara = pParaList->GetParagraph( nPara );
             const SfxInt16Item& rLevel = (const SfxInt16Item&) pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL );
-            if ( pPara->GetDepth() != rLevel.GetValue() )
+            if ( pPara && pPara->GetDepth() != rLevel.GetValue() )
             {
                 pPara->SetDepth( rLevel.GetValue() );
                 ImplCalcBulletText( nPara, TRUE, TRUE );
@@ -1975,7 +1994,9 @@ void Outliner::Clear()
     }
     else
     {
-        pParaList->GetParagraph( 0 )->SetDepth( nMinDepth );
+            Paragraph* pPara = pParaList->GetParagraph( 0 );
+            if(pPara)
+                pPara->SetDepth( nMinDepth );
     }
 }
 
@@ -1994,11 +2015,16 @@ void Outliner::SetFlatMode( BOOL bFlat )
 
 String Outliner::ImplGetBulletText( USHORT nPara )
 {
+        String aRes;
     Paragraph* pPara = pParaList->GetParagraph( nPara );
+        if (pPara)
+        {
     // MT: Optimierung mal wieder aktivieren...
 //  if( pPara->nFlags & PARAFLAG_SETBULLETTEXT )
         ImplCalcBulletText( nPara, FALSE, FALSE );
-    return pPara->GetText();
+                aRes = pPara->GetText();
+        }
+    return aRes;
 }
 
 // this is needed for StarOffice Api
