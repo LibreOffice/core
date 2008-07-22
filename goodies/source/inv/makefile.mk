@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.20 $
+# $Revision: 1.21 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -139,7 +139,7 @@ $(MISC)$/$(SHL1TARGET).def: makefile.mk
 $(MISC)$/$(SHL1TARGET).def: makefile.mk
     @+echo -------------------------------------------
     @+echo DEF-File erstellen $@
-        @+echo LIBRARY     $(DLLNAME) INITINSTANCE TERMINSTANCE   >$@
+        @+echo LIBRARY     $(SHL1TARGET) INITINSTANCE TERMINSTANCE   >$@
         @+echo DESCRIPTION 'Star Cube DLL'               >>$@
         @+echo DATA                MULTIPLE  >>$@
         @+echo EXPORTS                                   >>$@
