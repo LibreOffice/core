@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLFastDocumentHandler.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,6 +119,22 @@ throw (uno::RuntimeException, xml::sax::SAXException)
 #endif
 }
 
+OOXMLFastContextHandler::Pointer_t
+OOXMLFastDocumentHandler::getContextHandler() const
+{
+    if (mpContextHandler == OOXMLFastContextHandler::Pointer_t())
+    {
+        mpContextHandler.reset
+        (new OOXMLFastContextHandler(m_xContext));
+        mpContextHandler->setStream(mpStream);
+        mpContextHandler->setDocument(mpDocument);
+        mpContextHandler->setXNoteId(msXNoteId);
+        mpContextHandler->setForwardEvents(true);
+    }
+
+    return mpContextHandler;
+}
+
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
  OOXMLFastDocumentHandler::createFastChildContext
 (::sal_Int32 Element,
@@ -131,17 +147,14 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
          << endl;
 #endif
 
-    if (mpContextHandler.get() == NULL)
-    {
-        mpContextHandler.reset
-            (new OOXMLFastContextHandler(m_xContext));
-        mpContextHandler->setStream(mpStream);
-        mpContextHandler->setDocument(mpDocument);
-        mpContextHandler->setXNoteId(msXNoteId);
-        mpContextHandler->setForwardEvents(true);
-    }
+    return getContextHandler()->createFromStart(Element, Attribs);
+}
 
-    return mpContextHandler->createFromStart(Element, Attribs);
+OOXMLParserState::Pointer_t OOXMLFastDocumentHandler::getParserState() const
+{
+    OOXMLParserState::Pointer_t pParserState;
+
+    return getContextHandler()->getParserState();
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
