@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: ch2_xml_format.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-13 14:26:55 $
+'* last change: $Author: obo $ $Date: 2008-07-22 10:35:40 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -43,7 +43,7 @@ sub main
     Printlog "---    Chart2 General XML file format check    ---"
     Printlog "--------------------------------------------------"
     
-    use "chart2/loadsave/inc/ch2_xml_format.inc"
+    use "chart2/optional/includes/loadsave/ch2_xml_format.inc"
     use "chart2/tools/ch_tools_common.inc"
     
     Call hStatusIn("Chart2", "ch2_xml_format.bas")                    
@@ -55,8 +55,7 @@ end sub
 '-------------------------------------------------------------------------------
 '
 sub LoadIncludeFiles
-    use "global/system/inc/master.inc"
-    use "global/system/inc/gvariabl.inc"
-    use "global/tools/inc/t_doc2.inc"
+    use "global/system/includes/master.inc"
+    use "global/system/includes/gvariabl.inc"    
     call getusefiles            
 end sub
