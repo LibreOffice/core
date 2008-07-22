@@ -146,7 +146,7 @@ catch (sig)
     fatalerr ("got signal %d\n", sig);
 }
 
-#if defined(USG) || (defined(i386) && defined(SYSV)) || defined(WIN32) || defined(__EMX__) || defined(Lynx_22)
+#if defined(USG) || (defined(i386) && defined(SYSV)) || defined(WIN32) || defined(OS2) || defined(Lynx_22)
 #define USGISH
 #endif
 
@@ -639,7 +639,7 @@ char *base_name(file)
     return(file);
 }
 
-#if defined(USG) && !defined(CRAY) && !defined(SVR4) && !defined(__EMX__)
+#if defined(USG) && !defined(CRAY) && !defined(SVR4)
 int rename (from, to)
     char *from, *to;
 {
@@ -687,12 +687,12 @@ void redirect(line, makefile)
         fatalerr("cannot open \"%s\"\n", makefile);
     sprintf(backup, "%s.bak", makefile);
     unlink(backup);
-#if defined(WIN32) || defined(__EMX__)
+#if defined(WIN32) || defined(OS2)
     fclose(fdin);
 #endif
     if (rename(makefile, backup) < 0)
         fatalerr("cannot rename %s to %s\n", makefile, backup);
-#if defined(WIN32) || defined(__EMX__)
+#if defined(WIN32) || defined(OS2)
     if ((fdin = fopen(backup, "r")) == NULL)
         fatalerr("cannot open \"%s\"\n", backup);
 #endif
@@ -791,7 +791,7 @@ void warning1(msg,x1,x2,x3,x4,x5,x6,x7,x8,x9)
 void convert_slashes(path)
     char* path;
 {
-#if defined (WNT)
+#if defined (WNT) || defined(OS2)
     /*
      * Convert backslashes to slashes
      */
