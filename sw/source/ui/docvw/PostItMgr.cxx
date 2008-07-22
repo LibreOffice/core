@@ -8,7 +8,7 @@
  *
  * $RCSfile: PostItMgr.cxx,v $
  *
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1586,12 +1586,26 @@ bool SwPostItMgr::ScrollbarHit(const unsigned long aPage,const Point &aPoint)
 
 void SwPostItMgr::CorrectPositions()
 {
-   if ( mbWaitingForCalcRects || mbLayouting || mvPostItFlds.empty() || !(*mvPostItFlds.begin())->pPostIt )
+   if ( mbWaitingForCalcRects || mbLayouting || mvPostItFlds.empty())
        return;
-   // yeah, I know, if this is a left page it could be wrong, but finding the page and the note is probably not even faster
-   const long aAnkorX = mpEditWin->LogicToPixel( Point((long)((*mvPostItFlds.begin())->pPostIt->Ankor()->GetSixthPosition().getX()),0)).X();
-   const long aAnkorY = mpEditWin->LogicToPixel( Point(0,(long)((*mvPostItFlds.begin())->pPostIt->Ankor()->GetSixthPosition().getY()))).Y() + 1;
-   if (Point(aAnkorX,aAnkorY) != (*mvPostItFlds.begin())->pPostIt->GetPosPixel())
+
+   // find first valid note
+   SwPostIt *pFirstPostIt = 0;
+   for(SwPostItItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+   {
+       pFirstPostIt = (*i)->pPostIt;
+       if (pFirstPostIt)
+            break;
+   }
+
+   //if we have not found a valid note, forget about it and leave
+   if (!pFirstPostIt)
+       return;
+
+   // yeah, I know, if this is a left page it could be wrong, but finding the page and the note is probably not even faster than just doing it
+   const long aAnkorX = mpEditWin->LogicToPixel( Point((long)(pFirstPostIt->Ankor()->GetSixthPosition().getX()),0)).X();
+   const long aAnkorY = mpEditWin->LogicToPixel( Point(0,(long)(pFirstPostIt->Ankor()->GetSixthPosition().getY()))).Y() + 1;
+   if (Point(aAnkorX,aAnkorY) != pFirstPostIt->GetPosPixel())
    {
        long aAnkorPosX = 0;
        long aAnkorPosY = 0;
@@ -1599,7 +1613,7 @@ void SwPostItMgr::CorrectPositions()
        {
            for(SwPostItItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
            {
-               if ((*i)->bShow)
+               if ((*i)->bShow && (*i)->pPostIt)
                {
                     aAnkorPosX = mPages[n]->bMarginSide ?
                         mpEditWin->LogicToPixel( Point((long)((*i)->pPostIt->Ankor()->GetSeventhPosition().getX()),0)).X() :
