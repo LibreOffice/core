@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_gui_updatedialog.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -551,13 +551,25 @@ bool UpdateDialog::Thread::update(
     const ::boost::optional< ::rtl::OUString> updateWebsiteURL(infoset.getLocalizedUpdateWebsiteURL());
     rtl::OUStringBuffer b(package->getDisplayName());
     b.append(static_cast< sal_Unicode >(' '));
-    b.append(m_dialog.m_version);
+    {
+        vos::OGuard g( Application::GetSolarMutex() );
+        if ( m_stop )
+            return !m_stop;
+        else
+            b.append(m_dialog.m_version);
+    }
     b.append(static_cast< sal_Unicode >(' '));
     b.append(infoset.getVersion());
     if (updateWebsiteURL)
     {
         b.append(static_cast< sal_Unicode >(' '));
-        b.append(m_dialog.m_browserbased);
+        {
+            vos::OGuard g( Application::GetSolarMutex() );
+            if ( m_stop )
+                return !m_stop;
+            else
+                b.append(m_dialog.m_browserbased);
+        }
     }
     du.name = b.makeStringAndClear();
 
