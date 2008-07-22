@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: plotareacontext.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,6 +81,34 @@ ContextWrapper View3DContext::onCreateContext( sal_Int32 nElement, const Attribu
                     // default value dependent on chart type
                     mrModel.monRotationY = rAttribs.getInteger( XML_val );
                     return false;
+            }
+        break;
+    }
+    return false;
+}
+
+// ============================================================================
+
+WallFloorContext::WallFloorContext( ContextHandler2Helper& rParent, WallFloorModel& rModel ) :
+    ContextBase< WallFloorModel >( rParent, rModel )
+{
+}
+
+WallFloorContext::~WallFloorContext()
+{
+}
+
+ContextWrapper WallFloorContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
+{
+    switch( getCurrentElement() )
+    {
+        case C_TOKEN( backWall ):
+        case C_TOKEN( floor ):
+        case C_TOKEN( sideWall ):
+            switch( nElement )
+            {
+                case C_TOKEN( spPr ):
+                    return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
             }
         break;
     }

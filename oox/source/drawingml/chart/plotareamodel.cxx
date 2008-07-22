@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: plotareamodel.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,16 @@ View3DModel::View3DModel() :
 }
 
 View3DModel::~View3DModel()
+{
+}
+
+// ============================================================================
+
+WallFloorModel::WallFloorModel()
+{
+}
+
+WallFloorModel::~WallFloorModel()
 {
 }
 
