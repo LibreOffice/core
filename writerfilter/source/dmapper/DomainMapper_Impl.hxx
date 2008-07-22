@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DomainMapper_Impl.hxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,11 +52,15 @@
 #include <StyleSheetTable.hxx>
 #include <ThemeTable.hxx>
 #include <GraphicImport.hxx>
+#include <OLEHandler.hxx>
 #include <map>
 
 #include <string.h>
 
 namespace com{ namespace sun{ namespace star{
+        namespace awt{
+            struct Size;
+        }
         namespace lang{
             class XMultiServiceFactory;
             struct Locale;
@@ -357,7 +361,7 @@ public:
     void appendTextPortion( const ::rtl::OUString& rString, PropertyMapPtr pPropertyMap );
     void appendTextContent( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >,
                                 const uno::Sequence< beans::PropertyValue >  );
-    void appendOLE( const ::rtl::OUString& rStreamName );
+    void appendOLE( const ::rtl::OUString& rStreamName, OLEHandlerPtr pOleHandler );
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > appendTextSectionAfter(
                     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xBefore );
 
