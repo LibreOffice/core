@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: numberformatsbuffer.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1807,40 +1807,6 @@ static const BuiltinFormatTable spBuiltinFormatTables[] =
     { "zh-TW",  "*CJK",     spBuiltinFormats_zh_TW  }   // Chinese, Taiwan
 };
 
-// ============================================================================
-
-/** Functor for converting an XML number format to an API number format index. */
-class NumberFormatFunctor
-{
-public:
-    explicit            NumberFormatFunctor( const WorkbookHelper& rHelper );
-
-    inline bool         is() const { return mxNumFmts.is(); }
-
-    inline void         operator()( NumberFormat& rNumFmt ) const
-                            { rNumFmt.finalizeImport( mxNumFmts, maEnUsLocale ); }
-
-private:
-    Reference< XNumberFormats > mxNumFmts;
-    Locale              maEnUsLocale;
-};
-
-// ----------------------------------------------------------------------------
-
-NumberFormatFunctor::NumberFormatFunctor( const WorkbookHelper& rHelper ) :
-    maEnUsLocale( CREATE_OUSTRING( "en" ), CREATE_OUSTRING( "US" ), OUString() )
-{
-    try
-    {
-        Reference< XNumberFormatsSupplier > xNumFmtsSupp( rHelper.getDocument(), UNO_QUERY_THROW );
-        mxNumFmts = xNumFmtsSupp->getNumberFormats();
-    }
-    catch( Exception& )
-    {
-    }
-    OSL_ENSURE( mxNumFmts.is(), "NumberFormatFunctor::NumberFormatFunctor - cannot get number formats" );
-}
-
 } // namespace
 
 // ============================================================================
@@ -1901,6 +1867,38 @@ sal_Int32 lclCreateFormat( const Reference< XNumberFormats >& rxNumFmts,
     return nIndex;
 }
 
+// ----------------------------------------------------------------------------
+
+/** Functor for converting an XML number format to an API number format index. */
+class NumberFormatFinalizer
+{
+public:
+    explicit            NumberFormatFinalizer( const WorkbookHelper& rHelper );
+
+    inline bool         is() const { return mxNumFmts.is(); }
+
+    inline void         operator()( NumberFormat& rNumFmt ) const
+                            { rNumFmt.finalizeImport( mxNumFmts, maEnUsLocale ); }
+
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > mxNumFmts;
+    ::com::sun::star::lang::Locale maEnUsLocale;
+};
+
+NumberFormatFinalizer::NumberFormatFinalizer( const WorkbookHelper& rHelper ) :
+    maEnUsLocale( CREATE_OUSTRING( "en" ), CREATE_OUSTRING( "US" ), OUString() )
+{
+    try
+    {
+        Reference< XNumberFormatsSupplier > xNumFmtsSupp( rHelper.getDocument(), UNO_QUERY_THROW );
+        mxNumFmts = xNumFmtsSupp->getNumberFormats();
+    }
+    catch( Exception& )
+    {
+    }
+    OSL_ENSURE( mxNumFmts.is(), "NumberFormatFinalizer::NumberFormatFinalizer - cannot get number formats" );
+}
+
 } // namespace
 
 // ----------------------------------------------------------------------------
@@ -1929,12 +1927,13 @@ void NumberFormat::setPredefinedId( const Locale& rLocale, sal_Int16 nPredefId )
     maOoxData.mnPredefId = nPredefId;
 }
 
-void NumberFormat::finalizeImport( const Reference< XNumberFormats >& rxNumFmts, const Locale& rFromLocale )
+sal_Int32 NumberFormat::finalizeImport( const Reference< XNumberFormats >& rxNumFmts, const Locale& rFromLocale )
 {
     if( rxNumFmts.is() && (maOoxData.maFmtCode.getLength() > 0) )
         maApiData.mnIndex = lclCreateFormat( rxNumFmts, maOoxData.maFmtCode, maOoxData.maLocale, rFromLocale );
     else
         maApiData.mnIndex = lclCreatePredefinedFormat( rxNumFmts, maOoxData.mnPredefId, maOoxData.maLocale );
+    return maApiData.mnIndex;
 }
 
 void NumberFormat::writeToPropertySet( PropertySet& rPropSet ) const
@@ -2037,7 +2036,7 @@ void NumberFormatsBuffer::importFormat( BiffInputStream& rStrm )
 
 void NumberFormatsBuffer::finalizeImport()
 {
-    maNumFmts.forEach( NumberFormatFunctor( *this ) );
+    maNumFmts.forEach( NumberFormatFinalizer( *this ) );
 }
 
 void NumberFormatsBuffer::writeToPropertySet( PropertySet& rPropSet, sal_Int32 nNumFmtId ) const
