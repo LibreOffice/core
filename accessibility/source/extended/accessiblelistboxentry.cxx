@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accessiblelistboxentry.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <tools/debug.hxx>
@@ -436,7 +437,20 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     Reference< XAccessibleRelationSet > SAL_CALL AccessibleListBoxEntry::getAccessibleRelationSet(  ) throw (RuntimeException)
     {
-        return new utl::AccessibleRelationSetHelper;
+        Reference< XAccessibleRelationSet > xRelSet;
+        Reference< XAccessible > xParent;
+        if ( m_aEntryPath.size() > 1 ) // not a root entry
+            xParent = implGetParentAccessible();
+        if ( xParent.is() )
+        {
+            utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
+            Sequence< Reference< XInterface > > aSequence(1);
+            aSequence[0] = xParent;
+            pRelationSetHelper->AddRelation(
+                AccessibleRelation( AccessibleRelationType::NODE_CHILD_OF, aSequence ) );
+            xRelSet = pRelationSetHelper;
+        }
+        return xRelSet;
     }
     // -----------------------------------------------------------------------------
     Reference< XAccessibleStateSet > SAL_CALL AccessibleListBoxEntry::getAccessibleStateSet(  ) throw (RuntimeException)
