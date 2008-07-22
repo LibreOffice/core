@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: window.cxx,v $
- * $Revision: 1.283 $
+ * $Revision: 1.284 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -243,7 +243,7 @@ void Window::ImplInitAppFontData( Window* pWindow )
         // of control sizes, if yes, make app font scalings larger
         // so dialog positioning is not completely off
         ImplControlValue aControlValue;
-        Region aCtrlRegion( Rectangle( Point(), Size( nTextWidth < 10 ? 10 : nTextWidth, nTextHeight < 10 ? 10 : nTextHeight ) ) );
+        Region aCtrlRegion( (const Rectangle&)Rectangle( Point(), Size( nTextWidth < 10 ? 10 : nTextWidth, nTextHeight < 10 ? 10 : nTextHeight ) ) );
         Region aBoundingRgn( aCtrlRegion );
         Region aContentRgn( aCtrlRegion );
         if( pWindow->GetNativeControlRegion( CTRL_EDITBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
@@ -3554,11 +3554,11 @@ void Window::ImplToTop( USHORT nFlags )
             {
                 USHORT nSysFlags = 0;
                 if ( nFlags & TOTOP_RESTOREWHENMIN )
-                    nSysFlags = SAL_FRAME_TOTOP_RESTOREWHENMIN;
+                    nSysFlags |= SAL_FRAME_TOTOP_RESTOREWHENMIN;
                 if ( nFlags & TOTOP_FOREGROUNDTASK )
-                    nSysFlags = SAL_FRAME_TOTOP_FOREGROUNDTASK;
+                    nSysFlags |= SAL_FRAME_TOTOP_FOREGROUNDTASK;
                 if ( nFlags & TOTOP_GRABFOCUSONLY )
-                    nSysFlags = SAL_FRAME_TOTOP_GRABFOCUS_ONLY;
+                    nSysFlags |= SAL_FRAME_TOTOP_GRABFOCUS_ONLY;
                 mpWindowImpl->mpFrame->ToTop( nSysFlags );
             }
         }
