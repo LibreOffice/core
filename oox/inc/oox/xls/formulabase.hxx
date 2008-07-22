@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formulabase.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,8 @@
 namespace com { namespace sun { namespace star {
     namespace sheet { class XFormulaTokens; }
 } } }
+
+namespace oox { template< typename Type > class Matrix; }
 
 namespace oox {
 namespace xls {
@@ -590,11 +592,24 @@ public:
         notation from the passed cell range addresses.
 
         @param rRanges  The list of cell ranges to be converted to a string.
-        @param cSeparator  Separator character between ranges.
      */
-    ::rtl::OUString     generateApiRangeListString(
-                            const ApiCellRangeList& rRanges,
-                            sal_Unicode cSeparator ) const;
+    ::rtl::OUString     generateApiRangeListString( const ApiCellRangeList& rRanges ) const;
+
+    /** Generates a string in Calc formula notation from the passed string.
+
+        @param rString  The string value.
+
+        @return  The string enclosed in double quotes, where all contained
+            quote characters are doubled.
+     */
+    static ::rtl::OUString generateApiString( const ::rtl::OUString& rString );
+
+    /** Generates an array string in Calc formula notation from the passed
+        matrix with Any's containing double values or strings.
+
+        @param rMatrix  The matrix containing double values or strings.
+     */
+    static ::rtl::OUString generateApiArray( const Matrix< ::com::sun::star::uno::Any >& rMatrix );
 
     // ------------------------------------------------------------------------
 
