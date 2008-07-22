@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shapestylecontext.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,39 +68,21 @@ Reference< XFastContextHandler > ShapeStyleContext::createFastChildContext( sal_
     throw ( SAXException, RuntimeException )
 {
     Reference< XFastContextHandler > xRet;
+    AttributeList aAttribs( rxAttributes );
     switch( aElementToken )
     {
         case NMSP_DRAWINGML|XML_lnRef :     // CT_StyleMatrixReference
-            {
-                Color* pColor( new Color );
-                mrShape.getShapeStylesColor()[ SHAPESTYLE_ln ] = ColorPtr( pColor );
-                xRet.set( new StyleMatrixReferenceContext( *this, rxAttributes, mrShape.getShapeStylesIndex()[ SHAPESTYLE_ln ], *pColor ) );
-            }
-            break;
         case NMSP_DRAWINGML|XML_fillRef :   // CT_StyleMatrixReference
-            {
-                Color* pColor( new Color );
-                mrShape.getShapeStylesColor()[ SHAPESTYLE_fill ] = ColorPtr( pColor );
-                xRet.set( new StyleMatrixReferenceContext( *this, rxAttributes, mrShape.getShapeStylesIndex()[ SHAPESTYLE_fill ], *pColor ) );
-            }
-            break;
         case NMSP_DRAWINGML|XML_effectRef : // CT_StyleMatrixReference
-            {
-                Color* pColor( new Color );
-                mrShape.getShapeStylesColor()[ SHAPESTYLE_effect ] = ColorPtr( pColor );
-                xRet.set( new StyleMatrixReferenceContext( *this, rxAttributes, mrShape.getShapeStylesIndex()[ SHAPESTYLE_effect ], *pColor ) );
-            }
-            break;
         case NMSP_DRAWINGML|XML_fontRef :   // CT_FontReference
-            {
-                Color* pColor( new Color );
-                mrShape.getShapeStylesColor()[ SHAPESTYLE_font ] = ColorPtr( pColor );
-                xRet.set( new StyleMatrixReferenceContext( *this, rxAttributes, mrShape.getShapeStylesIndex()[ SHAPESTYLE_font ], *pColor ) );
-            }
-            break;
+        {
+            sal_Int32 nToken = getToken( aElementToken );
+            ShapeStyleRef& rStyleRef = mrShape.getShapeStyleRefs()[ nToken ];
+            rStyleRef.mnThemedIdx = (nToken == XML_fontRef) ? aAttribs.getToken( XML_idx, XML_none ) : aAttribs.getInteger( XML_idx, 0 );
+            xRet.set( new StyleMatrixReferenceContext( *this, rStyleRef.maPhClr ) );
+        }
+        break;
     }
-    if ( !xRet.is() )
-        xRet.set( this );
     return xRet;
 }
 
