@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: themefragmenthandler.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,7 @@
 
 #include "oox/drawingml/themefragmenthandler.hxx"
 #include "oox/drawingml/objectdefaultcontext.hxx"
+#include "oox/drawingml/theme.hxx"
 #include "oox/drawingml/themeelementscontext.hxx"
 
 using ::rtl::OUString;
@@ -62,7 +63,7 @@ ContextWrapper ThemeFragmentHandler::onCreateContext( sal_Int32 nElement, const 
             switch( nElement )
             {
                 case NMSP_DRAWINGML|XML_themeElements:              // CT_BaseStyles
-                    return new themeElementsContext( *this, mrTheme );
+                    return new ThemeElementsContext( *this, mrTheme );
                 case NMSP_DRAWINGML|XML_objectDefaults:             // CT_ObjectStyleDefaults
                     return new objectDefaultContext( *this, mrTheme );
                 case NMSP_DRAWINGML|XML_extraClrSchemeLst:          // CT_ColorSchemeList
