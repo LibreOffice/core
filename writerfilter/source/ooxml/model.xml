@@ -17,6 +17,7 @@
   <token tokenid="ooxml:token"/>
   <token tokenid="ooxml:inputstream"/>
   <token tokenid="ooxml:trackchange"/>
+  <token tokenid="ooxml:object"/>
   <namespace name="dml-stylesheet" url="http://schemas.openxmlformats.org/drawingml/2006/main" file="dml-stylesheet.rng">
     <start name="theme"/>
     <start name="themeOverride"/>
@@ -21768,12 +21769,16 @@
       <element name="control" tokenid="ooxml:CT_Object_control"/>
       <attribute name="dxaOrig" tokenid="ooxml:CT_Object_dxaOrig"/>
       <attribute name="dyaOrig" tokenid="ooxml:CT_Object_dyaOrig"/>
+      <action name="end" action="sendPropertiesWithId" sendtokenid="ooxml:object"/>
+      <action name="end" action="clearProps"/>
     </resource>
     <resource name="CT_Picture" resource="Shape">
       <element name="movie" tokenid="ooxml:CT_Picture_movie"/>
       <element name="control" tokenid="ooxml:CT_Picture_control"/>
       <action name="start" action="mark" sendtokenid="ooxml:mark_shape" value="0"/>
       <action name="end" action="mark" sendtokenid="ooxml:mark_shape" value="1"/>
+      <action name="end" action="sendPropertiesWithId" sendtokenid="ooxml:object"/>
+      <action name="end" action="clearProps"/>
     </resource>
     <resource name="CT_Drawing" resource="Properties">
       <action name="end" action="handlePicture"/>
@@ -22301,6 +22306,7 @@
       <element name="subDoc" tokenid="ooxml:EG_PContent_subDoc"/>
     </resource>
     <resource name="CT_P" resource="Stream">
+      <action name="start" action="handleLastParagraphInSection"/>
       <action name="start" action="startParagraphGroup"/>
       <action name="start" action="setHandle"/>
       <action name="start" action="sendTableDepth"/>
@@ -22677,7 +22683,7 @@
     <resource name="CT_WriteProtection" resource="Properties">
       <attribute name="recommended" tokenid="ooxml:CT_WriteProtection_recommended"/>
     </resource>
-    <resource name="CT_Settings" resource="Properties">
+    <resource name="CT_Settings" resource="PropertyTable" tokenid="ooxml:SETTINGS">
       <element name="writeProtection" tokenid="ooxml:CT_Settings_writeProtection"/>
       <element name="view" tokenid="ooxml:CT_Settings_view"/>
       <element name="zoom" tokenid="ooxml:CT_Settings_zoom"/>
@@ -22775,8 +22781,6 @@
       <element name="doNotEmbedSmartTags" tokenid="ooxml:CT_Settings_doNotEmbedSmartTags"/>
       <element name="decimalSymbol" tokenid="ooxml:CT_Settings_decimalSymbol"/>
       <element name="listSeparator" tokenid="ooxml:CT_Settings_listSeparator"/>
-      <action name="end" action="propagateCharacterProperties"/>
-      <action name="end" action="clearProps"/>
     </resource>
     <resource name="ST_FrameScrollbar" resource="List" generated="yes">
       <value name="on" tokenid="ooxml:Value_wordprocessingml_ST_FrameScrollbar_on">on</value>
