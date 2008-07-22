@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: window.cxx,v $
- * $Revision: 1.282 $
+ * $Revision: 1.283 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -679,6 +679,8 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbIsInTaskPaneList = FALSE;           // TRUE: window was added to the taskpanelist in the topmost system window
     mpWindowImpl->mnNativeBackground  = 0;              // initialize later, depends on type
     mpWindowImpl->mbCallHandlersDuringInputDisabled = FALSE; // TRUE: call event handlers even if input is disabled
+    mpWindowImpl->mbDisableAccessibleLabelForRelation = FALSE; // TRUE: do not set LabelFor relation on accessible objects
+    mpWindowImpl->mbDisableAccessibleLabeledByRelation = FALSE; // TRUE: do not set LabeledBy relation on accessible objects
 
     mbEnableRTL         = TRUE;         // TRUE: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
 }
