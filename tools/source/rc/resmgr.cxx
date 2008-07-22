@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: resmgr.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -657,7 +657,9 @@ BOOL InternalResMgr::Create()
             }
         }
         rtl_freeMemory( pContentBuf );
+#ifndef OS2
         OSL_ENSURE( bSorted, "content not sorted" );
+#endif
         OSL_ENSURE( bEqual2Content, "resource structure wrong" );
         if( !bSorted )
             ::std::sort(pContent,pContent+nEntries,ImpContentLessCompare());
