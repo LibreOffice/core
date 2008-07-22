@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: WW8PropertySetImpl.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,9 +31,7 @@
 #ifndef INCLUDED_WW8_PROPERTY_SET_IMPL_HXX
 #define INCLUDED_WW8_PROEPRTY_SET_IMPL_HXX
 
-#ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
 #include <resourcemodel/WW8ResourceModel.hxx>
-#endif
 #include <doctok/WW8Document.hxx>
 #include <WW8StructBase.hxx>
 #include <WW8OutputWithDepth.hxx>
