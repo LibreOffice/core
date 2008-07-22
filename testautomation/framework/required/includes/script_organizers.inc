@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: script_organizers.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:03 $
+'* last change: $Author: obo $ $Date: 2008-07-22 12:35:37 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -44,8 +44,8 @@ testcase tUpdtScriptCount
         aScriptCount( 1 ) = 10
         aScriptCount( 2 ) = 14
         aScriptCount( 3 ) = 10
-        aScriptCount( 4 ) = 634
-        aScriptCount( 5 ) = 650
+        aScriptCount( 4 ) = 585
+        aScriptCount( 5 ) = 601
                 
     dim iCurrentDialog as integer
     dim iCurrentScriptCount as integer
