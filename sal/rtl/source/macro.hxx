@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: macro.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,7 @@
 #if defined WIN32
 #define THIS_OS "Windows"
 #elif defined OS2
-#define THIS_OS "OS/2"
+#define THIS_OS "OS2"
 #elif defined SOLARIS
 #define THIS_OS "Solaris"
 #elif defined LINUX
