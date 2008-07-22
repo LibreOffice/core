@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xml_parser.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -205,8 +205,8 @@ void xml_parser::parse(const char* XmlData, size_t Length, bool IsFinal)
 {
     if (0 == XML_Parse(xml_parser_, XmlData, Length, IsFinal))
         throw xml_parser_exception(
-            XML_ErrorString(XML_GetErrorCode(xml_parser_)),
-            XML_GetErrorCode(xml_parser_),
+            (char*)XML_ErrorString(XML_GetErrorCode(xml_parser_)),
+            (int)XML_GetErrorCode(xml_parser_),
             XML_GetCurrentLineNumber(xml_parser_),
             XML_GetCurrentColumnNumber(xml_parser_),
             XML_GetCurrentByteIndex(xml_parser_));
