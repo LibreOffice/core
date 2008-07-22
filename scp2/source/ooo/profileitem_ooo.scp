@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: profileitem_ooo.scp,v $
- * $Revision: 1.66 $
+ * $Revision: 1.67 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -540,7 +540,7 @@ ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Java_Types
     ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_JAVA_TYPES";
-    Value = "$ORIGIN/classes/unoil.jar ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH}";
+    Value = "$ORIGIN/classes/unoil.jar $ORIGIN/classes/ScriptFramework.jar ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH}";
 End
 
 ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Java_Jfw_Shared_Data
