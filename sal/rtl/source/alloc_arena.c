@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: alloc_arena.c,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -329,7 +329,7 @@ rtl_arena_hash_rescale (
     sal_Size                  new_bytes;
 
     new_bytes = new_size * sizeof(rtl_arena_segment_type*);
-    new_table = rtl_arena_alloc (gp_arena_arena, &new_bytes);
+    new_table = (rtl_arena_segment_type **)rtl_arena_alloc (gp_arena_arena, &new_bytes);
 
     if (new_table != 0)
     {
@@ -788,7 +788,7 @@ rtl_arena_activate (
             int  i, n = (arena->m_qcache_max >> arena->m_quantum_shift);
 
             sal_Size size = n * sizeof(rtl_cache_type*);
-            arena->m_qcache_ptr = rtl_arena_alloc (gp_arena_arena, &size);
+            arena->m_qcache_ptr = (rtl_cache_type**)rtl_arena_alloc (gp_arena_arena, &size);
             if (!(arena->m_qcache_ptr))
             {
                 /* out of memory */
@@ -956,7 +956,7 @@ SAL_CALL rtl_arena_create (
     void * (SAL_CALL * source_alloc)(rtl_arena_type *, sal_Size *),
     void   (SAL_CALL * source_free) (rtl_arena_type *, void *, sal_Size),
     int                flags
-)
+) SAL_THROW_EXTERN_C()
 {
     rtl_arena_type * result = 0;
     sal_Size         size   = sizeof(rtl_arena_type);
@@ -964,7 +964,7 @@ SAL_CALL rtl_arena_create (
     (void) flags; /* unused */
 
 try_alloc:
-    result = rtl_arena_alloc (gp_arena_arena, &size);
+    result = (rtl_arena_type*)rtl_arena_alloc (gp_arena_arena, &size);
     if (result != 0)
     {
         rtl_arena_type * arena = result;
@@ -1025,7 +1025,7 @@ void *
 SAL_CALL rtl_arena_alloc (
     rtl_arena_type * arena,
     sal_Size *       pSize
-)
+) SAL_THROW_EXTERN_C()
 {
     void * addr = 0;
 
@@ -1096,7 +1096,7 @@ SAL_CALL rtl_arena_free (
     rtl_arena_type * arena,
     void *           addr,
     sal_Size         size
-)
+) SAL_THROW_EXTERN_C()
 {
     if (arena != 0)
     {
