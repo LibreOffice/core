@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwsha.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -500,39 +500,57 @@ void ScTabViewShell::ExecuteCellFormatDlg( SfxRequest& rReq, USHORT nTabPage )
 }
 
 //------------------------------------------------------------------
-void ScTabViewShell::ExecuteInputDirect()
-{
-    bool bRefInputMode = false;
-    ScModule* pScMod = SC_MOD();
 
-    if ( pScMod->IsFormulaMode() )
+bool ScTabViewShell::IsRefInputMode() const
+{
+    ScModule* pScMod = SC_MOD();
+    if ( pScMod && pScMod->IsFormulaMode() )
     {
         ScInputHandler* pHdl = pScMod->GetInputHdl();
-        String aString = pHdl->GetEditString();
-
-        if ( !pHdl->GetSelIsRef() && aString.Len() > 1 &&
-             ( aString.GetChar(0) == '+' || aString.GetChar(0) == '-' ) )
+        if ( pHdl )
         {
-            ScViewData* pViewData = GetViewData();
-            ScDocument* pDoc = pViewData->GetDocument();
-            ScAddress aPos( pViewData->GetCurPos() );
-            ScCompiler aComp( pDoc, aPos, pDoc->GetGrammar() );
-            aComp.SetCloseBrackets( false );
-            ScTokenArray* pArr = aComp.CompileString( aString );
-            if ( pArr->MayReferenceFollow() )
+            String aString = pHdl->GetEditString();
+            if ( !pHdl->GetSelIsRef() && aString.Len() > 1 &&
+                 ( aString.GetChar(0) == '+' || aString.GetChar(0) == '-' ) )
             {
-                bRefInputMode = true;
+                const ScViewData* pViewData = GetViewData();
+                if ( pViewData )
+                {
+                    ScDocument* pDoc = pViewData->GetDocument();
+                    if ( pDoc )
+                    {
+                        const ScAddress aPos( pViewData->GetCurPos() );
+                        ScCompiler aComp( pDoc, aPos, pDoc->GetGrammar() );
+                        aComp.SetCloseBrackets( false );
+                        ScTokenArray* pArr = aComp.CompileString( aString );
+                        if ( pArr && pArr->MayReferenceFollow() )
+                        {
+                            return true;
+                        }
+                    }
+                }
             }
-        }
-        else
-        {
-            bRefInputMode = true;
+            else
+            {
+                return true;
+            }
         }
     }
 
-    if ( !bRefInputMode )
+    return false;
+}
+
+//------------------------------------------------------------------
+
+void ScTabViewShell::ExecuteInputDirect()
+{
+    if ( !IsRefInputMode() )
     {
-        pScMod->InputEnterHandler();
+        ScModule* pScMod = SC_MOD();
+        if ( pScMod )
+        {
+            pScMod->InputEnterHandler();
+        }
     }
 }
 
