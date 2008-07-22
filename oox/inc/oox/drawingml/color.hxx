@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: color.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,6 +55,8 @@ public:
     /** Returns a system color, e.g. used in the a:sysClr element. */
     static sal_Int32    getSystemColor( sal_Int32 nToken, sal_Int32 nDefault = -1 );
 
+    /** Sets the color to unused state. */
+    void                setUnused();
     /** Sets an RGB value (hexadecimal RRGGBB) from the a:srgbClr element. */
     void                setSrgbClr( sal_Int32 nRGB );
     /** Sets the percentual RGB values from the a:scrgbClr element. */
@@ -70,9 +72,13 @@ public:
 
     /** Inserts the passed color transformation. */
     void                addTransformation( sal_Int32 nElement, sal_Int32 nValue = -1 );
+    /** Inserts Chart specific color tint (-1.0...0.0 = shade, 0.0...1.0 = tint). */
+    void                addChartTintTransformation( double fTint );
     /** Inserts Excel specific color tint (-1.0...0.0 = shade, 0.0...1.0 = tint). */
     void                addExcelTintTransformation( double fTint );
 
+    /** Overwrites this color with the passed color, if it is used. */
+    inline void         assignIfUsed( const Color& rColor ) { if( rColor.isUsed() ) *this = rColor; }
     /** Removes transparence from the color. */
     void                clearTransparence();
 
