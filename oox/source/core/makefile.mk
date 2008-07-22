@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,6 +54,7 @@ SLOFILES =	\
         $(SLO)$/filterdetect.obj			\
         $(SLO)$/fragmenthandler.obj			\
         $(SLO)$/fragmenthandler2.obj		\
+        $(SLO)$/modelobjectcontainer.obj	\
         $(SLO)$/recordparser.obj			\
         $(SLO)$/relations.obj				\
         $(SLO)$/relationshandler.obj		\
