@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: olepersist.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1388,6 +1388,16 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
 {
     RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::setPersistentEntry" );
 
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->setPersistentEntry( xStorage, sEntName, nEntryConnectionMode, lArguments, lObjArgs );
+        return;
+    }
+    // end wrapping related part ====================
+
     // TODO: use lObjArgs
 
     // the type of the object must be already set
@@ -1587,6 +1597,16 @@ void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XSto
 {
     RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::storeToEntry" );
 
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->storeToEntry( xStorage, sEntName, lArguments, lObjArgs );
+        return;
+    }
+    // end wrapping related part ====================
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -1611,6 +1631,16 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
 {
     RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::storeAsEntry" );
 
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->storeAsEntry( xStorage, sEntName, lArguments, lObjArgs );
+        return;
+    }
+    // end wrapping related part ====================
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -1629,6 +1659,16 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
                 uno::RuntimeException )
 {
     RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::saveCompleted" );
+
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->saveCompleted( bUseNew );
+        return;
+    }
+    // end wrapping related part ====================
 
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1718,6 +1758,15 @@ sal_Bool SAL_CALL OleEmbeddedObject::hasEntry()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        return xWrappedObject->hasEntry();
+    }
+    // end wrapping related part ====================
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -1738,6 +1787,15 @@ sal_Bool SAL_CALL OleEmbeddedObject::hasEntry()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        return xWrappedObject->getEntryName();
+    }
+    // end wrapping related part ====================
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -1766,6 +1824,16 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
                 uno::RuntimeException )
 {
     RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::storeOwn" );
+
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->storeOwn();
+        return;
+    }
+    // end wrapping related part ====================
 
     // during switching from Activated to Running and from Running to Loaded states the object will
     // ask container to store the object, the container has to make decision
@@ -1887,6 +1955,15 @@ sal_Bool SAL_CALL OleEmbeddedObject::isReadonly()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        return xWrappedObject->isReadonly();
+    }
+    // end wrapping related part ====================
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -1908,14 +1985,24 @@ sal_Bool SAL_CALL OleEmbeddedObject::isReadonly()
 
 //------------------------------------------------------
 void SAL_CALL OleEmbeddedObject::reload(
-                const uno::Sequence< beans::PropertyValue >& /*lArguments*/,
-                const uno::Sequence< beans::PropertyValue >& /*lObjArgs*/ )
+                const uno::Sequence< beans::PropertyValue >& lArguments,
+                const uno::Sequence< beans::PropertyValue >& lObjArgs )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 io::IOException,
                 uno::Exception,
                 uno::RuntimeException )
 {
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->reload( lArguments, lObjArgs );
+        return;
+    }
+    // end wrapping related part ====================
+
     // TODO: use lObjArgs
 
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1949,6 +2036,16 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
                 uno::Exception,
                 uno::RuntimeException )
 {
+    // begin wrapping related part ====================
+    uno::Reference< embed::XLinkageSupport > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->breakLink( xStorage, sEntName );
+        return;
+    }
+    // end wrapping related part ====================
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -2055,6 +2152,15 @@ sal_Bool SAL_CALL  OleEmbeddedObject::isLink()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
+    // begin wrapping related part ====================
+    uno::Reference< embed::XLinkageSupport > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        return xWrappedObject->isLink();
+    }
+    // end wrapping related part ====================
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -2068,6 +2174,15 @@ sal_Bool SAL_CALL  OleEmbeddedObject::isLink()
                 uno::Exception,
                 uno::RuntimeException )
 {
+    // begin wrapping related part ====================
+    uno::Reference< embed::XLinkageSupport > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        return xWrappedObject->getLinkURL();
+    }
+    // end wrapping related part ====================
+
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
