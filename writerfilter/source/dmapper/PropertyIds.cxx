@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyIds.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -313,7 +313,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_INSERT   :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Insert")); break;
             case PROP_DELETE   :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Delete")); break;
             case PROP_STREAM_NAME:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamName")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+            case PROP_BITMAP :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Bitmap")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
