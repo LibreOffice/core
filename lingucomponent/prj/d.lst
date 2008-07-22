@@ -31,7 +31,7 @@
 ..\%__SRC%\lib\libulingu.a %_DEST%\lib%_EXT%\libulingu.a
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
-..\%__SRC%\bin\guesslang* %_DEST%\bin%_EXT%\guesslang*
+..\%__SRC%\bin\guesslan* %_DEST%\bin%_EXT%\guesslan*
 ..\%__SRC%\lib\iguesslang* %_DEST%\lib%_EXT%\iguesslang*
 ..\%__SRC%\lib\libguesslang*.dylib %_DEST%\lib%_EXT%\libguesslang*.dylib
 ..\%__SRC%\lib\libguesslang*.so %_DEST%\lib%_EXT%\libguesslang*.so
