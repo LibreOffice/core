@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: timenode.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -548,7 +548,7 @@ namespace oox { namespace ppt {
                 maTransitionFilter.setTransitionFilterProperties( xFilter );
             }
 
-            std::for_each( maChilds.begin(), maChilds.end(),
+            std::for_each( maChildren.begin(), maChildren.end(),
                            boost::bind(&TimeNode::addNode, _1, rxModel, boost::ref(xNode),
                                        boost::ref(pSlide) ) );
 
