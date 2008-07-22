@@ -8,7 +8,7 @@
 #
 # $RCSfile: tg_obj.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -35,6 +35,13 @@ MKFILENAME:=TG_OBJ.MK
 $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
     @echo ------------------------------
     @echo Making: $@
+.IF "$(GUI)"=="OS2"
+.IF "$(LIBTARGET)"!="NO"
+    @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
+.ENDIF          # "$(LIBTARGET)"!="NO"
+    $(LIBMGR) $(LIBFLAGS) $@ $(&)
+.ENDIF		# "$(GUI)"=="OS2"
+
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
     $(ECHONL) $(foreach,i,$(OBJFILES:f) $(ROBJ)$/$(i)) > $@
@@ -61,6 +68,13 @@ $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
 $($(SECOND_BUILD)OBJTARGET): $(REAL_$(SECOND_BUILD)_OBJFILES)
     @echo ------------------------------
     @echo Making: $@
+.IF "$(GUI)"=="OS2"
+.IF "$(LIBTARGET)"!="NO"
+    @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
+.ENDIF          # "$(LIBTARGET)"!="NO"
+    $(LIBMGR) $(LIBFLAGS) $@ $(&)
+.ENDIF			# "$(GUI)"=="OS2"
+
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
 #     $(LIBMGR) $(LIBFLAGS) $@ $(OBJFILES)
@@ -78,3 +92,9 @@ $($(SECOND_BUILD)OBJTARGET): $(REAL_$(SECOND_BUILD)_OBJFILES)
 .ENDIF			# "$($(SECOND_BUILD)OBJTARGET)"!=""
 .ENDIF			# "$(SECOND_BUILD)"!=""
 
+.IF "$(GUI)"=="OS2"
+.IF "$(LIBTARGET)"!="NO"
+    @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
+.ENDIF          # "$(LIBTARGET)"!="NO"
+    $(LIBMGR) $(LIBFLAGS) $@ $(&)
+.ENDIF			# "$(GUI)"=="OS2"
