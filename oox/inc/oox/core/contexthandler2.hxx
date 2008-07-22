@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: contexthandler2.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,7 +100,7 @@ struct ContextInfo;
 class ContextHandler2Helper
 {
 public:
-    explicit            ContextHandler2Helper();
+    explicit            ContextHandler2Helper( bool bEnableTrimSpace );
     explicit            ContextHandler2Helper( const ContextHandler2Helper& rParent );
     virtual             ~ContextHandler2Helper();
 
@@ -220,6 +220,7 @@ private:
 
     ContextStackRef     mxContextStack;     /// Stack of processed contexts.
     size_t              mnRootStackSize;    /// Stack size on construction time.
+    bool                mbEnableTrimSpace;  /// True = trim whitespace in characters().
 };
 
 // ============================================================================
