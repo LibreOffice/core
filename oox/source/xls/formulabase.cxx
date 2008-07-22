@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formulabase.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -377,7 +377,7 @@ static const FunctionData saFuncTableBiff3[] =
     { "ROUNDDOWN",              "ROUNDDOWN",        213,    213,    2,  2,  V, { V }, 0 },
     { "ASC",                    "ASC",              214,    214,    1,  1,  V, { V }, 0 },
     { "JIS",                    "DBCS",             215,    215,    1,  1,  V, { V }, 0 },
-    { "ADDRESS",                "ADDRESS",          219,    219,    2,  5,  V, { V, V, V, V, V }, 0 },
+    { "ADDRESS",                "ADDRESS",          219,    219,    2,  5,  V, { V }, 0 },
     { "DAYS360",                "DAYS360",          220,    220,    2,  2,  V, { V, V, C, I }, 0 },
     { "TODAY",                  "TODAY",            221,    221,    0,  0,  V, {}, FUNCFLAG_VOLATILE },
     { "VDB",                    "VDB",              222,    222,    5,  7,  V, { V }, 0 },
@@ -402,7 +402,7 @@ static const FunctionData saFuncTableBiff4[] =
     { "RANK",                   "RANK",             216,    216,    2,  3,  V, { V, R, V }, 0 },
     { "DB",                     "DB",               247,    247,    4,  5,  V, { V }, 0 },
     { "FREQUENCY",              "FREQUENCY",        252,    252,    2,  2,  A, { R }, 0 },
-    { "ERROR.TYPE",             "ERROR.TYPE",       261,    261,    1,  1,  V, { V }, 0 },
+    { "ORG.OPENOFFICE.ERRORTYPE","ERROR.TYPE",      261,    261,    1,  1,  V, { V }, 0 },
     { "AVEDEV",                 "AVEDEV",           269,    269,    1,  MX, V, { R }, 0 },
     { "BETADIST",               "BETADIST",         270,    270,    3,  5,  V, { V }, 0 },
     { "GAMMALN",                "GAMMALN",          271,    271,    1,  1,  V, { V }, 0 },
@@ -673,6 +673,17 @@ static const FunctionData saFuncTableOdf[] =
     { "XOR",                    0,                  NOID,   NOID,   1,  MX, V, { R }, 0 }
 };
 
+// ----------------------------------------------------------------------------
+
+const sal_Unicode API_TOKEN_OPEN            = '(';
+const sal_Unicode API_TOKEN_CLOSE           = ')';
+const sal_Unicode API_TOKEN_SEP             = ';';
+
+const sal_Unicode API_TOKEN_ARRAY_OPEN      = '{';
+const sal_Unicode API_TOKEN_ARRAY_CLOSE     = '}';
+const sal_Unicode API_TOKEN_ARRAY_ROWSEP    = '|';
+const sal_Unicode API_TOKEN_ARRAY_COLSEP    = ';';
+
 } // namespace
 
 // function info parameter class iterator =====================================
@@ -723,7 +734,9 @@ private:
     static bool         fillTokenMap( FormulaTokenMap& orTokenMap, OpCodeEntrySequence& orEntrySeq, const Reference< XFormulaOpCodeMapper >& rxMapper, sal_Int32 nMapGroup );
 
     static bool         initOpCode( sal_Int32& ornOpCode, const OpCodeEntrySequence& rEntrySeq, sal_Int32 nSpecialId );
+    static bool         initOpCode( OpCodeEntryVector& orParserMap, sal_Int32& ornOpCode, const FormulaTokenMap& rTokenMap, const OUString& rOdfName, const OUString& rOoxName );
     static bool         initOpCode( OpCodeEntryVector& orParserMap, sal_Int32& ornOpCode, const FormulaTokenMap& rTokenMap, const sal_Char* pcOdfName, const sal_Char* pcOoxName );
+    static bool         initOpCode( OpCodeEntryVector& orParserMap, sal_Int32& ornOpCode, const FormulaTokenMap& rTokenMap, sal_Unicode cOdfName, sal_Unicode cOoxName );
 
     void                construct( const Reference< XSpreadsheetDocument >& rxDocument, bool bImportFilter );
     void                construct( const Reference< XSpreadsheetDocument >& rxDocument, BiffType eBiff, bool bImportFilter );
@@ -857,17 +870,16 @@ bool FunctionProviderImpl::initOpCode( sal_Int32& ornOpCode,
 }
 
 bool FunctionProviderImpl::initOpCode( OpCodeEntryVector& orParserMap, sal_Int32& ornOpCode,
-        const FormulaTokenMap& rTokenMap, const sal_Char* pcOdfName, const sal_Char* pcOoxName )
+        const FormulaTokenMap& rTokenMap, const OUString& rOdfName, const OUString& rOoxName )
 {
-    OUString aOdfName = OUString::createFromAscii( pcOdfName );
-    FormulaTokenMap::const_iterator aIt = rTokenMap.find( aOdfName );
+    FormulaTokenMap::const_iterator aIt = rTokenMap.find( rOdfName );
     if( aIt != rTokenMap.end() )
     {
         ornOpCode = aIt->second.OpCode;
-        if( pcOoxName )
+        if( rOoxName.getLength() > 0 )
         {
             FormulaOpCodeMapEntry aEntry;
-            aEntry.Name = OUString::createFromAscii( pcOoxName );
+            aEntry.Name = rOoxName;
             aEntry.Token.OpCode = ornOpCode;
             orParserMap.push_back( aEntry );
         }
@@ -875,9 +887,25 @@ bool FunctionProviderImpl::initOpCode( OpCodeEntryVector& orParserMap, sal_Int32
     }
     OSL_ENSURE( false,
         OStringBuffer( "FunctionProviderImpl::initOpCode - opcode for \"" ).
-        append( OUStringToOString( aOdfName, RTL_TEXTENCODING_ASCII_US ) ).
+        append( OUStringToOString( rOdfName, RTL_TEXTENCODING_ASCII_US ) ).
         append( "\" not found" ).getStr() );
     return false;
+}
+
+bool FunctionProviderImpl::initOpCode( OpCodeEntryVector& orParserMap, sal_Int32& ornOpCode,
+        const FormulaTokenMap& rTokenMap, const sal_Char* pcOdfName, const sal_Char* pcOoxName )
+{
+    OUString aOoxName;
+    if( pcOoxName ) aOoxName = OUString::createFromAscii( pcOoxName );
+    return initOpCode( orParserMap, ornOpCode, rTokenMap, OUString::createFromAscii( pcOdfName ), aOoxName );
+}
+
+bool FunctionProviderImpl::initOpCode( OpCodeEntryVector& orParserMap, sal_Int32& ornOpCode,
+        const FormulaTokenMap& rTokenMap, sal_Unicode cOdfName, sal_Unicode cOoxName )
+{
+    OUString aOoxName;
+    if( cOoxName ) aOoxName = OUString( cOoxName );
+    return initOpCode( orParserMap, ornOpCode, rTokenMap, OUString( cOdfName ), aOoxName );
 }
 
 void FunctionProviderImpl::construct(
@@ -958,37 +986,37 @@ void FunctionProviderImpl::initOpCodes( const Reference< XSpreadsheetDocument >&
             initOpCode( mrOpCodes.OPCODE_NONAME,  aEntrySeq, NO_NAME ) &&
             // separators
             fillTokenMap( aTokenMap, aEntrySeq, xMapper, SEPARATORS ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_OPEN,          aTokenMap, "(",  "("  ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_CLOSE,         aTokenMap, ")",  ")"  ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_SEP,           aTokenMap, ";",  ","  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_OPEN,  aTokenMap, API_TOKEN_OPEN,  '('  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_CLOSE, aTokenMap, API_TOKEN_CLOSE, ')'  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_SEP,   aTokenMap, API_TOKEN_SEP,   ','  ) &&
             // array separators
             fillTokenMap( aTokenMap, aEntrySeq, xMapper, ARRAY_SEPARATORS ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_ARRAY_OPEN,    aTokenMap, "{",  "{"  ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_ARRAY_CLOSE,   aTokenMap, "}",  "}"  ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_ARRAY_ROWSEP,  aTokenMap, "|",  ";"  ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_ARRAY_COLSEP,  aTokenMap, ";",  ","  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_ARRAY_OPEN,    aTokenMap, API_TOKEN_ARRAY_OPEN,   '{'  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_ARRAY_CLOSE,   aTokenMap, API_TOKEN_ARRAY_CLOSE,  '}'  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_ARRAY_ROWSEP,  aTokenMap, API_TOKEN_ARRAY_ROWSEP, ';'  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_ARRAY_COLSEP,  aTokenMap, API_TOKEN_ARRAY_COLSEP, ','  ) &&
             // unary operators
             fillTokenMap( aTokenMap, aEntrySeq, xMapper, UNARY_OPERATORS ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_PLUS_SIGN,     aTokenMap, "+",  0    ) && // same op-code as OPCODE_ADD
-            initOpCode( maParserMap, mrOpCodes.OPCODE_MINUS_SIGN,    aTokenMap, "-",  "-"  ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_PERCENT,       aTokenMap, "%",  "%"  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_PLUS_SIGN,     aTokenMap, '+',  '\0' ) && // same op-code as OPCODE_ADD
+            initOpCode( maParserMap, mrOpCodes.OPCODE_MINUS_SIGN,    aTokenMap, '-',  '-'  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_PERCENT,       aTokenMap, '%',  '%'  ) &&
             // binary operators
             fillTokenMap( aTokenMap, aEntrySeq, xMapper, BINARY_OPERATORS ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_ADD,           aTokenMap, "+",  "+"  ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_SUB,           aTokenMap, "-",  "-"  ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_MULT,          aTokenMap, "*",  "*"  ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_DIV,           aTokenMap, "/",  "/"  ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_POWER,         aTokenMap, "^",  "^"  ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_CONCAT,        aTokenMap, "&",  "&"  ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_EQUAL,         aTokenMap, "=",  "="  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_ADD,           aTokenMap, '+',  '+'  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_SUB,           aTokenMap, '-',  '-'  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_MULT,          aTokenMap, '*',  '*'  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_DIV,           aTokenMap, '/',  '/'  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_POWER,         aTokenMap, '^',  '^'  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_CONCAT,        aTokenMap, '&',  '&'  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_EQUAL,         aTokenMap, '=',  '='  ) &&
             initOpCode( maParserMap, mrOpCodes.OPCODE_NOT_EQUAL,     aTokenMap, "<>", "<>" ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_LESS,          aTokenMap, "<",  "<"  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_LESS,          aTokenMap, '<',  '<'  ) &&
             initOpCode( maParserMap, mrOpCodes.OPCODE_LESS_EQUAL,    aTokenMap, "<=", "<=" ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_GREATER,       aTokenMap, ">",  ">"  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_GREATER,       aTokenMap, '>',  '>'  ) &&
             initOpCode( maParserMap, mrOpCodes.OPCODE_GREATER_EQUAL, aTokenMap, ">=", ">=" ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_INTERSECT,     aTokenMap, "!",  " "  ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_LIST,          aTokenMap, "~",  ","  ) &&
-            initOpCode( maParserMap, mrOpCodes.OPCODE_RANGE,         aTokenMap, ":",  ":"  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_INTERSECT,     aTokenMap, '!',  ' '  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_LIST,          aTokenMap, '~',  ','  ) &&
+            initOpCode( maParserMap, mrOpCodes.OPCODE_RANGE,         aTokenMap, ':',  ':'  ) &&
             // functions
             fillTokenMap( aTokenMap, aEntrySeq, xMapper, FUNCTIONS ) &&
             initFuncNames( aEntrySeq ) &&
@@ -1394,7 +1422,7 @@ OUString FormulaProcessorBase::generateApiRangeString( const CellRangeAddress& r
     return aRangeName;
 }
 
-OUString FormulaProcessorBase::generateApiRangeListString( const ApiCellRangeList& rRanges, sal_Unicode cSeparator ) const
+OUString FormulaProcessorBase::generateApiRangeListString( const ApiCellRangeList& rRanges ) const
 {
     OUStringBuffer aBuffer;
     for( ApiCellRangeList::const_iterator aIt = rRanges.begin(), aEnd = rRanges.end(); aIt != aEnd; ++aIt )
@@ -1403,10 +1431,46 @@ OUString FormulaProcessorBase::generateApiRangeListString( const ApiCellRangeLis
         if( aRangeName.getLength() > 0 )
         {
             if( aBuffer.getLength() > 0 )
-                aBuffer.append( cSeparator );
+                aBuffer.append( API_TOKEN_SEP );
             aBuffer.append( aRangeName );
         }
     }
+    return aBuffer.makeStringAndClear();
+}
+
+OUString FormulaProcessorBase::generateApiString( const OUString& rString )
+{
+    OUString aRetString = rString;
+    sal_Int32 nQuotePos = aRetString.getLength();
+    while( (nQuotePos = aRetString.lastIndexOf( '"', nQuotePos )) >= 0 )
+        aRetString = aRetString.replaceAt( nQuotePos, 1, CREATE_OUSTRING( "\"\"" ) );
+    return OUStringBuffer().append( sal_Unicode( '"' ) ).append( aRetString ).append( sal_Unicode( '"' ) ).makeStringAndClear();
+}
+
+OUString FormulaProcessorBase::generateApiArray( const Matrix< Any >& rMatrix )
+{
+    OSL_ENSURE( !rMatrix.empty(), "FormulaProcessorBase::generateApiArray - missing matrix values" );
+    OUStringBuffer aBuffer;
+    aBuffer.append( API_TOKEN_ARRAY_OPEN );
+    for( size_t nRow = 0, nHeight = rMatrix.height(); nRow < nHeight; ++nRow )
+    {
+        if( nRow > 0 )
+            aBuffer.append( API_TOKEN_ARRAY_ROWSEP );
+        for( Matrix< Any >::const_iterator aBeg = rMatrix.row_begin( nRow ), aIt = aBeg, aEnd = rMatrix.row_end( nRow ); aIt != aEnd; ++aIt )
+        {
+            double fValue = 0.0;
+            OUString aString;
+            if( aIt != aBeg )
+                aBuffer.append( API_TOKEN_ARRAY_COLSEP );
+            if( *aIt >>= fValue )
+                aBuffer.append( fValue );
+            else if( *aIt >>= aString )
+                aBuffer.append( generateApiString( aString ) );
+            else
+                aBuffer.appendAscii( "\"\"" );
+        }
+    }
+    aBuffer.append( API_TOKEN_ARRAY_CLOSE );
     return aBuffer.makeStringAndClear();
 }
 
