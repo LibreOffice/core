@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textwindowaccessibility.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -891,7 +891,7 @@ Document::retrieveParagraphBounds(ParagraphImpl const * pParagraph,
 
     return ::css::awt::Rectangle(
         static_cast< ::sal_Int32 >(aOrig.X()),
-        static_cast< ::sal_Int32 >(aOrig.Y()) + nPos,
+        static_cast< ::sal_Int32 >(aOrig.Y()) + nPos - m_nViewOffset,
         m_rView.GetWindow()->GetOutputSizePixel().Width(), aPara->getHeight());
         // XXX  numeric overflow (3x)
 }
@@ -995,7 +995,7 @@ Document::retrieveCharacterBounds(ParagraphImpl const * pParagraph,
                                         - aLeft.Left());
             // XXX  numeric overflow (4x)
         aBounds = ::css::awt::Rectangle(static_cast< ::sal_Int32 >(aLeft.Left()),
-                                        static_cast< ::sal_Int32 >(aLeft.Top()),
+                                        static_cast< ::sal_Int32 >(aLeft.Top() - m_nViewOffset),
                                         nWidth,
                                         static_cast< ::sal_Int32 >(aLeft.Bottom()
                                                                     - aLeft.Top()));
