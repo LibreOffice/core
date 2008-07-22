@@ -8,7 +8,7 @@
  *
  * $RCSfile: chartspacefragment.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,9 +84,13 @@ ContextWrapper ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const At
                     // default is 'false', not 'true' as specified
                     mrModel.mbAutoTitleDel = rAttribs.getBool( XML_val, false );
                     return false;
+                case C_TOKEN( backWall ):
+                    return new WallFloorContext( *this, mrModel.mxBackWall.create() );
                 case C_TOKEN( dispBlanksAs ):
                     mrModel.mnDispBlanksAs = rAttribs.getToken( XML_val, XML_zero );
                     return false;
+                case C_TOKEN( floor ):
+                    return new WallFloorContext( *this, mrModel.mxFloor.create() );
                 case C_TOKEN( legend ):
                     return new LegendContext( *this, mrModel.mxLegend.create() );
                 case C_TOKEN( plotArea ):
@@ -99,6 +103,8 @@ ContextWrapper ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const At
                     // default is 'false', not 'true' as specified
                     mrModel.mbShowLabelsOverMax = rAttribs.getBool( XML_val, false );
                     return false;
+                case C_TOKEN( sideWall ):
+                    return new WallFloorContext( *this, mrModel.mxSideWall.create() );
                 case C_TOKEN( title ):
                     return new TitleContext( *this, mrModel.mxTitle.create() );
                 case C_TOKEN( view3D ):
