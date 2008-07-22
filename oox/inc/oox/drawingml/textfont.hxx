@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textfont.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,32 +28,56 @@
  *
  ************************************************************************/
 
-#ifndef OOX_DRAWINGNML__TEXTFONT_HXX
-#define OOX_DRAWINGNML__TEXTFONT_HXX
+#ifndef OOX_DRAWINGNML_TEXTFONT_HXX
+#define OOX_DRAWINGNML_TEXTFONT_HXX
 
 #include <rtl/ustring.hxx>
 
-namespace oox { namespace drawingml {
+namespace oox { class AttributeList; }
+namespace oox { namespace core { class XmlFilterBase; } }
 
+namespace oox {
+namespace drawingml {
 
-    /** carries a CT_TextFont*/
-    class TextFont
-    {
-    public:
-        TextFont()
-            : mnPitch( 0 ), mnCharset( 0 )
-            {
-            }
-        /** return true if valid */
-        bool is() const
-            { return msTypeface.getLength() != 0; }
-        ::rtl::OUString  msTypeface;
-        ::rtl::OUString  msPanose;
-        sal_Int32        mnPitch;
-        sal_Int32        mnCharset;
-    };
+// ============================================================================
 
-} }
+/** carries a CT_TextFont*/
+class TextFont
+{
+public:
+    explicit            TextFont();
+
+    /** Sets attributes from the passed attribute list. */
+    void                setAttributes( const AttributeList& rAttribs );
+
+    /** Overwrites this text font with the passed text font, if it is used. */
+    void                assignIfUsed( const TextFont& rTextFont );
+
+    /** Returns the font name, pitch, and family; tries to resolve theme
+        placeholder names, e.g. '+mj-lt' for the major latin theme font. */
+    bool                getFontData(
+                            ::rtl::OUString& rFontName,
+                            sal_Int16 rnFontPitch,
+                            sal_Int16& rnFontFamily,
+                            const ::oox::core::XmlFilterBase& rFilter ) const;
+
+private:
+    bool                implGetFontData(
+                            ::rtl::OUString& rFontName,
+                            sal_Int16 rnFontPitch,
+                            sal_Int16& rnFontFamily ) const;
+
+private:
+    ::rtl::OUString     maTypeface;
+    ::rtl::OUString     maPanose;
+    sal_Int32           mnPitch;
+    sal_Int32           mnCharset;
+};
+
+// ============================================================================
+
+} // namespace drawingml
+} // namespace oox
 
 #endif
 
