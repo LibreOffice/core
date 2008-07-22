@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sunjre.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,10 +68,14 @@ char const* const* SunInfo::getJavaExePaths(int * size)
 char const* const* SunInfo::getRuntimePaths(int * size)
 {
     static char const* ar[]= {
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
         "/bin/client/jvm.dll",
         "/bin/hotspot/jvm.dll",
         "/bin/classic/jvm.dll"
+#elif defined(OS2)
+        "/bin/classic/jvm.dll",
+        "/bin/client/jvm.dll",
+        "/bin/hotspot/jvm.dll"
 #elif UNX
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so",
         "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so",
