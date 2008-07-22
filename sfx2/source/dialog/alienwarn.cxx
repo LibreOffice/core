@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: alienwarn.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,13 +46,13 @@ SfxAlienWarningDialog::SfxAlienWarningDialog( Window* pParent, const String& _rF
 
     SfxModalDialog( pParent, SfxResId( RID_DLG_ALIEN_WARNING ) ),
 
-    m_aQueryImage       ( this, SfxResId( FI_QUERY ) ),
-    m_aInfoText         ( this, SfxResId( FT_INFOTEXT ) ),
     m_aKeepCurrentBtn   ( this, SfxResId( PB_NO ) ),
     m_aSaveODFBtn       ( this, SfxResId( PB_YES ) ),
     m_aMoreInfoBtn      ( this, SfxResId( PB_MOREINFO ) ),
     m_aOptionLine       ( this, SfxResId( FL_OPTION ) ),
-    m_aWarningOnBox     ( this, SfxResId( CB_WARNING_OFF ) )
+    m_aWarningOnBox     ( this, SfxResId( CB_WARNING_OFF ) ),
+    m_aQueryImage       ( this, SfxResId( FI_QUERY ) ),
+    m_aInfoText         ( this, SfxResId( FT_INFOTEXT ) )
 
 {
     FreeResource();
