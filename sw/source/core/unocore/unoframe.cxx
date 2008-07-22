@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoframe.cxx,v $
- * $Revision: 1.123 $
+ * $Revision: 1.124 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1234,22 +1234,40 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 }
             }
         }
-        else if( FN_UNO_REPLACEMENT_GRAPHIC_URL == pCur->nWID )
+        else if( FN_UNO_REPLACEMENT_GRAPHIC_URL == pCur->nWID || FN_UNO_REPLACEMENT_GRAPHIC == pCur->nWID )
         {
-            GraphicObject *pGrfObj = 0;
-            OUString aGrfUrl;
-            aValue >>= aGrfUrl;
-
-            // the package URL based graphics are handled in different way currently
-            // TODO/LATER: actually this is the correct place to handle them
-            ::rtl::OUString aGraphicProtocol( RTL_CONSTASCII_USTRINGPARAM( sGraphicObjectProtocol ) );
-            if( aGrfUrl.compareTo( aGraphicProtocol, aGraphicProtocol.getLength() ) == 0 )
+            bool bURL = FN_UNO_REPLACEMENT_GRAPHIC_URL == pCur->nWID;
+            bool bApply = false;
+            Graphic aGraphic;
+            if( bURL )
             {
-                ByteString sId( aGrfUrl.copy(sizeof(sGraphicObjectProtocol)-1).getStr(), RTL_TEXTENCODING_ASCII_US );
-                pGrfObj = new GraphicObject( sId );
+                GraphicObject *pGrfObj = 0;
+                OUString aGrfUrl;
+                aValue >>= aGrfUrl;
+
+                // the package URL based graphics are handled in different way currently
+                // TODO/LATER: actually this is the correct place to handle them
+                ::rtl::OUString aGraphicProtocol( RTL_CONSTASCII_USTRINGPARAM( sGraphicObjectProtocol ) );
+                if( aGrfUrl.compareTo( aGraphicProtocol, aGraphicProtocol.getLength() ) == 0 )
+                {
+                    ByteString sId( aGrfUrl.copy(sizeof(sGraphicObjectProtocol)-1).getStr(), RTL_TEXTENCODING_ASCII_US );
+                    pGrfObj = new GraphicObject( sId );
+                    aGraphic = pGrfObj->GetGraphic();
+                    bApply = true;
+                }
+            }
+            else
+            {
+                uno::Reference< graphic::XGraphic > xGraphic;
+                aValue >>= xGraphic;
+                if( xGraphic.is() )
+                {
+                    aGraphic = Graphic( xGraphic );
+                    bApply = true;
+                }
             }
 
-            if ( pGrfObj )
+            if ( bApply )
             {
                 const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
                 if ( pCnt->GetCntntIdx() && pDoc->GetNodes()[ pCnt->GetCntntIdx()->GetIndex() + 1 ] )
@@ -1261,7 +1279,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         svt::EmbeddedObjectRef xObj = pOleNode->GetOLEObj().GetObject();
 
                         ::rtl::OUString aMediaType;
-                        xObj.SetGraphic( pGrfObj->GetGraphic(), aMediaType );
+                        xObj.SetGraphic( aGraphic, aMediaType );
                     }
                 }
             }
@@ -2311,6 +2329,9 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         uno::Any* pOrder;
         if( pProps->GetProperty(FN_UNO_Z_ORDER, 0, pOrder) )
             setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_Z_ORDER)), *pOrder);
+        uno::Any* pReplacement;
+        if( pProps->GetProperty(FN_UNO_REPLACEMENT_GRAPHIC, 0, pReplacement) )
+            setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_GRAPHIC)), *pReplacement);
     }
     else
         throw lang::IllegalArgumentException();
