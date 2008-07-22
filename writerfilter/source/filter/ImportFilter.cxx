@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ImportFilter.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,7 @@
 #include <iostream>
 #include <osl/process.h>
 #endif
-
+#include <resourcemodel/TagLogger.hxx>
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
@@ -68,13 +68,14 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         return sal_False;
     }
 
-#ifdef DEBUG_IMPORT
-    TimeValue t1;
-    osl_getSystemTime(&t1);
+#ifdef DEBUG_ELEMENT
+    writerfilter::TagLogger::Pointer_t debugLogger
+    (writerfilter::TagLogger::getInstance("DEBUG"));
+    debugLogger->startDocument();
 
-    writerfilter::logger("DEBUG", "<out>");
-    writerfilter::logger("DEBUG", string("<starttime>") + string(t1.Seconds)
-                         + "</starttime>");
+    writerfilter::TagLogger::Pointer_t dmapperLogger
+    (writerfilter::TagLogger::getInstance("DOMAINMAPPER"));
+    dmapperLogger->startDocument();
 #endif
 
     writerfilter::dmapper::SourceDocumentType eType =
@@ -107,13 +108,11 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         pDocument->resolve(*pStream);
     }
 
-#ifdef DEBUG_IMPORT
-    TimeValue t2;
-    osl_getSystemTime(&t2);
-
-    writerfilter::logger("DEBUG", string("<importtime>")
-                         + string(t2.Seconds - t1.Seconds) + "</importtime>");
-    writerfilter::logger("DEBUG", "</out>");
+#ifdef DEBUG_ELEMENT
+    writerfilter::TagLogger::dump("DEBUG");
+    debugLogger->endDocument();
+    writerfilter::TagLogger::dump("DOMAINMAPPER");
+    dmapperLogger->endDocument();
 #endif
 
     return sal_True;
