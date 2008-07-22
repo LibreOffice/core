@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: ReportBuilder01.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: obo $ $Date: 2008-07-21 12:31:42 $
+'* last change: $Author: obo $ $Date: 2008-07-22 12:34:57 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -106,14 +106,8 @@ testcase tMainMenuBar
         hMenuSelectNr(1) ' the file menu
         hMenuSelectNr(4) ' the autopilots menu        
         iCount = hMenuItemGetCount()
-        if (gOOO) then   
-            if (iCount <> 10) then
-                warnlog "There should 10 items in the FILE/AUTOPILOTS menu but there are " + iCount + " items."
-            end if
-        else
-            if (iCount <> 8) then
-                warnlog "There should 8 items in the FILE/AUTOPILOTS menu but there are " + iCount + " items."
-            end if
+        if (iCount <> 8) then
+            warnlog "There should 8 items in the FILE/AUTOPILOTS menu but there are " + iCount + " items."
         endif
         call hMenuClose()
 
