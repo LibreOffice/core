@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slidepersist.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,9 @@
 #include "oox/ppt/timenode.hxx"
 #include "oox/ppt/pptshape.hxx"
 #include "oox/ppt/slidepersist.hxx"
+#include "oox/drawingml/fillproperties.hxx"
 #include "oox/core/namespaces.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 #include "tokens.hxx"
 
 #include <com/sun/star/style/XStyle.hpp>
@@ -127,19 +129,19 @@ sal_Int16 SlidePersist::getLayoutFromValueToken()
     return nLayout;
 }
 
-void SlidePersist::createXShapes( const oox::core::XmlFilterBase& rFilterBase )
+void SlidePersist::createXShapes( const XmlFilterBase& rFilterBase )
 {
     applyTextStyles( rFilterBase );
 
     Reference< XShapes > xShapes( getPage(), UNO_QUERY );
 
-    std::vector< oox::drawingml::ShapePtr >& rShapes( maShapesPtr->getChilds() );
+    std::vector< oox::drawingml::ShapePtr >& rShapes( maShapesPtr->getChildren() );
     std::vector< oox::drawingml::ShapePtr >::iterator aShapesIter( rShapes.begin() );
     while( aShapesIter != rShapes.end() )
     {
-        std::vector< oox::drawingml::ShapePtr >& rChilds( (*aShapesIter++)->getChilds() );
-        std::vector< oox::drawingml::ShapePtr >::iterator aChildIter( rChilds.begin() );
-        while( aChildIter != rChilds.end() )
+        std::vector< oox::drawingml::ShapePtr >& rChildren( (*aShapesIter++)->getChildren() );
+        std::vector< oox::drawingml::ShapePtr >::iterator aChildIter( rChildren.begin() );
+        while( aChildIter != rChildren.end() )
         {
             PPTShape* pPPTShape = dynamic_cast< PPTShape* >( (*aChildIter).get() );
             if ( pPPTShape )
@@ -166,7 +168,7 @@ void SlidePersist::createXShapes( const oox::core::XmlFilterBase& rFilterBase )
     }
 }
 
-void SlidePersist::createBackground( const oox::core::XmlFilterBase& rFilterBase )
+void SlidePersist::createBackground( const XmlFilterBase& rFilterBase )
 {
     if ( mpBackgroundPropertiesPtr )
     {
@@ -176,7 +178,10 @@ void SlidePersist::createBackground( const oox::core::XmlFilterBase& rFilterBase
             static const rtl::OUString sBackground( RTL_CONSTASCII_USTRINGPARAM( "Background" ) );
             uno::Reference< beans::XPropertySet > xPagePropSet( mxPage, uno::UNO_QUERY_THROW );
             uno::Reference< beans::XPropertySet > xPropertySet( aPropMap.makePropertySet() );
-            mpBackgroundPropertiesPtr->pushToPropSet( rFilterBase, xPropertySet, 0 );
+            PropertySet aPropSet( xPropertySet );
+            mpBackgroundPropertiesPtr->pushToPropSet(
+                aPropSet, ::oox::drawingml::FillProperties::DEFAULTNAMES,
+                rFilterBase, rFilterBase.getModelObjectContainer(), 0, -1 );
             xPagePropSet->setPropertyValue( sBackground, Any( xPropertySet ) );
         }
         catch( Exception )
@@ -185,17 +190,11 @@ void SlidePersist::createBackground( const oox::core::XmlFilterBase& rFilterBase
     }
 }
 
-void setTextStyle( Reference< beans::XPropertySet >& rxPropSet,
+void setTextStyle( Reference< beans::XPropertySet >& rxPropSet, const XmlFilterBase& rFilter,
     oox::drawingml::TextListStylePtr& pTextListStylePtr, int nLevel )
 {
     ::oox::drawingml::TextParagraphPropertiesPtr pTextParagraphPropertiesPtr( pTextListStylePtr->getListStyle()[ nLevel ] );
     if( pTextParagraphPropertiesPtr == NULL )
-    {
-        // no properties. return
-        return;
-    }
-    ::oox::drawingml::TextCharacterPropertiesPtr pTextCharacterPropertiesPtr( pTextParagraphPropertiesPtr->getTextCharacterProperties() );
-    if( pTextCharacterPropertiesPtr == NULL )
     {
         // no properties. return
         return;
@@ -207,18 +206,12 @@ void setTextStyle( Reference< beans::XPropertySet >& rxPropSet,
         rTextParagraphPropertyMap.dump_debug("TextParagraph paragraph props");
 #endif
 
-    PropertyMap& rTextCharacterPropertyMap( pTextCharacterPropertiesPtr->getTextCharacterPropertyMap() );
-#ifdef DEBUG
-    if ( false )
-        rTextCharacterPropertyMap.dump_debug("TextParagraph paragraph props");
-#endif
-
     PropertySet aPropSet( rxPropSet );
     aPropSet.setProperties( rTextParagraphPropertyMap );
-    aPropSet.setProperties( rTextCharacterPropertyMap );
+    pTextParagraphPropertiesPtr->getTextCharacterProperties().pushToPropSet( aPropSet, rFilter );
 }
 
-void SlidePersist::applyTextStyles( const oox::core::XmlFilterBase& rFilterBase )
+void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
 {
     if ( mbMaster )
     {
@@ -290,8 +283,8 @@ void SlidePersist::applyTextStyles( const oox::core::XmlFilterBase& rFilterBase 
                                 if ( xFamilies->getByName( aStyle ) >>= aXStyle )
                                 {
                                     Reference< beans::XPropertySet > xPropSet( aXStyle, UNO_QUERY_THROW );
-                                    setTextStyle( xPropSet, maDefaultTextStylePtr, 0 );
-                                    setTextStyle( xPropSet, pTextListStylePtr, 0 );
+                                    setTextStyle( xPropSet, rFilterBase, maDefaultTextStylePtr, 0 );
+                                    setTextStyle( xPropSet, rFilterBase, pTextListStylePtr, 0 );
                                     if ( i == 1 /* BodyStyle */ )
                                     {
                                         for ( int nLevel = 1; nLevel < 5; nLevel++ )
@@ -307,8 +300,8 @@ void SlidePersist::applyTextStyles( const oox::core::XmlFilterBase& rFilterBase 
                                                         xPropSet = Reference< beans::XPropertySet >( aXStyle, UNO_QUERY_THROW );
                                                 }
                                             }
-                                            setTextStyle( xPropSet, maDefaultTextStylePtr, nLevel );
-                                            setTextStyle( xPropSet, pTextListStylePtr, nLevel );
+                                            setTextStyle( xPropSet, rFilterBase, maDefaultTextStylePtr, nLevel );
+                                            setTextStyle( xPropSet, rFilterBase, pTextListStylePtr, nLevel );
                                         }
                                     }
                                 }
