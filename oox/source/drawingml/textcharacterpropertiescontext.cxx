@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textcharacterpropertiescontext.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,17 +30,11 @@
 
 #include "oox/drawingml/textcharacterpropertiescontext.hxx"
 
-#include <com/sun/star/awt/FontSlant.hpp>
-#include <com/sun/star/awt/FontWeight.hpp>
-#include <com/sun/star/awt/FontStrikeout.hpp>
-#include <com/sun/star/awt/FontUnderline.hpp>
-#include <com/sun/star/lang/Locale.hpp>
-
 #include "oox/helper/attributelist.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/colorchoicecontext.hxx"
 #include "oox/drawingml/lineproperties.hxx"
-#include "oox/drawingml/textfontcontext.hxx"
+#include "oox/drawingml/textparagraphproperties.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/core/relations.hxx"
 #include "hyperlinkcontext.hxx"
@@ -60,88 +54,24 @@ namespace oox { namespace drawingml {
 TextCharacterPropertiesContext::TextCharacterPropertiesContext(
         ContextHandler& rParent,
         const Reference< XFastAttributeList >& rXAttributes,
-        oox::drawingml::TextCharacterProperties& rTextCharacterProperties )
+        TextCharacterProperties& rTextCharacterProperties )
 : ContextHandler( rParent )
 , mrTextCharacterProperties( rTextCharacterProperties )
 {
-    AttributeList attribs( rXAttributes );
-    PropertyMap& rPropertyMap( mrTextCharacterProperties.getTextCharacterPropertyMap() );
-
-    rtl::OUString aVal( rXAttributes->getOptionalValue( XML_sz ) );
-    if ( aVal.getLength() )
-    {
-        float fTextSize = GetTextSize( aVal );
-        const rtl::OUString sCharHeight( CREATE_OUSTRING( "CharHeight" ) );
-        const rtl::OUString sCharHeightAsian( CREATE_OUSTRING( "CharHeightAsian" ) );
-        const rtl::OUString sCharHeightComplex( CREATE_OUSTRING( "CharHeightComplex" ) );
-        rPropertyMap[ sCharHeight ] <<= fTextSize;
-        rPropertyMap[ sCharHeightAsian ] <<= fTextSize;
-        rPropertyMap[ sCharHeightComplex ] <<= fTextSize;
-    }
-
-    bool bIsBold = attribs.getBool( XML_b, false );
-    const rtl::OUString sCharWeight( CREATE_OUSTRING( "CharWeight" ) );
-    const rtl::OUString sCharWeightAsian( CREATE_OUSTRING( "CharWeightAsian" ) );
-    const rtl::OUString sCharWeightComplex( CREATE_OUSTRING( "CharWeightComplex" ) );
-    rPropertyMap[ sCharWeight ] <<= ( bIsBold ? FontWeight::BOLD : FontWeight::NORMAL );
-    rPropertyMap[ sCharWeightAsian ] <<= ( bIsBold ? FontWeight::BOLD : FontWeight::NORMAL );
-    rPropertyMap[ sCharWeightComplex ] <<= ( bIsBold ? FontWeight::BOLD : FontWeight::NORMAL );
-
-    bool bIsItalic = attribs.getBool( XML_i, false );
-    const rtl::OUString sCharFontPosture( CREATE_OUSTRING( "CharPosture" ) );
-    const rtl::OUString sCharFontPostureAsian( CREATE_OUSTRING( "CharPostureAsian" ) );
-    const rtl::OUString sCharFontPostureComplex( CREATE_OUSTRING( "CharPostureComplex" ) );
-    rPropertyMap[ sCharFontPosture ] <<= ( bIsItalic ? FontSlant_ITALIC : FontSlant_NONE );
-    rPropertyMap[ sCharFontPostureAsian ] <<= ( bIsItalic ? FontSlant_ITALIC : FontSlant_NONE );
-    rPropertyMap[ sCharFontPostureComplex ] <<= ( bIsItalic ? FontSlant_ITALIC : FontSlant_NONE );
-
-    sal_Int32 nFontUnderline( rXAttributes->getOptionalValueToken( XML_u, 0 ) );
-    if ( nFontUnderline )
-    {
-        const rtl::OUString sCharUnderline( CREATE_OUSTRING( "CharUnderline" ) );
-        rPropertyMap[ sCharUnderline ] <<= GetFontUnderline( nFontUnderline );
-        mrTextCharacterProperties.getHasUnderline() <<= sal_True;
-    }
-
-    const rtl::OUString sCharStrikeout( CREATE_OUSTRING( "CharStrikeout" ) );
-    rPropertyMap[ sCharStrikeout ] <<= GetFontStrikeout( rXAttributes->getOptionalValueToken( XML_strike, XML_noStrike ) );
-
-    // ST_TextCapsType
-//  const rtl::OUString sCharCaseMap( CREATE_OUSTRING( "CharCaseMap" ) );
-//  rPropertyMap[ sCharCaseMap ] <<= GetCaseMap( rXAttributes->getOptionalValueToken( XML_cap, XML_none ) );
-
-
-    OUString sLang = rXAttributes->getOptionalValue( XML_lang );
-    if( sLang.getLength( ) )
-    {
-        const rtl::OUString sCharLocale( CREATE_OUSTRING( "CharLocale" ) );
-        const rtl::OUString sCharLocaleAsian( CREATE_OUSTRING( "CharLocaleAsian" ) );
-        const rtl::OUString sCharLocaleComplex( CREATE_OUSTRING( "CharLocaleComplex" ) );
-
-        com::sun::star::lang::Locale aLocale;
-        OUString aString( sLang );
-        sal_Int32  nSepPos = aString.indexOf( (sal_Unicode)'-', 0 );
-        if ( nSepPos != -1 )
-        {
-            aLocale.Language = aString.copy( 0, nSepPos );
-            aLocale.Country = aString.copy( nSepPos+1 );
-        }
-        else
-        {
-            aLocale.Language = aString;
-        }
-
-        rPropertyMap[ sCharLocale ] <<= aLocale;
-        rPropertyMap[ sCharLocaleAsian ] <<= aLocale;
-        rPropertyMap[ sCharLocaleComplex ] <<= aLocale;
-    }
-
+    AttributeList aAttribs( rXAttributes );
+    mrTextCharacterProperties.moLang        = aAttribs.getString( XML_lang );
+    mrTextCharacterProperties.moHeight      = aAttribs.getInteger( XML_sz );
+    mrTextCharacterProperties.moUnderline   = aAttribs.getToken( XML_u );
+    mrTextCharacterProperties.moStrikeout   = aAttribs.getToken( XML_strike );
+//    mrTextCharacterProperties.moCaseMap     = aAttribs.getToken( XML_cap );
+    mrTextCharacterProperties.moBold        = aAttribs.getBool( XML_b );
+    mrTextCharacterProperties.moItalic      = aAttribs.getBool( XML_i );
 
 // TODO
 /*   todo: we need to be able to iterate over the XFastAttributes
 
   // ST_TextNonNegativePoint
-    const rtl::OUString sCharKerning( CREATE_OUSTRING( "CharKerning" ) );
+    const OUString sCharKerning( CREATE_OUSTRING( "CharKerning" ) );
     //case NMSP_DRAWINGML|XML_kern:
 
   // ST_TextLanguageID
@@ -164,40 +94,6 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
 
 TextCharacterPropertiesContext::~TextCharacterPropertiesContext()
 {
-    PropertyMap& rPropertyMap( mrTextCharacterProperties.getTextCharacterPropertyMap() );
-
-    sal_Int16 nPitch, nFamily;
-
-    if( maLatinFont.is() )
-    {
-        const rtl::OUString sCharFontName( CREATE_OUSTRING( "CharFontName" ) );
-        const rtl::OUString sCharFontPitch( CREATE_OUSTRING( "CharFontPitch" ) );
-        const rtl::OUString sCharFontFamily( CREATE_OUSTRING( "CharFontFamily" ) );
-        GetFontPitch( maLatinFont.mnPitch, nPitch, nFamily);
-        rPropertyMap[ sCharFontName ] <<= maLatinFont.msTypeface;
-        rPropertyMap[ sCharFontPitch ] <<= nPitch;
-        rPropertyMap[ sCharFontFamily ] <<= nFamily;
-    }
-    if( maAsianFont.is() )
-    {
-        const rtl::OUString sCharFontNameAsian( CREATE_OUSTRING( "CharFontNameAsian" ) );
-        const rtl::OUString sCharFontPitchAsian( CREATE_OUSTRING( "CharFontPitchAsian" ) );
-        const rtl::OUString sCharFontFamilyAsian( CREATE_OUSTRING( "CharFontFamilyAsian" ) );
-        GetFontPitch( maAsianFont.mnPitch, nPitch, nFamily);
-        rPropertyMap[ sCharFontNameAsian ] <<= maAsianFont.msTypeface;
-        rPropertyMap[ sCharFontPitchAsian ] <<= nFamily;
-        rPropertyMap[ sCharFontFamilyAsian ] <<= nPitch;
-    }
-    if( maComplexFont.is() )
-    {
-        const rtl::OUString sCharFontNameComplex( CREATE_OUSTRING( "CharFontNameComplex" ) );
-        const rtl::OUString sCharFontPitchComplex( CREATE_OUSTRING( "CharFontPitchComplex" ) );
-        const rtl::OUString sCharFontFamilyComplex( CREATE_OUSTRING( "CharFontFamilyComplex" ) );
-        GetFontPitch( maComplexFont.mnPitch, nPitch, nFamily );
-        rPropertyMap[ sCharFontNameComplex ] <<= maComplexFont.msTypeface;
-        rPropertyMap[ sCharFontPitchComplex ] <<= nPitch;
-        rPropertyMap[ sCharFontFamilyComplex ] <<= nFamily;
-    }
 }
 
 // --------------------------------------------------------------------
@@ -210,66 +106,65 @@ void TextCharacterPropertiesContext::endFastElement( sal_Int32 ) throw (SAXExcep
 
 Reference< XFastContextHandler > TextCharacterPropertiesContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttributes ) throw (SAXException, RuntimeException)
 {
+    AttributeList aAttribs( xAttributes );
     Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
-        // not supported.....
-      case NMSP_DRAWINGML|XML_ln:           // CT_LineProperties
 // TODO unsupported yet
-//          xRet.set( new LinePropertiesContext( getHandler(), xAttributes, maTextOutlineProperties ) );
-            break;
-        // EG_FillProperties
-      case NMSP_DRAWINGML|XML_solidFill:
-            xRet.set( new colorChoiceContext( *this, *mrTextCharacterProperties.getCharColor() ) );
-            break;
-        // EG_EffectProperties
-    case NMSP_DRAWINGML|XML_effectDag:
-            // CT_EffectContainer 5.1.10.25
-      case NMSP_DRAWINGML|XML_effectLst:
-            // CT_EffectList 5.1.10.26
-            break;
+//        case NMSP_DRAWINGML|XML_ln:         // CT_LineProperties
+//            xRet.set( new LinePropertiesContext( getHandler(), xAttributes, maTextOutlineProperties ) );
+//        break;
 
-        case NMSP_DRAWINGML|XML_highlight:      //CT_Color
-            xRet.set( new colorChoiceContext( *this, *mrTextCharacterProperties.getHighlightColor() ) );
-            break;
+        case NMSP_DRAWINGML|XML_solidFill:  // EG_FillProperties
+            xRet.set( new colorChoiceContext( *this, mrTextCharacterProperties.maCharColor ) );
+        break;
+
+        // EG_EffectProperties
+        case NMSP_DRAWINGML|XML_effectDag:  // CT_EffectContainer 5.1.10.25
+        case NMSP_DRAWINGML|XML_effectLst:  // CT_EffectList 5.1.10.26
+        break;
+
+        case NMSP_DRAWINGML|XML_highlight:  // CT_Color
+            xRet.set( new colorChoiceContext( *this, mrTextCharacterProperties.maHighlightColor ) );
+        break;
 
         // EG_TextUnderlineLine
-        case NMSP_DRAWINGML|XML_uLnTx:          // CT_TextUnderlineLineFollowText
-             mrTextCharacterProperties.getUnderlineLineFollowText() <<= sal_True;
-            break;
-        case NMSP_DRAWINGML|XML_uLn:            // CT_LineProperties
+        case NMSP_DRAWINGML|XML_uLnTx:      // CT_TextUnderlineLineFollowText
+            mrTextCharacterProperties.moUnderlineLineFollowText = true;
+        break;
 // TODO unsupported yet
-//          xRet.set( new LinePropertiesContext( getHandler(), xAttributes, maUnderlineProperties ) );
-            break;
+//        case NMSP_DRAWINGML|XML_uLn:        // CT_LineProperties
+//            xRet.set( new LinePropertiesContext( getHandler(), xAttributes, maUnderlineProperties ) );
+//        break;
 
         // EG_TextUnderlineFill
-        case NMSP_DRAWINGML|XML_uFillTx:        // CT_TextUnderlineFillFollowText
-             mrTextCharacterProperties.getUnderlineFillFollowText() <<= sal_True;
-            break;
-        case NMSP_DRAWINGML|XML_uFill:          // CT_TextUnderlineFillGroupWrapper->EG_FillProperties (not supported)
-            xRet.set( new colorChoiceContext( *this, *mrTextCharacterProperties.getUnderlineColor() ) );
-            break;
+        case NMSP_DRAWINGML|XML_uFillTx:    // CT_TextUnderlineFillFollowText
+            mrTextCharacterProperties.moUnderlineFillFollowText = true;
+        break;
+        case NMSP_DRAWINGML|XML_uFill:      // CT_TextUnderlineFillGroupWrapper->EG_FillProperties (not supported)
+            xRet.set( new colorChoiceContext( *this, mrTextCharacterProperties.maUnderlineColor ) );
+        break;
 
         // CT_FontCollection
-        case NMSP_DRAWINGML|XML_ea:             // CT_TextFont
-            xRet.set( new TextFontContext( *this, aElementToken,  xAttributes, maAsianFont ) );
-            break;
-        case NMSP_DRAWINGML|XML_cs:             // CT_TextFont
-            xRet.set( new TextFontContext( *this, aElementToken,  xAttributes, maComplexFont ) );
-            break;
-        case NMSP_DRAWINGML|XML_sym:            // CT_TextFont
-            xRet.set( new TextFontContext( *this, aElementToken,  xAttributes, maSymbolFont ) );
-            break;
-        case NMSP_DRAWINGML|XML_latin:          // CT_TextFont
-            xRet.set( new TextFontContext( *this, aElementToken,  xAttributes, maLatinFont ) );
-            break;
+        case NMSP_DRAWINGML|XML_latin:      // CT_TextFont
+            mrTextCharacterProperties.maLatinFont.setAttributes( aAttribs );
+        break;
+        case NMSP_DRAWINGML|XML_ea:         // CT_TextFont
+            mrTextCharacterProperties.maAsianFont.setAttributes( aAttribs );
+        break;
+        case NMSP_DRAWINGML|XML_cs:         // CT_TextFont
+            mrTextCharacterProperties.maComplexFont.setAttributes( aAttribs );
+        break;
+        case NMSP_DRAWINGML|XML_sym:        // CT_TextFont
+            mrTextCharacterProperties.maSymbolFont.setAttributes( aAttribs );
+        break;
 
         case NMSP_DRAWINGML|XML_hlinkClick:     // CT_Hyperlink
         case NMSP_DRAWINGML|XML_hlinkMouseOver: // CT_Hyperlink
-            xRet.set( new HyperLinkContext( *this, xAttributes,  mrTextCharacterProperties.getHyperlinkPropertyMap() ) );
-            break;
+            xRet.set( new HyperLinkContext( *this, xAttributes,  mrTextCharacterProperties.maHyperlinkPropertyMap ) );
+        break;
     }
-    if ( !xRet.is() )
+    if( !xRet.is() )
         xRet.set( this );
     return xRet;
 }
