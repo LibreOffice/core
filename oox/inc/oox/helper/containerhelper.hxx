@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: containerhelper.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,7 @@ namespace com { namespace sun { namespace star {
     namespace container { class XIndexContainer; }
     namespace container { class XNameAccess; }
     namespace container { class XNameContainer; }
+    namespace lang { class XMultiServiceFactory; }
 } } }
 
 namespace oox {
@@ -326,7 +327,8 @@ public:
     static bool         insertByName(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxNameContainer,
                             const ::rtl::OUString& rName,
-                            const ::com::sun::star::uno::Any& rObject );
+                            const ::com::sun::star::uno::Any& rObject,
+                            bool bReplaceOldExisting = true );
 
     /** Inserts an object into a name container.
 
@@ -338,9 +340,9 @@ public:
         @param rxNameContainer  com.sun.star.container.XNameContainer interface
             of the name container.
 
-        @param rObject  The object to be inserted.
-
         @param rSuggestedName  Suggested name for the object.
+
+        @param rObject  The object to be inserted.
 
         @param bRenameOldExisting  Specifies behaviour if an object with the
             suggested name already exists. If false (default), the new object
@@ -356,9 +358,9 @@ public:
      */
     static ::rtl::OUString insertByUnusedName(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxNameContainer,
-                            const ::com::sun::star::uno::Any& rObject,
                             const ::rtl::OUString& rSuggestedName,
                             sal_Unicode cSeparator,
+                            const ::com::sun::star::uno::Any& rObject,
                             bool bRenameOldExisting = false );
 
     // vector and matrix ------------------------------------------------------
@@ -410,6 +412,42 @@ template< typename Type >
     }
     return aSeq;
 }
+
+// ============================================================================
+
+/** This helper manages named objects in a container, which is created on demand.
+ */
+class ObjectContainer
+{
+public:
+    explicit            ObjectContainer(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::rtl::OUString& rServiceName );
+                        ~ObjectContainer();
+
+    /** Returns true, if the object with the passed name exists in the container. */
+    bool                hasObject( const ::rtl::OUString& rObjName ) const;
+
+    /** Returns the object with the passed name from the container. */
+    ::com::sun::star::uno::Any getObject( const ::rtl::OUString& rObjName ) const;
+
+    /** Inserts the passed object into the container, returns its final name. */
+    ::rtl::OUString     insertObject(
+                            const ::rtl::OUString& rObjName,
+                            const ::com::sun::star::uno::Any& rObj,
+                            bool bInsertByUnusedName );
+
+private:
+    void                createContainer() const;
+
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                        mxFactory;              /// Factory to create the container.
+    mutable ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+                        mxContainer;            /// Container for the objects.
+    ::rtl::OUString     maServiceName;          /// Service name to create the container.
+    sal_Int32           mnIndex;                /// Index to create unique identifiers.
+};
 
 // ============================================================================
 
