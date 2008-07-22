@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textrun.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,14 +28,12 @@
  *
  ************************************************************************/
 
-
 #ifndef OOX_DRAWINGML_TEXTRUN_HXX
 #define OOX_DRAWINGML_TEXTRUN_HXX
 
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-
 #include "oox/drawingml/textcharacterproperties.hxx"
 
 namespace oox { namespace drawingml {
@@ -43,25 +41,27 @@ namespace oox { namespace drawingml {
 class TextRun
 {
 public:
-
     TextRun();
     virtual ~TextRun();
 
-    TextCharacterPropertiesPtr  getTextCharacterProperties(){ return maTextCharacterPropertiesPtr; };
-    ::rtl::OUString & getText() { return msText; }
-    const ::rtl::OUString & getText() const { return msText; }
+    inline ::rtl::OUString&         getText() { return msText; }
+    inline const ::rtl::OUString&   getText() const { return msText; }
+
+    inline TextCharacterProperties&         getTextCharacterProperties() { return maTextCharacterProperties; }
+    inline const TextCharacterProperties&   getTextCharacterProperties() const { return maTextCharacterProperties; }
+
+    inline void                 setLineBreak() { mbIsLineBreak = true; }
 
     virtual void                insertAt(
                                     const ::oox::core::XmlFilterBase& rFilterBase,
-                                    const ::com::sun::star::uno::Reference < ::com::sun::star::text::XText > & xText,
-                                    const ::com::sun::star::uno::Reference < ::com::sun::star::text::XTextCursor > &xAt,
-                                    const TextCharacterPropertiesPtr& );
+                                    const ::com::sun::star::uno::Reference < ::com::sun::star::text::XText >& xText,
+                                    const ::com::sun::star::uno::Reference < ::com::sun::star::text::XTextCursor >& xAt,
+                                    const TextCharacterProperties& rTextCharacterStyle ) const;
 
-    void                        setLineBreak() { mbIsLineBreak = true; }
-protected:
-    bool                        mbIsLineBreak;
-    TextCharacterPropertiesPtr  maTextCharacterPropertiesPtr;
+private:
     ::rtl::OUString             msText;
+    TextCharacterProperties     maTextCharacterProperties;
+    bool                        mbIsLineBreak;
 };
 
 typedef boost::shared_ptr< TextRun > TextRunPtr;
