@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: ch2_losa_ods_to_ods.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-13 14:26:54 $
+'* last change: $Author: obo $ $Date: 2008-07-22 10:34:13 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -57,7 +57,7 @@ sub main
     Printlog "--------------------------------------------------"
 
     use "chart2/tools/ch_tools_common.inc"
-    use "chart2/optional/includes/ch2_losa.inc"
+    use "chart2/optional/includes/loadsave/ch2_losa.inc"
     
     Call hStatusIn("Chart2", "ch2_losa_ods_to_ods.bas")       
         call subLoSaFromTo   
