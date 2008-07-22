@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.12 $
+# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -53,6 +53,7 @@ SLOFILES= \
     $(SLO)$/sprmcodetostr.obj \
     $(SLO)$/resourcemodel.obj \
     $(SLO)$/util.obj \
+    $(SLO)$/TagLogger.obj \
     $(SLO)$/WW8Analyzer.obj
 
 # linux 64 bit: compiler (gcc 4.2.3) fails with 'out of memory'
