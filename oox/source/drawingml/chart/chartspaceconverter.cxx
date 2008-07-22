@@ -8,7 +8,7 @@
  *
  * $RCSfile: chartspaceconverter.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
-#include "oox/core/filterbase.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
 #include "oox/drawingml/chart/plotareaconverter.hxx"
@@ -44,6 +44,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::util::XNumberFormatsSupplier;
+using ::com::sun::star::chart2::XDiagram;
 using ::com::sun::star::chart2::XTitled;
 using ::com::sun::star::chart2::data::XDataReceiver;
 
@@ -64,9 +65,6 @@ ChartSpaceConverter::~ChartSpaceConverter()
 
 void ChartSpaceConverter::convertFromModel()
 {
-    // initialize the automatic formatting information
-    initAutoFormats( mrModel.mnStyle );
-
     /*  create data provider (virtual function in the ChartConverter class,
         derived converters may create an external data provider) */
     getChartConverter().createDataProvider( getChartDocument() );
@@ -84,24 +82,38 @@ void ChartSpaceConverter::convertFromModel()
 
     // formatting of the chart background
     PropertySet aPropSet( getChartDocument()->getPageBackground() );
-    convertAutoFormats( aPropSet, OBJECTTYPE_CHARTSPACE );
+    getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, OBJECTTYPE_CHARTSPACE );
 
     // convert plot area (container of all chart type groups)
     PlotAreaConverter aPlotAreaConv( *this, mrModel.mxPlotArea.getOrCreate() );
-    OUString aAutoTitle = aPlotAreaConv.convertFromModel( mrModel.mxView3D.getOrCreate() );
+    aPlotAreaConv.convertFromModel( mrModel.mxView3D.getOrCreate() );
+
+    // plot area converter has created the diagram object
+    Reference< XDiagram > xDiagram = getChartDocument()->getFirstDiagram();
+
+    // convert wall and floor formatting in 3D charts
+    if( xDiagram.is() && aPlotAreaConv.isWall3dChart() )
+    {
+        WallFloorConverter aFloorConv( *this, mrModel.mxFloor.getOrCreate() );
+        aFloorConv.convertFromModel( xDiagram, OBJECTTYPE_FLOOR );
+
+        WallFloorConverter aWallConv( *this, mrModel.mxBackWall.getOrCreate() );
+        aWallConv.convertFromModel( xDiagram, OBJECTTYPE_WALL );
+    }
 
     // chart title
     if( !mrModel.mbAutoTitleDel ) try
     {
         /*  If the title model is missing, but the chart shows exactly one
             series, the series title is shown as chart title. */
+        OUString aAutoTitle = aPlotAreaConv.getAutomaticTitle();
         if( mrModel.mxTitle.is() || (aAutoTitle.getLength() > 0) )
         {
             if( aAutoTitle.getLength() == 0 )
                 aAutoTitle = CREATE_OUSTRING( "Chart Title" );
             Reference< XTitled > xTitled( getChartDocument(), UNO_QUERY_THROW );
             TitleConverter aTitleConv( *this, mrModel.mxTitle.getOrCreate() );
-            aTitleConv.convertFromModel( xTitled, aAutoTitle );
+            aTitleConv.convertFromModel( xTitled, aAutoTitle, OBJECTTYPE_CHARTTITLE );
         }
     }
     catch( Exception& )
