@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: alloc_global.c,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -189,7 +189,7 @@ rtl_memory_fini (void)
  * ================================================================= */
 
 void *
-SAL_CALL rtl_allocateMemory (sal_Size n)
+SAL_CALL rtl_allocateMemory (sal_Size n) SAL_THROW_EXTERN_C()
 {
     void * p = 0;
     if (n > 0)
@@ -231,7 +231,7 @@ try_alloc:
 
 /* ================================================================= */
 
-void SAL_CALL rtl_freeMemory (void * p)
+void SAL_CALL rtl_freeMemory (void * p) SAL_THROW_EXTERN_C()
 {
     if (p != 0)
     {
@@ -248,7 +248,7 @@ void SAL_CALL rtl_freeMemory (void * p)
 
 /* ================================================================= */
 
-void * SAL_CALL rtl_reallocateMemory (void * p, sal_Size n)
+void * SAL_CALL rtl_reallocateMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
 {
     if (n > 0)
     {
@@ -330,7 +330,7 @@ rtl_memory_fini (void)
  *
  * ================================================================= */
 
-void * SAL_CALL rtl_allocateZeroMemory (sal_Size n)
+void * SAL_CALL rtl_allocateZeroMemory (sal_Size n) SAL_THROW_EXTERN_C()
 {
     void * p = rtl_allocateMemory (n);
     if (p != 0)
@@ -340,7 +340,7 @@ void * SAL_CALL rtl_allocateZeroMemory (sal_Size n)
 
 /* ================================================================= */
 
-void SAL_CALL rtl_freeZeroMemory (void * p, sal_Size n)
+void SAL_CALL rtl_freeZeroMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
 {
     if (p != 0)
     {
