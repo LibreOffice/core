@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cfgitem.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -457,6 +457,13 @@ void SmMathConfig::SetOtherModified( BOOL bVal )
 void SmMathConfig::SetFormatModified( BOOL bVal )
 {
     bIsFormatModified = bVal;
+}
+
+
+void SmMathConfig::SetFontFormatListModified( BOOL bVal )
+{
+    if (pFontFormatList)
+        pFontFormatList->SetModified( bVal );
 }
 
 
@@ -1120,7 +1127,7 @@ const SmFormat & SmMathConfig::GetStandardFormat() const
 }
 
 
-void SmMathConfig::SetStandardFormat( const SmFormat &rFormat )
+void SmMathConfig::SetStandardFormat( const SmFormat &rFormat, BOOL bSaveFontFormatList )
 {
     if (!pFormat)
         LoadFormat();
@@ -1129,6 +1136,13 @@ void SmMathConfig::SetStandardFormat( const SmFormat &rFormat )
         *pFormat = rFormat;
         SetFormatModified( TRUE );
         SaveFormat();
+
+        if (bSaveFontFormatList)
+        {
+            // needed for SmFontTypeDialog's DefaultButtonClickHdl
+            SetFontFormatListModified( TRUE );
+            SaveFontFormatList();
+        }
     }
 }
 
