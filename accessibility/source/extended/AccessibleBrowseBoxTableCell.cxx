@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleBrowseBoxTableCell.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 #include "accessibility/extended/AccessibleBrowseBox.hxx"
 #include <tools/gen.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
 namespace accessibility
 {
@@ -98,6 +99,15 @@ namespace accessibility
         Reference< XComponent > xComponent(_rxParent, UNO_QUERY);
         if( xComponent.is() )
             xComponent->addEventListener(static_cast< XEventListener *> (this));
+    }
+
+    void AccessibleBrowseBoxTableCell::nameChanged( const ::rtl::OUString& rNewName, const ::rtl::OUString& rOldName )
+    {
+        implSetName( rNewName );
+        Any aOldValue, aNewValue;
+        aOldValue <<= rOldName;
+        aNewValue <<= rNewName;
+        commitEvent( AccessibleEventId::NAME_CHANGED, aOldValue, aNewValue );
     }
 
     // XInterface -------------------------------------------------------------
