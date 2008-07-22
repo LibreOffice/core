@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: javadep.c,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,7 +110,7 @@ static char     csep        = ';';
 #if defined (UNX) || defined(OS2)
 #define CDECL
 static char     cpathsep    = '/';
-#elif defined (WNT)
+#elif defined (WNT) || defined(OS2)
 static char     cpathsep    = '\\';
 #endif
 static FILE     *pfsout     = NULL;
