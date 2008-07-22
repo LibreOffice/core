@@ -12,7 +12,6 @@ wz      wizards\source\tools                                    nmake           
 wz      wizards\source\depot                                    nmake           -       all     wz_depot NULL
 wz      wizards\source\tutorials                                nmake           -       all     wz_tutorials NULL
 wz      wizards\source\standard                                 nmake           -       all     wz_standard NULL
-wz      wizards\source\launcher                                 nmake           -       all     wz_launcher NULL
 wz      wizards\com\sun\star\wizards                            nmake           -       all     wz_commonwiz NULL
 wz      wizards\com\sun\star\wizards\query                      nmake           -       all     wz_querywiz wz_formwiz wz_commonwiz NULL
 wz      wizards\com\sun\star\wizards\report                     nmake           -       all     wz_reportwiz wz_commonwiz NULL
