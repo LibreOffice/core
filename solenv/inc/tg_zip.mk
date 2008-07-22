@@ -8,7 +8,7 @@
 #
 # $RCSfile: tg_zip.mk,v $
 #
-# $Revision: 1.41 $
+# $Revision: 1.42 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -36,6 +36,8 @@
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*"
+.ELIF "$(GUI)"=="OS2"
+command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
