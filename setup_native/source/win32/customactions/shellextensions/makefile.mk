@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.19 $
+# $Revision: 1.20 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -64,6 +64,7 @@ SLOFILES = \
     $(SLO)$/checkdirectory.obj \
     $(SLO)$/setadmininstall.obj \
     $(SLO)$/layerlinks.obj \
+    $(SLO)$/dotnetcheck.obj \
     $(SLO)$/registerextensions.obj \
     $(SLO)$/copyeditiondata.obj
 
