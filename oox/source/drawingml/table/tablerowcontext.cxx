@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tablerowcontext.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 
 #include "oox/drawingml/table/tablerowcontext.hxx"
 #include "oox/drawingml/table/tablecellcontext.hxx"
+#include "oox/drawingml/table/tablerow.hxx"
 #include "oox/core/namespaces.hxx"
 
 using namespace ::oox::core;

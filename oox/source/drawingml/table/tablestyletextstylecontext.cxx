@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tablestyletextstylecontext.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +33,8 @@
 #include "oox/drawingml/table/tablestyletextstylecontext.hxx"
 #include "oox/drawingml/colorchoicecontext.hxx"
 #include "oox/drawingml/stylematrixreferencecontext.hxx"
-#include "oox/drawingml/textfontcontext.hxx"
 #include "oox/core/namespaces.hxx"
+#include "oox/helper/attributelist.hxx"
 #include "tokens.hxx"
 using namespace ::oox::core;
 using namespace ::com::sun::star;
@@ -72,6 +72,7 @@ TableStyleTextStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
     throw ( xml::sax::SAXException, uno::RuntimeException)
 {
     uno::Reference< xml::sax::XFastContextHandler > xRet;
+    AttributeList aAttribs( xAttribs );
 
     switch( aElementToken )
     {
@@ -80,21 +81,24 @@ TableStyleTextStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
             xRet.set( this );
             break;
         case NMSP_DRAWINGML|XML_ea:             // CT_TextFont
-            xRet.set( new TextFontContext( *this, aElementToken,  xAttribs, mrTableStylePart.getAsianFont() ) );
-            break;
+            mrTableStylePart.getAsianFont().setAttributes( aAttribs );
+            return 0;
         case NMSP_DRAWINGML|XML_cs:             // CT_TextFont
-            xRet.set( new TextFontContext( *this, aElementToken,  xAttribs, mrTableStylePart.getComplexFont() ) );
-            break;
+            mrTableStylePart.getComplexFont().setAttributes( aAttribs );
+            return 0;
         case NMSP_DRAWINGML|XML_sym:            // CT_TextFont
-            xRet.set( new TextFontContext( *this, aElementToken,  xAttribs, mrTableStylePart.getSymbolFont() ) );
-            break;
+            mrTableStylePart.getSymbolFont().setAttributes( aAttribs );
+            return 0;
         case NMSP_DRAWINGML|XML_latin:          // CT_TextFont
-            xRet.set( new TextFontContext( *this, aElementToken,  xAttribs, mrTableStylePart.getLatinFont() ) );
-            break;
+            mrTableStylePart.getLatinFont().setAttributes( aAttribs );
+            return 0;
 
         case NMSP_DRAWINGML|XML_fontRef:    // CT_FontReference
-            xRet.set( new StyleMatrixReferenceContext( *this, xAttribs,
-                mrTableStylePart.getThemeableFontRef(), mrTableStylePart.getThemeableFontColor() ) );
+            {
+                ShapeStyleRef& rFontStyle = mrTableStylePart.getStyleRefs()[ XML_fontRef ];
+                rFontStyle.mnThemedIdx = aAttribs.getToken( XML_idx, XML_none );
+                xRet.set( new StyleMatrixReferenceContext( *this, rFontStyle.maPhClr ) );
+            }
             break;
 
         case NMSP_DRAWINGML|XML_extLst:     // CT_OfficeArtExtensionList

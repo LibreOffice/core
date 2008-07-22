@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tablecell.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,8 +30,9 @@
 
 #include "oox/drawingml/table/tablecell.hxx"
 #include "oox/drawingml/table/tableproperties.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
+#include "oox/drawingml/textbody.hxx"
 #include "oox/core/namespaces.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 #include "tokens.hxx"
 #include "oox/helper/propertyset.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -42,6 +43,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <com/sun/star/text/XText.hpp>
 
 using rtl::OUString;
 using namespace ::oox::core;
@@ -76,43 +78,26 @@ void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
     Reference< XPropertySet >& rxPropSet, oox::drawingml::LineProperties& rLineProperties,
         const rtl::OUString& sPropertyName )
 {
-    try
+    BorderLine aBorderLine( 0, 0, 0, 0 );
+    if( rLineProperties.maLineFill.moFillType.differsFrom( XML_noFill ) )
     {
-        BorderLine aBorderLine;
-        const rtl::OUString sLineStyle( RTL_CONSTASCII_USTRINGPARAM( "LineStyle" ) );
-        drawing::LineStyle eLineStyle( drawing::LineStyle_NONE );
-        rLineProperties.getLinePropertyMap()[ sLineStyle ] >>= eLineStyle;
-        switch( eLineStyle )
-        {
-            default:
-                {
-                    aBorderLine.Color = rLineProperties.getLineColor()->getColor( rFilterBase );
-                    aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( rLineProperties.getLineWidth() ? *rLineProperties.getLineWidth() : 0 );
-                    aBorderLine.InnerLineWidth = 0;
-                    aBorderLine.LineDistance = 0;
-                }
-                break;
-            case drawing::LineStyle_NONE :
-                {
-                    aBorderLine.OuterLineWidth = 0;
-                    aBorderLine.InnerLineWidth = 0;
-                    aBorderLine.LineDistance = 0;
-                }
-            break;
-        }
-        rxPropSet->setPropertyValue( sPropertyName, Any( aBorderLine ) );
+        Color aColor = rLineProperties.maLineFill.getBestSolidColor();
+        aBorderLine.Color = aColor.getColor( rFilterBase );
+        aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) );
+        aBorderLine.InnerLineWidth = 0;
+        aBorderLine.LineDistance = 0;
     }
-    catch( uno::Exception& )
-    {
-    }
+
+    PropertySet aPropSet( rxPropSet );
+    aPropSet.setProperty( sPropertyName, aBorderLine );
 }
 
-void applyBorder( TableStylePart& rTableStylePart, TableStylePart::LineType eLineType, oox::drawingml::LineProperties& rLineProperties )
+void applyBorder( TableStylePart& rTableStylePart, sal_Int32 nLineType, oox::drawingml::LineProperties& rLineProperties )
 {
-    std::map < TableStylePart::LineType, boost::shared_ptr< ::oox::drawingml::LineProperties > >& rPartLineBorders( rTableStylePart.getLineBorders() );
-    std::map < TableStylePart::LineType, boost::shared_ptr< ::oox::drawingml::LineProperties > >::const_iterator aIter( rPartLineBorders.find( eLineType ) );
-    if ( ( aIter != rPartLineBorders.end() ) && ((*aIter).second).get() )
-        rLineProperties.apply( *((*aIter).second).get() );
+    std::map < sal_Int32, ::oox::drawingml::LinePropertiesPtr >& rPartLineBorders( rTableStylePart.getLineBorders() );
+    std::map < sal_Int32, ::oox::drawingml::LinePropertiesPtr >::const_iterator aIter( rPartLineBorders.find( nLineType ) );
+    if ( ( aIter != rPartLineBorders.end() ) && aIter->second.get() )
+        rLineProperties.assignUsed( *aIter->second );
 }
 
 void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase, const Reference < ::com::sun::star::table::XCell >& rxCell, oox::drawingml::FillProperties& rFillProperties,
@@ -126,54 +111,24 @@ void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase, const R
 {
     boost::shared_ptr< ::oox::drawingml::FillProperties >& rPartFillPropertiesPtr( rTableStylePart.getFillProperties() );
     if ( rPartFillPropertiesPtr.get() )
-        rFillProperties.apply( *rPartFillPropertiesPtr.get() );
+        rFillProperties.assignUsed( *rPartFillPropertiesPtr );
 
-    applyBorder( rTableStylePart, TableStylePart::LEFT, rLeftBorder );
-    applyBorder( rTableStylePart, TableStylePart::RIGHT, rRightBorder );
-    applyBorder( rTableStylePart, TableStylePart::TOP, rTopBorder );
-    applyBorder( rTableStylePart, TableStylePart::BOTTOM, rBottomBorder );
-    applyBorder( rTableStylePart, TableStylePart::TL2BR, rTopLeftToBottomRightBorder );
-    applyBorder( rTableStylePart, TableStylePart::TR2BL, rBottomLeftToTopRightBorder );
+    applyBorder( rTableStylePart, XML_left, rLeftBorder );
+    applyBorder( rTableStylePart, XML_right, rRightBorder );
+    applyBorder( rTableStylePart, XML_top, rTopBorder );
+    applyBorder( rTableStylePart, XML_bottom, rBottomBorder );
+    applyBorder( rTableStylePart, XML_tl2br, rTopLeftToBottomRightBorder );
+    applyBorder( rTableStylePart, XML_tr2bl, rBottomLeftToTopRightBorder );
 
-    const rtl::OUString sCharColor( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "CharColor" ) ) );
-    Reference< XPropertySet > xPropSet( rxCell, UNO_QUERY_THROW );
-    if ( rTableStylePart.getTextColor().isUsed() )
-        xPropSet->setPropertyValue( sCharColor, Any( rTableStylePart.getTextColor().getColor( rFilterBase ) ) );
+    TextCharacterProperties aTextCharProps;
+    aTextCharProps.maLatinFont = rTableStylePart.getLatinFont();
+    aTextCharProps.maAsianFont = rTableStylePart.getAsianFont();
+    aTextCharProps.maComplexFont = rTableStylePart.getComplexFont();
+    aTextCharProps.maSymbolFont = rTableStylePart.getSymbolFont();
+    aTextCharProps.maCharColor = rTableStylePart.getTextColor();
 
-    sal_Int16 nPitch, nFamily;
-    ::oox::drawingml::TextFont& rLatinFont( rTableStylePart.getLatinFont() );
-    if( rLatinFont.is() )
-    {
-        const rtl::OUString sCharFontName( CREATE_OUSTRING( "CharFontName" ) );
-        const rtl::OUString sCharFontPitch( CREATE_OUSTRING( "CharFontPitch" ) );
-        const rtl::OUString sCharFontFamily( CREATE_OUSTRING( "CharFontFamily" ) );
-        GetFontPitch( rLatinFont.mnPitch, nPitch, nFamily );
-        xPropSet->setPropertyValue( sCharFontName, Any( rLatinFont.msTypeface ) );
-        xPropSet->setPropertyValue( sCharFontPitch, Any( nPitch ) );
-        xPropSet->setPropertyValue( sCharFontFamily, Any( nFamily ) );
-    }
-    ::oox::drawingml::TextFont& rAsianFont( rTableStylePart.getAsianFont() );
-    if( rAsianFont.is() )
-    {
-        const rtl::OUString sCharFontNameAsian( CREATE_OUSTRING( "CharFontNameAsian" ) );
-        const rtl::OUString sCharFontPitchAsian( CREATE_OUSTRING( "CharFontPitchAsian" ) );
-        const rtl::OUString sCharFontFamilyAsian( CREATE_OUSTRING( "CharFontFamilyAsian" ) );
-        GetFontPitch( rAsianFont.mnPitch, nPitch, nFamily );
-        xPropSet->setPropertyValue( sCharFontNameAsian, Any( rAsianFont.msTypeface ) );
-        xPropSet->setPropertyValue( sCharFontPitchAsian, Any( nFamily ) );
-        xPropSet->setPropertyValue( sCharFontFamilyAsian, Any( nPitch ) );
-    }
-    ::oox::drawingml::TextFont& rComplexFont( rTableStylePart.getComplexFont() );
-    if( rComplexFont.is() )
-    {
-        const rtl::OUString sCharFontNameComplex( CREATE_OUSTRING( "CharFontNameComplex" ) );
-        const rtl::OUString sCharFontPitchComplex( CREATE_OUSTRING( "CharFontPitchComplex" ) );
-        const rtl::OUString sCharFontFamilyComplex( CREATE_OUSTRING( "CharFontFamilyComplex" ) );
-        GetFontPitch( rComplexFont.mnPitch, nPitch, nFamily );
-        xPropSet->setPropertyValue( sCharFontNameComplex, Any( rComplexFont.msTypeface ) );
-        xPropSet->setPropertyValue( sCharFontPitchComplex, Any( nPitch ) );
-        xPropSet->setPropertyValue( sCharFontFamilyComplex, Any( nFamily ) );
-    }
+    PropertySet aPropSet( rxCell );
+    aTextCharProps.pushToPropSet( aPropSet, rFilterBase );
 }
 
 void applyTableCellProperties( const Reference < ::com::sun::star::table::XCell >& rxCell, const TableCell& rTableCell )
@@ -214,7 +169,8 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
     Reference< text::XTextCursor > xAt = xText->createTextCursor();
 
     applyTableCellProperties( rxCell, *this );
-    getTextBody()->insertAt( rFilterBase, xText, xAt, pMasterTextListStyle );
+    TextCharacterProperties aTextStyleProps;
+    getTextBody()->insertAt( rFilterBase, xText, xAt, aTextStyleProps, pMasterTextListStyle );
 
     Reference< XPropertySet > xPropSet( rxCell, UNO_QUERY_THROW );
     static const rtl::OUString sLeftBorder( RTL_CONSTASCII_USTRINGPARAM( "LeftBorder" ) );
@@ -233,7 +189,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
 
     boost::shared_ptr< ::oox::drawingml::FillProperties >& rBackgroundFillPropertiesPtr( rTable.getBackgroundFillProperties() );
     if ( rBackgroundFillPropertiesPtr.get() )
-        aFillProperties.apply( *rBackgroundFillPropertiesPtr.get() );
+        aFillProperties.assignUsed( *rBackgroundFillPropertiesPtr );
 
     applyTableStylePart( rFilterBase, rxCell, aFillProperties,
         aLinePropertiesLeft,
@@ -396,13 +352,12 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
             }
         }
     }
-    aFillProperties.apply( maFillProperties );
-    aLinePropertiesLeft.apply( maLinePropertiesLeft );
-    aLinePropertiesLeft.apply( maLinePropertiesRight );
-    aLinePropertiesLeft.apply( maLinePropertiesTop );
-    aLinePropertiesLeft.apply( maLinePropertiesBottom );
-    aLinePropertiesLeft.apply( maLinePropertiesTopLeftToBottomRight );
-    aLinePropertiesLeft.apply( maLinePropertiesBottomLeftToTopRight );
+    aLinePropertiesLeft.assignUsed( maLinePropertiesLeft );
+    aLinePropertiesLeft.assignUsed( maLinePropertiesRight );
+    aLinePropertiesLeft.assignUsed( maLinePropertiesTop );
+    aLinePropertiesLeft.assignUsed( maLinePropertiesBottom );
+    aLinePropertiesLeft.assignUsed( maLinePropertiesTopLeftToBottomRight );
+    aLinePropertiesLeft.assignUsed( maLinePropertiesBottomLeftToTopRight );
     applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesLeft, sLeftBorder );
     applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesRight, sRightBorder );
     applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesTop, sTopBorder );
@@ -410,7 +365,11 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
     applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesTopLeftToBottomRight, sDiagonalTLBR );
     applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesBottomLeftToTopRight, sDiagonalBLTR );
 
-    aFillProperties.pushToPropSet( rFilterBase, xPropSet, 0 );
+    aFillProperties.assignUsed( maFillProperties );
+    PropertySet aPropSet( xPropSet );
+    // TODO: phClr?
+    aFillProperties.pushToPropSet( aPropSet, FillProperties::DEFAULTNAMES,
+        rFilterBase, rFilterBase.getModelObjectContainer(), 0, -1 );
 }
 
 } } }

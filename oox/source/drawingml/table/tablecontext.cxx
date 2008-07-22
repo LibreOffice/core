@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tablecontext.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/drawingml/guidcontext.hxx"
 #include "oox/drawingml/table/tablecontext.hxx"
+#include "oox/drawingml/table/tableproperties.hxx"
 #include "oox/drawingml/table/tablestylecontext.hxx"
 #include "oox/drawingml/table/tablerowcontext.hxx"
 #include "oox/core/namespaces.hxx"

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tablestylelist.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,15 +29,6 @@
  ************************************************************************/
 
 #include "oox/drawingml/table/tablestylelist.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
-
-using rtl::OUString;
-using namespace ::oox::core;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
 
 namespace oox { namespace drawingml { namespace table {
 

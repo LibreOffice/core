@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tablestylecellstylecontext.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 #include "oox/drawingml/linepropertiescontext.hxx"
 #include "oox/drawingml/stylematrixreferencecontext.hxx"
 #include "oox/core/namespaces.hxx"
+#include "oox/helper/attributelist.hxx"
 #include "tokens.hxx"
 using namespace ::oox::core;
 using namespace ::com::sun::star;
@@ -47,7 +48,7 @@ namespace oox { namespace drawingml { namespace table {
 TableStyleCellStyleContext::TableStyleCellStyleContext( ContextHandler& rParent, TableStylePart& rTableStylePart )
 : ContextHandler( rParent )
 , mrTableStylePart( rTableStylePart )
-, meLineType( TableStylePart::NONE )
+, mnLineType( XML_none )
 {
 }
 
@@ -61,53 +62,40 @@ TableStyleCellStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
     throw ( xml::sax::SAXException, uno::RuntimeException)
 {
     uno::Reference< xml::sax::XFastContextHandler > xRet;
+    AttributeList aAttribs( xAttribs );
     switch( aElementToken )
     {
         case NMSP_DRAWINGML|XML_tcBdr:      // CT_TableCellBorderStyle
             break;
         case NMSP_DRAWINGML|XML_left:       // CT_ThemeableLineStyle
-            meLineType = TableStylePart::LEFT;
-            break;
         case NMSP_DRAWINGML|XML_right:
-            meLineType = TableStylePart::RIGHT;
-            break;
         case NMSP_DRAWINGML|XML_top:
-            meLineType = TableStylePart::TOP;
-            break;
         case NMSP_DRAWINGML|XML_bottom:
-            meLineType = TableStylePart::BOTTOM;
-            break;
         case NMSP_DRAWINGML|XML_insideH:
-            meLineType = TableStylePart::INSIDEH;
-            break;
         case NMSP_DRAWINGML|XML_insideV:
-            meLineType = TableStylePart::INSIDEV;
-            break;
         case NMSP_DRAWINGML|XML_tl2br:
-            meLineType = TableStylePart::TL2BR;
-            break;
         case NMSP_DRAWINGML|XML_tr2bl:
-            meLineType = TableStylePart::TR2BL;
+            mnLineType = getToken( aElementToken );
             break;
 
         case NMSP_DRAWINGML|XML_ln:
             {
-                if ( meLineType != TableStylePart::NONE )
+                if ( mnLineType != XML_none )
                 {
-                    std::map < TableStylePart::LineType, boost::shared_ptr< ::oox::drawingml::LineProperties > >& rLineBorders = mrTableStylePart.getLineBorders();
-                    boost::shared_ptr< ::oox::drawingml::LineProperties > mpLineProperties( new oox::drawingml::LineProperties );
-                    rLineBorders[ meLineType ] = mpLineProperties;
+                    std::map < sal_Int32, ::oox::drawingml::LinePropertiesPtr >& rLineBorders = mrTableStylePart.getLineBorders();
+                    ::oox::drawingml::LinePropertiesPtr mpLineProperties( new oox::drawingml::LineProperties );
+                    rLineBorders[ mnLineType ] = mpLineProperties;
                     xRet = new LinePropertiesContext( *this, xAttribs, *mpLineProperties );
                 }
             }
             break;
         case NMSP_DRAWINGML|XML_lnRef:
             {
-                if ( meLineType != TableStylePart::NONE )
+                if ( mnLineType != XML_none )
                 {
-                    std::map < TableStylePart::LineType, rtl::OUString >& rLineBordersStyleRef = mrTableStylePart.getLineBordersStyleRef();
-                    std::map < TableStylePart::LineType, oox::drawingml::Color >& rLineBordersStyleColor = mrTableStylePart.getLineBordersStyleColor();
-                    xRet.set( new StyleMatrixReferenceContext( *this, xAttribs, rLineBordersStyleRef[ meLineType ], rLineBordersStyleColor[ meLineType ] ) );
+                    ShapeStyleRef rLineStyleRef = mrTableStylePart.getStyleRefs()[ mnLineType ];
+                    rLineStyleRef.mnThemedIdx = aAttribs.getInteger( XML_idx, 0 );
+                    xRet.set( new StyleMatrixReferenceContext( *this, rLineStyleRef.maPhClr ) );
                 }
             }
             break;
@@ -115,13 +103,17 @@ TableStyleCellStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
         // EG_ThemeableFillStyle (choice)
         case NMSP_DRAWINGML|XML_fill:       // CT_FillProperties
             {
-                boost::shared_ptr< oox::drawingml::FillProperties >& rFillProperties( mrTableStylePart.getFillProperties() );
-                rFillProperties = boost::shared_ptr< oox::drawingml::FillProperties > ( new oox::drawingml::FillProperties() );
-                xRet.set( new oox::drawingml::FillPropertiesContext( *this, *rFillProperties.get() ) );
+                oox::drawingml::FillPropertiesPtr& rFillProperties( mrTableStylePart.getFillProperties() );
+                rFillProperties.reset( new oox::drawingml::FillProperties );
+                xRet.set( new oox::drawingml::FillPropertiesContext( *this, *rFillProperties ) );
             }
             break;
         case NMSP_DRAWINGML|XML_fillRef:    // CT_StyleMatrixReference
-            xRet.set( new StyleMatrixReferenceContext( *this, xAttribs, mrTableStylePart.getFillStyleRef(), mrTableStylePart.getFillStyleColor() ) );
+            {
+                ShapeStyleRef rStyleRef = mrTableStylePart.getStyleRefs()[ XML_fillRef ];
+                rStyleRef.mnThemedIdx = aAttribs.getInteger( XML_idx, 0 );
+                xRet.set( new StyleMatrixReferenceContext( *this, rStyleRef.maPhClr ) );
+            }
             break;
 
         case NMSP_DRAWINGML|XML_cell3D:     // CT_Cell3D

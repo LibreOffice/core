@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tablebackgroundstylecontext.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include "oox/drawingml/table/tablebackgroundstylecontext.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/core/namespaces.hxx"
+#include "oox/helper/attributelist.hxx"
 #include "tokens.hxx"
 using namespace ::oox::core;
 using namespace ::com::sun::star;
@@ -59,6 +60,7 @@ TableBackgroundStyleContext::createFastChildContext( ::sal_Int32 aElementToken, 
 {
     uno::Reference< xml::sax::XFastContextHandler > xRet;
 
+    AttributeList aAttribs( xAttribs );
     switch( aElementToken )
     {
         // EG_ThemeableFillStyle (choice)
@@ -70,7 +72,11 @@ TableBackgroundStyleContext::createFastChildContext( ::sal_Int32 aElementToken, 
             }
             break;
         case NMSP_DRAWINGML|XML_fillRef:    // CT_StyleMatrixReference
-            xRet.set( new oox::drawingml::StyleMatrixReferenceContext( *this, xAttribs, mrTableStyle.getBackgroundFillStyleRef(), mrTableStyle.getBackgroundFillStyleColor() ) );
+            {
+                ShapeStyleRef& rStyleRef = mrTableStyle.getBackgroundFillStyleRef();
+                rStyleRef.mnThemedIdx = aAttribs.getInteger( XML_idx, 0 );
+                xRet.set( new StyleMatrixReferenceContext( *this, rStyleRef.maPhClr ) );
+            }
             break;
 
         // EG_ThemeableEffectStyle (choice)
