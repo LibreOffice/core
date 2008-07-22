@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: select.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -323,7 +323,8 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
     ScTabView* pView = pViewData->GetView();
     SCTAB nTab = pViewData->GetTabNo();
     ScModule* pScMod = SC_MOD();
-    BOOL bRefMode = pScMod->IsFormulaMode();
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    bool bRefMode = ( pViewShell ? pViewShell->IsRefInputMode() : false );
 
     BOOL bHide = !bRefMode && !pViewData->IsAnyFillMode() &&
             ( nPosX != (SCsCOL) pViewData->GetCurX() || nPosY != (SCsROW) pViewData->GetCurY() );
