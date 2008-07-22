@@ -8,7 +8,7 @@
 #
 # $RCSfile: libs.mk,v $
 #
-# $Revision: 1.136 $
+# $Revision: 1.137 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,9 +28,9 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.136 $$"
+LIBSMKREV!:="$$Revision: 1.137 $$"
 
-.IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
+.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 
 #
 #externe libs in plattform.mk
@@ -351,7 +351,8 @@ LPSOLVELIB=-llpsolve55
 SOFFICELIB=-lsofficeapp
 UNOPKGAPPLIB=-lunopkgapp
 
-.ELSE				# "$(GUI)"=="UNX"
+.ELSE				# ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
+
 AWTLIB*=jawt.lib
 AVMEDIALIB=iavmedia.lib
 ICUINLIB=icuin.lib
@@ -370,7 +371,11 @@ LDAPBERLIB=ldapber.lib
 CPPULIB=icppu.lib
 CPPUHELPERLIB=icppuhelper.lib
 UCBHELPERLIB=iucbhelper.lib
+.IF "$(GUI)"=="OS2"
+OPENSSLLIB=ssl.lib crypto.lib
+.ELSE
 OPENSSLLIB=ssleay32.lib libeay32.lib
+.ENDIF
 ODBCLIB=iodbc.lib
 ODBCBASELIB=iodbcbase.lib
 DBFILELIB=ifile.lib
@@ -516,4 +521,4 @@ LPSOLVELIB=lpsolve55.lib
 SOFFICELIB=isofficeapp.lib
 UNOPKGAPPLIB=iunopkgapp.lib
 
-.ENDIF              # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
+.ENDIF              # ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
