@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,9 +51,9 @@ OBJFILES=	$(OBJ)$/gengal.obj
 
 .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 APP1TARGET= $(TARGET)
-.ELSE			# .IF "$(GUI)"=="WNT"
+.ELSE			# .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 APP1TARGET= $(TARGET).bin
-.ENDIF			# .IF "$(GUI)"=="WNT"
+.ENDIF			# .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 
 APP1OBJS=   $(OBJFILES)
 
