@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shutdownicon.cxx,v $
- * $Revision: 1.63 $
+ * $Revision: 1.64 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -658,6 +658,19 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
                 /* Create a sub-classed instance - foo */
                 ShutdownIcon::pShutdownIcon = this;
                 initSystray();
+#ifdef OS2
+                // above win32 starts the quickstart thread, but we have
+                // quickstart running only when -quickstart is specified
+                // on command line (next boot).
+                // so if -quickstart was not specified, we cannot issue
+                // quickstart veto on shutdown.
+                if (bQuickstart)
+                {
+                    // disable shutdown
+                    ShutdownIcon::getInstance()->SetVeto( true );
+                    ShutdownIcon::getInstance()->addTerminateListener();
+                }
+#endif
 #ifdef OS2
                 // above win32 starts the quickstart thread, but we have
                 // quickstart running only when -quickstart is specified
