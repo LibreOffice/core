@@ -9,7 +9,7 @@
  
   $RCSfile: fastresources.xsl,v $
  
-  $Revision: 1.4 $
+  $Revision: 1.5 $
  
   This file is part of OpenOffice.org.
  
@@ -78,6 +78,7 @@
 #include &lt;string&gt;
 
 #include &lt;resourcemodel/WW8ResourceModel.hxx&gt;
+#include &lt;resourcemodel/TagLogger.hxx&gt;
 #include &lt;doctok/resourceids.hxx&gt;
 #include &lt;ooxml/resourceids.hxx&gt;
 #include &lt;ooxml/OOXMLnamespaceids.hxx&gt;
@@ -94,6 +95,9 @@
 
 namespace writerfilter {
 namespace ooxml {
+
+extern TagLogger::Pointer_t debug_logger;
+
 using namespace ::std;
 using namespace ::com::sun::star;
 
