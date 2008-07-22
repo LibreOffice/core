@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.21 $
+# $Revision: 1.22 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -64,7 +64,11 @@ SHL1LIBS=\
     $(SLB)$/regexp.lib
 SHL1IMPLIB=i$(TARGET)
 
+.IF "$(GUI)" == "OS2"
+DEF1EXPORTFILE=exports2.dxp
+.ELSE
 SHL1VERSIONMAP=exports.map
+.ENDIF
 
 DEF1NAME=$(SHL1TARGET)
 
