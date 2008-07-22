@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: commontimenodecontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -637,7 +637,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
         {
         case NMSP_PPT|XML_childTnLst:
         case NMSP_PPT|XML_subTnLst:
-            xRet.set( new TimeNodeListContext( *this, mpNode->getChilds() ) );
+            xRet.set( new TimeNodeListContext( *this, mpNode->getChildren() ) );
             break;
 
         case NMSP_PPT|XML_stCondLst:
