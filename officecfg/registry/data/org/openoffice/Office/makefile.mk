@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.23 $
+# $Revision: 1.24 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -77,7 +77,6 @@ MODULEFILES= \
     Common-unx.xcu   \
     Common-macosx.xcu   \
     Common-wnt.xcu   \
-    Common-dicooo.xcu   \
     Common-UseOOoFileDialogs.xcu \
     Linguistic-ForceDefaultLanguage.xcu \
     Scripting-python.xcu   \
