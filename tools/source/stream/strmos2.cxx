@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: strmos2.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,13 @@
 
 // class FileBase
 #include <osl/file.hxx>
+
+using namespace osl;
+
+// class FileBase
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
 
 using namespace osl;
 
