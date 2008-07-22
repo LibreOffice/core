@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UninstallationOngoingCtrl.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,7 +102,7 @@ public class UninstallationOngoingCtrl extends PanelController {
 
                 for (int i = 0; i < uninstallPackages.size(); i++) {
                     PackageDescription packageData = (PackageDescription) uninstallPackages.get(i);
-                    int progress = java.lang.Math.round(100/uninstallPackages.size()) * (i+1);
+                    int progress = java.lang.Math.round((100*(i+1))/uninstallPackages.size());
                     panel.setProgressValue(progress);
                     panel.setProgressText(packageData.getPackageName());
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: InstallationOngoingCtrl.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,7 +106,7 @@ public class InstallationOngoingCtrl extends PanelController {
 
                 for (int i = 0; i < installPackages.size(); i++) {
                     PackageDescription packageData = (PackageDescription) installPackages.get(i);
-                    int progress = java.lang.Math.round(100/installPackages.size()) * (i+1);
+                    int progress = java.lang.Math.round((100*(i+1))/installPackages.size());
                     panel.setProgressValue(progress);
                     panel.setProgressText(packageData.getPackageName());
 
