@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edit.cxx,v $
- * $Revision: 1.98 $
+ * $Revision: 1.99 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,8 +48,8 @@
 #include <vcl/edit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/controllayout.hxx>
-
 #include <vcl/msgbox.hxx>
+#include <vcl/window.h>
 
 #include <vos/mutex.hxx>
 
@@ -219,6 +219,25 @@ Edit::Edit( Window* pParent, const ResId& rResId ) :
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
+
+    // Derived MultiLineEdit takes care to call Show only after MultiLineEdit
+    // ctor has already started:
+    if ( !(nStyle & WB_HIDE) && rResId.GetRT() != RSC_MULTILINEEDIT )
+        Show();
+}
+
+// -----------------------------------------------------------------------
+
+Edit::Edit( Window* pParent, const ResId& rResId, bool bDisableAccessibleLabeledByRelation ) :
+    Control( WINDOW_EDIT )
+{
+    ImplInitEditData();
+    rResId.SetRT( RSC_EDIT );
+    WinBits nStyle = ImplInitRes( rResId );
+    ImplInit( pParent, nStyle );
+    ImplLoadRes( rResId );
+    if ( bDisableAccessibleLabeledByRelation )
+        ImplGetWindowImpl()->mbDisableAccessibleLabeledByRelation = TRUE;
 
     // Derived MultiLineEdit takes care to call Show only after MultiLineEdit
     // ctor has already started:
