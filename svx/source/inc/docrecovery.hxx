@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docrecovery.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -148,7 +148,7 @@ enum ERecoveryState
     E_SUCCESSFULLY_RECOVERED,
     E_ORIGINAL_DOCUMENT_RECOVERED,
     E_RECOVERY_FAILED,
-    E_RECOVERY_IN_PROGRESS,
+    E_RECOVERY_IS_IN_PROGRESS,
     E_NOT_RECOVERED_YET
 };
 
@@ -674,7 +674,7 @@ class RecoveryDialog : public IExtendedTabPage
         PushButton*     m_pDefButton;
         RecoveryCore*   m_pCore;
         css::uno::Reference< css::task::XStatusIndicator > m_xProgress;
-        enum ERecoveryState
+        enum EInternalRecoveryState
         {
             E_RECOVERY_PREPARED,            // dialog started ... recovery prepared
             E_RECOVERY_IN_PROGRESS,         // recovery core still in progress
@@ -732,6 +732,10 @@ class RecoveryDialog : public IExtendedTabPage
         //---------------------------------------
         /** @short TODO */
         void impl_refreshDocList();
+
+        //---------------------------------------
+        /** @short TODO */
+        String impl_getStatusString( const TURLInfo& rInfo ) const;
 };
 
 //===============================================
