@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textbodycontext.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,9 +30,11 @@
 
 #include "oox/drawingml/textbodycontext.hxx"
 #include "oox/drawingml/textbodypropertiescontext.hxx"
+#include "oox/drawingml/textparagraph.hxx"
 #include "oox/drawingml/textparagraphpropertiescontext.hxx"
 #include "oox/drawingml/textcharacterpropertiescontext.hxx"
 #include "oox/drawingml/textliststylecontext.hxx"
+#include "oox/drawingml/textfield.hxx"
 #include "oox/drawingml/textfieldcontext.hxx"
 #include "oox/core/namespaces.hxx"
 #include "tokens.hxx"
@@ -86,14 +88,14 @@ Reference< XFastContextHandler > TextParagraphContext::createFastChildContext( s
     {
     case NMSP_DRAWINGML|XML_r:      // "CT_RegularTextRun" Regular Text Run.
     {
-        TextRunPtr pRun( new TextRun() );
+        TextRunPtr pRun( new TextRun );
         mrParagraph.addRun( pRun );
         xRet.set( new RegularTextRunContext( *this, pRun ) );
         break;
     }
     case NMSP_DRAWINGML|XML_br: // "CT_TextLineBreak" Soft return line break (vertical tab).
     {
-        TextRunPtr pRun( new TextRun() );
+        TextRunPtr pRun( new TextRun );
         pRun->setLineBreak();
         mrParagraph.addRun( pRun );
         xRet.set( new RegularTextRunContext( *this, pRun ) );
@@ -101,16 +103,16 @@ Reference< XFastContextHandler > TextParagraphContext::createFastChildContext( s
     }
     case NMSP_DRAWINGML|XML_fld:    // "CT_TextField" Text Field.
     {
-        TextFieldPtr pField( new TextField() );
+        TextFieldPtr pField( new TextField );
         mrParagraph.addRun( pField );
-        xRet.set( new TextFieldContext( *this, xAttribs, pField ) );
+        xRet.set( new TextFieldContext( *this, xAttribs, *pField ) );
         break;
     }
     case NMSP_DRAWINGML|XML_pPr:
-        xRet.set( new TextParagraphPropertiesContext( *this, xAttribs, *mrParagraph.getProperties() ) );
+        xRet.set( new TextParagraphPropertiesContext( *this, xAttribs, mrParagraph.getProperties() ) );
         break;
     case NMSP_DRAWINGML|XML_endParaRPr:
-        xRet.set( new TextParagraphPropertiesContext( *this, xAttribs, *mrParagraph.getEndProperties() ) );
+        xRet.set( new TextParagraphPropertiesContext( *this, xAttribs, mrParagraph.getEndProperties() ) );
         break;
     }
 
@@ -163,7 +165,7 @@ Reference< XFastContextHandler > RegularTextRunContext::createFastChildContext( 
     switch( aElementToken )
     {
     case NMSP_DRAWINGML|XML_rPr:    // "CT_TextCharPropertyBag" The text char properties of this text run.
-        xRet.set( new TextCharacterPropertiesContext( *this, xAttribs, *mpRunPtr->getTextCharacterProperties() ) );
+        xRet.set( new TextCharacterPropertiesContext( *this, xAttribs, mpRunPtr->getTextCharacterProperties() ) );
         break;
     case NMSP_DRAWINGML|XML_t:      // "xsd:string" minOccurs="1" The actual text string.
         mbIsInText = true;
