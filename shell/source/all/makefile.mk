@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -50,7 +50,6 @@ CFLAGS_X64+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820
 CDEFS_X64+=-D_WIN32_IE=0x501
 .ENDIF # "$(BUILD_X64)"!=""
 .ENDIF
-
 .IF "$(GUI)" == "OS2"
 CFLAGS+=-DISOLATION_AWARE_ENABLED -DXML_UNICODE -DXML_UNICODE_WCHAR_T -DUNICODE -D_UNICODE
 .ENDIF
