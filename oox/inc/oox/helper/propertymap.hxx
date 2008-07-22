@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: propertymap.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include "oox/helper/helper.hxx"
 
 namespace oox {
 
@@ -46,6 +47,10 @@ class PropertyMap : public PropertyMapBase
 public:
     bool hasProperty( const ::rtl::OUString& rName ) const;
     const com::sun::star::uno::Any* getPropertyValue( const ::rtl::OUString& rName ) const;
+
+    template< typename Type >
+    inline void setProperty( const ::rtl::OUString& rName, const Type& rValue )
+        { if( rName.getLength() > 0 ) (*this)[ rName ] <<= rValue; }
 
     void makeSequence( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rSequence ) const;
     void makeSequence( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rSequence ) const;
