@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: seriesmodel.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,19 +45,18 @@ struct DataLabelModelBase
     typedef ModelRef< Shape >       ShapeRef;
     typedef ModelRef< TextBody >    TextBodyRef;
 
-    ShapeRef            mxShapeProp;            /// Data label frame formatting.
-    TextBodyRef         mxTextProp;             /// Data label text formatting.
-    OptValue< ::rtl::OUString > moaFormatCode;  /// Number format for numeric labels.
-    OptValue< ::rtl::OUString > moaSeparator;   /// Separator between label components.
-    OptValue< sal_Int32 > monLabelPos;          /// Data label position.
-    OptValue< bool >    mobShowBubbleSize;      /// True = show size of bubbles in bubble charts.
-    OptValue< bool >    mobShowCatName;         /// True = show category name of data points.
-    OptValue< bool >    mobShowLegendKey;       /// True = show legend key of data series.
-    OptValue< bool >    mobShowPercent;         /// True = show percentual value in pie/doughnut charts.
-    OptValue< bool >    mobShowSerName;         /// True = show series name.
-    OptValue< bool >    mobShowVal;             /// True = show data point value.
-    OptValue< bool >    mobSourceLinked;        /// True = number format linked to source data.
-    bool                mbDeleted;              /// True = data label(s) deleted.
+    ShapeRef            mxShapeProp;        /// Data label frame formatting.
+    TextBodyRef         mxTextProp;         /// Data label text formatting.
+    NumberFormat        maNumberFormat;     /// Number format for numeric data labels.
+    OptValue< ::rtl::OUString > moaSeparator;/// Separator between label components.
+    OptValue< sal_Int32 > monLabelPos;      /// Data label position.
+    OptValue< bool >    mobShowBubbleSize;  /// True = show size of bubbles in bubble charts.
+    OptValue< bool >    mobShowCatName;     /// True = show category name of data points.
+    OptValue< bool >    mobShowLegendKey;   /// True = show legend key of data series.
+    OptValue< bool >    mobShowPercent;     /// True = show percentual value in pie/doughnut charts.
+    OptValue< bool >    mobShowSerName;     /// True = show series name.
+    OptValue< bool >    mobShowVal;         /// True = show data point value.
+    bool                mbDeleted;          /// True = data label(s) deleted.
 
     explicit            DataLabelModelBase();
                         ~DataLabelModelBase();
@@ -87,7 +86,7 @@ struct DataLabelsModel : public DataLabelModelBase
 
     DataLabelVector     maPointLabels;      /// Settings for individual data point labels.
     ShapeRef            mxLeaderLines;      /// Formatting of connector lines between data points and labels.
-    OptValue< bool >    mobShowLeaderLines; /// True = show connector lines between data points and labels.
+    bool                mbShowLeaderLines;  /// True = show connector lines between data points and labels.
 
     explicit            DataLabelsModel();
                         ~DataLabelsModel();
@@ -120,11 +119,32 @@ struct ErrorBarModel
 
 // ============================================================================
 
+struct TrendlineLabelModel
+{
+    typedef ModelRef< Shape >       ShapeRef;
+    typedef ModelRef< TextBody >    TextBodyRef;
+    typedef ModelRef< LayoutModel > LayoutRef;
+    typedef ModelRef< TextModel >   TextRef;
+
+    ShapeRef            mxShapeProp;        /// Label frame formatting.
+    TextBodyRef         mxTextProp;         /// Label text formatting.
+    LayoutRef           mxLayout;           /// Layout/position of the frame.
+    TextRef             mxText;             /// Text source of the label.
+    NumberFormat        maNumberFormat;     /// Number format for coefficients.
+
+    explicit            TrendlineLabelModel();
+                        ~TrendlineLabelModel();
+};
+
+// ============================================================================
+
 struct TrendlineModel
 {
-    typedef ModelRef< Shape > ShapeRef;
+    typedef ModelRef< Shape >               ShapeRef;
+    typedef ModelRef< TrendlineLabelModel > TrendlineLabelRef;
 
     ShapeRef            mxShapeProp;        /// Trendline formatting.
+    TrendlineLabelRef   mxLabel;            /// Trendline label text object.
     ::rtl::OUString     maName;             /// User-defined name of the trendline.
     OptValue< double >  mfBackward;         /// Size of trendline before first data point.
     OptValue< double >  mfForward;          /// Size of trendline behind last data point.
