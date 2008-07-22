@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: debug.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -271,7 +271,7 @@ void ImplDbgUnlock()
 
 // =======================================================================
 
-#if defined WNT && !defined SVX_LIGHT
+#if (defined WNT || defined OS2) && !defined SVX_LIGHT
 //#define SV_MEMMGR //
 #endif
 #ifdef SV_MEMMGR
