@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textparagraph.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,6 +29,7 @@
  ************************************************************************/
 
 #include "oox/drawingml/textparagraph.hxx"
+#include "oox/drawingml/drawingmltypes.hxx"
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/text/XText.hpp>
@@ -45,8 +46,6 @@ using namespace ::com::sun::star::frame;
 namespace oox { namespace drawingml {
 
 TextParagraph::TextParagraph()
-    : mpProperties( new TextParagraphProperties )
-    , mpEndProperties( new TextParagraphProperties )
 {
 }
 
@@ -58,36 +57,38 @@ void TextParagraph::insertAt(
         const ::oox::core::XmlFilterBase& rFilterBase,
         const Reference < XText > &xText,
         const Reference < XTextCursor > &xAt,
-        const TextListStylePtr& rTextStyleList, bool bFirst)
+        const TextCharacterProperties& rTextStyleProperties,
+        const TextListStyle& rTextListStyle, bool bFirst) const
 {
     try {
         sal_Int32 nParagraphSize = 0;
         Reference< XTextRange > xStart( xAt, UNO_QUERY );
 
-        sal_Int16 nLevel = mpProperties->getLevel();
-        TextParagraphPropertiesVector& rListStyle = rTextStyleList->getListStyle();
+        sal_Int16 nLevel = maProperties.getLevel();
+        const TextParagraphPropertiesVector& rListStyle = rTextListStyle.getListStyle();
         if ( nLevel >= static_cast< sal_Int16 >( rListStyle.size() ) )
             nLevel = 0;
         TextParagraphPropertiesPtr pTextParagraphStyle;
-        TextCharacterPropertiesPtr pTextCharacterStyle;
         if ( rListStyle.size() )
             pTextParagraphStyle = rListStyle[ nLevel ];
+
+        TextCharacterProperties aTextCharacterStyle( rTextStyleProperties );
         if ( pTextParagraphStyle.get() )
-            pTextCharacterStyle = pTextParagraphStyle->getTextCharacterProperties();
+            aTextCharacterStyle.assignUsed( pTextParagraphStyle->getTextCharacterProperties() );
+        aTextCharacterStyle.assignUsed( maProperties.getTextCharacterProperties() );
 
         if( !bFirst )
         {
             xText->insertControlCharacter( xStart, ControlCharacter::APPEND_PARAGRAPH, sal_False );
-            xAt->gotoEnd(true);
+            xAt->gotoEnd( sal_True );
         }
 
-        TextRunVector::iterator begin( maRuns.begin() );
-        while( begin != maRuns.end() )
+        for( TextRunVector::const_iterator aIt = maRuns.begin(), aEnd = maRuns.end(); aIt != aEnd; ++aIt )
         {
-            (*begin)->insertAt( rFilterBase, xText, xAt, pTextCharacterStyle );
-            nParagraphSize += (*begin++)->getText().getLength();
+            (*aIt)->insertAt( rFilterBase, xText, xAt, aTextCharacterStyle );
+            nParagraphSize += (*aIt)->getText().getLength();
         }
-        xAt->gotoEnd(true);
+        xAt->gotoEnd( sal_True );
 
 #ifdef DEBUG
     if ( false )
@@ -103,10 +104,10 @@ void TextParagraph::insertAt(
         if ( pTextParagraphStyle.get() )
         {
             pTextParagraphStyle->pushToPropSet( rFilterBase, xProps, aioBulletList, NULL, sal_False, fCharacterSize );
-            fCharacterSize = pTextParagraphStyle->getCharacterSize( 18 );
+            fCharacterSize = pTextParagraphStyle->getCharHeightPoints( 18 );
         }
 
-        mpProperties->pushToPropSet( rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), sal_True, fCharacterSize );
+        maProperties.pushToPropSet( rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), sal_True, fCharacterSize );
 
         // empty paragraphs do not have bullets in ppt
         if ( !nParagraphSize )
