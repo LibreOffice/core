@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: version.c,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,11 +53,11 @@ static const struct VersionInfo g_aVersionInfo =
     _INPATH
 };
 
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
 __declspec(dllexport) const struct VersionInfo* GetVersionInfo(void);
 #endif
 
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
 __declspec(dllexport) const struct VersionInfo* GetVersionInfo(void)
 #else
 const struct VersionInfo *GetVersionInfo(void)
