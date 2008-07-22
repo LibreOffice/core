@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.10 $
+# $Revision: 1.11 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -48,7 +48,7 @@ OBJFILES = \
 
 APP1TARGET = solar
 APP1OBJS = $(OBJ)$/solar.obj
-.IF "$(GUI)" == "UNX"
+.IF "$(GUI)" == "UNX" || "$(GUI)" == "OS2"
 APP1STDLIBS = $(TOOLSLIB)
 .ELSE
 APP1LIBS = $(LB)$/itools.lib
@@ -56,7 +56,7 @@ APP1LIBS = $(LB)$/itools.lib
 
 APP2TARGET = urltest
 APP2OBJS = $(OBJ)$/urltest.obj
-.IF "$(GUI)" == "UNX"
+.IF "$(GUI)" == "UNX" || "$(GUI)" == "OS2"
 APP2STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB) $(CPPULIB) $(CPPUHELPERLIB)
 .ELSE
 APP2STDLIBS = $(LB)$/itools.lib $(VOSLIB) $(SALLIB) $(CPPULIB) $(CPPUHELPERLIB)
