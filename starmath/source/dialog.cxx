@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dialog.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -539,7 +539,7 @@ IMPL_LINK_INLINE_START( SmFontTypeDialog, DefaultButtonClickHdl, Button *, EMPTY
         SmModule *pp = SM_MOD1();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
         WriteTo( aFmt );
-        pp->GetConfig()->SetStandardFormat( aFmt );
+        pp->GetConfig()->SetStandardFormat( aFmt, TRUE );
     }
 
     delete pQueryBox;
