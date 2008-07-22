@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.89 $
+# $Revision: 1.90 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -236,20 +236,13 @@ $(DESTDIRBIN)$/addsym-macosx.sh : addsym-macosx.sh
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
     -chmod 755 $@
 
-$(DESTDIRSETTINGS)$/dk.mk :
+$(DESTDIRSETTINGS)$/dk.mk : dk.mk
     @@-rm -f $@
-    -$(MKDIRHIER) $(@:d)    
-    @echo # $(TITLE) dependent settings > $@
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    @echo 'SDKVERSION=$(PRODUCT_RELEASE)'>> $@
-    @echo 'BUILDID=$(RSCREVISION)'>> $@
-.ELSE
-    @echo SDKVERSION=$(PRODUCT_RELEASE)>> $@
-    @echo BUILDID=$(RSCREVISION)>> $@
-.ENDIF
+    -$(MKDIRHIER) $(@:d)
+    tr -d "\015" < dk.mk | sed -e 's/@@RELEASE@@/$(PRODUCT_RELEASE)/' -e 's/@@BUILDID@@/$(RSCREVISION)/'> $@
 
 $(CONVERTTAGFLAG) : $(DOCUHTMLFILES)
-    $(PERL) $(CONVERTTAGSCRIPT) 1 $(TITLE) $(OFFICEPRODUCTNAME) $(DOCUHTMLFILES)
+    $(PERL) $(CONVERTTAGSCRIPT) 1 "$(TITLE)" "$(OFFICEPRODUCTNAME)" $(DOCUHTMLFILES)
     @echo "tags converted" > $@
 
 $(IDL_DOCU_CLEANUP_FLAG) : $(IDL_CHAPTER_REFS) $(IDL_SINCE_TAGS) $(PRJ)$/docs$/common$/ref$/idl.css
