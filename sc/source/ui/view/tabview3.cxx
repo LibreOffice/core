@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabview3.cxx,v $
- * $Revision: 1.68 $
+ * $Revision: 1.69 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -372,9 +372,12 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, BOOL bNew )
 
     if ( nPosX != nOldX || nPosY != nOldY || bNew )
     {
-        if ( aViewData.HasEditView(aViewData.GetActivePart()) &&
-                        !SC_MOD()->IsFormulaMode() )                    // 23259 oder so
+        ScTabViewShell* pViewShell = aViewData.GetViewShell();
+        bool bRefMode = ( pViewShell ? pViewShell->IsRefInputMode() : false );
+        if ( aViewData.HasEditView( aViewData.GetActivePart() ) && !bRefMode ) // 23259 oder so
+        {
             UpdateInputLine();
+        }
 
         HideAllCursors();
 
