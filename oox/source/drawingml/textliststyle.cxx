@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textliststyle.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +53,7 @@ void applyStyleList( const TextParagraphPropertiesVector& rSourceListStyle, Text
     {
         if ( aDestListStyleIter != rDestListStyle.end() )
         {
-            (*aDestListStyleIter)->apply( *aSourceListStyleIter );
+            (*aDestListStyleIter)->apply( **aSourceListStyleIter );
             aDestListStyleIter++;
         }
         else
