@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: content.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.55 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -423,7 +423,9 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
             {
                 for(SwPostItMgr::const_iterator i = aMgr->begin(); i != aMgr->end(); ++i)
                 {
-                    if ( (*i)->pFmtFld->GetTxtFld() && (*i)->pFmtFld->IsFldInDoc() )
+                    if ( (*i)->pFmtFld->GetTxtFld() &&
+                        (*i)->pFmtFld->IsFldInDoc() &&
+                        (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
                     {
                         String sEntry = (*i)->pFmtFld->GetFld()->GetPar2();
                         RemoveNewline(sEntry);
@@ -761,7 +763,9 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
             {
                 for(SwPostItMgr::const_iterator i = aMgr->begin(); i != aMgr->end(); ++i)
                 {
-                    if ( (*i)->pFmtFld->GetTxtFld() && (*i)->pFmtFld->IsFldInDoc() )
+                    if ( (*i)->pFmtFld->GetTxtFld() &&
+                        (*i)->pFmtFld->IsFldInDoc() &&
+                        (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
                     {
                         String sEntry = (*i)->pFmtFld->GetFld()->GetPar2();
                         RemoveNewline(sEntry);
