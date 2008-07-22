@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: plotareamodel.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +53,18 @@ struct View3DModel
 
     explicit            View3DModel();
                         ~View3DModel();
+};
+
+// ============================================================================
+
+struct WallFloorModel
+{
+    typedef ModelRef< Shape > ShapeRef;
+
+    ShapeRef            mxShapeProp;        /// Wall/floor frame formatting.
+
+    explicit            WallFloorModel();
+                        ~WallFloorModel();
 };
 
 // ============================================================================

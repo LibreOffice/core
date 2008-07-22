@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: plotareacontext.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,22 @@ class View3DContext : public ContextBase< View3DModel >
 public:
     explicit            View3DContext( ::oox::core::ContextHandler2Helper& rParent, View3DModel& rModel );
     virtual             ~View3DContext();
+
+    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+};
+
+// ============================================================================
+
+struct WallFloorModel;
+
+/** Handler for a chart wall/floor context (c:backWall, c:floor, c:sideWall
+    elements).
+ */
+class WallFloorContext : public ContextBase< WallFloorModel >
+{
+public:
+    explicit            WallFloorContext( ::oox::core::ContextHandler2Helper& rParent, WallFloorModel& rModel );
+    virtual             ~WallFloorContext();
 
     virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
