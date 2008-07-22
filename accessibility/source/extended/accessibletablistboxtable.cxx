@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accessibletablistboxtable.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -179,6 +179,42 @@ namespace accessibility
                                 AccessibleCheckBoxCell* pCell =
                                     static_cast< AccessibleCheckBoxCell* >( xChild.get() );
                                 pCell->SetChecked( m_pTabListBox->IsItemChecked( pEntry, nCol ) );
+                            }
+                        }
+                    }
+                    break;
+                }
+
+                case VCLEVENT_TABLECELL_NAMECHANGED :
+                {
+                    if ( m_pTabListBox->IsTransientChildrenDisabled() )
+                    {
+                        commitEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
+                        TabListBoxEventData* pData = static_cast< TabListBoxEventData* >( rVclWindowEvent.GetData() );
+                        SvLBoxEntry* pEntry = pData != NULL ? pData->m_pEntry : NULL;
+                        if ( pEntry )
+                        {
+                            sal_Int32 nRow = m_pTabListBox->GetEntryPos( pEntry );
+                            USHORT nCol = pData->m_nColumn;
+                            Reference< XAccessible > xChild =
+                                m_pTabListBox->CreateAccessibleCell( nRow, nCol );
+                            uno::Any aOldValue, aNewValue;
+                            aOldValue <<= ::rtl::OUString( pData->m_sOldText );
+                            ::rtl::OUString sNewText( m_pTabListBox->GetCellText( nRow, nCol ) );
+                            aNewValue <<= sNewText;
+                            TriState eState = STATE_DONTKNOW;
+
+                            if ( m_pTabListBox->IsCellCheckBox( nRow, nCol, eState ) )
+                            {
+                                AccessibleCheckBoxCell* pCell =
+                                    static_cast< AccessibleCheckBoxCell* >( xChild.get() );
+                                pCell->commitEvent( AccessibleEventId::NAME_CHANGED, aOldValue, aNewValue );
+                            }
+                            else
+                            {
+                                AccessibleBrowseBoxTableCell* pCell =
+                                    static_cast< AccessibleBrowseBoxTableCell* >( xChild.get() );
+                                pCell->nameChanged( sNewText, pData->m_sOldText );
                             }
                         }
                     }
