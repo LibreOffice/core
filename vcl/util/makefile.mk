@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.110 $
+# $Revision: 1.111 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -242,7 +242,7 @@ LINKFLAGSSHL += /ENTRY:LibMain@12
 # --- OS2 ----------------------------------------------------------------
 
 .IF "$(GUI)" == "OS2"
-SHL1STDLIBS += ft2lib.lib
+STDSHL1 += ft2lib.lib apsp.lib
 .ENDIF
 
 # --- UNX ----------------------------------------------------------------
