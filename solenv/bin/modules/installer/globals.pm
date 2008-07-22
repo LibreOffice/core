@@ -8,7 +8,7 @@
 #
 # $RCSfile: globals.pm,v $
 #
-# $Revision: 1.102 $
+# $Revision: 1.103 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -57,6 +57,7 @@ BEGIN
     $destdir = "";
     $rootpath = "";
 
+    $required_dotnet_version = "2.0.0.0";
     $productextension = "";
     @languageproducts = ();
     $build = "";
