@@ -364,3 +364,7 @@ UDK_3.3 { # OOo 2.3
         _ZN4cppu18OPropertySetHelper8getTypesEv;
 } UDK_3.2;
 
+UDK_3.4 { # OOo 2.4
+    global:
+        _ZN4cppu19bootstrap_expandUriERKN3rtl8OUStringE; # rtl::OUString cppu::bootstrap_expandUri(rtl::OUString const &)
+} UDK_3.3;
