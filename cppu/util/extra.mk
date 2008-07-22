@@ -8,7 +8,7 @@
 #
 # $RCSfile: extra.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,14 +47,28 @@ USE_DEFFILE      :=TRUE
 SHL3TARGET  := unsafe_uno_uno
 SHL3IMPLIB  := i$(SHL3TARGET)
 SHL3STDLIBS := $(purpenv_helper_LIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) 
+SHL3OBJS    := $(SLO)$/UnsafeBridge.obj
+.IF "$(GUI)"=="OS2"
+SHL3VERSIONMAP=unsafe_os2.map
+SHL3DEF=$(MISC)$/$(SHL3TARGET).def
+DEF3NAME=$(SHL3TARGET)
+.ELSE
 SHL3DEF     := empty.def
+.ENDIF
 SHL3OBJS    := $(SLO)$/UnsafeBridge.obj
 SHL3RPATH   := URELIB
 
 SHL4TARGET  := affine_uno_uno
 SHL4IMPLIB  := i$(SHL4TARGET)
 SHL4STDLIBS := $(purpenv_helper_LIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) 
+SHL4OBJS    := $(SLO)$/AffineBridge.obj
+.IF "$(GUI)"=="OS2"
+SHL4VERSIONMAP=unsafe_os2.map
+SHL4DEF=$(MISC)$/$(SHL4TARGET).def
+DEF4NAME=$(SHL4TARGET)
+.ELSE
 SHL4DEF     := empty.def
+.ENDIF
 SHL4OBJS    := $(SLO)$/AffineBridge.obj
 SHL4RPATH   := URELIB
 
