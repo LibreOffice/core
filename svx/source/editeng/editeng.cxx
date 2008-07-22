@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editeng.cxx,v $
- * $Revision: 1.115 $
+ * $Revision: 1.116 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1537,7 +1537,7 @@ void EditEngine::InsertParagraph( sal_uInt16 nPara, const EditTextObject& rTxtOb
     DBG_CHKTHIS( EditEngine, 0 );
     if ( nPara > GetParagraphCount() )
     {
-        DBG_ASSERTWARNING( nPara == USHRT_MAX, "AbsatzNr zu Gro�, aber nicht LIST_APPEND! " );
+        DBG_ASSERTWARNING( nPara == USHRT_MAX, "AbsatzNr zu Gro???, aber nicht LIST_APPEND! " );
         nPara = GetParagraphCount();
     }
 
@@ -1560,7 +1560,7 @@ void EditEngine::InsertParagraph( sal_uInt16 nPara, const XubString& rTxt )
     DBG_CHKTHIS( EditEngine, 0 );
     if ( nPara > GetParagraphCount() )
     {
-        DBG_ASSERTWARNING( nPara == USHRT_MAX, "AbsatzNr zu Gro�, aber nicht LIST_APPEND! " );
+        DBG_ASSERTWARNING( nPara == USHRT_MAX, "AbsatzNr zu Gro???, aber nicht LIST_APPEND! " );
         nPara = GetParagraphCount();
     }
 
@@ -2410,7 +2410,6 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_uInt16 nPara )
         ParaPortion* pParaPortion = pImpEditEngine->GetParaPortions()[nPara];
         EditLine* pLine = (pParaPortion && pParaPortion->GetLines().Count()) ?
                 pParaPortion->GetLines().GetObject( 0 ) : NULL;
-
         DBG_ASSERT( pParaPortion && pLine, "GetParagraphInfos - Paragraph out of range" );
         if ( pParaPortion && pLine )
         {
