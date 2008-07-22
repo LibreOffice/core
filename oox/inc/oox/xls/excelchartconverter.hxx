@@ -8,7 +8,7 @@
  *
  * $RCSfile: excelchartconverter.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +54,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >
                         createDataSequence(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >& rxDataProvider,
-                            const ::rtl::OUString& rFormula );
+                            const ::oox::drawingml::chart::DataSequenceModel& rDataSeq );
 };
 
 // ============================================================================
