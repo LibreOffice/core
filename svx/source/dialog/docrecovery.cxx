@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docrecovery.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -466,7 +466,7 @@ ERecoveryState RecoveryCore::mapDocState2RecoverState(sal_Int32 eDocState)
         ((eDocState & E_TRY_LOAD_BACKUP  ) == E_TRY_LOAD_BACKUP  ) ||
         ((eDocState & E_TRY_LOAD_ORIGINAL) == E_TRY_LOAD_ORIGINAL)
        )
-        eRecState = E_RECOVERY_IN_PROGRESS;
+        eRecState = E_RECOVERY_IS_IN_PROGRESS;
     // red
     else
     if ((eDocState & E_DAMAGED) == E_DAMAGED)
@@ -951,7 +951,7 @@ void RecovDocListEntry::Paint(const Point&       aPos   ,
         }
         break;
 
-        case E_RECOVERY_IN_PROGRESS :
+        case E_RECOVERY_IS_IN_PROGRESS :
         {
             pImg = 0;
             pTxt = &pList->m_aRecovInProgrStr;
@@ -1104,7 +1104,10 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
     {
         const TURLInfo& rInfo = *pIt;
 
-        SvLBoxEntry* pEntry = m_aFileListLB.InsertEntry(rInfo.DisplayName, rInfo.StandardImage, rInfo.StandardImage);
+        String sName( rInfo.DisplayName );
+        sName += '\t';
+        sName += impl_getStatusString( rInfo );
+        SvLBoxEntry* pEntry = m_aFileListLB.InsertEntry(sName, rInfo.StandardImage, rInfo.StandardImage);
         pEntry->SetUserData((void*)&rInfo);
         m_aFileListLB.SetExpandedEntryBmp (pEntry, rInfo.HCImage, BMP_COLOR_HIGHCONTRAST);
         m_aFileListLB.SetCollapsedEntryBmp(pEntry, rInfo.HCImage, BMP_COLOR_HIGHCONTRAST);
@@ -1360,6 +1363,23 @@ void RecoveryDialog::start()
 //===============================================
 void RecoveryDialog::updateItems()
 {
+    ULONG c = m_aFileListLB.GetEntryCount();
+    ULONG i = 0;
+    for ( i=0; i<c; ++i )
+    {
+        SvLBoxEntry* pEntry = m_aFileListLB.GetEntry(i);
+        if ( !pEntry )
+            continue;
+
+        TURLInfo* pInfo = (TURLInfo*)pEntry->GetUserData();
+        if ( !pInfo )
+            continue;
+
+        String sStatus = impl_getStatusString( *pInfo );
+        if ( sStatus.Len() > 0 )
+            m_aFileListLB.SetEntryText( sStatus, pEntry, 1 );
+    }
+
     m_aFileListLB.Invalidate();
     m_aFileListLB.Update();
 }
@@ -1422,6 +1442,33 @@ IMPL_LINK( RecoveryDialog, CancelButtonHdl, void*, EMPTYARG )
 //===============================================
 void RecoveryDialog::impl_refreshDocList()
 {
+}
+
+//===============================================
+String RecoveryDialog::impl_getStatusString( const TURLInfo& rInfo ) const
+{
+    String sStatus;
+    switch ( rInfo.RecoveryState )
+    {
+        case E_SUCCESSFULLY_RECOVERED :
+            sStatus = m_aFileListLB.m_aSuccessRecovStr;
+            break;
+        case E_ORIGINAL_DOCUMENT_RECOVERED :
+            sStatus = m_aFileListLB.m_aOrigDocRecovStr;
+            break;
+        case E_RECOVERY_FAILED :
+            sStatus = m_aFileListLB.m_aRecovFailedStr;
+            break;
+        case E_RECOVERY_IS_IN_PROGRESS :
+            sStatus = m_aFileListLB.m_aRecovInProgrStr;
+            break;
+        case E_NOT_RECOVERED_YET :
+            sStatus = m_aFileListLB.m_aNotRecovYetStr;
+            break;
+        default:
+            break;
+    }
+    return sStatus;
 }
 
 //===============================================
