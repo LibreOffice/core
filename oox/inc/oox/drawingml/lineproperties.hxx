@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lineproperties.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,59 +31,87 @@
 #ifndef OOX_DRAWINGML_LINEPROPERTIES_HXX
 #define OOX_DRAWINGML_LINEPROPERTIES_HXX
 
-#include "oox/helper/propertymap.hxx"
-#include "oox/drawingml/color.hxx"
+#include "oox/drawingml/fillproperties.hxx"
 
-#include <boost/shared_ptr.hpp>
-#include <boost/optional.hpp>
-#include <vector>
-#include <map>
+namespace oox {
+namespace drawingml {
 
-namespace oox { namespace drawingml {
+// ============================================================================
 
-class LineProperties;
-
-typedef boost::shared_ptr< LineProperties > LinePropertiesPtr;
-
-class LineProperties
+struct LinePropertyNames
 {
-public:
+    ::rtl::OUString     maLineStyle;
+    ::rtl::OUString     maLineWidth;
+    ::rtl::OUString     maLineColor;
+    ::rtl::OUString     maLineTransparence;
+    ::rtl::OUString     maLineDash;
+    ::rtl::OUString     maLineJoint;
+    ::rtl::OUString     maLineStart;
+    ::rtl::OUString     maLineStartWidth;
+    ::rtl::OUString     maLineStartCenter;
+    ::rtl::OUString     maLineEnd;
+    ::rtl::OUString     maLineEndWidth;
+    ::rtl::OUString     maLineEndCenter;
+    bool                mbNamedLineDash;
+    bool                mbNamedLineMarker;
 
-    LineProperties();
-    virtual ~LineProperties();
-
-    void apply( const LineProperties& );
-    void pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
-            const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet ) const;
-
-    PropertyMap&                    getLinePropertyMap(){ return maLineProperties; };
-    ::oox::drawingml::ColorPtr&     getLineColor(){ return maLineColor; };
-    boost::optional< sal_Int32 >&   getLineWidth(){ return moLineWidth; };
-    boost::optional< sal_Int32 >&   getStartArrow(){ return moStartArrow; };
-    boost::optional< sal_Int32 >&   getStartArrowWidth(){ return moStartArrowWidth; };
-    boost::optional< sal_Int32 >&   getStartArrowLength(){ return moStartArrowLength; };
-    boost::optional< sal_Int32 >&   getEndArrow(){ return moEndArrow; };
-    boost::optional< sal_Int32 >&   getEndArrowWidth(){ return moEndArrowWidth; };
-    boost::optional< sal_Int32 >&   getEndArrowLength(){ return moEndArrowLength; };
-    boost::optional< sal_Int32 >&   getPresetDash(){ return moPresetDash; };
-    boost::optional< sal_Int32 >&   getLineCap(){ return moLineCap; };
-
-private:
-
-    PropertyMap                     maLineProperties;
-    ::oox::drawingml::ColorPtr      maLineColor;
-
-    boost::optional< sal_Int32 >    moLineWidth;
-    boost::optional< sal_Int32 >    moStartArrow;
-    boost::optional< sal_Int32 >    moStartArrowWidth;
-    boost::optional< sal_Int32 >    moStartArrowLength;
-    boost::optional< sal_Int32 >    moEndArrow;
-    boost::optional< sal_Int32 >    moEndArrowWidth;
-    boost::optional< sal_Int32 >    moEndArrowLength;
-    boost::optional< sal_Int32 >    moPresetDash;
-    boost::optional< sal_Int32 >    moLineCap;
+    explicit            LinePropertyNames();
+    explicit            LinePropertyNames(
+                            const sal_Char* const* ppcPropertyNames,
+                            bool bNamedLineDash,
+                            bool bNamedLineMarker );
 };
 
-} }
+// ============================================================================
 
-#endif  //  OOX_DRAWINGML_LINEPROPERTIES_HXX
+struct LineArrowProperties
+{
+    OptValue< sal_Int32 > moArrowType;
+    OptValue< sal_Int32 > moArrowWidth;
+    OptValue< sal_Int32 > moArrowLength;
+
+    /** Overwrites all members that are explicitly set in rSourceProps. */
+    void                assignUsed( const LineArrowProperties& rSourceProps );
+};
+
+// ============================================================================
+
+struct LineProperties
+{
+    LineArrowProperties maStartArrow;       /// Start line arrow style.
+    LineArrowProperties maEndArrow;         /// End line arrow style.
+    FillProperties      maLineFill;         /// Line fill (solid, gradient, ...).
+    OptValue< sal_Int32 > moLineWidth;      /// Line width (EMUs).
+    OptValue< sal_Int32 > moPresetDash;     /// Preset dash (OOXML token).
+    OptValue< sal_Int32 > moLineCap;        /// Line cap (OOXML token).
+    OptValue< sal_Int32 > moLineJoint;      /// Line joint type (OOXML token).
+
+    static LinePropertyNames DEFAULTNAMES;  /// Default line property names.
+
+    /** Overwrites all members that are explicitly set in rSourceProps. */
+    void                assignUsed( const LineProperties& rSourceProps );
+
+    /** Writes the properties to the passed property map. */
+    void                pushToPropMap(
+                            PropertyMap& rPropMap,
+                            const LinePropertyNames& rPropNames,
+                            const ::oox::core::XmlFilterBase& rFilter,
+                            ::oox::core::ModelObjectContainer& rObjContainer,
+                            sal_Int32 nPhClr ) const;
+
+    /** Writes the properties to the passed property map. */
+    void                pushToPropSet(
+                            PropertySet& rPropSet,
+                            const LinePropertyNames& rPropNames,
+                            const ::oox::core::XmlFilterBase& rFilter,
+                            ::oox::core::ModelObjectContainer& rObjContainer,
+                            sal_Int32 nPhClr ) const;
+};
+
+// ============================================================================
+
+} // namespace drawingml
+} // namespace oox
+
+#endif
+
