@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: timenode.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,10 +62,10 @@ namespace oox { namespace ppt {
         NodePropertyMap & getNodeProperties() { return maNodeProperties; }
         PropertyMap & getUserData() { return maUserData; }
         void addChild( const TimeNodePtr & pChildPtr )
-            { maChilds.push_back( pChildPtr ); }
+            { maChildren.push_back( pChildPtr ); }
 
-        TimeNodePtrList & getChilds()
-            { return maChilds; }
+        TimeNodePtrList & getChildren()
+            { return maChildren; }
 
         void setId( sal_Int32 nId );
         const ::rtl::OUString & getId() const { return msId; }
@@ -112,7 +112,7 @@ namespace oox { namespace ppt {
     private:
         const sal_Int16 mnNodeType;
 
-        TimeNodePtrList maChilds;
+        TimeNodePtrList maChildren;
 
         rtl::OUString   msId;
         NodePropertyMap            maNodeProperties;
