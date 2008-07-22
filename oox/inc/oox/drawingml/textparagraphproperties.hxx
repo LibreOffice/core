@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textparagraphproperties.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,11 @@
 #include <com/sun/star/style/NumberingType.hpp>
 #include "oox/drawingml/textfont.hxx"
 #include "textspacing.hxx"
+#include <boost/optional.hpp>
+
+namespace com { namespace sun { namespace star {
+    namespace graphic { class XGraphic; }
+} } }
 
 namespace oox { namespace drawingml {
 
@@ -89,36 +94,34 @@ public:
     ~TextParagraphProperties();
 
     void                                setLevel( sal_Int16 nLevel ) { mnLevel = nLevel; }
-    sal_Int16                           getLevel( ) const
-        { return mnLevel; }
-    PropertyMap&                        getTextParagraphPropertyMap()
-        { return maTextParagraphPropertyMap; }
-    BulletList&                 getBulletList() { return maBulletList; }
-    ::oox::drawingml::TextCharacterPropertiesPtr    getTextCharacterProperties()
-        { return maTextCharacterPropertiesPtr; }
+    sal_Int16                           getLevel( ) const { return mnLevel; }
+    PropertyMap&                        getTextParagraphPropertyMap() { return maTextParagraphPropertyMap; }
+    BulletList&                         getBulletList() { return maBulletList; }
+    TextCharacterProperties&            getTextCharacterProperties() { return maTextCharacterProperties; }
+    const TextCharacterProperties&      getTextCharacterProperties() const { return maTextCharacterProperties; }
 
-    oox::drawingml::TextSpacing&        getParaTopMargin() { return maParaTopMargin; };
-    oox::drawingml::TextSpacing&        getParaBottomMargin() { return maParaBottomMargin; };
-    boost::optional< sal_Int32 >&       getParaLeftMargin(){ return moParaLeftMargin; };
-    boost::optional< sal_Int32 >&       getFirstLineIndentation(){ return moFirstLineIndentation; };
+    TextSpacing&                        getParaTopMargin() { return maParaTopMargin; }
+    TextSpacing&                        getParaBottomMargin() { return maParaBottomMargin; }
+    boost::optional< sal_Int32 >&       getParaLeftMargin(){ return moParaLeftMargin; }
+    boost::optional< sal_Int32 >&       getFirstLineIndentation(){ return moFirstLineIndentation; }
 
-    void                                apply( const TextParagraphPropertiesPtr& );
+    void                                apply( const TextParagraphProperties& rSourceProps );
     void                                pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
                                             const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet,
                                                 PropertyMap& rioBulletList, const BulletList* pMasterBuList, sal_Bool bApplyBulletList, float fFontSize ) const;
 
-    float                               getCharacterSize( float fDefault ) const;   // returns the largest character size of this paragraph,
-                                                                                    // if possible the masterstyle should have been applied before,
-                                                                                    // otherwise the character size can be zero and the default value
-                                                                                    // is returned
+    /** Returns the largest character size of this paragraph. If possible the
+        masterstyle should have been applied before, otherwise the character
+        size can be zero and the default value is returned. */
+    float                               getCharHeightPoints( float fDefault ) const;
 
 protected:
 
-    TextCharacterPropertiesPtr      maTextCharacterPropertiesPtr;
+    TextCharacterProperties         maTextCharacterProperties;
     PropertyMap                     maTextParagraphPropertyMap;
     BulletList                      maBulletList;
-    oox::drawingml::TextSpacing     maParaTopMargin;
-    oox::drawingml::TextSpacing     maParaBottomMargin;
+    TextSpacing                     maParaTopMargin;
+    TextSpacing                     maParaBottomMargin;
     boost::optional< sal_Int32 >    moParaLeftMargin;
     boost::optional< sal_Int32 >    moFirstLineIndentation;
     sal_Int16                       mnLevel;
