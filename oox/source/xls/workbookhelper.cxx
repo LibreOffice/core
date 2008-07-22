@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: workbookhelper.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -430,7 +430,7 @@ Reference< XStyle > WorkbookData::createStyleObject( OUString& orStyleName, bool
     {
         Reference< XMultiServiceFactory > xFactory( mxDoc, UNO_QUERY_THROW );
         xStyle.set( xFactory->createInstance( bPageStyle ? maPageStyleServ : maCellStyleServ ), UNO_QUERY_THROW );
-        orStyleName = ContainerHelper::insertByUnusedName( xStylesNC, Any( xStyle ), orStyleName, ' ', bRenameOldExisting );
+        orStyleName = ContainerHelper::insertByUnusedName( xStylesNC, orStyleName, ' ', Any( xStyle ), bRenameOldExisting );
     }
     catch( Exception& )
     {
