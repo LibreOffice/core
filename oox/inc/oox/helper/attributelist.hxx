@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: attributelist.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,7 +64,7 @@ public:
     OptValue< sal_Int32 > getToken( sal_Int32 nElement ) const;
 
     /** Returns the string value of the specified attribute. */
-    OptValue< ::rtl::OUString > _getString( sal_Int32 nElement ) const;
+    OptValue< ::rtl::OUString > getString( sal_Int32 nElement ) const;
 
     /** Returns the double value of the specified attribute. */
     OptValue< double >  getDouble( sal_Int32 nElement ) const;

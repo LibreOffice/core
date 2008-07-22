@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: backgroundproperties.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,20 +34,18 @@
 #include "oox/core/contexthandler.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 
-namespace oox { namespace drawingml {
-
+namespace oox { namespace ppt {
 
 // ---------------------------------------------------------------------
 
 class BackgroundPropertiesContext : public ::oox::core::ContextHandler
 {
 public:
-    BackgroundPropertiesContext( ::oox::core::ContextHandler& rParent, ::oox::drawingml::FillPropertiesPtr pFillPropertiesPtr ) throw();
+    BackgroundPropertiesContext( ::oox::core::ContextHandler& rParent, ::oox::drawingml::FillProperties& rFillProperties ) throw();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 protected:
-
-    ::oox::drawingml::FillPropertiesPtr mpFillPropertiesPtr;
+    ::oox::drawingml::FillProperties& mrFillProperties;
 };
 
 } }
