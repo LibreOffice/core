@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.12 $
+# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,7 +46,9 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Targets ------------------------------------------------------
 
 APP1TARGET=	$(TARGET)
+.IF "$(GUI)"!="OS2"
 APP1STACK=	1000000
+.ENDIF
 
 UWINAPILIB=$(0)
 LIBSALCPPRT=$(0)
