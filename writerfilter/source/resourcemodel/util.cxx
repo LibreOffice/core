@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: util.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,12 +39,14 @@
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <resourcemodel/WW8ResourceModel.hxx>
+#include <resourcemodel/TagLogger.hxx>
 
 namespace writerfilter
 {
 using namespace com::sun::star;
 using namespace std;
 using text::TextContentAnchorType;
+
 static string & logger_file()
 {
     static string _logger_file = string(getenv("TEMP")?getenv("TEMP"):"/tmp") + "/writerfilter.ooxml.tmp";
@@ -368,4 +370,34 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
 
     return sResult;
 }
+    string xmlify(const string & str)
+    {
+        string result = "";
+        char sBuffer[16];
+
+        for (string::const_iterator aIt = str.begin(); aIt != str.end(); ++aIt)
+        {
+            char c = *aIt;
+
+            if (isprint(c) && c != '\"')
+            {
+                if (c == '<')
+                    result += "&lt;";
+                else if (c == '>')
+                    result += "&gt;";
+                else if (c == '&')
+                    result += "&amp;";
+                else
+                    result += c;
+            }
+            else
+            {
+                snprintf(sBuffer, sizeof(sBuffer), "\\%03d", c);
+                result += sBuffer;
+            }
+        }
+
+        return result;
+    }
+
 }
