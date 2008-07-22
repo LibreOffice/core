@@ -8,7 +8,7 @@
 #
 # $RCSfile: settings.mk,v $
 #
-# $Revision: 1.236 $
+# $Revision: 1.237 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -704,7 +704,7 @@ PROCESSOUT*=$(MISC)
 .INCLUDE .IGNORE : office.mk
 .INCLUDE : libs.mk
 
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 VERSIONOBJ=$(SLO)$/_version.obj
 .ENDIF
 
@@ -712,11 +712,11 @@ VERSIONOBJ=$(SLO)$/_version.obj
 VERSIONOBJ=$(SLO)$/_version.o
 .ENDIF
 
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 WINVERSIONNAMES=$(UNIXVERSIONNAMES)
 .ENDIF			# "$(GUI)"=="WNT"
 
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(COM)"=="GCC"
 SHELLLIB=-lgdi32 -lshell32 -ladvapi32 -lcomdlg32
 .ELSE
@@ -857,6 +857,11 @@ SCPDEFS+=-DCCNUMVER=$(CCNUMVER)
 .IF "$(COM)"=="GCC"
 SCPDEFS+=-DSHORTSTDCPP3=$(SHORTSTDCPP3)
 .ENDIF			# "$(SHORTSTDCPP3)"!=""
+# extend library path for OS/2 gcc/wlink
+.IF "$(GUI)"=="OS2"
+LIB:=$(LB);$(SLB);$(ILIB)
+.ENDIF
+
 
 UNOIDLDEFS+=-DSUPD=$(UPD) -DUPD=$(UPD)
 
@@ -869,7 +874,7 @@ UNOIDLINC+=-I. -I.. -I$(PRJ) -I$(PRJ)$/inc -I$(PRJ)$/$(INPATH)$/idl -I$(OUT)$/in
 
 CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME)
 
-.IF "$(USE_STLP_DEBUG)" != ""
+.IF "$(USE_STLP_DEBUG)" != "" && "$(GUI)"!="OS2"
 CDEFS+=-D_STLP_DEBUG
 .ENDIF
 
@@ -990,6 +995,10 @@ LNTFLAGSOUTOBJ=-os
 
 .IF "$(GUI)" == "UNX"
 .INCLUDE : unx.mk
+.ENDIF
+
+.IF "$(GUI)" == "OS2"
+.INCLUDE : os2.mk
 .ENDIF
 
 # for multiprocess building in external modules
