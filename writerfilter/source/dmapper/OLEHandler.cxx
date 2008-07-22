@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OLEHandler.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +35,10 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbedObjectCreator.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -50,7 +52,9 @@ using namespace ::com::sun::star;
 /*-- 23.04.2008 10:46:14---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-OLEHandler::OLEHandler()
+OLEHandler::OLEHandler() :
+    m_nDxaOrig(0),
+    m_nDyaOrig(0)
 {
 }
 /*-- 23.04.2008 10:46:14---------------------------------------------------
@@ -91,6 +95,32 @@ void OLEHandler::attribute(Id rName, Value & rVal)
         case NS_ooxml::LN_inputstream:
             rVal.getAny() >>= m_xInputStream;
         break;
+        case NS_ooxml::LN_CT_Object_dxaOrig:
+            m_nDxaOrig = rVal.getInt();
+        break;
+        case NS_ooxml::LN_CT_Object_dyaOrig:
+            m_nDyaOrig = rVal.getInt();
+        break;
+        case NS_ooxml::LN_shape:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+        {
+            uno::Reference< drawing::XShape > xTempShape;
+            rVal.getAny() >>= xTempShape;
+            if( xTempShape.is() )
+            {
+                m_aShapeSize = xTempShape->getSize();
+                m_aShapePosition = xTempShape->getPosition();
+                try
+                {
+                    uno::Reference< beans::XPropertySet > xShapeProps( xTempShape, uno::UNO_QUERY_THROW );
+                    xShapeProps->getPropertyValue( PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_BITMAP ) ) >>= m_xReplacement;
+                }
+                catch( const uno::Exception& )
+                {
+                }
+            }
+        }
+        break;
         default:
             OSL_ENSURE( false, "unknown attribute");
     }
@@ -100,7 +130,21 @@ void OLEHandler::attribute(Id rName, Value & rVal)
   -----------------------------------------------------------------------*/
 void OLEHandler::sprm(Sprm & rSprm)
 {
-    (void)rSprm;
+    sal_uInt32 nSprmId = rSprm.getId();
+    switch( nSprmId )
+    {
+        case NS_ooxml::LN_OLEObject_OLEObject:
+        {
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if( pProperties.get())
+            {
+                pProperties->resolve(*this);
+            }
+        }
+        break;
+        default:
+            OSL_ENSURE( false, "unknown attribute");
+    }
 }
 /*-- 23.04.2008 11:15:19---------------------------------------------------
 
