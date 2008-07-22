@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CellColorHandler.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,7 +84,7 @@ void CellColorHandler::attribute(Id rName, Value & rVal)
             //might be clear, pct5...90, some hatch types
             //TODO: The values need symbolic names!
             m_nShadowType = nIntValue; //clear == 0, solid: 1, pct5: 2, pct50:8, pct95: x3c, horzStripe:0x0e, thinVertStripe: 0x15
-            m_bOOXMLColor = true;
+            m_bOOXMLColor = m_nShadowType != 0;
         }
         break;
         /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
