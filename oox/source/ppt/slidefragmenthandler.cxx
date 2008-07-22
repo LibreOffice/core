@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slidefragmenthandler.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@
 #include "tokens.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/namespaces.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 #include "oox/ppt/backgroundproperties.hxx"
 #include "oox/ppt/slidefragmenthandler.hxx"
 #include "oox/ppt/slidetimingcontext.hxx"
@@ -109,8 +110,8 @@ Reference< XFastContextHandler > SlideFragmentHandler::createFastChildContext( s
     // BackgroundGroup
     case NMSP_PPT|XML_bgPr:             // CT_BackgroundProperties
         {
-            FillPropertiesPtr pFillPropertiesPtr( new FillProperties() );
-            xRet.set( new BackgroundPropertiesContext( *this, pFillPropertiesPtr ) );
+            FillPropertiesPtr pFillPropertiesPtr( new FillProperties );
+            xRet.set( new BackgroundPropertiesContext( *this, *pFillPropertiesPtr ) );
             mpSlidePersistPtr->setBackgroundProperties( pFillPropertiesPtr );
         }
         break;
