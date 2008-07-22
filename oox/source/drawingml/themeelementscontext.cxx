@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: themeelementscontext.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,38 +30,45 @@
 
 #include "oox/drawingml/themeelementscontext.hxx"
 #include "oox/drawingml/clrschemecontext.hxx"
+#include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/linepropertiescontext.hxx"
+#include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
+#include "oox/drawingml/theme.hxx"
 #include "oox/core/namespaces.hxx"
+#include "oox/helper/attributelist.hxx"
 #include "tokens.hxx"
 
-using rtl::OUString;
+using ::rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-namespace oox { namespace drawingml {
+namespace oox {
+namespace drawingml {
 
-class fillStyleListContext : public ContextHandler
+// ============================================================================
+
+class FillStyleListContext : public ContextHandler
 {
-    std::vector< FillPropertiesPtr >& mrFillStyleList;
-
 public:
-    fillStyleListContext( ContextHandler& rParent, std::vector< FillPropertiesPtr >& rFillStyleList );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    FillStyleListContext( ContextHandler& rParent, FillStyleList& rFillStyleList );
+    virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException);
+
+private:
+    FillStyleList& mrFillStyleList;
 };
 
-fillStyleListContext::fillStyleListContext( ContextHandler& rParent, std::vector< FillPropertiesPtr >& rFillStyleList )
-: ContextHandler( rParent )
-, mrFillStyleList( rFillStyleList )
+FillStyleListContext::FillStyleListContext( ContextHandler& rParent, FillStyleList& rFillStyleList ) :
+    ContextHandler( rParent ),
+    mrFillStyleList( rFillStyleList )
 {
 }
 
-Reference< XFastContextHandler > fillStyleListContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
+Reference< XFastContextHandler > FillStyleListContext::createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttribs )
     throw (SAXException, RuntimeException)
 {
-    Reference< XFastContextHandler > xRet;
-    switch( aElementToken )
+    switch( nElement )
     {
         case NMSP_DRAWINGML|XML_noFill:
         case NMSP_DRAWINGML|XML_solidFill:
@@ -69,173 +76,171 @@ Reference< XFastContextHandler > fillStyleListContext::createFastChildContext( s
         case NMSP_DRAWINGML|XML_blipFill:
         case NMSP_DRAWINGML|XML_pattFill:
         case NMSP_DRAWINGML|XML_grpFill:
-        {
             mrFillStyleList.push_back( FillPropertiesPtr( new FillProperties ) );
-            xRet = FillPropertiesGroupContext::StaticCreateContext( *this, aElementToken, xAttribs, *mrFillStyleList.back() );
-        }
-        break;
+            return FillPropertiesGroupContext::StaticCreateContext( *this, nElement, xAttribs, *mrFillStyleList.back() );
     }
-    if( !xRet.is() )
-        xRet.set( this );
-    return xRet;
+    return 0;
 }
 
-// ---------------------------------------------------------------------
+// ============================================================================
 
-class lineStyleListContext : public ContextHandler
+class LineStyleListContext : public ContextHandler
 {
-    std::vector< LinePropertiesPtr >& mrLineStyleList;
-
 public:
-    lineStyleListContext( ContextHandler& rParent, std::vector< LinePropertiesPtr >& rLineStyleList );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs )
-            throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    LineStyleListContext( ContextHandler& rParent, LineStyleList& rLineStyleList );
+    virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException);
+
+private:
+    LineStyleList& mrLineStyleList;
 };
 
-lineStyleListContext::lineStyleListContext( ContextHandler& rParent, std::vector< LinePropertiesPtr >& rLineStyleList )
-: ContextHandler( rParent )
-, mrLineStyleList( rLineStyleList )
+LineStyleListContext::LineStyleListContext( ContextHandler& rParent, LineStyleList& rLineStyleList ) :
+    ContextHandler( rParent ),
+    mrLineStyleList( rLineStyleList )
 {
 }
 
-Reference< XFastContextHandler > lineStyleListContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
+Reference< XFastContextHandler > LineStyleListContext::createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttribs )
     throw (SAXException, RuntimeException)
 {
-    Reference< XFastContextHandler > xRet;
-    switch( aElementToken )
+    switch( nElement )
     {
         case NMSP_DRAWINGML|XML_ln:
-        {
             mrLineStyleList.push_back( LinePropertiesPtr( new LineProperties ) );
-            xRet.set( new LinePropertiesContext( *this, xAttribs, *mrLineStyleList.back() ) );
-        }
-        break;
+            return new LinePropertiesContext( *this, xAttribs, *mrLineStyleList.back() );
     }
-    if( !xRet.is() )
-        xRet.set( this );
-    return xRet;
+    return 0;
 }
 
-// ---------------------------------------------------------------------
+// ============================================================================
 
-class effectStyleListContext : public ContextHandler
+class EffectStyleListContext : public ContextHandler
 {
-    EffectStyleList& mrEffectStyleList;
-
 public:
-    effectStyleListContext( ContextHandler& rParent, EffectStyleList& rEffectStyleList );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    EffectStyleListContext( ContextHandler& rParent, EffectStyleList& rEffectStyleList );
+    virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException);
+
+private:
+    EffectStyleList& mrEffectStyleList;
 };
 
-effectStyleListContext::effectStyleListContext( ContextHandler& rParent, EffectStyleList& rEffectStyleList )
-: ContextHandler( rParent )
-, mrEffectStyleList( rEffectStyleList )
+EffectStyleListContext::EffectStyleListContext( ContextHandler& rParent, EffectStyleList& rEffectStyleList ) :
+    ContextHandler( rParent ),
+    mrEffectStyleList( rEffectStyleList )
 {
 }
 
-Reference< XFastContextHandler > effectStyleListContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& /* xAttribs */ ) throw (SAXException, RuntimeException)
+Reference< XFastContextHandler > EffectStyleListContext::createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& /*xAttribs*/ ) throw (SAXException, RuntimeException)
 {
-    Reference< XFastContextHandler > xRet;
-    switch( aElementToken )
+    switch( nElement )
     {
         case NMSP_DRAWINGML|XML_effectStyle:
-        {
             mrEffectStyleList.push_back( EffectStyleList::value_type( new PropertyMap ) );
-            // todo: last effect list entry needs to be filled/
-            break;
-        }
+            // TODO: import effect styles
+            return 0;
     }
-    if( !xRet.is() )
-        xRet.set( this );
-    return xRet;
+    return 0;
 }
 
-// ---------------------------------------------------------------------
+// ============================================================================
 
-class bgFillStyleListContext : public ContextHandler
+class FontSchemeContext : public ContextHandler
 {
-    std::vector< FillPropertiesPtr >& mrBgFillStyleList;
-
 public:
-    bgFillStyleListContext( ContextHandler& rParent, std::vector< FillPropertiesPtr >& rBgFillStyleList );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    FontSchemeContext( ContextHandler& rParent, FontScheme& rFontScheme );
+    virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException);
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) throw (SAXException, RuntimeException);
+
+private:
+    FontScheme& mrFontScheme;
+    TextCharacterPropertiesPtr mxCharProps;
 };
 
-bgFillStyleListContext::bgFillStyleListContext( ContextHandler& rParent, std::vector< FillPropertiesPtr >& rBgFillStyleList )
-: ContextHandler( rParent )
-, mrBgFillStyleList( rBgFillStyleList )
+FontSchemeContext::FontSchemeContext( ContextHandler& rParent, FontScheme& rFontScheme ) :
+    ContextHandler( rParent ),
+    mrFontScheme( rFontScheme )
 {
 }
 
-Reference< XFastContextHandler > bgFillStyleListContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+Reference< XFastContextHandler > FontSchemeContext::createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs )
+    throw (SAXException, RuntimeException)
 {
-    Reference< XFastContextHandler > xRet;
-    switch( aElementToken )
+    AttributeList aAttribs( rxAttribs );
+    switch( nElement )
     {
-        case NMSP_DRAWINGML|XML_noFill:
-        case NMSP_DRAWINGML|XML_solidFill:
-        case NMSP_DRAWINGML|XML_gradFill:
-        case NMSP_DRAWINGML|XML_blipFill:
-        case NMSP_DRAWINGML|XML_pattFill:
-        case NMSP_DRAWINGML|XML_grpFill:
-        {
-            mrBgFillStyleList.push_back( FillPropertiesPtr( new FillProperties ) );
-            xRet = FillPropertiesGroupContext::StaticCreateContext( *this, aElementToken, xAttribs, *mrBgFillStyleList.back() );
-        }
+        case NMSP_DRAWINGML|XML_majorFont:
+            mxCharProps.reset( new TextCharacterProperties );
+            mrFontScheme[ XML_major ] = mxCharProps;
+            return this;
+        case NMSP_DRAWINGML|XML_minorFont:
+            mxCharProps.reset( new TextCharacterProperties );
+            mrFontScheme[ XML_minor ] = mxCharProps;
+            return this;
+
+        case NMSP_DRAWINGML|XML_latin:
+            if( mxCharProps.get() )
+                mxCharProps->maLatinFont.setAttributes( aAttribs );
+        break;
+        case NMSP_DRAWINGML|XML_ea:
+            if( mxCharProps.get() )
+                mxCharProps->maAsianFont.setAttributes( aAttribs );
+        break;
+        case NMSP_DRAWINGML|XML_cs:
+            if( mxCharProps.get() )
+                mxCharProps->maComplexFont.setAttributes( aAttribs );
         break;
     }
-    if( !xRet.is() )
-        xRet.set( this );
-    return xRet;
+    return 0;
 }
 
-// ---------------------------------------------------------------------
+void FontSchemeContext::endFastElement( sal_Int32 nElement ) throw (SAXException, RuntimeException)
+{
+    switch( nElement )
+    {
+        case NMSP_DRAWINGML|XML_majorFont:
+        case NMSP_DRAWINGML|XML_minorFont:
+            mxCharProps.reset();
+        break;
+    }
+}
 
-themeElementsContext::themeElementsContext( ContextHandler& rParent, Theme& rTheme )
-: ContextHandler( rParent )
-, mrTheme( rTheme )
+// ============================================================================
+
+ThemeElementsContext::ThemeElementsContext( ContextHandler& rParent, Theme& rTheme ) :
+    ContextHandler( rParent ),
+    mrTheme( rTheme )
 {
 }
 
-Reference< XFastContextHandler > themeElementsContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+Reference< XFastContextHandler > ThemeElementsContext::createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
 {
     // CT_BaseStyles
     Reference< XFastContextHandler > xRet;
-    switch( aElementToken )
+    switch( nElement )
     {
         case NMSP_DRAWINGML|XML_clrScheme:  // CT_ColorScheme
-        {
-            xRet.set( new clrSchemeContext( *this, mrTheme.getClrScheme() ) );
-            break;
-        }
-
+            return new clrSchemeContext( *this, mrTheme.getClrScheme() );
         case NMSP_DRAWINGML|XML_fontScheme: // CT_FontScheme
-            break;
+            return new FontSchemeContext( *this, mrTheme.getFontScheme() );
 
         case NMSP_DRAWINGML|XML_fmtScheme:  // CT_StyleMatrix
             mrTheme.setStyleName( xAttribs->getOptionalValue( XML_name ) );
-        break;
+            return this;
 
-            case NMSP_DRAWINGML|XML_fillStyleLst:   // CT_FillStyleList
-                xRet.set( new fillStyleListContext( *this, mrTheme.getFillStyleList() ) );
-            break;
-            case NMSP_DRAWINGML|XML_lnStyleLst:    // CT_LineStyleList
-                xRet.set( new lineStyleListContext( *this, mrTheme.getLineStyleList() ) );
-            break;
-            case NMSP_DRAWINGML|XML_effectStyleLst: // CT_EffectStyleList
-                xRet.set( new effectStyleListContext( *this, mrTheme.getEffectStyleList() ) );
-            break;
-            case NMSP_DRAWINGML|XML_bgFillStyleLst: // CT_BackgroundFillStyleList
-                xRet.set( new bgFillStyleListContext( *this, mrTheme.getBgFillStyleList() ) );
-            break;
-
-        case NMSP_DRAWINGML|XML_extLst:     // CT_OfficeArtExtensionList
-        break;
+        case NMSP_DRAWINGML|XML_fillStyleLst:   // CT_FillStyleList
+            return new FillStyleListContext( *this, mrTheme.getFillStyleList() );
+        case NMSP_DRAWINGML|XML_lnStyleLst:    // CT_LineStyleList
+            return new LineStyleListContext( *this, mrTheme.getLineStyleList() );
+        case NMSP_DRAWINGML|XML_effectStyleLst: // CT_EffectStyleList
+            return new EffectStyleListContext( *this, mrTheme.getEffectStyleList() );
+        case NMSP_DRAWINGML|XML_bgFillStyleLst: // CT_BackgroundFillStyleList
+            return new FillStyleListContext( *this, mrTheme.getBgFillStyleList() );
     }
-    if( !xRet.is() )
-        xRet.set( this );
-    return xRet;
+    return 0;
 }
 
-} }
+// ============================================================================
+
+} // namespace drawingml
+} // namespace oox
+
