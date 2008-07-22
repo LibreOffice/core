@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textfield.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,10 @@
 #include <com/sun/star/text/XTextField.hpp>
 
 #include "oox/helper/helper.hxx"
+#include "oox/helper/propertyset.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/textparagraphproperties.hxx"
+#include "oox/drawingml/textcharacterproperties.hxx"
 
 using ::rtl::OString;
 using ::rtl::OUString;
@@ -52,140 +55,144 @@ using namespace ::com::sun::star::lang;
 
 namespace oox { namespace drawingml {
 
-    TextField::TextField()
-        : mpTextParagraphPropertiesPtr( new TextParagraphProperties())
+TextField::TextField()
+{
+}
+
+namespace {
+
+/** intsanciate the textfields. Because of semantics difference between
+ * OpenXML and OpenOffice, some OpenXML field might cause two fields to be created.
+ * @param aFields the created fields. The list is empty if no field has been created.
+ * @param xModel the model
+ * @param sType the OpenXML field type.
+ */
+void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
+                                                            const Reference< XModel > & xModel, const OUString & sType )
+{
+    Reference< XInterface > xIface;
+    Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
+
+    if( sType.compareToAscii( "datetime", 8 ) == 0)
     {
-    }
-
-
-    /** intsanciate the textfields. Because of semantics difference between
-     * OpenXML and OpenOffice, some OpenXML field might cause two fields to be created.
-     * @param aFields the created fields. The list is empty if no field has been created.
-     * @param xModel the model
-     * @param sType the OpenXML field type.
-     */
-    static void createTextFields( std::list< Reference< XTextField > > & aFields,
-                                                                const Reference< XModel > & xModel, const OUString & sType )
-    {
-        Reference< XInterface > xIface;
-        Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
-
-        if( sType.compareToAscii( "datetime", 8 ) == 0)
+        OString s = ::rtl::OUStringToOString( sType, RTL_TEXTENCODING_UTF8);
+        OString p( s.pData->buffer + 8 );
+        try
         {
-            OString s = ::rtl::OUStringToOString( sType, RTL_TEXTENCODING_UTF8);
-            OString p( s.pData->buffer + 8 );
-            try
-            {
-                bool bIsDate = true;
-                int idx = p.toInt32();
+            bool bIsDate = true;
+            int idx = p.toInt32();
 //              OSL_TRACE( "OOX: p = %s, %d", p.pData->buffer, idx );
-                xIface = xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.text.TextField.DateTime" ) );
-                aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
-                Reference< XPropertySet > xProps( xIface, UNO_QUERY_THROW );
-
-                // here we should format the field properly. waiting after #i81091.
-                switch( idx )
-                {
-                case 1: // Date dd/mm/yyyy
-                    // this is the default format...
-                    break;
-                case 2: // Date Day, Month dd, yyyy
-                    break;
-                case 3: // Date dd Month yyyy
-                    break;
-                case 4: // Date Month dd, yyyy
-                    break;
-                case 5: // Date dd-Mon-yy
-                    break;
-                case 6: // Date Month yy
-                    break;
-                case 7: // Date Mon-yy
-                    break;
-                case 8: // DateTime dd/mm/yyyy H:MM PM
-                    createTextFields( aFields, xModel, CREATE_OUSTRING( "datetime12" ) );
-                    break;
-                case 9: // DateTime dd/mm/yy H:MM:SS PM
-                    createTextFields( aFields, xModel, CREATE_OUSTRING( "datetime13" ) );
-                    break;
-                case 10: // Time H:MM
-                    bIsDate = false;
-                    break;
-                case 11: // Time H:MM:SS
-                    bIsDate = false;
-                    // this is the default format
-                    break;
-                case 12: // Time H:MM PM
-                    bIsDate = false;
-                    break;
-                case 13: // Time H:MM:SS PM
-                    bIsDate = false;
-                    break;
-                }
-                xProps->setPropertyValue( CREATE_OUSTRING( "IsDate" ), makeAny( bIsDate ) );
-                xProps->setPropertyValue( CREATE_OUSTRING( "IsFixed" ), makeAny( false ) );
-            }
-            catch(Exception & e)
-            {
-                OSL_TRACE( "Exception %s",  OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-            }
-        }
-        else if ( sType.compareToAscii( "slidenum" ) == 0 )
-        {
-            xIface = xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.text.TextField.PageNumber" ) );
+            xIface = xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.text.TextField.DateTime" ) );
             aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
+            Reference< XPropertySet > xProps( xIface, UNO_QUERY_THROW );
+
+            // here we should format the field properly. waiting after #i81091.
+            switch( idx )
+            {
+            case 1: // Date dd/mm/yyyy
+                // this is the default format...
+                break;
+            case 2: // Date Day, Month dd, yyyy
+                break;
+            case 3: // Date dd Month yyyy
+                break;
+            case 4: // Date Month dd, yyyy
+                break;
+            case 5: // Date dd-Mon-yy
+                break;
+            case 6: // Date Month yy
+                break;
+            case 7: // Date Mon-yy
+                break;
+            case 8: // DateTime dd/mm/yyyy H:MM PM
+                lclCreateTextFields( aFields, xModel, CREATE_OUSTRING( "datetime12" ) );
+                break;
+            case 9: // DateTime dd/mm/yy H:MM:SS PM
+                lclCreateTextFields( aFields, xModel, CREATE_OUSTRING( "datetime13" ) );
+                break;
+            case 10: // Time H:MM
+                bIsDate = false;
+                break;
+            case 11: // Time H:MM:SS
+                bIsDate = false;
+                // this is the default format
+                break;
+            case 12: // Time H:MM PM
+                bIsDate = false;
+                break;
+            case 13: // Time H:MM:SS PM
+                bIsDate = false;
+                break;
+            }
+            xProps->setPropertyValue( CREATE_OUSTRING( "IsDate" ), makeAny( bIsDate ) );
+            xProps->setPropertyValue( CREATE_OUSTRING( "IsFixed" ), makeAny( false ) );
+        }
+        catch(Exception & e)
+        {
+            OSL_TRACE( "Exception %s",  OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
         }
     }
-
-    void TextField::insertAt(
-            const ::oox::core::XmlFilterBase& rFilterBase,
-            const Reference < XText > & xText,
-            const Reference < XTextCursor > &xAt,
-            const TextCharacterPropertiesPtr& rTextCharacterStyle )
+    else if ( sType.compareToAscii( "slidenum" ) == 0 )
     {
-        try {
-            PropertyMap aioBulletList;
-            Reference< XTextRange > xStart( xAt, UNO_QUERY );
-            Reference< XPropertySet > xProps( xStart, UNO_QUERY);
-            mpTextParagraphPropertiesPtr->pushToPropSet( rFilterBase, xProps, aioBulletList, NULL, sal_True, 18 );
+        xIface = xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.text.TextField.PageNumber" ) );
+        aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );
+    }
+}
 
-            if ( rTextCharacterStyle.get() )
-                rTextCharacterStyle->pushToPropSet( rFilterBase, xProps );
+} // namespace
 
-            maTextCharacterPropertiesPtr->pushToPropSet( rFilterBase, xProps );
+void TextField::insertAt(
+        const ::oox::core::XmlFilterBase& rFilterBase,
+        const Reference < XText > & xText,
+        const Reference < XTextCursor > &xAt,
+        const TextCharacterProperties& rTextCharacterStyle ) const
+{
+    try
+    {
+        PropertyMap aioBulletList;
+        Reference< XTextRange > xStart( xAt, UNO_QUERY );
+        Reference< XPropertySet > xProps( xStart, UNO_QUERY);
+        PropertySet aPropSet( xProps );
 
-            std::list< Reference< XTextField > > fields;
-            createTextFields( fields, rFilterBase.getModel(), msType );
-            if( !fields.empty() )
+        maTextParagraphProperties.pushToPropSet( rFilterBase, xProps, aioBulletList, NULL, sal_True, 18 );
+
+        TextCharacterProperties aTextCharacterProps( rTextCharacterStyle );
+        aTextCharacterProps.assignUsed( maTextParagraphProperties.getTextCharacterProperties() );
+        aTextCharacterProps.assignUsed( getTextCharacterProperties() );
+        aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
+
+        std::list< Reference< XTextField > > fields;
+        lclCreateTextFields( fields, rFilterBase.getModel(), msType );
+        if( !fields.empty() )
+        {
+            bool bFirst = true;
+            for( std::list< Reference< XTextField > >::iterator iter = fields.begin();
+                     iter != fields.end(); ++iter )
             {
-                bool bFirst = true;
-                for( std::list< Reference< XTextField > >::iterator iter = fields.begin();
-                         iter != fields.end(); ++iter )
+                if( iter->is() )
                 {
-                    if( iter->is() )
+                    Reference< XTextContent > xContent( *iter, UNO_QUERY);
+                    if( bFirst)
                     {
-                        Reference< XTextContent > xContent( *iter, UNO_QUERY);
-                        if( bFirst)
-                        {
-                            bFirst = false;
-                        }
-                        else
-                        {
-                            xText->insertString( xStart, CREATE_OUSTRING( " " ), sal_False );
-                        }
-                        xText->insertTextContent( xStart, xContent, sal_False );
+                        bFirst = false;
                     }
+                    else
+                    {
+                        xText->insertString( xStart, CREATE_OUSTRING( " " ), sal_False );
+                    }
+                    xText->insertTextContent( xStart, xContent, sal_False );
                 }
             }
-            else
-            {
-                xText->insertString( xStart, getText(), sal_False );
-            }
         }
-        catch( const Exception&  )
+        else
         {
-            OSL_TRACE("OOX:  TextField::insertAt() exception");
+            xText->insertString( xStart, getText(), sal_False );
         }
     }
-
+    catch( const Exception&  )
+    {
+        OSL_TRACE("OOX:  TextField::insertAt() exception");
+    }
+}
 
 } }
