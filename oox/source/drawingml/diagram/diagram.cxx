@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: diagram.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include "oox/drawingml/diagram/diagram.hxx"
+#include "oox/drawingml/fillproperties.hxx"
 #include "oox/core/namespaces.hxx"
 #include "tokens.hxx"
 
@@ -103,7 +104,7 @@ PointsTreePtr PointsTree::getParent() const
 } // dgm namespace
 
 DiagramData::DiagramData()
-    : mpFillProperties( new FillProperties( ) )
+    : mpFillProperties( new FillProperties )
 {
 }
 
@@ -274,9 +275,9 @@ void Diagram::addTo( const ShapePtr & pParentShape )
         pParentShape->addChild( pShape );
     }
 
-    OSL_TRACE( "Dgm: addTo() # of childs %d", pParentShape->getChilds().size() );
-    for( std::vector< ShapePtr >::iterator iter = pParentShape->getChilds().begin();
-         iter != pParentShape->getChilds().end(); ++iter)
+    OSL_TRACE( "Dgm: addTo() # of childs %d", pParentShape->getChildren().size() );
+    for( std::vector< ShapePtr >::iterator iter = pParentShape->getChildren().begin();
+         iter != pParentShape->getChildren().end(); ++iter)
     {
         OSL_TRACE( "Dgm: shape name %s", OUSTRING_TO_CSTR( (*iter)->getName() ) );
     }
