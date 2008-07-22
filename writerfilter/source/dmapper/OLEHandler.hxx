@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OLEHandler.hxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,10 +35,15 @@
 #endif
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <boost/shared_ptr.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/awt/Point.hpp>
 
 namespace com{ namespace sun{ namespace star{
     namespace embed{
         class XEmbeddedObject;
+    }
+    namespace graphic{
+        class XGraphic;
     }
     namespace io{
         class XInputStream;
@@ -65,6 +70,14 @@ class WRITERFILTER_DLLPRIVATE OLEHandler : public Properties
     ::rtl::OUString     m_sObjectId;
     ::rtl::OUString     m_sr_id;
 
+    sal_Int32                   m_nDxaOrig;
+    sal_Int32                   m_nDyaOrig;
+
+    ::com::sun::star::awt::Size m_aShapeSize;
+    ::com::sun::star::awt::Point m_aShapePosition;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > m_xReplacement;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xInputStream;
 public:
     OLEHandler();
@@ -75,6 +88,12 @@ public:
     virtual void sprm(Sprm & sprm);
 
     ::rtl::OUString copyOLEOStream( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument > xTextDocument );
+
+    ::com::sun::star::awt::Size     getSize() const { return m_aShapeSize;}
+    ::com::sun::star::awt::Point    getPosition() const { return m_aShapePosition;}
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
+                                    getReplacement() const { return m_xReplacement; }
+
 };
 typedef boost::shared_ptr< OLEHandler >  OLEHandlerPtr;
 }}
