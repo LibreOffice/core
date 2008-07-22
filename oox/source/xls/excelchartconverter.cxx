@@ -8,7 +8,7 @@
  *
  * $RCSfile: excelchartconverter.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +33,11 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include "oox/drawingml/chart/datasourcemodel.hxx"
 #include "oox/xls/formulaparser.hxx"
 
 using ::rtl::OUString;
+using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -45,7 +47,7 @@ using ::com::sun::star::chart2::XChartDocument;
 using ::com::sun::star::chart2::data::XDataProvider;
 using ::com::sun::star::chart2::data::XDataReceiver;
 using ::com::sun::star::chart2::data::XDataSequence;
-using ::oox::drawingml::chart::ChartConverter;
+using ::oox::drawingml::chart::DataSequenceModel;
 
 namespace oox {
 namespace xls {
@@ -77,27 +79,39 @@ void ExcelChartConverter::createDataProvider( const Reference< XChartDocument >&
 }
 
 Reference< XDataSequence > ExcelChartConverter::createDataSequence(
-        const Reference< XDataProvider >& rxDataProvider, const OUString& rFormula )
+        const Reference< XDataProvider >& rxDataProvider, const DataSequenceModel& rDataSeq )
 {
-    OSL_ENSURE( rFormula.getLength() > 0, "ExcelChartConverter::createDataSequence - missing formula" );
-
     Reference< XDataSequence > xDataSeq;
-    if( rxDataProvider.is() && (rFormula.getLength() > 0) )
+    if( rxDataProvider.is() )
     {
-        // parse the formula string, create a token sequence
-        FormulaParser& rParser = getFormulaParser();
-        TokensFormulaContext aContext( true, true );
-        aContext.setBaseAddress( CellAddress( getCurrentSheetIndex(), 0, 0 ) );
-        rParser.importFormula( aContext, rFormula );
+        OUString aRangeRep;
+        if( rDataSeq.maFormula.getLength() > 0 )
+        {
+            // parse the formula string, create a token sequence
+            FormulaParser& rParser = getFormulaParser();
+            TokensFormulaContext aContext( true, true );
+            aContext.setBaseAddress( CellAddress( getCurrentSheetIndex(), 0, 0 ) );
+            rParser.importFormula( aContext, rDataSeq.maFormula );
 
-        // create a range list from the token sequence
-        ApiCellRangeList aRanges;
-        rParser.extractCellRangeList( aRanges, aContext.getTokens() );
+            // create a range list from the token sequence
+            ApiCellRangeList aRanges;
+            rParser.extractCellRangeList( aRanges, aContext.getTokens() );
+            aRangeRep = rParser.generateApiRangeListString( aRanges );
+        }
+        else if( !rDataSeq.maData.empty() )
+        {
+            // create a single-row array from constant source data
+            Matrix< Any > aMatrix( rDataSeq.maData.size(), 1 );
+            Matrix< Any >::iterator aMIt = aMatrix.begin();
+            // TODO: how to handle missing values in the map?
+            for( DataSequenceModel::AnyMap::const_iterator aDIt = rDataSeq.maData.begin(), aDEnd = rDataSeq.maData.end(); aDIt != aDEnd; ++aDIt, ++aMIt )
+                *aMIt = aDIt->second;
+            aRangeRep = FormulaProcessorBase::generateApiArray( aMatrix );
+        }
 
-        if( !aRanges.empty() ) try
+        if( aRangeRep.getLength() > 0 ) try
         {
             // create the data sequence
-            OUString aRangeRep = rParser.generateApiRangeListString( aRanges, ';' );
             xDataSeq = rxDataProvider->createDataSequenceByRangeRepresentation( aRangeRep );
         }
         catch( Exception& )
