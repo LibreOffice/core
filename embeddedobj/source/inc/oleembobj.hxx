@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: oleembobj.hxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,18 +35,18 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/embed/XInplaceObject.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/XLinkageSupport.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/XComponentSupplier.hpp>
-#ifndef _COM_SUN_STAR_EMBED_VERBDESCR_HPP_
 #include <com/sun/star/embed/VerbDescriptor.hpp>
-#endif
 #include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase5.hxx>
 
 #include <osl/thread.h>
 
@@ -109,10 +109,12 @@ public:
 
 class OleComponent;
 class OwnView_Impl;
-class OleEmbeddedObject : public ::cppu::WeakImplHelper3
+class OleEmbeddedObject : public ::cppu::WeakImplHelper5
                         < ::com::sun::star::embed::XEmbeddedObject
                         , ::com::sun::star::embed::XEmbedPersist
-                        , ::com::sun::star::embed::XLinkageSupport >
+                        , ::com::sun::star::embed::XLinkageSupport
+                        , ::com::sun::star::embed::XInplaceObject
+                        , ::com::sun::star::container::XChild >
 {
     friend class OleComponent;
 
@@ -190,6 +192,12 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper3
     // STAMPIT solution
     // the following member is used during verb execution to detect whether the verb execution modifies the object
     VerbExecutionController m_aVerbExecutionController;
+
+    // if the following member is set, the object works in wrapper mode
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > m_xWrappedObject;
+    sal_Bool m_bTriedConversion;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xParent;
 
 protected:
 
@@ -273,6 +281,12 @@ protected:
     ::rtl::OUString GetTempURL_Impl();
 #endif
     ::rtl::OUString GetContainerName_Impl() { return m_aContainerName; }
+
+    // the following 4 methods are related to switch to wrapping mode
+    void MoveListeners();
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > CreateTemporarySubstorage( ::rtl::OUString& o_aStorageName );
+    ::rtl::OUString MoveToTemporarySubstream();
+    sal_Bool TryToConvertToOOo();
 
 public:
     // in case a new object must be created the class ID must be specified
@@ -504,6 +518,28 @@ public:
     virtual void SAL_CALL removeEventListener(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& Listener )
         throw ( ::com::sun::star::uno::RuntimeException );
+
+// XInplaceObject ( only for wrapping scenario here )
+
+    virtual void SAL_CALL setObjectRectangles( const ::com::sun::star::awt::Rectangle& aPosRect,
+                                          const ::com::sun::star::awt::Rectangle& aClipRect )
+        throw ( ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::Exception,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL enableModeless( sal_Bool bEnable )
+        throw ( ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::Exception,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL translateAccelerators(
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::awt::KeyEvent >& aKeys )
+        throw ( ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::RuntimeException );
+
+    // XChild ( only for wrapping scenario here )
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
 };
 
