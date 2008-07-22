@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Handler.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -274,10 +274,6 @@ OOXMLPictureHandler::~OOXMLPictureHandler()
 
 void OOXMLPictureHandler::attribute(Id name, Value & val)
 {
-#ifdef DEBUG_PICTURE
-    logger("DEBUG", "handle picture:" + (*QNameToString::Instance())(name));
-#endif
-
     if (name == NS_ooxml::LN_AG_Blob_r_embed)
         mpFastContext->resolvePicture(val.getString());
     else
