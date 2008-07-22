@@ -8,7 +8,6 @@ mkdir: %_DEST%\inc%_EXT%\bootstrp
 ..\%__SRC%\lib\btstrp.lib %_DEST%\lib%_EXT%\btstrp.lib
 ..\%__SRC%\lib\bootstrp2.lib %_DEST%\lib%_EXT%\bootstrp2.lib
 ..\%__SRC%\lib\itools.lib %_DEST%\lib%_EXT%\itools.lib
-..\%__SRC%\lib\lib*.a %_DEST%\lib%_EXT%\lib*.a
 ..\%__SRC%\lib\lib*.sl %_DEST%\lib%_EXT%\lib*.sl
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
 ..\%__SRC%\lib\lib*.so.* %_DEST%\lib%_EXT%\lib*.so.*
