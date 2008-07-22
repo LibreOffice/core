@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: WW8DocumentImpl.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,6 +29,7 @@
  ************************************************************************/
 
 #include <resourcemodel/exceptions.hxx>
+#include <resourcemodel/QNameToString.hxx>
 #include <WW8DocumentImpl.hxx>
 #include <WW8FKPImpl.hxx>
 #include <WW8PieceTableImpl.hxx>
@@ -38,6 +39,9 @@
 #include <Dff.hxx>
 #include <iterator>
 #include <XNoteHelperImpl.hxx>
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <doctokLoggers.hxx>
 
 namespace writerfilter {
 namespace doctok
@@ -156,12 +160,30 @@ WW8Document::~WW8Document()
 {
 }
 
+class WW8IdToString : public IdToString
+{
+public:
+    WW8IdToString() : IdToString() {}
+    virtual ~WW8IdToString() {}
+
+    virtual string toString(const Id & rId) const
+    {
+        string s((*SprmIdToString::Instance())(rId));
+
+        if (s.size() == 0)
+            s = (*QNameToString::Instance())(rId);
+
+        return s;
+    }
+};
+
 WW8DocumentImpl::~WW8DocumentImpl()
 {
 }
 
 WW8DocumentImpl::WW8DocumentImpl(WW8Stream::Pointer_t rpStream)
-: bSubDocument(false), mfcPicLoc(0), mbPicIsData(false), mpStream(rpStream)
+: bSubDocument(false), mfcPicLoc(0), mbPicIsData(false), mpStream(rpStream),
+mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
 {
     mpDocStream = getSubStream(::rtl::OUString::createFromAscii
                                ("WordDocument"));
@@ -1390,6 +1412,34 @@ void WW8DocumentImpl::resolveSpecialChar(sal_uInt32 nChar, Stream & rStream)
     }
 }
 
+void WW8DocumentImpl::text(Stream & rStream, const sal_uInt8 * data, size_t len)
+{
+#ifdef DEBUG_ELEMENT
+    ::rtl::OUString sText( (const sal_Char*) data, len, RTL_TEXTENCODING_MS_1252 );
+    debug_logger->startElement("text");
+    debug_logger->chars(OUStringToOString(sText, RTL_TEXTENCODING_ASCII_US).getStr());
+    debug_logger->endElement("text");
+#endif
+    rStream.text(data, len);
+}
+
+void WW8DocumentImpl::utext(Stream & rStream, const sal_uInt8 * data, size_t len)
+{
+#ifdef DEBUG_ELEMENT
+    debug_logger->startElement("utext");
+
+    ::rtl::OUString sText;
+    ::rtl::OUStringBuffer aBuffer = ::rtl:: OUStringBuffer(len);
+    aBuffer.append( (const sal_Unicode *) data, len);
+    sText = aBuffer.makeStringAndClear();
+
+    debug_logger->chars(OUStringToOString(sText, RTL_TEXTENCODING_ASCII_US).getStr());
+    debug_logger->endElement("utext");
+#endif
+    rStream.text(data, len);
+}
+
+
 void WW8DocumentImpl::resolveText(WW8DocumentIterator::Pointer_t pIt,
                                   Stream & rStream)
 {
@@ -1398,7 +1448,6 @@ void WW8DocumentImpl::resolveText(WW8DocumentIterator::Pointer_t pIt,
     sal_uInt32 nCount = aSeq.getCount();
     bool bComplex = pIt->isComplex();
 
-#if 1
     /*
       Assumption: Special characters are always at the beginning or end of a
       run.
@@ -1420,7 +1469,7 @@ void WW8DocumentImpl::resolveText(WW8DocumentIterator::Pointer_t pIt,
             {
                 nStartIndex += 1;
                 resolveSpecialChar(nCharFirst, rStream);
-                rStream.text(&aSeq[0], 1);
+                text(rStream, &aSeq[0], 1);
             }
 
             if (!isSpecial(nCharLast))
@@ -1429,12 +1478,12 @@ void WW8DocumentImpl::resolveText(WW8DocumentIterator::Pointer_t pIt,
             if (nStartIndex < nEndIndex)
             {
                 sal_uInt32 nChars = nEndIndex - nStartIndex;
-                rStream.text(&aSeq[nStartIndex], nChars);
+                text(rStream, &aSeq[nStartIndex], nChars);
 
                 if (isSpecial(nCharLast))
                 {
                     resolveSpecialChar(nCharLast, rStream);
-                    rStream.text(&aSeq[nEndIndex], 1);
+                    text(rStream, &aSeq[nEndIndex], 1);
                 }
             }
         }
@@ -1450,7 +1499,7 @@ void WW8DocumentImpl::resolveText(WW8DocumentIterator::Pointer_t pIt,
             {
                 nStartIndex += 2;
                 resolveSpecialChar(nCharFirst, rStream);
-                rStream.utext(&aSeq[0], 1);
+                utext(rStream, &aSeq[0], 1);
             }
 
             if (!isSpecial(nCharLast))
@@ -1459,56 +1508,89 @@ void WW8DocumentImpl::resolveText(WW8DocumentIterator::Pointer_t pIt,
             if (nStartIndex < nEndIndex)
             {
                 sal_uInt32 nChars = (nEndIndex - nStartIndex) / 2;
-                rStream.utext(&aSeq[nStartIndex], nChars);
+                utext(rStream, &aSeq[nStartIndex], nChars);
 
                 if (isSpecial(nCharLast))
                 {
                     resolveSpecialChar(nCharLast, rStream);
-                    rStream.utext(&aSeq[nEndIndex], 1);
+                    utext(rStream, &aSeq[nEndIndex], 1);
                 }
             }
         }
     }
-#else
-    sal_uInt32 nIndex = 0;
+}
 
-    while (nIndex < nCount)
-    {
-        sal_uInt32 nChar = aSeq[nIndex];
+void WW8DocumentImpl::startCharacterGroup(Stream & rStream)
+{
+    if (mbInCharacterGroup)
+        endCharacterGroup(rStream);
 
-        if (! bComplex)
-            nChar += aSeq[nIndex + 1] << 8;
-
-        if (isSpecial(nChar))
-        {
-            if (bComplex)
-            {
-                if (nStart < nIndex)
-                    rStream.text(&aSeq[nStart], nIndex - nStart);
-                rStream.text(&aSeq[nIndex], 1);
-            }
-            else
-            {
-                if (nStart < nIndex)
-                    rStream.utext(&aSeq[nStart], (nIndex - nStart) / 2);
-
-                rStream.utext(&aSeq[nIndex], 1);
-            }
-
-            nStart = nIndex + (bComplex ? 1 : 2);
-        }
-
-        nIndex += bComplex ? 1 : 2;
-    }
-
-    if (nStart < nCount)
-    {
-        if (bComplex)
-            rStream.text(&aSeq[nStart], nCount - nStart);
-        else
-            rStream.utext(&aSeq[nStart], (nCount - nStart) / 2);
-    }
+#ifdef DEBUG_ELEMENT
+    debug_logger->startElement("charactergroup");
 #endif
+
+    rStream.startCharacterGroup();
+    mbInCharacterGroup = true;
+}
+
+void WW8DocumentImpl::endCharacterGroup(Stream & rStream)
+{
+#ifdef DEBUG_ELEMENT
+    debug_logger->endElement("charactergroup");
+#endif
+
+    rStream.endCharacterGroup();
+    mbInCharacterGroup = false;
+}
+
+void WW8DocumentImpl::startParagraphGroup(Stream & rStream)
+{
+    if (mbInParagraphGroup)
+        endParagraphGroup(rStream);
+
+#ifdef DEBUG_ELEMENT
+    debug_logger->startElement("paragraphgroup");
+#endif
+
+    rStream.startParagraphGroup();
+    mbInParagraphGroup = true;
+}
+
+void WW8DocumentImpl::endParagraphGroup(Stream & rStream)
+{
+    if (mbInCharacterGroup)
+        endCharacterGroup(rStream);
+
+#ifdef DEBUG_ELEMENT
+    debug_logger->endElement("paragraphgroup");
+#endif
+    rStream.endParagraphGroup();
+    mbInParagraphGroup = false;
+}
+
+void WW8DocumentImpl::startSectionGroup(Stream & rStream)
+{
+    if (mbInSection)
+        endSectionGroup(rStream);
+
+#ifdef DEBUG_ELEMENT
+    debug_logger->startElement("sectiongroup");
+#endif
+
+    rStream.startSectionGroup();
+    mbInSection = true;
+}
+
+void WW8DocumentImpl::endSectionGroup(Stream & rStream)
+{
+    if (mbInParagraphGroup)
+        endParagraphGroup(rStream);
+
+#ifdef DEBUG_ELEMENT
+    debug_logger->endElement("sectiongroup");
+#endif
+    rStream.endSectionGroup();
+    mbInSection = false;
 }
 
 void WW8DocumentImpl::resolve(Stream & rStream)
@@ -1638,9 +1720,9 @@ void WW8DocumentImpl::resolve(Stream & rStream)
     WW8DocumentIterator::Pointer_t pIt = begin();
     WW8DocumentIterator::Pointer_t pItEnd = end();
 
-    bool bInParagraphGroup = false;
-    bool bInCharacterGroup = false;
-    bool bInSection = false;
+    mbInParagraphGroup = false;
+    mbInCharacterGroup = false;
+    mbInSection = false;
 
     sal_uInt32 nSectionIndex = 0;
 
@@ -1661,7 +1743,15 @@ void WW8DocumentImpl::resolve(Stream & rStream)
                     pFootnote(pIt->getSubDocument());
 
                 if (pFootnote.get() != NULL)
+                {
+#ifdef DEBUG_ELEMENT
+                    debug_logger->startElement("substream");
+#endif
                     rStream.substream(NS_rtf::LN_footnote, pFootnote);
+#ifdef DEBUG_ELEMENT
+                    debug_logger->endElement("substream");
+#endif
+                }
             }
             break;
         case PROP_ENDNOTE:
@@ -1671,7 +1761,15 @@ void WW8DocumentImpl::resolve(Stream & rStream)
                     pEndnote(pIt->getSubDocument());
 
                 if (pEndnote.get() != NULL)
+                {
+#ifdef DEBUG_ELEMENT
+                    debug_logger->startElement("substream");
+#endif
                     rStream.substream(NS_rtf::LN_endnote, pEndnote);
+#ifdef DEBUG_ELEMENT
+                    debug_logger->endElement("substream");
+#endif
+                }
             }
             break;
         case PROP_ANNOTATION:
@@ -1681,60 +1779,34 @@ void WW8DocumentImpl::resolve(Stream & rStream)
                     pAnnotation(pIt->getSubDocument());
 
                 if (pAnnotation.get() != NULL)
+                {
+#ifdef DEBUG_ELEMENT
+                    debug_logger->startElement("substream");
+#endif
                     rStream.substream(NS_rtf::LN_annotation, pAnnotation);
+#ifdef DEBUG_ELEMENT
+                    debug_logger->endElement("substream");
+#endif
+                }
             }
             break;
         case PROP_CHP:
             {
-                if (bInCharacterGroup)
-                    rStream.endCharacterGroup();
-
-                rStream.info(pIt->toString());
-                rStream.startCharacterGroup();
-
-                bInCharacterGroup = true;
+                startCharacterGroup(rStream);
             }
 
             break;
         case PROP_PAP:
             {
-                if (bInCharacterGroup)
-                {
-                    rStream.endCharacterGroup();
-                    bInCharacterGroup = false;
-                }
-
-                if (bInParagraphGroup)
-                    rStream.endParagraphGroup();
-
+                startParagraphGroup(rStream);
                 rStream.info(pIt->toString());
-                rStream.startParagraphGroup();
-
-                bInParagraphGroup = true;
             }
 
             break;
         case PROP_SEC:
             {
-                if (bInCharacterGroup)
-                {
-                    rStream.endCharacterGroup();
-                    bInCharacterGroup = false;
-                }
-
-                if (bInParagraphGroup)
-                {
-                    rStream.endParagraphGroup();
-                    bInParagraphGroup = false;
-                }
-
-                if (bInSection)
-                    rStream.endSectionGroup();
-
-                rStream.startSectionGroup();
+                startSectionGroup(rStream);
                 rStream.info(pIt->toString());
-
-                bInSection = true;
 
                 sal_uInt32 nHeaderStartIndex = 6 + nSectionIndex * 6;
                 sal_uInt32 nHeaderEndIndex = nHeaderStartIndex + 6;
@@ -1766,13 +1838,18 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 
         if (pProperties.get() != NULL)
         {
+#ifdef DEBUG_PROPERTIES
+            PropertySetToTagHandler aHandler(IdToString::Pointer_t(new WW8IdToString()));
+            pProperties->resolve(aHandler);
+            debug_logger->addTag(aHandler.getTag());
+#endif
+
             rStream.props(pProperties);
         }
 
         if (pIt->getPropertyType() == PROP_PAP)
         {
-            rStream.startCharacterGroup();
-            bInCharacterGroup = true;
+            startCharacterGroup(rStream);
         }
 
         resolveText(pIt, rStream);
@@ -1780,14 +1857,14 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         ++(*pIt);
     }
 
-    if (bInCharacterGroup)
-        rStream.endCharacterGroup();
+    if (mbInCharacterGroup)
+        endCharacterGroup(rStream);
 
-    if (bInParagraphGroup)
-        rStream.endParagraphGroup();
+    if (mbInParagraphGroup)
+        endParagraphGroup(rStream);
 
-    if (bInSection)
-        rStream.endSectionGroup();
+    if (mbInSection)
+        endSectionGroup(rStream);
 
 }
 
