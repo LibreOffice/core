@@ -9,7 +9,7 @@
  *
  * $RCSfile: resourcestools.xsl,v $
  *
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,36 +95,6 @@
 
   <xsl:template name="licenseheader">
     <xsl:text>
-/*************************************************************************
- *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
- * Copyright 2008 by Sun Microsystems, Inc.
- *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: resourcestools.xsl,v $
- *
- * $Revision: 1.48 $
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * http://www.openoffice.org/license.html
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
 /*      
 
   THIS FILE IS GENERATED AUTOMATICALLY! DO NOT EDIT!
@@ -742,6 +712,10 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
         <xsl:text>
     endOfParagraph();</xsl:text>
       </xsl:when>
+      <xsl:when test="@action='handleLastParagraphInSection'">
+        <xsl:text>
+    handleLastParagraphInSection();</xsl:text>
+      </xsl:when>
       <xsl:when test="@action='setLastParagraphInSection'">
         <xsl:text>
     setLastParagraphInSection();</xsl:text>
@@ -797,6 +771,14 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
         </xsl:when>
         <xsl:when test="@action='propagateTableProperties'">
     propagateTableProperties();
+        </xsl:when>
+        <xsl:when test="@action='sendPropertiesWithId'">
+          <xsl:text>
+    sendPropertiesWithId(</xsl:text>
+          <xsl:call-template name="idtoqname">
+            <xsl:with-param name="id" select="@sendtokenid"/>
+          </xsl:call-template>
+          <xsl:text>);</xsl:text>
         </xsl:when>
         <xsl:when test="@action='clearProps'">
     clearProps();
@@ -867,6 +849,8 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
   <xsl:template name="fastcontextimpls">
     <xsl:param name="ns"/>
     <xsl:for-each select=".//namespace[@name=$ns]">
+    <xsl:text>
+</xsl:text>
       <xsl:for-each select="./rng:grammar/rng:define">
         <xsl:variable name="do">
           <xsl:call-template name="classfordefine"/>
@@ -1843,13 +1827,13 @@ public:
       <xsl:call-template name="faststartaction"/>
     </xsl:variable>
     <xsl:if test="string-length($faststartactionbody)">
-     virtual void startAction(Token_t nElement);
+     virtual void lcl_startAction(Token_t nElement);
     </xsl:if>
     <xsl:variable name="fastendactionbody">
       <xsl:call-template name="fastendaction"/>
     </xsl:variable>
     <xsl:if test="string-length($fastendactionbody)">
-     virtual void endAction(Token_t nElement);
+     virtual void lcl_endAction(Token_t nElement);
     </xsl:if>
     <xsl:variable name="fastcharactersbody">
       <xsl:call-template name="fastcharacters"/>
@@ -1962,7 +1946,7 @@ public:
       <xsl:text>
 void </xsl:text>
 <xsl:value-of select="$classname"/>
-<xsl:text>::startAction(Token_t</xsl:text>
+<xsl:text>::lcl_startAction(Token_t</xsl:text>
 <xsl:for-each select="ancestor::namespace/resource[@name=$name]">
   <xsl:if test="./element/action[@name='start']">
     <xsl_text> nElement</xsl_text>
@@ -1998,7 +1982,7 @@ void </xsl:text>
       <xsl:text>
 void </xsl:text>
 <xsl:value-of select="$classname"/>
-<xsl:text>::endAction(Token_t</xsl:text>
+<xsl:text>::lcl_endAction(Token_t</xsl:text>
 <xsl:for-each select="ancestor::namespace/resource[@name=$name]">
   <xsl:if test="./element/action[@name='end']">
     <xsl_text> nElement</xsl_text>
@@ -2087,10 +2071,8 @@ OOXMLFastContextHandler::createFromStart
  const uno::Reference &lt; xml::sax::XFastAttributeList &gt; &amp; Attribs) 
 {
 #ifdef DEBUG_CREATE
-    string tmp = "&lt;createfromstart element=\"";
-    tmp += fastTokenToId(Element);
-    tmp += "\"&gt;";
-    logger("DEBUG", tmp);
+    debug_logger-&gt;startElement("createfromstart");
+    debug_logger-&gt;attribute("element", fastTokenToId(Element));
 #endif
     uno::Reference &lt; xml::sax::XFastContextHandler &gt; xResult;</xsl:text>
 
@@ -2109,7 +2091,7 @@ OOXMLFastContextHandler::createFromStart
     <xsl:text>
 
 #ifdef DEBUG_CREATE
-    logger("DEBUG", "&lt;/createfromstart&gt;");
+    debug_logger-&gt;endElement("createfromstart");
 #endif
 
     return xResult;
@@ -2128,14 +2110,18 @@ void dumpAttrib(const char * sToken, sal_uInt32 nToken,
    try
    {
        if (Attribs->hasAttribute(nToken))
-           logger("DEBUG", string("attrib id='") + sToken 
-                + "'&gt;" + OUStringToOString(Attribs->getValue(nToken), RTL_TEXTENCODING_ASCII_US).getStr()
-                + "&lt;/attrib&gt;"); 
+       {
+           debug_logger-&gt;startElement("attrib");
+           debug_logger-&gt;attribute("id", sToken);
+           debug_logger-&gt;chars(Attribs->getValue(nToken));
+           debug_logger-&gt;endElement("attrib"); 
+       }
    }
    catch (...)
    {
-      logger("DEBUG", string("&lt;error&gt;") + sToken 
-           + "&lt;/error&gt;");
+      debug_logger-&gt;startElement("error");
+      debug_logger-&gt;chars(sToken);
+      debug_logger-&gt;endElement("error");
    }
 }
 
@@ -2143,7 +2129,7 @@ void dumpAttribs
 (const uno::Reference &lt; xml::sax::XFastAttributeList &gt; &amp; Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    logger("DEBUG", "&lt;attribs&gt;");
+    debug_logger-&gt;startElement("attribs");
     </xsl:text>
     <xsl:for-each select="//rng:attribute[@name]">
       <xsl:if test="generate-id(.) = generate-id(key('attribs-qnames', @qname)[1]
@@ -2163,7 +2149,7 @@ void dumpAttribs
       </xsl:if>
     </xsl:for-each>
     <xsl:text>
-    logger("DEBUG", "&lt;/attribs&gt;");
+    debug_logger-&gt;endElement("attribs");
 }</xsl:text>
   </xsl:template>
 
