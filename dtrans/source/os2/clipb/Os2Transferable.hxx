@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Os2Transferable.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +46,8 @@
 #define CHAR_POINTER(THE_OUSTRING) ::rtl::OUStringToOString (THE_OUSTRING, RTL_TEXTENCODING_UTF8).pData->buffer
 
 #if OSL_DEBUG_LEVEL>1
-extern "C" int debug_printf(const char *f, ...);
+//extern "C" int debug_printf(const char *f, ...);
+#define debug_printf( ...) { 1; }
 #else
 #define debug_printf( ...) { 1; }
 #endif
