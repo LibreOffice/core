@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: axismodel.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,7 +73,7 @@ struct AxisModel
     AxisDispUnitsRef    mxDispUnits;        /// Axis units label.
     ShapeRef            mxMajorGridLines;   /// Major grid lines formatting.
     ShapeRef            mxMinorGridLines;   /// Minor grid lines formatting.
-    ::rtl::OUString     maFormatCode;       /// Number format code for tick mark labels.
+    NumberFormat        maNumberFormat;     /// Number format for axis tick labels.
     OptValue< double >  mofCrossesAt;       /// Position on this axis where another axis crosses.
     OptValue< double >  mofMajorUnit;       /// Unit for major tick marks on date/value axis.
     OptValue< double >  mofMinorUnit;       /// Unit for minor tick marks on date/value axis.
@@ -100,7 +100,6 @@ struct AxisModel
     bool                mbAuto;             /// True = automatic axis settings.
     bool                mbDeleted;          /// True = axis has been deleted manually.
     bool                mbNoMultiLevel;     /// True = no multi-level categories supported.
-    bool                mbSourceLinked;     /// True = number format linked to source data.
 
     explicit            AxisModel( sal_Int32 nTypeId );
                         ~AxisModel();
