@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: ch2_losa_ods_to_sxc.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-13 14:26:54 $
+'* last change: $Author: obo $ $Date: 2008-07-22 10:34:50 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -56,7 +56,7 @@ sub main
     Printlog "---       Load charts in ODS - SaveAS SXC      ---"
     Printlog "--------------------------------------------------"
 
-    use "chart2/loadsave/inc/ch2_losa.inc"
+    use "chart2/optional/includes/loadsave/ch2_losa.inc"
     use "chart2/tools/ch_tools_common.inc"
     
     Call hStatusIn("Chart2", "ch2_losa_ods_to_sxc.bas")       
