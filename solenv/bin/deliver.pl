@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: deliver.pl,v $
 #
-# $Revision: 1.129 $
+# $Revision: 1.130 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,7 +47,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.129 $ ';
+$id_str = ' $Revision: 1.130 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -823,6 +823,10 @@ sub copy_if_newer
             }
         }
         fix_file_permissions($$from_stat_ref[2], $temp_file);
+        if ( $^O eq 'os2' )
+        {
+            $rc = unlink($to); # YD OS/2 can't rename if $to exists!
+        }
         $rc = rename($temp_file, $to);
         if ( $rc ) {
             # handle special packaging of *.dylib files for Mac OS X
