@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolbox2.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.55 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1833,6 +1833,24 @@ BOOL ToolBox::IsItemVisible( USHORT nItemId ) const
         return pItem->mbVisible;
     else
         return FALSE;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL ToolBox::IsItemReallyVisible( USHORT nItemId ) const
+{
+    // is the item on the visible area of the toolbox?
+    BOOL bRet = FALSE;
+    Rectangle aRect( mnLeftBorder, mnTopBorder, mnDX-mnRightBorder, mnDY-mnBottomBorder );
+    ImplToolItem* pItem = ImplGetItem( nItemId );
+
+    if ( pItem && pItem->mbVisible &&
+         !pItem->maRect.IsEmpty() && aRect.IsOver( pItem->maRect ) )
+    {
+        bRet = TRUE;
+    }
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
