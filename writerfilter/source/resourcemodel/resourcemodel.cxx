@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: resourcemodel.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include <resourcemodel/QNameToString.hxx>
 #include <resourcemodel/exceptions.hxx>
 #include <resourcemodel/SubSequence.hxx>
+#include <resourcemodel/util.hxx>
 #include <resourcemodel.hxx>
 
 namespace writerfilter {
