@@ -8,7 +8,7 @@
  *
  * $RCSfile: axisconverter.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,10 +31,12 @@
 
 #include "oox/drawingml/chart/axisconverter.hxx"
 #include <com/sun/star/chart2/AxisPosition.hpp>
+#include <com/sun/star/chart2/TickmarkStyle.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
+#include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/chart/axismodel.hxx"
 #include "oox/drawingml/chart/titleconverter.hxx"
 #include "oox/drawingml/chart/typegroupconverter.hxx"
@@ -46,6 +48,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::chart2::IncrementData;
 using ::com::sun::star::chart2::ScaleData;
 using ::com::sun::star::chart2::SubIncrement;
@@ -76,6 +79,18 @@ void lclSetScaledValueOrClearAny( Any& orAny, const OptValue< double >& rofValue
         lclSetValueOrClearAny( orAny, rofValue );
 }
 
+sal_Int32 lclGetTickMark( sal_Int32 nToken )
+{
+    using namespace ::com::sun::star::chart2::TickmarkStyle;
+    switch( nToken )
+    {
+        case XML_in:    return INNER;
+        case XML_out:   return OUTER;
+        case XML_cross: return INNER | OUTER;
+    }
+    return NONE;
+}
+
 } // namespace
 
 // ============================================================================
@@ -95,23 +110,49 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
     Reference< XAxis > xAxis;
     try
     {
+        const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
+        ObjectFormatter& rFormatter = getFormatter();
+
         // create the axis object (always)
         xAxis.set( createInstance( CREATE_OUSTRING( "com.sun.star.chart2.Axis" ) ), UNO_QUERY_THROW );
         PropertySet aAxisProp( xAxis );
         // #i58688# axis enabled
         aAxisProp.setProperty( CREATE_OUSTRING( "Show" ), !mrModel.mbDeleted );
 
-        // axis line properties -----------------------------------------------
+        // axis line, tick, and gridline properties ---------------------------
 
-        //! TODO
+        // show axis labels
+        aAxisProp.setProperty( CREATE_OUSTRING( "DisplayLabels" ), mrModel.mnTickLabelPos != XML_none );
+        // no X axis line in radar charts
+        if( (nAxisIdx == API_X_AXIS) && (rTypeInfo.meTypeCategory == TYPECATEGORY_RADAR) )
+            mrModel.mxShapeProp.getOrCreate().getLineProperties().maLineFill.moFillType = XML_noFill;
+        // axis line and tick label formatting
+        rFormatter.convertFormatting( aAxisProp, mrModel.mxShapeProp, mrModel.mxTextProp, OBJECTTYPE_AXIS );
+        // tick label rotation
+        rFormatter.convertTextRotation( aAxisProp, mrModel.mxTextProp );
 
-        // axis ticks and tick labels -----------------------------------------
+        // tick mark style
+        aAxisProp.setProperty( CREATE_OUSTRING( "MajorTickmarks" ), lclGetTickMark( mrModel.mnMajorTickMark ) );
+        aAxisProp.setProperty( CREATE_OUSTRING( "MinorTickmarks" ), lclGetTickMark( mrModel.mnMinorTickMark ) );
 
-        //! TODO
+        // main grid
+        PropertySet aGridProp( xAxis->getGridProperties() );
+        aGridProp.setProperty( CREATE_OUSTRING( "Show" ), mrModel.mxMajorGridLines.is() );
+        if( mrModel.mxMajorGridLines.is() )
+            rFormatter.convertFrameFormatting( aGridProp, mrModel.mxMajorGridLines, OBJECTTYPE_MAJORGRIDLINE );
+
+        // sub grid
+        Sequence< Reference< XPropertySet > > aSubGridPropSeq = xAxis->getSubGridProperties();
+        if( aSubGridPropSeq.hasElements() )
+        {
+            PropertySet aSubGridProp( aSubGridPropSeq[ 0 ] );
+            aSubGridProp.setProperty( CREATE_OUSTRING( "Show" ), mrModel.mxMinorGridLines.is() );
+            if( mrModel.mxMinorGridLines.is() )
+                rFormatter.convertFrameFormatting( aSubGridProp, mrModel.mxMinorGridLines, OBJECTTYPE_MINORGRIDLINE );
+        }
 
         // axis type and X axis categories ------------------------------------
 
-        const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
         ScaleData aScaleData = xAxis->getScaleData();
         // set axis type
         namespace ApiAxisType = ::com::sun::star::chart2::AxisType;
@@ -213,9 +254,10 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
         // write back scaling data
         xAxis->setScaleData( aScaleData );
 
-        // grid ---------------------------------------------------------------
+        // number format ------------------------------------------------------
 
-        //! TODO
+        if( (aScaleData.AxisType == ApiAxisType::REALNUMBER) || (aScaleData.AxisType == ApiAxisType::PERCENT) )
+            getFormatter().convertNumberFormat( aAxisProp, mrModel.maNumberFormat );
 
         // axis position ------------------------------------------------------
 
@@ -229,7 +271,7 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
         {
             Reference< XTitled > xTitled( xAxis, UNO_QUERY_THROW );
             TitleConverter aTitleConv( *this, *mrModel.mxTitle );
-            aTitleConv.convertFromModel( xTitled, CREATE_OUSTRING( "Axis Title" ) );
+            aTitleConv.convertFromModel( xTitled, CREATE_OUSTRING( "Axis Title" ), OBJECTTYPE_AXISTITLE );
         }
     }
     catch( Exception& )
