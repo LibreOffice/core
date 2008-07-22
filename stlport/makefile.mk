@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.44 $
+# $Revision: 1.45 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -117,7 +117,8 @@ $(INCCOM)$/stlport$/vector: systemstl$/$$(@:f)
 TAR_EXCLUDES=*/SC5/*
 .ENDIF          # "$(USE_SHELL)"=="4nt"
 
-ADDITIONAL_FILES=src$/gcc-3.0.mak src$/gcc-3.0-macosx.mak src$/gcc-3.0-freebsd.mak src$/sunpro8.mak src$/sunpro11.mak src$/gcc-3.0-mingw.mak
+ADDITIONAL_FILES=src$/gcc-3.0.mak src$/gcc-3.0-macosx.mak src$/gcc-3.0-freebsd.mak src$/sunpro8.mak src$/sunpro11.mak src$/gcc-3.0-mingw.mak \
+    src$/gcc-3.0-os2.mak src$/gcc-3.0-os2.def src$/common_macros_os2.mak
 
 
 CONFIGURE_ACTION=none
@@ -141,6 +142,8 @@ BUILD_FLAGS=-f vc7.mak EXFLAGS="/EHa /Zc:wchar_t-" CCNUMVER=$(CCNUMVER)
             BUILD_FLAGS=-f gcc-3.0-freebsd.mak
         .ELIF "$(OS)"=="MACOSX"
             BUILD_FLAGS=-f gcc-3.0-macosx.mak
+        .ELIF "$(OS)"=="OS2"
+            BUILD_FLAGS=-f gcc-3.0-os2.mak
         .ELIF "$(GUI)"=="WNT"
             BUILD_FLAGS=-f gcc-3.0-mingw.mak
         .ELSE
@@ -208,6 +211,12 @@ OUT2BIN= \
     lib$/*.pdb
 
 .ENDIF # "$(COM)"=="GCC"
+
+.ELIF "$(GUI)"=="OS2"
+
+OUT2LIB= lib$/*.a lib$/*.lib
+
+OUT2BIN= lib$/*.dll
 
 .ELSE          # "$(GUI)"=="WNT"
 
