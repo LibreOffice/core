@@ -1,5 +1,9 @@
 # unroll begin
 
+.IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
+APP1DEF = $(MISC)$/$(APP1TARGET).def
+.ENDIF
+
 .IF "$(APP1LINKTYPE)" != ""
 #must be either STATIC or SHARED
 APP1LINKTYPEFLAG=$(APPLINK$(APP1LINKTYPE))
@@ -55,7 +59,7 @@ APP1PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP1PRODUCTNAME)\"
 .ENDIF			# "$(APP1PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP1LIBS)"!=""
 $(MISC)$/$(APP1TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -70,8 +74,16 @@ $(APP1TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP1LIBSALCPPRT*=$(LIBSALCPPRT)
 
+.IF "$(GUI)" == "OS2"
+_APP1IMP_ORD = $(APP1STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP1STDLIBS:^"$(LB)$/") 
+APP1IMP_ORD = $(foreach,i,$(_APP1IMP_ORD) $(shell @-ls $i))
+.ELSE
+APP1IMP_ORD = 
+.ENDIF
+
 $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     $(APP1RES) \
+    $(APP1IMP_ORD) \
     $(APP1ICON) $(APP1DEPN) $(USE_APP1DEF)
     @echo ------------------------------
     @echo Making: $@
@@ -200,11 +212,81 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 
 .ENDIF			# "$(GUI)" == "WNT"
 
+.IF "$(GUI)" == "OS2"
+    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+.IF "$(APP1LINKRES)" != ""
+    @+-$(RM) $(MISC)$/$(APP1LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP1ICON)" != ""
+.IF "$(USE_SHELL)"=="4nt"
+    @-+echo ICON 1 "$(APP1ICON:s/\/\\/)" >> $(MISC)$/$(APP1LINKRES:b).rc
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP1ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP1LINKRES:b).rc
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP1ICON)" != ""
+.IF "$(APP1VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP1LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP1VERINFO)$(EMQ)" >> $(MISC)$/$(APP1LINKRES:b).rc
+.ENDIF		# "$(APP1VERINFO)" != ""
+    $(RC) -r -DOS2 $(APP1PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP1LINKRES:b).rc
+.ENDIF			# "$(APP1LINKRES)" != ""
+
+.IF "$(TARGETTYPE)" == "GUI" 
+    @echo NAME $(APP1TARGET) WINDOWAPI > $(MISC)$/$(APP1TARGET).def
+.ENDIF
+
+    @+echo	$(APP1LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP1BASEX) \
+        $(APP1STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP1LINKRES) \
+        $(APP1RES) \
+        $(APP1DEF) \
+        $(APP1OBJS) \
+        $(APP1LIBS) \
+        $(APP1STDLIBS:^"-l") \
+        $(APP1STDLIB:^"-l") $(STDLIB1:^"-l") 
+    $(APP1LINKER) -v \
+        $(APP1LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP1BASEX) \
+        $(APP1STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP1LINKRES) \
+        $(APP1RES) \
+        $(APP1DEF) \
+        $(APP1OBJS) \
+        $(APP1LIBS) \
+        $(APP1STDLIBS:^"-l") \
+        $(APP1STDLIB:^"-l") $(STDLIB1:^"-l") 
+
+
+.IF "$(APP1TARGET)" == "loader"
+    +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+    +$(RM) $@
+    +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
+.ENDIF			# "$(TARGET)" == "setup"
+
+.ENDIF			# "$(GUI)" == "OS2"
+
 .ENDIF			# "$(APP1TARGETN)"!=""
 
 
 # Instruction for linking
 # unroll begin
+
+.IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
+APP2DEF = $(MISC)$/$(APP2TARGET).def
+.ENDIF
 
 .IF "$(APP2LINKTYPE)" != ""
 #must be either STATIC or SHARED
@@ -261,7 +343,7 @@ APP2PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP2PRODUCTNAME)\"
 .ENDIF			# "$(APP2PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP2LIBS)"!=""
 $(MISC)$/$(APP2TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -276,8 +358,16 @@ $(APP2TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP2LIBSALCPPRT*=$(LIBSALCPPRT)
 
+.IF "$(GUI)" == "OS2"
+_APP2IMP_ORD = $(APP2STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP2STDLIBS:^"$(LB)$/") 
+APP2IMP_ORD = $(foreach,i,$(_APP2IMP_ORD) $(shell @-ls $i))
+.ELSE
+APP2IMP_ORD = 
+.ENDIF
+
 $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     $(APP2RES) \
+    $(APP2IMP_ORD) \
     $(APP2ICON) $(APP2DEPN) $(USE_APP2DEF)
     @echo ------------------------------
     @echo Making: $@
@@ -406,11 +496,81 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 
 .ENDIF			# "$(GUI)" == "WNT"
 
+.IF "$(GUI)" == "OS2"
+    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+.IF "$(APP2LINKRES)" != ""
+    @+-$(RM) $(MISC)$/$(APP2LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP2ICON)" != ""
+.IF "$(USE_SHELL)"=="4nt"
+    @-+echo ICON 1 "$(APP2ICON:s/\/\\/)" >> $(MISC)$/$(APP2LINKRES:b).rc
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP2ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP2LINKRES:b).rc
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP2ICON)" != ""
+.IF "$(APP2VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP2LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP2VERINFO)$(EMQ)" >> $(MISC)$/$(APP2LINKRES:b).rc
+.ENDIF		# "$(APP2VERINFO)" != ""
+    $(RC) -r -DOS2 $(APP2PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP2LINKRES:b).rc
+.ENDIF			# "$(APP2LINKRES)" != ""
+
+.IF "$(TARGETTYPE)" == "GUI" 
+    @echo NAME $(APP2TARGET) WINDOWAPI > $(MISC)$/$(APP2TARGET).def
+.ENDIF
+
+    @+echo	$(APP2LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP2BASEX) \
+        $(APP2STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP2LINKRES) \
+        $(APP2RES) \
+        $(APP2DEF) \
+        $(APP2OBJS) \
+        $(APP2LIBS) \
+        $(APP2STDLIBS:^"-l") \
+        $(APP2STDLIB:^"-l") $(STDLIB2:^"-l") 
+    $(APP2LINKER) -v \
+        $(APP2LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP2BASEX) \
+        $(APP2STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP2LINKRES) \
+        $(APP2RES) \
+        $(APP2DEF) \
+        $(APP2OBJS) \
+        $(APP2LIBS) \
+        $(APP2STDLIBS:^"-l") \
+        $(APP2STDLIB:^"-l") $(STDLIB2:^"-l") 
+
+
+.IF "$(APP2TARGET)" == "loader"
+    +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+    +$(RM) $@
+    +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
+.ENDIF			# "$(TARGET)" == "setup"
+
+.ENDIF			# "$(GUI)" == "OS2"
+
 .ENDIF			# "$(APP2TARGETN)"!=""
 
 
 # Instruction for linking
 # unroll begin
+
+.IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
+APP3DEF = $(MISC)$/$(APP3TARGET).def
+.ENDIF
 
 .IF "$(APP3LINKTYPE)" != ""
 #must be either STATIC or SHARED
@@ -467,7 +627,7 @@ APP3PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP3PRODUCTNAME)\"
 .ENDIF			# "$(APP3PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP3LIBS)"!=""
 $(MISC)$/$(APP3TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -482,8 +642,16 @@ $(APP3TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP3LIBSALCPPRT*=$(LIBSALCPPRT)
 
+.IF "$(GUI)" == "OS2"
+_APP3IMP_ORD = $(APP3STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP3STDLIBS:^"$(LB)$/") 
+APP3IMP_ORD = $(foreach,i,$(_APP3IMP_ORD) $(shell @-ls $i))
+.ELSE
+APP3IMP_ORD = 
+.ENDIF
+
 $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     $(APP3RES) \
+    $(APP3IMP_ORD) \
     $(APP3ICON) $(APP3DEPN) $(USE_APP3DEF)
     @echo ------------------------------
     @echo Making: $@
@@ -612,11 +780,81 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 
 .ENDIF			# "$(GUI)" == "WNT"
 
+.IF "$(GUI)" == "OS2"
+    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+.IF "$(APP3LINKRES)" != ""
+    @+-$(RM) $(MISC)$/$(APP3LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP3ICON)" != ""
+.IF "$(USE_SHELL)"=="4nt"
+    @-+echo ICON 1 "$(APP3ICON:s/\/\\/)" >> $(MISC)$/$(APP3LINKRES:b).rc
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP3ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP3LINKRES:b).rc
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP3ICON)" != ""
+.IF "$(APP3VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP3LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP3VERINFO)$(EMQ)" >> $(MISC)$/$(APP3LINKRES:b).rc
+.ENDIF		# "$(APP3VERINFO)" != ""
+    $(RC) -r -DOS2 $(APP3PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP3LINKRES:b).rc
+.ENDIF			# "$(APP3LINKRES)" != ""
+
+.IF "$(TARGETTYPE)" == "GUI" 
+    @echo NAME $(APP3TARGET) WINDOWAPI > $(MISC)$/$(APP3TARGET).def
+.ENDIF
+
+    @+echo	$(APP3LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP3BASEX) \
+        $(APP3STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP3LINKRES) \
+        $(APP3RES) \
+        $(APP3DEF) \
+        $(APP3OBJS) \
+        $(APP3LIBS) \
+        $(APP3STDLIBS:^"-l") \
+        $(APP3STDLIB:^"-l") $(STDLIB3:^"-l") 
+    $(APP3LINKER) -v \
+        $(APP3LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP3BASEX) \
+        $(APP3STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP3LINKRES) \
+        $(APP3RES) \
+        $(APP3DEF) \
+        $(APP3OBJS) \
+        $(APP3LIBS) \
+        $(APP3STDLIBS:^"-l") \
+        $(APP3STDLIB:^"-l") $(STDLIB3:^"-l") 
+
+
+.IF "$(APP3TARGET)" == "loader"
+    +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+    +$(RM) $@
+    +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
+.ENDIF			# "$(TARGET)" == "setup"
+
+.ENDIF			# "$(GUI)" == "OS2"
+
 .ENDIF			# "$(APP3TARGETN)"!=""
 
 
 # Instruction for linking
 # unroll begin
+
+.IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
+APP4DEF = $(MISC)$/$(APP4TARGET).def
+.ENDIF
 
 .IF "$(APP4LINKTYPE)" != ""
 #must be either STATIC or SHARED
@@ -673,7 +911,7 @@ APP4PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP4PRODUCTNAME)\"
 .ENDIF			# "$(APP4PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP4LIBS)"!=""
 $(MISC)$/$(APP4TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -688,8 +926,16 @@ $(APP4TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP4LIBSALCPPRT*=$(LIBSALCPPRT)
 
+.IF "$(GUI)" == "OS2"
+_APP4IMP_ORD = $(APP4STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP4STDLIBS:^"$(LB)$/") 
+APP4IMP_ORD = $(foreach,i,$(_APP4IMP_ORD) $(shell @-ls $i))
+.ELSE
+APP4IMP_ORD = 
+.ENDIF
+
 $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     $(APP4RES) \
+    $(APP4IMP_ORD) \
     $(APP4ICON) $(APP4DEPN) $(USE_APP4DEF)
     @echo ------------------------------
     @echo Making: $@
@@ -818,11 +1064,81 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 
 .ENDIF			# "$(GUI)" == "WNT"
 
+.IF "$(GUI)" == "OS2"
+    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+.IF "$(APP4LINKRES)" != ""
+    @+-$(RM) $(MISC)$/$(APP4LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP4ICON)" != ""
+.IF "$(USE_SHELL)"=="4nt"
+    @-+echo ICON 1 "$(APP4ICON:s/\/\\/)" >> $(MISC)$/$(APP4LINKRES:b).rc
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP4ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP4LINKRES:b).rc
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP4ICON)" != ""
+.IF "$(APP4VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP4LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP4VERINFO)$(EMQ)" >> $(MISC)$/$(APP4LINKRES:b).rc
+.ENDIF		# "$(APP4VERINFO)" != ""
+    $(RC) -r -DOS2 $(APP4PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP4LINKRES:b).rc
+.ENDIF			# "$(APP4LINKRES)" != ""
+
+.IF "$(TARGETTYPE)" == "GUI" 
+    @echo NAME $(APP4TARGET) WINDOWAPI > $(MISC)$/$(APP4TARGET).def
+.ENDIF
+
+    @+echo	$(APP4LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP4BASEX) \
+        $(APP4STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP4LINKRES) \
+        $(APP4RES) \
+        $(APP4DEF) \
+        $(APP4OBJS) \
+        $(APP4LIBS) \
+        $(APP4STDLIBS:^"-l") \
+        $(APP4STDLIB:^"-l") $(STDLIB4:^"-l") 
+    $(APP4LINKER) -v \
+        $(APP4LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP4BASEX) \
+        $(APP4STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP4LINKRES) \
+        $(APP4RES) \
+        $(APP4DEF) \
+        $(APP4OBJS) \
+        $(APP4LIBS) \
+        $(APP4STDLIBS:^"-l") \
+        $(APP4STDLIB:^"-l") $(STDLIB4:^"-l") 
+
+
+.IF "$(APP4TARGET)" == "loader"
+    +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+    +$(RM) $@
+    +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
+.ENDIF			# "$(TARGET)" == "setup"
+
+.ENDIF			# "$(GUI)" == "OS2"
+
 .ENDIF			# "$(APP4TARGETN)"!=""
 
 
 # Instruction for linking
 # unroll begin
+
+.IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
+APP5DEF = $(MISC)$/$(APP5TARGET).def
+.ENDIF
 
 .IF "$(APP5LINKTYPE)" != ""
 #must be either STATIC or SHARED
@@ -879,7 +1195,7 @@ APP5PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP5PRODUCTNAME)\"
 .ENDIF			# "$(APP5PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP5LIBS)"!=""
 $(MISC)$/$(APP5TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -894,8 +1210,16 @@ $(APP5TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP5LIBSALCPPRT*=$(LIBSALCPPRT)
 
+.IF "$(GUI)" == "OS2"
+_APP5IMP_ORD = $(APP5STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP5STDLIBS:^"$(LB)$/") 
+APP5IMP_ORD = $(foreach,i,$(_APP5IMP_ORD) $(shell @-ls $i))
+.ELSE
+APP5IMP_ORD = 
+.ENDIF
+
 $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     $(APP5RES) \
+    $(APP5IMP_ORD) \
     $(APP5ICON) $(APP5DEPN) $(USE_APP5DEF)
     @echo ------------------------------
     @echo Making: $@
@@ -1024,11 +1348,81 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 
 .ENDIF			# "$(GUI)" == "WNT"
 
+.IF "$(GUI)" == "OS2"
+    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+.IF "$(APP5LINKRES)" != ""
+    @+-$(RM) $(MISC)$/$(APP5LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP5ICON)" != ""
+.IF "$(USE_SHELL)"=="4nt"
+    @-+echo ICON 1 "$(APP5ICON:s/\/\\/)" >> $(MISC)$/$(APP5LINKRES:b).rc
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP5ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP5LINKRES:b).rc
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP5ICON)" != ""
+.IF "$(APP5VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP5LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP5VERINFO)$(EMQ)" >> $(MISC)$/$(APP5LINKRES:b).rc
+.ENDIF		# "$(APP5VERINFO)" != ""
+    $(RC) -r -DOS2 $(APP5PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP5LINKRES:b).rc
+.ENDIF			# "$(APP5LINKRES)" != ""
+
+.IF "$(TARGETTYPE)" == "GUI" 
+    @echo NAME $(APP5TARGET) WINDOWAPI > $(MISC)$/$(APP5TARGET).def
+.ENDIF
+
+    @+echo	$(APP5LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP5BASEX) \
+        $(APP5STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP5LINKRES) \
+        $(APP5RES) \
+        $(APP5DEF) \
+        $(APP5OBJS) \
+        $(APP5LIBS) \
+        $(APP5STDLIBS:^"-l") \
+        $(APP5STDLIB:^"-l") $(STDLIB5:^"-l") 
+    $(APP5LINKER) -v \
+        $(APP5LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP5BASEX) \
+        $(APP5STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP5LINKRES) \
+        $(APP5RES) \
+        $(APP5DEF) \
+        $(APP5OBJS) \
+        $(APP5LIBS) \
+        $(APP5STDLIBS:^"-l") \
+        $(APP5STDLIB:^"-l") $(STDLIB5:^"-l") 
+
+
+.IF "$(APP5TARGET)" == "loader"
+    +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+    +$(RM) $@
+    +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
+.ENDIF			# "$(TARGET)" == "setup"
+
+.ENDIF			# "$(GUI)" == "OS2"
+
 .ENDIF			# "$(APP5TARGETN)"!=""
 
 
 # Instruction for linking
 # unroll begin
+
+.IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
+APP6DEF = $(MISC)$/$(APP6TARGET).def
+.ENDIF
 
 .IF "$(APP6LINKTYPE)" != ""
 #must be either STATIC or SHARED
@@ -1085,7 +1479,7 @@ APP6PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP6PRODUCTNAME)\"
 .ENDIF			# "$(APP6PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP6LIBS)"!=""
 $(MISC)$/$(APP6TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -1100,8 +1494,16 @@ $(APP6TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP6LIBSALCPPRT*=$(LIBSALCPPRT)
 
+.IF "$(GUI)" == "OS2"
+_APP6IMP_ORD = $(APP6STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP6STDLIBS:^"$(LB)$/") 
+APP6IMP_ORD = $(foreach,i,$(_APP6IMP_ORD) $(shell @-ls $i))
+.ELSE
+APP6IMP_ORD = 
+.ENDIF
+
 $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     $(APP6RES) \
+    $(APP6IMP_ORD) \
     $(APP6ICON) $(APP6DEPN) $(USE_APP6DEF)
     @echo ------------------------------
     @echo Making: $@
@@ -1230,11 +1632,81 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 
 .ENDIF			# "$(GUI)" == "WNT"
 
+.IF "$(GUI)" == "OS2"
+    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+.IF "$(APP6LINKRES)" != ""
+    @+-$(RM) $(MISC)$/$(APP6LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP6ICON)" != ""
+.IF "$(USE_SHELL)"=="4nt"
+    @-+echo ICON 1 "$(APP6ICON:s/\/\\/)" >> $(MISC)$/$(APP6LINKRES:b).rc
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP6ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP6LINKRES:b).rc
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP6ICON)" != ""
+.IF "$(APP6VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP6LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP6VERINFO)$(EMQ)" >> $(MISC)$/$(APP6LINKRES:b).rc
+.ENDIF		# "$(APP6VERINFO)" != ""
+    $(RC) -r -DOS2 $(APP6PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP6LINKRES:b).rc
+.ENDIF			# "$(APP6LINKRES)" != ""
+
+.IF "$(TARGETTYPE)" == "GUI" 
+    @echo NAME $(APP6TARGET) WINDOWAPI > $(MISC)$/$(APP6TARGET).def
+.ENDIF
+
+    @+echo	$(APP6LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP6BASEX) \
+        $(APP6STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP6LINKRES) \
+        $(APP6RES) \
+        $(APP6DEF) \
+        $(APP6OBJS) \
+        $(APP6LIBS) \
+        $(APP6STDLIBS:^"-l") \
+        $(APP6STDLIB:^"-l") $(STDLIB6:^"-l") 
+    $(APP6LINKER) -v \
+        $(APP6LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP6BASEX) \
+        $(APP6STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP6LINKRES) \
+        $(APP6RES) \
+        $(APP6DEF) \
+        $(APP6OBJS) \
+        $(APP6LIBS) \
+        $(APP6STDLIBS:^"-l") \
+        $(APP6STDLIB:^"-l") $(STDLIB6:^"-l") 
+
+
+.IF "$(APP6TARGET)" == "loader"
+    +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+    +$(RM) $@
+    +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
+.ENDIF			# "$(TARGET)" == "setup"
+
+.ENDIF			# "$(GUI)" == "OS2"
+
 .ENDIF			# "$(APP6TARGETN)"!=""
 
 
 # Instruction for linking
 # unroll begin
+
+.IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
+APP7DEF = $(MISC)$/$(APP7TARGET).def
+.ENDIF
 
 .IF "$(APP7LINKTYPE)" != ""
 #must be either STATIC or SHARED
@@ -1291,7 +1763,7 @@ APP7PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP7PRODUCTNAME)\"
 .ENDIF			# "$(APP7PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP7LIBS)"!=""
 $(MISC)$/$(APP7TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -1306,8 +1778,16 @@ $(APP7TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP7LIBSALCPPRT*=$(LIBSALCPPRT)
 
+.IF "$(GUI)" == "OS2"
+_APP7IMP_ORD = $(APP7STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP7STDLIBS:^"$(LB)$/") 
+APP7IMP_ORD = $(foreach,i,$(_APP7IMP_ORD) $(shell @-ls $i))
+.ELSE
+APP7IMP_ORD = 
+.ENDIF
+
 $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     $(APP7RES) \
+    $(APP7IMP_ORD) \
     $(APP7ICON) $(APP7DEPN) $(USE_APP7DEF)
     @echo ------------------------------
     @echo Making: $@
@@ -1436,11 +1916,81 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 
 .ENDIF			# "$(GUI)" == "WNT"
 
+.IF "$(GUI)" == "OS2"
+    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+.IF "$(APP7LINKRES)" != ""
+    @+-$(RM) $(MISC)$/$(APP7LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP7ICON)" != ""
+.IF "$(USE_SHELL)"=="4nt"
+    @-+echo ICON 1 "$(APP7ICON:s/\/\\/)" >> $(MISC)$/$(APP7LINKRES:b).rc
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP7ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP7LINKRES:b).rc
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP7ICON)" != ""
+.IF "$(APP7VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP7LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP7VERINFO)$(EMQ)" >> $(MISC)$/$(APP7LINKRES:b).rc
+.ENDIF		# "$(APP7VERINFO)" != ""
+    $(RC) -r -DOS2 $(APP7PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP7LINKRES:b).rc
+.ENDIF			# "$(APP7LINKRES)" != ""
+
+.IF "$(TARGETTYPE)" == "GUI" 
+    @echo NAME $(APP7TARGET) WINDOWAPI > $(MISC)$/$(APP7TARGET).def
+.ENDIF
+
+    @+echo	$(APP7LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP7BASEX) \
+        $(APP7STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP7LINKRES) \
+        $(APP7RES) \
+        $(APP7DEF) \
+        $(APP7OBJS) \
+        $(APP7LIBS) \
+        $(APP7STDLIBS:^"-l") \
+        $(APP7STDLIB:^"-l") $(STDLIB7:^"-l") 
+    $(APP7LINKER) -v \
+        $(APP7LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP7BASEX) \
+        $(APP7STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP7LINKRES) \
+        $(APP7RES) \
+        $(APP7DEF) \
+        $(APP7OBJS) \
+        $(APP7LIBS) \
+        $(APP7STDLIBS:^"-l") \
+        $(APP7STDLIB:^"-l") $(STDLIB7:^"-l") 
+
+
+.IF "$(APP7TARGET)" == "loader"
+    +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+    +$(RM) $@
+    +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
+.ENDIF			# "$(TARGET)" == "setup"
+
+.ENDIF			# "$(GUI)" == "OS2"
+
 .ENDIF			# "$(APP7TARGETN)"!=""
 
 
 # Instruction for linking
 # unroll begin
+
+.IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
+APP8DEF = $(MISC)$/$(APP8TARGET).def
+.ENDIF
 
 .IF "$(APP8LINKTYPE)" != ""
 #must be either STATIC or SHARED
@@ -1497,7 +2047,7 @@ APP8PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP8PRODUCTNAME)\"
 .ENDIF			# "$(APP8PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP8LIBS)"!=""
 $(MISC)$/$(APP8TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -1512,8 +2062,16 @@ $(APP8TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP8LIBSALCPPRT*=$(LIBSALCPPRT)
 
+.IF "$(GUI)" == "OS2"
+_APP8IMP_ORD = $(APP8STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP8STDLIBS:^"$(LB)$/") 
+APP8IMP_ORD = $(foreach,i,$(_APP8IMP_ORD) $(shell @-ls $i))
+.ELSE
+APP8IMP_ORD = 
+.ENDIF
+
 $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     $(APP8RES) \
+    $(APP8IMP_ORD) \
     $(APP8ICON) $(APP8DEPN) $(USE_APP8DEF)
     @echo ------------------------------
     @echo Making: $@
@@ -1642,11 +2200,81 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 
 .ENDIF			# "$(GUI)" == "WNT"
 
+.IF "$(GUI)" == "OS2"
+    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+.IF "$(APP8LINKRES)" != ""
+    @+-$(RM) $(MISC)$/$(APP8LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP8ICON)" != ""
+.IF "$(USE_SHELL)"=="4nt"
+    @-+echo ICON 1 "$(APP8ICON:s/\/\\/)" >> $(MISC)$/$(APP8LINKRES:b).rc
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP8ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP8LINKRES:b).rc
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP8ICON)" != ""
+.IF "$(APP8VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP8LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP8VERINFO)$(EMQ)" >> $(MISC)$/$(APP8LINKRES:b).rc
+.ENDIF		# "$(APP8VERINFO)" != ""
+    $(RC) -r -DOS2 $(APP8PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP8LINKRES:b).rc
+.ENDIF			# "$(APP8LINKRES)" != ""
+
+.IF "$(TARGETTYPE)" == "GUI" 
+    @echo NAME $(APP8TARGET) WINDOWAPI > $(MISC)$/$(APP8TARGET).def
+.ENDIF
+
+    @+echo	$(APP8LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP8BASEX) \
+        $(APP8STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP8LINKRES) \
+        $(APP8RES) \
+        $(APP8DEF) \
+        $(APP8OBJS) \
+        $(APP8LIBS) \
+        $(APP8STDLIBS:^"-l") \
+        $(APP8STDLIB:^"-l") $(STDLIB8:^"-l") 
+    $(APP8LINKER) -v \
+        $(APP8LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP8BASEX) \
+        $(APP8STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP8LINKRES) \
+        $(APP8RES) \
+        $(APP8DEF) \
+        $(APP8OBJS) \
+        $(APP8LIBS) \
+        $(APP8STDLIBS:^"-l") \
+        $(APP8STDLIB:^"-l") $(STDLIB8:^"-l") 
+
+
+.IF "$(APP8TARGET)" == "loader"
+    +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+    +$(RM) $@
+    +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
+.ENDIF			# "$(TARGET)" == "setup"
+
+.ENDIF			# "$(GUI)" == "OS2"
+
 .ENDIF			# "$(APP8TARGETN)"!=""
 
 
 # Instruction for linking
 # unroll begin
+
+.IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
+APP9DEF = $(MISC)$/$(APP9TARGET).def
+.ENDIF
 
 .IF "$(APP9LINKTYPE)" != ""
 #must be either STATIC or SHARED
@@ -1703,7 +2331,7 @@ APP9PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP9PRODUCTNAME)\"
 .ENDIF			# "$(APP9PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP9LIBS)"!=""
 $(MISC)$/$(APP9TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -1718,8 +2346,16 @@ $(APP9TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP9LIBSALCPPRT*=$(LIBSALCPPRT)
 
+.IF "$(GUI)" == "OS2"
+_APP9IMP_ORD = $(APP9STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP9STDLIBS:^"$(LB)$/") 
+APP9IMP_ORD = $(foreach,i,$(_APP9IMP_ORD) $(shell @-ls $i))
+.ELSE
+APP9IMP_ORD = 
+.ENDIF
+
 $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     $(APP9RES) \
+    $(APP9IMP_ORD) \
     $(APP9ICON) $(APP9DEPN) $(USE_APP9DEF)
     @echo ------------------------------
     @echo Making: $@
@@ -1848,11 +2484,81 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 
 .ENDIF			# "$(GUI)" == "WNT"
 
+.IF "$(GUI)" == "OS2"
+    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+.IF "$(APP9LINKRES)" != ""
+    @+-$(RM) $(MISC)$/$(APP9LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP9ICON)" != ""
+.IF "$(USE_SHELL)"=="4nt"
+    @-+echo ICON 1 "$(APP9ICON:s/\/\\/)" >> $(MISC)$/$(APP9LINKRES:b).rc
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP9ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP9LINKRES:b).rc
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP9ICON)" != ""
+.IF "$(APP9VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP9LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP9VERINFO)$(EMQ)" >> $(MISC)$/$(APP9LINKRES:b).rc
+.ENDIF		# "$(APP9VERINFO)" != ""
+    $(RC) -r -DOS2 $(APP9PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP9LINKRES:b).rc
+.ENDIF			# "$(APP9LINKRES)" != ""
+
+.IF "$(TARGETTYPE)" == "GUI" 
+    @echo NAME $(APP9TARGET) WINDOWAPI > $(MISC)$/$(APP9TARGET).def
+.ENDIF
+
+    @+echo	$(APP9LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP9BASEX) \
+        $(APP9STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP9LINKRES) \
+        $(APP9RES) \
+        $(APP9DEF) \
+        $(APP9OBJS) \
+        $(APP9LIBS) \
+        $(APP9STDLIBS:^"-l") \
+        $(APP9STDLIB:^"-l") $(STDLIB9:^"-l") 
+    $(APP9LINKER) -v \
+        $(APP9LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP9BASEX) \
+        $(APP9STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP9LINKRES) \
+        $(APP9RES) \
+        $(APP9DEF) \
+        $(APP9OBJS) \
+        $(APP9LIBS) \
+        $(APP9STDLIBS:^"-l") \
+        $(APP9STDLIB:^"-l") $(STDLIB9:^"-l") 
+
+
+.IF "$(APP9TARGET)" == "loader"
+    +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+    +$(RM) $@
+    +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
+.ENDIF			# "$(TARGET)" == "setup"
+
+.ENDIF			# "$(GUI)" == "OS2"
+
 .ENDIF			# "$(APP9TARGETN)"!=""
 
 
 # Instruction for linking
 # unroll begin
+
+.IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
+APP10DEF = $(MISC)$/$(APP10TARGET).def
+.ENDIF
 
 .IF "$(APP10LINKTYPE)" != ""
 #must be either STATIC or SHARED
@@ -1909,7 +2615,7 @@ APP10PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP10PRODUCTNAME)\"
 .ENDIF			# "$(APP10PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP10LIBS)"!=""
 $(MISC)$/$(APP10TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -1924,8 +2630,16 @@ $(APP10TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP10LIBSALCPPRT*=$(LIBSALCPPRT)
 
+.IF "$(GUI)" == "OS2"
+_APP10IMP_ORD = $(APP10STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP10STDLIBS:^"$(LB)$/") 
+APP10IMP_ORD = $(foreach,i,$(_APP10IMP_ORD) $(shell @-ls $i))
+.ELSE
+APP10IMP_ORD = 
+.ENDIF
+
 $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     $(APP10RES) \
+    $(APP10IMP_ORD) \
     $(APP10ICON) $(APP10DEPN) $(USE_APP10DEF)
     @echo ------------------------------
     @echo Making: $@
@@ -2053,6 +2767,72 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .ENDIF			# "$(TARGET)" == "setup"
 
 .ENDIF			# "$(GUI)" == "WNT"
+
+.IF "$(GUI)" == "OS2"
+    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+.IF "$(APP10LINKRES)" != ""
+    @+-$(RM) $(MISC)$/$(APP10LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP10ICON)" != ""
+.IF "$(USE_SHELL)"=="4nt"
+    @-+echo ICON 1 "$(APP10ICON:s/\/\\/)" >> $(MISC)$/$(APP10LINKRES:b).rc
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP10ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP10LINKRES:b).rc
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP10ICON)" != ""
+.IF "$(APP10VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP10LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP10VERINFO)$(EMQ)" >> $(MISC)$/$(APP10LINKRES:b).rc
+.ENDIF		# "$(APP10VERINFO)" != ""
+    $(RC) -r -DOS2 $(APP10PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP10LINKRES:b).rc
+.ENDIF			# "$(APP10LINKRES)" != ""
+
+.IF "$(TARGETTYPE)" == "GUI" 
+    @echo NAME $(APP10TARGET) WINDOWAPI > $(MISC)$/$(APP10TARGET).def
+.ENDIF
+
+    @+echo	$(APP10LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP10BASEX) \
+        $(APP10STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP10LINKRES) \
+        $(APP10RES) \
+        $(APP10DEF) \
+        $(APP10OBJS) \
+        $(APP10LIBS) \
+        $(APP10STDLIBS:^"-l") \
+        $(APP10STDLIB:^"-l") $(STDLIB10:^"-l") 
+    $(APP10LINKER) -v \
+        $(APP10LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP10BASEX) \
+        $(APP10STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP10LINKRES) \
+        $(APP10RES) \
+        $(APP10DEF) \
+        $(APP10OBJS) \
+        $(APP10LIBS) \
+        $(APP10STDLIBS:^"-l") \
+        $(APP10STDLIB:^"-l") $(STDLIB10:^"-l") 
+
+
+.IF "$(APP10TARGET)" == "loader"
+    +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+    +$(RM) $@
+    +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
+.ENDIF			# "$(TARGET)" == "setup"
+
+.ENDIF			# "$(GUI)" == "OS2"
 
 .ENDIF			# "$(APP10TARGETN)"!=""
 
