@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.28 $
+# $Revision: 1.29 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -97,7 +97,7 @@ APP3STDLIBS= \
         $(SALHELPERLIB) 	\
         $(SALLIB) 	
 
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(GUI)"=="OS2"
 APP3STDLIBS+= -l$(SHL1TARGET)
 .ENDIF
 .IF "$(GUI)"=="WNT"
