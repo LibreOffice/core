@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: WW8ResourceModel.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -376,16 +376,16 @@ public:
 */
 Stream::Pointer_t WRITERFILTER_DLLPUBLIC createStreamHandler();
 
-void WRITERFILTER_DLLPUBLIC analyzerIds();
-Stream::Pointer_t WRITERFILTER_DLLPUBLIC createAnalyzer();
+    void WRITERFILTER_DLLPUBLIC analyzerIds();
+    Stream::Pointer_t WRITERFILTER_DLLPUBLIC createAnalyzer();
 
-void WRITERFILTER_DLLPUBLIC logger(string prefix, string message);
+    void WRITERFILTER_DLLPUBLIC logger(string prefix, string message);
 
-void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<Properties>::Pointer_t props);
-void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, sal_uInt32 n);
-void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
-          const rtl::OUString & /*str*/);
-void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<BinaryObj>::Pointer_t binary);
+    void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<Properties>::Pointer_t props);
+    void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, sal_uInt32 n);
+    void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
+                                     const rtl::OUString & /*str*/);
+    void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<BinaryObj>::Pointer_t binary);
 
 }
 
