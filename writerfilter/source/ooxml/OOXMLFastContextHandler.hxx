@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLFastContextHandler.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -135,6 +135,7 @@ public:
 
     virtual ResourceEnum_t getResource() const { return UNKNOWN; }
 
+    static XMLTag::Pointer_t toPropertiesTag(OOXMLPropertySet::Pointer_t);
     virtual XMLTag::Pointer_t toTag() const;
     virtual string toString() const;
 
@@ -181,6 +182,8 @@ public:
     void setFallback(bool bFallbac);
     bool isFallback() const;
 
+    OOXMLParserState::Pointer_t getParserState() const;
+
 #ifdef DEBUG_MEMORY
     virtual void SAL_CALL acquire() throw();
     virtual void SAL_CALL release() throw();
@@ -225,8 +228,10 @@ protected:
     virtual void lcl_characters(const ::rtl::OUString & aChars)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
-    virtual void startAction(Token_t Element);
-    virtual void endAction(Token_t Element);
+    void startAction(Token_t Element);
+    virtual void lcl_startAction(Token_t Element);
+    void endAction(Token_t Element);
+    virtual void lcl_endAction(Token_t Element);
 
 
     // Returns string for resource of this context. (debug)
@@ -258,11 +263,13 @@ protected:
     void cr();
     void noBreakHyphen();
     void softHyphen();
+    void handleLastParagraphInSection();
     void endOfParagraph();
     void text(const ::rtl::OUString & sText);
     virtual void propagateCharacterProperties();
     virtual void propagateCharacterPropertiesAsSet(const Id & rId);
     virtual bool propagatesProperties() const;
+    void sendPropertiesWithId(const Id & rId);
     void propagateTableProperties();
     void clearProps();
 
@@ -302,8 +309,6 @@ public:
     virtual void newProperty(const Id & rId, OOXMLValue::Pointer_t pVal);
     virtual void sendProperty(Id nId);
     virtual OOXMLPropertySet::Pointer_t getPropertySet() const;
-
-    virtual XMLTag::Pointer_t toTag() const;
 
     void handleHyperlink();
 
