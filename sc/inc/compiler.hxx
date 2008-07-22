@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: compiler.hxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -416,6 +416,7 @@ private:
     const Convention *pConv;
     bool        mbCloseBrackets;            // whether to close open brackets automatically, default TRUE
     ScGrammar::Grammar  meGrammar;          // The grammar used, language plus convention.
+    bool        mbExtendedErrorDetection;
 
     BOOL   GetToken();
     BOOL   NextNewToken(bool bAllowBooleans = false);
@@ -538,6 +539,8 @@ public:
         including an address reference convention. */
     void            SetGrammar( const ScGrammar::Grammar eGrammar );
     inline  ScGrammar::Grammar   GetGrammar() const { return meGrammar; }
+
+    void            SetExtendedErrorDetection( bool bVal ) { mbExtendedErrorDetection = bVal; }
 
     BOOL            IsCorrected() { return bCorrected; }
     const String&   GetCorrectedFormula() { return aCorrectedFormula; }
