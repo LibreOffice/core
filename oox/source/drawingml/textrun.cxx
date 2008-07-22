@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textrun.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,14 +30,14 @@
 
 #include "oox/drawingml/textrun.hxx"
 
-#include <rtl/ustring.hxx>
-
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 
 #include "oox/helper/helper.hxx"
+#include "oox/helper/propertyset.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
@@ -48,12 +48,10 @@ using namespace ::com::sun::star::lang;
 
 namespace oox { namespace drawingml {
 
-TextRun::TextRun()
-    : mbIsLineBreak( false )
-    , maTextCharacterPropertiesPtr( new TextCharacterProperties() )
+TextRun::TextRun() :
+    mbIsLineBreak( false )
 {
 }
-
 
 TextRun::~TextRun()
 {
@@ -63,18 +61,17 @@ void TextRun::insertAt(
         const ::oox::core::XmlFilterBase& rFilterBase,
         const Reference < XText > & xText,
         const Reference < XTextCursor > &xAt,
-        const TextCharacterPropertiesPtr& rTextCharacterStyle )
+        const TextCharacterProperties& rTextCharacterStyle ) const
 {
     try {
         Reference< XTextRange > xStart( xAt, UNO_QUERY );
+        PropertySet aPropSet( xStart );
 
-        Reference< XPropertySet > xProps( xStart, UNO_QUERY);
-        if ( rTextCharacterStyle.get() )
-            rTextCharacterStyle->pushToPropSet( rFilterBase, xProps );
+        TextCharacterProperties aTextCharacterProps( rTextCharacterStyle );
+        aTextCharacterProps.assignUsed( maTextCharacterProperties );
+        aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
 
-        maTextCharacterPropertiesPtr->pushToPropSet( rFilterBase, xProps );
-
-        if( maTextCharacterPropertiesPtr->getHyperlinkPropertyMap().empty() )
+        if( maTextCharacterProperties.maHyperlinkPropertyMap.empty() )
         {
             if( mbIsLineBreak )
             {
@@ -93,11 +90,10 @@ void TextRun::insertAt(
             Reference< XTextField > xField( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.text.TextField.URL" ) ), UNO_QUERY );
             if( xField.is() )
             {
-                const rtl::OUString sRepresentation( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "Representation" ) ) );
-                maTextCharacterPropertiesPtr->getHyperlinkPropertyMap()[ sRepresentation ] <<= getText();
+                PropertySet aFieldProps( xField );
+                aFieldProps.setProperties( maTextCharacterProperties.maHyperlinkPropertyMap );
+                aFieldProps.setProperty( CREATE_OUSTRING( "Representation" ), getText() );
 
-                Reference< XPropertySet > xFieldProps( xField, UNO_QUERY);
-                maTextCharacterPropertiesPtr->pushToUrlFieldPropSet( xFieldProps );
                 Reference< XTextContent > xContent( xField, UNO_QUERY);
                 xText->insertTextContent( xStart, xContent, sal_False );
             }
