@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: directory_ooo.scp,v $
- * $Revision: 1.54 $
+ * $Revision: 1.55 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -982,11 +982,6 @@ End
 Directory gid_Dir_Basic_Depot
     ParentID = gid_Dir_Basic;
     DosName = "Depot";
-End
-
-Directory gid_Dir_Basic_Launcher
-    ParentID = gid_Dir_Basic;
-    DosName = "Launcher";
 End
 
 Directory gid_Dir_Basic_Schedule
