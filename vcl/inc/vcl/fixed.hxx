@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fixed.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +61,7 @@ protected:
 public:
                     FixedText( Window* pParent, WinBits nStyle = 0 );
                     FixedText( Window* pParent, const ResId& rResId );
+                    FixedText( Window* pParent, const ResId& rResId, bool bDisableAccessibleLabelForRelation );
 
     virtual void    Paint( const Rectangle& rRect );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
