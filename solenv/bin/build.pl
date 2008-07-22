@@ -11,7 +11,7 @@
 #
 # $RCSfile: build.pl,v $
 #
-# $Revision: 1.170 $
+# $Revision: 1.171 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -76,7 +76,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.170 $ ';
+    $id_str = ' $Revision: 1.171 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -2604,7 +2604,12 @@ sub do_exit {
     my $exit_code = shift;
     $build_finished++;
     generate_html_file(1);
-    rmtree(CorrectPath($tmp_dir), 0, 1) if ($tmp_dir);
+    if ( $^O eq 'os2' )
+    {
+        # perl 5.10 returns 'resource busy' for rmtree
+        rmdir(CorrectPath($tmp_dir)) if ($tmp_dir);
+    }
+    rmtree(CorrectPath($tmp_dir), 1, 0) if ($tmp_dir);
     exit($exit_code);
 };
 
