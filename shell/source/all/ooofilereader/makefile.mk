@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -79,6 +79,7 @@ LIB1OBJFILES_X64=$(SLOFILES_X64)
 LIB1FILES_X64=$(SLB_X64)$/zipfile.lib\
           $(SLB_X64)$/xmlparser.lib
 .ENDIF # "$(BUILD_X64)"!=""
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	set_wntx64.mk
