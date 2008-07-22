@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textcharacterproperties.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,94 +29,140 @@
  ************************************************************************/
 
 #include "oox/drawingml/textcharacterproperties.hxx"
-
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
+#include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/core/namespaces.hxx"
+#include "oox/drawingml/drawingmltypes.hxx"
 #include "tokens.hxx"
 
-using rtl::OUString;
-using namespace ::oox::core;
+using ::rtl::OUString;
+using ::oox::core::XmlFilterBase;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-namespace oox { namespace drawingml {
+namespace oox {
+namespace drawingml {
 
-TextCharacterProperties::TextCharacterProperties()
-: maCharColorPtr( new Color() )
-, maUnderlineColorPtr( new Color() )
-, maHighlightColorPtr( new Color() )
-{
-}
-TextCharacterProperties::~TextCharacterProperties()
-{
-}
-void TextCharacterProperties::apply( const TextCharacterPropertiesPtr& rSourceTextCharacterPropertiesPtr )
-{
-    maTextCharacterPropertyMap.insert( rSourceTextCharacterPropertiesPtr->maTextCharacterPropertyMap.begin(), rSourceTextCharacterPropertiesPtr->maTextCharacterPropertyMap.end() );
-    maHyperlinkPropertyMap.insert( rSourceTextCharacterPropertiesPtr->maHyperlinkPropertyMap.begin(), rSourceTextCharacterPropertiesPtr->maHyperlinkPropertyMap.end() );
-    ColorPtr rSourceCharColor( rSourceTextCharacterPropertiesPtr->getCharColor() );
-    if ( rSourceCharColor->isUsed() )
-        maCharColorPtr = rSourceCharColor;
-    ColorPtr rSourceHighlightColor( rSourceTextCharacterPropertiesPtr->getHighlightColor() );
-    if ( rSourceHighlightColor->isUsed() )
-        maHighlightColorPtr = rSourceHighlightColor;
-    ColorPtr rSourceUnderlineColor( rSourceTextCharacterPropertiesPtr->getUnderlineColor() );
-    if ( rSourceUnderlineColor->isUsed() )
-        maUnderlineColorPtr = rSourceUnderlineColor;
-    Any& rHasUnderline = rSourceTextCharacterPropertiesPtr->getHasUnderline();
-    if ( rHasUnderline.hasValue() )
-        maHasUnderline = rHasUnderline;
-    Any& rUnderlineLineFollowText = rSourceTextCharacterPropertiesPtr->getUnderlineLineFollowText();
-    if ( rUnderlineLineFollowText.hasValue() )
-        maUnderlineLineFollowText = rUnderlineLineFollowText;
-    Any& rUnderlineFillFollowText = rSourceTextCharacterPropertiesPtr->getUnderlineFillFollowText();
-    if ( rUnderlineFillFollowText.hasValue() )
-        maUnderlineFillFollowText = rUnderlineFillFollowText;
-}
-void TextCharacterProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase, const Reference < XPropertySet > & xPropSet ) const
-{
-//  maTextCharacterPropertyMap.dump_debug("TextCharacter props");
+// ============================================================================
 
-    PropertySet aPropSet( xPropSet );
-    aPropSet.setProperties( maTextCharacterPropertyMap );
-    if ( maCharColorPtr->isUsed() )
+void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSourceProps )
+{
+    // overwrite all properties exisiting in rSourceProps
+    maHyperlinkPropertyMap.insert( rSourceProps.maHyperlinkPropertyMap.begin(), rSourceProps.maHyperlinkPropertyMap.end() );
+    maLatinFont.assignIfUsed( rSourceProps.maLatinFont );
+    maAsianFont.assignIfUsed( rSourceProps.maAsianFont );
+    maComplexFont.assignIfUsed( rSourceProps.maComplexFont );
+    maSymbolFont.assignIfUsed( rSourceProps.maSymbolFont );
+    maCharColor.assignIfUsed( rSourceProps.maCharColor );
+    maHighlightColor.assignIfUsed( rSourceProps.maHighlightColor );
+    maUnderlineColor.assignIfUsed( rSourceProps.maUnderlineColor );
+    moHeight.assignIfUsed( rSourceProps.moHeight );
+    moUnderline.assignIfUsed( rSourceProps.moUnderline );
+    moStrikeout.assignIfUsed( rSourceProps.moStrikeout );
+    moCaseMap.assignIfUsed( rSourceProps.moCaseMap );
+    moBold.assignIfUsed( rSourceProps.moBold );
+    moItalic.assignIfUsed( rSourceProps.moItalic );
+    moUnderlineLineFollowText.assignIfUsed( rSourceProps.moUnderlineLineFollowText );
+    moUnderlineFillFollowText.assignIfUsed( rSourceProps.moUnderlineFillFollowText );
+}
+
+void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFilterBase& rFilter ) const
+{
+    OUString aFontName;
+    sal_Int16 nFontPitch = 0;
+    sal_Int16 nFontFamily = 0;
+
+    if( maLatinFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter ) )
     {
-        const rtl::OUString sCharColor( CREATE_OUSTRING( "CharColor" ) );
-        aPropSet.setProperty( sCharColor, maCharColorPtr->getColor( rFilterBase ) );
+        rPropMap[ CREATE_OUSTRING( "CharFontName" ) ] <<= aFontName;
+        rPropMap[ CREATE_OUSTRING( "CharFontPitch" ) ] <<= nFontPitch;
+        rPropMap[ CREATE_OUSTRING( "CharFontFamily" ) ] <<= nFontFamily;
     }
 
-    sal_Bool bHasUnderline = sal_False;
-    sal_Bool bUnderlineFillFollowText = sal_False;
-    maHasUnderline >>= bHasUnderline;
-    maUnderlineFillFollowText >>= bUnderlineFillFollowText;
-    if( bHasUnderline )
+    if( maAsianFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter ) )
     {
-        if( maUnderlineColorPtr.get() && !bUnderlineFillFollowText )
+        rPropMap[ CREATE_OUSTRING( "CharFontNameAsian" ) ] <<= aFontName;
+        rPropMap[ CREATE_OUSTRING( "CharFontPitchAsian" ) ] <<= nFontFamily;
+        rPropMap[ CREATE_OUSTRING( "CharFontFamilyAsian" ) ] <<= nFontPitch;
+    }
+
+    if( maComplexFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter ) )
+    {
+        rPropMap[ CREATE_OUSTRING( "CharFontNameComplex" ) ] <<= aFontName;
+        rPropMap[ CREATE_OUSTRING( "CharFontPitchComplex" ) ] <<= nFontPitch;
+        rPropMap[ CREATE_OUSTRING( "CharFontFamilyComplex" ) ] <<= nFontFamily;
+    }
+
+    // symbol font not supported
+
+    if( maCharColor.isUsed() )
+        rPropMap[ CREATE_OUSTRING( "CharColor" ) ] <<= maCharColor.getColor( rFilter );
+
+    if( moLang.has() && (moLang.get().getLength() > 0) )
+    {
+        lang::Locale aLocale;
+        sal_Int32 nSepPos = moLang.get().indexOf( sal_Unicode( '-' ), 0 );
+        if ( nSepPos >= 0 )
         {
-            const rtl::OUString sCharUnderlineColor( CREATE_OUSTRING( "CharUnderlineColor" ) );
-            aPropSet.setProperty( sCharUnderlineColor, maUnderlineColorPtr->getColor( rFilterBase ) );
-            const rtl::OUString sCharUnderlineHasColor( CREATE_OUSTRING( "CharUnderlineHasColor" ) );
-            aPropSet.setProperty( sCharUnderlineHasColor, Any( sal_True ) );
+            aLocale.Language = moLang.get().copy( 0, nSepPos );
+            aLocale.Country = moLang.get().copy( nSepPos + 1 );
         }
+        else
+        {
+            aLocale.Language = moLang.get();
+        }
+        rPropMap[ CREATE_OUSTRING( "CharLocale" ) ] <<= aLocale;
+        rPropMap[ CREATE_OUSTRING( "CharLocaleAsian" ) ] <<= aLocale;
+        rPropMap[ CREATE_OUSTRING( "CharLocaleComplex" ) ] <<= aLocale;
+    }
+
+    if( moHeight.has() )
+    {
+        float fHeight = GetFontHeight( moHeight.get() );
+        rPropMap[ CREATE_OUSTRING( "CharHeight" ) ] <<= fHeight;
+        rPropMap[ CREATE_OUSTRING( "CharHeightAsian" ) ] <<= fHeight;
+        rPropMap[ CREATE_OUSTRING( "CharHeightComplex" ) ] <<= fHeight;
+    }
+
+    rPropMap[ CREATE_OUSTRING( "CharUnderline" ) ] <<= GetFontUnderline( moUnderline.get( XML_none ) );
+    rPropMap[ CREATE_OUSTRING( "CharStrikeout" ) ] <<= GetFontStrikeout( moStrikeout.get( XML_noStrike ) );
+    rPropMap[ CREATE_OUSTRING( "CharCaseMap" ) ] <<= GetCaseMap( moCaseMap.get( XML_none ) );
+
+    float fWeight = moBold.get( false ) ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL;
+    rPropMap[ CREATE_OUSTRING( "CharWeight" ) ] <<= fWeight;
+    rPropMap[ CREATE_OUSTRING( "CharWeightAsian" ) ] <<= fWeight;
+    rPropMap[ CREATE_OUSTRING( "CharWeightComplex" ) ] <<= fWeight;
+
+    awt::FontSlant eSlant = moItalic.get( false ) ? awt::FontSlant_ITALIC : awt::FontSlant_NONE;
+    rPropMap[ CREATE_OUSTRING( "CharPosture" ) ] <<= eSlant;
+    rPropMap[ CREATE_OUSTRING( "CharPostureAsian" ) ] <<= eSlant;
+    rPropMap[ CREATE_OUSTRING( "CharPostureComplex" ) ] <<= eSlant;
+
+    bool bUnderlineFillFollowText = moUnderlineFillFollowText.get( false );
+    if( moUnderline.has() && maUnderlineColor.isUsed() && !bUnderlineFillFollowText )
+    {
+        rPropMap[ CREATE_OUSTRING( "CharUnderlineHasColor" ) ] <<= true;
+        rPropMap[ CREATE_OUSTRING( "CharUnderlineColor" ) ] <<= maUnderlineColor.getColor( rFilter );
     }
 }
 
-void TextCharacterProperties::pushToUrlFieldPropSet( const Reference < XPropertySet > & xPropSet ) const
+void TextCharacterProperties::pushToPropSet( PropertySet& rPropSet, const XmlFilterBase& rFilter ) const
 {
-    PropertySet aPropSet( xPropSet );
-    aPropSet.setProperties( maHyperlinkPropertyMap );
+    PropertyMap aPropMap;
+    pushToPropMap( aPropMap, rFilter );
+    rPropSet.setProperties( aPropMap );
 }
 
-float TextCharacterProperties::getCharacterSize( float fDefault ) const
+float TextCharacterProperties::getCharHeightPoints( float fDefault ) const
 {
-    const rtl::OUString sCharHeight( CREATE_OUSTRING( "CharHeight" ) );
-    float fCharHeight = 0;
-    const Any* pAny = maTextCharacterPropertyMap.getPropertyValue( sCharHeight );
-    if ( pAny && ( *pAny >>= fCharHeight ) )
-        return fCharHeight;
-    else
-        return fDefault;
+    return moHeight.has() ? GetFontHeight( moHeight.get() ) : fDefault;
 }
 
-} }
+// ============================================================================
+
+} // namespace drawingml
+} // namespace oox
+
