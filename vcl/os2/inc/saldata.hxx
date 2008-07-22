@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saldata.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -149,9 +149,9 @@ inline SalData* GetAppSalData() { return (SalData*)ImplGetAppSVData()->mpSalData
 
 struct SalShlData
 {
-    HMODULE                 mhMod;                  // Module handle of SAL-DLL
-    USHORT                  mnVersion;              // 211 = OS2 2.11; 230 = OS2 3.0; 240 = OS2 4.0
-    PFNWP                   mpOldFrameProc;         // old frame proc
+    HMODULE mhMod;      // Module handle of SAL-DLL
+    USHORT  mnVersion;  // 211 = OS2 2.11; 230 = OS2 3.0; 240 = OS2 4.0
+    PFNWP   mpFrameProc;    // old frame proc
 };
 
 extern SalShlData aSalShlData;
