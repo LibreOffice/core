@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textparagraph.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,27 +47,32 @@ typedef RefVector< TextRun > TextRunVector;
 class TextParagraph
 {
 public:
-
     TextParagraph();
     ~TextParagraph();
 
-    TextRunVector&              getRuns() { return maRuns; }
-    const TextRunVector&        getRuns() const { return maRuns; }
-    void                        addRun( const TextRunPtr & pRun ) { maRuns.push_back( pRun ); }
-    TextParagraphPropertiesPtr  getProperties() { return mpProperties; }
-    TextParagraphPropertiesPtr  getEndProperties() { return mpEndProperties; }
-    void                        setProperties(TextParagraphPropertiesPtr pProps) { mpProperties = pProps; }
+    inline TextRunVector&       getRuns() { return maRuns; }
+    inline const TextRunVector& getRuns() const { return maRuns; }
+    inline void                 addRun( const TextRunPtr & pRun ) { maRuns.push_back( pRun ); }
+
+    inline TextParagraphProperties&         getProperties() { return maProperties; }
+    inline const TextParagraphProperties&   getProperties() const { return maProperties; }
+
+    inline TextParagraphProperties&         getEndProperties() { return maEndProperties; }
+    inline const TextParagraphProperties&   getEndProperties() const { return maEndProperties; }
+
+    //inline void                        setProperties( TextParagraphPropertiesPtr pProps ) { mpProperties = pProps; }
 
     void                        insertAt(
                                     const ::oox::core::XmlFilterBase& rFilterBase,
                                     const ::com::sun::star::uno::Reference < ::com::sun::star::text::XText > & xText,
                                     const ::com::sun::star::uno::Reference < ::com::sun::star::text::XTextCursor > &xAt,
-                                    const TextListStylePtr&,
-                                    bool bFirst = false );
+                                    const TextCharacterProperties& rTextStyleProperties,
+                                    const TextListStyle& rTextListStyle,
+                                    bool bFirst = false ) const;
 
-protected:
-    TextParagraphPropertiesPtr  mpProperties;
-    TextParagraphPropertiesPtr  mpEndProperties;
+private:
+    TextParagraphProperties     maProperties;
+    TextParagraphProperties     maEndProperties;
     TextRunVector               maRuns;
 };
 
