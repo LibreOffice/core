@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cuioptgenrl.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +48,27 @@
 
 struct GeneralTabPage_Impl;
 
-#define SfxGeneralTabPage SvxGeneralTabPage
+#define SfxGeneralTabPage   SvxGeneralTabPage
+#define INDEX_NOTSET        ((sal_Int16)-1)
+
+// class SvxUserEdit -----------------------------------------------------
+
+class SvxUserEdit : public Edit
+{
+private:
+    sal_Int16   m_nIndex;
+    FixedText*  m_pLabel;
+
+public:
+    SvxUserEdit( Window* pParent, const ResId& rResId,
+                 sal_Int16 nIndex = INDEX_NOTSET, FixedText* pLabel = NULL ) :
+        Edit( pParent, rResId, true ), m_nIndex( nIndex ), m_pLabel( pLabel ) {}
+
+    inline void         SetIndex( sal_Int16 nIndex ) { m_nIndex = nIndex; }
+    inline sal_Int16    GetIndex() const { return m_nIndex; }
+    inline void         SetLabel( FixedText* pLabel ) { m_pLabel = pLabel; }
+    inline FixedText*   GetLabel() const { return m_pLabel; }
+};
 
 // class SvxGeneralTabPage -----------------------------------------------
 
@@ -57,34 +77,34 @@ class SvxGeneralTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 private:
     FixedText           aCompanyLbl;
-    Edit                aCompanyEdit;
+    SvxUserEdit         aCompanyEdit;
     FixedText           aNameLbl;
     FixedText           aNameLblRuss;
-    Edit                aFirstName;
-    Edit                aFatherName;
-    Edit                aName;
-    Edit                aShortName;
+    SvxUserEdit         aFirstName;
+    SvxUserEdit         aFatherName;
+    SvxUserEdit         aName;
+    SvxUserEdit         aShortName;
     FixedText           aStreetLbl;
     FixedText           aStreetLblRuss;
-    Edit                aStreetEdit;
-    Edit                aApartmentNrEdit;
+    SvxUserEdit         aStreetEdit;
+    SvxUserEdit         aApartmentNrEdit;
     FixedText           aCityLbl;
-    Edit                aPLZEdit;
-    Edit                aCityEdit;
-    Edit                aUsCityEdit;
-    Edit                aUsStateEdit;
-    Edit                aUsZipEdit;
+    SvxUserEdit         aPLZEdit;
+    SvxUserEdit         aCityEdit;
+    SvxUserEdit         aUsCityEdit;
+    SvxUserEdit         aUsStateEdit;
+    SvxUserEdit         aUsZipEdit;
     FixedText           aCountryLbl;
-    Edit                aCountryEdit;
+    SvxUserEdit         aCountryEdit;
     FixedText           aTitlePosLbl;
-    Edit                aTitleEdit;
-    Edit                aPositionEdit;
+    SvxUserEdit         aTitleEdit;
+    SvxUserEdit         aPositionEdit;
     FixedText           aPhoneLbl;
-    Edit                aTelPrivEdit;
-    Edit                aTelCompanyEdit;
+    SvxUserEdit         aTelPrivEdit;
+    SvxUserEdit         aTelCompanyEdit;
     FixedText           aFaxMailLbl;
-    Edit                aFaxEdit;
-    Edit                aEmailEdit;
+    SvxUserEdit         aFaxEdit;
+    SvxUserEdit         aEmailEdit;
     FixedLine           aAddrFrm;
     CheckBox            aUseDataCB;
 
