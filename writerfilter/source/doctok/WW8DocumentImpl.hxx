@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: WW8DocumentImpl.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -354,6 +354,10 @@ class WW8DocumentImpl : public WW8Document
     /// Textbox stories
     PLCF<WW8FTXBXS>::Pointer_t mpTextBoxStories;
 
+    bool mbInSection;
+    bool mbInParagraphGroup;
+    bool mbInCharacterGroup;
+
     bool isSpecial(sal_uInt32 nChar);
 
     WW8Stream::Pointer_t getSubStream(const ::rtl::OUString & sId) const;
@@ -366,6 +370,15 @@ class WW8DocumentImpl : public WW8Document
        @param eType_   type of CpAndFcs to create
      */
     void parseBinTableCpAndFcs(WW8BinTable & rTable, PropertyType eType_);
+
+    void startCharacterGroup(Stream & rStream);
+    void endCharacterGroup(Stream & rStream);
+    void startParagraphGroup(Stream & rStream);
+    void endParagraphGroup(Stream & rStream);
+    void startSectionGroup(Stream & rStream);
+    void endSectionGroup(Stream & rStream);
+    void text(Stream & rStream, const sal_uInt8 * data, size_t len);
+    void utext(Stream & rStream, const sal_uInt8 * data, size_t len);
 
 public:
     WW8DocumentImpl(WW8Stream::Pointer_t rpStream);
