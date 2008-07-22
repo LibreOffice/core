@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: detfunc.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1938,40 +1938,42 @@ ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject, 
 
     if ( pObject && pObject->GetLayer() == SC_LAYER_INTERN )
     {
-        ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObject, nObjTab );
-        if ( pObject->IsPolyObj() && pObject->GetPointCount() == 2 )
+        if ( ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObject, nObjTab ) )
         {
-            // line object -> arrow
-
-            if ( pData->bValidStart )
-                eType = ( pData->bValidEnd ) ? SC_DETOBJ_ARROW : SC_DETOBJ_TOOTHERTAB;
-            else if ( pData->bValidEnd )
-                eType = SC_DETOBJ_FROMOTHERTAB;
-
-            if ( pData->bValidStart )
-                rSource = pData->aStt;
-            if ( pData->bValidEnd )
-                rPosition = pData->aEnd;
-
-            if ( pData->bValidStart && lcl_HasThickLine( *pObject ) )
+            if ( pObject->IsPolyObj() && pObject->GetPointCount() == 2 )
             {
-                // thick line -> look for frame before this object
+                // line object -> arrow
 
-                FindFrameForObject( pObject, rSource );     // modifies rSource
+                if ( pData->bValidStart )
+                    eType = ( pData->bValidEnd ) ? SC_DETOBJ_ARROW : SC_DETOBJ_TOOTHERTAB;
+                else if ( pData->bValidEnd )
+                    eType = SC_DETOBJ_FROMOTHERTAB;
+
+                if ( pData->bValidStart )
+                    rSource = pData->aStt;
+                if ( pData->bValidEnd )
+                    rPosition = pData->aEnd;
+
+                if ( pData->bValidStart && lcl_HasThickLine( *pObject ) )
+                {
+                    // thick line -> look for frame before this object
+
+                    FindFrameForObject( pObject, rSource );     // modifies rSource
+                }
+
+                ColorData nObjColor = ((const XLineColorItem&)pObject->GetMergedItem(XATTR_LINECOLOR)).GetColorValue().GetColor();
+                if ( nObjColor == GetErrorColor() && nObjColor != GetArrowColor() )
+                    rRedLine = TRUE;
             }
-
-            ColorData nObjColor = ((const XLineColorItem&)pObject->GetMergedItem(XATTR_LINECOLOR)).GetColorValue().GetColor();
-            if ( nObjColor == GetErrorColor() && nObjColor != GetArrowColor() )
-                rRedLine = TRUE;
-        }
-        else if ( pObject->ISA(SdrCircObj) )
-        {
-            if ( pData->bValidStart )
+            else if ( pObject->ISA(SdrCircObj) )
             {
-                // cell position is returned in rPosition
+                if ( pData->bValidStart )
+                {
+                    // cell position is returned in rPosition
 
-                rPosition = pData->aStt;
-                eType = SC_DETOBJ_CIRCLE;
+                    rPosition = pData->aStt;
+                    eType = SC_DETOBJ_CIRCLE;
+                }
             }
         }
     }
