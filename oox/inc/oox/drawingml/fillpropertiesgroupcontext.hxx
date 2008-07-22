@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fillpropertiesgroupcontext.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,20 +32,18 @@
 #define OOX_DRAWINGML_FILLPROPERTIESGROUPCONTEXT_HPP
 
 #include "oox/core/contexthandler.hxx"
-#include "oox/drawingml/fillproperties.hxx"
-
-namespace oox { namespace core {
-    class PropertyMap;
-} }
+#include <com/sun/star/drawing/BitmapMode.hpp>
 
 namespace oox { namespace drawingml {
+
+struct FillProperties;
 
 // ---------------------------------------------------------------------
 
 class FillPropertiesGroupContext : public ::oox::core::ContextHandler
 {
 public:
-    FillPropertiesGroupContext( oox::core::ContextHandler& rParent, ::com::sun::star::drawing::FillStyle eFillStyle, FillProperties& rFillProperties ) throw();
+    FillPropertiesGroupContext( ::oox::core::ContextHandler& rParent, FillProperties& rFillProperties, sal_Int32 nContext ) throw();
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > StaticCreateContext( oox::core::ContextHandler& rParent,
         ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs, FillProperties& rFillProperties )
@@ -85,7 +83,6 @@ public:
             throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 private:
-    ::com::sun::star::drawing::BitmapMode   meBitmapMode;
     rtl::OUString   msEmbed;
     rtl::OUString   msLink;
 };
