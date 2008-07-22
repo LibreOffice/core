@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ownview.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,11 +67,12 @@ private:
 
     void CreateNative();
 
-    ::rtl::OUString GetFilterNameFromExtentionAndInStream(
+public:
+    static ::rtl::OUString GetFilterNameFromExtentionAndInStream(
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
                                 const ::rtl::OUString& aNameWithExtention,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInputStream );
 
-public:
     OwnView_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
                   const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xStream );
     virtual ~OwnView_Impl();
