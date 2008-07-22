@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLFastDocumentHandler.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <ooxml/OOXMLDocument.hxx>
+#include "OOXMLParserState.hxx"
 
 namespace writerfilter {
 namespace ooxml
@@ -97,6 +98,8 @@ public:
     void setDocument(OOXMLDocument * pDocument);
     void setXNoteId(const ::rtl::OUString & rXNoteId);
 
+    OOXMLParserState::Pointer_t getParserState() const;
+
 private:
     OOXMLFastDocumentHandler(OOXMLFastDocumentHandler &); // not defined
     void operator =(OOXMLFastDocumentHandler &); // not defined
@@ -106,7 +109,8 @@ private:
     Stream * mpStream;
     OOXMLDocument * mpDocument;
     ::rtl::OUString msXNoteId;
-    boost::shared_ptr<OOXMLFastContextHandler> mpContextHandler;
+    mutable boost::shared_ptr<OOXMLFastContextHandler> mpContextHandler;
+    boost::shared_ptr<OOXMLFastContextHandler> getContextHandler() const;
 };
 }}
 
