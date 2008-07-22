@@ -8,7 +8,7 @@
  *
  * $RCSfile: seriesconverter.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,8 +44,46 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
+class TypeGroupConverter;
+
 // #i66858# enable this when Chart2 supports smoothed lines per data series
 #define OOX_CHART_SMOOTHED_PER_SERIES 0
+
+// ============================================================================
+
+class DataLabelConverter : public ConverterBase< DataLabelModel >
+{
+public:
+    explicit            DataLabelConverter( const ConverterRoot& rParent, DataLabelModel& rModel );
+    virtual             ~DataLabelConverter();
+
+    /** Converts OOXML data label settings for the passed data point. */
+    void                convertFromModel(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& rxDataSeries,
+                            const TypeGroupConverter& rTypeGroup );
+
+    /** Conversion helper for data series and data points. */
+    static void         convertLabelFormatting(
+                            PropertySet& rPropSet,
+                            ObjectFormatter& rFormatter,
+                            const DataLabelModelBase& rDataLabel,
+                            const TypeGroupConverter& rTypeGroup,
+                            bool bDataSeriesLabel );
+};
+
+// ============================================================================
+
+class DataLabelsConverter : public ConverterBase< DataLabelsModel >
+{
+public:
+    explicit            DataLabelsConverter( const ConverterRoot& rParent, DataLabelsModel& rModel );
+    virtual             ~DataLabelsConverter();
+
+    /** Converts OOXML data label settings for the passed data series. */
+    void                convertFromModel(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& rxDataSeries,
+                            const TypeGroupConverter& rTypeGroup );
+};
 
 // ============================================================================
 
@@ -79,9 +117,6 @@ public:
 
 // ============================================================================
 
-class TypeGroupConverter;
-class SeriesConverter;
-
 class DataPointConverter : public ConverterBase< DataPointModel >
 {
 public:
@@ -111,7 +146,7 @@ public:
                         createValueSequence( const ::rtl::OUString& rRole );
     /** Creates a data series object with initialized source links. */
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >
-                        createDataSeries( const TypeGroupConverter& rTypeGroup );
+                        createDataSeries( const TypeGroupConverter& rTypeGroup, bool bVaryColorsByPoint );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
