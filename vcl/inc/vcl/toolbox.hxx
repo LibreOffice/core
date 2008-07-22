@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolbox.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -492,6 +492,7 @@ public:
     void                ShowItem( USHORT nItemId, BOOL bVisible = TRUE );
     void                HideItem( USHORT nItemId ) { ShowItem( nItemId, FALSE ); }
     BOOL                IsItemVisible( USHORT nItemId ) const;
+    BOOL                IsItemReallyVisible( USHORT nItemId ) const;
 
     void                SetItemCommand( USHORT nItemId, const XubString& rCommand );
     const XubString&    GetItemCommand( USHORT nItemId ) const;
