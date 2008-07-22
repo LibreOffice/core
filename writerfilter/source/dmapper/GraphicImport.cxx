@@ -8,7 +8,7 @@
  *
  * $RCSfile: GraphicImport.cxx,v $
  *
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,9 +42,6 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
 
-//#ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCESEQUENCE_HPP_
-//#include <com/sun/star/drawing/PointSequenceSequence.hpp>
-//#endif
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -64,11 +61,19 @@
 #include <resourcemodel/QNameToString.hxx>
 #include <string.h>
 
+#ifdef DEBUG_DOMAINMAPPER
+#include <resourcemodel/TagLogger.hxx>
+#endif
+
 namespace writerfilter {
 namespace dmapper
 {
 using namespace ::std;
 using namespace ::com::sun::star;
+
+#ifdef DEBUG_DOMAINMAPPER
+extern TagLogger::Pointer_t dmapper_logger;
+#endif
 
 class XInputStreamHelper : public cppu::WeakImplHelper1
 <    io::XInputStream   >
@@ -369,9 +374,8 @@ GraphicImport::~GraphicImport()
 void GraphicImport::attribute(Id nName, Value & val)
 {
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", string("<attribute name=\"") +
-           (*QNameToString::Instance())(nName) + "\">");
-    //logger("DOMAINMAPPER", string("<value>") + val.toString() + "</value>");
+    dmapper_logger->startElement("attribute");
+    dmapper_logger->attribute("name", (*QNameToString::Instance())(nName));
 #endif
     sal_Int32 nIntValue = val.getInt();
     /* WRITERFILTERSTATUS: table: PICFattribute */
@@ -1019,27 +1023,36 @@ void GraphicImport::attribute(Id nName, Value & val)
 
                     m_xShape->setSize(aSize);
 
-#ifdef DEBUG_DOMAINMAPPER
-                    char buffer[256];
-                    snprintf(buffer, sizeof(buffer),
-                             "<shape x=\"%ld\" y=\"%ld\" width=\"%ld\" height=\"%ld\">",
-                             aPoint.X, aPoint.Y, aSize.Width, aSize.Height);
-                    logger("DOMAINMAPPER", buffer);
-                    logger("DOMAINMAPPER", "</shape>");
-#endif
                     m_pImpl->bIsGraphic = true;
                 }
-#ifdef DEBUG_DOMAINMAPPER
-                else
-                    logger("DOMAINMAPPER", "<shape/>");
-#endif
-
             }
-            break;
-        default: val.getInt();
+        break;
+        case NS_ooxml::LN_CT_Inline_distT:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+        case NS_ooxml::LN_CT_Inline_distB:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+        case NS_ooxml::LN_CT_Inline_distL:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+        case NS_ooxml::LN_CT_Inline_distR:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            //TODO: need to be handled
+        break;
+        case NS_ooxml::LN_CT_GraphicalObjectData_uri:
+            val.getString();
+            //TODO: does it need to be handled?
+        break;
+        default:
+#if OSL_DEBUG_LEVEL > 0
+            ::rtl::OString sMessage( "GraphicImport::attribute() - Id: ");
+            sMessage += ::rtl::OString::valueOf( sal_Int32( nName ), 10 );
+            sMessage += ::rtl::OString(" / 0x");
+            sMessage += ::rtl::OString::valueOf( sal_Int32( nName ), 16 );
+            OSL_ENSURE( false, sMessage.getStr())
+#endif
+            ;
     }
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", string("</attribute>"));
+    dmapper_logger->endElement("attribute");
 #endif
 }
 
@@ -1183,7 +1196,7 @@ void GraphicImport::ProcessShapeOptions(Value& val)
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_dff::LN_shppibFlags/*262*/:  // rtf:shppibFlags
         /*
-         * // MSOBLIPFLAGS – flags for pictures
+         * // MSOBLIPFLAGS Ã± flags for pictures
             typedef enum
                {
                msoblipflagDefault = 0,
@@ -1734,7 +1747,8 @@ void GraphicImport::ProcessShapeOptions(Value& val)
 void GraphicImport::sprm(Sprm & rSprm)
 {
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", string("<sprm>") + rSprm.toString());
+    dmapper_logger->startElement("sprm");
+    dmapper_logger->chars(rSprm.toString());
 #endif
 
     sal_uInt32 nSprmId = rSprm.getId();
@@ -1812,14 +1826,20 @@ void GraphicImport::sprm(Sprm & rSprm)
             }
         break;
         default:
-            if( pValue.get() )
-                pValue->getInt();
+#if OSL_DEBUG_LEVEL > 0
+            ::rtl::OString sMessage( "GraphicImport::sprm() - Id: ");
+            sMessage += ::rtl::OString::valueOf( sal_Int32( nSprmId ), 10 );
+            sMessage += ::rtl::OString(" / 0x");
+            sMessage += ::rtl::OString::valueOf( sal_Int32( nSprmId ), 16 );
+            OSL_ENSURE( false, sMessage.getStr())
+#endif
+            ;
     }
 
 
 
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", "</sprm>");
+    dmapper_logger->endElement("sprm");
 #endif
 }
 /*-- 01.11.2006 09:45:02---------------------------------------------------
