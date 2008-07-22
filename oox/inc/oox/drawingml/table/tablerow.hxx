@@ -8,7 +8,7 @@
  *
  * $RCSfile: tablerow.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,13 +33,7 @@
 #define OOX_DRAWINGML_TABLEROW_HXX
 
 #include "oox/drawingml/table/tablecell.hxx"
-#include "oox/helper/propertymap.hxx"
-#include "oox/drawingml/color.hxx"
-
-#include <boost/shared_ptr.hpp>
-#include <boost/optional.hpp>
 #include <vector>
-#include <map>
 
 namespace oox { namespace drawingml { namespace table {
 

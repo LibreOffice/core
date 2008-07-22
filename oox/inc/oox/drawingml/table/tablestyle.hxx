@@ -8,7 +8,7 @@
  *
  * $RCSfile: tablestyle.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +32,9 @@
 #ifndef OOX_DRAWINGML_TABLESTYLE_HXX
 #define OOX_DRAWINGML_TABLESTYLE_HXX
 
-#include <rtl/ustring.hxx>
 #include "oox/drawingml/table/tablestylepart.hxx"
-#include "oox/drawingml/fillproperties.hxx"
+#include "oox/drawingml/drawingmltypes.hxx"
+#include "oox/drawingml/shape.hxx"
 
 namespace oox { namespace drawingml { namespace table {
 
@@ -45,37 +45,35 @@ public:
     TableStyle();
     ~TableStyle();
 
-    rtl::OUString&  getStyleId(){ return maStyleId; };
-    rtl::OUString&  getStyleName() { return maStyleName; };
+    rtl::OUString&  getStyleId(){ return maStyleId; }
+    rtl::OUString&  getStyleName() { return maStyleName; }
 
-    rtl::OUString&                  getBackgroundFillStyleRef(){ return maFillStyleRef; };
-    ::oox::drawingml::Color&        getBackgroundFillStyleColor(){ return maFillStyleColor; };
+    ::oox::drawingml::ShapeStyleRef&        getBackgroundFillStyleRef(){ return maFillStyleRef; }
 
-    boost::shared_ptr< ::oox::drawingml::FillProperties >&  getBackgroundFillProperties(){ return mpFillProperties; };
+    ::oox::drawingml::FillPropertiesPtr&    getBackgroundFillProperties(){ return mpFillProperties; }
 
-    TableStylePart& getWholeTbl()   { return maWholeTbl; };
-    TableStylePart& getBand1H()     { return maBand1H; };
-    TableStylePart& getBand2H()     { return maBand2H; };
-    TableStylePart& getBand1V()     { return maBand1V; };
-    TableStylePart& getBand2V()     { return maBand2V; };
-    TableStylePart& getLastCol()    { return maLastCol; };
-    TableStylePart& getFirstCol()   { return maFirstCol; };
-    TableStylePart& getLastRow()    { return maLastRow; };
-    TableStylePart& getSeCell()     { return maSeCell; };
-    TableStylePart& getSwCell()     { return maSwCell; };
-    TableStylePart& getFirstRow()   { return maFirstRow; };
-    TableStylePart& getNeCell()     { return maNeCell; };
-    TableStylePart& getNwCell()     { return maNwCell; };
+    TableStylePart& getWholeTbl()   { return maWholeTbl; }
+    TableStylePart& getBand1H()     { return maBand1H; }
+    TableStylePart& getBand2H()     { return maBand2H; }
+    TableStylePart& getBand1V()     { return maBand1V; }
+    TableStylePart& getBand2V()     { return maBand2V; }
+    TableStylePart& getLastCol()    { return maLastCol; }
+    TableStylePart& getFirstCol()   { return maFirstCol; }
+    TableStylePart& getLastRow()    { return maLastRow; }
+    TableStylePart& getSeCell()     { return maSeCell; }
+    TableStylePart& getSwCell()     { return maSwCell; }
+    TableStylePart& getFirstRow()   { return maFirstRow; }
+    TableStylePart& getNeCell()     { return maNeCell; }
+    TableStylePart& getNwCell()     { return maNwCell; }
 
 private:
 
     rtl::OUString           maStyleId;
     rtl::OUString           maStyleName;
 
-    rtl::OUString           maFillStyleRef;
-    ::oox::drawingml::Color maFillStyleColor;
+    ::oox::drawingml::ShapeStyleRef maFillStyleRef;
 
-    boost::shared_ptr< ::oox::drawingml::FillProperties >   mpFillProperties;
+    ::oox::drawingml::FillPropertiesPtr mpFillProperties;
 
     TableStylePart  maWholeTbl;
     TableStylePart  maBand1H;

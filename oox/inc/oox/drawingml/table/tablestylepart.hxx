@@ -8,7 +8,7 @@
  *
  * $RCSfile: tablestylepart.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@
 #include "oox/drawingml/textfont.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/lineproperties.hxx"
+#include "oox/drawingml/shape.hxx"
 #include <map>
 
 namespace oox { namespace drawingml { namespace table {
@@ -46,58 +47,35 @@ class TableStylePart
 {
 public:
 
-    enum LineType
-    {
-        NONE,
-        LEFT,
-        RIGHT,
-        TOP,
-        BOTTOM,
-        INSIDEH,
-        INSIDEV,
-        TL2BR,
-        TR2BL
-    };
-
     TableStylePart();
     ~TableStylePart();
 
-    ::oox::drawingml::Color&            getTextColor(){ return maTextColor; };
-    rtl::OUString&                      getThemeableFontRef(){ return maThemeableFontRefIndex; };
-    ::oox::drawingml::Color&            getThemeableFontColor(){ return maThemeableFontColor; };
-    ::boost::optional< sal_Bool >&      getTextBoldStyle(){ return maTextBoldStyle; };
-    ::boost::optional< sal_Bool >&      getTextItalicStyle(){ return maTextItalicStyle; };
-    ::oox::drawingml::TextFont&         getAsianFont(){ return maAsianFont; };
-    ::oox::drawingml::TextFont&         getComplexFont(){ return maComplexFont; };
-    ::oox::drawingml::TextFont&         getSymbolFont(){ return maSymbolFont; };
-    ::oox::drawingml::TextFont&         getLatinFont(){ return maLatinFont; };
+    ::oox::drawingml::Color&            getTextColor(){ return maTextColor; }
+    ::boost::optional< sal_Bool >&      getTextBoldStyle(){ return maTextBoldStyle; }
+    ::boost::optional< sal_Bool >&      getTextItalicStyle(){ return maTextItalicStyle; }
+    ::oox::drawingml::TextFont&         getAsianFont(){ return maAsianFont; }
+    ::oox::drawingml::TextFont&         getComplexFont(){ return maComplexFont; }
+    ::oox::drawingml::TextFont&         getSymbolFont(){ return maSymbolFont; }
+    ::oox::drawingml::TextFont&         getLatinFont(){ return maLatinFont; }
 
-    rtl::OUString&                      getFillStyleRef(){ return maFillStyleRef; };
-    ::oox::drawingml::Color&            getFillStyleColor(){ return maFillStyleColor; };
+    ::oox::drawingml::FillPropertiesPtr&                            getFillProperties(){ return mpFillProperties; }
+    std::map < sal_Int32, ::oox::drawingml::LinePropertiesPtr >&    getLineBorders(){ return maLineBorders; }
 
-    boost::shared_ptr< ::oox::drawingml::FillProperties >&                          getFillProperties(){ return mpFillProperties; };
-    std::map < LineType, boost::shared_ptr< ::oox::drawingml::LineProperties > >&   getLineBorders(){ return maLineBorders; };
-    std::map < LineType, rtl::OUString >&                                           getLineBordersStyleRef(){ return maLineBordersStyleRef; };
-    std::map < LineType, oox::drawingml::Color >&                                   getLineBordersStyleColor(){ return maLineBordersStyleColor; };
+    ::oox::drawingml::ShapeStyleRefMap& getStyleRefs(){ return maStyleRefs; }
 
 private:
 
     ::oox::drawingml::Color             maTextColor;
-    rtl::OUString                       maThemeableFontRefIndex;
-    ::oox::drawingml::Color             maThemeableFontColor;
     ::boost::optional< sal_Bool >       maTextBoldStyle;
     ::boost::optional< sal_Bool >       maTextItalicStyle;
     ::oox::drawingml::TextFont          maAsianFont;
     ::oox::drawingml::TextFont          maComplexFont;
     ::oox::drawingml::TextFont          maSymbolFont;
     ::oox::drawingml::TextFont          maLatinFont;
-    rtl::OUString                       maFillStyleRef;
-    ::oox::drawingml::Color             maFillStyleColor;
 
-    boost::shared_ptr< ::oox::drawingml::FillProperties >                           mpFillProperties;
-    std::map < LineType, boost::shared_ptr< ::oox::drawingml::LineProperties > >    maLineBorders;
-    std::map < LineType, rtl::OUString >                                            maLineBordersStyleRef;
-    std::map < LineType, oox::drawingml::Color >                                    maLineBordersStyleColor;
+    ::oox::drawingml::FillPropertiesPtr mpFillProperties;
+    std::map < sal_Int32, ::oox::drawingml::LinePropertiesPtr > maLineBorders;
+    ::oox::drawingml::ShapeStyleRefMap  maStyleRefs;
 };
 
 } } }

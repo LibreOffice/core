@@ -8,7 +8,7 @@
  *
  * $RCSfile: tablecontext.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,8 @@
 
 namespace oox { namespace drawingml { namespace table {
 
+class TableProperties;
+
 class TableContext : public ShapeContext
 {
 public:
@@ -47,7 +49,7 @@ public:
 
 private:
 
-    table::TableProperties& mrTableProperties;
+    TableProperties& mrTableProperties;
 };
 
 } } }

@@ -8,7 +8,7 @@
  *
  * $RCSfile: tableproperties.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,10 +43,6 @@
 #include <map>
 
 namespace oox { namespace drawingml { namespace table {
-
-class TableProperties;
-
-typedef boost::shared_ptr< TableProperties > TablePropertiesPtr;
 
 class TableProperties
 {

@@ -8,7 +8,7 @@
  *
  * $RCSfile: tablerowcontext.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,10 +33,11 @@
 #ifndef OOX_DRAWINGML_TABLEROWCONTEXT
 #define OOX_DRAWINGML_TABLEROWCONTEXT
 
-#include "oox/drawingml/shapecontext.hxx"
-#include "oox/drawingml/table/tablerowcontext.hxx"
+#include "oox/core/contexthandler.hxx"
 
 namespace oox { namespace drawingml { namespace table {
+
+class TableRow;
 
 class TableRowContext : public ::oox::core::ContextHandler
 {

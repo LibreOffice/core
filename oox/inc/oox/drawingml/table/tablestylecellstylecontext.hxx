@@ -8,7 +8,7 @@
  *
  * $RCSfile: tablestylecellstylecontext.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +49,7 @@ public:
 private:
 
     TableStylePart&             mrTableStylePart;
-    TableStylePart::LineType    meLineType;
+    sal_Int32                   mnLineType;
 };
 
 } } }
