@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: containerhelper.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,13 +115,16 @@ OUString ContainerHelper::getUnusedName(
 
 bool ContainerHelper::insertByName(
         const Reference< XNameContainer >& rxNameContainer,
-        const OUString& rName, const Any& rObject )
+        const OUString& rName, const Any& rObject, bool bReplaceOldExisting )
 {
     OSL_ENSURE( rxNameContainer.is(), "ContainerHelper::insertByName - missing XNameContainer interface" );
     bool bRet = false;
     try
     {
-        rxNameContainer->insertByName( rName, rObject );
+        if( bReplaceOldExisting && rxNameContainer->hasByName( rName ) )
+            rxNameContainer->replaceByName( rName, rObject );
+        else
+            rxNameContainer->insertByName( rName, rObject );
         bRet = true;
     }
     catch( Exception& )
@@ -132,8 +135,9 @@ bool ContainerHelper::insertByName(
 }
 
 OUString ContainerHelper::insertByUnusedName(
-        const Reference< XNameContainer >& rxNameContainer, const Any& rObject,
-        const OUString& rSuggestedName, sal_Unicode cSeparator, bool bRenameOldExisting )
+        const Reference< XNameContainer >& rxNameContainer,
+        const OUString& rSuggestedName, sal_Unicode cSeparator,
+        const Any& rObject, bool bRenameOldExisting )
 {
     OSL_ENSURE( rxNameContainer.is(), "ContainerHelper::insertByUnusedName - missing XNameContainer interface" );
 
@@ -160,6 +164,64 @@ OUString ContainerHelper::insertByUnusedName(
     // insert the new object and return its resulting name
     insertByName( rxNameContainer, aNewName, rObject );
     return aNewName;
+}
+
+// ============================================================================
+
+ObjectContainer::ObjectContainer( const Reference< XMultiServiceFactory >& rxFactory, const OUString& rServiceName ) :
+    mxFactory( rxFactory ),
+    maServiceName( rServiceName ),
+    mnIndex( 0 )
+{
+    OSL_ENSURE( mxFactory.is(), "ObjectContainer::ObjectContainer - missing service factory" );
+}
+
+ObjectContainer::~ObjectContainer()
+{
+}
+
+bool ObjectContainer::hasObject( const OUString& rObjName ) const
+{
+    createContainer();
+    return mxContainer.is() && mxContainer->hasByName( rObjName );
+}
+
+Any ObjectContainer::getObject( const OUString& rObjName ) const
+{
+    createContainer();
+    if( mxContainer.is() ) try
+    {
+        return mxContainer->getByName( rObjName );
+    }
+    catch( Exception& )
+    {
+    }
+    return Any();
+}
+
+OUString ObjectContainer::insertObject( const OUString& rObjName, const Any& rObj, bool bInsertByUnusedName )
+{
+    createContainer();
+    if( mxContainer.is() )
+    {
+        if( bInsertByUnusedName )
+            return ContainerHelper::insertByUnusedName( mxContainer, rObjName + OUString::valueOf( ++mnIndex ), ' ', rObj );
+        if( ContainerHelper::insertByName( mxContainer, rObjName, rObj ) )
+            return rObjName;
+    }
+    return OUString();
+}
+
+void ObjectContainer::createContainer() const
+{
+    if( !mxContainer.is() && mxFactory.is() ) try
+    {
+        mxContainer.set( mxFactory->createInstance( maServiceName ), UNO_QUERY_THROW );
+    }
+    catch( Exception& )
+    {
+    }
+    OSL_ENSURE( mxContainer.is(), "ObjectContainer::createContainer - container not found" );
 }
 
 // ============================================================================
