@@ -8,7 +8,7 @@
  *
  * $RCSfile: titleconverter.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,8 @@ namespace com { namespace sun { namespace star {
     namespace chart2 { namespace data { class XDataSequence; } }
 } } }
 
+namespace oox { namespace drawingml { struct TextCharacterProperties; } }
+
 namespace oox {
 namespace drawingml {
 namespace chart {
@@ -60,8 +62,19 @@ public:
                         createDataSequence( const ::rtl::OUString& rRole );
     /** Creates a sequence of formatted string objects. */
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XFormattedString > >
-                        createStringSequence( const ::rtl::OUString& rDefaultText );
+                        createStringSequence(
+                            const ::rtl::OUString& rDefaultText,
+                            const ModelRef< TextBody >& rxTextProp,
+                            ObjectType eObjType );
+
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XFormattedString >
+                        appendFormattedString(
+                            ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XFormattedString > >& orStringVec,
+                            const ::rtl::OUString& rString,
+                            bool bAddNewLine ) const;
 };
+
 // ============================================================================
 
 struct TitleModel;
@@ -75,7 +88,7 @@ public:
     /** Creates a title text object and attaches it at the passed interface. */
     void                convertFromModel(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitled >& rxTitled,
-                            const ::rtl::OUString& rAutoTitle );
+                            const ::rtl::OUString& rAutoTitle, ObjectType eObjType );
 };
 
 // ============================================================================
