@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewfunc.cxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -465,6 +465,10 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
             ScCompiler aComp( pDoc, aPos, pDoc->GetGrammar() );
 //2do: AutoCorrection via CalcOptions abschaltbar machen
             aComp.SetAutoCorrection( TRUE );
+            if ( rString.GetChar(0) == '+' || rString.GetChar(0) == '-' )
+            {
+                aComp.SetExtendedErrorDetection( true );
+            }
             String aFormula( rString );
             ScTokenArray* pArr;
             BOOL bAgain;
