@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shapepropertiescontext.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,7 +99,7 @@ Reference< XFastContextHandler > ShapePropertiesContext::createFastChildContext(
 
     // CT_LineProperties
     case NMSP_DRAWINGML|XML_ln:
-        xRet.set( new LinePropertiesContext( *this, xAttribs, *(mrShape.getLineProperties()) ) );
+        xRet.set( new LinePropertiesContext( *this, xAttribs, mrShape.getLineProperties() ) );
         break;
 
     // EffectPropertiesGroup
@@ -116,7 +116,7 @@ Reference< XFastContextHandler > ShapePropertiesContext::createFastChildContext(
 
     // FillPropertiesGroupContext
     if( !xRet.is() )
-        xRet.set( FillPropertiesGroupContext::StaticCreateContext( *this, aElementToken, xAttribs, *(mrShape.getFillProperties()) ) );
+        xRet.set( FillPropertiesGroupContext::StaticCreateContext( *this, aElementToken, xAttribs, mrShape.getFillProperties() ) );
 
     return xRet;
 }
