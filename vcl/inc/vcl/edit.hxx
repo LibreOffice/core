@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edit.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -157,6 +157,7 @@ public:
 
                         Edit( Window* pParent, WinBits nStyle = WB_BORDER );
                         Edit( Window* pParent, const ResId& rResId );
+                        Edit( Window* pParent, const ResId& rResId, bool bDisableAccessibleLabeledByRelation );
                         virtual ~Edit();
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );
