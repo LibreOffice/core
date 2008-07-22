@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optmemory.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -168,7 +168,8 @@ OfaMemoryOptionsPage::OfaMemoryOptionsPage(Window* pParent, const SfxItemSet& rS
 #endif
     FreeResource();
 
-#if !defined(WNT) && !defined(ENABLE_GTK)
+    //quick launch only available in Win and OS/2
+#if !defined(WNT) && !defined(OS2) && !defined(ENABLE_GTK)
     aQuickLaunchFL.Hide();
     aQuickLaunchCB.Hide();
 #endif
