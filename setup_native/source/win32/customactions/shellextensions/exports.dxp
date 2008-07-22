@@ -13,4 +13,5 @@ CheckInstallDirectory
 SetAdminInstallProperty
 CreateLayerLinks
 RemoveLayerLinks
+DotNetCheck
 copyEditionData
