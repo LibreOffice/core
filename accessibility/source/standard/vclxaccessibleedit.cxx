@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxaccessibleedit.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -253,7 +253,8 @@ sal_Int32 VCLXAccessibleEdit::getAccessibleActionCount( ) throw (RuntimeExceptio
 {
     OExternalLockGuard aGuard( this );
 
-    return 0;
+    // There is one action: activate
+    return 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -265,7 +266,15 @@ sal_Bool VCLXAccessibleEdit::doAccessibleAction ( sal_Int32 nIndex ) throw (Inde
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
-    return sal_False;
+    sal_Bool bDoAction = sal_False;
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+    {
+        pWindow->GrabFocus();
+        bDoAction = sal_True;
+    }
+
+    return bDoAction;
 }
 
 // -----------------------------------------------------------------------------
@@ -277,7 +286,8 @@ sal_Bool VCLXAccessibleEdit::doAccessibleAction ( sal_Int32 nIndex ) throw (Inde
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
-    return ::rtl::OUString();
+    static const ::rtl::OUString sAction( RTL_CONSTASCII_USTRINGPARAM( "activate" ) );
+    return sAction;
 }
 
 // -----------------------------------------------------------------------------
