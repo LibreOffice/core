@@ -8,7 +8,7 @@
  *
  * $RCSfile: DomainMapper.cxx,v $
  *
- * $Revision: 1.68 $
+ * $Revision: 1.69 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,11 +80,14 @@
 #include <tools/color.hxx>
 #include <BorderHandler.hxx>
 #include <CellColorHandler.hxx>
+#include <SectionColumnHandler.hxx>
 #include <vector>
 #include <iostream>
 
 #ifdef DEBUG_DOMAINMAPPER
 #include <resourcemodel/QNameToString.hxx>
+#include <resourcemodel/util.hxx>
+#include <resourcemodel/TagLogger.hxx>
 #endif
 #if OSL_DEBUG_LEVEL > 0
 #include <resourcemodel/QNameToString.hxx>
@@ -97,6 +100,10 @@ using namespace ::rtl;
 namespace writerfilter {
 namespace dmapper{
 
+#ifdef DEBUG_DOMAINMAPPER
+TagLogger::Pointer_t dmapper_logger(TagLogger::getInstance("DOMAINMAPPER"));
+#endif
+
 /* ---- Fridrich's mess begins here ---- */
 struct _PageSz
 {
@@ -106,20 +113,6 @@ struct _PageSz
     sal_Int32 w;
 } CT_PageSz;
 
-struct _Column
-{
-    sal_Int32 w;
-    sal_Int32 space;
-} CT_Column;
-
-struct _Columns
-{
-    bool equalWidth;
-    sal_Int32 space;
-    sal_Int32 num;
-    bool sep;
-    std::vector<_Column> cols;
-} CT_Columns;
 
 /* ---- Fridrich's mess (hopefully) ends here ---- */
 
@@ -136,10 +129,6 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
     // #i24363# tab stops relative to indent
     m_pImpl->SetDocumentSettingsProperty(
         PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_TABS_RELATIVE_TO_INDENT ),
-        uno::makeAny( false ) );
-
-    m_pImpl->SetDocumentSettingsProperty(
-        PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ADD_PARA_TABLE_SPACING ),
         uno::makeAny( false ) );
 
     m_pImpl->SetDocumentSettingsProperty(
@@ -168,7 +157,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
     }
 
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", "<domainmapper>");
+    dmapper_logger->startElement("domainmapper");
 #endif
 }
 /*-- 09.06.2006 09:52:12---------------------------------------------------
@@ -196,7 +185,7 @@ DomainMapper::~DomainMapper()
     delete m_pImpl;
 
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", "</domainmapper>");
+    dmapper_logger->endElement("domainmapper");
 #endif
 }
 /*-- 09.06.2006 09:52:12---------------------------------------------------
@@ -205,9 +194,9 @@ DomainMapper::~DomainMapper()
 void DomainMapper::attribute(Id nName, Value & val)
 {
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", string("<attribute name=\"") +
-           (*QNameToString::Instance())(nName) +"\" value=\""
-           + val.toString() + "\">");
+    dmapper_logger->startElement("attribute");
+    dmapper_logger->attribute("name", (*QNameToString::Instance())(nName));
+    dmapper_logger->attribute("value", val.toString());
 #endif
     static ::rtl::OUString sLocalBookmarkName;
     sal_Int32 nIntValue = val.getInt();
@@ -1871,31 +1860,6 @@ void DomainMapper::attribute(Id nName, Value & val)
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             m_pImpl->SetPageMarginTwip( PAGE_MAR_GUTTER, nIntValue );
         break;
-        case NS_ooxml::LN_CT_Columns_equalWidth:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-            CT_Columns.equalWidth = (nIntValue != 0);
-            break;
-        case NS_ooxml::LN_CT_Columns_space:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-            CT_Columns.space = ConversionHelper::convertTwipToMM100( nIntValue );
-            break;
-        case NS_ooxml::LN_CT_Columns_num:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-            CT_Columns.num = nIntValue;
-            break;
-        case NS_ooxml::LN_CT_Columns_sep:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-            CT_Columns.sep = (nIntValue != 0);
-            break;
-
-        case NS_ooxml::LN_CT_Column_w:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-            CT_Column.w = ConversionHelper::convertTwipToMM100( nIntValue );
-            break;
-        case NS_ooxml::LN_CT_Column_space:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-            CT_Column.space = ConversionHelper::convertTwipToMM100( nIntValue );
-            break;
         case NS_ooxml::LN_CT_Language_val: //90314
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
         case NS_ooxml::LN_CT_Language_eastAsia: //90315
@@ -2199,7 +2163,7 @@ void DomainMapper::attribute(Id nName, Value & val)
         }
     }
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", "</attribute>");
+    dmapper_logger->endElement("attribute");
 #endif
 }
 /*-- 09.06.2006 09:52:12---------------------------------------------------
@@ -2216,7 +2180,8 @@ void DomainMapper::sprm(Sprm & rSprm)
 void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmType )
 {
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", string("<sprm>") + rSprm.toString());
+    dmapper_logger->startElement("sprm");
+    dmapper_logger->chars(rSprm.toString());
 #endif
     OSL_ENSURE(rContext.get(), "PropertyMap has to be valid!");
     if(!rContext.get())
@@ -3869,44 +3834,46 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
 
     case NS_ooxml::LN_EG_SectPrContents_cols:
         /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-        CT_Columns.equalWidth = CT_Columns.sep = false;
-        CT_Columns.space = CT_Columns.num = 0;
-        CT_Columns.cols.erase(CT_Columns.cols.begin(), CT_Columns.cols.end());
-        resolveSprmProps(rSprm);
-        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
-        if(pSectionContext)
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if( pProperties.get())
         {
-            if (CT_Columns.equalWidth)
+
+            SectionColumnHandlerPtr pSectHdl( new SectionColumnHandler );
+            pProperties->resolve(*pSectHdl);
+            if(pSectionContext)
             {
-                pSectionContext->SetEvenlySpaced( true );
-                pSectionContext->SetColumnCount( (sal_Int16) (CT_Columns.num - 1) );
-                pSectionContext->SetColumnDistance( CT_Columns.space );
-                pSectionContext->SetSeparatorLine( CT_Columns.sep );
-            }
-            else if (!CT_Columns.cols.empty())
-            {
-                pSectionContext->SetEvenlySpaced( false );
-                pSectionContext->SetColumnDistance( CT_Columns.space );
-                pSectionContext->SetColumnCount( (sal_Int16)(CT_Columns.cols.size() -1));
-                std::vector<_Column>::const_iterator tmpIter = CT_Columns.cols.begin();
-                for (; tmpIter != CT_Columns.cols.end(); tmpIter++)
+                if( pSectHdl->IsEqualWidth() )
                 {
-                    pSectionContext->AppendColumnWidth( tmpIter->w );
-                    if ((tmpIter != CT_Columns.cols.end() - 1) || (tmpIter->space > 0))
-                        pSectionContext->AppendColumnSpacing( tmpIter->space );
+                    pSectionContext->SetEvenlySpaced( true );
+                    pSectionContext->SetColumnCount( (sal_Int16) (pSectHdl->GetNum() - 1) );
+                    pSectionContext->SetColumnDistance( pSectHdl->GetSpace() );
+                    pSectionContext->SetSeparatorLine( pSectHdl->IsSeparator() );
                 }
-                pSectionContext->SetSeparatorLine( CT_Columns.sep );
+                else if( !pSectHdl->GetColumns().empty() )
+                {
+                    pSectionContext->SetEvenlySpaced( false );
+                    pSectionContext->SetColumnDistance( pSectHdl->GetSpace() );
+                    pSectionContext->SetColumnCount( (sal_Int16)(pSectHdl->GetColumns().size() -1));
+                    std::vector<_Column>::const_iterator tmpIter = pSectHdl->GetColumns().begin();
+                    for (; tmpIter != pSectHdl->GetColumns().end(); tmpIter++)
+                    {
+                        pSectionContext->AppendColumnWidth( tmpIter->nWidth );
+                        if ((tmpIter != pSectHdl->GetColumns().end() - 1) || (tmpIter->nSpace > 0))
+                            pSectionContext->AppendColumnSpacing( tmpIter->nSpace );
+                    }
+                    pSectionContext->SetSeparatorLine( pSectHdl->IsSeparator() );
+                }
+                else if( pSectHdl->GetNum() > 0 )
+                {
+                    pSectionContext->SetColumnCount( (sal_Int16)pSectHdl->GetNum() - 1 );
+                    pSectionContext->SetColumnDistance( pSectHdl->GetSpace() );
+                }
             }
         }
+    }
+    break;
 
-        break;
-
-    case NS_ooxml::LN_CT_Columns_col:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-        CT_Column.w = CT_Column.space = 0;
-        resolveSprmProps(rSprm);
-        CT_Columns.cols.push_back(CT_Column);
-        break;
     case NS_ooxml::LN_CT_PPrBase_pStyle:
     {
         /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
@@ -4089,7 +4056,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         /* WRITERFILTERSTATUS: done: 100, planned: 5, spent: 0 */
     break;
     /* WRITERFILTERSTATUS: done: 0, planned: 4, spent: 0 */
-    case NS_ooxml::LN_OLEObject_OLEObject:
+    case NS_ooxml::LN_object:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if( pProperties.get())
@@ -4099,7 +4066,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
             ::rtl::OUString sStreamName = pOLEHandler->copyOLEOStream( m_pImpl->GetTextDocument() );
             if(sStreamName.getLength())
             {
-                m_pImpl->appendOLE( sStreamName );
+                m_pImpl->appendOLE( sStreamName, pOLEHandler );
             }
         }
     }
@@ -4142,7 +4109,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     }
 
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", "</sprm>");
+    dmapper_logger->endElement("sprm");
 #endif
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
@@ -4166,7 +4133,7 @@ void DomainMapper::data(const sal_uInt8* /*buf*/, size_t /*len*/,
 void DomainMapper::startSectionGroup()
 {
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", "<section>");
+    dmapper_logger->startElement("section");
 #endif
     m_pImpl->PushProperties(CONTEXT_SECTION);
 }
@@ -4183,7 +4150,7 @@ void DomainMapper::endSectionGroup()
     m_pImpl->PopProperties(CONTEXT_SECTION);
 
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", "</section>");
+    dmapper_logger->endElement("section");
 #endif
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
@@ -4192,7 +4159,7 @@ void DomainMapper::endSectionGroup()
 void DomainMapper::startParagraphGroup()
 {
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", "<paragraph>");
+    dmapper_logger->startElement("paragraph");
 #endif
 
     m_pImpl->getTableManager().startParagraphGroup();
@@ -4213,12 +4180,44 @@ void DomainMapper::startParagraphGroup()
 -----------------------------------------------------------------------*/
 void DomainMapper::endParagraphGroup()
 {
+    //handle unprocessed deferred breaks
+    PropertyMapPtr pParaProperties = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
+    if( pParaProperties->hasEmptyPropertyValues() )
+    {
+        PropertyMap::const_iterator aIter = pParaProperties->find(PropertyDefinition( PROP_BREAK_TYPE , false ) );
+        if( aIter != pParaProperties->end() )
+        {
+            style::BreakType eType;
+            aIter->second >>= eType;
+            bool bPage = false;
+            bool bColumn = false;
+            if( eType == style::BreakType_PAGE_BEFORE )
+                bPage = true;
+            else if( eType == style::BreakType_COLUMN_BEFORE )
+                 bColumn = true;
+
+            if( bPage || bColumn )
+            {
+                try
+                {
+                        uno::Reference< beans::XPropertySet > xRangeProperties( m_pImpl->GetTopTextAppend()->getEnd(), uno::UNO_QUERY_THROW );
+                        xRangeProperties->setPropertyValue(
+                            PropertyNameSupplier::GetPropertyNameSupplier().GetName(PROP_BREAK_TYPE),
+                                                    uno::makeAny( bPage ? style::BreakType_PAGE_BEFORE : style::BreakType_COLUMN_BEFORE));
+                }
+                catch( const uno::Exception& )
+                {
+                }
+            }
+        }
+    }
+
     m_pImpl->PopProperties(CONTEXT_PARAGRAPH);
     m_pImpl->getTableManager().endParagraphGroup();
     //frame conversion has to be executed after table conversion
     m_pImpl->ExecuteFrameConversion();
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", "</paragraph>");
+    dmapper_logger->endElement("paragraph");
 #endif
 }
 
@@ -4257,7 +4256,7 @@ void DomainMapper::PopListProperties()
 void DomainMapper::startCharacterGroup()
 {
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", "<charactergroup>");
+    dmapper_logger->startElement("charactergroup");
 #endif
 
     m_pImpl->PushProperties(CONTEXT_CHARACTER);
@@ -4276,7 +4275,7 @@ void DomainMapper::endCharacterGroup()
     m_pImpl->PopProperties(CONTEXT_CHARACTER);
 
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", "</charactergroup>");
+    dmapper_logger->endElement("charactergroup");
 #endif
 }
 /*-- 09.06.2006 09:52:14---------------------------------------------------
@@ -4350,9 +4349,9 @@ void DomainMapper::text(const sal_uInt8 * data_, size_t len)
 
             m_pImpl->appendTextPortion( sText, pContext );
 #ifdef DEBUG_DOMAINMAPPER
-            logger("DOMAINMAPPER", string("<text>") +
-                   OUStringToOString(sText, RTL_TEXTENCODING_ASCII_US).getStr()
-                   + "</text>");
+            dmapper_logger->startElement("text");
+            dmapper_logger->chars(sText);
+            dmapper_logger->endElement("text");
 #endif
         }
     }
@@ -4414,9 +4413,9 @@ void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
                 m_pImpl->appendTextPortion( sText, pContext );
 
 #ifdef DEBUG_DOMAINMAPPER
-            logger("DOMAINMAPPER", string("<utext>") +
-                   xmlify(OUStringToOString(sText, RTL_TEXTENCODING_ASCII_US).getStr())
-                   + "</utext>");
+            dmapper_logger->startElement("utext");
+            dmapper_logger->chars(sText);
+            dmapper_logger->endElement("utext");
 #endif
         }
     }
@@ -4430,7 +4429,7 @@ void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
 void DomainMapper::props(writerfilter::Reference<Properties>::Pointer_t ref)
 {
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", "<props>");
+    dmapper_logger->startElement("props");
 #endif
 
     string sType = ref->getType();
@@ -4446,7 +4445,7 @@ void DomainMapper::props(writerfilter::Reference<Properties>::Pointer_t ref)
         ref->resolve(*this);
 
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", "</props>");
+    dmapper_logger->endElement("props");
 #endif
 }
 /*-- 09.06.2006 09:52:15---------------------------------------------------
@@ -4455,7 +4454,8 @@ void DomainMapper::props(writerfilter::Reference<Properties>::Pointer_t ref)
 void DomainMapper::table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
 {
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", "<table>");
+    dmapper_logger->startElement("table");
+    dmapper_logger->attribute("id", (*QNameToString::Instance())(name));
 #endif
 
     // printf ( "DomainMapper::table(0x%.4x)\n", (unsigned int)name);
@@ -4499,7 +4499,7 @@ void DomainMapper::table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
     m_pImpl->SetAnyTableImport(false);
 
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", "</table>");
+    dmapper_logger->endElement("table");
 #endif
 }
 /*-- 09.06.2006 09:52:16---------------------------------------------------
@@ -4508,7 +4508,7 @@ void DomainMapper::table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
 void DomainMapper::substream(Id rName, ::writerfilter::Reference<Stream>::Pointer_t ref)
 {
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", "<substream>");
+    dmapper_logger->startElement("substream");
 #endif
 
     m_pImpl->getTableManager().startLevel();
@@ -4576,7 +4576,7 @@ void DomainMapper::substream(Id rName, ::writerfilter::Reference<Stream>::Pointe
     m_pImpl->getTableManager().endLevel();
 
 #ifdef DEBUG_DOMAINMAPPER
-    logger("DOMAINMAPPER", "</substream>");
+    dmapper_logger->endElement("substream");
 #endif
 }
 /*-- 09.06.2006 09:52:16---------------------------------------------------
