@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: testtoolloader.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,7 +85,7 @@ void LoadLib()
         aTestToolModule = osl_loadModuleRelative(
             &thisModule,
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("sts"))).pData,
-            SAL_LOADMODULE_DEFAULT );
+            SAL_LOADMODULE_GLOBAL );
     }
 }
 
@@ -131,19 +131,16 @@ void InitTestToolLib()
     {
         OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "CreateEventLogger" ));
 
-        aTestToolModule = osl_loadModuleRelative(
-            &thisModule,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("sts"))).pData,
-            SAL_LOADMODULE_GLOBAL );
+        LoadLib();
         if ( aTestToolModule )
         {
             oslGenericFunction pInitFunc = osl_getFunctionSymbol(
                 aTestToolModule, aFuncName.pData );
             if ( pInitFunc )
-                (reinterpret_cast< pfunc_CreateRemoteControl >(pInitFunc))();
+                (reinterpret_cast< pfunc_CreateEventLogger >(pInitFunc))();
             else
             {
-                DBG_ERROR1( "Unable to get Symbol 'CreateRemoteControl' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+                DBG_ERROR1( "Unable to get Symbol 'CreateEventLogger' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
             }
         }
         else
