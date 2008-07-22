@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: ch2_lvl1_wizard.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-13 14:26:55 $
+'* last change: $Author: obo $ $Date: 2008-07-22 10:36:56 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -50,10 +50,10 @@ testcase tCreateNew3DChart
     Dim iChartVariantText as string
     
    
-    sInputFile = convertpath ( gTesttoolPath & "chart2/level1/input/randomData.ods" )
+    sInputFile = convertpath ( gTesttoolPath & "chart2/optional/input/randomData.ods" )
     sOutputFile = convertpath ( gOfficePath & "user/work/tCreateNew3DChart.ods" )
     
-    printlog "Load test document TesttoolPath/chart2/level1/input/randomData.ods"
+    printlog "Load test document TesttoolPath/chart2/optional/input/randomData.ods"
     call hFileOpen(sInputFile)
     sleep(2)    
     printlog "Save document as OfficePath/user/work/tCreateNew3DChart.ods"
@@ -377,9 +377,9 @@ testcase tCreateNewLineChart
     dim sInputFile as STRING
     dim sOutputFile as STRING
     dim sControlString as STRING
-    sInputFile = convertpath ( gTesttoolPath & "chart2/level1/input/randomData.ods" )
+    sInputFile = convertpath ( gTesttoolPath & "chart2/optional/input/randomData.ods" )
     sOutputFile = convertpath ( gOfficepath & "user/work/tCreateNewLineChart.ods" )    
-    printlog "File / Load TesttoolPath/chart2/level1/input/randomData.ods"
+    printlog "File / Load TesttoolPath/chart2/optional/input/randomData.ods"
     call hFileOpen(sInputFile)
     sleep(2)    
     printlog "Save document as Officepath/user/work/tCreateNewLineChart.ods"
