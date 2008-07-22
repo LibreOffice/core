@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: printopt.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -211,6 +211,10 @@ void SfxCommonPrintOptionsTabPage::Reset( const SfxItemSet& /*rSet*/ )
     aPrintFileOptions.GetPrinterOptions( maPrintFileOptions );
 
     ImplUpdateControls( aPrinterOutputRB.IsChecked() ? &maPrinterOptions : &maPrintFileOptions );
+
+    // --> OD 2008-06-25 #i63982#
+    ImplSetAccessibleNames();
+    // <--
 }
 
 // -----------------------------------------------------------------------------
@@ -276,6 +280,106 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCu
     ClickReduceTransparencyCBHdl( &aReduceTransparencyCB );
     ClickReduceGradientsCBHdl( &aReduceGradientsCB );
     ClickReduceBitmapsCBHdl( &aReduceBitmapsCB );
+}
+
+// -----------------------------------------------------------------------------
+
+void SfxCommonPrintOptionsTabPage::ImplSetAccessibleNames()
+{
+    static const String cSeparator = String::CreateFromAscii( " - " );
+
+    String sReduceText = aReduceGB.GetDisplayText();
+    sReduceText += cSeparator;
+
+    String sAccessibleName = sReduceText;
+    sAccessibleName += aPrinterOutputRB.GetDisplayText();
+    aPrinterOutputRB.SetAccessibleName( sAccessibleName );
+
+    sAccessibleName = sReduceText;
+    sAccessibleName += aPrintFileOutputRB.GetDisplayText();
+    aPrintFileOutputRB.SetAccessibleName( sAccessibleName );
+
+    String sOutputText = sReduceText;
+    sOutputText += aOutputGB.GetDisplayText();
+    sOutputText += cSeparator;
+
+    sAccessibleName = sOutputText;
+    sAccessibleName += aReduceTransparencyCB.GetDisplayText();
+    aReduceTransparencyCB.SetAccessibleName( sAccessibleName );
+
+    String sTransparencyText = aReduceTransparencyCB.GetAccessibleName();
+    sTransparencyText += cSeparator;
+
+    sAccessibleName = sTransparencyText;
+    sAccessibleName += aReduceTransparencyAutoRB.GetDisplayText();
+    aReduceTransparencyAutoRB.SetAccessibleName( sAccessibleName );
+
+    sAccessibleName = sTransparencyText;
+    sAccessibleName += aReduceTransparencyNoneRB.GetDisplayText();
+    aReduceTransparencyNoneRB.SetAccessibleName( sAccessibleName );
+
+    sAccessibleName = sOutputText;
+    sAccessibleName += aReduceGradientsCB.GetDisplayText();
+    aReduceGradientsCB.SetAccessibleName( sAccessibleName );
+
+    String sGradientText = aReduceGradientsCB.GetAccessibleName();
+    sGradientText += cSeparator;
+
+    sAccessibleName = sGradientText;
+    sAccessibleName += aReduceGradientsStripesRB.GetDisplayText();
+    aReduceGradientsStripesRB.SetAccessibleName( sAccessibleName );
+
+    sAccessibleName = aReduceGradientsStripesRB.GetAccessibleName();
+    aReduceGradientsStepCountNF.SetAccessibleName( sAccessibleName );
+
+    sAccessibleName = sGradientText;
+    sAccessibleName += aReduceGradientsColorRB.GetDisplayText();
+    aReduceGradientsColorRB.SetAccessibleName( sAccessibleName );
+
+    sAccessibleName = sOutputText;
+    sAccessibleName += aReduceBitmapsCB.GetDisplayText();
+    aReduceBitmapsCB.SetAccessibleName( sAccessibleName );
+
+    String sBitmapText = aReduceBitmapsCB.GetAccessibleName();
+    sBitmapText += cSeparator;
+
+    sAccessibleName = sBitmapText;
+    sAccessibleName += aReduceBitmapsOptimalRB.GetDisplayText();
+    aReduceBitmapsOptimalRB.SetAccessibleName( sAccessibleName );
+
+    sAccessibleName = sBitmapText;
+    sAccessibleName += aReduceBitmapsNormalRB.GetDisplayText();
+    aReduceBitmapsNormalRB.SetAccessibleName( sAccessibleName );
+
+    sAccessibleName = sBitmapText;
+    sAccessibleName += aReduceBitmapsResolutionRB.GetDisplayText();
+    aReduceBitmapsResolutionRB.SetAccessibleName( sAccessibleName );
+
+    sAccessibleName = aReduceBitmapsResolutionRB.GetAccessibleName();
+    aReduceBitmapsResolutionLB.SetAccessibleName( sAccessibleName );
+
+    sAccessibleName = sBitmapText;
+    sAccessibleName += aReduceBitmapsTransparencyCB.GetDisplayText();
+    aReduceBitmapsTransparencyCB.SetAccessibleName( sAccessibleName );
+
+    sAccessibleName = sOutputText;
+    sAccessibleName += aConvertToGreyscalesCB.GetDisplayText();
+    aConvertToGreyscalesCB.SetAccessibleName( sAccessibleName );
+
+    String sWarnText = aWarnGB.GetDisplayText();
+    sWarnText += cSeparator;
+
+    sAccessibleName = sWarnText;
+    sAccessibleName += aPaperSizeCB.GetDisplayText();
+    aPaperSizeCB.SetAccessibleName( sAccessibleName );
+
+    sAccessibleName = sWarnText;
+    sAccessibleName += aPaperOrientationCB.GetDisplayText();
+    aPaperOrientationCB.SetAccessibleName( sAccessibleName );
+
+    sAccessibleName = sWarnText;
+    sAccessibleName += aTransparencyCB.GetDisplayText();
+    aTransparencyCB.SetAccessibleName( sAccessibleName );
 }
 
 // -----------------------------------------------------------------------------
@@ -378,6 +482,9 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl, RadioButton*,
         aOutputGB.SetText( OutputDevice::GetNonMnemonicString( pButton->GetText() ) );
         ImplUpdateControls( &maPrinterOptions );
         bOutputForPrinter = TRUE;
+        // --> OD 2008-06-25 #i63982#
+        ImplSetAccessibleNames();
+        // <--
     }
     else
         ImplSaveControls( &maPrinterOptions );
@@ -394,6 +501,9 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl, RadioButton
         aOutputGB.SetText( OutputDevice::GetNonMnemonicString( pButton->GetText() ) );
         ImplUpdateControls( &maPrintFileOptions );
         bOutputForPrinter = FALSE;
+        // --> OD 2008-06-25 #i63982#
+        ImplSetAccessibleNames();
+        // <--
     }
     else
         ImplSaveControls( &maPrintFileOptions );
