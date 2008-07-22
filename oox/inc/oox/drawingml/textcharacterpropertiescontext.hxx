@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textcharacterpropertiescontext.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +32,10 @@
 #define OOX_DRAWINGML_TEXTCHARACTERPROPERTIESCONTEXT_HXX
 
 #include "oox/core/contexthandler.hxx"
-#include "oox/drawingml/textparagraphproperties.hxx"
-#include "oox/drawingml/textfont.hxx"
 
 namespace oox { namespace drawingml {
+
+struct TextCharacterProperties;
 
 class TextCharacterPropertiesContext : public ::oox::core::ContextHandler
 {
@@ -43,18 +43,13 @@ public:
     TextCharacterPropertiesContext( ::oox::core::ContextHandler& rParent,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >& rXAttributes,
             TextCharacterProperties& rTextCharacterProperties );
-    ~TextCharacterPropertiesContext();
+    virtual ~TextCharacterPropertiesContext();
 
     virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 protected:
     TextCharacterProperties& mrTextCharacterProperties;
-    bool      mbHasHighlightColor;
-    TextFont  maLatinFont;
-    TextFont  maAsianFont;
-    TextFont  maComplexFont;
-    TextFont  maSymbolFont;
 };
 
 } }
