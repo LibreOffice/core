@@ -8,7 +8,7 @@
  *
  * $RCSfile: stylematrixreferencecontext.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,15 +40,11 @@ namespace oox { namespace drawingml {
 class StyleMatrixReferenceContext : public oox::core::ContextHandler
 {
 public:
-
-    StyleMatrixReferenceContext( ::oox::core::ContextHandler& rParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs,
-            rtl::OUString& rIdentifier, oox::drawingml::Color& rColor );
+    StyleMatrixReferenceContext( ::oox::core::ContextHandler& rParent, Color& rColor );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
-protected:
-
-    ::oox::drawingml::Color& mrColor;
+private:
+    Color& mrColor;
 };
 
 } }
