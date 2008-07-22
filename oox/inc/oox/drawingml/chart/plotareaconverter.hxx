@@ -8,7 +8,7 @@
  *
  * $RCSfile: plotareaconverter.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +61,22 @@ public:
 
 // ============================================================================
 
+struct WallFloorModel;
+
+class WallFloorConverter : public ConverterBase< WallFloorModel >
+{
+public:
+    explicit            WallFloorConverter( const ConverterRoot& rParent, WallFloorModel& rModel );
+    virtual             ~WallFloorConverter();
+
+    /** Converts the OOXML wall/floor model to a chart2 diagram. */
+    void                convertFromModel(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& rxDiagram,
+                            ObjectType eObjType );
+};
+
+// ============================================================================
+
 struct PlotAreaModel;
 
 class PlotAreaConverter : public ConverterBase< PlotAreaModel >
@@ -69,9 +85,20 @@ public:
     explicit            PlotAreaConverter( const ConverterRoot& rParent, PlotAreaModel& rModel );
     virtual             ~PlotAreaConverter();
 
-    /** Converts the OOXML plot area model to a chart2 diagram.
-        @return  Automatic chart title from a single series title, if possible. */
-    ::rtl::OUString     convertFromModel( View3DModel& rView3DModel );
+    /** Converts the OOXML plot area model to a chart2 diagram. */
+    void                convertFromModel( View3DModel& rView3DModel );
+
+    /** Returns the automatic chart title if the chart contains only one series. */
+    inline const ::rtl::OUString& getAutomaticTitle() const { return maAutoTitle; }
+    /** Returns true, if the chart is three-dimensional. */
+    inline bool         is3dChart() const { return mb3dChart; }
+    /** Returns true, if chart type supports wall and floor format in 3D mode. */
+    inline bool         isWall3dChart() const { return mbWall3dChart; }
+
+private:
+    ::rtl::OUString     maAutoTitle;
+    bool                mb3dChart;
+    bool                mbWall3dChart;
 };
 
 // ============================================================================
