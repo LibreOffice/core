@@ -8,7 +8,7 @@
 #
 # $RCSfile: rules.mk,v $
 #
-# $Revision: 1.101 $
+# $Revision: 1.102 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -633,7 +633,7 @@ $(MISC)$/%.dpz :
     @echo Making: $@
     @@-$(RM) $@
 # line too long on 4nt
-.IF "$(USE_SHELL)"!="4nt"
+.IF "$(USE_SHELL)"!="4nt" || "$(GUI)"=="OS2"
     dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) make_zip_deps=true $(ZIPDEPFILES)
 .ELSE			# "$(USE_SHELL)"!="4nt"
     $(TYPE) $(mktmp $(ZIPDEPFILES:s/\/\\/)) | $(XARGS) dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) make_zip_deps=true
