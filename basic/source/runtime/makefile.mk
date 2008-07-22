@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -66,7 +66,7 @@ SLOFILES+=	$(SLO)$/wnt.obj
 .ENDIF
 
 .IF "$(GUI)$(CPU)" == "OS2I"
-SLOFILES+= $(SLO)$/os2.obj
+#FIXME SLOFILES+= $(SLO)$/os2.obj
 .ENDIF
 
 EXCEPTIONSFILES=$(SLO)$/step0.obj	\
