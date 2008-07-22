@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unomap.cxx,v $
- * $Revision: 1.212 $
+ * $Revision: 1.213 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1247,6 +1247,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_STREAM_NAME),           FN_UNO_STREAM_NAME, CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0 },
                     { SW_PROP_NMID(UNO_NAME_MODEL), FN_UNO_MODEL, CPPU_E2T(CPPUTYPE_REFMODEL), PropertyAttribute::READONLY|PropertyAttribute::MAYBEVOID, 0},
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC_URL), FN_UNO_REPLACEMENT_GRAPHIC_URL, CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID, 0 },
+                    { SW_PROP_NMID(UNO_NAME_GRAPHIC), FN_UNO_REPLACEMENT_GRAPHIC, CPPU_E2T(CPPUTYPE_REFXGRAPHIC), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_COMPONENT),FN_UNO_COMPONENT, CPPU_E2T(CPPUTYPE_REFCOMPONENT), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NMID(UNO_NAME_ALTERNATIVE_TEXT), FN_UNO_ALTERNATIVE_TEXT,CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE , 0   },
                     {0,0,0,0,0,0}
