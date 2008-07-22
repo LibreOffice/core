@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excelfilter.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,6 +113,11 @@ bool ExcelFilter::importDocument() throw()
 bool ExcelFilter::exportDocument() throw()
 {
     return false;
+}
+
+const ::oox::drawingml::Theme* ExcelFilter::getCurrentTheme() const
+{
+    return mpHelper->getTheme().getCoreThemePtr().get();
 }
 
 sal_Int32 ExcelFilter::getSchemeClr( sal_Int32 nColorSchemeToken ) const
