@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_hidden_ooo.scp,v $
- * $Revision: 1.111 $
+ * $Revision: 1.112 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -487,7 +487,6 @@ Module gid_Module_Root_Files_6
 	gid_File_Basic_Template,
 	gid_File_Basic_Tools,
 	gid_File_Basic_Tutorials,
-	gid_File_Basic_Launcher,
 	gid_File_Extra_Cfgsrv,
 	gid_File_Extra_Cfgsrv_Bitmap_Unx,
 	gid_File_Extra_Symbols,
