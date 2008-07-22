@@ -54,6 +54,18 @@ $(LIB1TARGET) :	$(LIB1FILES) \
 .ELSE
     @nm `cat $(LIB1TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ENDIF
+
+.ELIF "$(GUI)"=="OS2"
+    $(LIBMGR) $(LIBFLAGS) $@ $(LIB1FILES) $(LIB1OBJFILES)
+    @+-$(RM) $(@:s/.lib/.lin/)
+.IF "$(LIB1OBJFILES)"!=""    
+    @+$(TYPE) $(mktmp $(LIB1OBJFILES)) > $(null,$(LIB1OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
+.ENDIF          # "$(LIB1OBJFILES)"!=""    
+.IF "$(LIB1FILES)"!=""    
+    @-$(TYPE) $(foreach,i,$(LIB1FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
+.ENDIF          # "$(LIB1FILES)"!=""    
+    @+$(ECHONL)
+
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -135,6 +147,18 @@ $(LIB2TARGET) :	$(LIB2FILES) \
 .ELSE
     @nm `cat $(LIB2TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ENDIF
+
+.ELIF "$(GUI)"=="OS2"
+    $(LIBMGR) $(LIBFLAGS) $@ $(LIB2FILES) $(LIB2OBJFILES)
+    @+-$(RM) $(@:s/.lib/.lin/)
+.IF "$(LIB2OBJFILES)"!=""    
+    @+$(TYPE) $(mktmp $(LIB2OBJFILES)) > $(null,$(LIB2OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
+.ENDIF          # "$(LIB2OBJFILES)"!=""    
+.IF "$(LIB2FILES)"!=""    
+    @-$(TYPE) $(foreach,i,$(LIB2FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
+.ENDIF          # "$(LIB2FILES)"!=""    
+    @+$(ECHONL)
+
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -216,6 +240,18 @@ $(LIB3TARGET) :	$(LIB3FILES) \
 .ELSE
     @nm `cat $(LIB3TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ENDIF
+
+.ELIF "$(GUI)"=="OS2"
+    $(LIBMGR) $(LIBFLAGS) $@ $(LIB3FILES) $(LIB3OBJFILES)
+    @+-$(RM) $(@:s/.lib/.lin/)
+.IF "$(LIB3OBJFILES)"!=""    
+    @+$(TYPE) $(mktmp $(LIB3OBJFILES)) > $(null,$(LIB3OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
+.ENDIF          # "$(LIB3OBJFILES)"!=""    
+.IF "$(LIB3FILES)"!=""    
+    @-$(TYPE) $(foreach,i,$(LIB3FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
+.ENDIF          # "$(LIB3FILES)"!=""    
+    @+$(ECHONL)
+
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -297,6 +333,18 @@ $(LIB4TARGET) :	$(LIB4FILES) \
 .ELSE
     @nm `cat $(LIB4TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ENDIF
+
+.ELIF "$(GUI)"=="OS2"
+    $(LIBMGR) $(LIBFLAGS) $@ $(LIB4FILES) $(LIB4OBJFILES)
+    @+-$(RM) $(@:s/.lib/.lin/)
+.IF "$(LIB4OBJFILES)"!=""    
+    @+$(TYPE) $(mktmp $(LIB4OBJFILES)) > $(null,$(LIB4OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
+.ENDIF          # "$(LIB4OBJFILES)"!=""    
+.IF "$(LIB4FILES)"!=""    
+    @-$(TYPE) $(foreach,i,$(LIB4FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
+.ENDIF          # "$(LIB4FILES)"!=""    
+    @+$(ECHONL)
+
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -378,6 +426,18 @@ $(LIB5TARGET) :	$(LIB5FILES) \
 .ELSE
     @nm `cat $(LIB5TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ENDIF
+
+.ELIF "$(GUI)"=="OS2"
+    $(LIBMGR) $(LIBFLAGS) $@ $(LIB5FILES) $(LIB5OBJFILES)
+    @+-$(RM) $(@:s/.lib/.lin/)
+.IF "$(LIB5OBJFILES)"!=""    
+    @+$(TYPE) $(mktmp $(LIB5OBJFILES)) > $(null,$(LIB5OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
+.ENDIF          # "$(LIB5OBJFILES)"!=""    
+.IF "$(LIB5FILES)"!=""    
+    @-$(TYPE) $(foreach,i,$(LIB5FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
+.ENDIF          # "$(LIB5FILES)"!=""    
+    @+$(ECHONL)
+
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -459,6 +519,18 @@ $(LIB6TARGET) :	$(LIB6FILES) \
 .ELSE
     @nm `cat $(LIB6TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ENDIF
+
+.ELIF "$(GUI)"=="OS2"
+    $(LIBMGR) $(LIBFLAGS) $@ $(LIB6FILES) $(LIB6OBJFILES)
+    @+-$(RM) $(@:s/.lib/.lin/)
+.IF "$(LIB6OBJFILES)"!=""    
+    @+$(TYPE) $(mktmp $(LIB6OBJFILES)) > $(null,$(LIB6OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
+.ENDIF          # "$(LIB6OBJFILES)"!=""    
+.IF "$(LIB6FILES)"!=""    
+    @-$(TYPE) $(foreach,i,$(LIB6FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
+.ENDIF          # "$(LIB6FILES)"!=""    
+    @+$(ECHONL)
+
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -540,6 +612,18 @@ $(LIB7TARGET) :	$(LIB7FILES) \
 .ELSE
     @nm `cat $(LIB7TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ENDIF
+
+.ELIF "$(GUI)"=="OS2"
+    $(LIBMGR) $(LIBFLAGS) $@ $(LIB7FILES) $(LIB7OBJFILES)
+    @+-$(RM) $(@:s/.lib/.lin/)
+.IF "$(LIB7OBJFILES)"!=""    
+    @+$(TYPE) $(mktmp $(LIB7OBJFILES)) > $(null,$(LIB7OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
+.ENDIF          # "$(LIB7OBJFILES)"!=""    
+.IF "$(LIB7FILES)"!=""    
+    @-$(TYPE) $(foreach,i,$(LIB7FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
+.ENDIF          # "$(LIB7FILES)"!=""    
+    @+$(ECHONL)
+
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -621,6 +705,18 @@ $(LIB8TARGET) :	$(LIB8FILES) \
 .ELSE
     @nm `cat $(LIB8TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ENDIF
+
+.ELIF "$(GUI)"=="OS2"
+    $(LIBMGR) $(LIBFLAGS) $@ $(LIB8FILES) $(LIB8OBJFILES)
+    @+-$(RM) $(@:s/.lib/.lin/)
+.IF "$(LIB8OBJFILES)"!=""    
+    @+$(TYPE) $(mktmp $(LIB8OBJFILES)) > $(null,$(LIB8OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
+.ENDIF          # "$(LIB8OBJFILES)"!=""    
+.IF "$(LIB8FILES)"!=""    
+    @-$(TYPE) $(foreach,i,$(LIB8FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
+.ENDIF          # "$(LIB8FILES)"!=""    
+    @+$(ECHONL)
+
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -702,6 +798,18 @@ $(LIB9TARGET) :	$(LIB9FILES) \
 .ELSE
     @nm `cat $(LIB9TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ENDIF
+
+.ELIF "$(GUI)"=="OS2"
+    $(LIBMGR) $(LIBFLAGS) $@ $(LIB9FILES) $(LIB9OBJFILES)
+    @+-$(RM) $(@:s/.lib/.lin/)
+.IF "$(LIB9OBJFILES)"!=""    
+    @+$(TYPE) $(mktmp $(LIB9OBJFILES)) > $(null,$(LIB9OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
+.ENDIF          # "$(LIB9OBJFILES)"!=""    
+.IF "$(LIB9FILES)"!=""    
+    @-$(TYPE) $(foreach,i,$(LIB9FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
+.ENDIF          # "$(LIB9FILES)"!=""    
+    @+$(ECHONL)
+
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -783,6 +891,18 @@ $(LIB10TARGET) :	$(LIB10FILES) \
 .ELSE
     @nm `cat $(LIB10TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ENDIF
+
+.ELIF "$(GUI)"=="OS2"
+    $(LIBMGR) $(LIBFLAGS) $@ $(LIB10FILES) $(LIB10OBJFILES)
+    @+-$(RM) $(@:s/.lib/.lin/)
+.IF "$(LIB10OBJFILES)"!=""    
+    @+$(TYPE) $(mktmp $(LIB10OBJFILES)) > $(null,$(LIB10OBJFILES) $(NULLDEV) $(@:s/.lib/.lin/))
+.ENDIF          # "$(LIB10OBJFILES)"!=""    
+.IF "$(LIB10FILES)"!=""    
+    @-$(TYPE) $(foreach,i,$(LIB10FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
+.ENDIF          # "$(LIB10FILES)"!=""    
+    @+$(ECHONL)
+
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
