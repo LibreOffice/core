@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pptshapecontext.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,8 +76,8 @@ oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlaceholder, st
             aShapePtr = *aRevIter;
             break;
         }
-        std::vector< oox::drawingml::ShapePtr >& rChilds = (*aRevIter)->getChilds();
-        aShapePtr = findPlaceholder( nMasterPlaceholder, rChilds );
+        std::vector< oox::drawingml::ShapePtr >& rChildren = (*aRevIter)->getChildren();
+        aShapePtr = findPlaceholder( nMasterPlaceholder, rChildren );
         if ( aShapePtr.get() )
             break;
         aRevIter++;
@@ -156,12 +156,12 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
                     {
                         oox::drawingml::ShapePtr pPlaceholder;
                         if ( eShapeLocation == Layout )     // for layout objects the referenced object can be found within the same shape tree
-                            pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder, mpSlidePersistPtr->getShapes()->getChilds() );
+                            pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder, mpSlidePersistPtr->getShapes()->getChildren() );
                         else if ( eShapeLocation == Slide ) // normal slide shapes have to search within the corresponding master tree for referenced objects
                         {
                             SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
                             if ( pMasterPersist.get() )
-                                pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder, pMasterPersist->getShapes()->getChilds() );
+                                pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder, pMasterPersist->getShapes()->getChildren() );
                         }
                         if ( pPlaceholder.get() )
                         {
