@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxaccessibletoolboxitem.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -420,10 +420,9 @@ Reference< XAccessibleStateSet > SAL_CALL VCLXAccessibleToolBoxItem::getAccessib
             pStateSetHelper->AddState( AccessibleStateType::SENSITIVE );
         }
         if ( m_pToolBox->IsItemVisible( m_nItemId ) )
-        {
             pStateSetHelper->AddState( AccessibleStateType::VISIBLE );
+        if ( m_pToolBox->IsItemReallyVisible( m_nItemId ) )
             pStateSetHelper->AddState( AccessibleStateType::SHOWING );
-        }
         if ( m_bHasFocus )
             pStateSetHelper->AddState( AccessibleStateType::FOCUSED );
     }
