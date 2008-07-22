@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLPropertySetImpl.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -168,12 +168,6 @@ void OOXMLPropertyImpl::resolve(writerfilter::Properties & rProperties)
         rProperties.attribute(mId, *getValue());
         break;
     }
-
-#ifdef DEBUG_RESOLVE
-    logger("DEBUG", "<resolve>");
-    logger("DEBUG", toString());
-    logger("DEBUG", "</resolve>");
-#endif
 }
 
 /*
@@ -424,7 +418,10 @@ void OOXMLPropertySetImpl::resolve(Properties & rHandler)
             pProp->resolve(rHandler);
 #ifdef DEBUG_RESOLVE
         else
-            logger("DEBUG", "<error>zero-property</error>");
+        {
+            debug_logger->startElement("error");
+            debug_logger->chars("zero-property");
+            debug_logger->endElement("error");
 #endif
 
         aIt++;
@@ -460,11 +457,6 @@ string OOXMLPropertySetImpl::getType() const
 
 void OOXMLPropertySetImpl::add(OOXMLProperty::Pointer_t pProperty)
 {
-#ifdef DEBUG_RESOLVE
-    if (pProperty->getId() == 0x0)
-        logger("DEBUG", "<error>zero property</error>");
-#endif
-
     if (pProperty.get() != NULL && pProperty->getId() != 0x0)
         mProperties.push_back(pProperty);
 }
@@ -478,11 +470,6 @@ void OOXMLPropertySetImpl::add(OOXMLPropertySet::Pointer_t pPropertySet)
 
         if (pSet != NULL)
         {
-#ifdef DEBUG_RESOLVE
-            logger("DEBUG", "<call class=\"OOXMLPropertySetImpl\" method=\"add\"><me>" + toString()
-                 + "</me>" + pSet->toString() + "</call>");
-#endif
-
             mProperties.resize(mProperties.size() + pSet->mProperties.size());
             for (OOXMLProperties_t::iterator aIt = pSet->mProperties.begin();
                  aIt != pSet->mProperties.end(); aIt++)
@@ -756,11 +743,6 @@ void OOXMLPropertySetEntryToString::sprm(Sprm & /*rSprm*/)
 
 void OOXMLPropertySetEntryToString::attribute(Id nId, Value & rValue)
 {
-#ifdef DEBUG_RESOLVE
-    logger("DEBUG", "OOXMLPropertySetEntryToString::attribute("
-           + (*QNameToString::Instance())(nId) + ")");
-#endif
-
     if (nId == mnId)
         mStr = rValue.getString();
 }
