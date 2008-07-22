@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pptimport.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,6 +88,11 @@ bool PowerPointImport::exportDocument() throw()
     return false;
 }
 
+const ::oox::drawingml::Theme* PowerPointImport::getCurrentTheme() const
+{
+    return mpActualSlidePersist ? mpActualSlidePersist->getTheme().get() : 0;
+}
+
 sal_Int32 PowerPointImport::getSchemeClr( sal_Int32 nColorSchemeToken ) const
 {
     sal_Int32 nColor = 0;
@@ -113,7 +118,7 @@ sal_Int32 PowerPointImport::getSchemeClr( sal_Int32 nColorSchemeToken ) const
             pClrSchemePtr->getColor( nColorSchemeToken, nColor );
         else
         {
-            drawingml::ThemePtr pTheme = mpActualSlidePersist->getTheme();
+            ::oox::drawingml::ThemePtr pTheme = mpActualSlidePersist->getTheme();
             if( pTheme )
             {
                 pTheme->getClrScheme().getColor( nColorSchemeToken, nColor );
