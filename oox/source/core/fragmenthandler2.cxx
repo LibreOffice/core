@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fragmenthandler2.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,8 +42,9 @@ namespace core {
 
 // ============================================================================
 
-FragmentHandler2::FragmentHandler2( XmlFilterBase& rFilter, const OUString& rFragmentPath ) :
-    FragmentHandler( rFilter, rFragmentPath )
+FragmentHandler2::FragmentHandler2( XmlFilterBase& rFilter, const OUString& rFragmentPath, bool bEnableTrimSpace ) :
+    FragmentHandler( rFilter, rFragmentPath ),
+    ContextHandler2Helper( bEnableTrimSpace )
 {
 }
 
