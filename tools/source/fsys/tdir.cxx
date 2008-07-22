@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tdir.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -360,7 +360,7 @@ void Dir::Reset()
 #endif
 
     // gibt es das zu oeffnende Verzeichnis ueberhaupt?
-#ifndef UNX //explanation: see DirReader_Impl::Read() in unx.cxx
+#if !defined(UNX) && !defined(OS2) //explanation: see DirReader_Impl::Read() in unx.cxx
     if( !pReader->pDosDir )
     {
         nError = FSYS_ERR_NOTADIRECTORY;
