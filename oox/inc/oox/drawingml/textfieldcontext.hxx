@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textfieldcontext.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,27 +32,28 @@
 #define OOX_DRAWINGML_TEXTFIELDCONTEXT_HXX
 
 #include "oox/core/contexthandler.hxx"
-#include "oox/drawingml/textfield.hxx"
 
 namespace oox { namespace drawingml {
 
-    class TextFieldContext
-        : public ::oox::core::ContextHandler
-    {
-    public:
-        TextFieldContext( ::oox::core::ContextHandler& rParent,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rXAttributes,
-                            const TextFieldPtr & pTextField);
-        virtual void SAL_CALL endFastElement( sal_Int32 aElementToken ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL characters( const ::rtl::OUString& aChars ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-            sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rXAttributes )
-            throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+class TextField;
 
-    private:
-        TextFieldPtr mpTextField;
-        bool mbIsInText;
-    };
+class TextFieldContext
+    : public ::oox::core::ContextHandler
+{
+public:
+    TextFieldContext( ::oox::core::ContextHandler& rParent,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rXAttributes,
+                        TextField& rTextField);
+    virtual void SAL_CALL endFastElement( sal_Int32 aElementToken ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL characters( const ::rtl::OUString& aChars ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rXAttributes )
+        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+
+private:
+    TextField& mrTextField;
+    bool mbIsInText;
+};
 
 } }
 

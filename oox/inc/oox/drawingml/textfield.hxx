@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textfield.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,37 +34,38 @@
 #include <boost/shared_ptr.hpp>
 
 #include "oox/drawingml/textrun.hxx"
-#include "oox/drawingml/textcharacterproperties.hxx"
 #include "oox/drawingml/textparagraphproperties.hxx"
 
 namespace oox { namespace drawingml {
 
-    class TextField
-        : public TextRun
-    {
-    public:
-        TextField();
+struct TextCharacterProperties;
 
-        TextParagraphPropertiesPtr getTextParagraphProperties()
-            { return mpTextParagraphPropertiesPtr; }
+class TextField
+    : public TextRun
+{
+public:
+    TextField();
 
-        virtual void    insertAt(
-                            const ::oox::core::XmlFilterBase& rFilterBase,
-                            const ::com::sun::star::uno::Reference < ::com::sun::star::text::XText > & xText,
-                            const ::com::sun::star::uno::Reference < ::com::sun::star::text::XTextCursor > &xAt,
-                            const TextCharacterPropertiesPtr& );
+    inline TextParagraphProperties& getTextParagraphProperties() { return maTextParagraphProperties; }
+    inline const TextParagraphProperties& getTextParagraphProperties() const { return maTextParagraphProperties; }
 
-        void setType(const ::rtl::OUString & sType)
-            { msType = sType; }
-        void setUuid(const ::rtl::OUString & sUuid)
-            { msUuid = sUuid; }
-    private:
-        TextParagraphPropertiesPtr  mpTextParagraphPropertiesPtr;
-        ::rtl::OUString msType;
-        ::rtl::OUString msUuid;
-    };
+    inline void setType( const ::rtl::OUString& sType ) { msType = sType; }
+    inline void setUuid( const ::rtl::OUString & sUuid ) { msUuid = sUuid; }
 
-    typedef boost::shared_ptr< TextField > TextFieldPtr;
+    virtual void    insertAt(
+                        const ::oox::core::XmlFilterBase& rFilterBase,
+                        const ::com::sun::star::uno::Reference < ::com::sun::star::text::XText > & xText,
+                        const ::com::sun::star::uno::Reference < ::com::sun::star::text::XTextCursor > &xAt,
+                        const TextCharacterProperties& rTextCharacterStyle ) const;
+
+private:
+    TextParagraphProperties  maTextParagraphProperties;
+    ::rtl::OUString msType;
+    ::rtl::OUString msUuid;
+};
+
+typedef boost::shared_ptr< TextField > TextFieldPtr;
+
 } }
 
 #endif
