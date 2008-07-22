@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLFastHelper.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +33,9 @@
 #include <iostream>
 #include <resourcemodel/QNameToString.hxx>
 #include "OOXMLFastContextHandler.hxx"
-
+#include "ooxmlLoggers.hxx"
 namespace writerfilter {
+
 namespace ooxml
 {
 using namespace ::std;
@@ -80,20 +81,17 @@ OOXMLFastHelper<T>::createAndSetParent
     pTmp->setId(nId);
 
 #ifdef DEBUG_CREATE
-    XMLTag aTag("createAndSetParent");
-
-    aTag.addAttr("context", pHandler->getType());
-    aTag.addAttr("token", fastTokenToId(pTmp->getToken()));
-    aTag.addAttr("id", (*QNameToString::Instance())(nId));
+    debug_logger->startElement("createAndSetParent");
+    debug_logger->attribute("context", pHandler->getType());
+    debug_logger->attribtue("token", fastTokenToId(pTmp->getToken()));
+    debug_logger->attribute("id", (*QNameToString::Instance())(nId));
     if (pTmp->isFallback())
-        aTag.addAttr("fallback", "yes");
+        debug_logger->attribute("fallback", "yes");
 
-    XMLTag::Pointer_t pCreatedTag(new XMLTag("created"));
-    pCreatedTag->addTag(pTmp->toTag());
-
-    aTag.addTag(pCreatedTag);
-
-    logger("DEBUG", aTag.toString());
+    debug_logger->startElement("created");
+    debug_logger->addTag(pTmp->toTag());
+    debug_logger->endElement("created");
+    debug_logger->endElement("createAndSetParent");
 #endif
 
     return aResult;
@@ -120,20 +118,17 @@ OOXMLFastHelper<T>::createAndSetParentRef
 
 
 #ifdef DEBUG_CREATE
-    XMLTag aTag("createAndSetParentRef");
+    debug_logger->startElement("createAndSetParentRef");
+    debug_logger->attribute("context", pHandler->getType());
+    debug_logger->attribute("type", fastTokenToId(nToken));
 
-    aTag.addAttr("context", pHandler->getType());
-    aTag.addAttr("type", fastTokenToId(nToken));
     if (pTmp->isFallback())
-        aTag.addAttr("fallback", "yes");
+        debug_logger->attribute("fallback", "yes");
 
-    XMLTag::Pointer_t pTag(new XMLTag("created"));
-
-    pTag->chars(pTmp->getType());
-
-    aTag.addTag(pTag);
-
-    logger("DEBUG", aTag.toString());
+    debug_logger->startElement("created");
+    debug_logger->chars(pTmp->getType());
+    debug_logger->endElement("created");
+    debug_logger->endElement("createAndSetParentRef");
 #endif
 
     return xChild;
@@ -148,17 +143,18 @@ void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
 
     string aStr = (*QNameToString::Instance())(nId);
 
-    if (aStr.size() == 0)
-        logger("DEBUG", "unknown QName");
-
 #ifdef DEBUG_PROPERTIES
-    XMLTag aTag("newProperty");
+    debug_logger->startElement("newProperty");
+    debug_logger->attribute("name", aStr);
+    debug_logger->attribute
+        ("value",
+         ::rtl::OUStringToOString
+         (rValue, RTL_TEXTENCODING_ASCII_US).getStr());
 
-    aTag.addAttr("name", aStr);
-    aTag.addAttr("value",
-                 ::rtl::OUStringToOString
-                 (rValue, RTL_TEXTENCODING_ASCII_US).getStr());
-    logger("DEBUG", aTag.toString());
+    if (aStr.size() == 0)
+        debug_logger->addTag(XMLTag::Pointer_t(new XMLTag("unknown-qname")));
+
+    debug_logger->endElement("newProperty");
 #endif
 
     pHandler->newProperty(nId, pVal);
@@ -173,16 +169,15 @@ void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
 
     string aStr = (*QNameToString::Instance())(nId);
 
-    if (aStr.size() == 0)
-        logger("DEBUG", "unknown QName");
-
 #ifdef DEBUG_PROPERTIES
-    XMLTag aTag("newProperty");
+    debug_logger->startElement("newProperty");
+    debug_logger->attribute("name", aStr);
+    debug_logger->attribute("value", pVal->toString());
 
-    aTag.addAttr("name", aStr);
-    aTag.addAttr("value", pVal->toString());
+    if (aStr.size() == 0)
+        debug_logger->addTag(XMLTag::Pointer_t(new XMLTag("unknown-qname")));
 
-    logger("DEBUG", aTag.toString());
+    debug_logger->endElement("newProperty");
 #endif
 
     pHandler->newProperty(nId, pVal);
@@ -197,18 +192,18 @@ void OOXMLFastHelper<T>::mark(OOXMLFastContextHandler * pHandler,
 
     string aStr = (*QNameToString::Instance())(nId);
 
-    if (aStr.size() == 0)
-        logger("DEBUG", "unknown QName");
-
 #ifdef DEBUG_PROPERTIES
-    XMLTag aTag("mark");
+    debug_logger->startElement("mark");
+    debug_logger->attribute("name", aStr);
+    debug_logger->attribute
+    ("value",
+     ::rtl::OUStringToOString
+     (rValue, RTL_TEXTENCODING_ASCII_US).getStr());
 
-    aTag.addAttr("name", aStr);
-    aTag.addAttr("value",
-                 ::rtl::OUStringToOString
-                 (rValue, RTL_TEXTENCODING_ASCII_US).getStr());
+    if (aStr.size() == 0)
+        debug_logger->addTag(XMLTag::Pointer_t(new XMLTag("unknown-qname")));
 
-    logger("DEBUG", aTag.toString());
+    debug_logger->endElement("mark");
 #endif
 
     pHandler->mark(nId, pVal);
@@ -218,7 +213,7 @@ template <class T>
 void OOXMLFastHelper<T>::attributes
 (OOXMLFastContextHandler * pContext,
  const uno::Reference < xml::sax::XFastAttributeList > & Attribs)
-{
+    {
     T aContext(pContext);
 
     aContext.setPropertySet(pContext->getPropertySet());
