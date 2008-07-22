@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,8 +40,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
-.IF "$(GUI)" != "OS2"
 
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
@@ -77,8 +75,6 @@ DEF1NAME    =$(SHL1TARGET)
 
 # DEF1EXPORTFILE= export.exp
 SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
-
-.ENDIF # "$(GUI)" != "OS2"
 
 # END ------------------------------------------------------------------
 
