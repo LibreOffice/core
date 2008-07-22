@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Common.xcu,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -502,21 +502,6 @@
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">Address Data Source...</value>
-        </prop>
-        <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_self</value>
-        </prop>
-        <prop oor:name="ImageIdentifier"  oor:type="xs:string">
-          <value >private:image/3216</value>
-        </prop>
-      </node>
-      <node oor:name="m15" oor:op="replace" install:module="dicooo">
-        <prop oor:name="URL"  oor:type="xs:string">
-          <value >macro:///Launcher.FontOOo.StartFontOOo</value>
-        </prop>
-        <prop oor:name="Title">
-          <value>FontOOo Wizard...</value>
-          <value xml:lang="en-US">Install fonts from the web...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
           <value >_self</value>
