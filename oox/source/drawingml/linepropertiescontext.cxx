@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: linepropertiescontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,21 +29,15 @@
  ************************************************************************/
 
 #include "oox/drawingml/linepropertiescontext.hxx"
-
-#include <com/sun/star/drawing/LineJoint.hpp>
-#include <com/sun/star/drawing/LineStyle.hpp>
-#include "oox/helper/propertymap.hxx"
-#include "oox/core/namespaces.hxx"
-#include "oox/drawingml/colorchoicecontext.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
-
+#include "oox/drawingml/fillpropertiesgroupcontext.hxx"
+#include "oox/drawingml/lineproperties.hxx"
+#include "oox/helper/attributelist.hxx"
+#include "oox/core/namespaces.hxx"
 #include "tokens.hxx"
 
 using ::rtl::OUString;
-using ::com::sun::star::beans::NamedValue;
 using namespace ::oox::core;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
@@ -57,46 +51,32 @@ LinePropertiesContext::LinePropertiesContext( ContextHandler& rParent, const Ref
 : ContextHandler( rParent )
 , mrLineProperties( rLineProperties )
 {
-    // ST_LineWidth
-    if( xAttribs->hasAttribute( XML_w ) )
-        mrLineProperties.getLineWidth() = boost::optional< sal_Int32 >( GetCoordinate( xAttribs->getOptionalValue( XML_w ) ) );
-
-    // "ST_LineCap"
-    if( xAttribs->hasAttribute( XML_cap ) )
-        mrLineProperties.getLineCap() = boost::optional< sal_Int32 >( xAttribs->getOptionalValueToken( XML_cap, 0 ) );
-
-    // if ( xAttribs->hasAttribute( XML_cmpd ) )    ST_CompoundLine
-    // if ( xAttribs->hasAttribute( XML_algn ) )    ST_PenAlignment
+    AttributeList aAttribs( xAttribs );
+    mrLineProperties.moLineWidth = aAttribs.getInteger( XML_w );
+    mrLineProperties.moLineCap = aAttribs.getToken( XML_cap );
 }
 
 LinePropertiesContext::~LinePropertiesContext()
 {
 }
 
-Reference< XFastContextHandler > LinePropertiesContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+Reference< XFastContextHandler > LinePropertiesContext::createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
 {
     Reference< XFastContextHandler > xRet;
-    const rtl::OUString sLineStyle( RTL_CONSTASCII_USTRINGPARAM( "LineStyle" ) );
-    switch( aElementToken )
+    AttributeList aAttribs( xAttribs );
+    switch( nElement )
     {
-        // LineFillPropertiesGroup, line fillings currently unsuported
+        // LineFillPropertiesGroup
         case NMSP_DRAWINGML|XML_noFill:
-            mrLineProperties.getLinePropertyMap()[ sLineStyle ] <<= LineStyle_NONE;
-        break;
         case NMSP_DRAWINGML|XML_solidFill:
-        {
-            mrLineProperties.getLinePropertyMap()[ sLineStyle ] <<= LineStyle_SOLID;
-            xRet = new colorChoiceContext( *this, *mrLineProperties.getLineColor() );
-        }
-        break;
         case NMSP_DRAWINGML|XML_gradFill:
         case NMSP_DRAWINGML|XML_pattFill:
-            mrLineProperties.getLinePropertyMap()[ sLineStyle ] <<= LineStyle_SOLID;
+            xRet = FillPropertiesGroupContext::StaticCreateContext( *this, nElement, xAttribs, mrLineProperties.maLineFill );
         break;
 
         // LineDashPropertiesGroup
         case NMSP_DRAWINGML|XML_prstDash:   // CT_PresetLineDashProperties
-            mrLineProperties.getPresetDash() = boost::optional< sal_Int32 >( xAttribs->getOptionalValueToken( XML_val, XML_solid ) );
+            mrLineProperties.moPresetDash = aAttribs.getToken( XML_val );
         break;
         case NMSP_DRAWINGML|XML_custDash:   // CT_DashStopList
         break;
@@ -105,47 +85,20 @@ Reference< XFastContextHandler > LinePropertiesContext::createFastChildContext( 
         case NMSP_DRAWINGML|XML_round:
         case NMSP_DRAWINGML|XML_bevel:
         case NMSP_DRAWINGML|XML_miter:
-        {
-            LineJoint eJoint = (aElementToken == (NMSP_DRAWINGML|XML_round)) ? LineJoint_ROUND :
-                                (aElementToken == (NMSP_DRAWINGML|XML_bevel)) ? LineJoint_BEVEL :
-                                    LineJoint_MITER;
-            static const OUString sLineJoint( RTL_CONSTASCII_USTRINGPARAM( "LineJoint" ) );
-            mrLineProperties.getLinePropertyMap()[ sLineJoint ] <<= eJoint;
-        }
+            mrLineProperties.moLineJoint = getToken( nElement );
         break;
 
         case NMSP_DRAWINGML|XML_headEnd:    // CT_LineEndProperties
         case NMSP_DRAWINGML|XML_tailEnd:    // CT_LineEndProperties
         {                                   // ST_LineEndType
-            if( xAttribs->hasAttribute( XML_type ) )
-            {
-                sal_Int32 nType = xAttribs->getOptionalValueToken( XML_type, 0 );
-                if ( aElementToken == ( NMSP_DRAWINGML|XML_tailEnd ) )
-                    mrLineProperties.getStartArrow() = boost::optional< sal_Int32 >( nType );
-                else
-                    mrLineProperties.getEndArrow() = boost::optional< sal_Int32 >( nType );
-            }
-            if ( xAttribs->hasAttribute( XML_w ) )
-            {
-                sal_Int32 nW = xAttribs->getOptionalValueToken( XML_w, 0 );
-                if ( aElementToken == ( NMSP_DRAWINGML|XML_tailEnd ) )
-                    mrLineProperties.getStartArrowWidth() = boost::optional< sal_Int32 >( nW );
-                else
-                    mrLineProperties.getEndArrowWidth() = boost::optional< sal_Int32 >( nW );
-            }
-            if ( xAttribs->hasAttribute( XML_len ) )
-            {
-                sal_Int32 nLen = xAttribs->getOptionalValueToken( XML_len, 0 );
-                if ( aElementToken == ( NMSP_DRAWINGML|XML_tailEnd ) )
-                    mrLineProperties.getStartArrowLength() = boost::optional< sal_Int32 >( nLen );
-                else
-                    mrLineProperties.getEndArrowLength() = boost::optional< sal_Int32 >( nLen );
-            }
+            bool bTailEnd = nElement == (NMSP_DRAWINGML|XML_tailEnd);
+            LineArrowProperties& rArrowProps = bTailEnd ? mrLineProperties.maEndArrow : mrLineProperties.maStartArrow;
+            rArrowProps.moArrowType = aAttribs.getToken( XML_type );
+            rArrowProps.moArrowWidth = aAttribs.getToken( XML_w );
+            rArrowProps.moArrowLength = aAttribs.getToken( XML_len );
         }
         break;
     }
-    if ( !xRet.is() )
-        xRet.set( this );
     return xRet;
 }
 
