@@ -8,7 +8,7 @@
 #
 # $RCSfile: tg_shl.mk,v $
 #
-# $Revision: 1.126 $
+# $Revision: 1.127 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -85,7 +85,7 @@ $(MISC)$/$(SHL$(TNR)VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(S
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL$(TNR)IMPLIB)" == ""
 SHL$(TNR)IMPLIB=i$(TARGET)_t$(TNR)
 .ENDIF			# "$(SHL$(TNR)IMPLIB)" == ""
@@ -98,7 +98,7 @@ ALLTAR : $(SHL$(TNR)IMPLIBN)
 .IF "$(USE_DEFFILE)"==""
 USE_$(TNR)IMPLIB_DEPS=$(LB)$/$(SHL$(TNR)IMPLIB).lib
 .ENDIF			# "$(USE_DEFFILE)"==""
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 USE_SHL$(TNR)DEF=$(SHL$(TNR)DEF)
 .ELSE			# "$(GUI)" != "UNX"
 USE_SHL$(TNR)DEF=
@@ -233,7 +233,7 @@ SHL$(TNR)LINKRESO*=$(MISC)$/$(SHL$(TNR)TARGET)_res.o
 #.IF "$(SHL$(TNR)TARGETN)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(SHL$(TNR)LIBS)"!=""
 $(MISC)$/$(SHL$(TNR)TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -246,7 +246,7 @@ $(SHL$(TNR)TARGETN) : $(LINKINCTARGETS)
 
 .ELSE
 .IF "$(SHL$(TNR)USE_EXPORTS)"=="name"
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)" == "OS2"
 .IF "$(COM)"!="GCC"
 .IF "$(SHL$(TNR)LIBS)"!=""
 SHL$(TNR)LINKLIST=$(MISC)$/$(SHL$(TNR)TARGET)_link.lst
@@ -263,6 +263,20 @@ $(MISC)$/%linkinc.ls:
     echo . > $@
 .ENDIF          # "$(linkinc)"!=""
 
+.IF "$(GUI)" == "OS2"
+#21/02/2006 YD dll names must be 8.3, invoke fix script
+#check osl/os2/module.c/osl_loadModule()
+SHL$(TNR)TARGET8=$(shell @fix_shl $(SHL$(TNR)TARGET))
+.ENDIF
+
+.IF "$(GUI)" == "OS2"
+_SHL$(TNR)IMP_ORD = $(SHL$(TNR)STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(SHL$(TNR)STDLIBS:^"$(LB)$/") 
+SHL$(TNR)IMP_ORD = $(foreach,i,$(_SHL$(TNR)IMP_ORD) $(shell @-ls $i))
+.ELSE
+SHL$(TNR)IMP_ORD = 
+.ENDIF
+
+
 $(SHL$(TNR)TARGETN) : \
                     $(SHL$(TNR)OBJS)\
                     $(SHL$(TNR)LIBS)\
@@ -271,6 +285,7 @@ $(SHL$(TNR)TARGETN) : \
                     $(USE_SHL$(TNR)VERSIONMAP)\
                     $(SHL$(TNR)RES)\
                     $(SHL$(TNR)DEPN) \
+                    $(SHL$(TNR)IMP_ORD) \
                     $(SHL$(TNR)LINKLIST)
     @echo ------------------------------
     @echo Making: $(SHL$(TNR)TARGETN)
@@ -480,6 +495,71 @@ $(SHL$(TNR)TARGETN) : \
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 
+.IF "$(GUI)" == "OS2"
+
+.IF "$(SHL$(TNR)DEFAULTRES)"!=""
+    @+-$(RM) $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc >& $(NULLDEV)
+.IF "$(SHL$(TNR)ICON)" != ""
+    @-+echo 1 ICON $(SHL$(TNR)ICON) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+.ENDIF
+.IF "$(use_shl_versions)" != ""
+.IF "$(SHL$(TNR)ADD_VERINFO)"!=""
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL$(TNR)ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+.ENDIF			# "$(SHL$(TNR)ADD_VERINFO)"!=""
+    @-+echo MENU 1 BEGIN END >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+#	@-+echo $(EMQ)RCDATA 1 { "Build string here" }$(EMQ) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+.ENDIF			# "$(use_shl_versions)" != ""
+# YD 04/07/06 seems null, confuses rc cli: -i $(SOLARTESDIR)
+    $(RC) -r -DOS2 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+.ENDIF			# "$(SHL$(TNR)DEFAULTRES)"!=""
+
+.IF "$(SHL$(TNR)ALLRES)"!=""
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) $(SHL$(TNR)ALLRES:s/res /res+/) $(SHL$(TNR)LINKRES)
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(SHL$(TNR)ALLRES) > $(SHL$(TNR)LINKRES)
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF			# "$(SHL$(TNR)ALLRES)"!=""
+
+.IF "$(USE_DEFFILE)"!=""
+
+    $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(LINKFLAGSSHL) -o $@ \
+        $(SHL$(TNR)DEF) \
+        $(STDOBJ) \
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL$(TNR)OBJS) $(SHL$(TNR)VERSIONOBJ) \
+        $(SHL$(TNR)LIBS) \
+        $(SHL$(TNR)STDLIBS:^"-l") \
+        $(SHL$(TNR)LINKRES) \
+        $(SHL$(TNR)STDSHL:^"-l") $(STDSHL$(TNR):^"-l") 
+
+.ELSE			# "$(USE_DEFFILE)"!=""
+
+    $(SHL$(TNR)LINKER) -v 	$(SHL$(TNR)LINKFLAGS)			\
+        $(LINKFLAGSSHL) $(SHL$(TNR)BASEX)		\
+        $(SHL$(TNR)STACK) -o $(SHL$(TNR)TARGETN)	\
+        $(SHL$(TNR)DEF) \
+        $(STDOBJ)							\
+        -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(SHL$(TNR)OBJS) $(SHL$(TNR)VERSIONOBJ) \
+        $(SHL$(TNR)LIBS) \
+        $(SHL$(TNR)STDLIBS:^"-l") \
+        $(SHL$(TNR)LINKRES) \
+        $(SHL$(TNR)STDSHL:^"-l") $(STDSHL$(TNR):^"-l")                           \
+    $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
+
+.ENDIF			# "$(USE_DEFFILE)"!=""
+
+.IF "$(SHL$(TNR)TARGET8)" != "$(SHL$(TNR)TARGET)"
+    +$(COPY) $@ $(@:d)$(SHL$(TNR)TARGET8).dll
+.ENDIF
+
+.ENDIF			# "$(GUI)" == "OS2"
+
+
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
 
@@ -521,7 +601,7 @@ $(SHL$(TNR)IMPLIBN):	\
 $(SHL$(TNR)IMPLIBN):	\
                     $(SHL$(TNR)LIBS)
 .ENDIF
-    @echo ------------------------------
+    @echo ------------------------------1
     @echo Making: $(SHL$(TNR)IMPLIBN)
 .IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
@@ -538,6 +618,14 @@ $(SHL$(TNR)IMPLIBN):	\
     @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
+
+.ELIF "$(GUI)" == "OS2"
+
+# touch creates an empty file, but this is not good for emxomfar, so
+# create a dummy lib here
+    -$(LIBMGR) $(LIBFLAGS) $@ $(SHL$(TNR)VERSIONOBJ)
+    +@echo build of $(SHL$(TNR)TARGETN) creates $@
+
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
