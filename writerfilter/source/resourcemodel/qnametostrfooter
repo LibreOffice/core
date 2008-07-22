@@ -4,36 +4,6 @@ QNameToString::QNameToString()
     init_ooxml();
 }
 
-string xmlify(const string & str)
-{
-    string result = "";
-    char sBuffer[16];
-
-    for (string::const_iterator aIt = str.begin(); aIt != str.end(); ++aIt)
-    {
-        char c = *aIt;
-
-        if (isprint(c) && c != '\"')
-        {
-            if (c == '<')
-                result += "&lt;";
-            else if (c == '>')
-                result += "&gt;";
-            else if (c == '&')
-                result += "&amp;";
-            else
-                result += c;
-        }
-        else
-        {
-            snprintf(sBuffer, sizeof(sBuffer), "\\%03d", c);
-            result += sBuffer;
-        }
-    }
-
-    return result;
-}
-
 void WRITERFILTER_DLLPUBLIC analyzerIds()
 {
     cout << "<ids type=\"sprm\">" << endl;
@@ -49,67 +19,6 @@ void WRITERFILTER_DLLPUBLIC analyzerIds()
     ooxmlidsToXML(cout);
 
     cout << "</ids>" << endl;
-}
-
-void XMLTag::addAttr(string sName, string sValue)
-{
-    XMLAttribute aAttr(sName, sValue);
-
-    mAttrs.push_back(aAttr);
-}
-
-void XMLTag::addTag(XMLTag::Pointer_t pTag)
-{
-    mTags.push_back(pTag);
-}
-
-void XMLTag::chars(const string & rChars)
-{
-    mChars = rChars;
-}
-
-string XMLTag::toString() const
-{
-    if (mChars.length() > 0)
-        return mChars;
-
-    string sResult;
-
-    if (mMode == START || mMode == COMPLETE)
-    {
-        sResult += "<" + mTag;
-        
-        vector<XMLAttribute>::const_iterator aIt = mAttrs.begin();
-        while (aIt != mAttrs.end())
-        {
-            sResult += " ";
-            sResult += aIt->mName;
-            sResult += "=\"";
-            sResult += xmlify(aIt->mValue);
-            sResult += "\"";
-            
-            aIt++;
-        }
-
-        sResult +=">";
-            
-        if (mTags.size() > 0)
-        {
-            vector<XMLTag::Pointer_t>::const_iterator aItTags = mTags.begin();
-            while (aItTags != mTags.end())
-            {
-                if ((*aItTags).get() != NULL)
-                    sResult += (*aItTags)->toString();
-                
-                aItTags++;
-            }
-        }
-    }
-    
-    if (mMode == END || mMode == COMPLETE)
-        sResult += "</" + mTag + ">";
-
-    return sResult;
 }
 
 }
