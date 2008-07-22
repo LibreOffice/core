@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svtabbx.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,16 @@ enum SvTabJustify
     AdjustLeft = SV_LBOXTAB_ADJUST_LEFT,
     AdjustCenter = SV_LBOXTAB_ADJUST_CENTER,
     AdjustNumeric = SV_LBOXTAB_ADJUST_NUMERIC
+};
+
+struct TabListBoxEventData
+{
+    SvLBoxEntry*    m_pEntry;
+    USHORT          m_nColumn;
+    String          m_sOldText;
+
+    TabListBoxEventData( SvLBoxEntry* pEntry, USHORT nColumn, const String& rOldText ) :
+        m_pEntry( pEntry ), m_nColumn( nColumn ), m_sOldText( rOldText ) {}
 };
 
 class SVT_DLLPUBLIC SvTabListBox : public SvTreeListBox
