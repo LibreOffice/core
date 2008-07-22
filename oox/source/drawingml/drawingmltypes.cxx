@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawingmltypes.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,9 +29,7 @@
  ************************************************************************/
 
 #include "oox/drawingml/drawingmltypes.hxx"
-#include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
-#include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -45,9 +43,10 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::geometry;
 
-namespace oox { namespace drawingml {
+namespace oox {
+namespace drawingml {
 
-// --------------------------------------------------------------------
+// ============================================================================
 
 /** converts an emu string into 1/100th mmm but constrain as per ST_TextMargin
  * see 5.1.12.73
@@ -66,15 +65,19 @@ sal_Int32 GetTextMargin( const OUString& sValue )
     return nRet;
 }
 
+/** converts EMUs into 1/100th mmm */
+sal_Int32 GetCoordinate( sal_Int32 nValue )
+{
+    return (nValue + 180) / 360;
+}
+
 /** converts an emu string into 1/100th mmm */
 sal_Int32 GetCoordinate( const OUString& sValue )
 {
     sal_Int32 nRet = 0;
     if( !::sax::Converter::convertNumber( nRet, sValue ) )
         nRet = 0;
-
-    nRet /= 360;
-    return nRet;
+    return GetCoordinate( nRet );
 }
 
 /** converts a ST_Percentage % string into 1/1000th of % */
@@ -130,166 +133,57 @@ sal_Int32 GetTextSpacingPoint( const OUString& sValue )
 }
 
 
-sal_Int16 GetFontUnderline( ::sal_Int32 nToken )
+float GetFontHeight( sal_Int32 nHeight )
 {
-    sal_Int16 nEnum;
+    // convert 1/100 points to points
+    return static_cast< float >( nHeight / 100.0 );
+}
+
+sal_Int16 GetFontUnderline( sal_Int32 nToken )
+{
     switch( nToken )
     {
-    case XML_none:
-        nEnum = FontUnderline::NONE;
-        break;
-    case XML_dash:
-        nEnum = FontUnderline::DASH;
-        break;
-    case XML_dashHeavy:
-        nEnum = FontUnderline::BOLDDASH;
-        break;
-    case XML_dashLong:
-        nEnum = FontUnderline::LONGDASH;
-        break;
-    case XML_dashLongHeavy:
-        nEnum = FontUnderline::BOLDLONGDASH;
-        break;
-    case XML_dbl:
-        nEnum = FontUnderline::DOUBLE;
-        break;
-    case XML_dotDash:
-        nEnum = FontUnderline::DASHDOT;
-        break;
-    case XML_dotDashHeavy:
-        nEnum = FontUnderline::BOLDDASHDOT;
-        break;
-    case XML_dotDotDash:
-        nEnum = FontUnderline::DASHDOTDOT;
-        break;
-    case XML_dotDotDashHeavy:
-        nEnum = FontUnderline::BOLDDASHDOTDOT;
-        break;
-    case XML_dotted:
-        nEnum = FontUnderline::DOTTED;
-        break;
-    case XML_dottedHeavy:
-        nEnum = FontUnderline::BOLDDOTTED;
-        break;
-    case XML_heavy:
-        nEnum = FontUnderline::BOLD;
-        break;
-    case XML_sng:
-        nEnum = FontUnderline::SINGLE;
-        break;
-    case XML_wavy:
-        nEnum = FontUnderline::WAVE;
-        break;
-    case XML_wavyDbl:
-        nEnum = FontUnderline::DOUBLEWAVE;
-        break;
-    case XML_wavyHeavy:
-         nEnum = FontUnderline::BOLDWAVE;
-        break;
-    case XML_words:
-        // TODO
-    default:
-        nEnum = FontUnderline::DONTKNOW;
-        break;
+        case XML_none:              return FontUnderline::NONE;
+        case XML_dash:              return FontUnderline::DASH;
+        case XML_dashHeavy:         return FontUnderline::BOLDDASH;
+        case XML_dashLong:          return FontUnderline::LONGDASH;
+        case XML_dashLongHeavy:     return FontUnderline::BOLDLONGDASH;
+        case XML_dbl:               return FontUnderline::DOUBLE;
+        case XML_dotDash:           return FontUnderline::DASHDOT;
+        case XML_dotDashHeavy:      return FontUnderline::BOLDDASHDOT;
+        case XML_dotDotDash:        return FontUnderline::DASHDOTDOT;
+        case XML_dotDotDashHeavy:   return FontUnderline::BOLDDASHDOTDOT;
+        case XML_dotted:            return FontUnderline::DOTTED;
+        case XML_dottedHeavy:       return FontUnderline::BOLDDOTTED;
+        case XML_heavy:             return FontUnderline::BOLD;
+        case XML_sng:               return FontUnderline::SINGLE;
+        case XML_wavy:              return FontUnderline::WAVE;
+        case XML_wavyDbl:           return FontUnderline::DOUBLEWAVE;
+        case XML_wavyHeavy:         return FontUnderline::BOLDWAVE;
+//        case XML_words:             // TODO
     }
-    return nEnum;
+    return FontUnderline::DONTKNOW;
 }
 
 sal_Int16 GetFontStrikeout( sal_Int32 nToken )
 {
-    sal_Int16 nEnum;
     switch( nToken )
     {
-    case XML_dblStrike:
-        nEnum = FontStrikeout::DOUBLE;
-        break;
-    case XML_noStrike:
-        nEnum = FontStrikeout::NONE;
-        break;
-    case XML_sngStrike:
-        nEnum = FontStrikeout::SINGLE;
-        break;
-    default:
-        nEnum = FontStrikeout::DONTKNOW;
-        break;
+        case XML_dblStrike: return FontStrikeout::DOUBLE;
+        case XML_noStrike:  return FontStrikeout::NONE;
+        case XML_sngStrike: return FontStrikeout::SINGLE;
     }
-    return nEnum;
+    return FontStrikeout::DONTKNOW;
 }
 
 sal_Int16 GetCaseMap( sal_Int32 nToken )
 {
-    sal_Int16 nEnum;
     switch( nToken )
     {
-    case XML_all:
-        nEnum = CaseMap::UPPERCASE;
-        break;
-    case XML_small:
-        nEnum = CaseMap::SMALLCAPS;
-        break;
-    case XML_none:
-        // fall through
-    default:
-        nEnum = CaseMap::NONE;
-        break;
+        case XML_all:   return CaseMap::UPPERCASE;
+        case XML_small: return CaseMap::SMALLCAPS;
     }
-    return nEnum;
-}
-
-// BEGIN stolen from sd/source/filter/eppt/epptso.cxx
-/* Font Families */
-#define FF_DONTCARE             0x00
-#define FF_ROMAN                0x10
-#define FF_SWISS                0x20
-#define FF_MODERN               0x30
-#define FF_SCRIPT               0x40
-#define FF_DECORATIVE           0x50
-
-/* Font pitches */
-#define DEFAULT_PITCH           0x00
-#define FIXED_PITCH             0x01
-#define VARIABLE_PITCH          0x02
-
-// END
-
-void GetFontPitch( sal_Int32 nOoxValue, sal_Int16 & nPitch, sal_Int16 & nFamily )
-{
-    sal_Int32 oFamily = ( nOoxValue & 0xf0 );
-    sal_Int32 oPitch = ( nOoxValue & 0x0f );
-    switch( oFamily )
-    {
-    case FF_ROMAN:
-        nFamily = FontFamily::ROMAN;
-        break;
-    case FF_SWISS:
-        nFamily = FontFamily::SWISS;
-        break;
-    case FF_MODERN:
-        nFamily = FontFamily::MODERN;
-        break;
-    case FF_SCRIPT:
-        nFamily = FontFamily::SCRIPT;
-        break;
-    case FF_DECORATIVE:
-        nFamily = FontFamily::DECORATIVE;
-        break;
-    default:
-        nFamily = FontFamily::DONTKNOW;
-        break;
-    }
-    switch( oPitch )
-    {
-    case FIXED_PITCH:
-        nPitch = FontPitch::FIXED;
-        break;
-    case VARIABLE_PITCH:
-        nPitch = FontPitch::VARIABLE;
-        break;
-    case DEFAULT_PITCH:
-    default:
-        nPitch = FontPitch::DONTKNOW;
-        break;
-    }
+    return CaseMap::NONE;
 }
 
 /** converts a paragraph align to a ParaAdjust */
@@ -360,7 +254,7 @@ IntegerRectangle2D GetRelativeRect( const Reference< XFastAttributeList >& xAttr
     return r;
 }
 
-// --------------------------------------------------------------------
+// ============================================================================
 
 /** converts the attributes from an CT_Size2D into an awt Size with 1/100thmm */
 Size GetSize2D( const Reference< XFastAttributeList >& xAttribs )
@@ -376,4 +270,8 @@ IndexRange GetIndexRange( const Reference< XFastAttributeList >& xAttributes )
     return range;
 }
 
-} }
+// ============================================================================
+
+} // namespace drawingml
+} // namespace oox
+
