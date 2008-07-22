@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fragmenthandler2.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,12 +42,15 @@ namespace core {
 class FragmentHandler2 : public FragmentHandler, public ContextHandler2Helper
 {
 public:
-    explicit            FragmentHandler2( XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath );
+    explicit            FragmentHandler2(
+                            XmlFilterBase& rFilter,
+                            const ::rtl::OUString& rFragmentPath,
+                            bool bEnableTrimSpace = true );
     virtual             ~FragmentHandler2();
 
     // resolve ambiguity from base classes
-    virtual void SAL_CALL acquire() throw() { ::oox::core::FragmentHandler::acquire(); }
-    virtual void SAL_CALL release() throw() { ::oox::core::FragmentHandler::release(); }
+    virtual void SAL_CALL acquire() throw() { FragmentHandler::acquire(); }
+    virtual void SAL_CALL release() throw() { FragmentHandler::release(); }
 
     virtual ContextHandler& queryContextHandler();
 
