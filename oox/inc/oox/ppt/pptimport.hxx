@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pptimport.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,6 +55,8 @@ public:
     // from FilterBase
     virtual bool importDocument() throw();
     virtual bool exportDocument() throw();
+
+    virtual const ::oox::drawingml::Theme* getCurrentTheme() const;
 
     virtual sal_Int32 getSchemeClr( sal_Int32 nColorSchemeToken ) const;
 
