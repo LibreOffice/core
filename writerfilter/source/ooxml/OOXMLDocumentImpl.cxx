@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLDocumentImpl.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,13 +36,14 @@
 #include "OOXMLBinaryObjectReference.hxx"
 #include "OOXMLFastDocumentHandler.hxx"
 #include "OOXMLPropertySetImpl.hxx"
+#include "ooxmlLoggers.hxx"
 
 #include <iostream>
 
 namespace writerfilter {
 namespace ooxml
 {
-
+TagLogger::Pointer_t debug_logger(TagLogger::getInstance("DEBUG"));
 using namespace ::std;
 
 OOXMLDocumentImpl::OOXMLDocumentImpl
@@ -144,10 +145,9 @@ OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const Id & rT
                                   const rtl::OUString & rId)
 {
 #ifdef DEBUG_ELEMENT
-    string tmp = "<getXNoteStream id=\"";
-    tmp += OUStringToOString(rId, RTL_TEXTENCODING_ASCII_US).getStr();
-    tmp += "\"/>";
-    logger("DEBUG", tmp);
+    debug_logger->startElement("getXNoteStream");
+    debug_logger->attribute("id", rId);
+    debug_logger->endElement("getXNoteStream");
 #endif
 
     OOXMLStream::Pointer_t pStream =
