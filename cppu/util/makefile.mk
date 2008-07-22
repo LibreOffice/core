@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.16 $
+# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -76,8 +76,10 @@ DEF1NAME=$(SHL1TARGET)
 
 SHL2TARGET  := $(NAMEpurpenv_helper)
 DEF2NAME    := $(SHL2TARGET)
-.IF "$(GUI)$(COM)"=="WNTGCC" || "$(GUI)"=="OS2"
+.IF "$(GUI)$(COM)"=="WNTGCC"
 SHL2VERSIONMAP:=uno_purpenvhelper$(COMID).map
+.ELIF "$(GUI)"=="OS2"
+SHL2VERSIONMAP:=uno_purpenvhelperwntgcc.map
 .ELSE
 SHL2VERSIONMAP:=$(SHL2TARGET).map
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
