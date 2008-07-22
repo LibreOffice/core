@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: seriescontext.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,39 +53,33 @@ ContextWrapper lclDataLabelSharedCreateContext(
 {
     if( rContext.isRootElement() ) switch( nElement )
     {
-        case C_TOKEN( deleted ):
-            orModel.mbDeleted = rAttribs.getBool( XML_val, true );
-            return false;
-        case C_TOKEN( numFmt ):
-            orModel.moaFormatCode = rAttribs.getString( XML_formatCode, OUString() );
-            orModel.mobSourceLinked = rAttribs.getBool( XML_sourceLinked, true );
+        case C_TOKEN( delete ):
+            // default is 'false', not 'true' as specified
+            orModel.mbDeleted = rAttribs.getBool( XML_val, false );
             return false;
         case C_TOKEN( dLblPos ):
             orModel.monLabelPos = rAttribs.getToken( XML_val, XML_TOKEN_INVALID );
             return false;
+        case C_TOKEN( numFmt ):
+            orModel.maNumberFormat.setAttributes( rAttribs );
+            return false;
         case C_TOKEN( showBubbleSize ):
-            // default is 'false', not 'true' as specified
-            orModel.mobShowBubbleSize = rAttribs.getBool( XML_val, false );
+            orModel.mobShowBubbleSize = rAttribs.getBool( XML_val );
             return false;
         case C_TOKEN( showCatName ):
-            // default is 'false', not 'true' as specified
-            orModel.mobShowCatName = rAttribs.getBool( XML_val, false );
+            orModel.mobShowCatName = rAttribs.getBool( XML_val );
             return false;
         case C_TOKEN( showLegendKey ):
-            // default is 'false', not 'true' as specified
-            orModel.mobShowLegendKey = rAttribs.getBool( XML_val, false );
+            orModel.mobShowLegendKey = rAttribs.getBool( XML_val );
             return false;
         case C_TOKEN( showPercent ):
-            // default is 'false', not 'true' as specified
-            orModel.mobShowPercent = rAttribs.getBool( XML_val, false );
+            orModel.mobShowPercent = rAttribs.getBool( XML_val );
             return false;
         case C_TOKEN( showSerName ):
-            // default is 'false', not 'true' as specified
-            orModel.mobShowSerName = rAttribs.getBool( XML_val, false );
+            orModel.mobShowSerName = rAttribs.getBool( XML_val );
             return false;
         case C_TOKEN( showVal ):
-            // default is 'false', not 'true' as specified
-            orModel.mobShowVal = rAttribs.getBool( XML_val, false );
+            orModel.mobShowVal = rAttribs.getBool( XML_val );
             return false;
         case C_TOKEN( separator ):
             // collect separator text in onEndElement()
@@ -123,20 +117,15 @@ DataLabelContext::~DataLabelContext()
 
 ContextWrapper DataLabelContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    switch( getCurrentElement() )
+    if( isRootElement() ) switch( nElement )
     {
-        case C_TOKEN( dLbl ):
-            switch( nElement )
-            {
-                case C_TOKEN( index ):
-                    mrModel.mnIndex = rAttribs.getInteger( XML_val, -1 );
-                    return false;
-                case C_TOKEN( layout ):
-                    return new LayoutContext( *this, mrModel.mxLayout.create() );
-                case C_TOKEN( tx ):
-                    return new TextContext( *this, mrModel.mxText.create() );
-            }
-        break;
+        case C_TOKEN( idx ):
+            mrModel.mnIndex = rAttribs.getInteger( XML_val, -1 );
+            return false;
+        case C_TOKEN( layout ):
+            return new LayoutContext( *this, mrModel.mxLayout.create() );
+        case C_TOKEN( tx ):
+            return new TextContext( *this, mrModel.mxText.create() );
     }
     return lclDataLabelSharedCreateContext( *this, nElement, rAttribs, mrModel );
 }
@@ -159,21 +148,16 @@ DataLabelsContext::~DataLabelsContext()
 
 ContextWrapper DataLabelsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    switch( getCurrentElement() )
+    if( isRootElement() ) switch( nElement )
     {
-        case C_TOKEN( dLbls ):
-            switch( nElement )
-            {
-                case C_TOKEN( dLbl ):
-                    return new DataLabelContext( *this, mrModel.maPointLabels.create() );
-                case C_TOKEN( leaderLines ):
-                    return new ShapePrWrapperContext( *this, mrModel.mxLeaderLines.create() );
-                case C_TOKEN( showLeaderLines ):
-                    // default is 'false', not 'true' as specified
-                    mrModel.mobShowLeaderLines = rAttribs.getBool( XML_val, false );
-                    return false;
-            }
-        break;
+        case C_TOKEN( dLbl ):
+            return new DataLabelContext( *this, mrModel.maPointLabels.create() );
+        case C_TOKEN( leaderLines ):
+            return new ShapePrWrapperContext( *this, mrModel.mxLeaderLines.create() );
+        case C_TOKEN( showLeaderLines ):
+            // default is 'false', not 'true' as specified
+            mrModel.mbShowLeaderLines = rAttribs.getBool( XML_val, false );
+            return false;
     }
     return lclDataLabelSharedCreateContext( *this, nElement, rAttribs, mrModel );
 }
@@ -196,35 +180,60 @@ ErrorBarContext::~ErrorBarContext()
 
 ContextWrapper ErrorBarContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    switch( getCurrentElement() )
+    if( isRootElement() ) switch( nElement )
     {
-        case C_TOKEN( errBars ):
-            switch( nElement )
-            {
-                case C_TOKEN( errBarType ):
-                    mrModel.mnTypeId = rAttribs.getToken( XML_val, XML_both );
-                    return false;
-                case C_TOKEN( errDir ):
-                    mrModel.mnDirection = rAttribs.getToken( XML_val, XML_TOKEN_INVALID );
-                    return false;
-                case C_TOKEN( errValType ):
-                    mrModel.mnValueType = rAttribs.getToken( XML_val, XML_fixedVal );
-                    return false;
-                case C_TOKEN( minus ):
-                    return new DataSourceContext( *this, mrModel.maSources.create( ErrorBarModel::MINUS ) );
-                case C_TOKEN( noEndCap ):
-                    // default is 'false', not 'true' as specified
-                    mrModel.mbNoEndCap = rAttribs.getBool( XML_val, false );
-                    return false;
-                case C_TOKEN( plus ):
-                    return new DataSourceContext( *this, mrModel.maSources.create( ErrorBarModel::PLUS ) );
-                case C_TOKEN( spPr ):
-                    return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
-                case C_TOKEN( val ):
-                    mrModel.mfValue = rAttribs.getDouble( XML_val, 0.0 );
-                    return false;
-            }
-        break;
+        case C_TOKEN( errBarType ):
+            mrModel.mnTypeId = rAttribs.getToken( XML_val, XML_both );
+            return false;
+        case C_TOKEN( errDir ):
+            mrModel.mnDirection = rAttribs.getToken( XML_val, XML_TOKEN_INVALID );
+            return false;
+        case C_TOKEN( errValType ):
+            mrModel.mnValueType = rAttribs.getToken( XML_val, XML_fixedVal );
+            return false;
+        case C_TOKEN( minus ):
+            return new DataSourceContext( *this, mrModel.maSources.create( ErrorBarModel::MINUS ) );
+        case C_TOKEN( noEndCap ):
+            // default is 'false', not 'true' as specified
+            mrModel.mbNoEndCap = rAttribs.getBool( XML_val, false );
+            return false;
+        case C_TOKEN( plus ):
+            return new DataSourceContext( *this, mrModel.maSources.create( ErrorBarModel::PLUS ) );
+        case C_TOKEN( spPr ):
+            return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
+        case C_TOKEN( val ):
+            mrModel.mfValue = rAttribs.getDouble( XML_val, 0.0 );
+            return false;
+    }
+    return false;
+}
+
+// ============================================================================
+
+TrendlineLabelContext::TrendlineLabelContext( ContextHandler2Helper& rParent, TrendlineLabelModel& rModel ) :
+    ContextBase< TrendlineLabelModel >( rParent, rModel )
+{
+}
+
+TrendlineLabelContext::~TrendlineLabelContext()
+{
+}
+
+ContextWrapper TrendlineLabelContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    if( isRootElement() ) switch( nElement )
+    {
+        case C_TOKEN( layout ):
+            return new LayoutContext( *this, mrModel.mxLayout.create() );
+        case C_TOKEN( numFmt ):
+            mrModel.maNumberFormat.setAttributes( rAttribs );
+            return false;
+        case C_TOKEN( spPr ):
+            return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
+        case C_TOKEN( tx ):
+            return new TextContext( *this, mrModel.mxText.create() );
+        case C_TOKEN( txPr ):
+            return new TextBodyContext( *this, mrModel.mxTextProp.create() );
     }
     return false;
 }
@@ -242,43 +251,40 @@ TrendlineContext::~TrendlineContext()
 
 ContextWrapper TrendlineContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    switch( getCurrentElement() )
+    if( isRootElement() ) switch( nElement )
     {
-        case C_TOKEN( trendline ):
-            switch( nElement )
-            {
-                case C_TOKEN( backward ):
-                    mrModel.mfBackward = rAttribs.getDouble( XML_val, 0.0 );
-                    return false;
-                case C_TOKEN( dispEq ):
-                    // default is 'false', not 'true' as specified
-                    mrModel.mbDispEquation = rAttribs.getBool( XML_val, false );
-                    return false;
-                case C_TOKEN( dispRSqr ):
-                    // default is 'false', not 'true' as specified
-                    mrModel.mbDispRSquared = rAttribs.getBool( XML_val, false );
-                    return false;
-                case C_TOKEN( forward ):
-                    mrModel.mfForward = rAttribs.getDouble( XML_val, 0.0 );
-                    return false;
-                case C_TOKEN( intercept ):
-                    mrModel.mfIntercept = rAttribs.getDouble( XML_val, 0.0 );
-                    return false;
-                case C_TOKEN( name ):
-                    return true;
-                case C_TOKEN( order ):
-                    mrModel.mnOrder = rAttribs.getInteger( XML_val, 2 );
-                    return false;
-                case C_TOKEN( period ):
-                    mrModel.mnPeriod = rAttribs.getInteger( XML_val, 2 );
-                    return false;
-                case C_TOKEN( spPr ):
-                    return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
-                case C_TOKEN( trendlineType ):
-                    mrModel.mnTypeId = rAttribs.getToken( XML_val, XML_linear );
-                    return false;
-            }
-        break;
+        case C_TOKEN( backward ):
+            mrModel.mfBackward = rAttribs.getDouble( XML_val, 0.0 );
+            return false;
+        case C_TOKEN( dispEq ):
+            // default is 'false', not 'true' as specified
+            mrModel.mbDispEquation = rAttribs.getBool( XML_val, false );
+            return false;
+        case C_TOKEN( dispRSqr ):
+            // default is 'false', not 'true' as specified
+            mrModel.mbDispRSquared = rAttribs.getBool( XML_val, false );
+            return false;
+        case C_TOKEN( forward ):
+            mrModel.mfForward = rAttribs.getDouble( XML_val, 0.0 );
+            return false;
+        case C_TOKEN( intercept ):
+            mrModel.mfIntercept = rAttribs.getDouble( XML_val, 0.0 );
+            return false;
+        case C_TOKEN( name ):
+            return true;
+        case C_TOKEN( order ):
+            mrModel.mnOrder = rAttribs.getInteger( XML_val, 2 );
+            return false;
+        case C_TOKEN( period ):
+            mrModel.mnPeriod = rAttribs.getInteger( XML_val, 2 );
+            return false;
+        case C_TOKEN( spPr ):
+            return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
+        case C_TOKEN( trendlineLbl ):
+            return new TrendlineLabelContext( *this, mrModel.mxLabel.create() );
+        case C_TOKEN( trendlineType ):
+            mrModel.mnTypeId = rAttribs.getToken( XML_val, XML_linear );
+            return false;
     }
     return false;
 }
