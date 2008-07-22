@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLParserState.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <iostream>
 #include "OOXMLParserState.hxx"
+#include "ooxmlLoggers.hxx"
 
 namespace writerfilter {
 namespace ooxml
@@ -177,9 +178,9 @@ void OOXMLParserState::newCharacterProperty(const Id & rId,
             (new OOXMLPropertyImpl(rId, pVal, OOXMLPropertyImpl::ATTRIBUTE));
 
 #ifdef DEBUG_PROPERTIES
-        logger("DEBUG", "<newCharacterProperty>");
-        logger("DEBUG", pProperty->toString());
-        logger("DEBUG", "</newCharacterProperty>");
+        debug_logger->startElement("<newCharacterProperty");
+        debug_logger->chars(pProperty->toString());
+        debug_logger->endElement("newCharacterProperty");
 #endif
 
         mpCharacterProps->add(pProperty);
@@ -192,13 +193,18 @@ void OOXMLParserState::resolveCharacterProperties(Stream & rStream)
     if (mpCharacterProps.get() != NULL)
     {
 #ifdef DEBUG_PROPERTIES
-        logger("DEBUG", "<resolveCharacterProperties>");
-        logger("DEBUG", mpCharacterProps->toString());
-        logger("DEBUG", "</resolveCharacterProperties>");
+        debug_logger->startElement("resolveCharacterProperties");
+        debug_logger->chars(mpCharacterProps->toString());
+        debug_logger->endElement("resolveCharacterProperties");
 #endif
         rStream.props(mpCharacterProps);
         mpCharacterProps.reset(new OOXMLPropertySetImpl());
     }
+}
+
+OOXMLPropertySet::Pointer_t OOXMLParserState::getCharacterProperties() const
+{
+    return mpCharacterProps;
 }
 
 void OOXMLParserState::setCharacterProperties
@@ -258,6 +264,8 @@ XMLTag::Pointer_t OOXMLParserState::toTag() const
     pTag->addAttr("XNoteId",
                   OUStringToOString(getXNoteId(),
                                     RTL_TEXTENCODING_ASCII_US).getStr());
+    if (mpCharacterProps != OOXMLPropertySet::Pointer_t())
+        pTag->chars(mpCharacterProps->toString());
 
     return pTag;
  }
