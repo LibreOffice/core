@@ -4,6 +4,8 @@
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*"
+.ELIF "$(GUI)"=="OS2"
+command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
@@ -36,7 +38,7 @@ zip1langdirs*=$(alllangiso)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 zip1langdirs:=$(shell @-test -d {$(subst,$/$(LANGDIR), $(null,$(ZIP1DIR) . $(ZIP1DIR)))}/ && find {$(subst,$/$(LANGDIR), $(null,$(ZIP1DIR) . $(ZIP1DIR)))}/ -type d ! -name CVS ! -name "." | sed "s/\.\/\///" | sed "s/\.\///" )
 .ELSE			# "$(GUI)"=="UNX"
-zip1langdirs:=$(subst,CVS, $(shell @$(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP1DIR))} /ba:d ))
+zip1langdirs:=$(subst,CVS, $(shell $(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP1DIR))} /ba:d ))
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF          # "$(zip1generatedlangs)"!=""
 .IF "$(ZIP1FORCEALLLANG)"!=""
@@ -121,6 +123,8 @@ $(ZIP1TARGETN) : delzip $(ZIP1DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*"
+.ELIF "$(GUI)"=="OS2"
+command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
@@ -153,7 +157,7 @@ zip2langdirs*=$(alllangiso)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 zip2langdirs:=$(shell @-test -d {$(subst,$/$(LANGDIR), $(null,$(ZIP2DIR) . $(ZIP2DIR)))}/ && find {$(subst,$/$(LANGDIR), $(null,$(ZIP2DIR) . $(ZIP2DIR)))}/ -type d ! -name CVS ! -name "." | sed "s/\.\/\///" | sed "s/\.\///" )
 .ELSE			# "$(GUI)"=="UNX"
-zip2langdirs:=$(subst,CVS, $(shell @$(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP2DIR))} /ba:d ))
+zip2langdirs:=$(subst,CVS, $(shell $(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP2DIR))} /ba:d ))
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF          # "$(zip2generatedlangs)"!=""
 .IF "$(ZIP2FORCEALLLANG)"!=""
@@ -238,6 +242,8 @@ $(ZIP2TARGETN) : delzip $(ZIP2DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*"
+.ELIF "$(GUI)"=="OS2"
+command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
@@ -270,7 +276,7 @@ zip3langdirs*=$(alllangiso)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 zip3langdirs:=$(shell @-test -d {$(subst,$/$(LANGDIR), $(null,$(ZIP3DIR) . $(ZIP3DIR)))}/ && find {$(subst,$/$(LANGDIR), $(null,$(ZIP3DIR) . $(ZIP3DIR)))}/ -type d ! -name CVS ! -name "." | sed "s/\.\/\///" | sed "s/\.\///" )
 .ELSE			# "$(GUI)"=="UNX"
-zip3langdirs:=$(subst,CVS, $(shell @$(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP3DIR))} /ba:d ))
+zip3langdirs:=$(subst,CVS, $(shell $(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP3DIR))} /ba:d ))
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF          # "$(zip3generatedlangs)"!=""
 .IF "$(ZIP3FORCEALLLANG)"!=""
@@ -355,6 +361,8 @@ $(ZIP3TARGETN) : delzip $(ZIP3DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*"
+.ELIF "$(GUI)"=="OS2"
+command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
@@ -387,7 +395,7 @@ zip4langdirs*=$(alllangiso)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 zip4langdirs:=$(shell @-test -d {$(subst,$/$(LANGDIR), $(null,$(ZIP4DIR) . $(ZIP4DIR)))}/ && find {$(subst,$/$(LANGDIR), $(null,$(ZIP4DIR) . $(ZIP4DIR)))}/ -type d ! -name CVS ! -name "." | sed "s/\.\/\///" | sed "s/\.\///" )
 .ELSE			# "$(GUI)"=="UNX"
-zip4langdirs:=$(subst,CVS, $(shell @$(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP4DIR))} /ba:d ))
+zip4langdirs:=$(subst,CVS, $(shell $(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP4DIR))} /ba:d ))
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF          # "$(zip4generatedlangs)"!=""
 .IF "$(ZIP4FORCEALLLANG)"!=""
@@ -472,6 +480,8 @@ $(ZIP4TARGETN) : delzip $(ZIP4DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*"
+.ELIF "$(GUI)"=="OS2"
+command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
@@ -504,7 +514,7 @@ zip5langdirs*=$(alllangiso)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 zip5langdirs:=$(shell @-test -d {$(subst,$/$(LANGDIR), $(null,$(ZIP5DIR) . $(ZIP5DIR)))}/ && find {$(subst,$/$(LANGDIR), $(null,$(ZIP5DIR) . $(ZIP5DIR)))}/ -type d ! -name CVS ! -name "." | sed "s/\.\/\///" | sed "s/\.\///" )
 .ELSE			# "$(GUI)"=="UNX"
-zip5langdirs:=$(subst,CVS, $(shell @$(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP5DIR))} /ba:d ))
+zip5langdirs:=$(subst,CVS, $(shell $(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP5DIR))} /ba:d ))
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF          # "$(zip5generatedlangs)"!=""
 .IF "$(ZIP5FORCEALLLANG)"!=""
@@ -589,6 +599,8 @@ $(ZIP5TARGETN) : delzip $(ZIP5DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*"
+.ELIF "$(GUI)"=="OS2"
+command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
@@ -621,7 +633,7 @@ zip6langdirs*=$(alllangiso)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 zip6langdirs:=$(shell @-test -d {$(subst,$/$(LANGDIR), $(null,$(ZIP6DIR) . $(ZIP6DIR)))}/ && find {$(subst,$/$(LANGDIR), $(null,$(ZIP6DIR) . $(ZIP6DIR)))}/ -type d ! -name CVS ! -name "." | sed "s/\.\/\///" | sed "s/\.\///" )
 .ELSE			# "$(GUI)"=="UNX"
-zip6langdirs:=$(subst,CVS, $(shell @$(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP6DIR))} /ba:d ))
+zip6langdirs:=$(subst,CVS, $(shell $(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP6DIR))} /ba:d ))
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF          # "$(zip6generatedlangs)"!=""
 .IF "$(ZIP6FORCEALLLANG)"!=""
@@ -706,6 +718,8 @@ $(ZIP6TARGETN) : delzip $(ZIP6DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*"
+.ELIF "$(GUI)"=="OS2"
+command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
@@ -738,7 +752,7 @@ zip7langdirs*=$(alllangiso)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 zip7langdirs:=$(shell @-test -d {$(subst,$/$(LANGDIR), $(null,$(ZIP7DIR) . $(ZIP7DIR)))}/ && find {$(subst,$/$(LANGDIR), $(null,$(ZIP7DIR) . $(ZIP7DIR)))}/ -type d ! -name CVS ! -name "." | sed "s/\.\/\///" | sed "s/\.\///" )
 .ELSE			# "$(GUI)"=="UNX"
-zip7langdirs:=$(subst,CVS, $(shell @$(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP7DIR))} /ba:d ))
+zip7langdirs:=$(subst,CVS, $(shell $(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP7DIR))} /ba:d ))
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF          # "$(zip7generatedlangs)"!=""
 .IF "$(ZIP7FORCEALLLANG)"!=""
@@ -823,6 +837,8 @@ $(ZIP7TARGETN) : delzip $(ZIP7DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*"
+.ELIF "$(GUI)"=="OS2"
+command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
@@ -855,7 +871,7 @@ zip8langdirs*=$(alllangiso)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 zip8langdirs:=$(shell @-test -d {$(subst,$/$(LANGDIR), $(null,$(ZIP8DIR) . $(ZIP8DIR)))}/ && find {$(subst,$/$(LANGDIR), $(null,$(ZIP8DIR) . $(ZIP8DIR)))}/ -type d ! -name CVS ! -name "." | sed "s/\.\/\///" | sed "s/\.\///" )
 .ELSE			# "$(GUI)"=="UNX"
-zip8langdirs:=$(subst,CVS, $(shell @$(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP8DIR))} /ba:d ))
+zip8langdirs:=$(subst,CVS, $(shell $(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP8DIR))} /ba:d ))
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF          # "$(zip8generatedlangs)"!=""
 .IF "$(ZIP8FORCEALLLANG)"!=""
@@ -940,6 +956,8 @@ $(ZIP8TARGETN) : delzip $(ZIP8DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*"
+.ELIF "$(GUI)"=="OS2"
+command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
@@ -972,7 +990,7 @@ zip9langdirs*=$(alllangiso)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 zip9langdirs:=$(shell @-test -d {$(subst,$/$(LANGDIR), $(null,$(ZIP9DIR) . $(ZIP9DIR)))}/ && find {$(subst,$/$(LANGDIR), $(null,$(ZIP9DIR) . $(ZIP9DIR)))}/ -type d ! -name CVS ! -name "." | sed "s/\.\/\///" | sed "s/\.\///" )
 .ELSE			# "$(GUI)"=="UNX"
-zip9langdirs:=$(subst,CVS, $(shell @$(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP9DIR))} /ba:d ))
+zip9langdirs:=$(subst,CVS, $(shell $(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP9DIR))} /ba:d ))
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF          # "$(zip9generatedlangs)"!=""
 .IF "$(ZIP9FORCEALLLANG)"!=""
@@ -1057,6 +1075,8 @@ $(ZIP9TARGETN) : delzip $(ZIP9DEPS)
 command_seperator=&&
 #command_seperator=^
 avoid_cvs_dir=-x "*CVS*"
+.ELIF "$(GUI)"=="OS2"
+command_seperator=&&
 .ELSE
 command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
@@ -1089,7 +1109,7 @@ zip10langdirs*=$(alllangiso)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 zip10langdirs:=$(shell @-test -d {$(subst,$/$(LANGDIR), $(null,$(ZIP10DIR) . $(ZIP10DIR)))}/ && find {$(subst,$/$(LANGDIR), $(null,$(ZIP10DIR) . $(ZIP10DIR)))}/ -type d ! -name CVS ! -name "." | sed "s/\.\/\///" | sed "s/\.\///" )
 .ELSE			# "$(GUI)"=="UNX"
-zip10langdirs:=$(subst,CVS, $(shell @$(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP10DIR))} /ba:d ))
+zip10langdirs:=$(subst,CVS, $(shell $(4nt_force_shell)-dir {$(subst,$/$(LANGDIR), $(ZIP10DIR))} /ba:d ))
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF          # "$(zip10generatedlangs)"!=""
 .IF "$(ZIP10FORCEALLLANG)"!=""
