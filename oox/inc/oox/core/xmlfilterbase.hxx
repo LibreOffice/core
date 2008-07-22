@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlfilterbase.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,14 +43,14 @@ namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XFastDocumentHandler; } }
 } } }
 
-namespace oox { namespace drawingml { namespace chart {
-    class ChartConverter;
-} } }
+namespace oox { namespace drawingml { class Theme; } }
+namespace oox { namespace drawingml { namespace chart { class ChartConverter; } } }
 
 namespace oox {
 namespace core {
 
 class FragmentHandler;
+class ModelObjectContainer;
 
 // ============================================================================
 
@@ -63,6 +63,10 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
 
     virtual             ~XmlFilterBase();
+
+    /** Has to be implemented by each filter, returns the current theme. */
+    virtual const ::oox::drawingml::Theme*
+                        getCurrentTheme() const = 0;
 
     /** Has to be implemented by each filter to resolve scheme colors. */
     virtual sal_Int32   getSchemeClr( sal_Int32 nColorSchemeToken ) const = 0;
@@ -105,9 +109,8 @@ public:
      */
     ::rtl::OUString     copyPictureStream( const ::rtl::OUString& rPicturePath );
 
-    /** needs to be holded throughout the whole import, allows to create new arrow names... */
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >&
-                        getMarkerTable() const;
+    /** Returns object containers for various named drawing objects for the imported document. */
+    ModelObjectContainer& getModelObjectContainer() const;
 
 private:
     virtual StorageRef  implCreateStorage(
