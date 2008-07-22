@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documen2.cxx,v $
- * $Revision: 1.74 $
+ * $Revision: 1.75 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1872,5 +1872,6 @@ void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
 
 void ScDocument::ClearLookupCaches()
 {
-    pLookupCacheMapImpl->clear();
+    if( pLookupCacheMapImpl )
+        pLookupCacheMapImpl->clear();
 }
