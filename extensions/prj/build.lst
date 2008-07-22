@@ -26,7 +26,8 @@ ex  extensions\source\logging                   nmake   -   all ex_logging ex_in
 ex  extensions\source\oooimprovecore            nmake   -   all ex_oooimprovecore ex_inc NULL
 ex  extensions\source\preload                   nmake   -   all ex_preload  ex_inc NULL
 ex  extensions\source\config\ldap               nmake   -   all ex_ldap ex_inc NULL
-ex  extensions\source\nsplugin\source           nmake   -   all ex_nsplugin ex_inc NULL
+ex	extensions\source\nsplugin\source			nmake	-	u	ex_nsplugin ex_inc NULL
+ex	extensions\source\nsplugin\source			nmake	-	w	ex_nsplugin ex_inc NULL
 ex  extensions\source\update\feed               nmake   -   all ex_updchkfeed ex_inc NULL
 ex  extensions\source\update\check              nmake   -   all ex_updchk ex_inc NULL
 ex  extensions\source\update\ui                 nmake   -   all ex_updchkui ex_inc NULL
