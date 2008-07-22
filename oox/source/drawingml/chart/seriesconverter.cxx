@@ -8,7 +8,7 @@
  *
  * $RCSfile: seriesconverter.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,9 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/seriesconverter.hxx"
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
@@ -47,6 +49,7 @@ using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::chart2::DataPointLabel;
 using ::com::sun::star::chart2::XDataSeries;
 using ::com::sun::star::chart2::XRegressionCurve;
 using ::com::sun::star::chart2::XRegressionCurveContainer;
@@ -97,7 +100,121 @@ Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
     return xLabeledSeq;
 }
 
+void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatter,
+        const DataLabelModelBase& rDataLabel, const TypeGroupConverter& rTypeGroup, bool bDataSeriesLabel )
+{
+    const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
+
+    /*  Excel 2007 does not change the series setting for a single data point,
+        if none of some specific elements occur. But only one existing element
+        in a data point will reset most other of these elements from the series
+        (e.g.: series has <c:showVal>, data point has <c:showCatName>, this
+        will reset <c:showVal> for this point, unless <c:showVal> is repeated
+        in the data point). The elements <c:layout>, <c:numberFormat>,
+        <c:spPr>, <c:tx>, and <c:txPr> are not affected at all. */
+    bool bHasAnyElement =
+        rDataLabel.moaSeparator.has() || rDataLabel.monLabelPos.has() ||
+        rDataLabel.mobShowCatName.has() || rDataLabel.mobShowLegendKey.has() ||
+        rDataLabel.mobShowPercent.has() || rDataLabel.mobShowSerName.has() ||
+        rDataLabel.mobShowVal.has();
+
+    bool bShowValue   = !rDataLabel.mbDeleted && rDataLabel.mobShowVal.get( false );
+    bool bShowPercent = !rDataLabel.mbDeleted && rDataLabel.mobShowPercent.get( false ) && (rTypeInfo.meTypeCategory == TYPECATEGORY_PIE);
+    bool bShowCateg   = !rDataLabel.mbDeleted && rDataLabel.mobShowCatName.get( false );
+    bool bShowSymbol  = !rDataLabel.mbDeleted && rDataLabel.mobShowLegendKey.get( false );
+
+    // type of attached label
+    if( bHasAnyElement || rDataLabel.mbDeleted )
+    {
+        DataPointLabel aPointLabel( bShowValue, bShowPercent, bShowCateg, bShowSymbol );
+        rPropSet.setProperty( CREATE_OUSTRING( "Label" ), aPointLabel );
+    }
+
+    if( !rDataLabel.mbDeleted )
+    {
+        // data label number format (percentage format wins over value format)
+        rFormatter.convertNumberFormat( rPropSet, rDataLabel.maNumberFormat, bShowPercent );
+
+        // data label text formatting (frame formatting and text rotation not supported by Chart2)
+        rFormatter.convertTextFormatting( rPropSet, rDataLabel.mxTextProp, OBJECTTYPE_DATALABEL );
+
+        // data label separator (do not overwrite series separator, if no explicit point separator is present)
+        if( bDataSeriesLabel || rDataLabel.moaSeparator.has() )
+            rPropSet.setProperty( CREATE_OUSTRING( "LabelSeparator" ), rDataLabel.moaSeparator.get( CREATE_OUSTRING( "; " ) ) );
+
+        // data label placement (do not overwrite series placement, if no explicit point placement is present)
+        if( bDataSeriesLabel || rDataLabel.monLabelPos.has() )
+        {
+            namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
+            sal_Int32 nPlacement = rTypeInfo.mnDefLabelPos;
+            switch( rDataLabel.monLabelPos.get( XML_TOKEN_INVALID ) )
+            {
+                case XML_outEnd:    nPlacement = csscd::OUTSIDE;        break;
+                case XML_inEnd:     nPlacement = csscd::INSIDE;         break;
+                case XML_ctr:       nPlacement = csscd::CENTER;         break;
+                case XML_inBase:    nPlacement = csscd::NEAR_ORIGIN;    break;
+                case XML_t:         nPlacement = csscd::TOP;            break;
+                case XML_b:         nPlacement = csscd::BOTTOM;         break;
+                case XML_l:         nPlacement = csscd::LEFT;           break;
+                case XML_r:         nPlacement = csscd::RIGHT;          break;
+                case XML_bestFit:   nPlacement = csscd::AVOID_OVERLAP;  break;
+            }
+            rPropSet.setProperty( CREATE_OUSTRING( "LabelPlacement" ), nPlacement );
+        }
+    }
+}
+
 } // namespace
+
+// ============================================================================
+
+DataLabelConverter::DataLabelConverter( const ConverterRoot& rParent, DataLabelModel& rModel ) :
+    ConverterBase< DataLabelModel >( rParent, rModel )
+{
+}
+
+DataLabelConverter::~DataLabelConverter()
+{
+}
+
+void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDataSeries, const TypeGroupConverter& rTypeGroup )
+{
+    if( rxDataSeries.is() ) try
+    {
+        PropertySet aPropSet( rxDataSeries->getDataPointByIndex( mrModel.mnIndex ) );
+        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, false );
+    }
+    catch( Exception& )
+    {
+    }
+}
+
+// ============================================================================
+
+DataLabelsConverter::DataLabelsConverter( const ConverterRoot& rParent, DataLabelsModel& rModel ) :
+    ConverterBase< DataLabelsModel >( rParent, rModel )
+{
+}
+
+DataLabelsConverter::~DataLabelsConverter()
+{
+}
+
+void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDataSeries, const TypeGroupConverter& rTypeGroup )
+{
+    if( !mrModel.mbDeleted )
+    {
+        PropertySet aPropSet( rxDataSeries );
+        lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, true );
+    }
+
+    // data point label settings
+    for( DataLabelsModel::DataLabelVector::iterator aIt = mrModel.maPointLabels.begin(), aEnd = mrModel.maPointLabels.end(); aIt != aEnd; ++aIt )
+    {
+        DataLabelConverter aLabelConv( *this, **aIt );
+        aLabelConv.convertFromModel( rxDataSeries, rTypeGroup );
+    }
+}
 
 // ============================================================================
 
@@ -181,7 +298,8 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
                 xErrorBar.clear();
         }
 
-        // TODO: error bar formatting
+        // error bar formatting
+        getFormatter().convertFrameFormatting( aBarProp, mrModel.mxShapeProp, OBJECTTYPE_ERRORBAR );
 
         if( xErrorBar.is() )
         {
@@ -256,14 +374,23 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         if( aServiceName.getLength() > 0 )
         {
             Reference< XRegressionCurve > xRegCurve( createInstance( aServiceName ), UNO_QUERY_THROW );
-
             PropertySet aPropSet( xRegCurve );
+
+            // trendline formatting
+            getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, OBJECTTYPE_TRENDLINE );
+
             // #i83100# show equation and correlation coefficient
             PropertySet aLabelProp( xRegCurve->getEquationProperties() );
             aLabelProp.setProperty( CREATE_OUSTRING( "ShowEquation" ), mrModel.mbDispEquation );
             aLabelProp.setProperty( CREATE_OUSTRING( "ShowCorrelationCoefficient" ), mrModel.mbDispRSquared );
 
-            // TODO: #i83100# formatting of the equation text box
+            // #i83100# formatting of the equation text box
+            if( mrModel.mbDispEquation || mrModel.mbDispRSquared )
+            {
+                TrendlineLabelModel& rLabel = mrModel.mxLabel.getOrCreate();
+                getFormatter().convertFormatting( aLabelProp, rLabel.mxShapeProp, rLabel.mxTextProp, OBJECTTYPE_TRENDLINELABEL );
+            }
+
             // unsupported: #i5085# manual trendline size
             // unsupported: #i34093# manual crossing point
 
@@ -302,6 +429,10 @@ void DataPointConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         // data point pie explosion
         if( mrModel.monExplosion.differsFrom( rSeries.mnExplosion ) )
             rTypeGroup.convertPieExplosion( aPropSet, mrModel.monExplosion.get() );
+
+        // point formatting
+        if( mrModel.mxShapeProp.is() )
+            getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, rTypeGroup.getSeriesObjectType(), rSeries.mnIndex );
     }
     catch( Exception& )
     {
@@ -329,13 +460,16 @@ Reference< XLabeledDataSequence > SeriesConverter::createValueSequence( const OU
     return createLabeledDataSequence( SeriesModel::VALUES, rRole, true );
 }
 
-Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConverter& rTypeGroup )
+Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConverter& rTypeGroup, bool bVaryColorsByPoint )
 {
+    const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
+
     // create the data series object
     Reference< XDataSeries > xDataSeries( createInstance( CREATE_OUSTRING( "com.sun.star.chart2.DataSeries" ) ), UNO_QUERY );
     PropertySet aSeriesProp( xDataSeries );
 
     // attach data and title sequences to series
+    sal_Int32 nDataPointCount = 0;
     Reference< XDataSink > xDataSink( xDataSeries, UNO_QUERY );
     if( xDataSink.is() )
     {
@@ -344,9 +478,14 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
         // add Y values
         Reference< XLabeledDataSequence > xYValueSeq = createValueSequence( CREATE_OUSTRING( "values-y" ) );
         if( xYValueSeq.is() )
+        {
             aLabeledSeqVec.push_back( xYValueSeq );
+            Reference< XDataSequence > xValues = xYValueSeq->getValues();
+            if( xValues.is() )
+                nDataPointCount = xValues->getData().getLength();
+        }
         // add X values of scatter and bubble charts
-        if( !rTypeGroup.getTypeInfo().mbCategoryAxis )
+        if( !rTypeInfo.mbCategoryAxis )
         {
             Reference< XLabeledDataSequence > xXValueSeq = createCategorySequence( CREATE_OUSTRING( "values-x" ) );
             if( xXValueSeq.is() )
@@ -382,11 +521,52 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
     // pie explosion (restricted to [0%,100%] in Chart2)
     rTypeGroup.convertPieExplosion( aSeriesProp, mrModel.mnExplosion );
 
+    // series formatting
+    ObjectFormatter& rFormatter = getFormatter();
+    ObjectType eObjType = rTypeGroup.getSeriesObjectType();
+    rFormatter.convertFrameFormatting( aSeriesProp, mrModel.mxShapeProp, eObjType, mrModel.mnIndex );
+
+    // set the property default value used by the Chart2 templates (true for pie/doughnut charts)
+    aSeriesProp.setProperty( CREATE_OUSTRING( "VaryColorsByPoint" ), rTypeInfo.meTypeCategory == TYPECATEGORY_PIE );
+    // own area formatting for every data point (TODO: varying line color not supported)
+    if( bVaryColorsByPoint && rTypeGroup.isSeriesFrameFormat() && ObjectFormatter::isAutomaticFill( mrModel.mxShapeProp ) )
+    {
+        /*  Set the series point number as color cycle size at the object
+            formatter to get correct start-shade/end-tint. TODO: in doughnut
+            charts, the sizes of the series may vary, need to use the maximum
+            point count of all series. */
+        sal_Int32 nOldMax = rFormatter.getMaxSeriesIndex();
+        rFormatter.setMaxSeriesIndex( nDataPointCount - 1 );
+        for( sal_Int32 nIndex = 0; nIndex < nDataPointCount; ++nIndex )
+        {
+            try
+            {
+                PropertySet aPointProp( xDataSeries->getDataPointByIndex( nIndex ) );
+                rFormatter.convertAutomaticFill( aPointProp, eObjType, nIndex );
+            }
+            catch( Exception& )
+            {
+            }
+        }
+        rFormatter.setMaxSeriesIndex( nOldMax );
+    }
+
     // data point settings
     for( SeriesModel::DataPointVector::iterator aIt = mrModel.maPoints.begin(), aEnd = mrModel.maPoints.end(); aIt != aEnd; ++aIt )
     {
         DataPointConverter aPointConv( *this, **aIt );
         aPointConv.convertFromModel( xDataSeries, rTypeGroup, mrModel );
+    }
+
+    /*  Series data label settings. If and only if the series does not contain
+        a c:dLbls element, then the c:dLbls element of the parent chart type is
+        used (data label settings of the parent chart type are *not* merged
+        into own existing data label settings). */
+    ModelRef< DataLabelsModel > xLabels = mrModel.mxLabels.is() ? mrModel.mxLabels : rTypeGroup.getModel().mxLabels;
+    if( xLabels.is() )
+    {
+        DataLabelsConverter aLabelsConv( *this, *xLabels );
+        aLabelsConv.convertFromModel( xDataSeries, rTypeGroup );
     }
 
     return xDataSeries;
