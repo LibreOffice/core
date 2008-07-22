@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleRelationType.idl,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,6 +107,16 @@ published constants AccessibleRelationType
         from the parent window to the child window.</p>
     */
     const short SUB_WINDOW_OF = 8;
+
+    /** Node-Child-of relation type.
+
+        <p>Indicates an object is a cell in a tree or treetable which is
+        displayed because a cell in the same column is expanded and
+        identifies that cell.</p>
+
+        @since OOo 3.0
+    */
+    const short NODE_CHILD_OF = 9;
 };
 
 }; }; }; };
