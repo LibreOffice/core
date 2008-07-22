@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textbody.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,6 +29,9 @@
  ************************************************************************/
 
 #include "oox/drawingml/textbody.hxx"
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
+#include "oox/drawingml/textparagraph.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
@@ -57,7 +60,8 @@ void TextBody::insertAt(
         const ::oox::core::XmlFilterBase& rFilterBase,
         const Reference < XText > & xText,
         const Reference < XTextCursor > & xAt,
-        const TextListStylePtr& pMasterTextListStylePtr )
+        const TextCharacterProperties& rTextStyleProperties,
+        const TextListStylePtr& pMasterTextListStylePtr ) const
 {
 #ifdef DEBUG
     if ( false )
@@ -73,27 +77,12 @@ void TextBody::insertAt(
     }
 #endif
 
-    TextListStylePtr aCombinedTextStyle( new TextListStyle() );
-    aCombinedTextStyle->apply( *pMasterTextListStylePtr );
-    aCombinedTextStyle->apply( maTextListStyle );
+    TextListStyle aCombinedTextStyle;
+    aCombinedTextStyle.apply( *pMasterTextListStylePtr );
+    aCombinedTextStyle.apply( maTextListStyle );
 
-    TextParagraphVector::iterator begin( maParagraphs.begin() );
-    TextParagraphVector::iterator end( maParagraphs.end() );
-    // apparently if there is no paragraph, it crashes. this is sort of the
-    // expected behavior.
-    while( begin != end )
-    {
-        (*begin)->insertAt( rFilterBase, xText, xAt, aCombinedTextStyle, begin == maParagraphs.begin() );
-        begin++;
-/*
-            std::for_each( begin, end,
-                                         boost::bind( &TextParagraph::insertAt, _1,
-                                                                    rFilterBase, xText, xAt, xModel, aCombinedTextStyle,
-                                                                    // determine whether it is the first paragraph of not
-                                                                    boost::bind( std::equal_to<TextParagraphPtr>(), _1,
-                                                                                             *maParagraphs.begin() ) ) );
-*/
-    }
+    for( TextParagraphVector::const_iterator aBeg = maParagraphs.begin(), aIt = aBeg, aEnd = maParagraphs.end(); aIt != aEnd; ++aIt )
+        (*aIt)->insertAt( rFilterBase, xText, xAt, rTextStyleProperties, aCombinedTextStyle, aIt == aBeg );
 }
 
 
