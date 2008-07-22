@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.17 $
+# $Revision: 1.18 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -104,8 +104,13 @@ RESLIB1SRSFILES = \
         $(SRS)$/deployment_registry_help.srs \
         $(SRS)$/deployment_registry.srs \
         $(SRS)$/deployment_manager.srs \
-        $(SRS)$/deployment_misc.srs \
     $(SRS)$/deployment_unopkg.srs
+
+.IF "$(GUI)"=="OS2"
+RESLIB1SRSFILES += $(SRS)$/deplmisc.srs
+.ELSE
+RESLIB1SRSFILES += $(SRS)$/deployment_misc.srs
+.ENDIF
 
 .INCLUDE : target.mk
 
