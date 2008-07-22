@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fixed.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,10 +34,9 @@
 #include <vcl/event.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/controllayout.hxx>
+#include <vcl/window.h>
 
 #include <tools/rc.h>
-
-
 
 // =======================================================================
 
@@ -186,6 +185,22 @@ FixedText::FixedText( Window* pParent, const ResId& rResId ) :
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
+
+    if ( !(nStyle & WB_HIDE) )
+        Show();
+}
+
+// -----------------------------------------------------------------------
+
+FixedText::FixedText( Window* pParent, const ResId& rResId, bool bDisableAccessibleLabelForRelation ) :
+    Control( WINDOW_FIXEDTEXT )
+{
+    rResId.SetRT( RSC_TEXT );
+    WinBits nStyle = ImplInitRes( rResId );
+    ImplInit( pParent, nStyle );
+    ImplLoadRes( rResId );
+    if ( bDisableAccessibleLabelForRelation )
+        ImplGetWindowImpl()->mbDisableAccessibleLabelForRelation = TRUE;
 
     if ( !(nStyle & WB_HIDE) )
         Show();
@@ -430,7 +445,6 @@ void  FixedText::FillLayoutData() const
     mpLayoutData = new vcl::ControlLayoutData();
     ImplDraw( const_cast<FixedText*>(this), 0, Point(), GetOutputSizePixel(), true );
 }
-
 
 // =======================================================================
 
