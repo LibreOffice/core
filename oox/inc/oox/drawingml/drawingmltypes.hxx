@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawingmltypes.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,18 @@ namespace drawingml {
 
 // ============================================================================
 
+struct LineProperties;
+typedef ::boost::shared_ptr< LineProperties > LinePropertiesPtr;
+
+struct FillProperties;
+typedef ::boost::shared_ptr< FillProperties > FillPropertiesPtr;
+
+struct TextCharacterProperties;
+typedef ::boost::shared_ptr< TextCharacterProperties > TextCharacterPropertiesPtr;
+
+struct TextBodyProperties;
+typedef ::boost::shared_ptr< TextBodyProperties > TextBodyPropertiesPtr;
+
 class TextBody;
 typedef ::boost::shared_ptr< TextBody > TextBodyPtr;
 
@@ -52,7 +64,16 @@ typedef ::boost::shared_ptr< Shape > ShapePtr;
 class Theme;
 typedef ::boost::shared_ptr< Theme > ThemePtr;
 
-// ----------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+
+namespace table {
+
+class TableProperties;
+typedef ::boost::shared_ptr< TableProperties > TablePropertiesPtr;
+
+} // namespace table
+
+// ============================================================================
 
 /** converts the attributes from an CT_Point2D into an awt Point with 1/100th mm */
 com::sun::star::awt::Point GetPoint2D( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes );
@@ -72,6 +93,9 @@ com::sun::star::geometry::IntegerRectangle2D GetRelativeRect( const ::com::sun::
  */
 sal_Int32 GetTextMargin( const ::rtl::OUString& sValue );
 
+/** converts EMUs into 1/100th mmm */
+sal_Int32 GetCoordinate( sal_Int32 nValue );
+
 /** converts an emu string into 1/100th mmm */
 sal_Int32 GetCoordinate( const ::rtl::OUString& sValue );
 
@@ -90,19 +114,18 @@ sal_Int32 GetTextSpacingPoint(  const ::rtl::OUString& sValue );
 /** */
 ::com::sun::star::style::TabAlign GetTabAlign( ::sal_Int32 aToken );
 
-sal_Int16 GetFontUnderline( ::sal_Int32 nToken );
+float GetFontHeight( sal_Int32 nHeight );
+
+sal_Int16 GetFontUnderline( sal_Int32 nToken );
 
 sal_Int16 GetFontStrikeout( sal_Int32 nToken );
 
 sal_Int16 GetCaseMap( sal_Int32 nToken );
 
-/** converts pitchFamily from CT_TextFont */
-void GetFontPitch( sal_Int32 nOoxValue, sal_Int16 & nPitch, sal_Int16 & nFamily );
-
 /** converts a paragraph align to a ParaAdjust */
 sal_Int16 GetParaAdjust( sal_Int32 nAlign );
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 
 // CT_IndexRange
 struct IndexRange {
