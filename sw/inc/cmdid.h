@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cmdid.h,v $
- * $Revision: 1.83 $
+ * $Revision: 1.84 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -902,6 +902,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 // --> OD 2008-07-14 #i91601#
 #define FN_UNO_LIST_ID                      (FN_EXTRA2 + 107)
 // <--
+#define FN_UNO_REPLACEMENT_GRAPHIC          (FN_EXTRA2 + 108)
 
 /*--------------------------------------------------------------------
     Bereich: Hilfe
