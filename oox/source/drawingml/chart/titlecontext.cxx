@@ -8,7 +8,7 @@
  *
  * $RCSfile: titlecontext.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
