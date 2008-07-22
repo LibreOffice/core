@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DomainMapper_Impl.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 #include <ConversionHelper.hxx>
 #include <DomainMapperTableHandler.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -68,7 +69,10 @@
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.h>
+#ifdef DEBUG_DOMAINMAPPER
 #include <resourcemodel/QNameToString.hxx>
+#include <resourcemodel/util.hxx>
+#endif
 #include <ooxml/OOXMLFastTokens.hxx>
 
 
@@ -1169,7 +1173,7 @@ void DomainMapper_Impl::appendTextContent(
 /*-- 24.04.2008 08:38:07---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void DomainMapper_Impl::appendOLE( const ::rtl::OUString& rStreamName )
+void DomainMapper_Impl::appendOLE( const ::rtl::OUString& rStreamName, OLEHandlerPtr pOLEHandler )
 {
     static const rtl::OUString sEmbeddedService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextEmbeddedObject"));
     try
@@ -1179,11 +1183,19 @@ void DomainMapper_Impl::appendOLE( const ::rtl::OUString& rStreamName )
 
         xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_STREAM_NAME ),
                         uno::makeAny( rStreamName ));
-        //TODO: get real object properties
+        awt::Size aSize = pOLEHandler->getSize();
+        if( !aSize.Width )
+            aSize.Width = 1000;
+        if( !aSize.Height )
+            aSize.Height = 1000;
         xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_WIDTH ),
-                        uno::makeAny(sal_Int32(1000)));
+                        uno::makeAny(aSize.Width));
         xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_HEIGHT ),
-                        uno::makeAny(sal_Int32(2000)));
+                        uno::makeAny(aSize.Height));
+
+        uno::Reference< graphic::XGraphic > xGraphic = pOLEHandler->getReplacement();
+        xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_GRAPHIC ),
+                        uno::makeAny(xGraphic));
 
         //
         appendTextContent( xOLE, uno::Sequence< beans::PropertyValue >() );
@@ -3359,53 +3371,10 @@ void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Po
     uno::Reference<text::XTextContent> xTextContent
         (m_pGraphicImport->GetGraphicObject());
 
-#ifdef DEBUG_DOMAINMAPPER
-    uno::Reference<drawing::XShape> xShape
-        (xTextContent, uno::UNO_QUERY_THROW);
-    {
-        uno::Reference<beans::XPropertySet> xPropSet
-            (xShape, uno::UNO_QUERY_THROW);
-        logger("DOMAINMAPPER", "<shapeprops-before>");
-        try
-        {
-            logger("DOMAINMAPPER", propertysetToString(xPropSet));
-        }
-        catch (...)
-        {
-            logger("DOMAINMAPPER", "<exception/>");
-        }
-        logger("DOMAINMAPPER", "</shapeprops-before>");
-    }
-#endif
     //insert it into the document at the current cursor position
     OSL_ENSURE( xTextContent.is(), "DomainMapper_Impl::ImportGraphic");
     if( xTextContent.is())
         appendTextContent( xTextContent, uno::Sequence< beans::PropertyValue >() );
-
-#ifdef DEBUG_DOMAINMAPPER
-    {
-        uno::Reference<beans::XPropertySet> xPropSet
-            (xShape, uno::UNO_QUERY_THROW);
-        logger("DOMAINMAPPER", "<shapeprops-after>");
-        try
-        {
-            logger("DOMAINMAPPER", propertysetToString(xPropSet));
-        }
-        catch (...)
-        {
-            logger("DOMAINMAPPER", "<exception/>");
-        }
-        awt::Size aSize(xShape->getSize());
-        awt::Point aPoint(xShape->getPosition());
-        char buffer[256];
-        snprintf(buffer, sizeof(buffer),
-                 "<shape x=\"%ld\" y=\"%ld\" width=\"%ld\" height=\"%ld\">",
-                 aPoint.X, aPoint.Y, aSize.Width, aSize.Height);
-        logger("DOMAINMAPPER", buffer);
-        logger("DOMAINMAPPER", "</shape>");
-        logger("DOMAINMAPPER", "</shapeprops-after>");
-    }
-#endif
 
     m_pGraphicImport.reset();
 }
