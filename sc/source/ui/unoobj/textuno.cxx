@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textuno.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1045,10 +1045,12 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
         ScDocument* pDoc = pDocShell->GetDocument();
 
         SfxItemSet aDefaults( pEditEngine->GetEmptyItemSet() );
-        const ScPatternAttr* pPattern =
-                pDoc->GetPattern( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab() );
-        pPattern->FillEditItemSet( &aDefaults );
-        pPattern->FillEditParaItems( &aDefaults );  // including alignment etc. (for reading)
+        if( const ScPatternAttr* pPattern =
+                pDoc->GetPattern( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab() ) )
+        {
+            pPattern->FillEditItemSet( &aDefaults );
+            pPattern->FillEditParaItems( &aDefaults );  // including alignment etc. (for reading)
+        }
 
         const ScBaseCell* pCell = pDoc->GetCell( aCellPos );
         if ( pCell && pCell->GetCellType() == CELLTYPE_EDIT )
