@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframe.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,6 +81,8 @@ static void ImplSalCalcFrameSize( HWND hWnd,
                                   LONG& nFrameX, LONG& nFrameY, LONG& nCaptionY );
 static void ImplSalCalcFrameSize( const Os2SalFrame* pFrame,
                                   LONG& nFrameX, LONG& nFrameY, LONG& nCaptionY );
+MRESULT EXPENTRY SalFrameSubClassWndProc( HWND hWnd, ULONG nMsg,
+                                  MPARAM nMP1, MPARAM nMP2 );
 
 // =======================================================================
 
@@ -711,6 +713,9 @@ SalFrame* ImplSalCreateFrame( Os2SalInstance* pInst, HWND hWndParent, ULONG nSal
             WinEnableMenuItem(hSysMenu, SC_CLOSE, FALSE);
         }
     }
+
+    // ticket#124 subclass frame window: we need to intercept TRACK message
+    aSalShlData.mpFrameProc = WinSubclassWindow( hWndFrame, SalFrameSubClassWndProc);
 
     // init OS/2 frame data
     pFrame->mhAB            = pInst->mhAB;
@@ -2752,13 +2757,7 @@ static long ImplHandleKeyMsg( HWND hWnd,
     if ( nFlags & KC_CTRL )
         nModCode |= KEY_MOD1;
     if ( nFlags & KC_ALT )
-    {
         nModCode |= KEY_MOD2;
-        // Nur wenn nicht Control und kein auswertbarer CharCode
-        // Wegen AltGr (vorallem wegen 122-Tastaturen auch KC_CHAR testen)
-        if ( !(nModCode & KEY_MOD1) && !(nFlags & KC_CHAR) )
-            nModCode |= KEY_CONTROLMOD;
-    }
 
     // Bei Shift, Control und Alt schicken wir einen KeyModChange-Event
     if ( (nOS2KeyCode == VK_SHIFT) || (nOS2KeyCode == VK_CTRL) ||
@@ -3703,7 +3702,6 @@ MRESULT EXPENTRY SalFrameWndProc( HWND hWnd, ULONG nMsg,
 
 // -----------------------------------------------------------------------
 
-
 void Os2SalFrame::ResetClipRegion()
 {
 }
@@ -3720,3 +3718,26 @@ void Os2SalFrame::EndSetClipRegion()
 {
 }
 
+// -----------------------------------------------------------------------
+
+MRESULT EXPENTRY SalFrameSubClassWndProc( HWND hWnd, ULONG nMsg,
+                                  MPARAM nMP1, MPARAM nMP2 )
+{
+    MRESULT mReturn = 0L;
+
+    // ticket#124 min size of 132 px is too much
+    if (nMsg == WM_QUERYTRACKINFO) {
+    PTRACKINFO pti;
+    // first, let PM initialize TRACKINFO
+    mReturn = aSalShlData.mpFrameProc( hWnd, nMsg, nMP1, nMP2 );
+    // now change default min size
+    pti = (PTRACKINFO) nMP2;
+    pti->ptlMinTrackSize.x = 64L;
+    // now return to PM
+    return mReturn;
+    }
+
+    return aSalShlData.mpFrameProc( hWnd, nMsg, nMP1, nMP2 );
+}
+
+// -----------------------------------------------------------------------
