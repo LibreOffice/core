@@ -8,7 +8,7 @@
  *
  * $RCSfile: typegroupconverter.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,11 +99,11 @@ struct TypeGroupInfo
     TypeCategory        meTypeCategory;         /// Category this chart type belongs to.
     const sal_Char*     mpcServiceName;         /// Service name of the type.
     VarPointMode        meVarPointMode;         /// Mode for varying point colors.
+    sal_Int32           mnDefLabelPos;          /// Default data label position (API constant).
     bool                mbCombinable2d;         /// True = types can be combined in one axes set.
     bool                mbSupports3d;           /// True = 3D type allowed, false = only 2D type.
     bool                mbPolarCoordSystem;     /// True = polar, false = cartesian.
     bool                mbSeriesIsFrame2d;      /// True = 2D type series with area formatting.
-    bool                mbSeriesIsFrame3d;      /// True = 3D type series with area formatting.
     bool                mbSingleSeriesVis;      /// True = only first series visible (e.g. pie charts).
     bool                mbCategoryAxis;         /// True = X axis contains categories.
     bool                mbSwappedAxesSet;       /// True = X axis and Y axis are swapped.
@@ -154,6 +154,9 @@ public:
 
     /** Returns true, if this chart type supports area formatting for its series. */
     bool                isSeriesFrameFormat() const;
+    /** Returns the object type for a series depending on the chart type. */
+    ObjectType          getSeriesObjectType() const;
+
     /** Returns true, if this chart type has to reverse its series order. */
     bool                isReverseSeries() const;
     /** Returns series title, if the chart type group contains only one single series. */
@@ -170,7 +173,7 @@ public:
     void                convertFromModel(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& rxDiagram,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem >& rxCoordSystem,
-                            sal_Int32 nAxesSetIdx );
+                            sal_Int32 nAxesSetIdx, bool bSupportsVaryColorsByPoint );
 
     /** Sets the passed OOXML marker style at the passed property set. */
     void                convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSymbol, sal_Int32 nOoxSize ) const;
