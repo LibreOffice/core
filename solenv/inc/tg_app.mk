@@ -8,7 +8,7 @@
 #
 # $RCSfile: tg_app.mk,v $
 #
-# $Revision: 1.74 $
+# $Revision: 1.75 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -32,6 +32,10 @@
 #######################################################
 # instructions for linking
 # unroll begin
+
+.IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
+APP$(TNR)DEF = $(MISC)$/$(APP$(TNR)TARGET).def
+.ENDIF
 
 .IF "$(APP$(TNR)LINKTYPE)" != ""
 #must be either STATIC or SHARED
@@ -88,7 +92,7 @@ APP$(TNR)PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP$(TNR)PRODUCTNAME)\"
 .ENDIF			# "$(APP$(TNR)PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP$(TNR)LIBS)"!=""
 $(MISC)$/$(APP$(TNR)TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
@@ -103,8 +107,16 @@ $(APP$(TNR)TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP$(TNR)LIBSALCPPRT*=$(LIBSALCPPRT)
 
+.IF "$(GUI)" == "OS2"
+_APP$(TNR)IMP_ORD = $(APP$(TNR)STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP$(TNR)STDLIBS:^"$(LB)$/") 
+APP$(TNR)IMP_ORD = $(foreach,i,$(_APP$(TNR)IMP_ORD) $(shell @-ls $i))
+.ELSE
+APP$(TNR)IMP_ORD = 
+.ENDIF
+
 $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     $(APP$(TNR)RES) \
+    $(APP$(TNR)IMP_ORD) \
     $(APP$(TNR)ICON) $(APP$(TNR)DEPN) $(USE_APP$(TNR)DEF)
     @echo ------------------------------
     @echo Making: $@
@@ -232,6 +244,72 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 .ENDIF			# "$(TARGET)" == "setup"
 
 .ENDIF			# "$(GUI)" == "WNT"
+
+.IF "$(GUI)" == "OS2"
+    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
+.IF "$(APP$(TNR)LINKRES)" != ""
+    @+-$(RM) $(MISC)$/$(APP$(TNR)LINKRES:b).rc >& $(NULLDEV)
+.IF "$(APP$(TNR)ICON)" != ""
+.IF "$(USE_SHELL)"=="4nt"
+    @-+echo ICON 1 "$(APP$(TNR)ICON:s/\/\\/)" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP$(TNR)ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+.ENDIF		# "$(APP$(TNR)ICON)" != ""
+.IF "$(APP$(TNR)VERINFO)" != ""
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP$(TNR)VERINFO)$(EMQ)" >> $(MISC)$/$(APP$(TNR)LINKRES:b).rc
+.ENDIF		# "$(APP$(TNR)VERINFO)" != ""
+    $(RC) -r -DOS2 $(APP$(TNR)PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP$(TNR)LINKRES:b).rc
+.ENDIF			# "$(APP$(TNR)LINKRES)" != ""
+
+.IF "$(TARGETTYPE)" == "GUI" 
+    @echo NAME $(APP$(TNR)TARGET) WINDOWAPI > $(MISC)$/$(APP$(TNR)TARGET).def
+.ENDIF
+
+    @+echo	$(APP$(TNR)LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP$(TNR)BASEX) \
+        $(APP$(TNR)STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP$(TNR)LINKRES) \
+        $(APP$(TNR)RES) \
+        $(APP$(TNR)DEF) \
+        $(APP$(TNR)OBJS) \
+        $(APP$(TNR)LIBS) \
+        $(APP$(TNR)STDLIBS:^"-l") \
+        $(APP$(TNR)STDLIB:^"-l") $(STDLIB$(TNR):^"-l") 
+    $(APP$(TNR)LINKER) -v \
+        $(APP$(TNR)LINKFLAGS) \
+        $(LINKFLAGSAPP) $(APP$(TNR)BASEX) \
+        $(APP$(TNR)STACKN) \
+        -o $@ \
+        -Zmap -L$(LB) \
+        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        $(STDOBJ) \
+        $(APP$(TNR)LINKRES) \
+        $(APP$(TNR)RES) \
+        $(APP$(TNR)DEF) \
+        $(APP$(TNR)OBJS) \
+        $(APP$(TNR)LIBS) \
+        $(APP$(TNR)STDLIBS:^"-l") \
+        $(APP$(TNR)STDLIB:^"-l") $(STDLIB$(TNR):^"-l") 
+
+
+.IF "$(APP$(TNR)TARGET)" == "loader"
+    +$(PERL) loader.pl $@
+.IF "$(USE_SHELL)"=="4nt"
+    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
+.ELSE			# "$(USE_SHELL)"=="4nt"
+    +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+    +$(RM) $@
+    +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
+.ENDIF			# "$(TARGET)" == "setup"
+
+.ENDIF			# "$(GUI)" == "OS2"
 
 .ENDIF			# "$(APP$(TNR)TARGETN)"!=""
 
