@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxaccessibletoolbox.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -361,6 +361,12 @@ void VCLXAccessibleToolBox::implReleaseToolboxItem( ToolBoxItemsMap::iterator& _
 // -----------------------------------------------------------------------------
 void VCLXAccessibleToolBox::UpdateItem_Impl( sal_Int32 _nPos, sal_Bool _bItemAdded )
 {
+    if ( _nPos < sal_Int32( m_aAccessibleChildren.size() ) )
+    {
+        UpdateAllItems_Impl();
+        return;
+    }
+
     ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
     if ( pToolBox )
     {
@@ -542,15 +548,17 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
             break;
 
         case VCLEVENT_TOOLBOX_ITEMADDED :
-        case VCLEVENT_TOOLBOX_ITEMREMOVED :
-            UpdateItem_Impl( (sal_Int32)(sal_IntPtr)rVclWindowEvent.GetData(), VCLEVENT_TOOLBOX_ITEMADDED == rVclWindowEvent.GetId() );
+//            UpdateItem_Impl( (sal_Int32)(sal_IntPtr)rVclWindowEvent.GetData(), VCLEVENT_TOOLBOX_ITEMADDED == rVclWindowEvent.GetId() );
+            UpdateItem_Impl( (sal_Int32)(sal_IntPtr)rVclWindowEvent.GetData(), sal_True );
             break;
 
+        case VCLEVENT_TOOLBOX_ITEMREMOVED :
         case VCLEVENT_TOOLBOX_ALLITEMSCHANGED :
         {
             UpdateAllItems_Impl();
             break;
         }
+
         case VCLEVENT_TOOLBOX_ITEMWINDOWCHANGED:
         {
             sal_Int32 nPos = (sal_Int32)(sal_IntPtr)rVclWindowEvent.GetData();
@@ -698,13 +706,13 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
     ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
     if ( pToolBox )
     {
-        USHORT nHighlightItemId = pToolBox->GetHighlightItemId();
         Reference< XAccessible > xChild;
         // search for the child
         ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.find(i);
         if ( m_aAccessibleChildren.end() == aIter )
         {
             USHORT nItemId = pToolBox->GetItemId( (USHORT)i );
+            USHORT nHighlightItemId = pToolBox->GetHighlightItemId();
             Window* pItemWindow = pToolBox->GetItemWindow( nItemId );
             // not found -> create a new child
             VCLXAccessibleToolBoxItem* pChild = new VCLXAccessibleToolBoxItem( pToolBox, i, this );
