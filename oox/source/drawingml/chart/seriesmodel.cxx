@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: seriesmodel.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,7 +58,8 @@ DataLabelModel::~DataLabelModel()
 
 // ============================================================================
 
-DataLabelsModel::DataLabelsModel()
+DataLabelsModel::DataLabelsModel() :
+    mbShowLeaderLines( false )
 {
 }
 
@@ -78,6 +79,16 @@ ErrorBarModel::ErrorBarModel() :
 }
 
 ErrorBarModel::~ErrorBarModel()
+{
+}
+
+// ============================================================================
+
+TrendlineLabelModel::TrendlineLabelModel()
+{
+}
+
+TrendlineLabelModel::~TrendlineLabelModel()
 {
 }
 
