@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewsettings.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -433,7 +433,6 @@ void SheetViewSettings::importWindow2( BiffInputStream& rStrm )
         rStrm >> nFlags >> aFirstPos;
 
         rData.maFirstPos     = getAddressConverter().createValidCellAddress( aFirstPos, getSheetIndex(), false );
-        rData.mnViewType     = getFlagValue( nFlags, BIFF_WINDOW2_PAGEBREAKMODE, XML_pageBreakPreview, XML_normal );
         rData.mnPaneState    = getFlagValue( nFlags, BIFF_WINDOW2_FROZEN, getFlagValue( nFlags, BIFF_WINDOW2_FROZENNOSPLIT, XML_frozen, XML_frozenSplit ), XML_split );
         rData.mbSelected     = getFlag( nFlags, BIFF_WINDOW2_SELECTED );
         rData.mbRightToLeft  = getFlag( nFlags, BIFF_WINDOW2_RIGHTTOLEFT );
@@ -446,6 +445,8 @@ void SheetViewSettings::importWindow2( BiffInputStream& rStrm )
 
         if( getBiff() == BIFF8 )
         {
+            rData.mnViewType = getFlagValue( nFlags, BIFF_WINDOW2_PAGEBREAKMODE, XML_pageBreakPreview, XML_normal );
+
             rData.maGridColor.importColorId( rStrm );
             // zoom data not included in chart sheets
             if( (getSheetType() != SHEETTYPE_CHARTSHEET) && (rStrm.getRecLeft() >= 6) )
