@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ipclient.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -992,6 +992,20 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                         try
                         {
                             m_pImp->m_xObject->doVerb( -9 ); // open own view, a workaround verb that is not visible
+
+                            if ( m_pImp->m_xObject->getCurrentState() == embed::EmbedStates::UI_ACTIVE )
+                            {
+                                // the object was converted to OOo object
+                                awt::Size aSize = m_pImp->m_xObject->getVisualAreaSize( m_pImp->m_nAspect );
+                                MapMode aObjectMap( VCLUnoHelper::UnoEmbed2VCLMapUnit( m_pImp->m_xObject->getMapUnit( m_pImp->m_nAspect ) ) );
+                                MapMode aClientMap( GetEditWin()->GetMapMode().GetMapUnit() );
+                                Size aNewSize = GetEditWin()->LogicToLogic( Size( aSize.Width, aSize.Height ), &aObjectMap, &aClientMap );
+
+                                Rectangle aScaledArea = GetScaledObjArea();
+                                m_pImp->m_aObjArea.SetSize( aNewSize );
+                                m_pImp->m_aScaleWidth = Fraction( aScaledArea.GetWidth(), aNewSize.Width() );
+                                m_pImp->m_aScaleHeight = Fraction( aScaledArea.GetHeight(), aNewSize.Height() );
+                            }
                         }
                         catch ( uno::Exception& )
                         {
