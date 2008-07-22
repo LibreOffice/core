@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: window.h,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -358,7 +358,9 @@ public:
                         mbDrawSelectionBackground:1,
                         mbIsInTaskPaneList:1,
                         mbToolbarFloatingWindow:1,
-                        mbCallHandlersDuringInputDisabled:1;
+                        mbCallHandlersDuringInputDisabled:1,
+                        mbDisableAccessibleLabelForRelation:1,
+                        mbDisableAccessibleLabeledByRelation:1;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 };
