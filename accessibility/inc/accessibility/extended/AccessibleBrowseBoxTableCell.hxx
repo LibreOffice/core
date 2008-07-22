@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleBrowseBoxTableCell.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +61,8 @@ namespace accessibility
                                     sal_Int32 _nRowId,
                                     sal_uInt16 _nColId,
                                     sal_Int32 _nOffset );
+
+        void    nameChanged( const ::rtl::OUString& rNewName, const ::rtl::OUString& rOldName );
 
         // XInterface -------------------------------------------------------------
 
