@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lineproperties.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,325 +29,410 @@
  ************************************************************************/
 
 #include "oox/drawingml/lineproperties.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/core/namespaces.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "tokens.hxx"
+#include <vector>
+#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include "oox/helper/propertyset.hxx"
-#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
-#include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
+#include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/PointSequence.hpp>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#include "oox/drawingml/drawingmltypes.hxx"
+#include "oox/core/modelobjectcontainer.hxx"
+#include "oox/core/namespaces.hxx"
+#include "oox/core/xmlfilterbase.hxx"
+#include "oox/helper/propertymap.hxx"
+#include "oox/helper/propertyset.hxx"
+#include "tokens.hxx"
 
-using rtl::OUString;
-using namespace ::oox::core;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::drawing;
 
-namespace oox { namespace drawingml {
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::awt::Point;
+using ::com::sun::star::container::XNameContainer;
+using ::oox::core::ModelObjectContainer;
+using ::oox::core::XmlFilterBase;
 
-LineProperties::LineProperties()
-: maLineColor( new Color() )
+namespace oox {
+namespace drawingml {
+
+// ============================================================================
+
+namespace {
+
+static const sal_Char* const sppcDefaultLineNames[] =
 {
-}
-LineProperties::~LineProperties()
-{
-}
+    "LineStyle", "LineWidth", "LineColor", "LineTransparence", "LineDash", "LineJoint",
+    "LineStartName", "LineStartWidth", "LineStartCenter",
+    "LineEndName", "LineEndWidth", "LineEndCenter",
+    0
+};
 
-void LineProperties::apply( const LineProperties& rSourceLineProperties )
+// ----------------------------------------------------------------------------
+
+DashStyle lclGetDashStyle( sal_Int32 nToken )
 {
-    PropertyMapBase::const_iterator aIter( rSourceLineProperties.maLineProperties.begin() );
-    PropertyMapBase::const_iterator aEnd( rSourceLineProperties.maLineProperties.end() );
-    while( aIter != aEnd )
+    switch( nToken )
     {
-        maLineProperties[ (*aIter).first ] = (*aIter).second;
-        aIter++;
+        case XML_rnd:   return DashStyle_ROUNDRELATIVE;
+        case XML_sq:    return DashStyle_RECTRELATIVE;
+        case XML_flat:  return DashStyle_RECT;
     }
-    if ( rSourceLineProperties.maLineColor->isUsed() )
-        maLineColor = rSourceLineProperties.maLineColor;
-    if ( rSourceLineProperties.moLineWidth )
-        moLineWidth = rSourceLineProperties.moLineWidth;
-    if ( rSourceLineProperties.moStartArrow )
-        moStartArrow = rSourceLineProperties.moStartArrow;
-    if ( rSourceLineProperties.moStartArrowWidth )
-        moStartArrowWidth = rSourceLineProperties.moStartArrowWidth;
-    if ( rSourceLineProperties.moStartArrowLength )
-        moStartArrowLength = rSourceLineProperties.moStartArrowLength;
-    if ( rSourceLineProperties.moEndArrow )
-        moEndArrow = rSourceLineProperties.moEndArrow;
-    if ( rSourceLineProperties.moEndArrowWidth )
-        moEndArrowWidth = rSourceLineProperties.moEndArrowWidth;
-    if ( rSourceLineProperties.moEndArrowLength )
-        moEndArrowLength = rSourceLineProperties.moEndArrowLength;
-    if ( rSourceLineProperties.moPresetDash )
-        moPresetDash = rSourceLineProperties.moPresetDash;
-    if ( rSourceLineProperties.moLineCap )
-        moLineCap = rSourceLineProperties.moLineCap;
+    return DashStyle_ROUNDRELATIVE;
 }
 
-static com::sun::star::drawing::PolyPolygonBezierCoords GetLineArrow( const sal_Int32 nLineWidth, const sal_Int32 nLineEndToken,
-    const sal_Int32 nArrowWidthToken, const sal_Int32 nArrowLengthToken, sal_Int32& rnArrowWidth, sal_Bool& rbArrowCenter, rtl::OUString& rsArrowName )
+LineJoint lclGetLineJoint( sal_Int32 nToken )
 {
-    uno::Sequence< awt::Point > aPoly;
+    switch( nToken )
+    {
+        case XML_round: return LineJoint_ROUND;
+        case XML_bevel: return LineJoint_BEVEL;
+        case XML_miter: return LineJoint_MITER;
+    }
+    return LineJoint_ROUND;
+}
 
-    double      fLineWidth = nLineWidth < 70 ? 70.0 : nLineWidth;
-    double      fLenghtMul, fWidthMul;
-    sal_Int32   nLineNumber;
-    switch( nArrowLengthToken )
+const sal_Int32 OOX_ARROWSIZE_SMALL     = 0;
+const sal_Int32 OOX_ARROWSIZE_MEDIUM    = 1;
+const sal_Int32 OOX_ARROWSIZE_LARGE     = 2;
+
+sal_Int32 lclGetArrowSize( sal_Int32 nToken )
+{
+    switch( nToken )
     {
-        default :
-        case XML_med: fLenghtMul = 3.0; nLineNumber = 2; break;
-        case XML_sm : fLenghtMul = 2.0; nLineNumber = 1; break;
-        case XML_lg : fLenghtMul = 5.0; nLineNumber = 3; break;
+        case XML_sm:    return OOX_ARROWSIZE_SMALL;
+        case XML_med:   return OOX_ARROWSIZE_MEDIUM;
+        case XML_lg:    return OOX_ARROWSIZE_LARGE;
     }
-    switch( nArrowWidthToken )
+    return OOX_ARROWSIZE_MEDIUM;
+}
+
+// ----------------------------------------------------------------------------
+
+void lclPushMarkerProperties( PropertyMap& rPropMap, const LineArrowProperties& rArrowProps,
+        const LinePropertyNames& rPropNames, ModelObjectContainer& rObjContainer, sal_Int32 nLineWidth, bool bLineEnd )
+{
+    PolyPolygonBezierCoords aMarker;
+    OUString aMarkerName;
+    sal_Int32 nMarkerWidth = 0;
+    bool bMarkerCenter = false;
+
+    OUStringBuffer aBuffer;
+    sal_Int32 nArrowType = rArrowProps.moArrowType.get( XML_none );
+    switch( nArrowType )
     {
-        default :
-        case XML_med: fWidthMul = 3.0; nLineNumber += 3; break;
-        case XML_sm : fWidthMul = 2.0; break;
-        case XML_lg : fWidthMul = 5.0; nLineNumber += 6; break;
-    }
-    rbArrowCenter = sal_False;
-    switch ( nLineEndToken )
-    {
-        case XML_triangle :
-        {
-            aPoly.realloc( 4 );
-            aPoly[ 0 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth * 0.50 ), 0 );
-            aPoly[ 1 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth ), static_cast< sal_Int32 >( fLenghtMul * fLineWidth ) );
-            aPoly[ 2 ] = awt::Point( 0, static_cast< sal_Int32 >( fLenghtMul * fLineWidth ) );
-            aPoly[ 3 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth * 0.50 ), 0 );
-            static const OUString sArrowEnd( RTL_CONSTASCII_USTRINGPARAM( "msArrowEnd " ) );
-            rsArrowName = sArrowEnd;
-        }
+        case XML_triangle:
+            aBuffer.append( CREATE_OUSTRING( "msArrowEnd" ) );
         break;
+        case XML_arrow:
+            aBuffer.append( CREATE_OUSTRING( "msArrowOpenEnd" ) );
+        break;
+        case XML_stealth:
+            aBuffer.append( CREATE_OUSTRING( "msArrowStealthEnd" ) );
+        break;
+        case XML_diamond:
+            aBuffer.append( CREATE_OUSTRING( "msArrowDiamondEnd" ) );
+            bMarkerCenter = true;
+        break;
+        case XML_oval:
+            aBuffer.append( CREATE_OUSTRING( "msArrowOvalEnd" ) );
+            bMarkerCenter = true;
+        break;
+    }
 
-        case XML_arrow :
+    if( aBuffer.getLength() > 0 )
+    {
+        sal_Int32 nLength = lclGetArrowSize( rArrowProps.moArrowLength.get( XML_med ) );
+        sal_Int32 nWidth  = lclGetArrowSize( rArrowProps.moArrowWidth.get( XML_med ) );
+
+        sal_Int32 nNameIndex = nWidth * 3 + nLength + 1;
+        aBuffer.append( sal_Unicode( ' ' ) ).append( nNameIndex );
+        aMarkerName = aBuffer.makeStringAndClear();
+
+        bool bIsArrow = nArrowType == XML_arrow;
+        double fArrowLength = 1.0;
+        switch( nLength )
         {
-            switch( nArrowLengthToken )
+            case OOX_ARROWSIZE_SMALL:   fArrowLength = (bIsArrow ? 3.5 : 2.0); break;
+            case OOX_ARROWSIZE_MEDIUM:  fArrowLength = (bIsArrow ? 4.5 : 3.0); break;
+            case OOX_ARROWSIZE_LARGE:   fArrowLength = (bIsArrow ? 6.0 : 5.0); break;
+        }
+        double fArrowWidth = 1.0;
+        switch( nWidth )
+        {
+            case OOX_ARROWSIZE_SMALL:   fArrowWidth = (bIsArrow ? 3.5 : 2.0);  break;
+            case OOX_ARROWSIZE_MEDIUM:  fArrowWidth = (bIsArrow ? 4.5 : 3.0);  break;
+            case OOX_ARROWSIZE_LARGE:   fArrowWidth = (bIsArrow ? 6.0 : 5.0);  break;
+        }
+        // set arrow width relative to line width (convert line width from EMUs to 1/100 mm)
+        sal_Int32 nApiLineWidth = ::std::max< sal_Int32 >( GetCoordinate( nLineWidth ), 70 );
+        nMarkerWidth = static_cast< sal_Int32 >( fArrowWidth * nApiLineWidth );
+
+        // test if the arrow already exists, do not create it again in this case
+        if( !rPropNames.mbNamedLineMarker || !rObjContainer.hasLineMarker( aMarkerName ) )
+        {
+// pass X and Y as percentage to OOX_ARROW_POINT
+#define OOX_ARROW_POINT( x, y ) Point( static_cast< sal_Int32 >( fArrowWidth * x ), static_cast< sal_Int32 >( fArrowLength * y ) )
+
+            ::std::vector< Point > aPoints;
+            switch( rArrowProps.moArrowType.get() )
             {
-                default :
-                case XML_med: fLenghtMul = 4.5; break;
-                case XML_sm : fLenghtMul = 3.5; break;
-                case XML_lg : fLenghtMul = 6.0; break;
+                case XML_triangle:
+                    aPoints.push_back( OOX_ARROW_POINT(  50,   0 ) );
+                    aPoints.push_back( OOX_ARROW_POINT( 100, 100 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(   0, 100 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  50,   0 ) );
+                break;
+                case XML_arrow:
+                    aPoints.push_back( OOX_ARROW_POINT(  50,   0 ) );
+                    aPoints.push_back( OOX_ARROW_POINT( 100,  91 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  85, 100 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  50,  36 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  15, 100 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(   0,  91 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  50,   0 ) );
+                break;
+                case XML_stealth:
+                    aPoints.push_back( OOX_ARROW_POINT(  50,   0 ) );
+                    aPoints.push_back( OOX_ARROW_POINT( 100, 100 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  50,  60 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(   0, 100 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  50,   0 ) );
+                break;
+                case XML_diamond:
+                    aPoints.push_back( OOX_ARROW_POINT(  50,   0 ) );
+                    aPoints.push_back( OOX_ARROW_POINT( 100,  50 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  50, 100 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(   0,  50 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  50,   0 ) );
+                break;
+                case XML_oval:
+                    aPoints.push_back( OOX_ARROW_POINT(  50,   0 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  75,   7 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  93,  25 ) );
+                    aPoints.push_back( OOX_ARROW_POINT( 100,  50 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  93,  75 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  75,  93 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  50, 100 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  25,  93 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(   7,  75 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(   0,  50 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(   7,  25 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  25,   7 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  50,   0 ) );
+                break;
             }
-            switch( nArrowWidthToken )
+#undef OOX_ARROW_POINT
+
+            OSL_ENSURE( !aPoints.empty(), "ApiLineMarkerProperties::ApiLineMarkerProperties - missing arrow coordinates" );
+            if( !aPoints.empty() )
             {
-                default :
-                case XML_med: fWidthMul = 4.5; break;
-                case XML_sm : fWidthMul = 3.5; break;
-                case XML_lg : fWidthMul = 6.0; break;
+                aMarker.Coordinates.realloc( 1 );
+                aMarker.Coordinates[ 0 ] = ContainerHelper::vectorToSequence( aPoints );
+
+                ::std::vector< PolygonFlags > aFlags( aPoints.size(), PolygonFlags_NORMAL );
+                aMarker.Flags.realloc( 1 );
+                aMarker.Flags[ 0 ] = ContainerHelper::vectorToSequence( aFlags );
+
+                if( rPropNames.mbNamedLineMarker && !rObjContainer.insertLineMarker( aMarkerName, aMarker ) )
+                    aMarkerName = OUString();
             }
-            aPoly.realloc( 7 );
-            aPoly[ 0 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth * 0.50 ), 0 );
-            aPoly[ 1 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth ), static_cast< sal_Int32 >( fLenghtMul * fLineWidth * 0.91 ) );
-            aPoly[ 2 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth * 0.85 ), static_cast< sal_Int32 >( fLenghtMul * fLineWidth ) );
-            aPoly[ 3 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth * 0.50 ), static_cast< sal_Int32 >( fLenghtMul * fLineWidth * 0.36 ) );
-            aPoly[ 4 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth * 0.15 ), static_cast< sal_Int32 >( fLenghtMul * fLineWidth ) );
-            aPoly[ 5 ] = awt::Point( 0, static_cast< sal_Int32 >( fLenghtMul * fLineWidth * 0.91 ) );
-            aPoly[ 6 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth * 0.50 ), 0 );
-            static const OUString sArrowOpenEnd( RTL_CONSTASCII_USTRINGPARAM( "msArrowOpenEnd " ) );
-            rsArrowName = sArrowOpenEnd;
-        }
-        break;
-        case XML_stealth :
-        {
-            aPoly.realloc( 5 );
-            aPoly[ 0 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth * 0.50 ), 0 );
-            aPoly[ 1 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth ), static_cast< sal_Int32 >( fLenghtMul * fLineWidth ) );
-            aPoly[ 2 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth * 0.50 ), static_cast< sal_Int32 >( fLenghtMul * fLineWidth * 0.60 ) );
-            aPoly[ 3 ] = awt::Point( 0, static_cast< sal_Int32 >( fLenghtMul * fLineWidth ) );
-            aPoly[ 4 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth * 0.50 ), 0 );
-            static const OUString sArrowStealthEnd( RTL_CONSTASCII_USTRINGPARAM( "msArrowStealthEnd " ) );
-            rsArrowName = sArrowStealthEnd;
-        }
-        break;
-        case XML_diamond :
-        {
-            aPoly.realloc( 5 );
-            aPoly[ 0 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth * 0.50 ), 0 );
-            aPoly[ 1 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth ), static_cast< sal_Int32 >( fLenghtMul * fLineWidth * 0.50 ) );
-            aPoly[ 2 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth * 0.50 ), static_cast< sal_Int32 >( fLenghtMul * fLineWidth ) );
-            aPoly[ 3 ] = awt::Point( 0, static_cast< sal_Int32 >( fLenghtMul * fLineWidth * 0.50 ) );
-            aPoly[ 4 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth * 0.50 ), 0 );
-            static const OUString sArrowDiamondEnd( RTL_CONSTASCII_USTRINGPARAM( "msArrowDiamondEnd " ) );
-            rsArrowName = sArrowDiamondEnd;
-            rbArrowCenter = sal_True;
-        }
-        break;
-        case XML_oval :
-        {
-            aPoly.realloc( 5 );
-            aPoly[ 0 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth * 0.50 ), 0 );
-            aPoly[ 1 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth ), static_cast< sal_Int32 >( fLenghtMul * fLineWidth * 0.50 ) );
-            aPoly[ 2 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth * 0.50 ), static_cast< sal_Int32 >( fLenghtMul * fLineWidth ) );
-            aPoly[ 3 ] = awt::Point( 0, static_cast< sal_Int32 >( fLenghtMul * fLineWidth * 0.50 ) );
-            aPoly[ 4 ] = awt::Point( static_cast< sal_Int32 >( fWidthMul * fLineWidth * 0.50 ), 0 );
-            static const OUString sArrowOvalEnd( RTL_CONSTASCII_USTRINGPARAM( "msArrowOvalEnd " ) );
-            rsArrowName = sArrowOvalEnd;
-            rbArrowCenter = sal_True;
-        }
-        break;
-        default: break;
-    }
-    rsArrowName += rtl::OUString::valueOf( nLineNumber );
-    rnArrowWidth = static_cast< sal_Int32 >( fLineWidth * fWidthMul );
-
-    com::sun::star::drawing::PolyPolygonBezierCoords aPolyPolyBezier;
-    aPolyPolyBezier.Coordinates.realloc( 1 );
-    aPolyPolyBezier.Flags.realloc( 1 );
-    ::com::sun::star::drawing::PointSequence* pOuterSequence = aPolyPolyBezier.Coordinates.getArray();
-    ::com::sun::star::drawing::FlagSequence*  pOuterFlags = aPolyPolyBezier.Flags.getArray();
-    pOuterSequence[ 0 ] = aPoly;
-    pOuterFlags[ 0 ] = ::com::sun::star::drawing::PolygonFlags( aPoly.getLength() );
-    return aPolyPolyBezier;
-}
-
-void setArrow( const ::oox::core::XmlFilterBase& rFilterBase, rtl::OUString& rName, com::sun::star::drawing::PolyPolygonBezierCoords& rPoly )
-{
-    uno::Reference< container::XNameContainer >& xMarker( rFilterBase.getMarkerTable() );
-    try
-    {
-        if( xMarker.is() )
-        {
-            if( xMarker->hasByName( rName ) )
-                xMarker->replaceByName( rName, Any( rPoly ) );
             else
-                xMarker->insertByName( rName, Any( rPoly ) );
+            {
+                aMarkerName = OUString();
+            }
         }
     }
-    catch( container::ElementExistException& )
-    {}
-}
 
-void LineProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
-    const Reference < XPropertySet >& xPropSet ) const
-{
-    PropertySet aPropSet( xPropSet );
-    aPropSet.setProperties( maLineProperties );
-    if ( maLineColor->isUsed() )
+    // push the properties (filled aMarkerName indicates valid marker)
+    if( aMarkerName.getLength() > 0 )
     {
-        const rtl::OUString sLineColor( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "LineColor" ) ) );
-        aPropSet.setProperty( sLineColor, maLineColor->getColor( rFilterBase ) );
-
-        if ( maLineColor->hasTransparence() )
+        if( bLineEnd )
         {
-            const rtl::OUString sLineTransparence( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "LineTransparence" ) ) );
-            aPropSet.setProperty( sLineTransparence, maLineColor->getTransparence() );
+            if( rPropNames.mbNamedLineMarker )
+                rPropMap.setProperty( rPropNames.maLineEnd, aMarkerName );
+            else
+                rPropMap.setProperty( rPropNames.maLineEnd, aMarker );
+            rPropMap.setProperty( rPropNames.maLineEndWidth, nMarkerWidth );
+            rPropMap.setProperty( rPropNames.maLineEndCenter, bMarkerCenter );
         }
-    }
-    if ( moLineWidth )
-    {
-        const rtl::OUString sLineWidth( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "LineWidth" ) ) );
-        xPropSet->setPropertyValue( sLineWidth, Any( *moLineWidth ) );
-    }
-    if ( moStartArrow && ( *moStartArrow != XML_none ) )
-    {
-        sal_Int32   nArrowWidth;
-        sal_Bool    bArrowCenter;
-        rtl::OUString aArrowName;
-        com::sun::star::drawing::PolyPolygonBezierCoords aPoly( GetLineArrow( moLineWidth ? *moLineWidth : 70, *moStartArrow,
-            moStartArrowWidth ? *moStartArrowWidth : XML_med, moStartArrowLength ? *moStartArrowLength : XML_med, nArrowWidth, bArrowCenter, aArrowName ) );
-        const rtl::OUString sLineStart( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "LineStart" ) ) );
-        const rtl::OUString sLineStartName( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "LineStartName" ) ) );
-        const rtl::OUString sLineStartCenter( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "LineStartCenter" ) ) );
-        const rtl::OUString sLineStartWidth( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "LineStartWidth" ) ) );
-//      xPropSet->setPropertyValue( sLineStart, Any( aPoly ) );
-        setArrow( rFilterBase, aArrowName, aPoly  );
-        xPropSet->setPropertyValue( sLineStartName, Any( aArrowName ) );
-        xPropSet->setPropertyValue( sLineStartCenter, Any( bArrowCenter ) );
-        xPropSet->setPropertyValue( sLineStartWidth, Any( nArrowWidth ) );
-    }
-    if ( moEndArrow && ( *moEndArrow != XML_none ) )
-    {
-        sal_Int32   nArrowWidth;
-        sal_Bool    bArrowCenter;
-        rtl::OUString aArrowName;
-        com::sun::star::drawing::PolyPolygonBezierCoords aPoly( GetLineArrow( moLineWidth ? *moLineWidth : 70, *moEndArrow,
-            moEndArrowWidth ? *moEndArrowWidth : XML_med, moEndArrowLength ? *moEndArrowLength : XML_med, nArrowWidth, bArrowCenter, aArrowName ) );
-        const rtl::OUString sLineEnd( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "LineEnd" ) ) );
-        const rtl::OUString sLineEndName( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "LineEndName" ) ) );
-        const rtl::OUString sLineEndCenter( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "LineEndCenter" ) ) );
-        const rtl::OUString sLineEndWidth( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "LineEndWidth" ) ) );
-//      xPropSet->setPropertyValue( sLineEnd, Any( aPoly ) );
-        setArrow( rFilterBase, aArrowName, aPoly );
-        xPropSet->setPropertyValue( sLineEndName, Any( aArrowName ) );
-        xPropSet->setPropertyValue( sLineEndCenter, Any( bArrowCenter ) );
-        xPropSet->setPropertyValue( sLineEndWidth, Any( nArrowWidth ) );
-    }
-    if ( moPresetDash ) // ST_PresetLineDashVal
-    {
-        const rtl::OUString sLineStyle( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "LineStyle" ) ) );
-        if ( *moPresetDash == XML_solid )
-            xPropSet->setPropertyValue( sLineStyle, Any( drawing::LineStyle_SOLID ) );
         else
         {
-            sal_Int32 nLineWidth = moLineWidth ? *moLineWidth : 288;
-            drawing::LineDash aLineDash;
-            aLineDash.Style = drawing::DashStyle_ROUNDRELATIVE;
-            if ( moLineCap )
-            {
-                switch( *moLineCap )
-                {
-                    default:
-                    case XML_rnd:   // Rounded ends. Semi-circle protrudes by half line width.
-                        aLineDash.Style = drawing::DashStyle_ROUNDRELATIVE;
-                    break;
-                    case XML_sq:    // Square protrudes by half line width.
-                        aLineDash.Style = drawing::DashStyle_RECTRELATIVE;
-                    break;
-                    case XML_flat:  // Line ends at end point.
-                        aLineDash.Style = drawing::DashStyle_RECT;
-                    break;
-                }
-            }
+            if( rPropNames.mbNamedLineMarker )
+                rPropMap.setProperty( rPropNames.maLineStart, aMarkerName );
+            else
+                rPropMap.setProperty( rPropNames.maLineStart, aMarker );
+            rPropMap.setProperty( rPropNames.maLineStartWidth, nMarkerWidth );
+            rPropMap.setProperty( rPropNames.maLineStartCenter, bMarkerCenter );
+        }
+    }
+}
+
+} // namespace
+
+// ============================================================================
+
+LinePropertyNames::LinePropertyNames() :
+    mbNamedLineDash( false ),
+    mbNamedLineMarker( false )
+{
+}
+
+LinePropertyNames::LinePropertyNames( const sal_Char* const* ppcPropertyNames, bool bNamedLineDash, bool bNamedLineMarker ) :
+    maLineStyle( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maLineWidth( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maLineColor( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maLineTransparence( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maLineDash( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maLineJoint( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maLineStart( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maLineStartWidth( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maLineStartCenter( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maLineEnd( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maLineEndWidth( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    maLineEndCenter( OUString::createFromAscii( *ppcPropertyNames++ ) ),
+    mbNamedLineDash( bNamedLineDash ),
+    mbNamedLineMarker( bNamedLineMarker )
+{
+    OSL_ENSURE( !*ppcPropertyNames, "LinePropertyNames::LinePropertyNames - unexpected trailing property names" );
+}
+
+// ============================================================================
+
+void LineArrowProperties::assignUsed( const LineArrowProperties& rSourceProps )
+{
+    moArrowType.assignIfUsed( rSourceProps.moArrowType );
+    moArrowWidth.assignIfUsed( rSourceProps.moArrowWidth );
+    moArrowLength.assignIfUsed( rSourceProps.moArrowLength );
+}
+
+// ============================================================================
+
+LinePropertyNames LineProperties::DEFAULTNAMES( sppcDefaultLineNames, false, true );
+
+void LineProperties::assignUsed( const LineProperties& rSourceProps )
+{
+    maStartArrow.assignUsed( rSourceProps.maStartArrow );
+    maEndArrow.assignUsed( rSourceProps.maEndArrow );
+    maLineFill.assignUsed( rSourceProps.maLineFill );
+    moLineWidth.assignIfUsed( rSourceProps.moLineWidth );
+    moPresetDash.assignIfUsed( rSourceProps.moPresetDash );
+    moLineCap.assignIfUsed( rSourceProps.moLineCap );
+    moLineJoint.assignIfUsed( rSourceProps.moLineJoint );
+}
+
+void LineProperties::pushToPropMap( PropertyMap& rPropMap, const LinePropertyNames& rPropNames,
+        const XmlFilterBase& rFilter, ModelObjectContainer& rObjContainer, sal_Int32 nPhClr ) const
+{
+    // line fill type must exist, otherwise ignore other properties
+    if( maLineFill.moFillType.has() )
+    {
+        // line style (our core only supports none and solid)
+        LineStyle eLineStyle = (maLineFill.moFillType.get() == XML_noFill) ? LineStyle_NONE : LineStyle_SOLID;
+
+        // create line dash from preset dash token (not for invisible line)
+        if( (eLineStyle != LineStyle_NONE) && moPresetDash.differsFrom( XML_solid ) )
+        {
+            LineDash aLineDash;
+
+            sal_Int32 nLineWidth = GetCoordinate( moLineWidth.get( 103500 ) );
+            aLineDash.Style = lclGetDashStyle( moLineCap.get( XML_rnd ) );
             aLineDash.Dots  = 1;
             aLineDash.DotLen = nLineWidth;
             aLineDash.Dashes = 0;
-            aLineDash.DashLen = ( 8 * nLineWidth );
-            aLineDash.Distance = ( 3 * nLineWidth );
+            aLineDash.DashLen = 8 * nLineWidth;
+            aLineDash.Distance = 3 * nLineWidth;
 
-            switch( *moPresetDash )
+            switch( moPresetDash.get() )
             {
-                default :
-                case XML_dash :
-                case XML_sysDash :
-                    aLineDash.DashLen = ( 4 * nLineWidth ); // !!PASSTHROUGH INTENDED
-                case XML_lgDash :
-                {
+                default:
+                case XML_dash:
+                case XML_sysDash:
+                    aLineDash.DashLen = 4 * nLineWidth;
+                // passthrough intended
+                case XML_lgDash:
                     aLineDash.Dots = 0;
                     aLineDash.Dashes = 1;
-                }
                 break;
-                case XML_dashDot :
-                case XML_sysDashDot :
-                    aLineDash.DashLen = ( 4 * nLineWidth ); // !!PASSTHROUGH INTENDED
-                case XML_lgDashDot :
+
+                case XML_dashDot:
+                case XML_sysDashDot:
+                    aLineDash.DashLen = 4 * nLineWidth;
+                // passthrough intended
+                case XML_lgDashDot:
                     aLineDash.Dashes = 1;
                 break;
-                case XML_sysDashDotDot :
-                    aLineDash.DashLen = ( 4 * nLineWidth ); // !!PASSTHROUGH INTENDED
-                case XML_lgDashDotDot :
-                {
+
+                case XML_sysDashDotDot:
+                    aLineDash.DashLen = 4 * nLineWidth;
+                // passthrough intended
+                case XML_lgDashDotDot:
                     aLineDash.Dots = 2;
                     aLineDash.Dashes = 1;
-                }
                 break;
-                case XML_dot :
-                case XML_sysDot :
+
+                case XML_dot:
+                case XML_sysDot:
                     aLineDash.Distance = aLineDash.DotLen;
                 break;
             }
-            const rtl::OUString sLineDash( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "LineDash" ) ) );
-            xPropSet->setPropertyValue( sLineStyle, Any( drawing::LineStyle_DASH ) );
-            xPropSet->setPropertyValue( sLineDash, Any( aLineDash ) );
+
+            if( rPropNames.mbNamedLineDash )
+            {
+                OUString aDashName = rObjContainer.insertLineDash( aLineDash );
+                if( aDashName.getLength() > 0 )
+                {
+                    rPropMap.setProperty( rPropNames.maLineDash, aDashName );
+                    eLineStyle = LineStyle_DASH;
+                }
+            }
+            else
+            {
+                rPropMap.setProperty( rPropNames.maLineDash, aLineDash );
+                eLineStyle = LineStyle_DASH;
+            }
         }
+
+        // set final line style property
+        rPropMap.setProperty( rPropNames.maLineStyle, eLineStyle );
+
+        // line joint type
+        if( moLineJoint.has() )
+            rPropMap.setProperty( rPropNames.maLineJoint, lclGetLineJoint( moLineJoint.get() ) );
+
+        // convert line width from EMUs to 1/100 mm
+        if( moLineWidth.has() )
+            rPropMap.setProperty( rPropNames.maLineWidth, GetCoordinate( moLineWidth.get() ) );
+
+        // line color and transparence
+        Color aLineColor = maLineFill.getBestSolidColor();
+        if( aLineColor.isUsed() )
+        {
+            rPropMap.setProperty( rPropNames.maLineColor, aLineColor.getColor( rFilter, nPhClr ) );
+            if( aLineColor.hasTransparence() )
+                rPropMap.setProperty( rPropNames.maLineTransparence, aLineColor.getTransparence() );
+        }
+
+        // line markers
+        lclPushMarkerProperties( rPropMap, maStartArrow, rPropNames, rObjContainer, moLineWidth.get( 0 ), false );
+        lclPushMarkerProperties( rPropMap, maEndArrow,   rPropNames, rObjContainer, moLineWidth.get( 0 ), true );
     }
 }
 
-} }
+void LineProperties::pushToPropSet( PropertySet& rPropSet, const LinePropertyNames& rPropNames,
+        const XmlFilterBase& rFilter, ModelObjectContainer& rObjContainer, sal_Int32 nPhClr ) const
+{
+    PropertyMap aPropMap;
+    pushToPropMap( aPropMap, rPropNames, rFilter, rObjContainer, nPhClr );
+    rPropSet.setProperties( aPropMap );
+}
+
+// ============================================================================
+
+} // namespace drawingml
+} // namespace oox
+
