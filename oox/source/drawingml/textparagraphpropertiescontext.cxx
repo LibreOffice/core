@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textparagraphpropertiescontext.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +35,7 @@
 
 #include "oox/drawingml/colorchoicecontext.hxx"
 #include "oox/drawingml/textcharacterpropertiescontext.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/textfontcontext.hxx"
+#include "oox/drawingml/fillproperties.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/core/namespaces.hxx"
 #include "textspacingcontext.hxx"
@@ -172,12 +171,10 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
         const OUString sParaTabStops( CREATE_OUSTRING( "ParaTabStops" ) );
         rPropertyMap[ sParaTabStops ] <<= aSeq;
     }
-    if ( mpFillPropertiesPtr )
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > xGraphic( mpFillPropertiesPtr->getXGraphic() );
-        if ( xGraphic.is() )
-            mrBulletList.setGraphic( xGraphic );
-    }
+
+    if ( mpFillPropertiesPtr && mpFillPropertiesPtr->mxGraphic.is() )
+        mrBulletList.setGraphic( mpFillPropertiesPtr->mxGraphic );
+
     if( mrBulletList.is() )
     {
         const rtl::OUString sIsNumbering( CREATE_OUSTRING( "IsNumbering" ) );
@@ -204,6 +201,7 @@ void TextParagraphPropertiesContext::endFastElement( sal_Int32 ) throw (SAXExcep
 
 Reference< XFastContextHandler > TextParagraphPropertiesContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& rXAttributes ) throw (SAXException, RuntimeException)
 {
+    AttributeList aAttribs( rXAttributes );
     Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
@@ -242,7 +240,7 @@ Reference< XFastContextHandler > TextParagraphPropertiesContext::createFastChild
             mrBulletList.mbBulletFontFollowText <<= sal_True;
             break;
         case NMSP_DRAWINGML|XML_buFont:         // CT_TextFont
-            xRet.set( new TextFontContext( *this, aElementToken, rXAttributes, mrBulletList.maBulletFont ) );
+            mrBulletList.maBulletFont.setAttributes( aAttribs );
             break;
 
         // EG_TextBullet
@@ -283,8 +281,8 @@ Reference< XFastContextHandler > TextParagraphPropertiesContext::createFastChild
             break;
         case NMSP_DRAWINGML|XML_buBlip:         // CT_TextBlipBullet
             {
-                mpFillPropertiesPtr = FillPropertiesPtr( new FillProperties() );
-                xRet.set( new BlipFillPropertiesContext( *this, rXAttributes, *mpFillPropertiesPtr.get() ) );
+                mpFillPropertiesPtr.reset( new FillProperties );
+                xRet.set( new BlipFillPropertiesContext( *this, rXAttributes, *mpFillPropertiesPtr ) );
             }
             break;
 
@@ -292,7 +290,7 @@ Reference< XFastContextHandler > TextParagraphPropertiesContext::createFastChild
             xRet.set( new TextTabStopListContext( *this, maTabList ) );
             break;
         case NMSP_DRAWINGML|XML_defRPr:         // CT_TextCharacterProperties
-            xRet.set( new TextCharacterPropertiesContext( *this, rXAttributes, *mrTextParagraphProperties.getTextCharacterProperties() ) );
+            xRet.set( new TextCharacterPropertiesContext( *this, rXAttributes, mrTextParagraphProperties.getTextCharacterProperties() ) );
             break;
     }
     if ( !xRet.is() )
