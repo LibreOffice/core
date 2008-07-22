@@ -1,0 +1,1085 @@
+--- misc/curl-7.12.2/configure	2004-10-18 00:22:10.000000000 +0200
++++ misc/build/curl-7.12.2/configure	2008-07-08 16:11:12.796875000 +0200
+@@ -1538,8 +1538,8 @@
+ 
+ ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
++ac_compile='$CC -c $ADDCFLAGS $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
++ac_link='$CC -o conftest$ac_exeext $ADDCFLAGS $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+ 
+ 
+@@ -2314,8 +2314,8 @@
+ 
+ ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
++ac_compile='$CC -c $ADDCFLAGS $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
++ac_link='$CC -o conftest$ac_exeext $ADDCFLAGS $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+ if test -n "$ac_tool_prefix"; then
+   # Extract the first word of "${ac_tool_prefix}gcc", so it can be a program name with args.
+@@ -2967,15 +2967,15 @@
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS="$ADDCFLAGS -g -O2"
+   else
+-    CFLAGS="-g"
++    CFLAGS="$ADDCFLAGS -g"
+   fi
+ else
+   if test "$GCC" = yes; then
+-    CFLAGS="-O2"
++    CFLAGS="$ADDCFLAGS -O2"
+   else
+-    CFLAGS=
++    CFLAGS="$ADDCFLAGS"
+   fi
+ fi
+ echo "$as_me:$LINENO: checking for $CC option to accept ANSI C" >&5
+@@ -9456,7 +9456,7 @@
+   ;;
+ 
+ freebsd*)
+-  objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
++  objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+   version_type=freebsd-$objformat
+   case $version_type in
+     freebsd-elf*)
+@@ -13154,7 +13154,7 @@
+   ;;
+ 
+ freebsd*)
+-  objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
++  objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+   version_type=freebsd-$objformat
+   case $version_type in
+     freebsd-elf*)
+@@ -16303,7 +16303,7 @@
+   ;;
+ 
+ freebsd*)
+-  objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
++  objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+   version_type=freebsd-$objformat
+   case $version_type in
+     freebsd-elf*)
+@@ -18650,7 +18650,7 @@
+   ;;
+ 
+ freebsd*)
+-  objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
++  objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+   version_type=freebsd-$objformat
+   case $version_type in
+     freebsd-elf*)
+--- misc/curl-7.12.2/lib/Makefile.os2	2008-07-09 07:45:49.093750000 +0200
++++ misc/build/curl-7.12.2/lib/Makefile.os2	2008-07-08 16:11:13.109375000 +0200
+@@ -1 +1,79 @@
+-dummy
++#############################################################
++# $Id$
++#
++## Makefile for building libcurl.a with MingW32 (GCC-3.2) and
++## optionally OpenSSL (0.9.7)
++##
++## Use: make -f Makefile.m32
++##
++## Comments to: Troy Engel <tengel@sonic.net> or
++##              Joern Hartroth <hartroth@acm.org>
++
++ifndef OPENSSL_PATH
++OPENSSL_PATH = ../../openssl-0.9.7d
++endif
++ifndef ZLIB_PATH
++ZLIB_PATH = ../../zlib-1.2.1
++endif
++
++CC = gcc
++AR = emxomfar
++RM = rm -f 
++RANLIB = echo
++STRIP = echo
++
++########################################################
++## Nothing more to do below this line!
++
++INCLUDES = -I. -I.. -I../include -I../src
++CFLAGS = -s -Zomf -O2 -DOS2
++ifdef SSL
++ INCLUDES += -I"$(OPENSSL_PATH)/outinc" -I"$(OPENSSL_PATH)/outinc/openssl"
++ CFLAGS += -DUSE_SSLEAY -DHAVE_OPENSSL_ENGINE_H
++ DLL_LIBS = -L$(OPENSSL_PATH)/out -leay32 -lssl32
++endif
++ifdef ZLIB
++ INCLUDES += -I"$(ZLIB_PATH)"
++ CFLAGS += -DHAVE_LIBZ -DHAVE_ZLIB_H
++ DLL_LIBS += -L$(ZLIB_PATH) -lz
++endif
++COMPILE = $(CC) $(INCLUDES) $(CFLAGS)
++
++# Makefile.inc provides the CSOURCES and HHEADERS defines
++include Makefile.inc
++
++libcurl_a_OBJECTS := $(patsubst %.c,%.o,$(strip $(CSOURCES)))
++
++libcurl_a_LIBRARIES = libcurl.a
++libcurl_a_DEPENDENCIES = $(strip $(CSOURCES) $(HHEADERS))
++
++all: libcurl.a libcurl.dll
++
++libcurl.a: $(libcurl_a_OBJECTS) $(libcurl_a_DEPENDENCIES)
++	$(RM) libcurl.a
++	$(AR) cru libcurl.a $(libcurl_a_OBJECTS)
++	$(STRIP) $@
++
++# remove the last line above to keep debug info
++
++libcurl.dll: libcurl.a 
++	$(RM) $@
++	dllar -omf -libflags "INITINSTANCE TERMINSTANCE" -libdata "MULTIPLE" libcurl.a -lz -Zmap -Zno-fork -Zhigh-mem -Zbin-files
++
++# remove the last line above to keep debug info
++
++.c.o:
++	$(COMPILE) -c $<
++
++.s.o:
++	$(COMPILE) -c $<
++
++.S.o:
++	$(COMPILE) -c $<
++
++clean:
++	$(RM) $(libcurl_a_OBJECTS) $(RESOURCE)
++
++distrib: clean
++	$(RM) $(libcurl_a_LIBRARIES)
++
+--- misc/curl-7.12.2/lib/Makefile.vc6	2004-09-16 13:13:37.000000000 +0200
++++ misc/build/curl-7.12.2/lib/Makefile.vc6	2008-07-08 16:11:16.765625000 +0200
+@@ -23,7 +23,7 @@
+ ##############################################################
+ 
+ LIB_NAME       = libcurl
+-LIB_NAME_DEBUG = libcurld
++LIB_NAME_DEBUG = libcurl
+ !IFNDEF OPENSSL_PATH
+ OPENSSL_PATH   = ../../openssl-0.9.7d
+ !ENDIF
+@@ -34,7 +34,7 @@
+ 
+ # Use the high resolution time by default.  Comment this out to use low
+ # resolution time and not require winmm.lib
+-USEMM_LIBS = YES
++#USEMM_LIBS = YES
+ 
+ #############################################################
+ ## Nothing more to do below this line!
+@@ -43,7 +43,7 @@
+ CCDEBUG    = cl.exe /MDd /Od /Gm /Zi  /D "_DEBUG" /GZ
+ CFLAGSSSL  = /D "USE_SSLEAY" /I "$(OPENSSL_PATH)/inc32" /I "$(OPENSSL_PATH)/inc32/openssl"
+ CFLAGSZLIB = /D "HAVE_ZLIB_H" /D "HAVE_ZLIB" /D "HAVE_LIBZ" /I "$(ZLIB_PATH)"
+-CFLAGS     = /I "." /I "../include" /nologo /W3 /GX /D "WIN32" /D "VC6" /D "_MBCS" /D "_LIB" /YX /FD /c /D "MSDOS" 
++CFLAGS     = /I "." /I "../include" /nologo /W3 $(EXCFLAGS) /D "WIN32" /D "VC6" /D "_MBCS" /D "_LIB" /FD /c /D "MSDOS" 
+ LNKDLL     = link.exe /DLL  /def:libcurl.def
+ LNKLIB     = link.exe /lib
+ LFLAGS     = /nologo
+@@ -51,7 +51,11 @@
+ !IFDEF USEMM_LIBS
+ WINLIBS    = wsock32.lib winmm.lib
+ !ELSE
++!IFDEF WINDOWS_VISTA_PSDK
++WINLIBS    = wsock32.lib ws2_32.lib
++!ELSE
+ WINLIBS    = wsock32.lib 
++!ENDIF
+ CFLAGS     = $(CFLAGS) /D "WITHOUT_MM_LIB"
+ !ENDIF
+ #  RSAglue.lib was formerly needed in the SSLLIBS
+--- misc/curl-7.12.2/lib/config-os2.h	2008-07-09 07:45:48.484375000 +0200
++++ misc/build/curl-7.12.2/lib/config-os2.h	2008-07-08 16:11:12.859375000 +0200
+@@ -1 +1,531 @@
+-dummy
++/* lib/config.h.  Generated by configure.  */
++/* lib/config.h.in.  Generated from configure.ac by autoheader.  */
++
++/* to disable DICT */
++#define CURL_DISABLE_DICT 1
++
++/* to disable FILE */
++#define CURL_DISABLE_FILE 1
++
++/* to disable FTP */
++/* #undef CURL_DISABLE_FTP */
++
++/* to disable GOPHER */
++#define CURL_DISABLE_GOPHER 1
++
++/* to disable HTTP */
++#define CURL_DISABLE_HTTP 1
++
++/* to disable LDAP */
++#define CURL_DISABLE_LDAP 1
++
++/* to disable TELNET */
++#define CURL_DISABLE_TELNET 1
++
++/* Set to explicitly specify we don't want to use thread-safe functions */
++/* #undef DISABLED_THREADSAFE */
++
++/* your Entropy Gathering Daemon socket pathname */
++/* #undef EGD_SOCKET */
++
++/* Define if you want to enable IPv6 support */
++/* #undef ENABLE_IPV6 */
++
++/* Define to 1 if you have the <alloca.h> header file. */
++#define HAVE_ALLOCA_H 1
++
++/* Define to 1 if you have the <arpa/inet.h> header file. */
++#define HAVE_ARPA_INET_H 1
++
++/* Define to 1 if you have the <assert.h> header file. */
++#define HAVE_ASSERT_H 1
++
++/* Define to 1 if you have the `basename' function. */
++#define HAVE_BASENAME 1
++
++/* Define to 1 if you have the `closesocket' function. */
++/* #undef HAVE_CLOSESOCKET */
++
++/* Define to 1 if you have the `CRYPTO_cleanup_all_ex_data' function. */
++/* #undef HAVE_CRYPTO_CLEANUP_ALL_EX_DATA */
++
++/* Define to 1 if you have the <crypto.h> header file. */
++/* #undef HAVE_CRYPTO_H */
++
++/* Define to 1 if you have the <des.h> header file. */
++/* #undef HAVE_DES_H */
++
++/* disabled non-blocking sockets */
++/* #undef HAVE_DISABLED_NONBLOCKING */
++
++/* Define to 1 if you have the <dlfcn.h> header file. */
++#define HAVE_DLFCN_H 1
++
++/* Define to 1 if you have the `dlopen' function. */
++#define HAVE_DLOPEN 1
++
++/* Define to 1 if you have the <err.h> header file. */
++/* #undef HAVE_ERR_H */
++
++/* Define to 1 if you have the <fcntl.h> header file. */
++#define HAVE_FCNTL_H 1
++
++/* use FIONBIO for non-blocking sockets */
++/* #undef HAVE_FIONBIO */
++
++/* Define if getaddrinfo exists and works */
++/* #undef HAVE_GETADDRINFO */
++
++/* Define to 1 if you have the `geteuid' function. */
++#define HAVE_GETEUID 1
++
++/* Define to 1 if you have the `gethostbyaddr' function. */
++#define HAVE_GETHOSTBYADDR 1
++
++/* If you have gethostbyname */
++#define HAVE_GETHOSTBYNAME 1
++
++/* Define to 1 if you have the `gethostbyname_r' function. */
++/* #undef HAVE_GETHOSTBYNAME_R */
++
++/* gethostbyname_r() takes 3 args */
++/* #undef HAVE_GETHOSTBYNAME_R_3 */
++
++/* gethostbyname_r() takes 5 args */
++/* #undef HAVE_GETHOSTBYNAME_R_5 */
++
++/* gethostbyname_r() takes 6 args */
++/* #undef HAVE_GETHOSTBYNAME_R_6 */
++
++/* Define to 1 if you have the `getpass_r' function. */
++/* #undef HAVE_GETPASS_R */
++
++/* Define to 1 if you have the `getpwuid' function. */
++#define HAVE_GETPWUID 1
++
++/* Define to 1 if you have the `gettimeofday' function. */
++#define HAVE_GETTIMEOFDAY 1
++
++/* we have a glibc-style strerror_r() */
++/* #undef HAVE_GLIBC_STRERROR_R */
++
++/* Define to 1 if you have the `gmtime_r' function. */
++#define HAVE_GMTIME_R 1
++
++/* if you have the gssapi libraries */
++/* #undef HAVE_GSSAPI */
++
++/* if you have the Heimdal gssapi libraries */
++/* #undef HAVE_GSSHEIMDAL */
++
++/* if you have the MIT gssapi libraries */
++/* #undef HAVE_GSSMIT */
++
++/* Define to 1 if you have the `idna_strerror' function. */
++/* #undef HAVE_IDNA_STRERROR */
++
++/* Define to 1 if you have the `idn_free' function. */
++/* #undef HAVE_IDN_FREE */
++
++/* Define to 1 if you have the <idn-free.h> header file. */
++/* #undef HAVE_IDN_FREE_H */
++
++/* Define to 1 if you have the `inet_addr' function. */
++#define HAVE_INET_ADDR 1
++
++/* Define to 1 if you have the `inet_ntoa' function. */
++#define HAVE_INET_NTOA 1
++
++/* Define to 1 if you have the `inet_ntoa_r' function. */
++/* #undef HAVE_INET_NTOA_R */
++
++/* inet_ntoa_r() is declared */
++/* #undef HAVE_INET_NTOA_R_DECL */
++
++/* Define to 1 if you have the `inet_pton' function. */
++#define HAVE_INET_PTON 1
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++#define HAVE_INTTYPES_H 1
++
++/* use ioctlsocket() for non-blocking sockets */
++/* #undef HAVE_IOCTLSOCKET */
++
++/* use Ioctlsocket() for non-blocking sockets */
++/* #undef HAVE_IOCTLSOCKET_CASE */
++
++/* Define to 1 if you have the <io.h> header file. */
++#define HAVE_IO_H 1
++
++/* if you have the Kerberos4 libraries (including -ldes) */
++/* #undef HAVE_KRB4 */
++
++/* Define to 1 if you have the `krb_get_our_ip_for_realm' function. */
++/* #undef HAVE_KRB_GET_OUR_IP_FOR_REALM */
++
++/* Define to 1 if you have the <krb.h> header file. */
++/* #undef HAVE_KRB_H */
++
++/* Define to 1 if you have the `crypto' library (-lcrypto). */
++/* #undef HAVE_LIBCRYPTO */
++
++/* Define to 1 if you have the `dl' library (-ldl). */
++/* #undef HAVE_LIBDL */
++
++/* Define to 1 if you have the <libgen.h> header file. */
++#define HAVE_LIBGEN_H 1
++
++/* Define to 1 if you have the `idn' library (-lidn). */
++/* #undef HAVE_LIBIDN */
++
++/* Define to 1 if you have the `resolv' library (-lresolv). */
++/* #undef HAVE_LIBRESOLV */
++
++/* Define to 1 if you have the `resolve' library (-lresolve). */
++/* #undef HAVE_LIBRESOLVE */
++
++/* Define to 1 if you have the `socket' library (-lsocket). */
++/* #undef HAVE_LIBSOCKET */
++
++/* Define to 1 if you have the `ssl' library (-lssl). */
++/* #undef HAVE_LIBSSL */
++
++/* if zlib is available */
++#define HAVE_LIBZ 1
++
++/* Define to 1 if you have the <limits.h> header file. */
++#define HAVE_LIMITS_H 1
++
++/* if your compiler supports LL */
++#define HAVE_LL 1
++
++/* Define to 1 if you have the `localtime_r' function. */
++#define HAVE_LOCALTIME_R 1
++
++/* if your compiler supports long long */
++#define HAVE_LONGLONG 1
++
++/* Define to 1 if you have the <malloc.h> header file. */
++#define HAVE_MALLOC_H 1
++
++/* Define to 1 if you have the <memory.h> header file. */
++#define HAVE_MEMORY_H 1
++
++/* Define to 1 if you have the <netdb.h> header file. */
++#define HAVE_NETDB_H 1
++
++/* Define to 1 if you have the <netinet/in.h> header file. */
++#define HAVE_NETINET_IN_H 1
++
++/* Define to 1 if you have the <netinet/tcp.h> header file. */
++#define HAVE_NETINET_TCP_H 1
++
++/* Define to 1 if you have the <net/if.h> header file. */
++#define HAVE_NET_IF_H 1
++
++/* Define if NI_WITHSCOPEID exists and works */
++/* #undef HAVE_NI_WITHSCOPEID */
++
++/* we have no strerror_r() proto */
++/* #undef HAVE_NO_STRERROR_R_DECL */
++
++/* Define to 1 if you have the <openssl/crypto.h> header file. */
++/* #undef HAVE_OPENSSL_CRYPTO_H */
++
++/* Define to 1 if you have the <openssl/engine.h> header file. */
++/* #undef HAVE_OPENSSL_ENGINE_H */
++
++/* Define to 1 if you have the <openssl/err.h> header file. */
++/* #undef HAVE_OPENSSL_ERR_H */
++
++/* Define to 1 if you have the <openssl/pem.h> header file. */
++/* #undef HAVE_OPENSSL_PEM_H */
++
++/* Define to 1 if you have the <openssl/rsa.h> header file. */
++/* #undef HAVE_OPENSSL_RSA_H */
++
++/* Define to 1 if you have the <openssl/ssl.h> header file. */
++/* #undef HAVE_OPENSSL_SSL_H */
++
++/* Define to 1 if you have the <openssl/x509.h> header file. */
++/* #undef HAVE_OPENSSL_X509_H */
++
++/* use O_NONBLOCK for non-blocking sockets */
++#define HAVE_O_NONBLOCK 1
++
++/* Define to 1 if you have the <pem.h> header file. */
++/* #undef HAVE_PEM_H */
++
++/* Define to 1 if you have the `perror' function. */
++#define HAVE_PERROR 1
++
++/* Define to 1 if you have the `poll' function. */
++/* #undef HAVE_POLL */
++
++/* If you have a fine poll */
++/* #undef HAVE_POLL_FINE */
++
++/* we have a POSIX-style strerror_r() */
++#define HAVE_POSIX_STRERROR_R 1
++
++/* Define to 1 if you have the <pwd.h> header file. */
++#define HAVE_PWD_H 1
++
++/* Define to 1 if you have the `RAND_egd' function. */
++/* #undef HAVE_RAND_EGD */
++
++/* Define to 1 if you have the `RAND_screen' function. */
++/* #undef HAVE_RAND_SCREEN */
++
++/* Define to 1 if you have the `RAND_status' function. */
++/* #undef HAVE_RAND_STATUS */
++
++/* Define to 1 if you have the <rsa.h> header file. */
++/* #undef HAVE_RSA_H */
++
++/* Define to 1 if you have the `select' function. */
++#define HAVE_SELECT 1
++
++/* Define to 1 if you have the <setjmp.h> header file. */
++#define HAVE_SETJMP_H 1
++
++/* Define to 1 if you have the <sgtty.h> header file. */
++#define HAVE_SGTTY_H 1
++
++/* Define to 1 if you have the `sigaction' function. */
++#define HAVE_SIGACTION 1
++
++/* Define to 1 if you have the `siginterrupt' function. */
++#define HAVE_SIGINTERRUPT 1
++
++/* Define to 1 if you have the `signal' function. */
++#define HAVE_SIGNAL 1
++
++/* If you have sigsetjmp */
++#define HAVE_SIGSETJMP 1
++
++/* Define to 1 if you have the `socket' function. */
++#define HAVE_SOCKET 1
++
++/* use SO_NONBLOCK for non-blocking sockets */
++/* #undef HAVE_SO_NONBLOCK */
++
++/* Define this if you have the SPNEGO library fbopenssl */
++/* #undef HAVE_SPNEGO */
++
++/* Define to 1 if you have the <ssl.h> header file. */
++/* #undef HAVE_SSL_H */
++
++/* Define to 1 if you have the <stdint.h> header file. */
++#define HAVE_STDINT_H 1
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#define HAVE_STDLIB_H 1
++
++/* Define to 1 if you have the `strcasecmp' function. */
++#define HAVE_STRCASECMP 1
++
++/* Define to 1 if you have the `strcmpi' function. */
++/* #undef HAVE_STRCMPI */
++
++/* Define to 1 if you have the `strdup' function. */
++#define HAVE_STRDUP 1
++
++/* Define to 1 if you have the `strerror_r' function. */
++#define HAVE_STRERROR_R 1
++
++/* Define to 1 if you have the `strftime' function. */
++#define HAVE_STRFTIME 1
++
++/* Define to 1 if you have the `stricmp' function. */
++#define HAVE_STRICMP 1
++
++/* Define to 1 if you have the <strings.h> header file. */
++#define HAVE_STRINGS_H 1
++
++/* Define to 1 if you have the <string.h> header file. */
++#define HAVE_STRING_H 1
++
++/* Define to 1 if you have the `strlcat' function. */
++#define HAVE_STRLCAT 1
++
++/* Define to 1 if you have the `strlcpy' function. */
++/* #undef HAVE_STRLCPY */
++
++/* Define to 1 if you have the `strstr' function. */
++#define HAVE_STRSTR 1
++
++/* Define to 1 if you have the `strtok_r' function. */
++#define HAVE_STRTOK_R 1
++
++/* Define to 1 if you have the `strtoll' function. */
++#define HAVE_STRTOLL 1
++
++/* Define to 1 if you have the <sys/ioctl.h> header file. */
++#define HAVE_SYS_IOCTL_H 1
++
++/* Define to 1 if you have the <sys/param.h> header file. */
++#define HAVE_SYS_PARAM_H 1
++
++/* Define to 1 if you have the <sys/poll.h> header file. */
++/* #undef HAVE_SYS_POLL_H */
++
++/* Define to 1 if you have the <sys/select.h> header file. */
++#define HAVE_SYS_SELECT_H 1
++
++/* Define to 1 if you have the <sys/socket.h> header file. */
++#define HAVE_SYS_SOCKET_H 1
++
++/* Define to 1 if you have the <sys/sockio.h> header file. */
++#define HAVE_SYS_SOCKIO_H 1
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#define HAVE_SYS_STAT_H 1
++
++/* Define to 1 if you have the <sys/time.h> header file. */
++#define HAVE_SYS_TIME_H 1
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#define HAVE_SYS_TYPES_H 1
++
++/* Define to 1 if you have the <sys/utime.h> header file. */
++#define HAVE_SYS_UTIME_H 1
++
++/* Define to 1 if you have the `tcgetattr' function. */
++#define HAVE_TCGETATTR 1
++
++/* Define to 1 if you have the `tcsetattr' function. */
++#define HAVE_TCSETATTR 1
++
++/* Define to 1 if you have the <termios.h> header file. */
++#define HAVE_TERMIOS_H 1
++
++/* Define to 1 if you have the <termio.h> header file. */
++#define HAVE_TERMIO_H 1
++
++/* Define to 1 if you have the <time.h> header file. */
++#define HAVE_TIME_H 1
++
++/* Define to 1 if you have the `tld_strerror' function. */
++/* #undef HAVE_TLD_STRERROR */
++
++/* Define to 1 if you have the `uname' function. */
++#define HAVE_UNAME 1
++
++/* Define to 1 if you have the <unistd.h> header file. */
++#define HAVE_UNISTD_H 1
++
++/* Define to 1 if you have the `utime' function. */
++#define HAVE_UTIME 1
++
++/* Define to 1 if you have the <utime.h> header file. */
++#define HAVE_UTIME_H 1
++
++/* Define to 1 if you have the <winsock.h> header file. */
++/* #undef HAVE_WINSOCK_H */
++
++/* Define this symbol if your OS supports changing the contents of argv */
++#define HAVE_WRITABLE_ARGV 1
++
++/* Define to 1 if you have the <x509.h> header file. */
++/* #undef HAVE_X509_H */
++
++/* if you have the zlib.h header file */
++#define HAVE_ZLIB_H 1
++
++/* If you lack a fine basename() prototype */
++/* #undef NEED_BASENAME_PROTO */
++
++/* need REENTRANT defined */
++/* #undef NEED_REENTRANT */
++
++/* cpu-machine-OS */
++#define OS "i386-pc-os2-emx"
++
++/* Name of package */
++#define PACKAGE "curl"
++
++/* Define to the address where bug reports for this package should be sent. */
++#define PACKAGE_BUGREPORT "a suitable curl mailing list => http://curl.haxx.se/mail/"
++
++/* Define to the full name of this package. */
++#define PACKAGE_NAME "curl"
++
++/* Define to the full name and version of this package. */
++#define PACKAGE_STRING "curl -"
++
++/* Define to the one symbol short name of this package. */
++#define PACKAGE_TARNAME "curl"
++
++/* Define to the version of this package. */
++#define PACKAGE_VERSION "-"
++
++/* a suitable file to read random data from */
++/* #undef RANDOM_FILE */
++
++/* Define as the return type of signal handlers (`int' or `void'). */
++#define RETSIGTYPE void
++
++/* Define to the type of arg 1 for `select'. */
++#define SELECT_TYPE_ARG1 int
++
++/* Define to the type of args 2, 3 and 4 for `select'. */
++#define SELECT_TYPE_ARG234 (fd_set *)
++
++/* Define to the type of arg 5 for `select'. */
++#define SELECT_TYPE_ARG5 (struct timeval *)
++
++/* The size of a `curl_off_t', as computed by sizeof. */
++#define SIZEOF_CURL_OFF_T 8
++
++/* The size of a `long', as computed by sizeof. */
++#define SIZEOF_LONG 4
++
++/* The size of a `size_t', as computed by sizeof. */
++#define SIZEOF_SIZE_T 4
++
++/* Define to 1 if you have the ANSI C header files. */
++#define STDC_HEADERS 1
++
++/* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
++#define TIME_WITH_SYS_TIME 1
++
++/* Define if you want to enable ares support */
++/* #undef USE_ARES */
++
++/* If you want to build curl with the built-in manual */
++/* #undef USE_MANUAL */
++
++/* Version number of package */
++#define VERSION "7.12.2"
++
++/* Define to 1 if on AIX 3.
++  System headers sometimes define this.
++  We just want to avoid a redefinition error message.  */
++#ifndef _ALL_SOURCE
++/* # undef _ALL_SOURCE */
++#endif
++
++/* Number of bits in a file offset, on hosts where this is settable. */
++/* #undef _FILE_OFFSET_BITS */
++
++/* Define for large files, on AIX-style hosts. */
++/* #undef _LARGE_FILES */
++
++/* define this if you need it to compile thread-safe code */
++/* #undef _THREAD_SAFE */
++
++/* Define to empty if `const' does not conform to ANSI C. */
++/* #undef const */
++
++/* type to use in place of in_addr_t if not defined */
++/* #undef in_addr_t */
++
++/* Define to `unsigned' if <sys/types.h> does not define. */
++/* #undef size_t */
++
++/* type to use in place of socklen_t if not defined */
++#define socklen_t int
++
++/* the signed version of size_t */
++/* #undef ssize_t */
+--- misc/curl-7.12.2/lib/config-win32.h	2004-07-29 15:09:58.000000000 +0200
++++ misc/build/curl-7.12.2/lib/config-win32.h	2008-07-08 16:11:12.984375000 +0200
+@@ -29,6 +29,24 @@
+ /* Define this to 'int' if ssize_t is not an available typedefed type */
+ #define ssize_t int
+ 
++/* Define to disable DICT */
++#define CURL_DISABLE_DICT 1
++ 
++/* Define to disable FILE */
++#define CURL_DISABLE_FILE 1
++ 
++/* Define to disable GOPHER */
++#define CURL_DISABLE_GOPHER 1
++ 
++/* Define to disable LDAP */
++#define CURL_DISABLE_LDAP 1
++ 
++/* Define to disable TELNET */
++#define CURL_DISABLE_TELNET 1
++ 
++/* Define if you want to enable IPv6 support */
++#define ENABLE_IPV6 1
++
+ /* Define this to 'int' if socklen_t is not an available typedefed type */
+ #if !defined(ENABLE_IPV6) && ((_MSC_VER < 1300) || !defined(USE_SSLEAY))
+ #define socklen_t int
+--- misc/curl-7.12.2/lib/http_ntlm.c	2004-07-29 15:09:58.000000000 +0200
++++ misc/build/curl-7.12.2/lib/http_ntlm.c	2008-07-08 16:11:13.062500000 +0200
+@@ -528,6 +528,13 @@
+     size=64;
+     ntlmbuf[62]=ntlmbuf[63]=0;
+ 
++    /* Make sure that the user and domain strings fit in the target buffer
++       before we copy them there. */
++    if(size + userlen + domlen >= sizeof(ntlmbuf)) {
++      failf(conn->data, "user + domain name too big");
++      return CURLE_OUT_OF_MEMORY;
++    }
++
+     memcpy(&ntlmbuf[size], domain, domlen);
+     size += domlen;
+ 
+--- misc/curl-7.12.2/lib/setup.h	2004-10-08 10:06:16.000000000 +0200
++++ misc/build/curl-7.12.2/lib/setup.h	2008-07-08 16:23:32.328125000 +0200
+@@ -44,6 +44,10 @@
+ /* hand-modified win32 config.h! */
+ #include "config-win32.h"
+ #endif
++#ifdef OS2
++/* hand-modified os2 config.h! */
++#include "config-os2.h"
++#endif
+ #endif
+ 
+ #ifdef macintosh
+@@ -161,21 +165,11 @@
+ #define WIN32_LEAN_AND_MEAN  /* Prevent including <winsock*.h> in <windows.h> */
+ #endif
+ 
+-#if (defined(ENABLE_IPV6) || defined(CURLDEBUG)) && defined(_MSC_VER) && \
+-    (!defined(_WIN32_WINNT) || _WIN32_WINNT < 0x0500)
+-/*
+- * Needed to pull in the real getaddrinfo() and not the inline version
+- * in <wspiAPI.H> which doesn't support IPv6 (IPv4 only). <wspiAPI.H> is
+- * included from <ws2tcpip.h> for <= 0x0500 SDKs.
+- */
+-#undef  _WIN32_WINNT
+-#define _WIN32_WINNT 0x0501
+-#endif
+-
+ #include <winsock2.h>        /* required by telnet.c */
+ 
+ #if defined(ENABLE_IPV6) || defined(USE_SSLEAY)
+ #include <ws2tcpip.h>
++#include <wspiapi.h>
+ #endif
+ 
+ #if !defined(__GNUC__) || defined(__MINGW32__)
+--- misc/curl-7.12.2/lib/url.c	2004-10-18 00:21:02.000000000 +0200
++++ misc/build/curl-7.12.2/lib/url.c	2008-07-08 16:11:13.375000000 +0200
+@@ -814,27 +814,6 @@
+        and this just changes the actual request keyword */
+     break;
+ 
+-  case CURLOPT_PROXY:
+-    /*
+-     * Set proxy server:port to use as HTTP proxy.
+-     *
+-     * If the proxy is set to "" we explicitly say that we don't want to use a
+-     * proxy (even though there might be environment variables saying so).
+-     *
+-     * Setting it to NULL, means no proxy but allows the environment variables
+-     * to decide for us.
+-     */
+-    if(data->change.proxy_alloc) {
+-      /*
+-       * The already set string is allocated, free that first
+-       */
+-      data->change.proxy_alloc=FALSE;;
+-      free(data->change.proxy);
+-    }
+-    data->set.set_proxy = va_arg(param, char *);
+-    data->change.proxy = data->set.set_proxy;
+-    break;
+-
+   case CURLOPT_PROXYPORT:
+     /*
+      * Explicitly set HTTP proxy port number.
+@@ -883,6 +862,27 @@
+   break;
+ #endif   /* CURL_DISABLE_HTTP */
+ 
++  case CURLOPT_PROXY:
++    /*
++     * Set proxy server:port to use as HTTP proxy.
++     *
++     * If the proxy is set to "" we explicitly say that we don't want to use a
++     * proxy (even though there might be environment variables saying so).
++     *
++     * Setting it to NULL, means no proxy but allows the environment variables
++     * to decide for us.
++     */
++    if(data->change.proxy_alloc) {
++      /*
++       * The already set string is allocated, free that first
++       */
++      data->change.proxy_alloc=FALSE;;
++      free(data->change.proxy);
++    }
++    data->set.set_proxy = va_arg(param, char *);
++    data->change.proxy = data->set.set_proxy;
++    break;
++
+   case CURLOPT_WRITEHEADER:
+     /*
+      * Custom pointer to pass the header write callback function
+@@ -1428,7 +1428,7 @@
+     result = CURLE_FAILED_INIT; /* correct this */
+     break;
+   }
+-  
++
+   return result;
+ }
+ 
+@@ -2278,12 +2278,18 @@
+   if(urllen < LEAST_PATH_ALLOC)
+     urllen=LEAST_PATH_ALLOC;
+ 
+-  conn->pathbuffer=(char *)malloc(urllen);
++  /*
++   * We malloc() the buffers below urllen+2 to make room for to possibilities:
++   * 1 - an extra terminating zero
++   * 2 - an extra slash (in case a syntax like "www.host.com?moo" is used)
++   */
++
++  conn->pathbuffer=(char *)malloc(urllen+2);
+   if(NULL == conn->pathbuffer)
+     return CURLE_OUT_OF_MEMORY; /* really bad error */
+   conn->path = conn->pathbuffer;
+ 
+-  conn->host.rawalloc=(char *)malloc(urllen);
++  conn->host.rawalloc=(char *)malloc(urllen+2);
+   if(NULL == conn->host.rawalloc)
+     return CURLE_OUT_OF_MEMORY;
+   conn->host.name = conn->host.rawalloc;
+@@ -2461,6 +2467,7 @@
+       return CURLE_OUT_OF_MEMORY;
+   }
+ 
++#ifndef CURL_DISABLE_HTTP
+   /*************************************************************
+    * Detect what (if any) proxy to use
+    *************************************************************/
+@@ -2625,6 +2632,7 @@
+     if(no_proxy)
+       free(no_proxy);
+   } /* if not using proxy */
++#endif /* CURL_DISABLE_HTTP */
+ 
+   /*************************************************************
+    * No protocol part in URL was used, add it!
+@@ -2880,54 +2888,6 @@
+     return CURLE_UNSUPPORTED_PROTOCOL;
+   }
+ 
+-  /*************************************************************
+-   * Figure out the remote port number
+-   *
+-   * No matter if we use a proxy or not, we have to figure out the remote
+-   * port number of various reasons.
+-   *
+-   * To be able to detect port number flawlessly, we must not confuse them
+-   * IPv6-specified addresses in the [0::1] style. (RFC2732)
+-   *
+-   * The conn->host.name is currently [user:passwd@]host[:port] where host
+-   * could be a hostname, IPv4 address or IPv6 address.
+-   *************************************************************/
+-  if((1 == sscanf(conn->host.name, "[%*39[0-9a-fA-F:.]%c", &endbracket)) &&
+-     (']' == endbracket)) {
+-    /* this is a RFC2732-style specified IP-address */
+-    conn->bits.ipv6_ip = TRUE;
+-
+-    conn->host.name++; /* pass the starting bracket */
+-    tmp = strchr(conn->host.name, ']');
+-    *tmp = 0; /* zero terminate */
+-    tmp++; /* pass the ending bracket */
+-    if(':' != *tmp)
+-      tmp = NULL; /* no port number available */
+-  }
+-  else
+-    tmp = strrchr(conn->host.name, ':');
+-
+-  if (tmp) {
+-    char *rest;
+-    unsigned long port;
+-
+-    port=strtoul(tmp+1, &rest, 10);  /* Port number must be decimal */
+-
+-    if (rest != (tmp+1) && *rest == '\0') {
+-      /* The colon really did have only digits after it,
+-       * so it is either a port number or a mistake */
+-
+-      if (port > 0xffff) {   /* Single unix standard says port numbers are
+-                              * 16 bits long */
+-        failf(data, "Port number too large: %lu", port);
+-        return CURLE_URL_MALFORMAT;
+-      }
+-
+-      *tmp = '\0'; /* cut off the name there */
+-      conn->remote_port = (unsigned short)port;
+-    }
+-  }
+-
+   if(data->change.proxy && *data->change.proxy) {
+     /* If this is supposed to use a proxy, we need to figure out the proxy
+        host name name, so that we can re-use an existing connection
+@@ -3119,6 +3079,54 @@
+     return CURLE_OUT_OF_MEMORY;
+ 
+   /*************************************************************
++   * Figure out the remote port number
++   *
++   * No matter if we use a proxy or not, we have to figure out the remote
++   * port number of various reasons.
++   *
++   * To be able to detect port number flawlessly, we must not confuse them
++   * IPv6-specified addresses in the [0::1] style. (RFC2732)
++   *
++   * The conn->host.name is currently host[:port] where host could be a
++   * hostname, IPv4 address or IPv6 address.
++   *************************************************************/
++  if((1 == sscanf(conn->host.name, "[%*39[0-9a-fA-F:.]%c", &endbracket)) &&
++     (']' == endbracket)) {
++    /* this is a RFC2732-style specified IP-address */
++    conn->bits.ipv6_ip = TRUE;
++
++    conn->host.name++; /* pass the starting bracket */
++    tmp = strchr(conn->host.name, ']');
++    *tmp = 0; /* zero terminate */
++    tmp++; /* pass the ending bracket */
++    if(':' != *tmp)
++      tmp = NULL; /* no port number available */
++  }
++  else
++    tmp = strrchr(conn->host.name, ':');
++
++  if (tmp) {
++    char *rest;
++    unsigned long port;
++
++    port=strtoul(tmp+1, &rest, 10);  /* Port number must be decimal */
++
++    if (rest != (tmp+1) && *rest == '\0') {
++      /* The colon really did have only digits after it,
++       * so it is either a port number or a mistake */
++
++      if (port > 0xffff) {   /* Single unix standard says port numbers are
++                              * 16 bits long */
++        failf(data, "Port number too large: %lu", port);
++        return CURLE_URL_MALFORMAT;
++      }
++
++      *tmp = '\0'; /* cut off the name there */
++      conn->remote_port = (unsigned short)port;
++    }
++  }
++
++  /*************************************************************
+    * Check the current list of connections to see if we can
+    * re-use an already existing one or if we have to create a
+    * new one.
+@@ -3471,9 +3479,7 @@
+    * characters (you get mangled text files, and corrupted binary files when
+    * you download to stdout and redirect it to a file). */
+ 
+-  if ((data->set.out)->_handle == NULL) {
+     _fsetmode(stdout, "b");
+-  }
+ #endif
+ 
+   return CURLE_OK;
+--- misc/curl-7.12.2/ltmain.sh	2004-08-09 13:12:17.000000000 +0200
++++ misc/build/curl-7.12.2/ltmain.sh	2008-07-08 16:11:13.484375000 +0200
+@@ -2915,12 +2915,12 @@
+ 	  # which has an extra 1 added just for fun
+ 	  #
+ 	  case $version_type in
+-	  darwin|linux|osf|windows)
++	  darwin|linux|osf|windows|freebsd-aout|freebsd-elf)
+ 	    current=`expr $number_major + $number_minor`
+ 	    age="$number_minor"
+ 	    revision="$number_revision"
+ 	    ;;
+-	  freebsd-aout|freebsd-elf|sunos)
++	  sunos)
+ 	    current="$number_major"
+ 	    revision="$number_minor"
+ 	    age="0"
+@@ -2990,16 +2990,6 @@
+ 	  verstring="-compatibility_version $minor_current -current_version $minor_current.$revision"
+ 	  ;;
+ 
+-	freebsd-aout)
+-	  major=".$current"
+-	  versuffix=".$current.$revision";
+-	  ;;
+-
+-	freebsd-elf)
+-	  major=".$current"
+-	  versuffix=".$current";
+-	  ;;
+-
+ 	irix | nonstopux)
+ 	  major=`expr $current - $age + 1`
+ 
+@@ -3022,7 +3012,7 @@
+ 	  versuffix="$major.$revision"
+ 	  ;;
+ 
+-	linux)
++	linux|freebsd-aout|freebsd-elf)
+ 	  major=.`expr $current - $age`
+ 	  versuffix="$major.$age.$revision"
+ 	  ;;
