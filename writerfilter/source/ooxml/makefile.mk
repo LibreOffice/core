@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.16 $
+# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -184,7 +184,7 @@ XSLTPROC=$(SOLARVER)$/$(INPATH)$/bin$(UPDMINOREXT)$/xsltproc
 XSLTPROC=xsltproc
 .ENDIF
 
-$(TOKENXMLTMP): 
+$(TOKENXMLTMP): $(SOLARVER)$/$(INPATH)$/inc$(UPDMINOREXT)$/oox$/token.txt
     $(TYPE) $(SOLARVER)$/$(INPATH)$/inc$(UPDMINOREXT)$/oox$/token.txt | $(SED) "s#\(.*\)#<fasttoken>\1</fasttoken>#" > $@
 
 $(TOKENXML): tokenxmlheader $(TOKENXMLTMP) tokenxmlfooter
