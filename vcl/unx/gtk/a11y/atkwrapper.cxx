@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atkwrapper.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -130,6 +130,10 @@ static AtkRelationType mapRelationType( sal_Int16 nRelation )
 
         case accessibility::AccessibleRelationType::SUB_WINDOW_OF:
             type = ATK_RELATION_SUBWINDOW_OF;
+            break;
+
+        case accessibility::AccessibleRelationType::NODE_CHILD_OF:
+            type = ATK_RELATION_NODE_CHILD_OF;
             break;
 
         default:
