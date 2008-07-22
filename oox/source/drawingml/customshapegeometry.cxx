@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: customshapegeometry.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,16 +28,16 @@
  *
  ************************************************************************/
 
-#include <com/sun/star/xml/sax/FastToken.hpp>
+#include "oox/drawingml/customshapegeometry.hxx"
 
+#include <com/sun/star/xml/sax/FastToken.hpp>
+#include <comphelper/stl_types.hxx>
+#include <hash_map>
+
+#include "oox/helper/helper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/core/namespaces.hxx"
-#include "oox/drawingml/customshapegeometry.hxx"
 #include "tokens.hxx"
-#ifndef _UTL_STLTYPES_HXX_
-#include <comphelper/stl_types.hxx>
-#endif
-#include <hash_map>
 
 using ::rtl::OUString;
 using ::com::sun::star::beans::NamedValue;
