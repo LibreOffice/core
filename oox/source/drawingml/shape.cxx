@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shape.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,8 +30,12 @@
 
 #include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/theme.hxx"
+#include "oox/drawingml/fillproperties.hxx"
+#include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/textbody.hxx"
+#include "oox/drawingml/table/tableproperties.hxx"
 #include "oox/core/namespaces.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "tokens.hxx"
 
@@ -67,11 +71,11 @@ CreateShapeCallback::~CreateShapeCallback()
 // ============================================================================
 
 Shape::Shape( const sal_Char* pServiceName )
-: mpLinePropertiesPtr( new LineProperties() )
-, mpFillPropertiesPtr( new FillProperties( XML_spPr ) )
-, mpGraphicPropertiesPtr( new FillProperties( XML_pic ) )
-, mpCustomShapePropertiesPtr( new CustomShapeProperties() )
-, mpMasterTextListStyle( new TextListStyle() )
+: mpLinePropertiesPtr( new LineProperties )
+, mpFillPropertiesPtr( new FillProperties )
+, mpGraphicPropertiesPtr( new FillProperties )
+, mpCustomShapePropertiesPtr( new CustomShapeProperties )
+, mpMasterTextListStyle( new TextListStyle )
 , mnSubType( 0 )
 , mnIndex( 0 )
 , mnRotation( 0 )
@@ -86,6 +90,13 @@ Shape::~Shape()
 {
 }
 
+table::TablePropertiesPtr Shape::getTableProperties()
+{
+    if ( !mpTablePropertiesPtr.get() )
+        mpTablePropertiesPtr.reset( new table::TableProperties() );
+    return mpTablePropertiesPtr;
+}
+
 void Shape::setDefaults()
 {
     const OUString sTextAutoGrowHeight( RTL_CONSTASCII_USTRINGPARAM( "TextAutoGrowHeight" ) );
@@ -95,8 +106,8 @@ void Shape::setDefaults()
     const OUString sTextRightDistance( RTL_CONSTASCII_USTRINGPARAM( "TextRightDistance" ) );
     const OUString sTextLowerDistance( RTL_CONSTASCII_USTRINGPARAM( "TextLowerDistance" ) );
     const OUString sCharHeight( RTL_CONSTASCII_USTRINGPARAM( "CharHeight" ) );
-    maShapeProperties[ sTextAutoGrowHeight ] <<= sal_False;
-    maShapeProperties[ sTextWordWrap ] <<= sal_True;
+    maShapeProperties[ sTextAutoGrowHeight ] <<= false;
+    maShapeProperties[ sTextWordWrap ] <<= true;
     maShapeProperties[ sTextLeftDistance ]  <<= static_cast< sal_Int32 >( 250 );
     maShapeProperties[ sTextUpperDistance ] <<= static_cast< sal_Int32 >( 125 );
     maShapeProperties[ sTextRightDistance ] <<= static_cast< sal_Int32 >( 250 );
@@ -110,6 +121,12 @@ void Shape::setServiceName( const sal_Char* pServiceName )
         msServiceName = OUString::createFromAscii( pServiceName );
 }
 
+
+const ShapeStyleRef* Shape::getShapeStyleRef( sal_Int32 nRefType ) const
+{
+    ShapeStyleRefMap::const_iterator aIt = maShapeStyleRefs.find( nRefType );
+    return (aIt == maShapeStyleRefs.end()) ? 0 : &aIt->second;
+}
 
 void Shape::addShape(
         const ::oox::core::XmlFilterBase& rFilterBase,
@@ -133,7 +150,7 @@ void Shape::addShape(
             // if this is a group shape, we have to add also each child shape
             Reference< XShapes > xShapes( xShape, UNO_QUERY );
             if ( xShapes.is() )
-                addChilds( rFilterBase, *this, rxTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap );
+                addChildren( rFilterBase, *this, rxTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap );
         }
     }
     catch( const Exception&  )
@@ -141,7 +158,7 @@ void Shape::addShape(
     }
 }
 
-void Shape::applyShapeReference( const oox::drawingml::Shape& rReferencedShape )
+void Shape::applyShapeReference( const Shape& rReferencedShape )
 {
     mpTextBody = TextBodyPtr( new TextBody( *rReferencedShape.mpTextBody.get() ) );
     maShapeProperties = rReferencedShape.maShapeProperties;
@@ -150,8 +167,7 @@ void Shape::applyShapeReference( const oox::drawingml::Shape& rReferencedShape )
     mpCustomShapePropertiesPtr = CustomShapePropertiesPtr( new CustomShapeProperties( *rReferencedShape.mpCustomShapePropertiesPtr.get() ) );
     mpTablePropertiesPtr = table::TablePropertiesPtr( rReferencedShape.mpTablePropertiesPtr.get() ? new table::TableProperties( *rReferencedShape.mpTablePropertiesPtr.get() ) : NULL );
     mpMasterTextListStyle = TextListStylePtr( new TextListStyle( *rReferencedShape.mpMasterTextListStyle.get() ) );
-    maShapeStylesColorMap = rReferencedShape.maShapeStylesColorMap;
-    maShapeStylesIndexMap = rReferencedShape.maShapeStylesIndexMap;
+    maShapeStyleRefs = rReferencedShape.maShapeStyleRefs;
     maSize = rReferencedShape.maSize;
     maPosition = rReferencedShape.maPosition;
     mnRotation = rReferencedShape.mnRotation;
@@ -160,7 +176,7 @@ void Shape::applyShapeReference( const oox::drawingml::Shape& rReferencedShape )
 }
 
 // for group shapes, the following method is also adding each child
-void Shape::addChilds(
+void Shape::addChildren(
         const ::oox::core::XmlFilterBase& rFilterBase,
         Shape& rMaster,
         const ThemePtr& rxTheme,
@@ -173,8 +189,8 @@ void Shape::addChilds(
     sal_Int32 nGlobalRight = SAL_MIN_INT32;
     sal_Int32 nGlobalTop   = SAL_MAX_INT32;
     sal_Int32 nGlobalBottom= SAL_MIN_INT32;
-    std::vector< ShapePtr >::iterator aIter( rMaster.maChilds.begin() );
-    while( aIter != rMaster.maChilds.end() )
+    std::vector< ShapePtr >::iterator aIter( rMaster.maChildren.begin() );
+    while( aIter != rMaster.maChildren.end() )
     {
         sal_Int32 l = (*aIter)->maPosition.X;
         sal_Int32 t = (*aIter)->maPosition.Y;
@@ -190,8 +206,8 @@ void Shape::addChilds(
             nGlobalBottom = b;
         aIter++;
     }
-    aIter = rMaster.maChilds.begin();
-    while( aIter != rMaster.maChilds.end() )
+    aIter = rMaster.maChildren.begin();
+    while( aIter != rMaster.maChildren.end() )
     {
         Rectangle aShapeRect;
         Rectangle* pShapeRect = 0;
@@ -215,38 +231,6 @@ void Shape::addChilds(
             }
         }
         (*aIter++)->addShape( rFilterBase, rxTheme, rxShapes, pShapeRect, pShapeMap );
-    }
-}
-
-void applyPropertyMap( uno::Reference< drawing::XShape >& rxShape, PropertyMap& rPropertyMap )
-{
-    if( !rPropertyMap.empty() )
-    {
-        Reference< XMultiPropertySet > xMSet( rxShape, UNO_QUERY );
-        if( xMSet.is() )
-        {
-            try
-            {
-                Sequence< OUString > aNames;
-                Sequence< Any > aValues;
-                rPropertyMap.makeSequence( aNames, aValues );
-                xMSet->setPropertyValues( aNames,  aValues);
-            }
-            catch( Exception& )
-            {
-            }
-        }
-        else
-        {
-            uno::Reference< beans::XPropertySet > xSet( rxShape, uno::UNO_QUERY_THROW );
-            uno::Reference< beans::XPropertySetInfo > xInfo( xSet->getPropertySetInfo() );
-
-            for( PropertyMap::const_iterator aIter( rPropertyMap.begin() ); aIter != rPropertyMap.end(); aIter++ )
-            {
-                if ( xInfo->hasPropertyByName( (*aIter).first ) )
-                    xSet->setPropertyValue( (*aIter).first, (*aIter).second );
-            }
-        }
     }
 }
 
@@ -364,7 +348,7 @@ Reference< XShape > Shape::createAndInsert(
     if ( !mxShape.is() )
         mxShape = Reference< drawing::XShape >( xServiceFact->createInstance( rServiceName ), UNO_QUERY_THROW );
 
-    Reference< XPropertySet > xSet( mxShape, UNO_QUERY_THROW );
+    Reference< XPropertySet > xSet( mxShape, UNO_QUERY );
     if( mxShape.is() && xSet.is() )
     {
         if( msName.getLength() )
@@ -376,23 +360,52 @@ Reference< XShape > Shape::createAndInsert(
         rxShapes->add( mxShape );
 
         LineProperties aLineProperties;
+        aLineProperties.maLineFill.moFillType = XML_none;
+        sal_Int32 nLinePhClr = -1;
         FillProperties aFillProperties;
-        PropertyMap    aShapeProperties;
+        aFillProperties.moFillType = XML_none;
+        sal_Int32 nFillPhClr = -1;
 
-        setShapeStyles( rxTheme, aLineProperties, aFillProperties );
-        setShapeStyleColors( rFilterBase, aLineProperties, aFillProperties, aShapeProperties );
+        if( rxTheme.get() )
+        {
+            if( const ShapeStyleRef* pLineRef = getShapeStyleRef( XML_lnRef ) )
+            {
+                if( const LineProperties* pLineProps = rxTheme->getLineStyle( pLineRef->mnThemedIdx ) )
+                    aLineProperties.assignUsed( *pLineProps );
+                nLinePhClr = pLineRef->maPhClr.getColor( rFilterBase );
+            }
+            if( const ShapeStyleRef* pFillRef = getShapeStyleRef( XML_fillRef ) )
+            {
+                if( const FillProperties* pFillProps = rxTheme->getFillStyle( pFillRef->mnThemedIdx ) )
+                    aFillProperties.assignUsed( *pFillProps );
+                nFillPhClr = pFillRef->maPhClr.getColor( rFilterBase );
+            }
+//            if( const ShapeStyleRef* pEffectRef = getShapeStyleRef( XML_fillRef ) )
+//            {
+//                if( const EffectProperties* pEffectProps = rxTheme->getEffectStyle( pEffectRef->mnThemedIdx ) )
+//                    aEffectProperties.assignUsed( *pEffectProps );
+//                nEffectPhClr = pEffectRef->maPhClr.getColor( rFilterBase );
+//            }
+        }
 
-        aLineProperties.apply( *getLineProperties() );
-        aFillProperties.apply( *getFillProperties() );
+        aLineProperties.assignUsed( getLineProperties() );
+        aFillProperties.assignUsed( getFillProperties() );
+
+        PropertyMap aShapeProperties;
         aShapeProperties.insert( getShapeProperties().begin(), getShapeProperties().end() );
 
+        // add properties from textbody to shape properties
+        if( mpTextBody.get() )
+            aShapeProperties.insert( mpTextBody->getTextProperties().maPropertyMap.begin(), mpTextBody->getTextProperties().maPropertyMap.end() );
+
         // applying properties
+        PropertySet aPropSet( xSet );
         if ( rServiceName == OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) )
-            mpGraphicPropertiesPtr->pushToPropSet( rFilterBase, xSet, 0 );
+            mpGraphicPropertiesPtr->pushToPropSet( aPropSet, FillProperties::DEFAULTPICNAMES, rFilterBase, rFilterBase.getModelObjectContainer(), 0, -1 );
         if ( mpTablePropertiesPtr.get() && ( rServiceName == OUString::createFromAscii( "com.sun.star.drawing.TableShape" ) ) )
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
-        aFillProperties.pushToPropSet( rFilterBase, xSet, mnRotation );
-        aLineProperties.pushToPropSet( rFilterBase, xSet );
+        aFillProperties.pushToPropSet( aPropSet, FillProperties::DEFAULTNAMES, rFilterBase, rFilterBase.getModelObjectContainer(), mnRotation, nFillPhClr );
+        aLineProperties.pushToPropSet( aPropSet, LineProperties::DEFAULTNAMES, rFilterBase, rFilterBase.getModelObjectContainer(), nLinePhClr );
 
         // applying autogrowheight property before setting shape size, because
         // the shape size might be changed if currently autogrowheight is true
@@ -403,10 +416,10 @@ Reference< XShape > Shape::createAndInsert(
         {
             const Any* pAutoGrowHeight = aShapeProperties.getPropertyValue( sTextAutoGrowHeight );
             if ( pAutoGrowHeight )
-                xSet->setPropertyValue( sTextAutoGrowHeight, Any( sal_False ) );
+                xSet->setPropertyValue( sTextAutoGrowHeight, Any( false ) );
         }
 
-        applyPropertyMap( mxShape, aShapeProperties );
+        aPropSet.setProperties( aShapeProperties );
 
         if( rServiceName == OUString::createFromAscii( "com.sun.star.drawing.CustomShape" ) )
             mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape );
@@ -417,11 +430,21 @@ Reference< XShape > Shape::createAndInsert(
             Reference < XText > xText( mxShape, UNO_QUERY );
             if ( xText.is() )   // not every shape is supporting an XText interface (e.g. GroupShape)
             {
+                TextCharacterProperties aCharStyleProperties;
+                if( const ShapeStyleRef* pFontRef = getShapeStyleRef( XML_fontRef ) )
+                {
+                    if( rxTheme.get() )
+                        if( const TextCharacterProperties* pCharProps = rxTheme->getFontStyle( pFontRef->mnThemedIdx ) )
+                            aCharStyleProperties.assignUsed( *pCharProps );
+                    aCharStyleProperties.maCharColor.assignIfUsed( pFontRef->maPhClr );
+                }
+
                 Reference < XTextCursor > xAt = xText->createTextCursor();
-                getTextBody()->insertAt( rFilterBase, xText, xAt, mpMasterTextListStyle );
+                getTextBody()->insertAt( rFilterBase, xText, xAt, aCharStyleProperties, mpMasterTextListStyle );
             }
         }
     }
+
     // use a callback for further processing on the XShape (e.g. charts)
     if( mxShape.is() && mxCreateCallback.get() )
         mxCreateCallback->onCreateXShape( mxShape );
@@ -438,70 +461,6 @@ void addMissingProperties( const PropertyMap& rSource, PropertyMap& rDest )
         if ( rDest.find( (*aSourceIter ).first ) == rDest.end() )
             rDest[ (*aSourceIter).first ] <<= (*aSourceIter).second;
         aSourceIter++;
-    }
-}
-
-// merging styles, if a shape property is not set, we have to set the shape style property
-void Shape::setShapeStyles( const ThemePtr& rxTheme, LineProperties& rLineProperties, FillProperties& rFillProperties )
-{
-    if( !rxTheme ) return;
-
-    ShapeStylesIndexMap::const_iterator aShapeStylesIndexIter( getShapeStylesIndex().begin() );
-    while( aShapeStylesIndexIter != getShapeStylesIndex().end() )
-    {
-        sal_Int32 nIndex = aShapeStylesIndexIter->second.toInt32();
-        if ( nIndex-- > 0 )
-        {
-            switch( aShapeStylesIndexIter->first )
-            {
-                case SHAPESTYLE_ln :
-                    if( const LineProperties* pLineProps = rxTheme->getLineStyle( nIndex ) )
-                        rLineProperties = *pLineProps;
-                break;
-                case SHAPESTYLE_fill :
-                    if( const FillProperties* pFillProps = rxTheme->getFillStyle( nIndex ) )
-                        rFillProperties = *pFillProps;
-                break;
-                case SHAPESTYLE_effect :
-                case SHAPESTYLE_font :
-                break;
-            }
-        }
-        ++aShapeStylesIndexIter;
-    }
-}
-
-void Shape::setShapeStyleColors( const oox::core::XmlFilterBase& rFilterBase,
-    LineProperties& rLineProperties, FillProperties& rFillProperties, PropertyMap& rShapeProperties )
-{
-    ShapeStylesColorMap::const_iterator aShapeStylesColorIter( getShapeStylesColor().begin() );
-    while( aShapeStylesColorIter != getShapeStylesColor().end() )
-    {
-        switch( (*aShapeStylesColorIter).first )
-        {
-            case SHAPESTYLE_ln :
-            {
-                if ( ( !mpLinePropertiesPtr->getLineColor()->isUsed() ) && ( (*aShapeStylesColorIter).second)->isUsed() )
-                    rLineProperties.getLineColor() = (*aShapeStylesColorIter).second;
-
-            }
-            break;
-            case SHAPESTYLE_fill :
-            {
-                if ( ( !mpFillPropertiesPtr->getFillColor()->isUsed() ) && ( (*aShapeStylesColorIter).second)->isUsed() )
-                    rFillProperties.getFillColor() = (*aShapeStylesColorIter).second;
-            }
-            case SHAPESTYLE_effect :
-            break;
-            case SHAPESTYLE_font :
-            {
-                const rtl::OUString sCharColor( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "CharColor" ) ) );
-                if ( rShapeProperties.find( sCharColor ) == rShapeProperties.end() )
-                    rShapeProperties[ sCharColor ] <<= ((*aShapeStylesColorIter).second)->getColor( rFilterBase );
-            }
-            break;
-        }
-        aShapeStylesColorIter++;
     }
 }
 
