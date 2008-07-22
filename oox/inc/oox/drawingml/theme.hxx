@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: theme.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,19 +34,21 @@
 #include "oox/helper/containerhelper.hxx"
 #include "oox/drawingml/clrscheme.hxx"
 #include "oox/drawingml/shape.hxx"
+#include "oox/drawingml/textfont.hxx"
 
 namespace oox {
 namespace drawingml {
 
 // ============================================================================
 
-const sal_Int32 THEMED_INDEX_SUBTLE     = 0;
-const sal_Int32 THEMED_INDEX_MODERATE   = 1;
-const sal_Int32 THEMED_INDEX_INTENSE    = 2;
+const sal_Int32 THEMED_STYLE_SUBTLE     = 1;
+const sal_Int32 THEMED_STYLE_MODERATE   = 2;
+const sal_Int32 THEMED_STYLE_INTENSE    = 3;
 
-typedef RefVector< FillProperties >     FillStyleList;
-typedef RefVector< LineProperties >     LineStyleList;
-typedef RefVector< PropertyMap >        EffectStyleList;
+typedef RefVector< FillProperties >                     FillStyleList;
+typedef RefVector< LineProperties >                     LineStyleList;
+typedef RefVector< PropertyMap >                        EffectStyleList;
+typedef RefMap< sal_Int32, TextCharacterProperties >    FontScheme;
 
 // ============================================================================
 
@@ -64,19 +66,30 @@ public:
 
     inline FillStyleList&           getFillStyleList() { return maFillStyleList; }
     inline const FillStyleList&     getFillStyleList() const { return maFillStyleList; }
-    inline const FillProperties*    getFillStyle( sal_Int32 nIndex ) const { return maFillStyleList.get( nIndex ).get(); }
+    /** Returns the fill properties of the passed one-based themed style index. */
+    inline const FillProperties*    getFillStyle( sal_Int32 nIndex ) const { return maFillStyleList.get( nIndex - 1 ).get(); }
 
     inline LineStyleList&           getLineStyleList() { return maLineStyleList; }
     inline const LineStyleList&     getLineStyleList() const { return maLineStyleList; }
-    inline const LineProperties*    getLineStyle( sal_Int32 nIndex ) const { return maLineStyleList.get( nIndex ).get(); }
+    /** Returns the line properties of the passed one-based themed style index. */
+    inline const LineProperties*    getLineStyle( sal_Int32 nIndex ) const { return maLineStyleList.get( nIndex - 1 ).get(); }
 
     inline EffectStyleList&         getEffectStyleList() { return maEffectStyleList; }
     inline const EffectStyleList&   getEffectStyleList() const { return maEffectStyleList; }
-    inline const PropertyMap*       getEffectStyle( sal_Int32 nIndex ) const { return maEffectStyleList.get( nIndex ).get(); }
+    /** Returns the effect properties of the passed one-based themed style index. */
+    inline const PropertyMap*       getEffectStyle( sal_Int32 nIndex ) const { return maEffectStyleList.get( nIndex - 1 ).get(); }
 
     inline FillStyleList&           getBgFillStyleList() { return maBgFillStyleList; }
     inline const FillStyleList&     getBgFillStyleList() const { return maBgFillStyleList; }
-    inline const FillProperties*    getBgFillStyle( sal_Int32 nIndex ) const { return maBgFillStyleList.get( nIndex ).get(); }
+    /** Returns the bg-fill properties of the passed one-based themed style index. */
+    inline const FillProperties*    getBgFillStyle( sal_Int32 nIndex ) const { return maBgFillStyleList.get( nIndex - 1 ).get(); }
+
+    inline FontScheme&              getFontScheme() { return maFontScheme; }
+    inline const FontScheme&        getFontScheme() const { return maFontScheme; }
+    /** Returns theme font properties by scheme type (major/minor). */
+    const TextCharacterProperties*  getFontStyle( sal_Int32 nSchemeType ) const { return maFontScheme.get( nSchemeType ).get(); }
+    /** Returns theme font by placeholder name, e.g. the major latin theme font for the font name '+mj-lt'. */
+    const TextFont*                 resolveFont( const ::rtl::OUString& rName ) const;
 
     inline Shape&                   getSpDef() { return maSpDef; }
     inline const Shape&             getSpDef() const { return maSpDef; }
@@ -94,6 +107,7 @@ private:
     LineStyleList       maLineStyleList;
     EffectStyleList     maEffectStyleList;
     FillStyleList       maBgFillStyleList;
+    FontScheme          maFontScheme;
     Shape               maSpDef;
     Shape               maLnDef;
     Shape               maTxDef;
