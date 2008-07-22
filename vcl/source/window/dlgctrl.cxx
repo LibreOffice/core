@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgctrl.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -980,6 +980,9 @@ static sal_Unicode getAccel( const String& rStr )
 
 Window* Window::GetLabelFor() const
 {
+    if ( mpWindowImpl->mbDisableAccessibleLabelForRelation )
+        return NULL;
+
     Window* pWindow = NULL;
     Window* pFrameWindow = ImplGetFrameWindow();
 
@@ -1050,6 +1053,9 @@ Window* Window::GetLabelFor() const
 
 Window* Window::GetLabeledBy() const
 {
+    if ( mpWindowImpl->mbDisableAccessibleLabeledByRelation )
+        return NULL;
+
     Window* pWindow = NULL;
     Window* pFrameWindow = ImplGetFrameWindow();
 
