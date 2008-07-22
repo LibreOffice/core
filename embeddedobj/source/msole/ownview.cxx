@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ownview.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -209,14 +209,16 @@ sal_Bool OwnView_Impl::CreateModel( sal_Bool bUseNative )
 }
 
 //--------------------------------------------------------
-::rtl::OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream( const ::rtl::OUString& aNameWithExtention,
-                                                                    const uno::Reference< io::XInputStream >& xInputStream )
+::rtl::OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
+                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
+                                                    const ::rtl::OUString& aNameWithExtention,
+                                                    const uno::Reference< io::XInputStream >& xInputStream )
 {
     if ( !xInputStream.is() )
         throw uno::RuntimeException();
 
     uno::Reference< document::XTypeDetection > xTypeDetection(
-            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ),
+            xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ),
             uno::UNO_QUERY_THROW );
 
     ::rtl::OUString aTypeName;
@@ -411,7 +413,7 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
     // The temporary native file is created, now the filter must be detected
     if ( !bFailed )
     {
-        m_aFilterName = GetFilterNameFromExtentionAndInStream( aFileSuffix, xNativeInTemp );
+        m_aFilterName = GetFilterNameFromExtentionAndInStream( m_xFactory, aFileSuffix, xNativeInTemp );
         m_aNativeTempURL = aNativeTempURL;
     }
 
