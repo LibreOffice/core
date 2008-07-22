@@ -8,7 +8,7 @@
 #
 # $RCSfile: codemaker.pmk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -37,7 +37,7 @@ STL_OS2_BUILDING=1
 CODEMAKERLIBDEPN=codemaker.lib
 COMMONCPPLIBDEPN=commoncpp.lib
 COMMONJAVALIBDEPN=commonjava.lib
-.IF "$(COM)"=="GCC"
+.IF "$(COM)"=="GCC" && "$(GUI)"=="WNT"
 CODEMAKERLIBST=-lcodemaker
 COMMONCPPLIBST=-lcommoncpp
 COMMONJAVALIBST=-lcommonjava
