@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -74,7 +74,6 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/security.obj \
             $(SLO)$/profile.obj  \
             $(SLO)$/tempfile.obj  \
-        $(SLO)$/printf.obj\
         $(SLO)$/process_impl.obj\
         $(SLO)$/uunxapi.obj\
         $(SLO)$/file.obj     \
