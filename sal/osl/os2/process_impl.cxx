@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: process_impl.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -195,9 +195,7 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
 {
 
     osl_acquireMutex(g_command_args.m_mutex);
-#if 0
     OSL_ENSURE (g_command_args.m_nCount == 0, "osl_setCommandArgs(): CommandArgs already set.");
-#endif
     if (g_command_args.m_nCount == 0)
     {
         rtl_uString** ppArgs = (rtl_uString**)rtl_allocateZeroMemory (argc * sizeof(rtl_uString*));
