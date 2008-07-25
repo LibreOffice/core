@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: window.cxx,v $
- * $Revision: 1.284 $
+ * $Revision: 1.285 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -4337,8 +4337,6 @@ Window::~Window()
             // deregister drop target listener
             if( mpWindowImpl->mpFrameData->mxDropTargetListener.is() )
             {
-                OSL_TRACE( "removing drop target listener" );
-
                 Reference< XDragGestureRecognizer > xDragGestureRecognizer =
                     Reference< XDragGestureRecognizer > (mpWindowImpl->mpFrameData->mxDragSource, UNO_QUERY);
                 if( xDragGestureRecognizer.is() )
@@ -8396,7 +8394,6 @@ Reference< XDropTarget > Window::GetDropTarget()
 
                     try
                     {
-//                        OSL_TRACE( "adding droptarget listener" );
                         mpWindowImpl->mpFrameData->mxDropTarget->addDropTargetListener( mpWindowImpl->mpFrameData->mxDropTargetListener );
 
                         // register also as drag gesture listener if directly supported by drag source
