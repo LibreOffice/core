@@ -8,7 +8,7 @@
  *
  * $RCSfile: aqua11ycomponentwrapper.mm,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,15 +94,14 @@ using namespace ::com::sun::star::uno;
 +(void)setFocusedAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value {
     if ( [ value boolValue ] == YES ) {
         if ( [ wrapper accessibleContext ] -> getAccessibleRole() == AccessibleRole::COMBO_BOX ) {
-            // special treatment for comboboxes: find the included text area and set focus to it
-            if ( [ wrapper accessibleContext ] -> getAccessibleChildCount() > 0 ) {
-                for ( int i = 0; i < [ wrapper accessibleContext ] -> getAccessibleChildCount(); i++ ) {
-                    Reference < XAccessible > rxAccessibleChild = [ wrapper accessibleContext ] -> getAccessibleChild ( i );
-                    if ( rxAccessibleChild.is() && rxAccessibleChild -> getAccessibleContext().is() && rxAccessibleChild -> getAccessibleContext() -> getAccessibleRole() == AccessibleRole::TEXT ) {
-                        Reference < XAccessibleComponent > rxAccessibleComponent = Reference < XAccessibleComponent > ( rxAccessibleChild -> getAccessibleContext(), UNO_QUERY );
-                        if ( rxAccessibleComponent.is() ) {
-                            rxAccessibleComponent -> grabFocus();
-                        }
+            // special treatment for comboboxes: find the corresponding PANEL and set focus to it
+            Reference < XAccessible > rxParent = [ wrapper accessibleContext ] -> getAccessibleParent();
+            if ( rxParent.is() ) {
+                Reference < XAccessibleContext > rxContext = rxParent->getAccessibleContext();
+                if ( rxContext.is() && rxContext -> getAccessibleRole() == AccessibleRole::PANEL ) {
+                    Reference < XAccessibleComponent > rxComponent = Reference < XAccessibleComponent > ( rxParent -> getAccessibleContext(), UNO_QUERY );
+                    if ( rxComponent.is() ) {
+                        rxComponent -> grabFocus();
                     }
                 }
             }
