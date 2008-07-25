@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atkwrapper.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,7 @@ namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessibleEditableText;
     class XAccessibleHypertext;
     class XAccessibleImage;
+    class XAccessibleMultiLineText;
     class XAccessibleSelection;
     class XAccessibleTable;
     class XAccessibleText;
@@ -64,12 +65,15 @@ struct _AtkObjectWrapper
     ::com::sun::star::accessibility::XAccessibleEditableText   *mpEditableText;
     ::com::sun::star::accessibility::XAccessibleHypertext      *mpHypertext;
     ::com::sun::star::accessibility::XAccessibleImage          *mpImage;
+    ::com::sun::star::accessibility::XAccessibleMultiLineText  *mpMultiLineText;
     ::com::sun::star::accessibility::XAccessibleSelection      *mpSelection;
     ::com::sun::star::accessibility::XAccessibleTable          *mpTable;
     ::com::sun::star::accessibility::XAccessibleText           *mpText;
     ::com::sun::star::accessibility::XAccessibleTextAttributes *mpTextAttributes;
     ::com::sun::star::accessibility::XAccessibleValue          *mpValue;
 
+    AtkObject *child_about_to_be_removed;
+    gint       index_of_child_about_to_be_removed;
 //    ::rtl::OString * m_pKeyBindings
 };
 
@@ -86,6 +90,9 @@ AtkObject *            atk_object_wrapper_ref(
 AtkObject *            atk_object_wrapper_new(
     const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible,
     AtkObject* parent = NULL );
+
+void                   atk_object_wrapper_add_child(AtkObjectWrapper* wrapper, AtkObject *child, gint index);
+void                   atk_object_wrapper_remove_child(AtkObjectWrapper* wrapper, AtkObject *child, gint index);
 
 void                   atk_object_wrapper_dispose(AtkObjectWrapper* wrapper);
 
