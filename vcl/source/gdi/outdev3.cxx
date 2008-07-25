@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev3.cxx,v $
- * $Revision: 1.241 $
+ * $Revision: 1.242 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2786,6 +2786,17 @@ bool ImplFontCache::IFSD_Equal::operator()(const ImplFontSelectData& rA, const I
     // check style name
     if( rA.maStyleName != rB.maStyleName)
         return false;
+
+    // Symbol fonts may recode from one type to another So they are only
+    // safely equivalent for equal targets
+    if (
+        (rA.mpFontData && rA.mpFontData->IsSymbolFont()) ||
+        (rB.mpFontData && rB.mpFontData->IsSymbolFont())
+       )
+    {
+        if (rA.maTargetName != rB.maTargetName)
+            return false;
+    }
 
     return true;
 }
