@@ -5,3 +5,4 @@
 -o complex.dbaccess.QueryInQuery
 -o complex.dbaccess.Storable
 -o complex.dbaccess.DataSource
+-o complex.dbaccess.Parser
