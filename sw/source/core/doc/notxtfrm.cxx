@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: notxtfrm.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -840,10 +840,13 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             }
             // <--
             // --> OD 2008-01-30 #i85717#
+            // --> OD 2008-07-21 #i90395# - check, if asynchronous retrieval
+            // if input stream for the graphic is possible
 //            else if( GRAPHIC_DEFAULT == rGrfObj.GetType() &&
             else if ( ( rGrfObj.GetType() == GRAPHIC_DEFAULT ||
                         rGrfObj.GetType() == GRAPHIC_NONE ) &&
-                      pGrfNd->IsLinkedFile() )
+                      pGrfNd->IsLinkedFile() &&
+                      pGrfNd->IsAsyncRetrieveInputStreamPossible() )
             // <--
             {
                 Size aTmpSz;
