@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: t_basic_ide_tools.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 07:57:11 $
+'* last change: $Author: obo $ $Date: 2008-07-25 07:44:37 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -166,7 +166,7 @@ function hCloseBasicIDE() as boolean
     '///</ol>
     '///<ul>
     
-    use "global\tools\includes\optional\f_docfuncs.inc"
+    use "global\tools\includes\optional\t_docfuncs.inc"
     
     const CFN = "hCloseBasicIDE::"
     dim brc as boolean
