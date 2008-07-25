@@ -18757,9 +18757,12 @@ cat >>conftest.$ac_ext <<_ACEOF
 #include <unicode/uversion.h>
 
 int main(int argc, char **argv) {
-      if(U_ICU_VERSION_MAJOR_NUM == 3 && (U_ICU_VERSION_MINOR_NUM == 6 ||
-      	U_ICU_VERSION_MINOR_NUM == 8)) return 0;
-      else return 1;
+      if(U_ICU_VERSION_MAJOR_NUM < 3)
+        return 1;
+      else if(U_ICU_VERSION_MAJOR_NUM == 3 && U_ICU_VERSION_MINOR_NUM < 6)
+        return 1;
+      else
+        return 0;
 }
 
 _ACEOF
@@ -18791,8 +18794,9 @@ echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
 ( exit $ac_status )
-{ echo "$as_me:$LINENO: result: not suitable, only 3.6 supported currently" >&5
-echo "${ECHO_T}not suitable, only 3.6 supported currently" >&6; }
+{ { echo "$as_me:$LINENO: error: not suitable, only >= 3.6 supported currently" >&5
+echo "$as_me: error: not suitable, only >= 3.6 supported currently" >&2;}
+   { (exit 1); exit 1; }; }
 fi
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
