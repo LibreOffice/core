@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndgrf.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1209,5 +1209,25 @@ void SwGrfNode::UpdateLinkWithInputStream()
         mbLinkedInputStreamReady = false;
         mpThreadConsumer.reset();
     }
+}
+// <--
+
+// --> OD 2008-07-21 #i90395#
+bool SwGrfNode::IsAsyncRetrieveInputStreamPossible() const
+{
+    bool bRet = false;
+
+    if ( IsLinkedFile() )
+    {
+        String sGrfNm;
+        refLink->GetLinkManager()->GetDisplayNames( refLink, 0, &sGrfNm, 0, 0 );
+        String sProtocol( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.pkg:" ) );
+        if ( sGrfNm.CompareTo( sProtocol, sProtocol.Len() ) != 0 )
+        {
+            bRet = true;
+        }
+    }
+
+    return bRet;
 }
 // <--
