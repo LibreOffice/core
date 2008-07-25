@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdmod1.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -256,7 +256,13 @@ void SdModule::Execute(SfxRequest& rReq)
                 {
                     if( sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() ) )
                     {
-                        bIntercept = TRUE;
+                        // Prevent documents from opening while the slide
+                        // show is running, except when this request comes
+                        // from a shape interaction.
+                        if (rReq.GetArgs() == NULL)
+                        {
+                            bIntercept = TRUE;
+                        }
                     }
                 }
             }
