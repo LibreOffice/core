@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: res_ErrorBar.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -232,7 +232,7 @@ void ErrorBarResources::SetAxisMinorStepWidthForErrorBarDecimals( double fMinorS
     else
     {
         m_nConstDecimalDigits = 0;
-        m_nConstSpinSize = static_cast< sal_Int64 >( pow( 10.0, nExponent ));
+        m_nConstSpinSize = static_cast< sal_Int64 >( pow( 10.0, (int)nExponent ));
     }
 }
 
