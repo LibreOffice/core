@@ -8,7 +8,7 @@
 #
 # $RCSfile: libs.mk,v $
 #
-# $Revision: 1.137 $
+# $Revision: 1.138 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,7 +28,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.137 $$"
+LIBSMKREV!:="$$Revision: 1.138 $$"
 
 .IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 
@@ -46,10 +46,12 @@ AVMEDIALIB=-lavmedia$(DLLPOSTFIX)
 ICUINLIB=-licuin$(ICU_MAJOR)$(ICU_MINOR)
 ICULELIB=-licule$(ICU_MAJOR)$(ICU_MINOR)
 ICUUCLIB=-licuuc$(ICU_MAJOR)$(ICU_MINOR)
+ICUDATALIB=-licudata$(ICU_MAJOR)$(ICU_MINOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 ICUINLIB=-licui18n
 ICULELIB=-licule
 ICUUCLIB=-licuuc
+ICUDATALIB=-licudata
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 I18NUTILLIB=-li18nutil$(COMID)
 .INCLUDE .IGNORE : i18npool$/version.mk
@@ -358,6 +360,7 @@ AVMEDIALIB=iavmedia.lib
 ICUINLIB=icuin.lib
 ICULELIB=icule.lib
 ICUUCLIB=icuuc.lib
+ICUDATALIB=icudata.lib
 I18NUTILLIB=ii18nutil.lib
 I18NISOLANGLIB=ii18nisolang.lib
 .IF "$(WITH_GPC)"!="NO"
