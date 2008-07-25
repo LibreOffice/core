@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewshe3.cxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -252,8 +252,14 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     if (! pArgs)
     {
         // Make the layout menu visible in the tool pane.
-        framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
+        const ViewShellBase& rBase (GetViewShellBase());
+        if (rBase.GetMainViewShell()!=NULL
+            && rBase.GetMainViewShell()->GetShellType()!=ViewShell::ST_OUTLINE
+            && rBase.GetMainViewShell()->GetShellType()!=ViewShell::ST_DRAW)
+        {
+            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
             framework::FrameworkHelper::msLayoutTaskPanelURL);
+        }
 
         // AutoLayouts muessen fertig sein
         pDocument->StopWorkStartupDelay();
