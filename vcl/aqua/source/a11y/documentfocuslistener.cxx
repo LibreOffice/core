@@ -8,7 +8,7 @@
  *
  * $RCSfile: documentfocuslistener.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -161,10 +161,13 @@ void DocumentFocusListener::attachRecursive(
     const Reference< XAccessibleContext >& xContext
 )  throw (IndexOutOfBoundsException, RuntimeException)
 {
-    Reference< XAccessibleStateSet > xStateSet = xContext->getAccessibleStateSet();
+    if( xContext.is() )
+    {
+        Reference< XAccessibleStateSet > xStateSet = xContext->getAccessibleStateSet();
 
-    if( xStateSet.is() )
-        attachRecursive(xAccessible, xContext, xStateSet);
+        if( xStateSet.is() )
+            attachRecursive(xAccessible, xContext, xStateSet);
+    }
 }
 
 //------------------------------------------------------------------------------
