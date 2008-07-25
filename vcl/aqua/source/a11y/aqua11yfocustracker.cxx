@@ -8,7 +8,7 @@
  *
  * $RCSfile: aqua11yfocustracker.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,6 +66,9 @@ long AquaA11yFocusTracker::WindowEventHandler(AquaA11yFocusTracker *pFocusTracke
 {
     switch (pEvent->GetId())
     {
+    case VCLEVENT_WINDOW_PAINT:
+        pFocusTracker-> toolbox_open_floater( getWindow(pEvent) );
+        break;
     case VCLEVENT_WINDOW_GETFOCUS:
         pFocusTracker->window_got_focus( getWindow(pEvent) );
         break;
@@ -129,6 +132,41 @@ void AquaA11yFocusTracker::notify_toolbox_item_focus(ToolBox *pToolBox)
             sal_Int32 nPos = pToolBox->GetItemPos( pToolBox->GetHighlightItemId() );
             if( nPos != TOOLBOX_ITEM_NOTFOUND )
                 setFocusedObject( xContext->getAccessibleChild( nPos ) );
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void AquaA11yFocusTracker::toolbox_open_floater(Window *pWindow)
+{
+    bool bToolboxFound = false;
+    bool bFloatingWindowFound = false;
+    Window * pFloatingWindow = NULL;
+    while ( pWindow != NULL ) {
+        if ( pWindow->GetType() == WINDOW_TOOLBOX ) {
+            bToolboxFound = true;
+        } else if ( pWindow->GetType() == WINDOW_FLOATINGWINDOW ) {
+            bFloatingWindowFound = true;
+            pFloatingWindow = pWindow;
+        }
+        pWindow = pWindow->GetParent();
+    }
+    if ( bToolboxFound && bFloatingWindowFound ) {
+        Reference < XAccessible > rxAccessible = pFloatingWindow -> GetAccessible();
+        if ( ! rxAccessible.is() ) {
+            return;
+        }
+        Reference < XAccessibleContext > rxContext = rxAccessible -> getAccessibleContext();
+        if ( ! rxContext.is() ) {
+            return;
+        }
+        if ( rxContext -> getAccessibleChildCount() > 0 ) {
+            Reference < XAccessible > rxAccessibleChild = rxContext -> getAccessibleChild( 0 );
+            if ( ! rxAccessibleChild.is() ) {
+                return;
+            }
+            setFocusedObject ( rxAccessibleChild );
         }
     }
 }

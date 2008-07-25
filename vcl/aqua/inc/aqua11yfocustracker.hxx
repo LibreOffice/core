@@ -8,7 +8,7 @@
  *
  * $RCSfile: aqua11yfocustracker.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,6 +85,9 @@ protected:
 
     // toolbox items are widgets in gtk+ and Cocoa
     virtual void notify_toolbox_item_focus(ToolBox *pToolBox);
+
+    // toolbox item opened a floating window (e.g. color chooser)
+    virtual void toolbox_open_floater(Window *pWindow);
 
     // callback function for Application::addEventListener
     static long WindowEventHandler(AquaA11yFocusTracker *pFocusTracker, ::VclSimpleEvent const *pEvent);
