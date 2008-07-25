@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editsh.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -179,7 +179,15 @@ void ScEditShell::Execute( SfxRequest& rReq )
     EditView* pTopView   = pHdl->GetTopView();      // hat Eingabezeile den Focus?
     EditView* pTableView = pHdl->GetTableView();
 
-    DBG_ASSERT(pTableView,"keine EditView :-(");
+    DBG_ASSERT(pTableView,"no EditView :-(");
+    /* #i91683# No EditView if spell-check dialog is active and positioned on
+     * an error and user immediately (without double click or F2) selected a
+     * text portion of that cell with the mouse and wanted to modify it. */
+    /* FIXME: Bailing out only cures the symptom and prevents a crash, no edit
+     * action is possible. A real fix somehow would need to create a valid
+     * EditView from the spell-check view. */
+    if (!pTableView)
+        return;
 
     EditEngine* pEngine = pTableView->GetEditEngine();
 
