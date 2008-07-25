@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabfrm.cxx,v $
- * $Revision: 1.104 $
+ * $Revision: 1.105 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -5443,6 +5443,9 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
 
     SwPageFrm* pPg = 0;
     if ( !FindTabFrm()->IsRebuildLastLine() && text::VertOrientation::NONE != rOri.GetVertOrient() &&
+    // --> OD 2008-07-16 #158225# no vertical alignment of covered cells
+         !IsCoveredCell() &&
+    // <--
     // --> FME 2004-06-29 #116532# Do not consider vertical alignment in grid mode
          !(pPg = FindPageFrm())->HasGrid() )
     // <--
