@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gcach_ftyp.cxx,v $
- * $Revision: 1.149 $
+ * $Revision: 1.150 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -911,10 +911,20 @@ int FreetypeServerFont::GetEmUnits() const
 void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
 {
     static_cast<ImplFontAttributes&>(rTo) = mpFontInfo->GetFontAttributes();
+
     rTo.mbScalableFont  = true;
     rTo.mbDevice        = true;
     rTo.mbKernableFont  = (FT_HAS_KERNING( maFaceFT ) != 0) || mpFontInfo->HasExtraKerning();
     rTo.mnOrientation = GetFontSelData().mnOrientation;
+
+    //Always consider [star]symbol as symbol fonts
+    if (
+         (rTo.GetFamilyName().EqualsAscii("OpenSymbol")) ||
+         (rTo.GetFamilyName().EqualsAscii("StarSymbol"))
+       )
+    {
+        rTo.mbSymbolFlag = true;
+    }
 
     if( maSizeFT )
         pFTActivateSize( maSizeFT );
@@ -2178,7 +2188,7 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex,
     int nGlyphFlags;
     SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
 
-    FT_Int nLoadFlags = FT_LOAD_DEFAULT;
+    FT_Int nLoadFlags = FT_LOAD_DEFAULT | FT_LOAD_IGNORE_TRANSFORM;
 
 #ifdef FT_LOAD_TARGET_LIGHT
     // enable "light hinting" if available
