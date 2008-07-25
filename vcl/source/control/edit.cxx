@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edit.cxx,v $
- * $Revision: 1.99 $
+ * $Revision: 1.100 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1023,6 +1023,8 @@ void Edit::ImplSetText( const XubString& rText, const Selection* pNewSelection )
         }
         else
             ImplInsertText( rText, pNewSelection );
+
+        ImplCallEventListeners( VCLEVENT_EDIT_MODIFY );
     }
 }
 
