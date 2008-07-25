@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: ReportBuilder01.inc,v $
 '*
-'* $Revision: 1.3 $
+'* $Revision: 1.4 $
 '*
-'* last change: $Author: obo $ $Date: 2008-07-22 12:34:57 $
+'* last change: $Author: obo $ $Date: 2008-07-25 07:44:12 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -47,6 +47,7 @@ sub rpt_Main
         call tConditionalFormatingDialog
         call tPageNumber
         call tDateTime
+        call tFormatPage
         call tGroupingSorting
         call tReportNavigator
         call tReportHeaderFooter
@@ -772,4 +773,38 @@ testcase tEditReport
     printlog "close the database"
     call fCloseDatabase
     
+endcase
+'-------------------------------------------------------------------------
+testcase tFormatPage
+    
+    printlog "open Bibliography database"    
+    call fOpenDatabase(gOfficePath + ConvertPath("user/database/biblio.odb"))
+        
+    printlog "open the report designer"
+    call fOpenNewReportDesign
+    
+    printlog "open format/page dialog via the menu"
+    Kontext "ReportDesign"
+        ReportDesign.UseMenu
+        hMenuSelectNr(5)
+        hMenuSelectNr(3) 
+     
+    printlog "check if the format page dialog appear"    
+    Kontext "TabSeite"
+        if ( not TabSeite.exists(3)) then
+            warnlog "format page dialog doesn't appear"
+            call fCloseReportDesign    
+            call fCloseDatabase
+            goto endsub
+        else   
+            printlog "format page dialog appear"
+            call DialogTest(TabSeite)
+            TabSeite.Cancel
+        endif    
+    
+    '/// close the report designer
+    call fCloseReportDesign
+    '/// close the database
+    call fCloseDatabase
+
 endcase
