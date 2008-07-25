@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unomodel.cxx,v $
- * $Revision: 1.112 $
+ * $Revision: 1.113 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2150,10 +2150,23 @@ uno::Reference< i18n::XForbiddenCharacters > SdXImpressDocument::getForbiddenCha
 
 void SdXImpressDocument::initializeDocument()
 {
-    if( (mpDoc->GetPageCount() <= 1) && !mbClipBoard )
+    if( !mbClipBoard )
     {
-        mpDoc->CreateFirstPages();
-        mpDoc->StopWorkStartupDelay();
+        switch( mpDoc->GetPageCount() )
+        {
+        case 1:
+        {
+            // nasty hack to detect clipboard document
+            mbClipBoard = true;
+            break;
+        }
+        case 0:
+        {
+            mpDoc->CreateFirstPages();
+            mpDoc->StopWorkStartupDelay();
+            break;
+        }
+        }
     }
 }
 
