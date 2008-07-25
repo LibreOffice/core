@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atktextattributes.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,8 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/style/TabAlign.hpp>
+#include <com/sun/star/style/TabStop.hpp>
 
 #include <com/sun/star/text/WritingMode2.hpp>
 
@@ -70,6 +72,8 @@ static AtkTextAttribute atk_text_attribute_decoration = ATK_TEXT_ATTR_INVALID;
 static AtkTextAttribute atk_text_attribute_line_height = ATK_TEXT_ATTR_INVALID;
 static AtkTextAttribute atk_text_attribute_rotation = ATK_TEXT_ATTR_INVALID;
 static AtkTextAttribute atk_text_attribute_shadow = ATK_TEXT_ATTR_INVALID;
+static AtkTextAttribute atk_text_attribute_tab_interval = ATK_TEXT_ATTR_INVALID;
+static AtkTextAttribute atk_text_attribute_tab_stops = ATK_TEXT_ATTR_INVALID;
 static AtkTextAttribute atk_text_attribute_writing_mode = ATK_TEXT_ATTR_INVALID;
 static AtkTextAttribute atk_text_attribute_vertical_align = ATK_TEXT_ATTR_INVALID;
 
@@ -108,6 +112,7 @@ enum ExportedAttribute
     TEXT_ATTRIBUTE_LINE_SPACING,
     TEXT_ATTRIBUTE_RIGHT_MARGIN,
     TEXT_ATTRIBUTE_STYLE_NAME,
+    TEXT_ATTRIBUTE_TAB_STOPS,
     TEXT_ATTRIBUTE_TOP_MARGIN,
     TEXT_ATTRIBUTE_WRITING_MODE,
     TEXT_ATTRIBUTE_LAST
@@ -141,6 +146,7 @@ static const char * ExportedTextAttributes[TEXT_ATTRIBUTE_LAST] =
     "ParaLineSpacing",      // TEXT_ATTRIBUTE_LINE_SPACING
     "ParaRightMargin",      // TEXT_ATTRIBUTE_RIGHT_MARGIN
     "ParaStyleName",        // TEXT_ATTRIBUTE_STYLE_NAME
+    "ParaTabStops",         // TEXT_ATTRIBUTE_TAB_STOPS
     "ParaTopMargin",        // TEXT_ATTRIBUTE_TOP_MARGIN
     "WritingMode"           // TEXT_ATTRIBUTE_WRITING_MODE
 };
@@ -1000,6 +1006,107 @@ LineSpacing2LineHeight( const uno::Any& rAny )
 
 /*****************************************************************************/
 
+// @see http://www.w3.org/People/howcome/t/970224HTMLERB-CSS/WD-tabs-970117.html
+static gchar *
+TabStopList2String( const uno::Any& rAny, bool default_tabs )
+{
+    uno::Sequence< style::TabStop > theTabStops;
+    gchar * ret = NULL;
+
+    if( rAny >>= theTabStops)
+    {
+        sal_Int32 indexOfTab = 0;
+        sal_Int32 numberOfTabs = theTabStops.getLength();
+        sal_Unicode lastFillChar = (sal_Unicode) ' ';
+
+        for( ; indexOfTab < numberOfTabs; ++indexOfTab )
+        {
+            bool is_default_tab = (style::TabAlign_DEFAULT == theTabStops[indexOfTab].Alignment);
+
+            if( is_default_tab != default_tabs )
+                continue;
+
+            double fValue = theTabStops[indexOfTab].Position;
+            fValue = fValue * 0.01;
+
+            const gchar * tab_align = "";
+            switch( theTabStops[indexOfTab].Alignment )
+            {
+                case style::TabAlign_LEFT :
+                    tab_align = "left ";
+                    break;
+                case style::TabAlign_CENTER :
+                    tab_align = "center ";
+                    break;
+                case style::TabAlign_RIGHT :
+                    tab_align = "right ";
+                    break;
+                case style::TabAlign_DECIMAL :
+                    tab_align = "decimal ";
+                    break;
+                default:
+                    break;
+            }
+
+            const gchar * lead_char = "";
+
+            if( theTabStops[indexOfTab].FillChar != lastFillChar )
+            {
+                lastFillChar = theTabStops[indexOfTab].FillChar;
+                switch (lastFillChar)
+                {
+                    case (sal_Unicode) ' ':
+                        lead_char = "blank ";
+                        break;
+
+                    case (sal_Unicode) '.':
+                        lead_char = "dotted ";
+                        break;
+
+                    case (sal_Unicode) '-':
+                        lead_char = "dashed ";
+                        break;
+
+                    case (sal_Unicode) '_':
+                        lead_char = "lined ";
+                        break;
+
+                    default:
+                        lead_char = "custom ";
+                        break;
+                }
+            }
+
+            gchar * tab_str = g_strdup_printf( "%s%s%gmm", lead_char, tab_align, fValue );
+
+            if( ret )
+            {
+                gchar * old_tab_str = ret;
+                ret = g_strconcat(old_tab_str, " ", tab_str, NULL /* terminated */);
+                g_free( old_tab_str );
+            }
+            else
+                ret = tab_str;
+        }
+    }
+
+    return ret;
+}
+
+static gchar *
+TabStops2String( const uno::Any& rAny )
+{
+    return TabStopList2String(rAny, false);
+}
+
+static gchar *
+DefaultTabStops2String( const uno::Any& rAny )
+{
+    return TabStopList2String(rAny, true);
+}
+
+/*****************************************************************************/
+
 extern "C" int
 attr_compare(const void *p1,const void *p2)
 {
@@ -1175,6 +1282,18 @@ attribute_set_new_from_property_values(
 
     attribute_set = attribute_set_prepend(attribute_set, atk_text_attribute_line_height,
         get_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_LINE_SPACING], LineSpacing2LineHeight));
+
+    if( ATK_TEXT_ATTR_INVALID == atk_text_attribute_tab_interval )
+        atk_text_attribute_tab_interval = atk_text_attribute_register("tab-interval");
+
+    attribute_set = attribute_set_prepend(attribute_set, atk_text_attribute_tab_interval,
+        get_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_TAB_STOPS], DefaultTabStops2String));
+
+    if( ATK_TEXT_ATTR_INVALID == atk_text_attribute_tab_stops )
+        atk_text_attribute_tab_stops = atk_text_attribute_register("tab-stops");
+
+    attribute_set = attribute_set_prepend(attribute_set, atk_text_attribute_tab_stops,
+        get_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_TAB_STOPS], TabStops2String));
 
     return attribute_set;
 }
