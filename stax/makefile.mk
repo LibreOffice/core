@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -37,10 +37,11 @@ TARGET=stax
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+.INCLUDE : tg_javav.mk
 .INCLUDE : antsettings.mk
 
 .IF "$(SOLAR_JAVA)" != ""
-.IF "$(JAVANUMVER:s/.//)" >= "000100060000" 
+.IF "$(JAVANUMVER:s/.//)" >= "000100060000" || "$(JDK)"=="gcj"
 all:
     @echo "Your java version already contains StAX"
 .ENDIF			# "$(JAVANUMVER:s/.//)" >= "000100060000" 
