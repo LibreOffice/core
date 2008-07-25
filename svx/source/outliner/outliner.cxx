@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outliner.cxx,v $
- * $Revision: 1.73 $
+ * $Revision: 1.74 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1498,6 +1498,9 @@ const SvxNumberFormat* Outliner::GetNumberFormat( USHORT nPara ) const
     const SvxNumberFormat* pFmt = NULL;
 
     Paragraph* pPara = pParaList->GetParagraph( nPara );
+    if (pPara == NULL)
+        return NULL;
+
     sal_Int16 nDepth = pPara? pPara->GetDepth() : -1;
 
     if( nDepth >= 0 )
