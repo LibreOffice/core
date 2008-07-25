@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sbxvar.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -361,14 +361,18 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
         if( !SbxValue::LoadData( rStrm, nVer ) )
             return FALSE;
         rStrm.ReadByteString( maName, RTL_TEXTENCODING_ASCII_US );
-        rStrm >> nUserData;
+        UINT32 nTemp;
+        rStrm >> nTemp;
+        nUserData = nTemp;
     }
     else
     {
         rStrm.SeekRel( -1L );
         rStrm >> nType;
         rStrm.ReadByteString( maName, RTL_TEXTENCODING_ASCII_US );
-        rStrm >> nUserData;
+        UINT32 nTemp;
+        rStrm >> nTemp;
+        nUserData = nTemp;
         // Korrektur: Alte Methoden haben statt SbxNULL jetzt SbxEMPTY
         if( nType == SbxNULL && GetClass() == SbxCLASS_METHOD )
             nType = SbxEMPTY;
@@ -473,7 +477,7 @@ BOOL SbxVariable::StoreData( SvStream& rStrm ) const
     // if( !SbxValue::StoreData( rStrm ) )
         // return FALSE;
     rStrm.WriteByteString( maName, RTL_TEXTENCODING_ASCII_US );
-    rStrm << nUserData;
+    rStrm << (UINT32)nUserData;
     if( pInfo.Is() )
     {
         rStrm << (BYTE) 2;      // Version 2: mit UserData!
