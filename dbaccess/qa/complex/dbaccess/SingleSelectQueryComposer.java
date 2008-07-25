@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SingleSelectQueryComposer.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,13 +37,13 @@ import com.sun.star.sdb.*;
 import com.sun.star.container.*;
 import com.sun.star.lang.XMultiServiceFactory;
 
-import complexlib.ComplexTestCase;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class SingleSelectQueryComposer extends ComplexTestCase
+public class SingleSelectQueryComposer extends CRMBasedTestCase
 {
-    private CRMDatabase                 m_database;
     private XSingleSelectQueryComposer  m_composer;
 
     private final String complexFilter = "( \"ID\" = 1 AND \"Postal\" = '4' )" +
@@ -71,43 +71,21 @@ public class SingleSelectQueryComposer extends ComplexTestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    private final XMultiServiceFactory getORB()
-    {
-        return (XMultiServiceFactory)param.getMSF();
-    }
-
-    // --------------------------------------------------------------------------------------------------------
     private void createQueries() throws Exception
     {
         m_database.getDatabase().getDataSource().createQuery( innerProductsQuery, "SELECT * FROM \"products\"" );
     }
 
     // --------------------------------------------------------------------------------------------------------
-    public void before()
-    {
-        createTestCase();
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-    public void after()
-    {
-        if ( m_database != null )
-            m_database.close();
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-    private void createTestCase()
+    protected void createTestCase()
     {
         try
         {
-            m_database = new CRMDatabase( getORB() );
+            super.createTestCase();
 
             createQueries();
 
-            XMultiServiceFactory connectionFactory = (XMultiServiceFactory)UnoRuntime.queryInterface(
-                XMultiServiceFactory.class, m_database.getConnection() );
-            m_composer = (XSingleSelectQueryComposer)UnoRuntime.queryInterface(
-                XSingleSelectQueryComposer.class, connectionFactory.createInstance( "com.sun.star.sdb.SingleSelectQueryComposer" ) );
+            m_composer = createQueryComposer();
 
         }
         catch ( Exception e )
@@ -144,51 +122,51 @@ public class SingleSelectQueryComposer extends ComplexTestCase
     {
         log.println("testing SingleSelectQueryComposer's attributes (order, filter, group by, having)");
 
-    try
-    {
-            log.println("check setQuery");
-            final String simpleQuery = "SELECT * FROM \"customers\"";
-            m_composer.setQuery( simpleQuery );
-            assure( "set/getQuery inconsistent", m_composer.getQuery().equals( simpleQuery ) );
+        try
+        {
+                log.println("check setQuery");
+                final String simpleQuery = "SELECT * FROM \"customers\"";
+                m_composer.setQuery( simpleQuery );
+                assure( "set/getQuery inconsistent", m_composer.getQuery().equals( simpleQuery ) );
 
-            checkAttributeAccess( "Filter", "\"Name\" = 'oranges'" );
-            checkAttributeAccess( "Group", "\"City\"" );
-            checkAttributeAccess( "Order", "\"Address\"" );
-            checkAttributeAccess( "HavingClause", "\"ID\" <> 4" );
+                checkAttributeAccess( "Filter", "\"Name\" = 'oranges'" );
+                checkAttributeAccess( "Group", "\"City\"" );
+                checkAttributeAccess( "Order", "\"Address\"" );
+                checkAttributeAccess( "HavingClause", "\"ID\" <> 4" );
 
-            XIndexAccess orderColumns = m_composer.getOrderColumns();
-            assure( "Order columns doesn't exist: \"Address\"",
-                orderColumns != null && orderColumns.getCount() == 1 && orderColumns.getByIndex(0) != null );
+                XIndexAccess orderColumns = m_composer.getOrderColumns();
+                assure( "Order columns doesn't exist: \"Address\"",
+                    orderColumns != null && orderColumns.getCount() == 1 && orderColumns.getByIndex(0) != null );
 
-            XIndexAccess groupColumns = m_composer.getGroupColumns();
-            assure( "Group columns doesn't exist: \"City\"",
-                groupColumns != null && groupColumns.getCount() == 1 && groupColumns.getByIndex(0) != null );
+                XIndexAccess groupColumns = m_composer.getGroupColumns();
+                assure( "Group columns doesn't exist: \"City\"",
+                    groupColumns != null && groupColumns.getCount() == 1 && groupColumns.getByIndex(0) != null );
 
-            // XColumnsSupplier
-            XColumnsSupplier xSelectColumns = (XColumnsSupplier)
-                    UnoRuntime.queryInterface(XColumnsSupplier.class,m_composer);
-            assure( "no select columns, or wrong number of select columns",
-                xSelectColumns != null && xSelectColumns.getColumns() != null && xSelectColumns.getColumns().getElementNames().length == 5 );
+                // XColumnsSupplier
+                XColumnsSupplier xSelectColumns = (XColumnsSupplier)
+                        UnoRuntime.queryInterface(XColumnsSupplier.class,m_composer);
+                assure( "no select columns, or wrong number of select columns",
+                    xSelectColumns != null && xSelectColumns.getColumns() != null && xSelectColumns.getColumns().getElementNames().length == 5 );
 
-            // structured filter
-            m_composer.setQuery("SELECT \"ID\", \"Postal\", \"Address\" FROM \"customers\"");
-            m_composer.setFilter(complexFilter);
-            PropertyValue[][] aStructuredFilter = m_composer.getStructuredFilter();
-            m_composer.setFilter("");
-            m_composer.setStructuredFilter(aStructuredFilter);
-            assure("Structured Filter not identical" , m_composer.getFilter().equals(complexFilter));
+                // structured filter
+                m_composer.setQuery("SELECT \"ID\", \"Postal\", \"Address\" FROM \"customers\"");
+                m_composer.setFilter(complexFilter);
+                PropertyValue[][] aStructuredFilter = m_composer.getStructuredFilter();
+                m_composer.setFilter("");
+                m_composer.setStructuredFilter(aStructuredFilter);
+                assure("Structured Filter not identical" , m_composer.getFilter().equals(complexFilter));
 
-            // structured having clause
-            m_composer.setHavingClause(complexFilter);
-            PropertyValue[][] aStructuredHaving = m_composer.getStructuredHavingClause();
-            m_composer.setHavingClause("");
-            m_composer.setStructuredHavingClause(aStructuredHaving);
-            assure("Structured Having Clause not identical" , m_composer.getHavingClause().equals(complexFilter));
-     }
-    catch(Exception e)
-    {
-            assure("Exception caught: " + e,false);
-    }
+                // structured having clause
+                m_composer.setHavingClause(complexFilter);
+                PropertyValue[][] aStructuredHaving = m_composer.getStructuredHavingClause();
+                m_composer.setHavingClause("");
+                m_composer.setStructuredHavingClause(aStructuredHaving);
+                assure("Structured Having Clause not identical" , m_composer.getHavingClause().equals(complexFilter));
+         }
+        catch(Exception e)
+        {
+                assure("Exception caught: " + e,false);
+        }
     }
 
     /** test various sub query related features ("queries in queries")
