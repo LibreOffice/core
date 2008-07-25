@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi3.cxx,v $
- * $Revision: 1.154 $
+ * $Revision: 1.155 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -944,7 +944,7 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
     Display* pDisplay = GetXDisplay();
 
     cairo_surface_t *surface = rCairo.xlib_surface_create_with_xrender_format (pDisplay,
-        hDrawable_, DefaultScreenOfDisplay(pDisplay), pVisualFormat, 1, 1);
+        hDrawable_, ScreenOfDisplay(pDisplay, m_nScreen), pVisualFormat, SAL_MAX_INT16, SAL_MAX_INT16);
 
     /*
      * It might be ideal to cache surface and cairo context between calls and
