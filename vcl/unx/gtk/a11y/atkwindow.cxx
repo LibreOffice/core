@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atkwindow.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +47,6 @@ extern "C" {
 
 static void (* window_real_initialize) (AtkObject *obj, gpointer data) = NULL;
 static void (* window_real_finalize) (GObject *obj) = NULL;
-static G_CONST_RETURN gchar* (* window_real_get_name) (AtkObject *accessible) = NULL;
 
 static void
 init_from_window( AtkObject *accessible, Window *pWindow )
@@ -197,7 +196,7 @@ ooo_window_wrapper_class_init (AtkObjectClass *klass, gpointer)
 
     /*
      * Patch the gobject vtable of GailWindow to refer to our instance of
-     * "initialize" and "get_name".
+     * "initialize".
      */
 
     data = g_type_class_peek_parent( klass );
@@ -268,6 +267,5 @@ void restore_gail_window_vtable (void)
     atk_class = ATK_OBJECT_CLASS (data);
 
     atk_class->initialize = window_real_initialize;
-    atk_class->get_name = window_real_get_name;
 }
 
