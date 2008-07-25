@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unodatbr.cxx,v $
- * $Revision: 1.202 $
+ * $Revision: 1.203 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1525,6 +1525,10 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
 
     switch ( nId )
     {
+        case ID_TREE_ADMINISTRATE:
+            aReturn.bEnabled = true;
+            return aReturn;
+
         case ID_BROWSER_CLOSE:
             // the close button should always be enabled
             aReturn.bEnabled = !m_bEnableBrowser;
