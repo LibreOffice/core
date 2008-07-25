@@ -8,7 +8,7 @@
  *
  * $RCSfile: aqua11ywrapper.mm,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,8 @@ using namespace ::com::sun::star::uno;
 -(Reference<XAccessibleContext>)accessibleContext;
 @end
 
+static MacOSBOOL isPopupMenuOpen = NO;
+
 @implementation AquaA11yWrapper : NSView
 
 #pragma mark -
@@ -81,7 +83,9 @@ using namespace ::com::sun::star::uno;
     mDefaultFontsize = 0.0;
     mpDefaultFontname = nil;
     mpReferenceWrapper = new ReferenceWrapper;
+    mActsAsRadioGroup = NO;
     mpReferenceWrapper -> rAccessibleContext = rxAccessibleContext;
+    mIsTableCell = NO;
     // Querying all supported interfaces
     try {
         // XAccessibleComponent
@@ -102,6 +106,8 @@ using namespace ::com::sun::star::uno;
         mpReferenceWrapper -> rAccessibleAction = Reference < XAccessibleAction > ( rxAccessibleContext, UNO_QUERY );
         // XAccessibleTextAttributes
         mpReferenceWrapper -> rAccessibleTextAttributes = Reference < XAccessibleTextAttributes > ( rxAccessibleContext, UNO_QUERY );
+        // XAccessibleMultiLineText
+        mpReferenceWrapper -> rAccessibleMultiLineText = Reference < XAccessibleMultiLineText > ( rxAccessibleContext, UNO_QUERY );
         // XAccessibleEventBroadcaster
         if ( ! rxAccessibleContext -> getAccessibleStateSet() -> contains ( AccessibleStateType::TRANSIENT ) ) {
             Reference< XAccessibleEventBroadcaster > xBroadcaster(rxAccessibleContext, UNO_QUERY);
@@ -112,6 +118,10 @@ using namespace ::com::sun::star::uno;
                  */
                 xBroadcaster->addEventListener( new AquaA11yEventListener( self, rxAccessibleContext -> getAccessibleRole() ) );
             }
+        }
+        // TABLE_CELL
+        if ( rxAccessibleContext -> getAccessibleRole() == AccessibleRole::TABLE_CELL ) {
+            mIsTableCell = YES;
         }
     } catch ( const Exception ) {
     }
@@ -166,21 +176,54 @@ using namespace ::com::sun::star::uno;
     return selector;
 }
 
+-(Reference < XAccessible >)getFirstRadioButtonInGroup {
+    Reference < XAccessibleRelationSet > rxAccessibleRelationSet = [ self accessibleContext ] -> getAccessibleRelationSet();
+    AccessibleRelation relationMemberOf = rxAccessibleRelationSet -> getRelationByType ( AccessibleRelationType::MEMBER_OF );
+    if ( relationMemberOf.RelationType == AccessibleRelationType::MEMBER_OF && relationMemberOf.TargetSet.hasElements() ) {
+        return Reference < XAccessible > ( relationMemberOf.TargetSet[0], UNO_QUERY );
+    }
+    return Reference < XAccessible > ();
+}
+
+-(MacOSBOOL)isFirstRadioButtonInGroup {
+    Reference < XAccessible > rFirstMateAccessible = [ self getFirstRadioButtonInGroup ];
+    if ( rFirstMateAccessible.is() && rFirstMateAccessible -> getAccessibleContext().get() == [ self accessibleContext ] ) {
+        return YES;
+    }
+    return NO;
+}
+
 #pragma mark -
 #pragma mark Attribute Value Getters
 // ( called via Reflection by accessibilityAttributeValue )
 
+/*
+    Radiobutton grouping is done differently in NSAccessibility and the UNO-API. In UNO related radio buttons share an entry in their
+    RelationSet. In NSAccessibility the relationship is axpressed through the hierarchy. A AXRadioGroup contains two or more AXRadioButton 
+    objects. Since this group is not available in the UNO hierarchy, an extra wrapper is used for it. This wrapper shares almost all 
+    attributes with the first radio button of the group, except for the role, subrole, role description, parent and children attributes. 
+    So in this five methods there is a special treatment for radio buttons and groups.
+*/
+
 -(id)roleAttribute {
-    return [ AquaA11yRoleHelper getNativeRoleFrom: [ self accessibleContext ] ];
+    if ( mActsAsRadioGroup ) {
+        return NSAccessibilityRadioGroupRole;
+    } else {
+        return [ AquaA11yRoleHelper getNativeRoleFrom: [ self accessibleContext ] ];
+    }
 }
 
 -(id)subroleAttribute {
-    NSString * subRole = [ AquaA11yRoleHelper getNativeSubroleFrom: [ self accessibleContext ] -> getAccessibleRole() ];
-    if ( ! [ subRole isEqualToString: @"" ] ) {
-        return subRole;
+    if ( mActsAsRadioGroup ) {
+        return @"";
     } else {
-        [ subRole release ];
-        return [ super accessibilityAttributeValue: NSAccessibilitySubroleAttribute ];
+        NSString * subRole = [ AquaA11yRoleHelper getNativeSubroleFrom: [ self accessibleContext ] -> getAccessibleRole() ];
+        if ( ! [ subRole isEqualToString: @"" ] ) {
+            return subRole;
+        } else {
+            [ subRole release ];
+            return [ super accessibilityAttributeValue: NSAccessibilitySubroleAttribute ];
+        }
     }
 }
 
@@ -189,7 +232,9 @@ using namespace ::com::sun::star::uno;
 }
 
 -(id)descriptionAttribute {
-    if ( [ self accessibleExtendedComponent ] != nil ) {
+    if ( [ self accessibleContext ] -> getAccessibleRole() == AccessibleRole::COMBO_BOX ) {
+        return [ self titleAttribute ];
+    } else if ( [ self accessibleExtendedComponent ] != nil ) {
         return [ AquaA11yComponentWrapper descriptionAttributeForElement: self ];
     } else {
         return CreateNSString ( [ self accessibleContext ] -> getAccessibleDescription() );
@@ -205,7 +250,17 @@ using namespace ::com::sun::star::uno;
 }
 
 -(id)focusedAttribute {
-    if ( [ self accessibleContext ] -> getAccessibleStateSet().is() ) {
+    if ( [ self accessibleContext ] -> getAccessibleRole() == AccessibleRole::COMBO_BOX ) {
+        id isFocused = nil;
+        Reference < XAccessible > rxParent = [ self accessibleContext ] -> getAccessibleParent();
+        if ( rxParent.is() ) {
+            Reference < XAccessibleContext > rxContext = rxParent -> getAccessibleContext();
+            if ( rxContext.is() && rxContext -> getAccessibleStateSet().is() ) {
+                isFocused = [ NSNumber numberWithBool: rxContext -> getAccessibleStateSet() -> contains ( AccessibleStateType::FOCUSED ) ];
+            }
+        }
+        return isFocused;
+    } else if ( [ self accessibleContext ] -> getAccessibleStateSet().is() ) {
         return [ NSNumber numberWithBool: [ self accessibleContext ] -> getAccessibleStateSet() -> contains ( AccessibleStateType::FOCUSED ) ];
     } else {
         return nil;
@@ -213,6 +268,16 @@ using namespace ::com::sun::star::uno;
 }
 
 -(id)parentAttribute {
+    if ( [ self accessibleContext ] -> getAccessibleRole() == AccessibleRole::RADIO_BUTTON && ! mActsAsRadioGroup ) {
+        Reference < XAccessible > rxAccessible = [ self getFirstRadioButtonInGroup ];
+        if ( rxAccessible.is() && rxAccessible -> getAccessibleContext().is() ) {
+            Reference < XAccessibleContext > rxAccessibleContext = rxAccessible -> getAccessibleContext();
+            id parent_wrapper = [ AquaA11yFactory wrapperForAccessibleContext: rxAccessibleContext createIfNotExists: YES asRadioGroup: YES ];
+            [ parent_wrapper autorelease ];
+            return NSAccessibilityUnignoredAncestor( parent_wrapper );
+        }
+        return nil;
+    }
     try {
         Reference< XAccessible > xParent( [ self accessibleContext ] -> getAccessibleParent() );
         if ( xParent.is() ) {
@@ -231,7 +296,25 @@ using namespace ::com::sun::star::uno;
 }
 
 -(id)childrenAttribute {
-    if ( [ self accessibleTable ] != nil ) {
+    if ( mActsAsRadioGroup ) {
+        NSMutableArray * children = [ [ NSMutableArray alloc ] init ];
+        Reference < XAccessibleRelationSet > rxAccessibleRelationSet = [ self accessibleContext ] -> getAccessibleRelationSet();
+        AccessibleRelation relationMemberOf = rxAccessibleRelationSet -> getRelationByType ( AccessibleRelationType::MEMBER_OF );
+        if ( relationMemberOf.RelationType == AccessibleRelationType::MEMBER_OF && relationMemberOf.TargetSet.hasElements() ) {
+            for ( int index = 0; index < relationMemberOf.TargetSet.getLength(); index++ ) {
+                Reference < XAccessible > rMateAccessible = Reference < XAccessible > ( relationMemberOf.TargetSet[index], UNO_QUERY );
+                if ( rMateAccessible.is() ) {
+                    Reference< XAccessibleContext > rMateAccessibleContext( rMateAccessible -> getAccessibleContext() );
+                    if ( rMateAccessibleContext.is() ) {
+                        id wrapper = [ AquaA11yFactory wrapperForAccessibleContext: rMateAccessibleContext ];
+                        [ children addObject: wrapper ];
+                        [ wrapper release ];
+                    }
+                }
+            }
+        }
+        return children;
+    } else if ( [ self accessibleTable ] != nil ) {
         return [ AquaA11yTableWrapper childrenAttributeForElement: self ];
     } else {
         try {
@@ -252,6 +335,21 @@ using namespace ::com::sun::star::uno;
                 }
             }
             
+            // if not already acting as RadioGroup now is the time to replace RadioButtons with RadioGroups and remove RadioButtons
+            if ( ! mActsAsRadioGroup ) {
+                NSEnumerator * enumerator = [ children objectEnumerator ];
+                AquaA11yWrapper * element;
+                while ( ( element = ( (AquaA11yWrapper *) [ enumerator nextObject ] ) ) ) {
+                    if ( [ element accessibleContext ] -> getAccessibleRole() == AccessibleRole::RADIO_BUTTON ) {
+                        if ( [ element isFirstRadioButtonInGroup ] ) {
+                            id wrapper = [ AquaA11yFactory wrapperForAccessibleContext: [ element accessibleContext ] createIfNotExists: YES asRadioGroup: YES ];
+                            [ children replaceObjectAtIndex: [ children indexOfObjectIdenticalTo: element ] withObject: wrapper ];
+                        }
+                        [ children removeObject: element ];
+                    }
+                }
+            }
+
             [ children autorelease ];
             return NSAccessibilityUnignoredChildren( children );
         } catch (const Exception &e) {
@@ -298,13 +396,47 @@ using namespace ::com::sun::star::uno;
 }
 
 -(id)roleDescriptionAttribute {
-    return [ AquaA11yRoleHelper getRoleDescriptionFrom: 
-            [ AquaA11yRoleHelper getNativeRoleFrom: [ self accessibleContext ] ] 
-            with: [ AquaA11yRoleHelper getNativeSubroleFrom: [ self accessibleContext ] -> getAccessibleRole() ] ];
+    if ( mActsAsRadioGroup ) {
+        return [ AquaA11yRoleHelper getRoleDescriptionFrom: NSAccessibilityRadioGroupRole with: @"" ];
+	} else if( [ self accessibleContext ] -> getAccessibleRole() == AccessibleRole::RADIO_BUTTON ) {
+		// FIXME: VO should read this because of hierarchy, this is just a workaround
+		// get parent and its children
+		AquaA11yWrapper * parent = [ self parentAttribute ];
+		NSArray * children = [ parent childrenAttribute ];
+		// find index of self
+		int index = 1;
+		NSEnumerator * enumerator = [ children objectEnumerator ];
+		AquaA11yWrapper * child = nil;
+		while ( ( child = [ enumerator nextObject ] ) ) {
+			if ( self == child ) {
+				break;
+			}
+			index++;
+		}
+		// build string
+		NSNumber * nIndex = [ NSNumber numberWithInt: index ];
+		NSNumber * nGroupsize = [ NSNumber numberWithInt: [ children count ] ];
+		NSMutableString * value = [ [ NSMutableString alloc ] init ];
+		[ value appendString: @"radio button " ];
+		[ value appendString: [ nIndex stringValue ] ];
+		[ value appendString: @" of " ];
+		[ value appendString: [ nGroupsize stringValue ] ];
+		// clean up and return string
+		[ nIndex release ];
+		[ nGroupsize release ];
+		[ children release ];
+		return value;
+    } else {
+        return [ AquaA11yRoleHelper getRoleDescriptionFrom: 
+                [ AquaA11yRoleHelper getNativeRoleFrom: [ self accessibleContext ] ] 
+                with: [ AquaA11yRoleHelper getNativeSubroleFrom: [ self accessibleContext ] -> getAccessibleRole() ] ];
+    }
 }
 
 -(id)valueAttribute {
-    if ( [ self accessibleText ] != nil ) {
+    if ( [ [ self roleAttribute ] isEqualToString: NSAccessibilityMenuItemRole ] ) {
+        return nil;
+    } else if ( [ self accessibleText ] != nil ) {
         return [ AquaA11yTextWrapper valueAttributeForElement: self ];
     } else if ( [ self accessibleValue ] != nil ) {
         return [ AquaA11yValueWrapper valueAttributeForElement: self ];
@@ -498,23 +630,58 @@ using namespace ::com::sun::star::uno;
     }
 }
 
+-(id)lineForIndexAttributeForParameter:(id)index {
+    if ( [ self accessibleMultiLineText ] != nil ) {
+        return [ AquaA11yTextWrapper lineForIndexAttributeForElement: self forParameter: index ];
+    } else {
+        return nil;
+    }
+}
+
+-(id)rangeForLineAttributeForParameter:(id)line {
+    if ( [ self accessibleMultiLineText ] != nil ) {
+        return [ AquaA11yTextWrapper rangeForLineAttributeForElement: self forParameter: line ];
+    } else {
+        return nil;
+    }
+}
+
 #pragma mark -
 #pragma mark Accessibility Protocol
 
 -(id)accessibilityAttributeValue:(NSString *)attribute {
+    // #i90575# guard NSAccessibility protocol against unwanted access
+    if ( isPopupMenuOpen ) {
+        return nil;
+    }
     id value = nil;
-    try {
-        SEL methodSelector = [ self selectorForAttribute: attribute asGetter: YES withGetterParameter: NO ];
-        if ( [ self respondsToSelector: methodSelector ] ) {
-            value = [ self performSelector: methodSelector ];
+    // if we are no longer in the wrapper repository, we have been disposed
+    AquaA11yWrapper * theWrapper = [ AquaA11yFactory wrapperForAccessibleContext: [ self accessibleContext ] createIfNotExists: NO ];
+    if ( theWrapper != nil || mIsTableCell ) {
+        try {
+            SEL methodSelector = [ self selectorForAttribute: attribute asGetter: YES withGetterParameter: NO ];
+            if ( [ self respondsToSelector: methodSelector ] ) {
+                value = [ self performSelector: methodSelector ];
+            }
+        } catch ( const DisposedException & e ) {
+            mIsTableCell = NO; // just to be sure
+            [ AquaA11yFactory removeFromWrapperRepositoryFor: [ self accessibleContext ] ];
+            return nil;
+        } catch ( const Exception & e ) {
+            // empty
         }
-    } catch ( const Exception & e ) {
-        // empty
+    }
+    if ( theWrapper != nil ) {
+        [ theWrapper release ]; // the above called method calls retain on the returned Wrapper
     }
     return value;
 }
 
 -(MacOSBOOL)accessibilityIsIgnored {
+    // #i90575# guard NSAccessibility protocol against unwanted access
+    if ( isPopupMenuOpen ) {
+        return nil;
+    }
     MacOSBOOL ignored = NO;
     sal_Int16 nRole = [ self accessibleContext ] -> getAccessibleRole();
     switch ( nRole ) {
@@ -534,6 +701,10 @@ using namespace ::com::sun::star::uno;
 }
 
 -(NSArray *)accessibilityAttributeNames {
+    // #i90575# guard NSAccessibility protocol against unwanted access
+    if ( isPopupMenuOpen ) {
+        return nil;
+    }
     NSString * nativeSubrole = nil;
     NSString * title = nil;
     NSMutableArray * attributeNames = nil;
@@ -593,7 +764,8 @@ using namespace ::com::sun::star::uno;
         if ( attributeNames != nil ) {
             [ attributeNames release ];
         }
-        return nil;
+        [ AquaA11yFactory removeFromWrapperRepositoryFor: [ self accessibleContext ] ];
+        return [ [ NSArray alloc ] init ];
     }
 }
 
@@ -652,6 +824,10 @@ using namespace ::com::sun::star::uno;
 }
 
 -(id)accessibilityFocusedUIElement {
+    // #i90575# guard NSAccessibility protocol against unwanted access
+    if ( isPopupMenuOpen ) {
+        return nil;
+    }
 
     // as this seems to be the first API call on a newly created SalFrameView object,
     // make sure self gets registered in the repository ..
@@ -892,6 +1068,10 @@ Reference < XAccessibleContext > hitTestRunner ( Point point, Reference < XAcces
     return mpReferenceWrapper -> rAccessibleTextAttributes.get();
 }
 
+-(XAccessibleMultiLineText *)accessibleMultiLineText {
+    return mpReferenceWrapper -> rAccessibleMultiLineText.get();
+}
+
 -(NSView *)viewElementForParent {
     return self;
 }
@@ -917,6 +1097,18 @@ Reference < XAccessibleContext > hitTestRunner ( Point point, Reference < XAcces
 
 -(float)defaultFontsize {
     return mDefaultFontsize;
+}
+
+-(void)setActsAsRadioGroup:(MacOSBOOL)actsAsRadioGroup {
+    mActsAsRadioGroup = actsAsRadioGroup;
+}
+
+-(MacOSBOOL)actsAsRadioGroup {
+    return mActsAsRadioGroup;
+}
+
++(void)setPopupMenuOpen:(MacOSBOOL)popupMenuOpen {
+    isPopupMenuOpen = popupMenuOpen;
 }
 
 @end
