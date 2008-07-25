@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportController.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -738,8 +738,10 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = isConnected() && isEditable();
             break;
         case SID_EDITDOC:
-        case SID_PAGEDIALOG:
             aReturn.bChecked = isEditable();
+            break;
+        case SID_PAGEDIALOG:
+            aReturn.bEnabled = isEditable();
             break;
         case SID_BACKGROUND_COLOR:
             impl_fillState_nothrow(PROPERTY_CONTROLBACKGROUND,aReturn);
