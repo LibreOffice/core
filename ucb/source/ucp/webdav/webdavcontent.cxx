@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: webdavcontent.cxx,v $
- * $Revision: 1.64 $
+ * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1434,14 +1434,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 ContentProperties::UCBNamesToHTTPNames(
                     rProperties,
                     aHeaderNames,
-                    false /* bIncludeUnmatched */ );
-
-                // Note: Setting bIncludeUnmatched to true would provide
-                // support for obtaining arbitrary header values, but will
-                // result in additional network traffic (HEAD requests).
-                // For the moment it is okay only to support the header
-                // values which can be mapped to UCB properties (like
-                // "Content-Length" header <-> "Size" property)
+                    true /* bIncludeUnmatched */ );
 
                 if ( aHeaderNames.size() > 0 )
                 {
