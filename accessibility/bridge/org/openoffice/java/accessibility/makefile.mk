@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.25 $
+# $Revision: 1.26 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,7 +40,7 @@ USE_JAVAVER:=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(JAVANUMVER:s/.//)" >= "000100040000" 
+.IF "$(JAVANUMVER:s/.//)" >= "000100050000" 
 JAVADIR = $(OUT)$/misc$/java
 JARFILES = sandbox.jar jurt.jar unoil.jar ridl.jar
 JAVAFILES = \
@@ -96,7 +96,7 @@ JARTARGET               = $(TARGET).jar
 JARCOMPRESS             = TRUE
 JARCLASSDIRS            = $(PACKAGE)
 
-.ENDIF			# "$(JAVANUMVER:s/.//)" >= "000100040000" 
+.ENDIF			# "$(JAVANUMVER:s/.//)" >= "000100050000" 
 
 # --- Targets ------------------------------------------------------
 
