@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterSlideSorter.cxx,v $
  *
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1058,7 +1058,7 @@ void PresenterSlideSorter::PaintPreview (
             1, 0, aTopLeft.X,
             0, 1, aTopLeft.Y),
         NULL,
-        Sequence<double>(3),
+        Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
 
 
@@ -1147,7 +1147,7 @@ void PresenterSlideSorter::Paint (const awt::Rectangle& rUpdateBox)
 
     // Paint the horizontal separator.
     rendering::RenderState aRenderState (geometry::AffineMatrix2D(1,0,0, 0,1,0),
-            NULL, Sequence<double>(3), rendering::CompositeOperation::SOURCE);
+            NULL, Sequence<double>(4), rendering::CompositeOperation::SOURCE);
     PresenterCanvasHelper::SetDeviceColor(aRenderState, maSeparatorColor);
     mxCanvas->drawLine(
         geometry::RealPoint2D(0, mnSeparatorY),
@@ -1806,7 +1806,7 @@ void PresenterSlideSorter::MouseOverManager::Paint (
                 rendering::RenderState(
                     geometry::AffineMatrix2D(1,0,nXOffset, 0,1,nYOffset),
                     NULL,
-                    Sequence<double>(3),
+                    Sequence<double>(4),
                     rendering::CompositeOperation::SOURCE));
         }
     }
@@ -1919,7 +1919,7 @@ Reference<rendering::XBitmap> PresenterSlideSorter::MouseOverManager::CreateBitm
         rendering::RenderState aRenderState (
             geometry::AffineMatrix2D(1,0,nXOffset, 0,1,nYOffset),
             NULL,
-            Sequence<double>(3),
+            Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
         PresenterCanvasHelper::SetDeviceColor(aRenderState, mpFont->mnColor);
 
@@ -2275,7 +2275,7 @@ void PresenterSlideSorter::CurrentSlideFrameRenderer::PaintBitmapOnce(
             1, 0, nX,
             0, 1, nY),
         NULL,
-        Sequence<double>(3),
+        Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
 
     rxCanvas->drawBitmap(
@@ -2315,7 +2315,7 @@ void PresenterSlideSorter::CurrentSlideFrameRenderer::PaintBitmapTiled(
             1, 0, nX0,
             0, 1, nY0),
         NULL,
-        Sequence<double>(3),
+        Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
 
     const double nX1 = nX0 + nWidth;
