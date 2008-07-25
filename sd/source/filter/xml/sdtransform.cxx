@@ -8,7 +8,7 @@
  *
  * $RCSfile: sdtransform.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -323,13 +323,16 @@ bool SdTransformOOo2xDocument::getBulletState( const SfxItemSet& rSet, sal_uInt1
 bool SdTransformOOo2xDocument::transformItemSet( SfxItemSet& rSet, bool bNumbering )
 {
     bool bRet = false;
-    if( bNumbering && (rSet.GetItemState( EE_PARA_LRSPACE ) == SFX_ITEM_SET) && (rSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_SET) )
+    if( bNumbering /* && (rSet.GetItemState( EE_PARA_LRSPACE ) == SFX_ITEM_SET) && (rSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_SET) */ )
     {
         SvxLRSpaceItem aItem( *static_cast<const SvxLRSpaceItem*>(rSet.GetItem( EE_PARA_LRSPACE )) );
-        aItem.SetLeftValue( 0 );
-        aItem.SetTxtFirstLineOfst( 0 );
-        rSet.Put( aItem );
-        bRet = true;
+        if( (aItem.GetLeft() != 0) || (aItem.GetTxtFirstLineOfst() != 0) )
+        {
+            aItem.SetLeftValue( 0 );
+            aItem.SetTxtFirstLineOfst( 0 );
+            rSet.Put( aItem );
+            bRet = true;
+        }
     }
 
     if( rSet.GetItemState( SDRATTR_TEXT_WORDWRAP ) == SFX_ITEM_SET )
