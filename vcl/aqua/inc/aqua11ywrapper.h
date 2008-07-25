@@ -8,7 +8,7 @@
  *
  * $RCSfile: aqua11ywrapper.h,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,7 @@
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
+#include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
 
 // rAccessibleXYZ as a field in an Objective-C-Class would not call Con-/Destructor, so use a struct instead
 struct ReferenceWrapper
@@ -57,6 +58,7 @@ struct ReferenceWrapper
     ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleEditableText > rAccessibleEditableText;
     ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleValue > rAccessibleValue;
     ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleTextAttributes > rAccessibleTextAttributes;
+    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleMultiLineText > rAccessibleMultiLineText;
 };
 
 @interface AquaA11yWrapper : NSView
@@ -64,6 +66,8 @@ struct ReferenceWrapper
     ReferenceWrapper * mpReferenceWrapper;
     NSString * mpDefaultFontname;
     float mDefaultFontsize;
+    MacOSBOOL mActsAsRadioGroup;
+    MacOSBOOL mIsTableCell;
 }
 // NSAccessibility Protocol
 -(id)accessibilityAttributeValue:(NSString *)attribute;
@@ -92,6 +96,8 @@ struct ReferenceWrapper
 -(id)orientationAttribute;
 -(id)windowAttribute;
 // Wrapper-specific
+-(void)setActsAsRadioGroup:(MacOSBOOL)actsAsRadioGroup;
+-(MacOSBOOL)actsAsRadioGroup;
 -(NSView *)viewElementForParent;
 -(id)initWithAccessibleContext: (::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >) anAccessibleContext;
 -(void) setDefaults: (::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >) rxAccessibleContext;
@@ -100,6 +106,7 @@ struct ReferenceWrapper
 -(NSString *)defaultFontname;
 -(void)setDefaultFontsize:(float)fontsize;
 -(float)defaultFontsize;
++(void)setPopupMenuOpen:(MacOSBOOL)popupMenuOpen;
 -(::com::sun::star::accessibility::XAccessibleAction *)accessibleAction;
 -(::com::sun::star::accessibility::XAccessibleContext *)accessibleContext;
 -(::com::sun::star::accessibility::XAccessibleComponent *)accessibleComponent;
@@ -110,6 +117,7 @@ struct ReferenceWrapper
 -(::com::sun::star::accessibility::XAccessibleEditableText *)accessibleEditableText;
 -(::com::sun::star::accessibility::XAccessibleValue *)accessibleValue;
 -(::com::sun::star::accessibility::XAccessibleTextAttributes *)accessibleTextAttributes;
+-(::com::sun::star::accessibility::XAccessibleMultiLineText *)accessibleMultiLineText;
 @end
 
 #endif // _SV_AQUA11WRAPPER_H
