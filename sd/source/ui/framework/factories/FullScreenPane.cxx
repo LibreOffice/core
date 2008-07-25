@@ -8,7 +8,7 @@
  *
  * $RCSfile: FullScreenPane.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -144,7 +144,7 @@ Reference<rendering::XCanvas> FullScreenPane::CreateCanvas (void)
             mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
         return Reference<rendering::XCanvas>(
             xFactory->createInstanceWithArguments(
-                OUString::createFromAscii("com.sun.star.rendering.VCLCanvas"),
+                OUString::createFromAscii("com.sun.star.rendering.SpriteCanvas.VCL"),
                 aArg),
             UNO_QUERY);
     }
