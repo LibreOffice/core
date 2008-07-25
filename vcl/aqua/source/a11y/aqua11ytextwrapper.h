@@ -8,7 +8,7 @@
  *
  * $RCSfile: aqua11ytextwrapper.h,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +52,8 @@
 +(id)boundsForRangeAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)range;
 +(id)styleRangeForIndexAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)index;
 +(id)rTFForRangeAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)range;
++(id)lineForIndexAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)index;
++(id)rangeForLineAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)line;
 +(void)addAttributeNamesTo:(NSMutableArray *)attributeNames;
 +(void)addParameterizedAttributeNamesTo:(NSMutableArray *)attributeNames;
 +(NSArray *)specialAttributeNames;
