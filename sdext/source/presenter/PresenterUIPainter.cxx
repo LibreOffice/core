@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterUIPainter.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +76,7 @@ void PresenterUIPainter::PaintHorizontalBitmapComposite (
     rendering::RenderState aRenderState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         NULL,
-        Sequence<double>(3),
+        Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
 
     // Paint the left bitmap once.
@@ -181,7 +181,7 @@ void PresenterUIPainter::PaintVerticalBitmapComposite (
     rendering::RenderState aRenderState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         NULL,
-        Sequence<double>(3),
+        Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
 
     // Paint the top bitmap once.
