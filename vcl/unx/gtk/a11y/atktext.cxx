@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atktext.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
+#include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 
@@ -202,6 +203,34 @@ static accessibility::XAccessibleTextAttributes*
 
 /*****************************************************************************/
 
+static accessibility::XAccessibleMultiLineText*
+    getMultiLineText( AtkText *pText ) throw (uno::RuntimeException)
+{
+    AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pText );
+    if( pWrap )
+    {
+        if( !pWrap->mpMultiLineText && pWrap->mpContext )
+        {
+            uno::Any any = pWrap->mpContext->queryInterface( accessibility::XAccessibleMultiLineText::static_type(NULL) );
+            /* Since this not a dedicated interface in Atk and thus has not
+             * been queried during wrapper initialization, we need to check
+             * the return value here.
+             */
+            if( typelib_TypeClass_INTERFACE == any.pType->eTypeClass )
+            {
+                pWrap->mpMultiLineText = reinterpret_cast< accessibility::XAccessibleMultiLineText * > (any.pReserved);
+                pWrap->mpMultiLineText->acquire();
+            }
+        }
+
+        return pWrap->mpMultiLineText;
+    }
+
+    return NULL;
+}
+
+/*****************************************************************************/
+
 extern "C" {
 
 static gchar *
@@ -289,6 +318,22 @@ text_wrapper_get_text_at_offset (AtkText          *text,
         accessibility::XAccessibleText* pText = getText( text );
         if( pText )
         {
+            /* If the user presses the 'End' key, the caret will be placed behind the last character,
+             * which is the same index as the first character of the next line. In atk the magic offset
+             * '-2' is used to cover this special case.
+             */
+            if( -2 == offset &&
+                (ATK_TEXT_BOUNDARY_LINE_START == boundary_type) ||
+                (ATK_TEXT_BOUNDARY_LINE_END == boundary_type) )
+            {
+                accessibility::XAccessibleMultiLineText* pMultiLineText = getMultiLineText( text );
+                if( pMultiLineText )
+                {
+                    accessibility::TextSegment aTextSegment = pMultiLineText->getTextAtLineWithCaret();
+                    return adjust_boundaries(pText, aTextSegment, boundary_type, start_offset, end_offset);
+                }
+            }
+
             accessibility::TextSegment aTextSegment = pText->getTextAtIndex(offset, text_type_from_boundary(boundary_type));
             return adjust_boundaries(pText, aTextSegment, boundary_type, start_offset, end_offset);
         }
@@ -395,12 +440,14 @@ text_wrapper_get_run_attributes( AtkText        *text,
                 pTextAttributes->getRunAttributes( offset, uno::Sequence< rtl::OUString > () );
 
             pSet = attribute_set_new_from_property_values( aAttributeList, true, text );
+            if( pSet )
+            {
+                accessibility::TextSegment aTextSegment =
+                    pText->getTextAtIndex(offset, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
 
-            accessibility::TextSegment aTextSegment =
-                pText->getTextAtIndex(offset, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
-
-            *start_offset = aTextSegment.SegmentStart;
-            *end_offset = aTextSegment.SegmentEnd + 1; // FIXME: TESTME
+                *start_offset = aTextSegment.SegmentStart;
+                *end_offset = aTextSegment.SegmentEnd + 1; // FIXME: TESTME
+            }
         }
     }
     catch(const uno::Exception& e) {
