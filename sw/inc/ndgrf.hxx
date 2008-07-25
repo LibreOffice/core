@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndgrf.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,10 +73,11 @@ class SwGrfNode: public SwNoTxtNode
 
     // --> OD 2007-01-19 #i73788#
     boost::shared_ptr< SwAsyncRetrieveInputStreamThreadConsumer > mpThreadConsumer;
-    bool mbLinkedInputStreamReady :1;
+    bool mbLinkedInputStreamReady;
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream> mxInputStream;
     sal_Bool mbIsStreamReadOnly;
     // <--
+
     SwGrfNode( const SwNodeIndex& rWhere,
                const String& rGrfName, const String& rFltName,
                const Graphic* pGraphic,
@@ -230,6 +231,9 @@ public:
         com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xInputStream,
         const sal_Bool bIsStreamReadOnly );
     void UpdateLinkWithInputStream();
+    // <--
+    // --> OD 2008-07-21 #i90395#
+    bool IsAsyncRetrieveInputStreamPossible() const;
     // <--
 };
 
