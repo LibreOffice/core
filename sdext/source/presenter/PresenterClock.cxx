@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterClock.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -299,10 +299,8 @@ PresenterClock::PresenterClock (
 
     maViewState.AffineTransform = geometry::AffineMatrix2D(1,0,0, 0,1,0);
     maRenderState.AffineTransform = geometry::AffineMatrix2D(1,0,0, 0,1,0);
-    maRenderState.DeviceColor = Sequence<double>(3);
-    maRenderState.DeviceColor[0] = 0;
-    maRenderState.DeviceColor[1] = 0;
-    maRenderState.DeviceColor[2] = 0;
+    maRenderState.DeviceColor = Sequence<double>(4);
+    PresenterCanvasHelper::SetDeviceColor(maRenderState, util::Color(0x00000000));
 
     try
     {
@@ -1341,17 +1339,15 @@ void DigitalDefaultPainter::Paint (
     rendering::RenderState aRenderState(
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         NULL,
-        Sequence<double>(3),
+        Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
 
     util::Color aFontColor (mpPresenterController->GetViewFontColor(msViewURL));
-    aRenderState.DeviceColor[0] = ((aFontColor>>16) & 0x0ff) / 255.0;
-    aRenderState.DeviceColor[1] = ((aFontColor>>8) & 0x0ff) / 255.0;
-    aRenderState.DeviceColor[2] = ((aFontColor>>0) & 0x0ff) / 255.0;
-    aRenderState.AffineTransform.m02 = (maWindowSize.Width - (aBox.X2-aBox.X1+1)) / 2
-        - aBox.X1;
-    aRenderState.AffineTransform.m12 = (maWindowSize.Height - (aBox.Y2-aBox.Y1+1)) / 2
-        - aBox.Y1;
+    PresenterCanvasHelper::SetDeviceColor(aRenderState, aFontColor);
+    aRenderState.AffineTransform.m02
+        = (maWindowSize.Width - (aBox.X2-aBox.X1+1)) / 2 - aBox.X1;
+    aRenderState.AffineTransform.m12
+        = (maWindowSize.Height - (aBox.Y2-aBox.Y1+1)) / 2 - aBox.Y1;
     rxCanvas->drawText(
         aContext,
         mxFont,
