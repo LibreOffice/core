@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slideshow.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -152,6 +152,7 @@ SfxItemPropertyMap map_impl[] = { { 0,0,0,0,0,0 } };
 SlideShow::SlideShow( SdDrawDocument* pDoc )
 : SlideshowBase( m_aMutex )
 , maPropSet(ImplGetPresentationPropertyMap())
+, mbIsInStartup(false)
 , mpDoc( pDoc )
 , mpCurrentViewShellBase( 0 )
 , mpFullScreenViewShellBase( 0 )
@@ -255,7 +256,13 @@ void SlideShow::CreateController(  ViewShell* pViewSh, ::sd::View* pView, ::Wind
 
     Reference< XPresentation2 > xThis( this );
 
-    mxController.set( new SlideshowImpl( xThis, pViewSh, pView, mpDoc, pParentWindow ) );
+    rtl::Reference<SlideshowImpl> xController (
+        new SlideshowImpl(xThis, pViewSh, pView, mpDoc, pParentWindow));
+
+    // Reset mbIsInStartup.  From here mxController.is() is used to prevent
+    // multiple slide show instances for one document.
+    mxController = xController;
+    mbIsInStartup = false;
 }
 
 // --------------------------------------------------------------------
@@ -674,6 +681,12 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
+    // The mbIsInStartup flag should have been reset during the start of the
+    // slide show.  Reset it here just in case that something has horribly
+    // gone wrong.
+    OSL_ASSERT(!mbIsInStartup);
+    mbIsInStartup = false;
+
     rtl::Reference< SlideshowImpl > xController( mxController );
     if( xController.is() )
     {
@@ -786,7 +799,20 @@ void SAL_CALL SlideShow::startWithArguments( const Sequence< PropertyValue >& rA
 
     // Stop a running show before starting a new one.
     if( mxController.is() )
+    {
+        OSL_ASSERT(!mbIsInStartup);
         end();
+    }
+    else if (mbIsInStartup)
+    {
+        // We are already somewhere in process of starting a slide show but
+        // have not yet got to the point where mxController is set.  There
+        // is not yet a slide show to end so return silently.
+        return;
+    }
+
+    // Prevent multiple instance of the SlideShow class for one document.
+    mbIsInStartup = true;
 
     mxCurrentSettings.reset( new PresentationSettingsEx( mpDoc->getPresentationSettings() ) );
     mxCurrentSettings->SetArguments( rArguments );
