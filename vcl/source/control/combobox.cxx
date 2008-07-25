@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: combobox.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -882,6 +882,8 @@ long ComboBox::Notify( NotifyEvent& rNEvt )
 
 void ComboBox::SetText( const XubString& rStr )
 {
+    ImplCallEventListeners( VCLEVENT_COMBOBOX_SETTEXT );
+
     Edit::SetText( rStr );
     ImplUpdateFloatSelection();
 }
@@ -890,6 +892,8 @@ void ComboBox::SetText( const XubString& rStr )
 
 void ComboBox::SetText( const XubString& rStr, const Selection& rNewSelection )
 {
+    ImplCallEventListeners( VCLEVENT_COMBOBOX_SETTEXT );
+
     Edit::SetText( rStr, rNewSelection );
     ImplUpdateFloatSelection();
 }
