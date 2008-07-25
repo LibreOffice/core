@@ -8,7 +8,7 @@
  *
  * $RCSfile: aqua11ylistener.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,7 @@
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 
 using namespace ::com::sun::star::accessibility;
+using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
@@ -89,6 +90,7 @@ AquaA11yEventListener::notifyEvent( const AccessibleEventObject& aEvent ) throw(
 {
     NSString * notification = nil;
     id element = m_wrapperObject;
+    Rectangle bounds;
 
     // TODO: NSAccessibilityValueChanged, NSAccessibilitySelectedRowsChangedNotification
     switch( aEvent.EventId )
@@ -106,13 +108,14 @@ AquaA11yEventListener::notifyEvent( const AccessibleEventObject& aEvent ) throw(
             break;
 
         case AccessibleEventId::CHILD:
-            // TODO: map to NSAccessibilityCreatedNotification/NSAccessibilityUIElementDestroyedNotification
-            // once we found out which object to pass to it.
-            if(aEvent.NewValue.hasValue()) {
-                //notification = NSAccessibilityCreatedNotification;
-            } else if(aEvent.OldValue.hasValue()) {
-                //notification = NSAccessibilityUIElementDestroyedNotification
-             }
+            // only needed for tooltips (says Apple)
+            if ( m_role == AccessibleRole::TOOL_TIP ) {
+                if(aEvent.NewValue.hasValue()) {
+                    notification = NSAccessibilityCreatedNotification;
+                } else if(aEvent.OldValue.hasValue()) {
+                    notification = NSAccessibilityUIElementDestroyedNotification;
+                }
+            }
             break;
 
         case AccessibleEventId::INVALIDATE_ALL_CHILDREN:
@@ -120,8 +123,14 @@ AquaA11yEventListener::notifyEvent( const AccessibleEventObject& aEvent ) throw(
             break;
 
         case AccessibleEventId::BOUNDRECT_CHANGED:
-            // TODO: check against remembered size/position and send
-            //       NSAccessibilityMovedNotification or NSAccessibilityResized Notification
+            bounds = [ element accessibleComponent ] -> getBounds();
+            if ( m_oldBounds.X != 0 && ( bounds.X != m_oldBounds.X || bounds.Y != m_oldBounds.Y ) ) {
+                NSAccessibilityPostNotification(element, NSAccessibilityMovedNotification); // post directly since both cases can happen simultaneously
+            }
+            if ( m_oldBounds.X != 0 && ( bounds.Width != m_oldBounds.Width || bounds.Height != m_oldBounds.Height ) ) {
+                NSAccessibilityPostNotification(element, NSAccessibilityResizedNotification); // post directly since both cases can happen simultaneously
+            }
+            m_oldBounds = bounds;
             break;
 
         case AccessibleEventId::SELECTION_CHANGED:

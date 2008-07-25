@@ -8,7 +8,7 @@
  *
  * $RCSfile: aqua11ylistener.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@
 #include "aqua11yfocustracker.hxx"
 #include "aquavcltypes.h"
 #include <set>
+#include <com/sun/star/awt/Rectangle.hpp>
 
 // -------------------------
 // - AquaA11yEventListener -
@@ -62,6 +63,7 @@ public:
 private:
     const id m_wrapperObject;
     const sal_Int16 m_role;
+    ::com::sun::star::awt::Rectangle m_oldBounds;
 };
 
 #endif // _AQUA11YLISTENER_HXX_
