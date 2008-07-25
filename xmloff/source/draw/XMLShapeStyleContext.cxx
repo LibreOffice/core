@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLShapeStyleContext.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -272,7 +272,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
                 Sequence<OUString> aSeq(1);
                 aSeq[0] = sStyleName;
                 GetImport().SetError(
-                    XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_ERROR,
+                    XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_WARNING,
                     aSeq, e.Message, NULL );
             }
             break;
@@ -297,7 +297,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
             {
                 Sequence<OUString> aSeq;
                 GetImport().SetError(
-                    XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_ERROR,
+                    XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_WARNING,
                     aSeq, e.Message, NULL );
             }
             break;
