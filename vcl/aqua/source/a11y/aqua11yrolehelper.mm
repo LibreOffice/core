@@ -8,7 +8,7 @@
  *
  * $RCSfile: aqua11yrolehelper.mm,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 #include "aqua11yrolehelper.h"
 #include "aqua11yfactory.h"
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
@@ -87,7 +88,7 @@ using namespace ::com::sun::star::uno;
         MAP( AccessibleRole::OPTION_PANE, NSAccessibilityUnknownRole ); // FIXME
         MAP( AccessibleRole::PAGE_TAB, NSAccessibilityButtonRole );
         MAP( AccessibleRole::PAGE_TAB_LIST, NSAccessibilityTabGroupRole );
-        MAP( AccessibleRole::PANEL, NSAccessibilityUnknownRole ); // FIXME
+        MAP( AccessibleRole::PANEL, NSAccessibilityGroupRole );
         MAP( AccessibleRole::PARAGRAPH, NSAccessibilityTextAreaRole );
         MAP( AccessibleRole::PASSWORD_TEXT, NSAccessibilityTextFieldRole );
         MAP( AccessibleRole::POPUP_MENU, NSAccessibilityMenuRole );
@@ -106,15 +107,29 @@ using namespace ::com::sun::star::uno;
         MAP( AccessibleRole::SPLIT_PANE, NSAccessibilitySplitterRole );
         MAP( AccessibleRole::STATUS_BAR, NSAccessibilityGroupRole ); // FIXME
         MAP( AccessibleRole::TABLE, NSAccessibilityTableRole );
-        MAP( AccessibleRole::TABLE_CELL, NSAccessibilityStaticTextRole ); // FIXME
+        MAP( AccessibleRole::TABLE_CELL, NSAccessibilityTextFieldRole );
         MAP( AccessibleRole::TEXT, NSAccessibilityTextAreaRole );
-        MAP( AccessibleRole::TEXT_FRAME, NSAccessibilityUnknownRole );
+        MAP( AccessibleRole::TEXT_FRAME, NSAccessibilityGroupRole );
         MAP( AccessibleRole::TOGGLE_BUTTON, NSAccessibilityCheckBoxRole );
         MAP( AccessibleRole::TOOL_BAR, NSAccessibilityToolbarRole );
         MAP( AccessibleRole::TOOL_TIP, NSAccessibilityUnknownRole ); // FIXME
         MAP( AccessibleRole::TREE, NSAccessibilityGroupRole );
         MAP( AccessibleRole::VIEW_PORT, NSAccessibilityUnknownRole ); // FIXME
         MAP( AccessibleRole::WINDOW, NSAccessibilityWindowRole );
+
+        MAP( AccessibleRole::BUTTON_DROPDOWN, NSAccessibilityMenuButtonRole );
+        MAP( AccessibleRole::BUTTON_MENU, NSAccessibilityMenuButtonRole );
+        MAP( AccessibleRole::CAPTION, NSAccessibilityUnknownRole );
+        MAP( AccessibleRole::CHART, NSAccessibilityUnknownRole );
+        MAP( AccessibleRole::FORM, NSAccessibilityUnknownRole );
+        MAP( AccessibleRole::IMAGE_MAP, NSAccessibilityUnknownRole );
+        MAP( AccessibleRole::NOTE, NSAccessibilityUnknownRole );
+        MAP( AccessibleRole::PAGE, NSAccessibilityUnknownRole );
+        MAP( AccessibleRole::RULER, NSAccessibilityUnknownRole );
+        MAP( AccessibleRole::SECTION, NSAccessibilityUnknownRole );
+        MAP( AccessibleRole::TREE_ITEM, NSAccessibilityUnknownRole );
+        MAP( AccessibleRole::TREE_TABLE, NSAccessibilityUnknownRole );
+
 #undef MAP
         default:
             break;
@@ -137,6 +152,17 @@ using namespace ::com::sun::star::uno;
                     nativeRole = NSAccessibilityRowRole;
                 }
                 [ roleParent release ];
+            }
+        }
+    } else if ( accessibleContext -> getAccessibleRole() == AccessibleRole::COMBO_BOX ) {
+        Reference < XAccessible > rxAccessible = accessibleContext -> getAccessibleChild(0);
+        if ( rxAccessible.is() ) {
+            Reference < XAccessibleContext > rxAccessibleContext = rxAccessible -> getAccessibleContext();
+            if ( rxAccessibleContext.is() && rxAccessibleContext -> getAccessibleRole() == AccessibleRole::TEXT ) {
+                if ( ! rxAccessibleContext -> getAccessibleStateSet() -> contains ( AccessibleStateType::EDITABLE ) ) {
+                    [ nativeRole release ];
+                    nativeRole = NSAccessibilityPopUpButtonRole;
+                }
             }
         }
     }
@@ -217,6 +243,20 @@ using namespace ::com::sun::star::uno;
         MAP( AccessibleRole::TREE, @"" );
         MAP( AccessibleRole::VIEW_PORT, @"" );
         MAP( AccessibleRole::WINDOW, NSAccessibilityStandardWindowSubrole );
+
+        MAP( AccessibleRole::BUTTON_DROPDOWN, @"" );
+        MAP( AccessibleRole::BUTTON_MENU, @"" );
+        MAP( AccessibleRole::CAPTION, @"" );
+        MAP( AccessibleRole::CHART, @"" );
+        MAP( AccessibleRole::FORM, @"" );
+        MAP( AccessibleRole::IMAGE_MAP, @"" );
+        MAP( AccessibleRole::NOTE, @"" );
+        MAP( AccessibleRole::PAGE, @"" );
+        MAP( AccessibleRole::RULER, @"" );
+        MAP( AccessibleRole::SECTION, @"" );
+        MAP( AccessibleRole::TREE_ITEM, @"" );
+        MAP( AccessibleRole::TREE_TABLE, @"" );
+
 #undef MAP
         default:
             break;
@@ -271,6 +311,10 @@ using namespace ::com::sun::star::uno;
         } else if ( [ subRole isEqualToString: NSAccessibilityTableRowSubrole ] ) {
             roleDescription = @"table row";
         }
+    } else if ( [ role isEqualToString: NSAccessibilityMenuButtonRole ] ) {
+        roleDescription = @"menu button";
+    } else if ( [ role isEqualToString: NSAccessibilityPopUpButtonRole ] ) {
+        roleDescription = @"popup menu button";
     }
     return roleDescription;
 }
