@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: HsqlDatabase.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,7 @@ import com.sun.star.sdbc.XStatement;
 import com.sun.star.sdbcx.XAppend;
 import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.io.IOException;
 import java.io.File;
 
 import com.sun.star.util.CloseVetoException;
@@ -112,6 +113,18 @@ public class HsqlDatabase
     {
         XStatement statement = defaultConnection().createStatement();
         statement.execute( statementString );
+    }
+
+    /** stores the database document
+    */
+    public void store() throws IOException
+    {
+        if ( m_databaseDocument != null )
+        {
+            XStorable storeDoc = (XStorable)UnoRuntime.queryInterface( XStorable.class,
+                m_databaseDocument );
+            storeDoc.store();
+        }
     }
 
     /** closes the database document
