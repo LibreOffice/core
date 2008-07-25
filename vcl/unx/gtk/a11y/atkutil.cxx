@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atkutil.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
@@ -38,14 +39,16 @@
 #include <cppuhelper/implbase1.hxx>
 #include <vos/mutex.hxx>
 #include <rtl/ref.hxx>
-#include <vcl/svapp.hxx>
 
+#include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
 
 #include "atkwrapper.hxx"
 #include "atkutil.hxx"
+
+#include <gtk/gtk.h>
 
 #include <set>
 
@@ -57,7 +60,8 @@
 
 using namespace ::com::sun::star;
 
-static AtkObject *last_focused_object = NULL;
+static uno::WeakReference< accessibility::XAccessible > xNextFocusObject;
+static guint focus_notify_handler = 0;
 
 /*****************************************************************************/
 
@@ -68,16 +72,23 @@ atk_wrapper_focus_idle_handler (gpointer data)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
 
+    focus_notify_handler = 0;
+
+    uno::Reference< accessibility::XAccessible > xAccessible = xNextFocusObject;
+    if( xAccessible.get() == reinterpret_cast < accessibility::XAccessible * > (data) )
+    {
+        // Gail does not notify focus changes to NULL, so do we ..
+        if( xAccessible.is() )
+        {
+            AtkObject *atk_obj = atk_object_wrapper_ref( xAccessible );
+
 #ifdef ENABLE_TRACING
-    fprintf(stderr, "%s focus event for %p\n",
-        (data == last_focused_object) ? "notifying" : "ignoring"  , data );
+            fprintf(stderr, "notifying focus event for %p\n", atk_obj);
 #endif
-
-    if( data == last_focused_object )
-        atk_focus_tracker_notify( ATK_OBJECT( data ) );
-
-    if( data )
-        g_object_unref( G_OBJECT(data) );
+            atk_focus_tracker_notify(atk_obj);
+            g_object_unref(atk_obj);
+        }
+    }
 
     return FALSE;
 }
@@ -87,15 +98,14 @@ atk_wrapper_focus_idle_handler (gpointer data)
 /*****************************************************************************/
 
 static void
-atk_wrapper_focus_tracker_notify_when_idle( const uno::Reference< accessibility::XAccessible > &rAccessible )
+atk_wrapper_focus_tracker_notify_when_idle( const uno::Reference< accessibility::XAccessible > &xAccessible )
 {
-    AtkObject *accessible = NULL;
+    if( focus_notify_handler )
+        g_source_remove(focus_notify_handler);
 
-    if( rAccessible.is() )
-        accessible = atk_object_wrapper_ref( rAccessible );
+    xNextFocusObject = xAccessible;
 
-    last_focused_object = accessible;
-    g_idle_add (atk_wrapper_focus_idle_handler, accessible);
+    focus_notify_handler = g_idle_add (atk_wrapper_focus_idle_handler, xAccessible.get());
 }
 
 /*****************************************************************************/
@@ -426,6 +436,25 @@ static void handle_toolbox_highlightoff(Window *pWindow)
         notify_toolbox_item_focus( pToolBoxParent );
 }
 
+/*****************************************************************************/
+
+static void create_wrapper_for_child(
+    const uno::Reference< accessibility::XAccessibleContext >& xContext,
+    sal_Int32 index)
+{
+    if( xContext.is() )
+    {
+        uno::Reference< accessibility::XAccessible > xChild(xContext->getAccessibleChild(index));
+        if( xChild.is() )
+        {
+            // create the wrapper object - it will survive the unref unless it is a transient object
+            g_object_unref( atk_object_wrapper_ref( xChild ) );
+        }
+    }
+}
+
+/*****************************************************************************/
+
 static void handle_toolbox_buttonchange(VclWindowEvent const *pEvent)
 {
     Window* pWindow = pEvent->GetWindow();
@@ -436,17 +465,28 @@ static void handle_toolbox_buttonchange(VclWindowEvent const *pEvent)
         uno::Reference< accessibility::XAccessible > xAccessible(pWindow->GetAccessible());
         if( xAccessible.is() )
         {
+            create_wrapper_for_child(xAccessible->getAccessibleContext(), index);
+        }
+    }
+}
+
+/*****************************************************************************/
+
+static void create_wrapper_for_children(Window *pWindow)
+{
+    if( pWindow && pWindow->IsReallyVisible() )
+    {
+        uno::Reference< accessibility::XAccessible > xAccessible(pWindow->GetAccessible());
+        if( xAccessible.is() )
+        {
             uno::Reference< accessibility::XAccessibleContext > xContext(xAccessible->getAccessibleContext());
             if( xContext.is() )
             {
-                uno::Reference< accessibility::XAccessible > xChild(xContext->getAccessibleChild(index));
-                if( xChild.is() )
-                {
-                    // create the wrapper object - it will survive the unref unless it is a transient object
-                    g_object_unref( atk_object_wrapper_ref( xChild ) );
-                }
+                sal_Int32 nChildren = xContext->getAccessibleChildCount();
+                for( sal_Int32 i = 0; i < nChildren; ++i )
+                    create_wrapper_for_child(xContext, i);
             }
-       }
+        }
     }
 }
 
@@ -579,6 +619,7 @@ long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
     case VCLEVENT_WINDOW_KEYINPUT:
     case VCLEVENT_WINDOW_KEYUP:
     case VCLEVENT_WINDOW_COMMAND:
+    case VCLEVENT_WINDOW_MOUSEMOVE:
         break;
  /*
         fprintf(stderr, "got VCLEVENT_WINDOW_COMMAND (%d) for %p\n",
@@ -607,8 +648,12 @@ long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
         handle_tabpage_activated(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
         break;
 
+    case VCLEVENT_COMBOBOX_SETTEXT:
+        create_wrapper_for_children(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
+        break;
+
     default:
-        //fprintf(stderr, "got event %d \n", pEvent->GetId());
+//        OSL_TRACE("got event %d \n", pEvent->GetId());
         break;
     }
     return 0;
