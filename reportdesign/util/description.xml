@@ -16,4 +16,7 @@
   <dependencies>
     <OpenOffice.org-minimal-version value="2.3" d:name="OpenOffice.org 2.3"/>
   </dependencies>
+  <publisher>
+    <name xlink:href="http://www.sun.com/staroffice" lang="en">Sun Microsystems, Inc.</name>
+  </publisher>
 </description>
