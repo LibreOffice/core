@@ -31,7 +31,7 @@ extern "C" {
 #endif
 
 #ifndef SIZEOF_LONG
-# if defined(__alpha__) || defined(__x86_64__) || defined(__ia64__) || defined(__s390x__) || defined(__sparcv9)
+# if defined(__alpha__) || defined(__x86_64__) || defined(__ia64__) || defined(__s390x__) || defined(__sparcv9) || defined(__LP64__)
 # define SIZEOF_LONG        8
 #else
 # define SIZEOF_LONG        4
