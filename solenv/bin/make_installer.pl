@@ -8,7 +8,7 @@
 #
 # $RCSfile: make_installer.pl,v $
 #
-# $Revision: 1.115 $
+# $Revision: 1.116 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -1627,6 +1627,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # Adding child projects to installation dynamically
             if ($installer::globals::addchildprojects) { installer::epmfile::put_childprojects_into_installset($installer::globals::subdir, $allvariableshashref, $modulesinproductarrayref); }
 
+            # Adding license file into setup
+            if ( $allvariableshashref->{'PUT_LICENSE_INTO_SETUP'} ) { installer::worker::put_license_into_setup(".", $includepatharrayref); }
+
             # Creating installation set for Unix language packs, that are not part of multi lingual installation sets
             if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::debian ) && ( ! $installer::globals::makedownload ) ) { installer::languagepack::build_installer_for_languagepack($installer::globals::subdir, $allvariableshashref, $includepatharrayref, $languagesarrayref, $languagestringref); }
 
@@ -1661,6 +1664,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # Adding license and readme into installation set
             # if ($installer::globals::addlicensefile) { installer::epmfile::put_installsetfiles_into_installset($newepmdir); }
             if ($installer::globals::addlicensefile) { installer::worker::put_scpactions_into_installset("."); }
+
+            # Adding license file into setup
+            if ( $allvariableshashref->{'PUT_LICENSE_INTO_SETUP'} ) { installer::worker::put_license_into_setup(".", $includepatharrayref); }
 
             # Creating installation set for Unix language packs, that are not part of multi lingual installation sets
             if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::debian ) && ( ! $installer::globals::makedownload ) ) { installer::languagepack::build_installer_for_languagepack($newepmdir, $allvariableshashref, $includepatharrayref, $languagesarrayref, $languagestringref); }
