@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleText.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1020,15 +1020,14 @@ ScAccessibleTextData* ScAccessibleEditObjectTextData::Clone() const
 
 SvxTextForwarder* ScAccessibleEditObjectTextData::GetTextForwarder()
 {
-    if (!mpForwarder && mpEditView)
+    if ((!mpForwarder && mpEditView) || (mpEditEngine && !mpEditEngine->GetNotifyHdl().IsSet()))
     {
         if (!mpEditEngine)
-        {
             mpEditEngine = mpEditView->GetEditEngine();
-            if (mpEditEngine)
-                mpEditEngine->SetNotifyHdl( LINK(this, ScAccessibleEditObjectTextData, NotifyHdl) );
-        }
-        mpForwarder = new SvxEditEngineForwarder(*mpEditEngine);
+        if (mpEditEngine && !mpEditEngine->GetNotifyHdl().IsSet())
+            mpEditEngine->SetNotifyHdl( LINK(this, ScAccessibleEditObjectTextData, NotifyHdl) );
+        if(!mpForwarder)
+            mpForwarder = new SvxEditEngineForwarder(*mpEditEngine);
     }
     return mpForwarder;
 }
