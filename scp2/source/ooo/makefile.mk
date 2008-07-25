@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.76 $
+# $Revision: 1.77 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -55,7 +55,7 @@ SCPDEFS+=-DENABLE_CRASHDUMP
 SCPDEFS+=-DBUILD_SPECIAL
 .ENDIF
 
-.IF "$(JAVANUMVER)" >= "000100040000"
+.IF "$(JAVANUMVER)" >= "000100050000"
 SCPDEFS+=-DINCLUDE_JAVA_ACCESSBRIDGE
 .ENDIF
 
