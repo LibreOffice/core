@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.75 $
+# $Revision: 1.76 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,6 +42,10 @@ USE_JAVAVER=TRUE
 
 .INCLUDE :  settings.mk
 .INCLUDE :  i18npool/version.mk
+
+.IF "$(COM)" == "MSC"
+SCPDEFS+=-D_MSC
+.ENDIF
 
 .IF "$(ENABLE_CRASHDUMP)"!=""
 SCPDEFS+=-DENABLE_CRASHDUMP
