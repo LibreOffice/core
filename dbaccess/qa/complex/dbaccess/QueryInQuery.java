@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: QueryInQuery.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,20 +34,15 @@ import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
-import com.sun.star.sdb.ErrorCondition;
-import com.sun.star.sdb.XSingleSelectQueryComposer;
 import com.sun.star.sdbc.SQLException;
-import com.sun.star.uno.UnoRuntime;
 import connectivity.tools.HsqlColumnDescriptor;
 import connectivity.tools.HsqlTableDescriptor;
 import connectivity.tools.RowSet;
 import com.sun.star.sdbc.XStatement;
 import com.sun.star.sdbc.XResultSet;
 
-public class QueryInQuery extends complexlib.ComplexTestCase
+public class QueryInQuery extends CRMBasedTestCase
 {
-    private CRMDatabase                 m_database;
-
     // --------------------------------------------------------------------------------------------------------
     public String[] getTestMethodNames()
     {
@@ -61,24 +56,17 @@ public class QueryInQuery extends complexlib.ComplexTestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    private final XMultiServiceFactory getORB()
-    {
-        return (XMultiServiceFactory)param.getMSF();
-    }
-
-    // --------------------------------------------------------------------------------------------------------
     public String getTestObjectName()
     {
         return "QueryInQuery";
     }
 
     // --------------------------------------------------------------------------------------------------------
-    private void createTestCase()
+    protected void createTestCase()
     {
         try
         {
-            m_database = new CRMDatabase( getORB() );
-
+            super.createTestCase();
             m_database.getDatabase().getDataSource().createQuery( "query products", "SELECT * FROM \"products\"" );
         }
         catch ( Exception e )
@@ -86,19 +74,6 @@ public class QueryInQuery extends complexlib.ComplexTestCase
             e.printStackTrace( System.err );
             assure( "caught an exception (" + e.getMessage() + ") while creating the test case", false );
         }
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-    public void before()
-    {
-        createTestCase();
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-    public void after()
-    {
-        if ( m_database != null )
-            m_database.close();
     }
 
     // --------------------------------------------------------------------------------------------------------
