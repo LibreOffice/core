@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.19 $
+# $Revision: 1.20 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -220,6 +220,9 @@ COMPONENT_HTMLFILES = $(EXTENSIONDIR)$/THIRDPARTYREADMELICENSE.html \
 COMPONENT_JARFILES = \
     $(EXTENSIONDIR)$/sun-report-builder.jar
 
+COMPONENT_HELP= \
+    $(EXTENSIONDIR)$/help$/component.txt
+
 # .jar files from solver
 COMPONENT_EXTJARFILES = \
     $(EXTENSIONDIR)$/flute-1.3-jfree-20061107.jar							\
@@ -233,13 +236,14 @@ COMPONENT_EXTJARFILES = \
     $(EXTENSIONDIR)$/libxml-0.9.9.jar										\
     $(EXTENSIONDIR)$/pentaho-reporting-flow-engine-0.9.2.jar					\
     $(EXTENSIONDIR)$/sac.jar                                                \
-    $(EXTENSIONDIR)$/sun-report-builder.jar
+    $(EXTENSIONDIR)$/sun-report-builder.jar \
+    $(EXTENSIONDIR)$/reportbuilderwizard.jar
 
 COMPONENT_MANIFEST_GENERIC:=TRUE
 COMPONENT_MANIFEST_SEARCHDIR:=registry
 
 # make sure to add your custom files here
-EXTENSION_PACKDEPS=$(COMPONENT_EXTJARFILES) $(COMPONENT_HTMLFILES) $(COMPONENT_OTR_FILES)
+EXTENSION_PACKDEPS=$(COMPONENT_EXTJARFILES) $(COMPONENT_HTMLFILES) $(COMPONENT_OTR_FILES) $(COMPONENT_HELP)
 
 # --- Targets ----------------------------------
 
@@ -265,7 +269,11 @@ $(EXTENSIONDIR)$/THIRDPARTYREADMELICENSE.html : $(PRJ)$/license$/THIRDPARTYREADM
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-.ELSE			# "$(SOLAR_JAVA)"!=""
+$(COMPONENT_HELP) : $$(@:f)
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+
+    .ELSE			# "$(SOLAR_JAVA)"!=""
 .INCLUDE : target.mk
 .ENDIF			# "$(SOLAR_JAVA)"!=""
 #
