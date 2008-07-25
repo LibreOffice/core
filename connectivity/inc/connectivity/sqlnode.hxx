@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sqlnode.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -192,6 +192,7 @@ namespace connectivity
             all_or_any_predicate,
             named_columns_join,
             join_condition,
+            joined_table,
             boolean_factor,
             sql_not,
             boolean_test,
