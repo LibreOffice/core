@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: m_007_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 11:51:23 $
+'* last change: $Author: obo $ $Date: 2008-07-25 08:03:39 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -159,8 +159,7 @@ testcase tmHelpContents
             '///+ Enter 'recumbent' in textfield 'Search term'  ///'
             SearchFind.SetText "recumbent"
             '///+ click on button 'Find' ///'
-            qaerrorlog "#i84151# Crash on using find button since src680m238 - disabled find button."
-            'FindButton.Click
+            FindButton.Click
             kontext
             '///+ Messagebox comes up about: 'No topics found.' say OK ///'
             if (active.exists (2) )then
