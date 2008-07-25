@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accessibletableshape.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -175,7 +175,7 @@ void AccessibleTableShapeImpl::getColumnAndRow( sal_Int32 nChildIndex, sal_Int32
     if( mxTable.is() )
     {
         const sal_Int32 nColumnCount = mxTable->getColumnCount();
-        while( nChildIndex >= nColumnCount )
+        while( rnColumn >= nColumnCount )
         {
             rnRow++;
             rnColumn -= nColumnCount;
