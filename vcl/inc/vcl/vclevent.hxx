@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclevent.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,6 +145,7 @@ class Menu;
 #define VCLEVENT_TABPAGE_PAGETEXTCHANGED    1170        // pData = pageid
 #define VCLEVENT_ROADMAP_ITEMSELECTED       1171
 #define VCLEVENT_TOOLBOX_FORMATCHANGED      1172        // request new layout
+#define VCLEVENT_COMBOBOX_SETTEXT           1173
 
 // VclMenuEvent
 #define VCLEVENT_MENU_ACTIVATE              1200
