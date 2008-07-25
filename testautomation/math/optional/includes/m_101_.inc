@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: m_101_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 11:51:22 $
+'* last change: $Author: obo $ $Date: 2008-07-25 08:03:27 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -97,7 +97,10 @@ testcase tFileSave
 
 '/// take formulatext from loaded file -> language independant! ///'
    sFormula = TBOloadFormulaFromFile()
-
+   if sFormula = "gehtnicht" then
+       qaErrorlog "can not make document writeable - exiting test"
+       goto endsub
+   endif
    hNewDocument
 '///  write formula down  ///'
    SchreibenInMathdok (sFormula)
@@ -128,6 +131,10 @@ testcase tFileSaveAs
 
 '/// take formulatext from loaded file -> language independant! ///'
    sFormula = TBOloadFormulaFromFile
+   if sFormula = "gehtnicht" then
+       qaErrorlog "can not make document writeable - exiting test"
+       goto endsub
+   endif
 
    hNewDocument
 '///  write formula down  ///'
@@ -299,9 +306,13 @@ function TBOloadFormulaFromFile () as string
 '///  close dokument ///
    Call hFileOpen ( ConvertPath(gTesttoolPath + "math/optional/input/101_1.sxm") )
    kontext "dokumentwriter"
+   try
    EditSelectAllMath
    EditCopy
    TBOloadFormulaFromFile = GetClipboardText
+   catch
+   TBOloadFormulaFromFile = "gehtnicht"
+   endcatch
 '   printlog "-----TBOloadFormulaFromFile: will return: '"+TBOloadFormulaFromFile+"'"
    hCloseDocument
 end function
@@ -330,6 +341,10 @@ testcase tFilePrint
 
     bError = FALSE
     sFormula = TBOloadFormulaFromFile()
+   if sFormula = "gehtnicht" then
+       qaErrorlog "can not make document writeable - exiting test"
+       goto endsub
+   endif
 
     Call hFileOpen ( ConvertPath(gTesttoolPath + "math/optional/input/101_2.sxw") )
     TBOmakeWriteable()
@@ -574,7 +589,7 @@ function TBOmakeWriteable()
    catch
    '/// make document writeable :-)///'
       kontext "Funktionsleiste"
-      printlog "!!!!!!!!!!!!!!!!!!!!!!!!!!!!doc was ReadOnly, changed it to writeable. (maybe wrong access rights?)"
+      printlog "ReadOnly, changed it to writeable."
       Bearbeiten.click
       kontext
       if active.exists (5) then
