@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxaccessibletoolbox.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,8 +38,7 @@
 //  class VCLXAccessibleToolBox
 //  ----------------------------------------------------
 
-typedef ::cppu::ImplHelper2 < ::com::sun::star::accessibility::XAccessible,
-                            ::com::sun::star::accessibility::XAccessibleSelection > VCLXAccessibleToolBox_BASE;
+typedef ::cppu::ImplHelper1 < ::com::sun::star::accessibility::XAccessibleSelection > VCLXAccessibleToolBox_BASE;
 
 typedef std::map< sal_Int32, com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > > ToolBoxItemsMap;
 
@@ -89,9 +88,6 @@ public:
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException);
-
-    // XAccessible
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleContext
     virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);

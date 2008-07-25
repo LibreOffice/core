@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxaccessibletoolbox.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -520,7 +520,7 @@ void VCLXAccessibleToolBox::FillAccessibleStateSet( utl::AccessibleStateSetHelpe
 void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     // to prevent an early release of the toolbox (VCLEVENT_OBJECT_DYING)
-    Reference< XAccessible > xTemp = this;
+    Reference< XAccessibleContext > xTemp = this;
 
     switch ( rVclWindowEvent.GetId() )
     {
@@ -673,15 +673,6 @@ Sequence< ::rtl::OUString > VCLXAccessibleToolBox::getSupportedServiceNames() th
     return aNames;
 }
 // -----------------------------------------------------------------------------
-// XAccessible
-// -----------------------------------------------------------------------------
-Reference< XAccessibleContext > SAL_CALL VCLXAccessibleToolBox::getAccessibleContext(  ) throw (RuntimeException)
-{
-    comphelper::OContextEntryGuard aGuard( this );
-
-    return this;
-}
-// -----------------------------------------------------------------------------
 // XAccessibleContext
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL VCLXAccessibleToolBox::getAccessibleChildCount(  ) throw (RuntimeException)
@@ -715,7 +706,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
             USHORT nHighlightItemId = pToolBox->GetHighlightItemId();
             Window* pItemWindow = pToolBox->GetItemWindow( nItemId );
             // not found -> create a new child
-            VCLXAccessibleToolBoxItem* pChild = new VCLXAccessibleToolBoxItem( pToolBox, i, this );
+            VCLXAccessibleToolBoxItem* pChild = new VCLXAccessibleToolBoxItem( pToolBox, i );
             Reference< XAccessible> xParent = pChild;
             if ( pItemWindow )
             {
