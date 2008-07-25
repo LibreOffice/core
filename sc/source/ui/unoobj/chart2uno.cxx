@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chart2uno.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1724,13 +1724,18 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ScChart2DataSequence::generateLabel(ch
         {
             for (SCCOL nCol = p->aStart.Col(); nCol <= p->aEnd.Col(); ++nCol)
             {
-                String aString = ScGlobal::GetRscString(STR_COLUMN);
-                aString += ' ';
-                ScAddress aPos( nCol, 0, 0 );
-                String aColStr;
-                aPos.Format( aColStr, SCA_VALID_COL, NULL );
-                aString += aColStr;
-                pArr[nCount] = aString;
+                if( eOrigin != chart2::data::LabelOrigin_LONG_SIDE )
+                {
+                    String aString = ScGlobal::GetRscString(STR_COLUMN);
+                    aString += ' ';
+                    ScAddress aPos( nCol, 0, 0 );
+                    String aColStr;
+                    aPos.Format( aColStr, SCA_VALID_COL, NULL );
+                    aString += aColStr;
+                    pArr[nCount] = aString;
+                }
+                else //only indices for categories
+                    pArr[nCount] = String::CreateFromInt32( nCount+1 );
                 ++nCount;
             }
         }
@@ -1738,10 +1743,15 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ScChart2DataSequence::generateLabel(ch
         {
             for (sal_Int32 nRow = p->aStart.Row(); nRow <= p->aEnd.Row(); ++nRow)
             {
-                String aString = ScGlobal::GetRscString(STR_ROW);
-                aString += ' ';
-                aString += String::CreateFromInt32( nRow+1 );
-                pArr[nCount] = aString;
+                if( eOrigin != chart2::data::LabelOrigin_LONG_SIDE )
+                {
+                    String aString = ScGlobal::GetRscString(STR_ROW);
+                    aString += ' ';
+                    aString += String::CreateFromInt32( nRow+1 );
+                    pArr[nCount] = aString;
+                }
+                else //only indices for categories
+                    pArr[nCount] = String::CreateFromInt32( nCount+1 );
                 ++nCount;
             }
         }
