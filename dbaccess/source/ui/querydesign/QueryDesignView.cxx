@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: QueryDesignView.cxx,v $
- * $Revision: 1.95 $
+ * $Revision: 1.96 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -312,7 +312,7 @@ namespace
             const ::connectivity::OSQLParseNode* pParseNode = pTableRefList->getChild(i);
             const ::connectivity::OSQLParseNode* pJoinNode = NULL;
 
-            if ( SQL_ISRULEOR2(pParseNode , qualified_join,cross_union) )
+            if ( SQL_ISRULE( pParseNode, qualified_join ) || SQL_ISRULE( pParseNode, joined_table ) || SQL_ISRULE( pParseNode, cross_union ) )
                 pJoinNode = pParseNode;
             else if(    SQL_ISRULE(pParseNode,table_ref)
                     &&  pParseNode->count() == 4 ) // '{' SQL_TOKEN_OJ joined_table '}'
@@ -1923,8 +1923,11 @@ namespace
     sal_Bool InsertJoin(const OQueryDesignView* _pView,
                         const ::connectivity::OSQLParseNode *pNode)
     {
-        DBG_ASSERT(SQL_ISRULE(pNode, qualified_join) || SQL_ISRULE(pNode, cross_union),
+        DBG_ASSERT( SQL_ISRULE( pNode, qualified_join ) || SQL_ISRULE( pNode, joined_table ) || SQL_ISRULE( pNode, cross_union ),
             "OQueryDesignView::InsertJoin: Fehler im Parse Tree");
+
+        if (SQL_ISRULE(pNode,joined_table))
+            return InsertJoin(_pView,pNode->getChild(1));
 
         // first check the left and right side
         const ::connectivity::OSQLParseNode* pRightTableRef = pNode->getChild(3); // table_ref
