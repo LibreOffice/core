@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmshell.cxx,v $
- * $Revision: 1.78 $
+ * $Revision: 1.79 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1327,10 +1327,12 @@ void FmFormShell::SetView( FmFormView* _pView )
 {
     if ( m_pFormView )
     {
+        if ( IsActive() )
+            GetImpl()->viewDeactivated( m_pFormView );
+
         m_pFormView->SetFormShell( NULL );
         m_pFormView = NULL;
         m_pFormModel = NULL;
-        GetImpl()->UpdateForms( sal_False );
     }
 
     if ( !_pView )
@@ -1380,7 +1382,8 @@ void FmFormShell::Activate(sal_Bool bMDI)
 {
     SfxShell::Activate(bMDI);
 
-    GetImpl()->viewActivated( m_pFormView, sal_True );
+    if ( m_pFormView )
+        GetImpl()->viewActivated( m_pFormView, sal_True );
 }
 
 //------------------------------------------------------------------------
@@ -1388,7 +1391,8 @@ void FmFormShell::Deactivate(sal_Bool bMDI)
 {
     SfxShell::Deactivate(bMDI);
 
-    GetImpl()->viewDeactivated( m_pFormView, sal_False );
+    if ( m_pFormView )
+        GetImpl()->viewDeactivated( m_pFormView, sal_False );
 }
 
 //------------------------------------------------------------------------
