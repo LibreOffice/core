@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterScrollBar.cxx,v $
  *
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -672,7 +672,7 @@ void PresenterScrollBar::PaintBitmap(
                 1,0,aBox.X1 + (aBox.X2-aBox.X1 - aBitmapSize.Width)/2,
                 0,1,aBox.Y1 + (aBox.Y2-aBox.Y1 - aBitmapSize.Height)/2),
             NULL,
-            Sequence<double>(3),
+            Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
 
         mxCanvas->drawBitmap(
