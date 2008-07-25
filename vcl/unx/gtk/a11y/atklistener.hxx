@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atklistener.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +53,7 @@ public:
     virtual void notifyEvent( const ::com::sun::star::accessibility::AccessibleEventObject& aEvent )
         throw( ::com::sun::star::uno::RuntimeException );
 
-    AtkObject *mpAccessible;
+    AtkObjectWrapper *mpWrapper;
     AccessibleVector m_aChildList;
 
 private:
