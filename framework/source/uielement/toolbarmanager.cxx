@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolbarmanager.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -826,31 +826,30 @@ void ToolBarManager::RemoveControllers()
 
     m_aSubToolBarControllerMap.clear();
 
+
     // i90033
-    // Remove item windows pointers from the toolbar. They are going to be
-    // destroyed by the dispose() call later at XComponent. This is needed
+    // Remove item window pointers from the toolbar. They were
+    // destroyed by the dispose() at the XComponent. This is needed
     // as VCL code later tries to access the item window data in certain
     // dtors where the item window is already invalid!
     for ( sal_uInt16 i = 0; i < m_pToolBar->GetItemCount(); i++ )
     {
         sal_uInt16 nItemId = m_pToolBar->GetItemId( i );
         if ( nItemId > 0 )
-            m_pToolBar->SetItemWindow(nItemId, 0);
-    }
-
-    ToolBarControllerMap::iterator pIter = m_aControllerMap.begin();
-    while ( pIter != m_aControllerMap.end() )
-    {
-        try
         {
-            Reference< XComponent > xComponent( pIter->second, UNO_QUERY );
+            Reference< XComponent > xComponent( m_aControllerMap[ nItemId ], UNO_QUERY );
             if ( xComponent.is() )
-                xComponent->dispose();
+            {
+                try
+                {
+                    xComponent->dispose();
+                }
+                catch ( Exception& )
+                {
+                }
+            }
+            m_pToolBar->SetItemWindow(nItemId, 0);
         }
-        catch ( Exception& )
-        {
-        }
-        ++pIter;
     }
     m_aControllerMap.clear();
 }
