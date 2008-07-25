@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sbxvar.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -453,8 +453,8 @@ class SbxVariable : public SbxValue
     USHORT       nHash;         // Hash-ID fuer die Suche
 protected:
     SbxInfoRef  pInfo;          // Evtl. angeforderte Infos
-    UINT32      nUserData;      // Benutzerdaten fuer Call()
-    SbxObject*  pParent;        // aktuell zugeordnetes Objekt
+    sal_uIntPtr nUserData;      // Benutzerdaten fuer Call()
+    SbxObject* pParent;         // aktuell zugeordnetes Objekt
     virtual ~SbxVariable();
     virtual BOOL LoadData( SvStream&, USHORT );
     virtual BOOL StoreData( SvStream& ) const;
@@ -474,8 +474,8 @@ public:
 
     virtual void SetModified( BOOL );
 
-    UINT32 GetUserData() const     { return nUserData; }
-    void   SetUserData( UINT32 n ) { nUserData = n;    }
+    sal_uIntPtr GetUserData() const        { return nUserData; }
+    void SetUserData( sal_uIntPtr n ) { nUserData = n;    }
 
     virtual SbxDataType  GetType()  const;
     virtual SbxClassType GetClass() const;
