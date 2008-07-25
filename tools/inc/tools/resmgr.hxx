@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: resmgr.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 
 #define CREATEVERSIONRESMGR_NAME( Name )   #Name
-#define CREATEVERSIONRESMGR( Name )        ResMgr::CreateResMgr( #Name )
+#define CREATEVERSIONRESMGR( Name )        ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( Name ) )
 
 #define LOCALE_MAX_FALLBACK 6
 
