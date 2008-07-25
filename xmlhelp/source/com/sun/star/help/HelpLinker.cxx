@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: HelpLinker.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,10 +40,6 @@
 #include <libxslt/xsltutils.h>
 #include <libxslt/functions.h>
 #include <libxslt/extensions.h>
-
-#include <unicode/brkiter.h>
-#include <unicode/ustring.h>
-#include <unicode/ucnv.h>
 
 #include <sal/types.h>
 #include <osl/time.h>
