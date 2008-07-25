@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objcont.cxx,v $
- * $Revision: 1.75 $
+ * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1465,6 +1465,13 @@ void SfxObjectShell::ResetFromTemplate( const String& rTemplateName, const Strin
             INetURLObject aObj( rFileName );
             xDocProps->setTemplateURL( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
             xDocProps->setTemplateName( rTemplateName );
+
+            ::DateTime now;
+            xDocProps->setTemplateDate( util::DateTime(
+                now.Get100Sec(), now.GetSec(), now.GetMin(),
+                now.GetHour(), now.GetDay(), now.GetMonth(),
+                now.GetYear() ) );
+
             SetQueryLoadTemplate( sal_True );
         }
     }
