@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slideshow.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -216,6 +216,11 @@ private:
     SvxItemPropertySet  maPropSet;
 
     rtl::Reference< SlideshowImpl > mxController;
+    /** This flag is used together with mxController.is() to prevent
+        multiple instances of the slide show for one document.  The flag
+        covers the time before mxController is set.
+    */
+    bool mbIsInStartup;
     SdDrawDocument* mpDoc;
 
     boost::shared_ptr< PresentationSettingsEx > mxCurrentSettings;
