@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salmenu.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,7 @@
 #include "vcl/impbmp.hxx"
 
 #include "rtl/ustrbuf.hxx"
+#include "aqua11ywrapper.h"
 
 const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
 
@@ -374,8 +375,10 @@ BOOL AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rR
     NSPopUpButtonCell * pPopUpButtonCell = [[NSPopUpButtonCell alloc] initTextCell:@"" pullsDown:NO];
     [pPopUpButtonCell setMenu: pCopyMenu];
     [pPopUpButtonCell selectItem:nil];
+    [AquaA11yWrapper setPopupMenuOpen: YES];
     [pPopUpButtonCell performClickWithFrame:displayPopupFrame inView:pParentNSView];
     [pPopUpButtonCell release];
+    [AquaA11yWrapper setPopupMenuOpen: NO];
 
     // clean up the copy
     [pCopyMenu release];
