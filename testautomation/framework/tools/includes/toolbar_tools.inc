@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: toolbar_tools.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:06 $
+'* last change: $Author: obo $ $Date: 2008-07-25 09:56:35 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -199,22 +199,13 @@ function hStandardbarItemGetCount() as integer
     dim iToolbarItemsCurrent as integer
     dim iToolbarItemsExpected as integer
         iToolbarItemsExpected = 30
-    dim bHasAdditionalIcons as boolean
     
     const CFN = "hStandardbarItemGetCount::"
-    const ADD_EXTENSION_1 = "SunSearchToolbar.oxt"
 
     gApplication = "Writer"
-
     printlog( CFN & "Enter" )
     
     '///+<li>Look for additional icons on the standardbar (through extensions)</li>
-    bHasAdditionalIcons = hIsExtensionAlreadyInstalled( ADD_EXTENSION_1 )
-    if ( bHasAdditionalIcons ) then
-        printlog( CFN & "Found extension: " & ADD_EXTENSION_1 & ", adding 1 item" )
-        iToolbarItemsExpected = iToolbarItemsExpected + 1
-    endif
-    
     printlog( CFN & "Count all items at the Standardbar" )
 
     '///+<li>Open the context menu on the Standardbar</li>
