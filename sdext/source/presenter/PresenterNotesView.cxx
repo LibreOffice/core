@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterNotesView.cxx,v $
  *
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -692,7 +692,7 @@ void PresenterNotesView::PaintToolBar (const awt::Rectangle& rUpdateBox)
     rendering::RenderState aRenderState(
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         NULL,
-        Sequence<double>(3),
+        Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
 
     if (mpBackground.get() != NULL)
@@ -709,6 +709,7 @@ void PresenterNotesView::PaintToolBar (const awt::Rectangle& rUpdateBox)
     // Paint the horizontal separator.
     OSL_ASSERT(mxViewId.is());
     PresenterCanvasHelper::SetDeviceColor(aRenderState, maSeparatorColor);
+
     mxCanvas->drawLine(
         geometry::RealPoint2D(0,mnSeparatorYLocation),
         geometry::RealPoint2D(aWindowBox.Width,mnSeparatorYLocation),
