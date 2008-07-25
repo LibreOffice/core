@@ -10,7 +10,7 @@ bn       0  2117   # Bengali
 bn-BD    0  2117   # Bengali Bangladesh
 bn-IN    0  1093   # Bengali India
 br    1252  1150   # Breton
-bs      0   5146 # bosnian
+bs       0  5146   # bosnian
 ca    1252  1027   # Catalan
 cs    1250  1029   # Czech
 cy    1252  1106   # Welsh
@@ -60,6 +60,7 @@ mr       0  1102   # Marathi
 mr-IN    0  1102
 ms       0  1086   # Malay (Malaysian)
 mt       0  1082   # Maltese
+my       0  1109   # Burmese
 nb    1252  1044
 ne       0  1121   # Nepali
 nl    1252  1043
