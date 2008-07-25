@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salplug.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,15 +31,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef OSL_MODULE_H
 #include <osl/module.h>
-#endif
-#ifndef OSL_PROCESS_H
 #include <osl/process.h>
-#endif
-#ifndef RTL_STRING_HXX
+
 #include <rtl/ustrbuf.hxx>
-#endif
 
 #include <svunx.h>
 #include <prex.h>
@@ -97,6 +92,32 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
             if( pInst )
             {
                 pCloseModule = aMod;
+
+                /*
+                 * Recent GTK+ versions load their modules with RTLD_LOCAL, so we can
+                 * not access the 'gnome_accessibility_module_shutdown' anymore.
+                 * So make sure libgtk+ & co are still mapped into memory when
+                 * atk-bridge's atexit handler gets called.
+                 */
+                if( rModuleBase.equalsAscii("gtk") )
+                {
+                    const char* gtk_modules = getenv( "GTK_MODULES" );
+                    if( gtk_modules )
+                    {
+                        rtl::OString aModules( gtk_modules );
+                        sal_Int32 nIndex = 0;
+                        while( nIndex >= 0 )
+                        {
+                            rtl::OString aToken = aModules.getToken( 0, ':', nIndex );
+                            if( aToken.equals( "atk-bridge" ) )
+                            {
+                                pCloseModule = NULL;
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 GetSalData()->m_pPlugin = aMod;
             }
             else
