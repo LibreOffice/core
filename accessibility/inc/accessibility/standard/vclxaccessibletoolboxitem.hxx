@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxaccessibletoolboxitem.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,7 +73,6 @@ private:
     sal_Bool                m_bIsChecked;
     bool                    m_bIndeterminate;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >    m_xParent;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >    m_xChild;
 
 public:
@@ -96,7 +95,7 @@ protected:
     ::rtl::OUString GetText( bool _bAsName );
 
 public:
-    VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_Int32 _nPos, const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _xParent );
+    VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_Int32 _nPos );
 
     void                SetFocus( sal_Bool _bFocus );
     inline sal_Bool     HasFocus() const { return m_bHasFocus; }
