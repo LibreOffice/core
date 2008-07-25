@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dsmeta.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -138,6 +138,7 @@ namespace dbaui
             s_aSupport[ DST_EVOLUTION_GROUPWISE ] = InitAdvanced( InitAdvanced::None );
             s_aSupport[ DST_EVOLUTION_LDAP      ] = InitAdvanced( InitAdvanced::None );
             s_aSupport[ DST_KAB                 ] = InitAdvanced( InitAdvanced::None );
+            s_aSupport[ DST_MACAB               ] = InitAdvanced( InitAdvanced::None );
             s_aSupport[ DST_MSACCESS_2007       ] = InitAdvanced( 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0 );
             s_aSupport[ DST_EMBEDDED_HSQLDB     ] = InitAdvanced( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0 );
             s_aSupport[ DST_USERDEFINE1         ] = InitAdvanced( InitAdvanced::All );
@@ -185,6 +186,7 @@ namespace dbaui
             s_aSupport[ DST_EVOLUTION_GROUPWISE ] = FeatureSupport( AuthNone    );
             s_aSupport[ DST_EVOLUTION_LDAP      ] = FeatureSupport( AuthNone    );
             s_aSupport[ DST_KAB                 ] = FeatureSupport( AuthNone    );
+            s_aSupport[ DST_MACAB               ] = FeatureSupport( AuthNone    );
             s_aSupport[ DST_MSACCESS_2007       ] = FeatureSupport( AuthNone    );
             s_aSupport[ DST_EMBEDDED_HSQLDB     ] = FeatureSupport( AuthNone    );
             s_aSupport[ DST_USERDEFINE1         ] = FeatureSupport( AuthUserPwd );
