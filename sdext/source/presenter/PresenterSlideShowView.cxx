@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterSlideShowView.cxx,v $
  *
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -369,7 +369,7 @@ void SAL_CALL PresenterSlideShowView::clear (void)
         rendering::RenderState aRenderState(
             geometry::AffineMatrix2D(1,0,0, 0,1,0),
             NULL,
-            Sequence<double>(aColor,3),
+            Sequence<double>(aColor,4),
             rendering::CompositeOperation::SOURCE);
         mxViewCanvas->fillPolyPolygon(xPolygon, aViewState, aRenderState);
     }
@@ -856,7 +856,7 @@ void PresenterSlideShowView::PaintEndSlide (const awt::Rectangle& rRepaintBox)
     rendering::RenderState aRenderState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         NULL,
-        Sequence<double>(3),
+        Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
     PresenterCanvasHelper::SetDeviceColor(aRenderState, util::Color(0x00000000));
     mxCanvas->fillPolyPolygon(
