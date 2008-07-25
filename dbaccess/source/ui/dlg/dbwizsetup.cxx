@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbwizsetup.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -521,6 +521,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
             { DST_EVOLUTION_GROUPWISE, EVOLUTION_PATH_GROUPWISE },
             { DST_EVOLUTION_LDAP, EVOLUTION_PATH_LDAP },
             { DST_KAB,          KAB_PATH            },
+            { DST_MACAB,        MACAB_PATH          },
             { DST_USERDEFINE1,  USERDEFINED_PATH    },
             { DST_USERDEFINE2,  USERDEFINED_PATH    },
             { DST_USERDEFINE3,  USERDEFINED_PATH    },
@@ -591,6 +592,7 @@ sal_Bool ODbTypeWizDialogSetup::IsConnectionUrlRequired()
     switch ( m_eType )
     {
         case DST_KAB:
+        case DST_MACAB:
         case DST_EVOLUTION:
         case DST_EVOLUTION_GROUPWISE:
         case DST_EVOLUTION_LDAP:
