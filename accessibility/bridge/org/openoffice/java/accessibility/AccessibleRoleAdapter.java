@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleRoleAdapter.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,13 +61,13 @@ public abstract class AccessibleRoleAdapter {
         javax.accessibility.AccessibleRole.FILE_CHOOSER,
         javax.accessibility.AccessibleRole.FILLER,
         javax.accessibility.AccessibleRole.FONT_CHOOSER,
-        javax.accessibility.AccessibleRole.PANEL,  // FOOTER
+        javax.accessibility.AccessibleRole.FOOTER,
         javax.accessibility.AccessibleRole.PANEL,  // FOOTNOTE
         javax.accessibility.AccessibleRole.FRAME,
         javax.accessibility.AccessibleRole.GLASS_PANE,
         javax.accessibility.AccessibleRole.PANEL,  // GRAPHIC
         javax.accessibility.AccessibleRole.GROUP_BOX,
-        javax.accessibility.AccessibleRole.PANEL,  // HEADER
+        javax.accessibility.AccessibleRole.HEADER,
         javax.accessibility.AccessibleRole.TEXT,   // HEADING
         javax.accessibility.AccessibleRole.HYPERLINK,
         javax.accessibility.AccessibleRole.ICON,
@@ -83,7 +83,7 @@ public abstract class AccessibleRoleAdapter {
         javax.accessibility.AccessibleRole.PAGE_TAB,
         javax.accessibility.AccessibleRole.PAGE_TAB_LIST,
         javax.accessibility.AccessibleRole.PANEL,
-        javax.accessibility.AccessibleRole.TEXT,   // PARAGRAPH
+        javax.accessibility.AccessibleRole.PARAGRAPH,
         javax.accessibility.AccessibleRole.PASSWORD_TEXT,
         javax.accessibility.AccessibleRole.POPUP_MENU,
         javax.accessibility.AccessibleRole.PUSH_BUTTON,
@@ -109,7 +109,20 @@ public abstract class AccessibleRoleAdapter {
         javax.accessibility.AccessibleRole.TOOL_TIP,
         javax.accessibility.AccessibleRole.TREE,
         javax.accessibility.AccessibleRole.VIEWPORT,
-        javax.accessibility.AccessibleRole.WINDOW
+        javax.accessibility.AccessibleRole.WINDOW,
+    javax.accessibility.AccessibleRole.RADIO_BUTTON,  // BUTTON_DROPDOWN
+    javax.accessibility.AccessibleRole.RADIO_BUTTON,  // BUTTON_MENU
+    javax.accessibility.AccessibleRole.PANEL,  // CAPTION
+    javax.accessibility.AccessibleRole.PANEL,  // CHART
+    javax.accessibility.AccessibleRole.EDITBAR,
+    javax.accessibility.AccessibleRole.PANEL,  // FORM
+    javax.accessibility.AccessibleRole.PANEL,  // IMAGE_MAP
+    javax.accessibility.AccessibleRole.PANEL,  // NOTE
+    javax.accessibility.AccessibleRole.PANEL,  // PAGE
+    javax.accessibility.AccessibleRole.RULER,
+    javax.accessibility.AccessibleRole.PANEL,  // SECTION
+    javax.accessibility.AccessibleRole.LABEL,  // TREE_ITEM
+    javax.accessibility.AccessibleRole.TABLE   // TREE_TABLE
     };
 
     public static javax.accessibility.AccessibleRole getAccessibleRole(short role) {
