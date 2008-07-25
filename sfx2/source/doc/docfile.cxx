@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docfile.cxx,v $
- * $Revision: 1.202 $
+ * $Revision: 1.203 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2325,7 +2325,13 @@ void SfxMedium::GetMedium_Impl()
                 sal_Bool bReadOnly = sal_False;
                 aMedium[comphelper::MediaDescriptor::PROP_READONLY()] >>= bReadOnly;
                 if ( bReadOnly )
+                {
+                    SFX_ITEMSET_ARG( GetItemSet(), pROItem, SfxBoolItem, SID_DOC_READONLY, sal_False);
+                    BOOL bForceWritable = ( pROItem && !pROItem->GetValue() );
                     GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
+                    if( bForceWritable )
+                        SetError( ERRCODE_IO_ACCESSDENIED );
+                }
 
                 //TODO/MBA: what happens if property is not there?!
                 GetContent();
@@ -2955,7 +2961,6 @@ void SfxMedium::CompleteReOpen()
     {
         pTmpFile->EnableKillingFile( sal_True );
         delete pTmpFile;
-
     }
 
     pImp->bUseInteractionHandler = bUseInteractionHandler;
