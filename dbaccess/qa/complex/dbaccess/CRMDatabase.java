@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CRMDatabase.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,7 @@
 package complex.dbaccess;
 
 import com.sun.star.container.ElementExistException;
+import com.sun.star.io.IOException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
@@ -85,23 +86,37 @@ public class CRMDatabase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    public void close()
+    public void close() throws SQLException, IOException
     {
+        m_database.store();
         m_database.close();
     }
 
     // --------------------------------------------------------------------------------------------------------
     private void createTables() throws SQLException
     {
-        HsqlTableDescriptor table = new HsqlTableDescriptor( "products",
+        HsqlTableDescriptor table = new HsqlTableDescriptor( "categories",
             new HsqlColumnDescriptor[] {
                 new HsqlColumnDescriptor( "ID", "INTEGER", HsqlColumnDescriptor.PRIMARY ),
-                new HsqlColumnDescriptor( "Name", "VARCHAR(50)" ) } );
+                new HsqlColumnDescriptor( "Name", "VARCHAR(50)" ),
+                new HsqlColumnDescriptor( "Description", "VARCHAR(1024)" ),
+                new HsqlColumnDescriptor( "Image", "LONGVARBINARY" ) } );
         m_database.createTable( table, true );
 
-        m_database.executeSQL( "INSERT INTO \"products\" VALUES ( 1, 'Oranges' )" );
-        m_database.executeSQL( "INSERT INTO \"products\" VALUES ( 2, 'Apples' )" );
-        m_database.executeSQL( "INSERT INTO \"products\" VALUES ( 3, 'Pears' )" );
+        m_database.executeSQL( "INSERT INTO \"categories\" ( \"ID\", \"Name\" ) VALUES ( 1, 'Food' )" );
+        m_database.executeSQL( "INSERT INTO \"categories\" ( \"ID\", \"Name\" ) VALUES ( 2, 'Furniture' )" );
+
+        table = new HsqlTableDescriptor( "products",
+            new HsqlColumnDescriptor[] {
+                new HsqlColumnDescriptor( "ID", "INTEGER", HsqlColumnDescriptor.PRIMARY ),
+                new HsqlColumnDescriptor( "Name", "VARCHAR(50)" ),
+                new HsqlColumnDescriptor( "CategoryID", "INTEGER", HsqlColumnDescriptor.REQUIRED, "categories", "ID" ) } );
+        m_database.createTable( table, true );
+
+        m_database.executeSQL( "INSERT INTO \"products\" VALUES ( 1, 'Oranges', 1 )" );
+        m_database.executeSQL( "INSERT INTO \"products\" VALUES ( 2, 'Apples', 1 )" );
+        m_database.executeSQL( "INSERT INTO \"products\" VALUES ( 3, 'Pears', 1 )" );
+        m_database.executeSQL( "INSERT INTO \"products\" VALUES ( 4, 'Strawberries', 1 )" );
 
         table = new HsqlTableDescriptor( "customers",
             new HsqlColumnDescriptor[] {
@@ -115,6 +130,7 @@ public class CRMDatabase
         m_database.executeSQL( "INSERT INTO \"customers\" VALUES(1,'Food, Inc.','Down Under','Melbourne','509') " );
         m_database.executeSQL( "INSERT INTO \"customers\" VALUES(2,'Simply Delicious','Down Under','Melbourne','518') " );
         m_database.executeSQL( "INSERT INTO \"customers\" VALUES(3,'Pure Health','10 Fish St.','San Francisco','94107') " );
+        m_database.executeSQL( "INSERT INTO \"customers\" VALUES(4,'Milk And More','Arlington Road 21','Dublin','31021') " );
 
         table = new HsqlTableDescriptor( "orders",
             new HsqlColumnDescriptor[] {
