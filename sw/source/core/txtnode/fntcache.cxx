@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fntcache.cxx,v $
- * $Revision: 1.97 $
+ * $Revision: 1.98 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -535,9 +535,14 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
                 // Font wird nun nochmals auf dem Drucker eingestellt.
                 Font aFnt1 = pOut->GetFontMetric();
                 Font aFnt2( *pPrtFont );
-                aFnt2.SetCharSet( aFnt1.GetCharSet() );
-                aFnt2.SetFamily( aFnt1.GetFamily() );
-                aFnt2.SetPitch( aFnt1.GetPitch() );
+
+                if (RTL_TEXTENCODING_DONTKNOW == pPrtFont->GetCharSet())
+                    aFnt2.SetCharSet( aFnt1.GetCharSet() );
+                if (FAMILY_DONTKNOW  == pPrtFont->GetFamily())
+                    aFnt2.SetFamily( aFnt1.GetFamily() );
+                if (PITCH_DONTKNOW   == pPrtFont->GetPitch())
+                    aFnt2.SetPitch( aFnt1.GetPitch() );
+
                 pPrt->SetFont( aFnt2 );
                 aMet = pPrt->GetFontMetric( );
             }
