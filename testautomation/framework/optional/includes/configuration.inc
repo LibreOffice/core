@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: configuration.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:13 $
+'* last change: $Author: obo $ $Date: 2008-07-25 08:02:50 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -91,6 +91,7 @@ testcase tToolsCustomizeKeyboardFunction(lList())
     dim i87950 as string
     dim i87951 as string
     dim i87952 as string
+    dim i92080 as string
     
     i60617 = ".uno:ContinueNumbering"
     i43969 = ".uno:MacroOrganizer"
@@ -101,6 +102,7 @@ testcase tToolsCustomizeKeyboardFunction(lList())
 	i87950 = ".uno:DBMigrateScripts"
 	i87951 = ".uno:DeleteAllNotes.uno:DeleteAuthor.uno:DeleteNote.uno:HideAllNotes.uno:HideAuthor.uno:HideNote"
 	i87952 = ".uno:InsertApplet"
+	i92080 = ".uno:SaveGraphic"
     
     '/// open application ///'
     Call hNewDocument
@@ -178,6 +180,11 @@ testcase tToolsCustomizeKeyboardFunction(lList())
 
                         if (inStr(i87952,sTemp2)>0) then
                             qaErrorLog "#i87952# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            bErrorFound = true
+                        endif
+
+                        if (inStr(i92080,sTemp2)>0) then
+                            qaErrorLog "#i92080# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
 
