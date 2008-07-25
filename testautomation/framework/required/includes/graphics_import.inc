@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: graphics_import.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:03 $
+'* last change: $Author: obo $ $Date: 2008-07-25 08:03:02 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -68,7 +68,7 @@ testcase tQuickInsertGraphNotAsLink
     '///+<li>grafix4.xbm (X Bitmap)</li>
     '///+<li>papagei2.xpm (X PixMap)</li></ul>
     
-    if ( not gUseSysDlg ) then
+    if ( gUseSysDlg ) then
         warnlog( "This test needs the OpenOffice.org filepicker to be set as default" )
         goto endsub
     endif
@@ -228,7 +228,7 @@ testcase tInFilterCountCompare()
     '///<h1>Verify presence of all known graphic filters</h1>
     '///<i>Plain text description</i><br><br>
     
-    if ( not gUseSysDlg ) then
+    if ( gUseSysDlg ) then
         warnlog( "This test needs the OpenOffice.org filepicker to be set as default" )
         goto endsub
     endif
