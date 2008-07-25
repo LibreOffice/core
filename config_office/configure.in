@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-07-22 17:41:43 $
+dnl * Date: $Date: 2008-07-25 11:20:14 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.276 $ )
+AC_REVISION( $Revision: 1.277 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -4290,11 +4290,14 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
 #include <unicode/uversion.h>
 
 int main(int argc, char **argv) {
-      if(U_ICU_VERSION_MAJOR_NUM == 3 && (U_ICU_VERSION_MINOR_NUM == 6 ||
-      	U_ICU_VERSION_MINOR_NUM == 8)) return 0;
-      else return 1;
+      if(U_ICU_VERSION_MAJOR_NUM < 3)
+        return 1;
+      else if(U_ICU_VERSION_MAJOR_NUM == 3 && U_ICU_VERSION_MINOR_NUM < 6)
+        return 1;
+      else
+        return 0;
 }
-      ], [AC_MSG_RESULT(OK)], [AC_MSG_RESULT([not suitable, only 3.6 supported currently])])
+      ], [AC_MSG_RESULT(OK)], [AC_MSG_ERROR([not suitable, only >= 3.6 supported currently])])
       AC_LANG_POP([C++])
 else
     AC_MSG_RESULT([internal])
