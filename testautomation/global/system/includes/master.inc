@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: master.inc,v $
 '*
-'* $Revision: 1.3 $
+'* $Revision: 1.4 $
 '*
-'* last change: $Author: tbo $ $Date: 2008-06-23 14:14:02 $
+'* last change: $Author: obo $ $Date: 2008-07-25 08:03:15 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -130,7 +130,7 @@ sub GetUseFiles
         use sTemp
         call getUseFilesPrivateEnvironment
     else
-        qaErrorLog "Private Environment Control File Location specified in '" + sPrivateEnvironmentLocation + "', but the file doesn't exist: '" +sTemp+ "'"
+        'qaErrorLog "Private Environment Control File Location specified in '" + sPrivateEnvironmentLocation + "', but the file doesn't exist: '" +sTemp+ "'"
     end if
     end if
     
@@ -938,8 +938,20 @@ sub hDetectStatusDatabase as Boolean
                     gLocalStatusDatabase = ""
                 end if
             else
-		qaErrorLog "You are using status mode 1; you have to define the public filespace location in your testtoolrc:"+chr(13)+"[OOoLocalStatusDatabase]"+chr(13)+"Type=Path"+chr(13)+"Current=."
+                qaErrorLog "You are using status mode 1; you have to define the public filespace location in your testtoolrc:"+chr(13)+"[OOoLocalStatusDatabase]"+chr(13)+"Type=Path"+chr(13)+"Current=."
                 gLocalStatusDatabase = ""
+            end if
+            sTemp = GetIniValue ( gTesttoolIni, "StatusDatabaseServerIP" , "Current" )
+            if sTemp = "" then
+                qaErrorLog "You are using status mode 1; you have to define the database server adress in your testtoolrc:"+chr(13)+"[StatusDatabaseServerIP]"+chr(13)+"Type=Path"+chr(13)+"Current=."
+            else
+                privateDatabaseServerIP = sTemp
+            end if
+            sTemp = GetIniValue ( gTesttoolIni, "StatusDatabaseServerPath" , "Current" )
+            if sTemp = "" then
+                qaErrorLog "You are using status mode 1; you have to define the database server path in your testtoolrc:"+chr(13)+"[StatusDatabaseServerPath]"+chr(13)+"Type=Path"+chr(13)+"Current=."
+            else
+                privateDatabaseServerPath = sTemp
             end if
         else
             if gStatusFeatureLevel = 2 then
