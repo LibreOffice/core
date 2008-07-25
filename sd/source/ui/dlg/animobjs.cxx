@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: animobjs.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -350,18 +350,31 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
         if( bReverse )
         {
             i--;
-            bCount = i >= 0;
+            if (i < 0)
+            {
+                // Terminate loop.
+                bCount = false;
+                // Move i back into valid range.
+                i = 0;
+            }
         }
         else
         {
             i++;
-            bCount = i < (long) nCount;
+            if (i >= (long) nCount)
+            {
+                // Terminate loop.
+                bCount = false;
+                // Move i back into valid range.
+                i = nCount - 1;
+            }
         }
     }
 
     // Um die Controls wieder zu enablen
     bMovie = FALSE;
-    UpdateControl( i - 1 );
+    if (nCount > 0)
+        UpdateControl(i);
 
     if( pProgress )
     {
