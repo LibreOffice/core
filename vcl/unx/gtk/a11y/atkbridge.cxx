@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atkbridge.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,12 +37,7 @@
 #include "atkfactory.hxx"
 #include "atkutil.hxx"
 #include "atkwindow.hxx"
-
 #include <stdio.h>
-
-#if ! ( defined AIX || defined HPUX ) // these have no dl* functions
-#include <dlfcn.h>
-#endif
 
 bool InitAtkBridge(void)
 {
@@ -85,22 +80,5 @@ bool InitAtkBridge(void)
 void DeInitAtkBridge()
 {
     restore_gail_window_vtable();
-
-    /* shutdown atk-bridge Gtk+ module here, otherwise it is done in an atexit handler
-     * where the VCL Gtk+ plugin might already be unloaded
-     */
-
-#if ! ( defined AIX || defined HPUX ) // these have no dl* functions
-#if defined __SUNPRO_CC // disable warning: Cannot cast from void* to void(*)()
-#pragma disable_warn
-#endif
-    void (* shutdown) ( void ) =  (void (*) (void)) dlsym( RTLD_DEFAULT, "gnome_accessibility_module_shutdown");
-#if defined __SUNPRO_CC
-#pragma enable_warn
-#endif
-
-    if( shutdown )
-        shutdown();
-#endif // ! ( defined AIX || defined HPUX )
 }
 
