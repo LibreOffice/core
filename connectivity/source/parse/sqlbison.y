@@ -9,7 +9,7 @@
 //
 // $RCSfile: sqlbison.y,v $
 //
-// $Revision: 1.65 $
+// $Revision: 1.66 $
 //
 // This file is part of OpenOffice.org.
 //
@@ -984,6 +984,7 @@ table_ref:
 			$$->append($2);
 		    $$->append($3);
 		}
+	|	joined_table
 	|	'{' SQL_TOKEN_OJ joined_table '}'
 		{
 			$$ = SQL_NEW_RULE;
