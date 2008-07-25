@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: langhelper.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -310,14 +310,16 @@ namespace SwLangHelper
 
     void SetLanguage_None(SwWrtShell &rWrtSh, EditEngine* pEditEngine,ESelection aSelection, bool bIsForSelection, SfxItemSet &rCoreSet )
     {
-        const USHORT aLangWhichId[3] =
+        // EditEngine IDs
+        const USHORT aLangWhichId_EE[3] =
         {
             EE_CHAR_LANGUAGE,
             EE_CHAR_LANGUAGE_CJK,
             EE_CHAR_LANGUAGE_CTL
         };
 
-        const USHORT aLangWhichId_res[3] =
+        // Writewr IDs
+        const USHORT aLangWhichId_Writer[3] =
         {
             RES_CHRATR_LANGUAGE,
             RES_CHRATR_CJK_LANGUAGE,
@@ -330,14 +332,14 @@ namespace SwLangHelper
             if (pEditEngine)
             {
                 for (sal_uInt16 i = 0; i < 3; ++i)
-                    rCoreSet.Put( SvxLanguageItem( LANGUAGE_NONE, aLangWhichId[i] ));
+                    rCoreSet.Put( SvxLanguageItem( LANGUAGE_NONE, aLangWhichId_EE[i] ));
                 pEditEngine->QuickSetAttribs( rCoreSet, aSelection);
             }
             else
             {
                 rWrtSh.GetCurAttr( rCoreSet );
                 for (sal_uInt16 i = 0; i < 3; ++i)
-                    rCoreSet.Put( SvxLanguageItem( LANGUAGE_NONE, aLangWhichId[i] ));
+                    rCoreSet.Put( SvxLanguageItem( LANGUAGE_NONE, aLangWhichId_Writer[i] ));
                 rWrtSh.SetAttr( rCoreSet );
             }
         }
@@ -346,8 +348,8 @@ namespace SwLangHelper
             SvUShortsSort aAttribs;
             for (sal_uInt16 i = 0; i < 3; ++i)
             {
-                rWrtSh.SetDefault( SvxLanguageItem( LANGUAGE_NONE, aLangWhichId_res[i] ) );
-                aAttribs.Insert( aLangWhichId_res[i] );
+                rWrtSh.SetDefault( SvxLanguageItem( LANGUAGE_NONE, aLangWhichId_Writer[i] ) );
+                aAttribs.Insert( aLangWhichId_Writer[i] );
             }
 
             // set all language attributes to default
