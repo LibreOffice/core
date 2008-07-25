@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxaccessibletoolboxitem.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,7 +70,7 @@ DBG_NAME(VCLXAccessibleToolBoxItem)
 // -----------------------------------------------------------------------------
 // Ctor() and Dtor()
 // -----------------------------------------------------------------------------
-VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_Int32 _nPos, const Reference< XAccessible >& _xParent ) :
+VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_Int32 _nPos ) :
 
     AccessibleTextHelper_BASE( new VCLExternalSolarLock() ),
 
@@ -80,8 +80,7 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
     m_nItemId       ( 0 ),
     m_bHasFocus     ( sal_False ),
     m_bIsChecked    ( sal_False ),
-    m_bIndeterminate( false ),
-    m_xParent       ( _xParent )
+    m_bIndeterminate( false )
 
 {
     DBG_CTOR( VCLXAccessibleToolBoxItem, NULL );
@@ -99,7 +98,9 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
         case TOOLBOXITEM_BUTTON :
         {
             ToolBoxItemBits nBits = m_pToolBox->GetItemBits( m_nItemId );
-            if (( ( nBits & TIB_CHECKABLE ) == TIB_CHECKABLE ) ||
+            if (( nBits & TIB_DROPDOWN ) == TIB_DROPDOWN)
+                m_nRole = AccessibleRole::BUTTON_DROPDOWN;
+            else if (( ( nBits & TIB_CHECKABLE ) == TIB_CHECKABLE ) ||
                 ( ( nBits & TIB_AUTOCHECK ) == TIB_AUTOCHECK ) )
                 m_nRole = AccessibleRole::TOGGLE_BUTTON;
             else if ( m_pToolBox->GetItemWindow( m_nItemId ) )
@@ -293,7 +294,6 @@ void SAL_CALL VCLXAccessibleToolBoxItem::disposing()
 {
     AccessibleTextHelper_BASE::disposing();
     m_pToolBox = NULL;
-    m_xParent = NULL;
 }
 // -----------------------------------------------------------------------------
 // XServiceInfo
@@ -355,7 +355,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleParent
 {
     OContextEntryGuard aGuard( this );
 
-    return m_xParent;
+    return m_pToolBox->GetAccessible();
 }
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleIndexInParent(  ) throw (RuntimeException)
@@ -553,9 +553,16 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleAtPoin
 // -----------------------------------------------------------------------------
 void SAL_CALL VCLXAccessibleToolBoxItem::grabFocus(  ) throw (RuntimeException)
 {
-    Reference < XAccessibleSelection > rxAccessibleSelection ( getAccessibleParent(), UNO_QUERY );
-    if ( rxAccessibleSelection.is() ) {
-        rxAccessibleSelection -> selectAccessibleChild ( getAccessibleIndexInParent() );
+    Reference< XAccessible > xParent(getAccessibleParent());
+
+    if( xParent.is() )
+    {
+        Reference< XAccessibleSelection > rxAccessibleSelection(xParent->getAccessibleContext(), UNO_QUERY);
+
+        if ( rxAccessibleSelection.is() )
+        {
+            rxAccessibleSelection -> selectAccessibleChild ( getAccessibleIndexInParent() );
+        }
     }
 }
 // -----------------------------------------------------------------------------
