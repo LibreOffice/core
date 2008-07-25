@@ -8,7 +8,7 @@
 #
 # $RCSfile: worker.pm,v $
 #
-# $Revision: 1.64 $
+# $Revision: 1.65 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -2956,6 +2956,39 @@ sub set_spellcheckerlanguages
 
     $infoline = "Collected spellchecker languages for spellchecker: $langstring \n";
     push( @installer::globals::globallogfileinfo, $infoline);
+}
+
+################################################
+# Including a license text into setup script
+################################################
+
+sub put_license_into_setup
+{
+    my ($installdir, $includepatharrayref) = @_;
+
+    # find and read english license file
+    my $licenselanguage = "en-US";                  # always english !
+    my $licensefilename = "LICENSE_" . $licenselanguage;
+    my $licenseincludepatharrayref = get_language_specific_include_pathes($includepatharrayref, $licenselanguage);
+
+    my $licenseref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$licensefilename, $licenseincludepatharrayref, 0);
+    if ($$licenseref eq "") { installer::exiter::exit_program("ERROR: Could not find License file $licensefilename!", "put_license_into_setup"); }
+    my $licensefile = installer::files::read_file($$licenseref);
+
+    # Read setup
+    my $setupfilename = $installdir . $installer::globals::separator . "setup";
+    my $setupfile = installer::files::read_file($setupfilename);
+
+    # Replacement
+    my $infoline = "Adding licensefile into setup script\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    my $includestring = "";
+    for ( my $i = 0; $i <= $#{$licensefile}; $i++ ) { $includestring = $includestring . ${$licensefile}[$i]; }
+    for ( my $i = 0; $i <= $#{$setupfile}; $i++ ) { ${$setupfile}[$i] =~ s/LICENSEFILEPLACEHOLDER/$includestring/; }
+
+    # Write setup
+    installer::files::save_file($setupfilename, $setupfile);
 }
 
 1;
