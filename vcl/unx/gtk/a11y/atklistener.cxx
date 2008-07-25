@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atklistener.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,17 +49,19 @@ using namespace com::sun::star;
 
 #define CSTRING_FROM_ANY(i) rtl::OUStringToOString( i.get< rtl::OUString >(), RTL_TEXTENCODING_UTF8 ).getStr()
 
-AtkListener::AtkListener( AtkObjectWrapper* pWrapper )
+AtkListener::AtkListener( AtkObjectWrapper* pWrapper ) : mpWrapper( pWrapper )
 {
-    if( pWrapper )
+    if( mpWrapper )
     {
-        mpAccessible = ATK_OBJECT( g_object_ref( pWrapper ) );
-        updateChildList( pWrapper->mpContext );
+        g_object_ref( mpWrapper );
+        updateChildList( mpWrapper->mpContext );
     }
 }
 
 AtkListener::~AtkListener()
 {
+    if( mpWrapper )
+        g_object_unref( mpWrapper );
 }
 
 /*****************************************************************************/
@@ -76,21 +78,23 @@ AtkStateType mapState( const uno::Any &rAny )
 // XEventListener implementation
 void AtkListener::disposing( const lang::EventObject& ) throw (uno::RuntimeException)
 {
-    if( mpAccessible )
+    if( mpWrapper )
     {
+        AtkObject *atk_obj = ATK_OBJECT( mpWrapper );
+
         // Release all interface references to avoid shutdown problems with
         // global mutex
-        atk_object_wrapper_dispose( ATK_OBJECT_WRAPPER( mpAccessible ) );
+        atk_object_wrapper_dispose( mpWrapper );
 
         // This is an equivalent to a state change to DEFUNC(T).
-        atk_object_notify_state_change( mpAccessible, ATK_STATE_DEFUNCT, TRUE );
+        atk_object_notify_state_change( atk_obj, ATK_STATE_DEFUNCT, TRUE );
 
-        if( atk_get_focus_object() == mpAccessible )
+        if( atk_get_focus_object() == atk_obj )
             atk_focus_tracker_notify( NULL );
 
         // Release the wrapper object so that it can vanish ..
-        g_object_unref( mpAccessible );
-        mpAccessible = NULL;
+        g_object_unref( mpWrapper );
+        mpWrapper = NULL;
     }
 }
 
@@ -135,10 +139,11 @@ void AtkListener::handleChildAdded(
 
     if( pChild )
     {
-        atk_object_set_parent( pChild, mpAccessible );
         updateChildList(rxParent.get());
-        g_signal_emit_by_name( mpAccessible, "children_changed::add",
-            atk_object_get_index_in_parent( pChild ), pChild, NULL );
+
+        atk_object_wrapper_add_child( mpWrapper, pChild,
+            atk_object_get_index_in_parent( pChild ));
+
         g_object_unref( pChild );
     }
 }
@@ -164,7 +169,8 @@ void AtkListener::handleChildRemoved(
 
     // FIXME: two problems here:
     // a) we get child-removed events for objects that are no real childs
-    //    in the accessibility hierarchy
+    //    in the accessibility hierarchy or have been removed before due to
+    //    some child removing batch.
     // b) spi_atk_bridge_signal_listener ignores the given parameters
     //    for children_changed events and always asks the parent for the
     //    0. child, which breaks somehow on vanishing list boxes.
@@ -177,8 +183,7 @@ void AtkListener::handleChildRemoved(
         AtkObject * pChild = atk_object_wrapper_ref( rxChild, false );
         if( pChild )
         {
-            atk_object_set_parent( pChild, atk_get_root() );
-            g_signal_emit_by_name( mpAccessible, "children_changed::remove", nIndex, pChild, NULL );
+            atk_object_wrapper_remove_child( mpWrapper, pChild, nIndex );
             g_object_unref( pChild );
         }
     }
@@ -198,8 +203,7 @@ void AtkListener::handleInvalidateChildren(
             AtkObject * pChild = atk_object_wrapper_ref( m_aChildList[n], false );
             if( pChild )
             {
-                atk_object_set_parent( pChild, atk_get_root() );
-                g_signal_emit_by_name( mpAccessible, "children_changed::remove", n, pChild, NULL );
+                atk_object_wrapper_remove_child( mpWrapper, pChild, n );
                 g_object_unref( pChild );
             }
         }
@@ -217,8 +221,7 @@ void AtkListener::handleInvalidateChildren(
 
             if( pChild )
             {
-                atk_object_set_parent( pChild, mpAccessible );
-                g_signal_emit_by_name( mpAccessible, "children_changed::add", n, pChild, NULL );
+                atk_object_wrapper_add_child( mpWrapper, pChild, n );
                 g_object_unref( pChild );
             }
         }
@@ -250,8 +253,10 @@ getAccessibleContextFromSource( const uno::Reference< uno::XInterface >& rxSourc
 // XAccessibleEventListener
 void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEvent ) throw( uno::RuntimeException )
 {
-    if( !mpAccessible )
+    if( !mpWrapper )
         return;
+
+    AtkObject *atk_obj = ATK_OBJECT( mpWrapper );
 
     switch( aEvent.EventId )
     {
@@ -285,11 +290,25 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             break;
 
         case accessibility::AccessibleEventId::NAME_CHANGED:
-            g_object_notify( G_OBJECT( mpAccessible ), "accessible-name" );
+        {
+            rtl::OUString aName;
+            if( aEvent.NewValue >>= aName )
+            {
+                atk_object_set_name(atk_obj,
+                    rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
+            }
+        }
             break;
 
         case accessibility::AccessibleEventId::DESCRIPTION_CHANGED:
-            g_object_notify( G_OBJECT( mpAccessible ), "accessible-description" );
+        {
+            rtl::OUString aDescription;
+            if( aEvent.NewValue >>= aDescription )
+            {
+                atk_object_set_description(atk_obj,
+                    rtl::OUStringToOString(aDescription, RTL_TEXTENCODING_UTF8).getStr());
+            }
+        }
             break;
 
         case accessibility::AccessibleEventId::STATE_CHANGED:
@@ -300,25 +319,25 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             gboolean bState = eNewState != ATK_STATE_INVALID;
             AtkStateType eRealState = bState ? eNewState : eOldState;
 
-            atk_object_notify_state_change( mpAccessible, eRealState, bState );
+            atk_object_notify_state_change( atk_obj, eRealState, bState );
             break;
         }
 
         case accessibility::AccessibleEventId::BOUNDRECT_CHANGED:
 
 #ifdef HAS_ATKRECTANGLE
-            if( ATK_IS_COMPONENT( mpAccessible ) )
+            if( ATK_IS_COMPONENT( atk_obj ) )
             {
                 AtkRectangle rect;
 
-                atk_component_get_extents( ATK_COMPONENT( mpAccessible ),
+                atk_component_get_extents( ATK_COMPONENT( atk_obj ),
                                            &rect.x,
                                            &rect.y,
                                            &rect.width,
                                            &rect.height,
                                            ATK_XY_SCREEN );
 
-                g_signal_emit_by_name( mpAccessible, "bounds_changed", &rect );
+                g_signal_emit_by_name( atk_obj, "bounds_changed", &rect );
             }
             else
                 g_warning( "bounds_changed event for object not implementing AtkComponent\n");
@@ -327,7 +346,7 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             break;
 
         case accessibility::AccessibleEventId::VISIBLE_DATA_CHANGED:
-            g_signal_emit_by_name( mpAccessible, "visible-data-changed" );
+            g_signal_emit_by_name( atk_obj, "visible-data-changed" );
             break;
 
         case accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED:
@@ -335,7 +354,7 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             AtkObject *pChild = getObjFromAny( aEvent.NewValue );
             if( pChild )
             {
-                g_signal_emit_by_name( mpAccessible, "active-descendant-changed", pChild );
+                g_signal_emit_by_name( atk_obj, "active-descendant-changed", pChild );
                 g_object_unref( pChild );
             }
             break;
@@ -343,7 +362,7 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
 
         // AtkAction signals ...
         case accessibility::AccessibleEventId::ACTION_CHANGED:
-            g_signal_emit_by_name( G_OBJECT( mpAccessible ), "property_change::accessible-actions");
+            g_signal_emit_by_name( G_OBJECT( atk_obj ), "property_change::accessible-actions");
             break;
 
         // AtkText
@@ -351,7 +370,7 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
         {
             sal_Int32 nPos=0;
             aEvent.NewValue >>= nPos;
-            g_signal_emit_by_name( mpAccessible, "text_caret_moved", nPos );
+            g_signal_emit_by_name( atk_obj, "text_caret_moved", nPos );
             break;
         }
         case accessibility::AccessibleEventId::TEXT_CHANGED:
@@ -371,17 +390,17 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
                  * UTF-8 converted strings in the atk wrapper object.
                  */
 
-                g_object_set_data( G_OBJECT(mpAccessible), "ooo::text_changed::delete", &aDeletedText);
+                g_object_set_data( G_OBJECT(atk_obj), "ooo::text_changed::delete", &aDeletedText);
 
-                g_signal_emit_by_name( mpAccessible, "text_changed::delete",
+                g_signal_emit_by_name( atk_obj, "text_changed::delete",
                                        (gint) aDeletedText.SegmentStart,
                                        (gint)( aDeletedText.SegmentEnd - aDeletedText.SegmentStart ) );
 
-                g_object_steal_data( G_OBJECT(mpAccessible), "ooo::text_changed::delete" );
+                g_object_steal_data( G_OBJECT(atk_obj), "ooo::text_changed::delete" );
             }
 
             if( aEvent.NewValue >>= aInsertedText )
-                g_signal_emit_by_name( mpAccessible, "text_changed::insert",
+                g_signal_emit_by_name( atk_obj, "text_changed::insert",
                                        (gint) aInsertedText.SegmentStart,
                                        (gint)( aInsertedText.SegmentEnd - aInsertedText.SegmentStart ) );
             break;
@@ -389,17 +408,17 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
 
         case accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED:
         {
-            g_signal_emit_by_name( mpAccessible, "text-selection-changed" );
+            g_signal_emit_by_name( atk_obj, "text-selection-changed" );
             break;
         }
 
         case accessibility::AccessibleEventId::TEXT_ATTRIBUTE_CHANGED:
-            g_signal_emit_by_name( mpAccessible, "text-attributes-changed" );
+            g_signal_emit_by_name( atk_obj, "text-attributes-changed" );
             break;
 
         // AtkValue
         case accessibility::AccessibleEventId::VALUE_CHANGED:
-            g_object_notify( G_OBJECT( mpAccessible ), "accessible-value" );
+            g_object_notify( G_OBJECT( atk_obj ), "accessible-value" );
             break;
 
         case accessibility::AccessibleEventId::CONTENT_FLOWS_FROM_RELATION_CHANGED:
@@ -436,11 +455,11 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             case accessibility::AccessibleTableModelChangeType::INSERT:
             case accessibility::AccessibleTableModelChangeType::DELETE:
                 if( nRowsChanged > 0 )
-                    g_signal_emit_by_name( G_OBJECT( mpAccessible ),
+                    g_signal_emit_by_name( G_OBJECT( atk_obj ),
                                            aSignalNames[aChange.Type].row,
                                            aChange.FirstRow, nRowsChanged );
                 if( nColumnsChanged > 0 )
-                    g_signal_emit_by_name( G_OBJECT( mpAccessible ),
+                    g_signal_emit_by_name( G_OBJECT( atk_obj ),
                                            aSignalNames[aChange.Type].col,
                                            aChange.FirstColumn, nColumnsChanged );
                 break;
@@ -452,40 +471,40 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
                 g_warning( "TESTME: unusual table model change %d\n", aChange.Type );
                 break;
             }
-            g_signal_emit_by_name( G_OBJECT( mpAccessible ), "model-changed" );
+            g_signal_emit_by_name( G_OBJECT( atk_obj ), "model-changed" );
             break;
         }
 
         case accessibility::AccessibleEventId::TABLE_COLUMN_HEADER_CHANGED:
-            g_signal_emit_by_name( G_OBJECT( mpAccessible ), "property_change::accessible-table-column-header");
+            g_signal_emit_by_name( G_OBJECT( atk_obj ), "property_change::accessible-table-column-header");
             break;
 
         case accessibility::AccessibleEventId::TABLE_CAPTION_CHANGED:
-            g_signal_emit_by_name( G_OBJECT( mpAccessible ), "property_change::accessible-table-caption");
+            g_signal_emit_by_name( G_OBJECT( atk_obj ), "property_change::accessible-table-caption");
             break;
 
         case accessibility::AccessibleEventId::TABLE_COLUMN_DESCRIPTION_CHANGED:
-            g_signal_emit_by_name( G_OBJECT( mpAccessible ), "property_change::accessible-table-column-description");
+            g_signal_emit_by_name( G_OBJECT( atk_obj ), "property_change::accessible-table-column-description");
             break;
 
         case accessibility::AccessibleEventId::TABLE_ROW_DESCRIPTION_CHANGED:
-            g_signal_emit_by_name( G_OBJECT( mpAccessible ), "property_change::accessible-table-row-description");
+            g_signal_emit_by_name( G_OBJECT( atk_obj ), "property_change::accessible-table-row-description");
             break;
 
         case accessibility::AccessibleEventId::TABLE_ROW_HEADER_CHANGED:
-            g_signal_emit_by_name( G_OBJECT( mpAccessible ), "property_change::accessible-table-row-header");
+            g_signal_emit_by_name( G_OBJECT( atk_obj ), "property_change::accessible-table-row-header");
             break;
 
         case accessibility::AccessibleEventId::TABLE_SUMMARY_CHANGED:
-            g_signal_emit_by_name( G_OBJECT( mpAccessible ), "property_change::accessible-table-summary");
+            g_signal_emit_by_name( G_OBJECT( atk_obj ), "property_change::accessible-table-summary");
             break;
 
         case accessibility::AccessibleEventId::SELECTION_CHANGED:
-            g_signal_emit_by_name( G_OBJECT( mpAccessible ), "selection_changed");
+            g_signal_emit_by_name( G_OBJECT( atk_obj ), "selection_changed");
             break;
 
         case accessibility::AccessibleEventId::HYPERTEXT_CHANGED:
-            g_signal_emit_by_name( G_OBJECT( mpAccessible ), "property_change::accessible-hypertext-offset");
+            g_signal_emit_by_name( G_OBJECT( atk_obj ), "property_change::accessible-hypertext-offset");
             break;
 
     default:
