@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterToolBar.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1825,7 +1825,7 @@ void Button::PaintIcon (
         const rendering::RenderState aRenderState(
             geometry::AffineMatrix2D(1,0,nX, 0,1,nY),
             NULL,
-            Sequence<double>(3),
+            Sequence<double>(4),
             rendering::CompositeOperation::OVER);
         rxCanvas->drawBitmap(xBitmap, rViewState, aRenderState);
     }
@@ -2032,7 +2032,7 @@ void Text::Paint (
     rendering::RenderState aRenderState(
         geometry::AffineMatrix2D(1,0,nX, 0,1,nY),
         NULL,
-        Sequence<double>(3),
+        Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
     PresenterCanvasHelper::SetDeviceColor(aRenderState, mpFont->mnColor);
 
@@ -2349,7 +2349,7 @@ void VerticalSeparator::Paint (
     rendering::RenderState aRenderState(
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         NULL,
-        Sequence<double>(3),
+        Sequence<double>(4),
         rendering::CompositeOperation::OVER);
     if (mpMode.get() != NULL)
     {
@@ -2412,7 +2412,7 @@ void HorizontalSeparator::Paint (
     rendering::RenderState aRenderState(
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         NULL,
-        Sequence<double>(3),
+        Sequence<double>(4),
         rendering::CompositeOperation::OVER);
     if (mpMode.get() != NULL)
     {

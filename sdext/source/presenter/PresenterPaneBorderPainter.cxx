@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterPaneBorderPainter.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -652,14 +652,12 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
     rendering::RenderState aRenderState(
         geometry::AffineMatrix2D(1,0,nX, 0,1,nY),
         NULL,
-        Sequence<double>(3),
+        Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
 
     if (bPaintBackground)
     {
-        aRenderState.DeviceColor[0] = 1;
-        aRenderState.DeviceColor[1] = 1;
-        aRenderState.DeviceColor[2] = 1;
+        PresenterCanvasHelper::SetDeviceColor(aRenderState, util::Color(0x00ffffff));
         Sequence<Sequence<geometry::RealPoint2D> > aPolygons(1);
         aPolygons[0] = Sequence<geometry::RealPoint2D>(4);
         aPolygons[0][0] = geometry::RealPoint2D(0, -nTextHeight);
@@ -842,7 +840,7 @@ void PresenterPaneBorderPainter::Renderer::PaintBitmap(
             double(nW)/rpBitmap->mnWidth, 0, nX,
             0, double(nH)/rpBitmap->mnHeight, nY),
         NULL,
-        Sequence<double>(3),
+        Sequence<double>(4),
         rendering::CompositeOperation::OVER);
 
     if (xBitmap.is())

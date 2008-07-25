@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterSlidePreview.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -357,15 +357,13 @@ void PresenterSlidePreview::Paint (const awt::Rectangle& rBoundingBox)
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         NULL);
 
-    Sequence<double> aBackgroundColor(3);
-    aBackgroundColor[0] = 0;
-    aBackgroundColor[1] = 0;
-    aBackgroundColor[2] = 0;
+    Sequence<double> aBackgroundColor(4);
     rendering::RenderState aRenderState (
         geometry::AffineMatrix2D(1, 0, aPreviewBox.X, 0, 1, aPreviewBox.Y),
         NULL,
         aBackgroundColor,
         rendering::CompositeOperation::SOURCE);
+    PresenterCanvasHelper::SetDeviceColor(aRenderState, 0x00000000);
     if (mxPreview.is())
     {
         mxCanvas->drawBitmap(mxPreview, aViewState, aRenderState);

@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterSprite.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -179,7 +179,7 @@ void PresenterSprite::MoveTo (const css::geometry::RealPoint2D& rLocation)
             rendering::RenderState(
                 geometry::AffineMatrix2D(1,0,0, 0,1,0),
                 NULL,
-                uno::Sequence<double>(3),
+                uno::Sequence<double>(4),
                 rendering::CompositeOperation::SOURCE)
             );
 }
@@ -258,7 +258,7 @@ void PresenterSprite::ProvideSprite (void)
             rendering::RenderState(
                 geometry::AffineMatrix2D(1,0,0, 0,1,0),
                 NULL,
-                uno::Sequence<double>(3),
+                uno::Sequence<double>(4),
                 rendering::CompositeOperation::SOURCE)
                 );
             mxSprite->setAlpha(mnAlpha);
@@ -301,7 +301,7 @@ void PresenterSprite::SetToBitmap (const Reference<rendering::XBitmap>& rxBitmap
             rendering::RenderState(
                 geometry::AffineMatrix2D(1,0,0, 0,1,0),
                 NULL,
-                uno::Sequence<double>(3),
+                uno::Sequence<double>(4),
                 rendering::CompositeOperation::SOURCE));
 
     }

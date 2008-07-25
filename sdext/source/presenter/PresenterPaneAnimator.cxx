@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterPaneAnimator.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 #include "PresenterAnimation.hxx"
 #include "PresenterAnimator.hxx"
+#include "PresenterCanvasHelper.hxx"
 #include "PresenterController.hxx"
 #include "PresenterGeometryHelper.hxx"
 #include "PresenterPaintManager.hxx"
@@ -625,7 +626,7 @@ void UnfoldInCenterAnimator::HidePane (void)
     const rendering::RenderState aRenderState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         NULL,
-        Sequence<double>(3),
+        Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
 
     // Animate the uppder and lower window bitmaps.
@@ -1037,11 +1038,7 @@ void TransparentOverlayAnimator::CreateBackgroundSprite (void)
                 NULL,
                 Sequence<double>(4),
                 rendering::CompositeOperation::SOURCE);
-
-            aRenderState.DeviceColor[0] = 0.5;
-            aRenderState.DeviceColor[1] = 0.5;
-            aRenderState.DeviceColor[2] = 0.5;
-            aRenderState.DeviceColor[3] = 0.5;
+            PresenterCanvasHelper::SetDeviceColor(aRenderState, util::Color(0x80808080));
 
             Reference<rendering::XPolyPolygon2D> xPolygon (
                 PresenterGeometryHelper::CreatePolygon(aWindowBox, xCanvas->getDevice()));
@@ -1114,7 +1111,7 @@ void PaneGroup::CreateSubstitution (const Reference<rendering::XSpriteCanvas>& r
     const rendering::RenderState aRenderState (
         geometry::AffineMatrix2D(1,0,-maOriginalBoundingBox.X, 0,1,-maOriginalBoundingBox.Y),
         NULL,
-        Sequence<double>(3),
+        Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
 
     Reference<rendering::XCanvas> xSpriteCanvas (mpSubstitution->GetCanvas());

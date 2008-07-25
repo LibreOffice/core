@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterWindowManager.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1460,7 +1460,7 @@ ModeChangeAnimationStarter::ModeChangeAnimationStarter (
     const rendering::RenderState aRenderState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         NULL,
-        Sequence<double>(3),
+        Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
     Reference<rendering::XCanvas> xSpriteCanvas (mpSprite->GetCanvas());
     if (xSpriteCanvas.is())
