@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sqlnode.cxx,v $
- * $Revision: 1.55 $
+ * $Revision: 1.56 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1372,6 +1372,7 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
             { OSQLParseNode::all_or_any_predicate, "all_or_any_predicate" },
             { OSQLParseNode::named_columns_join, "named_columns_join" },
             { OSQLParseNode::join_condition, "join_condition" },
+            { OSQLParseNode::joined_table, "joined_table" },
             { OSQLParseNode::boolean_factor, "boolean_factor" },
             { OSQLParseNode::sql_not, "sql_not" },
             { OSQLParseNode::boolean_test, "boolean_test" },
