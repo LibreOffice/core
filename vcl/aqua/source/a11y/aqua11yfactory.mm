@@ -8,7 +8,7 @@
  *
  * $RCSfile: aqua11yfactory.mm,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,6 +80,10 @@ static bool enabled = false;
     return [ NSValue valueWithPointer: rxAccessibleContext.get() ];
 }
 
++(NSValue *)keyForAccessibleContextAsRadioGroup: (Reference < XAccessibleContext >) rxAccessibleContext {
+    return [ NSValue valueWithPointer: ( rxAccessibleContext.get() + 2 ) ];
+}
+
 +(AquaA11yWrapper *)wrapperForAccessible: (Reference < XAccessible >) rxAccessible {
     if ( rxAccessible.is() ) {
         Reference< XAccessibleContext > xAccessibleContext = rxAccessible->getAccessibleContext();
@@ -91,12 +95,21 @@ static bool enabled = false;
 }
 
 +(AquaA11yWrapper *)wrapperForAccessibleContext: (Reference < XAccessibleContext >) rxAccessibleContext {
-    return [ AquaA11yFactory wrapperForAccessibleContext: rxAccessibleContext createIfNotExists: YES ];
+    return [ AquaA11yFactory wrapperForAccessibleContext: rxAccessibleContext createIfNotExists: YES asRadioGroup: NO ];
 }
 
 +(AquaA11yWrapper *)wrapperForAccessibleContext: (Reference < XAccessibleContext >) rxAccessibleContext createIfNotExists:(MacOSBOOL) bCreate {
+    return [ AquaA11yFactory wrapperForAccessibleContext: rxAccessibleContext createIfNotExists: bCreate asRadioGroup: NO ];
+}
+
++(AquaA11yWrapper *)wrapperForAccessibleContext: (Reference < XAccessibleContext >) rxAccessibleContext createIfNotExists:(MacOSBOOL) bCreate asRadioGroup:(MacOSBOOL) asRadioGroup{
     NSMutableDictionary * dAllWrapper = [ AquaA11yFactory allWrapper ];
-    NSValue * nKey = [ AquaA11yFactory keyForAccessibleContext: rxAccessibleContext ];
+    NSValue * nKey = nil;
+    if ( asRadioGroup ) {
+        nKey = [ AquaA11yFactory keyForAccessibleContextAsRadioGroup: rxAccessibleContext ];
+    } else {
+        nKey = [ AquaA11yFactory keyForAccessibleContext: rxAccessibleContext ];
+    }
     AquaA11yWrapper * aWrapper = (AquaA11yWrapper *) [ dAllWrapper objectForKey: nKey ];
     if ( aWrapper != nil ) {
         [ aWrapper retain ];
@@ -137,6 +150,7 @@ static bool enabled = false;
             aWrapper = [ [ AquaA11yWrapper alloc ] initWithAccessibleContext: rxAccessibleContext ];
         }
         [ nativeRole release ];
+        [ aWrapper setActsAsRadioGroup: asRadioGroup ];
         if ( ! rxAccessibleContext -> getAccessibleStateSet() -> contains ( AccessibleStateType::TRANSIENT ) ) {
             [ dAllWrapper setObject: aWrapper forKey: nKey ];
         }
@@ -150,6 +164,7 @@ static bool enabled = false;
 }
 
 +(void)removeFromWrapperRepositoryFor: (::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >) rxAccessibleContext {
+    // TODO: when RADIO_BUTTON search for associated RadioGroup-wrapper and delete that as well
     AquaA11yWrapper * theWrapper = [ AquaA11yFactory wrapperForAccessibleContext: rxAccessibleContext createIfNotExists: NO ];
     if ( theWrapper != nil ) {
         [ [ AquaA11yFactory allWrapper ] removeObjectForKey: [ AquaA11yFactory keyForAccessibleContext: rxAccessibleContext ] ];
