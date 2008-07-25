@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sfxhelp.cxx,v $
- * $Revision: 1.81 $
+ * $Revision: 1.82 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -793,7 +793,12 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
         else
         {
             aHelpURL  = CreateHelpURL_Impl( 0, GetHelpModuleName_Impl( ) );
-            sKeyword = ::rtl::OUString( rURL );
+
+            // pb i91715: strings begin with ".HelpId:" are not words of the basic ide
+            // they are helpid-strings used by the testtool -> so we ignore them
+            static const String sHelpIdScheme( DEFINE_CONST_OUSTRING(".HelpId:") );
+            if ( rURL.Search( sHelpIdScheme ) != 0 )
+                sKeyword = ::rtl::OUString( rURL );
         }
     }
 
