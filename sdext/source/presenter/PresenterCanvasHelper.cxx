@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterCanvasHelper.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -334,10 +334,7 @@ void PresenterCanvasHelper::PaintColor (
 
     // Setup the rendering state to use the given color.
     rendering::RenderState aRenderState (rDefaultRenderState);
-    aRenderState.DeviceColor[0] = ((nColor >> 16) & 0x0ff) / 255.0;
-    aRenderState.DeviceColor[1] = ((nColor >> 8) & 0x0ff) / 255.0;
-    aRenderState.DeviceColor[2] = ((nColor >> 0) & 0x0ff) / 255.0;
-    aRenderState.DeviceColor[3] = ((nColor >> 24) & 0x0ff) / 255.0;
+    SetDeviceColor(aRenderState, nColor);
 
     rxCanvas->fillPolyPolygon(
         rxPolygon,
@@ -352,14 +349,15 @@ void PresenterCanvasHelper::SetDeviceColor(
     rendering::RenderState& rRenderState,
     const util::Color aColor)
 {
-    if (rRenderState.DeviceColor.getLength() >= 3)
+    // Other component counts then 4 (RGBA) are not accepted (anymore).
+
+    OSL_ASSERT(rRenderState.DeviceColor.getLength() == 4);
+    if (rRenderState.DeviceColor.getLength() == 4)
     {
         rRenderState.DeviceColor[0] = ((aColor >> 16) & 0x0ff) / 255.0;
         rRenderState.DeviceColor[1] = ((aColor >> 8) & 0x0ff) / 255.0;
         rRenderState.DeviceColor[2] = ((aColor >> 0) & 0x0ff) / 255.0;
-
-        if (rRenderState.DeviceColor.getLength() >= 4)
-            rRenderState.DeviceColor[3] = ((aColor >> 24) & 0x0ff) / 255.0;
+        rRenderState.DeviceColor[3] = 1.0 - ((aColor >> 24) & 0x0ff) / 255.0;
     }
 }
 
