@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: border.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -173,6 +173,13 @@ Color TpBorderRGBColor( const Color& rColor )
 }
 
 // -----------------------------------------------------------------------
+void lcl_SetDecimalDigitsTo1(MetricField& rField)
+{
+    sal_Int64 nMin = rField.Denormalize( rField.GetMin( FUNIT_TWIP ) );
+    rField.SetDecimalDigits(1);
+    rField.SetMin( rField.Normalize( nMin ), FUNIT_TWIP );
+}
+// -----------------------------------------------------------------------
 
 SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
                                     const SfxItemSet& rCoreAttrs )
@@ -266,7 +273,6 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
         {
             case FUNIT_M:
             case FUNIT_KM:
-            case FUNIT_CM:
                 eFUnit = FUNIT_MM;
                 break;
             default: ; //prevent warning
@@ -320,11 +326,12 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
     }
     if(!mbUseMarginItem && eFUnit == FUNIT_MM && SFX_MAPUNIT_TWIP == rCoreAttrs.GetPool()->GetMetric( GetWhich( SID_ATTR_BORDER_INNER ) ))
     {
-        aLeftMF.SetDecimalDigits(1);
-        aRightMF.SetDecimalDigits(1);
-        aTopMF.SetDecimalDigits(1);
-        aBottomMF.SetDecimalDigits(1);
-        aEdShadowSize.SetDecimalDigits(1);
+        //#i91548# changing the number of decimal digits changes the minimum values, too
+        lcl_SetDecimalDigitsTo1(aLeftMF);
+        lcl_SetDecimalDigitsTo1(aRightMF);
+        lcl_SetDecimalDigitsTo1(aTopMF);
+        lcl_SetDecimalDigitsTo1(aBottomMF);
+        lcl_SetDecimalDigitsTo1(aEdShadowSize);
     }
 
     svx::FrameSelFlags nFlags = svx::FRAMESEL_OUTER;
