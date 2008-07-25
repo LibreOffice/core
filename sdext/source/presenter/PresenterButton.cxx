@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterButton.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -331,7 +331,7 @@ void SAL_CALL PresenterButton::windowPaint (const css::awt::PaintEvent& rEvent)
         rendering::RenderState aRenderState(
             geometry::AffineMatrix2D(1,0,0, 0,1,0),
             PresenterGeometryHelper::CreatePolygon(rEvent.UpdateRect, mxCanvas->getDevice()),
-            Sequence<double>(3),
+            Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
 
         mxCanvas->drawBitmap(xBitmap, aViewState, aRenderState);
@@ -489,7 +489,7 @@ void PresenterButton::RenderButton (
     const geometry::RealRectangle2D aTextBBox (xLayout->queryTextBounds());
 
     rendering::RenderState aRenderState (geometry::AffineMatrix2D(1,0,0, 0,1,0), NULL,
-        Sequence<double>(3), rendering::CompositeOperation::SOURCE);
+        Sequence<double>(4), rendering::CompositeOperation::SOURCE);
     PresenterCanvasHelper::SetDeviceColor(aRenderState, rpFont->mnColor);
     aRenderState.AffineTransform.m02 = (rSize.Width - aTextBBox.X2 + aTextBBox.X1)/2;
     aRenderState.AffineTransform.m12 = rSize.Height - aTextBBox.Y2 - gnVerticalBorder - nBottomOffset;
