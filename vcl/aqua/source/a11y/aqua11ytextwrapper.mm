@@ -8,7 +8,7 @@
  *
  * $RCSfile: aqua11ytextwrapper.mm,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +45,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
-// Wrapper for XAccessibleText and XAccessibleEditableText
+// Wrapper for XAccessibleText, XAccessibleEditableText and XAccessibleMultiLineText
 
 @implementation AquaA11yTextWrapper : NSObject
 
@@ -85,7 +85,11 @@ using namespace ::rtl;
     if ( start != end ) {
         return [ NSValue valueWithRange: NSMakeRange ( start, end - start ) ]; // true selection
     } else {
-        return [ NSValue valueWithRange: NSMakeRange ( [ wrapper accessibleText ] -> getCaretPosition(), 0 ) ]; // insertion point
+        long caretPos = [ wrapper accessibleText ] -> getCaretPosition();
+        if ( caretPos < 0 || caretPos > [ wrapper accessibleText ] -> getCharacterCount() ) {
+            return nil;
+        }
+        return [ NSValue valueWithRange: NSMakeRange ( caretPos, 0 ) ]; // insertion point
     }
 }
 
@@ -144,7 +148,31 @@ using namespace ::rtl;
             NSAccessibilityBoundsForRangeParameterizedAttribute, 
             NSAccessibilityStyleRangeForIndexParameterizedAttribute, 
             NSAccessibilityRTFForRangeParameterizedAttribute, 
+            NSAccessibilityLineForIndexParameterizedAttribute, 
+            NSAccessibilityRangeForLineParameterizedAttribute, 
             nil ];
+}
+
++(id)lineForIndexAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)index {
+    NSNumber * lineNumber = nil;
+    try {
+        sal_Int32 line = [ wrapper accessibleMultiLineText ] -> getLineNumberAtIndex ( (sal_Int32) [ index intValue ] );
+        lineNumber = [ NSNumber numberWithInt: line ];
+    } catch ( IndexOutOfBoundsException & e ) {
+        // empty
+    }
+    return lineNumber;
+}
+
++(id)rangeForLineAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)line {
+    NSValue * range = nil;
+    try {
+        TextSegment textSegment = [ wrapper accessibleMultiLineText ] -> getTextAtLineNumber ( [ line intValue ] );
+        range = [ NSValue valueWithRange: NSMakeRange ( textSegment.SegmentStart, textSegment.SegmentEnd - textSegment.SegmentStart ) ];
+    } catch ( IndexOutOfBoundsException & e ) {
+        // empty
+    }
+    return range;
 }
 
 +(id)stringForRangeAttributeForElement:(AquaA11yWrapper *)wrapper forParameter:(id)range {
