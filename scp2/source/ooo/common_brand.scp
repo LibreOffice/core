@@ -1,13 +1,13 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: common_brand.scp,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -775,15 +775,11 @@ ProfileItem gid_Brand_Profileitem_Bootstrap_Userinstall
     Order = 3;
     Key = "UserInstallation";
   #ifdef WNT
-    Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME%USERDIRPRODUCTVERSION";
-  #elif defined MACOSX
-  #if defined QUARTZ 
-    Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME-aqua/%USERDIRPRODUCTVERSION";
-  #else 
     Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME/%USERDIRPRODUCTVERSION";
-  #endif
+  #elif defined MACOSX
+    Value = "$SYSUSERCONFIG/%ONEWORDPRODUCTNAME/%USERDIRPRODUCTVERSION";
   #else
-    Value = "$SYSUSERCONFIG/.%LCONEWORDPRODUCTNAME%USERDIRPRODUCTVERSION";
+    Value = "$SYSUSERCONFIG/.%LCONEWORDPRODUCTNAME/%USERDIRPRODUCTVERSION";
   #endif
     StandaloneValue = "$ORIGIN/..";
 End
@@ -825,7 +821,7 @@ ProfileItem gid_Brand_ProfileItem_Soffice_Macosxrc2
     Key = "MacOSXIntegrationDefaultFile";
     Value = "${$ORIGIN/bootstraprc:BaseInstallation}/presets/macosxrc.txt";
 End
-#endif 
+#endif
 
 #ifdef WNT
 ProfileItem gid_Brand_Profileitem_Soffice_Hideeula
