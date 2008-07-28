@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -33,11 +33,11 @@ PRJ=.
 
 PRJNAME=stax
 TARGET=stax
+USE_JAVAVER=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
-.INCLUDE : tg_javav.mk
 .INCLUDE : antsettings.mk
 
 .IF "$(SOLAR_JAVA)" != ""
