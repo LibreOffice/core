@@ -8,7 +8,7 @@
 #
 # $RCSfile: MAKEFILE.MK,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -43,9 +43,10 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- #105371#
 .IF "$(COM)"=="GCC"
-CDEFS += -UWINVER -DWINVER=0x0400
+CDEFS += -UWINVER -DWINVER=0x0400 -D_WIN32_WINNT=0x0501
 .ELSE
-CFLAGS += -DWINVER=0x0400
+CFLAGS += -DWINVER=0x0400 -D_WIN32_WINNT=0x0501
+
 .ENDIF
 
 # --- Files --------------------------------------------------------
