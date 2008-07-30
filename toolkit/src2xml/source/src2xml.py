@@ -183,7 +183,11 @@ def post_process (s):
     s = s.replace (' def-button="true"', ' default="true"')
     return s
 
-XML_HEADER = '<?xml version="1.0" encoding="UTF-8"?>\n'
+XML_HEADER = '''<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is a template.  i18n translation is not performed in-place;
+     i18n translated XML files are generated from this template by
+     transex3/layout/tralay.  !-->
+'''
 
 def do_one_file (file_name, options):
     str = XML_HEADER
