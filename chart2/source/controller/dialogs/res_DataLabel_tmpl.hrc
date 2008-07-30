@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: res_DataLabel_tmpl.hrc,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,7 +57,7 @@ CheckBox CB_VALUE_AS_NUMBER \
 { \
     HelpID = HID_SCH_DATALABEL_VALUE; \
     Pos = MAP_APPFONT ( xpos , ypos  ) ; \
-    Size = MAP_APPFONT ( 120 , 10 ) ; \
+    Size = MAP_APPFONT ( 136 , 10 ) ; \
     TabStop = TRUE ; \
     Text [ en-US ] = "Show value as ~number" ; \
 };   \
@@ -73,7 +73,7 @@ CheckBox CB_VALUE_AS_PERCENTAGE \
 { \
     HelpID = HID_SCH_DATALABEL_PERCENT; \
     Pos = MAP_APPFONT ( xpos , ypos+30  ) ; \
-    Size = MAP_APPFONT ( 120 , 10 ) ; \
+    Size = MAP_APPFONT ( 136 , 10 ) ; \
     TabStop = TRUE ; \
     Text [ en-US ] = "Show value as ~percentage" ; \
 };   \
@@ -89,7 +89,7 @@ CheckBox CB_CATEGORY \
 { \
     HelpID = HID_SCH_DATALABEL_TEXT; \
     Pos  = MAP_APPFONT ( xpos , ypos+62  ); \
-    Size = MAP_APPFONT ( 120 , 10 ); \
+    Size = MAP_APPFONT ( 182 , 10 ); \
     TabStop = TRUE; \
     Text [ en-US ] = "Show ~category"; \
 }; \
