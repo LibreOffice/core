@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DiagramHelper.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -329,6 +329,13 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram > & xDiagram,
         sal_Int32 nNewGeometry );
+
+    //returns integer from constant group ::com::sun::star::chart::MissingValueTreatment
+    static sal_Int32 getCorrectedMissingValueTreatment(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XDiagram > & xDiagram,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XChartType >& xChartType );
 
 private:
     // not implemented
