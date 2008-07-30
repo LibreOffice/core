@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editeng.cxx,v $
- * $Revision: 1.116 $
+ * $Revision: 1.117 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2482,6 +2482,10 @@ void __EXPORT EditEngine::ParagraphDeleted( sal_uInt16 nPara )
         aNotify.nParagraph = nPara;
         pImpEditEngine->CallNotify( aNotify );
     }
+}
+void EditEngine::ParagraphConnected( USHORT /*nLeftParagraph*/, USHORT /*nRightParagraph*/ )
+{
+    DBG_CHKTHIS( EditEngine, 0 );
 }
 
 sal_Bool __EXPORT EditEngine::FormattingParagraph( sal_uInt16 )
