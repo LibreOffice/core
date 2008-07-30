@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sfxlocal.hrc,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,7 @@
 // Lokale  Resourcen
 //
 // (C) 1996 - 2000 Star Division GmbH, Hamburg, Germany
-// $Author: rt $ $Date: 2008-04-11 13:25:50 $ $Revision: 1.7 $
+// $Author: rt $ $Date: 2008-07-30 09:24:39 $ $Revision: 1.8 $
 // $Logfile:   T:/sfx2/source/inc/sfxlocal.hrv  $ $Workfile:   SFXLOCAL.HRC  $
 //----------------------------------------------------------------------------
 #ifndef _SFXLOCAL_HRC
@@ -47,6 +47,19 @@
 #define STR_SFX_EXPLORERFILE_BUTTONINSERT   (RID_SFX_SFXLOCAL_START +  4)
 #define STR_SFX_IMPORT_ALL                  (RID_SFX_SFXLOCAL_START +  5)
 #define STR_SFX_EXPLORERFILE_EXPORT         (RID_SFX_SFXLOCAL_START +  6)
+
+// Controls --------------------------------------------------------------
+
+#define SFX_CB_PROPERTY_NAME                (RID_SFX_SFXLOCAL_START +  0)
+#define SFX_ED_PROPERTY_VALUE               (RID_SFX_SFXLOCAL_START +  1)
+#define SFX_RB_PROPERTY_YES                 (RID_SFX_SFXLOCAL_START +  2)
+#define SFX_RB_PROPERTY_NO                  (RID_SFX_SFXLOCAL_START +  3)
+#define SFX_LB_PROPERTY_TYPE                (RID_SFX_SFXLOCAL_START +  4)
+#define SFX_PB_PROPERTY_REMOVE              (RID_SFX_SFXLOCAL_START +  5)
+#define SFX_WIN_PROPERTY_YESNO              (RID_SFX_SFXLOCAL_START +  6)
+#define SFX_QB_WRONG_TYPE                   (RID_SFX_SFXLOCAL_START +  7)
+#define SFX_IMG_PROPERTY_REMOVE             (RID_SFX_SFXLOCAL_START +  8)
+#define SFX_IMG_PROPERTY_REMOVE_HC          (RID_SFX_SFXLOCAL_START +  9)
 
 #endif
 
