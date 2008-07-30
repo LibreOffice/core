@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyMaps.cxx,v $
- * $Revision: 1.55 $
+ * $Revision: 1.56 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,6 +145,11 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
 
             case XML_SCH_TYPE_NAMED_SYMBOL:
                 pHdl = new XMLSymbolTypePropertyHdl( true );
+                break;
+
+            case XML_SCH_TYPE_MISSING_VALUE_TREATMENT:
+                pHdl = new XMLEnumPropertyHdl( aXMLChartMissingValueTreatmentEnumMap,
+                                               ::getCppuType((const sal_Int32*)0) );
                 break;
         }
         if( pHdl )
