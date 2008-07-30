@@ -8,9 +8,9 @@
  *
  * $RCSfile: futext.cxx,v $
 <<<<<<< futext.cxx
- * $Revision: 1.65 $
+ * $Revision: 1.66 $
 =======
- * $Revision: 1.65 $
+ * $Revision: 1.66 $
 >>>>>>> 1.63.50.1
  *
  * This file is part of OpenOffice.org.
@@ -438,13 +438,18 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
                                 aDragTimer.Start();
                             }
 
-                            // we need to pick again since SdrEndTextEdit can rebuild the handles list
-                            eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
-                            if( (eHit == SDRHIT_HANDLE) || (eHit == SDRHIT_MARKEDOBJECT) )
+
+                            if ( ! rMEvt.IsRight())
                             {
-                                USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
-                                mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
+                                // we need to pick again since SdrEndTextEdit can rebuild the handles list
+                                eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+                                if( (eHit == SDRHIT_HANDLE) || (eHit == SDRHIT_MARKEDOBJECT) )
+                                {
+                                    USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+                                    mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
+                                }
                             }
+                            bReturn = true;
                         }
                     }
                     else if ( nSlotId != SID_TEXTEDIT &&
