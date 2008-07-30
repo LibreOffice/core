@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.78 $
+ * $Revision: 1.79 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -283,8 +283,7 @@ AquaSalGraphics::AquaSalGraphics()
     , mnRealDPIX( 0 )
     , mnRealDPIY( 0 )
     , mfFakeDPIScale( 1.0 )
-    , mxClipRectsPath( NULL )
-    , mxClipPolysPath( NULL )
+    , mxClipPath( NULL )
     , maLineColor( COL_WHITE )
     , maFillColor( COL_BLACK )
     , mpMacFontData( NULL )
@@ -310,8 +309,7 @@ AquaSalGraphics::~AquaSalGraphics()
         Application::RemoveUserEvent( mnUpdateGraphicsEvent );
     }
 */
-    CGPathRelease( mxClipRectsPath );
-    CGPathRelease( mxClipPolysPath );
+    CGPathRelease( mxClipPath );
     ATSUDisposeStyle( maATSUStyle );
 
     if( mpXorEmulation )
@@ -524,10 +522,11 @@ static void AddPolyPolygonToPath( CGMutablePathRef xPath,
 void AquaSalGraphics::ResetClipRegion()
 {
     // release old path and indicate no clipping
-    CGPathRelease( mxClipRectsPath );
-    mxClipRectsPath = NULL;
-    CGPathRelease( mxClipPolysPath );
-    mxClipPolysPath = NULL;
+    if( mxClipPath )
+    {
+        CGPathRelease( mxClipPath );
+        mxClipPath = NULL;
+    }
     if( CheckContext() )
         SetState();
 }
@@ -536,17 +535,11 @@ void AquaSalGraphics::ResetClipRegion()
 
 void AquaSalGraphics::BeginSetClipRegion( ULONG nRectCount )
 {
-    // release union-of-rectangles clip
-    if( mxClipRectsPath )
+    // release old clip path
+    if( mxClipPath )
     {
-        CGPathRelease( mxClipRectsPath );
-        mxClipRectsPath = NULL;
-    }
-    // release complex polygon clip
-    if( !nRectCount )
-    {
-        CGPathRelease( mxClipPolysPath );
-        mxClipPolysPath = NULL;
+        CGPathRelease( mxClipPath );
+        mxClipPath = NULL;
     }
 }
 
@@ -557,10 +550,10 @@ BOOL AquaSalGraphics::unionClipRegion( long nX, long nY, long nWidth, long nHeig
     if( (nWidth <= 0) || (nHeight <= 0) )
         return TRUE;
 
-    if( !mxClipRectsPath )
-        mxClipRectsPath = CGPathCreateMutable();
+    if( !mxClipPath )
+        mxClipPath = CGPathCreateMutable();
     const CGRect aClipRect = {{nX,nY},{nWidth,nHeight}};
-    CGPathAddRect( mxClipRectsPath, NULL, aClipRect );
+    CGPathAddRect( mxClipPath, NULL, aClipRect );
     return TRUE;
 }
 
@@ -571,9 +564,9 @@ bool AquaSalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& rPolyPol
     if( rPolyPolygon.count() <= 0 )
         return true;
 
-    if( !mxClipPolysPath )
-        mxClipPolysPath = CGPathCreateMutable();
-    AddPolyPolygonToPath( mxClipPolysPath, rPolyPolygon, false );
+    if( !mxClipPath )
+        mxClipPath = CGPathCreateMutable();
+    AddPolyPolygonToPath( mxClipPath, rPolyPolygon, false );
     return true;
 }
 
