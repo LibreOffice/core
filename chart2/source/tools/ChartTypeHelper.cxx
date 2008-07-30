@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartTypeHelper.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
 
 //.............................................................................
 using namespace ::com::sun::star;
@@ -557,6 +558,65 @@ bool ChartTypeHelper::allSeriesAttachedToSameAxis(
     }
 }
 
+uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments( const uno::Reference< XChartType >& xChartType )
+{
+    uno::Sequence < sal_Int32 > aRet;
+    if( !xChartType.is() )
+        return aRet;
+
+    bool bStacked = false;
+    bool bFound=false;
+    bool bAmbiguous=false;
+    StackMode eStackMode = DiagramHelper::getStackModeFromChartType( xChartType, bFound, bAmbiguous, 0 );
+    bStacked = bFound && (StackMode_Y_STACKED == eStackMode);
+
+    rtl::OUString aChartTypeName = xChartType->getChartType();
+    if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) ||
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )
+    {
+        aRet.realloc( 2 );
+        sal_Int32* pSeq = aRet.getArray();
+        *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP;
+        *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::USE_ZERO;
+    }
+    else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA) )
+    {
+        aRet.realloc( bStacked ? 1 : 2 );
+        sal_Int32* pSeq = aRet.getArray();
+        *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::USE_ZERO;
+        if( !bStacked )
+            *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::CONTINUE;
+    }
+    else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE) ||
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET))
+    {
+        aRet.realloc( bStacked ? 2 : 3 );
+        sal_Int32* pSeq = aRet.getArray();
+        *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP;
+        *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::USE_ZERO;
+        if( !bStacked )
+            *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::CONTINUE;
+    }
+    else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
+    {
+        aRet.realloc( 3 );
+        sal_Int32* pSeq = aRet.getArray();
+        *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::CONTINUE;
+        *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP;
+        *pSeq++ = ::com::sun::star::chart::MissingValueTreatment::USE_ZERO;
+    }
+    else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) ||
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
+    {
+        aRet.realloc( 0 );
+    }
+    else
+    {
+        OSL_ENSURE( false, "unknown charttype" );
+    }
+
+    return aRet;
+}
 
 //.............................................................................
 } //namespace chart
