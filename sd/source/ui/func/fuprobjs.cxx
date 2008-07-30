@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuprobjs.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,7 +108,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
     List* pList = pOutlinerView->CreateSelectionList();
     Paragraph* pPara = (Paragraph*)pList->First();
     nDepth = pOutl->GetDepth((USHORT)pOutl->GetAbsPos( pPara ) );
-    bool bPage = pPara->HasFlag( PARAFLAG_ISPAGE );
+    bool bPage = pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE );
 
     while( pPara )
     {
@@ -120,7 +120,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
             break;
         }
 
-        if( pPara->HasFlag( PARAFLAG_ISPAGE ) != bPage )
+        if( pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE ) != bPage )
         {
             bUnique = FALSE;
             break;
