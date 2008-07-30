@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframeview.mm,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -344,14 +344,15 @@ static const struct ExceptionalKey
 
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame
 {
-	mDraggingDestinationHandler = nil;
-    mpFrame = pFrame;
-    if ((self = [super initWithFrame: [NSWindow contentRectForFrameRect: [mpFrame->getWindow() frame] styleMask: mpFrame->mnStyleMask]]) != nil)
+    if ((self = [super initWithFrame: [NSWindow contentRectForFrameRect: [pFrame->getWindow() frame] styleMask: pFrame->mnStyleMask]]) != nil)
     {
+        mDraggingDestinationHandler = nil;
+        mpFrame = pFrame;
         mMarkedRange = NSMakeRange(NSNotFound, 0);
         mSelectedRange = NSMakeRange(NSNotFound, 0);
         mpReferenceWrapper = nil;
 		mpMouseEventListener = nil;
+        mpLastSuperEvent = nil;
     }
 
     return self;
@@ -956,8 +957,14 @@ static const struct ExceptionalKey
     {
         if( ! [self sendSingleCharacter:mpLastEvent] )
         {
-            if( [NSApp respondsToSelector: @selector(sendSuperEvent:)] )
+            /* prevent recursion */
+            if( mpLastEvent != mpLastSuperEvent && [NSApp respondsToSelector: @selector(sendSuperEvent:)] )
+            {
+                id pLastSuperEvent = mpLastSuperEvent;
+                mpLastSuperEvent = mpLastEvent;
                 [NSApp performSelector:@selector(sendSuperEvent:) withObject: mpLastEvent];
+                mpLastSuperEvent = pLastSuperEvent;
+            }
         }
     }
 }
