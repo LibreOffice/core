@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlview.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -493,7 +493,7 @@ Paragraph* OutlineView::GetPrevTitle(const Paragraph* pPara)
         while(nPos)
         {
             pPara = mpOutliner->GetParagraph(--nPos);
-            if( pPara->HasFlag(PARAFLAG_ISPAGE) )
+            if( mpOutliner->HasParaFlag(pPara, PARAFLAG_ISPAGE) )
             {
                 return const_cast< Paragraph* >( pPara );
             }
@@ -518,7 +518,7 @@ Paragraph* OutlineView::GetNextTitle(const Paragraph* pPara)
     do
     {
         pResult = mpOutliner->GetParagraph(++nPos);
-        if( pResult && pResult->HasFlag(PARAFLAG_ISPAGE) )
+        if( pResult && mpOutliner->HasParaFlag(pResult, PARAFLAG_ISPAGE) )
             return pResult;
     }
     while( pResult );
@@ -548,7 +548,7 @@ IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner )
 
         UpdateParagraph( nAbsPos );
 
-        if( (nAbsPos == 0) || pPara->HasFlag(PARAFLAG_ISPAGE) || mpOutliner->GetParagraph( nAbsPos-1 )->HasFlag(PARAFLAG_ISPAGE) )
+        if( (nAbsPos == 0) || mpOutliner->HasParaFlag(pPara,PARAFLAG_ISPAGE) || mpOutliner->HasParaFlag(mpOutliner->GetParagraph( nAbsPos-1 ), PARAFLAG_ISPAGE) )
         {
             InsertSlideForParagraph( pPara );
             InvalidateSlideNumberArea();
@@ -565,7 +565,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
 
     OutlineViewPageChangesGuard aGuard(this);
 
-    pPara->SetFlag( PARAFLAG_ISPAGE );
+    mpOutliner->SetParaFlag( pPara, PARAFLAG_ISPAGE );
     // wieviele Titel sind vor dem neuen Titelabsatz?
     ULONG nExample = 0L;            // Position der "Vorbild"seite
     ULONG nTarget  = 0L;            // Einfuegeposition
@@ -689,7 +689,7 @@ IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner )
     OutlineViewPageChangesGuard aGuard(this);
 
     Paragraph* pPara = pOutliner->GetHdlParagraph();
-    if( pPara->HasFlag( PARAFLAG_ISPAGE ) )
+    if( pOutliner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
     {
         // wieviele Titel sind vor dem fraglichen Titelabsatz?
         ULONG nPos = 0L;
@@ -753,7 +753,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
     OutlineViewPageChangesGuard aGuard(this);
 
     Paragraph* pPara = pOutliner->GetHdlParagraph();
-    if( pPara->HasFlag( PARAFLAG_ISPAGE ) && ((pOutliner->GetPrevFlags() & PARAFLAG_ISPAGE) == 0) )
+    if( pOutliner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) && ((pOutliner->GetPrevFlags() & PARAFLAG_ISPAGE) == 0) )
     {
         // the current paragraph is transformed into a slide
 
@@ -771,7 +771,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
             Paragraph*    pParagraph   = (Paragraph*)pList->First();
             while (pParagraph)
             {
-                if( !pParagraph->HasFlag( PARAFLAG_ISPAGE ) && (pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pParagraph ) ) <= 0) )
+                if( !pOutliner->HasParaFlag( pParagraph, PARAFLAG_ISPAGE ) && (pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pParagraph ) ) <= 0) )
                     mnPagesToProcess++;
                 pParagraph = (Paragraph*)pList->Next();
             }
@@ -822,7 +822,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
         }
         pOutliner->UpdateFields();
     }
-    else if( !pPara->HasFlag( PARAFLAG_ISPAGE ) && ((pOutliner->GetPrevFlags() & PARAFLAG_ISPAGE) != 0) )
+    else if( !pOutliner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) && ((pOutliner->GetPrevFlags() & PARAFLAG_ISPAGE) != 0) )
     {
         // the paragraph was a page but now becomes a normal paragraph
 
@@ -917,7 +917,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
             sal_Int16 nDepth = pOutliner->GetDepth( (USHORT) nPara );
             bool bSubTitle = pPage->GetPresObj(PRESOBJ_TEXT) != NULL;
 
-            if( pPara->HasFlag(PARAFLAG_ISPAGE) )
+            if( pOutliner->HasParaFlag(pPara, PARAFLAG_ISPAGE) )
             {
                 pStyleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
             }
@@ -1029,7 +1029,7 @@ IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner )
     Paragraph* pPara = static_cast<Paragraph*>(mpSelectedParas->First());
     while (pPara)
     {
-        if( !pPara->HasFlag(PARAFLAG_ISPAGE) )
+        if( !pOutliner->HasParaFlag(pPara, PARAFLAG_ISPAGE) )
         {
             mpSelectedParas->Remove();
             pPara = static_cast<Paragraph*>(mpSelectedParas->GetCurObject());
@@ -1048,7 +1048,7 @@ IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner )
 
     while(pPara)
     {
-        if( pPara->HasFlag(PARAFLAG_ISPAGE) )                     // eine Seite?
+        if( pOutliner->HasParaFlag(pPara, PARAFLAG_ISPAGE) )                     // eine Seite?
         {
             mpOldParaOrder->Insert(pPara, LIST_APPEND);
             SdPage* pPage = mpDoc->GetSdPage(nPos, PK_STANDARD);
@@ -1089,7 +1089,7 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
     Paragraph*  pPrev = NULL;
     while (pPara && pPara != pSearchIt)
     {
-        if( pPara->HasFlag(PARAFLAG_ISPAGE) )
+        if( pOutliner->HasParaFlag(pPara, PARAFLAG_ISPAGE) )
         {
             nPosNewOrder++;
             pPrev = pPara;
@@ -1340,7 +1340,7 @@ void OutlineView::FillOutliner()
             mpOutliner->SetStyleSheet( mpOutliner->GetAbsPos( pPara ), pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE ) );
         }
 
-        pPara->SetFlag( PARAFLAG_ISPAGE );
+        mpOutliner->SetParaFlag( pPara, PARAFLAG_ISPAGE );
 
         ULONG nPara = mpOutliner->GetAbsPos( pPara );
 
@@ -1465,7 +1465,7 @@ SdPage* OutlineView::GetActualPage()
 
 SdPage* OutlineView::GetPageForParagraph( Paragraph* pPara )
 {
-    if( !pPara->HasFlag(PARAFLAG_ISPAGE) )
+    if( !mpOutliner->HasParaFlag(pPara,PARAFLAG_ISPAGE) )
         pPara = GetPrevTitle(pPara);
 
     sal_uInt32 nPageToSelect = 0;
@@ -1493,7 +1493,7 @@ Paragraph* OutlineView::GetParagraphForPage( ::Outliner* pOutl, SdPage* pPage )
     while( pPara )
     {
         // if this paragraph is a page ...
-        if( pPara->HasFlag(PARAFLAG_ISPAGE) )
+        if( mpOutliner->HasParaFlag(pPara,PARAFLAG_ISPAGE) )
         {
             // see if we already skiped enough pages
             if( 0 == nPagesToSkip )
@@ -1552,7 +1552,7 @@ void OutlineView::SetSelectedPages()
 
     while(pPara)
     {
-        if( !pPara->HasFlag(PARAFLAG_ISPAGE) )
+        if( !mpOutliner->HasParaFlag(pPara, PARAFLAG_ISPAGE) )
         {
             pSelParas->Remove();
             pPara = (Paragraph*) pSelParas->GetCurObject();
@@ -1571,7 +1571,7 @@ void OutlineView::SetSelectedPages()
 
     while(pPara)
     {
-        if( pPara->HasFlag(PARAFLAG_ISPAGE) )                     // eine Seite?
+        if( mpOutliner->HasParaFlag(pPara, PARAFLAG_ISPAGE) )                     // eine Seite?
         {
             SdPage* pPage = mpDoc->GetSdPage(nPos, PK_STANDARD);
             DBG_ASSERT(pPage!=NULL,
@@ -1961,13 +1961,13 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo)
         Size aOffset( 100, 100 );
 
         // paint slide number
-        if( pPara && pPara->HasFlag(PARAFLAG_ISPAGE) )
+        if( pPara && mpOutliner->HasParaFlag(pPara,PARAFLAG_ISPAGE) )
         {
             long nPage = 0; // todo, printing??
             for ( USHORT n = 0; n <= pInfo->mnPara; n++ )
             {
                 Paragraph* p = mpOutliner->GetParagraph( n );
-                if ( p->HasFlag(PARAFLAG_ISPAGE) )
+                if ( mpOutliner->HasParaFlag(p,PARAFLAG_ISPAGE) )
                     nPage++;
             }
 
@@ -2095,7 +2095,7 @@ void OutlineView::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
     {
         Paragraph* pPara = mpOutliner->GetParagraph( nPara );
 
-        bool bPage = pPara->HasFlag( PARAFLAG_ISPAGE  );
+        bool bPage = mpOutliner->HasParaFlag( pPara, PARAFLAG_ISPAGE  );
 
         if( !bPage )
         {
