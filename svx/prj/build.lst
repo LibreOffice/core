@@ -1,6 +1,7 @@
 sx	svx	:	SUN:officenames connectivity xmloff linguistic jvmfwk avmedia configmgr ucb fileaccess NULL
 sx	svx										usr1	-	all	sx_mkout NULL
 sx	svx\inc									nmake	-	all	sx_inc NULL
+sx	svx\uiconfig\layout									nmake	-	all	sx_layout NULL
 sx	svx\prj									get		-	all	sx_prj NULL
 sx	svx\win\res								get		-	all	sx_wres NULL
 sx	svx\os2\res								get		-	all	sx_ores NULL
