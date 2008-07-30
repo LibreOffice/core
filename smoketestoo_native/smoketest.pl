@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: smoketest.pl,v $
 #
-# $Revision: 1.34 $
+# $Revision: 1.35 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -179,7 +179,8 @@ else {
             'can not copy all basic scripts',
             'can not patch bottstrapini',
             'msiexec failed. Maybe you have got an installed version',
-            'deinstallation is incomplete'
+            'deinstallation is incomplete',
+            'this packformat is not supported for this environment'
 );
 
 my $show_NoMessage = 0;
@@ -197,6 +198,7 @@ my $error_copyBasic = 9;
 my $error_patchBootstrap = 10;
 my $error_msiexec = 11;
 my $error_deinst = 12;
+my $error_packformat = 13;
 
 my $command_normal = 0;
 my $command_withoutErrorcheck = 1;
@@ -209,8 +211,11 @@ else {
     $PRODUCT="StarOffice";
 }
 
-if ($ENV{PKGFORMAT} eq "installed") {
+if (($ENV{PKGFORMAT} eq "installed") and (!defined ($ENV{FORCE2ARCHIVE}))) {
     $packpackage = $ENV{PKGFORMAT}; # take it for all environments
+}
+elsif (defined ($ENV{FORCE2ARCHIVE})) {
+    $packpackage = "archive"; # take it for all environments
 }
 $StandDir = $ENV{SOLARSRC} . $PathSeparator;
 $SHIP = defined $ENV{SHIPDRIVE} ? $ENV{SHIPDRIVE} . $PathSeparator : "shipdrive_not_set";
@@ -260,7 +265,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.34 $ ';
+$id_str = ' $Revision: 1.35 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -435,7 +440,6 @@ sub doTest {
     # install office (error 2)
 
     $basedir = doInstall ("$INSTALLSET$INSTSETNAME$PathSeparator", $installpath);
-    print "$basedir\n";
     $basisdir = findUnique($basedir, 'ure-link');
     $branddir = findUnique($basedir, 'basis-link');
     if ( (defined($ENV{OS})) && ($ENV{OS} eq "MACOSX") ) {
@@ -521,7 +525,7 @@ sub doTest {
 sub doInstall {
     my ($installsetpath, $dest_installdir) = @_;
     my ($DirArray, $mask, $file, $Command, $optdir, $rpmdir, $system, $mach, $basedir, $output_ref, $olddir, $newdir);
-    if ($ENV{PKGFORMAT} eq "installed") {
+    if (($ENV{PKGFORMAT} eq "installed") and (!defined($ENV{FORCE2ARCHIVE}))) {
                 createPath ($dest_installdir, $error_setup);
                 $Command = "$COPY_DIR \"$installsetpath\" \"$dest_installdir\"";
             execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
@@ -538,6 +542,9 @@ sub doInstall {
         }
     }
     elsif (($gui eq "WNT") or ($gui eq $cygwin)) {
+        if (defined($ENV{FORCE2ARCHIVE})) {
+            print_error ($error_messages[$error_packformat], $error_packformat);
+        }
         $mask = "\\.msi\$";
         getSubFiles ("$installsetpath", \@DirArray, $mask);
         if ($#DirArray == -1) {
@@ -622,7 +629,23 @@ sub doInstall {
             return "$sane_destdir/"
 
         } elsif ( (defined($system)) && ($system eq "Linux") ) {
-            if ($ENV{PKGFORMAT} eq "deb") { # default is rpm
+            if (defined ($ENV{FORCE2ARCHIVE}) and ($ENV{FORCE2ARCHIVE} eq "TRUE")) {
+                $optdir = $dest_installdir; #needed for getting work dir at the end
+                   $mask = "\\.tar\\.gz\$";
+                getSubFiles ("$installsetpath", \@DirArray, $mask);
+                if ($#DirArray == -1) {
+                       print_error ("Installationset in $installsetpath is incomplete", 2);
+                }
+                elsif ($#DirArray == 0) {
+                    createPath ($dest_installdir, $error_setup);
+                    $Command = "cd \"$dest_installdir\" && tar xzvf \"$installsetpath$DirArray[0]\"";
+                    execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
+                }
+                else {
+                    print_error ($error_setup, $show_Message);
+                }
+            }
+            elsif ($ENV{PKGFORMAT} eq "deb") { # default is rpm
                 $installsetpath .= "DEBS$PathSeparator";
             $optdir = "$dest_installdir" . "opt" . $PathSeparator;
                 createPath ($optdir, $error_setup);
@@ -662,6 +685,9 @@ sub doInstall {
             }
         }
         elsif ( (defined($system)) && ($system eq "SunOS") ) {
+            if (defined($ENV{FORCE2ARCHIVE})) {
+                print_error ($error_messages[$error_packformat], $error_packformat);
+            }
             @DirArray = ();
                 $mask = "^.ai.pkg.zone.lock";
                         getSubFiles ("/tmp", \@DirArray, $mask);
@@ -706,6 +732,9 @@ sub doInstall {
             $ENV{LD_PRELOAD} = $ld_preload;
         }
         elsif ( (defined($ENV{OS})) && ($ENV{OS} eq "MACOSX") ) {
+            if (defined($ENV{FORCE2ARCHIVE})) {
+                print_error ($error_messages[$error_packformat], $error_packformat);
+            }
             @DirArray = ();
             my $install_dmg;
             getSubFiles ("$installsetpath", \@DirArray, "^[a-zA-Z0-9].*\\.dmg\$");
