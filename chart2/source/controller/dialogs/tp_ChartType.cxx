@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_ChartType.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -962,7 +962,7 @@ IMPL_LINK( ChartTypeTabPage, SelectSubTypeHdl, void *, EMPTYARG )
     {
         ChartTypeParameter aParameter( this->getCurrentParamter() );
         m_pCurrentMainType->adjustParameterToSubType( aParameter );
-        this->fillAllControls( aParameter );
+        this->fillAllControls( aParameter, false );
         if( m_bDoLiveUpdate )
             commitToModel( aParameter );
     }
@@ -1063,10 +1063,10 @@ void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeControll
     rTypeController.showExtraControls( this, Point( nXPos, nYPos ), aRemainingSize );
 }
 
-void ChartTypeTabPage::fillAllControls( const ChartTypeParameter& rParameter, const uno::Reference< beans::XPropertySet >& /*xTemplateProps*/ )
+void ChartTypeTabPage::fillAllControls( const ChartTypeParameter& rParameter, bool bAlsoResetSubTypeList )
 {
     m_nChangingCalls++;
-    if( m_pCurrentMainType )
+    if( m_pCurrentMainType && bAlsoResetSubTypeList )
     {
         bool bIsHighContrast = ( true && GetDisplayBackground().GetColor().IsDark() );
         m_pCurrentMainType->fillSubTypeList( m_aSubTypeList, bIsHighContrast, rParameter );
@@ -1115,7 +1115,7 @@ void ChartTypeTabPage::initializePage()
 
             aParameter.bSortByXValues = lcl_getSortByXValues( m_xChartModel );
 
-            this->fillAllControls( aParameter, xTemplateProps );
+            this->fillAllControls( aParameter );
             if( m_pCurrentMainType )
                 m_pCurrentMainType->fillExtraControls(aParameter,m_xChartModel,xTemplateProps);
             break;
