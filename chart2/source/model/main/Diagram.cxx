@@ -8,7 +8,7 @@
  *
  * $RCSfile: Diagram.cxx,v $
  *
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,7 +83,8 @@ enum
     PROP_DIAGRAM_RIGHT_ANGLED_AXES,
     PROP_DIAGRAM_PERSPECTIVE,
     PROP_DIAGRAM_ROTATION_HORIZONTAL,
-    PROP_DIAGRAM_ROTATION_VERTICAL
+    PROP_DIAGRAM_ROTATION_VERTICAL,
+    PROP_DIAGRAM_MISSING_VALUE_TREATMENT
 };
 
 void lcl_AddPropertiesToVector(
@@ -155,6 +156,13 @@ void lcl_AddPropertiesToVector(
                   PROP_DIAGRAM_ROTATION_VERTICAL,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U( "MissingValueTreatment" ),
+                  PROP_DIAGRAM_MISSING_VALUE_TREATMENT,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
 }
 
 void lcl_AddDefaultsToMap(
