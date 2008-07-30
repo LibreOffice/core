@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxwindows.cxx,v $
- * $Revision: 1.68 $
+ * $Revision: 1.69 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2127,7 +2127,11 @@ sal_Int16 VCLXMessageBox::execute() throw(::com::sun::star::uno::RuntimeExceptio
     return pBox ? pBox->Execute() : 0;
 }
 
-
+::com::sun::star::awt::Size SAL_CALL VCLXMessageBox::getMinimumSize() throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return ::com::sun::star::awt::Size( 250, 100 );
+}
 
 //  ----------------------------------------------------
 //  class VCLXDialog
@@ -3275,6 +3279,19 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             break;
     }
 }
+
+::com::sun::star::awt::Size SAL_CALL VCLXScrollBar::implGetMinimumSize( Window* p ) throw(::com::sun::star::uno::RuntimeException)
+{
+    long n = p->GetSettings().GetStyleSettings().GetScrollBarSize();
+    return ::com::sun::star::awt::Size( n, n );
+}
+
+::com::sun::star::awt::Size SAL_CALL VCLXScrollBar::getMinimumSize() throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return implGetMinimumSize( GetWindow() );
+}
+
 
 //  ----------------------------------------------------
 //  class VCLXEdit
