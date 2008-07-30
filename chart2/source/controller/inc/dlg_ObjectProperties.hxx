@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlg_ObjectProperties.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,6 +56,7 @@ public:
     bool HasRegressionProperties() const;
     bool ProvidesSecondaryYAxis() const;
     bool ProvidesOverlapAndGapWidth() const;
+    bool ProvidesBarConnectors() const;
     bool HasAreaProperties() const;
     bool HasLineProperties() const;
     bool HasSymbolProperties() const;
@@ -63,6 +64,7 @@ public:
     bool CanAxisLabelsBeStaggered() const;
     bool HasNumberProperties() const;
     bool ProvidesStartingAngle() const;
+    bool ProvidesMissingValueTreatments() const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
         getDocument() const;
@@ -79,6 +81,7 @@ private:
     bool m_bHasRegressionProperties;
     bool m_bProvidesSecondaryYAxis;
     bool m_bProvidesOverlapAndGapWidth;
+    bool m_bProvidesBarConnectors;
     bool m_bHasAreaProperties;
     bool m_bHasLineProperties;
     bool m_bHasSymbolProperties;
@@ -86,6 +89,7 @@ private:
     bool m_bCanAxisLabelsBeStaggered;
     bool m_bHasNumberProperties;
     bool m_bProvidesStartingAngle;
+    bool m_bProvidesMissingValueTreatments;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > m_xChartDocument;
 };
