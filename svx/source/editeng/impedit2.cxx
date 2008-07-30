@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impedit2.cxx,v $
- * $Revision: 1.122 $
+ * $Revision: 1.123 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2161,6 +2161,8 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
     USHORT nParagraphTobeDeleted = aEditDoc.GetPos( pRight );
     DeletedNodeInfo* pInf = new DeletedNodeInfo( (ULONG)pRight, nParagraphTobeDeleted );
     aDeletedNodes.Insert( pInf, aDeletedNodes.Count() );
+
+    GetEditEnginePtr()->ParagraphConnected( aEditDoc.GetPos( pLeft ), aEditDoc.GetPos( pRight ) );
 
 #ifndef SVX_LIGHT
     if ( IsUndoEnabled() && !IsInUndo() )
