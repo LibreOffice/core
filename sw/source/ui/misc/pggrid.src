@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pggrid.src,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -195,7 +195,7 @@ TabPage TP_TEXTGRID_PAGE
     CheckBox        CB_RUBYBELOW
     {
         Pos = MAP_APPFONT ( 14 , 112 ) ;
-        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Size = MAP_APPFONT ( 237 , 10 ) ;
         Text [ en-US ] = "Ruby text below/left from base text" ;
     };
     FixedLine       FL_DISPLAY
@@ -207,13 +207,13 @@ TabPage TP_TEXTGRID_PAGE
     CheckBox        CB_DISPLAY
     {
         Pos = MAP_APPFONT ( 12 , 139 ) ;
-        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
         Text [ en-US ] = "Display grid" ;
     };
     CheckBox        CB_PRINT
     {
         Pos = MAP_APPFONT ( 18 , 154 ) ;
-        Size = MAP_APPFONT ( 106 , 10 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
         Text [ en-US ] = "Print grid" ;
     };
     FixedText       FT_COLOR
