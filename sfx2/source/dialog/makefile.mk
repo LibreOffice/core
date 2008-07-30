@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.42 $
+# $Revision: 1.43 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -50,6 +50,7 @@ EXCEPTIONSFILES=\
         $(SLO)$/partwnd.obj         \
         $(SLO)$/recfloat.obj        \
         $(SLO)$/templdlg.obj        \
+        $(SLO)$/dinfdlg.obj         \
         $(SLO)$/newerverwarn.obj
 
 SLOFILES =\
@@ -57,7 +58,6 @@ SLOFILES =\
         $(SLO)$/about.obj           \
         $(SLO)$/alienwarn.obj       \
         $(SLO)$/basedlgs.obj		\
-        $(SLO)$/dinfdlg.obj			\
         $(SLO)$/dinfedt.obj			\
         $(SLO)$/dockwin.obj			\
         $(SLO)$/intro.obj			\
