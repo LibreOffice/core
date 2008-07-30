@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -53,6 +53,7 @@ ULFFILES = \
     UIText.ulf 
     
 MLFFILES = $(foreach,i,$(ULFFILES) $(COMMONMISC)$/$(TARGET)$/$(i:b).mlf)
+UULFFILES = $(COMMONMISC)$/$(TARGET)$/Nsis.uulf
 
 # --- Targets ------------------------------------------------------
 
@@ -60,6 +61,6 @@ MLFFILES = $(foreach,i,$(ULFFILES) $(COMMONMISC)$/$(TARGET)$/$(i:b).mlf)
 
 .IF "$(GUI)"=="WNT"
 
-ALLTAR : $(MLFFILES)
+ALLTAR : $(MLFFILES) $(UULFFILES)
 
 .ENDIF
