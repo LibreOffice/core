@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartTypeHelper.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,6 +67,10 @@ public:
     static ::com::sun::star::uno::Sequence < sal_Int32 > getSupportedLabelPlacements(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Bool bSwapXAndY
         , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& xSeries );
+
+    //returns sequence of ::com::sun::star::chart::MissingValueTreatment
+    static ::com::sun::star::uno::Sequence < sal_Int32 > getSupportedMissingValueTreatments(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
 
     static ::com::sun::star::drawing::Direction3D getDefaultSimpleLightDirection( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
     static ::com::sun::star::drawing::Direction3D getDefaultRealisticLightDirection( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
