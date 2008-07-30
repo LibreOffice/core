@@ -1,3 +1,34 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: wrapper.hxx,v $
+ *
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 #ifndef WRAPPER_HXX
 #define WRAPPER_HXX
 
@@ -5,7 +36,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <cstring>
 
@@ -13,7 +43,7 @@ namespace css = com::sun::star;
 
 namespace layout
 {
-// Window
+
 class WindowImpl
 {
   public:
@@ -63,7 +93,6 @@ class WindowImpl
     }
 };
 
-// Window/Control
 class ControlImpl : public WindowImpl
 {
   public:
@@ -71,14 +100,6 @@ class ControlImpl : public WindowImpl
         : WindowImpl( pCtx, xPeer, pWindow ) {}
 };
 
-class ImageImpl
-{
-  public:
-    css::uno::Reference< css::graphic::XGraphic > mxGraphic;
-    ImageImpl( const char *pName );
-};
-
-// Window/Control/Edit
 inline WindowImpl &Window::getImpl() const
 { return *(static_cast< WindowImpl * >( mpImpl )); }
 
@@ -104,12 +125,12 @@ inline WindowImpl &Window::getImpl() const
         , other_par( new other_par##Impl( Window::GetPeer() ) ) \
     { \
     } \
-    t::t( Window *pParent, WinBits nBits) \
+    t::t( Window *pParent, WinBits nBits ) \
         : win_par( new t##Impl( pParent->getContext(), Window::CreatePeer( pParent, nBits, unoName ), this ) ) \
         , other_par( new other_par##Impl( Window::GetPeer() ) ) \
     { \
     }
 
-}; // end namespace layout
+} // namespace layout
 
 #endif // WRAPPER_HXX
