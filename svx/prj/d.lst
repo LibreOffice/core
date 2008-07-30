@@ -658,3 +658,4 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\table
 ..\inc\svx\selectioncontroller.hxx %_DEST%\inc%_EXT%\svx\selectioncontroller.hxx
 ..\inc\svx\optimprove.hxx %_DEST%\inc%_EXT%\svx\optimprove.hxx
 
+..\%__SRC%\bin\*-layout.zip %_DEST%\pck%_EXT%\*.*
