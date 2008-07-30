@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salnativewidgets.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1126,10 +1126,8 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
     if( nType == CTRL_WINDOW_BACKGROUND )
     {
         CGRect aRect = { { 0, 0 }, { 0, 0 } };
-        if( mxClipRectsPath )
-            aRect = CGPathGetBoundingBox( mxClipRectsPath );
-        else if( mxClipPolysPath )
-            aRect = CGPathGetBoundingBox( mxClipPolysPath );
+        if( mxClipPath )
+            aRect = CGPathGetBoundingBox( mxClipPath );
         if( aRect.size.width != 0 && aRect.size.height != 0 )
             buttonRect.Intersection( Rectangle( Point( aRect.origin.x, aRect.origin.y ),
                                                 Size( aRect.size.width, aRect.size.height ) ) );
