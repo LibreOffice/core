@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuinsfil.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -638,7 +638,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     Paragraph*     pPara     = (Paragraph*)pList->First();
 
     // wo soll eingefuegt werden?
-    while( !pPara->HasFlag( PARAFLAG_ISPAGE ) )
+    while( !pDocliner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
     {
         pPara = pDocliner->GetParent(pPara);
     }
@@ -650,7 +650,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     while (pPara)
     {
         ULONG nPos = pDocliner->GetAbsPos( pPara );
-        if ( pPara->HasFlag( PARAFLAG_ISPAGE ) )
+        if ( pDocliner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
             nPage++;
         pPara = pDocliner->GetParagraph( nPos - 1 );
     }
@@ -694,7 +694,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
         while (pPara)
         {
             ULONG nPos = pOutliner->GetAbsPos( pPara );
-            if( pPara->HasFlag( PARAFLAG_ISPAGE ) )
+            if( pOutliner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
                 nNewPages++;
             pPara = pOutliner->GetParagraph( ++nPos );
         }
@@ -731,7 +731,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
                 pDocliner->SetStyleSheet( nTargetPos, pOutlStyle );
             }
 
-            if( pSourcePara->HasFlag( PARAFLAG_ISPAGE ) )
+            if( pDocliner->HasParaFlag( pSourcePara, PARAFLAG_ISPAGE ) )
             {
                 nNewPages++;
                 if( pProgress )
