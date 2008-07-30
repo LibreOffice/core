@@ -1,3 +1,34 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: wfield.cxx,v $
+ *
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 #include "wrapper.hxx"
 
 #include <comphelper/processfactory.hxx>
@@ -19,7 +50,7 @@ class EditImpl : public ControlImpl,
                  public ::cppu::WeakImplHelper1< awt::XTextListener >
 {
     Link maModifyHdl;
-  public:
+public:
     uno::Reference< awt::XTextComponent > mxEdit;
     EditImpl( Context *pCtx, const PeerHandle &xPeer, Window *pWindow )
         : ControlImpl( pCtx, xPeer, pWindow )
@@ -72,7 +103,7 @@ void Edit::SetModifyHdl( const Link& rLink )
 }
 
 DECL_CONSTRUCTOR_IMPLS( Edit, Control, "edit" );
-DECL_GET_IMPL_IMPL( Edit )
+DECL_GET_IMPL_IMPL( Edit );
 
 // Window/Control/Edit/MultiLineEdit
 class MultiLineEditImpl : public EditImpl
@@ -85,14 +116,16 @@ public:
 };
 
 DECL_CONSTRUCTOR_IMPLS( MultiLineEdit, Edit, "multilineedit" );
-DECL_GET_IMPL_IMPL( MultiLineEdit )
+DECL_GET_IMPL_IMPL( MultiLineEdit );
 
 // Window/Control/Edit/SpinField
 class SpinFieldImpl : public EditImpl
 {
-  public:
+public:
     SpinFieldImpl( Context *pCtx, const PeerHandle &xPeer, Window *pWindow )
-        : EditImpl( pCtx, xPeer, pWindow ) {}
+        : EditImpl( pCtx, xPeer, pWindow )
+    {
+    }
 };
 
 DECL_CONSTRUCTOR_IMPLS( SpinField, Edit, "spinfield" );
@@ -100,46 +133,54 @@ DECL_CONSTRUCTOR_IMPLS( SpinField, Edit, "spinfield" );
 // Window/Control/Edit/SpinField/NumericField
 class NumericFieldImpl : public SpinFieldImpl
 {
-  public:
+public:
     NumericFieldImpl( Context *pCtx, const PeerHandle &xPeer, Window *pWindow )
-        : SpinFieldImpl( pCtx, xPeer, pWindow ) {}
+        : SpinFieldImpl( pCtx, xPeer, pWindow )
+    {
+    }
 };
 
 // Window/Control/Edit/SpinField/MetricField
 class MetricFieldImpl : public SpinFieldImpl
 {
-  public:
+public:
     MetricFieldImpl( Context *pCtx, const PeerHandle &xPeer, Window *pWindow )
-        : SpinFieldImpl( pCtx, xPeer, pWindow ) {}
+        : SpinFieldImpl( pCtx, xPeer, pWindow )
+    {
+    }
 };
 
-DECL_GET_IMPL_IMPL( SpinField )
-DECL_GET_IMPL_IMPL( NumericField )
-DECL_GET_IMPL_IMPL( MetricField )
+DECL_GET_IMPL_IMPL( SpinField );
+DECL_GET_IMPL_IMPL( NumericField );
+DECL_GET_IMPL_IMPL( MetricField );
 
 // FormatterBase
 class FormatterBaseImpl
 {
-  protected:
+protected:
     PeerHandle mxPeer;
-  public:
+public:
     explicit FormatterBaseImpl( const PeerHandle &xPeer )
-        : mxPeer( xPeer ) {};
+        : mxPeer( xPeer )
+    {
+    };
 };
 
 class NumericFormatterImpl : public FormatterBaseImpl
 {
-  public:
+public:
     uno::Reference< awt::XCurrencyField > mxField;
     explicit NumericFormatterImpl( const PeerHandle &xPeer )
         : FormatterBaseImpl( xPeer )
-        , mxField( xPeer, uno::UNO_QUERY ) {}
+        , mxField( xPeer, uno::UNO_QUERY )
+    {
+    }
 
     // FIXME: burn that CPU ! cut/paste from vclxwindows.cxx
     double valueToDouble( sal_Int64 nValue )
     {
         sal_Int16 nDigits = mxField->getDecimalDigits();
-        double n = nValue;
+        double n = (double)nValue;
         for ( sal_uInt16 d = 0; d < nDigits; d++ )
             n /= 10;
         return n;
@@ -156,11 +197,13 @@ class NumericFormatterImpl : public FormatterBaseImpl
 
 class MetricFormatterImpl : public FormatterBaseImpl
 {
-  public:
+public:
     uno::Reference< awt::XMetricField > mxField;
     explicit MetricFormatterImpl( const PeerHandle &xPeer )
         : FormatterBaseImpl( xPeer )
-        , mxField( xPeer, uno::UNO_QUERY ) {}
+        , mxField( xPeer, uno::UNO_QUERY )
+    {
+    }
 };
 
 // NumericFormatter
@@ -204,7 +247,9 @@ DECL_CONSTRUCTOR_IMPLS_2( NumericField, SpinField, NumericFormatter, "numericfie
 // MetricFormatter
 
 MetricFormatter::MetricFormatter( FormatterBaseImpl *pImpl )
-    : FormatterBase( pImpl ) {}
+    : FormatterBase( pImpl )
+{
+}
 MetricFormatterImpl& MetricFormatter::getFormatImpl() const
 {    return *( static_cast<MetricFormatterImpl *>( mpFormatImpl ) );   }
 
@@ -252,7 +297,7 @@ public:
     uno::Reference< awt::XComboBox > mxComboBox;
     ComboBoxImpl( Context *pCtx, const PeerHandle &xPeer, Window *pWindow )
         : EditImpl( pCtx, xPeer, pWindow ),
-        mxComboBox( xPeer, uno::UNO_QUERY )
+          mxComboBox( xPeer, uno::UNO_QUERY )
     {
     }
 
@@ -273,10 +318,10 @@ public:
     {
         uno::Sequence< rtl::OUString> aItems( mxComboBox->getItems() );
         rtl::OUString rKey( rStr );
-        for( unsigned int i = 0; aItems.getLength(); i++ )
+        for ( unsigned int i = 0; aItems.getLength(); i++ )
         {
             if ( aItems[ i ] == rKey )
-                return i;
+                return sal::static_int_cast< USHORT >( i );
         }
         return COMBOBOX_ENTRY_NOTFOUND;
     }
@@ -382,7 +427,7 @@ void ComboBox::SetSelectHdl( const Link& rLink )
 }
 
 DECL_CONSTRUCTOR_IMPLS( ComboBox, Edit, "combobox" );
-DECL_GET_IMPL_IMPL( ComboBox )
+DECL_GET_IMPL_IMPL( ComboBox );
 
 // Window/Control/ListBox
 class ListBoxImpl : public ControlImpl,
@@ -394,7 +439,7 @@ public:
     uno::Reference< awt::XListBox > mxListBox;
     ListBoxImpl( Context *pCtx, const PeerHandle &xPeer, Window *pWindow )
         : ControlImpl( pCtx, xPeer, pWindow ),
-        mxListBox( xPeer, uno::UNO_QUERY )
+          mxListBox( xPeer, uno::UNO_QUERY )
     {
     }
 
@@ -423,10 +468,10 @@ public:
     {
         uno::Sequence< rtl::OUString> aItems( mxListBox->getItems() );
         rtl::OUString rKey( rStr );
-        for( unsigned int i = 0; aItems.getLength(); i++ )
+        for ( unsigned int i = 0; aItems.getLength(); i++ )
         {
             if ( aItems[ i ] == rKey )
-                return i;
+                return sal::static_int_cast< USHORT >( i );
         }
         return LISTBOX_ENTRY_NOTFOUND;
     }
@@ -448,7 +493,7 @@ public:
 
     USHORT GetSelectEntryCount() const
     {
-        return mxListBox->getSelectedItems().getLength();
+        return sal::static_int_cast< USHORT >( mxListBox->getSelectedItems().getLength() );
     }
 
     USHORT GetSelectEntryPos( USHORT nSelIndex ) const
@@ -577,6 +622,6 @@ void ListBox::SetClickHdl( const Link& rLink )
 }
 
 DECL_CONSTRUCTOR_IMPLS( ListBox, Control, "listbox" );
-DECL_GET_IMPL_IMPL( ListBox )
+DECL_GET_IMPL_IMPL( ListBox );
 
-}; // end namespace layout
+} // namespace layout
