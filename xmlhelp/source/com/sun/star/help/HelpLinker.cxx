@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: HelpLinker.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -406,6 +406,7 @@ void HelpLinker::link() throw( HelpProcessingException )
         if (!key.empty() && !data.empty())
             hidlistTranslation[key] = data;
     }
+    fileReader.close();
 
     // lastly, initialize the indexBuilder
     if ( (!bExtensionMode || bIndexForExtension) && !helpFiles.empty())
@@ -605,7 +606,6 @@ void HelpLinker::link() throw( HelpProcessingException )
         }
 
     } // while loop over hzip files ending
-
     if( !bExtensionMode )
         std::cout << std::endl;
 
@@ -645,10 +645,6 @@ void HelpLinker::link() throw( HelpProcessingException )
         }
     }
 
-#ifdef SOLARIS
-    if( !bExtensionMode )
-        _exit( 0 );
-#endif
 /*
     /////////////////////////////////////////////////////////////////////////
     /// remove temprary directory for index creation
@@ -685,6 +681,7 @@ void HelpLinker::main(std::vector<std::string> &args, std::string* pExtensionPat
             if (!token.empty())
                 stringList.push_back(token);
         }
+        fileReader.close();
 
         args = stringList;
     }
