@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.90 $
+# $Revision: 1.91 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,9 +47,9 @@ PYTHONPATH:=$(PWD)$/$(BIN):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$
 .ENDIF			# "$(GUI)"=="WNT"
 .EXPORT: PYTHONPATH
 
-.IF "$(CWS_WORK_STAMP)=="" || "$(UPDATER)!=""
+.IF "$(CWS_WORK_STAMP)"=="" || "$(UPDATER)"!=""
 ENABLE_DOWNLOADSETS*=TRUE
-.ENDIF			# "$(CWS_WORK_STAMP)=="" || "$(UPDATER)!=""
+.ENDIF			# "$(CWS_WORK_STAMP)"=="" || "$(UPDATER)"!=""
 .IF "$(FORCE_DOWNLOADSETS)"!=""
 ENABLE_DOWNLOADSETS=TRUE
 .ENDIF			# "$(FORCE_DOWNLOADSETS)"!=""
@@ -116,7 +116,11 @@ PKGFORMAT+=$(MAKETARGETS:e:s/.//)
 .ENDIF			# "$(MAKETARGETS:e)"!=""
 
 .IF "$(PKGFORMAT)"!=""
+.IF "$(FORCE2ARCHIVE)"!=""
+PKGFORMATSWITCH=-format archive
+.ELSE			# "$(FORCE2ARCHIVE)"!=""
 PKGFORMATSWITCH=-format xxx
+.ENDIF			# "$(FORCE2ARCHIVE)"!=""
 .ENDIF			# "$(PKGFORMAT)"!=""
 
 .IF "$(VERBOSE)"=="TRUE"
@@ -134,8 +138,6 @@ updatepack:
 openoffice: $(foreach,i,$(alllangiso) openoffice_$i)
 
 openofficedev: $(foreach,i,$(alllangiso) openofficedev_$i)
-
-openofficedevarchive: $(foreach,i,$(alllangiso) openofficedevarchive_$i)
 
 openofficewithjre: $(foreach,i,$(alllangiso) openofficewithjre_$i)
 
@@ -185,8 +187,6 @@ $(foreach,i,$(alllangiso) openoffice_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) openofficedev_$i) : $(ADDDEPS)
 
-$(foreach,i,$(alllangiso) openofficedevarchive_$i) : $(ADDDEPS)
-
 $(foreach,i,$(alllangiso) openofficewithjre_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $(ADDDEPS)
@@ -213,16 +213,16 @@ $(MAKETARGETS) : $(ADDDEPS)
 
 .IF "$(OS)" == "MACOSX"
 DMGDEPS=$(BIN)$/{osxdndinstall.png DS_Store}
-$(foreach,i,$(alllangiso) {openoffice openofficedev openofficedevarchive openofficewithjre broffice brofficedev brofficewithjre}_$i) : $(DMGDEPS)
+$(foreach,i,$(alllangiso) {openoffice openofficedev openofficewithjre broffice brofficedev brofficewithjre}_$i) : $(DMGDEPS)
 .ENDIF # "$(OS)" == "MACOSX"
 
 .IF "$(PKGFORMAT)"!=""
 $(foreach,i,$(alllangiso) openoffice_$i) : $$@{$(PKGFORMAT:^".")}
 .IF "$(MAKETARGETS)"!="" && "$(PKGFORMAT)"!=""
-.IF "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)" && "$(MAKETARGETS:s/archive//)"=="$(MAKETARGETS)"
+.IF "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
 $(MAKETARGETS) : $$@{$(PKGFORMAT:^".")}
 $(MAKETARGETS){$(PKGFORMAT:^".")} : $(ADDDEPS)
-.ENDIF			# "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)" && "$(MAKETARGETS:s/archive//)"=="$(MAKETARGETS)"
+.ENDIF			# "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
 .ENDIF			# "$(MAKETARGETS)"!="" && "$(PKGFORMAT)"!=""
 openoffice_%{$(PKGFORMAT:^".")} :
 .ELSE			# "$(PKGFORMAT)"!=""
@@ -247,9 +247,6 @@ openofficedev_% :
 .ENDIF			# "$(PKGFORMAT)"!=""
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_Dev -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH) $(VERBOSESWITCH))
     $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product OpenOffice_Dev --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
-
-openofficedevarchive_% :
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_Dev -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -format archive $(VERBOSESWITCH)
 
 .IF "$(PKGFORMAT)"!=""
 $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
@@ -293,10 +290,10 @@ ure_% :
 .IF "$(PKGFORMAT)"!=""
 $(foreach,i,$(alllangiso) broffice_$i) : $$@{$(PKGFORMAT:^".")}
 .IF "$(MAKETARGETS)"!="" && "$(PKGFORMAT)"!=""
-.IF "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)" && "$(MAKETARGETS:s/archive//)"=="$(MAKETARGETS)"
+.IF "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
 $(MAKETARGETS) : $$@{$(PKGFORMAT:^".")}
 $(MAKETARGETS){$(PKGFORMAT:^".")} : $(ADDDEPS)
-.ENDIF			# "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)" && "$(MAKETARGETS:s/archive//)"=="$(MAKETARGETS)"
+.ENDIF			# "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
 .ENDIF			# "$(MAKETARGETS)"!="" && "$(PKGFORMAT)"!=""
 broffice_%{$(PKGFORMAT:^".")} :
 .ELSE			# "$(PKGFORMAT)"!=""
@@ -338,9 +335,9 @@ openoffice:
 
 .IF "$(LOCALPYFILES)"!=""
 .IF "$(PKGFORMAT)"==""
-$(foreach,i,$(alllangiso) openoffice_$i openofficewithjre_$i openofficedev_$i broffice_$i brofficewithjre_$i brofficedev_$i openofficedevarchive_$i ooolanguagepack_$i ooodevlanguagepack_$i sdkoo_$i) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
+$(foreach,i,$(alllangiso) openoffice_$i openofficewithjre_$i openofficedev_$i broffice_$i brofficewithjre_$i brofficedev_$i ooolanguagepack_$i ooodevlanguagepack_$i sdkoo_$i) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
 .ELSE			# "$(PKGFORMAT)"==""
-$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".")} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} broffice_$i{$(PKGFORMAT:^".")} brofficewithjre_$i{$(PKGFORMAT:^".")} brofficedev_$i{$(PKGFORMAT:^".")} openofficedevarchive_$i ooolanguagepack_$i{$(PKGFORMAT:^".")} ooodevlanguagepack_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
+$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".")} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} broffice_$i{$(PKGFORMAT:^".")} brofficewithjre_$i{$(PKGFORMAT:^".")} brofficedev_$i{$(PKGFORMAT:^".")} ooolanguagepack_$i{$(PKGFORMAT:^".")} ooodevlanguagepack_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
 .ENDIF			# "$(PKGFORMAT)"==""
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
