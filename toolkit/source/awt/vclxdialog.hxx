@@ -1,52 +1,67 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: vclxdialog.hxx,v $
+ *
+ * $Revision: 1.4 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 #ifndef LAYOUT_AWT_VCLXDIALOG_HXX
 #define LAYOUT_AWT_VCLXDIALOG_HXX
 
-#include <toolkit/awt/vclxwindow.hxx>
-#include <toolkit/helper/listenermultiplexer.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <comphelper/uno3.hxx>
-
+#include <com/sun/star/awt/XDialog2.hpp>
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
-#include <com/sun/star/awt/XMenuBar.hpp>
-#include <com/sun/star/awt/XDialog2.hpp>
+#include <comphelper/uno3.hxx>
+#include <layout/bin.hxx>
+#include <toolkit/awt/vclxtopwindow.hxx>
 
-#include <com/sun/star/awt/XSimpleTabController.hpp>
-#include "../layout/bin.hxx"
-
-#include <com/sun/star/awt/MaxChildrenException.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-
-#include "forward.hxx"
-
-using namespace toolkit;
-
-//........................................................................
 namespace layoutimpl
 {
-//........................................................................
 
-//====================================================================
-//= VCLXDialog
-//====================================================================
-
-typedef ::cppu::ImplHelper3 < ::com::sun::star::awt::XTopWindow,
-                              ::com::sun::star::awt::XSystemDependentWindowPeer,
-                              ::com::sun::star::awt::XDialog2
-                              >   VCLXDialog_Base;
+typedef ::cppu::ImplHelper1 < ::com::sun::star::awt::XDialog2 > VCLXDialog_Base;
 
 class VCLXDialog :public VCLXWindow
+                 ,public VCLXTopWindow_Base
                  ,public VCLXDialog_Base
                  ,public Bin
 {
-public:
-    VCLXDialog();
+private:
+    bool bRealized, bResizeSafeguard;
+    css::uno::Reference< css::awt::XLayoutUnit > mxLayoutUnit;
 
-    // ::com::sun::star::awt::XDialog2
-    void SAL_CALL endDialog( sal_Int32 nResult ) throw(::com::sun::star::uno::RuntimeException);
+    VCLXDialog( const VCLXDialog& );            // never implemented
+    VCLXDialog& operator=( const VCLXDialog& ); // never implemented
 
 protected:
-    ~VCLXDialog( );
+    vos::IMutex& GetMutexImpl();
+    Window* GetWindowImpl();
+    TopWindowListenerMultiplexer& GetTopWindowListenersImpl();
+
+    ~VCLXDialog();
 
     // XInterface
     DECLARE_XINTERFACE()
@@ -55,7 +70,7 @@ protected:
     DECLARE_XTYPEPROVIDER()
 
     // XComponent
-    void SAL_CALL dispose( ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
 
     // VclWindowPeer
     virtual void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
@@ -64,20 +79,10 @@ protected:
     // VCLXWindow
     void ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent );
 
-    // ::com::sun::star::awt::XSystemDependendtWindowPeer
-    ::com::sun::star::uno::Any SAL_CALL getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::awt::XTopWindow
-    void SAL_CALL addTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL removeTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL toFront(  ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL toBack(  ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >& xMenu ) throw(::com::sun::star::uno::RuntimeException);
-
     // ::com::sun::star::awt::XDialog
     void SAL_CALL setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star::uno::RuntimeException);
-    ::rtl::OUString SAL_CALL getTitle(  ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Int16 SAL_CALL execute(  ) throw(::com::sun::star::uno::RuntimeException);
+    ::rtl::OUString SAL_CALL getTitle() throw(::com::sun::star::uno::RuntimeException);
+    sal_Int16 SAL_CALL execute() throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL endExecute() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XLayoutContainer
@@ -91,16 +96,15 @@ protected:
     }
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 
-private:
-    VCLXDialog( const VCLXDialog& );            // never implemented
-    VCLXDialog& operator=( const VCLXDialog& ); // never implemented
-    bool bRealized, bResizeSafeguard;
 
-    css::uno::Reference< css::awt::XLayoutUnit > mxLayoutUnit;
+public:
+    VCLXDialog();
+
+    // ::com::sun::star::awt::XDialog2
+    void SAL_CALL endDialog( sal_Int32 nResult ) throw(::com::sun::star::uno::RuntimeException);
+
 };
 
-//........................................................................
 } // namespace layoutimpl
-//........................................................................
 
-#endif /*LAYOUT_AWT_VCLXDIALOG_HXX*/
+#endif /* LAYOUT_AWT_VCLXDIALOG_HXX */
