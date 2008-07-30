@@ -1,3 +1,34 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: container.cxx,v $
+ *
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 #include "container.hxx"
 
 #include <com/sun/star/awt/XWindow.hpp>
@@ -105,7 +136,7 @@ Container::getLabel()  // debug label
 
             uno::Sequence< uno::Reference< awt::XLayoutConstrains > > aChildren;
             aChildren = xParent->getChildren();
-            for( node = 0; node < aChildren.getLength(); node++ )
+            for ( node = 0; node < aChildren.getLength(); node++ )
                 if ( aChildren[ node ] == xContainer )
                     break;
         }
@@ -126,13 +157,8 @@ Container::getLabel()  // debug label
 
 void Container::propertiesChanged()
 {
-    if ( !mxParent.is() )
-    {
-        DBG_ERROR( "Properties listener: error container doesn't have parent" );
-    }
-
-    // ask parent to be re-calculated
-// FIXME: thats wrongg actually. We just need to do a "queueResize();"
+    // cl: why this assertion? This is also called to set properties at the top level widget which has no parent!?
+    // DBG_ASSERT( mxParent.is(), "Properties listener: error container doesn't have parent" );
 
     if ( mxLayoutUnit.is() && mxParent.is() )
         mxLayoutUnit->queueResize( mxParent );
