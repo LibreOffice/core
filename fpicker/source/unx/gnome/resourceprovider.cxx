@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: resourceprovider.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,8 +58,8 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 //
 //------------------------------------------------------------
 
-#define RES_NAME fps_office
-#define OTHER_RES_NAME svt
+static const char* RES_NAME = "fps_office";
+static const char* OTHER_RES_NAME = "svt";
 
 //------------------------------------------------------------
 // we have to translate control ids to resource ids
@@ -148,8 +148,8 @@ public:
 
     CResourceProvider_Impl( )
     {
-        m_ResMgr = CREATEVERSIONRESMGR( RES_NAME );
-        m_OtherResMgr = CREATEVERSIONRESMGR( OTHER_RES_NAME );
+        m_ResMgr = ResMgr::CreateResMgr( RES_NAME );
+        m_OtherResMgr = ResMgr::CreateResMgr( OTHER_RES_NAME );
     }
 
     //-------------------------------------
