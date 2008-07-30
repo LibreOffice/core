@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.h,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,11 +112,7 @@ protected:
     double                                  mfFakeDPIScale;
 
     /// path representing current clip region
-    /// 1. the old fashioned union-of-rectangles clip
-    /// TODO: get rid of it, when last caller of unionClipRegion(Rect) is gone
-    CGMutablePathRef                        mxClipRectsPath;
-    /// 2. the modern polypolygon shaped clip
-    CGMutablePathRef                        mxClipPolysPath;
+    CGMutablePathRef                        mxClipPath;
 
     /// Drawing colors
     /// pen color RGBA
