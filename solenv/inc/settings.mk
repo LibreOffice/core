@@ -8,7 +8,7 @@
 #
 # $RCSfile: settings.mk,v $
 #
-# $Revision: 1.237 $
+# $Revision: 1.238 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -622,14 +622,19 @@ $(OUT)$/inc$/%world.mk :
     @$(MKOUT) $(ROUT)
     @echo $(EMQ)# > $@
 
+# don't need/want output trees in solenv!!!
+.IF "$(PRJNAME)"!="solenv"
 .INCLUDE : $(OUT)$/inc$/myworld.mk
+.ENDIF			# "$(PRJNAME)"!="solenv"
 
 .IF "$(common_build)"!=""
 $(LOCAL_COMMON_OUT)$/inc$/%world.mk :
     @$(MKOUT) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(ROUT))
     @echo $(EMQ)# > $@
 
+.IF "$(PRJNAME)"!="solenv"
 .INCLUDE : $(LOCAL_COMMON_OUT)$/inc$/myworld.mk
+.ENDIF			# "$(PRJNAME)"!="solenv"
 .ENDIF			# "$(common_build)"!=""
 
 
@@ -698,7 +703,7 @@ CLASSPATH!:=$(CLASSPATH:s/tkt/no/)
 
 # default output directory when processing
 # configuration files
-PROCESSOUT*=$(MISC)
+PROCESSOUT*:=$(MISC)
 
 # Makros fuer die Librarynamen des Solar
 .INCLUDE .IGNORE : office.mk
@@ -1000,6 +1005,18 @@ LNTFLAGSOUTOBJ=-os
 .IF "$(GUI)" == "OS2"
 .INCLUDE : os2.mk
 .ENDIF
+
+# remove if .Net 2003 support has expired 
+.IF "$(debug)"!=""
+.IF "$(OS)$(COM)$(CPU)" == "WNTMSCI"
+.IF "$(COMEX)" == "10"
+.IF "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)"!=""
+MAXPROCESS!:=1
+.EXPORT : MAXPROCESS
+.ENDIF			# "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)"!=""
+.ENDIF			# "$(COMEX)" == "10"
+.ENDIF			# "$(OS)$(COM)$(CPU)" == "WNTMSCI"
+.ENDIF			# "$(debug)"!=""
 
 # for multiprocess building in external modules
 # allow seperate handling
