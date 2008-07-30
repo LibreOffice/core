@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlsSlotManager.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -327,23 +327,24 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
         case SID_PASTE:
         {
             SdTransferable* pTransferClip = SD_MOD()->pTransferClip;
-            SfxObjectShell* pTransferDocShell = pTransferClip->GetDocShell();
+            if( pTransferClip )
+            {
+                SfxObjectShell* pTransferDocShell = pTransferClip->GetDocShell();
 
-            DrawDocShell* pDocShell = dynamic_cast<DrawDocShell*>(pTransferDocShell);
-            if (pDocShell && pDocShell->GetDoc()->GetPageCount() > 1)
-            {
-                mrSlideSorter.GetController().GetClipboard().HandleSlotCall(rRequest);
-            }
-            else
-            {
-                ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
-                if (pBase != NULL)
+                DrawDocShell* pDocShell = dynamic_cast<DrawDocShell*>(pTransferDocShell);
+                if (pDocShell && pDocShell->GetDoc()->GetPageCount() > 1)
                 {
-                    ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
-                        ::boost::dynamic_pointer_cast<DrawViewShell>(pBase->GetMainViewShell()));
-                    if (pDrawViewShell.get() != NULL)
-                        pDrawViewShell->FuSupport(rRequest);
+                    mrSlideSorter.GetController().GetClipboard().HandleSlotCall(rRequest);
+                    break;
                 }
+            }
+            ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
+            if (pBase != NULL)
+            {
+                ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
+                    ::boost::dynamic_pointer_cast<DrawViewShell>(pBase->GetMainViewShell()));
+                if (pDrawViewShell.get() != NULL)
+                    pDrawViewShell->FuSupport(rRequest);
             }
         }
         break;
