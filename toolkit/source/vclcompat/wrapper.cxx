@@ -1,16 +1,50 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: wrapper.cxx,v $
+ *
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 #include "wrapper.hxx"
 
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/awt/XFixedText.hpp>
 #include <com/sun/star/awt/XDialog2.hpp>
+#include <com/sun/star/awt/XProgressBar.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 
-#include "layoutcore.hxx"
-#include "../layout/factory.hxx"
-#include "../layout/root.hxx"
+#include <layout/layoutcore.hxx>
+#include <layout/factory.hxx>
+#include <layout/root.hxx>
+#include <vcl/image.hxx>
 
 using namespace ::com::sun::star;
 
@@ -212,7 +246,7 @@ static const int toolkitVclPropsMapLen =
 void Window::SetStyle( WinBits nStyle )
 {
     uno::Reference< awt::XVclWindowPeer > xPeer = mpImpl->mxVclPeer;
-    for( int i = 0; i < toolkitVclPropsMapLen; i++ )
+    for ( int i = 0; i < toolkitVclPropsMapLen; i++ )
     {
         if ( toolkitVclPropsMap[ i ].propName )
         {
@@ -235,14 +269,14 @@ WinBits Window::GetStyle()
 {
     uno::Reference< awt::XVclWindowPeer > xPeer = mpImpl->mxVclPeer;
     WinBits ret = 0;
-    for( int i = 0; i < toolkitVclPropsMapLen; i++ )
+    for ( int i = 0; i < toolkitVclPropsMapLen; i++ )
     {
         if ( toolkitVclPropsMap[ i ].propName )
         {
-            short nValue;
+            short nValue = 0;
             if ( toolkitVclPropsMap[ i ].isBoolean )
             {
-                bool bValue;
+                bool bValue = false;
                 mpImpl->getProperty( toolkitVclPropsMap[ i ].propName ) >>= bValue;
                 nValue = bValue ? 1 : 0;
             }
@@ -278,61 +312,12 @@ PeerHandle Window::CreatePeer( Window *pParent, WinBits nStyle, const char *pNam
 {
 
     long nWinAttrbs = 0;
-    for( int i = 0; i < toolkitVclPropsMapLen; i++ )
+    for ( int i = 0; i < toolkitVclPropsMapLen; i++ )
         if ( nStyle & toolkitVclPropsMap[ i ].vclStyle )
             nWinAttrbs |= toolkitVclPropsMap[ i ].initAttr;
 
     return layoutimpl::createWidget( getToolkit(), pParent->GetPeer(),
                                      rtl::OUString::createFromAscii( pName ), nWinAttrbs );
-
-
-#if 0
-    awt::WindowDescriptor desc;
-
-    // debugging help ...
-    desc.Bounds.X = 0;
-    desc.Bounds.Y = 0;
-    desc.Bounds.Width = 300;
-    desc.Bounds.Height = 200;
-
-    desc.ParentIndex = 0;
-    // FIXME: this code should be shared with
-    // toolkit/source/awt/vclxtoolkit.cxx (ImplGetWinBits)
-    desc.WindowAttributes = 0;
-    for( int i = 0; i < toolkitVclPropsMapLen; i++ )
-        if ( nStyle & toolkitVclPropsMap[ i ].vclStyle )
-            desc.WindowAttributes |= toolkitVclPropsMap[ i ].initAttr;
-    desc.WindowServiceName = rtl::OUString( pName, strlen( pName ),
-                                            RTL_TEXTENCODING_ASCII_US );
-
-    // FIXME: we really want to walk up the peer hierarchy
-    // and get the top-level that this requires.
-    if ( pParent != NULL )
-    {
-        PeerHandle hdl = pParent->GetPeer();
-        desc.Parent = uno::Reference< awt::XWindowPeer >( hdl, uno::UNO_QUERY );
-    }
-
-    PeerHandle xPeer = getToolkit()->createWindow( desc );
-
-    // not all WinBits have an equivalent attribute, some are available through
-    // properties though
-    for( int i = 0; i < toolkitVclPropsMapLen; i++ )
-        if ( nStyle & toolkitVclPropsMap[ i ].vclStyle &&
-            !toolkitVclPropsMap[ i ].initAttr &&
-            toolkitVclPropsMap[ i ].propName )
-        {
-            uno::Any aValue;
-            if ( toolkitVclPropsMap[ i ].isBoolean )
-                aValue = uno::makeAny( (bool) toolkitVclPropsMap[ i ].enableProp );
-            else
-                aValue = uno::makeAny( (short) toolkitVclPropsMap[ i ].enableProp );
-            layoutimpl::prophlp::setProperty( xPeer,
-                                              rtl::OUString::createFromAscii( toolkitVclPropsMap[ i ].propName ), aValue );
-        }
-
-    return xPeer;
-#endif
 }
 
 void Window::Enable( bool bEnable )
@@ -419,6 +404,12 @@ public:
 DECL_CONSTRUCTOR_IMPLS( FixedLine, Control, "hfixedline" );
 DECL_GET_IMPL_IMPL( FixedLine )
 
+bool FixedLine::IsEnabled()
+{
+    //FIXME
+    return true;
+}
+
 class FixedTextImpl : public ControlImpl
 {
 public:
@@ -456,6 +447,123 @@ public:
 };
 
 DECL_CONSTRUCTOR_IMPLS( FixedInfo, FixedText, "fixedinfo" );
-DECL_GET_IMPL_IMPL( FixedInfo )
+DECL_GET_IMPL_IMPL( FixedInfo );
 
-}; // end namespace layout
+class ProgressBarImpl : public ControlImpl
+{
+public:
+    uno::Reference< awt::XProgressBar > mxProgressBar;
+    ProgressBarImpl( Context *pCtx, const PeerHandle &xPeer, Window *pWindow )
+        : ControlImpl( pCtx, xPeer, pWindow )
+        , mxProgressBar( xPeer, uno::UNO_QUERY )
+    {
+    }
+
+    virtual void SAL_CALL disposing( const css::lang::EventObject& /* Source */ )
+        throw (css::uno::RuntimeException)
+    {
+        mxProgressBar.clear();
+    }
+};
+
+
+class FixedImageImpl: public ControlImpl
+{
+public:
+    uno::Reference< graphic::XGraphic > mxGraphic;
+    FixedImageImpl( Context *pCtx, const PeerHandle &xPeer, Window *pWindow)
+//                    const char *pName )
+        : ControlImpl( pCtx, xPeer, pWindow )
+          //, mxGraphic( layoutimpl::loadGraphic( pName ) )
+        , mxGraphic( xPeer, uno::UNO_QUERY )
+    {
+        if ( !mxGraphic.is() )
+        {
+            DBG_ERROR( "ERROR: failed to load image: `%s'" /*, pName*/ );
+        }
+#if 0
+        else
+            getImpl().mxGraphic->...();
+#endif
+    }
+};
+
+DECL_CONSTRUCTOR_IMPLS( FixedImage, Control, "fixedimage" );
+DECL_GET_IMPL_IMPL( FixedImage )
+
+void FixedImage::setImage( ::Image const& i )
+{
+    (void) i;
+    if ( !getImpl().mxGraphic.is() )
+        return;
+    //FIXME: hack moved to proplist
+    //getImpl().mxGraphic =
+}
+
+#if 0
+
+    FixedImage::FixedImage( const char *pName )
+    : pImpl( new FixedImageImpl( pName ) )
+{
+}
+
+FixedImage::~FixedImage()
+{
+    delete pImpl;
+}
+
+#endif
+
+
+DECL_CONSTRUCTOR_IMPLS( ProgressBar, Control, "ProgressBar" );
+#if 0
+ProgressBar::ProgressBar( Context *pCtx, const char *pId, sal_uInt32 nId )
+    : Control( new ProgressBarImpl( pCtx, pCtx->GetPeerHandle( pId, nId ), this ) )
+{
+}
+ProgressBar::ProgressBar( Window *pParent, WinBits nBits)
+//    : Control( new ProgressBarImpl( pParent->getContext(), Window::CreatePeer( pParent, nBits, "ProgressBar" ), this ) )
+    : Control( new ProgressBarImpl( pParent->getContext(), Window::CreatePeer( pParent, nBits, "progressbar" ), this ) )
+{
+}
+#endif
+
+DECL_GET_IMPL_IMPL( ProgressBar )
+
+
+void ProgressBar::SetForegroundColor( css::util::Color color )
+{
+    if ( !getImpl().mxProgressBar.is() )
+        return;
+    getImpl().mxProgressBar->setForegroundColor( color );
+}
+
+void ProgressBar::SetBackgroundColor( css::util::Color color )
+{
+    if ( !getImpl().mxProgressBar.is() )
+        return;
+    getImpl().mxProgressBar->setBackgroundColor( color );
+}
+
+void ProgressBar::SetValue( sal_Int32 i )
+{
+    if ( !getImpl().mxProgressBar.is() )
+        return;
+    getImpl().mxProgressBar->setValue( i );
+}
+
+void ProgressBar::SetRange( sal_Int32 min, sal_Int32 max )
+{
+    if ( !getImpl().mxProgressBar.is() )
+        return;
+    getImpl().mxProgressBar->setRange( min, max );
+}
+
+sal_Int32 ProgressBar::GetValue()
+{
+    if ( !getImpl().mxProgressBar.is() )
+        return 0;
+    return getImpl().mxProgressBar->getValue();
+}
+
+} // namespace layout
