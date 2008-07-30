@@ -8,7 +8,7 @@
  *
  * $RCSfile: unotbl.cxx,v $
  *
- * $Revision: 1.122 $
+ * $Revision: 1.123 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,6 +102,7 @@
 #include <frmatr.hxx>
 #include <crsskip.hxx>
 #include <unochart.hxx>
+#include <rtl/math.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -716,11 +717,11 @@ void lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt,
  * --------------------------------------------------*/
 double lcl_getValue( SwXCell &rCell )
 {
-    double fRet = 0.0;
-    if(rCell.IsValid())
-    {
+    double fRet;
+    if(rCell.IsValid() && rCell.getString().getLength()!=0)
         fRet = rCell.pBox->GetFrmFmt()->GetTblBoxValue().GetValue();
-    }
+    else
+        ::rtl::math::setNan( &fRet );
     return fRet;
 }
 /* -----------------30.04.02 08:00-------------------
@@ -1011,7 +1012,13 @@ void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException 
 double SwXCell::getValue(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return lcl_getValue( *this );
+    double fRet = lcl_getValue( *this );
+    //lcl_getValue was changed thus it can return nan values,
+    //so I make this additional nan check here to not change the behaviour
+    //but maybe it would even be more correct to just return nan here? ... todo?
+    if( ::rtl::math::isNan( fRet ) )
+        fRet = 0.0;
+    return fRet;
 }
 /*-- 11.12.98 10:56:26---------------------------------------------------
 
@@ -4398,6 +4405,9 @@ void SwXCellRange::GetDataSequence(
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
+        double fNan;
+        ::rtl::math::setNan( & fNan );
+
         uno::Reference< table::XCell > xCellRef;
         for(sal_uInt16 nRow = 0; nRow < nRowCount; nRow++)
         {
@@ -4430,7 +4440,7 @@ void SwXCellRange::GetDataSequence(
                         pTxtData[nDtaCnt++] = lcl_getString(*pXCell);
                     else if (pDblData)
                     {
-                        double fVal = 0.0;
+                        double fVal = fNan;
                         if (!bForceNumberResults || table::CellContentType_TEXT != pXCell->getType())
                             fVal = lcl_getValue(*pXCell);
                         else
