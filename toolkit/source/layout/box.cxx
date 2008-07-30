@@ -1,3 +1,34 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: box.cxx,v $
+ *
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 #include "box.hxx"
 
 #include <tools/debug.hxx>
@@ -11,36 +42,41 @@ namespace layoutimpl
 
 using namespace css;
 
-class BoxChildProps : public PropHelper
+Box::ChildProps::ChildProps( Box::ChildData *pData )
 {
-public:
-    BoxChildProps( Box::ChildData *pData )
-    {
-        addProp( RTL_CONSTASCII_USTRINGPARAM( "Expand" ),
-                 ::getCppuType( static_cast< const sal_Bool* >( NULL ) ),
-                 &(pData->bExpand) );
-        addProp( RTL_CONSTASCII_USTRINGPARAM( "Fill" ),
-                 ::getCppuType( static_cast< const sal_Bool* >( NULL ) ),
-                 &(pData->bFill) );
-        addProp( RTL_CONSTASCII_USTRINGPARAM( "Padding" ),
-                 ::getCppuType( static_cast< const sal_Int32* >( NULL ) ),
-                 &(pData->nPadding) );
-    }
-    PROPHELPER_SET_INFO
-};
+    addProp( RTL_CONSTASCII_USTRINGPARAM( "Expand" ),
+             ::getCppuType( static_cast< const sal_Bool* >( NULL ) ),
+             &(pData->mbExpand) );
+    addProp( RTL_CONSTASCII_USTRINGPARAM( "Fill" ),
+             ::getCppuType( static_cast< const sal_Bool* >( NULL ) ),
+             &(pData->mbFill) );
+    addProp( RTL_CONSTASCII_USTRINGPARAM( "Padding" ),
+             ::getCppuType( static_cast< const sal_Int32* >( NULL ) ),
+             &(pData->mnPadding) );
+}
 
-bool Box::ChildData::isVisible()
+Box::ChildData::ChildData( uno::Reference< awt::XLayoutConstrains > const& xChild )
+    : Box_Base::ChildData( xChild )
+    , mnPadding( 0 )
+    , mbExpand( true )
+    , mbFill( true )
 {
-    // FIXME: call the 'isVisible' method on it ?
-    if ( !xChild.is() )
-    {
-        DBG_ERROR( "FIXME: invalid child !" );
-    }
-    return xChild.is();
+}
+
+Box::ChildData*
+Box::createChild( uno::Reference< awt::XLayoutConstrains > const& xChild )
+{
+    return new ChildData( xChild );
+}
+
+Box::ChildProps*
+Box::createChildProps( Box_Base::ChildData *pData )
+{
+    return new ChildProps( static_cast<Box::ChildData*> ( pData ) );
 }
 
 Box::Box( bool horizontal )
-    : Container()
+    : Box_Base()
     , mnSpacing( 0 )
     , mbHomogeneous( false )
     , mbHorizontal( horizontal )
@@ -54,119 +90,28 @@ Box::Box( bool horizontal )
     mbHasFlowChildren = false;
 }
 
-Box::ChildData *
-Box::createChild( uno::Reference< awt::XLayoutConstrains > const& xChild )
-{
-    ChildData *p = new ChildData();
-
-    p->nPadding = 0;
-    p->bExpand = true;
-    p->bFill = true;
-    p->xChild = xChild;
-    return p;
-}
-
-void SAL_CALL
-Box::addChild( const uno::Reference< awt::XLayoutConstrains >& xChild )
-    throw (uno::RuntimeException, awt::MaxChildrenException)
-{
-    if ( xChild.is() )
-    {
-        ChildData *pData = createChild( xChild );
-        maChildren.push_back( pData );
-        setChildParent( xChild );
-        queueResize();
-    }
-}
-
-Box::ChildData *
-Box::removeChildData( std::list< ChildData *> lst, css::uno::Reference< css::awt::XLayoutConstrains > const& xChild )
-{
-    for( std::list< ChildData * >::iterator it = lst.begin();
-         it != lst.end(); it++ )
-    {
-        if ( (*it)->xChild == xChild )
-        {
-            lst.erase( it );
-            return *it;
-        }
-    }
-    return 0;
-}
-
-void SAL_CALL
-Box::removeChild( const uno::Reference< awt::XLayoutConstrains >& xChild )
-    throw (uno::RuntimeException)
-{
-    if ( ChildData *p = removeChildData( maChildren, xChild ) )
-    {
-        // CHECK: BoxChildProps leaks?
-        delete p;
-        unsetChildParent( xChild );
-        queueResize();
-    }
-    else
-    {
-        DBG_ERROR( "Box: removeChild: no such child" );
-    }
-}
-
-uno::Sequence< uno::Reference < awt::XLayoutConstrains > > SAL_CALL
-Box::getChildren()
-    throw (uno::RuntimeException)
-{
-    uno::Sequence< uno::Reference< awt::XLayoutConstrains > > children( maChildren.size() );
-    unsigned int i = 0;
-    for( std::list< ChildData * >::iterator it = maChildren.begin();
-         it != maChildren.end(); it++, i++ )
-        children[i] = (*it)->xChild;
-
-    return children;
-}
-
-uno::Reference< beans::XPropertySet > SAL_CALL
-Box::getChildProperties( const uno::Reference< awt::XLayoutConstrains >& xChild )
-    throw (uno::RuntimeException)
-{
-    std::list< ChildData * >::iterator iter;
-    for( iter = maChildren.begin(); iter != maChildren.end(); iter++)
-    {
-        if ( (*iter)->xChild == xChild )
-        {
-            if ( !(*iter)->xProps.is() )
-            {
-                // FIXME: make me safe !
-                PropHelper *pProps = new BoxChildProps( *iter );
-                pProps->setChangeListener( this );
-                (*iter)->xProps = pProps;
-            }
-            return (*iter)->xProps;
-        }
-    }
-    return uno::Reference< beans::XPropertySet >();
-}
-
 awt::Size
 Box::calculateSize( long nWidth )
 {
     int nVisibleChildren = 0;
     // primary vs secundary axis (instead of a X and Y)
-    int nPrimSize = 0, nSecSize = 0;
+    int nPrimSize = 0;
+    int nSecSize = 0;
     int nFlowMinWidth = 0;  // in case the box only has flow children
 
     mbHasFlowChildren = false;
 
-    std::list<ChildData *>::const_iterator it;
-    for( it = maChildren.begin(); it != maChildren.end(); it++ )
+    for ( std::list<Box_Base::ChildData *>::const_iterator it
+              = maChildren.begin(); it != maChildren.end(); it++ )
     {
-        ChildData *child = *it;
+        ChildData *child = static_cast<Box::ChildData*> ( *it );
         if ( !child->isVisible() )
             continue;
 
-        uno::Reference< awt::XLayoutContainer > xChildCont( child->xChild, uno::UNO_QUERY );
+        uno::Reference< awt::XLayoutContainer > xChildCont( child->mxChild, uno::UNO_QUERY );
         bool bFlow = xChildCont.is() && xChildCont->hasHeightForWidth();
 
-        awt::Size aChildSize = child->aRequisition = child->xChild->getMinimumSize();
+        awt::Size aChildSize = child->maRequisition = child->mxChild->getMinimumSize();
 
         if ( !mbHorizontal /*vertical*/ && bFlow )
         {
@@ -176,7 +121,7 @@ Box::calculateSize( long nWidth )
         }
         else
         {
-            int size = primDim( aChildSize ) + child->nPadding * 2;
+            int size = primDim( aChildSize ) + child->mnPadding * 2;
             if ( mbHomogeneous )
                 nPrimSize = SAL_MAX( nPrimSize, size );
             else
@@ -198,13 +143,14 @@ Box::calculateSize( long nWidth )
     {
         if ( nWidth == 0 )
             nWidth = nSecSize ? nSecSize : nFlowMinWidth;
-        for( it = maChildren.begin(); it != maChildren.end(); it++ )
+        for ( std::list<Box_Base::ChildData *>::const_iterator it
+                  = maChildren.begin(); it != maChildren.end(); it++ )
         {
-            ChildData *child = *it;
+            ChildData *child = static_cast<Box::ChildData*> ( *it );
             if ( !child->isVisible() )
                 continue;
 
-            uno::Reference< awt::XLayoutContainer > xChildCont( child->xChild, uno::UNO_QUERY );
+            uno::Reference< awt::XLayoutContainer > xChildCont( child->mxChild, uno::UNO_QUERY );
             bool bFlow = xChildCont.is() && xChildCont->hasHeightForWidth();
 
             if ( bFlow )
@@ -248,14 +194,14 @@ Box::allocateArea( const awt::Rectangle &newArea )
     maAllocation = newArea;
     int nVisibleChildren = 0, nExpandChildren = 0;
 
-    std::list<ChildData *>::const_iterator it;
-    for( it = maChildren.begin(); it != maChildren.end(); it++ )
+    for ( std::list<Box_Base::ChildData *>::const_iterator it
+              = maChildren.begin(); it != maChildren.end(); it++ )
     {
-        ChildData *child = *it;
+        ChildData *child = static_cast<Box::ChildData*> ( *it );
         if ( child->isVisible() )
         {
             nVisibleChildren++;
-            if ( child->bExpand )
+            if ( child->mbExpand )
                 nExpandChildren++;
         }
     }
@@ -285,9 +231,10 @@ Box::allocateArea( const awt::Rectangle &newArea )
     int nStartPoint = primDim( newPoint ) + mnBorderWidth;
     int nBoxSecSize = SAL_MAX( 1, secDim( newSize ) - mnBorderWidth * 2 );
 
-    for( it = maChildren.begin(); it != maChildren.end(); it++ )
+    for ( std::list<Box_Base::ChildData *>::const_iterator it
+              = maChildren.begin(); it != maChildren.end(); it++ )
     {
-        ChildData *child = *it;
+        ChildData *child = static_cast<Box::ChildData*> ( *it );
         if ( !child->isVisible() )
             continue;
 
@@ -298,26 +245,26 @@ Box::allocateArea( const awt::Rectangle &newArea )
             nBoxPrimSize = nExtraSpace;
         else
         {
-            uno::Reference< awt::XLayoutContainer > xChildCont( child->xChild, uno::UNO_QUERY );
+            uno::Reference< awt::XLayoutContainer > xChildCont( child->mxChild, uno::UNO_QUERY );
             bool bFlow = xChildCont.is() && xChildCont->hasHeightForWidth();
             if ( !mbHorizontal && bFlow )
                 nBoxPrimSize = xChildCont->getHeightForWidth( newArea.Width );
             else
-                nBoxPrimSize = primDim( child->aRequisition );
-            nBoxPrimSize += child->nPadding;
-            if ( child->bExpand )
+                nBoxPrimSize = primDim( child->maRequisition );
+            nBoxPrimSize += child->mnPadding;
+            if ( child->mbExpand )
                 nBoxPrimSize += nExtraSpace;
         }
 
-        nChildPrimPoint = nStartPoint + child->nPadding;
+        nChildPrimPoint = nStartPoint + child->mnPadding;
         nChildSecPoint = secDim( newPoint ) + mnBorderWidth;
 
         nChildSecSize = nBoxSecSize;
-        if ( child->bFill )
-            nChildPrimSize = SAL_MAX( 1, nBoxPrimSize - child->nPadding);
+        if ( child->mbFill )
+            nChildPrimSize = SAL_MAX( 1, nBoxPrimSize - child->mnPadding);
         else
         {
-            nChildPrimSize = primDim( child->aRequisition );
+            nChildPrimSize = primDim( child->maRequisition );
             nChildPrimPoint += (nBoxPrimSize - nChildPrimSize) / 2;
 
             nChildSecPoint += (nBoxSecSize - nChildSecSize) / 2;
@@ -329,9 +276,9 @@ Box::allocateArea( const awt::Rectangle &newArea )
         area.Width = mbHorizontal ? nChildPrimSize : nChildSecSize;
         area.Height = mbHorizontal ? nChildSecSize : nChildPrimSize;
 
-        allocateChildAt( child->xChild, area );
+        allocateChildAt( child->mxChild, area );
 
-        nStartPoint += nBoxPrimSize + mnSpacing + child->nPadding;
+        nStartPoint += nBoxPrimSize + mnSpacing + child->mnPadding;
     }
 }
 
