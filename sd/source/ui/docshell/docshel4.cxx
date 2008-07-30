@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docshel4.cxx,v $
- * $Revision: 1.80 $
+ * $Revision: 1.81 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -377,6 +377,9 @@ BOOL DrawDocShell::Load( SfxMedium& rMedium )
         }
 
         FinishedLoading( SFX_LOADED_ALL );
+
+        const INetURLObject aUrl;
+        SfxObjectShell::SetAutoLoad( aUrl, 0, sal_False );
     }
     else
     {
