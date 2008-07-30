@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartTypeTemplate.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -142,6 +142,21 @@ void lcl_resetLabelPlacementIfDefault( const Reference< beans::XPropertySet >& x
     {
         if( nDefaultPlacement == nLabelPlacement )
             xProp->setPropertyValue( C2U("LabelPlacement"), uno::Any() );
+    }
+}
+
+void lcl_ensureCorrectMissingValueTreatment( const Reference< chart2::XDiagram >& xDiagram, const Reference< XChartType >& xChartType )
+{
+    Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
+    if( xDiaProp.is() )
+    {
+        uno::Sequence < sal_Int32 > aAvailableMissingValueTreatment(
+            ::chart::ChartTypeHelper::getSupportedMissingValueTreatments( xChartType ) );
+
+        if( aAvailableMissingValueTreatment.getLength() )
+            xDiaProp->setPropertyValue( C2U( "MissingValueTreatment" ), uno::makeAny( aAvailableMissingValueTreatment[0] ) );
+        else
+            xDiaProp->setPropertyValue( C2U( "MissingValueTreatment" ), uno::Any() );
     }
 }
 
@@ -474,6 +489,23 @@ void SAL_CALL ChartTypeTemplate::applyStyle(
             ASSERT_EXCEPTION( ex );
         }
     }
+}
+
+void SAL_CALL ChartTypeTemplate::applyStyles( const Reference< chart2::XDiagram >& xDiagram )
+    throw (uno::RuntimeException)
+{
+    // apply chart-type specific styles, like "symbols on" for example
+    Sequence< Sequence< Reference< XDataSeries > > > aNewSeriesSeq(
+        DiagramHelper::getDataSeriesGroups( xDiagram ));
+    for( sal_Int32 i=0; i<aNewSeriesSeq.getLength(); ++i )
+    {
+        const sal_Int32 nNumSeries = aNewSeriesSeq[i].getLength();
+        for( sal_Int32 j=0; j<nNumSeries; ++j )
+            applyStyle( aNewSeriesSeq[i][j], i, j, nNumSeries );
+    }
+
+    //ensure valid empty cell handling (for first chart type...)
+    lcl_ensureCorrectMissingValueTreatment( xDiagram, getChartTypeForIndex( 0 ) );
 }
 
 void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram >& xDiagram )
@@ -826,16 +858,7 @@ void ChartTypeTemplate::FillDiagram(
 
         // chart types
         createChartTypes( aSeriesSeq, aCoordinateSystems, aOldChartTypesSeq );
-
-        // apply chart-type specific styles, like "symbols on"
-        Sequence< Sequence< Reference< XDataSeries > > > aNewSeriesSeq(
-            DiagramHelper::getDataSeriesGroups( xDiagram ));
-        for( sal_Int32 i=0; i<aNewSeriesSeq.getLength(); ++i )
-        {
-            const sal_Int32 nNumSeries = aNewSeriesSeq[i].getLength();
-            for( sal_Int32 j=0; j<nNumSeries; ++j )
-                applyStyle( aNewSeriesSeq[i][j], i, j, nNumSeries );
-        }
+        applyStyles( xDiagram );
     }
     catch( const uno::Exception & ex )
     {
