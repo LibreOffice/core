@@ -1,3 +1,34 @@
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2008 by Sun Microsystems, Inc.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# $RCSfile: makefile.mk,v $
+#
+# $Revision: 1.3 $
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
 PRJ=../..
 PRJNAME=toolkit
 TARGET=test
@@ -24,12 +55,14 @@ CFLAGS+=-Wall -Wno-non-virtual-dtor
 
 CXXFILES=\
     editor.cxx \
+    recover.cxx \
     wordcountdialog.cxx \
     test.cxx \
     zoom.cxx
 
 OBJFILES=\
     $(OBJ)$/editor.obj \
+    $(OBJ)$/recover.obj \
     $(OBJ)$/test.obj \
     $(OBJ)$/wordcountdialog.obj \
     $(OBJ)$/zoom.obj
@@ -44,41 +77,36 @@ APP1STDLIBS= \
         $(CPPUHELPERLIB)		\
         $(SALLIB)			\
         $(XMLSCRIPTLIB)			\
-        $(LAYOUTLIB)\
         $(TKLIB)
 
-all: svtools ALLTAR
+svtools = $(INCCOM)/svtools
+all: $(svtools) ALLTAR
 
 .INCLUDE :  target.mk
 
-# FIXME: move this rule and .xml files into sw/svx trees,
-#        install into xml directory instead of lib.
-ALLTAR: \
-    $(DLLDEST)$/wordcount.xml\
-    $(DLLDEST)$/zoom.xml\
-    $(DLLDEST)$/de/wordcount.xml\
-    $(DLLDEST)$/de/zoom.xml\
-    $(DLLDEST)$/nl/wordcount.xml\
-    $(DLLDEST)$/nl/zoom.xml
+XML_FILES=\
+    recover.xml\
+    wordcount.xml\
+    zoom.xml\
 
 TRALAY=tralay
-$(WITH_LANG:f:t"/%.xml ")/%.xml: %.xml
-    $(TRALAY) -m localize.sdf -o . -l $(WITH_LANG:f:t" -l ") $<
+XML_LANGS=$(alllangiso)
+
+#ALL_XMLS=$(foreach,i,$(XML_LANGS) $(foreach,j,$(XML_FILES) $i/$j))
+ALLTAR: $(foreach,i,$(XML_FILES) en-US/$i)
+
+$(XML_LANGS:f:t"/%.xml ")/%.xml: %.xml
+    $(TRALAY) -m localize.sdf -o . -l $(XML_LANGS:f:t" -l ") $<
     rm -rf en-US
 
-$(DLLDEST)$/%.xml: %.xml
-# modes, INSTALL?
-    -$(MKDIR) $(@:d)
-    $(COPY) $< $@
-
-svtools:
-    # FIXME: there's a bug in svtools layout or usage
-    # Include files are in svtools/inc, but are referenced as <svtools/..>
-    # They probably should be in svtools/inc/svtools
-    # This means that include files can only be included after svtools
-    # is built, which would mean a circular dependency,
-    # because svtools depends on toolkit.
-    ln -sf ../$(PRJ)/svtools/inc svtools
+$(svtools):
+# FIXME: there's a bug in svtools layout or usage
+# Include files are in svtools/inc, but are referenced as <svtools/..>
+# They probably should be in svtools/inc/svtools
+# This means that include files can only be included after svtools
+# is built, which would mean a circular dependency,
+# because svtools depends on toolkit.
+    ln -sf ..$/$(PRJ)$/svtools$/inc $(INCCOM)$/svtools
 
 dist .PHONY :
     $(SHELL) ./un-test.sh zoom.cxx > ../$(PRJ)/svx/source/dialog/zoom.cxx
@@ -87,7 +115,7 @@ dist .PHONY :
     $(SHELL) ./un-test.sh wordcountdialog.cxx > ../$(PRJ)/sw/source/ui/dialog/wordcountdialog.cxx
     $(SHELL) ./un-test.sh wordcountdialog.hxx > ../$(PRJ)/sw/source/ui/inc/wordcountdialog.hxx
     touch ../$(PRJ)/sw/source/ui/dialog/swdlgfact.cxx
-    # FIXME: broken setup
+# FIXME: broken setup
     ln -sf ../inc/wordcountdialog.hxx ../$(PRJ)/sw/source/ui/dialog/wordcountdialog.hxx 
 
 .ELSE # ENABLE_LAYOUT != TRUE
