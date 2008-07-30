@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: zoom.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,16 +66,21 @@ class SvxZoomDialog : public SfxModalDialog
 {
 private:
     FixedLine           aZoomFl;
+    RadioButton         aOptimalBtn;
     RadioButton         aWholePageBtn;
     RadioButton         aPageWidthBtn;
-    RadioButton         aOptimalBtn;
-    RadioButton         a200Btn;
-    RadioButton         a150Btn;
     RadioButton         a100Btn;
-    RadioButton         a75Btn;
-    RadioButton         a50Btn;
     RadioButton         aUserBtn;
     MetricField         aUserEdit;
+
+    FixedLine           aViewLayoutFl;
+    RadioButton         aAutomaticBtn;
+    RadioButton         aSingleBtn;
+    RadioButton         aColumnsBtn;
+    MetricField         aColumnsEdit;
+    CheckBox            aBookModeChk;
+
+    FixedLine           aBottomFl;
     OKButton            aOKBtn;
     CancelButton        aCancelBtn;
     HelpButton          aHelpBtn;
@@ -89,6 +94,9 @@ private:
 #ifdef _SVX_ZOOM_CXX
     DECL_LINK( UserHdl, RadioButton* );
     DECL_LINK( SpinHdl, MetricField* );
+    DECL_LINK( ViewLayoutUserHdl, RadioButton* );
+    DECL_LINK( ViewLayoutSpinHdl, MetricField* );
+    DECL_LINK( ViewLayoutCheckHdl, CheckBox* );
     DECL_LINK( OKHdl, Button* );
 #endif
 
