@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rubydialog.src,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -159,7 +159,7 @@ ModelessDialog RID_SVXDLG_RUBY
     FixedText FT_CHAR_STYLE
     {
         Pos = MAP_APPFONT ( 80 , 82 ) ;
-        Size = MAP_APPFONT ( 89 , 8 ) ;
+        Size = MAP_APPFONT ( 141 , 8 ) ;
         Text [ en-US ] = "Character Style for ruby text";
     };
     ListBox LB_CHAR_STYLE
