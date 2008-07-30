@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlnvsh.cxx,v $
- * $Revision: 1.90 $
+ * $Revision: 1.91 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -891,14 +891,14 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
     sal_Int16 nDepth;
     sal_Int16 nTmpDepth = pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) );
-    bool bPage = pPara->HasFlag( PARAFLAG_ISPAGE );
+    bool bPage = pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE );
     while (pPara)
     {
         nDepth = pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) );
 
         if( nDepth != nTmpDepth )
             bUnique = FALSE;
-        if( bPage != pPara->HasFlag( PARAFLAG_ISPAGE ) )
+        if( bPage != pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
             bUnique = FALSE;
         if (!pOutl->IsExpanded(pPara) && pOutl->HasChilds(pPara))
             bDisableExpand = FALSE;
@@ -1413,15 +1413,15 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
 
     ::sd::Window*       pWin        = GetActiveWindow();
     OutlinerView*   pActiveView = pOlView->GetViewByWindow( pWin );
-//  ::Outliner*       pOutliner   = pOlView->GetOutliner();
+    ::Outliner*     pOutliner   = pOlView->GetOutliner();
     List*           pSelList    = (List*)pActiveView->CreateSelectionList();
     Paragraph*      pFirstPara  = (Paragraph*)pSelList->First();
     Paragraph*      pLastPara   = (Paragraph*)pSelList->Last();
 
-    if( !pFirstPara->HasFlag(PARAFLAG_ISPAGE) )
+    if( !pOutliner->HasParaFlag(pFirstPara,PARAFLAG_ISPAGE) )
         pFirstPara = pOlView->GetPrevTitle( pFirstPara );
 
-    if( !pLastPara->HasFlag(PARAFLAG_ISPAGE) )
+    if( !pOutliner->HasParaFlag(pLastPara, PARAFLAG_ISPAGE) )
         pLastPara = pOlView->GetPrevTitle( pLastPara );
 
     delete pSelList;                // die wurde extra fuer uns erzeugt
@@ -1784,7 +1784,7 @@ String OutlineViewShell::GetPageRangeString()
 {
     ::sd::Window*      pWin             = GetActiveWindow();
     OutlinerView*  pActiveView      = pOlView->GetViewByWindow(pWin);
-//  ::Outliner*      pOutl            = pActiveView->GetOutliner();
+    ::Outliner*      pOutl            = pActiveView->GetOutliner();
     List*          pSelList         = (List*)pActiveView->CreateSelectionList();
     Paragraph*     pPara            = (Paragraph*)pSelList->First();
 
@@ -1801,7 +1801,7 @@ String OutlineViewShell::GetPageRangeString()
 
     while ( pPara )
     {
-        if ( !pPara->HasFlag(PARAFLAG_ISPAGE) )
+        if ( !pOutl->HasParaFlag(pPara, PARAFLAG_ISPAGE) )
         {
             pPara = pOlView->GetPrevTitle(pPara);
         }
@@ -2002,7 +2002,7 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
     ULONG nPara          = nTitlePara + 1;
     ULONG nParasInLayout = 0L;
     pPara = pOutliner->GetParagraph( nPara );
-    while( pPara && !pPara->HasFlag(PARAFLAG_ISPAGE) )
+    while( pPara && !pOutliner->HasParaFlag(pPara, PARAFLAG_ISPAGE) )
     {
         nParasInLayout++;
         pPara = pOutliner->GetParagraph( ++nPara );
@@ -2114,7 +2114,7 @@ ULONG OutlineViewShell::Read(SvStream& rInput, const String& rBaseURL, USHORT eF
             {
                 Paragraph* pPara = pOutl->GetParagraph( nPara );
                 pOutl->SetDepth(pPara, -1);
-                pPara->SetFlag(PARAFLAG_ISPAGE);
+                pOutl->SetParaFlag(pPara, PARAFLAG_ISPAGE);
 
                 pOutl->SetStyleSheet( nPara, pTitleSheet );
 
