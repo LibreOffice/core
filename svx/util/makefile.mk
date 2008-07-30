@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.59 $
+# $Revision: 1.60 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -184,11 +184,6 @@ SHL2STDLIBS+= \
              $(SHLWAPILIB) \
              $(ADVAPI32LIB)
 .ENDIF # WNT
-
-.IF "$(ENABLE_LAYOUT)" == "TRUE"
-LINKFLAGS+= -L../$(PRJ)/layout/$(INPATH)/lib
-SHL2STDLIBS += -ltklayout$(UPD)$(DLLPOSTFIX)
-.ENDIF # ENABLE_LAYOUT == TRUE
 
 # ------------------------------------------------------------------------------
 
