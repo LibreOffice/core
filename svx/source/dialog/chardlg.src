@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chardlg.src,v $
- * $Revision: 1.77 $
+ * $Revision: 1.78 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -373,14 +373,14 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     FixedText FT_UNDERLINE
     {
         Pos = MAP_APPFONT( 12 , 6 );
-        Size = MAP_APPFONT( 68 , 8 );
+        Size = MAP_APPFONT( 78 , 8 );
         Text [ en-US ] = "Underlining" ;
     };
     ListBox LB_UNDERLINE
     {
         Border = TRUE;
         Pos = MAP_APPFONT ( 12 , 17 );
-        Size = MAP_APPFONT ( 68 , 72 );
+        Size = MAP_APPFONT ( 78 , 72 );
         TabStop = TRUE;
         DropDown = TRUE;
         StringList [ en-US ] =
@@ -406,29 +406,29 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     FixedText FT_UNDERLINE_COLOR
     {
-        Pos = MAP_APPFONT ( 86 , 6 );
-        Size = MAP_APPFONT ( 68 , 8 );
+        Pos = MAP_APPFONT ( 96 , 6 );
+        Size = MAP_APPFONT ( 70 , 8 );
         Text [ en-US ] = "Color";
     };
     ListBox LB_UNDERLINE_COLOR
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 86 , 17 );
-        Size = MAP_APPFONT ( 68 , 100 );
+        Pos = MAP_APPFONT ( 96 , 17 );
+        Size = MAP_APPFONT ( 70 , 100 );
         TabStop = TRUE;
         DropDown = TRUE;
     };
     FixedText FT_STRIKEOUT
     {
         Pos = MAP_APPFONT ( 12 , 35 );
-        Size = MAP_APPFONT ( 68 , 8 );
+        Size = MAP_APPFONT ( 78 , 8 );
         Text [ en-US ] = "Strikethrough" ;
     };
     ListBox LB_STRIKEOUT
     {
         Border = TRUE;
         Pos = MAP_APPFONT ( 12 , 46 );
-        Size = MAP_APPFONT ( 68 , 72 );
+        Size = MAP_APPFONT ( 78 , 72 );
         TabStop = TRUE;
         DropDown = TRUE;
         StringList [ en-US ] =
@@ -443,22 +443,22 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     CheckBox CB_INDIVIDUALWORDS
     {
-        Pos = MAP_APPFONT ( 86 , 48 );
-        Size = MAP_APPFONT ( 68 , 10 );
+        Pos = MAP_APPFONT ( 96 , 48 );
+        Size = MAP_APPFONT ( 70 , 10 );
         TabStop = TRUE;
         Text [ en-US ] = "Individual ~words" ;
     };
     FixedText FT_EMPHASIS
     {
         Pos = MAP_APPFONT ( 12 , 64 );
-        Size = MAP_APPFONT ( 68 , 8 );
+        Size = MAP_APPFONT ( 78 , 8 );
         Text [ en-US ] = "Emp~hasis mark" ;
     };
     ListBox LB_EMPHASIS
     {
         Border = TRUE;
         Pos = MAP_APPFONT ( 12 , 75 );
-        Size = MAP_APPFONT ( 68 , 72 );
+        Size = MAP_APPFONT ( 78 , 72 );
         TabStop = TRUE;
         DropDown = TRUE;
         StringList [ en-US ] =
@@ -472,15 +472,15 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     FixedText FT_POSITION
     {
-        Pos = MAP_APPFONT ( 86 , 64 );
-        Size = MAP_APPFONT ( 68 , 8 );
+        Pos = MAP_APPFONT ( 96 , 64 );
+        Size = MAP_APPFONT ( 70 , 8 );
         Text [ en-US ] = "Position" ;
     };
     ListBox LB_POSITION
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 86 , 75 );
-        Size = MAP_APPFONT ( 68 , 48 );
+        Pos = MAP_APPFONT ( 96 , 75 );
+        Size = MAP_APPFONT ( 70 , 48 );
         TabStop = TRUE;
         DropDown = TRUE;
         StringList [ en-US ] =
@@ -492,26 +492,26 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     FixedText FT_FONTCOLOR
     {
         Pos = MAP_APPFONT ( 12 , 93 );
-        Size = MAP_APPFONT ( 68 , 8 );
+        Size = MAP_APPFONT ( 78 , 8 );
         Text [ en-US ] = "Font ~color" ;
     };
     ListBox LB_FONTCOLOR
     {
         Border = TRUE;
         Pos = MAP_APPFONT ( 12 , 104 );
-        Size = MAP_APPFONT ( 68 , 72 );
+        Size = MAP_APPFONT ( 78 , 72 );
         TabStop = TRUE;
         DropDown = TRUE;
     };
     FixedText FT_EFFECTS
     {
-        Pos = MAP_APPFONT( 166 , 6 );
+        Pos = MAP_APPFONT( 172 , 6 );
         Size = MAP_APPFONT( 82 , 8 );
         Text [ en-US ] = "Effects" ;
     };
     ListBox LB_EFFECTS2
     {
-        Pos = MAP_APPFONT ( 166 , 17 ) ;
+        Pos = MAP_APPFONT ( 172 , 17 ) ;
         Size = MAP_APPFONT ( 82 , 56 ) ;
         DropDown = TRUE;
         StringList [ en-US ] =
@@ -525,13 +525,13 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     FixedText FT_RELIEF
     {
-        Pos = MAP_APPFONT ( 166 , 35 );
+        Pos = MAP_APPFONT ( 172 , 35 );
         Size = MAP_APPFONT ( 82 , 8 );
         Text [ en-US ] = "~Relief";
     };
     ListBox LB_RELIEF
     {
-        Pos = MAP_APPFONT ( 166 , 46 ) ;
+        Pos = MAP_APPFONT ( 172 , 46 ) ;
         Size = MAP_APPFONT ( 82 , 56 ) ;
         DropDown = TRUE;
         StringList [ en-US ] =
@@ -543,26 +543,26 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     TriStateBox CB_OUTLINE
     {
-        Pos = MAP_APPFONT ( 166 , 64 ) ;
+        Pos = MAP_APPFONT ( 172 , 64 ) ;
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Text [ en-US ] = "Outline" ;
     };
     TriStateBox CB_SHADOW
     {
-        Pos = MAP_APPFONT ( 166 , 78 ) ;
+        Pos = MAP_APPFONT ( 172 , 78 ) ;
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Text [ en-US ] = "Shadow" ;
     };
     TriStateBox CB_BLINKING
     {
-        Pos = MAP_APPFONT ( 166 , 92 ) ;
+        Pos = MAP_APPFONT ( 172 , 92 ) ;
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Hide = TRUE;
         Text [ en-US ] = "~Blinking" ;
     };
     TriStateBox CB_CHARHIDDEN
     {
-        Pos = MAP_APPFONT ( 166 , 106 ) ;
+        Pos = MAP_APPFONT ( 172 , 106 ) ;
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Text [ en-US ] = "H~idden" ;
     };
