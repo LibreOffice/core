@@ -1,3 +1,34 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: layoutparse.cxx,v $
+ *
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 #include "layoutparse.hxx"
 
 #define STRING( str ) String( str, RTL_TEXTENCODING_UTF8 )
@@ -20,6 +51,8 @@ LayoutXMLFile::SearchL10NElements( XMLParentNode* pCur, int )
         for ( ULONG i = 0; i < lst->Count(); i++ )
             if ( lst->GetObject( i )->GetNodeType() == XML_NODE_TYPE_ELEMENT )
                 HandleElement( ( XMLElement* )lst->GetObject( i ) );
+            else if ( lst->GetObject( i )->GetNodeType() == XML_NODE_TYPE_COMMENT )
+                lst->Remove( i-- );
 }
 
 std::vector<XMLAttribute*>
@@ -42,13 +75,14 @@ LayoutXMLFile::HandleElement( XMLElement* element )
 
     if ( interesting.size() )
     {
-        ByteString id = BSTRING( interesting[0]->GetValue() );
+        std::vector<XMLAttribute*>::iterator i = interesting.begin();
+
+        ByteString id = BSTRING( (*i++)->GetValue() );
 
         if ( mMergeMode )
             InsertL10NElement( id, element );
         else
-            for ( std::vector<XMLAttribute*>::iterator i = ++interesting.begin();
-                  i != interesting.end(); ++i )
+            for ( ; i != interesting.end(); ++i )
             {
                 ByteString attributeId = id;
                 ByteString value = BSTRING( ( *i )->GetValue() );
