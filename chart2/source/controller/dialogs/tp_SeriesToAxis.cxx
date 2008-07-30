@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_SeriesToAxis.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,9 @@
 #include <svtools/eitem.hxx>
 // header for SfxInt32Item
 #include <svtools/intitem.hxx>
+//SfxIntegerListItem
+#include <svtools/ilstitem.hxx>
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
 
 //.............................................................................
 namespace chart
@@ -59,18 +62,19 @@ SchOptionTabPage::SchOptionTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
     aFTOverlap(this,SchResId(FT_OVERLAP)),
     aMTOverlap(this,SchResId(MT_OVERLAP)),
     aCBConnect(this,SchResId(CB_CONNECTOR)),
-    aCBAxisSideBySide(this,SchResId(CB_BARS_SIDE_BY_SIDE))
+    aCBAxisSideBySide(this,SchResId(CB_BARS_SIDE_BY_SIDE)),
+    m_aFL_EmptyCells(this,SchResId(FL_PLOT_MISSING_VALUES)),
+    m_aRB_DontPaint(this,SchResId(RB_DONT_PAINT)),
+    m_aRB_AssumeZero(this,SchResId(RB_ASSUME_ZERO)),
+    m_aRB_ContinueLine(this,SchResId(RB_CONTINUE_LINE)),
+    m_bProvidesSecondaryYAxis(true),
+    m_bProvidesOverlapAndGapWidth(false)
 {
     FreeResource();
 
     aRbtAxis1.SetClickHdl( LINK( this, SchOptionTabPage, EnableHdl ));
     aRbtAxis2.SetClickHdl( LINK( this, SchOptionTabPage, EnableHdl ));
 }
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
 
 SchOptionTabPage::~SchOptionTabPage()
 {
@@ -85,22 +89,12 @@ IMPL_LINK( SchOptionTabPage, EnableHdl, RadioButton *, EMPTYARG )
 
     return 0;
 }
-/*************************************************************************
-|*
-|* Erzeugung
-|*
-\*************************************************************************/
 
 SfxTabPage* SchOptionTabPage::Create(Window* pWindow,const SfxItemSet& rOutAttrs)
 {
     return new SchOptionTabPage(pWindow, rOutAttrs);
 }
 
-/*************************************************************************
-|*
-|* Fuellt uebergebenen Item-Set mit Dialogbox-Attributen
-|*
-\*************************************************************************/
 BOOL SchOptionTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
     if(aRbtAxis2.IsChecked())
@@ -122,13 +116,15 @@ BOOL SchOptionTabPage::FillItemSet(SfxItemSet& rOutAttrs)
     if(aCBAxisSideBySide.IsVisible())
         rOutAttrs.Put(SfxBoolItem(SCHATTR_GROUP_BARS_PER_AXIS, ! aCBAxisSideBySide.IsChecked()));
 
+    if(m_aRB_DontPaint.IsChecked())
+        rOutAttrs.Put(SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT,::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP));
+    else if(m_aRB_AssumeZero.IsChecked())
+        rOutAttrs.Put(SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT,::com::sun::star::chart::MissingValueTreatment::USE_ZERO));
+    else if(m_aRB_ContinueLine.IsChecked())
+        rOutAttrs.Put(SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT,::com::sun::star::chart::MissingValueTreatment::CONTINUE));
+
     return TRUE;
 }
-/*************************************************************************
-|*
-|* Initialisierung
-|*
-\*************************************************************************/
 
 void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
 {
@@ -152,31 +148,19 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
         nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
         aMTGap.SetValue(nTmp);
     }
-    else
-    {
-        aMTGap.Show(FALSE);
-        aFTGap.Show(FALSE);
-    }
 
     if (rInAttrs.GetItemState(SCHATTR_BAR_OVERLAP, TRUE, &pPoolItem) == SFX_ITEM_SET)
     {
         nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
         aMTOverlap.SetValue(nTmp);
     }
-    else
-    {
-        aMTOverlap.Show(FALSE);
-        aFTOverlap.Show(FALSE);
-    }
+
     if (rInAttrs.GetItemState(SCHATTR_BAR_CONNECT, TRUE, &pPoolItem) == SFX_ITEM_SET)
     {
         BOOL bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
         aCBConnect.Check(bCheck);
     }
-    else
-    {
-        aCBConnect.Show(FALSE);
-    }
+
     if (rInAttrs.GetItemState(SCHATTR_AXIS_FOR_ALL_SERIES, TRUE, &pPoolItem) == SFX_ITEM_SET)
     {
         m_nAllSeriesAxisIndex = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
@@ -194,6 +178,97 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
         aCBAxisSideBySide.Show(FALSE);
     }
 
+
+    //missing value treatment
+    {
+        ::com::sun::star::uno::Sequence < sal_Int32 > aMissingValueTreatments;
+        if( rInAttrs.GetItemState(SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS, TRUE, &pPoolItem) == SFX_ITEM_SET )
+            aMissingValueTreatments =((const SfxIntegerListItem*)pPoolItem)->GetConstSequence();
+
+        if ( aMissingValueTreatments.getLength()>1 && rInAttrs.GetItemState(SCHATTR_MISSING_VALUE_TREATMENT,TRUE, &pPoolItem) == SFX_ITEM_SET)
+        {
+            m_aRB_DontPaint.Enable(FALSE);
+            m_aRB_AssumeZero.Enable(FALSE);
+            m_aRB_ContinueLine.Enable(FALSE);
+
+            for( sal_Int32 nN =0; nN<aMissingValueTreatments.getLength(); nN++ )
+            {
+                sal_Int32 nVal = aMissingValueTreatments[nN];
+                if(nVal==::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
+                    m_aRB_DontPaint.Enable(TRUE);
+                else if(nVal==::com::sun::star::chart::MissingValueTreatment::USE_ZERO)
+                    m_aRB_AssumeZero.Enable(TRUE);
+                else if(nVal==::com::sun::star::chart::MissingValueTreatment::CONTINUE)
+                    m_aRB_ContinueLine.Enable(TRUE);
+            }
+
+            long nVal=((const SfxInt32Item*)pPoolItem)->GetValue();
+            if(nVal==::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
+                m_aRB_DontPaint.Check(TRUE);
+            else if(nVal==::com::sun::star::chart::MissingValueTreatment::USE_ZERO)
+                m_aRB_AssumeZero.Check(TRUE);
+            else if(nVal==::com::sun::star::chart::MissingValueTreatment::CONTINUE)
+                m_aRB_ContinueLine.Check(TRUE);
+        }
+        else
+        {
+            m_aRB_DontPaint.Show(FALSE);
+            m_aRB_AssumeZero.Show(FALSE);
+            m_aRB_ContinueLine.Show(FALSE);
+            m_aFL_EmptyCells.Show(FALSE);
+        }
+    }
+
+    AdaptControlPositionsAndVisibility();
+}
+
+void SchOptionTabPage::Init( bool bProvidesSecondaryYAxis, bool bProvidesOverlapAndGapWidth, bool bProvidesBarConnectors )
+{
+    m_bProvidesSecondaryYAxis = bProvidesSecondaryYAxis;
+    m_bProvidesOverlapAndGapWidth = bProvidesOverlapAndGapWidth;
+    m_bProvidesBarConnectors = bProvidesBarConnectors;
+
+    AdaptControlPositionsAndVisibility();
+}
+
+void SchOptionTabPage::AdaptControlPositionsAndVisibility()
+{
+    aRbtAxis1.Show(m_bProvidesSecondaryYAxis);
+    aRbtAxis2.Show(m_bProvidesSecondaryYAxis);
+    aGrpAxis.Show(m_bProvidesSecondaryYAxis);
+
+    aMTGap.Show(m_bProvidesOverlapAndGapWidth);
+    aFTGap.Show(m_bProvidesOverlapAndGapWidth);
+
+    aMTOverlap.Show(m_bProvidesOverlapAndGapWidth);
+    aFTOverlap.Show(m_bProvidesOverlapAndGapWidth);
+
+    aCBConnect.Show(m_bProvidesBarConnectors);
+
+    if( !aMTGap.IsVisible() && !aMTOverlap.IsVisible() )
+    {
+        aGrpBar.Show(FALSE);
+        Point aPos;
+        if( !aRbtAxis1.IsVisible() && !aRbtAxis2.IsVisible() )
+            aPos = aGrpAxis.GetPosPixel();
+        else
+            aPos = aGrpBar.GetPosPixel();
+
+        long nDiffX = aRbtAxis1.GetPosPixel().getX() - aGrpAxis.GetPosPixel().getX();
+        long nDiffY = aRbtAxis1.GetPosPixel().getY() - aGrpAxis.GetPosPixel().getY();
+        long nDiffY1 = aRbtAxis2.GetPosPixel().getY() - aRbtAxis1.GetPosPixel().getY();
+
+        m_aFL_EmptyCells.SetPosPixel( aPos );
+        m_aRB_DontPaint.SetPosPixel( Point( aPos.getX() + nDiffX, aPos.getY() + nDiffY ) );
+        m_aRB_AssumeZero.SetPosPixel( Point( aPos.getX() + nDiffX, aPos.getY() + nDiffY + nDiffY1  ) );
+        m_aRB_ContinueLine.SetPosPixel( Point( aPos.getX() + nDiffX, aPos.getY() + nDiffY + nDiffY1 * 2 ) );
+    }
+
+    if( !m_aRB_DontPaint.IsVisible() )
+    {
+        m_aRB_ContinueLine.SetPosPixel( m_aRB_AssumeZero.GetPosPixel() );
+        m_aRB_AssumeZero.SetPosPixel( m_aRB_DontPaint.GetPosPixel() );
+    }
 }
 //.............................................................................
 } //namespace chart
