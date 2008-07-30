@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drtxtob.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -276,7 +276,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         // #96250# and #78665#
                         // allow move up if position is 2 or greater OR it
                         // is a title object (and thus depth==1)
-                        if(pOutl->GetAbsPos(pPara) > 1 || ( pPara->HasFlag(PARAFLAG_ISPAGE) && pOutl->GetAbsPos(pPara) > 0 ) )
+                        if(pOutl->GetAbsPos(pPara) > 1 || ( pOutl->HasParaFlag(pPara,PARAFLAG_ISPAGE) && pOutl->GetAbsPos(pPara) > 0 ) )
                         {
                             // Nicht ganz oben
                             bDisableUp = FALSE;
@@ -296,14 +296,14 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     {
                         sal_Int16 nDepth = pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) );
 
-                        if (nDepth > 0 || (bOutlineViewSh && (nDepth <= 0) && !pPara->HasFlag( PARAFLAG_ISPAGE )) )
+                        if (nDepth > 0 || (bOutlineViewSh && (nDepth <= 0) && !pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE )) )
                         {
                             // Nicht minimale Tiefe
                             bDisableLeft = FALSE;
                         }
 
                         if( (nDepth < pOLV->GetOutliner()->GetMaxDepth() && ( !bOutlineViewSh || pOutl->GetAbsPos(pPara) != 0 )) ||
-                            (bOutlineViewSh && (nDepth <= 0) && pPara->HasFlag( PARAFLAG_ISPAGE ) && pOutl->GetAbsPos(pPara) != 0) )
+                            (bOutlineViewSh && (nDepth <= 0) && pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE ) && pOutl->GetAbsPos(pPara) != 0) )
                         {
                             // Nicht maximale Tiefe und nicht ganz oben
                             bDisableRight = FALSE;
@@ -326,7 +326,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         && pPara
                         && 0 == pOutl->GetAbsPos(pPara)
                         && pOutl->GetParagraphCount() > 1
-                        && !pOutl->GetParagraph(1)->HasFlag( PARAFLAG_ISPAGE ) )
+                        && !pOutl->HasParaFlag( pOutl->GetParagraph(1), PARAFLAG_ISPAGE ) )
                     {
                         // Needs to be disabled
                         bDisableDown = TRUE;
