@@ -1,3 +1,34 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: proplist.cxx,v $
+ *
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 #include "proplist.hxx"
 
 #include <rtl/ustrbuf.hxx>
@@ -7,6 +38,8 @@
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 #include <tools/debug.hxx>
+
+#include "layout/layoutcore.hxx"
 
 #if TEST_LAYOUT && !defined( DBG_UTIL )
 #include <stdio.h>
@@ -85,8 +118,14 @@ getProperty( const uno::Reference< uno::XInterface > &xPeer,
 
 /* Given a string and a type, it converts the string to the type, and returns
    it encapsulated in Any. */
-uno::Any anyFromString( const OUString &value, const uno::Type &type )
+uno::Any anyFromString( OUString const& value, uno::Type const& type )
 {
+    sal_Int16 radix = 10;
+    OUString intval = value;
+    if ( value.getLength() > 2 && value[0] == '0' && value[1] == 'x' )
+        intval = value.copy( 2 ), radix = 16;
+    else if ( value.getLength() > 1 && value[0] == '#' )
+        intval = value.copy( 1 ), radix = 16;
     switch ( type.getTypeClass() )
     {
         case uno::TypeClass_CHAR:
@@ -98,21 +137,21 @@ uno::Any anyFromString( const OUString &value, const uno::Type &type )
                 return uno::makeAny( false );
             break;  // ends switch, throws exception
         case uno::TypeClass_BYTE:
-            return uno::makeAny( ( sal_uInt8 ) value.toInt32() );
+            return uno::makeAny( ( sal_uInt8 ) intval.toInt32( radix ) );
         case uno::TypeClass_SHORT:
-            return uno::makeAny( ( sal_Int16 ) value.toInt32() );
+            return uno::makeAny( ( sal_Int16 ) intval.toInt32( radix ) );
         case uno::TypeClass_UNSIGNED_SHORT:
-            return uno::makeAny( ( sal_uInt16 ) value.toInt32() );
+            return uno::makeAny( ( sal_uInt16 ) intval.toInt32( radix ) );
         case uno::TypeClass_ENUM:
-            return uno::makeAny( ( sal_Int16 ) value.toInt32() );
+            return uno::makeAny( ( sal_Int16 ) intval.toInt32( radix ) );
         case uno::TypeClass_LONG:
-            return uno::makeAny( ( sal_Int32 ) value.toInt32() );
+            return uno::makeAny( ( sal_Int32 ) intval.toInt32( radix ) );
         case uno::TypeClass_UNSIGNED_LONG:
-            return uno::makeAny( ( sal_uInt32 ) value.toInt32() );
+            return uno::makeAny( ( sal_uInt32 ) intval.toInt32( radix ) );
         case uno::TypeClass_HYPER:
-            return uno::makeAny( ( sal_Int64 ) value.toInt64() );
+            return uno::makeAny( ( sal_Int64 ) intval.toInt64( radix ) );
         case uno::TypeClass_UNSIGNED_HYPER:
-            return uno::makeAny( ( sal_uInt16 ) value.toInt64() );
+            return uno::makeAny( ( sal_uInt16 ) intval.toInt64( radix ) );
         case uno::TypeClass_FLOAT:
             return uno::makeAny( value.toFloat() );
         case uno::TypeClass_DOUBLE:
@@ -120,9 +159,9 @@ uno::Any anyFromString( const OUString &value, const uno::Type &type )
         case uno::TypeClass_STRING:
             return uno::makeAny( value );
         case uno::TypeClass_CONSTANT:
-            if ( value.getLength() > 2 && value[0] == '0' && value[1] == 'x' )
-                return uno::makeAny( value.copy( 2 ).toInt32( 16 ) );
-            return uno::makeAny( value.toInt32() );
+            return uno::makeAny( intval.toInt32( radix ) );
+        case uno::TypeClass_INTERFACE:
+            return uno::makeAny( loadGraphic( OUSTRING_CSTR( value ) ) );
         case uno::TypeClass_SEQUENCE:
         {
             sal_Int32 i = 0;
@@ -157,16 +196,15 @@ uno::Any anyFromString( const OUString &value, const uno::Type &type )
 
             uno::Sequence< OUString > seq( values.size() );
             i = 0;
-            for( std::list< OUString >::const_iterator it = values.begin();
-                 it != values.end(); it++, i++ )
+            for ( std::list< OUString >::const_iterator it = values.begin();
+                  it != values.end(); it++, i++ )
                 seq[ i ] = *it;
 
             return uno::makeAny( seq );
         }
-        break;
 
         default:
-            DBG_ERROR1( "ERROR: unknown property type of value: `%s'", OUSTRING_CSTR( value ) );
+            DBG_ERROR1( "ERROR: unknown property type of value: `%s'\n", OUSTRING_CSTR( value ) );
             break;
     }
     throw uno::RuntimeException();
@@ -212,9 +250,9 @@ setProperties( uno::Reference< uno::XInterface > const& xPeer,
 {
     if ( !prophlp::canHandleProps( xPeer ) )
     {
-        DBG_ERROR( "Error: setProperties - bad handle ignoring props:" );
+        DBG_ERROR( "Error: setProperties - bad handle ignoring props:\n" );
         PropList::const_iterator cur;
-        for( cur = rProps.begin(); cur != rProps.end(); cur++ )
+        for ( cur = rProps.begin(); cur != rProps.end(); cur++ )
         {
             OString attr = OUStringToOString( cur->first, RTL_TEXTENCODING_UTF8 );
             OString value = OUStringToOString( cur->second, RTL_TEXTENCODING_UTF8 );
@@ -223,7 +261,7 @@ setProperties( uno::Reference< uno::XInterface > const& xPeer,
     }
 
     PropList::const_iterator cur;
-    for( cur = rProps.begin(); cur != rProps.end(); cur++ )
+    for ( cur = rProps.begin(); cur != rProps.end(); cur++ )
         setProperty( xPeer, cur->first, cur->second );
 }
 
@@ -233,6 +271,7 @@ setProperty( uno::Reference< uno::XInterface > const& xPeer,
 {
     OUString unoAttr = toUnoNaming( attr );
 
+    OSL_TRACE( "setting %s=%s\n", OUSTRING_CSTR( attr ), OUSTRING_CSTR( value ) );
     // get a Property object
     beans::Property prop;
     try
@@ -241,15 +280,15 @@ setProperty( uno::Reference< uno::XInterface > const& xPeer,
             = prophlp::queryPropertyInfo( xPeer );
         prop = xInfo->getPropertyByName( unoAttr );
     }
-    catch( beans::UnknownPropertyException &ex )
+    catch( beans::UnknownPropertyException & )
     {
-        DBG_ERROR1( "Warning: unknown attribute: `%s'", OUSTRING_CSTR( unoAttr ) );
+        DBG_ERROR1( "Warning: unknown attribute: `%s'\n", OUSTRING_CSTR( unoAttr ) );
         return;
     }
 
     if ( prop.Name.getLength() <= 0 )
     {
-        DBG_ERROR1( "Warning: missing prop: `%s'", OUSTRING_CSTR( unoAttr ) );
+        DBG_ERROR1( "Warning: missing prop: `%s'\n", OUSTRING_CSTR( unoAttr ) );
         return;
     }
 
@@ -259,9 +298,9 @@ setProperty( uno::Reference< uno::XInterface > const& xPeer,
     {
         any = anyFromString( value, prop.Type );
     }
-    catch( uno::RuntimeException &ex )
+    catch( uno::RuntimeException & )
     {
-        DBG_ERROR5( "Warning: %s( %s )( %s ) attribute is of type %s( rejected: %s )", OUSTRING_CSTR( unoAttr ), OUSTRING_CSTR( value ), OUSTRING_CSTR( prop.Name ),  OUSTRING_CSTR( prop.Type.getTypeName() ), OUSTRING_CSTR( value ) );
+        DBG_ERROR5( "Warning: %s( %s )( %s ) attribute is of type %s( rejected: %s )\n", OUSTRING_CSTR( unoAttr ), OUSTRING_CSTR( value ), OUSTRING_CSTR( prop.Name ),  OUSTRING_CSTR( prop.Type.getTypeName() ), OUSTRING_CSTR( value ) );
         return;
     }
 
@@ -272,7 +311,7 @@ setProperty( uno::Reference< uno::XInterface > const& xPeer,
     }
     catch( ... )
     {
-        DBG_ERROR2( "Warning: cannot set attribute %s to %s ", OUSTRING_CSTR( unoAttr ), OUSTRING_CSTR( value ) );
+        DBG_ERROR2( "Warning: cannot set attribute %s to %s \n", OUSTRING_CSTR( unoAttr ), OUSTRING_CSTR( value ) );
     }
 }
 
@@ -301,8 +340,7 @@ static const AttributesMap attribsMap[] =
     { "left",         awt::VclWindowPeerAttribute::LEFT,         false },
     { "moveable",     awt::WindowAttribute::MOVEABLE,            true },
     { "noborder",     awt::VclWindowPeerAttribute::NOBORDER,     false },
-// Comment-out for <= m237
-//    { "nolabel",      awt::VclWindowPeerAttribute::NOLABEL,      false },
+    { "nolabel",      awt::VclWindowPeerAttribute::NOLABEL,      false },
     { "optimumsize",  awt::WindowAttribute::OPTIMUMSIZE,         false },
     { "readonly",     awt::VclWindowPeerAttribute::READONLY,     false },
     { "right",        awt::VclWindowPeerAttribute::RIGHT,        false },
@@ -347,7 +385,7 @@ void propsFromAttributes( const uno::Reference<xml::input::XAttributes> & xAttri
 
 
     sal_Int32 nAttrs = xAttributes->getLength();
-    for( sal_Int32 i = 0; i < nAttrs; i++ )
+    for ( sal_Int32 i = 0; i < nAttrs; i++ )
     {
         if ( nNamespace != xAttributes->getUidByIndex( i ) )
             continue;
@@ -367,7 +405,7 @@ findAndRemove( const char *pAttr, PropList &rProps, OUString &rValue )
     PropList::iterator cur;
     OUString aName = OUString::createFromAscii( pAttr );
 
-    for( cur = rProps.begin(); cur != rProps.end(); cur++ )
+    for ( cur = rProps.begin(); cur != rProps.end(); cur++ )
     {
         if ( cur->first.equalsIgnoreAsciiCase( aName ) )
         {
@@ -395,7 +433,7 @@ getAttributeProps( PropList &rProps )
     else
         nAttrs |= awt::WindowAttribute::SHOW;
 
-    for( int i = 0; i < attribsMapLen; i++ )
+    for ( int i = 0; i < attribsMapLen; i++ )
     {
         if ( findAndRemove( attribsMap[i].name, rProps, aValue ) )
         {
