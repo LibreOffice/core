@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_ChartType.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,7 +84,7 @@ public:
 protected:
     ChartTypeDialogController* getSelectedMainType();
     void showAllControls( ChartTypeDialogController& rTypeController );
-    void fillAllControls( const ChartTypeParameter& rParameter, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xTemplateProps=::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >() );
+    void fillAllControls( const ChartTypeParameter& rParameter, bool bAlsoResetSubTypeList=true );
     ChartTypeParameter getCurrentParamter() const;
 
     virtual void stateChanged( ChangingResource* pResource );
