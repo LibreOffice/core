@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_SeriesToAxis.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +48,20 @@ namespace chart
 
 class SchOptionTabPage : public SfxTabPage
 {
-private:
+public:
+    SchOptionTabPage(Window* pParent, const SfxItemSet& rInAttrs);
+    virtual ~SchOptionTabPage();
+
+    static SfxTabPage* Create(Window* pParent, const SfxItemSet& rInAttrs);
+    virtual BOOL FillItemSet(SfxItemSet& rOutAttrs);
+    virtual void Reset(const SfxItemSet& rInAttrs);
+
+    void Init( bool bProvidesSecondaryYAxis, bool bProvidesOverlapAndGapWidth, bool bProvidesBarConnectors );
+
+private: //methods
+    void AdaptControlPositionsAndVisibility();
+
+private: //member
     FixedLine   aGrpAxis;
     RadioButton aRbtAxis1;
     RadioButton aRbtAxis2;
@@ -61,17 +74,18 @@ private:
     CheckBox    aCBConnect;
     CheckBox    aCBAxisSideBySide;
 
+    FixedLine   m_aFL_EmptyCells;
+    RadioButton m_aRB_DontPaint;
+    RadioButton m_aRB_AssumeZero;
+    RadioButton m_aRB_ContinueLine;
+
     DECL_LINK(EnableHdl, RadioButton * );
 
     sal_Int32   m_nAllSeriesAxisIndex;
 
-public:
-    SchOptionTabPage(Window* pParent, const SfxItemSet& rInAttrs);
-    virtual ~SchOptionTabPage();
-
-    static SfxTabPage* Create(Window* pParent, const SfxItemSet& rInAttrs);
-    virtual BOOL FillItemSet(SfxItemSet& rOutAttrs);
-    virtual void Reset(const SfxItemSet& rInAttrs);
+    bool m_bProvidesSecondaryYAxis;
+    bool m_bProvidesOverlapAndGapWidth;
+    bool m_bProvidesBarConnectors;
 };
 
 //.............................................................................
