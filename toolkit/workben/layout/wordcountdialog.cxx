@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wordcountdialog.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,7 +84,15 @@ SwWordCountDialog::~SwWordCountDialog()
 /*-- 06.04.2004 16:05:57---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void  SwWordCountDialog::SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc)
+void  SwWordCountDialog::SetValues(const SwDocStat&
+#if !TEST_LAYOUT
+                                   rCurrent,
+#endif
+                                   , const SwDocStat&
+#if !TEST_LAYOUT
+                                   rDoc
+#endif
+                                   )
 {
 #if !TEST_LAYOUT
     aCurrentWordFI.SetText(     String::CreateFromInt32(rCurrent.nWord ));
