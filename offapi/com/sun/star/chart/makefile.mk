@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.12 $
+# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -88,6 +88,7 @@ IDLFILES=\
     Dim3DDiagram.idl\
     DonutDiagram.idl\
     LineDiagram.idl\
+    MissingValueTreatment.idl\
     NetDiagram.idl\
     PieDiagram.idl\
     StackableDiagram.idl\
