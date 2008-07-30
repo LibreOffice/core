@@ -8,7 +8,7 @@
  *
  * $RCSfile: Diagram.idl,v $
  *
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,6 +102,11 @@ service Diagram
     */
     [optional, property] boolean                    GroupBarsPerAxis;
 
+    /** Starting angle in degrees for pie charts and doughnut charts.
+     */
+    [optional, property] long                       StartingAngle;
+
+    [optional, property] boolean                    RightAngledAxes;
 
     /** Perspective of 3D charts ( [0,100] ).
      */
@@ -114,6 +119,12 @@ service Diagram
     /** Vertical rotation of 3D charts in degrees ( ]-180,180] ).
      */
     [optional, property] long                       RotationVertical;
+
+    /** specifies how empty or invalid cells in the provided data should be handled when displayed
+
+        @see ::com::sun::star::chart::MissingValueTreatment
+     */
+    [optional, property] long                       MissingValueTreatment;
 };
 
 } ; // chart2
