@@ -3,7 +3,7 @@ cp    scp2                        usr1     -    all    cp_mkout NULL
 cp    scp2\macros                 nmake    -    all    cp_langmacros NULL
 cp    scp2\source\templates       nmake    -    all    cp_langtemplates NULL
 cp    scp2\source\activex         nmake    -    all    cp_activex cp_langmacros cp_langtemplates NULL
-cp    scp2\source\binfilter       nmake    -    all    cp_binfilter cp_langmacros NULL
+cp    scp2\source\binfilter       nmake    -    all    cp_binfilter cp_langmacros cp_langtemplates NULL
 cp    scp2\source\calc            nmake    -    all    cp_calc cp_langmacros cp_langtemplates NULL
 cp    scp2\source\canvas          nmake    -    all    cp_canvas cp_langmacros cp_langtemplates NULL
 cp    scp2\source\crashrep        nmake    -    all    cp_crashrep cp_langmacros cp_langtemplates NULL
