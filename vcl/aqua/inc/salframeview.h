@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframeview.h,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,6 +79,7 @@
     NSRange mSelectedRange;
     id mpMouseEventListener;
     id mDraggingDestinationHandler;
+    id mpLastSuperEvent;
 }
 +(void)unsetMouseFrame: (AquaSalFrame*)pFrame;
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;
