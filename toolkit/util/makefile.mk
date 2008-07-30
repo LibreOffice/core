@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.25 $
+# $Revision: 1.26 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -53,7 +53,10 @@ LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1FILES=	$(SLB)$/awt.lib \
             $(SLB)$/tree.lib \
             $(SLB)$/controls.lib \
-            $(SLB)$/helper.lib
+            $(SLB)$/helper.lib\
+            $(SLB)$/layoutcore.lib \
+            $(SLB)$/vclcompat.lib
+
 SHL1TARGET= tk$(DLLPOSTFIX)
 SHL1IMPLIB= itk
 SHL1USE_EXPORTS=name
@@ -98,32 +101,6 @@ RESLIB1IMAGES=$(PRJ)$/source$/awt
 RES1FILELIST=$(SRS)$/awt.srs
 RESLIB1NAME=$(TARGET)
 RESLIB1SRSFILES=$(RES1FILELIST)
-
-.IF "$(ENABLE_LAYOUT)" == "TRUE"
-
-TARGET2 = tklayout
-LIB2FILES= \
-    $(SLB)$/layout_awt.lib \
-    $(SLB)$/layoutcore.lib \
-    $(SLB)$/vclcompat.lib
-
-LIB2TARGET= $(SLB)$/$(TARGET2).lib
-SHL2TARGET= $(TARGET2)$(UPD)$(DLLPOSTFIX)
-SHL2IMPLIB= $(TARGET2)
-
-SHL2LIBS= $(LIB2TARGET)
-
-SHL2STDLIBS=  \
-    $(UNOTOOLSLIB) \
-    $(TKLIB) \
-    $(TOOLSLIB) \
-    $(COMPHELPERLIB) \
-    $(VCLLIB) \
-    $(CPPULIB) \
-    $(CPPUHELPERLIB) \
-    $(SALLIB) \
-
-.ENDIF # ENABLE_LAYOUT == "TRUE"
 
 # --- Footer -------------------------------------------------------------
 .INCLUDE :	target.mk
