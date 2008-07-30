@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VDataSeries.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -170,6 +170,9 @@ public:
 
     void releaseShapes();
 
+    void setMissingValueTreatment( sal_Int32 nMissingValueTreatment );
+    sal_Int32 getMissingValueTreatment() const;
+
 private: //methods
     VDataSeries();
     ::com::sun::star::chart2::DataPointLabel*
@@ -245,6 +248,8 @@ private: //member
     mutable sal_Int32                               m_nCurrentAttributedPoint;
     ::com::sun::star::awt::Size                     m_aReferenceSize;
     //
+
+    sal_Int32                                       m_nMissingValueTreatment;
 };
 
 //.............................................................................
