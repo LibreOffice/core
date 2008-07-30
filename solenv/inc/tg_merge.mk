@@ -8,7 +8,7 @@
 #
 # $RCSfile: tg_merge.mk,v $
 #
-# $Revision: 1.11 $
+# $Revision: 1.12 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,31 +41,26 @@ $(foreach,i,$(ULFFILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf
 # *.xrb merge
 .IF "$(XMLPROPERTIES)"!=""
 $(foreach,i,$(XMLPROPERTIES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
-.ENDIF          # "$(ULFFILES)"!=""
-
-# *.xrm merge
-.IF "$(READMEFILES)"!=""
-$(foreach,i,$(READMEFILES) $(COMMONMISC)$/$(TARGET)$/$(i:b).xrm) : $$(@:f) localize.sdf 
-.ENDIF          # "$(ULFFILES)"!=""
+.ENDIF          # "$(XMLPROPERTIES)"!=""
 
 # *.xrm merge
 .IF "$(APOCHELPFILES)"!=""
 $(foreach,i,$(APOCHELPFILES) $(COMMONMISC)$/$(MYPATH)$/$(i:b).xrm) : $$(@:f) localize.sdf 
-.ENDIF          # "$(ULFFILES)"!=""
+.ENDIF          # "$(APOCHELPFILES)"!=""
 
 # *.xcu merge
 .IF "$(LOCALIZEDFILES)"!=""
 $(foreach,i,$(LOCALIZEDFILES) $(PROCESSOUT)$/merge$/{$(subst,.,$/ $(PACKAGE))}$/$(i:b).xcu) : $$(@:f) localize.sdf 
-.ENDIF          # "$(ULFFILES)"!=""
+.ENDIF          # "$(LOCALIZEDFILES)"!=""
 .ENDIF			# "$(WITH_LANG)"!=""
 
 # dependencies from *.ulf to par-files
 .IF "$(ULFPARFILES)"!=""
 $(ULFPARFILES) : $(COMMONMISC)$/$(TARGET)$/$$(@:b).$(LANGFILEEXT)
-.ENDIF          # "$(PARFILES)"!=""
+.ENDIF          # "$(ULFPARFILES)"!=""
 
 # *.xrm merge
 .IF "$(READMEFILES)"!=""
 $(uniq $(foreach,i,$(READMEFILES) $(COMMONMISC)$/$(TARGET)$/$(i:b).xrm)) : $$(@:f) localize.sdf
-.ENDIF          # "$(ULFFILES)"!=""
+.ENDIF          # "$(READMEFILES)"!=""
 
