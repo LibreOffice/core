@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: layout.scp,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,83 +30,21 @@
 
 #include "macros.inc"
 
-File gid_File_Lib_Layout
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT4(libtklayout,OFFICEUPD,DLLPOSTFIX,UNXSUFFIX));
-  #else
-    Name = STRING(CONCAT4(tklayout,OFFICEUPD,DLLPOSTFIX,.dll));
-  #endif
-End
-
 Directory gid_Dir_Share_Layout
     ParentID = gid_Dir_Share;
     DosName = "layout";
 End
 
-File gid_File_Xml_Wordcount
-   TXT_FILE_BODY;
+File gid_File_Zip_Sw_Layout
    Dir = gid_Dir_Share_Layout;
-   Name = "wordcount.xml";
-   Styles = (PACKED);
+   USER_FILE_BODY;
+   Styles = (ARCHIVE, PATCH);
+   Name = "sw-layout.zip";
 End
 
-File gid_File_Xml_Zoom
-   TXT_FILE_BODY;
+File gid_File_Zip_Svx_Layout
    Dir = gid_Dir_Share_Layout;
-   Name = "zoom.xml";
-   Styles = (PACKED);
+   USER_FILE_BODY;
+   Styles = (ARCHIVE, PATCH);
+   Name = "svx-layout.zip";
 End
-
-Directory gid_Dir_Share_Layout_De
-    ParentID = gid_Dir_Share_Layout;
-    DosName = "de";
-End
-
-File gid_File_Xml_Wordcount_De
-   TXT_FILE_BODY;
-   Dir = gid_Dir_Share_Layout_De;
-   Name = "de/wordcount.xml";
-   Styles = (PACKED);
-End
-
-File gid_File_Xml_Zoom_De
-   TXT_FILE_BODY;
-   Dir = gid_Dir_Share_Layout_De;
-   Name = "de/zoom.xml";
-   Styles = (PACKED);
-End
-
-Directory gid_Dir_Share_Layout_Nl
-    ParentID = gid_Dir_Share_Layout;
-    DosName = "nl";
-End
-
-File gid_File_Xml_Wordcount_Nl
-   TXT_FILE_BODY;
-   Dir = gid_Dir_Share_Layout_Nl;
-   Name = "nl/wordcount.xml";
-   Styles = (PACKED);
-End
-
-File gid_File_Xml_Zoom_Nl
-   TXT_FILE_BODY;
-   Dir = gid_Dir_Share_Layout_Nl;
-   Name = "nl/zoom.xml";
-   Styles = (PACKED);
-End
-
-//  Do we need this?
-//  Must MODULE_OPTIONAL_LAYOUT be registered somewhere?
-//
-// Module gid_Module_Layout
-//    MOD_NAME_DESC (MODULE_OPTIONAL_LAYOUT);
-//    ParentID = gid_Module_Optional;
-//    Files = (gid_File_Lib_Layout,gid_File_Xml_Wordcount,gid_File_Xml_Zoom);
-//    Minimal = NO;
-//    Default = YES;
-//    Styles = ();
-// End
