@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: byteseq.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,43 +28,52 @@
  *
  ************************************************************************/
 
-/* We do not link to xmlscript, because that would introduce an extra
-   toolkit dependency.  */
-#include <xml_helper/xml_byteseq.cxx>
-
-#include <stdio.h>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <osl/file.hxx>
+#include <comphelper/oslfile2streamwrap.hxx>
+
+using osl::File;
+using osl::FileBase;
+using namespace ::com::sun::star;
 
 namespace layoutimpl
 {
 
-uno::Reference< io::XInputStream >
-getFileAsStream( const uno::Reference< lang::XMultiServiceFactory > &xFactory,
-                 const rtl::OUString &rName );
-
-uno::Reference< io::XInputStream >
-getFileAsStream( const uno::Reference< lang::XMultiServiceFactory > & /* xFactory */,
-                 const rtl::OUString &rName )
+uno::Reference< io::XInputStream > getFileAsStream( const rtl::OUString &rName )
 {
-    rtl::OString fname = rtl::OUStringToOString( rName, RTL_TEXTENCODING_UTF8 );
-    // create the input stream
-    FILE *f = ::fopen( fname, "rb" );
-    if (f)
+    rtl::OUString sFileURL;
+    if( FileBase::E_None != FileBase::getFileURLFromSystemPath( rName, sFileURL ) )
+        sFileURL = rName; // maybe it already was a file url
+
+    File * blobFile = new File(sFileURL);
+    File::RC errorCode = blobFile->open(OpenFlag_Read);
+
+    uno::Reference<io::XInputStream> xResult;
+    switch (errorCode)
     {
-        ::fseek( f, 0 ,SEEK_END );
-        int nLength = ::ftell( f );
-        ::fseek( f, 0, SEEK_SET );
+    case osl::File::E_None: // got it
+        xResult.set( new comphelper::OSLInputStreamWrapper(blobFile,true) );
+        break;
 
-        ByteSequence bytes( nLength );
-        ::fread( bytes.getArray(), nLength, 1, f );
-        ::fclose( f );
+    case osl::File::E_NOENT: // no file => no stream
+        delete blobFile;
+        break;
 
-        return new xmlscript::BSeqInputStream( bytes );
+    default:
+        delete blobFile;
+/*            {
+            rtl::OUStringBuffer sMsg;
+            sMsg.appendAscii("Cannot open output file \"");
+            sMsg.append(aURL);
+            sMsg.appendAscii("\" : ");
+            sMsg.append(configmgr::FileHelper::createOSLErrorString(errorCode));
+
+            throw io::IOException(sMsg.makeStringAndClear(),NULL);
+        }
+*/
     }
 
-    throw Exception( OUString( RTL_CONSTASCII_USTRINGPARAM("### Cannot read file!") ),
-                     Reference< XInterface >() );
+    return xResult;
 }
 
 } // namespace layoutimpl
