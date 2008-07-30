@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dinfdlg.hrc,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,14 @@
 #define _DINFDLG_HRC
 
 #include <svtools/controldims.hrc>
+
+// const -----------------------------------------------------------------
+
+#define CUSTOM_TYPE_UNKNOWN     0
+#define CUSTOM_TYPE_TEXT        1
+#define CUSTOM_TYPE_NUMBER      2
+#define CUSTOM_TYPE_DATE        3
+#define CUSTOM_TYPE_BOOLEAN     4
 
 // 4 TP_DOCINFORELOAD
 #define PAGE_WIDTH          260
@@ -126,6 +134,25 @@
 #define FT_SIGNED_VAL       77
 #define STR_MULTSIGNED      78
 #define BTN_SIGNATURE       79
+
+#define WIN_PROPERTIES      90
+#define SB_VERTICAL         91
+#define FT_PROPERTIES       92
+#define CTRL_PROPERTIES     93
+#define BTN_ADD             94
+#define LB_PROPNAME         95
+#define ED_PROPVALUE        96
+#define RB_PROPYES          96
+#define RB_PROPNO           97
+#define LB_PROPTYPE         98
+#define PB_REMOVEPROP       99
+#define RB_PROPERTY_YES     100
+#define RB_PROPERTY_NO      101
+
+#define STR_HEADER_NAME     90
+#define STR_HEADER_TYPE     91
+#define STR_HEADER_VALUE    92
+#define STR_HEADER_ACTION   93
 
 #endif
 
