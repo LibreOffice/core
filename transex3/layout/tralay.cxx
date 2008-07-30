@@ -1,5 +1,38 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: tralay.cxx,v $
+ *
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <transex3/vosapp.hxx>
+
+#include <osl/file.hxx>
 
 #include "export.hxx"
 #include "layoutparse.hxx"
@@ -12,7 +45,9 @@
 #define STRING( str ) String( str, RTL_TEXTENCODING_UTF8 )
 #define BSTRING( str ) ByteString( str, RTL_TEXTENCODING_UTF8 )
 
-using namespace ::rtl;
+using ::rtl::OUString;
+
+using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -31,7 +66,7 @@ class TranslateLayout : public Application
 
 public:
     TranslateLayout();
-    ~TranslateLayout();
+    virtual ~TranslateLayout();
     ByteString GetCommandLineParam( int i );
     ByteString GetOptionArgument( int const i );
     void ExceptionalMain();
@@ -40,6 +75,8 @@ public:
     void MergeLanguage( ByteString const& language );
     void ParseCommandLine();
     void CreateSDF();
+
+    using Application::GetCommandLineParam;
 };
 
 static void usage()
@@ -55,9 +92,29 @@ static void usage()
     exit( 2 );
 }
 
+static ByteString ConvertSystemPath( const ByteString& rPath )
+{
+    if( rPath.CompareTo( ".", 1 ) == 0 )
+    {
+        OUString sPath( rPath.GetBuffer(), rPath.Len(), RTL_TEXTENCODING_UTF8 );
+
+        ::rtl::OUString curDirPth, sURL;
+        osl_getProcessWorkingDir( &curDirPth.pData );
+
+        ::osl::FileBase::getAbsoluteFileURL( curDirPth, sPath, sURL );
+        ::osl::FileBase::getSystemPathFromFileURL( sURL, sPath );
+
+        return ByteString( rtl::OUStringToOString( sPath, RTL_TEXTENCODING_UTF8 ) );
+    }
+    else
+    {
+        return rPath;
+    }
+}
+
 ByteString TranslateLayout::GetCommandLineParam( int i )
 {
-    return ByteString( OUSTRING_CSTR( Application::GetCommandLineParam( i ) ) );
+    return ByteString( OUSTRING_CSTR( Application::GetCommandLineParam( sal::static_int_cast< USHORT >( i ) ) ) );
 }
 
 ByteString TranslateLayout::GetOptionArgument( int const i )
@@ -90,14 +147,14 @@ void TranslateLayout::ParseCommandLine()
             mLocalize = GetOptionArgument( ++i );
         }
         else if ( aParam.Equals( "-o" ) || aParam.Equals( "--output" ) )
-            mOutput = GetOptionArgument( ++i );
+            mOutput = ConvertSystemPath( GetOptionArgument( ++i ) );
         else if ( !aParam.CompareTo( "-", 1 ) )
         {
             fprintf( stderr, "error: No such option: %s\n", aParam.GetBuffer() );
             usage();
         }
         else
-            mFiles.push_back( aParam );
+            mFiles.push_back( ConvertSystemPath( aParam ) );
     }
     if ( !mFiles.size() )
     {
@@ -129,49 +186,76 @@ translateElement( XMLElement* element, ByteString const& lang,
                   ResData* resData, MergeDataFile& mergeData )
 {
     XMLAttributeList* attributes = element->GetAttributeList();
-    std::vector<XMLAttribute*> interesting = interestingAttributes( attributes );
-    ByteString id = BSTRING( interesting[0]->GetValue() );
-    for ( std::vector<XMLAttribute*>::iterator i = ++interesting.begin();
-          i != interesting.end(); ++i )
-    {
-        ByteString attributeId = id;
-        attributeId += BSTRING ( **i );
-        resData->sGId = attributeId;
-        resData->sId = element->GetOldref();
+    std::vector<XMLAttribute*> interesting( interestingAttributes( attributes ) );
 
-        if ( PFormEntrys* entry = mergeData.GetPFormEntrys( resData ) )
+
+    if( !interesting.empty() )
+    {
+        std::vector<XMLAttribute*>::iterator i( interesting.begin() );
+        ByteString id = BSTRING( (*i++)->GetValue() );
+        for ( ; i != interesting.end(); ++i )
         {
-            ByteString translation;
-            entry->GetText( translation, STRING_TYP_TEXT, lang, true );
-//            ByteString original = removeContent( element );
-            if ( !translation.Len() )
+            ByteString attributeId = id;
+            attributeId += BSTRING ( **i );
+            resData->sGId = attributeId;
+            resData->sId = element->GetOldref();
+
+            if ( PFormEntrys* entry = mergeData.GetPFormEntrys( resData ) )
+            {
+                ByteString translation;
+                entry->GetText( translation, STRING_TYP_TEXT, lang, true );
+    //            ByteString original = removeContent( element );
+                if ( !translation.Len() )
 #if 0
-                translation = original;
+                    translation = original;
 #else
-                translation = BSTRING( ( *i )->GetValue() );
+                    translation = BSTRING( ( *i )->GetValue() );
 #endif
-            delete translateAttribute( attributes, **i , STRING( translation ) );
+                delete translateAttribute( attributes, **i , STRING( translation ) );
+            }
         }
     }
 }
 
 static bool is_dir( ByteString const& name )
 {
-    if (DIR* dir = opendir( name.GetBuffer() ) )
+    DirectoryItem aItem;
+    OUString sFileURL( name.GetBuffer(), name.Len(), RTL_TEXTENCODING_UTF8 );
+    FileBase::getFileURLFromSystemPath( sFileURL, sFileURL );
+    if( DirectoryItem::get( sFileURL, aItem ) == FileBase::E_None )
     {
-        closedir( dir );
-        return true;
+        FileStatus aStatus(FileStatusMask_Type);
+        if( aItem.getFileStatus( aStatus ) == FileBase::E_None )
+        {
+            if( aStatus.getFileType() == FileStatus::Directory )
+                return true;
+        }
     }
     return false;
 }
 
 static void make_directory( ByteString const& name )
 {
-#ifdef WNT
-    _mkdir( name.GetBuffer() );
-#else
-    mkdir( name.GetBuffer() , S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH );
-#endif
+    OUString sFileURL( name.GetBuffer(), name.Len(), RTL_TEXTENCODING_UTF8 );
+    FileBase::getFileURLFromSystemPath( sFileURL, sFileURL );
+    Directory::create( sFileURL );
+}
+
+static void insertMarker( XMLParentNode *p, ByteString const& file )
+{
+    if ( XMLChildNodeList* lst = p->GetChildList() )
+        if ( lst->Count() )
+        {
+            ULONG i = 1;
+            // Skip newline, if possible.
+            if ( lst->Count() > 1
+                 && lst->GetObject( 2 )->GetNodeType() == XML_NODE_TYPE_DEFAULT )
+                i++;
+            OUString marker = OUString::createFromAscii( "\n    NOTE: This file has been generated automagically by transex3/layout/tralay,\n          from source template: " )
+                + STRING( file )
+                + OUString::createFromAscii( ".\n          Do not edit, changes will be lost.\n" );
+            lst->Insert( new XMLComment( marker, 0 ), i );
+        }
 }
 
 void TranslateLayout::MergeLanguage( ByteString const& language )
@@ -190,6 +274,7 @@ void TranslateLayout::MergeLanguage( ByteString const& language )
     }
 
     layoutXml->Extract();
+    insertMarker( layoutXml, xmlFile );
 
     ResData resData( "", "", "" );
     resData.sResTyp = mProject; /* mGid1 ?? */
@@ -204,7 +289,11 @@ void TranslateLayout::MergeLanguage( ByteString const& language )
                 translateElement( element, language, &resData, mergeData );
     }
 
+#ifndef WNT
     ByteString outFile = "/dev/stdout";
+#else
+    ByteString outFile = "\\\\.\\CON";
+#endif
     if ( mOutput.Len() )
     {
         outFile = mOutput;
@@ -235,7 +324,11 @@ void TranslateLayout::Merge()
 void TranslateLayout::CreateSDF()
 {
     ByteString xmlFile = mFiles.front();
+#ifndef WNT
     ByteString sdf = "/dev/stdout";
+#else
+    ByteString sdf = "\\\\.\\CON";
+#endif
     if ( mOutput.Len() )
         sdf = mOutput;
     Export::SetLanguages( mLanguages );
@@ -289,7 +382,7 @@ TranslateLayout::TranslateLayout()
     , mLocalize( "localize.sdf" )
     , mOutput()
     , mProject( "layout" )
-    , mRoot( "/root" )
+    , mRoot()
     , mMergeMode( false )
     , mLanguages()
     , mFiles()
