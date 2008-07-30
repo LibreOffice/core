@@ -1,3 +1,34 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: helper.cxx,v $
+ *
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 #include "helper.hxx"
 
 #include <assert.h>
@@ -8,7 +39,7 @@
 #include <tools/debug.hxx>
 
 #include "proplist.hxx"
-#include "layoutcore.hxx"
+#include "layout/layoutcore.hxx"
 
 #if TEST_LAYOUT && !defined( DBG_UTIL )
 #include <stdio.h>
@@ -143,6 +174,7 @@ createToolkitWidget( uno::Reference< awt::XToolkit > xToolkit,
     uno::Reference< awt::XWindowPeer > xWinPeer;
     try
     {
+//        DBG_ERROR1("Asking toolkit: %s\n", OUSTRING_CSTR( desc.WindowServiceName ) );
         xWinPeer = xToolkit->createWindow( desc );
         if ( !xWinPeer.is() )
             throw uno::RuntimeException(
@@ -150,9 +182,9 @@ createToolkitWidget( uno::Reference< awt::XToolkit > xToolkit,
                 uno::Reference< uno::XInterface >() );
         xPeer = uno::Reference< awt::XLayoutConstrains >( xWinPeer, uno::UNO_QUERY );
     }
-    catch( uno::Exception &ex )
+    catch( uno::Exception & )
     {
-        DBG_ERROR1( "Warning:  %s is not a recognized type", OUSTRING_CSTR( rName ) );
+        DBG_ERROR1( "Warning: %s is not a recognized type\n", OUSTRING_CSTR( rName ) );
         return uno::Reference< awt::XLayoutConstrains >();
     }
 
@@ -179,10 +211,6 @@ createWidget( uno::Reference< awt::XToolkit > xToolkit,
         return xPeer;
 
     xPeer = ImplCreateWindow( xParent, rName, nProps );
-    if ( xPeer.is() )
-        return xPeer;
-
-    xPeer = createInternalWidget( xToolkit, xParent, rName, nProps );
     if ( xPeer.is() )
         return xPeer;
 
@@ -222,7 +250,7 @@ PropHelper::getInfoHelper()
     if ( ! pHelper )
     {
         uno::Sequence< beans::Property > aProps( maDetails.size() );
-        for( unsigned int i = 0; i < maDetails.size(); i++)
+        for ( unsigned int i = 0; i < maDetails.size(); i++)
         {
             aProps[i].Name = maDetails[i].aName;
             aProps[i].Type = maDetails[i].aType;
@@ -314,18 +342,22 @@ PropHelper::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::
 
 } // namespace layoutimpl
 
-#include "../awt/vclxdialog.hxx"
-#include "../awt/vclxfixedline.hxx"
-#include "../awt/vclxproxy.hxx"
-#include "../awt/vclxscroller.hxx"
-#include "../awt/vclxsplitter.hxx"
-#include "../awt/vclxtabcontrol.hxx"
+#include <awt/vclxbutton.hxx>
+#include <awt/vclxdialog.hxx>
+#include <awt/vclxfixedline.hxx>
+#include <awt/vclxscroller.hxx>
+#include <awt/vclxsplitter.hxx>
+#include <awt/vclxtabcontrol.hxx>
 #include <toolkit/awt/vclxtoolkit.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
+#include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
+
+
+///#include <svtools/prgsbar.hxx>
 
 namespace layoutimpl
 {
@@ -346,10 +378,7 @@ uno::Reference< awt::XLayoutConstrains > ImplCreateWindow(
     if ( aName.equalsAscii( "dialog" ) )
     {
         if ( pParent == NULL )
-            // DIALOG_NO_PARENT == 0xffff
-            // it would crash otherwise
-// FIXME: check for crash
-            pParent = DIALOG_NO_PARENT; /*DIALOG_NO_PARENT == 0xffff ?! :P*/
+            pParent = DIALOG_NO_PARENT;
         pNewWindow = new Dialog( pParent,
                                  ImplGetWinBits( WindowAttributes, 0 ) );
         pNewComp = new layoutimpl::VCLXDialog();
@@ -393,6 +422,61 @@ uno::Reference< awt::XLayoutConstrains > ImplCreateWindow(
             nStyle |= WB_VERT;
         pNewWindow = new FixedLine( pParent, nStyle );
         pNewComp = new layoutimpl::VCLXFixedLine();
+    }
+    else if ( aName.equalsAscii( "okbutton" ) )
+    {
+        pNewWindow = new PushButton( pParent, ImplGetWinBits( WindowAttributes, 0 ) );
+        pNewComp = new layoutimpl::VCLXOKButton( pNewWindow );
+    }
+    else if ( aName.equalsAscii( "cancelbutton" ) )
+    {
+        pNewWindow = new PushButton( pParent, ImplGetWinBits( WindowAttributes, 0 ) );
+        pNewComp = new layoutimpl::VCLXCancelButton( pNewWindow );
+    }
+    else if ( aName.equalsAscii( "yesbutton" ) )
+    {
+        pNewWindow = new PushButton( pParent, ImplGetWinBits( WindowAttributes, 0 ) );
+        pNewComp = new layoutimpl::VCLXYesButton( pNewWindow );
+    }
+    else if ( aName.equalsAscii( "nobutton" ) )
+    {
+        pNewWindow = new PushButton( pParent, ImplGetWinBits( WindowAttributes, 0 ) );
+        pNewComp = new layoutimpl::VCLXNoButton( pNewWindow );
+    }
+    else if ( aName.equalsAscii( "retrybutton" ) )
+    {
+        pNewWindow = new PushButton( pParent, ImplGetWinBits( WindowAttributes, 0 ) );
+        pNewComp = new layoutimpl::VCLXRetryButton( pNewWindow );
+    }
+    else if ( aName.equalsAscii( "ignorebutton" ) )
+    {
+        pNewWindow = new PushButton( pParent, ImplGetWinBits( WindowAttributes, 0 ) );
+        pNewComp = new layoutimpl::VCLXIgnoreButton( pNewWindow );
+    }
+    else if ( aName.equalsAscii( "resetbutton" ) )
+    {
+        pNewWindow = new PushButton( pParent, ImplGetWinBits( WindowAttributes, 0 ) );
+        pNewComp = new layoutimpl::VCLXResetButton( pNewWindow );
+    }
+    else if ( aName.equalsAscii( "applybutton" ) )
+    {
+        pNewWindow = new PushButton( pParent, ImplGetWinBits( WindowAttributes, 0 ) );
+        pNewComp = new layoutimpl::VCLXApplyButton( pNewWindow );
+    }
+    else if ( aName.equalsAscii( "helpbutton" ) )
+    {
+        pNewWindow = new PushButton( pParent, ImplGetWinBits( WindowAttributes, 0 ) );
+        pNewComp = new layoutimpl::VCLXHelpButton( pNewWindow );
+    }
+    else if ( aName.equalsAscii( "morebutton" ) )
+    {
+        pNewWindow = new PushButton( pParent, ImplGetWinBits( WindowAttributes, 0 ) );
+        pNewComp = new layoutimpl::VCLXMoreButton( pNewWindow );
+    }
+    else if ( aName.equalsAscii( "advancedbutton" ) )
+    {
+        pNewWindow = new PushButton( pParent, ImplGetWinBits( WindowAttributes, 0 ) );
+        pNewComp = new layoutimpl::VCLXAdvancedButton( pNewWindow );
     }
 
     if ( !pNewWindow )
