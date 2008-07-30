@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdata.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -200,6 +200,7 @@ struct ImplSVGDIData
     vcl::FontSubstConfiguration* mpFontSubstConfiguration;
     bool                    mbPrinterPullModel; // true: use pull model instead of normal push model when printing
     bool                    mbNativeFontConfig; // true: do not override UI font
+    bool                    mbNoXORClipping;    // true: do not use XOR to achieve clipping effects
 };
 
 
