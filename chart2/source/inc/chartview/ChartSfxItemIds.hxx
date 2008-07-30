@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartSfxItemIds.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -202,8 +202,10 @@
 #define SCHATTR_GROUP_BARS_PER_AXIS     (SCHATTR_CHARTTYPE_START + 8)
 #define SCHATTR_STARTING_ANGLE          (SCHATTR_CHARTTYPE_START + 9)
 #define SCHATTR_CLOCKWISE               (SCHATTR_CHARTTYPE_START + 10)
+#define SCHATTR_MISSING_VALUE_TREATMENT     (SCHATTR_CHARTTYPE_START + 11)
+#define SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS (SCHATTR_CHARTTYPE_START + 12)
 
-#define SCHATTR_CHARTTYPE_END           SCHATTR_CLOCKWISE
+#define SCHATTR_CHARTTYPE_END           SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS
 
 // items for transporting information to dialogs
 #define SCHATTR_MISC_START              (SCHATTR_CHARTTYPE_END + 1)
