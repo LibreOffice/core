@@ -107,3 +107,5 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\swreport\statusbar
 ..\uiconfig\sglobal\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sglobal\statusbar\*.xml
 ..\uiconfig\swform\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\swform\statusbar\*.xml
 ..\uiconfig\swreport\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\swreport\statusbar\*.xml
+
+..\%__SRC%\bin\*-layout.zip %_DEST%\pck%_EXT%\*.*
