@@ -1,6 +1,37 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: wcontainer.cxx,v $
+ *
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 #include "wrapper.hxx"
 
-#include "layoutcore.hxx"
+#include "layout/layoutcore.hxx"
 #include <com/sun/star/awt/XLayoutRoot.hpp>
 #include <com/sun/star/awt/XLayoutContainer.hpp>
 
@@ -13,8 +44,7 @@ using namespace ::com::sun::star;
 namespace layout
 {
 
-// Container
-Container::Container( const Context *pCtx, const char *pId )
+Container::Container( Context const* pCtx, char const* pId )
     : mxContainer( pCtx->GetPeerHandle( pId ), uno::UNO_QUERY )
 {
     if ( !mxContainer.is() )
@@ -23,7 +53,7 @@ Container::Container( const Context *pCtx, const char *pId )
     }
 }
 
-Container::Container( const rtl::OUString &rName, sal_Int32 nBorder )
+Container::Container( rtl::OUString const& rName, sal_Int32 nBorder )
 {
     mxContainer = layoutimpl::createContainer( rName );
 
@@ -72,7 +102,7 @@ void Container::Clear()
 {
     css::uno::Sequence< css::uno::Reference < css::awt::XLayoutConstrains > > children;
     children = mxContainer->getChildren();
-    for( int i = 0; i < children.getLength(); i++ )
+    for ( int i = 0; i < children.getLength(); i++ )
         mxContainer->removeChild( children[ i ] );
 }
 
@@ -87,7 +117,7 @@ void Container::ShowAll( bool bShow )
             {
                 uno::Sequence< uno::Reference < awt::XLayoutConstrains > > aChildren;
                 aChildren = xCont->getChildren();
-                for( int i = 0; i < aChildren.getLength(); i++ )
+                for ( int i = 0; i < aChildren.getLength(); i++ )
                 {
                     uno::Reference < awt::XLayoutConstrains > xChild( aChildren[ i ] );
 
@@ -106,7 +136,16 @@ void Container::ShowAll( bool bShow )
     inner::setChildrenVisible( mxContainer, bShow );
 }
 
-// Container/Table
+void Container::Show()
+{
+    ShowAll( true );
+}
+
+void Container::Hide()
+{
+    ShowAll( false );
+}
+
 Table::Table( sal_Int32 nBorder, sal_Int32 nColumns )
     : Container( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "table" ) ), nBorder )
 {
@@ -153,8 +192,7 @@ void Table::setProps( uno::Reference< awt::XLayoutConstrains > xChild,
                               uno::Any( nYSpan ) );
 }
 
-// Container/Box
-Box::Box( const rtl::OUString &rName, sal_Int32 nBorder, bool bHomogeneous )
+Box::Box( rtl::OUString const& rName, sal_Int32 nBorder, bool bHomogeneous )
     : Container( rName, nBorder )
 {
     uno::Reference< beans::XPropertySet > xProps( mxContainer, uno::UNO_QUERY_THROW );
@@ -199,4 +237,36 @@ void Box::setProps( uno::Reference< awt::XLayoutConstrains > xChild,
                               uno::Any( nPadding ) );
 }
 
-}; // end namespace layout
+Table::Table( Context const* pCtx, char const* pId )
+    : Container( pCtx, pId )
+{
+}
+
+Box::Box( Context const* pCtx, char const* pId )
+    : Container( pCtx, pId )
+{
+}
+
+HBox::HBox( sal_Int32 nBorder, bool bHomogeneous )
+    : Box( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hbox" ) ),
+           nBorder, bHomogeneous )
+{
+}
+
+HBox::HBox( Context const* pCtx, char const* pId )
+    : Box( pCtx, pId )
+{
+}
+
+VBox::VBox( sal_Int32 nBorder, bool bHomogeneous )
+    : Box( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vbox" ) ),
+           nBorder, bHomogeneous )
+{
+}
+
+VBox::VBox( Context const* pCtx, char const* pId )
+    : Box( pCtx, pId )
+{
+}
+
+} // namespace layout
