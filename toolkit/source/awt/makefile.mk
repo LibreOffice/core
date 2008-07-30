@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.34 $
+# $Revision: 1.35 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -43,6 +43,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
+# FIXME: This is bad, hmkay
+CFLAGS+= -I$(PRJ)/source
+
 .IF "$(GUIBASE)"=="aqua"
 OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
 CFLAGSCXX+=$(OBJCXXFLAGS)
@@ -68,25 +71,17 @@ SLOFILES=   \
             $(SLO)$/vclxspinbutton.obj                  \
             $(SLO)$/xsimpleanimation.obj                \
             $(SLO)$/xthrobber.obj						\
-            $(SLO)$/asynccallback.obj
+            $(SLO)$/asynccallback.obj\
+            $(SLO)/vclxbutton.obj\
+            $(SLO)/vclxdialog.obj\
+            $(SLO)/vclxfixedline.obj\
+            $(SLO)/vclxscroller.obj\
+            $(SLO)/vclxsplitter.obj\
+            $(SLO)/vclxtabcontrol.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES=\
             xthrobber.src
-
-.IF "$(ENABLE_LAYOUT)" == "TRUE"
-
-SECOND_BUILD=layout
-layout_SLOFILES=\
-    $(SLO)/vclxbutton.obj\
-    $(SLO)/vclxdialog.obj\
-    $(SLO)/vclxfixedline.obj\
-    $(SLO)/vclxproxy.obj\
-    $(SLO)/vclxscroller.obj\
-    $(SLO)/vclxsplitter.obj\
-    $(SLO)/vclxtabcontrol.obj
-
-.ENDIF # ENABLE_LAYOUT == TRUE
 
 # --- Targets ------------------------------------------------------
 
