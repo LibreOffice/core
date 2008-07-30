@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AreaChart.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,8 +45,10 @@
 #include "LabelPositionHelper.hxx"
 #include "Clipping.hxx"
 #include "Stripe.hxx"
+
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <tools/debug.hxx>
 #include <svx/unoprnms.hxx>
 #include <rtl/math.hxx>
@@ -706,6 +708,23 @@ void AreaChart::createShapes()
                     VDataSeries* pSeries( *aSeriesIter );
                     if(!pSeries)
                         continue;
+
+                    sal_Int32 nMissingValueTreatment = pSeries->getMissingValueTreatment();
+                    switch( nMissingValueTreatment )
+                    {
+                       case ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP:
+                           if( !m_bArea )
+                               m_eNanHandling = NAN_AS_GAP;
+                           break;
+                       case ::com::sun::star::chart::MissingValueTreatment::USE_ZERO:
+                           m_eNanHandling = NAN_AS_ZERO;
+                           break;
+                       case ::com::sun::star::chart::MissingValueTreatment::CONTINUE:
+                           m_eNanHandling = NAN_AS_INTERPOLATED;
+                           break;
+                       default:
+                           break;
+                    }
 
                     /*  #i70133# ignore points outside of series length in standard area
                         charts. Stacked area charts will use missing points as zeros. In
