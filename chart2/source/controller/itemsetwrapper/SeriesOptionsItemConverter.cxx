@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SeriesOptionsItemConverter.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,11 +43,19 @@
 #include "DiagramHelper.hxx"
 #include "ChartTypeHelper.hxx"
 #include "DataSeriesHelper.hxx"
+
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 
 // for SfxBoolItem
 #include <svtools/eitem.hxx>
 #include <svtools/intitem.hxx>
+
+//SfxIntegerListItem
+#include <svtools/ilstitem.hxx>
+#define _SVSTDARR_ULONGS
+#include <svtools/svstdarr.hxx>
+
 #include <rtl/math.hxx>
 #include <functional>
 #include <algorithm>
@@ -83,6 +91,8 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         , m_bSupportingStartingAngle(false)
         , m_nStartingAngle(90)
         , m_bClockwise(false)
+        , m_aSupportedMissingValueTreatments()
+        , m_nMissingValueTreatment(0)
 {
     try
     {
@@ -145,6 +155,10 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         {
             xDiagramProperties->getPropertyValue( C2U( "StartingAngle" ) ) >>= m_nStartingAngle;
         }
+
+        m_aSupportedMissingValueTreatments = ChartTypeHelper::getSupportedMissingValueTreatments( xChartType );
+        m_nMissingValueTreatment = DiagramHelper::getCorrectedMissingValueTreatment(
+            ChartModelHelper::findDiagram(m_xChartModel), xChartType );
     }
     catch( uno::Exception ex )
     {
@@ -302,6 +316,31 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxIte
             }
         }
         break;
+
+        case SCHATTR_MISSING_VALUE_TREATMENT:
+        {
+            if( m_aSupportedMissingValueTreatments.getLength() )
+            {
+                sal_Int32 nNew = static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
+                if( m_nMissingValueTreatment != nNew )
+                {
+                    try
+                    {
+                        uno::Reference< beans::XPropertySet > xDiagramProperties( ChartModelHelper::findDiagram(m_xChartModel), uno::UNO_QUERY );
+                        if( xDiagramProperties.is() )
+                        {
+                            xDiagramProperties->setPropertyValue( C2U( "MissingValueTreatment" ), uno::makeAny( nNew ));
+                            bChanged = true;
+                        }
+                    }
+                    catch( uno::Exception& e )
+                    {
+                        ASSERT_EXCEPTION( e );
+                    }
+                }
+            }
+        }
+        break;
     }
     return bChanged;
 }
@@ -357,6 +396,20 @@ void SeriesOptionsItemConverter::FillSpecialItem(
         case SCHATTR_CLOCKWISE:
         {
             rOutItemSet.Put( SfxBoolItem(nWhichId,m_bClockwise) );
+            break;
+        }
+        case SCHATTR_MISSING_VALUE_TREATMENT:
+        {
+            if( m_aSupportedMissingValueTreatments.getLength() )
+                rOutItemSet.Put( SfxInt32Item( nWhichId, m_nMissingValueTreatment ));
+            break;
+        }
+        case SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS:
+        {
+            SvULongs aList;
+            for ( sal_Int32 nN=0; nN<m_aSupportedMissingValueTreatments.getLength(); nN++ )
+                aList.Insert( m_aSupportedMissingValueTreatments[nN], sal::static_int_cast< USHORT >(nN) );
+            rOutItemSet.Put( SfxIntegerListItem( nWhichId, aList ) );
             break;
         }
         default:
