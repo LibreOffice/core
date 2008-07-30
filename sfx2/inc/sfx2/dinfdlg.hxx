@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dinfdlg.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,16 +40,36 @@
 #include <svtools/stritem.hxx>
 #include <svtools/svmedit.hxx>
 
+#include <vcl/edit.hxx>
+#include <vcl/lstbox.hxx>
+#include <vcl/scrbar.hxx>
+#include <svtools/headbar.hxx>
+#include <svtools/syslocale.hxx>
+#include <svtools/zforlist.hxx>
+
 #include "tabdlg.hxx"
 
-
 namespace com { namespace sun { namespace star {
+    namespace beans {
+        class XPropertyContainer;
+    }
     namespace document {
         class XDocumentInfo;
         class XDocumentProperties;
     }
 } } }
 
+struct CustomProperty
+{
+    ::rtl::OUString             m_sName;
+    com::sun::star::uno::Any    m_aValue;
+
+    CustomProperty( const ::rtl::OUString& sName, const com::sun::star::uno::Any& rValue ) :
+        m_sName( sName ), m_aValue( rValue ) {}
+
+    inline bool operator==( const CustomProperty& rProp )
+                    { return m_sName.equals( rProp.m_sName ) && m_aValue == rProp.m_aValue; }
+};
 
 // class SfxDocumentInfoItem ---------------------------------------------
 
@@ -78,6 +98,7 @@ private:
     sal_Bool                            bHasTemplate;
     sal_Bool                            bDeleteUserData;
     sal_Bool                            bIsUseUserData;
+    std::vector< CustomProperty* >      m_aCustomProperties;
 
 public:
     TYPEINFO();
@@ -159,6 +180,11 @@ public:
     void                    SetUseUserData( BOOL bSet );
     BOOL                    IsDeleteUserData() const;
     BOOL                    IsUseUserData() const;
+
+    std::vector< CustomProperty* >  GetCustomProperties() const;
+    void                            ClearCustomProperties();
+    void                            AddCustomProperty(  const ::rtl::OUString& sName,
+                                                        const com::sun::star::uno::Any& rValue );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
@@ -360,6 +386,183 @@ public:
     SfxDocumentInfoDialog(  Window* pParent, const SfxItemSet& );
 };
 
+// class CustomPropertiesRemoveButton ------------------------------------
 
-#endif
+struct CustomPropertyLine;
+
+class CustomPropertiesEdit : public Edit
+{
+private:
+    CustomPropertyLine*             m_pLine;
+
+public:
+    inline CustomPropertiesEdit(
+        Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
+            Edit( pParent, rResId ), m_pLine( pLine ) {}
+
+    inline CustomPropertyLine*      GetLine() const { return m_pLine; }
+};
+
+class CustomPropertiesTypeBox : public ListBox
+{
+private:
+    CustomPropertyLine*             m_pLine;
+
+public:
+    inline CustomPropertiesTypeBox(
+        Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
+            ListBox( pParent, rResId ), m_pLine( pLine ) {}
+
+    inline CustomPropertyLine*      GetLine() const { return m_pLine; }
+};
+
+class CustomPropertiesRemoveButton : public ImageButton
+{
+private:
+    CustomPropertyLine*             m_pLine;
+
+public:
+    inline CustomPropertiesRemoveButton(
+        Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
+            ImageButton( pParent, rResId ), m_pLine( pLine ) {}
+
+    inline CustomPropertyLine*      GetLine() const { return m_pLine; }
+};
+
+class CustomPropertiesYesNoButton : public Control
+{
+private:
+    RadioButton                     m_aYesButton;
+    RadioButton                     m_aNoButton;
+
+public:
+    CustomPropertiesYesNoButton( Window* pParent, const ResId& rResId );
+
+    virtual void    Resize();
+
+    inline void     CheckYes() { m_aYesButton.Check(); }
+    inline void     CheckNo() { m_aNoButton.Check(); }
+    inline bool     IsYesChecked() const { return m_aYesButton.IsChecked() != FALSE; }
+};
+
+// struct CustomPropertyLine ---------------------------------------------
+
+struct CustomPropertyLine
+{
+    ComboBox                        m_aNameBox;
+    CustomPropertiesTypeBox         m_aTypeBox;
+    CustomPropertiesEdit            m_aValueEdit;
+    CustomPropertiesYesNoButton     m_aYesNoButton;
+    CustomPropertiesRemoveButton    m_aRemoveButton;
+
+    bool                            m_bIsRemoved;
+    bool                            m_bTypeLostFocus;
+
+    CustomPropertyLine( Window* pParent );
+
+    void    SetRemoved();
+};
+
+// class CustomPropertiesWindow ------------------------------------------
+
+class CustomPropertiesWindow : public Window
+{
+private:
+    ComboBox                            m_aNameBox;
+    ListBox                             m_aTypeBox;
+    Edit                                m_aValueEdit;
+    CustomPropertiesYesNoButton         m_aYesNoButton;
+    ImageButton                         m_aRemoveButton;
+
+    sal_Int32                           m_nLineHeight;
+    SvtSysLocale                        m_aSysLocale;
+    std::vector< CustomPropertyLine* >  m_aCustomPropertiesLines;
+    CustomPropertyLine*                 m_pCurrentLine;
+    SvNumberFormatter                   m_aNumberFormatter;
+    Timer                               m_aEditLoseFocusTimer;
+    Timer                               m_aBoxLoseFocusTimer;
+
+    DECL_LINK(  TypeHdl, CustomPropertiesTypeBox* );
+    DECL_LINK(  RemoveHdl, CustomPropertiesRemoveButton* );
+    DECL_LINK(  EditLoseFocusHdl, CustomPropertiesEdit* );
+    DECL_LINK(  BoxLoseFocusHdl, CustomPropertiesTypeBox* );
+    DECL_LINK(  EditTimeoutHdl, Timer* );
+    DECL_LINK(  BoxTimeoutHdl, Timer* );
+
+    bool        IsLineValid( CustomPropertyLine* pLine ) const;
+    void        ValidateLine( CustomPropertyLine* pLine, bool bIsFromTypeBox );
+
+public:
+    CustomPropertiesWindow( Window* pParent, const ResId& rResId );
+    ~CustomPropertiesWindow();
+
+    void                InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar );
+    USHORT              GetVisibleLineCount() const;
+    inline sal_Int32    GetLineHeight() const { return m_nLineHeight; }
+    void                AddLine( const ::rtl::OUString& sName, com::sun::star::uno::Any& rAny );
+    bool                AreAllLinesValid() const;
+    void                ClearAllLines();
+    void                DoScroll( sal_Int32 nNewPos );
+
+    bool                DoesCustomPropertyExist( const String& rName ) const;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+                        GetCustomProperties() const;
+};
+
+// class CustomPropertiesControl -----------------------------------------
+
+class CustomPropertiesControl : public Control
+{
+private:
+    HeaderBar               m_aHeaderBar;
+    CustomPropertiesWindow  m_aPropertiesWin;
+    ScrollBar               m_aVertScroll;
+
+    bool                    m_bIsInitialized;
+    sal_Int32               m_nThumbPos;
+
+    void                    Initialize();
+
+    DECL_LINK( ScrollHdl, ScrollBar* );
+
+public:
+    CustomPropertiesControl( Window* pParent, const ResId& rResId );
+    ~CustomPropertiesControl();
+
+    void            AddLine( const ::rtl::OUString& sName, com::sun::star::uno::Any& rAny );
+
+    inline bool     AreAllLinesValid() const { return m_aPropertiesWin.AreAllLinesValid(); }
+    inline void     ClearAllLines() { m_aPropertiesWin.ClearAllLines(); }
+    inline bool     DoesCustomPropertyExist( const String& rName ) const
+                        { return m_aPropertiesWin.DoesCustomPropertyExist( rName ); }
+    inline ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+                    GetCustomProperties() const
+                        { return m_aPropertiesWin.GetCustomProperties(); }
+};
+
+// class SfxCustomPropertiesPage -----------------------------------------
+
+class SfxCustomPropertiesPage : public SfxTabPage
+{
+private:
+    FixedText               m_aPropertiesFT;
+    CustomPropertiesControl m_aPropertiesCtrl;
+    PushButton              m_aAddBtn;
+
+    DECL_LINK(  AddHdl, PushButton* );
+
+    using TabPage::DeactivatePage;
+
+protected:
+    SfxCustomPropertiesPage( Window* pParent, const SfxItemSet& );
+
+    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual void        Reset( const SfxItemSet& );
+    virtual int         DeactivatePage( SfxItemSet* pSet = NULL );
+
+public:
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
+};
+
+#endif // #ifndef _SFX_DINFDLG_HXX
 
