@@ -6,7 +6,7 @@
         has_border="true" sizeable="true" moveable="true">
     <vbox>
         <tabcontrol>
--           <pushbutton label="Child 1" cnt:title="Page 1" />
+            <pushbutton label="Child 1" cnt:title="Page 1" />
             <edit has_border="true" text="Child 2" cnt:title="Page 2" />
             <vbox cnt:title="Page 3">
                 <pushbutton label="Child 3"/>
