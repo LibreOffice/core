@@ -8,7 +8,7 @@
 #
 # $RCSfile: rules.mk,v $
 #
-# $Revision: 1.102 $
+# $Revision: 1.103 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -104,8 +104,8 @@ $(OBJ)$/%.obj : %.cc
 PCHOUTDIR=$(SLO)$/pch
 PCHEXOUTDIR=$(SLO)$/pch_ex
 .ELSE			# "$(NETWORK_BUILD)"==""
-PCHOUTDIR=$(TMP)$/$(BUILD)$(CWS_WORK_STAMP)$(PRJNAME)
-PCHEXOUTDIR=$(TMP)$/$(BUILD)$(CWS_WORK_STAMP)$(PRJNAME)_ex
+PCHOUTDIR=$(TMP)$/$(BUILD)$(CWS_WORK_STAMP)$(PRJNAME)$(PROEXT)
+PCHEXOUTDIR=$(TMP)$/$(BUILD)$(CWS_WORK_STAMP)$(PRJNAME)_ex$(PROEXT)
 .ENDIF			# "$(NETWORK_BUILD)"==""
 $(SLO)$/precompiled.% .PHONY:
     -$(MKDIRHIER) $(SLO)$/pch
@@ -804,6 +804,17 @@ $(COMMONMISC)$/$(TARGET)$/%.mlf : $$(@:b).ulf
     @-$(MKDIRHIER) $(@:d)
     -$(RM) $@
     @$(ULFCONV) -o $@.$(INPATH) -t $(SOLARBINDIR)$/msi-encodinglist.txt $<
+    @$(RENAME) $@.$(INPATH) $@
+    @-$(RM) $@.$(INPATH)
+
+.IF "$(WITH_LANG)"!=""
+$(COMMONMISC)$/$(TARGET)$/%.uulf : $$(@:db).ulf
+.ELSE			# "$(WITH_LANG)"!=""
+$(COMMONMISC)$/$(TARGET)$/%.uulf : $$(@:b).ulf
+.ENDIF			# "$(WITH_LANG)"!=""
+    @-$(MKDIRHIER) $(@:d)
+    -$(RM) $@
+    @$(COPY) $< $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
     @-$(RM) $@.$(INPATH)
 
