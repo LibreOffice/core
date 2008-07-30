@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.49 $
+# $Revision: 1.50 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -317,10 +317,7 @@ IDLFILES=\
     XWindowListener.idl\
     XWindowListener2.idl\
     XWindowPeer.idl\
-    XMenuExtended.idl
-
-.IF "$(ENABLE_LAYOUT)" == "TRUE"
-IDLFILES+=\
+    XMenuExtended.idl\
     MaxChildrenException.idl\
     XDialog2.idl\
     XLayoutContainer.idl\
@@ -328,7 +325,6 @@ IDLFILES+=\
     XLayoutFlowContainer.idl\
     XLayoutRoot.idl\
     XLayoutUnit.idl
-.ENDIF # ENABLE_LAYOUT == TRUE
 
 # ------------------------------------------------------------------
 
