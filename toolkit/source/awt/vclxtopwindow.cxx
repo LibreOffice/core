@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxtopwindow.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,6 +59,106 @@
 
 #include <tools/debug.hxx>
 
+VCLXTopWindow_Base::~VCLXTopWindow_Base()
+{
+}
+
+::com::sun::star::uno::Any VCLXTopWindow_Base::getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutexImpl() );
+
+    // TODO, check the process id
+    ::com::sun::star::uno::Any aRet;
+    Window* pWindow = GetWindowImpl();
+    if ( pWindow )
+    {
+        const SystemEnvData* pSysData = ((SystemWindow *)pWindow)->GetSystemData();
+        if( pSysData )
+        {
+#if (defined WNT)
+            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_WIN32 )
+            {
+                 aRet <<= (sal_Int32)pSysData->hWnd;
+            }
+#elif (defined OS2)
+            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_OS2 )
+            {
+                 aRet <<= (sal_Int32)pSysData->hWnd;
+            }
+#elif (defined QUARTZ)
+            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_MAC )
+            {
+                 aRet <<= (sal_IntPtr)pSysData->pView;
+            }
+#elif (defined UNX)
+            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW )
+            {
+                ::com::sun::star::awt::SystemDependentXWindow aSD;
+                aSD.DisplayPointer = sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(pSysData->pDisplay));
+                aSD.WindowHandle = pSysData->aWindow;
+                aRet <<= aSD;
+            }
+#endif
+        }
+    }
+    return aRet;
+}
+
+void VCLXTopWindow_Base::addTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutexImpl() );
+
+    GetTopWindowListenersImpl().addInterface( rxListener );
+}
+
+void VCLXTopWindow_Base::removeTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutexImpl() );
+
+    GetTopWindowListenersImpl().removeInterface( rxListener );
+}
+
+void VCLXTopWindow_Base::toFront(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutexImpl() );
+
+    Window* pWindow = GetWindowImpl();
+    if ( pWindow )
+        ((WorkWindow*)pWindow)->ToTop( TOTOP_RESTOREWHENMIN );
+}
+
+void VCLXTopWindow_Base::toBack(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+#if 0 // Not possible in VCL...
+
+    ::vos::OGuard aGuard( GetMutexImpl() );
+
+    Window* pWindow = GetWindowImpl();
+    if ( pWindow )
+    {
+        ((WorkWindow*)pWindow)->ToBack();
+    }
+#endif
+}
+
+void VCLXTopWindow_Base::setMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >& rxMenu ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutexImpl() );
+
+    SystemWindow* pWindow = (SystemWindow*) GetWindowImpl();
+    if ( pWindow )
+    {
+        pWindow->SetMenuBar( NULL );
+        if ( rxMenu.is() )
+        {
+            VCLXMenu* pMenu = VCLXMenu::GetImplementation( rxMenu );
+            if ( pMenu && !pMenu->IsPopupMenu() )
+                pWindow->SetMenuBar( (MenuBar*) pMenu->GetMenu() );
+        }
+    }
+    mxMenuBar = rxMenu;
+}
+
 //  ----------------------------------------------------
 //  class VCLXTopWindow
 //  ----------------------------------------------------
@@ -75,6 +175,21 @@ VCLXTopWindow::VCLXTopWindow(bool bWHWND)
 
 VCLXTopWindow::~VCLXTopWindow()
 {
+}
+
+vos::IMutex& VCLXTopWindow::GetMutexImpl()
+{
+    return VCLXContainer::GetMutex();
+}
+
+Window* VCLXTopWindow::GetWindowImpl()
+{
+    return VCLXContainer::GetWindow();
+}
+
+TopWindowListenerMultiplexer& VCLXTopWindow::GetTopWindowListenersImpl()
+{
+    return VCLXContainer::GetTopWindowListeners();
 }
 
 // ::com::sun::star::uno::XInterface
@@ -167,104 +282,3 @@ VCLXTopWindow::~VCLXTopWindow()
         return (*pCollection).getTypes();
     }
 }
-
-::com::sun::star::uno::Any VCLXTopWindow::getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    // TODO, check the process id
-    ::com::sun::star::uno::Any aRet;
-    Window* pWindow = GetWindow();
-    if ( pWindow )
-    {
-        const SystemEnvData* pSysData = ((SystemWindow *)pWindow)->GetSystemData();
-        if( pSysData )
-        {
-#if (defined WNT)
-            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_WIN32 )
-            {
-                 aRet <<= (sal_Int32)pSysData->hWnd;
-            }
-#elif (defined OS2)
-            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_OS2 )
-            {
-                 aRet <<= (sal_Int32)pSysData->hWnd;
-            }
-#elif (defined QUARTZ)
-            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_MAC )
-            {
-                 aRet <<= (sal_IntPtr)pSysData->pView;
-            }
-#elif (defined UNX)
-            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW )
-            {
-                ::com::sun::star::awt::SystemDependentXWindow aSD;
-                aSD.DisplayPointer = sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(pSysData->pDisplay));
-                aSD.WindowHandle = pSysData->aWindow;
-                aRet <<= aSD;
-            }
-#endif
-        }
-    }
-    return aRet;
-}
-
-
-void VCLXTopWindow::addTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    GetTopWindowListeners().addInterface( rxListener );
-}
-
-void VCLXTopWindow::removeTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    GetTopWindowListeners().removeInterface( rxListener );
-}
-
-void VCLXTopWindow::toFront(  ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    Window* pWindow = GetWindow();
-    if ( pWindow )
-        ((WorkWindow*)pWindow)->ToTop( TOTOP_RESTOREWHENMIN );
-}
-
-void VCLXTopWindow::toBack(  ) throw(::com::sun::star::uno::RuntimeException)
-{
-/* Not possible in VCL...
-
-    ::vos::OGuard aGuard( GetMutex() );
-
-    Window* pWindow = GetWindow();
-    if ( pWindow )
-    {
-        ((WorkWindow*)pWindow)->ToBack();
-    }
-*/
-}
-
-void VCLXTopWindow::setMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >& rxMenu ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    SystemWindow* pWindow = (SystemWindow*) GetWindow();
-    if ( pWindow )
-    {
-        pWindow->SetMenuBar( NULL );
-        if ( rxMenu.is() )
-        {
-            VCLXMenu* pMenu = VCLXMenu::GetImplementation( rxMenu );
-            if ( pMenu && !pMenu->IsPopupMenu() )
-                pWindow->SetMenuBar( (MenuBar*) pMenu->GetMenu() );
-        }
-    }
-    mxMenuBar = rxMenu;
-}
-
-
-
-
