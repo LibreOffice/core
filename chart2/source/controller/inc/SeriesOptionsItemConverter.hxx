@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SeriesOptionsItemConverter.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,6 +90,9 @@ private:
     bool m_bClockwise;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XCoordinateSystem > m_xCooSys;
+
+    ::com::sun::star::uno::Sequence< sal_Int32 > m_aSupportedMissingValueTreatments;
+    sal_Int32 m_nMissingValueTreatment;
 };
 
 } //  namespace wrapper
