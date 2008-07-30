@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impdialog.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -443,6 +443,19 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
 {
     mpaResMgr = paResMgr;
     FreeResource();
+
+    // pb: #i91991# maCbExportEmptyPages double-spaced if necessary
+    Size aSize = maCbExportEmptyPages.GetSizePixel();
+    Size aMinSize = maCbExportEmptyPages.CalcMinimumSize();
+    if ( aSize.Width() > aMinSize.Width() )
+    {
+        Size aNewSize = maCbExportNotes.GetSizePixel();
+        long nDelta = aSize.Height() - aNewSize.Height();
+        maCbExportEmptyPages.SetSizePixel( aNewSize );
+        Point aNewPos = maCbAddStream.GetPosPixel();
+        aNewPos.Y() -= nDelta;
+        maCbAddStream.SetPosPixel( aNewPos );
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1008,6 +1021,25 @@ ImpPDFTabSecurityPage::ImpPDFTabSecurityPage( Window* pParent,
     FreeResource();
     maCbPermissions.SetText( OUString( msRestrPermissions ) );
     maCbPermissions.SetStyle( maCbPermissions.GetStyle() | WB_CBLINESTYLE );
+
+    // pb: #i91991# maRbChangesComment double-spaced if necessary
+    Size aSize = maRbChangesComment.GetSizePixel();
+    Size aMinSize = maRbChangesComment.CalcMinimumSize();
+    if ( aSize.Width() > aMinSize.Width() )
+    {
+        Size aNewSize = maRbChangesFillForm.GetSizePixel();
+        long nDelta = aSize.Height() - aNewSize.Height();
+        maRbChangesComment.SetSizePixel( aNewSize );
+        Window* pWins[] =
+            { &maRbChangesAnyNoCopy, &maCbEnableCopy, &maCbEnableAccessibility, NULL };
+        Window** pCurrent = pWins;
+        while ( *pCurrent )
+        {
+            Point aNewPos = (*pCurrent)->GetPosPixel();
+            aNewPos.Y() -= nDelta;
+            (*pCurrent++)->SetPosPixel( aNewPos );
+        }
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1232,6 +1264,56 @@ ImpPDFTabLinksPage::ImpPDFTabLinksPage( Window* pParent,
 {
     mpaResMgr = &rResMgr;
     FreeResource();
+
+    // pb: #i91991# checkboxes only double-spaced if necessary
+    long nDelta = 0;
+    Size aSize = maCbExprtBmkrToNmDst.GetSizePixel();
+    Size aMinSize = maCbExprtBmkrToNmDst.CalcMinimumSize();
+    long nLineHeight =
+        maCbExprtBmkrToNmDst.LogicToPixel( Size( 10, 10 ), MAP_APPFONT ).Height();
+    if ( aSize.Width() > aMinSize.Width() )
+    {
+        Size aNewSize( aSize.Width(), nLineHeight );
+        nDelta += ( aSize.Height() - nLineHeight );
+        maCbExprtBmkrToNmDst.SetSizePixel( aNewSize );
+        Point aNewPos = maCbOOoToPDFTargets.GetPosPixel();
+        aNewPos.Y() -= nDelta;
+        maCbOOoToPDFTargets.SetPosPixel( aNewPos );
+    }
+
+    aSize = maCbOOoToPDFTargets.GetSizePixel();
+    aMinSize = maCbOOoToPDFTargets.CalcMinimumSize();
+    if ( aSize.Width() > aMinSize.Width() )
+    {
+        Size aNewSize( aSize.Width(), nLineHeight );
+        nDelta += ( aSize.Height() - nLineHeight );
+        maCbOOoToPDFTargets.SetSizePixel( aNewSize );
+        Point aNewPos = maCbExportRelativeFsysLinks.GetPosPixel();
+        aNewPos.Y() -= nDelta;
+        maCbExportRelativeFsysLinks.SetPosPixel( aNewPos );
+    }
+
+    aSize = maCbExportRelativeFsysLinks.GetSizePixel();
+    aMinSize = maCbExportRelativeFsysLinks.CalcMinimumSize();
+    if ( aSize.Width() > aMinSize.Width() )
+    {
+        Size aNewSize( aSize.Width(), nLineHeight );
+        nDelta += ( aSize.Height() - nLineHeight );
+        maCbExportRelativeFsysLinks.SetSizePixel( aNewSize );
+    }
+
+    if ( nDelta > 0 )
+    {
+        Window* pWins[] =
+            { &maFlDefaultTitle, &maRbOpnLnksDefault, &maRbOpnLnksLaunch, &maRbOpnLnksBrowser, NULL };
+        Window** pCurrent = pWins;
+        while ( *pCurrent )
+        {
+            Point aNewPos = (*pCurrent)->GetPosPixel();
+            aNewPos.Y() -= nDelta;
+            (*pCurrent++)->SetPosPixel( aNewPos );
+        }
+    }
 }
 
 // -----------------------------------------------------------------------------
