@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxwindows.hxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -375,6 +375,9 @@ public:
     ::rtl::OUString SAL_CALL getMessageText(  ) throw(::com::sun::star::uno::RuntimeException);
     sal_Int16 SAL_CALL execute(  ) throw(::com::sun::star::uno::RuntimeException);
 
+    // ::com::sun::star::awt::XLayoutConstrains
+    ::com::sun::star::awt::Size SAL_CALL getMinimumSize() throw(::com::sun::star::uno::RuntimeException);
+
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
@@ -593,6 +596,10 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XLayoutConstrains
+    ::com::sun::star::awt::Size SAL_CALL getMinimumSize() throw(::com::sun::star::uno::RuntimeException);
+    static ::com::sun::star::awt::Size SAL_CALL implGetMinimumSize( Window* p ) throw(::com::sun::star::uno::RuntimeException);
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
