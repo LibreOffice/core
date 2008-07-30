@@ -1,3 +1,34 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: test.cxx,v $
+ *
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 #include <vcl/svapp.hxx>
 //#include <transex3/vosapp.hxx>
 
@@ -22,7 +53,11 @@
 
 #include "wordcountdialog.hxx"
 #undef _LAYOUT_POST_HXX
+
 #include "zoom.hxx"
+#undef _LAYOUT_POST_HXX
+
+#include "recover.hxx"
 #undef _LAYOUT_POST_HXX
 
 //#undef SW_WORDCOUNTDIALOG_HXX
@@ -161,7 +196,7 @@ void LayoutTest::IInit()
 
 void LayoutTest::ParseCommandLine()
 {
-    for ( int i = 0; i < GetCommandLineParamCount(); i++ )
+    for ( sal_uInt16 i = 0; i < GetCommandLineParamCount(); i++ )
     {
         OUString aParam = OUString( GetCommandLineParam( i ) );
         if ( aParam.equalsAscii( "-h" ) || aParam.equalsAscii( "--help" ) )
@@ -219,6 +254,11 @@ void TestDialog( OUString const& name )
     {
         SwWordCountDialog words ( 0 );
         RunDialog( words );
+    }
+    else if ( name.equalsAscii( "recover" ) )
+    {
+        SvxRecoverDialog recover ( 0 );
+        RunDialog( recover );
     }
 }
 
