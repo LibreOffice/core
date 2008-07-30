@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: res_ErrorBar_tmpl.hrc,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -181,7 +181,7 @@ CheckBox CB_SYN_POS_NEG \
 { \
     HelpID = HID_SCH_STATISTIK_SAME_FOR_BOTH; \
     Pos = MAP_APPFONT ( 12 , 126 + yoffset  ); \
-    Size = MAP_APPFONT ( 80 , 10 ); \
+    Size = MAP_APPFONT ( availablewidth - 12 , 10 ); \
     TabStop = TRUE; \
     Text[ en-US ] = "Same value for both"; \
 }; \
