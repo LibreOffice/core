@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outliner.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -157,10 +157,9 @@ private:
     sal_Bool            IsParaIsNumberingRestart() const { return mbParaIsNumberingRestart; }
     void                SetParaIsNumberingRestart( sal_Bool bParaIsNumberingRestart );
 
-public:
-    bool                HasFlag( USHORT nFlag ) const { return (nFlags & nFlag) != 0; }
     void                SetFlag( USHORT nFlag ) { nFlags |= nFlag; }
     void                RemoveFlag( USHORT nFlag ) { nFlags &= ~nFlag; }
+    bool                HasFlag( USHORT nFlag ) const { return (nFlags & nFlag) != 0; }
 };
 
 struct ParaRange
@@ -838,6 +837,10 @@ public:
     void            Remove( Paragraph* pPara, ULONG nParaCount );
     BOOL            Expand( Paragraph* );
     BOOL            Collapse( Paragraph* );
+
+    void            SetParaFlag( Paragraph* pPara,  sal_uInt16 nFlag );
+    void            RemoveParaFlag( Paragraph* pPara, sal_uInt16 nFlag );
+    bool            HasParaFlag( const Paragraph* pPara, sal_uInt16 nFlag ) const;
 
     // gibt ein Array mit den Bulletbreiten der n Einrueckebenen
     // zurueck. Letzter Wert muss -1 sein. Wird vom Outliner geloescht.
