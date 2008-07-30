@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.pmk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -39,8 +39,8 @@ CFLAGS += -xldscope=hidden
 
 # FIXME: sprinkle some TOOLKIT_DLLPUBLIC
 
-.IF "$(ENABLE_LAYOUT)" == "TRUE"
 CFLAGS+=-I$(PRJ)/inc/layout
+.IF "$(ENABLE_LAYOUT)" == "TRUE"
 CFLAGS+=-DENABLE_LAYOUT=1 -DTEST_LAYOUT=1
 .ELSE
 CFLAGS+=-DENABLE_LAYOUT=0
