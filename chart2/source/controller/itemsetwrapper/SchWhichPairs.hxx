@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SchWhichPairs.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -161,7 +161,9 @@ const USHORT nDataPointWhichPairs[] =
     SCHATTR_BAR_OVERLAP,SCHATTR_BAR_CONNECT,         /*    98 - 100 (incl. SCHATTR_GAPWIDTH) */  \
     SCHATTR_GROUP_BARS_PER_AXIS,SCHATTR_AXIS_FOR_ALL_SERIES, \
     SCHATTR_STARTING_ANGLE,SCHATTR_STARTING_ANGLE, \
-    SCHATTR_CLOCKWISE,SCHATTR_CLOCKWISE \
+    SCHATTR_CLOCKWISE,SCHATTR_CLOCKWISE, \
+    SCHATTR_MISSING_VALUE_TREATMENT,SCHATTR_MISSING_VALUE_TREATMENT, \
+    SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS,SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS
 
 const USHORT nSeriesOptionsWhichPairs[] =
 {
