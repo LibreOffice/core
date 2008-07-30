@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: abspilot.src,v $
- * $Revision: 1.60 $
+ * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -314,7 +314,7 @@ TabPage RID_PAGE_FINAL
     CheckBox CB_REGISTER_DS
     {
         Pos     = MAP_APPFONT ( BORDER_X, 82 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 53 - BORDER_X - BORDER_X, 8) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - BORDER_X - BORDER_X, 8) ;
         SVLook = TRUE;
         Group = TRUE;
 
