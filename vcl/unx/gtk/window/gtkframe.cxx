@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gtkframe.cxx,v $
- * $Revision: 1.83 $
+ * $Revision: 1.84 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -582,6 +582,7 @@ void GtkSalFrame::InitCommon()
 
     //system data
     SalDisplay* pDisp = GetX11SalData()->GetDisplay();
+    m_aSystemData.nSize         = sizeof( SystemChildData );
     m_aSystemData.pDisplay      = pDisp->GetDisplay();
     m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(m_pWindow->window);
     m_aSystemData.pSalFrame     = this;
