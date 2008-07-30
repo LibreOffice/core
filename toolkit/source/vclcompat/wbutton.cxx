@@ -1,11 +1,46 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: wbutton.cxx,v $
+ *
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 #include "wrapper.hxx"
 
+#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XActionListener.hpp>
 #include <com/sun/star/awt/XButton.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XRadioButton.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
+#include <toolkit/helper/convert.hxx>
+#include <vcl/button.hxx>
 #include <vcl/event.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
@@ -13,24 +48,46 @@
 
 #include <list>
 
-#include "layoutcore.hxx"
+#include "layout/layoutcore.hxx"
 
 using namespace ::com::sun::star;
 
 namespace layout
 {
 
-// Window/Control/Button
-//class TOOLKIT_DLLPUBLIC ButtonImpl : public ControlImpl,
-class ButtonImpl : public ControlImpl,
-                   public ::cppu::WeakImplHelper1< awt::XActionListener >,
-                   public ::cppu::WeakImplHelper1< awt::XItemListener >
+class ImageImpl
+{
+  public:
+    css::uno::Reference< css::graphic::XGraphic > mxGraphic;
+    ImageImpl( const char *pName )
+        : mxGraphic( layoutimpl::loadGraphic( pName ) )
+    {
+        if ( !mxGraphic.is() )
+        {
+            DBG_ERROR1( "ERROR: failed to load image: `%s'\n", pName );
+        }
+    }
+};
+
+Image::Image( const char *pName )
+    : pImpl( new ImageImpl( pName ) )
+{
+}
+
+Image::~Image()
+{
+    delete pImpl;
+}
+
+class ButtonImpl : public ControlImpl
+                 , public ::cppu::WeakImplHelper1< awt::XActionListener >
+                 , public ::cppu::WeakImplHelper1< awt::XItemListener >
 {
     Link maClickHdl;
-  protected:
+protected:
     // we add toggle hooks here to cut on code
     Link maToggleHdl;
-  public:
+public:
     uno::Reference< awt::XButton > mxButton;
     ButtonImpl( Context *pCtx, const PeerHandle &xPeer, Window *pWindow )
         : ControlImpl( pCtx, xPeer, pWindow )
@@ -107,10 +164,9 @@ void Button::Click()
 {
 }
 
-DECL_GET_IMPL_IMPL( Button )
+DECL_GET_IMPL_IMPL( Button );
 DECL_CONSTRUCTOR_IMPLS( Button, Control, "button" );
 
-// Window/Control/Button/PushButton
 class PushButtonImpl : public ButtonImpl
 {
   public:
@@ -163,13 +219,12 @@ void PushButton::SetToggleHdl( const Link& rLink )
     getImpl().SetToggleHdl( rLink );
 }
 
-DECL_GET_IMPL_IMPL( PushButton )
+DECL_GET_IMPL_IMPL( PushButton );
 DECL_CONSTRUCTOR_IMPLS( PushButton, Button, "pushbutton" );
 
  // HACK: put every radio button into a group :/
 static std::list< RadioButtonImpl*> mpRadioGroup;
 
-// Window/Control/Button/RadioButton
 class RadioButtonImpl : public ButtonImpl
 {
 public:
@@ -210,19 +265,11 @@ public:
     static void unsetOthersGroup( RadioButtonImpl* current )
     {
         // set all others to false
-        for( std::list< RadioButtonImpl*>::iterator it = mpRadioGroup.begin();
-                 it != mpRadioGroup.end(); it++ )
+        for ( std::list< RadioButtonImpl*>::iterator i = mpRadioGroup.begin();
+              i != mpRadioGroup.end(); i++ )
         {
-#if 0 // BREAKS in OOo
-            if ( *it != current )
-                (*it)->Check( false );
-#else
-            if ( *it != current && (*it)->IsChecked() )
-            {
-                (*it)->Check( false );
-                return;
-            }
-#endif
+            if ( *i != current )
+                ( *i )->Check( false );
         }
     }
 
@@ -269,10 +316,22 @@ void RadioButton::SetToggleHdl( const Link& rLink )
     getImpl().SetToggleHdl( rLink );
 }
 
-DECL_GET_IMPL_IMPL( RadioButton )
+DECL_GET_IMPL_IMPL( RadioButton );
+#if 1
 DECL_CONSTRUCTOR_IMPLS( RadioButton, Button, "radiobutton" );
+#else //debugging aid
+RadioButton::RadioButton( Context *pCtx, const char *pId, sal_uInt32 nId )
+    : Button( new RadioButtonImpl( pCtx, pCtx->GetPeerHandle( pId, nId ), this ) )
+{
+    printf( "%s: name=%s\n", __PRETTY_FUNCTION__, pId );
+}
 
-// Window/Control/Button/CheckBox
+RadioButton::RadioButton( Window *pParent, WinBits nBits )
+    : Button( new RadioButtonImpl( pParent->getContext(), Window::CreatePeer( pParent, nBits, "radiobutton" ), this ) )
+{
+}
+#endif
+
 class CheckBoxImpl : public ButtonImpl
 {
   public:
@@ -302,7 +361,7 @@ BOOL CheckBox::IsChecked() const
 {
     if ( !getImpl().mxCheckBox.is() )
         return FALSE;
-    return getImpl().mxCheckBox->getState();
+    return getImpl().mxCheckBox->getState() != 0;
 }
 
 void CheckBox::SetToggleHdl( const Link& rLink )
@@ -310,10 +369,9 @@ void CheckBox::SetToggleHdl( const Link& rLink )
     getImpl().SetToggleHdl( rLink );
 }
 
-DECL_GET_IMPL_IMPL( CheckBox )
+DECL_GET_IMPL_IMPL( CheckBox );
 DECL_CONSTRUCTOR_IMPLS( CheckBox, Button, "checkbox" );
 
-// Window/Control/Button/PushButton/etc
 #define BUTTON_IMPL(t, parent, response) \
     class t##Impl : public parent##Impl \
     { \
@@ -358,25 +416,167 @@ DECL_CONSTRUCTOR_IMPLS( ResetButton, PushButton, "resetbutton" );
 DECL_CONSTRUCTOR_IMPLS( ApplyButton, PushButton, "applybutton" );  /* Deprecated? */
 DECL_CONSTRUCTOR_IMPLS( HelpButton, PushButton, "helpbutton" );
 
-
-ImageImpl::ImageImpl( const char *pName )
-    : mxGraphic( layoutimpl::loadGraphic( pName ) )
+class AdvancedButtonImpl : public PushButtonImpl
 {
-    if ( !mxGraphic.is() )
+protected:
+    bool bAdvancedMode;
+    std::list< Window*> maAdvanced;
+    std::list< Window*> maSimple;
+    rtl::OUString mSimpleLabel;
+    rtl::OUString mAdvancedLabel;
+
+    Window* Remove( std::list< Window*> lst, Window* w )
     {
-        DBG_ERROR1( "ERROR: failed to load image: `%s'", pName );
+        for ( std::list< Window*>::iterator it = maAdvanced.begin();
+              it != maAdvanced.end(); it++ )
+            if ( *it == w )
+            {
+                lst.erase( it );
+                return *it;
+            }
+        return 0;
+    }
+    void redraw()
+    {
+        uno::Reference <awt::XWindow> ref( mxWindow, uno::UNO_QUERY );
+        ::Window* window = VCLXWindow::GetImplementation( ref )->GetWindow();
+        ::Window* parent = window->GetParent();
+
+        ::Rectangle r = Rectangle( parent->GetPosPixel(),
+                                   parent->GetSizePixel() );
+
+        parent->Invalidate( r, INVALIDATE_CHILDREN | INVALIDATE_NOCHILDREN );
+        parent->SetPosSizePixel( 0, 0, r.nRight - r.nLeft, r.nBottom - r.nTop,
+                                 awt::PosSize::SIZE );
     }
 
-}
+public:
+    AdvancedButtonImpl( Context *pCtx, PeerHandle const& xPeer, Window *pWindow )
+        : PushButtonImpl( pCtx, xPeer, pWindow )
+        , bAdvancedMode( false )
+          // TODO: i18n
+          // Button::GetStandardText( BUTTON_ADVANCED );
+          // Button::GetStandardText( BUTTON_SIMPLE );
+        , mSimpleLabel( rtl::OUString::createFromAscii( "Advanced..." ) )
+        , mAdvancedLabel( rtl::OUString::createFromAscii( "Simple..." ) )
+    {
+    }
+    void Click()
+    {
+        bAdvancedMode = !bAdvancedMode;
+        if ( bAdvancedMode )
+            advancedMode();
+        else
+            simpleMode();
+    }
+    void advancedMode()
+    {
+        // TODO: set symbol/image?
+        // SYMBOL_PAGEUP, SYMBOL_PAGEDOWN
+#if 0
+        // How to set images from here?
+        // XImageConsumer looks like a disaster
+        // Should move all this switching functionality to VCLXAdvancedButton?
+        /biek/home/janneke/vc/layout-cws/default_images/res/commandimagelist/
+            sc_arrowshapes_down.png
+            sch_flowchartshapes.flowchart-extract.png
+            sch_flowchartshapes.flowchart-merge.png
+#endif
+        mxButton->setLabel( mAdvancedLabel );
+        for ( std::list< Window*>::iterator it = maAdvanced.begin();
+              it != maAdvanced.end(); it++ )
+            ( *it )->Show();
+        for ( std::list< Window*>::iterator it = maSimple.begin();
+              it != maSimple.end(); it++ )
+            ( *it )->Hide();
 
-Image::Image( const char *pName )
-    : pImpl( new ImageImpl( pName ) )
+        redraw();
+    }
+
+    void simpleMode()
+    {
+        mxButton->setLabel( mSimpleLabel );
+        for ( std::list< Window*>::iterator it = maAdvanced.begin();
+              it != maAdvanced.end(); it++ )
+            ( *it )->Hide();
+        for ( std::list< Window*>::iterator it = maSimple.begin();
+              it != maSimple.end(); it++ )
+            ( *it )->Show();
+
+        redraw();
+    }
+    void AddAdvanced( Window* w )
+    {
+        maAdvanced.push_back( w );
+        if ( !bAdvancedMode )
+            w->Hide();
+    }
+    void AddSimple( Window* w )
+    {
+        maSimple.push_back( w );
+        if ( bAdvancedMode )
+            w->Hide();
+    }
+    void RemoveAdvanced( Window* w )
+    {
+        Remove( maAdvanced, w );
+    }
+    void RemoveSimple( Window* w )
+    {
+        Remove( maSimple, w );
+    }
+};
+
+void AdvancedButton::AddAdvanced( Window* w )
 {
+    getImpl().AddAdvanced( w );
 }
 
-Image::~Image()
+void AdvancedButton::AddSimple( Window* w )
 {
-    delete pImpl;
+    getImpl().AddSimple( w );
 }
 
-}; // namespace layout
+void AdvancedButton::RemoveAdvanced( Window* w )
+{
+    getImpl().RemoveAdvanced( w );
+}
+
+void AdvancedButton::RemoveSimple( Window* w )
+{
+    getImpl().RemoveSimple( w );
+}
+
+DECL_CONSTRUCTOR_IMPLS( AdvancedButton, PushButton, "advancedbutton" );
+DECL_GET_IMPL_IMPL( AdvancedButton );
+
+
+class MoreButtonImpl : public AdvancedButtonImpl
+{
+public:
+    MoreButtonImpl( Context *pCtx, PeerHandle const& xPeer, Window *pWindow )
+        : AdvancedButtonImpl( pCtx, xPeer, pWindow)
+    {
+        mAdvancedLabel = ::Button::GetStandardText( BUTTON_LESS );
+        mSimpleLabel = ::Button::GetStandardText( BUTTON_MORE );
+    }
+    void AddWindow( Window* w ) { AddAdvanced( w ); }
+    void RemoveWindow( Window* w ) { RemoveAdvanced( w ); }
+};
+
+// TODO
+//BUTTON_IMPL( MoreButton, PushButton, 0 );
+DECL_CONSTRUCTOR_IMPLS( MoreButton, AdvancedButton, "morebutton" );
+DECL_GET_IMPL_IMPL( MoreButton );
+
+void MoreButton::AddWindow( Window* w )
+{
+    getImpl().AddWindow( w );
+}
+
+void MoreButton::RemoveWindow( Window* w )
+{
+    getImpl().RemoveWindow( w );
+}
+
+} // namespace layout
