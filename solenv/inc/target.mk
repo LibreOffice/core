@@ -8,7 +8,7 @@
 #
 # $RCSfile: target.mk,v $
 #
-# $Revision: 1.210 $
+# $Revision: 1.211 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -112,18 +112,6 @@ DEPFILE_OBJ+:=$(MISC)$/all_$(TARGET).dpobj
 .ENDIF			# "$(nodep)"==""
 
 .IF "$(depend)" == ""
-
-# remove if .Net 2003 support has expired 
-.IF "$(debug)"!=""
-.IF "$(OS)$(COM)$(CPU)" == "WNTMSCI"
-.IF "$(COMEX)" == "10"
-.IF "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)"!=""
-MAXPROCESS!:=1
-.EXPORT : MAXPROCESS
-.ENDIF			# "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)"!=""
-.ENDIF			# "$(COMEX)" == "10"
-.ENDIF			# "$(OS)$(COM)$(CPU)" == "WNTMSCI"
-.ENDIF			# "$(debug)"!=""
 
 # -------
 # - ALL -
