@@ -26,45 +26,59 @@ module com {  module sun {  module star {  module awt {
 
 //=============================================================================
 
-published interface XLayoutUnit;
+interface XLayoutUnit;
 
 /** specifies the layout constraints for a surrounding container.
+
+    @since OOo 3.0
  */
-published interface XLayoutContainer: com::sun::star::container::XChild
+interface XLayoutContainer: com::sun::star::container::XChild
 {
-    /* Add/remove a child. Some containers provide an interface for
+    /** Adds a child. Some containers provide an interface for
        adding children which you should use. */
     void addChild( [in] com::sun::star::awt::XLayoutConstrains Child )
         raises( com::sun::star::awt::MaxChildrenException );
+
+    /** Remove a child. Some containers provide an interface for
+       adding children which you should use.
+    */
     void removeChild( [in] com::sun::star::awt::XLayoutConstrains Child );
+
+    /** Returns a sequence of the children of this container. */
     sequence< com::sun::star::awt::XLayoutConstrains > getChildren();
 
-    /* Read/modify some child layout properties. XPropertySet provides a
+    /** Read/modify some child layout properties. XPropertySet provides a
        rich API that allows, e.g., for introspection.
        Should rarely be a need to use; containers shall provide an interface
        for setting properties more confortably. */
     com::sun::star::beans::XPropertySet getChildProperties(
         [in] com::sun::star::awt::XLayoutConstrains Child );
 
-    /* Set at initilization, this object should be notified when a containers state
+    /** Set at initilization, this object should be notified when a containers state
        changes, that may affect its size, to queue a layout re-calculation. */
     void setLayoutUnit( [in] com::sun::star::awt::XLayoutUnit Unit );
 
     // TEMP: no need for this...
     com::sun::star::awt::XLayoutUnit getLayoutUnit();
 
-    /* To be used by the parent for the purpose of layout management.
+    /** To be used by the parent for the purpose of layout management.
        For widgets, use XWindow::setPosSize() */
     void allocateArea( [in] com::sun::star::awt::Rectangle NewArea );
 
-    /* Used by the layouting unit to evaluate size damage, and force a
+    /** Used by the layouting unit to evaluate size damage, and force a
        re-allocation. */
     com::sun::star::awt::Size getRequestedSize();
+
+    /** Used by the layouting unit to evaluate size damage, and force a
+       re-allocation. */
     com::sun::star::awt::Rectangle getAllocatedArea();
 
-    /* For flow layouting (e.g. wrap-able labels). TODO: We might want to
+    /** For flow layouting (e.g. wrap-able labels). TODO: We might want to
        re-design this approach -- check XLayoutConstrains::calcAdjustedSize(). */
     long getHeightForWidth( [in] long Width );
+
+    /** For flow layouting (e.g. wrap-able labels). TODO: We might want to
+       re-design this approach -- check XLayoutConstrains::calcAdjustedSize(). */
     boolean hasHeightForWidth();
 };
 

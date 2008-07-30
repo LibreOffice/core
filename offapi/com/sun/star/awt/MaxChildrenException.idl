@@ -15,8 +15,10 @@ module com {  module sun {  module star {  module awt {
 
     @see     XLayoutContainer
     @see     com::sun::star::awt::XLayoutContainer::addChild
+
+    @since OOo 3.0
  */
-published exception MaxChildrenException: com::sun::star::uno::Exception
+exception MaxChildrenException: com::sun::star::uno::Exception
 {
 };
 
