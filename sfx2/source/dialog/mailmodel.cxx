@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mailmodel.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -376,11 +376,21 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             if ( bStoreTo )
             {
                 // Retrieve filter from type
-                css::uno::Sequence< css::beans::NamedValue > aQuery( 2 );
+                css::uno::Sequence< css::beans::NamedValue > aQuery( bSendAsPDF ? 3 : 2 );
                 aQuery[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ));
                 aQuery[0].Value = css::uno::makeAny( aTypeName );
                 aQuery[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentService" ));
                 aQuery[1].Value = css::uno::makeAny( aModule );
+                if( bSendAsPDF )
+                {
+                    // #i91419#
+                    // FIXME: we want just an export filter. However currently we need
+                    // exact flag value as detailed in the filter configuration to get it
+                    // this seems to be a bug
+                    // without flags we get an import filter here, which is also unwanted
+                    aQuery[2].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Flags" ));
+                    aQuery[2].Value = css::uno::makeAny( sal_Int32(0x80042) ); // EXPORT ALIEN 3RDPARTY
+                }
 
                 css::uno::Reference< css::container::XEnumeration > xEnumeration =
                     xContainerQuery->createSubSetEnumerationByProperties( aQuery );
