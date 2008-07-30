@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev6.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,10 @@
 #include <vcl/graph.hxx>
 #include <vcl/wall2.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+
+#include <basegfx/vector/b2dvector.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <vcl/window.h>
 #include <vcl/svdata.hxx>
@@ -160,26 +164,89 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
     DBG_TRACE( "OutputDevice::DrawTransparent()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    if( !mbFillColor || ( 0 == nTransparencePercent ) || ( mnDrawMode & ( DRAWMODE_NOTRANSPARENCY ) ) )
-        DrawPolyPolygon( rPolyPoly );
-    else if( 100 == nTransparencePercent )
+    // short circuit for drawing an opaque polygon
+    if( (nTransparencePercent < 1) || ((mnDrawMode & DRAWMODE_NOTRANSPARENCY) != 0) )
     {
+        DrawPolyPolygon( rPolyPoly );
+        return;
+    }
+
+    // short circut for drawing an invisible polygon
+    if( !mbFillColor || (nTransparencePercent >= 100) )
+    {
+        // short circuit if the polygon border is invisible too
+        if( !mbLineColor )
+            return;
+
+        // DrawTransparent() assumes that the border is NOT to be drawn transparently???
         Push( PUSH_FILLCOLOR );
         SetFillColor();
         DrawPolyPolygon( rPolyPoly );
         Pop();
+        return;
     }
-    else
+
+    // handle metafile recording
+    if( mpMetaFile )
+        mpMetaFile->AddAction( new MetaTransparentAction( rPolyPoly, nTransparencePercent ) );
+
+    bool bDrawn = !IsDeviceOutputNecessary() || ImplIsRecordLayout();
+    if( bDrawn )
+        return;
+
+    // get the device graphics as drawing target
+    if( !mpGraphics )
+        if( !ImplGetGraphics() )
+            return;
+
+    // debug helper:
+    static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA");
+
+    // try hard to draw it directly, because the emulation layers are @!#!
+    if( !pDisableNative
+    && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) )
     {
-        if( mpMetaFile )
-            mpMetaFile->AddAction( new MetaTransparentAction( rPolyPoly, nTransparencePercent ) );
-
-        if( !IsDeviceOutputNecessary() || ( !mbLineColor && !mbFillColor ) || ImplIsRecordLayout() )
+        // prepare the graphics device
+        if( mbInitClipRegion )
+            ImplInitClipRegion();
+        if( mbOutputClipped )
             return;
+        if( mbInitLineColor )
+            ImplInitLineColor();
+        if( mbInitFillColor )
+            ImplInitFillColor();
 
-        if( !mpGraphics && !ImplGetGraphics() )
-            return;
+        // get the polygon in device coordinates
+        ::basegfx::B2DPolyPolygon aB2DPolyPolygon = rPolyPoly.getB2DPolyPolygon();
+        const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
+        aB2DPolyPolygon.transform( aTransform );
 
+        // draw the transparent polygon
+        bDrawn = mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, nTransparencePercent*0.01, this );
+
+        // DrawTransparent() assumes that the border is NOT to be drawn transparently???
+        if( mbLineColor )
+        {
+            // disable the fill color for now
+            mpGraphics->SetFillColor();
+            // draw the border line
+            const basegfx::B2DVector aLineWidths( 1, 1 );
+            const int nPolyCount = aB2DPolyPolygon.count();
+            for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
+            {
+                const ::basegfx::B2DPolygon& rPolygon = aB2DPolyPolygon.getB2DPolygon( nPolyIdx );
+                mpGraphics->DrawPolyLine( rPolygon, aLineWidths, this );
+            }
+            // prepare to restore the fill color
+            mbInitFillColor = mbFillColor;
+        }
+    }
+
+    if( bDrawn )
+        return;
+
+    if( 1 )
+    {
         VirtualDevice* pOldAlphaVDev = mpAlphaVDev;
 
         // #110958# Disable alpha VDev, we perform the necessary
@@ -237,7 +304,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
         }
         else
         {
-            PolyPolygon     aPolyPoly( LogicToPixel( rPolyPoly ) );
+             PolyPolygon    aPolyPoly( LogicToPixel( rPolyPoly ) );
             Rectangle       aPolyRect( aPolyPoly.GetBoundRect() );
             Point           aPoint;
             Rectangle       aDstRect( aPoint, GetOutputSizePixel() );
@@ -254,9 +321,6 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 
             if( !aDstRect.IsEmpty() )
             {
-                bool bDrawn = false;
-                static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA");
-
                 // #i66849# Added fast path for exactly rectangular
                 // polygons
                 // #i83087# Naturally, system alpha blending cannot
@@ -265,7 +329,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                 {
                     // setup Graphics only here (other cases delegate
                     // to basic OutDev methods)
-                    if( mpGraphics || ImplGetGraphics() )
+                    if( 1 )
                     {
                         if ( mbInitClipRegion )
                             ImplInitClipRegion();
