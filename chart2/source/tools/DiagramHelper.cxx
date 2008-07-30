@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DiagramHelper.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,7 @@
 #include "CommonConverters.hxx"
 #include "servicenames_charttypes.hxx"
 
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
@@ -1480,6 +1481,34 @@ void DiagramHelper::setGeometry3D(
         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(
             *aIt, C2U( "Geometry3D" ), uno::makeAny( nNewGeometry ));
     }
+}
+
+//static
+sal_Int32 DiagramHelper::getCorrectedMissingValueTreatment(
+            const Reference< chart2::XDiagram > & xDiagram,
+            const Reference< chart2::XChartType >& xChartType )
+{
+    sal_Int32 nResult = ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP;
+    uno::Sequence < sal_Int32 > aAvailableMissingValueTreatments(
+                ChartTypeHelper::getSupportedMissingValueTreatments( xChartType ) );
+
+    uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
+    if( xDiaProp.is() && (xDiaProp->getPropertyValue( C2U( "MissingValueTreatment" ) ) >>= nResult) )
+    {
+        //ensure that the set value is supported by this charttype
+        for( sal_Int32 nN = 0; nN < aAvailableMissingValueTreatments.getLength(); nN++ )
+            if( aAvailableMissingValueTreatments[nN] == nResult )
+                return nResult; //ok
+    }
+
+    //otherwise use the first supported one
+    if( aAvailableMissingValueTreatments.getLength() )
+    {
+        nResult = aAvailableMissingValueTreatments[0];
+        return nResult;
+    }
+
+    return nResult;
 }
 
 } //  namespace chart
