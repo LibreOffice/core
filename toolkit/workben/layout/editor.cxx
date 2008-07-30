@@ -1,3 +1,34 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: editor.cxx,v $
+ *
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 #include "editor.hxx"
 
 #undef NDEBUG
@@ -29,7 +60,7 @@ using rtl::OUString;
 //#define FILEDLG
 
 // somewhat of a hack unfortunately ...
-#include "layoutcore.hxx"
+#include "layout/layoutcore.hxx"
 #include "root.hxx"
 #include "helper.hxx"
 
@@ -73,7 +104,7 @@ namespace layoutimpl {
                       const rtl::OUString &rName, long nProps, bool bToplevel );
 
     uno::Any anyFromString (const rtl::OUString &value, const uno::Type &type);
-};
+}
 
 using namespace layout;
 using namespace layoutimpl;
@@ -117,7 +148,7 @@ static rtl::OUString anyToString (uno::Any value)
 }
 
 static inline long anyToNatural (uno::Any value)
-{ return anyToString( value ).toInt64(); }
+{ return sal::static_int_cast<long>(anyToString( value ).toInt64()); }
 static inline double anyToDecimal (uno::Any value)
 { return anyToString( value ).toDouble(); }
 
@@ -211,7 +242,9 @@ public:
                 beans::Property prop = it.next();
                 rtl::OUString name( prop.Name );
                 rtl::OUString value( getProperty( name, WINDOW_PROPERTY ) );
-fprintf(stderr, "original property: %s = %s\n", OUSTRING_CSTR(name), OUSTRING_CSTR(value));
+#if DEBUG_PRINT
+                fprintf(stderr, "original property: %s = %s\n", OUSTRING_CSTR(name), OUSTRING_CSTR(value));
+#endif
                 std::pair< rtl::OUString, rtl::OUString > pair( name, value );
                 maOriProps.push_back( pair );
             }
@@ -372,7 +405,7 @@ fprintf(stderr, "original property: %s = %s\n", OUSTRING_CSTR(name), OUSTRING_CS
             pChild->removeChild( *it );
 
         for ( std::vector< Widget *>::const_iterator it = aChildChildren.begin();
-             it != aChildChildren.end(); it++ )
+              it != aChildChildren.end(); it++ )
             if ( !addChild( *it ) )
             {    // failure
                 for ( std::vector< Widget *>::const_iterator jt = aChildChildren.begin();
@@ -439,7 +472,9 @@ fprintf(stderr, "original property: %s = %s\n", OUSTRING_CSTR(name), OUSTRING_CS
         for ( PropList::const_iterator it = props.begin(); it != props.end(); it++ )
             if ( it->first.equalsIgnoreAsciiCase( propName ) )
                 return it->second;
-fprintf(stderr, "Serious error: property '%s' not found\n", OUSTRING_CSTR(propName));
+#if DEBUG_PRINT
+        fprintf(stderr, "Serious error: property '%s' not found\n", OUSTRING_CSTR(propName));
+#endif
         return rtl::OUString();
     }
 
@@ -486,9 +521,13 @@ fprintf(stderr, "Serious error: property '%s' not found\n", OUSTRING_CSTR(propNa
         rtl::OUString oriValue = getOriginalProperty( propName, rKind );
         rtl::OUString newValue = getProperty( propName, rKind );
         bool isTouched = oriValue != newValue;
-fprintf(stderr, "is property '%s' touched? %s  (%s vs %s)\n", OUSTRING_CSTR(propName), isTouched ? "yes" : "no", OUSTRING_CSTR(oriValue), OUSTRING_CSTR(newValue));
+#if DEBUG_PRINT
+        fprintf(stderr, "is property '%s' touched? %s  (%s vs %s)\n", OUSTRING_CSTR(propName), isTouched ? "yes" : "no", OUSTRING_CSTR(oriValue), OUSTRING_CSTR(newValue));
+#endif
         return isTouched;
     }
+
+    using LayoutWidget::setProperty;
 
     void setProperty( rtl::OUString rPropName, PropertyKind rKind, uno::Any rValue )
     {
@@ -717,7 +756,7 @@ namespace FlatLayout
             nRet++;
         return nRet;
     }
-};
+}
 
 //** PropertiesList widget
 
@@ -743,7 +782,9 @@ class PropertiesList : public layout::Table
 
             virtual ~AnyWidget()
             {
+#if DEBUG_PRINT
                 fprintf(stderr, "~AnyWidget\n");
+#endif
             }
 
             void save( uno::Any aValue )
@@ -752,15 +793,15 @@ class PropertiesList : public layout::Table
                 checkProperty();
             }
 
-void checkProperty()
-{
+            void checkProperty()
+            {
                 bool flag = mpWidget->isPropertyTouched( maPropName, maPropKind );
 
-                if ( mpFlag && mpFlag->IsChecked() != flag )
+                if ( mpFlag && mpFlag->IsChecked() != (BOOL)flag )
                 {
                     CheckFlag( flag, true );
                 }
-}
+            }
 
             void CheckFlag( bool bValue, bool bBlockCallback )
             {
@@ -950,7 +991,9 @@ printf("Remove mpEdit and expand\n");
 
             virtual void store()
             {
-fprintf(stderr, "store number: %ld\n", rtl::OUString( GetText() ).toInt64());
+#if DEBUG_PRINT
+                fprintf(stderr, "store number: %ld\n", rtl::OUString( GetText() ).toInt64());
+#endif
                 save( uno::makeAny( rtl::OUString( GetText() ).toInt64() ) );
             }
         };
@@ -982,7 +1025,9 @@ fprintf(stderr, "store number: %ld\n", rtl::OUString( GetText() ).toInt64());
 
             virtual ~AnyCheckBox()
             {
+#if DEBUG_PRINT
                 fprintf(stderr, "~AnyCheckBox\n");
+#endif
             }
 
             virtual layout::Window *getWindow()
@@ -990,8 +1035,10 @@ fprintf(stderr, "store number: %ld\n", rtl::OUString( GetText() ).toInt64());
 
             virtual void load()
             {
-fprintf(stderr, "loading boolean value\n");
-                Check( getValue().toInt64() );
+#if DEBUG_PRINT
+                fprintf(stderr, "loading boolean value\n");
+#endif
+                Check( getValue().toInt64() != 0 );
                 setLabel();
                 checkProperty();
             }
@@ -1022,7 +1069,7 @@ fprintf(stderr, "loading boolean value\n");
 
             virtual void load()
             {
-                SelectEntryPos( getValue().toInt32() );
+                SelectEntryPos( sal::static_int_cast< USHORT >( getValue().toInt32() ) );
                 checkProperty();
             }
 
@@ -1108,7 +1155,9 @@ fprintf(stderr, "loading boolean value\n");
 
             ~PropertyEntry()
             {
-            fprintf(stderr, "REMOVING label, flag and value\n");
+#if DEBUG_PRINT
+                fprintf(stderr, "REMOVING label, flag and value\n");
+#endif
                 delete mpLabel;
                 delete mpFlag;
                 delete mpValue;
@@ -1224,7 +1273,7 @@ private:
             rtl::OUString name( prop.Name );
             if ( toIgnore( name ) )
                 continue;
-            sal_uInt16 type = prop.Type.getTypeClass();
+            sal_uInt16 type = static_cast< sal_uInt16 >( prop.Type.getTypeClass() );
 
             PropertyEntry *propEntry = PropertyEntry::construct(
                 pWidget, name, rKind, type, mpParentWindow );
@@ -1232,6 +1281,7 @@ private:
             if ( propEntry )
             {
                 Add( propEntry->mpLabel, false, false );
+
                 // HACK: one of these will return Null...
                 Add( propEntry->mpValue->getWindow(), true, false );
                 Add( propEntry->mpValue->getContainer(), true, false );
@@ -1246,6 +1296,7 @@ public:
     void selectedWidget( Widget *pWidget )
     {
         clear();
+
         if ( !pWidget )
             return;
 
@@ -1262,6 +1313,7 @@ public:
 
     void clear()
     {
+        ///FIXME: crash
         Container::Clear();
 
         for ( std::list< PropertyEntry* >::iterator it = maPropertiesList.begin();
@@ -1283,26 +1335,34 @@ IMPL_LINK( PropertiesList::PropertyEntry::AnyWidget, ApplyPropertyHdl, layout::W
 
 IMPL_LINK( PropertiesList::PropertyEntry::AnyWidget, FlagToggledHdl, layout::CheckBox *, pCheck )
 {
-fprintf(stderr, "Property flag pressed -- is: %d\n", pCheck->IsChecked());
+#if DEBUG_PRINT
+    fprintf(stderr, "Property flag pressed -- is: %d\n", pCheck->IsChecked());
+#endif
     if ( !mbBlockFlagCallback )
     {
         bool checked = pCheck->IsChecked();
         if ( !checked )  // revert
-{
-fprintf(stderr, "revert\n");
+        {
+#if DEBUG_PRINT
+            fprintf(stderr, "revert\n");
+#endif
             load();
-}
+        }
         else
         {
-fprintf(stderr, "user can't dirty the flag!\n");
+#if DEBUG_PRINT
+            fprintf(stderr, "user can't dirty the flag!\n");
+#endif
             // User can't flag the property as dirty
             // Actually, we may want to allow the designer to force a property to be stored.
             // Could be useful when the default value of some new property wasn't yet decided...
             CheckFlag( false, true );
         }
     }
-else
-fprintf(stderr, "Property flag pressed -- BLOCKED\n");
+#if DEBUG_PRINT
+    else
+        fprintf(stderr, "Property flag pressed -- BLOCKED\n");
+#endif
     return 0;
 }
 
@@ -1392,14 +1452,16 @@ public:
         itemSelected( LISTBOX_ENTRY_NOTFOUND );
     }
 
-    ~SortListBox()
-    {
-        delete mpListBox;
-        delete mpUpButton;
-        delete mpDownButton;
-        delete mpRemoveButton;
-    }
+    virtual ~SortListBox();
 };
+
+SortListBox::~SortListBox()
+{
+    delete mpListBox;
+    delete mpUpButton;
+    delete mpDownButton;
+    delete mpRemoveButton;
+}
 
 IMPL_LINK( SortListBox, UpPressedHdl, layout::Button *, pBtn )
 {
@@ -1463,10 +1525,7 @@ public:
         mpRootWidget = new Widget( xWidget, "root" );
     }
 
-    ~LayoutTree()
-    {
-        delete mpRootWidget;
-    }
+    virtual ~LayoutTree();
 
     Widget *getWidget( int nPos )
     {
@@ -1489,7 +1548,7 @@ public:
         if ( pos == -1 )
             // if asked to select hidden root, select visible root
             pos = 0;
-        mpListBox->SelectEntryPos( pos );
+        mpListBox->SelectEntryPos( sal::static_int_cast< USHORT >( pos ) );
     }
 
     void rebuild()
@@ -1522,23 +1581,23 @@ public:
 
     // print in XML format...
 
-static rtl::OUString toXMLNaming (const rtl::OUString &string)
-{
-    rtl::OUStringBuffer buffer (string.getLength());
-    sal_Unicode *str = string.pData->buffer;
-    for (int i = 0; i < string.getLength(); i++) {
-        if ( str[i] >= 'A' && str[i] <= 'Z' )
-        {
-            if ( i > 0 )
-                buffer.append ((sal_Unicode) '-');
-            buffer.append ((sal_Unicode) (str[i] - 'A' + 'a'));
+    static rtl::OUString toXMLNaming (const rtl::OUString &string)
+    {
+        rtl::OUStringBuffer buffer (string.getLength());
+        sal_Unicode *str = string.pData->buffer;
+        for (int i = 0; i < string.getLength(); i++) {
+            if ( str[i] >= 'A' && str[i] <= 'Z' )
+            {
+                if ( i > 0 )
+                    buffer.append ((sal_Unicode) '-');
+                buffer.append ((sal_Unicode) (str[i] - 'A' + 'a'));
+            }
+            else
+                buffer.append ((sal_Unicode) str[i]);
         }
-        else
-            buffer.append ((sal_Unicode) str[i]);
-    }
 
-    return buffer.makeStringAndClear();
-}
+        return buffer.makeStringAndClear();
+    }
 
     void print()
     {
@@ -1622,6 +1681,11 @@ protected:
     }
 };
 
+LayoutTree::~LayoutTree()
+{
+    delete mpRootWidget;
+}
+
 //** EditorImpl
 
 class EditorImpl : public LayoutTree::Listener
@@ -1656,7 +1720,7 @@ public:
     EditorImpl( layout::Dialog *dialog,
         // we should probable open this channel (or whatever its called) ourselves
                 uno::Reference< lang::XMultiServiceFactory > xMSF );
-    ~EditorImpl();
+    virtual ~EditorImpl();
 
     void loadFile( const rtl::OUString &aTestFile );
 };
@@ -1669,7 +1733,9 @@ EditorImpl::EditorImpl( layout::Dialog *dialog,
     //dialog->getContext()->getRoot(), uno::UNO_QUERY )
     // dialog->GetPeer(), uno::UNO_QUERY )
 {
-fprintf (stderr, "EditorImpl()\n");
+#if DEBUG_PRINT
+    fprintf (stderr, "EditorImpl()\n");
+#endif
     // framework
     mxToolkit = uno::Reference< awt::XToolkit >(
         mxFactory->createInstance(
@@ -1678,7 +1744,9 @@ fprintf (stderr, "EditorImpl()\n");
     assert( mxToolkit.is() );
 
     // custom widgets
-fprintf (stderr, "custom widgets\n");
+#if DEBUG_PRINT
+    fprintf (stderr, "custom widgets\n");
+#endif
     mpPropertiesList = new PropertiesList( dialog );
 
     mpLayoutTree = new LayoutTree( dialog );
@@ -1710,11 +1778,11 @@ fprintf (stderr, "custom widgets\n");
     }
 
 #ifdef FILEDLG
-fprintf(stderr,"creating file dialog\n");
+    fprintf(stderr,"creating file dialog\n");
     pImportDialog = new FileDialog( NULL/*(layout::Window *) dialog*/, 0 );
-fprintf(stderr,"connecting it\n");
+    fprintf(stderr,"connecting it\n");
     pImportDialog->SetFileSelectHdl( LINK( this, EditorImpl, ImportDialogHdl ) );
-fprintf(stderr,"done file dialog\n");
+    fprintf(stderr,"done file dialog\n");
 #endif
 
 /*    pImportButton = new layout::PushButton( dialog, "import-button" );
@@ -1755,7 +1823,10 @@ mxMSF->createInstance
             uno::Reference< uno::XInterface >() );
     }
 
-fprintf( stderr, "TEST: initing root\n" );
+#if DEBUG_PRINT
+    fprintf( stderr, "TEST: initing root\n" );
+#endif
+
     uno::Reference< lang::XInitialization > xInit( xRoot, uno::UNO_QUERY );
     if ( !xInit.is() )
     {
@@ -1764,12 +1835,18 @@ fprintf( stderr, "TEST: initing root\n" );
             uno::Reference< uno::XInterface >() );
     }
 
-fprintf( stderr, "TEST: running parser\n" );
+#if DEBUG_PRINT
+    fprintf( stderr, "TEST: running parser\n" );
+#endif
     uno::Sequence< uno::Any > aParams( 1 );
     aParams[0] <<= aTestFile;
-fprintf( stderr, "TEST: do it\n" );
+#if DEBUG_PRINT
+    fprintf( stderr, "TEST: do it\n" );
+#endif
     xInit->initialize( aParams );
-fprintf( stderr, "TEST: file loaded\n" );
+#if DEBUG_PRINT
+    fprintf( stderr, "TEST: file loaded\n" );
+#endif
 
     mpLayoutTree->rebuild();
 }
@@ -1829,7 +1906,9 @@ IMPL_LINK( EditorImpl, CreateWidgetHdl, layout::Button *, pBtn )
 IMPL_LINK( EditorImpl, ImportButtonHdl, layout::PushButton *, pBtn )
 {
     (void) pBtn;
-fprintf(stderr, "IMPORT!\n");
+#if DEBUG_PRINT
+    fprintf(stderr, "IMPORT!\n");
+#endif
 #ifdef FILEDLG
     pImportDialog->Execute();
 #endif
@@ -1840,10 +1919,12 @@ fprintf(stderr, "IMPORT!\n");
 #ifdef FILEDLG
 IMPL_LINK( EditorImpl, ImportDialogHdl, FileDialog *, pDialog )
 {
+    UniString path = pDialog->GetPath();
 //fprintf(stderr, "Executing import dialog!\n");
 
-    UniString path = pDialog->GetPath();
-fprintf(stderr, "got import file: %s\n",rtl::OUStringToOString( path, RTL_TEXTENCODING_ASCII_US ).getStr() );
+#if DEBUG_PRINT
+    fprintf(stderr, "got import file: %s\n",rtl::OUStringToOString( path, RTL_TEXTENCODING_ASCII_US ).getStr() );
+#endif
 
     return 0;
 }
