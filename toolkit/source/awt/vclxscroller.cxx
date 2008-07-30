@@ -1,22 +1,48 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: vclxscroller.cxx,v $
+ *
+ * $Revision: 1.4 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 #include "vclxscroller.hxx"
-#include "toolkit/helper/property.hxx"
+
+#include <assert.h>
+#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#include <sal/macros.h>
+#include <toolkit/helper/property.hxx>
 #include <tools/debug.hxx>
 #include <vcl/scrbar.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
-#include <com/sun/star/awt/PosSize.hpp>
+#include "forward.hxx"
 
-#include <sal/macros.h>
-#include <assert.h>
-
-//#include <vcl/fixed.h>
-
-using namespace toolkit;
-//........................................................................
 namespace layoutimpl
 {
-//........................................................................
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -24,33 +50,26 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star;
 
-//====================================================================
-//= VCLXScroller
-//====================================================================
 DBG_NAME( VCLXScroller )
-//--------------------------------------------------------------------
-VCLXScroller::VCLXScroller( )
-: VCLXWindow()
-    , Bin()
+
+VCLXScroller::VCLXScroller()
+  : VCLXWindow()
+  , Bin()
 {
     DBG_CTOR( VCLXScroller, NULL );
     mpHorScrollBar = mpVerScrollBar = 0;
 }
 
-//--------------------------------------------------------------------
 VCLXScroller::~VCLXScroller()
 {
     DBG_DTOR( VCLXScroller, NULL );
 }
 
-//--------------------------------------------------------------------
-IMPLEMENT_2_FORWARD_XINTERFACE1( VCLXScroller, VCLXWindow, Container )
+IMPLEMENT_2_FORWARD_XINTERFACE1( VCLXScroller, VCLXWindow, Container );
 
-//--------------------------------------------------------------------
-IMPLEMENT_FORWARD_XTYPEPROVIDER1( VCLXScroller, VCLXWindow )
+IMPLEMENT_FORWARD_XTYPEPROVIDER1( VCLXScroller, VCLXWindow );
 
-//--------------------------------------------------------------------
-void SAL_CALL VCLXScroller::dispose( ) throw(RuntimeException)
+void SAL_CALL VCLXScroller::dispose() throw(RuntimeException)
 {
     {
         ::vos::OGuard aGuard( GetMutex() );
@@ -63,7 +82,6 @@ void SAL_CALL VCLXScroller::dispose( ) throw(RuntimeException)
     VCLXWindow::dispose();
 }
 
-//--------------------------------------------------------------------
 void VCLXScroller::ensureScrollBars()
 {
 
@@ -86,7 +104,6 @@ void VCLXScroller::ensureScrollBars()
 
 }
 
-//--------------------------------------------------------------------
 void SAL_CALL VCLXScroller::allocateArea(
     const ::com::sun::star::awt::Rectangle &rArea )
     throw (::com::sun::star::uno::RuntimeException)
@@ -118,7 +135,6 @@ void SAL_CALL VCLXScroller::allocateArea(
         allocateChildAt( mxChild, childRect );
 }
 
-//--------------------------------------------------------------------
 #define MAX_CHILD_REQ 40
 ::com::sun::star::awt::Size SAL_CALL VCLXScroller::getMinimumSize()
     throw(::com::sun::star::uno::RuntimeException)
@@ -134,37 +150,42 @@ void SAL_CALL VCLXScroller::allocateArea(
     return maRequisition;
 }
 
-//--------------------------------------------------------------------
 void VCLXScroller::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
 {
+/*
     ::vos::OClearableGuard aGuard( GetMutex() );
 
     switch ( _rVclWindowEvent.GetId() )
     {
         default:
             aGuard.clear();
+*/
             VCLXWindow::ProcessWindowEvent( _rVclWindowEvent );
-            break;
+/*
+        break;
     }
+*/
 }
 
-//--------------------------------------------------------------------
 void SAL_CALL VCLXScroller::setProperty( const ::rtl::OUString& PropertyName, const Any &Value ) throw(RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
     {
+/*
         sal_uInt16 nPropertyId = GetPropertyId( PropertyName );
         switch ( nPropertyId )
         {
             default:
+*/
                 VCLXWindow::setProperty( PropertyName, Value );
+/*
         }
+*/
     }
 }
 
-//--------------------------------------------------------------------
 Any SAL_CALL VCLXScroller::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -172,12 +193,15 @@ Any SAL_CALL VCLXScroller::getProperty( const ::rtl::OUString& PropertyName ) th
     Any aReturn;
     if ( GetWindow() )
     {
+/*
         sal_uInt16 nPropertyId = GetPropertyId( PropertyName );
         switch ( nPropertyId )
         {
             default:
+*/
                 aReturn = VCLXWindow::getProperty( PropertyName );
-        }
+
+//        }
     }
     return aReturn;
 }
@@ -189,6 +213,4 @@ IMPL_LINK( VCLXScroller, ScrollHdl, ScrollBar *, pScrollBar )
     return 0;
 }
 
-//........................................................................
-} // namespace toolkit
-//........................................................................
+} // namespace layoutimpl
