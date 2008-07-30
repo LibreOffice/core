@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyMap.hxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,7 @@
 #include <com/sun/star/chart/ChartSolidType.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
 
 // custom types
 #define XML_SCH_TYPE_AXIS_ARRANGEMENT       ( XML_SCH_TYPES_START + 0 )
@@ -57,6 +58,7 @@
 #define XML_SCH_TYPE_SYMBOL_TYPE            ( XML_SCH_TYPES_START + 9 )
 #define XML_SCH_TYPE_NAMED_SYMBOL           ( XML_SCH_TYPES_START + 10 )
 #define XML_SCH_TYPE_LABEL_PLACEMENT_TYPE   ( XML_SCH_TYPES_START + 11 )
+#define XML_SCH_TYPE_MISSING_VALUE_TREATMENT    ( XML_SCH_TYPES_START + 12 )
 
 // context ids
 #define XML_SCH_CONTEXT_USER_SYMBOL                 ( XML_SCH_CTF_START + 0 )
@@ -129,8 +131,11 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     // format), but is still ex-/imported for compatibility with the OOo file format
       MAP_CONTEXT( "NumberOfLines", CHART, XML_LINES_USED, XML_TYPE_NUMBER, LINES_USED  ),
     MAP_ENTRY( "StackedBarsConnected", CHART, XML_CONNECT_BARS, XML_TYPE_BOOL ),
+
     MAP_ENTRY_ODF12( "GroupBarsPerAxis", CHART, XML_GROUP_BARS_PER_AXIS, XML_TYPE_BOOL ),
     MAP_ENTRY_ODF12( "StartingAngle", CHART, XML_ANGLE_OFFSET, XML_TYPE_NUMBER ),
+    MAP_ENTRY_ODF12( "MissingValueTreatment", CHART, XML_TREAT_EMPTY_CELLS, XML_SCH_TYPE_MISSING_VALUE_TREATMENT ),
+
     // spline settings
     MAP_ENTRY( "SplineOrder", CHART, XML_SPLINE_ORDER, XML_TYPE_NUMBER ),
     MAP_ENTRY( "SplineResolution", CHART, XML_SPLINE_RESOLUTION, XML_TYPE_NUMBER ),
@@ -276,6 +281,13 @@ SvXMLEnumMapEntry aXMLChartDataLabelPlacementEnumMap[] =
     { ::xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
+SvXMLEnumMapEntry aXMLChartMissingValueTreatmentEnumMap[] =
+{
+    { ::xmloff::token::XML_LEAVE_GAP,    ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP },
+    { ::xmloff::token::XML_USE_ZERO,     ::com::sun::star::chart::MissingValueTreatment::USE_ZERO },
+    { ::xmloff::token::XML_IGNORE,       ::com::sun::star::chart::MissingValueTreatment::CONTINUE },
+    { ::xmloff::token::XML_TOKEN_INVALID,0 },
+};
 
 #endif  // XML_SCH_CREATE_GLOBAL_MAPS
 
