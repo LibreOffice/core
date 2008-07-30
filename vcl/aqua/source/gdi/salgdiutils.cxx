@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdiutils.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -131,20 +131,12 @@ void AquaSalGraphics::SetState()
     CGContextRestoreGState( mrContext );
     CGContextSaveGState( mrContext );
 
-    // setup standard clipping (unions of non-intersecting rectangles)
-    if( mxClipRectsPath )
+    // setup clipping
+    if( mxClipPath )
     {
         CGContextBeginPath( mrContext );                // discard any existing path
-        CGContextAddPath( mrContext, mxClipRectsPath );  // set the current path to the clipping path
+        CGContextAddPath( mrContext, mxClipPath );  // set the current path to the clipping path
         CGContextClip( mrContext );                     // use it for clipping
-    }
-
-    // intersect with complex clipping
-    if( mxClipPolysPath )
-    {
-        CGContextBeginPath( mrContext );
-        CGContextAddPath( mrContext, mxClipPolysPath );
-        CGContextEOClip( mrContext );
     }
 
     // set RGB colorspace and line and fill colors
