@@ -1,3 +1,300 @@
+2008-03-20  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* source/awt/vclxwindow.cxx: Fix compile warning.
+
+2008-03-20  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* util/makefile.mk: Revert obsolete VERSION addition.
+
+2008-03-20  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* source/controls/dialogcontrol.cxx,
+	source/controls/unocontrol.cxx, source/helper/tkresmgr.cxx,
+	util/defs/wntmsci11: Revert weird initial patch.
+
+2008-03-20  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* doc/layout/TODO: Doc update.
+
+2008-03-20  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* inc/layout/layout-post.hxx, inc/layout/layout-pre.hxx,
+	inc/layout/layout.hxx, source/awt/vclxbutton.cxx,
+	source/vclcompat/wbutton.cxx, workben/layout/recover.xml: Implement
+	MoreButton.  TODO: images.
+
+2008-03-19  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* source/vclcompat/wbutton.cxx: Remove redraw cruft, rename
+	redrawAlready to redraw.
+
+2008-03-19  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* inc/layout/layout-post.hxx, source/vclcompat/wbutton.cxx: Step
+	towards cleaner redraw.
+
+2008-03-19  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* inc/layout/layout-post.hxx, inc/layout/layout-pre.hxx,
+	inc/layout/layout.hxx, source/awt/vclxbutton.cxx,
+	source/awt/vclxbutton.hxx, source/layout/helper.cxx,
+	source/vclcompat/wbutton.cxx, workben/layout/recover.cxx,
+	workben/layout/recover.hxx: Extract AdvancedButton implementation
+	from recover.cxx into new widget.
+
+2008-03-19  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* workben/layout/recover.cxx, workben/layout/recover.hxx,
+	workben/layout/recover.xml: Update recover dialog, make
+	advanced/simple switching work.
+
+2008-03-14  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* workben/layout/zoom.cxx: In test mode, enable everything.
+
+2008-03-14  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* workben/layout/localize.sdf: Manually add new translatable strings
+	and translations for de, nl.
+
+2008-03-14  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* workben/layout/zoom.xml: Update zoom to have hbox of Zoom factor
+	and View layout alongside each other.
+
+2008-03-14  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* workben/layout/zoom.cxx, workben/layout/zoom.hxx,
+	workben/layout/zoom.xml: Merge upstream's zoom.
+
+2008-03-14  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* source/vclcompat/wbutton.cxx, source/vclcompat/wrapper.hxx: 
+	Nitpick, debugging aid.
+
+2008-03-14  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* inc/layout/layout.hxx, source/vclcompat/wrapper.cxx: Implement
+	FixedLine.IsEnabled().
+
+2008-03-14  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* util/makefile.mk: Build lib name fix.
+
+2008-03-14  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* inc/layout/layout-post.hxx, inc/layout/layout-pre.hxx,
+	inc/layout/layout.hxx, source/vclcompat/wcontainer.cxx,
+	workben/layout/recover.cxx, workben/layout/recover.hxx,
+	workben/layout/recover.xml: Complete VBox/HBox wrappers.  Not use
+	them in recover, spacing still wrong.
+
+2008-03-13  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* doc/layout/TODO, workben/layout/recover.cxx,
+	workben/layout/recover.hxx, workben/layout/recover.xml: More
+	recovery dialog mockuping.
+
+2008-03-13  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* source/layout/box-base.cxx: Implement visibility of
+	elements/containers better.
+
+2008-03-13  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* inc/layout/layout-post.hxx, inc/layout/layout-pre.hxx,
+	inc/layout/layout.hxx, source/layout/helper.cxx,
+	source/layout/import.cxx, source/layout/proplist.cxx,
+	source/vclcompat/wbutton.cxx, source/vclcompat/wfield.cxx,
+	source/vclcompat/wrapper.cxx, source/vclcompat/wrapper.hxx: 
+	Implement FixedImage.  Needed for recovery dialog.
+
+2008-02-28  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* source/layout/box-base.hxx, workben/layout/editor.cxx: Give
+	ChildData virtual distructor.
+
+2008-02-28  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* inc/layout/layout-post.hxx, inc/layout/layout-pre.hxx,
+	inc/layout/layout.hxx, source/layout/helper.cxx,
+	source/vclcompat/makefile.mk, source/vclcompat/wrapper.cxx,
+	util/makefile.mk, workben/layout/makefile.mk,
+	workben/layout/recover.cxx, workben/layout/recover.hxx,
+	workben/layout/recover.xml, workben/layout/test.cxx: Stab at new
+	recover dialog.
+
+2008-02-28  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* workben/layout/editor.cxx: Do not clear fresh container.  Disable
+	debug printing.
+
+2008-02-27  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* doc/layout/TODO, workben/layout/localize.sdf: Fix localize.sdf for
+	wordcount.
+
+2008-02-27  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* inc/layout/layout-pre.hxx, source/layout/dialogbuttonhbox.cxx: Fix
+	ID for displaying dialogs.
+
+2008-02-27  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* doc/layout/TODO, workben/layout/localize.sdf,
+	workben/layout/wordcount.xml, workben/layout/zoom.xml: Add strings
+	for all languages.
+
+2008-02-27  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* doc/layout/TODO, source/awt/vclxsplitter.cxx,
+	source/awt/vclxsplitter.hxx, source/awt/vclxtabcontrol.cxx,
+	source/awt/vclxtabcontrol.hxx, source/layout/box-base.cxx,
+	source/layout/box-base.hxx, source/layout/box.cxx,
+	source/layout/box.hxx, source/layout/container.cxx,
+	source/layout/dialogbuttonhbox.cxx,
+	source/layout/dialogbuttonhbox.hxx, source/layout/factory.cxx,
+	source/layout/flow.cxx, source/layout/helper.cxx,
+	source/layout/import.hxx, source/layout/makefile.mk,
+	source/layout/proplist.cxx, source/layout/root.cxx,
+	source/layout/table.cxx, source/layout/table.hxx,
+	source/layout/timer.cxx, source/vclcompat/wcontainer.cxx,
+	source/vclcompat/wfield.cxx, source/vclcompat/wrapper.cxx: Clean-up
+	code duplication from layout: new Box_Base class implements
+	addChild, removeChild, getChildren, getChildProperties for Box,
+	Table, VCLXSplitter, VCLXTabControl.
+
+2008-02-26  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* doc/layout/TODO, source/layout/root.cxx: Document more fixmes.
+
+2008-02-26  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* doc/layout/TODO, source/layout/proplist.cxx: Remove m237
+	workaround.
+
+2008-02-26  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* source/layout/helper.cxx: More comment cleanups.
+
+2008-02-26  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* source/awt/vclxtabcontrol.cxx, source/layout/box.cxx,
+	source/layout/container.cxx, source/vclcompat/wrapper.cxx: 
+	Commented-out code cleanups.
+
+2008-02-26  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* inc/layout/layout-post.hxx, inc/layout/layout-pre.hxx,
+	inc/layout/layout.hxx, inc/layout/layoutcore.hxx,
+	source/awt/forward.hxx, source/awt/vclxbutton.cxx,
+	source/awt/vclxbutton.hxx, source/awt/vclxdialog.cxx,
+	source/awt/vclxdialog.hxx, source/awt/vclxfixedline.cxx,
+	source/awt/vclxfixedline.hxx, source/awt/vclxscroller.cxx,
+	source/awt/vclxscroller.hxx, source/awt/vclxsplitter.cxx,
+	source/awt/vclxsplitter.hxx, source/awt/vclxtabcontrol.cxx,
+	source/awt/vclxtabcontrol.hxx, source/layout/bin.cxx,
+	source/layout/bin.hxx, source/layout/box.cxx,
+	source/layout/box.hxx, source/layout/container.cxx,
+	source/layout/container.hxx, source/layout/dialogbuttonhbox.cxx,
+	source/layout/dialogbuttonhbox.hxx, source/layout/factory.cxx,
+	source/layout/factory.hxx, source/layout/flow.cxx,
+	source/layout/flow.hxx, source/layout/helper.cxx,
+	source/layout/helper.hxx, source/layout/import.cxx,
+	source/layout/import.hxx, source/layout/makefile.mk,
+	source/layout/precompiled_xmlscript.hxx,
+	source/layout/proplist.cxx, source/layout/proplist.hxx,
+	source/layout/root.cxx, source/layout/root.hxx,
+	source/layout/table.cxx, source/layout/table.hxx,
+	source/layout/timer.cxx, source/layout/timer.hxx,
+	source/layout/translate.cxx, source/layout/translate.hxx,
+	source/vclcompat/makefile.mk, source/vclcompat/wbutton.cxx,
+	source/vclcompat/wcontainer.cxx, source/vclcompat/wfield.cxx,
+	source/vclcompat/wrapper.cxx, source/vclcompat/wrapper.hxx,
+	workben/layout/editor.cxx, workben/layout/editor.hxx,
+	workben/layout/makefile.mk, workben/layout/simple-paragraph.cxx,
+	workben/layout/simple-paragraph.hxx, workben/layout/test.cxx,
+	workben/layout/uno.hxx, workben/layout/zoom_def.hxx: Add licence
+	headers.
+
+2008-02-26  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* workben/layout/meekfile.mk: Junk meekfile.mk
+
+2008-02-26  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* doc/layout/TODO: Update TODO.
+
+2008-02-26  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* inc/toolkit/awt/vclxwindows.hxx, source/awt/vclxwindow.cxx,
+	source/awt/vclxwindows.cxx: Move VCLXScrollBar's getMinimumSize()
+	from VCLXWindow's switch to method.
+
+2008-02-26  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* inc/toolkit/awt/vclxwindows.hxx, source/awt/vclxwindow.cxx,
+	source/awt/vclxwindows.cxx: Move VCLXMessageBox's getMinimumSize()
+	from VCLXWindow's switch to method.
+
+2008-02-26  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* doc/layout/TODO, inc/toolkit/awt/vclxtopwindow.hxx,
+	source/awt/vclxdialog.cxx, source/awt/vclxdialog.hxx,
+	source/awt/vclxtopwindow.cxx: Remove code duplication from
+	VCLXDialog.
+
+2008-02-26  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* source/awt/vclxdialog.cxx, source/vclcompat/wbutton.cxx,
+	source/vclcompat/wcontainer.cxx, source/vclcompat/wrapper.hxx: 
+	Comment cleanup.
+
+2008-02-21  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* doc/layout/TODO, source/layout/helper.hxx,
+	workben/layout/editor.cxx, workben/layout/wordcountdialog.cxx: Fix
+	remaining SUN warnings.
+
+2008-02-21  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* inc/layout/layout.hxx, source/awt/vclxfixedline.hxx,
+	source/layout/byteseq.cxx, source/layout/helper.hxx,
+	source/layout/import.cxx, source/layout/makefile.mk,
+	source/layout/proplist.cxx, source/layout/translate.hxx,
+	source/vclcompat/wbutton.cxx, source/vclcompat/wcontainer.cxx,
+	source/vclcompat/wfield.cxx, source/vclcompat/wrapper.cxx,
+	source/vclcompat/wrapper.hxx, workben/layout/editor.cxx: Fix some
+	sunstudio12 warnings.
+
+2008-02-20  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* doc/layout/TODO, source/awt/makefile.mk,
+	source/awt/vclxbutton.cxx, source/awt/vclxbutton.hxx,
+	source/awt/vclxproxy.cxx, source/awt/vclxproxy.hxx,
+	source/layout/helper.cxx: Junk VCLXProxy.
+
+2008-02-20  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* inc/toolkit/awt/vclxwindows.hxx,
+	inc/toolkit/helper/listenermultiplexer.hxx,
+	source/awt/vclxbutton.cxx, source/awt/vclxbutton.hxx,
+	source/awt/vclxtabcontrol.cxx, source/awt/vclxtabcontrol.hxx,
+	source/layout/helper.cxx: Hello world on AWTVCLXCancelButton() label
+	and images.
+
+2008-02-20  Jan Nieuwenhuizen <janneke@gnu.org>
+
+	* .gitignore, source/awt/forward.hxx, source/awt/makefile.mk,
+	source/awt/vclxdialog.cxx, source/awt/vclxdialog.hxx,
+	source/awt/vclxfixedline.cxx, source/awt/vclxfixedline.hxx,
+	source/awt/vclxscroller.cxx, source/awt/vclxscroller.hxx,
+	source/awt/vclxsplitter.cxx, source/awt/vclxsplitter.hxx,
+	source/awt/vclxtabcontrol.cxx, source/awt/vclxtabcontrol.hxx,
+	source/layout/makefile.mk, workben/layout/localize-de.sdf,
+	workben/layout/localize-nl.sdf: Cleanup of includes, namespace in
+	headers in awt.
+
 2008-02-11  Jan Nieuwenhuizen <janneke@gnu.org>
 
 	* prj/build.lst: Have workspace depend on util, fixes parallel build

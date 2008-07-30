@@ -1,14 +1,32 @@
 -*-outline-*-
 
 * CWS
-** 3.0 feature freeze: March 6
+** Move everything & development into new layout-dialogs CWS
+
 ** cleanups
-*** remove stuff
-**** vclxproxy -> move into source/awt widgets 
-**** toplevel dialog/container?
+*** layout/import.hxx: what's this generator stuff?
+#if 0
+// generator
+class Widget
+*** root.hxx:
+/*
+  TODO: (ricardo) I think we should cut on LayoutRoot, stripping out its widget
+  proxy interface (just make it return the root widget).
+
+*** root.cxx:
+LayoutWidget::~LayoutWidget()
+{
+    /* should we dispose of the references...? */
+    // at least of its children... Or should root?
+*** root.cxx:
+LayoutRoot::~LayoutRoot()
+{
+// TODO: we want to delete the top level LayoutWidget...
+
 
 * portability
-** --enable-layout does not compile on Sun
+** --enable-layout does not compile on Sun?
+[SunStudio12 on Linux works...]
 
 TODO: Try not including layout-pre.hxx twice, but use
 layout-pre-header.hxx and layout-pre-source.hxx (both include an
@@ -36,20 +54,40 @@ un-multiple-inclusion-shielded layout-pre.hxx).
     aUserEdit . Disable ( ) ;
     return 0 ;
     }
-** LayoutDialogs compilation errors on Windows (--disable-layout?)
+
+** LayoutDialogs compilation errors on Windows
 in VCL headers there, need to include more headers to also get stuff like HWND defined.
 
 * code
 ** features
+*** Symbols on MoreButton/AdvancedButton?
+
+*** support more widgets (as necessary)
+**** see toolkit/source/awt/vclxtoolkit.cxx and svtools/source/uno/unoiface.cxx
+**** SubDialog
+**** Pull-down menu
+**** embed custom widget
+**** embed old .src TAB
+**** have a LAYOUT TAB be embedded in an old .src dialog
+**** FileControl?
+**** roadmap?
+**** datefield?
+**** patternfield?
+**** patternbox?
+**** dockingarea?
+**** errorbox?
+**** groupbox?
+**** menubutton?
+**** messbox?
+**** simpleanimation?
+
 *** support cnt:cnt:? 
 *** support using label (verb) on yes/ok no/cancel buttons for some platforms
 but keep using yes/no on Windows, eg?
-*** remove -DTEST_LAYOUT=1 from util/makefile.mk
+*** remove -DTEST_LAYOUT=1 from util/makefile.mk?
 
 ** fixes
 *** mpRadioGroup HACK --> use radiogroup property
-*** toolkit/source/awt/vclxwindow.cxx
-   empty-out VCLXWindow::getMinimumSize
 *** missing properties
 	'title' -> 'Set Zoom'
 Missing prop Title
@@ -62,9 +100,14 @@ Missing prop Default
 *** Remove magic constants
 fHorAlign = fVerAlign = 0.5; --> float const [CENTER?] = 0.5;
 
-*** remove stuff?
+** include full translations
+*** zoom
+grep zoom.src svx/source/dialog/localize.sdf | awk -F'\t' '{printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "layout", "janneke\\vc\\layout-cws\\toolkit\\workben\\layout\\zoom.xml", $3, "layout", $6 "_label", "", "", $8, "0", $10, $11, $12, "", $14, $15}' | sed -e 's/FL_\(ZOOM\)_label/FL_\1_text/' -e 's/\t_label/\tRID_SVXDLG_ZOOM_title/'
+**** done, except for View Layout update: no strings in localize.sdf yet,
+     must redo.
+*** wordcount
+grep wordcountdialog.src sw/source/ui/dialog/localize.sdf | awk -F'\t' '{printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "layout", "janneke\\vc\\layout-cws\\toolkit\\workben\\layout\\workben.xml", $3, "layout", $6 "_label", "", "", $8, "0", $10, $11, $12, "", $14, $15}' | sed -e 's/FL_\([A-Z]*\)_label/FL_\1_text/' -e 's/\t_label/\tDLG_WORDCOUNT_title/'s
 
-*** box.hxx: use vbox/hbox polymorphism instead of if (mbHorizontal)
 
 * i18n
     + forget java property files nonsense
@@ -102,14 +145,27 @@ m1'''': c93389f7
 ** Zoom dialog
 *** list of radio buttons indented: workben/zoom-indent.xml ?
 ** Word Count dialog
-** 'Format' dialog
+** Recover dialog (redesign)
+** pivotfilter dialog (Kohei?)
+** paragraph dialog
+
+
 TODO
 
 
 * play with / improve Ricardo's editor
 ** broken after new uno registration
-	+ this is not meant to be a production level tool, but still,
-	  it can be improved I think :-)
+
+   it barfs on
+   
+    void selectedWidget( Widget *pWidget )
+    {
+        clear();
+
+   it looks like a window is deleted twice.
+
+** this is not meant to be a production level tool, but still,
+   it can be improved I think :-)
 
 * improve Kohei's converter (poke him on IRC (afternoons) about this)
 
