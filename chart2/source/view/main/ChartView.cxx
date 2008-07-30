@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartView.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,6 +78,7 @@
 #include <time.h>
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/ExplicitSubIncrement.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -674,6 +675,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             pPlotter->setNumberFormatsSupplier( xNumberFormatsSupplier );
             pPlotter->setColorScheme( xColorScheme );
             pPlotter->setExplicitCategoriesProvider( pVCooSys->getExplicitCategoriesProvider() );
+            sal_Int32 nMissingValueTreatment = DiagramHelper::getCorrectedMissingValueTreatment( xDiagram, xChartType );
 
             if(pVCooSys)
                 pVCooSys->addMinimumAndMaximumSupplier(pPlotter);
@@ -703,6 +705,8 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
                 pSeries->setConnectBars( bConnectBars );
                 pSeries->setGroupBarsPerAxis( bGroupBarsPerAxis );
                 pSeries->setStartingAngle( nStartingAngle );
+
+                pSeries->setMissingValueTreatment( nMissingValueTreatment );
 
                 rtl::OUString aSeriesParticle( ObjectIdentifier::createParticleForSeries( nDiagramIndex, nCS, nT, nS ) );
                 pSeries->setParticle(aSeriesParticle);
