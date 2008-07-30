@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartTypeTemplate.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -128,6 +128,11 @@ protected:
         ::sal_Int32 nSeriesCount )
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL resetStyles(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    //
+    virtual void SAL_CALL applyStyles(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )
         throw (::com::sun::star::uno::RuntimeException);
 
