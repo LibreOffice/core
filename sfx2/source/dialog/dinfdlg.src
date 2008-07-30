@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dinfdlg.src,v $
- * $Revision: 1.54 $
+ * $Revision: 1.55 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -472,6 +472,181 @@ TabPage TP_DOCINFORELOAD
 
 };
 
+// TP_CUSTOMPROPERTIES ---------------------------------------------------
+
+TabPage TP_CUSTOMPROPERTIES
+{
+    HelpId = HID_TP_CUSTOMPROPERTIES ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    FixedText FT_PROPERTIES
+    {
+        Pos = MAP_APPFONT ( 6 , 7 ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "~Properties" ;
+    };
+    Control CTRL_PROPERTIES
+    {
+        HelpId = HID_CTRL_CUSTOMPROPERTIES;
+        Pos = MAP_APPFONT ( 6 , 18 ) ;
+        Size = MAP_APPFONT ( 248 , 141 ) ;
+        Border = TRUE;
+        DialogControl = TRUE;
+        //OutputSize = TRUE ;
+        Window WIN_PROPERTIES
+        {
+            OutputSize = TRUE ;
+            Pos = MAP_APPFONT ( 0 , 10 ) ;
+            Size = MAP_APPFONT ( 240 , 134 ) ;
+            DialogControl = TRUE;
+        };
+        ScrollBar SB_VERTICAL
+        {
+            Pos = MAP_APPFONT ( 238 , 10 ) ;
+            Size = MAP_APPFONT ( 8 , 129 ) ;
+            VScroll = TRUE;
+        };
+        String STR_HEADER_NAME
+        {
+            Text [ en-US ] = "Name" ;
+        };
+        String STR_HEADER_TYPE
+        {
+            Text [ en-US ] = "Type" ;
+        };
+        String STR_HEADER_VALUE
+        {
+            Text [ en-US ] = "Value" ;
+        };
+        String STR_HEADER_ACTION
+        {
+            Text [ en-US ] = "" ;
+        };
+    };
+    PushButton BTN_ADD
+    {
+        Pos = MAP_APPFONT( 204 , 165 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text [ en-US ] = "~Add";
+    };
+};
+
+ComboBox SFX_CB_PROPERTY_NAME
+{
+    Pos = MAP_APPFONT ( 0 , 2 ) ;
+    Size = MAP_APPFONT ( 60 , 72 ) ;
+    TabStop = TRUE ;
+    DropDown = TRUE ;
+    AutoSize = TRUE ;
+    AutoHScroll = TRUE ;
+    DDExtraWidth = TRUE ;
+    QuickHelpText [ en-US ] = "Property Name" ;
+    StringList [ en-US ] =
+    {
+        "Checked by";
+        "Client";
+        "Date completed";
+        "Department";
+        "Destinations";
+        "Disposition";
+        "Division";
+        "Document number";
+        "Editor";
+        "E-Mail";
+        "Forward to";
+        "Group";
+        "Info";
+        "Language";
+        "Mailstop";
+        "Matter";
+        "Office";
+        "Owner";
+        "Project";
+        "Publisher";
+        "Purpose";
+        "Received from";
+        "Recorded by";
+        "Recorded date";
+        "Reference";
+        "Source";
+        "Status";
+        "Telephone number";
+        "Typist";
+        "URL";
+    };
+};
+ListBox SFX_LB_PROPERTY_TYPE
+{
+    Pos = MAP_APPFONT ( 63 , 2 ) ;
+    Size = MAP_APPFONT ( 60 , 50 ) ;
+    DropDown = TRUE;
+    Border = TRUE;
+    CurPos = 0;
+    StringList [ en-US ] =
+    {
+        < "Text"        ; CUSTOM_TYPE_TEXT ; > ;
+        < "Date"        ; CUSTOM_TYPE_DATE ; > ;
+        < "Number"      ; CUSTOM_TYPE_NUMBER ; > ;
+        < "Yes or no"   ; CUSTOM_TYPE_BOOLEAN ; > ;
+    };
+};
+Edit SFX_ED_PROPERTY_VALUE
+{
+    Border = TRUE ;
+    Pos = MAP_APPFONT ( 127 , 2 ) ;
+    Size = MAP_APPFONT ( 61 , RSC_CD_TEXTBOX_HEIGHT ) ;
+    TabStop = TRUE ;
+    Left = TRUE ;
+};
+Control SFX_WIN_PROPERTY_YESNO
+{
+    HelpId = HID_CTRL_CUSTOMPROPS_YES_NO;
+    OutputSize = TRUE ;
+    Pos = MAP_APPFONT ( 127 , 2 ) ;
+    Size = MAP_APPFONT ( 61 , RSC_CD_TEXTBOX_HEIGHT ) ;
+    Border = TRUE ;
+    DialogControl = TRUE ;
+    RadioButton RB_PROPERTY_YES
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( 1 , 1 ) ;
+        Size = MAP_APPFONT( 28 , RSC_CD_RADIOBUTTON_HEIGHT ) ;
+        Text [ en-US ] = "Yes" ;
+    };
+    RadioButton RB_PROPERTY_NO
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( 32 , 1 ) ;
+        Size = MAP_APPFONT( 29 , RSC_CD_RADIOBUTTON_HEIGHT ) ;
+        Text [ en-US ] = "No" ;
+    };
+};
+
+ImageButton SFX_PB_PROPERTY_REMOVE
+{
+    Pos = MAP_APPFONT( 190 , 1 );
+    Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, RSC_CD_PUSHBUTTON_HEIGHT );
+    QuickHelpText [ en-US ] = "Remove Property" ;
+};
+Image SFX_IMG_PROPERTY_REMOVE
+{
+    ImageBitmap = Bitmap { File = "deleterow.bmp" ; };
+    MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
+};
+Image SFX_IMG_PROPERTY_REMOVE_HC
+{
+    ImageBitmap = Bitmap { File = "deleterow_h.bmp" ; };
+    MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
+};
+
+QueryBox SFX_QB_WRONG_TYPE
+{
+    Buttons = WB_OK_CANCEL ;
+    DefButton = WB_DEF_OK ;
+    Message [ en-US ] = "The value entered does not match the specified type.\nThe value will be stored as text." ;
+};
+
  // SID_DOCINFO -----------------------------------------------------------
 
 TabDialog SID_DOCINFO
@@ -497,8 +672,8 @@ TabDialog SID_DOCINFO
             };
             PageItem
             {
-                Identifier = TP_DOCINFOUSER ;
-                Text [ en-US ] = "User Defined" ;
+                Identifier = TP_CUSTOMPROPERTIES ;
+                Text [ en-US ] = "Custom Properties" ;
             };
             PageItem
             {
@@ -508,23 +683,4 @@ TabDialog SID_DOCINFO
         };
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
