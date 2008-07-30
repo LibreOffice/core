@@ -10,15 +10,18 @@ module com {  module sun {  module star {  module awt {
 //=============================================================================
 
 /** Enables height-for-width layout negociations, which allows for label wrapping
- *  and flow containers. Can be implemented by either a container or an ordinary widget;
- *  whether its parent will honor it is another story, so keep implementing
- *  getMinimumSize().
+    and flow containers. Can be implemented by either a container or an ordinary widget;
+    whether its parent will honor it is another story, so keep implementing
+    getMinimumSize().
+
+    @since OOo 3.0
  */
-published interface XLayoutFlow
+interface XLayoutFlow
 {
+    /** returns the prefered high this layout element would need for the given width. */
     long getHeightForWidth( [in] long Width );
 
-    /* Allow the container/widget to toggle the functionality. */
+    /** Allow the container/widget to toggle the functionality. */
     boolean hasHeightForWidth();
 };
 

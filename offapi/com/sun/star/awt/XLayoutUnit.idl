@@ -11,13 +11,15 @@ module com {  module sun {  module star {  module awt {
 
 //=============================================================================
 
-published interface XLayoutContainer;
+interface XLayoutContainer;
 
 /** Responsible to evaluate size damages and force a re-calculation. Containers
     should let it know of state changes that may affects their size.
- *  All children of a top-level window should share the same object.
+    All children of a top-level window should share the same object.
+
+    @since OOo 3.0
  */
-published interface XLayoutUnit
+interface XLayoutUnit
 {
     void queueResize( [in] com::sun::star::awt::XLayoutContainer Container );
 };
