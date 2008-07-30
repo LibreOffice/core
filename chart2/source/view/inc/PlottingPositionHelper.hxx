@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PlottingPositionHelper.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -352,8 +352,6 @@ inline bool PlottingPositionHelper::clipYRange( double& rMin, double& rMax ) con
         rMin = getLogicMinY();
     if( rMax > getLogicMaxY() )
         rMax = getLogicMaxY();
-    if( rMin == rMax )
-        return false;
     return true;
 }
 
