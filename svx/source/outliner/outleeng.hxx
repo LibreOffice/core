@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outleeng.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,6 +56,7 @@ public:
 
     virtual void        ParagraphInserted( USHORT nNewParagraph );
     virtual void        ParagraphDeleted( USHORT nDeletedParagraph );
+    virtual void        ParagraphConnected( USHORT nLeftParagraph, USHORT nRightParagraph );
 
     // #101498#
     virtual void        DrawingText(const Point& rStartPos, const XubString& rText, USHORT nTextStart, USHORT nTextLen, const sal_Int32* pDXArray, const SvxFont& rFont, USHORT nPara, USHORT nIndex, BYTE nRightToLeft);
