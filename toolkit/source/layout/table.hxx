@@ -1,44 +1,83 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: table.hxx,v $
+ *
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 #ifndef TABLE_HXX
 #define TABLE_HXX
 
-#include "container.hxx"
-
-#include <list>
+#include "box-base.hxx"
 
 namespace layoutimpl
 {
 
-class Table : public Container
+class Table : public Box_Base
 {
-    friend class TableChildProps;
-protected:
-    // Table properties
-    sal_Int32 mnColsLen;
-
+public:
     // Children properties
-    struct ChildData
+    struct ChildData : public Box_Base::ChildData
     {
-        sal_Bool  bExpand[ 2 ];
-        sal_Int32 nColSpan, nRowSpan;
-        css::awt::Size aRequisition;
-        css::uno::Reference< css::awt::XLayoutConstrains > xChild;
-        css::uno::Reference< css::beans::XPropertySet >    xProps;
-        bool isVisible();
+        sal_Bool mbExpand[ 2 ];
+        sal_Int32 mnColSpan;
+        sal_Int32 mnRowSpan;
+        int mnLeftCol;
+        int mnRightCol;
+        int mnTopRow;
+        int mnBottomRow;
 
-        // automatically calculated
-        int nLeftCol, nRightCol, nTopRow, nBottomRow;
+        ChildData( css::uno::Reference< css::awt::XLayoutConstrains > const& xChild );
+        bool isVisible();
     };
-    std::list< ChildData * > maChildren;
+
+    struct ChildProps : public Box_Base::ChildProps
+    {
+        ChildProps( ChildData *pData );
+    };
+
+protected:
 
     // a group of children; either a column or a row
     struct GroupData
     {
-        sal_Bool bExpand;
-        int nSize;  // request size (width or height)
-        GroupData() : bExpand( false ), nSize( 0 ) {}
+        sal_Bool mbExpand;
+        int mnSize;  // request size (width or height)
+        GroupData() : mbExpand( false ), mnSize( 0 ) {}
     };
-    std::vector< GroupData > maCols, maRows;
+
+    // Table properties
+    sal_Int32 mnColsLen;
+    std::vector< GroupData > maCols;
+    std::vector< GroupData > maRows;
     int mnColExpandables, mnRowExpandables;
+
+    ChildData *createChild( css::uno::Reference< css::awt::XLayoutConstrains > const& xChild );
+    ChildProps *createChildProps( Box_Base::ChildData* pData );
 
 public:
     Table();
@@ -46,16 +85,6 @@ public:
     // css::awt::XLayoutContainer
     virtual void SAL_CALL addChild( const css::uno::Reference< css::awt::XLayoutConstrains >& Child )
         throw (css::uno::RuntimeException, css::awt::MaxChildrenException);
-    virtual void SAL_CALL removeChild( const css::uno::Reference< css::awt::XLayoutConstrains >& Child )
-        throw (css::uno::RuntimeException);
-
-    virtual css::uno::Sequence< css::uno::Reference
-                                < css::awt::XLayoutConstrains > > SAL_CALL getChildren()
-        throw (css::uno::RuntimeException);
-
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getChildProperties(
-        const css::uno::Reference< css::awt::XLayoutConstrains >& Child )
-        throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL allocateArea( const css::awt::Rectangle &rArea )
         throw (css::uno::RuntimeException);
