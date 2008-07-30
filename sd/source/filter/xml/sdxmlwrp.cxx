@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdxmlwrp.cxx,v $
- * $Revision: 1.69 $
+ * $Revision: 1.70 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -777,7 +777,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
                         if( nUPD == 300 )
                         {
                             sal_Int32 nBuildId = sBuildId.copy( nIndex+1 ).toInt32();
-                            if( (nBuildId > 0) && (nBuildId < 9305) )
+                            if( (nBuildId > 0) && (nBuildId < 9316) )
                                 bTransform = true; // treat OOo 3.0 beta1 as OOo 2.x
                         }
                         else if( (nUPD == 680) || ( nUPD >= 640 && nUPD <= 645 ) )
