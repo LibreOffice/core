@@ -1,15 +1,52 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: vclxbutton.cxx,v $
+ *
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 #include "vclxbutton.hxx"
 
-#include "layoutcore.hxx"
+#include "layout/layoutcore.hxx"
 #include <com/sun/star/awt/ImagePosition.hpp>
 #include <vcl/button.hxx>
 
 namespace css = com::sun::star;
 
-IconButton::IconButton( css::uno::Reference< css::uno::XInterface > xButton,
-                        rtl::OUString aDefaultLabel, const char *pGraphName )
-    : VCLXProxy( xButton )
+namespace layoutimpl
 {
+
+VCLXIconButton::VCLXIconButton( Window *p, rtl::OUString aDefaultLabel, char const *pGraphName )
+    : VCLXButton()
+{
+    /* FIXME: before Window is set, setLabel, setProperty->setImage
+     * are silent no-ops.  */
+    p->SetComponentInterface( this );
+
     setLabel( aDefaultLabel );
     setProperty( rtl::OUString::createFromAscii( "Graphic" ),
                  css::uno::Any( layoutimpl::loadGraphic( pGraphName ) ) );
@@ -21,110 +58,73 @@ IconButton::IconButton( css::uno::Reference< css::uno::XInterface > xButton,
 
 // FIXME: l10n/i18n of Reset & Apply
 
-VCLXOKButton::VCLXOKButton( css::uno::Reference< css::uno::XInterface > xButton )
-    : IconButton( xButton, Button::GetStandardText( BUTTON_OK ),
-                  "res/commandimagelist/sc_ok.png" )
+VCLXOKButton::VCLXOKButton( Window *p )
+    : VCLXIconButton( p, Button::GetStandardText( BUTTON_OK ),
+                         "res/commandimagelist/sc_ok.png" )
 {
 }
 
-VCLXCancelButton::VCLXCancelButton( css::uno::Reference< css::uno::XInterface > xButton )
-    : IconButton( xButton, Button::GetStandardText( BUTTON_CANCEL ),
-//    : IconButton( xButton, rtl::OUString::createFromAscii( "~Cancel " ),
-                  "res/commandimagelist/sc_cancel.png" )
+VCLXCancelButton::VCLXCancelButton( Window *p )
+    : VCLXIconButton( p, Button::GetStandardText( BUTTON_CANCEL ),
+//    : VCLXIconButton( xButton, rtl::OUString::createFromAscii( "~Cancel " ),
+                         "res/commandimagelist/sc_cancel.png" )
 {
 }
 
-VCLXYesButton::VCLXYesButton( css::uno::Reference< css::uno::XInterface > xButton )
-    : IconButton( xButton, Button::GetStandardText( BUTTON_YES ),
+VCLXYesButton::VCLXYesButton( Window *p )
+    : VCLXIconButton( p, Button::GetStandardText( BUTTON_YES ),
                   "res/commandimagelist/sc_yes.png" )
 {
 }
 
-VCLXNoButton::VCLXNoButton( css::uno::Reference< css::uno::XInterface > xButton )
-    : IconButton( xButton, Button::GetStandardText( BUTTON_NO ),
+VCLXNoButton::VCLXNoButton( Window *p )
+    : VCLXIconButton( p, Button::GetStandardText( BUTTON_NO ),
                   "res/commandimagelist/sc_no.png" )
 {
 }
 
-VCLXRetryButton::VCLXRetryButton( css::uno::Reference< css::uno::XInterface > xButton )
-    : IconButton( xButton, Button::GetStandardText( BUTTON_RETRY ),
+VCLXRetryButton::VCLXRetryButton( Window *p )
+    : VCLXIconButton( p, Button::GetStandardText( BUTTON_RETRY ),
                   "res/commandimagelist/sc_retry.png" )
 {
 }
 
-VCLXIgnoreButton::VCLXIgnoreButton( css::uno::Reference< css::uno::XInterface > xButton )
-    : IconButton( xButton, Button::GetStandardText( BUTTON_IGNORE ),
+VCLXIgnoreButton::VCLXIgnoreButton( Window *p )
+    : VCLXIconButton( p, Button::GetStandardText( BUTTON_IGNORE ),
                   "res/commandimagelist/sc_ignore.png" )
 {
 }
 
-VCLXResetButton::VCLXResetButton( css::uno::Reference< css::uno::XInterface > xButton )
-    : IconButton( xButton, rtl::OUString::createFromAscii( "~Reset " ),
+VCLXResetButton::VCLXResetButton( Window *p )
+    : VCLXIconButton( p, rtl::OUString::createFromAscii( "~Reset " ),
                   "res/commandimagelist/sc_reset.png" )
 {
 }
 
-VCLXApplyButton::VCLXApplyButton( css::uno::Reference< css::uno::XInterface > xButton )
-    : IconButton( xButton, rtl::OUString::createFromAscii( "Apply" ),
+VCLXApplyButton::VCLXApplyButton( Window *p )
+    : VCLXIconButton( p, rtl::OUString::createFromAscii( "Apply" ),
                   "res/commandimagelist/sc_apply.png" )
 {
 }
 
-VCLXHelpButton::VCLXHelpButton( css::uno::Reference< css::uno::XInterface > xButton )
-    : IconButton( xButton, Button::GetStandardText( BUTTON_HELP ),
+VCLXHelpButton::VCLXHelpButton( Window *p )
+    : VCLXIconButton( p, Button::GetStandardText( BUTTON_HELP ),
                   "res/commandimagelist/sc_help.png" )
 {
 }
 
-namespace layoutimpl
+VCLXMoreButton::VCLXMoreButton( Window *p )
+    : VCLXIconButton( p, Button::GetStandardText( BUTTON_MORE ),
+//    : VCLXIconButton( p, rtl::OUString::createFromAscii( "More " ),
+                  "res/commandimagelist/sc_more.png" )
 {
-css::uno::Reference< css::awt::XLayoutConstrains >
-createInternalWidget( css::uno::Reference< css::awt::XToolkit > xToolkit,
-                      css::uno::Reference< css::uno::XInterface > xParent,
-                      const rtl::OUString &rName, long nProps )
-{
-    css::uno::Reference< css::awt::XLayoutConstrains > xRef, xWrapped;
-    bool bOK = false;
-    bool bCancel = false;
-    bool bYes = false;
-    bool bNo = false;
-    bool bRetry = false;
-    bool bIgnore = false;
-    bool bReset = false;
-    bool bApply = false;
-    bool bHelp = false;
-    if ( ( bOK = rName.equalsAscii( "okbutton" ) )
-         || ( bCancel = rName.equalsAscii( "cancelbutton" ) )
-         || ( bYes = rName.equalsAscii( "yesbutton" ) )
-         || ( bNo = rName.equalsAscii( "nobutton" ) )
-         || ( bRetry = rName.equalsAscii( "retrybutton" ) )
-         || ( bIgnore = rName.equalsAscii( "ignorebutton" ) )
-         || ( bReset = rName.equalsAscii( "resetbutton" ) )
-         || ( bApply = rName.equalsAscii( "applybutton" ) )
-         || ( bHelp = rName.equalsAscii( "helpbutton" ) ) )
-    {
-        xWrapped = createWidget( xToolkit, xParent,
-                                 rtl::OUString::createFromAscii( "pushbutton" ),
-                                 nProps );
-        if ( bOK )
-            xRef = new VCLXOKButton( xWrapped );
-        if ( bCancel )
-            xRef = new VCLXCancelButton( xWrapped );
-        if ( bYes )
-            xRef = new VCLXYesButton( xWrapped );
-        if ( bNo )
-            xRef = new VCLXNoButton( xWrapped );
-        if ( bRetry )
-            xRef = new VCLXRetryButton( xWrapped );
-        if ( bIgnore )
-            xRef = new VCLXIgnoreButton( xWrapped );
-        if ( bReset )
-            xRef = new VCLXResetButton( xWrapped );
-        if ( bApply )
-            xRef = new VCLXApplyButton( xWrapped );
-        if ( bHelp )
-            xRef = new VCLXHelpButton( xWrapped );
-    }
-    return xRef;
 }
-};
+
+VCLXAdvancedButton::VCLXAdvancedButton( Window *p )
+//    : VCLXIconButton( p, Button::GetStandardText( BUTTON_ADVANCED ),
+    : VCLXIconButton( p, rtl::OUString::createFromAscii( "Advanced " ),
+                  "res/commandimagelist/sc_advanced.png" )
+{
+}
+
+} // namespace layoutimpl
