@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outleeng.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@
 #include <svtools/itemset.hxx>
 #include <svx/eeitem.hxx>
 #include "editstat.hxx"
+#include "outlundo.hxx"
 
 OutlinerEditEng::OutlinerEditEng( Outliner* pEngOwner, SfxItemPool* pPool )
  : EditEngine( pPool )
@@ -94,6 +95,19 @@ void OutlinerEditEng::ParagraphDeleted( USHORT nDeletedParagraph )
 
     EditEngine::ParagraphDeleted( nDeletedParagraph );
 }
+
+void OutlinerEditEng::ParagraphConnected( USHORT /*nLeftParagraph*/, USHORT nRightParagraph )
+{
+    if( pOwner && pOwner->IsUndoEnabled() && !const_cast<EditEngine&>(pOwner->GetEditEngine()).IsInUndo() )
+    {
+        Paragraph* pPara = pOwner->GetParagraph( nRightParagraph );
+        if( pPara && pOwner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
+        {
+            pOwner->InsertUndo( new OutlinerUndoChangeParaFlags( pOwner, nRightParagraph, PARAFLAG_ISPAGE, 0 ) );
+        }
+    }
+}
+
 
 void OutlinerEditEng::StyleSheetChanged( SfxStyleSheet* pStyle )
 {
