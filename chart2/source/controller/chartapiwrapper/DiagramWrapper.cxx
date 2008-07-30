@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DiagramWrapper.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,6 +122,8 @@ enum
     PROP_DIAGRAM_PERSPECTIVE,
     PROP_DIAGRAM_ROTATION_HORIZONTAL,
     PROP_DIAGRAM_ROTATION_VERTICAL,
+
+    PROP_DIAGRAM_MISSING_VALUE_TREATMENT,
 
     PROP_DIAGRAM_HAS_X_AXIS,
     PROP_DIAGRAM_HAS_X_AXIS_DESCR,
@@ -409,6 +411,13 @@ void lcl_AddPropertiesToVector(
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "MissingValueTreatment" ),
+                  PROP_DIAGRAM_MISSING_VALUE_TREATMENT,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
 }
 
 const uno::Sequence< Property > & lcl_GetPropertySequence()
