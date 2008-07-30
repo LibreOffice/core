@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_SeriesToAxis.src,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,20 +38,20 @@ TabPage TP_OPTIONS
     Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedLine 1
     {
-        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Pos = MAP_APPFONT ( 6 , 6  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Align data series to";
     };
     RadioButton RBT_OPT_AXIS_1
     {
-        Pos = MAP_APPFONT ( 12 , 14  ) ;
+        Pos = MAP_APPFONT ( 12 , 20  ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Primary Y axis";
     };
     RadioButton RBT_OPT_AXIS_2
     {
-        Pos = MAP_APPFONT ( 12 , 28  ) ;
+        Pos = MAP_APPFONT ( 12 , 34  ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Secondary Y axis";
@@ -59,13 +59,13 @@ TabPage TP_OPTIONS
 
     FixedLine GB_BAR
     {
-        Pos = MAP_APPFONT ( 6 , 44  ) ;
+        Pos = MAP_APPFONT ( 6 , 50  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Settings";
     };
     FixedText FT_OVERLAP
     {
-        Pos = MAP_APPFONT ( 12 , 73 ) ;
+        Pos = MAP_APPFONT ( 12 , 80 ) ;
         Size = MAP_APPFONT ( 47 , 8 ) ;
         Text [ en-US ] = "~Overlap";
     };
@@ -73,7 +73,7 @@ TabPage TP_OPTIONS
     MetricField MT_OVERLAP
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 63 , 71 ) ;
+        Pos = MAP_APPFONT ( 63 , 78 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -91,7 +91,7 @@ TabPage TP_OPTIONS
 
     FixedText FT_GAP
     {
-        Pos = MAP_APPFONT ( 12 , 57 ) ;
+        Pos = MAP_APPFONT ( 12 , 64 ) ;
         Size = MAP_APPFONT ( 47 , 8 ) ;
         Text [ en-US ] = "~Spacing";
     };
@@ -99,7 +99,7 @@ TabPage TP_OPTIONS
     MetricField MT_GAP
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 63 , 55 ) ;
+        Pos = MAP_APPFONT ( 63 , 62 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -117,7 +117,7 @@ TabPage TP_OPTIONS
 
     CheckBox CB_CONNECTOR
     {
-        Pos = MAP_APPFONT ( 12 , 90 ) ;
+        Pos = MAP_APPFONT ( 12 , 97 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Connection Lines";
@@ -125,9 +125,40 @@ TabPage TP_OPTIONS
 
     CheckBox CB_BARS_SIDE_BY_SIDE
     {
-        Pos = MAP_APPFONT ( 12 , 90 ) ;
+        Pos = MAP_APPFONT ( 12 , 97 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Show ~bars side by side";
+    };
+
+    FixedLine FL_PLOT_MISSING_VALUES
+    {
+        Pos = MAP_APPFONT ( 6 , 113  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Plot missing values";
+    };
+
+    RadioButton RB_DONT_PAINT
+    {
+        Pos = MAP_APPFONT ( 12 , 127  ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Leave gap";
+    };
+
+    RadioButton RB_ASSUME_ZERO
+    {
+        Pos = MAP_APPFONT ( 12 , 141  ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Assume zero";
+    };
+
+    RadioButton RB_CONTINUE_LINE
+    {
+        Pos = MAP_APPFONT ( 12 , 155  ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Continue line";
     };
 };
