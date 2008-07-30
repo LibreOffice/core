@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optgdlg.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -877,11 +877,11 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& )
         {
             case 0: eSet = SFX_SYMBOLS_STYLE_AUTO;       break;
             case 1: eSet = SFX_SYMBOLS_STYLE_DEFAULT;    break;
-            case 2: eSet = SFX_SYMBOLS_STYLE_INDUSTRIAL; break;
-            case 3: eSet = SFX_SYMBOLS_STYLE_CRYSTAL;    break;
-            case 4: eSet = SFX_SYMBOLS_STYLE_TANGO;      break;
-            case 5: eSet = SFX_SYMBOLS_STYLE_CLASSIC;    break;
-            case 6: eSet = SFX_SYMBOLS_STYLE_HICONTRAST; break;
+            case 2: eSet = SFX_SYMBOLS_STYLE_HICONTRAST; break;
+            case 3: eSet = SFX_SYMBOLS_STYLE_INDUSTRIAL; break;
+            case 4: eSet = SFX_SYMBOLS_STYLE_CRYSTAL;    break;
+            case 5: eSet = SFX_SYMBOLS_STYLE_TANGO;      break;
+            case 6: eSet = SFX_SYMBOLS_STYLE_CLASSIC;    break;
             default:
                 DBG_ERROR( "OfaViewTabPage::FillItemSet(): This state of aIconStyleLB should not be possible!" );
         }
@@ -1049,11 +1049,11 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
         switch ( aMiscOptions.GetCurrentSymbolsStyle() )
         {
             case SFX_SYMBOLS_STYLE_DEFAULT:    nStyleLB_InitialSelection = 1; break;
-            case SFX_SYMBOLS_STYLE_INDUSTRIAL: nStyleLB_InitialSelection = 2; break;
-            case SFX_SYMBOLS_STYLE_CRYSTAL:    nStyleLB_InitialSelection = 3; break;
-            case SFX_SYMBOLS_STYLE_TANGO:      nStyleLB_InitialSelection = 4; break;
-            case SFX_SYMBOLS_STYLE_CLASSIC:    nStyleLB_InitialSelection = 5; break;
-            case SFX_SYMBOLS_STYLE_HICONTRAST: nStyleLB_InitialSelection = 6; break;
+            case SFX_SYMBOLS_STYLE_HICONTRAST: nStyleLB_InitialSelection = 2; break;
+            case SFX_SYMBOLS_STYLE_INDUSTRIAL: nStyleLB_InitialSelection = 3; break;
+            case SFX_SYMBOLS_STYLE_CRYSTAL:    nStyleLB_InitialSelection = 4; break;
+            case SFX_SYMBOLS_STYLE_TANGO:      nStyleLB_InitialSelection = 5; break;
+            case SFX_SYMBOLS_STYLE_CLASSIC:    nStyleLB_InitialSelection = 6; break;
             default:                           nStyleLB_InitialSelection = 0; break;
         }
     }
