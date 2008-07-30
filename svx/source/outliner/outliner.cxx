@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outliner.cxx,v $
- * $Revision: 1.74 $
+ * $Revision: 1.75 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2124,6 +2124,34 @@ void Outliner::SetEndPasteOrDropHdl( const Link& rLink )
 {
     maEndPasteOrDropHdl = rLink;
 }
+
+void Outliner::SetParaFlag( Paragraph* pPara,  sal_uInt16 nFlag )
+{
+    if( pPara && !pPara->HasFlag( nFlag ) )
+    {
+        if( IsUndoEnabled() && !IsInUndo() )
+            InsertUndo( new OutlinerUndoChangeParaFlags( this, (sal_uInt16)GetAbsPos( pPara ), pPara->nFlags, pPara->nFlags|nFlag ) );
+
+        pPara->SetFlag( nFlag );
+    }
+}
+
+void Outliner::RemoveParaFlag( Paragraph* pPara, sal_uInt16 nFlag )
+{
+    if( pPara && pPara->HasFlag( nFlag ) )
+    {
+        if( IsUndoEnabled() && !IsInUndo() )
+            InsertUndo( new OutlinerUndoChangeParaFlags( this, (sal_uInt16)GetAbsPos( pPara ), pPara->nFlags, pPara->nFlags & ~nFlag ) );
+
+        pPara->RemoveFlag( nFlag );
+    }
+}
+
+bool Outliner::HasParaFlag( const Paragraph* pPara, sal_uInt16 nFlag ) const
+{
+    return pPara && pPara->HasFlag( nFlag );
+}
+
 
 sal_Bool DrawPortionInfo::IsRTL() const
 {
