@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlg_ObjectProperties.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,6 +105,7 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const rtl::OUS
         , m_bHasRegressionProperties(false)
         , m_bProvidesSecondaryYAxis(false)
         , m_bProvidesOverlapAndGapWidth(false)
+        , m_bProvidesBarConnectors(false)
         , m_bHasAreaProperties(false)
         , m_bHasLineProperties(false)
         , m_bHasSymbolProperties(false)
@@ -112,6 +113,7 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const rtl::OUS
         , m_bCanAxisLabelsBeStaggered(false)
         , m_bHasNumberProperties(false)
         , m_bProvidesStartingAngle(false)
+        , m_bProvidesMissingValueTreatments(false)
         , m_xChartDocument( 0 )
 {
     rtl::OUString aParticleID = ObjectIdentifier::getParticleID( m_aObjectCID );
@@ -152,7 +154,11 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
             m_bHasRegressionProperties = ChartTypeHelper::isSupportingRegressionProperties( xChartType, nDimensionCount );
             m_bProvidesSecondaryYAxis =  ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount, 1 );
             m_bProvidesOverlapAndGapWidth =  ChartTypeHelper::isSupportingOverlapAndGapWidthProperties( xChartType, nDimensionCount );
+            m_bProvidesBarConnectors =  ChartTypeHelper::isSupportingBarConnectors( xChartType, nDimensionCount );
             m_bProvidesStartingAngle = ChartTypeHelper::isSupportingStartingAngle( xChartType );
+
+            m_bProvidesMissingValueTreatments = ChartTypeHelper::getSupportedMissingValueTreatments( xChartType )
+                                            .getLength() ? true : false;
         }
     }
     m_bHasLineProperties     = true; //@todo ask object
@@ -223,6 +229,10 @@ bool ObjectPropertiesDialogParameter::ProvidesOverlapAndGapWidth() const
 {
     return m_bProvidesOverlapAndGapWidth;
 }
+bool ObjectPropertiesDialogParameter::ProvidesBarConnectors() const
+{
+    return m_bProvidesBarConnectors;
+}
 bool ObjectPropertiesDialogParameter::HasAreaProperties() const
 {
     return m_bHasAreaProperties;
@@ -250,6 +260,10 @@ bool ObjectPropertiesDialogParameter::HasNumberProperties() const
 bool ObjectPropertiesDialogParameter::ProvidesStartingAngle() const
 {
     return m_bProvidesStartingAngle;
+}
+bool ObjectPropertiesDialogParameter::ProvidesMissingValueTreatments() const
+{
+    return m_bProvidesMissingValueTreatments;
 }
 uno::Reference< chart2::XChartDocument > ObjectPropertiesDialogParameter::getDocument() const
 {
@@ -337,7 +351,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
 //                 AddTabPage(TP_YERRORBAR, String(SchResId(STR_PAGE_YERROR_BARS)), ErrorBarsTabPage::Create, NULL);
             if( m_pParameter->HasGeometryProperties() )
                 AddTabPage(TP_LAYOUT, String(SchResId(STR_PAGE_LAYOUT)),SchLayoutTabPage::Create, NULL);
-            if( m_pParameter->ProvidesSecondaryYAxis() || m_pParameter->ProvidesOverlapAndGapWidth() )
+            if( m_pParameter->ProvidesSecondaryYAxis() || m_pParameter->ProvidesOverlapAndGapWidth() || m_pParameter->ProvidesMissingValueTreatments() )
                 AddTabPage(TP_OPTIONS, String(SchResId(STR_PAGE_OPTIONS)),SchOptionTabPage::Create, NULL);
             if( m_pParameter->ProvidesStartingAngle())
                 AddTabPage(TP_POLAROPTIONS, String(SchResId(STR_PAGE_OPTIONS)),PolarOptionsTabPage::Create, NULL);
@@ -522,6 +536,14 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
                 pTabPage->SetErrorBarType( ErrorBarResources::ERROR_BAR_Y );
                 pTabPage->SetChartDocumentForRangeChoosing( m_pParameter->getDocument());
             }
+            break;
+        }
+        case TP_OPTIONS:
+        {
+            SchOptionTabPage* pTabPage = dynamic_cast< SchOptionTabPage* >( &rPage );
+            if( pTabPage && m_pParameter )
+                pTabPage->Init( m_pParameter->ProvidesSecondaryYAxis(), m_pParameter->ProvidesOverlapAndGapWidth(),
+                    m_pParameter->ProvidesBarConnectors() );
             break;
         }
     }
