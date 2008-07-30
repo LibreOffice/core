@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BarChart.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,8 @@
 #include "Clipping.hxx"
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
+
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
@@ -634,14 +636,6 @@ void BarChart::createShapes()
                         bDrawConnectionLinesInited = true;
                     }
 
-                    if(fLogicPositiveYSum==0.0 && fLogicNegativeYSum==0.0)
-                    {
-                        if( bDrawConnectionLines )
-                            bOnlyConnectionLinesForThisPoint = true;
-                        else
-                            break;
-                    }
-
                     //------------
 
                     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes(
@@ -651,18 +645,16 @@ void BarChart::createShapes()
                     double fLogicX = pPosHelper->getSlotPos( (*aSeriesIter)->getX( nCatIndex ), fSlotX );
                     double fLogicBarHeight = (*aSeriesIter)->getY( nCatIndex );
                     if( ::rtl::math::isNan( fLogicBarHeight )) //no value at this category
-                        continue;
+                    {
+                        if( pSeries->getMissingValueTreatment() == ::com::sun::star::chart::MissingValueTreatment::USE_ZERO )
+                            fLogicBarHeight = 0.0;
+                        else
+                            continue;
+                    }
 
                     double fLogicValueForLabeDisplay = fLogicBarHeight;
                     fLogicBarHeight-=fBaseValue;
 
-                    if(fLogicBarHeight==0.0 )//@todo: continue also if the resolution to small
-                    {
-                        if( bDrawConnectionLines )
-                            bOnlyConnectionLinesForThisPoint = true;
-                        else
-                            continue;
-                    }
                     if( pPosHelper->isPercentY() )
                     {
                         if(fLogicPositiveYSum!=0.0)
@@ -713,13 +705,6 @@ void BarChart::createShapes()
 
                         //apply clipping to Y
                         if( !pPosHelper->clipYRange(fLowerYValue,fUpperYValue) )
-                        {
-                            if( bDrawConnectionLines )
-                                bOnlyConnectionLinesForThisPoint = true;
-                            else
-                                continue;
-                        }
-                        if( approxEqual(fLowerYValue,fUpperYValue) )
                         {
                             if( bDrawConnectionLines )
                                 bOnlyConnectionLinesForThisPoint = true;
@@ -804,85 +789,88 @@ void BarChart::createShapes()
 
                         nCreatedPoints++;
                         //create partial point
-                        uno::Reference< drawing::XShape >  xShape;
-                        if( m_nDimension==3 )
+                        if( !approxEqual(fLowerYValue,fUpperYValue) )
                         {
-                            drawing::Position3D aLogicBottom            (fLogicX,fLogicYStart,fLogicZ);
-                            drawing::Position3D aLogicLeftBottomFront   (fLogicX+fLogicBarWidth/2.0,fLogicYStart,fLogicZ-fLogicBarDepth/2.0);
-                            drawing::Position3D aLogicRightDeepTop      (fLogicX-fLogicBarWidth/2.0,fLogicYStart+fMiddleHeight,fLogicZ+fLogicBarDepth/2.0);
-                            drawing::Position3D aLogicTopTop            (fLogicX,fLogicYStart+fMiddleHeight+fTopHeight,fLogicZ);
-
-                            uno::Reference< XTransformation > xTransformation = pSubPosHelper->getTransformationScaledLogicToScene();
-
-                            //transformation 3) -> 4)
-                            drawing::Position3D aTransformedBottom          ( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicBottom) ) ) );
-                            drawing::Position3D aTransformedLeftBottomFront ( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicLeftBottomFront) ) ) );
-                            drawing::Position3D aTransformedRightDeepTop    ( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicRightDeepTop) ) ) );
-                            drawing::Position3D aTransformedTopTop          ( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicTopTop) ) ) );
-
-                            drawing::Direction3D aSize = aTransformedRightDeepTop - aTransformedLeftBottomFront;
-                            drawing::Direction3D aTopSize( aTransformedTopTop - aTransformedRightDeepTop );
-                            fTopHeight = aTopSize.DirectionY;
-
-                            sal_Int32 nRotateZAngleHundredthDegree = 0;
-                            if( pPosHelper->isSwapXAndY() )
+                            uno::Reference< drawing::XShape >  xShape;
+                            if( m_nDimension==3 )
                             {
-                                fTopHeight = aTopSize.DirectionX;
-                                nRotateZAngleHundredthDegree = 90*100;
-                                aSize = drawing::Direction3D(aSize.DirectionY,aSize.DirectionX,aSize.DirectionZ);
+                                drawing::Position3D aLogicBottom            (fLogicX,fLogicYStart,fLogicZ);
+                                drawing::Position3D aLogicLeftBottomFront   (fLogicX+fLogicBarWidth/2.0,fLogicYStart,fLogicZ-fLogicBarDepth/2.0);
+                                drawing::Position3D aLogicRightDeepTop      (fLogicX-fLogicBarWidth/2.0,fLogicYStart+fMiddleHeight,fLogicZ+fLogicBarDepth/2.0);
+                                drawing::Position3D aLogicTopTop            (fLogicX,fLogicYStart+fMiddleHeight+fTopHeight,fLogicZ);
+
+                                uno::Reference< XTransformation > xTransformation = pSubPosHelper->getTransformationScaledLogicToScene();
+
+                                //transformation 3) -> 4)
+                                drawing::Position3D aTransformedBottom          ( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicBottom) ) ) );
+                                drawing::Position3D aTransformedLeftBottomFront ( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicLeftBottomFront) ) ) );
+                                drawing::Position3D aTransformedRightDeepTop    ( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicRightDeepTop) ) ) );
+                                drawing::Position3D aTransformedTopTop          ( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicTopTop) ) ) );
+
+                                drawing::Direction3D aSize = aTransformedRightDeepTop - aTransformedLeftBottomFront;
+                                drawing::Direction3D aTopSize( aTransformedTopTop - aTransformedRightDeepTop );
+                                fTopHeight = aTopSize.DirectionY;
+
+                                sal_Int32 nRotateZAngleHundredthDegree = 0;
+                                if( pPosHelper->isSwapXAndY() )
+                                {
+                                    fTopHeight = aTopSize.DirectionX;
+                                    nRotateZAngleHundredthDegree = 90*100;
+                                    aSize = drawing::Direction3D(aSize.DirectionY,aSize.DirectionX,aSize.DirectionZ);
+                                }
+
+                                if( aSize.DirectionX < 0 )
+                                    aSize.DirectionX *= -1.0;
+                                if( aSize.DirectionZ < 0 )
+                                    aSize.DirectionZ *= -1.0;
+                                if( fTopHeight < 0 )
+                                    fTopHeight *= -1.0;
+
+                                xShape = createDataPoint3D_Bar(
+                                    xPointGroupShape_Shapes, aTransformedBottom, aSize, fTopHeight, nRotateZAngleHundredthDegree
+                                    , xDataPointProperties, nGeometry3D );
                             }
+                            else //m_nDimension!=3
+                            {
+                                //if( bCreateLineInsteadOfComplexGeometryDueToMissingSpace )
+                                //{
+                                //    drawing::PolyPolygonShape3D aPoly;
+                                //    drawing::Position3D aUpperPoint( fLogicX,fUpperYValue,fLogicZ );
+                                //    drawing::Position3D aLowerPoint( fLogicX,fLowerYValue,fLogicZ );
 
-                            if( aSize.DirectionX < 0 )
-                                aSize.DirectionX *= -1.0;
-                            if( aSize.DirectionZ < 0 )
-                                aSize.DirectionZ *= -1.0;
-                            if( fTopHeight < 0 )
-                                fTopHeight *= -1.0;
+                                //    AddPointToPoly( aPoly, aUpperPoint );
+                                //    AddPointToPoly( aPoly, aLowerPoint );
 
-                            xShape = createDataPoint3D_Bar(
-                                xPointGroupShape_Shapes, aTransformedBottom, aSize, fTopHeight, nRotateZAngleHundredthDegree
-                                , xDataPointProperties, nGeometry3D );
+                                //    VLineProperties aLineProperties;
+                                //    aLineProperties.initFromPropertySet( xDataPointProperties, true /*bUseSeriesPropertyNames*/ );
+                                //    if( !aLineProperties.isLineVisible() )
+                                //    {
+                                //        //todo
+                                //        //aLineProperties.Color =
+                                //    }
+
+                                //    xShape = m_pShapeFactory->createLine2D( xPointGroupShape_Shapes
+                                //                , PolyToPointSequence(aPoly), &aLineProperties );
+                                //}
+
+                                drawing::PolyPolygonShape3D aPoly;
+                                drawing::Position3D aLeftUpperPoint( fLogicX-fLogicBarWidth/2.0,fUpperYValue,fLogicZ );
+                                drawing::Position3D aRightUpperPoint( fLogicX+fLogicBarWidth/2.0,fUpperYValue,fLogicZ );
+
+                                AddPointToPoly( aPoly, drawing::Position3D( fLogicX-fLogicBarWidth/2.0,fLowerYValue,fLogicZ) );
+                                AddPointToPoly( aPoly, drawing::Position3D( fLogicX+fLogicBarWidth/2.0,fLowerYValue,fLogicZ) );
+                                AddPointToPoly( aPoly, aRightUpperPoint );
+                                AddPointToPoly( aPoly, aLeftUpperPoint );
+                                AddPointToPoly( aPoly, drawing::Position3D( fLogicX-fLogicBarWidth/2.0,fLowerYValue,fLogicZ) );
+                                pPosHelper->transformScaledLogicToScene( aPoly );
+                                xShape = m_pShapeFactory->createArea2D( xPointGroupShape_Shapes, aPoly );
+                                this->setMappedProperties( xShape, xDataPointProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
+                            }
+                            //set name/classified ObjectID (CID)
+                            ShapeFactory::setShapeName(xShape
+                                , ObjectIdentifier::createPointCID(
+                                    (*aSeriesIter)->getPointCID_Stub(),nCatIndex) );
                         }
-                        else //m_nDimension!=3
-                        {
-                            //if( bCreateLineInsteadOfComplexGeometryDueToMissingSpace )
-                            //{
-                            //    drawing::PolyPolygonShape3D aPoly;
-                            //    drawing::Position3D aUpperPoint( fLogicX,fUpperYValue,fLogicZ );
-                            //    drawing::Position3D aLowerPoint( fLogicX,fLowerYValue,fLogicZ );
-
-                            //    AddPointToPoly( aPoly, aUpperPoint );
-                            //    AddPointToPoly( aPoly, aLowerPoint );
-
-                            //    VLineProperties aLineProperties;
-                            //    aLineProperties.initFromPropertySet( xDataPointProperties, true /*bUseSeriesPropertyNames*/ );
-                            //    if( !aLineProperties.isLineVisible() )
-                            //    {
-                            //        //todo
-                            //        //aLineProperties.Color =
-                            //    }
-
-                            //    xShape = m_pShapeFactory->createLine2D( xPointGroupShape_Shapes
-                            //                , PolyToPointSequence(aPoly), &aLineProperties );
-                            //}
-
-                            drawing::PolyPolygonShape3D aPoly;
-                            drawing::Position3D aLeftUpperPoint( fLogicX-fLogicBarWidth/2.0,fUpperYValue,fLogicZ );
-                            drawing::Position3D aRightUpperPoint( fLogicX+fLogicBarWidth/2.0,fUpperYValue,fLogicZ );
-
-                            AddPointToPoly( aPoly, drawing::Position3D( fLogicX-fLogicBarWidth/2.0,fLowerYValue,fLogicZ) );
-                            AddPointToPoly( aPoly, drawing::Position3D( fLogicX+fLogicBarWidth/2.0,fLowerYValue,fLogicZ) );
-                            AddPointToPoly( aPoly, aRightUpperPoint );
-                            AddPointToPoly( aPoly, aLeftUpperPoint );
-                            AddPointToPoly( aPoly, drawing::Position3D( fLogicX-fLogicBarWidth/2.0,fLowerYValue,fLogicZ) );
-                            pPosHelper->transformScaledLogicToScene( aPoly );
-                            xShape = m_pShapeFactory->createArea2D( xPointGroupShape_Shapes, aPoly );
-                            this->setMappedProperties( xShape, xDataPointProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
-                        }
-                        //set name/classified ObjectID (CID)
-                        ShapeFactory::setShapeName(xShape
-                            , ObjectIdentifier::createPointCID(
-                                (*aSeriesIter)->getPointCID_Stub(),nCatIndex) );
 
                         //create error bar
                         createErrorBar_Y( aUnscaledLogicPosition, **aSeriesIter, nCatIndex, m_xLogicTarget );
