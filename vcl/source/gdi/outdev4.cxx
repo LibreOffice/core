@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev4.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -920,20 +920,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
             aGradient.SetEndColor( aEndCol );
         }
 
-        if( mpGraphics->supportsOperation( OutDevSupport_B2DClip ) )
-        {
-            ::basegfx::B2DPolyPolygon aB2DPolyPolygon = rPolyPoly.getB2DPolyPolygon();
-            const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
-            aB2DPolyPolygon.transform( aTransform );
-            mpGraphics->BeginSetClipRegion( 0 );
-            mpGraphics->UnionClipRegion( aB2DPolyPolygon, this );
-            mpGraphics->EndSetClipRegion();
-            const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
-            DrawGradient( aBoundRect, rGradient );
-            mpGraphics->BeginSetClipRegion( 0 );
-            mpGraphics->EndSetClipRegion();
-        }
-        else if( OUTDEV_PRINTER == meOutDevType )
+        if( OUTDEV_PRINTER == meOutDevType || ImplGetSVData()->maGDIData.mbNoXORClipping )
         {
             const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
 
