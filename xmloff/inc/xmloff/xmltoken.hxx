@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmltoken.hxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3029,6 +3029,11 @@ namespace xmloff { namespace token {
         XML_XFORM_MODEL_SETTINGS,
 
         XML_META_FIELD,
+
+        XML_TREAT_EMPTY_CELLS,
+        XML_LEAVE_GAP,
+        XML_USE_ZERO,
+        XML_IGNORE,
 
         XML_TOKEN_END
     };
