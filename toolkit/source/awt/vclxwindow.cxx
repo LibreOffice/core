@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxwindow.cxx,v $
- * $Revision: 1.89 $
+ * $Revision: 1.90 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,7 @@
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/awt/vclxpointer.hxx>
+#include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -458,7 +459,8 @@ void VCLXWindowImpl::processEvent( const ::comphelper::AnyEvent& _rEvent )
             break;
         }
     }
-    else {
+    else
+    {
         DBG_ERROR( "VCLXWindowImpl::processEvent: what kind of event *is* this (3)?" );
     }
 }
@@ -2258,14 +2260,6 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
         WindowType nWinType = GetWindow()->GetType();
         switch ( nWinType )
         {
-            case WINDOW_MESSBOX:
-            case WINDOW_INFOBOX:
-            case WINDOW_WARNINGBOX:
-            case WINDOW_ERRORBOX:
-            case WINDOW_QUERYBOX:
-                aSz = Size( 250, 100 );
-            break;
-
             case WINDOW_CONTROL:
                 aSz.Width() = GetWindow()->GetTextWidth( GetWindow()->GetText() )+2*12;
                 aSz.Height() = GetWindow()->GetTextHeight()+2*6;
@@ -2282,12 +2276,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 aSz.Height() = GetWindow()->GetTextHeight()+2*2;
             break;
             case WINDOW_SCROLLBARBOX:
-            case WINDOW_SCROLLBAR:
-            {
-                long n = GetWindow()->GetSettings().GetStyleSettings().GetScrollBarSize();
-                aSz = Size( n, n );
-            }
-            break;
+                return VCLXScrollBar::implGetMinimumSize( GetWindow() );
             default:
                 aSz = GetWindow()->GetOptimalSize( WINDOWSIZE_MINIMUM );
         }
