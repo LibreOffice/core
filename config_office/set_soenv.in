@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.194 $
-# Date:        $Date: 2008-07-22 17:41:57 $
+# Version:     $Revision: 1.195 $
+# Date:        $Date: 2008-07-30 13:07:05 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -2000,6 +2000,9 @@ ToFile( "FREETYPE_LIBS",     "@FREETYPE_LIBS@",    "e" );
 ToFile( "SYSTEM_CAIRO",      "@SYSTEM_CAIRO@",     "e" );
 ToFile( "CAIRO_CFLAGS",      "@CAIRO_CFLAGS@",     "e" );
 ToFile( "CAIRO_LIBS",        "@CAIRO_LIBS@",       "e" );
+ToFile( "XRANDR_CFLAGS",     "@XRANDR_CFLAGS@",    "e" );
+ToFile( "XRANDR_LIBS",       "@XRANDR_LIBS@",      "e" );
+ToFile( "XRANDR_DLOPEN",     "@XRANDR_DLOPEN@",    "e" );
 ToFile( "SYSTEM_LIBWPD",     "@SYSTEM_LIBWPD@",    "e" );
 ToFile( "LIBWPD_CFLAGS",     "@LIBWPD_CFLAGS@",    "e" );
 ToFile( "LIBWPD_LIBS",       "@LIBWPD_LIBS@",      "e" );
