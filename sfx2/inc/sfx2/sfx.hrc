@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sfx.hrc,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -227,6 +227,7 @@
 #define TP_DOCINFODOC                       (RID_SFX_START+4)
 #define TP_DOCINFOUSER                      (RID_SFX_START+5)
 #define TP_DOCINFORELOAD                    (RID_SFX_START+13)
+#define TP_CUSTOMPROPERTIES                 (RID_SFX_START+14)
 #define DLG_DOCINFO_EDT                     (RID_SFX_START+6)
 #define TP_MANAGE_STYLES                    (RID_SFX_START+7)
 #define DLG_STYLE_DESIGNER                  (RID_SFX_START+8)
