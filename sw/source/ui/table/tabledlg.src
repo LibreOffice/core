@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabledlg.src,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -566,7 +566,7 @@ TabPage TP_TABLE_TEXTFLOW
     FixedLine FL_FLOW
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 251 , 8 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         TEXT_TEXTFLOW
     };
     CheckBox CB_PAGEBREAK
@@ -581,7 +581,7 @@ TabPage TP_TABLE_TEXTFLOW
     RadioButton RB_BREAKPAGE
     {
         Pos = MAP_APPFONT ( 105 , 14 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "~Page" ;
         Group = TRUE ;
         Check = TRUE ;
@@ -589,8 +589,8 @@ TabPage TP_TABLE_TEXTFLOW
     RadioButton RB_BREAKCOLUMN
     {
          //         Disable = TRUE;
-        Pos = MAP_APPFONT ( 176 , 14 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Pos = MAP_APPFONT ( 178 , 14 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
          // ### ACHTUNG: Neuer Text in Resource? S~palte : ~Spalte
         Text [ en-US ] = "Col~umn" ;
     };
@@ -598,7 +598,7 @@ TabPage TP_TABLE_TEXTFLOW
     {
          //         Disable = TRUE;
         Pos = MAP_APPFONT ( 105 , 28 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "Be~fore" ;
         Group = TRUE ;
         Check = TRUE ;
@@ -606,8 +606,8 @@ TabPage TP_TABLE_TEXTFLOW
     RadioButton RB_PAGEBREAKAFTER
     {
          //         Disable = TRUE;
-        Pos = MAP_APPFONT ( 176 , 28 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Pos = MAP_APPFONT ( 178 , 28 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "~After" ;
     };
     CheckBox CB_PAGECOLL
@@ -635,7 +635,7 @@ TabPage TP_TABLE_TEXTFLOW
     NumericField NF_PAGENUM
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 223 , 42 ) ;
+        Pos = MAP_APPFONT ( 222 , 42 ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -650,28 +650,28 @@ TabPage TP_TABLE_TEXTFLOW
     CheckBox CB_SPLIT
     {
         Pos = MAP_APPFONT ( 12 , 58 ) ;
-        Size = MAP_APPFONT ( 200 , 10 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Allow ~table to split across pages and columns" ;
     };
     TriStateBox CB_SPLIT_ROW
     {
         Pos = MAP_APPFONT ( 21 , 71 ) ;
-        Size = MAP_APPFONT ( 194 , 10 ) ;
+        Size = MAP_APPFONT ( 227 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Allow row to break a~cross pages and columns" ;
     };
     CheckBox CB_KEEP
     {
         Pos = MAP_APPFONT ( 12 , 85 ) ;
-        Size = MAP_APPFONT ( 200 , 10 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "~Keep with next paragraph" ;
         TabStop = TRUE ;
     };
     CheckBox CB_HEADLINE
     {
         Pos = MAP_APPFONT ( 12 , 99 ) ;
-        Size = MAP_APPFONT ( 113 , 10 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "R~epeat heading" ;
     };
@@ -702,13 +702,13 @@ TabPage TP_TABLE_TEXTFLOW
     FixedText FT_TEXTDIRECTION
     {
         Pos = MAP_APPFONT ( 12 , 132 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "~Text direction" ;
     };
     ListBox LB_TEXTDIRECTION
     {
         Pos = MAP_APPFONT ( 85 , 130 ) ;
-        Size = MAP_APPFONT ( 166 , 50 ) ;
+        Size = MAP_APPFONT ( 163 , 50 ) ;
         DropDown = TRUE;
         Border = TRUE;
         StringList [ en-US ] =
@@ -728,7 +728,7 @@ TabPage TP_TABLE_TEXTFLOW
     FixedText FT_VERTORIENT
     {
         Pos = MAP_APPFONT ( 12 , 164 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "~Vertical alignment" ;
     };
     ListBox LB_VERTORIENT
