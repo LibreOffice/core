@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VDataSeries.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include "ContainerHelper.hxx"
 #include "MeanValueRegressionCurveCalculator.hxx"
 
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 
 //#include "CommonConverters.hxx"
@@ -255,6 +256,7 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     , m_apSymbolProperties_AttributedPoint(NULL)
     , m_apSymbolProperties_InvisibleSymbolForSelection(NULL)
     , m_nCurrentAttributedPoint(-1)
+    , m_nMissingValueTreatment(::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
 {
     ::rtl::math::setNan( & m_fYMeanValue );
 
@@ -925,6 +927,16 @@ bool VDataSeries::getTextLabelMultiPropertyLists( sal_Int32 index
     if(pPropNames&&pPropValues)
         return true;
     return false;
+}
+
+void VDataSeries::setMissingValueTreatment( sal_Int32 nMissingValueTreatment )
+{
+    m_nMissingValueTreatment = nMissingValueTreatment;
+}
+
+sal_Int32 VDataSeries::getMissingValueTreatment() const
+{
+    return m_nMissingValueTreatment;
 }
 
 //.............................................................................
