@@ -8,7 +8,7 @@
 #
 # $RCSfile: download.pm,v $
 #
-# $Revision: 1.45 $
+# $Revision: 1.46 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -1565,7 +1565,7 @@ sub get_translation_file
 {
     my ($allvariableshashref) = @_;
     my $translationfilename = $installer::globals::idtlanguagepath . $installer::globals::separator . $installer::globals::nsisfilename;
-    if ( $installer::globals::unicodensis ) { $translationfilename = $translationfilename . ".ulf"; }
+    if ( $installer::globals::unicodensis ) { $translationfilename = $translationfilename . ".uulf"; }
     else {  { $translationfilename = $translationfilename . ".mlf"; } }
     if ( ! -f $translationfilename ) { installer::exiter::exit_program("ERROR: Could not find language file $translationfilename!", "get_translation_file"); }
     my $translationfile = installer::files::read_file($translationfilename);
