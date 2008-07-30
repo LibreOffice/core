@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxtopwindow.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,25 +37,55 @@
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
 
+#include <cppuhelper/implbase2.hxx>
+
 #include <toolkit/awt/vclxcontainer.hxx>
+
+typedef ::cppu::ImplHelper2 < ::com::sun::star::awt::XTopWindow,
+                              ::com::sun::star::awt::XSystemDependentWindowPeer
+                              > VCLXTopWindow_XBase;
+
+class TOOLKIT_DLLPUBLIC VCLXTopWindow_Base: public VCLXTopWindow_XBase
+{
+protected:
+      ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar> mxMenuBar;
+
+    virtual ::vos::IMutex& GetMutexImpl() = 0;
+    virtual Window* GetWindowImpl() = 0;
+    virtual TopWindowListenerMultiplexer& GetTopWindowListenersImpl() = 0;
+
+public:
+    virtual ~VCLXTopWindow_Base();
+
+    // ::com::sun::star::awt::XSystemDependentWindowPeer
+    ::com::sun::star::uno::Any SAL_CALL getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XTopWindow
+    void SAL_CALL addTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL removeTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL toFront() throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL toBack() throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >& xMenu ) throw(::com::sun::star::uno::RuntimeException);
+};
 
 //  ----------------------------------------------------
 //  class VCLXTopWindow
 //  ----------------------------------------------------
 
-class VCLXTopWindow :   public ::com::sun::star::awt::XTopWindow,
-            public ::com::sun::star::awt::XSystemDependentWindowPeer,
-                        public VCLXContainer
+class VCLXTopWindow: public VCLXTopWindow_Base,
+                     public VCLXContainer
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar> mxMenuBar;
     bool m_bWHWND;
+
+protected:
+    virtual vos::IMutex& GetMutexImpl();
+    virtual Window* GetWindowImpl();
+    virtual TopWindowListenerMultiplexer& GetTopWindowListenersImpl();
+
 public:
     VCLXTopWindow(bool bWHWND = false);
     ~VCLXTopWindow();
-
-    // ::com::sun::star::awt::XSystemDependendtWindowPeer
-    ::com::sun::star::uno::Any SAL_CALL getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -65,13 +95,6 @@ public:
     // ::com::sun::star::lang::XTypeProvider
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::awt::XTopWindow
-    void SAL_CALL addTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL removeTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL toFront(  ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL toBack(  ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >& xMenu ) throw(::com::sun::star::uno::RuntimeException);
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
