@@ -1,6 +1,7 @@
 sw	sw	:	connectivity OOo:writerperfect svx stoc uui NULL
 sw	sw										usr1	-	all	sw_mkout NULL
 sw	sw\inc									nmake		-	all	sw_inc NULL
+sw	sw\uiconfig\layout									nmake	-	all	sw_layout NULL
 sw	sw\prj									get		-	all	sw_prj NULL
 sw	sw\source\ui\inc						nmake	-	all	sw_uinc NULL
 sw	sw\source\core\inc						get		-	all	sw_cinc NULL
