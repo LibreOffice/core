@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editeng.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -424,6 +424,7 @@ public:
     virtual void    PaintingFirstLine( USHORT nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev );
     virtual void    ParagraphInserted( USHORT nNewParagraph );
     virtual void    ParagraphDeleted( USHORT nDeletedParagraph );
+    virtual void    ParagraphConnected( USHORT nLeftParagraph, USHORT nRightParagraph );
     virtual void    ParaAttribsChanged( USHORT nParagraph );
     virtual void    StyleSheetChanged( SfxStyleSheet* pStyle );
     virtual void    ParagraphHeightChanged( USHORT nPara );
