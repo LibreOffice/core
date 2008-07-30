@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.72 $
+# $Revision: 1.73 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -194,11 +194,6 @@ SHL3STDLIBS= \
             $(CPPULIB) \
             $(SALLIB) \
             $(SOTLIB)
-
-.IF "$(ENABLE_LAYOUT)" == "TRUE"
-LINKFLAGS+= -L../$(PRJ)/layout/$(INPATH)/lib
-SHL3STDLIBS += -ltklayout$(UPD)$(DLLPOSTFIX)
-.ENDIF # ENABLE_LAYOUT == TRUE
 
 SHL3LIBS=   $(SLB)$/swui.lib
 LIB3TARGET = $(SLB)$/swui.lib
