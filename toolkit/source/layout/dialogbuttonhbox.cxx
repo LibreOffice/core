@@ -1,11 +1,41 @@
-#include "dialogbuttonhbox.hxx"
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: dialogbuttonhbox.cxx,v $
+ *
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
 
+#include <awt/vclxbutton.hxx>
 #include <tools/debug.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
 #include <vcl/button.hxx>
 
+#include "dialogbuttonhbox.hxx"
 #include "flow.hxx"
-#include "../awt/vclxbutton.hxx"
 #include "proplist.hxx"
 
 #if TEST_LAYOUT && !defined( DBG_UTIL )
@@ -26,7 +56,7 @@ using namespace css;
 //FIXME: how to set platform-dependant variables?
 DialogButtonHBox::Ordering const DialogButtonHBox::DEFAULT_ORDERING =
 #if defined( MACOSX )
-    DialogButtonHBox::MacOS;
+    DialogButtonHBox::MACOS;
 #elif defined( SAL_W32 )
 DialogButtonHBox::WINDOWS;
 #elif defined( ENABLE_KDE )
@@ -129,23 +159,23 @@ DialogButtonHBox::removeChild( uno::Reference< awt::XLayoutConstrains > const& x
     if ( !xChild.is ())
         return;
 
-    ChildData *p = 0;
+    Box_Base::ChildData *p = 0;
 
-    if ( mpAction && mpAction->xChild == xChild )
+    if ( mpAction && mpAction->mxChild == xChild )
         p = mpAction;
-    else if ( mpAffirmative && mpAffirmative->xChild == xChild )
+    else if ( mpAffirmative && mpAffirmative->mxChild == xChild )
         p = mpAffirmative;
-    else if ( mpAlternate && mpAlternate->xChild == xChild )
+    else if ( mpAlternate && mpAlternate->mxChild == xChild )
         p = mpAlternate;
-    else if ( mpApply && mpApply->xChild == xChild )
+    else if ( mpApply && mpApply->mxChild == xChild )
         p = mpApply;
-    else if ( mpCancel && mpCancel->xChild == xChild )
+    else if ( mpCancel && mpCancel->mxChild == xChild )
         p = mpCancel;
-    else if ( mpFlow && mpFlow->xChild == xChild )
+    else if ( mpFlow && mpFlow->mxChild == xChild )
         p = mpFlow;
-    else if ( mpReset && mpReset->xChild == xChild )
+    else if ( mpReset && mpReset->mxChild == xChild )
         p = mpReset;
-    else if ( mpHelp && mpHelp->xChild == xChild )
+    else if ( mpHelp && mpHelp->mxChild == xChild )
         p = mpHelp;
     else
         p = removeChildData( maOther, xChild );
@@ -166,7 +196,7 @@ DialogButtonHBox::removeChild( uno::Reference< awt::XLayoutConstrains > const& x
 void
 DialogButtonHBox::gnomeOrdering()
 {
-    std::list< ChildData * > ordered;
+    std::list< Box_Base::ChildData * > ordered;
     if ( mpHelp )
         ordered.push_back( mpHelp );
     if ( mpReset )
@@ -190,7 +220,7 @@ DialogButtonHBox::gnomeOrdering()
 void
 DialogButtonHBox::kdeOrdering()
 {
-    std::list< ChildData * > ordered;
+    std::list< Box_Base::ChildData * > ordered;
     if ( mpHelp )
         ordered.push_back( mpHelp );
     if ( mpReset )
@@ -214,7 +244,7 @@ DialogButtonHBox::kdeOrdering()
 void
 DialogButtonHBox::macosOrdering()
 {
-    std::list< ChildData * > ordered;
+    std::list< Box_Base::ChildData * > ordered;
     if ( mpHelp )
         ordered.push_back( mpHelp );
     if ( mpReset )
@@ -240,7 +270,7 @@ DialogButtonHBox::macosOrdering()
 void
 DialogButtonHBox::windowsOrdering()
 {
-    std::list< ChildData * > ordered;
+    std::list< Box_Base::ChildData * > ordered;
     if ( mpReset )
         ordered.push_back( mpReset );
     if ( mpReset && mpFlow )
