@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formatclipboard.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -169,38 +169,53 @@ void SdFormatClipboard::Paste( ::sd::View& rDrawView, bool, bool )
     {
         //modify source itemset
         {
-            SfxItemSet aTargetSet( pObj->GetStyleSheet()->GetItemSet() );
+            boost::shared_ptr< SfxItemSet > pTargetSet;
 
-            USHORT nWhich=0;
-            SfxItemState nSourceState;
-            SfxItemState nTargetState;
-            const SfxPoolItem* pSourceItem=0;
-            const SfxPoolItem* pTargetItem=0;
-            SfxItemIter aSourceIter(*m_pItemSet);
-            pSourceItem = aSourceIter.FirstItem();
-            while( pSourceItem!=NULL )
+            if( pObj->GetStyleSheet() )
             {
-                if (!IsInvalidItem(pSourceItem))
+                pTargetSet.reset( new SfxItemSet( pObj->GetStyleSheet()->GetItemSet() ) );
+            }
+            else
+            {
+                SdrModel* pModel = pObj->GetModel();
+                if( pModel )
                 {
-                    nWhich = pSourceItem->Which();
-                    if(nWhich)
-                    {
-                        nSourceState = m_pItemSet->GetItemState( nWhich );
-                        nTargetState = aTargetSet.GetItemState( nWhich );
-                        pTargetItem = aTargetSet.GetItem( nWhich );
-                        ::com::sun::star::uno::Any aSourceValue, aTargetValue;
+                    pTargetSet.reset( new SfxItemSet( pModel->GetItemPool() ) );
+                }
+            }
 
-                        if(!pTargetItem)
-                            m_pItemSet->ClearItem(nWhich);
-                        else if( (*pSourceItem) == (*pTargetItem) )
+            if( pTargetSet.get() )
+            {
+                USHORT nWhich=0;
+                SfxItemState nSourceState;
+                SfxItemState nTargetState;
+                const SfxPoolItem* pSourceItem=0;
+                const SfxPoolItem* pTargetItem=0;
+                SfxItemIter aSourceIter(*m_pItemSet);
+                pSourceItem = aSourceIter.FirstItem();
+                while( pSourceItem!=NULL )
+                {
+                    if (!IsInvalidItem(pSourceItem))
+                    {
+                        nWhich = pSourceItem->Which();
+                        if(nWhich)
                         {
-                            //do not set items which have the same content in source and target
-                            m_pItemSet->ClearItem(nWhich);
+                            nSourceState = m_pItemSet->GetItemState( nWhich );
+                            nTargetState = pTargetSet->GetItemState( nWhich );
+                            pTargetItem = pTargetSet->GetItem( nWhich );
+
+                            if(!pTargetItem)
+                                m_pItemSet->ClearItem(nWhich);
+                            else if( (*pSourceItem) == (*pTargetItem) )
+                            {
+                                //do not set items which have the same content in source and target
+                                m_pItemSet->ClearItem(nWhich);
+                            }
                         }
                     }
-                }
-                pSourceItem = aSourceIter.NextItem();
-            }//end while
+                    pSourceItem = aSourceIter.NextItem();
+                }//end while
+            }
         }
         BOOL bReplaceAll = TRUE;
         rDrawView.SetAttrToMarked(*m_pItemSet, bReplaceAll);
