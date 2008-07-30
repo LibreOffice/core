@@ -1,54 +1,77 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: vclxdialog.cxx,v $
+ *
+ * $Revision: 1.4 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 #include "vclxdialog.hxx"
-#include "toolkit/helper/property.hxx"
-#include <com/sun/star/awt/ScrollBarOrientation.hpp>
 
+#include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/awt/SystemDependentXWindow.hpp>
+#include <com/sun/star/lang/SystemDependent.hpp>
 
-#include <tools/debug.hxx>
-
-#include <vcl/msgbox.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/syswin.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/dialog.hxx>
-
-#include <vcl/svapp.hxx>
-#include <vcl/syschild.hxx>
-#include <vcl/sysdata.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/macros.hxx>
+#include <toolkit/helper/property.hxx>
 
-#include <com/sun/star/lang/SystemDependent.hpp>
-#include <com/sun/star/awt/SystemDependentXWindow.hpp>
-#include <toolkit/helper/vclunohelper.hxx>
+#ifdef WNT
+#include <tools/prewin.h>
+#include <windows.h>
+#include <tools/postwin.h>
+#endif
 
-#include <com/sun/star/awt/PosSize.hpp>
+#ifdef QUARTZ
+#include "premac.h"
+#include <Cocoa/Cocoa.h>
+#include "postmac.h"
+#endif
 
-#include "../layout/timer.hxx"
+#include <vcl/dialog.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/sysdata.hxx>
+#include <vcl/wrkwin.hxx>
 
-using namespace toolkit;
-//........................................................................
+#include "forward.hxx"
+
 namespace layoutimpl
 {
-//........................................................................
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star;
-
-//====================================================================
-//= VCLXDialog
-//====================================================================
 DBG_NAME( VCLXDialog )
-//--------------------------------------------------------------------
+
 VCLXDialog::VCLXDialog()
-: VCLXWindow()
+    : VCLXWindow()
     , VCLXDialog_Base()
     , Bin()
-    , bRealized( false ), bResizeSafeguard( false )
+    , bRealized( false )
+    , bResizeSafeguard( false )
 {
     DBG_CTOR( VCLXDialog, NULL );
 
@@ -56,25 +79,36 @@ VCLXDialog::VCLXDialog()
           assert(mxLayoutUnit.is());*/
 }
 
-//--------------------------------------------------------------------
 VCLXDialog::~VCLXDialog()
 {
     DBG_DTOR( VCLXDialog, NULL );
 }
 
-//--------------------------------------------------------------------
-IMPLEMENT_2_FORWARD_XINTERFACE2( VCLXDialog, VCLXWindow, Bin, VCLXDialog_Base )
+vos::IMutex& VCLXDialog::GetMutexImpl()
+{
+    return VCLXWindow::GetMutex();
+}
 
-//--------------------------------------------------------------------
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXDialog, VCLXWindow, VCLXDialog_Base )
+Window* VCLXDialog::GetWindowImpl()
+{
+    return VCLXWindow::GetWindow();
+}
 
-//--------------------------------------------------------------------
-void SAL_CALL VCLXDialog::dispose( ) throw(RuntimeException)
+TopWindowListenerMultiplexer& VCLXDialog::GetTopWindowListenersImpl()
+{
+    return VCLXWindow::GetTopWindowListeners();
+}
+
+IMPLEMENT_2_FORWARD_XINTERFACE2( VCLXDialog, VCLXWindow, Bin, VCLXDialog_Base );
+
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXDialog, VCLXWindow, VCLXDialog_Base );
+
+void SAL_CALL VCLXDialog::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
     {
         ::vos::OGuard aGuard( GetMutex() );
 
-        EventObject aDisposeEvent;
+        ::com::sun::star::lang::EventObject aDisposeEvent;
         aDisposeEvent.Source = *this;
 //            maTabListeners.disposeAndClear( aDisposeEvent );
     }
@@ -90,32 +124,31 @@ void VCLXDialog::resizedCb()
 void SAL_CALL VCLXDialog::allocateArea( const css::awt::Rectangle &rArea )
     throw (css::uno::RuntimeException)
 {
-    awt::Size reqSize = Bin::getMinimumSize();
+    ::com::sun::star::awt::Size reqSize = Bin::getMinimumSize();
     reqSize.Height = getHeightForWidth( rArea.Width );
 
     if ( !bRealized )
     {
-        setPosSize( 0, 0, reqSize.Width, reqSize.Height, PosSize::SIZE );
+        setPosSize( 0, 0, reqSize.Width, reqSize.Height, ::com::sun::star::awt::PosSize::SIZE );
         bRealized = true;
         setVisible( true );
     }
     else
     {
-        awt::Size curSize = getSize();
+        ::com::sun::star::awt::Size curSize = getSize();
         if ( reqSize.Width > curSize.Width )
-            setPosSize( 0, 0, reqSize.Width, 0, PosSize::WIDTH );
+            setPosSize( 0, 0, reqSize.Width, 0, ::com::sun::star::awt::PosSize::WIDTH );
         if ( reqSize.Height > curSize.Height )
-            setPosSize( 0, 0, 0, reqSize.Height, PosSize::HEIGHT );
+            setPosSize( 0, 0, 0, reqSize.Height, ::com::sun::star::awt::PosSize::HEIGHT );
     }
 
-    awt::Size size = getSize();
+    ::com::sun::star::awt::Size size = getSize();
     maAllocation.Width = size.Width;
     maAllocation.Height = size.Height;
 
     Bin::allocateArea( maAllocation );
 }
 
-//--------------------------------------------------------------------
 void VCLXDialog::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
 {
     ::vos::OClearableGuard aGuard( GetMutex() );
@@ -131,143 +164,42 @@ void VCLXDialog::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
     }
 }
 
-//--------------------------------------------------------------------
-void SAL_CALL VCLXDialog::setProperty( const ::rtl::OUString& PropertyName, const Any &Value ) throw(RuntimeException)
+void SAL_CALL VCLXDialog::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any &Value ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
     {
-        sal_uInt16 nPropertyId = GetPropertyId( PropertyName );
+/*        sal_uInt16 nPropertyId = GetPropertyId( PropertyName );
         switch ( nPropertyId )
         {
             default:
+*/
                 VCLXWindow::setProperty( PropertyName, Value );
-        }
+/*        }
+*/
     }
 }
 
-//--------------------------------------------------------------------
-Any SAL_CALL VCLXDialog::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
+::com::sun::star::uno::Any SAL_CALL VCLXDialog::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    Any aReturn;
+    ::com::sun::star::uno::Any aReturn;
     if ( GetWindow() )
     {
+/*
         sal_uInt16 nPropertyId = GetPropertyId( PropertyName );
         switch ( nPropertyId )
         {
             default:
+*/
                 aReturn = VCLXWindow::getProperty( PropertyName );
+/*
         }
+*/
     }
     return aReturn;
-}
-
-//---------------------------------------------------------------------
-
-::com::sun::star::uno::Any VCLXDialog::getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    ::com::sun::star::uno::Any aRet;
-    Window* pWindow = VCLXWindow::GetWindow();
-    if ( pWindow )
-    {
-        const SystemEnvData* pSysData = ((SystemWindow *)pWindow)->GetSystemData();
-        if ( pSysData )
-        {
-#if (defined WNT)
-            if ( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_WIN32 )
-            {
-                aRet <<= (sal_Int32)pSysData->hWnd;
-            }
-#elif (defined OS2)
-            if ( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_OS2 )
-            {
-                aRet <<= (sal_Int32)pSysData->hWnd;
-            }
-#elif (defined QUARTZ)
-            if ( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_MAC )
-            {
-                aRet <<= (sal_IntPtr)pSysData->rWindow;
-            }
-#elif (defined UNX)
-            if ( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW )
-            {
-                ::com::sun::star::awt::SystemDependentXWindow aSD;
-                aSD.DisplayPointer = sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(pSysData->pDisplay));
-                aSD.WindowHandle = pSysData->aWindow;
-                aRet <<= aSD;
-            }
-#endif
-        }
-    }
-    return aRet;
-}
-
-
-void VCLXDialog::addTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
-{
-#if 1
-    ::vos::OGuard aGuard( GetMutex() );
-
-    GetTopWindowListeners().addInterface( rxListener );
-#else
-#endif
-}
-
-void VCLXDialog::removeTopWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
-{
-#if 1
-    ::vos::OGuard aGuard( GetMutex() );
-
-    GetTopWindowListeners().removeInterface( rxListener );
-#endif
-}
-
-void VCLXDialog::toFront(  ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    Window* pWindow = GetWindow();
-    if ( pWindow )
-        ((WorkWindow*)pWindow)->ToTop( TOTOP_RESTOREWHENMIN );
-}
-
-void VCLXDialog::toBack(  ) throw(::com::sun::star::uno::RuntimeException)
-{
-/* Not possible in VCL...
-
-   ::vos::OGuard aGuard( GetMutex() );
-
-   Window* pWindow = GetWindow();
-   if ( pWindow )
-   {
-   ((WorkWindow*)pWindow)->ToBack();
-   }
-*/
-}
-
-void VCLXDialog::setMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >& /*rxMenu*/ ) throw(::com::sun::star::uno::RuntimeException)
-{
-#if 0
-    ::vos::OGuard aGuard( GetMutex() );
-
-    SystemWindow* pWindow = (SystemWindow*) GetWindow();
-    if ( pWindow )
-    {
-        pWindow->SetMenuBar( NULL );
-        if ( rxMenu.is() )
-        {
-            VCLXMenu* pMenu = VCLXMenu::GetImplementation( rxMenu );
-            if ( pMenu && !pMenu->IsPopupMenu() )
-                pWindow->SetMenuBar( (MenuBar*) pMenu->GetMenu() );
-        }
-    }
-    mxMenuBar = rxMenu;
-#endif
 }
 
 void VCLXDialog::setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star::uno::RuntimeException)
@@ -340,6 +272,4 @@ void VCLXDialog::endExecute() throw(::com::sun::star::uno::RuntimeException)
     endDialog( 0 );
 }
 
-//........................................................................
-} // namespace toolkit
-//........................................................................
+} // namespace layoutimpl
