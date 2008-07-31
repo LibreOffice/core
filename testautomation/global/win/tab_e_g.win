@@ -210,6 +210,7 @@ Bearbeiten HID_SC_FOOTER_EDIT
 LinkerBereich HID_SC_HF_FRL
 MittlererBereich HID_SC_HF_FRC
 RechterBereich HID_SC_HF_FRR
+PredefinedFooter HID_SC_HF_FR_DEFINED
 TextAttribute HID_SC_HF_TEXT sc:ImageButton:RID_HFBASE:BTN_TEXT
 Datei HID_SC_HF_FILE sc:ImageButton:RID_HFBASE:BTN_FILE
 Tabelle HID_SC_HF_TABLE sc:ImageButton:RID_HFBASE:BTN_TABLE
@@ -223,6 +224,7 @@ Hoehedynamisch svx:CheckBox:RID_SVXPAGE_FOOTER:CB_HEIGHT_DYN
 LinkerBereich HID_SC_HF_FLL
 MittlererBereich HID_SC_HF_FLC
 RechterBereich HID_SC_HF_FLR
+PredefinedFooterLeft HID_SC_HF_FL_DEFINED
 TextAttribute HID_SC_HF_TEXT sc:ImageButton:RID_HFBASE:BTN_TEXT
 Datei HID_SC_HF_FILE sc:ImageButton:RID_HFBASE:BTN_FILE
 Tabelle HID_SC_HF_TABLE sc:ImageButton:RID_HFBASE:BTN_TABLE

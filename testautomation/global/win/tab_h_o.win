@@ -239,6 +239,7 @@ Bearbeiten HID_SC_HEADER_EDIT
 LinkerBereich HID_SC_HF_HRL
 MittlererBereich HID_SC_HF_HRC
 RechterBereich HID_SC_HF_HRR
+PredefinedHeader HID_SC_HF_HR_DEFINED
 TextAttribute HID_SC_HF_TEXT sc:ImageButton:RID_HFBASE:BTN_TEXT
 Datei HID_SC_HF_FILE sc:ImageButton:RID_HFBASE:BTN_FILE
 Tabelle HID_SC_HF_TABLE sc:ImageButton:RID_HFBASE:BTN_TABLE
@@ -251,6 +252,7 @@ Zeit HID_SC_HF_TIME sc:ImageButton:RID_HFBASE:BTN_TIME
 LinkerBereich HID_SC_HF_HLL
 MittlererBereich HID_SC_HF_HLC
 RechterBereich HID_SC_HF_HLR
+PredefinedHeaderLeft HID_SC_HF_HL_DEFINED
 TextAttribute HID_SC_HF_TEXT sc:ImageButton:RID_HFBASE:BTN_TEXT
 Datei HID_SC_HF_FILE sc:ImageButton:RID_HFBASE:BTN_FILE
 Tabelle HID_SC_HF_TABLE sc:ImageButton:RID_HFBASE:BTN_TABLE
