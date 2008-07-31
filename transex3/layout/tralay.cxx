@@ -8,7 +8,7 @@
  *
  * $RCSfile: tralay.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@
 #include "export.hxx"
 #include "layoutparse.hxx"
 #include "helpmerge.hxx"
+#include "xmlparse.hxx"
 
 // Convert a rtl::OUString to a byte string.
 #define OUSTRING_CSTR( str ) \
@@ -265,9 +266,10 @@ void TranslateLayout::MergeLanguage( ByteString const& language )
     MergeDataFile mergeData( mLocalize, xmlFile,
                              FALSE, RTL_TEXTENCODING_MS_1252 );
 
+    DirEntry aFile( xmlFile );
     SimpleXMLParser aParser;
     LayoutXMLFile* layoutXml = new LayoutXMLFile( mMergeMode );
-    if ( !aParser.Execute( STRING( xmlFile ), layoutXml ) )
+    if ( !aParser.Execute( aFile.GetFull() , STRING( xmlFile ), layoutXml ) )
     {
         fprintf(stderr, "error: parsing: %s\n", xmlFile.GetBuffer() );
         return;
