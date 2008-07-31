@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sane.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -146,7 +146,7 @@ SANE_Status Sane::ControlOption( int nOption, SANE_Action nAction,
 #if OSL_DEBUG_LEVEL > 1
     if( nStatus != SANE_STATUS_GOOD )
     {
-        char* pAction = "Unknown";
+        const char* pAction = "Unknown";
         switch( nAction )
         {
             case SANE_ACTION_GET_VALUE:
