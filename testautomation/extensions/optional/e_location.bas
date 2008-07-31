@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: e_location.bas,v $
 '*
-'* $Revision: 1.3 $
+'* $Revision: 1.4 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 08:07:01 $
+'* last change: $Author: rt $ $Date: 2008-07-31 19:25:16 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -64,6 +64,8 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_filetools.inc"
     use "global\tools\includes\optional\t_macro_tools.inc"
     use "global\tools\includes\optional\t_security_tools.inc"
+    use "global\tools\includes\optional\t_treelist_tools.inc"
+    use "global\tools\includes\optional\t_extension_manager_tools.inc"
      
     gApplication = "WRITER"
     call GetUseFiles()
