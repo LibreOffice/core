@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: c_so7_pp1_iz.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 08:05:52 $
+'* last change: $Author: rt $ $Date: 2008-07-31 19:03:52 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -76,7 +76,7 @@ testcase tIZ19381
     DocumentCalc.typekeys "<Escape>"    
     sleep(2)    
     '/// File Save As <i>gOfficepath</i>user/work/i19381.ods
-    if NOT hFileSaveAsWithFilterKill (sOutputFile, gCalcFilter) then
+    if NOT hFileSaveAsWithFilterKill (sOutputFile, "calc8") then
         warnlog "Saving test document localy failed -> Aborting"
         call hCloseDocument
         goto endsub
