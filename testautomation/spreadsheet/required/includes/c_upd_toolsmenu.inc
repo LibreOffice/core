@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: c_upd_toolsmenu.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 08:06:07 $
+'* last change: $Author: rt $ $Date: 2008-07-31 19:05:36 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -82,11 +82,14 @@ testcase tToolsSpellcheck
 
     Dim iDictionaries as integer
     
-    '/// Opening new spreadsheet document for getting defined starting environment
-    printlog " Opening new spreadsheet document for getting defined starting environment"
-    call hNewDocument
+    printlog " Load document from 'gTesttoolPath + spreadsheet\required\input\english.ods"
+    Call hFileOpen (Convertpath (gTesttoolPath + "spreadsheet\required\input\english.ods" ))
+    '/// If the file is not editable, click the edit button on standardbar
+    printlog "If the file is not editable, click the edit button on standardbar"
+    call sMakeReadOnlyDocumentEditable
     '/// Enter 'fgsdftk' in a cell
     printlog " Enter 'fgsdftk' in a cell"
+    Kontext "DocumentCalc"
     DocumentCalc.TypeKeys "fgsdftk<Return><Up>"
     '/// Open 'Spellcheck' – dialog via 'Tools – Spellcheck'
     printlog " Open 'Spellcheck' – dialog via 'Tools – Spellcheck'"
@@ -394,23 +397,26 @@ endcase
 testcase tToolsLanguageThesaurus
 '///<u><b>Tools – Language – Chinese Translation</b></u>
 
-    '/// Open new Spreadsheet document
-    printlog " Open new Spreadsheet document"
-    call hNewDocument
-    '/// Verify that the current locale is supported by the thesaurus
-    printlog " Verify that the current locale is supported by the thesaurus"
-    if fThesaurusLocales = FALSE then
-        qaerrorlog "The Thesaurus does not support this language " & iSprache
-        call hCloseDocument
-        goto endsub
-    end if
+    '/// Load document from 'gTesttoolPath + "spreadsheet\required\input\english.ods"'
+    printlog " Load document from 'gTesttoolPath + spreadsheet\required\input\english.ods"
+    Call hFileOpen (Convertpath (gTesttoolPath + "spreadsheet\required\input\english.ods" ))
+    '/// If the file is not editable, click the edit button on standardbar
+    printlog "If the file is not editable, click the edit button on standardbar"
+    call sMakeReadOnlyDocumentEditable    
+    Kontext "DocumentCalc"
     '/// Enter 'blabla' in a cell
     printlog " Enter 'blabla' in a cell"
     Call fCalcSelectRange ("B2")
     DocumentCalc.TypeKeys "blabla<Return><Up>"
     '/// Open 'Thesaurus' dialog by 'Tools – Language – Thesaurus
     printlog " Open 'Thesaurus' dialog by 'Tools – Language – Thesaurus"
-    ToolsLanguageThesaurusCalc
+    try
+        ToolsLanguageThesaurusCalc
+    catch
+        warnlog "Thesaurus did not work"
+        call hCloseDocument
+        goto endsub
+    endcatch
     Kontext "Thesaurus"
     DialogTest ( Thesaurus )
     '/// Click on 'Search' button
