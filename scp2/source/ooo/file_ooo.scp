@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_ooo.scp,v $
- * $Revision: 1.257 $
+ * $Revision: 1.258 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,6 +89,13 @@ File gid_File_Basic_User
     Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
     Dir = gid_Dir_User_Basic;
     Name = "basicusr.zip";
+End
+
+File gid_File_Basic_Share
+    USER_FILE_BODY;
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
+    Dir = gid_Dir_Basic;
+    Name = "basicshare.zip";
 End
 
 File gid_File_Basic_User_Standard
