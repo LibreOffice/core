@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: t_macro_tools.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 07:58:44 $
+'* last change: $Author: rt $ $Date: 2008-07-31 19:26:13 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -65,7 +65,12 @@ function hInsertMacroFromFile( cMacroId as string, optional cSource as string ) 
     
     '///+<li>Find the path to the source file</li>
     dim cFile as string
-        
+    if ( IsMissing( cSource ) ) then
+        cFile = convertpath( gTesttoolPath & "global/input/macros.txt" )
+    else
+        cFile = convertpath( cSource )
+    endif        
+    
     '///+<li>Determine the required array size</li>
     dim iArraySize as integer
         iArraySize = hListFileGetSize( cFile )
@@ -76,12 +81,6 @@ function hInsertMacroFromFile( cMacroId as string, optional cSource as string ) 
     dim iCurrentInstruction as integer
     
     dim brc as boolean
-    
-    if ( IsMissing( cSource ) ) then
-        cFile = convertpath( gTesttoolPath & "global/input/macros.txt" )
-    else
-        cFile = convertpath( cSource )
-    endif        
     
     '///+<li>retrieve the macro from the file with ID as section</li>
     iInstructionCount = hGetDataFileSection( cFile, _
