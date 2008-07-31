@@ -8,7 +8,7 @@
 #
 # $RCSfile: property.pm,v $
 #
-# $Revision: 1.29 $
+# $Revision: 1.30 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -338,6 +338,11 @@ sub set_important_properties
         push(@{$propertyfile}, $registryline);
         my $betainfoline = "BETAPRODUCT" . "\t" . "1" . "\n";
         push(@{$propertyfile}, $betainfoline);
+    }
+    elsif ( $allvariables->{'DEVELOPMENTPRODUCT'} )
+    {
+        my $registryline = "WRITE_REGISTRY" . "\t" . "0" . "\n";
+        push(@{$propertyfile}, $registryline);
     }
     else
     {
