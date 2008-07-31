@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: javadep.c,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -123,7 +123,6 @@ uint16  read_uint16(const file_t *pfile);
 uint32  read_uint32(const file_t *pfile);
 void    skip_bytes(const file_t *pfile, const size_t nnum);
 char    *escape_slash(const char *pstr);
-char    *get_stripped_class(const char *pclass);
 int     is_inner(const char *pstr);
 void    print_dependencies(const struct growable *pdep,
                            const char* pclass_file);
@@ -332,38 +331,6 @@ add_to_dependencies(struct growable *pdep,
     }
     free(pstr);
     return;
-}
-
-char *get_stripped_class(const char *pclass)
-{
-    /* returns fresh allocated string with the simple unadorned
-     * class name from a full qualified class name.
-     *
-     * caller is resposible for freeing
-     */
-    char *pstr, *ptmpstr;
-
-    pstr = ptmpstr = strdup(pclass);
-
-    /* '\\' might be possible on WIN32 plattforms */
-    while ( (ptmpstr = strchr(ptmpstr, '\\')) != NULL )
-            *ptmpstr = '/';
-
-    /* remove any trailing .class */
-    ptmpstr = strchr(pstr, '.');
-    if ( ptmpstr )
-        *ptmpstr = '\0';
-
-    /* remove leading package descriptors */
-    ptmpstr = strrchr(pstr, '/');
-    if ( !ptmpstr ) {
-        return pstr;
-    }
-    else {
-        ptmpstr = strdup(ptmpstr);
-        free(pstr);
-        return ptmpstr;
-    }
 }
 
 char *
