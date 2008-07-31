@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.195 $
-# Date:        $Date: 2008-07-30 13:07:05 $
+# Version:     $Revision: 1.196 $
+# Date:        $Date: 2008-07-31 13:53:05 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1857,6 +1857,7 @@ if ( $platform =~ m/cygwin/ )
    ToFile( "MFC_INCLUDE",       $MFC_INCLUDE,       "e" );
    ToFile( "NSIS_PATH",         $NSIS_PATH,         "e" );
    ToFile( "DISABLE_ACTIVEX",   "@DISABLE_ACTIVEX@","e" );
+   ToFile( "DISABLE_ATL",   "@DISABLE_ATL@","e" );
    ToFile( "USE_NEW_SDK",       $USE_NEW_SDK,       "e" );
 
    # Hack around dmake's mktmp not generating DOS paths.
