@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xplugin.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -779,7 +779,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
                                         &stype ) )
     {
 #if OSL_DEBUG_LEVEL > 1
-        char* pType;
+        const char* pType;
         switch( stype )
         {
             case NP_NORMAL:     pType = "NP_NORMAL";break;

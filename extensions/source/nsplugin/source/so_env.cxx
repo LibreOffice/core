@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: so_env.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,11 +34,7 @@
 #ifdef UNIX
 #include <sys/types.h>
 #include <strings.h>
-#if defined(SOLARIS) && !defined(__GNUC__)
-#include <varargs.h>
-#else
 #include <stdarg.h>
-#endif
 // For vsnprintf()
 #define NSP_vsnprintf vsnprintf
 #include "nsp_func.hxx"
@@ -359,15 +355,14 @@ char* NSP_getPluginDesc()
 
 void NSP_WriteLog(int level,  const char* pFormat, ...)
 {
-#ifndef DEBUG
     (void)level;
+#ifndef DEBUG
     (void)pFormat;
 #else
     va_list      ap;
     char         msgBuf[NPP_BUFFER_SIZE];
     static char  logName[NPP_PATH_MAX] = {0};
     FILE *       fp = NULL;
-    int          dwPos,dwWriteBytes;
 
     va_start(ap,pFormat);
     NSP_vsnprintf(msgBuf, NPP_BUFFER_SIZE, pFormat, ap);
