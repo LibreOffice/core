@@ -8,7 +8,7 @@
 #
 # $RCSfile: target.pmk,v $
 #
-# $Revision: 1.10 $
+# $Revision: 1.11 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,6 +29,7 @@
 #
 #*************************************************************************
 CONFIG_ALL_TARGET               = basicusr
+CONFIG_SHARE_TARGET             = basicshare
 EURO_ALL_TARGET                 = basicsrveuro
 FORMWIZARD_ALL_TARGET           = basicsrvform
 GIMMICKS_ALL_TARGET             = basicsrvgimmicks
