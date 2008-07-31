@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: f_wizards.bas,v $
 '*
-'* $Revision: 1.3 $
+'* $Revision: 1.4 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 08:07:03 $
+'* last change: $Author: rt $ $Date: 2008-07-31 19:25:29 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -75,9 +75,8 @@ sub LoadIncludeFiles
     use "global\system\includes\gvariabl.inc"
     
     use "global\tools\includes\optional\t_filetools.inc"
-    use "global\tools\includes\optional\key_tools.inc"
+    use "global\tools\includes\optional\t_key_tools.inc"
     use "global\tools\includes\optional\t_docfuncs.inc"
-    use "global\tools\includes\optional\key_tools.inc"
     use "global\tools\includes\optional\t_stringtools.inc"
 
     use "framework\tools\includes\wizards.inc"
