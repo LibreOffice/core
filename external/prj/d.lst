@@ -6,9 +6,6 @@ mkdir: %_DEST%\inc%_EXT%\external\mingw\include
 mkdir: %_DEST%\inc%_EXT%\external\mingw\include\atl
 mkdir: %_DEST%\inc%_EXT%\external\mingw\include\sys
 
-..\jars\parser.jar %_DEST%\bin%_EXT%\parser.jar
-..\jars\jaxp.jar %_DEST%\bin%_EXT%\jaxp.jar
-
 ..\glibc\rtufiles\config.h %_DEST%\inc%_EXT%\external\glibc\config.h
 ..\glibc\rtufiles\getopt.h %_DEST%\inc%_EXT%\external\glibc\getopt.h
 ..\gpc\gpc.h %_DEST%\inc%_EXT%\external\gpc\gpc.h
