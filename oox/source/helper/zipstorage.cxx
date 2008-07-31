@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: zipstorage.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,7 +64,6 @@ ZipStorage::ZipStorage(
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "ZipStorage::ZipStorage - cannot open input storage" );
     }
 }
 
@@ -119,7 +118,7 @@ StorageRef ZipStorage::implOpenSubStorage( const OUString& rElementName, bool bC
     (void)bCreate;  // prevent compiler warning
 
     Reference< XStorage > xSubXStorage;
-    try
+    if( mxStorage.is() ) try
     {
         // XStorage::isStorageElement may throw various exceptions...
         if( mxStorage->isStorageElement( rElementName ) )
