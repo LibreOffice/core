@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hidclex.l,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,7 @@
 #pragma warning(push, 1)
 #endif
 
-static char const Revision[]     = "$Revision: 1.8 $" ;
+static char const Revision[]     = "$Revision: 1.9 $" ;
 
 /*
 
@@ -78,21 +78,6 @@ static int nInputFileDepth = 0;
 #include <string.h>
 
 #include <ctype.h>
-
-#if defined _MSC_VER
-#include <io.h>
-#endif
-
-char* lower(char* str)
-{
-	size_t s= strlen(str);
-	size_t i=0;
-	while( i < s ){
-		str[i] = (char) tolower( str[i] );
-		i++;
-	}
-	return str;
-}
 
 int alloc_cnt = 0;
 void freestring( char const * ); //forward
@@ -190,24 +175,6 @@ void makestring(char** newstr, char* oldstr)
 		"error: cannot malloc for makestring() alloc_cnt==%d \n", alloc_cnt);
 		exit(1);
 	}
-}
-
-int strncmpi(char* stra, char* strb, size_t cnt)
-{
-	// like strncmp() but case insensitive
-	size_t i;
-	char a,b;
-	for(i=0;i<cnt;i++){
-		a = (char) tolower(stra[i]);
-		b = (char) tolower(strb[i]);
-		if( a < b )
-			return -1;
-		if( a > b )
-			return 1;
-		if( a == '\0' && b == '\0' )
-			return 0;
-	}
-	return 0;
 }
 
 #ifndef WNT
@@ -451,13 +418,6 @@ resource* pop_resource()
 	return stack[ stackptr-- ];
 }
 
-void delete_stack()
-{
-	while( stackptr > EMPTYSTACK )
-		delete pop_resource();
-}
-
-
 /* forward */
 int eat_comment();
 int eat_cpp_comment();
@@ -474,6 +434,10 @@ int eat_cpp_comment();
 //string		(\"[^"]*\") alter einfacher string ohne "
 
 %}
+
+/* 89012 */
+%option never-interactive
+
 
 simple		([^\n\"]*)
 %p 7000
