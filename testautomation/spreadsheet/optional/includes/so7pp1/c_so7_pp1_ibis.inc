@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: c_so7_pp1_ibis.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 08:05:52 $
+'* last change: $Author: rt $ $Date: 2008-07-31 19:03:38 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -44,10 +44,13 @@
 '\***********************************************************************
 
 testcase tIBIS111099
-Dim testdoc$
-testdoc$ = convertpath(gTesttoolpath & "spreadsheet\optional\input\111099.xls")
-'/// Open the test document
-    Call hFileOpen(testdoc$)
+
+    Dim testdoc as string
+    testdoc = convertpath(gOfficePath & "user/work/111099.xls")
+    Printlog "Copy testdocument locally"
+    app.FileCopy convertpath(gTesttoolpath & "spreadsheet\optional\input\111099.xls"),gOfficePath + ConvertPath("user/work/111099.xls")
+    printlog " Open the test document"
+    Call hFileOpen(testdoc)
     Call sMakeReadOnlyDocumentEditable    
     '/// Invoke Control Toolbar
     '///+ Try to click control 'Push Button'
@@ -71,11 +74,15 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase tIBIS111158
-Dim testdoc$, testString$
-testdoc$ = convertpath(gTesttoolpath & "spreadsheet\optional\input\111158.xls")
+
+    Dim testdoc as string 
+    Dim testString as string
+    testdoc = convertpath(gOfficePath & "user/work/111158.xls")
     
-'/// Open test document ...spreadsheet\optional\input\111158.xls
-    Call hFileOpen(testdoc$)
+    Printlog "Copy testdocument locally"
+    app.FileCopy convertpath(gTesttoolpath & "spreadsheet\optional\input\111158.xls"),gOfficePath + ConvertPath("user/work/111158.xls")
+    printlog " Open the test document"
+    Call hFileOpen(testdoc)
     Call sMakeReadOnlyDocumentEditable      
     Kontext "Standardbar"
     '/// If 'Form Controls' toolbar is not visible: View / Toolbars / Form Controls     
@@ -153,11 +160,11 @@ testdoc$ = convertpath(gTesttoolpath & "spreadsheet\optional\input\111158.xls")
     '/// Check for right initial string ('Please select one:')in control
     Kontext "MSC_Special_Dialog"
     if MSC_Special_Dialog.Exists(3) then
-        testString$ = MSC_Special_Dialog.getSelText
-        if testString$ = "Please select one:" then
+        testString = MSC_Special_Dialog.getSelText
+        if testString = "Please select one:" then
             printlog "OK, the right string was found in control"
         else
-            warnlog "Wrong string found in Control: " & testString$
+            warnlog "Wrong string found in Control: " & testString
         end if
     else
         warnlog "The control seems to be not named in the document?! Verify!"
@@ -169,10 +176,10 @@ endcase
 
 testcase tIBIS111711
 printlog "iBIS Task 111711"
-'/// Create a new document
+
+    printlog " Create a new document"
     call hNewDocument
-    call sMakeReadOnlyDocumentEditable
-'/// enter some numbers as content
+    printlog " Enter some numbers as content"
     Kontext "DocumentCalc"
     DocumentCalc.typekeys "1<RETURN>2<RETURN><UP>"
     sleep(2)
