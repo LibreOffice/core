@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: c_upd_filemenu.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 08:06:06 $
+'* last change: $Author: rt $ $Date: 2008-07-31 19:05:11 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -295,6 +295,8 @@ testcase tFileRecentDocuments
     '/// Open Test File <i>spreadsheet/required/input/recentdocument.ods</i>
     Printlog " Open Test File spreadsheet/required/input/recentdocument.ods"
     Call hFileOpen(sTestFile)
+    printlog "If the file is not editable, click the edit button on standardbar"
+    call sMakeReadOnlyDocumentEditable
     '/// Close the document.
     Printlog " Close the document."
     '/// Now an item in <i>File / Recent Documents</i> should exist
