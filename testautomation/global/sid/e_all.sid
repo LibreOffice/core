@@ -221,6 +221,7 @@ ViewValueHightlighting FID_TOGGLESYNTAX
 ViewNormalView .uno:NormalViewMode
 ViewPageBreakPreview .uno:PagebreakMode
 ViewCurrentDatabaseCalc SID_VIEW_DATA_SOURCE_BROWSER
+ViewSelectionCalc .uno:Toolbox
 
 ' ****  Draw / Impress
 ViewBackground SID_MASTERPAGE
