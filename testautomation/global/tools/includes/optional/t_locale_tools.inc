@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: t_locale_tools.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-13 10:27:08 $
+'* last change: $Author: rt $ $Date: 2008-07-31 19:02:31 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -38,6 +38,7 @@
 '\***********************************************************************
 '*
 ' #1 fThesaurusLocales         'Get locales which are supported by Thesaurus
+' #1 fSpellcheckerLocales      'Get locales which are supported by Spellchecker
 '*
 '\***********************************************************************
 
@@ -67,4 +68,31 @@ function fThesaurusLocales as boolean
 
 end function
 
+'-----------------------------------------------------------
+
+function fSpellcheckerLocales as boolean
+'/// Gets the supported spellchecker locales from the API
+'/// Returns TRUE if iSprache is supported by Spellchecker
+'/// Returns FALSE if iSprache is not supported by Spellchecker
+
+    dim uno as object
+    dim linugServiceMgr as object
+    dim aAllLocales (256) as variant
+    dim sLocale as string
+    dim i as integer
+    
+    fSpellcheckerLocales = FALSE
+    uno=hGetUnoService()
+    linugServiceMgr=uno.createInstance("com.sun.star.linguistic2.LinguServiceManager")
+    aAllLocales = linugServiceMgr.getSpellchecker().getLocales()
+    for i = 0 to ubound( aAllLocales ())
+        sLocale = ( aAllLocales(i).Language & "-" & (aAllLocales(i).Country) )
+        printlog sLocale
+        if ConvertLanguage2 ( sLocale ) = iSprache then
+            fSpellcheckerLocales = TRUE
+            i = ubound( aAllLocales ())
+        endif
+    next i
+
+end function
 
