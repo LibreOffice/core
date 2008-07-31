@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,8 +40,8 @@ TARGET=ttf_liberation
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=liberation-fonts
-TARFILE_ROOTDIR=liberation-fonts
+TARFILE_NAME=liberation-fonts-1.04
+TARFILE_ROOTDIR=liberation-fonts-1.04
 
 PATCH_FILE_NAME=
 
