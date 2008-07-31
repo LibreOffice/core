@@ -95,47 +95,33 @@ sub print_path($$)
 sub print_psdk_home()
 {
     my $value;
-    $value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/Directories/Install Dir');
+    $value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v6.1/InstallationFolder');
     if (!defined $value)
     {
-        $key = reg_find_key ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install Dir');
-        $value = reg_get_value ($key);
-    }
+		$value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/Directories/Install Dir');
+		if (!defined $value)
+		{
+			$key = reg_find_key ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install Dir');
+			$value = reg_get_value ($key);
+		}
+	}
     defined $value || die "psdk not found";
 
     print cygpath ($value, 'w', $output_format);
 }
 
-my %msvc6 = (
-    'ver' => '6.0',
-    'key' => 'Microsoft/VisualStudio/6.0/Setup/Microsoft Visual C++/ProductDir',
-);
-my %msvc_net_2002 = (
-    'ver' => '7.0',
-    'key' => 'Microsoft/VisualStudio/7.0/Setup/VC/ProductDir',
-    'instmsi_path' => '../Common7/Tools/Deployment/MsiRedist',
-    'dll_path' => '../Visual Studio .NET Professional - English', # testme ...
-    'dll_suffix' => '70'
-);
-my %msvs_net_2002 = (
-    'ver' => '7.0',
-    'key' => 'Microsoft/VisualStudio/7.0/Setup/VS/ProductDir',
-    'instmsi_path' => 'Common7/Tools/Deployment/MsiRedist',
-    'dll_path' => 'Visual Studio .NET Professional - English', # testme ...
-    'dll_suffix' => '70'
-);
 my %msvc_net_2003 = (
     'ver' => '7.1',
     'key' => 'Microsoft/VisualStudio/7.1/Setup/VC/ProductDir',
     'instmsi_path' => '../Common7/Tools/Deployment/MsiRedist',
-    'dll_path' => '../SDK/v1.1/Bin',
+    'dll_path' => '../Visual Studio .NET Professional 2003 - English',
     'dll_suffix' => '71'
 );
 my %msvs_net_2003 = (
     'ver' => '7.1',
     'key' => 'Microsoft/VisualStudio/7.1/Setup/VS/ProductDir',
     'instmsi_path' => 'Common7/Tools/Deployment/MsiRedist',
-    'dll_path' => 'Visual Studio .NET Professional 2003 - English', # testme ...
+    'dll_path' => 'Visual Studio .NET Professional 2003 - English',
     'dll_suffix' => '71'
 );
 my %msvs_net_2003_ea = (
@@ -159,10 +145,24 @@ my %msvc_express_2005 = (
     'dll_path' => '../SDK/v2.0/Bin',
     'dll_suffix' => '80'
 );
+my %msvs_2008 = (
+    'ver' => '9.0',
+    'key' => 'Microsoft/VisualStudio/9.0/Setup/VS/ProductDir',
+    'instmsi_path' => '?',
+    'dll_path' => 'VC/redist/x86/Microsoft.VC90.CRT',
+    'dll_suffix' => '90'
+);
+my %msvc_2008 = (
+    'ver' => '9.0',
+    'key' => 'Microsoft/VisualStudio/9.0/Setup/VC/ProductDir',
+    'instmsi_path' => '?',
+    'dll_path' => 'redist/x86/Microsoft.VC90.CRT',
+    'dll_suffix' => '90'
+);
 
 sub find_msvs()
 {
-    my @ms_versions = ( \%msvs_express_2005, \%msvs_net_2003_ea, \%msvs_net_2003, \%msvs_net_2002, \%msvc6 );
+    my @ms_versions = ( \%msvs_2008, \%msvs_express_2005, \%msvs_net_2003_ea, \%msvs_net_2003 );
 
     for $ver (@ms_versions)
     {
@@ -177,7 +177,7 @@ sub find_msvs()
 
 sub find_msvc()
 {
-    my @ms_versions = ( \%msvc_express_2005, \%msvc_net_2003, \%msvc_net_2002, \%msvc6 );
+    my @ms_versions = ( \%msvc_2008, \%msvc_express_2005, \%msvc_net_2003 );
 
     for $ver (@ms_versions)
     {
@@ -211,13 +211,13 @@ sub print_msvs_productdir()
 sub print_csc_compiler_dir()
 {
     my $dir = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/InstallRoot");
-    $dir .= "v1.1.4322"; # lame-but ...
+    $dir .= "v2.0.50727"; # lame, but...
     print cygpath ($dir, 'w', $output_format);
 }
 
 sub print_dotnetsdk_dir()
 {
-    my $dir = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/sdkInstallRootv1.1");
+    my $dir = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/sdkInstallRootv2.0");
     print cygpath ($dir, 'w', $output_format);
 }
 
@@ -242,6 +242,7 @@ sub copy_dll($$$)
     -f "$src/$fname" || die "can't find $src";
     -d $dest || die "no directory $dest";
 
+	print STDERR "Copying $src/$fname to $dest\n";
     copy ("$src/$fname", $dest) || die "copy failed: $!";
     chmod (0755, "$dest/$fname") || die "failed to set dll executable: $!";
 }
@@ -257,7 +258,7 @@ sub msvc_find_version($)
     $srcdir = (cygpath ($ver->{'product_dir'}, 'w', 'u') . '/' . 
 		  $ver->{$checkpath});
     -d $srcdir && return $ver;
-    return "";
+    return undef;
 }
 
 sub msvc_copy_dlls($)
@@ -272,6 +273,11 @@ sub msvc_copy_dlls($)
 	      $dest . $ver->{'dll_suffix'});
     copy_dll ($srcdir, "msvcr" . $ver->{'dll_suffix'} . ".dll",
 	      $dest . $ver->{'dll_suffix'});
+    if ($ver->{'dll_suffix'} >= 90) {
+        copy_dll ($srcdir, "msvcm" . $ver->{'dll_suffix'} . ".dll",
+                  $dest . $ver->{'dll_suffix'});
+        copy_dll ($srcdir, "Microsoft.VC90.CRT.manifest", $dest . $ver->{'dll_suffix'});
+    }
 }
 
 sub msvc_copy_instmsi($)
