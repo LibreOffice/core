@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: t_files.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-13 10:27:10 $
+'* last change: $Author: rt $ $Date: 2008-07-31 19:02:44 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -266,7 +266,7 @@ function hIsNamedDocLoaded (ShouldFile as String, optional bSilent as boolean) a
         hIsNamedDocLoaded = True
     Else
         sTemp = left(right(ShouldFile,2),1) ' get the 2nd last character ' vor;dot;sti;pot;std;xlt
-        if (((sTemp="o") or (sTemp="t") or (sTemp="l")) and (left(right(ShouldFile,4),1)=".")) then
+        if (((sTemp="o") or (sTemp="t") or (sTemp="l")) and ((left(right(ShouldFile,4),1)=".") or (left(right(ShouldFile,5),1)="."))) then
             hIsNamedDocLoaded = True ' exception! for linux! and MS-Office Templates
         else
             if ((Dateiname.GetSeltext = "") and not bSilent) then
