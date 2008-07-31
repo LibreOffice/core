@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: c_upd_editmenu.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 08:06:05 $
+'* last change: $Author: rt $ $Date: 2008-07-31 19:04:59 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -711,7 +711,7 @@ testcase tEditHeadersAndFooters
     Call DialogTest ( TabKopfzeileCalc )
     '/// Choose in Listbox Header the first entry (none)
     printlog " Choose in Listbox Header the first entry (none)"
-    qaerrorlog "Due to missing helpID this control is not testable #i84123#"
+    PredefinedHeader.Select 1
     '/// Enter '1' in left area field
     printlog " Enter '1' in left area field"
     LinkerBereich.typeKeys ("1")
@@ -905,7 +905,7 @@ testcase tEditHeadersAndFooters
     Call DialogTest ( TabKopfzeileCalcLinks )
     '/// Choose in Listbox Header the first entry (none)
     printlog " Choose in Listbox Header the first entry (none)"
-    qaerrorlog "Due to missing helpID this control is not testable #i84123#"    
+    PredefinedHeaderLeft.Select 1    
     '/// Enter 'Test' in left area field
     printlog " Enter 'Test' in left area field"
     LinkerBereich.typeKeys ("Test")
@@ -961,7 +961,7 @@ testcase tEditHeadersAndFooters
     Call DialogTest ( TabFusszeileCalc )
     '/// Choose in Listbox Footer the first entry (none)
     printlog " Choose in Listbox Footer the first entry (none)"
-    qaerrorlog "Due to missing helpID this control is not testable #i84123#"    
+    PredefinedFooter.Select 1    
     '/// Enter 'Test' in left area field
     printlog " Enter 'Test' in left area field"
     LinkerBereich.typeKeys ("Test")
@@ -1017,7 +1017,7 @@ testcase tEditHeadersAndFooters
     Call DialogTest ( TabFusszeileCalcLinks )
     '/// Choose in Listbox Footer the first entry (none)
     printlog " Choose in Listbox Footer the first entry (none)"
-    qaerrorlog "Due to missing helpID this control is not testable #i84123#"    
+    PredefinedFooterLeft.Select 1    
     '/// Enter 'Test' in left area field
     printlog " Enter 'Test' in left area field"
     LinkerBereich.typeKeys ("Test")
