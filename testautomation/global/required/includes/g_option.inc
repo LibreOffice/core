@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: g_option.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-13 10:27:04 $
+'* last change: $Author: rt $ $Date: 2008-07-31 19:25:49 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -570,7 +570,11 @@ testcase tToolsOptionsInternet
    '/// (The last section in Tools / Options is <i>Internet</i>)
    ToPosInOptionlist ( iSectionNumber)
 
-    if gPlatgroup = "w95" then
+    if gPlatgroup = "w95" OR gPlatform = lcase("osx") then
+        '/// On MacOS X systems this section includes the tab pages:
+        '///+<ol><li>Proxy</li>
+        '///+<li>Search</li>
+        '///+<li>E-Mai</li></ol>
         '/// On Win32 systems this section includes the tab pages:
         '///+<ol><li>Proxy</li>
         '///+<li>Search</li>
