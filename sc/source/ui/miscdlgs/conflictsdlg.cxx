@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: conflictsdlg.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -506,7 +506,7 @@ ScConflictsDlg::ScConflictsDlg( Window* pParent, ScViewData* pViewData, ScDocume
 
     SetMinOutputSizePixel( maDialogSize );
 
-    long nTabs[] = { 3, 10, 160, 210 };
+    long nTabs[] = { 3, 10, 216, 266 };
     maLbConflicts.SetTabs( nTabs );
 
     String aTab( sal_Unicode( '\t' ) );
