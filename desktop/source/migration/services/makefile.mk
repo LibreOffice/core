@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -37,7 +37,7 @@ ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST = migrationoo2
 
 # --- Settings -----------------------------------------------------
-
+.INCLUDE : ..$/..$/deployment/inc/dp_misc.mk
 .INCLUDE :  settings.mk
 DLLPRE =
 
@@ -49,19 +49,27 @@ SLOFILES= \
         $(SLO)$/jvmfwk.obj \
         $(SLO)$/cexports.obj \
         $(SLO)$/basicmigration.obj \
+        $(SLO)$/wordbookmigration.obj \
+        $(SLO)$/extensionmigration.obj \
         $(SLO)$/autocorrmigration.obj
 
 SHL1TARGET=$(TARGET)
 SHL1VERSIONMAP = migrationoo2.map
 
 SHL1STDLIBS= \
+    $(DEPLOYMENTMISCLIB) \
     $(CPPULIB)		\
     $(CPPUHELPERLIB)	\
     $(SALLIB) \
+    $(UCBHELPERLIB)	\
     $(UNOTOOLSLIB) \
     $(TOOLSLIB)	\
     $(I18NISOLANGLIB) \
-    $(JVMFWKLIB)
+    $(JVMFWKLIB) \
+    $(COMPHELPERLIB) \
+    $(XMLSCRIPTLIB)
+    
+    
 
 SHL1DEPN=
 SHL1IMPLIB=i$(TARGET)
