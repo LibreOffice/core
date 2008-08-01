@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: wizard_firsttime.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:04 $
+'* last change: $Author: rt $ $Date: 2008-08-01 09:48:30 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -46,18 +46,12 @@ testcase tUpdtWizardFirsttime
     dim cLastName as string
     dim cInitials as string
     
-    dim bMigrate as boolean ' Do we migrate?
-    
     cFirstName = "Tom"
     cLastName = "Cat"
     cInitials = "TC"
     
     dim cQuickstarterPath as string
         cQuickStarterPath = gNetzOfficePath & "program\quickstart.exe"
-    
-    ' look for .sversionrc/sversion.ini. If it exists, we assume migration
-    printlog( "Do we migrate from an older version?" )
-    bMigrate = hTestForOldOffice()
     
     '///<ul>
     
@@ -129,14 +123,6 @@ testcase tUpdtWizardFirsttime
     if ( TabPersonalDataMigration.exists( 2 ) ) then
         call dialogtest( TabPersonalDataMigration )
         printlog( "The data migration page is visible" )
-        if ( hTestForOldOffice() ) then
-            printlog( "Assuming migration data exists" )
-            printlog( "Unchecking migration" )
-            TransferPersonalData.uncheck()
-        else
-            ' at this point i have no clue about the status of the dialog
-            qaerrorlog( "There doesn't appear to be anything to migrate" )
-        endif
     
         '///+<li>Click the 'next' button to get to the next page</li>    
         kontext "WelcomeDialog"
@@ -243,60 +229,12 @@ testcase tUpdtWizardFirsttime
     if ( OptionenDlg.exists() ) then
         OptionenDlg.cancel()
     endif
+    
+    do while( getDocumentCount() > 0 )
+        call hCloseDocument()
+    loop
    
     '///</ul>
 endcase
 
-'*******************************************************************************
-
-function hTestForOldOffice() as boolean
-
-    '///<h3>Check if old office exists (look for .sversionrc)</h3>
-    '///<i>BEWARE: Environment variable $HOME is evaluated</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorcondition (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE: .sversionrc/sversion.ini exists</li>
-    '///+<li>FALSE: No trace of old office version</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-
-    ' this function looks for the presence of the .sversionrc (unix)
-    ' or sversion.ini (windows). If the file exists, we assume that
-    ' there is data to be migrated and the function returns true
-    ' if $HOME is not set, the function will fail!
-
-    dim sSVersion as string ' name of the .sversionrc/sversion.ini
-    dim sIniPath as string
-
-    '///+<li>Determine the platform dependent name of .sversionrc/sversion.ini</li>
-    if ( gPlatGroup = "unx" ) then
-        sSVersion = ".sversionrc"
-    else
-        sSVersion = "sversion.ini"
-    endif
-        
-    '///+<li>Retrieve the location of the file from the environment ($HOME)</li>
-    sIniPath = environ( "HOME" )
-    sIniPath = convertpath( sIniPath & "/" & sSVersion )
-    
-    '///+<li>Test if the file is present</li>
-    if ( dir( sIniPath ) <> "" ) then
-        printlog( "  Yes: .sversionrc/soffice.ini at: " & sIniPath )
-        hTestForOldOffice() = true
-    else
-        printlog( "  No: .sversionrc/soffice.ini not present." )
-        hTestForOldOffice() = false
-    endif
-    '///</ul>
-    
-end function
 
