@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: InfoDir.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 package org.openoffice.setup.Util;
 
 import org.openoffice.setup.InstallData;
+import org.openoffice.setup.ResourceManager;
 import java.io.File;
 import java.util.Vector;
 
@@ -243,21 +244,38 @@ public class InfoDir {
 
     static public void prepareUninstallation() {
         // additional tasks for uninstallation
-        String setupPath = copySourceFile("setup");
-        SystemManager.setUnixPrivileges(setupPath, "775");
+        // Directory destDir has to exist!
         InstallData data = InstallData.getInstance();
-        File jarFile = data.getJarFilePath();
-        copySourceFile(jarFile.getName());
+        File destDir = new File(data.getInstallDefaultDir(), data.getProductDir());
+        boolean directoryExists = true;
 
-        File uninstallDir = createUninstallDir();
-        copyInstallDirectoryWithExtension(uninstallDir, "xpd", "xpd");
-        copyInstallDirectoryWithExtension(uninstallDir, "html", "html");
-        copyInstallDirectoryWithExtension(uninstallDir, "images", "gif");
-        copyInstallDirectoryDoubleSubdir(uninstallDir, "html", "images");
-        copyGetUidSoFile(uninstallDir);
-        copyJreFile(uninstallDir);
-        moveAdminFiles(uninstallDir);
-        createInfoFile(uninstallDir);
+        if ( ! destDir.exists() ) {
+            try {
+                directoryExists = SystemManager.create_directory(destDir.getPath());
+            }
+            catch (SecurityException ex) {
+                String message = ResourceManager.getString("String_ChooseDirectory_No_Write_Access") + ": " + destDir.getPath();
+                String title = ResourceManager.getString("String_Error");
+                Informer.showErrorMessage(message, title);
+            }
+        }
+
+        if ( directoryExists ) {
+            String setupPath = copySourceFile("setup");
+            SystemManager.setUnixPrivileges(setupPath, "775");
+            File jarFile = data.getJarFilePath();
+            copySourceFile(jarFile.getName());
+
+            File uninstallDir = createUninstallDir();
+            copyInstallDirectoryWithExtension(uninstallDir, "xpd", "xpd");
+            copyInstallDirectoryWithExtension(uninstallDir, "html", "html");
+            copyInstallDirectoryWithExtension(uninstallDir, "images", "gif");
+            copyInstallDirectoryDoubleSubdir(uninstallDir, "html", "images");
+            copyGetUidSoFile(uninstallDir);
+            copyJreFile(uninstallDir);
+            moveAdminFiles(uninstallDir);
+            createInfoFile(uninstallDir);
+        }
     }
 
     static public void removeUninstallationFiles() {
