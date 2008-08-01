@@ -9,5 +9,5 @@ jf	jfreereport\java\libfonts				nmake	-	all	jf_libfonts	jf_jcommon jf_libloader 
 jf	jfreereport\java\libformula				nmake	-	all	jf_libformula jf_jcommon 			NULL
 jf	jfreereport\java\librepository			nmake	-	all	jf_librepository jf_jcommon			NULL
 jf	jfreereport\java\jcommon-serializer		nmake	-	all	jf_jcommon-serializer jf_jcommon	NULL
-jf	jfreereport\java\jfreereport			nmake	-	all	jf_jfreereport jf_liblayout jf_libformula  		NULL
+jf	jfreereport\java\jfreereport			nmake	-	all	jf_jfreereport jf_liblayout jf_libformula jf_jcommon-serializer		NULL
 jf	jfreereport\java\liblayout				nmake	-	all	jf_liblayout jf_jcommon	jf_flute jf_libfonts jf_libloader jf_librepository jf_libxml jf_sac		NULL
