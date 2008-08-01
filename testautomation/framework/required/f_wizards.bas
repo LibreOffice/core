@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: f_wizards.bas,v $
 '*
-'* $Revision: 1.4 $
+'* $Revision: 1.5 $
 '*
-'* last change: $Author: rt $ $Date: 2008-07-31 19:25:29 $
+'* last change: $Author: rt $ $Date: 2008-08-01 11:04:08 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -33,7 +33,7 @@
 '*
 '*  owner : joerg.skottke@sun.com
 '*
-'*  short description : Updatetest for the wizards
+'*  short description : Category 0 tests for all included wizards
 '*
 '\******************************************************************************
 
@@ -52,14 +52,14 @@ sub main
     hDeleteUserTemplates()
    
     call hStatusIn( "framework" , "f_wizards.bas" )
+    call tUpdtWizardFirsttime()
+    call tUpdtWizardLetter()
+    call tUpdtWizardPresentation()
     call tUpdtWizardMailmerge()
     call tUpdtWizardAgenda()
     call tUpdtWizardDocumentConverter()
     call tUpdtWizardEuroConverter()
     call tUpdtWizardFax()
-    call tUpdtWizardFirsttime()
-    call tUpdtWizardLetter()
-    call tUpdtWizardPresentation()
     call tUpdtWizardWebpage()
     call hStatusOut()
     
@@ -75,9 +75,10 @@ sub LoadIncludeFiles
     use "global\system\includes\gvariabl.inc"
     
     use "global\tools\includes\optional\t_filetools.inc"
-    use "global\tools\includes\optional\t_key_tools.inc"
     use "global\tools\includes\optional\t_docfuncs.inc"
+    use "global\tools\includes\optional\t_key_tools.inc"
     use "global\tools\includes\optional\t_stringtools.inc"
+    use "global\tools\includes\optional\t_accels.inc"
 
     use "framework\tools\includes\wizards.inc"
     use "framework\tools\includes\init_tools.inc"
