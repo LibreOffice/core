@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,7 +41,8 @@ TARGET=find-requires
 # ------------------------------------------------------------------
 
 FINDREQUIRES = \
-    $(BIN)$/find-requires-gnome.sh
+    $(BIN)$/find-requires-gnome.sh \
+    $(BIN)$/find-requires-x11.sh
     
 # --- Targets ------------------------------------------------------
 
