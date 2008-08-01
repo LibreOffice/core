@@ -8,7 +8,7 @@
 #
 # $RCSfile: globals.pm,v $
 #
-# $Revision: 1.103 $
+# $Revision: 1.104 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -357,6 +357,8 @@ BEGIN
     %allcalculated_guids = ();
     %calculated_component_guids = ();
     %base_independent_components = ();
+    %all_english_languagestrings = ();
+    %all_required_english_languagestrings = ();
 
     @forced_properties = ("SERVICETAG_PRODUCTNAME", "SERVICETAG_PRODUCTVERSION", "SERVICETAG_PARENTNAME", "SERVICETAG_SOURCE", "SERVICETAG_URN");
 
