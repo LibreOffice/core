@@ -9,6 +9,7 @@ AutoReqProv: no
 #BuildRoot: %{_tmppath}/%{name}-root
 Provides: libgnomevfs-2.so.0
 Provides: libgconf-2.so.4
+Provides: libfreetype.so.6
 Provides: /bin/sh
 Provides: /bin/basename
 Provides: /bin/cat
