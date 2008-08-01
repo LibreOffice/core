@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_dialog2.cxx,v $
  *
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -739,7 +739,7 @@ void ExtensionBox_Impl::SetButtonStatus( const TEntry_Impl pEntry )
         m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_ENABLE );
     }
 
-    m_pOptionsBtn->Enable( !pEntry->m_bLocked && pEntry->m_bHasOptions );
+    m_pOptionsBtn->Enable( pEntry->m_bHasOptions );
     m_pEnableBtn->Enable( !pEntry->m_bLocked );
     m_pRemoveBtn->Enable( !pEntry->m_bLocked );
 }
