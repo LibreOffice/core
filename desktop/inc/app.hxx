@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: app.hxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -164,11 +164,6 @@ class Desktop : public Application
 
         static void             PreloadModuleData( CommandLineArgs* );
         static void             PreloadConfigurationData();
-
-        static ::rtl::OUString  GetProductVersionID();
-        static ::rtl::OUString  GetInstanceUUID( const ::rtl::OUString& rProductVersionID );
-        static ::rtl::OUString  GenerateUUID();
-        static void             StoreInstanceUUID( const ::rtl::OUString& rProductVersionID, const ::rtl::OUString& rUUID );
 
         Reference<XStatusIndicator> m_rSplashScreen;
         void                    OpenSplashScreen();
