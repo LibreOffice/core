@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlmetai.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -249,6 +249,10 @@ void SvXMLMetaDocumentContext::setBuildId(::rtl::OUString const& i_rBuildId)
                 RTL_CONSTASCII_STRINGPARAM("OpenOffice.org 1") ) == 0))
         {
             sBuildId = OUString::createFromAscii( "645$8687" );
+        }
+        if ((i_rBuildId.compareToAscii( RTL_CONSTASCII_STRINGPARAM("NeoOffice/2") ) == 0) )
+        {
+            sBuildId = OUString::createFromAscii( "680$9134" ); // fake NeoOffice as OpenOffice.org 2.2 release
         }
     }
 
