@@ -48,6 +48,10 @@ DiskSpaceRequirements	OK	EndDialog	Return	1	0
 FilesInUse	Exit	EndDialog	Exit	1	0
 FilesInUse	Ignore	EndDialog	Ignore	1	0
 FilesInUse	Retry	EndDialog	Retry	1	0
+FileTypeDialog	Back	NewDialog	CustomSetup	Installed OR _IsSetupTypeMin = "Custom"	2
+FileTypeDialog	Back	NewDialog	SetupType	NOT Installed AND _IsSetupTypeMin <> "Custom"	1
+FileTypeDialog	Cancel	SpawnDialog	CancelSetup	1	0
+FileTypeDialog	Next	NewDialog	ReadyToInstall	1	0
 InstallChangeFolder	Cancel	NewDialog	DestinationFolder	1	2
 InstallChangeFolder	Cancel	Reset	0	1	1
 InstallChangeFolder	OK	NewDialog	DestinationFolder	1	3
