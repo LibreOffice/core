@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.38 $
+# $Revision: 1.39 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -102,9 +102,9 @@ JAVACLASSFILES = \
 
 JARFILES  = ridl.jar jurt.jar unoil.jar juh.jar
 .IF "$(SYSTEM_LUCENE)" == "YES"
-XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(LUCENE_CORE_JAR)
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(LUCENE_CORE_JAR)$(PATH_SEPERATOR)$(LUCENE_ANALYZERS_JAR)
 .ELSE
-JARFILES += lucene-core-2.3.jar
+JARFILES += lucene-core-2.3.jar lucene-analyzers-2.3.jar
 .ENDIF
 JAVAFILES = $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
   
