@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Common.xcs,v $
- * $Revision: 1.153 $
+ * $Revision: 1.154 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3412,13 +3412,16 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				</prop>
 				<prop oor:name="ProductVersionID" oor:type="xs:string">
 					<info>
+						<author>CD/OBR</author>
 						<desc>Current product ID.</desc>
+						<deprecated>This data is saved in a dedicated file since OOo 3.0 FCS</deprecated>
 					</info>
 				</prop>
 				<set oor:name="ProductVersions" oor:node-type="ProductVersionID">
 					<info>
-						<author>CD</author>
+						<author>CD/OBR</author>
 						<desc>Specifies product specific IDs and associated instance UUIDs</desc>
+						<deprecated>This data is saved in a dedicated file since OOo 3.0 FCS</deprecated>
 					</info>
 				</set>
 			</group>
