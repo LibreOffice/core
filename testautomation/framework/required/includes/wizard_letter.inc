@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: wizard_letter.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:04 $
+'* last change: $Author: rt $ $Date: 2008-08-01 09:48:44 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -64,7 +64,7 @@ testcase tUpdtWizardLetter
 
     '///+<li>Page 1 </li>
     kontext "Autopilotletter"  
-    if ( not autopilotletter.exists( 1 ) ) then
+    if ( not autopilotletter.exists( 3 ) ) then
         warnlog( "#i87733# Wizard does not start" )
         hCloseDocument()
         goto endsub
@@ -216,6 +216,9 @@ testcase tUpdtWizardLetter
         printlog( "Unexpectedly deleted user template(s), please check")
     endif
     
+    do while( getDocumentCount() > 0 )
+        call hCloseDocument()
+    loop
     
     '///</ul>
 

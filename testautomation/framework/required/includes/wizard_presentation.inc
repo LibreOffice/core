@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: wizard_presentation.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:04 $
+'* last change: $Author: rt $ $Date: 2008-08-01 09:48:58 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -76,8 +76,11 @@ testcase tUpdtWizardPresentation
     '///+<li>Finish the wizard</li>
     hFinishWizard( 1 )
     
-    '///+<li>Close the document</li>
-    brc = hDestroyDocument()
+    '///+<li>Close the document(s)</li>
+    do while( getDocumentCount() > 0 )
+        call hCloseDocument()
+    loop
+
     gApplication = "WRITER"
     '///</ul>
 

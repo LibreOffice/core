@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: wizard_agenda.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:04 $
+'* last change: $Author: rt $ $Date: 2008-08-01 09:48:01 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -114,6 +114,11 @@ testcase tUpdtWizardAgenda
     if ( not brc ) then
         qaerrorlog( "#i59233# The wizard does not display the new template" )
     endif
+    
+    do while( getDocumentCount() > 0 )
+        call hCloseDocument()
+    loop
+    
         
     '///+<li>delete the new template</li>
     hDeleteFile( cTemplatePath )
