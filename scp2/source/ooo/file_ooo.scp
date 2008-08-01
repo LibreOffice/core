@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_ooo.scp,v $
- * $Revision: 1.259 $
+ * $Revision: 1.260 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -478,7 +478,8 @@ STD_JAR_FILE( gid_File_Jar_Classes, classes )
 
 #ifdef SOLAR_JAVA
 #ifndef SYSTEM_LUCENE
-STD_JAR_FILE( gid_File_Jar_Lucene, lucene-core-2.3 )
+STD_JAR_FILE( gid_File_Jar_Lucene_Core, lucene-core-2.3 )
+STD_JAR_FILE( gid_File_Jar_Lucene_Analyzers, lucene-analyzers-2.3 )
 #endif
 #endif
 
