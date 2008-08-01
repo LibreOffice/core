@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: common_brand.scp,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -799,6 +799,42 @@ ProfileItem gid_Brand_Profileitem_Soffice_Logo
     Order = 1;
     Key = "Logo";
     Value = "1";
+End
+
+ProfileItem gid_Brand_Profileitem_Soffice_ProgressBarColor_So
+    ProfileID = gid_Brand_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 2;
+    Key = "ProgressBarColor";
+    Value = "${PROGRESSBARCOLOR}";
+End
+
+ProfileItem gid_Brand_Profileitem_Soffice_ProgressSize_So
+    ProfileID = gid_Brand_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 3;
+    Key = "ProgressSize";
+    Value = "${PROGRESSSIZE}";
+End
+
+ProfileItem gid_Brand_Profileitem_Soffice_ProgressPosition_So
+    ProfileID = gid_Brand_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 4;
+    Key = "ProgressPosition";
+    Value = "${PROGRESSPOSITION}";
+End
+
+ProfileItem gid_Brand_Profileitem_Soffice_ProgressFrameColor_So
+    ProfileID = gid_Brand_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 5;
+    Key = "ProgressFrameColor";
+    Value = "${PROGRESSFRAMECOLOR}";
 End
 
 #ifdef MACOSX
