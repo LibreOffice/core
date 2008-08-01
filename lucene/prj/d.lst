@@ -1,3 +1,3 @@
 mkdir: %_DEST%\inc%_EXT%\external
 mkdir: %_DEST%\inc%_EXT%\external\lucene
-..\%__SRC%\bin\lucene-core-2.3.jar %_DEST%\bin%_EXT%\lucene-core-2.3.jar
+..\%__SRC%\bin\lucene-*.jar %_DEST%\bin%_EXT%\lucene-*.jar
