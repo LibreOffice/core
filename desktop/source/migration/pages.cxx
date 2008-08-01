@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pages.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,12 +48,11 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
-#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
+#include <com/sun/star/task/XJobExecutor.hpp>
 #include <comphelper/configurationhelper.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -66,7 +65,6 @@ using namespace rtl;
 using namespace osl;
 using namespace utl;
 using namespace svt;
-using namespace com::sun::star::system;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
@@ -559,35 +557,11 @@ sal_Bool RegistrationPage::commitPage( CommitPageReason _eReason )
     if ( _eReason == eFinish )
     {
         ::svt::RegOptions aOptions;
+        rtl::OUString aEvent;
+
         if ( m_rbNow.IsChecked())
         {
-            sal_Bool bSuccess = sal_False;
-            try
-            {
-                // create the Desktop component which can load components
-                Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-                Reference< XSystemShellExecute > xSystemShell(
-                    xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" ) ),
-                    UNO_QUERY_THROW );
-
-                // access the configuration to retrieve the URL we shall use for registration
-                ::rtl::OUString sRegistrationURL( aOptions.getRegistrationURL( ) );
-                OSL_ENSURE( sRegistrationURL.getLength(), "OProductRegistration::doOnlineRegistration: invalid URL found!" );
-                if ( xSystemShell.is() && sRegistrationURL.getLength() )
-                {
-                    xSystemShell->execute( sRegistrationURL, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
-                    bSuccess = sal_True;
-                }
-            }
-            catch( const Exception& )
-            {
-            }
-
-            if ( !bSuccess )
-            {
-                ErrorBox aRegistrationError( this, WizardResId( ERRBOX_REG_NOSYSBROWSER ) );
-                aRegistrationError.Execute();
-            }
+            aEvent = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RegistrationRequired" ) );
         }
         else if (m_rbLater.IsChecked())
         {
@@ -595,6 +569,24 @@ sal_Bool RegistrationPage::commitPage( CommitPageReason _eReason )
             // avtivate a reminder job...
         }
         // aOptions.markSessionDone();
+
+        try
+        {
+            // create the Desktop component which can load components
+            Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+            if( xFactory.is() )
+            {
+                Reference< com::sun::star::task::XJobExecutor > xProductRegistration(
+                    xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.setup.ProductRegistration" ) ) ),
+                    UNO_QUERY_THROW );
+
+                 // tell it that the user wants to register
+                 xProductRegistration->trigger( aEvent );
+            }
+        }
+        catch( const Exception& )
+        {
+        }
     }
     return sal_True;
 }
