@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolbox.cxx,v $
- * $Revision: 1.107 $
+ * $Revision: 1.108 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1034,7 +1034,12 @@ USHORT ToolBox::ImplCalcLines( ToolBox* pThis, long nToolSize )
         nToolSize += TB_LINESPACING;
     }
 
-    return (USHORT)(nToolSize/nLineHeight);
+    // #i91917# always report at least one line
+    long nLines = nToolSize/nLineHeight;
+    if( nLines < 1 )
+        nLines = 1;
+
+    return static_cast<USHORT>(nLines);
 }
 
 // -----------------------------------------------------------------------
