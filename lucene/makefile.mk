@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -34,35 +34,29 @@ PRJ=.
 PRJNAME=so_lucene
 TARGET=so_lucene
 
-.IF "$(USE_JDK_VERSION)" == "140"
-JDK_VERSION=140
-JAVA_HOME=$(JDK14PATH)
-
-XCLASSPATH:=$(JDK14PATH)$/jre/lib/rt.jar
-CLASSPATH:=$(XCLASSPATH)
-.ENDIF
-
-ANT_BUILDFILE*=../../../../build.xml
 
 # --- Settings -----------------------------------------------------
 
-#.INCLUDE :	ant.mk
 .INCLUDE :	settings.mk
 .INCLUDE :	antsettings.mk
 # --- Files --------------------------------------------------------
 
-CLASSPATH!:=$(CLASSPATH)$(PATH_SEPERATOR)$(ANT_CLASSPATH)$(PATH_SEPERATOR)$(JAVA_HOME)$/lib$/tools.jar
-.EXPORT : CLASSPATH
+LUCENE_MAJOR=2
+LUCENE_MINOR=3
+LUCENE_MICRO=2
 
-LUCENE_NAME=lucene-2.3.2
+LUCENE_NAME=lucene-$(LUCENE_MAJOR).$(LUCENE_MINOR).$(LUCENE_MICRO)
+# NOTE that the jar names do not contain the micro version
+LUCENE_CORE_JAR=lucene-core-$(LUCENE_MAJOR).$(LUCENE_MINOR).jar
+LUCENE_ANALYZERS_JAR=lucene-analyzers-$(LUCENE_MAJOR).$(LUCENE_MINOR).jar
 
 TARFILE_NAME=$(LUCENE_NAME)
 PATCH_FILE_NAME=lucene.patch
 
-ANT_FLAGS += -Dbasedir=../../../../$(INPATH)/misc/build/lucene-2.3.2
-
 BUILD_DIR=.
-BUILD_ACTION= ${ANT} ${ANT_FLAGS}
+BUILD_ACTION= ${ANT} -buildfile .$/contrib$/analyzers$/build.xml
+
+OUT2BIN=.$/build$/$(LUCENE_CORE_JAR) .$/build$/contrib$/analyzers$/$(LUCENE_ANALYZERS_JAR)
 
 # --- Targets ------------------------------------------------------
 
