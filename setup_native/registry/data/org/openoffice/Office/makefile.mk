@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -31,7 +31,7 @@
 
 PRJ=..$/..$/..$/..$/..
 PRJNAME=setup_native
-TARGET=data_stclient
+TARGET=data_registration
 PACKAGE=org.openoffice.Office
 
 ABSXCSROOT=$(SOLARXMLDIR)
@@ -47,13 +47,8 @@ PROCESSORDIR=$(SOLARBINDIR)
 
 .IF "$(BUILD_SPECIAL)"!=""
 
-.IF "$(OS)"!="MACOSX"
 XCUFILES= \
     Jobs.xcu
-.ELSE
-dummy:
-    @echo "Nothing to build"
-.ENDIF
 
 MODULEFILES=
 
@@ -63,7 +58,7 @@ PACKAGEDIR=$(subst,.,$/ $(PACKAGE))
 SPOOLDIR=$(MISC)$/registry$/spool
 
 MYXCUFILES= \
-    $(SPOOLDIR)$/$(PACKAGEDIR)$/Jobs$/Jobs-stclient.xcu
+    $(SPOOLDIR)$/$(PACKAGEDIR)$/Jobs$/Jobs-registration.xcu
 
 .ELSE # "$(BUILD_SPECIAL)"!=""
 
@@ -78,7 +73,7 @@ dummy:
 
 ALLTAR : $(MYXCUFILES)
 
-$(SPOOLDIR)$/$(PACKAGEDIR)$/Jobs$/Jobs-stclient.xcu : $(PROCESSOUT)$/registry$/data$/$/$(PACKAGEDIR)$/Jobs.xcu
+$(SPOOLDIR)$/$(PACKAGEDIR)$/Jobs$/Jobs-registration.xcu : $(PROCESSOUT)$/registry$/data$/$/$(PACKAGEDIR)$/Jobs.xcu
     @-$(MKDIRHIER) $(@:d)
     @$(COPY) $< $@
 
