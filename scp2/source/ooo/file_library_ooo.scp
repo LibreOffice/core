@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_library_ooo.scp,v $
- * $Revision: 1.303 $
+ * $Revision: 1.304 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -605,29 +605,6 @@ End
 
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Fps_Office, fps_office.uno )
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Fpicker, fpicker.uno )
-
-#ifdef UNX
-
-#if ! (defined(MACOSX) || defined (SYSTEM_FREETYPE))
-
-File gid_File_Lib_Freetype
-  #ifdef LINUX
-    Dir = gid_Dir_Filter;
-  #else
-    Dir = gid_Dir_Program;
-  #endif
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-  #if defined (FREEBSD) || defined (NETBSD)
-    Name = "libfreetype.so.9";
-  #else
-    Name = "libfreetype.so.6";
-  #endif
-End
-
-#endif
-
-#endif
 
 STD_UNO_LIB_FILE( gid_File_Lib_Frm , frm)
 
