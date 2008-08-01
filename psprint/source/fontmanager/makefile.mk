@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.10 $
+# $Revision: 1.11 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,9 +45,9 @@ INCDEPN+= -I..$/fontsubset
 .IF "$(ENABLE_FONTCONFIG)" != ""
 CDEFS += -DENABLE_FONTCONFIG
 .ENDIF
-.IF "$(SYSTEM_FREETYPE)"=="YES"
+
 CFLAGS+=$(FREETYPE_CFLAGS)
-.ENDIF # "$(SYSTEM_FREETYPE)"=="YES"
+
 
 # --- Files --------------------------------------------------------
 
