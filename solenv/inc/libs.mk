@@ -8,7 +8,7 @@
 #
 # $RCSfile: libs.mk,v $
 #
-# $Revision: 1.138 $
+# $Revision: 1.139 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,7 +28,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.138 $$"
+LIBSMKREV!:="$$Revision: 1.139 $$"
 
 .IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 
@@ -143,13 +143,8 @@ AGGLIB=-lagg
 .ELSE
 AGGLIB=-lagg$(DLLPOSTFIX)
 .ENDIF
-.IF "$(SYSTEM_FREETYPE)"=="YES"
+FREETYPE_LIBS*=-lfreetype
 FREETYPELIB=$(FREETYPE_LIBS)
-FREETYPELIBST=$(FREETYPE_LIBS)
-.ELSE
-FREETYPELIB=-lfreetype
-FREETYPELIBST=$(STATIC) -lfreetype $(DYNAMIC)
-.ENDIF
 PSPLIB=-lpsp$(DLLPOSTFIX)
 TKLIB=-ltk$(DLLPOSTFIX)
 LAYOUTLIB=-ltklayout$(DLLPOSTFIX)
@@ -476,7 +471,6 @@ TKLIB=itk.lib
 LAYOUTLIB=itklayout.lib
 SVXLLIB=svxl.lib
 FREETYPELIB=freetype.lib
-FREETYPELIBST=freetype.lib
 PKGCHKLIB=ipkgchk.lib
 HELPLINKERLIB=ihelplinker.lib
 SYSSHELLLIB=sysshell.lib
