@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: wizard_documentconverter.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:04 $
+'* last change: $Author: rt $ $Date: 2008-08-01 09:48:16 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -39,9 +39,6 @@
 
 testcase tUpdtWizardDocumentConverter
     
-    warnlog( "#i90431# Document Converter does not recognize .sdw files" )
-    goto endsub
-
     '///<H1>Update test for documentconverter</H1>
     '///<ul>
     dim irc as integer
