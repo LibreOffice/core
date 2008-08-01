@@ -1,2 +1,2 @@
 RegistrationClassName: com.sun.star.help.HelpSearch
-Class-Path: lucene-core-2.3.jar
+Class-Path: lucene-core-2.3.jar lucene-analyzers-2.3.jar
