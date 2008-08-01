@@ -8,7 +8,7 @@
 #
 # $RCSfile: scriptitems.pm,v $
 #
-# $Revision: 1.51 $
+# $Revision: 1.52 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -2711,6 +2711,43 @@ sub collect_all_languagemodules
         {
             if ( ! exists($onefeature->{'Language'}) ) { installer::exiter::exit_program("ERROR: \"$onefeature->{'gid'}\" has flag LANGUAGEMODULE, but does not know its language!", "collect_all_languagemodules"); }
             $installer::globals::alllangmodules{$onefeature->{'gid'}} = $onefeature->{'Language'};
+            # Collecting also the english names, that are used for nsis unpack directory for language packs
+            my $lang = $onefeature->{'Language'};
+            my $name = "";
+            foreach my $localkey ( keys %{$onefeature} )
+            {
+                if ( $localkey =~ /^\s*Name\s*\(\s*en-US\s*\)\s*$/ )
+                {
+                    $installer::globals::all_english_languagestrings{$lang} = $onefeature->{$localkey};
+                }
+            }
+        }
+    }
+}
+
+#################################################################################
+# Selecting from all collected english language strings those, that are really
+# required in this installation set.
+#################################################################################
+
+sub select_required_language_strings
+{
+    my ($modulesref) = @_;
+
+    for ( my $i = 0; $i <= $#{$modulesref}; $i++ )
+    {
+        my $onefeature = ${$modulesref}[$i];
+        my $styles = "";
+        if ( $onefeature->{'Styles'} ) { $styles = $onefeature->{'Styles'}; }
+        if ( $styles =~ /\bLANGUAGEMODULE\b/ )
+        {
+            if ( ! exists($onefeature->{'Language'}) ) { installer::exiter::exit_program("ERROR: \"$onefeature->{'gid'}\" has flag LANGUAGEMODULE, but does not know its language!", "select_required_language_strings"); }
+            my $lang = $onefeature->{'Language'};
+
+            if (( exists($installer::globals::all_english_languagestrings{$lang}) ) && ( ! exists($installer::globals::all_required_english_languagestrings{$lang}) ))
+            {
+                $installer::globals::all_required_english_languagestrings{$lang} = $installer::globals::all_english_languagestrings{$lang};
+            }
         }
     }
 }
