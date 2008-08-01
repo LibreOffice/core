@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.77 $
+# $Revision: 1.78 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -247,6 +247,10 @@ SCPDEFS+=-DDISABLE_ATL
 
 .IF "$(SYSTEM_PYTHON)" == "YES"
 SCPDEFS+=-DSYSTEM_PYTHON
+.ENDIF
+
+.IF "$(ENABLE_SVCTAGS)" == "YES"
+SCPDEFS+=-DENABLE_SVCTAGS
 .ENDIF
 
 SCP_PRODUCT_TYPE=osl
