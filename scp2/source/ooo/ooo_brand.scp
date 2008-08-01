@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ooo_brand.scp,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,42 +53,6 @@ ProfileItem gid_Brand_Profileitem_Bootstrap_Errorreport_Server
   #else
     Value = "";
   #endif
-End
-
-ProfileItem gid_Brand_Profileitem_Soffice_ProgressBarColor
-    ProfileID = gid_Brand_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Bootstrap";
-    Order = 2;
-    Key = "ProgressBarColor";
-    Value = "4,68,155";
-End
-
-ProfileItem gid_Brand_Profileitem_Soffice_ProgressFrameColor
-    ProfileID = gid_Brand_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Bootstrap";
-    Order = 3;
-    Key = "ProgressFrameColor";
-    Value = "58,159,232";
-End
-
-ProfileItem gid_Brand_Profileitem_Soffice_ProgressSize
-    ProfileID = gid_Brand_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Bootstrap";
-    Order = 4;
-    Key = "ProgressSize";
-    Value = "412,7";
-End
-
-ProfileItem gid_Brand_Profileitem_Soffice_ProgressPosition
-    ProfileID = gid_Brand_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Bootstrap";
-    Order = 5;
-    Key = "ProgressPosition";
-    Value = "14,230";
 End
 
 #if defined UNX && ! defined MACOSX
