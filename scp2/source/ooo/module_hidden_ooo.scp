@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_hidden_ooo.scp,v $
- * $Revision: 1.114 $
+ * $Revision: 1.115 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -842,24 +842,6 @@ Module gid_Module_Root_Files_7
              gid_File_Moz_Msvcr71,
              gid_File_Mozilla_Runtime);
 End
-
-#ifdef UNX
-#if ! (defined(MACOSX) || defined (SYSTEM_FREETYPE))
-
-Module gid_Module_Root_Files_8
-    PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-    InstallOrder = "90";
-	Name = "gid_Module_Root_Files_8";
-	Description = "gid_Module_Root_Files_8";
-	Sortkey = "2000";
-	Default = YES;
-	Styles = (HIDDEN_ROOT);
-	Files = (gid_File_Lib_Freetype);
-End
-
-#endif
-#endif
 
 Module gid_Module_Root_Files_Images
     PackageInfo = "packinfo_office.txt";
