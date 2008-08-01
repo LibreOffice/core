@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.13 $
+# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,11 +41,9 @@ ENABLE_EXCEPTIONS=true
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile2.pmk
 
-.IF "$(SYSTEM_FREETYPE)" == "YES"
-CFLAGS+=-DSYSTEM_FREETYPE $(FREETYPE_CFLAGS)
+CFLAGS+= $(FREETYPE_CFLAGS)
 .IF "$(USE_FT_EMBOLDEN)" == "YES"
 CFLAGS+=-DUSE_FT_EMBOLDEN
-.ENDIF
 .ENDIF
 
 # --- Files --------------------------------------------------------
