@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.196 $
-# Date:        $Date: 2008-07-31 13:53:05 $
+# Version:     $Revision: 1.197 $
+# Date:        $Date: 2008-08-01 12:12:55 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -2019,6 +2019,7 @@ ToFile( "SYSTEM_HSQLDB",     "@SYSTEM_HSQLDB@",    "e" );
 ToFile( "HSQLDB_JAR",        "@HSQLDB_JAR@",       "e" );
 ToFile( "SYSTEM_LUCENE",     "@SYSTEM_LUCENE@",    "e" );
 ToFile( "LUCENE_CORE_JAR",   "@LUCENE_CORE_JAR@",  "e" );
+ToFile( "LUCENE_ANALYZERS_JAR",   "@LUCENE_ANALYZERS_JAR@",  "e" );
 ToFile( "SYSTEM_BSH",        "@SYSTEM_BSH@",       "e" );
 ToFile( "BSH_JAR",           "@BSH_JAR@",          "e" );
 ToFile( "SYSTEM_XML_APIS",   "@SYSTEM_XML_APIS@",  "e" );
