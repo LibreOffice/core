@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: common_brand.scp,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,7 +106,7 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Registry_Spool_Oo_Office_Writer_defaultfontarial_Xcu_C01,
              gid_Brand_File_Script_Setofficelang_C01,
              gid_Brand_File_Script_Unopkg,
-             gid_Brand_File_Share_Registry_Modules_Oo_Office_Jobs_Stclient,
+             gid_Brand_File_Share_Registry_Modules_Oo_Office_Jobs_Registration,
              gid_Brand_File_Share_Xdg_Base,
              gid_Brand_File_Share_Xdg_Calc,
              gid_Brand_File_Share_Xdg_Draw,
@@ -1226,18 +1226,18 @@ ProfileItem gid_Brand_Profileitem_Setup_Install
 End
 #endif
 
-#if defined BUILD_SPECIAL && !defined MACOSX
+#ifdef ENABLE_SVCTAGS
 
 Directory gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Jobs
     ParentID = gid_Brand_Dir_Share_Registry_Modules_Oo_Office;
     HostName = "Jobs";
 End
 
-File gid_Brand_File_Share_Registry_Modules_Oo_Office_Jobs_Stclient
+File gid_Brand_File_Share_Registry_Modules_Oo_Office_Jobs_Registration
     TXT_FILE_BODY;
     Styles = (PACKED, SCPZIP_REPLACE);
     Dir = gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Jobs;
-    Name = "/registry/spool/org/openoffice/Office/Jobs/Jobs-stclient.xcu";
+    Name = "/registry/spool/org/openoffice/Office/Jobs/Jobs-registration.xcu";
 End
 
 #endif
