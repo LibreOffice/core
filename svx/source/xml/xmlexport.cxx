@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlexport.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -243,11 +243,8 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStrea
             Reference< xml::sax::XDocumentHandler > xFilter( xServiceFactory->createInstanceWithArguments( OUString::createFromAscii( pImportService ), aFilterArgs), UNO_QUERY );
             DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
 
-            if( !xParser.is() || !xFilter.is() )
-            {
-                nRet = 1;
-            }
-            else
+            nRet = 1;
+            if( xParser.is() && xFilter.is() )
             {
                 // connect parser and filter
                 xParser->setDocumentHandler( xFilter );
@@ -258,6 +255,8 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStrea
 
                 // finally, parser the stream
                 xParser->parseStream( aParserInput );
+
+                nRet = 0;
             }
         }
     }
