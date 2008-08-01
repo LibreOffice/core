@@ -8,7 +8,7 @@
 #
 # $RCSfile: download.pm,v $
 #
-# $Revision: 1.46 $
+# $Revision: 1.47 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -885,7 +885,7 @@ sub put_windows_productversion_into_template
 
 sub put_windows_productpath_into_template
 {
-    my ($templatefile, $variableshashref, $languagestringref) = @_;
+    my ($templatefile, $variableshashref, $languagestringref, $localnsisdir) = @_;
 
     my $productpath = $variableshashref->{'PROPERTYTABLEPRODUCTNAME'};
 
@@ -894,6 +894,8 @@ sub put_windows_productpath_into_template
     if (length($locallangs) > $installer::globals::max_lang_length) { $locallangs = "multi lingual"; }
 
     if ( ! $installer::globals::languagepack ) { $productpath = $productpath . " (" . $locallangs . ")"; }
+
+    # if (( $installer::globals::languagepack ) && ( $installer::globals::unicodensis )) { $productpath = convert_textstring_to_utf16($productpath, $localnsisdir, "stringhelper.txt"); }
 
     replace_one_variable($templatefile, "PRODUCTPATHPLACEHOLDER", $productpath);
 }
@@ -1310,6 +1312,26 @@ sub convert_utf8_to_utf16
 
     $savfilename = $filename . "_after.utf16";
     installer::systemactions::copy_one_file($filename, $savfilename);
+}
+
+##################################################################
+# Converting text string to utf 16
+##################################################################
+
+sub convert_textstring_to_utf16
+{
+    my ( $textstring, $localnsisdir, $shortfilename ) = @_;
+
+    my $filename = $localnsisdir . $installer::globals::separator . $shortfilename;
+    my @filecontent = ();
+    push(@filecontent, $textstring);
+    installer::files::save_file($filename, \@filecontent);
+    convert_utf8_to_utf16($filename);
+    my $newfile = installer::files::read_file($filename);
+    my $utf16string = "";
+    if ( ${$newfile}[0] ne "" ) { $utf16string = ${$newfile}[0]; }
+
+    return $utf16string;
 }
 
 ##################################################################
@@ -1770,7 +1792,7 @@ sub create_download_sets
         put_website_into_template($templatefile);
         put_javafilename_into_template($templatefile, $allvariableshashref);
         put_windows_productversion_into_template($templatefile, $allvariableshashref);
-        put_windows_productpath_into_template($templatefile, $allvariableshashref, $languagestringref);
+        put_windows_productpath_into_template($templatefile, $allvariableshashref, $languagestringref, $localnsisdir);
         put_outputfilename_into_template($templatefile, $downloadname);
         put_filelist_into_template($templatefile, $installationdir);
         put_language_list_into_template($templatefile, $languagesarrayref);
