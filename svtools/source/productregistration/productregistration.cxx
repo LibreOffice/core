@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: productregistration.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,11 +38,14 @@
 #include <svtools/svtools.hrc>
 #endif
 #include "cppuhelper/factory.hxx"
+#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
@@ -58,6 +61,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
+using namespace ::com::sun::star::container;
 
 using rtl::OUString;
 
@@ -143,50 +147,41 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OProductRegistration::trigger( const OUString& _rEvent ) throw (RuntimeException)
+    static  Reference< XFrame > lcl_getActiveFrame( const Reference< XMultiServiceFactory >& xFactory )
     {
-        switch ( classify( _rEvent ) )
+        try
         {
-            case etRegistrationRequired:
-                doOnlineRegistration();
-                break;
+            Reference< XDesktop > xDesktop(
+                xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop") ) ),
+                UNO_QUERY_THROW );
 
-            default:
-                OSL_ENSURE( sal_False, "OProductRegistration::trigger: invalid event!" );
-                break;
+            Reference< XFrame > xFrame(xDesktop->getCurrentFrame());
+            if( ! xFrame.is() )
+            {
+                // Perhaps the frames collection of the desktop knows about an "active frame"?
+                Reference< XFramesSupplier > xFrames( xDesktop, UNO_QUERY_THROW );
+                xFrame =  xFrames->getActiveFrame();
+            }
+
+            return xFrame;
+        }
+        catch(const Exception& )
+        {
+            OSL_ENSURE( sal_False, "lcl_getActiveFrame: caught an exception!" );
+            return Reference< XFrame >();
         }
     }
 
     //--------------------------------------------------------------------
-    static Window* lcl_getPreferredDialogParent( Reference< XMultiServiceFactory > _rxORB )
+    static Window* lcl_getPreferredDialogParent( const Reference< XFrame >& xFrame )
     {
         Window* pReturn = Application::GetDefDialogParent();
-            // default
 
         try
         {
-            //................................................................
-            // get the desktop service
-            Reference< XDesktop > xDesktop(
-                _rxORB->createInstance( OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
-
-            Reference< XFrame > xFrameCandidate;
-            if ( xDesktop.is() )
+            if ( xFrame.is() )
             {
-                // the current frame, by definition, is the one which owns the focus currently
-                xFrameCandidate = xDesktop->getCurrentFrame();
-                if ( !xFrameCandidate.is() )
-                {
-                    // hmm. Perhaps the frames collection of the desktop knows about an "active frame"?
-                    Reference< XFramesSupplier > xFrames( xDesktop, UNO_QUERY );
-                    if ( xFrames.is() )
-                        xFrameCandidate = xFrames->getActiveFrame();
-                }
-            }
-
-            if ( xFrameCandidate.is() )
-            {
-                Reference< XWindow > xWindow = xFrameCandidate->getContainerWindow();
+                Reference< XWindow > xWindow = xFrame->getContainerWindow();
                 if ( xWindow.is() )
                     pReturn = VCLUnoHelper::GetWindow( xWindow );
             }
@@ -229,6 +224,75 @@ namespace svt
         }
 
         return bIsEvaluationVersion;
+    }
+
+    //--------------------------------------------------------------------
+    static bool lcl_doNewStyleRegistration( const Reference< XMultiServiceFactory >& xFactory, bool online )
+    {
+        try
+        {
+            Reference< XMultiServiceFactory > xConfigProvider(
+                xFactory->createInstance(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) )
+                ),
+                UNO_QUERY_THROW
+            );
+
+            PropertyValue aNodePath;
+            aNodePath.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+            aNodePath.Value = makeAny( OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Jobs/Events" ) ) );
+
+            Sequence< Any > lArguments(1);
+            lArguments[0] = makeAny( aNodePath );
+
+            Reference< XHierarchicalNameAccess > xNameAccess(
+                xConfigProvider->createInstanceWithArguments(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ) ),
+                    lArguments
+                ),
+                UNO_QUERY_THROW
+            );
+
+            if( ! xNameAccess->hasByHierarchicalName( OUString( RTL_CONSTASCII_USTRINGPARAM( "onRegisterNow/JobList" ) ) ) )
+                return false;
+
+            Reference< XJobExecutor > xJobExecutor(
+                xFactory->createInstance(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.JobExecutor"  ) )
+                ),
+                UNO_QUERY_THROW
+            );
+
+            xJobExecutor->trigger( online ? OUString( RTL_CONSTASCII_USTRINGPARAM( "onRegisterNow" ) ) :
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "onRegisterLater" ) ) );
+
+            return true;
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( false, "lcl_getOnlineRegistrationDispatch: caught an exception!" );
+            return false;
+        }
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL OProductRegistration::trigger( const OUString& _rEvent ) throw (RuntimeException)
+    {
+        bool registerOnline = false;
+
+        switch ( classify( _rEvent ) )
+        {
+            case etRegistrationRequired:
+                registerOnline = true;
+                break;
+
+            default:
+                break;
+        }
+
+        // prefer new style registration
+        if( ! lcl_doNewStyleRegistration(m_xORB, registerOnline ) && registerOnline )
+            doOnlineRegistration();
     }
 
     //--------------------------------------------------------------------
@@ -287,18 +351,20 @@ namespace svt
                     std::auto_ptr<ResMgr> pResMgr (ResMgr::CreateResMgr (
                         CREATEVERSIONRESMGR_NAME(productregistration)));
 
+                    Reference< XFrame > xFrame = lcl_getActiveFrame( m_xORB );
                     // execute it
                     RegistrationDialog aDialog (
-                        lcl_getPreferredDialogParent( m_xORB ),
+                        lcl_getPreferredDialogParent( xFrame ),
                         ResId( DLG_REGISTRATION_REQUEST, *pResMgr.get() ),
                         lcl_isEvalVersion( m_xORB ) );
                     aDialog.Execute();
 
+                    bool registerOnline = false;
+
                     switch ( aDialog.getResponse() )
                     {
                         case RegistrationDialog::urRegisterNow:
-                            // -> do the registration
-                            doOnlineRegistration();
+                            registerOnline = true;
                             break;
 
                         case RegistrationDialog::urRegisterLater:
@@ -316,6 +382,10 @@ namespace svt
                         default:
                             OSL_ENSURE( sal_False, "OProductRegistration::execute: invalid response from the dialog!" );
                     }
+
+                    // prefer new style registration
+                    if( ! lcl_doNewStyleRegistration(m_xORB, registerOnline) && registerOnline )
+                        doOnlineRegistration();
                 }
             }
 
@@ -364,6 +434,10 @@ namespace svt
                 Application::GetDefDialogParent(),
                 ResId( ERRBOX_REG_NOSYSBROWSER, *pResMgr.get() ));
             aRegistrationError.Execute();
+
+            // try again later
+            RegOptions aRegOptions;
+            aRegOptions.activateReminder( 7 );
         }
     }
 
