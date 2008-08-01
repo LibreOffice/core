@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DropTarget.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -205,13 +205,7 @@ sal_Int8 DropTarget::determineDropAction(sal_Int8 dropActions, id sender) const
     {
       if (srcAndDestEqual)
         {
-          if ((dropActions & DNDConstants::ACTION_MOVE) ||
-              (dropActions & DNDConstants::ACTION_DEFAULT))
-            dropAct = DNDConstants::ACTION_MOVE;
-          else if (dropActions & DNDConstants::ACTION_COPY)
-            dropAct = DNDConstants::ACTION_COPY;
-          else if (dropActions & DNDConstants::ACTION_LINK)
-            dropAct = DNDConstants::ACTION_LINK;
+          dropAct = dropActions;
         }
       else // source and destination are different
         {
