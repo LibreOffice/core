@@ -23,6 +23,10 @@ Globals
 			LIBRARYVERSION 9.0.0
             REGISTRATION_HOST https://registration2.services.openoffice.org/RegistrationWeb
 			REGISTRATIONURL http://survey.services.openoffice.org/user/index.php
+			PROGRESSBARCOLOR 4,68,155
+			PROGRESSSIZE 412,7
+			PROGRESSPOSITION 14,230
+			PROGRESSFRAMECOLOR 58,159,232
 		}
 	}
 }
@@ -317,6 +321,10 @@ BrOffice
 			BRANDPACKAGEVERSION 3
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.0.0
+			PROGRESSBARCOLOR 
+			PROGRESSSIZE 
+			PROGRESSPOSITION 
+			PROGRESSFRAMECOLOR 
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
@@ -379,6 +387,10 @@ BrOffice_wJRE
 			BRANDPACKAGEVERSION 3
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.0.0
+			PROGRESSBARCOLOR 
+			PROGRESSSIZE 
+			PROGRESSPOSITION 
+			PROGRESSFRAMECOLOR 
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat
@@ -444,6 +456,10 @@ BrOffice_Dev
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.0.0
 			DEVELOPMENTPRODUCT 1
+			PROGRESSBARCOLOR 
+			PROGRESSSIZE 
+			PROGRESSPOSITION 
+			PROGRESSFRAMECOLOR 
 			BASISPACKAGEPREFIX ooobasis-dev
 			UREPACKAGEPREFIX ooodev
 			SOLSUREPACKAGEPREFIX ooodev
