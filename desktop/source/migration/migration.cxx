@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: migration.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -16,7 +16,7 @@
  * only, as published by the Free Software Foundation.
  *
  * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * but WITHOUT uno::Any WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License version 3 for more details
  * (a copy is included in the LICENSE file that accompanied this code).
@@ -44,6 +44,9 @@
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
+#include <ucbhelper/content.hxx>
+#include <osl/security.hxx>
+#include <unotools/configmgr.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/task/XJob.hpp>
@@ -53,11 +56,11 @@
 #include <com/sun/star/configuration/backend/XSingleLayerStratum.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
+#include <com/sun/star/util/XStringSubstitution.hpp>
 
 using namespace rtl;
 using namespace osl;
 using namespace std;
-using namespace com::sun::star::uno;
 using namespace com::sun::star::task;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -65,7 +68,8 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::container;
 using namespace com::sun::star::configuration;
 using namespace com::sun::star::configuration::backend;
-
+using com::sun::star::uno::Exception;
+using namespace com::sun::star;
 
 namespace desktop {
 
@@ -136,7 +140,7 @@ sal_Bool MigrationImpl::checkMigration()
         return sal_False;
 }
 
-MigrationImpl::MigrationImpl(const Reference< XMultiServiceFactory >& xFactory)
+MigrationImpl::MigrationImpl(const uno::Reference< XMultiServiceFactory >& xFactory)
     : m_vrVersions(new strings_v)
     , m_xFactory(xFactory)
     , m_vrMigrations(readMigrationSteps())
@@ -167,7 +171,6 @@ sal_Bool MigrationImpl::doMigration()
         runServices();
         refresh();
 
-
         result = sal_True;
     } catch (...)
     {
@@ -179,13 +182,13 @@ sal_Bool MigrationImpl::doMigration()
 
     // prevent running the migration multiple times
     setMigrationCompleted();
-    return sal_False;
+    return result;
 }
 
 void MigrationImpl::refresh()
 {
-    Reference< XRefreshable > xRefresh(m_xFactory->createInstance(
-                OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")), UNO_QUERY);
+    uno::Reference< XRefreshable > xRefresh(m_xFactory->createInstance(
+                OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")), uno::UNO_QUERY);
     if (xRefresh.is())
         xRefresh->refresh();
     else
@@ -196,9 +199,9 @@ void MigrationImpl::refresh()
 void MigrationImpl::setMigrationCompleted()
 {
     try {
-        Reference< XPropertySet > aPropertySet(getConfigAccess("org.openoffice.Setup/Office", true), UNO_QUERY_THROW);
-        aPropertySet->setPropertyValue(OUString::createFromAscii("MigrationCompleted"), makeAny(sal_True));
-        Reference< XChangesBatch >(aPropertySet, UNO_QUERY_THROW)->commitChanges();
+        uno::Reference< XPropertySet > aPropertySet(getConfigAccess("org.openoffice.Setup/Office", true), uno::UNO_QUERY_THROW);
+        aPropertySet->setPropertyValue(OUString::createFromAscii("MigrationCompleted"), uno::makeAny(sal_True));
+        uno::Reference< XChangesBatch >(aPropertySet, uno::UNO_QUERY_THROW)->commitChanges();
     } catch (...) {
         // fail silently
     }
@@ -208,8 +211,8 @@ sal_Bool MigrationImpl::checkMigrationCompleted()
 {
     sal_Bool bMigrationCompleted = sal_False;
     try {
-        Reference< XPropertySet > aPropertySet(
-            getConfigAccess("org.openoffice.Setup/Office"), UNO_QUERY_THROW);
+        uno::Reference< XPropertySet > aPropertySet(
+            getConfigAccess("org.openoffice.Setup/Office"), uno::UNO_QUERY_THROW);
         aPropertySet->getPropertyValue(
             OUString::createFromAscii("MigrationCompleted")) >>= bMigrationCompleted;
     } catch (Exception&) {
@@ -223,19 +226,19 @@ migrations_vr MigrationImpl::readMigrationSteps()
 {
 
     // get supported version names
-    Reference< XNameAccess > aMigrationAccess(getConfigAccess("org.openoffice.Setup/Migration"), UNO_QUERY_THROW);
-    Sequence< OUString > seqVersions;
+    uno::Reference< XNameAccess > aMigrationAccess(getConfigAccess("org.openoffice.Setup/Migration"), uno::UNO_QUERY_THROW);
+    uno::Sequence< OUString > seqVersions;
     aMigrationAccess->getByName(OUString::createFromAscii("SupportedVersions")) >>= seqVersions;
     for (sal_Int32 i=0; i<seqVersions.getLength(); i++)
         m_vrVersions->push_back(seqVersions[i].trim());
 
     // get migration description from from org.openoffice.Setup/Migration
     // and build vector of migration steps
-    Reference< XNameAccess > theNameAccess(getConfigAccess("org.openoffice.Setup/Migration/MigrationSteps"), UNO_QUERY_THROW);
-    Sequence< OUString > seqMigrations = theNameAccess->getElementNames();
-    Reference< XNameAccess > tmpAccess;
-    Reference< XNameAccess > tmpAccess2;
-    Sequence< OUString > tmpSeq;
+    uno::Reference< XNameAccess > theNameAccess(getConfigAccess("org.openoffice.Setup/Migration/MigrationSteps"), uno::UNO_QUERY_THROW);
+    uno::Sequence< OUString > seqMigrations = theNameAccess->getElementNames();
+    uno::Reference< XNameAccess > tmpAccess;
+    uno::Reference< XNameAccess > tmpAccess2;
+    uno::Sequence< OUString > tmpSeq;
     migrations_vr vrMigrations(new migrations_v);
     for (sal_Int32 i = 0; i < seqMigrations.getLength(); i++)
     {
@@ -289,57 +292,65 @@ migrations_vr MigrationImpl::readMigrationSteps()
     return vrMigrations;
 }
 
+static FileBase::RC _checkAndCreateDirectory(INetURLObject& dirURL)
+{
+    FileBase::RC result = Directory::create(dirURL.GetMainURL(INetURLObject::DECODE_TO_IURI));
+    if (result == FileBase::E_NOENT)
+    {
+        INetURLObject baseURL(dirURL);
+        baseURL.removeSegment();
+        _checkAndCreateDirectory(baseURL);
+        return Directory::create(dirURL.GetMainURL(INetURLObject::DECODE_TO_IURI));
+    } else
+        return result;
+}
+
 install_info MigrationImpl::findInstallation()
 {
-    OUString usVersion;
+    rtl::OUString aProductName;
+    uno::Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+    aRet >>= aProductName;
+    aProductName = aProductName.toAsciiLowerCase();
+
     install_info aInfo;
-    utl::Bootstrap::PathStatus aStatus;
-    aStatus = utl::Bootstrap::locateVersionFile(usVersion);
-    if (aStatus != utl::Bootstrap::PATH_EXISTS)
+    strings_v::const_iterator i_ver = m_vrVersions->begin();
+    uno::Reference < util::XStringSubstitution > xSubst( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.PathSubstitution")), uno::UNO_QUERY );
+    while (i_ver != m_vrVersions->end())
     {
-        // aStatus = utl::Bootstrap::locateUserInstallation(usVersion);
-        // if (aStatus == utl::Bootstrap::PATH_EXISTS)
-        if (rtl::Bootstrap::get(
-            OUString::createFromAscii("SYSUSERCONFIG"), usVersion))
+        ::rtl::OUString aVersion, aProfileName;
+        sal_Int32 nSeparatorIndex = (*i_ver).indexOf('=');
+        if ( nSeparatorIndex != -1 )
         {
-            aStatus = utl::Bootstrap::PATH_EXISTS;
+            aVersion = (*i_ver).copy( 0, nSeparatorIndex );
+            aProfileName = (*i_ver).copy( nSeparatorIndex+1 );
+        }
+
+        if ( aVersion.getLength() && aProfileName.getLength() &&
+                ( !aInfo.userdata.getLength() || !aProfileName.toAsciiLowerCase().compareTo( aProductName, aProductName.getLength() ) )
+           )
+        {
+            ::rtl::OUString aUserInst;
+            osl::Security().getConfigDir( aUserInst );
+            if ( aUserInst.getLength() && aUserInst[ aUserInst.getLength()-1 ] != '/' )
+                aUserInst += ::rtl::OUString::createFromAscii("/");
 #ifdef UNX
-            usVersion += OUString::createFromAscii("/.sversionrc");
-#else
-            usVersion += OUString::createFromAscii("/sversion.ini");
+            // tribute to whoever had the "great" idea to use different names on Windows and Unix
+            aUserInst += ::rtl::OUString::createFromAscii(".");
 #endif
-        }
-        else
-            return aInfo;
-    }
-
-    Config aVersion(usVersion);
-    aVersion.SetGroup("Versions");
-
-    strings_v vInst;
-    ByteString sInst;
-    for (USHORT i=0; i<aVersion.GetKeyCount(); i++) {
-        sInst =aVersion.GetKeyName(i);
-        vInst.push_back(OUString(static_cast< OString >(sInst), sInst.Len(), RTL_TEXTENCODING_UTF8));
-    }
-
-    ByteString sInstall;
-    strings_v::const_iterator i_ins = vInst.begin();
-    while (i_ins != vInst.end()) {
-        strings_v::const_iterator i_ver = m_vrVersions->begin();
-        while (i_ver != m_vrVersions->end())
-        {
-            // this will use the last valid version from the sversion file
-            // aInfo will be overwritten for each matching version identifier
-            if ( i_ins->indexOf(*i_ver) == 0) {
-                sInstall = aVersion.ReadKey(OUStringToOString(*i_ins, RTL_TEXTENCODING_UTF8));
-                aInfo.productname = *i_ins;
-                aInfo.userdata = OUString(static_cast< OString >(sInstall), sInstall.Len(), RTL_TEXTENCODING_UTF8);
+            aUserInst += aProfileName;
+            try
+            {
+                INetURLObject aObj(aUserInst);
+                ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
+                aCnt.isDocument();
+                aInfo.userdata = aObj.GetMainURL( INetURLObject::NO_DECODE );
+                aInfo.productname = aVersion;
             }
-            i_ver++;
+            catch( uno::Exception& ){}
         }
-        i_ins++;
+        i_ver++;
     }
+
     return aInfo;
 }
 
@@ -442,52 +453,52 @@ void MigrationImpl::copyConfig()
 {
     try {
         // 1. get a list of all components from hierachy browser
-        Reference< XJob > xBrowser(m_xFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.configuration.backend.LocalHierarchyBrowser")), UNO_QUERY_THROW);
+        uno::Reference< XJob > xBrowser(m_xFactory->createInstance(
+            OUString::createFromAscii("com.sun.star.configuration.backend.LocalHierarchyBrowser")), uno::UNO_QUERY_THROW);
 
-        Sequence< NamedValue > seqArgs(2);
+        uno::Sequence< NamedValue > seqArgs(2);
         seqArgs[0] = NamedValue(
             OUString::createFromAscii("LayerDataUrl"),
-            makeAny(m_aInfo.userdata + OUString::createFromAscii("/user/registry")));
+            uno::makeAny(m_aInfo.userdata + OUString::createFromAscii("/user/registry")));
         seqArgs[1] = NamedValue(
             OUString::createFromAscii("FetchComponentNames"),
-            makeAny(sal_True));
+            uno::makeAny(sal_True));
 
         // execute the search
-        Any aResult = xBrowser->execute(seqArgs);
-        Sequence< OUString > seqComponents;
+        uno::Any aResult = xBrowser->execute(seqArgs);
+        uno::Sequence< OUString > seqComponents;
         aResult >>= seqComponents;
         OSL_ENSURE(seqComponents.getLength()>0, "MigrationImpl::copyConfig(): no config components available");
 
         // 2. create an importer
-        Reference< XJob > xImporter(m_xFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.configuration.backend.LocalDataImporter")), UNO_QUERY_THROW);
+        uno::Reference< XJob > xImporter(m_xFactory->createInstance(
+            OUString::createFromAscii("com.sun.star.configuration.backend.LocalDataImporter")), uno::UNO_QUERY_THROW);
 
         // 3. for each migration step...
-        Sequence< NamedValue > importerArgs(3);
+        uno::Sequence< NamedValue > importerArgs(3);
         importerArgs[0] = NamedValue(
             OUString::createFromAscii("LayerDataUrl"),
-            makeAny(m_aInfo.userdata + OUString::createFromAscii("/user/registry")));
+            uno::makeAny(m_aInfo.userdata + OUString::createFromAscii("/user/registry")));
         importerArgs[1] = NamedValue(
             OUString::createFromAscii("LayerFilter"),
-            Any());
+            uno::Any());
         importerArgs[2] = NamedValue(
             OUString::createFromAscii("Component"),
-            Any());
+            uno::Any());
 
         migrations_v::const_iterator i_mig = m_vrMigrations->begin();
         while (i_mig != m_vrMigrations->end())
         {
             //   a. create config filter for step
-            Reference< XInitialization > xFilter(
+            uno::Reference< XInitialization > xFilter(
                 new CConfigFilter(&(i_mig->includeConfig), &(i_mig->excludeConfig)));
-            importerArgs[1].Value = makeAny(xFilter);
+            importerArgs[1].Value = uno::makeAny(xFilter);
 
             //   b. run each importer with config filter
             for (sal_Int32 i=0; i<seqComponents.getLength(); i++)
             {
                 OUString component = seqComponents[i];
-                importerArgs[2].Value = makeAny(seqComponents[i]);
+                importerArgs[2].Value = uno::makeAny(seqComponents[i]);
                 try {
                     aResult = xImporter->execute(importerArgs);
                     Exception myException;
@@ -547,9 +558,9 @@ void MigrationImpl::substract(strings_v& va, const strings_v& vb_c) const
     }
 }
 
-Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPath, sal_Bool bUpdate)
+uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPath, sal_Bool bUpdate)
 {
-   Reference< XNameAccess > xNameAccess;
+    uno::Reference< XNameAccess > xNameAccess;
     try{
         OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
         OUString sAccessSrvc;
@@ -561,35 +572,22 @@ Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPath, s
         OUString sConfigURL = OUString::createFromAscii(pPath);
 
         // get configuration provider
-        Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
-        Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory > (
-                theMSF->createInstance( sConfigSrvc ),UNO_QUERY_THROW );
+        uno::Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
+        uno::Reference< XMultiServiceFactory > theConfigProvider = uno::Reference< XMultiServiceFactory > (
+                theMSF->createInstance( sConfigSrvc ),uno::UNO_QUERY_THROW );
 
         // access the provider
-        Sequence< Any > theArgs(1);
+        uno::Sequence< uno::Any > theArgs(1);
         theArgs[ 0 ] <<= sConfigURL;
-        xNameAccess = Reference< XNameAccess > (
+        xNameAccess = uno::Reference< XNameAccess > (
                 theConfigProvider->createInstanceWithArguments(
-                sAccessSrvc, theArgs ), UNO_QUERY_THROW );
+                sAccessSrvc, theArgs ), uno::UNO_QUERY_THROW );
     } catch (com::sun::star::uno::Exception& e)
     {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
         OSL_ENSURE(sal_False, aMsg.getStr());
     }
     return xNameAccess;
-}
-
-static FileBase::RC _checkAndCreateDirectory(INetURLObject& dirURL)
-{
-    FileBase::RC result = Directory::create(dirURL.GetMainURL(INetURLObject::DECODE_TO_IURI));
-    if (result == FileBase::E_NOENT)
-    {
-        INetURLObject baseURL(dirURL);
-        baseURL.removeSegment();
-        _checkAndCreateDirectory(baseURL);
-        return Directory::create(dirURL.GetMainURL(INetURLObject::DECODE_TO_IURI));
-    } else
-        return result;
 }
 
 void MigrationImpl::copyFiles()
@@ -636,24 +634,24 @@ void MigrationImpl::runServices()
     OUString aOldLayerURL = m_aInfo.userdata;
     aOldLayerURL += OUString::createFromAscii("/user/registry");
     OUString aStratumSvc = OUString::createFromAscii("com.sun.star.configuration.backend.LocalSingleStratum");
-    Sequence< Any > stratumArgs(1);
-    stratumArgs[0] = makeAny(aOldLayerURL);
-    Reference< XSingleLayerStratum> xStartum( m_xFactory->createInstanceWithArguments(
-        aStratumSvc, stratumArgs), UNO_QUERY);
+    uno::Sequence< uno::Any > stratumArgs(1);
+    stratumArgs[0] = uno::makeAny(aOldLayerURL);
+    uno::Reference< XSingleLayerStratum> xStartum( m_xFactory->createInstanceWithArguments(
+        aStratumSvc, stratumArgs), uno::UNO_QUERY);
 
     // Build argument array
-    Sequence< Any > seqArguments(3);
-    seqArguments[0] = makeAny(NamedValue(
+    uno::Sequence< uno::Any > seqArguments(3);
+    seqArguments[0] = uno::makeAny(NamedValue(
         OUString::createFromAscii("Productname"),
-        makeAny(m_aInfo.productname)));
-    seqArguments[1] = makeAny(NamedValue(
+        uno::makeAny(m_aInfo.productname)));
+    seqArguments[1] = uno::makeAny(NamedValue(
         OUString::createFromAscii("UserData"),
-        makeAny(m_aInfo.userdata)));
+        uno::makeAny(m_aInfo.userdata)));
 
 
     // create an instance of every migration service
     // and execute the migration job
-    Reference< XJob > xMigrationJob;
+    uno::Reference< XJob > xMigrationJob;
 
     migrations_v::const_iterator i_mig  = m_vrMigrations->begin();
     while (i_mig != m_vrMigrations->end())
@@ -665,28 +663,28 @@ void MigrationImpl::runServices()
             {
                 // create access to old configuration components in the user layer
                 // that were requested by the migration service
-                Sequence< NamedValue > seqComponents(i_mig->configComponents.size());
+                uno::Sequence< NamedValue > seqComponents(i_mig->configComponents.size());
                 strings_v::const_iterator i_comp = i_mig->configComponents.begin();
                 sal_Int32 i = 0;
                 while (i_comp != i_mig->configComponents.end() && xStartum.is())
                 {
                     // create Layer for i_comp
                     seqComponents[i] =  NamedValue(
-                        *i_comp, makeAny(xStartum->getLayer(*i_comp, OUString())));
+                        *i_comp, uno::makeAny(xStartum->getLayer(*i_comp, OUString())));
 
                     // next component
                     i_comp++;
                     i++;
                 }
                 // set old config argument
-                seqArguments[2] = makeAny(NamedValue(
+                seqArguments[2] = uno::makeAny(NamedValue(
                     OUString::createFromAscii("OldConfiguration"),
-                    makeAny(seqComponents)));
+                    uno::makeAny(seqComponents)));
 
-                xMigrationJob = Reference< XJob >(m_xFactory->createInstanceWithArguments(
-                    i_mig->service, seqArguments), UNO_QUERY_THROW);
+                xMigrationJob = uno::Reference< XJob >(m_xFactory->createInstanceWithArguments(
+                    i_mig->service, seqArguments), uno::UNO_QUERY_THROW);
 
-                xMigrationJob->execute(Sequence< NamedValue >());
+                xMigrationJob->execute(uno::Sequence< NamedValue >());
 
 
             } catch (Exception& e)
