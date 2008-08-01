@@ -8,7 +8,7 @@
 #
 # $RCSfile: property.pm,v $
 #
-# $Revision: 1.30 $
+# $Revision: 1.31 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -124,6 +124,28 @@ sub get_language_string
     return $langstring;
 }
 
+sub get_english_language_string
+{
+    my $langstring = "";
+
+    # Sorting value not keys, therefore collecting all values
+    my %helper = ();
+    foreach my $lang ( keys %installer::globals::all_required_english_languagestrings )
+    {
+        $helper{$installer::globals::all_required_english_languagestrings{$lang}} = 1;
+    }
+
+    foreach my $lang ( sort keys %helper )
+    {
+        $langstring = $langstring . $lang . ", ";
+    }
+
+    $langstring =~ s/\,\s*$//;
+    $langstring = "(" . $langstring . ")";
+
+    return $langstring;
+}
+
 sub get_productname_for_property_table
 {
     my ( $allvariables ) = @_;
@@ -148,7 +170,8 @@ sub get_productname_for_property_table
 
     if ( $installer::globals::languagepack )
     {
-        my $langstring = get_language_string(); # Example (English, Deutsch)
+        # my $langstring = get_language_string();   # Example (English, Deutsch)
+        my $langstring = get_english_language_string(); # New: (English, German)
         $productname = $name . " " . $version . " Language Pack" . " " . $langstring;
     }
 
