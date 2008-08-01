@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SysShentry.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,7 +85,7 @@ extern "C"
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ":affine";
 }
 
 //-----------------------------------------------------------------------
