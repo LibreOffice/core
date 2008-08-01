@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: namecont.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -962,8 +962,8 @@ sal_Bool SfxLibraryContainer::init_Impl(
         INetURLObject aUserBasicInetObj( String(maLibraryPath).GetToken(1) );
         OUString aStandardStr( RTL_CONSTASCII_USTRINGPARAM("Standard") );
 
-        static char strPrevFolderName_1[] = "__basic_70";
-        static char strPrevFolderName_2[] = "__basic_70_2";
+        static char strPrevFolderName_1[] = "__basic_80";
+        static char strPrevFolderName_2[] = "__basic_80_2";
         INetURLObject aPrevUserBasicInetObj_1( aUserBasicInetObj );
         aPrevUserBasicInetObj_1.removeSegment();
         INetURLObject aPrevUserBasicInetObj_2 = aPrevUserBasicInetObj_1;
@@ -1076,18 +1076,9 @@ sal_Bool SfxLibraryContainer::init_Impl(
                 mxSFI->move( aFolderUserBasic, aPrevFolder );
                 mxSFI->move( aFolderTmp, aFolderUserBasic );
 
-                // Detect old share/basic folder to destinguish
-                // between own links and links to wizards
-                INetURLObject aPrevOrgShareFolderInetObj;
-                if( pPrevCont->hasByName( aStandardStr ) )
-                {
-                    SfxLibrary* pImplLib = pPrevCont->getImplLib( aStandardStr );
-                    aPrevOrgShareFolderInetObj = INetURLObject( pImplLib->maStorageURL );
-                    for( int i = 0 ; i < 3 ; ++ i )
-                        aPrevOrgShareFolderInetObj.removeSegment();
-                    aPrevOrgShareFolderInetObj.Append( "share" );
-                    aPrevOrgShareFolderInetObj.Append( "basic" );
-                }
+                OUString aUserSearchStr   = OUString::createFromAscii( "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE" );
+                OUString aSharedSearchStr = OUString::createFromAscii( "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE" );
+                OUString aInstSearchStr   = OUString::createFromAscii( "$(INST)" );
 
                 Sequence< OUString > aNames = pPrevCont->getElementNames();
                 const OUString* pNames = aNames.getConstArray();
@@ -1114,12 +1105,15 @@ sal_Bool SfxLibraryContainer::init_Impl(
                     SfxLibrary* pImplLib = pPrevCont->getImplLib( aLibName );
                     if( pImplLib->mbLink )
                     {
-                        INetURLObject aPrevLinkInetObj( pImplLib->maStorageURL );
-                        for( int j = 0 ; j < 3 ; ++ j )
-                            aPrevLinkInetObj.removeSegment();
-                        aPrevLinkInetObj.Append( "share" );
-                        aPrevLinkInetObj.Append( "basic" );
-                        if( aPrevLinkInetObj != aPrevOrgShareFolderInetObj )
+                        OUString aStorageURL = pImplLib->maUnexpandedStorageURL;
+                        bool bCreateLink = true;
+                        if( aStorageURL.indexOf( aUserSearchStr   ) != -1 ||
+                            aStorageURL.indexOf( aSharedSearchStr ) != -1 ||
+                            aStorageURL.indexOf( aInstSearchStr   ) != -1 )
+                        {
+                            bCreateLink = false;
+                        }
+                        if( bCreateLink )
                             createLibraryLink( aLibName, pImplLib->maStorageURL, pImplLib->mbReadOnly );
                     }
                     else
