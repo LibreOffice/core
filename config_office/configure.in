@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-08-01 12:12:29 $
+dnl * Date: $Date: 2008-08-01 14:39:54 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.283 $ )
+AC_REVISION( $Revision: 1.284 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -329,9 +329,6 @@ AC_ARG_WITH(system-jpeg,
 ],,)
 AC_ARG_WITH(system-expat,
 [  --with-system-expat     Use expat already on system
-],,)
-AC_ARG_WITH(system-freetype,
-[  --with-system-freetype  Use freetype already on system
 ],,)
 AC_ARG_WITH(system-libwpd,
 [  --with-system-libwpd    Use libwpd already on system
@@ -887,6 +884,7 @@ case "$build_os" in
 		test_kde=yes
 		test_cups=yes
         test_randr=yes
+		test_freetype=yes
 		_os=SunOS
 
 		dnl ===========================================================
@@ -914,6 +912,7 @@ case "$build_os" in
 		test_kde=yes
 		test_cups=yes
         test_randr=yes
+		test_freetype=yes
 		if getconf GNU_LIBPTHREAD_VERSION |grep -q NPTL; then
 			PTHREAD_CFLAGS="-DNPTL"
 		fi
@@ -926,6 +925,7 @@ case "$build_os" in
 	cygwin*) # Windows
 		test_cups=no
 		build_cairo=yes
+		test_freetype=no
 		_os=WINNT
 		;;
 	darwin*) # Mac OS X
@@ -933,6 +933,7 @@ case "$build_os" in
 		test_gtk=yes
 		build_cairo=yes
         test_randr=no
+		test_freetype=no
 		_os=Darwin
       if test "$enable_systray" = "yes" && test "$enable_gtk" != "no"; then
          AC_MSG_WARN([Disabling gtk-quickstarter - not supported on Mac. Use --disable-systray])
@@ -945,6 +946,7 @@ case "$build_os" in
 		test_cups=no
         test_randr=no
 		test_gtk=no
+		test_freetype=no
 		_os=OS2
 		;;
 	freebsd*)
@@ -953,6 +955,7 @@ case "$build_os" in
 		test_kde=yes
 		test_cups=yes
         test_randr=yes
+		test_freetype=yes
 		AC_MSG_CHECKING([the FreeBSD operating system release])
 		if test -n "$with_os_version"; then
 			OSVERSION="$with_os_version"
@@ -985,6 +988,7 @@ case "$build_os" in
 		test_kde=yes
 		test_cups=no
         test_randr=yes
+		test_freetype=yes
 		PTHREAD_CFLAGS="-pthread"
 		PTHREAD_LIBS="-pthread -lpthread"
 		_os=NetBSD
@@ -992,11 +996,13 @@ case "$build_os" in
 	irix*)
 		test_cups=no
         test_randr=no
+		test_freetype=yes
 		_os=IRIX
 		;;
 	aix*)
 		test_cups=no
         test_randr=no
+		test_freetype=yes
 	   PTHREAD_LIBS=-pthread
 		echo "AIX is an alpha port --- Use at own risk" >> warn
 		_os=AIX
@@ -3447,24 +3453,6 @@ fi
 AC_SUBST(SYSTEM_EXPAT)
 
 dnl ===================================================================
-dnl Check for system freetype
-dnl ===================================================================
-AC_MSG_CHECKING([which freetype to use])
-if test -n "$with_system_freetype" -o -n "$with_system_libs" && \
-	test "$with_system_freetype" != "no"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_FREETYPE=YES
-    PKG_CHECK_MODULES( FREETYPE, freetype2 >= 2.0 )
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_FREETYPE=NO
-    BUILD_TYPE="$BUILD_TYPE FREETYPE"
-fi
-AC_SUBST(SYSTEM_FREETYPE)
-AC_SUBST(FREETYPE_CFLAGS)
-AC_SUBST(FREETYPE_LIBS)
-
-dnl ===================================================================
 dnl Check for system libwpd
 dnl ===================================================================
 AC_MSG_CHECKING([which libwpd to use])
@@ -3483,9 +3471,19 @@ AC_SUBST(LIBWPD_CFLAGS)
 AC_SUBST(LIBWPD_LIBS)
 
 dnl ===================================================================
+dnl Check whether freetype is available
+dnl ===================================================================
+if test  "$test_freetype" = "yes"; then
+   AC_MSG_CHECKING([whether freetype is available])
+	PKG_CHECK_MODULES( FREETYPE, freetype2 >= 2.0 )
+fi
+AC_SUBST(FREETYPE_CFLAGS)
+AC_SUBST(FREETYPE_LIBS)
+
+dnl ===================================================================
 dnl Check whether freetype2 supports emboldening
 dnl ===================================================================
-if test "$SYSTEM_FREETYPE" = "YES" ; then
+if test  "$test_freetype" = "yes"; then
     save_CPPFLAGS="$CPPFLAGS"
     save_LDFLAGS="$LDFLAGS"
     save_LIBS="$LIBS"
@@ -3496,10 +3494,6 @@ if test "$SYSTEM_FREETYPE" = "YES" ; then
     LDFLAGS="$save_LDFLAGS"
     CPPFLAGS="$save_CPPFLAGS"
     LIBS="$save_LIBS"
-else
-    # It was added in freetype-2.1.10
-    USE_FT_EMBOLDEN="NO"
-    AC_MSG_WARN([Internal freetype2 does not support emboldening.])
 fi
 AC_SUBST(USE_FT_EMBOLDEN)
 
