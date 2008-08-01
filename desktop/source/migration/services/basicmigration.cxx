@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basicmigration.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +46,7 @@ namespace migration
 
 
     static ::rtl::OUString sSourceUserBasic = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/basic" ) );
-    static ::rtl::OUString sTargetUserBasic = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/__basic_70" ) );
+    static ::rtl::OUString sTargetUserBasic = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/__basic_80" ) );
 
 
     // =============================================================================
