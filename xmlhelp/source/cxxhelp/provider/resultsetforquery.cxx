@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: resultsetforquery.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -141,22 +141,25 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
             {
                 if( xInvocation.is() )
                 {
-                    int nParamCount = bCaptionsOnly ? 5 : 4;
+                    int nParamCount = bCaptionsOnly ? 7 : 6;
                     Sequence<uno::Any> aParamsSeq( nParamCount );
 
-                    aParamsSeq[0] = uno::makeAny( rtl::OUString::createFromAscii( "-index" ) );
+                    aParamsSeq[0] = uno::makeAny( rtl::OUString::createFromAscii( "-lang" ) );
+                    aParamsSeq[1] = uno::makeAny( m_aURLParameter.get_language() );
+
+                    aParamsSeq[2] = uno::makeAny( rtl::OUString::createFromAscii( "-index" ) );
                     rtl::OUString aSystemPath;
                     osl::FileBase::getSystemPathFromFileURL( idxDir, aSystemPath );
-                    aParamsSeq[1] = uno::makeAny( aSystemPath );
+                    aParamsSeq[3] = uno::makeAny( aSystemPath );
 
-                    aParamsSeq[2] = uno::makeAny( rtl::OUString::createFromAscii( "-query" ) );
+                    aParamsSeq[4] = uno::makeAny( rtl::OUString::createFromAscii( "-query" ) );
 
                     const std::vector< rtl::OUString >& aListItem = queryList[i];
                     ::rtl::OUString aNewQueryStr = aListItem[0];
-                    aParamsSeq[3] = uno::makeAny( aNewQueryStr );
+                    aParamsSeq[5] = uno::makeAny( aNewQueryStr );
 
                     if( bCaptionsOnly )
-                        aParamsSeq[4] = uno::makeAny( rtl::OUString::createFromAscii( "-caption" ) );
+                        aParamsSeq[6] = uno::makeAny( rtl::OUString::createFromAscii( "-caption" ) );
 
                     Sequence< sal_Int16 > aOutParamIndex;
                     Sequence< uno::Any > aOutParam;
