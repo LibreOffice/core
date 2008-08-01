@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SysShExec.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,7 @@
 #endif
 #include <windows.h>
 #include <shellapi.h>
+#include <objbase.h>
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
@@ -269,6 +270,15 @@ namespace // private
 CSysShExec::CSysShExec( ) :
     WeakComponentImplHelper2< XSystemShellExecute, XServiceInfo >( m_aMutex )
 {
+    /*
+     * As this service is declared thread-affine, it is ensured to be called from a
+     * dedicated thread, so initialize COM here.
+     *
+     * We need COM to be initialized for STA, but osl thread get initialized for MTA.
+     * Once this changed, we can remove the uninitialize call.
+     */
+    CoUninitialize();
+    CoInitialize( NULL );
 }
 
 //-------------------------------------------------
