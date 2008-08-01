@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtl_Bootstrap.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -769,13 +769,20 @@ namespace rtl_Bootstrap
         }
 
         void testOverride() {
-            rtl::OUString t(
+            rtl::OUString t1(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "${.override:$ORIGIN/" SAL_CONFIGFILE("rtl") ":ORIGIN}"));
-            Bootstrap(t_getSourcePath("rtl")).expandMacrosFrom(t);
+            Bootstrap(t_getSourcePath("rtl")).expandMacrosFrom(t1);
             CPPUNIT_ASSERT_MESSAGE(
-                "override",
-                t.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("direct")));
+                "override ORIGIN",
+                t1.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("direct")));
+            rtl::OUString t2(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "${.override:$ORIGIN/" SAL_CONFIGFILE("none") ":MYVAR}"));
+            Bootstrap::expandMacros(t2);
+            CPPUNIT_ASSERT_MESSAGE(
+                "override MYVAR",
+                t2.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("src680_test")));
         }
 
         void testSection() {
