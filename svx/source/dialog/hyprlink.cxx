@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hyprlink.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -127,10 +127,6 @@ SvxHyperlinkDlg::SvxHyperlinkDlg( SfxBindings *_pBindings, Window* pParent) :
     nMaxWidth = GetSizePixel().Width();
     nMaxHeight = GetSizePixel().Height();
 
-    SetSizePixel(CalcWindowSizePixel());    // Groesse initialisieren
-
-    nMaxHeight = GetSizePixel().Height();   // Hoehe nochmal merken, da sie veraendert wurde
-                                            // SetSizePixel ruft Resize-Handler!
 
     InsertSeparator( 0 );
     InsertWindow( CB_URL, &aUrlCB, 0, 0 );
@@ -151,6 +147,11 @@ SvxHyperlinkDlg::SvxHyperlinkDlg( SfxBindings *_pBindings, Window* pParent) :
         sItemText = aNameCB.GetQuickHelpText();
     if ( sItemText.Len() > 0 )
         SetItemText( CB_NAME, sItemText );
+
+    SetSizePixel(CalcWindowSizePixel());    // Groesse initialisieren
+
+    nMaxHeight = GetSizePixel().Height();   // Hoehe nochmal merken, da sie veraendert wurde
+                                            // SetSizePixel ruft Resize-Handler!
 
     Show();
     Resize();
