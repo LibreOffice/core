@@ -1,8 +1,3 @@
---- lucene-2.3.2/build.xml	2008-05-01 22:28:56.000000000 +0200
-+++ misc/build/lucene-2.3.2/build.xml	2008-06-16 16:01:23.734375000 +0200
-@@ -20 +20 @@
--<project name="core" default="default" basedir=".">
-+<project name="core_" default="default" basedir=".">
 --- lucene-2.3.2/common-build.xml	2008-05-01 22:28:56.000000000 +0200
 +++ misc/build/lucene-2.3.2/common-build.xml	2008-06-16 16:01:28.812500000 +0200
 @@ -280 +280 @@
