@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shellexec.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -208,6 +208,11 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 
         OString aTmp = OUStringToOString(aProgram, osl_getThreadTextEncoding());
         escapeForShell(aBuffer, aTmp);
+
+#ifdef SOLARIS
+        if ( m_aDesktopEnvironment.getLength() == 0 )
+             m_aDesktopEnvironment = OString("GNOME");
+#endif
 
         // Respect the desktop environment - if there is an executable named
         // <desktop-environement-is>-open-url, pass the url to this one instead
