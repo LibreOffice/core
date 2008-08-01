@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bootstrap.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -994,13 +994,10 @@ rtl::OUString expandMacros(
                     rtl::Bootstrap b(seg[1]);
                     Bootstrap_Impl * f = static_cast< Bootstrap_Impl * >(
                         b.getHandle());
-                    // Silently ignore bootstrap files that cannot be opened:
-                    if (f != NULL) {
-                        buf.append(
-                            lookup(
-                                f == NULL ? get_static_bootstrap_handle() : f,
-                                f != NULL, seg[2], requestStack));
-                    }
+                    buf.append(
+                        lookup(
+                            f == NULL ? get_static_bootstrap_handle() : f,
+                            f != NULL, seg[2], requestStack));
                 } else {
                     // Going through osl::Profile, this code erroneously does
                     // not recursively expand macros in the resulting
