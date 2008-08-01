@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataFlavorMapping.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -655,21 +655,22 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const com::sun::star::uno:
   sal_uInt32 nFlavors = flavors.getLength();
   NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity: 1];
 
-  if( nFlavors == 0 ) // #i89462# work around insane impress implementation
+  for (sal_uInt32 i = 0; i < nFlavors; i++)
+  {
+      NSString* str = openOfficeToSystemFlavor(flavors[i]);
+
+      if (str != NULL)
+      {
+          [array addObject: str];
+      }
+  }
+
+   // #i89462# #i90747#
+   // in case no system flavor was found to report
+   // report at least one so D&D between OOo targets works
+  if( [array count] == 0 )
   {
       [array addObject: PBTYPE_DUMMY_INTERNAL];
-  }
-  else
-  {
-      for (sal_uInt32 i = 0; i < nFlavors; i++)
-      {
-          NSString* str = openOfficeToSystemFlavor(flavors[i]);
-
-          if (str != NULL)
-          {
-              [array addObject: str];
-          }
-      }
   }
 
   return [array autorelease];
