@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cexports.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +32,9 @@
 #include "precompiled_desktop.hxx"
 
 #include "cppuhelper/implementationentry.hxx"
-#include "jvmfwk.hxx"
 #include "basicmigration.hxx"
-#include "autocorrmigration.hxx"
-
+#include "wordbookmigration.hxx"
+#include "extensionmigration.hxx"
 
 extern "C"
 {
@@ -43,18 +42,18 @@ extern "C"
 ::cppu::ImplementationEntry entries [] =
 {
     {
-        migration::jvmfwk_create, migration::jvmfwk_getImplementationName,
-        migration::jvmfwk_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
-        0, 0
-    },
-    {
         migration::BasicMigration_create, migration::BasicMigration_getImplementationName,
         migration::BasicMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
         0, 0
     },
     {
-        migration::AutocorrectionMigration_create, migration::AutocorrectionMigration_getImplementationName,
-        migration::AutocorrectionMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
+        migration::WordbookMigration_create, migration::WordbookMigration_getImplementationName,
+        migration::WordbookMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
+        0, 0
+    },
+    {
+        migration::ExtensionMigration_create, migration::ExtensionMigration_getImplementationName,
+        migration::ExtensionMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
         0, 0
     },
     { 0, 0, 0, 0, 0, 0 }
