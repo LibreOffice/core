@@ -8,7 +8,7 @@
  *
  * $RCSfile: vclxdialog.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,7 +109,7 @@ void SAL_CALL VCLXDialog::dispose() throw(::com::sun::star::uno::RuntimeExceptio
         ::vos::OGuard aGuard( GetMutex() );
 
         ::com::sun::star::lang::EventObject aDisposeEvent;
-        aDisposeEvent.Source = *this;
+        aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);
 //            maTabListeners.disposeAndClear( aDisposeEvent );
     }
 

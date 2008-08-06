@@ -8,7 +8,7 @@
  *
  * $RCSfile: vclxtabcontrol.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,7 +100,7 @@ void SAL_CALL VCLXTabControl::dispose( ) throw(RuntimeException)
         ::vos::OGuard aGuard( GetMutex() );
 
         EventObject aDisposeEvent;
-        aDisposeEvent.Source = *this;
+        aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);
 //            maTabListeners.disposeAndClear( aDisposeEvent );
     }
 

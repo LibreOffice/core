@@ -8,7 +8,7 @@
  *
  * $RCSfile: forward.hxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,5 +66,12 @@
         } \
         return aReturn; \
     }
+
+#if defined (_MSC_VER) && (_MSC_VER <= 1310)
+// Windows .Net2003 build fix
+#define W3K_EXPLICIT_CAST(x) static_cast <XWindow2*> (&x)
+#else // !(defined (_MSC_VER) && (_MSC_VER <= 1310))
+#define W3K_EXPLICIT_CAST(x) x
+#endif // !(defined (_MSC_VER) && (_MSC_VER <= 1310))
 
 #endif /* AWT_FORWARD_HXX */
