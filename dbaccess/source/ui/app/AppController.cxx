@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppController.cxx,v $
- * $Revision: 1.63 $
+ * $Revision: 1.64 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2076,11 +2076,14 @@ void OApplicationController::newElement( ElementType _eType, sal_Bool _bSQLView 
         case E_REPORT:
             {
                 ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
-                Reference< XComponent > xComponent,xDefinition;
-                sal_Int32 nCommandType = -1;
-                const ::rtl::OUString sName(getCurrentlySelectedName(nCommandType));
-                xComponent = aHelper->newDocument(_eType == E_FORM ? ID_FORM_NEW_TEXT : ID_REPORT_NEW_TEXT,xDefinition,nCommandType,sName);
-                addDocumentListener(xComponent,xDefinition);
+                if ( aHelper->isConnected() )
+                {
+                    Reference< XComponent > xComponent,xDefinition;
+                    sal_Int32 nCommandType = -1;
+                    const ::rtl::OUString sName(getCurrentlySelectedName(nCommandType));
+                    xComponent = aHelper->newDocument(_eType == E_FORM ? ID_FORM_NEW_TEXT : ID_REPORT_NEW_TEXT,xDefinition,nCommandType,sName);
+                    addDocumentListener(xComponent,xDefinition);
+                }
             }
             break;
         case E_QUERY:
