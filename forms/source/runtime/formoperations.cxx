@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formoperations.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +54,7 @@
 #include <com/sun/star/form/XReset.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/util/XRefreshable.hpp>
 /** === end UNO includes === **/
 
 #include <connectivity/dbtools.hxx>
@@ -63,6 +64,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/container.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -120,6 +122,7 @@ namespace frm
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::ui::dialogs::XExecutableDialog;
     using ::com::sun::star::beans::NamedValue;
+    using ::com::sun::star::util::XRefreshable;
     /** === end UNO using === **/
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
     namespace RowChangeAction = ::com::sun::star::sdb::RowChangeAction;
@@ -532,6 +535,18 @@ namespace frm
                 {
                     WaitObject aWO( NULL );
                     m_xLoadableForm->reload();
+
+                    // refresh all controls in the form (and sub forms) which can be refreshed
+                    // #i90914# / 2008-07-02 / frank.schoenheit@sun.com
+                    ::comphelper::IndexAccessIterator aIter( m_xLoadableForm );
+                    Reference< XInterface > xElement( aIter.Next() );
+                    while ( xElement.is() )
+                    {
+                        Reference< XRefreshable > xRefresh( xElement, UNO_QUERY );
+                        if ( xRefresh.is() )
+                            xRefresh->refresh();
+                        xElement = aIter.Next();
+                    }
                 }
                 break;
 
