@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormComponent.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1046,8 +1046,18 @@ protected:
     const ::com::sun::star::uno::Type&
                 getExternalValueType() const { return m_aExternalValueType; }
 
+    /** initializes the control from m_xField
+
+        Basically, this method calls transferDbValueToControl - but only if our cursor is positioned
+        on a valid row. Otherwise, the control is reset.
+
+        @precond
+            m_xField is not <NULL/>
+    */
+    void        initFromField( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxForm );
+
 private:
-    sal_Bool    connectToField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxForm);
+    sal_Bool    connectToField( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxForm );
     void        resetField();
 
     /** does a new validation of the control value
