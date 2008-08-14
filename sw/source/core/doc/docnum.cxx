@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docnum.cxx,v $
- * $Revision: 1.77 $
+ * $Revision: 1.78 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2929,10 +2929,15 @@ namespace listfunc
     }
     const String CreateUniqueListId( const SwDoc& rDoc )
     {
+        // --> OD 2008-08-06 #i92478#
+        String aNewListId = String::CreateFromAscii( "list" );
+        // <--
         sal_Int64 n = Time().GetTime();
         n += Date().GetDate();
         n += rand();
-        String aNewListId = String::CreateFromInt64( n );
+        // --> OD 2008-08-06 #i92478#
+        aNewListId += String::CreateFromInt64( n );
+        // <--
 
         return MakeListIdUnique( rDoc, aNewListId );
     }
