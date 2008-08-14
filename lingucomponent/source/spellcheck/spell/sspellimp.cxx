@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sspellimp.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -189,9 +189,14 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                 aSuppLocales[k++] = aTmp;
             }
 
-            //! now have one dictionary entry for each locale
-            //! (this is necessary in order to allow for several locales for one dictionary)
-            numdict = aSuppLocales.getLength();
+            //! For each dictionary and each locale we need a seperate entry.
+            //! If this results in more than one dictionary per locale than (for now)
+            //! it is undefined which dictionary gets used.
+            //! In the future the implementation should support using several dictionaries
+            //! for one locale.
+            numdict = 0;
+            for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
+                numdict = numdict + aDictIt->aLocaleNames.getLength();
 
             // add dictionary information
             aDicts  = new Hunspell* [numdict];
