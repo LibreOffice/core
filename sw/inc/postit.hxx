@@ -8,7 +8,7 @@
  *
  * $RCSfile: postit.hxx,v $
  *
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -179,6 +179,7 @@ class PostItTxt : public Window
         virtual void    DataChanged( const DataChangedEvent& aData);
         virtual void    LoseFocus();
         virtual void    RequestHelp(const HelpEvent &rEvt);
+        DECL_LINK( Select, Menu* );
 
     public:
             PostItTxt(Window* pParent, WinBits nBits);
