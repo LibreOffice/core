@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtsh.hxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -534,6 +534,10 @@ private:
     SW_DLLPRIVATE BOOL _EndWrd();
     SW_DLLPRIVATE BOOL _NxtWrd();
     SW_DLLPRIVATE BOOL _PrvWrd();
+    // --> OD 2008-08-06 #i92468#
+    SW_DLLPRIVATE BOOL _NxtWrdForDelete();
+    SW_DLLPRIVATE BOOL _PrvWrdForDelete();
+    // <--
     SW_DLLPRIVATE BOOL _FwdSentence();
     SW_DLLPRIVATE BOOL _BwdSentence();
     BOOL _FwdPara();
