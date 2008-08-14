@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="Filter" oor:package="org.openoffice.TypeDetection">
+ <node oor:name="Filters">
+  <node oor:name="draw_pdf_import" oor:type="xs:string" oor:op="replace">
+   <prop oor:name="DocumentService">
+    <value>com.sun.star.drawing.DrawingDocument</value>
+   </prop>
+   <prop oor:name="FileFormatVersion" oor:type="xs:int">
+    <value>0</value>
+   </prop>
+   <prop oor:name="FilterService" oor:type="xs:string">
+    <!-- stacks filters for XML import. see UserData below.
+         the _Writer_ in the impl name is a misnomer -->
+    <value>com.sun.star.comp.Writer.XmlFilterAdaptor</value>
+   </prop>
+   <prop oor:name="Flags" oor:type="oor:string-list">
+    <value>3RDPARTYFILTER ALIEN IMPORT PREFERRED</value>
+   </prop>
+   <prop oor:name="Type" oor:type="xs:string">
+    <value>pdf_Portable_Document_Format</value>
+   </prop>
+   <prop oor:name="UIName">
+    <value xml:lang="x-default">PDF - Portable Document Format</value>
+   </prop>
+   <prop oor:name="TemplateName"/>
+   <prop oor:name="UIComponent"/>
+   <prop oor:name="UserData" oor:type="oor:string-list">
+    <!-- converter service, ,import service,export service, , ,bool for pretty printing on or off -->
+    <value oor:separator=",">com.sun.star.comp.documents.DrawPDFImport,,com.sun.star.comp.Draw.XMLOasisImporter,,,,true</value>
+   </prop>
+  </node>
+
+  <node oor:name="impress_pdf_import" oor:type="xs:string" oor:op="replace">
+   <prop oor:name="DocumentService">
+    <value>com.sun.star.presentation.PresentationDocument</value>
+   </prop>
+   <prop oor:name="FileFormatVersion" oor:type="xs:int">
+    <value>0</value>
+   </prop>
+   <prop oor:name="FilterService" oor:type="xs:string">
+    <!-- stacks filters for XML import. see UserData below.
+         the _Writer_ in the impl name is a misnomer -->
+    <value>com.sun.star.comp.Writer.XmlFilterAdaptor</value>
+   </prop>
+   <prop oor:name="Flags" oor:type="oor:string-list">
+    <value>3RDPARTYFILTER ALIEN IMPORT PREFERRED</value>
+   </prop>
+   <prop oor:name="Type" oor:type="xs:string">
+    <value>pdf_Portable_Document_Format</value>
+   </prop>
+   <prop oor:name="UIName">
+    <value xml:lang="x-default">PDF - Portable Document Format</value>
+   </prop>
+   <prop oor:name="TemplateName"/>
+   <prop oor:name="UIComponent"/>
+   <prop oor:name="UserData" oor:type="oor:string-list">
+    <!-- converter service, ,import service,export service, , ,bool for pretty printing on or off -->
+    <value oor:separator=",">com.sun.star.comp.documents.ImpressPDFImport,,com.sun.star.comp.Impress.XMLOasisImporter,,,,true</value>
+   </prop>
+  </node>
+
+  <node oor:name="writer_pdf_import" oor:type="xs:string" oor:op="replace">
+   <prop oor:name="DocumentService">
+    <value>com.sun.star.text.TextDocument</value>
+   </prop>
+   <prop oor:name="FileFormatVersion" oor:type="xs:int">
+    <value>0</value>
+   </prop>
+   <prop oor:name="FilterService" oor:type="xs:string">
+    <!-- stacks filters for XML import. see UserData below.
+         the _Writer_ in the impl name is a misnomer -->
+    <value>com.sun.star.comp.Writer.XmlFilterAdaptor</value>
+   </prop>
+   <prop oor:name="Flags" oor:type="oor:string-list">
+    <value>3RDPARTYFILTER ALIEN IMPORT PREFERRED</value>
+   </prop>
+   <prop oor:name="Type" oor:type="xs:string">
+    <value>pdf_Portable_Document_Format</value>
+   </prop>
+   <prop oor:name="UIName">
+    <value xml:lang="x-default">PDF - Portable Document Format</value>
+   </prop>
+   <prop oor:name="TemplateName"/>
+   <prop oor:name="UIComponent"/>
+   <prop oor:name="UserData" oor:type="oor:string-list">
+    <!-- converter service, ,import service,export service, , ,bool for pretty printing on or off -->
+    <value oor:separator=",">com.sun.star.comp.documents.WriterPDFImport,,com.sun.star.comp.Writer.XMLOasisImporter,,,,true</value>
+   </prop>
+  </node>
+
+  <node oor:name="writer_pdf_addstream_import" oor:op="replace">
+   <prop oor:name="DocumentService" oor:type="xs:string">
+    <value>com.sun.star.text.TextDocument</value>
+   </prop>
+   <prop oor:name="FileFormatVersion" oor:type="xs:int">
+    <value>0</value>
+   </prop>
+   <prop oor:name="FilterService" oor:type="xs:string">
+    <value>com.sun.star.comp.documents.HybridPDFImport</value>
+   </prop>
+   <prop oor:name="Flags" oor:type="oor:string-list">
+    <value>3RDPARTYFILTER ALIEN IMPORT NOTINFILEDIALOG NOTINCHOOSER</value>
+   </prop>
+   <prop oor:name="TemplateName" oor:type="xs:string">
+    <value/>
+   </prop>
+   <prop oor:name="Type" oor:type="xs:string">
+    <value>pdf_Portable_Document_Format</value>
+   </prop>
+   <prop oor:name="UIComponent" oor:type="xs:string">
+    <value/>
+   </prop>
+   <prop oor:name="UIName">
+    <value xml:lang="x-default">PDF - Portable Document Format</value>
+   </prop>
+  </node>
+
+  <node oor:name="impress_pdf_addstream_import" oor:op="replace">
+   <prop oor:name="DocumentService" oor:type="xs:string">
+    <value>com.sun.star.presentation.PresentationDocument</value>
+   </prop>
+   <prop oor:name="FileFormatVersion" oor:type="xs:int">
+    <value>0</value>
+   </prop>
+   <prop oor:name="FilterService" oor:type="xs:string">
+    <value>com.sun.star.comp.documents.HybridPDFImport</value>
+   </prop>
+   <prop oor:name="Flags" oor:type="oor:string-list">
+    <value>3RDPARTYFILTER ALIEN IMPORT NOTINFILEDIALOG NOTINCHOOSER</value>
+   </prop>
+   <prop oor:name="TemplateName" oor:type="xs:string">
+    <value/>
+   </prop>
+   <prop oor:name="Type" oor:type="xs:string">
+    <value>pdf_Portable_Document_Format</value>
+   </prop>
+   <prop oor:name="UIComponent" oor:type="xs:string">
+    <value/>
+   </prop>
+   <prop oor:name="UIName">
+    <value xml:lang="x-default">PDF - Portable Document Format</value>
+   </prop>
+  </node>
+
+  <node oor:name="draw_pdf_addstream_import" oor:op="replace">
+   <prop oor:name="DocumentService" oor:type="xs:string">
+    <value>com.sun.star.drawing.DrawingDocument</value>
+   </prop>
+   <prop oor:name="FileFormatVersion" oor:type="xs:int">
+    <value>0</value>
+   </prop>
+   <prop oor:name="FilterService" oor:type="xs:string">
+    <value>com.sun.star.comp.documents.HybridPDFImport</value>
+   </prop>
+   <prop oor:name="Flags" oor:type="oor:string-list">
+    <value>3RDPARTYFILTER ALIEN IMPORT NOTINFILEDIALOG NOTINCHOOSER</value>
+   </prop>
+   <prop oor:name="TemplateName" oor:type="xs:string">
+    <value/>
+   </prop>
+   <prop oor:name="Type" oor:type="xs:string">
+    <value>pdf_Portable_Document_Format</value>
+   </prop>
+   <prop oor:name="UIComponent" oor:type="xs:string">
+    <value/>
+   </prop>
+   <prop oor:name="UIName">
+    <value xml:lang="x-default">PDF - Portable Document Format</value>
+   </prop>
+  </node>
+
+  <node oor:name="calc_pdf_addstream_import" oor:op="replace">
+   <prop oor:name="DocumentService" oor:type="xs:string">
+    <value>com.sun.star.sheet.SpreadsheetDocument</value>
+   </prop>
+   <prop oor:name="FileFormatVersion" oor:type="xs:int">
+    <value>0</value>
+   </prop>
+   <prop oor:name="FilterService" oor:type="xs:string">
+    <value>com.sun.star.comp.documents.HybridPDFImport</value>
+   </prop>
+   <prop oor:name="Flags" oor:type="oor:string-list">
+    <value>3RDPARTYFILTER ALIEN IMPORT NOTINFILEDIALOG NOTINCHOOSER</value>
+   </prop>
+   <prop oor:name="TemplateName" oor:type="xs:string">
+    <value/>
+   </prop>
+   <prop oor:name="Type" oor:type="xs:string">
+    <value>pdf_Portable_Document_Format</value>
+   </prop>
+   <prop oor:name="UIComponent" oor:type="xs:string">
+    <value/>
+   </prop>
+   <prop oor:name="UIName">
+    <value xml:lang="x-default">PDF - Portable Document Format</value>
+    </prop>
+   </node>
+  </node>
+</oor:component-data>

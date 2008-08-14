@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:package="org.openoffice.TypeDetection" oor:name="Types">
+    <node oor:name="Types">
+    <node oor:name="pdf_Portable_Document_Format" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.documents.PDFDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>pdf</value></prop>
+        <prop oor:name="MediaType"><value>application/pdf</value></prop>
+        <prop oor:name="Preferred"><value>true</value></prop>
+        <prop oor:name="PreferredFilter"><value>draw_pdf_import</value></prop>
+        <prop oor:name="UIName">
+            <value>PDF - Portable Document Format (Draw)</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"/>
+    </node>
+    </node>
+</oor:component-data>
