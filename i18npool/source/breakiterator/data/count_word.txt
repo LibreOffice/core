@@ -32,13 +32,15 @@ $ALetter   = [[:Alphabetic:] [:name= HEBREW PUNCTUATION GERESH:]
                            - [:Script = Lao:]
                            - [:Script = Hiragana:]];
                            
+$TheZWSP = \u200b;
+
 #
 #  Character Class Definitions.
 #    The names are those from TR29.
 #
 $CR         = \u000d;
 $LF         = \u000a;
-$Control    = [[:Zl:] [:Zp:] [:Cc:] [:Cf:]];
+$Control    = [[[:Zl:] [:Zp:] [:Cc:] [:Cf:]] - $TheZWSP];
 $Extend     = [[:Grapheme_Extend = TRUE:]]; 
 
 
@@ -50,7 +52,7 @@ $Extend     = [[:Grapheme_Extend = TRUE:]];
 #
 ####################################################################################
 
-$Format    = [[:Cf:]];
+$Format    = [[:Cf:] - $TheZWSP];
 
 
 
