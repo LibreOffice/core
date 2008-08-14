@@ -6,13 +6,6 @@ fl	filter\source\xmlfilteradaptor			nmake	-	all	fl_xmlfilteradaptor	fl_inc NULL
 fl	filter\source\xmlfilterdetect			nmake	-	all	fl_xmlfilterdetect	fl_inc NULL
 fl	filter\source\msfilter\powerpoint		nmake	-	all	fl_powerpoint		fl_inc NULL
 fl	filter\source\pdf						nmake	-	all	fl_pdf fl_svg		fl_inc NULL
-fl	filter\source\pdfimport\wrapper			nmake	-	all	fl_pdfwrap			fl_inc NULL
-fl	filter\source\pdfimport\misc			nmake	-	all	fl_misc				fl_inc NULL
-fl	filter\source\pdfimport\odf				nmake	-	all	fl_odf				fl_inc NULL
-fl	filter\source\pdfimport\pdfparse		nmake	-	all	fl_pdfparse			fl_inc NULL
-fl	filter\source\pdfimport\sax				nmake	-	all	fl_sax				fl_inc NULL
-fl	filter\source\pdfimport\tree			nmake	-	all	fl_tree				fl_inc NULL
-fl	filter\source\pdfimport					nmake	-	all	fl_pdfi fl_pdfwrap fl_misc fl_odf fl_pdfparse fl_sax fl_tree fl_inc NULL
 fl	filter\source\svg						nmake	-	all	fl_svg				fl_inc NULL
 fl	filter\source\placeware					nmake	-	all	fl_placeware		fl_inc NULL
 fl	filter\source\flash						nmake	-	all	fl_flash fl_pdf			fl_inc NULL
