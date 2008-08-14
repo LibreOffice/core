@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtsh4.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,8 +124,6 @@ BOOL SwWrtShell::_NxtWrd()
     return bRet;
 }
 
-
-
 BOOL SwWrtShell::_PrvWrd()
 {
     BOOL bRet = FALSE;
@@ -157,6 +155,53 @@ BOOL SwWrtShell::_PrvWrd()
     return bRet;
 }
 
+// --> OD 2008-08-06 #i92468#
+// method code of <SwWrtShell::_NxtWrd()> before fix for issue i72162
+BOOL SwWrtShell::_NxtWrdForDelete()
+{
+    if ( IsEndPara() )
+    {
+        if ( !SwCrsrShell::Right(1,CRSR_SKIP_CHARS) )
+        {
+            Pop( FALSE );
+            return FALSE;
+        }
+        return TRUE;
+    }
+    Push();
+    ClearMark();
+    if ( !GoNextWord() )
+    {
+        SwCrsrShell::MovePara( fnParaCurr, fnParaEnd );
+    }
+    ClearMark();
+    Combine();
+    return TRUE;
+}
+
+// method code of <SwWrtShell::_PrvWrd()> before fix for issue i72162
+BOOL SwWrtShell::_PrvWrdForDelete()
+{
+    if ( IsSttPara() )
+    {
+        if ( !SwCrsrShell::Left(1,CRSR_SKIP_CHARS) )
+        {
+            Pop( FALSE );
+            return FALSE;
+        }
+        return TRUE;
+    }
+    Push();
+    ClearMark();
+    if( !GoPrevWord() )
+    {
+        SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
+    }
+    ClearMark();
+    Combine();
+    return TRUE;
+}
+// <--
 
 
 BOOL SwWrtShell::_FwdSentence()
