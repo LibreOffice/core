@@ -21,11 +21,8 @@ T4_WRITER = \
     writer_T602_Document \
     writer_Text \
     writer_Text_encoded \
-    writer_JustSystem_Ichitaro_10 \
-    writer_JustSystem_Ichitaro_10_template \
     writer_MIZI_Hwp_97 \
     writer_StarOffice_XML_Writer_Template \
-    writer_WPSSystem_WPS2000_10 \
     pdf_Portable_Document_Format\
     writer8_template\
     writer8 \
@@ -57,11 +54,8 @@ F4_WRITER = \
     T602Document \
     Text \
     Text__encoded_ \
-    writer_JustSystem_Ichitaro_10 \
-    writer_JustSystem_Ichitaro_10_template \
     writer_MIZI_Hwp_97 \
     writer_StarOffice_XML_Writer_Template \
-    writer_WPSSystem_WPS2000_10 \
     writer_pdf_Export\
     writer8\
     writer8_template \
@@ -82,7 +76,6 @@ F4_UI_WRITER = \
     StarOffice_XML__Writer__ui \
     Text_ui \
     Text__encoded__ui \
-    writer_JustSystem_Ichitaro_10_template_ui \
     writer_StarOffice_XML_Writer_Template_ui \
     writer8_ui \
     writer8_template_ui \
