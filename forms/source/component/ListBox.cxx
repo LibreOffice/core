@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ListBox.cxx,v $
- * $Revision: 1.61 $
+ * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1394,6 +1394,8 @@ namespace frm
     void OListBoxModel::refreshInternalEntryList()
     {
         impl_refreshDbEntryList( true );
+        if ( hasField() && m_xCursor.is() )
+            initFromField( m_xCursor );
     }
 
     //==================================================================
