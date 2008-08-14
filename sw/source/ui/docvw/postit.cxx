@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: postit.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -353,6 +353,12 @@ IMPL_LINK(PostItTxt, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
     return 0;
 }
 
+IMPL_LINK( PostItTxt, Select, Menu*, pSelMenu )
+{
+    mpPostIt->ExecuteCommand( pSelMenu->GetCurItemId() );
+    return 0;
+}
+
 void PostItTxt::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
@@ -371,6 +377,10 @@ void PostItTxt::Command( const CommandEvent& rCEvt )
             aRewriter.AddRule(UNDO_ARG1, mpPostIt->GetAuthor());
             aText = aRewriter.Apply(aText);
             ((PopupMenu*)aMgr->GetSVMenu())->SetItemText(FN_DELETE_NOTE_AUTHOR,aText);
+            // SwPostItLinkForwarder_Impl aFwd( ((PopupMenu*)aMgr->GetSVMenu())->pSvMenu->GetSelectHdl(), mpPostIt );
+            // ((PopupMenu*)aMgr->GetSVMenu())->pSvMenu->SetSelectHdl( LINK(&aFwd, SwPostItLinkForwarder_Impl, Select) );
+
+            ((PopupMenu*)aMgr->GetSVMenu())->SetSelectHdl( LINK(this, PostItTxt, Select) );
 
             if (rCEvt.IsMouseEvent())
                 ((PopupMenu*)aMgr->GetSVMenu())->Execute(this,rCEvt.GetMousePosPixel());
@@ -1349,6 +1359,9 @@ void SwPostIt::ExecuteCommand(USHORT nSlot)
             aItems[1] = 0;
             mpView->GetViewFrame()->GetBindings().Execute( nSlot, aItems, 0, SFX_CALLMODE_ASYNCHRON );
         }
+        default:
+            mpView->GetViewFrame()->GetBindings().Execute( nSlot );
+            break;
     }
 }
 
