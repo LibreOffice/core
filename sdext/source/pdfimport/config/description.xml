@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description
+
+    xmlns="http://openoffice.org/extensions/description/2006"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:dep="http://openoffice.org/extensions/description/2006">
+    <identifier value="UPDATED_IDENTIFIER" />
+
+    <dependencies>
+        <OpenOffice.org-minimal-version value="3.0" dep:name="OpenOffice.org 3.0"/>
+    </dependencies>
+
+    <registration>
+        <simple-license accept-by="admin" default-license-id="lic-en-US">
+        <license-text xlink:href="licensefile" lang="isocode" license-id="lic-isocode"/>
+        </simple-license>
+    </registration>
+
+    <version value="0.3" />
+
+    <platform value="UPDATED_SUPPORTED_PLATFORM" />
+
+    <publisher>
+        <name xlink:href="http://www.sun.com/software/star/staroffice/extensions.jsp?cid=925095" lang="en">Sun Microsystems</name>
+    </publisher>
+
+    <display-name>
+        <name lang="en-US">PDF Import Extension</name>
+    </display-name>
+
+</description>
