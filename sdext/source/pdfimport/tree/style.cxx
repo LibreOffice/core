@@ -1,0 +1,240 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: style.cxx,v $
+ *
+ * $Revision: 1.2 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sdext.hxx"
+
+#include "style.hxx"
+#include "genericelements.hxx"
+#include "xmlemitter.hxx"
+#include "pdfiprocessor.hxx"
+#include <rtl/ustrbuf.hxx>
+
+#include <algorithm>
+
+using namespace rtl;
+using namespace pdfi;
+
+#define USTR(x) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
+
+StyleContainer::StyleContainer() :
+    m_nNextId( 1 )
+{
+}
+
+sal_Int32 StyleContainer::impl_getStyleId( const Style& rStyle, bool bSubStyle )
+{
+    sal_Int32 nRet = -1;
+
+    // construct HashedStyle to find or insert
+    HashedStyle aSearchStyle;
+    aSearchStyle.Name                   = rStyle.Name;
+    aSearchStyle.Properties             = rStyle.Properties;
+    aSearchStyle.Contents               = rStyle.Contents;
+    aSearchStyle.ContainedElement       = rStyle.ContainedElement;
+    for( unsigned int n = 0; n < rStyle.SubStyles.size(); ++n )
+        aSearchStyle.SubStyles.push_back( impl_getStyleId( *rStyle.SubStyles[n], true ) );
+
+    std::hash_map< HashedStyle, sal_Int32, StyleHash >::iterator it =
+        m_aStyleToId.find( aSearchStyle );
+
+    if( it != m_aStyleToId.end() )
+    {
+        nRet = it->second;
+        HashedStyle& rFound = m_aIdToStyle[ nRet ];
+        // increase refcount on this style
+        rFound.RefCount++;
+        if( ! bSubStyle )
+            rFound.IsSubStyle = false;
+    }
+    else
+    {
+        nRet = m_nNextId++;
+        // create new style
+        HashedStyle& rNew = m_aIdToStyle[ nRet ];
+        rNew = aSearchStyle;
+        rNew.RefCount           = 1;
+        rNew.IsSubStyle         = bSubStyle;
+        // fill the style hash to find the id
+        m_aStyleToId[ rNew ] = nRet;
+    }
+    return nRet;
+}
+
+const PropertyMap* StyleContainer::getProperties( sal_Int32 nStyleId ) const
+{
+    std::hash_map< sal_Int32, HashedStyle >::const_iterator it =
+        m_aIdToStyle.find( nStyleId );
+    return it != m_aIdToStyle.end() ? &(it->second.Properties) : NULL;
+}
+
+sal_Int32 StyleContainer::setProperties( sal_Int32 nStyleId, const PropertyMap& rNewProps )
+{
+    sal_Int32 nRet = -1;
+    std::hash_map< sal_Int32, HashedStyle >::iterator it =
+        m_aIdToStyle.find( nStyleId );
+    if( it != m_aIdToStyle.end() )
+    {
+        if( it->second.RefCount == 1 )
+        {
+            nRet = it->first;
+            // erase old hash to id mapping
+            m_aStyleToId.erase( it->second );
+            // change properties
+            it->second.Properties = rNewProps;
+            // fill in new hash to id mapping
+            m_aStyleToId[ it->second ] = nRet;
+        }
+        else
+        {
+            // decrease refcound on old instance
+            it->second.RefCount--;
+            // acquire new HashedStyle
+            HashedStyle aSearchStyle;
+            aSearchStyle.Name                   = it->second.Name;
+            aSearchStyle.Properties             = rNewProps;
+            aSearchStyle.Contents               = it->second.Contents;
+            aSearchStyle.ContainedElement       = it->second.ContainedElement;
+            aSearchStyle.SubStyles              = it->second.SubStyles;
+            aSearchStyle.IsSubStyle             = it->second.IsSubStyle;
+
+            // find out whether this new style already exists
+            std::hash_map< HashedStyle, sal_Int32, StyleHash >::iterator new_it =
+                m_aStyleToId.find( aSearchStyle );
+            if( new_it != m_aStyleToId.end() )
+            {
+                nRet = new_it->second;
+                m_aIdToStyle[ nRet ].RefCount++;
+            }
+            else
+            {
+                nRet = m_nNextId++;
+                // create new style with new id
+                HashedStyle& rNew = m_aIdToStyle[ nRet ];
+                rNew = aSearchStyle;
+                rNew.RefCount = 1;
+                // fill style to id hash
+                m_aStyleToId[ aSearchStyle ] = nRet;
+            }
+        }
+    }
+    return nRet;
+}
+
+OUString StyleContainer::getStyleName( sal_Int32 nStyle ) const
+{
+    OUStringBuffer aRet( 64 );
+
+    std::hash_map< sal_Int32, HashedStyle >::const_iterator style_it =
+        m_aIdToStyle.find( nStyle );
+    if( style_it != m_aIdToStyle.end() )
+    {
+        const HashedStyle& rStyle = style_it->second;
+
+        PropertyMap::const_iterator fam_it = rStyle.Properties.find( USTR("style:family" ) );
+        OUString aStyleName;
+        if( fam_it != rStyle.Properties.end() )
+        {
+            aStyleName = fam_it->second;
+        }
+        else
+            aStyleName = OStringToOUString( rStyle.Name, RTL_TEXTENCODING_ASCII_US );
+        sal_Int32 nIndex = aStyleName.lastIndexOf( ':' );
+        aRet.append( aStyleName.copy( nIndex+1 ) );
+        aRet.append( nStyle );
+
+    }
+    else
+    {
+        aRet.appendAscii( "invalid style id " );
+        aRet.append( nStyle );
+    }
+
+    return aRet.makeStringAndClear();
+}
+
+void StyleContainer::impl_emitStyle( sal_Int32           nStyleId,
+                                     EmitContext&        rContext,
+                                     ElementTreeVisitor& rContainedElemVisitor )
+{
+    std::hash_map< sal_Int32, HashedStyle >::const_iterator it = m_aIdToStyle.find( nStyleId );
+    if( it != m_aIdToStyle.end() )
+    {
+        const HashedStyle& rStyle = it->second;
+            PropertyMap aProps( rStyle.Properties );
+        if( !rStyle.IsSubStyle )
+            aProps[ USTR( "style:name" ) ] = getStyleName( nStyleId );
+        rContext.rEmitter.beginTag( rStyle.Name.getStr(), aProps );
+
+        for( unsigned int n = 0; n < rStyle.SubStyles.size(); ++n )
+            impl_emitStyle( rStyle.SubStyles[n], rContext, rContainedElemVisitor );
+        if( rStyle.Contents )
+            rContext.rEmitter.write( rStyle.Contents );
+        if( rStyle.ContainedElement )
+            rStyle.ContainedElement->visitedBy( rContainedElemVisitor,
+                                                std::list<Element*>::iterator() );
+        rContext.rEmitter.endTag( rStyle.Name.getStr() );
+    }
+}
+
+void StyleContainer::emit( EmitContext&        rContext,
+                           ElementTreeVisitor& rContainedElemVisitor )
+{
+    std::vector< sal_Int32 > aMasterPageSection, aAutomaticStyleSection;
+    for( std::hash_map< sal_Int32, HashedStyle >::iterator it = m_aIdToStyle.begin();
+         it != m_aIdToStyle.end(); ++it )
+    {
+        if( ! it->second.IsSubStyle )
+        {
+            if( it->second.Name.equals( "style:master-page" ) )
+                aMasterPageSection.push_back( it->first );
+            else
+                aAutomaticStyleSection.push_back( it->first );
+        }
+    }
+
+    if( ! aMasterPageSection.empty() )
+        std::stable_sort( aMasterPageSection.begin(), aMasterPageSection.end(), StyleIdNameSort(&m_aIdToStyle) );
+    if( ! aAutomaticStyleSection.empty() )
+        std::stable_sort( aAutomaticStyleSection.begin(), aAutomaticStyleSection.end(), StyleIdNameSort(&m_aIdToStyle) );
+
+    rContext.rEmitter.beginTag( "office:automatic-styles", PropertyMap() );
+    int n = 0, nElements = 0;
+    for( n = 0, nElements = aAutomaticStyleSection.size(); n < nElements; n++ )
+        impl_emitStyle( aAutomaticStyleSection[n], rContext, rContainedElemVisitor );
+    rContext.rEmitter.endTag( "office:automatic-styles" );
+    rContext.rEmitter.beginTag( "office:styles", PropertyMap() );
+    rContext.rEmitter.endTag( "office:styles" );
+    rContext.rEmitter.beginTag( "office:master-styles", PropertyMap() );
+    for( n = 0, nElements = aMasterPageSection.size(); n < nElements; n++ )
+        impl_emitStyle( aMasterPageSection[n], rContext, rContainedElemVisitor );
+    rContext.rEmitter.endTag( "office:master-styles" );
+}
