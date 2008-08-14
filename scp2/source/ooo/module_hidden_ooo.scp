@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_hidden_ooo.scp,v $
- * $Revision: 1.115 $
+ * $Revision: 1.116 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1006,6 +1006,17 @@ Module gid_Module_Root_Extension_Dictionary_Fr
 	Files = (gid_File_Extension_Dictionary_Fr);
 	InstallOrder = "2000";
 	Spellcheckerlanguage = "fr";
+	PackageInfo = "packinfo_office.txt";
+	ParentID = gid_Module_Root;
+	Styles = (HIDDEN_ROOT);
+End
+
+Module gid_Module_Root_Extension_Dictionary_Gl
+	Name = "gid_Module_Root_Extension_Dictionary_Gl";
+	Description = "gid_Module_Root_Extension_Dictionary_Gl";
+	Files = (gid_File_Extension_Dictionary_Gl);
+	InstallOrder = "2000";
+	Spellcheckerlanguage = "gl";
 	PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
 	Styles = (HIDDEN_ROOT);
