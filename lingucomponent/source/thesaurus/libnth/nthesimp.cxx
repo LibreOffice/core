@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nthesimp.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -201,9 +201,14 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
                 aSuppLocales[k++] = aTmp;
             }
 
-            //! now have one dictionary entry for each locale
-            //! (this is necessary in order to allow for several locales for one dictionary)
-            numthes = aSuppLocales.getLength();
+            //! For each dictionary and each locale we need a seperate entry.
+            //! If this results in more than one dictionary per locale than (for now)
+            //! it is undefined which dictionary gets used.
+            //! In the future the implementation should support using several dictionaries
+            //! for one locale.
+            numthes = 0;
+            for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
+                numthes = numthes + aDictIt->aLocaleNames.getLength();
 
             // add dictionary information
             aThes   = new MyThes* [numthes];
