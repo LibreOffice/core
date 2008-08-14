@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtlists.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,10 +140,15 @@ const ::rtl::OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() con
 
 ::rtl::OUString XMLTextListsHelper::GenerateNewListId() const
 {
+    // --> OD 2008-08-06 #i92478#
+    ::rtl::OUString sTmpStr( ::rtl::OUString::createFromAscii( "list" ) );
+    // <--
     sal_Int64 n = Time().GetTime();
     n += Date().GetDate();
     n += rand();
-    ::rtl::OUString sTmpStr( ::rtl::OUString::valueOf( n ) );
+    // --> OD 2008-08-06 #i92478#
+    sTmpStr += ::rtl::OUString::valueOf( n );
+    // <--
 
     long nHitCount = 0;
     ::rtl::OUString sNewListId( sTmpStr );
