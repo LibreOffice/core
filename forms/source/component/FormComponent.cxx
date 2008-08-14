@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormComponent.cxx,v $
- * $Revision: 1.62 $
+ * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1995,6 +1995,21 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
 }
 
 //------------------------------------------------------------------------------
+void OBoundControlModel::initFromField( const Reference< XRowSet >& _rxRowSet )
+{
+    // but only if the rowset if posisitioned on a valid record
+    if ( m_xField.is() && _rxRowSet.is() )
+    {
+        if ( !_rxRowSet->isBeforeFirst() && !_rxRowSet->isAfterLast() )
+            transferDbValueToControl();
+        else
+            // reset the field if the row set is empty
+            // #i30661# / 2004-12-16 / frank.schoenheit@sun.com
+            resetNoBroadcast();
+    }
+}
+
+//------------------------------------------------------------------------------
 sal_Bool OBoundControlModel::approveDbColumnType(sal_Int32 _nColumnType)
 {
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::approveDbColumnType: invalid call (have an external binding)!" );
@@ -2039,20 +2054,9 @@ void OBoundControlModel::connectDatabaseColumn( const Reference< XRowSet >& _rxR
     m_bLoaded = sal_True;
     onConnectedDbColumn( _rxRowSet );
 
-    // did we successfully connect to a database column?
+    // initially transfer the db column value to the control, if we successfully connected to a database column
     if ( m_xField.is() )
-    {   // initially transfer the db column value to the control
-        // but only if the rowset if posisitioned on a valid record
-        if ( _rxRowSet.is() )
-        {
-            if ( !_rxRowSet->isBeforeFirst() && !_rxRowSet->isAfterLast() )
-                transferDbValueToControl();
-            else
-                // reset the field if the row set is empty
-                // #i30661# / 2004-12-16 / frank.schoenheit@sun.com
-                resetNoBroadcast();
-        }
-    }
+        initFromField( _rxRowSet );
 
     if ( xOldField != m_xField )
     {
