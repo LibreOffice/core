@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: breakiteratorImpl.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,6 +77,8 @@ sal_Int32 SAL_CALL BreakIteratorImpl::previousCharacters( const OUString& Text, 
         return LBI->previousCharacters( Text, nStartPos, rLocale, nCharacterIteratorMode, nCount, nDone);
 }
 
+#define isZWSP(c) (ch == 0x200B)
+
 static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, sal_Int16 rWordType, sal_Bool bDirection)
 {
         sal_uInt32 ch=0;
@@ -84,23 +86,23 @@ static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, 
         switch (rWordType) {
             case WordType::ANYWORD_IGNOREWHITESPACES:
                 if (bDirection)
-                    while (nPos < len && u_isWhitespace(Text.iterateCodePoints(&pos, 1))) nPos=pos;
+                    while (nPos < len && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, 1)) || isZWSP(ch))) nPos=pos;
                 else
-                    while (nPos > 0 && u_isWhitespace(Text.iterateCodePoints(&pos, -1))) nPos=pos;
+                    while (nPos > 0 && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch))) nPos=pos;
             break;
             case WordType::DICTIONARY_WORD:
                 if (bDirection)
-                    while (nPos < len && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, 1)) ||
+                    while (nPos < len && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, 1)) || isZWSP(ch) ||
                             ! (ch == 0x002E || u_isalnum(ch)))) nPos=pos;
                 else
-                    while (nPos > 0 && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, -1)) ||
+                    while (nPos > 0 && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, -1)) || isZWSP(ch) ||
                             ! (ch == 0x002E || u_isalnum(ch)))) nPos=pos;
             break;
             case WordType::WORD_COUNT:
                 if (bDirection)
-                    while (nPos < len && u_isUWhiteSpace(Text.iterateCodePoints(&pos, 1))) nPos=pos;
+                    while (nPos < len && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos, 1)) || isZWSP(ch))) nPos=pos;
                 else
-                    while (nPos > 0 && u_isUWhiteSpace(Text.iterateCodePoints(&pos, -1))) nPos=pos;
+                    while (nPos > 0 && (u_isUWhiteSpace(ch = Text.iterateCodePoints(&pos, -1))) || isZWSP(ch)) nPos=pos;
             break;
         }
         return nPos;
