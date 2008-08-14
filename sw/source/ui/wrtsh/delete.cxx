@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: delete.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -513,9 +513,9 @@ long SwWrtShell::DelNxtWord()
     EnterStdMode();
     SetMark();
     if(IsEndWrd() && !IsSttWrd())
-        _NxtWrd();
+        _NxtWrdForDelete(); // --> OD 2008-08-06 #i92468#
     if(IsSttWrd() || IsEndPara())
-        _NxtWrd();
+        _NxtWrdForDelete(); // --> OD 2008-08-06 #i92468#
     else
         _EndWrd();
 
@@ -538,11 +538,12 @@ long SwWrtShell::DelPrvWord()
     ResetCursorStack();
     EnterStdMode();
     SetMark();
-    if( !IsSttWrd() || !_PrvWrd() )
+    if ( !IsSttWrd() ||
+         !_PrvWrdForDelete() ) // --> OD 2008-08-06 #i92468#
     {
         if( IsEndWrd() )
         {
-            if( _PrvWrd() )
+            if ( _PrvWrdForDelete() ) // --> OD 2008-08-06 #i92468#
             {
                 // skip over all-1 spaces
                 short n = -1;
@@ -554,7 +555,7 @@ long SwWrtShell::DelPrvWord()
             }
         }
         else if( IsSttPara())
-            _PrvWrd();
+            _PrvWrdForDelete(); // --> OD 2008-08-06 #i92468#
         else
             _SttWrd();
     }
