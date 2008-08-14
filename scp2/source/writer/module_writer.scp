@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_writer.scp,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +47,6 @@ Module gid_Module_Prg_Wrt_Bin
     Styles = (HIDDEN_ROOT);
     Files = (gid_File_Bin_Cde_Sagenda,gid_File_Bin_Cde_Sfax,gid_File_Bin_Cde_Slabel,
     gid_File_Bin_Cde_Sletter,gid_File_Bin_Cde_Smemo,gid_File_Bin_Cde_Svcard,
-    gid_File_Lib_Jsreader, gid_File_Lib_Wps2star,
     gid_File_Lib_Hwpreader,
     gid_File_Lib_Swd,
     gid_File_Lib_Swui,
