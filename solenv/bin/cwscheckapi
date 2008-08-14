@@ -8,7 +8,7 @@
 #
 # $RCSfile: cwscheckapi,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -98,6 +98,9 @@ LOCALINSTALLDIR=$DESTPATH/office
 LOCALUNPACKDIR=$DESTPATH/unpack
 export LOCALINSTALLDIR
 export LOCALUNPACKDIR
+
+unset LD_LIBRARY_PATH
+unset FORCE2ARCHIVE
 
 date 2>&1
 

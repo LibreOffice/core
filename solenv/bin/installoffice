@@ -7,7 +7,7 @@
 #
 # $RCSfile: installoffice,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -83,6 +83,9 @@ LOCALUNPACKDIR=$DESTPATH/unpack
 
 export LOCALINSTALLDIR
 export LOCALUNPACKDIR
+
+unset LD_LIBRARY_PATH
+unset FORCE2ARCHIVE
 
 echo "### $SOLARENV/bin/installoffice.pl $PARAM -cleanup true $@"
 exec perl -w $SOLARENV/bin/installoffice.pl $PARAM -cleanup true $@
