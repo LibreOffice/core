@@ -1,0 +1,319 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: pdfiadaptor.cxx,v $
+ *
+ * $Revision: 1.2 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sdext.hxx"
+
+#include "pdfiadaptor.hxx"
+#include "filterdet.hxx"
+#include "saxemitter.hxx"
+#include "odfemitter.hxx"
+#include "inc/wrapper.hxx"
+#include "inc/contentsink.hxx"
+#include "tree/pdfiprocessor.hxx"
+
+#include <osl/file.h>
+#include <osl/thread.h>
+#include <osl/diagnose.h>
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/frame/XLoadable.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
+
+
+#include <boost/shared_ptr.hpp>
+
+using namespace com::sun::star;
+
+
+namespace pdfi
+{
+
+PDFIHybridAdaptor::PDFIHybridAdaptor( const uno::Reference< uno::XComponentContext >& xContext ) :
+    PDFIHybridAdaptorBase( m_aMutex ),
+    m_xContext( xContext ),
+    m_xModel()
+{
+}
+
+// XFilter
+sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::PropertyValue >& rFilterData ) throw( uno::RuntimeException )
+{
+    sal_Bool bRet = sal_False;
+    if( m_xModel.is() )
+    {
+        uno::Reference< io::XStream > xSubStream;
+        rtl::OUString aPwd;
+        const beans::PropertyValue* pAttribs = rFilterData.getConstArray();
+        sal_Int32 nAttribs = rFilterData.getLength();
+        sal_Int32 nPwPos = -1;
+        for( sal_Int32 i = 0; i < nAttribs; i++ )
+        {
+            #if OSL_DEBUG_LEVEL > 1
+            rtl::OUString aVal( RTL_CONSTASCII_USTRINGPARAM( "<no string>" ) );
+            pAttribs[i].Value >>= aVal;
+            OSL_TRACE( "filter: Attrib: %s = %s\n",
+                       rtl::OUStringToOString( pAttribs[i].Name, RTL_TEXTENCODING_UTF8 ).getStr(),
+                       rtl::OUStringToOString( aVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+            #endif
+            if( pAttribs[i].Name.equalsAscii( "EmbeddedSubstream" ) )
+                pAttribs[i].Value >>= xSubStream;
+            else if( pAttribs[i].Name.equalsAscii( "Password" ) )
+            {
+                nPwPos = i;
+                pAttribs[i].Value >>= aPwd;
+            }
+        }
+        bool bAddPwdProp = false;
+        if( ! xSubStream.is() )
+        {
+            for( sal_Int32 i = 0; i < nAttribs; i++ )
+            {
+                if( pAttribs[i].Name.equalsAscii( "Stream" ) )
+                    pAttribs[i].Value >>= xSubStream;
+            }
+            if( xSubStream.is() )
+            {
+                // TODO(P2): extracting hybrid substream twice - once during detection, second time here
+                uno::Reference< io::XInputStream > xInput( xSubStream->getInputStream() );
+                uno::Reference< io::XSeekable > xSeek( xInput, uno::UNO_QUERY );
+                if( xSeek.is() )
+                    xSeek->seek( 0 );
+                oslFileHandle aFile = NULL;
+                sal_uInt64 nWritten = 0;
+                rtl::OUString aURL;
+                if( osl_createTempFile( NULL, &aFile, &aURL.pData ) == osl_File_E_None )
+                {
+                    OSL_TRACE( "created temp file %s\n", rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    const sal_Int32 nBufSize = 4096;
+                    uno::Sequence<sal_Int8> aBuf(nBufSize);
+                    // copy the bytes
+                    sal_Int32 nBytes;
+                    do
+                    {
+                        nBytes = xInput->readBytes( aBuf, nBufSize );
+                        if( nBytes > 0 )
+                        {
+                            osl_writeFile( aFile, aBuf.getConstArray(), nBytes, &nWritten );
+                            if( static_cast<sal_Int32>(nWritten) != nBytes )
+                            {
+                                xInput.clear();
+                                break;
+                            }
+                        }
+                    } while( nBytes == nBufSize );
+                    osl_closeFile( aFile );
+                    if( xInput.is() )
+                    {
+                        rtl::OUString aEmbedMimetype;
+                        rtl::OUString aOrgPwd( aPwd );
+                        xSubStream = getAdditionalStream( aURL, aEmbedMimetype, aPwd, m_xContext, rFilterData, true );
+                        if( aOrgPwd != aPwd )
+                            bAddPwdProp = true;
+                    }
+                    osl_removeFile( aURL.pData );
+                }
+                else
+                    xSubStream.clear();
+            }
+        }
+        if( xSubStream.is() )
+        {
+            uno::Sequence< uno::Any > aArgs( 2 );
+            aArgs[0] <<= m_xModel;
+            aArgs[1] <<= xSubStream;
+
+            OSL_TRACE( "try to instantiate subfilter\n" );
+            uno::Reference< document::XFilter > xSubFilter;
+            try {
+                xSubFilter = uno::Reference<document::XFilter>(
+                    m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.OwnSubFilter" ) ),
+                        aArgs,
+                        m_xContext ),
+                    uno::UNO_QUERY );
+            }
+            catch(uno::Exception& e)
+            {
+                (void)e;
+                OSL_TRACE( "subfilter exception: %s\n",
+                           OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+            }
+
+            OSL_TRACE( "subfilter: %p\n", xSubFilter.get() );
+            if( xSubFilter.is() )
+            {
+                if( bAddPwdProp )
+                {
+                    uno::Sequence<beans::PropertyValue> aFilterData( rFilterData );
+                    if( nPwPos == -1 )
+                    {
+                        nPwPos = aFilterData.getLength();
+                        aFilterData.realloc( nPwPos+1 );
+                        aFilterData[nPwPos].Name = rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM( "Password" ) );
+                    }
+                    aFilterData[nPwPos].Value <<= aPwd;
+                    bRet = xSubFilter->filter( aFilterData );
+                }
+                else
+                    bRet = xSubFilter->filter( rFilterData );
+            }
+        }
+        #if OSL_DEBUG_LEVEL > 1
+        else
+            OSL_TRACE( "PDFIAdaptor::filter: no embedded substream set\n" );
+        #endif
+    }
+    #if OSL_DEBUG_LEVEL > 1
+    else
+        OSL_TRACE( "PDFIAdaptor::filter: no model set\n" );
+    #endif
+
+    return bRet;
+}
+
+void SAL_CALL PDFIHybridAdaptor::cancel() throw()
+{
+}
+
+//XImporter
+void SAL_CALL PDFIHybridAdaptor::setTargetDocument( const uno::Reference< lang::XComponent >& xDocument ) throw( lang::IllegalArgumentException )
+{
+    OSL_TRACE( "PDFIAdaptor::setTargetDocument\n" );
+    m_xModel = uno::Reference< frame::XModel >( xDocument, uno::UNO_QUERY );
+    if( xDocument.is() && ! m_xModel.is() )
+        throw lang::IllegalArgumentException();
+}
+
+//---------------------------------------------------------------------------------------
+
+PDFIRawAdaptor::PDFIRawAdaptor( const uno::Reference< uno::XComponentContext >& xContext ) :
+    PDFIAdaptorBase( m_aMutex ),
+    m_xContext( xContext ),
+    m_xModel(),
+    m_pVisitorFactory(),
+    m_bEnableToplevelText(false)
+{
+}
+
+void PDFIRawAdaptor::setTreeVisitorFactory(const TreeVisitorFactorySharedPtr& rVisitorFactory)
+{
+    m_pVisitorFactory = rVisitorFactory;
+}
+
+bool PDFIRawAdaptor::parse( const uno::Reference<io::XInputStream>&       xInput,
+                            const uno::Reference<task::XStatusIndicator>& xStatus,
+                            const XmlEmitterSharedPtr&                    rEmitter,
+                            const rtl::OUString&                          rURL )
+{
+    // container for metaformat
+    boost::shared_ptr<PDFIProcessor> pSink(
+        new PDFIProcessor(xStatus));
+
+    // TEMP! TEMP!
+    if( m_bEnableToplevelText )
+        pSink->enableToplevelText();
+
+    bool bSuccess=false;
+
+    if( xInput.is() && (!rURL.getLength() || rURL.compareToAscii( "file:", 5 ) != 0) )
+        bSuccess = xpdf_ImportFromStream( xInput, pSink, m_xContext );
+    else
+        bSuccess = xpdf_ImportFromFile( rURL, pSink, m_xContext );
+
+    if( bSuccess )
+        pSink->emit(*rEmitter,*m_pVisitorFactory);
+
+    return bSuccess;
+}
+
+bool PDFIRawAdaptor::odfConvert( const rtl::OUString&                          rURL,
+                                 const uno::Reference<io::XOutputStream>&      xOutput,
+                                 const uno::Reference<task::XStatusIndicator>& xStatus )
+{
+    XmlEmitterSharedPtr pEmitter = createOdfEmitter(xOutput);
+    const bool bSuccess = parse(uno::Reference<io::XInputStream>(),xStatus,pEmitter,rURL);
+
+    // tell input stream that it is no longer needed
+    xOutput->closeOutput();
+
+    return bSuccess;
+}
+
+// XImportFilter
+sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::PropertyValue >&        rSourceData,
+                                            const uno::Reference< xml::sax::XDocumentHandler >& rHdl,
+                                            const uno::Sequence< rtl::OUString >&               /*rUserData*/ ) throw( uno::RuntimeException )
+{
+    // get the InputStream carrying the PDF content
+    uno::Reference< io::XInputStream > xInput;
+    uno::Reference< task::XStatusIndicator > xStatus;
+    rtl::OUString aURL;
+    const beans::PropertyValue* pAttribs = rSourceData.getConstArray();
+    sal_Int32 nAttribs = rSourceData.getLength();
+    for( sal_Int32 i = 0; i < nAttribs; i++, pAttribs++ )
+    {
+        OSL_TRACE("importer Attrib: %s\n", OUStringToOString( pAttribs->Name, RTL_TEXTENCODING_UTF8 ).getStr() );
+        if( pAttribs->Name.equalsAscii( "InputStream" ) )
+            pAttribs->Value >>= xInput;
+        else if( pAttribs->Name.equalsAscii( "URL" ) )
+            pAttribs->Value >>= aURL;
+        else if( pAttribs->Name.equalsAscii( "StatusIndicator" ) )
+            pAttribs->Value >>= xStatus;
+    }
+    if( !xInput.is() )
+        return sal_False;
+
+    XmlEmitterSharedPtr pEmitter = createSaxEmitter(rHdl);
+    const bool bSuccess = parse(xInput,xStatus,pEmitter,aURL);
+
+    // tell input stream that it is no longer needed
+    xInput->closeInput();
+    xInput.clear();
+
+    return bSuccess;
+}
+
+//XImporter
+void SAL_CALL PDFIRawAdaptor::setTargetDocument( const uno::Reference< lang::XComponent >& xDocument ) throw( lang::IllegalArgumentException )
+{
+    OSL_TRACE( "PDFIAdaptor::setTargetDocument\n" );
+    m_xModel = uno::Reference< frame::XModel >( xDocument, uno::UNO_QUERY );
+    if( xDocument.is() && ! m_xModel.is() )
+        throw lang::IllegalArgumentException();
+}
+
+}
