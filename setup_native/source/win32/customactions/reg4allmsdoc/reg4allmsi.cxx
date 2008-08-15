@@ -8,7 +8,7 @@
  *
  * $RCSfile: reg4allmsi.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,6 +126,10 @@ static BOOL CheckExtensionInRegistry( LPCSTR lpSubKey )
             }
             if ( strncmp( szBuffer, "OpenOffice.org.", 15 ) == 0 )
             {   // We will replace registration for our own types, too
+                bRet = true;
+            }
+            if ( strncmp( szBuffer, "ooostub.", 8 ) == 0 )
+            {   // We will replace registration for ooostub, too
                 bRet = true;
             }
         }
