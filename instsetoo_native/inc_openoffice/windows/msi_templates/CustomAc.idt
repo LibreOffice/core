@@ -3,6 +3,36 @@ s72	i2	S64	S255
 CustomAction	Action
 ISInitAllUsers	307	ALLUSERS	1
 DontRemoveProducts	51	OLDPRODUCTS	{}
+DontRemoveLpEnusProducts	51	O2LPENUS	{}
+DontRemoveLpptProducts	51	O2LPPT	{}
+DontRemoveLpruProducts	51	O2LPRU	{}
+DontRemoveLpelProducts	51	O2LPEL	{}
+DontRemoveLpnlProducts	51	O2LPNL	{}
+DontRemoveLpfrProducts	51	O2LPFR	{}
+DontRemoveLpesProducts	51	O2LPES	{}
+DontRemoveLpfiProducts	51	O2LPFI	{}
+DontRemoveLphuProducts	51	O2LPHU	{}
+DontRemoveLpcaProducts	51	O2LPCA	{}
+DontRemoveLpitProducts	51	O2LPIT	{}
+DontRemoveLpcsProducts	51	O2LPCS	{}
+DontRemoveLpskProducts	51	O2LPSK	{}
+DontRemoveLpengbProducts	51	O2LPENGB	{}
+DontRemoveLpdaProducts	51	O2LPDA	{}
+DontRemoveLpsvProducts	51	O2LPSV	{}
+DontRemoveLpnoProducts	51	O2LPNO	{}
+DontRemoveLpplProducts	51	O2LPPL	{}
+DontRemoveLpdeProducts	51	O2LPDE	{}
+DontRemoveLpptbrProducts	51	O2LPPTBR	{}
+DontRemoveLpthProducts	51	O2LPTH	{}
+DontRemoveLpetProducts	51	O2LPET	{}
+DontRemoveLpjaProducts	51	O2LPJA	{}
+DontRemoveLpkoProducts	51	O2LPKO	{}
+DontRemoveLpzhcnProducts	51	O2LPZHCN	{}
+DontRemoveLpzhtwProducts	51	O2LPZHTW	{}
+DontRemoveLptrProducts	51	O2LPTR	{}
+DontRemoveLphiProducts	51	O2LPHI	{}
+DontRemoveLparProducts	51	O2LPAR	{}
+DontRemoveLpheProducts	51	O2LPHE	{}
 setAllUsersProfile2K	51	ALLUSERSPROFILE	[%ALLUSERSPROFILE]
 SetAllUsersProfileNT	51	ALLUSERSPROFILE	[%SystemRoot]\Profiles\All Users
 setUserProfileNT	51	USERPROFILE	[%USERPROFILE]
