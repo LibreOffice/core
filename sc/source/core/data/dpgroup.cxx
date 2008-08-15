@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dpgroup.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1136,18 +1136,13 @@ void ScDPGroupTableData::CreateCacheTable()
     pSourceData->CreateCacheTable();
 }
 
-void ScDPGroupTableData::FilterCacheTable(const vector<ScDPDimension*>& rPageDims)
-{
-    pSourceData->FilterCacheTable(rPageDims);
-}
-
-void ScDPGroupTableData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, Sequence< Sequence<Any> >& rData)
+void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>& rCriteria) const
 {
     typedef hash_map<long, const ScDPGroupDimension*> GroupFieldMapType;
     GroupFieldMapType aGroupFieldIds;
     {
-        ScDPGroupDimensionVec::const_iterator itrEnd = aGroups.end();
-        for (ScDPGroupDimensionVec::const_iterator itr = aGroups.begin(); itr != itrEnd; ++itr)
+        ScDPGroupDimensionVec::const_iterator itr = aGroups.begin(), itrEnd = aGroups.end();
+        for (; itr != itrEnd; ++itr)
             aGroupFieldIds.insert( hash_map<long, const ScDPGroupDimension*>::value_type(itr->GetGroupDim(), &(*itr)) );
     }
 
@@ -1240,7 +1235,20 @@ void ScDPGroupTableData::GetDrillDownData(const vector<ScDPCacheTable::Criterion
             }
         }
     }
+    rCriteria.swap(aNewCriteria);
+}
 
+void ScDPGroupTableData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria)
+{
+    vector<ScDPCacheTable::Criterion> aNewCriteria(rCriteria);
+    ModifyFilterCriteria(aNewCriteria);
+    pSourceData->FilterCacheTable(aNewCriteria);
+}
+
+void ScDPGroupTableData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, Sequence< Sequence<Any> >& rData)
+{
+    vector<ScDPCacheTable::Criterion> aNewCriteria(rCriteria);
+    ModifyFilterCriteria(aNewCriteria);
     pSourceData->GetDrillDownData(aNewCriteria, rData);
 }
 
