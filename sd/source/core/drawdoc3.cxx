@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawdoc3.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1611,10 +1611,13 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
                     }
                     else
                     {
-                       // So eine Vorlage erzeugen
+                        // create new style
+                        String aHelpFile;
                         pMySheet = static_cast<SfxStyleSheet*>( &mxStyleSheetPool->Make(aName, SD_STYLE_FAMILY_MASTERPAGE, pHisSheet->GetMask()) );
+                        pMySheet->SetHelpId( aHelpFile, pHisSheet->GetHelpId(aHelpFile) );
                         pMySheet->GetItemSet().ClearItem(0);  // alle loeschen
                         pMySheet->GetItemSet().Put(pHisSheet->GetItemSet());
+
                         aCreatedStyles.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( pMySheet ) ) );
                     }
 
