@@ -8,7 +8,7 @@
  *
  * $RCSfile: sdtransform.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,7 +160,10 @@ void SdTransformOOo2xDocument::transformStyle( SfxStyleSheetBase& rSheet )
 {
     SfxItemSet& rSet = rSheet.GetItemSet();
 
-    transformItemSet( rSet, false );
+    bool bState = false;
+    getBulletState( rSheet.GetItemSet(), rSheet.GetPool().Find( rSheet.GetParent(), rSheet.GetFamily() ), bState );
+
+    transformItemSet( rSet, bState );
     removeAlienAttributes( rSet );
 }
 
