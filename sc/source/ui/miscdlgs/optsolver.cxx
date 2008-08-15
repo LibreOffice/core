@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optsolver.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -503,7 +503,7 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             if ( bSingle )
                 aAdr.Format( aStr, nFmt, pDocP, pDocP->GetAddressConvention() );
             else
-                rRef.Format( aStr, nFmt, pDocP, pDocP->GetAddressConvention() );
+                rRef.Format( aStr, nFmt | SCR_ABS, pDocP, pDocP->GetAddressConvention() );
         }
 
         // variable cells can be several ranges, so only the selection is replaced
