@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salbmp.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -167,6 +167,7 @@ void AquaSalBitmap::Destroy()
 void AquaSalBitmap::DestroyContext()
 {
     CGImageRelease( mxCachedImage );
+    mxCachedImage = NULL;
 
     if( mxGraphicContext )
     {
