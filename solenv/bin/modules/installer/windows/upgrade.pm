@@ -8,7 +8,7 @@
 #
 # $RCSfile: upgrade.pm,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -31,6 +31,7 @@
 
 package installer::windows::upgrade;
 
+use installer::exiter;
 use installer::files;
 use installer::globals;
 use installer::windows::idtglobal;
@@ -103,6 +104,20 @@ sub create_upgrade_table
             $newline = $allvariableshashref->{'STUBUPGRADECODE'} . "\t" . "1.0" . "\t" . "\t" . "\t" . "1" . "\t" . "\t" . "STUBPRODUCTS" . "\n";
             push(@upgradetable, $newline);
         }
+
+        # searching for all older patches and languagepacks (defined in a extra file)
+
+        if ( $allvariableshashref->{'REMOVE_UPGRADE_CODE_FILE'} )
+        {
+            my $filename = $allvariableshashref->{'REMOVE_UPGRADE_CODE_FILE'};
+            my $langpackcodefilename = $installer::globals::idttemplatepath  . $installer::globals::separator . $filename;
+            if ( ! -f $langpackcodefilename ) { installer::exiter::exit_program("ERROR: Could not find file \"$langpackcodefilename\".", "create_upgrade_table"); }
+
+            my $filecontent = installer::files::read_file($langpackcodefilename);
+            my $newlines = analyze_file_for_upgrade_table($filecontent);
+
+            for ( my $i = 0; $i <= $#{$newlines}; $i++ ) { push(@upgradetable, ${$newlines}[$i]); }
+        }
     }
 
     # No upgrade for Beta versions!
@@ -121,6 +136,30 @@ sub create_upgrade_table
     installer::files::save_file($upgradetablename ,\@upgradetable);
     my $infoline = "Created idt file: $upgradetablename\n";
     push(@installer::globals::logfileinfo, $infoline);
+}
+
+##############################################################
+# Reading the file with UpgradeCodes of old products,
+# that can be removed, if the user wants to remove them.
+##############################################################
+
+sub analyze_file_for_upgrade_table
+{
+    my ($filecontent) = @_;
+
+    my @allnewlines = ();
+
+    for ( my $i = 0; $i <= $#{$filecontent}; $i++ )
+    {
+        my $line = ${$filecontent}[$i];
+        if ( $line =~ /^\s*$/ ) { next; } # empty lines can be ignored
+        if ( $line =~ /^\s*\#/ ) { next; } # comment lines starting with a hash
+
+        if ( $line =~ /^(.*)\t(.*)\t(.*)\t(.*)\t(.*)\t(.*)\t(.*)$/ ) { push(@allnewlines, $line); }
+        else { installer::exiter::exit_program("ERROR: Wrong syntax in file for upgrade table", "analyze_file_for_upgrade_table"); }
+    }
+
+    return \@allnewlines;
 }
 
 1;
