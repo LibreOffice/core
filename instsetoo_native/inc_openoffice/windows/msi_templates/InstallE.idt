@@ -11,6 +11,36 @@ CreateFolders		1850
 CreateShortcuts		2150
 DeleteServices	VersionNT	1000
 DontRemoveProducts	REMOVEOLDPRODUCTS<>"1"	155
+DontRemoveLpEnusProducts	REMOVEOLDPRODUCTS<>"1"	157
+DontRemoveLpptProducts	REMOVEOLDPRODUCTS<>"1"	158
+DontRemoveLpruProducts	REMOVEOLDPRODUCTS<>"1"	159
+DontRemoveLpelProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpnlProducts	REMOVEOLDPRODUCTS<>"1"	161
+DontRemoveLpfrProducts	REMOVEOLDPRODUCTS<>"1"	162
+DontRemoveLpesProducts	REMOVEOLDPRODUCTS<>"1"	163
+DontRemoveLpfiProducts	REMOVEOLDPRODUCTS<>"1"	164
+DontRemoveLphuProducts	REMOVEOLDPRODUCTS<>"1"	165
+DontRemoveLpcaProducts	REMOVEOLDPRODUCTS<>"1"	166
+DontRemoveLpitProducts	REMOVEOLDPRODUCTS<>"1"	167
+DontRemoveLpcsProducts	REMOVEOLDPRODUCTS<>"1"	168
+DontRemoveLpskProducts	REMOVEOLDPRODUCTS<>"1"	169
+DontRemoveLpengbProducts	REMOVEOLDPRODUCTS<>"1"	170
+DontRemoveLpdaProducts	REMOVEOLDPRODUCTS<>"1"	171
+DontRemoveLpsvProducts	REMOVEOLDPRODUCTS<>"1"	172
+DontRemoveLpnoProducts	REMOVEOLDPRODUCTS<>"1"	173
+DontRemoveLpplProducts	REMOVEOLDPRODUCTS<>"1"	174
+DontRemoveLpdeProducts	REMOVEOLDPRODUCTS<>"1"	175
+DontRemoveLpptbrProducts	REMOVEOLDPRODUCTS<>"1"	176
+DontRemoveLpthProducts	REMOVEOLDPRODUCTS<>"1"	177
+DontRemoveLpetProducts	REMOVEOLDPRODUCTS<>"1"	178
+DontRemoveLpjaProducts	REMOVEOLDPRODUCTS<>"1"	179
+DontRemoveLpkoProducts	REMOVEOLDPRODUCTS<>"1"	180
+DontRemoveLpzhcnProducts	REMOVEOLDPRODUCTS<>"1"	181
+DontRemoveLpzhtwProducts	REMOVEOLDPRODUCTS<>"1"	182
+DontRemoveLptrProducts	REMOVEOLDPRODUCTS<>"1"	183
+DontRemoveLphiProducts	REMOVEOLDPRODUCTS<>"1"	184
+DontRemoveLparProducts	REMOVEOLDPRODUCTS<>"1"	185
+DontRemoveLpheProducts	REMOVEOLDPRODUCTS<>"1"	186
 DuplicateFiles		2050
 FileCost		400
 FindRelatedProducts	NOT ISSETUPDRIVEN	100
@@ -57,7 +87,7 @@ ScheduleReboot	ISSCHEDULEREBOOT	3125
 SelfRegModules		2850
 SelfUnregModules		1100
 SetARPInstallLocation	Not Installed	990
-SetOfficeInstallLocation	Not Installed AND OFFICEINSTALLLOCATION=""	575
+SetOfficeInstallLocation	Not Installed	575
 SetBasisDir	Not Installed AND BASISINSTALLLOCATION<>""	379
 SetBasisInstallLocation	Not Installed AND BASISINSTALLLOCATION=""	576
 SetUreDir	Not Installed AND UREINSTALLLOCATION<>""	380
