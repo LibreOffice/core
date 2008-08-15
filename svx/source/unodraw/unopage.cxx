@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unopage.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -967,6 +967,14 @@ void SvxDrawPage::ChangeModel( SdrModel* pNewModel )
             StartListening( *pNewModel );
 
         mpModel = pNewModel;
+
+        if( mpView )
+        {
+            delete mpView;
+            mpView = new SdrView( mpModel );
+            if( mpView )
+                mpView->SetDesignMode(sal_True);
+        }
     }
 }
 
