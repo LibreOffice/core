@@ -8,7 +8,7 @@
  *
  * $RCSfile: dpcachetable.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -198,7 +198,7 @@ public:
 
     /** Set filter on/off flag to each row to control visibility.  The caller
         must ensure that the table is filled before calling this function. */
-    void filterByPageDimension(const ::std::vector<ScDPDimension*>& rPageDims);
+    void filterByPageDimension(const ::std::vector<Criterion>& rCriteria, bool bRepeatIfEmpty = false);
 
     /** Get the cell instance at specified location within the data grid. Note
         that the data grid doesn't include the header row.  Don't delete the
@@ -229,6 +229,10 @@ public:
     bool empty() const;
 
 private:
+    /**
+     * Check if a given row meets all specified criteria.
+     */
+    bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria, bool bRepeatIfEmpty) const;
     void getValueData(ScDocument* pDoc, const ScAddress& rPos, Cell& rCell);
     ScDPCacheTable::Cell getSelectedDimension(ScDPDimension* pDim) const;
 
