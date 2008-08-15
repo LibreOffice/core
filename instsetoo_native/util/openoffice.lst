@@ -51,6 +51,7 @@ OpenOffice
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
+			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
 			EVAL
 			FILEFORMATNAME OpenOffice.org
@@ -113,6 +114,7 @@ OpenOffice_wJRE
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat
+			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
 			EVAL
 			FILEFORMATNAME OpenOffice.org
@@ -328,6 +330,7 @@ BrOffice
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
+			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
 			EVAL
 			FILEFORMATNAME OpenOffice.org
@@ -394,6 +397,7 @@ BrOffice_wJRE
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat
+			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
 			EVAL
 			FILEFORMATNAME OpenOffice.org
