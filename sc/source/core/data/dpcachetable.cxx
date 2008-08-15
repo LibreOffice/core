@@ -8,7 +8,7 @@
  *
  * $RCSfile: dpcachetable.cxx,v $
  *
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -544,40 +544,17 @@ bool ScDPCacheTable::isRowActive(sal_Int32 nRow) const
     return maRowsVisible[nRow];
 }
 
-void ScDPCacheTable::filterByPageDimension(const vector<ScDPDimension*>& rPageDims)
+void ScDPCacheTable::filterByPageDimension(const vector<Criterion>& rCriteria, bool bRepeatIfEmpty)
 {
     sal_Int32 nRowSize = getRowSize();
-
     if (nRowSize != static_cast<sal_Int32>(maRowsVisible.size()))
     {
-        fprintf(stdout, "ScDPCacheTable::filterByPageDimension: the sizes of the two tables differ.\n");fflush(stdout);
+        // sizes of the two tables differ!
         return;
     }
 
     for (sal_Int32 nRow = 0; nRow < nRowSize; ++nRow)
-    {
-        maRowsVisible[nRow] = true;
-        const vector<Cell>& rRow = maTable[nRow];
-        vector<ScDPDimension*>::const_iterator itr = rPageDims.begin(), itrEnd = rPageDims.end();
-        for (; itr != itrEnd; ++itr)
-        {
-            ScDPDimension* pDim = *itr;
-            if (!pDim->HasSelectedPage())
-                // 'show all' is selected.
-                continue;
-
-            ScDPCacheTable::Cell aDimCell = getSelectedDimension(pDim);
-
-            sal_Int32 nCol = pDim->GetDimension();
-            const Cell& rCell = rRow[nCol];
-            if (aDimCell.mnStrId != rCell.mnStrId)
-            {
-                // Selected page dimension value does not match the current value.  Skip it.
-                maRowsVisible[nRow] = false;
-                break;
-            }
-        }
-    }
+        maRowsVisible[nRow] = isRowQualified(nRow, rCriteria, bRepeatIfEmpty);
 }
 
 const ::ScDPCacheTable::Cell* ScDPCacheTable::getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const
@@ -668,32 +645,7 @@ void ScDPCacheTable::filterTable(const vector<Criterion>& rCriteria, Sequence< S
             // This row is filtered out.
             continue;
 
-        bool bRetainRow = true;
-
-        vector<Criterion>::const_iterator itrEnd = rCriteria.end();
-        for (vector<Criterion>::const_iterator itr = rCriteria.begin(); itr != itrEnd; ++itr)
-        {
-            if (itr->mnFieldIndex >= nColSize)
-                // specified field is outside the source data columns.  Don't
-                // use this criterion.
-                continue;
-
-            const Cell* pCell = getCell(static_cast<SCCOL>(itr->mnFieldIndex), nRow, bRepeatIfEmpty);
-            if (!pCell)
-            {
-                // This should never happen, but just in case...
-                bRetainRow = false;
-                break;
-            }
-
-            if (!itr->mpFilter->match(*pCell))
-            {
-                bRetainRow = false;
-                break;
-            }
-        }
-
-        if (!bRetainRow)
+        if (!isRowQualified(nRow, rCriteria, bRepeatIfEmpty))
             continue;
 
         // Insert this row into table.
@@ -754,6 +706,28 @@ void ScDPCacheTable::swap(ScDPCacheTable& rOther)
 bool ScDPCacheTable::empty() const
 {
     return maTable.empty();
+}
+
+bool ScDPCacheTable::isRowQualified(sal_Int32 nRow, const vector<Criterion>& rCriteria, bool bRepeatIfEmpty) const
+{
+    sal_Int32 nColSize = getColSize();
+    vector<Criterion>::const_iterator itrEnd = rCriteria.end();
+    for (vector<Criterion>::const_iterator itr = rCriteria.begin(); itr != itrEnd; ++itr)
+    {
+        if (itr->mnFieldIndex >= nColSize)
+            // specified field is outside the source data columns.  Don't
+            // use this criterion.
+            continue;
+
+        const Cell* pCell = getCell(static_cast<SCCOL>(itr->mnFieldIndex), nRow, bRepeatIfEmpty);
+        if (!pCell)
+            // This should never happen, but just in case...
+            return false;
+
+        if (!itr->mpFilter->match(*pCell))
+            return false;
+    }
+    return true;
 }
 
 void ScDPCacheTable::getValueData(ScDocument* pDoc, const ScAddress& rPos, Cell& rCell)
