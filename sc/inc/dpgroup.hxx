@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dpgroup.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -196,6 +196,8 @@ class ScDPGroupTableData : public ScDPTableData
     void        GetNumGroupInfo( long nDimension, ScDPNumGroupInfo& rInfo,
                                     bool& rNonInteger, sal_Unicode& rDecimal );
 
+    void        ModifyFilterCriteria(::std::vector<ScDPCacheTable::Criterion>& rCriteria) const;
+
 public:
                 // takes ownership of pSource
                 ScDPGroupTableData( ScDPTableData* pSource, ScDocument* pDocument );
@@ -217,7 +219,7 @@ public:
     virtual void                    SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty );
 
     virtual void                    CreateCacheTable();
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPDimension*>& rPageDims);
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria);
     virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
                                                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData);
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow);
