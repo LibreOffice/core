@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_crashrep_dynamic.scp,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,11 @@ File gid_Brand_File_Bin_Crashreport
     Name = "crashrep.exe";
   #endif
     Dir = gid_Brand_Dir_Program;
+  #ifdef WNT
+    Styles = (PACKED, PATCH_SO_NAME);
+  #else
     Styles = (PACKED);
+  #endif
 End
 
 #endif
