@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sbxvalue.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -309,7 +309,7 @@ SbxValue& SbxValue::operator=( const SbxValue& r )
         {
             // string -> byte array
             if( IsFixed() && (aData.eType == SbxOBJECT)
-                && aData.pObj && ( aData.pObj->GetType() & (SbxARRAY | SbxBYTE) )
+                && aData.pObj && ( aData.pObj->GetType() == (SbxARRAY | SbxBYTE) )
                 && (r.aData.eType == SbxSTRING) )
             {
                 String aStr = r.GetString();
@@ -319,7 +319,7 @@ SbxValue& SbxValue::operator=( const SbxValue& r )
             }
             // byte array -> string
             if( r.IsFixed() && (r.aData.eType == SbxOBJECT)
-                && r.aData.pObj && ( r.aData.pObj->GetType() & (SbxARRAY | SbxBYTE) )
+                && r.aData.pObj && ( r.aData.pObj->GetType() == (SbxARRAY | SbxBYTE) )
                 && (aData.eType == SbxSTRING) )
             {
                 SbxBase* pObj = r.GetObject();
