@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sbxstr.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,7 +98,7 @@ XubString ImpGetString( const SbxValues* p )
             if( pVal )
                 aRes = pVal->GetString();
             else if( p->pObj && p->pObj->IsFixed()
-                    && (p->pObj->GetType() & (SbxARRAY | SbxBYTE )) )
+                    && (p->pObj->GetType() == (SbxARRAY | SbxBYTE )) )
             {
                 // convert byte array to string
                 SbxArray* pArr = PTR_CAST(SbxArray, p->pObj);
