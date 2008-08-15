@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dpsdbtab.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -287,10 +287,10 @@ void ScDatabaseDPData::CreateCacheTable()
     pImpl->aCacheTable.fillTable(pImpl->xRowSet, *pImpl->pFormatter->GetNullDate());
 }
 
-void ScDatabaseDPData::FilterCacheTable(const vector<ScDPDimension*>& rPageDims)
+void ScDatabaseDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria)
 {
     CreateCacheTable();
-    pImpl->aCacheTable.filterByPageDimension(rPageDims);
+    pImpl->aCacheTable.filterByPageDimension(rCriteria, IsRepeatIfEmpty());
 }
 
 void ScDatabaseDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, Sequence< Sequence<Any> >& rData)
