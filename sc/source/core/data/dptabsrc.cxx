@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dptabsrc.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -834,15 +834,25 @@ void ScDPSource::CreateRes_Impl()
         else
         {
             {
-                vector<ScDPDimension*> aPageDims;
-                aPageDims.reserve(nPageDimCount);
+                // filter table by page dimensions.
+                vector<ScDPCacheTable::Criterion> aCriteria;
                 for (i = 0; i < nPageDimCount; ++i)
                 {
                     ScDPDimension* pDim = GetDimensionsObject()->getByIndex(nPageDims[i]);
-                    if (pDim)
-                        aPageDims.push_back(pDim);
+                    if (!pDim || !pDim->HasSelectedPage())
+                        continue;
+
+                    long nField = pDim->GetDimension();
+                    const ScDPItemData& rData = pDim->GetSelectedData();
+                    aCriteria.push_back(ScDPCacheTable::Criterion());
+                    ScDPCacheTable::Criterion& r = aCriteria.back();
+                    r.mnFieldIndex = static_cast<sal_Int32>(nField);
+                    sal_Int32 nStrId = ScSharedString::getStringId(rData.aString);
+                    r.mpFilter.reset(
+                        new ScDPCacheTable::SingleFilter(nStrId, rData.fValue, rData.bHasValue));
                 }
-                pData->FilterCacheTable(aPageDims);
+                if (!aCriteria.empty())
+                    pData->FilterCacheTable(aCriteria);
             }
             aInfo.aPageDims.reserve(nPageDimCount);
             for (i = 0; i < nPageDimCount; ++i)
