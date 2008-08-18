@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: button.cxx,v $
- * $Revision: 1.62 $
+ * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2445,7 +2445,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
 
             // if the text rect height is smaller than the height of the image
             // then for single lines the default should be centered text
-            if( (nWinStyle & (WB_TOP|WB_CENTER|WB_BOTTOM)) == 0 &&
+            if( (nWinStyle & (WB_TOP|WB_VCENTER|WB_BOTTOM)) == 0 &&
                 (rImageSize.Height() > rSize.Height() || ! (nWinStyle & WB_WORDBREAK)  ) )
             {
                 nTextStyle &= ~(TEXT_DRAW_TOP|TEXT_DRAW_BOTTOM);
@@ -3541,7 +3541,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
 
         // if the text rect height is smaller than the height of the image
         // then for single lines the default should be centered text
-        if( (nWinStyle & (WB_TOP|WB_CENTER|WB_BOTTOM)) == 0 &&
+        if( (nWinStyle & (WB_TOP|WB_VCENTER|WB_BOTTOM)) == 0 &&
             (rImageSize.Height() > rSize.Height() || ! (nWinStyle & WB_WORDBREAK) ) )
         {
             nTextStyle &= ~(TEXT_DRAW_TOP|TEXT_DRAW_BOTTOM);
