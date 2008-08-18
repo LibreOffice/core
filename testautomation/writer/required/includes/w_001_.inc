@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_001_.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 14:32:03 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:40:29 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -410,7 +410,7 @@ testcase tFileNewBusinessCards
         Sleep 1
     else
         Warnlog "Dialog to synchronize Business Cards not up!"
-    endif
+    end if
     Sleep 2
     Call hCloseDocument
     PrintLog "Close active document"
@@ -707,7 +707,7 @@ testcase tFileSaveWithPassword
     PrintLog "Open new document"
     Call hNewDocument
     PrintLog "Enter some text into document"
-    Call wDokSchreiben("This document will be saved with a password!")
+    Call wTypeKeys("This document will be saved with a password!")
 
 
     if gUseSysDlg = True then goto endsub
@@ -886,7 +886,7 @@ testcase tFileReload
     Call hNewDocument
 
     PrintLog "Enter some text, save and close document"
-    Call wDokSchreiben("File -> Reload!")
+    Call wTypeKeys("File -> Reload!")
     Call hFileSaveAsKill ( gOfficePath + "user\work\" + sFile$ )
     FileClose
     Kontext
@@ -943,7 +943,7 @@ testcase tFileVersions
 
     PrintLog "Open new document"
     Call hNewDocument
-    Call wDokSchreiben ("File version")
+    Call wTypeKeys ("File version")
     PrintLog "enter some text in documet and save it"
     Call hFileSaveAsKill(gOfficePath + "user\work\" + sFile$)
     Sleep 1
@@ -980,11 +980,11 @@ testcase tFileSendCreateMasterDocument
     if gApplication <> "WRITER" then
         printlog "Not in : " + gApplication
         goto endsub
-    endif
+    end if
 
     Call hNewDocument
     PrintLog "Open new document"
-    Call wDokSchreiben("File -> Send -> Create Master Document")
+    Call wTypeKeys("File -> Send -> Create Master Document")
     FileSendCreateMasterdocument
     PrintLog "Choose File / Send /Create Master Document"
     Kontext "SendMasterDocument"
@@ -1122,8 +1122,8 @@ testcase tFileSendOutlineToClipboard
 
     PrintLog "Paste outline in new document"
     EditPaste
-    Call wDokSchreiben("<Up>", 6)
-    Call wDokSchreiben("<Home><Shift End>")
+    Call wTypeKeys("<Up>", 6)
+    Call wTypeKeys("<Home><Shift End>")
     EditCopy
     if GetClipboardText <> "Seite 1." then QAErrorlog "#i29453#Wrong Outline in Impress Outlinemode"
     WaitSlot(1000)
@@ -1166,8 +1166,8 @@ testcase tFileSendCreateAutoabstract
     Kontext "AutoAbstractErzeugen"
     AutoAbstractErzeugen.OK
     Sleep 1
-    Call wDokSchreiben("<Home><Up>", 10)
-    Call wDokSchreiben("<Shift End>")
+    Call wTypeKeys("<Home><Up>", 10)
+    Call wTypeKeys("<Shift End>")
     try
         EditCopy
         WaitSlot(1000)
