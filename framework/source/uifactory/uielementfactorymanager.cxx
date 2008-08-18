@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: uielementfactorymanager.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +54,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/svapp.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -436,10 +437,9 @@ void ConfigurationAccess_UIElementFactoryManager::readConfigurationData()
             }
         }
 
-        // UNSAFE
-        aLock.unlock();
-
         Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
+        aLock.unlock();
+        // UNSAFE
         if ( xContainer.is() )
             xContainer->addContainerListener( this );
     }
@@ -501,7 +501,7 @@ DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   UIElementFactoryManager             
 DEFINE_INIT_SERVICE                     (   UIElementFactoryManager, {} )
 
 UIElementFactoryManager::UIElementFactoryManager( const Reference< XMultiServiceFactory >& xServiceManager ) :
-    ThreadHelpBase(),
+    ThreadHelpBase( &Application::GetSolarMutex() ),
     m_bConfigRead( sal_False ),
     m_xServiceManager( xServiceManager )
 {
@@ -577,11 +577,14 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
             Args[i].Value >>= xFrame;
     }
 
+    Reference< XModuleManager > xManager( m_xModuleManager );
+    aLock.unlock();
+
     // Determine the module identifier
     try
     {
-        if ( xFrame.is() && m_xModuleManager.is() )
-            aModuleId = m_xModuleManager->identify( Reference< XInterface >( xFrame, UNO_QUERY ) );
+        if ( xFrame.is() && xManager.is() )
+            aModuleId = xManager->identify( Reference< XInterface >( xFrame, UNO_QUERY ) );
 
         Reference< XUIElementFactory > xUIElementFactory = getFactory( ResourceURL, aModuleId );
         if ( xUIElementFactory.is() )
@@ -626,9 +629,13 @@ throw ( RuntimeException )
 
     RetrieveTypeNameFromResourceURL( aResourceURL, aType, aName );
 
+    Reference< XMultiServiceFactory > xSManager( m_xServiceManager );
+
     rtl::OUString aServiceSpecifier = m_pConfigAccess->getFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );
+
+    aLock.unlock();
     if ( aServiceSpecifier.getLength() )
-        return Reference< XUIElementFactory >( m_xServiceManager->createInstance( aServiceSpecifier ), UNO_QUERY );
+        return Reference< XUIElementFactory >( xSManager->createInstance( aServiceSpecifier ), UNO_QUERY );
     else
         return Reference< XUIElementFactory >();
 }
