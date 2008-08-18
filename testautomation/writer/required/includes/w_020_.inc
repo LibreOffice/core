@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_020_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:26:32 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:42:36 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -71,9 +71,9 @@ testcase t_TB_Insert
         printlog " Click 'Frame' and Insert a Frame"
         Rahmen.Click
         Call gMouseMove(40, 40, 60, 60)
-        Call wDokSchreiben ("<Delete>")
+        Call wTypeKeys ("<Delete>")
         printlog " Hit 'Delete' to remove the frame"
-    endif
+    end if
 
     printlog "  - Graphic"
     Kontext "Insertbar"
@@ -90,7 +90,7 @@ testcase t_TB_Insert
                 Oeffnen.Click
             else
                 Warnlog "Dialog 'Insert Graphic' not up!"
-            endif
+            end if
             Sleep 1
             Kontext "Active"
             if Active.Exists then
@@ -98,13 +98,13 @@ testcase t_TB_Insert
                 Active.Ok
                 Kontext "GrafikEinfuegenDlg"
                 GrafikEinfuegenDlg.Cancel
-            endif
-            Call wDokSchreiben ("<Delete>")
+            end if
+            Call wTypeKeys ("<Delete>")
             printlog " Hit 'Delete' to remove graphic"
         else
             Warnlog "Button 'Graphic' on Insertbar is not enabled!"
-        endif
-    endif
+        end if
+    end if
 
     Sleep 2
     printlog "  - Table"
@@ -116,10 +116,10 @@ testcase t_TB_Insert
         Kontext "TabelleEinfuegenWriter"
         TabelleEinfuegenWriter.OK
         printlog " Move cursor under table"
-        Call wDokSchreiben ("<Down>",2)
+        Call wTypeKeys ("<Down>",2)
     else
         Warnlog "Button 'Table' on Insertbar is not enabled!"
-    endif
+    end if
 
     printlog "  - Document"
     Kontext "Insertbar"
@@ -132,10 +132,10 @@ testcase t_TB_Insert
         if Fussnote.IsEnabled then
             Fussnote.Click
             printlog " Click 'Insert Footnote Directly' in Toolbox"
-            Call wDokSchreiben ("<PageUp>")
+            Call wTypeKeys ("<PageUp>")
         else
             Warnlog "Button 'Footnote' on Insertbar is not enabled!"
-        endif
+        end if
         
         Sleep 2
         printlog "  - Endnote"
@@ -144,14 +144,14 @@ testcase t_TB_Insert
         printlog " Click 'Insert Endnote Directly' in Toolbox"
         if Endnote.IsEnabled then
             Endnote.CLick
-            Call wDokSchreiben ("<PageUp>")
+            Call wTypeKeys ("<PageUp>")
         else
             Warnlog "Button 'Endnote' on Insertbar is not enabled!"
-        endif
+        end if
 
         
         printlog "  - Index Marker"
-        Call wDokSchreiben ("Index Marker <Shift Home>")
+        Call wTypeKeys ("Index Marker <Shift Home>")
         Kontext "Insertbar"
         if Not Insertbar.Exists then Call hToolbarSelect("Insert", true)
         printlog " Click 'Insert Index Marker' in Toolbox"
@@ -162,8 +162,8 @@ testcase t_TB_Insert
             printlog " Close upcoming 'Insert Index Entry' dialog"
         else
             Warnlog "Button 'Index Marker' on Insertbar is not enabled!"
-        endif            
-    endif
+        end if            
+    end if
 
     printlog "  - Special Character"
     Kontext "Insertbar"
@@ -176,7 +176,7 @@ testcase t_TB_Insert
         printlog " Cancel upcoming 'Special Character' dialog"
     else
         Warnlog "Button 'Special Character' on Insertbar is not enabled!"
-    endif
+    end if
 
     printlog "  - Insert Section"
     Kontext "Insertbar"
@@ -191,7 +191,7 @@ testcase t_TB_Insert
         printlog " Close upcoming 'Section' dialog"
     else
         Warnlog "Button 'Insert Section' on Insertbar is not enabled!"
-    endif
+    end if
 
     printlog "  - Bookmark"
     Kontext "Insertbar"
@@ -205,7 +205,7 @@ testcase t_TB_Insert
         TextmarkeEinfuegen.OK
     else
         Warnlog "Button 'Bookmark' on Insertbar is not enabled!"
-    endif
+    end if
 
     'Only with closing the toolbox the dialog is accessible for TT
     Kontext "Insertbar"           
@@ -225,7 +225,7 @@ testcase t_TB_InsertFields
 	if gPlatgroup = "unx" then
 		QAErrorlog "HDE: Doesn't run on unix"
 		goto endsub
-	endif	
+	end if	
     Call hNewDocument
     printlog " Open new document"
     printlog "- TearOff Insert Toolbox"
@@ -240,7 +240,7 @@ testcase t_TB_InsertFields
         Call hMenuSelectNr(6)
     else
         Call hMenuSelectNr(8)
-    endif
+    end if
     Kontext
     try
         Active.SetPage TabDokumentFeldbefehle
@@ -261,7 +261,7 @@ testcase t_TB_ShowDrawFunctions
     if gApplication = "HTMLDOKUMENT" then
         printlog "Not in WriterWeb!"
         goto endsub
-    endif
+    end if
 
     Call hNewDocument
     printlog " Open new document"
@@ -281,7 +281,7 @@ testcase t_TB_ShowDrawFunctions
     try
         Linie.Click
         Call gMouseMove(20, 20, 30, 30)
-        Call wDokSchreiben ("<Escape>")
+        Call wTypeKeys ("<Escape>")
     catch
         Warnlog " Line could not be created !"
     endcatch
@@ -291,14 +291,14 @@ testcase t_TB_ShowDrawFunctions
     printlog " Draw a Rectangle"
     Rechteck.Click
     Call gMouseMove(31, 20, 40, 40)
-    Call wDokSchreiben ("<Escape>")
+    Call wTypeKeys ("<Escape>")
 
     printlog "  - Draw Ellipse"
     Kontext "Drawbar"
     printlog " Draw an Ellipse"
     Ellipse.Click
     Call gMouseMove(31, 30, 60, 50)
-    Call wDokSchreiben ("<Escape>")
+    Call wTypeKeys ("<Escape>")
 
     printlog "  - Draw Freeform"
     Kontext "Drawbar"
@@ -308,16 +308,16 @@ testcase t_TB_ShowDrawFunctions
     Call gMouseMove ( 35, 31, 40, 90 )
     Call gMouseMove ( 41, 91, 55 , 70 )
     Call gMouseClick( 55, 70 )
-    Call wDokSchreiben ("<Escape>")
+    Call wTypeKeys ("<Escape>")
 
     printlog "  - Draw Textobject"
     Kontext "Drawbar"
     printlog " Draw a Textobject"
     Textobjekt.Click
     Call gMouseMove ( 17, 17, 28, 25 )
-    Call wDokSchreiben ("Textobject")
+    Call wTypeKeys ("Textobject")
     Call gMouseClick ( 50, 99 )
-    Call wDokSchreiben ("<Escape>")
+    Call wTypeKeys ("<Escape>")
 
     printlog "  - Draw Callouts"
     Kontext "Drawbar"
@@ -325,7 +325,7 @@ testcase t_TB_ShowDrawFunctions
     Legende.Click
     Call gMouseMove (15, 20, 50, 60)
     Call gMouseClick( 50, 60 )
-    Call wDokSchreiben ("<Escape>")
+    Call wTypeKeys ("<Escape>")
 
     Kontext "Drawbar"
     Drawbar.Close
@@ -557,7 +557,7 @@ testcase t_TB_DirektCursor
     Sleep 1
     Call gMouseDoubleClick(50, 70)
     printlog " Point cursor somewhere in document"
-    Call wDokSchreiben ("Direct Cursor On")
+    Call wTypeKeys ("Direct Cursor On")
     printlog " Insert some words in document"
 
     Kontext "Toolbar"
@@ -566,7 +566,7 @@ testcase t_TB_DirektCursor
     Direktcursor.Click
     Call gMouseDoubleClick (80, 20)
     printlog " Insert some text in document"
-    Call wDokSchreiben ("Direct Cursor Off")
+    Call wTypeKeys ("Direct Cursor Off")
 
     Call hCloseDocument
     printlog " Close active document"
