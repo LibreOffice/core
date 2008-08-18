@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_005b_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:26:29 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:41:25 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -943,9 +943,9 @@ testcase tFormatGroup
     printlog " Insert 2 rectangles and select both"
     if gPlatGroup <> "unx" then
         Call wZeichenobjektEinfuegen ( "Rechteck", 25, 25, 30, 30 )
-        Call wDokSchreiben ( "<Escape>" )
+        Call wTypeKeys ( "<Escape>" )
         Call wZeichenobjektEinfuegen ( "Rechteck", 35, 35, 45, 45 )
-        Call wDokSchreiben ( "<Escape>" )
+        Call wTypeKeys ( "<Escape>" )
         Call wObjektSelektieren ( 23, 23, 50, 50 )
         x% = 25
         y% = 25
@@ -953,9 +953,9 @@ testcase tFormatGroup
         y1% = 45
     else
         Call wZeichenobjektEinfuegen ( "Rechteck", 50, 60, 30, 30 )
-        Call wDokSchreiben ( "<Escape>" )
+        Call wTypeKeys ( "<Escape>" )
         Call wZeichenobjektEinfuegen ( "Rechteck", 65, 80, 45, 45 )
-        Call wDokSchreiben ( "<Escape>" )
+        Call wTypeKeys ( "<Escape>" )
         Call wObjektSelektieren ( 23, 23, 70, 90 )
         x% = 55
         y% = 55
@@ -985,7 +985,7 @@ testcase tFormatGroup
         goto endsub
     endcatch
 
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 2
     try
         printlog " Format / Exit Group"
@@ -998,7 +998,7 @@ testcase tFormatGroup
         goto endsub
     endcatch
 
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 2
     try
         printlog " Format / Ungroup"
@@ -1123,46 +1123,46 @@ testcase tFormatStyleEdit
     
         FormatStyleBold
         printlog " Format / Style / Bold"
-        Call wDokSchreiben ("a")
+        Call wTypeKeys ("a")
         printlog " Format / Style / Italic"
         FormatStyleItalic
         WaitSlot (1000)
         printlog " Insert a letter in text object"
-        Call wDokSchreiben ("a")
+        Call wTypeKeys ("a")
         printlog " Format / Style / Underline"
         FormatStyleUnderline
         WaitSlot (1000)
 
         printlog " Insert a letter in text object"
-        Call wDokSchreiben ("a")
+        Call wTypeKeys ("a")
         printlog " Format /Style / Strike through"
         UseBindings
         FormatStyleStrikeThrough
         WaitSlot (1000)
         printlog " Insert a letter in text object"
-        Call wDokSchreiben ("b")
+        Call wTypeKeys ("b")
         printlog " Format / Style / Shadow"
         UseBindings
         FormatStyleShadow
         WaitSlot (1000)
         printlog " Insert a letter in text object"
-        Call wDokSchreiben ("b")
+        Call wTypeKeys ("b")
         printlog " Format / Style / Outline"
         UseBindings
         FormatStyleOutline
         WaitSlot (1000)
         printlog " Insert a letter in text object"
-        Call wDokSchreiben ("b")
+        Call wTypeKeys ("b")
         printlog " Format / Style / Superscript"
         FormatStyleSuperscript
         WaitSlot (1000)
         printlog " Insert a letter in text object"
-        Call wDokSchreiben ("a")
+        Call wTypeKeys ("a")
         printlog " Format / Style / Subscript "
         FormatStyleSubscript
         WaitSlot (1000)
         printlog " Insert a letter in text object"
-        Call wDokSchreiben ("a")
+        Call wTypeKeys ("a")
         Kontext "Drawbar"
         Drawbar.Close
     else
@@ -1192,7 +1192,7 @@ testcase tFormatAlignmentEdit
     Sleep 1
     printlog " Insert some text in document"
 
-    Call wDokSchreiben ("Ein Wort")
+    Call wTypeKeys ("Ein Wort")
     printlog " Format / Alignment / Left"
     FormatAlignmentLeftText
     WaitSlot (1000)
@@ -1232,7 +1232,7 @@ testcase tFormatLineSpacing
     Sleep 1
 
     printlog " Format / Spacing / Single line"
-    Call wDokSchreiben ("Hallo<Return>Andere Zeile")
+    Call wTypeKeys ("Hallo<Return>Andere Zeile")
 
     printlog " Format / Line Spacing / Single line"
     FormatLineSpacingSingleLine
