@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_007_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:26:30 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:41:47 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -67,7 +67,7 @@ end sub
 testcase tToolsSpellcheck
     PrintLog "- Tools / Spellcheck"
     Dim i as integer
-    Dim DieDatei as string
+    Dim TheFile as string
     Dim IsWriteable as boolean
 
 	' As long as OOo has no modules for that, disabled
@@ -76,10 +76,43 @@ testcase tToolsSpellcheck
 		goto endsub
 	end if
 
-    Call hNewDocument
-    printlog " Open new document"
-    Call wDokSchreiben ("Dies ist ein Rechtschreibtexxxxt<Home>")
+    printlog " Open document where the formatting is set to the language we wish to test."
+    TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
+    if hFileExists ( TheFile ) <> TRUE then
+       Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
+       exit sub
+    end if
+    call hFileOpen (TheFile,false)
+    Call sMakeReadOnlyDocumentEditable
+
     printlog " Insert some faulty text"
+    select case iSprache
+        case 01 : Call wTypeKeys ("This is a spellchecktestttttt<Home>")
+        case 33 : Call wTypeKeys ("Je Suiss la Penneeee<Home>")
+        case 34 : Call wTypeKeys ("Habla Espanollll<Home>")
+        case 39 : Call wTypeKeys ("Don Cara Mio, capitoliooo?<Home>")
+        case 49 : Call wTypeKeys ("Dies ist ein Rechtschreibtexxxxt<Home>")
+        case 46 : Call wTypeKeys ("Det här är en rättstavningstexxxxt<Home>")
+        case 07 : Printlog "- No Spellcheck in Russian!"
+                     goto endsub
+        case 48 : Printlog "- No Spellcheck in Polish!"
+                     goto endsub
+        case 55 : Printlog "- No Spellcheck in Brazilian!"
+                     goto endsub                     
+        case 81 : Printlog "- No Spellcheck in Japanese!"
+                     goto endsub
+        case 82 : Printlog "- No Spellcheck in Korean!"
+                     goto endsub
+        case 86 : Printlog "- No Spellcheck in Chinese (simplified)!"
+                     goto endsub
+        case 88 : Printlog "- No Spellcheck in Chinese (traditional)!"
+                     goto endsub
+        case 03, 30, 35, 36, 37, 42, 47, 51, 90
+                  Printlog "- No Spellcheck available !"
+                  goto endsub
+        case else
+    end select
+
     ToolsSpellcheck
     printlog " Tools / Spellcheck / Check"
     WaitSlot (500)
@@ -170,7 +203,7 @@ endcase
 
 testcase tToolsThesaurus
     PrintLog "- Tools / Thesaurus"
-    Dim DieDatei as string
+    Dim TheFile as string
 
 	' As long as OOo has no modules for that, disabled
 	if gOOO = True then
@@ -179,6 +212,42 @@ testcase tToolsThesaurus
 	end if
 
     select case iSprache
+        case 07 : Printlog "- No Thesaurus in Russian!"
+                     goto endsub
+        case 48 : Printlog "- No Thesaurus in Polish!"
+                     goto endsub
+        case 55 : Printlog "- No Thesaurus in Brazilian!"
+                     goto endsub
+        case 81 : Printlog "- No Thesaurus in Japanese!"
+                     goto endsub
+        case 82 : Printlog "- No Thesaurus in Korean!"
+                     goto endsub
+        case 86 : Printlog "- No Thesaurus in Chinese (simplified)!"
+                     goto endsub
+        case 88 : Printlog "- No Thesaurus in Chinese (traditional)!"
+                     goto endsub
+        case 03, 30, 35, 36, 37, 42, 47, 51, 90
+                  Printlog "- No Thesaurus available !"
+                  goto endsub
+    end select
+
+    printlog " Open document where the formatting is set to the language we wish to test."
+    TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
+    if hFileExists ( TheFile ) <> TRUE then
+       Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
+       exit sub
+    end if
+    call hFileOpen (TheFile,false)
+    Call sMakeReadOnlyDocumentEditable
+
+    printlog " Insert some faulty text"
+    select case iSprache
+        case 01 : Call wTypeKeys ("This is a spellchecktestttttt<Home>")
+        case 33 : Call wTypeKeys ("Je Suiss la Penneeee<Home>")
+        case 34 : Call wTypeKeys ("Habla Espanollll<Home>")
+        case 39 : Call wTypeKeys ("Don Cara Mio, capitoliooo?<Home>")
+        case 49 : Call wTypeKeys ("Dies ist ein Rechtschreibtexxxxt<Home>")
+        case 46 : Call wTypeKeys ("Det här är en rättstavningstexxxxt<Home>")
         case 07 : Printlog "- No Thesaurus in Russian!"
                      goto endsub
         case 48 : Printlog "- No Thesaurus in Polish!"
@@ -195,13 +264,10 @@ testcase tToolsThesaurus
                      goto endsub
         case 03, 30, 35, 36, 37, 42, 47, 51, 90
                   Printlog "- No Thesaurus available !"
-                  goto endsub                  
+                  goto endsub
+        case else
     end select
 
-    Call hNewDocument
-    printlog " Open new document"
-    Call wDokSchreiben ("Dies ist ein Rechtschreibtexxt<Home>")
-    printlog " Insert a faulty text"
     ToolsLanguageThesaurus
     Kontext "Active"
     if Active.Exists then
@@ -249,7 +315,7 @@ testcase tToolsHyphenation
         case 1,01 : LingFile = "01-44-hyph.dat"
                      DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\001.odt" )
         case 7,07 :  DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\007.odt" )
-        case 3,03 :  DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\003.odt" )        
+        case 3,03 :  DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\003.odt" )
         case 81 : Printlog "- No Hyphenation in Japanese!"
                      goto endsub
         case 82 : Printlog "- No Hyphenation in Korean!"
@@ -286,11 +352,10 @@ testcase tToolsHyphenation
             goto endsub
     end select
 
-    
     Call sMakeReadOnlyDocumentEditable
     printlog " Insert file 'writer\required\input\linguistik\0 + [OfficeLanguage] + '.odt'"
     Sleep 1
-    Call wDokSchreiben ("<Mod1 Home>")
+    Call wTypeKeys ("<Mod1 Home>")
 
     ToolsLanguageHyphenate
     printlog " Tools / Hyphenate"
@@ -755,9 +820,9 @@ testcase tToolsTextInTables
 
     Call hNewDocument
     printlog " Open new document"
-    Call wDokSchreiben ("Hallo dieser Text soll in eine Tabelle")
+    Call wTypeKeys ("Hallo dieser Text soll in eine Tabelle")
     printlog " Insert some text and select it"
-    Call wDokSchreiben ("<Shift Home>")
+    Call wTypeKeys ("<Shift Home>")
     ToolsTextInTable
     printlog " Tools / Text<->Table"
     Kontext "TextInTabelleUmwandeln"
@@ -778,10 +843,10 @@ testcase tToolsSort
     Call hNewDocument
     printlog " Open new document"
     For i = 1 to 5
-        Call wDokSchreiben (i)
-        Call wDokSchreiben ("<Return>")
+        Call wTypeKeys (i)
+        Call wTypeKeys ("<Return>")
     next i
-    Call wDokSchreiben ("<Mod1 A>")
+    Call wTypeKeys ("<Mod1 A>")
     ToolsSort
     Kontext "Sortieren"
     Call DialogTest ( Sortieren )
@@ -798,13 +863,13 @@ testcase tToolsCalculate
 
     Call hNewDocument
     printlog " Open new document"
-    Call wDokSchreiben( "2+4" )
+    Call wTypeKeys( "2+4" )
     printlog " Insert text: 2+4"
     EditSelectAll
     printlog " Edit / Select All"
     ToolsCalculate
     printlog " Tools / Calculate"
-    Call wDokSchreiben ("<End>  Das Ergebnis ist = ")
+    Call wTypeKeys ("<End>  Das Ergebnis ist = ")
     printlog " Paste result of calculation with Edit / Paste"
     EditPaste
     Call hCloseDocument
@@ -825,7 +890,7 @@ testcase tToolsUpdate
 
     printlog "  - Update Indexes ( all, current )"
     printlog " Add a text to document"
-    Call wDokSchreiben ("Dieser Text ist zur Aktualisierung")
+    Call wTypeKeys ("Dieser Text ist zur Aktualisierung")
     InsertIndexes
     printlog " Insert / Indexes"
     WaitSlot (2000)
@@ -850,7 +915,7 @@ testcase tToolsUpdate
     ToolsUpdateCurrentIndex
 
     printlog "  - Update Fields"
-    Call wDokSchreiben ("<Up><Home><Tab>")
+    Call wTypeKeys ("<Up><Home><Tab>")
     printlog " Insert / Fields / Author"
 
     InsertFieldsAuthor
@@ -907,7 +972,7 @@ testcase tToolsHangulHanjaConversion
     printlog " Open the test file"
     Call hFileOpen (sTestFile)
     Call sMakeReadOnlyDocumentEditable
-    Call wDokSchreiben("<MOD1 Home>")
+    Call wTypeKeys("<MOD1 Home>")
 
     printlog " Tools / HangulHanjaConversion"
     try
