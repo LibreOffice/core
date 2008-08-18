@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xsecverify.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,9 +70,10 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
         /*
          * create a SignatureVerifier
          */
+    cssu::Reference< cssl::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     xReferenceResolvedListener = cssu::Reference< cssxc::sax::XReferenceResolvedListener >(
-        mxMSF->createInstance(
-            rtl::OUString::createFromAscii( SIGNATUREVERIFIER_COMPONENT )),
+        xMCF->createInstanceWithContext(
+            rtl::OUString::createFromAscii( SIGNATUREVERIFIER_COMPONENT ), mxCtx),
         cssu::UNO_QUERY);
 
     cssu::Reference<cssl::XInitialization> xInitialization(xReferenceResolvedListener, cssu::UNO_QUERY);
