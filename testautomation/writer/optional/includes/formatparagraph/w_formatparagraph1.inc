@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_formatparagraph1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:53 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:29:14 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -119,9 +119,9 @@ testcase tParagraphIndent1
     TabSeite.OK
 
    '/// Input some test words which should be longer than one line
-    Call wDokSchreiben sTest
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys sTest
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     iLenTest = Len(getclipboardtext)
 
@@ -130,8 +130,8 @@ testcase tParagraphIndent1
         Vonlinks.SetText sIndentLeft
     TabEinzuegeUndAbstaende.OK
 
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     iLenHalf = Len(getclipboardtext)
 
@@ -139,8 +139,8 @@ testcase tParagraphIndent1
         Warnlog "1.Indents - before Text is not right !"
     end if
 
-    Call wDokSchreiben "<Right><Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys "<Right><Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     iLenHalf = Len(getclipboardtext)
 
@@ -181,9 +181,9 @@ testcase tParagraphIndent2
     TabSeite.OK
 
    '/// Input some test words which should be longer than one line
-    Call wDokSchreiben sTest
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys sTest
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     iLenTest = Len(getclipboardtext)
 
@@ -192,8 +192,8 @@ testcase tParagraphIndent2
         VonRechts.SetText sIndentRight
     TabEinzuegeUndAbstaende.OK
 
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     iLenHalf = Len(getclipboardtext)
 
@@ -201,8 +201,8 @@ testcase tParagraphIndent2
         Warnlog "1.Indents - after Text is not right !"
     end if
 
-    Call wDokSchreiben "<Right><Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys "<Right><Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     iLenHalf = Len(getclipboardtext)
 
@@ -243,9 +243,9 @@ testcase tParagraphIndent3
     TabSeite.OK
 
    '/// Input some test words which should be longer than one line
-    Call wDokSchreiben sTest
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys sTest
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     iLenTest = Len(getclipboardtext)
 
@@ -254,8 +254,8 @@ testcase tParagraphIndent3
         ErsteZeile.SetText sIndentFirst
     TabEinzuegeUndAbstaende.OK
 
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     iLenNew = Len(getclipboardtext)
 
@@ -263,8 +263,8 @@ testcase tParagraphIndent3
         Warnlog "1.Indents - First line is not right !"
     end if
 
-    Call wDokSchreiben "<Right><Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys "<Right><Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     iLenNew = Len(getclipboardtext)
 
@@ -305,9 +305,9 @@ testcase tParagraphIndent4
     TabSeite.OK
 
    '/// Input some test words which should be longer than one line
-    Call wDokSchreiben sTest
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys sTest
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     iLenTest = Len(getclipboardtext)
 
@@ -318,8 +318,8 @@ testcase tParagraphIndent4
         if ErsteZeile.IsEnabled = TRUE then Warnlog "The first line shouldn't be enabled when checking automatic !"
     TabEinzuegeUndAbstaende.OK
 
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     iLenNew = Len(getclipboardtext)
 
@@ -328,8 +328,8 @@ testcase tParagraphIndent4
         Warnlog "The 1st line length isn't right after checking 'automatic'!"
     end if
 
-    Call wDokSchreiben "<Right><Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys "<Right><Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     iLenNew = Len(getclipboardtext)
 
@@ -497,14 +497,14 @@ testcase tParagraphIndent7
         Sleep 1
     FindAndReplace.Close
 
-    Call wDokSchreiben "<End>"
+    Call wTypeKeys "<End>"
     Sleep 1
 
-    Call wDokSchreiben "<Return>"
+    Call wTypeKeys "<Return>"
     Sleep 1
 
    '/// insert 2nd paragraph
-    Call wDokSchreiben sParagraph2
+    Call wTypeKeys sParagraph2
     Sleep 1
 
    '/// check if the head of paragraph2 is in 1st page and
@@ -584,14 +584,14 @@ testcase tParagraphIndent8
         Sleep 1
     FindAndReplace.Close
 
-    Call wDokSchreiben "<End>"
+    Call wTypeKeys "<End>"
     Sleep 1
 
-    Call wDokSchreiben "<Return>"
+    Call wTypeKeys "<Return>"
     Sleep 1
 
    '/// insert 2nd paragraph
-    Call wDokSchreiben sParagraph2
+    Call wTypeKeys sParagraph2
     Sleep 1
 
    '/// check if the paragraph2 is in 2nd page
@@ -639,7 +639,7 @@ testcase tParagraphIndent9
     TabEinzuegeUndAbstaende.OK
 
    'Set the focus to the end of the paragraph
-    Call wDokSchreiben "<MOD1 End>"
+    Call wTypeKeys "<MOD1 End>"
     Sleep 1
 
    '/// check if the last line is in 1 page (it should be)
@@ -680,10 +680,10 @@ testcase tParagraphIndent10
     TabEinzuegeUndAbstaende.OK
 
    'Set the focus to the end of the paragraph
-    Call wDokSchreiben "<MOD1 End>"
+    Call wTypeKeys "<MOD1 End>"
     Sleep 1
 
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
     Sleep 1
 
    '/// check if the last 2 lines(7th and 8th) is in 2nd page (it should be)
@@ -694,9 +694,9 @@ testcase tParagraphIndent10
         if Seitennummer.GetText <> "2" then warnlog "The 8th line should be in 2nd page !"
     fCloseNavigator
 
-    Call wDokSchreiben "<Up>"
+    Call wTypeKeys "<Up>"
     Sleep 1
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
     Sleep 1
 
     Kontext "Navigator"
@@ -706,9 +706,9 @@ testcase tParagraphIndent10
         if Seitennummer.GetText <> "2" then warnlog "The 7th line should be in 2nd page !"
     fCloseNavigator
 
-    Call wDokSchreiben "<Up>" , 2
+    Call wTypeKeys "<Up>" , 2
     Sleep 1
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
     Sleep 1
 
    '/// check if the 5th lines is in 1st page (it should be)
@@ -748,10 +748,10 @@ testcase tParagraphIndent11
     TabEinzuegeUndAbstaende.OK
     
     'Set the focus to the end of the paragraph
-    Call wDokSchreiben "<MOD1 End>"
+    Call wTypeKeys "<MOD1 End>"
     Sleep 1
     
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
     Sleep 1
     
     '/// check if the last 4 lines is in 2nd page (it should be)
@@ -762,7 +762,7 @@ testcase tParagraphIndent11
     if Seitennummer.GetText <> "2" then warnlog "The 8th line should be in 2nd page !"
     fCloseNavigator
     
-    Call wDokSchreiben "<Up>" , 3
+    Call wTypeKeys "<Up>" , 3
     Sleep 1
     
     Kontext "Navigator"
@@ -772,7 +772,7 @@ testcase tParagraphIndent11
     if Seitennummer.GetText <> "2" then warnlog "The 5th line should be in 2nd page !"
     fCloseNavigator
     
-    Call wDokSchreiben "<Up>"
+    Call wTypeKeys "<Up>"
     Sleep 1
     
     '/// check if the first 4 lines is in 1st page (it should be)
@@ -784,10 +784,10 @@ testcase tParagraphIndent11
     fCloseNavigator
     
     'Set the focus to the end of the paragraph
-    Call wDokSchreiben "<MOD1 End>"
+    Call wTypeKeys "<MOD1 End>"
     Sleep 1
     
-    Call wDokSchreiben "m"
+    Call wTypeKeys "m"
     Kontext "Navigator"
     if Not Navigator.Exists then EditNavigator
     Kontext "NavigatorWriter"
@@ -844,10 +844,10 @@ testcase tParagraphIndent12
     TabEinzuegeUndAbstaende.OK
 
    'Set the focus to the end of the paragraph
-    Call wDokSchreiben "<MOD1 End>"
+    Call wTypeKeys "<MOD1 End>"
     Sleep 1
 
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
     Sleep 1
 
    '/// check if the last 2 lines is in 2nd page (it should be)
@@ -858,7 +858,7 @@ testcase tParagraphIndent12
         if Seitennummer.GetText <> "2" then warnlog "The 8th line should be in 2nd page !"
     fCloseNavigator
 
-    Call wDokSchreiben "<Up>" , 2
+    Call wTypeKeys "<Up>" , 2
     Sleep 1
 
     Kontext "Navigator"
@@ -895,7 +895,7 @@ testcase tParagraphIndent13
     Call hFileOpen(sTestFile)
 
    'Get the original coordinate-Y
-   Call wDokSchreiben ( "<Shift F4>" )
+   Call wTypeKeys ( "<Shift F4>" )
    Sleep 1
    FormatAnchorToPage
    Sleep 1
@@ -904,7 +904,7 @@ testcase tParagraphIndent13
     TabPositionAndSizeWriter.Cancel
     FormatAnchorAsCharacter
     Sleep 1
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Sleep 1
 
    '/// Format/Paragraph / Indents & Spacing , select At least in Line spacing and set 4cm
@@ -915,7 +915,7 @@ testcase tParagraphIndent13
     TabEinzuegeUndAbstaende.OK
 
    'Set the focus to the end of the paragraph
-    Call wDokSchreiben "<MOD1 End>"
+    Call wTypeKeys "<MOD1 End>"
     Sleep 1
 
    '/// check if it is 1 line /page
@@ -927,7 +927,7 @@ testcase tParagraphIndent13
     fCloseNavigator
 
    '/// check if the pic moves
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     FormatAnchorToPage
     Sleep 1
@@ -963,7 +963,7 @@ testcase tParagraphIndent14
     Call hFileOpen(sTestFile)
 
    'Get the original coordinate-Y
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     FormatAnchorToPage
     Sleep 1
@@ -972,7 +972,7 @@ testcase tParagraphIndent14
     TabPositionAndSizeWriter.Cancel
     FormatAnchorAsCharacter
     Sleep 1
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Sleep 1
 
    '/// Format/Paragraph / Indents & Spacing , select leading in Line spacing and set 4cm
@@ -983,7 +983,7 @@ testcase tParagraphIndent14
     TabEinzuegeUndAbstaende.OK
 
    'Set the focus to the end of the paragraph
-    Call wDokSchreiben "<MOD1 End>"
+    Call wTypeKeys "<MOD1 End>"
     Sleep 1
 
    '/// check if it is 1 line /page
@@ -995,7 +995,7 @@ testcase tParagraphIndent14
     fCloseNavigator
 
    '/// check if the pic moves
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     FormatAnchorToPage
     Sleep 1
@@ -1037,7 +1037,7 @@ testcase tParagraphIndent15
     TabEinzuegeUndAbstaende.OK
 
    '/// Format/Character / Font ,Change font size to 24
-    Call wDokSchreiben "<MOD1 a>"
+    Call wTypeKeys "<MOD1 a>"
     Sleep 1
     Call fFormatCharacter("TabFont")
         try
@@ -1049,8 +1049,8 @@ testcase tParagraphIndent15
 
    '/// check if there are still 8 lines/page and there
    '/// + should be 2 pages
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Down>" , 7
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Down>" , 7
 
     Kontext "Navigator"
         if Not Navigator.Exists then EditNavigator
@@ -1059,7 +1059,7 @@ testcase tParagraphIndent15
         if Seitennummer.GetText <> "1" then warnlog "The 8th line should be in 1st page !"
     Call fCloseNavigator
 
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
 
     Kontext "Navigator"
         if Not Navigator.Exists then EditNavigator
@@ -1096,7 +1096,7 @@ testcase tParagraphIndent16
     Call hFileOpen(sTestFile)
 
    'Get the original location for the pic
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     FormatAnchorToPage
     Sleep 1
@@ -1107,9 +1107,9 @@ testcase tParagraphIndent16
 
     FormatAnchorAsCharacter
     Sleep 1
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Sleep 1
-    Call wDokSchreiben "<MOD1 A>"
+    Call wTypeKeys "<MOD1 A>"
 
    '/// Format/Paragraph / Indents & Spacing ,
    '/// + check Regester-true Active
@@ -1119,7 +1119,7 @@ testcase tParagraphIndent16
     TabEinzuegeUndAbstaende.OK
 
    '/// Check if  "He2 heard quiet steps" is at the same line with the context left it.
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     FormatAnchorToPage
     Sleep 1
