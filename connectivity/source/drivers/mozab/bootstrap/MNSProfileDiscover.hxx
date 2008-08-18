@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MNSProfileDiscover.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,9 @@
 #ifndef __MNSProfileDiscover_h___
 #define __MNSProfileDiscover_h___
 
+#ifndef MINIMAL_PROFILEDISCOVER
 #include "mozilla_profile_discover.h"
+#endif
 
 #include <sal/types.h>
 #include <osl/diagnose.h>
@@ -68,15 +70,27 @@ namespace connectivity
         class ProfileStruct
         {
         public:
-            ProfileStruct(MozillaProductType aProduct,::rtl::OUString aProfileName,nsILocalFile * aProfilePath);
+            ProfileStruct(MozillaProductType aProduct,::rtl::OUString aProfileName,
+#ifdef MINIMAL_PROFILEDISCOVER
+                          const ::rtl::OUString &aProfilePath
+#else
+                          nsILocalFile * aProfilePath
+#endif
+                            );
             MozillaProductType getProductType() { return product;}
             ::rtl::OUString getProfileName(){ return profileName;}
             ::rtl::OUString getProfilePath() ;
+#ifndef MINIMAL_PROFILEDISCOVER
             nsILocalFile    *getProfileLocal(){ return profilePath;}
+#endif
         protected:
             MozillaProductType product;
             ::rtl::OUString profileName;
+#ifdef MINIMAL_PROFILEDISCOVER
+            ::rtl::OUString profilePath;
+#else
             nsCOMPtr<nsILocalFile> profilePath;
+#endif
         };
 
         class ProductStruct
@@ -102,16 +116,18 @@ namespace connectivity
             ::rtl::OUString getDefaultProfile( ::com::sun::star::mozilla::MozillaProductType product ) throw (::com::sun::star::uno::RuntimeException);
             ::sal_Bool SAL_CALL isProfileLocked( ::com::sun::star::mozilla::MozillaProductType product, const ::rtl::OUString& profileName ) throw (::com::sun::star::uno::RuntimeException);
             ::sal_Bool SAL_CALL getProfileExists( ::com::sun::star::mozilla::MozillaProductType product, const ::rtl::OUString& profileName ) throw (::com::sun::star::uno::RuntimeException);
-
         protected:
             ProductStruct m_ProductProfileList[4];
             sal_Int32 LoadProductsInfo();
+#ifndef MINIMAL_PROFILEDISCOVER
             nsresult  LoadMozillaProfiles();
+#endif
             sal_Int32 LoadXPToolkitProfiles(MozillaProductType product);
-
+#ifndef MINIMAL_PROFILEDISCOVER
             //used by isProfileLocked
             nsresult isExistFileOrSymlink(nsILocalFile* aFile,PRBool *bExist);
             nsresult isLockExist(nsILocalFile* aFile);
+#endif
         };
 
     }
