@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: signal.c,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,16 @@
 #include "system.h"
 
 #define MAX_STACK_FRAMES 256
+
+#if defined( MACOSX )
+
+#if defined( INTEL )
+#include "backtrace.h"
+#define INCLUDE_BACKTRACE
+#define STACKTYPE "MacOsX_X86"
+#endif /* INTEL */
+
+#endif /* MACOSX */
 
 #ifdef LINUX
 #include <execinfo.h>
@@ -60,6 +70,7 @@
 #include <osl/signal.h>
 #include <osl/process.h>
 #include <osl/thread.h>
+#include <rtl/bootstrap.h>
 #include <rtl/digest.h>
 
 #include "file_path_helper.h"
@@ -297,6 +308,7 @@ static sal_Bool DeInitSignal()
 }
 
 #if defined (SAL_ENABLE_CRASH_REPORT) && defined(INCLUDE_BACKTRACE)
+
 /*****************************************************************************/
 /* Generate MD5 checksum    */
 /*****************************************************************************/
@@ -626,6 +638,40 @@ static int ReportCrash( int Signal )
                         pChecksumTempName,
                         pStackTempName,
                         bAutoCrashReport ? " -noui -send" : " -noui" );
+#elif defined( MACOSX )
+                if ( pXMLTempName && pChecksumTempName && pStackTempName )
+                {
+                    rtl_uString *crashrep_url = NULL;
+                    rtl_uString *crashrep_path = NULL;
+                    rtl_String  *crashrep_path_system = NULL;
+
+                    rtl_string2UString( &crashrep_url, RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/crash_report.bin"), OSTRING_TO_OUSTRING_CVTFLAGS );
+                    rtl_bootstrap_expandMacros( &crashrep_url );
+                    osl_getSystemPathFromFileURL( crashrep_url, &crashrep_path );
+                    rtl_uString2String(
+                        &crashrep_path_system,
+                        rtl_uString_getStr( crashrep_path ),
+                        rtl_uString_getLength( crashrep_path ),
+                        osl_getThreadTextEncoding(),
+                        RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR );
+
+                    rtl_uString_release( crashrep_url );
+                    rtl_uString_release( crashrep_path );
+
+                    snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
+                        "%s -p %d -s %d -xml %s -chksum %s -stack %s%s",
+                        rtl_string_getStr( crashrep_path_system ),
+                        getpid(),
+                        Signal,
+                        pXMLTempName,
+                        pChecksumTempName,
+                        pStackTempName,
+                        bAutoCrashReport ? " -noui -send" : " -noui" );
+
+                    rtl_string_release( crashrep_path_system );
+
+                    printf( "%s\n", szShellCmd );
+                }
 #elif defined ( SOLARIS )
                 if ( pXMLTempName && pChecksumTempName )
                     snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
@@ -679,14 +725,14 @@ static int ReportCrash( int Signal )
 
 static void PrintStack( int sig )
 {
-#ifndef MACOSX
+#if ! defined(MACOSX) || defined(INCLUDE_BACKTRACE)
     void *buffer[MAX_STACK_FRAMES];
     int size = backtrace( buffer, sizeof(buffer) / sizeof(buffer[0]) );
 #endif
 
     fprintf( stderr, "\n\nFatal exception: Signal %d\n", sig );
 
-#ifdef MACOSX
+#if defined(MACOSX) && ! defined(INCLUDE_BACKTRACE)
     fprintf( stderr, "Please turn on Enable Crash Reporting and\nAutomatic Display of Crashlogs in the Console application\n" );
 #else
     if ( size > 0 )
