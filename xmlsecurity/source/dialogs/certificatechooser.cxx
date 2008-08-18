@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: certificatechooser.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,9 +36,11 @@
 #include <xmlsecurity/biginteger.hxx>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <comphelper/sequence.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/security/NoPasswordException.hpp>
 #include <com/sun/star/security/CertificateCharacters.hpp>
+#include <com/sun/star/security/SerialNumberAdapter.hpp>
 
 #include <dialogs.hrc>
 #include <resourcemanager.hxx>
@@ -64,7 +66,7 @@ USHORT CertificateChooser::GetSelectedEntryPos( void ) const
     return (USHORT) nSel;
 }
 
-CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment, const SignatureInformations& _rCertsToIgnore )
+CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< uno::XComponentContext>& _rxCtx, uno::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment, const SignatureInformations& _rCertsToIgnore )
     :ModalDialog    ( _pParent, XMLSEC_RES( RID_XMLSECDLG_CERTCHOOSER ) )
     ,maCertsToIgnore( _rCertsToIgnore )
     ,maHintFT       ( this, XMLSEC_RES( FT_HINT_SELECT ) )
@@ -84,6 +86,7 @@ CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< dcss::
 
     FreeResource();
 
+    mxCtx = _rxCtx;
     mxSecurityEnvironment = _rxSecurityEnvironment;
     mbInitialized = FALSE;
 
@@ -135,6 +138,9 @@ void CertificateChooser::ImplInitialize()
         {
         }
 
+        uno::Reference< dcss::security::XSerialNumberAdapter> xSerialNumberAdapter =
+            ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
+
         sal_Int32 nCertificates = maCerts.getLength();
         sal_Int32 nCertificatesToIgnore = maCertsToIgnore.size();
         for( sal_Int32 nCert = nCertificates; nCert; )
@@ -150,7 +156,7 @@ void CertificateChooser::ImplInitialize()
                 {
                     const SignatureInformation& rInf = maCertsToIgnore[ nSig ];
                     if ( ( aIssuerName == rInf.ouX509IssuerName ) &&
-                        ( bigIntegerToNumericString( xCert->getSerialNumber() ) == rInf.ouX509SerialNumber ) )
+                        ( xSerialNumberAdapter->toString( xCert->getSerialNumber() ) == rInf.ouX509SerialNumber ) )
                     {
                         bIgnoreThis = true;
                         break;
