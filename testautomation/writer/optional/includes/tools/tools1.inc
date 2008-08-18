@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: tools1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:04:00 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:38:22 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -33,7 +33,7 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description : Tools for writer/level1 - 1
+'* short description : Tools for writer/Optional - 1
 '*
 '************************************************************************
 '*
@@ -111,15 +111,15 @@ function fFormatGraphic(Options as string) as boolean
                             Active.Ok
                         else
                             exit do
-                        endif                    
+                        end if                    
                     else
                         exit do
-                    endif
+                    end if
                 Loop            
         end select
     
         Kontext Options
-    endif
+    end if
     fFormatGraphic = sSlotOK
 end function
 

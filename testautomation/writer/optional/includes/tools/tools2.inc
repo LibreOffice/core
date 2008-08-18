@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: tools2.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:04:00 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:38:33 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -33,7 +33,7 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description : Tools for writer/level1 - 2
+'* short description : Tools for writer/Optional - 2
 '*
 '************************************************************************
 '*
@@ -133,10 +133,10 @@ function StrToDouble ( sWert$ ) as Double
             sDummy$ = Left ( sWert$, Len(sWert$)-1 )
          else
             sDummy$ = Left ( sWert$, Len(sWert$)-Len(gMeasurementUnit) )
-         endif
+         end if
       else
          sDummy$ = sWert$
-      endif
+      end if
    ' get position of fraction mark
       i1 = instr (sDummy$, ",")  ' wrong output
       i2 = instr (sDummy$, ".")
