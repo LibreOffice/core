@@ -1,3 +1,4 @@
+'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 '* 
@@ -7,9 +8,9 @@
 '*
 '* $RCSfile: w_shortcuts.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-26 08:16:56 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:35:39 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -50,6 +51,24 @@
 '*
 '\***********************************************************************
 
+sub w_shortcuts
+
+    Call tShortcutGlobalNew
+    Call tShortcutGlobalOpen
+    Call tShortcutGlobalSave
+    Call tShortcutGlobalSaveAs
+    Call tShortcutSelectAll
+    Call tShortcutFindAndReplace
+    Call tShortcutBold
+    Call tShortcutItalic
+    Call tShortcutUnderline
+    Call tShortcutDoubleUnderline
+    Call tShortcutAlign
+    Call tShortcutSuperscript
+    Call tShortcutSubscript
+
+end sub
+
 testcase tShortcutGlobalNew
     Dim vShortcut as string
     Dim vNoOfDocs as integer
@@ -75,7 +94,7 @@ testcase tShortcutGlobalNew
     
     vNoOfDocs = GetDocumentCount
     '/// After executing previous named shortcut a new document should be opened
-    Call wDokSchreiben ( vShortcut )
+    Call wTypeKeys ( vShortcut )
     wait 500
     if GetDocumentCount = (vNoOfDocs + 1) then
         printlog "Shortcut " & vShortcut & " opens a new document!"
@@ -114,7 +133,7 @@ testcase tShortcutGlobalOpen
     end select
     
     '/// After executing previous named shortcut FileOpen dialog should be opened
-    Call wDokSchreiben ( vShortcut )
+    Call wTypeKeys ( vShortcut )
     wait 500
     Kontext "OeffnenDlg"
     if OeffnenDlg.Exists then
@@ -153,7 +172,7 @@ testcase tShortcutGlobalSave
     end select
     
     '/// After executing previous named shortcut FileSave dialog should be opened
-    Call wDokSchreiben ( vShortcut )
+    Call wTypeKeys ( vShortcut )
     Kontext "SpeichernDlg"
     if SpeichernDlg.Exists then
         printlog "Shortcut " & vShortcut & " opens FileSave dialog"
@@ -178,7 +197,7 @@ testcase tShortcutGlobalSaveAs
     vShortcut = "<Mod1 Shift S>"
     
     '/// After executing previous named shortcut FileSave dialog should be opened
-    Call wDokSchreiben ( vShortcut )
+    Call wTypeKeys ( vShortcut )
     Kontext "SpeichernDlg"
     if SpeichernDlg.Exists then
         printlog "Shortcut " & vShortcut & " opens FileSaveAs dialog"
@@ -217,9 +236,9 @@ testcase tShortcutSelectAll
     end select
  
     '/// write down 'The complete text should be selected'
-    Call wDokSchreiben ( "The complete text should be selected" )
+    Call wTypeKeys ( "The complete text should be selected" )
     '/// execute shortcut->the complete text should be selected
-    Call wDokSchreiben ( vShortcut )
+    Call wTypeKeys ( vShortcut )
     wait 500
     try
         EditCopy
@@ -266,9 +285,9 @@ testcase tShortcutFindAndReplace
     
     printlog "Shortcut for 'Find & Replace'"
     '/// write down 'Check Find & Replace'
-    Call wDokSchreiben ( "Check Find & Replace" )
+    Call wTypeKeys ( "Check Find & Replace" )
     '/// execute shortcut->the Find & Replace dialog should come up
-    Call wDokSchreiben ( vShortcut )
+    Call wTypeKeys ( vShortcut )
     wait 500
     Kontext "FindAndReplace"
     if FindAndReplace.Exists then
@@ -297,7 +316,7 @@ testcase tShortcutFindAndReplace
  
     printlog "Shortcut for 'Repeat Search'"
     '/// execute shortcut->a messagebox should appear asking to start from the beginning
-    Call wDokSchreiben ( vShortcut )
+    Call wTypeKeys ( vShortcut )
     wait 500    
     Kontext "Active"
     if Active.Exists then
@@ -351,10 +370,10 @@ testcase tShortcutBold
     end select
 
     '/// write down word 'Bold' and select it
-    Call wDokSchreiben ( "Bold" )
-    Call wDokSchreiben ( "<Shift Home>" )
+    Call wTypeKeys ( "Bold" )
+    Call wTypeKeys ( "<Shift Home>" )
     '/// execute shortcut and check if word is now formatted as 'Bold'
-    Call wDokSchreiben ( vShortcut )
+    Call wTypeKeys ( vShortcut )
     wait 500
     Kontext "TextObjectbar"
     if Fett.Getstate(2) = 1 then
@@ -394,10 +413,10 @@ testcase tShortcutItalic
     end select
 
     '/// write down word 'Italic' and select it
-    Call wDokSchreiben ( "Italic" )
-    Call wDokSchreiben ( "<Shift Home>" )
+    Call wTypeKeys ( "Italic" )
+    Call wTypeKeys ( "<Shift Home>" )
     '/// execute shortcut and check if word is now formatted as 'Italic'
-    Call wDokSchreiben ( vShortcut )
+    Call wTypeKeys ( vShortcut )
     wait 500
     Kontext "TextObjectbar"
     if Kursiv.Getstate(2) = 1 then
@@ -437,10 +456,10 @@ testcase tShortcutUnderline
     end select
 
     '/// write down word 'Underline' and select it
-    Call wDokSchreiben ( "Underline" )
-    Call wDokSchreiben ( "<Shift Home>" )
+    Call wTypeKeys ( "Underline" )
+    Call wTypeKeys ( "<Shift Home>" )
     '/// execute shortcut and check if word is now formatted as 'Underline'
-    Call wDokSchreiben ( vShortcut )
+    Call wTypeKeys ( vShortcut )
     wait 500
     Kontext "TextObjectbar"
     if Unterstrichen.Getstate(2) = 1 then
@@ -476,10 +495,10 @@ testcase tShortcutDoubleUnderline
     end select
 
     '/// write down word 'Underline' and select it
-    Call wDokSchreiben ( "Double Underline" )
-    Call wDokSchreiben ( "<Shift Home>" )
+    Call wTypeKeys ( "Double Underline" )
+    Call wTypeKeys ( "<Shift Home>" )
     '/// execute shortcut and check if word is now formatted as 'Double Underline'
-    Call wDokSchreiben ( vShortcut )
+    Call wTypeKeys ( vShortcut )
     wait 500
     FormatCharacter
     Kontext
@@ -490,6 +509,7 @@ testcase tShortcutDoubleUnderline
     else
         printlog "Shortcut " & vShortcut & " to format 'Double Underline' works"
     end if
+
     TabFontEffects.Cancel
     
     '/// close previous opened document
@@ -522,9 +542,9 @@ testcase tShortcutAlign
     end select
 
     '/// write down word 'Align Left'
-    Call wDokSchreiben ( "Align Left" )
+    Call wTypeKeys ( "Align Left" )
     '/// execute shortcut and check if word is now aligned left
-    Call wDokSchreiben ( vShortcut )
+    Call wTypeKeys ( vShortcut )
     wait 500
     Kontext "TextObjectbar"
     if Linksbuendig.Getstate(2) = 1 then
@@ -550,11 +570,11 @@ testcase tShortcutAlign
     end select
 
     '/// Insert a line break
-    Call wDokSchreiben ( "<Return>" )
+    Call wTypeKeys ( "<Return>" )
     '/// write down word 'Align Right'
-    Call wDokSchreiben ( "Align Right" )
+    Call wTypeKeys ( "Align Right" )
     '/// execute shortcut and check if word is now aligned right
-    Call wDokSchreiben ( vShortcut )
+    Call wTypeKeys ( vShortcut )
     wait 500
     Kontext "TextObjectbar"
     if Rechtsbuendig.Getstate(2) = 1 then
@@ -582,11 +602,11 @@ testcase tShortcutAlign
     end select
 
     '/// Insert a line break
-    Call wDokSchreiben ( "<Return>" )
+    Call wTypeKeys ( "<Return>" )
     '/// write down word 'Align Right'
-    Call wDokSchreiben ( "Align Centered" )
+    Call wTypeKeys ( "Align Centered" )
     '/// execute shortcut and check if word is now aligned centered
-    Call wDokSchreiben ( vShortcut )
+    Call wTypeKeys ( vShortcut )
     wait 500
     Kontext "TextObjectbar"
     if Zentriert.Getstate(2) = 1 then
@@ -614,11 +634,11 @@ testcase tShortcutAlign
     end select
 
     '/// Insert a line break
-    Call wDokSchreiben ( "<Return>" )
+    Call wTypeKeys ( "<Return>" )
     '/// write down word 'Align Right'
-    Call wDokSchreiben ( "Align Justified" )
+    Call wTypeKeys ( "Align Justified" )
     '/// execute shortcut and check if word is now aligned centered
-    Call wDokSchreiben ( vShortcut )
+    Call wTypeKeys ( vShortcut )
     wait 500
     Kontext "TextObjectbar"
     if Blocksatz.Getstate(2) = 1 then
@@ -664,8 +684,9 @@ testcase tShortcutSuperscript
     '/// write down word 'Superscript' and select it
     Call wDokSchreiben ("Superscript")
     Call wDokSchreiben ("<Shift Home>")
+
     '/// execute shortcut and check if word is now formatted as 'Superscript'
-    Call wDokSchreiben ( vShortcut )
+    Call wTypeKeys ( vShortcut )
     wait 500
     FormatCharacter
     Kontext
@@ -713,10 +734,12 @@ testcase tShortcutSubscript
     '/// Draw a Textobject ///
     Call gMouseMove ( 30, 30, 40, 40 )
     '/// write down word 'Subscript' and select it
+
     Call wDokSchreiben ("Subscript")
     Call wDokSchreiben ("<Shift Home>")
+
     '/// execute shortcut and check if word is now formatted as 'Superscript'
-    Call wDokSchreiben ( vShortcut )
+    Call wTypeKeys ( vShortcut )
     wait 500
     FormatCharacter
     Kontext
