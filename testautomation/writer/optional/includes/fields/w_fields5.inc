@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_fields5.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:51 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:27:14 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -99,21 +99,21 @@ testcase tVariables_1
          Zahlenformat.Select i+1
          Einfuegen.Click
          sleep 1
-         Call wDokSchreiben "<Return>"
+         Call wTypeKeys "<Return>"
          Kontext "TabVariablen"
      next i
      Kontext "TabVariablen"
    TabVariablen.Close
 
   '/// Check if the insertion is correct
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
    for i = 0 to j
-       Call wDokSchreiben "<Shift Right>"
+       Call wTypeKeys "<Shift Right>"
        if fGetFieldContent() <> sResult(i) then
            Warnlog i & "Should get " & sResult(i) & " but get " & fGetFieldContent()
        end if
-       Call wDokSchreiben "<Down><Home>"
+       Call wTypeKeys "<Down><Home>"
    next i
 
   Call hCloseDocument
@@ -167,21 +167,21 @@ testcase tVariables_2
          Zahlenformat.Select i+1
          Einfuegen.Click
          sleep 1
-         Call wDokSchreiben "<Return>"
+         Call wTypeKeys "<Return>"
          Kontext "TabVariablen"
      next i
      Kontext "TabVariablen"
    TabVariablen.Close
 
   '/// Check if the insertion is correct
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
    for i = 0 to j
-       Call wDokSchreiben "<Shift Right>"
+       Call wTypeKeys "<Shift Right>"
        if fGetFieldContent() <> sResult(i) then
            Warnlog i & "Should get " & sResult(i) & " but get " & fGetFieldContent()
        end if
-       Call wDokSchreiben "<Down><Home>"
+       Call wTypeKeys "<Down><Home>"
    next i
 
   Call hCloseDocument
@@ -241,7 +241,7 @@ testcase tVariables_3
 
          Kontext "TabVariablen"
            Einfuegen.Click
-           Call wDokSchreiben "<Shift Left>"
+           Call wTypeKeys "<Shift Left>"
            sleep 1
            if fGetFieldContent() <> sResult(i) then
                Warnlog i & "Should get " & sResult(i) & " but get " & fGetFieldContent()
@@ -294,7 +294,7 @@ testcase tVariables_4
          sleep 1
      next i
      for i = 0 to j
-         Call wDokSchreiben "<Return>"
+         Call wTypeKeys "<Return>"
          Kontext "TabVariablen"
          Feldtyp.Select 2
          Sleep 1
@@ -305,24 +305,24 @@ testcase tVariables_4
    TabVariablen.Close
 
   '/// Check if the insertion is correct
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
    for i = 0 to j
-       Call wDokSchreiben "<Down><Home>"
-       Call wDokSchreiben "<Shift Right>"
+       Call wTypeKeys "<Down><Home>"
+       Call wTypeKeys "<Shift Right>"
        if fGetFieldContent() <> sResult(i) then
            Warnlog "Should get " & sResult(i) & " but get " & fGetFieldContent()
        end if
    next i
 
   '/// Delete the 1st line
-   Call wDokSchreiben "<MOD1 Home><Shift End><Delete>"
+   Call wTypeKeys "<MOD1 Home><Shift End><Delete>"
 
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
    for i = 0 to j
-       Call wDokSchreiben "<Down><Home>"
-       Call wDokSchreiben "<Shift Right>"
+       Call wTypeKeys "<Down><Home>"
+       Call wTypeKeys "<Shift Right>"
        if fGetFieldContent() <> "0" then
            Warnlog i & "Should get 0 but get " & fGetFieldContent()
        end if
@@ -369,7 +369,7 @@ testcase tVariables_5
      Einfuegen.Click
 
     '/// Then select Show Variable , insert this variable
-     Call wDokSchreiben "<Return>"
+     Call wTypeKeys "<Return>"
      Kontext "TabVariablen"
      Feldtyp.Select 2
      Sleep 1
@@ -377,7 +377,7 @@ testcase tVariables_5
      Einfuegen.Click
 
     '/// Insert a same name variable again , but set to another number
-     Call wDokSchreiben "<Return>"
+     Call wTypeKeys "<Return>"
      sValue = "200"
      Kontext "TabVariablen"
      Feldtyp.Select 1
@@ -388,7 +388,7 @@ testcase tVariables_5
      Einfuegen.Click
 
     '/// Then select Show Variable , insert this variable again
-     Call wDokSchreiben "<Return>"
+     Call wTypeKeys "<Return>"
      Kontext "TabVariablen"
      Feldtyp.Select 2
      Sleep 1
@@ -397,14 +397,14 @@ testcase tVariables_5
    TabVariablen.Close
 
   '/// Check if the insertion is correct
-   Call wDokSchreiben "<F9><MOD1 Home>"
+   Call wTypeKeys "<F9><MOD1 Home>"
 
    for i = 0 to j
-       Call wDokSchreiben "<Shift Right>"
+       Call wTypeKeys "<Shift Right>"
        if fGetFieldContent() <> sResult(i) then
            Warnlog i & "Should get " & sResult(i) & " but get " & fGetFieldContent()
        end if
-       Call wDokSchreiben "<Down><Home>"
+       Call wTypeKeys "<Down><Home>"
    next i
 
   Call hCloseDocument
@@ -450,14 +450,14 @@ testcase tVariables_6
      next i
 
     '/// Then select 'Insert formula' , A+B
-     Call wDokSchreiben "<Return>"
+     Call wTypeKeys "<Return>"
      Kontext "TabVariablen"
        Feldtyp.Select 4
        Wert.SetText (sName(0) & "+" & sName(1))
        Einfuegen.Click
    TabVariablen.Close
 
-   Call wDokSchreiben "<Shift Left>"
+   Call wTypeKeys "<Shift Left>"
    if fGetFieldContent() <> sResult then
        Warnlog "Should get " & sResult & " but get " & fGetFieldContent()
    end if
@@ -479,7 +479,7 @@ testcase tVariables_7
 
   Call hNewDocument
 
-   Call wDokSchreiben "<Return>"
+   Call wTypeKeys "<Return>"
 
   '/// Insert/Fields/Other/Variables / Select "Number range" , insert 4 numbers for
   '/// + Table , text , drawing and illustration
@@ -489,14 +489,14 @@ testcase tVariables_7
          Sleep 1
          Auswahl.Select i
          Einfuegen.Click
-         Call wDokSchreiben "<Return>"
+         Call wTypeKeys "<Return>"
          Kontext "TabVariablen"
          sleep 1
      next i
 
     '/// Then insert Table , text , drawing and illustration separately
     '/// + Check if the result is correct
-     Call wDokSchreiben "<MOD1 Home>"
+     Call wTypeKeys "<MOD1 Home>"
      Kontext "TabVariablen"
 
      for i = 1 to 4
@@ -505,17 +505,17 @@ testcase tVariables_7
          Auswahl.Select i
          Einfuegen.Click
          Sleep 2
-         Call wDokSchreiben "<Home>"
+         Call wTypeKeys "<Home>"
          sResult = Array("1" , "1" , "1" , "1" , "1")
          sResult(i) = "2"
          for x = 0 to 4
-             Call wDokSchreiben "<Shift Right>"
+             Call wTypeKeys "<Shift Right>"
              if fGetFieldContent() <> sResult(x) then
                  Warnlog "Should get " & sResult(x) & " but get " & fGetFieldContent()
              end if
-             Call wDokSchreiben "<Down><Home>"
+             Call wTypeKeys "<Down><Home>"
          next x
-         Call wDokSchreiben "<MOD1 Home><Shift End><Delete>"
+         Call wTypeKeys "<MOD1 Home><Shift End><Delete>"
          sleep 1
          Kontext "TabVariablen"
      next i
@@ -551,7 +551,7 @@ testcase tVariables_8
      Wert.SetText sValue
      Zahlenformat.Select 2
      Einfuegen.Click
-     Call wDokSchreiben "<Return>"
+     Call wTypeKeys "<Return>"
      Sleep 1
 
   '/// Select "Input field" , set reference , press insert ,
@@ -572,24 +572,24 @@ testcase tVariables_8
    TabVariablen.Close
 
   '/// Check if the insertion is correct
-     Call wDokSchreiben "<MOD1 Home>"
-     Call wDokSchreiben "<Shift Right>"
+     Call wTypeKeys "<MOD1 Home>"
+     Call wTypeKeys "<Shift Right>"
      if fGetFieldContent() <> sValue then
          Warnlog "Should get " & sValue & " but get " & fGetFieldContent()
      end if
 
-     Call wDokSchreiben "<Down><Home>"
-     Call wDokSchreiben "<Shift Right>"
+     Call wTypeKeys "<Down><Home>"
+     Call wTypeKeys "<Shift Right>"
      if fGetFieldContent() <> sFieldContent then
          Warnlog "Should get " & sFieldContent & " but get " & fGetFieldContent()
      end if
 
   '/// Delete variable A in the document , Check if the insertion is still correct
-     Call wDokSchreiben "<MOD1 Home>"
-     Call wDokSchreiben "<Shift Right><Delete>"
+     Call wTypeKeys "<MOD1 Home>"
+     Call wTypeKeys "<Shift Right><Delete>"
 
-     Call wDokSchreiben "<Down><Home>"
-     Call wDokSchreiben "<Shift Right>"
+     Call wTypeKeys "<Down><Home>"
+     Call wTypeKeys "<Shift Right>"
      if fGetFieldContent() <> sFieldContent then
          Warnlog "2-Should get " & sFieldContent & " but get " & fGetFieldContent()
      end if
@@ -630,26 +630,26 @@ testcase tVariables_9
        Zahlenformat.Select 3
        Einfuegen.Click
        Sleep 2
-       Call wDokSchreiben "<Shift Left>"
+       Call wTypeKeys "<Shift Left>"
        if fGetFieldContent() <> sResult1(i) then
            Warnlog "Should get " & sResult1(i) & " but get " & fGetFieldContent()
        end if
-       Call wDokSchreiben "<End><Return>"
+       Call wTypeKeys "<End><Return>"
        sleep 1
        Kontext "TabVariablen"
    next i
    TabVariablen.Close
 
   '/// Check if the result is OK.
-   Call wDokSchreiben "<F9>"
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<F9>"
+   Call wTypeKeys "<MOD1 Home>"
    Sleep 1
    for i = 0 to j
-       Call wDokSchreiben "<Shift Right>"
+       Call wTypeKeys "<Shift Right>"
        if fGetFieldContent() <> sResult2(i) then
            Warnlog "Should get " & sResult2(i) & " but get " & fGetFieldContent()
        end if
-       Call wDokSchreiben "<Down><Left>"
+       Call wTypeKeys "<Down><Left>"
    next i
 
    Call hCloseDocument
@@ -680,8 +680,8 @@ testcase tVariables_10
   Call hNewDocument
 
   '/// Input something , insert a section , then save it and close the file
-   Call wDokSchreiben sContent
-   Call wDokSchreiben "<Shift Home>"
+   Call wTypeKeys sContent
+   Call wTypeKeys "<Shift Home>"
    Call fInsertSection("TabBereiche")
      Bereichsliste.Settext sSectionName
    TabBereiche.OK
@@ -705,8 +705,8 @@ testcase tVariables_10
    TabVariablen.Close
    Sleep 2
 
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<Shift End>"
    if fGetFieldContent() <> sContent then
        Warnlog "Should get " & sContent & " but get " & fGetFieldContent()
    end if
@@ -714,15 +714,15 @@ testcase tVariables_10
   '/// Open the test file which you just closed , add something ,
   '/// Save the file
    Call hFileOpen(sDDEFile)
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "XYZ"
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "XYZ"
     FileSave
    Call hCloseDocument
 
   '/// Check if the content is changed -- Should NOT
    Sleep 2
-   Call wDokSchreiben "<F9>"
-   Call wDokSchreiben "<MOD1 Home><Shift End>"
+   Call wTypeKeys "<F9>"
+   Call wTypeKeys "<MOD1 Home><Shift End>"
    if fGetFieldContent() <> sContent then
        Warnlog "Should get " & sContent & " but get " & fGetFieldContent()
    end if
@@ -735,8 +735,8 @@ testcase tVariables_10
 
   '/// Check if the content is changed -- Should NOT
    Sleep 1
-   Call wDokSchreiben "<F9>"
-   Call wDokSchreiben "<MOD1 Home><Shift End>"
+   Call wTypeKeys "<F9>"
+   Call wTypeKeys "<MOD1 Home><Shift End>"
    if fGetFieldContent() <> ("XYZ" & sContent) then
        Warnlog "Should get XYZ" & sContent & " but get " & fGetFieldContent()
    end if
@@ -771,8 +771,8 @@ testcase tVariables_11
   Call hNewDocument
 
   '/// Input something , insert a section , then save it and close the file
-   Call wDokSchreiben sContent
-   Call wDokSchreiben "<Shift Home>"
+   Call wTypeKeys sContent
+   Call wTypeKeys "<Shift Home>"
    Call fInsertSection("TabBereiche")
      Bereichsliste.Settext sSectionName
    TabBereiche.OK
@@ -796,8 +796,8 @@ testcase tVariables_11
    TabVariablen.Close
    Sleep 2
 
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<Shift End>"
    if fGetFieldContent() <> sContent then
        Warnlog "Should get " & sContent & " but get " & fGetFieldContent()
    end if
@@ -805,15 +805,15 @@ testcase tVariables_11
   '/// Open the test file which you just closed , add something ,
   '/// Save the file
    Call hFileOpen(sDDEFile)
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "XYZ"
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "XYZ"
     FileSave
    Call hCloseDocument
 
   '/// Check if the content is changed -- Should
    Sleep 2
-   Call wDokSchreiben "<F9>"
-   Call wDokSchreiben "<MOD1 Home><Shift End>"
+   Call wTypeKeys "<F9>"
+   Call wTypeKeys "<MOD1 Home><Shift End>"
    if fGetFieldContent() <> ("XYZ" & sContent) then
        Warnlog "Should get XYZ" & sContent & " but get " & fGetFieldContent()
    end if

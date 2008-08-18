@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_fields1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:51 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:26:27 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -70,12 +70,12 @@ testcase tFields_1
     InsertFieldsDate
     
     '/// Return
-    Call wDokSchreiben "<Return>"
+    Call wTypeKeys "<Return>"
     
     '/// Insert / Fields / Date
     InsertFieldsDate
     
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
     
     '/// Set 2nd date only to be date , not fixed
     '/// In 2nd date , Edit / Fields , select date in 'select'
@@ -86,15 +86,15 @@ testcase tFields_1
     FeldbefehlBearbeitenDokument.OK
     
     '/// Check if the date is correct
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Shift Right>"
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Shift Right>"
     EditCopy
     if GetClipboardText <> sDate1 then
         Warnlog "Fixed date is wrong ! Hope you don't run this case in the midnight"
     end if
     
-    Call wDokSchreiben "<Down><Home>"
-    Call wDokSchreiben "<Shift Right>"
+    Call wTypeKeys "<Down><Home>"
+    Call wTypeKeys "<Shift Right>"
     EditCopy
     if GetClipboardText <> sDate2 then
         Warnlog "Date is wrong ! Hope you don't run this case in the midnight"
@@ -124,12 +124,12 @@ testcase tFields_2
     InsertFieldsTime
     
     '/// Return
-    Call wDokSchreiben "<Return>"
+    Call wTypeKeys "<Return>"
     
     '/// Insert / Fields / Time
     InsertFieldsTime
     
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
     
     '/// Set 2nd time only to be time , not fixed
     '/// In 2nd time , Edit / Fields , select Time in 'select'
@@ -140,15 +140,15 @@ testcase tFields_2
     FeldbefehlBearbeitenDokument.OK
     
     '/// Check if the time is correct
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Shift Right>"
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Shift Right>"
     EditCopy
     sTime1 = GetClipboardText
     if Len(sTime1)       < 11    then Warnlog "Fixed time is wrong !"
     if Right(sTime1 , 2) <> sTemp then Warnlog "Fixed time is wrong ! , Hope you don't run this case in the midnight"
     
-    Call wDokSchreiben "<Down><Home>"
-    Call wDokSchreiben "<Shift Right>"
+    Call wTypeKeys "<Down><Home>"
+    Call wTypeKeys "<Shift Right>"
     EditCopy
     sTime2 = GetClipboardText
     if Len(sTime2)       <> 11    then Warnlog "Time is wrong !"
@@ -157,13 +157,13 @@ testcase tFields_2
     printlog "Stop for a while ..."
     '/// Stop for  a while , check if the time is still correct
     Sleep 5
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Shift Right>"
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Shift Right>"
     EditCopy
     if GetClipboardText <> sTime1 then Warnlog "Fixed time is wrong !"
     
-    Call wDokSchreiben "<Down><Home>"
-    Call wDokSchreiben "<Shift Right>"
+    Call wTypeKeys "<Down><Home>"
+    Call wTypeKeys "<Shift Right>"
     EditCopy
     if GetClipboardText = sTime2  then Warnlog "Time is wrong !"
     
@@ -197,17 +197,17 @@ testcase tFields_3
   '/// In 2nd page , Insert / Fields / Page Number
    InsertFieldsPageNumbers
 
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Check if the page number is correct
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    ToolsCalculate
    if GetClipboardText <> sPage1 then
        QAErrorLog "#i31214# The 1st page number isn't correct !"
    end if
 
-   Call wDokSchreiben "<MOD1 End>"
-   Call wDokSchreiben "<Shift Left>"
+   Call wTypeKeys "<MOD1 End>"
+   Call wTypeKeys "<Shift Left>"
    ToolsCalculate
    if GetClipboardText <> sPage2 then
        Warnlog "The 2nd page number isn't correct !"
@@ -233,15 +233,15 @@ testcase tFields_4
   '/// In 1st page , Insert / Fields / Page Count
    InsertFieldsPageCount
 
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Check if the 1st page count is correct
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    ToolsCalculate
    if GetClipboardText <> sPage1 then
        Warnlog "1-The 1st page count isn't correct !"
    end if
-   Call wDokSchreiben "<End>"
+   Call wTypeKeys "<End>"
 
   '/// Insert a page break
    InsertManualBreak
@@ -253,17 +253,17 @@ testcase tFields_4
   '/// In 2nd page , Insert / Fields / Page Count
    InsertFieldsPageCount
 
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Check if the page count is correct
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    ToolsCalculate
    if GetClipboardText <> sPage2 then
        Warnlog "2-The 1st page count isn't correct"
    end if
 
-   Call wDokSchreiben "<MOD1 End>"
-   Call wDokSchreiben "<Shift Left>"
+   Call wTypeKeys "<MOD1 End>"
+   Call wTypeKeys "<Shift Left>"
    ToolsCalculate
    if GetClipboardText <> sPage2 then
        Warnlog "The 2nd page count isn't correct !"
@@ -296,7 +296,7 @@ testcase tFields_5
    InsertFieldsSubject
 
   '/// Check if the subject is correct
-   Call wDokSchreiben "<Shift Left>"
+   Call wTypeKeys "<Shift Left>"
    EditCopy
    if GetClipboardText <> sSubject then
        Warnlog "Subject isn't correct !"
@@ -329,7 +329,7 @@ testcase tFields_6
    InsertFieldsTitle
 
   '/// Check if the title is correct
-   Call wDokSchreiben "<Shift Left>"
+   Call wTypeKeys "<Shift Left>"
    EditCopy
    if GetClipboardText <> sTitle then
        Warnlog "Title isn't correct !"
@@ -376,7 +376,7 @@ testcase tFields_7
    InsertFieldsAuthor
 
   '/// Check if the title is correct
-   Call wDokSchreiben "<Shift Left>"
+   Call wTypeKeys "<Shift Left>"
    EditCopy
    if GetClipboardText <> (sFirstName1 + " " + sLastName1) then
        Warnlog "Author isn't correct !"

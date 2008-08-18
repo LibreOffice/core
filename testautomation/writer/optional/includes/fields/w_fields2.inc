@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_fields2.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:51 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:26:39 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -71,14 +71,14 @@ testcase tFieldsOther_0
   '/// + the dialog is NON modal
    Call fInsertFieldsOther("TabDokumentFeldbefehle")
        try
-           Call wDokSchreiben sTest
+           Call wTypeKeys sTest
        catch
            Warnlog "Something is wrong in dialog document!"
        endcatch
    Kontext "TabDokumentFeldbefehle"
    TabDokumentFeldbefehle.Close
 
-   Call wDokSchreiben "<Shift Home>"
+   Call wTypeKeys "<Shift Home>"
    EditCopy
    if GetClipboardText <> sTest then
        Warnlog "The text in document isn't corrrect!"
@@ -125,7 +125,7 @@ testcase tFieldsOther_1_1
      Sleep 1
      Einfuegen.Click
      sleep 1
-     Call wDokSchreiben "<Return>"
+     Call wTypeKeys "<Return>"
      Kontext "TabDokumentFeldbefehle"
      Auswahl.Select 2
      Sleep 1
@@ -133,15 +133,15 @@ testcase tFieldsOther_1_1
    TabDokumentFeldbefehle.Close
 
   '/// Check if the name is inserted correctly
-   Call wDokSchreiben "<MOD1 Home><Shift End>"
+   Call wTypeKeys "<MOD1 Home><Shift End>"
    EditCopy
    if GetClipboardText <> (sFirstName1 + " " + sLastName1) then
        Warnlog "Should get " & sFirstName1 & " " & sLastName1 & " but get " & GetClipboardText
    end if
 
   '/// Check if the Initial is inserted correctly
-   Call wDokSchreiben "<Down>"
-   Call wDokSchreiben "<End><Shift Home>"
+   Call wTypeKeys "<Down>"
+   Call wTypeKeys "<End><Shift Home>"
    EditCopy
    if GetClipboardText <> sInitial1 then
        Warnlog "Should get " & sInitial1 & " but get " & GetClipboardText
@@ -157,18 +157,18 @@ testcase tFieldsOther_1_1
    Sleep 2
 
   '/// Press F9
-   Call wDokSchreiben "<F9>"
+   Call wTypeKeys "<F9>"
    Sleep 3
 
   '/// Check if the name is changed
-   Call wDokSchreiben "<MOD1 Home><Shift End>"
+   Call wTypeKeys "<MOD1 Home><Shift End>"
    EditCopy
    if GetClipboardText <> (sFirstName2 + " " + sLastName2) then
        Warnlog "Should get " & sFirstName2 & " " & sLastName2 & " but get " & GetClipboardText
    end if
 
   '/// Check if the Initial is changed
-   Call wDokSchreiben "<Down><End><Shift Home>"
+   Call wTypeKeys "<Down><End><Shift Home>"
    EditCopy
    if GetClipboardText <> sInitial2 then
        Warnlog "Should get " & sInitial2 & " but get " & GetClipboardText
@@ -225,7 +225,7 @@ testcase tFieldsOther_1_2
      InhaltFix.Check
      Einfuegen.Click
      sleep 1
-     Call wDokSchreiben "<Return>"
+     Call wTypeKeys "<Return>"
      Kontext "TabDokumentFeldbefehle"
      Auswahl.Select 2
      Sleep 1
@@ -234,15 +234,15 @@ testcase tFieldsOther_1_2
    TabDokumentFeldbefehle.Close
 
   '/// Check if the name is inserted correctly
-   Call wDokSchreiben "<MOD1 Home><Shift End>"
+   Call wTypeKeys "<MOD1 Home><Shift End>"
    EditCopy
    if GetClipboardText <> (sFirstName1 + " " + sLastName1) then
        Warnlog "Should get " & sFirstName1 & " " & sLastName1 & " but get " & GetClipboardText
    end if
 
   '/// Check if the Initial is inserted correctly
-   Call wDokSchreiben "<Down>"
-   Call wDokSchreiben "<End><Shift Home>"
+   Call wTypeKeys "<Down>"
+   Call wTypeKeys "<End><Shift Home>"
    EditCopy
    if GetClipboardText <> sInitial1 then
        Warnlog "Should get " & sInitial1 & " but get " & GetClipboardText
@@ -258,18 +258,18 @@ testcase tFieldsOther_1_2
    Sleep 2
 
   '/// Press F9
-   Call wDokSchreiben "<F9>"
+   Call wTypeKeys "<F9>"
    Sleep 3
 
   '/// Check if the name is changed
-   Call wDokSchreiben "<MOD1 Home><Shift End>"
+   Call wTypeKeys "<MOD1 Home><Shift End>"
    EditCopy
    if GetClipboardText <> (sFirstName1 + " " + sLastName1) then
        Warnlog "Still should get " & sFirstName1 & " " & sLastName1 & " but get " & GetClipboardText
    end if
 
   '/// Check if the Initial is changed
-   Call wDokSchreiben "<Down><End><Shift Home>"
+   Call wTypeKeys "<Down><End><Shift Home>"
    EditCopy
    if GetClipboardText <> sInitial1 then
        Warnlog "Still should get " & sInitial1 & " but get " & GetClipboardText
@@ -312,7 +312,7 @@ testcase tFieldsOther_2
   '/// Open test file chapterTest.sxw
    Call hFileOpen(sTestFile)
 
-   Call wDokSchreiben "<MOD1 End><Return>"
+   Call wTypeKeys "<MOD1 End><Return>"
 
   '/// Insert/Fields/Other/Document / Chapter
   '/// Insert Chapter name, Chapter number,
@@ -326,14 +326,14 @@ testcase tFieldsOther_2
          Sleep 1
          Einfuegen.Click
          sleep 1
-         Call wDokSchreiben "<F9>"
+         Call wTypeKeys "<F9>"
          Sleep 2
-         Call wDokSchreiben "<Shift Home>"
+         Call wTypeKeys "<Shift Home>"
          Sleep 1
          if fGetFieldContent() <> sChapter(i) then
              Warnlog i &"#i40625# Should get " & sChapter(i) & " but get " & fGetFieldContent()
          end if
-         Call wDokSchreiben "<Delete>"
+         Call wTypeKeys "<Delete>"
      next i
      Kontext "TabDokumentFeldbefehle"
    TabDokumentFeldbefehle.Close
@@ -362,7 +362,7 @@ testcase tFieldsOther_3
     Kontext "TabDokumentFeldbefehle"
     TabDokumentFeldbefehle.Close
     
-    Call wDokSchreiben "<Shift Left>"
+    Call wTypeKeys "<Shift Left>"
     EditCopy
     Sleep 1
     if GetClipboardText = "" then
@@ -396,8 +396,8 @@ testcase tFieldsOther_4
   '/// Open test file pageTest.sxw
    Call hFileOpen(sTestFile)
 
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<End><Return>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<End><Return>"
 
   '/// Insert/Fields/Other/Document / File name
   '/// Insert File name, File name without extension ,
@@ -411,14 +411,14 @@ testcase tFieldsOther_4
          Sleep 1
          Einfuegen.Click
          sleep 1
-         Call wDokSchreiben "<F9>"
+         Call wTypeKeys "<F9>"
          Sleep 2
-         Call wDokSchreiben "<Shift Home>"
+         Call wTypeKeys "<Shift Home>"
          Sleep 1
          if fGetFieldContent() <> sFilename(i) then
              Warnlog i &" - Should get " & sFilename(i) & " but get " & fGetFieldContent()
          end if
-         Call wDokSchreiben "<Delete>"
+         Call wTypeKeys "<Delete>"
      next i
      Kontext "TabDokumentFeldbefehle"
    TabDokumentFeldbefehle.Close
@@ -452,9 +452,9 @@ testcase tFieldsOther_5
    Call hFileOpen(sTestFile)
 
   '/// Go to the 2nd page
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
    Call fFindWord ("Sec")
-   Call wDokSchreiben "<End><Return>"
+   Call wTypeKeys "<End><Return>"
 
   '/// Insert/Fields/Other/Document / Page
   '/// Insert Page numbers, Privious page , Next page
@@ -466,15 +466,15 @@ testcase tFieldsOther_5
          Sleep 1
          Einfuegen.Click
          sleep 1
-         Call wDokSchreiben "<F9>"
+         Call wTypeKeys "<F9>"
          Sleep 2
-         Call wDokSchreiben "<Shift Home>"
+         Call wTypeKeys "<Shift Home>"
          Sleep 1
          ToolsCalculate
          if GetClipboardText <> sPage(i) then
              Warnlog i &" - Should get " & sPage(i) & " but get " & GetClipboardText
          end if
-         Call wDokSchreiben "<Delete>"
+         Call wTypeKeys "<Delete>"
      next i
      Kontext "TabDokumentFeldbefehle"
    TabDokumentFeldbefehle.Close
@@ -578,19 +578,19 @@ testcase tFieldsOther_6_1
          Sleep 1
          Einfuegen.Click
          sleep 1
-         Call wDokSchreiben "<Return>"
+         Call wTypeKeys "<Return>"
      next i
      Kontext "TabDokumentFeldbefehle"
    TabDokumentFeldbefehle.Close
 
   '/// Check if the configuration is inserted correctly
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
    for i= 0 to UBound(aUserData1)
-       Call wDokSchreiben "<Shift End>"
+       Call wTypeKeys "<Shift End>"
        if fGetFieldContent() <> aUserData1(i) then
            Warnlog "i32872 1.Should get " & aUserData1(i)& " but get " & fGetFieldContent()
        end if
-       Call wDokSchreiben "<Down><Home>"
+       Call wTypeKeys "<Down><Home>"
    next i
 
   '/// Change author to author1 :XYZ OPQ
@@ -617,17 +617,17 @@ testcase tFieldsOther_6_1
    Sleep 2
 
   '/// Press F9
-   Call wDokSchreiben "<F9>"
+   Call wTypeKeys "<F9>"
    Sleep 3
 
   '/// Check if the configuration is changed
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
    for i= 0 to UBound(aUserData1)
-       Call wDokSchreiben "<Shift End>"
+       Call wTypeKeys "<Shift End>"
        if fGetFieldContent() <> aUserData2(i) then
            Warnlog "i32872  2.Should get " & aUserData2(i)& " but get " & fGetFieldContent()
        end if
-       Call wDokSchreiben "<Down><Home>"
+       Call wTypeKeys "<Down><Home>"
    next i
 
   'Change author to default
@@ -752,19 +752,19 @@ testcase tFieldsOther_6_2
          InhaltFix.Check
          Einfuegen.Click
          sleep 1
-         Call wDokSchreiben "<Return>"
+         Call wTypeKeys "<Return>"
      next i
      Kontext "TabDokumentFeldbefehle"
    TabDokumentFeldbefehle.Close
 
   '/// Check if the configuration is inserted correctly
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
    for i= 0 to UBound(aUserData1)
-       Call wDokSchreiben "<Shift End>"
+       Call wTypeKeys "<Shift End>"
        if fGetFieldContent() <> aUserData1(i) then
            Warnlog "i32872  1.Should get " & aUserData1(i)& " but get " & fGetFieldContent()
        end if
-       Call wDokSchreiben "<Down><Home>"
+       Call wTypeKeys "<Down><Home>"
    next i
 
   '/// Change author to author1 :XYZ OPQ
@@ -791,17 +791,17 @@ testcase tFieldsOther_6_2
    Sleep 2
 
   '/// Press F9
-   Call wDokSchreiben "<F9>"
+   Call wTypeKeys "<F9>"
    Sleep 3
 
   '/// Check if the configuration is changed
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
    for i= 0 to UBound(aUserData1)
-       Call wDokSchreiben "<Shift End>"
+       Call wTypeKeys "<Shift End>"
        if fGetFieldContent() <> aUserData1(i) then
            Warnlog "i32872  2.Should get " & aUserData1(i)& " but get " & fGetFieldContent()
        end if
-       Call wDokSchreiben "<Down><Home>"
+       Call wTypeKeys "<Down><Home>"
    next i
 
   'Change author to default
@@ -859,7 +859,7 @@ testcase tFieldsOther_7
   '/// 2 words , 12 characters and 2 pages
    Call hFileOpen(sTestFile)
 
-   Call wDokSchreiben "<MOD1 Home><Down>"
+   Call wTypeKeys "<MOD1 Home><Down>"
 
   '/// Insert/Fields/Other/Document / Statistics
   '/// Insert Pages, Paragraphs , Words , Characters , Tables, Graphics , Objects.
@@ -872,15 +872,15 @@ testcase tFieldsOther_7
          Sleep 1
          Einfuegen.Click
          sleep 1
-         Call wDokSchreiben "<F9>"
+         Call wTypeKeys "<F9>"
          Sleep 2
-         Call wDokSchreiben "<Shift Home>"
+         Call wTypeKeys "<Shift Home>"
          Sleep 1
          ToolsCalculate
          if GetClipboardText <> sStatistics(i) then
              Warnlog i &" - Should get " & sStatistics(i) & " but get " & GetClipboardText
          end if
-         Call wDokSchreiben "<Delete>"
+         Call wTypeKeys "<Delete>"
      next i
      Kontext "TabDokumentFeldbefehle"
    TabDokumentFeldbefehle.Close
@@ -919,7 +919,7 @@ testcase tFieldsOther_8
     '/// Open test file diploma.ott
     Call hFileOpen(sTestFile)
     
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
     
     '/// Insert/Fields/Other/Document / Template
     '/// Insert Category , File name , File name without extension ,
@@ -933,9 +933,9 @@ testcase tFieldsOther_8
         Sleep 1
         Einfuegen.Click
         sleep 1
-        Call wDokSchreiben "<F9>"
+        Call wTypeKeys "<F9>"
         Sleep 2
-        Call wDokSchreiben "<Shift Left>"
+        Call wTypeKeys "<Shift Left>"
         Sleep 1
     
         if fGetFieldContent() <> sResult(i-1) then
@@ -946,7 +946,7 @@ testcase tFieldsOther_8
                     Warnlog " - Should get " & sResult(i-1) & " but get " & fGetFieldContent()                    
             end select
         end if
-        Call wDokSchreiben "<Delete>"
+        Call wTypeKeys "<Delete>"
     next i
     Kontext "TabDokumentFeldbefehle"
     TabDokumentFeldbefehle.Close
@@ -976,7 +976,7 @@ testcase tFieldsOther_9
      Sleep 1
      Einfuegen.Click
      sleep 1
-     Call wDokSchreiben "<Return>"
+     Call wTypeKeys "<Return>"
 
      Kontext "TabDokumentFeldbefehle"
      Auswahl.Select 1  'Time
@@ -986,30 +986,30 @@ testcase tFieldsOther_9
      Kontext "TabDokumentFeldbefehle"
    TabDokumentFeldbefehle.Close
 
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    sTime1 = GetClipboardText
 
-   Call wDokSchreiben "<Down><Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<Down><Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    sTime2 = GetClipboardText
 
    Sleep 5
-   Call wDokSchreiben "<F9>"
+   Call wTypeKeys "<F9>"
 
    'Check fixed time
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    if sTime1 <> GetClipboardText then
        Warnlog "Time should NOT change !"
    end if
 
    'Check time
-   Call wDokSchreiben "<Down><Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<Down><Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    if sTime2 <> GetClipboardText then
        Warnlog "Time should change !"

@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_fields6.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:51 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:27:26 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -103,7 +103,7 @@ testcase tFunctions_1
         Zahlenformat.Select 1
         Einfuegen.Click
       TabVariablen.Close
-      Call wDokSchreiben "<Return>"
+      Call wTypeKeys "<Return>"
       Call fInsertFieldsOther("TabFunktionen")
         Feldtyp.Select 1
         Sleep 1
@@ -112,18 +112,18 @@ testcase tFunctions_1
         Sonst.SetText     sElse
         Einfuegen.Click
       TabFunktionen.Close
-      Call wDokSchreiben "<Return>"
+      Call wTypeKeys "<Return>"
    next i
 
   '/// Check if the insertion is correct
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
    j = UBound(sResult)
    for i = 0 to j
-       Call wDokSchreiben "<Shift Right>"
+       Call wTypeKeys "<Shift Right>"
        if fGetFieldContent() <> sResult(i) then
            Warnlog "Should get " & sResult(i) & " but get " & fGetFieldContent()
        end if
-       Call wDokSchreiben "<Down><Home>"
+       Call wTypeKeys "<Down><Home>"
    next i
 
   Call hCloseDocument
@@ -179,7 +179,7 @@ testcase tFunctions_2
   '/// Check if the insertion is correct
    j = UBound(sValue)
    for i = 0 to j
-      Call wDokSchreiben "<MOD1 Home><Shift End>"
+      Call wTypeKeys "<MOD1 Home><Shift End>"
       Call fInsertFieldsOther("TabVariablen")
         Feldtyp.Select 1
         Sleep 1
@@ -188,7 +188,7 @@ testcase tFunctions_2
         Zahlenformat.Select 1
         Einfuegen.Click
       TabVariablen.Close
-      Call wDokSchreiben "<Return>"
+      Call wTypeKeys "<Return>"
       Call fInsertFieldsOther("TabFunktionen")
         Feldtyp.Select 7   'Hidden text
         Sleep 1
@@ -197,7 +197,7 @@ testcase tFunctions_2
         Einfuegen.Click
       TabFunktionen.Close
 
-      Call wDokSchreiben "<Shift Left>"
+      Call wTypeKeys "<Shift Left>"
       if fGetFieldContent() <> sResult(i) then
           Warnlog "Should get " & sResult(i) & " but get " & fGetFieldContent()
       end if
@@ -256,9 +256,9 @@ testcase tFunctions_3
    ExtrasOptionenDlg.OK
 
   '/// Input a paragraph first
-   Call wDokSchreiben "<Return>"
-   Call wDokSchreiben sHiddenText
-   Call wDokSchreiben "<Up>"
+   Call wTypeKeys "<Return>"
+   Call wTypeKeys sHiddenText
+   Call wTypeKeys "<Up>"
 
   '/// Insert/Fields/Other/Variables / Select "set Variable" ,
   '/// Set Name and set its Value to "ABC" , then goto tabpage function
@@ -267,7 +267,7 @@ testcase tFunctions_3
   '/// Check if the paragraph disappear or not
    j = UBound(sValue)
    for i = 0 to j
-      Call wDokSchreiben "<MOD1 Home><Shift End>"
+      Call wTypeKeys "<MOD1 Home><Shift End>"
       Call fInsertFieldsOther("TabVariablen")
         Feldtyp.Select 1
         Sleep 1
@@ -276,7 +276,7 @@ testcase tFunctions_3
         Zahlenformat.Select 1
         Einfuegen.Click
       TabVariablen.Close
-      Call wDokSchreiben "<Down><Home>"
+      Call wTypeKeys "<Down><Home>"
       Call fInsertFieldsOther("TabFunktionen")
         Feldtyp.Select 8   'Hidden paragraph
         Sleep 1
@@ -284,7 +284,7 @@ testcase tFunctions_3
         Einfuegen.Click
       TabFunktionen.Close
 
-      Call wDokSchreiben "<MOD1 Home><Down><Shift End>"
+      Call wTypeKeys "<MOD1 Home><Down><Shift End>"
       if fGetFieldContent() <> sResult(i) then
           Warnlog "Should get " & sResult(i) & " but get " & fGetFieldContent()
       end if
@@ -333,8 +333,8 @@ testcase tFunctions_4
    TabFunktionen.Close
 
   '/// Check if the insertion is correct
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sFieldContent then
        Warnlog "Should get " & sFieldContent & " but get " & fGetFieldContent()
    end if
@@ -367,8 +367,8 @@ testcase tFunctions_5
    TabFunktionen.Close
 
   '/// Check if the insertion is correct
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> ("<" & sPlaceHolder & ">" )then
        Warnlog "Should get <" & sPlaceHolder & "> but get " & fGetFieldContent()
    end if
@@ -417,14 +417,14 @@ testcase tFunctions_6
     TabFunktionen.Close
     
     '/// Check if the insertion is correct
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Shift Right>"
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Shift Right>"
     if fGetFieldContent() <> ("<TableTableTableTableTable>" )then
         Warnlog "Should get <TableTableTableTableTable> but get " & fGetFieldContent()
     end if
     
     Call fSetToBigSize()
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
     Sleep 1
     
 	Call gMouseMove(0,0,30,25)
@@ -481,14 +481,14 @@ testcase tFunctions_7
     TabFunktionen.Close
     
     '/// Check if the insertion is correct
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Shift Right>"
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Shift Right>"
     if fGetFieldContent() <> ("<FrameFrameFrameFrameFrameFrame>" )then
         Warnlog "Should get <FrameFrameFrameFrameFrameFrame> but get " & fGetFieldContent()
     end if
     
     Call fSetToBigSize()
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
     Sleep 1
 	Call gMouseMove(0,0,30,25)
     Call gMouseClick(30,25)
@@ -548,14 +548,14 @@ testcase tFunctions_8
     TabFunktionen.Close
     
     '/// Check if the insertion is correct
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Shift Right>"
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Shift Right>"
     if fGetFieldContent() <> ("<GraphicsGraphicsGraphicsGraphicsGraphics>" )then
         Warnlog "Should get <GraphicsGraphicsGraphicsGraphicsGraphics> but get " & fGetFieldContent()
     end if
     
     Call fSetToBigSize()
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
     Sleep 1
 	Call gMouseMove(0,0,30,25)
     Call gMouseClick(30,25)
@@ -612,14 +612,14 @@ testcase tFunctions_9
     TabFunktionen.Close
     
     '/// Check if the insertion is correct
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Shift Right>"
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Shift Right>"
     if fGetFieldContent() <> ("<ObjectObjectObjectObjectObjectObject>" )then
         Warnlog "Should get <ObjectObjectObjectObjectObjectObject> but get " & fGetFieldContent()
     end if
     
     Call fSetToBigSize()
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
     Sleep 1
 	Call gMouseMove(0,0,30,25)
     Call gMouseClick(30,25)
@@ -661,7 +661,7 @@ testcase tFunctions_10
      AddListEntry.Click
      Sleep 1
      Einfuegen.Click
-     Call wDokSchreiben "<Return>"
+     Call wTypeKeys "<Return>"
      Kontext "TabFunktionen"
      EntrysList.Select 1
      RemoveEntry.Click
@@ -669,13 +669,13 @@ testcase tFunctions_10
    TabFunktionen.Close
 
   '/// Check if the insertion is correct
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sItem1 then
        Warnlog "Should get " & sItem1 & " but get " & fGetFieldContent()
    end if
-   Call wDokSchreiben "<Down><Home>"
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Down><Home>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sItem2 then
        Warnlog "Should get " & sItem2 & " but get " & fGetFieldContent()
    end if
@@ -708,20 +708,20 @@ testcase tFunctions_11
      AddListEntry.Click
      Sleep 1
      Einfuegen.Click
-     Call wDokSchreiben "<Return>"
+     Call wTypeKeys "<Return>"
      Kontext "TabFunktionen"
      MoveUpEntry.Click
      Einfuegen.Click
    TabFunktionen.Close
 
   '/// Check if the insertion is correct
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sItem1 then
        Warnlog "Should get " & sItem1 & " but get " & fGetFieldContent()
    end if
-   Call wDokSchreiben "<Down><Home>"
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Down><Home>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sItem2 then
        Warnlog "Should get " & sItem2 & " but get " & fGetFieldContent()
    end if
@@ -754,7 +754,7 @@ testcase tFunctions_12
      AddListEntry.Click
      Sleep 1
      Einfuegen.Click
-     Call wDokSchreiben "<Return>"
+     Call wTypeKeys "<Return>"
      Kontext "TabFunktionen"
      EntrysList.Select 1
      MoveDownEntry.Click
@@ -762,13 +762,13 @@ testcase tFunctions_12
    TabFunktionen.Close
 
   '/// Check if the insertion is correct
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sItem1 then
        Warnlog "Should get " & sItem1 & " but get " & fGetFieldContent()
    end if
-   Call wDokSchreiben "<Down><Home>"
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Down><Home>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sItem2 then
        Warnlog "Should get " & sItem2 & " but get " & fGetFieldContent()
    end if
@@ -794,8 +794,8 @@ testcase tFunctions_13
     
     '/// Open test file pageTest.sxw
     Call hFileOpen(sTestFile)
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Right>"
     
     '/// Insert/Fields/Other/Functions / Select "Combine characters"
     Call fInsertFieldsOther("TabFunktionen")
@@ -806,12 +806,12 @@ testcase tFunctions_13
     TabFunktionen.Close
     
     '/// Check if the insertion is correct
-    Call wDokSchreiben "<Shift Left>"
+    Call wTypeKeys "<Shift Left>"
     if fGetFieldContent() <> sCombineCharacter then
         Warnlog "Should get " & sCombineCharacter & " but get " & fGetFieldContent()
     end if
     
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     FormatAnchorToPage
     Sleep 1
     Call fPositionAndSize("TabPositionAndSizeWriter")

@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_fields4.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:51 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:27:02 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -85,16 +85,16 @@ testcase tDocInformation_1
   '/// It should NOT be changed in Fix
    Call fFindWord ("Title")
 
-   Call wDokSchreiben "<End><Right>"
+   Call wTypeKeys "<End><Right>"
    Sleep 1
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sVarResult then
        Warnlog "Should get " & sVarResult & " but get " & fGetFieldContent()
    end if
 
-   Call wDokSchreiben "<End><Right>"
+   Call wTypeKeys "<End><Right>"
    Sleep 1
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sFixResult then
        Warnlog "Should get " & sFixResult & " but get " & fGetFieldContent()
    end if
@@ -136,16 +136,16 @@ testcase tDocInformation_2
   '/// It should NOT be changed in Fix
    Call fFindWord ("Subject")
 
-   Call wDokSchreiben "<End><Right>"
+   Call wTypeKeys "<End><Right>"
    Sleep 1
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sVarResult then
        Warnlog "Should get " & sVarResult & " but get " & fGetFieldContent()
    end if
 
-   Call wDokSchreiben "<End><Right>"
+   Call wTypeKeys "<End><Right>"
    Sleep 1
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sFixResult then
        Warnlog "Should get " & sFixResult & " but get " & fGetFieldContent()
    end if
@@ -186,16 +186,16 @@ testcase tDocInformation_3
   '/// It should NOT be changed in Fix
    Call fFindWord ("Keywords")
 
-   Call wDokSchreiben "<End><Right>"
+   Call wTypeKeys "<End><Right>"
    Sleep 1
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sVarResult then
        Warnlog "Should get " & sVarResult & " but get " & fGetFieldContent()
    end if
 
-   Call wDokSchreiben "<End><Right>"
+   Call wTypeKeys "<End><Right>"
    Sleep 1
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sFixResult then
        Warnlog "Should get " & sFixResult & " but get " & fGetFieldContent()
    end if
@@ -238,18 +238,18 @@ testcase tDocInformation_4
   '/// It should NOT be changed in Fix
    Call fFindWord ("Description")
 
-   Call wDokSchreiben "<End>"
-   Call wDokSchreiben "<Down>"  , 4
-   Call wDokSchreiben "<Right>" , 2
+   Call wTypeKeys "<End>"
+   Call wTypeKeys "<Down>"  , 4
+   Call wTypeKeys "<Right>" , 2
    Sleep 1
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sVarResult then
        Warnlog "Due to i31893 , should get " & sVarResult & " but get " & fGetFieldContent()
    end if
 
-   Call wDokSchreiben "<End><Right>"
+   Call wTypeKeys "<End><Right>"
    Sleep 1
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sFixResult then
        Warnlog "Should get " & sFixResult & " but get " & fGetFieldContent()
    end if
@@ -306,23 +306,23 @@ testcase tDocInformation_5
   '/// It should NOT be changed in Fix
    Call fFindWord ("Info fields")
 
-   Call wDokSchreiben "<End><Right><Down><Home>"
+   Call wTypeKeys "<End><Right><Down><Home>"
    Sleep 1
 
    for i= 0 to UBound(sVarResult)
-       Call wDokSchreiben "<Shift Right>"
+       Call wTypeKeys "<Shift Right>"
        if fGetFieldContent() <> sVarResult(i) then
            Warnlog "Should get " & sVarResult(i) & " but get " & fGetFieldContent()
        end if
 
-       Call wDokSchreiben "<End><Right>"
+       Call wTypeKeys "<End><Right>"
        Sleep 1
-       Call wDokSchreiben "<Shift Right>"
+       Call wTypeKeys "<Shift Right>"
        if fGetFieldContent() <> sFixResult(i) then
            Warnlog "Should get " & sFixResult(i) & " but get " & fGetFieldContent()
        end if
 
-       Call wDokSchreiben "<End><Down><Home><Left><Home>"
+       Call wTypeKeys "<End><Down><Home><Left><Home>"
    next i
 
  Call hCloseDocument
@@ -361,11 +361,11 @@ testcase tDocInformation_6
    Call hFileOpen(sTestFile)
 
    Call fFindWord ("Created")
-   Call wDokSchreiben "<End><Right><Down><Down><Down><Home>"
+   Call wTypeKeys "<End><Right><Down><Down><Down><Home>"
    Sleep 1
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    sVarResult(2)= fGetFieldContent()
-   Call wDokSchreiben "<MOD1 Home>" , 3
+   Call wTypeKeys "<MOD1 Home>" , 3
 
   '/// Change author to author :Test2 Test1
    ToolsOptions
@@ -391,31 +391,31 @@ testcase tDocInformation_6
   '/// It should NOT be changed in Fix
    Call fFindWord ("Created")
 
-   Call wDokSchreiben "<End><Right><Down><Home>"
+   Call wTypeKeys "<End><Right><Down><Home>"
    Sleep 1
 
    for i = 0 to 1
-       Call wDokSchreiben "<Shift Right>"
+       Call wTypeKeys "<Shift Right>"
        if fGetFieldContent() <> sVarResult(i) then
            Warnlog "Should get " & sVarResult(i) & " but get " & fGetFieldContent()
        end if
 
-       Call wDokSchreiben "<End><Right>"
+       Call wTypeKeys "<End><Right>"
        Sleep 1
-       Call wDokSchreiben "<Shift Right>"
+       Call wTypeKeys "<Shift Right>"
        if fGetFieldContent() <> sFixResult(i) then
            Warnlog "Should get " & sFixResult(i) & " but get " & fGetFieldContent()
        end if
-       Call wDokSchreiben "<End><Down><Home><Left><Home>"
+       Call wTypeKeys "<End><Down><Home><Left><Home>"
    next i
 
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() = sVarResult(2) then
        Warnlog "Should get " & sFixResult(2) & " but get " & fGetFieldContent()
    end if
 
-   Call wDokSchreiben "<End><Right>"
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<End><Right>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sFixResult(2) then
        Warnlog "Should get " & sFixResult(2) & " but get " & fGetFieldContent()
    end if
@@ -469,11 +469,11 @@ testcase tDocInformation_7_1
    Call hFileSaveAsKill (sSaveAsFile)
 
    Call fFindWord ("Modified")
-   Call wDokSchreiben "<End><Right><Down><Down><Down><Home>"
+   Call wTypeKeys "<End><Right><Down><Down><Down><Home>"
    Sleep 1
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    sVarResult(2)= fGetFieldContent()
-   Call wDokSchreiben "<MOD1 Home>" , 3
+   Call wTypeKeys "<MOD1 Home>" , 3
 
   '/// Change author to author : Test2 Test1
    ToolsOptions
@@ -507,31 +507,31 @@ testcase tDocInformation_7_1
   '/// It should NOT be changed in Fix
    Call fFindWord ("Modified")
 
-   Call wDokSchreiben "<End><Right><Down><Home>"
+   Call wTypeKeys "<End><Right><Down><Home>"
    Sleep 1
 
    for i = 0 to 1
-       Call wDokSchreiben "<Shift Right>"
+       Call wTypeKeys "<Shift Right>"
        if fGetFieldContent() <> sVarResult(i) then
            Warnlog "Should get " & sVarResult(i) & " but get " & fGetFieldContent()
        end if
 
-       Call wDokSchreiben "<End><Right>"
+       Call wTypeKeys "<End><Right>"
        Sleep 1
-       Call wDokSchreiben "<Shift Right>"
+       Call wTypeKeys "<Shift Right>"
        if fGetFieldContent() <> sFixResult(i) then
            Warnlog "Should get " & sFixResult(i) & " but get " & fGetFieldContent()
        end if
-       Call wDokSchreiben "<End><Down><Home><Left><Home>"
+       Call wTypeKeys "<End><Down><Home><Left><Home>"
    next i
 
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() = sVarResult(2) then
        Warnlog "Should get " & sFixResult(2) & " but get " & fGetFieldContent()
    end if
 
-   Call wDokSchreiben "<End><Right>"
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<End><Right>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sFixResult(2) then
        Warnlog "Should get " & sFixResult(2) & " but get " & fGetFieldContent()
    end if
@@ -594,11 +594,11 @@ testcase tDocInformation_7_2
    Call hFileOpen(sTestFile)
 
    Call fFindWord ("Modified")
-   Call wDokSchreiben "<End><Right><Down><Down><Down><Home>"
+   Call wTypeKeys "<End><Right><Down><Down><Down><Home>"
    Sleep 1
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    sVarResult(2)= fGetFieldContent()
-   Call wDokSchreiben "<MOD1 Home>" , 3
+   Call wTypeKeys "<MOD1 Home>" , 3
 
   '/// Change author to author : Test2 Test1
    ToolsOptions
@@ -618,31 +618,31 @@ testcase tDocInformation_7_2
   '/// It should NOT be changed in Fix
    Call fFindWord ("Modified")
 
-   Call wDokSchreiben "<End><Right><Down><Home>"
+   Call wTypeKeys "<End><Right><Down><Home>"
    Sleep 1
 
    for i = 0 to 1
-       Call wDokSchreiben "<Shift Right>"
+       Call wTypeKeys "<Shift Right>"
        if fGetFieldContent() <> sVarResult(i) then
            QAErrorlog "#i41327# Should get " & sVarResult(i) & " but get " & fGetFieldContent()
        end if
 
-       Call wDokSchreiben "<End><Right>"
+       Call wTypeKeys "<End><Right>"
        Sleep 1
-       Call wDokSchreiben "<Shift Right>"
+       Call wTypeKeys "<Shift Right>"
        if fGetFieldContent() <> sFixResult(i) then
            Warnlog "Should get " & sFixResult(i) & " but get " & fGetFieldContent()
        end if
-       Call wDokSchreiben "<End><Down><Home><Left><Home>"
+       Call wTypeKeys "<End><Down><Home><Left><Home>"
    next i
 
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() = sVarResult(2) then
        QAErrorlog "#i41327# Should get " & sFixResult(2) & " but get " & fGetFieldContent()
    end if
 
-   Call wDokSchreiben "<End><Right>"
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<End><Right>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sFixResult(2) then
        Warnlog "Should get " & sFixResult(2) & " but get " & fGetFieldContent()
    end if
@@ -701,11 +701,11 @@ testcase tDocInformation_8
    Call hFileOpen(sTestFile)
 
    Call fFindWord ("Last printed")
-   Call wDokSchreiben "<End><Right><Down><Down><Down><Home>"
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<End><Right><Down><Down><Down><Home>"
+   Call wTypeKeys "<Shift Right>"
    Sleep 1
    sVarResult(2)= fGetFieldContent()
-   Call wDokSchreiben "<MOD1 Home>" , 3
+   Call wTypeKeys "<MOD1 Home>" , 3
 
   '/// Change author to author : Test2 Test1
    ToolsOptions
@@ -741,31 +741,31 @@ testcase tDocInformation_8
   '/// It should NOT be changed in Fix
    Call fFindWord ("Last printed")
 
-   Call wDokSchreiben "<End><Right><Down><Home>"
+   Call wTypeKeys "<End><Right><Down><Home>"
    Sleep 1
 
    for i = 0 to 1
-       Call wDokSchreiben "<Shift Right>"
+       Call wTypeKeys "<Shift Right>"
        if fGetFieldContent() <> sVarResult(i) then
            Warnlog "Should get " & sVarResult(i) & " but get " & fGetFieldContent()
        end if
 
-       Call wDokSchreiben "<End><Right>"
+       Call wTypeKeys "<End><Right>"
        Sleep 1
-       Call wDokSchreiben "<Shift Right>"
+       Call wTypeKeys "<Shift Right>"
        if fGetFieldContent() <> sFixResult(i) then
            Warnlog "Should get " & sFixResult(i) & " but get " & fGetFieldContent()
        end if
-       Call wDokSchreiben "<End><Down><Home><Left><Home>"
+       Call wTypeKeys "<End><Down><Home><Left><Home>"
    next i
 
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() = sVarResult(2) then
        Warnlog "Should NOT get " & sFixResult(2)
    end if
 
-   Call wDokSchreiben "<End><Right>"
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<End><Right>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sFixResult(2) then
        Warnlog "Should get " & sFixResult(2) & " but get " & fGetFieldContent()
    end if
@@ -824,7 +824,7 @@ testcase tDocInformation_9
    Call hFileSaveAsKill(sSaveAsFile)
 
   '/// Press F9
-   Call wDokSchreiben "<F9>"
+   Call wTypeKeys "<F9>"
 
   '/// Save the file
    FileSave
@@ -840,17 +840,17 @@ testcase tDocInformation_9
   '/// It should NOT be changed in Fix
    Call fFindWord ("Version")
 
-   Call wDokSchreiben "<End><Right>"
+   Call wTypeKeys "<End><Right>"
    Sleep 1
 
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sVarResult then
        Warnlog "Should get " & sVarResult & " but get " & fGetFieldContent()
    end if
 
-   Call wDokSchreiben "<End><Right>"
+   Call wTypeKeys "<End><Right>"
    Sleep 1
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sFixResult then
        Warnlog "Should get " & sFixResult & " but get " & fGetFieldContent()
    end if
@@ -904,14 +904,14 @@ testcase tDocInformation_10
    Call hFileSaveAsKill(sSaveAsFile)
 
   '/// Press F9
-   Call wDokSchreiben "<F9>"
+   Call wTypeKeys "<F9>"
 
    Call fFindWord ("Accessed")
-   Call wDokSchreiben "<End><Right>"
+   Call wTypeKeys "<End><Right>"
    Sleep 1
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    sVarResult = fGetFieldContent()
-   Call wDokSchreiben "<MOD1 Home>" , 3
+   Call wTypeKeys "<MOD1 Home>" , 3
 
   '/// Save the file
    FileSave
@@ -927,17 +927,17 @@ testcase tDocInformation_10
   '/// It should NOT be changed in Fix
    Call fFindWord ("Accessed")
 
-   Call wDokSchreiben "<End><Right>"
+   Call wTypeKeys "<End><Right>"
    Sleep 1
 
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() = sVarResult then
        Warnlog "Should NOT get " & sVarResult
    end if
 
-   Call wDokSchreiben "<End><Right>"
+   Call wTypeKeys "<End><Right>"
    Sleep 1
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    if fGetFieldContent() <> sFixResult then
        Warnlog "Should get " & sFixResult & " but get " & fGetFieldContent()
    end if

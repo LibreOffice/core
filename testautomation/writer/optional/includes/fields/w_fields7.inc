@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_fields7.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:51 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:27:37 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -60,7 +60,7 @@ testcase tL10N_1
     
     if iSprache <> 01 then
         QAErrorlog "This is a English-only testcase"
-    endif
+    end if
     
     Call hNewDocument
     ' Get current settings on language tabpage and remember
@@ -123,7 +123,7 @@ testcase tL10N_1
     
     j = UBound(iCountry)
     for i = 0 to j
-        Call wDokSchreiben "<MOD1 Home>"
+        Call wTypeKeys "<MOD1 Home>"
         fSetLocale(fGetLanguageName(iCountry(i)))
         if iCountry(i) < 80 then
             fSetWestern(fGetLanguageName(iCountry(i)))
@@ -133,13 +133,13 @@ testcase tL10N_1
             fSetAsian(fGetLanguageName(iCountry(i)))
         end if
     
-        Call wDokSchreiben "<F9>"
-        Call wDokSchreiben "<Shift Right>"
+        Call wTypeKeys "<F9>"
+        Call wTypeKeys "<Shift Right>"
         if fGetFieldContent() <> sBelow(i) then
             Warnlog "Should get " & sBelow(i) & " but get " & fGetFieldContent()
         end if
-        Call wDokSchreiben "<MOD1 End>"
-        Call wDokSchreiben "<Shift Left>"
+        Call wTypeKeys "<MOD1 End>"
+        Call wTypeKeys "<Shift Left>"
         if fGetFieldContent() <> sAbove(i) then
             Warnlog i & " - Should get " & sAbove(i) & " but get " & fGetFieldContent()
         end if
@@ -154,11 +154,11 @@ testcase tL10N_1
     Westlich.Select sWestern
     if sAsiancb = true then
         if sAsiancbChecked = true then Aktivieren.IsChecked
-    endif
+    end if
     
     if sCTLcb = true then    
         if sCTLcbChecked = true then ComplexScriptEnabled.IsChecked
-    endif
+    end if
 
     if Asiatisch.IsEnabled and sAsian > 0 then Asiatisch.Select sAsian
     if LanguageComplexScript.IsEnabled and sCTL > 0 then LanguageComplexScript.Select sCTL
@@ -186,7 +186,7 @@ testcase tL10N_2
     
     if iSprache <> 01 then
         QAErrorlog "This is a English-only testcase"
-    endif
+    end if
     
     Call hNewDocument
     ' Get current settings on language tabpage and remember
@@ -236,7 +236,7 @@ testcase tL10N_2
     '/// Check if Date is changed after language is changed
     j = UBound(iCountry)
     for i = 0 to j
-        Call wDokSchreiben "<MOD1 Home>"
+        Call wTypeKeys "<MOD1 Home>"
         fSetLocale(fGetLanguageName(iCountry(i)))
         if iCountry(i) < 80 then
             fSetWestern(fGetLanguageName(iCountry(i)))
@@ -246,8 +246,8 @@ testcase tL10N_2
             fSetAsian(fGetLanguageName(iCountry(i)))
         end if
     
-        Call wDokSchreiben "<F9>"
-        Call wDokSchreiben "<Shift Right>"
+        Call wTypeKeys "<F9>"
+        Call wTypeKeys "<Shift Right>"
         if fGetFieldContent() <> sDate(i) then
             Warnlog i & " - Should get " & sDate(i) & " but get " & fGetFieldContent()
         end if
@@ -262,11 +262,11 @@ testcase tL10N_2
     Westlich.Select sWestern
     if sAsiancb = true then
         if sAsiancbChecked = true then Aktivieren.IsChecked
-    endif
+    end if
     
     if sCTLcb = true then    
         if sCTLcbChecked = true then ComplexScriptEnabled.IsChecked
-    endif
+    end if
 
     if Asiatisch.IsEnabled and sAsian > 0 then Asiatisch.Select sAsian
     if LanguageComplexScript.IsEnabled and sCTL > 0 then LanguageComplexScript.Select sCTL
@@ -294,7 +294,7 @@ testcase tL10N_3
     
     if iSprache <> 01 then
         QAErrorlog "This is a English-only testcase"
-    endif
+    end if
     
     Call hNewDocument
     ' Get current settings on language tabpage and remember
@@ -343,7 +343,7 @@ testcase tL10N_3
     '/// Check if time is changed after language is changed
     j = UBound(iCountry)
     for i = 0 to j
-        Call wDokSchreiben "<MOD1 Home>"
+        Call wTypeKeys "<MOD1 Home>"
         fSetLocale(fGetLanguageName(iCountry(i)))
         if iCountry(i) < 80 then
             fSetWestern(fGetLanguageName(iCountry(i)))
@@ -353,8 +353,8 @@ testcase tL10N_3
             fSetAsian(fGetLanguageName(iCountry(i)))
         end if
     
-        Call wDokSchreiben "<F9>"
-        Call wDokSchreiben "<Shift Right>"
+        Call wTypeKeys "<F9>"
+        Call wTypeKeys "<Shift Right>"
         if fGetFieldContent() <> sTime(i) then
             Warnlog i & " - Should get " & sTime(i) & " but get " & fGetFieldContent()
         end if
@@ -369,11 +369,11 @@ testcase tL10N_3
     Westlich.Select sWestern
     if sAsiancb = true then
         if sAsiancbChecked = true then Aktivieren.IsChecked
-    endif
+    end if
     
     if sCTLcb = true then    
         if sCTLcbChecked = true then ComplexScriptEnabled.IsChecked
-    endif
+    end if
 
     if Asiatisch.IsEnabled and sAsian > 0 then Asiatisch.Select sAsian
     if LanguageComplexScript.IsEnabled and sCTL > 0 then LanguageComplexScript.Select sCTL

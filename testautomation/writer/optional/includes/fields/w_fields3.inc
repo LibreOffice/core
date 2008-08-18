@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_fields3.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:51 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:26:51 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -102,9 +102,9 @@ testcase tSetReferences_1
    Call hFileOpen(sTestFile)
 
   '/// Set curson to the 2nd page
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
    Call fFindWord ("Sec")
-   Call wDokSchreiben "<End><Return>"
+   Call wTypeKeys "<End><Return>"
 
   '/// Insert/Cross-reference , choose "Set Reference"
    InsertReferenceField
@@ -144,8 +144,8 @@ testcase tSetReferences_2
   Call hNewDocument
 
   '/// Input some text and select them
-   Call wDokSchreiben "ABCD"
-   Call wDokSchreiben "<Shift Home>"
+   Call wTypeKeys "ABCD"
+   Call wTypeKeys "<Shift Home>"
 
   '/// Insert/Cross-reference , choose "Set Reference"
    InsertReferenceField
@@ -189,9 +189,9 @@ testcase tInsertReference_1
    Call hFileOpen(sTestFile)
 
   '/// Set curson to the 2nd page
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
    Call fFindWord ("Sec")
-   Call wDokSchreiben "<End><Return>"
+   Call wTypeKeys "<End><Return>"
 
   '/// Insert/Cross-reference , choose "Set Reference"
    InsertReferenceField
@@ -202,7 +202,7 @@ testcase tInsertReference_1
      Einfuegen.Click
    TabReferenzen.Close
 
-   Call wDokSchreiben "<Return>" , 2
+   Call wTypeKeys "<Return>" , 2
 
   '/// Insert/Cross-reference , choose "Insert Reference" and "Page"
    InsertReferenceField
@@ -216,9 +216,9 @@ testcase tInsertReference_1
      Einfuegen.Click
    TabReferenzen.Close
 
-   Call wDokSchreiben "<F9>"
+   Call wTypeKeys "<F9>"
    Sleep 2
-   Call wDokSchreiben "<Shift Home>"
+   Call wTypeKeys "<Shift Home>"
 
    if fGetFieldContent( ) <> "2" then
        Warnlog "Should get 2 , but get " & fGetFieldContent()
@@ -248,8 +248,8 @@ testcase tInsertReference_2
    Call hFileOpen(sTestFile)
 
   '/// Set curson to the 2nd line
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<Down><Home>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<Down><Home>"
 
   '/// Insert/Cross-reference , choose "Set Reference"
    InsertReferenceField
@@ -260,8 +260,8 @@ testcase tInsertReference_2
      Einfuegen.Click
    TabReferenzen.Close
 
-   Call wDokSchreiben "<End>"
-   Call wDokSchreiben "<Return>" , 2
+   Call wTypeKeys "<End>"
+   Call wTypeKeys "<Return>" , 2
 
   '/// Insert/Cross-reference , choose "Insert Reference" and "Chapter"
    InsertReferenceField
@@ -275,9 +275,9 @@ testcase tInsertReference_2
      Einfuegen.Click
    TabReferenzen.Close
 
-   Call wDokSchreiben "<F9>"
+   Call wTypeKeys "<F9>"
    Sleep 2
-   Call wDokSchreiben "<Shift Home>"
+   Call wTypeKeys "<Shift Home>"
 
    if fGetFieldContent( ) <> "2" then
        Warnlog "#i40625# Should get 2 , but get " & fGetFieldContent()
@@ -305,12 +305,12 @@ testcase tInsertReference_3
   Call hNewDocument
 
   '/// Input some thing in the document and press return
-   Call wDokSchreiben "This is a test !"
-   Call wDokSchreiben "<Return>"
+   Call wTypeKeys "This is a test !"
+   Call wTypeKeys "<Return>"
 
   '/// Select some text
-   Call wDokSchreiben "<Up><End>"
-   Call wDokSchreiben "<Shift Left>" , 5
+   Call wTypeKeys "<Up><End>"
+   Call wTypeKeys "<Shift Left>" , 5
 
   '/// Insert/Cross-reference , choose "Set Reference"
    InsertReferenceField
@@ -322,7 +322,7 @@ testcase tInsertReference_3
    TabReferenzen.Close
 
   '/// set focus to 2nd line
-   Call wDokSchreiben "<Down>"
+   Call wTypeKeys "<Down>"
 
   '/// Insert/Cross-reference , choose "Insert Reference" and "Reference"
    InsertReferenceField
@@ -336,9 +336,9 @@ testcase tInsertReference_3
      Einfuegen.Click
    TabReferenzen.Close
 
-   Call wDokSchreiben "<F9>"
+   Call wTypeKeys "<F9>"
    Sleep 2
-   Call wDokSchreiben "<Shift Home>"
+   Call wTypeKeys "<Shift Home>"
 
    if fGetFieldContent() <> sReference then
        Warnlog "Should get " & sReference & " but get " & fGetFieldContent()
@@ -367,12 +367,12 @@ testcase tInsertReference_4
 
   '/// Press Return first , then input some text in
   '/// + the document , press return again
-   Call wDokSchreiben "<Return>"
-   Call wDokSchreiben "This is a test !"
-   Call wDokSchreiben "<Return>"
+   Call wTypeKeys "<Return>"
+   Call wTypeKeys "This is a test !"
+   Call wTypeKeys "<Return>"
 
   '/// Insert a reference before "This is ..."
-   Call wDokSchreiben "<Up><Home>"
+   Call wTypeKeys "<Up><Home>"
    InsertReferenceField
    Kontext "TabReferenzen"
      Feldtyp.Select 1
@@ -382,7 +382,7 @@ testcase tInsertReference_4
    TabReferenzen.Close
 
   '/// set focus to 3rd line
-   Call wDokSchreiben "<Down>"
+   Call wTypeKeys "<Down>"
 
   '/// Insert/Cross-reference , choose "Insert Reference" and "above/below"
    InsertReferenceField
@@ -396,16 +396,16 @@ testcase tInsertReference_4
      Einfuegen.Click
    TabReferenzen.Close
 
-   Call wDokSchreiben "<F9>"
+   Call wTypeKeys "<F9>"
    Sleep 2
-   Call wDokSchreiben "<Shift Home>"
+   Call wTypeKeys "<Shift Home>"
 
    if fGetFieldContent() <> sAbove then
        Warnlog "Should get " & sAbove & " but get " & fGetFieldContent()
    end if
 
   '/// set focus to 1st line
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Insert/Cross-reference , choose "Insert Reference" and "above/below"
    InsertReferenceField
@@ -419,9 +419,9 @@ testcase tInsertReference_4
      Einfuegen.Click
    TabReferenzen.Close
 
-   Call wDokSchreiben "<F9>"
+   Call wTypeKeys "<F9>"
    Sleep 2
-   Call wDokSchreiben "<Shift Home>"
+   Call wTypeKeys "<Shift Home>"
 
    if fGetFieldContent() <> sBelow then
        Warnlog "Should get " & sBelow & " but get " & fGetFieldContent()
@@ -454,11 +454,11 @@ testcase tInsertReference_5
    TabSeite.OK
 
   '/// Input some thing in the document , press return
-   Call wDokSchreiben "This is a test !"
-   Call wDokSchreiben "<Return>"
+   Call wTypeKeys "This is a test !"
+   Call wTypeKeys "<Return>"
 
   '/// Insert a reference before "This is ..."
-   Call wDokSchreiben "<Up><Home>"
+   Call wTypeKeys "<Up><Home>"
    InsertReferenceField
    Kontext "TabReferenzen"
      Feldtyp.Select 1
@@ -468,7 +468,7 @@ testcase tInsertReference_5
    TabReferenzen.Close
 
   '/// set focus to 2nd line
-   Call wDokSchreiben "<Down>"
+   Call wTypeKeys "<Down>"
 
   '/// Insert/Cross-reference , choose "Insert Reference" and "As Page Style"
    InsertReferenceField
@@ -482,9 +482,9 @@ testcase tInsertReference_5
      Einfuegen.Click
    TabReferenzen.Close
 
-   Call wDokSchreiben "<F9>"
+   Call wTypeKeys "<F9>"
    Sleep 2
-   Call wDokSchreiben "<Shift Home>"
+   Call wTypeKeys "<Shift Home>"
 
    if fGetFieldContent() <> sTestSytle then
        Warnlog "Should get " & sTestSytle & " but get " & fGetFieldContent()
@@ -519,8 +519,8 @@ testcase tInsertReference_6
    FussnoteEinfuegen.OK
 
   '/// Check if footnote is inserted correctly
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<Shift End>"
    if fGetFieldContent() <> sFootnote then
        Warnlog "Should get " & sFootnote & " but get " & fGetFieldContent()
    end if
@@ -553,8 +553,8 @@ testcase tInsertReference_7
    FussnoteEinfuegen.OK
 
   '/// Check if footnote is inserted correctly
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<Shift End>"
    if fGetFieldContent() <> sEndnote then
        Warnlog "Should get " & sEndnote & " but get " & fGetFieldContent()
    end if
@@ -591,16 +591,16 @@ testcase tInsertReference_8_1
    Sleep 1
 
   '/// Check if the insertion is correct
-   Call wDokSchreiben "<Return>"
-   Call wDokSchreiben "<Up><Home><Shift End>"
+   Call wTypeKeys "<Return>"
+   Call wTypeKeys "<Up><Home><Shift End>"
    EditCopy
 
    if fGetFieldContent() <> sCategory & " 1" & sSeparator & sCaption  then
        Warnlog "Should get " & sCategory & " 1" & sSeparator & sCaption & " but get " & fGetFieldContent()
    end if
 
-   Call wDokSchreiben "<Down>"
-   Call wDokSchreiben "<Home><Shift End>"
+   Call wTypeKeys "<Down>"
+   Call wTypeKeys "<Home><Shift End>"
    try
        EditCopy
        Warnlog "Should NOT get anything !"
@@ -640,16 +640,16 @@ testcase tInsertReference_8_2
    Sleep 1
 
   '/// Check if the insertion is correct
-   Call wDokSchreiben "<Return>"
-   Call wDokSchreiben "<Up><Home><Shift End>"
+   Call wTypeKeys "<Return>"
+   Call wTypeKeys "<Up><Home><Shift End>"
    try
        EditCopy
        Warnlog "Should NOT get anything !"
    catch
    endcatch
 
-   Call wDokSchreiben "<Down>"
-   Call wDokSchreiben "<Home><Shift End>"
+   Call wTypeKeys "<Down>"
+   Call wTypeKeys "<Home><Shift End>"
    EditCopy
    if fGetFieldContent() <> sCategory & " 1" & sSeparator & sCaption  then
        Warnlog "Should get " & sCategory & " 1" & sSeparator & sCaption & " but get " & fGetFieldContent()
@@ -678,9 +678,9 @@ testcase tInsertBookmark_1
    Call hFileOpen(sTestFile)
 
   '/// Set curson to the 2nd page
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
    Call fFindWord ("Sec")
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Insert a bookmark
    InsertBookmark
@@ -688,8 +688,8 @@ testcase tInsertBookmark_1
      Textmarken.SetText sBookmark
    TextmarkeEinfuegen.OK
 
-   Call wDokSchreiben "<End>"
-   Call wDokSchreiben "<Return>" , 2
+   Call wTypeKeys "<End>"
+   Call wTypeKeys "<Return>" , 2
 
   '/// Insert/Cross-reference , choose "Bookmarks" and "Page"
    InsertReferenceField
@@ -703,9 +703,9 @@ testcase tInsertBookmark_1
      Einfuegen.Click
    TabReferenzen.Close
 
-   Call wDokSchreiben "<F9>"
+   Call wTypeKeys "<F9>"
    Sleep 2
-   Call wDokSchreiben "<Shift Home>"
+   Call wTypeKeys "<Shift Home>"
 
    if fGetFieldContent( ) <> "2" then
        Warnlog "Should get 2 , but get " & fGetFieldContent()
@@ -735,8 +735,8 @@ testcase tInsertBookmark_2
    Call hFileOpen(sTestFile)
 
   '/// Set curson to the 2nd line
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<Down><Home>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<Down><Home>"
 
   '/// Insert a bookmark
    InsertBookmark
@@ -744,8 +744,8 @@ testcase tInsertBookmark_2
      Textmarken.SetText sBookmark
    TextmarkeEinfuegen.OK
 
-   Call wDokSchreiben "<End>"
-   Call wDokSchreiben "<Return>" , 2
+   Call wTypeKeys "<End>"
+   Call wTypeKeys "<Return>" , 2
 
   '/// Insert/Cross-reference , choose "Bookmarks" and "Chapter"
    InsertReferenceField
@@ -759,9 +759,9 @@ testcase tInsertBookmark_2
      Einfuegen.Click
    TabReferenzen.Close
 
-   Call wDokSchreiben "<F9>"
+   Call wTypeKeys "<F9>"
    Sleep 2
-   Call wDokSchreiben "<Shift Home>"
+   Call wTypeKeys "<Shift Home>"
 
    if fGetFieldContent( ) <> "2" then
        Warnlog "#i40625# Should get 2 , but get " & fGetFieldContent()
@@ -789,12 +789,12 @@ testcase tInsertBookmark_3
   Call hNewDocument
 
   '/// Input some thing in the document and press return
-   Call wDokSchreiben "This is a test !"
-   Call wDokSchreiben "<Return>"
+   Call wTypeKeys "This is a test !"
+   Call wTypeKeys "<Return>"
 
   '/// Select some text
-   Call wDokSchreiben "<Up><End>"
-   Call wDokSchreiben "<Shift Left>" , 5
+   Call wTypeKeys "<Up><End>"
+   Call wTypeKeys "<Shift Left>" , 5
 
   '/// Insert a bookmark
    InsertBookmark
@@ -803,7 +803,7 @@ testcase tInsertBookmark_3
    TextmarkeEinfuegen.OK
 
   '/// set focus to 2nd line
-   Call wDokSchreiben "<Down>"
+   Call wTypeKeys "<Down>"
 
   '/// Insert/Cross-reference , choose "Bookmark" and "Reference"
    InsertReferenceField
@@ -817,9 +817,9 @@ testcase tInsertBookmark_3
      Einfuegen.Click
    TabReferenzen.Close
 
-   Call wDokSchreiben "<F9>"
+   Call wTypeKeys "<F9>"
    Sleep 2
-   Call wDokSchreiben "<Shift Home>"
+   Call wTypeKeys "<Shift Home>"
 
    if fGetFieldContent() <> sReference then
        Warnlog "Should get " & sReference & " but get " & fGetFieldContent()
@@ -848,19 +848,19 @@ testcase tInsertBookmark_4
 
   '/// Press Return first , then input some thing in
   '/// + the document , press return again
-   Call wDokSchreiben "<Return>"
-   Call wDokSchreiben "This is a test !"
-   Call wDokSchreiben "<Return>"
+   Call wTypeKeys "<Return>"
+   Call wTypeKeys "This is a test !"
+   Call wTypeKeys "<Return>"
 
   '/// Insert a Bookmark before "This is ..."
-   Call wDokSchreiben "<Up><Home>"
+   Call wTypeKeys "<Up><Home>"
    InsertBookmark
      Kontext "TextmarkeEinfuegen"
      Textmarken.SetText sBookmark
    TextmarkeEinfuegen.OK
 
   '/// set focus to 3rd line
-   Call wDokSchreiben "<Down>"
+   Call wTypeKeys "<Down>"
 
   '/// Insert/Cross-reference , choose "Bookmarks" and "above/below"
    InsertReferenceField
@@ -874,16 +874,16 @@ testcase tInsertBookmark_4
      Einfuegen.Click
    TabReferenzen.Close
 
-   Call wDokSchreiben "<F9>"
+   Call wTypeKeys "<F9>"
    Sleep 2
-   Call wDokSchreiben "<Shift Home>"
+   Call wTypeKeys "<Shift Home>"
 
    if fGetFieldContent() <> sAbove then
        Warnlog "Should get " & sAbove & " but get " & fGetFieldContent()
    end if
 
   '/// set focus to 1st line
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Insert/Cross-reference , choose "Bookmark" and "above/below"
    InsertReferenceField
@@ -897,9 +897,9 @@ testcase tInsertBookmark_4
      Einfuegen.Click
    TabReferenzen.Close
 
-   Call wDokSchreiben "<F9>"
+   Call wTypeKeys "<F9>"
    Sleep 2
-   Call wDokSchreiben "<Shift Home>"
+   Call wTypeKeys "<Shift Home>"
 
    if fGetFieldContent() <> sBelow then
        Warnlog "Should get " & sBelow & " but get " & fGetFieldContent()
@@ -932,18 +932,18 @@ testcase tInsertBookmark_5
    TabSeite.OK
 
   '/// Input some thing in the document , press return
-   Call wDokSchreiben "This is a test !"
-   Call wDokSchreiben "<Return>"
+   Call wTypeKeys "This is a test !"
+   Call wTypeKeys "<Return>"
 
   '/// Insert a Bookmark before "This is ..."
-   Call wDokSchreiben "<Up><Home>"
+   Call wTypeKeys "<Up><Home>"
    InsertBookmark
      Kontext "TextmarkeEinfuegen"
      Textmarken.SetText sBookmark
    TextmarkeEinfuegen.OK
 
   '/// set focus to 2nd line
-   Call wDokSchreiben "<Down>"
+   Call wTypeKeys "<Down>"
 
   '/// Insert/Cross-reference , choose "Bookmark" and "As Page Style"
    InsertReferenceField
@@ -957,9 +957,9 @@ testcase tInsertBookmark_5
      Einfuegen.Click
    TabReferenzen.Close
 
-   Call wDokSchreiben "<F9>"
+   Call wTypeKeys "<F9>"
    Sleep 2
-   Call wDokSchreiben "<Shift Home>"
+   Call wTypeKeys "<Shift Home>"
 
    if fGetFieldContent() <> sTestSytle then
        Warnlog "Should get " & sTestSytle & " but get " & fGetFieldContent()
