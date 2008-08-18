@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.22 $
+# $Revision: 1.23 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -137,10 +137,6 @@ SHL4LIBS=\
                 $(SLB)$/dialogs.lib     \
                 $(SLB)$/component.lib
 
-SHL4OBJS=\
-                $(SLO)$/baseencoding.obj    \
-                $(SLO)$/biginteger.obj
-
 SHL4STDLIBS=\
                 $(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
@@ -157,9 +153,6 @@ SHL4STDLIBS=\
                 $(SFXLIB)			\
                 $(XMLOFFLIB)		\
                 $(SVXLIB)
-
-#MT: Remove libxml2 and xs_comm (above) by cerating service for base encodings
-SHL4STDLIBS+= $(LIBXML2LIB) $(XMLSECLIB)
 
 SHL4VERSIONMAP = xmlsecurity.map
 SHL4DEPN=
