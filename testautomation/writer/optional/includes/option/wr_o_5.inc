@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: wr_o_5.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:56 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:33:29 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -58,7 +58,7 @@ testcase tLanguageSettingsComplexTextLayout
     Dim bSequenceChecking as boolean
 	if Val(mid$(gMinor, 2, Len(gMinor))) < 141 then        
         goto endsub
-    endif
+    end if
     '/// Open new writerdocument
     Call hNewDocument
     '/// Activate Asian support    
@@ -103,30 +103,30 @@ testcase tLanguageSettingsComplexTextLayout
             if sCTLLan(j) = sCurrentDocumentLanguage then
                 bSequenceChecking = TRUE
                 exit for
-            endif				
+            end if				
         next j
                 
 		Select Case bSequenceChecking
 			Case TRUE
 				if UseSequenceChecking.IsChecked = False then
 					Warnlog "'Sequence Checking' should be checked for language: " & sCurrentDocumentLanguage
-				endif
+				end if
 				if Restricted.IsEnabled = False or Restricted.IsChecked = False then
 					Warnlog "'Restricted' should be enabled and checked for language: " & sCurrentDocumentLanguage
-				endif
+				end if
 				if TypeAndReplace.IsEnabled = False or TypeAndReplace.IsChecked = False then
 					Warnlog "'Type And Replace' should be enabled and checked for language: " & sCurrentDocumentLanguage
-				endif				
+				end if				
 			Case FALSE
 				if UseSequenceChecking.IsChecked = True then
 					QAErrorlog "'Sequence Checking' should not be checked for language: " & sCurrentDocumentLanguage
-				endif
+				end if
 				if Restricted.IsEnabled = True AND Restricted.IsChecked = True then
 					QAErrorlog "'Restricted' should not be checked for language: " & sCurrentDocumentLanguage
-				endif
+				end if
 				if TypeAndReplace.IsEnabled = True AND TypeAndReplace.IsChecked = True then
 					QAErrorlog "'Type And Replace' should not checked for language: " & sCurrentDocumentLanguage
-				endif				
+				end if				
 		end select				        
         Kontext "ExtrasOptionenDlg"
 		ExtrasOptionenDlg.Ok
@@ -155,13 +155,13 @@ testcase tLanguageSettingsComplexTextLayout
     '/// Check if all checkboxes under 'Sequence checking' are checked 
     if UseSequenceChecking.IsChecked = False then
         Warnlog "'Sequence Checking' should be checked for language: " & sCTLLan(0)
-    endif
+    end if
     if Restricted.IsEnabled = False or Restricted.IsChecked = False then
         Warnlog "'Restricted' should be enabled and checked for language: " & sCTLLan(0)
-    endif
+    end if
     if TypeAndReplace.IsEnabled = False or TypeAndReplace.IsChecked = False then
         Warnlog "'Type And Replace' should be enabled and checked for language: " & sCTLLan(0)
-    endif	
+    end if	
     '/// Reset CTL Language
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Ok        

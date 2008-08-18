@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: wr_o_1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:56 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:32:44 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -95,12 +95,12 @@ testcase tToolsOptionsWriterView1
             HorizontalesLinealMasseinheit.Select (HorizontalesLinealMasseinheit.GetItemCount)
         else
             HorizontalesLinealMasseinheit.Select (1)
-        endif
+        end if
         if ( VertikalesLinealMasseinheit.GetItemCount <> measurement_unit(3) ) then
             VertikalesLinealMasseinheit.Select (VertikalesLinealMasseinheit.GetItemCount)
         else
             VertikalesLinealMasseinheit.Select (1)
-        endif
+        end if
         iTemp(2) = HorizontalesLinealMasseinheit.GetSelIndex
         iTemp(3) = VertikalesLinealMasseinheit.GetSelIndex
         '/// if Asian Language enabled there has to be a checkbox 'Right-aligned' for 'Vertical-Ruler' ///
@@ -110,12 +110,12 @@ testcase tToolsOptionsWriterView1
                     RechtsAusgerichtet.Uncheck
                 else
                     RechtsAusgerichtet.Check
-                endif
+                end if
             else
                 Warnlog "- Checkbox 'Right-aligned' is not visible !"
-            endif
-        endif
-    endif
+            end if
+        end if
+    end if
     if option_value(8)= true then WeichesScrollen.UnCheck else WeichesScrollen.Check
 
     '/// close options dialog
@@ -146,9 +146,9 @@ testcase tToolsOptionsWriterView1
                 if option_value(9) = RechtsAusgerichtet.IsChecked then WarnLog "Right-aligned state changed"
             else
                 Warnlog "- Checkbox 'Right-aligned' is not visible !"
-            endif
-        endif
-    endif
+            end if
+        end if
+    end if
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK        
@@ -197,7 +197,7 @@ testcase tToolsOptionsWriterView2
     if bAsianLan = true then
         VertikalesLineal.Check
         RechtsAusgerichtet.Uncheck
-    endif
+    end if
     VertikalesLineal.Uncheck
     HorizontalesLinealMasseinheit.Select (1)
     VertikalesLinealMasseinheit.Select (1)
@@ -236,8 +236,8 @@ testcase tToolsOptionsWriterView2
             if RechtsAusgerichtet.IsEnabled = true then WarnLog "Right-aligned checkbox is enabled"
         else
             Warnlog "- Checkbox 'Right-aligned' is not visible !"
-        endif
-    endif
+        end if
+    end if
 
     if ( HorizontalesLinealMasseinheit.GetSelIndex <> 1 ) then WarnLog "HorizontalesLinealMasseinheit is not item 1"
     if ( VertikalesLinealMasseinheit.GetSelIndex <> 1 ) then WarnLog "VertikalesLinealMasseinheit   is not item 1"

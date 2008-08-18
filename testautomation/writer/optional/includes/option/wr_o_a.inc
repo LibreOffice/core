@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: wr_o_a.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:56 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:33:41 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -203,8 +203,8 @@ testcase tToolsOptionsWriterTableMove
     TabelleEinfuegenWriter.OK
 
     Printlog "remember column width of inserted table"
-    Call wDokSchreiben "<Left><Mod2 Down>"
-    Call wDokSchreiben "<Left><Mod2 Up>"
+    Call wTypeKeys "<Left><Mod2 Down>"
+    Call wTypeKeys "<Left><Mod2 Up>"
 
     ' **   Grundwerte der Tabelle holen ( alles schon in Double und rechenbar ) since 05.02.2001 ;-)
     Spalte1 = SpaltenBreiteHolen
@@ -215,11 +215,11 @@ testcase tToolsOptionsWriterTableMove
     Zellenhoehe.OK
 
     Zeile1  = ZeilenHoeheHolen
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     Spalte2 = SpaltenBreiteHolen
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     Zeile2  = Zeile1
-    Call wDokSchreiben "<Up><Left>"
+    Call wTypeKeys "<Up><Left>"
     SeitenAbstaendeHolen ( Abstaende() )
     AbLi = Abstaende(1)
     AbRe = Abstaende(2)
@@ -229,65 +229,65 @@ testcase tToolsOptionsWriterTableMove
     Printlog "Height  :   Row 1: " & Zeile1 & " Row 2: " & Zeile2 & Chr(13)
 
     Printlog "- with <Alt Left> downsize 1. column from right side"
-    Call wDokSchreiben "<Mod2 Left>"
+    Call wTypeKeys "<Mod2 Left>"
     Call SpaltenBreiteTesten ( Spalte1-VerschubZeile )
     Call SeitenAbstaendeTesten ( 0.00, VerschubZeile )
 
     Printlog "- with <Shift Alt Right> downsize 1. column from left side"
-    Call wDokSchreiben "<Shift Mod2 Right>"
+    Call wTypeKeys "<Shift Mod2 Right>"
     Call SpaltenBreiteTesten ( Spalte1 - VerschubZeile *2 )
     Call SeitenAbstaendeTesten ( VerschubZeile, VerschubZeile )
 
     Printlog "- with <Alt Right> upsize 1. column to the right 2 times"
-    Call wDokSchreiben "<Mod2 Right>"
-    Call wDokSchreiben "<Mod2 Right>"
+    Call wTypeKeys "<Mod2 Right>"
+    Call wTypeKeys "<Mod2 Right>"
     Call SpaltenBreiteTesten ( Spalte1 )
     Call SeitenAbstaendeTesten ( VerschubZeile, 0 )
 
     Printlog "- check size of 2. column"
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     Call SpaltenBreiteTesten ( Spalte2 - VerschubZeile )
     Call SeitenAbstaendeTesten ( VerschubZeile, 0 )
 
     Printlog "- with <Alt Left> upsize 2. column from left"
-    Call wDokSchreiben "<Mod2 Left>"
+    Call wTypeKeys "<Mod2 Left>"
     wait 100
     Call SpaltenBreiteTesten ( Spalte2 - VerschubZeile*2 )
     Call SeitenAbstaendeTesten ( VerschubZeile, VerschubZeile )
 
     Printlog "- with <Shift Alt Right> downsize 2. column from left"
-    Call wDokSchreiben "<Shift Mod2 Right>"
+    Call wTypeKeys "<Shift Mod2 Right>"
     Call SpaltenBreiteTesten ( Spalte2 - VerschubZeile*3 )
     Call SeitenAbstaendeTesten ( VerschubZeile*2, VerschubZeile )
 
     Printlog "- with <Shift Alt Left> upsize 2. column to the left 2 times"
-    Call wDokSchreiben "<Shift Mod2 Left>"
-    Call wDokSchreiben "<Shift Mod2 Left>"
+    Call wTypeKeys "<Shift Mod2 Left>"
+    Call wTypeKeys "<Shift Mod2 Left>"
     Call SpaltenBreiteTesten ( Spalte2-VerschubZeile )
     Call SeitenAbstaendeTesten ( 0, VerschubZeile )
 
     Printlog "- with <Shift Alt Left> upsize 2. column to the right"
-    Call wDokSchreiben "<Mod2 Right>"
+    Call wTypeKeys "<Mod2 Right>"
     Call SpaltenBreiteTesten ( Spalte2 )
     Call SeitenAbstaendeTesten ( 0, 0 )
 
     Printlog "- with <Alt Down> upsize 1. column down"
-    Call wDokSchreiben "<Left><Mod2 Down>"
+    Call wTypeKeys "<Left><Mod2 Down>"
     Call ZeilenHoeheTesten ( Zeile1+VerschubSpalte )
     Call SeitenAbstaendeTesten ( 0, 0 )
 
     Printlog "- with <Shift Alt Up> upsize 1. column down"
-    Call wDokSchreiben "<Mod2 Down>"
+    Call wTypeKeys "<Mod2 Down>"
     Call ZeilenHoeheTesten ( Zeile1+VerschubSpalte*2 )
     Call SeitenAbstaendeTesten ( 0, 0 )
 
     Printlog "- with <Shift Alt Down> downsize 1. column up"
-    Call wDokSchreiben "<Shift Mod2 Down>"
+    Call wTypeKeys "<Shift Mod2 Down>"
     Call ZeilenHoeheTesten ( Zeile1+VerschubSpalte )
     Call SeitenAbstaendeTesten ( 0, 0 )
 
     Printlog "- with <Alt Up> downsize 1. column up"
-    Call wDokSchreiben "<Mod2 Up>"
+    Call wTypeKeys "<Mod2 Up>"
     Call ZeilenHoeheTesten ( ( Zeile1 ) )
     Call SeitenAbstaendeTesten ( 0, 0 )
 
@@ -301,22 +301,22 @@ testcase tToolsOptionsWriterTableMove
     Zellenhoehe.OK
 
     Printlog "- with <Alt Down> upsize 2. column down"
-    Call wDokSchreiben "<Right><Mod2 Down>"
+    Call wTypeKeys "<Right><Mod2 Down>"
     Call ZeilenHoeheTesten ( Zeile2+VerschubSpalte*2/2 )
     Call SeitenAbstaendeTesten ( 0, 0 )
 
     Printlog "- with <Shift Alt Up> upsize 2. column down"
-    Call wDokSchreiben "<Mod2 Down>"
+    Call wTypeKeys "<Mod2 Down>"
     Call ZeilenHoeheTesten ( Zeile2+VerschubSpalte*2 )
     Call SeitenAbstaendeTesten ( 0, 0 )
 
     Printlog "- with <Shift Alt Down> downsize 2. column up"
-    Call wDokSchreiben "<Shift Mod2 Down>"
+    Call wTypeKeys "<Shift Mod2 Down>"
     Call ZeilenHoeheTesten ( Zeile2+VerschubSpalte*2/2 )
     Call SeitenAbstaendeTesten ( 0, 0 )
 
     Printlog "- with <Alt Up> downsize 2. column up"
-    Call wDokSchreiben "<Mod2 Up>"
+    Call wTypeKeys "<Mod2 Up>"
     Call ZeilenHoeheTesten ( Zeile2 )
     Call SeitenAbstaendeTesten ( 0, 0 )
 
@@ -363,59 +363,59 @@ testcase tToolsOptionsWriterTableInsert
     ' **   Grundwerte der Tabelle holen ( alles schon in Double und rechenbar )
     Spalte1 = SpaltenBreiteHolen
     Zeile  = ZeilenHoeheHolen
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     Spalte2 = SpaltenBreiteHolen
     ' **
 
     Printlog "- with <Alt Insert><Up> insert a row from top"
-    Call wDokSchreiben "<Mod2 Insert><Up>"
+    Call wTypeKeys "<Mod2 Insert><Up>"
     Call ZeilenHoeheTesten ( VerschubZeile )
     Call SeitenAbstaendeTesten ( 0.00, 0.00 )
     Call ZeilenTesten ( 3 )
     Call SpaltenTesten ( 2 )
 
     Printlog "- with <Alt Insert><Down> insert a row from downside"
-    Call wDokSchreiben "<Down><Mod2 Insert><Down>"
+    Call wTypeKeys "<Down><Mod2 Insert><Down>"
     Call ZeilenHoeheTesten ( VerschubZeile )
     Call ZeilenTesten ( 4 )
     Call SpaltenTesten ( 2 )
 
     Printlog "- with <Alt Delete><Up> delete 1. row from top"
-    Call wDokSchreiben "<Mod2 Delete><Up>"
+    Call wTypeKeys "<Mod2 Delete><Up>"
     Call ZeilenHoeheTesten ( 0.01 )
     Call ZeilenTesten ( 3 )
     Call SpaltenTesten ( 2 )
 
     Printlog "- with <Alt Delete><Down> delete 1. row from the button"
-    Call wDokSchreiben "<Mod2 Delete><Down>"
+    Call wTypeKeys "<Mod2 Delete><Down>"
     Call ZeilenHoeheTesten ( VerschubZeile )
     Call ZeilenTesten ( 2 )
     Call SpaltenTesten ( 2 )
 
     Printlog "- with <Alt Insert><Left> insert a column from left side"
-    Call wDokSchreiben "<Mod2 Insert><Left>"
+    Call wTypeKeys "<Mod2 Insert><Left>"
     Call SpaltenBreiteTesten ( VerschubSpalte )
     Call SeitenAbstaendeTesten ( 0.00, 0.00 )
     Call ZeilenTesten ( 2 )
     Call SpaltenTesten ( 3 )
 
     Printlog "- with <Alt Insert><Right> insert a rown from right side"
-    Call wDokSchreiben "<Right><Right><Mod2 Insert><Right>"
+    Call wTypeKeys "<Right><Right><Mod2 Insert><Right>"
     Call SpaltenBreiteTesten ( VerschubSpalte )
     Call ZeilenTesten ( 2 )
     Call SpaltenTesten ( 4 )
 
     Printlog "- with <Alt Delete><Left> delete 1. Column from left side"
-    Call wDokSchreiben "<Mod2 Delete><Left>"
+    Call wTypeKeys "<Mod2 Delete><Left>"
     DocumentWriter.TypeKeys "<Up>"
     Call SpaltenBreiteTesten ( Spalte1-VerschubSpalte )
     Call ZeilenTesten ( 2 )
     Call SpaltenTesten ( 3 )
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     Call SeitenAbstaendeTesten ( VerschubSpalte, 0.00 )
 
     Printlog "- with <Alt Delete><Right> delete last column from right side"
-    Call wDokSchreiben "<Right><Right><Mod2 Delete><Right>"
+    Call wTypeKeys "<Right><Right><Mod2 Delete><Right>"
     Call SpaltenBreiteTesten ( Spalte2-VerschubSpalte )
     Call ZeilenTesten ( 2 )
     Call SpaltenTesten ( 2 )
@@ -452,62 +452,62 @@ testcase tToolsOptionsWriterTableEffects
     TabelleEinfuegenWriter.OK
 
     Spalte1 = SpaltenBreiteHolen
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     Spalte2 = SpaltenBreiteHolen
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     Spalte3 = SpaltenBreiteHolen
     Kontext "DocumentWriter"
     DocumentWriter.TypeKeys "<Left>", 3
 
     Printlog "- with <Alt Left> downsize 1. Column from right side"
-    Call wDokSchreiben "<Mod2 Left>"
+    Call wTypeKeys "<Mod2 Left>"
     Call SpaltenBreiteTesten ( Spalte1-VerschubZeile )
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     Call SpaltenBreiteTesten ( Spalte2+VerschubZeile )
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     Call SpaltenBreiteTesten ( Spalte3 )
     Call SeitenAbstaendeTesten ( 0.00, 0.00 )
 
     Kontext "DocumentWriter"
     DocumentWriter.TypeKeys "<Left>", 3
     Printlog "- with <Alt Shift Right> no changes should be happen"
-    Call wDokSchreiben "<Mod2 Shift Left>"
+    Call wTypeKeys "<Mod2 Shift Left>"
     Call SpaltenBreiteTesten ( Spalte1-VerschubZeile )
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     Call SpaltenBreiteTesten ( Spalte2+VerschubZeile )
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     Call SpaltenBreiteTesten ( Spalte3 )
     Call SeitenAbstaendeTesten ( 0.00, 0.00 )
 
     Kontext "DocumentWriter"
     DocumentWriter.TypeKeys "<Left>", 3
     Printlog "- with <Alt Right> re-establish initial state ///"
-    Call wDokSchreiben "<Mod2 Right>"
+    Call wTypeKeys "<Mod2 Right>"
     Call SpaltenBreiteTesten ( Spalte1 )
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     SpaltenBreiteTesten ( Spalte2 )
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     SpaltenBreiteTesten ( Spalte3 )
     SeitenAbstaendeTesten ( 0.00, 0.00 )
 
     Printlog "- with <Alt Down> row will be upsized ///"
-    Call wDokSchreiben "<Mod2 Down>"
+    Call wTypeKeys "<Mod2 Down>"
     Call ZeilenHoeheTesten ( 1.17 )
     Call SeitenAbstaendeTesten ( 0.00, 0.00 )
 
     if iSprache <> 01 then
         Printlog "- with <Alt Up> row gets initial state"
-        Call wDokSchreiben "<Mod2 Up>"
+        Call wTypeKeys "<Mod2 Up>"
         Call ZeilenHoeheTesten ( 0.7 )
         Call SeitenAbstaendeTesten ( 0.00, 0.00 )
 
         Printlog "- with <Alt Shift Up> row will be upsized"
-        Call wDokSchreiben "<Mod2 Shift Up>"
+        Call wTypeKeys "<Mod2 Shift Up>"
         Call ZeilenHoeheTesten ( 1.17 )
         Call SeitenAbstaendeTesten ( 0.00, 0.00 )
 
         Printlog "- with <Alt Shift Down> column gets initial state"
-        Call wDokSchreiben "<Mod2 Shift Down>"
+        Call wTypeKeys "<Mod2 Shift Down>"
         Call ZeilenHoeheTesten ( 0.7 )
         Call SeitenAbstaendeTesten ( 0.00, 0.00 )
     end if
@@ -528,54 +528,54 @@ testcase tToolsOptionsWriterTableEffects
     TabelleEinfuegenWriter.OK
 
     Printlog "- with <Alt Left> downsize 1. column from right"
-    Call wDokSchreiben "<Mod2 Left>"
+    Call wTypeKeys "<Mod2 Left>"
     Call SpaltenBreiteTesten ( Spalte1-VerschubZeile )
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     Call SpaltenBreiteTesten ( Spalte2+VerschubZeile/2 )
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     Call SpaltenBreiteTesten ( Spalte3+VerschubZeile/2 )
     Call SeitenAbstaendeTesten ( 0.00, 0.00 )
 
     Kontext "DocumentWriter"
     DocumentWriter.TypeKeys "<Left>", 3
     Printlog "- with <Alt Shift Right> nothing should happen"
-    Call wDokSchreiben "<Mod2 Shift Left>"
+    Call wTypeKeys "<Mod2 Shift Left>"
     Call SpaltenBreiteTesten ( Spalte1-VerschubZeile )
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     Call SpaltenBreiteTesten ( Spalte2+VerschubZeile/2 )
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     Call SpaltenBreiteTesten ( Spalte3+VerschubZeile/2 )
     Call SeitenAbstaendeTesten ( 0.00, 0.00 )
 
     Kontext "DocumentWriter"
     DocumentWriter.TypeKeys "<Left>", 3
     Printlog "- with <Alt Right> reach initial state"
-    Call wDokSchreiben "<Mod2 Right>"
+    Call wTypeKeys "<Mod2 Right>"
     Call SpaltenBreiteTesten ( Spalte1 )
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     Call SpaltenBreiteTesten ( Spalte2 )
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     Call SpaltenBreiteTesten ( Spalte3 )
     Call SeitenAbstaendeTesten ( 0.00, 0.00 )
 
     if iSprache <> 01 then
         Printlog "- with <Alt Down> row will be upsized"
-        Call wDokSchreiben "<Mod2 Down>"
+        Call wTypeKeys "<Mod2 Down>"
         Call ZeilenHoeheTesten ( 1.2 )
         Call SeitenAbstaendeTesten ( 0.00, 0.00 )
 
         Printlog "- with <Alt Up> column gets intitial state"
-        Call wDokSchreiben "<Mod2 Up>"
+        Call wTypeKeys "<Mod2 Up>"
         Call ZeilenHoeheTesten ( 0.7 )
         Call SeitenAbstaendeTesten ( 0.00, 0.00 )
 
         Printlog "- with <Alt Shift Up> column will be upsized"
-        Call wDokSchreiben "<Mod2 Shift Up>"
+        Call wTypeKeys "<Mod2 Shift Up>"
         Call ZeilenHoeheTesten ( 1.2 )
         Call SeitenAbstaendeTesten ( 0.00, 0.00 )
 
         Printlog "- with <Alt Shift Down> column gets initial state"
-        Call wDokSchreiben "<Mod2 Shift Down>"
+        Call wTypeKeys "<Mod2 Shift Down>"
         Call ZeilenHoeheTesten ( 0.7 )
         Call SeitenAbstaendeTesten ( 0.00, 0.00 )
     end if
@@ -620,7 +620,7 @@ testcase tToolsOptionsWriterTableEffects2
     ExtrasOptionenDlg.OK
 
     printlog "- resize cell with <Alt Left>"
-    Call wDokSchreiben "<Mod2 Left>"
+    Call wTypeKeys "<Mod2 Left>"
     SpaltenBreiteTesten ( ( Spalte1-VerschubZeile ) )
 
     FormatTable

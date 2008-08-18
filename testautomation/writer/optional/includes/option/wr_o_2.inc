@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: wr_o_2.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:56 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:32:54 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -101,7 +101,7 @@ testcase tToolsOptionsWriterDefaultfont (WestOrEast as string)
         printlog "------------ WESTERN FONTS -------------"
         Call ActiveDeactivateAsianSupport(False)
         sFileName = gTesttoolPath + "writer\optional\input\options\options2.sxw"
-    endif
+    end if
 
     '/// use a document to check the font with styles///'
     '///+ use 'input\\writer\\optional\\options\\options2.sxw' ///
@@ -181,35 +181,35 @@ testcase tToolsOptionsWriterDefaultfont (WestOrEast as string)
     Printlog "'/// - check whether fonts get changed in doc. ///"
     Kontext "DocumentWriter"
     DocumentWriter.TypeKeys "<Up>", 5
-    Call wDokSchreiben "<Home><Right>"
+    Call wTypeKeys "<Home><Right>"
     sTempS = wGetCharacterFont()
     if sTempS <> sTempListBox(1) then Warnlog "Default font: state changed  is: "+sTempS+" ;should: "+sTempListBox(1)+" : "+iTempListBox(1)
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     sTempS = wGetCharacterFont()
     if sTempS <> sTempListBox(2) then Warnlog "Heading font: state changed  is: "+sTempS+" ;should: "+sTempListBox(2)+" : "+iTempListBox(2)
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     sTempS = wGetCharacterFont()
     if sTempS <> sTempListBox(3) then Warnlog "List font: state changed  is: "+sTempS+" ;should: "+sTempListBox(3)+" : "+iTempListBox(3)
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     sTempS = wGetCharacterFont()
     if sTempS <> sTempListBox(4) then Warnlog "Caption font: state changed  is: "+sTempS+" ;should: "+sTempListBox(4)+" : "+iTempListBox(4)
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     sTempS = wGetCharacterFont()
     if sTempS <> sTempListBox(5) then Warnlog "Index font: state changed  is: "+sTempS+" ;should: "+sTempListBox(5)+" : "+iTempListBox(5)
 
-    Call wDokSchreiben "<Mod1 Home><Right>"
+    Call wTypeKeys "<Mod1 Home><Right>"
     sTempS = wGetCharacterFontSize()
     if sTempS <> sTempListBoxSize(1) then Warnlog "Default fontsize: state changed  is: "+sTempS+" ;should: "+sTempListBoxSize(1)+" : "+iTempListBoxSize(1)
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     sTempS = wGetCharacterFontSize()
     if sTempS <> sTempListBoxSize(2) then Warnlog "Heading fontsize: state changed  is: "+sTempS+" ;should: "+sTempListBoxSize(2)+" : "+iTempListBoxSize(2)
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     sTempS = wGetCharacterFontSize()
     if sTempS <> sTempListBoxSize(3) then Warnlog "List fontsize: state changed  is: "+sTempS+" ;should: "+sTempListBoxSize(3)+" : "+iTempListBoxSize(3)
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     sTempS = wGetCharacterFontSize()
     if sTempS <> sTempListBoxSize(4) then Warnlog "Caption fontsize: state changed  is: "+sTempS+" ;should: "+sTempListBoxSize(4)+" : "+iTempListBoxSize(4)
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     sTempS = wGetCharacterFontSize()
     if sTempS <> sTempListBoxSize(5) then Warnlog "Index fontsize: state changed  is: "+sTempS+" ;should: "+sTempListBoxSize(5)+" : "+iTempListBoxSize(5)
     
@@ -243,36 +243,36 @@ testcase tToolsOptionsWriterDefaultfont (WestOrEast as string)
     Call hFileOpen ( sFileName )
     Kontext "DocumentWriter"
     DocumentWriter.TypeKeys "<Up>", 5
-    Call wDokSchreiben "<Home><Right>"
+    Call wTypeKeys "<Home><Right>"
 
     sTempS = wGetCharacterFont()
     if sTempS <> sListBox(1) then Warnlog "Default font: Writer changed  Font !?! is: "+sTempS+" ;should: "+sListBox(1)+" : "+iListBox(1)
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     sTempS = wGetCharacterFont()
     if sTempS <> sListBox(2) then Warnlog "Heading font: Writer changed  Font !?! is: "+sTempS+" ;should: "+sListBox(2)+" : "+iListBox(2)
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     sTempS = wGetCharacterFont()
     if sTempS <> sListBox(3) then Warnlog "List font: Writer changed  Font !?! is: "+sTempS+" ;should: "+sListBox(3)+" : "+iListBox(3)
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     sTempS = wGetCharacterFont()
     if sTempS <> sListBox(4) then Warnlog "Caption font: Writer changed  Font !?! is: "+sTempS+" ;should: "+sListBox(4)+" : "+iListBox(4)
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     sTempS = wGetCharacterFont()
     if sTempS <> sListBox(5) then Warnlog "Index font: Writer changed  Font !?! is: "+sTempS+" ;should: "+sListBox(5)+" : "+iListBox(5)
 
-	Call wDokSchreiben "<Mod1 Home><Right>"
+	Call wTypeKeys "<Mod1 Home><Right>"
     sTempS = wGetCharacterFontSize()
     if sTempS <> sListBoxSize(1) then Warnlog "Default font: Writer changed  Font !?! is: "+sTempS+" ;should: "+sListBoxSize(1)+" : "+iListBoxSize(1)
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     sTempS = wGetCharacterFontSize()
     if sTempS <> sListBoxSize(2) then Warnlog "Heading font: Writer changed  Font !?! is: "+sTempS+" ;should: "+sListBoxSize(2)+" : "+iListBoxSize(2)
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     sTempS = wGetCharacterFontSize()
     if sTempS <> sListBoxSize(3) then Warnlog "List font: Writer changed  Font !?! is: "+sTempS+" ;should: "+sListBoxSize(3)+" : "+iListBoxSize(3)
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     sTempS = wGetCharacterFontSize()
     if sTempS <> sListBoxSize(4) then Warnlog "Caption font: Writer changed  Font !?! is: "+sTempS+" ;should: "+sListBoxSize(4)+" : "+iListBoxSize(4)
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     sTempS = wGetCharacterFontSize()
     if sTempS <> sListBoxSize(5) then Warnlog "Index font: Writer changed  Font !?! is: "+sTempS+" ;should: "+sListBoxSize(5)+" : "+iListBoxSize(5)
     
@@ -292,7 +292,7 @@ testcase tToolsOptionsWriterDefaultfont (WestOrEast as string)
         ToolsOptions
         Call hToolsOptions ( "TextDocument" , WestOrEast )
         AktuellesDokument.Check
-    endif
+    end if
         
     StandardSchrift.Select(1)
     Ueberschrift.Select(1)
@@ -527,7 +527,7 @@ testcase tToolsOptionsWriterPrint1
                 Sleep 1
             else
                 i = 100
-            endif
+            end if
         next i
     catch
         print " :::::::::::::::wr2::::::test d1"
@@ -542,15 +542,15 @@ testcase tToolsOptionsWriterPrint1
             catch
                 Active.Yes
             endcatch
-        endif
-    endif
+        end if
+    end if
     Kontext "TabDruckenWriter"
     wait 500
     if Fax.GetSelText <> iListBox(1) then
         Fax.Select (Fax.GetItemCount)
     else
         Fax.Select(1)
-    endif
+    end if
     iTempListBox(1) = Fax.GetSelIndex
 
     Kontext "ExtrasOptionenDlg"

@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: wr_o_4.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:56 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:33:17 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -204,7 +204,7 @@ testcase tToolsOptionsWriterOther
 '   creating document with tabstops and save it
     Kontext "DocumentWriter"
     DocumentWriter.TypeKeys "a<Tab>b<Tab>c<Tab>d<Tab>e<Tab>f<Tab>g<Tab>h<Tab>i<Tab>j"
-    Call hFileSaveAsWithFilterKill ( gOfficePath + "user\work\tab25cm.odt", Writer8 )
+    Call hFileSaveAsWithFilterKill ( gOfficePath + "user\work\tab25cm.odt", "Writer8")
     Call hCloseDocument
     sleep (2)
 
@@ -480,7 +480,7 @@ testcase tToolsOptionsWriterAutoCaption
             WarnLog ObjectList.GetText & " is checked though it had been unchecked before"
         else
             ObjectList.Check
-        endif
+        end if
     next i
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
@@ -494,7 +494,7 @@ testcase tToolsOptionsWriterAutoCaption
         if ( ObjectList.IsChecked = FALSE ) Then
             WarnLog ObjectList.GetText & " is unchecked though it had been checked before"
             ObjectList.Check
-        endif        
+        end if        
     next i
    
     printlog ("'/// - change states ///")
@@ -535,7 +535,7 @@ testcase tToolsOptionsWriterAutoCaption
                         Numbering.Select Numbering.GetItemCount
                     else
                         Numbering.Select 4
-                    endif
+                    end if
                     Position.Select 2
                 case 9:
                     Category.Select 2
@@ -543,14 +543,14 @@ testcase tToolsOptionsWriterAutoCaption
                         Numbering.Select Numbering.GetItemCount
                     else
                         Numbering.Select 5
-                    endif
+                    end if
                     Position.Select 1                          
             
                 end select
                 vCategoryTmp(i) = Category.GetSelText
         else
             Warnlog ObjectList.GetText & " is not checked: Verify test script"
-        endif
+        end if
     next i
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
@@ -573,34 +573,34 @@ testcase tToolsOptionsWriterAutoCaption
                     Warnlog "-    'Numbering' changed after restart"
                 else
                     printlog "-   'Numbering' => ok"
-                endif
-            endif
+                end if
+            end if
             if CaptionSeparator.Gettext <> "Caption Separator " & cstr(i) then
                 Warnlog "-    'Caption Separator' changed after restart"
             else
                 printlog "-    'Caption Separator' => ok"
-            endif
+            end if
             if ChapterSeparator.Gettext <>  cstr(i) then
                 Warnlog "-    'Chapter Separator' changed after restart"
             else
                 printlog "-    'Chapter Separator' => ok"
-            endif
+            end if
             if Level.GetSelIndex <> i then 
                 Warnlog "-    'Level' changed after restart"
             else
                 Printlog "-    'Level' => ok"
-            endif            
+            end if            
             if CharacterStyle.GetSelIndex <> i then
                 Warnlog "-    'Character Style' changed after restart"
             else
                 printlog "-    'Character Style' => ok"
-            endif
+            end if
 
             if Category.GetSelText <> vCategoryTmp(i) then
                 Warnlog "-    'Category' changed after restart. Not " & vCategoryTmp(i) & " but " & Category.GetSelText
             else
                 printlog "-    'Category' => ok"
-            endif
+            end if
             
             Select Case i
                 case 1:
@@ -608,54 +608,54 @@ testcase tToolsOptionsWriterAutoCaption
                         Warnlog "-    'Position' changed after restart"
                     else
                         printlog "-    'Position' => ok"
-                    endif                    
+                    end if                    
                 case 2:
                     if Position.GetSelIndex <> 2 then
                         Warnlog "-    'Position' changed after restart"
                     else
                         printlog "-    'Position' => ok"
-                    endif
+                    end if
 
                 case 3:
                     if Position.IsEnabled = true then
                         Warnlog "-    'Position' should be disabled"
                     else
                         printlog "-    'Position' disabled => ok"
-                    endif
+                    end if
                     
                     if ApplyBorderAndShadow.IsChecked = false then
                         Warnlog "-    'Apply Border and Shadow' changed after restart"
                     else
                         printlog "-    'Apply Border and Shadow => ok"
-                    endif
+                    end if
 
                 case 4:
                     if Position.GetSelIndex <> 2 then
                         Warnlog "-    'Position' changed after restart"
                     else
                         printlog "-    'Position' => ok"
-                    endif
+                    end if
                     
                 case 5:
                     if Position.GetSelIndex <> 1 then
                         Warnlog "-    'Position' changed after restart"
                     else
                         printlog "-    'Position' => ok"
-                    endif
+                    end if
                     
                 case 6:
                     if Position.GetSelIndex <> 2 then
                         Warnlog "-    'Position' changed after restart"
                     else
                         printlog "-    'Position' => ok"
-                    endif
+                    end if
                     
                 case 7:
                     if Position.GetSelIndex <> 1 then
                         Warnlog "-    'Position' changed after restart"
                     else
                         printlog "-    'Position' => ok"
-                    endif
+                    end if
                     
                 case 8:
                     if Numbering.GetItemCount > 7 then
@@ -663,20 +663,20 @@ testcase tToolsOptionsWriterAutoCaption
                             Warnlog "-    'Numbering' changed after restart"
                         else
                             printlog "-    'Numbering' => ok"
-                        endif
+                        end if
                     else
                         if Numbering.GetSelIndex <> 4 then
                             Warnlog "-    'Numbering' changed after restart"
                         else
                             printlog "-    'Numbering' => ok"
-                        endif
-                    endif
+                        end if
+                    end if
 
                     if Position.GetSelIndex <> 2 then
                         Warnlog "-    'Position' changed after restart"
                     else
                         printlog "-    'Position' => ok"
-                    endif
+                    end if
                     
                 case 9:
                     if Numbering.GetItemCount > 7 then
@@ -684,25 +684,25 @@ testcase tToolsOptionsWriterAutoCaption
                             Warnlog "-    Numbering changed after restart"
                         else
                             printlog "-    Numbering => ok"
-                        endif
+                        end if
                     else
                         if Numbering.GetSelIndex <> 5 then
                             Warnlog "-    'Numbering changed after restart"
                         else
                             printlog "-    'Numbering' => ok"
-                        endif
-                    endif
+                        end if
+                    end if
 
                     if Position.GetSelIndex <> 1 then
                         Warnlog "-    'Position' changed after restart"
                     else
                         printlog "-    'Position' => ok"
-                    endif
+                    end if
                     
             end select
         else
             Warnlog "-   " & ObjectList.GetText & " is not checked"
-        endif
+        end if
     next i    
     
     Kontext "ExtrasOptionenDlg"
@@ -721,7 +721,7 @@ testcase tToolsOptionsWriterAutoCaption
                 Category.Select Category.GetItemCount
             else
                 Category.Select vCategory(i)
-            endif
+            end if
             Numbering.Select vNumbering(i)
             CaptionSeparator.SetText vCaptionSeparator(i)
             if Position.IsEnabled then Position.Select vPosition(i)
@@ -735,8 +735,8 @@ testcase tToolsOptionsWriterAutoCaption
                     case false
                         ApplyBorderAndShadow.Uncheck
                 end select
-            endif
-        endif    
+            end if
+        end if    
         Select case vObjectList(i)
             Case true
                 ObjectList.Check
@@ -783,8 +783,8 @@ testcase tToolsOptionsWriterGeneral
             catch
                 Active.Ok
             endcatch
-        endif
-    endif
+        end if
+    end if
     Sleep 2
     Call hCloseDocument
     Sleep 2
@@ -807,8 +807,8 @@ testcase tToolsOptionsWriterGeneral
             Active.yes
         else
             Warnlog "Update all links should appear!"
-        endif
-    endif
+        end if
+    end if
     Sleep 2
     Call hCloseDocument
     Sleep 2
@@ -829,8 +829,8 @@ testcase tToolsOptionsWriterGeneral
         if Active.GetRT = 304 then
             Warnlog "Update all links should not appear!"
             Active.yes
-         endif
-    endif
+         end if
+    end if
     Sleep 3
     Kontext "DocumentWriter"
     DocumentWriter.TypeKeys "<Up>",10
@@ -955,7 +955,7 @@ testcase tToolsOptionsWriterMailMerge
         if TaskStatusListBox.GetItemCount > 0 then
             TestAccountSettings.Cancel
             exit do
-        endif
+        end if
         wait 500
     Loop
     if TestAccountSettings.Exists then TestAccountSettings.Cancel
