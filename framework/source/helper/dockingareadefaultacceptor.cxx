@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dockingareadefaultacceptor.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,8 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
+#include <vcl/svapp.hxx>
+
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -79,7 +81,8 @@ using namespace ::rtl                           ;
 //*****************************************************************************************************************
 DockingAreaDefaultAcceptor::DockingAreaDefaultAcceptor( const   Reference< XFrame >&        xOwner  )
         //  Init baseclasses first
-        :   OWeakObject     (           )
+        :   ThreadHelpBase  ( &Application::GetSolarMutex() )
+        ,   OWeakObject     (           )
         // Init member
         ,   m_xOwner        ( xOwner    )
 {
@@ -126,6 +129,8 @@ sal_Bool SAL_CALL DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css
 
     // Try to "lock" the frame for access to taskscontainer.
     Reference< XFrame > xFrame( m_xOwner.get(), UNO_QUERY );
+    aGuard.unlock();
+
     if ( xFrame.is() == sal_True )
     {
         Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
