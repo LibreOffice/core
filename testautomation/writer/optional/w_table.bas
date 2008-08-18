@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_table.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 09:11:26 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:22:57 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -36,7 +36,6 @@
 '*
 '\***********************************************************************
 
-
 global mUnit as string
 global cDecSep as string 'Decimal Seperator init in 'sub w_204_'
 global cSep as string 'Seperator for numbers formated as text init in 'sub w_204_'
@@ -44,7 +43,7 @@ global gLocaleDefault as string
 global gDocumentLanguage as string
 
 sub main
-    
+
     Dim StartZeit
     StartZeit = Now()
 
@@ -59,11 +58,11 @@ sub main
     printlog Chr(13) & "Loading of Include - Files takes: " & Wielange ( StartZeit )
 
     Printlog ""
-    Printlog "----------------------------------------------------------"
-    Printlog "|                  Writer Table Test                     |"
-    Printlog "----------------------------------------------------------"
+    Printlog "----------------------------------------------"
+    Printlog "|                           Writer Table Test                           |"
+    Printlog "----------------------------------------------"
     Printlog ""
-  
+
     'Checking for supported language
     if fLocaleString("LocaleText") = "Abortion" then 
         warnlog "This test does not support language " & iSprache
@@ -71,8 +70,7 @@ sub main
     endif
     'First some settings to verify a stable run
     Call TableConfiguration
-    
-   
+
     Call hStatusIn("writer","w_table.bas","Writer Table test")
     Call w_204_
     Call w_204a_
@@ -91,7 +89,7 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    use "global\tools\includes\t_locale_strings1.inc"    
+    use "global\tools\includes\optional\t_locale_strings1.inc"
     Call GetUseFiles
     gApplication = "Writer"
 end sub
@@ -129,7 +127,7 @@ sub TableConfiguration
     
     mUnit = fSetMeasurementToCM()
     ToolsOptions
-    Call hToolsOptions ("TextDocument","GENERAL")        
+    Call hToolsOptions ("TextDocument","GENERAL")
     cDecSep = GetDecimalSeperator(Tabulatorenabstand.GetText)
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Ok
@@ -141,25 +139,26 @@ sub TableConfiguration
     ToolsCalculate
     if Instr(GetClipBoardtext, ",") > 0 then cSep = ","
     if Instr(GetClipBoardtext, ".") > 0 then cSep = "."
-    Call hCloseDocument    
+    Call hCloseDocument
 end sub
 
 sub RestoreSettings
-    If iSprache <> iSystemSprache then 
+    If iSprache <> iSystemSprache then
         Call hNewDocument
         ToolsOptions
         Call hToolsOptions ("LanguageSettings", "Languages")
         Gebietsschema.Select(gLocaleDefault)
         Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.OK
-    endif
+    end if
     ToolsOptions
     Call hToolsOptions ("LanguageSettings", "Languages")
     if fLocaleString("LocaleScriptType") = "Western" then Westlich.Select(gDocumentLanguage)
-    if fLocaleString("LocaleScriptType") = "CJK" then Asiatisch.Select(gDocumentLanguage)    
+    if fLocaleString("LocaleScriptType") = "CJK" then Asiatisch.Select(gDocumentLanguage)
     if fLocaleString("LocaleScriptType") = "CTL" then LanguageComplexScript.Select(gDocumentLanguage)
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-    Call hCloseDocument
+    If iSprache <> iSystemSprache then
+        Call hCloseDocument
+    end if
 end sub
-
