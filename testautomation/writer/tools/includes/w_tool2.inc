@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_tool2.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:36:08 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:43:13 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -54,10 +54,10 @@ sub OptionenAufrufen(Seite as string)
                 if i = 1 then
                     Warnlog Active.Gettext + " Bug#90025"
                     GotItAlready = True
-                endif
+                end if
                 Active.Ok
-            endif
-        endif
+            end if
+        end if
     next i
     Kontext
     Select case Seite
@@ -72,8 +72,8 @@ sub OptionenAufrufen(Seite as string)
             if Active.GetRT = 304 then
                 if i = 1 and GotItAlready = False then Warnlog Active.Gettext + " Bug#90025"
                 Active.Ok
-            endif
-        endif
+            end if
+        end if
     next i
     Kontext Seite
 end sub
@@ -81,48 +81,48 @@ end sub
 
 
 sub CheckUberpruefen ( Pruefung$ )
-    Call wDokSchreiben Pruefung$
+    Call wTypeKeys Pruefung$
     wait 100
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Home><Shift End>"
     EditCopy
     if GetClipboardText = Pruefung$ then Warnlog "Text has not been replaced"
-    Call wDokSchreiben "<Home><Shift End><Delete>"
+    Call wTypeKeys "<Home><Shift End><Delete>"
 end sub
 
 sub UnCheckUeberpruefen ( Pruefung$ )
-    Call wDokSchreiben Pruefung$
+    Call wTypeKeys Pruefung$
     wait 100
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Home><Shift End>"
     EditCopy
     if GetClipboardText <> Pruefung$ then Warnlog "Text has been replaced"
-    Call wDokSchreiben "<Home><Shift End><Delete>"
+    Call wTypeKeys "<Home><Shift End><Delete>"
 end sub
 
 
 sub WortErgaenzen(Tastaturbefehl as string)
-    Call wDokSchreiben "Die"
+    Call wTypeKeys "Die"
     Wait 500
-    Call wDokSchreiben Tastaturbefehl
-    Call wDokSchreiben "<End><Mod1 Shift Left>"
+    Call wTypeKeys Tastaturbefehl
+    Call wTypeKeys "<End><Mod1 Shift Left>"
     EditCopy
     if GetClipBoardtext = "Dies" then Warnlog "Word 'Dies' has been completed!"
-    if Tastaturbefehl = "<Return>" then Call wDokSchreiben "<Return>"
+    if Tastaturbefehl = "<Return>" then Call wTypeKeys "<Return>"
 
-    Call wDokSchreiben "auto"
+    Call wTypeKeys "auto"
     Wait 500
-    Call wDokSchreiben Tastaturbefehl
-    Call wDokSchreiben "<End><Mod1 Shift Left>"
+    Call wTypeKeys Tastaturbefehl
+    Call wTypeKeys "<End><Mod1 Shift Left>"
     EditCopy
     if GetClipBoardtext <> "automatischen" then Warnlog "Word 'automatischen' has not been completed!"
-    if Tastaturbefehl = "<Return>" then Call wDokSchreiben "<Return>"
+    if Tastaturbefehl = "<Return>" then Call wTypeKeys "<Return>"
 
-    Call wDokSchreiben "Wor"
+    Call wTypeKeys "Wor"
     Wait 500
-    Call wDokSchreiben Tastaturbefehl
-    Call wDokSchreiben "<End><Mod1 Shift Left>"
+    Call wTypeKeys Tastaturbefehl
+    Call wTypeKeys "<End><Mod1 Shift Left>"
     EditCopy
     if GetClipBoardtext <> "Worterkennung" then Warnlog "Word 'Worterkennung' has not been completed!"
-    if Tastaturbefehl = "<Return>" then Call wDokSchreiben "<Return>"
+    if Tastaturbefehl = "<Return>" then Call wTypeKeys "<Return>"
 
 end sub
 
@@ -142,8 +142,8 @@ function wCreateAutotextCategory(vCategoryName as string) as boolean
         if Active.GetRT = 304 then
             QAErrorlog Active.Gettext
             Active.Ok
-        endif
-    endif
+        end if
+    end if
     
     Kontext "Autotext"
     try
@@ -153,8 +153,8 @@ function wCreateAutotextCategory(vCategoryName as string) as boolean
             if Active.GetRT = 304 then
                 QAErrorlog Active.Gettext
                 Active.Ok
-            endif
-        endif
+            end if
+        end if
     catch
        Warnlog "Button 'Categories' is disabled!"
        goto NotPassed
@@ -170,7 +170,7 @@ function wCreateAutotextCategory(vCategoryName as string) as boolean
             QAErrorlog "Category " & vCategoryName & " already existing"
             bCategoryExist = true
             exit for
-        endif
+        end if
     next i
     
     if bCategoryExist = false then
@@ -185,7 +185,7 @@ function wCreateAutotextCategory(vCategoryName as string) as boolean
 					Warnlog "Unable to create new category"
 					BereicheBearbeitenAutotext.Close
 					goto NotPassed				
-				endif
+				end if
 			endcatch
 		next i
         
@@ -199,10 +199,10 @@ function wCreateAutotextCategory(vCategoryName as string) as boolean
             endcatch
         else
             wCreateAutotextCategory = true
-        endif
+        end if
     else
         wCreateAutotextCategory = true
-    endif
+    end if
     
     Sleep 1
     BereicheBearbeitenAutotext.Ok      
@@ -212,8 +212,8 @@ function wCreateAutotextCategory(vCategoryName as string) as boolean
         if Active.GetRT = 304 then
             QAErrorlog Active.Gettext
             Active.Ok
-        endif
-    endif    
+        end if
+    end if    
     
     NotPassed:
 
@@ -235,8 +235,8 @@ function wSelectAutotextCategory(vCategoryName as string) as boolean
         if Active.GetRT = 304 then
             QAErrorlog Active.Gettext
             Active.Ok
-        endif
-    endif    
+        end if
+    end if    
     '/// close all categories
     Kontext "Autotext"
     Liste.Select 1
@@ -251,7 +251,7 @@ function wSelectAutotextCategory(vCategoryName as string) as boolean
         if Liste.Gettext <>  vCategoryName then
             Liste.TypeKeys "<Down>"
             wait 500
-        endif
+        end if
     next i    
     
     if Liste.Gettext =  vCategoryName then wSelectAutotextCategory = true
@@ -274,8 +274,8 @@ function wDeleteAutotextCategory(vCategoryName as string) as boolean
         if Active.GetRT = 304 then
             QAErrorlog Active.Gettext
             Active.Ok
-        endif
-    endif
+        end if
+    end if
     
     Kontext "Autotext"
     try
@@ -286,8 +286,8 @@ function wDeleteAutotextCategory(vCategoryName as string) as boolean
             if Active.GetRT = 304 then
                 QAErrorlog Active.Gettext
                 Active.Ok
-            endif
-        endif
+            end if
+        end if
 
     catch
        Warnlog "Button 'Categories' is disabled!"
@@ -303,7 +303,7 @@ function wDeleteAutotextCategory(vCategoryName as string) as boolean
         if Liste.Gettext <>  vCategoryName then
             Liste.TypeKeys "<Down>"
             wait 500
-        endif
+        end if
     next i    
     
     if Liste.Gettext = vCategoryName then    
@@ -313,7 +313,7 @@ function wDeleteAutotextCategory(vCategoryName as string) as boolean
             goto NotPassed
             BereicheBearbeitenAutotext.Close
         endcatch           
-    endif
+    end if
     BereicheBearbeitenAutotext.Ok
     
     Kontext "Active"
@@ -326,16 +326,16 @@ function wDeleteAutotextCategory(vCategoryName as string) as boolean
             catch
                 Active.Ok
             endcatch
-        endif
-    endif
+        end if
+    end if
 
     Kontext "Active"
     if Active.Exists then
         if Active.GetRT = 304 then
             QAErrorlog Active.Gettext
             Active.Ok
-        endif
-    endif
+        end if
+    end if
 
     NotPassed:
 
@@ -358,8 +358,8 @@ function wDeleteAutotext(vAutotextName as string) as boolean
         if Active.GetRT = 304 then
             QAErrorlog Active.Gettext
             Active.Ok
-        endif
-    endif
+        end if
+    end if
     
     Kontext "Autotext"            
     Liste.Select 1
@@ -385,12 +385,12 @@ function wDeleteAutotext(vAutotextName as string) as boolean
                     wDeleteAutotext = true
                 else
                     Warnlog "No messages to confirm deleting the Autotext!"
-                endif
+                end if
                 exit for
             catch
                 Warnlog "Menu Autotext->'Delete' disabled ! Test failed !"
             endcatch
-        endif
+        end if
         Liste.TypeKeys "+"
         sAll = Liste.GetItemCount
     next j
