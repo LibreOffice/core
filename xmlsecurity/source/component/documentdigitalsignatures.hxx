@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentdigitalsignatures.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,14 +45,14 @@ class DocumentDigitalSignatures : public cppu::WeakImplHelper1
 >
 {
 private:
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > mxMSF;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxCtx;
 
     sal_Bool ImplViewSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xSignStream, DocumentSignatureMode eMode, bool bReadOnly ) throw (::com::sun::star::uno::RuntimeException);
     sal_Bool ImplViewSignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignStream, DocumentSignatureMode eMode, bool bReadOnly ) throw (::com::sun::star::uno::RuntimeException);
     com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation > ImplVerifySignatures( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignStream, DocumentSignatureMode eMode ) throw (::com::sun::star::uno::RuntimeException);
 
 public:
-    DocumentDigitalSignatures( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory> rxMSF );
+    DocumentDigitalSignatures( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext>& rxCtx );
 
     // for service registration...
     static ::rtl::OUString GetImplementationName() throw (com::sun::star::uno::RuntimeException);
@@ -81,6 +81,6 @@ public:
 };
 
 com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL DocumentDigitalSignatures_CreateInstance(
-    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr) throw ( com::sun::star::uno::Exception );
+    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rCtx) throw ( com::sun::star::uno::Exception );
 
 #endif // _XMLSECURITY_DOCUMENTDIGITALSIGNATURES_HXX
