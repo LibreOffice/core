@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saldata.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,6 +88,8 @@ struct SalData
     SalVirtualDevice                             *mpFirstVD;        // first VirDev
     SalPrinter                                   *mpFirstPrinter;   // first printing printer
     SystemFontList                               *mpFontList;
+    NSStatusItem*                                 mpStatusItem;     // one status item that draws all our stati
+                                                                    // at the moment this is only one add menu button
 
     CGColorSpaceRef                               mxRGBSpace;
     CGColorSpaceRef                               mxGraySpace;
@@ -108,6 +110,8 @@ struct SalData
 
     static void ensureThreadAutoreleasePool();
     static void drainThreadAutoreleasePool();
+
+    static NSStatusItem* getStatusItem();
 };
 
 inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = (void*)pData; }
