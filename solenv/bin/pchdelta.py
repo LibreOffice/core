@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/python
 
 # ------------------------------------------------------------------------------
 # Hacky little delta debug tool to figure out the proper includes for a pch file
