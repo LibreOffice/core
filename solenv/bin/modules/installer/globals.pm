@@ -8,7 +8,7 @@
 #
 # $RCSfile: globals.pm,v $
 #
-# $Revision: 1.104 $
+# $Revision: 1.105 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -160,6 +160,17 @@ BEGIN
     @linuxlinks = ();
     @linkrpms = ();
     $archiveformat = "";
+    $updatelastsequence = 0;
+    $updatesequencecounter = 0;
+    $updatedatabase = 0;
+    $pfffileexists = 0;
+    $pffcabfilename = "ooobasis3.0_pff.cab";
+    $mergemodulenumber = 0;
+    %allmergemodulefilesequences = ();
+    %newupdatefiles = ();
+    %allusedupdatesequences = ();
+    %mergemodulefiles = ();
+    $mergefiles_added_into_collector = 0;
 
     $strip = 1;
     $solarjava = 0;
@@ -167,6 +178,7 @@ BEGIN
     $jrepath = "";
 
     $globallogging = 0;
+    $globalloggingform21 = 1;
     $logfilename = "logfile.log";   # the default logfile name for global errors
     @logfileinfo = ();
     @errorlogfileinfo = ();
@@ -209,6 +221,7 @@ BEGIN
     $mergefeaturecollected = 0;
     $mergedirectoriescollected = 0;
     $lastsequence_before_merge = 0;
+    $lastcabfilename = "";
 
     $createdxpddefaultlang = 0;
     $xpddir = "";
@@ -294,17 +307,20 @@ BEGIN
     $javamaxservices = 15;
 
     $one_cab_file = 0;
-    $fix_number_of_cab_files = 0;
+    $fix_number_of_cab_files = 1;
     $cab_file_per_component = 0;
     $cabfilecompressionlevel = 2;
-    $number_of_cabfiles = 4;    # only for $fix_number_of_cab_files = 1
+    $number_of_cabfiles = 1;    # only for $fix_number_of_cab_files = 1
     $include_cab_in_msi = 0;
-    $use_packages_for_cabs = 1;
+    $use_packages_for_cabs = 0;
     $msidatabasename = "";
     $prepare_winpatch = 0;
     $previous_idt_dir = "";
     $updatepack = 0;
     $msitranpath = "";
+    $insert_file_at_end = 0;
+    $newfilesexist = 0;
+    %newfilescollector = ();
 
     $saveinstalldir = "";
     $csp_installdir = "";       # global installdir of createsimplepackage() in simplepackage.pm
