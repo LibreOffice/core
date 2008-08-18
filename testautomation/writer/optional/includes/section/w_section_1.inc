@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_section_1.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-25 14:46:32 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:34:52 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -63,39 +63,39 @@ testcase tInsertSection_1
     Call hNewDocument
     Call fInsertSection("Section Test")
     sleep(1)
-    Call wDokSchreiben "<RETURN>"
+    Call wTypeKeys "<RETURN>"
     '/// Test for insert a section with western words ///
     Call fInsertSection("Western Test")
     sleep(1)
-    Call wDokSchreiben "<UP>" , 1
-    Call wDokSchreiben "Section : western test"
+    Call wTypeKeys "<UP>" , 1
+    Call wTypeKeys "Section : western test"
 
     'If Asian office...
     if bAsianLan = TRUE then
-        Call wDokSchreiben "<DOWN>" , 1
-        Call wDokSchreiben "<RETURN>"
+        Call wTypeKeys "<DOWN>" , 1
+        Call wTypeKeys "<RETURN>"
         '///+... test for insert a section with asian character -- Simplified Chinese ///
         Call fInsertSection("Asian Test")
         sleep(1)
-        Call wDokSchreiben "<UP>" , 1
-        Call wDokSchreiben "简体中文"
+        Call wTypeKeys "<UP>" , 1
+        Call wTypeKeys "简体中文"
     end if
 
-    Call wDokSchreiben "<DOWN>" , 1
-    Call wDokSchreiben "<RETURN>"
+    Call wTypeKeys "<DOWN>" , 1
+    Call wTypeKeys "<RETURN>"
 
     '/// Test for insert a section with a graphic object
     Call fInsertSection("Graphic Test")
-    Call wDokSchreiben "<UP>" , 1
+    Call wTypeKeys "<UP>" , 1
     Call hGrafikEinfuegen(gTesttoolPath + "writer\optional\input\graphics\jolink.jpg")
     sleep(1)
     gMouseClick(6,1)
-    Call wDokSchreiben "<DOWN>" , 10
-    Call wDokSchreiben "<RETURN>"
+    Call wTypeKeys "<DOWN>" , 10
+    Call wTypeKeys "<RETURN>"
     '/// Test for insert a section with a draw object ///
     Call fInsertSection("Draw Test")
     sleep(1)
-    Call wDokSchreiben "<UP>" , 1
+    Call wTypeKeys "<UP>" , 1
     InsertObjectOLEObject
     sleep(1)
     Kontext "OLEObjektEinfuegen"
@@ -114,14 +114,14 @@ testcase tInsertSection_1
     sleep(1)
 
     '/// -- western words  ///
-    Call wDokSchreiben "<UP>" , 1
-    Call wDokSchreiben "Section : western test<return>"
+    Call wTypeKeys "<UP>" , 1
+    Call wTypeKeys "Section : western test<return>"
     '/// -- Graphic  ///
     Call hGrafikEinfuegen(gTesttoolPath & "writer\optional\input\graphics\jolink.jpg")
     sleep(1)
     gMouseClick(1,1)
-    Call wDokSchreiben "<DOWN>" , 1
-    Call wDokSchreiben "<RETURN>"
+    Call wTypeKeys "<DOWN>" , 1
+    Call wTypeKeys "<RETURN>"
     '/// -- drawing object ///
     InsertObjectOLEObject
     sleep(1)
@@ -154,7 +154,7 @@ testcase tInsertSection_2
         Kontext "TabBereiche"
         TabBereiche.OK
         sleep(2)
-        Call wDokSchreiben "<UP>"
+        Call wTypeKeys "<UP>"
         'Check the section name is correct or NOT (Format/Section)
         FormatSections
         sleep(1)
@@ -164,7 +164,7 @@ testcase tInsertSection_2
         end if
         BereicheBearbeiten.Cancel
         sleep(1)
-        Call wDokSchreiben "<DOWN>"
+        Call wTypeKeys "<DOWN>"
     next j
     Call hCloseDocument
 endcase
@@ -204,14 +204,14 @@ testcase tInsertSection_3
     For i = 0 to j
         try
             fInsertSection(SectionName(i))
-            Call wDokSchreiben "<Up>" , 1
+            Call wTypeKeys "<Up>" , 1
 
             FormatSections
             Kontext "BereicheBearbeiten"
             if BereichsName.GetText <> SectionName(i) then warnlog "    The Section Name is wrong, it should be :" +SectionName(i) +", but: "+BereichsName.GetText
             BereicheBearbeiten.Cancel
 
-            Call wDokSchreiben "<Down>" , 1
+            Call wTypeKeys "<Down>" , 1
         catch
             Warnlog "   Insert Section is failed , the section name should be " +SectionName(i)
         endcatch
@@ -233,8 +233,8 @@ testcase tInsertSection_4
     printlog "     Section includes more than 1 line of text"
     Call hNewDocument
     sleep(2)
-    Call wDokSchreiben "This is first line<return>"
-    Call wDokSchreiben "This is Second line"
+    Call wTypeKeys "This is first line<return>"
+    Call wTypeKeys "This is Second line"
     EditSelectAll
     sleep(1)
     EditCopy
@@ -267,8 +267,8 @@ testcase tInsertSection_4
     sleep(2)
     TabZusaetze.OK
     sleep(1)
-    Call wDokSchreiben "<ESCAPE>"
-    Call wDokSchreiben "<RETURN>" , 2
+    Call wTypeKeys "<ESCAPE>"
+    Call wTypeKeys "<RETURN>" , 2
     sleep(1)
     Call hGrafikEinfuegen ( gTesttoolPath + "writer\optional\input\graphics\bild.jpg" )
     sleep(2)
@@ -280,8 +280,8 @@ testcase tInsertSection_4
     ObjektName.SetText "bild"
     TabZusaetze.OK
     sleep(1)
-    Call wDokSchreiben "<ESCAPE>"
-    Call wDokSchreiben "<RETURN>" , 4
+    Call wTypeKeys "<ESCAPE>"
+    Call wTypeKeys "<RETURN>" , 4
     sleep(1)
     EditSelectAll
     sleep(2)
@@ -317,8 +317,8 @@ testcase tInsertSection_4
     Call hNewDocument
 
     ' Call dialog with Insert/ManualBreak and in dialog check 'page break'
-    Call wDokSchreiben "Page Break"
-    Call wDokSchreiben "<LEFT>" , 5
+    Call wTypeKeys "Page Break"
+    Call wTypeKeys "<LEFT>" , 5
     Kontext
     InsertManualBreak
     sleep(1)
@@ -387,7 +387,7 @@ testcase tInsertSection_5
     if Bereich.GetItemCount <> 0 then warnlog "Should NO entry in the section listbox"
     TabBereiche.Cancel
     
-    Call wDokSchreiben "Hello World!"
+    Call wTypeKeys "Hello World!"
     EditSelectAll
     
     FormatCharacter
@@ -458,7 +458,7 @@ testcase tInsertSection_5
     TabBereiche.OK
     sleep 2
     
-    Call wDokSchreiben "<up>" , 2
+    Call wTypeKeys "<up>" , 2
     
     FormatSections
     Kontext "BereicheBearbeiten"
@@ -541,7 +541,7 @@ testcase tInsertSection_6
     '/// 1. Multiselection  ///
     printlog "  - Multiselection "
     
-    Call wDokSchreiben "Multiselection test , Multiselection test !"
+    Call wTypeKeys "Multiselection test , Multiselection test !"
     Call fMultiSelection("Multiselection")
     
     try
@@ -563,7 +563,7 @@ testcase tInsertSection_6
     TabelleEinfuegenWriter.OK
     sleep 1
     
-    Call wDokSchreiben "<Shift Right>"
+    Call wTypeKeys "<Shift Right>"
     
     try
         InsertSection
