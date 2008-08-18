@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xsecctl.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,8 +65,9 @@ const sal_Int8 XML_MAXDIGITSCOUNT_DATETIME = 6;
 /* string for package protocol */
 #define PACKAGEPROTOCOL "vnd.sun.star.Package:"
 
-XSecController::XSecController( )
-    :m_nNextSecurityId(1),
+XSecController::XSecController( const cssu::Reference<cssu::XComponentContext>& rxCtx )
+    :mxCtx(rxCtx),
+     m_nNextSecurityId(1),
       m_bIsSAXEventKeeperConnected(false),
      m_nStatusOfSecurityComponents(UNINITIALIZED),
       m_bIsSAXEventKeeperSticky(false),
@@ -361,8 +362,10 @@ void XSecController::createXSecComponent( )
     m_xXMLDocumentWrapper = NULL;
     m_xSAXEventKeeper = NULL;
 
+    cssu::Reference< cssl::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
+
     m_xXMLSignature = cssu::Reference< cssxc::XXMLSignature >(
-        mxMSF->createInstance( sXMLSignature ),
+        xMCF->createInstanceWithContext( sXMLSignature, mxCtx ),
         cssu::UNO_QUERY );
 
     bool bSuccess = (0!=m_xXMLSignature.is());
@@ -372,7 +375,7 @@ void XSecController::createXSecComponent( )
      */
     {
         m_xXMLDocumentWrapper = cssu::Reference< cssxw::XXMLDocumentWrapper >(
-            mxMSF->createInstance( sXMLDocument ),
+            xMCF->createInstanceWithContext( sXMLDocument, mxCtx ),
             cssu::UNO_QUERY );
     }
 
@@ -383,7 +386,7 @@ void XSecController::createXSecComponent( )
      */
     {
         m_xSAXEventKeeper = cssu::Reference< cssxc::sax::XSecuritySAXEventKeeper >(
-            mxMSF->createInstance( sSAXEventKeeper ),
+            xMCF->createInstanceWithContext( sSAXEventKeeper, mxCtx ),
             cssu::UNO_QUERY );
     }
 
@@ -768,49 +771,6 @@ sal_Int32 XSecController::getFastPropertyIndex(sal_Int32 nHandle) const
 /*
  * public methods
  */
-
-void XSecController::setFactory( const cssu::Reference<cssl::XMultiServiceFactory>& rxMSF)
-/****** XSecController/setFactory *********************************************
- *
- *   NAME
- *  setFactory -- configures the service factory component.
- *
- *   SYNOPSIS
- *  setFactory( rxMSF );
- *
- *   FUNCTION
- *  See NAME.
- *
- *   INPUTS
- *  rxMSF - the service factory component
- *
- *   RESULT
- *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
- ******************************************************************************/
-{
-    mxMSF = rxMSF;
-}
-
-#if 0
-void XSecController::setSignatureCreationResultListener(
-    const cssu::Reference< cssxc::sax::XSignatureCreationResultListener >& xSignatureCreationResultListener)
-{
-    m_xSignatureCreationResultListener = xSignatureCreationResultListener;
-}
-
-void XSecController::setSignatureVerifyResultListener(
-    const cssu::Reference< cssxc::sax::XSignatureVerifyResultListener >& xSignatureVerifyResultListener)
-{
-    m_xSignatureVerifyResultListener = xSignatureVerifyResultListener;
-}
-#endif
 
 sal_Int32 XSecController::getNewSecurityId(  )
 {

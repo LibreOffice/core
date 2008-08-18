@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.11 $
+# $Revision: 1.12 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -57,7 +57,6 @@ CDEFS += -DXMLSEC_CRYPTO_NSS -DXMLSEC_NO_XSLT
 
 # --- Files --------------------------------------------------------
 SLOFILES = \
-    $(SLO)$/baseencoding.obj \
     $(SLO)$/biginteger.obj \
     $(SLO)$/certvalidity.obj \
     $(SLO)$/saxhelper.obj \

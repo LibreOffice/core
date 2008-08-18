@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xsecsign.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,9 +86,10 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
         /*
          * create a SignatureCreator
          */
+    cssu::Reference< cssl::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     xReferenceResolvedListener = cssu::Reference< cssxc::sax::XReferenceResolvedListener >(
-        mxMSF->createInstance(
-            rtl::OUString::createFromAscii(SIGNATURECREATOR_COMPONENT)),
+        xMCF->createInstanceWithContext(
+            rtl::OUString::createFromAscii(SIGNATURECREATOR_COMPONENT), mxCtx),
         cssu::UNO_QUERY);
 
     cssu::Reference<cssl::XInitialization> xInitialization(xReferenceResolvedListener, cssu::UNO_QUERY);

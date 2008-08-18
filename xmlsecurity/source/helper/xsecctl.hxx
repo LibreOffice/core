@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xsecctl.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 #include <xmlsecurity/sigstruct.hxx>
 
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -192,8 +193,7 @@ class XSecController : public cppu::WeakImplHelper4
     friend class XSecParser;
 
 private:
-    com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory> mxMSF;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext> mxCtx;
 
     /*
      * used to buffer SAX events
@@ -428,20 +428,8 @@ private:
         sal_Int32 nSecurityId );
 
 public:
-    XSecController();
+    XSecController(const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& rxCtx);
     ~XSecController();
-
-    /*
-     * Common methods
-     */
-    void setFactory( const com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory>& rxMSF);
-#if 0
-    void setSignatureCreationResultListener( const com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::sax::XSignatureCreationResultListener >& xSignatureCreationResultListener);
-    void setSignatureVerifyResultListener( const com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::sax::XSignatureVerifyResultListener >& xSignatureVerifyResultListener);
-#endif
 
     sal_Int32 getNewSecurityId(  );
 
