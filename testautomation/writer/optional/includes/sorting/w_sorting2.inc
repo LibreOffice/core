@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_sorting2.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:58 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:36:02 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -102,7 +102,7 @@ testcase tSort_1
 		Call hFileOpen ( TestFile )
 
 		printlog " select all table"
-		Call wDokSchreiben "<Mod1 a>", 2
+		Call wTypeKeys "<Mod1 a>", 2
 
 		printlog " Tools/Sort , choose  Ascending mode"
 		printlog " choose English in language and Alphanumeric in keytype"
@@ -118,16 +118,16 @@ testcase tSort_1
 		Sortieren.OK
 		Sleep 1
 
-		Call wDokSchreiben "<Mod1 a>" ,2 
+		Call wTypeKeys "<Mod1 a>" ,2 
 
 		For i = 0 to UBound(contentInTable)
-			Call wDokSchreiben "<Mod1 a>"
+			Call wTypeKeys "<Mod1 a>"
 			wait 100
 			EditCopy
 			if GetClipboardText <> contentInTable(i) then
 				Warnlog "The content in table is Wrong! We hope to get " + contentInTable(i) + " But get " + GetClipboardText
-			endif
-			Call wDokSchreiben "<Escape><TAB>"
+			end if
+			Call wTypeKeys "<Escape><TAB>"
 		next i
 
 		Call hCloseDocument
@@ -195,7 +195,7 @@ testcase tSort_2
 		Call hFileOpen ( TestFile )
 
 		printlog " select all table"
-		Call wDokSchreiben "<Mod1 a>", 2
+		Call wTypeKeys "<Mod1 a>", 2
 
 		printlog " Tools/Sort , choose  Ascending mode."
 		printlog " choose English in language and Alphanumeric in keytype."
@@ -211,16 +211,16 @@ testcase tSort_2
 		Sortieren.OK
 		Sleep 1
 
-		Call wDokSchreiben "<Mod1 a>" ,2 
+		Call wTypeKeys "<Mod1 a>" ,2 
 
 		For i = 0 to UBound(contentInTable)
-			Call wDokSchreiben "<Mod1 a>"
+			Call wTypeKeys "<Mod1 a>"
 			wait 100
 			EditCopy
 			if GetClipboardText <> contentInTable(i) then
 				Warnlog "The content in table is Wrong! We hope to get " + contentInTable(i) + " But get " + GetClipboardText
-			endif
-			Call wDokSchreiben "<Escape><TAB>"
+			end if
+			Call wTypeKeys "<Escape><TAB>"
 		next i
 
 		Call hCloseDocument

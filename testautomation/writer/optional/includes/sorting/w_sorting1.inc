@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_sorting1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:58 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:35:51 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -64,11 +64,11 @@ testcase tToolsSort1
     if iSprache = 82 then
         QAErrorlog "#59349#Sorting: Keytype-Reset when language changes"
         goto endsub
-    endif
+    end if
     Printlog "   - alphanumeric ascending ( Key 1 )"
     Call hNewDocument
-    Call wDokSchreiben "Ohallo<Return>Ahallo<Return>Ghallo<Return>Zhallo<Return>Shallo"
-    Call wDokSchreiben ( "<Mod1 a>" )
+    Call wTypeKeys "Ohallo<Return>Ahallo<Return>Ghallo<Return>Zhallo<Return>Shallo"
+    Call wTypeKeys ( "<Mod1 a>" )
     ToolsSort
     Kontext "Sortieren"
     Schluessel1.Check
@@ -81,7 +81,7 @@ testcase tToolsSort1
     Call AufsteigendKontrollieren ( FALSE )
 
     Printlog "   - alphanumeric descending ( Key 1 )"
-    Call wDokSchreiben ( "<Mod1 a>" )
+    Call wTypeKeys ( "<Mod1 a>" )
     ToolsSort
     Kontext "Sortieren"
     Schluessel1.Check
@@ -92,11 +92,11 @@ testcase tToolsSort1
     AbsteigendKontrollieren ( FALSE )
 
     Printlog "   - alphanumeric ascending ( Key 2 )"
-    Call wDokSchreiben "<Mod1 a>"
-    Call wDokSchreiben "<Delete>"
+    Call wTypeKeys "<Mod1 a>"
+    Call wTypeKeys "<Delete>"
     Sleep 1
-    Call wDokSchreiben "Ohallo<Return>Ahallo<Return>Ghallo<Return>Zhallo<Return>Shallo"
-    Call wDokSchreiben ( "<Mod1 a>" )
+    Call wTypeKeys "Ohallo<Return>Ahallo<Return>Ghallo<Return>Zhallo<Return>Shallo"
+    Call wTypeKeys ( "<Mod1 a>" )
     ToolsSort
     Kontext "Sortieren"
     Schluessel2.Check
@@ -109,7 +109,7 @@ testcase tToolsSort1
     Call AufsteigendKontrollieren ( FALSE )
 
     Printlog "   - alphanumeric descending ( Key 2 )"
-    Call wDokSchreiben "<Mod1 a>"
+    Call wTypeKeys "<Mod1 a>"
     ToolsSort
     Kontext "Sortieren"
     Spalte2.SetText "1"
@@ -119,11 +119,11 @@ testcase tToolsSort1
     AbsteigendKontrollieren ( FALSE )
 
     Printlog "   - alphanumeric ascending ( Key 3 )"
-    Call wDokSchreiben "<Mod1 a>"
-    Call wDokSchreiben "<Delete>"
+    Call wTypeKeys "<Mod1 a>"
+    Call wTypeKeys "<Delete>"
     Sleep 1
-    Call wDokSchreiben "Ohallo<Return>Ahallo<Return>Ghallo<Return>Zhallo<Return>Shallo"
-    Call wDokSchreiben ( "<Mod1 a>" )
+    Call wTypeKeys "Ohallo<Return>Ahallo<Return>Ghallo<Return>Zhallo<Return>Shallo"
+    Call wTypeKeys ( "<Mod1 a>" )
     ToolsSort
     Kontext "Sortieren"
     Schluessel3.Check
@@ -136,7 +136,7 @@ testcase tToolsSort1
     Call AufsteigendKontrollieren ( FALSE )
 
     Printlog "   - alphanumeric descending ( Key 3 )"
-    Call wDokSchreiben "<Mod1 a>"
+    Call wTypeKeys "<Mod1 a>"
     ToolsSort
     Kontext "Sortieren"
     Schluessel3.Check
@@ -158,8 +158,8 @@ testcase tToolsSort2
 
     Printlog "   - numeric ascending ( Key 1 )"
     Call hNewDocument
-    Call wDokSchreiben "43<Return>54<Return>23<Return>65<Return>56"
-    Call wDokSchreiben ( "<Mod1 a>" )
+    Call wTypeKeys "43<Return>54<Return>23<Return>65<Return>56"
+    Call wTypeKeys ( "<Mod1 a>" )
     ToolsSort
     Kontext "Sortieren"
     Schluessel1.Check
@@ -170,7 +170,7 @@ testcase tToolsSort2
     Call AufsteigendKontrollieren ( TRUE )
 
     Printlog "   - numeric descending ( Key 1 )"
-    Call wDokSchreiben ( "<Mod1 a>" )
+    Call wTypeKeys ( "<Mod1 a>" )
     ToolsSort
     Kontext "Sortieren"
     Schluessel1.Check
@@ -184,11 +184,11 @@ testcase tToolsSort2
     if iSprache = 82 then
         QAErrorlog "#59349#Sorting: Keytype-Reset when language changes"
     else
-        Call wDokSchreiben "<Mod1 a>"
-        Call wDokSchreiben "<Delete>"
+        Call wTypeKeys "<Mod1 a>"
+        Call wTypeKeys "<Delete>"
         Sleep 1
-        Call wDokSchreiben "43<Return>54<Return>23<Return>65<Return>56"
-        Call wDokSchreiben ( "<Mod1 a>" )
+        Call wTypeKeys "43<Return>54<Return>23<Return>65<Return>56"
+        Call wTypeKeys ( "<Mod1 a>" )
         ToolsSort
         Kontext "Sortieren"
         Schluessel1.Uncheck
@@ -198,10 +198,10 @@ testcase tToolsSort2
         Aufsteigend2.Check
         Sortieren.OK
         Call AufsteigendKontrollieren ( TRUE )
-    endif
+    end if
     
     Printlog "   - numeric descending ( Key 2 )"
-    Call wDokSchreiben ( "<Mod1 a>" )
+    Call wTypeKeys ( "<Mod1 a>" )
     ToolsSort
     Kontext "Sortieren"
     Schluessel1.Uncheck
@@ -216,11 +216,11 @@ testcase tToolsSort2
     if iSprache = 82 then
         QAErrorlog "#59349#Sorting: Keytype-Reset when language changes"
     else    
-        Call wDokSchreiben ( "<Mod1 a>" )
-        Call wDokSchreiben ( "<Delete>" )
+        Call wTypeKeys ( "<Mod1 a>" )
+        Call wTypeKeys ( "<Delete>" )
         Sleep 1
-        Call wDokSchreiben "43<Return>54<Return>23<Return>65<Return>56"
-        Call wDokSchreiben ( "<Mod1 a>" )
+        Call wTypeKeys "43<Return>54<Return>23<Return>65<Return>56"
+        Call wTypeKeys ( "<Mod1 a>" )
         ToolsSort
         Kontext "Sortieren"
         Schluessel1.Uncheck
@@ -231,10 +231,10 @@ testcase tToolsSort2
         Aufsteigend3.Check
         Sortieren.OK
         Call AufsteigendKontrollieren ( TRUE )
-    endif
+    end if
 
     Printlog "   - numeric descending ( Key 3 )"
-    Call wDokSchreiben ( "<Mod1 a>" )
+    Call wTypeKeys ( "<Mod1 a>" )
     ToolsSort
     Kontext "Sortieren"
     Schluessel1.Uncheck
@@ -257,7 +257,7 @@ testcase tToolsSort3
     if iSprache = 82 then
         QAErrorlog "#59349#Sorting: Keytype-Reset when language changes"
         goto endsub
-    endif
+    end if
     for i=1 to 3
         select case i
             case 1: Printlog "  - Seperator is a tabulator"
@@ -270,11 +270,11 @@ testcase tToolsSort3
             Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort2.odt" )
         else
             Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort2.odm" )
-        endif
+        end if
         if i <> 1 then TrennzeichenSetzen ( Trennzeichen )
 
         Printlog "     - alphanumeric ascending after 1.Column, followed by 4.Column and 3. Column"
-        Call wDokSchreiben ( "<Mod1 a>" )
+        Call wTypeKeys ( "<Mod1 a>" )
         ToolsSort
         Kontext "Sortieren"
         Schluessel1.Check
@@ -342,13 +342,13 @@ testcase tToolsSort4
     if iSprache = 82 then
         QAErrorlog "#59349#Sorting: Keytype-Reset when language changes"
         goto endsub
-    endif
+    end if
     if gApplication = "WRITER" then
         Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort1.odt" )
     else
         Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort1.odm" )
-    endif
-    Call wDokSchreiben "<Mod1 a>", 2
+    end if
+    Call wTypeKeys "<Mod1 a>", 2
     Printlog "   - 3. column alphanum., 1. column num., 3. column alphanum. ascending"
     ToolsSort
     Kontext "Sortieren"
@@ -371,7 +371,7 @@ testcase tToolsSort4
     Sortieren.OK
 
     Printlog "   - Check"
-    Call wDokSchreiben "<Mod1 a>", 3   ' Umstellung zur 5.0 Cursor steht nach Sortierung in der letzten Zelle, mit 3*Ctrl_A kommt man in die 1.
+    Call wTypeKeys "<Mod1 a>", 3   ' Umstellung zur 5.0 Cursor steht nach Sortierung in der letzten Zelle, mit 3*Ctrl_A kommt man in die 1.
     wait 100
     EditCopy
     if GetClipboardText <> "1" then Warnlog "Header of the first column has been sorted"
@@ -380,9 +380,9 @@ testcase tToolsSort4
     if ZelleRuntertesten("5") = FALSE then Warnlog "1/4 is wrong"
     if ZelleRuntertesten("3") = FALSE then Warnlog "1/5 is wrong"
     if ZelleRuntertesten("6") = FALSE then Warnlog "1/6 is wrong"
-    Call wDokSchreiben "<Right>"
-    Call wDokSchreiben "<up>", 5
-    Call wDokSchreiben "<Mod1 a>"
+    Call wTypeKeys "<Right>"
+    Call wTypeKeys "<up>", 5
+    Call wTypeKeys "<Mod1 a>"
     Wait 100
     EditCopy
     if GetClipboardText <> "a" then Warnlog "Header of the 2. column has not been sorted"
@@ -391,9 +391,9 @@ testcase tToolsSort4
     if ZelleRuntertesten("c") = FALSE then Warnlog "2/4 is wrong"
     if ZelleRuntertesten("b") = FALSE then Warnlog "2/5 is wrong"
     if ZelleRuntertesten("c") = FALSE then Warnlog "2/6 is wrong"
-    Call wDokSchreiben "<Right>"
-    Call wDokSchreiben "<up>", 5
-    Call wDokSchreiben "<Mod1 a>"
+    Call wTypeKeys "<Right>"
+    Call wTypeKeys "<up>", 5
+    Call wTypeKeys "<Mod1 a>"
     Wait 100
     EditCopy
     if GetClipboardText <> "zz" then Warnlog "Header der 3. column has not been sorted"
@@ -404,8 +404,8 @@ testcase tToolsSort4
     if ZelleRuntertesten("zz") = FALSE then Warnlog "3/6 is wrong"
 
     Printlog "   - 3. column alphanum., 1. column num., 3. column alphanum. descending"
-    Call wDokSchreiben "<Left Right>"
-    Call wDokSchreiben "<Mod1 a>", 2
+    Call wTypeKeys "<Left Right>"
+    Call wTypeKeys "<Mod1 a>", 2
     Sleep 2
     ToolsSort
     Kontext "Sortieren"
@@ -426,8 +426,8 @@ testcase tToolsSort4
     Sortieren.OK
 
     Printlog "   - check"
-    Call wDokSchreiben "<up><Left>", 6
-    Call wDokSchreiben "<Mod1 a>"
+    Call wTypeKeys "<up><Left>", 6
+    Call wTypeKeys "<Mod1 a>"
     wait 100
     EditCopy
     if GetClipboardText <> "1" then Warnlog "Header of the 1. column has been sorted"
@@ -436,9 +436,9 @@ testcase tToolsSort4
     if ZelleRuntertesten("5") = FALSE then Warnlog "1/4 is wrong"
     if ZelleRuntertesten("4") = FALSE then Warnlog "1/5 is wrong"
     if ZelleRuntertesten("2") = FALSE then Warnlog "1/6 is wrong"
-    Call wDokSchreiben "<Right>"
-    Call wDokSchreiben "<up>", 5
-    Call wDokSchreiben "<Mod1 a>"
+    Call wTypeKeys "<Right>"
+    Call wTypeKeys "<up>", 5
+    Call wTypeKeys "<Mod1 a>"
     Wait 100
     EditCopy
     if GetClipboardText <> "a" then Warnlog "Header of the 2. column has not been sorted"
@@ -447,9 +447,9 @@ testcase tToolsSort4
     if ZelleRuntertesten("c") = FALSE then Warnlog "2/4 is wrong"
     if ZelleRuntertesten("b") = FALSE then Warnlog "2/5 is wrong"
     if ZelleRuntertesten("a") = FALSE then Warnlog "2/6 is wrong"
-    Call wDokSchreiben "<Right>"
-    Call wDokSchreiben "<up>", 5
-    Call wDokSchreiben "<Mod1 a>"
+    Call wTypeKeys "<Right>"
+    Call wTypeKeys "<up>", 5
+    Call wTypeKeys "<Mod1 a>"
     Wait 100
     EditCopy
     if GetClipboardText <> "zz" then Warnlog "Header of the 3. column has not been sorted"
@@ -468,14 +468,14 @@ testcase tToolsSort5
     if iSprache = 82 then
         QAErrorlog "#59349#Sorting: Keytype-Reset when language changes"
         goto endsub
-    endif
+    end if
     if gApplication = "WRITER" then
         Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort1.odt" )
     else
         Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort1.odm" )
-    endif
+    end if
     Call wNavigatorAuswahl (2, 2)
-    Call wDokSchreiben "<Mod1 a>", 2
+    Call wTypeKeys "<Mod1 a>", 2
     Printlog "   - 3. column alphanum., 1. column num., 2. column alphanum. ascending"
     ToolsSort
     Kontext "Sortieren"
@@ -499,7 +499,7 @@ testcase tToolsSort5
 
     Printlog "   - check"
     Call wNavigatorAuswahl (2, 2)
-    Call wDokSchreiben "<Mod1 a>"
+    Call wTypeKeys "<Mod1 a>"
     wait 100
     EditCopy
 
@@ -509,9 +509,9 @@ testcase tToolsSort5
     if ZelleRuntertesten("1") = FALSE then Warnlog "1/4 is wrong"
     if ZelleRuntertesten("3") = FALSE then Warnlog "1/5 is wrong"
     if ZelleRuntertesten("6") = FALSE then Warnlog "1/6 is wrong"
-    Call wDokSchreiben "<Right>"
-    Call wDokSchreiben "<up>", 5
-    Call wDokSchreiben "<Mod1 a>"
+    Call wTypeKeys "<Right>"
+    Call wTypeKeys "<up>", 5
+    Call wTypeKeys "<Mod1 a>"
     Wait 100
     EditCopy
     if GetClipboardText <> "a" then Warnlog "2/1 is wrong!"
@@ -520,9 +520,9 @@ testcase tToolsSort5
     if ZelleRuntertesten("a") = FALSE then Warnlog "2/4 is wrong"
     if ZelleRuntertesten("b") = FALSE then Warnlog "2/5 is wrong"
     if ZelleRuntertesten("c") = FALSE then Warnlog "2/6 is wrong"
-    Call wDokSchreiben "<Right>"
-    Call wDokSchreiben "<up>", 5
-    Call wDokSchreiben "<Mod1 a>"
+    Call wTypeKeys "<Right>"
+    Call wTypeKeys "<up>", 5
+    Call wTypeKeys "<Mod1 a>"
     Wait 100
     EditCopy
     if GetClipboardText <> "xx" then Warnlog "3/1 is wrong!"
@@ -535,7 +535,7 @@ testcase tToolsSort5
 
     Printlog "   - 3. column alphanum., 1. column num., 2. column alphanum. descending"
     Call wNavigatorAuswahl (2, 2)
-    Call wDokSchreiben "<Mod1 a>", 2
+    Call wTypeKeys "<Mod1 a>", 2
     Sleep 2
     ToolsSort
     Kontext "Sortieren"
@@ -557,7 +557,7 @@ testcase tToolsSort5
 
     Printlog "   - check"
     Call wNavigatorAuswahl (2, 2)
-    Call wDokSchreiben "<Mod1 a>"
+    Call wTypeKeys "<Mod1 a>"
     wait 100
     EditCopy
     if GetClipboardText <> "6" then Warnlog "1/1 is wrong!"
@@ -566,9 +566,9 @@ testcase tToolsSort5
     if ZelleRuntertesten("5") = FALSE then Warnlog "1/4 is wrong"
     if ZelleRuntertesten("4") = FALSE then Warnlog "1/5 is wrong"
     if ZelleRuntertesten("2") = FALSE then Warnlog "1/6 is wrong"
-    Call wDokSchreiben "<Right>"
-    Call wDokSchreiben "<up>", 5
-    Call wDokSchreiben "<Mod1 a>"
+    Call wTypeKeys "<Right>"
+    Call wTypeKeys "<up>", 5
+    Call wTypeKeys "<Mod1 a>"
     Wait 100
     EditCopy
     if GetClipboardText <> "c" then Warnlog "2/1 is wrong!"
@@ -577,9 +577,9 @@ testcase tToolsSort5
     if ZelleRuntertesten("c") = FALSE then Warnlog "2/4 is wrong"
     if ZelleRuntertesten("b") = FALSE then Warnlog "2/5 is wrong"
     if ZelleRuntertesten("a") = FALSE then Warnlog "2/6 is wrong"
-    Call wDokSchreiben "<Right>"
-    Call wDokSchreiben "<up>", 5
-    Call wDokSchreiben "<Mod1 a>"
+    Call wTypeKeys "<Right>"
+    Call wTypeKeys "<up>", 5
+    Call wTypeKeys "<Mod1 a>"
     Wait 100
     EditCopy
     if GetClipboardText <> "zz" then Warnlog "3/1 is wrong!"
@@ -600,8 +600,8 @@ testcase tToolsSort6
         Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort3.odt" )
     else
         Call hFileOpen ( gTesttoolPath + "writer\optional\input\sorting\sort3.odm" )
-    endif
-    Call wDokSchreiben "<Mod1 a>", 2
+    end if
+    Call wTypeKeys "<Mod1 a>", 2
     Printlog "   - Sort 1. column numeric descending"
     ToolsSort
     Kontext "Sortieren"
@@ -614,25 +614,25 @@ testcase tToolsSort6
     Sortieren.OK
 
     Printlog "   - check"
-    Call wDokSchreiben "<Mod1 a>", 3
+    Call wTypeKeys "<Mod1 a>", 3
     wait 100
     EditCopy
     if GetClipboardText <> "4" then Warnlog "Header of the 1. column has not been sorted"
     if ZelleRuntertesten("3") = FALSE then Warnlog "1/2 is wrong"
     if ZelleRuntertesten("2") = FALSE then Warnlog "1/3 is wrong"
     if ZelleRuntertesten("1") = FALSE then Warnlog "1/4 is wrong"
-    Call wDokSchreiben "<Tab>"
-    Call wDokSchreiben "<up>", 3
-    Call wDokSchreiben "<Mod1 a>"
+    Call wTypeKeys "<Tab>"
+    Call wTypeKeys "<up>", 3
+    Call wTypeKeys "<Mod1 a>"
     Wait 100
     EditCopy
     if GetClipboardText <> "dd" then Warnlog "Header of the 2. column has not been sorted"
     if ZelleRuntertesten("cc") = FALSE then Warnlog "2/2 is wrong"
     if ZelleRuntertesten("bb") = FALSE then Warnlog "2/3 is wrong"
     if ZelleRuntertesten("aa") = FALSE then Warnlog "2/4 is wrong"
-    Call wDokSchreiben "<Tab>"
-    Call wDokSchreiben "<up>", 3
-    Call wDokSchreiben "<Mod1 a>"
+    Call wTypeKeys "<Tab>"
+    Call wTypeKeys "<up>", 3
+    Call wTypeKeys "<Mod1 a>"
     Wait 100
     EditCopy
     if GetClipboardText <> "ww" then Warnlog "Header of the 3 column has not been sorted"
@@ -641,37 +641,37 @@ testcase tToolsSort6
     if ZelleRuntertesten("zz") = FALSE then Warnlog "3/4 is wrong"
 
     Printlog "   - copy table"
-    Call wDokSchreiben "<Left Right>"
-    Call wDokSchreiben "<Mod1 a>", 2
+    Call wTypeKeys "<Left Right>"
+    Call wTypeKeys "<Mod1 a>", 2
     Sleep 1
     EditCopy
     Sleep 1
     Printlog "   - insert table"
-    Call wDokSchreiben "<Down>", 10
-    Call wDokSchreiben "<Up>", 4
+    Call wTypeKeys "<Down>", 10
+    Call wTypeKeys "<Up>", 4
     EditPaste
     Sleep 1
 
     Printlog "   - check"
-    Call wDokSchreiben "<Mod1 a>"
+    Call wTypeKeys "<Mod1 a>"
     wait 100
     EditCopy
     if GetClipboardText <> "4" then Warnlog "Header of the 1. column has not been sorted"
     if ZelleRuntertesten("3") = FALSE then Warnlog "1/2 is wrong"
     if ZelleRuntertesten("2") = FALSE then Warnlog "1/3 is wrong"
     if ZelleRuntertesten("1") = FALSE then Warnlog "1/4 is wrong"
-    Call wDokSchreiben "<Tab>"
-    Call wDokSchreiben "<up>", 3
-    Call wDokSchreiben "<Mod1 a>"
+    Call wTypeKeys "<Tab>"
+    Call wTypeKeys "<up>", 3
+    Call wTypeKeys "<Mod1 a>"
     Wait 100
     EditCopy
     if GetClipboardText <> "dd" then Warnlog "Header of the 2. column has not been sorted"
     if ZelleRuntertesten("cc") = FALSE then Warnlog "2/2 is wrong"
     if ZelleRuntertesten("bb") = FALSE then Warnlog "2/3 is wrong"
     if ZelleRuntertesten("aa") = FALSE then Warnlog "2/4 is wrong"
-    Call wDokSchreiben "<Tab>"
-    Call wDokSchreiben "<up>", 3
-    Call wDokSchreiben "<Mod1 a>"
+    Call wTypeKeys "<Tab>"
+    Call wTypeKeys "<up>", 3
+    Call wTypeKeys "<Mod1 a>"
     Wait 100
     EditCopy
     if GetClipboardText <> "ww" then Warnlog "Header of the 3 column has not been sorted"
