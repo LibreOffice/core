@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: doc.cxx,v $
- * $Revision: 1.68 $
+ * $Revision: 1.69 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -301,6 +301,7 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
         // --> OD 2008-06-05 #i89181#
         case TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
             mbTabAtLeftIndentForParagraphsInList = value;
+        break;
         // <--
          // COMPATIBILITY FLAGS END
 
