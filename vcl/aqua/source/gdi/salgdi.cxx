@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.79 $
+ * $Revision: 1.80 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -454,7 +454,7 @@ USHORT AquaSalGraphics::GetBitCount()
 // -----------------------------------------------------------------------
 
 static void AddPolygonToPath( CGMutablePathRef xPath,
-    const ::basegfx::B2DPolygon& rPolygon, bool bClosePath, bool bPixelSnap )
+    const ::basegfx::B2DPolygon& rPolygon, bool bClosePath, bool bPixelSnap, bool bLineDraw )
 {
     // short circuit if there is nothing to do
     const int nPointCount = rPolygon.count();
@@ -477,21 +477,30 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
             else
                 break;
         }
-        const ::basegfx::B2DPoint& rPoint = rPolygon.getB2DPoint( nClosedIdx );
+        ::basegfx::B2DPoint aPoint( rPolygon.getB2DPoint( nClosedIdx ) );
+        if( bLineDraw )
+        {
+            aPoint += basegfx::B2DPoint( 0.5, 0.5 );
+        }
         if( !nPointIdx )            // first point
         {
-            CGPathMoveToPoint( xPath, pTransform, rPoint.getX(), rPoint.getY() );
+            CGPathMoveToPoint( xPath, pTransform, aPoint.getX(), aPoint.getY() );
         }
         else if( !bPendingCurve )   // line segment
         {
-            CGPathAddLineToPoint( xPath, pTransform, rPoint.getX(), rPoint.getY() );
+            CGPathAddLineToPoint( xPath, pTransform, aPoint.getX(), aPoint.getY() );
         }
         else                        // cubic bezier segment
         {
-            const ::basegfx::B2DPoint& rCP1 = rPolygon.getNextControlPoint( nPrevIdx );
-            const ::basegfx::B2DPoint& rCP2 = rPolygon.getPrevControlPoint( nClosedIdx );
-            CGPathAddCurveToPoint( xPath, pTransform, rCP1.getX(), rCP1.getY(),
-                rCP2.getX(), rCP2.getY(), rPoint.getX(), rPoint.getY() );
+            basegfx::B2DPoint aCP1 = rPolygon.getNextControlPoint( nPrevIdx );
+            basegfx::B2DPoint aCP2 = rPolygon.getPrevControlPoint( nClosedIdx );
+            if( bLineDraw )
+            {
+                aCP1 += basegfx::B2DPoint( 0.5, 0.5 );
+                aCP2 += basegfx::B2DPoint( 0.5, 0.5 );
+            }
+            CGPathAddCurveToPoint( xPath, pTransform, aCP1.getX(), aCP1.getY(),
+                aCP2.getX(), aCP2.getY(), aPoint.getX(), aPoint.getY() );
         }
 
         if( bHasCurves )
@@ -503,7 +512,7 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
 }
 
 static void AddPolyPolygonToPath( CGMutablePathRef xPath,
-    const ::basegfx::B2DPolyPolygon& rPolyPoly, bool bPixelSnap )
+    const ::basegfx::B2DPolyPolygon& rPolyPoly, bool bPixelSnap, bool bLineDraw )
 {
     // short circuit if there is nothing to do
     const int nPolyCount = rPolyPoly.count();
@@ -513,7 +522,7 @@ static void AddPolyPolygonToPath( CGMutablePathRef xPath,
     for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
     {
         const ::basegfx::B2DPolygon rPolygon = rPolyPoly.getB2DPolygon( nPolyIdx );
-        AddPolygonToPath( xPath, rPolygon, true, bPixelSnap );
+        AddPolygonToPath( xPath, rPolygon, true, bPixelSnap, bLineDraw );
     }
 }
 
@@ -566,7 +575,7 @@ bool AquaSalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& rPolyPol
 
     if( !mxClipPath )
         mxClipPath = CGPathCreateMutable();
-    AddPolyPolygonToPath( mxClipPath, rPolyPolygon, false );
+    AddPolyPolygonToPath( mxClipPath, rPolyPolygon, false, false );
     return true;
 }
 
@@ -914,7 +923,7 @@ bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPol
     for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
     {
         const ::basegfx::B2DPolygon rPolygon = rPolyPoly.getB2DPolygon( nPolyIdx );
-        AddPolygonToPath( xPath, rPolygon, true, false );
+        AddPolygonToPath( xPath, rPolygon, true, false, IsPenVisible() );
     }
     CGContextSaveGState( mrContext );
     CGContextBeginPath( mrContext );
@@ -945,14 +954,13 @@ bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
 
     // setup poly-polygon path
     CGMutablePathRef xPath = CGPathCreateMutable();
-    AddPolygonToPath( xPath, rPolyLine, false, false );
+    AddPolygonToPath( xPath, rPolyLine, rPolyLine.isClosed(), false, true );
     CGContextSaveGState( mrContext );
     CGContextAddPath( mrContext, xPath );
     const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
     CGPathRelease( xPath );
 
     // draw path with antialiased line
-    // CGContextSetAllowsAntialiasing( mrContext, true );
     CGContextSetShouldAntialias( mrContext, true );
     CGContextSetLineWidth( mrContext, rLineWidths.getX() );
     CGContextDrawPath( mrContext, kCGPathStroke );
