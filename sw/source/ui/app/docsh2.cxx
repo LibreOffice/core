@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh2.cxx,v $
- * $Revision: 1.104 $
+ * $Revision: 1.105 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -917,7 +917,32 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             break;
                     }
                     else
-                        DoSave();
+                    {
+                        // try to store the document
+                        sal_uInt32 nErrorCode = ERRCODE_NONE;
+                        try
+                        {
+                            uno::Reference< frame::XStorable > xStorable( GetModel(), uno::UNO_QUERY_THROW );
+                            xStorable->store();
+                        }
+                        catch( task::ErrorCodeIOException& aErrEx )
+                        {
+                            nErrorCode = (sal_uInt32)aErrEx.ErrCode;
+                        }
+                        catch( uno::Exception& )
+                        {
+                            nErrorCode = ERRCODE_IO_GENERAL;
+                        }
+
+                        if ( nErrorCode != ERRCODE_NONE )
+                        {
+                            // if the saving has failed show the error and break the action
+                            if ( nErrorCode != ERRCODE_ABORT )
+                                ErrorHandler::HandleError( nErrorCode );
+
+                            break;
+                        }
+                    }
                 }
 #ifdef DBG_UTIL
                 {
