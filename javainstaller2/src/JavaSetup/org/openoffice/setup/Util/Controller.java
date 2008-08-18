@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Controller.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,11 +101,32 @@ public class Controller {
         if ( returnValue == 0 ) {
             log = pkgCommand + "<br><b>Returns: " + returnValue + " Successful command</b><br>";
             LogManager.addCommandsLogfileComment(log);
-            // System.err.println("Available languages: ");
+
+            // System.err.println("Available languages 1: ");
             // for (int i = 0; i < returnVector.size(); i++) {
             //     System.err.println(returnVector.get(i));
             // }
-            installData.setSystemLanguages(returnVector);
+
+            // Collecting "en-US" instead of "en-US.UTF8"
+            Vector realVector = new Vector();
+
+            for (int i = 0; i < returnVector.size(); i++) {
+                String oneLang = (String)returnVector.get(i);
+                int position = oneLang.indexOf(".");
+                if ( position > -1 ) {
+                    oneLang = oneLang.substring(0, position);
+                }
+                if ( ! realVector.contains(oneLang)) {
+                    realVector.add(oneLang);
+                }
+            }
+
+            // System.err.println("Available languages 2: ");
+            // for (int i = 0; i < realVector.size(); i++) {
+            //     System.err.println(realVector.get(i));
+            // }
+
+            installData.setSystemLanguages(realVector);
         } else {    // an error occured
             log = pkgCommand + "<br><b>Returns: " + returnValue + " An error occured</b><br>";
             LogManager.addCommandsLogfileComment(log);
