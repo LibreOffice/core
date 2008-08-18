@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_219_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:47 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:25:15 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -57,8 +57,8 @@ testcase HTMLToIMPRESSText
   printlog "  Copy selected text "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
   printlog "  Jump to beginning of document "
-  Call wDokSchreiben "<Mod1 Home>"
-  Call wDokSchreiben "<Shift Down><Shift End>"
+  Call wTypeKeys "<Mod1 Home>"
+  Call wTypeKeys "<Shift Down><Shift End>"
   EditCopy
 
   gApplication = "IMPRESS"
@@ -111,9 +111,9 @@ testcase HTMLToIMPRESSField
   printlog "  Copy selected text "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
   printlog "  Jump to beginning of document "
-  Call wDokSchreiben "<Mod1 Home>"
-  Call wDokSchreiben "<Down>",2
-  Call wDokSchreiben "<Home><Shift End>"
+  Call wTypeKeys "<Mod1 Home>"
+  Call wTypeKeys "<Down>",2
+  Call wTypeKeys "<Home><Shift End>"
   EditCopy
 
     gApplication = "IMPRESS"
@@ -166,9 +166,9 @@ testcase HTMLToIMPRESSTable
   printlog "  Copy selected table "
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
   printlog "  Jump to beginning of document "
-  Call wDokSchreiben "<Mod1 Home>"
-  Call wDokSchreiben "<Down>",5
-  Call wDokSchreiben "<Mod1 A>",2
+  Call wTypeKeys "<Mod1 Home>"
+  Call wTypeKeys "<Down>",5
+  Call wTypeKeys "<Mod1 A>",2
   EditCopy
 
   gApplication = "IMPRESS"
@@ -220,8 +220,8 @@ testcase HTMLToIMPRESSGraphicLinked
     printlog "  Copy selected Linked Graphic "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
     printlog "  Jump to beginning of document "
-    Call wDokSchreiben "<Mod1 Home>"
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys ( "<Shift F4>" )
     EditCopy
     
     gApplication = "IMPRESS"
@@ -273,9 +273,9 @@ testcase HTMLToIMPRESSControl
     printlog "  Copy selected Control "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
     printlog "  Jump to beginning of document "
-    Call wDokSchreiben "<Mod1 Home>"
-    Call wDokSchreiben ( "<Shift F4>" )
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys ( "<Shift F4>" )
+    Call wTypeKeys "<Tab>"
     EditCopy
     
     gApplication = "IMPRESS"
@@ -327,9 +327,9 @@ testcase HTMLToIMPRESSFloatingFrame
     printlog "  Copy selected Floating Frame "
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
     printlog "  Jump to beginning of document "
-    Call wDokSchreiben "<Mod1 Home>"
-    Call wDokSchreiben ( "<Shift F4>" )
-    Call wDokSchreiben "<Tab>",2
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys ( "<Shift F4>" )
+    Call wTypeKeys "<Tab>",2
     try
         EditCopy
     catch
