@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframe.cxx,v $
- * $Revision: 1.66 $
+ * $Revision: 1.67 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -213,7 +213,7 @@ void AquaSalFrame::initWindowAndView()
     UpdateFrameGeometry();
 
     // setContentView causes a display; in multithreaded use this can deadlock
-    YieldMutexReleaser aRel;
+    //YieldMutexReleaser aRel;
     [mpWindow setContentView: mpView];
 }
 
@@ -399,7 +399,7 @@ void AquaSalFrame::Show(BOOL bVisible, BOOL bNoActivate)
         // trigger filling our backbuffer
         SendPaintEvent();
 
-        YieldMutexReleaser aRel;
+        //YieldMutexReleaser aRel;
 
         if( bNoActivate || [mpWindow canBecomeKeyWindow] == NO )
             [mpWindow orderFront: NSApp];
@@ -419,7 +419,7 @@ void AquaSalFrame::Show(BOOL bVisible, BOOL bNoActivate)
         if( mpMenu && mpMenu->mbMenuBar && AquaSalMenu::pCurrentMenuBar == mpMenu )
             AquaSalMenu::setDefaultMenu();
 
-        YieldMutexReleaser aRel;
+        //YieldMutexReleaser aRel;
 
         // #i90440# work around the focus going back to some other window
         // if a child gets hidden for a fullscreen window
@@ -533,7 +533,7 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
 
     // relase and acquire mutex again since this call can block waiting for an internal lock
     {
-        YieldMutexReleaser aRel;
+        //YieldMutexReleaser aRel;
         [mpWindow setFrame: aStateRect display: NO];
     }
 
@@ -564,7 +564,7 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
         SendPaintEvent();
 
         // tell the system the views need to be updated
-        YieldMutexReleaser aRel;
+        //YieldMutexReleaser aRel;
 
         [mpWindow display];
     }
@@ -699,7 +699,7 @@ void AquaSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay )
 
         maFullScreenRect = [mpWindow frame];
         {
-            YieldMutexReleaser aRel;
+            //YieldMutexReleaser aRel;
             [mpWindow setFrame: [NSWindow frameRectForContentRect: aNewContentRect styleMask: mnStyleMask] display: mbShown ? YES : NO];
         }
 
@@ -711,7 +711,7 @@ void AquaSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay )
     else
     {
         {
-            YieldMutexReleaser aRel;
+            //YieldMutexReleaser aRel;
             [mpWindow setFrame: maFullScreenRect display: mbShown ? YES : NO];
         }
         UpdateFrameGeometry();
@@ -869,7 +869,7 @@ void AquaSalFrame::Sync()
 {
     if( mbGraphics && mpGraphics && mpView && mbShown )
     {
-        YieldMutexReleaser aRel;
+        //YieldMutexReleaser aRel;
 
         [mpView setNeedsDisplay: YES];
         [mpView display];
@@ -1249,7 +1249,7 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, USHOR
 
     // do not display yet, we need to update our backbuffer
     {
-        YieldMutexReleaser aRel;
+        //YieldMutexReleaser aRel;
         [mpWindow setFrame: [NSWindow frameRectForContentRect: aContentRect styleMask: mnStyleMask] display: NO];
     }
 
@@ -1264,7 +1264,7 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, USHOR
         SendPaintEvent();
 
         // now inform the system that the views need to be drawn
-        YieldMutexReleaser aRel;
+        //YieldMutexReleaser aRel;
         [mpWindow display];
     }
 }
