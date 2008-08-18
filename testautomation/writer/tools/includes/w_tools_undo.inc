@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_tools_undo.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:36:09 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:44:47 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -53,7 +53,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 	else
 		Warnlog "Unable to read from Undo-Box!"
 		exit sub
-	endif
+	end if
 
 	Sleep 1
 	Kontext "UndoRedoBox"
@@ -629,17 +629,17 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 			Warnlog "Wrong Type in Undo list. Not " & vTypeString & " but " & Trim(CurrentUndoString(0))
 		else
 			Printlog "-  Type in Undo-List is ok"
-		endif
+		end if
 		try
 			if Trim(CurrentUndoString(1)) <> vShould then
 				Warnlog "Wrong String in Undo list. Not " & vShould & " but " & Trim(CurrentUndoString(1))
 			else
 				Printlog "-  String in Undo-List is ok"
-			endif
+			end if
 		catch
 			warnlog "Something wrong with type: " & vTypeString
 		endcatch
-	endif
+	end if
 	wait 500
     Kontext "StandardBar"
     Undo.Click
