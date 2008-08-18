@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframe.cxx,v $
- * $Revision: 1.67 $
+ * $Revision: 1.68 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1497,7 +1497,11 @@ void AquaSalFrame::BeginSetClipRegion( ULONG nRects )
 void AquaSalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 {
     if( nWidth && nHeight )
-        maClippingRects.push_back( CGRectMake(nX, nY, nWidth, nHeight) );
+    {
+        NSRect aRect = { { nX, nY }, { nWidth, nHeight } };
+        VCLToCocoa( aRect, false );
+        maClippingRects.push_back( CGRectMake(aRect.origin.x, aRect.origin.y, aRect.size.width, aRect.size.height) );
+    }
 }
 
 void AquaSalFrame::EndSetClipRegion()
