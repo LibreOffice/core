@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unotxdoc.cxx,v $
- * $Revision: 1.132 $
+ * $Revision: 1.133 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1584,6 +1584,11 @@ void    SwXTextDocument::InitNewDoc()
 
     if(pxXDrawPage)
     {
+        // --> OD 2008-07-23 #i91798#, #i91895#
+        // dispose XDrawPage here. We are the owner and know that it is no longer in a valid condition.
+        uno::Reference<lang::XComponent> xComp( *pxXDrawPage, uno::UNO_QUERY );
+        xComp->dispose();
+        // <--
         pDrawPage->Invalidate();
         delete pxXDrawPage;
         pxXDrawPage = 0;
