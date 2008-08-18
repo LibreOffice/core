@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registerservices.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,42 +93,35 @@ sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistr
 
 void* SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
-    void* pRet = NULL;
+    void* pRet = 0;
+    uno::Reference< XInterface > xFactory;
 
     //Decryptor
-        rtl::OUString implName = rtl::OUString::createFromAscii( pImplName );
+    rtl::OUString implName = rtl::OUString::createFromAscii( pImplName );
 
-        // DocumentDigitalSignatures
     if ( pServiceManager && implName.equals( DocumentDigitalSignatures::GetImplementationName() ) )
     {
-            uno::Reference< lang::XSingleServiceFactory > xFactory( cppu::createSingleFactory(
+        // DocumentDigitalSignatures
+        xFactory = cppu::createSingleComponentFactory(
+            DocumentDigitalSignatures_CreateInstance,
+            rtl::OUString::createFromAscii( pImplName ),
+            DocumentDigitalSignatures::GetSupportedServiceNames() );
+    }
+    else if ( pServiceManager && implName.equals( CertificateContainer::impl_getStaticImplementationName() ))
+    {
+        // CertificateContainer
+        xFactory = cppu::createOneInstanceFactory(
             reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
             rtl::OUString::createFromAscii( pImplName ),
-            DocumentDigitalSignatures_CreateInstance, DocumentDigitalSignatures::GetSupportedServiceNames() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
+            CertificateContainer::impl_createInstance,
+            CertificateContainer::impl_getStaticSupportedServiceNames() );
     }
 
-        // CertificateContainer
-        if ( pServiceManager && implName.equals( CertificateContainer::impl_getStaticImplementationName() ))
+     if (xFactory.is())
     {
-            uno::Reference< lang::XSingleServiceFactory > xFactoryCertificateContainer( cppu::createOneInstanceFactory(
-                reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-                rtl::OUString::createFromAscii( pImplName ),
-                CertificateContainer::impl_createInstance,
-                CertificateContainer::impl_getStaticSupportedServiceNames() ) );
-
-            if (xFactoryCertificateContainer.is())
-            {
-        xFactoryCertificateContainer->acquire();
-        pRet = xFactoryCertificateContainer.get();
-            }
+        xFactory->acquire();
+        pRet = xFactory.get();
     }
-
     return pRet;
 }
 
