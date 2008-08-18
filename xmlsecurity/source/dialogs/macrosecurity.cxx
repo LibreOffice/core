@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: macrosecurity.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,7 @@
 
 
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
+#include <com/sun/star/security/SerialNumberAdapter.hpp>
 #include <comphelper/sequence.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svtools/pickerhelper.hxx>
@@ -74,7 +75,7 @@ IMPL_LINK( MacroSecurity, OkBtnHdl, void*, EMPTYARG )
     return 0;
 }
 
-MacroSecurity::MacroSecurity( Window* _pParent, const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment )
+MacroSecurity::MacroSecurity( Window* _pParent, const cssu::Reference< cssu::XComponentContext> &_rxCtx, const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment )
     :TabDialog          ( _pParent, XMLSEC_RES( RID_XMLSECTP_MACROSEC ) )
     ,maTabCtrl          ( this, XMLSEC_RES( 1 ) )
     ,maOkBtn            ( this, XMLSEC_RES( BTN_OK ) )
@@ -84,6 +85,7 @@ MacroSecurity::MacroSecurity( Window* _pParent, const cssu::Reference< dcss::xml
 {
     FreeResource();
 
+    mxCtx = _rxCtx;
     mxSecurityEnvironment = _rxSecurityEnvironment;
 
     mpLevelTP = new MacroSecurityLevelTP( &maTabCtrl, this );
@@ -201,7 +203,11 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, ViewCertPBHdl, void*, EMPTYARG )
     if( maTrustCertLB.FirstSelected() )
     {
         USHORT nSelected = USHORT( sal_uIntPtr( maTrustCertLB.FirstSelected()->GetUserData() ) );
-        uno::Reference< dcss::security::XCertificate > xCert = mpDlg->mxSecurityEnvironment->getCertificate( maTrustedAuthors[nSelected][0], numericStringToBigInteger( maTrustedAuthors[nSelected][1] ) );
+
+        uno::Reference< dcss::security::XSerialNumberAdapter > xSerialNumberAdapter =
+            ::com::sun::star::security::SerialNumberAdapter::create(mpDlg->mxCtx);
+
+        uno::Reference< dcss::security::XCertificate > xCert = mpDlg->mxSecurityEnvironment->getCertificate( maTrustedAuthors[nSelected][0], xSerialNumberAdapter->toSequence( maTrustedAuthors[nSelected][1] ) );
 
         // If we don't get it, create it from signature data:
         if ( !xCert.is() )
