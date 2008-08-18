@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: template_tools.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:06 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:06:22 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -318,9 +318,9 @@ function hGetFileFolderName( iFolder as integer ) as string
 
     Kontext "TemplateAndDocuments"
     FileList.select( iFolder )
-    wait( 100 )
+    WaitSlot()
     hGetFileFolderName() = FileList.getText()
-    wait( 100 )
+    WaitSlot()
 
 end function
 
@@ -387,41 +387,32 @@ function hSelectDocumentObject( iTitle as integer , iMode as integer ) as string
         hSelectDocumentObject() = cTitle
         exit function
     case 1 ' open new document based on the template
+        WaitSlot()
+        kontext "TemplateAndDocuments"
         FileList.typeKeys( "<return>" )
-        
-        '///+<li>Check if the dialog is still open</li>
-        brc = hIsTemplateDialogClosed()
+        WaitSlot( 5000 )
 
-        if ( not brc ) then
-            '///+<li>If yes: Try to determine if it is a new folder</li>
-            brc = hIsObjectAFolder( iObjectCount )
+        try
+            kontext "TemplateAndDocuments"
+            if ( TemplateAndDocuments.exists() ) then
+                '///+<li>If yes: Try to determine if it is a new folder</li>
+                brc = hIsObjectAFolder( iObjectCount )
 
-            if ( brc ) then
-                hSelectDocumentObject() = "Folder"
-                exit function
+                if ( brc ) then
+                    hSelectDocumentObject() = "Folder"
+                    exit function
+                endif
+
             endif
-
-        endif
-
-        brc = hWaitWhileLoading()
-
-        if ( brc ) then
-            hHandleActivesOnLoad( 2, false )
-        endif
-
-    case 2 ' edit the template
-        if ( edit.isEnabled() ) then
-            printlog( CFN & "Edit is disabled" )
-            edit.click()
-            brc = hWaitWhileLoading()
-        else
-        endif
+        catch
+        endcatch
+        
+        hFileWait()
+        hHandleActivesOnLoad( 2, false )
+        hHandleInitialDialogs()
+        
     end select
 
-    '///+<li>If the file was successfully opened, handle any dialogs</li>
-    if ( brc ) then
-        brc = hHandleInitialDialogs()
-    endif
 
     '///+<li>If all initial dialogs were handled correctly, return the title</li>
     if ( brc ) then
@@ -445,14 +436,28 @@ function hIsTemplateDialogClosed() as boolean
     '///+<li>TRUE if the Templates and Documents dialog cannot be found</li>
     '///+<li>FALSE if the selected object was a foder (Templates and Documents still open</li>
     '///</ul>
+    
+    dim iTry as integer : iTry = 0
 
-
-    kontext "TemplateAndDocuments"
-    if ( TemplateAndDocuments.exists() ) then
-        printlog( CFN & "Dialog still open. Maybe we opened a folder" )
-        hIsTemplateDialogClosed() = false
+    
+    if ( WaitSlot( 2000 ) = WSFinished ) then
+        kontext "TemplateAndDocuments"
+        try
+            if ( TemplateAndDocuments.exists() ) then
+                printlog( CFN & "Dialog still open. Maybe we opened a folder" )
+                hIsTemplateDialogClosed() = false
+                exit function
+            else
+                printlog( CFN & "Regular object. Dialog is closed" )
+                hIsTemplateDialogClosed() = true
+                exit function
+            endif
+        catch
+            warnlog( "Failure to query Templates and Documents dialog" )
+            hIsTemplateDialogClosed() = true
+        endcatch
     else
-        printlog( CFN & "Regular object. Dialog is closed" )
+        warnlog( "Slot not finished within 2000 msec" )
         hIsTemplateDialogClosed() = true
     endif
 

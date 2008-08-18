@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: t_filetools.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsk $ $Date: 2008-06-20 07:58:07 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:06:34 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -229,10 +229,10 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
 
             endif
         catch
-            warnlog( "Serious problem while trying to handle messageboxes" )
+            qaerrorlog( "Problem while trying to handle messageboxes" )
             hHandleActivesOnLoad() = false
         endcatch
-
+        
     next iTry
 
     ' now see how many dialogs were allowed and how many have been closed
@@ -267,6 +267,7 @@ function hHandleInitialDialogs() as integer
     '///+<li>2: StarOfficeCalendar1</li>
     '///+<li>3: NewsletterLayout</li>
     '///+<li>4: PortfolioCurrency</li>
+    '///+<li>5: StarOfficeCalendar2</li>
     '///</ul>
     '///</ol>
     '///<u>Description</u>:
@@ -280,38 +281,49 @@ function hHandleInitialDialogs() as integer
         incident = 0
         
     printlog( CFN & "Enter" )
+    try
 
-    '///+<li>Test for UseOfThisTemplate-dialog</li>
-    Kontext "UseOfThisTemplate"
-    if ( UseOfThisTemplate.Exists() ) then
-        printlog( CFN & "Closing UseOfThisTemplate-dialog" )
-        incident = 1
-        CancelButton.Click()
-    endif
-      
-    '///+<li>Test for StarOfficeCalendar1-dialog</li>
-    Kontext "StarOfficeCalendar1"
-    if ( StarOfficeCalendar1.Exists() ) then
-        printlog( CFN & "Closing StarOfficeCalendarl-dialog" )
-        incident = 2
-        Create.Click()
-    endif
-      
-    '///+<li>Test for NewsletterLayout-dialog</li>
-    Kontext "NewsletterLayout"
-    if ( NewsletterLayout.Exists() ) then
-        printlog( CFN & "Closing NewsletterLayout-dialog" )
-        incident = 3
-        OkButton.Click()
-    endif
-      
-    '///+<li>Test for PortfolioCurrency-dialog</li>
-    Kontext "PortfolioCurrency"
-    if ( PortfolioCurrency.Exists() ) then
-        printlog( CFN & "Closing PortfolioCurrency-dialog" )
-        incident = 4
-        OKButton.Click()
-    endif
+        '///+<li>Test for UseOfThisTemplate-dialog</li>
+        Kontext "UseOfThisTemplate"
+        if ( UseOfThisTemplate.Exists() ) then
+            printlog( CFN & "Closing UseOfThisTemplate-dialog" )
+            incident = 1
+            CancelButton.Click()
+        endif
+          
+        '///+<li>Test for StarOfficeCalendar1-dialog</li>
+        Kontext "StarOfficeCalendar1"
+        if ( StarOfficeCalendar1.Exists() ) then
+            printlog( CFN & "Closing StarOfficeCalendar1-dialog" )
+            incident = 2
+            Create.Click()
+        endif
+
+        '///+<li>Test for StarOfficeCalendar2-dialog (This should be idential to StarofficeCalendar1)</li>
+        Kontext "StarOfficeCalendar2"
+        if ( StarOfficeCalendar2.Exists() ) then
+            printlog( CFN & "Closing StarOfficeCalendar2-dialog" )
+            incident = 5
+            Create.Click()
+        endif
+          
+        '///+<li>Test for NewsletterLayout-dialog</li>
+        Kontext "NewsletterLayout"
+        if ( NewsletterLayout.Exists() ) then
+            printlog( CFN & "Closing NewsletterLayout-dialog" )
+            incident = 3
+            OkButton.Click()
+        endif
+          
+        '///+<li>Test for PortfolioCurrency-dialog</li>
+        Kontext "PortfolioCurrency"
+        if ( PortfolioCurrency.Exists() ) then
+            printlog( CFN & "Closing PortfolioCurrency-dialog" )
+            incident = 4
+            OKButton.Click()
+        endif
+    catch
+    endcatch
          
     hHandleInitialDialogs() = incident
     printlog( CFN & "Exit" )

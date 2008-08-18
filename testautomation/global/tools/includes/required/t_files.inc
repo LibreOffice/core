@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: t_files.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: rt $ $Date: 2008-07-31 19:02:44 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:06:46 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -905,6 +905,12 @@ function hFileWait() as integer
             exit do
         end if
         
+        ' LOAD: StarOffice Calendar (Triggered by template)
+        kontext "StarOfficeCalendar1"
+        if ( StarOfficeCalendar1.Exists() ) then
+            iWait = -8
+            exit do
+        end if
         
         ' SAVE: Password dialog
         kontext "PasswordDlg"
@@ -932,13 +938,14 @@ function hFileWait() as integer
     
     if ( C_INFO ) then
         select case iWait
-        case -1   : printlog( CFN & "Timeout reached, continuing" )
-        case -2   : printlog( CFN & "Macro security warning displayed, continuing" )
-        case -3   : printlog( CFN & "Dialog boxes are in the way, continuing" )
-        case -4   : printlog( CFN & "Password dialog (load) displayed, continuing" )
-        case -5   : printlog( CFN & "Password dialog (save) displayed, continuing" )
-        case -6   : printlog( CFN & "Filter Selection dialog displayed, continuing" )
-        case -7   : printlog( CFN & "ASCII filter options dialog displayed, continuing" )
+        case -1   : printlog( CFN & "Timeout reached, exiting" )
+        case -2   : printlog( CFN & "Macro security warning displayed, exiting" )
+        case -3   : printlog( CFN & "Dialog boxes are in the way, exiting" )
+        case -4   : printlog( CFN & "Password dialog (load) displayed, exiting" )
+        case -5   : printlog( CFN & "Password dialog (save) displayed, exiting" )
+        case -6   : printlog( CFN & "Filter Selection dialog displayed, exiting" )
+        case -7   : printlog( CFN & "ASCII filter options dialog displayed, exiting" )
+        case -8   : printlog( CFN & "StarOffice Calendar (Template) displayed, exiting" )
         case else : printlog( CFN & "File I/O completed in " & iWait & " seconds" )
         end select
     endif
