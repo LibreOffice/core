@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_stylist.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:59 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:36:39 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -87,7 +87,7 @@ testcase tFormatStylist1
 	Call hNewDocument
 	printlog "  - Call Stylist with F11"
 	printlog "Call stylist with <F11> aand proof all windowmethods at stylist"
-	Call wDokSchreiben "<F11>"
+	Call wTypeKeys "<F11>"
 	Kontext "Stylist"
 	if Stylist.NotExists then
       	Warnlog "No Stylist with <F11>"
@@ -160,14 +160,14 @@ testcase tFormatStylist2
 	printlog " New document"
 	Call hNewDocument
 	printlog "check all methods of Stylist as Window between more than one document"
-	Call wDokSchreiben "Test the stylist functions"
+	Call wTypeKeys "Test the stylist functions"
 	printlog "  - Call Stylist in first document and check in a second document"
 	Sleep 2
 	Kontext "Stylist"
 	If Not Stylist.Exists then FormatStylist
 	Sleep 2
 	Call hNewDocument
-	Call wDokSchreiben "Test the stylist functions"
+	Call wTypeKeys "Test the stylist functions"
 	Sleep 2
 	Kontext "Stylist"
 	if Stylist.NotExists then Warnlog "No Stylist in new document"
@@ -180,7 +180,7 @@ testcase tFormatStylist2
 	Sleep 2
 	Call hNewDocument
 	Sleep 2
-	Call wDokSchreiben "Test the stylist functions"
+	Call wTypeKeys "Test the stylist functions"
 	Kontext "Stylist"
 	if Stylist.NotExists then Warnlog "No Stylist in a new document"
 
@@ -189,7 +189,7 @@ testcase tFormatStylist2
 	Stylist.Dock
 	Sleep 1
 	Call hNewDocument
-	Call wDokSchreiben "Test the stylist functions"
+	Call wTypeKeys "Test the stylist functions"
 	Kontext "Stylist"
 	if NOT Stylist.IsDocked then Warnlog "Stylist is not docked in new document"
 	
@@ -205,7 +205,7 @@ testcase tFormatStylist2
 	printlog "  - Close Stylist with <F11>"
 	Stylist.Undock
 	Sleep 1
-	Call wDokSchreiben "<F11>"
+	Call wTypeKeys "<F11>"
 	Kontext "Stylist"
 	if NOT Stylist.NotExists then
 		Warnlog "Stylist is still open"
@@ -362,7 +362,7 @@ testcase tFormatStylist5
 		goto endsub
 	end if
 	Call hNewDocument
-	Call wDokSchreiben "Dies ist ein formatierter Text <Shift Home>"
+	Call wTypeKeys "Dies ist ein formatierter Text <Shift Home>"
 	printlog "  - format Text"
 	FormatCharacter
 	Kontext
@@ -391,7 +391,7 @@ testcase tFormatStylist5
             Vorlagenliste.TypeKeys "<Return>"
             bStyleFound = true
             exit for
-        endif
+        end if
     next i
     Stylist.Close
     
@@ -399,7 +399,7 @@ testcase tFormatStylist5
         Warnlog "Style: " & Suchmal & " has not been found in Stylist"
         Call hCloseDocument
         goto endsub
-    endif   	
+    end if   	
 
 	printlog "  - check format"
 	FormatCharacter
@@ -423,7 +423,7 @@ testcase tFormatStylist6
 	printlog "New writerdocument"
 
 	Call hNewDocument
-	Call wDokSchreiben "Creating a style from selection <Return><Up><Shift End>"
+	Call wTypeKeys "Creating a style from selection <Return><Up><Shift End>"
 	printlog "create a new style from selection"
 	FormatCharacter
 	Kontext
@@ -461,8 +461,8 @@ testcase tFormatStylist6
 	end if
 
    	printlog "   - assign new Character Style to a new text"
-	wDokSchreiben "<Home><Down>",3
-	wDokSchreiben "This is some new text <Return><Up><Up><Shift End>"
+	wTypeKeys "<Home><Down>",3
+	wTypeKeys "This is some new text <Return><Up><Up><Shift End>"
 	Kontext "Stylist"
 	TBGestalter.Click ZeichenVorlagen
 	Vorlagenliste.TypeKeys "<Home>"
@@ -596,7 +596,7 @@ testcase tAssigningStyles2
     end if
     
 	printlog "Select whole dummytext"
-    Call wDokSchreiben "<Mod1 A>"
+    Call wTypeKeys "<Mod1 A>"
 	printlog "Apply style 'Heading 1' through Styles & Formatting combobox"
     Kontext "Textobjectbar"
     for i = 1 to Vorlage.GetItemCount
@@ -609,8 +609,8 @@ testcase tAssigningStyles2
     next i
 
 	printlog "Check if style has been applied to paragraph"
-    Call wDokSchreiben "<Mod1 Home><End>"
-    Call wDokSchreiben "<Left>", 2
+    Call wTypeKeys "<Mod1 Home><End>"
+    Call wTypeKeys "<Left>", 2
     
     Kontext "Textobjectbar"
     if Vorlage.GetSeltext <> sTemp then
@@ -634,7 +634,7 @@ testcase tAssigningStyles3
     end if
     
     printlog "Select the whole dummy text"
-    Call wDokSchreiben "<Mod1 A>"
+    Call wTypeKeys "<Mod1 A>"
     printlog "Format / Character" 
     FormatCharacter
 	Kontext
@@ -656,7 +656,7 @@ testcase tAssigningStyles3
     Vorlage.TypeKeys "MyStyle<Return>"
     
     printlog "Check if style has been applied to the combobox"
-    Call wDokSchreiben "<Mod1 End>"
+    Call wTypeKeys "<Mod1 End>"
     
     wait 500
     Kontext "Textobjectbar"
@@ -667,8 +667,8 @@ testcase tAssigningStyles3
     endcatch
         
     printlog "Check if style has been applied to paragraph"
-    Call wDokSchreiben "<Mod1 Home>"
-    Call wDokSchreiben "<Right>", 2
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys "<Right>", 2
     
     Kontext "Textobjectbar"
     if Vorlage.GetSelText <> "MyStyle" then
@@ -695,7 +695,7 @@ testcase tAssigningStyles4
     end if
     
     printlog "Select whole dummytext"
-    Call wDokSchreiben "<Mod1 A>"
+    Call wTypeKeys "<Mod1 A>"
     printlog "Apply style 'Heading 1' through Styles & Formatting combobox"
     Kontext "Textobjectbar"
     for i = 1 to Vorlage.GetItemCount
@@ -713,8 +713,8 @@ testcase tAssigningStyles4
     Vorlage.TypeKeys "<Return>"
     wait 500
     printlog "Check if style has been set to default"
-    Call wDokSchreiben "<Mod1 Home>"
-    Call wDokSchreiben "<Right>", 3
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys "<Right>", 3
 
     wait 500    
     Kontext "Textobjectbar"
@@ -742,8 +742,8 @@ testcase tAssigningStyles5
     end if
 
     printlog "Highlight first line in dummy text"
-	Call wDokSchreiben "<Mod1 Home>"
-	Call wDokSchreiben "<Shift End>" 
+	Call wTypeKeys "<Mod1 Home>"
+	Call wTypeKeys "<Shift End>" 
 	
     printlog "Format / Bold"
 	Kontext "TextObjectbar"
@@ -752,8 +752,8 @@ testcase tAssigningStyles5
 	Wait 500
 
     printlog "Set cursor outside of bold formatted text"
-	Call wDokSchreiben "<Mod1 Home>"
-	Call wDokschreiben "<Down><Right>"
+	Call wTypeKeys "<Mod1 Home>"
+	Call wTypeKeys "<Down><Right>"
 	
     printlog "Select 'Clear Formatting' in Style-Listbox"
 	Kontext "Textobjectbar"
@@ -762,8 +762,8 @@ testcase tAssigningStyles5
     wait 500
 
     printlog "Check that first line is still bold and has not been reset"
-	Call wDokSchreiben "<Mod1 Home>"
-	Call wDokschreiben "<Right>"
+	Call wTypeKeys "<Mod1 Home>"
+	Call wTypeKeys "<Right>"
 
     Kontext "TextObjectbar"
     if Fett.Getstate(2) = 0 then
@@ -791,8 +791,8 @@ testcase tAssigningStyles6
     end if
 
     printlog "Highlight first line in dummy text"
-	Call wDokSchreiben "<Mod1 Home>"
-	Call wDokSchreiben "<Shift End>" 
+	Call wTypeKeys "<Mod1 Home>"
+	Call wTypeKeys "<Shift End>" 
 	
     printlog "Format / Bold"
 	Kontext "TextObjectbar"
@@ -801,24 +801,24 @@ testcase tAssigningStyles6
 	Wait 500
 
     printlog "Point cursor to first highlighted word of bold formatted text"
-	Call wDokSchreiben "<Mod1 Home>"	
-	Call wDokschreiben "<Right>"
+	Call wTypeKeys "<Mod1 Home>"	
+	Call wTypeKeys "<Right>"
 	
     printlog "Select 'Format / Default Formatting' in Style-Listbox"
 	FormatDefaultWriter
     wait 500
 
     printlog "first highlighted word should be set to 'Standard'"
-	Call wDokSchreiben "<Mod1 Home>"
-	Call wDokSchreiben "<Right>"
+	Call wTypeKeys "<Mod1 Home>"
+	Call wTypeKeys "<Right>"
     Kontext "TextObjectbar"
     if Fett.Getstate(2) = 1 then
         Warnlog "Style 'Bold' has not been reset!"
     end if
 	
     printlog "Check that rest of first line is still bold and has not been reset"
-	Call wDokSchreiben "<Mod1 Home>"
-	Call wDokschreiben "<End><Left>"
+	Call wTypeKeys "<Mod1 Home>"
+	Call wTypeKeys "<End><Left>"
 
     Kontext "TextObjectbar"
     if Fett.Getstate(2) = 1 then
