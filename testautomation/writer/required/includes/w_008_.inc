@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_008_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:26:31 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:42:00 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -50,7 +50,7 @@ testcase tWindowNewWindow
     if gApplication = "HTMLDOKUMENT" then
         printlog "Not in WriterWeb !"
         goto endsub
-    endif
+    end if
     Call hNewDocument
     printlog " Open new document"
     Call hTabelleEinfuegen
