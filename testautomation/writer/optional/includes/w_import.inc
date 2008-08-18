@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_import.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 14:53:51 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:23:09 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -387,12 +387,12 @@ testcase wLoadFile(sFileName as string, sCurrentFilterExt as string, sCurrentFil
         
         ' Point cursor to first page when write protected
         for i = 1 to 10
-            Call wDokSchreiben " "
+            Call wTypeKeys " "
             Kontext "Active"
             if Active.Exists then
                 if Active.GetRT = 304 then
                     Active.Ok
-                    Call wDokSchreiben "<DOWN>",5
+                    Call wTypeKeys "<DOWN>",5
                 end if
             else
                 i = 11
@@ -402,13 +402,13 @@ testcase wLoadFile(sFileName as string, sCurrentFilterExt as string, sCurrentFil
 
         Sleep 5
         printlog " modify document content"
-        Call wDokSchreiben "Writer Import test<Return>"
+        Call wTypeKeys "Writer Import test<Return>"
         Sleep 2
 
-        Call wDokSchreiben "<Return>", 5
+        Call wTypeKeys "<Return>", 5
         Sleep 1
         Call wSearchWriteableArea ()
-        Call wDokSchreiben "Writer Import test<Return>"
+        Call wTypeKeys "Writer Import test<Return>"
         wait 500
         printlog "   - Open and modify => OK "
         printlog " save file"
@@ -636,13 +636,13 @@ testcase wLoadFile2(Inputpfad as string, FileToLoad as string, Filter as string,
             end select
         endcatch			
         
-        Call wDokSchreiben "<Escape>"
-        Call wDokSchreiben "<Mod1 End>"
-        Call wDokSchreiben "<Return>", 1
+        Call wTypeKeys "<Escape>"
+        Call wTypeKeys "<Mod1 End>"
+        Call wTypeKeys "<Return>", 1
         Sleep 1
         printlog " check if writeable area!"
         Call wSearchWriteableArea ()
-        Call wDokSchreiben "Writer Import test"
+        Call wTypeKeys "Writer Import test"
         printlog "  - Able to modify Document  => OK"
         sleep (3)
 
