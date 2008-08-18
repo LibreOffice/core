@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_tool6.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:36:09 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:44:06 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -161,10 +161,10 @@ function StrToDouble ( sWert$ ) as Double
                 sDummy$ = Left$ ( sWert$, Len(sWert$)-1 )
             else
                 sDummy$ = Left$ ( sWert$, Len(sWert$)-2 )
-            endif
+            end if
         else
             sDummy$ = sWert$
-        endif
+        end if
         ' get position of fraction mark
         i1 = instr (sDummy$, ",")  ' wrong output
         i2 = instr (sDummy$, ".")
@@ -180,7 +180,7 @@ function StrToDouble ( sWert$ ) as Double
         StrToDouble = a + c
     else
         StrToDouble = 0
-    endif
+    end if
 end function
 
 '--------------------------------------------------------------
@@ -211,7 +211,7 @@ function wKillUpcomingActives(optional sDocument as string)
                     Case else
                         Warnlog Active.Gettext
                 end select
-            endif
+            end if
             try
                 Active.Ok ' Read Error
             catch
@@ -249,7 +249,7 @@ function wGetCharacterFont as String
             wGetCharacterFont = FontWest.GetSelText
         else
             wGetCharacterFont = Font.GetSelText
-        endif
+        end if
         TabFont.Cancel
         sleep (1)
     catch
@@ -285,7 +285,7 @@ function wGetCharacterFontSize as String
             wGetCharacterFontSize = SizeWest.GetSelText
         else
             wGetCharacterFontSize = Size.GetSelText
-        endif
+        end if
         TabFont.Cancel
         sleep (1)
     catch
@@ -355,7 +355,7 @@ sub SpaltenBreiteTesten ( Wert as Double )
     zWert = ZahlAusSpinnfield ( Breite.GetText )
     if Not Wert = zWert then
         Warnlog "Die Spaltenbreite ist nicht "+ Wert +" sondern "+ zWert
-    endif
+    end if
     SpaltenBreite.OK
 end sub
 
@@ -406,7 +406,7 @@ sub ZeilenTesten ( Anzahl% )
     DocumentWriter.TypeKeys "<Up>", 5 ' Move out of table ????!!!!
     for i=2 to Anzahl% +4   ' might work, but if there are some more tables, it doesn't!!
         try
-            Call wDokSchreiben "<Down>"
+            Call wTypeKeys "<Down>"
             FormatRowHeight       'This is OK; but different evaluation is necessary
             Kontext "ZellenHoehe"
             ZellenHoehe.Cancel
@@ -452,30 +452,30 @@ sub TBOhTabelleEinfuegen (optional tName as string, optional tHeader as boolean,
             if (IsMissing (tRepeat) <> True) then if tRepeat then UeberschriftWiederholen.Check else UeberschriftWiederholen.UnCheck
         else
             Ueberschrift.UnCheck
-        endif
-    endif
+        end if
+    end if
 
     if IsMissing (tSeperate) <> True then
         if tSeperate then
             TabelleNichtTrennen.Check
         else
             TabelleNichtTrennen.UnCheck
-        endif
-    endif
+        end if
+    end if
 
     if IsMissing(tBorder) <> True then
         if tBorder then
             Umrandung.check
         else
             Umrandung.check
-        endif
-    endif
+        end if
+    end if
 
     if IsMissing(tWidth) <> True then
 		Spalten.SetText tWidth
 	else
 		Spalten.Settext "5"
-	endif
+	end if
     if IsMissing(tHeight) <> True then Zeilen.SetText tHeight
 
     TabelleEinfuegenWriter.OK
@@ -523,7 +523,7 @@ function hGetTableName () as string
             TabelleEinfuegenWriter.Ok
         else
             hGetTableName = ""
-        endif
+        end if
     endcatch
     Sleep (1)
 end function
@@ -565,7 +565,7 @@ function hGetColumn() as integer
         SpaltenBreite.Cancel
     else
         hGetColumn = 0
-    endif
+    end if
 end function
 
 '--------------------------------------------------------------
@@ -685,14 +685,14 @@ sub hSetSpellHypLanguage
                     Westlich.Select sTrieit
                 else
                     warnlog "SOrry no spellbook found :-("
-                endif
+                end if
         else
             Westlich.Select glLocale (4)
-        endif
+        end if
         printlog "selected: "+Westlich.GetSelText
         Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.OK
-   endif
+   end if
 end sub
 
 '--------------------------------------------------------------
@@ -716,7 +716,7 @@ sub hFindSpellHypLanguage as string
         Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.OK
         sleep 1
-    endif
+    end if
 end sub
 
 '--------------------------------------------------------------
@@ -729,7 +729,7 @@ function wCheckRowHeight ( ShouldValue as string ) as boolean
         wCheckRowHeight = False
     else
         wCheckRowHeight = True
-    endif
+    end if
     ZellenHoehe.Cancel
 end function
 
@@ -746,48 +746,48 @@ sub wSearchWriteableArea ()
     NowWriteable = False
     PageDownNow = True
     Do until NowWriteable = True
-        Call wDokSchreiben " "
+        Call wTypeKeys " "
         Kontext "Active"
         if Active.Exists then
             if Active.GetRT = 304 then
                 Active.Ok
                 if PageDownNow = True then
                     for i = 1 to 10
-                        Call wDokSchreiben "<Down>", 5
-                        Call wDokSchreiben " "
+                        Call wTypeKeys "<Down>", 5
+                        Call wTypeKeys " "
                         Kontext "Active"
                         if Active.Exists then
                             if Active.GetRT = 304 then
                                 Active.Ok
-                            endif
+                            end if
                         else
                             NowWriteable = True
                             i = 11
-                        endif
+                        end if
                     next i
                 else
                     for i = 1 to 1000
-                        Call wDokSchreiben "<Up>", 1
-                        Call wDokSchreiben " "
+                        Call wTypeKeys "<Up>", 1
+                        Call wTypeKeys " "
                         Kontext "Active"
                         if Active.Exists then
                             if Active.GetRT = 304 then
                                 Active.Ok
-                            endif
+                            end if
                         else
                             NowWriteable = True
                             i = 1002
-                        endif
+                        end if
                     next i
-                endif
+                end if
             else
                 NowWriteable = True
                 Exit Do
-            endif
+            end if
         else
             NowWriteable = True            
             Exit Do
-        endif
+        end if
     Loop
 end sub
 
