@@ -8,7 +8,7 @@
 #
 # $RCSfile: CreatePDBRelocators.pm,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -142,10 +142,12 @@ sub collect_files
         # collect all shared libraries on o:
         my @lib = glob("$template/lib/*.so*");
         my @lib_so = glob("$template/lib/so/*.so*");
+        my @mac_lib = glob("$template/lib/*.dylib*");
+        my @mac_lib_so = glob("$template/lib/so/*.dylib*");
         # collect all binary executables on o:
         my @bin = find_binary_execs("$template/bin");
         my @bin_so = find_binary_execs("$template/bin/so");
-        @$filesref = (@lib, @lib_so, @bin, @bin_so);
+        @$filesref = (@lib, @lib_so, @mac_lib, @mac_lib_so, @bin, @bin_so);
     }
     return 1;
 }
@@ -156,7 +158,8 @@ sub find_binary_execs
     my @files = glob("$path/*");
     my @execs = grep(-x $_, @files);
     my @elf_files = grep(`file $_` =~ /ELF/, @execs);
-    return @elf_files;
+    my @MachO_files = grep(`file $_` =~ /Mach\-O/, @execs);
+    return ( @elf_files, @MachO_files );
 }
 
 1; # required
