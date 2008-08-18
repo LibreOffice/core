@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_tools.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:36:09 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:44:20 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -31,13 +31,14 @@
 '*
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : fredrik.haegg@sun.com
 '*
 '* short description : Writer-Tools
 '*
 '************************************************************************
 '*
-' #1 wDokSchreiben ( OutputText
+' #1 wDokSchreiben ( OutputText )
+' #1 wTypeKeys ( OutputText )
 ' #1 wDocSetContext
 ' #1 wBlindtextEinfuegen
 ' #1 wSelectVorlage ( sVorlagenTyp as String
@@ -69,7 +70,7 @@ sub wDokSchreiben ( OutputText , optional iLoop as Integer )
 Dim i as integer
 If lcase(OutputText) = "<mod1 a>" then
     If iSprache = 34 then OutputText = "<Mod1 E>"
-endif
+end if
 If IsMissing(iLoop) = True then iLoop = 1
     For i = 1 to iLoop
     Select Case Ucase(gApplication)
@@ -86,9 +87,41 @@ If IsMissing(iLoop) = True then iLoop = 1
         DocumentWriterWeb.TypeKeys OutputText
 
         case "DRAW"
-        Call hTextrahmenErstellen (OutputText,10,10,50,20)
+        Call hTextrahmenErstellen (OutputText,35,35,50,20)
         case "IMPRESS"
-        Call hTextrahmenErstellen (OutputText,10,10,50,20)
+        Call hTextrahmenErstellen (OutputText,35,35,50,20)
+
+    end select
+    wait 500
+    next i
+end sub
+
+' -----------------------------------------------------------------------
+
+sub wTypeKeys ( OutputText , optional iLoop as Integer )
+Dim i as integer
+If lcase(OutputText) = "<mod1 a>" then
+    If iSprache = 34 then OutputText = "<Mod1 E>"
+end if
+If IsMissing(iLoop) = True then iLoop = 1
+    For i = 1 to iLoop
+    Select Case Ucase(gApplication)
+        Case "WRITER"
+        Kontext "DocumentWriter"
+        DocumentWriter.TypeKeys OutputText
+
+        Case "MASTERDOC"
+        Kontext "DocumentMasterDoc"
+        DocumentMasterDoc.TypeKeys OutputText
+
+        Case "HTMLDOKUMENT"
+        Kontext "DocumentWriterWeb"
+        DocumentWriterWeb.TypeKeys OutputText
+
+        case "DRAW"
+        Call hTextrahmenErstellen (OutputText,35,35,50,20)
+        case "IMPRESS"
+        Call hTextrahmenErstellen (OutputText,35,35,50,20)
 
     end select
     wait 500
@@ -127,7 +160,7 @@ end sub
 ' -----------------------------------------------------------------------
 
 function wBlindtextEinfuegen() as boolean 
-    '/// This functions inserts a Dummytext and returns true if it was inserted    
+    '/// This functions inserts a Dummytext and returns true if it was inserted
     Dim BlindText as string, bTemp as boolean
     bTemp = False
     select case iSprache
@@ -151,7 +184,7 @@ function wBlindtextEinfuegen() as boolean
     end select
 
     if BlindText > "" then
-        Call wDokSchreiben BlindText
+        Call wTypeKeys BlindText
         Kontext "Active"
         if Active.Exists then
             if Active.GetRT = 304 then
@@ -159,13 +192,13 @@ function wBlindtextEinfuegen() as boolean
                 Active.Ok
             else
                 bTemp = True 
-            endif
+            end if
         else
             bTemp = True
-        endif
-    endif
-        
-    wBlindtextEinfuegen = bTemp        
+        end if
+    end if
+
+    wBlindtextEinfuegen = bTemp
 
 end function
 
@@ -189,7 +222,7 @@ sub wZeichenobjektEinfuegen ( Objekt$, xStart%, yStart%, xEnde%, yEnde%, optiona
         catch
             if gAsianSup = True then
                 Warnlog "Unable to insert Vertical Text! Asian Support in Options activated ?"
-            endif
+            end if
         endcatch
         case "LAUFTEXT" : Lauftext.Click
         case "LEGENDE"  : Legende.Click
@@ -213,7 +246,7 @@ sub wZeichenobjektEinfuegen ( Objekt$, xStart%, yStart%, xEnde%, yEnde%, optiona
              Drawbar.Close
          else
              if sCloseToolbar = true then Drawbar.Close
-         endif
+         end if
          if Objekt <> "TEXT" and Objekt <> "VTEXT" then
              Kontext "DocumentWriter"
              Call gMouseClick (1, 1)
@@ -231,7 +264,7 @@ sub wZeichenobjektEinfuegen ( Objekt$, xStart%, yStart%, xEnde%, yEnde%, optiona
              Drawbar.Close
          else
              if sCloseToolbar = true then Drawbar.Close
-         endif
+         end if
          if Objekt <> "TEXT" and Objekt <> "VTEXT" then
              Kontext "DocumentMasterDoc"
              Call gMouseClick (1, 1)
@@ -330,7 +363,7 @@ function WortAusWoerterbuchLoeschen ( Aufnahme$ ) as Boolean
             Entfernen.Click
             WortAusWoerterbuchLoeschen = TRUE
             i = AnzahlBuecher + 1
-        endif
+        end if
   next i
   if WortAusWoerterbuchLoeschen = FALSE then Warnlog "The added word has not been found in modules"
   BenutzerwoerterbuchBearbeiten.Close
@@ -370,16 +403,16 @@ function wIgnorierenlisteLoeschen
                         if Active.Exists then
                             Warnlog Active.Gettext
                             Active.Ok
-                        endif
+                        end if
                         Kontext "BenutzerwoerterbuchBearbeiten"
                         BenutzerwoerterbuchBearbeiten.Cancel
                         sleep 1
                         j=101
-                    endif
+                    end if
                     wait 500
                 next j
                 i=AlleBuecher + 1
-            endif
+            end if
     next i
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
@@ -401,7 +434,7 @@ sub hLeisteUmschalten(welche as integer)
             Kontext "TextObjectbar"
         else
             Kontext "TextObjectbar"
-        endif
+        end if
         Sleep 1
         try
             Fett.Click    ' Sonst sind Comboboxen fȭr Testtool nicht sichtbar
@@ -531,7 +564,7 @@ sub wNavigatorAuswahl(Gruppe as integer, Eintrag as integer,optional LeaveFocus 
                 Kontext "GlobaldokumentToolbox"
                 Umschalten.Click
                 Kontext "NavigatorWriter"
-            endif
+            end if
             MinEntrys = 11
         Case Else ' for all others!!!!
             Warnlog "Not supported application!"
@@ -548,7 +581,7 @@ sub wNavigatorAuswahl(Gruppe as integer, Eintrag as integer,optional LeaveFocus 
                 Liste.Select j
                 Liste.TypeKeys "-"
             next j
-        endif
+        end if
 
         Liste.Select Gruppe
         if Eintrag >0 then
@@ -556,7 +589,7 @@ sub wNavigatorAuswahl(Gruppe as integer, Eintrag as integer,optional LeaveFocus 
           Liste.TypeKeys "+"
           Liste.Select WelcherEintrag
           Liste.TypeKeys "<Return>"
-        endif
+        end if
 
         Case "WRITER","HTMLDOKUMENT", "HTML"
         if (Auswahlliste.GetItemCount < MinEntrys) then
@@ -564,13 +597,13 @@ sub wNavigatorAuswahl(Gruppe as integer, Eintrag as integer,optional LeaveFocus 
                 Inhaltsansicht.Click
             catch
             endcatch
-        endif
+        end if
         if Auswahlliste.GetItemCount >MinEntrys then
             For j= 1 to 12
                 Auswahlliste.Select j
                 Auswahlliste.TypeKeys "-"
             next j
-        endif
+        end if
 
         Auswahlliste.Select Gruppe
         if Eintrag >0 then
@@ -578,19 +611,19 @@ sub wNavigatorAuswahl(Gruppe as integer, Eintrag as integer,optional LeaveFocus 
             Auswahlliste.TypeKeys "+"
             Auswahlliste.Select WelcherEintrag
             Auswahlliste.TypeKeys "<Return>"
-        endif
+        end if
 
         Case "MASTERDOC"
         if Liste.IsVisible = True then
             Umschalten.Click
-        endif
+        end if
 
         if Auswahlliste.GetItemCount >MinEntrys then
              For j= 1 to 12
                  Auswahlliste.Select j
                  Auswahlliste.TypeKeys "-"
             next j
-        endif
+        end if
 
         Auswahlliste.Select Gruppe
         if Eintrag >0 then
@@ -598,7 +631,7 @@ sub wNavigatorAuswahl(Gruppe as integer, Eintrag as integer,optional LeaveFocus 
             Auswahlliste.TypeKeys "+"
             Auswahlliste.Select WelcherEintrag
             Auswahlliste.TypeKeys "<Return>"
-        endif
+        end if
     end select
 
     if LeaveFocus = False then
@@ -612,7 +645,7 @@ sub wNavigatorAuswahl(Gruppe as integer, Eintrag as integer,optional LeaveFocus 
             Case "MASTERDOC"
                 Kontext "DocumentMasterDoc"
         end select
-    endif
+    end if
 end sub
 
 ' ---------------------------------------------------------------
@@ -632,14 +665,14 @@ end function
 sub wClearDocument
     Dim i as integer : Dim j as integer
     '/// Remove all Text, Drawing-objects or Objects from document ///
-    Call wDokSchreiben "<PageUp><Home>"
-    Call wDokSchreiben "<Backspace>",5
-    DocumentWriter.MouseDown ( 10,10 )
+    Call wTypeKeys "<PageUp><Home>"
+    Call wTypeKeys "<Backspace>",5
+    DocumentWriter.MouseDown ( 30,30 )
     DocumentWriter.MouseMove ( 75,60 )
     wait 500
     DocumentWriter.MouseUp ( 75, 60 )
     Sleep 1
-    Call wDokSchreiben "<Delete>"
+    Call wTypeKeys "<Delete>"
     Sleep 3
 
     Kontext "NavigatorWriter"
@@ -654,7 +687,7 @@ sub wClearDocument
             Auswahlliste.Select j
             Auswahlliste.TypeKeys "-"
         next j
-    endif
+    end if
     wait 500
     for i = 1 to 12
         Auswahlliste.Select i
@@ -666,7 +699,7 @@ sub wClearDocument
                 wait 500
                 if Auswahlliste.GetItemCount > 11 then Auswahlliste.Select i
             next j
-        endif
+        end if
     next i
     if j= 5 then Warnlog "Try another way to clear page !"
 
@@ -679,14 +712,14 @@ sub wClearDocument
     endcatch
 
     try
-        Call wDokSchreiben "<Mod1 A>"
+        Call wTypeKeys "<Mod1 A>"
     catch
     endcatch
-    Call wDokSchreiben "<Delete>"
+    Call wTypeKeys "<Delete>"
     DocumentWriter.MouseDown ( 50,10 )
     DocumentWriter.MouseUp ( 50,10 )
     Sleep 2
-    Call wDokSchreiben "<Home><PageUp>"
+    Call wTypeKeys "<Home><PageUp>"
     Sleep 5
 end sub
 
@@ -704,8 +737,8 @@ sub wMarkObjects(delete as boolean)
     end select
 
     Call gMouseClick 50,50
-    Call wDokSchreiben "<PageUp><Home>"
-    Call wDokSchreiben "<Backspace>",5
+    Call wTypeKeys "<PageUp><Home>"
+    Call wTypeKeys "<Backspace>",5
     Call gMouseClick 50,50
     Select Case gApplication
         Case "WRITER"
@@ -715,14 +748,14 @@ sub wMarkObjects(delete as boolean)
             DocumentMasterDoc.TypeKeys "<Shift F4>"
 
         Case "HTMLDOKUMENT"
-            DocumentWriterWeb.TypeKeys "<Shift F4>"        
+            DocumentWriterWeb.TypeKeys "<Shift F4>"
     end select
 
     Sleep 1
     if delete = TRUE then
-        Call wDokSchreiben "<Delete>"
+        Call wTypeKeys "<Delete>"
         Sleep 3
-    endif
+    end if
 end sub
 
 ' -----------------------------------------------------------------------
@@ -746,7 +779,7 @@ sub hExportUmstellung ( WasDenn as Boolean )
         end if
         Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.OK
-    endif
+    end if
 end sub
 
 ' -----------------------------------------------------------------------
@@ -801,7 +834,7 @@ sub wRectangleToClipboard
     tempApplication = gApplication
     gApplication = "DRAW"
     Call hNewDocument
-    Call hRechteckErstellen ( 20, 20, 30, 30 )
+    Call hRechteckErstellen ( 45, 45, 60, 60 )
     ' select the drawn object
     try
         EditSelectAll
@@ -831,7 +864,7 @@ end sub
 sub wRectangleToClipboardHTML
     gApplication = "DRAW"
     Call hNewDocument
-    Call hRechteckErstellen ( 20, 20, 30, 30 )
+    Call hRechteckErstellen ( 45, 45, 60, 60 )
     EditSelectAll
     EditCopy
     Call hCloseDocument
@@ -843,9 +876,9 @@ end sub
 ' -----------------------------------------------------------------------
 
 function MachMirDenEintrag(WoDenn as integer,WieLang as integer, optional Welches as string)
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<Down>",WoDenn
-    Call wDokSchreiben "<Mod1 Shift Right>" , WieLang
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<Down>",WoDenn
+    Call wTypeKeys "<Mod1 Shift Right>" , WieLang
     Kontext "VerzeichniseintragEinfuegen"
     if Welches > "" then
         Select case Welches
@@ -853,7 +886,7 @@ function MachMirDenEintrag(WoDenn as integer,WieLang as integer, optional Welche
             case "Stich"  : Verzeichnis.Select 2
             case "Benutz" : Verzeichnis.Select 3
         end select
-    endif
+    end if
     Verzeichniseintrag.TypeKeys "<Up>"
     Wait 500
     EintragOk.Click
@@ -871,14 +904,14 @@ sub wOptionenUndo ( sOption$ )
     Kontext "ExtrasOptionenDlg"
     if Not ExtrasOptionenDlg.Exists then
         ToolsOptions
-    endif
+    end if
 
     Call hToolsOptions("Textdocument","General")
     if Instr(Tabulatorenabstand.Gettext, ",") then
         sTempSeparator = ","
     else
         sTempSeparator = "."
-    endif
+    end if
     sTempUnit = Masseinheit.GetSelIndex
     
     if sOption$ = "Laden" OR sOption$ = "Alle" then
@@ -898,7 +931,7 @@ sub wOptionenUndo ( sOption$ )
                 Tabulatorenabstand.Settext "2" & sTempSeparator & "95"
             Case 5:     ' Point
                 Tabulatorenabstand.Settext "35" & sTempSeparator & "5"
-        end select                    
+        end select
     end if
 
     Call hToolsOptions("Textdocument","View")
@@ -963,7 +996,7 @@ sub wOptionenUndo ( sOption$ )
             Case 5:     ' Point
                 RasterAufloesungXAchse.SetText "28" & sTempSeparator & "3"
                 RasterAufloesungYAchse.SetText "28" & sTempSeparator & "3"
-        end select                            
+        end select
         RasterUnterteilungXAchse.ToMin
         RasterUnterteilungXAchse.More 1
         RasterUnterteilungYAchse.ToMin
@@ -1037,7 +1070,7 @@ sub wOptionenUndo ( sOption$ )
                 VerschiebenSpalte.SetText "14" & sTempSeparator & "2"
                 EinfuegenZeile.SetText "14" & sTempSeparator & "2"
                 EinfuegenSpalte.SetText "70" & sTempSeparator & "9"
-        end select                                    
+        end select
         Sleep 1
         ' Behaviour of rows/columns
         Variabel.Check
@@ -1063,11 +1096,11 @@ sub wOptionenUndo ( sOption$ )
 			ObjectList.Select i
 			ObjectList.UnCheck
 		next i
-	endif	
-	
+	end if	
+
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-    
+
     Call hCloseDocument
 end sub
 
@@ -1076,8 +1109,8 @@ end sub
 function wInsertDocumentinMasterDoc(DocumentName as string) as boolean
     Call hNewDocument
     Call hFileOpen(DocumentName)
-    Sleep 5
-    Call wDokSchreiben "<Mod1 A>"
+    Sleep 2
+    Call wTypeKeys "<Mod1 A>"
     Sleep 2
     EditCopy
     Call hCloseDocument
@@ -1120,11 +1153,11 @@ function CheckForFilters() as boolean
             else
                 Warnlog "- Reselecting the graphic didn't enable the button in the toolbar! No further test!"
                 CheckForFilters = False
-            endif
-        endif
+            end if
+        end if
     else
         CheckForFilters=True
-    endif
+    end if
     Kontext "GraphicFilterBar"
 end function
 
@@ -1183,8 +1216,8 @@ function wStyleCreate( sStyleName as string, sType as string, optional NotFromSe
             VorlagenName.SetText sStyleName
             wait 500
             TabVerwalten.OK
-        endif
-    endif
+        end if
+    end if
 
 	Kontext "Stylist"
       
@@ -1192,7 +1225,7 @@ function wStyleCreate( sStyleName as string, sType as string, optional NotFromSe
         wStyleCreate = False
     else
         wStyleCreate = True
-    endif
+    end if
 	Stylist.Close
 end function
 
@@ -1211,7 +1244,7 @@ function wStyleSelect( sStyleName as string, optional sType as string ) as boole
     Gruppenliste.Select 2	'-> 'All Styles' has to be selected
     wait 500
     if IsMissing (sType) then
-	    Absatzvorlagen.Click    
+	    Absatzvorlagen.Click
     else
         select case sType
             case "Paragraph":	Absatzvorlagen.Click
@@ -1220,7 +1253,7 @@ function wStyleSelect( sStyleName as string, optional sType as string ) as boole
             case "Page":		Seitenvorlagen.Click
             case "Numbering":	Numerierungsvorlagen.Click
         end select
-    endif
+    end if
     
 	Sleep 1
     Vorlagenliste.Select 1
@@ -1232,12 +1265,12 @@ function wStyleSelect( sStyleName as string, optional sType as string ) as boole
 				i = 202
             else
                 Vorlagenliste.TypeKeys "<Down>"
-            endif
+            end if
 		next i
 		if i = 202 then wStyleSelect = true
 	else
 		wStyleSelect = true
-	endif
+	end if
 
 end function
 
@@ -1274,11 +1307,11 @@ function wStyleDelete ( sStyleName as string, sType as string ) as boolean
                     if Active.GetRT = 304 then
                         Active.Yes
 						i = 203
-                    endif
-                endif
+                    end if
+                end if
 			else
                 Vorlagenliste.TypeKeys "<Down>"
-            endif			
+            end if
 		next i
 		if i = 204 then wStyleDelete = true
 	else
@@ -1290,10 +1323,10 @@ function wStyleDelete ( sStyleName as string, sType as string ) as boolean
         if Active.Exists then
             if Active.GetRT = 304 then
                 Active.Yes
-            endif
-        endif
+            end if
+        end if
         wStyleDelete = true
-	endif
+	end if
 
 end function
 
@@ -1312,7 +1345,7 @@ function wStyleSet( sStyleName as string, optional sType as string ) as boolean
     Gruppenliste.Select 2	'-> 'All Styles' has to be selected
     wait 500
     if IsMissing (sType) then
-	    Absatzvorlagen.Click    
+	    Absatzvorlagen.Click
     else
         select case sType
             case "Paragraph":	Absatzvorlagen.Click
@@ -1321,7 +1354,7 @@ function wStyleSet( sStyleName as string, optional sType as string ) as boolean
             case "Page":		Seitenvorlagen.Click
             case "Numbering":	Numerierungsvorlagen.Click
         end select
-    endif
+    end if
     
 	Sleep 1
     Vorlagenliste.Select 1
@@ -1334,11 +1367,11 @@ function wStyleSet( sStyleName as string, optional sType as string ) as boolean
 				exit for
             else
                 Vorlagenliste.TypeKeys "<Down>"
-            endif
+            end if
 		next i
 	else
 		wStyleSet = true
-	endif
+	end if
 
 end function
 
@@ -1357,7 +1390,7 @@ function wStyleGet( sStyleName as string, optional sType as string ) as boolean
     Gruppenliste.Select 2	'-> 'All Styles' has to be selected
     wait 500
     if IsMissing (sType) then
-	    Absatzvorlagen.Click    
+	    Absatzvorlagen.Click
     else
         select case sType
             case "Paragraph":	Absatzvorlagen.Click
@@ -1366,12 +1399,12 @@ function wStyleGet( sStyleName as string, optional sType as string ) as boolean
             case "Page":		Seitenvorlagen.Click
             case "Numbering":	Numerierungsvorlagen.Click
         end select
-    endif
+    end if
     
     wait 500
 	if Vorlagenliste.GetSelText = sStyleName then
 		wStyleGet = true
-	endif
+	end if
 
 end function
 
