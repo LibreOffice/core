@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: hhConversion3.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:54 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:30:14 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -66,7 +66,7 @@ testcase tHHOptions_1
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
   '/// + there should be no entries in User defined dictionaries
@@ -107,7 +107,7 @@ testcase tHHOptions_2
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
   '/// + then press new button , enter 1 new dictionar name ,
@@ -186,7 +186,7 @@ testcase tHHOptions_3
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese characters
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
   '/// + then press new button , enter 1 new dictionary name ,
@@ -247,7 +247,7 @@ testcase tHHOptions_4
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
   '/// + then press new button , enter 1 new dictionar name ,
@@ -311,7 +311,7 @@ testcase tHHOptions_5
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
   '/// + then press new button , insert 2 new dictionaries
@@ -383,7 +383,7 @@ testcase tHHOptions_6
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
   '/// + then press new button , insert 1 new dictionary
@@ -491,7 +491,7 @@ testcase tHHOptions_7
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
   '/// + then press new button , insert 1 new dictionary
@@ -596,7 +596,7 @@ testcase tHHOptions_8
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
   '/// + then press new button , insert 1 new dictionary
@@ -683,7 +683,7 @@ testcase tHHOptions_9
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
   '/// + then press new button , insert 1 new dictionary
@@ -766,7 +766,7 @@ testcase tHHOptions_10
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
   '/// + then press new button , insert 1 new dictionary
@@ -851,7 +851,7 @@ testcase tHHOptions_11
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
   '/// + then press new button , insert 1 new dictionary
@@ -931,7 +931,7 @@ testcase tHHOptions_12
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
   '/// + then press new button , insert 1 new dictionary

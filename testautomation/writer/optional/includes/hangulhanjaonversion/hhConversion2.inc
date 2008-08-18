@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: hhConversion2.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:54 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:30:03 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -84,7 +84,7 @@ testcase tHHConversion_1
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion ,
   '/// + Press Peplace button
@@ -99,8 +99,8 @@ testcase tHHConversion_1
      next i
 
   '/// Check if the result is correct
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    Sleep 1
    if GetClipboardText <> sResult then
@@ -130,7 +130,7 @@ testcase tHHConversion_2
   '/// Open a test file , which includes some
   '/// + Chinese character and Korean chacters
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , check hanja only .
   '/// + Press Peplace button
@@ -146,8 +146,8 @@ testcase tHHConversion_2
      next i
 
   '/// Check if the result is correct
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    Sleep 1
    if GetClipboardText <> sResult then
@@ -178,7 +178,7 @@ testcase tHHConversion_3
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , check Hanja(Hangul)
   '/// + Press Peplace button
@@ -195,8 +195,8 @@ testcase tHHConversion_3
      next i
 
   '/// Check if the result is correct
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    Sleep 1
    if GetClipboardText <> sResult then
@@ -227,7 +227,7 @@ testcase tHHConversion_4
   '/// Open a test file , which includes some
   '/// + Chinese character and Korean chacters
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , check Hanja(Hangul).
   '/// + Press Peplace button
@@ -244,8 +244,8 @@ testcase tHHConversion_4
      next i
 
   '/// Check if the result is correct
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    Sleep 1
    if GetClipboardText <> sResult then
@@ -276,7 +276,7 @@ testcase tHHConversion_5
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , check Hangul(Hanja) ,
   '/// + Press Peplace button
@@ -293,8 +293,8 @@ testcase tHHConversion_5
      next i
 
   '/// Check if the result is correct
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    Sleep 1
    if GetClipboardText <> sResult then
@@ -326,7 +326,7 @@ testcase tHHConversion_6
   '/// Open a test file , which includes some
   '/// + Chinese character and Korean chacters
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , check Hangul(Hanja),
   '/// + Press Peplace button
@@ -343,8 +343,8 @@ testcase tHHConversion_6
      next i
 
   '/// Check if the result is correct
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    Sleep 1
    if GetClipboardText <> sResult then
@@ -376,7 +376,7 @@ testcase tHHConversion_7
 
   '/// Open a test file , which includes some Korean chacters
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hanja As Ruby Above Hangul' ,
   '/// + press Peplace button
@@ -388,7 +388,7 @@ testcase tHHConversion_7
      Sleep 1
    HangulHanjaConversion.Close
 
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
   '/// Format/Ruby , check if the result is correct
    FormatRuby
    Kontext "RubyDialog"
@@ -433,7 +433,7 @@ testcase tHHConversion_8
 
   '/// Open a test file , which includes some Chinese chacters
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hanja As Ruby Above Hangul' ,
   '/// + press Peplace button
@@ -445,7 +445,7 @@ testcase tHHConversion_8
      Sleep 1
    HangulHanjaConversion.Close
 
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
   '/// Format/Ruby , check if the result is correct
    FormatRuby
    Kontext "RubyDialog"
@@ -490,7 +490,7 @@ testcase tHHConversion_9
 
   '/// Open a test file , which includes some Korean chacters
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hanja As Ruby Below Hangul' ,
   '/// + press Peplace button
@@ -502,7 +502,7 @@ testcase tHHConversion_9
      Sleep 1
    HangulHanjaConversion.Close
 
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
   '/// Format/Ruby , check if the result is correct
    FormatRuby
    Kontext "RubyDialog"
@@ -547,7 +547,7 @@ testcase tHHConversion_10
 
   '/// Open a test file , which includes some Chinese chacters
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hanja As Ruby Below Hangul' ,
   '/// + press Peplace button
@@ -559,7 +559,7 @@ testcase tHHConversion_10
      Sleep 1
    HangulHanjaConversion.Close
 
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
   '/// Format/Ruby , check if the result is correct
    FormatRuby
    Kontext "RubyDialog"
@@ -604,7 +604,7 @@ testcase tHHConversion_11
 
   '/// Open a test file , which includes some Korean chacters
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hangul As Ruby Above Hanja' ,
   '/// + press Peplace button
@@ -616,7 +616,7 @@ testcase tHHConversion_11
      Sleep 1
    HangulHanjaConversion.Close
 
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
   '/// Format/Ruby , check if the result is correct
    FormatRuby
    Kontext "RubyDialog"
@@ -661,7 +661,7 @@ testcase tHHConversion_12
 
   '/// Open a test file , which includes some Chinese chacters
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hangul As Ruby Above Hanja' ,
   '/// + press Peplace button
@@ -673,7 +673,7 @@ testcase tHHConversion_12
      Sleep 1
    HangulHanjaConversion.Close
 
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
   '/// Format/Ruby , check if the result is correct
    FormatRuby
    Kontext "RubyDialog"
@@ -718,7 +718,7 @@ testcase tHHConversion_13
 
   '/// Open a test file , which includes some Korean chacters
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hangul As Ruby Below Hanja' ,
   '/// + press Peplace button
@@ -730,7 +730,7 @@ testcase tHHConversion_13
      Sleep 1
    HangulHanjaConversion.Close
 
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
   '/// Format/Ruby , check if the result is correct
    FormatRuby
    Kontext "RubyDialog"
@@ -775,7 +775,7 @@ testcase tHHConversion_14
 
   '/// Open a test file , which includes some Chinese chacters
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , check 'Hangul As Ruby Below Hanja' ,
   '/// + press Peplace button
@@ -787,7 +787,7 @@ testcase tHHConversion_14
      Sleep 1
    HangulHanjaConversion.Close
 
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
   '/// Format/Ruby , check if the result is correct
    FormatRuby
    Kontext "RubyDialog"
@@ -827,7 +827,7 @@ testcase tHHConversion_15
   '/// Open a test file , which includes some Korean chacters .
   '/// + Set focus before Korean character
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion ,
   '/// + 'Hangul Only' should be active and Unchecked,
@@ -872,7 +872,7 @@ testcase tHHConversion_16
   '/// Open a test file , which includes some Chinese chacters .
   '/// + Set focus before Chinese character
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion ,
   '/// + 'Hanja Only' should be active and Unchecked,
@@ -920,7 +920,7 @@ testcase tHHConversion_17
 
   '/// Open a test file , which includes some Korean chacters .
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , press Ignore ,
   '/// + next word should be selected for conversion.
@@ -935,8 +935,8 @@ testcase tHHConversion_17
      Sleep 1
    HangulHanjaConversion.Close
 
-   Call wDokSchreiben "<Home>"
-   Call wDokSchreiben "<Shift Right>" , 4
+   Call wTypeKeys "<Home>"
+   Call wTypeKeys "<Shift Right>" , 4
    EditCopy
    if GetClipboardText <> sResult then
        Warnlog "Should get " & sResult & " but get " & GetClipboardText
@@ -968,7 +968,7 @@ testcase tHHConversion_18
   '/// Open a test file , which includes some Chinese chacters =>.
   '/// + 山下  上山下乡   山下
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , press Always Ignore ,
   '/// + (here, 山下 should be selected) , then press Replace
@@ -985,8 +985,8 @@ testcase tHHConversion_18
      next i
 
   '/// The result should be only 黄河 and 上山下 are converted
-   Call wDokSchreiben "<Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    if GetClipboardText <> sResult then
        Warnlog "Should get " & sResult & " but get " & GetClipboardText
@@ -999,7 +999,7 @@ testcase tHHConversion_18
 
   '/// Reopen the test file
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion ,
   '/// + ,(here,  黄河 should be selected)
@@ -1018,8 +1018,8 @@ testcase tHHConversion_18
      next i
 
   '/// The result should be only 黄河 and 上山下 are converted
-   Call wDokSchreiben "<Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    if GetClipboardText <> sResult then
        QAErrorlog "#i39308# Should get " & sResult & " but get " & GetClipboardText
@@ -1047,7 +1047,7 @@ testcase tHHConversion_19
   '/// Open a test file , which includes some Chinese chacters =>.
   '/// + 山下  上山下乡   山下
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , press Always Ignore ,
   '/// + (here, 山下 should be selected)
@@ -1070,7 +1070,7 @@ testcase tHHConversion_19
   Call hNewDocument
   '/// Reopen the test file
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , 山下 should be selcted
    ToolsLanguageHangulHanjaConversion
@@ -1106,7 +1106,7 @@ testcase tHHConversion_20
 
   '/// Open a test file , which includes some Korean chacters
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , select a word in selection
   '/// + then press Replace button
@@ -1132,8 +1132,8 @@ testcase tHHConversion_20
     next i
 
     '/// Check if the result is right
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     if GetClipboardText <> sResult then
         Warnlog "Should get " & sResult & " but get " & GetClipboardText
@@ -1169,7 +1169,7 @@ testcase tHHConversion_21
 
   '/// Open a test file , which includes some Korean chacters
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , select a word in selection,
   '/// + press 'always replace' , then press Replace button
@@ -1196,8 +1196,8 @@ testcase tHHConversion_21
     next i
 
     '/// Check if the result is right
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     Sleep 1
     if GetClipboardText <> sResult then
@@ -1211,7 +1211,7 @@ testcase tHHConversion_21
 
     '/// Reopen this test file
     Call hFileOpen(sTestFile)
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
 
     '/// Tools / HangulHanjaConversion
     ToolsLanguageHangulHanjaConversion
@@ -1231,8 +1231,8 @@ testcase tHHConversion_21
     next i
 
     '/// Check if the result is right
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<Shift End>"
     GetClipboardText = ""
     EditCopy
     Sleep 1
@@ -1262,7 +1262,7 @@ testcase tHHConversion_22
 
     '/// Open a test file , which includes some Korean chacters
     Call hFileOpen(sTestFile)
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
 
     '/// Tools / HangulHanjaConversion , select a word in selection,
     '/// + press 'always replace' , then press Replace button
@@ -1291,7 +1291,7 @@ testcase tHHConversion_22
     Call hNewDocument
   	'/// Reopen this test file
    	Call hFileOpen(sTestFile)
-   	Call wDokSchreiben "<Home>"
+   	Call wTypeKeys "<Home>"
 
 	'/// Tools / HangulHanjaConversion
     ToolsLanguageHangulHanjaConversion
@@ -1300,7 +1300,7 @@ testcase tHHConversion_22
 	   	HangulHanjaConversion.Close
 	else
 		Warnlog "Replace list is active after office-restart"	
-	endif
+	end if
 
     Call hCloseDocument
 
@@ -1327,7 +1327,7 @@ testcase tHHConversion_23
     
     '/// Open a test file , which includes some Korean chacters
     Call hFileOpen(sTestFile)
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
 
     '/// Tools / HangulHanjaConversion , select a word in selection,
     '/// + press 'always replace' , then press Replace button
@@ -1345,7 +1345,7 @@ testcase tHHConversion_23
 	    	endcatch
 		else
 			Ignore.Click
-		endif
+		end if
 	next i
     Sleep 1
     AlwaysReplace.Click
@@ -1359,8 +1359,8 @@ testcase tHHConversion_23
     next i
 
     '/// Check if the result is right
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     if GetClipboardText <> sResult then
         Warnlog "Should get " & sResult & " but get " & GetClipboardText
@@ -1389,7 +1389,7 @@ testcase tHHConversion_24
 
   '/// Open a test file , which includes some Korean chacters
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , the default for 'Replace by character'
   '/// + is OFF . Check 'Replace by character' , then press Replace button
@@ -1409,8 +1409,8 @@ testcase tHHConversion_24
      next i
 
   '/// Check if the result is right
-   Call wDokSchreiben "<Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    if GetClipboardText <> sResult then
        Warnlog "Should get " & sResult & " but get " & GetClipboardText
@@ -1441,7 +1441,7 @@ testcase tHHConversion_25
   '/// Open a test file , which includes some Chinese chacters =>.
   '/// + 山下  上山下乡   山下
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion , Check 'Replace by character' ,
   '/// + press Always Ignore ,  then press Replace
@@ -1460,8 +1460,8 @@ testcase tHHConversion_25
      next i
 
   '/// The result should be only 黄河 and 上山下 are converted
-   Call wDokSchreiben "<Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    if GetClipboardText <> sResult then
        Warnlog "Should get " & sResult & " but get " & GetClipboardText
@@ -1502,7 +1502,7 @@ testcase tHHConversion_26
 
   '/// Open a test file , which includes some Korean chacters
    Call hFileOpen(sTestFile)
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
   '/// Tools / HangulHanjaConversion ,  Check 'Replace by character' ,
   '/// + select a word in selection, press 'always replace' ,
@@ -1524,8 +1524,8 @@ testcase tHHConversion_26
      next i
 
   '/// Check if the result is right
-   Call wDokSchreiben "<Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    if GetClipboardText <> sResult then
        Warnlog "Should get " & sResult & " but get " & GetClipboardText
