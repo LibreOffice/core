@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saltimer.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,6 +107,7 @@ void AquaSalTimer::handleStartTimerEvent( NSEvent* pEvent )
         NSTimeInterval current = [NSDate timeIntervalSinceReferenceDate];
         if( (posted - current) <= 0.0 )
         {
+            YIELD_GUARD;
             // timer already elapsed since event posted
             pSVData->mpSalTimer->CallCallback();
         }
