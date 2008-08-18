@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_issuezilla_regression.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:57 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:34:41 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -134,7 +134,7 @@ testcase i64991
         if Not Quer.IsChecked then Warnlog "#i64991#Setting a printer make the page styles to be lost"
         TabSeite.Cancel
 
-        Call wDokSchreiben ("<Down>")
+        Call wTypeKeys ("<Down>")
 
         '/// check if page layout on second page is still portrait
         printlog "Check layout on second page"
@@ -205,7 +205,7 @@ testcase i69045
     '/// Enable redlining
     EditChangesRecord
     '/// Change document
-    Call wDokSchreiben "Here are some changes"
+    Call wTypeKeys "Here are some changes"
     '/// Save document as "..\user\work\i65094compare.odt and close it
     Call hFileSaveAsKill (gOfficepath & "user\work\i69045.odt")
     Call hCloseDocument
@@ -279,9 +279,9 @@ testcase i75027
     '/// New HTML Document
     Call hNewDocument
     '/// type 'This<BR>is<BR>a numbering<BR>test'
-    Call wDokSchreiben ("This<Return>is<Return>a numbering<Return>test")
+    Call wTypeKeys ("This<Return>is<Return>a numbering<Return>test")
     '/// Select all paragraphs
-    Call wDokSchreiben ("<Mod1 A>")     
+    Call wTypeKeys ("<Mod1 A>")     
     '/// Format with simple numbering
     Kontext "TextObjectbar"
     if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )
@@ -291,9 +291,9 @@ testcase i75027
     '/// move "a numbering" to numbering level 3
     '/// move "test" to numbering level 4  
     printlog "- create numbering"
-    Call wDokSchreiben ("<Mod1 Home>"    
+    Call wTypeKeys ("<Mod1 Home>"    
     for i = 1 to 3    
-        Call wDokSchreiben ("<Down>")
+        Call wTypeKeys ("<Down>")
         Kontext "NumObjectbar"
         if Not NumObjectbar.Exists then Call hToolbarSelect("BULLETSANDNUMBERING", true)
         for j = 1 to 1 + i
@@ -306,7 +306,7 @@ testcase i75027
     '///        1. a numbering
     '///            1. test
     printlog "- check numbering"
-    Call wDokSchreiben ( "<MOD1 A>" )
+    Call wTypeKeys ( "<MOD1 A>" )
     EditCopy
     Select Case gPlatGroup
         Case "unx"
@@ -333,7 +333,7 @@ testcase i75027
     Call hFileOpen (gOfficepath & "user\work\i75027.html")
     '/// Check that the numbering is still the same.
     printlog "- check numbering (previous saved)"
-    Call wDokSchreiben ( "<MOD1 A>" )
+    Call wTypeKeys ( "<MOD1 A>" )
     EditCopy
     Select Case gPlatGroup
         Case "unx"
@@ -406,14 +406,14 @@ testcase i88656
     printlog " Open a new writerdocument."
     Call hNewDocument
     printlog "Write the forrlowing text into the document: This is a test-text to be autoformatted."
-    wDokSchreiben ("This is a test-text to be autoformatted.")
+    wTypeKeys ("This is a test-text to be autoformatted.")
 
     'Without text selected.
     printlog "Use the menu: Format - Autoformat - Apply and Edit Changes."
     FormatAutoformatApplyAndEditChanges
 
     printlog "Press SHIFT + HOME. To select the text we just wrote."
-    wDokSchreiben ("SHIFT HOME")
+    wTypeKeys ("SHIFT HOME")
 
     'with text selected
     printlog "Again, but with the text selected; use the menu: Format - Autoformat - Apply and Edit Changes."
