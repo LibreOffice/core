@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salplug.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -477,11 +477,15 @@ SalInstance *CreateSalInstance()
 
     if( ! pInst )
     {
+        /* #i92121# workaround deadlocks in the X11 implementation
+        */
+        static const char* pNoXInitThreads = getenv( "SAL_NO_XINITTHREADS" );
         /* #i90094#
            from now on we know that an X connection will be
            established, so protect X against itself
         */
-        XInitThreads();
+        if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
+            XInitThreads();
     }
 
     if( ! pInst && !(pUsePlugin && *pUsePlugin) )
