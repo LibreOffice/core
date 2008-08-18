@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.21 $
+# $Revision: 1.22 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,7 +54,7 @@ TARFILE_ROOTDIR=hsqldb
 
 CONVERTFILES=build$/build.xml
 
-PATCH_FILE_NAME=patches$/accumulated_patches.patch
+# PATCH_FILE_NAME=patches$/accumulated_patches.patch
 
 # ADDITIONAL_FILES=   src$/org$/hsqldb$/Collation.java \
 #                     src$/org$/hsqldb$/TxManager.java \
