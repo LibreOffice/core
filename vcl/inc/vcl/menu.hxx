@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: menu.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -420,6 +420,7 @@ public:
     BOOL                HandleMenuDeActivateEvent( Menu *pMenu ) const;
     BOOL                HandleMenuHighlightEvent( Menu *pMenu, USHORT nEventId ) const;
     BOOL                HandleMenuCommandEvent( Menu *pMenu, USHORT nEventId ) const;
+    BOOL                HandleMenuButtonEvent( Menu *pMenu, USHORT nEventId ) const;
 
     void                SetCloserHdl( const Link& rLink )           { maCloserHdl = rLink; }
     const Link&         GetCloserHdl() const                        { return maCloserHdl; }
@@ -444,6 +445,10 @@ public:
     // add an arbitrary button to the menubar (will appear next to closer)
     // passed link will be call with a MenuBarButtonCallbackArg on press
     USHORT              AddMenuBarButton( const Image&, const Link&, USHORT nPos = 0 );
+    // add an arbitrary button to the menubar (will appear next to closer)
+    // passed link will be call with a MenuBarButtonCallbackArg on press
+    // passed string will be set as tooltip
+    USHORT              AddMenuBarButton( const Image&, const Link&, const String&, USHORT nPos = 0 );
     // set the highlight link for additional button with ID nId
     // highlight link will be called with a MenuBarButtonHighlightArg
     // the bHighlight member of that struct shall contain the new state
