@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unodatbr.hxx,v $
- * $Revision: 1.73 $
+ * $Revision: 1.74 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -164,7 +164,7 @@ namespace dbaui
         Splitter*               m_pSplitter;
         SvLBoxTreeList*         m_pTreeModel;           // contains the datasources of the registry
         SvLBoxEntry*            m_pCurrentlyDisplayed;
-        sal_Int32               m_nAsyncDrop;
+        ULONG                   m_nAsyncDrop;
 
         sal_Int16               m_nBorder;              // TRUE when border should be shown
 
