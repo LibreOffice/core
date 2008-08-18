@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_204b_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:59 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:37:14 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -54,7 +54,7 @@ testcase wSplittingTableCellsIntoEqualProportions
    printlog "Insert a table with 4 rows and 4 lines"
    Call TBOhTabelleEinfuegen("SplittingTable", 0, 1, 0, 1, "4", "4")
    printlog "Select the table ( Strg + A )"
-   Call wDokSchreiben ( "<Mod1 A>" )
+   Call wTypeKeys ( "<Mod1 A>" )
    printlog "Format / Row / Height"
    Kontext "ZellenHoehe"
    TableAutoFitSetRowHeight
@@ -63,22 +63,22 @@ testcase wSplittingTableCellsIntoEqualProportions
       Hoehe.Settext "1.20"
    else
       Hoehe.Settext "1,20"
-   endif
+   end if
    Dynamisch.Check
    DaRowHeight = Hoehe.Gettext
    printlog "Close 'Row Height' with 'OK'"
    ZellenHoehe.Ok
    printlog "Point cursor to first cell in first row ( Strg + Home )"
-   Call wDokSchreiben ( "<Mod1 Home>" )
+   Call wTypeKeys ( "<Mod1 Home>" )
    For i = 1 to 4
       if wCheckRowHeight( DaRowHeight ) = False then SetRowHeight = False
-      Call wDokSchreiben ( "<Down>" )
+      Call wTypeKeys ( "<Down>" )
    next i
    if SetRowHeight = True then
-      Call wDokSchreiben ( "<Up>", 4 )
+      Call wTypeKeys ( "<Up>", 4 )
       printlog "Select 1st and 2nd column"
-      Call wDokSchreiben ( "<Shift Down>", 3 )
-      Call wDokSchreiben ( "<Shift Right>" )
+      Call wTypeKeys ( "<Shift Down>", 3 )
+      Call wTypeKeys ( "<Shift Right>" )
       printlog "Format / Cell / Merge to merge all cells"
       TableMergeCells
       printlog "Now split previous merged cell into 4 pieces ( horizontally )"
@@ -95,11 +95,11 @@ testcase wSplittingTableCellsIntoEqualProportions
       printlog "Now the cell has to be splitted into 4 rows of height 1,2cm"
       For i = 1 to 4
          if wCheckRowHeight( DaRowHeight ) = False then SetRowHeight = False
-         Call wDokSchreiben ( "<Down>" )
+         Call wTypeKeys ( "<Down>" )
       next i
    else
       Warnlog "Error setting the row height !"
-   endif
+   end if
 
    Call hCloseDocument
 

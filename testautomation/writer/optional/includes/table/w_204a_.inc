@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_204a_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:59 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:37:02 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -61,7 +61,7 @@ testcase sTableName
     Call hNewDocument
 
     Call TBOhTabelleEinfuegen ("dummy" ,0,1,0,1,"1",tHeight:="1")  ' insert table
-    Call wDokSchreiben "<mod1 end><mod1 end>"
+    Call wTypeKeys "<mod1 end><mod1 end>"
     temp (1) = "Garfield"
     Call TBOhTabelleEinfuegen (temp (1) ,0,1,0,1,"10",tHeight:="7")  ' insert table
 
@@ -111,7 +111,7 @@ testcase sTableAlignment
 
     Call hNewDocument
     Call TBOhTabelleEinfuegen ("dummy" ,0,1,0,1,"1",tHeight:="1")  ' insert table
-    Call wDokSchreiben "<mod1 end><mod1 end>"
+    Call wTypeKeys "<mod1 end><mod1 end>"
     temp (1) = "Garfield"
     Call TBOhTabelleEinfuegen (temp (1) ,0,1,0,1,"10",tHeight:="7")  ' insert table
 
@@ -137,8 +137,8 @@ testcase sTableAlignment
             QAErrorlog "#i78144#Cdbl returns wrong values"
         else
             warnlog "measurement value error "+ "is: "+(StrToDouble (Breite.GetText) + StrToDouble (NachRechts.GetText))+" should: " + PAGEWIDTH
-        endif
-    endif
+        end if
+    end if
     NachRechts.SetText "2"
     sleep (1)
     temp(1) = NachRechts.GetText
@@ -155,8 +155,8 @@ testcase sTableAlignment
             QAErrorlog "#i78144#Cdbl returns wrong values"
         else
             warnlog "measurement value error "+ "is: "+(StrToDouble (Breite.GetText) + StrToDouble (NachRechts.GetText))+" should: "+PAGEWIDTH
-        endif
-    endif
+        end if
+    end if
     '--------------------------------
     NachRechts.SetText "0"
     sleep (1)
@@ -169,8 +169,8 @@ testcase sTableAlignment
             QAErrorlog "#i78144#Cdbl returns wrong values"
         else
             warnlog "measurement value error "+ "is: "+(StrToDouble (Breite.GetText) + StrToDouble (NachLinks.GetText))+" should: "+PAGEWIDTH
-        endif
-    endif
+        end if
+    end if
     NachLinks.SetText "2"
     sleep (1)
     temp(1) = NachLinks.GetText
@@ -192,8 +192,8 @@ testcase sTableAlignment
             QAErrorlog "#i78144#Cdbl returns wrong values"
         else
                 warnlog "measurement value error  "+ "is: "+(StrToDouble (Breite.GetText) + StrToDouble (NachLinks.GetText))+" should: "+PAGEWIDTH
-        endif
-    endif
+        end if
+    end if
     '--------------------------------
     NachLinks.SetText "0"
     Printlog "'///     Right ///"
@@ -205,8 +205,8 @@ testcase sTableAlignment
             QAErrorlog "#i78144#Cdbl returns wrong values"
         else
              warnlog "measurement value error "+ "is: "+(StrToDouble (Breite.GetText) + StrToDouble (NachLinks.GetText))+" should: "+PAGEWIDTH
-        endif
-    endif
+        end if
+    end if
     NachLinks.SetText "2"
     sleep (1)
     temp(1) = NachLinks.GetText
@@ -223,8 +223,8 @@ testcase sTableAlignment
             QAErrorlog "#i78144#Cdbl returns wrong values"
         else
             warnlog "measurement value error "+ "is: "+(StrToDouble (Breite.GetText) + StrToDouble (NachLinks.GetText))+" should: "+PAGEWIDTH
-        endif
-    endif    
+        end if
+    end if    
     '--------------------------------
     NachLinks.SetText "0"
     Printlog "'///      center ///"
@@ -236,8 +236,8 @@ testcase sTableAlignment
             QAErrorlog "#i78144#Cdbl returns wrong values"
         else
             warnlog "measurement value error "+ "is: "+(StrToDouble (Breite.GetText) + StrToDouble (NachLinks.GetText))+" should: "+PAGEWIDTH
-        endif
-    endif    
+        end if
+    end if    
     NachLinks.SetText "2"
     sleep (1)
     temp(1) = NachLinks.GetText
@@ -254,8 +254,8 @@ testcase sTableAlignment
             QAErrorlog "#i78144#Cdbl returns wrong values"
         else
             warnlog "measurement value error "+ "is: "+(StrToDouble (Breite.GetText) + StrToDouble (NachLinks.GetText))+" should: "+PAGEWIDTH
-        endif
-    endif    
+        end if
+    end if    
     '--------------------------------
     NachLinks.SetText "0"
     Printlog "'///     manual ///"
@@ -267,8 +267,8 @@ testcase sTableAlignment
             QAErrorlog "#i78144#Cdbl returns wrong values"
         else
             warnlog "measurement value error "+ "is: "+(StrToDouble (Breite.GetText) + StrToDouble (NachLinks.GetText)+ StrToDouble (NachRechts.GetText))+" should: "+PAGEWIDTH
-        endif
-    endif
+        end if
+    end if
     NachLinks.SetText "2"
     NachRechts.SetText "2"
     sleep (1)
@@ -288,8 +288,8 @@ testcase sTableAlignment
             QAErrorlog "#i78144#Cdbl returns wrong values"
         else
              warnlog "measurement value error "+ "is: "+(StrToDouble (Breite.GetText) + StrToDouble (NachLinks.GetText)+ StrToDouble (NachRechts.GetText))+" should: "+PAGEWIDTH
-        endif
-    endif
+        end if
+    end if
     '--------------------------------
     NachLinks.SetText "0"
     NachRechts.SetText "0"
@@ -305,14 +305,14 @@ testcase sTablePagebreak
 
     Call hNewDocument
     Call TBOhTabelleEinfuegen ("dummy" ,0,1,0,1,"1",tHeight:="1")  ' insert table
-    Call wDokSchreiben "<mod1 end><mod1 end>"
+    Call wTypeKeys "<mod1 end><mod1 end>"
     temp (1) = "Garfield"
     Call TBOhTabelleEinfuegen (temp (1) ,0,1,0,1,"10",tHeight:="7")  ' insert table
 
     Printlog "'///     Check TextFlow: pagebreak ///"
 
     InsertFieldsPagenumbers          ' get pagenumber & leave it for next calculation
-    Call wDokSchreiben "<shift home>"
+    Call wTypeKeys "<shift home>"
     ToolsCalculate
     temp(1) = val(GetClipboardText)
 
@@ -326,20 +326,20 @@ testcase sTablePagebreak
         printlog "--- defaultvalue changed..."
         Seite.Check
         Davor.Check
-    endif
+    end if
     TabTextFlusstabelle.OK
 
     ToolsUpdateUpdateAll             ' update field & get pagenumber & clear
-    Call wDokSchreiben "<shift end>"
+    Call wTypeKeys "<shift end>"
     ToolsCalculate
     temp(2) = val(GetClipboardText)
     if ((val(temp(1))+1) <> temp(2)) then
         warnlog "--- Table didn't move, that's not good "+ "from: "+val(temp(1))+" to: "+ temp(2) +" 1+1= "+(val(temp(1))+1)
     else
         printlog "    works , moved, ok!"
-    endif
+    end if
 
-    Call wDokSchreiben "<mod1 end><mod1 end><return>"
+    Call wTypeKeys "<mod1 end><mod1 end><return>"
 
     Call hCloseDocument
 endcase
@@ -356,16 +356,16 @@ testcase sTableMergeCell
     Call hNewDocument
 
     ' set marks to find
-    Call wDokSchreiben "NULL<return>"
-    Call wDokSchreiben "Start<return>"
-    Call wDokSchreiben "End<return>"
-    Call wDokSchreiben "NULL<return><up><up>"
+    Call wTypeKeys "NULL<return>"
+    Call wTypeKeys "Start<return>"
+    Call wTypeKeys "End<return>"
+    Call wTypeKeys "NULL<return><up><up>"
 
     temp (1) = "Table1"
 	'/// Insert a table with 10 columns and 7 rows
     Call TBOhTabelleEinfuegen (temp (1) ,0,1,0,1,"10",tHeight:="7")  ' insert table
-    Call wDokSchreiben "<MOD1 END>", 2
-    Call wDokSchreiben "<up><up>"
+    Call wTypeKeys "<MOD1 END>", 2
+    Call wTypeKeys "<up><up>"
 
 	'/// Insert a table with 10 columns and 10 rows
     temp (1) = "Table2"
@@ -378,21 +378,21 @@ testcase sTableMergeCell
     Printlog " - merging of cells"
     ac=0   ' ActionCount
     fc=100 ' FieldCount
-    Call wDokSchreiben "<down><shift right>"     ' 2 horizontal (0,1) & (1,1) (x,y)
+    Call wTypeKeys "<down><shift right>"     ' 2 horizontal (0,1) & (1,1) (x,y)
     TableMergeCells : inc ac : dec fc '   FormatZelleVerbinden
-    Call wDokSchreiben "<down><shift down>"      ' 2 vertical (1,2) & (1,3)
+    Call wTypeKeys "<down><shift down>"      ' 2 vertical (1,2) & (1,3)
     TableMergeCells : inc ac : dec fc
-    Call wDokSchreiben "<down><up><shift down><shift up>"      ' merge again
+    Call wTypeKeys "<down><up><shift down><shift up>"      ' merge again
     'Warnlog "Merge cells will crash when only one cell is selected (#i33394)"
     TableMergeCells
 
     ' go to top of table, move to end & count
-    Call wDokSchreiben "<mod1 home>"
+    Call wTypeKeys "<mod1 home>"
     for i=1 to fc
-        Call wDokSchreiben "<right>"
+        Call wTypeKeys "<right>"
     next i
-    Call wDokSchreiben "<down>"
-    Call wDokSchreiben "<shift end>" ' right after/outside the table ->
+    Call wTypeKeys "<down>"
+    Call wTypeKeys "<shift end>" ' right after/outside the table ->
 	try
 	    EditCopy
 	catch
@@ -404,7 +404,7 @@ testcase sTableMergeCell
 		Warnlog "Test didn't find the end of the table, stops here! Found:" & GetClipboardtext
 		Call hCloseDocument
 		goto endsub		
-    endif
+    end if
     ' undo & check where we are
     for i=1 to ac
         EditUndo
@@ -415,15 +415,15 @@ testcase sTableMergeCell
     if (temp(2) <> temp(1)) then warnlog " --- wrong table? schould be : "+temp (1)+ ", is : "+temp(2)
     EditUndo ' go one step further
     EditUndo ' go one step further
-    Call wDokSchreiben "<up><shift end>"
+    Call wTypeKeys "<up><shift end>"
     EditCopy
     temp(2) = GetClipboardText
-    Call wDokSchreiben "<down><shift home>"
+    Call wTypeKeys "<down><shift home>"
     EditCopy
     temp(3) = GetClipboardText
     if ((temp(2) <> "Start") AND (temp(3) <> "End")) then
         warnlog "there is smth. wrong with the undo stuff !!! is:"+temp(3) +" and:"+temp(2)+" should:End Start"
-    endif
+    end if
     
     '/// Close document
     Call hCloseDocument
@@ -441,17 +441,17 @@ testcase sTableBorder
     Call hNewDocument
 
     ' set marks to find
-    Call wDokSchreiben "<mod1 end><mod1 end>"
-    Call wDokSchreiben "NULL<return>"
-    Call wDokSchreiben "Start<return>"
-    Call wDokSchreiben "End<return>"
-    Call wDokSchreiben "NULL<return><up><up>"
+    Call wTypeKeys "<mod1 end><mod1 end>"
+    Call wTypeKeys "NULL<return>"
+    Call wTypeKeys "Start<return>"
+    Call wTypeKeys "End<return>"
+    Call wTypeKeys "NULL<return><up><up>"
 
     Call TBOhTabelleEinfuegen (temp (1) ,0,1,0,1,"10",tHeight:="7")  ' insert table
 
     Printlog "'///       set border & undo ///"
     ' assign border to whole table
-    Call wDokSchreiben "<shift mod1 end>"
+    Call wTypeKeys "<shift mod1 end>"
     TableTableProperties                ' get into existing table
     Sleep (1)
     Kontext "TabelleEinfuegenWriter"
@@ -489,8 +489,8 @@ testcase sTableBorder
             SchattenFarbe.Select SchattenFarbe.GetItemCount - 1
         else
             warnlog "baeh!"
-        endif
-    endif
+        end if
+    end if
     Kontext
     Active.SetPage TabHintergrund
     Sleep (1)
@@ -521,18 +521,18 @@ testcase sTableBorder
     temp (2) = hGetTableName()
     if (temp(2) <> temp(1)) then warnlog " --- wrong table? schould be : "+temp (1)+ ", is : "+temp(2)
     EditUndo ' go one step further
-    Call wDokSchreiben "<up><shift end>"
+    Call wTypeKeys "<up><shift end>"
     EditCopy
     temp(2) = GetClipboardText
-    Call wDokSchreiben "<down><shift home>"
+    Call wTypeKeys "<down><shift home>"
     EditCopy
     temp(3) = GetClipboardText
     if ((temp(2) <> "Start") AND (temp(3) <> "End")) then
         warnlog "there is smth. wrong with the undo stuff !!!"
         print "whats wrong with the undo stuff"
-    endif
+    end if
     EditRedo ' and back again
-    Call wDokSchreiben "<up><mod1 home>" ' now we are in (0,0)
+    Call wTypeKeys "<up><mod1 home>" ' now we are in (0,0)
     Call hCloseDocument
 endcase
 
@@ -544,10 +544,10 @@ testcase sTableIndent
 
     Call hNewDocument
     ' set marks to find
-    Call wDokSchreiben "NULL<return>"
-    Call wDokSchreiben "Start<return>"
-    Call wDokSchreiben "End<return>"
-    Call wDokSchreiben "NULL<return><up><up>"
+    Call wTypeKeys "NULL<return>"
+    Call wTypeKeys "Start<return>"
+    Call wTypeKeys "End<return>"
+    Call wTypeKeys "NULL<return><up><up>"
 
     temp (1) = "Garfield"
     Call TBOhTabelleEinfuegen (temp (1) ,0,1,0,1,"10",tHeight:="7")  ' insert table
@@ -579,8 +579,8 @@ testcase sTableIndent
 
 
     Printlog "'///     text attributes ///"
-    Call wDokSchreiben "John"  : inc ac
-    Call wDokSchreiben "<shift home>"
+    Call wTypeKeys "John"  : inc ac
+    Call wTypeKeys "<shift home>"
     FormatCharacter
     Kontext
     Active.SetPage TabFontEffects
@@ -601,17 +601,17 @@ testcase sTableIndent
     EditUndo
 
     Printlog "'///      cell protection ///"
-    Call wDokSchreiben "<LEFT><UP>", 10
-    Call wDokSchreiben "<DOWN>", 3
-    Call wDokSchreiben "<down><shift down><shift right><Right><Left><Shift right><Shift left>"
+    Call wTypeKeys "<LEFT><UP>", 10
+    Call wTypeKeys "<DOWN>", 3
+    Call wTypeKeys "<down><shift down><shift right><Right><Left><Shift right><Shift left>"
     TableCellProtect
-    Call wDokSchreiben "<LEFT>"
-    Call wDokSchreiben "x"
+    Call wTypeKeys "<LEFT>"
+    Call wTypeKeys "x"
     Kontext
     if (Active.Exists <> TRUE) then
-        Call wDokSchreiben "<LEFT><UP>", 10
-        Call wDokSchreiben "<DOWN>", 3
-        Call wDokSchreiben "<down><shift down><shift right><Right><Left><Shift right><Shift left>"
+        Call wTypeKeys "<LEFT><UP>", 10
+        Call wTypeKeys "<DOWN>", 3
+        Call wTypeKeys "<down><shift down><shift right><Right><Left><Shift right><Shift left>"
         try
             EditCopy
         catch
@@ -624,7 +624,7 @@ testcase sTableIndent
     else
         Active.OK
         EditUndo
-        Call wDokSchreiben "x"
+        Call wTypeKeys "x"
         Kontext
         if (Active.Exists = TRUE) then
             Warnlog "ReProtection of table does not work!" + Active.GetText
@@ -637,18 +637,18 @@ testcase sTableIndent
         temp (2) = hGetTableName()
         if (temp(2) <> temp(1)) then warnlog " --- wrong table? schould be : "+temp (1)+ ", is : "+temp(2)
         EditUndo ' go one step further
-        Call wDokSchreiben "<up><shift end>"
+        Call wTypeKeys "<up><shift end>"
         EditCopy
         temp(2) = GetClipboardText
-        Call wDokSchreiben "<down><shift home>"
+        Call wTypeKeys "<down><shift home>"
         EditCopy
         temp(3) = GetClipboardText
         if ((temp(2) <> "Start") AND (temp(3) <> "End")) then
             warnlog "there is smth. wrong with the undo stuff !!! is: "+temp(2)+" should: Start; is: "+temp(3)+" should: End;"
-        endif
+        end if
         EditRedo ' and back again
-        Call wDokSchreiben "<up><mod1 home>" ' now we are in (0,0)
-    endif
+        Call wTypeKeys "<up><mod1 home>" ' now we are in (0,0)
+    end if
 
     Printlog "'///      Set graphic in table as background ///"
     try
@@ -693,17 +693,17 @@ testcase sTableIndent
         temp (2) = hGetTableName()
         if (temp(2) <> temp(1)) then warnlog " --- wrong table? schould be : "+temp (1)+ ", is : "+temp(2)
         EditUndo ' go one step further
-        Call wDokSchreiben "<up><shift end>"
+        Call wTypeKeys "<up><shift end>"
         EditCopy
         temp(2) = GetClipboardText
-        Call wDokSchreiben "<down><shift home>"
+        Call wTypeKeys "<down><shift home>"
         EditCopy
         temp(3) = GetClipboardText
         if ((temp(2) <> "Start") AND (temp(3) <> "End")) then
             warnlog "there is smth. wrong with the undo stuff !!! is: "+temp(2)+" should: Start; is: "+temp(3)+" should: End;"
-        endif
+        end if
         EditRedo ' and back again
-        Call wDokSchreiben "<mod1 end>" ' go to end of doc
+        Call wTypeKeys "<mod1 end>" ' go to end of doc
     catch
         Warnlog "Dialog 'Insert Table' not up!"
     endcatch
@@ -721,16 +721,16 @@ testcase sTableSort
     Call hNewDocument
     '   Kontext "DocumentWriter"
     Call TBOhTabelleEinfuegen ("dummy" ,0,1,0,1,"1",tHeight:="1")  ' insert table
-    Call wDokSchreiben "<mod1 end><mod1 end>"
+    Call wTypeKeys "<mod1 end><mod1 end>"
     temp (1) = "Sort"
     Call TBOhTabelleEinfuegen (temp (1) ,0,1,0,1,"10",tHeight:="10")  ' insert table
 
     fc = 99
     randomize()
     for i=1 to fc
-        Call wDokSchreiben str(rnd()) + "<right>"
+        Call wTypeKeys str(rnd()) + "<right>"
     next i
-    Call wDokSchreiben "<shift mod1 home>"
+    Call wTypeKeys "<shift mod1 home>"
     ToolsSort '-----------------------------------------------------------11111111111111111
     Kontext "Sortieren"
     Spalten.Check  'direction 1
@@ -741,20 +741,20 @@ testcase sTableSort
     Sortieren.OK
     Kontext
     if active.exists (5) then printlog "active1: "+active.gettext
-    Call wDokSchreiben "<shift mod1 end>",2
+    Call wTypeKeys "<shift mod1 end>",2
     try
         ToolsSort '-----------------------------------------------------------22222222222222222
     catch
         printlog "WorkAround only seen on linux, can't select immediately, cursor movement needed "
-        Call wDokSchreiben "<right><left>"
-        Call wDokSchreiben "<shift mod1 end>",2
+        Call wTypeKeys "<right><left>"
+        Call wTypeKeys "<shift mod1 end>",2
         ToolsSort
     endcatch
     Kontext
     if active.exists (5) then
         printlog "active2: "+active.gettext
         active.ok
-    endif
+    end if
     Kontext "Sortieren"
     Zeilen.Check
     Sortieren.OK
@@ -762,7 +762,7 @@ testcase sTableSort
     if active.exists (5) then
         printlog "active3: "+active.gettext
         active.ok
-    endif
+    end if
 
     'Schluessel1
     'Spalte1
@@ -804,14 +804,14 @@ testcase TableSplit_copy_heading
     Call hNewDocument
     ' Kontext "DocumentWriter"
     Call TBOhTabelleEinfuegen ("dummy" ,0,1,0,1,"1",tHeight:="1")  ' insert table
-    Call wDokSchreiben "<mod1 end><mod1 end>"
+    Call wTypeKeys "<mod1 end><mod1 end>"
     temp (1) = "Split"
     Call TBOhTabelleEinfuegen (temp (1) ,1,1,0,1,"10",tHeight:="10")  ' insert table
 
     Printlog "'/// Splitting Tables & UNDO ///"
     Printlog "'///     check 'copy heading' ///"
     temp(2) = "Jon"
-    Call wDokSchreiben temp(2)+"<down>"
+    Call wTypeKeys temp(2)+"<down>"
     FormatSplitTable
     Kontext "TabelleAuftrennen"
     UeberschriftKopieren.Check      '<------------- this is the key
@@ -821,21 +821,21 @@ testcase TableSplit_copy_heading
     if (temp(6) <> (fLocaleString("LocaleTable")+"1")) then warnlog "Split table didn't work! is: "+temp(6)+"; should: "+(fLocaleString("LocaleTable")+"1")
 '   if (temp(6) <> (fLocaleString("LocaleTable")+"2")) then warnlog "Split table didn't work! is: "+temp(6)+"; should: "+(fLocaleString("LocaleTable")+"2")
 
-    Call wDokSchreiben "<up>"  ' im in the content of the table
+    Call wTypeKeys "<up>"  ' im in the content of the table
     Sleep 1
     ' -------------check if heading (style)
     Kontext "TextObjectbar"
     if (Vorlage.GetSelText <> fLocaleString("LocaleTableHeading")) then
         Warnlog "tabel heading did not work!is: " & Vorlage.GetSelText & ", should " & fLocaleString("LocaleTableHeading")
-    endif
+    end if
     '----------------------------------
-    Call wDokSchreiben "<end><shift home>" ' check heading in 'new' table (content)
+    Call wTypeKeys "<end><shift home>" ' check heading in 'new' table (content)
     EditCopy
     temp(3) = GetClipboardText
     if (temp(2) <> temp(3)) then  warnlog "wrong heading! Is: "+temp(3)+" Should: "+temp(2)
-    Call wDokSchreiben "<up><up>"
+    Call wTypeKeys "<up><up>"
     if (hGetTableName () <> (temp(1))) then warnlog "Split table didn't work?"
-    Call wDokSchreiben "<end><shift home>" ' check heading in 'old' table
+    Call wTypeKeys "<end><shift home>" ' check heading in 'old' table
     EditCopy
     temp(3) = GetClipboardText
     if (temp(2) <> temp(3)) then  warnlog "wrong heading! is: "+temp(3)+" should: "+temp(2)
@@ -845,7 +845,7 @@ testcase TableSplit_copy_heading
     Printlog "'///     check 'custom heading (apply style)' ///"
     ' splitting headers doesn't work -> move down 1 line
     temp(2) = temp(1)
-    Call wDokSchreiben temp(2)
+    Call wTypeKeys temp(2)
     ' set some style to verify
     FormatParagraph
     Kontext
@@ -858,7 +858,7 @@ testcase TableSplit_copy_heading
     temp (4) = Vonlinks.GetText
     temp (5) = Vonrechts.GetText
     TabEinzuegeUndAbstaende.OK
-    Call wDokSchreiben "<down>",2
+    Call wTypeKeys "<down>",2
     FormatSplitTable
     Kontext "TabelleAuftrennen"
     EigeneMitVorlage.Check    '<------------- this is the key
@@ -867,14 +867,14 @@ testcase TableSplit_copy_heading
     temp (6) = hGetTableName ()
     if (temp(6) <> (fLocaleString("LocaleTable")+"1")) then
         warnlog "Split table didn't work! is: "+temp(6)+"; should: "+(fLocaleString("LocaleTable")+"1")
-    endif
+    end if
     ' -------------check if heading
     Kontext "TextObjectbar"
     if (Vorlage.GetSelText <> fLocaleString("LocaleTableHeading")) then
         Warnlog "Table heading did not work!"
         Warnlog "is: " & Vorlage.GetSelText & ", should " & fLocaleString("LocaleTableHeading")
-        Call wDokSchreiben "<Escape>"
-    endif
+        Call wTypeKeys "<Escape>"
+    end if
     '----------------------------------
 
     FormatParagraph         ' check style
@@ -885,9 +885,9 @@ testcase TableSplit_copy_heading
     Sleep (1)
     '         if ((Vonlinks.GetText <>temp (4) ) OR (Vonrechts.GetText <>temp (5) )) then warnlog "style didn't get inherited. is: "+Vonlinks.GetText+"; should: "+temp (4) +";; is: "+Vonrechts.GetText+"; should: "+temp (5) +";;"
     TabEinzuegeUndAbstaende.OK
-    Call wDokSchreiben "<up><up><up>"               ' goto old table
+    Call wTypeKeys "<up><up><up>"               ' goto old table
     if (hGetTableName () <> (temp(1))) then warnlog "Split table didn't work? "
-    Call wDokSchreiben "<end><shift home>" ' check heading in 'old' table
+    Call wTypeKeys "<end><shift home>" ' check heading in 'old' table
     EditCopy
     temp(3) = GetClipboardText
     if (temp(2) <> temp(3)) then  warnlog "wrong heading! is: "+temp(3)+"; should: "+temp(2)
@@ -906,11 +906,11 @@ testcase TableSplit_custom_heading
 
     Call hNewDocument
     Call TBOhTabelleEinfuegen ("dummy" ,0,1,0,1,"1",tHeight:="1")  ' insert table
-    Call wDokSchreiben "<mod1 end><mod1 end>"
+    Call wTypeKeys "<mod1 end><mod1 end>"
     temp (1) = "Header"
     Call TBOhTabelleEinfuegen (temp (1) ,1,1,0,1,"10",tHeight:="10")  ' insert table
     Printlog "'///     check  'custom heading' ///"
-    Call wDokSchreiben "Header"
+    Call wTypeKeys "Header"
     FormatStylesCatalog ' set a style to verify
     Kontext "Vorlagenkatalog"
     Ansicht.TypeKeys "<up><up><up><up>"
@@ -928,7 +928,7 @@ testcase TableSplit_custom_heading
     temp (2) = Vonlinks.GetText
     temp (3) = Vonrechts.GetText
     TabEinzuegeUndAbstaende.OK
-    Call wDokSchreiben ("<down>")
+    Call wTypeKeys ("<down>")
     FormatSplitTable
     Kontext "TabelleAuftrennen"
     Eigene.Check                 '<------------- this is the key
@@ -937,8 +937,8 @@ testcase TableSplit_custom_heading
     temp (5) = hGetTableName ()
     if (temp(5) <> ( fLocaleString("LocaleTable") + "1" )) then warnlog "Split table didn't work! is: "+ temp(5) + "; should: "+(fLocaleString("LocaleTable") + "1")
     ' -------------check if NO heading (would be a custom style...))
-    Call wDokSchreiben "<Up>",2
-    Call wDokSchreiben "<mod1 a>"
+    Call wTypeKeys "<Up>",2
+    Call wTypeKeys "<mod1 a>"
     EditCopy
     temp(6) = GetClipboardText
     FormatParagraph         ' check style
@@ -970,14 +970,14 @@ testcase TableSplit_custom_heading_apply_style
 
     Call hNewDocument
     Call TBOhTabelleEinfuegen ("dummy" ,0,1,0,1,"1",tHeight:="1")  ' insert table
-    Call wDokSchreiben "<mod1 end><mod1 end>"
+    Call wTypeKeys "<mod1 end><mod1 end>"
     temp (1) = "Split"
     TBOhTabelleEinfuegen (temp (1) ,1,1,0,1,"10",tHeight:="10")  ' insert table
 
     Printlog "'/// Splitting Tables & UNDO ///"
     Printlog "'///     check 'custom heading (apply style)' ///"
     temp(2) = temp(1)
-    Call wDokSchreiben temp(2)
+    Call wTypeKeys temp(2)
     ' set some style to verify
     FormatParagraph
     Kontext "TabTabulator"
@@ -991,7 +991,7 @@ testcase TableSplit_custom_heading_apply_style
     temp (4) = Vonlinks.GetText
     temp (5) = Vonrechts.GetText
     TabEinzuegeUndAbstaende.OK
-    Call wDokSchreiben "<down>",2
+    Call wTypeKeys "<down>",2
     FormatSplitTable
     Kontext "TabelleAuftrennen"
     EigeneMitVorlage.Check    '<------------- this is the key
@@ -1000,15 +1000,15 @@ testcase TableSplit_custom_heading_apply_style
     temp (6) = hGetTableName ()
     if (temp(6) <> (fLocaleString("LocaleTable")+"1")) then
         warnlog "Split table didn't work! is: "+temp(6)+"; should: "+(fLocaleString("LocaleTable")+"1")
-    endif
+    end if
     ' -------------check if heading
     Kontext "TextObjectbar"
     if (Vorlage.GetSelText <> fLocaleString("LocaleTableHeading")) then
         Warnlog "table heading did not work!"
         warnlog "is: " & Vorlage.GetSelText & ", should " & fLocaleString("LocaleTableHeading")
         'GetSelText bleibt in der box
-        Call wDokSchreiben "<Escape>"
-    endif
+        Call wTypeKeys "<Escape>"
+    end if
     '----------------------------------
     FormatParagraph         ' check style
     Kontext "TabTabulator"
@@ -1018,9 +1018,9 @@ testcase TableSplit_custom_heading_apply_style
     Kontext "TabEinzuegeUndAbstaende"
     Sleep (1)
     TabEinzuegeUndAbstaende.OK
-    Call wDokSchreiben "<up><up><up>"               ' goto old table
+    Call wTypeKeys "<up><up><up>"               ' goto old table
     if (hGetTableName () <> (temp(1))) then warnlog "Split table didn't work? "
-    Call wDokSchreiben "<end><shift home>" ' check heading in 'old' table
+    Call wTypeKeys "<end><shift home>" ' check heading in 'old' table
     EditCopy
     temp(3) = GetClipboardText
     if (temp(2) <> temp(3)) then  warnlog "wrong heading! is: "+temp(3)+"; should: "+temp(2)
@@ -1039,7 +1039,7 @@ testcase TableSplit_no_heading
 
     Call hNewDocument
     Call TBOhTabelleEinfuegen ("dummy" ,0,1,0,1,"1",tHeight:="1")  ' insert table
-    Call wDokSchreiben "<mod1 end><mod1 end>"
+    Call wTypeKeys "<mod1 end><mod1 end>"
     temp (1) = "Split"
     Call TBOhTabelleEinfuegen (temp (1) ,1,1,0,1,"10",tHeight:="10")  ' insert table
 
@@ -1047,10 +1047,10 @@ testcase TableSplit_no_heading
     Printlog "'///     check 'no heading' ///"
     temp(2) = "Header"
     temp(3) = "Content"
-    Call wDokSchreiben ( temp(2) )
-    Call wDokSchreiben ( "<down>" )
-    Call wDokSchreiben ( temp(3) )
-    Call wDokSchreiben ( "<Home>" )
+    Call wTypeKeys ( temp(2) )
+    Call wTypeKeys ( "<down>" )
+    Call wTypeKeys ( temp(3) )
+    Call wTypeKeys ( "<Home>" )
     ' set some style to verify
     FormatParagraph
     Kontext
@@ -1072,7 +1072,7 @@ testcase TableSplit_no_heading
     if (temp(6) <> ( fLocaleString("LocaleTable") + "1" )) then warnlog "Split table didn't work! is: " + temp(6) + "; should: " + (fLocaleString("LocaleTable") + "1" )
     ' -------------check if NO heading (would be a custom style...))
     Kontext "TextObjectbar"
-    Call wDokSchreiben "<end><shift home>" ' check heading in 'new' table
+    Call wTypeKeys "<end><shift home>" ' check heading in 'new' table
     try
         EditCopy
         ' Should be 'Content'
@@ -1088,9 +1088,9 @@ testcase TableSplit_no_heading
     Sleep (1)
     if ((Vonlinks.GetText <>temp (4) ) OR (Vonrechts.GetText <>temp (5) )) then warnlog "style didn't get inherited"
     TabEinzuegeUndAbstaende.OK
-    Call wDokSchreiben "<up><up>"               ' goto header
+    Call wTypeKeys "<up><up>"               ' goto header
     if (hGetTableName () <> (temp(1))) then warnlog "Split table didn't work? "
-    Call wDokSchreiben "<Mod1 A>" ' check heading in 'old' table
+    Call wTypeKeys "<Mod1 A>" ' check heading in 'old' table
     try
         EditCopy
     catch
@@ -1106,8 +1106,8 @@ testcase sTableMerge
     dim temp(10) as string
 
     Call hNewDocument
-    Call wDokSchreiben "<return><mod1 end><mod1 end>"
-    Call wDokSchreiben "<mod1 end><mod1 end>"
+    Call wTypeKeys "<return><mod1 end><mod1 end>"
+    Call wTypeKeys "<mod1 end><mod1 end>"
 
     temp(2) = "Arlene"
     temp(3) = "Pooky"
@@ -1115,10 +1115,10 @@ testcase sTableMerge
 
     Call TBOhTabelleEinfuegen (temp (2) ,0,1,0,1,"10",tHeight:="7")  ' insert table Arlene
     sleep (3)
-    Call wDokSchreiben "<mod1 end><mod1 end>"
+    Call wTypeKeys "<mod1 end><mod1 end>"
     Call TBOhTabelleEinfuegen (temp (3) ,0,1,0,1,"10",tHeight:="7")  ' insert table Pooky
     sleep (3)
-    Call wDokSchreiben "<mod1 end><mod1 end>"
+    Call wTypeKeys "<mod1 end><mod1 end>"
     Call TBOhTabelleEinfuegen (temp (4) ,0,1,0,1,"10",tHeight:="7")  ' insert table Nermal
     sleep (3)
 
@@ -1130,25 +1130,25 @@ testcase sTableMerge
     Printlog "'///     join Nermal with pooky -> Nermal has to be under Arlene -> undo ///"
     FormatMergeTables
     if (hGetTableName () <> temp(4)) then warnlog "Merge table didn't work? 1 "
-    Call wDokSchreiben "<mod1 home><up>"
+    Call wTypeKeys "<mod1 home><up>"
     if (hGetTableName () <> temp(2)) then warnlog "Merge table didn't work? 1+ "
     EditUndo
-    Call wDokSchreiben "<up><mod1 home>"
+    Call wTypeKeys "<up><mod1 home>"
 
     Printlog "'///     join Nermal with pooky -> choose lowerTable -> Nermal has to be under Arlene again -> undo  ///"
     FormatMergeTables
     Kontext "TabellenVerbinden"
     if TabellenVerbinden.exists (5) <> TRUE then
         warnlog "there is only one table around no question for which table should be connected "
-    endif
+    end if
     MitNachfolgenderTabelleVerbinden.Check
     TabellenVerbinden.OK
     temp (5) = hGetTableName ()
     if (temp (5) <> temp(3)) then warnlog "Merge table didn't work? 2 is:"+temp (5)+" should: "+temp(3)
-    Call wDokSchreiben "<up>"
+    Call wTypeKeys "<up>"
     if (hGetTableName () <> temp(2)) then warnlog "Merge table didn't work? 2+ "
     EditUndo
-    Call wDokSchreiben "<up><mod1 home>"
+    Call wTypeKeys "<up><mod1 home>"
 
     Printlog "'///     join Pooky with Arlene -> choose upperTable -> Pooky is now above Nermal -> undo  ///"
     FormatMergeTables
@@ -1157,10 +1157,10 @@ testcase sTableMerge
     TabellenVerbinden.OK
     temp (5) = hGetTableName ()
     if (temp (5) <> temp(3)) then warnlog "Merge table didn't work? 3 is:"+temp (5)+" should: "+temp(3)
-    Call wDokSchreiben "<up>"
+    Call wTypeKeys "<up>"
     if (hGetTableName () <> temp(3)) then warnlog "Merge table didn't work? 3+ "
     EditUndo
-    Call wDokSchreiben "<up><mod1 home>"
+    Call wTypeKeys "<up><mod1 home>"
 
     Printlog "'///     join Arlene with Pooky -> Pooky is above Nermal -> undo ///"
     FormatMergeTables
@@ -1168,12 +1168,12 @@ testcase sTableMerge
     if TabellenVerbinden.exists then
         warnlog "tzhere shouldn't be a table connect dialog; yust one table to connect to available "
         TabellenVerbinden.cancel
-    endif
+    end if
     sleep (2)
     temp (5) = hGetTableName ()
     if (temp (5) <> temp(2)) then warnlog "Merge table didn't work? 4 is:"+temp (5)+" should: "+temp(2)
     sleep (2)
-    Call wDokSchreiben "<mod1 end><down>"
+    Call wTypeKeys "<mod1 end><down>"
     sleep (3)
     if (hGetTableName () <> temp(4)) then warnlog "Merge table didn't work? 4+ "
     sleep (3)
