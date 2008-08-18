@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salatslayout.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,7 +80,7 @@ private:
 
     int Fixed2Vcl( Fixed ) const;       // convert ATSU-Fixed units to VCL units
     int AtsuPix2Vcl( int ) const;       // convert ATSU-Pixel units to VCL units
-    Fixed   Vcl2Fixed( int ) const;         // convert VCL units to ATSU-Fixed units
+    Fixed   Vcl2Fixed( int ) const;     // convert VCL units to ATSU-Fixed units
 
     // cached details about the resulting layout
     // mutable members since these details are all lazy initialized
@@ -298,7 +298,7 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     Fixed nFixedWidth = Vcl2Fixed( nPixelWidth );
     mnCachedWidth = nFixedWidth;
     Fract nFractFactor = kATSUFullJustification;
-    ATSLineLayoutOptions nLineLayoutOptions = kATSLineHasNoHangers | kATSLineHasNoOpticalAlignment;
+    ATSLineLayoutOptions nLineLayoutOptions = kATSLineHasNoHangers | kATSLineHasNoOpticalAlignment | kATSLineBreakToNearestCharacter;
 
     nTags[0] = kATSULineWidthTag;
     nVals[0] = &nFixedWidth;
@@ -618,11 +618,6 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
 {
     const long nPixelWidth = (nMaxWidth - (nCharExtra * mnCharCount)) / nFactor;
 
-    // TODO: ATSUBreakLine needs to be dumbed down to treat spaces as normal
-    //       codepoints, to ignore word/syllable boundaries and so on:
-    // OOo's SW+SVX+I18N handle "logical line breaking" with the value
-    // returned from VCL's GetTextBreak(). Returning anything else than the
-    // "stupid visual line break" results in subtle problems in the app layers
     UniCharArrayOffset nBreakPos = mnMinCharPos;
     const ATSUTextMeasurement nATSUMaxWidth = Vcl2Fixed( nPixelWidth );
     OSStatus nStatus = ATSUBreakLine( maATSULayout, mnMinCharPos,
@@ -631,11 +626,32 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
     if( (nStatus != noErr) && (nStatus != kATSULineBreakInWord) )
         return STRING_LEN;
 
+    // the result from ATSUBreakLine() doesn't match the semantics expected by its
+    // application layer callers from SW+SVX+I18N. Adjust the results to the expectations:
+
     // ATSU reports that everything fits even when trailing spaces would break the line
     // #i89789# OOo's application layers expect STRING_LEN if everything fits
-    if( (sal_Int32)nBreakPos >= mnEndCharPos )
-            nBreakPos = STRING_LEN;
-    return nBreakPos;
+    if( nBreakPos >= static_cast<UniCharArrayOffset>(mnEndCharPos) )
+        return STRING_LEN;
+
+    // GetTextBreak()'s callers expect it to return the "stupid visual line break".
+    // Returning anything else result.s in subtle problems in the application layers.
+    static const bool bInWord = true; // TODO: add as argument to GetTextBreak() method
+    if( !bInWord )
+        return nBreakPos;
+
+    // emulate stupid visual line breaking by line breaking for the remaining width
+    ATSUTextMeasurement nLeft, nRight, nDummy;
+    nStatus = ATSUGetUnjustifiedBounds( maATSULayout, mnMinCharPos, nBreakPos-mnMinCharPos,
+        &nLeft, &nRight, &nDummy, &nDummy );
+    if( nStatus != noErr )
+        return nBreakPos;
+    const ATSUTextMeasurement nATSURemWidth = nATSUMaxWidth - (nRight - nLeft);
+    if( nATSURemWidth <= 0 )
+        return nBreakPos;
+    UniCharArrayOffset nBreakPosInWord = nBreakPos;
+    nStatus = ATSUBreakLine( maATSULayout, nBreakPos, nATSURemWidth, false, &nBreakPosInWord );
+    return nBreakPosInWord;
 }
 
 // -----------------------------------------------------------------------
