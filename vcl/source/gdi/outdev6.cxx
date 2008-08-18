@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev6.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -201,7 +201,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
     // debug helper:
     static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA");
 
-    // try hard to draw it directly, because the emulation layers are @!#!
+    // try hard to draw it directly, because the emulation layers are slower
     if( !pDisableNative
     && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) )
     {
@@ -216,7 +216,8 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
             ImplInitFillColor();
 
         // get the polygon in device coordinates
-        ::basegfx::B2DPolyPolygon aB2DPolyPolygon = rPolyPoly.getB2DPolyPolygon();
+        basegfx::B2DPolyPolygon aB2DPolyPolygon( rPolyPoly.getB2DPolyPolygon() );
+        aB2DPolyPolygon.setClosed( true );
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         aB2DPolyPolygon.transform( aTransform );
 
