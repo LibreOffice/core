@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: launcher.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,6 +112,11 @@ extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
     if ( fSuccess )
     {
+        // Wait for soffice process to be terminated to allow other applications
+        // to wait for termination of started process
+
+        WaitForSingleObject( aProcessInfo.hProcess, INFINITE );
+
         CloseHandle( aProcessInfo.hProcess );
         CloseHandle( aProcessInfo.hThread );
 
