@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salmenu.h,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,25 @@ class AquaSalMenuItem;
 
 class AquaSalMenu : public SalMenu
 {
+    std::vector< AquaSalMenuItem* >     maItems;
+
+public: // for OOStatusView
+    struct MenuBarButtonEntry
+    {
+        SalMenuButtonItem       maButton;
+        NSImage*                mpNSImage;      // cached image
+        NSString*               mpToolTipString;
+
+        MenuBarButtonEntry() : mpNSImage( nil ), mpToolTipString( nil ) {}
+        MenuBarButtonEntry( const SalMenuButtonItem& i_rItem )
+        : maButton( i_rItem), mpNSImage( nil ), mpToolTipString( nil ) {}
+    };
+private:
+    std::vector< MenuBarButtonEntry >   maButtons;
+
+    MenuBarButtonEntry* findButtonItem( USHORT i_nItemId );
+    void releaseButtonEntry( MenuBarButtonEntry& i_rEntry );
+    static void statusLayout();
 public:
     AquaSalMenu( bool bMenuBar );
     virtual ~AquaSalMenu();
@@ -62,7 +81,10 @@ public:
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage);
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName );
     virtual void GetSystemMenuData( SystemMenuData* pData );
-    virtual BOOL ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, ULONG nFlags);
+    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, ULONG nFlags);
+    virtual bool AddMenuBarButton( const SalMenuButtonItem& );
+    virtual void RemoveMenuBarButton( USHORT nId );
+    virtual Rectangle GetMenuBarButtonRectPixel( USHORT i_nItemId, SalFrame* i_pReferenceFrame );
 
     int getItemIndexByPos( USHORT nPos ) const;
     const AquaSalFrame* getFrame() const;
@@ -74,6 +96,8 @@ public:
     static void addFallbackMenuItem( NSMenuItem* NewItem );
     static void removeFallbackMenuItem( NSMenuItem* pOldItem );
 
+    const std::vector< MenuBarButtonEntry >& getButtons() const { return maButtons; }
+
     bool                    mbMenuBar;          // true - Menubar, false - Menu
     NSMenu*                 mpMenu;             // The Carbon reference to this menu
     Menu*                   mpVCLMenu;          // the corresponding vcl Menu object
@@ -82,7 +106,19 @@ public:
 
     static const AquaSalMenu* pCurrentMenuBar;
 
-    std::vector< AquaSalMenuItem* > maItems;
+};
+
+class AquaSalMenuItem : public SalMenuItem
+{
+public:
+    AquaSalMenuItem( const SalItemParams* );
+    virtual ~AquaSalMenuItem();
+
+    USHORT              mnId;                 // Item ID
+    Menu*               mpVCLMenu;            // VCL Menu into which this MenuItem is inserted
+    AquaSalMenu*        mpParentMenu;         // The menu in which this menu item is inserted
+    AquaSalMenu*        mpSubMenu;            // Sub menu of this item (if defined)
+    NSMenuItem*         mpMenuItem;           // The NSMenuItem
 };
 
 #endif // _SV_SALMENU_H
