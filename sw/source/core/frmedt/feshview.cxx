@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: feshview.cxx,v $
- * $Revision: 1.61 $
+ * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1604,6 +1604,7 @@ BOOL SwFEShell::ImpEndCreate()
         return TRUE;
     }
 
+    LockPaint();
     StartAllAction();
 
     Imp()->GetDrawView()->UnmarkAll();
@@ -1911,6 +1912,7 @@ BOOL SwFEShell::ImpEndCreate()
 
     KillPams();
     EndAllActionAndCall();
+    UnlockPaint();
     return TRUE;
 }
 
