@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basesh.cxx,v $
- * $Revision: 1.86 $
+ * $Revision: 1.87 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -502,11 +502,15 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
     switch( nId )
     {
         case SID_UNDO:
+            rSh.LockPaint();
             rSh.Do( SwWrtShell::UNDO, nCnt );
+            rSh.UnlockPaint();
             break;
 
         case SID_REDO:
+            rSh.LockPaint();
             rSh.Do( SwWrtShell::REDO, nCnt );
+            rSh.UnlockPaint();
             break;
 
         case SID_REPEAT:
