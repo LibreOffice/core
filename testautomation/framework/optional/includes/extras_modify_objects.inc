@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: extras_modify_objects.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:13 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:06:09 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -47,25 +47,35 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
 
     const CFN = "tModifyObjects::"
     const RESTART = 15
+    const TEMPLATE_COUNT = 236 ' For en-US/StarOffice, numbers may differ for Languages/Brands
+    const SAMPLE_COUNT = 60    ' For en-US/StarOffice, numbers may differ for Languages/Brands
 
     '///<h1>Open all Objects, save, close, reload, save and close them</h1>
     '///<i>The test should be able to handle any OOo 1.x and 2.x files</i><br>
     '///<ul>
 
-    dim iObjectFolder as Integer
+    dim iObjectFolder as integer
     dim iObjectFolders as integer
    
-    dim iObject as Integer
-   
+    dim iObject as integer    ' Iterator
     dim iObjectCount( 20 ) as integer
+    dim iObjectSum as integer : iObjectSum = 0
+    dim iObjectCountExpected as integer
    
     dim sFile as string
     dim sPath as string
         sPath = hGetWorkPath()  
     dim brc as boolean
     dim crc as string
+    
+    dim iReset as integer : iReset = 0
 
     printlog( "" )
+    
+    select case( lcase( cCategory ))
+    case "templates" : iObjectCountExpected = TEMPLATE_COUNT
+    case "samples"   : iObjectCountExpected = SAMPLE_COUNT
+    end select
    
     '///+<li>Open File->New->Templates and documents</li>
     FileNewFromTemplate
@@ -84,11 +94,23 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
       
         '///+<li>count the items in the list</li>
         iObjectCount( iObject ) = FileList.getItemCount()
+        iObjectSum = iObjectSum + iObjectCount( iObject )
       
         '///+<li>move back up to the root of cCategory</li>
         UpOneLevel.click()
       
     next iObject
+    
+    if ( gProductName = "StarOffice" and gISOLang = "en-US" ) then
+        if ( iObjectSum <> iObjectCountExpected ) then
+            warnlog( "Number of objects has changed. OLD: " & iObjectCountExpected &_
+            " NEW: " & iObjectSum )
+        else
+            printlog( "Object count is ok for en-US / StarOffice" )
+        endif
+    else
+        printlog( "Template count testing skipped for non-en_US/StarOffice" )
+    endif
    
     Kontext "TemplateAndDocuments"
     
@@ -117,6 +139,13 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
             do while ( getDocumentCount > 0 ) 
                 hDestroyDocument()
             loop
+            
+            if ( iReset = 10 ) then
+                iReset = 0
+                call exitRestartTheOffice()
+            else
+                iReset = iReset + 1
+            endif
           
             '///<ol>
             FileNewFromTemplate
@@ -160,10 +189,6 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
           
                 '///+<li>Build the filename</li>
                 sFile = sPath & cCategory & iObjectFolder & "_" & iObject
-                sFile = convertpath( sFile )
-                
-                '///+<li>Delete the file if it exists</li>
-                brc = hDeleteFile( sFile )
 
                 '///+<li>Save the file without suffix, use default filter, overwrite</li>
                 brc = hFileSaveAsKill( sFile )
@@ -174,7 +199,7 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
                 '///+<li>Load the file again</li>
                 brc = hFileOpen( sFile )
                 brc = hHandleActivesOnLoad( 1 , 2 )
-                brc = hHandleInitialDialogs()
+                'brc = hHandleInitialDialogs()
                 
                 '///+<li>Cancel the filterdialog if present -> bug</li>
                 brc = hCancelFilterDialog()

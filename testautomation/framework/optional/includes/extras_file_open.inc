@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: extras_file_open.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:13 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:05:57 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -68,17 +68,21 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
     const RESETCOUNTER = 30
     
     dim bSkipFile as boolean      ' turns true if file is to be skipped
-    
     dim brc as boolean            ' some multi purpose boolan returncode
+    dim cOfficePath as string
     
     ' the path where the samples/templates are located, verify function params
     ' note that for some time the suffixes for the different filetypes are changed,
     ' so we have separate names for samples and templates.
+        
+    cOfficePath = mid( gOfficeBasisPath, len( gNetzOfficePath ) + 1 )
+    printlog( "Using: " & cOfficePath )
+    
     select case cCategory
-    case "SAMPLES"    : sRootPath = gOfficeBasisPath & "share\samples"
+    case "SAMPLES"    : sRootPath = cOfficePath & "share\samples"
                         sRootPathFallback = "/opt/openoffice.org/basis3.0/share/samples"
                         sFIlter   = "*.od*"
-    case "TEMPLATES"  : sRootPath = gOfficeBasisPath & "share\template"
+    case "TEMPLATES"  : sRootPath = cOfficePath & "share\template"
                         sRootPathFallback = "/opt/openoffice.org/basis3.0/share/template"
                         sFilter   = "*.ot*"
     case default
