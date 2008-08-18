@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salnsmenu.h,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,18 +31,16 @@
 #ifndef _VCL_SALNSMENU_H
 #define _VCL_SALNSMENU_H
 
-class AquaSalMenuItem : public SalMenuItem
-{
-public:
-    AquaSalMenuItem( const SalItemParams* );
-    virtual ~AquaSalMenuItem();
+class AquaSalMenu;
+class AquaSalMenuItem;
 
-    USHORT              mnId;                 // Item ID
-    Menu*               mpVCLMenu;            // VCL Menu into which this MenuItem is inserted
-    AquaSalMenu*        mpParentMenu;         // The menu in which this menu item is inserted
-    AquaSalMenu*        mpSubMenu;            // Sub menu of this item (if defined)
-    NSMenuItem*         mpMenuItem;           // The NSMenuItem
-};
+@interface OOStatusItemView : NSView
+{
+}
+-(void)drawRect: (NSRect)aRect;
+-(void)layout;
+-(void)mouseUp: (NSEvent *)pEvent;
+@end
 
 @interface SalNSMenu : NSMenu
 {
