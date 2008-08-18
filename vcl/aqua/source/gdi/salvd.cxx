@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salvd.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,9 @@
 SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
     long nDX, long nDY, USHORT nBitCount, const SystemGraphicsData *pData )
 {
+    // #i92075# can be called first in a thread
+    SalData::ensureThreadAutoreleasePool();
+
     return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ), nDX, nDY, nBitCount, pData );
 }
 
