@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: brwctrlr.hxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -118,7 +118,7 @@ namespace dbaui
         ::vos::OThread*         m_pLoadThread;          // the thread wherein the form is loaded
         FormControllerImpl*     m_pFormControllerImpl;  // implementing the XFormController
 
-        sal_uInt32              m_nPendingLoadFinished;         // the event used to tell ourself that the load is finished
+        ULONG                   m_nPendingLoadFinished;         // the event used to tell ourself that the load is finished
         sal_uInt16              m_nFormActionNestingLevel;      // see enter-/leaveFormAction
 
         sal_Bool                m_bLoadCanceled : 1;            // the load was canceled somehow
