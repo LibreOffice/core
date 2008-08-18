@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -60,6 +60,8 @@ IDLFILES=\
     XDocumentDigitalSignatures.idl	\
     KeyUsage.idl			\
     XCertificateContainer.idl		\
+    XSerialNumberAdapter.idl		\
+    SerialNumberAdapter.idl		\
     CertificateContainer.idl \
     CertificateContainerStatus.idl
 
