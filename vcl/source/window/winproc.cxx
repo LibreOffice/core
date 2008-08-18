@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: winproc.cxx,v $
- * $Revision: 1.126 $
+ * $Revision: 1.127 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2124,6 +2124,9 @@ static long ImplHandleMenuEvent( Window* pWindow, SalMenuEvent* pEvent, USHORT n
                 case SALEVENT_MENUHIGHLIGHT:
                     nRet = pMenuBar->HandleMenuHighlightEvent( (Menu*) pEvent->mpMenu, pEvent->mnId ) ? 1 : 0;
                     break;
+                case SALEVENT_MENUBUTTONCOMMAND:
+                    nRet = pMenuBar->HandleMenuButtonEvent( (Menu*) pEvent->mpMenu, pEvent->mnId ) ? 1 : 0;
+                    break;
                 case SALEVENT_MENUCOMMAND:
                     nRet = pMenuBar->HandleMenuCommandEvent( (Menu*) pEvent->mpMenu, pEvent->mnId ) ? 1 : 0;
                     break;
@@ -2398,6 +2401,7 @@ long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
         case SALEVENT_MENUDEACTIVATE:
         case SALEVENT_MENUHIGHLIGHT:
         case SALEVENT_MENUCOMMAND:
+        case SALEVENT_MENUBUTTONCOMMAND:
             nRet = ImplHandleMenuEvent( pWindow, (SalMenuEvent*)pEvent, nEvent );
             break;
 
