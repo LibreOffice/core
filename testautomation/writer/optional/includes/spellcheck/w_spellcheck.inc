@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_spellcheck.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:58 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:36:16 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -54,12 +54,48 @@ end sub
 
 
 testcase tToolsSpellcheckWithShortcut
+    Dim TheFile as String
     '/// Check if Spellcheck dialog comes up with shortcut 'F7'
-    Call hNewDocument
-    Call wDokSchreiben "Check if spellchecker comes up!" 
-    wait 500    
-    Call wDokSchreiben "<HOME>"         'Setting cursor to beginning
-    Call wDokSchreiben "<F7>"           'Calling spellchecker with shortcut
+    printlog " Open document where the formatting is set to the language we wish to test."
+    TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
+    if hFileExists ( TheFile ) <> TRUE then
+       Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
+       exit sub
+    end if
+    
+    call hFileOpen (TheFile,false)
+    Call sMakeReadOnlyDocumentEditable
+
+    printlog " Insert some faulty text"
+    select case iSprache
+        case 01 : Call wTypeKeys ("This is a spellchecktestttttt<Home>")
+        case 33 : Call wTypeKeys ("Je Suiss la Penneeee<Home>")
+        case 34 : Call wTypeKeys ("Habla Espanollll<Home>")
+        case 39 : Call wTypeKeys ("Don Cara Mio, capitoliooo?<Home>")
+        case 49 : Call wTypeKeys ("Dies ist ein Rechtschreibtexxxxt<Home>")
+        case 46 : Call wTypeKeys ("Det här är en rättstavningstexxxxt<Home>")
+        case 07 : Printlog "- No Spellcheck in Russian!"
+                     goto endsub
+        case 48 : Printlog "- No Spellcheck in Polish!"
+                     goto endsub
+        case 55 : Printlog "- No Spellcheck in Brazilian!"
+                     goto endsub                     
+        case 81 : Printlog "- No Spellcheck in Japanese!"
+                     goto endsub
+        case 82 : Printlog "- No Spellcheck in Korean!"
+                     goto endsub
+        case 86 : Printlog "- No Spellcheck in Chinese (simplified)!"
+                     goto endsub
+        case 88 : Printlog "- No Spellcheck in Chinese (traditional)!"
+                     goto endsub
+        case 03, 30, 35, 36, 37, 42, 47, 51, 90
+                  Printlog "- No Spellcheck available !"
+                  goto endsub
+        case else
+    end select
+
+    Call wTypeKeys "<HOME>"         'Setting cursor to beginning
+    Call wTypeKeys "<F7>"           'Calling spellchecker with shortcut
     sleep (1)
     
     Kontext "Active"
@@ -68,7 +104,7 @@ testcase tToolsSpellcheckWithShortcut
             Active.OK
         else
             printlog "No message Box!"
-        endif
+        end if
         printlog "Message Box closed, Spellchecker came up"
     else
         Kontext "Spellcheck"            'checking if spellcheck dialog came up
@@ -77,21 +113,27 @@ testcase tToolsSpellcheckWithShortcut
             Spellcheck.Close            'closing spellchecker
         else
             Warnlog "#i35000#Spellchecker does not come up with shortcut 'F7'"
-        endif
-    endif
+        end if
+    end if
     Call hCloseDocument
 endcase
 
+'----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 testcase tToolsSpellcheckCorrect
     Dim sHyphenationFile as String
-    Dim sLocale(3) as string
-    '/// Checking if dictionary-files exists ///
-    sLocale(3) = fgetDocumentLanguages(sLocale(), true)
-    
+    Dim TheFile as String
+    Dim FFText as String
+
+    TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
+    if hFileExists ( TheFile ) <> TRUE then
+       Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
+       exit sub
+    end if
+
     Printlog "- Checking Dictionary-Files"
-    select case sLocale(1)
-        case 01 : sHyphenationFile = "01-44-hyph.dat"
+    select case iSprache
+        case 1 : sHyphenationFile = "01-44-hyph.dat"
         case 81 : Printlog "- No Spellcheck in Japanese!"
                   goto endsub
         case 82 : Printlog "- No Spellcheck in Korean!"
@@ -100,17 +142,21 @@ testcase tToolsSpellcheckCorrect
                   goto endsub
         case 88 : Printlog "- No Spellcheck in Chinese (traditional)!"
                   goto endsub
-        case else : sHyphenationFile =  "" & sLocale(1) & "-hyph.dat"
+        case else : sHyphenationFile =  "" & iSprache & "-hyph.dat"
     end select
     if gNetzInst = TRUE then
         sHyphenationFile = Convertpath (gNetzOfficePath + "share\dict\" + trim$(sHyphenationFile))
     else
         sHyphenationFile = Convertpath (gOfficePath + "share\dict\" + trim$(sHyphenationFile))
-    endif
+    end if
 
     PrintLog "- Tools / Spellcheck without text"
-    '/// New writerdocument ///
-    Call hNewDocument
+
+    printlog " Open document where the formatting is set to the language we wish to test."
+    call hFileOpen (TheFile,false)
+    Call sMakeReadOnlyDocumentEditable
+
+    printlog " Insert some faulty text"
     Sleep 1
     '/// Call Spellcheck in empty document ///
     ToolsSpellcheck
@@ -122,10 +168,9 @@ testcase tToolsSpellcheckCorrect
         Active.OK
     end if
 
-    Dim FFText as String
     PrintLog "- Tools / Spellcheck with correct text"
     '/// Call Spellcheck for correct text ///
-    select case sLocale(1)
+    select case iSprache
         case 01   : FFText = "This is a text without any error.<Return>"
         case 03   : FFText = "Escreva os seus dados de utilizador correctamente e tome nota deles (guardar / imprimir).<Return>"
         case 07   : FFText = "принятый Государственной Думой в первом чтении 16 ноября 1999 года.<Return>"
@@ -139,11 +184,11 @@ testcase tToolsSpellcheckCorrect
         case 48   : FFText = "Nie wolno w zadnim wypadku przerywa uruchomionego serwisu !<Return>"
         case 49   : FFText = "Dies ist ein Text ohne Fehler.<Return>"
         case 55	  : FFText = "Ele ouviu passos silenciosos atrás dele. Isso não estava certo.<Return>"
-        case else : QAErrorLog " - The language " + sLocale(1) +" has no defined language text. No Test !"
+        case else : QAErrorLog " - The language " + iSprache +" has no defined language text. No Test !"
                     exit Sub
     end select
 
-    Call wDokSchreiben FFText
+    Call wTypeKeys FFText
     wait 500
     ToolsSpellcheck
     Sleep 2
@@ -177,21 +222,25 @@ testcase tToolsSpellcheck1Mistake
     Dim sLanguageName as string
     Dim sDummy as string
     Dim sErrorSampleText as string
-    Dim sLocale(3) as string
-    '/// Checking if dictionary-files exists ///
-    sLocale(3) = fgetDocumentLanguages(sLocale(), true)
-    
+    Dim TheFile as String
+
+    TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
+    if hFileExists ( TheFile ) <> TRUE then
+       Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
+       exit sub
+    end if
+
     PrintLog "- Tools / Spellcheck with a defined mistake"
-    Select Case sLocale(1)
-        case 01   : sErrorSampleText = "Thats not a trick, it's a Sony."
-                    sWordToBeChecked = "Thats"
+    Select Case iSprache
+        case 01   : sErrorSampleText = "Thatts not a trick, it's a Sony."
+                    sWordToBeChecked = "Thatts"
                     sLanguageName = "English (USA)"
         case 03   : sErrorSampleText = "Escrive os seus dados de utilizador correctamente e tome nota deles."
                     sWordToBeChecked = "Escrive"
                     sLanguageName = "Português"
         case 07   : sErrorSampleText = "Военная технического сaтрудничества, проблему задолженности и вопросы региональных связей."
                     sWordToBeChecked = "сaтрудничества"
-                    sLanguageName = "Русский"        
+                    sLanguageName = "Русский"
         case 31   : sErrorSampleText = "Wijek danken u voor uw interesse in het samenwerken met Sun Microsystems."
                     sWordToBeChecked = "Wijek"
                     sLanguageName = "Nederlands (NL)"
@@ -202,7 +251,7 @@ testcase tToolsSpellcheck1Mistake
                     sWordToBeChecked = "importnte"
                     sLanguageName = "Español (España)"
         case 36   : sErrorSampleText = "Boszniai amerikai kontingens háromnegyedének – mintegy négyezer katona – magyarországi telepítése egy éven belül megtörténhet."
-                    sWordToBeChecked = "háromnegyedének"                    
+                    sWordToBeChecked = "háromnegyedének"
                     sLanguageName = "Magyar"
         case 39   : sErrorSampleText = "Lab ringraziamo per l'interesse"
                     sWordToBeChecked = "Lab"
@@ -233,11 +282,14 @@ testcase tToolsSpellcheck1Mistake
         case else : QAErrorLog "The language " + wSysLanguage +" has no defined Errortext. No test"
                   goto endsub
     end select
-    '/// New writerdocument ///
-    Call hNewDocument
+
+    printlog " Open document where the formatting is set to the language we wish to test."
+    call hFileOpen (TheFile,false)
+    Call sMakeReadOnlyDocumentEditable
+
     '/// Insert a sentence with one definded mistake and execute spellcheck ///
-    Call wDokSchreiben sErrorSampleText
-    Call wDokSchreiben "<Return><Up>"
+    Call wTypeKeys sErrorSampleText
+    Call wTypeKeys "<Return><Up>"
 	wait 500
     ToolsSpellcheck
     Kontext "Active"
@@ -249,15 +301,15 @@ testcase tToolsSpellcheck1Mistake
                 Warnlog Active.Gettext
                 Active.Ok
             endcatch
-        endif
-    endif
+        end if
+    end if
     Sleep 2
     Kontext "Spellcheck"
     if Not Spellcheck.Exists then
         Warnlog "Spellchecker is not up !"
         Call hCloseDocument
         goto endsub
-    endif
+    end if
     printlog "Current selected dictionary language is: " & DictionaryLanguage.GetSelText 
     '  Dictionary Language is language dependend. Function to be created
     printlog "   - check language"
@@ -266,7 +318,7 @@ testcase tToolsSpellcheck1Mistake
     '/// replace wrong word with a suggestion ///
     if trim$(NotInDictionary.GetText) <> trim(sErrorSampleText) then
         QAErrorlog "#i79988#" & sErrorSampleText & " has not been detected as mistake. Detected mistake is:" & NotInDictionary.GetText
-    endif
+    end if
     if Suggestions.GetItemCount > 0 then
         if Suggestions.IsEnabled then
 			try
@@ -278,13 +330,13 @@ testcase tToolsSpellcheck1Mistake
 			endcatch
             ' Next check does not work because if word is selected it will only be highlited!!"
             ' if Not NotInDictionary.GetText <> sErrorSampleText then Warnlog "Text in preview has not been replaced with the suggestion"
-            Change.Click            
+            Change.Click
 		else
 			QAErrorLog "No suggestions made from spellchecker"
-		endif
+		end if
     else
         QAErrorLog "Please choose another word to check suggestions, because no suggestion found!"
-    endif
+    end if
     Kontext "Active"
     if Active.Exists then
         try
@@ -298,8 +350,8 @@ testcase tToolsSpellcheck1Mistake
     Kontext "Spellcheck"
     if Spellcheck.Exists then SpellcheckClose.Click
 
-	Call wDokSchreiben "<Up><Home>"
-    Call wDokSchreiben "<Shift End>"
+	Call wTypeKeys "<Up><Home>"
+    Call wTypeKeys "<Shift End>"
     Sleep 1
 	EditCopy
     if GetClipboardText = sErrorSampleText then Warnlog "Replaced text in document is wrong. Not "+ sErrorSampleText + " but " + GetClipboardText
@@ -315,10 +367,7 @@ testcase tToolsSpellcheckForward
     Dim InsFile as string
     Dim Add_Word as string
     Dim sDictionary as string
-    Dim sLocale(3) as string
-    '/// Checking if dictionary-files exists ///
-    sLocale(3) = fgetDocumentLanguages(sLocale(), true)
-    
+
     PrintLog "- Tools / Spellcheck / check forward"
     '/// Open specified document depending on language to check spellcheck ///
     '/// document has 4 defined wrong words ///
@@ -328,7 +377,7 @@ testcase tToolsSpellcheckForward
             Printlog "- No Spellcheck for this language available!"
             goto endsub
         case "Empty"
-            QAErrorLog "The language " + iSystemSprache +" has no defined Errortext. No test!"
+            QAErrorLog "The language " + iSprache +" has no defined Errortext. No test!"  'iSystemSprache
             goto endsub
     end select
     
@@ -337,11 +386,11 @@ testcase tToolsSpellcheckForward
             EditPaste
     else
         Call hFileOpen(InsFile)
-    endif
+    end if
     '/// point cursor to beginning of document and execute spellcheck ///
-    Call wDokSchreiben "<Mod1 Home>"
+    Call wTypeKeys "<Mod1 Home>"
     
-    select case sLocale(1)
+    select case iSprache
         case 01   : sDummy = "exprass"      : sWordToBeAdded = "pablischer"
         case 07   : sDummy = "решаaт"       : sWordToBeAdded = "кaнкретных"
         case 03   : sDummy = "quante"       : sWordToBeAdded = "cempas"
@@ -377,7 +426,7 @@ testcase tToolsSpellcheckForward
 	else
 		QAErrorLog "No suggestions made from spellchecker!=>Choose 'Ignore All'"
         if IgnoreAll.IsEnabled then IgnoreAll.Click
-	endif
+	end if
 
     Printlog "   - Ignore All (" + NotInDictionary.Gettext + ")"
     '/// For second wrong word select 'Ignore all' ///
@@ -403,7 +452,7 @@ testcase tToolsSpellcheckForward
     if Active.Exists then
         if Active.GetRT = 304 then
             Warnlog "Spellcheck has ended! Not reproducable by hand !"
-        endif
+        end if
     else
         Kontext "Spellcheck"
         Add_Word = trim$(NotInDictionary.Gettext)
@@ -418,19 +467,19 @@ testcase tToolsSpellcheckForward
 			Sleep 1
 		else
 			Warnlog "Unable to add word to dictionary->button is disabled!"
-		endif
-    endif
+		end if
+    end if
 
 	Kontext "Active"
 	if Active.Exists then
 		If Active.GetRT = 304 then
 			Active.Ok
-		endif
-	endif
+		end if
+	end if
 	
     Kontext "Spellcheck"
     if Spellcheck.Exists then Spellcheck.Close
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
 
     Printlog "   - recheck: One mistake has to be found 3 times"
     wait 500
@@ -446,8 +495,8 @@ testcase tToolsSpellcheckForward
                 Active.Yes
                 Warnlog Active.Gettext
             endcatch
-        endif
-    endif
+        end if
+    end if
     Kontext "Spellcheck"
     if Spellcheck.Exists then
         if Instr(NotInDictionary.GetText, sDummy) = 0 then
@@ -458,8 +507,8 @@ testcase tToolsSpellcheckForward
             catch
                 Warnlog "Button 'Ignore all' is not accessible"
             endcatch
-        endif
-    endif
+        end if
+    end if
     Sleep 2
     Kontext
     if Active.Exists(2) then
@@ -490,9 +539,6 @@ testcase tToolsSpellcheckOnlyOneWord
     Dim InsFile as string
     Dim ReplacedWith as String
     Dim i as integer
-    Dim sLocale(3) as string
-    '/// Checking if dictionary-files exists ///
-    sLocale(3) = fgetDocumentLanguages(sLocale(), true)
         
     '/// Open specified document depending on language to check spellcheck ///
     '/// document has 1 defined wrong word ///
@@ -503,7 +549,7 @@ testcase tToolsSpellcheckOnlyOneWord
             Printlog "- No Spellcheck for this language available!"
             goto endsub
         case "Empty"
-            QAErrorLog "The language " + iSystemSprache +" has no defined Errortext. No test!"
+            QAErrorLog "The language " + iSprache +" has no defined Errortext. No test!"
             goto endsub
     end select
     
@@ -512,10 +558,10 @@ testcase tToolsSpellcheckOnlyOneWord
             EditPaste
     else
         Call hFileOpen(InsFile)
-    endif
-    Call wDokSchreiben "<Mod1 Home>"
+    end if
+    Call wTypeKeys "<Mod1 Home>"
     
-    select case sLocale(1)
+    select case iSprache
         case 01   : sWordToBeChecked = "excetionally"      ' this word is wrong
         case 07   : sWordToBeChecked = "Кaнституции"
         case 03   : sWordToBeChecked = "semstre"           ' this word is wrong
@@ -559,8 +605,8 @@ testcase tToolsSpellcheckOnlyOneWord
             catch
                 Active.No
             endcatch
-        endif
-    endif
+        end if
+    end if
 
     Kontext "FindAndReplace"
     if FindAndReplace.Exists then FindAndReplace.Close
@@ -577,8 +623,8 @@ testcase tToolsSpellcheckOnlyOneWord
             endcatch
             Call hCloseDocument
             goto endsub
-        endif
-    endif
+        end if
+    end if
 
     Kontext "Spellcheck"
     Printlog "   - Replace all"
@@ -595,16 +641,15 @@ testcase tToolsSpellcheckOnlyOneWord
 			QAErrorLog "No suggestions made from spellchecker!"
             Spellcheck.Close
             Call hCloseDocument
-            goto endsub            
-		endif
+            goto endsub
+		end if
     else
         Warnlog "No suggestion for word: " & sWordToBeChecked & " found. Test stops"
         Spellcheck.Close
         Call hCloseDocument
         goto endsub
-    endif
+    end if
 
-    
     Kontext "Active"
     if Active.Exists then
         if Active.GetRT = 304 then
@@ -614,20 +659,20 @@ testcase tToolsSpellcheckOnlyOneWord
                 Active.No
                 Warnlog Active.Gettext
             endcatch
-        endif
-    endif       
+        end if
+    end if       
     
     Kontext "Spellcheck"
     if Spellcheck.Exists then SpellcheckClose.Click
     
-    Call wDokSchreiben "<Mod1 Shift Left>"
+    Call wTypeKeys "<Mod1 Shift Left>"
     try
         EditCopy
         if GetClipboardtext = sWordToBeChecked then
             Warnlog "#i40498#Spellchecker does not commit changes correctly (" & GetClipboardtext & " found )"
             Call hCloseDocument
             goto endsub
-        endif
+        end if
     catch
         Warnlog "- Didn't found the word to check! No Spellchecking for one word!"
         Call hCloseDocument
@@ -647,20 +692,20 @@ testcase tToolsSpellcheckOnlyOneWord
                     if Active.GetRT = 304 then
                         Active.Ok
                         Warnlog "#i40480#Spellchecker finishes though wrong words in documents"
-                    endif
-                endif
+                    end if
+                end if
             catch
                 Active.Ok
             endcatch
-        endif
+        end if
     else
         Sleep 2
         Kontext "Spellcheck"
         if Spellcheck.Exists then
             Warnlog "Probably the replaced word found wrong again!"
             Spellcheck.Close
-        endif
-    endif
+        end if
+    end if
         
     Kontext "Spellcheck"
     if Spellcheck.Exists then Spellcheck.Close
@@ -680,64 +725,70 @@ testcase tToolsSpellcheckAutomatic
     Dim sNumberOfSuggestions as string
     Dim sReplaceWithWord as string
     Dim sDefaultFormat as string
-    Dim sLocale(3) as string
-    '/// Checking if dictionary-files exists ///
-    sLocale(3) = fgetDocumentLanguages(sLocale(), true)
-        
+    Dim TheFile as String
+
+    TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
+    if hFileExists ( TheFile ) <> TRUE then
+       Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
+       exit sub
+    end if
+
     PrintLog "- Tools / Spellcheck / AutoSpellcheck"
-    '/// New writerdocument ///
-    Call hNewDocument
+    printlog " Open document where the formatting is set to the language we wish to test."
+    call hFileOpen (TheFile,false)
+    Call sMakeReadOnlyDocumentEditable
+
     '/// Enable Auto-Spellcheck in options
     Call wEnableAutoSpellcheck ( true ) 
     
     '/// Check Auto-Spellcheck and insert a sentence with 2 mistakes ///
     printlog "   - write text"
     select case iSprache
-        case 01   : wDokSchreiben "Hello thiis here are too errorrs "
+        case 01   : wTypeKeys "Hello thiis here are too errorrs "
                   iError1 = 1 : iError2 = 4
                   sError1 = "thiis"  : sError1 = "errorrs"
                   sDefaultFormat = "Standard"
-        case 03   : wDokSchreiben "Aqui poderá elimitnar componentes já instalados ou instalar novos compotentes numa "
+        case 03   : wTypeKeys "Aqui poderá elimitnar componentes já instalados ou instalar novos compotentes numa "
                   iError1 = 2 : iError2 = 7
                   sError1 = "elimitnar"  : sError1 = "compotentes"
                   sDefaultFormat = "Padrão"
-        case 31   : wDokSchreiben "Betaling binnern 14 dagen rekeningsdatum met 2% kortng, binnen 30 dagen nettor "
+        case 31   : wTypeKeys "Betaling binnern 14 dagen rekeningsdatum met 2% kortng, binnen 30 dagen nettor "
                   iError1 = 1 : iError2 = 7
                   sError1 = "binnern"  : sError1 = "rekeningsdatum"
                   sDefaultFormat = "Standaard"
-        case 33   : wDokSchreiben "Je vious remercie d'accuser réception dex ce courrier "
+        case 33   : wTypeKeys "Je vious remercie d'accuser réception dex ce courrier "
                   iError1 = 1 : iError2 = 4
                   sError1 = "vious"  : sError1 = "dex"
                   sDefaultFormat = "Standard"
-        case 34   : wDokschreiben "Este archvo contiene información importnte sobre el programa."
+        case 34   : wTypeKeys "Este archvo contiene información importnte sobre el programa."
                   iError1 = 1 : iError2 = 3
                   sError1 = "archvo"  : sError1 = "importnte"
                   sDefaultFormat = "Estándar"
-        case 36   : wDokSchreiben "A hétezres koszovói amerikai kontingens jelentos részét is a magyarországi bázison helyezi majd el."
+        case 36   : wTypeKeys "A hétezres koszovói amerikai kontingens jelentos részét is a magyarországi bázison helyezi majd el."
                   iError1 = 1 : iError2 = 4
                   sError1 = "hétezres"  : sError1 = "jelentos"
                   sDefaultFormat = "Alapértelmezett"                
-        case 39   : wDokSchreiben "La sfumaturar è statsi modificata senza salvare "
+        case 39   : wTypeKeys "La sfumaturar è statsi modificata senza salvare "
                   iError1 = 1 : iError2 = 2
                   sError1 = "sfumaturar"  : sError1 = "statsi"
                   sDefaultFormat = "Standard"
-        case 45   : wDokSchreiben "Han advarade både mod at kalde traktüten et fredens projekt "
+        case 45   : wTypeKeys "Han advarade både mod at kalde traktüten et fredens projekt "
                   iError1 = 1 : iError2 = 5
                   sError1 = "advarade"  : sError1 = "traktüten"
                   sDefaultFormat = "Standard"
-        case 46   : wDokSchreiben "Den här fiten innehåller viktit programinformation "
+        case 46   : wTypeKeys "Den här fiten innehåller viktit programinformation "
                   iError1 = 2 : iError2 = 2
                   sError1 = "fiten"  : sError1 = "viktit"
                   sDefaultFormat = "Standard"
-        case 48   : wDokSchreiben "Nie wolno w zadim wypadku przerywa uruchomiongo serwisu "
+        case 48   : wTypeKeys "Nie wolno w zadim wypadku przerywa uruchomiongo serwisu "
                   iError1 = 3 : iError2 = 3
                   sError1 = "zadim"  : sError1 = "uruchomiongo"
                   sDefaultFormat = "Standard"
-        case 49   : wDokSchreiben "Hallo hiaer sind swei Fehler "
+        case 49   : wTypeKeys "Hallo hiaer sind swei Fehler "
                   iError1 = 1 : iError2 = 2
                   sError1 = "hiaer"  : sError1 = "swei"
                   sDefaultFormat = "Standard"
-        case 55   : wDokSchreiben "Aqui poderá elimitnar componentes já instalados ou instalar novos compotentes numa "
+        case 55   : wTypeKeys "Aqui poderá elimitnar componentes já instalados ou instalar novos compotentes numa "
                   iError1 = 2 : iError2 = 7
                   sError1 = "elimitnar"  : sError1 = "compotentes"
                   sDefaultFormat = "Padrão"                  
@@ -753,20 +804,20 @@ testcase tToolsSpellcheckAutomatic
         case 88 : Printlog "- No Spellcheck in Chinese (traditional)!"
                  Call hCloseDocument
                  goto endsub
-        case else : QAErrorlog "The language " + iSystemSprache +" has no defined errortext. No Test!"
+        case else : QAErrorlog "The language " + iSprache +" has no defined errortext. No Test!"
                   Call hCloseDocument
                   goto endsub
     end select
 
-    Call wDokSchreiben "<Space><Return>"
+    Call wTypeKeys "<Space><Return>"
     
     printlog "   -  relieve mistake"
-    Call wDokSchreiben "<Up><Home>"
-    Sleep 5
-    Call wDokSchreiben "<Mod1 Right>", iError1
-    Call wDokSchreiben "<Right>"          ' Cursor in fehlerhaftes NotInDictionary stellen
+    Call wTypeKeys "<Up><Home>"
+    Call wTypeKeys "<Mod1 Right>", iError1
+    Call wTypeKeys "<Right>"          ' Cursor in fehlerhaftes NotInDictionary stellen
+    Wait (500)
     '/// Open contextmenu in first wrong word ///
-    Call wOpenContextMenu
+    Call wTypeKeys "<Shift F10>"
     sReplaceWithWord=hMenuItemGetText (2)
     if sReplaceWithWord<>sDefaultFormat then
         sNumberOfSuggestions=MenuGetItemCount - 6
@@ -776,24 +827,27 @@ testcase tToolsSpellcheckAutomatic
         else
             printlog "- Context menu has " + sNumberOfSuggestions + " suggestions to the 1. wrong word!"
             Call hMenuSelectNr (2)
-            Call wDokSchreiben "<Shift Mod1 Left>"
+            Call wTypeKeys "<Shift Mod1 Left>"
             try
                 EditCopy
                 if GetClipboardtext<> sReplaceWithWord then
                     Warnlog "- 1. wrong Word has not been replaced with " + sReplaceWithWord + " but "+ GetClipBoardtext
                 else
                     printlog "- 1. wrong word has been replaced with the 1. entry in context menu!"
-                endif
+                end if
             catch
             endcatch
-        endif
+        end if
     else
         Warnlog "- AutoSpellcheck doesn't work , wrong Context menu! (1.Word)"
-    endif
+    end if
+    Wait (5000)
+    Call wTypeKeys "<Mod1 Right>", iError2
+    Wait (5000)
+    Call wTypeKeys "<Right>"          ' Cursor in fehlerhaftes NotInDictionary stellen
+    Wait (5000)
+    Call wTypeKeys "<Shift F10>"
 
-    Call wDokSchreiben "<Mod1 Right>", iError2
-    Call wDokSchreiben "<Right>"          ' Cursor in fehlerhaftes NotInDictionary stellen
-    Call wOpenContextMenu
     sReplaceWithWord=hMenuItemGetText (2)
     if sReplaceWithWord<>sDefaultFormat then
         sNumberOfSuggestions=MenuGetItemCount - 6
@@ -802,23 +856,23 @@ testcase tToolsSpellcheckAutomatic
         else
             printlog "- Context menu has " + sNumberOfSuggestions + " suggestions for the 2. wrong word!"
             Call hMenuSelectNr (2)
-            Call wDokSchreiben "<Shift Mod1 Left>"
+            Call wTypeKeys "<Shift Mod1 Left>"
             try
                 EditCopy
                 if GetClipboardtext<> sReplaceWithWord then
                     Warnlog "- 2. wrong word has not been replaced with " + sReplaceWithWord + " but "+ GetClipBoardtext
                 else
                     printlog "- 2. mistake has been replaced with the 1. entry in context menu!"
-                endif
+                end if
             catch
             endcatch
-        endif
+        end if
     else
         Warnlog "- AutoSpellcheck doesn't work, wrong Context menu (2.Word)!"
-    endif
+    end if
 
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<F7>"
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<F7>"
     Sleep 2
     Kontext "Active"
     if Active.Exists then
@@ -829,7 +883,7 @@ testcase tToolsSpellcheckAutomatic
                 Active.Gettext
                 Active.No
             endcatch
-        endif
+        end if
     else
         Kontext "Spellcheck"
         if Spellcheck.Exists then
@@ -845,20 +899,17 @@ testcase tToolsSpellcheckAutomatic
     Call hCloseDocument
 endcase
 
-
+'------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 testcase tToolsSpellcheckChangeLanguageAttribute
-      
+
     Dim sWordToBeChecked as string
     Dim InsFile as string
     Dim i as integer
     Dim ReplacedWith as string
     Dim PriorLanguage as string
     Dim CurrentLanguage as string
-    Dim sLocale(3) as string
-    '/// Checking if dictionary-files exists ///
-    sLocale(3) = fgetDocumentLanguages(sLocale(), true)
-        
+
     '/// Open specified document depending on language to check spellcheck ///
     '/// document has 1 defined wrong word ///
     PrintLog "- Tools / Spellchecking / Check only one word"
@@ -868,7 +919,7 @@ testcase tToolsSpellcheckChangeLanguageAttribute
             Printlog "- No Spellcheck for this language available!"
             goto endsub
         case "Empty"
-            QAErrorLog "The language " + iSystemSprache +" has no defined Errortext. No test!"
+            QAErrorLog "The language " + iSprache +" has no defined Errortext. No test!" 'iSystemSprache
             goto endsub
     end select
     
@@ -877,10 +928,10 @@ testcase tToolsSpellcheckChangeLanguageAttribute
             EditPaste
     else
         Call hFileOpen(InsFile)
-    endif
-    Call wDokSchreiben "<Mod1 Home>"
+    end if
+    Call wTypeKeys "<Mod1 Home>"
     
-    select case sLocale(1)
+    select case iSprache
         case 01   : sWordToBeChecked = "excetionally"      ' this word is wrong
         case 03   : sWordToBeChecked = "semstre"           ' this word is wrong
         case 07   : sWordToBeChecked = "военно"
@@ -924,8 +975,8 @@ testcase tToolsSpellcheckChangeLanguageAttribute
             FindAndReplace.Cancel
             Call hCloseDocument
             goto endsub
-        endif
-    endif
+        end if
+    end if
     Kontext "FindAndReplace"
     if FindAndReplace.Exists then FindAndReplace.Cancel
     EditCopy
@@ -942,11 +993,11 @@ testcase tToolsSpellcheckChangeLanguageAttribute
                 Warnlog Active.Gettext
                 Warnlog "- Probably didn't found the word to check! No Spellchecking for one word!"
                 Active.ok
-            endif
-        endif
+            end if
+        end if
         ToolsSpellcheck
         Kontext "Spellcheck"
-    endif
+    end if
 	'/// Replace found word with suggestion from list
     if Spellcheck.Exists then
         PriorLanguage = DictionaryLanguage.GetSelText
@@ -961,12 +1012,12 @@ testcase tToolsSpellcheckChangeLanguageAttribute
                     ReplacedWith = Suggestions.GetSelText
                     printlog "-  replace with word: " & ReplacedWith
                     i = DictionaryLanguage.GetItemCount + 1 
-                endif
-            endif        
-        next i    
+                end if
+            end if
+        next i
         '/// Close spellcheck dialog and check if properties have been set
         if ReplacedWith > "" then
-            Change.Click        
+            Change.Click
             Kontext "Active"
             if Active.Exists then
                 if Active.GetRT = 304 then
@@ -974,8 +1025,8 @@ testcase tToolsSpellcheckChangeLanguageAttribute
                         Active.Yes
                     catch
                     endcatch
-                endif
-            endif
+                end if
+            end if
             ' Finished message ?
             Kontext "Active"
             if Active.Exists then
@@ -984,15 +1035,15 @@ testcase tToolsSpellcheckChangeLanguageAttribute
                         Active.Ok
                     catch
                     endcatch
-                endif
-            endif
+                end if
+            end if
             wait 500
             Kontext "Spellcheck"
             if Spellcheck.Exists then
                 SpellcheckClose.Click
-            endif
+            end if
             wait 500
-            Call wDokSchreiben "<Mod1 Home>"
+            Call wTypeKeys "<Mod1 Home>"
             printlog "- find replaced word"
             
             EditSearchAndReplace
@@ -1013,8 +1064,8 @@ testcase tToolsSpellcheckChangeLanguageAttribute
                     FindAndReplace.Cancel
                     Call hCloseDocument
                     goto endsub
-                endif
-            endif
+                end if
+            end if
             Kontext "FindAndReplace"
             if FindAndReplace.Exists then FindAndReplace.Cancel
             wait 500
@@ -1027,28 +1078,27 @@ testcase tToolsSpellcheckChangeLanguageAttribute
                     if Language.GetSelText = PriorLanguage then
                         Warnlog "Language Attributes has not been set to" & CurrentLanguage
                     else
-                        Warnlog "Language Attributes has not been set to " & CurrentLanguage & " but " & Language.GetSelText                    
-                    endif
-                endif
+                        Warnlog "Language Attributes has not been set to " & CurrentLanguage & " but " & Language.GetSelText
+                    end if
+                end if
             catch
                 if LanguageWest.GetSelText <> CurrentLanguage then
                     if LanguageWest.GetSelText = PriorLanguage then
                         Warnlog "Language Attributes has not been set to" & CurrentLanguage
                     else
-                        Warnlog "Language Attributes has not been set to " & CurrentLanguage & " but " & LanguageWest.GetSelText                    
-                    endif
-                endif
+                        Warnlog "Language Attributes has not been set to " & CurrentLanguage & " but " & LanguageWest.GetSelText
+                    end if
+                end if
             endcatch
             TabFont.Cancel
         else
             QAErrorlog "No suggestions found! Maybe wrong word should be changed to run more deeper testing"
-        endif
+        end if
     else
         Warnlog "Spellcheck dialog is not up !"
-    endif    
+    end if
     '/// Close document ///
     Call hCloseDocument
-
 endcase
 
 ' *******************************************************************
@@ -1065,7 +1115,7 @@ testcase tToolsSpellcheckButtonChange
             Printlog "- No Spellcheck for this language available!"
             goto endsub
         case "Empty"
-            QAErrorLog "The language " + iSystemSprache +" has no defined Errortext. No test!"
+            QAErrorLog "The language " + iSprache +" has no defined Errortext. No test!"  'iSystemSprache
             goto endsub
     end select
     
@@ -1074,8 +1124,8 @@ testcase tToolsSpellcheckButtonChange
             EditPaste
     else
         Call hFileOpen(InsFile)
-    endif
-    Call wDokSchreiben "<Mod1 Home>"
+    end if
+    Call wTypeKeys "<Mod1 Home>"
 
     '/// invoke the spellchecker
     ToolsSpellcheck
@@ -1103,17 +1153,17 @@ testcase tToolsSpellcheckButtonChange
                             wait 500
                             if Not Change.IsEnabled = true then
                                 Warnlog "Button 'Change' is disabled though text has been changed"
-                            endif
-                         endif
-                     endif
-                next i    
-            endif
-        endif
-    endif
+                            end if
+                         end if
+                     end if
+                next i
+            end if
+        end if
+    end if
     Kontext "Spellcheck"
     if Spellcheck.Exists then SpellcheckClose.Click
     '/// Close document
-    Call hCloseDocument    
+    Call hCloseDocument
 
 endcase
 
@@ -1131,7 +1181,7 @@ testcase tToolsSpellcheckButtonChangeAll
             Printlog "- No Spellcheck for this language available!"
             goto endsub
         case "Empty"
-            QAErrorLog "The language " + iSystemSprache +" has no defined Errortext. No test!"
+            QAErrorLog "The language " + iSprache +" has no defined Errortext. No test!"  'iSystemSprache
             goto endsub
     end select
     
@@ -1140,8 +1190,8 @@ testcase tToolsSpellcheckButtonChangeAll
             EditPaste
     else
         Call hFileOpen(InsFile)
-    endif
-    Call wDokSchreiben "<Mod1 Home>"
+    end if
+    Call wTypeKeys "<Mod1 Home>"
 
     '/// invoke the spellchecker
     ToolsSpellcheck
@@ -1161,13 +1211,13 @@ testcase tToolsSpellcheckButtonChangeAll
                 wait 500
                 if ChangeAll.IsEnabled = true then
                     Warnlog "Button 'Change all' is disabled though text has been changed"
-                endif
+                end if
             else
                 Warnlog "Button 'Change all' should be enabled"
-            endif
+            end if
             SpellcheckClose.Click
-        endif
-    endif
+        end if
+    end if
     '/// Close document
     Call hCloseDocument
     
@@ -1181,13 +1231,18 @@ testcase tToolsThesaurus
     Dim sWordToBeFound as string
     Dim sWordReplacedWith as string
     Dim i as integer
-    Dim sLocale(3) as string
-    '/// Checking if dictionary-files exists ///
-    sLocale(3) = fgetDocumentLanguages(sLocale(), true)
-    
+    Dim TheFile as String
+
     PrintLog "- Tools / Thesaurus"
 
-    select case sLocale(1)    
+    printlog " Open document where the formatting is set to the language we wish to test."
+    TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
+    if hFileExists ( TheFile ) <> TRUE then
+       Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
+       exit sub
+    end if
+
+    select case iSprache
         case 01 : sWordInitial = "Morning"
         case 03 : sWordInitial = "Confirmam"
         case 07 : Printlog "- No Thesaurus in Russian!"
@@ -1214,13 +1269,15 @@ testcase tToolsThesaurus
                   goto endsub
         case 30, 35, 36, 37, 42, 47, 48, 51, 90
                   Printlog "- No Thesaurus available !"
-                  goto endsub                    
-        case else : QAErrorlog "The language " +  iSystemSprache + " has no defined errortext. No Test!"
+                  goto endsub
+        case else : QAErrorlog "The language " + iSprache + " has no defined errortext. No Test!"
                     goto endsub
     end select
 
-    Call hNewDocument
-    '/// New writerdocument ///
+    printlog "Open new preformatted-writerdocument"
+    call hFileOpen (TheFile,false)
+    Call sMakeReadOnlyDocumentEditable
+
     printlog "-  Thesaurus without a word"
     '/// Call Thesaurus without a written word ///
 	ToolsLanguageThesaurus
@@ -1233,33 +1290,36 @@ testcase tToolsThesaurus
     if Active.Exists then
         Warnlog Active.Gettext
         Active.ok
-    endif
+    end if
     Kontext "Thesaurus"
     if Bedeutung.GetSelText(1) = "" then Warnlog "No meaning text"
     if Ersetzen.Gettext = "" then Ersetzen.SetText = sWordInitial
     sWordToBeFound = Ersetzen.GetText
     Thesaurus.OK
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Home><Shift End>"
     wait 200
     EditCopy
-    if iSystemSprache = 1 then
+    if iSprache = 1 then
         if GetClipboardText <> sWordToBeFound then Warnlog "Wrong word has been replaced, not => " + sWordInitial + " but => " + GetClipboardText
     else
         if LCase (GetClipboardText) <> LCase (sWordToBeFound) then Warnlog "Wrong word has been replaced, not => " + sWordToBeFound + " but => " + GetClipboardText
     end if
     Call hCloseDocument
     wait 500
-    Call hNewDocument
+    
+    printlog " Open new preformatted-document where the formatting is set to the language we wish to test."
+    call hFileOpen (TheFile,false)
+    Call sMakeReadOnlyDocumentEditable
 
     printlog "-  check the language"
-    Call wDokSchreiben sWordInitial + "<Home>"
+    Call wTypeKeys sWordInitial + "<Home>"
     '/// Check language in Thesaurus ///
     ToolsLanguageThesaurus
     Kontext "Thesaurus"
 
     Sprache.Click
     Kontext "SpracheAuswaehlen"
-    select case iSystemSprache    
+    select case iSprache ' iSystemSprache    
         case 01 : sLanguageToBeSelected = "English (USA)"
         case 07 : sLanguageToBeSelected = "Русский"
         case 03 : sLanguageToBeSelected = "Português"
@@ -1273,7 +1333,6 @@ testcase tToolsThesaurus
         case 48 : sLanguageToBeSelected = "Polski"
         case 49 : sLanguageToBeSelected = "Deutsch (Deutschland)"
     end select
-    'if Auswahl.GetSelText <> gLanguage then Warnlog "Selected language is " + Auswahl.GetSelText + " and not "+ sLanguageToBeSelected
     SpracheAuswaehlen.OK
     Sleep 5
 
@@ -1307,20 +1366,22 @@ testcase tToolsThesaurus
             Sleep 1
         next i
         sWordToBeFound = Bedeutung.GetSelText
-        if Ersetzen.GetText <> sWordToBeFound then Warnlog "Meaning has not been overtaken"
-    endif
+        if Instr ( Ersetzen.GetText, sWordToBeFound ) <> 0 then
+            Warnlog "Meaning has not been overtaken"
+        end if
+    end if
 
     printlog "-  Replace unchecked ( Cursor in front of words 1. character )"
     '/// replace unchecked ///
     sWordReplacedWith = Ersetzen.GetText
     Thesaurus.OK
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys "<Shift Home>"
     wait 200
     EditCopy
     if GetClipboardText <> sWordReplacedWith then Warnlog "Text has not been correctly replaced, not => " + sWordReplacedWith + " but => " + GetClipboardText
 
-    Call wDokSchreiben "<End><Shift Home><Delete>" + sWordInitial
-    Call wDokSchreiben "<Home><Right><Right>"
+    Call wTypeKeys "<End><Shift Home><Delete>" + sWordInitial
+    Call wTypeKeys "<Home><Right><Right>"
 
     printlog "-  Replace unchecked ( Cursor in word )"
     ToolsLanguageThesaurus
@@ -1330,17 +1391,17 @@ testcase tToolsThesaurus
         Synonym.Select 1
         sWordReplacedWith = Ersetzen.GetText
         Thesaurus.OK
-        Call wDokSchreiben "<Home><Shift End>"
+        Call wTypeKeys "<Home><Shift End>"
         wait 200
         EditCopy
         if GetClipboardText <> sWordReplacedWith then Warnlog "Text has not been correctly replaced, not => " + sWordReplacedWith + " but => " + GetClipboardText
     else
         Warnlog "- No Synonym when cursor is in word!"
         Thesaurus.Ok
-    endif
+    end if
 
-    Call wDokSchreiben "<End><Shift Home><Delete>"
-    Call wDokSchreiben sWordInitial + "<End><Left>"
+    Call wTypeKeys "<End><Shift Home><Delete>"
+    Call wTypeKeys sWordInitial + "<End><Left>"
 
     printlog "-  Replace unchecked ( Cursor at words end )"
     ToolsLanguageThesaurus
@@ -1349,17 +1410,17 @@ testcase tToolsThesaurus
         Synonym.Select 1
         sWordReplacedWith = Ersetzen.GetText
         Thesaurus.OK
-        Call wDokSchreiben "<Home><Shift End>"
+        Call wTypeKeys "<Home><Shift End>"
         wait 200
         EditCopy
         if GetClipboardText <> sWordReplacedWith then Warnlog "Text has not been correctly replaced, not => " + sWordReplacedWith + " but => " + Trim$(GetClipboardText)
     else
         Warnlog "- No sysnonym when cursor pointed to words end!"
         Thesaurus.Ok
-    endif
+    end if
 
-    Call wDokSchreiben "<End><Shift Home><Delete>"
-    Call wDokSchreiben sWordInitial + "<End><Left><Shift Mod1 Left>"
+    Call wTypeKeys "<End><Shift Home><Delete>"
+    Call wTypeKeys sWordInitial + "<End><Left><Shift Mod1 Left>"
 
     printlog "-  Replace checked ( back to front )"
     '/// replace checked ///
@@ -1369,7 +1430,7 @@ testcase tToolsThesaurus
         Synonym.Select 1
         sWordReplacedWith = Ersetzen.GetText
         Thesaurus.Ok
-        Call wDokSchreiben "<Home><Shift End><Shift Left>"
+        Call wTypeKeys "<Home><Shift End><Shift Left>"
         wait 200
         EditCopy
         if GetClipboardText <> sWordReplacedWith then Warnlog "Text has not been correctly replaced, not => " + sWordReplacedWith + " but => " + GetClipboardText
@@ -1380,11 +1441,11 @@ testcase tToolsThesaurus
             Active.Ok
             Kontext "Thesaurus"
             Thesaurus.OK
-        endif
-    endif
+        end if
+    end if
 
-    Call wDokSchreiben "<End><Shift Home><Delete>"
-    Call wDokSchreiben sWordInitial + "<Home><Shift End>"
+    Call wTypeKeys "<End><Shift Home><Delete>"
+    Call wTypeKeys sWordInitial + "<Home><Shift End>"
     printlog "-  Replace checked ( front to back )"
     ToolsLanguageThesaurus
     Kontext "Thesaurus"
@@ -1392,17 +1453,17 @@ testcase tToolsThesaurus
         Synonym.Select 1
         sWordReplacedWith = Ersetzen.GetText
         Thesaurus.Ok
-        Call wDokSchreiben "<Home><Shift End>"
+        Call wTypeKeys "<Home><Shift End>"
         wait 200
         EditCopy
         if GetClipboardText <> sWordReplacedWith then Warnlog "Text has not been correctly replaced, not => " + sWordReplacedWith + " but => " + GetClipboardText
     else
         Warnlog "- No sysnonym when word is marked!"
         Thesaurus.Ok
-    endif
+    end if
 
-    Call wDokSchreiben "<End><Shift Home><Delete>"
-    Call wDokSchreiben sWordInitial + "<Home><Right><Shift Right><Shift Right>"
+    Call wTypeKeys "<End><Shift Home><Delete>"
+    Call wTypeKeys sWordInitial + "<Home><Right><Shift Right><Shift Right>"
 
     printlog "-  Part of Replace checked ( back to front )  - no checking anymore"
     ToolsLanguageThesaurus

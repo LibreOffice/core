@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_spellcheck1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:59 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:36:27 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -66,7 +66,7 @@ DIM WordLanguageTemp    AS string 'variable for checking if Office language is a
         printlog "Autospellcheck checked"
     else
         printlog "Autospellcheck is already checked"
-    endif
+    end if
     '----------------------------------------------------------------
     EditNavigator       'opening navigator and selecting table
     sleep(1)
@@ -98,12 +98,12 @@ DIM WordLanguageTemp    AS string 'variable for checking if Office language is a
                 printlog "Word language proposal is correct" 'all ok
             else
                 warnlog "Word language proposal is not correct!" 'problem!
-            endif
+            end if
         else
             Call MenuSelect(0) 'closing menu when language is not yet covered
             Call hCloseDocument ''closing doc when language is not yet covered
             exit sub
-        endif
+        end if
         
         '///Apply the language for this word ///
         call hMenuItemCheck (iStringPosition)        'clicking on menu entry, closing context. Word looses redline.
@@ -116,7 +116,7 @@ DIM WordLanguageTemp    AS string 'variable for checking if Office language is a
             warnlog "Word language not applied correctly!" 'Problem!
         else
             printlog "Word language applied correctly" ''all ok
-        endif
+        end if
         Call MenuSelect(0) 'closing menu
         
         '----------------------------------------------------------------
@@ -137,7 +137,7 @@ DIM WordLanguageTemp    AS string 'variable for checking if Office language is a
             printlog "Paragraph language proposal is correct" 'all ok
         else
             warnlog "Paragraph language proposal is not correct!" 'Problem!
-        endif 
+        end if 
         
         
         '///Apply the language for this paragraph ///
@@ -152,7 +152,7 @@ DIM WordLanguageTemp    AS string 'variable for checking if Office language is a
            warnlog "Paragraph language not applied correctly!" 'Problem
         else
             printlog "Paragraph language applied correctly" 'all ok
-        endif
+        end if
         Call MenuSelect(0) 'closing menu
         printlog "-----------------"
         '///Go to the next text sample ///
