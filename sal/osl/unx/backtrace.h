@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: backtrace.h,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,3 +82,21 @@ struct frame {
 #endif
 
 #endif /* defined LINUX && SPARC */
+
+#if defined (MACOSX)
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* backtrace function with same behaviour as defined in GNU libc */
+
+int backtrace( void **buffer, int max_frames );
+
+void backtrace_symbols_fd( void **buffer, int size, int fd );
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
+
+#endif /* defined MACOSX */
