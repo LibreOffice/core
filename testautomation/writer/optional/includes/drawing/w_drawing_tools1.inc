@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_drawing_tools1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:49 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:25:48 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -104,7 +104,7 @@ testcase tCreateObjects_1
     gMouseMove(40,60,60,75)
     Sleep 1
     Kontext "DocumentWriter"
-    Call wDokSchreiben "This is StarOffice Test !"
+    Call wTypeKeys "This is StarOffice Test !"
     gMouseClick (75,5)
     
     PrintLog "- Draw callouts"
@@ -158,8 +158,8 @@ testcase  tPositionAndSize_1
     Sleep 1
     
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<Right>",2
-    Call wDokSchreiben "<Down>" ,2
+    Call wTypeKeys "<Right>",2
+    Call wTypeKeys "<Down>" ,2
     Sleep 1
     
     fPositionAndSize("TabPositionAndSizeWriter")
@@ -172,8 +172,8 @@ testcase  tPositionAndSize_1
     
     PrintLog "- check wether the rectangle can be removed when 'protect position' is UnChecked"
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<Right>",2
-    Call wDokSchreiben "<Down>" ,2
+    Call wTypeKeys "<Right>",2
+    Call wTypeKeys "<Down>" ,2
     Sleep 1
     
     fPositionAndSize("TabPositionAndSizeWriter")
@@ -216,8 +216,8 @@ testcase  tPositionAndSize_2
     Sleep 1
     
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<Right>"
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Right>"
+    Call wTypeKeys "<Down>"
     Sleep 1
     
     PrintLog "- check undo function"
@@ -371,7 +371,7 @@ testcase  tPositionAndSize_5
     Call fPositionAndSize("TabDrehung")
     if Left$(Winkel.GetText,5) <> "45" + gSeperator + "00" then
         Warnlog "The rotation angle isn't corroct! It should be 45" & gSeperator & "00, but get " + Left$(Winkel.GetText, 5)
-    endif
+    end if
     TabDrehung.Cancel
 
     Call hCloseDocument
@@ -422,9 +422,9 @@ testcase  tPositionAndSize_7
     PrintLog "- Insert a rectangle , and set its corner radius"
     
     Call wZeichenobjektEinfuegen("TEXT", 30, 40, 60, 60)
-    Call wDokSchreiben "The test for corner radius of textboxes..."
+    Call wTypeKeys "The test for corner radius of textboxes..."
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     
     fPositionAndSize("TabSchraegstellen")
      Radius.SetText sRadius
@@ -547,7 +547,7 @@ testcase  tLine_1
     Sleep 2
     Call gMouseClick(40,40)
     Sleep 2
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     PrintLog "- modify Style ,color , width and arrow styles"
@@ -666,7 +666,7 @@ testcase  tLine_2
     Sleep 2
     Call gMouseClick(40,40)
     Sleep 2
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     PrintLog "- call Format/Line dialog via Button in object bar."
@@ -718,7 +718,7 @@ testcase  tLine_3
     Sleep 2
     Call gMouseClick(40,40)
     Sleep 2
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     PrintLog "- set Arrow Styles"
@@ -783,7 +783,7 @@ testcase  tLine_4
     Sleep 2
     Call gMouseClick(40,40)
     Sleep 2
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     fFormatLine("TabLinie")
@@ -833,7 +833,7 @@ testcase  tLine_5
     Sleep 2
     Call gMouseClick(40,40)
     Sleep 2
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     Call fFormatLine("TabLinienstile")
