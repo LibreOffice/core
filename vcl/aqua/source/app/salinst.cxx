@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salinst.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,7 @@
 #include "vcl/salimestatus.hxx"
 #include "vcl/window.hxx"
 #include "vcl/timer.hxx"
+#include "vcl/impbmp.hxx"
 
 #include "saldata.hxx"
 #include "salinst.h"
@@ -258,6 +259,11 @@ const ::rtl::OUString& SalGetDesktopEnvironment()
 void DeInitSalData()
 {
     SalData *pSalData = GetSalData();
+    if( pSalData->mpStatusItem )
+    {
+        [pSalData->mpStatusItem release];
+        pSalData->mpStatusItem = nil;
+    }
     delete pSalData;
     SetSalData( NULL );
 }
@@ -1043,4 +1049,78 @@ CFStringRef CreateCFString( const rtl::OUString& rStr )
 NSString* CreateNSString( const rtl::OUString& rStr )
 {
     return [[NSString alloc] initWithCharacters: rStr.getStr() length: rStr.getLength()];
+}
+
+CGImageRef CreateCGImage( const Image& rImage )
+{
+    BitmapEx aBmpEx( rImage.GetBitmapEx() );
+    Bitmap aBmp( aBmpEx.GetBitmap() );
+
+    if( ! aBmp || ! aBmp.ImplGetImpBitmap() )
+        return NULL;
+
+    // simple case, no transparency
+    AquaSalBitmap* pSalBmp = static_cast<AquaSalBitmap*>(aBmp.ImplGetImpBitmap()->ImplGetSalBitmap());
+
+    if( ! pSalBmp )
+        return NULL;
+
+    CGImageRef xImage = NULL;
+    if( ! (aBmpEx.IsAlpha() || aBmpEx.IsTransparent() ) )
+        xImage = pSalBmp->CreateCroppedImage( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
+    else if( aBmpEx.IsAlpha() )
+    {
+        AlphaMask aAlphaMask( aBmpEx.GetAlpha() );
+        Bitmap aMask( aAlphaMask.GetBitmap() );
+        AquaSalBitmap* pMaskBmp = static_cast<AquaSalBitmap*>(aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
+        if( pMaskBmp )
+            xImage = pSalBmp->CreateWithMask( *pMaskBmp, 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
+        else
+            xImage = pSalBmp->CreateCroppedImage( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
+    }
+    else if( aBmpEx.GetTransparentType() == TRANSPARENT_BITMAP )
+    {
+        Bitmap aMask( aBmpEx.GetMask() );
+        AquaSalBitmap* pMaskBmp = static_cast<AquaSalBitmap*>(aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
+        if( pMaskBmp )
+            xImage = pSalBmp->CreateWithMask( *pMaskBmp, 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
+        else
+            xImage = pSalBmp->CreateCroppedImage( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
+    }
+    else if( aBmpEx.GetTransparentType() == TRANSPARENT_COLOR )
+    {
+        Color aTransColor( aBmpEx.GetTransparentColor() );
+        SalColor nTransColor = MAKE_SALCOLOR( aTransColor.GetRed(), aTransColor.GetGreen(), aTransColor.GetBlue() );
+        xImage = pSalBmp->CreateColorMask( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight, nTransColor );
+    }
+
+    return xImage;
+}
+
+NSImage* CreateNSImage( const Image& rImage )
+{
+    CGImageRef xImage = CreateCGImage( rImage );
+
+    if( ! xImage )
+        return nil;
+
+    Size aSize( rImage.GetSizePixel() );
+    NSImage* pImage = [[NSImage alloc] initWithSize: NSMakeSize( aSize.Width(), aSize.Height() )];
+    if( pImage )
+    {
+        [pImage setFlipped: YES];
+        [pImage lockFocus];
+
+        NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
+        CGContextRef rCGContext = reinterpret_cast<CGContextRef>([pContext graphicsPort]);
+
+        const CGRect aDstRect = { {0, 0}, { aSize.Width(), aSize.Height() } };
+        CGContextDrawImage( rCGContext, aDstRect, xImage );
+
+        [pImage unlockFocus];
+    }
+
+    CGImageRelease( xImage );
+
+    return pImage;
 }
