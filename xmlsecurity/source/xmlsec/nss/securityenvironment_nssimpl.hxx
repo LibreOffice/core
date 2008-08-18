@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: securityenvironment_nssimpl.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,6 +59,11 @@
 #include "certdb.h"
 #include "list"
 
+#include <sal/types.h>
+//For reasons that escape me, this is what xmlsec does when size_t is not 4
+#if SAL_TYPES_SIZEOFPOINTER != 4
+#    define XMLSEC_NO_SIZE_T
+#endif
 #include "xmlsec/xmlsec.h"
 
 class SecurityEnvironment_NssImpl : public ::cppu::WeakImplHelper4<
