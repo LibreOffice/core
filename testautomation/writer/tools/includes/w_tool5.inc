@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_tool5.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:36:09 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:43:52 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -52,7 +52,7 @@ function hLevelContent () as String
     ' input : -
     ' output: paragraph content
     dim sTemp as string
-    wDokSchreiben "<end><shift home>" 'select line
+    wTypeKeys "<end><shift home>" 'select line
     editcopy
     sTemp = GetClipboardText()
     'i don't need the first '-', so i start searching at 2. char
@@ -83,10 +83,10 @@ function hLevelChange(aL() as integer,i as integer,x as integer ,y as integer, s
                aL (iTemp,1) = aL (iTemp,1) + x
                iTemp=iTemp + 1
             loop
-         endif
+         end if
       else
          'warnlog "This makes no sense; you trie to 'move to the left'; it doesn't go further! Entry: "+i
-      endif
+      end if
       iTemp = 1
       do while (i <> aL(itemp,2))
          inc iTemp
@@ -114,7 +114,7 @@ function hLevelChange(aL() as integer,i as integer,x as integer ,y as integer, s
                aL( itemp ,2) = xtemp
                inc sTemp
             loop
-         endif
+         end if
       else
          if (y < 0) then
             for j=-1 to y
@@ -137,11 +137,11 @@ function hLevelChange(aL() as integer,i as integer,x as integer ,y as integer, s
                      aL( itemp+y+1 ,2) = xtemp
                   iTemp=iTemp + 1
                loop
-            endif
+            end if
          else ' 0
-         endif
-      endif
-   endif
+         end if
+      end if
+   end if
 end function
 
 '------------------------------------------------------------------------------
@@ -190,9 +190,9 @@ function hIsNumberingBullets () as Boolean
             hIsNumberingBullets = true
         else
             hIsNumberingBullets = false
-        endif
+        end if
         TabBullet.cancel
-    endif
+    end if
     sleep (1)
 end function
 
@@ -210,20 +210,20 @@ sub hFormatParagraphNumbering (sStyle as string,bRestart as integer,sStartW as s
             Vorlage.Select sStyle
         else
             Vorlage.Select 2
-        endif
+        end if
         if (bRestart <> -1) then
             select case bRestart
                 case 0: NumerierungNeuBeginnen.UnCheck
                 case 1: NumerierungNeuBeginnen.Check
                 case 2: NumerierungNeuBeginnen.TriState
             end select
-        endif
+        end if
         if (sStartW <> -1) then
             select case sStartW
                 case 0: NumerierungBeginnenBei.UnCheck
                 case 1: NumerierungBeginnenBei.Check
             end select
-        endif
+        end if
     catch
         Warnlog "Not possible; wrong style=none??"
     endcatch
@@ -246,5 +246,5 @@ function hFindInDocument (sTempSearch as string) as boolean
         hFindInDocument = FALSE
     else
         hFindInDocument = TRUE
-    endif
+    end if
 end function
