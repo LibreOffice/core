@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salwtype.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,7 +105,8 @@ class ImplFontSelectData;
 #define SALEVENT_EXTERNALMOUSEBUTTONUP  ((USHORT)39)
 #define SALEVENT_INPUTLANGUAGECHANGE    ((USHORT)40)
 #define SALEVENT_SHOWDIALOG             ((USHORT)41)
-#define SALEVENT_COUNT                  ((USHORT)41)
+#define SALEVENT_MENUBUTTONCOMMAND      ((USHORT)42)
+#define SALEVENT_COUNT                  ((USHORT)42)
 
 // MOUSELEAVE must send, when the pointer leave the client area and
 // the mouse is not captured
@@ -134,6 +135,10 @@ struct SalMenuEvent
 {
     USHORT          mnId;           // Menu item ID
     void*           mpMenu;         // pointer to VCL menu (class Menu)
+
+    SalMenuEvent() : mnId( 0 ), mpMenu( NULL ) {}
+    SalMenuEvent( USHORT i_nId, void* i_pMenu )
+    : mnId( i_nId ), mpMenu( i_pMenu ) {}
 };
 
 // KEYMODCHANGE
