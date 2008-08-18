@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sendreportunx.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -215,7 +215,7 @@ namespace svx{
         {
             ByteString  strSubject( GetDocType(), RTL_TEXTENCODING_UTF8 );
 
-#ifdef LINUX
+#if defined( LINUX ) || defined (MACOSX )
             setenv( "ERRORREPORT_SUBJECT", strSubject.GetBuffer(), 1 );
 #else
             static ::rtl::OString   strEnvSubject = "ERRORREPORT_SUBJECT";
@@ -233,7 +233,7 @@ namespace svx{
 
                 fwrite( strUTF8.GetBuffer(), 1, strUTF8.Len(), fp );
                 fclose( fp );
-#ifdef LINUX
+#if defined( LINUX ) || defined (MACOSX)
                 setenv( "ERRORREPORT_BODYFILE", szBodyFile, 1 );
 #else
             static ::rtl::OString   strEnvBodyFile = "ERRORREPORT_BODYFILE";
@@ -246,7 +246,7 @@ namespace svx{
             int ret = -1;
             rtl::OUString path1(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "$BRAND_BASE_DIR/program/crash_report"));
+                    "$BRAND_BASE_DIR/program/crash_report.bin"));
             rtl::Bootstrap::expandMacros(path1);
             rtl::OString path2;
             if ((osl::FileBase::getSystemPathFromFileURL(path1, path1) ==
@@ -258,8 +258,8 @@ namespace svx{
             {
                 rtl::OStringBuffer cmd;
                 tools::appendUnixShellWord(&cmd, path2);
-                cmd.append(RTL_CONSTASCII_STRINGPARAM(" -load -send -noui"));
-                ret = system(cmd.makeStringAndClear().getStr());
+                cmd.append(RTL_CONSTASCII_STRINGPARAM(" -debug -load -send -noui"));
+                ret = system(cmd.getStr());
             }
 
             if ( szBodyFile[0] )
