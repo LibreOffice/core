@@ -9,7 +9,7 @@
 #
 # $RCSfile: unopkg.sh,v $
 #
-# $Revision: 1.13 $
+# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -70,6 +70,9 @@ unset XENVIRONMENT
 
 # uncomment line below to disable anti aliasing of fonts
 # SAL_ANTIALIAS_DISABLE=true; export SAL_ANTIALIAS_DISABLE
+
+# uncomment line below if you encounter problems starting soffice on your system
+# SAL_NO_XINITTHREADS=true; export SAL_NO_XINITTHREADS
 
 # Set PATH so that crash_report is found:
 PATH=$sd_prog${PATH+:$PATH}
