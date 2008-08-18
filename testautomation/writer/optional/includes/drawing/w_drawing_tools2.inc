@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_drawing_tools2.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:49 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:25:59 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -301,7 +301,7 @@ testcase  tGroup_6
     PrintLog "- Set the focus to ellipse, and move it."
     Call gMouseClick(50,50)
     Sleep 1
-    Call wDokSchreiben "<Right>",2
+    Call wTypeKeys "<Right>",2
 
     PrintLog "- Set the focus to rectangle , check if it is moved (Should NOT)"
     Call gMouseClick(35,35)
@@ -311,7 +311,7 @@ testcase  tGroup_6
     TabPositionAndSizeWriter.Cancel
 
     PrintLog "- Set the focus to ellipse , check if it is moved (Should)"
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
     Call fPositionAndSize("TabPositionAndSizeWriter")
     if Horizontalby.Gettext = sPositionX2 then Warnlog "ellipse should be moved"
     if Verticalby.Gettext   = sPositionY2 then Warnlog "ellipse should be moved"
@@ -372,7 +372,7 @@ testcase  tGroup_7
       PrintLog "- Set the focus to ellipse , and move it."
     Call gMouseClick(50,50)
     Sleep 1
-    Call wDokSchreiben "<Right>",2
+    Call wTypeKeys "<Right>",2
     
       PrintLog "- Set the focus to rectangle , check if it is moved (Should NOT)."
     Call gMouseClick(40,40)
@@ -382,7 +382,7 @@ testcase  tGroup_7
     TabPositionAndSizeWriter.Cancel
     
       PrintLog "- Set the focus to ellipse , check if it is moved (Should)."
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
     Call fPositionAndSize("TabPositionAndSizeWriter")
     if Horizontalby.Gettext = sPositionX2 then Warnlog "ellipse should be moved"
     if Verticalby.Gettext   = sPositionY2 then Warnlog "ellipse should be moved"
@@ -434,8 +434,8 @@ testcase  tGroup_8
     Call gMouseClick(50,50)
     Sleep 1
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<Right>",2
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Right>",2
+    Call wTypeKeys "<Down>"
     
       PrintLog "- Set the focus to rectangle (in fact, the focus is still on the group) ,"
       PrintLog "- check if it is moved . Group is moved , Rectangle is moved ..."
@@ -496,8 +496,8 @@ testcase  tGroup_9
       PrintLog "- Set the focus to ellipse(in fact, the focus is on the group), and move it."
     Call gMouseClick(50,50)
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<Right>",2
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Right>",2
+    Call wTypeKeys "<Down>"
     
       PrintLog "- Set the focus to rectangle (in fact, the focus is still on the group) ,"
       PrintLog "- check if it is moved . Group is moved , Rectangle is moved ..."
