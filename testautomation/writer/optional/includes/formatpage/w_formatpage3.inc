@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_formatpage3.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:52 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:28:45 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -61,8 +61,8 @@
 
 testcase tFormatPage_29
 
-    Dim sTestFile                 , sNewContent                as String
-    Dim sContentInHeaderInPage1   , sContentInHeaderInPage2    as String
+    Dim sTestFile as String  ,  sNewContent as String
+    Dim sContentInHeaderInPage1 as String  ,  sContentInHeaderInPage2 as String
 
     sTestFile                = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testHeaderContent29.sxw")
     sContentInHeaderInPage1  = "Header1"
@@ -98,7 +98,7 @@ testcase tFormatPage_29
         if Active.GetRT = 304 then  Active.OK
     else
         warnlog "The content should be same after checking 'same content left/right' !"
-    endif
+    end if
 
     Kontext "FindAndReplace"
     FindAndReplace.Close
@@ -113,9 +113,9 @@ testcase tFormatPage_29
        Sleep 1
      FindAndReplace.Close
 
-     Call wDokSchreiben "<Right>"
-     Call wDokSchreiben "<Backspace>" , 7
-     Call wDokSchreiben sNewContent
+     Call wTypeKeys "<Right>"
+     Call wTypeKeys "<Backspace>" , 7
+     Call wTypeKeys sNewContent
      Sleep 1
 
     '/// Check if the content in footer in page2 is changed
@@ -132,7 +132,7 @@ testcase tFormatPage_29
            if Active.GetRT = 304 then  Active.OK
        else
             warnlog "The content should be same after changing content in header in 1st page!"
-       endif
+       end if
 
        Kontext "FindAndReplace"
      FindAndReplace.Close
@@ -145,9 +145,9 @@ endcase
 
 testcase tFormatPage_30
 
-    Dim sTestFile                       as String
-    Dim sContentInHeader , sNewContent  as String
-    Dim sPage2                          as String
+    Dim sTestFile as String
+    Dim sContentInHeader as String  ,  sNewContent as String
+    Dim sPage2 as String
 
     sTestFile         = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testHeaderContent30.sxw")
     sContentInHeader  = "Header"
@@ -179,9 +179,9 @@ testcase tFormatPage_30
        Sleep 1
      FindAndReplace.Close
 
-     Call wDokSchreiben "<Right>"
-     Call wDokSchreiben "<Backspace>" , 6
-     Call wDokSchreiben sNewContent
+     Call wTypeKeys "<Right>"
+     Call wTypeKeys "<Backspace>" , 6
+     Call wTypeKeys sNewContent
      Sleep 1
 
     '/// Check if the content in footer in page2 is changed
@@ -210,8 +210,8 @@ endcase
 
 testcase tFormatPage_31
 
-    Dim sTestFile                 , sNewContent                as String
-    Dim sContentInFooterInPage1   , sContentInFooterInPage2    as String
+    Dim sTestFile as String  ,  sNewContent as String
+    Dim sContentInFooterInPage1 as String  ,  sContentInFooterInPage2 as String
 
     sTestFile                = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testFooterContent31.sxw")
     sContentInFooterInPage1  = "Footer1"
@@ -247,7 +247,7 @@ testcase tFormatPage_31
            if Active.GetRT = 304 then  Active.OK
        else
            warnlog "The content should be same after checking 'same content left/right' !"
-       endif
+       end if
 
        Kontext "FindAndReplace"
      FindAndReplace.Close
@@ -262,9 +262,9 @@ testcase tFormatPage_31
        Sleep 1
      FindAndReplace.Close
 
-     Call wDokSchreiben "<Right>"
-     Call wDokSchreiben "<Backspace>" , 7
-     Call wDokSchreiben sNewContent
+     Call wTypeKeys "<Right>"
+     Call wTypeKeys "<Backspace>" , 7
+     Call wTypeKeys sNewContent
      Sleep 1
 
     '/// Check if the content in footer in page2 is changed
@@ -281,7 +281,7 @@ testcase tFormatPage_31
            if Active.GetRT = 304 then  Active.OK
        else
             warnlog "The content should be same after changing content in footer in 1st page!"
-       endif
+       end if
 
        Kontext "FindAndReplace"
      FindAndReplace.Close
@@ -294,9 +294,9 @@ endcase
 
 testcase tFormatPage_32
 
-    Dim sTestFile                       as String
-    Dim sContentInFooter , sNewContent  as String
-    Dim sPage2                          as String
+    Dim sTestFile as String
+    Dim sContentInFooter as String  ,  sNewContent as String
+    Dim sPage2 as String
 
     sTestFile         = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testFooterContent32.sxw")
     sContentInFooter  = "Footer"
@@ -328,9 +328,9 @@ testcase tFormatPage_32
        Sleep 1
      FindAndReplace.Close
 
-     Call wDokSchreiben "<Right>"
-     Call wDokSchreiben "<Backspace>" , 6
-     Call wDokSchreiben sNewContent
+     Call wTypeKeys "<Right>"
+     Call wTypeKeys "<Backspace>" , 6
+     Call wTypeKeys sNewContent
      Sleep 1
 
     '/// Check if the content in the footer in page2 is changed
@@ -368,7 +368,7 @@ testcase tFormatPage_33
     Call hNewDocument
 
     '/// Input some test words
-     Call wDokSchreiben "ABC"
+     Call wTypeKeys "ABC"
 
     '/// Insert a header via menu
      DocumentWriter.UseMenu
@@ -380,7 +380,7 @@ testcase tFormatPage_33
      Sleep 2
 
     '/// type some test words -- it should be in the header
-     Call wDokSchreiben sTest
+     Call wTypeKeys sTest
 
     '/// check if the text in header is right
      Kontext
@@ -414,7 +414,7 @@ testcase tFormatPage_33
          if Active.GetRT = 304 then  Active.Yes
      else
           warnlog "There should be a warning message appear when turn off header !"
-     endif
+     end if
      Sleep 1
 
     '/// Check if the content in header is removed
@@ -431,7 +431,7 @@ testcase tFormatPage_33
            if Active.GetRT = 304 then  Active.OK
        else
            warnlog "The content in header should be removed!"
-       endif
+       end if
 
        Kontext "FindAndReplace"
      FindAndReplace.Close
@@ -453,7 +453,7 @@ testcase tFormatPage_34
 
     Call hNewDocument
 
-     Call wDokSchreiben "ABC"
+     Call wTypeKeys "ABC"
 
     '/// formatPage , tabpage header
      fFormatPageWriter("TabKopfzeile")
@@ -464,7 +464,7 @@ testcase tFormatPage_34
      Sleep 1
 
     '/// type some test words -- it should be in the header
-     Call wDokSchreiben sTest
+     Call wTypeKeys sTest
 
     '/// check if the text in header is right
      Kontext
@@ -501,7 +501,7 @@ testcase tFormatPage_35
 
     Call hNewDocument
 
-     Call wDokSchreiben "ABC"
+     Call wTypeKeys "ABC"
 
     '/// Insert a footer via menu
      DocumentWriter.UseMenu
@@ -513,7 +513,7 @@ testcase tFormatPage_35
      Sleep 2
 
     '/// type some test words - it should be in the footer
-     Call wDokSchreiben sTest
+     Call wTypeKeys sTest
 
     '/// check if the text in footer is right
      Kontext
@@ -547,7 +547,7 @@ testcase tFormatPage_35
          if Active.GetRT = 304 then  Active.Yes
      else
           warnlog "There should be a warning message appear when turn off footer !"
-     endif
+     end if
      Sleep 1
 
     '/// Check if the content in footer is removed
@@ -564,7 +564,7 @@ testcase tFormatPage_35
            if Active.GetRT = 304 then  Active.OK
        else
            warnlog "The content in footer should be removed!"
-       endif
+       end if
 
        Kontext "FindAndReplace"
      FindAndReplace.Close
@@ -586,7 +586,7 @@ testcase tFormatPage_36
 
     Call hNewDocument
 
-     Call wDokSchreiben "ABC"
+     Call wTypeKeys "ABC"
 
     '/// formatPage , tabpage footer
      fFormatPageWriter("TabKopfzeile")
@@ -597,7 +597,7 @@ testcase tFormatPage_36
      Sleep 1
 
     '/// type some test words - it should be in the footer
-     Call wDokSchreiben sTest
+     Call wTypeKeys sTest
 
     '/// check if the text in footer is right
      Kontext
@@ -721,8 +721,8 @@ endcase
 
 testcase tFormatPage_39
 
-    Dim sTestFile   as String
-    Dim sColumn     as String
+    Dim sTestFile as String
+    Dim sColumn as String
 
     sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testColumnInPage.sxw")
     sColumn    = "3"
@@ -753,8 +753,8 @@ testcase tFormatPage_39
        Sleep 1
      FindAndReplace.Close
 
-     Call wDokSchreiben "<Home>"
-     Call wDokSchreiben "<Shift End>"
+     Call wTypeKeys "<Home>"
+     Call wTypeKeys "<Shift End>"
      EditCopy
      if Len(GetClipboardText) = 26 then warnlog "the first column isn't right!"
 
@@ -783,8 +783,8 @@ endcase
 
 testcase tFormatPage_40
 
-    Dim sTestFile   as String
-    Dim sColumn     as String
+    Dim sTestFile as String
+    Dim sColumn as String
 
     sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testColumnInPage.sxw")
     sColumn    = "3"
@@ -819,8 +819,8 @@ testcase tFormatPage_40
        Sleep 1
      FindAndReplace.Close
 
-     Call wDokSchreiben "<Home>"
-     Call wDokSchreiben "<Shift End>"
+     Call wTypeKeys "<Home>"
+     Call wTypeKeys "<Shift End>"
      EditCopy
      if Len(GetClipboardText) = 26 then warnlog "the first column isn't right!"
 
@@ -849,11 +849,11 @@ endcase
 
 testcase tFormatPage_41
 
-    Dim sTestFile        as String
-    Dim sColumn          as String
-    Dim sWidthColumn1    as String
-    Dim sWidthColumn2    as String
-    Dim sWidthColumn3    as String
+    Dim sTestFile as String
+    Dim sColumn as String
+    Dim sWidthColumn1 as String
+    Dim sWidthColumn2 as String
+    Dim sWidthColumn3 as String
     
     sTestFile     = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testColumnInPage2.sxw")
     sColumn       = "3"
@@ -904,8 +904,8 @@ testcase tFormatPage_41
     Sleep 1
     FindAndReplace.Close
     
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     if Len(GetClipboardText) > 8 then Warnlog "Something wrong in the column1"
     
@@ -919,8 +919,8 @@ testcase tFormatPage_41
     Sleep 1
     FindAndReplace.Close
     
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     if Len(GetClipboardText) > 14 then Warnlog "Something wrong in the column2"
     
@@ -932,13 +932,13 @@ endcase
 
 testcase tFormatPage_42
 
-    Dim sTestFile        as String
-    Dim sColumn          as String
-    Dim sWidthColumn1    as String
-    Dim sWidthColumn2    as String
-    Dim sWidthColumn3    as String
-    Dim sSpacing1        as String
-    Dim sSpacing2        as String
+    Dim sTestFile as String
+    Dim sColumn as String
+    Dim sWidthColumn1 as String
+    Dim sWidthColumn2 as String
+    Dim sWidthColumn3 as String
+    Dim sSpacing1 as String
+    Dim sSpacing2 as String
 
     sTestFile     = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testColumnInPage2.sxw")
     sColumn       = "3"
@@ -1002,8 +1002,8 @@ testcase tFormatPage_42
        Sleep 1
      FindAndReplace.Close
 
-     Call wDokSchreiben "<Home>"
-     Call wDokSchreiben "<Shift End>"
+     Call wTypeKeys "<Home>"
+     Call wTypeKeys "<Shift End>"
      EditCopy
      if Len(GetClipboardText) > 11 then Warnlog "Somthing wrong in the column2"
 
@@ -1015,10 +1015,10 @@ endcase
 
 testcase tFormatPage_43
 
-    Dim sColumn    as String
-    Dim sHeight    as String
-    Dim iLine      as Integer
-    Dim iPosition  as Integer
+    Dim sColumn as String
+    Dim sHeight as String
+    Dim iLine as Integer
+    Dim iPosition as Integer
 
     sColumn        = "2"
     sHeight        = "50%"
@@ -1061,8 +1061,8 @@ endcase
 
 testcase tFormatPage_44
 
-    Dim sColumn    as String
-    Dim i          as Integer
+    Dim sColumn as String
+    Dim i as Integer
 
     sColumn = "2"
 
@@ -1101,8 +1101,8 @@ endcase
 
 testcase tFormatPage_45
 
-    Dim sTestFile       as String
-    Dim sTestText       as String
+    Dim sTestFile as String
+    Dim sTestText as String
     Dim iTestTextLength as Integer
 
     sTestFile     = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testSeparatorLine.sxw")
@@ -1127,8 +1127,8 @@ testcase tFormatPage_45
        Sleep 1
      FindAndReplace.Close
 
-     Call wDokSchreiben "<Home>"
-     Call wDokSchreiben "<Shift End>"
+     Call wTypeKeys "<Home>"
+     Call wTypeKeys "<Shift End>"
      EditCopy
      iTestTextLength = Len(GetClipboardText)
 
@@ -1147,8 +1147,8 @@ testcase tFormatPage_45
        Sleep 1
      FindAndReplace.Close
 
-     Call wDokSchreiben "<Home>"
-     Call wDokSchreiben "<Shift End>"
+     Call wTypeKeys "<Home>"
+     Call wTypeKeys "<Shift End>"
      EditCopy
      if iTestTextLength <= Len(GetClipboardText) then Warnlog "Seperator line isn't correct!"
 
@@ -1168,8 +1168,8 @@ testcase tFormatPage_45
        Sleep 1
      FindAndReplace.Close
 
-     Call wDokSchreiben "<Home>"
-     Call wDokSchreiben "<Shift End>"
+     Call wTypeKeys "<Home>"
+     Call wTypeKeys "<Shift End>"
      EditCopy
      if iTestTextLength <> Len(GetClipboardText) then Warnlog "The column isn't covered to former! #112632"
 
@@ -1181,15 +1181,15 @@ endcase
 
 testcase tFormatPage_46
 
-    Dim sColumn          as String
-    Dim sWidthColumn1    as String
-    Dim sWidthColumn2    as String
-    Dim sWidthColumn3    as String
-    Dim sSpacing1        as String
-    Dim sSpacing2        as String
-    Dim iLine            as Integer
-    Dim sLineHeight      as String
-    Dim iLinePosition    as Integer
+    Dim sColumn as String
+    Dim sWidthColumn1 as String
+    Dim sWidthColumn2 as String
+    Dim sWidthColumn3 as String
+    Dim sSpacing1 as String
+    Dim sSpacing2 as String
+    Dim iLine as Integer
+    Dim sLineHeight as String
+    Dim iLinePosition as Integer
 
     sColumn       = "3"
     sWidthColumn1 = "2" + gSeperator + "00" + gMeasurementUnit
@@ -1263,9 +1263,9 @@ endcase
 
 testcase tFormatPage_47
 
-    Dim sWidth                          as String
-    Dim sLeft    , sRight               as String  ' set margin size
-    Dim sWidth1  , sWidth2 , sWidth3    as String
+    Dim sWidth as String
+    Dim sLeft as String  ,  sRight as String  ' set margin size
+    Dim sWidth1 as String  ,  sWidth2 as String  ,  sWidth3 as String
 
     sWidth     = "20" + gSeperator + "00" + gMeasurementUnit
     sLeft      = "2"  + gSeperator + "00" + gMeasurementUnit

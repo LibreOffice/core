@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_formatpage1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:52 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:28:23 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -92,8 +92,9 @@ endcase
 
 testcase tFormatPage_2
 
-  	Dim sTestString              as String
-	Dim iRepectLength , iFormat  as Integer
+  	Dim sTestString as String
+	Dim iRepectLength as Integer
+	Dim iFormat as Integer
 
 	sTestString   =  "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQ"
 	iRepectLength =  26
@@ -105,7 +106,7 @@ testcase tFormatPage_2
 	Call hNewDocument
 
 	'/// Input a long test string
-    Call wDokSchreiben sTestString
+    Call wTypeKeys sTestString
 
    '/// Format/Page , tabpage page , check 'Portrait'
     fFormatPageWriter("TabSeite")
@@ -116,7 +117,7 @@ testcase tFormatPage_2
     TabSeite.OK
 
 	'/// Check if Checkbox -- Portrait works fine
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys "<Shift Home>"
     EditCopy
     wait 500
     if Len(GetClipboardText) < iRepectLength then Warnlog "Checkbox Portrait doesn't work fine!"
@@ -139,9 +140,9 @@ testcase tFormatPage_3
 	Call wOptionenUndo( "Grundschriften" )
 	
 	'/// Input a long test string
-	Call wDokSchreiben "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQ"
-    Call wDokSchreiben "<Mod1 Home>"
-    Call wDokSchreiben "<Shift End>"
+	Call wTypeKeys "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQ"
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     iTextLength = Len(GetClipBoardtext)
 	
@@ -154,8 +155,8 @@ testcase tFormatPage_3
 	TabSeite.OK
 	
 	'/// Check if Checkbox -- Landscape works fine
-	Call wDokSchreiben "<Mod1 Home>"
-    Call wDokSchreiben "<Shift End>"
+	Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys "<Shift End>"
 	EditCopy
 	wait 500
 	if Len(GetClipboardText) <= iTextLength then Warnlog "Checkbox Landscape doesn't work fine!"
@@ -168,8 +169,9 @@ endcase
 
 testcase tFormatPage_4
 
-	Dim  iFormat            as Integer
-	Dim  sWidth   , sHeight as String
+	Dim iFormat as Integer
+	Dim sWidth as String
+    Dim sHeight as String
 	
 	iFormat = 2   'A4 paper
 	
@@ -222,10 +224,11 @@ endcase
 
 testcase tFormatPage_5
 
-	Dim iFormat                                   as Integer
-	Dim sWidth   , sHeight                        as String
-	Dim sLeft    , sRight    , sUp   , sBottom    as String  ' set page size
-	Dim sLeft1   , sRight1   , sUp1  , sBottom1   as String  ' get page size
+	Dim iFormat as Integer
+	Dim sWidth as String
+    Dim sHeight as String
+	Dim sLeft as String  , sRight as String   , sUp as String  , sBottom as String  ' set page size
+	Dim sLeft1 as String  , sRight1 as String  ,  sUp1 as String  , sBottom1 as String  ' get page size
 	
 	iFormat    = 2   'A4 paper
 	sWidth     = "20" + gSeperator + "00" + gMeasurementUnit
@@ -298,10 +301,10 @@ endcase
 
 testcase tFormatPage_6
 
-	Dim iPaperTray     , iPageLayout                       as Integer
-	Dim iFormatLayout  , iReferenceStyle                   as Integer
-	Dim sWidth         , sHeight                           as String
-	Dim sLeft          , sRight         , sUp  , sBottom   as String
+	Dim iPaperTray as Integer  ,  iPageLayout as Integer
+	Dim iFormatLayout as Integer  ,  iReferenceStyle as Integer
+	Dim sWidth as String, sHeight as String
+	Dim sLeft as String  ,  sRight as String  ,  sUp as String  ,  sBottom as String
 	
 	iPaperTray    = 1 :  iPageLayout     = 2
 	iFormatLayout = 2 :  iReferenceStyle = 5
@@ -378,10 +381,10 @@ endcase
 
 testcase tFormatPage_7
 
-	Dim iPaperTray     , iPageLayout                       as Integer
-	Dim iFormatLayout  , iReferenceStyle                   as Integer
-	Dim sWidth         , sHeight                           as String
-	Dim sLeft          , sRight         , sUp  , sBottom   as String
+	Dim iPaperTray as Integer  ,  iPageLayout as Integer
+	Dim iFormatLayout as Integer  ,  iReferenceStyle as Integer
+	Dim sWidth as String  ,  sHeight as String
+	Dim sLeft as String  ,  sRight as String  ,  sUp as String  ,  sBottom as String
 	
 	iPaperTray    = 1 :  iPageLayout     = 2
 	iFormatLayout = 2 :  iReferenceStyle = 5
@@ -490,12 +493,12 @@ testcase tFormatPage_8
         Call ActiveDeactivateCTLSupport(TRUE)
     else
         Call ActiveDeactivateCTLSupport(FALSE)
-    endif
+    end if
     if RecheckAsianSupport = True then
         Call ActiveDeactivateAsianSupport(TRUE)
     else
         Call ActiveDeactivateAsianSupport(FALSE)
-    endif
+    end if
     
     Call hCloseDocument
 
@@ -505,8 +508,8 @@ endcase
 
 testcase tFormatPage_9
 
-    Dim RecheckCTLSupport as string 
-    Dim RecheckAsianSupport as string    
+    Dim RecheckCTLSupport as string
+    Dim RecheckAsianSupport as string
     RecheckCTLSupport = gCTLSup
     RecheckAsianSupport = gAsianSup
 
@@ -538,12 +541,12 @@ testcase tFormatPage_9
         Call ActiveDeactivateCTLSupport(TRUE)
     else
         Call ActiveDeactivateCTLSupport(FALSE)
-    endif
+    end if
     if RecheckAsianSupport = True then
         Call ActiveDeactivateAsianSupport(TRUE)
     else
         Call ActiveDeactivateAsianSupport(FALSE)
-    endif
+    end if
     
     Call hCloseDocument
 
@@ -553,8 +556,8 @@ endcase
 
 testcase tFormatPage_10
 
-    Dim RecheckCTLSupport as string 
-    Dim RecheckAsianSupport as string    
+    Dim RecheckCTLSupport as string
+    Dim RecheckAsianSupport as string
     RecheckCTLSupport = gCTLSup
     RecheckAsianSupport = gAsianSup
     
@@ -578,12 +581,12 @@ testcase tFormatPage_10
         Call ActiveDeactivateCTLSupport(TRUE)
     else
         Call ActiveDeactivateCTLSupport(FALSE)
-    endif
+    end if
     if RecheckAsianSupport = True then
         Call ActiveDeactivateAsianSupport(TRUE)
     else
         Call ActiveDeactivateAsianSupport(FALSE)
-    endif
+    end if
     
     Call hCloseDocument
 
@@ -593,9 +596,9 @@ endcase
 
 testcase tFormatPage_11
 
-    Dim sTestFile     as String
-    Dim sMarginsLeft  as String
-    Dim iPageLayout   as Integer
+    Dim sTestFile as String
+    Dim sMarginsLeft as String
+    Dim iPageLayout as Integer
 
     sTestFile    = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\pageLayout.sxw")
     sMarginsLeft = "10" + gSeperator + "00" + gMeasurementUnit
@@ -621,8 +624,8 @@ testcase tFormatPage_11
      TabSeite.OK
 
     '/// Set focus to first picture , format/anchor to Page
-    Call wDokSchreiben ( "<Shift F4>" )
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys ( "<Shift F4>" )
+    Call wTypeKeys "<Tab>"
 
     FormatAnchorToPage
     Sleep 1
@@ -633,7 +636,7 @@ testcase tFormatPage_11
      TabPositionAndSizeWriter.Cancel
 
     '/// Set focus to second picture , format/anchor to Page
-     Call wDokSchreiben "<Tab>"
+     Call wTypeKeys "<Tab>"
 
      FormatAnchorToPage
      Sleep 1
@@ -651,9 +654,9 @@ endcase
 
 testcase tFormatPage_12
 
-    Dim sTestFile                     as String
-    Dim sMarginsLeft  , sMarginsRight as String
-    Dim iPageLayout                   as Integer
+    Dim sTestFile as String
+    Dim sMarginsLeft as String  ,  sMarginsRight as String
+    Dim iPageLayout as Integer
 
     sTestFile     = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\pageLayout.sxw")
     sMarginsLeft  = "10" + gSeperator + "00" + gMeasurementUnit
@@ -681,8 +684,8 @@ testcase tFormatPage_12
      TabSeite.OK
 
     '/// Set focus to first picture , format/anchor to Page
-    Call wDokSchreiben ( "<Shift F4>" )
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys ( "<Shift F4>" )
+    Call wTypeKeys "<Tab>"
 
      FormatAnchorToPage
      Sleep 1
@@ -693,7 +696,7 @@ testcase tFormatPage_12
      TabPositionAndSizeWriter.Cancel
 
     '/// Set focus to second picture , format/anchor to Page
-     Call wDokSchreiben "<Tab>"
+     Call wTypeKeys "<Tab>"
 
      FormatAnchorToPage
      Sleep 1
@@ -711,9 +714,9 @@ endcase
 
 testcase tFormatPage_13
 
-    Dim sTestFile          as String
-    Dim sPage1 , sPage2    as String
-    Dim iPageLayout        as Integer
+    Dim sTestFile as String
+    Dim sPage1 as String , sPage2 as String
+    Dim iPageLayout as Integer
 
     sTestFile     = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\pageLayout.sxw")
     sPage1        = "1"
@@ -737,8 +740,8 @@ testcase tFormatPage_13
      TabSeite.OK
 
     '/// Set focus to first picture , Check if the picture is in first page
-    Call wDokSchreiben ( "<Shift F4>" )
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys ( "<Shift F4>" )
+    Call wTypeKeys "<Tab>"
 
 	Kontext "Navigator"
 	if Not Navigator.Exists then EditNavigator
@@ -749,7 +752,7 @@ testcase tFormatPage_13
 	Wait 500
 
     '/// Set focus to second picture , Check if the picture is in third page
-     Call wDokSchreiben "<Tab>"
+     Call wTypeKeys "<Tab>"
 
      Kontext "Navigator"
      if Not Navigator.Exists then EditNavigator
@@ -767,9 +770,9 @@ endcase
 
 testcase tFormatPage_14
 
-    Dim sTestFile          as String
-    Dim sPage1 , sPage2    as String
-    Dim iPageLayout        as Integer
+    Dim sTestFile as String
+    Dim sPage1 as String  ,  sPage2 as String
+    Dim iPageLayout as Integer
 
     sTestFile     = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\pageLayout.sxw")
     sPage1        = "2"
@@ -793,8 +796,8 @@ testcase tFormatPage_14
      TabSeite.OK
 
     '/// Set focus to first picture , Check if the picture is in first page
-    Call wDokSchreiben ( "<Shift F4>" )
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys ( "<Shift F4>" )
+    Call wTypeKeys "<Tab>"
 
      Kontext "Navigator"
      if Not Navigator.Exists then EditNavigator
@@ -805,7 +808,7 @@ testcase tFormatPage_14
      Wait 500
 
     '/// Set focus to second picture , Check if the picture is in third page
-     Call wDokSchreiben "<Tab>"
+     Call wTypeKeys "<Tab>"
 
      Kontext "Navigator"
      if Not Navigator.Exists then EditNavigator
@@ -823,7 +826,7 @@ endcase
 
 testcase tFormatPage_15
 
-    Dim sType , sFormat  as String
+    Dim sType as String  ,  sFormat as String
     
     Select case iSprache
         case 01:    sType   = "Page"

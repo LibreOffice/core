@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_formatpage2.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:52 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:28:35 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -55,8 +55,8 @@
 
 testcase tFormatPage_16
 
-    Dim sTestFile          as String
-    Dim sDummy             as String
+    Dim sTestFile as String
+    Dim sDummy as String
 
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testForAutoFit.sxw")
 
@@ -78,8 +78,8 @@ testcase tFormatPage_16
     EditNavigator
     
     '/// Step 3 times up in document
-    Call wDokSchreiben "<Up>" , 3
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Up>" , 3
+    Call wTypeKeys "<Home><Shift End>"
 
     '/// Remember number in line
     EditCopy
@@ -105,8 +105,8 @@ testcase tFormatPage_16
     TabKopfzeile.OK
 
     '/// Input some test words and select them
-    Call wDokSchreiben "Test"
-    Call wDokSchreiben "<End><Shift Home>"
+    Call wTypeKeys "Test"
+    Call wTypeKeys "<End><Shift Home>"
 
     '/// Set the bigger fonts to selection in the header
     fFormatCharacter("TabFont")
@@ -142,8 +142,8 @@ endcase
 
 testcase tFormatPage_17
 
-    Dim sTestFile          as String
-    Dim sDummy1  , sDummy2 as String
+    Dim sTestFile as String
+    Dim sDummy1 as String  ,  sDummy2 as String
 
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testForAutoFit.sxw")
 
@@ -165,15 +165,15 @@ testcase tFormatPage_17
     EditNavigator
 
     '/// Step 3 times up in document
-    Call wDokSchreiben "<Up>" , 3
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Up>" , 3
+    Call wTypeKeys "<Home><Shift End>"
     
     '/// Remember number in line
     EditCopy
     sDummy1 =  GetClipboardText
     
-    Call wDokSchreiben "<Up>"
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Up>"
+    Call wTypeKeys "<Home><Shift End>"
     
     EditCopy
     sDummy2 =  GetClipboardText
@@ -198,9 +198,9 @@ testcase tFormatPage_17
     TabKopfzeile.OK
     
     '/// Input some test words
-    Call wDokSchreiben "Test1"
-    Call wDokSchreiben "<Return>"
-    Call wDokSchreiben "Test2"
+    Call wTypeKeys "Test1"
+    Call wTypeKeys "<Return>"
+    Call wTypeKeys "Test2"
     
     '/// Check if AutoFit Height works well
     Kontext
@@ -243,8 +243,8 @@ endcase
 
 testcase tFormatPage_18
 
-    Dim sTestFile          as String
-    Dim sDummy             as String
+    Dim sTestFile as String
+    Dim sDummy as String
 
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testForAutoFit.sxw")
 
@@ -266,8 +266,8 @@ testcase tFormatPage_18
     EditNavigator
 
     '/// Step 3 times up in document
-    Call wDokSchreiben "<Up>" , 3
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Up>" , 3
+    Call wTypeKeys "<Home><Shift End>"
     
     '/// Remember number in line
     EditCopy
@@ -288,8 +288,8 @@ testcase tFormatPage_18
     TabKopfzeile.OK
     
     '/// Input some test words
-    Call wDokSchreiben "Test"
-    Call wDokSchreiben "<End><Shift Home>"
+    Call wTypeKeys "Test"
+    Call wTypeKeys "<End><Shift Home>"
     
     '/// Set the bigger fonts to selection in the header
     fFormatCharacter("TabFont")
@@ -325,8 +325,8 @@ endcase
 
 testcase tFormatPage_19
 
-    Dim sTestFile          as String
-    Dim sDummy             as String
+    Dim sTestFile as String
+    Dim sDummy as String
 
     sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testForAutoFit.sxw")
 
@@ -348,8 +348,8 @@ testcase tFormatPage_19
     EditNavigator
 
     '/// Step 3 times up in document
-    Call wDokSchreiben "<Up>" , 3
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Up>" , 3
+    Call wTypeKeys "<Home><Shift End>"
     
     '/// Remember number in line
     EditCopy
@@ -370,9 +370,9 @@ testcase tFormatPage_19
     TabKopfzeile.OK
     
     '/// input some test words
-    Call wDokSchreiben "Test1"
-    Call wDokSchreiben "<Return>"
-    Call wDokSchreiben "Test2"
+    Call wTypeKeys "Test1"
+    Call wTypeKeys "<Return>"
+    Call wTypeKeys "Test2"
     
     '/// Check if AutoFit Height works well
     Kontext
@@ -399,8 +399,8 @@ endcase
 
 testcase tFormatPage_20
 
-    Dim sTestFile          as String
-    Dim sDummy             as String
+    Dim sTestFile as String
+    Dim sDummy as String
 
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testForAutoFit.sxw")
 
@@ -422,8 +422,8 @@ testcase tFormatPage_20
     EditNavigator
 
     '/// Step 3 times up in document
-    Call wDokSchreiben "<Up>" , 3
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Up>" , 3
+    Call wTypeKeys "<Home><Shift End>"
     
     '/// Remember number in line
     EditCopy
@@ -449,8 +449,8 @@ testcase tFormatPage_20
     end if
     TabFusszeile.OK
     
-    Call wDokSchreiben "Test"
-    Call wDokSchreiben "<End><Shift Home>"
+    Call wTypeKeys "Test"
+    Call wTypeKeys "<End><Shift Home>"
     
     '/// Set the bigger fonts to selection in the footer
     fFormatCharacter("TabFont")
@@ -486,8 +486,8 @@ endcase
 
 testcase tFormatPage_21
 
-    Dim sTestFile          as String
-    Dim sDummy1  , sDummy2 as String
+    Dim sTestFile as String
+    Dim sDummy1 as String  ,  sDummy2 as String
 
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testForAutoFit.sxw")
 
@@ -509,16 +509,16 @@ testcase tFormatPage_21
     EditNavigator
 
     '/// Step 3 times up in document
-    Call wDokSchreiben "<Up>" , 3
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Up>" , 3
+    Call wTypeKeys "<Home><Shift End>"
     
     '/// Remember number in line
     EditCopy
     sDummy1 =  GetClipboardText
 
     '/// Again 1 step up
-    Call wDokSchreiben "<Up>"
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Up>"
+    Call wTypeKeys "<Home><Shift End>"
 
     '/// Remember number in current line
     EditCopy
@@ -544,9 +544,9 @@ testcase tFormatPage_21
     TabFusszeile.OK
     
     '/// input some test words
-    Call wDokSchreiben "Test1"
-    Call wDokSchreiben "<Return>"
-    Call wDokSchreiben "Test2"
+    Call wTypeKeys "Test1"
+    Call wTypeKeys "<Return>"
+    Call wTypeKeys "Test2"
     
     '/// Check if AutoFit Height works well
     Kontext
@@ -589,8 +589,8 @@ endcase
 
 testcase tFormatPage_22
 
-    Dim sTestFile          as String
-    Dim sDummy             as String
+    Dim sTestFile as String
+    Dim sDummy as String
 
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testForAutoFit.sxw")
 
@@ -612,8 +612,8 @@ testcase tFormatPage_22
     EditNavigator
 
     '/// Step 3 times up in document
-    Call wDokSchreiben "<Up>" , 3
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Up>" , 3
+    Call wTypeKeys "<Home><Shift End>"
     
     '/// Remember number in line
     EditCopy
@@ -634,8 +634,8 @@ testcase tFormatPage_22
     TabFusszeile.OK
     
     '/// input some test words
-    Call wDokSchreiben "Test"
-    Call wDokSchreiben "<End><Shift Home>"
+    Call wTypeKeys "Test"
+    Call wTypeKeys "<End><Shift Home>"
     
     '/// Set the bigger fonts to selection in the footer
     fFormatCharacter("TabFont")
@@ -671,8 +671,8 @@ endcase
 
 testcase tFormatPage_23
 
-    Dim sTestFile          as String
-    Dim sDummy             as String
+    Dim sTestFile as String
+    Dim sDummy as String
 
     sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testForAutoFit.sxw")
 
@@ -694,8 +694,8 @@ testcase tFormatPage_23
     EditNavigator
 
     '/// Step 3 times up in document
-    Call wDokSchreiben "<Up>" , 3
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Up>" , 3
+    Call wTypeKeys "<Home><Shift End>"
     
     '/// Remember number in line
     EditCopy
@@ -716,9 +716,9 @@ testcase tFormatPage_23
     TabFusszeile.OK
     
     '/// input some test words
-    Call wDokSchreiben "Test1"
-    Call wDokSchreiben "<Return>"
-    Call wDokSchreiben "Test2"
+    Call wTypeKeys "Test1"
+    Call wTypeKeys "<Return>"
+    Call wTypeKeys "Test2"
     
     '/// Check if AutoFit Height works well
     Kontext
@@ -771,7 +771,7 @@ testcase tFormatPage_24
            if Active.GetRT = 304 then  Active.No
        else
             warnlog "There should be a warning message appear when turn off header !"
-       endif
+       end if
 
        Kontext "TabKopfzeile"
      TabKopfzeile.Cancel
@@ -812,7 +812,7 @@ testcase tFormatPage_25
          if Active.GetRT = 304 then  Active.No
      else
           warnlog "There should be a warning message appear when turn off header !"
-     endif
+     end if
 
     Call hCloseDocument
 
@@ -848,7 +848,7 @@ testcase tFormatPage_26
            if Active.GetRT = 304 then  Active.No
        else
             warnlog "There should be a warning message appear when turn off footer !"
-       endif
+       end if
 
        Kontext "TabKopfzeile"
      TabKopfzeile.Cancel
@@ -890,7 +890,7 @@ testcase tFormatPage_27
          if Active.GetRT = 304 then  Active.No
      else
           warnlog "There should be a warning message appear when turn off footer !"
-     endif
+     end if
 
     Call hCloseDocument
 
@@ -900,8 +900,8 @@ endcase
 
 testcase tFormatPage_28
 
-    Dim iFormat                  as Integer
-    Dim sHeightInPage , sHeight  as String
+    Dim iFormat as Integer
+    Dim sHeightInPage as String  ,  sHeight as String
 
     iFormat        = 2   'A4 paper
     sHeightInPage  = "20" + gSeperator + "00" + gMeasurementUnit

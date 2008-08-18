@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_formatpage4.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:53 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:29:03 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -78,9 +78,9 @@ testcase tFormatPage_48
     Call ActiveDeactivateAsianSupport(TRUE)
     
     '/// Input some test words
-    Call wDokSchreiben sTestText1
-    Call wDokSchreiben "<Return>"
-    Call wDokSchreiben sTestText2
+    Call wTypeKeys sTestText1
+    Call wTypeKeys "<Return>"
+    Call wTypeKeys sTestText2
     Sleep 1
     
     '/// formatPage , tabpage page, select right to left (vertical)
@@ -91,25 +91,25 @@ testcase tFormatPage_48
     Sleep 2
     
     '/// Check if the direction of the test words is changed
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Shift Down>", 4
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Shift Down>", 4
     Sleep 1
     EditCopy
     if GetClipboardText <> "This" then
         Warnlog "Something wrong in first word - get " &GetClipboardText
-    endif
+    end if
     
-    Call wDokSchreiben "<Home><Left>"
-    Call wDokSchreiben "<Shift Down>"  , 4
+    Call wTypeKeys "<Home><Left>"
+    Call wTypeKeys "<Shift Down>"  , 4
     Sleep 1
     EditCopy
     if GetClipboardText <> "That" then
         Warnlog "Something wrong in second word - get " &GetClipboardText
-    endif
+    end if
     
     if RecheckAsianSupport = False then
         Call ActiveDeactivateAsianSupport(FALSE)
-    endif
+    end if
     
     Call hCloseDocument
 
@@ -138,8 +138,8 @@ testcase tFormatPage_49
     TabBereiche.OK
     
     '/// insert something in the section
-    Call wDokSchreiben "<Up>"
-    Call wDokSchreiben sTestText
+    Call wTypeKeys "<Up>"
+    Call wTypeKeys sTestText
     
     '/// formatPage , tabpage page, select right to left (vertical)
     fFormatPageWriter("TabSeite")
@@ -149,14 +149,14 @@ testcase tFormatPage_49
     Sleep 2
     
     '/// Check if the direction of the test words is changed
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<Shift Down>" , 4
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<Shift Down>" , 4
     EditCopy
     if GetClipboardText <> "This" then Warnlog "Something wrong in the section - get " &GetClipboardText
 
     if RecheckAsianSupport = False then
         Call ActiveDeactivateAsianSupport(FALSE)
-    endif
+    end if
     
     Call hCloseDocument
 
@@ -186,7 +186,7 @@ testcase tFormatPage_50
     FussnoteEinfuegen.OK
     Sleep 1
     
-    Call wDokSchreiben "<PageUp>"
+    Call wTypeKeys "<PageUp>"
     Sleep 1
     
     '/// formatPage , tabpage page, select right to left (vertical)
@@ -197,7 +197,7 @@ testcase tFormatPage_50
     Sleep 2
     
     '/// Check if the direction of the footnote is changed
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     try
         EditFootnote
         Kontext "FussnoteBearbeiten"
@@ -206,7 +206,7 @@ testcase tFormatPage_50
     catch
     endcatch
     
-    Call wDokSchreiben "<Up>"
+    Call wTypeKeys "<Up>"
     try
         EditFootnote
         Kontext "FussnoteBearbeiten"
@@ -217,7 +217,7 @@ testcase tFormatPage_50
 
     if RecheckAsianSupport = False then
         Call ActiveDeactivateAsianSupport(FALSE)
-    endif
+    end if
     
     Call hCloseDocument
 
@@ -247,7 +247,7 @@ testcase tFormatPage_51
     FussnoteEinfuegen.OK
     Sleep 1
     
-    Call wDokSchreiben "<PageUp>"
+    Call wTypeKeys "<PageUp>"
     Sleep 1
     
     '/// formatPage , tabpage page, select right to left (vertical)
@@ -258,7 +258,7 @@ testcase tFormatPage_51
     Sleep 2
     
     '/// Check if the direction of the endnote is changed
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     try
         EditFootnote
         Kontext "FussnoteBearbeiten"
@@ -267,7 +267,7 @@ testcase tFormatPage_51
     catch
     endcatch
     
-    Call wDokSchreiben "<Up>"
+    Call wTypeKeys "<Up>"
     try
         EditFootnote
         Kontext "FussnoteBearbeiten"
@@ -278,7 +278,7 @@ testcase tFormatPage_51
 
     if RecheckAsianSupport = False then
         Call ActiveDeactivateAsianSupport(FALSE)
-    endif
+    end if
     
     Call hCloseDocument
 
@@ -288,7 +288,7 @@ endcase
 
 testcase tFormatPage_52
 
-    Dim sTest1 , sTest2, sTest3  as String
+    Dim sTest1 as String  ,  sTest2 as String  ,  sTest3 as String
     Dim RecheckAsianSupport as boolean
     RecheckAsianSupport = gAsianSup
     
@@ -308,16 +308,16 @@ testcase tFormatPage_52
     '/// + input some string in the table , like
     '/// a1  b1
     '/// a2
-    Call wDokSchreiben sTest1
+    Call wTypeKeys sTest1
     wait 500
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     wait 500
-    Call wDokSchreiben sTest2
+    Call wTypeKeys sTest2
     wait 500
-    Call wDokSchreiben "<Down><Left>"   'so far, the focus should be in 2nd line of the table
+    Call wTypeKeys "<Down><Left>"   'so far, the focus should be in 2nd line of the table
     wait 500
-    Call wDokSchreiben sTest3
-    Call wDokSchreiben "<Up><Home>"     'so far, the focus should be in front of A1
+    Call wTypeKeys sTest3
+    Call wTypeKeys "<Up><Home>"     'so far, the focus should be in front of A1
     
     '/// formatPage , tabpage page, select right to left (vertical)
     Call fFormatPageWriter("TabSeite")
@@ -327,23 +327,23 @@ testcase tFormatPage_52
     Sleep 2
     
     '/// Check if the direction of the table is changed
-    Call wDokSchreiben "<Shift Down>" , 2
+    Call wTypeKeys "<Shift Down>" , 2
     Sleep 1
     EditCopy
     if GetClipboardText <> sTest1 then
         Warnlog "1st word in table is wrong!"
     end if
     
-    Call wDokSchreiben "<Down>"
-    Call wDokSchreiben "<Shift Down>" , 2
+    Call wTypeKeys "<Down>"
+    Call wTypeKeys "<Shift Down>" , 2
     Sleep 1
     EditCopy
     if GetClipboardText <> sTest2 then
         Warnlog "2nd word in table is wrong!"
     end if
     
-    Call wDokSchreiben "<Left><Up>"
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys "<Left><Up>"
+    Call wTypeKeys "<Shift Home>"
     Sleep 1
     EditCopy
     if GetClipboardText <> sTest3 then
@@ -352,7 +352,7 @@ testcase tFormatPage_52
 
     if RecheckAsianSupport = False then
         Call ActiveDeactivateAsianSupport(FALSE)
-    endif
+    end if
     
     Call hCloseDocument
 
@@ -362,8 +362,8 @@ endcase
 
 testcase tFormatPage_53
     
-    Dim sTest           as String
-    Dim sTestFile       as String
+    Dim sTest as String
+    Dim sTestFile as String
     Dim RecheckAsianSupport as boolean
     RecheckAsianSupport = gAsianSup
     
@@ -401,10 +401,10 @@ testcase tFormatPage_53
     FindAndReplace.Close
     Sleep 1
     
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     Sleep 1
     
-    Call wDokSchreiben "<Shift Up>" , 4
+    Call wTypeKeys "<Shift Up>" , 4
     EditCopy
     if GetClipboardText <> sTest then
         Warnlog "the test word is wrong!"
@@ -412,7 +412,7 @@ testcase tFormatPage_53
     
     if RecheckAsianSupport = False then
         Call ActiveDeactivateAsianSupport(FALSE)
-    endif
+    end if
     
     
     Call hCloseDocument
@@ -423,11 +423,11 @@ endcase
 
 testcase tFormatPage_54
 
-    Dim sSpacingToContentsNoBorder   as String   'no border in the page
-    Dim sSpacingToContentsYesBorder  as String   'border exists  in the page
+    Dim sSpacingToContentsNoBorder as String   'no border in the page
+    Dim sSpacingToContentsYesBorder as String   'border exists  in the page
 
-    sSpacingToContentsNoBorder  = "0" + gSeperator + "00" + gMeasurementUnit
-    sSpacingToContentsYesBorder = "0" + gSeperator + "05" + gMeasurementUnit
+    sSpacingToContentsNoBorder  = "0" + gSeperator + "0" '+ gMeasurementUnit
+    sSpacingToContentsYesBorder = "0" + gSeperator + "5" '+ gMeasurementUnit
 
     PrintLog "- Only when a border is set, 'spacing to contents' gets a minimum value of 0.05cm"
     '/// Only when a border is set, "spacing to contents" gets a minimum value of 0.05cm
@@ -439,18 +439,10 @@ testcase tFormatPage_54
     '/// + Check if "spacing to contents" is 0.00cm when
     '/// + there is no border in the page
      fFormatPageWriter("TabUmrandung")
-       if Links.GetText  <> sSpacingToContentsNoBorder then
-           Warnlog "Default of left Spacing to contents is wrong !"
-       end if
-       if Rechts.GetText <> sSpacingToContentsNoBorder then
-           Warnlog "Default of right Spacing to contents is wrong !"
-       end if
-       if Oben.GetText   <> sSpacingToContentsNoBorder then
-           Warnlog "Default of up Spacing to contents is wrong !"
-       end if
-       if Unten.GetText  <> sSpacingToContentsNoBorder then
-           Warnlog "Default of bottom Spacing to contents is wrong !"
-       end if
+       if InStr( Links.GetText, sSpacingToContentsNoBorder) = false then Warnlog "Default of left Spacing to contents is wrong !"
+       if InStr( Rechts.GetText, sSpacingToContentsNoBorder) = false then Warnlog "Default of right Spacing to contents is wrong !"
+       if InStr( Oben.GetText, sSpacingToContentsNoBorder) = false then Warnlog "Default of up Spacing to contents is wrong !"
+       if InStr( Unten.GetText, sSpacingToContentsNoBorder) = false then Warnlog "Default of bottom Spacing to contents is wrong !"
      TabUmrandung.Cancel
 
     PrintLog "Check if 'spacing to contents' is 0.50cm when there are borders in the page"
@@ -463,18 +455,10 @@ testcase tFormatPage_54
      TabUmrandung.OK
 
      fFormatPageWriter("TabUmrandung")
-       if Links.GetText  <> sSpacingToContentsYesBorder then
-           Warnlog "Default of left Spacing to contents is wrong !"
-       end if
-       if Rechts.GetText <> sSpacingToContentsYesBorder then
-           Warnlog "Default of right Spacing to contents is wrong !"
-       end if
-       if Oben.GetText   <> sSpacingToContentsYesBorder then
-           Warnlog "Default of up Spacing to contents is wrong !"
-       end if
-       if Unten.GetText  <> sSpacingToContentsYesBorder then
-           Warnlog "Default of bottom Spacing to contents is wrong !"
-       end if
+       if InStr( Links.GetText, sSpacingToContentsYesBorder) = false then Warnlog "Default of left Spacing to contents is wrong !"
+       if InStr( Rechts.GetText, sSpacingToContentsYesBorder) = false then Warnlog "Default of right Spacing to contents is wrong !"
+       if InStr( Oben.GetText, sSpacingToContentsYesBorder) = false then Warnlog "Default of up Spacing to contents is wrong !"
+       if InStr( Unten.GetText, sSpacingToContentsYesBorder) = false then Warnlog "Default of bottom Spacing to contents is wrong !"
      TabUmrandung.Cancel
 
     Call hCloseDocument
@@ -491,11 +475,11 @@ testcase tFormatPage_55
     Dim sSpacingToContentsU  as String
     Dim sSpacingToContentsB  as String
 
-    sSpacingToContents  = "5" + gSeperator + "00" + gMeasurementUnit
-    sSpacingToContentsL = "6" + gSeperator + "00" + gMeasurementUnit
-    sSpacingToContentsR = "7" + gSeperator + "00" + gMeasurementUnit
-    sSpacingToContentsU = "8" + gSeperator + "00" + gMeasurementUnit
-    sSpacingToContentsB = "9" + gSeperator + "00" + gMeasurementUnit
+    sSpacingToContents  = "5" + gSeperator + "0" '+ gMeasurementUnit
+    sSpacingToContentsL = "6" + gSeperator + "0" '+ gMeasurementUnit
+    sSpacingToContentsR = "7" + gSeperator + "0" '+ gMeasurementUnit
+    sSpacingToContentsU = "8" + gSeperator + "0" '+ gMeasurementUnit
+    sSpacingToContentsB = "9" + gSeperator + "0" '+ gMeasurementUnit
 
     PrintLog "- All 'spacing to contents' spin boxes are limited to 5cm"
     '/// All "spacing to contents" spin boxes are limited to 5cm
@@ -520,18 +504,10 @@ testcase tFormatPage_55
 
     '/// Check if all "spacing to contents" is 5.00cm
      fFormatPageWriter("TabUmrandung")
-       if Links.GetText  <> sSpacingToContents then
-           Warnlog "left Spacing to contents is wrong !"
-       end if
-       if Rechts.GetText <> sSpacingToContents then
-           Warnlog "right Spacing to contents is wrong !"
-       end if
-       if Oben.GetText   <> sSpacingToContents then
-           Warnlog "up Spacing to contents is wrong !"
-       end if
-       if Unten.GetText  <> sSpacingToContents then
-           Warnlog "bottom Spacing to contents is wrong !"
-       end if
+       if InStr( Links.GetText, sSpacingToContentsL) = false then Warnlog "left Spacing to contents is wrong !"
+       if InStr( Rechts.GetText, sSpacingToContentsR) = false then Warnlog "right Spacing to contents is wrong !"
+       if InStr( Oben.GetText, sSpacingToContentsU) = false then Warnlog "up Spacing to contents is wrong !"
+       if InStr( Unten.GetText, sSpacingToContentsB) = false then Warnlog "bottom Spacing to contents is wrong !"
      TabUmrandung.Cancel
 
     Call hCloseDocument
@@ -547,10 +523,10 @@ testcase tFormatPage_56
     Dim sSpacingToContentsU  as String
     Dim sSpacingToContentsB  as String
 
-    sSpacingToContentsL = "0" + gSeperator + "50" + gMeasurementUnit
-    sSpacingToContentsR = "0" + gSeperator + "60" + gMeasurementUnit
-    sSpacingToContentsU = "0" + gSeperator + "70" + gMeasurementUnit
-    sSpacingToContentsB = "0" + gSeperator + "80" + gMeasurementUnit
+    sSpacingToContentsL = "0" + gSeperator + "5" '+ gMeasurementUnit
+    sSpacingToContentsR = "0" + gSeperator + "6" '+ gMeasurementUnit
+    sSpacingToContentsU = "0" + gSeperator + "7" '+ gMeasurementUnit
+    sSpacingToContentsB = "0" + gSeperator + "8" '+ gMeasurementUnit
 
     PrintLog "- Test Uncheck 'Synchronize'"
     '///  Test Uncheck 'Synchronize'
@@ -578,18 +554,10 @@ testcase tFormatPage_56
 
     '/// Check if all "spacing to contents" is correct
      fFormatPageWriter("TabUmrandung")
-       if Links.GetText  <> sSpacingToContentsL then
-           Warnlog "left Spacing to contents is wrong !"
-       end if
-       if Rechts.GetText <> sSpacingToContentsR then
-           Warnlog "right Spacing to contents is wrong !"
-       end if
-       if Oben.GetText   <> sSpacingToContentsU then
-           Warnlog "up Spacing to contents is wrong !"
-       end if
-       if Unten.GetText  <> sSpacingToContentsB then
-           Warnlog "bottom Spacing to contents is wrong !"
-       end if
+       if InStr( Links.GetText, sSpacingToContentsL) = false then Warnlog "left Spacing to contents is wrong !"
+       if InStr( Rechts.GetText, sSpacingToContentsR) = false then Warnlog "right Spacing to contents is wrong !"
+       if InStr( Oben.GetText, sSpacingToContentsU) = false then Warnlog "up Spacing to contents is wrong !"
+       if InStr( Unten.GetText, sSpacingToContentsB) = false then Warnlog "bottom Spacing to contents is wrong !"
      TabUmrandung.Cancel
 
     Call hCloseDocument
@@ -605,10 +573,10 @@ testcase tFormatPage_57
     Dim sSpacingToContentsU  as String
     Dim sSpacingToContentsB  as String
 
-    sSpacingToContentsL = "0" + gSeperator + "50" + gMeasurementUnit
-    sSpacingToContentsR = "0" + gSeperator + "60" + gMeasurementUnit
-    sSpacingToContentsU = "0" + gSeperator + "70" + gMeasurementUnit
-    sSpacingToContentsB = "0" + gSeperator + "80" + gMeasurementUnit
+    sSpacingToContentsL = "0" + gSeperator + "5" '+ gMeasurementUnit
+    sSpacingToContentsR = "0" + gSeperator + "6" '+ gMeasurementUnit
+    sSpacingToContentsU = "0" + gSeperator + "7" '+ gMeasurementUnit
+    sSpacingToContentsB = "0" + gSeperator + "8" '+ gMeasurementUnit
 
     PrintLog "- Test Check 'Synchronize'"
     '///  Test Check 'Synchronize'
@@ -636,18 +604,10 @@ testcase tFormatPage_57
 
     '/// Check if all "spacing to contents" is correct
      fFormatPageWriter("TabUmrandung")
-       if Links.GetText  <> sSpacingToContentsB then
-           Warnlog "left Spacing to contents is wrong !"
-       end if
-       if Rechts.GetText <> sSpacingToContentsB then
-           Warnlog "right Spacing to contents is wrong !"
-       end if
-       if Oben.GetText   <> sSpacingToContentsB then
-           Warnlog "up Spacing to contents is wrong !"
-       end if
-       if Unten.GetText  <> sSpacingToContentsB then
-           Warnlog "bottom Spacing to contents is wrong !"
-       end if
+       if InStr( Links.GetText, sSpacingToContentsL) = true then Warnlog "left Spacing to contents is wrong !"
+       if InStr( Rechts.GetText, sSpacingToContentsR) = true then Warnlog "right Spacing to contents is wrong !"
+       if InStr( Oben.GetText, sSpacingToContentsU) = true then Warnlog "up Spacing to contents is wrong !"
+       if InStr( Unten.GetText, sSpacingToContentsB) = false then Warnlog "bottom Spacing to contents is wrong !"
      TabUmrandung.Cancel
 
     Call hCloseDocument
@@ -698,7 +658,7 @@ endcase
 
 testcase tFormatPage_59
 
-    Dim iBorderColor , iShadowColor   as Integer
+    Dim iBorderColor as Integer  ,  iShadowColor as Integer
     Dim sSpacingToContentsL           as String
     Dim sSpacingToContentsR           as String
     Dim sSpacingToContentsU           as String
@@ -706,11 +666,11 @@ testcase tFormatPage_59
     Dim sShadowDistance               as String
 
     iBorderColor = 5 : iShadowColor = 4
-    sSpacingToContentsL = "0" + gSeperator + "50" + gMeasurementUnit
-    sSpacingToContentsR = "0" + gSeperator + "60" + gMeasurementUnit
-    sSpacingToContentsU = "0" + gSeperator + "70" + gMeasurementUnit
-    sSpacingToContentsB = "0" + gSeperator + "80" + gMeasurementUnit
-    sShadowDistance     = "0" + gSeperator + "40" + gMeasurementUnit
+    sSpacingToContentsL = "0" + gSeperator + "5" '+ gMeasurementUnit
+    sSpacingToContentsR = "0" + gSeperator + "6" '+ gMeasurementUnit
+    sSpacingToContentsU = "0" + gSeperator + "7" '+ gMeasurementUnit
+    sSpacingToContentsB = "0" + gSeperator + "8" '+ gMeasurementUnit
+    sShadowDistance     = "25" + gSeperator + "4" '+ gMeasurementUnit
 
     PrintLog "- Test if the shadow settings is OK after closing the dialog"
     '///  Test if the shadow settings is OK after closing the dialog
@@ -740,13 +700,13 @@ testcase tFormatPage_59
     '/// format/Page , check if the configuration is all right
      fFormatPageWriter("TabUmrandung")
        if Synchronisieren.IsChecked = TRUE          then Warnlog "Synchronize should be Unchecked !"
-       if Links.GetText  <> sSpacingToContentsL     then Warnlog "left Spacing to contents is wrong !"
-       if Rechts.GetText <> sSpacingToContentsR     then Warnlog "right Spacing to contents is wrong !"
-       if Oben.GetText   <> sSpacingToContentsU     then Warnlog "up Spacing to contents is wrong !"
-       if Unten.GetText  <> sSpacingToContentsB     then Warnlog "bottom Spacing to contents is wrong !"
+       if InStr( Links.GetText, sSpacingToContentsL) = false then Warnlog "left Spacing to contents is wrong !"
+       if InStr( Rechts.GetText, sSpacingToContentsR) = false then Warnlog "right Spacing to contents is wrong !"
+       if InStr( Oben.GetText, sSpacingToContentsU) = false then Warnlog "up Spacing to contents is wrong !"
+       if InStr( Unten.GetText, sSpacingToContentsB) = false then Warnlog "bottom Spacing to contents is wrong !"
        if StilFarbe.GetSelIndex <> iBorderColor     then Warnlog "border color is wrong !"
 
-       if Groesse.GetText  <>  sShadowDistance      then Warnlog "shadow distance is wrong !"
+       if InStr( Groesse.GetText, sShadowDistance) = false then Warnlog "shadow distance is wrong !"
        if SchattenFarbe.GetSelindex <> iShadowColor then Warnlog "shadow color is wrong !"
      TabUmrandung.Cancel
 
@@ -758,7 +718,7 @@ endcase
 
 testcase tFormatPage_60
 
-    Dim iBorderColor , iShadowColor   as Integer
+    Dim iBorderColor as Integer  ,  iShadowColor as Integer
     Dim sSpacingToContentsL           as String
     Dim sSpacingToContentsR           as String
     Dim sSpacingToContentsU           as String
@@ -766,11 +726,11 @@ testcase tFormatPage_60
     Dim sShadowDistance               as String
 
     iBorderColor = 5 : iShadowColor = 4
-    sSpacingToContentsL = "0" + gSeperator + "50" + gMeasurementUnit
-    sSpacingToContentsR = "0" + gSeperator + "60" + gMeasurementUnit
-    sSpacingToContentsU = "0" + gSeperator + "70" + gMeasurementUnit
-    sSpacingToContentsB = "0" + gSeperator + "80" + gMeasurementUnit
-    sShadowDistance     = "0" + gSeperator + "40" + gMeasurementUnit
+    sSpacingToContentsL = "0" + gSeperator + "5" '+ gMeasurementUnit
+    sSpacingToContentsR = "0" + gSeperator + "6" '+ gMeasurementUnit
+    sSpacingToContentsU = "0" + gSeperator + "7" '+ gMeasurementUnit
+    sSpacingToContentsB = "0" + gSeperator + "8" '+ gMeasurementUnit
+    sShadowDistance     = "27" + gSeperator + "4" '+ gMeasurementUnit
 
     PrintLog "- Test if the shadow settings is OK after reopening the file"
     '///  Test if the shadow settings is OK after reopening the file
@@ -807,13 +767,13 @@ testcase tFormatPage_60
     '/// check if the configuration is all right
     fFormatPageWriter("TabUmrandung")
     if Synchronisieren.IsChecked = TRUE          then Warnlog "Synchronize should be Unchecked !"
-    if Links.GetText  <> sSpacingToContentsL     then Warnlog "left Spacing to contents is wrong !"
-    if Rechts.GetText <> sSpacingToContentsR     then Warnlog "right Spacing to contents is wrong !"
-    if Oben.GetText   <> sSpacingToContentsU     then Warnlog "up Spacing to contents is wrong !"
-    if Unten.GetText  <> sSpacingToContentsB     then Warnlog "bottom Spacing to contents is wrong !"
+    if InStr( Links.GetText, sSpacingToContentsL) = false then Warnlog "left Spacing to contents is wrong !"
+    if InStr( Rechts.GetText, sSpacingToContentsR) = false then Warnlog "right Spacing to contents is wrong !"
+    if InStr( Oben.GetText, sSpacingToContentsU) = false then Warnlog "up Spacing to contents is wrong !"
+    if InStr( Unten.GetText, sSpacingToContentsB) = false then Warnlog "bottom Spacing to contents is wrong !"
     if StilFarbe.GetSelIndex <> iBorderColor     then Warnlog "border color is wrong !"
 
-    if Groesse.GetText  <>  sShadowDistance      then Warnlog "shadow distance is wrong !"
+       if InStr( Groesse.GetText, sShadowDistance) = false then Warnlog "shadow distance is wrong !"
     if SchattenFarbe.GetSelindex <> iShadowColor then Warnlog "shadow color is wrong !"
     TabUmrandung.Cancel
 
