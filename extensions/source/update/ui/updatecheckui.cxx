@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updatecheckui.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,6 +59,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/sfx.hrc>
+#include "rtl/ustrbuf.hxx"
 
 #include "updatecheckui.hrc"
 
@@ -389,9 +390,21 @@ void UpdateCheckUI::AddMenuBarIcon( SystemWindow *pSysWin, bool bAddEventHdl )
 
         if ( pActiveMBar )
         {
+            rtl::OUStringBuffer aBuf;
+            if( maBubbleTitle.getLength() )
+                aBuf.append( maBubbleTitle );
+            if( maBubbleText.getLength() )
+            {
+                if( maBubbleTitle.getLength() )
+                    aBuf.appendAscii( "\n\n" );
+                aBuf.append( maBubbleText );
+            }
+
             Image aImage = GetMenuBarIcon( pActiveMBar );
             mnIconID = pActiveMBar->AddMenuBarButton( aImage,
-                                    LINK( this, UpdateCheckUI, ClickHdl ) );
+                                    LINK( this, UpdateCheckUI, ClickHdl ),
+                                    aBuf.makeStringAndClear()
+                                    );
             pActiveMBar->SetMenuBarButtonHighlightHdl( mnIconID,
                                     LINK( this, UpdateCheckUI, HighlightHdl ) );
         }
@@ -571,6 +584,10 @@ BubbleWindow * UpdateCheckUI::GetBubbleWindow()
     if ( !mpIconSysWin )
         return NULL;
 
+    Rectangle aIconRect = mpIconMBar->GetMenuBarButtonRectPixel( mnIconID );
+    if( aIconRect.IsEmpty() )
+        return NULL;
+
     BubbleWindow* pBubbleWin = mpBubbleWin;
 
     if ( !pBubbleWin ) {
@@ -586,7 +603,6 @@ BubbleWindow * UpdateCheckUI::GetBubbleWindow()
         mbBubbleChanged = false;
     }
 
-    Rectangle aIconRect = mpIconMBar->GetMenuBarButtonRectPixel( mnIconID );
     Point aWinPos = aIconRect.BottomCenter();
 
     pBubbleWin->SetTipPosPixel( aWinPos );
