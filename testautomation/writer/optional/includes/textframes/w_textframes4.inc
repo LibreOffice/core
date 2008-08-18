@@ -1,33 +1,34 @@
 'encoding UTF-8  Do not remove or change this line!
-'*************************************************************************
+'**************************************************************************
+'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'* 
+'* Copyright 2008 by Sun Microsystems, Inc.
 '*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
- * Copyright 2008 by Sun Microsystems, Inc.
- *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: w_textframes4.inc,v $
- *
- * $Revision: 1.2 $
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
+'* OpenOffice.org - a multi-platform office productivity suite
+'*
+'* $RCSfile: w_textframes4.inc,v $
+'*
+'* $Revision: 1.3 $
+'*
+'* last change: $Author: vg $ $Date: 2008-08-18 12:38:00 $
+'*
+'* This file is part of OpenOffice.org.
+'*
+'* OpenOffice.org is free software: you can redistribute it and/or modify
+'* it under the terms of the GNU Lesser General Public License version 3
+'* only, as published by the Free Software Foundation.
+'*
+'* OpenOffice.org is distributed in the hope that it will be useful,
+'* but WITHOUT ANY WARRANTY; without even the implied warranty of
+'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'* GNU Lesser General Public License version 3 for more details
+'* (a copy is included in the LICENSE file that accompanied this code).
+'*
+'* You should have received a copy of the GNU Lesser General Public License
+'* version 3 along with OpenOffice.org.  If not, see
+'* <http://www.openoffice.org/license.html>
+'* for a copy of the LGPLv3 License.
+'*
 '/************************************************************************
 '*
 '* owner : fredrik.haegg@sun.com
@@ -103,7 +104,7 @@ testcase tTextframes_50
     Call hFileOpen(sTestFile,false)
     
     '/// Set focus to frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -136,7 +137,7 @@ testcase tTextframes_51
     Call hFileOpen(sTestFile,false)
     
     '/// Set focus to frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -169,7 +170,7 @@ testcase tTextframes_52
     Call hFileOpen(sTestFile,false)
     
     '/// Set focus to the frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -202,7 +203,7 @@ testcase tTextframes_53
     Call hFileOpen(sTestFile,false)
     
     '/// Set focus to the frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -235,7 +236,7 @@ testcase tTextframes_54
     Call hFileOpen(sTestFile,false)
     
     '/// Set focus to the frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -364,9 +365,9 @@ testcase tTextframes_57
     Call hFileOpen(sTestFile,false)
     
     'Set focus to the picture
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic Y position
@@ -381,7 +382,7 @@ testcase tTextframes_57
     Sleep 1
     
     '/// Set focus to the frame
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -396,7 +397,7 @@ testcase tTextframes_57
     TabType.OK
     
     'Set focus to picture
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic Y position
@@ -439,9 +440,9 @@ testcase tTextframes_58
     Call hFileOpen(sTestFile,false)
     
     'Set focus to the picture
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic Y position
@@ -455,7 +456,7 @@ testcase tTextframes_58
     Sleep 1
     
     '/// Set focus to the frame
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -470,7 +471,7 @@ testcase tTextframes_58
     TabType.OK
     
     'Set focus to picture
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic Y position
@@ -509,9 +510,9 @@ testcase tTextframes_59
     Call hFileOpen(sTestFile,false)
     
     'Set focus to the picture
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
-    Call wDokSchreiben ( "<Tab>" )
+    Call wTypeKeys ( "<Tab>" )
     
     FormatAnchorToFrame
     Sleep 1
@@ -523,7 +524,7 @@ testcase tTextframes_59
     TabType.Cancel
         
     '/// Set focus to the frame
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -538,7 +539,7 @@ testcase tTextframes_59
     TabType.OK
     
     'Set focus to picture
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic Y position
@@ -553,11 +554,11 @@ testcase tTextframes_59
     end if
     
     'Set focus to frame
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'if the frame is in the table, the focus should be in the table
-    Call wDokSchreiben "<ESCape>"
+    Call wTypeKeys "<ESCape>"
     Sleep 1
     
     try
@@ -591,9 +592,9 @@ testcase tTextframes_60
     Call hFileOpen(sTestFile,false)
     
     'Set focus to the picture
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
-	Call wDokSchreiben ( "<Tab>" )
+	Call wTypeKeys ( "<Tab>" )
     
     'Get the pic Y position
     Sleep 1
@@ -605,7 +606,7 @@ testcase tTextframes_60
     Sleep 1
     
     '/// Set focus to the frame
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -620,7 +621,7 @@ testcase tTextframes_60
     TabType.OK
     
     'Set focus to picture
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic Y position
@@ -635,11 +636,11 @@ testcase tTextframes_60
     end if
     
     'Set focus to frame
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'if the frame is in the table, the focus should be in the table
-    Call wDokSchreiben "<ESCape>"
+    Call wTypeKeys "<ESCape>"
     Sleep 1
     
     try
@@ -677,9 +678,9 @@ testcase tTextframes_61
     Call hFileOpen(sTestFile,false)
     
     'Set focus to the picture
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic Y position
@@ -693,7 +694,7 @@ testcase tTextframes_61
     Sleep 1
     
     '/// Set focus to the frame
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -708,7 +709,7 @@ testcase tTextframes_61
     TabType.OK
     
     'Set focus to picture
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic Y position
@@ -751,9 +752,9 @@ testcase tTextframes_62
     Call hFileOpen(sTestFile,false)
     
     'Set focus to the picture
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic Y position
@@ -767,7 +768,7 @@ testcase tTextframes_62
     Sleep 1
     
     '/// Set focus to the frame
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -782,7 +783,7 @@ testcase tTextframes_62
     TabType.OK
     
     'Set focus to picture
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic Y position
@@ -825,9 +826,9 @@ testcase tTextframes_63
     Call hFileOpen(sTestFile,false)
     
     'Set focus to the picture
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
-	Call wDokSchreiben ( "<Tab>" )
+	Call wTypeKeys ( "<Tab>" )
     
     'Get the pic X position
     Sleep 1
@@ -839,7 +840,7 @@ testcase tTextframes_63
     Sleep 1
     
     '/// Set focus to the frame
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -854,7 +855,7 @@ testcase tTextframes_63
     TabType.OK
     
     'Set focus to picture
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic X position
@@ -869,11 +870,11 @@ testcase tTextframes_63
     end if
     
     'Set focus to frame
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'if the frame is in the table, the focus should be in the table
-    Call wDokSchreiben "<ESCape>"
+    Call wTypeKeys "<ESCape>"
     Sleep 1
     
     try
@@ -911,9 +912,9 @@ testcase tTextframes_64
     Call hFileOpen(sTestFile,false)
     
     'Set focus to the picture
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
-	Call wDokSchreiben ( "<Tab>" )
+	Call wTypeKeys ( "<Tab>" )
     
     'Get the pic Y position
     Sleep 1
@@ -925,7 +926,7 @@ testcase tTextframes_64
     Sleep 1
     
     '/// Set focus to the frame
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -940,7 +941,7 @@ testcase tTextframes_64
     TabType.OK
     
     'Set focus to picture
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic X position
@@ -955,11 +956,11 @@ testcase tTextframes_64
     end if
     
     'Set focus to frame
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'if the frame is in the table, the focus should be in the table
-    Call wDokSchreiben "<ESCape>"
+    Call wTypeKeys "<ESCape>"
     Sleep 1
     
     try
@@ -998,9 +999,9 @@ testcase tTextframes_65
     Call hFileOpen(sTestFile,false)
     
     'Set focus to the picture
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic X position
@@ -1014,7 +1015,7 @@ testcase tTextframes_65
     Sleep 1
     
     '/// Set focus to the frame
-    Call wDokSchreiben "<Tab>" , 2
+    Call wTypeKeys "<Tab>" , 2
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -1029,7 +1030,7 @@ testcase tTextframes_65
     TabType.OK
     
     'Set focus to picture
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic X position
@@ -1073,9 +1074,9 @@ testcase tTextframes_66
     Call hFileOpen(sTestFile,false)
     
     'Set focus to the picture
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic X position
@@ -1089,7 +1090,7 @@ testcase tTextframes_66
     Sleep 1
     
     '/// Set focus to the frame
-    Call wDokSchreiben "<Tab>" , 2
+    Call wTypeKeys "<Tab>" , 2
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -1104,7 +1105,7 @@ testcase tTextframes_66
     TabType.OK
     
     'Set focus to picture
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic X position
@@ -1147,9 +1148,9 @@ testcase tTextframes_67
     Call hFileOpen(sTestFile,false)
     
     'Set focus to the picture
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
-	Call wDokSchreiben ( "<Tab>" )
+	Call wTypeKeys ( "<Tab>" )
     
     'Get the pic X position
     Sleep 1
@@ -1161,7 +1162,7 @@ testcase tTextframes_67
     Sleep 1
     
     '/// Set focus to the frame
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -1176,7 +1177,7 @@ testcase tTextframes_67
     TabType.OK
     
     'Set focus to picture
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic X position
@@ -1191,11 +1192,11 @@ testcase tTextframes_67
     end if
     
     'Set focus to frame
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'if the frame is in the table, the focus should be in the table
-    Call wDokSchreiben "<ESCape>"
+    Call wTypeKeys "<ESCape>"
     Sleep 1
     
     try
@@ -1233,9 +1234,9 @@ testcase tTextframes_68
     Call hFileOpen(sTestFile,false)
     
     'Set focus to the picture
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
-	Call wDokSchreiben ( "<Tab>" )
+	Call wTypeKeys ( "<Tab>" )
     
     'Get the pic Y position
     Sleep 1
@@ -1247,7 +1248,7 @@ testcase tTextframes_68
     Sleep 1
     
     '/// Set focus to the frame
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -1262,7 +1263,7 @@ testcase tTextframes_68
     TabType.OK
     
     'Set focus to picture
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic X position
@@ -1277,11 +1278,11 @@ testcase tTextframes_68
     end if
     
     'Set focus to frame
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'if the frame is in the table, the focus should be in the table
-    Call wDokSchreiben "<ESCape>"
+    Call wTypeKeys "<ESCape>"
     Sleep 1
     
     try
@@ -1320,9 +1321,9 @@ testcase tTextframes_69
     Call hFileOpen(sTestFile,false)
     
     'Set focus to the picture
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic X position
@@ -1336,7 +1337,7 @@ testcase tTextframes_69
     Sleep 1
     
     '/// Set focus to the frame
-    Call wDokSchreiben "<Tab>" , 2
+    Call wTypeKeys "<Tab>" , 2
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -1351,7 +1352,7 @@ testcase tTextframes_69
     TabType.OK
     
     'Set focus to picture
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic X position
@@ -1395,9 +1396,9 @@ testcase tTextframes_70
     Call hFileOpen(sTestFile,false)
     
     'Set focus to the picture
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic X position
@@ -1411,7 +1412,7 @@ testcase tTextframes_70
     Sleep 1
     
     '/// Set focus to the frame
-    Call wDokSchreiben "<Tab>" , 2
+    Call wTypeKeys "<Tab>" , 2
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -1426,7 +1427,7 @@ testcase tTextframes_70
     TabType.OK
     
     'Set focus to picture
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     'Get the pic X position
