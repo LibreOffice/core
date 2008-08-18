@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: kill.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -152,25 +152,30 @@ static DWORD SignalToExceptionCode( int signal )
     }
 }
 
-static void RaiseSignalEx( HANDLE hProcess, int sig )
+static BOOL RaiseSignalEx( HANDLE hProcess, int sig )
 {
     DWORD   dwProcessId = GetProcessId( hProcess );
 
     HANDLE  hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPTHREAD, 0 );
     HANDLE  hThread = 0;
+    BOOL fSuccess = FALSE;
 
     if ( IsValidHandle(hSnapshot) )
     {
         THREADENTRY32   te;
 
         te.dwSize = sizeof(te);
-        BOOL fSuccess = Thread32First( hSnapshot, &te );
+        fSuccess = Thread32First( hSnapshot, &te );
         while ( fSuccess )
         {
             if ( te.th32OwnerProcessID == dwProcessId )
             {
-                hThread = OpenThread( THREAD_ALL_ACCESS, FALSE, te.th32ThreadID );
-                break;
+                hThread = OpenThread(
+                    THREAD_SUSPEND_RESUME | THREAD_QUERY_INFORMATION |
+                    THREAD_GET_CONTEXT | THREAD_SET_CONTEXT,
+                    FALSE, te.th32ThreadID );
+                if ( IsValidHandle(hThread) )
+                    break;
             }
 
             fSuccess = Thread32Next( hSnapshot, &te );
@@ -179,35 +184,53 @@ static void RaiseSignalEx( HANDLE hProcess, int sig )
         CloseHandle( hSnapshot );
     }
 
-    CONTEXT aContext;
-
-    SuspendThread( hThread );
-    ZeroMemory( &aContext, sizeof(aContext) );
-    aContext.ContextFlags = CONTEXT_FULL;
-    GetThreadContext( hThread, &aContext );
-
-    if ( sig )
+    if ( fSuccess )
     {
-        DWORD   dwStackBuffer[] =
+        CONTEXT aContext;
+
+        if ( SuspendThread( hThread ) != (DWORD)-1 )
         {
-            aContext.Eip,
-            SignalToExceptionCode( sig ),
-            EXCEPTION_NONCONTINUABLE,
-            0,
-            0
-        };
+            ZeroMemory( &aContext, sizeof(aContext) );
+            aContext.ContextFlags = CONTEXT_FULL;
 
-        aContext.Esp -= sizeof(dwStackBuffer);
-        WriteProcessMemory( hProcess, (LPVOID)aContext.Esp, dwStackBuffer, sizeof(dwStackBuffer), NULL );
-        aContext.Eip = (DWORD)GetProcAddressEx( hProcess, GetModuleHandleA("KERNEL32"), "RaiseException" );
-    }
-    else
-    {
-        aContext.Ecx = aContext.Eax = aContext.Ebx = aContext.Edx = aContext.Esi = aContext.Edi = 0;
+            fSuccess = GetThreadContext( hThread, &aContext );
+
+            if ( fSuccess )
+            {
+                if ( sig )
+                {
+                    DWORD   dwStackBuffer[] =
+                    {
+                        aContext.Eip,
+                        SignalToExceptionCode( sig ),
+                        EXCEPTION_NONCONTINUABLE,
+                        0,
+                        0
+                    };
+
+                    aContext.Esp -= sizeof(dwStackBuffer);
+                    WriteProcessMemory( hProcess, (LPVOID)aContext.Esp, dwStackBuffer, sizeof(dwStackBuffer), NULL );
+                    aContext.Eip = (DWORD)GetProcAddressEx( hProcess, GetModuleHandleA("KERNEL32"), "RaiseException" );
+                }
+                else
+                {
+                    aContext.Ecx = aContext.Eax = aContext.Ebx = aContext.Edx = aContext.Esi = aContext.Edi = 0;
+                }
+
+                fSuccess = SetThreadContext( hThread, &aContext );
+            }
+
+            fSuccess = ResumeThread( hThread ) && fSuccess;
+
+            DWORD   dwLastError = GetLastError();
+            CloseHandle( hThread );
+            SetLastError( dwLastError );
+
+            return fSuccess;
+        }
     }
 
-    SetThreadContext( hThread, &aContext );
-    ResumeThread( hThread );
+    return FALSE;
 }
 /////////////////////////////////////////////////////////////////////////////
 // Command line parameter parsing
@@ -359,6 +382,24 @@ static void ParseCommandArgs( LPDWORD lpProcesses, LPDWORD lpdwNumProcesses, int
 
 }
 
+void OutputSystemMessage( DWORD dwErrorCode )
+{
+    LPVOID lpMsgBuf;
+    FormatMessageA(
+                    FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                    FORMAT_MESSAGE_FROM_SYSTEM |
+                    FORMAT_MESSAGE_IGNORE_INSERTS,
+                    NULL,
+                    dwErrorCode,
+                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                    (LPSTR)&lpMsgBuf,
+                    0,
+                    NULL
+                );
+
+    printf( (LPSTR)lpMsgBuf );
+    LocalFree( lpMsgBuf );
+}
 
 int _tmain()
 {
@@ -383,13 +424,21 @@ int _tmain()
             if ( SIGKILL == sig )
                 TerminateProcess( hProcess, 255 );
             else
-                RaiseSignalEx( hProcess, sig );
-            _tprintf( _T("Done\n") );
+            {
+                if ( RaiseSignalEx( hProcess, sig ) )
+                    _tprintf( _T("OK\n") );
+                else
+                {
+                    OutputSystemMessage( GetLastError() );
+                }
+            }
 
             CloseHandle( hProcess );
         }
         else
-            _ftprintf( stderr, _T("No such process\n") );
+        {
+            OutputSystemMessage( GetLastError() );
+        }
     }
 
     return 0;
