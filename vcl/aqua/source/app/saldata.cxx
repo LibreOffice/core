@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saldata.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,8 @@
 #include "precompiled_vcl.hxx"
 
 #include "saldata.hxx"
+#include "salnsmenu.h"
+#include "salinst.h"
 
 oslThreadKey SalData::s_aAutoReleaseKey = 0;
 
@@ -49,6 +51,7 @@ SalData::SalData()
     mpFirstVD( NULL ),
     mpFirstPrinter( NULL ),
     mpFontList( NULL ),
+    mpStatusItem( nil ),
     mxRGBSpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB) ),
     mxGraySpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericGray) ),
     maCursors( POINTER_COUNT, INVALID_CURSOR_PTR ),
@@ -262,4 +265,22 @@ NSCursor* SalData::getCursor( PointerStyle i_eStyle )
         maCursors[ i_eStyle ] = pCurs;
     }
     return pCurs;
+}
+
+NSStatusItem* SalData::getStatusItem()
+{
+    SalData* pData = GetSalData();
+    if( ! pData->mpStatusItem )
+    {
+        NSStatusBar* pStatBar =[NSStatusBar systemStatusBar];
+        if( pStatBar )
+        {
+            pData->mpStatusItem = [pStatBar statusItemWithLength: NSVariableStatusItemLength];
+            [pData->mpStatusItem retain];
+            OOStatusItemView* pView = [[OOStatusItemView alloc] init];
+            [pData->mpStatusItem setView: pView ];
+            [pView display];
+        }
+    }
+    return pData->mpStatusItem;
 }
