@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: InstallData.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,6 +94,7 @@ public class InstallData
     static private String installDirName = "installdata";
     static private String uninstallDirName = "uninstalldata";
     static private int availableDiscSpace = 0;
+    static private int preselectedLanguages = 0;
     static private File jarFilePath = null;
     static private File resourceRoot;
     static private File infoRoot;
@@ -355,6 +356,14 @@ public class InstallData
 
     public void setAvailableDiscSpace(int space) {
         availableDiscSpace = space;
+    }
+
+    public int getPreselectedLanguages() {
+        return preselectedLanguages;
+    }
+
+    public void setPreselectedLanguages(int count) {
+        preselectedLanguages = count;
     }
 
     public String getAdminFileNameReloc() {
