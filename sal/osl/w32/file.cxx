@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -460,8 +460,11 @@ namespace /* private */
 
             if (!IsValidHandle(pDirectory->hFind))
             {
-                HeapFree(GetProcessHeap(), 0, pDirectory);
-                pDirectory = NULL;
+                if ( GetLastError() != ERROR_NO_MORE_FILES )
+                {
+                    HeapFree(GetProcessHeap(), 0, pDirectory);
+                    pDirectory = NULL;
+                }
             }
         }
         return (HANDLE)pDirectory;
@@ -504,8 +507,13 @@ namespace /* private */
                     fSuccess = TRUE;
                     pDirectory->aFirstData.cFileName[0] = 0;
                 }
-                else
+                else if ( IsValidHandle( pDirectory->hFind ) )
                     fSuccess = FindNextFile( pDirectory->hFind, pFindData );
+                else
+                {
+                    fSuccess = FALSE;
+                    SetLastError( ERROR_NO_MORE_FILES );
+                }
 
                 fValid = fSuccess && _tcscmp( TEXT("."), pFindData->cFileName ) != 0 && _tcscmp( TEXT(".."), pFindData->cFileName ) != 0;
 
