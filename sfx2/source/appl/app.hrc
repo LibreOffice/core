@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: app.hrc,v $
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -186,6 +186,12 @@
 #define IMG_HELP_CONTENT_DOC                    (RID_SFX_APP_START+124)
 
 #define IMG_HELP_CONTENT_DOC_HC                 (RID_SFX_APP_START+125) // image
+
+#define IMG_MISSING_1                           (RID_SFX_APP_START+126) // image
+#define IMG_MISSING_2                           (RID_SFX_APP_START+127) // image
+#define IMG_MISSING_3                           (RID_SFX_APP_START+128) // image
+#define IMG_MISSING_4                           (RID_SFX_APP_START+129) // image
+
 #define STR_HELP_WINDOW_TITLE                   (RID_SFX_APP_START+125) // string
 
 #define STR_HELP_BUTTON_INDEX_ON                (RID_SFX_APP_START+126)
