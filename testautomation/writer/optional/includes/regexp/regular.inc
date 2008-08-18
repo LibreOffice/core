@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: regular.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:57 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:34:19 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -369,7 +369,7 @@ testcase tEmpty_Paragraph
         Vergleichstext = Chr$(10)
    else
         Vergleichstext = Chr$(13) + Chr$(10)
-   endif
+   end if
    '/// Compare string found with: 'An empty paragraph' ///
    call Search_Und_Vergleichen
 endcase
@@ -675,8 +675,8 @@ testcase tAttach_Behind_WordToFind
      Active.OK                     'MSG-Box (... x ersetzt) schlie�en
     else
      Warnlog "Messagebox, how often replaced, not up !"
-    endif
-   endif
+    end if
+   end if
    Kontext "FindAndReplace"
    FindAndReplace.Close
    kontext "DocumentWriter"
@@ -944,14 +944,14 @@ sub Search_Und_Vergleichen
     if Active.GetRT = 304 then ' MESSBOX
      Warnlog "active: " + Active.Gettext
      Active.Ok
-    endif
-   endif
+    end if
+   end if
    kontext "FindAndReplace"
    if FindAndReplace.Exists then
      FindAndReplace.Close
     else
      Warnlog "Dialog 'Find & Replace' not open anymore!"
-   endif
+   end if
    Kontext "DocumentWriter"
     try
      EditCopy
