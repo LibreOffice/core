@@ -1,5 +1,3 @@
-#!/bin/python
-
 # Caolan McNamara caolanm@redhat.com
 # a simple email mailmerge component
 
