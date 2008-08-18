@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_undo_history_2.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:04:01 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:39:15 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -67,18 +67,18 @@ testcase tUndoHistory6
 	'/// <U><B>CHECK: Typing</B></U>
 	printlog "- TYPING"
 	'/// write a > 20 characters long string: ThisSentenceHasMoreThan20Characters
-	Call wDokSchreiben ( "ThisSentenceHasMoreThan20Characters" )
+	Call wTypeKeys ( "ThisSentenceHasMoreThan20Characters" )
 	'/// string in Undo list has to be: Typing: ThisSente...aracters
 	Call CheckUndoStringInUndoList ( 1, "'ThisSent...racters'" )
 
 	'/// <U><B>CHECK: Overwrite</B></U>
 	printlog "- OVERWRITE"
 	'/// press 'Home' key
-	Call wDokSchreiben "<Home>"
+	Call wTypeKeys "<Home>"
 	'/// press 'Ins' key
-	Call wDokSchreiben "<Insert>"
+	Call wTypeKeys "<Insert>"
 	'/// write a > 20 characters long string: ThePreviousSentenceHasBeenOverwritten
-	Call wDokSchreiben ( "ThePreviousSentenceHasBeenOverwritten" )
+	Call wTypeKeys ( "ThePreviousSentenceHasBeenOverwritten" )
 	'/// string in Undo list has to be: Overwrite: ThePrevio...rwritten
 	Call CheckUndoStringInUndoList ( 2, "'ThePrevio...rwritten'" )	
 
@@ -96,9 +96,9 @@ testcase tUndoHistory7
 	printlog "- REPLACE"
 	Call hNewDocument
 	'/// write a > 20 characters long string: ThePreviousSentenceHasBeenOverwritten
-	Call wDokSchreiben ( "ThePreviousSentenceHasBeenOverwritten" )
+	Call wTypeKeys ( "ThePreviousSentenceHasBeenOverwritten" )
 	'/// Select text
-	Call wDokSchreiben ( "<Shift Home>" )
+	Call wTypeKeys ( "<Shift Home>" )
 	'/// Edit / Find and Replace 	
 	EditSearchAndReplace
 	Kontext "FindAndReplace"
@@ -115,8 +115,8 @@ testcase tUndoHistory7
 			catch
 				Active.Ok
 			endcatch
-		endif
-	endif
+		end if
+	end if
 	Kontext "FindAndReplace"
 	FindAndReplace.Close
 	Kontext "DocumentWriter"
@@ -136,20 +136,20 @@ testcase tUndoHistory8
 	'/// new Document	
 	Call hNewDocument
 	'/// write down: the deletion of a multi-selection
-	Call wDokSchreiben ( "the deletion of a multi-selection" )
+	Call wTypeKeys ( "the deletion of a multi-selection" )
 	'/// with Shift + F8 enter multi-selection mode
-	Call wDokSchreiben ( "<SHIFT F8>" )
+	Call wTypeKeys ( "<SHIFT F8>" )
 	'/// multi-select "the ", " a" and "multi-"
-	Call wDokSchreiben ( "<MOD1 Left>" )
-	Call wDokSchreiben ( "<MOD1 SHIFT Left>", 2)
-	Call wDokSchreiben ( "<Left>" )
-	Call wDokSchreiben ( "<SHIFT Left>", 2)
-	Call wDokSchreiben ( "<Left>" )	
-	Call wDokSchreiben ( "<MOD1 Left>", 2)
-	Call wDokSchreiben ( "<Left>" )
-	Call wDokSchreiben ( "<MOD1 SHIFT Left>")
+	Call wTypeKeys ( "<MOD1 Left>" )
+	Call wTypeKeys ( "<MOD1 SHIFT Left>", 2)
+	Call wTypeKeys ( "<Left>" )
+	Call wTypeKeys ( "<SHIFT Left>", 2)
+	Call wTypeKeys ( "<Left>" )	
+	Call wTypeKeys ( "<MOD1 Left>", 2)
+	Call wTypeKeys ( "<Left>" )
+	Call wTypeKeys ( "<MOD1 SHIFT Left>")
 	'/// Delete the multi-selection
-	Call wDokSchreiben ( "<DELETE>" )
+	Call wTypeKeys ( "<DELETE>" )
 	'/// string in Undo-list has to be: 'Delete: multi-selection'"
 	Call CheckUndoStringInUndoList ( 4, "Delete: multi-selection" )
 	'/// Close document
@@ -165,13 +165,13 @@ testcase tUndoHistory9
 	'/// new document
 	Call hNewDocument
 	'/// press return to insert a new paragraph
-	Call wDokSchreiben ( "<Return>" )
+	Call wTypeKeys ( "<Return>" )
 	'///  string in Undo-list has to be: "New paragraph"
 	Call CheckUndoStringInUndoList ( 8, "New Paragraph" )
 	
 	printlog "- Delete Paragraph"
 	'/// press Backspace to delete paragraph
-	Call wDokSchreiben ( "<Backspace>" )
+	Call wTypeKeys ( "<Backspace>" )
 	'///  string in Undo-list has to be: "Delete paragraph"
 	Call CheckUndoStringInUndoList ( 8, "Delete Paragraph" )
 	
@@ -189,10 +189,10 @@ testcase tUndoHistory10
 	'/// new document
 	Call hNewDocument
 	'/// Insert some text in document and copy it
-	Call wDokSchreiben ( "CopyAndPasteInUndoList" )
-	Call wDokSchreiben ( "<Shift Home>" )
+	Call wTypeKeys ( "CopyAndPasteInUndoList" )
+	Call wTypeKeys ( "<Shift Home>" )
 	EditCopy
-	Call wDokSchreiben ( "<End><Return>" )
+	Call wTypeKeys ( "<End><Return>" )
 	'/// Paste the text in all available formats
 	For i = 1 to 4
 		Sleep 2
@@ -212,7 +212,7 @@ testcase tUndoHistory10
 		InhaltEinfuegen.Ok
 		'///  string in Undo-list has to be: "Paste clipboard"
 		Call CheckUndoStringInUndoList ( 9 )
-		Call wDokSchreiben ( "<Return>" )
+		Call wTypeKeys ( "<Return>" )
 	next i
 	'/// close document
 	Call hCloseDocument
@@ -230,7 +230,7 @@ testcase tUndoHistory11
     '/// Select Edit / Changes / Record
     EditChangesRecord
 	'/// Insert a string in document
-	Call wDokSchreiben ( "This is a test" )
+	Call wTypeKeys ( "This is a test" )
 	'/// Select Edit / Changes / Accept or Reject
     EditChangesAcceptOrReject
     '/// Dialog 'Accept or reject changes' has to come up ///
@@ -247,14 +247,14 @@ testcase tUndoHistory11
 		Warnlog "Redlining dialog not up!"
 		Call hCloseDocument
 		goto endsub
-	endif
+	end if
 	'///  string in Undo-list has to be: "Accept change: Insert 'this is a test'")
 	Call CheckUndoStringInUndoList ( 10, "Accept" )
 	
 	'/// Insert a line break in document
-	Call wDokSchreiben ( "<Return>" )
+	Call wTypeKeys ( "<Return>" )
 	'/// Insert a string in document
-	Call wDokSchreiben ( "This is a test" )
+	Call wTypeKeys ( "This is a test" )
 	'/// Select Edit / Changes / Accept or Reject
     EditChangesAcceptOrReject
     '/// Dialog 'Accept or reject changes' has to come up ///
@@ -274,7 +274,7 @@ testcase tUndoHistory11
 		Warnlog "Redlining dialog not up!"
 		Call hCloseDocument
 		goto endsub
-	endif
+	end if
 	
 	'///  string in Undo-list has to be: "Reject change: Insert 'this is a test'")
 	Call CheckUndoStringInUndoList ( 10, "Reject" )
@@ -292,12 +292,12 @@ testcase tUndoHistory12
 	'/// new document
 	Call hNewDocument
 	'/// Insert a line break (Shift return)
-	Call wDokSchreiben ( "<SHIFT RETURN>" )
+	Call wTypeKeys ( "<SHIFT RETURN>" )
 	'///  string in Undo-list has to be: "Insert line break")
 	Call CheckUndoStringInUndoList ( 10, "InsertLineBreak" )		
 	'/// Delete line break
 	printlog "- Delete line break"
-	Call wDokSchreiben ( "<SHIFT RETURN><Backspace>" )
+	Call wTypeKeys ( "<SHIFT RETURN><Backspace>" )
 	'///  string in Undo-list has to be: "Delete line break")
 	Call CheckUndoStringInUndoList ( 10, "DeleteLineBreak" )		
 	
@@ -321,12 +321,12 @@ testcase tUndoHistory13
 	Columns.Settext 2
 	FormatColumn.Ok
 	'/// Insert a column break (Strg+Shift+Return)
-	Call wDokSchreiben ( "<Mod1 Shift Return>" )
+	Call wTypeKeys ( "<Mod1 Shift Return>" )
 	'///  string in Undo-list has to be: "Insert column break") 
 	Call CheckUndoStringInUndoList ( 10, "InsertColumnBreak" )
 
 	'/// Delete a column break (Strg+Shift+Return+Backspace)
-	Call wDokSchreiben ( "<Mod1 Shift Return><Backspace>" )
+	Call wTypeKeys ( "<Mod1 Shift Return><Backspace>" )
 	'///  string in Undo-list has to be: "Delete column break") 
 	Call CheckUndoStringInUndoList ( 10, "DeleteColumnBreak" )
 
@@ -358,7 +358,7 @@ testcase tUndoHistory14
 	'/// Insert a page break
 	Seitenumbruch.Check
 	UmbruchEinfuegen.Ok
-	Call wDokSchreiben ( "<Backspace>" )
+	Call wTypeKeys ( "<Backspace>" )
 	'///  string in Undo-list has to be: "Delete page break") 
 	Call CheckUndoStringInUndoList ( 10, "DeletePageBreak" )
 
@@ -382,7 +382,7 @@ testcase tUndoHistory15
 	
 	printlog "- Fields (Modify)"
 	'/// Press Home-key
-	Call wDokSchreiben ( "<Home>" )
+	Call wTypeKeys ( "<Home>" )
 	'/// Edit fields and select 4th entry in Format-list
 	EditFields
 	Kontext "FeldbefehlBearbeitenDokument"
@@ -393,7 +393,7 @@ testcase tUndoHistory15
 	
 	printlog "- Fields (Delete)"
 	'/// Press delete-key
-	Call wDokSchreiben ( "<Delete>" )
+	Call wTypeKeys ( "<Delete>" )
 	'///  string in Undo-list has to be: "Delete field") 
 	Call CheckUndoStringInUndoList ( 10, "DeleteField" )
 
@@ -420,7 +420,7 @@ testcase tUndoHistory16
 	
 	printlog "- Special Character (Delete)"
 	'/// Delete special character with <Backspace>
-	Call wDokSchreiben ("<Backspace>" )
+	Call wTypeKeys ("<Backspace>" )
 	Call CheckUndoStringInUndoList ( 10, "DeleteSpecialCharacter" )
 
 	'/// Close document
@@ -438,9 +438,9 @@ testcase tUndoHistory17
 	'/// new document
 	Call hNewDocument
 	'/// type some text
-	Call wDokSchreiben ( "I have the new style" )
+	Call wTypeKeys ( "I have the new style" )
 	'/// Select text
-	Call wDokSchreiben ( "<Shift Home>" )
+	Call wTypeKeys ( "<Shift Home>" )
 	'/// Apply Style to a newly created style
 	Call wStyleCreate ( "AUndoHistory", "Paragraph" )
 	'///  string in Undo-list has to be: "Apply styles: AUndoHistory") 
@@ -451,7 +451,7 @@ testcase tUndoHistory17
 		Warnlog "Defined style has not been found in Stylist->Test aborted"
 		Call hCloseDocument
 		goto endsub
-	endif
+	end if
 		
 	Vorlagenliste.OpenContextMenu
 	Call hMenuSelectNr(2)
@@ -488,8 +488,8 @@ testcase tUndoHistory17
 			catch
 				Active.Ok
 			endcatch
-		endif
-	endif
+		end if
+	end if
 	kontext "FindAndReplace"
 	SearchForStyles.UnCheck
 	FindAndReplace.Close
@@ -502,7 +502,7 @@ testcase tUndoHistory17
 		UndoText = UndoRedoList.GetItemText(1)
 		if UndoText <> StyleText then
 			Warnlog "Wrong text in Undo-List: " & UndoText
-		endif
+		end if
 		Kontext "StandardBar"
 		Undo.Click
 	catch
@@ -511,7 +511,7 @@ testcase tUndoHistory17
 
 	printlog "Styles (Promote)"			
 	'/// point cursor to beginning of document
-	Call wDokSchreiben ( "<Mod1 Home>" )
+	Call wTypeKeys ( "<Mod1 Home>" )
 	' To promote style it has to be in the heading group
 	ToolsOutlineNumbering
 	Kontext

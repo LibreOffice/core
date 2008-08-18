@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_undo_history_4.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:04:01 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:39:38 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -67,7 +67,7 @@ testcase tUndoHistory34
 	Objekttyp.Select 1
 	OLEObjektEinfuegen.Ok
     wait 500
-	Call wDokSchreiben "<Esc>"
+	Call wTypeKeys "<Esc>"
     wait 500
     Call gMouseClick(15,5)
     wait 500
@@ -76,10 +76,10 @@ testcase tUndoHistory34
 
 	printlog "- delete object"	
 	'/// Select object with <Shift F4>
-    Call wDokSchreiben "<Shift F4>"
+    Call wTypeKeys "<Shift F4>"
     wait 500
     '/// <B>Delete object</B>
-	Call wDokSchreiben "<Delete>"
+	Call wTypeKeys "<Delete>"
     wait 500
 	'/// press 'delete' to remove object
 	'///  string in Undo-list has to be: "Delete object") 
@@ -109,7 +109,7 @@ testcase tUndoHistory35
 
 	'/// Delete floating frame
 	printlog "- delete floating frame"
-	Call wDokSchreiben "<Delete>"	
+	Call wTypeKeys "<Delete>"	
 	'///  string in Undo-list has to be: "Delete floating frame") 
 	Call CheckUndoStringInUndoList ( 10, "DeleteFloatingFrame" )
 	
@@ -138,7 +138,7 @@ testcase tUndoHistory36
 		Warnlog "File open dialog missing"
 		Call hCloseDocument
 		goto endsub
-	endif
+	end if
 
 	'///  string in Undo-list has to be: "Insert document") 
 	Call CheckUndoStringInUndoList ( 10, "InsertDocument" )
@@ -156,8 +156,8 @@ testcase tUndoHistory37
 	'/// new document
 	Call hNewDocument
 	'/// type some text and select it
-	Call wDokSchreiben ( "JuppHeidiUndJuppHeida" )
-	Call wDokSchreiben ( "<Home>" )
+	Call wTypeKeys ( "JuppHeidiUndJuppHeida" )
+	Call wTypeKeys ( "<Home>" )
 	'/// Check if Asian support is enabled, if not enable it
 	if gAsianSup = true then
 		FormatRuby
@@ -173,7 +173,7 @@ testcase tUndoHistory37
 		RubyDialog.Ok
 		RubyDialog.Close
 		Call ActiveDeactivateAsianSupport(False)	
-	endif
+	end if
 	
 	'///  string in Undo-list has to be: "Asian Phonectic Guides Setting") 
 	Call CheckUndoStringInUndoList ( 10, "APGS" )
@@ -193,15 +193,15 @@ testcase tUndoHistory38
 	'/// <B>Autocorrect</B>
 	printlog "- Autocorrect"
 	'/// type with quote and blank at the end 'www.sun.com ' 
-	Call wDokSchreiben ( "www.sun.com " )
+	Call wTypeKeys ( "www.sun.com " )
 	'///  string in Undo-list has to be: "AutoCorrect") 
 	Call CheckUndoStringInUndoList ( 10, "AutoCorrect" )	
 	'/// insert a line break
-	Call wDokSchreiben ( "<Return>" )
+	Call wTypeKeys ( "<Return>" )
 	'/// <B>Autoformat</B>
 	printlog "- Autoformat"
 	'/// type - AutoFormat test<Return>
-	Call wDokSchreiben ( "- AutoFormat test<Return>" )
+	Call wTypeKeys ( "- AutoFormat test<Return>" )
 	'///  string in Undo-list has to be: "AutoCorrect") 
 	Call CheckUndoStringInUndoList ( 10, "AutoFormat" )	
 	
@@ -232,7 +232,7 @@ testcase tUndoHistory39
     Call gMouseMove ( 35, 31, 40, 90 )
     Call gMouseMove ( 41, 91, 55 , 70 )
     Call gMouseClick( 55, 70 )
-    Call wDokSchreiben ("<Escape>")
+    Call wTypeKeys ("<Escape>")
 
 	'///  string in Undo-list has to be: "Insert draw object: freeform line") 
 	Call CheckUndoStringInUndoList ( 10, "FreeForm" )
@@ -282,7 +282,7 @@ testcase tUndoHistory40
 		'/// Select 1 object and delete it
 		Call gMouseClick ( 25, 25 )
 		printlog "- delete object"
-		Call wDokSchreiben "<Delete>"
+		Call wTypeKeys "<Delete>"
 		'///  string in Undo-list has to be: "Delete 2 Rectangles") 
 		Call CheckUndoStringInUndoList ( 10, "DeleteGroup" )				
 	catch
@@ -303,9 +303,9 @@ testcase tUndoHistory41
     '/// new document ///
     Call hNewDocument
 	'/// Type "This is a testp<End>"
-	Call wDokSchreiben ( "This is a testp<End>" )
+	Call wTypeKeys ( "This is a testp<End>" )
 	'/// Select word' testp'
-	Call wDokSchreiben ( "<Mod1 Shift Left>" )
+	Call wTypeKeys ( "<Mod1 Shift Left>" )
 	'/// Tools / Spellcheck
 	ToolsSpellcheck
 	Kontext "Spellcheck"
@@ -318,8 +318,8 @@ testcase tUndoHistory41
 	if Active.Exists then
 		if Active.GetRT = 304 then
 			Active.Ok
-		endif
-	endif
+		end if
+	end if
 	Kontext "Spellcheck"
 	if Spellcheck.Exists then Spellcheck.Close
 	'///  string in Undo-list has to be: "Replace: 'Testp' -> 'Test'") 
@@ -329,9 +329,9 @@ testcase tUndoHistory41
     'ToolsSpellcheckAutoSpellcheck
 	
 	printlog "- Spellcheck"
-	Call wDokSchreiben ( "<End><Return>", 2 )
+	Call wTypeKeys ( "<End><Return>", 2 )
 	'/// retype 'testp'
-	Call wDokSchreiben ( "testp<Shift Home>" )
+	Call wTypeKeys ( "testp<Shift Home>" )
 	ToolsSpellcheck
 	Kontext "Spellcheck"
 	' Workaround: For some reasons sometimes dialog is disabled here
@@ -353,8 +353,8 @@ testcase tUndoHistory41
 			catch
 				Active.Ok
 			endcatch
-		endif
-	endif
+		end if
+	end if
 	Kontext "Spellcheck"
 	if Spellcheck.Exists then Spellcheck.Close
 	
@@ -390,15 +390,15 @@ testcase tUndoHistory42
 
 	printlog "- Form control (move)"
 	'/// Press '<Up>' to move control
-	Call wDokSchreiben ( "<Up>" )
+	Call wTypeKeys ( "<Up>" )
 	'///  string in Undo-list has to be: "Move control")
 	Call CheckUndoStringInUndoList ( 10, "ControlMove" )
 
 	printlog "- Form control (resize)"
 	'/// Press '<Ctrl+Tab>' to enter handle selection mode
-	Call wDokSchreiben ( "<Mod1 Tab>" )
+	Call wTypeKeys ( "<Mod1 Tab>" )
 	'/// Press '<Up>' to resize control
-	Call wDokSchreiben ( "<Up>" )
+	Call wTypeKeys ( "<Up>" )
 	'///  string in Undo-list has to be: "Resize control")
 	Call CheckUndoStringInUndoList ( 10, "ControlResize" )
 		
@@ -423,7 +423,7 @@ testcase tUndoHistory42
 	
 	printlog "- Form control (delete)"
 	'/// Press '<Delete>' to delete control
-	Call wDokSchreiben ( "<Delete>" )
+	Call wTypeKeys ( "<Delete>" )
 	'///  string in Undo-list has to be: "Delete control")
 	Call CheckUndoStringInUndoList ( 10, "ControlDelete" )
 	
@@ -466,8 +466,8 @@ testcase tUndoHistory43
 	if Active.Exists then
 		if Active.GetRT = 304 then
 			Active.Yes
-		endif
-	endif
+		end if
+	end if
 	'///  string in Undo-list has to be: "Header/footer changed")
 	Call CheckUndoStringInUndoList ( 10, "Header/Footer" )
 
@@ -499,8 +499,8 @@ testcase tUndoHistory43
 	if Active.Exists then
 		if Active.GetRT = 304 then
 			Active.Yes
-		endif
-	endif
+		end if
+	end if
 	'///  string in Undo-list has to be: "Header/footer changed")
 	Call CheckUndoStringInUndoList ( 10, "Header/Footer" )
 

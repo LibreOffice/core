@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_undo1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:04:00 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:38:44 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -56,9 +56,9 @@ testcase tEditUndoRedo
     '/// New document ///
     Call hNewDocument
     '/// Write any text in document and insert a table ///
-    Call wDokSchreiben "Clipboard"
+    Call wTypeKeys "Clipboard"
     Call hTabelleEinfuegen
-    Call wDokSchreiben "<Down><Down>text"
+    Call wTypeKeys "<Down><Down>text"
 
     '/// Call Edit / Undo 2 times ///
     printlog "  - Undo 2 times"
@@ -76,10 +76,10 @@ testcase tEditUndoRedo
         Sleep 1
     endcatch
     '/// Check if Undo has been worked correctly ///
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys "<Shift Home>"
     EditCopy
     if GetClipboardText <> "Clipboard" then Warnlog "Undo is not working correct"
-    Call wDokSchreiben "<End>"
+    Call wTypeKeys "<End>"
 
     '/// select Redo 2 times ///
     printlog "  - Redo 2 times"
@@ -116,7 +116,7 @@ testcase tEditUndoRedo
 
     '/// New document ///
     Call hNewDocument
-    Call wDokSchreiben "Don't undo this<Return>Undo this"
+    Call wTypeKeys "Don't undo this<Return>Undo this"
     '/// Insert any text and try to Undo more than 1 time ///
 
     EditUndo
@@ -125,7 +125,7 @@ testcase tEditUndoRedo
         Warnlog "More than one Undo could be performed!"
     catch
     endcatch
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys "<Shift Home>"
     Wait 500
     EditCopy
     if GetClipboardText <> "Undo " then Warnlog "The UndoStep couldn't performed correct!"
@@ -195,15 +195,15 @@ testcase tEditUndoTOX
 				Warnlog "Edit / Undo entry is wrong: " & CompareThis
 				else
 					printlog " - Menu Edit / Undo is ok"
-				endif		
+				end if		
 		else
 			QAErrorLog "Use this string in this testcase: " & CompareThis
 			Call hCloseDocument
 			goto endsub
-		endif
+		end if
 	else
 		Warnlog "Edit / Undo in menu is disabled !"
-	endif
+	end if
 	
 	Kontext "DocumentWriter"
 	DocumentWriter.TypeKeys "<Up><Home>" 
@@ -238,15 +238,15 @@ testcase tEditUndoTOX
 				Warnlog "Edit / Undo entry is wrong: " & CompareThis
 				else
 					printlog " - Menu Edit / Undo is ok"
-				endif		
+				end if		
 		else
 			QAErrorLog "Use this string in this testcase: " & CompareThis
 			Call hCloseDocument
 			goto endsub
-		endif
+		end if
 	else
 		Warnlog "Edit / Undo in menu is disabled !"
-	endif
+	end if
 	
 	Kontext "DocumentWriter"
 	DocumentWriter.TypeKeys "<Up><Home>" 
@@ -281,15 +281,15 @@ testcase tEditUndoTOX
 				Warnlog "Edit / Undo entry is wrong: " & CompareThis
 				else
 					printlog " - Menu Edit / Undo is ok"
-				endif		
+				end if		
 		else
 			QAErrorLog "Use this string in this testcase: " & CompareThis
 			Call hCloseDocument
 			goto endsub
-		endif
+		end if
 	else
 		Warnlog "Edit / Undo in menu is disabled !"
-	endif
+	end if
 	
 	Kontext "DocumentWriter"
 	DocumentWriter.TypeKeys "<Up><Home>" 
@@ -355,7 +355,7 @@ testcase tEditUndoTOX
 	else
 		Warnlog "Index has not been removed!"
 		TabVerzeichnisseVerzeichnis.Cancel
-	endif
+	end if
 	
 	
 	

@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_undo_history_3.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:04:01 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:39:27 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -137,7 +137,7 @@ testcase tUndoHistory19
 	'///  string in Undo-list has to be: "Insert Hyperlink") 
 	Call CheckUndoStringInUndoList ( 10, "InsertHyperlink" )
 	
-	Call wDokSchreiben "<Return>"
+	Call wTypeKeys "<Return>"
 	
 	'/// Insert / Hyperlink as Button
 	printlog "- Insert hyperlink as Button"
@@ -183,7 +183,7 @@ testcase tUndoHistory20
 		Dokumentende.Check
 	else
 		Seitenende.Check
-	endif
+	end if
 	'/// Close dialog
 	TabFussnoten.Ok
 	'///  string in Undo-list has to be: "Modify footnote options") 
@@ -191,9 +191,9 @@ testcase tUndoHistory20
 	
 	printlog "- Footnote (Delete)"
 	'/// Point cursor directly to the footnote anchor
-	Call wDokSchreiben "<Mod1 Home>"
+	Call wTypeKeys "<Mod1 Home>"
 	'/// press 'delete' to remove footnote
-	Call wDokSchreiben "<Delete>"
+	Call wTypeKeys "<Delete>"
 	'///  string in Undo-list has to be: "Delete footnote options") 
 	Call CheckUndoStringInUndoList ( 10, "DeleteFootnote" )
 	
@@ -313,7 +313,7 @@ testcase tUndoHistory24
 
 	printlog "- Delete Note"
 	'/// Enter 'Backspace'
-	Call wDokSchreiben "<Backspace>"
+	Call wTypeKeys "<Backspace>"
 	'///  string in Undo-list has to be: "Delete: 'This is a note'") 
 	Call CheckUndoStringInUndoList ( 10, "DeleteNote" )	
 	
@@ -337,9 +337,9 @@ testcase tUndoHistory25
 	Call CheckUndoStringInUndoList ( 10, "InsertScript" )	
 	
 	'/// Point cursor directly to the script
-	Call wDokSchreiben "<Mod1 Home>"
+	Call wTypeKeys "<Mod1 Home>"
 	'/// press 'delete' to remove script
-	Call wDokSchreiben "<Delete>"
+	Call wTypeKeys "<Delete>"
 	'///  string in Undo-list has to be: "Delete script")
 	Call CheckUndoStringInUndoList ( 10, "DeleteScript" )
 	
@@ -356,8 +356,8 @@ testcase tUndoHistory26
 	'/// new document
 	Call hNewDocument
 	'/// Type a word
-	Call wDokSchreiben "IndexEntry"
-	Call wDokSchreiben "<Shift Home>"
+	Call wTypeKeys "IndexEntry"
+	Call wTypeKeys "<Shift Home>"
 	'/// Insert / Indexes and Tables / Entry
 	InsertIndexesEntry
 	Kontext "VerzeichnisEintragEinfuegen"
@@ -366,13 +366,13 @@ testcase tUndoHistory26
 	'///  string in Undo-list has to be: "Insert index entry")
 	Call CheckUndoStringInUndoList ( 10, "InsertIndexEntry" )
 	'/// delete index entry with 'Backspace'
-	Call wDokSchreiben ( "<Backspace>"
+	Call wTypeKeys ( "<Backspace>"
 	'///  string in Undo-list has to be: "Delete index entry")
 	Call CheckUndoStringInUndoList ( 10, "DeleteIndexEntry" )
 	
 	'/// Type a word
-	Call wDokSchreiben "BibliographyEntry"
-	Call wDokSchreiben "<Shift Home>"
+	Call wTypeKeys "BibliographyEntry"
+	Call wTypeKeys "<Shift Home>"
 	printlog "- Insert Bibliography entry"
 	'/// Insert / Index / Bibliography entry
 	InsertIndexesBibliographyEntry
@@ -382,7 +382,7 @@ testcase tUndoHistory26
 	'///  string in Undo-list has to be: "Insert bibliography entry")
 	Call CheckUndoStringInUndoList ( 10, "InsertBibliographyEntry" )
 	'/// delete bibliography entry with 'Backspace'
-	Call wDokSchreiben ( "<Backspace>"
+	Call wTypeKeys ( "<Backspace>"
 	'///  string in Undo-list has to be: "Delete bibliography entry")
 	Call CheckUndoStringInUndoList ( 10, "DeleteBibliographyEntry" )
 	
@@ -424,7 +424,7 @@ testcase tUndoHistory27
 	
 	printlog "- Delete Frame"
 	'/// Type 'Del' to delete the frame
-	Call wDokSchreiben "<Delete>"
+	Call wTypeKeys "<Delete>"
 	'///  string in Undo-list has to be: "Delete frame: 'MyRenamedFrame'") 
 	Call CheckUndoStringInUndoList ( 10, "DeleteFrame" )
 	
@@ -487,8 +487,8 @@ testcase tUndoHistory28
     ExtrasOptionenDlg.Cancel
 
 	'/// type '1' in a cell
-	Call wDokSchreiben ( "1" )
-	Call wDokSchreiben ( "<Right>" )
+	Call wTypeKeys ( "1" )
+	Call wTypeKeys ( "<Right>" )
 	'///  string in Undo-list has to be: "Format cell") 
 	Call CheckUndoStringInUndoList ( 10, "FormatCell" )
 	
@@ -526,14 +526,14 @@ testcase tUndoHistory29
 		Umbruch.Uncheck
 	else
 		Umbruch.Check
-	endif
+	end if
 	TabTextflussTabelle.Ok
 	'///  string in Undo-list has to be: "Apply table attributes") 
 	Call CheckUndoStringInUndoList ( 10, "ApplyTableAttributes" )	
 	
 	printlog "- merge tables"
 	'/// <B>Merge tables</B>
-	Call wDokSchreiben ( "<Down>" ,2 )
+	Call wTypeKeys ( "<Down>" ,2 )
 	'/// Insert a second table
 	InsertTableWriter
 	Kontext "TabelleEinfuegenWriter"
@@ -556,9 +556,9 @@ testcase tUndoHistory30
 	'/// new document
 	Call hNewDocument
 	'/// Insert text "This<Return>is a<Return>table to text<Return>text"
-	Call wDokSchreiben ("This<Return>is a<Return>table to text<Return>text")
+	Call wTypeKeys ("This<Return>is a<Return>table to text<Return>text")
 	'/// select all
-	Call wDokSchreiben ( "<Mod1 A>" )
+	Call wTypeKeys ( "<Mod1 A>" )
 	'/// Format / Text <-> Table
 	ToolsTextInTable
     Kontext "TextInTabelleUmwandeln"
@@ -568,7 +568,7 @@ testcase tUndoHistory30
 
 	printlog "- Sort table"
 	'/// <B>Sort table</B>	
-	Call wDokSchreiben ( "<Mod1 A>", 2 )	
+	Call wTypeKeys ( "<Mod1 A>", 2 )	
 	'/// Select all -> Tools / Sort
 	ToolsSort
 	Kontext "Sortieren"
@@ -592,7 +592,7 @@ testcase tUndoHistory31
 	InsertTableWriter
 	Kontext  "TabelleEinfuegenWriter"
 	TabelleEinfuegenWriter.Ok
-	Call wDokSchreiben ( "<Down>", 3 )
+	Call wTypeKeys ( "<Down>", 3 )
 	InsertTableWriter
 	Kontext  "TabelleEinfuegenWriter"
 	TabellenName.Settext "AnotherTable"
@@ -661,7 +661,7 @@ testcase tUndoHistory33
 	'/// <B>Delete graphic</B>
 	printlog "- delete graphic"
 	'/// press 'delete' to remove graphic
-	Call wDokSchreiben "<Delete>"
+	Call wTypeKeys "<Delete>"
 	'///  string in Undo-list has to be: "Delete graphics") 
 	Call CheckUndoStringInUndoList ( 10, "DeleteGraphic" )
 	
