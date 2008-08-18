@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_formatparagraph2.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:53 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:29:26 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -79,7 +79,7 @@ testcase tParagraphAlignment1
     Call hFileOpen(sTestFile)
 
    'Get the original coordinate-X
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     FormatAnchorToPage
     Sleep 1
@@ -88,7 +88,7 @@ testcase tParagraphAlignment1
     TabPositionAndSizeWriter.Cancel
     FormatAnchorAsCharacter
     Sleep 1
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
 
    '/// + Format/Paragraph / Alignment , choose Left/Top option
     Call fFormatParagraph("TabAusrichtungAbsatz")
@@ -96,7 +96,7 @@ testcase tParagraphAlignment1
     TabAusrichtungAbsatz.OK
 
    '/// + check if the alignment is moved to left
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     FormatAnchorToPage
     Sleep 1
@@ -133,7 +133,7 @@ testcase tParagraphAlignment2
     TabAusrichtungAbsatz.OK
 
    '/// + check if the alignment is moved to Right
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     FormatAnchorToPage
     Sleep 1
@@ -170,7 +170,7 @@ testcase tParagraphAlignment3
     TabAusrichtungAbsatz.OK
 
    '/// + check if the alignment is moved to Center
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     FormatAnchorToPage
     Sleep 1
@@ -204,7 +204,7 @@ testcase tParagraphAlignment4
    '/// + This file includes 1 paragraphs , and a pic is anchored to the last character
     Call hFileOpen(sTestFile)
 
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     FormatAnchorToPage
     Sleep 1
@@ -212,7 +212,7 @@ testcase tParagraphAlignment4
     Call fPositionAndSize("TabPositionAndSizeWriter")
         sPositionX2 = Horizontalby.Gettext
     TabPositionAndSizeWriter.Cancel
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
 
    '/// Format/Paragraph / Alignment , choose Justified option , and select default in last line
     Call fFormatParagraph("TabAusrichtungAbsatz")
@@ -222,8 +222,8 @@ testcase tParagraphAlignment4
     TabAusrichtungAbsatz.OK
 
    '/// check if the alignment is moved as Justified
-    Call wDokSchreiben ( "<Shift F4>" )
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys ( "<Shift F4>" )
+    Call wTypeKeys "<Tab>"
     Sleep 1
     FormatAnchorToPage
     Sleep 1
@@ -232,7 +232,7 @@ testcase tParagraphAlignment4
         if fCalculateTolerance(Horizontalby.Gettext , sPositionX1) > 0.02 then Warnlog "Alignment Justified doesn't work -1 !"
     TabPositionAndSizeWriter.Cancel
 
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     FormatAnchorToPage
     Sleep 1
     Call fPositionAndSize("TabPositionAndSizeWriter")
@@ -269,7 +269,7 @@ testcase tParagraphAlignment5
     TabAusrichtungAbsatz.OK
 
    '/// check if the alignment is moved as Justified
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     FormatAnchorToPage
     Sleep 1
     Call fPositionAndSize("TabPositionAndSizeWriter")
@@ -303,8 +303,8 @@ testcase tParagraphAlignment6
    '/// + and 2 pics are in 2nd line
     Call hFileOpen(sTestFile)
 
-    Call wDokSchreiben ( "<Shift F4>" )
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys ( "<Shift F4>" )
+    Call wTypeKeys "<TAB>"
     Sleep 1
     FormatAnchorToPage
     Sleep 1
@@ -314,7 +314,7 @@ testcase tParagraphAlignment6
     TabPositionAndSizeWriter.Cancel
     FormatAnchorAsCharacter
     Sleep 1
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
 
    '/// Format/Paragraph / Alignment ,
    '/// + choose Justified option , and select Justified in last line
@@ -325,8 +325,8 @@ testcase tParagraphAlignment6
     TabAusrichtungAbsatz.OK
 
    '/// check if the alignment is moved as Justified
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     FormatAnchorToPage
     Sleep 1
@@ -335,7 +335,7 @@ testcase tParagraphAlignment6
         if Horizontalby.Gettext <> sPositionX1 then warnlog "Alignment Justified doesn't work -1 !"
     TabPositionAndSizeWriter.Cancel
 
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     FormatAnchorToPage
     Sleep 1
     Call fPositionAndSize("TabPositionAndSizeWriter")
@@ -380,7 +380,7 @@ testcase tParagraphAlignment7
     TabAusrichtungAbsatz.OK
 
    '/// choose the drawing object , Format/Anchor / To page ///
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     FormatAnchorToPage
     Sleep 1
@@ -420,7 +420,7 @@ testcase tParagraphAlignment8
     Call hFileOpen(sTestFile)
 
    '/// Get the drawing object original position ///
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     FormatAnchorToPage
     Sleep 1
@@ -429,7 +429,7 @@ testcase tParagraphAlignment8
     TabPositionAndSizeWriter.Cancel
     FormatAnchorAsCharacter
     Sleep 1
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
 
    '/// Format/Paragraph / Alignment ,
    '/// + Uncheck 'Snap to text grid'
@@ -447,7 +447,7 @@ testcase tParagraphAlignment8
     TabGrid.OK
 
    '/// Check if the drawing object is in the same position
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     FormatAnchorToPage
     Sleep 1
@@ -491,7 +491,7 @@ testcase tParagraphAlignment9
     Call hFileOpen(sTestFile)
 
    '/// Get the drawing object original position ///
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     FormatAnchorToPage
     Sleep 1
@@ -500,7 +500,7 @@ testcase tParagraphAlignment9
     TabPositionAndSizeWriter.Cancel
     FormatAnchorAsCharacter
     Sleep 1
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
 
    '/// Format/Paragraph / Alignment ,
    '/// + check 'Snap to text grid'
@@ -518,7 +518,7 @@ testcase tParagraphAlignment9
     TabGrid.OK
 
    '/// Check if the drawing object is in the same position
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     FormatAnchorToPage
     Sleep 1
@@ -557,13 +557,13 @@ testcase tParagraphTextFlow1
     Call hFileOpen(sTestFile)
     
     'the focus is in front of Kilometerhigh
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
     
     '/// 1. Test there is no Hyphenation configuratioin
     For i = 1 to 10
-        Call wDokSchreiben "M"
-        Call wDokSchreiben "<End>"
-        Call wDokSchreiben "<Shift Left>"
+        Call wTypeKeys "M"
+        Call wTypeKeys "<End>"
+        Call wTypeKeys "<Shift Left>"
         EditCopy
         if GetClipboardText <> sTestText then
             if GetClipboardText = "A" then
@@ -572,7 +572,7 @@ testcase tParagraphTextFlow1
                 warnlog "no Hyphenation configuratioin doesn't work !"
             end if
         end if
-        Call wDokSchreiben "<Home>"
+        Call wTypeKeys "<Home>"
     next i
     
     warnlog "1.Something wrong in Hyphenation test !"
@@ -591,12 +591,12 @@ testcase tParagraphTextFlow1
     Automatisch.Check
     TabTextfluss.OK
     
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
     
     For i = 1 to 10
-        Call wDokSchreiben "M"
-        Call wDokSchreiben "<End>"
-        Call wDokSchreiben "<Shift Left>"
+        Call wTypeKeys "M"
+        Call wTypeKeys "<End>"
+        Call wTypeKeys "<Shift Left>"
         EditCopy
         if GetClipboardText <> sTestText then
             if GetClipboardText = "r" then
@@ -605,7 +605,7 @@ testcase tParagraphTextFlow1
                 warnlog "Hyphenation configuratioin doesn't work !"
             end if
         end if
-        Call wDokSchreiben "<Home>"
+        Call wTypeKeys "<Home>"
     next i
     warnlog "2.Something wrong in Hyphenation test !"
     
@@ -645,15 +645,15 @@ testcase tParagraphTextFlow2
     TabTextfluss.OK
     
     'the focus is in front of Kilometerhigh
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
     
     For i = 1 to 10
-        Call wDokSchreiben "M"
-        Call wDokSchreiben "<End>"
-        Call wDokSchreiben "<Shift Left>" , 6
+        Call wTypeKeys "M"
+        Call wTypeKeys "<End>"
+        Call wTypeKeys "<Shift Left>" , 6
         EditCopy
         if GetClipboardText = sTestText then Goto GoON1
-        Call wDokSchreiben "<Home>"
+        Call wTypeKeys "<Home>"
     next i
     warnlog "Something wrong in Characters at line end = > 6"
     
@@ -675,15 +675,15 @@ testcase tParagraphTextFlow2
     TabTextfluss.OK
     
     'the focus is in front of Kilometerhigh
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
     
     For i = 1 to 10
-        Call wDokSchreiben "M"
-        Call wDokSchreiben "<End>"
-        Call wDokSchreiben "<Shift Left>" , 6
+        Call wTypeKeys "M"
+        Call wTypeKeys "<End>"
+        Call wTypeKeys "<Shift Left>" , 6
         EditCopy
         if GetClipboardText = sTestText then  warnlog "Something wrong in Characters at line end = > 8"
-        Call wDokSchreiben "<Home>"
+        Call wTypeKeys "<Home>"
     next i
     
     Call hCloseDocument
@@ -721,15 +721,15 @@ testcase tParagraphTextFlow3
     TabTextfluss.OK
     
     'the focus is in front of Kilometerhigh
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
     
     For i = 1 to 10
-        Call wDokSchreiben "M"
-        Call wDokSchreiben "<End>"
-        Call wDokSchreiben "<Shift Left>" , 5
+        Call wTypeKeys "M"
+        Call wTypeKeys "<End>"
+        Call wTypeKeys "<Shift Left>" , 5
         EditCopy
         if GetClipboardText = sTestText then Goto GoON1
-        Call wDokSchreiben "<Home>"
+        Call wTypeKeys "<Home>"
     next i
     warnlog "Something wrong in Characters at line end = > 4"
     
@@ -751,16 +751,16 @@ testcase tParagraphTextFlow3
     TabTextfluss.OK
     
     'the focus is in front of Kilometerhigh
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
     
     For i = 1 to 10
-        Call wDokSchreiben "M"
-        Call wDokSchreiben "<End>"
-        Call wDokSchreiben "<Shift Left>" , 5
+        Call wTypeKeys "M"
+        Call wTypeKeys "<End>"
+        Call wTypeKeys "<Shift Left>" , 5
         
         EditCopy
         if GetClipboardText = sTestText then  warnlog "Something wrong in Characters at line end = > 6"
-        Call wDokSchreiben "<Home>"
+        Call wTypeKeys "<Home>"
     next i
     
     Call hCloseDocument
@@ -806,18 +806,18 @@ testcase tParagraphTextFlow4
         Trennstellen.SetText "0"
     TabTextfluss.OK
 
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Down>"
     For i = 0 to j
-        Call wDokSchreiben "<Down>" , i*2
-        Call wDokSchreiben "<Shift End>"
+        Call wTypeKeys "<Down>" , i*2
+        Call wTypeKeys "<Shift End>"
         EditCopy
         if GetClipboardText <> sTestText(i) then
             QAErrorlog "#i39917# Something wrong in Consecutive typhens 0 : " &i
             exit for
-        endif
-        Call wDokSchreiben "<MOD1 Home>"
-        Call wDokSchreiben "<Down>"
+        end if
+        Call wTypeKeys "<MOD1 Home>"
+        Call wTypeKeys "<Down>"
     Next i
 
    '/// 2.Test maxinum number of consecutive typhens = >1
@@ -837,18 +837,18 @@ testcase tParagraphTextFlow4
         Trennstellen.SetText "1"
     TabTextfluss.OK
 
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Down>"
     For i = 0 to j
-        Call wDokSchreiben "<Down>" , i*2
-        Call wDokSchreiben "<Shift End>"
+        Call wTypeKeys "<Down>" , i*2
+        Call wTypeKeys "<Shift End>"
         EditCopy
         if GetClipboardText <> sTestText(i) then 
             QAErrorlog "#i39917# Something wrong in Consecutive typhens 1 : " &i
             exit for
-        endif
-        Call wDokSchreiben "<MOD1 Home>"
-        Call wDokSchreiben "<Down>"
+        end if
+        Call wTypeKeys "<MOD1 Home>"
+        Call wTypeKeys "<Down>"
     Next i
 
    '/// 3.Test maxinum number of consecutive typhens = >2
@@ -868,18 +868,18 @@ testcase tParagraphTextFlow4
         Trennstellen.SetText "2"
     TabTextfluss.OK
 
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Down>"
     For i = 0 to j
-        Call wDokSchreiben "<Down>" , i*2
-        Call wDokSchreiben "<Shift End>"
+        Call wTypeKeys "<Down>" , i*2
+        Call wTypeKeys "<Shift End>"
         EditCopy
         if GetClipboardText <> sTestText(i) then
             QAErrorlog "#i39917# Something wrong in Consecutive typhens 2 : " &i
             exit for
-        endif
-        Call wDokSchreiben "<MOD1 Home>"
-        Call wDokSchreiben "<Down>"
+        end if
+        Call wTypeKeys "<MOD1 Home>"
+        Call wTypeKeys "<Down>"
     Next i
 
    Call hCloseDocument
@@ -969,8 +969,8 @@ testcase tParagraphTextFlow6
     TabTextfluss.OK
 
    '/// Set the focus to the end of the paragraph
-    Call wDokSchreiben "<MOD1 End>"
-    Call wDokSchreiben "<Return>"
+    Call wTypeKeys "<MOD1 End>"
+    Call wTypeKeys "<Return>"
 
    '/// + check if the 2nd paragraph is in 2nd page
     Kontext "Navigator"
@@ -1074,8 +1074,8 @@ testcase tParagraphTextFlow8
     TabTextfluss.OK
 
    '/// Set the focus to the end of the paragraph
-    Call wDokSchreiben "<MOD1 End>"
-    Call wDokSchreiben "<Return>"
+    Call wTypeKeys "<MOD1 End>"
+    Call wTypeKeys "<Return>"
 
    '/// + check if the 2nd paragraph is in 2nd page
     Kontext "Navigator"
@@ -1107,9 +1107,9 @@ testcase tParagraphTextFlow9
    '/// Open the test file
    '/// + There is 1 paragraph which cross 2 pages
     Call hFileOpen(sTestFile)
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
     Call fFindWord("She")
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
 
     PrintLog "-  Uncheck Don't split paragraph"
    '/// 1. Test unchecking "Don't split paragraph"
@@ -1126,7 +1126,7 @@ testcase tParagraphTextFlow9
        if Seitennummer.GetText <> "1" then warnlog "The head of the paragraph should be in 1st page !"
     fCloseNavigator
 
-    Call wDokSchreiben "<MOD1 End>"
+    Call wTypeKeys "<MOD1 End>"
     Kontext "Navigator"
         if Not Navigator.Exists then EditNavigator
         Kontext "NavigatorWriter"
@@ -1139,9 +1139,9 @@ testcase tParagraphTextFlow9
    PrintLog "-  Check Don't split paragraph"
    Call hNewDocument
     Call hFileOpen(sTestFile)
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
     Call fFindWord("She")
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
 
    '/// 2. Test checking "Don't split paragraph"
    '/// Format/Paragraph / Text Flow
@@ -1157,7 +1157,7 @@ testcase tParagraphTextFlow9
        if Seitennummer.GetText <> "2" then warnlog "The head of the paragraph should be in 2nd page !"
     fCloseNavigator
 
-    Call wDokSchreiben "<MOD1 End>"
+    Call wTypeKeys "<MOD1 End>"
     Kontext "Navigator"
         if Not Navigator.Exists then EditNavigator
         Kontext "NavigatorWriter"
@@ -1195,7 +1195,7 @@ testcase tParagraphTextFlow10
         SearchAll.Click
         Sleep 1
     FindAndReplace.Close
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
 
     PrintLog "-  Uncheck Keep with next paragraph"
    '/// 1. Test unchecking "Keep with next paragraph"
@@ -1243,7 +1243,7 @@ testcase tParagraphTextFlow10
         SearchAll.Click
         Sleep 1
     FindAndReplace.Close
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
     Call fFormatParagraph("TabTextfluss")
         AbsaetzeZusammenhalten.Check
     TabTextfluss.OK
@@ -1303,8 +1303,8 @@ testcase tParagraphTextFlow11
     TabTextfluss.OK
 
    '/// Press return 5 times to let only 3 lines are in 1st page
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Return>" , 5
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Return>" , 5
 
    '/// + check if the 1st line is in 1st page
     Kontext "Navigator"
@@ -1315,7 +1315,7 @@ testcase tParagraphTextFlow11
     fCloseNavigator
 
    '/// Press Return again
-    Call wDokSchreiben "<Return>"
+    Call wTypeKeys "<Return>"
 
    '/// + check if the 1st line is in 2nd page
     Kontext "Navigator"
@@ -1357,10 +1357,10 @@ testcase tParagraphTextFlow12
     TabTextfluss.OK
 
    '/// Press return to let the lastest line into 2nd page
-    Call wDokSchreiben "<MOD1 Home><Return>"
+    Call wTypeKeys "<MOD1 Home><Return>"
 
    '/// + check if the lastest 3rd line(6th line) is in 2nd page
-    Call wDokSchreiben "<Down>"  , 5
+    Call wTypeKeys "<Down>"  , 5
     Kontext "Navigator"
         if Not Navigator.Exists then EditNavigator
         Kontext "NavigatorWriter"
@@ -1369,7 +1369,7 @@ testcase tParagraphTextFlow12
     fCloseNavigator
 
    '/// + check if the 5th line is in 1st page
-    Call wDokSchreiben "<Up>"
+    Call wTypeKeys "<Up>"
     Kontext "Navigator"
         if Not Navigator.Exists then EditNavigator
         Kontext "NavigatorWriter"
@@ -1402,10 +1402,10 @@ testcase tParagraphTextFlow13
    '/// Press spaces in the head of the first line , we hope
    '/// + the whole word - 'TABC' will go to 2nd line at one time
     For i = 1 to 30
-        Call wDokSchreiben "<Home>"
-        Call wDokSchreiben " "
-        Call wDokSchreiben "<End>"
-        Call wDokSchreiben "<Shift Left>"
+        Call wTypeKeys "<Home>"
+        Call wTypeKeys " "
+        Call wTypeKeys "<End>"
+        Call wTypeKeys "<Shift Left>"
         EditCopy
         if GetClipboardText = "B" then
             QAErrorLog "#114094#"

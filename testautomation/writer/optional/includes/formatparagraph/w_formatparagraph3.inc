@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_formatparagraph3.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:53 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:29:37 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -88,13 +88,13 @@ testcase tParagraphTabs1
         Position.SetText sTabs
     TabTabulatoren.OK
 
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
 
    '/// Press TAB
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
 
    '/// Check if TAB is configurated correctly
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     FormatAnchorToPage
     Sleep 1
     Call fPositionAndSize("TabPositionAndSizeWriter")
@@ -133,13 +133,13 @@ testcase tParagraphTabs2
         Position.SetText sTabs
     TabTabulatoren.OK
 
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
 
    '/// Press TAB
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
 
    '/// Check if TAB is configurated correctly
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     FormatAnchorToPage
     Sleep 1
     Call fPositionAndSize("TabPositionAndSizeWriter")
@@ -178,13 +178,13 @@ testcase tParagraphTabs3
         Position.SetText sTabs
     TabTabulatoren.OK
 
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
 
    '/// Press TAB
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
 
    '/// Check if TAB is configurated correctly
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     FormatAnchorToPage
     Sleep 1
     Call fPositionAndSize("TabPositionAndSizeWriter")
@@ -227,14 +227,14 @@ testcase tParagraphTabs4
         Position.SetText sTabs
     TabTabulatoren.OK
 
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
 
    '/// Press TAB
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
 
    '/// Check if TAB is configurated correctly
    '/// + [Check . should be at distance 5.00cm]
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     FormatAnchorToPage
     Sleep 1
     Call fPositionAndSize("TabPositionAndSizeWriter")
@@ -373,7 +373,7 @@ testcase tParagraphDropCaps1
     TabInitialen.OK
 
    '/// Set focus to the pic , check if its position is changed correctly
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     FormatAnchorToPage
     Sleep 1
     Call fPositionAndSize("TabPositionAndSizeWriter")
@@ -426,7 +426,7 @@ testcase tParagraphDropCaps2
     TabInitialen.OK
 
    '/// Set focus to the pic , check if its position is changed correctly
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     FormatAnchorToPage
     Sleep 1
     Call fPositionAndSize("TabPositionAndSizeWriter")
@@ -479,7 +479,7 @@ testcase tParagraphDropCaps3
     TabInitialen.OK
 
    '/// Set focus to the pic , check if its position is changed correctly
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     FormatAnchorToPage
     Sleep 1
     Call fPositionAndSize("TabPositionAndSizeWriter")
@@ -527,7 +527,7 @@ testcase tParagraphDropCaps4
     TabInitialen.OK
 
    '/// Set focus to the pic , check if its position is changed correctly
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     FormatAnchorToPage
     Sleep 1
     Call fPositionAndSize("TabPositionAndSizeWriter")
@@ -581,7 +581,7 @@ testcase tParagraphDropCaps5
     TabInitialen.OK
 
    '/// Set focus to the pic , check if its position is changed correctly
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     FormatAnchorToPage
     Sleep 1
     Call fPositionAndSize("TabPositionAndSizeWriter")
@@ -657,8 +657,8 @@ testcase tParagraphDropCaps7
     TabInitialen.OK
 
    '/// Check if the head of the artile is changed to be "Xyzhe"
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Shift Right>" , 5
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Shift Right>" , 5
 
     EditCopy
     if GetClipboardText <> sHopeResult then
