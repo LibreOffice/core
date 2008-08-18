@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_004_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:26:29 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:41:03 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -110,7 +110,7 @@ testcase tInsertFields
        Warnlog "Unable to execute: Insert / Fields / Date "
     endcatch
     printlog " Insert / Fields / Date"
-    Call wDokSchreiben (" <Return>")
+    Call wTypeKeys (" <Return>")
     try
         printlog "Insert / Fields / Time"
         InsertFieldsTime
@@ -118,7 +118,7 @@ testcase tInsertFields
        Warnlog "Unable to execute: Insert / Fields / Time"
     endcatch
     printlog " Insert / Fields / Time"
-    Call wDokSchreiben (" <Return>")
+    Call wTypeKeys (" <Return>")
     try
         printlog "Insert / Fields / Page Number"
         InsertFieldsPageNumbers
@@ -126,7 +126,7 @@ testcase tInsertFields
        Warnlog "Unable to execute: Insert / Fields / Page numbers"
     endcatch
     printlog " Insert / Fields / Page numbers"
-    Call wDokSchreiben (" <Return>")
+    Call wTypeKeys (" <Return>")
     try
         printlog "Insert / Fields / Page Count"
         InsertFieldsPageCount
@@ -134,7 +134,7 @@ testcase tInsertFields
        Warnlog "Unable to execute: Insert / Fields / Page Count"
     endcatch
     printlog " Insert / Fields / Page count"
-    Call wDokSchreiben (" <Return>")
+    Call wTypeKeys (" <Return>")
     try
         printlog "Insert / Fields / Title"
         InsertFieldsTitle
@@ -142,7 +142,7 @@ testcase tInsertFields
        Warnlog "Unable to execute: Insert / Fields / Title"
     endcatch
     printlog " Insert / Fields / Title"
-    Call wDokSchreiben (" <Return>")
+    Call wTypeKeys (" <Return>")
     try
         printlog "Insert / Fields / Author"
         InsertFieldsAuthor
@@ -158,7 +158,7 @@ testcase tInsertFields
             Warnlog "Unable to execute: Insert / Fields / Subject"
         endcatch
         printlog " If document not HTML then  'Insert / Fields / Subject"
-        Call wDokSchreiben (" <Return>")
+        Call wTypeKeys (" <Return>")
         printlog " Press key 'enter'"
     end if
 
@@ -480,7 +480,7 @@ testcase tInsertNote
       InsertNoteWriter
       Kontext "DocumentWriter"
       sNoteText = "Testnote inserted by testtool !"
-      Call wDokSchreiben (sNoteText)
+      Call wTypeKeys (sNoteText)
 
       Call wNavigatorAuswahl( 11, 1 )
       Kontext "NavigatorWriter"
@@ -1187,7 +1187,7 @@ testcase tInsertAllGraphicsFromFile
         printlog "- Graphic: " + Right(Ziel(i),3) + "-Format"
         Call hGrafikEinfuegen ( Ziel(i) )
         Sleep 5
-        Call wDokSchreiben("<Delete>")
+        Call wTypeKeys("<Delete>")
         Call gMouseDoubleClick (10,10)
         Sleep 5
     next i
@@ -1317,7 +1317,7 @@ testcase tInsertObjectFormula
     Call gMouseClick(1,1)
     sleep 1
     printlog "  'Delete math-object in document"
-    Call wDokSchreiben("<Delete>")
+    Call wTypeKeys("<Delete>")
 
     printlog " Close active document"
     Call hCloseDocument
