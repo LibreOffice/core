@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_crashrep_dynamic.scp,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,8 +32,6 @@
 
 // crashreporter files
 
-#ifndef MACOSX
-
 File gid_Brand_File_Bin_Crashreport
     BIN_FILE_BODY;
   #ifdef UNX
@@ -48,8 +46,6 @@ File gid_Brand_File_Bin_Crashreport
     Styles = (PACKED);
   #endif
 End
-
-#endif
 
 #ifdef WNT
 
