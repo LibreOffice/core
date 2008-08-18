@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: hhConversion1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:54 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:29:51 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -73,8 +73,8 @@ testcase tHHNoSelction_1
     Call hFileOpen(sTestFile)
 
     '/// Set focus before the 3rd character
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Down>"
 
     '/// Tools / HangulHanjaConversion
     ToolsLanguageHangulHanjaConversion
@@ -88,21 +88,21 @@ testcase tHHNoSelction_1
         HangulHanjaConversion.Close
         Call hCloseDocument
         goto endsub
-    endif    
+    end if    
     Sleep 1
 
     HangulHanjaConversion.Close
 
     '/// Check if conversion really happens at cursor's location
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<Shift Right>",2
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<Shift Right>",2
     try
         EditCopy
     catch
         Warnlog "#116346#Hangul/Hanja selection to begin of line impossible after closing hhc dialog"
-        Call wDokSchreiben "<MOD1 Home>"
-        Call wDokSchreiben "<Right>" , 4
-        Call wDokSchreiben "<Shift Home>"
+        Call wTypeKeys "<MOD1 Home>"
+        Call wTypeKeys "<Right>" , 4
+        Call wTypeKeys "<Shift Home>"
         EditCopy
         Sleep 1
     endcatch
@@ -139,7 +139,7 @@ testcase tHHNoSelction_2
     Call hFileOpen(sTestFile)
     
     '/// Set focus to the beginning
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
     
     '/// Tools / HangulHanjaConversion
     ToolsLanguageHangulHanjaConversion
@@ -152,13 +152,13 @@ testcase tHHNoSelction_2
         Ignore.Click
         Sleep 1
         Replace.Click
-    endif
+    end if
 
     if HangulHanjaConversion.Exists then HangulHanjaConversion.Close
 
     '/// Check if Korean is converted
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     Sleep 1
     if GetClipboardText <> sResult then
@@ -193,7 +193,7 @@ testcase tHHNoSelction_3
     Call hFileOpen(sTestFile)
     
     '/// Set focus to the beginning
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
     
     '/// Tools / HangulHanjaConversion
     ToolsLanguageHangulHanjaConversion
@@ -209,11 +209,11 @@ testcase tHHNoSelction_3
         Replace.Click
         Sleep 1
         HangulHanjaConversion.Close
-    endif
+    end if
     
     '/// Check if Chinese is converted
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     Sleep 1
     if GetClipboardText <> sResult then
@@ -244,7 +244,7 @@ testcase tHHNoSelction_4
    Call hFileOpen(sTestFile)
 
   '/// Set focus to the beginning
-   Call wDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion ,
   '/// + nothing should happen
@@ -281,7 +281,7 @@ testcase tHHNoSelction_5
    Call hFileOpen(sTestFile)
 
   '/// Set focus to the end of the file
-   Call wDokSchreiben "<MOD1 End>"
+   Call wTypeKeys "<MOD1 End>"
 
   '/// Tools / HangulHanjaConversion ,
    ToolsLanguageHangulHanjaConversion
@@ -319,8 +319,8 @@ testcase tHHNoSelction_6
     Call hFileOpen(sTestFile)
 
     '/// Set focus to the 3rd character (korean)
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Right>" , 2
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Right>" , 2
 
     '/// Tools / HangulHanjaConversion , Replace and Always Replace
     '/// + should be disabled , "suggestion" should be empty .
@@ -345,8 +345,8 @@ testcase tHHNoSelction_6
     if HangulHanjaConversion.Exists then HangulHanjaConversion.Close
 
     '/// Check if the result is correct
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Shift End>"
     EditCopy
     Sleep 1
     if GetClipboardText <> sResult then
@@ -380,8 +380,8 @@ testcase tHHNoSelction_7
    Call hFileOpen(sTestFile)
 
   '/// Set focus to the 3rd chinese character
-   Call wDokSchreiben "<MOD1 Home><Down><Home>"
-   Call wDokSchreiben "<Right>" , 2
+   Call wTypeKeys "<MOD1 Home><Down><Home>"
+   Call wTypeKeys "<Right>" , 2
 
   '/// Tools / HangulHanjaConversion ,
   '/// + Press Peplace button
@@ -408,8 +408,8 @@ testcase tHHNoSelction_7
    HangulHanjaConversion.Close
 
   '/// Check if the result is correct
-   Call wDokSchreiben "<Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    Sleep 1
    if GetClipboardText <> sResult then
@@ -444,9 +444,9 @@ testcase tHHSingleSelction_1
     Call hFileOpen(sTestFile)
     
     '/// Select from 4th to 7th character
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Right>" , 3
-    Call wDokSchreiben "<Shift Right>" , 4
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Right>" , 3
+    Call wTypeKeys "<Shift Right>" , 4
     
     '/// Tools / HangulHanjaConversion ,
     '/// + Press Peplace button
@@ -462,8 +462,8 @@ testcase tHHSingleSelction_1
         endcatch
 
        '/// Check if the result is correct
-       Call wDokSchreiben "<MOD1 Home>"
-       Call wDokSchreiben "<Shift End>"
+       Call wTypeKeys "<MOD1 Home>"
+       Call wTypeKeys "<Shift End>"
        EditCopy
        Sleep 1
        if GetClipboardText <> sResult then
@@ -471,7 +471,7 @@ testcase tHHSingleSelction_1
        end if
     else
         Warnlog "Replace-Button is disabled!"
-    endif
+    end if
 
 
     Call hCloseDocument
@@ -513,8 +513,8 @@ testcase tHHMultiSelction_1
      Sleep 1
 
   '/// Check if the result is correct
-   Call wDokSchreiben "<MOD1 Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<MOD1 Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    Sleep 1
    if GetClipboardText <> sResult then
