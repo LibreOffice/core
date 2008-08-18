@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_dropdownLB1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:50 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:26:11 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -523,10 +523,10 @@ testcase tDropDownLB_10
     TabFunktionen.Close
 
    PrintLog "- Set focus in front of the list"
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
 
    PrintLog "- Press Ctrl+Shift+F9"
-    Call wDokSchreiben "<MOD1 Shift F9>"
+    Call wTypeKeys "<MOD1 Shift F9>"
 
     Kontext "EditInputList"
     if EditInputList.Exists then
@@ -576,10 +576,10 @@ testcase tDropDownLB_11
     TabFunktionen.Close
 
    PrintLog "- Set focus in front of the list"
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
 
    PrintLog "- Press Ctrl+Shift+F9"
-    Call wDokSchreiben "<MOD1 Shift F9>"
+    Call wTypeKeys "<MOD1 Shift F9>"
 
    PrintLog "- select 2nd list and press OK"
     Kontext "EditInputList"
@@ -648,7 +648,7 @@ testcase tDropDownLB_12
     TabFunktionen.Close
 
    PrintLog "- Set focus to another line"
-    Call wDokSchreiben "<End><Return><Return>"
+    Call wTypeKeys "<End><Return><Return>"
 
    PrintLog "- Insert/Field/Other/ Functions"
    PrintLog "- select Input list"
@@ -671,10 +671,10 @@ testcase tDropDownLB_12
     TabFunktionen.Close
 
    PrintLog "- Set focus in front of the 1st list."
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
 
    PrintLog "- Press Ctrl+Shift+F9"
-    Call wDokSchreiben "<MOD1 Shift F9>"
+    Call wTypeKeys "<MOD1 Shift F9>"
 
    PrintLog "- the 1st group items should be in edit area."
     Kontext "EditInputList"
@@ -734,7 +734,7 @@ testcase tDropDownLB_13
     TabFunktionen.Close
 
    PrintLog "- Set focus to another line"
-    Call wDokSchreiben "<End><Return><Return>"
+    Call wTypeKeys "<End><Return><Return>"
 
    PrintLog "- Insert/Field/Other/ Functions"
    PrintLog "- select Input list"
@@ -754,10 +754,10 @@ testcase tDropDownLB_13
     TabFunktionen.Close
 
    PrintLog "- Set focus in front of the 1st list"
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
 
    PrintLog "- Press Ctrl+Shift+F9"
-    Call wDokSchreiben "<MOD1 Shift F9>"
+    Call wTypeKeys "<MOD1 Shift F9>"
 
    PrintLog "- Press Edit button , the edit/field dialog should be up"
     Kontext "EditInputList"
@@ -832,7 +832,7 @@ testcase tDropDownLB_14
     TabFunktionen.Close
 
    PrintLog "- Set focus in front of the 1st list"
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
 
    PrintLog "- Edit/Fields , check if the entry items' info is correct."
     EditFields
@@ -883,7 +883,7 @@ testcase tDropDownLB_15
     TabFunktionen.Close
 
    PrintLog "- Set focus to another line"
-    Call wDokSchreiben "<End><Return><Return>"
+    Call wTypeKeys "<End><Return><Return>"
 
    PrintLog "- Insert/Field/Other/ Functions"
    PrintLog "- select Input list"
@@ -903,7 +903,7 @@ testcase tDropDownLB_15
     TabFunktionen.Close
 
    PrintLog "- Set focus in front of the 1st list."
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
 
    PrintLog "- Edit/Fields"
     EditFields
@@ -960,7 +960,7 @@ testcase tDropDownLB_16
     TabFunktionen.Close
 
    PrintLog "- Set focus to another line."
-    Call wDokSchreiben "<End><Return><Return>"
+    Call wTypeKeys "<End><Return><Return>"
 
    PrintLog "- Insert/Field/Other/ Functions"
    PrintLog "- select Input list"
@@ -980,7 +980,7 @@ testcase tDropDownLB_16
     TabFunktionen.Close
 
    PrintLog "- Set focus in front of the 2nd list."
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
 
    PrintLog "- Edit/Fields"
     EditFields
@@ -1032,7 +1032,7 @@ testcase tDropDownLB_17
     PrintLog "- Open a word document  which includes 2 entries."
     Call hFileOpen(sTestFile)
     PrintLog "- Set focus in front of first line."
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
     PrintLog "- Edit/Fields."
     try
         EditFields
@@ -1052,13 +1052,13 @@ testcase tDropDownLB_17
         next i
     else
         QAErrorlog "#i56768#Not all entrys in field correctly imported!"
-    endif
+    end if
     FeldbefehlBearbeitenFunktionen.Cancel
     
     PrintLog "- Set focus in front of third line"
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Down>" , 2
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Down>" , 2
+    Call wTypeKeys "<Home>"
     
     PrintLog "- Edit/Fields"
     try
@@ -1079,7 +1079,7 @@ testcase tDropDownLB_17
         next i
     else
         QAErrorlog "#i56768#Not all entrys in field correctly imported!"
-    endif
+    end if
     FeldbefehlBearbeitenFunktionen.Cancel
     
     Call hCloseDocument ' <- close word document
