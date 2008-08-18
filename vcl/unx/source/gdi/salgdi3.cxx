@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi3.cxx,v $
- * $Revision: 1.155 $
+ * $Revision: 1.156 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -799,7 +799,14 @@ CairoWrapper::CairoWrapper()
     OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libcairo.so.2" ));
     mpCairoLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
     if( !mpCairoLib )
-    return;
+        return;
+
+#if 0
+    // check cairo version
+    int (*p_version)();
+    p_version = (int(*)()) osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_version" );
+    const int nVersion = p_version ? (*p_version)() : 0;
+#endif
 
     mp_xlib_surface_create_with_xrender_format = (cairo_surface_t* (*)(Display *, Drawable , Screen *, XRenderPictFormat *, int , int ))
         osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_xlib_surface_create_with_xrender_format" );
@@ -916,7 +923,7 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
     for( int nStart = 0; rLayout.GetNextGlyphs( 1, &aGlyphId, aPos, nStart ); )
     {
         cairo_glyph_t aGlyph;
-        aGlyph.index = aGlyphId;
+        aGlyph.index = aGlyphId & GF_IDXMASK;
         aGlyph.x = aPos.X();
         aGlyph.y = aPos.Y();
         cairo_glyphs.push_back(aGlyph);
@@ -1382,8 +1389,9 @@ void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
 {
     // draw complex text
     ServerFont& rFont = rLayout.GetServerFont();
+    const bool bVertical = rFont.GetFontSelData().mbVertical;
 
-    if (CairoWrapper::get().isCairoRenderable(rFont))
+    if( !bVertical && CairoWrapper::get().isCairoRenderable(rFont) )
         DrawCairoAAFontString( rLayout );
     else
     {
