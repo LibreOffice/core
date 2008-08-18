@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: wr_o_3.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:56 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:33:06 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -273,7 +273,7 @@ testcase tToolsOptionsWriterChanges
     DocumentWriter.TypeKeys "<Return>"
     Call hTabelleEinfuegen
     
-    Call wDokSchreiben ("<Up>" , 2)
+    Call wTypeKeys ("<Up>" , 2)
     
     printlog ("'///- Tools/Options/Writer: Changes ///")
     
@@ -308,7 +308,7 @@ testcase tToolsOptionsWriterChanges
     UseBindings
     EditChangesRecord
     
-    Call wDokSchreiben "<Return> Here are some changes"
+    Call wTypeKeys "<Return> Here are some changes"
     DocumentWriter.TypeKeys "<Up>", 8
     DocumentWriter.TypeKeys "<Backspace>", 10
     DocumentWriter.TypeKeys "<Down>", 2
@@ -760,13 +760,13 @@ testcase tToolsOptionsAutocaption
     Kontext "TabelleEinfuegenWriter"
     TabelleEinfuegenWriter.OK
     Kontext "DocumentWriter"
-    Call wDokSchreiben ("<UP>", 2)
-    Call wDokSchreiben ("<Home>")
+    Call wTypeKeys ("<UP>", 2)
+    Call wTypeKeys ("<Home>")
     Select Case iSprache
         Case 31:
-            Call wDokSchreiben ("<Mod1 Shift Right>", 3)
+            Call wTypeKeys ("<Mod1 Shift Right>", 3)
         Case else
-            Call wDokSchreiben ("<Mod1 Shift Right>")
+            Call wTypeKeys ("<Mod1 Shift Right>")
     end select
     EditCopy
     wait 500
@@ -780,39 +780,43 @@ testcase tToolsOptionsAutocaption
     Kontext "TabType"
     Width.SetText "2"
     TabType.OK
-    Call wDokSchreiben ("<Return><Down>")
-    Call wDokSchreiben ("<Down>")
+    Call wTypeKeys ("<Return>")
+    sleep (1)
+    Call wTypeKeys ("<Down><Home>")
     Select Case iSprache
         Case 31:
-            Call wDokSchreiben ("<Mod1 Shift Right>", 3)
+            Call wTypeKeys ("<Mod1 Shift Right>", 3)
         Case else
-            Call wDokSchreiben ("<Mod1 Shift Right>")
+            Call wTypeKeys ("<Mod1 Shift Right>")
     end select
     EditCopy
     Wait 500
     if Trim$(GetClipboardText) <> Auswahl (2) then Warnlog "Caption of a frame is wrong.  Not " & Auswahl(2) & " but: " & GetClipboardtext
-    Call wDokSchreiben ("<Escape>")
-    Call wDokSchreiben ("<Delete>")
+    Call wTypeKeys ("<Escape>")
+    sleep(1)
+    Call wTypeKeys ("<Home><SHIFT END><Delete>")
 
     printlog "'///   - Check graphics caption ///"
     '///+ "writer\optional\input\graphics\jolink.jpg" ///
     Call hGrafikEinfuegen ( gTesttoolPath + "writer\optional\input\graphics\jolink.jpg" )
-    Call wDokSchreiben ("<Return>")
+        Call wTypeKeys ("<Return>")
+        sleep (1)
+        Call wTypeKeys ("<MOD1 Home>")
     Select Case iSprache
         Case 31:
-            Call wDokSchreiben ("<Mod1 Shift Right>", 3)
+            Call wTypeKeys ("<Mod1 Shift Right>", 3)
         Case 82:
-            Call wDokSchreiben ("<Down><Shift End>")
+            Call wTypeKeys ("<Down><Shift End>")
         Case else
-            Call wDokSchreiben ("<Mod1 Shift Right>")
+            Call wTypeKeys ("<Mod1 Shift Right>")
     end select
     EditCopy
     if Trim$(GetClipboardText) <> Auswahl (3) then Warnlog "Caption of a graphic is wrong. Not " & Auswahl(3) & " but: " & GetClipboardtext
     Call hCloseDocument
     
     printlog "'///   - Check caption of all other objects ///"
-    for i=1 to 5        
-        Call hNewDocument    
+    for i=1 to 5
+        Call hNewDocument
         InsertObjectOLEObject
         Kontext "OLEObjektEinfuegen"
         Objekttyp.Select i
@@ -822,20 +826,23 @@ testcase tToolsOptionsAutocaption
         Kontext "DocumentWriter"
         Call gMouseClick ( 90, 90 )
         Sleep 2
-        Call wDokSchreiben ("<Return>")
+        Call wTypeKeys ("<Return>")
+        sleep (2)
+        Call wTypeKeys ("<MOD1 Home>")
         Select Case i
             Case 1,3,4,5
                 Select Case iSprache
                     Case 31
-                        Call wDokSchreiben ("<Mod1 Shift Right>",3)
+                        Call wTypeKeys ("<Mod1 Shift Right>",3)
                     Case else
-                        Call wDokSchreiben ("<Mod1 Shift Right>")
+                        Call wTypeKeys ("<Mod1 Shift Right>")
                 end select
             Case else
-                Call wDokSchreiben ("<Mod1 Shift Right>")
+                Call wTypeKeys ("<Mod1 Shift Right>")
         end select
         EditCopy
         if Trim$(GetClipboardText) <> Auswahl (i+3) then Warnlog "Caption of a " & Auswahl(i+3) & " is wrong. Not " & Auswahl(i+3) & " but: " & GetClipboardtext
+        sleep (1)
         Call hCloseDocument
     next i
     Call hNewDocument
@@ -855,6 +862,7 @@ testcase tToolsOptionsAutocaption
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
+    sleep (1)
     Call hCloseDocument
 endcase
 
@@ -971,9 +979,9 @@ testcase tToolsOptionsWriterCompatibility2
     printlog "open document  ./writer/leve11/input/options/compatibility1.doc"
     printlog "check formatting of current opened document"
     Call hFileOpen ( gTesttoolpath & "writer\optional\input\options\compatibility1.doc" )
-    Call wDokSchreiben ("<Mod1 Home>")
-    Call wDokSchreiben ("<Down>")
-    Call wDokSchreiben ("<Shift Right>")
+    Call wTypeKeys ("<Mod1 Home>")
+    Call wTypeKeys ("<Down>")
+    Call wTypeKeys ("<Shift Right>")
     try
         EditCopy
         if GetClipboardtext <> "A" then
@@ -985,9 +993,9 @@ testcase tToolsOptionsWriterCompatibility2
         DefaultFailed = true
     endcatch
     
-    Call wDokSchreiben ("<Home>")
-    Call wDokSchreiben ("<Down>" ,3)
-    Call wDokSchreiben ("<Shift Right>")
+    Call wTypeKeys ("<Home>")
+    Call wTypeKeys ("<Down>" ,3)
+    Call wTypeKeys ("<Shift Right>")
     try
         EditCopy
         if GetClipboardtext <> "A" then
@@ -1010,9 +1018,9 @@ testcase tToolsOptionsWriterCompatibility2
         Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.Ok
         printlog " Now check if document has been reformatted"
-        Call wDokSchreiben ("<Mod1 Home>")
-        Call wDokSchreiben ("<Down>" , 2)
-        Call wDokSchreiben ("<Shift Right>")
+        Call wTypeKeys ("<Mod1 Home>")
+        Call wTypeKeys ("<Down>" , 2)
+        Call wTypeKeys ("<Shift Right>")
         try
             EditCopy
             if GetClipboardtext <> "A" then
@@ -1022,9 +1030,9 @@ testcase tToolsOptionsWriterCompatibility2
             Warnlog "Seems document has been formatted wrong"
         endcatch
         
-        Call wDokSchreiben ("<Home>")
-        Call wDokSchreiben ("<Down>" , 4)
-        Call wDokSchreiben ("<Shift Right>")
+        Call wTypeKeys ("<Home>")
+        Call wTypeKeys ("<Down>" , 4)
+        Call wTypeKeys ("<Shift Right>")
         try
             EditCopy
             if GetClipboardtext <> "A" then
