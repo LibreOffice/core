@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textsh.cxx,v $
- * $Revision: 1.62 $
+ * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -574,6 +574,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             aStartPos.X() -= 8 * MM50;
             aStartPos.Y() -= 4 * MM50;
             Size aSize(16 * MM50, 8 * MM50);
+            GetShell().LockPaint();
             GetShell().StartAllAction();
             SwFlyFrmAttrMgr aMgr( TRUE, GetShellPtr(), FRMMGR_TYPE_TEXT );
             if(nCols > 1)
@@ -584,6 +585,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             }
             aMgr.InsertFlyFrm(FLY_AT_CNTNT, aStartPos, aSize);
             GetShell().EndAllAction();
+            GetShell().UnlockPaint();
         }
         else
         {
@@ -634,11 +636,13 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 }
             }
 
+            GetShell().LockPaint();
             GetShell().StartAllAction();
 
             aMgr.InsertFlyFrm(eAnchor, aPos, aSize);
 
             GetShell().EndAllAction();
+            GetShell().UnlockPaint();
         }
         else
         {
@@ -684,6 +688,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             DBG_ASSERT(pDlg, "Dialogdiet fail!");
             if(pDlg->Execute() && pDlg->GetOutputItemSet())
             {
+                GetShell().LockPaint();
                 GetShell().StartAllAction();
                 GetShell().StartUndo(UNDO_INSERT);
 
@@ -718,6 +723,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     GetShell().EndUndo(UNDO_INSERT, &aRewriter);
                 }
                 GetShell().EndAllAction();
+                GetShell().UnlockPaint();
             }
 
             DELETEZ(pDlg);
