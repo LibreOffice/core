@@ -8,7 +8,7 @@
 #
 # $RCSfile: msiglobal.pm,v $
 #
-# $Revision: 1.49 $
+# $Revision: 1.50 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -149,7 +149,7 @@ sub get_sequenceorder
     for ( my $i = 0; $i <= $#{$filesref}; $i++ )
     {
         my $onefile = ${$filesref}[$i];
-        if ( ! $onefile->{'assignedsequencenumber'} ) { installer::exiter::exit_program("ERROR: Sequence number assigned to $onefile->{'gid'}!", "get_sequenceorder"); }
+        if ( ! $onefile->{'assignedsequencenumber'} ) { installer::exiter::exit_program("ERROR: No sequence number assigned to $onefile->{'gid'} ($onefile->{'uniquename'})!", "get_sequenceorder"); }
         $order{$onefile->{'assignedsequencenumber'}} = $i;
     }
 
@@ -181,8 +181,15 @@ sub generate_cab_file_list
         my $counter = 1;
         my $currentcabfile = "";
 
-        while ( exists($sequenceorder->{$counter}) )
+        while ( ( exists($sequenceorder->{$counter}) ) || ( exists($installer::globals::allmergemodulefilesequences{$counter}) ) ) # Taking care of files from merge modules
         {
+            if ( exists($installer::globals::allmergemodulefilesequences{$counter}) )
+            {
+                # Skipping this sequence, it is not included in $filesref, because it is assigned to a file from a merge module.\n";
+                $counter++;
+                next;
+            }
+
             # Files with increasing sequencerorder are included in one cab file
             my $onefile = ${$filesref}[$sequenceorder->{$counter}];
             my $cabinetfile = $onefile->{'assignedcabinetfile'};
@@ -233,6 +240,99 @@ sub generate_cab_file_list
                 {
                     $nextfile = ${$filesref}[$sequenceorder->{$counter}];
                     $nextcabinetfile = $nextfile->{'assignedcabinetfile'};
+                }
+            }
+
+            # creating the DDF file
+
+            my $ddffilename = $cabinetfile;
+            $ddffilename =~ s/.cab/.ddf/;
+            $ddfdir =~ s/\Q$installer::globals::separator\E\s*$//;
+            $ddffilename = $ddfdir . $installer::globals::separator . $ddffilename;
+
+            installer::files::save_file($ddffilename ,\@ddffile);
+            my $infoline = "Created ddf file: $ddffilename\n";
+            push(@installer::globals::logfileinfo, $infoline);
+
+            # lines in ddf files must not be longer than 256 characters
+            check_ddf_file(\@ddffile, $ddffilename);
+
+            # Writing the makecab system call
+
+            my $oneline = "makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
+
+            push(@cabfilelist, $oneline);
+
+            # collecting all ddf files
+            push(@installer::globals::allddffiles, $ddffilename);
+        }
+    }
+    elsif ((( $installer::globals::cab_file_per_component ) || ( $installer::globals::fix_number_of_cab_files )) && ( $installer::globals::updatedatabase ))
+    {
+        my $sequenceorder = get_sequenceorder($filesref);
+
+        my $counter = 1;
+        my $currentcabfile = "";
+
+        while ( ( exists($sequenceorder->{$counter}) ) || ( exists($installer::globals::allmergemodulefilesequences{$counter}) ) ) # Taking care of files from merge modules
+        {
+#           if ( exists($installer::globals::allmergemodulefilesequences{$counter}) )
+#           {
+#               # Skipping this sequence, it is not included in $filesref, because it is assigned to a file from a merge module.\n";
+#               $counter++;
+#               next;
+#           }
+
+            my $onefile = ${$filesref}[$sequenceorder->{$counter}];
+            $counter++;
+
+            my $cabinetfile = $onefile->{'cabinet'};
+            my $sourcepath =  $onefile->{'sourcepath'};
+            if ( $^O =~ /cygwin/i ) { $sourcepath = $onefile->{'cyg_sourcepath'}; }
+            my $uniquename =  $onefile->{'uniquename'};
+
+            my $styles = "";
+            my $doinclude = 1;
+            if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; };
+            if ( $styles =~ /\bDONT_PACK\b/ ) { $doinclude = 0; }
+
+            # to avoid lines with more than 256 characters, it can be useful to use relative pathes
+            if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
+
+            my @ddffile = ();
+
+            write_ddf_file_header(\@ddffile, $cabinetfile, $installdir);
+
+            my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
+            if ( $doinclude ) { push(@ddffile, $ddfline); }
+
+            my $nextfile = "";
+            if ( ${$filesref}[$sequenceorder->{$counter}] ) { $nextfile = ${$filesref}[$sequenceorder->{$counter}]; }
+
+            my $nextcabinetfile = "";
+
+            if ( $nextfile->{'cabinet'} ) { $nextcabinetfile = $nextfile->{'cabinet'}; }
+
+            while ( $nextcabinetfile eq $cabinetfile )
+            {
+                $sourcepath =  $nextfile->{'sourcepath'};
+                if ( $^O =~ /cygwin/i ) { $sourcepath = $nextfile->{'cyg_sourcepath'}; }
+                # to avoid lines with more than 256 characters, it can be useful to use relative pathes
+                if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
+                $uniquename =  $nextfile->{'uniquename'};
+                my $localdoinclude = 1;
+                my $nextfilestyles = "";
+                if ( $nextfile->{'Styles'} ) { $nextfilestyles = $nextfile->{'Styles'}; }
+                if ( $nextfilestyles =~ /\bDONT_PACK\b/ ) { $localdoinclude = 0; }
+                $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
+                if ( $localdoinclude ) { push(@ddffile, $ddfline); }
+                $counter++;                                         # increasing the counter!
+                $nextfile = "";
+                $nextcabinetfile = "_lastfile_";
+                if (( exists($sequenceorder->{$counter}) ) && ( ${$filesref}[$sequenceorder->{$counter}] ))
+                {
+                    $nextfile = ${$filesref}[$sequenceorder->{$counter}];
+                    $nextcabinetfile = $nextfile->{'cabinet'};
                 }
             }
 
@@ -335,6 +435,69 @@ sub generate_cab_file_list
             # collecting all ddf files
             push(@installer::globals::allddffiles, $ddffilename);
         }
+    }
+    elsif (( $installer::globals::one_cab_file ) && ( $installer::globals::updatedatabase ))
+    {
+        my $sequenceorder = get_sequenceorder($filesref);
+
+        my $counter = 1;
+        my $currentcabfile = "";
+
+        while ( ( exists($sequenceorder->{$counter}) ) || ( exists($installer::globals::allmergemodulefilesequences{$counter}) ) ) # Taking care of files from merge modules
+        {
+            if ( exists($installer::globals::allmergemodulefilesequences{$counter}) )
+            {
+                # Skipping this sequence, it is not included in $filesref, because it is assigned to a file from a merge module.\n";
+                $counter++;
+                next;
+            }
+
+            my $onefile = ${$filesref}[$sequenceorder->{$counter}];
+
+            $cabinetfile = $onefile->{'cabinet'};
+            my $sourcepath =  $onefile->{'sourcepath'};
+            if ( $^O =~ /cygwin/i ) { $sourcepath = $onefile->{'cyg_sourcepath'}; }
+            my $uniquename =  $onefile->{'uniquename'};
+
+            # to avoid lines with more than 256 characters, it can be useful to use relative pathes
+            if ( $allvariables->{'RELATIVE_PATHES_IN_DDF'} ) { $sourcepath = make_relative_ddf_path($sourcepath); }
+
+            if ( $counter == 1 ) { write_ddf_file_header(\@ddffile, $cabinetfile, $installdir); }
+
+            my $styles = "";
+            my $doinclude = 1;
+            if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; };
+            if ( $styles =~ /\bDONT_PACK\b/ ) { $doinclude = 0; }
+
+            my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
+            if ( $doinclude ) { push(@ddffile, $ddfline); }
+
+            $counter++; # increasing the counter
+        }
+
+        # creating the DDF file
+
+        my $ddffilename = $cabinetfile;
+        $ddffilename =~ s/.cab/.ddf/;
+        $ddfdir =~ s/[\/\\]\s*$//;
+        $ddffilename = $ddfdir . $installer::globals::separator . $ddffilename;
+
+        installer::files::save_file($ddffilename ,\@ddffile);
+        my $infoline = "Created ddf file: $ddffilename\n";
+        push(@installer::globals::logfileinfo, $infoline);
+
+        # lines in ddf files must not be longer than 256 characters
+        check_ddf_file(\@ddffile, $ddffilename);
+
+        # Writing the makecab system call
+
+        # my $oneline = "makecab.exe /F " . $ddffilename . "\n";
+        my $oneline = "makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
+
+        push(@cabfilelist, $oneline);
+
+        # collecting all ddf files
+        push(@installer::globals::allddffiles, $ddffilename);
     }
     elsif ( $installer::globals::one_cab_file )
     {
@@ -1698,7 +1861,7 @@ sub execute_packaging
 
 sub set_global_code_variables
 {
-    my ( $languagesref, $languagestringref, $allvariableshashref ) = @_;
+    my ( $languagesref, $languagestringref, $allvariableshashref, $alloldproperties ) = @_;
 
     # In the msi template directory a files "codes.txt" has to exist, in which the ProductCode
     # and the UpgradeCode for the product are defined.
@@ -1740,7 +1903,11 @@ sub set_global_code_variables
     }
 
     # ProductCode must not change, if Windows patches shall be applied
-    if ( $installer::globals::prepare_winpatch )
+    if ( $installer::globals::updatedatabase )
+    {
+        $installer::globals::productcode = $alloldproperties->{'ProductCode'};
+    }
+    elsif ( $installer::globals::prepare_winpatch )
     {
         # ProductCode has to be specified in each language
         my $searchstring = "PRODUCTCODE";
@@ -1879,6 +2046,7 @@ sub read_saved_mappings
         while (<F>)
         {
             m/^([^\t]+)\t([^\t]+)\t((.*)\|)?([^\t]*)/;
+            print "AAA1: \$1: $1, \$2: $2, \$3: $3, \$4: $4, \$5: $5\n";
             next if ("$1" eq "$5") && (!defined($3));
             my $lc1 = lc($1);
 
@@ -1954,6 +2122,8 @@ sub read_saved_mappings
             m/^([^\t]+)\t([^\t]+)\t(([^~]+~\d.*)\|)?([^\t]*)/;
             next if (!defined($3));
             my $lc1 = lc($1);
+
+            print "AAA2: \$1: $1, \$2: $2, \$3: $3\n";
 
             if ( exists($installer::globals::saved83dirmapping{$1}) )
             {
