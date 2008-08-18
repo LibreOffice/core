@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sbagrid.hxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -259,7 +259,7 @@ namespace dbaui
     protected:
         ::svx::ODataAccessDescriptor    m_aDataDescriptor;
         SbaGridListener*                m_pMasterListener;
-        sal_Int32                       m_nAsyncDropEvent;
+        ULONG                           m_nAsyncDropEvent;
         USHORT                          m_nLastColId;
         long                            m_nLastRowId;
 
