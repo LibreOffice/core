@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_tools_autocorrection.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:36:09 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:44:33 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -135,9 +135,9 @@ function fDeleteAllEntries()
                 EintragLoeschen.Click
             else
                 i = GesammelteWorte.GetItemCount + 1
-            endif
+            end if
         next i
-    endif
+    end if
 
     TabWortergaenzung.OK
 end function
