@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: alloc_global.c,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -197,9 +197,7 @@ SAL_CALL rtl_allocateMemory (sal_Size n) SAL_THROW_EXTERN_C()
         char *     addr;
         sal_Size   size = RTL_MEMORY_ALIGN(n + RTL_MEMALIGN, RTL_MEMALIGN);
 
-        int index = (size - 1) >> RTL_MEMALIGN_SHIFT;
         OSL_ASSERT(RTL_MEMALIGN >= sizeof(sal_Size));
-
         if (n >= SAL_MAX_SIZE - (RTL_MEMALIGN + RTL_MEMALIGN - 1))
         {
             /* requested size too large for roundup alignment */
@@ -207,8 +205,8 @@ SAL_CALL rtl_allocateMemory (sal_Size n) SAL_THROW_EXTERN_C()
         }
 
 try_alloc:
-        if (index < RTL_MEMORY_CACHED_LIMIT >> RTL_MEMALIGN_SHIFT)
-            addr = (char*)rtl_cache_alloc (g_alloc_table[index]);
+        if (size <= RTL_MEMORY_CACHED_LIMIT)
+            addr = (char*)rtl_cache_alloc(g_alloc_table[(size - 1) >> RTL_MEMALIGN_SHIFT]);
         else
             addr = (char*)rtl_arena_alloc (gp_alloc_arena, &size);
 
@@ -238,9 +236,8 @@ void SAL_CALL rtl_freeMemory (void * p) SAL_THROW_EXTERN_C()
         char *   addr = (char*)(p) - RTL_MEMALIGN;
         sal_Size size = ((sal_Size*)(addr))[0];
 
-        int index = (size - 1) >> RTL_MEMALIGN_SHIFT;
-        if (index < RTL_MEMORY_CACHED_LIMIT >> RTL_MEMALIGN_SHIFT)
-            rtl_cache_free (g_alloc_table[index], addr);
+        if (size <= RTL_MEMORY_CACHED_LIMIT)
+            rtl_cache_free(g_alloc_table[(size - 1) >> RTL_MEMALIGN_SHIFT], addr);
         else
             rtl_arena_free (gp_alloc_arena, addr, size);
     }
