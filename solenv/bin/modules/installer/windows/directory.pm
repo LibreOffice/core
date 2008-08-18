@@ -8,7 +8,7 @@
 #
 # $RCSfile: directory.pm,v $
 #
-# $Revision: 1.30 $
+# $Revision: 1.31 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -177,10 +177,11 @@ sub get_last_directory_name
 
 sub create_defaultdir_directorynames
 {
-    my ($directoryref) = @_;
+    my ($directoryref, $shortdirnamehashref) = @_;
 
     my @shortnames = ();
-    if ( $installer::globals::prepare_winpatch ) { @shortnames = values(%installer::globals::saved83dirmapping); }
+    if ( $installer::globals::updatedatabase ) { @shortnames = values(%{$shortdirnamehashref}); }
+    elsif ( $installer::globals::prepare_winpatch ) { @shortnames = values(%installer::globals::saved83dirmapping); }
 
     for ( my $i = 0; $i <= $#{$directoryref}; $i++ )
     {
@@ -192,7 +193,11 @@ sub create_defaultdir_directorynames
         # installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$hostname); # making program/classes to classes
         my $uniquename = $onedir->{'uniquename'};
         my $shortstring;
-        if (( $installer::globals::prepare_winpatch ) && ( exists($installer::globals::saved83dirmapping{$uniquename}) ))
+        if (( $installer::globals::updatedatabase ) && ( exists($shortdirnamehashref->{$uniquename}) ))
+        {
+            $shortstring = $shortdirnamehashref->{$uniquename};
+        }
+        elsif (( $installer::globals::prepare_winpatch ) && ( exists($installer::globals::saved83dirmapping{$uniquename}) ))
         {
             $shortstring = $installer::globals::saved83dirmapping{$uniquename};
         }
@@ -388,7 +393,7 @@ sub add_root_directories
 
 sub create_directory_table
 {
-    my ($directoryref, $basedir, $allvariableshashref) = @_;
+    my ($directoryref, $basedir, $allvariableshashref, $shortdirnamehashref) = @_;
 
     # Structure of the directory table:
     # Directory Directory_Parent DefaultDir
@@ -403,7 +408,7 @@ sub create_directory_table
 
     overwrite_programfilesfolder($allvariableshashref);
     create_unique_directorynames($directoryref);
-    create_defaultdir_directorynames($directoryref);    # only destdir!
+    create_defaultdir_directorynames($directoryref, $shortdirnamehashref);  # only destdir!
     installer::windows::idtglobal::write_idt_header(\@directorytable, "directory");
     add_root_directories(\@directorytable, $allvariableshashref);
     create_directorytable_from_collection(\@directorytable, $directoryref);
