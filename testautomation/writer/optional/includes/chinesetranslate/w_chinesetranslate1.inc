@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_chinesetranslate1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:46 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:24:05 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -152,8 +152,8 @@ testcase tDefaultSetting_3
    fSetAsian(fGetLanguageName(86))
 
    printlog " Input some chinese and set cursor in the beginning"
-   Call wDokSchreiben sChinese
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys sChinese
+   Call wTypeKeys "<Home>"
 
   printlog " Tools/language / Chinese translation , check"
   printlog " + 'Simplified Chinese to Traditional Chinese', press OK"
@@ -163,7 +163,7 @@ testcase tDefaultSetting_3
    ChineseTranslation.OK
 
   printlog " Check if the cursor's position is changed -- Should NOT"
-   Call wDokSchreiben "<Shift Right>"
+   Call wTypeKeys "<Shift Right>"
    try
        EditCopy
        if GetClipboardText <> sExpect then
@@ -193,9 +193,9 @@ testcase tChineseTranslate_1
    fSetAsian(fGetLanguageName(86))
 
   printlog " Input some chinese and select part of input"
-   Call wDokSchreiben sChinese
-   Call wDokSchreiben "<Home>"
-   Call wDokSchreiben "<Shift Right>" , 2
+   Call wTypeKeys sChinese
+   Call wTypeKeys "<Home>"
+   Call wTypeKeys "<Shift Right>" , 2
 
   printlog " Tools/language / Chinese translation , check"
   printlog " + 'Simplified Chinese to Traditional Chinese', press OK"
@@ -205,8 +205,8 @@ testcase tChineseTranslate_1
    ChineseTranslation.OK
 
   printlog " Check if the only selected text is translated -- Should be"
-   Call wDokSchreiben "<Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    if GetClipboardText <> sExpect then
        Warnlog "Hope to get " & sExpect & " but get " & GetClipboardText
@@ -232,7 +232,7 @@ testcase tChineseTranslate_2
    fSetAsian(fGetLanguageName(86))
 
   printlog " Input some chinese"
-   Call wDokSchreiben sChinese
+   Call wTypeKeys sChinese
 
   printlog " Tools/language / Chinese translation , check"
   printlog " + 'Simplified Chinese to Traditional Chinese' , press OK"
@@ -242,8 +242,8 @@ testcase tChineseTranslate_2
    ChineseTranslation.OK
 
   printlog " Check if all document is translated -- Should"
-   Call wDokSchreiben "<Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    if GetClipboardText <> sExpect then
        Warnlog "Hope to get " & sExpect & " but get " & GetClipboardText
@@ -270,7 +270,7 @@ testcase tChineseTranslate_3
 
   printlog " Input some chinese , include some"
   printlog " + tradition chinese and simplified chinese"
-   Call wDokSchreiben sChinese
+   Call wTypeKeys sChinese
 
   printlog " Tools/language / Chinese translation , check"
   printlog " + 'Traditional Chinese to Simplified Chinese' , press OK"
@@ -280,8 +280,8 @@ testcase tChineseTranslate_3
    ChineseTranslation.OK
 
   printlog " Check if only traditional chinese is translated -- Should"
-   Call wDokSchreiben "<Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    if GetClipboardText <> sExpect then
        Warnlog "Hope to get " & sExpect & " but get " & GetClipboardText
@@ -308,7 +308,7 @@ testcase tChineseTranslate_4
 
   printlog " Input some chinese , include some"
   printlog " + tradition chinese and simplified chinese"
-   Call wDokSchreiben sChinese
+   Call wTypeKeys sChinese
 
   printlog " Tools/language / Chinese translation , check"
   printlog " + 'Simplified Chinese to Traditional Chinese' , press OK"
@@ -318,8 +318,8 @@ testcase tChineseTranslate_4
    ChineseTranslation.OK
 
   printlog " Check if only simplified chinese is translated -- Should"
-   Call wDokSchreiben "<Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    if GetClipboardText <> sExpect then
        Warnlog "Hope to get " & sExpect & " but get " & GetClipboardText
