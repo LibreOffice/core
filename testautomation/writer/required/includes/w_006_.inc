@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_006_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:26:30 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:41:36 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -106,7 +106,7 @@ testcase tFormatSplitTables
     printlog " Insert a table"
     Call hTabelleEinfuegen
     printlog " Select all"
-    Call wDokSchreiben ("<Mod1 a>")
+    Call wTypeKeys ("<Mod1 a>")
     Sleep 1
     printlog " Format / Split Table"
     FormatSplitTable
@@ -127,15 +127,15 @@ testcase tFormatJoinTables
     printlog " Insert a table"
     Call hTabelleEinfuegen
     printlog " Point cursor under the table"
-    Call wDokSchreiben ("<Down><Down>")
+    Call wTypeKeys ("<Down><Down>")
     printlog " Insert a table"
     Call hTabelleEinfuegen
     printlog " Point cursor under the table"
-    Call wDokSchreiben ("<Down><Down>")
+    Call wTypeKeys ("<Down><Down>")
     printlog " Insert a table"
     Call hTabelleEinfuegen
     printlog " Point cursor in 3rd table"
-    Call wDokSchreiben ("<Up><Up>")
+    Call wTypeKeys ("<Up><Up>")
     printlog " Format / Merge Tables"
     FormatMergeTables
     Kontext "TabellenVerbinden"
@@ -186,7 +186,7 @@ testcase tTableCell
     printlog " Table / Protect Cells"
     TableCellProtect
 
-    Call wDokSchreiben ("<Left>")
+    Call wTypeKeys ("<Left>")
     printlog " Open Contextmenu"
     printlog " Select 'Cell->Unprotect"
     Kontext "DocumentWriter"
