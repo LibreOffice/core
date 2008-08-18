@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtimp.cxx,v $
- * $Revision: 1.143 $
+ * $Revision: 1.144 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -356,8 +356,6 @@ static __FAR_DATA SvXMLTokenMapEntry aTextListBlockAttrTokenMap[] =
     { XML_NAMESPACE_TEXT, XML_CONTINUE_NUMBERING,
             XML_TOK_TEXT_LIST_BLOCK_CONTINUE_NUMBERING },
     // --> OD 2008-04-22 #refactorlists#
-    { XML_NAMESPACE_TEXT, XML_ID,
-            XML_TOK_TEXT_LIST_BLOCK_ID },
     { XML_NAMESPACE_TEXT, XML_CONTINUE_LIST,
             XML_TOK_TEXT_LIST_BLOCK_CONTINUE_LIST },
     XML_TOKEN_MAP_END
