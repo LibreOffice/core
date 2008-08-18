@@ -8,7 +8,7 @@
 #
 # $RCSfile: file.pm,v $
 #
-# $Revision: 1.23 $
+# $Revision: 1.24 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -282,7 +282,7 @@ sub get_component_from_assigned_file
 
 sub generate_unique_filename_for_filetable
 {
-    my ($fileref, $component) = @_;
+    my ($fileref, $component, $uniquefilenamehashref) = @_;
 
     # This new filename has to be saved into $fileref, because this is needed to find the source.
     # The filename sbasic.idx/OFFSETS is changed to OFFSETS, but OFFSETS is not unique.
@@ -296,7 +296,17 @@ sub generate_unique_filename_for_filetable
 
     installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$uniquefilename); # making /registry/schema/org/openoffice/VCL.xcs to VCL.xcs
 
-    if (( $installer::globals::prepare_winpatch ) && ( exists($installer::globals::savedmapping{"$component/$uniquefilename"}) ))
+    # Reading unique filename with help of "Component_" in File table from old database
+    if (( $installer::globals::updatedatabase ) && ( exists($uniquefilenamehashref->{"$component/$uniquefilename"}) ))
+    {
+        $uniquefilename = $uniquefilenamehashref->{"$component/$uniquefilename"};  # syntax of $value: ($uniquename;$shortname)
+        if ( $uniquefilename =~ /^\s*(.*?)\;\s*(.*?)\s*$/ ) { $uniquefilename = $1; }
+         $lcuniquefilename = lc($uniquefilename);
+        $installer::globals::alluniquefilenames{$uniquefilename} = 1;
+        $installer::globals::alllcuniquefilenames{$lcuniquefilename} = 1;
+        return $uniquefilename;
+    }
+    elsif (( $installer::globals::prepare_winpatch ) && ( exists($installer::globals::savedmapping{"$component/$uniquefilename"}) ))
     {
         # If we have a FTK mapping for this component/file, use it.
         $installer::globals::savedmapping{"$component/$uniquefilename"} =~ m/^(.*);/;
@@ -372,7 +382,7 @@ sub generate_unique_filename_for_filetable
 
 sub generate_filename_for_filetable
 {
-    my ($fileref, $shortnamesref) = @_;
+    my ($fileref, $shortnamesref, $uniquefilenamehashref) = @_;
 
     my $returnstring = "";
 
@@ -381,7 +391,15 @@ sub generate_filename_for_filetable
     installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$filename);   # making /registry/schema/org/openoffice/VCL.xcs to VCL.xcs
 
     my $shortstring;
-    if (( $installer::globals::prepare_winpatch ) && ( exists($installer::globals::savedmapping{"$fileref->{'componentname'}/$filename"}) ))
+
+    # Reading short string with help of "FileName" in File table from old database
+    if (( $installer::globals::updatedatabase ) && ( exists($uniquefilenamehashref->{"$fileref->{'componentname'}/$filename"}) ))
+    {
+        my $value = $uniquefilenamehashref->{"$fileref->{'componentname'}/$filename"};  # syntax of $value: ($uniquename;$shortname)
+        if ( $value =~ /^\s*(.*?)\;\s*(.*?)\s*$/ ) { $shortstring = $2; } # already collected in function "collect_shortnames_from_old_database"
+        else { $shortstring = $filename; }
+    }
+    elsif (( $installer::globals::prepare_winpatch ) && ( exists($installer::globals::savedmapping{"$fileref->{'componentname'}/$filename"}) ))
     {
         $installer::globals::savedmapping{"$fileref->{'componentname'}/$filename"} =~ m/.*;(.*)/;
         if ($1 ne '')
@@ -457,11 +475,47 @@ sub get_fileversion
 
 sub get_sequence_for_file
 {
-    my ($number, $onefile) = @_;
+    my ($number, $onefile, $fileentry, $allupdatesequenceshashref, $allupdatefileorderhashref, $allfilecomponents) = @_;
 
     my $sequence = "";
 
-    if (( $onefile->{'assignedsequencenumber'} ) && ( $installer::globals::use_packages_for_cabs ))
+    if ( $installer::globals::updatedatabase )
+    {
+        if ( exists($allupdatesequenceshashref->{$onefile->{'uniquename'}}) )
+        {
+            $sequence = $allupdatesequenceshashref->{$onefile->{'uniquename'}};
+            $onefile->{'assignedsequencenumber'} = $sequence;
+            # Collecting all used sequences, to guarantee, that no number is unused
+            $installer::globals::allusedupdatesequences{$sequence} = 1;
+        }
+        else
+        {
+            $installer::globals::updatesequencecounter++;
+            $sequence = $installer::globals::updatesequencecounter;
+            $onefile->{'assignedsequencenumber'} = $sequence;
+            # $onefile->{'assignedcabinetfile'} = $installer::globals::pffcabfilename; # assigning to cabinet file for "post final files"
+            # Collecting all new files
+            $installer::globals::newupdatefiles{$sequence} = $onefile;
+            # Saving in sequence hash
+            $allupdatefileorderhashref->{$sequence} = $onefile->{'uniquename'};
+
+            # If the new file is part of an existing component, this must be changed now. All files
+            # of one component have to be included in one cabinet file. But because the order must
+            # not change, all new files have to be added to new components.
+            # $onefile->{'componentname'} = $file{'Component_'};
+
+            $onefile->{'componentname'} = $onefile->{'componentname'} . "_pff"; # pff for "post final file"
+            $fileentry->{'Component_'} = $onefile->{'componentname'};
+            if ( ! exists($allfilecomponents->{$fileentry->{'Component_'}}) ) { $allfilecomponents->{$fileentry->{'Component_'}} = 1; }
+            $onefile->{'PostFinalFile'} = 1;
+            # $installer::globals::pfffileexists = 1;
+            # The sequence for this file has changed. It has to be inserted at the end of the files collector.
+            $installer::globals::insert_file_at_end = 1;
+            $installer::globals::newfilescollector{$sequence} = $onefile; # Adding new files to the end of the filescollector
+            $installer::globals::newfilesexist = 1;
+        }
+    }
+    elsif (( $onefile->{'assignedsequencenumber'} ) && ( $installer::globals::use_packages_for_cabs ))
     {
         $sequence = $onefile->{'assignedsequencenumber'};
     }
@@ -519,6 +573,88 @@ sub generate_registry_keypath
     return $keypath;
 }
 
+####################################################################
+# Check, if in an update process files are missing. No removal
+# of files allowed for Windows Patch creation.
+# Also logging all new files, that have to be included in extra
+# components and cab files.
+####################################################################
+
+sub check_file_sequences
+{
+    my ($allupdatefileorderhashref) = @_;
+
+    # All used sequences stored in %installer::globals::allusedupdatesequences
+    # Maximum sequence number of old database stored in $installer::globals::updatelastsequence
+    # All new files stored in %installer::globals::newupdatefiles
+
+    my $infoline = "";
+
+    my @missing_sequences = ();
+    my @really_missing_sequences = ();
+
+    for ( my $i = 1; $i <= $installer::globals::updatelastsequence; $i++ )
+    {
+        if ( ! exists($installer::globals::allusedupdatesequences{$i}) ) { push(@missing_sequences, $i); }
+    }
+
+    if ( $#missing_sequences > -1 )
+    {
+        # Missing sequences can also be caused by files included in merge modules. This files are added later into the file table.
+        # Therefore now it is time to check the content of the merge modules.
+
+        for ( my $j = 0; $j <= $#missing_sequences; $j++ )
+        {
+            my $filename = $allupdatefileorderhashref->{$missing_sequences[$j]};
+
+            # Is this a file from a merge module? Then this is no error.
+            if ( ! exists($installer::globals::mergemodulefiles{$filename}) )
+            {
+                push(@really_missing_sequences, $missing_sequences[$j]);
+            }
+        }
+    }
+
+    if ( $#really_missing_sequences > -1 )
+    {
+        my $errorstring = "";
+        for ( my $j = 0; $j <= $#really_missing_sequences; $j++ )
+        {
+            my $filename = $allupdatefileorderhashref->{$really_missing_sequences[$j]};
+            $errorstring = "$errorstring$filename (Sequence: $really_missing_sequences[$j])\n";
+        }
+
+        $infoline = "ERROR: Files are removed compared with update database.\nThe following files are missing:\n$errorstring";
+        push(@installer::globals::logfileinfo, $infoline);
+        installer::exiter::exit_program($infoline, "check_file_sequences");
+    }
+
+    # Searching for new files
+
+    my $counter = 0;
+
+    foreach my $key ( keys %installer::globals::newupdatefiles )
+    {
+        my $onefile = $installer::globals::newupdatefiles{$key};
+        $counter++;
+        if ( $counter == 1 )
+        {
+            $infoline = "\nNew files compared to the update database:\n";
+            push(@installer::globals::logfileinfo, $infoline);
+        }
+
+        $infoline = "$onefile->{'Name'} ($onefile->{'gid'}) Sequence: $onefile->{'assignedsequencenumber'}\n";
+        push(@installer::globals::logfileinfo, $infoline);
+    }
+
+    if ( $counter == 0 )
+    {
+        $infoline = "Info: No new file compared with update database!\n";
+        push(@installer::globals::logfileinfo, $infoline);
+    }
+
+}
+
 ###################################################################
 # Collecting further conditions for the component table.
 # This is used by multilayer products, to enable installation
@@ -559,12 +695,33 @@ sub get_tree_condition_for_component
 }
 
 ############################################
+# Collecting all short names, that are
+# already used by the old database
+############################################
+
+sub collect_shortnames_from_old_database
+{
+    my ($uniquefilenamehashref, $shortnameshashref) = @_;
+
+    foreach my $key ( keys %{$uniquefilenamehashref} )
+    {
+        my $value = $uniquefilenamehashref->{$key};  # syntax of $value: ($uniquename;$shortname)
+
+        if ( $value =~ /^\s*(.*?)\;\s*(.*?)\s*$/ )
+        {
+            my $shortstring = $2;
+            $shortnameshashref->{$shortstring} = 1; # adding the shortname to the array of all shortnames
+        }
+    }
+}
+
+############################################
 # Creating the file File.idt dynamically
 ############################################
 
 sub create_files_table
 {
-    my ($filesref, $allfilecomponentsref, $basedir, $allvariables) = @_;
+    my ($filesref, $allfilecomponentsref, $basedir, $allvariables, $uniquefilenamehashref, $allupdatesequenceshashref, $allupdatefileorderhashref) = @_;
 
     installer::logger::include_timestamp_into_logfile("Performance Info: File Table start");
 
@@ -589,6 +746,8 @@ sub create_files_table
     # my @shortnames = ();
     my %shortnames = ();
 
+    if ( $installer::globals::updatedatabase ) { collect_shortnames_from_old_database($uniquefilenamehashref, \%shortnames); }
+
     installer::windows::idtglobal::write_idt_header(\@filetable, "file");
     installer::windows::idtglobal::write_idt_header(\@filehashtable, "filehash");
 
@@ -603,7 +762,7 @@ sub create_files_table
         if (( $styles =~ /\bJAVAFILE\b/ ) && ( ! ($allvariables->{'JAVAPRODUCT'} ))) { next; }
 
         $file{'Component_'} = get_file_component_name($onefile, $filesref);
-        $file{'File'} = generate_unique_filename_for_filetable($onefile, $file{'Component_'});
+        $file{'File'} = generate_unique_filename_for_filetable($onefile, $file{'Component_'}, $uniquefilenamehashref);
 
         $onefile->{'uniquename'} = $file{'File'};
         $onefile->{'componentname'} = $file{'Component_'};
@@ -613,7 +772,7 @@ sub create_files_table
 
         if ( ! exists($allfilecomponents{$file{'Component_'}}) ) { $allfilecomponents{$file{'Component_'}} = 1; }
 
-        $file{'FileName'} = generate_filename_for_filetable($onefile, \%shortnames);
+        $file{'FileName'} = generate_filename_for_filetable($onefile, \%shortnames, $uniquefilenamehashref);
 
         $file{'FileSize'} = get_filesize($onefile);
 
@@ -627,8 +786,9 @@ sub create_files_table
         # $file{'Attributes'} = "16384";    # Sourcefile is packed
         # $file{'Attributes'} = "8192";     # Sourcefile is unpacked
 
+        $installer::globals::insert_file_at_end = 0;
         $counter++;
-        $file{'Sequence'} = get_sequence_for_file($counter, $onefile);
+        $file{'Sequence'} = get_sequence_for_file($counter, $onefile, \%file, $allupdatesequenceshashref, $allupdatefileorderhashref, \%allfilecomponents);
 
         $onefile->{'sequencenumber'} = $file{'Sequence'};
 
@@ -638,7 +798,7 @@ sub create_files_table
 
         push(@filetable, $oneline);
 
-        push(@allfiles, $onefile);
+        if ( ! $installer::globals::insert_file_at_end ) { push(@allfiles, $onefile); }
 
         # Collecting all component conditions
         if ( $onefile->{'ComponentCondition'} )
@@ -768,6 +928,12 @@ sub create_files_table
     installer::files::save_file($filehashtablename ,\@filehashtable);
     $infoline = "\nCreated idt file: $filehashtablename\n";
     push(@installer::globals::logfileinfo, $infoline);
+
+    # Now the new files can be added to the files collector (only in update packaging processes)
+    if ( $installer::globals::newfilesexist )
+    {
+        foreach my $seq (sort keys %installer::globals::newfilescollector) { push(@allfiles, $installer::globals::newfilescollector{$seq}) }
+    }
 
     return \@allfiles;
 }
