@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salmenu.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,6 @@
 #include "vcl/window.h"
 #include "vcl/window.hxx"
 #include "vcl/svapp.hxx"
-#include "vcl/impbmp.hxx"
 
 #include "rtl/ustrbuf.hxx"
 #include "aqua11ywrapper.h"
@@ -90,6 +89,7 @@ const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
     [self showDialog: SHOWDIALOG_ID_ABOUT];
 }
 @end
+
 
 // FIXME: currently this is leaked
 static MainMenuSelector* pMainMenuSelector = nil;
@@ -269,6 +269,11 @@ AquaSalMenu::~AquaSalMenu()
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) && mpFrame->mpMenu == this )
         const_cast<AquaSalFrame*>(mpFrame)->mpMenu = NULL;
 
+    // this should normally be empty already, but be careful...
+    for( size_t i = 0; i < maButtons.size(); i++ )
+        releaseButtonEntry( maButtons[i] );
+    maButtons.clear();
+
     // is this leaking in some cases ? the release often leads to a duplicate release
     // it seems the parent item gets ownership of the menu
     if( mpMenu )
@@ -332,11 +337,11 @@ sal_Int32 removeUnusedItemsRunner(NSMenu * pMenu)
     return drawnItems;
 }
 
-BOOL AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, ULONG nFlags)
+bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, ULONG nFlags)
 {
     // do not use native popup menu when AQUA_NATIVE_MENUS is set to FALSE
     if( ! VisibleMenuBar() ) {
-        return FALSE;
+        return false;
     }
 
     // set offsets for positioning
@@ -382,7 +387,7 @@ BOOL AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rR
 
     // clean up the copy
     [pCopyMenu release];
-    return TRUE;
+    return true;
 }
 
 int AquaSalMenu::getItemIndexByPos( USHORT nPos ) const
@@ -428,6 +433,9 @@ void AquaSalMenu::setMainMenu()
                 [mpMenu insertItem: pItem atIndex: i+1];
             }
             pCurrentMenuBar = this;
+
+            // change status item
+            statusLayout();
         }
         enableMainMenu( true );
     }
@@ -644,69 +652,13 @@ void AquaSalMenu::SetItemImage( unsigned nPos, SalMenuItem* pSMI, const Image& r
     if( ! pSalMenuItem || ! pSalMenuItem->mpMenuItem )
         return;
 
-    BitmapEx aBmpEx( rImage.GetBitmapEx() );
-    Bitmap aBmp( aBmpEx.GetBitmap() );
+    NSImage* pImage = CreateNSImage( rImage );
 
-    if( ! aBmp || ! aBmp.ImplGetImpBitmap() )
-        return;
-
-    // simple case, no transparency
-    AquaSalBitmap* pSalBmp = static_cast<AquaSalBitmap*>(aBmp.ImplGetImpBitmap()->ImplGetSalBitmap());
-
-    if( ! pSalBmp )
-        return;
-
-    CGImageRef xImage = NULL;
-    if( ! (aBmpEx.IsAlpha() || aBmpEx.IsTransparent() ) )
-        xImage = pSalBmp->CreateCroppedImage( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
-    else if( aBmpEx.IsAlpha() )
-    {
-        AlphaMask aAlphaMask( aBmpEx.GetAlpha() );
-        Bitmap aMask( aAlphaMask.GetBitmap() );
-        AquaSalBitmap* pMaskBmp = static_cast<AquaSalBitmap*>(aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
-        if( pMaskBmp )
-            xImage = pSalBmp->CreateWithMask( *pMaskBmp, 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
-        else
-            xImage = pSalBmp->CreateCroppedImage( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
-    }
-    else if( aBmpEx.GetTransparentType() == TRANSPARENT_BITMAP )
-    {
-        Bitmap aMask( aBmpEx.GetMask() );
-        AquaSalBitmap* pMaskBmp = static_cast<AquaSalBitmap*>(aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
-        if( pMaskBmp )
-            xImage = pSalBmp->CreateWithMask( *pMaskBmp, 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
-        else
-            xImage = pSalBmp->CreateCroppedImage( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
-    }
-    else if( aBmpEx.GetTransparentType() == TRANSPARENT_COLOR )
-    {
-        Color aTransColor( aBmpEx.GetTransparentColor() );
-        SalColor nTransColor = MAKE_SALCOLOR( aTransColor.GetRed(), aTransColor.GetGreen(), aTransColor.GetBlue() );
-        xImage = pSalBmp->CreateColorMask( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight, nTransColor );
-    }
-
-    if( ! xImage )
-        return;
-
-    NSImage* pImage = [[NSImage alloc] initWithSize: NSMakeSize( pSalBmp->mnWidth, pSalBmp->mnHeight )];
     if( pImage )
     {
-        [pImage setFlipped: YES];
-        [pImage lockFocus];
-
-        NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
-        CGContextRef rCGContext = reinterpret_cast<CGContextRef>([pContext graphicsPort]);
-
-        const CGRect aDstRect = { {0, 0}, { pSalBmp->mnWidth, pSalBmp->mnHeight } };
-        CGContextDrawImage( rCGContext, aDstRect, xImage );
-
-        [pImage unlockFocus];
-
         [pSalMenuItem->mpMenuItem setImage: pImage];
         [pImage release];
     }
-
-    CGImageRelease( xImage );
 }
 
 void AquaSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const XubString& rText )
@@ -817,6 +769,121 @@ void AquaSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, cons
 
 void AquaSalMenu::GetSystemMenuData( SystemMenuData* pData )
 {
+}
+
+AquaSalMenu::MenuBarButtonEntry* AquaSalMenu::findButtonItem( USHORT i_nItemId )
+{
+    for( size_t i = 0; i < maButtons.size(); ++i )
+    {
+        if( maButtons[i].maButton.mnId == i_nItemId )
+            return &maButtons[i];
+    }
+    return NULL;
+}
+
+void AquaSalMenu::statusLayout()
+{
+    if( GetSalData()->mpStatusItem )
+    {
+        NSView* pView = [GetSalData()->mpStatusItem view];
+        if( [pView isMemberOfClass: [OOStatusItemView class]] ) // well of course it is
+            [(OOStatusItemView*)pView layout];
+        else
+            DBG_ERROR( "someone stole our status view" );
+    }
+}
+
+void AquaSalMenu::releaseButtonEntry( MenuBarButtonEntry& i_rEntry )
+{
+    if( i_rEntry.mpNSImage )
+    {
+        [i_rEntry.mpNSImage release];
+        i_rEntry.mpNSImage = nil;
+    }
+    if( i_rEntry.mpToolTipString )
+    {
+        [i_rEntry.mpToolTipString release];
+        i_rEntry.mpToolTipString = nil;
+    }
+}
+
+bool AquaSalMenu::AddMenuBarButton( const SalMenuButtonItem& i_rNewItem )
+{
+    if( ! mbMenuBar || ! VisibleMenuBar() )
+        return false;
+
+    MenuBarButtonEntry* pEntry = findButtonItem( i_rNewItem.mnId );
+    if( pEntry )
+    {
+        releaseButtonEntry( *pEntry );
+        pEntry->maButton = i_rNewItem;
+        pEntry->mpNSImage = CreateNSImage( i_rNewItem.maImage );
+        if( i_rNewItem.maToolTipText.getLength() )
+            pEntry->mpToolTipString = CreateNSString( i_rNewItem.maToolTipText );
+    }
+    else
+    {
+        maButtons.push_back( MenuBarButtonEntry( i_rNewItem ) );
+        maButtons.back().mpNSImage = CreateNSImage( i_rNewItem.maImage );
+        maButtons.back().mpToolTipString = CreateNSString( i_rNewItem.maToolTipText );
+    }
+
+    // lazy create status item
+    SalData::getStatusItem();
+
+    if( pCurrentMenuBar == this )
+        statusLayout();
+
+    return true;
+}
+
+void AquaSalMenu::RemoveMenuBarButton( USHORT i_nId )
+{
+    MenuBarButtonEntry* pEntry = findButtonItem( i_nId );
+    if( pEntry )
+    {
+        releaseButtonEntry( *pEntry );
+        // note: vector guarantees that its contents are in a plain array
+        maButtons.erase( maButtons.begin() + (pEntry - &maButtons[0]) );
+    }
+
+    if( pCurrentMenuBar == this )
+        statusLayout();
+}
+
+Rectangle AquaSalMenu::GetMenuBarButtonRectPixel( USHORT i_nItemId, SalFrame* i_pReferenceFrame )
+{
+    if( GetSalData()->mnSystemVersion < VER_LEOPARD )
+        return Rectangle( Point( -1, -1 ), Size( 1, 1 ) );
+
+    if( ! i_pReferenceFrame || ! AquaSalFrame::isAlive( static_cast<AquaSalFrame*>(i_pReferenceFrame) ) )
+        return Rectangle();
+
+    MenuBarButtonEntry* pEntry = findButtonItem( i_nItemId );
+
+    if( ! pEntry )
+        return Rectangle();
+
+    NSStatusItem* pItem = SalData::getStatusItem();
+    if( ! pItem )
+        return Rectangle();
+
+    NSView* pView = [pItem view];
+    if( ! pView )
+        return Rectangle();
+    NSWindow* pWin = [pView window];
+    if( ! pWin )
+        return Rectangle();
+
+    NSRect aRect = [pWin frame];
+    aRect.origin = [pWin convertBaseToScreen: NSMakePoint( 0, 0 )];
+
+    // make coordinates relative to reference frame
+    static_cast<AquaSalFrame*>(i_pReferenceFrame)->CocoaToVCL( aRect.origin );
+    aRect.origin.x -= i_pReferenceFrame->maGeometry.nX;
+    aRect.origin.y -= i_pReferenceFrame->maGeometry.nY + aRect.size.height;
+
+    return Rectangle( Point( aRect.origin.x, aRect.origin.y ), Size( aRect.size.width, aRect.size.height ) );
 }
 
 // =======================================================================
