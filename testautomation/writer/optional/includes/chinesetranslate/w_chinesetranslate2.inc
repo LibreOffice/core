@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_chinesetranslate2.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:46 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:24:17 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -62,7 +62,7 @@ testcase tChineseTranslate_6
    fSetAsian(fGetLanguageName(86))
 
   printlog " Input a test term"
-   Call wDokSchreiben sTerm
+   Call wTypeKeys sTerm
 
   printlog " Tools/language / Chinese translation ,"
   printlog " Check 'Simplified Chinese to Traditional Chinese'"
@@ -90,7 +90,7 @@ testcase tChineseTranslate_6
    ChineseTranslation.OK
 
   printlog " Check if the result is correct"
-   Call wDokSchreiben "<Home><Shift End>"
+   Call wTypeKeys "<Home><Shift End>"
    EditCopy
    if GetClipboardText <> sMapping then
        Warnlog "117803 - Hope to get " & sMapping & " but got " & GetClipboardText
@@ -131,7 +131,7 @@ testcase tChineseTranslate_7
    fSetAsian(fGetLanguageName(88))
 
   printlog " Input a test term"
-   Call wDokSchreiben sTerm
+   Call wTypeKeys sTerm
 
   printlog " Tools/language / Chinese translation ,"
   printlog " Check Traditional Chinese to Simplified Chinese"
@@ -159,7 +159,7 @@ testcase tChineseTranslate_7
    ChineseTranslation.OK
 
   printlog " Check if the result is correct"
-   Call wDokSchreiben "<Home><Shift End>"
+   Call wTypeKeys "<Home><Shift End>"
    EditCopy
    if GetClipboardText <> sMapping then
        Warnlog "117803 - Hope to get " & sMapping & " but get " & GetClipboardText
@@ -200,7 +200,7 @@ testcase tChineseTranslate_8
    fSetAsian(fGetLanguageName(88))
 
   printlog " Input a test term"
-   Call wDokSchreiben sMapping
+   Call wTypeKeys sMapping
 
   printlog " Tools/language / Chinese translation ,"
   printlog " Check 'Traditional Chinese to Simplified Chinese'"
@@ -231,7 +231,7 @@ testcase tChineseTranslate_8
    ChineseTranslation.OK
 
   printlog " Check if the result is correct"
-   Call wDokSchreiben "<Home><Shift End>"
+   Call wTypeKeys "<Home><Shift End>"
    EditCopy
    if GetClipboardText <> sTerm then
        Warnlog "117803 - Hope to get " & sTerm & " but get " & GetClipboardText
@@ -427,7 +427,7 @@ testcase tUndoRedo
    fSetAsian(fGetLanguageName(86))
 
    printlog " Input some simplified chinese"
-   Call wDokSchreiben sChinese
+   Call wTypeKeys sChinese
 
   printlog " Tools/language / Chinese translation , check"
   printlog " + 'Simplified Chinese to Traditional Chinese' , press OK"
@@ -438,8 +438,8 @@ testcase tUndoRedo
 
   printlog " Edit/Undo"
    EditUndo
-   Call wDokSchreiben "<Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    if GetClipboardText <> sChinese then
        Warnlog "#117810# Hope to get " & sChinese & " but get " & GetClipboardText
@@ -447,8 +447,8 @@ testcase tUndoRedo
 
   printlog " Edit/Redo"
    EditRedo
-   Call wDokSchreiben "<Home>"
-   Call wDokSchreiben "<Shift End>"
+   Call wTypeKeys "<Home>"
+   Call wTypeKeys "<Shift End>"
    EditCopy
    if GetClipboardText <> sExpect then
        Warnlog "#117810# Hope to get " & sExpect & " but get " & GetClipboardText
