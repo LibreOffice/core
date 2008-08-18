@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: wh_o_1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:56 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:32:16 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -204,9 +204,9 @@ testcase tToolsOptionsHTMLLayout
                 if irgendwas(9) Then RechtsAusgerichtet.Uncheck  Else RechtsAusgerichtet.Check
             else
                 Warnlog "- Checkbox 'Right-aligned' is not visible !"
-            endif
-        endif
-    endif
+            end if
+        end if
+    end if
     if irgendwas(8) Then WeichesScrollen.UnCheck           Else WeichesScrollen.Check    
     
     Kontext "ExtrasOptionenDlg"
@@ -238,9 +238,9 @@ testcase tToolsOptionsHTMLLayout
                 if irgendwas(9) = RechtsAusgerichtet.IsChecked then WarnLog "Right-aligned state changed"
             else
                 Warnlog "- Checkbox 'Right-aligned' is not visible !"
-            endif
-        endif
-    endif
+            end if
+        end if
+    end if
     
     printlog ("'/// - all UnCheck -> o ///")
     Hilfslinien.UnCheck
@@ -254,7 +254,7 @@ testcase tToolsOptionsHTMLLayout
     if gAsianSup = True then
         VertikalesLineal.Check
         RechtsAusgerichtet.Uncheck
-    endif
+    end if
     VertikalesLineal.Uncheck
     HorizontalesLinealMasseinheit.Select (1)
     VertikalesLinealMasseinheit.Select (1)
@@ -288,8 +288,8 @@ testcase tToolsOptionsHTMLLayout
             if RechtsAusgerichtet.IsEnabled = True then WarnLog "Right-aligned checkbox is enabled"
         else
             Warnlog "- Checkbox 'Right-aligned' is not visible !"
-        endif
-    endif
+        end if
+    end if
     
     if ( HorizontalesLinealMasseinheit.GetSelIndex <> 1 ) Then WarnLog "HorizontalesLinealMasseinheit is not item 1"
     if ( VertikalesLinealMasseinheit.GetSelIndex <> 1 ) Then WarnLog "VertikalesLinealMasseinheit   is not item 1"

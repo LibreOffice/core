@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: wh_o_3.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:56 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:32:30 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -269,7 +269,7 @@ testcase tToolsOptionsHTMLInsert
     if AutomatischeZahlenerkennung.IsChecked then
         if ( irgendwas(7) = TRUE ) Then Zahlenformaterkennung.Check
         if ( irgendwas(8) = TRUE ) Then AutomatischeAusrichtung.Check
-    endif
+    end if
     if ( irgendwas(6) = TRUE ) Then AutomatischeAusrichtung.Check
 
     Kontext "ExtrasOptionenDlg"
