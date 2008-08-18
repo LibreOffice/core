@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: app.src,v $
- * $Revision: 1.121 $
+ * $Revision: 1.122 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1103,3 +1103,22 @@ String RID_XMLSEC_DOCUMENTSIGNED
     Text [ en-US ] = "(Signed)" ;
 };
 
+Image IMG_MISSING_1
+{
+    ImageBitmap = Bitmap { File = "sc05539.bmp" ; };
+};
+
+Image IMG_MISSING_2
+{
+    ImageBitmap = Bitmap { File = "sc05700.bmp" ; };
+};
+
+Image IMG_MISSING_3
+{
+    ImageBitmap = Bitmap { File = "sc06302.bmp" ; };
+};
+
+Image IMG_MISSING_4
+{
+    ImageBitmap = Bitmap { File = "sn064.bmp" ; };
+};
