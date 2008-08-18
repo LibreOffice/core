@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_010_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:26:31 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:42:11 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -74,7 +74,7 @@ testcase tFormatting
     printlog "- Objectbar ( normal ) : Formatting"
     Call hNewDocument
     printlog " Open new document"
-    Call wDokSchreiben ("Formatting <Shift Home>")
+    Call wTypeKeys ("Formatting <Shift Home>")
     Kontext "TextObjectbar"
     if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )
     
@@ -133,7 +133,7 @@ testcase tFormatting
         printlog " Select 'Justify' in object bar (not in HTML)"
         Blocksatz.Click
         Sleep 1
-    endif
+    end if
     printlog "  - Font color"
     printlog " Select 'Font color' in object bar"
     Schriftfarbe.Click
@@ -156,7 +156,7 @@ testcase tNumbering
     if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )
     printlog " Select 'Numbering' in object bar"
     Numerierung.Click
-    Call wDokSchreiben ("Numbering <Return>", 2)
+    Call wTypeKeys ("Numbering <Return>", 2)
     printlog " Enter word 'Numbering' and '<Return>' two times"
     Call hCloseDocument
     printlog " Close active document"
@@ -172,7 +172,7 @@ testcase tEnumerating
     if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )
     printlog " In object bar click 'Bullets'"
     BulletsOnOff.Click
-    Call wDokSchreiben ("Bullets <Return>", 2)
+    Call wTypeKeys ("Bullets <Return>", 2)
     printlog " Enter word 'Bullets' and '<Return>' two times"
     Call hCloseDocument
     printlog " Close active document"
@@ -207,7 +207,7 @@ testcase tIndentIncreaseDecrease
             EinzugErhoehen.Click
         else
             if i = 1 then Warnlog "Increase Indent is disabled !"
-        endif
+        end if
         wait 500
     next i
 
@@ -218,11 +218,11 @@ testcase tIndentIncreaseDecrease
             EinzugVermindern.Click
         else
             if i = 1 then Warnlog "Decrease Indent is disabled !"
-        endif
+        end if
         wait 500
     next i
     printlog " Enter '<Return>' 2 times"
-    Call wDokSchreiben ("<Return>", 2)
+    Call wTypeKeys ("<Return>", 2)
     Sleep 1
 
     printlog "- Objectbar ( normal ) : Increase Indent with Bullets"
@@ -237,7 +237,7 @@ testcase tIndentIncreaseDecrease
             EinzugErhoehen.Click
         else
             if i = 1 then Warnlog "Increase Indent is disabled !"
-        endif
+        end if
         wait 500
     next i
 
@@ -248,11 +248,11 @@ testcase tIndentIncreaseDecrease
             EinzugVermindern.Click
         else
             if i = 1 then Warnlog "Decrease Indent is disabled !"
-        endif
+        end if
         wait 500
    next i
 
-   Call wDokSchreiben ("<Return>", 2)
+   Call wTypeKeys ("<Return>", 2)
    printlog " Enter '<Return>' 2 times"
    Call hCloseDocument
    printlog " Close active document"
@@ -269,7 +269,7 @@ testcase tNumFormatting
     printlog " Select 'Numbering' in object bar"
     Numerierung.Click
     Sleep 1
-    Call wDokSchreiben ("Objectbar Numbering : Numbering => Style, Font and Size <Shift Home>")
+    Call wTypeKeys ("Objectbar Numbering : Numbering => Style, Font and Size <Shift Home>")
     printlog " Enter some text in document and select it"
     Kontext "TextObjectbar"
     printlog "  - Style"
@@ -301,7 +301,7 @@ testcase tNumFormatting
     endcatch
     Sleep 1
     printlog " Enter '<Return>'"
-    Call wDokSchreiben ("<Return>")
+    Call wTypeKeys ("<Return>")
 
     Call hCloseDocument
     printlog " Close active document"
@@ -339,7 +339,7 @@ testcase tNumLevelUpDown
             Hinunterstufen.Click
         else
             if i = 1 then Warnlog "Level down is disabled!"
-        endif
+        end if
         wait 500
     next i
 
@@ -350,7 +350,7 @@ testcase tNumLevelUpDown
             Hochstufen.Click
         else
             if i = 1 then Warnlog "Level up is disabled! (#i28550)"
-        endif
+        end if
         wait 500
     next i
 
@@ -370,8 +370,8 @@ testcase tNumSubpointsUpDown
     if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )    
     Numerierung.Click
     printlog " Click 'Numbering' in Object bar"
-    Call wDokSchreiben ("Numbering <Return><Tab>", 2)
-    Call wDokSchreiben ("<Tab>Numbering<Up><Up><Up>")
+    Call wTypeKeys ("Numbering <Return><Tab>", 2)
+    Call wTypeKeys ("<Tab>Numbering<Up><Up><Up>")
     Sleep 1
 
     Kontext "NumObjectbar"
@@ -383,7 +383,7 @@ testcase tNumSubpointsUpDown
         HinunterstufenMitUnterpunkten.Click
     else
         if i = 1 then Warnlog "Move up with subpoints is disabled! (#i28550)"
-    endif
+    end if
     Sleep (1)
 	
     for i=1 to 5
@@ -391,13 +391,13 @@ testcase tNumSubpointsUpDown
             HinunterstufenMitUnterpunkten.Click
         else
             if i = 1 then Warnlog "Move down with subpoints is disabled!"
-        endif
+        end if
         Sleep (1)
     next i
 
     if HinunterstufenMitUnterpunkten.IsEnabled then
         Warnlog "Move down with subpoints is enabled though on Level 10"
-    endif
+    end if
     Sleep (1)
         
     printlog "   - 6 times subpoints up"
@@ -407,13 +407,13 @@ testcase tNumSubpointsUpDown
             HochstufenMitUnterpunkten.Click
         else
             if i = 1 then Warnlog "Move up with subpoints is disabled!"
-        endif
+        end if
         Sleep (1)
     next i
 
     if HochstufenMitUnterpunkten.IsEnabled then
         Warnlog "Move up with subpoints is enabled!"
-    endif
+    end if
     
     
     Call hCloseDocument
@@ -432,10 +432,10 @@ testcase tNumMoveUpMoveDown
     if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )
     Numerierung.Click
     printlog " Click 'Numbering' in object bar"
-    Call wDokSchreiben ("Numbering up <Return><Tab>", 3)
-    Call wDokSchreiben ("<Tab>Hallo<Return>")
-    Call wDokSchreiben ("<Shift Tab>", 5)
-    Call wDokSchreiben ("Numbering down <Up><Up>")
+    Call wTypeKeys ("Numbering up <Return><Tab>", 3)
+    Call wTypeKeys ("<Tab>Hallo<Return>")
+    Call wTypeKeys ("<Shift Tab>", 5)
+    Call wTypeKeys ("Numbering down <Up><Up>")
     Sleep 1
 
     printlog "   - 3 times move up"
@@ -474,10 +474,10 @@ testcase tNumSubpointsMoveUpMoveDown
     if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )    
     Numerierung.Click
     printlog " Click 'Numbering' in object bar"
-    Call wDokSchreiben ("hallo <Return><Tab>", 3)
-    Call wDokSchreiben ("<Tab>Hallo<Return>")
-    Call wDokSchreiben ("<Shift Tab>", 5)
-    Call wDokSchreiben ("Hallo <Up><Up>")
+    Call wTypeKeys ("hallo <Return><Tab>", 3)
+    Call wTypeKeys ("<Tab>Hallo<Return>")
+    Call wTypeKeys ("<Shift Tab>", 5)
+    Call wTypeKeys ("Hallo <Up><Up>")
     Sleep 1
 
     printlog "   - move up 3 times"
@@ -502,7 +502,7 @@ testcase tNumSubpointsMoveUpMoveDown
             HinunterschiebenMitUnterpunkten.Click
             Sleep 1
         next i
-    endif
+    end if
 
     Call hCloseDocument
     printlog " Close active document"
@@ -519,7 +519,7 @@ testcase tNumUnnumberedEntry
     if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )    
     Numerierung.Click
     printlog " Click 'Numbering' in object bar"
-    Call wDokSchreiben ("Paragraph without numbering")
+    Call wTypeKeys ("Paragraph without numbering")
     Kontext "NumObjectbar"
     if Not NumObjectbar.Exists then Call hToolbarSelect("BULLETSANDNUMBERING", true)
     try
@@ -543,7 +543,7 @@ testcase tNumRestartNumbering
     if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )    
     printlog " Click 'Numbering' in object bar"
     Numerierung.Click
-    Call wDokSchreiben ("Restart numbering<Return>", 3)
+    Call wTypeKeys ("Restart numbering<Return>", 3)
     printlog " Enter Text and hit <Return> 3 times"
     Kontext "NumObjectbar"
     if Not NumObjectbar.Exists then Call hToolbarSelect("BULLETSANDNUMBERING", true)
@@ -554,7 +554,7 @@ testcase tNumRestartNumbering
         Warnlog "Unable to select function in Toolbar"
     endcatch
 
-    Call wDokSchreiben ("Restart Numbering<Return>", 3)
+    Call wTypeKeys ("Restart Numbering<Return>", 3)
     Call hCloseDocument
     printlog " Close active document"
 endcase
@@ -569,7 +569,7 @@ testcase tNumNumberingOff
     if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )    
     printlog " Click 'Numbering' in object bar"
     Numerierung.Click
-    Call wDokSchreiben ("Numbering Off<Return>", 3)
+    Call wTypeKeys ("Numbering Off<Return>", 3)
     printlog " Enter Text and hit <Return> 3 times"
     Kontext "NumObjectbar"
     if Not NumObjectbar.Exists then Call hToolbarSelect("BULLETSANDNUMBERING", true)
@@ -580,7 +580,7 @@ testcase tNumNumberingOff
         Warnlog "Unable to select function in Toolbar"
     endcatch
 
-    Call wDokSchreiben ("Numbering Off<Return>", 3)
+    Call wTypeKeys ("Numbering Off<Return>", 3)
     printlog " Enter Text and hit <Return> 3 times"
     Call hCloseDocument
     printlog " Close active document"
@@ -604,7 +604,7 @@ testcase tNumNumberingEnumerating
         TabBullet.Cancel
     catch
     endcatch
-    Call wDokSchreiben ("Numbering within a Numbering<Return>")
+    Call wTypeKeys ("Numbering within a Numbering<Return>")
     printlog " Enter text and hit <Return>"
 
     Kontext "NumObjectbar"
@@ -682,7 +682,7 @@ testcase tUpFormatting
     BulletsOnOff.Click
     Sleep 1
     printlog " Enter some text and select it"
-    Call wDokSchreiben ("Bullets => Style, Font and -Size <Shift Home>")
+    Call wTypeKeys ("Bullets => Style, Font and -Size <Shift Home>")
     Kontext "TextObjectbar"
     printlog "  - Style"
     try
@@ -709,7 +709,7 @@ testcase tUpFormatting
     Schriftgroesse.TypeKeys "<Return>"
     Sleep 1
     printlog " Hit <Return> in document"
-    Call wDokSchreiben ("<Return>")
+    Call wTypeKeys ("<Return>")
 
     Call hCloseDocument
     printlog " Close active document"
@@ -746,7 +746,7 @@ testcase tUpLevelUpDown
             Hinunterstufen.Click
         else
             if i = 1 then Warnlog "Level down is disabled !"
-        endif
+        end if
         wait 500
     next i
 
@@ -757,7 +757,7 @@ testcase tUpLevelUpDown
             Hochstufen.Click
         else
             if i = 1 then Warnlog "Level up is disabled ! (#i28550)"
-        endif
+        end if
         wait 500
     next i
 
@@ -778,9 +778,9 @@ testcase tUpSubpointsUpDown
     printlog " Click 'Bullets on/off' in object bar"
     BulletsOnOff.Click
     printlog " Enter some text, hit 'Return' and 'Tab' 2 times"
-    Call wDokSchreiben ("Bullets with Subpoints <Return><Tab>", 2)
+    Call wTypeKeys ("Bullets with Subpoints <Return><Tab>", 2)
     printlog " Hit 'Tab', enter some text, and hit 'Cursor Up' 3 times"
-    Call wDokSchreiben ("<Tab>up and down<Up><Up><Up>")
+    Call wTypeKeys ("<Tab>up and down<Up><Up><Up>")
     Sleep 1
 
     printlog "   - down 6 times"
@@ -801,12 +801,12 @@ testcase tUpSubpointsUpDown
             HinunterstufenMitUnterpunkten.Click
         else
             if i = 1 then Warnlog "Move with Subpoints down is disabled!"
-        endif
+        end if
         Sleep 1
     next i
     if HinunterstufenMitUnterpunkten.IsEnabled then
         Warnlog "Move with Subpoints down is enabled though on level 10!"
-    endif
+    end if
 
     printlog "   - up 6 times"
     for i=1 to 6
@@ -815,12 +815,12 @@ testcase tUpSubpointsUpDown
             HochstufenMitUnterpunkten.Click
         else
             if i = 1 then Warnlog "Move with Subpoints up is disabled! (#i28550)"
-        endif
+        end if
         Sleep 1
     next i
     if HochstufenMitUnterpunkten.IsEnabled then
         Warnlog "Move with Subpoints up is enabled though on level 1!"
-    endif
+    end if
 
     Call hCloseDocument
     printlog " Close active document"
@@ -838,13 +838,13 @@ testcase tUpMoveUpMoveDown
     if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )    
     BulletsOnOff.Click
     printlog " Click 'Bullets on/off' in object bar"
-    Call wDokSchreiben ("move bullets <Return><Tab>", 3)
+    Call wTypeKeys ("move bullets <Return><Tab>", 3)
     printlog " enter some text hit <Return> and <Tab> 3 Times"
-    Call wDokSchreiben ("<Tab>up<Return>")
+    Call wTypeKeys ("<Tab>up<Return>")
     printlog " Enter one word"
-    Call wDokSchreiben ("<Shift Tab>", 5)
+    Call wTypeKeys ("<Shift Tab>", 5)
     printlog " Hit <Tab> 5 Times"
-    Call wDokSchreiben ("and down <Up><Up>")
+    Call wTypeKeys ("and down <Up><Up>")
     printlog " enter text and hit <Cursor Up> 2 times"
     Sleep 1
     Kontext "NumObjectbar"
@@ -887,13 +887,13 @@ testcase tUpSubpointsMoveUpMoveDown
     if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )    
     BulletsOnOff.Click
     printlog " Click 'Bullets on/off' in object bar"
-    Call wDokSchreiben ("move bullets <Return><Tab>", 3)
+    Call wTypeKeys ("move bullets <Return><Tab>", 3)
     printlog " enter some text hit <Return> and <Tab> 3 Times"
-    Call wDokSchreiben ("<Tab>up and down<Return>")
+    Call wTypeKeys ("<Tab>up and down<Return>")
     printlog " Enter one word"
-    Call wDokSchreiben ("<Shift Tab>", 5)
+    Call wTypeKeys ("<Shift Tab>", 5)
     printlog " Hit <Tab> 5 Times"
-    Call wDokSchreiben ("with subpoints <Up><Up>")
+    Call wTypeKeys ("with subpoints <Up><Up>")
     printlog " enter text and hit <Cursor Up> 2 times"
     Sleep 1
     printlog "   - move up 3 times"
@@ -919,7 +919,7 @@ testcase tUpSubpointsMoveUpMoveDown
             HinunterschiebenMitUnterpunkten.Click
             Sleep 1
         next i
-    endif
+    end if
 
     Call hCloseDocument
     printlog " Close active document"
@@ -936,7 +936,7 @@ testcase tUpUnnumberedEntry
     if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )    
     BulletsOnOff.Click
     printlog " Click 'Bullets on/off' in object bar"
-    Call wDokSchreiben ("Paragraph without Bullets")
+    Call wTypeKeys ("Paragraph without Bullets")
     Kontext "NumObjectbar"
     if Not NumObjectbar.Exists then Call hToolbarSelect("BULLETSANDNUMBERING", true)
 
@@ -960,7 +960,7 @@ testcase tUpRestartNumbering
     if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )    
     BulletsOnOff.Click
     printlog " Click 'Bullets on/off' in object bar"
-    Call wDokSchreiben ("restart Numbering<Return>", 3)
+    Call wTypeKeys ("restart Numbering<Return>", 3)
     printlog " enter Text and hit <Return> 3 Times"
     Kontext "NumObjectbar"
     if Not NumObjectbar.Exists then Call hToolbarSelect("BULLETSANDNUMBERING", true)
@@ -971,7 +971,7 @@ testcase tUpRestartNumbering
 		Warnlog "Unable to select function in Toolbar"
     endcatch
 
-    Call wDokSchreiben ("restart Numbering<Return>", 3)
+    Call wTypeKeys ("restart Numbering<Return>", 3)
     printlog " enter Text and hit <Return> 3 Times"
     Call hCloseDocument
     printlog " Close active document"
@@ -987,7 +987,7 @@ testcase tUpNumberingOff
     if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )    
     BulletsOnOff.Click
     printlog " Click 'Bullets on/off' in object bar"
-    Call wDokSchreiben ("Numbering off<Return>", 3)
+    Call wTypeKeys ("Numbering off<Return>", 3)
     printlog " enter Text and hit <Return> 3 Times"
     Kontext "NumObjectbar"
     if Not NumObjectbar.Exists then Call hToolbarSelect("BULLETSANDNUMBERING", true)
@@ -998,7 +998,7 @@ testcase tUpNumberingOff
 		Warnlog "Unable to select function in Toolbar"
     endcatch
 
-    Call wDokSchreiben ("Numbering off<Return>", 3)
+    Call wTypeKeys ("Numbering off<Return>", 3)
     printlog " enter Text and hit <Return> 3 Times"
     Call hCloseDocument
     printlog " Close active document"
@@ -1014,7 +1014,7 @@ testcase tUpNumberingEnumerating
     if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )    
     BulletsOnOff.Click
     printlog " Click 'Numbering on/off' in object bar"
-    Call wDokSchreiben ("Numbering and Bullets within numbering<Return>")
+    Call wTypeKeys ("Numbering and Bullets within numbering<Return>")
     printlog " enter Text and hit <Return>"
     Kontext "NumObjectbar"
     if Not NumObjectbar.Exists then Call hToolbarSelect("BULLETSANDNUMBERING", true)
