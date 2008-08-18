@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_section_2.inc,v $
 '*
-'* $Revision: 1.4 $
+'* $Revision: 1.5 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-24 11:12:12 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:35:05 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -91,11 +91,11 @@ testcase tHideSection_1
     Call hNewDocument
     
     '/// Press Return and then input some test words
-    Call wDokSchreiben "<Return>"
-    Call wDokSchreiben "Section: hidden without condition"
+    Call wTypeKeys "<Return>"
+    Call wTypeKeys "Section: hidden without condition"
     
     '/// Select the test words with SHIFT and HOME keys.
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys "<Shift Home>"
     
     '/// Insert/Section / Section, check 'Hide' in Hide area
     InsertSection
@@ -123,11 +123,11 @@ testcase tHideSection_1
     Call hNewDocument
     
     '/// Press Return and then input some test words
-    Call wDokSchreiben "<Return>"
-    Call wDokSchreiben "Section: hidden without condition"
+    Call wTypeKeys "<Return>"
+    Call wTypeKeys "Section: hidden without condition"
     
     '/// Select the test words with SHIFT and HOME keys.
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys "<Shift Home>"
     
     '/// Insert a section
     Call fInsertSection("HideSection")
@@ -162,17 +162,17 @@ testcase tHideSection_2
     '/// Open a new document. 
     Call hNewDocument
     '/// Press RETURN and then input some test words.
-    Call wDokSchreiben "<Return>"
-    Call wDokSchreiben "Section: hidden with condition<return>"
+    Call wTypeKeys "<Return>"
+    Call wTypeKeys "Section: hidden with condition<return>"
     
     '/// Select test words with UP- then HOME-key. Press SHIFT- and END-keys together.
-    Call wDokSchreiben "<Up><Home><Shift End>"
+    Call wTypeKeys "<Up><Home><Shift End>"
     
     '/// Insert a section.
     Call fInsertSection("HideSection")
     
     '/// Place the cursor out of the section with DOWN key.
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     
     '/// Insert a user field
     '/// Insert/Fields/Others , Tabpage Variables ,
@@ -209,7 +209,7 @@ testcase tHideSection_2
     
     '/// Use UP-, then HOME-keys, then SHIFT- and END-keys together to 
     '///+ check if the test words in section is hidden.
-    Call wDokSchreiben "<Up><Home><Shift End>"
+    Call wTypeKeys "<Up><Home><Shift End>"
     try
         EditCopy
     catch
@@ -219,7 +219,7 @@ testcase tHideSection_2
     
     if GetClipboardText = "Section: hidden with condition" then
         '/// Press DOWN key.
-        Call wDokSchreiben "<Down>"
+        Call wTypeKeys "<Down>"
         Kontext
         '/// Format / Sections
         FormatSections
@@ -238,7 +238,7 @@ testcase tHideSection_2
         sleep(1)
         
         '/// Check if the test words in section are hidden.
-        Call wDokSchreiben "<Up><Home><Shift End>"
+        Call wTypeKeys "<Up><Home><Shift End>"
         try
             EditCopy
             if GetClipboardText = "Section: hidden with condition" then
@@ -265,15 +265,15 @@ testcase tHideSection_3
     Call hNewDocument
 
     '/// Insert some test words
-    Call wDokSchreiben "Test for Heading and Index in section<Return>"
-    Call wDokSchreiben "<Up>"
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "Test for Heading and Index in section<Return>"
+    Call wTypeKeys "<Up>"
+    Call wTypeKeys "<Home><Shift End>"
 
     '/// Insert a section
     fInsertSection("HeadAndIndexInSection")
 
     '/// select part in the section.
-    Call wDokSchreiben "<Home><Shift Mod1 Right>"
+    Call wTypeKeys "<Home><Shift Mod1 Right>"
 
     '/// Select Insert/Indexes and Tables/Entrys and add this part to an index
     InsertIndexesEntry
@@ -294,7 +294,7 @@ testcase tHideSection_3
     VerzeichniseintragEinfuegen.close
 
     '/// Move the cursor out of the section
-    Call wDokSchreiben "<down>"
+    Call wTypeKeys "<down>"
 
     '/// Insert/Indexes and Tables/Indexes and Tables ...
     InsertIndexes
@@ -308,7 +308,7 @@ testcase tHideSection_3
     TabVerzeichnisseVerzeichnis.OK
 
     '/// Edit section with Format/Section and choose 'Hide'
-    Call wDokSchreiben "<Up>"
+    Call wTypeKeys "<Up>"
     Kontext
     FormatSections
     Kontext "BereicheBearbeiten"
@@ -338,9 +338,9 @@ testcase tProtectSection_1
    '/// Open options and check 'Direct-Cursor' in options ///
    fCheckDirectCursor
 
-   Call wDokSchreiben "Should be edited<return>"
-   Call wDokSchreiben "Section: protected"
-   Call wDokSchreiben "<Shift Home>"
+   Call wTypeKeys "Should be edited<return>"
+   Call wTypeKeys "Section: protected"
+   Call wTypeKeys "<Shift Home>"
 
    '/// Insert a protected section  in the bottom ///
 
@@ -358,8 +358,8 @@ testcase tProtectSection_1
 
    '/// 1) Warning should appear when trying to write in protected area! ///
    if GetClipBoardtext = "Section: protected" then
-     Call wDokSchreiben "<Home>"
-     Call wDokSchreiben "<Space>"
+     Call wTypeKeys "<Home>"
+     Call wTypeKeys "<Space>"
      Kontext "Active"
      If Active.Exists then
       Active.ok
@@ -370,8 +370,8 @@ testcase tProtectSection_1
      warnlog "Testtool couldn't find the protected area!"
    end if
 
-   Call wDokSchreiben "<Up>"
-   Call wDokSchreiben "<Home><Shift End>"
+   Call wTypeKeys "<Up>"
+   Call wTypeKeys "<Home><Shift End>"
 
    EditCopy
 
@@ -379,9 +379,9 @@ testcase tProtectSection_1
    '/// +  even the protected section at the end of document
    if GetClipBoardtext = "Should be edited" then
 
-     Call wDokSchreiben "<Home>"
-     Call wDokSchreiben "Can you see what I am doing?"
-     Call wDokSchreiben "<Home><Shift End>"
+     Call wTypeKeys "<Home>"
+     Call wTypeKeys "Can you see what I am doing?"
+     Call wTypeKeys "<Home><Shift End>"
      EditCopy
      If GetClipBoardtext <> "Can you see what I am doing?Should be edited" then warnlog "Should edit in the no-protected area"
 
@@ -640,7 +640,7 @@ testcase tDisplaySection_4
     printlog "   - Check hiding a section hierarchy hides all subsections -- Format Section -3"
     Call hNewDocument
     '/// Creating a new document.
-    Call wDokSchreiben "This is Section_s<Shift Home>"
+    Call wTypeKeys "This is Section_s<Shift Home>"
     '/// Writing This is Section_s, marking it and use Insert / Section to create a <i>Section_s</i>.
     Call fInsertSection("Section_s")
     '/// Saving it as DisplaySection_4.odt in the user-work-dir.
@@ -650,15 +650,15 @@ testcase tDisplaySection_4
     '/// Creating a new document.
     Call hNewDocument
     '/// <b>Entering a RETURN at the beginning of the new document</b>!
-    Call wDokSchreiben "<RETURN>"
+    Call wTypeKeys "<RETURN>"
     '/// Writing <i>This is Section_m</i> and marking it.
     '/// Insert a section named <i>Section_m</i>.
-    Call wDokSchreiben "This is Section_m<Shift Home>"
+    Call wTypeKeys "This is Section_m<Shift Home>"
     Call fInsertSection("Section_m")
     '/// Create a new line with END and RETURN in the actual section.
-    Call wDokSchreiben "<END><RETURN>"
+    Call wTypeKeys "<END><RETURN>"
     '/// Write <i>This Section should be Section_s</i> and mark it.
-    Call wDokSchreiben "This Section should be Section_s<Shift Home>"
+    Call wTypeKeys "This Section should be Section_s<Shift Home>"
     Kontext
     '/// Insert / Section
     InsertSection
@@ -688,18 +688,18 @@ testcase tDisplaySection_4
     TabBereiche.OK
     sleep(2)
 
-    Call wDokSchreiben "<MOD1 HOME>",2
+    Call wTypeKeys "<MOD1 HOME>",2
     '/// Type the keys <CTRL HOME> together and twice.
-    Call wDokSchreiben "<SHIFT END>"
+    Call wTypeKeys "<SHIFT END>"
     '/// Type the keys <SHIFT END> together.
     EditCopy
     '/// Copy it to the clipboard (Edit / Copy).
     '/// <i>This is Section_m</i> should be now in the clipboard.
     if GetClipboardText = "This is Section_m" then
         '/// Type keys <DOWN> and then <HOME>
-        Call wDokSchreiben "<DOWN><HOME>"
+        Call wTypeKeys "<DOWN><HOME>"
         '/// Type keys <SHIFT END> together
-        Call wDokSchreiben "<SHIFT END>"
+        Call wTypeKeys "<SHIFT END>"
         EditCopy
         '/// Copy it to the clipboard (Edit / Copy).
         if GetClipboardText = "This is Section_s" then
@@ -715,9 +715,9 @@ testcase tDisplaySection_4
                 BereicheBearbeiten.OK
                 sleep(2)
 
-                Call wDokSchreiben "<HOME>"
+                Call wTypeKeys "<HOME>"
                 '/// Type key <HOME>
-                Call wDokSchreiben "<SHIFT END>"
+                Call wTypeKeys "<SHIFT END>"
                 '/// Type key <SHIFT END> together
                 EditCopy
                 '/// Copy it to the clipboard (Edit / Copy).
@@ -793,16 +793,16 @@ testcase tDisplaySection_5
    'Generate a .odt file which include a section
    Call hNewDocument
    fInsertSection("Section_S")
-   Call wDokSchreiben "<up>This is section_S"
+   Call wTypeKeys "<up>This is section_S"
    Call hFileSaveAsKill (gOfficePath + "user\work\NavigatorSection_1.odt")
    Call hCloseDocument
 
    Call hNewDocument
 
    '/// Input some test words
-   Call wDokSchreiben "Test is in sectionNormal<return>"
-   Call wDokSchreiben "Test is in sectionHide<return>"
-   Call wDokSchreiben "Test is in sectionProtect<return>"
+   Call wTypeKeys "Test is in sectionNormal<return>"
+   Call wTypeKeys "Test is in sectionHide<return>"
+   Call wTypeKeys "Test is in sectionProtect<return>"
 
    sectionName = Array( _
                          "sectionNormal",  _
@@ -822,12 +822,12 @@ testcase tDisplaySection_5
 
    j = UBound(sectionName)
 
-   Call wDokSchreiben "<Up>",4
+   Call wTypeKeys "<Up>",4
 
    For i = 0 to j-1
-     Call wDokSchreiben "<Home><Shift End>"
+     Call wTypeKeys "<Home><Shift End>"
      fInsertSection(sectionName(i))
-     Call wDokSchreiben "<Down>"
+     Call wTypeKeys "<Down>"
    next i
 
    Kontext
@@ -899,14 +899,14 @@ testcase tDisplaySection_6
                          )
 
    '/// Input some test words
-   Call wDokSchreiben sectionContent(0)
-   Call wDokSchreiben "<return>"
-   Call wDokSchreiben sectionContent(1)
+   Call wTypeKeys sectionContent(0)
+   Call wTypeKeys "<return>"
+   Call wTypeKeys sectionContent(1)
 
-   Call wDokSchreiben "<up><home><Shift End>"
+   Call wTypeKeys "<up><home><Shift End>"
    fInsertSection("section1")
 
-   Call wDokSchreiben "<down><home><Shift End>"
+   Call wTypeKeys "<down><home><Shift End>"
    fInsertSection("section2")
 
    'start up Navigator
@@ -917,7 +917,7 @@ testcase tDisplaySection_6
    for j=1 to 2
       Auswahlliste.TypeKeys "<down><return>"
       Sleep 2
-      Call wDokSchreiben "<home><Shift End>"
+      Call wTypeKeys "<home><Shift End>"
       EditCopy
       if GetClipboardText <> sectionContent(j-1) then  QAErrorLog "The focus is NOT in the correct location"
       Kontext "NavigatorWriter"
@@ -1008,31 +1008,31 @@ testcase tDisplaySection_9
    '/// Open a new writerdocument ///
    Call hNewDocument
    '/// Write some text, selct it and insert a section named 'My Section' ///
-   Call wDokSchreiben "Add a paragraph before and after a section!<Shift Home>"
+   Call wTypeKeys "Add a paragraph before and after a section!<Shift Home>"
    fInsertSection("My Section")
    Sleep 1
    '/// Point cursor before text and press Alt+Return ///
-   Call wDokSchreiben "<Home>"
-   Call wDokSchreiben "<Mod2 Return>"
+   Call wTypeKeys "<Home>"
+   Call wTypeKeys "<Mod2 Return>"
    '/// A paragraph should have been inserted before section ///
-   Call wDokSchreiben "Paragraph before a section"
+   Call wTypeKeys "Paragraph before a section"
    '/// Point cursor at end of text in section and press Alt + Return ///
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Mod2 Return>"
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Mod2 Return>"
    '/// A paragraph should have been inserted after section ///
-   Call wDokSchreiben "Paragraph after a section"
+   Call wTypeKeys "Paragraph after a section"
    '/// Check settings ///
-   Call wDokSchreiben "<Home><Up>",4
+   Call wTypeKeys "<Home><Up>",4
    For i = 1 to 3
       Select Case i
          Case 1
-            Call wDokSchreiben "<Shift End>"
+            Call wTypeKeys "<Shift End>"
             EditCopy
             if GetClipBoardtext <> "Paragraph before a section" then
                warnlog "Problem with paragraph before section"
             end if
          Case 2
-            Call wDokSchreiben "<Shift Down>"
+            Call wTypeKeys "<Shift Down>"
             EditCopy
             if gPlatGroup = "unx" then
                 shouldbe = "Add a paragraph before and after a section!" + chr(10)
@@ -1044,13 +1044,13 @@ testcase tDisplaySection_9
                warnlog "Problem with section"
             end if
          Case 3
-            Call wDokSchreiben "<Shift End>"
+            Call wTypeKeys "<Shift End>"
             EditCopy
             if GetClipBoardtext <> "Paragraph after a section" then
                warnlog "Problem with paragraph after section"
             end if
       end select
-      Call wDokSchreiben "<Home><Down>"
+      Call wTypeKeys "<Home><Down>"
    next i
 
    Call hCloseDocument
