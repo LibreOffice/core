@@ -8,7 +8,7 @@
 #
 # $RCSfile: control.pm,v $
 #
-# $Revision: 1.41 $
+# $Revision: 1.42 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -50,7 +50,7 @@ sub check_system_path
     # The following files have to be found in the environment variable PATH
     # All platforms: zip, unzip
     # Windows only: msvcp70.dll, msvcr70.dll for regcomp.exe
-    # Windows only: "msiinfo.exe", "msidb.exe", "uuidgen.exe", "makecab.exe", "msitran.exe" for msi database and packaging
+    # Windows only: "msiinfo.exe", "msidb.exe", "uuidgen.exe", "makecab.exe", "msitran.exe", "expand.exe" for msi database and packaging
 
     my $onefile;
     my $error = 0;
@@ -69,7 +69,7 @@ sub check_system_path
 
     if (($installer::globals::iswin) && ($installer::globals::iswindowsbuild))
     {
-        @needed_files_in_path = ("zip.exe", "unzip.exe", "msiinfo.exe", "msidb.exe", "uuidgen.exe", "makecab.exe", "msitran.exe");
+        @needed_files_in_path = ("zip.exe", "unzip.exe", "msiinfo.exe", "msidb.exe", "uuidgen.exe", "makecab.exe", "msitran.exe", "expand.exe");
 
         if ( $installer::globals::compiler eq "wntmsci8" )
         {
