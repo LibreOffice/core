@@ -8,7 +8,7 @@
 #
 # $RCSfile: make_installer.pl,v $
 #
-# $Revision: 1.117 $
+# $Revision: 1.118 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -91,6 +91,7 @@ use installer::windows::registry;
 use installer::windows::selfreg;
 use installer::windows::shortcut;
 use installer::windows::strip;
+use installer::windows::update;
 use installer::windows::upgrade;
 use installer::worker;
 use installer::xpdinstaller;
@@ -666,6 +667,36 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     if ( $installer::globals::updatepack ) { $shipinstalldir = installer::control::determine_ship_directory($languagestringref); }
 
+    ###################################################################
+    # Reading an existing msi database, to prepare update and patch
+    ###################################################################
+
+    my $refdatabase = "";
+    my $uniquefilename = "";
+    my $revuniquefilename = "";
+    my $revshortfilename = "";
+    my $allupdatesequences = "";
+    my $allupdatefileorder = "";
+    my $shortdirname = "";
+    my $componentid = "";
+    my $componentidkeypath = "";
+    my $alloldproperties = "";
+    my $allupdatelastsequences = "";
+    my $allupdatediskids = "";
+
+    if ( $installer::globals::iswindowsbuild )
+    {
+        if ( $allvariableshashref->{'UPDATE_DATABASE'} )
+        {
+            installer::logger::print_message( "... analyzing update database ...\n" );
+
+            $installer::globals::updatedatabase = 1;
+            $refdatabase = installer::windows::update::readdatabase($allvariableshashref->{'UPDATE_DATABASE'}, $languagestringref);
+            ($uniquefilename, $revuniquefilename, $revshortfilename, $allupdatesequences, $allupdatefileorder, $shortdirname, $componentid, $componentidkeypath, $alloldproperties, $allupdatelastsequences, $allupdatediskids) = installer::windows::update::create_database_hashes($refdatabase);
+            if ( $mergemodulesarrayref > -1 ) { installer::windows::update::readmergedatabase($mergemodulesarrayref, $languagestringref, $includepatharrayref); }
+        }
+    }
+
     ##############################################
     # Setting global code variables for Windows
     ##############################################
@@ -674,7 +705,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     {
         if ( $installer::globals::iswindowsbuild )
         {
-            installer::windows::msiglobal::set_global_code_variables($languagesarrayref, $languagestringref, $allvariableshashref);
+            installer::windows::msiglobal::set_global_code_variables($languagesarrayref, $languagestringref, $allvariableshashref, $alloldproperties);
         }
     }
 
@@ -1816,10 +1847,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # Collection all available directory trees
         installer::windows::directory::collectdirectorytrees($directoriesforepmarrayref);
 
-        $filesinproductlanguageresolvedarrayref = installer::windows::file::create_files_table($filesinproductlanguageresolvedarrayref, \@allfilecomponents, $newidtdir, $allvariableshashref);
+        $filesinproductlanguageresolvedarrayref = installer::windows::file::create_files_table($filesinproductlanguageresolvedarrayref, \@allfilecomponents, $newidtdir, $allvariableshashref, $uniquefilename, $allupdatesequences, $allupdatefileorder);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles17c.log", $filesinproductlanguageresolvedarrayref); }
+        if ( $installer::globals::updatedatabase ) { installer::windows::file::check_file_sequences($allupdatefileorder); }
 
-        installer::windows::directory::create_directory_table($directoriesforepmarrayref, $newidtdir, $allvariableshashref);
+        installer::windows::directory::create_directory_table($directoriesforepmarrayref, $newidtdir, $allvariableshashref, $shortdirname);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles18.log", $filesinproductlanguageresolvedarrayref); }
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt1.log", $directoriesforepmarrayref); }
 
@@ -1827,7 +1859,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         installer::windows::registry::create_registry_table($registryitemsinproductlanguageresolvedarrayref, \@allregistrycomponents, $newidtdir, $languagesarrayref, $allvariableshashref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "registryitems4.log", $registryitemsinproductlanguageresolvedarrayref); }
 
-        installer::windows::component::create_component_table($filesinproductlanguageresolvedarrayref, $registryitemsinproductlanguageresolvedarrayref, $directoriesforepmarrayref, \@allfilecomponents, \@allregistrycomponents, $newidtdir);
+        installer::windows::component::create_component_table($filesinproductlanguageresolvedarrayref, $registryitemsinproductlanguageresolvedarrayref, $directoriesforepmarrayref, \@allfilecomponents, \@allregistrycomponents, $newidtdir, $componentid, $componentidkeypath);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles19.log", $filesinproductlanguageresolvedarrayref); }
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "registryitems5.log", $registryitemsinproductlanguageresolvedarrayref); }
 
@@ -1841,7 +1873,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         installer::windows::featurecomponent::create_featurecomponent_table($filesinproductlanguageresolvedarrayref, $registryitemsinproductlanguageresolvedarrayref, $newidtdir);
 
-        installer::windows::media::create_media_table($filesinproductlanguageresolvedarrayref, $newidtdir, $allvariableshashref);
+        installer::windows::media::create_media_table($filesinproductlanguageresolvedarrayref, $newidtdir, $allvariableshashref, $allupdatelastsequences, $allupdatediskids);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles20.log", $filesinproductlanguageresolvedarrayref); }
 
         installer::windows::font::create_font_table($filesinproductlanguageresolvedarrayref, $newidtdir);
@@ -2032,7 +2064,10 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 installer::windows::msiglobal::write_summary_into_msi_database($msifilename, $onelanguage, $languagefile, $allvariableshashref);
 
                 # if there are Merge Modules, they have to be integrated now
-                installer::windows::mergemodule::merge_mergemodules_into_msi_database($mergemodulesarrayref, $msifilename, $languagestringref, $onelanguage, $languagefile, $allvariableshashref, $includepatharrayref);
+                $filesinproductlanguageresolvedarrayref = installer::windows::mergemodule::merge_mergemodules_into_msi_database($mergemodulesarrayref, $filesinproductlanguageresolvedarrayref, $msifilename, $languagestringref, $onelanguage, $languagefile, $allvariableshashref, $includepatharrayref, $allupdatesequences, $allupdatelastsequences, $allupdatediskids);
+                if (( $installer::globals::globallogging ) && ($installer::globals::globalloggingform21)) { installer::files::save_array_of_hashes($loggingdir . "productfiles21_" . $onelanguage . ".log", $filesinproductlanguageresolvedarrayref); }
+                $installer::globals::globalloggingform21 = 0;
+                if ( $installer::globals::use_packages_for_cabs ) { installer::windows::media::create_media_table($filesinproductlanguageresolvedarrayref, $newidtdir, $allvariableshashref, $allupdatelastsequences, $allupdatediskids); }
 
                 # copy msi database into installation directory
 
@@ -2076,7 +2111,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         # ... copying MergeModules into installation set
 
-        installer::windows::msiglobal::copy_merge_modules_into_installset($installdir);
+        if ( ! $installer::globals::fix_number_of_cab_files ) { installer::windows::msiglobal::copy_merge_modules_into_installset($installdir); }
 
         # ... copying the child projects
 
