@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_section_3.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:58 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:35:16 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -123,8 +123,8 @@ testcase tBookmarkSection_1
     Call hNewDocument
     
     PrintLog " insert a section , and input Text"
-    Call wDokSchreiben testText
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys testText
+    Call wTypeKeys "<Shift Home>"
     fInsertSection(sectionName)
     
     PrintLog " insert a bookmark in front of Text"
@@ -135,14 +135,14 @@ testcase tBookmarkSection_1
     endcatch
 
     printlog "set the focus end of Text, make sure no text is marked."
-    Call wDokSchreiben "<End><SPACE><BACKSPACE>"
+    Call wTypeKeys "<End><SPACE><BACKSPACE>"
 
     PrintLog " active Navigator, double click the bookmark which be inserted,"
     PrintLog " + then the focus should be in front of $testText"
     Call wNavigatorAuswahl(6,1, true)
     Auswahlliste.TypeKeys "<return>"
     sleep(1)
-'    Call wDokSchreiben "<Shift End>"  'Outcommented since the bookmark also selects the text. Just like it was when it got bookmarked.
+'    Call wTypeKeys "<Shift End>"  'Outcommented since the bookmark also selects the text. Just like it was when it got bookmarked.
 '    sleep(1)
     EditCopy
     sleep(1)
@@ -177,8 +177,8 @@ testcase tBookmarkSection_2
     Call fInsertBookmark(bookmarkName)
     sleep(2)
     PrintLog " insert Text"
-    Call wDokSchreiben testText
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys testText
+    Call wTypeKeys "<Shift Home>"
     sleep(1)
     PrintLog " insert a section with protect option"
     InsertSection
@@ -192,7 +192,7 @@ testcase tBookmarkSection_2
     sleep(2)
     
     PrintLog " set the focus end of Text"
-    Call wDokSchreiben "<End>"
+    Call wTypeKeys "<End>"
     sleep(2)
     PrintLog " active Navigator, double click the bookmark which be inserted,"
     PrintLog " + then the focus should be in front of Text"
@@ -200,7 +200,7 @@ testcase tBookmarkSection_2
     sleep(2)
     Auswahlliste.TypeKeys "<down><return>"
     sleep(2)
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys "<Shift End>"
     sleep(1)
     EditCopy
     sleep(2)
@@ -228,14 +228,14 @@ testcase tFootnoteEndnoteSection_1
 
     PrintLog " insert footnote in front of Text"
     fInsertFootnote("automatic")
-    Call wDokSchreiben "<PageUp>"
+    Call wTypeKeys "<PageUp>"
 
     PrintLog " insert some test words"
-    Call wDokSchreiben testText
+    Call wTypeKeys testText
 
     PrintLog " insert endnote at end of Text"
     fInsertEndnote("automatic")
-    Call wDokSchreiben "<PageUp>"
+    Call wTypeKeys "<PageUp>"
 
     EditSelectAll
     sleep(1)
@@ -274,13 +274,13 @@ testcase tFootnoteEndnoteSection_2
     Call hNewDocument
 
     PrintLog " insert some test words"
-    Call wDokSchreiben testText
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys testText
+    Call wTypeKeys "<Shift Home>"
 
     PrintLog " insert a section which include Text"
     fInsertSection(sectionName)
 
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
 
     PrintLog " insert footnote into the section"
     try
@@ -289,7 +289,7 @@ testcase tFootnoteEndnoteSection_2
        Warnlog "   Could NOT insert a footnote into the section"
     endcatch
 
-    Call wDokSchreiben "<PageUp><End>"
+    Call wTypeKeys "<PageUp><End>"
 
     PrintLog " insert endnote into the section"
     try
@@ -319,11 +319,11 @@ testcase tFootnoteEndnoteSection_3
 
     PrintLog " insert a footnote"
     fInsertFootnote("automatic")
-    Call wDokSchreiben "<PageUp>"
+    Call wTypeKeys "<PageUp>"
 
     PrintLog " insert a endnote"
     fInsertEndnote("automatic")
-    Call wDokSchreiben "<PageUp>"
+    Call wTypeKeys "<PageUp>"
 
     EditSelectAll
     sleep(1)
@@ -349,7 +349,7 @@ testcase tFootnoteEndnoteSection_3
     sleep(1)
 
     if GetClipBoardtext = preMessage then
-        Call wDokSchreiben "<Space>"
+        Call wTypeKeys "<Space>"
         Kontext "Active"
         if Active.Exists then
             Active.ok
@@ -384,14 +384,14 @@ testcase tFootnoteEndnoteSection_4
     Call hNewDocument
 
     fInsertFootnote("automatic")
-    Call wDokSchreiben "<PageUp>"
+    Call wTypeKeys "<PageUp>"
 
-    Call wDokSchreiben testText
+    Call wTypeKeys testText
 
     fInsertEndnote("automatic")
-    Call wDokSchreiben "<PageUp>"
+    Call wTypeKeys "<PageUp>"
 
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys "<Shift Home>"
     fInsertSection(sourceSectionName)
 
     EditSelectAll
@@ -428,7 +428,7 @@ testcase tFootnoteEndnoteSection_4
 
     PrintLog " the footnote should be protected"
     if GetClipBoardtext = preMessage then
-        Call wDokSchreiben "<Space>"
+        Call wTypeKeys "<Space>"
         Kontext "Active"
         if Active.Exists then
             Active.ok
@@ -452,13 +452,13 @@ testcase tFootnoteEndnoteSection_5
 
     PrintLog " Insert a footnote"
     fInsertFootnote("automatic")
-    Call wDokSchreiben "<PAGEUP>"
+    Call wTypeKeys "<PAGEUP>"
     PrintLog " Insert a endnote"
     fInsertEndnote("automatic")
-    Call wDokSchreiben "<PAGEUP>"
-    Call wDokSchreiben "<HOME>"
-    Call wDokSchreiben "<RETURN>"
-    Call wDokSchreiben "<SHIFT END>"
+    Call wTypeKeys "<PAGEUP>"
+    Call wTypeKeys "<HOME>"
+    Call wTypeKeys "<RETURN>"
+    Call wTypeKeys "<SHIFT END>"
     PrintLog " Insert a section with hide option"
     InsertSection
     sleep(1)
@@ -495,21 +495,21 @@ testcase tFootnoteEndnoteSection_6
     Call hNewDocument
     
     fInsertSection(sectionName)
-    Call wDokSchreiben "<Up>"
+    Call wTypeKeys "<Up>"
     
     PrintLog " insert the first footnote"
     fInsertFootnote("automatic")
     Call wNavigatorAuswahl(7,1, true)
     if Seitennummer.GetText <> "1" then warnlog "The first footnote should be in the first page"
     fCloseNavigator
-    Call wDokSchreiben "<PageUp>"
+    Call wTypeKeys "<PageUp>"
     
     PrintLog " insert a endnote"
     fInsertEndnote("automatic")
     Call wNavigatorAuswahl(7,1, true)
     if Seitennummer.GetText <> "2" then warnlog "The first endnote should be in the second page"
     fCloseNavigator
-    Call wDokSchreiben "<PageUp>"
+    Call wTypeKeys "<PageUp>"
     
     PrintLog " insert the second footnote"
     fInsertFootnote("automatic")
@@ -649,7 +649,7 @@ testcase tMultiColumnSection_3
     Call hNewDocument
 
     PrintLog " input some text , less 1 line"
-    Call wDokSchreiben testText1
+    Call wTypeKeys testText1
     EditSelectAll
 
     PrintLog " insert a section ,set column to $columnNumber"
@@ -663,19 +663,19 @@ testcase tMultiColumnSection_3
     TabSpalten.OK
     sleep 1
 
-    Call wDokSchreiben "<Escape>"
+    Call wTypeKeys "<Escape>"
 
     PrintLog " input '-' in the end of the text check if"
     PrintLog " + the '-' will appare to second colum"
     For i = 0 to 100
-        Call wDokSchreiben testText2
-        Call wDokSchreiben "<Shift Home>"
+        Call wTypeKeys testText2
+        Call wTypeKeys "<Shift Home>"
         sleep(1)
         EditCopy
         sleep(1)
         if GetClipboardText = testText2 then goto GoON
-        Call wDokSchreiben "<Escape>"
-        Call wDokSchreiben "<End>"
+        Call wTypeKeys "<Escape>"
+        Call wTypeKeys "<End>"
     next i
     Warnlog "We can't get " +hopeResult2 +" in second column"
     
@@ -701,15 +701,15 @@ testcase tOperationSection_1
     Call hNewDocument
 
     PrintLog " insert a section"
-    Call wDokSchreiben "<Return>"
+    Call wTypeKeys "<Return>"
     fInsertSection(sectionName)
-    Call wDokSchreiben "<Up>"
-    Call wDokSchreiben testText1
-    Call wDokSchreiben "<Up>"
+    Call wTypeKeys "<Up>"
+    Call wTypeKeys testText1
+    Call wTypeKeys "<Up>"
     EditSelectAll
 
     PrintLog " Cut section"
-    Call wDokSchreiben "<Mod1 x>"
+    Call wTypeKeys "<Mod1 x>"
 
     try
         FormatSections
@@ -720,14 +720,14 @@ testcase tOperationSection_1
    endcatch
 
     PrintLog " Paste section"
-    Call wDokSchreiben "<Mod1 v>"
+    Call wTypeKeys "<Mod1 v>"
 
     'start up Navigator
     Call wNavigatorAuswahl(7,1, true)
     PrintLog " 1)check section name"
     if Auswahlliste.GetSelText = sectionName then
         PrintLog " 2)check the content in section"
-        Call wDokSchreiben "<home><Shift End>"
+        Call wTypeKeys "<home><Shift End>"
         sleep(1)
         EditCopy
         sleep(1)
@@ -745,22 +745,22 @@ testcase tOperationSection_1
     Call hNewDocument
 
     PrintLog " insert a section"
-    Call wDokSchreiben "<Return>"
+    Call wTypeKeys "<Return>"
     Call fInsertSection(sectionName)
-    Call wDokSchreiben "<Up>"
-    Call wDokSchreiben testText2
-    Call wDokSchreiben "<Up>"
+    Call wTypeKeys "<Up>"
+    Call wTypeKeys testText2
+    Call wTypeKeys "<Up>"
     EditSelectAll
 
     PrintLog " Copy section"
-    Call wDokSchreiben "<Mod1 c>"
+    Call wTypeKeys "<Mod1 c>"
 
     Call hCloseDocument
 
     Call hNewDocument
 
     'Paste section
-    Call wDokSchreiben "<Mod1 v>"
+    Call wTypeKeys "<Mod1 v>"
 
     'start up Navigator
     Call wNavigatorAuswahl(7,1, true)
@@ -769,7 +769,7 @@ testcase tOperationSection_1
     if Auswahlliste.GetSelText = sectionName then
         PrintLog " 2)check the content in section"
         sleep 1
-        Call wDokSchreiben "<home><Shift End>"
+        Call wTypeKeys "<home><Shift End>"
         sleep(1)
         EditCopy
         sleep(1)
@@ -786,15 +786,15 @@ testcase tOperationSection_1
     Call hNewDocument
 
     PrintLog " insert a section"
-    Call wDokSchreiben "<Return>"
+    Call wTypeKeys "<Return>"
     Call fInsertSection(sectionName)
-    Call wDokSchreiben "<Up>"
-    Call wDokSchreiben testText3
-    Call wDokSchreiben "<Up>"
+    Call wTypeKeys "<Up>"
+    Call wTypeKeys testText3
+    Call wTypeKeys "<Up>"
     EditSelectAll
 
     PrintLog " delete the section"
-    Call wDokSchreiben "<Delete>"
+    Call wTypeKeys "<Delete>"
 
     PrintLog " check if section exists or not"
     try
@@ -827,11 +827,11 @@ testcase tOperationSection_2
     Call hNewDocument
 
     PrintLog " insert a section"
-    Call wDokSchreiben "<Return>"
+    Call wTypeKeys "<Return>"
     Call fInsertSection(sectionName)
-    Call wDokSchreiben "<Up>"
-    Call wDokSchreiben testText1
-    Call wDokSchreiben "<Up>"
+    Call wTypeKeys "<Up>"
+    Call wTypeKeys testText1
+    Call wTypeKeys "<Up>"
     EditSelectAll
     sleep 1
     PrintLog " Cut section"
@@ -856,7 +856,7 @@ testcase tOperationSection_2
     PrintLog " 1)check section name"
     if Auswahlliste.GetSelText = sectionName then
         PrintLog " 2)check the content in section"
-        Call wDokSchreiben "<home><Shift End>"
+        Call wTypeKeys "<home><Shift End>"
         sleep(1)
         EditCopy
         sleep(1)
@@ -871,11 +871,11 @@ testcase tOperationSection_2
     Call hNewDocument
 
     PrintLog " insert a section"
-    Call wDokSchreiben "<Return>"
+    Call wTypeKeys "<Return>"
     Call fInsertSection(sectionName)
-    Call wDokSchreiben "<Up>"
-    Call wDokSchreiben testText2
-    Call wDokSchreiben "<Up>"
+    Call wTypeKeys "<Up>"
+    Call wTypeKeys testText2
+    Call wTypeKeys "<Up>"
     EditSelectAll
     sleep 1
 
@@ -898,7 +898,7 @@ testcase tOperationSection_2
     if Auswahlliste.GetSelText = sectionName then
         PrintLog " 2)check the content in section"
         sleep 1
-        Call wDokSchreiben "<home><Shift End>"
+        Call wTypeKeys "<home><Shift End>"
         sleep(1)
         EditCopy
         sleep(1)
@@ -928,7 +928,7 @@ testcase tOperationSection_3
     
     PrintLog " New document"
     Call hNewDocument
-    Call wDokSchreiben "<Return>"
+    Call wTypeKeys "<Return>"
     
     PrintLog " Insert a section with default name"
     InsertSection
@@ -943,7 +943,7 @@ testcase tOperationSection_3
     sleep(1)
     EditCopy
     sleep(1)
-    Call wDokSchreiben "<Escape>"
+    Call wTypeKeys "<Escape>"
     sleep(1)
     EditPaste
     
@@ -1258,13 +1258,13 @@ testcase tWrappedSections_1
     Call hNewDocument
 
     PrintLog " insert wrapping section"
-    Call wDokSchreiben testText
+    Call wTypeKeys testText
     EditSelectAll
     fInsertSection(wrappingSection)
 
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<Mod1 Right>",2
-    Call wDokSchreiben "<Mod1 Shift Right>"
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<Mod1 Right>",2
+    Call wTypeKeys "<Mod1 Shift Right>"
 
     try
         PrintLog " insert wrapped section"
@@ -1306,11 +1306,11 @@ testcase tWrappedSections_2
     Call hNewDocument
 
     PrintLog " Insert wrapped section"
-    Call wDokSchreiben "<Return>"
-    Call wDokSchreiben(testTextInFirstline)
-    Call wDokSchreiben "<Return>"
-    Call wDokSchreiben(testTextInSecondline)
-    Call wDokSchreiben "<MOD1 HOME><SHIFT END>"
+    Call wTypeKeys "<Return>"
+    Call wTypeKeys(testTextInFirstline)
+    Call wTypeKeys "<Return>"
+    Call wTypeKeys(testTextInSecondline)
+    Call wTypeKeys "<MOD1 HOME><SHIFT END>"
     Call fInsertSection(wrappedSection)
 
     EditSelectAll
@@ -1358,13 +1358,13 @@ testcase tWrappedSections_3
     fCheckDirectCursor
     
     PrintLog " insert wrapping section"
-    Call wDokSchreiben testText
+    Call wTypeKeys testText
     EditSelectAll
     fInsertSection(wrappingSection)
     
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<Mod1 Right>",2
-    Call wDokSchreiben "<Mod1 Shift Right>"
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<Mod1 Right>",2
+    Call wTypeKeys "<Mod1 Shift Right>"
     
     PrintLog " insert wrapped section"
     fInsertSection(wrappedSection)
@@ -1377,12 +1377,12 @@ testcase tWrappedSections_3
     Geschuetzt.Check
     BereicheBearbeiten.OK
     
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Home><Shift End>"
     sleep(1)
     EditCopy
     sleep(1)
     if GetClipBoardtext = contentInWrappedSection then
-        Call wDokSchreiben "<Space>"
+        Call wTypeKeys "<Space>"
         Kontext "Active"
         if Active.Exists then
             Active.ok
@@ -1412,13 +1412,13 @@ testcase tWrappedSections_4
     Call hNewDocument
     
     PrintLog " insert wrapping section"
-    Call wDokSchreiben "<RETURN>"
-    Call wDokSchreiben testText
-    Call wDokSchreiben "<SHIFT HOME>"
+    Call wTypeKeys "<RETURN>"
+    Call wTypeKeys testText
+    Call wTypeKeys "<SHIFT HOME>"
     Call fInsertSection(wrappingSection)
-    Call wDokSchreiben "<HOME>"
-    Call wDokSchreiben "<MOD1 RIGHT>" , 2
-    Call wDokSchreiben "<MOD1 SHIFT RIGHT>"
+    Call wTypeKeys "<HOME>"
+    Call wTypeKeys "<MOD1 RIGHT>" , 2
+    Call wTypeKeys "<MOD1 SHIFT RIGHT>"
     PrintLog " insert wrapped section"
     Call fInsertSection(wrappedSection)
     PrintLog " format/section, choose hide checkbox in wrappingSection"
@@ -1459,13 +1459,13 @@ testcase tWrappedSections_5
 
     Call hNewDocument
     PrintLog " insert wrapping section"
-    Call wDokSchreiben testText
+    Call wTypeKeys testText
     EditSelectAll
     Call fInsertSection(wrappingSection)
     
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<Mod1 Right>",2
-    Call wDokSchreiben "<Mod1 Shift Right>"
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<Mod1 Right>",2
+    Call wTypeKeys "<Mod1 Shift Right>"
     
     PrintLog " insert wrapped section"
     fInsertSection(wrappedSection)
@@ -1549,13 +1549,13 @@ testcase tWrappedSections_6
     Call hNewDocument
     
     PrintLog " insert wrapping section"
-    Call wDokSchreiben testText
+    Call wTypeKeys testText
     EditSelectAll
     fInsertSection(wrappingSection)
     
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<Mod1 Right>",2
-    Call wDokSchreiben "<Mod1 Shift Right>"
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<Mod1 Right>",2
+    Call wTypeKeys "<Mod1 Shift Right>"
     
     PrintLog " insert wrapped section"
     fInsertSection(wrappedSection)
@@ -1647,13 +1647,13 @@ testcase tWrappedSections_7
 
     Call hNewDocument    
     PrintLog " insert wrapping section"
-    Call wDokSchreiben testText
+    Call wTypeKeys testText
     EditSelectAll
     Call fInsertSection(wrappingSection)
 
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<Mod1 Right>",2
-    Call wDokSchreiben "<Mod1 Shift Right>"
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<Mod1 Right>",2
+    Call wTypeKeys "<Mod1 Shift Right>"
     
     PrintLog " insert wrapped section"
     Call fInsertSection(wrappedSection)
