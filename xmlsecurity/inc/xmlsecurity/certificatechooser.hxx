@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: certificatechooser.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +57,7 @@ class HeaderBar;
 class CertificateChooser : public ModalDialog
 {
 private:
+    cssu::Reference< cssu::XComponentContext > mxCtx;
     cssu::Reference< dcss::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
     cssu::Sequence< cssu::Reference< dcss::security::XCertificate > > maCerts;
     SignatureInformations maCertsToIgnore;
@@ -83,7 +84,7 @@ private:
     void ImplInitialize();
 
 public:
-    CertificateChooser( Window* pParent, cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const SignatureInformations& rCertsToIgnore );
+    CertificateChooser( Window* pParent, cssu::Reference< cssu::XComponentContext>& rxCtx, cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const SignatureInformations& rCertsToIgnore );
     ~CertificateChooser();
 
     short Execute();
