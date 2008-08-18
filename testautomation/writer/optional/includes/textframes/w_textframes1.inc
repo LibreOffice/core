@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_textframes1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:04:00 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:37:25 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -108,7 +108,7 @@ testcase tTextframes_1
     Sleep 1
     
     'set focus to the frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     
     Sleep 2
     
@@ -163,7 +163,7 @@ testcase tTextframes_1
     Wait 500
     
     'set focus to the frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Wait 500
     
     try
@@ -203,15 +203,15 @@ testcase tTextframes_2
     TabType.OK
 
     '/// A return on a selected frame points cursor into frame
-    Call wDokSchreiben "<Return>"
+    Call wTypeKeys "<Return>"
     Wait 500
 
     '/// Input text full of frame
-    Call wDokSchreiben sText
+    Call wTypeKeys sText
     Wait 500
 
-    Call wDokSchreiben "<End>"
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys "<End>"
+    Call wTypeKeys "<Shift Home>"
     Wait 500
 
     EditCopy
@@ -250,15 +250,15 @@ testcase tTextframes_3
     TabType.OK
 
     '/// A return on a selected frame points cursor into frame
-    Call wDokSchreiben "<Return>"
+    Call wTypeKeys "<Return>"
     Wait 500
 
     '/// Input text full of frame
-    Call wDokSchreiben sText
+    Call wTypeKeys sText
     Wait 500
 
-    Call wDokSchreiben "<End>"
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys "<End>"
+    Call wTypeKeys "<Shift Home>"
     Wait 500
 
     EditCopy
@@ -424,8 +424,8 @@ testcase tTextframes_6
             catch
                 Active.No
             endcatch
-        endif
-    endif
+        end if
+    end if
     Kontext "FindAndReplace"
     FindAndReplace.Cancel
     
@@ -436,9 +436,9 @@ testcase tTextframes_6
     if Seitennummer.GetText <> "1" then
         fCloseNavigator
         Wait 500
-        Call wDokSchreiben "<Home>"
+        Call wTypeKeys "<Home>"
         Wait 500
-        Call wDokSchreiben "<BackSpace>"
+        Call wTypeKeys "<BackSpace>"
         Wait 500
         Goto Check1
     end if
@@ -446,14 +446,14 @@ testcase tTextframes_6
     fCloseNavigator
     Wait 500
     
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
     
     '/// Press Return before "bottom" , now the "bottom"
     '/// + should be in the second page
-    Call wDokSchreiben "<Return>" , 15
+    Call wTypeKeys "<Return>" , 15
     Wait 500
     
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys "<Shift End>"
     Wait 500
     EditCopy
     if GetClipboardText <> sTestText then Warnlog "The test text isn't right !"
@@ -468,7 +468,7 @@ testcase tTextframes_6
     
     '/// Set focus to the frame  , the frame should be
     '/// + still in the first page
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     Kontext "Navigator"
@@ -504,7 +504,7 @@ testcase tTextframes_7
     Call hFileOpen(sTestFile,false)
     
     '/// check if the frame is in the first page
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     Check:
@@ -516,8 +516,8 @@ testcase tTextframes_7
         fCloseNavigator
         Sleep 1
     
-        Call wDokSchreiben "<ESCAPE>"
-        Call wDokSchreiben "<MOD1 Home>"
+        Call wTypeKeys "<ESCAPE>"
+        Call wTypeKeys "<MOD1 Home>"
     
         EditSearchAndReplace
         Kontext "FindAndReplace"
@@ -527,24 +527,24 @@ testcase tTextframes_7
         Sleep 1
         FindAndReplace.Cancel
     
-        Call wDokSchreiben "<Home>"
-        Call wDokSchreiben "<Backspace>"
+        Call wTypeKeys "<Home>"
+        Call wTypeKeys "<Backspace>"
         Goto Check
     else
         fCloseNavigator
         Wait 500
     end if
     
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Sleep 1
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
     
     '/// Press Return before the second paragraph
-    Call wDokSchreiben "<Return>" , 3
+    Call wTypeKeys "<Return>" , 3
     Wait 500
     
     '/// Set focus to the frame  , the frame should be in the second page
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     Kontext
@@ -580,7 +580,7 @@ testcase tTextframes_8
     Call hFileOpen(sTestFile,false)
     
     '/// check if the frame is in the first page
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     Check1:
@@ -592,8 +592,8 @@ testcase tTextframes_8
         fCloseNavigator
         Sleep 1
     
-        Call wDokSchreiben "<ESCAPE>"
-        Call wDokSchreiben "<MOD1 Home>"
+        Call wTypeKeys "<ESCAPE>"
+        Call wTypeKeys "<MOD1 Home>"
     
         EditSearchAndReplace
         Kontext "FindAndReplace"
@@ -603,24 +603,24 @@ testcase tTextframes_8
         Sleep 1
         FindAndReplace.Cancel
     
-        Call wDokSchreiben "<Home>"
-        Call wDokSchreiben "<Backspace>"
+        Call wTypeKeys "<Home>"
+        Call wTypeKeys "<Backspace>"
         Goto Check1
     else
         fCloseNavigator
         Wait 500
     end if
     
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Sleep 1
-    Call wDokSchreiben "<End>"
+    Call wTypeKeys "<End>"
     
     '/// Press Return behind the character which the frame is anchored.
-    Call wDokSchreiben "<Return>" , 8
+    Call wTypeKeys "<Return>" , 8
     Wait 500
     
     '/// Set focus to the frame  , the frame should be still in the first page
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     Kontext
@@ -635,7 +635,7 @@ testcase tTextframes_8
     
     Call hFileOpen(sTestFile,false)
     
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     Check2:
@@ -647,8 +647,8 @@ testcase tTextframes_8
         fCloseNavigator
         Sleep 1
     
-        Call wDokSchreiben "<ESCAPE>"
-        Call wDokSchreiben "<MOD1 Home>"
+        Call wTypeKeys "<ESCAPE>"
+        Call wTypeKeys "<MOD1 Home>"
     
         EditSearchAndReplace
         Kontext "FindAndReplace"
@@ -658,8 +658,8 @@ testcase tTextframes_8
         Sleep 1
         FindAndReplace.Cancel
     
-        Call wDokSchreiben "<Home>"
-        Call wDokSchreiben "<Backspace>"
+        Call wTypeKeys "<Home>"
+        Call wTypeKeys "<Backspace>"
         Goto Check2
     else
         fCloseNavigator
@@ -667,12 +667,12 @@ testcase tTextframes_8
     end if
     
     '/// Press Return  in front of the character which the frame is anchored.
-    Call wDokSchreiben "<MOD1 Home>"
-    Call wDokSchreiben "<Return>" , 8
+    Call wTypeKeys "<MOD1 Home>"
+    Call wTypeKeys "<Return>" , 8
     Wait 500
     
     '/// Set focus to the frame  , the frame should be in the second page
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     Kontext
@@ -707,7 +707,7 @@ testcase tTextframes_9
     Call hFileOpen(sTestFile,false)
     
     'check if the frame is in the first page
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     Check1:
@@ -719,8 +719,8 @@ testcase tTextframes_9
         fCloseNavigator
         Sleep 1
     
-        Call wDokSchreiben "<ESCAPE>"
-        Call wDokSchreiben "<MOD1 Home>"
+        Call wTypeKeys "<ESCAPE>"
+        Call wTypeKeys "<MOD1 Home>"
     
         EditSearchAndReplace
         Kontext "FindAndReplace"
@@ -730,24 +730,24 @@ testcase tTextframes_9
         Sleep 1
         FindAndReplace.Cancel
     
-        Call wDokSchreiben "<Home>"
-        Call wDokSchreiben "<Backspace>"
+        Call wTypeKeys "<Home>"
+        Call wTypeKeys "<Backspace>"
         Goto Check1
     else
         fCloseNavigator
         Wait 500
     end if
     
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Sleep 1
-    Call wDokSchreiben "<End>"
+    Call wTypeKeys "<End>"
     
     '/// Press Return behind the the frame.
-    Call wDokSchreiben "<Return>" , 8
+    Call wTypeKeys "<Return>" , 8
     Wait 500
     
     '/// Set focus to the frame  , the frame should be still in the first page
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     Kontext
@@ -771,8 +771,8 @@ testcase tTextframes_9
         fCloseNavigator
         Sleep 1
     
-        Call wDokSchreiben "<ESCAPE>"
-        Call wDokSchreiben "<MOD1 Home>"
+        Call wTypeKeys "<ESCAPE>"
+        Call wTypeKeys "<MOD1 Home>"
     
         EditSearchAndReplace
         Kontext "FindAndReplace"
@@ -782,8 +782,8 @@ testcase tTextframes_9
         Sleep 1
         FindAndReplace.Cancel
     
-        Call wDokSchreiben "<Home>"
-        Call wDokSchreiben "<Backspace>"
+        Call wTypeKeys "<Home>"
+        Call wTypeKeys "<Backspace>"
         Goto Check2
     else
         fCloseNavigator
@@ -791,14 +791,14 @@ testcase tTextframes_9
     end if
     
     '/// Press Return  in front of the frame
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Sleep 1
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<Return>" , 8
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<Return>" , 8
     Wait 500
     
     '/// Set focus to the frame  , the frame should be in the second page
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     Kontext
@@ -834,9 +834,9 @@ testcase tTextframes_10
     Call hFileOpen(sTestFile1,false)
     
     'Press return to ensure the frame is in 2nd column
-    Call wDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
     Sleep 1
-    Call wDokSchreiben "<Return>" , 8
+    Call wTypeKeys "<Return>" , 8
     Sleep 1
     
     '/// Set the column to 1
@@ -846,7 +846,7 @@ testcase tTextframes_10
     TabSpalten.OK
     
     '/// Check if the frame is in the second page
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     Kontext
@@ -869,7 +869,7 @@ testcase tTextframes_10
     Call hFileOpen(sTestFile2,false)
     
     'check if the frame is in the 2nd page
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     Kontext
@@ -877,16 +877,16 @@ testcase tTextframes_10
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then
-        Call wDokSchreiben "<ESCAPE>"
-        Call wDokSchreiben "<MOD1 Home>"
+        Call wTypeKeys "<ESCAPE>"
+        Call wTypeKeys "<MOD1 Home>"
         Sleep 1
-        Call wDokSchreiben "<Return>" , 8
+        Call wTypeKeys "<Return>" , 8
         Sleep 1
     end if
     fCloseNavigator
     Wait 500
     
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Sleep 1
     
     '/// Set the column to 2
@@ -896,7 +896,7 @@ testcase tTextframes_10
     TabSpalten.OK
     
     '/// Check if the frame is in the first page
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     Kontext
@@ -951,8 +951,8 @@ Check1:
             catch
                 Active.No
             endcatch
-        endif
-    endif
+        end if
+    end if
     Kontext "FindAndReplace"
     FindAndReplace.Cancel
 
@@ -963,9 +963,9 @@ Check1:
     if Seitennummer.GetText <> "1" then
         fCloseNavigator
         Wait 500
-        Call wDokSchreiben "<Home>"
+        Call wTypeKeys "<Home>"
         Wait 500
-        Call wDokSchreiben "<BackSpace>"
+        Call wTypeKeys "<BackSpace>"
         Wait 500
         Goto Check1
     end if
@@ -991,8 +991,8 @@ Check2:
             catch
                 Active.No
             endcatch
-        endif
-    endif
+        end if
+    end if
     Kontext "FindAndReplace"
     FindAndReplace.Close
 
@@ -1003,9 +1003,9 @@ Check2:
     if Seitennummer.GetText <> "2" then
         fCloseNavigator
         Wait 500
-        Call wDokSchreiben "<MOD1 Home>"
+        Call wTypeKeys "<MOD1 Home>"
         Wait 500
-        Call wDokSchreiben "<Return>"
+        Call wTypeKeys "<Return>"
         Wait 500
         Goto Check2
     end if
@@ -1014,12 +1014,12 @@ Check2:
     Wait 500
 
     '/// Delete the 1st paragraph mark
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
     Wait 500
-    Call wDokSchreiben "<Backspace>"
+    Call wTypeKeys "<Backspace>"
     Sleep 1
 
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
 
     '/// Check if frame is in 1st page
@@ -1346,7 +1346,7 @@ testcase tTextframes_15
     '/// + close the navigator
     Call fCloseNavigator
     
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     
     '/// Check if the name is changed correctly
     Call fFormatFrame("TabZusaetze")
@@ -1405,7 +1405,7 @@ testcase tTextframes_16
     '/// + close navigaotr
     Call fCloseNavigator
     
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     
     '/// Check if the name is changed correctly
     Call fFormatFrame("TabZusaetze")

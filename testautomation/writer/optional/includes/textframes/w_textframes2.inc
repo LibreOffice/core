@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_textframes2.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:04:00 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:37:37 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -78,21 +78,21 @@ testcase tTextframes_17
     InhaltSchuetzen.Check
     TabZusaetze.OK
     
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     Call gMouseClick(32,55)
     Wait 500
     
     '/// check if contents can be inserted into frame
-    Call wDokSchreiben sTestText
+    Call wTypeKeys sTestText
     
     Kontext "Active"
     if Active.Exists then
         Active.Ok
     else
         Warnlog "The contents should not be inserted into frame!"
-    endif
+    end if
     
     Call hCloseDocument
 
@@ -120,25 +120,25 @@ testcase tTextframes_18
     TabZusaetze.OK
     
     '/// Move the frame to right (Right key 4 times)
-    Call wDokSchreiben "<Right>" , 4
+    Call wTypeKeys "<Right>" , 4
     Wait 500
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     Call gMouseClick(55,50)
     Sleep 2
     
     '/// check if the frame is moved
-    Call wDokSchreiben sTestText
+    Call wTypeKeys sTestText
     
     Kontext "Active"
     if Active.Exists then
         Active.Ok
     else
         Warnlog "The contents should NOT be inserted into the frame!"
-    endif
+    end if
     
-    Call wDokSchreiben "<Shift Left>"
+    Call wTypeKeys "<Shift Left>"
     try
         EditCopy
         Wait 500
@@ -171,24 +171,24 @@ testcase tTextframes_19
     TabZusaetze.OK
     
     '/// Move the frame to right (Right key 4 times)
-    Call wDokSchreiben "<Right>" , 4
+    Call wTypeKeys "<Right>" , 4
     Wait 500
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     Call gMouseClick(52,55)
     Wait 500
     
     '/// check if the frame is moved
-    Call wDokSchreiben sTestText
+    Call wTypeKeys sTestText
     
     Kontext "Active"
     if Active.Exists then
         Warnlog "#i40348# The frame should move by keyboard!"
         Active.Ok
-    endif
+    end if
     
-    Call wDokSchreiben "<Shift Left>"
+    Call wTypeKeys "<Shift Left>"
     try
         EditCopy
         Wait 500
@@ -220,7 +220,7 @@ testcase tTextframes_20
     Call hFileOpen(sTestFile,false)
     
     '/// Set focus to frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format / Frame / Wrap , check None in setting area
@@ -240,8 +240,8 @@ testcase tTextframes_20
     Call fCloseNavigator
     
     '/// Check if test text are in 2nd page
-    Call wDokSchreiben "<ESCAPE>"
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<ESCAPE>"
+    Call wTypeKeys "<Home><Shift End>"
     
     try
         EditCopy
@@ -285,7 +285,7 @@ testcase tTextframes_21
     Call hFileOpen(sTestFile,false)
     
     '/// Set focus to frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format / Frame / Wrap , check through in setting area
@@ -305,8 +305,8 @@ testcase tTextframes_21
     Call fCloseNavigator
     
     '/// Check if test text are in 1st page
-    Call wDokSchreiben "<ESCAPE>"
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<ESCAPE>"
+    Call wTypeKeys "<Home><Shift End>"
     
     try
         EditCopy
@@ -353,7 +353,7 @@ testcase tTextframes_22
     printlog "- Test wrap - before"
     
     '/// Set focus to frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format / Frame / Wrap , check before in setting area
@@ -373,9 +373,9 @@ testcase tTextframes_22
     Call fCloseNavigator
     
     '/// Check if test text are in 1st page
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Sleep 1
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Home><Shift End>"
     
     try
         EditCopy
@@ -398,7 +398,7 @@ testcase tTextframes_22
     printlog "- Test wrap - after"
     
     'Set focus to frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format / Frame / Wrap , check after in setting area
@@ -418,9 +418,9 @@ testcase tTextframes_22
     Call fCloseNavigator
     
     '/// Check if test text are in 2nd page
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Sleep 1
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Home><Shift End>"
     
     try
         EditCopy
@@ -467,7 +467,7 @@ testcase tTextframes_23
     printlog "- Test wrap - before"
     
     '/// Set focus to frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format / Frame / Wrap , check before in setting area
@@ -487,9 +487,9 @@ testcase tTextframes_23
     Call fCloseNavigator
     
     '/// Check if test text are in 1st page
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Sleep 1
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Home><Shift End>"
     
     try
         EditCopy
@@ -512,7 +512,7 @@ testcase tTextframes_23
     printlog "- Test wrap - after"
     
     '/// Set focus to frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format / Frame / Wrap , check after in setting area
@@ -532,9 +532,9 @@ testcase tTextframes_23
     Call fCloseNavigator
     
     '/// Check if test text are in 2nd page
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Sleep 1
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Home><Shift End>"
     
     try
         EditCopy
@@ -767,8 +767,8 @@ testcase tTextframes_26
     if (Spaltenbreite3.GetText <> sNewWidthColumn3) then
 		if (Spaltenbreite3.GetText <> sNewWidthColumn4) then
 			Warnlog "the column3's width isn't set correctly ! (not" & Spaltenbreite3.GetText & " but " & sNewWidthColumn3 & ")"
-		endif
-	endif
+		end if
+	end if
     if Abstand12.GetText      <> sSpacing1        then Warnlog "the 1st spacing isn't set correctly !"
     if Abstand23.GetText      <> sSpacing2        then Warnlog "the 2nd spacing isn't set correctly !"
     TabSpalten.Cancel
@@ -866,7 +866,7 @@ testcase tTextframes_28
     Sleep 1
     TabUmlauf.OK
     Sleep 2
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Sleep 2
     
     '/// Insert another frame
@@ -884,11 +884,11 @@ testcase tTextframes_28
     Sleep 1
     TabUmlauf.OK
     
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Sleep 2
     
     '/// Set focus to second frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     wait 500
     
     '/// Check second frame's name
@@ -902,7 +902,7 @@ testcase tTextframes_28
     TabUmlauf.Cancel
     
     '/// Set focus to first frame
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
     Sleep 2
     
     '/// Check the frame's name and warp status
@@ -1062,7 +1062,7 @@ testcase tTextframes_31
     '/// Check if the frame is non-editable
     Call hFileOpen(sTestFile,false)
     
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     
     try
         FormatFrame
@@ -1106,7 +1106,7 @@ testcase tTextframes_32
     Editierbar.Check
     wait 500
     TabZusaetze.OK
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     
     '/// Save the file and set the file's property to Read-only
     Call hFileSaveAs (sTestFile ,true)
@@ -1123,13 +1123,13 @@ testcase tTextframes_32
     Wait 500
     
     try
-        Call wDokSchreiben sText
+        Call wTypeKeys sText
         Sleep 1
     catch
         Warnlog "Can't input text into frame !"
     endcatch
     
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys "<Shift Home>"
     Sleep 1
     
     EditCopy

@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_textframes3.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:04:00 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:37:48 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -70,14 +70,14 @@ testcase tTextframes_33
     '/// insert a frame
     Call fInsertFrame(30,30 , 30,40)
     
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert another frame
     Call fInsertFrame(40,55 , 60,65)
     
     '/// Set focus to first frame
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
     Wait 500
     
     '/// Active frame bar
@@ -103,7 +103,7 @@ testcase tTextframes_33
     TabType.Cancel
     
     '/// Set focus to second frame
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
     Wait 500
     
     '/// + 'AutoSize' should be actived in 2nd frame (target)
@@ -141,7 +141,7 @@ testcase tTextframes_34
     ObjektName.SetText sOriginalName
     TabZusaetze.OK
     
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert another frame , set frame name
@@ -152,7 +152,7 @@ testcase tTextframes_34
     TabZusaetze.OK
     
     '/// Set focus to first frame
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
     Wait 500
     
     '/// Active frame bar
@@ -164,17 +164,17 @@ testcase tTextframes_34
     Wait 500
     
     '/// Click second frame
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
     Wait 500
     
-    Call wDokSchreiben "<RETURN>"
+    Call wTypeKeys "<RETURN>"
     Wait 500
     
     Call wBlindtextEinfuegen
     Wait 500
     
     '/// set focus to the frame which the focus is in
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Sleep 1
     
     '/// Check if the link is showed correctly (Format.Frame.Options)
@@ -203,14 +203,14 @@ testcase tTextframes_35
     '/// insert a frame
     Call fInsertFrame(30,30 , 30,40)
     
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert another frame
     Call fInsertFrame(40,50 , 60,65)
     
     '/// Set focus to first frame
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
     Wait 500
     
     '/// Active frame bar
@@ -232,7 +232,7 @@ testcase tTextframes_35
     TabZusaetze.Cancel
     
     '/// Set focus to second frame
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
     Wait 500
     
     '/// Check if the link is showed correctly (Format.Frame.Options)
@@ -268,7 +268,7 @@ testcase tTextframes_36
     Call hFileOpen(sTestFile,false)
     
     'Set focus to first frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Wait 500
     
     'Check if frame is in 1st page
@@ -282,7 +282,7 @@ testcase tTextframes_36
     Call fCloseNavigator
     
     'Set focus to second frame
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
     Wait 500
     
     'Check if frame is in 2nd page
@@ -296,7 +296,7 @@ testcase tTextframes_36
     Call fCloseNavigator
     
     '/// Set focus to first frame
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
     Wait 500
     
     '/// Set link in Format/Frame/Options
@@ -316,7 +316,7 @@ testcase tTextframes_36
     TabZusaetze.Cancel
     
     '/// Set focus to second frame
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
     Wait 500
     
     '/// Check if the link is correctly
@@ -353,7 +353,7 @@ testcase tTextframes_37
     Call hFileOpen(sTestFile,false)
     
     '/// Set focus to first frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     
     Wait 500
     
@@ -374,7 +374,7 @@ testcase tTextframes_37
     TabZusaetze.Cancel
     
     '/// Set focus to second frame
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
     Wait 500
     
     '/// Check if the link is correctly
@@ -410,7 +410,7 @@ testcase tTextframes_38
     Call hFileOpen(sTestFile,false)
     
     '/// Set focus to first frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Wait 500
     
     '/// Set link in Format.Frame.Options
@@ -430,7 +430,7 @@ testcase tTextframes_38
     TabZusaetze.Cancel
     
     '/// Set focus to second frame
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
     Wait 500
     
     '/// Check if the link is correctly
@@ -476,7 +476,7 @@ testcase tTextframes_39
     wait 500
     TabType.OK
     
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert another frame and set Horizontal and Vertical
@@ -489,7 +489,7 @@ testcase tTextframes_39
     wait 500
     TabType.OK
     
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     
     '/// link two frames
     Call fFormatFrame("TabZusaetze")
@@ -498,9 +498,9 @@ testcase tTextframes_39
     TabZusaetze.OK
     
     '/// Move 1st frame with keyboard (right and down)
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     Sleep 1
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     Sleep 1
     
     Call fFormatFrame("TabType")
@@ -508,12 +508,12 @@ testcase tTextframes_39
     if VerticalBy.GetText   <> sVerticalByNew1   then QAErrorLog "#110726#1st frame: Vertical by isn't right!"
     TabType.Cancel
     
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     
     '/// Move 2nd frame with keyboard (right and down)
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     Sleep 1
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     Sleep 1
     
     '/// Check the result
@@ -547,13 +547,13 @@ testcase tTextframes_40
     wait 500
     TabType.OK
     
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert another frame
     Call fInsertFrame(40,80 , 60,95)
     
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     
     '/// Active frame bar
     Call hToolbarSelect("FRAME", true )
@@ -567,7 +567,7 @@ testcase tTextframes_40
     Wait 500
     
     '/// Move 1st frame with keyboard (right)
-    Call wDokSchreiben "<Right>"
+    Call wTypeKeys "<Right>"
     Sleep 1
     
     '/// Edit / Undo
@@ -600,14 +600,14 @@ testcase tTextframes_41
     '/// insert a frame
     Call fInsertFrame(30,30 , 30,40)
     
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert another frame
     Call fInsertFrame(40,50 , 60,65)
     
     '/// Set focus to 1st frame
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     
     '/// Active frame bar
     Call hToolbarSelect("FRAME", true )
@@ -666,13 +666,13 @@ testcase tTextframes_42
     
     Call wInsertFrame
     
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert another frame in bodytext
     Call fInsertFrame(40,50 , 60,65)
     
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     
     '/// Try to link two frames
     Call hToolbarSelect("FRAME", true )
@@ -714,13 +714,13 @@ testcase tTextframes_43
     
     Call wInsertFrame
     
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert another frame in bodytext
     Call fInsertFrame(40,50 , 60,70)
     
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     
     '/// Try to link two frames
     Call fFormatFrame("TabZusaetze")
@@ -755,18 +755,18 @@ testcase tTextframes_44
     '/// insert a frame
     Call fInsertFrame(30,30 , 30,40)
     
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert another frame
     Call fInsertFrame(40,50 , 60,65)
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     
     '/// input some text in the target frame(2nd frame)
     Call gMouseClick(50,60)
-    Call wDokSchreiben sText
+    Call wTypeKeys sText
     
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     
     '/// link two frames
     Call hToolbarSelect("FRAME", true )
@@ -800,14 +800,14 @@ testcase tTextframes_45
     '/// insert a frame
     Call fInsertFrame(30,30 , 30,40)
     
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert another frame
     Call fInsertFrame(40,50 , 60,65)
     
     '/// set focus to 1st frame
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
     Sleep 1
     
     '/// link two frames (2nd frame is target frame)
@@ -819,7 +819,7 @@ testcase tTextframes_45
     Wait 500
     
     '/// link two frames (1st frame is target frame)
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
     Call hToolbarSelect("FRAME", true )
     Wait 500
     Verketten.Click
@@ -851,13 +851,13 @@ testcase tTextframes_46
     '/// insert a frame
     Call fInsertFrame(30,30 , 30,40)
     
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert another frame
     Call fInsertFrame(30,50 , 30,60)
     
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert 3rd frame
@@ -865,7 +865,7 @@ testcase tTextframes_46
     Wait 500
     
     '/// set focus to 1st frame
-    Call wDokSchreiben "<TAB>"
+    Call wTypeKeys "<TAB>"
     Sleep 1
     
     '/// link two frames 1 & 2 (2nd frame is target frame)
@@ -878,7 +878,7 @@ testcase tTextframes_46
     Wait 500
     
     '/// set focus to 3rd frame
-    Call wDokSchreiben "<TAB>" , 2
+    Call wTypeKeys "<TAB>" , 2
     
     '/// link two frames 3 & 2 (2nd frame is target frame)
     Kontext "FrameObjectbar"
@@ -919,11 +919,11 @@ testcase tTextframes_47
     TabBereiche.OK
     wait 500
     
-    Call wDokSchreiben "<up>" , 1
+    Call wTypeKeys "<up>" , 1
     
     '/// Insert a frame (A) in the section
     Call wInsertFrame
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     
     '/// Set the section to be protected
     FormatSections
@@ -972,7 +972,7 @@ testcase tTextframes_48
     TabBereiche.OK
     wait 500
     
-    Call wDokSchreiben "<up>" , 1
+    Call wTypeKeys "<up>" , 1
     
     '/// Insert a frame (A) in the section , and check "editable in protected documents"
     Call wInsertFrame
@@ -982,7 +982,7 @@ testcase tTextframes_48
     wait 500
     TabZusaetze.OK
     
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     
     '/// Set the section to be protected
     FormatSections
