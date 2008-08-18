@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ModuleCtrl.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -715,6 +715,9 @@ public class ModuleCtrl {
                 oneLang = oneLang.trim();
                 if ( systemLanguages.contains(oneLang)) {
                     foundLang = true;
+                    int count = installData.getPreselectedLanguages();
+                    count++;
+                    installData.setPreselectedLanguages(count);
                     break;
                 }
             }
@@ -727,6 +730,18 @@ public class ModuleCtrl {
         for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
             PackageDescription child = (PackageDescription) e.nextElement();
             checkLanguagesPackages(child, installData);
+        }
+    }
+
+    static public void setLanguagesPackages(PackageDescription packageData) {
+        if (( packageData.getPkgLanguage() != null ) && ( ! packageData.getPkgLanguage().equals(""))) {
+            // This is a package with a specific language.
+            packageData.setSelectionState(PackageDescription.INSTALL);
+        }
+
+        for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
+            PackageDescription child = (PackageDescription) e.nextElement();
+            setLanguagesPackages(child);
         }
     }
 
