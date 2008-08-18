@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlsignaturehelper.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,8 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/security/SerialNumberAdapter.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -63,12 +65,11 @@
 
 using namespace ::com::sun::star;
 
-XMLSignatureHelper::XMLSignatureHelper( const uno::Reference< lang::XMultiServiceFactory>& rxMSF)
-    : mxMSF(rxMSF), mbODFPre1_2(false)
+XMLSignatureHelper::XMLSignatureHelper( const uno::Reference< uno::XComponentContext >& rxCtx)
+    : mxCtx(rxCtx), mbODFPre1_2(false)
 {
-    mpXSecController = new XSecController;
+    mpXSecController = new XSecController(rxCtx);
     mxSecurityController = mpXSecController;
-    mpXSecController->setFactory( rxMSF );
     mbError = false;
 }
 
@@ -93,11 +94,10 @@ bool XMLSignatureHelper::Init( const rtl::OUString& rTokenPath )
 
 void XMLSignatureHelper::ImplCreateSEInitializer()
 {
-    rtl::OUString sSEInitializer;
-
-    sSEInitializer = rtl::OUString::createFromAscii( SEINITIALIZER_COMPONENT );
+    rtl::OUString sSEInitializer(rtl::OUString::createFromAscii( SEINITIALIZER_COMPONENT ));
+    uno::Reference< lang::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     mxSEInitializer = uno::Reference< com::sun::star::xml::crypto::XSEInitializer > (
-            mxMSF->createInstance( sSEInitializer ), uno::UNO_QUERY );
+        xMCF->createInstanceWithContext( sSEInitializer,  mxCtx ), uno::UNO_QUERY );
 }
 
 void XMLSignatureHelper::SetUriBinding( com::sun::star::uno::Reference< com::sun::star::xml::crypto::XUriBinding >& rxUriBinding )
@@ -200,10 +200,10 @@ uno::Reference<xml::sax::XDocumentHandler> XMLSignatureHelper::CreateDocumentHan
     /*
      * get SAX writer component
      */
+    uno::Reference< lang::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     uno::Reference< io::XActiveDataSource > xSaxWriter(
-        mxMSF->createInstance(rtl::OUString::createFromAscii(
-            "com.sun.star.xml.sax.Writer")),
-        uno::UNO_QUERY );
+        xMCF->createInstanceWithContext(rtl::OUString::createFromAscii(
+            "com.sun.star.xml.sax.Writer"), mxCtx ), uno::UNO_QUERY );
 
     DBG_ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
 
@@ -318,10 +318,12 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const com::sun::star::uno::Refe
     /*
      * get SAX parser component
      */
+    uno::Reference< lang::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     uno::Reference< xml::sax::XParser > xParser(
-        mxMSF->createInstance(
-            rtl::OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+        xMCF->createInstanceWithContext(
+            rtl::OUString::createFromAscii("com.sun.star.xml.sax.Parser"), mxCtx ),
         uno::UNO_QUERY );
+
     DBG_ASSERT( xParser.is(), "Can't create parser" );
 
     /*
@@ -462,6 +464,3 @@ IMPL_LINK( XMLSignatureHelper, StartVerifySignatureElement, const uno::Reference
 
     return 0;
 }
-
-
-
