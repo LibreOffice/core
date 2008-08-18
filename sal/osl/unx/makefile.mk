@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.35 $
+# $Revision: 1.36 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -116,7 +116,7 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
 SLOFILES += $(SLO)$/osxlocale.obj
 .ENDIF
 
-.IF "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || "$(OS)$(CPU)"=="LINUXS"
+.IF "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || "$(OS)$(CPU)"=="LINUXS" || "$(OS)"=="MACOSX"
 SLOFILES += $(SLO)$/backtrace.obj
 OBJFILES += $(OBJ)$/backtrace.obj
 .ENDIF
