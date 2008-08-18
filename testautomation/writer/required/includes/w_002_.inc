@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_002_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:26:28 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:40:51 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -108,7 +108,7 @@ testcase tEditRepeat
     Call hTabelleEinfuegen
 
     PrintLog "Move cursor out of table"
-    Call wDokSchreiben("<Down><Down>")
+    Call wTypeKeys("<Down><Down>")
 
     PrintLog "Edit / Repeat"
     EditRepeat
@@ -127,7 +127,7 @@ testcase tEditPaste
     Call hNewDocument
 
     PrintLog "Insert some text in document"
-    Call wDokSchreiben("What a beatiful day !")
+    Call wTypeKeys("What a beatiful day !")
 
     PrintLog "Edit / Select All"
     EditSelectAll
@@ -136,11 +136,11 @@ testcase tEditPaste
     PrintLog "Edit / Paste"
     EditPaste
     PrintLog "Type <Shift Home >"
-    Call wDokSchreiben("<Shift Home>")
+    Call wTypeKeys("<Shift Home>")
     PrintLog "Edit / Copy"
     EditCopy
     PrintLog "Enter 2 Line breaks"
-    Call wDokSchreiben("<Return>", 2)
+    Call wTypeKeys("<Return>", 2)
     PrintLog "Edit / Paste"
     EditPaste
     PrintLog "Edit / Select All"
@@ -166,7 +166,7 @@ testcase tEditPasteSpecial
         PrintLog "Paste from external clipboard with Edit / Paste in Office"
         EditPaste
 WaitSlot(1000)
-        Call wDokSchreiben("<Mod1 A>")
+        Call wTypeKeys("<Mod1 A>")
         Wait(200)
         EditCopy
         WaitSlot(1000)
@@ -174,7 +174,7 @@ WaitSlot(1000)
             Warnlog "External Clipboard not available!"
             Warnlog "Is: " & GetClipboardText
         end if
-        Call wDokSchreiben("<End><Return>")
+        Call wTypeKeys("<End><Return>")
         SetClipboard ""
         SetClipboard "2nd Text from external clipboard!"
         try
@@ -204,7 +204,7 @@ WaitSlot(1000)
                             endcatch
                         end if
                     else
-                        Call wDokSchreiben("<Home><Shift End>")
+                        Call wTypeKeys("<Home><Shift End>")
                         EditCopy
                         if GetClipboardText <> "2nd Text from external clipboard!" then Warnlog "Wrong Text inserted! Is: " & GetClipboardText
                     end if
@@ -218,9 +218,9 @@ WaitSlot(1000)
 
     PrintLog "  - Internal Clipboard with StarOffice Writer-Text"
     PrintLog "Enter some text in writer and copy it"
-    Call wDokSchreiben("<Return>Text from internal clipboard<Shift Home>")
+    Call wTypeKeys("<Return>Text from internal clipboard<Shift Home>")
     EditCopy
-    Call wDokSchreiben("<End><Return>")
+    Call wTypeKeys("<End><Return>")
     EditPasteSpecialWriter
     PrintLog "Edit / Paste / Special"
     Kontext "InhaltEinfuegen"
@@ -228,7 +228,7 @@ WaitSlot(1000)
         DialogTest ( InhaltEinfuegen )
         Auswahl.Select 1
         InhaltEinfuegen.OK
-        Call wDokSchreiben "<Home><Shift End>"
+        Call wTypeKeys "<Home><Shift End>"
         EditCopy
         if GetClipboardText <> "Text from internal clipboard" then Warnlog "Wrong Text inserted! Is: " & GetClipboardText
     else
@@ -276,7 +276,7 @@ testcase tEditChanges
     Call hNewDocument
     PrintLog "Open new document"
 
-    Call wDokSchreiben("Hallo<Return><Return>")
+    Call wTypeKeys("Hallo<Return><Return>")
     PrintLog "Enter some text in document"
     Wait(200)
     UseBindings
@@ -284,8 +284,8 @@ testcase tEditChanges
     EditChangesRecord
     WaitSlot(1000)
     PrintLog "Enter some more text in document"
-    Call wDokSchreiben("Aenderung 1<Return><Up><Up><End>")
-    Call wDokSchreiben("<Backspace>", 4)
+    Call wTypeKeys("Aenderung 1<Return><Up><Up><End>")
+    Call wTypeKeys("<Backspace>", 4)
     Wait(200)
     UseBindings
     PrintLog "Select Edit / Changes / Record"
@@ -328,14 +328,14 @@ testcase tEditChanges
         Warnlog "Dialog 'Redlining' not opened!"
     end if
 
-    Call wDokSchreiben("<Down><Right>")
+    Call wTypeKeys("<Down><Right>")
     UseBindings
     try
         PrintLog "Point cursor into a changed text in document"
         EditChangesComment
         PrintLog "Edit / Changes / Comment"
     catch
-        Call wDokSchreiben("<Up>")
+        Call wTypeKeys("<Up>")
         try
             EditChangesComment
         catch
@@ -730,8 +730,8 @@ testcase tEditAutotext
 		end if
 	next i
 	Autotext.Close
-	Call wDokSchreiben ( "Create a dummy autotext" )
-	Call wDokSchreiben ( "<Shift Home>" )
+	Call wTypeKeys ( "Create a dummy autotext" )
+	Call wTypeKeys ( "<Shift Home>" )
 	EditAutotext
 	Kontext "AutoText"
     WaitSlot(3000)
@@ -757,7 +757,7 @@ testcase tEditAutotext
 			endcatch
 		endcatch
 		Autotext.Close
-		Call wDokSchreiben "<Home>"
+		Call wTypeKeys "<Home>"
 	else
 		Warnlog "Unable to create autotext"
 		Autotext.Close
@@ -853,7 +853,7 @@ testcase tEditAutotext
         Call hMenuSelectNr ( 4 )
         Sleep 1
         PrintLog "Enter some text in document and close it"
-        Call wDokSchreiben("Hallo")
+        Call wTypeKeys("Hallo")
         if GetDocumentCount = 2 then
             QAErrorlog "#116138#The autotext has been edited in current document!"
         else
@@ -934,7 +934,7 @@ testcase tEditHyperlink
     endcatch
 
     PrintLog "Set cursor into link"
-    Call wDokSchreiben("<Left>")
+    Call wTypeKeys("<Left>")
     try
         PrintLog "Edit / Hyperlink has to be enabled"
         EditHyperlink
@@ -1066,7 +1066,7 @@ testcase tEditFields
         Schliessen.Click
 
         PrintLog "Put cursor in front of field"
-        Call wDokSchreiben("<Home>")
+        Call wTypeKeys("<Home>")
 
         PrintLog "Edit / Fields"
         EditFields
@@ -1114,7 +1114,7 @@ testcase tEditFieldsInputList
             NewListEntry.Settext "MyNewListEntry"
             wait 200
             if AddListEntry.IsEnabled= True then AddListEntry.Click
-        endif
+        end if
         PrintLog "Close Fields dialog"
         if EntrysList.GetItemCount <> 1 then
             Warnlog "Entry has not been added to list!"
@@ -1123,9 +1123,9 @@ testcase tEditFieldsInputList
             Einfuegen.Click
             Wait 500
             Schliessen.Click
-            Call wDokSchreiben "<Home>"
+            Call wTypeKeys "<Home>"
             try
-                Call wDokSchreiben "<Mod1 Shift F9>"
+                Call wTypeKeys "<Mod1 Shift F9>"
                 wait 200
                 Kontext "EditInputList"
                 if EditInputList.Exists then
@@ -1158,7 +1158,7 @@ testcase tEditFootnote
     Kontext "FussnoteEinfuegen"
     FussnoteEinfuegen.OK
 
-    Call wDokSchreiben("<PageUp><Left>")
+    Call wTypeKeys("<PageUp><Left>")
 
     PrintLog "Edit / Footnote"
     EditFootnote
@@ -1185,8 +1185,8 @@ testcase tEditIndexEntry
     Call hNewDocument
 
     PrintLog "Write down something in document"
-    Call wDokSchreiben("Ich werde ein Verzeichniseintrag")
-    Call wDokSchreiben("<Left>")
+    Call wTypeKeys("Ich werde ein Verzeichniseintrag")
+    Call wTypeKeys("<Left>")
     InsertIndexesEntry
     PrintLog "Insert / Indexes / Entry"
     Kontext "VerzeichniseintragEinfuegen"
@@ -1198,7 +1198,7 @@ testcase tEditIndexEntry
     endcatch
     EinfuegenSchliessen.Click
 
-    Call wDokSchreiben("<End><Left>")
+    Call wTypeKeys("<End><Left>")
     try
         PrintLog "Point cursor in Index entry"
         EditIndexEntry
@@ -1298,7 +1298,7 @@ testcase tEditImageMap
 
     if hGrafikEinfuegen ( gTesttoolPath & "writer\required\input\graphics\jolink.jpg" )=true then
 		Kontext "ImageMapEditor"
-		if ImageMapEditor.Exists then ImageMapEditor.Close    
+		if ImageMapEditor.Exists then ImageMapEditor.Close
 		try
 			EditImageMap
 			Kontext "ImageMapEditor"
@@ -1308,7 +1308,7 @@ testcase tEditImageMap
 		catch
 			Warnlog "Edit/ImageMap disabled!"
 		endcatch
-    endif
+    end if
 
     Call hCloseDocument
     PrintLog "Close active document"
@@ -1323,9 +1323,11 @@ testcase tEditObjectEdit
     PrintLog "Open new document"
 
     InsertObjectChart
-    Call gMouseClick (99,99)
+    Call gMouseClick (99,1)
+    Call gMouseClick (99,1)
+    Call gMouseClick (99,1)
     wait 200
-    Call wDokSchreiben("<SHIFT F4>")
+    Call wTypeKeys("<SHIFT F4>")
     try
         EditObjectEdit
     catch
