@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: digitalsignaturesdialog.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,6 +63,7 @@ class HeaderBar;
 class DigitalSignaturesDialog : public ModalDialog
 {
 private:
+    cssu::Reference< cssu::XComponentContext >& mxCtx;
     XMLSignatureHelper      maSignatureHelper;
 
     css::uno::Reference < css::embed::XStorage > mxStore;
@@ -112,7 +113,7 @@ private:
 
 public:
     DigitalSignaturesDialog( Window* pParent, cssu::Reference<
-        css::lang::XMultiServiceFactory >& rxMSF, DocumentSignatureMode eMode,
+        cssu::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
         sal_Bool bReadOnly );
     ~DigitalSignaturesDialog();
 

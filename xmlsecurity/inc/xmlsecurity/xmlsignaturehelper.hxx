@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlsignaturehelper.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,7 @@
 
 #include <xmlsecurity/sigstruct.hxx>
 
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/crypto/XUriBinding.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
@@ -55,8 +56,6 @@ class Time;
 namespace com {
 namespace sun {
 namespace star {
-namespace lang {
-    class XMultiServiceFactory; }
 namespace io {
     class XOutputStream;
     class XInputStream; }
@@ -109,7 +108,7 @@ typedef ::std::vector<XMLSignatureVerifyResult> XMLSignatureVerifyResults;
 class XMLSignatureHelper
 {
 private:
-    ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory> mxMSF;
+    ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxCtx;
     ::com::sun::star::uno::Reference< com::sun::star::xml::crypto::sax::XSecurityController > mxSecurityController;
     ::com::sun::star::uno::Reference< com::sun::star::xml::crypto::XUriBinding > mxUriBinding;
 
@@ -133,7 +132,7 @@ private:
     XMLSignatureHelper(const XMLSignatureHelper&);
 
 public:
-    XMLSignatureHelper(const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory>& rxMSF );
+    XMLSignatureHelper(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& mrCtx );
     ~XMLSignatureHelper();
 
                 // Initialize the security context with given crypto token.
