@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docrecovery.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2043,6 +2043,8 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 
 #if defined(WNT) || defined(OS2)
             OUString    ustrValue = OUString::createFromAscii("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
+#elif defined( MACOSX )
+            OUString    ustrValue = OUString::createFromAscii("~");
 #else
             OUString    ustrValue = OUString::createFromAscii("$SYSUSERCONFIG");
 #endif
@@ -2099,6 +2101,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             String  aFileContent;
             ::osl::File aFile( rURL );
 
+            printf( "Loading %s:", OString( rURL.getStr(), rURL.getLength(), osl_getThreadTextEncoding() ).getStr() );
             if ( ::osl::FileBase::E_None == aFile.open( OpenFlag_Read ) )
             {
                 ::rtl::OString  aContent;
@@ -2122,7 +2125,11 @@ void BrokenRecoveryDialog::impl_askForSavePath()
                 aFileContent = ustrContent;
 
                 aFile.close();
+
+                printf( "SUCCEEDED\n" );
             }
+            else
+                printf( "FAILED\n" );
 
             return aFileContent;
         }
