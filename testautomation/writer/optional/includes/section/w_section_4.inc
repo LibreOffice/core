@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_section_4.inc,v $
 '*
-'* $Revision: 1.3 $
+'* $Revision: 1.4 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-25 15:24:07 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:35:27 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -167,10 +167,10 @@ testcase tSectionInTables_2
     Call fInsertTable(tableName , columnNumber, rowNumber)
 
    '/// input some test text in the table
-    Call wDokSchreiben testText
+    Call wTypeKeys testText
 
    '/// select text
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys "<Shift Home>"
 
    '/// insert section include select text
     try
@@ -184,8 +184,8 @@ testcase tSectionInTables_2
         BereicheBearbeiten.Cancel
 
       ' Check the content in section is correct or NOT
-        Call wDokSchreiben "<Home>"
-        Call wDokSchreiben "<Shift End>"
+        Call wTypeKeys "<Home>"
+        Call wTypeKeys "<Shift End>"
         EditCopy
         if GetClipBoardText <> testText then Warnlog "The content in section is NOT right : " +GetClipBoardText
 
@@ -294,17 +294,17 @@ testcase tSectionInTables_4
        '/// insert section
         Call fInsertSection(sectionName)
 
-        Call wDokSchreiben "<Up>"
+        Call wTypeKeys "<Up>"
 
        '/// insert a footnote
         Call fInsertFootnote("character",footNote)
 
-        Call wDokSchreiben "<PageUp>"
+        Call wTypeKeys "<PageUp>"
 
        '/// insert a endnote
         fInsertEndnote("character",endNote)
 
-        Call wDokSchreiben "<PageUp>"
+        Call wTypeKeys "<PageUp>"
 
        '/// Check the section name is correct or NOT (Format/Section)
         Kontext
@@ -314,7 +314,7 @@ testcase tSectionInTables_4
         BereicheBearbeiten.Cancel
 
        '/// Check the footnote and endnote are correct or NOT
-        Call wDokSchreiben "<Shift Home>"
+        Call wTypeKeys "<Shift Home>"
         EditCopy
         if GetClipBoardText <> footNote+endNote then Warnlog "The footnote/endnote are NOt inserted into section correctly!"
     catch
@@ -345,11 +345,11 @@ testcase tSectionInTables_5
     Call hNewDocument
 
      '/// insert a table
-     Call wDokSchreiben "<RETURN>"
+     Call wTypeKeys "<RETURN>"
      Call fInsertTable(tableName , columnNumber, rowNumber)
      '/// input some test text , select text and insert a section with hide option
-     Call wDokSchreiben testText
-     Call wDokSchreiben "<SHIFT HOME>"
+     Call wTypeKeys testText
+     Call wTypeKeys "<SHIFT HOME>"
      try
          InsertSection
          Kontext
@@ -361,8 +361,8 @@ testcase tSectionInTables_5
              sleep(1)
          '/// Check the content in section is hidden or NOT
          SetClipboard = ""
-         Call wDokSchreiben "<LEFT><DOWN>"
-         Call wDokSchreiben "<SHIFT END>"
+         Call wTypeKeys "<LEFT><DOWN>"
+         Call wTypeKeys "<SHIFT END>"
          try
              EditCopy
          catch
@@ -370,7 +370,7 @@ testcase tSectionInTables_5
          endcatch
          if GetClipboardText = "" then
              '/// Resize cell via key shortcuts
-             Call wDokSchreiben "<MOD1 MOD2 RIGHT>" , 2
+             Call wTypeKeys "<MOD1 MOD2 RIGHT>" , 2
              '/// UnCheck hide option (Format/Section)
              Kontext
              FormatSections
@@ -378,8 +378,8 @@ testcase tSectionInTables_5
                  Ausblenden.Uncheck
              BereicheBearbeiten.OK
              sleep(2)
-             Call wDokSchreiben "<LEFT><HOME>"
-             Call wDokSchreiben "<SHIFT END>"
+             Call wTypeKeys "<LEFT><HOME>"
+             Call wTypeKeys "<SHIFT END>"
              EditCopy
              if GetClipBoardText <> testText then warnlog "The content in section should be visible but get : " & GetClipBoardText
          else
@@ -420,7 +420,7 @@ testcase tSectionInTables_6
     Call fInsertTable(tableName , columnNumber, rowNumber)
 
    '/// input some words and do multi-selection
-    Call wDokSchreiben testText
+    Call wTypeKeys testText
     fMultiSelection(selectedString)
 
    '/// insert section
@@ -458,7 +458,7 @@ testcase tSectionInTables_7
     Call fInsertTable(tableName , columnNumber, rowNumber)
 
    '/// more than one cell are selected
-    Call wDokSchreiben "<Shift Right>",2
+    Call wTypeKeys "<Shift Right>",2
 
    '/// insert section
     try
@@ -582,7 +582,7 @@ testcase tEditSection_1
 
   '/// insert a section with only 1 culumn, that means a normal section
    Call fInsertSection(sectionName)
-   Call wDokSchreiben "<Up>"
+   Call wTypeKeys "<Up>"
 
   '/// change the column number (format/section) with
   '/// + TabPage "Columns", set column to $columnNumber
@@ -627,7 +627,7 @@ testcase tEditSection_1
     Kontext "BereicheBearbeiten"
     BereicheBearbeiten.OK
 
-    Call wDokSchreiben "<Up>"
+    Call wTypeKeys "<Up>"
    '/// Check the column's width
     Kontext
     FormatSections
@@ -667,9 +667,9 @@ testcase tEditSection_2
     Call hNewDocument
 
      '/// insert a normal section, and input some words
-     Call wDokSchreiben "<RETURN>"
-     Call wDokSchreiben testText
-     Call WDokSchreiben "<SHIFT HOME>"
+     Call wTypeKeys "<RETURN>"
+     Call wTypeKeys testText
+     Call wTypeKeys "<SHIFT HOME>"
      Call fInsertSection(sectionName)
      '/// Edit section with Format/Section and choose 'Hide'
      Kontext
@@ -709,8 +709,8 @@ testcase tEditSection_3
     fCheckDirectCursor
 
   '/// insert a normal section, and input some words
-    Call wDokSchreiben testText
-    Call WDokSchreiben "<Shift Home>"
+    Call wTypeKeys testText
+    Call wTypeKeys "<Shift Home>"
 
     Call fInsertSection(sectionName)
 
@@ -722,8 +722,8 @@ testcase tEditSection_3
     BereicheBearbeiten.OK
     sleep 1
 
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<Space>"
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<Space>"
     Kontext "Active"
     If Active.Exists then
       Active.ok
@@ -752,7 +752,7 @@ testcase tEditSection_4
 
   '/// edit a test file and save it
    Call hNewDocument
-   Call wDokSchreiben testText
+   Call wTypeKeys testText
    Call hFileSaveAsKill (gOfficePath + "user\work\tEditSection_4.odt")
    Call hCloseDocument
 
@@ -812,8 +812,8 @@ testcase tEditSection_5
    Call hNewDocument
 
   '/// insert a normal section, and input some words
-    Call wDokSchreiben testText
-    Call WDokSchreiben "<Shift Home>"
+    Call wTypeKeys testText
+    Call wTypeKeys "<Shift Home>"
     Call fInsertSection(sectionName)
 
   '/// remove section with Format/Section and click undo button
@@ -866,8 +866,8 @@ testcase tParagraphSection_1
 
    EditSelectAll
    Call fInsertSection(sectionName)
-   Call WDokSchreiben "<MOD1 End>"
-   Call WDokSchreiben "<Up>",3
+   Call wTypeKeys "<MOD1 End>"
+   Call wTypeKeys "<Up>",3
 
    FormatParagraph
    Kontext
@@ -879,7 +879,7 @@ testcase tParagraphSection_1
 
    TabTextfluss.OK
 
-   Call WDokSchreiben "<MOD1 Home>"
+   Call wTypeKeys "<MOD1 Home>"
 
   'Set the focus to the head of second page
    Kontext
@@ -889,7 +889,7 @@ testcase tParagraphSection_1
    Sleep 2
    fCloseNavigator
 
-   Call WDokSchreiben "<Shift MOD1 Right>"
+   Call wTypeKeys "<Shift MOD1 Right>"
    EditCopy
 
    if GetClipBoardText <> hopeResult then Warnlog "Something wrong in Keep paragraphs together test!"
@@ -928,9 +928,9 @@ testcase tParagraphSection_2
     end if
        
     if iSprache = 82 then
-        Call wDokSchreiben "<Return>"
+        Call wTypeKeys "<Return>"
     end if
-    Call WDokSchreiben "<Up>"
+    Call wTypeKeys "<Up>"
     
     FormatParagraph
     Kontext
@@ -957,7 +957,7 @@ testcase tParagraphSection_2
     
     '/// insert second paragraph , and do some configurations which is different from the first one
     wBlindtextEinfuegen
-    Call WDokSchreiben "<Up>"
+    Call wTypeKeys "<Up>"
     
     FormatParagraph
     Kontext
@@ -983,7 +983,7 @@ testcase tParagraphSection_2
     Call fInsertSection(sectionName)
     
     'Check the first paragraph's configuration
-    Call WDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
     FormatParagraph
     Kontext
     active.SetPage TabEinzuegeUndAbstaende
@@ -1000,8 +1000,8 @@ testcase tParagraphSection_2
 
     TabEinzuegeUndAbstaende.Cancel
 
-    Call WDokSchreiben "<MOD1 End>"
-    Call WDokSchreiben "<Up>",3
+    Call wTypeKeys "<MOD1 End>"
+    Call wTypeKeys "<Up>",3
     
     'Check the second paragraph's configuration
     FormatParagraph
@@ -1054,9 +1054,9 @@ testcase tParagraphSection_3
         goto endsub
     end if
     if iSprache = 82 then
-        Call wDokSchreiben "<Return>"
+        Call wTypeKeys "<Return>"
     end if   
-    Call WDokSchreiben "<Up>"
+    Call wTypeKeys "<Up>"
     
     FormatParagraph
     Kontext
@@ -1082,12 +1082,12 @@ testcase tParagraphSection_3
     SchattenFarbe.Select 2
     TabUmrandung.OK
     
-    Call WDokSchreiben "<Down>",2
+    Call wTypeKeys "<Down>",2
     
     '/// insert second paragraph , and do some configurations
     '/// + which is different from the first one
     wBlindtextEinfuegen
-    Call WDokSchreiben "<Up>"
+    Call wTypeKeys "<Up>"
     
     FormatParagraph
     Kontext
@@ -1111,7 +1111,7 @@ testcase tParagraphSection_3
     Call fInsertSection(sectionName)
     
     '<<< Check the FIRST paragraph's configuration >>>
-    Call WDokSchreiben "<MOD1 Home>"
+    Call wTypeKeys "<MOD1 Home>"
     
     FormatParagraph
     Kontext
@@ -1136,8 +1136,8 @@ testcase tParagraphSection_3
 
     TabUmrandung.Cancel
 
-    Call WDokSchreiben "<MOD1 End>"
-    Call WDokSchreiben "<Up>",3
+    Call wTypeKeys "<MOD1 End>"
+    Call wTypeKeys "<Up>",3
     
     '<<<Check the SECOND paragraph's configuration>>>
     FormatParagraph
@@ -1236,7 +1236,7 @@ testcase tScenarioSection_1
       Warnlog "Navigator in Master document isn't up!"
    end if
 
-   Call WDokSchreiben "<Up>" , 3
+   Call wTypeKeys "<Up>" , 3
 
   '/// Check the sections in MasterDoc
   '/// 1) check the content is section
@@ -1247,7 +1247,7 @@ testcase tScenarioSection_1
 
    For i = 0 to j
 
-      Call WDokSchreiben "<Home><Shift End>"
+      Call wTypeKeys "<Home><Shift End>"
       EditCopy
 
       if GetClipboardText = ContentInMasterDoc(i) then
@@ -1274,7 +1274,7 @@ testcase tScenarioSection_1
          Warnlog "The content in first section in Master file is wrong!"
       end if
 
-      Call WDokSchreiben "<Down>"
+      Call wTypeKeys "<Down>"
 
    next i
 
@@ -1355,7 +1355,7 @@ testcase tScenarioSection_2
       Warnlog "Navigator in Master document isn't up!"
    end if
 
-   Call WDokSchreiben "<Up>" , 3
+   Call wTypeKeys "<Up>" , 3
 
   '/// Check the sections in MasterDoc
   '/// 1) check the content is section
@@ -1366,7 +1366,7 @@ testcase tScenarioSection_2
 
    For i = 0 to j
 
-      Call wDokSchreiben "<Home><Shift End>"
+      Call wTypeKeys "<Home><Shift End>"
       EditCopy
 
       if GetClipboardText = ContentInMasterDoc(i) then
@@ -1394,7 +1394,7 @@ testcase tScenarioSection_2
          Warnlog "The content in first section in Master file is wrong!"
       end if
 
-      Call wDokSchreiben "<Down>"
+      Call wTypeKeys "<Down>"
 
    next i
 
