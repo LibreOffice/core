@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentdigitalsignatures.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,9 +36,10 @@
 #include <xmlsecurity/digitalsignaturesdialog.hxx>
 #include <xmlsecurity/certificateviewer.hxx>
 #include <xmlsecurity/macrosecurity.hxx>
-#include <xmlsecurity/baseencoding.hxx>
 #include <xmlsecurity/biginteger.hxx>
 #include <xmlsecurity/global.hrc>
+
+#include <xmloff/xmluconv.hxx>
 
 #include <../dialogs/resourcemanager.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -53,11 +54,11 @@
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/securityoptions.hxx>
-#ifndef _COM_SUN_STAR_SECURITY_CERTIFICATEVALIDITY_HDL_
 #include <com/sun/star/security/CertificateValidity.hdl>
-#endif
+#include <com/sun/star/security/SerialNumberAdapter.hpp>
 #include <ucbhelper/contentbroker.hxx>
 #include <unotools/ucbhelper.hxx>
+#include <comphelper/componentcontext.hxx>
 
 #include <stdio.h>
 
@@ -66,9 +67,9 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 namespace css = ::com::sun::star;
 
-DocumentDigitalSignatures::DocumentDigitalSignatures( const Reference< com::sun::star::lang::XMultiServiceFactory> rxMSF )
+DocumentDigitalSignatures::DocumentDigitalSignatures( const Reference< XComponentContext >& rxCtx )
 {
-    mxMSF = rxMSF;
+    mxCtx = rxCtx;
 }
 
 sal_Bool DocumentDigitalSignatures::signDocumentContent( const Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xSignStream ) throw (RuntimeException)
@@ -144,7 +145,7 @@ sal_Bool DocumentDigitalSignatures::ImplViewSignatures( const Reference< ::com::
 sal_Bool DocumentDigitalSignatures::ImplViewSignatures( const Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xSignStream, DocumentSignatureMode eMode, bool bReadOnly ) throw (RuntimeException)
 {
     sal_Bool bChanges = sal_False;
-    DigitalSignaturesDialog aSignaturesDialog( NULL, mxMSF, eMode, bReadOnly );
+    DigitalSignaturesDialog aSignaturesDialog( NULL, mxCtx, eMode, bReadOnly );
     bool bInit = aSignaturesDialog.Init( rtl::OUString() );
     DBG_ASSERT( bInit, "Error initializing security context!" );
     if ( bInit )
@@ -196,7 +197,7 @@ Sequence< ::com::sun::star::security::DocumentSignatureInformation > DocumentDig
         return Sequence< ::com::sun::star::security::DocumentSignatureInformation >(0);
 
 
-    XMLSignatureHelper aSignatureHelper( mxMSF );
+    XMLSignatureHelper aSignatureHelper( mxCtx );
 
     bool bInit = aSignatureHelper.Init( rtl::OUString() );
 
@@ -223,6 +224,9 @@ Sequence< ::com::sun::star::security::DocumentSignatureInformation > DocumentDig
     if ( nInfos )
     {
         std::vector< rtl::OUString > aElementsToBeVerified = DocumentSignatureHelper::CreateElementList( rxStorage, ::rtl::OUString(), eMode );
+        Reference<security::XSerialNumberAdapter> xSerialNumberAdapter =
+            ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
+
         for( int n = 0; n < nInfos; ++n )
         {
             const SignatureInformation& rInfo = aSignInfos[n];
@@ -231,7 +235,7 @@ Sequence< ::com::sun::star::security::DocumentSignatureInformation > DocumentDig
             if (rInfo.ouX509Certificate.getLength())
                rSigInfo.Signer = xSecEnv->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
             if (!rSigInfo.Signer.is())
-                rSigInfo.Signer = xSecEnv->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
+                rSigInfo.Signer = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xSerialNumberAdapter->toSequence( rInfo.ouX509SerialNumber ) );
 
             // --> PB 2004-12-14 #i38744# time support again
             Date aDate( rInfo.stDateTime.Day, rInfo.stDateTime.Month, rInfo.stDateTime.Year );
@@ -295,17 +299,17 @@ void DocumentDigitalSignatures::manageTrustedSources(  ) throw (RuntimeException
 
     cssu::Reference< dcss::xml::crypto::XSecurityEnvironment > xSecEnv;
 
-    XMLSignatureHelper aSignatureHelper( mxMSF );
+    XMLSignatureHelper aSignatureHelper( mxCtx );
     if ( aSignatureHelper.Init( rtl::OUString() ) )
         xSecEnv = aSignatureHelper.GetSecurityEnvironment();
 
-    MacroSecurity aDlg( NULL, xSecEnv );
+    MacroSecurity aDlg( NULL, mxCtx, xSecEnv );
     aDlg.Execute();
 }
 
 void DocumentDigitalSignatures::showCertificate( const Reference< ::com::sun::star::security::XCertificate >& _Certificate ) throw (RuntimeException)
 {
-    XMLSignatureHelper aSignatureHelper( mxMSF );
+    XMLSignatureHelper aSignatureHelper( mxCtx );
 
     bool bInit = aSignatureHelper.Init( rtl::OUString() );
 
@@ -322,7 +326,11 @@ void DocumentDigitalSignatures::showCertificate( const Reference< ::com::sun::st
 ::sal_Bool DocumentDigitalSignatures::isAuthorTrusted( const Reference< ::com::sun::star::security::XCertificate >& Author ) throw (RuntimeException)
 {
     sal_Bool bFound = sal_False;
-    ::rtl::OUString sSerialNum = bigIntegerToNumericString( Author->getSerialNumber() );
+
+    Reference<security::XSerialNumberAdapter> xSerialNumberAdapter =
+        ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
+
+    ::rtl::OUString sSerialNum = xSerialNumberAdapter->toString( Author->getSerialNumber() );
 
     Sequence< SvtSecurityOptions::Certificate > aTrustedAuthors = SvtSecurityOptions().GetTrustedAuthors();
     const SvtSecurityOptions::Certificate* pAuthors = aTrustedAuthors.getConstArray();
@@ -372,10 +380,17 @@ void DocumentDigitalSignatures::addAuthorToTrustedSources( const Reference< ::co
 {
     SvtSecurityOptions aSecOpts;
 
+    Reference<security::XSerialNumberAdapter> xSerialNumberAdapter =
+        ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
+
     SvtSecurityOptions::Certificate aNewCert( 3 );
     aNewCert[ 0 ] = Author->getIssuerName();
-    aNewCert[ 1 ] = bigIntegerToNumericString( Author->getSerialNumber() );
-    aNewCert[ 2 ] = baseEncode( Author->getEncoded(), BASE64 );
+    aNewCert[ 1 ] = xSerialNumberAdapter->toString( Author->getSerialNumber() );
+
+    rtl::OUStringBuffer aStrBuffer;
+    SvXMLUnitConverter::encodeBase64(aStrBuffer, Author->getEncoded());
+    aNewCert[ 2 ] = aStrBuffer.makeStringAndClear();
+
 
     Sequence< SvtSecurityOptions::Certificate > aTrustedAuthors = aSecOpts.GetTrustedAuthors();
     sal_Int32 nCnt = aTrustedAuthors.getLength();
@@ -412,8 +427,8 @@ Sequence< rtl::OUString > DocumentDigitalSignatures::GetSupportedServiceNames() 
 
 
 Reference< XInterface > DocumentDigitalSignatures_CreateInstance(
-    const Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr) throw ( Exception )
+    const Reference< XComponentContext >& rCtx) throw ( Exception )
 {
-    return (cppu::OWeakObject*) new DocumentDigitalSignatures( rSMgr );
+    return (cppu::OWeakObject*) new DocumentDigitalSignatures( rCtx );
 }
 
