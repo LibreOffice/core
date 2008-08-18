@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unostyle.cxx,v $
- * $Revision: 1.82 $
+ * $Revision: 1.83 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2932,8 +2932,14 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
                         }
                         else
                         {
-                            aFrmSz.SetWidth( LONG_MAX );
-                            aFrmSz.SetHeight( LONG_MAX );
+                            // --> OD 2008-07-25 #i91928#
+//                            aFrmSz.SetWidth( LONG_MAX );
+//                            aFrmSz.SetHeight( LONG_MAX );
+                            SvxPaper ePaper = SvxPaperInfo::GetDefaultSvxPaper(
+                                static_cast<LanguageType>( GetAppLanguage() ) );
+                            const Size aPhysSize = SvxPaperInfo::GetPaperSize( ePaper );
+                            aFrmSz.SetSize( aPhysSize );
+                            // <--
                         }
 
                     }
