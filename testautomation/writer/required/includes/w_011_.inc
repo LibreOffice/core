@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_011_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:26:31 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:42:23 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -61,7 +61,7 @@ testcase tGraphicFilters
         '/// This test applies not to HTML-Document ///
         Printlog "Not in WriterWeb!"
         goto endsub
-    endif
+    end if
     
     Call hNewDocument
     '/// Open new document ///
@@ -93,53 +93,53 @@ testcase tGraphicFilters
         Invert.Click
     else
         Warnlog "-  'Invert' is disabled !"
-    endif
+    end if
     
     if CheckForFilters=False then
         Call hCloseDocument
         '/// Close active document ///
         goto endsub
-    endif
+    end if
     '/// Click 'Smooth' ///
     printlog "-  Smooth"
     if Smooth.IsEnabled then
         Smooth.Click
     else
         Warnlog "-  'Smooth' is disabled!"
-    endif
+    end if
     
     if CheckForFilters=False then
         Call hCloseDocument
         '/// Close active document ///
         goto endsub
-    endif
+    end if
     printlog "-  Sharpen"
     '/// Click 'Sharpen' ///
     if Sharpen.IsEnabled then
         Sharpen.Click
     else
         Warnlog "-  'Sharpen' is disabled!"
-    endif
+    end if
     
     UseBindings
     if CheckForFilters=False then
         Call hCloseDocument
         '/// Close active document ///
         goto endsub
-    endif
+    end if
     printlog "-  Remove Noise"
     '/// Click 'Remove Noise' ///
     if Remove.IsEnabled then
         Remove.Click
     else
         Warnlog "-  'Remove Noise' is disabled!"
-    endif
+    end if
     
     if CheckForFilters=False then
         Call hCloseDocument
         '/// Close active document ///
         goto endsub
-    endif
+    end if
     printlog "-  Solarization"
     '/// Click 'Solarization' ///
     if Solarization.IsEnabled then
@@ -160,18 +160,18 @@ testcase tGraphicFilters
                     Solarization.Cancel
                 else
                     Warnlog "-  Dialog 'Solarisation' has not been opened!"
-                endif
-            endif
-        endif
+                end if
+            end if
+        end if
     else
         Warnlog "-  'Solarization' is disabled!"
-    endif
+    end if
     
     if CheckForFilters=False then
         Call hCloseDocument
         '/// Close active document ///
         goto endsub
-    endif
+    end if
     printlog "-  Aging"
     '/// Click 'Aging' ///
     if Aging.IsEnabled then
@@ -192,18 +192,18 @@ testcase tGraphicFilters
                     Aging.Cancel
                 else
                     Warnlog "-  Dialog 'Aging' has not been opened!"
-                endif
-            endif
-        endif
+                end if
+            end if
+        end if
     else
         Warnlog "-  'Aging' is disabled!"
-    endif
+    end if
     
     if CheckForFilters=False then
         Call hCloseDocument
         '/// Close active document ///
         goto endsub
-    endif
+    end if
     printlog "-  Posterize"
     '/// Click 'Posterize' ///
     if Posterize.IsEnabled then
@@ -224,44 +224,44 @@ testcase tGraphicFilters
                     Posterize.Cancel
                 else
                     Warnlog "-  Dialog 'Posterize' has not been opened!"
-                endif
-            endif
-        endif
+                end if
+            end if
+        end if
     else
         Warnlog "-  'Posterize' is disabled!"
-    endif
+    end if
     
     if CheckForFilters=False then
         Call hCloseDocument
         '/// Close active document ///
         goto endsub
-    endif
+    end if
     '/// Click 'Pop Art' ///
     printlog "-  Pop Art"
     if Art.IsEnabled then
         Art.Click
     else
         Warnlog "-  'Pop Art' is disabled!"
-    endif
+    end if
     
     if CheckForFilters=False then
         Call hCloseDocument
         '/// Close active document ///
         goto endsub
-    endif
+    end if
     printlog "-  Charcoal Sketch"
     '/// Click 'Charcoal Sketch' ///
     if CharcoalSketch.IsEnabled then
         CharcoalSketch.Click
     else
         Warnlog "-  'Charcoal Sketch' is disabled!"
-    endif
+    end if
     
     if CheckForFilters=False then
         Call hCloseDocument
         '/// Close active document ///
         goto endsub
-    endif
+    end if
     printlog "-  Relief"
     '/// Click 'Relief' ///
     if Relief.IsEnabled then
@@ -282,18 +282,18 @@ testcase tGraphicFilters
                     Relief.Cancel
                 else
                     Warnlog "-  Dialog 'Relief' has not been opened!"
-                endif
-            endif
-        endif
+                end if
+            end if
+        end if
     else
         Warnlog "-  'Relief' is disabled!"
-    endif
+    end if
     
     if CheckForFilters=False then
         Call hCloseDocument
         '/// Close active document ///
         goto endsub
-    endif
+    end if
     printlog "-  Mosaic"
     '/// Clock 'Mosaic' ///
     if Mosaic.IsEnabled then
@@ -305,10 +305,10 @@ testcase tGraphicFilters
             Mosaic.Cancel
         else
             Warnlog "-  Dialog 'Mosaic' has not been opened!"
-        endif
+        end if
     else
         Warnlog "-  'Mosaic' is disabled!"
-    endif
+    end if
     
     Call hCloseDocument
     '/// Close active document ///
@@ -322,11 +322,11 @@ testcase tZOEditPoints
         '/// This applies not to HTML document  ///
         Printlog "Not in WriterWeb!"
         goto endsub
-    endif
+    end if
     Call hNewDocument
     '/// Open new document ///
     Call wZeichenobjektEinfuegen ( "Rechteck", 30, 30, 50, 60 )
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     '/// Insert a drawing object (rectangle) ///
     '/// Select drawing object with shortcut 'Shift F4'
     
@@ -358,14 +358,14 @@ testcase tZOLine
         '/// This test applies not to HTML document ///
         Printlog "Not in WriterWeb!"
         goto endsub
-    endif
+    end if
     Call hNewDocument
     '/// Open new document ///
     Call wZeichenobjektEinfuegen ( "Rechteck", 30, 30, 50, 60 )
     '/// Insert a drawing object ( rectangle ) ///
     Call gMouseClick ( 25, 25 )
     '/// Select drawing object with shortcut 'Shift F4'
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     
     Kontext "DrawingObjectbar"
 	if Not DrawingObjectbar.Exists then hToolbarSelect("GRAPHIC", true)   
@@ -409,7 +409,7 @@ testcase tZOArea
         '/// This test applies not to HTML document ///
         Printlog "Not in WriterWeb!"
         goto endsub
-    endif
+    end if
     
     Call hNewDocument
     '/// Open new document ///
@@ -417,7 +417,7 @@ testcase tZOArea
     '/// Insert a draw object ( rectangle ) ///
     Call gMouseClick ( 25, 25 )
     '/// Select drawing object with shortcut 'Shift F4'
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     
     Kontext "DrawingObjectbar"
 	if Not DrawingObjectbar.Exists then hToolbarSelect("GRAPHIC", true)
@@ -449,7 +449,7 @@ testcase tZORest
     '/// This test applies not to HTML document ///
     Printlog "Not in WriterWeb!"
     goto endsub
-    endif
+    end if
     
     Call hNewDocument
     '/// Open new document ///
@@ -457,7 +457,7 @@ testcase tZORest
     '/// Insert a draw object ( rectangle ) ///
     Call gMouseClick ( 25, 25 )
     '/// Select drawing object with shortcut 'Shift F4'
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     
     printlog "  - Object rotation mode"
     Sleep 2
@@ -519,23 +519,23 @@ testcase tZOText
         '/// This test applies not to HTML document ///
         Printlog "Not in WriterWeb!"
         goto endsub
-    endif
+    end if
         
     Call hNewDocument
     '/// Open new document ///
     
     Call wZeichenobjektEinfuegen ( "Text", 30, 30, 50, 60 )
     '/// Insert draw object ( Text )///
-    Call wDokSchreiben ("Draw Functions-Objectbar: Text")
+    Call wTypeKeys ("Draw Functions-Objectbar: Text")
     '/// Insert some text to textbox ///
-    Call wDokSchreiben ("<Mod1 A>", 3)
+    Call wTypeKeys ("<Mod1 A>", 3)
     '/// Select the text in textbox with <Strg A> ///
     Sleep 4
     
     Kontext "DrawTextObjectBar"
     if DrawTextObjectBar.Exists = false then
         Call hToolbarSelect("TextObject", true)
-    endif
+    end if
 
     
     printlog "  - Font Size"
@@ -656,16 +656,16 @@ testcase tZOVerticalText
         '/// This test applies not to HTML document and only if Asian Support is enabled ///
         Printlog "Not in WriterWeb!"
         goto endsub
-    endif
+    end if
     
     Call hNewDocument
     '/// Open new document ///
     
     Call wZeichenobjektEinfuegen ( "VText", 30, 30, 50, 60 )
     '/// Insert Draw object ( 'vertical Text' ) ///
-    Call wDokSchreiben ("Checking vertical text")
+    Call wTypeKeys ("Checking vertical text")
     '/// Insert some text in textbox and select it ///
-    Call wDokSchreiben ("<Shift Home>")
+    Call wTypeKeys ("<Shift Home>")
     Sleep 4
     
     Call hToolbarSelect ( "Textobject", true  )
