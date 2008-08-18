@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_005_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:26:29 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:41:15 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -222,8 +222,8 @@ testcase tFormatChangeCase
     printlog " Open new document"
     Call hNewDocument
     printlog " Insert some text in document and select text"
-    Call wDokSchreiben ("Hello World!")
-    Call wDokSchreiben ("<Shift Home>")
+    Call wTypeKeys ("Hello World!")
+    Call wTypeKeys ("<Shift Home>")
 
     Wait 500
     printlog " Format / Case Characters / Upper"
@@ -277,8 +277,8 @@ testcase tFormatRuby
         end if
         Call hNewDocument
         printlog " Open new document"
-        Call wDokSchreiben ("Hello World!")
-        Call wDokSchreiben ("<Shift Home>")
+        Call wTypeKeys ("Hello World!")
+        Call wTypeKeys ("<Shift Home>")
         printlog " Insert some text in document"
 
         try
@@ -511,6 +511,7 @@ endcase
 '--------------------------------------------------
 
 testcase tFormatNumberingBullets
+    dim referencecounter as integer
     PrintLog "- Format / Numbering / Bullets"
 
     printlog " Open new document"
@@ -569,14 +570,21 @@ testcase tFormatNumberingBullets
     Kontext "TabOptionenNumerierung"
 
     Sleep 1
-    '  MenuSelect(2)
-    '  Call hMenuSelectNr (3)
-    '  Sleep 10
     try
         Auswahl.Click
-        Sleep 5
+        referencecounter = hMenuItemGetCount
+        wait (350)
+        do while (hMenuItemGetCount <> "2")
+            referencecounter = hMenuItemGetCount
+            wait (100)
+        loop
         Call hMenuSelectNr(2)
-        Sleep 25
+            referencecounter = hMenuItemGetCount
+            wait (100)
+            do while (hMenuItemGetCount <> referencecounter)
+                referencecounter = hMenuItemGetCount
+                wait (150)
+            loop
         Call hMenuClose
     catch
         Exceptlog
@@ -692,7 +700,7 @@ testcase tFormatColumn
     Wait 500
     Call wDocSetContext
     printlog " Enter some text in document"
-    Call wDokSchreiben ("Dies ist ein langer Text, HALLO HALLO")
+    Call wTypeKeys ("Dies ist ein langer Text, HALLO HALLO")
     Wait 500
     printlog " Format / Column / Optimal Width"
     FormatColumnOptimalWidthWriter
@@ -711,7 +719,7 @@ testcase tFormatColumn
     WaitSlot (500)
     Call wDocSetContext
     printlog " Press 'up' twice to point cursor in the table"
-    Call wDokSchreiben ("<Up>",2)
+    Call wTypeKeys ("<Up>",2)
     wait 500
     printlog " Format / Column / Insert "
     FormatColumnInsert
