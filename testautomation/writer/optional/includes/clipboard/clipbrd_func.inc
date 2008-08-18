@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: clipbrd_func.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:47 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:24:28 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -54,7 +54,7 @@ function wPasteAvailableClipboardFormats(TheNumber as integer, CheckWhat as Stri
         catch
             if i <= TheNumber then
                 QAErrorlog "Number of clipboard formats seems to be changed!"
-            endif
+            end if
             exit for
         endcatch            
         ClipboardFormat = Auswahl.GetSeltext
@@ -67,7 +67,7 @@ function wPasteAvailableClipboardFormats(TheNumber as integer, CheckWhat as Stri
                 else
                     InhaltEinfuegen.Ok
                     Sleep 3
-                endif
+                end if
             Case else
                 InhaltEinfuegen.Ok
                 Sleep 3
@@ -83,20 +83,20 @@ function wPasteAvailableClipboardFormats(TheNumber as integer, CheckWhat as Stri
         if Active.Exists then
             QAErrorlog " - " + Active.Gettext + "->Bug#110181"
             Active.Ok
-        endif
+        end if
         Call wDocSetContext
-        Call wDokSchreiben "<Escape>",2
+        Call wTypeKeys "<Escape>",2
         Select Case gApplication
             Case "WRITER","MASTERDOC","HTMLDOKUMENT"
                 Select Case CheckWhat
                     Case "text","field","table"
-                    Call wDokSchreiben "<Down><End><Return>"
-                    Call wDokSchreiben "(" + Clipboardformat + ")"
-                    Call wDokSchreiben "<End><Return>",2
+                    Call wTypeKeys "<Down><End><Return>"
+                    Call wTypeKeys "(" + Clipboardformat + ")"
+                    Call wTypeKeys "<End><Return>",2
             Case "frame", "draw", "graphicL", "graphicE", "ole", "control", "ctext"
                 'Call gMouseClick (50,100)
-                Call wDokSchreiben ("<Escape>")
-                Call wDokSchreiben "(" + Clipboardformat + ")"
+                Call wTypeKeys ("<Escape>")
+                Call wTypeKeys "(" + Clipboardformat + ")"
                 if i < TheNumber Then
                     if gApplication <> "HTMLDOKUMENT" then
                         InsertManualBreak
@@ -104,9 +104,9 @@ function wPasteAvailableClipboardFormats(TheNumber as integer, CheckWhat as Stri
                         Seitenumbruch.Check
                         UmbruchEinfuegen.OK
                     else
-                        Call wDokSchreiben ("<Return>" , 2)
-                    endif
-                endif
+                        Call wTypeKeys ("<Return>" , 2)
+                    end if
+                end if
         end select
         EditPasteSpecialWriter
     
@@ -116,19 +116,19 @@ function wPasteAvailableClipboardFormats(TheNumber as integer, CheckWhat as Stri
             if i < TheNumber Then
                 Call wInsertNewImpressSlide
                 EditPasteSpecial
-            endif
+            end if
     
         Case "CALC"
             printlog " Rename first sheet"
             if wRenameCalcSheet(Clipboardformat) = False then
                 Warnlog "Unable to rename Sheet Name !"
-            endif
+            end if
             if i < TheNumber Then
                 if wInsertNewCalcSheet(Clipboardformat) = False then
                     Warnlog "Unable to set Sheetname : " + Clipboardformat
-                endif
+                end if
                 EditPasteSpecialCalc
-            endif    
+            end if    
         end select
         s_next_item:
         Kontext "InhaltEinfuegen"
@@ -150,9 +150,9 @@ function wSetClipboardtestDefaults(ForWhat as string) as boolean
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\writer.sxw")
     Kontext "DocumentWriter"
     printlog " Jump to beginning of document "
-    Call wDokSchreiben "<Mod1 Home>"
+    Call wTypeKeys "<Mod1 Home>"
     printlog " Check if beginning of document reached "
-    Call wDokSchreiben "<Mod1 Shift Right>"
+    Call wTypeKeys "<Mod1 Shift Right>"
     EditCopy
     'if GetClipboardText <> "Text " then
     ' warnlog "Error jump to beginning of document!"
@@ -161,56 +161,56 @@ function wSetClipboardtestDefaults(ForWhat as string) as boolean
     Select Case ForWhat
         Case "text"
         '"+ Select first paragraph "
-        Call wDokSchreiben "<Shift End>"
-        Call wDokSchreiben "<Shift Down>"
+        Call wTypeKeys "<Shift End>"
+        Call wTypeKeys "<Shift Down>"
         '"+ Copy selected text "
         
         Case "field"
         '"+ Select paragraph with 'Date Field' "
-        Call wDokSchreiben "<Down>",3
-        Call wDokSchreiben "<Home><Shift End>"
+        Call wTypeKeys "<Down>",3
+        Call wTypeKeys "<Home><Shift End>"
         '"+ Copy selected text "
         
         Case "table"
         '"+ Select paragraph with 'Table' "
         Call wNavigatorAuswahl(2,1)
-        'Call wDokSchreiben "<Down>",6
-        Call wDokSchreiben "<Mod1 A>",2
+        'Call wTypeKeys "<Down>",6
+        Call wTypeKeys "<Mod1 A>",2
         '"+ Copy selected table "
         
         Case "frame"
         '"+ Select 'Frame' "
-        Call wDokSchreiben ( "<Shift F4>" )
+        Call wTypeKeys ( "<Shift F4>" )
         '"+ Copy selected frame "
         
         Case "draw"
         '"+ Select 'Drawing Object' "
-        Call wDokSchreiben ( "<Shift F4>" )
-        Call wDokSchreiben "<Tab>"
+        Call wTypeKeys ( "<Shift F4>" )
+        Call wTypeKeys "<Tab>"
         '"+ Copy selected Drawing Object "
         
         Case "graphicL"
         '"+ Select 'Linked Graphic' "
-        Call wDokSchreiben ( "<Shift F4>" )
-        Call wDokSchreiben "<Tab>",2
+        Call wTypeKeys ( "<Shift F4>" )
+        Call wTypeKeys "<Tab>",2
         '"+ Copy selected Linked Graphic "
         
         Case "graphicE"
         '"+ Select 'Embedded Graphic' "
-        Call wDokSchreiben ( "<Shift F4>" )
-        Call wDokSchreiben "<Tab>",3
+        Call wTypeKeys ( "<Shift F4>" )
+        Call wTypeKeys "<Tab>",3
         '"+ Copy selected Embedded Graphic "
         
         Case "ole"
         '"+ Select 'OLE Object' "
-        Call wDokSchreiben ( "<Shift F4>" )
-        Call wDokSchreiben "<Tab>",4
+        Call wTypeKeys ( "<Shift F4>" )
+        Call wTypeKeys "<Tab>",4
         '"+ Copy selected OLE Object "
         
         Case "control"
         '"+ Select 'Control' "
-        Call wDokSchreiben ( "<Shift F4>" )
-        Call wDokSchreiben "<Tab>",5
+        Call wTypeKeys ( "<Shift F4>" )
+        Call wTypeKeys "<Tab>",5
         '"+ Copy selected Control "
         
         Case else
@@ -255,14 +255,14 @@ function wInsertNewCalcSheet(SheetName as string) as boolean
                 wInsertNewCalcSheet = False
             else
                 wInsertNewCalcSheet = True
-            endif
+            end if
         else
             wInsertNewCalcSheet = True
-        endif
+        end if
     else
         Warnlog "Dialog 'Insert Sheet' not up!"
         wInsertNewCalcSheet = False
-    endif
+    end if
 end function
 
 ' ---------------------------------------------------------------------------------
@@ -283,13 +283,13 @@ function wRenameCalcSheet(NewName as string) as boolean
                 wRenameCalcSheet = False
             else
                 wRenameCalcSheet = True
-            endif
+            end if
         else
             wRenameCalcSheet = True
-        endif
+        end if
     else
         wRenameCalcSheet = False
-    endif
+    end if
     
 end function
 
@@ -301,7 +301,7 @@ sub wInsertNewImpressSlide()
     'Kontext "SeiteEinfuegen"
     'SeitenName.Settext "Dummy"
     'SeiteEinfuegen.Ok
-    'endif
+    'end if
 end sub
 
 ' ---------------------------------------------------------------------------------
@@ -321,7 +321,7 @@ sub wRenameImpressSlide(NewName as string)
             catch
                 Warnlog "Unable to rename Slide (No access to to Tab-Bar!)"
             endcatch
-        endif
+        end if
     catch
         Warnlog "Unable to rename Slide!"
     endcatch
@@ -402,18 +402,18 @@ function wChangeHTMLCompatibility ( optional RecentCompatibility as integer ) as
             if Instr(Ucase(CurrentCharset), "UTF-8") then
                 i = Zeichensatz.GetItemCount + 1
                 CharsetFound = True
-            endif
+            end if
         next i
     else
         CharsetFound = True
         RecentCharSet = RecentCompatibility
         Zeichensatz.Select RecentCompatibility
-    endif
+    end if
     if CharsetFound = True then
         printlog "Charset has been changed!"
     else
         Warnlog "Couldn't set Charset to UTF-8!"
-    endif
+    end if
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     wChangeHTMLCompatibility = RecentCharset
@@ -440,18 +440,18 @@ function wChangeHTMLCompatibilityExport ( optional wExport as integer ) as integ
             if Instr(Ucase(CurrentExportset), "STAROFFICE WRITER") then
                 i = Export.GetItemCount + 1
                 ExportFound = True
-            endif
+            end if
         next i
     else
         ExportFound = True
         RecentExportSet = wExport
         Export.Select RecentExportSet
-    endif
+    end if
     if ExportFound = True then
         printlog "Export has been changed!"
     else
         Warnlog "Couldn't set Export to StarOffice Writer!"
-    endif
+    end if
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     wChangeHTMLCompatibilityExport = RecentExportSet
