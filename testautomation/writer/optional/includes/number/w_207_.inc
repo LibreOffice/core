@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_207_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:55 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:32:04 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -91,7 +91,7 @@ testcase tToolsNumbering12
 					Warnlog "  - Filter Selection dialog is up !"
 					Filterauswahl.Cancel
 					Call hCloseDocument
-				endif
+				end if
 				Sleep 5
 				Kontext "AsciiFilterOptionen"
 				if AsciiFilterOptionen.Exists then AsciiFilterOptionen.Ok
@@ -100,7 +100,7 @@ testcase tToolsNumbering12
 				Kontext "SecurityWarning"
 				if SecurityWarning.Exists then
 					SecurityWarning.Cancel
-				endif
+				end if
 	
 				'/// check if loaded
 				if GetDocumentCount >= 1 then
@@ -134,7 +134,7 @@ testcase tToolsNumbering13
     '/// Load document 'writer\\optional\\input\\number\\regression\\73790.doc'
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\number\regression\73790.doc" )
     '/// Document has Heading1-Heading3 formatted, be sure it is
-    Call wDokSchreiben ("<Mod1 Home>")
+    Call wTypeKeys ("<Mod1 Home>")
     '/// Point cursor to top of document with <STRG HOME>
     Select Case iSprache
 		case 01 : iCounter = 2
@@ -157,14 +157,14 @@ testcase tToolsNumbering13
 		case else : iCounter = 2
 	end select
 	For i = 1 to 3
-        Call wDokSchreiben ("<Shift End>")
+        Call wTypeKeys ("<Shift End>")
         '/// Select first to third entry and check it i formatted with 'Heading1','Heading2','Heading3'
         Kontext "Textobjectbar"
         if Vorlage.GetSelIndex <> ( i + iCounter ) then
             Warnlog "Heading " & i & " not " & ( i + iCounter ) & " but " & Vorlage.GetSelIndex
-        endif
-        Call wDokSchreiben ( "<Home>" )
-        Call wDokSchreiben ( "<Down>" )
+        end if
+        Call wTypeKeys ( "<Home>" )
+        Call wTypeKeys ( "<Down>" )
     next i
     
     Call hCloseDocument
