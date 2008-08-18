@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salinst.h,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,7 @@
 
 class AquaSalFrame;
 class ApplicationEvent;
+class Image;
 
 // -----------------
 // - SalYieldMutex -
@@ -188,5 +189,8 @@ rtl::OUString GetOUString( CFStringRef );
 rtl::OUString GetOUString( NSString* );
 CFStringRef CreateCFString( const rtl::OUString& );
 NSString* CreateNSString( const rtl::OUString& );
+
+CGImageRef CreateCGImage( const Image& );
+NSImage*   CreateNSImage( const Image& );
 
 #endif // _SV_SALINST_H
