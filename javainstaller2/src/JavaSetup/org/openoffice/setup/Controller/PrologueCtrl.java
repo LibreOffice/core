@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PrologueCtrl.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,6 +84,14 @@ public class PrologueCtrl extends PanelController {
 
                     if (( installData.getOSType().equalsIgnoreCase("SunOS") ) && ( installData.isMultiLingual() )) {
                         ModuleCtrl.checkLanguagesPackages(packageData, installData);
+
+                        // int count = installData.getPreselectedLanguages();
+                        // System.err.println("Number of preselected language packages: " + count);
+
+                        if ( installData.getPreselectedLanguages() == 0 ) {
+                            // Something misterious happened. Setting all languages again.
+                            ModuleCtrl.setLanguagesPackages(packageData);
+                        }
 
                         if ( installData.logModuleStates() ) {
                             Dumper.logModuleStates(packageData, "Prologue Dialog Language Selection");
