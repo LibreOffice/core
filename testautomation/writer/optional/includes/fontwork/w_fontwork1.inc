@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_fontwork1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:52 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:28:01 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -56,11 +56,11 @@ testcase tFontWork_1
     Call hNewDocument
     
     Call wZeichenobjektEinfuegen("TEXT", 30, 40, 60, 60)
-    Call wDokSchreiben "First Line<Return>"
-    Call wDokSchreiben "Second Line<Return>"
-    Call wDokSchreiben "Third Line<Return>"
+    Call wTypeKeys "First Line<Return>"
+    Call wTypeKeys "Second Line<Return>"
+    Call wTypeKeys "Third Line<Return>"
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     
     '/// format/fontwork
     FormatFontWork
@@ -113,9 +113,9 @@ testcase tFontWork_2
     Call hNewDocument
     
     Call wZeichenobjektEinfuegen("TEXT", 30, 40, 60, 60)
-    Call wDokSchreiben "Test"
+    Call wTypeKeys "Test"
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     
     '/// format/fontwork
     FormatFontWork
@@ -167,9 +167,9 @@ testcase tFontWork_3
     Call hNewDocument
     
     Call wZeichenobjektEinfuegen("TEXT", 30, 40, 60, 60)
-    Call wDokSchreiben "Test"
+    Call wTypeKeys "Test"
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     
     '/// format/fontwork
     FormatFontWork
@@ -236,9 +236,9 @@ testcase tFontWork_4
     Call hNewDocument
     
     Call wZeichenobjektEinfuegen("TEXT", 30, 40, 60, 60)
-    Call wDokSchreiben "Test"
+    Call wTypeKeys "Test"
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     
     '/// format/fontwork , set distance and indent
     FormatFontWork
@@ -280,9 +280,9 @@ testcase tFontWork_5
     Call hNewDocument
     
     Call wZeichenobjektEinfuegen("TEXT", 30, 40, 60, 60)
-    Call wDokSchreiben "Test"
+    Call wTypeKeys "Test"
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     
     '/// format/fontwork
     FormatFontWork
@@ -339,9 +339,9 @@ testcase tFontWork_6
     Call hNewDocument
     
     Call wZeichenobjektEinfuegen("TEXT", 30, 40, 60, 60)
-    Call wDokSchreiben "Test"
+    Call wTypeKeys "Test"
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<ESCAPE>"
+    Call wTypeKeys "<ESCAPE>"
     
     '/// format/fontwork
     FormatFontWork
