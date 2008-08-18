@@ -1,0 +1,453 @@
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+#
+# Copyright 2008 by Sun Microsystems, Inc.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# $RCSfile: update.pm,v $
+#
+# $Revision: 1.2 $
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
+package installer::windows::update;
+
+use installer::exiter;
+use installer::files;
+use installer::globals;
+use installer::systemactions;
+
+#################################################################################
+# Extracting all tables from an msi database
+#################################################################################
+
+sub extract_all_tables_from_msidatabase
+{
+    my ($fulldatabasepath, $workdir) = @_;
+
+    my $msidb = "msidb.exe";    # Has to be in the path
+    my $infoline = "";
+    my $systemcall = "";
+    my $returnvalue = "";
+
+    # Export of all tables by using "*"
+
+    $systemcall = $msidb . " -d " . $fulldatabasepath . " -f " . $workdir . " -e \*";
+    $returnvalue = system($systemcall);
+
+    $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute $systemcall !\n";
+        push( @installer::globals::logfileinfo, $infoline);
+        installer::exiter::exit_program("ERROR: Could not exclude tables from msi database: $fulldatabasepath !", "extract_all_tables_from_msidatabase");
+    }
+    else
+    {
+        $infoline = "Success: Executed $systemcall successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+}
+
+#################################################################################
+# Collecting the keys from the first line of the idt file
+#################################################################################
+
+sub collect_all_keys
+{
+    my ($line) = @_;
+
+    my @allkeys = ();
+    my $rownumber = 0;
+    my $onekey = "";
+
+    while ( $line =~ /^\s*(\S+?)\t(.*)$/ )
+    {
+        $onekey = $1;
+        $line = $2;
+        $rownumber++;
+        push(@allkeys, $onekey);
+    }
+
+    # and the last key
+
+    $onekey = $line;
+    $onekey =~ s/^\s*//g;
+    $onekey =~ s/\s*$//g;
+
+    $rownumber++;
+    push(@allkeys, $onekey);
+
+    return (\@allkeys, $rownumber);
+}
+
+#################################################################################
+# Analyzing the content of one line of an idt file
+#################################################################################
+
+sub get_oneline_hash
+{
+    my ($line, $allkeys, $rownumber) = @_;
+
+    my $counter = 0;
+    my %linehash = ();
+
+    $line =~ s/^\s*//;
+    $line =~ s/\s*$//;
+
+    my $value = "";
+    my $onekey = "";
+
+    while ( $line =~ /^(.*?)\t(.*)$/ )
+    {
+        $value = $1;
+        $line = $2;
+        $onekey = ${$allkeys}[$counter];
+        $linehash{$onekey} = $value;
+        $counter++;
+    }
+
+    # the last column
+
+    $value = $line;
+    $onekey = ${$allkeys}[$counter];
+
+    $linehash{$onekey} = $value;
+
+    return \%linehash;
+}
+
+#################################################################################
+# Analyzing the content of an idt file
+#################################################################################
+
+sub analyze_idt_file
+{
+    my ($filecontent) = @_;
+
+    my %table = ();
+    # keys are written in first line
+    my ($allkeys, $rownumber) = collect_all_keys(${$filecontent}[0]);
+
+    for ( my $i = 0; $i <= $#{$filecontent}; $i++ )
+    {
+        if (( $i == 0 ) || ( $i == 1 ) || ( $i == 2 )) { next; }
+
+        my $onelinehash = get_oneline_hash(${$filecontent}[$i], $allkeys, $rownumber);
+        my $linekey = $i - 2;  # ! : The linenumber is the unique key !? Always decrease by two, because of removed first three lines.
+        $table{$linekey} = $onelinehash;
+    }
+
+    return \%table;
+}
+
+#################################################################################
+# Reading all idt files in a specified directory
+#################################################################################
+
+sub read_all_tables_from_msidatabase
+{
+    my ($workdir) = @_;
+
+    my %database = ();
+
+    my $ext = "idt";
+
+    my $allidtfiles = installer::systemactions::find_file_with_file_extension($ext, $workdir);
+
+    for ( my $i = 0; $i <= $#{$allidtfiles}; $i++ )
+    {
+        my $onefilename = ${$allidtfiles}[$i];
+        my $longonefilename = $workdir . $installer::globals::separator . $onefilename;
+        if ( ! -f $longonefilename ) { installer::exiter::exit_program("ERROR: Could not find idt file: $longonefilename!", "read_all_tables_from_msidatabase"); }
+        my $filecontent = installer::files::read_file($longonefilename);
+        my $idtcontent = analyze_idt_file($filecontent);
+        my $key = $onefilename;
+        $key =~ s/\.idt\s*$//;
+        $database{$key} = $idtcontent;
+    }
+
+    return \%database;
+}
+
+#################################################################################
+# Reading an existing database completely
+#################################################################################
+
+sub readdatabase
+{
+    my ($databasename,$languagestringref) = @_;
+
+    installer::logger::include_timestamp_into_logfile("Performance Info: readdatabase start");
+
+    # replace variables in database name ?
+
+    # database has to be located in "."
+
+    # create directory for unpacking
+    my $databasedir = installer::systemactions::create_directories("database", $languagestringref);
+
+    # copy database
+    if ( ! -f $databasename ) { installer::exiter::exit_program("ERROR: Could not find reference database: $databasename!", "readdatabase"); }
+    my $fulldatabasepath = $databasedir . $installer::globals::separator . $databasename;
+    installer::systemactions::copy_one_file($databasename, $fulldatabasepath);
+
+    installer::logger::include_timestamp_into_logfile("Performance Info: readdatabase: before extracting tables");
+
+    # extract all tables from database
+    extract_all_tables_from_msidatabase($fulldatabasepath, $databasedir);
+
+    installer::logger::include_timestamp_into_logfile("Performance Info: readdatabase: before reading tables");
+
+    # read all tables
+    my $database = read_all_tables_from_msidatabase($databasedir);
+
+    # Test output:
+
+    #   foreach my $key1 ( keys %{$database} )
+    #   {
+    #       print "Test1: $key1\n";
+    #       foreach my $key2 ( keys %{$database->{$key1}} )
+    #       {
+    #           print "\tTest2: $key2\n";
+    #           foreach my $key3 ( keys %{$database->{$key1}->{$key2}} )
+    #           {
+    #               print "\t\tTest3: $key3: $database->{$key1}->{$key2}->{$key3}\n";
+    #           }
+    #       }
+    #   }
+
+    # Example: File table
+
+    # my $filetable = $database->{'File'};
+    # foreach my $linenumber ( keys  %{$filetable} )
+    # {
+    #   print "Test Filenumber: $linenumber\n";
+    #   foreach my $key ( keys %{$filetable->{$linenumber}} )
+    #   {
+    #       print "\t\tTest: $key: $filetable->{$linenumber}->{$key}\n";
+    #   }
+    # }
+
+    # Example: Searching for ProductCode in table Property
+
+    # my $column1 = "Property";
+    # my $column2 = "Value";
+    # my $searchkey = "ProductCode";
+    # my $propertytable = $database->{'Property'};
+    # foreach my $linenumber ( keys  %{$propertytable} )
+    # {
+    #   if ( $propertytable->{$linenumber}->{$column1} eq $searchkey )
+    #   {
+    #       print("Test: $searchkey : $propertytable->{$linenumber}->{$column2}\n");
+    #   }
+    # }
+
+    installer::logger::include_timestamp_into_logfile("Performance Info: readdatabase end");
+
+    return $database;
+}
+
+#################################################################################
+# Files can be included in merge modules. This is also important for update.
+#################################################################################
+
+sub readmergedatabase
+{
+    my ( $mergemodules, $languagestringref, $includepatharrayref ) = @_;
+
+    installer::logger::include_timestamp_into_logfile("Performance Info: readmergedatabase start");
+
+    my $mergemoduledir = installer::systemactions::create_directories("mergedatabase", $languagestringref);
+
+    my %allmergefiles = ();
+
+    $installer::globals::mergemodulenumber = $#{$mergemodules} + 1;
+
+    foreach my $mergemodule ( @{$mergemodules} )
+    {
+        my $filename = $mergemodule->{'Name'};
+        my $mergefile = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 1);
+
+        if ( ! -f $$mergefile ) { installer::exiter::exit_program("ERROR: msm file not found: $filename !", "readmergedatabase"); }
+        my $completesource = $$mergefile;
+
+        my $mergegid = $mergemodule->{'gid'};
+        my $workdir = $mergemoduledir . $installer::globals::separator . $mergegid;
+        if ( ! -d $workdir ) { installer::systemactions::create_directory($workdir); }
+
+        my $completedest = $workdir . $installer::globals::separator . $filename;
+        installer::systemactions::copy_one_file($completesource, $completedest);
+        if ( ! -f $completedest ) { installer::exiter::exit_program("ERROR: msm file not found: $completedest !", "readmergedatabase"); }
+
+        # extract all tables from database
+        extract_all_tables_from_msidatabase($completedest, $workdir);
+
+        # read all tables
+        my $onemergefile = read_all_tables_from_msidatabase($workdir);
+
+        $allmergefiles{$mergegid} = $onemergefile;
+    }
+
+    foreach my $mergefilegid ( keys %allmergefiles )
+    {
+        my $onemergefile = $allmergefiles{$mergefilegid};
+        my $filetable = $onemergefile->{'File'};
+
+        foreach my $linenumber ( keys %{$filetable} )
+        {
+            # Collecting all files from merge modules in global hash
+            $installer::globals::mergemodulefiles{$filetable->{$linenumber}->{'File'}} = 1;
+        }
+    }
+
+    installer::logger::include_timestamp_into_logfile("Performance Info: readmergedatabase end");
+}
+
+#################################################################################
+# Creating several useful hashes from old database
+#################################################################################
+
+sub create_database_hashes
+{
+    my ( $database ) = @_;
+
+    # 1. Hash ( Component -> UniqueFileName ), required in File table.
+    # Read from File table.
+
+    my %uniquefilename = ();
+    my %allupdatesequences = ();
+    my %allupdatefileorder = ();
+    my %revuniquefilename = ();
+    my %revshortfilename = ();
+    my %shortdirname = ();
+    my %componentid = ();
+    my %componentidkeypath = ();
+    my %alloldproperties = ();
+    my %allupdatelastsequences = ();
+    my %allupdatediskids = ();
+
+    my $filetable = $database->{'File'};
+
+    foreach my $linenumber ( keys  %{$filetable} )
+    {
+        my $comp = $filetable->{$linenumber}->{'Component_'};
+        my $uniquename = $filetable->{$linenumber}->{'File'};
+        my $filename = $filetable->{$linenumber}->{'FileName'};
+        my $sequence = $filetable->{$linenumber}->{'Sequence'};
+
+        my $shortname = "";
+        if ( $filename =~ /^\s*(.*?)\|\s*(.*?)\s*$/ )
+        {
+            $shortname = $1;
+            $filename = $2;
+        }
+
+        # unique is the combination of $component and $filename
+        my $key = "$comp/$filename";
+
+        if ( exists($uniquefilename{$key}) ) { installer::exiter::exit_program("ERROR: Component/FileName \"$key\" is not unique in table \"File\" !", "create_database_hashes"); }
+
+        my $value = $uniquename;
+        if ( $shortname ne "" ) { $value = "$uniquename;$shortname"; }
+        $uniquefilename{$key} = $value; # saving the unique keys and short names in hash
+
+        # Saving reverse keys too
+        $revuniquefilename{$uniquename} = $key;
+        if ( $shortname ne "" ) { $revshortfilename{$shortname} = $key; }
+
+        # Saving Sequences for unique names
+        $allupdatesequences{$uniquename} = $sequence;
+
+        # Saving unique names for sequences
+        $allupdatefileorder{$sequence} = $uniquename;
+    }
+
+    # 2. Hash, required in Directory table.
+
+    my $dirtable = $database->{'Directory'};
+
+    foreach my $linenumber ( keys  %{$dirtable} )
+    {
+        my $dir = $dirtable->{$linenumber}->{'Directory'}; # this is a unique name
+        my $defaultdir = $dirtable->{$linenumber}->{'DefaultDir'};
+
+        my $shortname = "";
+        if ( $defaultdir =~ /^\s*(.*?)\|\s*(.*?)\s*$/ )
+        {
+            $shortname = $1;
+            $shortdirname{$dir} = $shortname;   # collecting only the short names
+        }
+    }
+
+    # 3. Hash, collecting info from Component table.
+    # ComponentID and KeyPath have to be reused.
+
+    my $comptable = $database->{'Component'};
+
+    foreach my $linenumber ( keys  %{$comptable} )
+    {
+        my $comp = $comptable->{$linenumber}->{'Component'};
+        my $compid = $comptable->{$linenumber}->{'ComponentId'};
+        my $keypath = $comptable->{$linenumber}->{'KeyPath'};
+
+        $componentid{$comp} = $compid;
+        $componentidkeypath{$comp} = $keypath;
+    }
+
+    # 4. Hash, property table, required for ProductCode and Installlocation.
+
+    my $proptable = $database->{'Property'};
+
+    foreach my $linenumber ( keys  %{$proptable} )
+    {
+        my $prop = $proptable->{$linenumber}->{'Property'};
+        my $value = $proptable->{$linenumber}->{'Value'};
+
+        $alloldproperties{$prop} = $value;
+    }
+
+    # 5. Media table, getting last sequence
+
+    my $mediatable = $database->{'Media'};
+    $installer::globals::updatelastsequence = 0;
+
+    foreach my $linenumber ( keys  %{$mediatable} )
+    {
+        my $cabname = $mediatable->{$linenumber}->{'Cabinet'};
+        my $lastsequence = $mediatable->{$linenumber}->{'LastSequence'};
+        my $diskid = $mediatable->{$linenumber}->{'DiskId'};
+        $allupdatelastsequences{$cabname} = $lastsequence;
+        $allupdatediskids{$cabname} = $diskid;
+
+        if ( $lastsequence > $installer::globals::updatelastsequence ) { $installer::globals::updatelastsequence = $lastsequence; }
+    }
+
+    $installer::globals::updatesequencecounter = $installer::globals::updatelastsequence;
+
+    return (\%uniquefilename, \%revuniquefilename, \%revshortfilename, \%allupdatesequences, \%allupdatefileorder, \%shortdirname, \%componentid, \%componentidkeypath, \%alloldproperties, \%allupdatelastsequences, \%allupdatediskids);
+}
+
+
+1;
