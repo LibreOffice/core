@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view2.cxx,v $
- * $Revision: 1.89 $
+ * $Revision: 1.90 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -447,7 +447,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
             {
                 if ( pAsLink )
                     bAsLink = pAsLink->GetValue();
-                if ( pStyle )
+                if ( pStyle && pStyle->GetValue().Len() )
                     sGraphicFormat = pStyle->GetValue();
             }
             else
@@ -460,14 +460,15 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
                     ListboxControlActions::GET_SELECTED_ITEM );
                 OUString sTmpl;
                 aTemplateValue >>= sTmpl;
-                sGraphicFormat = sTmpl;
-                if ( sGraphicFormat.Len() )
-                    rReq.AppendItem( SfxStringItem( FN_PARAM_2, sGraphicFormat ) );
+                if( sTmpl.getLength() )
+                    sGraphicFormat = sTmpl;
+                rReq.AppendItem( SfxStringItem( FN_PARAM_2, sGraphicFormat ) );
                 rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bAsLink ) );
             }
         }
 
         SwWrtShell& rSh = GetWrtShell();
+        rSh.LockPaint();
         rSh.StartAction();
 
         /// #111827#
@@ -515,6 +516,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
         }
 
         rSh.EndAction();
+        rSh.UnlockPaint();
         if( nResId )
         {
             if( bShowError )
