@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_autocorrect1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 14:54:41 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:23:21 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -112,13 +112,13 @@ testcase tReplaceDashes_1
         end select                  
         
         printlog "- Replace dashes " & testword & " => " & testResult
-        Call wDokSchreiben testWord
-        Call wDokSchreiben " "
+        Call wTypeKeys testWord
+        Call wTypeKeys " "
         Sleep 1
-        Call wDokSchreiben "<Left><Shift Home>"
+        Call wTypeKeys "<Left><Shift Home>"
         EditCopy
         if GetClipboardText <> testResult then Warnlog "Something wrong in the test for " + testWord(i)
-        Call wDokSchreiben "<DELETE>"
+        Call wTypeKeys "<DELETE>"
     next i
 
     Call hCloseDocument
@@ -157,28 +157,28 @@ testcase tToolsAutocorrectOptions_1
     if Not Einstellungen.IsChecked then Warnlog "Second Checkbox: " & Einstellungen.IsChecked
     TabOptionenAutokorrektur.Ok
     
-    Call wDokSchreiben "Aabbcc"
-    Call wDokSchreiben " "
-    Call wDokSchreiben "<BACKSPACE><Shift Home>"
+    Call wTypeKeys "Aabbcc"
+    Call wTypeKeys " "
+    Call wTypeKeys "<BACKSPACE><Shift Home>"
     EditCopy
     if GetClipboardText <> "Aaccbb" then Warnlog "Something wrong in Use Replacement table when M:Y  T:Y"
     
-    Call wDokSchreiben "<DELETE>"
+    Call wTypeKeys "<DELETE>"
     
     '/// M:Y  T:N    
     Call fAutocorrectOptions("UseReplacementTable")
     
-    Call wDokSchreiben "Aabbcc"
-    Call wDokSchreiben " "
-    Call wDokSchreiben "<BACKSPACE><Shift Home>"
+    Call wTypeKeys "Aabbcc"
+    Call wTypeKeys " "
+    Call wTypeKeys "<BACKSPACE><Shift Home>"
     
     EditCopy
     if GetClipboardText <> "Aabbcc" then
         Warnlog "The content should NOT be changed before Autoformat! M:Y  T:N"
     else    
-        Call wDokSchreiben "<ESCAPE>"
+        Call wTypeKeys "<ESCAPE>"
         FormatAutoformatApply
-        Call wDokSchreiben "<Home><Shift End>"
+        Call wTypeKeys "<Home><Shift End>"
         GetClipboardText = ""
         EditCopy
         if GetClipboardText <> "Aaccbb" then
@@ -186,35 +186,35 @@ testcase tToolsAutocorrectOptions_1
         end if
     end if
     
-    Call wDokSchreiben "<DELETE>"
+    Call wTypeKeys "<DELETE>"
     
     '/// M:N  T:Y   
     Call fAutocorrectOptions("UseReplacementTable")
     
-    Call wDokSchreiben "Aabbcc"
-    Call wDokSchreiben " "
-    Call wDokSchreiben "<BACKSPACE><Shift Home>"
+    Call wTypeKeys "Aabbcc"
+    Call wTypeKeys " "
+    Call wTypeKeys "<BACKSPACE><Shift Home>"
     GetClipboardText = ""
     EditCopy
     if GetClipboardText <> "Aaccbb" then Warnlog "Something wrong in Use Replacement table when M:N  T:Y"
     
-    Call wDokSchreiben "<DELETE>"
+    Call wTypeKeys "<DELETE>"
     
     '/// M:N  T:N  
     Call fAutocorrectOptions("UseReplacementTable")
     
-    Call wDokSchreiben "Aabbcc"
-    Call wDokSchreiben " "
-    Call wDokSchreiben "<BACKSPACE><Shift Home>"
+    Call wTypeKeys "Aabbcc"
+    Call wTypeKeys " "
+    Call wTypeKeys "<BACKSPACE><Shift Home>"
     EditCopy
     if GetClipboardText <> "Aabbcc" then
         Warnlog "The content should NOT be changed before Autoformat! M:N  T:N"
         goto testend
     else
     
-        Call wDokSchreiben "<ESCAPE>"
+        Call wTypeKeys "<ESCAPE>"
         FormatAutoformatApply
-        Call wDokSchreiben "<Home><Shift End>"
+        Call wTypeKeys "<Home><Shift End>"
         GetClipboardText = ""
         EditCopy
         if GetClipboardText <> "Aabbcc" then
@@ -259,13 +259,13 @@ testcase tToolsAutocorrectOptions_2
     '/// M:Y  T:Y (default)
      testContent = "TEst"
      hopeResult  = "Test"
-     Call wDokSchreiben testContent
-     Call wDokSchreiben " "
-     Call wDokSchreiben "<BACKSPACE><Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys " "
+     Call wTypeKeys "<BACKSPACE><Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResult then Warnlog "Something wrong in Correct TWo INitial CApital when M:Y  T:Y"
 
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '/// M:Y  T:N
      testContent                 = "TEst"
@@ -274,9 +274,9 @@ testcase tToolsAutocorrectOptions_2
 
      Call fAutocorrectOptions("CorrectTWoINitialCApitals")
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben " "
-     Call wDokSchreiben "<BACKSPACE><Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys " "
+     Call wTypeKeys "<BACKSPACE><Shift Home>"
 
      EditCopy
      if GetClipboardText <> hopeResultBeforeAutoformat then
@@ -284,16 +284,16 @@ testcase tToolsAutocorrectOptions_2
         goto GOING1
      end if
 
-     Call wDokSchreiben "<ESCAPE>"
+     Call wTypeKeys "<ESCAPE>"
      FormatAutoformatApply
-     Call wDokSchreiben "<Shift End>"
+     Call wTypeKeys "<Shift End>"
      EditCopy
      if GetClipboardText <> hopeResultAfterAutoformat then
         Warnlog "The content should be changed after Autoformat!M:Y  T:N"
      end if
 
 GOING1:
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '/// M:N  T:Y
      testContent  = "TEst"
@@ -301,13 +301,13 @@ GOING1:
 
      Call fAutocorrectOptions("CorrectTWoINitialCApitals")
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben " "
-     Call wDokSchreiben "<BACKSPACE><Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys " "
+     Call wTypeKeys "<BACKSPACE><Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResult then Warnlog "Something wrong in Correct TWo INitial CApital when M:N  T:Y"
 
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '/// M:N  T:N
      testContent                 = "TEst"
@@ -316,18 +316,18 @@ GOING1:
 
      Call fAutocorrectOptions("CorrectTWoINitialCApitals")
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben " "
-     Call wDokSchreiben "<BACKSPACE><Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys " "
+     Call wTypeKeys "<BACKSPACE><Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResultBeforeAutoformat then
         Warnlog "The content should NOT be changed before Autoformat! M:N  T:N"
         goto testend
      end if
 
-     Call wDokSchreiben "<ESCAPE>"
+     Call wTypeKeys "<ESCAPE>"
      FormatAutoformatApply
-     Call wDokSchreiben "<Shift End>"
+     Call wTypeKeys "<Shift End>"
      EditCopy
      if GetClipboardText <> hopeResultAfterAutoformat then
         Warnlog "The content should NOT be changed after Autoformat! M:N  T:N"
@@ -355,12 +355,12 @@ testcase tToolsAutocorrectOptions_3
     '/// M:Y  T:Y (default)
      testContent = "the test for StarOffice automation. who is the author?"
      hopeResult  = "The test for StarOffice automation. Who is the author?"
-     Call wDokSchreiben testContent
-     Call wDokSchreiben "<Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys "<Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResult then Warnlog "Something wrong in Capitalize first letter of every setence when M:Y  T:Y"
 
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '/// M:Y  T:N
      testContent                 = "the test for StarOffice automation. who is the author?"
@@ -368,36 +368,36 @@ testcase tToolsAutocorrectOptions_3
      hopeResultAfterAutoformat   = "The test for StarOffice automation. Who is the author?"
 
      Call fAutocorrectOptions("CapitalizeFirstLetter")
-     Call wDokSchreiben testContent
-     Call wDokSchreiben "<Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys "<Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResultBeforeAutoformat then
         Warnlog "The content should NOT be changed before Autoformat! M:Y  T:N"
         goto GOING1
      end if
 
-     Call wDokSchreiben "<ESCAPE>"
+     Call wTypeKeys "<ESCAPE>"
      FormatAutoformatApply
-     Call wDokSchreiben "<Shift End>"
+     Call wTypeKeys "<Shift End>"
      EditCopy
      if GetClipboardText <> hopeResultAfterAutoformat then
         Warnlog "The content should be changed after Autoformat!M:Y  T:N"
      end if
 
 GOING1:
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '/// M:N  T:Y
      testContent  = "the test for StarOffice automation. who is the author?"
      hopeResult   = "The test for StarOffice automation. Who is the author?"
 
      Call fAutocorrectOptions("CapitalizeFirstLetter")
-     Call wDokSchreiben testContent
-     Call wDokSchreiben "<Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys "<Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResult then Warnlog "Something wrong in Capitalize first letter of every setence when M:N  T:Y"
 
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '/// test 'Capitalize first letter of every setence' , M:N  T:N
      testContent                 = "the test for StarOffice automation. who is the author?"
@@ -406,17 +406,17 @@ GOING1:
 
      Call fAutocorrectOptions("CapitalizeFirstLetter")
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben "<Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys "<Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResultBeforeAutoformat then
         Warnlog "The content should NOT be changed before Autoformat! M:N  T:N"
         goto testend
      end if
 
-     Call wDokSchreiben "<ESCAPE>"
+     Call wTypeKeys "<ESCAPE>"
      FormatAutoformatApply
-     Call wDokSchreiben "<Shift End>"
+     Call wTypeKeys "<Shift End>"
      EditCopy
      if GetClipboardText <> hopeResultAfterAutoformat then
         Warnlog "The content should NOT be changed after Autoformat! M:N  T:N"
@@ -448,8 +448,8 @@ testcase tToolsAutocorrectOptions_4_1
      testContent = "*Test*"
      hopeResult  = "Test"
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben "<Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys "<Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResult then Warnlog "Something wrong in Automatic bold when M:Y  T:Y"
 
@@ -478,7 +478,7 @@ testcase tToolsAutocorrectOptions_4_1
      TabFont.OK
      Sleep 1
 
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '/// M:Y  T:N
      testContent                 = "*Test*"
@@ -487,8 +487,8 @@ testcase tToolsAutocorrectOptions_4_1
 
      Call fAutocorrectOptions("AutomaticBoldAndUnderline")
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben "<Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys "<Shift Home>"
 
      EditCopy
      if GetClipboardText <> hopeResultBeforeAutoformat then
@@ -512,9 +512,9 @@ testcase tToolsAutocorrectOptions_4_1
      if getStyle <> hopeStyle then Warnlog "The style should be standard style before autoformat!"
      TabFont.Cancel
 
-     Call wDokSchreiben "<ESCAPE>"
+     Call wTypeKeys "<ESCAPE>"
      FormatAutoformatApply
-     Call wDokSchreiben "<Shift End>"
+     Call wTypeKeys "<Shift End>"
      EditCopy
      if GetClipboardText <> hopeResultAfterAutoformat then
         Warnlog "The content should be changed after Autoformat!M:Y  T:N"
@@ -547,7 +547,7 @@ testcase tToolsAutocorrectOptions_4_1
 
 GOING1:
 
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '/// M:N  T:Y
      testContent = "*Test*"
@@ -555,8 +555,8 @@ GOING1:
 
      Call fAutocorrectOptions("AutomaticBoldAndUnderline")
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben "<Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys "<Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResult then Warnlog "Something wrong in Automatic bold when M:Y  T:Y"
 
@@ -582,7 +582,7 @@ GOING1:
      TabFont.OK
      Sleep 1
 
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '/// M:N  T:N
      testContent                 = "*Test*"
@@ -591,8 +591,8 @@ GOING1:
 
      Call fAutocorrectOptions("AutomaticBoldAndUnderline")
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben "<Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys "<Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResultBeforeAutoformat then
         Warnlog "The content should NOT be changed before Autoformat! M:N  T:N"
@@ -615,9 +615,9 @@ GOING1:
      if getStyle <> hopeStyle then Warnlog "The style should be standard style before autoformat!"
      TabFont.Cancel
 
-     Call wDokSchreiben "<ESCAPE>"
+     Call wTypeKeys "<ESCAPE>"
      FormatAutoformatApply
-     Call wDokSchreiben "<Shift End>"
+     Call wTypeKeys "<Shift End>"
      EditCopy
      if GetClipboardText <> hopeResultAfterAutoformat then
         Warnlog "The content should NOT be changed after Autoformat! M:N  T:N"
@@ -664,8 +664,8 @@ testcase tToolsAutocorrectOptions_4_2
      testContent = "_Test_"
      hopeResult  = "Test"
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben "<Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys "<Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResult then Warnlog "Something wrong in Automatic underline when M:Y  T:Y"
 
@@ -680,7 +680,7 @@ testcase tToolsAutocorrectOptions_4_2
      TabFontEffects.OK
      Sleep 1
 
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '/// M:Y  T:N
      testContent                 = "_Test_"
@@ -689,8 +689,8 @@ testcase tToolsAutocorrectOptions_4_2
 
      Call fAutocorrectOptions("AutomaticBoldAndUnderline")
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben "<Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys "<Shift Home>"
 
      EditCopy
      if GetClipboardText <> hopeResultBeforeAutoformat then
@@ -709,9 +709,9 @@ testcase tToolsAutocorrectOptions_4_2
      TabFontEffects.OK
      Sleep 1
 
-     Call wDokSchreiben "<ESCAPE>"
+     Call wTypeKeys "<ESCAPE>"
      FormatAutoformatApply
-     Call wDokSchreiben "<Shift End>"
+     Call wTypeKeys "<Shift End>"
      EditCopy
      if GetClipboardText <> hopeResultAfterAutoformat then
         Warnlog "The content should be changed after Autoformat!M:Y  T:N"
@@ -727,7 +727,7 @@ testcase tToolsAutocorrectOptions_4_2
      TabFontEffects.OK
      Sleep 1
 GOING1:
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '/// M:N  T:Y
      testContent = "_Test_"
@@ -735,8 +735,8 @@ GOING1:
 
      Call fAutocorrectOptions("AutomaticBoldAndUnderline")
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben "<Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys "<Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResult then Warnlog "Something wrong in Automatic bold when M:N  T:Y"
 
@@ -752,7 +752,7 @@ GOING1:
      TabFontEffects.OK
      Sleep 1
 
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '/// M:N  T:N
      testContent                 = "_Test_"
@@ -761,8 +761,8 @@ GOING1:
 
      Call fAutocorrectOptions("AutomaticBoldAndUnderline")
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben "<Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys "<Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResultBeforeAutoformat then
         Warnlog "The content should NOT be changed before Autoformat! M:N  T:N"
@@ -777,9 +777,9 @@ GOING1:
      if getUnderlineStatus <> hopeUnderlineStatus then Warnlog "The content should NOT be underlined before autoformat!M:N  T:N "
      TabFontEffects.OK
 
-     Call wDokSchreiben "<ESCAPE>"
+     Call wTypeKeys "<ESCAPE>"
      FormatAutoformatApply
-     Call wDokSchreiben "<Shift End>"
+     Call wTypeKeys "<Shift End>"
      EditCopy
      if GetClipboardText <> hopeResultAfterAutoformat then
         Warnlog "The content should NOT be changed after Autoformat! M:N  T:N"
@@ -818,9 +818,9 @@ testcase tToolsAutocorrectOptions_5
      testContent = "WWW.sun.com"
      hopeResult  = "http://WWW.sun.com/"
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben " "
-     Call wDokSchreiben "<Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys " "
+     Call wTypeKeys "<Home>"
 
      fFormatCharacter("TabHyperlinkZeichen")
      if URLName.GetText <> hopeResult then Warnlog "The URL is NOT appeared when M:Y  T:Y"
@@ -837,9 +837,9 @@ testcase tToolsAutocorrectOptions_5
 
      Call fAutocorrectOptions("URLRecognition")
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben " "
-     Call wDokSchreiben "<Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys " "
+     Call wTypeKeys "<Home>"
 
      fFormatCharacter("TabHyperlinkZeichen")
      if URLName.GetText <> hopeResultBeforeAutoformat then Warnlog "The URL should NOT appeare when M:Y  T:N  before autoformat!"
@@ -862,9 +862,9 @@ testcase tToolsAutocorrectOptions_5
 
      Call fAutocorrectOptions("URLRecognition")
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben " "
-     Call wDokSchreiben "<Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys " "
+     Call wTypeKeys "<Home>"
 
      fFormatCharacter("TabHyperlinkZeichen")
      if URLName.GetText <> hopeResult then Warnlog "The URL is NOT appeared when M:N  T:Y"
@@ -881,9 +881,9 @@ testcase tToolsAutocorrectOptions_5
 
      Call fAutocorrectOptions("URLRecognition")
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben " "
-     Call wDokSchreiben "<Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys " "
+     Call wTypeKeys "<Home>"
 
      fFormatCharacter("TabHyperlinkZeichen")
      if URLName.GetText <> hopeResultBeforeAutoformat then Warnlog "The URL should NOT appeare when M:N  T:N  before autoformat!"
@@ -917,9 +917,9 @@ testcase tToolsAutocorrectOptions_6
     testContent = "1st"
 
     '/// M:Y  T:Y (default)
-     Call wDokSchreiben testContent
-     Call wDokSchreiben " "
-     Call wDokSchreiben "<BACKSPACE><Shift Left><Shift Left>"
+     Call wTypeKeys testContent
+     Call wTypeKeys " "
+     Call wTypeKeys "<BACKSPACE><Shift Left><Shift Left>"
 
      fFormatCharacter("TabFontPosition")
      if SuperScript.IsChecked <> TRUE then Warnlog "The superscript should be checked when M:Y  T:Y"
@@ -927,14 +927,14 @@ testcase tToolsAutocorrectOptions_6
      TabFontPosition.OK
 
      EditSelectAll
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '/// M:Y  T:N
      Call fAutocorrectOptions("Replace1st")
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben " "
-     Call wDokSchreiben "<BACKSPACE><Shift Left><Shift Left>"
+     Call wTypeKeys testContent
+     Call wTypeKeys " "
+     Call wTypeKeys "<BACKSPACE><Shift Left><Shift Left>"
 
      fFormatCharacter("TabFontPosition")
      if SuperScript.IsChecked = TRUE then Warnlog "The superscript should NOT be checked  when M:Y  T:N  before autoformat!"
@@ -949,14 +949,14 @@ testcase tToolsAutocorrectOptions_6
      TabFontPosition.OK
 
      EditSelectAll
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '/// M:N  T:Y
      Call fAutocorrectOptions("Replace1st")
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben " "
-     Call wDokSchreiben "<BACKSPACE><Shift Left><Shift Left>"
+     Call wTypeKeys testContent
+     Call wTypeKeys " "
+     Call wTypeKeys "<BACKSPACE><Shift Left><Shift Left>"
 
      fFormatCharacter("TabFontPosition")
      if SuperScript.IsChecked <> TRUE then Warnlog "The superscript should be checked  when M:N  T:Y"
@@ -964,14 +964,14 @@ testcase tToolsAutocorrectOptions_6
      TabFontPosition.OK
 
      EditSelectAll
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '/// M:N  T:N
      Call fAutocorrectOptions("Replace1st")
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben " "
-     Call wDokSchreiben "<BACKSPACE><Shift Left><Shift Left>"
+     Call wTypeKeys testContent
+     Call wTypeKeys " "
+     Call wTypeKeys "<BACKSPACE><Shift Left><Shift Left>"
 
      fFormatCharacter("TabFontPosition")
      if SuperScript.IsChecked = TRUE then Warnlog "The superscript should NOT be checked  when M:N  T:N  before autoformat!"
@@ -1007,13 +1007,13 @@ testcase tToolsAutocorrectOptions_7
     '/// M:Y  T:Y (default)
      testContent = "1/2"
      hopeResult  = "½"
-     Call wDokSchreiben testContent
-     Call wDokSchreiben " "
-     Call wDokSchreiben "<BACKSPACE><Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys " "
+     Call wTypeKeys "<BACKSPACE><Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResult then Warnlog "Something wrong in Replace 1/2 ... with ½ ... M:Y  T:Y"
 
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '/// M:Y  T:N
      testContent                 = "1/2"
@@ -1021,38 +1021,38 @@ testcase tToolsAutocorrectOptions_7
      hopeResultAfterAutoformat   = "½"
 
      Call fAutocorrectOptions("Replace1/2")
-     Call wDokSchreiben testContent
-     Call wDokSchreiben " "
-     Call wDokSchreiben "<BACKSPACE><Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys " "
+     Call wTypeKeys "<BACKSPACE><Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResultBeforeAutoformat then
         Warnlog "The content should NOT be changed before Autoformat! M:Y  T:N"
         goto GOING1
      end if
 
-     Call wDokSchreiben "<ESCAPE>"
+     Call wTypeKeys "<ESCAPE>"
      FormatAutoformatApply
-     Call wDokSchreiben "<Shift End>"
+     Call wTypeKeys "<Shift End>"
      EditCopy
      if GetClipboardText <> hopeResultAfterAutoformat then
         Warnlog "The content should be changed after Autoformat!M:Y  T:N"
      end if
 
 GOING1:
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '///  M:N  T:Y
      testContent  = "1/2"
      hopeResult   = "½"
 
      Call fAutocorrectOptions("Replace1/2")
-     Call wDokSchreiben testContent
-     Call wDokSchreiben " "
-     Call wDokSchreiben "<BACKSPACE><Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys " "
+     Call wTypeKeys "<BACKSPACE><Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResult then Warnlog "Something wrong in Replace 1/2 ... with ½ ...  when M:N  T:Y"
 
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '///  M:N  T:N
      testContent                 = "1/2"
@@ -1061,18 +1061,18 @@ GOING1:
 
      Call fAutocorrectOptions("Replace1/2")
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben " "
-     Call wDokSchreiben "<BACKSPACE><Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys " "
+     Call wTypeKeys "<BACKSPACE><Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResultBeforeAutoformat then
         Warnlog "The content should NOT be changed before Autoformat! M:N  T:N"
         goto testend
      end if
 
-     Call wDokSchreiben "<ESCAPE>"
+     Call wTypeKeys "<ESCAPE>"
      FormatAutoformatApply
-     Call wDokSchreiben "<Shift End>"
+     Call wTypeKeys "<Shift End>"
      EditCopy
      if GetClipboardText <> hopeResultAfterAutoformat then
         Warnlog "The content should NOT be changed after Autoformat! M:N  T:N"
@@ -1102,13 +1102,13 @@ testcase tToolsAutocorrectOptions_8
     '///  M:Y  T:Y (default)
      testContent = "Bla - Bla"
      hopeResult  = "Bla – Bla"
-     Call wDokSchreiben testContent
-     Call wDokSchreiben " "
-     Call wDokSchreiben "<BACKSPACE><Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys " "
+     Call wTypeKeys "<BACKSPACE><Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResult then Warnlog "Something wrong in Replace dashes M:Y  T:Y"
 
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '///  M:Y  T:N
      testContent                 = "Bla - Bla"
@@ -1116,38 +1116,38 @@ testcase tToolsAutocorrectOptions_8
      hopeResultAfterAutoformat   = "Bla – Bla"
 
      Call fAutocorrectOptions("ReplaceDashes")
-     Call wDokSchreiben testContent
-     Call wDokSchreiben " "
-     Call wDokSchreiben "<BACKSPACE><Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys " "
+     Call wTypeKeys "<BACKSPACE><Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResultBeforeAutoformat then
         Warnlog "The content should NOT be changed before Autoformat! M:Y  T:N"
         goto GOING1
      end if
 
-     Call wDokSchreiben "<ESCAPE>"
+     Call wTypeKeys "<ESCAPE>"
      FormatAutoformatApply
-     Call wDokSchreiben "<Shift End>"
+     Call wTypeKeys "<Shift End>"
      EditCopy
      if GetClipboardText <> hopeResultAfterAutoformat then
         Warnlog "The content should be changed after Autoformat!M:Y  T:N"
      end if
 
 GOING1:
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '///  M:N  T:Y
      testContent  = "Bla - Bla"
      hopeResult   = "Bla – Bla"
 
      Call fAutocorrectOptions("ReplaceDashes")
-     Call wDokSchreiben testContent
-     Call wDokSchreiben " "
-     Call wDokSchreiben "<BACKSPACE><Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys " "
+     Call wTypeKeys "<BACKSPACE><Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResult then Warnlog "Something wrong in Replace dashes  when M:N  T:Y"
 
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '///  M:N  T:N
      testContent                 = "Bla - Bla"
@@ -1156,18 +1156,18 @@ GOING1:
 
      Call fAutocorrectOptions("ReplaceDashes")
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben " "
-     Call wDokSchreiben "<BACKSPACE><Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys " "
+     Call wTypeKeys "<BACKSPACE><Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResultBeforeAutoformat then
         Warnlog "The content should NOT be changed before Autoformat! M:N  T:N"
         goto testend
      end if
 
-     Call wDokSchreiben "<ESCAPE>"
+     Call wTypeKeys "<ESCAPE>"
      FormatAutoformatApply
-     Call wDokSchreiben "<Shift End>"
+     Call wTypeKeys "<Shift End>"
      EditCopy
      if GetClipboardText <> hopeResultAfterAutoformat then
         Warnlog "The content should NOT be changed after Autoformat! M:N  T:N"
@@ -1195,25 +1195,25 @@ testcase tToolsAutocorrectOptions_11
     '/// + T:N (default)
      testContent = "Two  Space"
      hopeResult  = "Two  Space"
-     Call wDokSchreiben testContent
-     Call wDokSchreiben "<Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys "<Shift Home>"
      EditCopy
      if GetClipboardText <> hopeResult then Warnlog "Should NOT ignore spaces T:N"
 
-     Call wDokSchreiben "<DELETE>"
+     Call wTypeKeys "<DELETE>"
 
     '/// + T:Y
      testContent = "Two  Space"
      hopeResult  = "Two Space"
 
      Call fAutocorrectOptions("IgnoreDoulbeSpaces")
-     Call wDokSchreiben testContent
-     Call wDokSchreiben "<Shift Home>"
+     Call wTypeKeys testContent
+     Call wTypeKeys "<Shift Home>"
      EditCopy
 
      if GetClipboardText <> hopeResult then Warnlog "Should ignore spaces T:Y"
 
-     Call wDokSchreiben "<ESCAPE>"
+     Call wTypeKeys "<ESCAPE>"
 
     '/// Recover to the default
      Call fAutocorrectOptions("IgnoreDoulbeSpaces")
@@ -1240,26 +1240,26 @@ testcase tToolsAutocorrectOptions_12
      testContent = "Test1"
      hopeResult  = "1.Test1"
 
-     Call wDokSchreiben firstLine
-     Call wDokSchreiben "<Return>"
-     Call wDokSchreiben testContent
-     Call wDokSchreiben "<Return><Up><Home><Shift End>"
+     Call wTypeKeys firstLine
+     Call wTypeKeys "<Return>"
+     Call wTypeKeys testContent
+     Call wTypeKeys "<Return><Up><Home><Shift End>"
      EditCopy
      if GetClipboardText <> hopeResult then Warnlog "Should Apply numbering when T:Y "
 
      EditSelectAll
-     Call wDokSchreiben "<DELETE>"
-     Call wDokSchreiben "<BACKSPACE>",3
+     Call wTypeKeys "<DELETE>"
+     Call wTypeKeys "<BACKSPACE>",3
 
     '/// + T:N
      testContent = "Test1"
      hopeResult  = "Test1"
 
      Call fAutocorrectOptions("ApplyNumbering")
-     Call wDokSchreiben firstLine
-     Call wDokSchreiben "<Return>"
-     Call wDokSchreiben testContent
-     Call wDokSchreiben "<Return><Up><Home><Shift End>"
+     Call wTypeKeys firstLine
+     Call wTypeKeys "<Return>"
+     Call wTypeKeys testContent
+     Call wTypeKeys "<Return><Up><Home><Shift End>"
      EditCopy
 
      if GetClipboardText <> hopeResult then Warnlog "Should NOT Apply numbering when T:Y"
@@ -1303,8 +1303,8 @@ testcase tToolsAutocorrectOptions_13
     '/// + T:Y (default)
      testContent = testlist(i)
 
-     Call wDokSchreiben testContent
-     Call wDokSchreiben "<Return><Up><Home><Shift End>"
+     Call wTypeKeys testContent
+     Call wTypeKeys "<Return><Up><Home><Shift End>"
      try
         EditCopy
         Warnlog "Apply border is NOT correct when T:Y " +testlist(i)
@@ -1319,15 +1319,15 @@ testcase tToolsAutocorrectOptions_13
        endcatch
      TabUmrandung.Cancel
 
-     Call wDokSchreiben "<Down>"
+     Call wTypeKeys "<Down>"
 
     '/// + T:N
      testContent = testlist(i)
      hopeResult  = testlist(i)
 
      Call fAutocorrectOptions("ApplyBorder")
-     Call wDokSchreiben testContent
-     Call wDokSchreiben "<Return><Up><Home><Shift End>"
+     Call wTypeKeys testContent
+     Call wTypeKeys "<Return><Up><Home><Shift End>"
      EditCopy
 
      if GetClipboardText <> hopeResult then Warnlog "Something wrong  when T:N "+testlist(i)
@@ -1361,8 +1361,8 @@ testcase tToolsAutocorrectOptions_14
 
     '/// + T:Y (default)
      testContent = "+---+"
-     Call wDokSchreiben testContent
-     Call wDokSchreiben "<Return><Up><Home><Shift End>"
+     Call wTypeKeys testContent
+     Call wTypeKeys "<Return><Up><Home><Shift End>"
      try
         EditCopy
         Warnlog "Something wrong in create table T:Y"
@@ -1381,8 +1381,8 @@ testcase tToolsAutocorrectOptions_14
      hopeResult  = "+---+"
 
      Call fAutocorrectOptions("CreateTable")
-     Call wDokSchreiben testContent
-     Call wDokSchreiben "<Return><Up><Home><Shift End>"
+     Call wTypeKeys testContent
+     Call wTypeKeys "<Return><Up><Home><Shift End>"
      EditCopy
 
      if GetClipboardText <> hopeResult then Warnlog "Something wrong  when T:N"
@@ -1422,25 +1422,25 @@ testcase tToolsAutocorrectOptions_16
    Call hNewDocument
 
     '///  M:N (default)
-     wDokSchreiben testContent1
-     wDokSchreiben "<Return>",2
-     wDokSchreiben testContent2
+     wTypeKeys testContent1
+     wTypeKeys "<Return>",2
+     wTypeKeys testContent2
 
      FormatAutoformatApply
 
-     wDokSchreiben "<Up><Up><Home><Shift End>"
+     wTypeKeys "<Up><Up><Home><Shift End>"
      wait 200
      EditCopy
      if GetClipboardText <> hopeResultAfterAutoformat1 then Warnlog "the first line's content is NOT correct when M:N"
 
-     wDokSchreiben "<Down><Home><Shift End>"
+     wTypeKeys "<Down><Home><Shift End>"
      try
         EditCopy
         Warnlog "the second line's content is NOT correct when M:N"
      catch
      endcatch
 
-     wDokSchreiben "<Down><Home><Shift End>"
+     wTypeKeys "<Down><Home><Shift End>"
      wait 200
      EditCopy
      if GetClipboardText <> hopeResultAfterAutoformat2 then Warnlog "the third line's content is NOT correct when M:N"
@@ -1452,18 +1452,18 @@ testcase tToolsAutocorrectOptions_16
     '///  M:Y
      Call fAutocorrectOptions("RemoveBlankParagraphs")
 
-     wDokSchreiben testContent1
-     wDokSchreiben "<Return>",2
-     wDokSchreiben testContent2
+     wTypeKeys testContent1
+     wTypeKeys "<Return>",2
+     wTypeKeys testContent2
 
      FormatAutoformatApply
 
-     wDokSchreiben "<Up><Up><Home><Shift End>"
+     wTypeKeys "<Up><Up><Home><Shift End>"
      wait 200
      EditCopy
      if GetClipboardText <> hopeResultAfterAutoformat1 then Warnlog "the first line's content is NOT correct when M:Y"
 
-     wDokSchreiben "<Down><Home><Shift End>"
+     wTypeKeys "<Down><Home><Shift End>"
      wait 200
      EditCopy
      if GetClipboardText <> hopeResultAfterAutoformat2 then Warnlog "the second line's content is NOT correct when M:Y"
@@ -1493,9 +1493,9 @@ testcase tToolsAutocorrectOptions_18
      hopeResultBeforeAutoformat  = "+ Hello"
      hopeResultAfterAutoformat   = "•	Hello"
 
-     wDokSchreiben testContent
+     wTypeKeys testContent
      wait 100
-     wDokSchreiben "<Shift Home>"
+     wTypeKeys "<Shift Home>"
      Sleep 1
      GetClipboardText = ""
      EditCopy
@@ -1503,7 +1503,7 @@ testcase tToolsAutocorrectOptions_18
 
      FormatAutoformatApply
 
-     wDokSchreiben "<Home><Shift End>"
+     wTypeKeys "<Home><Shift End>"
      Sleep 1
      GetClipboardText = ""
      EditCopy
@@ -1522,9 +1522,9 @@ testcase tToolsAutocorrectOptions_18
 
      Call fAutocorrectOptions("ReplaceBullets")
 
-     wDokSchreiben testContent
+     wTypeKeys testContent
      wait 100
-     wDokSchreiben "<Shift Home>"
+     wTypeKeys "<Shift Home>"
      Sleep 1
      GetClipboardText = ""
      EditCopy
@@ -1532,7 +1532,7 @@ testcase tToolsAutocorrectOptions_18
 
      FormatAutoformatApply
      Sleep 1
-     wDokSchreiben "<Home><Shift End>"
+     wTypeKeys "<Home><Shift End>"
      Sleep 1
      GetClipboardText = ""
      EditCopy
@@ -1577,16 +1577,16 @@ testcase tToolsAutocorrectOptions_19
      Kontext "TabTypografisch"
      TabTypografisch.OK
 
-     wDokSchreiben (testContent + "Hello")
+     wTypeKeys (testContent + "Hello")
      wait 100
-     wDokSchreiben "<Home><Shift Right>"
+     wTypeKeys "<Home><Shift Right>"
      Sleep 1
      EditCopy
      if GetClipboardText <> hopeResultBeforeAutoformat then Warnlog "Should NOT change before autoformat "
 
      FormatAutoformatApply
 
-     wDokSchreiben "<Home><Shift Right>"
+     wTypeKeys "<Home><Shift Right>"
      Sleep 1
      EditCopy
      if GetClipboardText <> hopeResultAfterAutoformat then Warnlog "Should  change after autoformat "
@@ -1602,16 +1602,16 @@ testcase tToolsAutocorrectOptions_19
 
      Call fAutocorrectOptions("ReplaceQuotes")
 
-     wDokSchreiben (testContent + "Hello")
+     wTypeKeys (testContent + "Hello")
      wait 100
-     wDokSchreiben "<Home><Shift Right>"
+     wTypeKeys "<Home><Shift Right>"
      Sleep 1
      EditCopy
      if GetClipboardText <> hopeResultBeforeAutoformat then Warnlog "Should NOT change before autoformat "
 
      FormatAutoformatApply
 
-     wDokSchreiben "<Home><Shift Right>"
+     wTypeKeys "<Home><Shift Right>"
      Sleep 1
      EditCopy
      if GetClipboardText <> hopeResultAfterAutoformat then Warnlog "Should  NOT change after autoformat "
