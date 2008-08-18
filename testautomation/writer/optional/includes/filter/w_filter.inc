@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_filter.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:51 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:27:49 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -157,8 +157,8 @@ testcase tSammleImportFilter
             printlog "----- NOT found : "+ c + chr(13)
          else
             qaErrorLog "--------- EVERYTHING is fine now, ignore every failure above about not found filters! :-) --------------"
-         endif
-      endif
+         end if
+      end if
       if (sPlatform = "lin") then
          qaErrorLog "ok there are failures, lets check them: sort out filters that are not allowed on this platform! (LINUX) :-)"
          b = fReadComparePrintLists (fW4WDiffFilterList, lsListeFail())
@@ -172,11 +172,11 @@ testcase tSammleImportFilter
             printlog "----- NOT found : "+ c + chr(13)
          else
             qaErrorLog "--------- EVERYTHING is fine now, ignore every failure above about not found filters! :-) --------------"
-         endif
+         end if
       else
          Warnlog ("The above filters are missing: " + a)
-      endif
-   endif
+      end if
+   end if
 
    printlog "'///- comparing ## Language   dependent ## Standard installation ## filters with existing ones"
    b = fReadComparePrintLists (fStandardLanguageFilterList, lsListe())
@@ -184,11 +184,11 @@ testcase tSammleImportFilter
    if b = 0 then
       warnlog "         No filters found :-( - maybe because list-file is empty, please create it!"
       warnlog "         take the file </testtool/input/writer/la_sp/if_st_1.all> and put all filters for this language on the same position into the file: " +fStandardLanguageFilterList
-   endif
+   end if
    a = ListCount (lsListeFail()) ' not found filters
    if (a > 0) then
       Warnlog ("The above filters are missing: " + a)
-   endif
+   end if
 
     '///' delete ------------ filters from IST-list (used filters appear twice) ///'
     '/// <font color=#ff0000> TBO TODO: select them! nice behaviour i think :-) </FONT> ///'
@@ -207,7 +207,7 @@ testcase tSammleImportFilter
             warnlog " there are seperators missing or too much :-("
             Printlog " check if all groups are available! the groupnames can be found in the tostcase <tGroupNameCheck> later on"
             warnlog " !!! NO FILTER IS ALLOWED TO HAVE THE SAME NAME AS ANY GROUPNAME !!! because than this group won't show up in the FileOpen Dialog!"
-         endif
+         end if
    '///' delete <...> filters from IST-list (used filters appear twice) ///'
          printlog "- Already used filters in previous tests."
          gZaehler = 0
@@ -229,7 +229,7 @@ testcase tSammleImportFilter
       printlog "----- found : "+ fReadComparePrintLists (fCompleteDiffFilterList, lsListe()) + chr(13)
    else
       printlog chr(13)+"'/// - this is a STANDARD Installation ?! (<50 filters still available): "+ListCount (lsListe()) + chr(13)
-   endif
+   end if
 
    if ListCount ( lsListe() ) <> 0 then
       printlog Chr(13)
@@ -294,12 +294,12 @@ testcase tCollectSaveAsFilter
    if (app.dir(fActualFilterFile) = "") then
       Call ListWrite(lsListe(),fActualFilterFile, "utf8")
       Printlog "- Got Filters from Office; written to: " + fActualFilterFile + "; Count: "+ ListCount (lsListe())
-   endif
+   end if
    if (app.dir(fSortedFilterFile) = "") then
       Call ListSort(lsListe())
       Call ListWrite(lsListe(),fSortedFilterFile, "utf8")
       Printlog "- Got Filters from Office; written to: " + fSortedFilterFile + chr(13)
-   endif
+   end if
 endcase
 
 testcase tCollectExportFilters
@@ -355,12 +355,12 @@ testcase tCollectExportFilters
    if (app.dir(fActualFilterFile) = "") then
       Call ListWrite(lsListe(),fActualFilterFile, "utf8")
       Printlog "- Got Filters from Office; written to: " + fActualFilterFile + "; Count: "+ ListCount (lsListe())
-   endif
+   end if
    if (app.dir(fSortedFilterFile) = "") then
       Call ListSort(lsListe())
       Call ListWrite(lsListe(),fSortedFilterFile, "utf8")
       Printlog "- Got Filters from Office; written to: " + fSortedFilterFile + chr(13)
-   endif
+   end if
 ' Should look like this:
 ' ---- WRITER : 3
 'PDF - Portable Document Format (.pdf)
@@ -521,7 +521,7 @@ function fReadComparePrintLists (fFilterList as string, gFilterList() as string,
    else
       warnlog " Missing list file, create empty file: "+fFilterList
       ListWrite ( lFilterList(), fFilterList, "utf8")
-   endif
+   end if
    '/// print filters which were not found from ONE list ///'
    if ListCount ( lFilterList() ) <> 0 then
       qaErrorLog "The following filters aren't available in the Office! look what happend to them !!!" + "; Count: "+ ListCount (lFilterList())
@@ -572,11 +572,11 @@ function TBOXMLGetListOfFilterGroups ( iLang as integer, sList() as string  ) as
         sXMLFile = ConvertPath ( gNetzOfficePath + "share\registry\res\" + gISOLang + "\org\openoffice\Office\UI.xcu" )
    else
         sXMLFile = ConvertPath ( gOfficePath + "share\registry\res\" + gISOLang + "\org\openoffice\Office\UI.xcu" )
-   endif
+   end if
    if (dir(sXMLFile) = "") then
        qaErrorLog "File doesn't exist :-( '" + sXMLFile + "'"
        exit function
-   endif
+   end if
    SAXReadFile ( sXMLFile )
    bCloseLocal = TRUE
    hXMLGotoElement ( sElementLine )
@@ -595,7 +595,7 @@ function TBOXMLGetListOfFilterGroups ( iLang as integer, sList() as string  ) as
                if (ConvertLanguage2( slang, TRUE ) = iLang) then ListAppend (sList(),SAXGetChars)
             else
 '               if SAXGetNodeType = NodeTypeCharacter then Printlog " "+":"+slang +":"+i+":"+SAXGetChars
-            endif
+            end if
             SAXSeekElement ( 0 )
             SAXSeekElement ( 0 )
             SAXSeekElement ( 0 )
