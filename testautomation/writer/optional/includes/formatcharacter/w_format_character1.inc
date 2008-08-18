@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_format_character1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:52 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:28:11 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -80,7 +80,7 @@ testcase tFormatCharacter2
 	Call hNewDocument
 	'/// New document ///
 	Printlog "  - adjust Font- and Paragraph-Format"
-	Call wDokSchreiben "Format<Shift Mod1 Left>"
+	Call wTypeKeys "Format<Shift Mod1 Left>"
 	'/// Insert a word and select it ///
 	FormatCharacter
 	'/// Select Format / Character and adjust Font- and Paragraph-Formats ///
@@ -202,12 +202,12 @@ testcase tFormatCharacter3
 	TabHintergrund.OK
 	'/// Close dialog and reopen with Format / Character ///
 	
-	Call wDokSchreiben "This is formatted text <Home><Right>"
+	Call wTypeKeys "This is formatted text <Home><Right>"
 	
 	printlog "  - check character"
 	
 	'/// Check settings made ///
-	Call wDokSchreiben "<Home><Right>"
+	Call wTypeKeys "<Home><Right>"
 	FormatCharacter
 	Kontext
 	active.SetPage TabFont
@@ -262,7 +262,7 @@ testcase tFormatCharacter3
 	else
 		Call hFileOpen ( gOfficePath + "user\work\format1.odm" )
 	end if
-	Call wDokSchreiben "<Home><Right>"
+	Call wTypeKeys "<Home><Right>"
 	Wait 500
 	'/// Reopen previous saved documentand check settings made under Format / Character ///
 	
@@ -308,11 +308,11 @@ testcase tFormatHyperlink
 	'/// Open a new writerdocument
 	Call hNewDocument
 	'/// Enter a URL (www.sun.com) in document
-	Call wDokSchreiben "Autocorrect my URL www.sun.com"
+	Call wTypeKeys "Autocorrect my URL www.sun.com"
 	'/// Enter a space after URL
-	Call wDokSchreiben " "
+	Call wTypeKeys " "
 	'/// URL should have been autocompleted to http://www.sun.com
-	Call wDokSchreiben "<Left>",7
+	Call wTypeKeys "<Left>",7
 	FormatCharacter
 	Kontext
 	Active.Setpage TabHyperlinkZeichen
@@ -325,9 +325,9 @@ testcase tFormatHyperlink
 	TabHyperlinkZeichen.Cancel
 
 	'/// Change URL to www.sauna.com
-	Call wDokSchreiben "a"
-	Call wDokSchreiben "<Left>" ,2
-	Call wDokSchreiben "a"
+	Call wTypeKeys "a"
+	Call wTypeKeys "<Left>" ,2
+	Call wTypeKeys "a"
 	
 	'/// Check whether URL has been changed
 	FormatCharacter
@@ -359,8 +359,8 @@ testcase tFormatStyles1
 	Call hNewDocument
 	printlog "- Style 'Bold' "
 	'/// Write 'Style Bold' - execute Context menu 'Style Bold'
-	Call wDokSchreiben "Style Bold"
-	Call wDokSchreiben "<Shift Home>"
+	Call wTypeKeys "Style Bold"
+	Call wTypeKeys "<Shift Home>"
 	Kontext "DocumentWriter"
 	DocumentWriter.OpenContextMenu
 	Call hMenuSelectNr(iMenuEntry)	' entry should be 'Style'
@@ -373,14 +373,14 @@ testcase tFormatStyles1
         Warnlog "Style 'Bold' with context menu has not been set!"
     end if
 
-	Call wDokSchreiben "<End><Mod1 Shift X>"
+	Call wTypeKeys "<End><Mod1 Shift X>"
     wait 500
-	Call wDokSchreiben "<Return>"
+	Call wTypeKeys "<Return>"
 	
 	printlog "- Style 'Italic' "
 	'/// Write 'Style Itlaic' - execute Context menu 'Style Italic'
-	Call wDokSchreiben "Style Italic"
-	Call wDokSchreiben "<Shift Home>"
+	Call wTypeKeys "Style Italic"
+	Call wTypeKeys "<Shift Home>"
 	Kontext "DocumentWriter"
 	DocumentWriter.OpenContextMenu
 	Call hMenuSelectNr(iMenuEntry)	' entry should be 'Style'
@@ -393,13 +393,13 @@ testcase tFormatStyles1
         Warnlog "#58722#Style 'Italic' with context menu has not been set!"
     end if
 
-	Call wDokSchreiben "<End><Right>"
-	Call wDokSchreiben "<Return>"
+	Call wTypeKeys "<End><Right>"
+	Call wTypeKeys "<Return>"
 	
 	printlog "- Style 'Underline' "
 	'/// Write 'Style Underline' - execute Context menu 'Style Underline'
-	Call wDokSchreiben "Style Underline"
-	Call wDokSchreiben "<Shift Home>"
+	Call wTypeKeys "Style Underline"
+	Call wTypeKeys "<Shift Home>"
 	Kontext "DocumentWriter"
 	DocumentWriter.OpenContextMenu
 	Call hMenuSelectNr(iMenuEntry)	' entry should be 'Style'
@@ -413,13 +413,13 @@ testcase tFormatStyles1
 	Kontext "TabFontEffects"
 	if Underline.GetSelIndex <> 2 then Warnlog "Style 'Underline' with context menu has not been set!"
 	TabFontEffects.Cancel
-	Call wDokSchreiben "<End><Right>"
-	Call wDokSchreiben "<Return>"
+	Call wTypeKeys "<End><Right>"
+	Call wTypeKeys "<Return>"
 	
 	printlog "- Style 'StrikeThrough' "
 	'/// Write 'Style Strikethrough' - execute Context menu 'Style Strikethrough'
-	Call wDokSchreiben "Style Strikethrough"
-	Call wDokSchreiben "<Shift Home>"
+	Call wTypeKeys "Style Strikethrough"
+	Call wTypeKeys "<Shift Home>"
 	Kontext "DocumentWriter"
 	DocumentWriter.OpenContextMenu
 	Call hMenuSelectNr(iMenuEntry)	' entry should be 'Style'
@@ -433,13 +433,13 @@ testcase tFormatStyles1
 	Kontext "TabFontEffects"
 	if StrikeThrough.GetSelIndex <> 2 then Warnlog "Style 'StrikeThrough' with context menu has not been set!"
 	TabFontEffects.Cancel
-	Call wDokSchreiben "<End>"
-	Call wDokSchreiben "<Right><Return>"
+	Call wTypeKeys "<End>"
+	Call wTypeKeys "<Right><Return>"
 
 	printlog "- Style 'Shadow' "
 	'/// Write 'Style Shadow' - execute Context menu 'Style Shadow'
-	Call wDokSchreiben "Style Shadow"
-	Call wDokSchreiben "<Shift Home>"
+	Call wTypeKeys "Style Shadow"
+	Call wTypeKeys "<Shift Home>"
 	Kontext "DocumentWriter"
 	DocumentWriter.OpenContextMenu
 	Call hMenuSelectNr(iMenuEntry)	' entry should be 'Style'
@@ -453,13 +453,13 @@ testcase tFormatStyles1
 	Kontext "TabFontEffects"
 	if Shadow.IsChecked = False then Warnlog "Style 'Shadow' with context menu has not been set!"
 	TabFontEffects.Cancel
-	Call wDokSchreiben "<End><Right>"
-	Call wDokSchreiben "<Return>"
+	Call wTypeKeys "<End><Right>"
+	Call wTypeKeys "<Return>"
 
 	printlog "- Style 'Outline' "
 	'/// Write 'Style Outline' - execute Context menu 'Style Outline'
-	Call wDokSchreiben "Style Outline"
-	Call wDokSchreiben "<Shift Home>"
+	Call wTypeKeys "Style Outline"
+	Call wTypeKeys "<Shift Home>"
 	Kontext "DocumentWriter"
 	DocumentWriter.OpenContextMenu
 	Call hMenuSelectNr(iMenuEntry)	' entry should be 'Style'
@@ -542,12 +542,12 @@ testcase tFormatCharacter
 	TabHintergrund.OK
 	'/// Close dialog and reopen with Format / Character ///
 
-	Call wDokSchreiben "Dies ist ein formatierter Text <Home><Right>"
+	Call wTypeKeys "Dies ist ein formatierter Text <Home><Right>"
 
 	printlog "  - check character"
 
 	'/// Check settings made ///
-	Call wDokSchreiben "<Home><Right>"
+	Call wTypeKeys "<Home><Right>"
 	FormatCharacter
 	Kontext
 	active.SetPage TabFont
@@ -602,7 +602,7 @@ testcase tFormatCharacter
 	else
     	Call hFileOpen ( gOfficePath + "user\work\format1.odm" )
 	end if
-   	Call wDokSchreiben "<Home><Right>"
+   	Call wTypeKeys "<Home><Right>"
 	Wait 500
 	'/// Reopen previous saved documentand check settings made under Format / Character ///
 
