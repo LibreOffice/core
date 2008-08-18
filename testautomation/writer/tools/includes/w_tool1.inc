@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_tool1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:36:08 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:43:01 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -112,17 +112,17 @@ sub hClipboarden
    endcatch
 
    Sleep 1
-   Call wDokSchreiben "<Escape>"
+   Call wTypeKeys "<Escape>"
    EditPaste
    Sleep 1
    EditCopy
-   Call wDokSchreiben "<Escape>"
+   Call wTypeKeys "<Escape>"
    Sleep 1
    EditPaste
    Sleep 1
-   Call wDokSchreiben "<Delete>"
+   Call wTypeKeys "<Delete>"
    Sleep 2
-   Call wDokSchreiben "<Escape>"
+   Call wTypeKeys "<Escape>"
    Sleep 1
 end sub
 
@@ -131,7 +131,7 @@ end sub
 sub FeldbefehlAendernUndKontrollieren ( Selektion as Integer )
    Dim Merk_dir_das as String
 
-   Call wDokSchreiben "<Left>"
+   Call wTypeKeys "<Left>"
    EditFields
    Kontext "FeldbefehlBearbeitenDokument"
    if Formatliste.IsVisible AND Formatliste.IsEnabled then
@@ -161,9 +161,9 @@ sub FeldbefehlAendernUndKontrollieren ( Selektion as Integer )
       end if
    end if
    FeldbefehlBearbeitenDokument.OK
-   Call wDokSchreiben "<End>"
+   Call wTypeKeys "<End>"
    Sleep 1
-   Call wDokSchreiben "<Return>"
+   Call wTypeKeys "<Return>"
 end sub
 
 ' -----------------------------------------------------------------------
@@ -227,8 +227,8 @@ sub wWriterKickBoxAway
          catch
             Active.Yes
          endcatch
-      endif
-   endif
+      end if
+   end if
 end sub
 
 '----------------------------------------------------------------
@@ -246,25 +246,25 @@ sub tCheckAutotextInGroup(NumberOff as integer, NumberVariant as integer)
          if Active.Exists then
             Warnlog Active.Gettext + "Group " + NumberVariant + " Entry " + j
             Active.Ok
-         endif
+         end if
          wait 500
          Kontext "Eingabefeld"
          if Eingabefeld.Exists then Eingabefeld.Cancel
          wait 500
-         Call wDokSchreiben "<Mod1 a>"
+         Call wTypeKeys "<Mod1 a>"
          EditCopy
          if GetClipboard = "" then Warnlog "No autotext inserted. Variant: "+ NumberVariant + "  " + j
       catch
          Warnlog "Variant "+ NumberVariant + " " + j +" has a Problem."
       endcatch
-      Call wDokSchreiben "<Delete>"  ' only text
+      Call wTypeKeys "<Delete>"  ' only text
       Call wMarkObjects(TRUE)
       EditAutotext
       Kontext "Active"
       if active.Exists then
          QAErrorlog Active.Gettext
          Active.Ok
-      endif
+      end if
       Kontext "AutoText"
       if not Vorschau_anzeigen.IsChecked then Warnlog "Preview isn't checked anymore!"
    next j
@@ -308,7 +308,7 @@ sub hMalZeichnen ( xS, yS, xE, yE )
       DocumentWriter.MouseMove ( xE, yE )
       DocumentWriter.MouseUp   ( xE, yE )
       Sleep 1
-      if DocumentWriter.IsEnabled then Call wDokSchreiben "<Escape>"
+      if DocumentWriter.IsEnabled then Call wTypeKeys "<Escape>"
 
    Case "HTMLDOKUMENT"
       Kontext "DocumentWriterWeb"
@@ -347,9 +347,9 @@ sub sMenufunktionen(Fuer_Was as string)
          		Warnlog "#i82427#-Mac OS X (Aqua): Drawing function does not draw anything"
          	else
 	         	Warnlog "Button (" + i + ")" + Fuer_Was + " is disabled "
-         	endif
-         endif
-      endif
+         	end if
+         end if
+      end if
    next i
 
    Kontext
@@ -367,18 +367,18 @@ sub sMenufunktionen(Fuer_Was as string)
             ControlPropertiesDialog.Close
          else
             Warnlog "  - Controlfieldproperties "+ Fuer_Was +" from Menu not available!"
-         endif
-      endif
+         end if
+      end if
       printlog Fuer_Was
    catch
         if gPlatform = "osx" then
             Warnlog "#i82427#-Mac OS X (Aqua): Drawing function does not draw anything"
         else
             Warnlog "  - Controlfieldproperties "+ Fuer_Was +" from Menu not available!"
-        endif         
+        end if         
    endcatch
 
-   Call wDokSchreiben "<Escape>"
+   Call wTypeKeys "<Escape>"
    Kontext "FormControls"
  end sub
 
@@ -397,7 +397,7 @@ sub sAutopilot_Groupelement
          Warnlog "Entry couldn't be overtaken in 1st Window of the Group Box-Autopilot!"
          Kontext "AutopilotGroupelement"
          CancelButton.Click
-      endif
+      end if
       Sleep 3
       Kontext "AutopilotGroupelement"
       if NextButton.IsEnabled then
@@ -405,7 +405,7 @@ sub sAutopilot_Groupelement
       else
          Warnlog "In 1st Window the 'Next'-button is disabled!"
          CancelButton.Click
-      endif
+      end if
       Sleep 3
       printlog "  -Autopilot-Group-Box Page 2"
       Kontext "TabDefaultFieldSelection"
@@ -416,7 +416,7 @@ sub sAutopilot_Groupelement
       else
          Warnlog "In 2nd Window the 'Next'-button is disabled!!"
          AutopilotGroupelement.Cancel
-      endif
+      end if
       Sleep 3
       printlog "  -Autopilot-Group-Box Page 3"
       Kontext "TabDatabaseValues"
@@ -427,7 +427,7 @@ sub sAutopilot_Groupelement
       else
          Warnlog "In 3rd Window the 'Next'-button is disabled!"
          AutopilotGroupelement.Cancel
-      endif
+      end if
       Sleep 3
       printlog "  -Autopilot-Group-Box Page 4"
       Kontext "TabCreateOptionGroup"
@@ -438,10 +438,10 @@ sub sAutopilot_Groupelement
       else
          Warnlog "In 4th Window the 'Create'-button is disabled!"
          AutopilotGroupelement.Cancel
-      endif
+      end if
    else
       Warnlog "- Autopilot for Group Box didn't appear!"
-   endif
+   end if
    Sleep 2
 end sub
 
@@ -466,13 +466,13 @@ sub sAutopilot_ListboxCombobox(WhichBox as String)
                 else
                     Warnlog "No table selectable!"
                     exit do
-                endif
+                end if
             Loop
             Kontext "AutoPilotListComboBox"
             CancelButton.Click
             exit sub
-         endif
-      endif
+         end if
+      end if
       Sleep 5
       Kontext "AutoPilotListComboBox"
       if NextButton.IsEnabled then
@@ -507,25 +507,25 @@ sub sAutopilot_ListboxCombobox(WhichBox as String)
                   Warnlog "Next-Button on 3rd Tabpage disabled!"
                   CancelButton.Click
                   exit sub
-               endif
+               end if
             else
                Warnlog "Next-Button on Second Tabpage disabled!"
                CancelButton.Click
                exit sub
-            endif
+            end if
          else
             Warnlog "Unable to select table on second tabpage!"
             CancelButton.Click
             exit sub
-         endif
+         end if
       else
          Warnlog "Next-Button on first Tabpage disabled!"
          CancelButton.Click
          Exit sub
-      endif
+      end if
    else
       Warnlog "Autopilot is not up!"
-   endif
+   end if
 end sub
 
 '----------------------------------------------------------------
@@ -547,17 +547,17 @@ sub sAutopilotTableElement
 				Messagebox.Ok
 			else
 				Warnlog "No table selectable!"
-			endif
+			end if
             Kontext "AutopilotTableElement"
             CancelButton.Click
             exit sub
-         endif
-      endif
+         end if
+      end if
 	  Kontext "AutopilotTableElement"
 	  CancelButton.Click
    else
       Warnlog "Autopilot Table Element is not up"
-   endif
+   end if
 end sub
 
 ' *****************************************************
@@ -748,17 +748,17 @@ function uTabFunktionen as Integer
                                 Active.Ok
                             else
                                 exit do
-                            endif                    
+                            end if                    
                         else
                             exit do
-                        endif
+                        end if
                     Loop                              
                   Kontext "Makro"
                   if Ausfuehren.IsEnabled then
                      Ausfuehren.Click
                   else
                      Makro.Cancel
-                  endif
+                  end if
                   Kontext "TabFunktionen"
                   Zaehler=Zaehler+1
                   if Einfuegen.IsEnabled then Einfuegen.Click
