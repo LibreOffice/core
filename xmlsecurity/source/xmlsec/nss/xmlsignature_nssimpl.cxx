@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlsignature_nssimpl.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +52,11 @@
 #include "xmlstreamio.hxx"
 #include "errorcallback.hxx"
 
+#include <sal/types.h>
+//For reasons that escape me, this is what xmlsec does when size_t is not 4
+#if SAL_TYPES_SIZEOFPOINTER != 4
+#    define XMLSEC_NO_SIZE_T
+#endif
 #include "xmlsec/xmlsec.h"
 #include "xmlsec/xmldsig.h"
 #include "xmlsec/crypto.h"
