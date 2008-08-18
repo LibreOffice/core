@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableWindowListBox.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,8 +73,8 @@ namespace dbaui
         Point                       m_aMousePos;
 
         OTableWindow*               m_pTabWin;
-        sal_Int32                   m_nDropEvent;
-        sal_Int32                   m_nUiEvent;
+        ULONG                       m_nDropEvent;
+        ULONG                       m_nUiEvent;
         OJoinDropData               m_aDropInfo;
 
         BOOL                        m_bReallyScrolled : 1;
