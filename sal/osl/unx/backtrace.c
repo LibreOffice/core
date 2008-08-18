@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: backtrace.c,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -339,3 +339,68 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 
 #endif /* defined LINUX */
 
+#if defined( MACOSX )
+
+#include <dlfcn.h>
+#include <stdio.h>
+#include "backtrace.h"
+
+typedef unsigned     ptrdiff_t;
+
+/* glib backtrace is only available on MacOsX 10.5 or higher
+   so we do it on our own */
+
+int backtrace( void **buffer, int max_frames )
+{
+    void **frame = (void **)__builtin_frame_address(0);
+    void **bp = ( void **)(*frame);
+    void *ip = frame[1];
+    int i;
+
+    for ( i = 0; bp && ip && i < max_frames; i++ )
+    {
+        *(buffer++) = ip;
+
+        ip = bp[1];
+        bp = (void**)(bp[0]);
+    }
+
+    return i;
+}
+
+
+void backtrace_symbols_fd( void **buffer, int size, int fd )
+{
+    FILE    *fp = fdopen( fd, "w" );
+
+    if ( fp )
+    {
+        void **pFramePtr;
+
+        for ( pFramePtr = buffer; size > 0 && pFramePtr && *pFramePtr; pFramePtr++, size-- )
+        {
+            Dl_info     dli;
+            ptrdiff_t   offset;
+
+            if ( 0 != dladdr( *pFramePtr, &dli ) )
+            {
+                if ( dli.dli_fname && dli.dli_fbase )
+                {
+                    offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_fbase;
+                    fprintf( fp, "%s+0x%x", dli.dli_fname, offset );
+                }
+                if ( dli.dli_sname && dli.dli_saddr )
+                {
+                    offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_saddr;
+                    fprintf( fp, "(%s+0x%x)", dli.dli_sname, offset );
+                }
+            }
+            fprintf( fp, "[0x%x]\n", (unsigned int)*pFramePtr );
+        }
+
+        fflush( fp );
+        fclose( fp );
+    }
+}
+
+#endif /* defined MACOSX */
