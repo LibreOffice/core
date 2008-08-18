@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_insertgraphic1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:54 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:30:39 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -110,7 +110,7 @@ testcase tInsertGraphic_1
         if Pfade.GetSelText = ConvertPath (gTesttoolpath + "writer\optional\input\insertgraphic\") then
             Pfade.TypeKeys "<Space>"
             exit for
-        endif
+        end if
     next i    
     PfadeAuswaehlen.Ok
     
@@ -134,8 +134,8 @@ testcase tInsertGraphic_1
         if Active.GetRT = 304 then
             Active.OK
             QAErrorLog "#112220#The graphic directory in Tools/options doesn't work"
-        endif
-    endif
+        end if
+    end if
     
     Kontext "GrafikEinfuegenDlg"
     if GrafikEinfuegenDlg.Exists then GrafikEinfuegenDlg.Cancel
@@ -180,13 +180,13 @@ testcase tInsertGraphic_2
          Active.OK
          Sleep 1
          Warnlog "1 - the file isn't in the dirtory " + ConvertPath(gTesttoolpath + "writer\optional\input\insertgraphic\")
-      endif
+      end if
 
       Kontext "GrafikEinfuegenDlg"
       GrafikEinfuegenDlg.Cancel
-   endif
+   end if
 
-   Call wDokSchreiben "<ESCAPE>"
+   Call wTypeKeys "<ESCAPE>"
 
   '/// Input the 2nd picture which exists in the dirtory2(only file name) ,
   '/// + then press open button
@@ -204,13 +204,13 @@ testcase tInsertGraphic_2
          Sleep 1
       else
          Warnlog "2 - Should get the warning messagebox"
-      endif
+      end if
 
       Kontext "GrafikEinfuegenDlg"
       GrafikEinfuegenDlg.Cancel
-   endif
+   end if
 
-   Call wDokSchreiben "<ESCAPE>"
+   Call wTypeKeys "<ESCAPE>"
 
   '/// Input the 3rd picture which exists in the dirtory2(full path) ,
   '/// + then press open button
@@ -227,13 +227,13 @@ testcase tInsertGraphic_2
          Active.OK
          Sleep 1
          Warnlog "3 - the file isn't in the dirtory " + ConvertPath(gTesttoolpath + "writer\optional\input\grafik")
-      endif
+      end if
 
       Kontext "GrafikEinfuegenDlg"
       GrafikEinfuegenDlg.Cancel
-   endif
+   end if
 
-   Call wDokSchreiben "<ESCAPE>"
+   Call wTypeKeys "<ESCAPE>"
 
   '/// Input the 2nd picture which exists in the dirtory2(only file name) again,
   '/// + then press open button
@@ -250,11 +250,11 @@ testcase tInsertGraphic_2
          Active.OK
          Sleep 1
          Warnlog "2 - the file isn't in the dirtory " + ConvertPath(gTesttoolpath + "writer\optional\input\grafik")
-      endif
+      end if
 
       Kontext "GrafikEinfuegenDlg"
       GrafikEinfuegenDlg.Cancel
-   endif
+   end if
 
    Call hCloseDocument
 
@@ -277,7 +277,7 @@ testcase tInsertGraphic_3
         GrafikEinfuegenDlg.Cancel
      else
         Warnlog "The dialogue can't be opened from Menu Insert - Graphics - From File..."
-     endif
+     end if
   catch
      Warnlog "Something wrong when calling up dialogue from Menu Insert - Graphics - From File..."
   endcatch
@@ -303,14 +303,14 @@ testcase tInsertGraphic_X
     Call hNewDocument
     
     try
-        Call wDokSchreiben sShortcut    
+        Call wTypeKeys sShortcut    
         Kontext "GrafikEinfuegenDlg"
     
         if GrafikEinfuegenDlg.Exists then
             GrafikEinfuegenDlg.Cancel
         else
             Warnlog "The dialogue can't be opened from Menu Insert - Picture - From File..."
-        endif
+        end if
     catch
         Warnlog "Something wrong when calling up dialogue from Menu Insert - Picture - From File..."
     endcatch
@@ -339,7 +339,7 @@ testcase tInsertGraphic_4
      GrafikEinfuegenDlg.Cancel
   else
      Warnlog "The dialogue can't be opened from Insert-Toolbox of the Toolbar"
-  endif
+  end if
 
   Call hCloseDocument
 
@@ -548,7 +548,7 @@ testcase tInsertGraphic_10
 
     Call hNewDocument
 
-    Call wDokSchreiben "<Return>" , 2
+    Call wTypeKeys "<Return>" , 2
 
     '/// Insert a jpg  Graphic
     Call fInsertGraphics("Bughunter.jpg")
@@ -562,8 +562,8 @@ testcase tInsertGraphic_10
     sleep(1)
 
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<ESCAPE>"
-    Call wDokSchreiben "<Return>" , 2
+    Call wTypeKeys "<ESCAPE>"
+    Call wTypeKeys "<Return>" , 2
     sleep(2)
 
     '/// Insert a gif  Graphic  (animated)
@@ -578,8 +578,8 @@ testcase tInsertGraphic_10
     sleep(1)
 
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<ESCAPE>"
-    Call wDokSchreiben "<Return>" , 2
+    Call wTypeKeys "<ESCAPE>"
+    Call wTypeKeys "<Return>" , 2
     sleep(2)
 
     '/// Insert a bmp Graphic
@@ -594,8 +594,8 @@ testcase tInsertGraphic_10
     sleep(1)
 
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<ESCAPE>"
-    Call wDokSchreiben "<Return>" , 2
+    Call wTypeKeys "<ESCAPE>"
+    Call wTypeKeys "<Return>" , 2
     sleep(2)
 
     '/// Edit / Links
@@ -624,7 +624,7 @@ testcase tInsertGraphic_10
 
     '/// Check if the inserted graphics are still there
     Kontext "DocumentWriter"
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     sleep(1)
     fFormatGraphic("TabZusaetze")
     sleep(1)
@@ -634,7 +634,7 @@ testcase tInsertGraphic_10
     sleep(1)
 
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Call fFormatGraphic("TabZusaetze")
     sleep(1)
     Kontext "TabZusaetze"
@@ -643,7 +643,7 @@ testcase tInsertGraphic_10
     sleep(1)
 
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Call fFormatGraphic("TabZusaetze")
     sleep(1)
     Kontext "TabZusaetze"
@@ -652,7 +652,7 @@ testcase tInsertGraphic_10
     sleep(1)
 
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<ESCAPE><Home>"
+    Call wTypeKeys "<ESCAPE><Home>"
     PrintLog "- Save and Reload the file"
 
     '/// Save the file and close the file
@@ -667,13 +667,13 @@ testcase tInsertGraphic_10
 
     '/// Check if the inserted graphics are still there
     Kontext "DocumentWriter"
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     sleep(1)
     if fFormatGraphic("TabZusaetze") = false then
         Warnlog "#i46300#linked JPEG pictures will disappear when doc is modified."
         Call hCloseDocument
         goto endsub
-    endif
+    end if
     sleep(1)
     Kontext "TabZusaetze"
     if ObjektName.GetText <> "TEST1" then  Warnlog "The first graphic isn't right!"
@@ -681,7 +681,7 @@ testcase tInsertGraphic_10
     sleep(1)
 
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     sleep(1)
     Call fFormatGraphic("TabZusaetze")
     sleep(1)
@@ -691,7 +691,7 @@ testcase tInsertGraphic_10
     sleep(2)
 
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     sleep(1)
     Call fFormatGraphic("TabZusaetze")
     sleep(1)
@@ -885,7 +885,7 @@ testcase tInsertGraphic_12
     Sleep 1
     
     '/// delete the graphic
-    Call wDokSchreiben "<Delete>"
+    Call wTypeKeys "<Delete>"
     Sleep 1
     
     '/// 1. Edit/Paste special the graphic from
@@ -936,9 +936,9 @@ testcase tInsertGraphic_12
         TabHyperlinkRahmen.Ok
         
         'delete the graphic
-        Call wDokSchreiben "<Delete>"
+        Call wTypeKeys "<Delete>"
         Sleep 1
-    endif
+    end if
 
     Call hCloseDocument
 

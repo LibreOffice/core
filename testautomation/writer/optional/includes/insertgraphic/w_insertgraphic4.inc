@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_insertgraphic4.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:54 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:31:06 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -382,9 +382,9 @@ testcase tInsertGraphic_33
                 QAErrorlog "#i59378#Missing vertical position in in Format-Picture-dialog"
             else
                 Warnlog "The graphic's Vertical option is not correct ! "
-            endif
-        endif
-    endif
+            end if
+        end if
+    end if
     TabType.Cancel
     
     PrintLog "  Bottom:"
@@ -749,7 +749,7 @@ testcase tInsertGraphic_39
    TabType.Cancel
 
   '/// move the picture with keyboard
-   Call wDokSchreiben "<Down><Down><Right><Right>"
+   Call wTypeKeys "<Down><Down><Right><Right>"
 
   '/// + Check if the position is changed
    fFormatGraphic("TabType")
@@ -807,8 +807,8 @@ testcase tInsertGraphic_40
     if Active.Exists then
         if Active.GetRT = 304 then
             Active.Ok
-        endif
-    endif
+        end if
+    end if
     
     Call hCloseDocument
     

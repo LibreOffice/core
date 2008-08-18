@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_insertgraphic2.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:54 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:30:51 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -65,7 +65,7 @@ testcase tInsertGraphic_13
 
    Call hNewDocument
 
-   Call wDokSchreiben "<Return>"
+   Call wTypeKeys "<Return>"
 
   '/// Insert three Graphics at the same place , and named in series
 
@@ -86,7 +86,7 @@ testcase tInsertGraphic_13
    wait 500
    TabType.OK
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
 
    'the 2nd graphic
    fInsertGraphics("flowers.gif")
@@ -105,7 +105,7 @@ testcase tInsertGraphic_13
    wait 500
    TabType.OK
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
 
    'the 3rd graphic
    fInsertGraphics("game.bmp")
@@ -128,7 +128,7 @@ testcase tInsertGraphic_13
    FormatArrangeSendToBack
    Sleep 1
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
    Sleep 1
 
    '/// Check if the attributes Arrange (send to back) works well
@@ -176,7 +176,7 @@ testcase tInsertGraphic_14
 
    Call hNewDocument
 
-   Call wDokSchreiben "<Return>"
+   Call wTypeKeys "<Return>"
 
   '/// Insert three Graphics at the same place , and named in series
 
@@ -197,7 +197,7 @@ testcase tInsertGraphic_14
    wait 500
    TabType.OK
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
 
    'the 2nd graphic
    fInsertGraphics("flowers.gif")
@@ -216,7 +216,7 @@ testcase tInsertGraphic_14
    wait 500
    TabType.OK
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
 
    'the 3rd graphic
    fInsertGraphics("game.bmp")
@@ -239,7 +239,7 @@ testcase tInsertGraphic_14
    FormatArrangeSetBackward
    Sleep 1
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
    Sleep 1
 
    '/// Check if the attributes Arrange (send to back) works well
@@ -287,7 +287,7 @@ testcase tInsertGraphic_15
 
   Call hNewDocument
 
-  Call wDokSchreiben "<Return>"
+  Call wTypeKeys "<Return>"
 
   '/// Insert three Graphics at the same place , and named in series
 
@@ -308,7 +308,7 @@ testcase tInsertGraphic_15
    wait 500
    TabType.OK
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
 
    'the 2nd graphic
    fInsertGraphics("flowers.gif")
@@ -327,7 +327,7 @@ testcase tInsertGraphic_15
    wait 500
    TabType.OK
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
 
    'the 3rd graphic
    fInsertGraphics("game.bmp")
@@ -354,7 +354,7 @@ testcase tInsertGraphic_15
    FormatArrangeBringToFront
    Sleep 1
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
    Sleep 1
 
    '/// Check if the attributes Arrange (send to back) works well
@@ -402,7 +402,7 @@ testcase tInsertGraphic_16
 
    Call hNewDocument
 
-   Call wDokSchreiben "<Return>"
+   Call wTypeKeys "<Return>"
 
   '/// Insert three Graphics at the same place , and named in series
 
@@ -423,7 +423,7 @@ testcase tInsertGraphic_16
    wait 500
    TabType.OK
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
 
    'the 2nd graphic
    fInsertGraphics("flowers.gif")
@@ -442,7 +442,7 @@ testcase tInsertGraphic_16
    wait 500
    TabType.OK
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
 
    'the 3rd graphic
    fInsertGraphics("game.bmp")
@@ -469,7 +469,7 @@ testcase tInsertGraphic_16
    FormatArrangeBringForward
    Sleep 1
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
    Sleep 1
 
    '/// Check if the attributes Arrange (send to back) works well
@@ -517,7 +517,7 @@ testcase tInsertGraphic_17
 
    Call hNewDocument
 
-   Call wDokSchreiben "<Return>"
+   Call wTypeKeys "<Return>"
 
   '/// Insert three Graphics at the same place , and named in series
 
@@ -538,7 +538,7 @@ testcase tInsertGraphic_17
    wait 500
    TabType.OK
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
 
    'the 2nd graphic
    fInsertGraphics("flowers.gif")
@@ -557,7 +557,7 @@ testcase tInsertGraphic_17
    wait 500
    TabType.OK
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
 
    'the 3rd graphic
    fInsertGraphics("game.bmp")
@@ -583,7 +583,7 @@ testcase tInsertGraphic_17
     hMenuSelectNr(4)
     Sleep 1
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
    Sleep 1
 
    '/// Check if the attributes Arrange (send to back) works well
@@ -631,7 +631,7 @@ testcase tInsertGraphic_18
 
    Call hNewDocument
 
-   Call wDokSchreiben "<Return>"
+   Call wTypeKeys "<Return>"
 
   '/// Insert three Graphics at the same place , and named in series
 
@@ -652,7 +652,7 @@ testcase tInsertGraphic_18
    wait 500
    TabType.OK
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
 
    'the 2nd graphic
    fInsertGraphics("flowers.gif")
@@ -671,7 +671,7 @@ testcase tInsertGraphic_18
    wait 500
    TabType.OK
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
 
    'the 3rd graphic
    fInsertGraphics("game.bmp")
@@ -697,7 +697,7 @@ testcase tInsertGraphic_18
     hMenuSelectNr(3)
     Sleep 1
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
    Sleep 1
 
    '/// Check if the attributes Arrange (send to back) works well
@@ -745,7 +745,7 @@ testcase tInsertGraphic_19
 
   Call hNewDocument
 
-  Call wDokSchreiben "<Return>"
+  Call wTypeKeys "<Return>"
 
   '/// Insert three Graphics at the same place , and named in series
 
@@ -766,7 +766,7 @@ testcase tInsertGraphic_19
    wait 500
    TabType.OK
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
 
    'the 2nd graphic
    fInsertGraphics("flowers.gif")
@@ -785,7 +785,7 @@ testcase tInsertGraphic_19
    wait 500
    TabType.OK
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
 
    'the 3rd graphic
    fInsertGraphics("game.bmp")
@@ -815,7 +815,7 @@ testcase tInsertGraphic_19
     hMenuSelectNr(1)
     Sleep 1
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
    Sleep 1
 
    '/// Check if the attributes Arrange (send to back) works well
@@ -863,7 +863,7 @@ testcase tInsertGraphic_20
 
    Call hNewDocument
 
-   Call wDokSchreiben "<Return>"
+   Call wTypeKeys "<Return>"
 
   '/// Insert three Graphics at the same place , and named in series
 
@@ -884,7 +884,7 @@ testcase tInsertGraphic_20
    wait 500
    TabType.OK
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
 
    'the 2nd graphic
    fInsertGraphics("flowers.gif")
@@ -903,7 +903,7 @@ testcase tInsertGraphic_20
    wait 500
    TabType.OK
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
 
    'the 3rd graphic
    fInsertGraphics("game.bmp")
@@ -933,7 +933,7 @@ testcase tInsertGraphic_20
     hMenuSelectNr(2)
     Sleep 1
 
-   Call wDokSchreiben "<ESCape>"
+   Call wTypeKeys "<ESCape>"
    Sleep 1
 
    '/// Check if the attributes Arrange (send to back) works well
