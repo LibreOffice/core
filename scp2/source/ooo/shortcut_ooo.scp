@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shortcut_ooo.scp,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,54 +117,6 @@ End
 
 #endif
 #endif
-
-//i38417
-#ifndef WITHOUT_MOZILLA
-#ifdef UNX
-Shortcut gid_Shortcut_Lib_LibXMLSec_xmlseccore
-    FileID = gid_File_Lib_LibXMLSec_xmlseccore;
-    Dir = gid_Dir_Program;
-#ifdef MACOSX
-    Name = STRING(CONCAT2(libxmlsec1.1,UNXSUFFIX));
-#else
-    Name = STRING(CONCAT3(libxmlsec1,UNXSUFFIX,.1));
-#endif
-    Styles = (NETWORK,RELATIVE);
-End
-#endif
-
-#ifdef UNX
-Shortcut gid_Shortcut_Lib_LibXMLSec_xmlseccore_2
-    ShortcutID = gid_Shortcut_Lib_LibXMLSec_xmlseccore;
-    Dir = gid_Dir_Program;
-    Name = STRING(CONCAT2(libxmlsec1,UNXSUFFIX));
-    Styles = (NETWORK,RELATIVE);
-End
-#endif
-
-#ifdef UNX
-Shortcut gid_Shortcut_Lib_LibXMLSec_xmlsecnss
-    FileID = gid_File_Lib_LibXMLSec_xmlsecnss;
-    Dir = gid_Dir_Program;
-#ifdef MACOSX
-    Name = STRING(CONCAT2(libxmlsec1-nss.1,UNXSUFFIX));
-#else
-    Name = STRING(CONCAT3(libxmlsec1-nss,UNXSUFFIX,.1));
-#endif
-    Styles = (NETWORK,RELATIVE);
-End
-#endif
-
-#ifdef UNX
-Shortcut gid_Shortcut_Lib_LibXMLSec_xmlsecnss_2
-    ShortcutID = gid_Shortcut_Lib_LibXMLSec_xmlsecnss;
-    Dir = gid_Dir_Program;
-    Name = STRING(CONCAT2(libxmlsec1-nss,UNXSUFFIX));
-    Styles = (NETWORK,RELATIVE);
-End
-#endif
-#endif
-//i38417 -end-
 
 #ifdef MACOSX
 
