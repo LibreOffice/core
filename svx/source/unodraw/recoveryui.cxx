@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: recoveryui.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -194,6 +194,8 @@ static OUString GetCrashConfigDir()
 
 #if defined(WNT) || defined(OS2)
     OUString    ustrValue = OUString::createFromAscii("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
+#elif defined(MACOSX)
+    OUString    ustrValue = OUString::createFromAscii("~");
 #else
     OUString    ustrValue = OUString::createFromAscii("$SYSUSERCONFIG");
 #endif
