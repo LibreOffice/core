@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextListBlockContext.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,6 +124,12 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         case XML_TOK_TEXT_LIST_BLOCK_XMLID:
             sXmlId = rValue;
 //FIXME: there is no UNO API for lists
+            // --> OD 2008-07-31 #i92221# - xml:id is also the list ID
+            if ( mnLevel == 0 ) // root <list> element
+            {
+                msListId = rValue;
+            }
+            // <--
             break;
         case XML_TOK_TEXT_LIST_BLOCK_CONTINUE_NUMBERING:
             mbRestartNumbering = !IsXMLToken(rValue, XML_TRUE);
@@ -135,12 +141,6 @@ XMLTextListBlockContext::XMLTextListBlockContext(
             msListStyleName = rValue;
             break;
         // --> OD 2008-04-22 #refactorlists#
-        case XML_TOK_TEXT_LIST_BLOCK_ID:
-            if ( mnLevel == 0 ) // root <list> element
-            {
-                msListId = rValue;
-            }
-            break;
         case XML_TOK_TEXT_LIST_BLOCK_CONTINUE_LIST:
             if ( mnLevel == 0 ) // root <list> element
             {
