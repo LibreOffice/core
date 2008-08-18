@@ -687,7 +687,7 @@ TableProperties .uno:TableDialog
 ' *********** Tools Menu  ***********
 ' ****
 ' **** All applications
-ToolsSpellcheck .uno:SpellDialog
+ToolsSpellcheck .uno:SpellingAndGrammarDialog
 ToolsSpellcheckAutoSpellcheck SID_AUTOSPELL_CHECK
 ToolsLanguageHangulHanjaConversion .uno:HangulHanjaConversion
 ToolsLanguageChineseTranslation .uno:ChineseConversion
