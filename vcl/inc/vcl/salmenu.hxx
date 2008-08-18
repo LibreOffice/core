@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salmenu.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +52,17 @@ struct SalItemParams
 };
 
 
+struct SalMenuButtonItem
+{
+    USHORT              mnId;
+    Image               maImage;
+    rtl::OUString       maToolTipText;
+
+    SalMenuButtonItem() : mnId( 0 ) {}
+    SalMenuButtonItem( USHORT i_nId, const Image& rImg, const rtl::OUString& i_rTTText = rtl::OUString() )
+    : mnId( i_nId ), maImage( rImg ), maToolTipText( i_rTTText ) {}
+};
+
 class VCL_DLLPUBLIC SalMenuItem
 {
 public:
@@ -78,7 +89,14 @@ public:
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage ) = 0;
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName ) = 0;
     virtual void GetSystemMenuData( SystemMenuData* pData ) = 0;
-    virtual BOOL ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, ULONG nFlags);
+    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, ULONG nFlags);
+    virtual bool AddMenuBarButton( const SalMenuButtonItem& ); // return false if not implemented or failure
+    virtual void RemoveMenuBarButton( USHORT nId );
+
+    // return an empty rectangle if not implemented
+    // return Rectangle( Point( -1, -1 ), Size( 1, 1 ) ) if menu bar buttons implemented
+    // but rectangle cannot be determined
+    virtual Rectangle GetMenuBarButtonRectPixel( USHORT i_nItemId, SalFrame* i_pReferenceFrame );
 };
 
 
