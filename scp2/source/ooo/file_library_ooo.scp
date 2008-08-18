@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_library_ooo.scp,v $
- * $Revision: 1.304 $
+ * $Revision: 1.305 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -937,6 +937,20 @@ End
 
 #endif  // #ifndef MACOSX
 
+#else
+
+File gid_File_Lib_Mozbootstrap
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT2(libmozbootstrap,UNXSUFFIX));
+  #else
+    Name = "libmozbootstrap.dll";
+  #endif
+End
+
 #endif
 
 STD_UNO_LIB_FILE(gid_File_Lib_Wpft,wpft)
@@ -1634,26 +1648,18 @@ File gid_File_Lib_XSec_XMLSecurity
     RegistryID = gid_Starregistry_Services_Rdb;
 End
 
+#ifdef WNT
 File gid_File_Lib_LibXMLSec_xmlseccore
     TXT_FILE_BODY;
-    #ifdef UNX
-        #ifdef MACOSX
-            Name = STRING(CONCAT2(libxmlsec1.1.2.6,UNXSUFFIX));
-        #else
-            Name = STRING(CONCAT3(libxmlsec1,UNXSUFFIX,.1.2.6));
-        #endif
+    #ifdef _gcc3
+      Name = "libxmlsec1-1.dll";
     #else
-      #ifdef _gcc3
-        Name = "libxmlsec1-1.dll";
-      #else
-        Name = "libxmlsec.dll";
-      #endif
+      Name = "libxmlsec.dll";
     #endif
     Dir = gid_Dir_Program;
     Styles = (PACKED);
 End
 
-#ifdef WNT
 File gid_File_Lib_LibXMLSec_xmlsecmscrypto
     TXT_FILE_BODY;
   #ifdef _gcc3
@@ -1666,18 +1672,6 @@ File gid_File_Lib_LibXMLSec_xmlsecmscrypto
 End
 #endif
 
-#ifdef UNX
-File gid_File_Lib_LibXMLSec_xmlsecnss
-    TXT_FILE_BODY;
-    #ifdef MACOSX
-        Name = STRING(CONCAT2(libxmlsec1-nss.1.2.6,UNXSUFFIX));
-    #else
-        Name = STRING(CONCAT3(libxmlsec1-nss,UNXSUFFIX,.1.2.6));
-    #endif
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-End
-#endif
 //i20156 - end
 #endif
 
