@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: digitalsignaturesdialog.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,7 @@
 #include <xmlsecurity/certificatechooser.hxx>
 #include <xmlsecurity/certificateviewer.hxx>
 #include <xmlsecurity/biginteger.hxx>
-#include "xmlsecurity/baseencoding.hxx"
+#include <xmloff/xmluconv.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -47,6 +47,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/security/CertificateValidity.hdl>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
+#include <com/sun/star/security/SerialNumberAdapter.hpp>
+
+#include <rtl/ustrbuf.hxx>
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -57,6 +60,7 @@
 
 #include <vcl/msgbox.hxx> // Until encrypted docs work...
 #include <unotools/configitem.hxx>
+#include <comphelper/componentcontext.hxx>
 
 
 using namespace ::com::sun::star::security;
@@ -146,10 +150,11 @@ sal_Bool HandleStreamAsXML_Impl( const uno::Reference < embed::XStorage >& rxSto
 
 DigitalSignaturesDialog::DigitalSignaturesDialog(
     Window* pParent,
-    uno::Reference< lang::XMultiServiceFactory >& rxMSF, DocumentSignatureMode eMode,
+    uno::Reference< uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
     sal_Bool bReadOnly)
     :ModalDialog        ( pParent, XMLSEC_RES( RID_XMLSECDLG_DIGSIG ) )
-    ,maSignatureHelper  ( rxMSF )
+    ,mxCtx              ( rxCtx )
+    ,maSignatureHelper  ( rxCtx )
     ,meSignatureMode    ( eMode )
     ,maHintDocFT        ( this, XMLSEC_RES( FT_HINT_DOC ) )
     ,maHintBasicFT      ( this, XMLSEC_RES( FT_HINT_BASIC ) )
@@ -319,7 +324,10 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
     try
     {
         uno::Reference<com::sun::star::xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureHelper.GetSecurityEnvironment();
-        CertificateChooser aChooser( this, xSecEnv, maCurrentSignatureInformations );
+
+        uno::Reference<com::sun::star::security::XSerialNumberAdapter> xSerialNumberAdapter =
+            ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
+        CertificateChooser aChooser( this, mxCtx, xSecEnv, maCurrentSignatureInformations );
         if ( aChooser.Execute() == RET_OK )
         {
             uno::Reference< ::com::sun::star::security::XCertificate > xCert = aChooser.GetSelectedCertificate();
@@ -328,7 +336,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
                 DBG_ERRORFILE( "no certificate selected" );
                 return -1;
             }
-            rtl::OUString aCertSerial = bigIntegerToNumericString( xCert->getSerialNumber() );
+            rtl::OUString aCertSerial = xSerialNumberAdapter->toString( xCert->getSerialNumber() );
             if ( !aCertSerial.getLength() )
             {
                 DBG_ERROR( "Error in Certificate, problem with serial number!" );
@@ -339,8 +347,13 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
 
             sal_Int32 nSecurityId = maSignatureHelper.GetNewSecurityId();
 
-            maSignatureHelper.SetX509Certificate( nSecurityId, xCert->getIssuerName(), aCertSerial,
-                baseEncode(xCert->getEncoded(), BASE64));
+            rtl::OUStringBuffer aStrBuffer;
+            SvXMLUnitConverter::encodeBase64(aStrBuffer, xCert->getEncoded());
+
+            maSignatureHelper.SetX509Certificate( nSecurityId,
+                xCert->getIssuerName(), aCertSerial,
+                aStrBuffer.makeStringAndClear());
+
 
             std::vector< rtl::OUString > aElements = DocumentSignatureHelper::CreateElementList( mxStore, rtl::OUString(), meSignatureMode );
 
@@ -390,6 +403,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
             aStreamHelper = SignatureStreamHelper();    // release objects...
 
             sal_Int32 nStatus = maSignatureHelper.GetSignatureInformation( nSecurityId ).nStatus;
+
             if ( nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
             {
                 mbSignaturesChanged = true;
@@ -472,6 +486,9 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
     maSignaturesLB.Clear();
 
     uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecEnv = maSignatureHelper.GetSecurityEnvironment();
+    uno::Reference<com::sun::star::security::XSerialNumberAdapter> xSerialNumberAdapter =
+        ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
+
     uno::Reference< ::com::sun::star::security::XCertificate > xCert;
 
     String aNullStr;
@@ -500,7 +517,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             //In case there is no embedded certificate we try to get it from a local store
             //Todo: This probably could be removed, see above.
             if (!xCert.is())
-                xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
+                xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xSerialNumberAdapter->toSequence( rInfo.ouX509SerialNumber ) );
 
             DBG_ASSERT( xCert.is(), "Certificate not found and can't be created!" );
 
@@ -615,13 +632,15 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
         const SignatureInformation& rInfo = maCurrentSignatureInformations[ nSelected ];
         css::uno::Reference<css::xml::crypto::XSecurityEnvironment > xSecEnv =
             maSignatureHelper.GetSecurityEnvironment();
+        css::uno::Reference<com::sun::star::security::XSerialNumberAdapter> xSerialNumberAdapter =
+            ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
         // Use Certificate from doc, not from key store
         uno::Reference< dcss::security::XCertificate > xCert;
         if (rInfo.ouX509Certificate.getLength())
             xCert = xSecEnv->createCertificateFromAscii(rInfo.ouX509Certificate);
         //fallback if no certificate is embedded, get if from store
         if (!xCert.is())
-            xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
+            xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xSerialNumberAdapter->toSequence( rInfo.ouX509SerialNumber ) );
 
         DBG_ASSERT( xCert.is(), "Error getting cCertificate!" );
         if ( xCert.is() )
