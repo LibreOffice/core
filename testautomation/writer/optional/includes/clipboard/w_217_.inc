@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_217_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:47 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:24:52 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -57,8 +57,8 @@ testcase HTMLToCALCText
   printlog "  Copy selected text " 
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
   printlog "  Jump to beginning of document " 
-  Call wDokSchreiben "<Mod1 Home>"
-  Call wDokSchreiben "<Shift Down><Shift End>"
+  Call wTypeKeys "<Mod1 Home>"
+  Call wTypeKeys "<Shift Down><Shift End>"
   EditCopy
 
   gApplication = "CALC"
@@ -111,9 +111,9 @@ testcase HTMLToCALCField
   printlog "  Copy selected text " 
   Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
   printlog "  Jump to beginning of document " 
-  Call wDokSchreiben "<Mod1 Home>"
-  Call wDokSchreiben "<Down>",2
-  Call wDokSchreiben "<Home><Shift End>"
+  Call wTypeKeys "<Mod1 Home>"
+  Call wTypeKeys "<Down>",2
+  Call wTypeKeys "<Home><Shift End>"
   EditCopy
 
     gApplication = "CALC"
@@ -165,9 +165,9 @@ testcase HTMLToCALCTable
     printlog "  Copy selected table " 
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
     printlog "  Jump to beginning of document " 
-    Call wDokSchreiben "<Mod1 Home>"
-    Call wDokSchreiben "<Down>",5
-    Call wDokSchreiben "<Mod1 A>",2
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys "<Down>",5
+    Call wTypeKeys "<Mod1 A>",2
     sleep (1)
     EditCopy
 
@@ -216,8 +216,8 @@ testcase HTMLToCALCGraphicLinked
     printlog "  Copy selected Linked Graphic " 
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
     printlog "  Jump to beginning of document " 
-    Call wDokSchreiben "<Mod1 Home>"
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys ( "<Shift F4>" )
     EditCopy
 
     gApplication = "CALC"
@@ -269,9 +269,9 @@ testcase HTMLToCALCControl
     printlog "  Copy selected Control " 
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
     printlog "  Jump to beginning of document " 
-    Call wDokSchreiben "<Mod1 Home>"
-    Call wDokSchreiben ( "<Shift F4>" )
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys ( "<Shift F4>" )
+    Call wTypeKeys "<Tab>"
     EditCopy
 
     gApplication = "CALC"
@@ -323,9 +323,9 @@ testcase HTMLToCALCFloatingFrame
     printlog "  Copy selected Floating Frame " 
     Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html",false)
     printlog "  Jump to beginning of document " 
-    Call wDokSchreiben "<Mod1 Home>"
-    Call wDokSchreiben ( "<Shift F4>" )
-    Call wDokSchreiben "<Tab>",2
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys ( "<Shift F4>" )
+    Call wTypeKeys "<Tab>",2
     wait 500
     try
         EditCopy
