@@ -16,6 +16,7 @@ Globals
 			SERVICETAG_SOURCE {buildsource}{minor}(Build:{buildid})
 			SERVICETAG_URN urn:uuid:00c01e7f-36f9-11dd-9b49-080020a9ed93
 			HIDELICENSEDIALOG 1
+			PACKAGEPREFIX 
 			BASISPACKAGEPREFIX ooobasis
 			UREPACKAGEPREFIX openoffice.org
 			SOLSUREPACKAGEPREFIX openofficeorg
