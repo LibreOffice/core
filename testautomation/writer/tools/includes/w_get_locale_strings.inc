@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_get_locale_strings.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:36:08 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:42:49 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -33,7 +33,7 @@
 '*
 '* owner : fredrik.haegg@sun.com
 '*
-'* short description : testcase to get Locale Strings used in Writer Level1-Test
+'* short description : testcase to get Locale Strings used in Writer Optional-Test
 '*
 '\***********************************************************************
 
@@ -102,8 +102,8 @@ testcase wUsedInTableTest
     Dim pos as integer 
     Dim wTableName as string
 
-    printlog " gets all strings which are used in '.\\level1\\w_table.bas'"
-    printlog " add these entries into file : .\\level1\input\\table\\locale.txt"
+    printlog " gets all strings which are used in '.\\optional\\w_table.bas'"
+    printlog " add these entries into file : .\\optional\input\\table\\locale.txt"
     Call hNewDocument
     
     InsertTableWriter
@@ -113,7 +113,7 @@ testcase wUsedInTableTest
     Kontext "TableObjectbar"
     printlog " Table Heading: " & Vorlage2.GetSelText
     Kontext "DocumentWriter"
-    Call wDokSchreiben "<Down>"
+    Call wTypeKeys "<Down>"
     Sleep 1
     Kontext "TableObjectbar"
     printlog " Table Contents: " & Vorlage2.GetSelText
