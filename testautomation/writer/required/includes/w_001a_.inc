@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_001a_.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:26:28 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:40:41 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -327,7 +327,7 @@ testcase tFilePagePreview
     end select
 
     printlog " Enter some text in document"
-    Call wDokSchreiben("Just a small change!")
+    Call wTypeKeys("Just a small change!")
     printlog " File / Page Preview"
     FilePageView
     WaitSlot (1000)
