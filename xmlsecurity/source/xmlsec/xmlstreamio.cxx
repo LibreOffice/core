@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlstreamio.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,11 @@
 #include "rtl/uri.hxx"
 
 #include <libxml/uri.h>
+#include <sal/types.h>
+//For reasons that escape me, this is what xmlsec does when size_t is not 4
+#if SAL_TYPES_SIZEOFPOINTER != 4
+#    define XMLSEC_NO_SIZE_T
+#endif
 #include <xmlsec/io.h>
 
 #define XMLSTREAMIO_INITIALIZED 0x01
