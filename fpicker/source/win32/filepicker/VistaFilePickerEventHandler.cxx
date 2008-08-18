@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VistaFilePickerEventHandler.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,8 @@
 #include <comphelper/storagehelper.hxx>
 //#include <tools/urlobj.hxx>
 //#include <unotools/ucbhelper.hxx>
+
+#include <osl/file.hxx>
 
 //------------------------------------------------------------------------
 // namespace directives
@@ -141,14 +143,26 @@ STDMETHODIMP VistaFilePickerEventHandler::OnFolderChange(IFileDialog* pDialog)
 ::rtl::OUString lcl_getURLFromShellItem2 (IShellItem* pItem)
 {
     LPOLESTR pStr = NULL;
+    ::rtl::OUString sURL;
 
-    SIGDN   eConversion = SIGDN_URL;
+    SIGDN   eConversion = SIGDN_FILESYSPATH;
     HRESULT hr          = pItem->GetDisplayName ( eConversion, &pStr );
 
     if ( FAILED(hr) )
-        return ::rtl::OUString();
+    {
+        eConversion = SIGDN_URL;
+        hr          = pItem->GetDisplayName ( eConversion, &pStr );
 
-    ::rtl::OUString sURL = ::rtl::OUString(reinterpret_cast<sal_Unicode*>(pStr));
+        if ( FAILED(hr) )
+            return ::rtl::OUString();
+
+        sURL = ::rtl::OUString(reinterpret_cast<sal_Unicode*>(pStr));
+    }
+    else
+    {
+        ::osl::FileBase::getFileURLFromSystemPath( reinterpret_cast<sal_Unicode*>(pStr), sURL );
+    }
+
     CoTaskMemFree (pStr);
     return sURL;
 }
@@ -255,6 +269,30 @@ STDMETHODIMP VistaFilePickerEventHandler::OnShareViolation(IFileDialog*         
 //-----------------------------------------------------------------------------------------
 STDMETHODIMP VistaFilePickerEventHandler::OnTypeChange(IFileDialog* pDialog)
 {
+    /*
+    IFileDialogCustomize               *iCustomize;
+    pDialog->QueryInterface(IID_IFileDialogCustomize, (void**)(&iCustomize));
+
+    BOOL bValue = FALSE;
+    HRESULT hResult = iCustomize->GetCheckButtonState( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, &bValue);
+
+    if ( bValue )
+    {
+        UINT nIndex;
+
+        pDialog->GetFileTypeIndex( &nIndex );
+
+        LPCWSTR lpFilterExt = lFilters[nIndex].pszSpec;
+
+        lpFilterExt = wcschr( lpFilterExt, '.' );
+        if ( lpFilterExt )
+            lpFilterExt++;
+        pDialog->SetDefaultExtension( lpFilterExt );
+    }
+    return S_OK;
+
+    */
+
     return E_NOTIMPL;
 }
 

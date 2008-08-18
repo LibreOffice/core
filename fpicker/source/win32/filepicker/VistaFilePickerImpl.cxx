@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VistaFilePickerImpl.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,14 +65,26 @@ typedef ::comphelper::SequenceAsVector< ::rtl::OUString > TStringList;
 ::rtl::OUString lcl_getURLFromShellItem (IShellItem* pItem)
 {
     LPOLESTR pStr = NULL;
+    ::rtl::OUString sURL;
 
-    SIGDN   eConversion = SIGDN_URL;
+    SIGDN   eConversion = SIGDN_FILESYSPATH;
     HRESULT hr          = pItem->GetDisplayName ( eConversion, &pStr );
 
     if ( FAILED(hr) )
-        return ::rtl::OUString();
+    {
+        eConversion = SIGDN_URL;
+        hr          = pItem->GetDisplayName ( eConversion, &pStr );
 
-    ::rtl::OUString sURL = ::rtl::OUString(reinterpret_cast<sal_Unicode*>(pStr));
+        if ( FAILED(hr) )
+            return ::rtl::OUString();
+
+        sURL = ::rtl::OUString(reinterpret_cast<sal_Unicode*>(pStr));
+    }
+    else
+    {
+        ::osl::FileBase::getFileURLFromSystemPath( reinterpret_cast<sal_Unicode*>(pStr), sURL );
+    }
+
     CoTaskMemFree (pStr);
     return sURL;
 }
@@ -435,8 +447,8 @@ void VistaFilePickerImpl::impl_sta_enableFeatures(::sal_Int32 nFeatures)
     if ((nFeatures & FEATURE_AUTOEXTENSION) == FEATURE_AUTOEXTENSION)
         iCustom->AddCheckButton (css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, L"Auto Extension", true);
 
-    if ((nFeatures & FEATURE_PASSWORD) == FEATURE_PASSWORD)
-        iCustom->AddCheckButton (css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, L"Password", true);
+    // if ((nFeatures & FEATURE_PASSWORD) == FEATURE_PASSWORD)
+    //    iCustom->AddCheckButton (css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, L"Password", true);
 
     if ((nFeatures & FEATURE_READONLY) == FEATURE_READONLY)
         iCustom->AddCheckButton (css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_READONLY, L"Readonly", false);
@@ -530,12 +542,30 @@ void VistaFilePickerImpl::impl_sta_setFiltersOnDialog()
     ::rtl::OUString                    sCurrentFilter = m_lFilters.getCurrentFilter();
     sal_Int32                          nCurrentFilter = m_lFilters.getFilterPos(sCurrentFilter);
     TFileDialog                        iDialog        = impl_getBaseDialogInterface();
+    TFileDialogCustomize               iCustomize;
 
     aLock.clear();
     // <- SYNCHRONIZED
 
-    iDialog->SetFileTypes(lFilters.size(), &lFilters[0]);
-    iDialog->SetFileTypeIndex(nCurrentFilter);
+    iDialog.query(&iCustomize);
+
+    COMDLG_FILTERSPEC   *pFilt = &lFilters[0];
+    iDialog->SetFileTypes(lFilters.size(), pFilt/*&lFilters[0]*/);
+    iDialog->SetFileTypeIndex(nCurrentFilter + 1);
+
+    BOOL bValue = FALSE;
+    HRESULT hResult = iCustomize->GetCheckButtonState( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, &bValue);
+
+    if ( bValue )
+    {
+        LPCWSTR lpFilterExt = lFilters[0].pszSpec;
+
+        lpFilterExt = wcschr( lpFilterExt, '.' );
+        if ( lpFilterExt )
+            lpFilterExt++;
+        iDialog->SetDefaultExtension( lpFilterExt );
+    }
+
 }
 
 //-------------------------------------------------------------------------------
@@ -672,7 +702,6 @@ TFileDialog VistaFilePickerImpl::impl_getBaseDialogInterface()
 #else
         m_iDialogOpen.query(&iDialog);
 #endif
-    else
     if (m_iDialogSave.is())
 #ifdef __MINGW32__
         m_iDialogSave->QueryInterface(IID_IFileDialog, (void**)(&iDialog));
