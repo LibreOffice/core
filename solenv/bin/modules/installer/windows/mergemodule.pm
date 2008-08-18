@@ -8,7 +8,7 @@
 #
 # $RCSfile: mergemodule.pm,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -52,7 +52,7 @@ use installer::windows::language;
 
 sub merge_mergemodules_into_msi_database
 {
-    my ($mergemodules, $msifilename, $languagestringref, $language, $languagefile, $allvariables, $includepatharrayref) = @_;
+    my ($mergemodules, $filesref, $msifilename, $languagestringref, $language, $languagefile, $allvariables, $includepatharrayref, $allupdatesequences, $allupdatelastsequences, $allupdatediskids) = @_;
 
     my $domerge = 0;
     if (( $#{$mergemodules} > -1 ) && ( ! $installer::globals::patch ) && ( ! $installer::globals::languagepack )) { $domerge = 1; }
@@ -91,7 +91,7 @@ sub merge_mergemodules_into_msi_database
                 my $filename = $mergemodule->{'Name'};
                 my $mergefile = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 1);
 
-                if ( ! -f $$mergefile ) { installer::exiter::exit_program("ERROR: msm file not found: $$mergefile !", "merge_mergemodules_into_msi_database"); }
+                if ( ! -f $$mergefile ) { installer::exiter::exit_program("ERROR: msm file not found: $filename !", "merge_mergemodules_into_msi_database"); }
                 my $completesource = $$mergefile;
 
                 my $mergegid = $mergemodule->{'gid'};
@@ -304,6 +304,7 @@ sub merge_mergemodules_into_msi_database
 
                 my %onemergemodulehash = ();
                 $onemergemodulehash{'mergefilepath'} = $completedest;
+                $onemergemodulehash{'workdir'} = $workdir;
                 $onemergemodulehash{'cabinetfile'} = $workdir . $installer::globals::separator . $cabinetfile;
                 $onemergemodulehash{'filenumber'} = $filecounter;
                 $onemergemodulehash{'componentnames'} = \%componentnames;
@@ -459,9 +460,9 @@ sub merge_mergemodules_into_msi_database
 
             # Changing content of tables: File, Media, Directory, FeatureComponent, MsiAssembly
             installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing Media table");
-            change_media_table($mergemodulehash, $workdir, $mergemodulegid);
+            change_media_table($mergemodulehash, $workdir, $mergemodulegid, $allupdatelastsequences, $allupdatediskids);
             installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing File table");
-            change_file_table($mergemodulehash, $workdir);
+            $filesref = change_file_table($mergemodulehash, $workdir, $allupdatesequences, $includepatharrayref, $filesref, $mergemodulegid);
             installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing FeatureComponent table");
             change_featurecomponent_table($mergemodulehash, $workdir);
             installer::logger::include_timestamp_into_logfile("\nPerformance Info: Changing Directory table");
@@ -588,8 +589,12 @@ sub merge_mergemodules_into_msi_database
             chdir($from);
         }
 
+        if ( ! $installer::globals::mergefiles_added_into_collector ) { $installer::globals::mergefiles_added_into_collector = 1; } # Now all mergemodules are merged for one language.
+
         installer::logger::include_timestamp_into_logfile("\nPerformance Info: MergeModule into msi database, stop");
     }
+
+    return $filesref;
 }
 
 #########################################################################
@@ -639,16 +644,25 @@ sub analyze_media_file
 
 sub get_diskid
 {
-    my ($mediafile) = @_;
+    my ($mediafile, $allupdatediskids, $cabfilename) = @_;
 
     my $diskid = 0;
     my $line;
-    foreach $line ( keys %{$mediafile} )
+
+    if (( $installer::globals::updatedatabase ) && ( exists($allupdatediskids->{$cabfilename}) ))
     {
-        if ( $mediafile->{$line}->{'DiskId'} > $diskid ) { $diskid = $mediafile->{$line}->{'DiskId'}; }
+        $diskid = $allupdatediskids->{$cabfilename};
+    }
+    else
+    {
+        foreach $line ( keys %{$mediafile} )
+        {
+            if ( $mediafile->{$line}->{'DiskId'} > $diskid ) { $diskid = $mediafile->{$line}->{'DiskId'}; }
+        }
+
+        $diskid++;
     }
 
-    $diskid++;
     return $diskid;
 }
 
@@ -676,9 +690,18 @@ sub set_current_last_sequence
 
 sub get_lastsequence
 {
-    my ($mergemodulehash) = @_;
+    my ($mergemodulehash, $allupdatelastsequences) = @_;
 
-    my $lastsequence = $installer::globals::lastsequence_before_merge + $mergemodulehash->{'filenumber'};
+    my $lastsequence = 0;
+
+    if (( $installer::globals::updatedatabase ) && ( exists($allupdatelastsequences->{$mergemodulehash->{'cabfilename'}}) ))
+    {
+        $lastsequence = $allupdatelastsequences->{$mergemodulehash->{'cabfilename'}};
+    }
+    else
+    {
+        $lastsequence = $installer::globals::lastsequence_before_merge + $mergemodulehash->{'filenumber'};
+    }
 
     return $lastsequence;
 }
@@ -756,10 +779,10 @@ sub get_source
 
 sub create_new_media_line
 {
-    my ($mergemodulehash, $mediafile) = @_;
+    my ($mergemodulehash, $mediafile, $allupdatelastsequences, $allupdatediskids) = @_;
 
-    my $diskid = get_diskid($mediafile);
-    my $lastsequence = get_lastsequence($mergemodulehash);
+    my $diskid = get_diskid($mediafile, $allupdatediskids, $mergemodulehash->{'cabfilename'});
+    my $lastsequence = get_lastsequence($mergemodulehash, $allupdatelastsequences);
     my $diskprompt = get_diskprompt($mediafile);
     my $cabinet = $mergemodulehash->{'cabfilename'};
     my $volumelabel = get_volumelabel($mediafile);
@@ -773,12 +796,48 @@ sub create_new_media_line
 }
 
 #########################################################################
-# In the media table the new cabinet file has to be added.
+# Setting the last diskid in media table.
+#########################################################################
+
+sub get_last_diskid
+{
+    my ($mediafile) = @_;
+
+    my $lastdiskid = 0;
+    my $line;
+    foreach $line ( keys %{$mediafile} )
+    {
+        if ( $mediafile->{$line}->{'DiskId'} > $lastdiskid ) { $lastdiskid = $mediafile->{$line}->{'DiskId'}; }
+    }
+
+    return $lastdiskid;
+}
+
+#########################################################################
+# Setting global variable for last cab file name.
+#########################################################################
+
+sub set_last_cabfile_name
+{
+    my ($mediafile, $lastdiskid) = @_;
+
+    my $line;
+    foreach $line ( keys %{$mediafile} )
+    {
+        if ( $mediafile->{$line}->{'DiskId'} == $lastdiskid ) { $installer::globals::lastcabfilename = $mediafile->{$line}->{'Cabinet'}; }
+    }
+    my $infoline = "Setting last cabinet file: $installer::globals::lastcabfilename\n";
+    push( @installer::globals::logfileinfo, $infoline);
+}
+
+#########################################################################
+# In the media table the new cabinet file has to be added or the
+# number of the last cabinet file has to be increased.
 #########################################################################
 
 sub change_media_table
 {
-    my ( $mergemodulehash, $workdir, $mergemodulegid ) = @_;
+    my ( $mergemodulehash, $workdir, $mergemodulegid, $allupdatelastsequences, $allupdatediskids ) = @_;
 
     my $infoline = "Changing content of table \"Media\"\n";
     push( @installer::globals::logfileinfo, $infoline);
@@ -790,17 +849,44 @@ sub change_media_table
     my $mediafile = analyze_media_file($filecontent, $workdir);
     set_current_last_sequence($mediafile);
 
-    # the new line is identical for all localized databases, but has to be created for each MergeModule ($mergemodulegid)
-    if ( ! exists($installer::globals::merge_media_line{$mergemodulegid}) )
+    if ( $installer::globals::fix_number_of_cab_files )
     {
-        $installer::globals::merge_media_line{$mergemodulegid} = create_new_media_line($mergemodulehash, $mediafile);
+        # Determining the line with the highest sequencenumber. That file needs to be updated.
+        my $lastdiskid = get_last_diskid($mediafile);
+        if ( $installer::globals::lastcabfilename eq "" ) { set_last_cabfile_name($mediafile, $lastdiskid); }
+        my $newmaxsequencenumber = $installer::globals::lastsequence_before_merge + $mergemodulehash->{'filenumber'};
+
+        for ( my $i = 0; $i <= $#{$filecontent}; $i++ )
+        {
+            if ( $i <= 2 ) { next; }                        # ignoring first three lines
+            if ( ${$filecontent}[$i] =~ /^\s*$/ ) { next; } # ignoring empty lines
+            if ( ${$filecontent}[$i] =~ /^\s*(\Q$lastdiskid\E\t)\Q$installer::globals::lastsequence_before_merge\E(\t.*)$/ )
+            {
+                my $start = $1;
+                my $final = $2;
+                $infoline = "Merge: Old line in media table: ${$filecontent}[$i]\n";
+                push( @installer::globals::logfileinfo, $infoline);
+                my $newline = $start . $newmaxsequencenumber . $final . "\n";
+                ${$filecontent}[$i] = $newline;
+                $infoline = "Merge: Changed line in media table: ${$filecontent}[$i]\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
+        }
     }
+    else
+    {
+        # the new line is identical for all localized databases, but has to be created for each MergeModule ($mergemodulegid)
+        if ( ! exists($installer::globals::merge_media_line{$mergemodulegid}) )
+        {
+            $installer::globals::merge_media_line{$mergemodulegid} = create_new_media_line($mergemodulehash, $mediafile, $allupdatelastsequences, $allupdatediskids);
+        }
 
-    $infoline = "Adding line: $installer::globals::merge_media_line{$mergemodulegid}\n";
-    push( @installer::globals::logfileinfo, $infoline);
+        $infoline = "Adding line: $installer::globals::merge_media_line{$mergemodulegid}\n";
+        push( @installer::globals::logfileinfo, $infoline);
 
-    # adding new line
-    push(@{$filecontent}, $installer::globals::merge_media_line{$mergemodulegid});
+        # adding new line
+        push(@{$filecontent}, $installer::globals::merge_media_line{$mergemodulegid});
+    }
 
     # saving file
     installer::files::save_file($filename, $filecontent);
@@ -961,12 +1047,37 @@ sub get_new_line_for_msiassembly_table
 }
 
 #########################################################################
-# In the file table "Sequence" and "Attributes" have to be chagned.
+# Sorting the files collector, if there are files, following
+# the merge module files.
+#########################################################################
+
+sub sort_files_collector_for_sequence
+{
+    my ($filesref) = @_;
+
+    my @sortarray = ();
+    my %helphash = ();
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        my $onefile = ${$filesref}[$i];
+        if ( ! exists($onefile->{'sequencenumber'}) ) { installer::exiter::exit_program("ERROR: Could not find sequencenumber for file: $onefile->{'uniquename'} !", "sort_files_collector_for_sequence"); }
+        my $sequence = $onefile->{'sequencenumber'};
+        $helphash{$sequence} = $onefile;
+    }
+
+    foreach my $seq ( sort { $a <=> $b } keys %helphash ) { push(@sortarray, $helphash{$seq}); }
+
+    return \@sortarray;
+}
+
+#########################################################################
+# In the file table "Sequence" and "Attributes" have to be changed.
 #########################################################################
 
 sub change_file_table
 {
-    my ($mergemodulehash, $workdir) = @_;
+    my ($mergemodulehash, $workdir, $allupdatesequenceshashref, $includepatharrayref, $filesref, $mergemodulegid) = @_;
 
     my $infoline = "Changing content of table \"File\"\n";
     push( @installer::globals::logfileinfo, $infoline);
@@ -986,6 +1097,84 @@ sub change_file_table
         }
     }
 
+    # Unpacking the MergeModule.CABinet (only once)
+    # Unpacking into temp directory. Warning: expand.exe has problems with very long unpack directories.
+
+    my $unpackdir = installer::systemactions::create_directories("cab", "");
+    push(@installer::globals::removedirs, $unpackdir);
+    $unpackdir = $unpackdir . $installer::globals::separator . $mergemodulegid;
+
+    my %newfileshash = ();
+    if (( $installer::globals::fix_number_of_cab_files ) && ( ! $installer::globals::mergefiles_added_into_collector ))
+    {
+        if ( ! -d $unpackdir ) { installer::systemactions::create_directory($unpackdir); }
+
+        # Unpack the cab file, so that in can be included into the last office cabinet file. Attention: cararc.exe from cabsdk required.
+        # cabarc.exe -o X <fullcabfilepath>
+
+        # my $cabarcfilename = "cabarc.exe";
+        # my $cabarcfile = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$cabarcfilename, $includepatharrayref, 1);
+
+        # if ( ! -f $$cabarcfile )
+        # {
+        #   $cabarcfilename = "CABARC.EXE";
+        #   $cabarcfile = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$cabarcfilename, $includepatharrayref, 1);
+        #   if ( ! -f $$cabarcfile )
+        #   {
+        #       installer::exiter::exit_program("ERROR: cabarc.exe not found !", "change_file_table");
+        #   }
+        # }
+        # my $cabarc = $$cabarcfile;
+
+        # changing directory
+        my $from = cwd();
+        my $to = $mergemodulehash->{'workdir'};
+        chdir($to);
+
+        # Unpack the cab file, so that in can be included into the last office cabinet file.
+        # Not using cabarc.exe from cabsdk for unpacking cabinet files, but "expand.exe" that
+        # should be available on every Windows system.
+
+        $infoline = "Unpacking cabinet file: $mergemodulehash->{'cabinetfile'}\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        my $expandfile = "expand.exe";  # Has to be in the path
+        my $cabfilename = "MergeModule.CABinet";
+
+        # exclude cabinet file
+        # my $systemcall = $cabarc . " -o X " . $mergemodulehash->{'cabinetfile'};
+
+        my $systemcall = "";
+        if ( $^O =~ /cygwin/i ) {
+            my $localunpackdir = $unpackdir;
+            $localunpackdir =~ s/\//\\\\/g;
+            $systemcall = $expandfile . " " . $cabfilename . " -F:\\\* " . $localunpackdir;
+        }
+        else
+        {
+            $systemcall = $expandfile . " " . $cabfilename . " -F:\* " . $unpackdir . " 2\>\&1";
+        }
+
+        my $returnvalue = system($systemcall);
+
+        my $infoline = "Systemcall: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        if ($returnvalue)
+        {
+            $infoline = "ERROR: Could not execute $systemcall !\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            installer::exiter::exit_program("ERROR: Could not extract cabinet file: $mergemodulehash->{'cabinetfile'} !", "change_file_table");
+        }
+        else
+        {
+            $infoline = "Success: Executed $systemcall successfully!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+
+        chdir($from);
+    }
+
     # For performance reasons creating a hash with file names and rows
     # The content of File.idt is changed after every merge -> content cannot be saved in global hash
     $merge_filetablehashref = analyze_filetable_file($filecontent, $idtfilename);
@@ -1003,9 +1192,21 @@ sub change_file_table
 
         # <- this line has to be changed concerning "Sequence" and "Attributes"
         $filehash->{'Attributes'} = $attributes;
-        # Important saved data: $installer::globals::lastsequence_before_merge.
-        # This mechanism keeps the correct order inside the new cabinet file.
-        $filehash->{'Sequence'} = $filehash->{'Sequence'} + $installer::globals::lastsequence_before_merge;
+
+        # If this is an update process, the sequence numbers have to be reused.
+        if ( $installer::globals::updatedatabase )
+        {
+            if ( ! exists($allupdatesequenceshashref->{$filehash->{'File'}}) ) { installer::exiter::exit_program("ERROR: Sequence not defined for file \"$filehash->{'File'}\" !", "change_file_table"); }
+            $filehash->{'Sequence'} = $allupdatesequenceshashref->{$filehash->{'File'}};
+            # Saving all mergemodule sequence numbers. This is important for creating ddf files
+            $installer::globals::allmergemodulefilesequences{$filehash->{'Sequence'}} = 1;
+        }
+        else
+        {
+            # Important saved data: $installer::globals::lastsequence_before_merge.
+            # This mechanism keeps the correct order inside the new cabinet file.
+            $filehash->{'Sequence'} = $filehash->{'Sequence'} + $installer::globals::lastsequence_before_merge;
+        }
 
         my $oldline = ${$filecontent}[$linenumber];
         my $newline = get_new_line_for_file_table($filehash);
@@ -1017,10 +1218,59 @@ sub change_file_table
         push( @installer::globals::logfileinfo, $infoline);
         $infoline = "New: $newline\n";
         push( @installer::globals::logfileinfo, $infoline);
+
+        # Adding files to the files collector (but only once)
+        if (( $installer::globals::fix_number_of_cab_files ) && ( ! $installer::globals::mergefiles_added_into_collector ))
+        {
+            # If the number of cabinet files is kept constant,
+            # all files from the mergemodule cabinet files will
+            # be integrated into the last office cabinet file
+            # (installer::globals::lastcabfilename).
+            # Therefore the files must now be added to the filescollector,
+            # so that they will be integrated into the ddf files.
+
+            # Problem with very long filenames -> copying to shorter filenames
+            my $newfilename = "f" . $filehash->{'Sequence'};
+            my $completesource = $unpackdir . $installer::globals::separator . $filehash->{'File'};
+            my $completedest = $unpackdir . $installer::globals::separator . $newfilename;
+            installer::systemactions::copy_one_file($completesource, $completedest);
+
+            # Create new file hash for file collector
+            my %newfile = ();
+            $newfile{'sequencenumber'} = $filehash->{'Sequence'};
+            $newfile{'assignedsequencenumber'} = $filehash->{'Sequence'};
+            $newfile{'cabinet'} = $installer::globals::lastcabfilename;
+            $newfile{'sourcepath'} = $completedest;
+            $newfile{'componentname'} = $filehash->{'Component'};
+            $newfile{'uniquename'} = $filehash->{'File'};
+            $newfile{'Name'} = $filehash->{'File'};
+
+            # Saving in globals sequence hash
+            $installer::globals::uniquefilenamesequence{$filehash->{'File'}} = $filehash->{'Sequence'};
+
+            if ( ! -f $newfile{'sourcepath'} ) { installer::exiter::exit_program("ERROR: File \"$newfile{'sourcepath'}\" must exist!", "change_file_table"); }
+
+            # Collecting all new files. Attention: This files must be included into files collector in correct order!
+            $newfileshash{$filehash->{'Sequence'}} = \%newfile;
+            # push(@{$filesref}, \%newfile); -> this is not the correct order
+        }
     }
 
-    # saving file
+    # Now the files can be added to the files collector
+    # In the case of an update process, there can be new files, that have to be added after the merge module files.
+    # Warning: In multilingual installation sets, the files only have to be added once to the files collector!
+
+    if ( ! $installer::globals::mergefiles_added_into_collector )
+    {
+        foreach my $localsequence ( sort { $a <=> $b } keys %newfileshash ) { push(@{$filesref}, $newfileshash{$localsequence}); }
+        if ( $installer::globals::newfilesexist ) { $filesref = sort_files_collector_for_sequence($filesref); }
+        # $installer::globals::mergefiles_added_into_collector = 1; -> Not yet. Only if all mergemodules are merged for one language.
+    }
+
+    # Saving the idt file (for every language)
     installer::files::save_file($idtfilename, $filecontent);
+
+    return $filesref;
 }
 
 #########################################################################
