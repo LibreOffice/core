@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salnsmenu.mm,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,9 +92,7 @@
     const AquaSalFrame* pFrame = mpMenuItem->mpParentMenu ? mpMenuItem->mpParentMenu->getFrame() : NULL;
     if( pFrame && AquaSalFrame::isAlive( pFrame ) && ! pFrame->GetWindow()->IsInModalMode() )
     {
-        SalMenuEvent aMenuEvt;
-        aMenuEvt.mnId   = mpMenuItem->mnId;
-        aMenuEvt.mpMenu = mpMenuItem->mpVCLMenu;
+        SalMenuEvent aMenuEvt( mpMenuItem->mnId, mpMenuItem->mpVCLMenu );
         pFrame->CallCallback(SALEVENT_MENUCOMMAND, &aMenuEvt);
     }
     else if( mpMenuItem->mpVCLMenu )
@@ -130,4 +128,89 @@
     }
 }
 @end
+
+@implementation OOStatusItemView
+-(void)drawRect: (NSRect)aRect
+{
+    NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
+    [pContext saveGraphicsState];
+    [SalData::getStatusItem() drawStatusBarBackgroundInRect: aRect withHighlight: NO];
+    if( AquaSalMenu::pCurrentMenuBar )
+    {
+        const std::vector< AquaSalMenu::MenuBarButtonEntry >& rButtons( AquaSalMenu::pCurrentMenuBar->getButtons() );
+        NSRect aFrame = [self frame];
+        NSRect aImgRect = { { 2, 0 }, { 0, 0 } };
+        for( size_t i = 0; i < rButtons.size(); ++i )
+        {
+            NSRect aFromRect = { { 0, 0 },
+                                 { rButtons[i].maButton.maImage.GetSizePixel().Width(),
+                                   rButtons[i].maButton.maImage.GetSizePixel().Height() } };
+            aImgRect.origin.y = floor((aFrame.size.height - aFromRect.size.height)/2);
+            aImgRect.size = aFromRect.size;
+            if( rButtons[i].mpNSImage )
+                [rButtons[i].mpNSImage drawInRect: aImgRect fromRect: aFromRect operation: NSCompositeSourceOver fraction: 1.0];
+            aImgRect.origin.x += aFromRect.size.width + 2;
+        }
+    }
+    [pContext restoreGraphicsState];
+}
+
+-(void)mouseUp: (NSEvent *)pEvent
+{
+    /* check if button goes up inside one of our status buttons */
+    if( AquaSalMenu::pCurrentMenuBar )
+    {
+        const std::vector< AquaSalMenu::MenuBarButtonEntry >& rButtons( AquaSalMenu::pCurrentMenuBar->getButtons() );
+        NSRect aFrame = [self frame];
+        NSRect aImgRect = { { 2, 0 }, { 0, 0 } };
+        NSPoint aMousePt = [pEvent locationInWindow];
+        for( size_t i = 0; i < rButtons.size(); ++i )
+        {
+            NSRect aFromRect = { { 0, 0 },
+                                 { rButtons[i].maButton.maImage.GetSizePixel().Width(),
+                                   rButtons[i].maButton.maImage.GetSizePixel().Height() } };
+            aImgRect.origin.y = (aFrame.size.height - aFromRect.size.height)/2;
+            aImgRect.size = aFromRect.size;
+            if( aMousePt.x >= aImgRect.origin.x && aMousePt.x <= (aImgRect.origin.x+aImgRect.size.width) &&
+                aMousePt.y >= aImgRect.origin.y && aMousePt.y <= (aImgRect.origin.y+aImgRect.size.height) )
+            {
+                if( AquaSalMenu::pCurrentMenuBar->mpFrame && AquaSalFrame::isAlive( AquaSalMenu::pCurrentMenuBar->mpFrame ) )
+                {
+                    SalMenuEvent aMenuEvt( rButtons[i].maButton.mnId, AquaSalMenu::pCurrentMenuBar->mpVCLMenu );
+                    AquaSalMenu::pCurrentMenuBar->mpFrame->CallCallback(SALEVENT_MENUBUTTONCOMMAND, &aMenuEvt);
+                }
+                return;
+            }
+            
+            aImgRect.origin.x += aFromRect.size.width + 2;
+        }
+    }
+}
+
+-(void)layout
+{
+    NSStatusBar* pStatBar = [NSStatusBar systemStatusBar];
+    NSSize aSize = { 0, [pStatBar thickness] };
+    [self removeAllToolTips];
+    if( AquaSalMenu::pCurrentMenuBar )
+    {
+        const std::vector< AquaSalMenu::MenuBarButtonEntry >& rButtons( AquaSalMenu::pCurrentMenuBar->getButtons() );
+        if( ! rButtons.empty() )
+        {
+            aSize.width = 2;
+            for( size_t i = 0; i < rButtons.size(); ++i )
+            {
+                NSRect aImgRect = { { aSize.width, floor((aSize.height-rButtons[i].maButton.maImage.GetSizePixel().Height())/2) },
+                                     { rButtons[i].maButton.maImage.GetSizePixel().Width(),
+                                       rButtons[i].maButton.maImage.GetSizePixel().Height() } };
+                if( rButtons[i].mpToolTipString )
+                    [self addToolTipRect: aImgRect owner: rButtons[i].mpToolTipString userData: NULL];
+                aSize.width += 2 + aImgRect.size.width;
+            }
+        }
+    }
+    [self setFrameSize: aSize];
+}
+@end
+
 
