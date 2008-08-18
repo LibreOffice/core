@@ -9,7 +9,7 @@
 #
 # $RCSfile: soffice.sh,v $
 #
-# $Revision: 1.33 $
+# $Revision: 1.34 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -87,6 +87,9 @@ unset XENVIRONMENT
 
 # uncomment line below to disable anti aliasing of fonts
 # SAL_ANTIALIAS_DISABLE=true; export SAL_ANTIALIAS_DISABLE
+
+# uncomment line below if you encounter problems starting soffice on your system
+# SAL_NO_XINITTHREADS=true; export SAL_NO_XINITTHREADS
 
 # pagein
 for sd_arg in ${1+"$@"} ; do
