@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MMozillaBootstrap.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,8 +38,10 @@ using namespace com::sun::star::mozilla;
 using namespace connectivity::mozab;
 #include <MNSFolders.hxx>
 #include "MNSProfileDiscover.hxx"
-#include "MNSProfileManager.hxx"
-#include "MNSRunnable.hxx"
+#ifndef MINIMAL_PROFILEDISCOVER
+#  include "MNSProfileManager.hxx"
+#  include "MNSRunnable.hxx"
+#endif
 #include <MNSInit.hxx>
 
 static MozillaBootstrap *pMozillaBootstrap=NULL;
@@ -72,10 +74,13 @@ MozillaBootstrap::~MozillaBootstrap()
 void MozillaBootstrap::Init()
 {
     sal_Bool aProfileExists=sal_False;
+
+#ifndef MINIMAL_PROFILEDISCOVER
     //This must be call before any mozilla code
     MNS_Init(aProfileExists);
 
     m_ProfileManager = new ProfileManager();
+#endif
     m_ProfileAccess = new ProfileAccess();
     bootupProfile(::com::sun::star::mozilla::MozillaProductType_Mozilla,rtl::OUString());
 }
@@ -157,32 +162,57 @@ Sequence< ::rtl::OUString > SAL_CALL MozillaBootstrap::getSupportedServiceNames(
 // XProfileManager
 ::sal_Int32 SAL_CALL MozillaBootstrap::bootupProfile( ::com::sun::star::mozilla::MozillaProductType product, const ::rtl::OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
 {
+#ifndef MINIMAL_PROFILEDISCOVER
     return m_ProfileManager->bootupProfile(product,profileName);
+#else
+        return -1;
+#endif
 }
 ::sal_Int32 SAL_CALL MozillaBootstrap::shutdownProfile(  ) throw (::com::sun::star::uno::RuntimeException)
 {
+#ifndef MINIMAL_PROFILEDISCOVER
     return m_ProfileManager->shutdownProfile();
+#else
+    return -1;
+#endif
 }
 ::com::sun::star::mozilla::MozillaProductType SAL_CALL MozillaBootstrap::getCurrentProduct(  ) throw (::com::sun::star::uno::RuntimeException)
 {
+#ifndef MINIMAL_PROFILEDISCOVER
     return m_ProfileManager->getCurrentProduct();
+#else
+    return ::com::sun::star::mozilla::MozillaProductType_Default;
+#endif
 }
 ::rtl::OUString SAL_CALL MozillaBootstrap::getCurrentProfile(  ) throw (::com::sun::star::uno::RuntimeException)
 {
+#ifndef MINIMAL_PROFILEDISCOVER
     return m_ProfileManager->getCurrentProfile();
+#else
+    return ::rtl::OUString();
+#endif
 }
 ::sal_Bool SAL_CALL MozillaBootstrap::isCurrentProfileLocked(  ) throw (::com::sun::star::uno::RuntimeException)
 {
+#ifndef MINIMAL_PROFILEDISCOVER
     return isProfileLocked(getCurrentProduct(),m_ProfileManager->getCurrentProfile());
+#else
+    return true;
+#endif
 }
 ::rtl::OUString SAL_CALL MozillaBootstrap::setCurrentProfile( ::com::sun::star::mozilla::MozillaProductType product, const ::rtl::OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
 {
+#ifndef MINIMAL_PROFILEDISCOVER
     return m_ProfileManager->setCurrentProfile(product,profileName);
+#else
+    return ::rtl::OUString();
+#endif
 }
 
 // XProxyRunner
 ::sal_Int32 SAL_CALL MozillaBootstrap::Run( const ::com::sun::star::uno::Reference< ::com::sun::star::mozilla::XCodeProxy >& aCode ) throw (::com::sun::star::uno::RuntimeException)
 {
+#ifndef MINIMAL_PROFILEDISCOVER
     ::rtl::OUString profileName = aCode->getProfileName();
     ::rtl::OUString currProfileName = getCurrentProfile();
     ::com::sun::star::mozilla::MozillaProductType currProduct = getCurrentProduct();
@@ -194,5 +224,105 @@ Sequence< ::rtl::OUString > SAL_CALL MozillaBootstrap::getSupportedServiceNames(
        MNSRunnable xRunnable;
 
     return xRunnable.StartProxy(aCode);;
+#else
+    return -1;
+#endif
 }
 
+#ifdef MINIMAL_PROFILEDISCOVER
+#include <cppuhelper/factory.hxx>
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::registry::XRegistryKey;
+using ::com::sun::star::lang::XSingleServiceFactory;
+using ::com::sun::star::lang::XMultiServiceFactory;
+
+extern "C" void SAL_CALL component_getImplementationEnvironment(
+                const sal_Char  **ppEnvTypeName,
+                uno_Environment ** /*ppEnv*/
+            )
+{
+    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+
+//---------------------------------------------------------------------------------------
+void REGISTER_PROVIDER(
+        const ::rtl::OUString& aServiceImplName,
+        const Sequence< ::rtl::OUString>& Services,
+        const Reference< ::com::sun::star::registry::XRegistryKey > & xKey)
+{
+    ::rtl::OUString aMainKeyName;
+    aMainKeyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/"));
+    aMainKeyName += aServiceImplName;
+    aMainKeyName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+
+    Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
+    OSL_ENSURE(xNewKey.is(), "MOZAB::component_writeInfo : could not create a registry key !");
+
+    for (sal_Int32 i=0; i<Services.getLength(); ++i)
+        xNewKey->createKey(Services[i]);
+}
+
+extern "C" sal_Bool SAL_CALL component_writeInfo(
+                void* /*pServiceManager*/,
+                void* pRegistryKey
+            )
+{
+    if (pRegistryKey)
+    try
+    {
+        Reference< ::com::sun::star::registry::XRegistryKey > xKey(reinterpret_cast< ::com::sun::star::registry::XRegistryKey*>(pRegistryKey));
+
+        Sequence< ::rtl::OUString > aSNS( 1 );
+        aSNS[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap"));
+        REGISTER_PROVIDER(
+             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.mozilla.MozillaBootstrap")),
+             aSNS, xKey);
+
+        return sal_True;
+    }
+    catch (::com::sun::star::registry::InvalidRegistryException& )
+    {
+        OSL_ENSURE(sal_False, "Mozab::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
+    }
+
+    return sal_False;
+}
+
+static Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >& rServiceManager )
+{
+        MozillaBootstrap * pBootstrap = reinterpret_cast<MozillaBootstrap*>(OMozillaBootstrap_CreateInstance(rServiceManager));
+        return *pBootstrap;
+}
+
+extern "C" void* SAL_CALL component_getFactory(
+                                        const sal_Char* pImplementationName,
+                                        void* pServiceManager,
+                                        void* /*pRegistryKey*/)
+{
+        void* pRet = 0;
+
+        if (pServiceManager)
+        {
+                ::rtl::OUString aImplName( ::rtl::OUString::createFromAscii( pImplementationName ) );
+                Reference< XSingleServiceFactory > xFactory;
+                if (aImplName.equals(  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.mozilla.MozillaBootstrap"))  ))
+                {
+                    Sequence< ::rtl::OUString > aSNS( 1 );
+                    aSNS[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap"));
+
+                    xFactory = ::cppu::createSingleFactory(
+                        reinterpret_cast< XMultiServiceFactory* > ( pServiceManager),
+                        aImplName, createInstance, aSNS );
+                }
+                if ( xFactory.is() )
+                {
+                    xFactory->acquire();
+                    pRet = xFactory.get();
+                }
+        }
+
+        return pRet;
+};
+
+#endif
