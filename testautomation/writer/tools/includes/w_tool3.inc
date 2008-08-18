@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_tool3.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 08:36:08 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:43:26 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -62,46 +62,46 @@
 
 
 sub InTabelleKontrollieren
-   Call wDokSchreiben ("<Home>")
-   Call wDokSchreiben ("<Tab><Shift End>")
+   Call wTypeKeys ("<Home>")
+   Call wTypeKeys ("<Tab><Shift End>")
    EditCopy
    if GetClipBoardText <> "Text" then
       Warnlog "Text has not been inserted in a table"
    else
-      Call wDokSchreiben "<Home>"
-      Call wDokSchreiben "<Shift End>"
+      Call wTypeKeys "<Home>"
+      Call wTypeKeys "<Shift End>"
    end if
 end sub
 
 ' ****
 sub InTabelleKontrollierenExtra
-   Call wDokSchreiben ("<Home><Shift Tab><Shift End>")
+   Call wTypeKeys ("<Home><Shift Tab><Shift End>")
    EditCopy
    if GetClipBoardText <> "Der" then
       Warnlog "Text has not been inserted in a table"
    else
-      Call wDokSchreiben "<Home>"
-      Call wDokSchreiben "<Shift End>"
+      Call wTypeKeys "<Home>"
+      Call wTypeKeys "<Shift End>"
    end if
 end sub
 
 '***
 sub InTextKontrollieren
-   Call wDokSchreiben ("<Home><Shift Mod1 Right>")
+   Call wTypeKeys ("<Home><Shift Mod1 Right>")
    EditCopy
    if Left$(GetClipBoardText,3) <> "Der" AND Left$(GetClipboardText,4) <> "Der " then
       Warnlog "Table has not been changed to text"
    else
-      Call wDokSchreiben "<Home>"
-      Call wDokSchreiben "<Shift End>"
+      Call wTypeKeys "<Home>"
+      Call wTypeKeys "<Shift End>"
    end if
 end sub
 
 '***
 sub AufsteigendKontrollieren ( Zahl as Boolean )
-   Call wDokSchreiben "<Home><Up>",6
+   Call wTypeKeys "<Home><Up>",6
    wait 500
-   Call wDokSchreiben ("<Home><Shift End>" )
+   Call wTypeKeys ("<Home><Shift End>" )
    wait 100
    EditCopy
    if Zahl = TRUE then
@@ -109,7 +109,7 @@ sub AufsteigendKontrollieren ( Zahl as Boolean )
    else
       if GetClipboardText <> "Ahallo" then Warnlog "1. Word is not correctly sorted"
    end if
-   Call wDokSchreiben ( "<Down><Down><Home><Shift End>" )
+   Call wTypeKeys ( "<Down><Down><Home><Shift End>" )
    wait 100
    EditCopy
    if Zahl = TRUE then
@@ -117,7 +117,7 @@ sub AufsteigendKontrollieren ( Zahl as Boolean )
    else
       if GetClipboardText <> "Ohallo" then Warnlog "3. Word not correctly sorted"
    end if
-   Call wDokSchreiben ( "<Down><Down><Home><Shift End>" )
+   Call wTypeKeys ( "<Down><Down><Home><Shift End>" )
    wait 100
    EditCopy
    if Zahl = TRUE then
@@ -129,9 +129,9 @@ end sub
 
 '***
 sub AbsteigendKontrollieren ( Zahl as Boolean )
-   Call wDokSchreiben "<Home><Up>",6
+   Call wTypeKeys "<Home><Up>",6
    wait 500
-   Call wDokSchreiben ( "<Home><Shift End>" )
+   Call wTypeKeys ( "<Home><Shift End>" )
    wait 100
    EditCopy
    if Zahl = TRUE then
@@ -139,7 +139,7 @@ sub AbsteigendKontrollieren ( Zahl as Boolean )
    else
       if GetClipboardText <> "Zhallo" then Warnlog "1. word not correctly sorted"
    end if
-   Call wDokSchreiben ( "<Down><Down><Down><Home><Shift End>" )
+   Call wTypeKeys ( "<Down><Down><Down><Home><Shift End>" )
    wait 100
    EditCopy
    if Zahl = TRUE then
@@ -147,7 +147,7 @@ sub AbsteigendKontrollieren ( Zahl as Boolean )
    else
       if GetClipboardText <> "Ghallo" then Warnlog "4th word not correctly sorted"
    end if
-   Call wDokSchreiben ( "<Down><Home><Shift End>" )
+   Call wTypeKeys ( "<Down><Home><Shift End>" )
    wait 100
    EditCopy
    if Zahl = TRUE then
@@ -159,42 +159,42 @@ end sub
 
 '***
 sub AufSortierungPruefen(i as integer)
-   Call wDokSchreiben "<Home>"
-   Call wDokSchreiben "<up>",6
-   Call wDokSchreiben "<Shift Mod1 Right>"
+   Call wTypeKeys "<Home>"
+   Call wTypeKeys "<up>",6
+   Call wTypeKeys "<Shift Mod1 Right>"
    Wait 100
    EditCopy
    if Left$(GetClipboardText,3) <> "AAA" then Warnlog "Entry in 1.Column/1.Row incorrect"
    if i <> 1 then
-    Call wDokSchreiben "<Mod1 Right>", 3
+    Call wTypeKeys "<Mod1 Right>", 3
    else
-    Call wDokSchreiben "<Mod1 Right>"
-   endif
-   Call wDokSchreiben "<Shift Mod1 Right>"
+    Call wTypeKeys "<Mod1 Right>"
+   end if
+   Call wTypeKeys "<Shift Mod1 Right>"
    Wait 100
    EditCopy
    if Left$(GetClipboardText,3) <> "CCC" then Warnlog "Entry in 2.Column/1.Row incorrect"
-   Call wDokSchreiben "<Down><Home>"
-   Call wDokSchreiben "<Shift Mod1 Right>"
+   Call wTypeKeys "<Down><Home>"
+   Call wTypeKeys "<Shift Mod1 Right>"
    Wait 100
    EditCopy
    if Left$(GetClipboardText,3) <> "AAA" then Warnlog "Entry in 1.Column/2.Row incorrect"
    if i <> 1 then
-    Call wDokSchreiben "<Mod1 Right>", 3
+    Call wTypeKeys "<Mod1 Right>", 3
    else
-    Call wDokSchreiben "<Mod1 Right>"
-   endif
-   Call wDokSchreiben "<Shift Mod1 Right>"
+    Call wTypeKeys "<Mod1 Right>"
+   end if
+   Call wTypeKeys "<Shift Mod1 Right>"
    Wait 100
    EditCopy
    if Left$(GetClipboardText,3) <> "DDD" then Warnlog "Entry in 2.Column/2.Row incorrect"
-   Call wDokSchreiben "<Down><Home>"
+   Call wTypeKeys "<Down><Home>"
    if i <> 1 then
-    Call wDokSchreiben "<Mod1 Right>", 10
+    Call wTypeKeys "<Mod1 Right>", 10
    else
-    Call wDokSchreiben "<Mod1 Right>", 5
-   endif
-   Call wDokSchreiben "<Shift Mod1 Right>"
+    Call wTypeKeys "<Mod1 Right>", 5
+   end if
+   Call wTypeKeys "<Shift Mod1 Right>"
    Wait 100
    EditCopy
    if Left$(GetClipboardText,3) <> "AAA" then Warnlog "Entry in 4.Column/3.Row incorrect"
@@ -202,40 +202,40 @@ end sub
 
 '***
 sub AbSortierungPruefen(i as integer)
-   Call wDokSchreiben "<Home>"
-   Call wDokSchreiben "<up>", 6
-   Call wDokSchreiben "<Shift Mod1 Right>"
+   Call wTypeKeys "<Home>"
+   Call wTypeKeys "<up>", 6
+   Call wTypeKeys "<Shift Mod1 Right>"
    Wait 100
    EditCopy
    if Left$(GetClipboardText,3) <> "CCC" then Warnlog "Entry in 1.Column/1.Row incorrect"
-   Call wDokSchreiben "<Down><Shift Mod1 Left>"
+   Call wTypeKeys "<Down><Shift Mod1 Left>"
    Wait 100
    EditCopy
    if Left$(GetClipboardText,3) <> "CCC" then Warnlog "Entry in 1.Column/2.Row incorrect"
    if i <> 1 then
-    Call wDokSchreiben "<Mod1 Right>" , 4
+    Call wTypeKeys "<Mod1 Right>" , 4
    else
-    Call wDokSchreiben "<Mod1 Right>" , 2
-   endif
-   Call wDokSchreiben "<Shift Mod1 Right>"
+    Call wTypeKeys "<Mod1 Right>" , 2
+   end if
+   Call wTypeKeys "<Shift Mod1 Right>"
    Wait 100
    EditCopy
    if Left$(GetClipboardText,3) <> "BBB" then Warnlog "Entry in 2.Column/2.Row incorrect"
-   Call wDokSchreiben "<Left><Up>"
-   Call wDokSchreiben "<Right>"
-   Call wDokSchreiben "<Shift Mod1 Left>"
+   Call wTypeKeys "<Left><Up>"
+   Call wTypeKeys "<Right>"
+   Call wTypeKeys "<Shift Mod1 Left>"
    Wait 100
    EditCopy
    if Left$(GetClipboardText,3) <> "EEE" then Warnlog "Entry in 2.Column/1.Row incorrect"
    if i <> 1 then
-    Call wDokSchreiben "<Mod1 Right>", 6
-    Call wDokSchreiben "<Down>", 3
-    Call wDokSchreiben "<End><Shift Mod1 Left>"
+    Call wTypeKeys "<Mod1 Right>", 6
+    Call wTypeKeys "<Down>", 3
+    Call wTypeKeys "<End><Shift Mod1 Left>"
    else
-    Call wDokSchreiben "<Mod1 Right>", 3
-    Call wDokSchreiben "<Down>", 3
-    Call wDokSchreiben "<Shift Mod1 Right>"
-   endif
+    Call wTypeKeys "<Mod1 Right>", 3
+    Call wTypeKeys "<Down>", 3
+    Call wTypeKeys "<Shift Mod1 Right>"
+   end if
    Wait 100
    EditCopy
    if Left$(GetClipboardText,3) <> "AAA" then Warnlog "Entry in 2.Column/1.Row incorrect"
@@ -244,43 +244,43 @@ end sub
 '***
 sub UndoRichtigBeiSortierung
   Dim Fehler as Boolean
-   Call wDokSchreiben "<Left Right>"
+   Call wTypeKeys "<Left Right>"
    wait 100
    EditUndo
    Sleep 1
-   Call wDokSchreiben "<Home>"
-   Call wDokSchreiben "<up>", 6
-   Call wDokSchreiben "<Shift Mod1 Right>"
+   Call wTypeKeys "<Home>"
+   Call wTypeKeys "<up>", 6
+   Call wTypeKeys "<Shift Mod1 Right>"
    EditCopy
    if Left$(GetClipboardText,3) <> "AAA" then Fehler = TRUE
-   Call wDokSchreiben "<Down><Home><Shift Mod1 Right>"
+   Call wTypeKeys "<Down><Home><Shift Mod1 Right>"
    Wait 100
    EditCopy
    if Left$(GetClipboardText,3) <> "BBB" then Fehler = TRUE
-   Call wDokSchreiben "<Down><Home><Shift Mod1 Right>"
+   Call wTypeKeys "<Down><Home><Shift Mod1 Right>"
    Wait 100
    EditCopy
    if Left$(GetClipboardText,3) <> "CCC" then Fehler = TRUE
-   Call wDokSchreiben "<Down><Home><Shift Mod1 Right>"
+   Call wTypeKeys "<Down><Home><Shift Mod1 Right>"
    Wait 100
    EditCopy
    if Left$(GetClipboardText,3) <> "AAA" then Fehler = TRUE
-   Call wDokSchreiben "<Down><Home><Shift Mod1 Right>"
+   Call wTypeKeys "<Down><Home><Shift Mod1 Right>"
    Wait 100
    EditCopy
    if Left$(GetClipboardText,3) <> "BBB" then Fehler = TRUE
-   Call wDokSchreiben "<Down><Home><Shift Mod1 Right>"
+   Call wTypeKeys "<Down><Home><Shift Mod1 Right>"
    Wait 100
    EditCopy
    if Left$(GetClipboardText,3) <> "CCC" then Fehler = TRUE
    if Fehler = TRUE then
       Warnlog "Undo after sorting has not been functioned correctly"
       Call hCloseDocument
-      Call hFileOpen ( gTesttoolPath + "writer\level1\input\st1_5.sdw" )
+      Call hFileOpen ( gTesttoolPath + "writer\optional\input\st1_5.sdw" )
    end if
-   Call wDokSchreiben "<End>"
-   Call wDokSchreiben "<Down>",6
-   Call wDokSchreiben "<Mod1 a>"
+   Call wTypeKeys "<End>"
+   Call wTypeKeys "<Down>",6
+   Call wTypeKeys "<Mod1 a>"
    wait 100
 end sub
 
@@ -335,8 +335,8 @@ end sub
 
 '***
 function ZelleRuntertesten ( Wert$ ) as Boolean
-   Call wDokSchreiben "<Down>"
-   Call wDokSchreiben "<Mod1 a>"
+   Call wTypeKeys "<Down>"
+   Call wTypeKeys "<Mod1 a>"
    wait 100
    EditCopy
    if GetClipboardText = Wert$ then
@@ -349,27 +349,27 @@ end function
 '***
 
 sub wEinfuegenEintragAlle ( NaWieSollErheissen$ )
-   Call wDokSchreiben NaWieSollErheissen$
-   Call wDokSchreiben "<Mod1 Left><Shift Mod1 Right>"
+   Call wTypeKeys NaWieSollErheissen$
+   Call wTypeKeys "<Mod1 Left><Shift Mod1 Right>"
    InsertIndexesEntry
    Kontext "VerzeichniseintragEinfuegen"
    Verzeichnis.Select 1
    VerzeichniseintragEinfuegen.OK
 
-   Call wDokSchreiben "<End> "
-   Call wDokSchreiben "<Left><Shift Mod1 Left>"
+   Call wTypeKeys "<End> "
+   Call wTypeKeys "<Left><Shift Mod1 Left>"
    InsertIndexesEntry
    Kontext "VerzeichniseintragEinfuegen"
    Verzeichnis.Select 2
    VerzeichniseintragEinfuegen.OK
 
-   Call wDokSchreiben "<End> "
-   Call wDokSchreiben "<Left><Left><Shift Mod1 Left>"
+   Call wTypeKeys "<End> "
+   Call wTypeKeys "<Left><Left><Shift Mod1 Left>"
    InsertIndexesEntry
    Kontext "VerzeichniseintragEinfuegen"
    Verzeichnis.Select 3
    VerzeichniseintragEinfuegen.OK
-   Call wDokSchreiben "<End> "
+   Call wTypeKeys "<End> "
 end sub
 
 '***
@@ -378,7 +378,7 @@ sub ReihenfolgePruefen
   Dim sDummy$
 
   printlog "     - Checking entry's on first page"
-   Call wDokSchreiben "<Down><Shift Mod1 Right>"
+   Call wTypeKeys "<Down><Shift Mod1 Right>"
    wait 100
    EditCopy
    sDummy$ = GetClipboardText
@@ -387,28 +387,28 @@ sub ReihenfolgePruefen
          Warnlog "Wrong Sort: Should -> Zhallo   Is -> "+ sDummy$
       else
          Warnlog "Sort infinitely is not in alphabetical order"
-         Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+         Call wTypeKeys "<Home><Down><Shift Mod1 Right>"
          wait 100
          EditCopy
          if GetClipboardText <> "Zhallo" then Warnlog "2. entry not Zhallo but "+GetClipboardText
       end if
    else
-      Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+      Call wTypeKeys "<Home><Down><Shift Mod1 Right>"
       wait 100
       EditCopy
       if GetClipboardText <> "Ahallo" then Warnlog "2. entry not Ahallo but "+GetClipboardText
    end if
-   Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+   Call wTypeKeys "<Home><Down><Shift Mod1 Right>"
    wait 100
    EditCopy
    if GetClipboardText <> "Xhallo" then Warnlog "3. entry not Xhallo but "+GetClipboardText
-   Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+   Call wTypeKeys "<Home><Down><Shift Mod1 Right>"
    wait 100
    EditCopy
    if GetClipboardText <> "Ghallo" then Warnlog "4. entry not Ghallo but "+GetClipboardText
 
   printlog "     - checking entrys on 3rd page"
-   Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+   Call wTypeKeys "<Home><Down><Shift Mod1 Right>"
    wait 100
    EditCopy
    sDummy$ = GetClipboardText
@@ -417,104 +417,104 @@ sub ReihenfolgePruefen
          Warnlog "Wrong Sort: Should -> Zhallo   Is -> "+ sDummy$
       else
          Warnlog "Sort infinitely is not in alphabetical order"
-         Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+         Call wTypeKeys "<Home><Down><Shift Mod1 Right>"
          wait 100
          EditCopy
          if GetClipboardText <> "Zhallo" then Warnlog "6. entry not Zhallo but "+GetClipboardText
       end if
    else
-      Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+      Call wTypeKeys "<Home><Down><Shift Mod1 Right>"
       wait 100
       EditCopy
       if GetClipboardText <> "Ahallo" then Warnlog "6. entry not Ahallo but "+GetClipboardText
    end if
-   Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+   Call wTypeKeys "<Home><Down><Shift Mod1 Right>"
    wait 100
    EditCopy
    if GetClipboardText <> "Xhallo" then Warnlog "7. entry not Xhallo but "+GetClipboardText
-   Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+   Call wTypeKeys "<Home><Down><Shift Mod1 Right>"
    wait 100
    EditCopy
    if GetClipboardText <> "Ghallo" then Warnlog "8. entry not Ghallo but "+GetClipboardText
 
   printlog "     - checking page entrys"
-   Call wDokSchreiben "<End><Shift Mod1 Left>"
+   Call wTypeKeys "<End><Shift Mod1 Left>"
    wait 100
    EditCopy
    if GetClipboardText <> "3" then Warnlog "8. Entry: Not page 3 but "+ GetClipboardText
-   Call wDokSchreiben "<End><Up><Shift Mod1 Left>"
+   Call wTypeKeys "<End><Up><Shift Mod1 Left>"
    wait 100
    EditCopy
    if GetClipboardText <> "3" then Warnlog "7. Entry: Not page 3 but "+ GetClipboardText
-   Call wDokSchreiben "<End><Up><Shift Mod1 Left>"
+   Call wTypeKeys "<End><Up><Shift Mod1 Left>"
    wait 100
    EditCopy
    if GetClipboardText <> "3" then Warnlog "6. entry: Not page 3 but "+ GetClipboardText
-   Call wDokSchreiben "<End><Up><Shift Mod1 Left>"
+   Call wTypeKeys "<End><Up><Shift Mod1 Left>"
    wait 100
    EditCopy
    if GetClipboardText <> "3" then Warnlog "5. entry: Not page 3 but "+ GetClipboardText
-   Call wDokSchreiben "<End><Up><Shift Mod1 Left>"
+   Call wTypeKeys "<End><Up><Shift Mod1 Left>"
    wait 100
    EditCopy
    if GetClipboardText <> "1" then Warnlog "4. entry: Not page 1 but "+ GetClipboardText
-   Call wDokSchreiben "<End><Up><Shift Mod1 Left>"
+   Call wTypeKeys "<End><Up><Shift Mod1 Left>"
    wait 100
    EditCopy
    if GetClipboardText <> "1" then Warnlog "3. entry: Not page 1 but "+ GetClipboardText
-   Call wDokSchreiben "<End><Up><Shift Mod1 Left>"
+   Call wTypeKeys "<End><Up><Shift Mod1 Left>"
    wait 100
    EditCopy
    if GetClipboardText <> "1" then Warnlog "2. entry: Not page 1 but "+ GetClipboardText
-   Call wDokSchreiben "<End><Up><Shift Mod1 Left>"
+   Call wTypeKeys "<End><Up><Shift Mod1 Left>"
    wait 100
    EditCopy
    if GetClipboardText <> "1" then Warnlog "1. entry: Not page 1 but "+ GetClipboardText
-   Call wDokSchreiben "<End><Up><Shift Mod1 Left>"
+   Call wTypeKeys "<End><Up><Shift Mod1 Left>"
 end sub
 
 '***
 sub ReihenfolgePruefen2
   printlog "     - checking entrys"
-   Call wDokSchreiben "<Down><Shift Mod1 Right>"
+   Call wTypeKeys "<Down><Shift Mod1 Right>"
    wait 100
    EditCopy
    if GetClipboardText <> "Ahallo" then Warnlog "1. entry not Ahallo but "+GetClipboardText
-   Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+   Call wTypeKeys "<Home><Down><Shift Mod1 Right>"
    wait 100
    EditCopy
    if GetClipboardText <> "Ghallo" then Warnlog "2. entry not Ghallo but "+GetClipboardText
-   Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+   Call wTypeKeys "<Home><Down><Shift Mod1 Right>"
    wait 100
    EditCopy
    if GetClipboardText <> "Xhallo" then Warnlog "3. entry not Xhallo but "+GetClipboardText
-   Call wDokSchreiben "<Home><Down><Shift Mod1 Right>"
+   Call wTypeKeys "<Home><Down><Shift Mod1 Right>"
    wait 100
    EditCopy
    if GetClipboardText <> "Zhallo" then Warnlog "4. entry not Zhallo but "+GetClipboardText
-   Call wDokSchreiben "<Down><Mod1 Left><Shift Mod1 Right>"
+   Call wTypeKeys "<Down><Mod1 Left><Shift Mod1 Right>"
    wait 100
    EditCopy
    if GetClipboardText <> "Bhallo " then Warnlog "Number of entrys more then 4."
 
   printlog "     - checking page entrys"
-   Call wDokSchreiben "<Up>"
-   Call wDokSchreiben "<Shift Mod1 Right>", 3
+   Call wTypeKeys "<Up>"
+   Call wTypeKeys "<Shift Mod1 Right>", 3
    wait 100
    EditCopy
    if GetClipboardText <> "1, 3" then Warnlog "4. entry: Not '1, 3' but "+ GetClipboardText
-   Call wDokSchreiben "<Up>"
-   Call wDokSchreiben "<Shift Mod1 Left>", 3
+   Call wTypeKeys "<Up>"
+   Call wTypeKeys "<Shift Mod1 Left>", 3
    wait 100
    EditCopy
    if GetClipboardText <> "1, 3" then Warnlog "3. entry: Not '1, 3' but "+ GetClipboardText
-   Call wDokSchreiben "<Up>"
-   Call wDokSchreiben "<Shift Mod1 Right>", 3
+   Call wTypeKeys "<Up>"
+   Call wTypeKeys "<Shift Mod1 Right>", 3
    wait 100
    EditCopy
    if GetClipboardText <> "1, 3" then Warnlog "2. entry: Not '1, 3' but "+ GetClipboardText
-   Call wDokSchreiben "<Up>"
-   Call wDokSchreiben "<Shift Mod1 Left>", 3
+   Call wTypeKeys "<Up>"
+   Call wTypeKeys "<Shift Mod1 Left>", 3
    wait 100
    EditCopy
    if GetClipboardText <> "1, 3" then Warnlog "1. entry: Not '1, 3' but "+ GetClipboardText
@@ -535,7 +535,7 @@ end function
 function ErmittleErgebnis ( Ergebnis as String ) as Boolean
    ErmittleErgebnis = TRUE
    Kontext "DocumentWriter"
-   Call wDokSchreiben "<End><Shift Home>"
+   Call wTypeKeys "<End><Shift Home>"
    EditCopy
    Wait 500
    if GetClipboardText <> Ergebnis then ErmittleErgebnis = FALSE
@@ -555,7 +555,7 @@ sub VerzeichnisUeberNavigator(Welches as integer)
         Auswahlliste.Select j
         Auswahlliste.TypeKeys "-"
        next j
-   endif
+   end if
 
    wait 500
 
@@ -591,7 +591,7 @@ sub sNavigatorInBrauchbarenZustand
         Auswahlliste.Select j
         Auswahlliste.TypeKeys "-"
        next j
-   endif
+   end if
 
 Wait 500
     Auswahlliste.Select 2
@@ -603,7 +603,7 @@ end sub
 '**********************************************************
 
 sub sZellinhaltInZwischenablage(VergleichDas as string,Aktion as string)
-  Call wDokSchreiben "<Home><Shift End>"
+  Call wTypeKeys "<Home><Shift End>"
   EditCopy
   if VergleichDas <> GetClipboardText then Warnlog "- Table has not been splitted correctly!(" + Aktion + ")"
 end sub
@@ -619,17 +619,17 @@ sub sSeiteMitBrauchbarerTabelleEinrichten
   Tabellenname.Settext "MeineTabelle"
   TabTabelle.OK
 
-  Call wDokSchreiben "�berschrift 1"
-  Call wDokSchreiben "<Down>"
-  Call wDokSchreiben "Text 1"
-  Call wDokSchreiben "<Down>"
+  Call wTypeKeys "�berschrift 1"
+  Call wTypeKeys "<Down>"
+  Call wTypeKeys "Text 1"
+  Call wTypeKeys "<Down>"
   wait 500
   Call hTabelleEinfuegen
   wait 500
-  Call wDokSchreiben "�berschrift 2"
-  Call wDokSchreiben "<Down>"
-  Call wDokSchreiben "Text 2"
-  Call wDokSchreiben "<Up>",1
+  Call wTypeKeys "�berschrift 2"
+  Call wTypeKeys "<Down>"
+  Call wTypeKeys "Text 2"
+  Call wTypeKeys "<Up>",1
 end sub
 
 '**********************************************************
@@ -639,11 +639,11 @@ sub wOpenContextMenu ( optional FocusParam as boolean)
  		Select Case gApplication
 			Case "WRITER"
 				Kontext "DocumentWriter"
-				Call DocumentWriter.OpenContextMenu
+				Call DocumentWriter.TypeKeys "<SHIFT F10>"  'OpenContextMenu
 
 			Case "MASTERDOC"
 				Kontext "DocumentMasterDoc"
-				Call DocumentMasterDoc.OpenContextMenu
+				Call DocumentMasterDoc.TypeKeys "<SHIFT F10>"  'OpenContextMenu
 
 			end select
 	else
@@ -662,12 +662,12 @@ sub wOpenContextMenu ( optional FocusParam as boolean)
 			Select Case gApplication
 				Case "WRITER"
 					Kontext "DocumentWriter"
-					Call DocumentWriter.OpenContextMenu true
+					Call DocumentWriter.OpenContextMenu
 
 				Case "MASTERDOC"
 					Kontext "DocumentMasterDoc"
-					Call DocumentMasterDoc.OpenContextMenu true
+					Call DocumentMasterDoc.OpenContextMenu
 			end select
-		endif
-	endif		
+		end if
+	end if		
 end sub
