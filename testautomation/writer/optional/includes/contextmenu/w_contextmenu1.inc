@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_contextmenu1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:48 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:25:37 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -59,17 +59,17 @@ testcase tPickSimpleText
     printlog "   Set zoom to 100%"
 	Call wSetZoom
     printlog "   Write down 'This is a test'"
-	Call wDokSchreiben "This is a test"
+	Call wTypeKeys "This is a test"
 
     printlog "   In text document select word 'test'"
-	Call wDokSchreiben "<End>"
-	Call wDokSchreiben "<Mod1 Shift Left>"	
+	Call wTypeKeys "<End>"
+	Call wTypeKeys "<Mod1 Shift Left>"	
     printlog "   Open context menu in word 'This'"
     printlog "   Shift + F8 changes selection mode in writer"
-	Call wDokSchreiben "<Shift F8>"
-	Call wDokSchreiben "<Mod1 Left>", 3
-	Call wDokSchreiben "<Right>"
-	Call wDokSchreiben "<Shift F8>"
+	Call wTypeKeys "<Shift F8>"
+	Call wTypeKeys "<Mod1 Left>", 3
+	Call wTypeKeys "<Right>"
+	Call wTypeKeys "<Shift F8>"
 	Call DocumentWriter.MouseMove 36, 38
 	Call wOpenContextMenu(true)
     printlog "   Change font size for word 'This'"
@@ -82,9 +82,9 @@ testcase tPickSimpleText
 		Warnlog "Unable to open context menu"
 	endcatch
 
-	Call wDokSchreiben "<Home>"
+	Call wTypeKeys "<Home>"
     printlog "   Check if font size has changed for word 'This' and not for word 'test'"
-	Call wDokSchreiben "<Right>"
+	Call wTypeKeys "<Right>"
 	FormatCharacter
 	Kontext
 	Active.Setpage TabFont
@@ -98,8 +98,8 @@ testcase tPickSimpleText
 
 	if GetThisFontSize <> SetThisFontSize then Warnlog "Fontsize for word 'This' has not correctly been set"
 
-	Call wDokSchreiben "<Mod1 Right>", 3
-	Call wDokSchreiben "<Right>"
+	Call wTypeKeys "<Mod1 Right>", 3
+	Call wTypeKeys "<Right>"
 	FormatCharacter
 	Kontext
 	Active.Setpage TabFont
@@ -127,17 +127,17 @@ testcase tPickSimpleTextMultiselection
 	Printlog "   Set zoom to 100%"
 	Call wSetZoom
 	Printlog "   Write down 'This is a test'"
-	Call wDokSchreiben "This is a test"
+	Call wTypeKeys "This is a test"
 
 	Printlog "   In text document select word 'test' and 'This'"
-	Call wDokSchreiben "<End>"
-	Call wDokSchreiben "<Mod1 Shift Left>"	
+	Call wTypeKeys "<End>"
+	Call wTypeKeys "<Mod1 Shift Left>"	
 	Printlog "   Open context menu in word 'This'"
 	Printlog "   Shift + F8 changes selection mode in writer"
-	Call wDokSchreiben "<Shift F8>"
-	Call wDokSchreiben "<Mod1 Left>", 3
-	Call wDokSchreiben "<Mod1 Shift Right>"
-	Call wDokSchreiben "<Shift F8>"
+	Call wTypeKeys "<Shift F8>"
+	Call wTypeKeys "<Mod1 Left>", 3
+	Call wTypeKeys "<Mod1 Shift Right>"
+	Call wTypeKeys "<Shift F8>"
 	Call DocumentWriter.MouseMove 32, 38
 	Call wOpenContextMenu(true)
 	Printlog "   Change font size"
@@ -150,9 +150,9 @@ testcase tPickSimpleTextMultiselection
 		Warnlog "Unable to open context menu"
 	endcatch
 
-	Call wDokSchreiben "<Home>"
+	Call wTypeKeys "<Home>"
 	Printlog "Check if font size has changed for words 'This' and 'test'"
-	Call wDokSchreiben "<Right>"
+	Call wTypeKeys "<Right>"
 	FormatCharacter
 	Kontext
 	Active.Setpage TabFont
@@ -166,8 +166,8 @@ testcase tPickSimpleTextMultiselection
 
 	if GetThisFontSize <> SetThisFontSize then Warnlog "Fontsize for word 'This' has not correctly been set"
 
-	Call wDokSchreiben "<Mod1 Right>", 3
-	Call wDokSchreiben "<Right>"
+	Call wTypeKeys "<Mod1 Right>", 3
+	Call wTypeKeys "<Right>"
 	FormatCharacter
 	Kontext
 	Active.Setpage TabFont
@@ -197,8 +197,8 @@ testcase tPickGraphic
 	Printlog "   Insert a graphic into writerdocument"
 	Call hGrafikEinfuegen ( gTesttoolPath + "writer\optional\input\menu\drums.jpg" )
 	Printlog "   Deselect graphic with 'Escape' and insert some text in text document"
-	Call wDokSchreiben "<Escape>"
-	Call wDokSchreiben "Don't be afraid !"
+	Call wTypeKeys "<Escape>"
+	Call wTypeKeys "Don't be afraid !"
 
 	Call DocumentWriter.MouseMove 50,30
 	Printlog "   Open context menu upon graphic with mouse"
@@ -259,8 +259,8 @@ testcase tPickHyperlink
     printlog "   Empty clipboard"
 	SetClipBoard = ""
     printlog "   Insert a hyperlink in document"
-	Call wDokSchreiben "www.sun.com"
-	Call wDokSchreiben " "
+	Call wTypeKeys "www.sun.com"
+	Call wTypeKeys " "
 
     printlog "   Open context menu on hyperlink"
 	Call DocumentWriter.MouseMove 30, 38
