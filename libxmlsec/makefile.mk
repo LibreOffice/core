@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.17 $
+# $Revision: 1.18 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -124,18 +124,10 @@ xmlsec_LDFLAGS+=-Wl,-z,noexecstack
 LDFLAGS:=$(xmlsec_LDFLAGS)
 .EXPORT: LDFLAGS
 
-#.IF "$(OS)$(COM)"=="LINUXGCC"
-#LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN'
-#.ENDIF			# "$(OS)$(COM)"=="LINUXGCC"
-#.IF "$(OS)$(COM)"=="SOLARISC52"
-#LDFLAGS:=-Wl,-R'$$$$ORIGIN'
-#.ENDIF			# "$(OS)$(COM)"=="SOLARISC52"
-#.EXPORT: LDFLAGS
 .ENDIF
 CONFIGURE_DIR=
-#CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure CFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)" LDFLAGS="$(xmlsec_LDFLAGS)"
 CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
-CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no LIBXML2LIB="$(LIBXML2LIB)" ZLIB3RDLIB=$(ZLIB3RDLIB)
+CONFIGURE_FLAGS=--with-pic --disable-shared --with-libxslt=no --with-openssl=no --with-gnutls=no LIBXML2LIB="$(LIBXML2LIB)" ZLIB3RDLIB=$(ZLIB3RDLIB)
 # system-mozilla needs pkgconfig to get the information about nss
 # FIXME: This also will enable pkg-config usage for libxml2. It *seems*
 # that the internal headers still are used when they are there but....
@@ -155,9 +147,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 
 OUTDIR2INC=include$/xmlsec 
 
-.IF "$(OS)"=="MACOSX"
-OUT2LIB+=src$/.libs$/libxmlsec1.*dylib src$/nss$/.libs$/libxmlsec1-nss.*dylib 
-.ELIF "$(OS)"=="WNT"
+.IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 OUT2BIN+=src$/.libs$/libxmlsec1-1.dll src$/nss$/.libs$/libxmlsec1-nss-1.dll src$/mscrypto$/.libs$/libxmlsec1-mscrypto-1.dll
 .ELSE
@@ -165,7 +155,7 @@ OUT2LIB+=win32$/binaries$/*.lib
 OUT2BIN+=win32$/binaries$/*.dll
 .ENDIF
 .ELSE
-OUT2LIB+=src$/.libs$/libxmlsec1.so* src$/nss$/.libs$/libxmlsec1-nss.so*
+OUT2LIB+=src$/.libs$/libxmlsec1.a src$/nss$/.libs$/libxmlsec1-nss.a
 .ENDIF
 
 # --- Targets ------------------------------------------------------
