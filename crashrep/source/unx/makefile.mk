@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.18 $
+# $Revision: 1.19 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,13 +45,6 @@ LIBSALCPPRT=$(0)
 
 # ------------------------------------------------------------------
 
-.IF "$(OS)"=="MACOSX"
-
-dummy:
-    @echo "Nothing to build for OS $(OS)"
-
-.ELSE		# "$(OS)"=="MACOSX"
-
 # Only build crash reporter if either a product build with debug info
 # or a non-pro build is done.
 
@@ -67,8 +60,10 @@ APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJFILES)
 APP1RPATH=BRAND
 
+.IF "$(OS)" != "MACOSX"
 APP1STDLIBS=$(DYNAMIC) -lXext -lX11
-.IF "$(OS)" != "FREEBSD"
+.ENDIF
+.IF "$(OS)" != "FREEBSD" && "$(OS)" != "MACOSX"
 APP1STDLIBS+=-ldl -lnsl
 .ENDIF
 .IF "$(OS)" == "SOLARIS"
@@ -76,8 +71,6 @@ APP1STDLIBS+=-lsocket
 .ENDIF
 
 .ENDIF #  "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" == ""
-
-.ENDIF #  "$(OS)"=="MACOSX"
 
 # --- Targets ------------------------------------------------------
 
