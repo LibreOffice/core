@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: seinitializer_nssimpl.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,6 +68,7 @@
 #include "pk11func.h"
 #ifdef SYSTEM_MOZILLA
 #include "nssrenam.h"
+#include "secmod.h"
 #endif
 #include "cert.h"
 #include "cryptohi.h"
@@ -104,6 +105,15 @@ bool nsscrypto_initialize( const char* token ) {
                         printf("%s",error);
                     return false ;
                 }
+
+#ifdef SYSTEM_MOZILLA
+        if (!SECMOD_HasRootCerts())
+        {
+            SECMOD_AddNewModule("Root Certs", "libnssckbi" SAL_DLLEXTENSION,
+                0, 0);
+        }
+#endif
+
         initialized = 1 ;
     }
 
