@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_hyphenation.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:54 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:30:28 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -63,19 +63,19 @@ testcase tHyphenation_1
    printlog "open a test file"
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\hyphenation\" + testFile )
 
-    Call wDokSchreiben "<End><Shift Mod1 Left>"
+    Call wTypeKeys "<End><Shift Mod1 Left>"
 
     EditCopy
 
    printlog "add '-' between 'fol' and 'lowing' , then press 3 times 'space bar'"
    printlog "+ check if fol in the end of the line"
     if GetClipboardText = testWord then
-         Call wDokSchreiben "<Right>" , 3
-         Call wDokSchreiben "<Mod1 SUBTRACT>"
-         Call wDokSchreiben "<Home>"
-         Call wDokSchreiben "<SPACE>" ,3
+         Call wTypeKeys "<Right>" , 3
+         Call wTypeKeys "<Mod1 SUBTRACT>"
+         Call wTypeKeys "<Home>"
+         Call wTypeKeys "<SPACE>" ,3
 
-         Call wDokSchreiben "<End><Left><Shift Mod1 Left>"
+         Call wTypeKeys "<End><Left><Shift Mod1 Left>"
          EditCopy
 
          if  GetClipboardText <> firstPartOfTestWord then
@@ -84,23 +84,23 @@ testcase tHyphenation_1
 
         printlog "add '-' between 'follow' and 'ing' , then press 3 times 'space bar'"
         printlog "+ check if follow in the end of the line ."
-         Call wDokSchreiben "<Mod1 z>",2
-         Call wDokSchreiben "<End>"
-         Call wDokSchreiben "<Left>",3
-         Call wDokSchreiben "<Mod1 SUBTRACT>"
-         Call wDokSchreiben "<Home>"
-         Call wDokSchreiben "<SPACE>",3
-         Call wDokSchreiben "<End><Left><Shift Mod1 Left>"
+         Call wTypeKeys "<Mod1 z>",2
+         Call wTypeKeys "<End>"
+         Call wTypeKeys "<Left>",3
+         Call wTypeKeys "<Mod1 SUBTRACT>"
+         Call wTypeKeys "<Home>"
+         Call wTypeKeys "<SPACE>",3
+         Call wTypeKeys "<End><Left><Shift Mod1 Left>"
          EditCopy
 
          if  GetClipboardText = secondPartOfTestWord then
-             Call wDokSchreiben "<Home>"
+             Call wTypeKeys "<Home>"
 
          printlog "press 5 times 'space bar'"
          printlog "check if fol in the end of the line ."
-             Call wDokSchreiben "<SPACE>" , 5
+             Call wTypeKeys "<SPACE>" , 5
 
-             Call wDokSchreiben "<End><Shift Mod1 Left>"
+             Call wTypeKeys "<End><Shift Mod1 Left>"
              EditCopy
 
              if  GetClipboardText <> firstPartOfTestWord then
@@ -141,7 +141,7 @@ testcase tHyphenation_2
    printlog "open a test file"
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\hyphenation\" + testFile )
 
-    Call wDokSchreiben "<End><Shift Mod1 Left>"
+    Call wTypeKeys "<End><Shift Mod1 Left>"
 
     EditCopy
 
@@ -151,8 +151,8 @@ testcase tHyphenation_2
     end if
 
    printlog "Press 3 times 'space bar'"
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<SPACE>" ,3
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<SPACE>" ,3
 
    printlog "Tools/Hyphenation"
     ToolsLanguageHyphenate
@@ -211,10 +211,10 @@ testcase tHyphenation_2
     Active.OK
 
    printlog "Press 3 times 'space bar' in front of the line"
-    Call wDokSchreiben "<BACKSPACE>",3
-    Call wDokSchreiben "<SPACE>",3
+    Call wTypeKeys "<BACKSPACE>",3
+    Call wTypeKeys "<SPACE>",3
 
-    Call wDokSchreiben "<End><Left><Shift Mod1 Left>"
+    Call wTypeKeys "<End><Left><Shift Mod1 Left>"
     EditCopy
 
    printlog "Check if get 'fol'"
@@ -252,7 +252,7 @@ testcase tHyphenation_3
    printlog "open a test file"
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\hyphenation\" + testFile )
 
-    Call wDokSchreiben "<End><Shift Mod1 Left>"
+    Call wTypeKeys "<End><Shift Mod1 Left>"
 
     EditCopy
 
@@ -262,8 +262,8 @@ testcase tHyphenation_3
     end if
 
    printlog "Press 3 times 'space bar'"
-    Call wDokSchreiben "<Home>"
-    Call wDokSchreiben "<SPACE>" ,3
+    Call wTypeKeys "<Home>"
+    Call wTypeKeys "<SPACE>" ,3
 
    printlog "Tools/Hyphenation"
     ToolsLanguageHyphenate
@@ -341,18 +341,18 @@ testcase tHyphenation_3
     Active.OK
 
    printlog "recover to the default file and press 3 sparc bar in front of the line"
-    Call wDokSchreiben "<BACKSPACE>",3
-    Call wDokSchreiben "<SPACE>",3
+    Call wTypeKeys "<BACKSPACE>",3
+    Call wTypeKeys "<SPACE>",3
 
-    Call wDokSchreiben "<End><Left><Shift Mod1 Left>"
+    Call wTypeKeys "<End><Left><Shift Mod1 Left>"
     EditCopy
 
    printlog "check if get 'follow' in the end of the line"
     if GetClipboardText = secondPartOfTestWord then
-        Call wDokSchreiben "<Home>"
-        Call wDokSchreiben "<SPACE>" , 5
+        Call wTypeKeys "<Home>"
+        Call wTypeKeys "<SPACE>" , 5
 
-        Call wDokSchreiben "<End><Shift Mod1 Left>"
+        Call wTypeKeys "<End><Shift Mod1 Left>"
            EditCopy
 
            if GetClipboardText <> firstPartOfTestWord then
