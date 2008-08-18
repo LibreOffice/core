@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppController.hxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,7 +137,7 @@ namespace dbaui
         TransferableClipboardListener*
                                 m_pClipbordNotifier;        // notifier for changes in the clipboard
         mutable ::rtl::OUString m_sDatabaseName;
-        sal_Int32               m_nAsyncDrop;
+        ULONG                   m_nAsyncDrop;
         OAsyncronousLink        m_aControllerConnectedEvent;
         OAsyncronousLink        m_aSelectContainerEvent;
         PreviewMode             m_ePreviewMode;             // the mode of the preview
