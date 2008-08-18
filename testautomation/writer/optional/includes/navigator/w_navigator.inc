@@ -7,9 +7,9 @@
 '*
 '* $RCSfile: w_navigator.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:55 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:31:20 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -46,7 +46,7 @@ sub w_navigator
         Call tEditNavigator4            ' Inhaltsansicht des Navigators ?berpr?fen
         Call tEditNavigator5            ' Anspringen von Punkten im Dokument ?ber die Inhaltsansicht
         Call tEditNavigator6            ' Umbenennen von Objekten aus dem Navigator
-    endif
+    end if
 
 end sub
 
@@ -61,7 +61,7 @@ testcase tEditNavigator1
     Call hNewDocument
     '/// Call Navigator with 'F5' ///
     printlog "  - Call Navigator with F5"
-    Call wDokSchreiben "<F5>"
+    Call wTypeKeys "<F5>"
     Kontext "Navigator"
     if Navigator.NotExists then
         Warnlog "No Navigator with F5"
@@ -133,14 +133,14 @@ testcase tEditNavigator2
     Call hNewDocument
     printlog "  - Call Navigator in Document and check in another"
     '/// Insert some text in first document ///
-	Call wDokSchreiben "Navigator test document 1"	
+	Call wTypeKeys "Navigator test document 1"	
 	'///  Edit / Navigator ///
     Kontext "Navigator"
     if Navigator.NotExists then EditNavigator
     '/// New document ///
     Call hNewDocument
 	'/// Insert some text in second document ///
-	Call wDokSchreiben "Navigator test document 1"
+	Call wTypeKeys "Navigator test document 1"
     Kontext "Navigator"
     '/// Check if Navigator has been opened in new document ///
     if Navigator.NotExists then Warnlog "In new Document is no Navigator"
@@ -155,7 +155,7 @@ testcase tEditNavigator2
     '/// Check if Navigator has been opened with document ///
     Kontext "NavigatorWriter"
     if NavigatorWriter.NotExists then Warnlog "In new Document is no Navigator"
-	Call wDokSchreiben "This is a navigator test!"
+	Call wTypeKeys "This is a navigator test!"
     '/// Dock Navigator ///
     printlog "  - dock Navigator in Document and check in another"
     Kontext "Navigator"
@@ -194,7 +194,7 @@ testcase tEditNavigator2
     Navigator.Undock
     Sleep 1
     '/// Undock Navigator and close with 'F5' ///
-    Call wDokSchreiben "<F5>"
+    Call wTypeKeys "<F5>"
     Kontext "Navigator"
     if NOT Navigator.NotExists then
         Warnlog "Navigator is already open"
@@ -247,7 +247,7 @@ testcase tEditNavigator3
 		sleep 1
 		'/// Close Navigation Window ///
 		NavigationsFenster.Close
-	endif
+	end if
     
 	'/// Functions in Navigator ///
     printlog "  - next Page"
@@ -258,9 +258,9 @@ testcase tEditNavigator3
 	VorherigeSeite.Click
 	wait 200
 	Call gMouseClick ( 20, 30 )
-	Call wDokSchreiben "   <Left>"
+	Call wTypeKeys "   <Left>"
 	InsertFieldsPageNumbers
-	Call wDokSchreiben "+0<Shift Left><Shift Left><Shift Left>"
+	Call wTypeKeys "+0<Shift Left><Shift Left><Shift Left>"
 	wait 200
 	ToolsCalculate
 	Sleep 1
@@ -273,9 +273,9 @@ testcase tEditNavigator3
 	NaechsteSeite.Click
 	wait 200
     Call gMouseClick 20, 60
-    Call wDokSchreiben "   <Left>"
+    Call wTypeKeys "   <Left>"
     InsertFieldsPageNumbers
-    Call wDokSchreiben "+0<Shift Left><Shift Left><Shift Left>"
+    Call wTypeKeys "+0<Shift Left><Shift Left><Shift Left>"
     wait 200
     ToolsCalculate
     if GetClipboardText <> "6" then QAErrorlog "#116002#Next Page isn't 6 but " & GetClipboardText
@@ -302,7 +302,7 @@ testcase tEditNavigator3
     '/// Select Jump to header ///
     Kopfzeile.Click
     wait 500
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Home><Shift End>"
     EditCopy
     if GetClipboardText <> "Kopfzeile" then Warnlog "Cursorposition wrong: Not in Header"
     Kontext "NavigatorWriter"
@@ -311,7 +311,7 @@ testcase tEditNavigator3
     printlog "  - jump to footer"
     Fusszeile.Click
     wait 500
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Home><Shift End>"
     EditCopy
     if GetClipboardText <> "Fusszeile" then Warnlog "Cursorposition wrong: Not in Footer"
     Kontext "NavigatorWriter"
@@ -320,14 +320,14 @@ testcase tEditNavigator3
     '/// Select Anchor to Text ///
     AnkerText.Click
     wait 500
-    Call wDokSchreiben "<Right><Shift Mod1 Right><Shift Left>"
+    Call wTypeKeys "<Right><Shift Mod1 Right><Shift Left>"
     EditCopy
     if GetClipboardText <> "sed" then Warnlog "Cursorposition wrong: Not in Footer"
     wait 500
     Kontext "NavigatorWriter"
     AnkerText.Click
     wait 200
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Home><Shift End>"
     EditCopy
     if GetClipboardText <> "Fussnote" then Warnlog "Cursorposition wrong: Not in Footer"
 
@@ -387,7 +387,7 @@ testcase tEditNavigator4
         else
             Auswahlliste.TypeKeys "<Down>",Ende + 1
             if Auswahlliste.Gettext <> AlterUnterwert$ then Warnlog "Not all Subpoints in Index View are visible"
-        endif
+        end if
     next i
     '/// Compare entrys in index view with entrys in Navigator///
 
@@ -418,7 +418,7 @@ testcase tEditNavigator5
     if Not NavigatorWriter.Exists then
         EditNavigator
         Kontext "NavigatorWriter"
-    endif
+    end if
 
     printlog "  - Header"
     '/// In Navigator switch to Index view ///
@@ -435,7 +435,7 @@ testcase tEditNavigator5
             Auswahlliste.Select j
             Auswahlliste.TypeKeys "<return>"
             Sleep 1
-            Call wDokSchreiben "<Home><Shift End>"
+            Call wTypeKeys "<Home><Shift End>"
             EditCopy
             Sleep 1
             '/// Check if the correct header has been selected ///
@@ -447,14 +447,14 @@ testcase tEditNavigator5
             Dummy = Auswahlliste.GetText
             Auswahlliste.TypeKeys "<return>"
             wait 200
-            Call wDokSchreiben "<Home><Shift End>"
+            Call wTypeKeys "<Home><Shift End>"
             EditCopy
             wait 100
             Kontext "NavigatorWriter"
         next j
     else
         Warnlog "There are not 7 but " & Auswahlliste.GetItemCount & " headings in navigator list"
-    endif
+    end if
     '/// Select in Navigator entry 'Tables' and jump via Navigator to tables in document ///
     printlog "  - Tables"
 	Call wNavigatorAuswahl(2,0)
@@ -467,8 +467,8 @@ testcase tEditNavigator5
     for j=1 to 4
         Auswahlliste.TypeKeys "<down><return>"
         Sleep 2
-        Call wDokSchreiben "<Home>"
-        Call wDokSchreiben "<Mod1 A>"
+        Call wTypeKeys "<Home>"
+        Call wTypeKeys "<Mod1 A>"
         EditCopy
         '/// Check if correct tables has been selected ///
         if GetClipboardText <> "Tabelle" + j then Warnlog "Wrong Cursorposition: Should -> Tabelle" + j + "  Is ->  " + GetClipboardText
@@ -485,7 +485,7 @@ testcase tEditNavigator5
     Auswahlliste.TypeKeys "<Home>"
     Auswahlliste.TypeKeys "<Down><Return>"
     Sleep 2
-    Call wDokSchreiben "<Home><Shift End>"
+    Call wTypeKeys "<Home><Shift End>"
     '/// Check if correct text frames have been selected ///
     try
         EditCopy
@@ -532,7 +532,7 @@ testcase tEditNavigator5
     for j=1 to 3
         Auswahlliste.TypeKeys "<down><return>"
         Sleep 2
-        Call wDokSchreiben "<Shift Mod1 Right>"
+        Call wTypeKeys "<Shift Mod1 Right>"
         wait 200
         EditCopy
         '/// Check if correct reference have been selected ///
@@ -623,7 +623,7 @@ testcase tEditNavigator6
                 Warnlog "- Object could not be renamed!"
                 ObjekteUmbenennen.Cancel
             endcatch
-        endif
+        end if
 
         '/// Check in Navigator if Object has been renamed ///
         Sleep 1
@@ -648,7 +648,7 @@ testcase tEditNavigator6
     if Navigator.NotExists then
         Warnlog "- The Navigator should have been opened!"
         EditNavigator
-    endif
+    end if
     Kontext "NavigatorWriter"
 
     For j= 1 to 12
