@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbloader2.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -225,7 +225,7 @@ private:
     ::comphelper::ComponentContext      m_aContext;
     Reference< XFrameLoader >           m_xMySelf;
     ::rtl::OUString                     m_sCurrentURL;
-    sal_Int32                           m_nStartWizard;
+    ULONG                               m_nStartWizard;
 
     DECL_LINK( OnStartTableWizard, void* );
 public:
