@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: search.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:57 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:34:31 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -324,7 +324,7 @@ testcase tItalic_Search
       endcatch
    else
       Style.Select 2
-   endif
+   end if
    wait 500
    TabFont.Ok
    ' Workaround
@@ -341,7 +341,7 @@ testcase tItalic_Search
      StyleWest.Select 2
    else
      Style.Select 2
-   endif
+   end if
    sleep  1
    TabFont.OK
    sleep  1
@@ -385,7 +385,7 @@ testcase tItalic_Replace
       endcatch
    else
      Style.Select 2
-   endif
+   end if
    sleep  1
    TabFont.OK
    sleep  1
@@ -402,7 +402,7 @@ testcase tItalic_Replace
      StyleWest.Select 2
    else
      Style.Select 2
-   endif
+   end if
    sleep  1
    TabFont.OK
    sleep  1
@@ -433,8 +433,8 @@ testcase tItalic_Replace
      Active.OK                     'MSG-Box (... x ersetzt) schließen
     else
      Warnlog "Messagebox, how often replaced, not up !"
-    endif
-   endif
+    end if
+   end if
    sleep  2
    kontext "FindAndReplace"
    FindAndReplace.Close
@@ -470,7 +470,7 @@ testcase tUnderline_Search
     if gCTLSup = True then
         QAErrorlog "No Check for attributes if CTL enabled!"
         goto endsub
-    endif        
+    end if        
     call wSetFindAndReplaceToDefault(1)
     Such_Text = "U"                     'search for Attributes underlined
     Meldungs_Text = "search Attribut Underlined"
@@ -506,7 +506,7 @@ testcase tUnderline_Search
                     Call hCloseDocument
                     goto endsub
         end select   
-    endif
+    end if
    
    SearchFor.SetText Such_Text
    ReplaceWith.SetText Meldungs_Text
@@ -520,7 +520,7 @@ testcase tUnderline_Replace
     if gCTLSup = True then
         QAErrorlog "No Check for attributes if CTL enabled!"
         goto endsub
-    endif        
+    end if        
     call wSetFindAndReplaceToDefault(1)
     Such_Text = "Unterstrichen"                  'search for Attributes underlined
     Meldungs_Text = "search underlined, replace shadow"      'replace with 'shadow'
@@ -557,7 +557,7 @@ testcase tUnderline_Replace
                     Call hCloseDocument
                     goto endsub
         end select   
-    endif
+    end if
     ReplaceWith.SetText "Schatten"
     Formats.Click
     kontext
@@ -571,8 +571,8 @@ testcase tUnderline_Replace
     if Active.Exists then
         if Active.GetRT = 304 then
             Active.OK                     'MSG-Box (... x ersetzt) schließen
-        endif
-    endif
+        end if
+    end if
     kontext "FindAndReplace"
     Such_Text = "Schatten"
     SearchFor.SetText Such_Text
@@ -602,8 +602,8 @@ testcase tAll_Replace
    if Active.Exists then
     if Active.GetRT = 304 then
      Active.OK                     'MSG-Box (... x ersetzt) schließen
-    endif
-   endif
+    end if
+   end if
    Such_Text = "y"                     'Suchen  aller "y", um die Ersetzung
    kontext "FindAndReplace"            'zu pruefen
    SearchFor.SetText Such_Text
@@ -655,13 +655,13 @@ testcase tReplace_Arial_with_TmsRmn
 		endcatch
 	else
 		Font.SetText "Times New Roman"
-	endif
+	end if
    sleep 2
    if gAsianSup = True or gCTLSup = True then
      StyleWest.Select 1
    else
      Style.Select 1
-   endif
+   end if
    sleep 2
    try
       SizeWest.SetText "20"
@@ -682,8 +682,8 @@ testcase tReplace_Arial_with_TmsRmn
      Active.OK                     'MSG-Box (... x ersetzt) schließen
     else
      Warnlog "Messagebox, how often replaced, not up !"
-    endif
-   endif
+    end if
+   end if
    Sleep 2
    kontext "FindAndReplace"
    FindAndReplace.Close
@@ -1291,7 +1291,7 @@ function wSelectAttributeName(aNumber as integer, AsianSupport as boolean, SetSt
      end select
      wSelectAttributeName = aSelectIt
      i = 50
-    endif
+    end if
    catch
      i = 50
    endcatch
@@ -1300,7 +1300,7 @@ function wSelectAttributeName(aNumber as integer, AsianSupport as boolean, SetSt
   if i = 42 then
    if AsianSupport = True then Warnlog "Unable to locate Attribute in list!"
    wSelectAttributeName = ""
-  endif
+  end if
   Attribute.Ok
 end function
 
@@ -1312,23 +1312,23 @@ sub wCheckAttribute(aNumber as integer)
  if wCheckActiveMessageboxes = False then
   Warnlog "Search for Attributes has failed!"
   exit sub
- endif
+ end if
  Select Case aNumber
   Case 1   ' "Absatz trennen"
     EditCopy
     if Left$(GetClipboardtext,15) <> "First Paragraph" then
      Warnlog "-  Wrong paragraph has been found!"
-    endif
+    end if
   Case 2    '"Absätze zusammenhalten"
     EditCopy
     if Left$(GetClipboardtext,25) <> "Keep with next paragraph1" then
      Warnlog "-  Wrong paragraph has been found!"
-    endif
+    end if
   Case 3    '"Abstand"
     EditCopy
     if Left$(GetClipBoardText,15) <> "Spacing between" then
      Warnlog "- Wrong paragraph has been found!"
-    endif
+    end if
   Case 4    '"Asiatische Schrift"
   Case 5    '"Ausrichtung"
      EditCopy
@@ -1336,14 +1336,14 @@ sub wCheckAttribute(aNumber as integer)
       Warnlog "- Wrong paragraph has been found!"
      else
       printlog "-  'Alignment right' found!"
-     endif
+     end if
      For i = 1 to 2
       Kontext "FindAndReplace"
       SearchNow.Click
       if wCheckActiveMessageboxes = False then
        Warnlog "Search for Attributes has failed!"
        exit sub
-      endif
+      end if
       EditCopy
       Select Case i
        Case 1
@@ -1352,14 +1352,14 @@ sub wCheckAttribute(aNumber as integer)
           exit sub
          else
           printlog "-  'Alignment centered' found!"
-         endif
+         end if
        Case 2
          if Left$(GetClipBoardtext,24) <> "Wow, Alignment justified" then
           Warnlog "- Wrong paragraph has been found!"
          exit sub
          else
           printlog "-  'Alignment justified' found!"
-         endif
+         end if
       end select
      next i
   Case 6    '"Auszeichnung"
@@ -1367,31 +1367,31 @@ sub wCheckAttribute(aNumber as integer)
      If Ucase(GetClipBoardtext) <> "CAPITALS" then
       Warnlog "Wrong effect has been found"
       exit sub
-     endif
+     end if
      For i = 1 to 3
       Kontext "FindAndReplace"
       SearchNow.Click
       if wCheckActiveMessageboxes = False then
        Warnlog "Search for effects has failed!"
        exit sub
-      endif
+      end if
       EditCopy
       Select Case i
        Case 1
         If Ucase(GetClipBoardtext) <> "LOWERCASE" then
          Warnlog "Wrong effect has been found"
          exit sub
-        endif
+        end if
        Case 2
         If Ucase(GetClipBoardtext) <> "TITLE" then
          Warnlog "Wrong effect has been found"
          exit sub
-        endif
+        end if
        Case 3
         If Ucase(GetClipBoardtext) <> "SMALL CAPITALS" then
          Warnlog "Wrong effect has been found"
          exit sub
-        endif
+        end if
       end select
      next i
   Case 7    '"Betonungszeichen"
@@ -1399,65 +1399,65 @@ sub wCheckAttribute(aNumber as integer)
     EditCopy
     if Left$(GetClipBoardText,13) <> "Blinking text" then
      Warnlog "- Wrong Attribute has been found!"
-    endif
+    end if
   Case 9     '"Doppelzeilig"
   Case 10    '"Durchgestrichen"
     EditCopy
     if Left$(GetClipBoardText,14) <> "Strike through" then
      Warnlog "- Wrong Attribute has been found!"
-    endif
+    end if
     For i = 1 to 4
      Kontext "FindAndReplace"
      SearchNow.Click
      EditCopy
      if Left$(GetClipBoardText,14) <> "Strike through" then
       Warnlog "- Wrong Attribute has been found!"
-     endif
+     end if
     next i
   Case 11    '"Einzug"
     EditCopy
     if Left$(GetClipBoardText,6) <> "Indent" then
      Warnlog "- Wrong Attribute has been found!"
-    endif
+    end if
   Case 12    '"Hängende Interpunktion"
   Case 13    '"Hurenkinder"
     EditCopy
     if Left$(GetClipBoardText, 9) <> "Hurenkind" then
      Warnlog "- Wrong Attribute has been found!"
-    endif
+    end if
     Kontext "FindAndReplace"
     SearchNow.Click
     EditCopy
     if Left$(GetClipBoardText, 8) <> "tstststs" then
      Warnlog "- Wrong Attribute has been found!"
-    endif
+    end if
   Case 14    '"Kerning"
     EditCopy
     if Left$(GetClipBoardText, 8) <> "Kerning1" then
      Warnlog "- Wrong Attribute has been found!"
-    endif
+    end if
     Kontext "FindAndReplace"
     SearchNow.Click
     EditCopy
     if Left$(GetClipBoardText, 8) <> "Kerning2" then
      Warnlog "- Wrong Attribute has been found!"
-    endif
+    end if
   Case 15    '"Kontur"
     EditCopy
     if Left$(GetClipBoardText, 6) <> "Kontur" then
      Warnlog "- Wrong Attribute has been found!"
-    endif
+    end if
   Case 16    '"Position"
     EditCopy
     if Left$(GetClipBoardText, 4) <> "Hoch" then
      Warnlog "- Wrong Attribute has been found!"
-    endif
+    end if
     Kontext "FindAndReplace"
     SearchNow.Click
     EditCopy
     if Left$(GetClipBoardText, 4) <> "Tief" then
      Warnlog "- Wrong Attribute has been found!"
-    endif
+    end if
   Case 17    '"Registerhaltigkeit"
 
   Case 18    '"Relief"
@@ -1502,15 +1502,15 @@ function wCheckActiveMessageboxes() as boolean
         wCheckActiveMessageboxes = False
         Warnlog Active.Gettext
         Active.Ok
-       endif
-      endif
+       end if
+      end if
      catch
       wCheckActiveMessageboxes = False
       Warnlog Active.Gettext
       Active.Ok
      endcatch
-    endif
-   endif
+    end if
+   end if
 end function
 
 '---------------------------------------------------------
@@ -1621,7 +1621,7 @@ sub Meldungs_Test
         sProduct = "OpenOffice.org"
     else
         sProduct = "StarOffice"
-    endif
+    end if
     
     select case iSprache
         Case 01 : Text_In_Meldung = sProduct & " Writer has searched to the end of the document. Do you want to continue at the beginning?"
@@ -1648,7 +1648,7 @@ sub Meldungs_Test
         else
             QAErrorlog "Please adapt test for this language!"
             printlog Dummy_text
-        endif
+        end if
     end if
 end sub
 
@@ -1663,7 +1663,7 @@ function ToggleAttribute(sNumber as integer, sCheck as boolean)
         Auswahl.Check
     else
         Auswahl.Uncheck
-    endif
+    end if
     wait 500
     Attribute.OK
     Kontext "FindAndReplace"
