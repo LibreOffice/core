@@ -8,7 +8,7 @@
 #
 # $RCSfile: idtglobal.pm,v $
 #
-# $Revision: 1.44 $
+# $Revision: 1.45 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -1303,13 +1303,22 @@ sub set_custom_action
 
     for ( my $i = 0; $i <= $#{$localfilesref}; $i++ )
     {
-        my $filename = ${$localfilesref}[$i]->{'Name'};
-
-        if ( $filename eq $exefilename )
+        my $onefile = ${$localfilesref}[$i];
+        my $filename = "";
+        if ( exists($onefile->{'Name'}) )
         {
-            $contains_file = 1;
-            $uniquename = ${$localfilesref}[$i]->{'uniquename'};
-            last;
+            $filename = $onefile->{'Name'};
+
+            if ( $filename eq $exefilename )
+            {
+                $contains_file = 1;
+                $uniquename = ${$localfilesref}[$i]->{'uniquename'};
+                last;
+            }
+        }
+        else
+        {
+            installer::exiter::exit_program("ERROR: Did not find \"Name\" for file \"$onefile->{'uniquename'}\" ($onefile->{'gid'})!", "set_custom_action");
         }
     }
 
