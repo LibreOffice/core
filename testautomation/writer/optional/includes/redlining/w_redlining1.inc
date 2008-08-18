@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_redlining1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:56 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:33:53 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -74,11 +74,11 @@ testcase tRedlining_1
   '/// Test Default settings
 
   '/// The default setting for Redlining is Off
-   Call wDokSchreiben "Redlining test"
-   Call wDokSchreiben "<Backspace>",2
+   Call wTypeKeys "Redlining test"
+   Call wTypeKeys "<Backspace>",2
    Sleep 1
-   Call wDokSchreiben "<End>"
-   Call wDokSchreiben "<Shift Left>" , 4
+   Call wTypeKeys "<End>"
+   Call wTypeKeys "<Shift Left>" , 4
    EditCopy
    if GetClipboardText <> "g te" then Warnlog "The default setting for Redlining is NO Off"
 
@@ -139,14 +139,14 @@ testcase tRedlining_2
    Call hNewDocument
 
    '/// Insert any sentence into document
-   Call wDokSchreiben "Redlining test => OK_1<Return>"
+   Call wTypeKeys "Redlining test => OK_1<Return>"
 
    UseBindings
    '/// Edit / Changes / Record
    EditChangesRecord
 
    '/// Insert some new sentence
-   Call wDokSchreiben "Redlining test => OK_2<Return>"
+   Call wTypeKeys "Redlining test => OK_2<Return>"
 
    '/// Edit / Changes / Accept or Reject
    EditChangesAcceptOrReject
@@ -160,10 +160,10 @@ testcase tRedlining_2
    Redlining.Close
 
    '/// Check if the changes have been accepted
-   Call wDokSchreiben "<Up>", 2
-   Call wDokSchreiben "<Down>"
-   Call wDokSchreiben "<End>"
-   Call wDokSchreiben "<Shift Left>"
+   Call wTypeKeys "<Up>", 2
+   Call wTypeKeys "<Down>"
+   Call wTypeKeys "<End>"
+   Call wTypeKeys "<Shift Left>"
    EditCopy
    Sleep 1
    if GetClipboardText <> "2" then Warnlog "The 2nd line is incorrect!"
@@ -184,13 +184,13 @@ testcase tRedlining_3
    Call hNewDocument
 
    '/// Insert any sentence into document , and copy it to clipboard
-   Call wDokSchreiben "Redlining test => OK_2<Return>"
+   Call wTypeKeys "Redlining test => OK_2<Return>"
    EditSelectAll
    EditCopy
    Sleep 1
 
    '/// Insert a new sentence into document
-   Call wDokSchreiben "Redlining test => OK_1<Return>"
+   Call wTypeKeys "Redlining test => OK_1<Return>"
 
    UseBindings
    '/// Edit / Changes / Record
@@ -212,10 +212,10 @@ testcase tRedlining_3
    Redlining.Close
 
    '/// Check if the changes have been accepted
-   Call wDokSchreiben "<Up>", 2
-   Call wDokSchreiben "<Down>"
-   Call wDokSchreiben "<End>"
-   Call wDokSchreiben "<Shift Left>"
+   Call wTypeKeys "<Up>", 2
+   Call wTypeKeys "<Down>"
+   Call wTypeKeys "<End>"
+   Call wTypeKeys "<Shift Left>"
    EditCopy
    Sleep 1
    if GetClipboardText <> "2" then Warnlog "The 2nd Line is incorrect!"
@@ -236,7 +236,7 @@ testcase tRedlining_4
    Call hNewDocument
 
    '/// Insert a sentence into document
-   Call wDokSchreiben "Redlining test => OK_1<Return>"
+   Call wTypeKeys "Redlining test => OK_1<Return>"
 
    UseBindings
    '/// Edit / Changes / Record
@@ -261,10 +261,10 @@ testcase tRedlining_4
    Redlining.Close
 
    '/// Check if the changes have been accepted
-   Call wDokSchreiben "<Up>", 2
-   Call wDokSchreiben "<Down>"
-   Call wDokSchreiben "<End>"
-   Call wDokSchreiben "<Shift Left>"
+   Call wTypeKeys "<Up>", 2
+   Call wTypeKeys "<Down>"
+   Call wTypeKeys "<End>"
+   Call wTypeKeys "<Shift Left>"
    EditCopy
    Sleep 1
    if GetClipboardText <> "2" then Warnlog "i35222 - The 2nd Line is incorrect!"
@@ -294,7 +294,7 @@ testcase tRedlining_5
 
     'insert a autotext
     '-----------------------------------------------------
-    Call wDokSchreiben "Redlining test => OK_2<Return>"
+    Call wTypeKeys "Redlining test => OK_2<Return>"
     Sleep 1
     EditSelectAll
     Sleep 1
@@ -324,15 +324,15 @@ testcase tRedlining_5
     '/// Insert a sentence into document
     Kontext "DocumentWriter"
     EditSelectAll
-    Call wDokSchreiben "Redlining test => OK_1<Return>"
+    Call wTypeKeys "Redlining test => OK_1<Return>"
 
     UseBindings
     '/// Edit / Changes / Record
     EditChangesRecord
 
     '/// Insert autotext
-    Call wDokSchreiben "AFT"
-    Call wDokSchreiben "<F3>"
+    Call wTypeKeys "AFT"
+    Call wTypeKeys "<F3>"
     Sleep 1
 
     '/// Edit / Changes / Accept or Reject
@@ -347,10 +347,10 @@ testcase tRedlining_5
     Redlining.Close
 
     '/// Check if the changes have been accepted
-    Call wDokSchreiben "<Up>", 2
-    Call wDokSchreiben "<Down>"
-    Call wDokSchreiben "<End>"
-    Call wDokSchreiben "<Shift Left>"
+    Call wTypeKeys "<Up>", 2
+    Call wTypeKeys "<Down>"
+    Call wTypeKeys "<End>"
+    Call wTypeKeys "<Shift Left>"
     EditCopy
     Sleep 1
     if GetClipboardText <> "2" then Warnlog "The 2nd Line is incorrect!"
@@ -392,21 +392,21 @@ testcase tRedlining_6
    Call hNewDocument
 
    '/// Insert a sentence into document
-   Call wDokSchreiben "Redlining test => OK_1"
+   Call wTypeKeys "Redlining test => OK_1"
 
    UseBindings
    '/// Edit / Changes / Record
    EditChangesRecord
 
    '/// Delete the last 2 characters
-   Call wDokSchreiben "<Backspace>",2
+   Call wTypeKeys "<Backspace>",2
    Sleep 1
 
    '/// Check if the changes is OK => The characters are deleted ,
    '/// + but their location exists
-   Call wDokSchreiben "<End>"
+   Call wTypeKeys "<End>"
    Sleep 1
-   Call wDokSchreiben "<Shift Left>" , 2
+   Call wTypeKeys "<Shift Left>" , 2
    Sleep 1
 
    Editcopy
@@ -428,9 +428,9 @@ testcase tRedlining_6
 
    '/// Check if the changes have been accepted => The
    '/// + characters are deleted , and their location doesn't exist
-   Call wDokSchreiben "<End>"
+   Call wTypeKeys "<End>"
    Sleep 1
-   Call wDokSchreiben "<Shift Left>" , 2
+   Call wTypeKeys "<Shift Left>" , 2
    Sleep 1
 
    EditCopy
@@ -453,8 +453,8 @@ testcase tRedlining_7
     Call hNewDocument
     
     '/// Insert some test text
-    Call wDokSchreiben "XYZ<Return>"
-    Call wDokSchreiben "ABC"
+    Call wTypeKeys "XYZ<Return>"
+    Call wTypeKeys "ABC"
     
     UseBindings
     '/// Edit / Changes / Record
@@ -470,15 +470,15 @@ testcase tRedlining_7
     
     '/// Check if the changes is OK => The characters are changed ,
     '/// + but their location exists
-    Call wDokSchreiben "<Down>" , 4
-    Call wDokSchreiben "<End>"
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys "<Down>" , 4
+    Call wTypeKeys "<End>"
+    Call wTypeKeys "<Shift Home>"
     EditCopy
     if Len(GetClipboardText)>0 then Warnlog "Something is wrong in sorting text before accepting the changes!"
     
-    Call wDokSchreiben "<Up>" , 4
-    Call wDokSchreiben "<End>"
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys "<Up>" , 4
+    Call wTypeKeys "<End>"
+    Call wTypeKeys "<Shift Home>"
     EditCopy
     if GetClipboardText <> "ABC" then Warnlog "Should get ABC in the first line, but get " +GetClipboardText + "  before accepting the changes!"
     
@@ -497,15 +497,15 @@ testcase tRedlining_7
     
     '/// Check if the changes have been accepted => The characters
     '/// + are changed , and their location doesn't exist
-    Call wDokSchreiben "<Down>" , 4
-    Call wDokSchreiben "<End><Backspace>"
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys "<Down>" , 4
+    Call wTypeKeys "<End><Backspace>"
+    Call wTypeKeys "<Shift Home>"
     EditCopy
     if Len(GetClipboardText) <> 3 then Warnlog "Something is wrong in sorting text after accepting the changes!"
     
-    Call wDokSchreiben "<Up>" , 4
-    Call wDokSchreiben "<End>"
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys "<Up>" , 4
+    Call wTypeKeys "<End>"
+    Call wTypeKeys "<Shift Home>"
     EditCopy
     if GetClipboardText <> "ABC" then Warnlog "Should get ABC in the first line, but get " +GetClipboardText + "  after accepting the changes!"
     
@@ -525,7 +525,7 @@ testcase tRedlining_8
    Call hNewDocument
 
    '/// Insert a sentence into document
-   Call wDokSchreiben "Redlining test => OK_1"
+   Call wTypeKeys "Redlining test => OK_1"
 
    UseBindings
    '/// Edit / Changes / Record
@@ -553,25 +553,25 @@ testcase tRedlining_8
          Sleep 1
       else
          Warnlog "Messagebox, how often replaced, not up !"
-      endif
-   endif
+      end if
+   end if
 
    Kontext "FindAndReplace"
    FindAndReplace.close
 
    '/// Check if the changes is OK => The characters are changed ,
    '/// + but their location exists
-   Call wDokSchreiben "<End>"
+   Call wTypeKeys "<End>"
    wait 500
-   Call wDokSchreiben "<Shift Left>"
+   Call wTypeKeys "<Shift Left>"
    wait 500
    Editcopy
    wait 500
    if GetClipboardText <> "2" then Warnlog "Something is wrong in changing text before accepting the changes!"
 
-   Call wDokSchreiben "<Left>" , 3
+   Call wTypeKeys "<Left>" , 3
    Sleep 1
-   Call wDokSchreiben "<Shift Left>" , 4
+   Call wTypeKeys "<Shift Left>" , 4
    Sleep 1
    Editcopy
    wait 500
@@ -593,16 +593,16 @@ testcase tRedlining_8
 
    '/// Check if the changes have been accepted => The characters
    '/// + are changed , and their location doesn't exist
-   Call wDokSchreiben "<End>"
-   Call wDokSchreiben "<Shift Left>"
+   Call wTypeKeys "<End>"
+   Call wTypeKeys "<Shift Left>"
 
    EditCopy
    Sleep 1
    if GetClipboardText <> "2" then Warnlog "Something is wrong in changing text after accepting the changes!"
 
-   Call wDokSchreiben "<Left>" , 3
+   Call wTypeKeys "<Left>" , 3
    Sleep 1
-   Call wDokSchreiben "<Shift Left>" , 4
+   Call wTypeKeys "<Shift Left>" , 4
    Sleep 1
    Editcopy
    if Len(GetClipboardText) <> 4 then Warnlog "Something is wrong in changing text after accepting the changes!"
@@ -625,8 +625,8 @@ testcase tRedlining_9
 	Call hNewDocument
 	
 	'/// Insert a sentence into document
-	Call wDokSchreiben "Redlining test => OK_1<Home>"
-	Call wDokSchreiben "<Shift Right>" , 9
+	Call wTypeKeys "Redlining test => OK_1<Home>"
+	Call wTypeKeys "<Shift Right>" , 9
 	Sleep 1
 	
 	UseBindings
@@ -661,7 +661,7 @@ testcase tRedlining_9
 		iComparison2$ = Style.GetSelText
 		Size.Select  5
 		iComparison3$ = Size.GetSelText
-	endif
+	end if
 	wait 100
 	Kontext
 	Active.Setpage TabHyperlinkZeichen
@@ -675,7 +675,7 @@ testcase tRedlining_9
 	TabHyperlinkZeichen.Ok
 	
 	Sleep 1
-	Call wDokSchreiben "<Left>"  , 2
+	Call wTypeKeys "<Left>"  , 2
 	Sleep 1
 	
 	'/// Check if the Attribute changes id OK before accepting the changes
@@ -692,7 +692,7 @@ testcase tRedlining_9
 		if iComparison1$ <> Font.GetSelText  then Warnlog "Wrong Font in Autotext!"
 		if iComparison2$ <> Style.GetSelText then Warnlog "Wrong Fontstyle in Autotext!"
 		if iComparison3$ <> Size.GetSelText  then Warnlog "Wrong Fontsize in Autotext!"
-	endif
+	end if
 	wait 100
 	Kontext
 	Active.Setpage TabHyperlinkZeichen
@@ -726,7 +726,7 @@ testcase tRedlining_9
 		if iComparison1$ <> Font.GetSelText  then Warnlog "Wrong Font in Autotext!"
 		if iComparison2$ <> Style.GetSelText then Warnlog "Wrong Fontstyle in Autotext!"
 		if iComparison3$ <> Size.GetSelText  then Warnlog "Wrong Fontsize in Autotext!"
-	endif
+	end if
 	wait 100
 	Kontext
 	Active.Setpage TabHyperlinkZeichen
@@ -755,7 +755,7 @@ testcase tRedlining_10
    Call hNewDocument
 
    '/// Insert a sentence into document
-   Call wDokSchreiben "Redlining test => OK_1<Shift Home>"
+   Call wTypeKeys "Redlining test => OK_1<Shift Home>"
 
    UseBindings
    '/// Edit / Changes / Record
@@ -877,7 +877,7 @@ testcase tRedlining_12
    '/// Insert a date , insert / field / date
    InsertFieldsDate
 
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
    Sleep 1
 
    '/// Check if the date is inserted correctly before accepting the changes
@@ -901,7 +901,7 @@ testcase tRedlining_12
    Redlining.Close
    Sleep 1
 
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
    '/// Check if the date is inserted correctly after accepting the changes
    try
@@ -937,7 +937,7 @@ testcase tRedlining_13
    Sleep 1
    FussnoteEinfuegen.OK
 
-   Call wDokSchreiben "<PageUp><Home>"
+   Call wTypeKeys "<PageUp><Home>"
 
    '/// Check if the footnote is inserted correctly before
    '/// + accepting the changes
@@ -960,7 +960,7 @@ testcase tRedlining_13
    '/// + Close Redlining dialog
    Redlining.Close
 
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
    '/// Check if the footnote is inserted correctly after accepting the changes
    try
@@ -999,7 +999,7 @@ testcase tRedlining_14
   Sleep 2
 
   '/// input some test words in the header
-  Call wDokSchreiben "Header Test"
+  Call wTypeKeys "Header Test"
 
   '/// Check if the header is inserted correctly before
   '/// + accepting the changes
@@ -1056,7 +1056,7 @@ testcase tRedlining_15
   MenuSelect(Menugetitemid(1))
   Sleep 2
 
-  Call wDokSchreiben "Footer Test"
+  Call wTypeKeys "Footer Test"
 
   '/// Check if the footer is inserted correctly before
   '/// + accepting the changes
@@ -1110,9 +1110,9 @@ testcase tRedlining_16
    '/// + Redlining test => OK_3  <--  Numbering style : list 3
 
    Call hFileOpen ( gTesttoolPath + "writer\optional\input\redlining\tRedlining_15.sxw" )
-   Call wDokSchreiben "<Up>" , 3
+   Call wTypeKeys "<Up>" , 3
 
-   Call wDokSchreiben "<Down>"
+   Call wTypeKeys "<Down>"
    FormatParagraph
    Kontext
    Active.SetPage TabNumerierungAbsatz
@@ -1120,7 +1120,7 @@ testcase tRedlining_16
    iComparison1$ = Vorlage.GetSelText
    TabNumerierungAbsatz.Cancel
 
-   Call wDokSchreiben "<Down>"
+   Call wTypeKeys "<Down>"
    FormatParagraph
    Kontext
    Active.SetPage TabNumerierungAbsatz
@@ -1132,29 +1132,29 @@ testcase tRedlining_16
    '/// Edit / Changes / Record
    EditChangesRecord
 
-   Call wDokSchreiben "<Up><End>"
-   Call wDokSchreiben "<Shift Down>"
+   Call wTypeKeys "<Up><End>"
+   Call wTypeKeys "<Shift Down>"
    '/// Cut the selection
    EditCut
 
-   Call wDokSchreiben "<Up>" , 3
-   Call wDokSchreiben "<End><Return>"
+   Call wTypeKeys "<Up>" , 3
+   Call wTypeKeys "<End><Return>"
    '/// paste under the first line
    EditPaste
 
-   Call wDokSchreiben "<Up><Up><End><Delete>"
+   Call wTypeKeys "<Up><Up><End><Delete>"
 
    '/// Check if the paragraph is moved correctly before
    '/// + accepting the changes
-   Call wDokSchreiben "<Up>" , 3
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Shift Left>"
+   Call wTypeKeys "<Up>" , 3
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Shift Left>"
    try
        EditCopy
    catch
        Warnlog "#i41424# Bullets cannot be removed by Del key"
-       Call wDokSchreiben "<Down><End>"
-       Call wDokSchreiben "<Shift Left>"
+       Call wTypeKeys "<Down><End>"
+       Call wTypeKeys "<Shift Left>"
        EditCopy
    endcatch
 
@@ -1167,8 +1167,8 @@ testcase tRedlining_16
    if iComparison2$ <> Vorlage.GetSelText then Warnlog "B.The paragraph is moved incorrect before accepting the changes - 2nd line"
    TabNumerierungAbsatz.Cancel
 
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Shift Left>"
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Shift Left>"
    EditCopy
    if GetClipboardText <> "2" then Warnlog "A. The paragraph is moved incorrect before accepting the changes - 3rd line"
 
@@ -1196,15 +1196,15 @@ testcase tRedlining_16
 
    '/// Check if the footnote is inserted correctly after
    '/// + accepting the changes
-   Call wDokSchreiben "<Up>" , 3
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Shift Left>"
+   Call wTypeKeys "<Up>" , 3
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Shift Left>"
    try
        EditCopy
    catch
        Warnlog "#i41424# Bullets cannot be removed by Del key"
-       Call wDokSchreiben "<Down><End>"
-       Call wDokSchreiben "<Shift Left>"
+       Call wTypeKeys "<Down><End>"
+       Call wTypeKeys "<Shift Left>"
        EditCopy
    endcatch
    if GetClipboardText <> "3" then Warnlog "A.The paragraph is moved incorrect after accepting the changes - 2nd line"
@@ -1216,8 +1216,8 @@ testcase tRedlining_16
    if iComparison2$ <> Vorlage.GetSelText then Warnlog "B.The paragraph is moved incorrect after accepting the changes - 2nd line"
    TabNumerierungAbsatz.Cancel
 
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Shift Left>"
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Shift Left>"
    EditCopy
    if GetClipboardText <> "2" then Warnlog "A. The paragraph is moved incorrect after accepting the changes - 3rd line"
 

@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_redlining2.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:03:57 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:34:05 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -64,22 +64,22 @@ testcase tAcceptReject_1
    Call hNewDocument
 
    'Insert some test sentences
-   Call wDokSchreiben "Redlining test => OK_1<Return><Return>"
-   Call wDokSchreiben "Redlining test => OK_2"
+   Call wTypeKeys "Redlining test => OK_1<Return><Return>"
+   Call wTypeKeys "Redlining test => OK_2"
 
    UseBindings
    '/// Edit / Changes / Record
    EditChangesRecord
 
    '/// Multi operations : Insert a new sentence , and delete some test text
-   Call wDokSchreiben "<Up>"
-   Call wDokSchreiben "Focus Test"
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Backspace>" , 3
+   Call wTypeKeys "<Up>"
+   Call wTypeKeys "Focus Test"
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Backspace>" , 3
 
    '/// Set the focus to the Start
-   Call wDokSchreiben "<Up>" , 3
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Up>" , 3
+   Call wTypeKeys "<Home>"
 
    '/// Edit / Changes / Accept or Reject
    EditChangesAcceptOrReject
@@ -96,7 +96,7 @@ testcase tAcceptReject_1
    Sleep 2
 
    Kontext "DocumentWriter"
-   Call wDokSchreiben "<Shift Home>"
+   Call wTypeKeys "<Shift Home>"
    EditCopy
    Sleep 1
    if GetClipboardText <> "Focus Test" then Warnlog "The inserted focus location is incorrect! Getting " +GetClipboardText
@@ -107,8 +107,8 @@ testcase tAcceptReject_1
    Sleep 2
 
    Kontext "DocumentWriter"
-   Call wDokSchreiben "<End>"
-   Call wDokSchreiben "<Shift Left>" , 4
+   Call wTypeKeys "<End>"
+   Call wTypeKeys "<Shift Left>" , 4
    Sleep 1
    EditCopy
    Sleep 1
@@ -134,8 +134,8 @@ testcase tAcceptReject_2
    Call hNewDocument
 
    'Insert some test sentences
-   Call wDokSchreiben "Redlining test => OK_1<Return><Return>"
-   Call wDokSchreiben "Redlining test => OK_2"
+   Call wTypeKeys "Redlining test => OK_1<Return><Return>"
+   Call wTypeKeys "Redlining test => OK_2"
 
    UseBindings
    '/// Edit / Changes / Record
@@ -143,11 +143,11 @@ testcase tAcceptReject_2
 
    '/// Multi operations : Insert a new sentence , and
    '/// + delete some test text
-   Call wDokSchreiben "<Up>"
-   Call wDokSchreiben "Focus Test"
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Backspace>" , 1
-   Call wDokSchreiben "<Up>"
+   Call wTypeKeys "<Up>"
+   Call wTypeKeys "Focus Test"
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Backspace>" , 1
+   Call wTypeKeys "<Up>"
 
    '/// Edit / Changes / Accept or Reject
    EditChangesAcceptOrReject
@@ -165,17 +165,17 @@ testcase tAcceptReject_2
    Sleep 2
 
    '/// Check if the configuration is all right
-   Call wDokSchreiben "<Up>" , 3
+   Call wTypeKeys "<Up>" , 3
    Sleep 1
-   Call wDokSchreiben "<Down><Home><Shift End>"
+   Call wTypeKeys "<Down><Home><Shift End>"
    Sleep 1
    EditCopy
    Sleep 1
    if GetClipboardText <> "Focus Test" then Warnlog "The inserted text is incorrect! Getting" + GetClipboardText
 
-   Call wDokSchreiben "<Down><End>"
+   Call wTypeKeys "<Down><End>"
    Sleep 1
-   Call wDokSchreiben "<Shift Left>" , 4
+   Call wTypeKeys "<Shift Left>" , 4
    Sleep 1
    EditCopy
    Sleep 1
@@ -197,20 +197,20 @@ testcase tAcceptReject_3
    Call hNewDocument
 
    'Insert some test sentences
-   Call wDokSchreiben "Redlining test => OK_1<Return><Return>"
-   Call wDokSchreiben "Redlining test => OK_2"
+   Call wTypeKeys "Redlining test => OK_1<Return><Return>"
+   Call wTypeKeys "Redlining test => OK_2"
 
    UseBindings
    '/// Edit / Changes / Record
    EditChangesRecord
 
    '/// Multi operations : Insert a new sentence , and delete some test text
-   Call wDokSchreiben "<Up>"
-   Call wDokSchreiben "Focus Test"
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Backspace>" , 3
-   Call wDokSchreiben "<Up>" , 3
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Up>"
+   Call wTypeKeys "Focus Test"
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Backspace>" , 3
+   Call wTypeKeys "<Up>" , 3
+   Call wTypeKeys "<Home>"
 
    '/// Edit / Changes / Accept or Reject
    EditChangesAcceptOrReject
@@ -231,8 +231,8 @@ testcase tAcceptReject_3
    Redlining.Close
 
    '/// Check if the configuration is all right
-   Call wDokSchreiben "<Up>" , 3
-   Call wDokSchreiben "<Down><Home><Shift End>"
+   Call wTypeKeys "<Up>" , 3
+   Call wTypeKeys "<Down><Home><Shift End>"
 
    try
       EditCopy
@@ -240,8 +240,8 @@ testcase tAcceptReject_3
    catch
    endcatch
 
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Shift Left>" , 4
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Shift Left>" , 4
    EditCopy
    if GetClipboardText <> "O" then Warnlog "The deleted text should be deleted and their location should be still reserved! Getting " + GetClipboardText
 
@@ -261,25 +261,25 @@ testcase tAcceptReject_4
    Call hNewDocument
 
    'Insert some test sentences
-   Call wDokSchreiben "Redlining test => OK_1<Return><Return>"
-   Call wDokSchreiben "Redlining test => OK_2"
+   Call wTypeKeys "Redlining test => OK_1<Return><Return>"
+   Call wTypeKeys "Redlining test => OK_2"
 
    UseBindings
    '/// Edit / Changes / Record
    EditChangesRecord
 
    '/// Multi operations : Insert a new sentence , and delete some test text
-   Call wDokSchreiben "<Up>"
+   Call wTypeKeys "<Up>"
    Sleep 1
-   Call wDokSchreiben "Focus Test"
+   Call wTypeKeys "Focus Test"
    Sleep 1
-   Call wDokSchreiben "<Down><End>"
+   Call wTypeKeys "<Down><End>"
    Sleep 1
-   Call wDokSchreiben "<Backspace>" , 3
+   Call wTypeKeys "<Backspace>" , 3
    Sleep 2
-   Call wDokSchreiben "<Up>" , 3
+   Call wTypeKeys "<Up>" , 3
    Sleep 2
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
    Sleep 1
 
    '/// Edit / Changes / Accept or Reject
@@ -297,17 +297,17 @@ testcase tAcceptReject_4
    Sleep 1
 
    '/// Check if the configuration is all right
-   Call wDokSchreiben "<Up>" , 3
+   Call wTypeKeys "<Up>" , 3
    Sleep 1
-   Call wDokSchreiben "<Down><Home><Shift End>"
+   Call wTypeKeys "<Down><Home><Shift End>"
    Sleep 1
    EditCopy
    Sleep 1
    if GetClipboardText <> "Focus Test" then Warnlog "The inserted text is incorrect! Getting " + GetClipboardText
 
-   Call wDokSchreiben "<Down><End>"
+   Call wTypeKeys "<Down><End>"
    Sleep 2
-   Call wDokSchreiben "<Shift Left>" , 4
+   Call wTypeKeys "<Shift Left>" , 4
    Sleep 2
    EditCopy
    if GetClipboardText <> "=> O" then Warnlog "The deleted text is incorrect! Getting " + GetClipboardText
@@ -328,22 +328,22 @@ testcase tAcceptReject_5
    Call hNewDocument
 
    'Insert some test sentences
-   Call wDokSchreiben "Redlining test => OK_1<Return><Return>"
-   Call wDokSchreiben "Redlining test => OK_2"
+   Call wTypeKeys "Redlining test => OK_1<Return><Return>"
+   Call wTypeKeys "Redlining test => OK_2"
 
    UseBindings
    '/// Edit / Changes / Record
    EditChangesRecord
 
    '/// Multi operations : Insert a new sentence , and delete some test text
-   Call wDokSchreiben "<Up>"
-   Call wDokSchreiben "Focus Test"
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Backspace>" , 3
+   Call wTypeKeys "<Up>"
+   Call wTypeKeys "Focus Test"
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Backspace>" , 3
    wait 500
-   Call wDokSchreiben "<Up>" , 3
+   Call wTypeKeys "<Up>" , 3
    wait 500
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
    '/// Edit / Changes / Accept or Reject
    EditChangesAcceptOrReject
@@ -358,9 +358,9 @@ testcase tAcceptReject_5
    Redlining.Close
 
    '/// Check if the configuration is all right
-   Call wDokSchreiben "<Up>" , 3
+   Call wTypeKeys "<Up>" , 3
    wait 500
-   Call wDokSchreiben "<Down><Home><Shift End>"
+   Call wTypeKeys "<Down><Home><Shift End>"
    wait 500
    try
       EditCopy
@@ -368,8 +368,8 @@ testcase tAcceptReject_5
    catch
    endcatch
 
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Shift Left>" , 4
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Shift Left>" , 4
    EditCopy
    if GetClipboardText <> "OK_2" then Warnlog "The deleted text should not be deleted! Getting " + GetClipboardText
 
@@ -396,8 +396,8 @@ testcase tAcceptReject_6
    Call hNewDocument
 
    'Insert some test sentences
-   Call wDokSchreiben "Redlining test => OK_1<Return>"
-   Call wDokSchreiben "Redlining test => OK_2"
+   Call wTypeKeys "Redlining test => OK_1<Return>"
+   Call wTypeKeys "Redlining test => OK_2"
 
    '/// Change author to author1 :Test1 Test1
    ToolsOptions
@@ -414,9 +414,9 @@ testcase tAcceptReject_6
    EditChangesRecord
 
    '/// author1 : delete some text
-   Call wDokSchreiben "<Up><End>"
+   Call wTypeKeys "<Up><End>"
    Sleep 1
-   Call wDokSchreiben "<Backspace>" , 3
+   Call wTypeKeys "<Backspace>" , 3
    Sleep 1
 
    '/// Change author to author2 :Test2 Test2
@@ -428,9 +428,9 @@ testcase tAcceptReject_6
    ExtrasOptionenDlg.OK
 
    '/// author2 : delete some other text
-   Call wDokSchreiben "<Down><End>"
+   Call wTypeKeys "<Down><End>"
    Sleep 1
-   Call wDokSchreiben "<Backspace>" , 4
+   Call wTypeKeys "<Backspace>" , 4
    Sleep 1
 
    '/// Edit / Changes / Accept or Reject
@@ -457,19 +457,19 @@ testcase tAcceptReject_6
    Sleep 1
 
    '/// + Check if Filter works well
-   Call wDokSchreiben "<Up>" , 2
+   Call wTypeKeys "<Up>" , 2
    Sleep 1
-   Call wDokSchreiben "<End>"
+   Call wTypeKeys "<End>"
    Sleep 1
-   Call wDokSchreiben "<Shift Left>" , 6
+   Call wTypeKeys "<Shift Left>" , 6
    Sleep 1
    EditCopy
    Sleep 1
    if GetClipboardText <>  "> O" then Warnlog "The deleted text by author1 is incorrect! Getting " + GetClipboardText
 
-   Call wDokSchreiben "<Down><End>"
+   Call wTypeKeys "<Down><End>"
    Sleep 1
-   Call wDokSchreiben "<Shift Left>" , 6
+   Call wTypeKeys "<Shift Left>" , 6
    Sleep 1
    EditCopy
    Sleep 1
@@ -501,16 +501,16 @@ testcase tAcceptReject_7
    Call hNewDocument
 
    '/// Insert some test sentences
-   Call wDokSchreiben "Redlining test => OK_1<Return>"
-   Call wDokSchreiben "Redlining test => OK_2"
+   Call wTypeKeys "Redlining test => OK_1<Return>"
+   Call wTypeKeys "Redlining test => OK_2"
 
    UseBindings
    '/// Edit / Changes / Record
    EditChangesRecord
 
    '/// delete some text in first line
-   Call wDokSchreiben "<Up><End>"
-   Call wDokSchreiben "<Backspace>" , 3
+   Call wTypeKeys "<Up><End>"
+   Call wTypeKeys "<Backspace>" , 3
 
    sTime = Str ( Format( Now  ) )
    sTime = Mid ( sTime , 12 , 5 )
@@ -519,8 +519,8 @@ testcase tAcceptReject_7
    Sleep 70
 
    '/// delete some text in second line
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Backspace>" , 2
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Backspace>" , 2
 
    '/// Edit / Changes / Accept or Reject
    EditChangesAcceptOrReject
@@ -547,14 +547,14 @@ testcase tAcceptReject_7
    Redlining.Close
 
    '/// + Check if Filter works well
-   Call wDokSchreiben "<Up>" , 2
-   Call wDokSchreiben "<End>"
-   Call wDokSchreiben "<Shift Left>" , 4
+   Call wTypeKeys "<Up>" , 2
+   Call wTypeKeys "<End>"
+   Call wTypeKeys "<Shift Left>" , 4
    EditCopy
    if GetClipboardText <>  "=> O" then Warnlog "The deleted text in first line is incorrect!"
 
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Shift Left>" , 4
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Shift Left>" , 4
    EditCopy
    if GetClipboardText <> "OK" then Warnlog "The deleted text in second line is incorrect!"
 
@@ -576,15 +576,15 @@ testcase tAcceptReject_8
 	Call hNewDocument
 	
 	'Insert some test sentences
-	Call wDokSchreiben "Redlining test => OK_1<Return>"
-	Call wDokSchreiben "Redlining test => OK_2"
+	Call wTypeKeys "Redlining test => OK_1<Return>"
+	Call wTypeKeys "Redlining test => OK_2"
 	
 	UseBindings
 	'/// Edit / Changes / Record
 	EditChangesRecord
 	
 	'/// Change the first line's attribute .
-	Call wDokSchreiben "<Up><Home><Shift End>"
+	Call wTypeKeys "<Up><Home><Shift End>"
 	
 	FormatCharacter
 	Kontext
@@ -613,7 +613,7 @@ testcase tAcceptReject_8
 		iComparison2$ = Style.GetSelText
 		Size.Select  5
 		iComparison3$ = Size.GetSelText
-	endif
+	end if
 	
 	wait 100
 	Kontext
@@ -628,8 +628,8 @@ testcase tAcceptReject_8
 	TabHyperlinkZeichen.Ok
 	
 	'/// Delete some text in second line
-	Call wDokSchreiben "<Down><End>"
-	Call wDokSchreiben "<Backspace>" , 3
+	Call wTypeKeys "<Down><End>"
+	Call wTypeKeys "<Backspace>" , 3
 	
 	'/// Edit / Changes / Accept or Reject
 	EditChangesAcceptOrReject
@@ -652,7 +652,7 @@ testcase tAcceptReject_8
 	Redlining.Close
 	
 	'/// Check if Filter works well
-	Call wDokSchreiben "<Up><Home><Right>"
+	Call wTypeKeys "<Up><Home><Right>"
 	FormatCharacter
 	Kontext
 	Active.SetPage TabFont
@@ -665,7 +665,7 @@ testcase tAcceptReject_8
 		if iComparison1$ <> Font.GetSelText  then Warnlog "Wrong Font in first line!"
 		if iComparison2$ <> Style.GetSelText then Warnlog "Wrong Fontstyle in first line!"
 		if iComparison3$ <> Size.GetSelText  then Warnlog "Wrong Fontsize in first line!"
-	endif
+	end if
 	wait 100
 	Kontext
 	Active.Setpage TabHyperlinkZeichen
@@ -674,8 +674,8 @@ testcase tAcceptReject_8
 	if iComparison4$   <> TargetFrame.GetSelText then Warnlog "Wrong targetFrame has been added to text!"
 	TabHyperlinkZeichen.Cancel
 	
-	Call wDokSchreiben "<Down><End>"
-	Call wDokSchreiben "<Shift Left>" , 4
+	Call wTypeKeys "<Down><End>"
+	Call wTypeKeys "<Shift Left>" , 4
 	EditCopy
 	if GetClipboardText <> "O" then Warnlog "The deleted text is incorrect!"
 	
@@ -695,16 +695,16 @@ testcase tAcceptReject_9
    Call hNewDocument
 
    '/// Insert some test sentences
-   Call wDokSchreiben "Redlining test => OK_1<Return>"
-   Call wDokSchreiben "Redlining test => OK_2"
+   Call wTypeKeys "Redlining test => OK_1<Return>"
+   Call wTypeKeys "Redlining test => OK_2"
 
    UseBindings
    '/// Edit / Changes / Record
    EditChangesRecord
 
    '/// delete some text in first line .
-   Call wDokSchreiben "<Up><End>"
-   Call wDokSchreiben "<Backspace>" , 3
+   Call wTypeKeys "<Up><End>"
+   Call wTypeKeys "<Backspace>" , 3
 
    '/// insert comment1: Edit / Changes / Comment
    EditChangesComment
@@ -713,8 +713,8 @@ testcase tAcceptReject_9
    Kommentar.OK
 
    '/// delete some text in second line .
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Backspace>" , 2
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Backspace>" , 2
 
    '/// insert comment2: Edit / Changes / Comment
    EditChangesComment
@@ -741,13 +741,13 @@ testcase tAcceptReject_9
    Redlining.Close
 
    '/// Check if the configuration is all right
-   Call wDokSchreiben "<Up><End>"
-   Call wDokSchreiben "<Shift Left>" , 4
+   Call wTypeKeys "<Up><End>"
+   Call wTypeKeys "<Shift Left>" , 4
    EditCopy
    if GetClipboardText <>  "=> O" then Warnlog "The deleted text in first line is incorrect!"
 
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Shift Left>" , 4
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Shift Left>" , 4
    EditCopy
    if GetClipboardText <> "OK" then Warnlog "The deleted text in second line is incorrect!"
 
@@ -767,20 +767,20 @@ testcase tAcceptReject_10
    Call hNewDocument
 
    '/// Insert some test sentences
-   Call wDokSchreiben "Redlining test => O1<Return>"
-   Call wDokSchreiben "Redlining test => K2"
+   Call wTypeKeys "Redlining test => O1<Return>"
+   Call wTypeKeys "Redlining test => K2"
 
    UseBindings
    '/// Edit / Changes / Record
    EditChangesRecord
 
    '/// delete some text in first line .
-   Call wDokSchreiben "<Up><End>"
-   Call wDokSchreiben "<Backspace>"
+   Call wTypeKeys "<Up><End>"
+   Call wTypeKeys "<Backspace>"
 
    '/// delete some text in second line .
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Backspace>"
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Backspace>"
 
    '/// Edit / Changes / Accept or Reject
    EditChangesAcceptOrReject
@@ -829,13 +829,13 @@ testcase tAcceptReject_10
    Redlining.Close
 
    '/// Check if the configuration is all right
-   Call wDokSchreiben "<Up><End>"
-   Call wDokSchreiben "<Shift Left>" , 2
+   Call wTypeKeys "<Up><End>"
+   Call wTypeKeys "<Shift Left>" , 2
    EditCopy
    if GetClipboardText <>  " O" then Warnlog "The deleted text in first line is incorrect!"
 
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Shift Left>" , 2
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Shift Left>" , 2
    EditCopy
    if GetClipboardText <> "K" then Warnlog "The deleted text in second line is incorrect!"
 
@@ -856,21 +856,21 @@ testcase tAcceptReject_11
     Call hNewDocument
     
     '/// Insert some test sentences
-    Call wDokSchreiben "Redlining_11_test<Return>"
+    Call wTypeKeys "Redlining_11_test<Return>"
     
     UseBindings
     '/// Edit / Changes / Record
     EditChangesRecord
     
     '/// Insert some test sentences
-    Call wDokSchreiben "A"
+    Call wTypeKeys "A"
     
     '/// delete some text in first line .
-    Call wDokSchreiben "<Up><End>"
-    Call wDokSchreiben "<Backspace>"
+    Call wTypeKeys "<Up><End>"
+    Call wTypeKeys "<Backspace>"
     
     'This step to ensure the 1st list is deletion , the 2nd list is insertion
-    Call wDokSchreiben "<Home>"
+    Call wTypeKeys "<Home>"
     
     '/// Edit / Changes / Accept or Reject
     EditChangesAcceptOrReject
@@ -904,13 +904,13 @@ testcase tAcceptReject_11
     Redlining.Close
     
     '/// Check if the configuration is all right
-    Call wDokSchreiben "<Up><End>"
-    Call wDokSchreiben "<Shift Left>"
+    Call wTypeKeys "<Up><End>"
+    Call wTypeKeys "<Shift Left>"
     EditCopy
     if GetClipboardText <> "s" then Warnlog "The deleted text in first line is incorrect!"
     
-    Call wDokSchreiben "<Down><End>"
-    Call wDokSchreiben "<Shift Home>"
+    Call wTypeKeys "<Down><End>"
+    Call wTypeKeys "<Shift Home>"
     EditCopy
     if GetClipboardText <> "A" then Warnlog "The inserted text in second line is incorrect!"
     
@@ -936,8 +936,8 @@ testcase tAcceptReject_12
    Call hNewDocument
 
    'Insert some test sentences
-   Call wDokSchreiben "Redlining test => O1<Return>"
-   Call wDokSchreiben "Redlining test => K2"
+   Call wTypeKeys "Redlining test => O1<Return>"
+   Call wTypeKeys "Redlining test => K2"
 
    '/// Change author to author1 :ATest1 ATest1
    ToolsOptions
@@ -954,7 +954,7 @@ testcase tAcceptReject_12
    EditChangesRecord
 
    '/// author1 : delete some text in 2nd line
-   Call wDokSchreiben "<Backspace>"
+   Call wTypeKeys "<Backspace>"
 
    '/// Change author to author2 :BTest2 BTest2
    ToolsOptions
@@ -965,10 +965,10 @@ testcase tAcceptReject_12
    ExtrasOptionenDlg.OK
 
    '/// author2 : delete some text in 1st line
-   Call wDokSchreiben "<Up><End>"
-   Call wDokSchreiben "<Backspace>"
+   Call wTypeKeys "<Up><End>"
+   Call wTypeKeys "<Backspace>"
    Sleep 1
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
    '/// Edit / Changes / Accept or Reject
    EditChangesAcceptOrReject
@@ -1006,14 +1006,14 @@ testcase tAcceptReject_12
    Redlining.Close
 
    '/// Check if Filter works well
-   Call wDokSchreiben "<Up>" , 2
-   Call wDokSchreiben "<End>"
-   Call wDokSchreiben "<Shift Left>" , 2
+   Call wTypeKeys "<Up>" , 2
+   Call wTypeKeys "<End>"
+   Call wTypeKeys "<Shift Left>" , 2
    EditCopy
    if GetClipboardText <>  "O" then Warnlog "The deleted text by author1 is incorrect!"
 
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Shift Left>" , 2
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Shift Left>" , 2
    EditCopy
    if GetClipboardText <> " K" then Warnlog "The deleted text by author2 is incorrect!"
 
@@ -1041,22 +1041,22 @@ testcase tAcceptReject_13
    Call hNewDocument
 
    '/// Insert some test sentences
-   Call wDokSchreiben "Redlining test => O1<Return>"
-   Call wDokSchreiben "Redlining test => K2"
+   Call wTypeKeys "Redlining test => O1<Return>"
+   Call wTypeKeys "Redlining test => K2"
 
    UseBindings
    '/// Edit / Changes / Record
    EditChangesRecord
 
    '/// delete some text in 2nd line .
-   Call wDokSchreiben "<Backspace>"
+   Call wTypeKeys "<Backspace>"
 
    '/// wait 70 seconds
    Sleep 70
 
    '/// delete some text in 1st line .
-   Call wDokSchreiben "<Up><End>"
-   Call wDokSchreiben "<Backspace>"
+   Call wTypeKeys "<Up><End>"
+   Call wTypeKeys "<Backspace>"
 
    '/// Edit / Changes / Accept or Reject
    EditChangesAcceptOrReject
@@ -1093,13 +1093,13 @@ testcase tAcceptReject_13
    Redlining.Close
 
    '/// Check if the configuration is all right
-   Call wDokSchreiben "<Up><End>"
-   Call wDokSchreiben "<Shift Left>" , 2
+   Call wTypeKeys "<Up><End>"
+   Call wTypeKeys "<Shift Left>" , 2
    EditCopy
    if GetClipboardText <> " O" then Warnlog "The deleted text in first line is incorrect!"
 
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Shift Left>" , 2
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Shift Left>" , 2
    EditCopy
    if GetClipboardText <>  "K" then Warnlog "The deleted text in second line is incorrect!"
 
@@ -1119,15 +1119,15 @@ testcase tAcceptReject_14
    Call hNewDocument
 
    '/// Insert some test sentences
-   Call wDokSchreiben "Redlining test => O1<Return>"
-   Call wDokSchreiben "Redlining test => K2"
+   Call wTypeKeys "Redlining test => O1<Return>"
+   Call wTypeKeys "Redlining test => K2"
 
    UseBindings
    '/// Edit / Changes / Record
    EditChangesRecord
 
    '/// delete some text in 2nd line .
-   Call wDokSchreiben "<Backspace>"
+   Call wTypeKeys "<Backspace>"
 
    '/// insert comment1: Edit / Changes / Comment
    EditChangesComment
@@ -1136,8 +1136,8 @@ testcase tAcceptReject_14
    Kommentar.OK
 
    '/// delete some text in 1st line .
-   Call wDokSchreiben "<Up><End>"
-   Call wDokSchreiben "<Backspace>"
+   Call wTypeKeys "<Up><End>"
+   Call wTypeKeys "<Backspace>"
 
    '/// insert comment2: Edit / Changes / Comment
    EditChangesComment
@@ -1180,13 +1180,13 @@ testcase tAcceptReject_14
    Redlining.Close
 
    '/// Check if the configuration is all right
-   Call wDokSchreiben "<Up><End>"
-   Call wDokSchreiben "<Shift Left>" , 2
+   Call wTypeKeys "<Up><End>"
+   Call wTypeKeys "<Shift Left>" , 2
    EditCopy
    if GetClipboardText <>  " O" then Warnlog "The deleted text in first line is incorrect!"
 
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Shift Left>" , 2
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Shift Left>" , 2
    EditCopy
    if GetClipboardText <>  "K" then Warnlog "The deleted text in second line is incorrect!"
 
@@ -1206,21 +1206,21 @@ testcase tAcceptReject_15
    Call hNewDocument
 
    '/// Insert some test sentences
-   Call wDokSchreiben "Redlining test => O1<Return>"
-   Call wDokSchreiben "Redlining test => K2"
+   Call wTypeKeys "Redlining test => O1<Return>"
+   Call wTypeKeys "Redlining test => K2"
 
    UseBindings
    '/// Edit / Changes / Record
    EditChangesRecord
 
    '/// delete some text in 2nd line .
-   Call wDokSchreiben "<Backspace>"
+   Call wTypeKeys "<Backspace>"
 
    '/// delete some text in 1st line .
-   Call wDokSchreiben "<Up><End>"
-   Call wDokSchreiben "<Backspace>"
+   Call wTypeKeys "<Up><End>"
+   Call wTypeKeys "<Backspace>"
 
-   Call wDokSchreiben "<Home>"
+   Call wTypeKeys "<Home>"
 
    '/// Edit / Changes / Accept or Reject
    EditChangesAcceptOrReject
@@ -1250,13 +1250,13 @@ testcase tAcceptReject_15
    Redlining.Close
 
    '/// Check if the configuration is all right
-   Call wDokSchreiben "<Up><End>"
-   Call wDokSchreiben "<Shift Left>" , 2
+   Call wTypeKeys "<Up><End>"
+   Call wTypeKeys "<Shift Left>" , 2
    EditCopy
    if GetClipboardText <>  "O" then Warnlog "The deleted text in first line is incorrect!"
 
-   Call wDokSchreiben "<Down><End>"
-   Call wDokSchreiben "<Shift Left>" , 2
+   Call wTypeKeys "<Down><End>"
+   Call wTypeKeys "<Shift Left>" , 2
    EditCopy
    if GetClipboardText <>  " K" then Warnlog "The deleted text in second line is incorrect!"
 
