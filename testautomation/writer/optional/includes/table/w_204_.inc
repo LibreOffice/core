@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_204_.inc,v $
 '*
-'* $Revision: 1.2 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-26 12:40:56 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:36:50 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -35,19 +35,35 @@
 '*
 '* short description : Writer Table Test
 '*
-'*    Call tTableOption
-'*    Call tTableInsert1
-'*    Call tTableInsert2
-'*    Call tTableInsert3
-'*    Call tTableInsert4
-'*    Call tTableInsert5
-'*    Call tTableNumberFormat
-'*    Call tTableDelete
-'*    Call tTableText
-'*    Call tTableCalculate
-'*    Call tTableEdit
+'*************************************************************************
+'*
+'*    tTableOption
+'*    tTableInsert1
+'*    tTableInsert2
+'*    tTableInsert3
+'*    tTableInsert4
+'*    tTableInsert5
+'*    tTableNumberFormat
+'*    tTableDelete
+'*    tTableText
+'*    tTableCalculate
+'*    tTableEdit
 '*
 '\***********************************************************************
+
+sub w_204_
+    Call tTableOption
+    Call tTableInsert1
+    Call tTableInsert2
+    Call tTableInsert3
+    Call tTableInsert4
+    Call tTableInsert5
+    Call tTableNumberFormat
+    Call tTableDelete
+     Call tTableText
+     Call tTableCalculate
+    Call tTableEdit
+end sub
 
 testcase tTableOption
    '/// Check Tables' default Option ///
@@ -107,7 +123,7 @@ testcase tTableInsert1
     TabellenName.SetText "one"
 	Spalten.Settext "5"
     TabelleEinfuegenWriter.OK
-    Call wDokSchreiben "one<down>"
+    Call wTypeKeys "one<down>"
 
     Printlog "'///+ ... play with number recognition in TOOLS->OPTIONS->TextDoc->Table ///"
     Printlog "'///+     ... Number recognition OFF ///"
@@ -120,7 +136,7 @@ testcase tTableInsert1
     ' insert test row
     Call hToolbarSelect ( "Table", true )
 	ZeileEinfuegen.Click
-    Call wDokSchreiben "<down>11111<Tab>1"+cSep+"116111<Tab>1"+cDecSep+"116111<Tab>abcd<shift tab><shift tab><shift tab>"
+    Call wTypeKeys "<down>11111<Tab>1"+cSep+"116111<Tab>1"+cDecSep+"116111<Tab>abcd<shift tab><shift tab><shift tab>"
     ' check format
     for i=1 to 4
         FormatNumberFormat
@@ -135,10 +151,10 @@ testcase tTableInsert1
         Kontext "tabAusrichtungAbsatz"
         if (links.isChecked <> true) then warnlog "wrong alignment of tablefield: "+i
         TabAusrichtungAbsatz.Cancel
-        Call wDokSchreiben "<Tab>"
+        Call wTypeKeys "<Tab>"
     next i
     ' go back to start of table
-    Call wDokSchreiben "<Mod1 Home><Down>"
+    Call wTypeKeys "<Mod1 Home><Down>"
 
     Printlog "'///+       ... Number recognition ON -                           ///"
     ToolsOptions
@@ -151,7 +167,7 @@ testcase tTableInsert1
 
 	Call hToolbarSelect ( "Table", true )
     ZeileEinfuegen.Click
-    Call wDokSchreiben "<down>11111<Tab>1"+cSep+"116111<Tab>1"+cDecSep+"116111<Tab>abcd<shift tab><shift tab><shift tab>"
+    Call wTypeKeys "<down>11111<Tab>1"+cSep+"116111<Tab>1"+cDecSep+"116111<Tab>abcd<shift tab><shift tab><shift tab>"
     for i=1 to 4
         FormatNumberFormat
         Kontext "Zahlenformat"
@@ -165,9 +181,9 @@ testcase tTableInsert1
         Kontext "TabAusrichtungAbsatz"
         if (Links.IsChecked = false) then warnlog "wrong alignment of tablefield: "+i
         TabAusrichtungAbsatz.Cancel
-        Call wDokSchreiben "<Tab>"
+        Call wTypeKeys "<Tab>"
     next i
-    Call wDokSchreiben "<Mod1 Home><Down>"
+    Call wTypeKeys "<Mod1 Home><Down>"
 
     Printlog "'///+       ... Number recognition ON - Number format recognition ///"
     ToolsOptions
@@ -179,7 +195,7 @@ testcase tTableInsert1
     ExtrasOptionenDlg.OK
 	Call hToolbarSelect ( "Table", true )
     ZeileEinfuegen.Click
-    Call wDokSchreiben "<down>11111<Tab>1"+cSep+"116111<Tab>1"+cDecSep+"116111<Tab>abcd<shift tab><shift tab><shift tab>"
+    Call wTypeKeys "<down>11111<Tab>1"+cSep+"116111<Tab>1"+cDecSep+"116111<Tab>abcd<shift tab><shift tab><shift tab>"
     ' number, text, number, text
     for i=1 to 4
         FormatNumberFormat
@@ -195,9 +211,9 @@ testcase tTableInsert1
                 end if
         end select
         Zahlenformat.Cancel
-        Call wDokSchreiben "<Tab>"
+        Call wTypeKeys "<Tab>"
     next i
-    Call wDokSchreiben "<Mod1 Home><Down>"
+    Call wTypeKeys "<Mod1 Home><Down>"
 
     Printlog "'///+       ... Number recognition ON - Number format recognition - Alignment ///"
     ToolsOptions
@@ -209,7 +225,7 @@ testcase tTableInsert1
     ExtrasOptionenDlg.OK
 	Call hToolbarSelect ( "Table", true )
     ZeileEinfuegen.Click
-    Call wDokSchreiben "<down>11111<Tab>1"+cSep+"116111<Tab>1"+cDecSep+"116111<Tab>abcd<shift tab><shift tab><shift tab>"
+    Call wTypeKeys "<down>11111<Tab>1"+cSep+"116111<Tab>1"+cDecSep+"116111<Tab>abcd<shift tab><shift tab><shift tab>"
     ' number-right, text-left, number-right, text-left
     for i=1 to 4
         Select Case i
@@ -240,7 +256,7 @@ testcase tTableInsert1
                 if (links.isChecked <> true) then warnlog "wrong alignment of tablefield: "+i+"; should: left"
                 TabAusrichtungAbsatz.Cancel
          end select
-         Call wDokSchreiben "<Tab>"
+         Call wTypeKeys "<Tab>"
      next i
 
      Call hCloseDocument
@@ -266,7 +282,7 @@ testcase tTableInsert2
     Kontext "TabelleEinfuegenWriter"
     TabellenName.SetText "two"
     TabelleEinfuegenWriter.OK
-    Call wDokSchreiben "two"
+    Call wTypeKeys "two"
 
     Call hCloseDocument
 
@@ -285,7 +301,7 @@ testcase tTableInsert3
     ' table heading active
     ' Don't split table INactive
     ' table border unchecked
-    Call wDokSchreiben "<Mod1 F12>"
+    Call wTypeKeys "<Mod1 F12>"
     Kontext "TabelleEinfuegenWriter"
 
     TabellenName.SetText "three"
@@ -293,7 +309,7 @@ testcase tTableInsert3
     Ueberschrift.Check
     Umrandung.Uncheck
     TabelleEinfuegenWriter.OK
-    Call wDokSchreiben "three"
+    Call wTypeKeys "three"
 
     ' -------------check if heading 1
     ' if checked: heading; else: contents !! SystemLanguage dependent !! :-(
@@ -306,12 +322,12 @@ testcase tTableInsert3
         warnlog "--- is:" + sTemp + ", should :" + fLocaleString("LocaleTableHeading")
     end if
     '----------------------------------
-    Call wDokSchreiben "<down>"
+    Call wTypeKeys "<down>"
       ' -------------check if splitting; it HAS TO split
     Printlog "'///+ check if Table gets splitted -  it HAS TO split ///"
 
     InsertFieldsPagenumbers          ' get pagenumber & leave it for next calculation
-    Call wDokSchreiben "<Mod1 A>"
+    Call wTypeKeys "<Mod1 A>"
     ToolsCalculate
     itemp(1) = val(GetClipboardText)
 	Call hToolbarSelect ( "Table", true )
@@ -320,17 +336,17 @@ testcase tTableInsert3
         wait 200
     next i
     ToolsUpdateUpdateAll             ' update field & get pagenumber & clear
-    Call wDokSchreiben "<Left><Right>" ' Seems there are focus problems on Solaris...workaround
-    Call wDokSchreiben "<Mod1 A>"
+    Call wTypeKeys "<Left><Right>" ' Seems there are focus problems on Solaris...workaround
+    Call wTypeKeys "<Mod1 A>"
     ToolsCalculate
     itemp(2) = val(GetClipboardText)
     if (itemp(1)+1 = itemp(2)) then warnlog "--- Table moved to seconde page"
     EditCut
-    Call wDokSchreiben "got start3"
+    Call wTypeKeys "got start3"
 
-    Call wDokSchreiben "<Mod1 end>"       ' move to last cell in table
+    Call wTypeKeys "<Mod1 end>"       ' move to last cell in table
     InsertFieldsPagenumbers          ' get pagenumber & clear
-    Call wDokSchreiben "<Mod1 A>"
+    Call wTypeKeys "<Mod1 A>"
     ToolsCalculate
     itemp(3) = val(GetClipboardText)
     if (itemp(2) <> itemp(3)) then
@@ -382,7 +398,7 @@ testcase tTableInsert4
 
     '/// Cursor leaves table with <Up> and <End>
     Printlog "check if Table gets splitted"
-    Call wDokSchreiben "<Up><End><SPACE>"
+    Call wTypeKeys "<Up><End><SPACE>"
     '/// Insert dummy text again 3 times
     Call wBlindtextEinfuegen
 '    wait 500
@@ -391,13 +407,13 @@ testcase tTableInsert4
     Call wBlindtextEinfuegen
     '/// check if table has been moved to Page 2
 
-    Call wDokSchreiben "<Mod1 End>"     ' jump to documents end
-    Call wDokschreiben "<Up>"           ' move cursor into table
-    Call wDokSchreiben "<Mod1 Home>"    ' move cursor to first cell
+    Call wTypeKeys "<Mod1 End>"     ' jump to documents end
+    Call wTypeKeys "<Up>"           ' move cursor into table
+    Call wTypeKeys "<Mod1 Home>"    ' move cursor to first cell
 
     '/// Insert / Fields / Pagenumbers to check on which page table is
     InsertFieldsPagenumbers
-    Call wDokSchreiben "<shift home>"
+    Call wTypeKeys "<shift home>"
     ToolsCalculate
 
     if (GetClipboardText = "2") or (GetClipboardText = "3") then
@@ -407,26 +423,26 @@ testcase tTableInsert4
     end if
 
 	'/// <B>Table should split if table is bigger than one page</B>
-    Call wDokSchreiben "<Up>"
-    Call wDokSchreiben "<shift mod1 home>"
-    Call wDokSchreiben "<delete>"
+    Call wTypeKeys "<Up>"
+    Call wTypeKeys "<shift mod1 home>"
+    Call wTypeKeys "<delete>"
     Call wBlindtextEinfuegen
-    Call wDokSchreiben "<mod1 End>"
-    Call wDokSchreiben "<up>"
-    Call wDokSchreiben "<mod1 Home>"
+    Call wTypeKeys "<mod1 End>"
+    Call wTypeKeys "<up>"
+    Call wTypeKeys "<mod1 Home>"
 
     Printlog "Table should split"
 	Call hToolbarSelect ( "Table", true )
     for i=1 to 25
         ZeileEinfuegen.Click ' inserted below the current row
     next i
-    Call wDokSchreiben "<shift end>"
+    Call wTypeKeys "<shift end>"
     ToolsCalculate
 	stemp = GetClipboardText
-	Call wDokSchreiben "<ESCAPE>"
-	Call wDokSchreiben "<mod1 End>"
+	Call wTypeKeys "<ESCAPE>"
+	Call wTypeKeys "<mod1 End>"
 	InsertFieldsPagenumbers
-	Call wDokSchreiben "<shift home>"
+	Call wTypeKeys "<shift home>"
 	ToolsCalculate
     if (GetClipboardText <> stemp) then
 	        printlog "Table has been splitted"
@@ -443,19 +459,19 @@ testcase tTableInsert5
     Call hNewDocument
     '///  Insert Text with delimeter & call Tools -> Text<->Table
     Printlog "'///  Insert Text with delimeter & call Tools -> Text<->Table ///"
-    Call wDokSchreiben "five;2;3;4;5;<return>"
-    Call wDokSchreiben "a;b;c;d;e;<return>"
-    Call wDokSchreiben "A;B;C;D;E;"
-    Call wDokSchreiben "<shift home>"
-    Call wDokSchreiben "<shift up>"
-    Call wDokSchreiben "<shift up>"
+    Call wTypeKeys "five;2;3;4;5;<return>"
+    Call wTypeKeys "a;b;c;d;e;<return>"
+    Call wTypeKeys "A;B;C;D;E;"
+    Call wTypeKeys "<shift home>"
+    Call wTypeKeys "<shift up>"
+    Call wTypeKeys "<shift up>"
 
     ToolsTextInTable
     Kontext "TextInTabelleUmwandeln"
     Semikolon.Check
 
     TextInTabelleUmwandeln.OK
-    Call wDokSchreiben "<end><Mod1 end><down><return>"
+    Call wTypeKeys "<end><Mod1 end><down><return>"
 
     Call hCloseDocument
 endcase
@@ -469,7 +485,7 @@ testcase tTableNumberFormat
     '///    use table 5x10; and try to get every entry from format->numberFormat->Categorie ///'
 
     Call TBOhTabelleEinfuegen ("six",0, 0, 0, 1,"5", "10" )
-    Call wDokSchreiben "six<down>"
+    Call wTypeKeys "six<down>"
 
     ToolsOptions           ' set options for this test
     Call hToolsOptions ("TextDocument","Table")
@@ -502,7 +518,7 @@ testcase tTableNumberFormat
             printlog "    - Currencyvalue is correctly alligned"
     end if
     TabAusrichtungAbsatz.Cancel
-    Call wDokSchreiben "<home><shift end>"
+    Call wTypeKeys "<home><shift end>"
     EditCopy
     if (GetClipboardText <> fLocaleString("LocaleCurrencyValue")) then
             warnlog "The number is not correctly formated. It is: " & GetClipboardText & " but should be: " & fLocaleString("LocaleCurrencyValue")
@@ -515,6 +531,7 @@ testcase tTableNumberFormat
     Call wDokSchreiben("10.78 §")
     Call wDokSchreiben "<Tab><shift tab>"
     FormatNumberFormat
+
     Kontext "Zahlenformat"
     if (Kategorie.GetSelIndex <> 11) then
             warnlog "The value is not recognized as string, it is " & Kategorie.GetSelText
@@ -532,7 +549,7 @@ testcase tTableNumberFormat
             printlog "    - Value is correctly alligned"
     end if
     TabAusrichtungAbsatz.Cancel
-    Call wDokSchreiben "<home><shift end>"
+    Call wTypeKeys "<home><shift end>"
     EditCopy
     if (GetClipboardText <> "10.78 §") then
             warnlog "The number is not correctly formated: should be 10.78 §, but is " & GetClipboardText
@@ -545,6 +562,7 @@ testcase tTableNumberFormat
     Call wDokSchreiben(fLocaleString("LocaleDateValue"))
     Call wDokSchreiben "<Tab><shift tab>"
     FormatNumberFormat
+
     Kontext "Zahlenformat"
     if (Kategorie.GetSelIndex <> 6) then
             warnlog "The value is not recognized as date, it is " & Kategorie.GetSelText
@@ -562,7 +580,7 @@ testcase tTableNumberFormat
             printlog "    - Datevalue is correctly alligned"
     end if
     TabAusrichtungAbsatz.Cancel
-    Call wDokSchreiben "<home><shift end>"
+    Call wTypeKeys "<home><shift end>"
     EditCopy
     if (GetClipboardText <> fLocaleString("LocaleDateOutput")) then
             warnlog "The number is not correctly formated: should be " & fLocaleString("LocaleDateOutput") & ", but is " & GetClipboardText
@@ -575,6 +593,7 @@ testcase tTableNumberFormat
     Call wDokSchreiben(fLocaleString("LocaleTimeInput"))
     Call wDokSchreiben "<Tab><shift tab>"
     FormatNumberFormat
+
     Kontext "Zahlenformat"
     if (Kategorie.GetSelIndex <> 7) then
             warnlog "The value is not recognized as time, it is " & Kategorie.GetSelText
@@ -592,7 +611,7 @@ testcase tTableNumberFormat
             printlog "    - Timevalue is correctly alligned"
     end if
     TabAusrichtungAbsatz.Cancel
-    Call wDokSchreiben "<home><shift end>"
+    Call wTypeKeys "<home><shift end>"
     EditCopy
     if (GetClipboardText <> fLocaleString("LocaleTimeValue")) then
             warnlog "The number is not correctly formated: should be " & fLocaleString("LocaleTimeValue") & ", but is " & GetClipboardText
@@ -605,6 +624,7 @@ testcase tTableNumberFormat
     Call wDokSchreiben(fLocaleString("LocalePercentValue"))
     Call wDokSchreiben "<Tab><shift tab>"
     FormatNumberFormat
+
     Kontext "Zahlenformat"
     if (Kategorie.GetSelIndex <> 4) then
             warnlog "The value is not recognized as percent, it is " & Kategorie.GetSelText
@@ -622,7 +642,7 @@ testcase tTableNumberFormat
             printlog "    - Percentvalue is correctly alligned"
     end if
     TabAusrichtungAbsatz.Cancel
-    Call wDokSchreiben "<home><shift end>"
+    Call wTypeKeys "<home><shift end>"
     EditCopy
     if (GetClipboardText <> fLocaleString("LocalePercentValue")) then
             warnlog "The number is not correctly formated: should be " & fLocaleString("LocalePercentValue") & ", but is " & GetClipboardText
@@ -635,6 +655,7 @@ testcase tTableNumberFormat
     Call wDokSchreiben(fLocaleString("LocaleScientificValue"))
     Call wDokSchreiben "<Tab><shift tab>"
     FormatNumberFormat
+
     Kontext "Zahlenformat"
     if (Kategorie.GetSelIndex <> 8) then
             warnlog "The value is not recognized as scientific, it is " & Kategorie.GetSelText
@@ -652,7 +673,7 @@ testcase tTableNumberFormat
             printlog "    - Scientificvalue is correctly alligned"
     end if
     TabAusrichtungAbsatz.Cancel
-    Call wDokSchreiben "<home><shift end>"
+    Call wTypeKeys "<home><shift end>"
     EditCopy
     if (GetClipboardText <> fLocaleString("LocaleScientificValue")) then
             warnlog "The number is not correctly formated: should be " & fLocaleString("LocaleScientificValue") & ", but is " & GetClipboardText
@@ -665,6 +686,7 @@ testcase tTableNumberFormat
     Call wDokSchreiben("58 11/4")
     Call wDokSchreiben "<Tab><shift tab>"
     FormatNumberFormat
+
     Kontext "Zahlenformat"
     if (Kategorie.GetSelIndex <> 9) then
             warnlog "The value is not recognized as fraction, it is " & Kategorie.GetSelText
@@ -682,7 +704,7 @@ testcase tTableNumberFormat
             printlog "    - Fractionvalue is correctly alligned"
     end if
     TabAusrichtungAbsatz.Cancel
-    Call wDokSchreiben "<home><shift end>"
+    Call wTypeKeys "<home><shift end>"
     EditCopy
     if (GetClipboardText <> "60 3/4") then
             warnlog "The number is not correctly formated: should be 60 3/4, but is " & GetClipboardText
@@ -695,6 +717,7 @@ testcase tTableNumberFormat
     Call wDokSchreiben(fLocaleString("LocaleBooleanValue"))
     Call wDokSchreiben "<Tab><shift tab>"
     FormatNumberFormat
+
     Kontext "Zahlenformat"
     
     if (Kategorie.GetSelIndex = 10) then
@@ -704,6 +727,7 @@ testcase tTableNumberFormat
     		else
     		warnlog "The value " & fLocaleString("LocaleBooleanValue") & "is not recognized as boolean, it is " & Kategorie.GetSelText 
      end if
+
     Zahlenformat.Cancel
     Formatparagraph
     Kontext
@@ -716,8 +740,9 @@ testcase tTableNumberFormat
             else
             warnlog "wrong alignment of number"
     end if
+
     TabAusrichtungAbsatz.Cancel
-    Call wDokSchreiben "<home><shift end>"
+    Call wTypeKeys "<home><shift end>"
     EditCopy
     if (GetClipboardText <> fLocaleString("LocaleBooleanValue")) then
             warnlog "The number is not correctly formated: should be " & fLocaleString("LocaleBooleanValue") & ", but is " & GetClipboardText
@@ -730,6 +755,7 @@ testcase tTableNumberFormat
     Call wDokSchreiben("testtext")
     Call wDokSchreiben "<Tab><shift tab>"
     FormatNumberFormat
+
     Kontext "Zahlenformat"
     if (Kategorie.GetSelIndex <> 11) then
             warnlog "The value is not recognized as string, it is " & Kategorie.GetSelText
@@ -747,7 +773,7 @@ testcase tTableNumberFormat
             printlog "    - String is correctly alligned"
     end if
     TabAusrichtungAbsatz.Cancel
-    Call wDokSchreiben "<home><shift end>"
+    Call wTypeKeys "<home><shift end>"
     EditCopy
     if (GetClipboardText <> "Testtext") then
             warnlog "The string is not correctly formated: should be Testtext, but is " & GetClipboardText
@@ -757,14 +783,14 @@ testcase tTableNumberFormat
 
     '/// finished the file, now some hardwired tests ///'
     '///+    check, if all decimals are saved, even if not displayed ///'
-    Call wDokSchreiben "123" & cDecSep & "123456789"
-    Call wDokSchreiben "<Tab><shift tab>"
-    Call wDokSchreiben "<home><shift end>"
+    Call wTypeKeys "123" & cDecSep & "123456789"
+    Call wTypeKeys "<Tab><shift tab>"
+    Call wTypeKeys "<home><shift end>"
     wait 500
 	EditCopy
     if (GetClipboardText <> "123" & cDecSep & "12") then warnlog "wrong reformating of text tablefield 1; should: " & "123" & cDecSep & "12 is: "+GetClipboardText
     EditUndo
-    Call wDokSchreiben "<home><shift end>"
+    Call wTypeKeys "<home><shift end>"
     EditCopy
     if (GetClipboardText <> "123" & cDecSep  & "123456789") then warnlog "wrong reformating of text tablefield 2; should: 123" & cDecSep &  "123456789 is: "+GetClipboardText
 
@@ -781,27 +807,27 @@ testcase tTableDelete
 
     Call TBOhTabelleEinfuegen ("seven",0, 0, 0, 1,"20", "20" )
     ' Point cursor to upper left cell
-    Call wDokSchreiben "<Mod1 Home>", 2
-    Call wDokSchreiben "1"
+    Call wTypeKeys "<Mod1 Home>", 2
+    Call wTypeKeys "1"
     For i = 2 to 20
-        Call wDokSchreiben "<down><right>"
-        Call wDokSchreiben CStr(i)
+        Call wTypeKeys "<down><right>"
+        Call wTypeKeys CStr(i)
     next i
-    Call wDokSchreiben "<Mod1 Home>", 2
+    Call wTypeKeys "<Mod1 Home>", 2
 
     Printlog "'///   via keys {alt delete} {cursor} -> delete row/column ///"
     ' delete some rows/columns using shortcuts del 2rows 2cols
-    Call wDokSchreiben "<mod2 delete><right>"
-    Call wDokSchreiben "<right>"
-    Call wDokSchreiben "<mod2 delete><left>"
-    Call wDokSchreiben "<left>"
-    Call wDokSchreiben "<mod2 delete><down>"
-    Call wDokSchreiben "<down>"
-    Call wDokSchreiben "<mod2 delete><up>"
-    Call wDokSchreiben "<up>"
+    Call wTypeKeys "<mod2 delete><right>"
+    Call wTypeKeys "<right>"
+    Call wTypeKeys "<mod2 delete><left>"
+    Call wTypeKeys "<left>"
+    Call wTypeKeys "<mod2 delete><down>"
+    Call wTypeKeys "<down>"
+    Call wTypeKeys "<mod2 delete><up>"
+    Call wTypeKeys "<up>"
     Call SpaltenTesten ( 18 )
-    Call wDokSchreiben "<Mod1 Home>", 2
-    Call wDokSchreiben "<Mod1 A>"
+    Call wTypeKeys "<Mod1 Home>", 2
+    Call wTypeKeys "<Mod1 A>"
     EditCopy
     if GetClipboardtext <> "2" then
         Warnlog "Deleting rows/columns via keys has not been worked as accepted! -> Test failed!"
@@ -816,7 +842,7 @@ testcase tTableDelete
         FormatSpalteLoeschen
         wait 500
     next i
-    Call wDokSchreiben "<Mod1 A>"
+    Call wTypeKeys "<Mod1 A>"
     EditCopy
     if GetClipboardtext <> "20" then
         Warnlog "Deleting rows/columns via keys has not been worked as accepted! -> Test failed!"
@@ -825,20 +851,20 @@ testcase tTableDelete
     end if
 
     Printlog "'///   via keys {alt insert} {cursor} -> insert row/column ///"
-    Call wDokSchreiben "<ESCAPE>"
-    Call wDokSchreiben "<mod2 insert><left>"
-    Call wDokSchreiben "<mod2 insert><right>"
-    Call wDokSchreiben "<mod2 insert><down>"
-    Call wDokSchreiben "<mod2 insert><up>"
+    Call wTypeKeys "<ESCAPE>"
+    Call wTypeKeys "<mod2 insert><left>"
+    Call wTypeKeys "<mod2 insert><right>"
+    Call wTypeKeys "<mod2 insert><down>"
+    Call wTypeKeys "<mod2 insert><up>"
     Call SpaltenTesten ( 3 )
-    Call wDokSchreiben "<Mod1 Home>", 2
-    Call wDokSchreiben "<Shift End>"
+    Call wTypeKeys "<Mod1 Home>", 2
+    Call wTypeKeys "<Shift End>"
     try
         EditCopy
         Warnlog "Maybe no columns have been inserted!"
     catch
-        Call wDokSchreiben "<Mod1 Right>", 2
-        Call wDokSchreiben "<Shift End>"
+        Call wTypeKeys "<Mod1 Right>", 2
+        Call wTypeKeys "<Shift End>"
         try
             EditCopy
             if GetClipboardtext <> "20" then
@@ -850,11 +876,11 @@ testcase tTableDelete
     endcatch
 
     Printlog "'///   delete whole table ///"
-    Call wDokSchreiben "<mod1 home>", 2  ' delete hole table
-    Call wDokSchreiben "<Mod1 A>"
+    Call wTypeKeys "<mod1 home>", 2  ' delete hole table
+    Call wTypeKeys "<Mod1 A>"
     try
         EditCut
-        Call wDokSchreiben "<return>"
+        Call wTypeKeys "<return>"
     catch
         Warnlog "Unable to delete table!"
     endcatch
@@ -872,8 +898,8 @@ testcase tTableText
     Call TBOhTabelleEinfuegen ("seven",0, 0, 0, 1,"10", "10" )
 
     for i = 1 to 99          ' fill every cell
-        Call wDokSchreiben CStr(i)
-        Call wDokSchreiben "<Tab>"
+        Call wTypeKeys CStr(i)
+        Call wTypeKeys "<Tab>"
     next i
 
     ToolsTextInTable         ' convert with '+' seperator
@@ -882,17 +908,17 @@ testcase tTableText
     AndereText.settext "+"
     TextInTabelleUmwandeln.OK
 
-    Call wDokSchreiben "<home>"   ' calculate every row
+    Call wTypeKeys "<home>"   ' calculate every row
     for i = 1 to 10
-        Call wDokSchreiben "<shift end>"
+        Call wTypeKeys "<shift end>"
         ToolsCalculate
-        Call wDokSchreiben "<shift insert>"
-        Call wDokSchreiben "+<delete>"
+        Call wTypeKeys "<shift insert>"
+        Call wTypeKeys "+<delete>"
     next i
-    Call wDokSchreiben "<backspace>0<shift home>"
+    Call wTypeKeys "<backspace>0<shift home>"
     ToolsCalculate
     if (GetClipboardText <> "12645") then warnlog "wrong table converting table<->text "
-    Call wDokSchreiben "<shift insert><return>"
+    Call wTypeKeys "<shift insert><return>"
 
     Call hCloseDocument ()
 endcase
@@ -904,8 +930,8 @@ testcase tTableCalculate
     Call hNewDocument
 
     Call TBOhTabelleEinfuegen ()
-    Call wDokSchreiben "1<Tab>2<Tab>3<Tab>4<Tab>5<Tab>6<Tab>7<Tab>8<Tab>"
-    Call wDokSchreiben "<end><Mod1 end><down><return>"
+    Call wTypeKeys "1<Tab>2<Tab>3<Tab>4<Tab>5<Tab>6<Tab>7<Tab>8<Tab>"
+    Call wTypeKeys "<end><Mod1 end><down><return>"
     Call TBOhTabelleEinfuegen ("eight",0, 0, 0, 1,"5", "5" )
 
     '///'  should look like: <pre> ///
@@ -918,113 +944,113 @@ testcase tTableCalculate
 
     '/// this table gets generated one by one ///'
 
-    Call wDokSchreiben "1"+cDecSep+"1<Tab>" ' insert input A1
-    Call wDokSchreiben "2"+cDecSep+"2<Tab>"
-    Call wDokSchreiben "="                  '
+    Call wTypeKeys "1"+cDecSep+"1<Tab>" ' insert input A1
+    Call wTypeKeys "2"+cDecSep+"2<Tab>"
+    Call wTypeKeys "="                  '
     Kontext "OL_SW_Rechenleiste"       '               C1
     Eingabefeld.SetText "<A1>+<B1>"
     Uebernehmen.click
-    Call wDokSchreiben "<Tab>"
-    Call wDokSchreiben "4"+cDecSep+"4<Tab>"
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
+    Call wTypeKeys "4"+cDecSep+"4<Tab>"
+    Call wTypeKeys "<Tab>"
 
-    Call wDokSchreiben "1<Tab>"             '               A2
-    Call wDokSchreiben "2<Tab>"
-    Call wDokSchreiben "<Tab>"
-    Call wDokSchreiben "4<shift tab>"
-    Call wDokSchreiben "="                  '
+    Call wTypeKeys "1<Tab>"             '               A2
+    Call wTypeKeys "2<Tab>"
+    Call wTypeKeys "<Tab>"
+    Call wTypeKeys "4<shift tab>"
+    Call wTypeKeys "="                  '
     Kontext "OL_SW_Rechenleiste"       '               C2
     Eingabefeld.SetText "<D2>-<A2>"
     Uebernehmen.click
-    Call wDokSchreiben "<Tab>"
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
+    Call wTypeKeys "<Tab>"
 
     ' automatic sum works only to next formula :-< ///'
 	Call hToolbarSelect ( "Table", true )
     formeleingeben.click
     Kontext "OL_SW_Rechenleiste"
     Uebernehmen.click
-    Call wDokSchreiben "<up>"
+    Call wTypeKeys "<up>"
 
 	Call hToolbarSelect ( "Table", true )
     formeleingeben.click
     Kontext "OL_SW_Rechenleiste"
     Uebernehmen.click
-    Call wDokSchreiben "<down><Tab>"
+    Call wTypeKeys "<down><Tab>"
 
-    Call wDokSchreiben "="                  ' slip into calculation area
+    Call wTypeKeys "="                  ' slip into calculation area
     Kontext "OL_SW_Rechenleiste"       '               A3
     Eingabefeld.SetText "sum <A1:A2>"
     Uebernehmen.click
-    Call wDokSchreiben "<Tab>"
-    Call wDokSchreiben "<F2>"                  '
+    Call wTypeKeys "<Tab>"
+    Call wTypeKeys "<F2>"                  '
     Kontext "OL_SW_Rechenleiste"
     Eingabefeld.SetText "sum <D2:B1>"
     Uebernehmen.click
-    Call wDokSchreiben "<Tab>"
-    Call wDokSchreiben "<F2>"                  '
+    Call wTypeKeys "<Tab>"
+    Call wTypeKeys "<F2>"                  '
     Kontext "OL_SW_Rechenleiste"
     Eingabefeld.SetText "sqrt <E2>"
     Uebernehmen.click
-    Call wDokSchreiben "<Tab>"
-    Call wDokSchreiben "<F2>"                  '
+    Call wTypeKeys "<Tab>"
+    Call wTypeKeys "<F2>"                  '
     Kontext "OL_SW_Rechenleiste"
     Eingabefeld.SetText "cos <E1>"
     Uebernehmen.click
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
 
-    Call wDokSchreiben "<F2>"                  ' E3 check this out :-)
+    Call wTypeKeys "<F2>"                  ' E3 check this out :-)
     Kontext "OL_SW_Rechenleiste"
     Eingabefeld.SetText "sum <A2:D3>"
     Uebernehmen.click
-    Call wDokSchreiben "<shift home>"
+    Call wTypeKeys "<shift home>"
     EditCopy
     if (GetClipboardText <> "32" & cDecSep & "69") then warnlog "wrong calculation should: 32" & cDecSep & "69 is: "+GetClipboardText
-    Call wDokSchreiben "<end><Tab>"
+    Call wTypeKeys "<end><Tab>"
 
-    Call wDokSchreiben "<F2>"                  ' A4
+    Call wTypeKeys "<F2>"                  ' A4
     Kontext "OL_SW_Rechenleiste"
     Eingabefeld.SetText "2+3*4"
     Uebernehmen.click
-    Call wDokSchreiben "<shift home>"
+    Call wTypeKeys "<shift home>"
     EditCopy
     if (GetClipboardText <> "14") then warnlog "wrong calculation should: "+"14"+" is: "+GetClipboardText
-    Call wDokSchreiben "<end><Tab>"
+    Call wTypeKeys "<end><Tab>"
 
-    Call wDokSchreiben "<F2>"                  ' B4
+    Call wTypeKeys "<F2>"                  ' B4
     Kontext "OL_SW_Rechenleiste"
     Eingabefeld.SetText "2*2 pow 3"
     Uebernehmen.click
-    Call wDokSchreiben "<shift home>"
+    Call wTypeKeys "<shift home>"
     EditCopy
     if (GetClipboardText <> "16") then warnlog "wrong calculation should: "+"16"+" is: "+GetClipboardText
-    Call wDokSchreiben "<end><Tab>"
-    Call wDokSchreiben "<shift tab>"
+    Call wTypeKeys "<end><Tab>"
+    Call wTypeKeys "<shift tab>"
     sleep (1)
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     sleep (1)
 
     '/// one row gets deleted///'
     FormatSpalteLoeschen ' grumel: have to find a cell :-(
-    Call wDokSchreiben "<F2>"                  ' C4
+    Call wTypeKeys "<F2>"                  ' C4
     Kontext "OL_SW_Rechenleiste"
     Eingabefeld.SetText "sum <A1:D3>"
     Uebernehmen.click
-    Call wDokSchreiben "<shift home>"
+    Call wTypeKeys "<shift home>"
     EditCopy
     if (GetClipboardText <> "58" & cDecSep & "89") then warnlog "wrong calculation should: " & "58" & cDecSep & "89" & " is: " & GetClipboardText
-    Call wDokSchreiben "<end><Tab>"
-    Call wDokSchreiben "<F2>"                  ' C4
+    Call wTypeKeys "<end><Tab>"
+    Call wTypeKeys "<F2>"                  ' C4
     Kontext "OL_SW_Rechenleiste"
     Eingabefeld.SetText "sum <"+fLocaleString("LocaleTable")+"1.B1:E1> / <A2:D2>"
     sleep (2)
     Uebernehmen.click
-    Call wDokSchreiben "<shift home>"
+    Call wTypeKeys "<shift home>"
     EditCopy
     if (GetClipboardText <> "1" & cDecSep & "27") then warnlog "wrong calculation should: 1" & cDecSep & "27 is: " & GetClipboardText
-    Call wDokSchreiben "<end><Tab>"
+    Call wTypeKeys "<end><Tab>"
 
-    Call wDokSchreiben "<end><Mod1 end><down><return>"
+    Call wTypeKeys "<end><Mod1 end><down><return>"
     Call hCloseDocument ()
 endcase
 
@@ -1037,9 +1063,9 @@ testcase tTableEdit
     Printlog "'///  edit table ///"
 
     Call TBOhTabelleEinfuegen ("nine-dumy",0, 0, 0, 1,"5", "3" )
-    Call wDokSchreiben "<end><Mod1 end><Mod1 end><return>"
+    Call wTypeKeys "<end><Mod1 end><Mod1 end><return>"
     Call TBOhTabelleEinfuegen ("nine",0, 0, 0, 1,"5", "3" )
-    Call wDokSchreiben "nine<Tab>"
+    Call wTypeKeys "nine<Tab>"
 
     Printlog "'///    insert Frame & Graphic in heading ///"
     InsertFrame
@@ -1048,13 +1074,13 @@ testcase tTableEdit
     sleep (5)
     TabType.ok
     sleep (5)
-    Call wDokSchreiben "<escape>"
+    Call wTypeKeys "<escape>"
     sleep (5)
     Call hGrafikEinfuegen (gTesttoolPath +"writer\optional\input\options\ga000907.gif")
     sleep (5)
-    Call wDokSchreiben "<escape>"
+    Call wTypeKeys "<escape>"
     sleep (5)
-    Call wDokSchreiben "<mod1 end><up><up>"
+    Call wTypeKeys "<mod1 end><up><up>"
     sleep (5)
 
     Printlog "'///    insert Frame & Graphic in body ///"
@@ -1064,13 +1090,13 @@ testcase tTableEdit
     sleep (5)
     TabType.ok
     sleep (5)
-    Call wDokSchreiben "<escape>"
+    Call wTypeKeys "<escape>"
     sleep (5)
     Call hGrafikEinfuegen (gTesttoolPath +"writer\optional\input\options\ga000907.gif")
     sleep (5)
-    Call wDokSchreiben "<escape>"
+    Call wTypeKeys "<escape>"
     sleep (5)
-    Call wDokSchreiben "<mod1 end><up><up><Tab>"
+    Call wTypeKeys "<mod1 end><up><up><Tab>"
 
     Printlog "'///    insert Frame & Table in body ///"
     InsertFrame
@@ -1079,22 +1105,22 @@ testcase tTableEdit
     sleep (5)
     TabType.ok
     sleep (5)
-    Call wDokSchreiben "<return>"
+    Call wTypeKeys "<return>"
     sleep (5)
     try
         Call hTabelleEinfuegen ()
-        Call wDokSchreiben "<mod1 end><mod1 end><up><up><Tab><Tab>"
+        Call wTypeKeys "<mod1 end><mod1 end><up><up><Tab><Tab>"
     catch
         Warnlog "Hit <Enter>-Key should enable edit mode for selected frames! (srx642z or greater)"
-        Call wDokSchreiben "<escape>"
-        Call wDokSchreiben "<down>"
+        Call wTypeKeys "<escape>"
+        Call wTypeKeys "<down>"
     endcatch
     sleep (5)
 
     Printlog "'///    insert PageBreak ///"
     '/// TBO: check test / insert dummy table      ' doesn't work, if the first 'stuff' in a document is the table ///'
     InsertFieldsPagenumbers
-    Call wDokSchreiben "<shift home>"
+    Call wTypeKeys "<shift home>"
     EditCopy
     ToolsCalculate
     sleep (5)
@@ -1107,7 +1133,7 @@ testcase tTableEdit
     UmbruchEinfuegen.OK
     sleep (5)
     InsertFieldsPagenumbers
-    Call wDokSchreiben "<shift home>"
+    Call wTypeKeys "<shift home>"
     EditCopy
     ToolsCalculate
     sleep (5)
@@ -1119,7 +1145,7 @@ testcase tTableEdit
     end if
 
     sleep (5)
-    Call wDokSchreiben "<end><Mod1 end><down><return>"
+    Call wTypeKeys "<end><Mod1 end><down><return>"
 
     Printlog "'///   the following may not be possible ///"
     Printlog "'///+      Insert table in footnote ///"
@@ -1132,6 +1158,6 @@ testcase tTableEdit
     catch
     endcatch
 
-    Call wDokSchreiben "<end><Mod1 end><return>"
+    Call wTypeKeys "<end><Mod1 end><return>"
     Call hCloseDocument
 endcase
