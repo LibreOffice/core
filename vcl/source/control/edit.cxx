@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edit.cxx,v $
- * $Revision: 1.100 $
+ * $Revision: 1.101 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -383,7 +383,10 @@ BOOL Edit::IsCharInput( const KeyEvent& rKeyEvent )
 {
     // In the future we must use new Unicode functions for this
     xub_Unicode cCharCode = rKeyEvent.GetCharCode();
-    return ((cCharCode >= 32) && (cCharCode != 127) && !rKeyEvent.GetKeyCode().IsMod2());
+    return ((cCharCode >= 32) && (cCharCode != 127) &&
+            !rKeyEvent.GetKeyCode().IsMod3() &&
+            !rKeyEvent.GetKeyCode().IsMod2() &&
+            !rKeyEvent.GetKeyCode().IsMod1() );
 }
 
 // -----------------------------------------------------------------------
