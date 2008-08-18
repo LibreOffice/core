@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: w_textframes5.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.2 $
 '*
-'* last change: $Author: fredrikh $ $Date: 2008-06-18 15:04:00 $
+'* last change: $Author: vg $ $Date: 2008-08-18 12:38:10 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -124,7 +124,7 @@ testcase tTextframes_72
     Call hFileOpen(( Convertpath (gTesttoolpath + "writer\optional\input\textframe\frameInFrame.sxw") ),false)
     
     'Set focus to Frame B
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -157,7 +157,7 @@ testcase tTextframes_73
     Call hFileOpen((Convertpath (gTesttoolpath + "writer\optional\input\textframe\frame.sxw")),false)
     
     '/// Set focus to Frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -189,7 +189,7 @@ testcase tTextframes_74
     Call hFileOpen((Convertpath (gTesttoolpath + "writer\optional\input\textframe\frameInTable.sxw")),false)
     
     '/// Set focus to Frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     
     '/// Format/Frame / Type ,
     '/// + Check if "Entire page" and "Page text area"
@@ -220,7 +220,7 @@ testcase tTextframes_75
     Call hFileOpen((Convertpath (gTesttoolpath + "writer\optional\input\textframe\Header.sxw")),false)
     
     '/// Set focus to Frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -253,7 +253,7 @@ testcase tTextframes_76
     Call hFileOpen((gTesttoolpath + "writer\optional\input\textframe\Footer.sxw"),false)
     
     '/// Set focus to Frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -285,7 +285,7 @@ testcase tTextframes_77
     Call hFileOpen((Convertpath(gTesttoolpath + "writer\optional\input\textframe\frameInFootnote.sxw")),false)
     
     '/// Set focus to Frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -317,7 +317,7 @@ testcase tTextframes_78
     Call hFileOpen((Convertpath(gTesttoolpath + "writer\optional\input\textframe\frameInEndnote.sxw")),false)
     
     '/// Set focus to Frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format/Frame / Type ,
@@ -361,7 +361,7 @@ testcase tTextframes_80
     Call hFileOpen(sTestFile,false)
     
     '/// Set focus to Frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format/Frame / Type , select Top in Vertical ,
@@ -375,7 +375,7 @@ testcase tTextframes_80
     
     '/// Check if the result is right
     'Set focus to the picture
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     FormatAnchorToPage
     Sleep 1
     Call fPositionAndSize("TabPositionAndSizeWriter")
@@ -413,7 +413,7 @@ testcase tTextframes_81
     Call hFileOpen(sTestFile,false)
     
     '/// Set focus to Frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format/Frame / Type , select Bottom in Vertical ,
@@ -427,7 +427,7 @@ testcase tTextframes_81
     
     '/// Check if the result is right
     'Set focus to the picture
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     FormatAnchorToPage
     Sleep 1
     Call fPositionAndSize("TabPositionAndSizeWriter")
@@ -465,7 +465,7 @@ testcase tTextframes_82
     Call hFileOpen(sTestFile,false)
     
     '/// Set focus to Frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format/Frame / Type , select Center in Vertical ,
@@ -479,7 +479,7 @@ testcase tTextframes_82
     
     '/// Check if the result is right
     'Set focus to the picture
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     FormatAnchorToPage
     Sleep 1
     Call fPositionAndSize("TabPositionAndSizeWriter")
@@ -519,7 +519,7 @@ testcase tTextframes_83
     Call hFileOpen(sTestFile,false)
     
     '/// Set focus to Frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format/Frame / Type , select From Bottom in Vertical ,
@@ -531,7 +531,7 @@ testcase tTextframes_83
         TabType.Cancel
         Call hCloseDocument
         goto endsub
-    endif
+    end if
     Vertical.Select    iVertical
     Sleep 1
     VerticalTo.Select  iVerticalTo
@@ -541,7 +541,7 @@ testcase tTextframes_83
     
     '/// Check if the result is right
     'Set focus to the picture
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     FormatAnchorToPage
     Sleep 1
     Call fPositionAndSize("TabPositionAndSizeWriter")
@@ -581,7 +581,7 @@ testcase tTextframes_84
     Call hFileOpen(sTestFile,false)
     
     '/// Set focus to Frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format/Frame / Type , select From Bottom in Vertical ,
@@ -593,7 +593,7 @@ testcase tTextframes_84
         TabType.Cancel
         Call hCloseDocument
         goto endsub
-    endif
+    end if
     Vertical.Select    iVertical
     Sleep 1
     VerticalTo.Select  iVerticalTo
@@ -603,7 +603,7 @@ testcase tTextframes_84
     
     '/// Check if the result is right
     'Set focus to the picture
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     FormatAnchorToPage
     Sleep 1
     Call fPositionAndSize("TabPositionAndSizeWriter")
@@ -645,7 +645,7 @@ testcase tTextframes_85
     Call hFileOpen(sTestFile,false)
     
     '/// Set focus to 1st Frame
-    Call wDokSchreiben ( "<Shift F4>" )
+    Call wTypeKeys ( "<Shift F4>" )
     Sleep 1
     
     '/// Format/Frame / Type , check if 'To character' in anchor area
@@ -664,7 +664,7 @@ testcase tTextframes_85
     TabType.Cancel
     
     '/// Set focus to 2nd Frame
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     '/// Format/Frame / Type , check if 'To character' in anchor area
@@ -683,7 +683,7 @@ testcase tTextframes_85
     TabType.Cancel
     
     '/// Set focus to 3rd Frame
-    Call wDokSchreiben "<Tab>"
+    Call wTypeKeys "<Tab>"
     Sleep 1
     
     '/// Format/Frame / Type , check if 'To character' in anchor area
