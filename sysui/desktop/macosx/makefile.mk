@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -55,7 +55,7 @@ CREATOR_TYPE=OOo2
 EXECUTABLE=droplet
 .ELSE
 CREATOR_TYPE=OOO2
-EXECUTABLE=soffice.bin
+EXECUTABLE=soffice
 .ENDIF
 
 SOURCE=$(RSCREVISION)
