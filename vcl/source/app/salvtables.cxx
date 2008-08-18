@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salvtables.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,10 +112,24 @@ SalMenu::~SalMenu()
 {
 }
 
-BOOL SalMenu::ShowNativePopupMenu(FloatingWindow *, const Rectangle&, ULONG )
+bool SalMenu::ShowNativePopupMenu(FloatingWindow *, const Rectangle&, ULONG )
 {
-    return FALSE;
-};
+    return false;
+}
+
+bool SalMenu::AddMenuBarButton( const SalMenuButtonItem& )
+{
+    return false;
+}
+
+void SalMenu::RemoveMenuBarButton( USHORT )
+{
+}
+
+Rectangle SalMenu::GetMenuBarButtonRectPixel( USHORT, SalFrame* )
+{
+    return Rectangle();
+}
 
 SalMenuItem::~SalMenuItem()
 {
